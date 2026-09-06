@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<title>Telestrator Pen</title>
+<style>
+  :root { --bg:#0d1117; --fg:#e6edf3; --ink:#FFD400; --dim:#7d8590; }
+  * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  html, body { margin:0; height:100%; background:var(--bg); color:var(--fg);
+    font:14px/1.4 system-ui, -apple-system, "Segoe UI", sans-serif; overscroll-behavior:none; }
+  body { display:flex; flex-direction:column; }
+  header { display:flex; align-items:center; gap:10px; padding:8px 12px; border-bottom:1px solid #21262d; }
+  #dot { width:9px; height:9px; border-radius:50%; background:#f85149; flex:none; }
+  #dot.on { background:#3fb950; }
+  #status { color:var(--dim); font-variant-numeric:tabular-nums; font-size:12px; }
+  #padwrap { flex:1; display:grid; place-items:center; padding:10px; min-height:0; }
+  /* The pen surface carries the *video's* aspect ratio, so a normalized point means the same
+     place on the phone and on the TV. Without this, every stroke arrives stretched. */
+  #pad { position:relative; width:100%; max-height:100%; aspect-ratio:var(--aspect, 1.7778);
+    border:1px solid #30363d; border-radius:8px;
+    background:#010409; touch-action:none; overflow:hidden; }
+  #pad canvas { position:absolute; inset:0; width:100%; height:100%; }
+  #hint { position:absolute; inset:0; display:grid; place-items:center; color:#30363d;
+    font-size:15px; pointer-events:none; }
+  #hint.hide { display:none; }
+  nav { display:flex; gap:6px; padding:8px 10px 14px; flex-wrap:wrap; }
+  button { flex:1 1 0; min-width:64px; padding:12px 6px; border-radius:8px; border:1px solid #30363d;
+    background:#161b22; color:var(--fg); font-size:13px; font-weight:600; }
+  button[aria-pressed="true"] { background:var(--ink); color:#000; border-color:var(--ink); }
+  button:active { filter:brightness(1.3); }
+</style>
+</head>
+<body>
+<header>
+  <span id="dot"></span>
+  <strong>Pen</strong>
+  <span id="status">connecting…</span>
+</header>
+
+<div id="padwrap">
+  <div id="pad">
+    <canvas id="cv"></canvas>
+    <div id="hint">draw here</div>
+  </div>
+</div>
+
+<nav>
+  <button id="t-freehand" data-tool="freehand" aria-pressed="true">Draw</button>
+  <button id="t-arrow" data-tool="arrow" aria-pressed="false">Arrow</button>
+  <button id="t-circle" data-tool="circle" aria-pressed="false">Circle</button>
+  <button id="t-spotlight" data-tool="spotlight" aria-pressed="false">Spot</button>
+  <button id="btn-playpause">Play/Pause</button>
+  <button id="btn-undo">Undo</button>
+  <button id="btn-clear">Clear</button>
+</nav>
+
+<script>
+(() => {
+  const pad = document.getElementById('pad');
+  const cv = document.getElementById('cv');
+  const ctx = cv.getContext('2d');
+  const statusEl = document.getElementById('status');
+  const dot = document.getElementById('dot');
+  const hint = document.getElementById('hint');
+
+  const pin = new URLSearchParams(location.search).get('pin') || '0000';
+  const clientId = 'pen-' + Math.random().toString(36).slice(2, 8);
+  let tool = 'freehand';
+  let ws = null, connected = false;
+
+  // ---- transport -----------------------------------------------------------
+  function connect() {
+    ws = new WebSocket('ws://' + location.host + '/ws');
+    ws.onopen = () => {
+      connected = true; dot.classList.add('on');
+      send({ type: 'hello', pin, clientId });
+    };
+    ws.onclose = () => {
+      connected = false; dot.classList.remove('on');
+      statusEl.textContent = 'reconnecting…';
+      setTimeout(connect, 1000);
+    };
+    ws.onmessage = (e) => {
+      const m = JSON.parse(e.data);
+      if (m.type === 'state') {
+        statusEl.textContent = (m.paused ? 'paused' : 'playing') +
+          ' · t=' + (m.t / 1000).toFixed(1) + 's · ink=' + m.annotationCount;
+      } else if (m.type === 'welcome') {
+        statusEl.textContent = 'paired';
+        // Match the TV's video aspect so the pad and the picture share one coordinate space.
+        document.documentElement.style.setProperty('--aspect', m.videoAspect);
+        requestAnimationFrame(fit);
+      }
+    };
+  }
+  function send(o) { if (connected) ws.send(JSON.stringify(o)); }
+  connect();
+
+  // ---- pen surface ---------------------------------------------------------
+  // The pad is letterboxed to the video aspect so phone coordinates and TV
+  // coordinates mean the same thing without any per-device calibration.
+  function fit() {
+    const r = pad.getBoundingClientRect();
+    cv.width = Math.round(r.width * devicePixelRatio);
+    cv.height = Math.round(r.height * devicePixelRatio);
+    ctx.scale(devicePixelRatio, devicePixelRatio);
+    ctx.lineCap = ctx.lineJoin = 'round';
+  }
+  addEventListener('resize', fit); fit();
+
+  const norm = (e) => {
+    const r = pad.getBoundingClientRect();
+    return [
+      Math.min(1, Math.max(0, (e.clientX - r.left) / r.width)),
+      Math.min(1, Math.max(0, (e.clientY - r.top) / r.height)),
+      e.pressure > 0 ? e.pressure : 0.5,
+    ];
+  };
+  const px = (n) => [n[0] * pad.clientWidth, n[1] * pad.clientHeight];
+
+  let drawing = false, batch = [], start = null, last = null, flushTimer = null;
+
+  function flush(phase) {
+    if (!batch.length && phase !== 'up') return;
+    send({ type: 'pen', tool: 'freehand', phase, color: '#FFD400', pts: batch });
+    batch = [];
+  }
+
+  pad.addEventListener('pointerdown', (e) => {
+    pad.setPointerCapture(e.pointerId);
+    drawing = true; hint.classList.add('hide');
+    const n = norm(e); start = n; last = n;
+    if (tool === 'freehand') {
+      batch = [[n[0], n[1], n[2], performance.now()]];
+      flush('down');
+      // Batch at ~60 Hz rather than one message per pointermove.
+      flushTimer = setInterval(() => flush('move'), 16);
+    }
+    ctx.beginPath(); const p = px(n); ctx.moveTo(p[0], p[1]);
+  });
+
+  pad.addEventListener('pointermove', (e) => {
+    if (!drawing) return;
+    const events = e.getCoalescedEvents ? e.getCoalescedEvents() : [e];
+    for (const ev of events) {
+      const n = norm(ev);
+      if (tool === 'freehand') {
+        batch.push([n[0], n[1], n[2], performance.now()]);
+        // Local echo: ink appears under the finger immediately, TV catches up.
+        const p = px(n);
+        ctx.strokeStyle = '#FFD400'; ctx.lineWidth = 3;
+        ctx.lineTo(p[0], p[1]); ctx.stroke();
+      }
+      last = n;
+    }
+    if (tool !== 'freehand') previewShape(start, last);
+  });
+
+  function endStroke(e) {
+    if (!drawing) return;
+    drawing = false;
+    const n = last || norm(e);
+    if (tool === 'freehand') {
+      clearInterval(flushTimer); flushTimer = null;
+      batch.push([n[0], n[1], n[2], performance.now()]);
+      flush('up');
+    } else {
+      send({ type: 'shape', tool, from: [start[0], start[1]], to: [n[0], n[1]], color: '#FFD400' });
+    }
+    setTimeout(() => ctx.clearRect(0, 0, cv.width, cv.height), 400);
+  }
+  pad.addEventListener('pointerup', endStroke);
+  pad.addEventListener('pointercancel', endStroke);
+
+  function previewShape(a, b) {
+    ctx.clearRect(0, 0, cv.width, cv.height);
+    const p1 = px(a), p2 = px(b);
+    ctx.strokeStyle = '#FFD400'; ctx.lineWidth = 3;
+    ctx.beginPath();
+    if (tool === 'arrow') { ctx.moveTo(p1[0], p1[1]); ctx.lineTo(p2[0], p2[1]); }
+    else {
+      const r = Math.hypot(p2[0] - p1[0], p2[1] - p1[1]);
+      ctx.arc(p1[0], p1[1], r, 0, Math.PI * 2);
+    }
+    ctx.stroke();
+  }
+
+  // ---- palette -------------------------------------------------------------
+  document.querySelectorAll('[data-tool]').forEach((b) => {
+    b.addEventListener('click', () => {
+      tool = b.dataset.tool;
+      document.querySelectorAll('[data-tool]').forEach((o) =>
+        o.setAttribute('aria-pressed', String(o === b)));
+    });
+  });
+  document.getElementById('btn-playpause')
+    .addEventListener('click', () => send({ type: 'transport', cmd: 'toggle' }));
+  document.getElementById('btn-undo')
+    .addEventListener('click', () => send({ type: 'undo' }));
+  document.getElementById('btn-clear')
+    .addEventListener('click', () => send({ type: 'clear' }));
+
+  // Exposed so the Playwright live UI test can assert on connection state.
+  window.__pen = { isConnected: () => connected, setTool: (t) => { tool = t; } };
+})();
+</script>
+</body>
+</html>

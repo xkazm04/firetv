@@ -1,0 +1,17 @@
+{
+  "name": "firetv-telestrator-tools",
+  "private": true,
+  "type": "module",
+  "description": "Live UI test harness: drives the TV app over the same WebSocket the phone uses.",
+  "scripts": {
+    "pen": "node pen-sim.mjs",
+    "live": "node live-ui-test.mjs"
+  },
+  "dependencies": {
+    "pngjs": "^7.0.0",
+    "ws": "^8.18.0"
+  },
+  "devDependencies": {
+    "playwright": "^1.48.0"
+  }
+}

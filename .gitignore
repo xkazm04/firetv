@@ -1,0 +1,19 @@
+# Gradle / Android
+.gradle/
+build/
+*/build/
+local.properties
+*.apk
+*.iml
+.idea/
+.cxx/
+
+# Node
+node_modules/
+
+# Test output
+artifacts/
+
+# Kotlin
+.kotlin/
+tv-app/src/main/res/raw/fixture_clip.mp4
