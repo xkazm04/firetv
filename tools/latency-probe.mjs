@@ -18,6 +18,14 @@ const seconds = Number(args.seconds ?? 6);
 // backpressure caused by the pen stream itself.
 const idle = process.argv.includes('--idle');
 
+const pin = await fetch(`http://${host}/health`)
+  .then((r) => r.json())
+  .then((h) => h.pin)
+  .catch(() => {
+    console.error('[latency] cannot reach the TV at', host);
+    process.exit(2);
+  });
+
 const ws = new WebSocket(`ws://${host}/ws`);
 const inflight = new Map();
 const rtts = [];
@@ -31,6 +39,10 @@ ws.on('error', (e) => {
 
 ws.on('message', (raw) => {
   const m = JSON.parse(raw.toString());
+  if (m.type === 'welcome' && !m.accepted) {
+    console.error('[latency] pairing rejected:', m.reason);
+    process.exit(1);
+  }
   if (m.type === 'pong' && inflight.has(m.id)) {
     rtts.push(Number(process.hrtime.bigint() - inflight.get(m.id)) / 1e6);
     inflight.delete(m.id);
@@ -40,7 +52,7 @@ ws.on('message', (raw) => {
 const pct = (a, p) => a[Math.min(a.length - 1, Math.floor((a.length * p) / 100))];
 
 ws.on('open', () => {
-  ws.send(JSON.stringify({ type: 'hello', pin: '0000', clientId: 'latency-probe' }));
+  ws.send(JSON.stringify({ type: 'hello', pin, clientId: 'latency-probe' }));
   ws.send(JSON.stringify({ type: 'transport', cmd: 'pause' }));
 
   let id = 0;

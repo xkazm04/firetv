@@ -1,5 +1,6 @@
 package dev.telestrator.tv
 
+import android.net.Uri
 import android.os.Bundle
 import android.view.KeyEvent
 import androidx.activity.ComponentActivity
@@ -31,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.media3.common.MediaItem
+import androidx.media3.common.PlaybackParameters
 import androidx.media3.common.Player
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.ExoPlayer
@@ -40,23 +42,30 @@ import androidx.tv.material3.Text
 import dev.telestrator.core.PenMessage
 import kotlinx.coroutines.delay
 
+/** The fixture clip is 25 fps; one frame is 40 ms. A real clip would read this off the format. */
+private const val FRAME_MS = 40L
+
 @UnstableApi
 class MainActivity : ComponentActivity() {
 
     private lateinit var session: Session
     private lateinit var server: PenServer
+    private var thumbnailer: Thumbnailer? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        val clipUri = Uri.parse("android.resource://$packageName/${R.raw.fixture_clip}")
         session = Session(clipId = "fixture_clip", videoAspect = 16.0 / 9.0)
-        server = PenServer(applicationContext, session).also { it.start() }
+        thumbnailer = Thumbnailer(applicationContext, clipUri)
+        server = PenServer(applicationContext, session, thumbnailer).also { it.start() }
 
-        setContent { TelestratorScreen(session, server) }
+        setContent { TelestratorScreen(session, server, clipUri) }
     }
 
     override fun onDestroy() {
         server.stop()
+        thumbnailer?.release()
         super.onDestroy()
     }
 
@@ -70,6 +79,7 @@ class MainActivity : ComponentActivity() {
             KeyEvent.KEYCODE_MEDIA_PLAY_PAUSE -> "toggle"
             KeyEvent.KEYCODE_MEDIA_FAST_FORWARD, KeyEvent.KEYCODE_DPAD_RIGHT -> "seek+"
             KeyEvent.KEYCODE_MEDIA_REWIND, KeyEvent.KEYCODE_DPAD_LEFT -> "seek-"
+            KeyEvent.KEYCODE_DPAD_UP -> "undo"
             KeyEvent.KEYCODE_DPAD_DOWN -> "clear"
             else -> null
         }
@@ -83,20 +93,17 @@ class MainActivity : ComponentActivity() {
 
 @UnstableApi
 @Composable
-private fun TelestratorScreen(session: Session, server: PenServer) {
+private fun TelestratorScreen(session: Session, server: PenServer, clipUri: Uri) {
     val context = LocalContext.current
     val doc by session.doc.collectAsState()
     val transport by session.transport.collectAsState()
     var tMs by remember { mutableLongStateOf(0L) }
     var paused by remember { mutableStateOf(false) }
+    var rate by remember { mutableStateOf(1.0f) }
 
     val player = remember {
         ExoPlayer.Builder(context).build().apply {
-            setMediaItem(
-                MediaItem.fromUri(
-                    "android.resource://" + context.packageName + "/" + R.raw.fixture_clip
-                )
-            )
+            setMediaItem(MediaItem.fromUri(clipUri))
             repeatMode = Player.REPEAT_MODE_ALL
             prepare()
             playWhenReady = true
@@ -112,6 +119,7 @@ private fun TelestratorScreen(session: Session, server: PenServer) {
             session.mediaTimeMs = tMs
             session.publishIfDirty()
             session.paused = !player.isPlaying
+            session.durationMs = player.duration.coerceAtLeast(0)
             paused = !player.isPlaying
             delay(33)
         }
@@ -125,7 +133,22 @@ private fun TelestratorScreen(session: Session, server: PenServer) {
             "pause" -> player.pause()
             "seek+" -> player.seekTo(player.currentPosition + 5_000)
             "seek-" -> player.seekTo((player.currentPosition - 5_000).coerceAtLeast(0))
-            "seek" -> player.seekTo(t.value.toLong())
+            "seek" -> player.seekTo(t.value.toLong().coerceAtLeast(0))
+            // Frame stepping only makes sense on a still picture, and seeking while playing
+            // fights the playback clock, so stepping pauses first.
+            "step" -> {
+                player.pause()
+                val target = player.currentPosition + (t.value.toLong() * FRAME_MS)
+                player.seekTo(target.coerceAtLeast(0))
+            }
+            "rate" -> {
+                val r = t.value.toFloat().coerceIn(0.1f, 2.0f)
+                player.playbackParameters = PlaybackParameters(r)
+                session.rate = r.toDouble()
+                rate = r
+            }
+            "undo" -> session.accept(PenMessage.Undo)
+            "redo" -> session.accept(PenMessage.Redo)
             "clear" -> session.accept(PenMessage.Clear)
         }
     }
@@ -155,7 +178,8 @@ private fun TelestratorScreen(session: Session, server: PenServer) {
 
         // Machine-readable status line: the live UI test reads this instead of guessing.
         Text(
-            text = "t=" + tMs + "ms " + (if (paused) "PAUSED" else "PLAY") + " ink=" + doc.annotations.size,
+            text = "t=" + tMs + "ms " + (if (paused) "PAUSED" else "PLAY") +
+                " x" + rate + " ink=" + doc.annotations.size,
             color = Color.White,
             fontSize = 16.sp,
             modifier = Modifier

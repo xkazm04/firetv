@@ -65,11 +65,11 @@ These are proxies, not proof (see §5), but each one is a thing that would have 
 
 | Stage | What it proves | Cost |
 |---|---|---|
-| `unit` | 13 JVM tests over the annotation schema, timeline, letterbox mapping, pen engine, wire codec | ~6 s, no device |
+| `unit` | 46 JVM tests over the annotation schema, timeline, letterbox mapping, pen engine, smoothing, hit-testing, undo history, wire codec | ~6 s, no device |
 | `build` | APK assembles | ~2 s incremental, ~60 s cold |
 | `boot` | emulator up and booted | ~15 s from the AVD snapshot, skipped when already running |
 | `deploy` | install, leanback launch, port forward, health check | ~10 s |
-| `live` | 12 assertions, real browser → real TV → real pixels | ~20 s |
+| `live` | 27 assertions, real browser → real TV → real pixels | ~60 s |
 
 **End to end with the emulator shut down first: 45 s, one command, no human in the loop.**
 
@@ -131,9 +131,19 @@ automatically.
 
 ### Other measurements
 
-- **Memory:** 114 MB PSS with the player, overlay, web server and a connected pen. Design doc
-  target is under 300 MB. Comfortable.
+- **Memory:** 143 MB PSS with the player, overlay, web server, frame thumbnailer and a connected
+  pen. Design doc target is under 300 MB. Comfortable.
+- **Overlay draw:** p50 0.05 ms, p95 2.7 ms against the design doc's 4 ms budget, measured on
+  device via `RenderStats` and asserted in the live test. The max sample (~31 ms) is the first
+  frame after a layout change, not steady state.
 - **APK:** 40.9 MB debug, of which ~7 MB is the embedded fixture clip.
+
+### After the pen tools landed
+
+Re-measured with smoothing, pressure width, the eraser, thumbnails and document mirroring all in
+place: pen round-trip p50 9.4 ms / p95 14.8 ms under the same 60 Hz load (was 7.8 / 12.8 before
+those features). Still comfortably inside budget, and the regression is small enough to attribute
+to the added traffic rather than to a structural problem.
 
 ## 5. What the PoC does not prove
 

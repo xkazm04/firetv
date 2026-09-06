@@ -23,19 +23,24 @@ Chrome (real touch events)          Android TV emulator, API 34, leanback
 
 - Phone draws → stroke appears over the video on the TV, anchored to the paused frame.
 - Seek away → the drawing leaves with its frame. Seek back → it returns.
-- Freehand, arrow, circle, spotlight, name tags render from one time-anchored document.
+- **Tools:** freehand (smoothed, pressure-varying width), arrow, circle, spotlight, name tag,
+  eraser — five colours, and a Pin toggle for drawings that should outlive the hold window.
+- **Undo / redo** as an operation log, so undoing an erase restores the annotation *in place*.
+- **Transport from the phone:** play/pause, single-frame step, 0.25×/0.5× slow motion, scrub.
+- **The phone can see what it is drawing on:** the paused frame arrives as a JPEG thumbnail, and
+  the TV mirrors its annotation document back so the eraser is aimed rather than guessed.
 - The TV serves the phone page itself, so `ws://` is same-origin (no mixed-content problem).
-- Pairing QR + PIN on screen.
-- Fire TV remote keys drive playback and clear.
+- Pairing QR + rotating PIN; a phone with the wrong PIN is refused.
+- Fire TV remote keys drive playback, undo and clear.
 
 ## Layout
 
 | Path | What |
 |---|---|
-| `core/` | Pure JVM: annotation schema + codec, timeline, letterbox mapping, pen engine, wire protocol. No Android imports — 13 unit tests run in seconds with no device. |
+| `core/` | Pure JVM: annotation schema + codec, timeline, letterbox mapping, pen engine, Catmull-Rom smoothing, hit-testing, undo history, wire protocol. No Android imports — 46 unit tests run in seconds with no device. |
 | `tv-app/` | Android app: Media3 player, Compose overlay, embedded Ktor server, QR pairing, D-pad input. |
 | `companion/` | The phone PWA. Single file, copied into the APK's assets at build time so there is one source of truth. |
-| `tools/` | `live-ui-test.mjs` (Playwright → real PWA → real TV → pixel assertions), `pen-sim.mjs` (headless protocol check), `latency-probe.mjs`. |
+| `tools/` | `live-ui-test.mjs` (Playwright → real PWA → real TV → pixel assertions, 27 checks), `pen-sim.mjs` (headless protocol check), `latency-probe.mjs`. |
 | `scripts/dev.ps1` | The whole cycle in one command. |
 | `fixtures/` | Reserved for clips; the PoC generates its own synthetic clip with ffmpeg (no copyright exposure). |
 
@@ -64,6 +69,10 @@ Screenshots and a JSON result file land in `artifacts/`.
 
 ## What this PoC deliberately does not cover
 
-Everything in the design doc's P1 and P2 tiers: the AWS tracking pipeline, name-tag snapping,
-Bedrock, voice. It also has not run on real Fire TV hardware. Those gaps and what they mean for
-the go/no-go are in [docs/POC-FINDINGS.md](docs/POC-FINDINGS.md).
+Everything in the design doc's P1 and P2 tiers: the AWS tracking pipeline, name-tag *snapping* to
+tracked players, Bedrock, voice. It also has not run on real Fire TV hardware.
+
+- [docs/POC-FINDINGS.md](docs/POC-FINDINGS.md) — what the toolchain proved, what it did not, and
+  the latency finding that came out of it.
+- [docs/PLATFORM-RISK.md](docs/PLATFORM-RISK.md) — Fire OS vs Vega OS, which Stick to buy, and why
+  the transport should sit behind an interface.

@@ -37,23 +37,27 @@ function tvScreenshot(name) {
   return { png: PNG.sync.read(readFileSync(dest)), file: dest };
 }
 
+const INK = {
+  // #FFD400 with tolerance; the fixture's pure yellow (255,255,0) fails the green test.
+  yellow: (r, g, b) => r > 230 && g > 185 && g < 232 && b < 70,
+  // #00E5FF, a hue that appears nowhere in the fixture's colour bars.
+  cyan: (r, g, b) => r < 90 && g > 195 && b > 225,
+};
+
 /**
- * Counts pixels close to the pen colour (#FFD400). The fixture clip contains saturated yellow
- * bars, so "is it yellow" is not enough — we require the exact ink hue and ignore the pairing
- * card and status bar regions.
+ * Counts pixels of one pen colour, ignoring the pairing card and the status bar so the test does
+ * not end up grading its own furniture.
  */
-function countInk(png) {
+function countInk(png, which = 'yellow') {
+  const match = INK[which];
   const { width, height, data } = png;
   let n = 0;
   for (let y = 0; y < height; y++) {
-    // Skip the status line at the bottom and the pairing card at the top-right.
     if (y > height * 0.94) continue;
     for (let x = 0; x < width; x++) {
       if (x > width * 0.74 && y < height * 0.44) continue;
       const i = (width * y + x) << 2;
-      const [r, g, b] = [data[i], data[i + 1], data[i + 2]];
-      // #FFD400 with tolerance; the fixture's pure yellow (255,255,0) fails the green test.
-      if (r > 230 && g > 185 && g < 232 && b < 70) n++;
+      if (match(data[i], data[i + 1], data[i + 2])) n++;
     }
   }
   return n;
@@ -71,10 +75,9 @@ const run = async () => {
   adb('shell', 'input', 'keyevent', 'KEYCODE_DPAD_DOWN');
   await sleep(600);
   let h = await health();
-  check('TV reachable and canvas cleared via D-pad', h.ok && h.annotations === 0, JSON.stringify(h));
+  check('TV reachable and canvas cleared via D-pad', h.ok && h.annotations === 0, JSON.stringify(h).slice(0, 80));
 
-  const before = tvScreenshot('live-00-clean.png');
-  const inkBefore = countInk(before.png);
+  const inkBefore = countInk(tvScreenshot('live-00-clean.png').png);
 
   // ---- 1. the phone opens the page the TV serves ---------------------------
   const browser = await chromium.launch();
@@ -92,14 +95,13 @@ const run = async () => {
 
   await page.goto(`${BASE}/?pin=${h.pin}`, { waitUntil: 'domcontentloaded' });
   await page.waitForFunction(() => window.__pen && window.__pen.isConnected(), null, { timeout: 15000 });
-  check('PWA loaded from the TV and paired over ws://', true, await page.textContent('#status'));
+  check('PWA loaded from the TV and paired over ws:// using the on-screen PIN', true);
 
   h = await health();
   check('TV sees the phone connected', h.pens >= 1, `pens=${h.pens}`);
 
   // The pad must adopt the TV's video aspect, otherwise every stroke arrives stretched.
-  const padBox = await page.locator('#pad').boundingBox();
-  const padAspect = padBox.width / padBox.height;
+  const padAspect = await page.locator('#pad').boundingBox().then((b) => b.width / b.height);
   check(
     'pen surface adopts the video aspect from the welcome message',
     Math.abs(padAspect - 16 / 9) < 0.02,
@@ -113,13 +115,8 @@ const run = async () => {
   await page.click('#btn-playpause');
   await sleep(800);
   h = await health();
-  check(
-    'phone transport control toggles TV playback',
-    h.paused === !wasPaused,
-    `paused ${wasPaused} -> ${h.paused}`
-  );
+  check('phone transport control toggles TV playback', h.paused === !wasPaused, `paused ${wasPaused} -> ${h.paused}`);
 
-  // The rest of the test needs a still frame.
   if (!h.paused) {
     await page.click('#btn-playpause');
     await sleep(800);
@@ -136,38 +133,39 @@ const run = async () => {
       type,
       touchPoints: type === 'touchEnd' ? [] : [{ x, y, radiusX: 6, radiusY: 6, force: 0.7 }],
     });
+  const at = (fx, fy) => [pad.x + pad.width * fx, pad.y + pad.height * fy];
+  const drag = async (fx, fy, tx, ty) => {
+    await touch('touchStart', ...at(fx, fy));
+    await touch('touchMove', ...at(tx, ty));
+    await touch('touchEnd', ...at(tx, ty));
+    await sleep(700);
+  };
 
-  const path0 = [];
+  const arc = [];
   for (let i = 0; i <= 30; i++) {
     const p = i / 30;
-    path0.push([pad.x + pad.width * (0.15 + 0.7 * p), pad.y + pad.height * (0.7 - 0.45 * Math.sin(Math.PI * p))]);
+    arc.push(at(0.15 + 0.7 * p, 0.7 - 0.45 * Math.sin(Math.PI * p)));
   }
-  await touch('touchStart', ...path0[0]);
-  for (const [x, y] of path0.slice(1)) {
+  await touch('touchStart', ...arc[0]);
+  for (const [x, y] of arc.slice(1)) {
     await touch('touchMove', x, y);
     await sleep(12);
   }
-  await touch('touchEnd', ...path0.at(-1));
+  await touch('touchEnd', ...arc.at(-1));
 
   await sleep(900);
   h = await health();
   check('touch drawing arrives on the TV as an annotation', h.annotations >= 1, `ink=${h.annotations}`);
 
   // ---- 4. the assertion that matters: it is actually on the screen ---------
-  const after = tvScreenshot('live-01-drawn.png');
-  const inkAfter = countInk(after.png);
-  check(
-    'stroke is rendered in the TV framebuffer',
-    inkAfter > inkBefore + 1500,
-    `ink px ${inkBefore} -> ${inkAfter}`
-  );
+  const inkAfter = countInk(tvScreenshot('live-01-drawn.png').png);
+  check('stroke is rendered in the TV framebuffer', inkAfter > inkBefore + 1500, `ink px ${inkBefore} -> ${inkAfter}`);
 
   // ---- 5. time anchoring: seek away, the drawing must leave with the frame --
-  adb('shell', 'input', 'keyevent', 'KEYCODE_DPAD_RIGHT'); // seek +5s
-  adb('shell', 'input', 'keyevent', 'KEYCODE_DPAD_RIGHT'); // seek +5s
+  adb('shell', 'input', 'keyevent', 'KEYCODE_DPAD_RIGHT');
+  adb('shell', 'input', 'keyevent', 'KEYCODE_DPAD_RIGHT');
   await sleep(1200);
-  const seeked = tvScreenshot('live-02-seeked-away.png');
-  const inkSeeked = countInk(seeked.png);
+  const inkSeeked = countInk(tvScreenshot('live-02-seeked-away.png').png);
   const hSeek = await health();
   check(
     'seeking past the hold window hides the drawing',
@@ -179,29 +177,137 @@ const run = async () => {
   adb('shell', 'input', 'keyevent', 'KEYCODE_DPAD_LEFT');
   adb('shell', 'input', 'keyevent', 'KEYCODE_DPAD_LEFT');
   await sleep(1200);
-  const back = tvScreenshot('live-03-seeked-back.png');
-  const inkBack = countInk(back.png);
-  check(
-    'seeking back onto the frame restores the drawing',
-    inkBack > inkAfter * 0.6,
-    `ink px ${inkBack} (drawn: ${inkAfter})`
-  );
+  const inkBack = countInk(tvScreenshot('live-03-seeked-back.png').png);
+  check('seeking back onto the frame restores the drawing', inkBack > inkAfter * 0.6, `ink px ${inkBack} (drawn: ${inkAfter})`);
 
-  // ---- 7. shape tool -------------------------------------------------------
-  await page.click('#t-arrow');
-  const c = { x: pad.x + pad.width * 0.3, y: pad.y + pad.height * 0.3 };
-  const d = { x: pad.x + pad.width * 0.75, y: pad.y + pad.height * 0.6 };
-  await touch('touchStart', c.x, c.y);
-  await touch('touchMove', d.x, d.y);
-  await touch('touchEnd', d.x, d.y);
-  await sleep(800);
+  // ---- 7. shapes, in a colour chosen on the phone --------------------------
+  await page.click('[data-tool="arrow"]');
+  await page.click('[data-color="#00E5FF"]');
+
+  // The fixture's colour bars contain a large block of pure cyan, so an absolute count would
+  // pass whether or not anything was drawn. The picture is paused, so measure the delta.
+  const cyanBefore = countInk(tvScreenshot('live-04b-before-arrow.png').png, 'cyan');
+  await drag(0.3, 0.3, 0.75, 0.55);
   h = await health();
   check('arrow tool commits a second annotation', h.annotations >= 2, `ink=${h.annotations}`);
 
-  await page.screenshot({ path: path.join(OUT, 'live-04-phone.png') });
-  tvScreenshot('live-05-arrow.png');
+  const cyanAfter = countInk(tvScreenshot('live-05-arrow.png').png, 'cyan');
+  check(
+    'the colour picked on the phone is the colour drawn on the TV',
+    cyanAfter - cyanBefore > 800,
+    `cyan px ${cyanBefore} -> ${cyanAfter} (+${cyanAfter - cyanBefore})`
+  );
 
+  // ---- 8. undo / redo round trip ------------------------------------------
+  const beforeUndo = h.annotations;
+  await page.click('#btn-undo');
+  await sleep(700);
+  h = await health();
+  check('undo removes the last annotation', h.annotations === beforeUndo - 1, `ink=${h.annotations}`);
+  check('the TV tells the phone redo is now available', h.canRedo === true);
+
+  await page.click('#btn-redo');
+  await sleep(700);
+  h = await health();
+  check('redo puts it back', h.annotations === beforeUndo, `ink=${h.annotations}`);
+
+  // ---- 8b. the phone can see what is already on the TV ---------------------
+  // The eraser is unusable without this: the viewer would be tapping at ink they cannot see.
+  const mirrored = await page.evaluate(() => window.__pen.mirrored());
+  check('the TV mirrors its annotations back to the phone', mirrored >= 2, `${mirrored} annotations mirrored`);
+
+  // ---- 9. eraser ----------------------------------------------------------
+  // Tap the apex of the arc from step 3; that stroke, and only that stroke, should vanish.
+  await page.click('[data-tool="erase"]');
+  const inkBeforeErase = countInk(tvScreenshot('live-06-before-erase.png').png);
+  const apex = at(0.5, 0.25);
+  await touch('touchStart', ...apex);
+  await touch('touchEnd', ...apex);
+  await sleep(900);
+  const inkAfterErase = countInk(tvScreenshot('live-07-erased.png').png);
+  check(
+    'tapping ink with the eraser removes that stroke from the TV',
+    inkAfterErase < inkBeforeErase * 0.5,
+    `ink px ${inkBeforeErase} -> ${inkAfterErase}`
+  );
+
+  await page.click('#btn-undo');
+  await sleep(800);
+  const inkRestored = countInk(tvScreenshot('live-08-erase-undone.png').png);
+  check(
+    'undoing an erase brings the stroke back',
+    inkRestored > inkBeforeErase * 0.8,
+    `ink px ${inkAfterErase} -> ${inkRestored}`
+  );
+
+  // ---- 10. name tag -------------------------------------------------------
+  await page.click('[data-tool="tag"]');
+  await page.click('[data-color="#FFD400"]');
+  const tagPoint = at(0.3, 0.78);
+  await touch('touchStart', ...tagPoint);
+  await touch('touchEnd', ...tagPoint);
+  await page.waitForSelector('#tagbox.show', { timeout: 4000 });
+  check('tapping with the tag tool opens inline label entry, not a blocking dialog', true);
+
+  const beforeTag = (await health()).annotations;
+  await page.fill('#tagtext', '#10 Novak');
+  await page.click('#tagok');
+  await sleep(900);
+  const tagged = await health();
+  check('a name tag reaches the TV as an annotation', tagged.annotations > beforeTag, `ink=${tagged.annotations}`);
+  tvScreenshot('live-09-nametag.png');
+
+  // ---- 11. frame stepping -------------------------------------------------
+  const beforeStep = (await health()).t;
+  await page.click('#btn-next');
+  await sleep(800);
+  const afterStep = await health();
+  check(
+    'the phone can step the TV forward by a single frame',
+    afterStep.t > beforeStep && afterStep.t - beforeStep <= 250 && afterStep.paused,
+    `t ${beforeStep} -> ${afterStep.t}ms`
+  );
+
+  await page.click('#btn-prev');
+  await sleep(800);
+  const stepBack = (await health()).t;
+  check('and back again', stepBack <= afterStep.t, `t ${afterStep.t} -> ${stepBack}ms`);
+
+  // ---- 12. slow motion ----------------------------------------------------
+  await page.click('[data-rate="0.25"]');
+  await sleep(700);
+  const slow = await health();
+  check('slow motion rate reaches the player', slow.rate === 0.25, `rate=${slow.rate}`);
+  await page.click('[data-rate="1"]');
+  await sleep(400);
+
+  // ---- 13. the phone can see the frame it is drawing on -------------------
+  const thumb = await page.evaluate(() => {
+    const bg = getComputedStyle(document.getElementById('pad')).backgroundImage;
+    return { hasImage: bg.includes('data:image/jpeg'), chars: bg.length };
+  });
+  check('the paused frame arrives on the phone as a thumbnail', thumb.hasImage, `${thumb.chars} chars`);
+
+  // ---- 14. overlay draw budget -------------------------------------------
+  const r = await health();
+  check(
+    'overlay draw stays inside the 4 ms budget',
+    r.renderFrames > 20 && r.renderP95Ms < 4.0,
+    `p50 ${r.renderP50Ms}ms p95 ${r.renderP95Ms}ms max ${r.renderMaxMs}ms over ${r.renderFrames} frames`
+  );
+
+  await page.screenshot({ path: path.join(OUT, 'live-04-phone.png') });
   check('no uncaught errors on the phone page', consoleErrors.length === 0, consoleErrors.join('; '));
+
+  // ---- 15. a pen that cannot quote the PIN is turned away -----------------
+  const intruder = await context.newPage();
+  await intruder.goto(`${BASE}/?pin=0000`, { waitUntil: 'domcontentloaded' });
+  await intruder
+    .waitForFunction(() => document.getElementById('status').classList.contains('bad'), null, { timeout: 8000 })
+    .catch(() => {});
+  const intruderStatus = (await intruder.textContent('#status')) ?? '';
+  check('a phone with the wrong PIN is refused', /not paired/i.test(intruderStatus), intruderStatus.slice(0, 55));
+  await intruder.close();
 
   await browser.close();
 

@@ -15,14 +15,31 @@ const host = args.host ?? '127.0.0.1:8765';
 const shape = args.shape ?? 'arc';
 
 const ws = new WebSocket(`ws://${host}/ws`);
-const seen = { welcome: false, states: 0, lastState: null };
+const seen = { welcome: false, accepted: false, states: 0, lastState: null };
+
+// The TV rotates a PIN per session and rejects a pen that cannot quote it, so read it from the
+// same health endpoint a human would read off the QR card.
+const pin = await fetch(`http://${host}/health`)
+  .then((r) => r.json())
+  .then((h) => h.pin)
+  .catch(() => {
+    console.error('[pen-sim] cannot reach the TV at', host);
+    process.exit(2);
+  });
 
 const send = (o) => ws.send(JSON.stringify(o));
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 ws.on('message', (raw) => {
   const m = JSON.parse(raw.toString());
-  if (m.type === 'welcome') seen.welcome = true;
+  if (m.type === 'welcome') {
+    seen.welcome = true;
+    seen.accepted = m.accepted;
+    if (!m.accepted) {
+      console.error('[pen-sim] pairing rejected:', m.reason);
+      process.exit(1);
+    }
+  }
   if (m.type === 'state') {
     seen.states++;
     seen.lastState = m;
@@ -36,7 +53,7 @@ ws.on('error', (e) => {
 
 ws.on('open', async () => {
   console.log(`[pen-sim] connected to ws://${host}/ws`);
-  send({ type: 'hello', pin: '0000', clientId: 'pen-sim' });
+  send({ type: 'hello', pin, clientId: 'pen-sim' });
   await sleep(300);
 
   // Pause first: telestration is a paused-frame activity, and a still frame makes the
@@ -66,9 +83,9 @@ ws.on('open', async () => {
   await sleep(1200);
   const rtt = Date.now() - t0;
 
-  const ok = seen.welcome && seen.states > 0 && (seen.lastState?.annotationCount ?? 0) > 0;
+  const ok = seen.accepted && seen.states > 0 && (seen.lastState?.annotationCount ?? 0) > 0;
   console.log(
-    `[pen-sim] welcome=${seen.welcome} states=${seen.states} ` +
+    `[pen-sim] paired=${seen.accepted} states=${seen.states} ` +
       `ink=${seen.lastState?.annotationCount} paused=${seen.lastState?.paused} ` +
       `t=${seen.lastState?.t}ms roundtrip=${rtt}ms`
   );
