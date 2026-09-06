@@ -39,17 +39,25 @@ import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.ui.AspectRatioFrameLayout
 import androidx.media3.ui.PlayerView
 import androidx.tv.material3.Text
+import androidx.lifecycle.lifecycleScope
 import dev.telestrator.core.PenMessage
+import dev.telestrator.tv.transport.LanTransport
+import dev.telestrator.tv.transport.PenTransport
+import dev.telestrator.tv.transport.RelayTransport
 import kotlinx.coroutines.delay
 
 /** The fixture clip is 25 fps; one frame is 40 ms. A real clip would read this off the format. */
 private const val FRAME_MS = 40L
 
+/** 10.0.2.2 is the development host as seen from inside the Android emulator. */
+private const val DEFAULT_RELAY_WS = "ws://10.0.2.2:9787/tv"
+private const val DEFAULT_RELAY_PHONE = "http://10.0.2.2:9787/"
+
 @UnstableApi
 class MainActivity : ComponentActivity() {
 
     private lateinit var session: Session
-    private lateinit var server: PenServer
+    private lateinit var transport: PenTransport
     private var thumbnailer: Thumbnailer? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -58,13 +66,45 @@ class MainActivity : ComponentActivity() {
         val clipUri = Uri.parse("android.resource://$packageName/${R.raw.fixture_clip}")
         session = Session(clipId = "fixture_clip", videoAspect = 16.0 / 9.0)
         thumbnailer = Thumbnailer(applicationContext, clipUri)
-        server = PenServer(applicationContext, session, thumbnailer).also { it.start() }
 
-        setContent { TelestratorScreen(session, server, clipUri) }
+        val host = PenSessionHost(session, thumbnailer)
+        transport = chooseTransport()
+        transport.start(lifecycleScope) { channel -> host.host(channel) }
+        // The viewer reads this off the QR card; the test harness reads it out of logcat, which
+        // is the closest a script gets to looking at the television.
+        android.util.Log.i("Telestrator", "transport=${transport.name} pairing=${transport.pairingUrl()}")
+
+        setContent { TelestratorScreen(session, transport, clipUri) }
+    }
+
+    /**
+     * Which way pens reach us. LAN by default; the relay is selected at launch so the same build
+     * can be exercised both ways:
+     *
+     *   adb shell am start -n dev.telestrator.tv/.MainActivity
+     *     --es transport relay
+     *     --es relay_url ws://10.0.2.2:9787/tv
+     *     --es phone_url http://HOST:9787/
+     */
+    private fun chooseTransport(): PenTransport {
+        val requested = intent?.getStringExtra("transport") ?: "lan"
+        if (requested != "relay") {
+            return LanTransport(
+                context = applicationContext,
+                pin = session.pin,
+                healthJson = { healthJson(session, "lan") },
+            )
+        }
+        val relayUrl = intent?.getStringExtra("relay_url") ?: DEFAULT_RELAY_WS
+        val phoneUrl = intent?.getStringExtra("phone_url") ?: DEFAULT_RELAY_PHONE
+        return RelayTransport(
+            relayWsUrl = relayUrl,
+            phoneUrl = "$phoneUrl?pin=${session.pin}",
+        )
     }
 
     override fun onDestroy() {
-        server.stop()
+        transport.stop()
         thumbnailer?.release()
         super.onDestroy()
     }
@@ -93,10 +133,10 @@ class MainActivity : ComponentActivity() {
 
 @UnstableApi
 @Composable
-private fun TelestratorScreen(session: Session, server: PenServer, clipUri: Uri) {
+private fun TelestratorScreen(session: Session, transport: PenTransport, clipUri: Uri) {
     val context = LocalContext.current
     val doc by session.doc.collectAsState()
-    val transport by session.transport.collectAsState()
+    val command by session.transport.collectAsState()
     var tMs by remember { mutableLongStateOf(0L) }
     var paused by remember { mutableStateOf(false) }
     var rate by remember { mutableStateOf(1.0f) }
@@ -125,8 +165,8 @@ private fun TelestratorScreen(session: Session, server: PenServer, clipUri: Uri)
         }
     }
 
-    LaunchedEffect(transport) {
-        val t = transport ?: return@LaunchedEffect
+    LaunchedEffect(command) {
+        val t = command ?: return@LaunchedEffect
         when (t.cmd) {
             "toggle" -> if (player.isPlaying) player.pause() else player.play()
             "play" -> player.play()
@@ -172,14 +212,15 @@ private fun TelestratorScreen(session: Session, server: PenServer, clipUri: Uri)
         )
 
         PairingCard(
-            url = "http://" + server.lanAddress() + ":" + server.port + "/?pin=" + session.pin,
+            url = transport.pairingUrl() ?: "connecting…",
+            transport = transport.name,
             modifier = Modifier.align(Alignment.TopEnd).padding(24.dp),
         )
 
         // Machine-readable status line: the live UI test reads this instead of guessing.
         Text(
             text = "t=" + tMs + "ms " + (if (paused) "PAUSED" else "PLAY") +
-                " x" + rate + " ink=" + doc.annotations.size,
+                " x" + rate + " ink=" + doc.annotations.size + " via=" + transport.name,
             color = Color.White,
             fontSize = 16.sp,
             modifier = Modifier
@@ -192,7 +233,7 @@ private fun TelestratorScreen(session: Session, server: PenServer, clipUri: Uri)
 }
 
 @Composable
-private fun PairingCard(url: String, modifier: Modifier = Modifier) {
+private fun PairingCard(url: String, transport: String, modifier: Modifier = Modifier) {
     val qr = remember(url) { runCatching { qrBitmap(url, 300) }.getOrNull() }
     Column(
         modifier = modifier
@@ -206,5 +247,6 @@ private fun PairingCard(url: String, modifier: Modifier = Modifier) {
             Image(bitmap = qr, contentDescription = "Pairing QR", modifier = Modifier.size(150.dp))
         }
         Text(text = url.removePrefix("http://"), color = Color.Black, fontSize = 11.sp)
+        Text(text = "via $transport", color = Color.DarkGray, fontSize = 10.sp)
     }
 }

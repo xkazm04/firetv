@@ -29,7 +29,10 @@ Chrome (real touch events)          Android TV emulator, API 34, leanback
 - **Transport from the phone:** play/pause, single-frame step, 0.25×/0.5× slow motion, scrub.
 - **The phone can see what it is drawing on:** the paused frame arrives as a JPEG thumbnail, and
   the TV mirrors its annotation document back so the eraser is aimed rather than guessed.
-- The TV serves the phone page itself, so `ws://` is same-origin (no mixed-content problem).
+- **Two transports behind one interface:** the TV either *listens* (LAN, lowest latency, serves the
+  phone page itself so `ws://` is same-origin) or *dials out* to a relay. Both are exercised by
+  tests. The second exists because a platform may not let an app listen at all — see
+  [docs/PLATFORM-RISK.md](docs/PLATFORM-RISK.md).
 - Pairing QR + rotating PIN; a phone with the wrong PIN is refused.
 - Fire TV remote keys drive playback, undo and clear.
 
@@ -40,7 +43,7 @@ Chrome (real touch events)          Android TV emulator, API 34, leanback
 | `core/` | Pure JVM: annotation schema + codec, timeline, letterbox mapping, pen engine, Catmull-Rom smoothing, hit-testing, undo history, wire protocol. No Android imports — 46 unit tests run in seconds with no device. |
 | `tv-app/` | Android app: Media3 player, Compose overlay, embedded Ktor server, QR pairing, D-pad input. |
 | `companion/` | The phone PWA. Single file, copied into the APK's assets at build time so there is one source of truth. |
-| `tools/` | `live-ui-test.mjs` (Playwright → real PWA → real TV → pixel assertions, 27 checks), `pen-sim.mjs` (headless protocol check), `latency-probe.mjs`. |
+| `tools/` | `live-ui-test.mjs` (Playwright → real PWA → real TV → pixel assertions, 27 checks), `relay-test.mjs` + `relay-stub.mjs` (the same APK with no listening socket, 11 checks), `pen-sim.mjs` (headless protocol check), `latency-probe.mjs`. |
 | `scripts/dev.ps1` | The whole cycle in one command. |
 | `fixtures/` | Reserved for clips; the PoC generates its own synthetic clip with ffmpeg (no copyright exposure). |
 
@@ -63,7 +66,12 @@ cd tools
 node pen-sim.mjs                     # headless phone, protocol only
 node latency-probe.mjs --seconds 6   # pen round-trip under 60 Hz load
 node latency-probe.mjs --idle        # same socket, no pen traffic (baseline)
+node relay-test.mjs                  # relaunches the app with no listening socket
 ```
+
+`relay-test.mjs` starts a local relay stub, restarts the app with `--es transport relay`, checks
+that nothing answers on the LAN port any more, and drives the whole thing through the relay. It
+puts the app back on the LAN transport when it finishes.
 
 Screenshots and a JSON result file land in `artifacts/`.
 

@@ -61,6 +61,7 @@ dependencies {
     debugImplementation(libs.compose.ui.tooling)
     implementation(libs.tv.material)
     implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.lifecycle.runtime)
 
     implementation(libs.media3.exoplayer)
     implementation(libs.media3.ui)
@@ -68,6 +69,9 @@ dependencies {
     implementation(libs.ktor.server.core)
     implementation(libs.ktor.server.cio)
     implementation(libs.ktor.server.websockets)
+    // The relay transport dials out instead of listening, so the app is a WebSocket client too.
+    implementation(libs.ktor.client.cio)
+    implementation(libs.ktor.client.websockets)
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.kotlinx.serialization.json)
 

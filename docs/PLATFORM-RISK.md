@@ -56,7 +56,7 @@ What survives a Vega port unchanged, and it is most of the code:
 | Annotation and tracking JSON schemas | ✅ | Wire formats, not platform APIs. |
 | Overlay rendering | ⚠️ | Compose Canvas → `react-native-svg`, which Vega does ship. Rewrite, but a mechanical one. |
 | Media3 player control | ⚠️ | Frame stepping would have to be rebuilt on `currentTime`; precision unproven. |
-| **Embedded LAN server (D3)** | ❌ | Likely impossible. The relay path becomes mandatory. |
+| **Embedded LAN server (D3)** | ❌ | Likely impossible. The relay path becomes mandatory — and now exists. |
 
 ## Decisions this changes
 
@@ -66,14 +66,28 @@ What survives a Vega port unchanged, and it is most of the code:
    2026 HD are Vega and will not run an APK at all. Amazon does not print the OS on the box, so
    match the model name on the retail listing before ordering; the lineup gets refreshed each
    autumn, so re-check the current names at purchase time rather than trusting this table.
-3. **Put the transport behind an interface now, before there is anything to migrate.** Today the
-   pen speaks to `PenServer` over LAN WebSocket. A `PenTransport` seam with two implementations —
-   LAN server and cloud relay — costs almost nothing while the code is this small, and it is the
-   difference between a two-week Vega port and a rewrite. The relay was already on the roadmap as
-   a hostile-Wi-Fi fallback (D3); this makes it a portability hedge as well, which roughly doubles
-   its value.
+3. ~~Put the transport behind an interface now~~ — **done, 2026-09-06.** `PenTransport` has two
+   implementations: `LanTransport` listens, `RelayTransport` dials out. Everything that carries
+   meaning — pairing, dispatch, the state and document heartbeat — moved into `PenSessionHost`,
+   which knows nothing about how a pen arrived. `tools/relay-test.mjs` runs the same APK with
+   `--es transport relay` and proves the app works with **nothing listening on the device**: it
+   asserts the LAN port stops answering, then drives a stroke onto the TV through a relay. The
+   relay was already on the roadmap as a hostile-Wi-Fi fallback (D3); it is now a portability
+   hedge as well.
 4. **Do not build anything else that depends on the TV being a server.** Discovery, multi-pen and
    the watch-party experiment should all be expressible over a relay.
+
+## What the relay work does and does not prove
+
+It proves the *shape* works: an outbound-only TV, a phone that meets it at a third party, and a
+relay dumb enough that it never learns the PIN or the annotation document.
+
+It does not prove the latency. The stub runs on the same machine as the test, so its round-trip
+(p50 ~5 ms) measures protocol overhead and nothing else — it reads *faster* than the LAN path only
+because the LAN probe goes through an adb tunnel. A hosted relay adds two internet legs to
+whichever region it lives in. Budget the design doc's +100–200 ms, expect shapes and tags to be
+fine and freehand to be marginal, and re-measure against a deployed relay before believing any of
+it.
 
 ## What is not decided
 
