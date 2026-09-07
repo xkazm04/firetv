@@ -27,7 +27,10 @@ for _s in (sys.stdout, sys.stderr):
     if hasattr(_s, "reconfigure"):
         _s.reconfigure(encoding="utf-8", errors="replace")
 
-ROOT = os.path.join("artifacts", "vision", "library")
+# Paths are anchored to the repo root, not the working directory: these scripts are run
+# from the repo root and from vision/ about equally often.
+REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+ROOT = os.path.join(REPO, "artifacts", "vision", "library")
 INDEX = os.path.join(ROOT, "clips.json")
 
 # --- VTT de-overlap ---------------------------------------------------------

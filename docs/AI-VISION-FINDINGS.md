@@ -419,6 +419,92 @@ or a hosted eye, the question becomes real.
 
 The tooling for 1 and 2 is written and in `vision/`.
 
+---
+
+## 8. The retrieval prototype — what it can and cannot answer
+
+`vision/coach.py`. Three steps, and the split is the whole design: the model **sees** (describes
+the frame, no tactical vocabulary allowed), the index **finds** (semantic search over the library),
+and the model **writes** using only what was found. No step asks it to know basketball.
+
+`vision/retrieve.py` embeds 733 passages — 579 overlapping transcript windows that keep their
+timestamps, plus 154 concept definitions — with `nomic-embed-text` on the local Ollama.
+
+### Finding 8 — dense retrieval alone cannot bridge fan language to coach language
+
+A viewer says *"the big man is hanging back near the rim instead of stepping out"*. A coach says
+**drop coverage**. Those are the same thing, and the embedding model does not know it: the correct
+concept scored **0.65**, *below* several rambling near-misses at 0.75, and never appeared in the
+top five.
+
+Expanding the question first — having the model write the answer it thinks is right, and searching
+with *that* — puts drop coverage top at **0.90, 0.88 and 0.87 from three independent channels**.
+
+This is not Finding 7 returning. The model is guessing a *word*, not reading the picture; the guess
+is never shown to the viewer, only used to steer the search. A wrong guess costs a retrieval, not a
+false answer — the passages it finds score low and the floor catches them.
+
+### Finding 9 — the same trick becomes citation laundering when pointed at a frame ⚠️
+
+Asked *"what is happening in this play right now?"* on a frame that is plainly a **free throw** —
+shooter at the line, players along the key, referee, fouls on the scorebug — the expansion invented
+a pick and roll, retrieval confirmed the invention at **0.905**, and the answer explained the frame
+as "typical for setting up a high pick-and-roll", **with citations**.
+
+Every component worked. Retrieval found genuinely relevant passages about a genuinely real concept,
+and the model quoted them accurately. The failure is that the question was never about that concept
+— expansion answers the hypothetical it just wrote, so aiming it at a specific moment converts a
+guess into a *sourced* claim. **Citations made a wrong answer more convincing, not less.**
+
+The fix is to route on the question, not to tune the retrieval:
+
+| Question | Route | Behaviour |
+|---|---|---|
+| *"why would a defence switch every screen?"* | general → expand | drop coverage / switching found at 0.87–0.90, answered and cited ✅ |
+| *"what is happening in this play?"* | specific → **no expansion** | best match 0.64, under the floor, refuses ✅ |
+
+Both layers are needed. The similarity floor sits at 0.68 because *"what is the best way to cook a
+risotto?"* still scored **0.643** against a basketball library — embeddings of jargon are never
+that far apart. The model's own refusal is the second layer, and it caught the risotto question
+even when the floor let it through.
+
+### What the answers actually look like
+
+Asked why a big man sits back near the rim, from four corroborating channels:
+
+> "That positioning is called *drop coverage*. It's a defensive strategy where the big man stays
+> back near the paint to protect the rim [1]. By retreating toward the basket, the defender stays
+> between the ball handler and the rim, preventing easy drives or lobs [1]. This forces the ball
+> handler to shoot over them rather than driving into the paint [2]."
+
+Correct, sourced, traceable to a timestamp in a named video. That is genuinely useful content.
+
+Asked what is happening on a specific frame, it says it does not know. That is also correct, and
+it is the answer the whole design exists to make possible.
+
+### 8.1 What this means for the product
+
+The prototype answers **questions about the sport**, reliably and with sources. It cannot answer
+**questions about the moment**, and now declines rather than pretending.
+
+So the pitch is not "the AI explains this play". It is **an expert on the game, always available,
+that never bluffs** — with the broadcast supplying the occasion to ask and the circle supplying
+*who* the viewer means, while the tactical content comes from a human who already said it on
+camera.
+
+That is a narrower product than the one implied at the start of this document, and it is the one
+the measurements support. The gap between them is exactly the perception problem in §3–§4, and
+every attempt to close it with cleverer prompting has made it worse rather than better.
+
+**What would widen it, in order of expected value:**
+
+1. **More library coverage.** Every refusal above was a coverage failure, not a reasoning failure.
+   Ten clips is nothing; a few hundred would answer most of what a viewer asks.
+2. **A detector.** Positions at frame rate would make "specific" questions answerable — who is
+   open, who is closest, how the shape changed — none of which needs the model to name a tactic.
+3. **Prepared clips.** For footage already in the library, the commentary *is* the answer, aligned
+   to the second. No perception at all, and it cannot be wrong.
+
 ## Reproducing any of this
 
 ```bash

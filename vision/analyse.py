@@ -28,7 +28,10 @@ for _s in (sys.stdout, sys.stderr):
     if hasattr(_s, "reconfigure"):
         _s.reconfigure(encoding="utf-8", errors="replace")
 
-KB = os.path.join("artifacts", "vision", "library", "knowledge.json")
+# Paths are anchored to the repo root, not the working directory: these scripts are run
+# from the repo root and from vision/ about equally often.
+REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+KB = os.path.join(REPO, "artifacts", "vision", "library", "knowledge.json")
 
 
 def vocabulary(sport="basketball", min_channels=2):
