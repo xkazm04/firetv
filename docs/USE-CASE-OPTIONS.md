@@ -1,185 +1,175 @@
-# Five directions, if "AI & Sports Analytics" cannot be delivered at quality
+# Fallback directions — v2, after market checks
 
-**Date:** 2026-09-07 · written on a fork of the session, as a fallback plan.
+**Date:** 2026-09-07 · written on a fork of the session, as a backup plan if "AI & Sports
+Analytics" cannot ship at quality. The main-track fallback (coach's clipboard: human draws, AI
+retrieves expert vocabulary) lives with the main track and is not listed here.
 
-**Premise.** The measurements in [AI-VISION-FINDINGS.md](AI-VISION-FINDINGS.md) say the local
-model is a good *describer*, a poor *measurer*, and an unreliable *narrator*; that a drawn circle
-reliably steers its attention; that it reads a scorebug correctly; and that tactical recognition
-does not work in any prompt condition we tried. Separately, the phone→TV pen stack is solid on real
-hardware: 27/27 live checks, p95 21 ms over Wi-Fi, two transports.
+**Bar for this list, set by the review of v1:** practical, *repeated* use — not "fun once, then
+deleted". The phone + TV pairing has to be *necessary*, not something an HDMI cable to a PC solves.
+The Stick stays a thin client: 1.7 GB RAM, already swapping, never runs a model.
 
-A golden use case sits on those facts rather than fighting them. Each option below is scored on
-**user pull**, **reuse of what is built**, and **risk given what we measured** — not on how
-impressive it sounds.
+**Rejected from v1 and why.** "Ask the screen" and auto-highlights: one-time novelty. Couch Studio:
+a second device that does not earn its maintenance, and a cable does most of it. Kept: party games,
+pending the market check below.
 
-One constraint applies to anything "pause any content": Fire OS will not let us screencap another
-app's DRM-protected video. Frames come only from **our own player** or media the user supplies.
-Every option below respects that.
-
----
-
-## 1. Party games on the TV, phones as the pens — with the AI as the guesser
-
-**Pitch.** Pictionary / "draw the word" on the living-room TV. Everyone scans the QR, draws on
-their phone, the TV shows it, and the *AI guesses the drawing* alongside the humans. Quiz rounds
-where the host is the model.
-
-**Why users want it.** It is the single most-played thing on a TV with friends present. Zero
-install (the TV serves the page), works on any phone, works on the phone your visitor brought.
-
-**What it reuses.** ~90%: pairing, pen engine, smoothing, colours, undo, frame anchoring becomes
-round anchoring. The LAN transport is exactly right.
-
-**The AI part is the model's strength, not its weakness.** Guessing a clean line drawing on a
-plain background is *description of a simple image* — the case where it answered in 1 s and was
-essentially perfect. No measuring, no narrating over time, no tactics.
-
-**What is new.** Multi-pen (today "newest pen wins"), rounds/scoring, word lists. All ordinary.
-
-**Risk.** Low. The only unmeasured piece is 4–6 simultaneous pens; the transport has headroom.
-
-**Demo in one line.** Four phones, one TV, the AI shouts "cat!" before anyone else does.
+What still holds from [AI-VISION-FINDINGS.md](AI-VISION-FINDINGS.md): the model is a good
+*describer* (reads text, scorebugs, scenes) and a bad *measurer* and *narrator*; a drawn circle
+steers it; the phone→TV stack is solid on hardware at p95 21 ms, with a LAN path and a relay path.
 
 ---
 
-## 2. "Ask the screen" — circle anything on a paused frame and ask, for any content
+## 1. Party games, phones as controllers — kept, and the market says drop it
 
-**Pitch.** Not sports-specific. Pause a cooking video, circle the pan: *"what is that?"* Pause a
-documentary, circle the animal. Pause a film, circle a prop. The TV answers, spoken aloud.
+**What is out there.** [Jackbox](https://gamefaqs.gamespot.com/firetv/195101-the-jackbox-party-pack)
+is on Fire TV at ~$30 a pack, phones joining via `jackbox.tv` and a room code — that is our
+architecture, shipped years ago. [AirConsole](https://www.amazon.com/N-Dream-AG-AirConsole-Multiplayer-Console/dp/B085H7Z1XC)
+is on the Amazon Appstore: scan a code, dozens of games, free tier plus $4.99/month. There are
+[roundups of ten more](https://playbuzzin.com/articles/best-party-games-for-tv) and
+[alternative lists](https://www.weekend.com/post/jackbox-on-fire-tv). The AI-guesses-your-drawing
+twist is Google's *Quick, Draw!* from 2016.
 
-**Why users want it.** It is the question people already ask the room, and nobody knows. It doubles
-as **accessibility**: "describe what's on screen" for low-vision viewers, which hackathon judges
-consistently reward and which is *exactly* the describer capability.
-
-**What it reuses.** The circle tool as the pointer (Finding 4, proven on real footage between
-players 50 px apart), the thumbnail path, pairing. ElevenLabs is already keyed in
-`gravitone-gcloud` for the voice; Fire OS has TTS built in as the fallback.
-
-**Why it is safer than sports.** General scene description is where the model was strongest on
-every clip — flare in the stands, swishing net, the scorebug. It fails at *interpreting sport*,
-not at *seeing things*.
-
-**What is new.** A question box on the phone, TTS on the TV, and a content source: our player
-with user-supplied media, or a small curated library. The DRM constraint bites here; say so in the
-pitch rather than hiding it.
-
-**Risk.** Low–medium. Latency is 1–3 s per answer, invisible on a paused frame. The honesty rules
-(offer the null answer, demand evidence) already exist.
-
-**Demo in one line.** Grandmother pauses a nature film, circles a bird, the TV tells her what it is.
+**Verdict.** A red ocean with two funded incumbents who have solved exactly our plumbing. Our
+only differentiators — lower latency on the LAN path, an AI guesser — are invisible to a player and
+already done respectively. **Keep it as a demo layer if useful; do not make it the product.**
 
 ---
 
-## 3. Auto-highlights and live score tracker for recorded sport
+## 2. Movement coach on the TV — workouts, physio, and your own technique
 
-**Pitch.** Drop a recording on the TV; it builds a timeline of the moments that mattered and a
-score-over-time strip, and the remote jumps between them. Sport stays, the *claim* changes: not
-"AI understands the game", but "AI finds the moments and reads the score."
+**Pitch.** The phone is the camera, propped on the coffee table. The TV shows the trainer, the
+routine, or the pro's swing; a skeleton of *you* is drawn over it, reps are counted, and the cue
+comes when your knee drifts in. Three audiences, one product: home workouts, prescribed physio
+exercises, and individual technique (golf swing, free-throw form) — film, play back slow, draw on it.
 
-**Why users want it.** Nobody rewatches 2½ hours. Everyone wants the 6 minutes.
+**Market.** Phone-camera form feedback is a real category —
+[Kemtai, Onyx, ScanFit, Firefly](https://www.sensai.fit/blog/best-ai-workout-form-check-apps-2026)
+call out "knees moving inward" with the measured angle — but they live on the *phone screen*. The
+TV-native versions are hardware: Peloton Guide, Tempo, Mirror, hundreds of dollars. **The wedge is
+TV-native with zero hardware, on the TV people already own.**
 
-**What it reuses.** Scorebug reading (correct, unprompted, on the first try), the closed-prompt
-event gate (Finding 3 — it said "nothing happened" correctly when nothing did), sparse-frame
-extraction, the library's transcript pipeline for any recording that has commentary.
+**Why the two devices are necessary.** The phone has the camera and the TV has the size. A PC does
+not stand on the coffee table facing you.
 
-**What is new.** A batch job — one frame a second through the model, ~1–3 s each, so a full game is
-an overnight run on the 4090 or a cloud burst. A timeline UI on the TV.
+**How it fits the Stick.** Pose estimation runs *on the phone*, in the browser — MediaPipe-class
+models are designed for exactly that. The phone sends keypoints, ~33 points at 20–30 Hz, which is
+lighter than the pen stream we already carry. The TV draws a skeleton; the overlay renderer is
+built and measured. **No VLM in the loop.** Angles and rep counts are arithmetic, which cannot
+hallucinate — Finding 2's lesson applied to a body instead of a pitch.
 
-**Risk.** Medium. Event detection was only proven for the *negative* case. Score-change detection
-via the scorebug is the reliable signal: a score changed ⇒ something happened just before it.
-Build the highlight logic on that, not on the model's opinion.
+**Reuse.** Pairing, LAN transport, overlay, frame anchoring for the slow-mo playback, the pen
+tools for the technique flavour. ~60%.
 
-**Demo in one line.** "Show me every basket in the fourth quarter" and it does.
+**New.** In-browser pose on the phone, skeleton overlay on the TV, rep/angle logic, a routine format.
 
----
-
-## 4. Software development — "Couch Studio": build a TV experience from your phone, rendered on a thin Fire TV client ★ the dev-focused option
-
-**Pitch.** The Fire TV app is a *thin renderer* — a full-screen WebView that shows whatever HTML it
-is sent. The phone is the prompt box. Claude Code on the PC (or in the cloud) generates the
-experience — a trivia round for tonight, a countdown board, a kids' spelling game, a dashboard —
-and it appears on the TV live, iterated from the couch. *"Make the timer bigger. Add a buzzer
-sound. Now make it a two-team game."*
-
-**Why this satisfies the brief.** Two devices, one of them light. The Stick has 1.7 GB RAM and was
-already swapping; it should not run a model and does not need to. Rendering HTML is what it is
-good at. The heavy compute is wherever the agent lives. The phone contributes text input and a
-touch surface. **Every device does the one thing it is cheap at.**
-
-**Why users want it.** It is the vibe-coding moment on the biggest screen in the house, for people
-who will never open an IDE. It is also a genuine dev tool: TV app developers get a live-reload
-target they drive from a phone, with `adb` never mentioned.
-
-**What it reuses.** More than it looks: the LAN server in the APK already serves a page to a phone
-and pushes state to a WebSocket — that *is* the render channel. `dev.ps1 -Device`, the pixel
-assertions and the latency probes become the developer's verification loop: the agent can deploy,
-screenshot, and check its own work on the real TV, which is what the whole first week built.
-
-**What is new.** A WebView surface in the TV app, a "push HTML" message type, the Claude Code side
-(a small MCP tool: `render_on_tv(html)`), and a phone prompt box. Sound via `<audio>` in the page.
-
-**A second flavour, same plumbing — "Mission Control".** The TV shows long agent runs (build
-status, test results, what Claude is doing right now); the phone is the approve/deny remote for
-permission prompts. Developers watching a 40-minute run from the sofa instead of the desk chair.
-Less magical for a demo; more likely to be used daily.
-
-**Risk.** Low on the TV side (WebView is mature on Fire OS), medium on "does generated HTML look
-good on a 10-foot UI" — solvable with a house stylesheet the agent must use.
-
-**Demo in one line.** Say "make a buzzer quiz for four teams" into your phone; thirty seconds later
-the family is playing it on the TV, and you fix the font size by saying so.
+**Risk.** Medium. Pose on a mid-range phone at 20 Hz is proven by the apps above; the unknown is
+how good the *cues* have to be before they are useful rather than annoying. Physio is the audience
+where a modest cue set is already valuable.
 
 ---
 
-## 5. Coach's clipboard — the telestrator for amateur teams, with the knowledge base as the expert
+## 3. Family board and care display — the TV a relative already has, posted to from anywhere
 
-**Pitch.** The recalibrated sports direction. A parent films the youth game on a phone; at home it
-plays on the TV; the coach draws on it exactly as we built; and when they circle a player and ask
-*"what should the defence do here?"*, the answer comes from the **library of expert breakdowns** —
-retrieved, cited, and read out — not from the model looking at the pixels.
+**Pitch.** Grandmother's Fire TV shows, big and always on: today's photos from the family, a
+message read aloud, the medication reminder, who is visiting Thursday. The family posts from their
+phones from any city. One button on her remote sends back "I'm fine" — or nothing, and the family
+sees that too.
 
-**Why users want it.** Every youth coach does this with a laptop and a whiteboard. Nobody has it
-on the living-room TV with a phone as the pen.
+**Market.** [Amazon retired Alexa Together](https://www.besidecare.com/blog/what-to-use-now-that-alexa-together-is-gone/)
+(the $19.99/month elder-care subscription with the activity feed and remote help) and replaced it
+with an emergency-assist product, leaving the daily-connection half unserved. The nearest things are
+dedicated hardware — Skylight-style calendar frames and digital photo frames — bought new, at a few
+hundred dollars, for a person who then has *another* screen to learn.
 
-**Why it works where "AI sports analytics" did not.** The human does the *seeing*; the AI does the
-*vocabulary*. That inverts the failed experiment: Finding 7 showed the model cannot recognise a
-tactic, and Findings 5–6 showed it cannot bind names to bodies. Retrieval needs neither. The
-knowledge base already holds 131 concepts with visual cues, cross-validated across channels, and
-it is grounded in transcripts we can quote.
+**Why the two devices are necessary.** The posting phone is in another house. This is the one
+option where the **relay transport** — built as a hedge and never yet the point — is the product.
+The TV dials out; the family meets it at the relay; nothing on the parent's network is configured.
 
-**Own footage fixes two problems at once.** No rights question, and a phone filmed from the stand
-gives players hundreds of pixels tall — the resolution that made basketball work and soccer fail.
+**AI on its strengths.** Describe an incoming photo aloud for low vision ("Emma on the beach,
+holding a shell") — scene description, the thing it did best on every clip. Read messages with TTS
+(ElevenLabs is keyed in `gravitone-gcloud`; Fire OS has TTS built in). No measuring, no narrating.
 
-**What it reuses.** All of the telestrator, the clip library, `patterns.py`, the circle-as-pointer.
+**Reuse.** Relay transport, pairing, QR onboarding done once by the visiting child, the TV render
+layer. ~50%.
 
-**What is new.** A retrieval layer over the transcripts (keyword or a small embedding model —
-nothing exotic), a concept-card UI on the TV, and TTS.
+**New.** A feed data model, a phone posting page, a TV feed layout that is legible from a sofa, the
+"I'm fine" acknowledgement path, the relay hosted somewhere real.
 
-**Risk.** Medium. The unproven step is whether retrieved commentary about *someone else's* game
-reads as useful on *this* frame. That is the exact question the un-forked branch is testing.
+**Risk.** Low–medium on tech, real on trust: a relay that carries family photos needs to be honest
+about where they go. The stub relay was designed dumb — it never learns the PIN — and that design
+is now a feature to state out loud.
 
-**Demo in one line.** Circle the defender, ask "what is drop coverage?", and the TV shows the
-concept card with the expert's own words and a diagram, over the paused frame of your kid's game.
+---
+
+## 4. Study desk — homework and tutoring on the big screen
+
+**Pitch.** The child points the phone at the worksheet; it appears on the TV. The parent, on the
+sofa, circles a problem from their own phone: *"explain this one, step by step, don't give the
+answer."* The explanation arrives on the TV, spoken. Both of them are looking at the same big page
+instead of crowding one phone.
+
+**Market.** Homework-help apps are everywhere *on the phone* (photo → solution). Classroom
+whiteboard-on-TV is crowded and, the research is blunt,
+[phones are poor pens for it](https://www.1001tvs.com/best-screen-mirroring-apps-teachers-2026/) —
+tablets win. So this is **not** a whiteboard product. The wedge is the *shared* view: two people,
+one page, one explaining and one learning, which the phone-solver apps structurally cannot do.
+
+**AI on its strengths.** Reading printed text and diagrams is description, and the circle-as-pointer
+is proven. The honesty rules (offer the null answer, demand evidence) already exist and matter
+here more than anywhere: "I can't read this" beats a confident wrong sum.
+
+**Why the two devices are necessary.** Phone = camera on the desk; TV = the page big enough for two
+people to look at; parent's phone = the pointer. A cable gives none of that.
+
+**Reuse.** Circle tool, pairing, thumbnail path, the frame-to-phone mirror. ~65%.
+
+**New.** Camera capture in the PWA, a question box, TTS, a "tutor mode" prompt that withholds
+answers.
+
+**Risk.** Medium. Maths OCR from a phone photo under living-room light is the unknown; the
+1–3 s answer latency is fine on a page that is not going anywhere.
+
+---
+
+## 5. Reading buddy — the child reads to the TV
+
+**Pitch.** The book's text is on the TV in large type. The phone, on the arm of the sofa, listens.
+As the child reads, the words light up; a stumble gets a gentle hint; the hard word gets sounded
+out. Parents get the "read 12 minutes, 4 new words" note afterwards.
+
+**Why it is here.** Daily, practical, and every parent of a five-to-eight-year-old does the
+underlying thing already. The TV earns its place because reading *together* on a sofa wants big
+text at a distance, not a phone held between two heads.
+
+**How it fits the Stick.** Speech recognition runs off the TV — on the phone in-browser for short
+utterances, or streamed over the existing socket to the PC/cloud for Whisper-class accuracy. The TV
+only highlights words. Deterministic alignment of heard words to known text, no VLM at all.
+
+**Reuse.** Transport, pairing, TV text rendering. ~35% — the lowest here; the audio stack is new.
+
+**New.** Microphone capture in the PWA, ASR, word alignment, a small library of leveled texts (public
+domain is plentiful for early readers).
+
+**Risk.** Medium–high, and honestly stated: child speech is the hardest ASR case, and the whole
+experience is the accuracy of that one step. It is on the list because the *value* is unarguable,
+not because the tech is safe.
 
 ---
 
 ## How they compare
 
-| | user pull | reuse | risk | AI on its strengths? |
-|---|---|---|---|---|
-| 1. Party games + AI guesser | **very high** | ~90% | **low** | ✅ describing a clean drawing |
-| 2. Ask the screen / accessibility | high | ~70% | low–med | ✅ scene description |
-| 3. Auto-highlights + score strip | high (sport fans) | ~50% | medium | ⚠️ only via the scorebug |
-| 4. Couch Studio (dev) ★ | high (a different crowd) | ~60% | low–med | ✅ generation, not perception |
-| 5. Coach's clipboard | medium (niche, loyal) | ~85% | medium | ✅ retrieval, not perception |
+| | repeated use | phone+TV necessary? | Stick stays thin? | reuse | risk |
+|---|---|---|---|---|---|
+| 1. Party games | yes | yes | yes | ~90% | low — **but owned by incumbents** |
+| 2. Movement coach | daily | yes (camera) | yes — pose on phone | ~60% | medium |
+| 3. Family & care board | daily | yes (remote) | yes | ~50% | low–med, trust |
+| 4. Study desk | weekly | yes (camera + pointer) | yes | ~65% | medium |
+| 5. Reading buddy | daily | yes (mic + big text) | yes | ~35% | med–high |
 
-**If one has to be picked cold:** **1** wins the room and is nearly built. **4** is the one a judge
-remembers, and it is the only option whose AI component gets *better* as models improve rather than
-being capped by perception. **2** is the safest way to keep the "AI on the TV" story with the
-accessibility angle as a moat.
+**Where I would put the bet:** **3** is the only one with a market gap you can point at — Amazon
+itself vacated it — and it is the only one where the relay path, already built and tested, is the
+whole product rather than a hedge. **2** has the broadest pull and the cleanest "each device does
+what it is cheap at" story. **4** is the safest technically and the most on-strength for the model.
 
-**Pairing that works:** 1 + 4 share the same phone-input, TV-render plumbing; ship the party game
-as the *first thing Couch Studio generates*. That tells one story with two demos.
-
-**What to stop claiming, in any option:** that the AI understands the game. Every measurement says
-it does not, and the pitch that survives is the one that never needed it to.
+**What the three share,** and what none of v1 had: the second device brings a *sensor or a remote
+presence* the TV cannot have — a camera, a microphone, a person in another city. That is the test
+for whether the pairing is necessary, and it is worth applying to any option that comes after these.
