@@ -1,0 +1,135 @@
+/*
+  On Air — the Study Desk design system. Rules in docs/DESIGN-ON-AIR.md; this file is those rules
+  as CSS. Sizes are for the 1920×1080 stage; the stage scales as a whole.
+*/
+:root {
+  --ink: #14161A; --ink-2: #1A1D22; --paper: #F2F3F5; --mute: rgba(255,255,255,.62); --line: rgba(255,255,255,.14);
+  --signal: #E23D28; --signal-2: #B8261A; --tint: #FFB4A8;
+  --maths: #7FD1E8; --english: #F2C14E; --essay: #8FD3A1;
+  --display: "Barlow Condensed", "Arial Narrow", sans-serif; --body: "Barlow", "Helvetica Neue", Arial, sans-serif;
+}
+
+/* ---- the stage: one committed dark world, every ground painted ---- */
+.stage { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; transform-origin: 0 0; background: var(--ink); color: var(--paper); font-family: var(--body); overflow: hidden; outline: none; }
+.grid { position: absolute; inset: 0; background-image: linear-gradient(rgba(255,255,255,.035) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.035) 1px, transparent 1px); background-size: 120px 120px; }
+.safe { position: absolute; inset: 54px 96px; z-index: 1; }
+
+/* ---- the band: one per screen ---- */
+.band { position: absolute; background: linear-gradient(180deg, var(--signal), var(--signal-2)); }
+.band::after { content: ""; position: absolute; inset: 0; background: repeating-linear-gradient(180deg, rgba(255,255,255,.05) 0 2px, transparent 2px 6px); }
+.band-left { left: -200px; top: 0; width: 760px; height: 1080px; clip-path: polygon(0 0, 100% 0, 60% 100%, 0 100%); }
+.band-left-thin { left: -200px; top: 0; width: 520px; height: 1080px; clip-path: polygon(0 0, 100% 0, 72% 100%, 0 100%); }
+.band-right { right: -200px; top: 0; width: 700px; height: 1080px; clip-path: polygon(40% 0, 100% 0, 100% 100%, 0 100%); }
+.band-rule { left: 0; top: 0; width: 1920px; height: 16px; }
+.band-wedge { left: 0; bottom: 0; width: 900px; height: 260px; clip-path: polygon(0 0, 100% 100%, 0 100%); }
+.band-low { left: -200px; top: 0; width: 900px; height: 1080px; clip-path: polygon(0 55%, 100% 100%, 0 100%); }
+.band-divider { left: 760px; top: 0; width: 400px; height: 1080px; clip-path: polygon(60% 0, 100% 0, 40% 100%, 0 100%); }
+
+/* ---- rail ---- */
+.rail { position: absolute; left: 0; top: 0; width: 300px; display: flex; flex-direction: column; gap: 26px; }
+.learner { font-family: var(--display); font-size: 64px; font-weight: 800; text-transform: uppercase; letter-spacing: .02em; line-height: .95; }
+.learner small { display: block; font-family: var(--body); font-size: 20px; font-weight: 600; letter-spacing: .18em; color: var(--mute); margin-bottom: 8px; }
+.subj { font-family: var(--display); font-size: 30px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; padding: 8px 0; color: var(--mute); }
+.subj[data-on="true"] { color: #fff; border-left: 6px solid #fff; padding-left: 16px; }
+.clock { font-family: var(--display); font-size: 72px; font-weight: 800; font-variant-numeric: tabular-nums; line-height: 1; }
+.clock small { display: block; font-family: var(--body); font-size: 20px; font-weight: 600; letter-spacing: .18em; text-transform: uppercase; color: var(--mute); }
+.clock[data-phase="break"] { background: #fff; color: var(--signal); display: inline-block; padding: 8px 20px; }
+.content { position: absolute; left: 356px; top: 0; right: 0; bottom: 0; }
+.content-full { position: absolute; left: 0; top: 0; right: 0; bottom: 0; }
+
+/* ---- type ---- */
+.eyebrow { font-size: 22px; font-weight: 600; letter-spacing: .18em; text-transform: uppercase; color: var(--mute); }
+.eyebrow[data-ch="maths"] { color: var(--maths); } .eyebrow[data-ch="english"] { color: var(--english); } .eyebrow[data-ch="essay"] { color: var(--essay); }
+.title { font-family: var(--display); font-size: 72px; font-weight: 800; text-transform: uppercase; letter-spacing: .02em; line-height: .95; margin-top: 8px; text-wrap: balance; }
+.headline { font-size: 52px; font-weight: 500; line-height: 1.2; }
+.body { font-size: 32px; line-height: 1.4; }
+.chan { font-family: var(--display); font-size: 24px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; }
+
+/* ---- lower-third, caption, ticker ---- */
+.lt { display: grid; grid-template-columns: auto 1fr; }
+.lt .tag { background: #fff; color: var(--ink); font-family: var(--display); font-size: 34px; font-weight: 800; text-transform: uppercase; letter-spacing: .06em; padding: 22px 30px; }
+.lt .txt { background: rgba(255,255,255,.08); backdrop-filter: blur(6px); font-size: 44px; font-weight: 500; padding: 20px 36px; border-right: 8px solid var(--signal); line-height: 1.25; }
+.cap { display: inline-block; background: var(--signal); color: #fff; font-family: var(--display); font-size: 26px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; padding: 8px 18px; }
+.cap-text { margin-top: 18px; font-size: 42px; font-weight: 500; line-height: 1.35; text-wrap: pretty; max-width: 1150px; }
+.cap-next { margin-top: 16px; font-family: var(--display); font-size: 34px; font-weight: 600; text-transform: uppercase; letter-spacing: .04em; color: var(--tint); }
+.ticker { position: absolute; left: 0; right: 0; bottom: 0; height: 64px; border-top: 2px solid var(--line); display: flex; align-items: center; gap: 28px; font-family: var(--display); font-size: 26px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--mute); font-variant-numeric: tabular-nums; white-space: nowrap; overflow: hidden; }
+.ticker b { color: #fff; font-weight: 800; } .ticker i { font-style: normal; color: var(--signal); }
+
+/* ---- focus: a skew and a hard shadow ---- */
+.btn { font-family: var(--display); font-size: 36px; font-weight: 800; text-transform: uppercase; letter-spacing: .06em; padding: 20px 40px; background: transparent; color: #fff; border: 3px solid rgba(255,255,255,.4); cursor: default; transition: transform .1s; }
+.btn[data-focused="true"] { background: #fff; color: var(--ink); border-color: #fff; transform: skewX(-6deg) scale(1.04); box-shadow: 12px 12px 0 var(--signal); }
+.btn[data-disabled="true"] { opacity: .35; }
+.actions { position: absolute; left: 0; bottom: 96px; display: flex; gap: 24px; }
+.row-focus[data-focused="true"] { background: #fff; color: var(--ink); transform: skewX(-4deg); box-shadow: 10px 10px 0 var(--signal); }
+
+/* ---- guide (the picker pattern) ---- */
+.guide { display: flex; flex-direction: column; }
+.guide .row { display: grid; grid-template-columns: 150px 1fr 140px; align-items: center; gap: 24px; padding: 20px 0; border-bottom: 1px solid var(--line); }
+.guide .row .u { font-family: var(--display); font-size: 30px; font-weight: 800; letter-spacing: .06em; color: var(--mute); }
+.guide .row .t { font-size: 34px; font-weight: 500; }
+.guide .row .d { font-family: var(--display); font-size: 26px; letter-spacing: .06em; color: var(--mute); text-align: right; font-variant-numeric: tabular-nums; }
+.guide .row[data-focused="true"] { background: #fff; color: var(--ink); transform: skewX(-4deg); box-shadow: 10px 10px 0 var(--signal); padding: 20px 24px; }
+.guide .row[data-focused="true"] .u, .guide .row[data-focused="true"] .d { color: var(--signal); }
+.guide .row[data-done="true"] .t { color: var(--mute); text-decoration: line-through; text-decoration-color: rgba(255,255,255,.3); }
+.guide .row[data-done="true"][data-focused="true"] .t { color: #3A3F47; }
+.pill { font-family: var(--display); font-size: 22px; font-weight: 800; letter-spacing: .12em; background: var(--signal); color: #fff; padding: 4px 10px; margin-left: 14px; vertical-align: middle; white-space: nowrap; }
+.pill[data-kind="done"] { background: transparent; border: 2px solid var(--essay); color: var(--essay); }
+
+/* ---- cards (task row, playbook) ---- */
+.cards { display: grid; gap: 28px; }
+.card { border: 2px solid var(--line); padding: 28px 32px; display: flex; flex-direction: column; gap: 10px; min-height: 260px; }
+.card[data-focused="true"] { background: #fff; color: var(--ink); border-color: #fff; transform: skewX(-4deg); box-shadow: 14px 14px 0 var(--signal); }
+.card .k { font-family: var(--display); font-size: 24px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--mute); }
+.card[data-focused="true"] .k { color: var(--signal); }
+.card .t { font-family: var(--display); font-size: 44px; font-weight: 800; text-transform: uppercase; letter-spacing: .02em; line-height: 1; }
+.card .d { font-size: 28px; line-height: 1.3; color: var(--mute); } .card[data-focused="true"] .d { color: #3A3F47; }
+.card .m { margin-top: auto; font-family: var(--display); font-size: 24px; letter-spacing: .08em; text-transform: uppercase; font-variant-numeric: tabular-nums; }
+
+/* ---- page bands ---- */
+.read { position: relative; overflow: hidden; background: #E9E6DF; }
+.read::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 14px; background: var(--signal); z-index: 1; }
+.read .img { position: absolute; left: 0; top: 0; width: 100%; transition: transform .18s; }
+.read[data-reading="true"] .img { filter: grayscale(1) brightness(.6); }
+/* The focused problem, marked on the page itself: a signal-red frame, because a white rule
+   disappears on paper and hides under the bracket. */
+.read .focus-band { position: absolute; left: 14px; right: 0; z-index: 2; box-shadow: inset 0 0 0 5px var(--signal); background: rgba(226,61,40,.07); transition: top .18s, height .18s; }
+.strip { display: flex; gap: 16px; align-items: flex-end; }
+.strip .thumb { width: 96px; height: 128px; background-size: cover; background-position: top center; opacity: .5; border: 2px solid transparent; }
+.strip .thumb[data-current="true"] { opacity: 1; border-color: #fff; box-shadow: 6px 6px 0 var(--signal); }
+
+/* ---- the sentence (English) ---- */
+.sent { font-size: 92px; font-weight: 500; line-height: 1.25; letter-spacing: -.01em; }
+.tok { position: relative; display: inline-block; }
+.tok[data-k="tense"] { border-bottom: 10px solid var(--signal); } .tok[data-k="marker"] { border-bottom: 10px solid var(--english); }
+.tok::after { content: attr(data-l); position: absolute; left: 0; top: 100%; margin-top: 16px; font-family: var(--display); font-size: 26px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; white-space: nowrap; }
+.tok[data-k="tense"]::after { color: var(--tint); } .tok[data-k="marker"]::after { color: var(--english); }
+
+/* ---- forensic (essay) ---- */
+.extract { font-size: 38px; line-height: 1.55; max-width: 60ch; }
+.extract mark { background: transparent; color: inherit; padding: 2px 0; }
+.extract mark[data-v="strong"] { box-shadow: inset 0 -14px 0 rgba(143,211,161,.35); }
+.extract mark[data-v="faulty"] { box-shadow: inset 0 -14px 0 rgba(226,61,40,.45); }
+.notes { display: flex; flex-direction: column; gap: 22px; }
+.notes .n { display: grid; grid-template-columns: 14px 1fr; gap: 18px; align-items: start; }
+.notes .n i { display: block; height: 100%; min-height: 40px; } .notes .n[data-v="strong"] i { background: var(--essay); } .notes .n[data-v="faulty"] i { background: var(--signal); }
+.notes .n b { display: block; font-family: var(--display); font-size: 28px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; }
+.notes .n span { font-size: 26px; color: var(--mute); line-height: 1.3; }
+
+/* ---- rule card ---- */
+.rule { display: grid; grid-template-columns: auto 1fr; gap: 10px 28px; font-size: 30px; border: 2px solid var(--line); padding: 24px 28px; max-width: 46ch; }
+.rule dt { font-family: var(--display); font-size: 26px; letter-spacing: .08em; text-transform: uppercase; color: var(--mute); padding-top: 4px; }
+.rule dd { margin: 0; } .rule .warn { grid-column: 1 / -1; color: var(--tint); }
+
+/* ---- calendar ---- */
+.cal { display: grid; grid-template-columns: 120px repeat(5, 1fr); gap: 12px; }
+.cal .wk { font-family: var(--display); font-size: 26px; letter-spacing: .08em; color: var(--mute); align-self: center; }
+.cal .cell { min-height: 150px; border: 2px solid var(--line); padding: 16px 18px; display: flex; flex-direction: column; gap: 6px; }
+.cal .cell .t { font-size: 26px; font-weight: 500; line-height: 1.2; } .cal .cell .s { margin-top: auto; font-family: var(--display); font-size: 22px; letter-spacing: .1em; text-transform: uppercase; }
+.cal .cell[data-state="done"] { border-color: rgba(143,211,161,.5); } .cal .cell[data-state="done"] .s { color: var(--essay); }
+.cal .cell[data-state="next"] .s { color: var(--tint); } .cal .cell[data-state="locked"] { opacity: .45; }
+.cal .cell[data-focused="true"] { background: #fff; color: var(--ink); border-color: #fff; transform: skewX(-3deg); box-shadow: 10px 10px 0 var(--signal); }
+.cal .cell[data-focused="true"] .s { color: var(--signal); }
+
+/* ---- motion: cuts, not fades ---- */
+.wipe { animation: wipe .28s steps(6) both; } @keyframes wipe { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
+@media (prefers-reduced-motion: reduce) { .wipe { animation: none; } .btn, .row-focus, .read .img { transition: none; } }
