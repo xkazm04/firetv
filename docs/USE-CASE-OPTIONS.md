@@ -12,7 +12,7 @@ The Stick stays a thin client: 1.7 GB RAM, already swapping, never runs a model.
 a second device that does not earn its maintenance, and a cable does most of it. Kept: party games,
 pending the market check below.
 
-What still holds from [AI-VISION-FINDINGS.md](AI-VISION-FINDINGS.md): the model is a good
+What still holds from [FRAME-ANALYSIS-LESSONS.md](FRAME-ANALYSIS-LESSONS.md): the model is a good
 *describer* (reads text, scorebugs, scenes) and a bad *measurer* and *narrator*; a drawn circle
 steers it; the phone→TV stack is solid on hardware at p95 21 ms, with a LAN path and a relay path.
 

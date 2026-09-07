@@ -46,6 +46,7 @@ Chrome (real touch events)          Android TV emulator, API 34, leanback
 | `tools/` | `live-ui-test.mjs` (Playwright → real PWA → real TV → pixel assertions, 27 checks), `relay-test.mjs` + `relay-stub.mjs` (the same APK with no listening socket, 11 checks), `pen-sim.mjs` (headless protocol check), `latency-probe.mjs`. |
 | `scripts/dev.ps1` | The whole cycle in one command. |
 | `fixtures/` | Reserved for clips; the PoC generates its own synthetic clip with ffmpeg (no copyright exposure). |
+| `vision/` | Local vision-model client and the mark-as-pointer technique. Two files, domain-neutral — see the lessons doc. |
 
 ## Running it
 
@@ -78,9 +79,21 @@ Screenshots and a JSON result file land in `artifacts/`.
 ## What this PoC deliberately does not cover
 
 Everything in the design doc's P1 and P2 tiers: the AWS tracking pipeline, name-tag *snapping* to
-tracked players, Bedrock, voice. It also has not run on real Fire TV hardware.
+tracked players, Bedrock, voice.
+
+## Where the product is going
+
+The sports-analytics direction was investigated and **closed** — a local vision model turned out to
+be a good describer and a poor measurer, and the advanced graphics on real broadcasts are driven by
+sensors in the venue rather than by anything visible in the picture. What came out of that work is
+a set of transferable techniques for asking a model about a paused frame, kept in `vision/` and
+written up in the lessons doc. The next use case is being shaped separately.
 
 - [docs/POC-FINDINGS.md](docs/POC-FINDINGS.md) — what the toolchain proved, what it did not, and
   the latency finding that came out of it.
 - [docs/PLATFORM-RISK.md](docs/PLATFORM-RISK.md) — Fire OS vs Vega OS, which Stick to buy, and why
   the transport should sit behind an interface.
+- [docs/FRAME-ANALYSIS-LESSONS.md](docs/FRAME-ANALYSIS-LESSONS.md) — what a local vision model can
+  and cannot be asked about a paused frame, measured. Domain-neutral.
+- [docs/USE-CASE-OPTIONS.md](docs/USE-CASE-OPTIONS.md) — candidate directions, scored on user pull,
+  reuse and measured risk.
