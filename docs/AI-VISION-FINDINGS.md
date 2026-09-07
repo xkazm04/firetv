@@ -139,6 +139,35 @@ a premise. Give it an explicit way to say nothing happened, and demand evidence:
 **Three rules, then, for every prompt we write:** enumerate instead of counting; always offer the
 null answer; require evidence naming what changed.
 
+### Finding 4 — a drawn circle is a working pointer, and we already build them
+
+This is the result the recommendation rests on, so it was tested rather than assumed.
+
+Visual question answering falls over on *reference*: "why is HE offside" is unanswerable unless the
+model and the viewer agree on who "he" is. Text cannot fix it — "the player on the left" is
+ambiguous with eleven of them — and coordinates are not something a viewer can express. So the
+question is whether burning an annotation into the pixels changes what the model attends to.
+
+Controlled test, synthetic scene, circle drawn on blue 7:
+
+| | Answer |
+|---|---|
+| **Without** the circle | *"Red, number 11"* — it read "the circle" as the pitch's **centre circle** and answered about a different player entirely |
+| **With** the circle drawn | *"The player inside the yellow circle is wearing a blue shirt with the number 7"* ✅ |
+
+On real broadcast footage it also discriminates between two players about 50 px apart — a circle on
+one returns "dark red or maroon kit… standing, possibly waiting for play to resume" (correct, it is
+a stoppage), and a circle 40 px to the right returns "white kit" (also correct).
+
+**So the telestrator's circle tool is the pointing device for the AI, and we built it last week
+without knowing it.** The viewer draws where they are already drawing; the annotation is both the
+question and the grounding. Nothing else in this document is as load-bearing as this, and nothing
+else would have been as easy to assume.
+
+Mechanically: draw the ring several pixels thick. A hairline vanishes when the model downscales the
+frame, and a pointer the model cannot see is worse than no pointer, because the prompt still claims
+one is there.
+
 ---
 
 ## 4. Which sports-studio features are actually reachable
@@ -180,10 +209,11 @@ It is the strongest case for four independent reasons:
    a human. Two seconds is nothing there; the same two seconds is fatal in anything live.
 2. **It uses the model's best output and avoids its worst.** Description and dialogue, not
    measurement and narration-over-time.
-3. **It composes with what already works.** The phone is a pen *and* a microphone/keyboard; the
-   annotation overlay is already the answer surface. A circle drawn round a player is a perfect
-   way to say *which* player the question is about — that grounding is the hard part of visual
-   Q&A, and we built it last week without knowing it.
+3. **It composes with what already works, and this is now measured, not hoped for** (Finding 4).
+   The phone is a pen *and* a keyboard; the overlay is already the answer surface; and a drawn
+   circle demonstrably redirects the model to the right player, on real footage, between players
+   50 px apart. The grounding problem that sinks most visual Q&A is solved by a gesture the viewer
+   was making anyway.
 4. **The failure mode is survivable.** A wrong answer to "why is that offside" is a bad
    explanation. A wrong offside *line* is a broadcast-grade error on screen.
 
@@ -241,4 +271,7 @@ python vision/synth_pitch.py --out artifacts/vision/seq1   # scene with known gr
 python vision/probe.py       --seq artifacts/vision/seq1   # four primitives, scored
 python vision/sequence.py    --seq artifacts/vision/seq1   # per-frame VLM + events in code
 python vision/look.py --dir artifacts/vision/soccer_cc --crop 0.50,0.75   # real footage
+
+# does a drawn circle point the model at the right player? (--compare runs it both ways)
+python vision/ask_frame.py --frame artifacts/vision/seq1/frame_0.jpg   --at 0.632,0.406 --radius 0.035 --compare   --ask "Which player is inside the circle? Give their team colour and shirt number."
 ```

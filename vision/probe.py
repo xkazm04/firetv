@@ -17,8 +17,16 @@ import argparse
 import base64
 import json
 import os
+import sys
 import time
 import urllib.request
+
+# The model answers in whatever characters it likes, and a Windows console defaults to cp1250,
+# which raises on the first emoji or box-drawing character rather than printing it. Every script
+# here prints model output, so this belongs in the shared module.
+for _stream in (sys.stdout, sys.stderr):
+    if hasattr(_stream, "reconfigure"):
+        _stream.reconfigure(encoding="utf-8", errors="replace")
 
 HOST = os.environ.get("OLLAMA_HOST", "http://127.0.0.1:11434").rstrip("/")
 MODEL = os.environ.get("OLLAMA_VISION_MODEL", "qwen3.8:27b")
