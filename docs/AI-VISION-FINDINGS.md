@@ -1,0 +1,244 @@
+# Sports AI on local hardware — what the eye can and cannot do
+
+**Date:** 2026-09-07
+**Question asked:** before committing to AWS, a tracking pipeline or any Fire TV integration, what
+can we actually extract from sports frames using only what is on this machine — and which use case
+is worth chasing?
+
+**Verdict: the local model is an excellent *describer* and a poor *measurer*. That is not a
+limitation to engineer around; it selects the use case.**
+
+Everything below was measured today. Nothing here needs a TV, an AWS account, or a network.
+
+---
+
+## 1. What we have, measured
+
+| Resource | Detail |
+|---|---|
+| Vision model | `qwen3.8:27b` (27.3 B, Q4_K_M, 17.7 GB) via Ollama at `127.0.0.1:11434` |
+| GPU | RTX 4090, 24 GB — the model fits entirely in VRAM |
+| Also available | `GOOGLE_AI_API_KEY` (Gemini) in `gravitone-gcloud`, if a cloud eye is ever wanted |
+| Video tooling | `yt-dlp` 2026.08.19, `ffmpeg` 7.x |
+| Orchestration | Claude Code CLI (this) for the reasoning layer |
+
+### Latency, and the one number that governs everything
+
+| Input | Prompt tokens | Warm latency |
+|---|---|---|
+| 1920×1080, simple scene | 2061 | **1–3 s** |
+| 960 px wide | 531 | 2.5 s |
+| 640 px wide | 241 | 1.8 s |
+| 1280×720 **broadcast wide shot**, full frame | — | **19–194 s** ⚠️ |
+| Same frame, cropped to the player band | — | **4.8–5.7 s** |
+
+First call after idle costs **25 s** — that is loading 17 GB into VRAM, once, not per frame.
+
+**Two consequences, and they decide the shape of the product:**
+
+1. **Real-time video analysis is off the table locally.** 25 fps needs 40 ms/frame; we have
+   seconds. Anything live must be sparse-sampled or run in the cloud.
+2. **Paused-frame analysis is comfortably interactive** — which is exactly the moment a
+   telestrator already creates. The product we built pauses on a frame and waits for a human.
+   That is precisely where a 2-second answer is invisible.
+
+**Scene complexity costs more than resolution.** A 1080p test pattern answers in 1 s; a 720p
+broadcast frame full of small players and a crowd took up to 194 s and returned nothing usable.
+Cropping to the horizontal band the players occupy took it to 5 s — a **~35× speed-up** — because
+it removes thousands of crowd faces the model would otherwise try to account for.
+
+---
+
+## 2. The four primitives, scored against known truth
+
+`vision/synth_pitch.py` generates a football scene from a spec, so the answer is known exactly:
+12 players, 7 red and 5 blue, known shirt numbers and positions, and one scripted event — red 10
+passes to red 11 between frames 2 and 3. Five frames, one second apart.
+
+It is deliberately *easier* than reality — flat colours, no occlusion, numbers face-on. **Read
+these as a ceiling, not a prediction.**
+
+| Primitive | Prompt | Result |
+|---|---|---|
+| **count** | "how many red players?" | **1/5** ❌ |
+| **roster** | "list every player: team, number, x, y" | **60/60 shirt numbers, mean position error 5 px** ✅ |
+| **ball** | "who is in possession?" | **5/5**, including the change ✅ |
+| **burst** | "what happened across these 5 frames?" | **wrong** — invented a duel, missed the pass ❌ |
+
+### Finding 1 — never ask for a number, ask for a list
+
+The same model, on the same image, scored **1/5 counting** and **60/60 enumerating**. Counting is
+a single token it has to guess; enumeration makes it attend to each object in turn, and then *we*
+take `len()`. This is free accuracy and it applies to every "how many" question we will ever want.
+
+### Finding 2 — the model is a good eye and an unreliable narrator
+
+Asked to narrate five frames, it produced a fluent account of a duel between red 11 and blue 7
+that never happened, and missed the pass that did. Asked what is in *one* frame, it was essentially
+perfect, five times in a row.
+
+So the architecture writes itself, and `vision/sequence.py` implements it:
+
+```
+per frame:  VLM  →  structured observation (who, where, who has the ball)
+across time: code →  differences, possession changes, events
+```
+
+Run against the same sequence, that pipeline reports:
+
+```
+PASS: red 10 -> red 11  (between frame 2 and 3)     ← exactly the ground truth
+counts from the roster: {'red': 7, 'blue': 5}        ← exact
+```
+
+The model's own narration got this wrong. Arithmetic over its per-frame observations gets it right,
+and **arithmetic cannot hallucinate.** Identity comes free from the shirt number, so players are
+tracked across frames with no tracking algorithm at all.
+
+---
+
+## 3. What survives real footage
+
+Source: a Creative Commons Attribution clip of a Rapid Wien match (`artifacts/vision/` — gitignored;
+footage is never committed).
+
+**What held up.** Scene reading is genuinely good. From one frame, unprompted, it returned sport,
+camera framing, `phase: "stoppage"`, both kits with counts, and:
+
+> "A flare is burning in the crowd, emitting bright orange light and thick white smoke. The stands
+> are packed with fans waving green and white flags."
+
+All correct. On a basketball clip it also correctly reported **0 players** rather than inventing
+any, and read a swishing net as a completed shot. It does not fabricate objects.
+
+**What broke.**
+
+- **Enumeration degrades badly.** On the uncropped wide shot it returned zero players after 194 s.
+  Cropped, it found 10–13 players and separated red from white — plus a black-shirted referee and
+  a blue goalkeeper, both plausible.
+- **Shirt numbers are mostly unreadable**: 3–5 legible out of ~13. On a broadcast wide shot a
+  player is a few dozen pixels tall and the number is a handful. **Do not design anything that
+  depends on reading a number off a wide shot.**
+- **Cropping trades understanding for detection.** The cropped frame lost the crowd, and the model
+  changed `phase` from the correct "stoppage" to "goal celebration". Context is what made the first
+  answer right.
+- **It confabulates into a vacuum.** Asked openly what happened across five frames of a stoppage,
+  it described a free kick, a goalkeeper diving left, and a ball heading for the top corner. None
+  of it occurred. The clip is twelve seconds of players standing around a burning flare.
+
+### Finding 3 — confabulation is a prompt bug, and it is fixable
+
+The invention happens when we ask "what happened" and nothing did. The model treats the question as
+a premise. Give it an explicit way to say nothing happened, and demand evidence:
+
+| Prompt | Answer |
+|---|---|
+| "What is happening?" (open) | narrates a free kick that does not exist |
+| "Decide whether a significant event occurs. **Most 5-second windows contain none.** Only claim one if you can point to what visibly changed. State that evidence." | `significant_event: false`, `event_type: "none"`, confidence **high**, with correct reasoning: *"players standing relatively still… the primary activity is in the stands… this is an off-pitch event"* |
+
+**Three rules, then, for every prompt we write:** enumerate instead of counting; always offer the
+null answer; require evidence naming what changed.
+
+---
+
+## 4. Which sports-studio features are actually reachable
+
+The honest split is between features that need **measurement** and features that need **description**.
+
+| Feature | Needs | Local verdict |
+|---|---|---|
+| Offside line | calibrated pitch homography, precise feet positions | ❌ not with a VLM at any prompt |
+| Player tracers / heat maps / distance covered | frame-rate detection + multi-object tracking | ❌ VLM far too slow; ✅ *a YOLO-class detector on this 4090 would do it* |
+| Speed / distance between players | metric calibration | ❌ pixels ≠ metres without homography |
+| Name tags pinned to players | per-player identity on a wide shot | ⚠️ shirt numbers unreadable; needs detection + tracking, not a VLM |
+| Formation / shape ("the back line is flat, 4-3-3") | approximate positions only | ✅ reachable — positions were 5 px accurate on clean input |
+| Possession and passes | who is nearest the ball, per frame | ✅ 5/5 synthetic; needs real-footage validation |
+| Event / highlight detection | "did anything happen in this window" | ✅ with the closed-prompt discipline |
+| **Explaining a paused frame in plain language** | scene understanding | ✅ **the model's strongest output by a distance** |
+| **Answering a viewer's question about the frame** | scene understanding + dialogue | ✅ same strength, and nothing else we could build has this |
+
+**The pattern:** everything in the ❌ column is a *geometry* problem that computer vision solved
+years ago with detectors and homography, and that a language model is the wrong tool for. Everything
+in the ✅ column is a *language* problem, where the VLM is the only thing we have that can do it at
+all.
+
+Chasing the ❌ column means rebuilding second-rate Hawk-Eye. Chasing the ✅ column means building
+something the broadcast studios largely do **not** have, because it only makes sense with one
+viewer and a remote in their hand.
+
+---
+
+## 5. The strongest case, and why
+
+> **The viewer pauses on a frame and asks the television a question about it.**
+
+*"Why is that offside?" · "What should the defence have done here?" · "Who is the free man?"*
+
+It is the strongest case for four independent reasons:
+
+1. **It sits exactly where our latency is invisible.** The telestrator already pauses and waits for
+   a human. Two seconds is nothing there; the same two seconds is fatal in anything live.
+2. **It uses the model's best output and avoids its worst.** Description and dialogue, not
+   measurement and narration-over-time.
+3. **It composes with what already works.** The phone is a pen *and* a microphone/keyboard; the
+   annotation overlay is already the answer surface. A circle drawn round a player is a perfect
+   way to say *which* player the question is about — that grounding is the hard part of visual
+   Q&A, and we built it last week without knowing it.
+4. **The failure mode is survivable.** A wrong answer to "why is that offside" is a bad
+   explanation. A wrong offside *line* is a broadcast-grade error on screen.
+
+**Second-strongest:** auto-highlight detection over a whole clip — sample a frame per second,
+closed-prompt each window, keep the windows with events. It is unglamorous and the local box can
+do it overnight for a full match.
+
+---
+
+## 6. What I need from you
+
+**1. Real tactical footage — the blocker.** ⚠️
+Free stock sports footage is b-roll: a hoop against the sky, a flare in the stands. It is not the
+elevated wide tactical shot every analysis feature assumes. Options, best first:
+
+- **SoccerNet** — the research dataset built for exactly this: broadcast footage with player,
+  ball, action and camera-calibration annotations. Free for research, needs a signed licence
+  agreement. It would give us *labelled ground truth*, which is what turns opinion into a score.
+- Footage you own or can record — a local match filmed from a stand is ideal and rights-free.
+- A specific match you want to demo on, and confirmation of how we may use it.
+
+Tell me which and I will build the ingest around it.
+
+**2. Which sport.** Soccer is the best-supported by public datasets. Hockey is hardest (fastest
+puck, most occlusion). Basketball has the smallest pitch and clearest kits. Pick one to go deep on
+rather than three shallow.
+
+**3. Does the demo need per-player identity?** This is the fork in the road. "The left back is
+stepping up" needs only *positions*. "Number 6 is stepping up" needs *identity*, which the wide
+shot does not give us and which changes the pipeline from one model to a detector + tracker + OCR
+stack. My recommendation: **no** for the demo.
+
+**4. What counts as good enough?** For a hackathon: does one convincing explanation on one prepared
+clip win, or does it need to hold up on arbitrary footage? These are very different projects.
+
+**5. Cloud budget, later not now.** Nothing so far needs it. When we do want frame-rate detection
+or a hosted eye, the question becomes real.
+
+---
+
+## 7. What I would do next
+
+1. **Get footage.** Everything else is blocked on it, and nothing else is.
+2. **Build the smallest end-to-end thing**: a paused frame plus a circled region plus a typed
+   question, answered locally. No TV, no cloud. It either feels like magic or it does not, and we
+   will know within a day.
+3. **Only then** decide whether it earns a detector, AWS, and the Fire TV integration.
+
+The tooling for 1 and 2 is written and in `vision/`.
+
+## Reproducing any of this
+
+```bash
+python vision/synth_pitch.py --out artifacts/vision/seq1   # scene with known ground truth
+python vision/probe.py       --seq artifacts/vision/seq1   # four primitives, scored
+python vision/sequence.py    --seq artifacts/vision/seq1   # per-frame VLM + events in code
+python vision/look.py --dir artifacts/vision/soccer_cc --crop 0.50,0.75   # real footage
+```
