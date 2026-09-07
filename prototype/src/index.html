@@ -1,0 +1,632 @@
+<title>Study Desk</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  /* A 10-foot UI is one committed visual world; every ground is painted, nothing borrows the host. */
+  :root {
+    --ground: #121A24; --surface: #1B2632; --surface-2: #233140; --rail: #0E141B;
+    --text: #E8EEF4; --muted: #8FA1B3; --line: #2C3A4A;
+    --focus: #6FA8DC; --focus-ink: #0B1420;
+    --warm: #E2A84B; --warm-ink: #2A1D06;
+    --good: #6CBF84; --bad: #D9736A;
+    --phone-ground: #F5F7F9; --phone-surface: #FFFFFF; --phone-ink: #1B2632; --phone-muted: #5E6E7E; --phone-line: #D7DEE5;
+    --sans: "IBM Plex Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    --mono: "IBM Plex Mono", "SF Mono", Consolas, monospace;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #0A0F15; color: var(--text); font-family: var(--sans); min-height: 100vh; }
+  button { font: inherit; }
+
+  /* ---- workbench: TV stage + phone, scaled to the viewport ---- */
+  .bench { display: grid; grid-template-columns: 1fr auto; gap: 24px; align-items: start; padding: 24px; }
+  .stage-wrap { position: relative; width: 100%; aspect-ratio: 16 / 9; overflow: hidden; border-radius: 6px; background: var(--ground); box-shadow: 0 30px 60px rgba(0,0,0,.5); }
+  .stage { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; transform-origin: 0 0; background: var(--ground); font-size: 32px; line-height: 1.35; }
+  .toolbar { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 8px 20px; align-items: center; color: var(--muted); font-size: 14px; }
+  .toolbar b { color: var(--text); font-weight: 500; }
+  .toolbar kbd { font-family: var(--mono); font-size: 12px; background: var(--surface-2); color: var(--text); padding: 2px 6px; border-radius: 3px; border: 1px solid var(--line); }
+  .toolbar button { background: transparent; color: var(--text); border: 1px solid var(--line); border-radius: 4px; padding: 4px 10px; cursor: pointer; }
+  .toolbar button[aria-pressed="true"] { border-color: var(--focus); color: var(--focus); }
+
+  /* ---- TV: safe zone, rail, content ---- */
+  .safe { position: absolute; inset: 54px 96px; display: grid; grid-template-columns: 320px 1fr; column-gap: 48px; }
+  .stage[data-rail="collapsed"] .safe { grid-template-columns: 0 1fr; column-gap: 0; }
+  .stage[data-rail="collapsed"] .rail { opacity: 0; pointer-events: none; }
+  .rail { display: flex; flex-direction: column; gap: 28px; transition: opacity .18s; }
+  .rail .learner { font-size: 26px; color: var(--muted); letter-spacing: .04em; text-transform: uppercase; }
+  .rail .learner b { display: block; font-size: 40px; color: var(--text); font-weight: 600; letter-spacing: 0; text-transform: none; }
+  .chips { display: flex; flex-direction: column; gap: 10px; }
+  .chip { padding: 12px 20px; border-radius: 8px; background: var(--surface); color: var(--muted); font-size: 28px; }
+  .chip[data-on="true"] { color: var(--text); background: var(--surface-2); }
+  .content { position: relative; min-width: 0; }
+  .screen { position: absolute; inset: 0; display: none; }
+  .screen[data-active="true"] { display: block; }
+  .eyebrow { font-size: 24px; color: var(--muted); letter-spacing: .06em; text-transform: uppercase; }
+  h1 { font-size: 56px; font-weight: 600; margin: 8px 0 0; line-height: 1.15; text-wrap: balance; }
+  h2 { font-size: 40px; font-weight: 600; margin: 0; }
+
+  /* ---- timer: the warm thing that is always alive ---- */
+  .timer { font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 44px; color: var(--warm); }
+  .timer small { display: block; font-family: var(--sans); font-size: 22px; color: var(--muted); }
+  .timer-chip { position: absolute; right: 96px; bottom: 54px; font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 30px; color: var(--warm); background: rgba(14,20,27,.85); padding: 8px 18px; border-radius: 8px; display: none; }
+  .stage[data-rail="collapsed"] .timer-chip { display: block; }
+
+  /* ---- focus: unmistakable from three metres ---- */
+  [data-focusable] { outline: 4px solid transparent; outline-offset: 4px; transition: transform .12s, outline-color .12s, box-shadow .12s; }
+  [data-focusable][data-focused="true"] { outline-color: var(--focus); transform: scale(1.04); box-shadow: 0 18px 40px rgba(0,0,0,.45); z-index: 2; }
+  [data-focusable][data-pressed="true"] { transform: scale(.97); }
+  @media (prefers-reduced-motion: reduce) { [data-focusable], .rail { transition: none; } }
+
+  /* ---- T0 pair ---- */
+  .pair { position: absolute; inset: 0; display: grid; place-items: center; text-align: center; }
+  .pair .qr { width: 340px; height: 340px; background: #fff; border-radius: 12px; margin: 0 auto 28px; display: grid; place-items: center; }
+  .pair .qr canvas { image-rendering: pixelated; }
+  .pair .pin { font-family: var(--mono); font-size: 72px; letter-spacing: .3em; color: var(--text); }
+  .pair p { color: var(--muted); font-size: 30px; max-width: 26ch; margin: 8px auto 0; }
+
+  /* ---- T1 tonight: task row ---- */
+  .row { display: flex; gap: 28px; margin-top: 40px; }
+  .task { flex: 0 0 380px; height: 300px; background: var(--surface); border-radius: 12px; padding: 28px; display: flex; flex-direction: column; justify-content: space-between; cursor: pointer; }
+  .task .sub { font-size: 24px; color: var(--muted); letter-spacing: .06em; text-transform: uppercase; }
+  .task .name { font-size: 34px; font-weight: 500; line-height: 1.2; text-wrap: balance; }
+  .task .meta { display: flex; justify-content: space-between; font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 24px; color: var(--muted); }
+  .task[data-done="true"] { opacity: .55; }
+  .task[data-done="true"] .meta::after { content: "done"; color: var(--good); font-family: var(--sans); }
+  .quiet { margin-top: 56px; color: var(--muted); font-size: 28px; }
+
+  /* ---- T2 page: band, overview, strip ---- */
+  .pagehead { display: flex; justify-content: space-between; align-items: baseline; }
+  .pagehead .n { font-family: var(--mono); font-variant-numeric: tabular-nums; color: var(--muted); font-size: 28px; }
+  .band-wrap { position: relative; margin-top: 28px; height: 520px; border-radius: 12px; overflow: hidden; background: #E9E6DF; }
+  .band { position: absolute; inset: 0; background-repeat: no-repeat; transition: background-position .18s; }
+  /* the focused problem, marked on the page itself: a blue bar and a faint lift, nothing else */
+  .band-focus { position: absolute; left: 0; right: 0; border-left: 10px solid var(--focus); background: rgba(111,168,220,.12); transition: top .18s, height .18s; pointer-events: none; }
+  .band-wrap[data-view="overview"] .band-focus { display: none; }
+  .band-wrap[data-reading="true"] .band { filter: grayscale(1) brightness(.7); }
+  .reading { position: absolute; left: 0; right: 0; bottom: 0; padding: 18px 28px; background: rgba(14,20,27,.85); color: var(--warm); font-size: 26px; display: none; }
+  .band-wrap[data-reading="true"] .reading { display: block; }
+  .overview { position: absolute; inset: 0; display: none; background: #E9E6DF; }
+  .band-wrap[data-view="overview"] .overview { display: block; }
+  .band-wrap[data-view="overview"] .band { display: none; }
+  .overview img { position: absolute; left: 50%; top: 0; height: 100%; transform: translateX(-50%); }
+  .overview .cursor { position: absolute; border: 4px solid var(--focus); border-radius: 6px; box-shadow: 0 0 0 4000px rgba(18,26,36,.35); }
+  .item-line { margin-top: 22px; display: flex; gap: 24px; align-items: baseline; }
+  .item-line .n { font-family: var(--mono); color: var(--focus); font-size: 30px; }
+  .item-line .t { font-size: 32px; color: var(--text); }
+  .item-line .ask { margin-left: auto; font-size: 26px; color: var(--warm); }
+  .strip { position: absolute; left: 0; right: 0; bottom: 0; display: flex; gap: 16px; align-items: flex-end; }
+  .thumb { width: 96px; height: 128px; border-radius: 6px; background-size: cover; background-position: top center; opacity: .55; }
+  .thumb[data-current="true"] { opacity: 1; outline: 3px solid var(--focus); outline-offset: 3px; }
+  .strip .add { width: 96px; height: 128px; border-radius: 6px; border: 2px dashed var(--line); display: grid; place-items: center; color: var(--muted); font-size: 22px; text-align: center; }
+
+  /* ---- T3 hint ---- */
+  .problem { background: var(--surface); border-radius: 12px; padding: 28px 32px; font-size: 40px; line-height: 1.3; display: flex; gap: 24px; }
+  .problem .n { font-family: var(--mono); color: var(--focus); }
+  .asked { margin-top: 18px; color: var(--muted); font-size: 28px; }
+  .asked b { color: var(--text); font-weight: 500; }
+  .hint { margin-top: 36px; padding-left: 28px; border-left: 6px solid var(--warm); font-size: 36px; line-height: 1.4; max-width: 44ch; text-wrap: pretty; }
+  .hint .next { margin-top: 16px; font-size: 30px; color: var(--warm); }
+  .hint[data-stage="2"] { border-left-color: var(--text); }
+  .card { margin-top: 28px; display: grid; grid-template-columns: auto 1fr; gap: 10px 28px; font-size: 28px; background: var(--surface); padding: 24px 28px; border-radius: 12px; max-width: 46ch; }
+  .card dt { color: var(--muted); }
+  .card dd { margin: 0; }
+  .card .warn { grid-column: 1 / -1; color: var(--warm); }
+  .actions { position: absolute; bottom: 0; left: 0; display: flex; gap: 24px; }
+  .btn { padding: 18px 36px; border-radius: 10px; background: var(--surface-2); color: var(--text); font-size: 30px; font-weight: 500; border: 0; cursor: pointer; }
+  .btn[data-primary="true"] { background: var(--focus); color: var(--focus-ink); }
+  .btn[disabled] { opacity: .4; }
+  .none { margin-top: 36px; color: var(--muted); font-size: 30px; max-width: 40ch; }
+
+  /* ---- T4 lesson ---- */
+  .why { color: var(--muted); font-size: 28px; margin-top: 12px; }
+  .why b { color: var(--text); font-weight: 500; }
+  .player { margin-top: 28px; height: 620px; border-radius: 12px; background: #000; position: relative; overflow: hidden; display: grid; place-items: center; }
+  .player .caption { position: absolute; left: 0; right: 0; bottom: 96px; padding: 0 64px; text-align: center; font-size: 34px; line-height: 1.35; text-shadow: 0 2px 8px #000; max-width: 60ch; margin: 0 auto; }
+  .player .bar { position: absolute; left: 48px; right: 48px; bottom: 40px; height: 6px; background: rgba(255,255,255,.25); border-radius: 3px; }
+  .player .bar i { position: absolute; left: 0; top: 0; bottom: 0; background: var(--focus); border-radius: 3px; }
+  .player .bar b { position: absolute; top: -14px; width: 6px; height: 34px; background: var(--warm); border-radius: 3px; }
+  .player .time { position: absolute; right: 48px; bottom: 56px; font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 26px; color: var(--muted); }
+  .player .stub { font-size: 26px; color: var(--muted); }
+
+  /* ---- T5 break / T6 recap ---- */
+  .break { position: absolute; inset: 0; display: grid; place-items: center; text-align: center; }
+  .break .big { font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 160px; color: var(--warm); line-height: 1; }
+  .break p { color: var(--muted); font-size: 32px; }
+  .recap { margin-top: 36px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
+  .stat { background: var(--surface); border-radius: 12px; padding: 24px 28px; }
+  .stat .v { font-family: var(--mono); font-variant-numeric: tabular-nums; font-size: 64px; line-height: 1; }
+  .stat .k { color: var(--muted); font-size: 24px; margin-top: 8px; }
+  .hard { margin-top: 28px; font-size: 28px; }
+  .hard .eyebrow { margin-bottom: 8px; }
+  .hard li { margin: 6px 0 6px 20px; }
+
+  /* ---- phone ---- */
+  .phone { width: 390px; height: 800px; border-radius: 36px; background: #0A0F15; padding: 12px; box-shadow: 0 30px 60px rgba(0,0,0,.5); }
+  .phone .glass { width: 100%; height: 100%; border-radius: 26px; background: var(--phone-ground); color: var(--phone-ink); overflow: hidden; display: flex; flex-direction: column; font-size: 15px; }
+  .ptop { display: flex; justify-content: space-between; align-items: center; padding: 14px 16px 10px; border-bottom: 1px solid var(--phone-line); }
+  .ptop .who { display: flex; gap: 4px; background: #E6EBF0; border-radius: 999px; padding: 3px; }
+  .ptop .who button { border: 0; background: transparent; padding: 5px 12px; border-radius: 999px; font-size: 13px; color: var(--phone-muted); cursor: pointer; }
+  .ptop .who button[aria-pressed="true"] { background: var(--phone-surface); color: var(--phone-ink); font-weight: 500; box-shadow: 0 1px 2px rgba(0,0,0,.1); }
+  .ptop .link { font-size: 12px; color: var(--phone-muted); }
+  .ptop .link b { color: var(--good); font-weight: 500; }
+  .pbody { flex: 1; overflow: auto; padding: 16px; display: flex; flex-direction: column; gap: 14px; }
+  .pnav { display: flex; border-top: 1px solid var(--phone-line); background: var(--phone-surface); }
+  .pnav button { flex: 1; border: 0; background: transparent; padding: 12px 4px; font-size: 12px; color: var(--phone-muted); cursor: pointer; }
+  .pnav button[aria-pressed="true"] { color: var(--phone-ink); font-weight: 600; }
+  .pscreen { display: none; flex-direction: column; gap: 14px; }
+  .pscreen[data-active="true"] { display: flex; }
+  .pscreen h3 { margin: 0; font-size: 20px; font-weight: 600; }
+  .pscreen p { margin: 0; color: var(--phone-muted); line-height: 1.4; }
+  .pbtn { border: 0; border-radius: 12px; padding: 14px; font-size: 16px; font-weight: 500; background: var(--phone-ink); color: #fff; cursor: pointer; }
+  .pbtn[data-secondary="true"] { background: #E6EBF0; color: var(--phone-ink); }
+  .pbtn:disabled { opacity: .4; }
+  .cam { aspect-ratio: 3 / 4; border-radius: 12px; background: #1B2632; position: relative; overflow: hidden; display: grid; place-items: center; color: #8FA1B3; font-size: 13px; }
+  .cam img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .cam .corner { position: absolute; width: 24px; height: 24px; border: 3px solid #fff; }
+  .mirror { position: relative; border-radius: 12px; overflow: hidden; background: #E9E6DF; touch-action: none; cursor: crosshair; }
+  .mirror img { display: block; width: 100%; }
+  .mirror .ring { position: absolute; width: 60px; height: 60px; border: 4px solid #FFD400; border-radius: 50%; transform: translate(-50%, -50%); pointer-events: none; display: none; }
+  .mirror .ring[data-on="true"] { display: block; }
+  .field { display: flex; gap: 8px; }
+  .field input { flex: 1; border: 1px solid var(--phone-line); border-radius: 10px; padding: 12px; font: inherit; }
+  .presets { display: flex; flex-wrap: wrap; gap: 6px; }
+  .presets button { border: 1px solid var(--phone-line); background: var(--phone-surface); border-radius: 999px; padding: 6px 10px; font-size: 12px; cursor: pointer; }
+  .tlist { display: flex; flex-direction: column; gap: 8px; }
+  .tlist label { display: flex; gap: 10px; align-items: center; background: var(--phone-surface); border: 1px solid var(--phone-line); border-radius: 10px; padding: 10px 12px; }
+  .tlist label span { flex: 1; }
+  .tlist label small { color: var(--phone-muted); font-family: var(--mono); }
+  .precap { background: var(--phone-surface); border: 1px solid var(--phone-line); border-radius: 12px; padding: 14px; line-height: 1.5; }
+  .precap b { display: block; font-size: 16px; margin-bottom: 6px; }
+  .precap ul { margin: 6px 0 0; padding-left: 18px; color: var(--phone-muted); }
+
+  @media (max-width: 1100px) { .bench { grid-template-columns: 1fr; } .phone { justify-self: center; } }
+</style>
+
+<div class="bench">
+  <div class="toolbar">
+    <b>Study Desk</b> — prototype on real PoC output
+    <span>TV: <kbd>←</kbd><kbd>↑</kbd><kbd>↓</kbd><kbd>→</kbd> D-pad · <kbd>Enter</kbd> Select · <kbd>Backspace</kbd> Back · <kbd>M</kbd> Menu · <kbd>Space</kbd> Play/Pause</span>
+    <button id="tts" aria-pressed="true">Read hints aloud</button>
+    <button id="fast" aria-pressed="false">Timer ×60</button>
+    <span id="status" style="margin-left:auto"></span>
+  </div>
+
+  <div class="stage-wrap"><div class="stage" id="stage" data-rail="full" tabindex="0" aria-label="Fire TV screen">
+    <div class="timer-chip" id="timerChip">25:00</div>
+    <div class="safe">
+      <aside class="rail" id="rail">
+        <div class="learner">Learner<b id="learner">Ema</b></div>
+        <div class="chips" id="chips"></div>
+        <div class="timer"><span id="timerBig">25:00</span><small id="timerLabel">not started</small></div>
+        <div id="railHint" class="chip" style="color:var(--warm);display:none">Select a problem for a hint</div>
+      </aside>
+      <main class="content" id="content">
+
+        <section class="screen" data-screen="pair">
+          <div class="pair"><div>
+            <div class="qr"><canvas id="qr" width="29" height="29" style="width:300px;height:300px"></canvas></div>
+            <div class="pin">4 7 2 9</div>
+            <p>Scan with a phone, or open <b>10.0.0.142:8765</b> and type the code.</p>
+          </div></div>
+        </section>
+
+        <section class="screen" data-screen="tonight">
+          <div class="eyebrow">Tonight</div>
+          <h1 id="tonightTitle">Three things, about 55 minutes</h1>
+          <div class="row" id="tasks"></div>
+          <div class="quiet" id="quiet">Point your phone at the page to begin.</div>
+        </section>
+
+        <section class="screen" data-screen="page">
+          <div class="pagehead"><h2 id="pageTitle">Algebra — Exercise 4.2</h2><span class="n" id="pageN">page 1 / 1</span></div>
+          <div class="band-wrap" id="bandWrap" data-view="band" data-reading="false">
+            <div class="band" id="band"></div>
+            <div class="band-focus" id="bandFocus"></div>
+            <div class="overview" id="overview"><img id="overviewImg" alt=""><div class="cursor" id="cursor"></div></div>
+            <div class="reading" id="readingLine">reading the page…</div>
+          </div>
+          <div class="item-line"><span class="n" id="itemN">1.</span><span class="t" id="itemT"></span><span class="ask" id="itemAsk">Select for a hint</span></div>
+          <div class="strip" id="strip"></div>
+        </section>
+
+        <section class="screen" data-screen="hint">
+          <div class="eyebrow" id="hintEyebrow">Hint</div>
+          <div class="problem" style="margin-top:12px"><span class="n" id="hintN">3.</span><span id="hintQ"></span></div>
+          <div class="asked" id="asked" style="display:none">Asked from the phone: <b id="askedQ"></b></div>
+          <div class="hint" id="hintBox" data-stage="1"><div id="hintText"></div><div class="next" id="hintNext"></div></div>
+          <dl class="card" id="ruleCard" style="display:none"></dl>
+          <div class="none" id="noneBox" style="display:none">No lesson in tonight's library covers this one yet. The hint is all there is — and that is fine.</div>
+          <div class="actions">
+            <button class="btn" data-focusable data-act="stuck" id="btnStuck">Still stuck</button>
+            <button class="btn" data-focusable data-act="lesson" id="btnLesson" data-primary="true">Show me the lesson</button>
+          </div>
+        </section>
+
+        <section class="screen" data-screen="lesson">
+          <div class="eyebrow">Lesson</div>
+          <h2 id="lessonTitle"></h2>
+          <div class="why" id="lessonWhy"></div>
+          <div class="player" id="player">
+            <div class="stub">video playback is stubbed in the prototype — the segment text below is the real transcript at the retrieved timestamp</div>
+            <div class="caption" id="caption"></div>
+            <div class="bar"><i id="barFill"></i><b id="barMark"></b></div>
+            <div class="time" id="lessonTime"></div>
+          </div>
+        </section>
+
+        <section class="screen" data-screen="break">
+          <div class="break"><div>
+            <div class="eyebrow">Break</div>
+            <div class="big" id="breakBig">5:00</div>
+            <p>Stand up. The page will still be here.</p>
+            <p style="font-size:24px">Select to skip the break</p>
+          </div></div>
+        </section>
+
+        <section class="screen" data-screen="recap">
+          <div class="eyebrow">Tonight, done</div>
+          <h1 id="recapTitle">Good session</h1>
+          <div class="recap">
+            <div class="stat"><div class="v" id="rTime">0</div><div class="k">minutes on task</div></div>
+            <div class="stat"><div class="v" id="rProblems">0</div><div class="k">problems looked at</div></div>
+            <div class="stat"><div class="v" id="rHints">0</div><div class="k">hints used</div></div>
+          </div>
+          <div class="hard" id="hardBox"><div class="eyebrow">Where it was hard</div><ul id="hardList"></ul></div>
+          <div class="actions"><button class="btn" data-focusable data-act="send" data-primary="true">Send to parent</button></div>
+        </section>
+
+      </main>
+    </div>
+  </div></div>
+
+  <div class="phone"><div class="glass">
+    <div class="ptop">
+      <div class="who"><button id="roleStudent" aria-pressed="true">Student</button><button id="roleParent" aria-pressed="false">Parent</button></div>
+      <div class="link" id="plink">not joined</div>
+    </div>
+    <div class="pbody">
+      <div class="pscreen" data-pscreen="join" data-active="true">
+        <h3>Join the desk</h3>
+        <p>Scan the code on the TV, or type it.</p>
+        <div class="field"><input id="pinInput" inputmode="numeric" placeholder="4-digit code" value="4729"><button class="pbtn" id="joinBtn">Join</button></div>
+        <p style="font-size:12px">The TV serves this page itself; nothing to install.</p>
+      </div>
+      <div class="pscreen" data-pscreen="capture">
+        <h3>Capture a page</h3>
+        <div class="cam" id="cam"><span>camera</span>
+          <i class="corner" style="left:14px;top:14px;border-right:0;border-bottom:0"></i><i class="corner" style="right:14px;top:14px;border-left:0;border-bottom:0"></i>
+          <i class="corner" style="left:14px;bottom:14px;border-right:0;border-top:0"></i><i class="corner" style="right:14px;bottom:14px;border-left:0;border-top:0"></i>
+        </div>
+        <button class="pbtn" id="snap">Snap page</button>
+        <p id="snapInfo">Next up: the maths sheet.</p>
+        <label style="display:flex;gap:8px;align-items:center;color:var(--phone-muted)"><input type="checkbox" id="doccam"> Keep re-snapping while I write (document camera)</label>
+      </div>
+      <div class="pscreen" data-pscreen="point">
+        <h3>Point &amp; ask</h3>
+        <p>Tap a problem on the page, then ask.</p>
+        <div class="mirror" id="mirror"><img id="mirrorImg" alt="the captured page"><div class="ring" id="ring"></div></div>
+        <div class="field"><input id="question" placeholder="What do you want to know?"><button class="pbtn" id="askBtn">Ask</button></div>
+        <div class="presets" id="presets"></div>
+        <p style="font-size:12px">Mic is stubbed — it types.</p>
+      </div>
+      <div class="pscreen" data-pscreen="tonight">
+        <h3>Tonight</h3>
+        <div class="tlist" id="ptasks"></div>
+        <div class="field"><input id="newTask" placeholder="Add an assignment"><button class="pbtn" data-secondary="true" id="addTask">Add</button></div>
+        <button class="pbtn" id="startTimer">Start 25 minutes</button>
+        <button class="pbtn" data-secondary="true" id="endSession">End session</button>
+      </div>
+      <div class="pscreen" data-pscreen="parent">
+        <h3>Recap</h3>
+        <p id="precapEmpty">Arrives when the session ends.</p>
+        <div class="precap" id="precap" style="display:none"></div>
+      </div>
+    </div>
+    <div class="pnav">
+      <button data-nav="capture">Capture</button><button data-nav="point">Point &amp; ask</button><button data-nav="tonight">Tonight</button><button data-nav="parent">Recap</button>
+    </div>
+  </div></div>
+</div>
+
+<script>
+const DATA = /*__DATA__*/null;
+
+// ---------- state ----------
+const S = {
+  screen: "pair", joined: false, pages: [], pageIx: 0, itemIx: 0, view: "band", reading: false,
+  hintStage: 1, hintKey: null, askedQ: "", lesson: null, timer: { left: 25*60, running: false, phase: "work" },
+  tasks: [
+    { sub: "Maths", name: "Algebra — Exercise 4.2, all ten", min: 25, done: false, page: "math" },
+    { sub: "Spanish", name: "Unidad 6 — verb forms", min: 15, done: false, page: "spanish" },
+    { sub: "Essay", name: "Later school starts — first draft", min: 15, done: false, page: "essay" },
+  ],
+  log: { problems: new Set(), hints: 0, hard: [], started: null, minutes: 0 },
+  focus: 0, role: "student", pscreen: "join",
+};
+const $ = (id) => document.getElementById(id);
+const stage = $("stage");
+const say = (t) => { if ($("tts").getAttribute("aria-pressed") !== "true" || !("speechSynthesis" in window)) return;
+  try { speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(t.replace(/\$|\\frac|\\sqrt|\*/g, "")); u.rate = .95; speechSynthesis.speak(u); } catch (e) {} };
+const status = (t) => { $("status").textContent = t; };
+
+// ---------- screens ----------
+function show(name) {
+  S.screen = name;
+  document.querySelectorAll(".screen").forEach(s => s.dataset.active = String(s.dataset.screen === name));
+  stage.dataset.rail = (name === "page" || name === "lesson" || name === "pair" || name === "break") ? "collapsed" : "full";
+  S.focus = 0; renderFocus();
+}
+function focusables() { return [...document.querySelector(`.screen[data-screen="${S.screen}"]`).querySelectorAll("[data-focusable]")]; }
+function renderFocus() {
+  document.querySelectorAll("[data-focusable]").forEach(el => el.dataset.focused = "false");
+  const f = focusables(); if (f.length) f[Math.min(S.focus, f.length - 1)].dataset.focused = "true";
+}
+function press(el, fn) { el.dataset.pressed = "true"; setTimeout(() => { el.dataset.pressed = "false"; fn(); }, 120); }
+
+// ---------- T0 pair: a real QR-ish pattern from the URL, deterministic ----------
+(function drawQr() {
+  const c = $("qr").getContext("2d"); let seed = 4729;
+  const rnd = () => (seed = (seed * 9301 + 49297) % 233280) / 233280;
+  c.fillStyle = "#fff"; c.fillRect(0, 0, 29, 29); c.fillStyle = "#111";
+  for (let y = 0; y < 29; y++) for (let x = 0; x < 29; x++) if (rnd() > .55) c.fillRect(x, y, 1, 1);
+  const finder = (x, y) => { c.fillStyle = "#111"; c.fillRect(x, y, 7, 7); c.fillStyle = "#fff"; c.fillRect(x+1, y+1, 5, 5); c.fillStyle = "#111"; c.fillRect(x+2, y+2, 3, 3); };
+  finder(0, 0); finder(22, 0); finder(0, 22);
+})();
+
+// ---------- rail ----------
+function renderRail() {
+  $("chips").innerHTML = S.tasks.map(t => `<div class="chip" data-on="${S.pages[S.pageIx]?.subject === t.sub}">${t.sub}</div>`).join("");
+  $("railHint").style.display = S.screen === "page" ? "block" : "none";
+}
+
+// ---------- T1 tonight ----------
+function renderTonight() {
+  const total = S.tasks.filter(t => !t.done).reduce((a, t) => a + t.min, 0);
+  const n = S.tasks.filter(t => !t.done).length;
+  $("tonightTitle").textContent = n ? `${["One thing","Two things","Three things","Four things","Five things"][n-1] || n + " things"}, about ${total} minutes` : "Everything done";
+  $("tasks").innerHTML = S.tasks.map((t, i) => `<div class="task" data-focusable data-done="${t.done}" data-ix="${i}">
+      <div><div class="sub">${t.sub}</div><div class="name">${t.name}</div></div>
+      <div class="meta"><span>${t.min} min</span></div></div>`).join("");
+  $("quiet").textContent = S.pages.length ? "Select a task, or Down to the page." : "Point your phone at the page to begin.";
+  renderFocus();
+}
+
+// ---------- T2 page ----------
+const PHOTO_W = () => S.pages[S.pageIx].w;
+function renderPage() {
+  const p = S.pages[S.pageIx]; if (!p) return;
+  $("pageTitle").textContent = p.title; $("pageN").textContent = `page ${S.pageIx + 1} / ${S.pages.length}`;
+  const wrap = $("bandWrap"); wrap.dataset.view = S.view; wrap.dataset.reading = String(S.reading);
+  const W = 1728, H = 520;                           // content width with the rail collapsed
+  const scale = W / p.w;
+  const it = p.items[S.itemIx];
+  const band = $("band");
+  band.style.backgroundImage = `url(${p.img})`;
+  band.style.backgroundSize = `${p.w * scale}px auto`;
+  // One problem's worth of lead above the focused band, so the crop starts on a boundary a reader
+  // recognises rather than mid-line; the focused band itself is marked on the page.
+  const bh = (it.band[1] - it.band[0]) * scale;
+  const top = Math.max(0, Math.min(p.h * scale - H, it.band[0] * scale - bh * 0.9));
+  band.style.backgroundPosition = `0 ${-top}px`;
+  const bf = $("bandFocus"); bf.style.top = (it.band[0] * scale - top) + "px"; bf.style.height = bh + "px";
+  $("overviewImg").src = p.img;
+  const ovScale = H / p.h, ovLeft = (W - p.w * ovScale) / 2;
+  const cur = $("cursor"); cur.style.left = ovLeft + "px"; cur.style.width = p.w * ovScale + "px";
+  cur.style.top = it.band[0] * ovScale + "px"; cur.style.height = (it.band[1] - it.band[0]) * ovScale + "px";
+  $("itemN").textContent = p.id === "essay" ? `¶ ${it.n}` : `${it.n}.`;
+  $("itemT").textContent = S.reading ? "" : (p.id === "essay" ? "" : it.text);
+  const hasHint = !!DATA.hints[it.key] || p.id === "essay";
+  $("itemAsk").textContent = S.reading ? "" : (hasHint ? "Select for a hint" : "No hint written for this one yet");
+  $("strip").innerHTML = S.pages.map((pg, i) => `<div class="thumb" data-current="${i === S.pageIx}" style="background-image:url(${pg.img})"></div>`).join("")
+    + `<div class="add">snap another</div>`;
+  renderRail();
+}
+function addPage(id) {
+  const src = DATA.pages.find(p => p.id === id); if (!src || S.pages.some(p => p.id === id)) { S.pageIx = S.pages.findIndex(p => p.id === id); show("page"); renderPage(); return; }
+  S.pages.push(src); S.pageIx = S.pages.length - 1; S.itemIx = 0; S.view = "band";
+  S.reading = true; show("page"); renderPage(); status("reading the page (stubbed at 3 s; measured 25 s locally)");
+  setTimeout(() => { S.reading = false; renderPage(); status(`${src.items.length} items read`); }, 3000);
+  renderMirror();
+}
+
+// ---------- T3 hint ----------
+function openHint(askedQ) {
+  const p = S.pages[S.pageIx], it = p.items[S.itemIx];
+  let key = it.key, h = DATA.hints[key];
+  if (p.id === "essay") { // essay hints are questions the student asks, not problems on the page
+    const essayKeys = Object.keys(DATA.hints).filter(k => DATA.hints[k].subject === "essay");
+    key = askedQ ? (essayKeys.find(k => DATA.hints[k].q.toLowerCase().startsWith(askedQ.toLowerCase().slice(0, 18))) || essayKeys[0]) : essayKeys[0];
+    h = DATA.hints[key];
+  }
+  if (!h) { status("no hint on file for that item"); return; }
+  S.hintKey = key; S.hintStage = 1; S.askedQ = askedQ || "";
+  S.log.problems.add(key); S.log.hints++;
+  const pick = DATA.picks[key];
+  $("hintN").textContent = p.id === "essay" ? "✎" : `${it.n}.`;
+  $("hintQ").textContent = p.id === "essay" ? h.q : it.text;
+  $("asked").style.display = askedQ ? "block" : "none"; $("askedQ").textContent = askedQ || "";
+  $("hintEyebrow").textContent = h.subject === "spanish" ? "Hint · the rule that applies" : "Hint";
+  renderHint();
+  const card = $("ruleCard");
+  if (h.rule) {
+    const r = h.rule;
+    card.style.display = "grid";
+    card.innerHTML = `<dt>Verb</dt><dd>${r.verb} (${r.class})</dd><dt>Tense</dt><dd>${r.name} — because of ${r.tense_reason}</dd>
+      <dt>Person</dt><dd>${r.person} — ${r.person_reason}</dd><dt>Find the ending</dt><dd>the ${r.person.split(" ")[0]} row of your chart</dd>${r.note ? `<div class="warn">${r.note}</div>` : ""}`;
+  } else card.style.display = "none";
+  $("btnLesson").disabled = !pick; $("noneBox").style.display = (h.subject === "math" && !pick) ? "block" : "none";
+  S.lesson = pick || null;
+  show("hint"); renderRail();
+}
+// The model writes maths as LaTeX. Spoken it is noise; shown it is worse. Render the little it
+// actually uses — $…$, ^n, \frac — and leave the rest alone, so the screen is judged on what the
+// model really said rather than a cleaned transcript.
+function maths(s) {
+  return s.replace(/\\frac\{([^}]*)\}\{([^}]*)\}/g, "($1)⁄($2)").replace(/\\sqrt\{([^}]*)\}/g, "√($1)").replace(/\\pm/g, "±")
+    .replace(/\^2/g, "²").replace(/\^3/g, "³").replace(/\^\{?(\d)\}?/g, "^$1").replace(/\$/g, "").replace(/\*\*/g, "");
+}
+function renderHint() {
+  const h = DATA.hints[S.hintKey], stage = S.hintStage, hh = stage === 1 ? h.hint1 : h.hint2;
+  $("hintBox").dataset.stage = String(stage);
+  $("hintText").textContent = maths(hh.hint); $("hintNext").textContent = hh.what_to_try_next ? "→ " + maths(hh.what_to_try_next) : "";
+  $("btnStuck").textContent = stage === 1 ? "Still stuck" : "That's both hints";
+  $("btnStuck").disabled = stage === 2;
+  say(hh.hint);
+}
+function escalate() {
+  if (S.hintStage === 2) return; S.hintStage = 2; S.log.hints++;
+  const p = S.pages[S.pageIx], it = p.items[S.itemIx];
+  S.log.hard.push(p.id === "essay" ? DATA.hints[S.hintKey].q : `${p.subject} ${it.n}. ${it.text}`);
+  renderHint(); S.focus = 1; renderFocus();
+}
+
+// ---------- T4 lesson ----------
+let lessonT = 0, lessonTick = null;
+function openLesson() {
+  const L = S.lesson; if (!L) return;
+  $("lessonTitle").textContent = L.title;
+  const p = S.pages[S.pageIx], it = p.items[S.itemIx];
+  $("lessonWhy").innerHTML = `Chosen because your problem — <b>${it.text}</b> — needs what this lesson teaches. Starts at the part that matters.`;
+  $("caption").textContent = L.text;
+  lessonT = L.t; renderLesson(); show("lesson");
+  clearInterval(lessonTick); lessonTick = setInterval(() => { if (S.screen !== "lesson" || S.paused) return; lessonT = Math.min(DATA.lessons[L.vid].duration, lessonT + 1); renderLesson(); }, 1000);
+}
+function renderLesson() {
+  const L = S.lesson, dur = DATA.lessons[L.vid].duration;
+  $("barFill").style.width = (lessonT / dur * 100) + "%"; $("barMark").style.left = (L.t / dur * 100) + "%";
+  const f = (s) => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`;
+  $("lessonTime").textContent = `${f(lessonT)} / ${f(dur)}${S.paused ? "  ·  paused" : ""}`;
+}
+
+// ---------- timer ----------
+let tick = null;
+function fmt(s) { return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`; }
+function renderTimer() {
+  const t = S.timer;
+  $("timerBig").textContent = fmt(t.left); $("timerChip").textContent = fmt(t.left); $("breakBig").textContent = fmt(t.left);
+  $("timerLabel").textContent = !t.running ? (t.left === 25*60 ? "not started" : "paused") : (t.phase === "work" ? "working" : "break");
+}
+function startTimer() {
+  const t = S.timer; if (t.running) return; t.running = true; if (!S.log.started) S.log.started = Date.now();
+  clearInterval(tick);
+  tick = setInterval(() => {
+    const step = $("fast").getAttribute("aria-pressed") === "true" ? 60 : 1;
+    t.left = Math.max(0, t.left - step); if (t.phase === "work") S.log.minutes += step / 60;
+    if (t.left === 0) {
+      if (t.phase === "work") { t.phase = "break"; t.left = 5*60; S.before = S.screen; show("break"); say("Time for a break."); }
+      else { t.phase = "work"; t.left = 25*60; show(S.before || "page"); }
+    }
+    renderTimer();
+  }, 1000);
+  renderTimer();
+}
+function skipBreak() { const t = S.timer; t.phase = "work"; t.left = 25*60; show(S.before || "page"); renderTimer(); }
+
+// ---------- T6 recap ----------
+function endSession() {
+  clearInterval(tick); S.timer.running = false;
+  $("rTime").textContent = Math.round(S.log.minutes); $("rProblems").textContent = S.log.problems.size; $("rHints").textContent = S.log.hints;
+  $("recapTitle").textContent = S.log.problems.size ? (S.log.hard.length ? "Good session — two things to look at together" : "Good session") : "Short session";
+  $("hardList").innerHTML = S.log.hard.length ? S.log.hard.map(h => `<li>${h}</li>`).join("") : "<li>Nothing needed a second hint.</li>";
+  show("recap");
+}
+function sendToParent() {
+  $("precapEmpty").style.display = "none"; const box = $("precap"); box.style.display = "block";
+  box.innerHTML = `<b>Ema, tonight</b>${Math.round(S.log.minutes)} minutes on task · ${S.log.problems.size} problems · ${S.log.hints} hints
+    <ul>${S.log.hard.length ? S.log.hard.map(h => `<li>Needed a second hint: ${h}</li>`).join("") : "<li>Nothing needed a second hint.</li>"}</ul>`;
+  S.role = "parent"; setRole("parent"); setPScreen("parent"); status("recap sent to the parent's phone");
+}
+
+// ---------- D-pad ----------
+stage.addEventListener("keydown", (e) => {
+  const k = e.key; const handled = ["ArrowUp","ArrowDown","ArrowLeft","ArrowRight","Enter","Backspace","Escape","m","M"," "].includes(k);
+  if (!handled) return; e.preventDefault();
+  const f = focusables();
+  if (S.screen === "pair") { if (k === "Enter") join(); return; }
+  if (S.screen === "tonight") {
+    if (k === "ArrowRight") S.focus = Math.min(f.length - 1, S.focus + 1);
+    if (k === "ArrowLeft") S.focus = Math.max(0, S.focus - 1);
+    if (k === "ArrowDown" && S.pages.length) { show("page"); renderPage(); return; }
+    if (k === "Enter") { const el = f[S.focus]; const t = S.tasks[+el.dataset.ix]; press(el, () => { if (S.pages.some(p => p.id === t.page)) { addPage(t.page); } else status(`snap the ${t.sub} page on the phone first`); }); return; }
+    if (k === "m" || k === "M") { S.tasks[S.focus].done = !S.tasks[S.focus].done; renderTonight(); renderPTasks(); return; }
+    renderFocus(); return;
+  }
+  if (S.screen === "page") {
+    const p = S.pages[S.pageIx]; if (!p) return;
+    if (S.reading) return;
+    if (k === "ArrowDown") S.itemIx = Math.min(p.items.length - 1, S.itemIx + 1);
+    if (k === "ArrowUp") S.itemIx = Math.max(0, S.itemIx - 1);
+    if (k === "ArrowRight") { S.pageIx = Math.min(S.pages.length - 1, S.pageIx + 1); S.itemIx = 0; }
+    if (k === "ArrowLeft") { if (S.pageIx === 0) { show("tonight"); renderTonight(); return; } S.pageIx--; S.itemIx = 0; }
+    if (k === "m" || k === "M") S.view = S.view === "band" ? "overview" : "band";
+    if (k === "Enter") { openHint(); return; }
+    if (k === "Backspace" || k === "Escape") { show("tonight"); renderTonight(); return; }
+    renderPage(); renderMirror(); return;
+  }
+  if (S.screen === "hint") {
+    if (k === "ArrowLeft") S.focus = Math.max(0, S.focus - 1);
+    if (k === "ArrowRight") S.focus = Math.min(f.length - 1, S.focus + 1);
+    if (k === "Enter") { const el = f[S.focus]; if (el.disabled) return; press(el, () => el.dataset.act === "stuck" ? escalate() : openLesson()); return; }
+    if (k === "Backspace" || k === "Escape") { speechSynthesis?.cancel?.(); show("page"); renderPage(); return; }
+    renderFocus(); return;
+  }
+  if (S.screen === "lesson") {
+    if (k === " ") { S.paused = !S.paused; renderLesson(); status(S.paused ? "paused — circle on the phone to ask about this frame" : "playing"); }
+    if (k === "ArrowRight") { lessonT += 10; renderLesson(); } if (k === "ArrowLeft") { lessonT = Math.max(0, lessonT - 10); renderLesson(); }
+    if (k === "Backspace" || k === "Escape") { clearInterval(lessonTick); show("hint"); S.focus = 1; renderFocus(); }
+    return;
+  }
+  if (S.screen === "break") { if (k === "Enter") skipBreak(); return; }
+  if (S.screen === "recap") { if (k === "Enter") press(f[0], sendToParent); if (k === "Backspace" || k === "Escape") { show("tonight"); renderTonight(); } return; }
+});
+stage.addEventListener("click", () => stage.focus());
+
+// ---------- phone ----------
+function setRole(r) { S.role = r; $("roleStudent").setAttribute("aria-pressed", String(r === "student")); $("roleParent").setAttribute("aria-pressed", String(r === "parent")); }
+$("roleStudent").onclick = () => setRole("student"); $("roleParent").onclick = () => setRole("parent");
+function setPScreen(n) { S.pscreen = n; document.querySelectorAll(".pscreen").forEach(s => s.dataset.active = String(s.dataset.pscreen === n));
+  document.querySelectorAll(".pnav button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.nav === n))); }
+document.querySelectorAll(".pnav button").forEach(b => b.onclick = () => { if (!S.joined) return; setPScreen(b.dataset.nav); });
+function join() { S.joined = true; $("plink").innerHTML = `<b>joined</b> · pin 4729`; setPScreen("capture"); show("tonight"); renderTonight(); renderRail(); status("phone joined over the LAN path"); }
+$("joinBtn").onclick = join;
+
+const ORDER = ["math", "spanish", "essay"];
+function renderCam() { const next = ORDER.find(id => !S.pages.some(p => p.id === id)); const src = next && DATA.pages.find(p => p.id === next);
+  $("cam").innerHTML = src ? `<img src="${src.img}" alt=""><span></span>` : `<span>all three pages captured</span>`;
+  $("cam").querySelectorAll(".corner").forEach(c => c.remove());
+  $("snapInfo").textContent = src ? `Next up: the ${src.subject} sheet.` : "Nothing left on the desk.";
+  $("snap").disabled = !src; }
+$("snap").onclick = () => { const next = ORDER.find(id => !S.pages.some(p => p.id === id)); if (!next) return; addPage(next); renderCam(); renderTonight(); setTimeout(() => setPScreen("point"), 400); };
+$("doccam").onchange = (e) => status(e.target.checked ? "document camera: would re-snap every few seconds (stubbed)" : "");
+
+function renderMirror() { const p = S.pages[S.pageIx]; if (!p) return; $("mirrorImg").src = p.img; $("ring").dataset.on = "false";
+  const presets = p.id === "essay" ? Object.values(DATA.hints).filter(h => h.subject === "essay").map(h => h.q.slice(0, 44) + "…")
+    : ["Why is this negative?", "What do I do first?", "Which rule is this?"];
+  $("presets").innerHTML = presets.map(q => `<button>${q}</button>`).join("");
+  $("presets").querySelectorAll("button").forEach((b, i) => b.onclick = () => { $("question").value = p.id === "essay" ? Object.values(DATA.hints).filter(h => h.subject === "essay")[i].q : presets[i]; });
+}
+$("mirror").addEventListener("pointerdown", (e) => {
+  const p = S.pages[S.pageIx]; if (!p) return; const r = $("mirror").getBoundingClientRect();
+  const y = (e.clientY - r.top) / r.height * p.h;
+  let best = 0; p.items.forEach((it, i) => { if (Math.abs(it.cy - y) < Math.abs(p.items[best].cy - y)) best = i; });
+  S.itemIx = best; const ring = $("ring"); ring.dataset.on = "true"; ring.style.left = (e.clientX - r.left) + "px"; ring.style.top = (e.clientY - r.top) + "px";
+  if (S.screen !== "page") { show("page"); } renderPage(); status(`circled item ${p.items[best].n} — the TV moved to it`);
+});
+$("askBtn").onclick = () => { if (!S.pages.length) return; const q = $("question").value.trim(); openHint(q); $("question").value = ""; };
+
+function renderPTasks() { $("ptasks").innerHTML = S.tasks.map((t, i) => `<label><input type="checkbox" data-ix="${i}" ${t.done ? "checked" : ""}><span>${t.name}</span><small>${t.min}m</small></label>`).join("");
+  $("ptasks").querySelectorAll("input").forEach(c => c.onchange = () => { S.tasks[+c.dataset.ix].done = c.checked; renderTonight(); }); }
+$("addTask").onclick = () => { const v = $("newTask").value.trim(); if (!v) return; S.tasks.push({ sub: "Other", name: v, min: 10, done: false, page: null }); $("newTask").value = ""; renderPTasks(); renderTonight(); };
+$("startTimer").onclick = () => { startTimer(); status("timer started from the phone"); };
+$("endSession").onclick = endSession;
+$("tts").onclick = () => $("tts").setAttribute("aria-pressed", String($("tts").getAttribute("aria-pressed") !== "true"));
+$("fast").onclick = () => $("fast").setAttribute("aria-pressed", String($("fast").getAttribute("aria-pressed") !== "true"));
+
+// ---------- scale the 1920×1080 stage to its box ----------
+function fit() { const box = document.querySelector(".stage-wrap").getBoundingClientRect(); stage.style.transform = `scale(${box.width / 1920})`; }
+addEventListener("resize", fit); fit();
+
+// ---------- open at rest: paired, page captured, a problem focused ----------
+renderPTasks(); renderTimer(); renderRail();
+join(); addPage("math"); S.reading = false; S.itemIx = 1; renderPage(); renderMirror(); renderCam(); setPScreen("point");
+setTimeout(() => stage.focus(), 50);
+status("opened mid-session: maths page captured, problem 2 focused — press Enter for its hint");
+</script>
