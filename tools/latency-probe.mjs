@@ -5,14 +5,15 @@
  * What this does NOT measure is compositor-to-photons on the TV panel; that needs on-device
  * render instrumentation (design doc 6.2). Treat the number as a floor, not the whole budget.
  *
- * Usage: node latency-probe.mjs [--host 127.0.0.1:8765] [--seconds 6]
+ * Usage: node latency-probe.mjs [--host <ip>:8765] [--seconds 6]
  */
 import WebSocket from 'ws';
+import { TV_HOST } from './device.mjs';
 
 const args = Object.fromEntries(
   process.argv.slice(2).flatMap((a, i, all) => (a.startsWith('--') ? [[a.slice(2), all[i + 1]]] : []))
 );
-const host = args.host ?? '127.0.0.1:8765';
+const host = args.host ?? TV_HOST;
 const seconds = Number(args.seconds ?? 6);
 // --idle measures the same socket with no pen traffic, to separate transport jitter from
 // backpressure caused by the pen stream itself.

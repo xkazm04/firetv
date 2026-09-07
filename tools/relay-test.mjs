@@ -11,10 +11,10 @@
  *
  * Leaves the app back on the LAN transport so the normal dev cycle is unaffected.
  *
- * Usage: node relay-test.mjs [--out ../artifacts] [--port 9787]
+ * Usage: node relay-test.mjs [--out ../artifacts] [--port 9787] [--relay-host <this machine's IP>]
  */
 import { chromium } from 'playwright';
-import { execFileSync, spawn } from 'node:child_process';
+import { spawn } from 'node:child_process';
 import { readFileSync, mkdirSync, writeFileSync } from 'node:fs';
 import { PNG } from 'pngjs';
 import { fileURLToPath } from 'node:url';
@@ -22,16 +22,20 @@ import path from 'node:path';
 import WebSocket from 'ws';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
-const ADB = process.env.ADB ?? 'C:/Users/kazda/scoop/apps/android-clt/current/platform-tools/adb.exe';
+import { makeAdb, TV_HOST, hostAddressForDevice } from './device.mjs';
 const args = Object.fromEntries(
   process.argv.slice(2).flatMap((a, i, all) => (a.startsWith('--') ? [[a.slice(2), all[i + 1]]] : []))
 );
 const PORT = Number(args.port ?? 9787);
+// How the TV addresses this machine. The emulator has a fixed host alias; a Stick on Wi-Fi has to
+// be handed this machine's LAN address, or it dials into its own loopback and nothing happens.
+const RELAY_HOST = args['relay-host'] ?? hostAddressForDevice();
 const OUT = path.resolve(args.out ?? '../artifacts');
 const PKG = 'dev.telestrator.tv';
 mkdirSync(OUT, { recursive: true });
 
-const adb = (...a) => execFileSync(ADB, a, { maxBuffer: 1 << 28 }).toString();
+const adbBin = makeAdb();
+const adb = (...a) => adbBin(...a).toString();
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const relayHealth = async () => (await fetch(`http://127.0.0.1:${PORT}/health`)).json();
 
@@ -146,8 +150,8 @@ const run = async () => {
     '-n',
     `${PKG}/.MainActivity`,
     '--es', 'transport', 'relay',
-    '--es', 'relay_url', `ws://10.0.2.2:${PORT}/tv`,
-    '--es', 'phone_url', `http://10.0.2.2:${PORT}/`
+    '--es', 'relay_url', `ws://${RELAY_HOST}:${PORT}/tv`,
+    '--es', 'phone_url', `http://${RELAY_HOST}:${PORT}/`
   );
 
   check(
@@ -165,10 +169,11 @@ const run = async () => {
   if (!pin) throw new Error('no PIN in logcat; cannot pair');
 
   // ---- 3. nothing is listening on the TV any more ---------------------------
-  // The LAN port is forwarded by adb, so if the app were still serving, this would answer.
+  // Ask wherever the LAN transport would have served: the adb tunnel on the emulator, the
+  // device's own address on hardware. If the app were still serving, this would answer.
   let lanAnswered = false;
   try {
-    await fetch('http://127.0.0.1:8765/health', { signal: AbortSignal.timeout(2500) });
+    await fetch(`http://${TV_HOST}/health`, { signal: AbortSignal.timeout(2500) });
     lanAnswered = true;
   } catch {
     // Expected: the relay build binds nothing.

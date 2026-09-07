@@ -11,21 +11,19 @@
  * Usage: node live-ui-test.mjs [--out ../artifacts]
  */
 import { chromium } from 'playwright';
-import { execFileSync } from 'node:child_process';
 import { readFileSync, mkdirSync, writeFileSync } from 'node:fs';
 import { PNG } from 'pngjs';
 import path from 'node:path';
+import { makeAdb, TV_BASE } from './device.mjs';
 
-const ADB =
-  process.env.ADB ?? 'C:/Users/kazda/scoop/apps/android-clt/current/platform-tools/adb.exe';
-const BASE = process.env.TV_URL ?? 'http://127.0.0.1:8765';
+const BASE = TV_BASE;
 const args = Object.fromEntries(
   process.argv.slice(2).flatMap((a, i, all) => (a.startsWith('--') ? [[a.slice(2), all[i + 1]]] : []))
 );
 const OUT = path.resolve(args.out ?? '../artifacts');
 mkdirSync(OUT, { recursive: true });
 
-const adb = (...a) => execFileSync(ADB, a, { maxBuffer: 1 << 28 });
+const adb = makeAdb();
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const health = async () => (await fetch(`${BASE}/health`)).json();
 

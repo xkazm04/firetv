@@ -4,14 +4,15 @@
  * This is the fast inner-loop check — no browser, no touch emulation — that the transport, the
  * codec and the pen engine agree with each other on a real device.
  *
- * Usage: node pen-sim.mjs [--host 127.0.0.1:8765] [--shape arc|arrow|circle|spotlight]
+ * Usage: node pen-sim.mjs [--host <ip>:8765] [--shape arc|arrow|circle|spotlight]
  */
 import WebSocket from 'ws';
+import { TV_HOST } from './device.mjs';
 
 const args = Object.fromEntries(
   process.argv.slice(2).flatMap((a, i, all) => (a.startsWith('--') ? [[a.slice(2), all[i + 1]]] : []))
 );
-const host = args.host ?? '127.0.0.1:8765';
+const host = args.host ?? TV_HOST;
 const shape = args.shape ?? 'arc';
 
 const ws = new WebSocket(`ws://${host}/ws`);
