@@ -121,6 +121,18 @@ const run = async () => {
     h = await health();
   }
   check('TV is paused for telestration', h.paused === true, `paused=${h.paused}`);
+
+  // Anchor the playhead before drawing. Sections 5 and 6 seek +10s and then -10s, which only
+  // stays inside a 20s looping fixture if the drawing is made near its middle. Inheriting
+  // whatever position the clip happened to be at made those two checks depend on how long the
+  // app had been running - invisible on the emulator, where every run starts from a fresh
+  // install, and intermittent on a Stick that keeps playing between runs.
+  // Land on 5s of the 20s fixture: the +10s seek reaches 15s (still inside, and well past the
+  // 6s hold window) and the -10s seek returns to 5s rather than falling off either end.
+  for (let i = 0; i < 5; i++) adb('shell', 'input', 'keyevent', 'KEYCODE_DPAD_LEFT'); // clamp to 0
+  adb('shell', 'input', 'keyevent', 'KEYCODE_DPAD_RIGHT');
+  await sleep(1200);
+  h = await health();
   const pausedAt = h.t;
 
   // ---- 3. draw with real touch events -------------------------------------

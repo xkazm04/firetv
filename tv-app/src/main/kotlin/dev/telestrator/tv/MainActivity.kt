@@ -3,6 +3,7 @@ package dev.telestrator.tv
 import android.net.Uri
 import android.os.Bundle
 import android.view.KeyEvent
+import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
@@ -62,6 +63,13 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // A telestrator is watched, not touched: the viewer holds the phone, and the remote may
+        // sit untouched through a whole play review. Fire OS reads that as idle and hands the
+        // screen to its screensaver, which pauses this activity, takes the foreground and lets
+        // the process be reclaimed - taking the pen session with it. Keeping the screen on is
+        // the same promise a video player makes, and this app is one.
+        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
 
         val clipUri = Uri.parse("android.resource://$packageName/${R.raw.fixture_clip}")
         session = Session(clipId = "fixture_clip", videoAspect = 16.0 / 9.0)
@@ -137,6 +145,7 @@ private fun TelestratorScreen(session: Session, transport: PenTransport, clipUri
     val context = LocalContext.current
     val doc by session.doc.collectAsState()
     val command by session.transport.collectAsState()
+    val transportFailure by transport.failure.collectAsState()
     var tMs by remember { mutableLongStateOf(0L) }
     var paused by remember { mutableStateOf(false) }
     var rate by remember { mutableStateOf(1.0f) }
@@ -214,6 +223,7 @@ private fun TelestratorScreen(session: Session, transport: PenTransport, clipUri
         PairingCard(
             url = transport.pairingUrl() ?: "connecting…",
             transport = transport.name,
+            failure = transportFailure,
             modifier = Modifier.align(Alignment.TopEnd).padding(24.dp),
         )
 
@@ -233,7 +243,12 @@ private fun TelestratorScreen(session: Session, transport: PenTransport, clipUri
 }
 
 @Composable
-private fun PairingCard(url: String, transport: String, modifier: Modifier = Modifier) {
+private fun PairingCard(
+    url: String,
+    transport: String,
+    failure: String?,
+    modifier: Modifier = Modifier,
+) {
     val qr = remember(url) { runCatching { qrBitmap(url, 300) }.getOrNull() }
     Column(
         modifier = modifier
@@ -248,5 +263,8 @@ private fun PairingCard(url: String, transport: String, modifier: Modifier = Mod
         }
         Text(text = url.removePrefix("http://"), color = Color.Black, fontSize = 11.sp)
         Text(text = "via $transport", color = Color.DarkGray, fontSize = 10.sp)
+        if (failure != null) {
+            Text(text = failure, color = Color.Red, fontSize = 10.sp, modifier = Modifier.testTag("transportError"))
+        }
     }
 }

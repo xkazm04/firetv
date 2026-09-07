@@ -7,6 +7,8 @@ import io.ktor.websocket.Frame
 import io.ktor.websocket.readText
 import io.ktor.websocket.send
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.channels.ClosedReceiveChannelException
 import kotlinx.coroutines.CancellationException
 
@@ -54,8 +56,18 @@ interface PenTransport {
     /** Begins accepting pens. [onPen] runs for the lifetime of each connection. */
     fun start(scope: CoroutineScope, onPen: suspend (PenChannel) -> Unit)
 
+    /**
+     * Non-null once the transport has given up trying to start, carrying something a viewer can
+     * act on. A transport that cannot start must say so on the television rather than take the
+     * app down: the screen is the only diagnostic channel a living-room user has.
+     */
+    val failure: StateFlow<String?> get() = NoFailure
+
     fun stop()
 }
+
+/** Shared empty state for transports that have no failure to report. */
+private val NoFailure: StateFlow<String?> = MutableStateFlow(null)
 
 /**
  * Adapts a Ktor WebSocket session to [PenChannel]. Server and client sessions both derive from

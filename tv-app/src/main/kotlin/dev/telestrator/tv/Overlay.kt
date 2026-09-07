@@ -2,6 +2,7 @@ package dev.telestrator.tv
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
@@ -27,9 +28,13 @@ import kotlin.math.sin
  * The Canvas draws straight from the document; there is no per-point recomposition, the whole
  * overlay redraws when [tMs] or [doc] changes (design doc 3.2). Every draw is timed into
  * [RenderStats] so the 4 ms budget is a measured number rather than an aspiration.
+ *
+ * Strokes are drawn from [StrokeCache], which keeps the smoothed geometry between frames. On a
+ * real Fire TV Stick, rebuilding it per frame is what breaks this app - see the class comment.
  */
 @Composable
 fun TelestrationOverlay(doc: AnnotationDoc, tMs: Long, modifier: Modifier = Modifier) {
+    val strokes = remember { StrokeCache() }
     Canvas(modifier = modifier) {
         val started = System.nanoTime()
         val rect = ContentRect.fit(size.width, size.height, doc.videoAspect)
@@ -38,18 +43,17 @@ fun TelestrationOverlay(doc: AnnotationDoc, tMs: Long, modifier: Modifier = Modi
         // Spotlights dim everything else, so they have to land under the ink.
         visible.filterIsInstance<Annotation.Spotlight>().forEach { drawSpotlight(it, rect) }
 
-        // One Path, reset between segments. A fresh Path per segment would allocate hundreds of
-        // objects per frame on a device with a 256 MB heap.
-        val scratch = Path()
+        strokes.beginFrame(rect)
         visible.forEach { a ->
             when (a) {
-                is Annotation.Stroke -> drawStroke(a, rect, scratch)
+                is Annotation.Stroke -> drawStroke(a, rect, strokes)
                 is Annotation.Arrow -> drawArrow(a, rect)
                 is Annotation.Circle -> drawRing(a, rect)
                 is Annotation.NameTag -> drawNameTag(a, rect)
                 is Annotation.Spotlight -> Unit
             }
         }
+        strokes.endFrame()
         RenderStats.record(System.nanoTime() - started)
     }
 }
@@ -57,34 +61,37 @@ fun TelestrationOverlay(doc: AnnotationDoc, tMs: Long, modifier: Modifier = Modi
 private fun parseColor(hex: String): Color =
     runCatching { Color(android.graphics.Color.parseColor(hex)) }.getOrDefault(Color.Yellow)
 
-private fun DrawScope.widthPx(rect: ContentRect, w: Double) = rect.w(w).coerceAtLeast(2f)
+private fun widthPx(rect: ContentRect, w: Double) = rect.w(w).coerceAtLeast(2f)
 
 /**
  * Draws a stroke as smoothed cubic segments, each at a width taken from the pen pressure at that
  * point. Drawing the raw polyline instead is visibly faceted once a phone-sized gesture is blown
  * up to a 1080p picture.
+ *
+ * The geometry comes from [StrokeCache] rather than being refitted here, and the segments are
+ * batched into one path per pressure bucket, so a long stroke costs a handful of draw calls
+ * instead of one per segment.
  */
-private fun DrawScope.drawStroke(a: Annotation.Stroke, rect: ContentRect, scratch: Path) {
-    val cubics = Smoothing.path(a.points)
-    if (cubics.isEmpty()) return
+private fun DrawScope.drawStroke(a: Annotation.Stroke, rect: ContentRect, cache: StrokeCache) {
+    val entry = cache.extend(a, rect)
     val color = parseColor(a.style.color)
-    for (c in cubics) {
-        scratch.reset()
-        scratch.moveTo(rect.x(c.x0), rect.y(c.y0))
-        scratch.cubicTo(
-            rect.x(c.c1x), rect.y(c.c1y),
-            rect.x(c.c2x), rect.y(c.c2y),
-            rect.x(c.x1), rect.y(c.y1),
-        )
+
+    for (bucket in 0 until PRESSURE_BUCKETS) {
+        if (!entry.used[bucket]) continue
         drawPath(
-            path = scratch,
+            path = entry.paths[bucket],
             color = color,
             style = StrokeStyle(
-                width = widthPx(rect, Smoothing.widthFor(a.style.width, c.pressure)),
+                width = widthPx(rect, Smoothing.widthFor(a.style.width, bucketPressure(bucket))),
                 cap = StrokeCap.Round,
             ),
         )
     }
+
+    // The newest span or two cannot be fitted yet: a Catmull-Rom segment needs the point after
+    // next, which the finger has not drawn. Carrying them as straight lines keeps the ink under
+    // the finger honest and costs nothing, and they turn into curve the moment they are settled.
+    entry.drawPendingTail(this, a, rect, color)
 }
 
 private fun DrawScope.drawArrow(a: Annotation.Arrow, rect: ContentRect) {
@@ -166,4 +173,163 @@ private fun DrawScope.drawNameTag(a: Annotation.NameTag, rect: ContentRect) {
 
     paint.color = android.graphics.Color.BLACK
     drawContext.canvas.nativeCanvas.drawText(a.label, boxLeft + padX, boxTop + padY + textSize * 0.82f, paint)
+}
+
+/**
+ * How many distinct widths a stroke is drawn with. Pen pressure is continuous, but every distinct
+ * width costs a separate draw call, and six steps is already finer than the eye resolves on a
+ * stroke a few pixels wide.
+ */
+private const val PRESSURE_BUCKETS = 6
+
+/** Matches [Smoothing.decimate]'s default: points closer than this are the finger holding still. */
+private const val MIN_POINT_DISTANCE = 0.004
+
+/** Catmull-Rom at the tension the renderer has always used; kept here so spans can be fitted one at a time. */
+private const val SPLINE_K = 1.0 / 6.0
+
+private fun bucketPressure(bucket: Int): Double = bucket / (PRESSURE_BUCKETS - 1.0)
+
+/**
+ * Keeps stroke geometry between frames.
+ *
+ * The overlay used to refit every stroke on every frame: decimate the whole point list, fit a
+ * spline through all of it, then issue one `drawPath` per segment. For a short stroke that is
+ * nothing, which is why an x86 emulator never complained. On a Fire TV Stick, a finger drawing
+ * continuously turns it into quadratic work plus thousands of draw calls per frame - measured at
+ * 150% CPU, an overlay draw of 12 ms against a 4 ms budget, and a pen round-trip whose p95 grew
+ * without bound because the receive loop was competing with all of it for the same cores.
+ *
+ * So geometry is built once, incrementally: each point is decimated as it arrives, each span is
+ * fitted exactly once when it becomes determined, and the result is appended to one retained
+ * [Path] per pressure bucket. A frame costs one draw call per bucket and nothing else. This is
+ * the design doc's "retained Path, no recomposition per point", which POC-FINDINGS.md already
+ * called load-bearing rather than polish.
+ */
+private class StrokeCache {
+    private val entries = HashMap<String, StrokeRender>()
+    private val seen = HashSet<String>()
+
+    fun beginFrame(rect: ContentRect) {
+        seen.clear()
+        // A resize invalidates every retained path, because they hold pixel coordinates.
+        if (entries.isNotEmpty() && entries.values.first().rect != rect) entries.clear()
+    }
+
+    fun extend(a: Annotation.Stroke, rect: ContentRect): StrokeRender {
+        seen += a.id
+        return entries.getOrPut(a.id) { StrokeRender() }.apply { ingest(a, rect) }
+    }
+
+    /** Forget strokes that were undone, erased, or have simply left their hold window. */
+    fun endFrame() {
+        if (entries.size != seen.size) entries.keys.retainAll(seen)
+    }
+}
+
+private class StrokeRender {
+    var rect: ContentRect? = null
+        private set
+
+    val paths = Array(PRESSURE_BUCKETS) { Path() }
+    val used = BooleanArray(PRESSURE_BUCKETS)
+
+    /** Decimated points, normalized, as [x, y, pressure]. */
+    private val kept = ArrayList<DoubleArray>()
+    private var consumedRaw = 0
+    private var fittedSpans = 0
+    private var lastRawX = 0.0
+    private var lastRawY = 0.0
+    private var lastRawP = 0.5
+
+    fun ingest(a: Annotation.Stroke, rect: ContentRect) {
+        // Points only ever arrive; a shorter list means this is a different stroke wearing the
+        // same id - a live stroke replaced by its decimated committed form - so start over.
+        if (this.rect != rect || a.points.size < consumedRaw) reset(rect)
+
+        val pts = a.points
+        while (consumedRaw < pts.size) {
+            val p = pts[consumedRaw++]
+            lastRawX = p[0]
+            lastRawY = p.getOrElse(1) { 0.0 }
+            lastRawP = p.getOrElse(2) { 0.5 }
+            val last = kept.lastOrNull()
+            if (last == null) {
+                kept += doubleArrayOf(lastRawX, lastRawY, lastRawP)
+                continue
+            }
+            val dx = lastRawX - last[0]
+            val dy = lastRawY - last[1]
+            if (dx * dx + dy * dy >= MIN_POINT_DISTANCE * MIN_POINT_DISTANCE) {
+                kept += doubleArrayOf(lastRawX, lastRawY, lastRawP)
+            }
+        }
+
+        // Span i runs from kept[i] to kept[i+1] and needs kept[i+2] to be fitted, so it settles
+        // only once two more points exist. Everything settled is fitted once and never revisited.
+        while (fittedSpans + 3 <= kept.size) {
+            fitSpan(fittedSpans, rect)
+            fittedSpans++
+        }
+    }
+
+    private fun fitSpan(i: Int, rect: ContentRect) {
+        val p0 = kept[if (i == 0) 0 else i - 1]
+        val p1 = kept[i]
+        val p2 = kept[i + 1]
+        val p3 = kept[i + 2]
+
+        val pressure = (p1[2] + p2[2]) / 2.0
+        val bucket = (pressure.coerceIn(0.0, 1.0) * (PRESSURE_BUCKETS - 1)).let { Math.round(it).toInt() }
+        val path = paths[bucket]
+        used[bucket] = true
+
+        path.moveTo(rect.x(p1[0]), rect.y(p1[1]))
+        path.cubicTo(
+            rect.x(p1[0] + (p2[0] - p0[0]) * SPLINE_K), rect.y(p1[1] + (p2[1] - p0[1]) * SPLINE_K),
+            rect.x(p2[0] - (p3[0] - p1[0]) * SPLINE_K), rect.y(p2[1] - (p3[1] - p1[1]) * SPLINE_K),
+            rect.x(p2[0]), rect.y(p2[1]),
+        )
+    }
+
+    fun drawPendingTail(scope: DrawScope, a: Annotation.Stroke, rect: ContentRect, color: Color) {
+        if (kept.isEmpty()) return
+        val width = widthPx(rect, Smoothing.widthFor(a.style.width, lastRawP))
+
+        var from = kept[fittedSpans.coerceAtMost(kept.size - 1)]
+        for (i in fittedSpans until kept.size - 1) {
+            val to = kept[i + 1]
+            scope.drawLine(
+                color,
+                Offset(rect.x(from[0]), rect.y(from[1])),
+                Offset(rect.x(to[0]), rect.y(to[1])),
+                strokeWidth = width,
+                cap = StrokeCap.Round,
+            )
+            from = to
+        }
+
+        // And on to wherever the finger actually is, which decimation has not accepted yet.
+        val tip = kept.last()
+        if (tip[0] != lastRawX || tip[1] != lastRawY) {
+            scope.drawLine(
+                color,
+                Offset(rect.x(tip[0]), rect.y(tip[1])),
+                Offset(rect.x(lastRawX), rect.y(lastRawY)),
+                strokeWidth = width,
+                cap = StrokeCap.Round,
+            )
+        }
+    }
+
+    private fun reset(rect: ContentRect) {
+        this.rect = rect
+        kept.clear()
+        consumedRaw = 0
+        fittedSpans = 0
+        for (i in paths.indices) {
+            paths[i].reset()
+            used[i] = false
+        }
+    }
 }
