@@ -170,6 +170,80 @@ one is there.
 
 ---
 
+## 3b. Basketball is the right sport, by a wide margin
+
+Repeating §3 on an NCAA broadcast (Kansas vs Colorado) against the soccer wide shot:
+
+| | soccer wide shot | basketball broadcast |
+|---|---|---|
+| roster latency | 19–194 s | **2.7–4.4 s** |
+| shirt numbers legible | 3–5 of ~13 | **8 of 9** |
+| sequence narration | confabulated a free kick | **correct**, no invention |
+
+Plus something soccer never gave us: it **reads the scorebug**. Unprompted, from one frame —
+*"the scoreboard shows Kansas leading Colorado 33-32 with 2:25 left in the first half"*, correct.
+Score, clock and period arrive free, with no integration and no data feed.
+
+The reason is pixels per player. A basketball court is small enough that a broadcast frame gives
+each player several hundred pixels of height where soccer gives a few dozen. **Every limit in §3
+was a resolution limit wearing a costume.**
+
+## 3c. Commentary transcripts — a real asset, and a real trap
+
+YouTube carries an enormous library of tactical explainers, and `yt-dlp` gets their captions with
+word-level timestamps. `gravitone-gcloud`'s `parse_vtt.py` de-overlaps YouTube's rolling captions
+(692 words / 274 s = 152 wpm — the skill's rule is that over ~280 wpm means the de-overlap failed,
+so this is clean). What comes out is expert analysis aligned to the second:
+
+```
+[00:22] Curry sets a cross
+[00:24] screen for Draymond Maxi Kleber goes
+[00:37] and now this is screening the screener
+```
+
+Named players, named tactical concepts, frame-aligned. That is exactly the labelled data this
+whole problem is short of.
+
+### Finding 5 — a single frame cannot see a tactical action, and it says so
+
+Asked what basketball action was occurring in the frame at 00:24, with no commentary:
+
+> *"The image is too blurry and the players are too far away to definitively identify specific
+> actions like who is setting a screen or cutting… specific roles cannot be determined from this
+> single, low-resolution frame."*
+
+Correct, and **honest** — it declined rather than inventing, which is the §3 confabulation failure
+not happening. A screen is an event over time, and one frame does not contain it. Any feature
+phrased as "what play is this" needs either several frames or the commentary.
+
+### Finding 6 — fusing the transcript naively produces confident wrong answers ⚠️
+
+Given the same frame *plus* the commentary above, and asked to point out where each named player is:
+
+| Model said | Actually |
+|---|---|
+| "Draymond: dark jersey **#42**" | #42 is **Kleber, on Dallas**. Draymond is a Warrior, in white/gold #23 |
+| "Kleber: dark jersey **#11**" | #11 is Hardaway Jr |
+| "Wiggins: white #22" | ✅ correct |
+
+It put a Golden State player in a Dallas jersey. And the failure is **not** perception — asked
+separately to read the numbers and kits, it returned #23 white/gold, #42 dark blue, #11 dark blue,
+#22 white/gold, all correct. It can see fine. What it cannot do is *bind* a name from the text to a
+body in the picture, and it does not know that it cannot, so it answers with the same fluency as
+when it is right.
+
+**So do not use a transcript as a grounding source.** Its right uses are:
+
+1. **Labels.** Expert ground truth for scoring a pipeline, which is what §2 had to build a
+   synthetic scene to get.
+2. **A retrieval corpus.** A library of tactical concepts with worked examples — what a cross
+   screen is, what "screening the screener" means — for a model to draw on when explaining.
+3. **The explanation itself.** For a *prepared* clip, the commentary already says what is
+   happening, better than we will. The AI's job there is retrieval and presentation, not
+   perception — and that path cannot hallucinate a player onto the wrong team.
+
+---
+
 ## 4. Which sports-studio features are actually reachable
 
 The honest split is between features that need **measurement** and features that need **description**.
