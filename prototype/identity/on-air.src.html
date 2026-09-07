@@ -1,0 +1,397 @@
+<title>Study Desk On Air</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;800&family=Barlow:wght@400;500;600&display=swap">
+<style>
+  :root {
+    --ink: #14161A; --ink-2: #1A1D22; --paper: #F2F3F5; --mute: rgba(255,255,255,.62); --line: rgba(255,255,255,.14);
+    --signal: #E23D28; --signal-2: #B8261A; --tint: #FFB4A8;
+    --maths: #7FD1E8; --english: #F2C14E; --essay: #8FD3A1;
+    --display: "Barlow Condensed", "Arial Narrow", sans-serif; --body: "Barlow", "Helvetica Neue", Arial, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #0B0D10; color: var(--paper); font-family: var(--body); }
+  .bench { padding: 20px 24px 40px; display: grid; gap: 16px; }
+  .tabs { display: grid; grid-template-columns: 110px repeat(3, 1fr); gap: 6px 10px; max-width: 900px; font-size: 13px; color: #98A2B3; align-items: center; }
+  .tabs .h { font-family: var(--display); text-transform: uppercase; letter-spacing: .08em; font-weight: 600; font-size: 13px; }
+  .tabs button { font: inherit; background: #151A21; color: var(--paper); border: 1px solid #2A323D; padding: 7px 10px; cursor: pointer; text-align: left; }
+  .tabs button[aria-pressed="true"] { border-color: var(--signal); box-shadow: 4px 4px 0 var(--signal); }
+  .tabs button kbd { float: right; font-family: var(--display); color: #6B7684; }
+  .frame { position: relative; width: 100%; aspect-ratio: 16 / 9; overflow: hidden; background: var(--ink); box-shadow: 0 30px 80px rgba(0,0,0,.6); }
+  .stage { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; transform-origin: 0 0; display: none; background: var(--ink); overflow: hidden; }
+  .stage[data-on="true"] { display: block; }
+  .why { font-size: 14px; color: #98A2B3; line-height: 1.5; max-width: 1100px; display: none; }
+  .why[data-on="true"] { display: block; } .why b { color: var(--paper); font-weight: 600; }
+  @media (prefers-reduced-motion: reduce) { .stage * { animation: none !important; transition: none !important; } }
+
+  /* ---------- On Air components ---------- */
+  .grid { position: absolute; inset: 0; background-image: linear-gradient(rgba(255,255,255,.035) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.035) 1px, transparent 1px); background-size: 120px 120px; }
+  .band { position: absolute; background: linear-gradient(180deg, var(--signal), var(--signal-2)); }
+  .band::after { content: ""; position: absolute; inset: 0; background: repeating-linear-gradient(180deg, rgba(255,255,255,.05) 0 2px, transparent 2px 6px); }
+  .band.left { left: -200px; top: 0; width: 760px; height: 1080px; clip-path: polygon(0 0, 100% 0, 60% 100%, 0 100%); }
+  .band.left.thin { width: 520px; clip-path: polygon(0 0, 100% 0, 72% 100%, 0 100%); }
+  .band.right { right: -200px; top: 0; width: 700px; height: 1080px; clip-path: polygon(40% 0, 100% 0, 100% 100%, 0 100%); }
+  .band.rule { left: 0; top: 0; width: 1920px; height: 16px; }
+  .band.wedge { left: 0; bottom: 0; width: 900px; height: 260px; clip-path: polygon(0 0, 100% 100%, 0 100%); }
+  .safe { position: absolute; inset: 54px 96px; z-index: 1; }
+  .rail { position: absolute; left: 0; top: 0; width: 300px; display: flex; flex-direction: column; gap: 26px; }
+  .learner { font-family: var(--display); font-size: 64px; font-weight: 800; text-transform: uppercase; letter-spacing: .02em; line-height: .95; }
+  .learner small { display: block; font-family: var(--body); font-size: 20px; font-weight: 600; letter-spacing: .18em; color: var(--mute); margin-bottom: 8px; }
+  .subj { font-family: var(--display); font-size: 30px; font-weight: 600; text-transform: uppercase; letter-spacing: .06em; padding: 8px 0; color: var(--mute); }
+  .subj[data-on="true"] { color: #fff; border-left: 6px solid #fff; padding-left: 16px; }
+  .clock { font-family: var(--display); font-size: 72px; font-weight: 800; font-variant-numeric: tabular-nums; line-height: 1; }
+  .clock small { display: block; font-family: var(--body); font-size: 20px; font-weight: 600; letter-spacing: .18em; text-transform: uppercase; color: var(--mute); }
+  .eyebrow { font-size: 22px; font-weight: 600; letter-spacing: .18em; text-transform: uppercase; color: var(--mute); }
+  .title { font-family: var(--display); font-size: 72px; font-weight: 800; text-transform: uppercase; letter-spacing: .02em; line-height: .95; margin-top: 8px; }
+  .lt { display: grid; grid-template-columns: auto 1fr; }
+  .lt .tag { background: #fff; color: var(--ink); font-family: var(--display); font-size: 34px; font-weight: 800; text-transform: uppercase; letter-spacing: .06em; padding: 22px 30px; }
+  .lt .txt { background: rgba(255,255,255,.08); backdrop-filter: blur(6px); font-size: 44px; font-weight: 500; padding: 20px 36px; border-right: 8px solid var(--signal); }
+  .cap { display: inline-block; background: var(--signal); color: #fff; font-family: var(--display); font-size: 26px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; padding: 8px 18px; }
+  .cap-text { margin-top: 18px; font-size: 42px; font-weight: 500; line-height: 1.35; text-wrap: pretty; max-width: 1150px; }
+  .ticker { position: absolute; left: 0; right: 0; bottom: 0; height: 64px; border-top: 2px solid var(--line); display: flex; align-items: center; gap: 28px; font-family: var(--display); font-size: 26px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--mute); font-variant-numeric: tabular-nums; }
+  .ticker b { color: #fff; font-weight: 800; }
+  .ticker i { font-style: normal; color: var(--signal); }
+  .actions { position: absolute; left: 0; bottom: 96px; display: flex; gap: 24px; }
+  .btn { font-family: var(--display); font-size: 36px; font-weight: 800; text-transform: uppercase; letter-spacing: .06em; padding: 20px 40px; background: transparent; color: #fff; border: 3px solid rgba(255,255,255,.4); cursor: default; }
+  .btn[data-focused] { background: #fff; color: var(--ink); border-color: #fff; transform: skewX(-6deg) scale(1.04); box-shadow: 12px 12px 0 var(--signal); }
+  .chan { font-family: var(--display); font-size: 24px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; }
+  .content { position: absolute; left: 356px; top: 0; right: 0; bottom: 0; }
+  .content.full { left: 0; }
+  .tab-in { animation: wipe .28s steps(6) both; } @keyframes wipe { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
+
+  /* ========== 1 · MATHS · PICKER — card row + recommendation lower-third ========== */
+  .p1 .cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 28px; margin-top: 44px; }
+  .p1 .card { border-top: 4px solid var(--line); padding-top: 18px; min-height: 340px; display: flex; flex-direction: column; gap: 10px; }
+  .p1 .card .n { font-family: var(--display); font-size: 88px; font-weight: 800; line-height: .9; color: var(--mute); }
+  .p1 .card .t { font-size: 32px; font-weight: 500; line-height: 1.2; text-wrap: balance; }
+  .p1 .card .m { margin-top: auto; font-family: var(--display); font-size: 24px; letter-spacing: .08em; text-transform: uppercase; color: var(--maths); font-variant-numeric: tabular-nums; }
+  .p1 .card[data-focused] { border-top-color: #fff; transform: skewX(-4deg) translateY(-8px); background: rgba(255,255,255,.06); padding: 18px 20px 20px; box-shadow: 12px 12px 0 var(--signal); }
+  .p1 .card[data-focused] .n { color: #fff; }
+  .p1 .lt { position: absolute; left: 0; bottom: 180px; }
+
+  /* ========== 2 · MATHS · ANALYSIS — page band + stat panel on graph paper ========== */
+  .p2 .read { position: absolute; left: 0; top: 0; width: 1240px; height: 300px; overflow: hidden; background: #E9E6DF url("__MATH_IMG__") no-repeat; background-size: 1240px auto; background-position: 0 -318px; }
+  .p2 .read::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 14px; background: var(--signal); }
+  .p2 .read .cap { position: absolute; left: 30px; top: 18px; }
+  .p2 .panel { position: absolute; left: 0; top: 340px; width: 1240px; padding: 34px 40px; border: 2px solid rgba(127,209,232,.45);
+      background-image: linear-gradient(rgba(127,209,232,.08) 1px, transparent 1px), linear-gradient(90deg, rgba(127,209,232,.08) 1px, transparent 1px); background-size: 40px 40px; }
+  .p2 .panel .eyebrow { color: var(--maths); }
+  .p2 .rows { display: grid; grid-template-columns: 300px 1fr; gap: 14px 40px; margin-top: 18px; font-size: 34px; }
+  .p2 .rows .k { font-family: var(--display); font-size: 28px; letter-spacing: .08em; text-transform: uppercase; color: var(--mute); padding-top: 4px; }
+  .p2 .rows .v b { color: var(--maths); font-weight: 600; }
+  .p2 .aside { position: absolute; right: 0; top: 0; width: 400px; }
+  .p2 .aside .clock { font-size: 96px; }
+  .p2 .aside .verdict { margin-top: 40px; font-size: 32px; line-height: 1.35; color: var(--mute); }
+  .p2 .aside .verdict b { color: #fff; font-weight: 500; }
+
+  /* ========== 3 · MATHS · LESSON — step line, studio floor, scrubber ========== */
+  .p3 .steps { position: absolute; left: 0; top: 130px; right: 0; display: grid; grid-template-columns: 90px 1fr; gap: 18px 40px; align-items: center; }
+  .p3 .s-n { font-family: var(--display); font-size: 40px; font-weight: 800; color: var(--mute); text-align: right; font-variant-numeric: tabular-nums; }
+  .p3 .s-t { font-size: 44px; font-weight: 500; color: var(--mute); padding: 12px 0; border-bottom: 1px solid var(--line); }
+  .p3 .s-t b { font-weight: 600; }
+  .p3 .cur .s-n { color: var(--signal); } .p3 .cur .s-t { color: #fff; font-size: 64px; border-bottom-color: #fff; }
+  .p3 .cur .s-t b { color: var(--maths); }
+  .p3 .scrub { position: absolute; left: 0; right: 0; bottom: 100px; height: 8px; background: var(--line); }
+  .p3 .scrub i { position: absolute; left: 0; top: 0; bottom: 0; width: 62%; background: #fff; }
+  .p3 .scrub b { position: absolute; left: 62%; top: -14px; width: 8px; height: 36px; background: var(--signal); }
+  .p3 .time { position: absolute; right: 0; bottom: 120px; font-family: var(--display); font-size: 30px; letter-spacing: .06em; color: var(--mute); font-variant-numeric: tabular-nums; }
+
+  /* ========== 4 · ENGLISH · PICKER — programme guide + preview ========== */
+  .p4 .guide { position: absolute; left: 0; top: 130px; width: 900px; }
+  .p4 .row { display: grid; grid-template-columns: 150px 1fr 120px; align-items: center; gap: 24px; padding: 20px 0; border-bottom: 1px solid var(--line); }
+  .p4 .row .u { font-family: var(--display); font-size: 30px; font-weight: 800; letter-spacing: .06em; color: var(--mute); }
+  .p4 .row .t { font-size: 34px; font-weight: 500; }
+  .p4 .row .d { font-family: var(--display); font-size: 26px; letter-spacing: .06em; color: var(--mute); text-align: right; font-variant-numeric: tabular-nums; }
+  .p4 .row[data-focused] { background: #fff; color: var(--ink); transform: skewX(-4deg); box-shadow: 10px 10px 0 var(--signal); padding: 20px 24px; }
+  .p4 .row[data-focused] .u, .p4 .row[data-focused] .d { color: var(--signal); }
+  .p4 .row .now { font-family: var(--display); font-size: 22px; font-weight: 800; letter-spacing: .12em; background: var(--signal); color: #fff; padding: 4px 10px; margin-left: 14px; vertical-align: middle; }
+  .p4 .preview { position: absolute; left: 980px; top: 130px; width: 748px; }
+  .p4 .preview .ex { font-size: 44px; font-weight: 500; line-height: 1.3; margin-top: 18px; }
+  .p4 .preview .ex u { text-decoration: none; border-bottom: 6px solid var(--english); }
+  .p4 .preview .m { margin-top: 26px; font-size: 30px; color: var(--mute); line-height: 1.4; }
+
+  /* ========== 5 · ENGLISH · ANALYSIS — the sentence, tokens tagged, rule lower-third ========== */
+  .p5 .sent { position: absolute; left: 0; top: 150px; font-size: 92px; font-weight: 500; line-height: 1.25; letter-spacing: -.01em; max-width: 1700px; }
+  .p5 .tok { position: relative; display: inline-block; }
+  .p5 .tok[data-k="tense"] { border-bottom: 10px solid var(--signal); }
+  .p5 .tok[data-k="marker"] { border-bottom: 10px solid var(--english); }
+  .p5 .tok::after { content: attr(data-l); position: absolute; left: 0; top: 100%; margin-top: 16px; font-family: var(--display); font-size: 26px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; white-space: nowrap; }
+  .p5 .tok[data-k="tense"]::after { color: var(--tint); } .p5 .tok[data-k="marker"]::after { color: var(--english); }
+  .p5 .lt { position: absolute; left: 0; bottom: 200px; max-width: 1500px; }
+  .p5 .lt .txt { font-size: 40px; }
+
+  /* ========== 6 · ENGLISH · LESSON — head-to-head with the band as divider ========== */
+  .p6 .half { position: absolute; top: 0; bottom: 0; width: 46%; padding-top: 40px; }
+  .p6 .half.a { left: 0; } .p6 .half.b { right: 0; text-align: right; }
+  .p6 .half .name { font-family: var(--display); font-size: 84px; font-weight: 800; text-transform: uppercase; line-height: .95; letter-spacing: .01em; }
+  .p6 .half .when { margin-top: 20px; font-size: 32px; color: var(--mute); line-height: 1.35; max-width: 640px; }
+  .p6 .half.b .when { margin-left: auto; }
+  .p6 .half .mk { margin-top: 26px; display: flex; flex-wrap: wrap; gap: 10px; } .p6 .half.b .mk { justify-content: flex-end; }
+  .p6 .mk span { font-family: var(--display); font-size: 26px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; border: 2px solid var(--english); color: var(--english); padding: 6px 14px; }
+  .p6 .half .ex { margin-top: 40px; font-size: 44px; font-weight: 500; line-height: 1.3; }
+  .p6 .half .ex b { font-weight: 600; color: var(--english); }
+  .p6 .vs { position: absolute; left: 50%; top: 40%; transform: translate(-50%, -50%) skewX(-12deg); font-family: var(--display); font-size: 120px; font-weight: 800; color: #fff; text-shadow: 12px 12px 0 var(--signal-2); z-index: 2; }
+  .p6 .q { position: absolute; left: 0; right: 0; bottom: 0; text-align: center; }
+  .p6 .q .cap-text { margin: 18px auto 0; text-align: center; }
+
+  /* ========== 7 · ESSAY · PICKER — playbook, 2×2 with CSS diagrams ========== */
+  .p7 .plays { position: absolute; left: 0; top: 130px; right: 0; display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 300px 300px; gap: 28px; }
+  .p7 .play { display: grid; grid-template-columns: 220px 1fr; gap: 28px; align-items: center; padding: 28px 32px; border: 2px solid var(--line); }
+  .p7 .play[data-focused] { background: #fff; color: var(--ink); border-color: #fff; transform: skewX(-4deg); box-shadow: 14px 14px 0 var(--signal); }
+  .p7 .play .t { font-family: var(--display); font-size: 44px; font-weight: 800; text-transform: uppercase; letter-spacing: .02em; line-height: 1; }
+  .p7 .play .d { margin-top: 10px; font-size: 28px; line-height: 1.3; color: var(--mute); } .p7 .play[data-focused] .d { color: #3A3F47; }
+  .p7 .dia { height: 180px; display: flex; flex-direction: column; justify-content: center; gap: 14px; }
+  .p7 .dia i { display: block; height: 22px; background: var(--essay); } .p7 .play[data-focused] .dia i { background: var(--signal); }
+  .p7 .dia.thesis i:first-child { width: 100%; } .p7 .dia.thesis i:nth-child(2), .p7 .dia.thesis i:nth-child(3) { width: 45%; opacity: .35; }
+  .p7 .dia.para i:nth-child(1) { width: 100%; } .p7 .dia.para i:nth-child(2) { width: 70%; opacity: .7; } .p7 .dia.para i:nth-child(3) { width: 40%; opacity: .45; }
+  .p7 .dia.order { flex-direction: row; align-items: flex-end; } .p7 .dia.order i { width: 30%; } .p7 .dia.order i:nth-child(1) { height: 50px; } .p7 .dia.order i:nth-child(2) { height: 100px; } .p7 .dia.order i:nth-child(3) { height: 160px; }
+  .p7 .dia.concl i:first-child { width: 45%; opacity: .35; } .p7 .dia.concl i:nth-child(2) { width: 45%; opacity: .35; } .p7 .dia.concl i:nth-child(3) { width: 100%; }
+
+  /* ========== 8 · ESSAY · ANALYSIS — sentence rows with roles, length bars, ticker ========== */
+  .p8 .rows { position: absolute; left: 0; top: 140px; width: 1300px; display: grid; grid-template-columns: 60px 1fr 260px 160px; gap: 0 28px; align-items: center; }
+  .p8 .rows > div { padding: 22px 0; border-bottom: 1px solid var(--line); }
+  .p8 .n { font-family: var(--display); font-size: 34px; font-weight: 800; color: var(--mute); font-variant-numeric: tabular-nums; }
+  .p8 .s { font-size: 38px; font-weight: 500; }
+  .p8 .role { font-family: var(--display); font-size: 26px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; padding: 6px 12px; border: 2px solid var(--essay); color: var(--essay); justify-self: start; }
+  .p8 .role[data-missing] { border-color: var(--signal); color: var(--tint); }
+  .p8 .len { height: 18px; background: var(--essay); }
+  .p8 .head { font-size: 20px; font-weight: 600; letter-spacing: .18em; text-transform: uppercase; color: var(--mute); border-bottom: 2px solid var(--line) !important; padding: 8px 0 !important; }
+  .p8 .verdict { position: absolute; left: 1380px; top: 140px; width: 348px; }
+  .p8 .verdict .cap-text { font-size: 34px; }
+
+  /* ========== 9 · ESSAY · LESSON — the essay with its skeleton drawn on, telestrator-style ========== */
+  .p9 .text { position: absolute; left: 0; top: 140px; width: 1300px; font-size: 38px; line-height: 1.5; }
+  /* Each sentence is a block with its role drawn as a left rule — the bars must sit beside the
+     sentence they belong to, which an inline span cannot guarantee once a sentence wraps. */
+  .p9 .text span { display: block; padding: 6px 0 6px 44px; border-left: 10px solid transparent; max-width: 60ch; }
+  .p9 .text [data-r="claim"] { border-left-color: var(--signal); } .p9 .text [data-r="evidence"] { border-left-color: var(--essay); } .p9 .text [data-r="link"] { border-left-color: #fff; }
+  .p9 .legend { position: absolute; left: 1380px; top: 140px; width: 348px; display: flex; flex-direction: column; gap: 26px; }
+  .p9 .legend .l { display: grid; grid-template-columns: 14px 1fr; gap: 18px; align-items: start; }
+  .p9 .legend .l i { display: block; height: 40px; }
+  .p9 .legend .l b { display: block; font-family: var(--display); font-size: 30px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; }
+  .p9 .legend .l span { font-size: 26px; color: var(--mute); line-height: 1.3; }
+  .p9 svg.tele { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; pointer-events: none; }
+</style>
+
+<div class="bench">
+  <div class="tabs" id="tabs">
+    <span></span><span class="h">Lesson picker</span><span class="h">Analysis of input</span><span class="h">Theory / lesson</span>
+    <span class="h" style="color:#7FD1E8">Maths</span><button data-p="1" aria-pressed="true">Pick a lesson <kbd>1</kbd></button><button data-p="2">What the desk read <kbd>2</kbd></button><button data-p="3">Worked example <kbd>3</kbd></button>
+    <span class="h" style="color:#F2C14E">English</span><button data-p="4">Units <kbd>4</kbd></button><button data-p="5">Your sentence <kbd>5</kbd></button><button data-p="6">Past simple vs present perfect <kbd>6</kbd></button>
+    <span class="h" style="color:#8FD3A1">Essay</span><button data-p="7">Playbook <kbd>7</kbd></button><button data-p="8">Your paragraph <kbd>8</kbd></button><button data-p="9">A paragraph, x-rayed <kbd>9</kbd></button>
+  </div>
+
+  <div class="frame" id="frame">
+
+    <!-- 1 MATHS PICKER -->
+    <div class="stage p1" data-p="1" data-on="true">
+      <div class="grid"></div><div class="band left thin"></div>
+      <div class="safe">
+        <aside class="rail"><div class="learner"><small>Now studying</small>Ema</div>
+          <div><div class="subj" data-on="true">Maths</div><div class="subj">English</div><div class="subj">Essay</div></div>
+          <div class="clock">18:40<small>On the clock</small></div></aside>
+        <main class="content">
+          <div class="eyebrow" style="color:var(--maths)">Maths · lessons on file</div>
+          <div class="title">Pick a lesson</div>
+          <div class="cards">
+            <div class="card"><div class="n">01</div><div class="t">Linear equations 1</div><div class="m">7:28 · solve for x</div></div>
+            <div class="card"><div class="n">02</div><div class="t">One-step equations</div><div class="m">2:09 · undo one operation</div></div>
+            <div class="card" data-focused><div class="n">03</div><div class="t">Factoring quadratics as (x+a)(x+b)</div><div class="m">6:33 · pairs that multiply and add</div></div>
+            <div class="card"><div class="n">04</div><div class="t">The substitution method</div><div class="m">4:39 · two equations, one x</div></div>
+          </div>
+          <div class="lt"><div class="tag">For problem 3</div><div class="txt">Factoring quadratics — chosen because x² + 7x + 12 needs pairs that multiply to 12</div></div>
+          <div class="ticker"><span><b>4</b> lessons</span><i>·</i><span>Khan Academy</span><i>·</i><span>1 recommended</span><i>·</i><span>press Select to jump to the part that matters</span></div>
+        </main>
+      </div>
+    </div>
+
+    <!-- 2 MATHS ANALYSIS -->
+    <div class="stage p2" data-p="2">
+      <div class="grid"></div><div class="band rule"></div>
+      <div class="safe">
+        <main class="content full">
+          <div class="eyebrow" style="color:var(--maths)">Maths · what the desk read</div>
+          <div class="read" style="top:60px"><span class="cap">Item 3 · circled from the phone</span></div>
+          <div class="panel" style="top:400px">
+            <div class="eyebrow">Read as</div>
+            <div class="rows">
+              <div class="k">Problem</div><div class="v">Factor completely: <b>x² + 7x + 12</b></div>
+              <div class="k">Form</div><div class="v">x² + bx + c &nbsp; with &nbsp; <b>b = 7</b>, <b>c = 12</b></div>
+              <div class="k">Needs</div><div class="v">two numbers that <b>multiply to 12</b> and <b>add to 7</b></div>
+              <div class="k">On file</div><div class="v">a lesson that teaches this · <b>hints written</b></div>
+            </div>
+          </div>
+          <aside class="aside" style="top:60px"><div class="clock">18:40<small>On the clock</small></div>
+            <div class="verdict"><b>Read cleanly.</b> Ten items, every equation character-exact, on a photo taken under the desk lamp. Nothing to check by hand.</div></aside>
+          <div class="ticker"><span>Sheet 4.2</span><i>·</i><span><b>10</b> items read</span><i>·</i><span>read in <b>25 s</b></span><i>·</i><span>equations intact <b>10 / 10</b></span></div>
+        </main>
+      </div>
+    </div>
+
+    <!-- 3 MATHS LESSON -->
+    <div class="stage p3" data-p="3">
+      <div class="grid"></div><div class="band wedge"></div>
+      <div class="safe">
+        <main class="content full">
+          <div class="eyebrow" style="color:var(--maths)">Maths · worked example</div>
+          <div class="title">Factor x² + 7x + 12</div>
+          <div class="steps">
+            <div class="s-n">1</div><div class="s-t">Find the pairs that multiply to <b>12</b>: 1·12, 2·6, 3·4</div>
+            <div class="s-n">2</div><div class="s-t">Now the pair that also adds to <b>7</b></div>
+            <div class="cur" style="display:contents"><div class="s-n">3</div><div class="s-t"><b>3 + 4 = 7</b> and <b>3 × 4 = 12</b> — that is the pair</div></div>
+            <div class="s-n">4</div><div class="s-t">So the factors are (x + 3)(x + 4)</div>
+          </div>
+          <div class="scrub"><i></i><b></b></div><div class="time">Step 3 of 4 · 4:02 / 6:33</div>
+          <div class="actions" style="bottom:140px"><button class="btn" data-focused>Next step</button><button class="btn">Back to my problem</button></div>
+        </main>
+      </div>
+    </div>
+
+    <!-- 4 ENGLISH PICKER -->
+    <div class="stage p4" data-p="4">
+      <div class="grid"></div><div class="band right"></div>
+      <div class="safe">
+        <main class="content full">
+          <div class="eyebrow" style="color:var(--english)">English · units</div>
+          <div class="title">Tonight's units</div>
+          <div class="guide">
+            <div class="row"><div class="u">Unit 5</div><div class="t">Past simple — regular and irregular</div><div class="d">10 min</div></div>
+            <div class="row" data-focused><div class="u">Unit 6</div><div class="t">Past simple vs present perfect <span class="now">next</span></div><div class="d">12 min</div></div>
+            <div class="row"><div class="u">Unit 7</div><div class="t">Time markers: yesterday, since, for, already</div><div class="d">8 min</div></div>
+            <div class="row"><div class="u">Unit 8</div><div class="t">Questions in the past</div><div class="d">9 min</div></div>
+          </div>
+          <div class="preview">
+            <span class="cap">From unit 6</span>
+            <div class="ex">"I <u>have lived</u> here <u>since 2019</u>." &nbsp;— but — &nbsp;"I <u>lived</u> there <u>in 2019</u>."</div>
+            <div class="m">Same verb, two tenses. The time word decides — which is exactly what the desk checks in your sentences.</div>
+          </div>
+          <div class="ticker"><span><b>4</b> units</span><i>·</i><span>unit 6 next</span><i>·</i><span>your last sentence needed this one</span></div>
+        </main>
+      </div>
+    </div>
+
+    <!-- 5 ENGLISH ANALYSIS -->
+    <div class="stage p5" data-p="5">
+      <div class="grid"></div><div class="band rule"></div>
+      <div class="safe">
+        <main class="content full">
+          <div class="eyebrow" style="color:var(--english)">English · your sentence</div>
+          <div class="sent">I <span class="tok" data-k="tense" data-l="present perfect">have gone</span> to school <span class="tok" data-k="marker" data-l="time marker · finished time">yesterday</span>.</div>
+          <div class="lt"><div class="tag">The rule</div><div class="txt">A finished time — <b>yesterday</b> — takes the <b>past simple</b>. The present perfect is for time that is still open.</div></div>
+          <div class="actions" style="bottom:60px"><button class="btn" data-focused>Try it again</button><button class="btn">Show me the unit</button></div>
+        </main>
+      </div>
+    </div>
+
+    <!-- 6 ENGLISH LESSON -->
+    <div class="stage p6" data-p="6">
+      <div class="grid"></div>
+      <div class="band" style="left:760px;top:0;width:400px;height:1080px;clip-path:polygon(60% 0,100% 0,40% 100%,0 100%)"></div>
+      <div class="safe">
+        <main class="content full">
+          <div class="half a">
+            <div class="chan" style="color:var(--english)">Finished time</div>
+            <div class="name">Past<br>simple</div>
+            <div class="when">The action is over and the time is closed.</div>
+            <div class="mk"><span>yesterday</span><span>in 2019</span><span>last week</span><span>ago</span></div>
+            <div class="ex">I <b>went</b> to school yesterday.</div>
+          </div>
+          <div class="vs">vs</div>
+          <div class="half b">
+            <div class="chan" style="color:var(--english)">Open time</div>
+            <div class="name">Present<br>perfect</div>
+            <div class="when">The time reaches up to now, or the result is still with us.</div>
+            <div class="mk"><span>since</span><span>for</span><span>already</span><span>ever</span></div>
+            <div class="ex">I <b>have lived</b> here since 2019.</div>
+          </div>
+          <div class="q"><span class="cap">The question to ask</span><div class="cap-text">Is the time <b>closed</b> or still <b>open</b>? Find the time word first — the tense follows.</div></div>
+        </main>
+      </div>
+    </div>
+
+    <!-- 7 ESSAY PICKER -->
+    <div class="stage p7" data-p="7">
+      <div class="grid"></div><div class="band left" style="clip-path:polygon(0 55%,100% 100%,0 100%);width:900px"></div>
+      <div class="safe">
+        <main class="content full">
+          <div class="eyebrow" style="color:var(--essay)">Essay · playbook</div>
+          <div class="title">Choose a structure to work on</div>
+          <div class="plays">
+            <div class="play"><div class="dia thesis"><i></i><i></i><i></i></div><div><div class="t">Thesis</div><div class="d">One sentence that takes a side and says why.</div></div></div>
+            <div class="play" data-focused><div class="dia para"><i></i><i></i><i></i></div><div><div class="t">Paragraph</div><div class="d">Claim, then evidence, then the link back.</div></div></div>
+            <div class="play"><div class="dia order"><i></i><i></i><i></i></div><div><div class="t">Order</div><div class="d">Which argument goes first, and why that one.</div></div></div>
+            <div class="play"><div class="dia concl"><i></i><i></i><i></i></div><div><div class="t">Conclusion</div><div class="d">What the introduction promised, now delivered.</div></div></div>
+          </div>
+          <div class="ticker"><span>Later school starts</span><i>·</i><span>first draft</span><i>·</i><span>your paragraph needed <b>evidence</b></span></div>
+        </main>
+      </div>
+    </div>
+
+    <!-- 8 ESSAY ANALYSIS -->
+    <div class="stage p8" data-p="8">
+      <div class="grid"></div>
+      <div class="safe">
+        <main class="content full">
+          <div class="eyebrow" style="color:var(--essay)">Essay · your paragraph</div>
+          <div class="title" style="font-size:56px">Four sentences, four claims</div>
+          <div class="rows">
+            <div class="head">#</div><div class="head">Sentence</div><div class="head">Role</div><div class="head">Length</div>
+            <div class="n">1</div><div class="s">Many students are tired.</div><div class="role">claim</div><div><i class="len" style="width:36%;display:block"></i></div>
+            <div class="n">2</div><div class="s">Sleep is important.</div><div class="role">claim</div><div><i class="len" style="width:30%;display:block"></i></div>
+            <div class="n">3</div><div class="s">Schools start early.</div><div class="role">claim</div><div><i class="len" style="width:32%;display:block"></i></div>
+            <div class="n">4</div><div class="s">This is bad.</div><div class="role" data-missing>claim · no evidence</div><div><i class="len" style="width:20%;display:block"></i></div>
+          </div>
+          <aside class="verdict"><span class="cap">What it needs</span>
+            <div class="cap-text">Combine the first two to show cause and effect, and replace the last sentence with a specific consequence.</div></aside>
+          <div class="ticker"><span><b>4</b> sentences</span><i>·</i><span><b>4</b> claims</span><i>·</i><span><b>0</b> evidence</span><i>·</i><span><b>0</b> connectors</span><i>·</i><span>avg <b>3.5</b> words</span></div>
+        </main>
+      </div>
+    </div>
+
+    <!-- 9 ESSAY LESSON -->
+    <div class="stage p9" data-p="9">
+      <div class="grid"></div><div class="band right" style="width:520px;clip-path:polygon(55% 0,100% 0,100% 100%,0 100%)"></div>
+      <svg class="tele" viewBox="0 0 1920 1080" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"><path d="M 1330 372 C 1380 372, 1400 396, 1470 396" stroke-dasharray="8 10" opacity=".7"/><circle cx="1330" cy="372" r="7" fill="#fff"/></svg>
+      <div class="safe">
+        <main class="content full">
+          <div class="eyebrow" style="color:var(--essay)">Essay · a paragraph, x-rayed</div>
+          <div class="title" style="font-size:56px">Claim, evidence, link</div>
+          <div class="text">
+            <span data-r="claim">Many students arrive at school exhausted, and the reason is not laziness but biology.</span>
+            <span data-r="evidence">During adolescence the body's internal clock shifts later, which means a teenager who goes to bed at eleven is often not sleepy until well after midnight.</span>
+            <span data-r="link">An early start therefore cuts into sleep that the brain still needs.</span>
+          </div>
+          <aside class="legend">
+            <div class="l"><i style="background:var(--signal)"></i><div><b>Claim</b><span>What you are saying. One sentence, takes a side.</span></div></div>
+            <div class="l"><i style="background:var(--essay)"></i><div><b>Evidence</b><span>Why a reader should believe it. A fact, a number, a mechanism.</span></div></div>
+            <div class="l"><i style="background:#fff"></i><div><b>Link</b><span>What it means for the argument. Often starts with <em>therefore</em>.</span></div></div>
+          </aside>
+          <div class="actions" style="bottom:60px"><button class="btn" data-focused>Try it on mine</button><button class="btn">Next paragraph</button></div>
+        </main>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="why" data-p="1" data-on="true"><b>Maths · picker.</b> Card row as the hero, the recommendation as a lower-third — the band is a thin left column so the rail sits on it. The channel colour appears only in the card metadata.</div>
+  <div class="why" data-p="2"><b>Maths · analysis.</b> The captured page as a cropped band with a red bracket; below it the "read as" panel on faint graph paper — the one place the maths channel gets a texture, the Blueprint nod. The band is only a top rule; the clock takes the right column. Ticker carries the PoC's real numbers.</div>
+  <div class="why" data-p="3"><b>Maths · lesson.</b> A step line instead of a video: the current step at 64 px, the others muted, a scrubber and a step counter. The band is a bottom wedge, so the composition is the inverse of the picker's.</div>
+  <div class="why" data-p="4"><b>English · picker.</b> A programme guide — rows with a unit number, a title and a duration, the focused row white and skewed, a "next" tag. The band is the right column and the preview sits against it.</div>
+  <div class="why" data-p="5"><b>English · analysis.</b> One sentence at 92 px is the whole screen. The tense is underlined red, the time marker amber, each with its label; the rule arrives as a lower-third. This is the rule-table design made visible: the desk decided the tense from the marker.</div>
+  <div class="why" data-p="6"><b>English · lesson.</b> Head-to-head: the band is the diagonal divider, "vs" in the middle, markers as chips on each side, the question to ask as the caption. No rail, no lower-third — the halves are the hero.</div>
+  <div class="why" data-p="7"><b>Essay · picker.</b> A playbook: four structures in a 2×2, each with a small CSS diagram of its shape, the focused one white. The band is a low wedge so the grid has the top of the screen.</div>
+  <div class="why" data-p="8"><b>Essay · analysis.</b> The student's paragraph as a table of sentences with a role tag and a length bar — four claims, no evidence, one flagged in red. The verdict is the real essay hint from the PoC. No band at all; red only in the missing-evidence tag and the ticker dots.</div>
+  <div class="why" data-p="9"><b>Essay · lesson.</b> The model paragraph with its skeleton drawn on — colour bars for claim, evidence and link, a legend, and one telestrator-style dashed stroke. The band is the right column. Reads as an x-ray of good writing rather than a slide about it.</div>
+</div>
+
+<script>
+  const stages = [...document.querySelectorAll(".stage")], whys = [...document.querySelectorAll(".why")], tabs = [...document.querySelectorAll(".tabs button")];
+  function pick(p) {
+    stages.forEach(s => { const on = s.dataset.p === p; s.dataset.on = String(on); if (on) { s.classList.remove("tab-in"); void s.offsetWidth; s.classList.add("tab-in"); } });
+    whys.forEach(w => w.dataset.on = String(w.dataset.p === p)); tabs.forEach(t => t.setAttribute("aria-pressed", String(t.dataset.p === p)));
+    try { localStorage.setItem("sd-onair", p); } catch (e) {}
+  }
+  tabs.forEach(t => t.onclick = () => pick(t.dataset.p));
+  addEventListener("keydown", e => { if ("123456789".includes(e.key)) pick(e.key); });
+  function fit() { const w = document.getElementById("frame").getBoundingClientRect().width; stages.forEach(s => s.style.transform = `scale(${w / 1920})`); }
+  addEventListener("resize", fit); fit();
+  try { const p = localStorage.getItem("sd-onair"); if (p && "123456789".includes(p)) pick(p); } catch (e) {}
+</script>
