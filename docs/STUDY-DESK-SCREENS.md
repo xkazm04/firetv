@@ -97,9 +97,12 @@ End of session. What was covered (problems touched, hints used, lessons watched)
 "where it was hard" (the problems that needed hint 2 — the honest version of the mistake journal,
 since answers are not checked). One button: **"Send to parent"** → phone. *Feeds:* session log.
 
-### Spanish screens — *withheld until B′ passes.* If the rule-table run holds, T3 gets a Spanish
-variant where the hint shows the **rule card** (marker → tense → ending) as a visible object the
-student can keep, which is the whole point of the design.
+### T3-es · Hint, Spanish variant — *B′ passed; in scope.*
+Same screen as T3 with one addition: the **rule card** the resolver produced is shown as a real
+object beside the hint — *marker → tense → person*, with the irregularity warning if any — and it
+stays on the page panel afterwards. It never shows the ending; it names the row of the student's
+chart. This is the whole point of the design and it is what makes the TV version different from a
+phone app that just prints *iremos*.
 
 ## 4. Phone screens
 

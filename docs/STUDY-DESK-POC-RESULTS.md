@@ -12,7 +12,8 @@ ten. C fails if hand judgement says the segment is off-topic more often than on.
 |---|---|---|
 | **A. Worksheet OCR** | **pass** (synthetic ceiling; real photos pending) | 10/10 equations, 8/8 sentences, 182/182 essay words — at *every* degradation level; circle selects the right item 16/16 |
 | **B. Socratic hints — maths, essay** | **pass** | maths 24/24 correct, 0 leaks; essay sound; escalation is the weak part |
-| **B. Socratic hints — Spanish** | **FAIL on the local model** | 2 of 6 problems get a *wrong* second hint, both tense-logic errors a beginner would copy |
+| **B. Socratic hints — Spanish, model picks the tense** | **fail** | 2 of 6 problems get a *wrong* second hint, both tense-logic errors a beginner would copy |
+| **B′. Spanish, rule table decides, model explains** | **pass** (2nd iteration) | 6/6 right tense, 0 leaks, 0 wrong statements — once the card stops carrying the ending |
 | **C. Problem → lesson segment** | **pass, with a design lesson** | plain text 4/9 → topic-expanded 7/9 → choose-from-syllabus **8/9** |
 
 ---
@@ -99,11 +100,37 @@ who followed them would write *vamos* and *han vivido* and be marked wrong. That
 one-in-ten line, and the failure is in exactly the place the feature is for. (One hint also
 switched into Spanish despite the instruction to explain in English — minor next to the above.)
 
-**What this says.** The local model's Spanish grammar is not reliable enough to tutor from. Two
-ways forward, to be tested rather than assumed: the same set on Bedrock, and a design where tense
-rules come from a small authored table (marker → tense → ending) and the model only *explains* the
-rule it is handed — the "retrieval, not perception" pattern from the sports work, applied to
-grammar. The first is a re-run; the second is the safer product.
+**What this says.** The local model's Spanish grammar is not reliable enough to tutor from *when
+it chooses the tense*. Decision taken: take that choice away from it.
+
+### Spanish, rule-table design (`poc_hints_es.py`) — two iterations: **pass**
+
+A time marker names a tense the way a shirt number names a player, so the tense, person and reasons
+are resolved in code from the sentence and handed to the model as a rule card. The model's job
+shrinks to explaining the rule it was given. Same six problems, same leak check.
+
+| | iteration 1 — card includes the endings | iteration 2 — card points at the chart row, never the ending |
+|---|---|---|
+| resolver (code) chose the right tense + person | 6/6 | 6/6 |
+| hint teaches the right tense | **6/6** (both earlier failures fixed) | **6/6** |
+| second hint assembles the answer | **6/6** ✗ — "combine the stem *com* with *í*", "*jug + aba*", one arrow reading "→ jogaba" | **0/6** |
+| wrong form stated | 1 (*lluv-* + *e*, stem change missed) | 0 |
+| latency per hint | ~2–3 s | ~3–5 s |
+
+Iteration 1 reproduced, in grammar, the lesson the sports work already recorded: **give the model
+the pieces of the answer and it hands them over.** With the endings on the card and an instruction
+to "go one step further", the second hint went straight to *stem + ending* every time — and the
+automatic leak check missed all six, because the finished word never appears. The checker now
+also flags a quoted ending that completes the answer.
+
+Iteration 2 withholds the ending and keeps the irregularity warning. Every second hint now sends
+the student to *"the yo row of your pretérito indefinido chart for -er verbs"* and, where it
+matters, *"adjust the vowel in the stem before adding the -er ending"* (llover) — which is the
+pedagogy anyway: the chart is theirs to read.
+
+**The design rule that generalises:** the rule card is what the model is *allowed to know*. It
+carries the decision and the reasons; it never carries the thing the student is supposed to
+produce.
 
 ### Essay — 4 prompts, 8 hints: pass
 
@@ -146,10 +173,10 @@ matched so the choice is made on those rather than on the model's reading of a t
 - **Maths and essay are feasible end to end** on what could be tested locally: read the page,
   point at a problem, hint without leaking, jump to the lesson. OCR on real photos is the one
   open check.
-- **Spanish is not feasible on the local model as designed.** Either it moves to Bedrock and is
-  re-tested on the same six problems, or tense selection is taken away from the model and given to
-  an authored rule table it explains from. Decide this before Spanish goes into the prototype; do
-  not model screens for a feature that has not passed.
+- **Spanish is feasible only under the rule-table design**, and that design is now the spec: the
+  tense is decided in code from the sentence, the card the model sees carries the decision and the
+  reasons and never the ending, and the card itself becomes a visible object on the TV that the
+  student keeps.
 - **The local model is a viable development stand-in and the wrong production engine.** A 25 s
   page read is acceptable for building flows, not for a product; hints at 1.7 s are fine either
   way. Bedrock for the read is a measured need; for the hint it is a quality question (Spanish),
