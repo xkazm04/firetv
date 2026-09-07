@@ -244,6 +244,87 @@ when it is right.
 
 ---
 
+## 3d. What the broadcasters actually do — and why we cannot copy it
+
+Researched 2026-09-07. The short version: **almost every advanced graphic you see on an NHL or NBA
+broadcast is driven by tracking data from an instrumented venue, not by analysing the picture.**
+
+| League | How it tracks | Consequence for us |
+|---|---|---|
+| **NHL** | **Sensors.** 14–16 infrared cameras above every rink, plus chips embedded in the puck and in players' shoulder pads. Data goes to teams, the NHLPA and broadcast partners (ESPN, Turner, Rogers); the pipeline runs on AWS with SMT building the graphics | ❌ **Unreplicable from video at any quality.** The information is not in the pixels |
+| **NBA** | **Optical.** Sony Hawk-Eye since 2023-24 — 3D, sub-second latency, pose tracking, replacing Second Spectrum's centre-of-mass system. Second Spectrum still does broadcast augmentation for League Pass alternate telecasts | ⚠️ In principle camera-derived, but from a calibrated multi-camera rig, not a single broadcast feed |
+
+The NHL EDGE graphics are then just presentation of that data: max skating speed bucketed (18–20,
+20–22, 22+ mph), shot speed with a 100+ mph tier, shot and save location across 16 zones, time on
+ice, distance skated, faceoff probability.
+
+**This is the most strategically important thing in this document.** The reason ESPN's hockey
+coverage looks advanced is not clever computer vision — it is a chip in the puck. We are not
+behind them on algorithms; we are on the other side of a hardware boundary, and no amount of model
+quality crosses it.
+
+The telestration vocabulary itself is the part that *is* ours: broadcast tools (Chyron PAINT, RT
+Software Tactic) offer arrows including **predictive** arrows projecting a hypothetical run,
+circles, labels, spotlights, cursors, trails, 3D columns, and zone highlights with the outside
+blurred. Our P0 palette — freehand, arrow, circle, spotlight, name tag — is already most of that
+list. The gap is that theirs *stick to a moving player*, which needs tracking.
+
+## 3e. The clip library, and a negative result
+
+`vision/library.py` ingests coach-breakdown videos as timestamped transcripts (gitignored:
+third-party content). Ten clips, **16,332 words** of expert commentary, all between 149 and 217 wpm
+so the de-overlap is sound. `vision/patterns.py` extracts the tactical vocabulary: **154 concept
+mentions, 131 distinct concepts**, each with a definition and — the field that matters — what it
+*looks like* on screen.
+
+Ranking by how many **independent channels** use a term separates domain vocabulary from one
+presenter's habit:
+
+| channels | concept |
+|---|---|
+| 4 | pick and roll, drop coverage |
+| 3 | hedge, switch |
+| 2 | slip, flare screen, drag screen, pick and pop, help defense, transition, double team |
+
+The cues are genuinely concrete. Drop coverage: *"The defender guarding the screener stays deep in
+the paint near the free-throw line or baseline, not coming up to the ball handler."*
+
+### Finding 7 — the vocabulary does not make the model see, and a menu removes its honesty
+
+`vision/analyse.py` gives the model five frames of a known play — the transcript says Curry sets a
+cross screen for Draymond, then a back screen for Wiggins, then "screening the screener" — and asks
+which concept is occurring.
+
+| Condition | Answer | Correct? |
+|---|---|---|
+| **Blind**, no vocabulary | "pick and roll", `confident: true` | ❌ it is off-ball screening, not a ball screen |
+| **Shared vocabulary** (right answer *absent*, so "none" was correct) | "slip", `confident: true` | ❌ and it should have said none |
+| **Full 90-concept vocabulary** (right answer present) | "slip", `confident: true` | ❌ |
+
+Three conditions, three confident wrong answers, and the escape hatch never used.
+
+**This inverts Finding 3.** There, an explicit "none" option made the model correctly decline. Here
+the same option is present and ignored — because a menu of plausible concepts is itself a
+suggestion. Offering the null answer works when the alternative is open-ended; it stops working
+when you also hand over a list of attractive things to pick. **A closed vocabulary buys accuracy
+on perception questions and costs honesty on interpretation questions.**
+
+So the knowledge base does **not** unlock tactical recognition. Its value is real but different:
+labels, retrieval, and explanation — the three uses named in §3c — none of which require the model
+to perceive the tactic.
+
+### Finding 4, confirmed by accident
+
+The model's answers kept referring to "the player circled". That looked like a hallucinated detail
+until the frame was checked: **the breakdown video has its own red telestrator circle drawn around
+#22**, and the model had latched onto it unprompted to decide who the play was about — correctly.
+
+An independent confirmation of Finding 4, from a circle we did not draw and did not mention. Drawn
+annotations steer this model's attention reliably enough that it uses them without being told they
+are there.
+
+---
+
 ## 4. Which sports-studio features are actually reachable
 
 The honest split is between features that need **measurement** and features that need **description**.
