@@ -5,7 +5,7 @@
  */
 import { useEffect, useState } from "react";
 import QRCode from "qrcode";
-import type { Profile, Session, Subject, Task } from "@/lib/session/store";
+import type { Profile, Session, Subject } from "@/lib/session/store";
 import type { Topic } from "@/lib/library/syllabus";
 import { LESSONS, ESSAY_TYPES } from "@/lib/library/lessons.data";
 import { fmt } from "./useSession";
@@ -13,7 +13,7 @@ import { fmt } from "./useSession";
 
 /** The OCR writes exponents as ^n and the tutor may too; the screen shows them as printed. */
 export const shown = (s: string) => s.replace(/\^2/g, "²").replace(/\^3/g, "³").replace(/\*\*/g, "").replace(/\$/g, "");
-import { BRAND, MODULE_BLURB, TYPE_WORDS, profileRows, locate, onModules, shownTasks } from "@/tv/profileRows";
+import { BRAND, MODULE_BLURB, TYPE_WORDS, profileRows, locate, onModules } from "@/tv/profileRows";
 const NAME = BRAND;
 
 function Rail({ s }: { s: Session }) {
@@ -108,74 +108,125 @@ export function Landing({ s, focus }: { s: Session; focus: number }) {
 }
 
 // ---- T1 ----
-/** The caption for whatever task is focused: what this module does with the page, in one sentence. */
-function taskCaption(s: Session, t: Task): { chip: string; text: string } {
-  const brand = NAME[t.sub];
-  if (s.awaiting === t.sub) return { chip: "Waiting", text: `Waiting for the ${brand} page. Snap it on the phone — it appears here.` };
-  if (t.done) return { chip: brand, text: "Done. Menu puts it back." };
-  const p = s.pages.find((x) => x.subject === t.sub);
-  if (p) return { chip: brand, text: `The sheet is on the desk. Enter opens it${p.items.length ? `, ${p.items.length} problems in` : ""}.` };
-  const first: Record<Subject, string> = {
-    maths: "Snap the sheet on the phone and the desk reads it one problem at a time. Hints, never the answer. Menu marks it done.",
-    english: "Say a sentence on the phone and the desk shows the tense and the word that decided it. Menu marks it done.",
-    essay: "Pick the lens here, then paste the paragraph on the phone. The desk shows what it does and what it lacks. Menu marks it done.",
+/**
+ * The continue card: the one thing already open in Math Buddy, offered before anything new.
+ * Read straight off the session — if none of these hold there is nothing to continue and the
+ * screen says nothing about it.
+ */
+export interface Continue { k: string; t: string; d: string; cap: string; go: "practice" | "walk" | "page"; pageIx: number }
+export function continueCard(s: Session): Continue | null {
+  const name = s.practice ? topicById(s.practice.topic)?.name ?? s.practice.topic : "";
+  if (s.practice && !s.practice.marked) return {
+    k: "Still open", t: "Finish the set", d: `${s.practice.items.length} questions on ${name}, not marked yet.`,
+    cap: "Your questions are still on paper. Enter puts them back on screen, ready for the photo.",
+    go: "practice", pageIx: 0,
   };
-  return { chip: brand, text: first[t.sub] };
+  if (s.practice?.marked && s.walkIx < s.practice.items.length - 1) return {
+    k: "Half walked", t: "Carry on walking the set", d: `${name} · you stopped at ${s.walkIx + 1} of ${s.practice.items.length}.`,
+    cap: `The marked set is waiting at item ${s.walkIx + 1} of ${s.practice.items.length}. Enter carries on from there.`,
+    go: "walk", pageIx: 0,
+  };
+  const pi = s.pages.findIndex((p) => p.subject === "maths" && p.items.length > 0);
+  if (pi >= 0) { const p = s.pages[pi]; return {
+    k: "On the desk", t: "Back to the sheet", d: `${p.title} · ${p.items.length} problems read.`,
+    cap: "The sheet you snapped is still on the desk. Enter opens it where you were.",
+    go: "page", pageIx: pi,
+  }; }
+  return null;
 }
-/** The two doors the D-pad meets first: the sheet you were given, and a topic you choose. */
+
+/** The two doors the D-pad meets: the sheet you were given, and a topic you choose. */
 const DOORS = [
   { k: "The sheet you were given", t: "I have homework", d: "Snap it; the desk reads it problem by problem." },
   { k: "No sheet needed", t: "Teach me something", d: "Pick a topic; the desk writes the questions." },
 ];
 function doorCaption(s: Session, i: number): string {
-  if (i === 1) return "Pick a topic and the desk writes six questions for you to work on paper. It marks them from a photo — nothing is typed here.";
+  if (i === 1) return "Pick a topic and the desk writes six questions to work on paper, then marks them from a photo.";
   if (s.awaiting === "maths") return "Waiting for the Math Buddy page. Snap it on the phone — it appears here.";
   if (s.pages.some((p) => p.subject === "maths")) return "The sheet is already on the desk. Enter opens it, one problem at a time.";
-  return "Snap the sheet on the phone and the desk reads it, one problem at a time. Hints, never the answer.";
+  return "Snap the sheet on the phone and the desk reads it, one problem at a time — hints, never the answer.";
 }
-/** Focus 0-1 are the two doors; 2 onwards walk the task board underneath them. */
+
+/** How long ago, in the words a person would use. Calendar days, not elapsed hours. */
+function ago(at: number): string {
+  const day = (t: number) => { const d = new Date(t); return Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()); };
+  const n = Math.round((day(Date.now()) - day(at)) / 86400000);
+  return n <= 0 ? "Today" : n === 1 ? "Yesterday" : n < 7 ? `${n} days ago` : n < 14 ? "Last week" : `${Math.floor(n / 7)} weeks ago`;
+}
+
+const COUNT = ["", "One", "Two", "Three", "Four", "Five"];
+
+/**
+ * M0 · Math Buddy's home. Only this module is on this screen: what is still open, what happened
+ * last, where the path goes next, and what the desk noticed. Focus 0 is the continue card when
+ * there is one; the two doors follow it.
+ */
 export function Tonight({ s, focus }: { s: Session; focus: number }) {
-  const list = shownTasks(s);
-  const open = list.filter((t) => !t.done);
-  const total = open.reduce((a, t) => a + t.min, 0);
-  const hidden = s.tasks.length - list.length;
-  const off = Array.from(new Set(s.tasks.filter((t) => !list.includes(t)).map((t) => t.sub)));
-  const onDoor = focus < 2;
-  const ti = Math.min(Math.max(0, focus - 2), list.length - 1);
-  const at = onDoor ? null : list[ti] ?? null;
-  const cap = at ? taskCaption(s, at) : null;
+  const cont = continueCard(s);
+  const off = cont ? 1 : 0;
+  const secure = Object.values(s.skills ?? {}).filter((r) => r.secure).map((r) => r.topic);
+  const next = nextTopic(secure);
+  const last = (s.history ?? []).at(-1) ?? null;
+  const noticed = (s.memory ?? []).at(-1) ?? "";
+  const sheets = s.pages.filter((p) => p.subject === "maths").length;
+  const title = cont ? "One thing is still open"
+    : secure.length === SYLLABUS.length ? "Every topic on the path is secure"
+    : secure.length ? `${COUNT[secure.length]} of ${SYLLABUS.length} topics secure`
+    : "Linear equations, from the first step";
   return (<>
     <div className="band band-left-thin" /><Rail s={s} />
     <main className="content">
-      <div className="eyebrow">Tonight</div>
-      <div className="title">{open.length ? `${["One", "Two", "Three", "Four", "Five"][open.length - 1] ?? open.length} thing${open.length > 1 ? "s" : ""}, about ${total} minutes` : "Everything done"}</div>
-      <div className="cards" style={{ gridTemplateColumns: "1fr 1fr", marginTop: 26 }}>
+      <div className="eyebrow" data-ch="maths">Math Buddy</div>
+      <div className="title">{title}</div>
+      <div className="cards" style={{ gridTemplateColumns: cont ? "1.1fr 1fr 1fr" : "1fr 1fr", marginTop: 20 }}>
+        {cont && (
+          <div className="card" data-focused={focus === 0} style={{ minHeight: 160 }}>
+            <div className="k">{cont.k}</div>
+            <div className="t" style={{ fontSize: 40 }}>{cont.t}</div>
+            <div className="d" style={{ marginTop: "auto" }}>{cont.d}</div>
+          </div>
+        )}
         {DOORS.map((d, i) => (
-          <div key={d.t} className="card" data-focused={focus === i} style={{ minHeight: 190 }}>
+          <div key={d.t} className="card" data-focused={focus === i + off} style={{ minHeight: 160 }}>
             <div className="k">{d.k}</div>
-            <div className="t" style={{ fontSize: 52 }}>{d.t}</div>
+            <div className="t" style={{ fontSize: cont ? 40 : 46 }}>{d.t}</div>
             <div className="d" style={{ marginTop: "auto" }}>{d.d}</div>
           </div>
         ))}
       </div>
-      <div className="eyebrow" style={{ marginTop: 28 }}>Also on the board</div>
-      <div className="cards" style={{ gridTemplateColumns: `repeat(${Math.max(3, list.length)}, 1fr)`, marginTop: 12 }}>
-        {list.map((t, i) => (
-          <div key={t.id} className="card" data-focused={focus === i + 2} style={{ minHeight: 0, padding: "16px 22px", gap: 6, ...(t.done ? { opacity: 0.5 } : null) }}>
-            <div className="k">{NAME[t.sub]}</div>
-            <div className="t" style={{ fontFamily: "var(--body)", textTransform: "none", fontWeight: 500, fontSize: 30, lineHeight: 1.1 }}>{t.name}</div>
-            {/* done is green on both grounds; the minutes let the focused card's CSS charcoal win */}
-            <div className="m" style={{ color: t.done ? (focus === i + 2 ? "#2E7D4F" : "var(--essay)") : focus === i + 2 ? undefined : "var(--mute)" }}>{t.done ? "done" : `${t.min} min`}</div>
-          </div>
-        ))}
+      <div style={{ display: "flex", gap: 52, marginTop: 30, alignItems: "flex-start" }}>
+        <div style={{ width: 430 }}>
+          <div className="chan" style={{ color: "var(--mute)" }}>Where you left off</div>
+          {last
+            ? <>
+                <div style={{ fontSize: 36, fontWeight: 500, marginTop: 14, lineHeight: 1.15 }}>{last.label}</div>
+                <div className="body" style={{ marginTop: 10, color: "var(--mute)", fontSize: 30 }}>
+                  {ago(last.at)} · {last.detail}
+                </div>
+              </>
+            : <div className="body" style={{ marginTop: 14, color: "var(--mute)", fontSize: 30 }}>Nothing yet — this is your first night with Math Buddy.</div>}
+        </div>
+        <div style={{ width: 890 }}>
+          <div className="chan" style={{ color: "var(--mute)" }}>Next on the path</div>
+          {next
+            ? <>
+                <div style={{ fontSize: 36, fontWeight: 500, marginTop: 14, lineHeight: 1.15 }}>{next.name}</div>
+                <div style={{ marginTop: 18 }}><Bands t={next} /></div>
+              </>
+            : <div className="body" style={{ marginTop: 14, color: "var(--mute)", fontSize: 30 }}>Nothing left on this path.</div>}
+        </div>
       </div>
+      {noticed && (
+        <div style={{ marginTop: 20, maxWidth: 1372 }}>
+          <div className="chan" style={{ color: "var(--mute)" }}>What the desk noticed last time</div>
+          <div className="body" style={{ marginTop: 10, fontSize: 28, lineHeight: 1.3 }}>{noticed}</div>
+        </div>
+      )}
       <div style={{ position: "absolute", left: 0, bottom: 96 }}>
-        {onDoor
-          ? <><span className="cap" style={{ background: "transparent", color: "var(--maths)", border: "2px solid var(--maths)" }}>Math Buddy</span><div className="cap-text">{doorCaption(s, focus)}</div></>
-          : cap && <><span className="cap" style={{ background: "transparent", color: `var(--${at!.sub})`, border: `2px solid var(--${at!.sub})` }}>{cap.chip}</span><div className="cap-text">{cap.text}</div></>}
+        <span className="cap" style={{ background: "transparent", color: "var(--maths)", border: "2px solid var(--maths)" }}>Math Buddy</span>
+        <div className="cap-text">{cont && focus === 0 ? cont.cap : doorCaption(s, Math.max(0, Math.min(1, focus - off)))}</div>
       </div>
-      <div className="ticker"><span><b>{open.length}</b> to do</span><i>·</i><span>about <b>{total}</b> minutes</span><i>·</i><span>{s.pages.length ? <><b>{s.pages.length}</b> page{s.pages.length === 1 ? "" : "s"} captured</> : "nothing captured yet"}</span>
-        {hidden > 0 && <><i>·</i><span><b>{hidden}</b> hidden · {off.map((x) => NAME[x]).join(" and ")} {off.length > 1 ? "are" : "is"} off</span></>}
+      <div className="ticker"><span><b>{secure.length}</b> of {SYLLABUS.length} topics secure</span><i>·</i><span>{sheets ? <><b>{sheets}</b> sheet{sheets === 1 ? "" : "s"} on the desk</> : "no sheet yet"}</span><i>·</i><span>{s.practice ? (s.practice.marked ? "set marked" : "set on paper") : "no set open"}</span>
         <i>·</i>{s.joined ? <span>phone joined</span> : <span>phone code <b>{s.pin}</b> · Down to pair</span>}</div>
     </main>
   </>);
@@ -568,7 +619,7 @@ export function ProfileScreen({ s, focus }: { s: Session; focus: number }) {
 }
 
 // ================= P3 · Math Buddy: topics, practice, walk, standing =================
-import { SYLLABUS, topic as topicById } from "@/lib/library/syllabus";
+import { SYLLABUS, nextTopic, topic as topicById } from "@/lib/library/syllabus";
 import { slip as slipById } from "@/lib/rules/maths";
 
 /** The four reference bands as small tabular facts, never a sentence. */

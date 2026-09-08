@@ -9,7 +9,7 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { networkInterfaces } from "node:os";
 import { AGE_RANGE } from "@/tv/profileRows";
 import path from "node:path";
-import { getLearner, type SkillRecord } from "./learners";
+import { getLearner, type HistoryEntry, type SkillRecord } from "./learners";
 import type { RuleCard } from "../rules/english";
 import type { Sentence } from "../rules/essay";
 
@@ -50,6 +50,8 @@ export interface Session {
   topic: string | null; practice: Practice | null; walkIx: number;
   /** the current learner's measured skills, hydrated at the dispatch boundary from data/learners.json */
   skills: Record<string, SkillRecord>;
+  /** what the desk noticed about this learner, and what actually happened, hydrated the same way */
+  memory: string[]; history: HistoryEntry[];
   status: string; log: { problems: string[]; hints: number; hard: string[]; minutes: number; started: number | null };
   updatedAt: number;
 }
@@ -98,7 +100,7 @@ export function fresh(): Session {
     pages: [], pageIx: 0, itemIx: 0, reading: false, awaiting: null,
     hint: null, lesson: null, noLesson: false, lessonPaused: false,
     english: null, essay: null, essayType: null,
-    topic: null, practice: null, walkIx: 0, skills: {},
+    topic: null, practice: null, walkIx: 0, skills: {}, memory: [], history: [],
     status: "", log: { problems: [], hints: 0, hard: [], minutes: 0, started: null }, updatedAt: Date.now(),
   };
 }
@@ -171,12 +173,12 @@ export function getSession() { return store.session; }
  * at the desk. The reducer stays pure: the file read happens here, at the boundary that already
  * writes to disk and pushes to subscribers.
  */
-const REHYDRATE = new Set(["learner.set", "practice.marked", "profile.save", "reset", "join"]);
+const REHYDRATE = new Set(["learner.set", "practice.marked", "profile.save", "reset", "join", "page.read"]);
 
 export function dispatch(e: Event): Session {
   store.session = reduce(store.session, e);
   if (REHYDRATE.has(e.type)) {
-    try { store.session = { ...store.session, skills: getLearner(store.session.learner.id).skills }; } catch {}
+    try { const l = getLearner(store.session.learner.id); store.session = { ...store.session, skills: l.skills, memory: l.memory, history: l.history }; } catch {}
   }
   try { mkdirSync(DATA, { recursive: true }); writeFileSync(FILE, JSON.stringify(store.session)); } catch {}
   store.subs.forEach((fn) => { try { fn(store.session); } catch {} });

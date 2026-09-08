@@ -16,10 +16,19 @@ export interface SkillRecord {
   slips: string[];          // slip ids seen for this learner+topic, deduped, newest last
 }
 
+/** One thing that actually happened in Math Buddy, so the desk can say where you left off. */
+export interface HistoryEntry {
+  at: number;                       // ms epoch
+  kind: "homework" | "practice";
+  label: string;                    // the topic's name, or the page's title
+  detail: string;                   // e.g. "4 of 6 right", "10 problems read"
+}
+
 export interface Learner {
   id: string;
   skills: Record<string, SkillRecord>;
   memory: string[];         // plain sentences the model reads, newest last, capped at 40
+  history: HistoryEntry[];  // what happened, newest last, capped at 20
 }
 
 // the same data dir the session store uses — derived the same way, not hard-coded
@@ -27,6 +36,7 @@ const DATA = path.join(process.cwd(), "data");
 const FILE = path.join(DATA, "learners.json");
 
 const MEMORY_CAP = 40;
+const HISTORY_CAP = 20;
 /** How far one attempt moves the estimate toward what we just observed. Fixed, deliberately blunt. */
 const RATE = 0.3;
 const SECURE_AT = 0.85;
@@ -48,7 +58,7 @@ function writeAll(book: Book): void {
   try { mkdirSync(DATA, { recursive: true }); writeFileSync(FILE, JSON.stringify(book)); } catch {}
 }
 
-function blank(id: string): Learner { return { id, skills: {}, memory: [] }; }
+function blank(id: string): Learner { return { id, skills: {}, memory: [], history: [] }; }
 
 /** Normalise whatever was on disk into a shape the rest of the module can trust. */
 function clean(id: string, l: unknown): Learner {
@@ -67,7 +77,16 @@ function clean(id: string, l: unknown): Learner {
       slips: Array.isArray(r.slips) ? r.slips.filter((s): s is string => typeof s === "string") : [],
     };
   }
-  return { id, skills, memory: Array.isArray(o.memory) ? o.memory.filter((m): m is string => typeof m === "string").slice(-MEMORY_CAP) : [] };
+  // a learners.json written before history existed still loads: the field simply defaults to none
+  const history: HistoryEntry[] = (Array.isArray(o.history) ? o.history : [])
+    .filter((h): h is HistoryEntry => !!h && typeof h === "object" && typeof (h as HistoryEntry).label === "string")
+    .map((h): HistoryEntry => ({
+      at: Number(h.at) || 0,
+      kind: h.kind === "homework" ? "homework" : "practice",
+      label: String(h.label), detail: typeof h.detail === "string" ? h.detail : "",
+    }))
+    .slice(-HISTORY_CAP);
+  return { id, skills, memory: Array.isArray(o.memory) ? o.memory.filter((m): m is string => typeof m === "string").slice(-MEMORY_CAP) : [], history };
 }
 
 export function getLearner(id: string): Learner {
@@ -77,7 +96,7 @@ export function getLearner(id: string): Learner {
 
 export function saveLearner(l: Learner): void {
   const book = readAll();
-  book[l.id] = { ...l, memory: l.memory.slice(-MEMORY_CAP) };
+  book[l.id] = { ...l, memory: l.memory.slice(-MEMORY_CAP), history: (l.history ?? []).slice(-HISTORY_CAP) };
   writeAll(book);
 }
 
@@ -107,6 +126,14 @@ export function addMemory(id: string, line: string): void {
   if (!t) return;
   const l = getLearner(id);
   l.memory = [...l.memory, t].slice(-MEMORY_CAP);
+  saveLearner(l);
+}
+
+/** One thing that happened, appended. Newest last; the oldest fall off the end. */
+export function addHistory(id: string, e: HistoryEntry): void {
+  if (!e || !e.label?.trim()) return;
+  const l = getLearner(id);
+  l.history = [...l.history, { ...e, label: e.label.trim(), detail: (e.detail ?? "").trim() }].slice(-HISTORY_CAP);
   saveLearner(l);
 }
 

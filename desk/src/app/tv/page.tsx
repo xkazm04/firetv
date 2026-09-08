@@ -10,7 +10,7 @@ import { LESSONS } from "@/lib/library/lessons.data";
 import { SYLLABUS } from "@/lib/library/syllabus";
 import type { Screen, Session } from "@/lib/session/store";
 import * as S from "@/tv/screens";
-import { profileRows, locate, flat, shownTasks } from "@/tv/profileRows";
+import { profileRows, locate, flat } from "@/tv/profileRows";
 
 export default function TV() {
   const { s, connected, post } = useSession();
@@ -72,30 +72,22 @@ export default function TV() {
         case "pair": if (back) nav(s.back ?? "landing"); break;
         case "joined": if (sel || back) nav("tonight"); break;
         case "tonight": {
-          // two doors first (0-1), then the board, which shows only the learner's modules
-          const shown = shownTasks(s);
-          const DOORS = 2;
-          if (back && s.awaiting) post({ type: "page.unask" });
-          if (f < DOORS) {
-            if (k === "ArrowRight") move(DOORS, 1); if (k === "ArrowLeft") move(DOORS, -1);
-            if (k === "ArrowDown" && shown.length) post({ type: "focus", focus: DOORS });
-            if (k === "ArrowUp") post({ type: "nav", screen: "learner", focus: 0, from: "tonight" });
-            if (sel) {
-              post({ type: "subject", subject: "maths" });
-              if (f === 1) nav("topics");
-              else { const pi = s.pages.findIndex((p) => p.subject === "maths");
-                if (pi >= 0) { post({ type: "page.select", pageIx: pi }); nav("page"); } else post({ type: "page.ask", subject: "maths" }); }
-            }
-            break;
+          // Math Buddy's home: the thing already open leads, then the two doors.
+          const cont = S.continueCard(s);
+          const off = cont ? 1 : 0, N = 2 + off;
+          if (back) { if (s.awaiting) post({ type: "page.unask" }); else nav("landing"); break; }
+          if (k === "ArrowRight") move(N, 1); if (k === "ArrowLeft") move(N, -1);
+          if (k === "ArrowUp") post({ type: "nav", screen: "learner", focus: 0, from: "tonight" });
+          if (k === "ArrowDown" && !s.joined) post({ type: "nav", screen: "pair", focus: 0, from: "tonight" });
+          if (sel) {
+            post({ type: "subject", subject: "maths" });
+            if (cont && f === 0) {
+              if (cont.go === "page") { post({ type: "page.select", pageIx: cont.pageIx }); nav("page"); }
+              else nav(cont.go);
+            } else if (f - off === 1) nav("topics");
+            else { const pi = s.pages.findIndex((p) => p.subject === "maths");
+              if (pi >= 0) { post({ type: "page.select", pageIx: pi }); nav("page"); } else post({ type: "page.ask", subject: "maths" }); }
           }
-          const t = shown[f - DOORS];
-          if (k === "ArrowRight") move(DOORS + shown.length, 1); if (k === "ArrowLeft") move(DOORS + shown.length, -1);
-          if (k === "ArrowUp") post({ type: "focus", focus: 0 });
-          if (k === "ArrowDown") { if (s.pages.length) nav("page"); else if (!s.joined) post({ type: "nav", screen: "pair", focus: 0, from: "tonight" }); }
-          if (menu && t) post({ type: "task.done", id: t.id, done: !t.done });
-          if (sel) { if (!t) break; post({ type: "subject", subject: t.sub }); const pi = s.pages.findIndex((p) => p.subject === t.sub);
-            // no page yet: ask for it and stay here — the units guide is not an answer to "start this task"
-            if (pi >= 0) { post({ type: "page.select", pageIx: pi }); nav("page"); } else if (t.sub === "essay") nav("essaytype"); else post({ type: "page.ask", subject: t.sub }); }
           break; }
         case "learner": {
           const n = s.profiles.length + 1;

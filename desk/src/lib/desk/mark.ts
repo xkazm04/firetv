@@ -11,7 +11,8 @@
  */
 import { vision } from "../engines/vision";
 import { slip as slipById, slipsFor, slipVocabulary } from "../rules/maths";
-import { recordAttempt } from "../session/learners";
+import { addHistory, recordAttempt } from "../session/learners";
+import { topic as topicById } from "../library/syllabus";
 import { verify } from "./verify";
 import type { Practice, PracticeItem } from "../session/store";
 
@@ -102,6 +103,14 @@ export async function markSet(
 
     recordAttempt(learnerId, practice.topic, verdict === "right", kept);
     return { ...item, studentAnswer, studentWorking, verdict, slip: kept, said };
+  });
+
+  // what happened, in one line the home screen can read back: never invented, always these counts
+  const right = items.filter((i) => i.verdict === "right").length;
+  addHistory(learnerId, {
+    at: Date.now(), kind: "practice",
+    label: topicById(practice.topic)?.name ?? practice.topic,
+    detail: `${right} of ${items.length} right`,
   });
 
   return { items, provider, ms, unsure };
