@@ -33,6 +33,14 @@ export default function Phone() {
   const [cam, setCam] = useState<MediaStream | null>(null);
 
   useEffect(() => { if (s?.joined && screen === "join") setScreen("capture"); }, [s?.joined, screen]);
+  // the QR on the TV carries the code: arrive with ?pin= and the phone joins itself, then tidies the bar
+  useEffect(() => {
+    if (!s || s.joined) return;
+    const q = new URLSearchParams(location.search).get("pin");
+    if (!q || q !== s.pin) return;
+    post({ type: "join" });
+    history.replaceState(null, "", location.pathname);
+  }, [s?.pin, s?.joined]); // eslint-disable-line react-hooks/exhaustive-deps
   // the input mirrors the draft; a new draft (or none) resets what is typed here
   useEffect(() => { setPname(s?.draft?.name ?? ""); }, [s?.draft?.id]); // eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => { if (s?.essayType && role === "student" && screen !== "paste" && s.screen === "essaytype") { setEtype(s.essayType); } }, [s?.essayType, s?.screen, role, screen]);

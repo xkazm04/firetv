@@ -6,6 +6,7 @@
  * dev reloads do not lose the desk mid-session; persisted as JSON on every change.
  */
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { networkInterfaces } from "node:os";
 import { AGE_RANGE } from "@/tv/profileRows";
 import path from "node:path";
 import type { RuleCard } from "../rules/english";
@@ -28,7 +29,7 @@ export interface Verdict { n: number; verdict: "strong" | "faulty" | "neutral"; 
 export interface EssayAnalysis { text: string; type: string; sentences: Sentence[]; stats: Record<string, number>; verdicts: Verdict[]; summary: string; provider?: string; }
 
 export interface Session {
-  pin: string; joined: boolean; learner: { id: string; name: string };
+  pin: string; joined: boolean; phoneUrl: string; learner: { id: string; name: string };
   profiles: Profile[]; draft: Profile | null;
   subject: Subject; screen: Screen; focus: number; view: "band" | "overview"; back?: Screen;
   tasks: Task[]; timer: { left: number; running: boolean; phase: "work" | "break"; before?: Screen };
@@ -56,9 +57,15 @@ export type Event =
 const DATA = path.join(process.cwd(), "data");
 const FILE = path.join(DATA, "session.json");
 
+/** Where the phone lives on this network — a fact of the server, so the session carries it. */
+function phoneUrl(): string {
+  const ip = Object.values(networkInterfaces()).flat().find((n) => n && n.family === "IPv4" && !n.internal)?.address ?? "localhost";
+  return `http://${ip}:${process.env.PORT ?? "3000"}/phone`;
+}
+
 export function fresh(): Session {
   return {
-    pin: String(1000 + Math.floor(Math.random() * 9000)), joined: false, learner: { id: "ema", name: "Ema" },
+    pin: String(1000 + Math.floor(Math.random() * 9000)), joined: false, phoneUrl: phoneUrl(), learner: { id: "ema", name: "Ema" },
     profiles: [
       { id: "ema", name: "Ema", type: "high-school", age: 16, modules: ["maths", "english", "essay"] },
       { id: "jakub", name: "Jakub", type: "other", modules: ["english", "essay"] },
@@ -80,7 +87,8 @@ export function fresh(): Session {
 export function reduce(s: Session, e: Event): Session {
   const n: Session = { ...s, updatedAt: Date.now() };
   switch (e.type) {
-    case "join": n.joined = true; n.screen = "tonight"; n.focus = 0; break;
+    // a draft in progress owns the screen: joining must not throw the parent off the profile
+    case "join": n.joined = true; if (s.screen !== "profile") { n.screen = "tonight"; n.focus = 0; } break;
     case "nav": n.screen = e.screen; n.focus = e.focus ?? 0; if (e.from) n.back = e.from; break;
     case "focus": n.focus = e.focus; break;
     case "learner.set": { const p = s.profiles.find((x) => x.id === e.id); if (!p) break; n.learner = { id: p.id, name: p.name }; n.screen = "tonight"; n.focus = 0; break; }

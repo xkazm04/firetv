@@ -3,6 +3,8 @@
  * Every television screen, composed on On Air. Each takes the session and a `focus` index and
  * draws itself; the D-pad logic that changes them lives in app/tv/page.tsx. No two share a layout.
  */
+import { useEffect, useState } from "react";
+import QRCode from "qrcode";
 import type { Profile, Session } from "@/lib/session/store";
 import { LESSONS, ESSAY_TYPES } from "@/lib/library/lessons.data";
 import { fmt } from "./useSession";
@@ -29,32 +31,25 @@ const Clock = ({ s, right }: { s: Session; right?: boolean }) => (
 
 // ---- T0 ----
 export function Pair({ s }: { s: Session }) {
-  return (
+  const url = s.phoneUrl + "?pin=" + s.pin;
+  // qrcode's browser build draws the code; generated here so the store stays free of UI.
+  const [svg, setSvg] = useState("");
+  useEffect(() => { let live = true; QRCode.toString(url, { type: "svg", margin: 1 }).then((x) => { if (live) setSvg(x); }).catch(() => {}); return () => { live = false; }; }, [url]);
+  return (<>
+    <div className="band band-rule" />
     <div className="content-full" style={{ display: "grid", placeItems: "center", textAlign: "center" }}>
-      <div>
+      <div style={{ maxWidth: 560 }}>
         <div className="eyebrow">Study Desk · pair a phone</div>
-        <div style={{ margin: "40px auto 28px", width: 300, height: 300, background: "#fff", display: "grid", placeItems: "center" }}>
-          <Qr seed={Number(s.pin)} />
+        <div className="qr" style={{ margin: "40px auto 28px", width: 300, height: 300, background: "#fff", display: "grid", placeItems: "center" }} dangerouslySetInnerHTML={{ __html: svg }} />
+        <div className="lt">
+          <div className="tag">Code</div>
+          <div className="txt" style={{ letterSpacing: ".3em", fontVariantNumeric: "tabular-nums" }}>{s.pin}</div>
         </div>
-        <div className="title" style={{ letterSpacing: ".3em", fontSize: 96 }}>{s.pin.split("").join(" ")}</div>
-        <div className="body" style={{ color: "var(--mute)", marginTop: 20, maxWidth: "28ch" }}>Open the phone page on this Wi-Fi and type the code.</div>
+        <div className="body" style={{ color: "var(--mute)", marginTop: 24 }}>Scan, or open <span style={{ color: "var(--paper)" }}>{s.phoneUrl}</span> on your phone and type the code.</div>
       </div>
     </div>
-  );
-}
-function Qr({ seed }: { seed: number }) {
-  let x = seed || 4729; const rnd = () => (x = (x * 9301 + 49297) % 233280) / 233280;
-  const cells: boolean[] = []; for (let i = 0; i < 29 * 29; i++) cells.push(rnd() > 0.55);
-  const finder = (cx: number, cy: number) => (
-    <g key={`${cx}-${cy}`}><rect x={cx} y={cy} width={7} height={7} fill="#111" /><rect x={cx + 1} y={cy + 1} width={5} height={5} fill="#fff" /><rect x={cx + 2} y={cy + 2} width={3} height={3} fill="#111" /></g>
-  );
-  return (
-    <svg viewBox="0 0 29 29" width={260} height={260} shapeRendering="crispEdges">
-      <rect width={29} height={29} fill="#fff" />
-      {cells.map((on, i) => (on ? <rect key={i} x={i % 29} y={Math.floor(i / 29)} width={1} height={1} fill="#111" /> : null))}
-      {finder(0, 0)}{finder(22, 0)}{finder(0, 22)}
-    </svg>
-  );
+    <div className="ticker"><span>Waiting for a phone</span><i>·</i><span>code <b>{s.pin}</b></span><i>·</i><span>same Wi-Fi as the TV</span></div>
+  </>);
 }
 
 
@@ -115,7 +110,7 @@ export function Tonight({ s, focus }: { s: Session; focus: number }) {
         ))}
       </div>
       <div className="body" style={{ marginTop: 56, color: "var(--mute)" }}>{s.pages.length ? "Select a task, or Down to the page." : "Point your phone at the page to begin."}</div>
-      <div className="ticker"><span><b>{open.length}</b> to do</span><i>·</i><span>{s.pages.length} page{s.pages.length === 1 ? "" : "s"} captured</span><i>·</i><span>Menu marks a task done</span>{!s.joined && <><i>·</i><span>phone code <b>{s.pin}</b></span></>}</div>
+      <div className="ticker"><span><b>{open.length}</b> to do</span><i>·</i><span>{s.pages.length} page{s.pages.length === 1 ? "" : "s"} captured</span><i>·</i><span>Menu marks a task done</span><i>·</i>{s.joined ? <span>phone joined</span> : <span>phone code <b>{s.pin}</b> · Down to pair</span>}</div>
     </main>
   </>);
 }
@@ -481,7 +476,7 @@ export function ProfileScreen({ s, focus }: { s: Session; focus: number }) {
     <main className="content-full">
       <div className="eyebrow">{editing ? `Preferences · ${d!.name}` : "New learner"}</div>
       <div className="title">{name || "Name it on the phone"}</div>
-      <div className="body" style={{ color: "var(--mute)", marginTop: 16 }}>{s.joined ? "Type the name on the phone's Profile tab" : `Phone code ${s.pin} · open the phone, tab Profile`}</div>
+      <div className="body" style={{ color: "var(--mute)", marginTop: 16 }}>{s.joined ? "Type the name on the phone's Profile tab" : `Phone code ${s.pin} · Menu to pair, or open the phone's Profile tab`}</div>
       <div className="guide" style={{ marginTop: 24, maxWidth: 1240 }}>
         {rows.slice(0, -1).map((row, r) => (
           <div key={row.title} className="row" style={{ gridTemplateColumns: "240px 1fr", padding: "14px 0" }}>

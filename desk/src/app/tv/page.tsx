@@ -61,10 +61,10 @@ export default function TV() {
           else { if (k === "ArrowRight") post({ type: "focus", focus: 4 }); if (k === "ArrowLeft") post({ type: "focus", focus: 3 }); if (k === "ArrowUp") post({ type: "focus", focus: 0 });
             if (sel) { if (f === 3) nav("tonight"); else post({ type: "nav", screen: "learner", focus: 0, from: "landing" }); } }
           break; }
-        case "pair": if (sel) post({ type: "join" }); break;
+        case "pair": if (back) nav(s.back ?? "landing"); break;
         case "tonight": {
           if (k === "ArrowRight") move(s.tasks.length, 1); if (k === "ArrowLeft") move(s.tasks.length, -1);
-          if (k === "ArrowDown" && s.pages.length) nav("page");
+          if (k === "ArrowDown") { if (s.pages.length) nav("page"); else if (!s.joined) post({ type: "nav", screen: "pair", focus: 0, from: "tonight" }); }
           if (menu) { const t = s.tasks[f]; if (t) post({ type: "task.done", id: t.id, done: !t.done }); }
           if (sel) { const t = s.tasks[f]; if (!t) break; post({ type: "subject", subject: t.sub }); const pi = s.pages.findIndex((p) => p.subject === t.sub);
             if (pi >= 0) { post({ type: "page.select", pageIx: pi }); nav("page"); } else if (t.sub === "essay") nav("essaytype"); else nav("units"); }
@@ -85,6 +85,7 @@ export default function TV() {
             else if (cell.kind === "age") post({ type: "profile.draft", patch: { age: cell.age } });
             else if (cell.kind === "interest" && cell.sub) { const m = cell.sub, on = s.draft?.modules ?? []; post({ type: "profile.draft", patch: { modules: on.includes(m) ? on.filter((x) => x !== m) : [...on, m] } }); }
             else if (cell.kind === "save") post({ type: "profile.save" }); else post({ type: "profile.discard" }); }
+          if (menu && !s.joined) post({ type: "nav", screen: "pair", focus: 0, from: "profile" });
           if (back) post({ type: "profile.discard" });
           break; }
         case "units": {
@@ -135,6 +136,7 @@ export default function TV() {
         <button aria-pressed={voice} onClick={() => setVoice((v) => !v)}>Voice</button>
         <button aria-pressed={fast} onClick={() => setFast((v) => !v)}>Clock ×60</button>
         <button onClick={() => post({ type: "reset" })}>Reset session</button>
+        <button onClick={() => post({ type: "join" })}>Fake phone</button>
         <span className="status">{connected ? "" : "reconnecting… "}{s?.status}</span>
       </div>
       <div className="frame" ref={frame}>
