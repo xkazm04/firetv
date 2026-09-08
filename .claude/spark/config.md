@@ -56,3 +56,7 @@ builder: cd desk && npx tsc --noEmit -p tsconfig.json
 (built by the retro)
 
 ## Skill improvement log
+
+- 2026-09-08: three builders sharing one dev server and one `data/` dir cost real work - a session reset out from under a builder mid-run, and a fabricated memory line written into `data/learners.json` that would have been read into every later prompt. Rule for this repo: **a builder that writes learner or session data uses a scratch learner id, never the seeded `ema`**, and says in its report what it wrote.
+- 2026-09-08: the TV (`desk/src/app/tv/page.tsx`, `desk/src/tv/screens.tsx`) is a client component and may not import anything filesystem-backed. `desk/src/lib/session/learners.ts` is server-only; the session hydrates `skills` at the dispatch boundary instead. Scouts should state the client/server boundary for every module a screen might want.
+- 2026-09-08: `.spark/` and `.cx/` are gitignored; the overlay at `.claude/spark/config.md` is tracked and travels with the clone.
