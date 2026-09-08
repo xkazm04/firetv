@@ -9,7 +9,7 @@ import { useSession, call } from "@/tv/useSession";
 import { LESSONS } from "@/lib/library/lessons.data";
 import type { Screen, Session } from "@/lib/session/store";
 import * as S from "@/tv/screens";
-import { profileRows, locate, flat } from "@/tv/profileRows";
+import { profileRows, locate, flat, shownTasks } from "@/tv/profileRows";
 
 export default function TV() {
   const { s, connected, post } = useSession();
@@ -53,6 +53,8 @@ export default function TV() {
       const f = s.focus, nav = (screen: Screen, focus = 0) => post({ type: "nav", screen, focus });
       const move = (n: number, delta: number) => post({ type: "focus", focus: Math.max(0, Math.min(n - 1, f + delta)) });
       const units = LESSONS.filter((l) => l.subject === s.subject);
+      // Play/Pause is the clock everywhere the clock is on screen; only the lesson keeps Space for the video.
+      if (k === " " && s.screen !== "lesson") { post({ type: s.timer.running ? "timer.pause" : "timer.start" }); return; }
       switch (s.screen) {
         case "landing": {
           // 0-2 the modules, 3-4 the actions; Down/Up jump between the rows
@@ -64,11 +66,15 @@ export default function TV() {
         case "pair": if (back) nav(s.back ?? "landing"); break;
         case "joined": if (sel || back) nav("tonight"); break;
         case "tonight": {
-          if (k === "ArrowRight") move(s.tasks.length, 1); if (k === "ArrowLeft") move(s.tasks.length, -1);
+          // the board shows only the learner's modules; the D-pad walks that same list
+          const shown = shownTasks(s);
+          if (k === "ArrowRight") move(shown.length, 1); if (k === "ArrowLeft") move(shown.length, -1);
           if (k === "ArrowDown") { if (s.pages.length) nav("page"); else if (!s.joined) post({ type: "nav", screen: "pair", focus: 0, from: "tonight" }); }
-          if (menu) { const t = s.tasks[f]; if (t) post({ type: "task.done", id: t.id, done: !t.done }); }
-          if (sel) { const t = s.tasks[f]; if (!t) break; post({ type: "subject", subject: t.sub }); const pi = s.pages.findIndex((p) => p.subject === t.sub);
-            if (pi >= 0) { post({ type: "page.select", pageIx: pi }); nav("page"); } else if (t.sub === "essay") nav("essaytype"); else nav("units"); }
+          if (menu) { const t = shown[f]; if (t) post({ type: "task.done", id: t.id, done: !t.done }); }
+          if (sel) { const t = shown[f]; if (!t) break; post({ type: "subject", subject: t.sub }); const pi = s.pages.findIndex((p) => p.subject === t.sub);
+            // no page yet: ask for it and stay here — the units guide is not an answer to "start this task"
+            if (pi >= 0) { post({ type: "page.select", pageIx: pi }); nav("page"); } else if (t.sub === "essay") nav("essaytype"); else post({ type: "page.ask", subject: t.sub }); }
+          if (back && s.awaiting) post({ type: "page.unask" });
           if (k === "ArrowUp") post({ type: "nav", screen: "learner", focus: 0, from: "tonight" }); break; }
         case "learner": {
           const n = s.profiles.length + 1;

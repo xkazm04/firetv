@@ -5,23 +5,22 @@
  */
 import { useEffect, useState } from "react";
 import QRCode from "qrcode";
-import type { Profile, Session } from "@/lib/session/store";
+import type { Profile, Session, Subject, Task } from "@/lib/session/store";
 import { LESSONS, ESSAY_TYPES } from "@/lib/library/lessons.data";
 import { fmt } from "./useSession";
 
-const SUBJECTS: Array<Session["subject"]> = ["maths", "english", "essay"];
 
 /** The OCR writes exponents as ^n and the tutor may too; the screen shows them as printed. */
 export const shown = (s: string) => s.replace(/\^2/g, "²").replace(/\^3/g, "³").replace(/\*\*/g, "").replace(/\$/g, "");
-import { BRAND, MODULE_BLURB, TYPE_WORDS, profileRows, locate } from "@/tv/profileRows";
+import { BRAND, MODULE_BLURB, TYPE_WORDS, profileRows, locate, onModules, shownTasks } from "@/tv/profileRows";
 const NAME = BRAND;
 
 function Rail({ s }: { s: Session }) {
   return (
     <aside className="rail">
       <div className="learner"><small>Now studying</small>{s.learner.name}</div>
-      <div>{SUBJECTS.map((x) => <div key={x} className="subj" data-on={s.subject === x}>{NAME[x]}</div>)}</div>
-      <div className="clock" data-phase={s.timer.phase}>{fmt(s.timer.left)}<small>{s.timer.running ? (s.timer.phase === "work" ? "On the clock" : "Break") : s.log.started ? "Paused" : "Not started"}</small></div>
+      <div>{onModules(s).map((x) => <div key={x} className="subj" data-on={s.subject === x}>{NAME[x]}</div>)}</div>
+      <div className="clock" data-phase={s.timer.phase}>{fmt(s.timer.left)}<small>{s.timer.running ? (s.timer.phase === "work" ? "On the clock" : "Break") : s.log.started ? "Paused" : "Press Play to start"}</small></div>
     </aside>
   );
 }
@@ -108,25 +107,50 @@ export function Landing({ s, focus }: { s: Session; focus: number }) {
 }
 
 // ---- T1 ----
+/** The caption for whatever task is focused: what this module does with the page, in one sentence. */
+function taskCaption(s: Session, t: Task): { chip: string; text: string } {
+  const brand = NAME[t.sub];
+  if (s.awaiting === t.sub) return { chip: "Waiting", text: `Waiting for the ${brand} page. Snap it on the phone — it appears here.` };
+  if (t.done) return { chip: brand, text: "Done. Menu puts it back." };
+  const p = s.pages.find((x) => x.subject === t.sub);
+  if (p) return { chip: brand, text: `The sheet is on the desk. Enter opens it${p.items.length ? `, ${p.items.length} problems in` : ""}.` };
+  const first: Record<Subject, string> = {
+    maths: "Snap the sheet on the phone and the desk reads it one problem at a time. Hints, never the answer. Menu marks it done.",
+    english: "Say a sentence on the phone and the desk shows the tense and the word that decided it. Menu marks it done.",
+    essay: "Pick the lens here, then paste the paragraph on the phone. The desk shows what it does and what it lacks. Menu marks it done.",
+  };
+  return { chip: brand, text: first[t.sub] };
+}
 export function Tonight({ s, focus }: { s: Session; focus: number }) {
-  const open = s.tasks.filter((t) => !t.done);
+  const list = shownTasks(s);
+  const open = list.filter((t) => !t.done);
   const total = open.reduce((a, t) => a + t.min, 0);
+  const hidden = s.tasks.length - list.length;
+  const off = Array.from(new Set(s.tasks.filter((t) => !list.includes(t)).map((t) => t.sub)));
+  const at = list[Math.min(focus, list.length - 1)];
+  const cap = at ? taskCaption(s, at) : null;
   return (<>
     <div className="band band-left-thin" /><Rail s={s} />
     <main className="content">
       <div className="eyebrow">Tonight</div>
       <div className="title">{open.length ? `${["One", "Two", "Three", "Four", "Five"][open.length - 1] ?? open.length} thing${open.length > 1 ? "s" : ""}, about ${total} minutes` : "Everything done"}</div>
-      <div className="cards" style={{ gridTemplateColumns: `repeat(${Math.max(3, s.tasks.length)}, 1fr)`, marginTop: 44 }}>
-        {s.tasks.map((t, i) => (
+      <div className="cards" style={{ gridTemplateColumns: `repeat(${Math.max(3, list.length)}, 1fr)`, marginTop: 44 }}>
+        {list.map((t, i) => (
           <div key={t.id} className="card" data-focused={focus === i} style={t.done ? { opacity: 0.5 } : undefined}>
             <div className="k">{NAME[t.sub]}</div>
             <div className="t" style={{ fontFamily: "var(--body)", textTransform: "none", fontWeight: 500, fontSize: 32 }}>{t.name}</div>
-            <div className="m" style={{ color: t.done ? "var(--essay)" : "var(--mute)" }}>{t.done ? "done" : `${t.min} min`}</div>
+            {/* done is green on both grounds; the minutes let the focused card's CSS charcoal win */}
+            <div className="m" style={{ color: t.done ? (focus === i ? "#2E7D4F" : "var(--essay)") : focus === i ? undefined : "var(--mute)" }}>{t.done ? "done" : `${t.min} min`}</div>
           </div>
         ))}
       </div>
-      <div className="body" style={{ marginTop: 56, color: "var(--mute)" }}>{s.pages.length ? "Select a task, or Down to the page." : s.joined ? `${s.learner.name}’s phone is on the desk. Snap the page on it to begin.` : "Point your phone at the page to begin."}</div>
-      <div className="ticker"><span><b>{open.length}</b> to do</span><i>·</i><span>{s.pages.length} page{s.pages.length === 1 ? "" : "s"} captured</span><i>·</i><span>Menu marks a task done</span><i>·</i>{s.joined ? <span>phone joined</span> : <span>phone code <b>{s.pin}</b> · Down to pair</span>}</div>
+      {cap && <div style={{ marginTop: 44 }}>
+        <span className="cap" style={{ background: "transparent", color: `var(--${at.sub})`, border: `2px solid var(--${at.sub})` }}>{cap.chip}</span>
+        <div className="cap-text">{cap.text}</div>
+      </div>}
+      <div className="ticker"><span><b>{open.length}</b> to do</span><i>·</i><span>about <b>{total}</b> minutes</span><i>·</i><span>{s.pages.length ? <><b>{s.pages.length}</b> page{s.pages.length === 1 ? "" : "s"} captured</> : "nothing captured yet"}</span>
+        {hidden > 0 && <><i>·</i><span><b>{hidden}</b> hidden · {off.map((x) => NAME[x]).join(" and ")} {off.length > 1 ? "are" : "is"} off</span></>}
+        <i>·</i>{s.joined ? <span>phone joined</span> : <span>phone code <b>{s.pin}</b> · Down to pair</span>}</div>
     </main>
   </>);
 }

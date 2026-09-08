@@ -6,6 +6,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useSession, call, fmt } from "@/tv/useSession";
 import { ESSAY_TYPES } from "@/lib/library/lessons.data";
+import { BRAND as MODULE } from "@/tv/profileRows";
 import type { Session, Subject } from "@/lib/session/store";
 
 type PScreen = "join" | "joined" | "capture" | "point" | "say" | "paste" | "tonight" | "parent" | "profile";
@@ -51,6 +52,8 @@ export default function Phone() {
   }, [s?.pin, s?.joined]); // eslint-disable-line react-hooks/exhaustive-deps
   // the input mirrors the draft; a new draft (or none) resets what is typed here
   useEffect(() => { setPname(s?.draft?.name ?? ""); }, [s?.draft?.id]); // eslint-disable-line react-hooks/exhaustive-deps
+  // the TV asked for a page: the capture tab follows what it is waiting for
+  useEffect(() => { if (s?.awaiting) setSubject(s.awaiting); }, [s?.awaiting]);
   useEffect(() => { if (s?.essayType && role === "student" && screen !== "paste" && s.screen === "essaytype") { setEtype(s.essayType); } }, [s?.essayType, s?.screen, role, screen]);
 
   // camera on when the capture screen is open
@@ -121,7 +124,7 @@ export default function Phone() {
           <p>Joined as <b>{s.learner.name}</b>. {["landing", "pair", "joined", "tonight"].includes(s.screen) ? "Snap the page and the TV opens it." : `The TV is on ${TV_WORDS[s.screen] ?? s.screen}.`}</p>
           {s.screen === "profile" || s.draft
             ? <button className="pbtn" data-signal="true" onClick={() => nav("profile")}>Name the new learner</button>
-            : <button className="pbtn" data-signal="true" onClick={() => nav("capture")}>Snap the page</button>}
+            : <button className="pbtn" data-signal="true" onClick={() => nav("capture")}>{s.awaiting ? `Snap the ${MODULE[s.awaiting]} page` : "Snap the page"}</button>}
           <button className="pbtn" data-secondary="true" onClick={() => nav("tonight")}>Set up tonight first</button>
           <p style={{ fontSize: 12 }}>Not {s.learner.name}? Press Up on the TV's Tonight to switch who is at the desk.</p></div>}
 
@@ -135,7 +138,8 @@ export default function Phone() {
           </> : <p>Add or edit a learner on the TV; the name is typed here.</p>}</div>}
 
         {screen === "capture" && <div className="pscreen"><h3>Capture a page</h3>
-          <div className="field"><select value={subject} onChange={(e) => setSubject(e.target.value as Subject)}><option value="maths">Maths</option><option value="english">English</option><option value="essay">Essay</option></select></div>
+          <div className="field"><select value={subject} onChange={(e) => setSubject(e.target.value as Subject)}><option value="maths">Math Buddy</option><option value="english">Linga</option><option value="essay">Essay Master</option></select></div>
+          {s?.awaiting && <p>The TV is waiting for the {MODULE[s.awaiting]} page.</p>}
           <div className="cam">{cam ? <video ref={video} autoPlay playsInline muted /> : <span>camera</span>}</div>
           <button className="pbtn" onClick={snap} disabled={!cam || busy}>Snap page</button>
           <p>No camera on this device? Send a sample page instead:</p>
@@ -185,6 +189,6 @@ export default function Phone() {
 
 function AddTask({ onAdd }: { onAdd: (name: string, sub: Subject) => void }) {
   const [v, setV] = useState(""); const [sub, setSub] = useState<Subject>("maths");
-  return <div className="field"><select value={sub} onChange={(e) => setSub(e.target.value as Subject)}><option value="maths">Maths</option><option value="english">English</option><option value="essay">Essay</option></select>
+  return <div className="field"><select value={sub} onChange={(e) => setSub(e.target.value as Subject)}><option value="maths">Math Buddy</option><option value="english">Linga</option><option value="essay">Essay Master</option></select>
     <input placeholder="Add an assignment" value={v} onChange={(e) => setV(e.target.value)} /><button className="pbtn" data-secondary="true" onClick={() => { if (v.trim()) { onAdd(v.trim(), sub); setV(""); } }}>Add</button></div>;
 }

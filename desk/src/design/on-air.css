@@ -89,6 +89,7 @@
 .card[data-focused="true"] .k { color: var(--signal); }
 .card .t { font-family: var(--display); font-size: 44px; font-weight: 800; text-transform: uppercase; letter-spacing: .02em; line-height: 1; }
 .card .d { font-size: 28px; line-height: 1.3; color: var(--mute); } .card[data-focused="true"] .d { color: #3A3F47; }
+.card[data-focused="true"] .m { color: #3A3F47; }
 .card .m { margin-top: auto; font-family: var(--display); font-size: 24px; letter-spacing: .08em; text-transform: uppercase; font-variant-numeric: tabular-nums; }
 
 /* ---- page bands ---- */

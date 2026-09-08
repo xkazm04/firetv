@@ -1,4 +1,16 @@
-import type { Profile, StudentType, Subject } from "@/lib/session/store";
+import type { Profile, Session, StudentType, Subject, Task } from "@/lib/session/store";
+
+const ALL: Subject[] = ["maths", "english", "essay"];
+/** What the learner at the desk is interested in. No profile row means everything stays on. */
+export function onModules(s: Session): Subject[] {
+  const me = s.profiles.find((p) => p.id === s.learner.id);
+  return me?.modules ?? ALL;
+}
+/** The board and the D-pad share one list: the tasks whose module the learner has on. */
+export function shownTasks(s: Session): Task[] {
+  const on = onModules(s);
+  return s.tasks.filter((t) => on.includes(t.sub));
+}
 
 /** The age a school type covers; "other" carries no age. The store uses it to clear an age that no longer fits. */
 export const AGE_RANGE: Record<StudentType, [number, number] | null> = { elementary: [6, 14], "high-school": [15, 19], other: null };

@@ -34,6 +34,8 @@ export interface Session {
   subject: Subject; screen: Screen; focus: number; view: "band" | "overview"; back?: Screen;
   tasks: Task[]; timer: { left: number; running: boolean; phase: "work" | "break"; before?: Screen };
   pages: Page[]; pageIx: number; itemIx: number; reading: boolean;
+  /** The desk has asked for a page and is waiting for the phone to snap it. */
+  awaiting: Subject | null;
   hint: Hint | null; lesson: LessonPick | null; noLesson: boolean; lessonPaused: boolean;
   english: EnglishAnalysis | null; essay: EssayAnalysis | null; essayType: string | null;
   status: string; log: { problems: string[]; hints: number; hard: string[]; minutes: number; started: number | null };
@@ -46,6 +48,7 @@ export type Event =
   | { type: "learner.set"; id: string }
   | { type: "profile.draft"; patch: Partial<Profile> } | { type: "profile.save" } | { type: "profile.discard" }
   | { type: "page.reading"; page: Omit<Page, "items"> } | { type: "page.read"; id: string; items: PageItem[]; readMs: number; provider: string }
+  | { type: "page.ask"; subject: Subject } | { type: "page.unask" }
   | { type: "page.select"; pageIx: number; itemIx?: number } | { type: "item"; itemIx: number } | { type: "view"; view: "band" | "overview" }
   | { type: "hint.set"; hint: Hint } | { type: "hint.stage"; stage: 1 | 2 }
   | { type: "lesson.set"; lesson: LessonPick | null } | { type: "lesson.pause"; paused: boolean }
@@ -77,7 +80,7 @@ export function fresh(): Session {
       { id: "t3", sub: "essay", name: "Later school starts — first draft", min: 15, done: false },
     ],
     timer: { left: 25 * 60, running: false, phase: "work" },
-    pages: [], pageIx: 0, itemIx: 0, reading: false,
+    pages: [], pageIx: 0, itemIx: 0, reading: false, awaiting: null,
     hint: null, lesson: null, noLesson: false, lessonPaused: false,
     english: null, essay: null, essayType: null,
     status: "", log: { problems: [], hints: 0, hard: [], minutes: 0, started: null }, updatedAt: Date.now(),
@@ -101,7 +104,10 @@ export function reduce(s: Session, e: Event): Session {
     case "subject": n.subject = e.subject; break;
     case "page.reading": { const ix = s.pages.findIndex((p) => p.id === e.page.id);
       const page: Page = { ...e.page, items: [] }; n.pages = ix >= 0 ? s.pages.map((p, i) => (i === ix ? page : p)) : [...s.pages, page];
-      n.pageIx = ix >= 0 ? ix : n.pages.length - 1; n.itemIx = 0; n.reading = true; n.screen = "page"; n.subject = e.page.subject; break; }
+      n.pageIx = ix >= 0 ? ix : n.pages.length - 1; n.itemIx = 0; n.reading = true; n.screen = "page"; n.subject = e.page.subject; n.awaiting = null; break; }
+    // the desk asks for a page and stays where it is; the phone answers with page.reading
+    case "page.ask": n.awaiting = e.subject; n.subject = e.subject; break;
+    case "page.unask": n.awaiting = null; break;
     case "page.read": n.pages = s.pages.map((p) => (p.id === e.id ? { ...p, items: e.items, readMs: e.readMs, provider: e.provider } : p)); n.reading = false; break;
     case "page.select": n.pageIx = e.pageIx; n.itemIx = e.itemIx ?? 0; break;
     case "item": n.itemIx = e.itemIx; break;
