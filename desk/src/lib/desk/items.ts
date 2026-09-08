@@ -10,6 +10,7 @@
 import { text } from "../engines/text";
 import { topic } from "../library/syllabus";
 import { getLearner } from "../session/learners";
+import { slip as slipById, type Slip } from "../rules/maths";
 import { verify } from "./verify";
 import type { PracticeItem } from "../session/store";
 
@@ -36,13 +37,20 @@ const SYSTEM =
   "Each question is a single equation in x. Each answer is the value of x alone, as a plain number " +
   "(for example -4) or a simple fraction (for example 7/2) — no words, no 'x =', no units.";
 
-function ask(topicId: string, memory: string[], want: number, avoid: string[]) {
+function ask(topicId: string, memory: string[], slips: string[], want: number, avoid: string[]) {
   const t = topic(topicId);
   const name = t?.name ?? topicId;
   const blurb = t?.blurb ?? "";
+  // the slips are read as the desk would say them, never as ids: the model has not seen our vocabulary
+  const said = slips.map((id) => slipById(id)).filter((x): x is Slip => !!x);
+  const known = said.length
+    ? `Mistakes this student has actually made on this topic before:\n${said.map((x) => `- ${x.says} (it shows at ${x.points})`).join("\n")}\n` +
+      `Include questions where a mistake like these would show itself. Do not flag which ones, do not mention the mistake in the question, and do not make those questions any harder than the rest.\n\n`
+    : `The desk has recorded no mistakes for this student on this topic. Spread the questions evenly across the usual ways this topic goes wrong.\n\n`;
   const prompt =
     `Topic: ${name}\n${blurb}\n\n` +
     (memory.length ? `What the desk has learned about this student:\n${memory.map((m) => `- ${m}`).join("\n")}\n\n` : "") +
+    known +
     (avoid.length ? `Do not repeat any of these, which the student already has:\n${avoid.map((q) => `- ${q}`).join("\n")}\n\n` : "") +
     `Write ${want} practice questions on this topic.\n` +
     `Rules:\n` +
@@ -77,7 +85,10 @@ export async function makeItems(
   learnerId: string,
   n = 6,
 ): Promise<{ items: PracticeItem[]; provider: string; ms: number; tries: number }> {
-  const memory = getLearner(learnerId).memory;
+  const me = getLearner(learnerId);
+  const memory = me.memory;
+  // the named mistakes this learner has made HERE: the set is written for them, not for the topic
+  const slips = me.skills[topicId]?.slips ?? [];
   const items: PracticeItem[] = [];
   let provider = "";
   let ms = 0;
@@ -85,7 +96,7 @@ export async function makeItems(
 
   for (let round = 0; round < 2 && items.length < n; round++) {
     const want = round === 0 ? n + 3 : n - items.length + 3;
-    const r = await ask(topicId, memory, want, items.map((i) => i.question));
+    const r = await ask(topicId, memory, slips, want, items.map((i) => i.question));
     tries++;
     provider = r.provider;
     ms += r.ms;

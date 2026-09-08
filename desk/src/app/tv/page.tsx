@@ -145,7 +145,8 @@ export default function TV() {
         case "break": if (sel) post({ type: "timer.skipbreak" }); break;
         case "topics": {
           if (k === "ArrowRight") move(SYLLABUS.length, 1); if (k === "ArrowLeft") move(SYLLABUS.length, -1);
-          if (k === "ArrowUp" || menu) nav("standing", f);
+          // nothing is locked here: Enter starts whatever is focused. Menu and Up go home, where the path lives.
+          if (k === "ArrowUp" || menu) nav("tonight");
           if (sel && !busy) { const t = SYLLABUS[f]; if (t) { setBusy(true); post({ type: "topic.open", topic: t.id });
             // P2 answers with practice.set over the session stream; a failure leaves the wait on screen
             call("/api/practice", { topic: t.id }).catch(() => {}); } }
@@ -158,9 +159,6 @@ export default function TV() {
           if (sel && s.walkIx === items.length - 1) post({ type: "practice.clear" });
           if (back) post({ type: "practice.clear" });
           break; }
-        case "standing": {
-          if (k === "ArrowUp") move(SYLLABUS.length, 1); if (k === "ArrowDown") move(SYLLABUS.length, -1);
-          if (back || menu) nav("topics", f); break; }
         case "recap": { if (k === "ArrowLeft") move(2, -1); if (k === "ArrowRight") move(2, 1); if (sel && f === 0) post({ type: "status", text: "recap sent to the parent's phone" }); if ((sel && f === 1) || back) nav("tonight"); break; }
       }
     };
@@ -213,6 +211,5 @@ function ScreenFor({ s, table, busy }: { s: Session; table: boolean; busy: boole
     case "topics": return <S.Topics s={s} focus={f} busy={busy} />;
     case "practice": return <S.PracticeScreen s={s} />;
     case "walk": return <S.Walk s={s} focus={f} />;
-    case "standing": return <S.Standing s={s} focus={f} />;
   }
 }

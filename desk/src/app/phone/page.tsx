@@ -21,7 +21,7 @@ const TV_WORDS: Partial<Record<Session["screen"], string>> = {
   landing: "the start screen", pair: "the pairing code", joined: "the paired screen", tonight: "Tonight", learner: "Who is at the desk", profile: "a new learner",
   units: "the units guide", calendar: "the calendar", page: "the page", hint: "a hint", lesson: "a lesson", sentence: "your sentence",
   headtohead: "head to head", essaytype: "the essay lens", forensic: "the essay", playbook: "the playbook", xray: "the x-ray", break: "a break", recap: "the recap",
-  topics: "Teach me something", practice: "the practice set", walk: "walking the set", standing: "where you stand",
+  topics: "Teach me something", practice: "the practice set", walk: "walking the set",
 };
 export default function Phone() {
   const { s, connected, post } = useSession();

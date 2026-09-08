@@ -14,7 +14,7 @@ import type { RuleCard } from "../rules/english";
 import type { Sentence } from "../rules/essay";
 
 export type Subject = "maths" | "english" | "essay";
-export type Screen = "landing" | "pair" | "joined" | "tonight" | "units" | "calendar" | "page" | "hint" | "lesson" | "sentence" | "headtohead" | "essaytype" | "forensic" | "playbook" | "xray" | "break" | "recap" | "learner" | "profile" | "topics" | "practice" | "walk" | "standing";
+export type Screen = "landing" | "pair" | "joined" | "tonight" | "units" | "calendar" | "page" | "hint" | "lesson" | "sentence" | "headtohead" | "essaytype" | "forensic" | "playbook" | "xray" | "break" | "recap" | "learner" | "profile" | "topics" | "practice" | "walk";
 
 export type StudentType = "elementary" | "high-school" | "other";
 /** The school system a learner's progress is read against. One per profile; the desk defaults to UK. */

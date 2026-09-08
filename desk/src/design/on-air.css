@@ -141,7 +141,7 @@
 .wipe { animation: wipe .28s steps(6) both; } @keyframes wipe { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
 @media (prefers-reduced-motion: reduce) { .wipe { animation: none; } .btn, .row-focus, .read .img { transition: none; } }
 
-/* ================= Math Buddy: topics, practice, walk, standing ================= */
+/* ================= Math Buddy: topics, practice, walk ================= */
 
 /* ---- four more bands, one per screen, none repeating a placement above ---- */
 /* topics: the corner the syllabus hangs from */
@@ -154,15 +154,6 @@
   background: linear-gradient(to top, var(--signal) 0 var(--fill, 0%), rgba(255,255,255,.10) var(--fill, 0%) 100%); }
 .band-gauge[data-v="right"] { background: linear-gradient(to top, #fff 0 var(--fill, 0%), rgba(255,255,255,.10) var(--fill, 0%) 100%); }
 .band-gauge[data-v="unsure"] { background: linear-gradient(to top, rgba(255,255,255,.34) 0 var(--fill, 0%), rgba(255,255,255,.10) var(--fill, 0%) 100%); }
-/* standing: the riser the staircase climbs */
-.band-riser { left: -96px; top: -54px; width: 1920px; height: 1080px; clip-path: polygon(14% 66%, 73% 13%, 73% 15.4%, 14% 68.4%); }
-
-/* ---- the four reference bands, as tabular facts ---- */
-.bands { display: flex; gap: 46px; font-variant-numeric: tabular-nums; }
-.bands.down { flex-direction: column; gap: 22px; }
-.bands > div { display: grid; gap: 6px; align-content: start; }
-.bands b { font-family: var(--display); font-size: 22px; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; color: var(--maths); }
-.bands span { font-size: 28px; font-weight: 500; line-height: 1.15; }
 
 /* ---- practice: six questions as a poster, nothing focusable ---- */
 .qs { display: grid; grid-template-columns: 1fr 1fr; gap: 58px 130px; }
@@ -178,20 +169,6 @@
 .verdict[data-v="unsure"] { font-size: 52px; font-weight: 600; color: var(--mute); border: 3px dashed var(--line); padding: 14px 28px; }
 .wrote { font-size: 64px; font-weight: 500; font-variant-numeric: tabular-nums; }
 .slipname { font-family: var(--display); font-size: 30px; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; color: var(--tint); }
-
-/* ---- standing: a staircase, not a list and not a rank ---- */
-.stair { position: relative; }
-.stair .step { position: absolute; width: 700px; padding: 18px 0 22px 30px; border-left: 10px solid var(--line); }
-.stair .step[data-state="secure"] { border-left-color: var(--maths); }
-.stair .step[data-state="here"] { border-left-color: #fff; }
-.stair .step[data-state="next"] { border-left-color: var(--tint); }
-.stair .step .t { font-family: var(--display); font-size: 46px; font-weight: 800; text-transform: uppercase; letter-spacing: .02em; line-height: 1; }
-.stair .step .s { margin-top: 12px; font-family: var(--display); font-size: 28px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--mute); }
-.stair .step[data-state="secure"] .s { color: var(--maths); }
-.stair .step[data-state="later"] { opacity: .5; }
-.stair .step[data-focused="true"] { background: #fff; color: var(--ink); transform: skewX(-4deg); box-shadow: 12px 12px 0 var(--signal); border-left-color: var(--ink); }
-.stair .step[data-focused="true"] .s { color: var(--signal); }
-.stair .step[data-focused="true"] { opacity: 1; }
 
 /* ---- M0 · the path, as one picture: a node per topic, and where the learner stands ---- */
 .path { position: relative; }

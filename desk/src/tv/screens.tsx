@@ -660,19 +660,9 @@ export function ProfileScreen({ s, focus }: { s: Session; focus: number }) {
   </>);
 }
 
-// ================= P3 · Math Buddy: topics, practice, walk, standing =================
+// ================= P3 · Math Buddy: topics, practice, walk =================
 import { SYLLABUS, expectedIndex, topic as topicById } from "@/lib/library/syllabus";
 import { slip as slipById } from "@/lib/rules/maths";
-
-/** The four reference bands as small tabular facts, never a sentence. */
-function Bands({ t, down }: { t: Topic; down?: boolean }) {
-  const rows: Array<[string, string]> = [["US", t.bands.us], ["UK", t.bands.uk], ["CZ", t.bands.cz], ["DE", t.bands.de]];
-  return (
-    <div className={down ? "bands down" : "bands"}>
-      {rows.map(([k, v]) => <div key={k}><b>{k}</b><span>{v}</span></div>)}
-    </div>
-  );
-}
 
 /**
  * What the session alone can say about a topic. The learner's long-term record lives on the
@@ -680,7 +670,14 @@ function Bands({ t, down }: { t: Topic; down?: boolean }) {
  * it, so tonight's marked set is the only evidence the television has.
  */
 type TState = "secure" | "here" | "next" | "later";
-const STATE_WORD: Record<TState, string> = { secure: "secure", here: "on the desk now", next: "next up", later: "not yet" };
+/**
+ * What the card says about a topic — a description of fact, never of permission. Nothing on
+ * this screen is locked: start-anywhere-and-adjust is the decision, so no word may imply a gate.
+ */
+function stateWord(s: Session, t: Topic, st: Record<string, TState>): string {
+  if (st[t.id] === "secure") return "Secure";
+  return st[t.id] === "here" || (s.skills?.[t.id]?.seen ?? 0) > 0 ? "In progress" : "Not started";
+}
 function topicStates(s: Session): Record<string, TState> {
   // The measured record is the truth: s.skills is hydrated from data/learners.json at the
   // dispatch boundary and survives resets, so "secure" means secure across sessions, not tonight.
@@ -700,8 +697,11 @@ const PREP = [
 ];
 export function Topics({ s, focus, busy }: { s: Session; focus: number; busy: boolean }) {
   const st = topicStates(s);
+  const sys = systemOf(s.profiles.find((p) => p.id === s.learner.id));
   const ix = busy && s.topic ? Math.max(0, SYLLABUS.findIndex((t) => t.id === s.topic)) : Math.min(focus, SYLLABUS.length - 1);
   const at = SYLLABUS[ix];
+  // guidance, never a gate: the topic most people take before this one, when it is not behind them yet
+  const before = at.prereq.map((p) => topicById(p)).find((t) => t && st[t.id] !== "secure");
   // the wait is a line that changes, never a spinner
   const [step, setStep] = useState(0);
   useEffect(() => { if (!busy) { setStep(0); return; } const t = setInterval(() => setStep((x) => Math.min(PREP.length - 1, x + 1)), 2600); return () => clearInterval(t); }, [busy]);
@@ -714,19 +714,20 @@ export function Topics({ s, focus, busy }: { s: Session; focus: number; busy: bo
         {busy
           ? <><span className="cap">Preparing</span><div className="cap-text">{PREP[step]}</div></>
           : <><span className="cap" style={{ background: "transparent", color: "var(--maths)", border: "2px solid var(--maths)" }}>{at.strand}</span>
-              <div className="cap-text">{at.blurb}</div>
-              <div style={{ marginTop: 22 }}><Bands t={at} /></div></>}
+              <div className="cap-text">{at.blurb}{before ? ` Most people do ${before.name} first.` : ""}</div></>}
       </div>
       <div className="cards" style={{ gridTemplateColumns: "repeat(3, 1fr)", marginTop: 56 }}>
         {SYLLABUS.map((t, i) => (
           <div key={t.id} className="card" data-focused={!busy && i === ix} style={{ minHeight: 250, opacity: busy && i !== ix ? 0.4 : 1 }}>
-            <div className="k">{STATE_WORD[st[t.id]]}</div>
+            <div className="k">{stateWord(s, t, st)}</div>
             <div className="t" style={{ fontSize: 40 }}>{t.name}</div>
-            <div className="d" style={{ marginTop: "auto" }}>{t.strand} · {t.bands.uk}</div>
+            <div className="m">{yearWord(t, sys)}</div>
           </div>
         ))}
       </div>
-      <div className="ticker"><span><b>{SYLLABUS.length}</b> topics</span><i>·</i><span>six questions a set</span><i>·</i><span>{busy ? "the desk is writing them" : "Select to begin"}</span><i>·</i><span>Menu · where you are</span><i>·</i><span>Back to tonight</span></div>
+      <div className="ticker">{busy
+        ? <><span>writing <b>six</b> questions</span><i>·</i><span>about a minute</span><i>·</i><span>nothing to press</span></>
+        : <><span><b>{SYLLABUS.length}</b> topics</span><i>·</i><span>six questions a set</span><i>·</i><span>about a minute a set</span><i>·</i><span>years · {SYS_TAG[sys]}</span><i>·</i><span>Select to begin</span><i>·</i><span>Menu, Up or Back · Math Buddy</span></>}</div>
     </main>
   </>);
 }
@@ -790,46 +791,6 @@ export function Walk({ s, focus }: { s: Session; focus: number }) {
       </div>
       {last && <div className="actions"><button className="btn" data-focused={focus === 0}>Finish the set</button></div>}
       <div className="ticker"><span>item <b>{s.walkIx + 1}</b> of {p.items.length}</span><i>·</i><span><b>{right}</b> right</span><i>·</i><span><b>{look}</b> to look at</span><i>·</i><span>{last ? "Select finishes" : "Left and Right walk the set"}</span></div>
-    </main>
-  </>);
-}
-
-// ---- M4 Standing · where the learner is. Band: riser. Hero: a staircase. ----
-export function Standing({ s, focus }: { s: Session; focus: number }) {
-  const st = topicStates(s);
-  const ix = Math.min(Math.max(0, focus), SYLLABUS.length - 1);
-  const at = SYLLABUS[ix];
-  // the furthest topic with evidence behind it: secure if we have it, else the one on the desk
-  const furthest = [...SYLLABUS].reverse().find((t) => st[t.id] === "secure") ?? [...SYLLABUS].reverse().find((t) => st[t.id] === "here") ?? SYLLABUS[0];
-  const sentence: Record<TState, string> = {
-    secure: "You have this one. " + at.blurb,
-    here: "This is the one on the desk tonight. " + at.blurb,
-    next: "This is the one to take next, and everything it needs is behind you. " + at.blurb,
-    later: "Not yet — it waits on " + at.prereq.map((p) => topicById(p)?.name ?? p).join(" and ") + ". " + at.blurb,
-  };
-  return (<>
-    <div className="band band-riser" />
-    <main className="content-full">
-      <div className="eyebrow" data-ch="maths">Math Buddy · where you are</div>
-      <div className="title">The climb, not a score</div>
-      <div className="stair" style={{ position: "absolute", left: 0, top: 210, width: 1180, height: 470 }}>
-        {SYLLABUS.map((t, i) => (
-          <div key={t.id} className="step" data-state={st[t.id]} data-focused={i === ix} style={{ left: i * 220, bottom: i * 155 }}>
-            <div className="t">{t.name}</div>
-            <div className="s">{STATE_WORD[st[t.id]]}</div>
-          </div>
-        ))}
-      </div>
-      <div style={{ position: "absolute", right: 0, top: 210, width: 400 }}>
-        <span className="cap" style={{ background: "transparent", color: "var(--maths)", border: "2px solid var(--maths)" }}>{furthest.name}</span>
-        <div className="body" style={{ marginTop: 18, color: "var(--mute)", fontSize: 28 }}>is taught at about</div>
-        <div style={{ marginTop: 18 }}><Bands t={furthest} down /></div>
-      </div>
-      <div style={{ position: "absolute", left: 0, bottom: 96, maxWidth: 1250 }}>
-        <span className="cap">{at.strand}</span>
-        <div className="cap-text">{sentence[st[at.id]]}</div>
-      </div>
-      <div className="ticker"><span><b>{SYLLABUS.filter((t) => st[t.id] === "secure").length}</b> of {SYLLABUS.length} secure</span><i>·</i><span>no ranks, no cohort</span><i>·</i><span>Up and Down walk the climb</span><i>·</i><span>Back to the topics</span></div>
     </main>
   </>);
 }
