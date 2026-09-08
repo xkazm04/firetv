@@ -60,7 +60,18 @@ export default function Phone() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [screen]);
 
-  const join = async () => { if (s && pin === s.pin) { await post({ type: "join" }); setMsg(""); } else setMsg("That code is not on the TV."); };
+  const [bad, setBad] = useState(false);
+  const join = async (code = pin) => {
+    if (s && code === s.pin) { await post({ type: "join" }); setMsg(""); try { localStorage.setItem("desk.pin", code); } catch {} }
+    else { setMsg("That code is not on the TV."); setBad(true); setTimeout(() => setBad(false), 500); }
+  };
+  // four digits join by themselves; Join stays as the fallback tap
+  const onPin = (v: string) => { const d = v.replace(/\D/g, "").slice(0, 4); setPin(d); if (d.length === 4 && s && !s.joined) join(d); };
+  // the phone remembers the desk: a code kept from an earlier join lets it in without asking
+  const remembered = useRef<string | null>(null);
+  useEffect(() => { try { remembered.current = localStorage.getItem("desk.pin"); } catch {} }, []);
+  useEffect(() => { if (s && !s.joined && remembered.current && remembered.current === s.pin) { remembered.current = null; post({ type: "join" }); } }, [s?.pin, s?.joined]); // eslint-disable-line react-hooks/exhaustive-deps
+  const forget = () => { try { localStorage.removeItem("desk.pin"); } catch {} remembered.current = null; setMsg("This phone will ask for the code next time."); };
 
   const send = async (dataUrl: string, w: number, h: number, sub: Subject, title: string) => {
     setBusy(true); setMsg("sending the page…"); setScreen("point");
@@ -102,12 +113,12 @@ export default function Phone() {
         {screen === "join" && <div className="pscreen"><h3>Join the desk</h3>
           <p>{!s ? "Looking for the TV…" : s.screen === "pair" ? "The TV is showing the code. Scan it, or type it here." : `The TV is on ${TV_WORDS[s.screen] ?? s.screen}. Ask it for the code, then type it here.`}</p>
           {s && s.screen !== "pair" && <button className="pbtn" data-secondary="true" onClick={() => post({ type: "nav", screen: "pair", from: s.screen })}>Show the code on the TV</button>}
-          <div className="field"><input inputMode="numeric" placeholder="4-digit code" value={pin} onChange={(e) => setPin(e.target.value)} /><button className="pbtn" data-signal="true" onClick={join}>Join</button></div>
-          <p style={{ fontSize: 12 }}>The TV serves this page itself; nothing to install.</p>
+          <div className="field" data-bad={bad}><input inputMode="numeric" placeholder="4-digit code" value={pin} onChange={(e) => onPin(e.target.value)} /><button className="pbtn" data-signal="true" onClick={() => join()}>Join</button></div>
+          <p style={{ fontSize: 12 }}>The TV serves this page itself; nothing to install. This phone remembers the desk once it has joined. <button className="plink" onClick={forget}>Forget this desk</button></p>
           <button className="pbtn" data-secondary="true" onClick={() => nav("profile")}>Naming a new learner? Open Profile.</button></div>}
 
         {screen === "joined" && s && <div className="pscreen"><h3>On the desk</h3>
-          <p>Joined as <b>{s.learner.name}</b>. The TV is on {TV_WORDS[s.screen] ?? s.screen}.</p>
+          <p>Joined as <b>{s.learner.name}</b>. {["landing", "pair", "joined", "tonight"].includes(s.screen) ? "Snap the page and the TV opens it." : `The TV is on ${TV_WORDS[s.screen] ?? s.screen}.`}</p>
           {s.screen === "profile" || s.draft
             ? <button className="pbtn" data-signal="true" onClick={() => nav("profile")}>Name the new learner</button>
             : <button className="pbtn" data-signal="true" onClick={() => nav("capture")}>Snap the page</button>}

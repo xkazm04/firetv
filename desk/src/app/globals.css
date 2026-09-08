@@ -41,6 +41,9 @@ button, input, textarea { font: inherit; }
 .mirror .band { position: absolute; left: 0; right: 0; border-left: 6px solid #E23D28; background: rgba(226,61,40,.12); pointer-events: none; }
 .field { display: flex; gap: 8px; } .field input, .field textarea, .field select { flex: 1; border: 1px solid #D7DEE5; padding: 12px; background: #fff; }
 .field textarea { min-height: 120px; }
+.field[data-bad="true"] { animation: shake .4s; } .field[data-bad="true"] input { border-color: #E23D28; }
+@keyframes shake { 0%, 100% { transform: none; } 20%, 60% { transform: translateX(-6px); } 40%, 80% { transform: translateX(6px); } }
+.plink { border: 0; background: none; padding: 0; color: #1B2632; text-decoration: underline; font: inherit; cursor: pointer; }
 .presets { display: flex; flex-wrap: wrap; gap: 6px; } .presets button { border: 1px solid #D7DEE5; background: #fff; padding: 6px 10px; font-size: 12px; cursor: pointer; }
 .tlist { display: flex; flex-direction: column; gap: 8px; }
 .tlist label { display: flex; gap: 10px; align-items: center; background: #fff; border: 1px solid #D7DEE5; padding: 10px 12px; }
