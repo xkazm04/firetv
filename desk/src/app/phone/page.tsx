@@ -8,7 +8,7 @@ import { useSession, call, fmt } from "@/tv/useSession";
 import { ESSAY_TYPES } from "@/lib/library/lessons.data";
 import type { Subject } from "@/lib/session/store";
 
-type PScreen = "join" | "capture" | "point" | "say" | "paste" | "tonight" | "parent";
+type PScreen = "join" | "capture" | "point" | "say" | "paste" | "tonight" | "parent" | "profile";
 const SAMPLES: Array<{ id: Subject; title: string; file: string }> = [
   { id: "maths", title: "Algebra — Exercise 4.2", file: "/samples/maths.jpg" },
   { id: "english", title: "English — Unit 6", file: "/samples/english.jpg" },
@@ -26,12 +26,15 @@ export default function Phone() {
   const [sentence, setSentence] = useState("I have gone to school yesterday.");
   const [essay, setEssay] = useState("Many students are tired. Sleep is important. Schools start early. This is bad.");
   const [etype, setEtype] = useState("structure");
+  const [pname, setPname] = useState("");
   const [ring, setRing] = useState<{ x: number; y: number } | null>(null);
   const [busy, setBusy] = useState(false);
   const video = useRef<HTMLVideoElement>(null);
   const [cam, setCam] = useState<MediaStream | null>(null);
 
   useEffect(() => { if (s?.joined && screen === "join") setScreen("capture"); }, [s?.joined, screen]);
+  // the input mirrors the draft; a new draft (or none) resets what is typed here
+  useEffect(() => { setPname(s?.draft?.name ?? ""); }, [s?.draft?.id]); // eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => { if (s?.essayType && role === "student" && screen !== "paste" && s.screen === "essaytype") { setEtype(s.essayType); } }, [s?.essayType, s?.screen, role, screen]);
 
   // camera on when the capture screen is open
@@ -71,7 +74,8 @@ export default function Phone() {
     const r = new SR(); r.lang = "en-US"; r.onresult = (ev) => into(ev.results[0][0].transcript); r.onerror = () => setMsg("did not catch that"); r.start(); setMsg("listening…");
   };
 
-  const nav = (n: PScreen) => { if (!s?.joined) return; setScreen(n); };
+  // The nav waits for a joined phone — except Profile, which a first arrival needs before joining.
+  const nav = (n: PScreen) => { if (!s?.joined && n !== "profile") return; setScreen(n); };
   return (
     <div className="phone">
       <div className="ptop">
@@ -81,7 +85,17 @@ export default function Phone() {
       <div className="pbody">
         {screen === "join" && <div className="pscreen"><h3>Join the desk</h3><p>Type the code on the TV.</p>
           <div className="field"><input inputMode="numeric" placeholder="4-digit code" value={pin} onChange={(e) => setPin(e.target.value)} /><button className="pbtn" onClick={join}>Join</button></div>
-          <p style={{ fontSize: 12 }}>The TV serves this page itself; nothing to install.</p></div>}
+          <p style={{ fontSize: 12 }}>The TV serves this page itself; nothing to install.</p>
+          <button className="pbtn" data-secondary="true" onClick={() => nav("profile")}>Naming a new learner? Open Profile.</button></div>}
+
+        {screen === "profile" && <div className="pscreen"><h3>Profile</h3>
+          <p>At the desk now: <b>{s?.learner.name ?? "—"}</b></p>
+          {s && (s.draft || s.screen === "profile") ? <>
+            <p>The TV takes the picks; type the name here.</p>
+            <div className="field"><input placeholder="Name" value={pname} onChange={(e) => { setPname(e.target.value); post({ type: "profile.draft", patch: { name: e.target.value } }); }} /></div>
+            <div className="field"><button className="pbtn" data-signal="true" style={{ flex: 1 }} onClick={() => post({ type: "profile.save" })}>Save</button>
+              <button className="pbtn" data-secondary="true" onClick={() => post({ type: "profile.discard" })}>Cancel</button></div>
+          </> : <p>Add or edit a learner on the TV; the name is typed here.</p>}</div>}
 
         {screen === "capture" && <div className="pscreen"><h3>Capture a page</h3>
           <div className="field"><select value={subject} onChange={(e) => setSubject(e.target.value as Subject)}><option value="maths">Maths</option><option value="english">English</option><option value="essay">Essay</option></select></div>
@@ -126,7 +140,7 @@ export default function Phone() {
         <div className="pstatus">{msg}</div>
       </div>
       <div className="pnav">
-        {([["capture", "Capture"], ["point", "Point & ask"], ["say", "Say it"], ["paste", "Essay"], ["tonight", "Tonight"], ["parent", "Recap"]] as Array<[PScreen, string]>).map(([id, label]) => <button key={id} aria-pressed={screen === id} onClick={() => nav(id)}>{label}</button>)}
+        {([["capture", "Capture"], ["point", "Point & ask"], ["say", "Say it"], ["paste", "Essay"], ["tonight", "Tonight"], ["parent", "Recap"], ["profile", "Profile"]] as Array<[PScreen, string]>).map(([id, label]) => <button key={id} aria-pressed={screen === id} onClick={() => nav(id)}>{label}</button>)}
       </div>
     </div>
   );

@@ -58,7 +58,7 @@ export default function TV() {
           if (f < 3) { if (k === "ArrowRight") move(3, 1); if (k === "ArrowLeft") move(3, -1); if (k === "ArrowDown") post({ type: "focus", focus: 3 });
             if (sel) { post({ type: "subject", subject: (["maths", "english", "essay"] as const)[f] }); nav("tonight"); } }
           else { if (k === "ArrowRight") post({ type: "focus", focus: 4 }); if (k === "ArrowLeft") post({ type: "focus", focus: 3 }); if (k === "ArrowUp") post({ type: "focus", focus: 0 });
-            if (sel) nav(f === 3 ? "tonight" : "learner"); }
+            if (sel) { if (f === 3) nav("tonight"); else post({ type: "nav", screen: "learner", focus: 0, from: "landing" }); } }
           break; }
         case "pair": if (sel) post({ type: "join" }); break;
         case "tonight": {
@@ -67,8 +67,27 @@ export default function TV() {
           if (menu) { const t = s.tasks[f]; if (t) post({ type: "task.done", id: t.id, done: !t.done }); }
           if (sel) { const t = s.tasks[f]; if (!t) break; post({ type: "subject", subject: t.sub }); const pi = s.pages.findIndex((p) => p.subject === t.sub);
             if (pi >= 0) { post({ type: "page.select", pageIx: pi }); nav("page"); } else if (t.sub === "essay") nav("essaytype"); else nav("units"); }
-          if (k === "ArrowUp") nav("learner"); break; }
-        case "learner": if (back || sel) nav("tonight"); if (k === "ArrowRight") move(3, 1); if (k === "ArrowLeft") move(3, -1); break;
+          if (k === "ArrowUp") post({ type: "nav", screen: "learner", focus: 0, from: "tonight" }); break; }
+        case "learner": {
+          const n = s.profiles.length + 1;
+          if (k === "ArrowRight") move(n, 1); if (k === "ArrowLeft") move(n, -1);
+          if (back) nav(s.back ?? "landing");
+          if (sel) { const p = s.profiles[f]; if (p) post({ type: "learner.set", id: p.id }); else { post({ type: "profile.draft", patch: {} }); nav("profile"); } }
+          if (menu) { const p = s.profiles[f]; if (p) { post({ type: "profile.draft", patch: { id: p.id, name: p.name, type: p.type, modules: p.modules } }); nav("profile"); } }
+          break; }
+        case "profile": {
+          // 0-2 the type of student, 3-5 the modules, 6 Save, 7 Back — Up/Down keep the column.
+          const col = f < 3 ? f : f < 6 ? f - 3 : f - 6, row = f < 3 ? 0 : f < 6 ? 1 : 2, wide = [3, 3, 2];
+          const go = (r: number) => post({ type: "focus", focus: [0, 3, 6][r] + Math.min(col, wide[r] - 1) });
+          if (k === "ArrowRight") post({ type: "focus", focus: f - col + Math.min(wide[row] - 1, col + 1) });
+          if (k === "ArrowLeft") post({ type: "focus", focus: f - col + Math.max(0, col - 1) });
+          if (k === "ArrowDown" && row < 2) go(row + 1); if (k === "ArrowUp" && row > 0) go(row - 1);
+          if (sel) { if (f < 3) post({ type: "profile.draft", patch: { type: (["high-school", "university", "adult"] as const)[f] } });
+            else if (f < 6) { const m = (["maths", "english", "essay"] as const)[f - 3]; const on = s.draft?.modules ?? [];
+              post({ type: "profile.draft", patch: { modules: on.includes(m) ? on.filter((x) => x !== m) : [...on, m] } }); }
+            else if (f === 6) post({ type: "profile.save" }); else post({ type: "profile.discard" }); }
+          if (back) post({ type: "profile.discard" });
+          break; }
         case "units": {
           if (k === "ArrowDown") move(units.length, 1); if (k === "ArrowUp") move(units.length, -1);
           if (sel) { const l = units[f]; if (l) { post({ type: "lesson.set", lesson: { id: l.id, title: l.title, t: 0, text: l.concepts.join(" · "), why: `Unit ${l.unit}, chosen by you.`, youtube: l.youtube } }); nav("lesson"); } }
@@ -136,6 +155,7 @@ function ScreenFor({ s, table }: { s: Session; table: boolean }) {
     case "pair": return <S.Pair s={s} />;
     case "tonight": return <S.Tonight s={s} focus={f} />;
     case "learner": return <S.Learner s={s} focus={f} />;
+    case "profile": return <S.ProfileScreen s={s} focus={f} />;
     case "units": return <S.Units s={s} focus={f} />;
     case "calendar": return <S.Calendar s={s} focus={f} />;
     case "page": return <S.PageScreen s={s} view={s.view} />;

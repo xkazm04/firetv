@@ -3,7 +3,7 @@
  * Every television screen, composed on On Air. Each takes the session and a `focus` index and
  * draws itself; the D-pad logic that changes them lives in app/tv/page.tsx. No two share a layout.
  */
-import type { Session } from "@/lib/session/store";
+import type { Profile, Session, StudentType } from "@/lib/session/store";
 import { LESSONS, ESSAY_TYPES } from "@/lib/library/lessons.data";
 import { fmt } from "./useSession";
 
@@ -430,14 +430,79 @@ export function Recap({ s, focus }: { s: Session; focus: number }) {
     </main>
   </>);
 }
+/** The student type, said in words — the card's kicker and the caption's chip. */
+const TYPE_WORDS: Record<StudentType, string> = { "high-school": "High school", university: "University", adult: "Adult" };
+const TYPES: StudentType[] = ["high-school", "university", "adult"];
+/** One sentence from the picks: what this desk is set up to do. */
+function picksLine(p: Profile) {
+  const join = (a: string[]) => (a.length > 1 ? a.slice(0, -1).join(", ") + " and " + a[a.length - 1] : a[0] ?? "");
+  const rest = p.modules.filter((m) => m !== "maths").map((m) => NAME[m]);
+  if (p.modules.includes("maths")) return rest.length ? `Math Buddy at ${p.type} level, ${join(rest)} on.` : `Math Buddy at ${p.type} level.`;
+  return rest.length ? `${join(rest)} on.` : "No modules on yet.";
+}
 export function Learner({ s, focus }: { s: Session; focus: number }) {
-  const names = ["Ema", "Jakub", "Add a learner"];
+  const at = s.profiles[focus] ?? null;
   return (<>
     <div className="band band-left" />
     <main className="content-full">
       <div className="eyebrow">Who is at the desk?</div>
       <div className="title">Learner</div>
-      <div className="cards" style={{ gridTemplateColumns: "repeat(3, 1fr)", marginTop: 44 }}>{names.map((n, i) => <div key={n} className="card" data-focused={focus === i}><div className="k">{i < 2 ? "Profile" : "New"}</div><div className="t">{n}</div><div className="d">{n === s.learner.name ? "at the desk now" : i < 2 ? "sessions on file" : "on the phone"}</div></div>)}</div>
+      <div className="cards" style={{ gridTemplateColumns: `repeat(${Math.max(3, s.profiles.length + 1)}, 1fr)`, marginTop: 44 }}>
+        {s.profiles.map((p, i) => (
+          <div key={p.id} className="card" data-focused={focus === i}>
+            <div className="k">{TYPE_WORDS[p.type].toUpperCase()}</div>
+            <div className="t">{p.name}</div>
+            <div className="d">{p.modules.map((m) => NAME[m]).join(" · ")}</div>
+            {p.id === s.learner.id && <div className="m">at the desk now</div>}
+          </div>
+        ))}
+        <div className="card" data-focused={focus === s.profiles.length}>
+          <div className="k">New</div><div className="t">Add a learner</div><div className="d">picks on the TV, name on the phone</div>
+        </div>
+      </div>
+      <div style={{ marginTop: 44 }}>
+        {at
+          ? <><span className="cap">{TYPE_WORDS[at.type]}</span><div className="cap-text">{picksLine(at)} Enter to sit at this desk, Menu to change the picks.</div></>
+          : <><span className="cap">New learner</span><div className="cap-text">The TV takes the picks, the phone takes the name.</div></>}
+      </div>
+    </main>
+  </>);
+}
+
+// ---- S2 Profile · the picks on the TV, the name on the phone ----
+/** Focus: 0-2 the type of student, 3-5 the modules, 6 Save, 7 Back. */
+export function ProfileScreen({ s, focus }: { s: Session; focus: number }) {
+  const d = s.draft;
+  const editing = !!d && s.profiles.some((p) => p.id === d.id);
+  const name = d?.name.trim() ?? "";
+  return (<>
+    <div className="band band-right" />
+    <main className="content-full">
+      <div className="eyebrow">{editing ? `Preferences · ${d!.name}` : "New learner"}</div>
+      <div className="title">{name || "Name it on the phone"}</div>
+      <div className="body" style={{ color: "var(--mute)", marginTop: 16 }}>{s.joined ? "Type the name on the phone's Profile tab" : `Phone code ${s.pin} · open the phone, tab Profile`}</div>
+      <div className="guide" style={{ marginTop: 40, maxWidth: 1180 }}>
+        <div className="row" style={{ gridTemplateColumns: "240px 1fr" }}>
+          <div className="u">Type of student</div>
+          <div style={{ display: "flex", gap: 20 }}>
+            {TYPES.map((t, i) => (
+              <button key={t} className="btn" data-focused={focus === i} style={{ whiteSpace: "nowrap", ...(d?.type === t ? { borderColor: "#fff", borderLeftWidth: 16 } : null) }}>{TYPE_WORDS[t]}</button>
+            ))}
+          </div>
+        </div>
+        <div className="row" style={{ gridTemplateColumns: "240px 1fr" }}>
+          <div className="u">Modules on</div>
+          <div style={{ display: "flex", gap: 20 }}>
+            {SUBJECTS.map((m, i) => (
+              <button key={m} className="btn" data-focused={focus === 3 + i} style={{ whiteSpace: "nowrap" }}>{NAME[m]}{d?.modules.includes(m) && <span className="pill" data-kind="done">on</span>}</button>
+            ))}
+          </div>
+        </div>
+      </div>
+      <div className="actions">
+        <button className="btn" data-focused={focus === 6} data-disabled={!name}>Save</button>
+        <button className="btn" data-focused={focus === 7}>Back</button>
+      </div>
     </main>
   </>);
 }

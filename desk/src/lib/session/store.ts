@@ -11,7 +11,10 @@ import type { RuleCard } from "../rules/english";
 import type { Sentence } from "../rules/essay";
 
 export type Subject = "maths" | "english" | "essay";
-export type Screen = "landing" | "pair" | "tonight" | "units" | "calendar" | "page" | "hint" | "lesson" | "sentence" | "headtohead" | "essaytype" | "forensic" | "playbook" | "xray" | "break" | "recap" | "learner";
+export type Screen = "landing" | "pair" | "tonight" | "units" | "calendar" | "page" | "hint" | "lesson" | "sentence" | "headtohead" | "essaytype" | "forensic" | "playbook" | "xray" | "break" | "recap" | "learner" | "profile";
+
+export type StudentType = "high-school" | "university" | "adult";
+export interface Profile { id: string; name: string; type: StudentType; modules: Subject[]; }
 
 export interface PageItem { n: number; text: string; cx: number; cy: number; band: [number, number]; key: string; }
 export interface Page { id: string; subject: Subject; title: string; img: string; w: number; h: number; items: PageItem[]; readMs?: number; provider?: string; }
@@ -23,8 +26,9 @@ export interface Verdict { n: number; verdict: "strong" | "faulty" | "neutral"; 
 export interface EssayAnalysis { text: string; type: string; sentences: Sentence[]; stats: Record<string, number>; verdicts: Verdict[]; summary: string; provider?: string; }
 
 export interface Session {
-  pin: string; joined: boolean; learner: { name: string };
-  subject: Subject; screen: Screen; focus: number; view: "band" | "overview";
+  pin: string; joined: boolean; learner: { id: string; name: string };
+  profiles: Profile[]; draft: Profile | null;
+  subject: Subject; screen: Screen; focus: number; view: "band" | "overview"; back?: Screen;
   tasks: Task[]; timer: { left: number; running: boolean; phase: "work" | "break"; before?: Screen };
   pages: Page[]; pageIx: number; itemIx: number; reading: boolean;
   hint: Hint | null; lesson: LessonPick | null; noLesson: boolean; lessonPaused: boolean;
@@ -34,8 +38,10 @@ export interface Session {
 }
 
 export type Event =
-  | { type: "join" } | { type: "nav"; screen: Screen; focus?: number } | { type: "focus"; focus: number }
+  | { type: "join" } | { type: "nav"; screen: Screen; focus?: number; from?: Screen } | { type: "focus"; focus: number }
   | { type: "subject"; subject: Subject }
+  | { type: "learner.set"; id: string }
+  | { type: "profile.draft"; patch: Partial<Profile> } | { type: "profile.save" } | { type: "profile.discard" }
   | { type: "page.reading"; page: Omit<Page, "items"> } | { type: "page.read"; id: string; items: PageItem[]; readMs: number; provider: string }
   | { type: "page.select"; pageIx: number; itemIx?: number } | { type: "item"; itemIx: number } | { type: "view"; view: "band" | "overview" }
   | { type: "hint.set"; hint: Hint } | { type: "hint.stage"; stage: 1 | 2 }
@@ -50,7 +56,11 @@ const FILE = path.join(DATA, "session.json");
 
 export function fresh(): Session {
   return {
-    pin: String(1000 + Math.floor(Math.random() * 9000)), joined: false, learner: { name: "Ema" },
+    pin: String(1000 + Math.floor(Math.random() * 9000)), joined: false, learner: { id: "ema", name: "Ema" },
+    profiles: [
+      { id: "ema", name: "Ema", type: "high-school", modules: ["maths", "english", "essay"] },
+      { id: "jakub", name: "Jakub", type: "university", modules: ["english", "essay"] },
+    ], draft: null,
     subject: "maths", screen: "landing", focus: 0, view: "band",
     tasks: [
       { id: "t1", sub: "maths", name: "Algebra — Exercise 4.2, all ten", min: 25, done: false },
@@ -69,8 +79,14 @@ export function reduce(s: Session, e: Event): Session {
   const n: Session = { ...s, updatedAt: Date.now() };
   switch (e.type) {
     case "join": n.joined = true; n.screen = "tonight"; n.focus = 0; break;
-    case "nav": n.screen = e.screen; n.focus = e.focus ?? 0; break;
+    case "nav": n.screen = e.screen; n.focus = e.focus ?? 0; if (e.from) n.back = e.from; break;
     case "focus": n.focus = e.focus; break;
+    case "learner.set": { const p = s.profiles.find((x) => x.id === e.id); if (!p) break; n.learner = { id: p.id, name: p.name }; n.screen = "tonight"; n.focus = 0; break; }
+    case "profile.draft": n.draft = { ...(s.draft ?? { id: "p" + Date.now(), name: "", type: "high-school" as StudentType, modules: ["maths", "english", "essay"] as Subject[] }), ...e.patch }; break;
+    case "profile.save": { const d = s.draft; if (!d || !d.name.trim()) break; const has = s.profiles.some((p) => p.id === d.id);
+      n.profiles = has ? s.profiles.map((p) => (p.id === d.id ? d : p)) : [...s.profiles, d];
+      n.learner = { id: d.id, name: d.name }; n.draft = null; n.screen = "tonight"; n.focus = 0; break; }
+    case "profile.discard": n.draft = null; n.screen = "learner"; n.focus = 0; break;
     case "subject": n.subject = e.subject; break;
     case "page.reading": { const ix = s.pages.findIndex((p) => p.id === e.page.id);
       const page: Page = { ...e.page, items: [] }; n.pages = ix >= 0 ? s.pages.map((p, i) => (i === ix ? page : p)) : [...s.pages, page];
@@ -106,7 +122,7 @@ export function reduce(s: Session, e: Event): Session {
 type Sub = (s: Session) => void;
 interface Store { session: Session; subs: Set<Sub>; ticker: NodeJS.Timeout | null; }
 const g = globalThis as unknown as { __desk?: Store };
-function load(): Session { try { if (existsSync(FILE)) return { ...fresh(), ...JSON.parse(readFileSync(FILE, "utf8")), reading: false }; } catch {} return fresh(); }
+function load(): Session { try { if (existsSync(FILE)) { const j = JSON.parse(readFileSync(FILE, "utf8")); if (Array.isArray(j?.profiles) && j?.learner?.id) return { ...fresh(), ...j, reading: false }; } } catch {} return fresh(); }
 if (!g.__desk) g.__desk = { session: load(), subs: new Set(), ticker: null };
 const store = g.__desk;
 if (!store.ticker) store.ticker = setInterval(() => { if (store.session.timer.running) dispatch({ type: "timer.tick", seconds: 1 }); }, 1000);
