@@ -7,6 +7,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useSession, call } from "@/tv/useSession";
 import { LESSONS } from "@/lib/library/lessons.data";
+import { SYLLABUS } from "@/lib/library/syllabus";
 import type { Screen, Session } from "@/lib/session/store";
 import * as S from "@/tv/screens";
 import { profileRows, locate, flat, shownTasks } from "@/tv/profileRows";
@@ -16,6 +17,8 @@ export default function TV() {
   const [table, setTable] = useState(false);
   const [voice, setVoice] = useState(true);
   const [fast, setFast] = useState(false);
+  /** A practice set has been asked for and has not arrived: the topics screen says so. */
+  const [busy, setBusy] = useState(false);
   const frame = useRef<HTMLDivElement>(null);
   const stage = useRef<HTMLDivElement>(null);
   const spoken = useRef<string>("");
@@ -30,7 +33,7 @@ export default function TV() {
   // speak what is new: the hint, the explanation, the verdict
   useEffect(() => {
     if (!s || !voice) return;
-    const line = s.screen === "hint" ? (s.hint?.stage === 2 ? s.hint.hint2?.hint : s.hint?.hint1?.hint) : s.screen === "sentence" ? s.english?.explanation : s.screen === "forensic" ? s.essay?.summary : s.screen === "break" ? "Time for a break." : "";
+    const line = s.screen === "hint" ? (s.hint?.stage === 2 ? s.hint.hint2?.hint : s.hint?.hint1?.hint) : s.screen === "sentence" ? s.english?.explanation : s.screen === "forensic" ? s.essay?.summary : s.screen === "walk" ? s.practice?.items[s.walkIx]?.said : s.screen === "break" ? "Time for a break." : "";
     if (!line || line === spoken.current) return;
     spoken.current = line;
     (async () => {
@@ -39,6 +42,9 @@ export default function TV() {
       catch { try { speechSynthesis.cancel(); speechSynthesis.speak(new SpeechSynthesisUtterance(line)); } catch {} }
     })();
   }, [s, voice]);
+
+  // the wait for a practice set belongs to the topics screen only
+  useEffect(() => { if (s && s.screen !== "topics") setBusy(false); }, [s?.screen]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // the demo clock: ×60 when asked, so the break screen is reachable
   useEffect(() => { if (!fast) return; const t = setInterval(() => post({ type: "timer.tick", seconds: 59 }), 1000); return () => clearInterval(t); }, [fast, post]);
@@ -66,16 +72,31 @@ export default function TV() {
         case "pair": if (back) nav(s.back ?? "landing"); break;
         case "joined": if (sel || back) nav("tonight"); break;
         case "tonight": {
-          // the board shows only the learner's modules; the D-pad walks that same list
+          // two doors first (0-1), then the board, which shows only the learner's modules
           const shown = shownTasks(s);
-          if (k === "ArrowRight") move(shown.length, 1); if (k === "ArrowLeft") move(shown.length, -1);
+          const DOORS = 2;
+          if (back && s.awaiting) post({ type: "page.unask" });
+          if (f < DOORS) {
+            if (k === "ArrowRight") move(DOORS, 1); if (k === "ArrowLeft") move(DOORS, -1);
+            if (k === "ArrowDown" && shown.length) post({ type: "focus", focus: DOORS });
+            if (k === "ArrowUp") post({ type: "nav", screen: "learner", focus: 0, from: "tonight" });
+            if (sel) {
+              post({ type: "subject", subject: "maths" });
+              if (f === 1) nav("topics");
+              else { const pi = s.pages.findIndex((p) => p.subject === "maths");
+                if (pi >= 0) { post({ type: "page.select", pageIx: pi }); nav("page"); } else post({ type: "page.ask", subject: "maths" }); }
+            }
+            break;
+          }
+          const t = shown[f - DOORS];
+          if (k === "ArrowRight") move(DOORS + shown.length, 1); if (k === "ArrowLeft") move(DOORS + shown.length, -1);
+          if (k === "ArrowUp") post({ type: "focus", focus: 0 });
           if (k === "ArrowDown") { if (s.pages.length) nav("page"); else if (!s.joined) post({ type: "nav", screen: "pair", focus: 0, from: "tonight" }); }
-          if (menu) { const t = shown[f]; if (t) post({ type: "task.done", id: t.id, done: !t.done }); }
-          if (sel) { const t = shown[f]; if (!t) break; post({ type: "subject", subject: t.sub }); const pi = s.pages.findIndex((p) => p.subject === t.sub);
+          if (menu && t) post({ type: "task.done", id: t.id, done: !t.done });
+          if (sel) { if (!t) break; post({ type: "subject", subject: t.sub }); const pi = s.pages.findIndex((p) => p.subject === t.sub);
             // no page yet: ask for it and stay here — the units guide is not an answer to "start this task"
             if (pi >= 0) { post({ type: "page.select", pageIx: pi }); nav("page"); } else if (t.sub === "essay") nav("essaytype"); else post({ type: "page.ask", subject: t.sub }); }
-          if (back && s.awaiting) post({ type: "page.unask" });
-          if (k === "ArrowUp") post({ type: "nav", screen: "learner", focus: 0, from: "tonight" }); break; }
+          break; }
         case "learner": {
           const n = s.profiles.length + 1;
           if (k === "ArrowRight") move(n, 1); if (k === "ArrowLeft") move(n, -1);
@@ -129,11 +150,29 @@ export default function TV() {
         case "playbook": { if (k === "ArrowRight") move(4, 1); if (k === "ArrowLeft") move(4, -1); if (k === "ArrowDown") move(4, 2); if (k === "ArrowUp") move(4, -2); if (sel) nav("xray"); if (back) nav(s.essay ? "forensic" : "essaytype"); break; }
         case "xray": if (back) nav("playbook"); break;
         case "break": if (sel) post({ type: "timer.skipbreak" }); break;
+        case "topics": {
+          if (k === "ArrowRight") move(SYLLABUS.length, 1); if (k === "ArrowLeft") move(SYLLABUS.length, -1);
+          if (k === "ArrowUp" || menu) nav("standing", f);
+          if (sel && !busy) { const t = SYLLABUS[f]; if (t) { setBusy(true); post({ type: "topic.open", topic: t.id });
+            // P2 answers with practice.set over the session stream; a failure leaves the wait on screen
+            call("/api/practice", { topic: t.id }).catch(() => {}); } }
+          if (back) nav("tonight"); break; }
+        case "practice": { if (back) post({ type: "practice.clear" }).then(() => nav("topics")); break; }
+        case "walk": {
+          const items = s.practice?.items ?? [];
+          if (k === "ArrowRight") post({ type: "walk", ix: s.walkIx + 1 });
+          if (k === "ArrowLeft") post({ type: "walk", ix: s.walkIx - 1 });
+          if (sel && s.walkIx === items.length - 1) post({ type: "practice.clear" });
+          if (back) post({ type: "practice.clear" });
+          break; }
+        case "standing": {
+          if (k === "ArrowUp") move(SYLLABUS.length, 1); if (k === "ArrowDown") move(SYLLABUS.length, -1);
+          if (back || menu) nav("topics", f); break; }
         case "recap": { if (k === "ArrowLeft") move(2, -1); if (k === "ArrowRight") move(2, 1); if (sel && f === 0) post({ type: "status", text: "recap sent to the parent's phone" }); if ((sel && f === 1) || back) nav("tonight"); break; }
       }
     };
     addEventListener("keydown", onKey); return () => removeEventListener("keydown", onKey);
-  }, [s, post]);
+  }, [s, post, busy]);
 
   return (
     <div className="bench">
@@ -149,14 +188,14 @@ export default function TV() {
       <div className="frame" ref={frame}>
         <div className="stage" ref={stage} tabIndex={0}>
           <div className="grid" />
-          <div className="safe">{s ? <ScreenFor s={s} table={table} /> : null}</div>
+          <div className="safe">{s ? <ScreenFor s={s} table={table} busy={busy} /> : null}</div>
         </div>
       </div>
     </div>
   );
 }
 
-function ScreenFor({ s, table }: { s: Session; table: boolean }) {
+function ScreenFor({ s, table, busy }: { s: Session; table: boolean; busy: boolean }) {
   const f = s.focus;
   switch (s.screen) {
     case "landing": return <S.Landing s={s} focus={f} />;
@@ -178,5 +217,9 @@ function ScreenFor({ s, table }: { s: Session; table: boolean }) {
     case "xray": return <S.Xray s={s} />;
     case "break": return <S.BreakScreen s={s} />;
     case "recap": return <S.Recap s={s} focus={f} />;
+    case "topics": return <S.Topics s={s} focus={f} busy={busy} />;
+    case "practice": return <S.PracticeScreen s={s} />;
+    case "walk": return <S.Walk s={s} focus={f} />;
+    case "standing": return <S.Standing s={s} focus={f} />;
   }
 }

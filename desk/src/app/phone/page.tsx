@@ -9,7 +9,7 @@ import { ESSAY_TYPES } from "@/lib/library/lessons.data";
 import { BRAND as MODULE } from "@/tv/profileRows";
 import type { Session, Subject } from "@/lib/session/store";
 
-type PScreen = "join" | "joined" | "capture" | "point" | "say" | "paste" | "tonight" | "parent" | "profile";
+type PScreen = "join" | "joined" | "capture" | "practice" | "point" | "say" | "paste" | "tonight" | "parent" | "profile";
 const SAMPLES: Array<{ id: Subject; title: string; file: string }> = [
   { id: "maths", title: "Algebra — Exercise 4.2", file: "/samples/maths.jpg" },
   { id: "english", title: "English — Unit 6", file: "/samples/english.jpg" },
@@ -21,6 +21,7 @@ const TV_WORDS: Partial<Record<Session["screen"], string>> = {
   landing: "the start screen", pair: "the pairing code", joined: "the paired screen", tonight: "Tonight", learner: "Who is at the desk", profile: "a new learner",
   units: "the units guide", calendar: "the calendar", page: "the page", hint: "a hint", lesson: "a lesson", sentence: "your sentence",
   headtohead: "head to head", essaytype: "the essay lens", forensic: "the essay", playbook: "the playbook", xray: "the x-ray", break: "a break", recap: "the recap",
+  topics: "Teach me something", practice: "the practice set", walk: "walking the set", standing: "where you stand",
 };
 export default function Phone() {
   const { s, connected, post } = useSession();
@@ -44,6 +45,14 @@ export default function Phone() {
   const [phase, setPhase] = useState<"idle" | "sending" | "sent" | "failed">("idle");
   /** The TV asked for a module; the picker stays out of the way until the user asks for it. */
   const [picking, setPicking] = useState(false);
+  /** What the mic caught, held on the phone until the learner has read it back. Nothing is sent unseen. */
+  const [heard, setHeard] = useState("");
+  const [holding, setHolding] = useState(false);
+  const [micOk, setMicOk] = useState(true);
+  /** The desk's answer to "how did you get there", in text — the TV speaks its own line. */
+  const [reply, setReply] = useState("");
+  /** What the desk noticed tonight, read once on the way out. */
+  const [memory, setMemory] = useState<string[] | null>(null);
 
   // a fresh join lands on the confirmation, never straight into the camera
   useEffect(() => { if (s?.joined && screen === "join") setScreen("joined"); }, [s?.joined, screen]);
@@ -62,12 +71,13 @@ export default function Phone() {
   useEffect(() => { if (s?.awaiting) setSubject(s.awaiting); }, [s?.awaiting]);
   useEffect(() => { if (s?.essayType && role === "student" && screen !== "paste" && s.screen === "essaytype") { setEtype(s.essayType); } }, [s?.essayType, s?.screen, role, screen]);
 
-  // camera on when the capture screen is open
+  // camera on when a screen is asking for a photo: capture, or practice with a set still to mark
+  const camWanted = screen === "capture" || (screen === "practice" && !!s?.practice && !s.practice.marked);
   useEffect(() => {
-    if (screen !== "capture") { cam?.getTracks().forEach((t) => t.stop()); setCam(null); return; }
+    if (!camWanted) { cam?.getTracks().forEach((t) => t.stop()); setCam(null); return; }
     navigator.mediaDevices?.getUserMedia({ video: { facingMode: "environment", width: { ideal: 1920 } } }).then((st) => { setCam(st); if (video.current) video.current.srcObject = st; }).catch(() => setMsg("No camera here — use a sample page below."));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [screen]);
+  }, [camWanted]);
   // the element arrives after the stream does; hand it the stream once it is on the page
   useEffect(() => { if (cam && video.current && video.current.srcObject !== cam) video.current.srcObject = cam; }, [cam, shot]);
 
@@ -115,11 +125,52 @@ export default function Phone() {
   const ask = async () => { if (!page) return; setBusy(true); try { await call("/api/hint", { askedQ: q, itemIx: s?.itemIx }); setQ(""); } finally { setBusy(false); } };
   const listen = (into: (t: string) => void) => {
     // Web Speech is not in TypeScript's DOM lib; the shape we use is small enough to declare here.
-    type Rec = { lang: string; onresult: (ev: { results: Array<Array<{ transcript: string }>> }) => void; onerror: () => void; start: () => void };
+    type Rec = { lang: string; onresult: (ev: { results: Array<Array<{ transcript: string }>> }) => void; onerror: () => void; start: () => void; stop: () => void };
     const w = window as unknown as { SpeechRecognition?: new () => Rec; webkitSpeechRecognition?: new () => Rec };
     const SR = w.SpeechRecognition ?? w.webkitSpeechRecognition;
-    if (!SR) return setMsg("No speech recognition in this browser — type instead.");
+    if (!SR) { setMsg("No speech recognition in this browser — type instead."); return null; }
     const r = new SR(); r.lang = "en-US"; r.onresult = (ev) => into(ev.results[0][0].transcript); r.onerror = () => setMsg("did not catch that"); r.start(); setMsg("listening…");
+    return r; // the caller may hold the button and stop it on release
+  };
+  // is there a mic path at all on this device? asked once, so the fallback is offered before a failed press
+  useEffect(() => { const w = window as unknown as { SpeechRecognition?: unknown; webkitSpeechRecognition?: unknown }; setMicOk(Boolean(w.SpeechRecognition ?? w.webkitSpeechRecognition)); }, []);
+
+  // ---- the practice loop: the worked sheet goes to be marked, the mouth explains one slip ----
+  /** The whole worked set, one photo. Same shot/review machinery as capture; a different door. */
+  const sendWorking = async () => {
+    if (!shot) return;
+    setBusy(true); setPhase("sending"); setMsg("");
+    try {
+      const r = await call("/api/mark", { image: shot.url, w: shot.w, h: shot.h });
+      const j = await r.json().catch(() => ({} as { error?: string }));
+      if (r.ok) setPhase("sent");
+      else { setPhase("failed"); setMsg(r.status === 404 ? "The desk cannot mark yet — that part is still being built." : `The desk could not mark it: ${j.error ?? r.status}`); }
+    } catch (e) { setPhase("failed"); setMsg(`That did not reach the desk: ${String(e)}`); } finally { setBusy(false); }
+  };
+  // the set came back marked: the sheet has done its job, so the review clears itself
+  useEffect(() => { if (screen === "practice" && s?.practice?.marked) { setShot(null); setPhase("idle"); } }, [s?.practice?.marked]); // eslint-disable-line react-hooks/exhaustive-deps
+  // a new item on the walk is a new question: last time's transcript and answer do not belong to it
+  useEffect(() => { setHeard(""); setReply(""); }, [s?.walkIx]);
+
+  const rec = useRef<{ stop: () => void } | null>(null);
+  const holdStart = () => { setReply(""); setHeard(""); const r = listen((t) => { setHeard(t); setMsg(""); }); if (r) { rec.current = r; setHolding(true); } else setMicOk(false); };
+  const holdEnd = () => { if (!holding) return; rec.current?.stop(); rec.current = null; setHolding(false); setMsg(""); };
+  const explain = async (transcript: string) => {
+    const t = transcript.trim(); if (!t) return;
+    setBusy(true); setMsg("");
+    try {
+      const r = await call("/api/explain", { transcript: t, n: s?.walkIx });
+      const j = await r.json().catch(() => ({} as { reply?: string; error?: string }));
+      if (r.ok) { setReply(j.reply ?? "The desk heard you."); setHeard(""); }
+      else setMsg(r.status === 404 ? "The desk cannot listen back yet — that part is still being built." : `The desk could not use that: ${j.error ?? r.status}`);
+    } catch (e) { setMsg(`That did not reach the desk: ${String(e)}`); } finally { setBusy(false); }
+  };
+  /** Memory is written on the way out — and is never allowed to hold the door shut. */
+  const endSession = async () => {
+    setBusy(true);
+    try { const r = await call("/api/memory", {}); const j = await r.json().catch(() => ({} as { lines?: string[] })); setMemory(r.ok && Array.isArray(j.lines) ? j.lines : []); }
+    catch { setMemory([]); }
+    finally { setBusy(false); await post({ type: "session.end" }); }
   };
 
   // The nav waits for a joined phone — except Profile, which a first arrival needs before joining.
@@ -192,6 +243,57 @@ export default function Phone() {
           </div>;
         })()}
 
+        {screen === "practice" && s && (() => {
+          const pr = s.practice;
+          if (!pr) return <div className="pscreen"><h3>Practice</h3>
+            <p>The practice set starts on the TV — open <b>Teach me something</b> there and pick a topic. Six problems land on the big screen; you work them on paper.</p></div>;
+
+          // not marked: the sheet is still on the table. Snap all six at once, review it, then send.
+          if (!pr.marked) return <div className="pscreen"><h3>Practice</h3>
+            <p><b>{pr.topic}</b> — work all {pr.items.length} on paper. When every one is done, snap the whole sheet in one photo.</p>
+            <div className="cam">
+              {cam ? <video ref={video} autoPlay playsInline muted /> : !shot && <span>camera</span>}
+              {shot && <img src={shot.url} alt="the sheet you just snapped" />}
+              {cam && !shot && <div className="guide"><i /><i /><i /><i /></div>}
+            </div>
+            {!shot && <p>Fill the frame with the sheet, all four corners inside.</p>}
+            {phase === "sending" ? <><p>Sent. The desk is marking the set…</p><button className="pbtn" disabled>Marking the set…</button></>
+              : shot ? <div className="field">
+                  <button className="pbtn" data-signal="true" style={{ flex: 1 }} onClick={sendWorking} disabled={busy}>Send my working</button>
+                  <button className="pbtn" data-secondary="true" onClick={retake}>Retake</button>
+                </div>
+              : <button className="pbtn" onClick={snap} disabled={!cam || busy}>{cam ? "Snap the sheet" : "No camera on this device"}</button>}
+          </div>;
+
+          // marked: the count, and not one verdict. The walk itself belongs to the TV.
+          const right = pr.items.filter((i) => i.verdict === "right").length;
+          const look = pr.items.length - right;
+          const item = s.screen === "walk" ? pr.items[s.walkIx] : undefined;
+          const asking = !!item && (item.verdict === "wrong" || item.verdict === "unsure");
+          return <div className="pscreen"><h3>Practice</h3>
+            <p><b>{right} right.</b> {look ? `${look} to look at.` : "Nothing to look at."}</p>
+            <p>Look at the TV — it is walking the set with you.</p>
+            {asking && <div className="ptalk">
+              <b>How did you get there?</b>
+              {reply ? <p className="said">{reply}</p> : null}
+              {heard ? <>
+                <p>I heard: “{heard}”</p>
+                <div className="field"><button className="pbtn" data-signal="true" style={{ flex: 1 }} onClick={() => explain(heard)} disabled={busy}>Send</button>
+                  <button className="pbtn" data-secondary="true" onClick={() => { setHeard(""); setReply(""); }}>Try again</button></div>
+              </> : micOk ? <>
+                <button className="phold" data-holding={holding} onPointerDown={holdStart} onPointerUp={holdEnd} onPointerLeave={holdEnd} onPointerCancel={holdEnd} onContextMenu={(e) => e.preventDefault()}>
+                  {holding ? "Listening… let go when you are done" : "Tell the desk how you got it"}</button>
+                <p style={{ fontSize: 12 }}>Hold the button, say what you did, let go.</p>
+              </> : <>
+                <p>The microphone is not available in this browser — type it instead.</p>
+                <div className="field"><textarea value={q} onChange={(e) => setQ(e.target.value)} placeholder="What did you do first?" /></div>
+                <div className="field"><button className="pbtn" data-signal="true" style={{ flex: 1 }} onClick={() => explain(q)} disabled={busy || !q.trim()}>Send</button>
+                  <button className="pbtn" data-secondary="true" onClick={() => { setQ(""); setReply(""); }}>Try again</button></div>
+              </>}
+            </div>}
+          </div>;
+        })()}
+
         {screen === "point" && <div className="pscreen"><h3>Point &amp; ask</h3>
           {page ? <>
             <p>Tap a problem on the page, then ask. Item {page.items[s!.itemIx]?.n ?? "—"} is on the TV.</p>
@@ -218,7 +320,9 @@ export default function Phone() {
           <div className="tlist">{s.tasks.map((t) => <label key={t.id}><input type="checkbox" checked={t.done} onChange={(e) => post({ type: "task.done", id: t.id, done: e.target.checked })} /><span>{t.name}</span><small>{t.min}m</small></label>)}</div>
           <AddTask onAdd={(name, sub) => post({ type: "task.add", name, sub, min: 10 })} />
           <button className="pbtn" onClick={() => post({ type: s.timer.running ? "timer.pause" : "timer.start" })}>{s.timer.running ? `Pause · ${fmt(s.timer.left)}` : `Start · ${fmt(s.timer.left)}`}</button>
-          <button className="pbtn" data-secondary="true" onClick={() => post({ type: "session.end" })}>End session</button></div>}
+          <button className="pbtn" data-secondary="true" onClick={endSession} disabled={busy}>{busy ? "Closing…" : "End session"}</button>
+          {memory && <div className="precap"><b>What the desk noticed</b>
+            {memory.length ? <ul>{memory.map((l) => <li key={l}>{l}</li>)}</ul> : <ul><li>Nothing written down tonight.</li></ul>}</div>}</div>}
 
         {screen === "parent" && s && <div className="pscreen"><h3>Recap</h3>
           {s.screen === "recap" || s.log.problems.length ? <div className="precap"><b>{s.learner.name}, tonight</b>{Math.round(s.log.minutes)} minutes on task · {s.log.problems.length} problems · {s.log.hints} hints
@@ -228,7 +332,7 @@ export default function Phone() {
         <div className="pstatus">{msg}</div>
       </div>
       <div className="pnav">
-        {([["capture", "Capture"], ["point", "Point & ask"], ["say", "Say it"], ["paste", "Essay"], ["tonight", "Tonight"], ["parent", "Recap"], ["profile", "Profile"]] as Array<[PScreen, string]>).map(([id, label]) => <button key={id} aria-pressed={screen === id} disabled={!s?.joined && id !== "profile"} onClick={() => nav(id)}>{label}</button>)}
+        {([["capture", "Capture"], ["practice", "Practice"], ["point", "Point & ask"], ["say", "Say it"], ["paste", "Essay"], ["tonight", "Tonight"], ["parent", "Recap"], ["profile", "Profile"]] as Array<[PScreen, string]>).map(([id, label]) => <button key={id} aria-pressed={screen === id} disabled={!s?.joined && id !== "profile"} onClick={() => nav(id)}>{label}</button>)}
       </div>
     </div>
   );

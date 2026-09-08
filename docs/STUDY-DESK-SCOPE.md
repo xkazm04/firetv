@@ -43,15 +43,29 @@ be.** The product is for the *session* — co-learning, a syllabus, a habit — 
 | **Focus** | Session timer on the TV · Tonight's task board |
 | **Progress** | Parent recap · Mistake journal · Syllabus & next practice · Learner profiles |
 
-Not in scope, and why: *Show my attempt* and *Check my work* (handwriting → correctness is the
-highest-risk chain, and a confident wrong check is worse than none); *Explain it three ways* (nice,
-not core); *Comprehension checkpoints* and *Flashcards* (later, once session memory exists);
+Not in scope, and why: *Explain it three ways* (nice, not core); *Flashcards* (later);
 *Stuck detector* (cheap, but not now).
 
-**A dependency to name:** the *Mistake journal* was accepted while *Check my work* was not. So it
-rests on the questions asked and the hints needed, not on answers checked — "asked for a hint on
-negatives three sessions running" rather than "got negatives wrong". That is a weaker signal and
-should be labelled as such in the product.
+**Overturned 2026-09-08 — *Check my work* is now in scope.** This section previously excluded it,
+on the grounds that handwriting → correctness is the highest-risk chain and a confident wrong check
+is worse than none. That risk is real and unchanged; what changed is the decision to carry it, taken
+in the Math Buddy design (`.spark/Spark/ideas/maths-module.md`, wave 1) because a learning framework
+cannot assess a skill it never checks. The risk is answered by architecture rather than by avoidance:
+
+- the model marks the work **and must show its own solution**;
+- the desk re-checks that solution itself, by substituting the answer back into the equation
+  numerically (`desk/src/lib/desk/verify.ts`) — the one thing it can know without the model;
+- where the two disagree, **no verdict reaches the screen**; the desk asks the learner how they got
+  there instead. Silence is a designed state.
+
+The evidence this guards against, from the 2026-09-08 market research: on Khan Academy's own CoMTA
+set every model is markedly worse at catching a wrong student (gpt-4o 68.5%) than at confirming a
+right one (85.8%), and models identify misconception-driven wrong answers at only ~40% cross-template.
+
+**Consequence for the *Mistake journal*.** It previously rested on hints needed rather than answers
+checked, and was labelled a weaker signal for that reason. With checking in scope it can rest on real
+errors, and on the specific slip named. *Comprehension checkpoints* likewise return, as the short
+check that opens a topic.
 
 ---
 

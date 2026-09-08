@@ -6,6 +6,7 @@
 import { useEffect, useState } from "react";
 import QRCode from "qrcode";
 import type { Profile, Session, Subject, Task } from "@/lib/session/store";
+import type { Topic } from "@/lib/library/syllabus";
 import { LESSONS, ESSAY_TYPES } from "@/lib/library/lessons.data";
 import { fmt } from "./useSession";
 
@@ -121,33 +122,58 @@ function taskCaption(s: Session, t: Task): { chip: string; text: string } {
   };
   return { chip: brand, text: first[t.sub] };
 }
+/** The two doors the D-pad meets first: the sheet you were given, and a topic you choose. */
+const DOORS = [
+  { k: "The sheet you were given", t: "I have homework", d: "Snap it; the desk reads it problem by problem." },
+  { k: "No sheet needed", t: "Teach me something", d: "Pick a topic; the desk writes the questions." },
+];
+function doorCaption(s: Session, i: number): string {
+  if (i === 1) return "Pick a topic and the desk writes six questions for you to work on paper. It marks them from a photo — nothing is typed here.";
+  if (s.awaiting === "maths") return "Waiting for the Math Buddy page. Snap it on the phone — it appears here.";
+  if (s.pages.some((p) => p.subject === "maths")) return "The sheet is already on the desk. Enter opens it, one problem at a time.";
+  return "Snap the sheet on the phone and the desk reads it, one problem at a time. Hints, never the answer.";
+}
+/** Focus 0-1 are the two doors; 2 onwards walk the task board underneath them. */
 export function Tonight({ s, focus }: { s: Session; focus: number }) {
   const list = shownTasks(s);
   const open = list.filter((t) => !t.done);
   const total = open.reduce((a, t) => a + t.min, 0);
   const hidden = s.tasks.length - list.length;
   const off = Array.from(new Set(s.tasks.filter((t) => !list.includes(t)).map((t) => t.sub)));
-  const at = list[Math.min(focus, list.length - 1)];
+  const onDoor = focus < 2;
+  const ti = Math.min(Math.max(0, focus - 2), list.length - 1);
+  const at = onDoor ? null : list[ti] ?? null;
   const cap = at ? taskCaption(s, at) : null;
   return (<>
     <div className="band band-left-thin" /><Rail s={s} />
     <main className="content">
       <div className="eyebrow">Tonight</div>
       <div className="title">{open.length ? `${["One", "Two", "Three", "Four", "Five"][open.length - 1] ?? open.length} thing${open.length > 1 ? "s" : ""}, about ${total} minutes` : "Everything done"}</div>
-      <div className="cards" style={{ gridTemplateColumns: `repeat(${Math.max(3, list.length)}, 1fr)`, marginTop: 44 }}>
-        {list.map((t, i) => (
-          <div key={t.id} className="card" data-focused={focus === i} style={t.done ? { opacity: 0.5 } : undefined}>
-            <div className="k">{NAME[t.sub]}</div>
-            <div className="t" style={{ fontFamily: "var(--body)", textTransform: "none", fontWeight: 500, fontSize: 32 }}>{t.name}</div>
-            {/* done is green on both grounds; the minutes let the focused card's CSS charcoal win */}
-            <div className="m" style={{ color: t.done ? (focus === i ? "#2E7D4F" : "var(--essay)") : focus === i ? undefined : "var(--mute)" }}>{t.done ? "done" : `${t.min} min`}</div>
+      <div className="cards" style={{ gridTemplateColumns: "1fr 1fr", marginTop: 26 }}>
+        {DOORS.map((d, i) => (
+          <div key={d.t} className="card" data-focused={focus === i} style={{ minHeight: 190 }}>
+            <div className="k">{d.k}</div>
+            <div className="t" style={{ fontSize: 52 }}>{d.t}</div>
+            <div className="d" style={{ marginTop: "auto" }}>{d.d}</div>
           </div>
         ))}
       </div>
-      {cap && <div style={{ marginTop: 44 }}>
-        <span className="cap" style={{ background: "transparent", color: `var(--${at.sub})`, border: `2px solid var(--${at.sub})` }}>{cap.chip}</span>
-        <div className="cap-text">{cap.text}</div>
-      </div>}
+      <div className="eyebrow" style={{ marginTop: 28 }}>Also on the board</div>
+      <div className="cards" style={{ gridTemplateColumns: `repeat(${Math.max(3, list.length)}, 1fr)`, marginTop: 12 }}>
+        {list.map((t, i) => (
+          <div key={t.id} className="card" data-focused={focus === i + 2} style={{ minHeight: 0, padding: "16px 22px", gap: 6, ...(t.done ? { opacity: 0.5 } : null) }}>
+            <div className="k">{NAME[t.sub]}</div>
+            <div className="t" style={{ fontFamily: "var(--body)", textTransform: "none", fontWeight: 500, fontSize: 30, lineHeight: 1.1 }}>{t.name}</div>
+            {/* done is green on both grounds; the minutes let the focused card's CSS charcoal win */}
+            <div className="m" style={{ color: t.done ? (focus === i + 2 ? "#2E7D4F" : "var(--essay)") : focus === i + 2 ? undefined : "var(--mute)" }}>{t.done ? "done" : `${t.min} min`}</div>
+          </div>
+        ))}
+      </div>
+      <div style={{ position: "absolute", left: 0, bottom: 96 }}>
+        {onDoor
+          ? <><span className="cap" style={{ background: "transparent", color: "var(--maths)", border: "2px solid var(--maths)" }}>Math Buddy</span><div className="cap-text">{doorCaption(s, focus)}</div></>
+          : cap && <><span className="cap" style={{ background: "transparent", color: `var(--${at!.sub})`, border: `2px solid var(--${at!.sub})` }}>{cap.chip}</span><div className="cap-text">{cap.text}</div></>}
+      </div>
       <div className="ticker"><span><b>{open.length}</b> to do</span><i>·</i><span>about <b>{total}</b> minutes</span><i>·</i><span>{s.pages.length ? <><b>{s.pages.length}</b> page{s.pages.length === 1 ? "" : "s"} captured</> : "nothing captured yet"}</span>
         {hidden > 0 && <><i>·</i><span><b>{hidden}</b> hidden · {off.map((x) => NAME[x]).join(" and ")} {off.length > 1 ? "are" : "is"} off</span></>}
         <i>·</i>{s.joined ? <span>phone joined</span> : <span>phone code <b>{s.pin}</b> · Down to pair</span>}</div>
@@ -537,6 +563,180 @@ export function ProfileScreen({ s, focus }: { s: Session; focus: number }) {
         <button className="btn" data-focused={cell.kind === "save"} data-disabled={!name}>Save</button>
         <button className="btn" data-focused={cell.kind === "back"}>Back</button>
       </div>
+    </main>
+  </>);
+}
+
+// ================= P3 · Math Buddy: topics, practice, walk, standing =================
+import { SYLLABUS, topic as topicById } from "@/lib/library/syllabus";
+import { slip as slipById } from "@/lib/rules/maths";
+
+/** The four reference bands as small tabular facts, never a sentence. */
+function Bands({ t, down }: { t: Topic; down?: boolean }) {
+  const rows: Array<[string, string]> = [["US", t.bands.us], ["UK", t.bands.uk], ["CZ", t.bands.cz], ["DE", t.bands.de]];
+  return (
+    <div className={down ? "bands down" : "bands"}>
+      {rows.map(([k, v]) => <div key={k}><b>{k}</b><span>{v}</span></div>)}
+    </div>
+  );
+}
+
+/**
+ * What the session alone can say about a topic. The learner's long-term record lives on the
+ * server (lib/session/learners.ts, which reads the filesystem) and the session does not carry
+ * it, so tonight's marked set is the only evidence the television has.
+ */
+type TState = "secure" | "here" | "next" | "later";
+const STATE_WORD: Record<TState, string> = { secure: "secure", here: "on the desk now", next: "next up", later: "not yet" };
+function topicStates(s: Session): Record<string, TState> {
+  // The measured record is the truth: s.skills is hydrated from data/learners.json at the
+  // dispatch boundary and survives resets, so "secure" means secure across sessions, not tonight.
+  const done = new Set<string>(Object.values(s.skills ?? {}).filter((r) => r.secure).map((r) => r.topic));
+  if (s.practice?.marked && s.practice.items.filter((i) => i.verdict === "right").length >= 5) done.add(s.practice.topic);
+  const out: Record<string, TState> = {};
+  for (const t of SYLLABUS) out[t.id] = done.has(t.id) ? "secure" : s.topic === t.id ? "here" : t.prereq.every((p) => done.has(p)) ? "next" : "later";
+  return out;
+}
+
+// ---- M1 Topics · the syllabus door. Band: corner. Hero: a card row under the caption. ----
+const PREP = [
+  "Writing six questions on this topic…",
+  "Choosing numbers that are worth the working…",
+  "Checking every one comes out clean…",
+  "Still writing. They will appear here — nothing to press.",
+];
+export function Topics({ s, focus, busy }: { s: Session; focus: number; busy: boolean }) {
+  const st = topicStates(s);
+  const ix = busy && s.topic ? Math.max(0, SYLLABUS.findIndex((t) => t.id === s.topic)) : Math.min(focus, SYLLABUS.length - 1);
+  const at = SYLLABUS[ix];
+  // the wait is a line that changes, never a spinner
+  const [step, setStep] = useState(0);
+  useEffect(() => { if (!busy) { setStep(0); return; } const t = setInterval(() => setStep((x) => Math.min(PREP.length - 1, x + 1)), 2600); return () => clearInterval(t); }, [busy]);
+  return (<>
+    <div className="band band-corner" />
+    <main className="content-full">
+      <div className="eyebrow" data-ch="maths">Math Buddy · teach me something</div>
+      <div className="title">Pick a topic</div>
+      <div style={{ marginTop: 34, minHeight: 190 }}>
+        {busy
+          ? <><span className="cap">Preparing</span><div className="cap-text">{PREP[step]}</div></>
+          : <><span className="cap" style={{ background: "transparent", color: "var(--maths)", border: "2px solid var(--maths)" }}>{at.strand}</span>
+              <div className="cap-text">{at.blurb}</div>
+              <div style={{ marginTop: 22 }}><Bands t={at} /></div></>}
+      </div>
+      <div className="cards" style={{ gridTemplateColumns: "repeat(3, 1fr)", marginTop: 56 }}>
+        {SYLLABUS.map((t, i) => (
+          <div key={t.id} className="card" data-focused={!busy && i === ix} style={{ minHeight: 250, opacity: busy && i !== ix ? 0.4 : 1 }}>
+            <div className="k">{STATE_WORD[st[t.id]]}</div>
+            <div className="t" style={{ fontSize: 40 }}>{t.name}</div>
+            <div className="d" style={{ marginTop: "auto" }}>{t.strand} · {t.bands.uk}</div>
+          </div>
+        ))}
+      </div>
+      <div className="ticker"><span><b>{SYLLABUS.length}</b> topics</span><i>·</i><span>six questions a set</span><i>·</i><span>{busy ? "the desk is writing them" : "Select to begin"}</span><i>·</i><span>Menu · where you are</span><i>·</i><span>Back to tonight</span></div>
+    </main>
+  </>);
+}
+
+// ---- M2 Practice · the poster. Band: spine. Hero: the six questions themselves. ----
+export function PracticeScreen({ s }: { s: Session }) {
+  const p = s.practice;
+  const t = p ? topicById(p.topic) : undefined;
+  if (!p) return <main className="content-full"><div className="title">No set on the desk</div></main>;
+  return (<>
+    <div className="band band-spine" />
+    <main className="content-full">
+      <div className="eyebrow" data-ch="maths">Math Buddy · {t?.name ?? p.topic}</div>
+      <div className="title">Work these on paper</div>
+      <div className="qs" style={{ marginTop: 44 }}>
+        {p.items.map((it) => (
+          <div key={it.n} className="q"><div className="n">{it.n}</div><div className="x">{shown(it.question)}</div></div>
+        ))}
+      </div>
+      <div style={{ position: "absolute", left: 0, bottom: 100 }}>
+        <span className="cap">What to do</span>
+        <div className="cap-text">Work all six on paper, then snap the whole sheet with the phone. The desk marks it and walks you through it here.</div>
+      </div>
+      <div className="ticker"><span><b>{p.items.length}</b> questions</span><i>·</i><span>{t?.name ?? p.topic}</span><i>·</i><span>the phone is waiting for the sheet</span><i>·</i><span>Back to the topics</span></div>
+    </main>
+  </>);
+}
+
+// ---- M3 Walk · one marked item at a time. Band: gauge. Hero: a lower-third and a verdict mark. ----
+const VERDICT_WORD = { right: "Right", wrong: "Look again", unsure: "The desk is not sure" } as const;
+export function Walk({ s, focus }: { s: Session; focus: number }) {
+  const p = s.practice;
+  const it = p?.items[s.walkIx];
+  if (!p || !it) return <main className="content-full"><div className="title">Nothing to walk</div></main>;
+  const v = it.verdict ?? "unsure";
+  const sl = it.slip ? slipById(it.slip) : undefined;
+  const t = topicById(p.topic);
+  const last = s.walkIx === p.items.length - 1;
+  const right = p.items.filter((x) => x.verdict === "right").length;
+  const look = p.items.filter((x) => x.verdict === "wrong").length;
+  return (<>
+    <div className="band band-gauge" data-v={v} style={{ "--fill": `${((s.walkIx + 1) / p.items.length) * 100}%` } as React.CSSProperties} />
+    <main className="content-full" style={{ left: 72 }}>
+      <div className="eyebrow" data-ch="maths">Math Buddy · your sheet, marked · {t?.name ?? p.topic}</div>
+      <div className="clock" style={{ position: "absolute", right: 0, top: 0, fontSize: 96, textAlign: "right" }}>{it.n}<small>of {p.items.length}</small></div>
+      <div className="lt" style={{ marginTop: 34, maxWidth: 1400 }}>
+        <div className="tag">Question {it.n}</div>
+        <div className="txt">{shown(it.question)}</div>
+      </div>
+      <div style={{ marginTop: 60, display: "flex", alignItems: "flex-end", justifyContent: "space-between", width: 1400 }}>
+        <div>
+          <div className="chan" style={{ color: "var(--mute)" }}>You wrote</div>
+          <div className="wrote" style={{ marginTop: 10 }}>{it.studentAnswer ? shown(it.studentAnswer) : "nothing on the line"}</div>
+        </div>
+        <div className="verdict" data-v={v}>{VERDICT_WORD[v]}</div>
+      </div>
+      {sl && <div className="slipname" style={{ marginTop: 34 }}>{sl.id.replace(/-/g, " ")} · look at {sl.points}</div>}
+      <div style={{ position: "absolute", left: 0, bottom: 200 }}>
+        <span className="cap" style={{ background: "transparent", color: "var(--maths)", border: "2px solid var(--maths)" }}>What the desk says</span>
+        <div className="cap-text">{it.said ?? (v === "right" ? "This one is right. Nothing more to say about it." : "The desk has no comment on this one.")}</div>
+      </div>
+      {last && <div className="actions"><button className="btn" data-focused={focus === 0}>Finish the set</button></div>}
+      <div className="ticker"><span>item <b>{s.walkIx + 1}</b> of {p.items.length}</span><i>·</i><span><b>{right}</b> right</span><i>·</i><span><b>{look}</b> to look at</span><i>·</i><span>{last ? "Select finishes" : "Left and Right walk the set"}</span></div>
+    </main>
+  </>);
+}
+
+// ---- M4 Standing · where the learner is. Band: riser. Hero: a staircase. ----
+export function Standing({ s, focus }: { s: Session; focus: number }) {
+  const st = topicStates(s);
+  const ix = Math.min(Math.max(0, focus), SYLLABUS.length - 1);
+  const at = SYLLABUS[ix];
+  // the furthest topic with evidence behind it: secure if we have it, else the one on the desk
+  const furthest = [...SYLLABUS].reverse().find((t) => st[t.id] === "secure") ?? [...SYLLABUS].reverse().find((t) => st[t.id] === "here") ?? SYLLABUS[0];
+  const sentence: Record<TState, string> = {
+    secure: "You have this one. " + at.blurb,
+    here: "This is the one on the desk tonight. " + at.blurb,
+    next: "This is the one to take next, and everything it needs is behind you. " + at.blurb,
+    later: "Not yet — it waits on " + at.prereq.map((p) => topicById(p)?.name ?? p).join(" and ") + ". " + at.blurb,
+  };
+  return (<>
+    <div className="band band-riser" />
+    <main className="content-full">
+      <div className="eyebrow" data-ch="maths">Math Buddy · where you are</div>
+      <div className="title">The climb, not a score</div>
+      <div className="stair" style={{ position: "absolute", left: 0, top: 210, width: 1180, height: 470 }}>
+        {SYLLABUS.map((t, i) => (
+          <div key={t.id} className="step" data-state={st[t.id]} data-focused={i === ix} style={{ left: i * 220, bottom: i * 155 }}>
+            <div className="t">{t.name}</div>
+            <div className="s">{STATE_WORD[st[t.id]]}</div>
+          </div>
+        ))}
+      </div>
+      <div style={{ position: "absolute", right: 0, top: 210, width: 400 }}>
+        <span className="cap" style={{ background: "transparent", color: "var(--maths)", border: "2px solid var(--maths)" }}>{furthest.name}</span>
+        <div className="body" style={{ marginTop: 18, color: "var(--mute)", fontSize: 28 }}>is taught at about</div>
+        <div style={{ marginTop: 18 }}><Bands t={furthest} down /></div>
+      </div>
+      <div style={{ position: "absolute", left: 0, bottom: 96, maxWidth: 1250 }}>
+        <span className="cap">{at.strand}</span>
+        <div className="cap-text">{sentence[st[at.id]]}</div>
+      </div>
+      <div className="ticker"><span><b>{SYLLABUS.filter((t) => st[t.id] === "secure").length}</b> of {SYLLABUS.length} secure</span><i>·</i><span>no ranks, no cohort</span><i>·</i><span>Up and Down walk the climb</span><i>·</i><span>Back to the topics</span></div>
     </main>
   </>);
 }
