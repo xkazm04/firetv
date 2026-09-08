@@ -13,7 +13,7 @@ import type { RuleCard } from "../rules/english";
 import type { Sentence } from "../rules/essay";
 
 export type Subject = "maths" | "english" | "essay";
-export type Screen = "landing" | "pair" | "joined" | "tonight" | "units" | "calendar" | "page" | "hint" | "lesson" | "sentence" | "headtohead" | "essaytype" | "forensic" | "playbook" | "xray" | "break" | "recap" | "learner" | "profile";
+export type Screen = "landing" | "pair" | "joined" | "tonight" | "units" | "calendar" | "page" | "hint" | "lesson" | "sentence" | "headtohead" | "essaytype" | "forensic" | "playbook" | "xray" | "break" | "recap" | "learner" | "profile" | "topics" | "practice" | "walk" | "standing";
 
 export type StudentType = "elementary" | "high-school" | "other";
 export interface Profile { id: string; name: string; type: StudentType; age?: number; modules: Subject[]; }
@@ -25,6 +25,13 @@ export interface Task { id: string; sub: Subject; name: string; min: number; don
 export interface Hint { key: string; problem: string; stage: 1 | 2; hint1: { hint: string; next: string } | null; hint2: { hint: string; next: string } | null; askedQ: string; rule?: RuleCard; provider?: string; ms?: number; }
 export interface LessonPick { id: string; title: string; t: number; text: string; why: string; youtube?: string; }
 export interface EnglishAnalysis { sentence: string; card: RuleCard; explanation: string; provider?: string; }
+export interface PracticeItem {
+  n: number; question: string; answer: string;
+  studentAnswer?: string; studentWorking?: string;
+  verdict?: "right" | "wrong" | "unsure";
+  slip?: string; said?: string;
+}
+export interface Practice { topic: string; items: PracticeItem[]; pageId?: string; marked: boolean; }
 export interface Verdict { n: number; verdict: "strong" | "faulty" | "neutral"; note: string; }
 export interface EssayAnalysis { text: string; type: string; sentences: Sentence[]; stats: Record<string, number>; verdicts: Verdict[]; summary: string; provider?: string; }
 
@@ -38,6 +45,8 @@ export interface Session {
   awaiting: Subject | null;
   hint: Hint | null; lesson: LessonPick | null; noLesson: boolean; lessonPaused: boolean;
   english: EnglishAnalysis | null; essay: EssayAnalysis | null; essayType: string | null;
+  /** the open maths topic, the practice set on it, and where the walk has got to */
+  topic: string | null; practice: Practice | null; walkIx: number;
   status: string; log: { problems: string[]; hints: number; hard: string[]; minutes: number; started: number | null };
   updatedAt: number;
 }
@@ -55,6 +64,9 @@ export type Event =
   | { type: "english.set"; analysis: EnglishAnalysis } | { type: "essay.type"; essayType: string } | { type: "essay.set"; analysis: EssayAnalysis }
   | { type: "task.add"; name: string; sub: Subject; min: number } | { type: "task.done"; id: string; done: boolean }
   | { type: "timer.start" } | { type: "timer.pause" } | { type: "timer.tick"; seconds: number } | { type: "timer.skipbreak" }
+  | { type: "topic.open"; topic: string }
+  | { type: "practice.set"; practice: Practice } | { type: "practice.marked"; items: PracticeItem[] }
+  | { type: "walk"; ix: number } | { type: "practice.clear" }
   | { type: "status"; text: string } | { type: "session.end" } | { type: "reset" };
 
 const DATA = path.join(process.cwd(), "data");
@@ -83,6 +95,7 @@ export function fresh(): Session {
     pages: [], pageIx: 0, itemIx: 0, reading: false, awaiting: null,
     hint: null, lesson: null, noLesson: false, lessonPaused: false,
     english: null, essay: null, essayType: null,
+    topic: null, practice: null, walkIx: 0,
     status: "", log: { problems: [], hints: 0, hard: [], minutes: 0, started: null }, updatedAt: Date.now(),
   };
 }
@@ -128,6 +141,11 @@ export function reduce(s: Session, e: Event): Session {
       if (left === 0) { if (t.phase === "work") { t.phase = "break"; t.left = 5 * 60; t.before = s.screen; n.screen = "break"; } else { t.phase = "work"; t.left = 25 * 60; n.screen = t.before ?? "page"; } }
       n.timer = t; break; }
     case "timer.skipbreak": n.timer = { ...s.timer, phase: "work", left: 25 * 60 }; n.screen = s.timer.before ?? "page"; break;
+    case "topic.open": n.topic = e.topic; n.subject = "maths"; n.screen = "topics"; n.focus = 0; break;
+    case "practice.set": n.practice = e.practice; n.topic = e.practice.topic; n.walkIx = 0; n.screen = "practice"; break;
+    case "practice.marked": if (s.practice) { n.practice = { ...s.practice, items: e.items, marked: true }; n.walkIx = 0; n.screen = "walk"; } break;
+    case "walk": { const len = s.practice?.items.length ?? 0; n.walkIx = len ? Math.min(len - 1, Math.max(0, e.ix)) : 0; break; }
+    case "practice.clear": n.practice = null; n.topic = null; n.screen = "tonight"; n.focus = 0; break;
     case "status": n.status = e.text; break;
     case "session.end": n.timer = { ...s.timer, running: false }; n.screen = "recap"; n.focus = 0; break;
     case "reset": return fresh();

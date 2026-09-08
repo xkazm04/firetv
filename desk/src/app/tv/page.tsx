@@ -178,5 +178,9 @@ function ScreenFor({ s, table }: { s: Session; table: boolean }) {
     case "xray": return <S.Xray s={s} />;
     case "break": return <S.BreakScreen s={s} />;
     case "recap": return <S.Recap s={s} focus={f} />;
+    case "topics": return null; // P3
+    case "practice": return null; // P3
+    case "walk": return null; // P3
+    case "standing": return null; // P3
   }
 }
