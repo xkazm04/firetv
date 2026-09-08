@@ -1,4 +1,4 @@
-import type { Profile, Session, StudentType, Subject, Task } from "@/lib/session/store";
+import type { Profile, SchoolSystem, Session, StudentType, Subject, Task } from "@/lib/session/store";
 
 const ALL: Subject[] = ["maths", "english", "essay"];
 /** What the learner at the desk is interested in. No profile row means everything stays on. */
@@ -22,6 +22,19 @@ export const MODULE_BLURB: Record<Subject, string> = {
   english: "An assistant for learning English at every level. Say a sentence, see the tense and the word that decided it.",
   essay: "An analyst for written thoughts. See what your paragraph does and what it lacks, never rewritten for you.",
 };
+/** The school systems the desk can read a learner's progress against; UK when a profile has none. */
+export const SYSTEMS: SchoolSystem[] = ["us", "uk", "cz", "de"];
+export const DEFAULT_SYSTEM: SchoolSystem = "uk";
+export const SYSTEM_WORDS: Record<SchoolSystem, string> = { us: "United States", uk: "United Kingdom", cz: "Czech Republic", de: "Germany" };
+export const SYSTEM_BLURB: Record<SchoolSystem, string> = {
+  us: "Progress is shown against US grades.",
+  uk: "Progress is shown against UK years.",
+  cz: "Progress is shown against Czech ročníky.",
+  de: "Progress is shown against German Klassen.",
+};
+/** The system on a profile, or the default. */
+export function systemOf(p: Profile | null | undefined): SchoolSystem { return p?.system ?? DEFAULT_SYSTEM; }
+
 export const TYPES: StudentType[] = ["elementary", "high-school", "other"];
 export const TYPE_WORDS: Record<StudentType, string> = { elementary: "Elementary school", "high-school": "High school", other: "Other" };
 export const TYPE_BLURB: Record<StudentType, string> = {
@@ -31,14 +44,15 @@ export const TYPE_BLURB: Record<StudentType, string> = {
 };
 
 /** One focusable pick on the profile screen. */
-export interface Cell { kind: "type" | "age" | "interest" | "save" | "back"; label: string; blurb: string; type?: StudentType; age?: number; sub?: Subject }
+export interface Cell { kind: "type" | "age" | "system" | "interest" | "save" | "back"; label: string; blurb: string; type?: StudentType; age?: number; system?: SchoolSystem; sub?: Subject }
 export interface Row { title: string; cells: Cell[] }
 
-/** The pick rows for a draft: type, age (school types only), interests, actions. The TV and the D-pad share this. */
+/** The pick rows for a draft: type, age (school types only), school system, interests, actions. The TV and the D-pad share this. */
 export function profileRows(d: Profile | null): Row[] {
   const t = d?.type ?? "high-school", r = AGE_RANGE[t];
   const rows: Row[] = [{ title: "Type of student", cells: TYPES.map((x) => ({ kind: "type", label: TYPE_WORDS[x], blurb: TYPE_BLURB[x], type: x })) }];
   if (r) rows.push({ title: "Age", cells: Array.from({ length: r[1] - r[0] + 1 }, (_, i) => r[0] + i).map((n) => ({ kind: "age", label: String(n), blurb: "", age: n })) });
+  rows.push({ title: "School system", cells: SYSTEMS.map((x) => ({ kind: "system", label: SYSTEM_WORDS[x], blurb: SYSTEM_BLURB[x], system: x })) });
   rows.push({ title: "Interested in", cells: (["maths", "english", "essay"] as Subject[]).map((m) => ({ kind: "interest", label: BRAND[m], blurb: MODULE_BLURB[m], sub: m })) });
   rows.push({ title: "", cells: [{ kind: "save", label: "Save", blurb: "Sit at this desk with these picks." }, { kind: "back", label: "Back", blurb: "Throw the draft away and go back." }] });
   return rows;

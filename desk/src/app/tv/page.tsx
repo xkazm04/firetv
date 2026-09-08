@@ -94,15 +94,16 @@ export default function TV() {
           if (k === "ArrowRight") move(n, 1); if (k === "ArrowLeft") move(n, -1);
           if (back) nav(s.back ?? "landing");
           if (sel) { const p = s.profiles[f]; if (p) post({ type: "learner.set", id: p.id }); else { post({ type: "profile.draft", patch: {} }); nav("profile"); } }
-          if (menu) { const p = s.profiles[f]; if (p) { post({ type: "profile.draft", patch: { id: p.id, name: p.name, type: p.type, modules: p.modules } }); nav("profile"); } }
+          if (menu) { const p = s.profiles[f]; if (p) { post({ type: "profile.draft", patch: { id: p.id, name: p.name, type: p.type, age: p.age, system: p.system, modules: p.modules } }); nav("profile"); } }
           break; }
         case "profile": {
-          // rows of picks (type, age when a school type, interests, actions); Up/Down keep the column
+          // rows of picks (type, age when a school type, school system, interests, actions); Up/Down keep the column
           const rows = profileRows(s.draft), at = locate(rows, f), cell = rows[at.r].cells[at.c];
           if (k === "ArrowRight") post({ type: "focus", focus: flat(rows, at.r, at.c + 1) }); if (k === "ArrowLeft") post({ type: "focus", focus: flat(rows, at.r, at.c - 1) });
           if (k === "ArrowDown" && at.r < rows.length - 1) post({ type: "focus", focus: flat(rows, at.r + 1, at.c) }); if (k === "ArrowUp" && at.r > 0) post({ type: "focus", focus: flat(rows, at.r - 1, at.c) });
           if (sel) { if (cell.kind === "type" && cell.type) post({ type: "profile.draft", patch: { type: cell.type } });
             else if (cell.kind === "age") post({ type: "profile.draft", patch: { age: cell.age } });
+            else if (cell.kind === "system" && cell.system) post({ type: "profile.draft", patch: { system: cell.system } });
             else if (cell.kind === "interest" && cell.sub) { const m = cell.sub, on = s.draft?.modules ?? []; post({ type: "profile.draft", patch: { modules: on.includes(m) ? on.filter((x) => x !== m) : [...on, m] } }); }
             else if (cell.kind === "save") post({ type: "profile.save" }); else post({ type: "profile.discard" }); }
           if (menu && !s.joined) post({ type: "nav", screen: "pair", focus: 0, from: "profile" });

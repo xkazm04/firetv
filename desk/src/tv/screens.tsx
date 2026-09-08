@@ -5,7 +5,7 @@
  */
 import { useEffect, useState } from "react";
 import QRCode from "qrcode";
-import type { Profile, Session, Subject } from "@/lib/session/store";
+import type { Profile, SchoolSystem, Session, Subject } from "@/lib/session/store";
 import type { Topic } from "@/lib/library/syllabus";
 import { LESSONS, ESSAY_TYPES } from "@/lib/library/lessons.data";
 import { fmt } from "./useSession";
@@ -13,7 +13,7 @@ import { fmt } from "./useSession";
 
 /** The OCR writes exponents as ^n and the tutor may too; the screen shows them as printed. */
 export const shown = (s: string) => s.replace(/\^2/g, "²").replace(/\^3/g, "³").replace(/\*\*/g, "").replace(/\$/g, "");
-import { BRAND, MODULE_BLURB, TYPE_WORDS, profileRows, locate, onModules } from "@/tv/profileRows";
+import { BRAND, MODULE_BLURB, TYPE_WORDS, profileRows, locate, onModules, systemOf } from "@/tv/profileRows";
 const NAME = BRAND;
 
 function Rail({ s }: { s: Session }) {
@@ -135,10 +135,13 @@ export function continueCard(s: Session): Continue | null {
   return null;
 }
 
-/** The two doors the D-pad meets: the sheet you were given, and a topic you choose. */
+/**
+ * The two doors the D-pad meets: the sheet you were given, and a topic you choose. A label and a
+ * name each — what either one does is the caption's job, and saying it twice was the old fault.
+ */
 const DOORS = [
-  { k: "The sheet you were given", t: "I have homework", d: "Snap it; the desk reads it problem by problem." },
-  { k: "No sheet needed", t: "Teach me something", d: "Pick a topic; the desk writes the questions." },
+  { k: "The sheet you were given", t: "I have homework" },
+  { k: "No sheet needed", t: "Teach me something" },
 ];
 function doorCaption(s: Session, i: number): string {
   if (i === 1) return "Pick a topic and the desk writes six questions to work on paper, then marks them from a photo.";
@@ -147,28 +150,95 @@ function doorCaption(s: Session, i: number): string {
   return "Snap the sheet on the phone and the desk reads it, one problem at a time — hints, never the answer.";
 }
 
-/** How long ago, in the words a person would use. Calendar days, not elapsed hours. */
-function ago(at: number): string {
-  const day = (t: number) => { const d = new Date(t); return Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()); };
-  const n = Math.round((day(Date.now()) - day(at)) / 86400000);
-  return n <= 0 ? "Today" : n === 1 ? "Yesterday" : n < 7 ? `${n} days ago` : n < 14 ? "Last week" : `${Math.floor(n / 7)} weeks ago`;
+/** A day, in the words a person would use. Calendar days, not elapsed hours. */
+const DAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+function day(at: number): string {
+  const d = new Date(at), mid = (t: Date) => Date.UTC(t.getFullYear(), t.getMonth(), t.getDate());
+  const n = Math.round((mid(new Date()) - mid(d)) / 86400000);
+  return n <= 0 ? "Today" : n === 1 ? "Yesterday" : n < 7 ? DAYS[d.getDay()] : `${d.getDate()} ${MONTHS[d.getMonth()]}`;
 }
 
 const COUNT = ["", "One", "Two", "Three", "Four", "Five"];
 
+/** The last maths sheets, newest first: a title and a day each. Nothing counted, nothing explained. */
+function Sheets({ s }: { s: Session }) {
+  const rows = (s.history ?? []).filter((h) => h.kind === "homework").slice(-4).reverse();
+  if (!rows.length) return <div className="nothing">Nothing yet</div>;
+  return (
+    <div className="sheets">
+      {rows.map((h, i) => (
+        <div key={`${h.at}-${i}`} className="s"><div className="t">{h.label}</div><div className="w">{day(h.at)}</div></div>
+      ))}
+    </div>
+  );
+}
+
+/** The one school system's own word for a topic's year — the band as a single fact. */
+const SYS_TAG: Record<SchoolSystem, string> = { us: "US", uk: "UK", cz: "CZ", de: "DE" };
+function yearWord(t: Topic, sys: SchoolSystem): string {
+  return { us: `Grade ${t.year.us}`, uk: `Year ${t.year.uk}`, cz: `${t.year.cz}. ročník`, de: `Klasse ${t.year.de}` }[sys];
+}
+
 /**
- * M0 · Math Buddy's home. Only this module is on this screen: what is still open, what happened
- * last, where the path goes next, and what the desk noticed. Focus 0 is the continue card when
- * there is one; the two doors follow it.
+ * Where the learner stands on the path, drawn rather than said: one node per topic, white where
+ * they have been, and a red tick at the point their school system would normally have them at.
+ * No age (or a learner outside a school system) means no tick and no verdict — there is nothing
+ * honest to compare against, and an invented comparison is worse than none.
+ */
+const PATH_W = 1240;
+function Path({ s }: { s: Session }) {
+  const me = s.profiles.find((p) => p.id === s.learner.id);
+  const sys = systemOf(me);
+  const secure = new Set(Object.values(s.skills ?? {}).filter((r) => r.secure).map((r) => r.topic));
+  const done = SYLLABUS.filter((t) => secure.has(t.id)).length;
+  const N = SYLLABUS.length, cell = PATH_W / N, cx = (i: number) => cell * i + cell / 2;
+
+  // nothing measured and nothing ever attempted: not a greyed-out track, a starting line
+  if (!done && !(s.history ?? []).some((h) => h.kind === "practice") && !s.practice) {
+    const first = SYLLABUS[0];
+    return (
+      <div>
+        <div className="chan" style={{ color: "var(--mute)" }}>Start here</div>
+        <div style={{ fontFamily: "var(--display)", fontSize: 76, fontWeight: 800, textTransform: "uppercase", letterSpacing: ".02em", lineHeight: .95, marginTop: 14, maxWidth: 1150 }}>{first.name}</div>
+        <div className="chan" style={{ marginTop: 26, color: "var(--maths)" }}>{SYS_TAG[sys]} · {yearWord(first, sys)}</div>
+      </div>
+    );
+  }
+
+  const age = me && me.type !== "other" ? me.age : undefined;
+  const exp = age === undefined ? null : expectedIndex(sys, age);
+  const tick = exp === null ? null : Math.max(0, Math.min(N - 1, exp));
+  const gap = exp === null ? null : done - Math.max(0, exp);
+  const verdict = gap === null ? "" : gap > 0 ? `Ahead by ${COUNT[Math.min(gap, 5)].toLowerCase()}` : gap === 0 ? "On schedule" : `${COUNT[Math.min(-gap, 5)]} behind`;
+  const state = (i: number) => (i < done ? "secure" : i === done ? "here" : "later");
+  return (
+    <div className="path" style={{ width: PATH_W }}>
+      <div className="above">{tick !== null && <div className="tick" style={{ left: cx(tick) }}><b>Expected at {age}</b></div>}</div>
+      <div className="nodes" style={{ gridTemplateColumns: `repeat(${N}, 1fr)` }}>
+        <div className="trk" style={{ left: cx(0), width: cx(N - 1) - cx(0) }} />
+        {done > 0 && <div className="trk" data-walked="true" style={{ left: cx(0), width: cx(Math.min(done, N - 1)) - cx(0) }} />}
+        {SYLLABUS.map((t, i) => <div key={t.id} className="cell"><i className="sq" data-s={state(i)} /></div>)}
+      </div>
+      <div className="names" style={{ gridTemplateColumns: `repeat(${N}, 1fr)` }}>
+        {SYLLABUS.map((t, i) => <span key={t.id} data-s={state(i)}>{t.name}</span>)}
+      </div>
+      {verdict && <div className="verdict-line">{verdict}</div>}
+    </div>
+  );
+}
+
+/**
+ * M0 · Math Buddy's home. The doors are the screen; the half below them is one panel that belongs
+ * to whichever door is focused — the last sheets, or the path. The continue card takes the focus
+ * first when there is one and leaves that half empty: the caption already says what it does.
  */
 export function Tonight({ s, focus }: { s: Session; focus: number }) {
   const cont = continueCard(s);
   const off = cont ? 1 : 0;
   const secure = Object.values(s.skills ?? {}).filter((r) => r.secure).map((r) => r.topic);
-  const next = nextTopic(secure);
-  const last = (s.history ?? []).at(-1) ?? null;
-  const noticed = (s.memory ?? []).at(-1) ?? "";
   const sheets = s.pages.filter((p) => p.subject === "maths").length;
+  const door = cont && focus === 0 ? -1 : Math.max(0, Math.min(1, focus - off));
   const title = cont ? "One thing is still open"
     : secure.length === SYLLABUS.length ? "Every topic on the path is secure"
     : secure.length ? `${COUNT[secure.length]} of ${SYLLABUS.length} topics secure`
@@ -189,42 +259,14 @@ export function Tonight({ s, focus }: { s: Session; focus: number }) {
         {DOORS.map((d, i) => (
           <div key={d.t} className="card" data-focused={focus === i + off} style={{ minHeight: 160 }}>
             <div className="k">{d.k}</div>
-            <div className="t" style={{ fontSize: cont ? 40 : 46 }}>{d.t}</div>
-            <div className="d" style={{ marginTop: "auto" }}>{d.d}</div>
+            <div className="t" style={{ fontSize: cont ? 40 : 46, marginTop: "auto" }}>{d.t}</div>
           </div>
         ))}
       </div>
-      <div style={{ display: "flex", gap: 52, marginTop: 30, alignItems: "flex-start" }}>
-        <div style={{ width: 430 }}>
-          <div className="chan" style={{ color: "var(--mute)" }}>Where you left off</div>
-          {last
-            ? <>
-                <div style={{ fontSize: 36, fontWeight: 500, marginTop: 14, lineHeight: 1.15 }}>{last.label}</div>
-                <div className="body" style={{ marginTop: 10, color: "var(--mute)", fontSize: 30 }}>
-                  {ago(last.at)} · {last.detail}
-                </div>
-              </>
-            : <div className="body" style={{ marginTop: 14, color: "var(--mute)", fontSize: 30 }}>Nothing yet — this is your first night with Math Buddy.</div>}
-        </div>
-        <div style={{ width: 890 }}>
-          <div className="chan" style={{ color: "var(--mute)" }}>Next on the path</div>
-          {next
-            ? <>
-                <div style={{ fontSize: 36, fontWeight: 500, marginTop: 14, lineHeight: 1.15 }}>{next.name}</div>
-                <div style={{ marginTop: 18 }}><Bands t={next} /></div>
-              </>
-            : <div className="body" style={{ marginTop: 14, color: "var(--mute)", fontSize: 30 }}>Nothing left on this path.</div>}
-        </div>
-      </div>
-      {noticed && (
-        <div style={{ marginTop: 20, maxWidth: 1372 }}>
-          <div className="chan" style={{ color: "var(--mute)" }}>What the desk noticed last time</div>
-          <div className="body" style={{ marginTop: 10, fontSize: 28, lineHeight: 1.3 }}>{noticed}</div>
-        </div>
-      )}
+      <div style={{ marginTop: 44 }}>{door === 0 ? <Sheets s={s} /> : door === 1 ? <Path s={s} /> : null}</div>
       <div style={{ position: "absolute", left: 0, bottom: 96 }}>
         <span className="cap" style={{ background: "transparent", color: "var(--maths)", border: "2px solid var(--maths)" }}>Math Buddy</span>
-        <div className="cap-text">{cont && focus === 0 ? cont.cap : doorCaption(s, Math.max(0, Math.min(1, focus - off)))}</div>
+        <div className="cap-text">{cont && focus === 0 ? cont.cap : doorCaption(s, Math.max(0, door))}</div>
       </div>
       <div className="ticker"><span><b>{secure.length}</b> of {SYLLABUS.length} topics secure</span><i>·</i><span>{sheets ? <><b>{sheets}</b> sheet{sheets === 1 ? "" : "s"} on the desk</> : "no sheet yet"}</span><i>·</i><span>{s.practice ? (s.practice.marked ? "set marked" : "set on paper") : "no set open"}</span>
         <i>·</i>{s.joined ? <span>phone joined</span> : <span>phone code <b>{s.pin}</b> · Down to pair</span>}</div>
@@ -587,20 +629,20 @@ export function ProfileScreen({ s, focus }: { s: Session; focus: number }) {
   const editing = !!d && s.profiles.some((p) => p.id === d.id);
   const name = d?.name.trim() ?? "";
   const rows = profileRows(d), at = locate(rows, focus), cell = rows[at.r].cells[at.c];
-  const chosen = (c: (typeof cell)) => (c.kind === "type" && d?.type === c.type) || (c.kind === "age" && d?.age === c.age) || (c.kind === "interest" && !!c.sub && !!d?.modules.includes(c.sub));
+  const chosen = (c: (typeof cell)) => (c.kind === "type" && d?.type === c.type) || (c.kind === "age" && d?.age === c.age) || (c.kind === "system" && d?.system === c.system) || (c.kind === "interest" && !!c.sub && !!d?.modules.includes(c.sub));
   return (<>
     <div className="band band-right" />
     <main className="content-full">
       <div className="eyebrow">{editing ? `Preferences · ${d!.name}` : "New learner"}</div>
       <div className="title">{name || "Name it on the phone"}</div>
       <div className="body" style={{ color: "var(--mute)", marginTop: 16 }}>{s.joined ? "Type the name on the phone's Profile tab" : `Phone code ${s.pin} · Menu to pair, or open the phone's Profile tab`}</div>
-      <div className="guide" style={{ marginTop: 24, maxWidth: 1240 }}>
+      <div className="guide" style={{ marginTop: 20, maxWidth: 1680 }}>
         {rows.slice(0, -1).map((row, r) => (
-          <div key={row.title} className="row" style={{ gridTemplateColumns: "240px 1fr", padding: "14px 0" }}>
+          <div key={row.title} className="row" style={{ gridTemplateColumns: "240px 1fr", padding: "10px 0" }}>
             <div className="u">{row.title}</div>
-            <div style={{ display: "flex", gap: row.cells.length > 5 ? 12 : 20 }}>
+            <div style={{ display: "flex", gap: row.cells.length > 3 ? 12 : 20 }}>
               {row.cells.map((c, i) => (
-                <button key={c.label} className="btn" data-focused={at.r === r && at.c === i} style={{ whiteSpace: "nowrap", ...(row.cells.length > 5 ? { padding: "20px 24px" } : null), ...(c.sub ? { "--pick": `var(--${c.sub})` } as React.CSSProperties : null) }} data-chosen={chosen(c)}>{c.label}</button>
+                <button key={c.label} className="btn" data-focused={at.r === r && at.c === i} style={{ whiteSpace: "nowrap", ...(row.cells.length > 3 ? { padding: "14px 22px" } : null), ...(c.sub ? { "--pick": `var(--${c.sub})` } as React.CSSProperties : null) }} data-chosen={chosen(c)}>{c.label}</button>
               ))}
             </div>
           </div>
@@ -619,7 +661,7 @@ export function ProfileScreen({ s, focus }: { s: Session; focus: number }) {
 }
 
 // ================= P3 · Math Buddy: topics, practice, walk, standing =================
-import { SYLLABUS, nextTopic, topic as topicById } from "@/lib/library/syllabus";
+import { SYLLABUS, expectedIndex, topic as topicById } from "@/lib/library/syllabus";
 import { slip as slipById } from "@/lib/rules/maths";
 
 /** The four reference bands as small tabular facts, never a sentence. */

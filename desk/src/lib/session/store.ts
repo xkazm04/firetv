@@ -17,7 +17,9 @@ export type Subject = "maths" | "english" | "essay";
 export type Screen = "landing" | "pair" | "joined" | "tonight" | "units" | "calendar" | "page" | "hint" | "lesson" | "sentence" | "headtohead" | "essaytype" | "forensic" | "playbook" | "xray" | "break" | "recap" | "learner" | "profile" | "topics" | "practice" | "walk" | "standing";
 
 export type StudentType = "elementary" | "high-school" | "other";
-export interface Profile { id: string; name: string; type: StudentType; age?: number; modules: Subject[]; }
+/** The school system a learner's progress is read against. One per profile; the desk defaults to UK. */
+export type SchoolSystem = "us" | "uk" | "cz" | "de";
+export interface Profile { id: string; name: string; type: StudentType; age?: number; system?: SchoolSystem; modules: Subject[]; }
 
 
 export interface PageItem { n: number; text: string; cx: number; cy: number; band: [number, number]; key: string; }

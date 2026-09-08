@@ -192,3 +192,31 @@
 .stair .step[data-focused="true"] { background: #fff; color: var(--ink); transform: skewX(-4deg); box-shadow: 12px 12px 0 var(--signal); border-left-color: var(--ink); }
 .stair .step[data-focused="true"] .s { color: var(--signal); }
 .stair .step[data-focused="true"] { opacity: 1; }
+
+/* ---- M0 · the path, as one picture: a node per topic, and where the learner stands ---- */
+.path { position: relative; }
+.path .above { position: relative; height: 74px; }
+/* the expected mark: a thin red tick over the track, and the only red on this screen after the band */
+.path .tick { position: absolute; bottom: 0; width: 4px; height: 34px; background: var(--signal); transform: translateX(-50%); }
+.path .tick b { position: absolute; bottom: 42px; left: 50%; transform: translateX(-50%); white-space: nowrap;
+  font-family: var(--display); font-size: 22px; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; color: var(--signal); }
+.path .nodes { position: relative; height: 68px; display: grid; }
+.path .nodes .trk { position: absolute; top: 33px; height: 2px; background: var(--line); }
+.path .nodes .trk[data-walked="true"] { background: #fff; }
+.path .nodes .cell { display: grid; place-items: center; position: relative; }
+.path .sq { display: block; width: 38px; height: 38px; background: #fff; }
+.path .sq[data-s="here"] { width: 60px; height: 60px; background: transparent; box-shadow: inset 0 0 0 4px #fff; }
+.path .sq[data-s="later"] { width: 28px; height: 28px; background: var(--ink-2); box-shadow: inset 0 0 0 2px var(--line); }
+.path .names { display: grid; margin-top: 18px; }
+.path .names span { font-family: var(--display); font-size: 24px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase;
+  color: var(--mute); text-align: center; line-height: 1.1; padding: 0 12px; }
+.path .names span[data-s="secure"], .path .names span[data-s="here"] { color: #fff; }
+.path .verdict-line { margin-top: 30px; font-family: var(--display); font-size: 44px; font-weight: 800;
+  text-transform: uppercase; letter-spacing: .06em; }
+
+/* ---- M0 · the last sheets: a title and a day, nothing else ---- */
+.sheets { display: flex; flex-direction: column; max-width: 1240px; }
+.sheets .s { display: grid; grid-template-columns: 1fr auto; align-items: baseline; gap: 40px; padding: 16px 0; border-bottom: 1px solid var(--line); }
+.sheets .s .t { font-size: 32px; font-weight: 500; line-height: 1.15; }
+.sheets .s .w { font-family: var(--display); font-size: 24px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--mute); font-variant-numeric: tabular-nums; }
+.nothing { font-family: var(--display); font-size: 48px; font-weight: 800; text-transform: uppercase; letter-spacing: .06em; color: var(--mute); }
