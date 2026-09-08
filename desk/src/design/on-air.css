@@ -60,6 +60,11 @@
 .btn { font-family: var(--display); font-size: 36px; font-weight: 800; text-transform: uppercase; letter-spacing: .06em; padding: 20px 40px; background: transparent; color: #fff; border: 3px solid rgba(255,255,255,.4); cursor: default; transition: transform .1s; }
 .btn[data-focused="true"] { background: #fff; color: var(--ink); border-color: #fff; transform: skewX(-6deg) scale(1.04); box-shadow: 12px 12px 0 var(--signal); }
 .btn[data-disabled="true"] { opacity: .35; }
+/* A chosen pick is coloured, never white: tint for a single choice, the channel colour for an interest. Focus stays the white skew. */
+.btn[data-chosen="true"] { border-color: var(--pick, var(--tint)); color: var(--pick, var(--tint)); }
+.btn[data-chosen="true"]::before { content: "■ "; }
+.btn[data-chosen="true"][data-focused="true"] { color: var(--ink); border-color: #fff; }
+.btn[data-chosen="true"][data-focused="true"]::before { color: var(--pick, var(--signal)); }
 .actions { position: absolute; left: 0; bottom: 96px; display: flex; gap: 24px; }
 .row-focus[data-focused="true"] { background: #fff; color: var(--ink); transform: skewX(-4deg); box-shadow: 10px 10px 0 var(--signal); }
 

@@ -6,15 +6,21 @@
 import { useEffect, useRef, useState } from "react";
 import { useSession, call, fmt } from "@/tv/useSession";
 import { ESSAY_TYPES } from "@/lib/library/lessons.data";
-import type { Subject } from "@/lib/session/store";
+import type { Session, Subject } from "@/lib/session/store";
 
-type PScreen = "join" | "capture" | "point" | "say" | "paste" | "tonight" | "parent" | "profile";
+type PScreen = "join" | "joined" | "capture" | "point" | "say" | "paste" | "tonight" | "parent" | "profile";
 const SAMPLES: Array<{ id: Subject; title: string; file: string }> = [
   { id: "maths", title: "Algebra — Exercise 4.2", file: "/samples/maths.jpg" },
   { id: "english", title: "English — Unit 6", file: "/samples/english.jpg" },
   { id: "essay", title: "Later school starts — draft", file: "/samples/essay.jpg" },
 ];
 
+/** The TV's screens in the user's words, for the phone's status line. */
+const TV_WORDS: Partial<Record<Session["screen"], string>> = {
+  landing: "the start screen", pair: "the pairing code", tonight: "Tonight", learner: "Who is at the desk", profile: "a new learner",
+  units: "the units guide", calendar: "the calendar", page: "the page", hint: "a hint", lesson: "a lesson", sentence: "your sentence",
+  headtohead: "head to head", essaytype: "the essay lens", forensic: "the essay", playbook: "the playbook", xray: "the x-ray", break: "a break", recap: "the recap",
+};
 export default function Phone() {
   const { s, connected, post } = useSession();
   const [role, setRole] = useState<"student" | "parent">("student");
@@ -32,7 +38,9 @@ export default function Phone() {
   const video = useRef<HTMLVideoElement>(null);
   const [cam, setCam] = useState<MediaStream | null>(null);
 
-  useEffect(() => { if (s?.joined && screen === "join") setScreen("capture"); }, [s?.joined, screen]);
+  // a fresh join lands on the confirmation, never straight into the camera
+  useEffect(() => { if (s?.joined && screen === "join") setScreen("joined"); }, [s?.joined, screen]);
+  useEffect(() => { if (s && !s.joined && screen !== "join" && screen !== "profile") setScreen("join"); }, [s?.joined]); // eslint-disable-line react-hooks/exhaustive-deps
   // the QR on the TV carries the code: arrive with ?pin= and the phone joins itself, then tidies the bar
   useEffect(() => {
     if (!s || s.joined) return;
@@ -88,13 +96,23 @@ export default function Phone() {
     <div className="phone">
       <div className="ptop">
         <div className="who"><button aria-pressed={role === "student"} onClick={() => { setRole("student"); }}>Student</button><button aria-pressed={role === "parent"} onClick={() => { setRole("parent"); setScreen("parent"); }}>Parent</button></div>
-        <div className="link">{s?.joined ? <><b>joined</b> · {s.learner.name}</> : connected ? "not joined" : "connecting…"}</div>
+        <div className="link">{s?.joined ? <><b>joined</b> · {s.learner.name}</> : connected ? "not joined" : "connecting…"}{s && <small>TV · {TV_WORDS[s.screen] ?? s.screen}</small>}</div>
       </div>
       <div className="pbody">
-        {screen === "join" && <div className="pscreen"><h3>Join the desk</h3><p>Type the code on the TV.</p>
-          <div className="field"><input inputMode="numeric" placeholder="4-digit code" value={pin} onChange={(e) => setPin(e.target.value)} /><button className="pbtn" onClick={join}>Join</button></div>
+        {screen === "join" && <div className="pscreen"><h3>Join the desk</h3>
+          <p>{!s ? "Looking for the TV…" : s.screen === "pair" ? "The TV is showing the code. Scan it, or type it here." : `The TV is on ${TV_WORDS[s.screen] ?? s.screen}. Ask it for the code, then type it here.`}</p>
+          {s && s.screen !== "pair" && <button className="pbtn" data-secondary="true" onClick={() => post({ type: "nav", screen: "pair", from: s.screen })}>Show the code on the TV</button>}
+          <div className="field"><input inputMode="numeric" placeholder="4-digit code" value={pin} onChange={(e) => setPin(e.target.value)} /><button className="pbtn" data-signal="true" onClick={join}>Join</button></div>
           <p style={{ fontSize: 12 }}>The TV serves this page itself; nothing to install.</p>
           <button className="pbtn" data-secondary="true" onClick={() => nav("profile")}>Naming a new learner? Open Profile.</button></div>}
+
+        {screen === "joined" && s && <div className="pscreen"><h3>On the desk</h3>
+          <p>Joined as <b>{s.learner.name}</b>. The TV is on {TV_WORDS[s.screen] ?? s.screen}.</p>
+          {s.screen === "profile" || s.draft
+            ? <button className="pbtn" data-signal="true" onClick={() => nav("profile")}>Name the new learner</button>
+            : <button className="pbtn" data-signal="true" onClick={() => nav("capture")}>Snap the page</button>}
+          <button className="pbtn" data-secondary="true" onClick={() => nav("tonight")}>Set up tonight first</button>
+          <p style={{ fontSize: 12 }}>Not {s.learner.name}? Press Up on the TV's Tonight to switch who is at the desk.</p></div>}
 
         {screen === "profile" && <div className="pscreen"><h3>Profile</h3>
           <p>At the desk now: <b>{s?.learner.name ?? "—"}</b></p>
@@ -148,7 +166,7 @@ export default function Phone() {
         <div className="pstatus">{msg}</div>
       </div>
       <div className="pnav">
-        {([["capture", "Capture"], ["point", "Point & ask"], ["say", "Say it"], ["paste", "Essay"], ["tonight", "Tonight"], ["parent", "Recap"], ["profile", "Profile"]] as Array<[PScreen, string]>).map(([id, label]) => <button key={id} aria-pressed={screen === id} onClick={() => nav(id)}>{label}</button>)}
+        {([["capture", "Capture"], ["point", "Point & ask"], ["say", "Say it"], ["paste", "Essay"], ["tonight", "Tonight"], ["parent", "Recap"], ["profile", "Profile"]] as Array<[PScreen, string]>).map(([id, label]) => <button key={id} aria-pressed={screen === id} disabled={!s?.joined && id !== "profile"} onClick={() => nav(id)}>{label}</button>)}
       </div>
     </div>
   );

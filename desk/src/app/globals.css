@@ -24,6 +24,8 @@ button, input, textarea { font: inherit; }
 .pbody { flex: 1; padding: 16px 16px 96px; display: flex; flex-direction: column; gap: 14px; }
 .pnav { display: flex; border-top: 1px solid #D7DEE5; background: #fff; position: sticky; bottom: 0; }
 .pnav button { flex: 1; border: 0; background: transparent; padding: 12px 2px; font-size: 11px; color: #5E6E7E; cursor: pointer; }
+.pnav button:disabled { opacity: .3; cursor: default; }
+.ptop .link small { display: block; font-size: 11px; color: #8A96A3; text-align: right; }
 .pnav button[aria-pressed="true"] { color: #1B2632; font-weight: 600; box-shadow: inset 0 3px 0 #E23D28; }
 .pscreen { display: flex; flex-direction: column; gap: 14px; }
 .pscreen h3 { margin: 0; font-family: var(--display); font-size: 26px; font-weight: 800; text-transform: uppercase; letter-spacing: .02em; }

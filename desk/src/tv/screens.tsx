@@ -109,7 +109,7 @@ export function Tonight({ s, focus }: { s: Session; focus: number }) {
           </div>
         ))}
       </div>
-      <div className="body" style={{ marginTop: 56, color: "var(--mute)" }}>{s.pages.length ? "Select a task, or Down to the page." : "Point your phone at the page to begin."}</div>
+      <div className="body" style={{ marginTop: 56, color: "var(--mute)" }}>{s.pages.length ? "Select a task, or Down to the page." : s.joined ? `${s.learner.name}’s phone is on the desk. Snap the page on it to begin.` : "Point your phone at the page to begin."}</div>
       <div className="ticker"><span><b>{open.length}</b> to do</span><i>·</i><span>{s.pages.length} page{s.pages.length === 1 ? "" : "s"} captured</span><i>·</i><span>Menu marks a task done</span><i>·</i>{s.joined ? <span>phone joined</span> : <span>phone code <b>{s.pin}</b> · Down to pair</span>}</div>
     </main>
   </>);
@@ -483,7 +483,7 @@ export function ProfileScreen({ s, focus }: { s: Session; focus: number }) {
             <div className="u">{row.title}</div>
             <div style={{ display: "flex", gap: row.cells.length > 5 ? 12 : 20 }}>
               {row.cells.map((c, i) => (
-                <button key={c.label} className="btn" data-focused={at.r === r && at.c === i} style={{ whiteSpace: "nowrap", ...(row.cells.length > 5 ? { padding: "20px 24px" } : null), ...(chosen(c) ? { borderColor: "#fff", borderLeftWidth: 16 } : null) }}>{c.label}</button>
+                <button key={c.label} className="btn" data-focused={at.r === r && at.c === i} style={{ whiteSpace: "nowrap", ...(row.cells.length > 5 ? { padding: "20px 24px" } : null), ...(c.sub ? { "--pick": `var(--${c.sub})` } as React.CSSProperties : null) }} data-chosen={chosen(c)}>{c.label}</button>
               ))}
             </div>
           </div>
