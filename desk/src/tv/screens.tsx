@@ -3,7 +3,7 @@
  * Every television screen, composed on On Air. Each takes the session and a `focus` index and
  * draws itself; the D-pad logic that changes them lives in app/tv/page.tsx. No two share a layout.
  */
-import type { Profile, Session, StudentType } from "@/lib/session/store";
+import type { Profile, Session } from "@/lib/session/store";
 import { LESSONS, ESSAY_TYPES } from "@/lib/library/lessons.data";
 import { fmt } from "./useSession";
 
@@ -11,7 +11,8 @@ const SUBJECTS: Array<Session["subject"]> = ["maths", "english", "essay"];
 
 /** The OCR writes exponents as ^n and the tutor may too; the screen shows them as printed. */
 export const shown = (s: string) => s.replace(/\^2/g, "²").replace(/\^3/g, "³").replace(/\*\*/g, "").replace(/\$/g, "");
-const NAME: Record<Session["subject"], string> = { maths: "Math Buddy", english: "Linga", essay: "Essay Master" };
+import { BRAND, MODULE_BLURB, TYPE_WORDS, profileRows, locate } from "@/tv/profileRows";
+const NAME = BRAND;
 
 function Rail({ s }: { s: Session }) {
   return (
@@ -60,9 +61,9 @@ function Qr({ seed }: { seed: number }) {
 // ---- S1 Landing ----
 /** The three modules, each branded as its own app: a name, an illustration, and one caption when it is active. */
 const MODULES: Array<{ name: string; ch: Session["subject"]; img: string; tag: string; d: string }> = [
-  { name: "Math Buddy", ch: "maths", img: "/brand/math-buddy.png", tag: "Maths · high school", d: "Learn and practise high-school maths one step at a time. The desk gives you the next step, never the answer." },
-  { name: "Linga", ch: "english", img: "/brand/linga.png", tag: "English · every level", d: "An assistant for learning English at every level. Say a sentence, see the tense and the word that decided it." },
-  { name: "Essay Master", ch: "essay", img: "/brand/essay-master.png", tag: "Essay · anyone who writes", d: "An analyst for written thoughts. See what your paragraph does and what it lacks, never rewritten for you." },
+  { name: "Math Buddy", ch: "maths", img: "/brand/math-buddy.png", tag: "Maths · high school", d: MODULE_BLURB.maths },
+  { name: "Linga", ch: "english", img: "/brand/linga.png", tag: "English · every level", d: MODULE_BLURB.english },
+  { name: "Essay Master", ch: "essay", img: "/brand/essay-master.png", tag: "Essay · anyone who writes", d: MODULE_BLURB.essay },
 ];
 /** Focus 0-2 are the modules, 3-4 the two actions. The caption below the row describes whatever is focused. */
 export function Landing({ s, focus }: { s: Session; focus: number }) {
@@ -431,14 +432,12 @@ export function Recap({ s, focus }: { s: Session; focus: number }) {
   </>);
 }
 /** The student type, said in words — the card's kicker and the caption's chip. */
-const TYPE_WORDS: Record<StudentType, string> = { "high-school": "High school", university: "University", adult: "Adult" };
-const TYPES: StudentType[] = ["high-school", "university", "adult"];
 /** One sentence from the picks: what this desk is set up to do. */
 function picksLine(p: Profile) {
   const join = (a: string[]) => (a.length > 1 ? a.slice(0, -1).join(", ") + " and " + a[a.length - 1] : a[0] ?? "");
-  const rest = p.modules.filter((m) => m !== "maths").map((m) => NAME[m]);
-  if (p.modules.includes("maths")) return rest.length ? `Math Buddy at ${p.type} level, ${join(rest)} on.` : `Math Buddy at ${p.type} level.`;
-  return rest.length ? `${join(rest)} on.` : "No modules on yet.";
+  const on = p.modules.map((m) => NAME[m]);
+  const who = p.type === "other" ? "for someone who just wants to learn" : `for a ${p.age ? `${p.age}-year-old` : TYPE_WORDS[p.type].toLowerCase()} student`;
+  return on.length ? `${join(on)} on, ${who}.` : `Nothing on yet, ${who}.`;
 }
 export function Learner({ s, focus }: { s: Session; focus: number }) {
   const at = s.profiles[focus] ?? null;
@@ -475,33 +474,33 @@ export function ProfileScreen({ s, focus }: { s: Session; focus: number }) {
   const d = s.draft;
   const editing = !!d && s.profiles.some((p) => p.id === d.id);
   const name = d?.name.trim() ?? "";
+  const rows = profileRows(d), at = locate(rows, focus), cell = rows[at.r].cells[at.c];
+  const chosen = (c: (typeof cell)) => (c.kind === "type" && d?.type === c.type) || (c.kind === "age" && d?.age === c.age) || (c.kind === "interest" && !!c.sub && !!d?.modules.includes(c.sub));
   return (<>
     <div className="band band-right" />
     <main className="content-full">
       <div className="eyebrow">{editing ? `Preferences · ${d!.name}` : "New learner"}</div>
       <div className="title">{name || "Name it on the phone"}</div>
       <div className="body" style={{ color: "var(--mute)", marginTop: 16 }}>{s.joined ? "Type the name on the phone's Profile tab" : `Phone code ${s.pin} · open the phone, tab Profile`}</div>
-      <div className="guide" style={{ marginTop: 40, maxWidth: 1180 }}>
-        <div className="row" style={{ gridTemplateColumns: "240px 1fr" }}>
-          <div className="u">Type of student</div>
-          <div style={{ display: "flex", gap: 20 }}>
-            {TYPES.map((t, i) => (
-              <button key={t} className="btn" data-focused={focus === i} style={{ whiteSpace: "nowrap", ...(d?.type === t ? { borderColor: "#fff", borderLeftWidth: 16 } : null) }}>{TYPE_WORDS[t]}</button>
-            ))}
+      <div className="guide" style={{ marginTop: 24, maxWidth: 1240 }}>
+        {rows.slice(0, -1).map((row, r) => (
+          <div key={row.title} className="row" style={{ gridTemplateColumns: "240px 1fr", padding: "14px 0" }}>
+            <div className="u">{row.title}</div>
+            <div style={{ display: "flex", gap: row.cells.length > 5 ? 12 : 20 }}>
+              {row.cells.map((c, i) => (
+                <button key={c.label} className="btn" data-focused={at.r === r && at.c === i} style={{ whiteSpace: "nowrap", ...(row.cells.length > 5 ? { padding: "20px 24px" } : null), ...(chosen(c) ? { borderColor: "#fff", borderLeftWidth: 16 } : null) }}>{c.label}</button>
+              ))}
+            </div>
           </div>
-        </div>
-        <div className="row" style={{ gridTemplateColumns: "240px 1fr" }}>
-          <div className="u">Modules on</div>
-          <div style={{ display: "flex", gap: 20 }}>
-            {SUBJECTS.map((m, i) => (
-              <button key={m} className="btn" data-focused={focus === 3 + i} style={{ whiteSpace: "nowrap" }}>{NAME[m]}{d?.modules.includes(m) && <span className="pill" data-kind="done">on</span>}</button>
-            ))}
-          </div>
-        </div>
+        ))}
+      </div>
+      <div style={{ position: "absolute", left: 0, bottom: 216 }}>
+        <span className="cap">{cell.label}</span>
+        <div className="cap-text">{cell.blurb}</div>
       </div>
       <div className="actions">
-        <button className="btn" data-focused={focus === 6} data-disabled={!name}>Save</button>
-        <button className="btn" data-focused={focus === 7}>Back</button>
+        <button className="btn" data-focused={cell.kind === "save"} data-disabled={!name}>Save</button>
+        <button className="btn" data-focused={cell.kind === "back"}>Back</button>
       </div>
     </main>
   </>);

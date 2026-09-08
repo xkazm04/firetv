@@ -9,6 +9,7 @@ import { useSession, call } from "@/tv/useSession";
 import { LESSONS } from "@/lib/library/lessons.data";
 import type { Screen, Session } from "@/lib/session/store";
 import * as S from "@/tv/screens";
+import { profileRows, locate, flat } from "@/tv/profileRows";
 
 export default function TV() {
   const { s, connected, post } = useSession();
@@ -76,16 +77,14 @@ export default function TV() {
           if (menu) { const p = s.profiles[f]; if (p) { post({ type: "profile.draft", patch: { id: p.id, name: p.name, type: p.type, modules: p.modules } }); nav("profile"); } }
           break; }
         case "profile": {
-          // 0-2 the type of student, 3-5 the modules, 6 Save, 7 Back — Up/Down keep the column.
-          const col = f < 3 ? f : f < 6 ? f - 3 : f - 6, row = f < 3 ? 0 : f < 6 ? 1 : 2, wide = [3, 3, 2];
-          const go = (r: number) => post({ type: "focus", focus: [0, 3, 6][r] + Math.min(col, wide[r] - 1) });
-          if (k === "ArrowRight") post({ type: "focus", focus: f - col + Math.min(wide[row] - 1, col + 1) });
-          if (k === "ArrowLeft") post({ type: "focus", focus: f - col + Math.max(0, col - 1) });
-          if (k === "ArrowDown" && row < 2) go(row + 1); if (k === "ArrowUp" && row > 0) go(row - 1);
-          if (sel) { if (f < 3) post({ type: "profile.draft", patch: { type: (["high-school", "university", "adult"] as const)[f] } });
-            else if (f < 6) { const m = (["maths", "english", "essay"] as const)[f - 3]; const on = s.draft?.modules ?? [];
-              post({ type: "profile.draft", patch: { modules: on.includes(m) ? on.filter((x) => x !== m) : [...on, m] } }); }
-            else if (f === 6) post({ type: "profile.save" }); else post({ type: "profile.discard" }); }
+          // rows of picks (type, age when a school type, interests, actions); Up/Down keep the column
+          const rows = profileRows(s.draft), at = locate(rows, f), cell = rows[at.r].cells[at.c];
+          if (k === "ArrowRight") post({ type: "focus", focus: flat(rows, at.r, at.c + 1) }); if (k === "ArrowLeft") post({ type: "focus", focus: flat(rows, at.r, at.c - 1) });
+          if (k === "ArrowDown" && at.r < rows.length - 1) post({ type: "focus", focus: flat(rows, at.r + 1, at.c) }); if (k === "ArrowUp" && at.r > 0) post({ type: "focus", focus: flat(rows, at.r - 1, at.c) });
+          if (sel) { if (cell.kind === "type" && cell.type) post({ type: "profile.draft", patch: { type: cell.type } });
+            else if (cell.kind === "age") post({ type: "profile.draft", patch: { age: cell.age } });
+            else if (cell.kind === "interest" && cell.sub) { const m = cell.sub, on = s.draft?.modules ?? []; post({ type: "profile.draft", patch: { modules: on.includes(m) ? on.filter((x) => x !== m) : [...on, m] } }); }
+            else if (cell.kind === "save") post({ type: "profile.save" }); else post({ type: "profile.discard" }); }
           if (back) post({ type: "profile.discard" });
           break; }
         case "units": {

@@ -6,6 +6,7 @@
  * dev reloads do not lose the desk mid-session; persisted as JSON on every change.
  */
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { AGE_RANGE } from "@/tv/profileRows";
 import path from "node:path";
 import type { RuleCard } from "../rules/english";
 import type { Sentence } from "../rules/essay";
@@ -13,8 +14,9 @@ import type { Sentence } from "../rules/essay";
 export type Subject = "maths" | "english" | "essay";
 export type Screen = "landing" | "pair" | "tonight" | "units" | "calendar" | "page" | "hint" | "lesson" | "sentence" | "headtohead" | "essaytype" | "forensic" | "playbook" | "xray" | "break" | "recap" | "learner" | "profile";
 
-export type StudentType = "high-school" | "university" | "adult";
-export interface Profile { id: string; name: string; type: StudentType; modules: Subject[]; }
+export type StudentType = "elementary" | "high-school" | "other";
+export interface Profile { id: string; name: string; type: StudentType; age?: number; modules: Subject[]; }
+
 
 export interface PageItem { n: number; text: string; cx: number; cy: number; band: [number, number]; key: string; }
 export interface Page { id: string; subject: Subject; title: string; img: string; w: number; h: number; items: PageItem[]; readMs?: number; provider?: string; }
@@ -58,8 +60,8 @@ export function fresh(): Session {
   return {
     pin: String(1000 + Math.floor(Math.random() * 9000)), joined: false, learner: { id: "ema", name: "Ema" },
     profiles: [
-      { id: "ema", name: "Ema", type: "high-school", modules: ["maths", "english", "essay"] },
-      { id: "jakub", name: "Jakub", type: "university", modules: ["english", "essay"] },
+      { id: "ema", name: "Ema", type: "high-school", age: 16, modules: ["maths", "english", "essay"] },
+      { id: "jakub", name: "Jakub", type: "other", modules: ["english", "essay"] },
     ], draft: null,
     subject: "maths", screen: "landing", focus: 0, view: "band",
     tasks: [
@@ -82,7 +84,8 @@ export function reduce(s: Session, e: Event): Session {
     case "nav": n.screen = e.screen; n.focus = e.focus ?? 0; if (e.from) n.back = e.from; break;
     case "focus": n.focus = e.focus; break;
     case "learner.set": { const p = s.profiles.find((x) => x.id === e.id); if (!p) break; n.learner = { id: p.id, name: p.name }; n.screen = "tonight"; n.focus = 0; break; }
-    case "profile.draft": n.draft = { ...(s.draft ?? { id: "p" + Date.now(), name: "", type: "high-school" as StudentType, modules: ["maths", "english", "essay"] as Subject[] }), ...e.patch }; break;
+    case "profile.draft": { const d: Profile = { ...(s.draft ?? { id: "p" + Date.now(), name: "", type: "high-school" as StudentType, modules: ["maths", "english", "essay"] as Subject[] }), ...e.patch };
+      const r = AGE_RANGE[d.type]; if (!r || (d.age !== undefined && (d.age < r[0] || d.age > r[1]))) delete d.age; n.draft = d; break; }
     case "profile.save": { const d = s.draft; if (!d || !d.name.trim()) break; const has = s.profiles.some((p) => p.id === d.id);
       n.profiles = has ? s.profiles.map((p) => (p.id === d.id ? d : p)) : [...s.profiles, d];
       n.learner = { id: d.id, name: d.name }; n.draft = null; n.screen = "tonight"; n.focus = 0; break; }
@@ -122,7 +125,7 @@ export function reduce(s: Session, e: Event): Session {
 type Sub = (s: Session) => void;
 interface Store { session: Session; subs: Set<Sub>; ticker: NodeJS.Timeout | null; }
 const g = globalThis as unknown as { __desk?: Store };
-function load(): Session { try { if (existsSync(FILE)) { const j = JSON.parse(readFileSync(FILE, "utf8")); if (Array.isArray(j?.profiles) && j?.learner?.id) return { ...fresh(), ...j, reading: false }; } } catch {} return fresh(); }
+function load(): Session { try { if (existsSync(FILE)) { const j = JSON.parse(readFileSync(FILE, "utf8")); if (Array.isArray(j?.profiles) && j?.learner?.id && j.profiles.every((p: Profile) => p.type in AGE_RANGE)) return { ...fresh(), ...j, reading: false }; } } catch {} return fresh(); }
 if (!g.__desk) g.__desk = { session: load(), subs: new Set(), ticker: null };
 const store = g.__desk;
 if (!store.ticker) store.ticker = setInterval(() => { if (store.session.timer.running) dispatch({ type: "timer.tick", seconds: 1 }); }, 1000);
