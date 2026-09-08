@@ -53,7 +53,13 @@ export default function TV() {
       const move = (n: number, delta: number) => post({ type: "focus", focus: Math.max(0, Math.min(n - 1, f + delta)) });
       const units = LESSONS.filter((l) => l.subject === s.subject);
       switch (s.screen) {
-        case "landing": { if (k === "ArrowRight") move(2, 1); if (k === "ArrowLeft") move(2, -1); if (sel) nav(f === 0 ? "tonight" : "learner"); break; }
+        case "landing": {
+          // 0-2 the modules, 3-4 the actions; Down/Up jump between the rows
+          if (f < 3) { if (k === "ArrowRight") move(3, 1); if (k === "ArrowLeft") move(3, -1); if (k === "ArrowDown") post({ type: "focus", focus: 3 });
+            if (sel) { post({ type: "subject", subject: (["maths", "english", "essay"] as const)[f] }); nav("tonight"); } }
+          else { if (k === "ArrowRight") post({ type: "focus", focus: 4 }); if (k === "ArrowLeft") post({ type: "focus", focus: 3 }); if (k === "ArrowUp") post({ type: "focus", focus: 0 });
+            if (sel) nav(f === 3 ? "tonight" : "learner"); }
+          break; }
         case "pair": if (sel) post({ type: "join" }); break;
         case "tonight": {
           if (k === "ArrowRight") move(s.tasks.length, 1); if (k === "ArrowLeft") move(s.tasks.length, -1);

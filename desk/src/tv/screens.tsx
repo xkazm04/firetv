@@ -11,7 +11,7 @@ const SUBJECTS: Array<Session["subject"]> = ["maths", "english", "essay"];
 
 /** The OCR writes exponents as ^n and the tutor may too; the screen shows them as printed. */
 export const shown = (s: string) => s.replace(/\^2/g, "²").replace(/\^3/g, "³").replace(/\*\*/g, "").replace(/\$/g, "");
-const NAME: Record<Session["subject"], string> = { maths: "Maths", english: "English", essay: "Essay" };
+const NAME: Record<Session["subject"], string> = { maths: "Math Buddy", english: "Linga", essay: "Essay Master" };
 
 function Rail({ s }: { s: Session }) {
   return (
@@ -58,34 +58,39 @@ function Qr({ seed }: { seed: number }) {
 
 
 // ---- S1 Landing ----
-const CHANNELS: Array<{ k: string; ch: Session["subject"]; t: string; d: string }> = [
-  { k: "Maths", ch: "maths", t: "High school", d: "One step per problem, never the answer." },
-  { k: "English", ch: "english", t: "Anyone", d: "Say a sentence, see the tense and why." },
-  { k: "Essay", ch: "essay", t: "Students & adults", d: "What your paragraph does and lacks, never rewritten." },
+/** The three modules, each branded as its own app: a name, an illustration, and one caption when it is active. */
+const MODULES: Array<{ name: string; ch: Session["subject"]; img: string; tag: string; d: string }> = [
+  { name: "Math Buddy", ch: "maths", img: "/brand/math-buddy.png", tag: "Maths · high school", d: "Learn and practise high-school maths one step at a time. The desk gives you the next step, never the answer." },
+  { name: "Linga", ch: "english", img: "/brand/linga.png", tag: "English · every level", d: "An assistant for learning English at every level. Say a sentence, see the tense and the word that decided it." },
+  { name: "Essay Master", ch: "essay", img: "/brand/essay-master.png", tag: "Essay · anyone who writes", d: "An analyst for written thoughts. See what your paragraph does and what it lacks, never rewritten for you." },
 ];
+/** Focus 0-2 are the modules, 3-4 the two actions. The caption below the row describes whatever is focused. */
 export function Landing({ s, focus }: { s: Session; focus: number }) {
+  const active = focus < 3 ? MODULES[focus] : null;
   return (<>
     <div className="band band-wedge" />
     <main className="content-full">
-      <div className="title" style={{ marginTop: 0 }}>Study Desk</div>
-      <div className="cards" style={{ gridTemplateColumns: "repeat(3, 1fr)", marginTop: 40 }}>
-        {CHANNELS.map((c) => (
-          <div key={c.ch} className="card">
-            <div className="k" style={{ color: `var(--${c.ch})` }}>{c.k}</div>
-            <div className="t">{c.t}</div>
-            <div className="d">{c.d}</div>
+      <div style={{ display: "flex", alignItems: "center", gap: 28 }}>
+        <img src="/brand/mark-telestrator.png" alt="" width={96} height={96} />
+        <div className="title" style={{ marginTop: 0 }}>Study Desk</div>
+      </div>
+      <div className="cards" style={{ gridTemplateColumns: "repeat(3, 1fr)", marginTop: 36 }}>
+        {MODULES.map((m, i) => (
+          <div key={m.ch} className="card" data-focused={focus === i} style={{ minHeight: 300, padding: "20px 32px 24px" }}>
+            <img src={m.img} alt="" style={{ height: 190, width: "100%", objectFit: "contain" }} />
+            <div className="t" style={{ marginTop: "auto" }}>{m.name}</div>
           </div>
         ))}
       </div>
-      <div style={{ marginTop: 56 }}>
-        <span className="cap">Hints, not answers</span>
-        <div className="cap-text">The desk gives you the next step, never the answer. The TV shows; your phone does.</div>
+      <div style={{ marginTop: 44 }}>
+        {active
+          ? <><span className="cap" style={{ background: "transparent", color: `var(--${active.ch})`, border: `2px solid var(--${active.ch})` }}>{active.tag}</span><div className="cap-text">{active.d}</div></>
+          : <><span className="cap">Hints, not answers</span><div className="cap-text">The desk gives you the next step, never the answer. The TV shows; your phone does.</div></>}
       </div>
       <div className="actions">
-        <button className="btn" data-focused={focus === 0}>Continue as {s.learner.name}</button>
-        <button className="btn" data-focused={focus === 1}>Someone else</button>
+        <button className="btn" data-focused={focus === 3}>Continue as {s.learner.name}</button>
+        <button className="btn" data-focused={focus === 4}>Someone else</button>
       </div>
-      <div className="ticker"><span><b>3</b> channels</span><i>·</i><span>Phone is the pen</span><i>·</i><span>Nothing to type here</span></div>
     </main>
   </>);
 }
