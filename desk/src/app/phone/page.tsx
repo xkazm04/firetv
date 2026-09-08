@@ -38,6 +38,12 @@ export default function Phone() {
   const [busy, setBusy] = useState(false);
   const video = useRef<HTMLVideoElement>(null);
   const [cam, setCam] = useState<MediaStream | null>(null);
+  /** The shot lives on the phone until the user says Use this page. Nothing is sent before that. */
+  const [shot, setShot] = useState<{ url: string; w: number; h: number; sub: Subject; title: string } | null>(null);
+  /** The hand-off, as the phone knows it: nothing sent, in flight, gone, or refused. */
+  const [phase, setPhase] = useState<"idle" | "sending" | "sent" | "failed">("idle");
+  /** The TV asked for a module; the picker stays out of the way until the user asks for it. */
+  const [picking, setPicking] = useState(false);
 
   // a fresh join lands on the confirmation, never straight into the camera
   useEffect(() => { if (s?.joined && screen === "join") setScreen("joined"); }, [s?.joined, screen]);
@@ -62,6 +68,8 @@ export default function Phone() {
     navigator.mediaDevices?.getUserMedia({ video: { facingMode: "environment", width: { ideal: 1920 } } }).then((st) => { setCam(st); if (video.current) video.current.srcObject = st; }).catch(() => setMsg("No camera here — use a sample page below."));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [screen]);
+  // the element arrives after the stream does; hand it the stream once it is on the page
+  useEffect(() => { if (cam && video.current && video.current.srcObject !== cam) video.current.srcObject = cam; }, [cam, shot]);
 
   const [bad, setBad] = useState(false);
   const join = async (code = pin) => {
@@ -76,17 +84,27 @@ export default function Phone() {
   useEffect(() => { if (s && !s.joined && remembered.current && remembered.current === s.pin) { remembered.current = null; post({ type: "join" }); } }, [s?.pin, s?.joined]); // eslint-disable-line react-hooks/exhaustive-deps
   const forget = () => { try { localStorage.removeItem("desk.pin"); } catch {} remembered.current = null; setMsg("This phone will ask for the code next time."); };
 
+  // the phone stays where it is: the hand-off is shown, not jumped over
   const send = async (dataUrl: string, w: number, h: number, sub: Subject, title: string) => {
-    setBusy(true); setMsg("sending the page…"); setScreen("point");
-    try { const r = await call("/api/read", { image: dataUrl, subject: sub, title, w, h }); const j = await r.json(); setMsg(r.ok ? `read ${j.items} items in ${(j.ms / 1000).toFixed(0)} s` : `read failed: ${j.error}`); }
-    catch (e) { setMsg(String(e)); } finally { setBusy(false); }
+    setBusy(true); setPhase("sending"); setMsg("");
+    try {
+      const r = await call("/api/read", { image: dataUrl, subject: sub, title, w, h }); const j = await r.json();
+      if (r.ok) { setPhase("sent"); setMsg(""); } else { setPhase("failed"); setMsg(`The desk could not read it: ${j.error}`); }
+    } catch (e) { setPhase("failed"); setMsg(`That did not reach the desk: ${String(e)}`); } finally { setBusy(false); }
   };
   const toJpeg = (src: HTMLVideoElement | HTMLImageElement, sw: number, sh: number) => {
     const w = 1280, h = Math.round((sh / sw) * 1280); const c = document.createElement("canvas"); c.width = w; c.height = h;
     c.getContext("2d")!.drawImage(src, 0, 0, w, h); return { url: c.toDataURL("image/jpeg", 0.85), w, h };
   };
-  const snap = () => { const v = video.current; if (!v || !v.videoWidth) return setMsg("camera not ready"); const { url, w, h } = toJpeg(v, v.videoWidth, v.videoHeight); send(url, w, h, subject, SAMPLES.find((x) => x.id === subject)?.title ?? "Page"); };
-  const sample = (x: (typeof SAMPLES)[number]) => { const img = new Image(); img.onload = () => { const { url, w, h } = toJpeg(img, img.naturalWidth, img.naturalHeight); send(url, w, h, x.id, x.title); }; img.src = x.file; };
+  /** How many pages of this module are already on the desk — a sheet has more than one side. */
+  const pagesOf = (sub: Subject) => s?.pages.filter((p) => p.subject === sub).length ?? 0;
+  const titleFor = (sub: Subject, base: string) => { const n = pagesOf(sub); return n >= 1 ? `${base} · page ${n + 1}` : base; };
+  // a snap is a shot, not a send
+  const snap = () => { const v = video.current; if (!v || !v.videoWidth) return setMsg("camera not ready"); const { url, w, h } = toJpeg(v, v.videoWidth, v.videoHeight);
+    setMsg(""); setPhase("idle"); setShot({ url, w, h, sub: subject, title: titleFor(subject, SAMPLES.find((x) => x.id === subject)?.title ?? "Page") }); };
+  const sample = (x: (typeof SAMPLES)[number]) => { const img = new Image(); img.onload = () => { const { url, w, h } = toJpeg(img, img.naturalWidth, img.naturalHeight);
+    setMsg(""); setPhase("idle"); setShot({ url, w, h, sub: x.id, title: titleFor(x.id, x.title) }); }; img.src = x.file; };
+  const retake = () => { setShot(null); setPhase("idle"); setMsg(""); };
 
   const page = s?.pages[s.pageIx];
   const tap = (e: React.PointerEvent<HTMLDivElement>) => {
@@ -137,13 +155,42 @@ export default function Phone() {
               <button className="pbtn" data-secondary="true" onClick={() => post({ type: "profile.discard" })}>Cancel</button></div>
           </> : <p>Add or edit a learner on the TV; the name is typed here.</p>}</div>}
 
-        {screen === "capture" && <div className="pscreen"><h3>Capture a page</h3>
-          <div className="field"><select value={subject} onChange={(e) => setSubject(e.target.value as Subject)}><option value="maths">Math Buddy</option><option value="english">Linga</option><option value="essay">Essay Master</option></select></div>
-          {s?.awaiting && <p>The TV is waiting for the {MODULE[s.awaiting]} page.</p>}
-          <div className="cam">{cam ? <video ref={video} autoPlay playsInline muted /> : <span>camera</span>}</div>
-          <button className="pbtn" onClick={snap} disabled={!cam || busy}>Snap page</button>
-          <p>No camera on this device? Send a sample page instead:</p>
-          <div className="samples">{SAMPLES.map((x) => <button key={x.id} onClick={() => sample(x)} disabled={busy}>{x.title}</button>)}</div></div>}
+        {screen === "capture" && (() => {
+          const reading = phase === "sending" || (phase === "sent" && !!s?.reading);
+          const done = phase === "sent" && !reading;
+          const read = page?.items.length ?? 0;
+          const n = pagesOf(subject);
+          return <div className="pscreen"><h3>Capture a page</h3>
+            {s?.awaiting && !picking
+              ? <p><b>{MODULE[s.awaiting]}</b> — the TV is waiting for this page. <button className="plink" onClick={() => setPicking(true)}>change</button></p>
+              : <div className="field"><select value={subject} onChange={(e) => setSubject(e.target.value as Subject)}><option value="maths">Math Buddy</option><option value="english">Linga</option><option value="essay">Essay Master</option></select></div>}
+            {phase === "idle" && !shot && n >= 1 && <p>Page {n + 1} of the {MODULE[subject]} sheet</p>}
+            <div className="cam">
+              {cam ? <video ref={video} autoPlay playsInline muted /> : !shot && <span>camera</span>}
+              {shot && <img src={shot.url} alt="the page you just snapped" />}
+              {cam && !shot && <div className="guide"><i /><i /><i /><i /></div>}
+            </div>
+            {!shot && <p>Fill the frame with the sheet, all four corners inside.</p>}
+
+            {phase === "sending" && <p>Sent. The TV is reading it…</p>}
+            {(phase === "sending" || phase === "sent") && <p>{reading ? "Reading the page…" : read ? `Read: ${read} problems` : s?.status || "Read."}</p>}
+
+            {reading ? <button className="pbtn" disabled>Reading…</button>
+              : done ? <div className="field">
+                  <button className="pbtn" data-signal="true" style={{ flex: 1 }} onClick={() => { setShot(null); setPhase("idle"); setMsg(""); }}>Add another page</button>
+                  <button className="pbtn" data-secondary="true" onClick={() => setScreen("point")}>Point &amp; ask</button>
+                </div>
+              : shot ? <div className="field">
+                  <button className="pbtn" data-signal="true" style={{ flex: 1 }} onClick={() => send(shot.url, shot.w, shot.h, shot.sub, shot.title)} disabled={busy}>Use this page</button>
+                  <button className="pbtn" data-secondary="true" onClick={retake}>Retake</button>
+                </div>
+              : <>
+                  <button className="pbtn" onClick={snap} disabled={!cam || busy}>{cam ? "Snap page" : "No camera on this device"}</button>
+                  <p style={{ fontSize: 12 }}>Prototype: send a sample sheet instead</p>
+                  <div className="samples">{SAMPLES.map((x) => <button key={x.id} onClick={() => sample(x)} disabled={busy}>{x.title}</button>)}</div>
+                </>}
+          </div>;
+        })()}
 
         {screen === "point" && <div className="pscreen"><h3>Point &amp; ask</h3>
           {page ? <>
