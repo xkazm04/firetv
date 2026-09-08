@@ -53,6 +53,7 @@ export default function TV() {
       const move = (n: number, delta: number) => post({ type: "focus", focus: Math.max(0, Math.min(n - 1, f + delta)) });
       const units = LESSONS.filter((l) => l.subject === s.subject);
       switch (s.screen) {
+        case "landing": { if (k === "ArrowRight") move(2, 1); if (k === "ArrowLeft") move(2, -1); if (sel) nav(f === 0 ? "tonight" : "learner"); break; }
         case "pair": if (sel) post({ type: "join" }); break;
         case "tonight": {
           if (k === "ArrowRight") move(s.tasks.length, 1); if (k === "ArrowLeft") move(s.tasks.length, -1);
@@ -125,6 +126,7 @@ export default function TV() {
 function ScreenFor({ s, table }: { s: Session; table: boolean }) {
   const f = s.focus;
   switch (s.screen) {
+    case "landing": return <S.Landing s={s} focus={f} />;
     case "pair": return <S.Pair s={s} />;
     case "tonight": return <S.Tonight s={s} focus={f} />;
     case "learner": return <S.Learner s={s} focus={f} />;

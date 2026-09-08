@@ -11,7 +11,7 @@ import type { RuleCard } from "../rules/english";
 import type { Sentence } from "../rules/essay";
 
 export type Subject = "maths" | "english" | "essay";
-export type Screen = "pair" | "tonight" | "units" | "calendar" | "page" | "hint" | "lesson" | "sentence" | "headtohead" | "essaytype" | "forensic" | "playbook" | "xray" | "break" | "recap" | "learner";
+export type Screen = "landing" | "pair" | "tonight" | "units" | "calendar" | "page" | "hint" | "lesson" | "sentence" | "headtohead" | "essaytype" | "forensic" | "playbook" | "xray" | "break" | "recap" | "learner";
 
 export interface PageItem { n: number; text: string; cx: number; cy: number; band: [number, number]; key: string; }
 export interface Page { id: string; subject: Subject; title: string; img: string; w: number; h: number; items: PageItem[]; readMs?: number; provider?: string; }
@@ -51,7 +51,7 @@ const FILE = path.join(DATA, "session.json");
 export function fresh(): Session {
   return {
     pin: String(1000 + Math.floor(Math.random() * 9000)), joined: false, learner: { name: "Ema" },
-    subject: "maths", screen: "pair", focus: 0, view: "band",
+    subject: "maths", screen: "landing", focus: 0, view: "band",
     tasks: [
       { id: "t1", sub: "maths", name: "Algebra — Exercise 4.2, all ten", min: 25, done: false },
       { id: "t2", sub: "english", name: "Unit 6 — past simple vs present perfect", min: 15, done: false },

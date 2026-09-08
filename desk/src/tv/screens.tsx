@@ -56,6 +56,40 @@ function Qr({ seed }: { seed: number }) {
   );
 }
 
+
+// ---- S1 Landing ----
+const CHANNELS: Array<{ k: string; ch: Session["subject"]; t: string; d: string }> = [
+  { k: "Maths", ch: "maths", t: "High school", d: "One step per problem, never the answer." },
+  { k: "English", ch: "english", t: "Anyone", d: "Say a sentence, see the tense and why." },
+  { k: "Essay", ch: "essay", t: "Students & adults", d: "What your paragraph does and lacks, never rewritten." },
+];
+export function Landing({ s, focus }: { s: Session; focus: number }) {
+  return (<>
+    <div className="band band-wedge" />
+    <main className="content-full">
+      <div className="title" style={{ marginTop: 0 }}>Study Desk</div>
+      <div className="cards" style={{ gridTemplateColumns: "repeat(3, 1fr)", marginTop: 40 }}>
+        {CHANNELS.map((c) => (
+          <div key={c.ch} className="card">
+            <div className="k" style={{ color: `var(--${c.ch})` }}>{c.k}</div>
+            <div className="t">{c.t}</div>
+            <div className="d">{c.d}</div>
+          </div>
+        ))}
+      </div>
+      <div style={{ marginTop: 56 }}>
+        <span className="cap">Hints, not answers</span>
+        <div className="cap-text">The desk gives you the next step, never the answer. The TV shows; your phone does.</div>
+      </div>
+      <div className="actions">
+        <button className="btn" data-focused={focus === 0}>Continue as {s.learner.name}</button>
+        <button className="btn" data-focused={focus === 1}>Someone else</button>
+      </div>
+      <div className="ticker"><span><b>3</b> channels</span><i>·</i><span>Phone is the pen</span><i>·</i><span>Nothing to type here</span></div>
+    </main>
+  </>);
+}
+
 // ---- T1 ----
 export function Tonight({ s, focus }: { s: Session; focus: number }) {
   const open = s.tasks.filter((t) => !t.done);
@@ -75,7 +109,7 @@ export function Tonight({ s, focus }: { s: Session; focus: number }) {
         ))}
       </div>
       <div className="body" style={{ marginTop: 56, color: "var(--mute)" }}>{s.pages.length ? "Select a task, or Down to the page." : "Point your phone at the page to begin."}</div>
-      <div className="ticker"><span><b>{open.length}</b> to do</span><i>·</i><span>{s.pages.length} page{s.pages.length === 1 ? "" : "s"} captured</span><i>·</i><span>Menu marks a task done</span></div>
+      <div className="ticker"><span><b>{open.length}</b> to do</span><i>·</i><span>{s.pages.length} page{s.pages.length === 1 ? "" : "s"} captured</span><i>·</i><span>Menu marks a task done</span>{!s.joined && <><i>·</i><span>phone code <b>{s.pin}</b></span></>}</div>
     </main>
   </>);
 }
