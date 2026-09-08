@@ -26,7 +26,7 @@ export interface Row { title: string; cells: Cell[] }
 export function profileRows(d: Profile | null): Row[] {
   const t = d?.type ?? "high-school", r = AGE_RANGE[t];
   const rows: Row[] = [{ title: "Type of student", cells: TYPES.map((x) => ({ kind: "type", label: TYPE_WORDS[x], blurb: TYPE_BLURB[x], type: x })) }];
-  if (r) rows.push({ title: "Age", cells: Array.from({ length: r[1] - r[0] + 1 }, (_, i) => r[0] + i).map((n) => ({ kind: "age", label: String(n), blurb: `${n} years old. The desk pitches its words and its examples for a ${n}-year-old.`, age: n })) });
+  if (r) rows.push({ title: "Age", cells: Array.from({ length: r[1] - r[0] + 1 }, (_, i) => r[0] + i).map((n) => ({ kind: "age", label: String(n), blurb: "", age: n })) });
   rows.push({ title: "Interested in", cells: (["maths", "english", "essay"] as Subject[]).map((m) => ({ kind: "interest", label: BRAND[m], blurb: MODULE_BLURB[m], sub: m })) });
   rows.push({ title: "", cells: [{ kind: "save", label: "Save", blurb: "Sit at this desk with these picks." }, { kind: "back", label: "Back", blurb: "Throw the draft away and go back." }] });
   return rows;

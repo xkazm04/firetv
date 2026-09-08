@@ -494,10 +494,10 @@ export function ProfileScreen({ s, focus }: { s: Session; focus: number }) {
           </div>
         ))}
       </div>
-      <div style={{ position: "absolute", left: 0, bottom: 216 }}>
+      {cell.kind !== "age" && <div style={{ position: "absolute", left: 0, bottom: 216 }}>
         <span className="cap">{cell.label}</span>
         <div className="cap-text">{cell.blurb}</div>
-      </div>
+      </div>}
       <div className="actions">
         <button className="btn" data-focused={cell.kind === "save"} data-disabled={!name}>Save</button>
         <button className="btn" data-focused={cell.kind === "back"}>Back</button>
