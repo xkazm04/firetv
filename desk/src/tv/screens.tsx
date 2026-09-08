@@ -30,6 +30,22 @@ const Clock = ({ s, right }: { s: Session; right?: boolean }) => (
 );
 
 // ---- T0 ----
+/** The moment after pairing: the phone is on the desk. One picture, one instruction, one action. */
+export function Joined({ s }: { s: Session }) {
+  return (<>
+    <div className="band band-low" />
+    <main className="content-full">
+      <div className="eyebrow">Paired</div>
+      <div className="title" style={{ maxWidth: 900 }}>{s.learner.name}’s phone is on the desk</div>
+      <img src="/brand/paired.png" alt="" style={{ position: "absolute", right: 0, top: 40, width: 760, height: 520, objectFit: "contain" }} />
+      <div style={{ position: "absolute", left: 0, bottom: 216, maxWidth: 900 }}>
+        <span className="cap">What now</span>
+        <div className="cap-text">Snap the page on the phone and it appears here. Or press Enter to see what is on tonight.</div>
+      </div>
+      <div className="actions"><button className="btn" data-focused>Tonight</button></div>
+    </main>
+  </>);
+}
 export function Pair({ s }: { s: Session }) {
   const url = s.phoneUrl + "?pin=" + s.pin;
   // qrcode's browser build draws the code; generated here so the store stays free of UI.

@@ -13,7 +13,7 @@ import type { RuleCard } from "../rules/english";
 import type { Sentence } from "../rules/essay";
 
 export type Subject = "maths" | "english" | "essay";
-export type Screen = "landing" | "pair" | "tonight" | "units" | "calendar" | "page" | "hint" | "lesson" | "sentence" | "headtohead" | "essaytype" | "forensic" | "playbook" | "xray" | "break" | "recap" | "learner" | "profile";
+export type Screen = "landing" | "pair" | "joined" | "tonight" | "units" | "calendar" | "page" | "hint" | "lesson" | "sentence" | "headtohead" | "essaytype" | "forensic" | "playbook" | "xray" | "break" | "recap" | "learner" | "profile";
 
 export type StudentType = "elementary" | "high-school" | "other";
 export interface Profile { id: string; name: string; type: StudentType; age?: number; modules: Subject[]; }
@@ -88,7 +88,7 @@ export function reduce(s: Session, e: Event): Session {
   const n: Session = { ...s, updatedAt: Date.now() };
   switch (e.type) {
     // a draft in progress owns the screen: joining must not throw the parent off the profile
-    case "join": n.joined = true; if (s.screen !== "profile") { n.screen = "tonight"; n.focus = 0; } break;
+    case "join": n.joined = true; if (s.screen !== "profile") { n.screen = "joined"; n.focus = 0; } break;
     case "nav": n.screen = e.screen; n.focus = e.focus ?? 0; if (e.from) n.back = e.from; break;
     case "focus": n.focus = e.focus; break;
     case "learner.set": { const p = s.profiles.find((x) => x.id === e.id); if (!p) break; n.learner = { id: p.id, name: p.name }; n.screen = "tonight"; n.focus = 0; break; }

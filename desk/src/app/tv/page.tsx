@@ -62,6 +62,7 @@ export default function TV() {
             if (sel) { if (f === 3) nav("tonight"); else post({ type: "nav", screen: "learner", focus: 0, from: "landing" }); } }
           break; }
         case "pair": if (back) nav(s.back ?? "landing"); break;
+        case "joined": if (sel || back) nav("tonight"); break;
         case "tonight": {
           if (k === "ArrowRight") move(s.tasks.length, 1); if (k === "ArrowLeft") move(s.tasks.length, -1);
           if (k === "ArrowDown") { if (s.pages.length) nav("page"); else if (!s.joined) post({ type: "nav", screen: "pair", focus: 0, from: "tonight" }); }
@@ -154,6 +155,7 @@ function ScreenFor({ s, table }: { s: Session; table: boolean }) {
   switch (s.screen) {
     case "landing": return <S.Landing s={s} focus={f} />;
     case "pair": return <S.Pair s={s} />;
+    case "joined": return <S.Joined s={s} />;
     case "tonight": return <S.Tonight s={s} focus={f} />;
     case "learner": return <S.Learner s={s} focus={f} />;
     case "profile": return <S.ProfileScreen s={s} focus={f} />;

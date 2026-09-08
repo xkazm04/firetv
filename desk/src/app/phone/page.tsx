@@ -17,7 +17,7 @@ const SAMPLES: Array<{ id: Subject; title: string; file: string }> = [
 
 /** The TV's screens in the user's words, for the phone's status line. */
 const TV_WORDS: Partial<Record<Session["screen"], string>> = {
-  landing: "the start screen", pair: "the pairing code", tonight: "Tonight", learner: "Who is at the desk", profile: "a new learner",
+  landing: "the start screen", pair: "the pairing code", joined: "the paired screen", tonight: "Tonight", learner: "Who is at the desk", profile: "a new learner",
   units: "the units guide", calendar: "the calendar", page: "the page", hint: "a hint", lesson: "a lesson", sentence: "your sentence",
   headtohead: "head to head", essaytype: "the essay lens", forensic: "the essay", playbook: "the playbook", xray: "the x-ray", break: "a break", recap: "the recap",
 };
