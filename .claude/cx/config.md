@@ -19,11 +19,14 @@ and it is law for the walk: a proposal that needs the philosophy changed is rais
 
 ## Journeys
 
+- Anyone - First arrival: landing, settings / profile (create or switch; type of student and preferences drive the content), pair - success: at their own profile in under a minute
 - Ema (15, learner) - Maths homework night: pair, tonight, snap the sheet, page, hint, still stuck, lesson, back to the page, recap - success: finished the sheet with hints, not answers
 - Ema - English sentence check: say a sentence on the phone, see the tense and the time word on the TV, the rule, the head-to-head unit - success: knows which tense and why
 - Ema - Essay draft: choose the lens on the TV, paste the paragraph on the phone, forensic view, playbook, x-ray - success: knows what the paragraph needs, without it being rewritten
 - Parent - Evening check-in: join as parent, point at a problem from the sofa, ask, later read the recap - success: knows where it was hard, in two minutes
 - Ema - Between sessions: calendar of lessons on file, units guide, break screen, learner switch - success: knows where she is in the syllabus
+
+Audiences: English is for anybody (Duolingo-like); maths mainly for high-school students; essays primarily for students, with adult review and a more philosophical conversation on top of the review in scope.
 
 ## Screens
 
