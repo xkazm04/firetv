@@ -8,8 +8,9 @@ import { useSession, call, fmt } from "@/tv/useSession";
 import { ESSAY_TYPES } from "@/lib/library/lessons.data";
 import { BRAND as MODULE } from "@/tv/profileRows";
 import type { Session, Subject } from "@/lib/session/store";
+import { LingaPhone } from "@/english/LingaPhone";
 
-type PScreen = "join" | "joined" | "capture" | "practice" | "point" | "say" | "paste" | "tonight" | "parent" | "profile";
+type PScreen = "join" | "joined" | "capture" | "practice" | "point" | "say" | "paste" | "tonight" | "parent" | "profile" | "linga";
 const SAMPLES: Array<{ id: Subject; title: string; file: string }> = [
   { id: "maths", title: "Algebra — Exercise 4.2", file: "/samples/maths.jpg" },
   { id: "english", title: "English — Unit 6", file: "/samples/english.jpg" },
@@ -22,6 +23,7 @@ const TV_WORDS: Partial<Record<Session["screen"], string>> = {
   units: "the units guide", calendar: "the calendar", page: "the page", hint: "a hint", lesson: "a lesson", sentence: "your sentence",
   headtohead: "head to head", essaytype: "the essay lens", forensic: "the essay", playbook: "the playbook", xray: "the x-ray", break: "a break", recap: "the recap",
   topics: "Teach me something", practice: "the practice set", walk: "walking the set",
+  linga: "Linga", "linga-scenes": "English situations", "linga-map": "your learning map", "linga-talk": "your conversation", "linga-coach": "a coaching moment", "linga-recap": "your rehearsal recap",
 };
 export default function Phone() {
   const { s, connected, post } = useSession();
@@ -56,6 +58,7 @@ export default function Phone() {
 
   // a fresh join lands on the confirmation, never straight into the camera
   useEffect(() => { if (s?.joined && screen === "join") setScreen("joined"); }, [s?.joined, screen]);
+  useEffect(() => { if (s?.joined && s.screen.startsWith("linga") && role === "student") setScreen("linga"); }, [s?.screen, s?.joined, role]);
   useEffect(() => { if (s && !s.joined && screen !== "join" && screen !== "profile") setScreen("join"); }, [s?.joined]); // eslint-disable-line react-hooks/exhaustive-deps
   // the QR on the TV carries the code: arrive with ?pin= and the phone joins itself, then tidies the bar
   useEffect(() => {
@@ -182,6 +185,7 @@ export default function Phone() {
         <div className="link">{s?.joined ? <><b>joined</b> · {s.learner.name}</> : connected ? "not joined" : "connecting…"}{s && <small>TV · {TV_WORDS[s.screen] ?? s.screen}</small>}</div>
       </div>
       <div className="pbody">
+        {screen === "linga" && s && <LingaPhone key={`${s.learner.id}:${s.conversation?.id??"setup"}`} s={s} post={post} onSentence={()=>setScreen("say")}/>}
         {screen === "join" && <div className="pscreen"><h3>Join the desk</h3>
           <p>{!s ? "Looking for the TV…" : s.screen === "pair" ? "The TV is showing the code. Scan it, or type it here." : `The TV is on ${TV_WORDS[s.screen] ?? s.screen}. Ask it for the code, then type it here.`}</p>
           {s && s.screen !== "pair" && <button className="pbtn" data-secondary="true" onClick={() => post({ type: "nav", screen: "pair", from: s.screen })}>Show the code on the TV</button>}
@@ -332,7 +336,7 @@ export default function Phone() {
         <div className="pstatus">{msg}</div>
       </div>
       <div className="pnav">
-        {([["capture", "Capture"], ["practice", "Practice"], ["point", "Point & ask"], ["say", "Say it"], ["paste", "Essay"], ["tonight", "Tonight"], ["parent", "Recap"], ["profile", "Profile"]] as Array<[PScreen, string]>).map(([id, label]) => <button key={id} aria-pressed={screen === id} disabled={!s?.joined && id !== "profile"} onClick={() => nav(id)}>{label}</button>)}
+        {([["capture", "Capture"], ["practice", "Practice"], ["point", "Point & ask"], ["linga", "Linga"], ["say", "Say it"], ["paste", "Essay"], ["tonight", "Tonight"], ["parent", "Recap"], ["profile", "Profile"]] as Array<[PScreen, string]>).map(([id, label]) => <button key={id} aria-pressed={screen === id} disabled={!s?.joined && id !== "profile"} onClick={() => nav(id)}>{label}</button>)}
       </div>
     </div>
   );

@@ -11,6 +11,7 @@ import { SYLLABUS } from "@/lib/library/syllabus";
 import type { Screen, Session } from "@/lib/session/store";
 import * as S from "@/tv/screens";
 import { profileRows, locate, flat } from "@/tv/profileRows";
+import { LingaTV } from "@/english/LingaTV";
 
 export default function TV() {
   const { s, connected, post } = useSession();
@@ -23,6 +24,20 @@ export default function TV() {
   const stage = useRef<HTMLDivElement>(null);
   const spoken = useRef<string>("");
   const audio = useRef<HTMLAudioElement | null>(null);
+  const linkedModule = useRef(false);
+  useEffect(() => {
+    if (!s || linkedModule.current) return;
+    linkedModule.current = true;
+    if (new URLSearchParams(window.location.search).get("module") === "english") {
+      void post({ type: "subject", subject: "english" }).then(() => post({ type: "nav", screen: "linga" }));
+    }
+  }, [s, post]);
+  useEffect(() => {
+    if (s?.screen.startsWith("linga") || s?.screen === "tonight" && s.subject === "english") {
+      audio.current?.pause();
+      if ("speechSynthesis" in window) window.speechSynthesis.cancel();
+    }
+  }, [s?.screen, s?.subject]);
 
   // scale the stage to its box
   useEffect(() => {
@@ -53,6 +68,7 @@ export default function TV() {
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (!s) return;
+      if (s.screen.startsWith("linga") || (s.screen === "tonight" && s.subject === "english")) return;
       const k = e.key; const keys = ["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", "Enter", "Backspace", "Escape", "m", "M", " "];
       if (!keys.includes(k)) return; e.preventDefault();
       const back = k === "Backspace" || k === "Escape", menu = k === "m" || k === "M", sel = k === "Enter";
@@ -65,7 +81,7 @@ export default function TV() {
         case "landing": {
           // 0-2 the modules, 3-4 the actions; Down/Up jump between the rows
           if (f < 3) { if (k === "ArrowRight") move(3, 1); if (k === "ArrowLeft") move(3, -1); if (k === "ArrowDown") post({ type: "focus", focus: 3 });
-            if (sel) { post({ type: "subject", subject: (["maths", "english", "essay"] as const)[f] }); nav("tonight"); } }
+            if (sel) { post({ type: "subject", subject: (["maths", "english", "essay"] as const)[f] }); nav(f === 1 ? "linga" : f === 2 ? "essaytype" : "tonight"); } }
           else { if (k === "ArrowRight") post({ type: "focus", focus: 4 }); if (k === "ArrowLeft") post({ type: "focus", focus: 3 }); if (k === "ArrowUp") post({ type: "focus", focus: 0 });
             if (sel) { if (f === 3) nav("tonight"); else post({ type: "nav", screen: "learner", focus: 0, from: "landing" }); } }
           break; }
@@ -179,7 +195,7 @@ export default function TV() {
       <div className="frame" ref={frame}>
         <div className="stage" ref={stage} tabIndex={0}>
           <div className="grid" />
-          <div className="safe">{s ? <ScreenFor s={s} table={table} busy={busy} /> : null}</div>
+          <div className="safe">{s ? s.screen.startsWith("linga") || (s.screen === "tonight" && s.subject === "english") ? <LingaTV s={s} post={post} voice={voice}/> : <ScreenFor s={s} table={table} busy={busy} /> : null}</div>
         </div>
       </div>
     </div>

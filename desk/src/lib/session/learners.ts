@@ -7,6 +7,8 @@
  */
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
+import { emptyEnglish, type EnglishLearning } from "../english/types";
+import { cleanEnglish } from "../english/rules";
 
 export interface SkillRecord {
   topic: string; seen: number; right: number;
@@ -26,13 +28,14 @@ export interface HistoryEntry {
 
 export interface Learner {
   id: string;
+  english: EnglishLearning;
   skills: Record<string, SkillRecord>;
   memory: string[];         // plain sentences the model reads, newest last, capped at 40
   history: HistoryEntry[];  // what happened, newest last, capped at 20
 }
 
 // the same data dir the session store uses — derived the same way, not hard-coded
-const DATA = path.join(process.cwd(), "data");
+const DATA = process.env.DESK_DATA_DIR || path.join(process.cwd(), "data");
 const FILE = path.join(DATA, "learners.json");
 
 const MEMORY_CAP = 40;
@@ -58,7 +61,7 @@ function writeAll(book: Book): void {
   try { mkdirSync(DATA, { recursive: true }); writeFileSync(FILE, JSON.stringify(book)); } catch {}
 }
 
-function blank(id: string): Learner { return { id, skills: {}, memory: [], history: [] }; }
+function blank(id: string): Learner { return { id, english: emptyEnglish(), skills: {}, memory: [], history: [] }; }
 
 /** Normalise whatever was on disk into a shape the rest of the module can trust. */
 function clean(id: string, l: unknown): Learner {
@@ -86,7 +89,7 @@ function clean(id: string, l: unknown): Learner {
       label: String(h.label), detail: typeof h.detail === "string" ? h.detail : "",
     }))
     .slice(-HISTORY_CAP);
-  return { id, skills, memory: Array.isArray(o.memory) ? o.memory.filter((m): m is string => typeof m === "string").slice(-MEMORY_CAP) : [], history };
+  return { id, english: cleanEnglish(o.english), skills, memory: Array.isArray(o.memory) ? o.memory.filter((m): m is string => typeof m === "string").slice(-MEMORY_CAP) : [], history };
 }
 
 export function getLearner(id: string): Learner {
@@ -98,6 +101,14 @@ export function saveLearner(l: Learner): void {
   const book = readAll();
   book[l.id] = { ...l, memory: l.memory.slice(-MEMORY_CAP), history: (l.history ?? []).slice(-HISTORY_CAP) };
   writeAll(book);
+}
+
+/** English commits report a disk failure instead of claiming progress was saved. */
+export function saveEnglish(id: string, english: EnglishLearning): void {
+  const book = readAll();
+  book[id] = { ...getLearner(id), english };
+  mkdirSync(DATA, { recursive: true });
+  writeFileSync(FILE, JSON.stringify(book));
 }
 
 /**

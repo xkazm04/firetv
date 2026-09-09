@@ -12,9 +12,10 @@ import path from "node:path";
 import { getLearner, type HistoryEntry, type SkillRecord } from "./learners";
 import type { RuleCard } from "../rules/english";
 import type { Sentence } from "../rules/essay";
+import { emptyEnglish, type Conversation, type EnglishLearning } from "../english/types";
 
 export type Subject = "maths" | "english" | "essay";
-export type Screen = "landing" | "pair" | "joined" | "tonight" | "units" | "calendar" | "page" | "hint" | "lesson" | "sentence" | "headtohead" | "essaytype" | "forensic" | "playbook" | "xray" | "break" | "recap" | "learner" | "profile" | "topics" | "practice" | "walk";
+export type Screen = "landing" | "pair" | "joined" | "tonight" | "units" | "calendar" | "page" | "hint" | "lesson" | "sentence" | "headtohead" | "essaytype" | "forensic" | "playbook" | "xray" | "break" | "recap" | "learner" | "profile" | "topics" | "practice" | "walk" | "linga" | "linga-scenes" | "linga-map" | "linga-talk" | "linga-coach" | "linga-recap";
 
 export type StudentType = "elementary" | "high-school" | "other";
 /** The school system a learner's progress is read against. One per profile; the desk defaults to UK. */
@@ -48,6 +49,7 @@ export interface Session {
   awaiting: Subject | null;
   hint: Hint | null; lesson: LessonPick | null; noLesson: boolean; lessonPaused: boolean;
   english: EnglishAnalysis | null; essay: EssayAnalysis | null; essayType: string | null;
+  englishLearning: EnglishLearning; conversation: Conversation | null;
   /** the open maths topic, the practice set on it, and where the walk has got to */
   topic: string | null; practice: Practice | null; walkIx: number;
   /** the current learner's measured skills, hydrated at the dispatch boundary from data/learners.json */
@@ -59,6 +61,7 @@ export interface Session {
 }
 
 export type Event =
+  | { type: "linga.changed"; conversation?: Conversation | null; screen?: Screen }
   | { type: "join" } | { type: "nav"; screen: Screen; focus?: number; from?: Screen } | { type: "focus"; focus: number }
   | { type: "subject"; subject: Subject }
   | { type: "learner.set"; id: string }
@@ -76,7 +79,7 @@ export type Event =
   | { type: "walk"; ix: number } | { type: "practice.clear" }
   | { type: "status"; text: string } | { type: "session.end" } | { type: "reset" };
 
-const DATA = path.join(process.cwd(), "data");
+const DATA = process.env.DESK_DATA_DIR || path.join(process.cwd(), "data");
 const FILE = path.join(DATA, "session.json");
 
 /** Where the phone lives on this network — a fact of the server, so the session carries it. */
@@ -101,7 +104,7 @@ export function fresh(): Session {
     timer: { left: 25 * 60, running: false, phase: "work" },
     pages: [], pageIx: 0, itemIx: 0, reading: false, awaiting: null,
     hint: null, lesson: null, noLesson: false, lessonPaused: false,
-    english: null, essay: null, essayType: null,
+    english: null, englishLearning: emptyEnglish(), conversation: null, essay: null, essayType: null,
     topic: null, practice: null, walkIx: 0, skills: {}, memory: [], history: [],
     status: "", log: { problems: [], hints: 0, hard: [], minutes: 0, started: null }, updatedAt: Date.now(),
   };
@@ -110,16 +113,17 @@ export function fresh(): Session {
 export function reduce(s: Session, e: Event): Session {
   const n: Session = { ...s, updatedAt: Date.now() };
   switch (e.type) {
+    case "linga.changed": if (e.conversation !== undefined) n.conversation = e.conversation; if (e.screen) { n.screen = e.screen; n.subject = "english"; n.focus = e.screen === "linga-talk" || e.screen === "linga-coach" ? -1 : 0; } break;
     // a draft in progress owns the screen: joining must not throw the parent off the profile
     case "join": n.joined = true; if (s.screen !== "profile") { n.screen = "joined"; n.focus = 0; } break;
     case "nav": n.screen = e.screen; n.focus = e.focus ?? 0; if (e.from) n.back = e.from; break;
     case "focus": n.focus = e.focus; break;
-    case "learner.set": { const p = s.profiles.find((x) => x.id === e.id); if (!p) break; n.learner = { id: p.id, name: p.name }; n.screen = "tonight"; n.focus = 0; break; }
+    case "learner.set": { const p = s.profiles.find((x) => x.id === e.id); if (!p) break; if (p.id !== s.learner.id) n.conversation = null; n.learner = { id: p.id, name: p.name }; n.screen = "tonight"; n.focus = 0; break; }
     case "profile.draft": { const d: Profile = { ...(s.draft ?? { id: "p" + Date.now(), name: "", type: "high-school" as StudentType, modules: ["maths", "english", "essay"] as Subject[] }), ...e.patch };
       const r = AGE_RANGE[d.type]; if (!r || (d.age !== undefined && (d.age < r[0] || d.age > r[1]))) delete d.age; n.draft = d; break; }
     case "profile.save": { const d = s.draft; if (!d || !d.name.trim()) break; const has = s.profiles.some((p) => p.id === d.id);
       n.profiles = has ? s.profiles.map((p) => (p.id === d.id ? d : p)) : [...s.profiles, d];
-      n.learner = { id: d.id, name: d.name }; n.draft = null; n.screen = "tonight"; n.focus = 0; break; }
+      n.conversation = null; n.learner = { id: d.id, name: d.name }; n.draft = null; n.screen = "tonight"; n.focus = 0; break; }
     case "profile.discard": n.draft = null; n.screen = "learner"; n.focus = 0; break;
     case "subject": n.subject = e.subject; break;
     case "page.reading": { const ix = s.pages.findIndex((p) => p.id === e.page.id);
@@ -164,10 +168,17 @@ export function reduce(s: Session, e: Event): Session {
 type Sub = (s: Session) => void;
 interface Store { session: Session; subs: Set<Sub>; ticker: NodeJS.Timeout | null; }
 const g = globalThis as unknown as { __desk?: Store };
-function load(): Session { try { if (existsSync(FILE)) { const j = JSON.parse(readFileSync(FILE, "utf8")); if (Array.isArray(j?.profiles) && j?.learner?.id && j.profiles.every((p: Profile) => p.type in AGE_RANGE)) return { ...fresh(), ...j, reading: false }; } } catch {} return fresh(); }
+function load(): Session { try { if (existsSync(FILE)) { const j = JSON.parse(readFileSync(FILE, "utf8")); if (Array.isArray(j?.profiles) && j?.learner?.id && j.profiles.every((p: Profile) => p.type in AGE_RANGE)) return { ...fresh(), ...j, phoneUrl: phoneUrl(), reading: false, englishLearning: getLearner(j.learner.id).english, conversation: j.conversation ? { ...j.conversation, pending: null, capture: false, paused: true } : null }; } } catch {} return fresh(); }
 if (!g.__desk) g.__desk = { session: load(), subs: new Set(), ticker: null };
 const store = g.__desk;
-if (!store.ticker) store.ticker = setInterval(() => { if (store.session.timer.running) dispatch({ type: "timer.tick", seconds: 1 }); }, 1000);
+// HMR can retain a session created before this feature was installed.
+if (!store.session.englishLearning) store.session.englishLearning = getLearner(store.session.learner.id).english;
+if (store.session.conversation === undefined) store.session.conversation = null;
+if (!store.ticker) store.ticker = setInterval(() => {
+  if (store.session.timer.running) dispatch({ type: "timer.tick", seconds: 1 });
+  const c=store.session.conversation;
+  if(c?.capture&&Date.now()-c.captureAt>50000)dispatch({type:"linga.changed",conversation:{...c,capture:false}});
+}, 1000);
 
 export function getSession() { return store.session; }
 /**
@@ -175,12 +186,12 @@ export function getSession() { return store.session; }
  * at the desk. The reducer stays pure: the file read happens here, at the boundary that already
  * writes to disk and pushes to subscribers.
  */
-const REHYDRATE = new Set(["learner.set", "practice.marked", "profile.save", "reset", "join", "page.read"]);
+const REHYDRATE = new Set(["learner.set", "practice.marked", "profile.save", "reset", "join", "page.read", "linga.changed"]);
 
 export function dispatch(e: Event): Session {
   store.session = reduce(store.session, e);
   if (REHYDRATE.has(e.type)) {
-    try { const l = getLearner(store.session.learner.id); store.session = { ...store.session, skills: l.skills, memory: l.memory, history: l.history }; } catch {}
+    try { const l = getLearner(store.session.learner.id); store.session = { ...store.session, skills: l.skills, memory: l.memory, history: l.history, englishLearning: l.english }; } catch {}
   }
   try { mkdirSync(DATA, { recursive: true }); writeFileSync(FILE, JSON.stringify(store.session)); } catch {}
   store.subs.forEach((fn) => { try { fn(store.session); } catch {} });

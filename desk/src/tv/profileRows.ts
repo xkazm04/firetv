@@ -19,7 +19,7 @@ export const AGE_RANGE: Record<StudentType, [number, number] | null> = { element
 export const BRAND: Record<Subject, string> = { maths: "Math Buddy", english: "Linga", essay: "Essay Master" };
 export const MODULE_BLURB: Record<Subject, string> = {
   maths: "Learn and practise school maths one step at a time. The desk gives you the next step, never the answer.",
-  english: "An assistant for learning English at every level. Say a sentence, see the tense and the word that decided it.",
+  english: "Practise real situations in English. Talk, get one useful coaching note, and try the moment again.",
   essay: "An analyst for written thoughts. See what your paragraph does and what it lacks, never rewritten for you.",
 };
 /** The school systems the desk can read a learner's progress against; UK when a profile has none. */

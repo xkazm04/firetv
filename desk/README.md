@@ -16,7 +16,41 @@ npm run dev              # http://localhost:3000
 - **/phone** — the phone. Open on a real phone on the same Wi-Fi at `http://<this PC's IP>:3000/phone`
   (the landing page prints the address), or in a second browser window. Without a camera, the
   Capture screen offers three sample pages.
+- **/tv?module=english** — Linga's conversation entrance. Choose a situation, respond on the
+  phone's Linga tab, ask for a cue or coaching, replay the moment, and finish with saved progress.
+- **/english/print** — the current learner's printable English learning map.
 - **/api/smoke** — one call per engine, so a broken engine is found here and not on the TV.
+
+## Linga conversations
+
+Eight authored situations cover introductions, interests, a children's adventure, teamwork,
+bookings, interviews, adult dates, and ordinary disagreements. The existing Claude CLI generates
+the actual dialogue and coaching. Set English comfort, interests, creativity, challenge and
+teaching notes on the phone. Adult dating is explicitly selected and excluded from child profiles.
+
+Speech starts only when requested. The phone displays the recognised transcript before sending;
+editing it changes the observation to written practice. Browser recognition support varies and
+may use the browser vendor's service. A physical phone needs a secure context (HTTPS) for this
+voice path; typing works on the ordinary LAN HTTP page. Raw audio is not stored by the app.
+TV audio uses the configured speech engine and falls back to browser synthesis; Repeat audio is
+also available when autoplay needs user interaction. See [MDN's recognition documentation](https://developer.mozilla.org/en-US/docs/Web/API/SpeechRecognition).
+
+English evidence and settings live alongside Math in `data/learners.json`, under a separate
+namespace. Session reset does not erase that learning record. The transcript belongs to the
+active saved session and is replaced when a new episode starts; learning evidence retains short
+quoted examples. Model assessment is provisional, not a pronunciation score or certified level.
+
+Linga's CLI calls disable unrelated coding customisations while retaining normal authentication
+and managed policies. They generate JSON directly and validate it in the service. Calls time out
+after 60 seconds; failures keep the phone draft available for retry. This is a turn-based web
+prototype, not a streaming speech engine.
+
+Plan and verification: [Linga implementation](../docs/LINGA-IMPLEMENTATION-PLAN.md).
+Run `node tools/linga-rules-test.cjs` from the repository root for isolated logic/service checks.
+For the browser integration check, start a separate server with `DESK_DATA_DIR` pointing to a
+scratch directory, then set `LINGA_TEST_ALLOW_WRITES=1` and `LINGA_TEST_URL` before running
+`node tools/linga-ui-test.cjs`. That check makes real model calls and simulates recognition events;
+it does not test microphone hardware. Other engine caches keep their existing locations.
 
 ## Engines (all local, all swappable)
 

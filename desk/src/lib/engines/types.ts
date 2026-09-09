@@ -4,7 +4,7 @@
  */
 export type JSONSchema = Record<string, unknown>;
 
-export interface TextRequest { system: string; prompt: string; schema?: JSONSchema; model?: "fast" | "best"; }
+export interface TextRequest { system: string; prompt: string; schema?: JSONSchema; model?: "fast" | "best"; timeoutMs?: number; isolated?: boolean; }
 export interface VisionRequest { imageBase64: string; prompt: string; schema?: JSONSchema; }
 export interface SpeakRequest { text: string; voice?: string; }
 export interface EmbedRequest { texts: string[]; }
