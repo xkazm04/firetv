@@ -30,6 +30,9 @@ export async function analyseEssay(raw: string, type: AnalysisType): Promise<Ess
     prompt: `The student's paragraph, sentence by sentence:\n${numbered}\n\nCounts: ${stats.sentences} sentences, ${stats.claims} first-pass claims, ${stats.evidence} evidence, ${stats.connectors} connectors, average ${stats.avgWords} words.`,
     schema: SCHEMA, model: "best",
   });
+  // A highlight may only land on a sentence number that exists. Anything else the model returned —
+  // a number off either end, or a `verdicts` that is not a list at all — is dropped, not shown.
   const valid = new Set(sentences.map((s) => s.n));
-  return { text: raw, type, sentences, stats, verdicts: (json.verdicts || []).filter((v) => valid.has(v.n)), summary: json.summary, provider };
+  const verdicts = (Array.isArray(json?.verdicts) ? json.verdicts : []).filter((v) => valid.has(v?.n));
+  return { text: raw, type, sentences, stats, verdicts, summary: json.summary, provider };
 }
