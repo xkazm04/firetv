@@ -15,7 +15,7 @@ const {splitSentences,paragraphStats}=require(path.join(root,'src/lib/rules/essa
 const engine=require(path.join(root,'src/lib/engines/text.ts'));
 let answer,seen=[];engine.text=(req)=>{seen.push(req);return answer(req);};
 const {analyseEssay}=require(path.join(root,'src/lib/desk/essay.ts'));
-const {getLearner,addHistory}=require(path.join(root,'src/lib/session/learners.ts'));
+const {getLearner,addHistory,recordWriting,recordAttempt}=require(path.join(root,'src/lib/session/learners.ts'));
 const reply=(json)=>async()=>({json,provider:'test',ms:1});
 
 const THREE='The school day starts too early. Research found that teenagers fall asleep later. Therefore the start should move.';
@@ -186,4 +186,79 @@ test('a writing episode survives a round trip through learners.json, an unknown 
  const h=getLearner('essay-disk').history;
  assert.deepEqual(h.map(e=>e.kind),['writing','homework','practice'],'writing reads back as writing; a kind this version does not know falls back to practice');
  assert.equal(h[0].detail,'1 of 4 sentences to fix');
+});
+
+// ---- the measured writing estimate: one attempt per reading, on its lens ----
+const FIVE='The start is early. Research found teenagers sleep late. A study measured it. Pupils are tired. Therefore it should move.';
+const faults=(ns)=>reply({verdicts:ns.map(n=>({n,verdict:'faulty',note:'x'})),summary:'s'});
+
+test('a reading is one attempt on its lens, right when under a quarter of the sentences are faulty',async()=>{
+ for(const [id,para,ns,right] of [
+  ['w-clean3',THREE,[],true],
+  ['w-one3',THREE,[1],false],
+  ['w-one5',FIVE,[2],true],
+  ['w-two5',FIVE,[2,4],false],
+  ['w-one4','One is here. Two is here. Three is here. Four is here.',[3],false],
+ ]){
+  answer=faults(ns);
+  await analyseEssay(para,'structure',id);
+  const r=getLearner(id).writing.structure;
+  assert.equal(r.seen,1,`${id}: one reading is one attempt`);
+  assert.equal(r.right,right?1:0,`${id}: ${ns.length} faulty is ${right?'right':'not right'}`);
+  assert.equal(r.estimate,right?0.3:0,`${id}: the estimate moves 30% toward the outcome, as Math Buddy's does`);
+  assert.equal(r.topic,'structure','keyed by the lens id, not its display name');
+ }
+});
+test('only faults that survived the anchoring count against the estimate',async()=>{
+ answer=faults([7,8,9]);
+ await analyseEssay(THREE,'evidence','w-anchored');
+ assert.equal(getLearner('w-anchored').writing.evidence.right,1,'verdicts off the end are not faults');
+});
+test('improvement is readable: faults thinning out over the readings raise the estimate',async()=>{
+ const trail=[];
+ for(const ns of [[1,2,3],[1,2],[1],[],[],[]]){answer=faults(ns);await analyseEssay(THREE,'argument','w-improving');trail.push(getLearner('w-improving').writing.argument.estimate);}
+ for(const ns of [[1,2,3],[1,2],[1,2],[1,3],[2,3],[1,2,3]]){answer=faults(ns);await analyseEssay(THREE,'argument','w-flat');}
+ assert.deepEqual(trail.slice(0,3),[0,0,0],'faulty readings leave it at nothing');
+ assert(trail[3]<trail[4]&&trail[4]<trail[5],'clean readings raise it, reading after reading');
+ assert(getLearner('w-improving').writing.argument.estimate>getLearner('w-flat').writing.argument.estimate,'the improving learner no longer looks like the one who never improved');
+ assert.equal(getLearner('w-flat').writing.argument.estimate,0);
+});
+test('a lens goes secure on Math Buddy\'s terms and never goes back',async()=>{
+ let r;answer=faults([]);
+ for(let k=0;k<5;k++){await analyseEssay(THREE,'language','w-secure');r=getLearner('w-secure').writing.language;}
+ assert.equal(r.secure,false,'five clean readings reach 0.83, not yet 0.85');
+ await analyseEssay(THREE,'language','w-secure');r=getLearner('w-secure').writing.language;
+ assert.equal(r.seen,6);assert(r.estimate>=0.85);assert.equal(r.secure,true);
+ answer=faults([1,2,3]);
+ for(let k=0;k<5;k++)await analyseEssay(THREE,'language','w-secure');
+ r=getLearner('w-secure').writing.language;
+ assert(r.estimate<0.85,'the estimate still falls');assert.equal(r.secure,true,'secure is latched');
+});
+test('each lens is its own record, and no lens ever shows up among the maths skills',async()=>{
+ recordAttempt('w-mixed','linear-one-step',true);
+ answer=faults([]);await analyseEssay(THREE,'structure','w-mixed');
+ answer=faults([1,2]);await analyseEssay(THREE,'evidence','w-mixed');
+ const l=getLearner('w-mixed');
+ assert.deepEqual(Object.keys(l.writing).sort(),['evidence','structure']);
+ assert.equal(l.writing.structure.right,1);assert.equal(l.writing.evidence.right,0);
+ assert.deepEqual(Object.keys(l.skills),['linear-one-step'],'Math Buddy\'s topic counts never include a lens');
+});
+test('no sentences is no attempt, and recordWriting refuses one directly',async()=>{
+ answer=faults([]);await analyseEssay('  ','structure','w-empty');
+ assert.deepEqual(getLearner('w-empty').writing,{});
+ assert.equal(recordWriting('w-empty','structure',0,0),null);
+ assert.equal(recordWriting('w-empty','',3,0),null);
+ assert.deepEqual(getLearner('w-empty').writing,{});
+});
+test('learners.json without a writing record loads, and a malformed one is cleaned',()=>{
+ const file=path.join(process.env.DESK_DATA_DIR,'learners.json');
+ const book=JSON.parse(fs.readFileSync(file,'utf8'));
+ book['w-old']={id:'w-old',skills:{},memory:[],history:[]};
+ book['w-bad']={id:'w-bad',skills:{},memory:[],history:[],writing:{structure:{seen:'3',right:2,estimate:7,secure:'yes'}}};
+ book['w-list']={id:'w-list',skills:{},memory:[],history:[],writing:['structure']};
+ fs.writeFileSync(file,JSON.stringify(book));
+ assert.deepEqual(getLearner('w-old').writing,{},'written before writing was measured');
+ assert.deepEqual(getLearner('w-bad').writing.structure,{topic:'structure',seen:3,right:2,estimate:1,secure:false,lastSeen:0,slips:[]});
+ assert.deepEqual(getLearner('w-list').writing,{},'a list is not a record');
+ assert.deepEqual(getLearner('nobody-yet').writing,{});
 });

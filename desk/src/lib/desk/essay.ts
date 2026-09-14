@@ -5,7 +5,7 @@
  */
 import { text } from "../engines/text";
 import { ANALYSIS_TYPES, paragraphStats, splitSentences, type AnalysisType } from "../rules/essay";
-import { addHistory } from "../session/learners";
+import { addHistory, recordWriting } from "../session/learners";
 import type { EssayAnalysis } from "../session/store";
 
 const SCHEMA = {
@@ -37,14 +37,15 @@ export async function analyseEssay(raw: string, type: AnalysisType, learnerId: s
   const verdicts = (Array.isArray(json?.verdicts) ? json.verdicts : []).filter((v) => valid.has(v?.n));
 
   // The reading happened, so the learner record says so — the same one-line episode Math Buddy
-  // writes after a marked set, from counts the reading actually produced, never invented. A
-  // paragraph with no sentences in it is not an episode.
+  // writes after a marked set, from counts the reading actually produced, never invented — and
+  // the lens's estimate takes it as one attempt. A paragraph with no sentences in it is neither.
   if (sentences.length) {
     const faulty = verdicts.filter((v) => v.verdict === "faulty").length;
     addHistory(learnerId, {
       at: Date.now(), kind: "writing", label: lens.name,
       detail: `${faulty} of ${sentences.length} sentence${sentences.length === 1 ? "" : "s"} to fix`,
     });
+    recordWriting(learnerId, lens.id, sentences.length, faulty);
   }
 
   return { text: raw, type, sentences, stats, verdicts, summary: json.summary, provider };

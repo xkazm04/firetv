@@ -32,6 +32,8 @@ export interface Learner {
   id: string;
   english: EnglishLearning;
   skills: Record<string, SkillRecord>;
+  /** the same record, one per Essay Master lens (structure, argument, evidence, language) — kept apart so no maths count ever includes a lens */
+  writing: Record<string, SkillRecord>;
   memory: string[];         // plain sentences the model reads, newest last, capped at 40
   history: HistoryEntry[];  // what happened, newest last, capped at 20
 }
@@ -46,6 +48,8 @@ const HISTORY_CAP = 20;
 const RATE = 0.3;
 const SECURE_AT = 0.85;
 const SECURE_SEEN = 4;
+/** A reading counts as a right attempt when under a quarter of its sentences came back faulty. */
+const WRITING_CLEAN_BELOW = 0.25;
 
 type Book = Record<string, Learner>;
 
@@ -63,13 +67,11 @@ function writeAll(book: Book): void {
   try { mkdirSync(DATA, { recursive: true }); writeFileSync(FILE, JSON.stringify(book)); } catch {}
 }
 
-function blank(id: string): Learner { return { id, english: emptyEnglish(), skills: {}, memory: [], history: [] }; }
+function blank(id: string): Learner { return { id, english: emptyEnglish(), skills: {}, writing: {}, memory: [], history: [] }; }
 
-/** Normalise whatever was on disk into a shape the rest of the module can trust. */
-function clean(id: string, l: unknown): Learner {
-  const o = (l ?? {}) as Partial<Learner>;
+function cleanSkills(raw: unknown): Record<string, SkillRecord> {
   const skills: Record<string, SkillRecord> = {};
-  const src = (o.skills ?? {}) as Record<string, Partial<SkillRecord>>;
+  const src = (raw && typeof raw === "object" && !Array.isArray(raw) ? raw : {}) as Record<string, Partial<SkillRecord>>;
   for (const k of Object.keys(src)) {
     const r = src[k] ?? {};
     skills[k] = {
@@ -82,6 +84,15 @@ function clean(id: string, l: unknown): Learner {
       slips: Array.isArray(r.slips) ? r.slips.filter((s): s is string => typeof s === "string") : [],
     };
   }
+  return skills;
+}
+
+/** Normalise whatever was on disk into a shape the rest of the module can trust. */
+function clean(id: string, l: unknown): Learner {
+  const o = (l ?? {}) as Partial<Learner>;
+  const skills = cleanSkills(o.skills);
+  // a learners.json written before writing was measured still loads, with no lens seen yet
+  const writing = cleanSkills(o.writing);
   // a learners.json written before history existed still loads: the field simply defaults to none
   const history: HistoryEntry[] = (Array.isArray(o.history) ? o.history : [])
     .filter((h): h is HistoryEntry => !!h && typeof h === "object" && typeof (h as HistoryEntry).label === "string")
@@ -92,7 +103,7 @@ function clean(id: string, l: unknown): Learner {
       label: String(h.label), detail: typeof h.detail === "string" ? h.detail : "",
     }))
     .slice(-HISTORY_CAP);
-  return { id, english: cleanEnglish(o.english), skills, memory: Array.isArray(o.memory) ? o.memory.filter((m): m is string => typeof m === "string").slice(-MEMORY_CAP) : [], history };
+  return { id, english: cleanEnglish(o.english), skills, writing, memory: Array.isArray(o.memory) ? o.memory.filter((m): m is string => typeof m === "string").slice(-MEMORY_CAP) : [], history };
 }
 
 export function getLearner(id: string): Learner {
@@ -120,19 +131,37 @@ export function saveEnglish(id: string, english: EnglishLearning): void {
  */
 export function recordAttempt(id: string, topic: string, right: boolean, slip?: string): SkillRecord {
   const l = getLearner(id);
-  const prev: SkillRecord = l.skills[topic] ?? { topic, seen: 0, right: 0, estimate: 0, secure: false, lastSeen: 0, slips: [] };
+  const rec = step(l.skills[topic], topic, right, slip);
+  l.skills[topic] = rec;
+  saveLearner(l);
+  return rec;
+}
+
+/**
+ * One reading through one lens, as one attempt on the same record Math Buddy keeps: right when
+ * under a quarter of the sentences came back faulty. So a learner whose faults thin out over the
+ * readings is seen to rise, and secure latches on the same terms and is never unset.
+ */
+export function recordWriting(id: string, lens: string, sentences: number, faulty: number): SkillRecord | null {
+  if (!lens || !(sentences > 0)) return null;
+  const l = getLearner(id);
+  const rec = step(l.writing[lens], lens, faulty / sentences < WRITING_CLEAN_BELOW);
+  l.writing[lens] = rec;
+  saveLearner(l);
+  return rec;
+}
+
+function step(before: SkillRecord | undefined, topic: string, right: boolean, slip?: string): SkillRecord {
+  const prev: SkillRecord = before ?? { topic, seen: 0, right: 0, estimate: 0, secure: false, lastSeen: 0, slips: [] };
   const estimate = Math.min(1, Math.max(0, prev.estimate + RATE * ((right ? 1 : 0) - prev.estimate)));
   const seen = prev.seen + 1;
   const slips = slip ? [...prev.slips.filter((s) => s !== slip), slip] : prev.slips;
-  const rec: SkillRecord = {
+  return {
     topic, seen, right: prev.right + (right ? 1 : 0), estimate,
     // latched: once secure, always secure
     secure: prev.secure || (estimate >= SECURE_AT && seen >= SECURE_SEEN),
     lastSeen: Date.now(), slips,
   };
-  l.skills[topic] = rec;
-  saveLearner(l);
-  return rec;
 }
 
 export function addMemory(id: string, line: string): void {
