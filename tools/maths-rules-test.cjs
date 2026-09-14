@@ -17,6 +17,8 @@ const {hint}=require(path.join(root,'src/lib/desk/hint.ts'));
 const {explain}=require(path.join(root,'src/lib/desk/explain.ts'));
 const {slip}=require(path.join(root,'src/lib/rules/maths.ts'));
 const {getLearner,recordAttempt}=require(path.join(root,'src/lib/session/learners.ts'));
+const {SYLLABUS,SYSTEM_START,topic,nextTopic,expectedIndex}=require(path.join(root,'src/lib/library/syllabus.ts'));
+const {LESSONS}=require(path.join(root,'src/lib/library/lessons.data.ts'));
 const storeFile=path.join(root,'src/lib/session/store.ts');
 let store=require(storeFile);
 after(()=>clearInterval(globalThis.__desk.ticker));
@@ -143,4 +145,45 @@ test('an answer arriving on an event, or from a desk saved before this change, i
  clearInterval(globalThis.__desk.ticker);delete globalThis.__desk;delete require.cache[storeFile];store=require(storeFile);
  assert.deepEqual(store.getSession().practice.items.map(i=>i.question),stated.map(c=>c.question),'the saved set is still there');
  assert(!keysIn(store.getSession()).includes('answer'),'loaded from session.json');
+});
+
+// ---- the topic spine every maths screen and the practice set read from ----
+test('the syllabus is a path: unique ids, prereqs that point back along it, lessons that exist',()=>{
+ const ids=SYLLABUS.map(t=>t.id);
+ assert.deepEqual(ids,['linear-one-step','linear-two-step','linear-both-sides']);assert.equal(new Set(ids).size,ids.length);
+ const lessons=new Set(LESSONS.map(l=>l.id));
+ SYLLABUS.forEach((t,ix)=>{
+  for(const p of t.prereq)assert(ids.indexOf(p)>-1&&ids.indexOf(p)<ix,`${t.id} needs ${p}, which must come earlier`);
+  if(t.lessonId)assert(lessons.has(t.lessonId),`${t.id} names lesson ${t.lessonId}`);
+  for(const k of ['us','uk','cz','de']){assert(Number.isInteger(t.year[k]),`${t.id} ${k}`);if(ix)assert(t.year[k]>=SYLLABUS[ix-1].year[k],`${t.id} is met no earlier than the topic before it in ${k}`);}
+ });
+ assert.deepEqual(Object.keys(SYSTEM_START).sort(),['cz','de','uk','us']);
+});
+test('topic finds by exact id and says undefined for anything else',()=>{
+ assert.equal(topic('linear-two-step'),SYLLABUS[1]);assert.equal(topic('linear-two-step').name,'Two-step equations');
+ for(const id of ['','unknown','Linear-One-Step',' linear-one-step','linear',undefined,null])assert.equal(topic(id),undefined,String(id));
+});
+test('nextTopic walks the path in order, ignores ids it does not know, and runs out when all is secure',()=>{
+ const next=(secure)=>nextTopic(secure)?.id;
+ assert.equal(next([]),'linear-one-step','a learner with nothing secure starts at the start');
+ assert.equal(next(['linear-one-step']),'linear-two-step');
+ assert.equal(next(['linear-one-step','linear-two-step']),'linear-both-sides');
+ assert.equal(next(['linear-two-step','linear-one-step']),'linear-both-sides','the order the ids are listed in does not matter');
+ assert.equal(next(['linear-one-step','linear-two-step','linear-both-sides']),undefined);
+ assert.equal(next(['unknown','','linear-two-step-x']),'linear-one-step','unknown ids unlock nothing');
+ assert.equal(next(['linear-two-step']),'linear-one-step','a gap earlier on the path is filled first');
+ assert.equal(next(['linear-both-sides']),'linear-one-step');
+ assert.equal(next(['linear-one-step','linear-both-sides']),'linear-two-step','a topic secured out of order is skipped, not repeated');
+ assert.equal(next(['linear-one-step','linear-one-step']),'linear-two-step','a repeated id counts once');
+});
+test('expectedIndex reads age against each system\'s own year: -1 before the path, never past its end',()=>{
+ // the first age at which each system has a topic behind the learner, and the year before it
+ for(const [sys,first] of [['us',11],['uk',11],['cz',11],['de',10]]){
+  assert.equal(expectedIndex(sys,first-1),-1,`${sys} age ${first-1}`);assert.equal(expectedIndex(sys,first),1,`${sys} age ${first}`);
+ }
+ assert.equal(expectedIndex('uk',12),2);assert.equal(expectedIndex('uk',13),3);assert.equal(expectedIndex('de',11),2);assert.equal(expectedIndex('de',12),3);
+ assert.equal(expectedIndex('us',13),3);assert.equal(expectedIndex('cz',12),2);
+ for(const sys of ['us','uk','cz','de'])for(const age of [0,5,SYSTEM_START[sys]])assert.equal(expectedIndex(sys,age),-1,`${sys} age ${age}`);
+ for(const sys of ['us','uk','cz','de'])for(const age of [16,40,120])assert.equal(expectedIndex(sys,age),SYLLABUS.length,`${sys} age ${age}`);
+ assert.notEqual(expectedIndex('uk',4),0,'nothing behind them is -1, never 0');
 });
