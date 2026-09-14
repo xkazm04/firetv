@@ -16,7 +16,7 @@ const {markSet}=require(path.join(root,'src/lib/desk/mark.ts'));
 const {hint}=require(path.join(root,'src/lib/desk/hint.ts'));
 const {explain}=require(path.join(root,'src/lib/desk/explain.ts'));
 const {slip}=require(path.join(root,'src/lib/rules/maths.ts'));
-const {getLearner}=require(path.join(root,'src/lib/session/learners.ts'));
+const {getLearner,recordAttempt}=require(path.join(root,'src/lib/session/learners.ts'));
 const reply=(json)=>async()=>({json,provider:'test',ms:1});
 
 test('verify accepts a value that satisfies the equation and rejects one that does not',()=>{
@@ -68,6 +68,14 @@ test('no marked line carries a value, and only settled items reach the learner r
  assert.equal(me.history.at(-1).detail,'1 of 6 right');
  looked=reply({items:'not json'});const blank=await markSet('img',sheet,'maths-blank');
  assert.equal(blank.unsure,6);assert.equal(getLearner('maths-blank').skills['linear-one-step'],undefined);
+});
+test('a wrong attempt moves the estimate but never un-secures a secured skill',()=>{
+ let rec;for(let k=0;k<3;k++)rec=recordAttempt('maths-secure','linear-two-step',true);assert.equal(rec.secure,false,'three attempts are not enough');
+ for(let k=0;k<3;k++)rec=recordAttempt('maths-secure','linear-two-step',true);assert.equal(rec.secure,true);
+ const before=rec.estimate;rec=recordAttempt('maths-secure','linear-two-step',false,'arithmetic-slip');
+ assert(rec.estimate<before);assert.equal(rec.secure,true);assert.deepEqual(rec.slips,['arithmetic-slip']);
+ for(let k=0;k<5;k++)recordAttempt('maths-secure','linear-two-step',false);
+ assert.equal(getLearner('maths-secure').skills['linear-two-step'].secure,true);
 });
 test('hints withhold the answer and the second hint must go one step further',async()=>{
  seen=[];answer=reply({hint:'Look at what is added to 2x.',what_to_try_next:'Undo it on both sides.'});
