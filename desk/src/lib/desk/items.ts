@@ -102,7 +102,8 @@ export async function makeItems(
     ms += r.ms;
     for (const c of keep(r.json?.items, items)) {
       if (items.length >= n) break;
-      items.push({ n: items.length + 1, question: c.question, answer: c.answer });
+      // the stated answer has done its job at the gate; it is not carried onto the desk
+      items.push({ n: items.length + 1, question: c.question });
     }
   }
 

@@ -29,13 +29,29 @@ export interface Task { id: string; sub: Subject; name: string; min: number; don
 export interface Hint { key: string; problem: string; stage: 1 | 2; hint1: { hint: string; next: string } | null; hint2: { hint: string; next: string } | null; askedQ: string; rule?: RuleCard; provider?: string; ms?: number; }
 export interface LessonPick { id: string; title: string; t: number; text: string; why: string; youtube?: string; }
 export interface EnglishAnalysis { sentence: string; card: RuleCard; explanation: string; provider?: string; }
+/**
+ * One practice question as the desk shows it. There is deliberately no answer here: the session goes
+ * to every screen, and marking substitutes into the question on the server, so the answer never needs to leave it.
+ */
 export interface PracticeItem {
-  n: number; question: string; answer: string;
+  n: number; question: string;
   studentAnswer?: string; studentWorking?: string;
   verdict?: "right" | "wrong" | "unsure";
   slip?: string; said?: string;
 }
 export interface Practice { topic: string; items: PracticeItem[]; pageId?: string; marked: boolean; }
+
+/** Only the fields a screen may see — an answer riding in on an event or an older session.json stops here. */
+function shown({ n, question, studentAnswer, studentWorking, verdict, slip, said }: PracticeItem): PracticeItem {
+  const item: PracticeItem = { n, question };
+  if (studentAnswer !== undefined) item.studentAnswer = studentAnswer;
+  if (studentWorking !== undefined) item.studentWorking = studentWorking;
+  if (verdict !== undefined) item.verdict = verdict;
+  if (slip !== undefined) item.slip = slip;
+  if (said !== undefined) item.said = said;
+  return item;
+}
+const shownPractice = (p: Practice | null | undefined): Practice | null => (p ? { ...p, items: (p.items ?? []).map(shown) } : null);
 export interface Verdict { n: number; verdict: "strong" | "faulty" | "neutral"; note: string; }
 export interface EssayAnalysis { text: string; type: string; sentences: Sentence[]; stats: Record<string, number>; verdicts: Verdict[]; summary: string; provider?: string; }
 
@@ -155,8 +171,8 @@ export function reduce(s: Session, e: Event): Session {
       n.timer = t; break; }
     case "timer.skipbreak": n.timer = { ...s.timer, phase: "work", left: 25 * 60 }; n.screen = s.timer.before ?? "page"; break;
     case "topic.open": n.topic = e.topic; n.subject = "maths"; n.screen = "topics"; n.focus = 0; break;
-    case "practice.set": n.practice = e.practice; n.topic = e.practice.topic; n.walkIx = 0; n.screen = "practice"; break;
-    case "practice.marked": if (s.practice) { n.practice = { ...s.practice, items: e.items, marked: true }; n.walkIx = 0; n.screen = "walk"; } break;
+    case "practice.set": n.practice = shownPractice(e.practice); n.topic = e.practice.topic; n.walkIx = 0; n.screen = "practice"; break;
+    case "practice.marked": if (s.practice) { n.practice = { ...s.practice, items: e.items.map(shown), marked: true }; n.walkIx = 0; n.screen = "walk"; } break;
     case "walk": { const len = s.practice?.items.length ?? 0; n.walkIx = len ? Math.min(len - 1, Math.max(0, e.ix)) : 0; break; }
     case "practice.clear": n.practice = null; n.topic = null; n.screen = "tonight"; n.focus = 0; break;
     case "status": n.status = e.text; break;
@@ -170,7 +186,7 @@ export function reduce(s: Session, e: Event): Session {
 type Sub = (s: Session) => void;
 interface Store { session: Session; subs: Set<Sub>; ticker: NodeJS.Timeout | null; }
 const g = globalThis as unknown as { __desk?: Store };
-function load(): Session { try { if (existsSync(FILE)) { const j = JSON.parse(readFileSync(FILE, "utf8")); if (Array.isArray(j?.profiles) && j?.learner?.id && j.profiles.every((p: Profile) => p.type in AGE_RANGE)) return { ...fresh(), ...j, phoneUrl: phoneUrl(), reading: false, englishLearning: getLearner(j.learner.id).english, conversation: j.conversation ? { ...j.conversation, pending: null, capture: false, paused: true } : null }; } } catch {} return fresh(); }
+function load(): Session { try { if (existsSync(FILE)) { const j = JSON.parse(readFileSync(FILE, "utf8")); if (Array.isArray(j?.profiles) && j?.learner?.id && j.profiles.every((p: Profile) => p.type in AGE_RANGE)) return { ...fresh(), ...j, practice: shownPractice(j.practice), phoneUrl: phoneUrl(), reading: false, englishLearning: getLearner(j.learner.id).english, conversation: j.conversation ? { ...j.conversation, pending: null, capture: false, paused: true } : null }; } } catch {} return fresh(); }
 if (!g.__desk) g.__desk = { session: load(), subs: new Set(), ticker: null };
 const store = g.__desk;
 // HMR can retain a session created before this feature was installed.

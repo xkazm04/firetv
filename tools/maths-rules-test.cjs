@@ -1,6 +1,6 @@
 /** Math Buddy's offline rules. Run with npm test in desk/ (directly: node tools/maths-rules-test.cjs). No model is called; a disposable data directory, never desk/data. */
 const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict'),Module=require('node:module');
-const {test}=require('node:test');
+const {test,after,mock}=require('node:test');
 const root=path.resolve(__dirname,'../desk');
 let ts;try{ts=require(path.join(root,'node_modules/typescript'));}catch{console.error('This suite transpiles desk TypeScript with desk\'s own compiler. Run `npm install` in desk/ first, then `npm test` from desk/.');process.exit(1);}
 const resolve=Module._resolveFilename;
@@ -17,6 +17,9 @@ const {hint}=require(path.join(root,'src/lib/desk/hint.ts'));
 const {explain}=require(path.join(root,'src/lib/desk/explain.ts'));
 const {slip}=require(path.join(root,'src/lib/rules/maths.ts'));
 const {getLearner,recordAttempt}=require(path.join(root,'src/lib/session/learners.ts'));
+const storeFile=path.join(root,'src/lib/session/store.ts');
+let store=require(storeFile);
+after(()=>clearInterval(globalThis.__desk.ticker));
 const reply=(json)=>async()=>({json,provider:'test',ms:1});
 
 test('verify accepts a value that satisfies the equation and rejects one that does not',()=>{
@@ -38,11 +41,11 @@ test('verify never throws on input it cannot read and never says yes to it',()=>
 test('a generated item whose stated answer is wrong never reaches the practice set',async()=>{
  answer=reply({items:[{question:'2x+3=11',answer:'4'},{question:'x-5=2',answer:'3'},{question:'3x = 18',answer:'x = 6'},{question:'2x+3 = 11',answer:'4'},{question:'x/2=4',answer:''},{question:'x+1=10',answer:'9'}]});
  const r=await makeItems('linear-one-step','maths-items',3);
- assert.deepEqual(r.items.map(i=>[i.n,i.question,i.answer]),[[1,'2x+3=11','4'],[2,'3x = 18','6'],[3,'x+1=10','9']]);
+ assert.deepEqual(r.items,[{n:1,question:'2x+3=11'},{n:2,question:'3x = 18'},{n:3,question:'x+1=10'}],'the stated answer does its job at the gate and goes no further');
  assert.equal(r.tries,1);
 });
 
-const sheet={topic:'linear-one-step',marked:false,items:[['2x+3=11','4'],['x-5=2','7'],['3x=18','6'],['x+1=10','9'],['5x=35','7'],['x/2=4','8']].map(([question,answer],ix)=>({n:ix+1,question,answer}))};
+const sheet={topic:'linear-one-step',marked:false,items:['2x+3=11','x-5=2','3x=18','x+1=10','5x=35','x/2=4'].map((question,ix)=>({n:ix+1,question}))};
 const marks=[
  {n:1,studentAnswer:'4',studentWorking:'2x=8',verdict:'right',solution:'4',slip:'sign-lost-moving'},
  {n:2,studentAnswer:'x = -3',studentWorking:'x=2-5',verdict:'wrong',solution:'7',slip:'sign-lost-moving'},
@@ -94,4 +97,50 @@ test('the reply to an explanation withholds the verdict and keeps only this topi
  assert.equal(kept.reply,'Look again at the line where the 5 moved.');assert.equal(kept.slip,'sign-lost-moving');
  assert.match(seen[0].system,/never state the final answer, never give the completed line, never say whether they are right or wrong/);
  for(const s of ['bracket-first-term-only','unclear','made-up'])(answer=reply({reply:'Check that step.',slip:s}),assert.equal((await explain('x-5=2','','linear-one-step','maths-explain')).slip,undefined,s));
+});
+
+// ---- the session goes to every screen, so no practice answer may ride in it ----
+/** Every key anywhere in a value, however deep. */
+const keysIn=(o)=>o&&typeof o==='object'?Object.entries(o).flatMap(([k,v])=>[k,...keysIn(v)]):[];
+const stated=[{question:'2x+3=11',answer:'4'},{question:'x-5=2',answer:'7'},{question:'3x=18',answer:'6'},{question:'x+1=10',answer:'9'},{question:'5x=35',answer:'7'},{question:'x/2=4',answer:'8'}];
+test('a practice set reaches the screens with no answer in the session, the stream or the saved desk',async()=>{
+ const practiceRoute=require(path.join(root,'src/app/api/practice/route.ts')),sessionRoute=require(path.join(root,'src/app/api/session/route.ts')),streamRoute=require(path.join(root,'src/app/api/session/stream/route.ts'));
+ store.dispatch({type:'reset'});answer=reply({items:stated});
+ const made=await practiceRoute.POST(new Request('http://desk/api/practice',{method:'POST',body:JSON.stringify({topic:'linear-one-step'})}));
+ assert.equal(made.status,200);assert.deepEqual(Object.keys(await made.json()).sort(),['items','ms','provider','tries']);
+ const got=await (await sessionRoute.GET()).json();
+ assert.equal(got.practice.items.length,6,'the set did land');
+ // the stream's keep-alive ping is a real interval; a mocked one lets the suite end the moment the reader lets go
+ mock.timers.enable({apis:['setInterval']});
+ const reader=(await streamRoute.GET()).body.getReader(),first=new TextDecoder().decode((await reader.read()).value);await reader.cancel();
+ mock.timers.reset();
+ const streamed=JSON.parse(first.replace(/^data: /,''));
+ const saved=JSON.parse(fs.readFileSync(path.join(process.env.DESK_DATA_DIR,'session.json'),'utf8'));
+ for(const [where,payload] of [['GET /api/session',got],['the session stream',streamed],['session.json',saved]]){
+  assert.deepEqual(payload.practice.items.map(i=>i.question),stated.map(c=>c.question),where);
+  assert(!keysIn(payload.practice).includes('answer'),`${where} carries an answer field`);
+ }
+});
+test('marking grades on the server from the question alone, and the marked set carries no answer either',async()=>{
+ store.dispatch({type:'reset'});store.dispatch({type:'practice.set',practice:sheet});
+ looked=reply({items:marks});
+ const {items}=await markSet('img',store.getSession().practice,'maths-server-marks');
+ assert.deepEqual(items.map(i=>i.verdict),['right','wrong','wrong','unsure','unsure','unsure'],'the verdicts come from substitution, with no stored answer to lean on');
+ store.dispatch({type:'practice.marked',items});
+ const keys=keysIn(store.getSession().practice);
+ assert(!keys.includes('answer'));assert(!keys.includes('solution'),'the marker\'s own solution stays on the server');
+});
+test('an answer arriving on an event, or from a desk saved before this change, is stripped before any screen sees it',()=>{
+ store.dispatch({type:'reset'});
+ store.dispatch({type:'practice.set',practice:{topic:'linear-one-step',marked:false,items:stated.map((c,ix)=>({n:ix+1,...c}))}});
+ assert(!keysIn(store.getSession()).includes('answer'),'practice.set');
+ store.dispatch({type:'practice.marked',items:stated.map((c,ix)=>({n:ix+1,...c,verdict:'right',said:`Number ${ix+1} is right.`}))});
+ assert(!keysIn(store.getSession()).includes('answer'),'practice.marked');
+ assert.equal(store.getSession().practice.items[0].said,'Number 1 is right.','what a screen may see is kept');
+ // a session.json written while items still carried answers, loaded by a fresh store
+ const legacy={...store.getSession(),practice:{topic:'linear-one-step',marked:false,items:stated.map((c,ix)=>({n:ix+1,...c}))}};
+ fs.writeFileSync(path.join(process.env.DESK_DATA_DIR,'session.json'),JSON.stringify(legacy));
+ clearInterval(globalThis.__desk.ticker);delete globalThis.__desk;delete require.cache[storeFile];store=require(storeFile);
+ assert.deepEqual(store.getSession().practice.items.map(i=>i.question),stated.map(c=>c.question),'the saved set is still there');
+ assert(!keysIn(store.getSession()).includes('answer'),'loaded from session.json');
 });
