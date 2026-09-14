@@ -298,3 +298,24 @@ test('the lens cards: one standing per lens, in the order the TV draws them',()=
  assert.deepEqual(writingTotals(lensStandings(history,writing),history),{read:6,secure:1},'the uncapped record outcounts the capped history');
  assert.deepEqual(writingTotals(lensStandings(history,{}),history),{read:2,secure:0},'with no record yet the episodes are the count');
 });
+
+// The Writing KPI (tools/kpi-measure.cjs) reads this storage shape. Pinned here, so a change to the shape fails beside the code that changed it.
+const kpi=require('./kpi-measure.cjs');
+test('the Writing KPI sees stage 6 as it landed: a "writing" history kind that the essay reading appends',()=>{
+ assert.deepEqual(kpi.writingPersisted(root),{persisted:true,kindDeclared:true,essayWrites:true});
+ const fake=path.join(process.env.DESK_DATA_DIR,'fake-desk'),put=(f,t)=>{fs.mkdirSync(path.dirname(path.join(fake,f)),{recursive:true});fs.writeFileSync(path.join(fake,f),t);};
+ const learners=fs.readFileSync(path.join(root,'src/lib/session/learners.ts'),'utf8'),essay=fs.readFileSync(path.join(root,'src/lib/desk/essay.ts'),'utf8');
+ put('src/lib/session/learners.ts',learners.replace(/ \| "writing"/,''));put('src/lib/desk/essay.ts',essay);
+ assert.deepEqual(kpi.writingPersisted(fake),{persisted:false,kindDeclared:false,essayWrites:true},'a kind the record does not declare is not persistence');
+ put('src/lib/session/learners.ts',learners);put('src/lib/desk/essay.ts',essay.replace(/kind: "writing"/,'kind: "practice"'));
+ assert.deepEqual(kpi.writingPersisted(fake),{persisted:false,kindDeclared:true,essayWrites:false},'a kind nothing appends is not persistence either');
+});
+test('the Writing KPI counts a learner with a writing episode, from the book a real reading wrote',()=>{
+ const file=path.join(process.env.DESK_DATA_DIR,'learners.json');
+ const r=kpi.learnerEvidence({file,source:'DESK_DATA_DIR',tried:[file]});
+ const book=JSON.parse(fs.readFileSync(file,'utf8'));
+ const writers=Object.values(book).filter(l=>(l.history||[]).some(h=>h.kind==='writing')).length;
+ assert(writers>=3,'the readings above wrote writing episodes for several learners');
+ assert.equal(r.withWriting,writers,'a writing record is an episode in the history, not a `writing` field');
+ assert.equal(r.reading,Object.values(book).reduce((n,l)=>n+(l.history||[]).length,0));
+});

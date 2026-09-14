@@ -1,17 +1,17 @@
 /**
- * Prints the project's KPI readings. Run with `npm run measure` in desk/ (directly: node tools/kpi-measure.cjs).
- * Read-only: it runs the test suite in its own scratch data dir and never writes to desk/data.
- * `--json` prints the same readings as one JSON object, for a back-measurement that has to be compared.
+ * Prints every one of the project's KPI readings. Run with `npm run measure` in desk/ (directly: node tools/kpi-measure.cjs).
+ * Read-only: the suites it shells out to use their own scratch data dir, tsc runs with --noEmit and no build info,
+ * and nothing here writes. `--json` prints the same readings as one JSON object, for a back-measurement that has to be compared.
+ * A reading it could not take is null and says why — never a 0, because a 0 recorded as a measurement is a claim.
  */
 const fs = require("node:fs"), path = require("node:path"), { spawnSync } = require("node:child_process");
 const root = path.resolve(__dirname, "..");
 const desk = path.join(root, "desk");
-const asJson = process.argv.includes("--json");
 
-/** Every .cjs/.mjs under tools/ is a candidate test file; node_modules is not ours. */
+/** Every .cjs/.mjs under tools/ is a candidate test file — except this tool and its own suite, which name modules without testing them. */
 function testSources() {
   return fs.readdirSync(__dirname)
-    .filter(f => /\.(cjs|mjs)$/.test(f) && f !== path.basename(__filename))
+    .filter(f => /\.(cjs|mjs)$/.test(f) && !f.startsWith("kpi-measure"))
     .map(f => ({ file: `tools/${f}`, text: fs.readFileSync(path.join(__dirname, f), "utf8") }));
 }
 /** A module counts as covered when some file under tools/ names its path. Requires and @/ imports both hit. */
@@ -38,71 +38,140 @@ const MATHS_CORE = ["src/lib/desk/verify.ts", "src/lib/desk/items.ts", "src/lib/
 const WRITING_STAGES_VERIFIED_BY_HAND = 5;
 const ESSAY_CORE = ["src/lib/rules/essay.ts", "src/lib/desk/essay.ts"];
 
-function writingPersisted() {
-  const learners = fs.readFileSync(path.join(desk, "src/lib/session/learners.ts"), "utf8");
-  const shape = learners.match(/export interface Learner \{[^}]*\}/);
-  return Boolean(shape && /\n\s*writing\??:/.test(shape[0]));
+/**
+ * Stage 6 as it landed: a writing episode is a history entry of kind "writing", and the essay reading
+ * is what appends it. Both halves must hold — a kind nothing writes, or a write of a kind the record drops, is not persistence.
+ */
+function writingPersisted(deskDir = desk) {
+  const read = f => { try { return fs.readFileSync(path.join(deskDir, f), "utf8"); } catch { return ""; } };
+  const entry = read("src/lib/session/learners.ts").match(/export interface HistoryEntry \{[^}]*\}/);
+  const kindDeclared = Boolean(entry && /\bkind\s*:[^;\n]*"writing"/.test(entry[0]));
+  const essayWrites = /addHistory\(\s*\w+\s*,\s*\{[^}]*\bkind\s*:\s*"writing"/.test(read("src/lib/desk/essay.ts"));
+  return { persisted: kindDeclared && essayWrites, kindDeclared, essayWrites };
+}
+
+// KPI 4 — TypeScript typecheck errors in desk/, from desk's own compiler. No compiler, no reading.
+function typecheckErrors() {
+  const tsc = path.join(desk, "node_modules/typescript/bin/tsc");
+  if (!fs.existsSync(tsc)) return { errors: null, unresolved: null, note: "desk/node_modules has no typescript — run npm install in desk/ (in a worktree, link the operator's copy)" };
+  const r = spawnSync(process.execPath, [tsc, "--noEmit", "--incremental", "false", "-p", path.join(desk, "tsconfig.json")], { cwd: desk, encoding: "utf8" });
+  const out = `${r.stdout || ""}${r.stderr || ""}`;
+  if (r.status !== 0 && !/error TS\d+/.test(out)) return { errors: null, unresolved: null, note: `tsc exited ${r.status} without a diagnostic` };
+  const lines = out.split(/\r?\n/).filter(l => /error TS\d+/.test(l));
+  // module-not-found errors are a missing dependency, not a type fault — counted in, and shown, so a dependency gap is visible
+  return { errors: lines.length, unresolved: lines.filter(l => /error TS2307/.test(l)).length, note: null };
 }
 
 // The artefact: what the learners on this machine actually have. Code that exists proves nothing.
-function learnerEvidence() {
-  const file = path.join(process.env.DESK_DATA_DIR || path.join(desk, "data"), "learners.json");
-  if (!fs.existsSync(file)) return { file, exists: false, learners: 0, history: 0, withEnglish: 0, withWriting: 0 };
-  let book = {};
-  try { book = JSON.parse(fs.readFileSync(file, "utf8")) || {}; } catch { return { file, exists: true, unreadable: true }; }
+/** The main worktree is the operator's checkout, where the desk actually runs. Empty when git is not there. */
+function mainCheckout(cwd = root) {
+  const r = spawnSync("git", ["worktree", "list", "--porcelain"], { cwd, encoding: "utf8" });
+  const m = r.status === 0 && (r.stdout || "").match(/^worktree (.+)$/m);
+  return m ? path.resolve(m[1].trim()) : null;
+}
+const same = (a, b) => process.platform === "win32" ? path.resolve(a).toLowerCase() === path.resolve(b).toLowerCase() : path.resolve(a) === path.resolve(b);
+
+/**
+ * Where the learner book is. DESK_DATA_DIR, when set, is the answer and nothing else is tried — it is what the app itself reads.
+ * Otherwise this checkout's desk/data, then the main checkout's: an autopilot worktree never carries desk/data.
+ */
+function findLearnerBook({ env = process.env, checkout = root, main = mainCheckout(checkout) } = {}) {
+  const candidates = env.DESK_DATA_DIR
+    ? [{ dir: env.DESK_DATA_DIR, source: "DESK_DATA_DIR" }]
+    : [{ dir: path.join(checkout, "desk/data"), source: "this checkout" },
+       ...(main && !same(main, checkout) ? [{ dir: path.join(main, "desk/data"), source: "main checkout" }] : [])];
+  const tried = candidates.map(c => path.join(c.dir, "learners.json"));
+  const hit = candidates.find((c, i) => fs.existsSync(tried[i]));
+  return hit ? { file: path.join(hit.dir, "learners.json"), source: hit.source, tried } : { file: null, source: null, tried };
+}
+
+/**
+ * Three states, never two: no book found (reading null), a book that is not JSON (reading null), and a book
+ * that was read — whose reading is its history entry count, and may honestly be 0.
+ */
+function learnerEvidence(where = findLearnerBook()) {
+  const base = { found: Boolean(where.file), file: where.file, source: where.source, tried: where.tried };
+  if (!where.file) return { ...base, readable: false, reading: null, learners: null, history: null, withEnglish: null, withWriting: null };
+  let book;
+  try { book = JSON.parse(fs.readFileSync(where.file, "utf8")); } catch { book = undefined; }
+  if (!book || typeof book !== "object" || Array.isArray(book)) return { ...base, readable: false, reading: null, learners: null, history: null, withEnglish: null, withWriting: null };
   const all = Object.values(book).filter(l => l && typeof l === "object");
+  const history = l => Array.isArray(l.history) ? l.history : [];
+  const count = all.reduce((n, l) => n + history(l).length, 0);
   return {
-    file, exists: true,
+    ...base, readable: true, reading: count,
     learners: all.length,
-    history: all.reduce((n, l) => n + (Array.isArray(l.history) ? l.history.length : 0), 0),
+    history: count,
     withEnglish: all.filter(l => l.english && Object.keys(l.english).length).length,
-    withWriting: all.filter(l => l.writing && Object.keys(l.writing).length).length,
+    // a writing record is an episode in the history, not a field of its own
+    withWriting: all.filter(l => history(l).some(h => h && h.kind === "writing")).length,
   };
 }
 
-const sources = testSources();
-const linga = lingaChecks();
-const maths = MATHS_CORE.map(m => ({ module: m, by: coveredBy(sources, m) }));
-const essay = ESSAY_CORE.map(m => ({ module: m, by: coveredBy(sources, m) }));
-const persisted = writingPersisted();
-const essayTested = essay.some(e => e.by.length);
-const learners = learnerEvidence();
-const writingStages = WRITING_STAGES_VERIFIED_BY_HAND + (persisted ? 1 : 0) + (essayTested ? 1 : 0);
-const rel = p => path.relative(root, p).replace(/\\/g, "/");
-
-if (asJson) {
-  console.log(JSON.stringify({
-    lingaChecksPassing: linga.pass, lingaChecksFailing: linga.fail, lingaNote: linga.note,
-    mathsCoreUnderTest: maths.filter(m => m.by.length).length, mathsCoreTotal: maths.length,
-    mathsCore: Object.fromEntries(maths.map(m => [m.module, m.by])),
-    writingStagesImplemented: writingStages, writingStagesTotal: 7,
-    writingEpisodePersisted: persisted, essayRulesUnderTest: essayTested,
-    learners,
-  }, null, 2));
-  process.exit(0);
+function measure() {
+  const sources = testSources();
+  const linga = lingaChecks();
+  const maths = MATHS_CORE.map(m => ({ module: m, by: coveredBy(sources, m) }));
+  const essay = ESSAY_CORE.map(m => ({ module: m, by: coveredBy(sources, m) }));
+  const writing = writingPersisted();
+  const essayTested = essay.some(e => e.by.length);
+  const learners = learnerEvidence();
+  const typecheck = typecheckErrors();
+  const writingStages = WRITING_STAGES_VERIFIED_BY_HAND + (writing.persisted ? 1 : 0) + (essayTested ? 1 : 0);
+  return { linga, maths, essay, writing, essayTested, learners, typecheck, writingStages };
 }
 
-console.log("Study Desk — KPI readings");
-console.log(`  source: ${root}, ${spawnSync("git", ["rev-parse", "--short", "HEAD"], { cwd: root, encoding: "utf8" }).stdout.trim() || "unknown"}\n`);
+function print(r, asJson) {
+  const { linga, maths, writing, essayTested, learners, typecheck, writingStages } = r;
+  const mathsCovered = maths.filter(m => m.by.length).length;
+  const rel = p => path.relative(root, p).replace(/\\/g, "/");
+  if (asJson) {
+    console.log(JSON.stringify({
+      readings: {
+        lingaChecksPassing: linga.pass, mathsCoreUnderTest: mathsCovered, writingStagesImplemented: writingStages,
+        learnerHistoryEntries: learners.reading, typecheckErrors: typecheck.errors,
+      },
+      lingaChecksPassing: linga.pass, lingaChecksFailing: linga.fail, lingaNote: linga.note,
+      mathsCoreUnderTest: mathsCovered, mathsCoreTotal: maths.length,
+      mathsCore: Object.fromEntries(maths.map(m => [m.module, m.by])),
+      writingStagesImplemented: writingStages, writingStagesTotal: 7,
+      writingEpisodePersisted: writing.persisted, writingEpisode: writing, essayRulesUnderTest: essayTested,
+      typecheck, learners,
+    }, null, 2));
+    return;
+  }
 
-console.log("Linga — conversation-loop checks passing");
-console.log(linga.pass === null ? `  n/a — ${linga.note}` : `  ${linga.pass} passing, ${linga.fail} failing   (tools/linga-rules-test.cjs)\n`);
+  console.log("Study Desk — KPI readings");
+  console.log(`  source: ${root}, ${spawnSync("git", ["rev-parse", "--short", "HEAD"], { cwd: root, encoding: "utf8" }).stdout.trim() || "unknown"}\n`);
 
-console.log(`Math Buddy — deterministic core modules under automated test: ${maths.filter(m => m.by.length).length} of ${maths.length}`);
-for (const m of maths) console.log(`  ${m.by.length ? "yes" : " no"}  ${m.module}${m.by.length ? `   (${m.by.join(", ")})` : ""}`);
-console.log();
+  console.log("Linga — conversation-loop checks passing");
+  console.log(linga.pass === null ? `  n/a — ${linga.note}\n` : `  ${linga.pass} passing, ${linga.fail} failing   (tools/linga-rules-test.cjs)\n`);
 
-console.log(`Writing — essay end-to-end stages implemented: ${writingStages} of 7`);
-console.log(`  ${WRITING_STAGES_VERIFIED_BY_HAND} stages taken as given (chooser, paste/dictate, split+stats, verdicts, Forensic render)`);
-console.log(`  ${persisted ? "yes" : " no"}  stage 6 — a writing namespace on the persisted Learner (src/lib/session/learners.ts)`);
-console.log(`  ${essayTested ? "yes" : " no"}  stage 7 — essay rules under automated test (${ESSAY_CORE.join(", ")})`);
-console.log();
+  console.log(`Math Buddy — deterministic core modules under automated test: ${mathsCovered} of ${maths.length}`);
+  for (const m of maths) console.log(`  ${m.by.length ? "yes" : " no"}  ${m.module}${m.by.length ? `   (${m.by.join(", ")})` : ""}`);
+  console.log();
 
-console.log("The artefact — what learners on this machine have actually completed");
-if (!learners.exists) console.log(`   no  ${rel(learners.file)} does not exist — nothing has ever been saved here`);
-else if (learners.unreadable) console.log(`   no  ${rel(learners.file)} is not readable JSON`);
-else {
-  console.log(`  ${learners.learners} learner(s), ${learners.history} history entr(ies)`);
-  console.log(`  ${learners.withEnglish} with an English record, ${learners.withWriting} with a writing record`);
-  console.log(`  read from ${rel(learners.file)}`);
+  console.log(`Writing — essay end-to-end stages implemented: ${writingStages} of 7`);
+  console.log(`  ${WRITING_STAGES_VERIFIED_BY_HAND} stages taken as given (chooser, paste/dictate, split+stats, verdicts, Forensic render)`);
+  console.log(`  ${writing.persisted ? "yes" : " no"}  stage 6 — a writing episode on the learner's history: kind "writing" ${writing.kindDeclared ? "declared" : "NOT declared"} in src/lib/session/learners.ts, ${writing.essayWrites ? "appended" : "NOT appended"} by src/lib/desk/essay.ts`);
+  console.log(`  ${essayTested ? "yes" : " no"}  stage 7 — essay rules under automated test (${ESSAY_CORE.join(", ")})`);
+  console.log();
+
+  console.log("Desk — TypeScript typecheck errors");
+  console.log(typecheck.errors === null ? `  n/a — ${typecheck.note}` : `  ${typecheck.errors} error(s)${typecheck.unresolved ? `, ${typecheck.unresolved} of them a module that could not be resolved` : ""}   (tsc --noEmit in desk/)`);
+  console.log();
+
+  console.log("The artefact — learner history entries saved on this machine");
+  if (!learners.found) {
+    console.log("  n/a — no learner book found, so there is no reading (this is not a zero). Tried:");
+    for (const t of learners.tried) console.log(`    ${t}`);
+  } else if (!learners.readable) console.log(`  n/a — ${learners.file} is not a readable learner book`);
+  else {
+    console.log(`  ${learners.history} history entr(ies) across ${learners.learners} learner(s)`);
+    console.log(`  ${learners.withEnglish} with an English record, ${learners.withWriting} with a writing episode`);
+    console.log(`  read from ${learners.source === "this checkout" ? rel(learners.file) : learners.file} (${learners.source})`);
+  }
 }
+
+module.exports = { findLearnerBook, learnerEvidence, writingPersisted, testSources, coveredBy };
+if (require.main === module) print(measure(), process.argv.includes("--json"));
