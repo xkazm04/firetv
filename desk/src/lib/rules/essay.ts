@@ -13,9 +13,22 @@ const CONNECTORS = /\b(because|therefore|however|although|which means|so that|as
 const EVIDENCE = /\b(\d+%?|per cent|percent|research|study|studies|report(ed|s)?|found|data|measured|according to|for example|for instance)\b/i;
 const LINK = /^(therefore|so|this (means|shows|suggests)|as a result|in conclusion|which is why)/i;
 
+/** Short forms whose full stop does not end a sentence, even when a capital follows. */
+const ABBREVIATION = /\b(?:Dr|Mr|Mrs|Ms|Prof|St|etc|eg|ie|e\.g|i\.e|vs)\.$/i;
+
+/**
+ * A sentence ends at . ! or ? — optionally inside a closing quote or bracket — followed by a
+ * capital or an opening quote. A piece that ends on an abbreviation is joined back to the next,
+ * because a wrong split renumbers every sentence after it and every highlight is drawn on those numbers.
+ */
 export function splitSentences(text: string): Sentence[] {
-  const parts = text.replace(/\s+/g, " ").trim().split(/(?<=[.!?])\s+(?=[A-Z"“])/);
-  return parts.filter(Boolean).map((t, i) => {
+  const pieces = text.replace(/\s+/g, " ").trim().split(/(?<=[.!?]["'”’)\]]?)\s+(?=[A-Z"“])/).filter(Boolean);
+  const parts: string[] = [];
+  for (const p of pieces) {
+    if (parts.length && ABBREVIATION.test(parts[parts.length - 1])) parts[parts.length - 1] += " " + p;
+    else parts.push(p);
+  }
+  return parts.map((t, i) => {
     const connectors = (t.match(CONNECTORS) || []).map((c) => c.toLowerCase());
     const role: Role = LINK.test(t) ? "link" : EVIDENCE.test(t) ? "evidence" : "claim";
     return { n: i + 1, text: t, words: t.split(/\s+/).length, connectors, role };

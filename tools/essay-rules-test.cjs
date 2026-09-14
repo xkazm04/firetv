@@ -38,9 +38,52 @@ test('a sentence ends at . ! or ? followed by a capital, and nowhere else',()=>{
  assert.equal(splitSentences('It rained. then we left.').length,1,'a lower-case word after a stop is not a new sentence');
  assert.equal(splitSentences('He agreed. "Now," he replied.').length,2,'a quote mark may open the next sentence');
  assert.equal(splitSentences('It costs 4.50 pounds.').length,1,'a decimal point does not end a sentence');
- // Two known limits of a rules-only splitter, pinned so a change to either is a decision, not a surprise.
- assert.equal(splitSentences('Dr. Smith agreed.').length,2,'an abbreviation before a capital does split');
- assert.equal(splitSentences('She said "Go." Then she left.').length,1,'a closing quote after the stop hides the sentence end');
+ // These two were pinned as known limits (an abbreviation split, a closing quote hid the end); both now hold.
+ assert.equal(splitSentences('Dr. Smith agreed.').length,1,'an abbreviation before a capital does not split');
+ assert.deepEqual(splitSentences('She said "Go." Then she left.').map(x=>x.text),['She said "Go."','Then she left.'],'a closing quote after the stop still ends the sentence');
+});
+test('abbreviations do not end a sentence, and the numbering after them stays true',()=>{
+ for(const [para,texts] of [
+  ['Mr. Jones and Mrs. Jones came. They sat down.',['Mr. Jones and Mrs. Jones came.','They sat down.']],
+  ['Ms. Lee asked Prof. Brown. He agreed.',['Ms. Lee asked Prof. Brown.','He agreed.']],
+  ['We walked down St. Mary Street. It was late.',['We walked down St. Mary Street.','It was late.']],
+  ['Bring pens, paper etc. Also a ruler. Then sit.',['Bring pens, paper etc. Also a ruler.','Then sit.']],
+  ['Some cities, e.g. Paris, are busy. Others, i.e. London, are too.',['Some cities, e.g. Paris, are busy.','Others, i.e. London, are too.']],
+  ['Cats eg. Tom sleep. Dogs ie. Rex bark. Cats vs. Dogs.',['Cats eg. Tom sleep.','Dogs ie. Rex bark.','Cats vs. Dogs.']],
+  ['DR. SMITH came. He left.',['DR. SMITH came.','He left.']],
+ ]){
+  const s=splitSentences(para);
+  assert.deepEqual(s.map(x=>x.text),texts,para);
+  assert.deepEqual(s.map(x=>x.n),texts.map((_,i)=>i+1),`${para}: numbering follows the real sentences`);
+ }
+ assert.equal(splitSentences('He met the Doctor. Smith agreed.').length,2,'a full word is not an abbreviation');
+ assert.equal(splitSentences('It was the first. Then the rest.').length,2,'a word merely ending in st is not St.');
+ assert.equal(splitSentences('I saw a tie. Then a coat.').length,2,'a word merely ending in ie is not ie.');
+ assert.deepEqual(splitSentences('We spoke to Dr.').map(x=>x.text),['We spoke to Dr.'],'an abbreviation at the very end is still one sentence');
+});
+test('a closing quote or bracket after the stop still ends the sentence',()=>{
+ for(const [para,texts] of [
+  ['She said "Go!" Then she left.',['She said "Go!"','Then she left.']],
+  ['He asked "Why?" Nobody knew.',['He asked "Why?"','Nobody knew.']],
+  ['She said “Go.” Then she left.',['She said “Go.”','Then she left.']],
+  ["He called it 'fair.' Few agreed.",["He called it 'fair.'",'Few agreed.']],
+  ['She wrote ‘done.’ It was not.',['She wrote ‘done.’','It was not.']],
+  ['The data was clear (see the report.) Then it changed.',['The data was clear (see the report.)','Then it changed.']],
+  ['It was noted [in 2020.] Later it grew.',['It was noted [in 2020.]','Later it grew.']],
+  ['She said "Go." "Now," he replied.',['She said "Go."','"Now," he replied.']],
+ ]){
+  const s=splitSentences(para);
+  assert.deepEqual(s.map(x=>x.text),texts,para);
+  assert.equal(s.at(-1).n,texts.length,`${para}: the last number is the count`);
+ }
+ assert.equal(splitSentences('She said "go." then she left.').length,1,'a lower-case word after the quote is still not a new sentence');
+});
+test('a fixed split moves a highlight onto the sentence it was meant for',async()=>{
+ answer=reply({verdicts:[{n:2,verdict:'faulty',note:'no evidence'},{n:3,verdict:'faulty',note:'there is no third sentence'}],summary:'s'});
+ const a=await analyseEssay('Dr. Smith says school starts too early. Nobody checked.','evidence','essay-anon');
+ assert.equal(a.sentences.length,2);
+ assert.deepEqual(a.verdicts.map(v=>v.n),[2],'sentence 2 is "Nobody checked." — a split after Dr. would have made it 3');
+ assert.equal(a.sentences[1].text,'Nobody checked.');
 });
 test('line breaks collapse, so a pasted paragraph is measured as one paragraph',()=>{
  const s=splitSentences('The first point.\n\n   The second   point spans\nlines.');
