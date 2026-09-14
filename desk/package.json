@@ -7,6 +7,7 @@
     "build": "next build",
     "start": "next start",
     "measure": "node ../tools/kpi-measure.cjs",
+    "pretest": "node ../tools/worktree-preflight.cjs",
     "test": "npm run test:types && npm run test:rules",
     "test:types": "tsc --noEmit",
     "test:rules": "node ../tools/linga-rules-test.cjs && node ../tools/maths-rules-test.cjs && node ../tools/essay-rules-test.cjs && node ../tools/kpi-measure-test.cjs"
