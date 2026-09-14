@@ -5,6 +5,7 @@
  */
 import { text } from "../engines/text";
 import { ANALYSIS_TYPES, paragraphStats, splitSentences, type AnalysisType } from "../rules/essay";
+import { addHistory } from "../session/learners";
 import type { EssayAnalysis } from "../session/store";
 
 const SCHEMA = {
@@ -18,7 +19,7 @@ const SCHEMA = {
   required: ["verdicts", "summary"],
 };
 
-export async function analyseEssay(raw: string, type: AnalysisType): Promise<EssayAnalysis> {
+export async function analyseEssay(raw: string, type: AnalysisType, learnerId: string): Promise<EssayAnalysis> {
   const sentences = splitSentences(raw);
   const stats = paragraphStats(sentences);
   const lens = ANALYSIS_TYPES.find((t) => t.id === type) ?? ANALYSIS_TYPES[0];
@@ -34,5 +35,17 @@ export async function analyseEssay(raw: string, type: AnalysisType): Promise<Ess
   // a number off either end, or a `verdicts` that is not a list at all — is dropped, not shown.
   const valid = new Set(sentences.map((s) => s.n));
   const verdicts = (Array.isArray(json?.verdicts) ? json.verdicts : []).filter((v) => valid.has(v?.n));
+
+  // The reading happened, so the learner record says so — the same one-line episode Math Buddy
+  // writes after a marked set, from counts the reading actually produced, never invented. A
+  // paragraph with no sentences in it is not an episode.
+  if (sentences.length) {
+    const faulty = verdicts.filter((v) => v.verdict === "faulty").length;
+    addHistory(learnerId, {
+      at: Date.now(), kind: "writing", label: lens.name,
+      detail: `${faulty} of ${sentences.length} sentence${sentences.length === 1 ? "" : "s"} to fix`,
+    });
+  }
+
   return { text: raw, type, sentences, stats, verdicts, summary: json.summary, provider };
 }

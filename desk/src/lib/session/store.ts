@@ -186,7 +186,7 @@ export function getSession() { return store.session; }
  * at the desk. The reducer stays pure: the file read happens here, at the boundary that already
  * writes to disk and pushes to subscribers.
  */
-const REHYDRATE = new Set(["learner.set", "practice.marked", "profile.save", "reset", "join", "page.read", "linga.changed"]);
+const REHYDRATE = new Set(["learner.set", "practice.marked", "profile.save", "reset", "join", "page.read", "linga.changed", "essay.set"]);
 
 export function dispatch(e: Event): Session {
   store.session = reduce(store.session, e);

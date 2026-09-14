@@ -1,6 +1,6 @@
 /** English: a sentence. Essay: a paragraph and a lens. Both land on the TV as analysis screens. */
 import { NextResponse } from "next/server";
-import { dispatch } from "@/lib/session/store";
+import { dispatch, getSession } from "@/lib/session/store";
 import { analyseSentence } from "@/lib/desk/english";
 import { analyseEssay } from "@/lib/desk/essay";
 import type { AnalysisType } from "@/lib/rules/essay";
@@ -16,7 +16,7 @@ export async function POST(req: Request) {
       return NextResponse.json(a);
     }
     dispatch({ type: "essay.type", essayType: body.type }); dispatch({ type: "status", text: `reading your paragraph — ${body.type} lens…` });
-    const a = await analyseEssay(body.text, body.type);
+    const a = await analyseEssay(body.text, body.type, getSession().learner.id);
     dispatch({ type: "essay.set", analysis: a }); dispatch({ type: "status", text: a.summary.slice(0, 120) });
     return NextResponse.json(a);
   } catch (e) {

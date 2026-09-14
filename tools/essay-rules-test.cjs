@@ -15,6 +15,7 @@ const {splitSentences,paragraphStats}=require(path.join(root,'src/lib/rules/essa
 const engine=require(path.join(root,'src/lib/engines/text.ts'));
 let answer,seen=[];engine.text=(req)=>{seen.push(req);return answer(req);};
 const {analyseEssay}=require(path.join(root,'src/lib/desk/essay.ts'));
+const {getLearner,addHistory}=require(path.join(root,'src/lib/session/learners.ts'));
 const reply=(json)=>async()=>({json,provider:'test',ms:1});
 
 const THREE='The school day starts too early. Research found that teenagers fall asleep later. Therefore the start should move.';
@@ -59,7 +60,7 @@ test('roles and connectors are counted from the text, and the stats add up',()=>
 
 test('the paragraph reaches the model numbered from one, with every sentence present',async()=>{
  seen=[];answer=reply({verdicts:[],summary:'ok'});
- await analyseEssay(THREE,'structure');
+ await analyseEssay(THREE,'structure','essay-anon');
  const lines=seen[0].prompt.split('\n').filter(l=>/^\d+\. /.test(l));
  assert.deepEqual(lines.map(l=>Number(l.split('.')[0])),[1,2,3]);
  assert.match(seen[0].prompt,/3 sentences/);
@@ -74,25 +75,72 @@ test('a verdict can only land on a sentence number that exists',async()=>{
   {n:-1,verdict:'faulty',note:'negative'},
   {n:99,verdict:'neutral',note:'far out of range'},
  ],summary:'A clear paragraph.'});
- const a=await analyseEssay(THREE,'structure');
+ const a=await analyseEssay(THREE,'structure','essay-anon');
  assert.deepEqual(a.verdicts.map(v=>v.n),[1,3],'0 and length+1 are both off the end; only 1..3 survive');
  assert.equal(a.sentences.length,3);assert.equal(a.summary,'A clear paragraph.');assert.equal(a.type,'structure');
  assert.equal(a.text,THREE,'the learner\'s own text is returned unchanged, not the collapsed one');
 });
 test('a single-sentence paragraph admits verdict 1 and nothing else',async()=>{
  answer=reply({verdicts:[{n:1,verdict:'faulty',note:'no evidence'},{n:2,verdict:'faulty',note:'there is no sentence 2'}],summary:'One claim only.'});
- const a=await analyseEssay('Homework is pointless.','evidence');
+ const a=await analyseEssay('Homework is pointless.','evidence','essay-anon');
  assert.deepEqual(a.verdicts.map(v=>v.n),[1]);
 });
 test('verdicts the model malformed never reach the screen, and never throw',async()=>{
  for(const verdicts of [undefined,null,'not an array',[{n:'1',verdict:'strong',note:'a string number'}],[{verdict:'strong',note:'no number at all'}]]){
   answer=reply({verdicts,summary:'s'});
-  const a=await analyseEssay(THREE,'language');
+  const a=await analyseEssay(THREE,'language','essay-anon');
   assert.deepEqual(a.verdicts,[],JSON.stringify(verdicts));
  }
 });
 test('an unknown lens falls back to the first one rather than failing the reading',async()=>{
  seen=[];answer=reply({verdicts:[],summary:'s'});
- await analyseEssay(THREE,'no-such-lens');
+ await analyseEssay(THREE,'no-such-lens','essay-anon');
  assert.match(seen[0].system,/Lens for this reading: Structure/);
+});
+
+test('a reading is written to the learner record as one writing episode',async()=>{
+ answer=reply({verdicts:[{n:1,verdict:'strong',note:'clear'},{n:2,verdict:'faulty',note:'asserts'},{n:3,verdict:'faulty',note:'no link'}],summary:'s'});
+ const before=Date.now();
+ await analyseEssay(THREE,'argument','essay-record');
+ const h=getLearner('essay-record').history;
+ assert.equal(h.length,1,'one reading is one episode, not one per sentence');
+ assert.equal(h[0].kind,'writing');
+ assert.equal(h[0].label,'Argument','the lens that was read, by its display name');
+ assert.equal(h[0].detail,'2 of 3 sentences to fix','the counts the reading produced, not invented ones');
+ assert(h[0].at>=before&&h[0].at<=Date.now());
+});
+test('the writing episode counts only faults that survived the anchoring',async()=>{
+ answer=reply({verdicts:[{n:1,verdict:'faulty',note:'real'},{n:9,verdict:'faulty',note:'no such sentence'},{n:2,verdict:'neutral',note:'fine'}],summary:'s'});
+ await analyseEssay(THREE,'evidence','essay-anchored');
+ assert.equal(getLearner('essay-anchored').history.at(-1).detail,'1 of 3 sentences to fix','a verdict off the end is not a fault to fix');
+ answer=reply({verdicts:[{n:1,verdict:'faulty',note:'no evidence'}],summary:'s'});
+ await analyseEssay('Homework is pointless.','evidence','essay-anchored');
+ assert.equal(getLearner('essay-anchored').history.at(-1).detail,'1 of 1 sentence to fix','one sentence is singular');
+});
+test('a paragraph with no sentences in it is not an episode',async()=>{
+ answer=reply({verdicts:[],summary:'s'});
+ await analyseEssay('   ','structure','essay-empty');
+ assert.deepEqual(getLearner('essay-empty').history,[]);
+});
+test('writing episodes sit beside Math Buddy\'s in one record, newest last',async()=>{
+ addHistory('essay-mixed',{at:1,kind:'practice',label:'Linear equations',detail:'4 of 6 right'});
+ answer=reply({verdicts:[{n:1,verdict:'faulty',note:'x'}],summary:'s'});
+ await analyseEssay(THREE,'language','essay-mixed');
+ const h=getLearner('essay-mixed').history;
+ assert.deepEqual(h.map(e=>e.kind),['practice','writing'],'the maths episode is untouched and the writing one is appended');
+ assert.deepEqual(h.filter(e=>e.kind==='homework'||e.kind==='practice').map(e=>e.label),['Linear equations'],'Math Buddy\'s home rows never pick up a writing episode');
+});
+test('a writing episode survives a round trip through learners.json, an unknown kind does not',()=>{
+ const file=path.join(process.env.DESK_DATA_DIR,'learners.json');
+ fs.mkdirSync(process.env.DESK_DATA_DIR,{recursive:true});
+ const book=JSON.parse(fs.readFileSync(file,'utf8'));
+ book['essay-disk']={id:'essay-disk',skills:{},memory:[],history:[
+  {at:5,kind:'writing',label:'Structure',detail:'1 of 4 sentences to fix'},
+  {at:6,kind:'homework',label:'Sheet 3',detail:'6 problems read'},
+  {at:7,kind:'nonsense',label:'From a later version',detail:''},
+ ]};
+ fs.writeFileSync(file,JSON.stringify(book));
+ const h=getLearner('essay-disk').history;
+ assert.deepEqual(h.map(e=>e.kind),['writing','homework','practice'],'writing reads back as writing; a kind this version does not know falls back to practice');
+ assert.equal(h[0].detail,'1 of 4 sentences to fix');
 });

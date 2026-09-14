@@ -18,13 +18,15 @@ export interface SkillRecord {
   slips: string[];          // slip ids seen for this learner+topic, deduped, newest last
 }
 
-/** One thing that actually happened in Math Buddy, so the desk can say where you left off. */
+/** One thing that actually happened at the desk, so it can say where you left off. */
 export interface HistoryEntry {
   at: number;                       // ms epoch
-  kind: "homework" | "practice";
-  label: string;                    // the topic's name, or the page's title
-  detail: string;                   // e.g. "4 of 6 right", "10 problems read"
+  kind: "homework" | "practice" | "writing";
+  label: string;                    // the topic's name, the page's title, or the lens that was read
+  detail: string;                   // e.g. "4 of 6 right", "10 problems read", "2 of 5 sentences to fix"
 }
+
+const KINDS: HistoryEntry["kind"][] = ["homework", "practice", "writing"];
 
 export interface Learner {
   id: string;
@@ -85,7 +87,8 @@ function clean(id: string, l: unknown): Learner {
     .filter((h): h is HistoryEntry => !!h && typeof h === "object" && typeof (h as HistoryEntry).label === "string")
     .map((h): HistoryEntry => ({
       at: Number(h.at) || 0,
-      kind: h.kind === "homework" ? "homework" : "practice",
+      // an unknown kind on disk reads back as practice, the kind this field had before the others
+      kind: KINDS.includes(h.kind) ? h.kind : "practice",
       label: String(h.label), detail: typeof h.detail === "string" ? h.detail : "",
     }))
     .slice(-HISTORY_CAP);
