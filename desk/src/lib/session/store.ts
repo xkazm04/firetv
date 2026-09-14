@@ -54,6 +54,8 @@ export interface Session {
   topic: string | null; practice: Practice | null; walkIx: number;
   /** the current learner's measured skills, hydrated at the dispatch boundary from data/learners.json */
   skills: Record<string, SkillRecord>;
+  /** the same measured record per Essay Master lens, hydrated the same way */
+  writing: Record<string, SkillRecord>;
   /** what the desk noticed about this learner, and what actually happened, hydrated the same way */
   memory: string[]; history: HistoryEntry[];
   status: string; log: { problems: string[]; hints: number; hard: string[]; minutes: number; started: number | null };
@@ -105,7 +107,7 @@ export function fresh(): Session {
     pages: [], pageIx: 0, itemIx: 0, reading: false, awaiting: null,
     hint: null, lesson: null, noLesson: false, lessonPaused: false,
     english: null, englishLearning: emptyEnglish(), conversation: null, essay: null, essayType: null,
-    topic: null, practice: null, walkIx: 0, skills: {}, memory: [], history: [],
+    topic: null, practice: null, walkIx: 0, skills: {}, writing: {}, memory: [], history: [],
     status: "", log: { problems: [], hints: 0, hard: [], minutes: 0, started: null }, updatedAt: Date.now(),
   };
 }
@@ -191,7 +193,7 @@ const REHYDRATE = new Set(["learner.set", "practice.marked", "profile.save", "re
 export function dispatch(e: Event): Session {
   store.session = reduce(store.session, e);
   if (REHYDRATE.has(e.type)) {
-    try { const l = getLearner(store.session.learner.id); store.session = { ...store.session, skills: l.skills, memory: l.memory, history: l.history, englishLearning: l.english }; } catch {}
+    try { const l = getLearner(store.session.learner.id); store.session = { ...store.session, skills: l.skills, writing: l.writing, memory: l.memory, history: l.history, englishLearning: l.english }; } catch {}
   }
   try { mkdirSync(DATA, { recursive: true }); writeFileSync(FILE, JSON.stringify(store.session)); } catch {}
   store.subs.forEach((fn) => { try { fn(store.session); } catch {} });

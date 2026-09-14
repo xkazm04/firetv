@@ -14,6 +14,7 @@ import { fmt } from "./useSession";
 /** The OCR writes exponents as ^n and the tutor may too; the screen shows them as printed. */
 export const shown = (s: string) => s.replace(/\^2/g, "²").replace(/\^3/g, "³").replace(/\*\*/g, "").replace(/\$/g, "");
 import { BRAND, MODULE_BLURB, TYPE_WORDS, profileRows, locate, onModules, systemOf } from "@/tv/profileRows";
+import { lensStandings, writingTotals, type LensStanding } from "@/tv/writingRows";
 const NAME = BRAND;
 
 function Rail({ s }: { s: Session }) {
@@ -467,8 +468,14 @@ export function HeadToHead({ }: { s: Session }) {
 }
 
 // ---- T8 Essay analysis type ----
-export function EssayType({ focus }: { s: Session; focus: number }) {
+/**
+ * Essay Master's home. Each lens card carries where the learner stands on it, drawn: the measured
+ * estimate as a bar, and one label — secure, the day it was last read, or not read yet.
+ */
+export function EssayType({ s, focus }: { s: Session; focus: number }) {
   const dia = ["thesis", "para", "order", "concl"];
+  const standings = lensStandings(s.history, s.writing);
+  const totals = writingTotals(standings, s.history);
   return (<>
     <div className="band band-low" />
     <main className="content-full">
@@ -478,13 +485,25 @@ export function EssayType({ focus }: { s: Session; focus: number }) {
         {ESSAY_TYPES.map((t, i) => (
           <div key={t.id} className="card" data-focused={focus === i} style={{ display: "grid", gridTemplateColumns: "200px 1fr", gap: 28, alignItems: "center" }}>
             <Diagram kind={dia[i]} focused={focus === i} />
-            <div><div className="t">{t.name}</div><div className="d" style={{ marginTop: 10 }}>{t.promise}</div></div>
+            <div><div className="t">{t.name}</div><div className="d" style={{ marginTop: 10 }}>{t.promise}</div><LensMeter l={standings.find((x) => x.id === t.id)} /></div>
           </div>
         ))}
       </div>
-      <div className="ticker"><span>Select a lens</span><i>·</i><span>then paste or dictate the paragraph on the phone</span></div>
+      <div className="ticker">{totals.read
+        ? <><span><b>{totals.read}</b> paragraph{totals.read === 1 ? "" : "s"} read</span><i>·</i><span><b>{totals.secure}</b> of {ESSAY_TYPES.length} lenses secure</span><i>·</i><span>Select a lens</span></>
+        : <><span>Select a lens</span><i>·</i><span>then paste or dictate the paragraph on the phone</span></>}</div>
     </main>
   </>);
+}
+function LensMeter({ l }: { l?: LensStanding }) {
+  const when = l?.lastAt ? day(l.lastAt) : "";
+  const word = l?.secure ? (when ? `Secure · ${when}` : "Secure") : when ? `Read ${when}` : "Not read yet";
+  return (
+    <div className="lens">
+      <div className="w" data-secure={!!l?.secure}>{word}</div>
+      <div className="track"><i style={{ width: `${Math.round((l?.estimate ?? 0) * 100)}%` }} /></div>
+    </div>
+  );
 }
 function Diagram({ kind, focused }: { kind: string; focused: boolean }) {
   const c = focused ? "var(--signal)" : "var(--essay)";

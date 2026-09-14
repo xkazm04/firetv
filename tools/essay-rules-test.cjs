@@ -4,7 +4,7 @@
  * node tools/essay-rules-test.cjs). No model is called; a disposable data directory, never desk/data.
  */
 const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict'),Module=require('node:module');
-const {test}=require('node:test');
+const {test,after}=require('node:test');
 const root=path.resolve(__dirname,'../desk');
 let ts;try{ts=require(path.join(root,'node_modules/typescript'));}catch{console.error('This suite transpiles desk TypeScript with desk\'s own compiler. Run `npm install` in desk/ first, then `npm test` from desk/.');process.exit(1);}
 const resolve=Module._resolveFilename;
@@ -16,6 +16,9 @@ const engine=require(path.join(root,'src/lib/engines/text.ts'));
 let answer,seen=[];engine.text=(req)=>{seen.push(req);return answer(req);};
 const {analyseEssay}=require(path.join(root,'src/lib/desk/essay.ts'));
 const {getLearner,addHistory,recordWriting,recordAttempt}=require(path.join(root,'src/lib/session/learners.ts'));
+const {lensStandings,writingTotals}=require(path.join(root,'src/tv/writingRows.ts'));
+const {dispatch,getSession}=require(path.join(root,'src/lib/session/store.ts'));
+after(()=>clearInterval(globalThis.__desk.ticker));
 const reply=(json)=>async()=>({json,provider:'test',ms:1});
 
 const THREE='The school day starts too early. Research found that teenagers fall asleep later. Therefore the start should move.';
@@ -261,4 +264,37 @@ test('learners.json without a writing record loads, and a malformed one is clean
  assert.deepEqual(getLearner('w-bad').writing.structure,{topic:'structure',seen:3,right:2,estimate:1,secure:false,lastSeen:0,slips:[]});
  assert.deepEqual(getLearner('w-list').writing,{},'a list is not a record');
  assert.deepEqual(getLearner('nobody-yet').writing,{});
+});
+
+// ---- what the TV reads: the session carries the record, and Essay Master's lens cards stand on it ----
+test('a reading reaches the session: the episode and the lens estimate both rehydrate on essay.set',async()=>{
+ dispatch({type:'reset'});
+ const id=getSession().learner.id;
+ assert.deepEqual(getSession().writing,{},'a learner who never wrote has no lens measured');
+ answer=faults([]);
+ const a=await analyseEssay(THREE,'structure',id);
+ dispatch({type:'essay.set',analysis:a});
+ const s=getSession();
+ assert.equal(s.writing.structure.seen,1);assert.equal(s.writing.structure.estimate,0.3);
+ assert.equal(s.history.filter(h=>h.kind==='writing').at(-1).label,'Structure');
+ dispatch({type:'reset'});
+ assert.equal(getSession().writing.structure.seen,1,'reset wipes the session, not the learner record');
+});
+test('the lens cards: one standing per lens, in the order the TV draws them',()=>{
+ const empty=lensStandings([],{});
+ assert.deepEqual(empty.map(l=>l.id),['structure','argument','evidence','language']);
+ assert(empty.every(l=>l.seen===0&&l.estimate===0&&!l.secure&&l.lastAt===null),'nothing read is nothing drawn, never an invented bar');
+ assert.deepEqual(lensStandings(undefined,undefined).map(l=>l.lastAt),[null,null,null,null],'a session from before either field existed still draws');
+ const writing={evidence:{topic:'evidence',seen:6,right:6,estimate:0.88,secure:true,lastSeen:5000,slips:[]}};
+ const history=[
+  {at:2000,kind:'writing',label:'Structure',detail:'1 of 3 sentences to fix'},
+  {at:9000,kind:'homework',label:'Structure',detail:'a maths sheet that happens to share the name'},
+  {at:3000,kind:'writing',label:'Evidence',detail:'0 of 3 sentences to fix'},
+ ];
+ const [structure,argument,evidence]=lensStandings(history,writing);
+ assert.deepEqual(structure,{id:'structure',name:'Structure',seen:0,estimate:0,secure:false,lastAt:2000},'an episode from before the lens was measured still says when it was read — and only a writing episode counts');
+ assert.equal(argument.lastAt,null);
+ assert.deepEqual(evidence,{id:'evidence',name:'Evidence',seen:6,estimate:0.88,secure:true,lastAt:5000},'the newer of the record and the episodes');
+ assert.deepEqual(writingTotals(lensStandings(history,writing),history),{read:6,secure:1},'the uncapped record outcounts the capped history');
+ assert.deepEqual(writingTotals(lensStandings(history,{}),history),{read:2,secure:0},'with no record yet the episodes are the count');
 });

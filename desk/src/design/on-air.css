@@ -196,4 +196,12 @@
 .sheets .s { display: grid; grid-template-columns: 1fr auto; align-items: baseline; gap: 40px; padding: 16px 0; border-bottom: 1px solid var(--line); }
 .sheets .s .t { font-size: 32px; font-weight: 500; line-height: 1.15; }
 .sheets .s .w { font-family: var(--display); font-size: 24px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--mute); font-variant-numeric: tabular-nums; }
+/* Essay Master's lens cards: the measured estimate as a bar under one label */
+.lens { margin-top: 18px; display: flex; flex-direction: column; gap: 8px; }
+.lens .w { font-family: var(--display); font-size: 22px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--mute); font-variant-numeric: tabular-nums; }
+.lens .w[data-secure="true"] { color: var(--essay); }
+.lens .track { height: 10px; background: var(--line); }
+.lens .track i { display: block; height: 100%; background: var(--essay); }
+.card[data-focused="true"] .lens .w { color: #3A3F47; } .card[data-focused="true"] .lens .w[data-secure="true"] { color: var(--signal); }
+.card[data-focused="true"] .lens .track { background: rgba(20,22,26,.12); } .card[data-focused="true"] .lens .track i { background: var(--signal); }
 .nothing { font-family: var(--display); font-size: 48px; font-weight: 800; text-transform: uppercase; letter-spacing: .06em; color: var(--mute); }
