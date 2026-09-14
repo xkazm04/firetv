@@ -5,7 +5,10 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "test": "npm run test:types && npm run test:rules",
+    "test:types": "tsc --noEmit",
+    "test:rules": "node ../tools/linga-rules-test.cjs"
   },
   "dependencies": {
     "next": "16.3.4",

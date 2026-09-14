@@ -9,6 +9,7 @@ Design rules: [../docs/DESIGN-ON-AIR.md](../docs/DESIGN-ON-AIR.md).
 
 ```
 npm run dev              # http://localhost:3000
+npm test                 # the gate: type check, then the rules suites
 ```
 
 - **/tv** — the television. Open at 1920×1080 (or let it scale). Keyboard is the D-pad: arrows,
@@ -46,7 +47,8 @@ after 60 seconds; failures keep the phone draft available for retry. This is a t
 prototype, not a streaming speech engine.
 
 Plan and verification: [Linga implementation](../docs/LINGA-IMPLEMENTATION-PLAN.md).
-Run `node tools/linga-rules-test.cjs` from the repository root for isolated logic/service checks.
+The isolated logic/service checks run as part of `npm test` in `desk/` (`npm run test:rules` alone,
+or `node tools/linga-rules-test.cjs` from the repository root).
 For the browser integration check, start a separate server with `DESK_DATA_DIR` pointing to a
 scratch directory, then set `LINGA_TEST_ALLOW_WRITES=1` and `LINGA_TEST_URL` before running
 `node tools/linga-ui-test.cjs`. That check makes real model calls and simulates recognition events;
