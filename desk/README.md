@@ -10,6 +10,7 @@ Design rules: [../docs/DESIGN-ON-AIR.md](../docs/DESIGN-ON-AIR.md).
 ```
 npm run dev              # http://localhost:3000
 npm test                 # the gate: type check, then the rules suites
+npm run measure          # the KPI readings, as numbers (--json for a machine)
 ```
 
 - **/tv** — the television. Open at 1920×1080 (or let it scale). Keyboard is the D-pad: arrows,

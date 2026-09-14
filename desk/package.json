@@ -6,6 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
+    "measure": "node ../tools/kpi-measure.cjs",
     "test": "npm run test:types && npm run test:rules",
     "test:types": "tsc --noEmit",
     "test:rules": "node ../tools/linga-rules-test.cjs"
