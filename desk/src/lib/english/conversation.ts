@@ -2,35 +2,43 @@ import { randomUUID } from "node:crypto";
 import { text } from "../engines/text";
 import { dispatch, getSession, type Screen } from "../session/store";
 import { getLearner, saveEnglish } from "../session/learners";
-import { defaultPreferences, eligibleScenes, ENGLISH_SCENES, ENGLISH_SKILLS, isAdult, recommendScene } from "./curriculum";
+import { checkCommand, isCheckAction } from "./check";
+import { audienceAllowed, defaultPreferences, eligibleScenes, ENGLISH_SCENES, ENGLISH_SKILLS, isAdult, recommendScene } from "./curriculum";
+import { ConversationError } from "./errors";
+import { BAND_NAME, BAND_TUTOR, isBand, TAUGHT_CAP } from "./placement";
 import { mergeEvidence, parsePreferences, validateObservations } from "./rules";
-import type { Conversation, EnglishEvidence, EvidenceMode, SkillId } from "./types";
+import type { Conversation, EnglishEvidence, EnglishScene, EvidenceMode, Moment, SkillId } from "./types";
 
-export class ConversationError extends Error { constructor(message: string, public status=400){super(message);} }
+export { ConversationError };
 const object=(x:unknown):Record<string,unknown>=>x&&typeof x==="object"&&!Array.isArray(x)?x as Record<string,unknown>:{};
 function required(value: unknown, name: string, max=160): string {if(typeof value!=="string"||!value.trim()||value.length>max)throw new ConversationError(`Invalid ${name}.`);return value.trim();}
 function line(value: unknown, max=230): string {if(typeof value!=="string"||!value.trim()||value.length>max)throw new Error("The tutor returned a response that does not fit the screen.");return value.trim();}
 const str=(maxLength:number)=>({type:"string",maxLength,minLength:1});
 const schema=(properties:Record<string,unknown>)=>({type:"object",additionalProperties:false,properties,required:Object.keys(properties)});
 const openingSchema=schema({title:str(70),goal:str(120),opening:str(230),supportProvided:{type:"boolean"}});
-const turnSchema=schema({reply:str(230),supportProvided:{type:"boolean"},observations:{type:"array",maxItems:2,items:schema({skill:{type:"string",enum:ENGLISH_SKILLS.map(s=>s.id)},quote:str(240),success:{type:"boolean"},confidence:{type:"string",enum:["clear","uncertain"]},note:str(180)})}});
+const momentSchema=schema({kind:{type:"string",enum:["none","fix","word"]},said:{type:"string",maxLength:180},better:{type:"string",maxLength:180},why:{type:"string",maxLength:140}});
+const turnSchema=schema({reply:str(230),supportProvided:{type:"boolean"},observations:{type:"array",maxItems:2,items:schema({skill:{type:"string",enum:ENGLISH_SKILLS.map(s=>s.id)},quote:str(240),success:{type:"boolean"},confidence:{type:"string",enum:["clear","uncertain"]},note:str(180)})},moment:momentSchema});
 const coachSchema=schema({before:str(180),after:str(180),note:str(220)});
 const replaySchema=schema({reply:str(230)});
+/** A moment at most once per three learner turns, and four in one rehearsal. */
+const MOMENT_GAP=3,MOMENT_CAP=4;
 
-function screenFor(c:Conversation):Screen{return c.phase==="finished"?"linga-recap":c.phase==="coaching"?"linga-coach":"linga-talk";}
+function screenFor(c:Conversation):Screen{return c.phase==="finished"?"linga-recap":c.moment?"linga-moment":c.phase==="coaching"?"linga-coach":"linga-talk";}
 function commit(c:Conversation,screen?:Screen){dispatch({type:"linga.changed",conversation:c,screen});}
+/** The scene contract this conversation runs: its own copy, or a built-in one for a conversation saved before copies. */
+function sceneOf(c:Conversation):EnglishScene|undefined{return c.scene??ENGLISH_SCENES.find(s=>s.id===c.sceneId);}
 function checkCurrent(c:Conversation,token?:string):Conversation{
   const s=getSession(),now=s.conversation;
   if(s.learner.id!==c.learnerId||s.subject!=="english"||now?.id!==c.id||(token&&now.pending!==token))throw new ConversationError("This conversation has changed. Return to the current scene.",409);
   return now;
 }
 function tutorSystem(c:Conversation):string{
-  const p=getSession().profiles.find(p=>p.id===c.learnerId),scene=ENGLISH_SCENES.find(s=>s.id===c.sceneId)!;
-  const prefs=c.preferences;
+  const p=getSession().profiles.find(p=>p.id===c.learnerId),scene=sceneOf(c)!;
+  const prefs=c.preferences,level=isBand(prefs.level)?prefs.level:"A1";
   return `You are Linga, a language-learning rehearsal on a shared television. You play ${scene.partner}.
 The learner is ${isAdult(p,prefs)?"an adult":p?.age?`age ${p.age}`:"of unspecified age; keep every exchange appropriate for children"}. This is a fictional practice scene, not a personal relationship.
 SCENE CONTRACT: ${scene.premise}
-Level: ${prefs.level}. Beginner: simple chunks, one short question, patient scaffolding. Developing: short natural exchanges. Confident: nuanced but concise. All levels get age-appropriate contexts.
+Level: ${level} on the CEFR scale (${BAND_NAME[level]}). ${BAND_TUTOR[level]} Pitch your English there. All levels get age-appropriate contexts.
 Creativity: ${prefs.creativity}; change harmless details, never English complexity automatically. Social challenge: ${prefs.challenge}; no ridicule, threats, manipulation or humiliation. Correction preference: ${prefs.correction}; keep conversation flowing, repair lost meaning naturally. Do not correct every sentence.
 One focus: ${c.focusSkill}. Review when natural: ${c.reviewSkill??"repair"}. Language and communication style are separate. Accept valid alternative wording. A blunt phrase may communicate successfully; do not label it a grammar error. Directness varies by context. Never infer accent, pronunciation, emotion or personality from a transcript.
 Use only the given allowed skill rubrics. Observations quote the exact submitted learner reply; assess only demonstrated evidence, with uncertainty where appropriate. Supplied phrases and selected choices are supported practice. Set supportProvided true whenever your reply models wording, offers a phrase starter, or otherwise supplies the learner's next answer. Never claim CEFR certification or mastery.
@@ -42,7 +50,23 @@ function context(c:Conversation){
   const recent=learning.evidence.filter(e=>e.skill===c.focusSkill&&e.mode!=="choice").slice(-4);
   const struggles=recent.filter(e=>!e.success).length,independent=recent.filter(e=>e.success&&!e.supported).length;
   const adaptation=struggles>=2?"Use a shorter question and a concrete example. Offer a phrase starter if needed, setting supportProvided=true. Stay in the scene.":independent>=3?"Ask a less predictable follow-up within the learner's chosen level and social challenge. Avoid another copy of a question they already answered.":"Keep one manageable question per turn. Respond to the learner's need before adding difficulty.";
-  return {scene:{title:c.title,goal:c.goal},preferences:c.preferences,adaptation,teachingNotes:learning.notes,recentLearning:recent.map(e=>({skill:e.skill,success:e.success,supported:e.supported,note:e.note})),skills:ENGLISH_SKILLS.filter(s=>s.id===c.focusSkill||s.id===c.reviewSkill||s.id==="repair"),transcript:c.turns.slice(-18)};
+  const placement=learning.placement;
+  return {scene:{title:c.title,goal:c.goal},preferences:c.preferences,adaptation,teachingNotes:learning.notes,levelCheck:placement?{band:placement.band,chosenBy:placement.source==="self"?"learner":"level check",practiseNext:placement.focus}:null,recentLearning:recent.map(e=>({skill:e.skill,success:e.success,supported:e.supported,note:e.note})),skills:ENGLISH_SKILLS.filter(s=>s.id===c.focusSkill||s.id===c.reviewSkill||s.id==="repair"),transcript:c.turns.slice(-18)};
+}
+function momentAllowed(c:Conversation):boolean{
+  const moments=c.moments??[];
+  if(c.preferences.correction!=="as-needed"||moments.length>=MOMENT_CAP)return false;
+  const last=moments.at(-1);if(!last)return true;
+  const since=c.turns.slice(c.turns.findIndex(t=>t.id===last.turnId)+1).filter(t=>t.role==="learner").length;
+  return since>=MOMENT_GAP-1;
+}
+/** A fix must quote the reply it fixes; a word must come with the sentence it belongs in. Anything else is no moment. */
+function parseMoment(value:unknown,reply:string,turnId:string):Moment|null{
+  const m=object(value),kind=m.kind;
+  const said=typeof m.said==="string"?m.said.trim():"",better=typeof m.better==="string"?m.better.trim():"",why=typeof m.why==="string"?m.why.trim():"";
+  if((kind!=="fix"&&kind!=="word")||!said||!better||!why||said.length>180||better.length>180||why.length>140)return null;
+  if(kind==="fix"&&(!reply.includes(said)||said===better))return null;
+  return {id:`${turnId}:moment`,kind,said,better,why,turnId,at:Date.now()};
 }
 
 /** One validated command surface for both devices. No client can commit model evidence. */
@@ -58,25 +82,28 @@ export async function englishCommand(raw:unknown){
     let preferences;try{preferences=parsePreferences(input.preferences);}catch(e){throw new ConversationError((e as Error).message);}
     if(profile.age!==undefined&&profile.age<18||profile.type!=="other"&&profile.age===undefined)preferences.adultConfirmed=false;
     if(!Array.isArray(input.notes)||input.notes.length>8||input.notes.some(n=>typeof n!=="string"||n.length>240))throw new ConversationError("Use up to eight short teaching notes, 240 characters each.");
-    saveEnglish(learnerId,{...learning,preferences,notes:input.notes.map((n:string)=>n.trim()).filter(Boolean)});
+    // A band set by hand is the learner's own call, and says so.
+    const placement=learning.placement&&learning.placement.band!==preferences.level?{...learning.placement,band:preferences.level,source:"self" as const,confidence:"low" as const,summary:"",at:Date.now()}:learning.placement;
+    saveEnglish(learnerId,{...learning,preferences,placement,notes:input.notes.map((n:string)=>n.trim()).filter(Boolean)});
     // Settings apply to the next scene; a changed age entitlement ends an incompatible scene now.
-    const current=s.conversation;
-    dispatch({type:"linga.changed",...(current&&!eligibleScenes(profile,preferences).some(x=>x.id===current.sceneId)?{conversation:null,screen:"linga" as Screen}:{})});
+    const current=s.conversation,scene=current&&sceneOf(current);
+    dispatch({type:"linga.changed",...(current&&(!scene||!audienceAllowed(profile,preferences,scene.audience))?{conversation:null,screen:"linga" as Screen}:{})});
     return getSession();
   }
   const commandId=required(input.commandId,"command id",100);
+  if(isCheckAction(action)){await checkCommand(action,input,profile,commandId);return getSession();}
   if(action==="start"){
-    const prefs=learning.preferences??defaultPreferences(profile),allowed=eligibleScenes(profile,prefs);
+    const prefs=learning.preferences??defaultPreferences(profile),allowed=eligibleScenes(profile,prefs,learning);
     const scene=input.sceneId?allowed.find(x=>x.id===input.sceneId):recommendScene(profile,learning);
-    if(!scene)throw new ConversationError("This situation is not available for this learner.",403);
+    if(!scene||!allowed.some(x=>x.id===scene.id))throw new ConversationError("This situation is not available for this learner.",403);
     if(s.conversation?.commands.includes(commandId))return getSession();
     if(s.conversation?.pending)throw new ConversationError("A scene is already being prepared. You can cancel it.",409);
     if(s.conversation&&s.conversation.phase!=="finished"&&input.replace!==true)throw new ConversationError("Finish or leave the current scene before starting another.",409);
     const due=learning.evidence.filter(e=>e.success&&e.skill!==scene.skill&&Date.now()-e.at>3*86400000).sort((a,b)=>a.at-b.at)[0];
-    const c:Conversation={id:randomUUID(),learnerId,sceneId:scene.id,title:scene.name,goal:scene.goal,partner:scene.partner,focusSkill:scene.skill,reviewSkill:due?.skill??"repair",preferences:prefs,turns:[],coaching:null,phase:"conversation",pending:commandId,error:"",paused:false,capture:false,captureAt:0,audioNonce:0,supported:false,cue:"",quizOpen:false,commands:[],evidence:[],startedAt:Date.now()};
+    const c:Conversation={id:randomUUID(),learnerId,sceneId:scene.id,title:scene.name,goal:scene.goal,partner:scene.partner,focusSkill:scene.skill,reviewSkill:due?.skill??"repair",preferences:prefs,scene,turns:[],coaching:null,moment:null,moments:[],phase:"conversation",pending:commandId,error:"",paused:false,capture:false,captureAt:0,audioNonce:0,supported:false,cue:"",quizOpen:false,commands:[],evidence:[],startedAt:Date.now()};
     dispatch({type:"timer.pause"});commit(c,"linga-talk");
     try{
-      const result=await text<Record<string,unknown>>({system:tutorSystem(c),prompt:JSON.stringify({...context(c),task:"Prepare a fitting scene and opening question. Title <=70 characters, goal <=120, opening <=230. Give an easy entry for a beginner. Use the learner's interest as a detail within the scene contract; do not change its purpose."}),schema:openingSchema,model:"fast",timeoutMs:60000,isolated:true});
+      const result=await text<Record<string,unknown>>({system:tutorSystem(c),prompt:JSON.stringify({...context(c),task:"Prepare a fitting scene and opening question. Title <=70 characters, goal <=120, opening <=230. Give an easy entry at the learner's level. Use the learner's interest as a detail within the scene contract; do not change its purpose."}),schema:openingSchema,model:"fast",timeoutMs:60000,isolated:true});
       checkCurrent(c,commandId);
       commit({...c,title:line(result.json.title,70),goal:line(result.json.goal,120),turns:[{id:randomUUID(),role:"partner",text:line(result.json.opening)}],supported:result.json.supportProvided!==false,pending:null,commands:[commandId],provider:result.provider,responseMs:result.ms},"linga-talk");
       return getSession();
@@ -85,24 +112,25 @@ export async function englishCommand(raw:unknown){
   const c=s.conversation;
   if(!c||c.id!==input.episodeId||c.learnerId!==learnerId)throw new ConversationError("This conversation has changed. Open the current scene.",409);
   if(c.commands.includes(commandId))return getSession();
-  const prefs=learning.preferences??defaultPreferences(profile);
-  if(!eligibleScenes(profile,prefs).some(x=>x.id===c.sceneId))throw new ConversationError("This situation is no longer available for this learner.",403);
+  const prefs=learning.preferences??defaultPreferences(profile),scene=sceneOf(c);
+  if(!scene||!audienceAllowed(profile,prefs,scene.audience))throw new ConversationError("This situation is no longer available for this learner.",403);
   if(action==="leave") {commit({...c,pending:null,paused:true,capture:false,quizOpen:false},"linga");return getSession();}
   if(action==="resume") {commit({...c,pending:null,paused:false,capture:false,error:""},screenFor(c));return getSession();}
+  if(action==="moment-done") {if(c.moment)commit({...c,moment:null},"linga-talk");return getSession();}
   if(action==="capture"){
-    if(input.active===true&&(c.pending||c.paused||c.phase==="finished"||c.phase==="coaching"))throw new ConversationError("Return to the conversation before speaking.",409);
+    if(input.active===true&&(c.pending||c.paused||c.phase==="finished"||c.phase==="coaching"||c.moment))throw new ConversationError("Return to the conversation before speaking.",409);
     commit({...c,capture:input.active===true,captureAt:Date.now()});return getSession();
   }
   if(action==="pause") {commit({...c,paused:!c.paused,capture:false});return getSession();}
   if(action==="repeat") {commit({...c,audioNonce:c.audioNonce+1,capture:false});return getSession();}
   if(c.pending)throw new ConversationError("The partner is preparing a reply. You can cancel and return later.",409);
   if(c.phase==="finished")throw new ConversationError("This rehearsal has finished. Start a new situation.",409);
+  if(c.moment&&action!=="finish")throw new ConversationError("Take in the moment on the TV, then carry on.",409);
   if(action==="cue"||action==="quiz"){
-    const scene=ENGLISH_SCENES.find(x=>x.id===c.sceneId)!;
     commit({...c,supported:true,cue:scene.cue,quizOpen:action==="quiz"},"linga-talk");return getSession();
   }
   if(action==="choice"){
-    const quiz=ENGLISH_SCENES.find(x=>x.id===c.sceneId)!.quiz;
+    const quiz=scene.quiz;
     if(!c.quizOpen||![0,1].includes(input.option as number))throw new ConversationError("Choose one of the displayed phrases.");
     const correct=input.option===quiz.correct;
     const e:EnglishEvidence={id:`${c.id}:${commandId}:choice`,episodeId:c.id,turnId:commandId,sceneId:c.sceneId,skill:c.focusSkill,at:Date.now(),mode:"choice",supported:true,success:correct,quote:quiz.options[input.option as number],note:"Recognised a supporting phrase; not speaking evidence."};
@@ -112,7 +140,7 @@ export async function englishCommand(raw:unknown){
   if(action==="finish"){
     const entry={id:c.id,sceneId:c.sceneId,title:c.title,at:Date.now(),turns:c.turns.filter(t=>t.role==="learner").length};
     saveEnglish(learnerId,{...learning,sessions:[...learning.sessions.filter(x=>x.id!==c.id),entry].slice(-30)});
-    commit({...c,phase:"finished",capture:false,quizOpen:false,paused:false,commands:[...c.commands,commandId]},"linga-recap");return getSession();
+    commit({...c,phase:"finished",moment:null,capture:false,quizOpen:false,paused:false,commands:[...c.commands,commandId]},"linga-recap");return getSession();
   }
   if(!["turn","coach","replay"].includes(action))throw new ConversationError("Unknown conversation action.");
   if(c.paused)throw new ConversationError("Resume the conversation first.",409);
@@ -129,17 +157,22 @@ export async function englishCommand(raw:unknown){
   const lastLearner=[...c.turns].reverse().find(t=>t.role==="learner");
   if(action==="coach"&&!lastLearner)throw new ConversationError("Try a reply first; use a cue if you need help.");
   if(action==="replay"&&!c.coaching)throw new ConversationError("Ask for a coaching moment first.");
+  const mayStop=action==="turn"&&momentAllowed(c);
   commit({...c,pending:commandId,capture:false,error:""});
   try{
-    const task=action==="turn"?{task:"Respond in character to submittedReply, then assess it against the allowed skills. Do not assess earlier turns again. Only clear evidence; uncertain observations cannot earn progress.",submittedReply:reply}:action==="coach"?{task:"Coach the latest learner reply: before must be an exact nonempty substring of that reply (<=180 characters); after is one useful alternative (<=180). Note <=220: say what worked and one change. Distinguish language from chosen communication intention; do not invent an error.",submittedReply:lastLearner!.text}:{task:"Return to the scene with a new short question that practises the coaching intention. Vary the question to test reuse. Do not supply the learner's answer.",coaching:c.coaching};
+    const momentTask=mayStop?" moment: stop the scene only when one thing is clearly worth it. fix: an error that blurred the meaning or will keep coming back; said is an exact excerpt of submittedReply, better is the same idea said well, why is one short reason. word: a word or phrase this situation clearly wants and the learner lacked; said is the word or phrase, better is a short sentence using it in this scene, why is what it means in plain words. Otherwise kind none with empty fields. Most turns are none. Never stop for a valid alternative, a style choice or register.":" moment: kind none with empty fields.";
+    const task=action==="turn"?{task:`Respond in character to submittedReply, then assess it against the allowed skills. Do not assess earlier turns again. Only clear evidence; uncertain observations cannot earn progress.${momentTask}`,submittedReply:reply}:action==="coach"?{task:"Coach the latest learner reply: before must be an exact nonempty substring of that reply (<=180 characters); after is one useful alternative (<=180). Note <=220: say what worked and one change. Distinguish language from chosen communication intention; do not invent an error.",submittedReply:lastLearner!.text}:{task:"Return to the scene with a new short question that practises the coaching intention. Vary the question to test reuse. Do not supply the learner's answer.",coaching:c.coaching};
     const result=await text<Record<string,unknown>>({system:tutorSystem(c),prompt:JSON.stringify({...context(c),...task}),schema:action==="turn"?turnSchema:action==="coach"?coachSchema:replaySchema,model:"fast",timeoutMs:60000,isolated:true});
     const current=checkCurrent(c,commandId);
     let next:Conversation={...current,pending:null,error:"",commands:[...c.commands,commandId].slice(-100),provider:result.provider,responseMs:result.ms};
     if(action==="turn"){
       const partnerReply=line(result.json.reply),turnId=`${c.id}:${commandId}`;
       const observations=validateObservations(result.json.observations,{episodeId:c.id,turnId,sceneId:c.sceneId,at:Date.now(),mode,supported:c.supported,text:reply,skills:[...new Set([c.focusSkill,c.reviewSkill??"repair","repair"])] as SkillId[]});
-      saveEnglish(learnerId,mergeEvidence(getLearner(learnerId).english,observations));
-      next={...next,turns:[...c.turns,{id:turnId,role:"learner",text:reply,mode,supported:c.supported},{id:randomUUID(),role:"partner",text:partnerReply}],supported:result.json.supportProvided!==false,cue:"",quizOpen:false,evidence:[...c.evidence,...observations]};
+      const moment=mayStop?parseMoment(result.json.moment,reply,turnId):null;
+      const learned=mergeEvidence(getLearner(learnerId).english,observations);
+      saveEnglish(learnerId,moment?{...learned,taught:[...learned.taught,{...moment,sceneId:c.sceneId,title:c.title}].slice(-TAUGHT_CAP)}:learned);
+      // a moment models wording, so the reply after it is supported practice
+      next={...next,turns:[...c.turns,{id:turnId,role:"learner",text:reply,mode,supported:c.supported},{id:randomUUID(),role:"partner",text:partnerReply}],supported:moment?true:result.json.supportProvided!==false,moment,moments:moment?[...(c.moments??[]),moment]:c.moments??[],cue:"",quizOpen:false,evidence:[...c.evidence,...observations]};
     }else if(action==="coach"){
       const before=line(result.json.before,180);if(!lastLearner!.text.includes(before))throw new Error("The coach did not quote the learner accurately.");
       next={...next,phase:"coaching",coaching:{before,after:line(result.json.after,180),note:line(result.json.note,220)},supported:true,quizOpen:false,cue:""};

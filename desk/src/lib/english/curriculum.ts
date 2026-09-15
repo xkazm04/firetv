@@ -1,5 +1,6 @@
 import type { Profile } from "../session/store";
-import type { EnglishLearning, EnglishPreferences, Progress, SkillId } from "./types";
+import type { Audience, EnglishLearning, EnglishPreferences, EnglishScene, Progress, SkillId } from "./types";
+export type { EnglishScene } from "./types";
 
 export const ENGLISH_SKILLS: Array<{ id: SkillId; name: string; goal: string }> = [
   { id: "contact", name: "Make contact", goal: "Greet, introduce yourself, and take a turn." },
@@ -11,11 +12,6 @@ export const ENGLISH_SKILLS: Array<{ id: SkillId; name: string; goal: string }> 
   { id: "relate", name: "Connect with people", goal: "Follow up, disagree respectfully, and decline." },
   { id: "resolve", name: "Handle friction", goal: "Name an impact, set a boundary, and agree next steps." },
 ];
-export interface EnglishScene {
-  id: string; name: string; goal: string; partner: string; skill: SkillId;
-  audience: "all" | "school" | "older" | "adult"; minutes: string;
-  premise: string; cue: string; quiz: { question: string; options: [string, string]; correct: number };
-}
 export const ENGLISH_SCENES: EnglishScene[] = [
   { id: "meet", name: "The first hello", goal: "Introduce yourself and ask a question back.", partner: "Jamie · New acquaintance", skill: "contact", audience: "all", minutes: "6–8",
     premise: "Meet someone at a new club, class or community event that fits the learner's age and interests. Greet, introduce yourself, ask an easy question back. Fictional names are welcome.", cue: "Try: Hi, I'm Alex. What is your name?",
@@ -43,16 +39,40 @@ export const ENGLISH_SCENES: EnglishScene[] = [
     quiz: { question: "Which reply makes a concrete request?", options: ["Can you send the finished section by noon?", "Be more considerate."], correct: 0 } },
 ];
 export function defaultPreferences(p?: Profile): EnglishPreferences {
-  return { level: "beginner", interest: "", goal: "", creativity: p?.type === "elementary" ? "playful" : "familiar", challenge: "supportive", correction: "pauses", adultConfirmed: false };
+  return { level: "A1", interest: "", goal: "", creativity: p?.type === "elementary" ? "playful" : "familiar", challenge: "supportive", correction: "as-needed", adultConfirmed: false };
 }
 export function isAdult(p: Profile | undefined, prefs: EnglishPreferences): boolean {
   return p?.age !== undefined ? p.age >= 18 : p?.type === "other" && prefs.adultConfirmed;
 }
-export function eligibleScenes(p: Profile | undefined, prefs: EnglishPreferences): EnglishScene[] {
-  return ENGLISH_SCENES.filter(x => x.audience === "adult" ? isAdult(p, prefs) : x.audience === "older" ? (p?.age ?? 0) >= 15 || p?.type === "other" : true);
+/** Age gates content; English level never does. */
+export function audienceAllowed(p: Profile | undefined, prefs: EnglishPreferences, audience: Audience): boolean {
+  return audience === "adult" ? isAdult(p, prefs) : audience === "older" ? (p?.age ?? 0) >= 15 || p?.type === "other" : true;
+}
+/** The agreed plan's topics, as scenes the conversation can run. */
+export function planScenes(l?: EnglishLearning | null): EnglishScene[] {
+  return (l?.plan?.topics ?? []).map(t => ({ id: t.id, name: t.title, goal: t.goal, partner: t.partner, skill: t.skill, audience: t.audience, minutes: "8–10", premise: t.premise, cue: t.cue, quiz: t.quiz }));
+}
+/** Plan topics first, then the built-in situations; both filtered by age. */
+export function eligibleScenes(p: Profile | undefined, prefs: EnglishPreferences, l?: EnglishLearning | null): EnglishScene[] {
+  return [...planScenes(l), ...ENGLISH_SCENES].filter(x => audienceAllowed(p, prefs, x.audience));
+}
+/** Every topic in the plan has been talked through at least once. */
+export function planDone(l: EnglishLearning): boolean {
+  const topics = l.plan?.topics ?? [], started = new Set(l.sessions.map(x => x.sceneId));
+  return topics.length > 0 && topics.every(t => started.has(t.id));
 }
 export function recommendScene(p: Profile | undefined, learning: EnglishLearning): EnglishScene {
   const prefs = learning.preferences ?? defaultPreferences(p);
+  // An agreed plan leads: the next topic not yet talked through, then the one whose skill is due.
+  const plan = planScenes(learning).filter(x => audienceAllowed(p, prefs, x.audience));
+  if (plan.length) {
+    const started = new Set(learning.sessions.map(x => x.sceneId));
+    const unstarted = plan.find(x => !started.has(x.id));
+    if (unstarted) return unstarted;
+    const lastId = learning.sessions.at(-1)?.sceneId;
+    const due = learning.evidence.filter(e => e.success && Date.now() - e.at > 3 * 86400000).sort((a, b) => a.at - b.at)[0];
+    return plan.find(x => due && x.skill === due.skill && x.id !== lastId) ?? plan[(plan.findIndex(x => x.id === lastId) + 1) % plan.length];
+  }
   const words = `${prefs.goal} ${prefs.interest}`.toLowerCase();
   // Adult eligibility makes date practice selectable, not an unsolicited next lesson.
   const allowed = eligibleScenes(p, prefs).filter(x=>x.id!=="date"||/date|dating/.test(words));

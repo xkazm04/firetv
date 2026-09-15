@@ -23,7 +23,7 @@ const TV_WORDS: Partial<Record<Session["screen"], string>> = {
   units: "the units guide", calendar: "the calendar", page: "the page", hint: "a hint", lesson: "a lesson", sentence: "your sentence",
   headtohead: "head to head", essaytype: "the essay lens", forensic: "the essay", playbook: "the playbook", xray: "the x-ray", break: "a break", recap: "the recap",
   topics: "Teach me something", practice: "the practice set", walk: "walking the set",
-  linga: "Linga", "linga-scenes": "English situations", "linga-map": "your learning map", "linga-talk": "your conversation", "linga-coach": "a coaching moment", "linga-recap": "your rehearsal recap",
+  linga: "Linga", "linga-scenes": "English situations", "linga-map": "your learning map", "linga-talk": "your conversation", "linga-coach": "a coaching moment", "linga-recap": "your rehearsal recap", "linga-check": "finding your level", "linga-verdict": "your level", "linga-plan": "your topics", "linga-moment": "a moment in your conversation",
 };
 export default function Phone() {
   const { s, connected, post } = useSession();
@@ -185,7 +185,7 @@ export default function Phone() {
         <div className="link">{s?.joined ? <><b>joined</b> · {s.learner.name}</> : connected ? "not joined" : "connecting…"}{s && <small>TV · {TV_WORDS[s.screen] ?? s.screen}</small>}</div>
       </div>
       <div className="pbody">
-        {screen === "linga" && s && <LingaPhone key={`${s.learner.id}:${s.conversation?.id??"setup"}`} s={s} post={post} onSentence={()=>setScreen("say")}/>}
+        {screen === "linga" && s && <LingaPhone key={`${s.learner.id}:${s.conversation?.id??"setup"}:${s.check?.id??""}`} s={s} post={post} onSentence={()=>setScreen("say")}/>}
         {screen === "join" && <div className="pscreen"><h3>Join the desk</h3>
           <p>{!s ? "Looking for the TV…" : s.screen === "pair" ? "The TV is showing the code. Scan it, or type it here." : `The TV is on ${TV_WORDS[s.screen] ?? s.screen}. Ask it for the code, then type it here.`}</p>
           {s && s.screen !== "pair" && <button className="pbtn" data-secondary="true" onClick={() => post({ type: "nav", screen: "pair", from: s.screen })}>Show the code on the TV</button>}

@@ -1,13 +1,16 @@
 import { ENGLISH_SKILLS, PROGRESS_ORDER } from "./curriculum";
+import { cleanPlacement, cleanPlan, cleanTaught, isBand } from "./placement";
 import { emptyEnglish, type EnglishEvidence, type EnglishLearning, type EnglishPreferences, type Progress, type SkillId } from "./types";
 
 const obj = (v: unknown): Record<string, unknown> => v && typeof v === "object" && !Array.isArray(v) ? v as Record<string, unknown> : {};
 const isSkill = (id: unknown): id is SkillId => ENGLISH_SKILLS.some(s => s.id === id);
+/** Saved before the level became a band: the three self-picked words read as the nearest band. */
+const LEGACY_LEVEL: Record<string, string> = { beginner: "A1", developing: "B1", confident: "B2" };
 export function parsePreferences(value: unknown): EnglishPreferences {
-  const v = obj(value);
-  if (!["beginner", "developing", "confident"].includes(String(v.level)) || !["familiar", "playful", "surprising"].includes(String(v.creativity)) || !["supportive", "realistic", "stretch"].includes(String(v.challenge)) || !["pauses", "as-needed"].includes(String(v.correction)) || typeof v.adultConfirmed !== "boolean") throw new Error("Choose the learning preferences again.");
+  const v = obj(value), level = LEGACY_LEVEL[String(v.level)] ?? v.level;
+  if (!isBand(level) || !["familiar", "playful", "surprising"].includes(String(v.creativity)) || !["supportive", "realistic", "stretch"].includes(String(v.challenge)) || !["pauses", "as-needed"].includes(String(v.correction)) || typeof v.adultConfirmed !== "boolean") throw new Error("Choose the learning preferences again.");
   for (const key of ["interest", "goal"]) if (typeof v[key] !== "string" || (v[key] as string).length > 160) throw new Error("Keep interests and goals under 160 characters.");
-  return { level: v.level, creativity: v.creativity, challenge: v.challenge, correction: v.correction, adultConfirmed: v.adultConfirmed, interest: (v.interest as string).trim(), goal: (v.goal as string).trim() } as EnglishPreferences;
+  return { level, creativity: v.creativity, challenge: v.challenge, correction: v.correction, adultConfirmed: v.adultConfirmed, interest: (v.interest as string).trim(), goal: (v.goal as string).trim() } as EnglishPreferences;
 }
 /** Strict enough to discard corrupt entries; never infer speech from a missing modality. */
 export function cleanEnglish(value: unknown): EnglishLearning {
@@ -16,6 +19,9 @@ export function cleanEnglish(value: unknown): EnglishLearning {
   result.notes = Array.isArray(v.notes) ? v.notes.filter((n): n is string => typeof n === "string").map(n=>n.slice(0,240)).slice(0,8) : [];
   result.evidence = Array.isArray(v.evidence) ? v.evidence.filter((e): e is EnglishEvidence => { const x=obj(e); return isSkill(x.skill) && typeof x.id === "string" && typeof x.episodeId === "string" && typeof x.turnId === "string" && typeof x.sceneId === "string" && typeof x.at === "number" && Number.isFinite(x.at) && ["speech","text","choice"].includes(String(x.mode)) && typeof x.supported === "boolean" && typeof x.success === "boolean" && typeof x.quote === "string" && typeof x.note === "string"; }).slice(-400) : [];
   for (const [key, val] of Object.entries(obj(v.achievements))) if (isSkill(key) && PROGRESS_ORDER.includes(val as Progress)) result.achievements[key] = val as Progress;
+  result.placement = cleanPlacement(v.placement);
+  result.plan = cleanPlan(v.plan);
+  result.taught = cleanTaught(v.taught);
   result.sessions = Array.isArray(v.sessions) ? v.sessions.filter((s): s is EnglishLearning["sessions"][number] => {const x=obj(s);return typeof x.id === "string" && typeof x.sceneId === "string" && typeof x.title === "string" && typeof x.at === "number" && typeof x.turns === "number";}).slice(-30) : [];
   return result;
 }
