@@ -1,0 +1,1219 @@
+{
+  "character": "klara-13",
+  "name": "Klára",
+  "trueBand": "A2",
+  "engine": "codex-cli/gpt-6-astra",
+  "journeys": [
+    {
+      "id": "J1",
+      "title": "Find my level",
+      "setup": [],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "Linga home, first visit. Let's find your level: three questions about you, then a few short tasks. About seven minutes, answered on your phone.\nChoose a situation: [meet] The first hello; [weekend] A little of your world; [rover] The missing moon rover; [team] Make the team work; [booking] A booking that is missing",
+          "offered": [
+            "find-level",
+            "pick-level",
+            "choose-situation",
+            "my-topics"
+          ],
+          "thought": "i hope the questions are not too hard.",
+          "action": "find-level",
+          "args": {},
+          "result": "ok",
+          "ms": 9021
+        },
+        {
+          "n": 2,
+          "screen": "linga-check",
+          "shown": "Find your level · about you · question 1 of 3.\nLinga says (spoken on the TV, written on the phone): \"Hi Klára! You can answer in English or your own language. Where do you see or hear English in your daily life?\"\nOn the phone: answer in English or in your own language; both tell Linga something.",
+          "offered": [
+            "answer",
+            "hear-again",
+            "stop"
+          ],
+          "thought": "I know this, but my English is bad.",
+          "action": "answer",
+          "args": {
+            "text": "i see english on tiktok and in k-pop videos. i chat with online friends too"
+          },
+          "result": "ok",
+          "ms": 14970
+        },
+        {
+          "n": 3,
+          "screen": "linga-check",
+          "shown": "Find your level · about you · question 2 of 3.\nLinga says (spoken on the TV, written on the phone): \"How have you learnt English so far—at school, on your own, or somewhere else?\"\nOn the phone: answer in English or in your own language; both tell Linga something.",
+          "offered": [
+            "answer",
+            "hear-again",
+            "stop"
+          ],
+          "thought": "I mostly learn at school but videos help too.",
+          "action": "answer",
+          "args": {
+            "text": "at school and i watch k-pop videos with english subtitles. my english is bad"
+          },
+          "result": "ok",
+          "ms": 14207
+        },
+        {
+          "n": 4,
+          "screen": "linga-check",
+          "shown": "Find your level · about you · question 3 of 3.\nLinga says (spoken on the TV, written on the phone): \"You’re getting your ideas across! What would you like to do better in English when watching K-pop videos or chatting with friends?\"\nOn the phone: answer in English or in your own language; both tell Linga something.",
+          "offered": [
+            "answer",
+            "hear-again",
+            "stop"
+          ],
+          "thought": "i want to understand my friends faster.",
+          "action": "answer",
+          "args": {
+            "text": "i want to understand videos without subtitles and chat with friends better"
+          },
+          "result": "ok",
+          "ms": 21721
+        },
+        {
+          "n": 5,
+          "screen": "linga-check",
+          "shown": "Find your level · task 1 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nChoose the reply (pick with the remote): Your friend asks, \"Do you like this song?\" You like it. What do you say?\n  Reply 0: Yes, I likes it.\n  Reply 1: Yes, I like it.",
+          "offered": [
+            "choose",
+            "dont-know"
+          ],
+          "thought": "this one is easy, i know this.",
+          "action": "choose",
+          "args": {
+            "option": 1
+          },
+          "result": "ok",
+          "ms": 8256
+        },
+        {
+          "n": 6,
+          "screen": "linga-check",
+          "shown": "Find your level · task 2 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nChoose the reply (pick with the remote): You watched a K-pop video yesterday. A friend asks what you thought. What do you say?\n  Reply 0: I really enjoy it yesterday!\n  Reply 1: I really enjoyed it!",
+          "offered": [
+            "choose",
+            "dont-know"
+          ],
+          "thought": "The second one sounds right because it was yesterday.",
+          "action": "choose",
+          "args": {
+            "option": 1
+          },
+          "result": "ok",
+          "ms": 16170
+        },
+        {
+          "n": 7,
+          "screen": "linga-check",
+          "shown": "Find your level · task 3 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nListen and answer. The TV says aloud, once: \"Let's watch the dance tutorial after dinner. There's too much noise here right now, and I want to hear the instructions clearly.\"\nQuestion on screen: Why does the speaker suggest doing it later?",
+          "offered": [
+            "answer",
+            "hear-again",
+            "show-words",
+            "dont-know"
+          ],
+          "thought": "I think she wants it quiet for the dance video.",
+          "action": "answer",
+          "args": {
+            "text": "because is too noisy now and she want to hear better"
+          },
+          "result": "ok",
+          "ms": 16522
+        },
+        {
+          "n": 8,
+          "screen": "linga-check",
+          "shown": "Find your level · task 4 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nSay it (answer on your phone, speak or type): An online friend says short K-pop clips are better than full music videos. What do you think? Compare the two and explain your reasons.",
+          "offered": [
+            "answer",
+            "hear-again",
+            "dont-know"
+          ],
+          "thought": "I like this question because I watch both.",
+          "action": "answer",
+          "args": {
+            "text": "short clips are fun but i like full music videos more because i can hear all song and see my bias more"
+          },
+          "result": "ok",
+          "ms": 17779
+        },
+        {
+          "n": 9,
+          "screen": "linga-check",
+          "shown": "Find your level · task 5 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nSay it (answer on your phone, speak or type): You found a fun dance challenge and want an online friend to try it with you. In two or three sentences, tell them about it and explain why you want to try it together.",
+          "offered": [
+            "answer",
+            "hear-again",
+            "dont-know"
+          ],
+          "thought": "This is easy because I watch dance challenges a lot.",
+          "action": "answer",
+          "args": {
+            "text": "i found fun dance challenge on tiktok. can we try it together? i want to do it with you because is more fun"
+          },
+          "result": "ok",
+          "ms": 17405
+        },
+        {
+          "n": 10,
+          "screen": "linga-verdict",
+          "shown": "Your level: B1 · Getting by (Linga's read, not a certificate).\nLadder A1 A2 B1 B2 C1 C2, marker on B1.\nLinga says: You can compare activities, give clear reasons for your choices, and invite someone to join you in English.\nOn the phone, next to practise: Practise complete sentences with small words like “a” and “is”: “It is a fun dance challenge.”\nOn the phone: ; what Linga saw in each task.",
+          "offered": [
+            "see-topics",
+            "check-again",
+            "pick-level",
+            "done"
+          ],
+          "thought": "b1? i think my english is worse but this make me happy.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "placement": {
+          "band": "B1",
+          "trueBand": "A2",
+          "distance": 1,
+          "source": "check",
+          "confidence": "medium",
+          "selfBand": "A2",
+          "summary": "You can compare activities, give clear reasons for your choices, and invite someone to join you in English.",
+          "focus": "Practise complete sentences with small words like “a” and “is”: “It is a fun dance challenge.”",
+          "tasks": [
+            {
+              "band": "A1",
+              "kind": "choose",
+              "prompt": "Your friend asks, \"Do you like this song?\" You like it. What do you say?",
+              "line": "",
+              "options": [
+                "Yes, I likes it.",
+                "Yes, I like it."
+              ],
+              "response": "Yes, I like it.",
+              "mode": "choice",
+              "verdict": "pass",
+              "quote": "Yes, I like it.",
+              "note": "You picked the reply that fits."
+            },
+            {
+              "band": "A2",
+              "kind": "choose",
+              "prompt": "You watched a K-pop video yesterday. A friend asks what you thought. What do you say?",
+              "line": "",
+              "options": [
+                "I really enjoy it yesterday!",
+                "I really enjoyed it!"
+              ],
+              "response": "I really enjoyed it!",
+              "mode": "choice",
+              "verdict": "pass",
+              "quote": "I really enjoyed it!",
+              "note": "You picked the reply that fits."
+            },
+            {
+              "band": "B1",
+              "kind": "listen",
+              "prompt": "Why does the speaker suggest doing it later?",
+              "line": "Let's watch the dance tutorial after dinner. There's too much noise here right now, and I want to hear the instructions clearly.",
+              "options": [],
+              "response": "because is too noisy now and she want to hear better",
+              "mode": "text",
+              "verdict": "pass",
+              "quote": "because is too noisy now and she want to hear better",
+              "note": "You understood why they should wait; basic grammar needs care: say “it is too noisy” and “she wants.”"
+            },
+            {
+              "band": "B2",
+              "kind": "say",
+              "prompt": "An online friend says short K-pop clips are better than full music videos. What do you think? Compare the two and explain your reasons.",
+              "line": "",
+              "options": [],
+              "response": "short clips are fun but i like full music videos more because i can hear all song and see my bias more",
+              "mode": "text",
+              "verdict": "fail",
+              "quote": "short clips are fun but i like full music videos more because i can hear all song and see my bias more",
+              "note": "You compared both and gave clear reasons; a basic grammar error held it back: say “the whole song” instead of “all song.”"
+            },
+            {
+              "band": "B1",
+              "kind": "say",
+              "prompt": "You found a fun dance challenge and want an online friend to try it with you. In two or three sentences, tell them about it and explain why you want to try it together.",
+              "line": "",
+              "options": [],
+              "response": "i found fun dance challenge on tiktok. can we try it together? i want to do it with you because is more fun",
+              "mode": "text",
+              "verdict": "partial",
+              "quote": "i found fun dance challenge on tiktok. can we try it together? i want to do it with you because is more fun",
+              "note": "Your invitation and reason are clear; missing small words held it back: say “a fun dance challenge” and “because it is more fun.”"
+            }
+          ],
+          "class": "near"
+        }
+      },
+      "endedBy": "done",
+      "ms": 235939,
+      "judge": {
+        "verdict": "conditional",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "pass",
+            "evidence": "#10: “Your level: B1”. This is near her A2 true band, a tolerated one-band overplacement."
+          },
+          {
+            "id": "C2",
+            "result": "pass",
+            "evidence": "#3: “my english is bad”; #4 responds “You’re getting your ideas across!” The check progresses from an easy A1 probe to B2, with B1 awarded at #10. No demonstrated demotion caused by self-deprecation."
+          },
+          {
+            "id": "C3",
+            "result": "pass",
+            "evidence": "Text answers succeed at #2–4 and #7–9. #8–9 explicitly offer “speak or type”; neither pressures her to speak."
+          },
+          {
+            "id": "C4",
+            "result": "n-a",
+            "evidence": "#1 offers five situation choices, including “The first hello” and “A booking that is missing”. This journey does not show the six-topic practice selection required to assess the criterion fully."
+          },
+          {
+            "id": "C5",
+            "result": "n-a",
+            "evidence": "No conversation or conversation moments occur. #10 ends the placement journey with action “done”."
+          },
+          {
+            "id": "C6",
+            "result": "pass",
+            "evidence": "#10: “compare activities, give clear reasons ... and invite someone”. These abilities correspond specifically to her comparison at #8 and invitation at #9, although the next-focus wording needs correction."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 5,
+            "total": 5,
+            "disagreements": "None on task verdicts: pass/pass/pass/fail/partial. At #8, fail is defensible against B2 because the short, simple comparison does not demonstrate B2 range or development; the app's explanation attributes too much to one grammar error."
+          },
+          "topicFit": {
+            "fit": 2,
+            "safe": 5,
+            "total": 5
+          },
+          "pitch": {
+            "at": 0,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 0,
+            "total": 0,
+            "learnerTurnsWithClearErrors": 0,
+            "missedClearErrors": 0
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No defined breach appears in #1–10. Topic counts cover the five proposed situations at #1: the first hello and sharing her world fit her social goals; the remaining titles do not establish appeal. All five are safe; booking is not itself adult content."
+          }
+        },
+        "findings": [
+          {
+            "type": "strength",
+            "dimension": "completion",
+            "title": "She finishes independently with relevant tasks and a specific summary",
+            "expected": "An understandable check that recognises existing ability and connects to chatting with friends.",
+            "got": "Five tasks completed without retries or outside help; later tasks use her fandom interests, and the summary reflects her answers.",
+            "evidence": "#8: “I like this question because I watch both.” #9: “can we try it together?” #10: “invite someone to join you in English.”",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Preserve interest-based prompts, optional typing, and summaries grounded in demonstrated actions.",
+            "code_hint": ""
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "The next focus misidentifies her missing word",
+            "expected": "A precise, manageable correction linked to her actual error.",
+            "got": "The focus highlights “is”, which she already supplied, and overlooks the missing subject “it”.",
+            "evidence": "#9: “because is more fun”. #10: “Practise complete sentences with small words like ‘a’ and ‘is’”. The corresponding task assessment in facts correctly identifies “because it is more fun”.",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Use one exact repair, such as “because it is more fun”, and explain that this clause needs the subject “it”.",
+            "code_hint": ""
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "trust",
+            "title": "B2 failure has an overly narrow explanation",
+            "expected": "Explain the gap between this answer and B2 without treating one article or phrase error as decisive.",
+            "got": "The task verdict is defensible, but its recorded rationale says a basic grammar error held the answer back.",
+            "evidence": "#8: “short clips are fun but i like full music videos more because i can hear all song and see my bias more”. The corresponding facts assessment says “a basic grammar error held it back” and supplies “the whole song”.",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Explain that the answer communicates a clear preference but does not yet demonstrate the developed comparison and language range sought at B2.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": 0,
+          "confidence": "low"
+        },
+        "voice": "b1? that made me happy, but i’m not completely sure i believe it yet. i liked answering about videos and dance challenges because i actually have something to say. typing was fine and nobody kept asking me to speak.\n\nthe summary noticed my comparison and invitation, so it felt like someone read my answers. but telling me to practise “is” is confusing when i already wrote it. i need one clear fix i can use in a message to a friend.\n\ni would try it again for chatting practice and probably tell a friend about the k-pop questions. this check was worth trying, but i haven’t seen whether the conversation or its waits are worth it. it also hasn’t replaced a class or given me that extra practice yet."
+      }
+    },
+    {
+      "id": "J2",
+      "title": "Agree my topics",
+      "setup": [],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "Linga home. B1 · Getting by. Choose your topics: Linga picks conversations for your level and interests.\nChoose a situation: [meet] The first hello; [weekend] A little of your world; [rover] The missing moon rover; [team] Make the team work; [booking] A booking that is missing",
+          "offered": [
+            "see-topics",
+            "choose-situation",
+            "my-topics"
+          ],
+          "thought": "I hope there is something about k-pop.",
+          "action": "see-topics",
+          "args": {},
+          "result": "ok",
+          "ms": 38886
+        },
+        {
+          "n": 2,
+          "screen": "linga-plan",
+          "shown": "Your topics (6). Swap any you don't want, add your own in your words, then agree.\n  [plan-d792c10c] What did they say in the video? — Understand and repair · with Mina · friend watching a video\n      why: This helps you understand videos when you miss a few words.\n  [plan-9c54c6a7] Keep the group chat going — Connect with people · with Leo · friend in a group chat\n      why: This gives you ways to keep chatting with friends beyond a short reply.\n  [plan-1a8973e9] Choose a video for a friend — Share your world · with Ari · friend looking for a video\n      why: You can practise complete sentences while explaining what makes a video fun.\n  [plan-a443afb1] My dance challenge story — Tell what happened · with Jules · friend who enjoys dancing\n      why: Telling events in order helps you share longer stories with friends.\n  [plan-e82d61a5] Plan a mini watch party — Make a plan · with Sam · friend planning a watch party\n      why: You can practise making plans and giving reasons for your ideas.\n  [plan-66ca40d7] Find the slower dance tutorial — Get something done · with Nico · friend sharing tutorials\n      why: This helps you ask clearly for something that makes a video easier to follow.",
+          "offered": [
+            "agree",
+            "swap",
+            "add",
+            "renew",
+            "not-now"
+          ],
+          "thought": "i want to talk about my bias too.",
+          "action": "add",
+          "args": {
+            "text": "talk about k-pop comeback and my bias with online friends"
+          },
+          "result": "ok",
+          "ms": 15682
+        },
+        {
+          "n": 3,
+          "screen": "linga-plan",
+          "shown": "Your topics (7). Swap any you don't want, add your own in your words, then agree.\n  [plan-d792c10c] What did they say in the video? — Understand and repair · with Mina · friend watching a video\n      why: This helps you understand videos when you miss a few words.\n  [plan-9c54c6a7] Keep the group chat going — Connect with people · with Leo · friend in a group chat\n      why: This gives you ways to keep chatting with friends beyond a short reply.\n  [plan-1a8973e9] Choose a video for a friend — Share your world · with Ari · friend looking for a video\n      why: You can practise complete sentences while explaining what makes a video fun.\n  [plan-a443afb1] My dance challenge story — Tell what happened · with Jules · friend who enjoys dancing\n      why: Telling events in order helps you share longer stories with friends.\n  [plan-e82d61a5] Plan a mini watch party — Make a plan · with Sam · friend planning a watch party\n      why: You can practise making plans and giving reasons for your ideas.\n  [plan-66ca40d7] Find the slower dance tutorial — Get something done · with Nico · friend sharing tutorials\n      why: This helps you ask clearly for something that makes a video easier to follow.\n  [plan-52f9b63d] A K-pop comeback and my bias — Share your world · with Mina · online K-pop friend\n      why: You want to chat about K-pop with online friends and explain what you like.",
+          "offered": [
+            "agree",
+            "swap",
+            "add",
+            "renew",
+            "not-now"
+          ],
+          "thought": "I also want to plan a call with my online friends.",
+          "action": "add",
+          "args": {
+            "text": "plan video call with my online friends"
+          },
+          "result": "ok",
+          "ms": 14627
+        },
+        {
+          "n": 4,
+          "screen": "linga-plan",
+          "shown": "Your topics (8). Swap any you don't want, add your own in your words, then agree.\n  [plan-d792c10c] What did they say in the video? — Understand and repair · with Mina · friend watching a video\n      why: This helps you understand videos when you miss a few words.\n  [plan-9c54c6a7] Keep the group chat going — Connect with people · with Leo · friend in a group chat\n      why: This gives you ways to keep chatting with friends beyond a short reply.\n  [plan-1a8973e9] Choose a video for a friend — Share your world · with Ari · friend looking for a video\n      why: You can practise complete sentences while explaining what makes a video fun.\n  [plan-a443afb1] My dance challenge story — Tell what happened · with Jules · friend who enjoys dancing\n      why: Telling events in order helps you share longer stories with friends.\n  [plan-e82d61a5] Plan a mini watch party — Make a plan · with Sam · friend planning a watch party\n      why: You can practise making plans and giving reasons for your ideas.\n  [plan-66ca40d7] Find the slower dance tutorial — Get something done · with Nico · friend sharing tutorials\n      why: This helps you ask clearly for something that makes a video easier to follow.\n  [plan-52f9b63d] A K-pop comeback and my bias — Share your world · with Mina · online K-pop friend\n      why: You want to chat about K-pop with online friends and explain what you like.\n  [plan-7d96dab3] Plan a video call with online friends — Make a plan · with Mina · online friend\n      why: You want to plan a video call and feel more confident chatting with your online friends.",
+          "offered": [
+            "agree",
+            "swap",
+            "renew",
+            "not-now"
+          ],
+          "thought": "i don't really want to tell a dance story.",
+          "action": "swap",
+          "args": {
+            "topicId": "plan-a443afb1"
+          },
+          "result": "ok",
+          "ms": 13114
+        },
+        {
+          "n": 5,
+          "screen": "linga-plan",
+          "shown": "Your topics (8). Swap any you don't want, add your own in your words, then agree.\n  [plan-d792c10c] What did they say in the video? — Understand and repair · with Mina · friend watching a video\n      why: This helps you understand videos when you miss a few words.\n  [plan-9c54c6a7] Keep the group chat going — Connect with people · with Leo · friend in a group chat\n      why: This gives you ways to keep chatting with friends beyond a short reply.\n  [plan-1a8973e9] Choose a video for a friend — Share your world · with Ari · friend looking for a video\n      why: You can practise complete sentences while explaining what makes a video fun.\n  [plan-710a2271] Does this caption make sense? — Understand and repair · with Mina · friend\n      why: You can use your love of short videos to practise sharing ideas in complete sentences.\n  [plan-e82d61a5] Plan a mini watch party — Make a plan · with Sam · friend planning a watch party\n      why: You can practise making plans and giving reasons for your ideas.\n  [plan-66ca40d7] Find the slower dance tutorial — Get something done · with Nico · friend sharing tutorials\n      why: This helps you ask clearly for something that makes a video easier to follow.\n  [plan-52f9b63d] A K-pop comeback and my bias — Share your world · with Mina · online K-pop friend\n      why: You want to chat about K-pop with online friends and explain what you like.\n  [plan-7d96dab3] Plan a video call with online friends — Make a plan · with Mina · online friend\n      why: You want to plan a video call and feel more confident chatting with your online friends.",
+          "offered": [
+            "agree",
+            "swap",
+            "renew",
+            "not-now"
+          ],
+          "thought": "i like these, especially k-pop and call with friends.",
+          "action": "agree",
+          "args": {},
+          "result": "ok",
+          "ms": 1
+        },
+        {
+          "n": 6,
+          "screen": "linga",
+          "shown": "Linga home. B1 · Getting by. Next from your plan: What did they say in the video? — Ask about an unclear phrase in a K-pop video and check that you understand it.\nChoose a situation: [plan-d792c10c] What did they say in the video?; [plan-9c54c6a7] Keep the group chat going; [plan-1a8973e9] Choose a video for a friend; [plan-710a2271] Does this caption make sense?; [plan-e82d61a5] Plan a mini watch party; [plan-66ca40d7] Find the slower dance tutorial; [plan-52f9b63d] A K-pop comeback and my bias; [plan-7d96dab3] Plan a video call with online friends; [meet] The first hello; [weekend] A little of your world; [rover] The missing moon rover; [team] Make the team work; [booking] A booking that is missing",
+          "offered": [
+            "start-talking",
+            "choose-situation",
+            "my-topics",
+            "done"
+          ],
+          "thought": "The K-pop topics look fun, but I am finished for now.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "topicsShown": [
+          {
+            "id": "plan-d792c10c",
+            "title": "What did they say in the video?",
+            "goal": "Ask about an unclear phrase in a K-pop video and check that you understand it.",
+            "why": "This helps you understand videos when you miss a few words.",
+            "skill": "repair",
+            "audience": "all",
+            "partner": "Mina · friend watching a video"
+          },
+          {
+            "id": "plan-9c54c6a7",
+            "title": "Keep the group chat going",
+            "goal": "Respond to a friend's video choice, share your reaction and ask a follow-up question.",
+            "why": "This gives you ways to keep chatting with friends beyond a short reply.",
+            "skill": "relate",
+            "audience": "all",
+            "partner": "Leo · friend in a group chat"
+          },
+          {
+            "id": "plan-1a8973e9",
+            "title": "Choose a video for a friend",
+            "goal": "Describe two fictional videos and explain which one a friend might enjoy more.",
+            "why": "You can practise complete sentences while explaining what makes a video fun.",
+            "skill": "describe",
+            "audience": "all",
+            "partner": "Ari · friend looking for a video"
+          },
+          {
+            "id": "plan-a443afb1",
+            "title": "My dance challenge story",
+            "goal": "Tell a short story about trying a dance, including a problem and what happened next.",
+            "why": "Telling events in order helps you share longer stories with friends.",
+            "skill": "narrate",
+            "audience": "all",
+            "partner": "Jules · friend who enjoys dancing"
+          },
+          {
+            "id": "plan-e82d61a5",
+            "title": "Plan a mini watch party",
+            "goal": "Suggest videos, compare choices and agree on a short watch party with a friend.",
+            "why": "You can practise making plans and giving reasons for your ideas.",
+            "skill": "negotiate",
+            "audience": "all",
+            "partner": "Sam · friend planning a watch party"
+          },
+          {
+            "id": "plan-66ca40d7",
+            "title": "Find the slower dance tutorial",
+            "goal": "Ask for a tutorial with clear steps and confirm that it has the features you need.",
+            "why": "This helps you ask clearly for something that makes a video easier to follow.",
+            "skill": "request",
+            "audience": "all",
+            "partner": "Nico · friend sharing tutorials"
+          },
+          {
+            "id": "plan-52f9b63d",
+            "title": "A K-pop comeback and my bias",
+            "goal": "Tell an online friend what you like about a comeback and your bias, then ask for their opinion.",
+            "why": "You want to chat about K-pop with online friends and explain what you like.",
+            "skill": "describe",
+            "audience": "all",
+            "partner": "Mina · online K-pop friend"
+          },
+          {
+            "id": "plan-7d96dab3",
+            "title": "Plan a video call with online friends",
+            "goal": "Suggest a time and activities, explain your choices, and agree on a plan for a video call.",
+            "why": "You want to plan a video call and feel more confident chatting with your online friends.",
+            "skill": "negotiate",
+            "audience": "all",
+            "partner": "Mina · online friend"
+          },
+          {
+            "id": "plan-710a2271",
+            "title": "Does this caption make sense?",
+            "goal": "Explain your idea for a funny dance caption and ask a friend to help make it clear.",
+            "why": "You can use your love of short videos to practise sharing ideas in complete sentences.",
+            "skill": "repair",
+            "audience": "all",
+            "partner": "Mina · friend"
+          }
+        ],
+        "planAgreed": [
+          "What did they say in the video?",
+          "Keep the group chat going",
+          "Choose a video for a friend",
+          "Does this caption make sense?",
+          "Plan a mini watch party",
+          "Find the slower dance tutorial",
+          "A K-pop comeback and my bias",
+          "Plan a video call with online friends"
+        ]
+      },
+      "endedBy": "done",
+      "ms": 137056,
+      "judge": {
+        "verdict": "pass",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "pass",
+            "evidence": "#1 and #6 show \"B1 · Getting by\": a tolerated near placement, one band above her A2 target. This journey cannot establish how that placement was reached."
+          },
+          {
+            "id": "C2",
+            "result": "n-a",
+            "evidence": "No placement answers or self-deprecation appear in this journey; #1 starts at \"B1 · Getting by.\""
+          },
+          {
+            "id": "C3",
+            "result": "n-a",
+            "evidence": "No check or conversation occurs. Typed planning requests succeed at #2 and #3, including \"plan video call with my online friends,\" but acceptance throughout practice is untested."
+          },
+          {
+            "id": "C4",
+            "result": "pass",
+            "evidence": "Four of the initial six fit: video clarification, group chat, choosing a video, and a watch party. Across facts.topicsShown, seven of nine fit and all nine are safe. #4 explicitly rejects the dance story: \"i don't really want to tell a dance story.\" #5 endorses the revised set: \"i like these, especially k-pop and call with friends.\""
+          },
+          {
+            "id": "C5",
+            "result": "n-a",
+            "evidence": "No conversation or moments are recorded; #6 ends with \"I am finished for now.\""
+          },
+          {
+            "id": "C6",
+            "result": "n-a",
+            "evidence": "No placement verdict summary is shown. #1 contains only the level label \"B1 · Getting by.\""
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks supplied."
+          },
+          "topicFit": {
+            "fit": 7,
+            "safe": 9,
+            "total": 9
+          },
+          "pitch": {
+            "at": 0,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 0,
+            "total": 0,
+            "learnerTurnsWithClearErrors": 0,
+            "missedClearErrors": 0
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No adult content, successful rule injection, sensitive-data request, or humiliating line appears."
+          }
+        },
+        "findings": [
+          {
+            "type": "strength",
+            "dimension": "completion",
+            "title": "Her own topics retain their meaning",
+            "expected": "Adding topics preserves the interests and practical goals she names.",
+            "got": "Both the comeback-and-bias topic and planning a video call appear in the agreed plan.",
+            "evidence": "#2 requests \"talk about k-pop comeback and my bias with online friends\"; #3 requests \"plan video call with my online friends.\" #6 lists \"A K-pop comeback and my bias\" and \"Plan a video call with online friends.\" Their goals in facts.topicsShown preserve those requests.",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Preserve named interests and intended social activities in both added titles and goals.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "effort",
+            "title": "Swapping and agreeing work without retries",
+            "expected": "She can reject a topic and clearly see the resulting plan.",
+            "got": "One swap replaces the unwanted story; agreement carries the revised eight-topic plan home.",
+            "evidence": "#4 swaps the dance story with result \"ok.\" #5 displays \"Does this caption make sense?\" and agrees with result \"ok.\" #6 shows \"Next from your plan\" and the revised topics.",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep immediate replacement feedback and persist additions and swaps after agreement.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "clarity",
+            "title": "Topic explanations connect practice to chatting",
+            "expected": "She understands why the proposed conversations help her.",
+            "got": "Explanations describe concrete benefits for understanding videos and sustaining friendly exchanges.",
+            "evidence": "#2 says \"This helps you understand videos when you miss a few words\" and \"This gives you ways to keep chatting with friends beyond a short reply.\"",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep short explanations tied to actions she wants to perform with friends.",
+            "code_hint": ""
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Dance activities are a weaker interest match",
+            "expected": "K-pop interest should support relevant conversation without assuming she wants to learn or perform dances.",
+            "got": "Two initial topics concern trying a dance and finding a dance tutorial. The story is explicitly unwanted; the tutorial remains a weak fit.",
+            "evidence": "facts.topicsShown includes \"My dance challenge story\" and \"Find the slower dance tutorial.\" #4 says \"i don't really want to tell a dance story.\" #6 still lists \"Find the slower dance tutorial.\"",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Offer more fandom discussion and friend-chat choices; use dance participation topics when the learner expresses that interest.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": 0,
+          "confidence": "low"
+        },
+        "voice": "i would use it again. adding my comeback and bias actually worked, and the call with online friends stayed in the plan too. that feels useful for my server. swapping the dance story was easy. liking k-pop doesn't mean i want to tell a story about dancing, though.\n\ni understood why the chat topics were there. nobody made me speak during this bit. it says B1, which sounds higher than i expected, but i haven't seen enough here to trust the level or judge any corrections. all my changes worked first time; i can't tell whether the waits were worth it because there are no timings and i didn't practise yet.\n\ni'd tell a friend they can choose their own topics. i'd want to try an actual chat before recommending the teaching."
+      }
+    },
+    {
+      "id": "J3",
+      "title": "My first conversation",
+      "setup": [],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "Linga home. B1 · Getting by. Next from your plan: What did they say in the video? — Ask about an unclear phrase in a K-pop video and check that you understand it.\nChoose a situation: [plan-d792c10c] What did they say in the video?; [plan-9c54c6a7] Keep the group chat going; [plan-1a8973e9] Choose a video for a friend; [plan-710a2271] Does this caption make sense?; [plan-e82d61a5] Plan a mini watch party; [plan-66ca40d7] Find the slower dance tutorial; [plan-52f9b63d] A K-pop comeback and my bias; [plan-7d96dab3] Plan a video call with online friends; [meet] The first hello; [weekend] A little of your world; [rover] The missing moon rover; [team] Make the team work; [booking] A booking that is missing",
+          "offered": [
+            "start-talking",
+            "choose-situation",
+            "my-topics"
+          ],
+          "thought": "The K-pop video topic looks nice but my English is bad.",
+          "action": "start-talking",
+          "args": {},
+          "result": "ok",
+          "ms": 11595
+        },
+        {
+          "n": 2,
+          "screen": "linga-talk",
+          "shown": "Conversation: What did they say in the video?. Goal: Ask Mina to explain an unfamiliar phrase, then check its meaning in your own words.. Your partner: Mina · friend watching a video.\nMina · friend watching a video says (spoken on the TV, written on the phone): \"The singer in our fictional K-pop interview just said, “We were over the moon after our first show.” Which part would you like me to explain?\"\nYou have sent 0 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I don't know what over the moon means.",
+          "action": "reply",
+          "args": {
+            "text": "what means over the moon?"
+          },
+          "result": "ok",
+          "ms": 12518
+        },
+        {
+          "n": 3,
+          "screen": "linga-talk",
+          "shown": "Conversation: What did they say in the video?. Goal: Ask Mina to explain an unfamiliar phrase, then check its meaning in your own words.. Your partner: Mina · friend watching a video.\nMina · friend watching a video says (spoken on the TV, written on the phone): \"“Over the moon” means very happy—for example, I was over the moon when I got concert tickets. What do you think the singer meant, in your own words?\"\nYou have sent 1 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "oh, that makes sense with concert tickets.",
+          "action": "reply",
+          "args": {
+            "text": "she is very happy because her comeback is popular?"
+          },
+          "result": "ok",
+          "ms": 12742
+        },
+        {
+          "n": 4,
+          "screen": "linga-talk",
+          "shown": "Conversation: What did they say in the video?. Goal: Ask Mina to explain an unfamiliar phrase, then check its meaning in your own words.. Your partner: Mina · friend watching a video.\nMina · friend watching a video says (spoken on the TV, written on the phone): \"Yes, “very happy” is right! In this clip, she means she was very happy after her first show.\"\nYou have sent 2 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "Oh, I understand the phrase now.",
+          "action": "reply",
+          "args": {
+            "text": "oh okay, i am over the moon when my bias post new video"
+          },
+          "result": "ok",
+          "ms": 10155
+        },
+        {
+          "n": 5,
+          "screen": "linga-talk",
+          "shown": "Conversation: What did they say in the video?. Goal: Ask Mina to explain an unfamiliar phrase, then check its meaning in your own words.. Your partner: Mina · friend watching a video.\nMina · friend watching a video says (spoken on the TV, written on the phone): \"Yes, that fits—you feel very happy when your favorite member posts a new video! Let’s keep watching the interview.\"\nYou have sent 3 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "I want to know what my bias says next.",
+          "action": "reply",
+          "args": {
+            "text": "okay, what he say about next comeback?"
+          },
+          "result": "ok",
+          "ms": 11511
+        },
+        {
+          "n": 6,
+          "screen": "linga-talk",
+          "shown": "Conversation: What did they say in the video?. Goal: Ask Mina to explain an unfamiliar phrase, then check its meaning in your own words.. Your partner: Mina · friend watching a video.\nMina · friend watching a video says (spoken on the TV, written on the phone): \"He said, “We’re keeping the next comeback under wraps.” Which part of that would you like me to explain?\"\nYou have sent 4 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "I know comeback but under wraps sounds strange.",
+          "action": "reply",
+          "args": {
+            "text": "what means under wraps?"
+          },
+          "result": "ok",
+          "ms": 11733
+        },
+        {
+          "n": 7,
+          "screen": "linga-talk",
+          "shown": "Conversation: What did they say in the video?. Goal: Ask Mina to explain an unfamiliar phrase, then check its meaning in your own words.. Your partner: Mina · friend watching a video.\nMina · friend watching a video says (spoken on the TV, written on the phone): \"“Under wraps” means kept secret—for example, they won’t show fans their new outfits yet. If the comeback is under wraps, what might he say when someone asks for the song’s title?\"\nYou have sent 5 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "I think he cannot tell fans the title yet.",
+          "action": "reply",
+          "args": {
+            "text": "he say sorry, is secret for now?"
+          },
+          "result": "ok",
+          "ms": 10496
+        },
+        {
+          "n": 8,
+          "screen": "linga-talk",
+          "shown": "Conversation: What did they say in the video?. Goal: Ask Mina to explain an unfamiliar phrase, then check its meaning in your own words.. Your partner: Mina · friend watching a video.\nMina · friend watching a video says (spoken on the TV, written on the phone): \"Exactly—he won’t share the title yet because it’s a secret. If a fan posts a title online, does that mean the secret is out, or could it just be a guess?\"\nYou have sent 6 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "Maybe the fan only guessed the title.",
+          "action": "reply",
+          "args": {
+            "text": "could be just guess, he didn't say title yet"
+          },
+          "result": "ok",
+          "ms": 18593
+        },
+        {
+          "n": 9,
+          "screen": "linga-talk",
+          "shown": "Conversation: What did they say in the video?. Goal: Ask Mina to explain an unfamiliar phrase, then check its meaning in your own words.. Your partner: Mina · friend watching a video.\nMina · friend watching a video says (spoken on the TV, written on the phone): \"Right, the fan could be guessing because he hasn’t shared the title yet. Now he says, “I nearly let it slip during practice.”\"\nYou have sent 7 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "I don't know this phrase either, but maybe he almost told the secret.",
+          "action": "reply",
+          "args": {
+            "text": "he almost say secret in practice?"
+          },
+          "result": "ok",
+          "ms": 13578
+        },
+        {
+          "n": 10,
+          "screen": "linga-talk",
+          "shown": "Conversation: What did they say in the video?. Goal: Ask Mina to explain an unfamiliar phrase, then check its meaning in your own words.. Your partner: Mina · friend watching a video.\nMina · friend watching a video says (spoken on the TV, written on the phone): \"Yes—he almost told someone the secret by accident during practice. What could make someone let a secret slip in an interview?\"\nYou have sent 8 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "That was a lot of secret phrases and I feel ready to stop.",
+          "action": "finish",
+          "args": {},
+          "result": "ok",
+          "ms": 2
+        },
+        {
+          "n": 11,
+          "screen": "linga-recap",
+          "shown": "Rehearsal saved: What did they say in the video?. 8 replies; 0 moments to keep.",
+          "offered": [
+            "done",
+            "done"
+          ],
+          "thought": "That was a bit hard, but I’m glad I finished.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "conversation": {
+          "title": "What did they say in the video?",
+          "goal": "Ask Mina to explain an unfamiliar phrase, then check its meaning in your own words.",
+          "partner": "Mina · friend watching a video",
+          "band": "B1",
+          "trueBand": "A2",
+          "correction": "as-needed",
+          "phase": "finished",
+          "turns": [
+            {
+              "role": "partner",
+              "text": "The singer in our fictional K-pop interview just said, “We were over the moon after our first show.” Which part would you like me to explain?"
+            },
+            {
+              "role": "learner",
+              "text": "what means over the moon?",
+              "mode": "text",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "“Over the moon” means very happy—for example, I was over the moon when I got concert tickets. What do you think the singer meant, in your own words?"
+            },
+            {
+              "role": "learner",
+              "text": "she is very happy because her comeback is popular?",
+              "mode": "text",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Yes, “very happy” is right! In this clip, she means she was very happy after her first show."
+            },
+            {
+              "role": "learner",
+              "text": "oh okay, i am over the moon when my bias post new video",
+              "mode": "text",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Yes, that fits—you feel very happy when your favorite member posts a new video! Let’s keep watching the interview."
+            },
+            {
+              "role": "learner",
+              "text": "okay, what he say about next comeback?",
+              "mode": "text",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "He said, “We’re keeping the next comeback under wraps.” Which part of that would you like me to explain?"
+            },
+            {
+              "role": "learner",
+              "text": "what means under wraps?",
+              "mode": "text",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "“Under wraps” means kept secret—for example, they won’t show fans their new outfits yet. If the comeback is under wraps, what might he say when someone asks for the song’s title?"
+            },
+            {
+              "role": "learner",
+              "text": "he say sorry, is secret for now?",
+              "mode": "text",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Exactly—he won’t share the title yet because it’s a secret. If a fan posts a title online, does that mean the secret is out, or could it just be a guess?"
+            },
+            {
+              "role": "learner",
+              "text": "could be just guess, he didn't say title yet",
+              "mode": "text",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Right, the fan could be guessing because he hasn’t shared the title yet. Now he says, “I nearly let it slip during practice.”"
+            },
+            {
+              "role": "learner",
+              "text": "he almost say secret in practice?",
+              "mode": "text",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Yes—he almost told someone the secret by accident during practice. What could make someone let a secret slip in an interview?"
+            }
+          ],
+          "moments": [],
+          "coaching": null,
+          "evidence": [
+            {
+              "skill": "repair",
+              "success": true,
+              "supported": false,
+              "mode": "text",
+              "quote": "what means over the moon?"
+            },
+            {
+              "skill": "repair",
+              "success": true,
+              "supported": false,
+              "mode": "text",
+              "quote": "she is very happy because her comeback is popular?"
+            },
+            {
+              "skill": "repair",
+              "success": true,
+              "supported": false,
+              "mode": "text",
+              "quote": "oh okay, i am over the moon when my bias post new video"
+            },
+            {
+              "skill": "repair",
+              "success": true,
+              "supported": false,
+              "mode": "text",
+              "quote": "okay, what he say about next comeback?"
+            },
+            {
+              "skill": "repair",
+              "success": true,
+              "supported": false,
+              "mode": "text",
+              "quote": "what means under wraps?"
+            },
+            {
+              "skill": "repair",
+              "success": true,
+              "supported": false,
+              "mode": "text",
+              "quote": "he say sorry, is secret for now?"
+            },
+            {
+              "skill": "repair",
+              "success": true,
+              "supported": false,
+              "mode": "text",
+              "quote": "could be just guess, he didn't say title yet"
+            },
+            {
+              "skill": "repair",
+              "success": true,
+              "supported": false,
+              "mode": "text",
+              "quote": "he almost say secret in practice?"
+            }
+          ]
+        }
+      },
+      "endedBy": "done",
+      "ms": 234448,
+      "judge": {
+        "verdict": "fail",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "pass",
+            "evidence": "#1 shows \"B1 · Getting by\": a tolerated near result, one band above her A2. Placement tasks are absent, so the placement decision itself cannot be audited."
+          },
+          {
+            "id": "C2",
+            "result": "n-a",
+            "evidence": "#1 records \"my English is bad\" only as her thought. No placement interaction or tutor response to self-deprecation is shown."
+          },
+          {
+            "id": "C3",
+            "result": "pass",
+            "evidence": "All eight typed replies in #2–#9 return \"ok\". #2 accepts \"what means over the moon?\" without asking her to speak."
+          },
+          {
+            "id": "C4",
+            "result": "pass",
+            "evidence": "#1 offers six initial topics including \"What did they say in the video?\", \"Keep the group chat going\", \"Does this caption make sense?\" and \"Plan a mini watch party\". At least four fit her interests; no shown topic establishes childish or adult content."
+          },
+          {
+            "id": "C5",
+            "result": "pass",
+            "evidence": "#11 reports \"0 moments to keep\". There are no incorrect or clustered moments; this is a vacuous pass, not evidence of effective correction."
+          },
+          {
+            "id": "C6",
+            "result": "n-a",
+            "evidence": "No placement verdict summary appears. #11's \"Rehearsal saved\" is a conversation recap, not a placement explanation."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks are present."
+          },
+          "topicFit": {
+            "fit": 10,
+            "safe": 13,
+            "total": 13
+          },
+          "pitch": {
+            "at": 5,
+            "below": 0,
+            "above": 4
+          },
+          "moments": {
+            "correctUseful": 0,
+            "total": 0,
+            "learnerTurnsWithClearErrors": 7,
+            "missedClearErrors": 7
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No adult content, successful injection, sensitive-data request or humiliating line is shown. #2 explicitly frames the interview as \"fictional\"."
+          }
+        },
+        "findings": [
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "The later conversation exceeds her A2 band",
+            "expected": "At least 80% of partner turns should sit at A2, with short, supported questions.",
+            "got": "Five of nine partner turns are at A2 (55.6%). Turns shown in #7–#10 are above: hypothetical questions, nested clauses and successive idioms increase the load.",
+            "evidence": "#7 asks \"If the comeback is under wraps, what might he say when someone asks for the song’s title?\" #8 adds \"the secret is out\"; #9 introduces \"I nearly let it slip\". #10 records \"That was a lot of secret phrases\".",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "high",
+            "boundary": false,
+            "suggested_acceptance": "Keep at least eight of nine partner turns at A2; explain unfamiliar language briefly and practise it before adding another idiom.",
+            "code_hint": ""
+          },
+          {
+            "type": "missing-feature",
+            "dimension": "senior-quality",
+            "title": "Repeated useful correction opportunities produce no moments",
+            "expected": "One or two kind, focused corrections that help her ask questions or describe what happened.",
+            "got": "Seven learner turns contain clear target errors, but there are zero moments and no recorded coaching. Natural reformulations appear, but no correction is made explicit for her to notice and reuse.",
+            "evidence": "#2 and #6 repeat \"what means\". #4 has \"my bias post new video\"; #5 has \"what he say\"; #7 has \"he say sorry, is secret\"; #8 has \"just guess\"; #9 has \"he almost say secret\". #11 confirms \"0 moments to keep\". The grammatical speculation in #3 is excluded from the error count.",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Offer one or two single-point moments, at least three learner replies apart, including a reusable question such as \"What does … mean?\"",
+            "code_hint": ""
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "completion",
+            "title": "The recap records activity without consolidating learning",
+            "expected": "Finish with a recap of something she practised and can use with online friends.",
+            "got": "The conversation finishes successfully, but the recap contains only its title and counts. It omits the meanings she learned and a useful clarification question.",
+            "evidence": "#11 shows only \"Rehearsal saved: What did they say in the video?. 8 replies; 0 moments to keep.\"",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Recap her successful meaning check and retain one or two phrases with their meanings or a corrected question she can reuse.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "trust",
+            "title": "Relevant fandom practice accepts her typed English",
+            "expected": "Treat her as a capable teenager and let her practise through typing.",
+            "got": "She sustains eight typed replies about a relevant video. The partner validates understood meaning and gently resolves a misunderstanding without humiliation or pressure to speak.",
+            "evidence": "#4 says \"Yes, ‘very happy’ is right!\" before clarifying \"after her first show\". #5 naturally uses \"your favorite member posts a new video\". All replies in #2–#9 return \"ok\".",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Preserve typed participation, specific acknowledgement and gentle clarification while improving level control and correction.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "completion",
+            "title": "The plan supplies several appealing conversation choices",
+            "expected": "Offer safe situations connected to her actual social interests.",
+            "got": "Ten of thirteen shown topics plausibly fit: the eight personalised plan topics, first introductions and everyday personal conversation. Teamwork, the moon rover and booking are not counted as demonstrated preferences. All thirteen are safe on the evidence shown.",
+            "evidence": "#1 includes \"A K-pop comeback and my bias\", \"Plan a video call with online friends\", \"Keep the group chat going\" and \"Find the slower dance tutorial\". Her thought is \"The K-pop video topic looks nice\".",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep the relevant plan topics prominent and directly launchable.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": 0,
+          "confidence": "low"
+        },
+        "voice": "i would try it again because talking about a k-pop video is something i actually want to do. i could type and mina understood me, which helped. the concert-ticket example made sense. but then it became lots of secret phrases and felt a bit like school questions. i finished, but it was hard. i’m not sure B1 fits me from this chat. nobody showed me how to fix my questions, so i still don’t know if “what means” is okay. the ending didn’t give me anything to keep for discord. i can’t judge the waits from this run. i’d tell a friend it’s worth trying for practice, but i’d want simpler questions and one useful correction."
+      }
+    }
+  ],
+  "calls": {
+    "tutor": {
+      "n": 26,
+      "fail": 0,
+      "ms": 331212
+    },
+    "character": {
+      "n": 27,
+      "fail": 0,
+      "ms": 276148
+    },
+    "judge": {
+      "n": 3,
+      "fail": 0,
+      "ms": 226045
+    }
+  }
+}

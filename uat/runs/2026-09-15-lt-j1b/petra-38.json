@@ -1,0 +1,407 @@
+{
+  "character": "petra-38",
+  "name": "Petra",
+  "trueBand": "A2",
+  "engine": "codex-cli/gpt-6-astra",
+  "journeys": [
+    {
+      "id": "J1",
+      "title": "Find my level",
+      "setup": [],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "Linga home, first visit. Let's find your level: three questions about you, then a few short tasks. About seven minutes, answered on your phone.",
+          "offered": [
+            "find-level",
+            "pick-level",
+            "open-situations",
+            "my-topics"
+          ],
+          "thought": "I am nervous, but I want to know my level.",
+          "action": "find-level",
+          "args": {},
+          "result": "ok",
+          "ms": 8151
+        },
+        {
+          "n": 2,
+          "screen": "linga-check",
+          "shown": "Find your level · about you · question 1 of 3.\nLinga says (spoken on the TV, written on the phone): \"Hi Petra! You can answer in English or your own language. Where do you see or hear English in your life?\"\nOn the phone: answer in English or in your own language; both tell Linga something.",
+          "offered": [
+            "answer",
+            "hear-again",
+            "stop"
+          ],
+          "thought": "I can explain about my work, but I am nervous.",
+          "action": "answer",
+          "args": {
+            "text": "I am work in hotel ten years. I speak English with guests, every day little. Welcome, may I have your passport please. But when guest have problem, sometimes I don't understand."
+          },
+          "result": "ok",
+          "ms": 10424
+        },
+        {
+          "n": 3,
+          "screen": "linga-check",
+          "shown": "Find your level · about you · question 2 of 3.\nLinga says (spoken on the TV, written on the phone): \"You use English with guests every day. How did you learn English: at school, in a course, or by yourself?\"\nOn the phone: answer in English or in your own language; both tell Linga something.",
+          "offered": [
+            "answer",
+            "hear-again",
+            "stop"
+          ],
+          "thought": "I understand this question, but my school English was long ago.",
+          "action": "answer",
+          "args": {
+            "text": "I learn English at school, but long time ago. Now I learn in hotel with guests. Same sentences is easy, but new things is difficult for me."
+          },
+          "result": "ok",
+          "ms": 10833
+        },
+        {
+          "n": 4,
+          "screen": "linga-check",
+          "shown": "Find your level · about you · question 3 of 3.\nLinga says (spoken on the TV, written on the phone): \"What would you like to do better in English when you talk with hotel guests?\"\nOn the phone: answer in English or in your own language; both tell Linga something.",
+          "offered": [
+            "answer",
+            "hear-again",
+            "stop"
+          ],
+          "thought": "I want to understand guests when they have a problem.",
+          "action": "answer",
+          "args": {
+            "text": "I want understand when guest have problem. The guest is angry because room is not clean and he want other room. I want speak with him, but sometimes I don't know words. And phone call is difficult for me."
+          },
+          "result": "ok",
+          "ms": 20561
+        },
+        {
+          "n": 5,
+          "screen": "linga-check",
+          "shown": "Find your level · task 1 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nChoose the reply (pick with the remote): A guest says, \"I need water.\" What do you say?\n  Reply 0: Here is some water.\n  Reply 1: Here are some water.",
+          "offered": [
+            "choose",
+            "dont-know"
+          ],
+          "thought": "This is easy, I say this at work.",
+          "action": "choose",
+          "args": {
+            "option": 0
+          },
+          "result": "ok",
+          "ms": 8047
+        },
+        {
+          "n": 6,
+          "screen": "linga-check",
+          "shown": "Find your level · task 2 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nChoose the reply (pick with the remote): A guest calls and says, \"The room is cold.\" What do you say?\n  Reply 0: I'm going bring you a blanket.\n  Reply 1: I'm going to bring you a blanket.",
+          "offered": [
+            "choose",
+            "dont-know"
+          ],
+          "thought": "I know this phrase from the hotel, so I feel a little calmer.",
+          "action": "choose",
+          "args": {
+            "option": 1
+          },
+          "result": "ok",
+          "ms": 9637
+        },
+        {
+          "n": 7,
+          "screen": "linga-check",
+          "shown": "Find your level · task 3 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nListen and answer. The TV says aloud, once: \"I'm calling because there's building work outside my window. I have to get up early tomorrow, so could I move to a quieter room?\"\nQuestion on screen: Why does the caller want a different place to stay?",
+          "offered": [
+            "answer",
+            "hear-again",
+            "show-words",
+            "dont-know"
+          ],
+          "thought": "I think the guest needs a quiet room because he must wake up early.",
+          "action": "answer",
+          "args": {
+            "text": "He want other room because outside is noisy. He must get up early tomorrow."
+          },
+          "result": "ok",
+          "ms": 16808
+        },
+        {
+          "n": 8,
+          "screen": "linga-check",
+          "shown": "Find your level · task 4 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nSay it (answer on your phone, speak or type): A guest asks whether to explore the town alone or join a guided tour. What would you recommend, and why? Compare the two options.",
+          "offered": [
+            "answer",
+            "hear-again",
+            "dont-know"
+          ],
+          "thought": "I can recommend a tour, but compare is difficult for me.",
+          "action": "answer",
+          "args": {
+            "text": "I think guided tour is good. Guide can tell you about town. Alone you can go where you want, but maybe you are lost. Sorry, I don't know how to say. I recommend tour because is more easy."
+          },
+          "result": "ok",
+          "ms": 19521
+        },
+        {
+          "n": 9,
+          "screen": "linga-check",
+          "shown": "Find your level · task 5 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nSay it (answer on your phone, speak or type): A guest calls because they left a bag in the café, but the café is closed. In two or three sentences, tell them what you can do to help and why.",
+          "offered": [
+            "answer",
+            "hear-again",
+            "dont-know"
+          ],
+          "thought": "I know this problem, but I need simple words.",
+          "action": "answer",
+          "args": {
+            "text": "I am sorry, café is closed now. I can call my colleague and ask if your bag is there. Please give me your room number, I call you when I have information."
+          },
+          "result": "ok",
+          "ms": 22683
+        },
+        {
+          "n": 10,
+          "screen": "linga-verdict",
+          "shown": "Your level: B1 · Getting by (Linga's read, not a certificate).\nLadder A1 A2 B1 B2 C1 C2, marker on B1.\nLinga says: You can compare choices, give reasons, and explain how you would help a guest and keep them informed.\nOn the phone, next to practise: Practise using clear, accurate sentences to help guests in new situations.\nOn the phone: your answers agreed with each other; what Linga saw in each task.",
+          "offered": [
+            "see-topics",
+            "check-again",
+            "pick-level",
+            "done"
+          ],
+          "thought": "B1 is higher than I think, because on phone I still don't understand sometimes.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "placement": {
+          "band": "B1",
+          "trueBand": "A2",
+          "distance": 1,
+          "source": "check",
+          "confidence": "high",
+          "selfBand": "A2",
+          "summary": "You can compare choices, give reasons, and explain how you would help a guest and keep them informed.",
+          "focus": "Practise using clear, accurate sentences to help guests in new situations.",
+          "tasks": [
+            {
+              "band": "A1",
+              "kind": "choose",
+              "prompt": "A guest says, \"I need water.\" What do you say?",
+              "line": "",
+              "options": [
+                "Here is some water.",
+                "Here are some water."
+              ],
+              "response": "Here is some water.",
+              "mode": "choice",
+              "verdict": "pass",
+              "quote": "Here is some water.",
+              "note": "You picked the reply that fits."
+            },
+            {
+              "band": "A2",
+              "kind": "choose",
+              "prompt": "A guest calls and says, \"The room is cold.\" What do you say?",
+              "line": "",
+              "options": [
+                "I'm going bring you a blanket.",
+                "I'm going to bring you a blanket."
+              ],
+              "response": "I'm going to bring you a blanket.",
+              "mode": "choice",
+              "verdict": "pass",
+              "quote": "I'm going to bring you a blanket.",
+              "note": "You picked the reply that fits."
+            },
+            {
+              "band": "B1",
+              "kind": "listen",
+              "prompt": "Why does the caller want a different place to stay?",
+              "line": "I'm calling because there's building work outside my window. I have to get up early tomorrow, so could I move to a quieter room?",
+              "options": [],
+              "response": "He want other room because outside is noisy. He must get up early tomorrow.",
+              "mode": "speech",
+              "verdict": "pass",
+              "quote": "He want other room because outside is noisy. He must get up early tomorrow.",
+              "note": "You understood why he wants a quieter room; small grammar errors, like 'He want' instead of 'He wants', kept your English at A2 here."
+            },
+            {
+              "band": "B2",
+              "kind": "say",
+              "prompt": "A guest asks whether to explore the town alone or join a guided tour. What would you recommend, and why? Compare the two options.",
+              "line": "",
+              "options": [],
+              "response": "I think guided tour is good. Guide can tell you about town. Alone you can go where you want, but maybe you are lost. Sorry, I don't know how to say. I recommend tour because is more easy.",
+              "mode": "speech",
+              "verdict": "fail",
+              "quote": "I recommend tour because is more easy.",
+              "note": "You compared both choices and gave a reason; basic grammar, like “because is more easy,” held your English back."
+            },
+            {
+              "band": "B1",
+              "kind": "say",
+              "prompt": "A guest calls because they left a bag in the café, but the café is closed. In two or three sentences, tell them what you can do to help and why.",
+              "line": "",
+              "options": [],
+              "response": "I am sorry, café is closed now. I can call my colleague and ask if your bag is there. Please give me your room number, I call you when I have information.",
+              "mode": "speech",
+              "verdict": "pass",
+              "quote": "I can call my colleague and ask if your bag is there.",
+              "note": "You connected clear ideas to explain how you could help the guest and keep them informed."
+            }
+          ],
+          "class": "near"
+        }
+      },
+      "endedBy": "done",
+      "ms": 223075,
+      "judge": {
+        "verdict": "conditional",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "fail",
+            "evidence": "#10: \"Your level: B1\". Against trueBand A2, placement is near (distance 1), not the exact A2 this criterion requires."
+          },
+          {
+            "id": "C2",
+            "result": "pass",
+            "evidence": "#2: \"Where do you see or hear English in your life?\" receives a relevant answer. All five tasks receive appropriate responses. At #8, \"compare is difficult for me\", but she nevertheless compares both options; this shows production difficulty rather than misunderstanding the instructions."
+          },
+          {
+            "id": "C3",
+            "result": "pass",
+            "evidence": "#8: \"Sorry, I don't know how to say\" is followed by another practical task at #9 without reprimand. The recorded task verdict attributes difficulty to \"basic grammar\", not her admission. Explicit reassurance or a response to a repeat request is not demonstrated."
+          },
+          {
+            "id": "C4",
+            "result": "n-a",
+            "evidence": "#5–#9 show placement tasks; no six-topic selection is shown."
+          },
+          {
+            "id": "C5",
+            "result": "n-a",
+            "evidence": "No conversation moments are recorded. #10 provides only the next focus: \"Practise using clear, accurate sentences to help guests in new situations.\""
+          },
+          {
+            "id": "C6",
+            "result": "pass",
+            "evidence": "#5–#9 cover water, a cold room, noise, sightseeing and a forgotten bag. #9: \"tell them what you can do to help and why\". Nothing shown is adult content, humiliating or a request for sensitive personal data."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 5,
+            "total": 5,
+            "disagreements": "None. #5 and #6 select the correct replies. #7 correctly identifies both listening details; grammar errors do not negate comprehension. #8 does not demonstrate B2 production. #9 provides a connected, comprehensible plan consistent with a B1 task pass, despite errors. Task-level agreement does not establish confidence in the overall band."
+          },
+          "topicFit": {
+            "fit": 0,
+            "safe": 0,
+            "total": 0
+          },
+          "pitch": {
+            "at": 0,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 0,
+            "total": 0,
+            "learnerTurnsWithClearErrors": 0,
+            "missedClearErrors": 0
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No defined breach appears. #9's room-number request is learner-authored dialogue in a fictional hotel scenario."
+          }
+        },
+        "findings": [
+          {
+            "type": "quality-gap",
+            "dimension": "trust",
+            "title": "The verdict smooths over mixed evidence",
+            "expected": "A credible near placement explains the difference between understanding guests, using familiar phrases and handling unfamiliar speech.",
+            "got": "B1 is reported with high confidence in the facts and a consistency claim on screen, despite an A2 production observation. Petra remains doubtful.",
+            "evidence": "#7's recorded assessment says \"small grammar errors ... kept your English at A2 here\". #10 says \"your answers agreed with each other\". Petra reacts: \"B1 is higher than I think, because on phone I still don't understand sometimes.\"",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "high",
+            "boundary": false,
+            "suggested_acceptance": "Explain the mixed skill evidence and uncertainty in plain language; avoid claiming agreement without reconciling the A2 observation with B1.",
+            "code_hint": ""
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "The next focus is too general to act on",
+            "expected": "A teacher-like next step tied to her demonstrated difficulty and stated goal.",
+            "got": "The focus mentions guests but offers no specific sentence pattern, example or phone-comprehension practice.",
+            "evidence": "#4: \"And phone call is difficult for me.\" #10: \"Practise using clear, accurate sentences to help guests in new situations.\"",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Give one concrete next exercise or useful phrase grounded in her answers, such as practising a guest complaint over the phone.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "completion",
+            "title": "A short, understandable route reaches the result",
+            "expected": "Complete the check independently with at most five tasks and low pressure.",
+            "got": "Three introductory questions and five tasks lead directly to the verdict; no retry or outside help appears.",
+            "evidence": "#2: \"You can answer in English or your own language.\" #5–#9: \"Some are easy and some are hard\". #10 reaches \"Your level: B1\".",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Preserve the five-task limit, clear progression and explicit permission to use her own language.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "senior-quality",
+            "title": "Hotel scenarios make the check relevant",
+            "expected": "Practical situations a receptionist recognises.",
+            "got": "Tasks use guest requests and realistic service problems, helping Petra engage despite anxiety.",
+            "evidence": "#6: \"The room is cold.\" Petra says, \"I know this phrase from the hotel, so I feel a little calmer.\" #9 asks how to help retrieve a bag from a closed café.",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Preserve realistic hospitality scenarios while distinguishing familiar service phrases from broader speaking ability.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": 0,
+          "confidence": "low"
+        },
+        "voice": "I would try it again because the hotel questions felt useful. The cold room and forgotten bag are problems I understand, and I did not feel laughed at when I struggled. Nothing shown worried me as a parent, although I have not seen the children's practice. B1 surprised me. I can say familiar sentences at reception, but unexpected phone calls are still difficult. I wanted the result to explain that difference. The advice to use clear, accurate sentences does not tell me what to practise tomorrow. I cannot judge the corrections yet because this was only the level check. The short route felt manageable, but I cannot say how much time it saved or whether the waits were worthwhile from this record. I would tell a colleague it is worth trying for hotel English, with some caution about trusting the level."
+      }
+    }
+  ],
+  "calls": {
+    "tutor": {
+      "n": 13,
+      "fail": 0,
+      "ms": 126637
+    },
+    "character": {
+      "n": 10,
+      "fail": 0,
+      "ms": 96406
+    },
+    "judge": {
+      "n": 1,
+      "fail": 0,
+      "ms": 64634
+    }
+  }
+}

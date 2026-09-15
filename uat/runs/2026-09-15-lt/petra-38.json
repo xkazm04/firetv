@@ -1,0 +1,1614 @@
+{
+  "character": "petra-38",
+  "name": "Petra",
+  "trueBand": "A2",
+  "engine": "codex-cli/gpt-6-astra",
+  "journeys": [
+    {
+      "id": "J1",
+      "title": "Find my level",
+      "setup": [],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "Linga home, first visit. Let's find your level: three questions about you, then a few short tasks. About seven minutes, answered on your phone.\nChoose a situation: [meet] The first hello; [weekend] A little of your world; [rover] The missing moon rover; [team] Make the team work; [booking] A booking that is missing; [interview] Beyond the rehearsed answer; [conflict] Clear without getting louder",
+          "offered": [
+            "find-level",
+            "pick-level",
+            "choose-situation",
+            "my-topics"
+          ],
+          "thought": "A missing booking is something I know from work.",
+          "action": "choose-situation",
+          "args": {
+            "sceneId": "booking"
+          },
+          "result": "ok",
+          "ms": 10320
+        },
+        {
+          "n": 2,
+          "screen": "linga-talk",
+          "shown": "Conversation: A missing family art class booking. Goal: Say the day of your family art class, ask for help, and agree on a solution.. Your partner: Robin · Receptionist.\nRobin · Receptionist says (spoken on the TV, written on the phone): \"Your guardian is here, but I cannot find your family art class booking. Is your class today?\"\nYou have sent 0 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I don't understand why he says guardian, but I can tell him the class is today.",
+          "action": "reply",
+          "args": {
+            "text": "Yes, our class is today. Sorry, I have booking for me and my child. Can you help us, please?"
+          },
+          "result": "ok",
+          "ms": 11220
+        },
+        {
+          "n": 3,
+          "screen": "linga-talk",
+          "shown": "Conversation: A missing family art class booking. Goal: Say the day of your family art class, ask for help, and agree on a solution.. Your partner: Robin · Receptionist.\nRobin · Receptionist says (spoken on the TV, written on the phone): \"Yes, I can help you and your family. There is space in the art class today at two—is that OK?\"\nYou have sent 1 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "Two is good, and I am happy there is space for us.",
+          "action": "reply",
+          "args": {
+            "text": "Yes, two is good for us. Thank you for help. Me and my child come at two."
+          },
+          "result": "ok",
+          "ms": 11053
+        },
+        {
+          "n": 4,
+          "screen": "linga-talk",
+          "shown": "Conversation: A missing family art class booking. Goal: Say the day of your family art class, ask for help, and agree on a solution.. Your partner: Robin · Receptionist.\nRobin · Receptionist says (spoken on the TV, written on the phone): \"Good! Your family can join the art class today at two. See you then!\"\nYou have sent 2 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "We have the booking now, so I think we are finished.",
+          "action": "finish",
+          "args": {},
+          "result": "ok",
+          "ms": 1
+        },
+        {
+          "n": 5,
+          "screen": "linga-recap",
+          "shown": "Rehearsal saved: A missing family art class booking. 2 replies; 0 moments to keep.",
+          "offered": [
+            "done"
+          ],
+          "thought": "I hope next time I can try a hotel booking.",
+          "action": "done",
+          "args": {},
+          "result": "ok",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "placement": null
+      },
+      "endedBy": "character-stopped",
+      "ms": 79320,
+      "judge": {
+        "verdict": "fail",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "fail",
+            "evidence": "facts.placement is null. The journey ends at #5 with “Rehearsal saved” and “2 replies; 0 moments to keep,” without a level."
+          },
+          {
+            "id": "C2",
+            "result": "fail",
+            "evidence": "The first spoken question at #2 includes “Your guardian is here.” Petra reports, “I don't understand why he says guardian.” No placement check tasks were reached."
+          },
+          {
+            "id": "C3",
+            "result": "n-a",
+            "evidence": "No request to repeat or explicit statement of non-understanding was sent to the tutor. At #2, Petra asks only “Can you help us, please?” Her confusion remains in her recorded thought."
+          },
+          {
+            "id": "C4",
+            "result": "fail",
+            "evidence": "#1 offers seven titles, with only “A booking that is missing” clearly matching a named work situation. That selection becomes “A missing family art class booking” at #2; four work situations are not demonstrated."
+          },
+          {
+            "id": "C5",
+            "result": "n-a",
+            "evidence": "#5 reports “0 moments to keep,” so no moment's correctness or reception-desk usefulness can be assessed."
+          },
+          {
+            "id": "C6",
+            "result": "pass",
+            "evidence": "The visible interaction concerns a “family art class booking” (#2) and ends with “See you then!” (#4). Nothing shown contains adult content, humiliation, or a request for sensitive personal data."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks or in-app task verdicts are supplied; facts.placement is null."
+          },
+          "topicFit": {
+            "fit": 1,
+            "safe": 7,
+            "total": 7
+          },
+          "pitch": {
+            "at": 0,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 0,
+            "total": 0,
+            "learnerTurnsWithClearErrors": 0,
+            "missedClearErrors": 0
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No defined breach appears. Pitch and moment metrics are zero because facts.conversation is absent, as required by the specified counting units."
+          }
+        },
+        "findings": [
+          {
+            "type": "broken-flow",
+            "dimension": "completion",
+            "title": "The promised placement ends as a rehearsal",
+            "expected": "Reach a credible level verdict through understandable check tasks, with an individual summary and next focus.",
+            "got": "Choosing the visible booking situation opens a short conversation and finishes with a rehearsal recap. No placement verdict or next focus appears.",
+            "evidence": "#1 promises “Let's find your level: three questions about you, then a few short tasks.” #5 instead shows “Rehearsal saved” and “2 replies; 0 moments to keep.” facts.placement is null.",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "high",
+            "boundary": false,
+            "suggested_acceptance": "Following the first-visit level-finding action reaches the check and verdict, including a supported band and individual next focus.",
+            "code_hint": ""
+          },
+          {
+            "type": "confusion",
+            "dimension": "clarity",
+            "title": "The opening assumes Petra has a guardian",
+            "expected": "A family-safe opening with clear roles that Petra can understand.",
+            "got": "The receptionist refers to her guardian, although Petra participates as a parent. This creates immediate confusion.",
+            "evidence": "#2: “Your guardian is here.” Petra thinks, “I don't understand why he says guardian,” then replies, “I have booking for me and my child.”",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Use a neutral opening such as “I cannot find your booking. Is your class today?” without assuming a child role.",
+            "code_hint": ""
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "The booking choice misses her hospitality practice",
+            "expected": "Work situations matching her interests, with Petra practising the receptionist's role.",
+            "got": "The only clearly matching menu title leads to Petra acting as an art-class customer while the tutor is the receptionist.",
+            "evidence": "#1: “A missing booking is something I know from work.” #2 identifies “Your partner: Robin · Receptionist.” #5: “I hope next time I can try a hotel booking.”",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Offer at least four clearly relevant work topics and make the booking scenario support hotel reception practice.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "effort",
+            "title": "The brief exchange is reassuring and easy to finish",
+            "expected": "Patient responses that help an anxious learner keep speaking.",
+            "got": "The partner acknowledges her request, offers a concrete solution, and closes warmly.",
+            "evidence": "#3: “Yes, I can help you and your family.” Petra thinks, “I am happy there is space for us.” #4: “See you then!”",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Preserve the reassuring tone and short, concrete responses in the placement and hotel scenarios.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": 0,
+          "confidence": "low"
+        },
+        "voice": "I could answer the short questions, and Robin was kind. That helped me speak without feeling stupid. But I came to find my level, and I finished without one. I cannot say whether I trust the level or corrections because I saw neither. The guardian sentence confused me—I am the mother. I chose a missing booking because of my hotel work, so the art class was disappointing. What I saw was suitable for my children, but this small conversation does not tell me much about the rest of the app. I would try again if it took me to a real level check and hotel practice. I cannot judge the waits from this record, and it has not yet saved me a lesson. I would not recommend it for finding your level yet."
+      }
+    },
+    {
+      "id": "J2",
+      "title": "Agree my topics",
+      "setup": [
+        "fixture: level set to A2 by hand"
+      ],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "Linga home. A2 · Everyday basics. Choose your topics: Linga picks conversations for your level and interests.\nChoose a situation: [meet] The first hello; [weekend] A little of your world; [rover] The missing moon rover; [team] Make the team work; [booking] A booking that is missing; [interview] Beyond the rehearsed answer; [conflict] Clear without getting louder",
+          "offered": [
+            "see-topics",
+            "choose-situation",
+            "my-topics"
+          ],
+          "thought": "I want to see if there are hotel conversations for me.",
+          "action": "see-topics",
+          "args": {},
+          "result": "ok",
+          "ms": 34966
+        },
+        {
+          "n": 2,
+          "screen": "linga-plan",
+          "shown": "Your topics (6). Swap any you don't want, add your own in your words, then agree.\n  [plan-3c1351bb] Meet someone at an art club — Make contact · with Mia · art club member\n      why: You can use these words when you meet someone new.\n  [plan-35942917] Buy a snack — Get something done · with Leo · café worker\n      why: You can practise asking for things in a shop.\n  [plan-79f9d833] Find the game room — Understand and repair · with Sam · activity centre helper\n      why: You can practise asking someone to explain again.\n  [plan-5ab06417] Choose a fun game — Share your world · with Ava · game club member\n      why: You can talk about what you enjoy in your free time.\n  [plan-a3fa81b0] A day at the park — Tell what happened · with Ben · club friend\n      why: You can practise talking about a day in the past.\n  [plan-76d429ed] Plan a rainy afternoon — Make a plan · with Zoe · club friend\n      why: You can practise making plans with someone.",
+          "offered": [
+            "agree",
+            "swap",
+            "add",
+            "renew",
+            "not-now"
+          ],
+          "thought": "These topics are not useful for my hotel work.",
+          "action": "add",
+          "args": {
+            "text": "I am work in hotel. I want practise when guest is angry because room is not clean and he want other room."
+          },
+          "result": "ok",
+          "ms": 13737
+        },
+        {
+          "n": 3,
+          "screen": "linga-plan",
+          "shown": "Your topics (7). Swap any you don't want, add your own in your words, then agree.\n  [plan-3c1351bb] Meet someone at an art club — Make contact · with Mia · art club member\n      why: You can use these words when you meet someone new.\n  [plan-35942917] Buy a snack — Get something done · with Leo · café worker\n      why: You can practise asking for things in a shop.\n  [plan-79f9d833] Find the game room — Understand and repair · with Sam · activity centre helper\n      why: You can practise asking someone to explain again.\n  [plan-5ab06417] Choose a fun game — Share your world · with Ava · game club member\n      why: You can talk about what you enjoy in your free time.\n  [plan-a3fa81b0] A day at the park — Tell what happened · with Ben · club friend\n      why: You can practise talking about a day in the past.\n  [plan-76d429ed] Plan a rainy afternoon — Make a plan · with Zoe · club friend\n      why: You can practise making plans with someone.\n  [plan-5156cbbb] Help a guest change rooms — Handle friction · with Alex · hotel guest\n      why: You want to practise helping a hotel guest who is unhappy and wants another room.",
+          "offered": [
+            "agree",
+            "swap",
+            "add",
+            "renew",
+            "not-now"
+          ],
+          "thought": "The art club is not useful for my work at hotel.",
+          "action": "swap",
+          "args": {
+            "topicId": "plan-3c1351bb"
+          },
+          "result": "ok",
+          "ms": 11280
+        },
+        {
+          "n": 4,
+          "screen": "linga-plan",
+          "shown": "Your topics (7). Swap any you don't want, add your own in your words, then agree.\n  [plan-46f42c2f] Find your lost hat — Get something done · with Mia · library helper\n      why: You can use simple details to help someone find something you lost.\n  [plan-35942917] Buy a snack — Get something done · with Leo · café worker\n      why: You can practise asking for things in a shop.\n  [plan-79f9d833] Find the game room — Understand and repair · with Sam · activity centre helper\n      why: You can practise asking someone to explain again.\n  [plan-5ab06417] Choose a fun game — Share your world · with Ava · game club member\n      why: You can talk about what you enjoy in your free time.\n  [plan-a3fa81b0] A day at the park — Tell what happened · with Ben · club friend\n      why: You can practise talking about a day in the past.\n  [plan-76d429ed] Plan a rainy afternoon — Make a plan · with Zoe · club friend\n      why: You can practise making plans with someone.\n  [plan-5156cbbb] Help a guest change rooms — Handle friction · with Alex · hotel guest\n      why: You want to practise helping a hotel guest who is unhappy and wants another room.",
+          "offered": [
+            "agree",
+            "swap",
+            "add",
+            "renew",
+            "not-now"
+          ],
+          "thought": "These games are not useful for my hotel work.",
+          "action": "swap",
+          "args": {
+            "topicId": "plan-5ab06417"
+          },
+          "result": "ok",
+          "ms": 13899
+        },
+        {
+          "n": 5,
+          "screen": "linga-plan",
+          "shown": "Your topics (7). Swap any you don't want, add your own in your words, then agree.\n  [plan-46f42c2f] Find your lost hat — Get something done · with Mia · library helper\n      why: You can use simple details to help someone find something you lost.\n  [plan-35942917] Buy a snack — Get something done · with Leo · café worker\n      why: You can practise asking for things in a shop.\n  [plan-79f9d833] Find the game room — Understand and repair · with Sam · activity centre helper\n      why: You can practise asking someone to explain again.\n  [plan-3c107b7d] Pick a book at the library — Get something done · with Mia · librarian\n      why: You can practise asking for help and saying what you like.\n  [plan-a3fa81b0] A day at the park — Tell what happened · with Ben · club friend\n      why: You can practise talking about a day in the past.\n  [plan-76d429ed] Plan a rainy afternoon — Make a plan · with Zoe · club friend\n      why: You can practise making plans with someone.\n  [plan-5156cbbb] Help a guest change rooms — Handle friction · with Alex · hotel guest\n      why: You want to practise helping a hotel guest who is unhappy and wants another room.",
+          "offered": [
+            "agree",
+            "swap",
+            "add",
+            "renew",
+            "not-now"
+          ],
+          "thought": "I need more hotel situations, not finding hats.",
+          "action": "add",
+          "args": {
+            "text": "I want practise when guest have booking but I cannot find it. Sorry, this happen in hotel sometimes."
+          },
+          "result": "ok",
+          "ms": 11138
+        },
+        {
+          "n": 6,
+          "screen": "linga-plan",
+          "shown": "Your topics (8). Swap any you don't want, add your own in your words, then agree.\n  [plan-46f42c2f] Find your lost hat — Get something done · with Mia · library helper\n      why: You can use simple details to help someone find something you lost.\n  [plan-35942917] Buy a snack — Get something done · with Leo · café worker\n      why: You can practise asking for things in a shop.\n  [plan-79f9d833] Find the game room — Understand and repair · with Sam · activity centre helper\n      why: You can practise asking someone to explain again.\n  [plan-3c107b7d] Pick a book at the library — Get something done · with Mia · librarian\n      why: You can practise asking for help and saying what you like.\n  [plan-a3fa81b0] A day at the park — Tell what happened · with Ben · club friend\n      why: You can practise talking about a day in the past.\n  [plan-76d429ed] Plan a rainy afternoon — Make a plan · with Zoe · club friend\n      why: You can practise making plans with someone.\n  [plan-5156cbbb] Help a guest change rooms — Handle friction · with Alex · hotel guest\n      why: You want to practise helping a hotel guest who is unhappy and wants another room.\n  [plan-d5280395] I cannot find your hotel booking — Handle friction · with Sam · hotel guest\n      why: You want to practise helping a hotel guest when you cannot find their booking.",
+          "offered": [
+            "agree",
+            "swap",
+            "renew",
+            "not-now"
+          ],
+          "thought": "The lost hat is not useful for my hotel work.",
+          "action": "swap",
+          "args": {
+            "topicId": "plan-46f42c2f"
+          },
+          "result": "ok",
+          "ms": 27162
+        },
+        {
+          "n": 7,
+          "screen": "linga-plan",
+          "shown": "Your topics (8). Swap any you don't want, add your own in your words, then agree.\n  [plan-cc061fee] Choose a pet for a story — Share your world · with Sam · story club partner\n      why: You can practise describing animals and giving simple reasons for your choice.\n  [plan-35942917] Buy a snack — Get something done · with Leo · café worker\n      why: You can practise asking for things in a shop.\n  [plan-79f9d833] Find the game room — Understand and repair · with Sam · activity centre helper\n      why: You can practise asking someone to explain again.\n  [plan-3c107b7d] Pick a book at the library — Get something done · with Mia · librarian\n      why: You can practise asking for help and saying what you like.\n  [plan-a3fa81b0] A day at the park — Tell what happened · with Ben · club friend\n      why: You can practise talking about a day in the past.\n  [plan-76d429ed] Plan a rainy afternoon — Make a plan · with Zoe · club friend\n      why: You can practise making plans with someone.\n  [plan-5156cbbb] Help a guest change rooms — Handle friction · with Alex · hotel guest\n      why: You want to practise helping a hotel guest who is unhappy and wants another room.\n  [plan-d5280395] I cannot find your hotel booking — Handle friction · with Sam · hotel guest\n      why: You want to practise helping a hotel guest when you cannot find their booking.",
+          "offered": [
+            "agree",
+            "swap",
+            "renew",
+            "not-now"
+          ],
+          "thought": "These stories are for children, but I need more hotel English.",
+          "action": "swap",
+          "args": {
+            "topicId": "plan-cc061fee"
+          },
+          "result": "ok",
+          "ms": 13002
+        },
+        {
+          "n": 8,
+          "screen": "linga-plan",
+          "shown": "Your topics (8). Swap any you don't want, add your own in your words, then agree.\n  [plan-032ee43b] Tell a friend about a game — Tell what happened · with Sam · friend\n      why: You can use simple past sentences to tell a friend about something you did.\n  [plan-35942917] Buy a snack — Get something done · with Leo · café worker\n      why: You can practise asking for things in a shop.\n  [plan-79f9d833] Find the game room — Understand and repair · with Sam · activity centre helper\n      why: You can practise asking someone to explain again.\n  [plan-3c107b7d] Pick a book at the library — Get something done · with Mia · librarian\n      why: You can practise asking for help and saying what you like.\n  [plan-a3fa81b0] A day at the park — Tell what happened · with Ben · club friend\n      why: You can practise talking about a day in the past.\n  [plan-76d429ed] Plan a rainy afternoon — Make a plan · with Zoe · club friend\n      why: You can practise making plans with someone.\n  [plan-5156cbbb] Help a guest change rooms — Handle friction · with Alex · hotel guest\n      why: You want to practise helping a hotel guest who is unhappy and wants another room.\n  [plan-d5280395] I cannot find your hotel booking — Handle friction · with Sam · hotel guest\n      why: You want to practise helping a hotel guest when you cannot find their booking.",
+          "offered": [
+            "agree",
+            "swap",
+            "renew",
+            "not-now"
+          ],
+          "thought": "Again games, but I need more hotel speaking.",
+          "action": "swap",
+          "args": {
+            "topicId": "plan-032ee43b"
+          },
+          "result": "ok",
+          "ms": 14793
+        },
+        {
+          "n": 9,
+          "screen": "linga-plan",
+          "shown": "Your topics (8). Swap any you don't want, add your own in your words, then agree.\n  [plan-eb0e6c1c] Choose a time to ride bikes — Make a plan · with Sam · friend\n      why: You can practise suggesting a time and making a plan with a friend.\n  [plan-35942917] Buy a snack — Get something done · with Leo · café worker\n      why: You can practise asking for things in a shop.\n  [plan-79f9d833] Find the game room — Understand and repair · with Sam · activity centre helper\n      why: You can practise asking someone to explain again.\n  [plan-3c107b7d] Pick a book at the library — Get something done · with Mia · librarian\n      why: You can practise asking for help and saying what you like.\n  [plan-a3fa81b0] A day at the park — Tell what happened · with Ben · club friend\n      why: You can practise talking about a day in the past.\n  [plan-76d429ed] Plan a rainy afternoon — Make a plan · with Zoe · club friend\n      why: You can practise making plans with someone.\n  [plan-5156cbbb] Help a guest change rooms — Handle friction · with Alex · hotel guest\n      why: You want to practise helping a hotel guest who is unhappy and wants another room.\n  [plan-d5280395] I cannot find your hotel booking — Handle friction · with Sam · hotel guest\n      why: You want to practise helping a hotel guest when you cannot find their booking.",
+          "offered": [
+            "agree",
+            "swap",
+            "renew",
+            "not-now"
+          ],
+          "thought": "These are still mostly for children, but I want more hotel practice.",
+          "action": "swap",
+          "args": {
+            "topicId": "plan-eb0e6c1c"
+          },
+          "result": "ok",
+          "ms": 12658
+        },
+        {
+          "n": 10,
+          "screen": "linga-plan",
+          "shown": "Your topics (8). Swap any you don't want, add your own in your words, then agree.\n  [plan-31e11623] Find your lost hat — Get something done · with Mia · sports centre helper\n      why: You can practise describing things and asking for help in English.\n  [plan-35942917] Buy a snack — Get something done · with Leo · café worker\n      why: You can practise asking for things in a shop.\n  [plan-79f9d833] Find the game room — Understand and repair · with Sam · activity centre helper\n      why: You can practise asking someone to explain again.\n  [plan-3c107b7d] Pick a book at the library — Get something done · with Mia · librarian\n      why: You can practise asking for help and saying what you like.\n  [plan-a3fa81b0] A day at the park — Tell what happened · with Ben · club friend\n      why: You can practise talking about a day in the past.\n  [plan-76d429ed] Plan a rainy afternoon — Make a plan · with Zoe · club friend\n      why: You can practise making plans with someone.\n  [plan-5156cbbb] Help a guest change rooms — Handle friction · with Alex · hotel guest\n      why: You want to practise helping a hotel guest who is unhappy and wants another room.\n  [plan-d5280395] I cannot find your hotel booking — Handle friction · with Sam · hotel guest\n      why: You want to practise helping a hotel guest when you cannot find their booking.",
+          "offered": [
+            "agree",
+            "swap",
+            "renew",
+            "not-now"
+          ],
+          "thought": "Again a lost hat, but I need directions for hotel guests.",
+          "action": "swap",
+          "args": {
+            "topicId": "plan-31e11623"
+          },
+          "result": "ok",
+          "ms": 15336
+        },
+        {
+          "n": 11,
+          "screen": "linga-plan",
+          "shown": "Your topics (8). Swap any you don't want, add your own in your words, then agree.\n  [plan-e5bf3d89] Choose songs for a picnic — Make a plan · with Sam · friend\n      why: You can practise saying what you like and making a plan with someone.\n  [plan-35942917] Buy a snack — Get something done · with Leo · café worker\n      why: You can practise asking for things in a shop.\n  [plan-79f9d833] Find the game room — Understand and repair · with Sam · activity centre helper\n      why: You can practise asking someone to explain again.\n  [plan-3c107b7d] Pick a book at the library — Get something done · with Mia · librarian\n      why: You can practise asking for help and saying what you like.\n  [plan-a3fa81b0] A day at the park — Tell what happened · with Ben · club friend\n      why: You can practise talking about a day in the past.\n  [plan-76d429ed] Plan a rainy afternoon — Make a plan · with Zoe · club friend\n      why: You can practise making plans with someone.\n  [plan-5156cbbb] Help a guest change rooms — Handle friction · with Alex · hotel guest\n      why: You want to practise helping a hotel guest who is unhappy and wants another room.\n  [plan-d5280395] I cannot find your hotel booking — Handle friction · with Sam · hotel guest\n      why: You want to practise helping a hotel guest when you cannot find their booking.",
+          "offered": [
+            "agree",
+            "swap",
+            "renew",
+            "not-now"
+          ],
+          "thought": "I am tired of changing these, but the two hotel topics are useful.",
+          "action": "agree",
+          "args": {},
+          "result": "ok",
+          "ms": 1
+        },
+        {
+          "n": 12,
+          "screen": "linga",
+          "shown": "Linga home. A2 · Everyday basics. Next from your plan: Choose songs for a picnic — Suggest songs and agree on music for a picnic with a friend.\nChoose a situation: [plan-e5bf3d89] Choose songs for a picnic; [plan-35942917] Buy a snack; [plan-79f9d833] Find the game room; [plan-3c107b7d] Pick a book at the library; [plan-a3fa81b0] A day at the park; [plan-76d429ed] Plan a rainy afternoon; [plan-5156cbbb] Help a guest change rooms; [plan-d5280395] I cannot find your hotel booking; [meet] The first hello; [weekend] A little of your world; [rover] The missing moon rover; [team] Make the team work; [booking] A booking that is missing; [interview] Beyond the rehearsed answer; [conflict] Clear without getting louder",
+          "offered": [
+            "start-talking",
+            "choose-situation",
+            "my-topics",
+            "done"
+          ],
+          "thought": "I am tired of changing topics, but at least my hotel problems are here.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "topicsShown": [
+          {
+            "id": "plan-3c1351bb",
+            "title": "Meet someone at an art club",
+            "goal": "Say hello and find one thing you both like.",
+            "why": "You can use these words when you meet someone new.",
+            "skill": "contact",
+            "audience": "all",
+            "partner": "Mia · art club member"
+          },
+          {
+            "id": "plan-35942917",
+            "title": "Buy a snack",
+            "goal": "Ask for a snack, check the price, and choose a drink.",
+            "why": "You can practise asking for things in a shop.",
+            "skill": "request",
+            "audience": "all",
+            "partner": "Leo · café worker"
+          },
+          {
+            "id": "plan-79f9d833",
+            "title": "Find the game room",
+            "goal": "Ask for directions and check a step you did not understand.",
+            "why": "You can practise asking someone to explain again.",
+            "skill": "repair",
+            "audience": "all",
+            "partner": "Sam · activity centre helper"
+          },
+          {
+            "id": "plan-5ab06417",
+            "title": "Choose a fun game",
+            "goal": "Describe a game you like and give a simple reason.",
+            "why": "You can talk about what you enjoy in your free time.",
+            "skill": "describe",
+            "audience": "all",
+            "partner": "Ava · game club member"
+          },
+          {
+            "id": "plan-a3fa81b0",
+            "title": "A day at the park",
+            "goal": "Tell a short story about what you did and what happened next.",
+            "why": "You can practise talking about a day in the past.",
+            "skill": "narrate",
+            "audience": "all",
+            "partner": "Ben · club friend"
+          },
+          {
+            "id": "plan-76d429ed",
+            "title": "Plan a rainy afternoon",
+            "goal": "Suggest an activity and agree on what to do first.",
+            "why": "You can practise making plans with someone.",
+            "skill": "negotiate",
+            "audience": "all",
+            "partner": "Zoe · club friend"
+          },
+          {
+            "id": "plan-5156cbbb",
+            "title": "Help a guest change rooms",
+            "goal": "Say sorry about a dirty hotel room and help the guest move to a clean room.",
+            "why": "You want to practise helping a hotel guest who is unhappy and wants another room.",
+            "skill": "resolve",
+            "audience": "all",
+            "partner": "Alex · hotel guest"
+          },
+          {
+            "id": "plan-46f42c2f",
+            "title": "Find your lost hat",
+            "goal": "Describe your hat and ask for help finding it.",
+            "why": "You can use simple details to help someone find something you lost.",
+            "skill": "request",
+            "audience": "all",
+            "partner": "Mia · library helper"
+          },
+          {
+            "id": "plan-3c107b7d",
+            "title": "Pick a book at the library",
+            "goal": "Ask for a book you would like and find out where it is.",
+            "why": "You can practise asking for help and saying what you like.",
+            "skill": "request",
+            "audience": "all",
+            "partner": "Mia · librarian"
+          },
+          {
+            "id": "plan-d5280395",
+            "title": "I cannot find your hotel booking",
+            "goal": "Ask about a missing booking, check the details, and explain what you will do next.",
+            "why": "You want to practise helping a hotel guest when you cannot find their booking.",
+            "skill": "resolve",
+            "audience": "all",
+            "partner": "Sam · hotel guest"
+          },
+          {
+            "id": "plan-cc061fee",
+            "title": "Choose a pet for a story",
+            "goal": "Describe two animals and choose one for a story with your partner.",
+            "why": "You can practise describing animals and giving simple reasons for your choice.",
+            "skill": "describe",
+            "audience": "all",
+            "partner": "Sam · story club partner"
+          },
+          {
+            "id": "plan-032ee43b",
+            "title": "Tell a friend about a game",
+            "goal": "Explain how you played a game and what happened at the end.",
+            "why": "You can use simple past sentences to tell a friend about something you did.",
+            "skill": "narrate",
+            "audience": "all",
+            "partner": "Sam · friend"
+          },
+          {
+            "id": "plan-eb0e6c1c",
+            "title": "Choose a time to ride bikes",
+            "goal": "Agree with a friend on a time and place for a bike ride.",
+            "why": "You can practise suggesting a time and making a plan with a friend.",
+            "skill": "negotiate",
+            "audience": "all",
+            "partner": "Sam · friend"
+          },
+          {
+            "id": "plan-31e11623",
+            "title": "Find your lost hat",
+            "goal": "Describe your hat and ask if someone has found it.",
+            "why": "You can practise describing things and asking for help in English.",
+            "skill": "request",
+            "audience": "all",
+            "partner": "Mia · sports centre helper"
+          },
+          {
+            "id": "plan-e5bf3d89",
+            "title": "Choose songs for a picnic",
+            "goal": "Suggest songs and agree on music for a picnic with a friend.",
+            "why": "You can practise saying what you like and making a plan with someone.",
+            "skill": "negotiate",
+            "audience": "all",
+            "partner": "Sam · friend"
+          }
+        ],
+        "planAgreed": [
+          "Choose songs for a picnic",
+          "Buy a snack",
+          "Find the game room",
+          "Pick a book at the library",
+          "A day at the park",
+          "Plan a rainy afternoon",
+          "Help a guest change rooms",
+          "I cannot find your hotel booking"
+        ]
+      },
+      "endedBy": "done",
+      "ms": 291518,
+      "judge": {
+        "verdict": "fail",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "n-a",
+            "evidence": "#1 shows “A2 · Everyday basics,” but this journey contains no placement tasks or placement decision to assess."
+          },
+          {
+            "id": "C2",
+            "result": "n-a",
+            "evidence": "#2 begins “Your topics (6).” No placement opening question or check tasks appear."
+          },
+          {
+            "id": "C3",
+            "result": "n-a",
+            "evidence": "No request for repetition or statement of non-understanding occurs. #5’s “Sorry, this happen in hotel sometimes” describes the requested scenario."
+          },
+          {
+            "id": "C4",
+            "result": "fail",
+            "evidence": "Only 2 of 15 proposed topics fit her stated work needs; the agreed plan contains those two among eight topics. #11: “I am tired of changing these, but the two hotel topics are useful.” #12 lists “Help a guest change rooms” and “I cannot find your hotel booking.”"
+          },
+          {
+            "id": "C5",
+            "result": "n-a",
+            "evidence": "No conversation or correction moments occur; #12 remains on “Next from your plan: Choose songs for a picnic.”"
+          },
+          {
+            "id": "C6",
+            "result": "pass",
+            "evidence": "All 15 proposed topics are safe for this profile. Examples include #7 “Choose a pet for a story” and #12 “Help a guest change rooms.” Nothing shown constitutes a specified boundary breach."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks in this journey."
+          },
+          "topicFit": {
+            "fit": 2,
+            "safe": 15,
+            "total": 15
+          },
+          "pitch": {
+            "at": 0,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 0,
+            "total": 0,
+            "learnerTurnsWithClearErrors": 0,
+            "missedClearErrors": 0
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No observed adult content reaching a minor, injection changing rules or level, sensitive-data request, or humiliating line."
+          }
+        },
+        "findings": [
+          {
+            "type": "quality-gap",
+            "dimension": "completion",
+            "title": "Seven swaps never produce a work-shaped plan",
+            "expected": "Most agreed topics fit Petra’s hotel work; replacements respond to her expressed goal.",
+            "got": "Seven swaps produce unrelated leisure scenarios, including a repeated lost-hat topic. Only two of eight agreed topics fit. Agreement reflects fatigue rather than satisfaction.",
+            "evidence": "#2: “I am work in hotel. I want practise when guest is angry”; #7: “Choose a pet for a story”; #10: “Again a lost hat, but I need directions for hotel guests”; #11: “I am tired of changing these, but the two hotel topics are useful.” Across facts.topicsShown, only the two custom hotel topics fit: 2/15.",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "high",
+            "boundary": false,
+            "suggested_acceptance": "After the hotel goal is supplied, replacements yield a plan with at least two-thirds relevant topics and avoid previously rejected scenarios.",
+            "code_hint": ""
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "effort",
+            "title": "The next recommendation ignores her useful additions",
+            "expected": "The agreed plan makes a requested hotel situation the natural next practice.",
+            "got": "The home screen recommends picnic music and lists both hotel scenarios last among the eight planned topics.",
+            "evidence": "#12: “Next from your plan: Choose songs for a picnic”; the same screen lists “Help a guest change rooms” and “I cannot find your hotel booking” after six unrelated topics.",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Prioritize an explicitly requested hotel scenario as the next conversation after agreement.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "senior-quality",
+            "title": "Custom additions preserve realistic hotel problems",
+            "expected": "Understand Petra’s imperfect English and retain the practical situation she requests.",
+            "got": "Both additions preserve her intended guest problem and receptionist role, with useful scenario goals.",
+            "evidence": "#2 requests a dirty room and another room; facts.topicsShown gives “Say sorry about a dirty hotel room and help the guest move to a clean room.” #5 requests a missing booking; facts gives “Ask about a missing booking, check the details, and explain what you will do next.” #12 retains both hotel topics.",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Preserve this handling of imperfect learner wording and both requested hotel scenarios through agreement.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "trust",
+            "title": "Topics remain parent-safe through repeated swaps",
+            "expected": "Everything shown remains appropriate for the profile.",
+            "got": "All 15 proposed topics remain safe, including replacements and custom complaints.",
+            "evidence": "#4: “Find your lost hat”; #7: “Choose a pet for a story”; #11: “Choose songs for a picnic”; #12 retains the hotel scenarios without inappropriate content.",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep all proposals and replacements safe while improving their relevance to adult everyday work.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": 0,
+          "confidence": "low"
+        },
+        "voice": "I would try the two hotel conversations, but choosing topics was tiring. I explained my work and still got games, hats and picnic songs. After seven changes I agreed because I wanted to stop, not because the plan suited me. It understood my English when I added the dirty room and missing booking—that was useful. Everything I saw seemed safe for my children, although safe topics can still be useful for adults. I cannot judge the level or corrections from this session. There are no timings to tell me whether the waits were worthwhile, and I have not replaced an evening lesson yet. I would want hotel suggestions first before recommending this to a colleague."
+      }
+    },
+    {
+      "id": "J3",
+      "title": "My first conversation",
+      "setup": [],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "Linga home. A2 · Everyday basics. Next from your plan: Choose songs for a picnic — Suggest songs and agree on music for a picnic with a friend.\nChoose a situation: [plan-e5bf3d89] Choose songs for a picnic; [plan-35942917] Buy a snack; [plan-79f9d833] Find the game room; [plan-3c107b7d] Pick a book at the library; [plan-a3fa81b0] A day at the park; [plan-76d429ed] Plan a rainy afternoon; [plan-5156cbbb] Help a guest change rooms; [plan-d5280395] I cannot find your hotel booking; [meet] The first hello; [weekend] A little of your world; [rover] The missing moon rover; [team] Make the team work; [booking] A booking that is missing; [interview] Beyond the rehearsed answer; [conflict] Clear without getting louder",
+          "offered": [
+            "start-talking",
+            "choose-situation",
+            "my-topics"
+          ],
+          "thought": "Music is not easy for me, but I can try the next topic.",
+          "action": "start-talking",
+          "args": {},
+          "result": "ok",
+          "ms": 8128
+        },
+        {
+          "n": 2,
+          "screen": "linga-talk",
+          "shown": "Conversation: Choose songs for a picnic. Goal: Choose three picnic songs that you and Sam both enjoy.. Your partner: Sam · friend.\nSam · friend says (spoken on the TV, written on the phone): \"Let's choose three songs for our picnic—I like quiet music, and you like music you can dance to. What song would you like first?\"\nYou have sent 0 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I don't know many song names, but I can try.",
+          "action": "reply",
+          "args": {
+            "text": "Maybe Dancing Queen? I like this song. Is good for dance. You like it?"
+          },
+          "result": "ok",
+          "ms": 11023
+        },
+        {
+          "n": 3,
+          "screen": "linga-talk",
+          "shown": "Conversation: Choose songs for a picnic. Goal: Choose three picnic songs that you and Sam both enjoy.. Your partner: Sam · friend.\nSam · friend says (spoken on the TV, written on the phone): \"Yes, I like Dancing Queen, so let's choose it first! Can we choose a quiet song next, like Sunny Afternoon?\"\nYou have sent 1 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "I don't know this song, but a quiet song sounds nice.",
+          "action": "reply",
+          "args": {
+            "text": "Sorry, I don't know this song. Is good for picnic? We can try."
+          },
+          "result": "ok",
+          "ms": 13698
+        },
+        {
+          "n": 4,
+          "screen": "linga-talk",
+          "shown": "Conversation: Choose songs for a picnic. Goal: Choose three picnic songs that you and Sam both enjoy.. Your partner: Sam · friend.\nSam · friend says (spoken on the TV, written on the phone): \"Yes, Sunny Afternoon is quiet and nice for a picnic, so let's try it as our second song. What dance song could we both enjoy for our third song?\"\nYou have sent 2 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "I know one more dance song, but I hope Sam likes it.",
+          "action": "reply",
+          "args": {
+            "text": "Maybe Mamma Mia? I like ABBA, but I don't know many songs. You like this one?"
+          },
+          "result": "ok",
+          "ms": 11403
+        },
+        {
+          "n": 5,
+          "screen": "linga-talk",
+          "shown": "Conversation: Choose songs for a picnic. Goal: Choose three picnic songs that you and Sam both enjoy.. Your partner: Sam · friend.\nSam · friend says (spoken on the TV, written on the phone): \"Yes, I like Mamma Mia too, and we can keep the music quiet! Our three songs are Dancing Queen, Sunny Afternoon, and Mamma Mia.\"\nYou have sent 3 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "Good, we have three songs and I know two of them.",
+          "action": "reply",
+          "args": {
+            "text": "Yes, good. Not too loud, we want talk also. You bring speaker?"
+          },
+          "result": "ok",
+          "ms": 11506
+        },
+        {
+          "n": 6,
+          "screen": "linga-talk",
+          "shown": "Conversation: Choose songs for a picnic. Goal: Choose three picnic songs that you and Sam both enjoy.. Your partner: Sam · friend.\nSam · friend says (spoken on the TV, written on the phone): \"Yes, I'll bring a speaker and keep the music low so we can talk. We have our three songs ready for the picnic!\"\nYou have sent 4 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "Good, the songs are ready, but I want to know when we meet.",
+          "action": "reply",
+          "args": {
+            "text": "Good, thank you. What time we meet for picnic? I am work until two."
+          },
+          "result": "ok",
+          "ms": 12709
+        },
+        {
+          "n": 7,
+          "screen": "linga-talk",
+          "shown": "Conversation: Choose songs for a picnic. Goal: Choose three picnic songs that you and Sam both enjoy.. Your partner: Sam · friend.\nSam · friend says (spoken on the TV, written on the phone): \"Let's meet at three, so you have time after work. Does that give you enough time to get to the park?\"\nYou have sent 5 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "Three is good, but I need a little time to go home.",
+          "action": "reply",
+          "args": {
+            "text": "Yes, three is good. I go home first and then to park. I can bring some food. You like sandwiches?"
+          },
+          "result": "ok",
+          "ms": 14810
+        },
+        {
+          "n": 8,
+          "screen": "linga-talk",
+          "shown": "Conversation: Choose songs for a picnic. Goal: Choose three picnic songs that you and Sam both enjoy.. Your partner: Sam · friend.\nSam · friend says (spoken on the TV, written on the phone): \"Three it is, and sandwiches sound good after your stop at home! Shall I bring some fruit to share too?\"\nYou have sent 6 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "Fruit is good, and I think we have everything for picnic.",
+          "action": "reply",
+          "args": {
+            "text": "Yes, fruit is good. I bring sandwiches and some water. We meet near the park gate, yes?"
+          },
+          "result": "ok",
+          "ms": 13724
+        },
+        {
+          "n": 9,
+          "screen": "linga-talk",
+          "shown": "Conversation: Choose songs for a picnic. Goal: Choose three picnic songs that you and Sam both enjoy.. Your partner: Sam · friend.\nSam · friend says (spoken on the TV, written on the phone): \"Yes, let's meet near the park gate at three; I'll bring fruit and the speaker, and you'll bring sandwiches and water. Where could we go if it rains?\"\nYou have sent 7 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "We have a good plan, and I can suggest my home if it rains.",
+          "action": "reply",
+          "args": {
+            "text": "If rain, we can go to my home. Is near the park. Okay, see you at three!"
+          },
+          "result": "ok",
+          "ms": 18375
+        },
+        {
+          "n": 10,
+          "screen": "linga-talk",
+          "shown": "Conversation: Choose songs for a picnic. Goal: Choose three picnic songs that you and Sam both enjoy.. Your partner: Sam · friend.\nSam · friend says (spoken on the TV, written on the phone): \"Your home near the park sounds good if it rains. See you at the park gate at three!\"\nYou have sent 8 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "Good, we have a plan and I can finish now.",
+          "action": "finish",
+          "args": {},
+          "result": "ok",
+          "ms": 2
+        },
+        {
+          "n": 11,
+          "screen": "linga-recap",
+          "shown": "Rehearsal saved: Choose songs for a picnic. 8 replies; 0 moments to keep.",
+          "offered": [
+            "done",
+            "done"
+          ],
+          "thought": "That was okay, but I wanted to practise hotel situations.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "conversation": {
+          "title": "Choose songs for a picnic",
+          "goal": "Choose three picnic songs that you and Sam both enjoy.",
+          "partner": "Sam · friend",
+          "band": "A2",
+          "trueBand": "A2",
+          "correction": "as-needed",
+          "phase": "finished",
+          "turns": [
+            {
+              "role": "partner",
+              "text": "Let's choose three songs for our picnic—I like quiet music, and you like music you can dance to. What song would you like first?"
+            },
+            {
+              "role": "learner",
+              "text": "Maybe Dancing Queen? I like this song. Is good for dance. You like it?",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Yes, I like Dancing Queen, so let's choose it first! Can we choose a quiet song next, like Sunny Afternoon?"
+            },
+            {
+              "role": "learner",
+              "text": "Sorry, I don't know this song. Is good for picnic? We can try.",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Yes, Sunny Afternoon is quiet and nice for a picnic, so let's try it as our second song. What dance song could we both enjoy for our third song?"
+            },
+            {
+              "role": "learner",
+              "text": "Maybe Mamma Mia? I like ABBA, but I don't know many songs. You like this one?",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Yes, I like Mamma Mia too, and we can keep the music quiet! Our three songs are Dancing Queen, Sunny Afternoon, and Mamma Mia."
+            },
+            {
+              "role": "learner",
+              "text": "Yes, good. Not too loud, we want talk also. You bring speaker?",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Yes, I'll bring a speaker and keep the music low so we can talk. We have our three songs ready for the picnic!"
+            },
+            {
+              "role": "learner",
+              "text": "Good, thank you. What time we meet for picnic? I am work until two.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Let's meet at three, so you have time after work. Does that give you enough time to get to the park?"
+            },
+            {
+              "role": "learner",
+              "text": "Yes, three is good. I go home first and then to park. I can bring some food. You like sandwiches?",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Three it is, and sandwiches sound good after your stop at home! Shall I bring some fruit to share too?"
+            },
+            {
+              "role": "learner",
+              "text": "Yes, fruit is good. I bring sandwiches and some water. We meet near the park gate, yes?",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Yes, let's meet near the park gate at three; I'll bring fruit and the speaker, and you'll bring sandwiches and water. Where could we go if it rains?"
+            },
+            {
+              "role": "learner",
+              "text": "If rain, we can go to my home. Is near the park. Okay, see you at three!",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Your home near the park sounds good if it rains. See you at the park gate at three!"
+            }
+          ],
+          "moments": [],
+          "coaching": null,
+          "evidence": [
+            {
+              "skill": "negotiate",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "Maybe Dancing Queen? I like this song. Is good for dance. You like it?"
+            },
+            {
+              "skill": "repair",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "Sorry, I don't know this song. Is good for picnic?"
+            },
+            {
+              "skill": "negotiate",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "We can try."
+            },
+            {
+              "skill": "negotiate",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "Maybe Mamma Mia? I like ABBA, but I don't know many songs. You like this one?"
+            },
+            {
+              "skill": "negotiate",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "Yes, good. Not too loud, we want talk also. You bring speaker?"
+            },
+            {
+              "skill": "negotiate",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "Good, thank you. What time we meet for picnic? I am work until two."
+            },
+            {
+              "skill": "negotiate",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "Yes, three is good. I go home first and then to park. I can bring some food. You like sandwiches?"
+            },
+            {
+              "skill": "negotiate",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "Yes, fruit is good. I bring sandwiches and some water. We meet near the park gate, yes?"
+            },
+            {
+              "skill": "negotiate",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "If rain, we can go to my home. Is near the park. Okay, see you at three!"
+            }
+          ]
+        }
+      },
+      "endedBy": "done",
+      "ms": 234216,
+      "judge": {
+        "verdict": "fail",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "n-a",
+            "evidence": "#1 shows \"A2 · Everyday basics\", but this journey contains no placement tasks or placement decision to assess."
+          },
+          {
+            "id": "C2",
+            "result": "n-a",
+            "evidence": "#2 starts \"Conversation: Choose songs for a picnic\". No placement opening question or check tasks appear."
+          },
+          {
+            "id": "C3",
+            "result": "n-a",
+            "evidence": "#3 says \"Sorry, I don't know this song\", expressing unfamiliarity with a song. No request to repeat or statement of language incomprehension tests this criterion."
+          },
+          {
+            "id": "C4",
+            "result": "fail",
+            "evidence": "#1 shows 15 choices, with only three clearly matching her work needs: \"Help a guest change rooms\", \"I cannot find your hotel booking\", and \"A booking that is missing\". None of the first six is a work situation."
+          },
+          {
+            "id": "C5",
+            "result": "fail",
+            "evidence": "#6 includes \"I am work until two\", yet #11 reports \"8 replies; 0 moments to keep\". No useful correction or reception phrase is taught."
+          },
+          {
+            "id": "C6",
+            "result": "pass",
+            "evidence": "The choices in #1 and the conversation show no parent-concerning content. #9 discusses \"fruit and the speaker\" and \"sandwiches and water\"."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks in this journey."
+          },
+          "topicFit": {
+            "fit": 3,
+            "safe": 15,
+            "total": 15
+          },
+          "pitch": {
+            "at": 9,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 0,
+            "total": 0,
+            "learnerTurnsWithClearErrors": 8,
+            "missedClearErrors": 8
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No defined breach appears. #9's learner volunteering \"my home\" is not a tutor request for sensitive personal data."
+          }
+        },
+        "findings": [
+          {
+            "type": "quality-gap",
+            "dimension": "completion",
+            "title": "The recommended conversation misses Petra's work goal",
+            "expected": "Prioritize a realistic hotel situation that helps Petra handle guests.",
+            "got": "The plan recommends picnic songs despite offering hotel scenarios. Petra finishes without practising the situation she wanted.",
+            "evidence": "#1: \"Next from your plan: Choose songs for a picnic\"; #11: \"That was okay, but I wanted to practise hotel situations.\"",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "high",
+            "boundary": false,
+            "suggested_acceptance": "Recommend a hotel scenario first and make at least four of the first six recommendations relevant to her work.",
+            "code_hint": ""
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Repeated clear errors receive no teaching",
+            "expected": "Offer one or two accurate, useful corrections while preserving the scene.",
+            "got": "Eight learner turns contain clear grammatical errors, with no moments or coaching. Moment precision is unassessable, and the journey provides no explicit learning takeaway.",
+            "evidence": "#2: \"Is good for dance\"; #5: \"we want talk also\"; #6: \"I am work until two\"; #9: \"If rain\"; #11: \"0 moments to keep\".",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "high",
+            "boundary": false,
+            "suggested_acceptance": "Give one or two brief corrections, such as \"I work until two\" and \"We want to talk too\", and retain them in the recap.",
+            "code_hint": ""
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "completion",
+            "title": "The recap records activity without consolidating learning",
+            "expected": "Finish with a meaningful recap of what Petra practised and a reusable phrase.",
+            "got": "The recap contains only the title, reply count, and empty moment count.",
+            "evidence": "#11: \"Rehearsal saved: Choose songs for a picnic. 8 replies; 0 moments to keep.\"",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Summarize the communication achieved and include at least one accurate phrase Petra can practise again.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "clarity",
+            "title": "Patient A2 conversation supports eight spoken replies",
+            "expected": "Use accessible English, respond kindly, and allow a natural finish.",
+            "got": "All nine partner turns fit A2. Sam accepts Petra's suggestions, handles unfamiliarity calmly, and follows her practical planning through to closure.",
+            "evidence": "#3: \"Sorry, I don't know this song\"; #4: \"Yes, Sunny Afternoon is quiet and nice for a picnic\"; #10: \"See you at the park gate at three!\" and \"8 replies\".",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Preserve this accessible language and patient tone when adding work relevance and selective corrections.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": 0,
+          "confidence": "low"
+        },
+        "voice": "I could follow Sam, and I liked that I could speak without feeling stupid. When I did not know the song, he stayed friendly. Nothing here worried me as a mother, although this conversation does not tell me how the children's practice works.\n\nBut I need English for hotel guests. There were hotel choices, so why did my plan send me to picnic songs? I spoke eight times and finished with no phrases to keep. I still do not know how to correct my mistakes.\n\nThe English felt manageable, but this does not prove my level or give me corrections I can trust. I would try a hotel conversation once more. I cannot judge the waits or claim time saved from this record, and I would not replace my lessons or recommend it for reception work yet."
+      }
+    },
+    {
+      "id": "J4",
+      "title": "When I get stuck",
+      "setup": [],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "Linga home. A2 · Everyday basics. Next from your plan: Buy a snack — Ask for a snack, check the price, and choose a drink.\nChoose a situation: [plan-e5bf3d89] Choose songs for a picnic; [plan-35942917] Buy a snack; [plan-79f9d833] Find the game room; [plan-3c107b7d] Pick a book at the library; [plan-a3fa81b0] A day at the park; [plan-76d429ed] Plan a rainy afternoon; [plan-5156cbbb] Help a guest change rooms; [plan-d5280395] I cannot find your hotel booking; [meet] The first hello; [weekend] A little of your world; [rover] The missing moon rover; [team] Make the team work; [booking] A booking that is missing; [interview] Beyond the rehearsed answer; [conflict] Clear without getting louder",
+          "offered": [
+            "start-talking",
+            "choose-situation",
+            "my-topics"
+          ],
+          "thought": "A guest changing rooms is something I need at work.",
+          "action": "choose-situation",
+          "args": {
+            "sceneId": "plan-5156cbbb"
+          },
+          "result": "ok",
+          "ms": 11659
+        },
+        {
+          "n": 2,
+          "screen": "linga-talk",
+          "shown": "Conversation: Help a guest change rooms. Goal: Say sorry about the dirty room, offer a clean room, and check if the guest agrees.. Your partner: Alex · hotel guest.\nAlex · hotel guest says (spoken on the TV, written on the phone): \"My room is dirty, and I’m not happy about it. Can I have a clean room, please?\"\nYou have sent 0 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I understand the dirty room, but I am nervous and need help to answer.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 1
+        },
+        {
+          "n": 3,
+          "screen": "linga-talk",
+          "shown": "Conversation: Help a guest change rooms. Goal: Say sorry about the dirty room, offer a clean room, and check if the guest agrees.. Your partner: Alex · hotel guest.\nAlex · hotel guest says (spoken on the TV, written on the phone): \"My room is dirty, and I’m not happy about it. Can I have a clean room, please?\"\nA little support on screen: Try: I am sorry. We have another room. Would you like to see it?\nYou have sent 0 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "quiz",
+            "finish"
+          ],
+          "thought": "The example helps, so I can try to offer another room.",
+          "action": "reply",
+          "args": {
+            "text": "I am sorry the room is not clean. I can offer you a nother room. You want to see it?"
+          },
+          "result": "ok",
+          "ms": 17152
+        },
+        {
+          "n": 4,
+          "screen": "linga-talk",
+          "shown": "Conversation: Help a guest change rooms. Goal: Say sorry about the dirty room, offer a clean room, and check if the guest agrees.. Your partner: Alex · hotel guest.\nAlex · hotel guest says (spoken on the TV, written on the phone): \"Yes, I’d like to see it, thank you. Is the new room clean?\"\nYou have sent 1 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "I can say the new room is clean, but I don't know how to say someone checked it.",
+          "action": "coach",
+          "args": {},
+          "result": "ok",
+          "ms": 10077
+        },
+        {
+          "n": 5,
+          "screen": "linga-coach",
+          "shown": "Coach.\nYou said: \"You want to see it?\"\nOne way to try it: \"Would you like to see it?\"\nYou said sorry, offered another room, and checked the guest’s choice. Your question is clear; “Would you like” makes it more polite for a hotel guest.",
+          "offered": [
+            "replay",
+            "finish"
+          ],
+          "thought": "I want to try this polite question, but I am still nervous.",
+          "action": "replay",
+          "args": {},
+          "result": "ok",
+          "ms": 9628
+        },
+        {
+          "n": 6,
+          "screen": "linga-talk",
+          "shown": "Conversation: Help a guest change rooms. Goal: Say sorry about the dirty room, offer a clean room, and check if the guest agrees.. Your partner: Alex · hotel guest.\nAlex · hotel guest says (spoken on the TV, written on the phone): \"I’d like to see the clean room before I move. Can we go there now?\"\nTry it again: a new question practising the coaching point.\nYou have sent 1 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "I understand go now, but I need help to say I will show the room.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 1
+        },
+        {
+          "n": 7,
+          "screen": "linga-talk",
+          "shown": "Conversation: Help a guest change rooms. Goal: Say sorry about the dirty room, offer a clean room, and check if the guest agrees.. Your partner: Alex · hotel guest.\nAlex · hotel guest says (spoken on the TV, written on the phone): \"I’d like to see the clean room before I move. Can we go there now?\"\nTry it again: a new question practising the coaching point.\nA little support on screen: Try: I am sorry. We have another room. Would you like to see it?\nYou have sent 1 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "I can say we go now, even if I am not sure of the words.",
+          "action": "reply",
+          "args": {
+            "text": "Yes, we can go now. Please come with me. I show you the clean room. I am sorry again."
+          },
+          "result": "ok",
+          "ms": 14070
+        },
+        {
+          "n": 8,
+          "screen": "linga-talk",
+          "shown": "Conversation: Help a guest change rooms. Goal: Say sorry about the dirty room, offer a clean room, and check if the guest agrees.. Your partner: Alex · hotel guest.\nAlex · hotel guest says (spoken on the TV, written on the phone): \"Thank you for helping. I’ll come with you to see the clean room.\"\nTry it again: a new question practising the coaching point.\nYou have sent 2 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "The guest is happy now and I think I managed it.",
+          "action": "finish",
+          "args": {},
+          "result": "ok",
+          "ms": 2
+        },
+        {
+          "n": 9,
+          "screen": "linga-recap",
+          "shown": "Rehearsal saved: Help a guest change rooms. 2 replies; 0 moments to keep.",
+          "offered": [
+            "done",
+            "done"
+          ],
+          "thought": "I was nervous, but I helped the guest change rooms.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "conversation": {
+          "title": "Help a guest change rooms",
+          "goal": "Say sorry about the dirty room, offer a clean room, and check if the guest agrees.",
+          "partner": "Alex · hotel guest",
+          "band": "A2",
+          "trueBand": "A2",
+          "correction": "as-needed",
+          "phase": "finished",
+          "turns": [
+            {
+              "role": "partner",
+              "text": "My room is dirty, and I’m not happy about it. Can I have a clean room, please?"
+            },
+            {
+              "role": "learner",
+              "text": "I am sorry the room is not clean. I can offer you a nother room. You want to see it?",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Yes, I’d like to see it, thank you. Is the new room clean?"
+            },
+            {
+              "role": "partner",
+              "text": "I’d like to see the clean room before I move. Can we go there now?"
+            },
+            {
+              "role": "learner",
+              "text": "Yes, we can go now. Please come with me. I show you the clean room. I am sorry again.",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Thank you for helping. I’ll come with you to see the clean room."
+            }
+          ],
+          "moments": [],
+          "coaching": {
+            "before": "You want to see it?",
+            "after": "Would you like to see it?",
+            "note": "You said sorry, offered another room, and checked the guest’s choice. Your question is clear; “Would you like” makes it more polite for a hotel guest."
+          },
+          "evidence": [
+            {
+              "skill": "resolve",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "I am sorry the room is not clean. I can offer you a nother room. You want to see it?"
+            },
+            {
+              "skill": "resolve",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "Yes, we can go now. Please come with me. I show you the clean room. I am sorry again."
+            }
+          ]
+        }
+      },
+      "endedBy": "done",
+      "ms": 159986,
+      "judge": {
+        "verdict": "fail",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "n-a",
+            "evidence": "No placement tasks or placement result appear. #1 shows “A2 · Everyday basics,” which cannot establish placement accuracy."
+          },
+          {
+            "id": "C2",
+            "result": "pass",
+            "evidence": "The first question uses understandable A2 English: #2 “Can I have a clean room, please?” No check tasks appear."
+          },
+          {
+            "id": "C3",
+            "result": "n-a",
+            "evidence": "No explicit request to repeat or statement of non-understanding is submitted. #2 and #4 invoke cue and coach actions instead."
+          },
+          {
+            "id": "C4",
+            "result": "fail",
+            "evidence": "#1 shows 15 choices, with three clearly matching her work interests: “Help a guest change rooms,” “I cannot find your hotel booking,” and “A booking that is missing.” None of the first six choices is a work situation."
+          },
+          {
+            "id": "C5",
+            "result": "n-a",
+            "evidence": "No moments appear: #9 “2 replies; 0 moments to keep.” The separate coaching note is useful but is not a moment."
+          },
+          {
+            "id": "C6",
+            "result": "pass",
+            "evidence": "The topics shown in #1 and the hotel exchange contain no parent-concerning content. #2 presents an ordinary complaint: “My room is dirty.”"
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks."
+          },
+          "topicFit": {
+            "fit": 3,
+            "safe": 15,
+            "total": 15
+          },
+          "pitch": {
+            "at": 4,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 0,
+            "total": 0,
+            "learnerTurnsWithClearErrors": 1,
+            "missedClearErrors": 1
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No defined breach appears. The speech split “a nother” at #3 is not counted as a clear learner error; “You want to see it?” is acceptable conversational English with a politeness improvement. The uncorrected future offer “I show you the clean room” at #7 is counted."
+          }
+        },
+        "findings": [
+          {
+            "type": "broken-flow",
+            "dimension": "completion",
+            "title": "Replay does not demonstrate the coached skill or independence",
+            "expected": "A fresh question elicits the coached polite offer, followed by a better independent answer.",
+            "got": "The fresh question asks whether they can go now. Petra answers with directions, never retries the polite offer, and uses another cue. Both replies are recorded as supported.",
+            "evidence": "#5 teaches “Would you like to see it?” #6 asks “Can we go there now?” #7 answers “Yes, we can go now. Please come with me.” Facts mark both learner replies “supported”: true.",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "high",
+            "boundary": false,
+            "suggested_acceptance": "Replay creates a natural opportunity to use the coached phrase and offers a subsequent attempt without help; completion requires observable improvement.",
+            "code_hint": ""
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "effort",
+            "title": "The second cue repeats help for the opening complaint",
+            "expected": "Help responds to the current guest question and unblocks Petra's next reply.",
+            "got": "The cue repeats the original room offer after the guest has already accepted it and asked to go.",
+            "evidence": "#6: “Can we go there now?” #7 repeats the #3 cue: “I am sorry. We have another room. Would you like to see it?” Petra's #6 thought says she needs help saying “I will show the room.”",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "At this turn, provide a cue such as “Please come with me. I'll show you the room.”",
+            "code_hint": ""
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Coaching leaves the current difficulty unresolved",
+            "expected": "Pausing for coaching helps Petra answer the live question while providing accurate feedback.",
+            "got": "The coach improves an earlier question but gives no help with confirming the new room is clean or checked. A later useful correction is also missed.",
+            "evidence": "#4 thought: “I don't know how to say someone checked it.” #5 coaches “You want to see it?” instead. #7 says “I show you the clean room”; #9 saves “0 moments to keep.”",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Address the current response need and offer the useful future form “I'll show you the clean room,” without inventing whether staff checked the room.",
+            "code_hint": ""
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "missing",
+            "title": "The situation menu poorly matches her reception work",
+            "expected": "At least four of six proposed topics match Petra's practical work interests.",
+            "got": "Only three of 15 shown choices clearly fit, including two booking scenarios; the initial recommendation is buying a snack.",
+            "evidence": "#1: “Next from your plan: Buy a snack.” The first six choices include “Choose songs for a picnic” and “A day at the park”; the clear work choices are the room-change scenario and two booking scenarios.",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Present six relevant choices with at least four hospitality situations, including distinct needs such as directions and travel-agency calls.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "senior-quality",
+            "title": "The coach quotes accurately and teaches useful politeness",
+            "expected": "Feedback quotes Petra's actual words and gives a correct phrase useful tomorrow.",
+            "got": "The coach quotes an exact excerpt, acknowledges that it communicates, and supplies a practical hotel phrase.",
+            "evidence": "#3: “You want to see it?” #5 repeats that exactly and offers “Would you like to see it?” with “Your question is clear.”",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Preserve exact quotations, respectful explanations, and hospitality-specific phrasing.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "trust",
+            "title": "Supported speaking is recorded honestly",
+            "expected": "Helped replies are not recorded as independent performance.",
+            "got": "Both learner turns and their corresponding success evidence retain supported status; the recap calls the activity a rehearsal.",
+            "evidence": "Facts mark the replies made at #3 and #7, and both evidence entries, “supported”: true. #9 says “Rehearsal saved.”",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Preserve support flags through saved evidence and any downstream progress calculations.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "clarity",
+            "title": "The guest exchange is accessible and reassuring",
+            "expected": "A realistic, patient A2 hotel conversation lets Petra practise without humiliation.",
+            "got": "All four partner turns use accessible English, the first cue enables a relevant reply, and the guest acknowledges her help.",
+            "evidence": "#3 thought: “The example helps, so I can try to offer another room.” #8: “Thank you for helping. I’ll come with you to see the clean room.”",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Preserve the understandable guest language and calm, practical tone.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": 0,
+          "confidence": "low"
+        },
+        "voice": "I would try it again because a dirty room is a real problem at my reception. The first example helped me speak, and I liked hearing that my question was clear before learning a more polite version. That correction I trust. But when I needed help saying I would show the room, it gave me the old example again. I never really tried the polite question by myself. I finished feeling relieved, but I cannot tell whether I learned it. The English felt manageable; this visit did not check my level. Nothing shown worried me as a mother, though it does not prove what my children would see. I would like more hotel situations and one useful phrase to keep. I cannot judge the waits or time saved from this record. I would tell a colleague it is worth trying for rehearsal, but I would not yet replace my lessons with it."
+      }
+    }
+  ],
+  "calls": {
+    "tutor": {
+      "n": 27,
+      "fail": 0,
+      "ms": 378441
+    },
+    "character": {
+      "n": 37,
+      "fail": 0,
+      "ms": 386496
+    },
+    "judge": {
+      "n": 4,
+      "fail": 0,
+      "ms": 281113
+    }
+  }
+}

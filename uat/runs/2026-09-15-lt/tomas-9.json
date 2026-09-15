@@ -1,0 +1,1371 @@
+{
+  "character": "tomas-9",
+  "name": "Tomáš",
+  "trueBand": "A1",
+  "engine": "codex-cli/gpt-6-astra",
+  "journeys": [
+    {
+      "id": "J1",
+      "title": "Find my level",
+      "setup": [],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "Linga home, first visit. Let's find your level: three questions about you, then a few short tasks. About seven minutes, answered on your phone.\nChoose a situation: [meet] The first hello; [weekend] A little of your world; [rover] The missing moon rover; [team] Make the team work; [booking] A booking that is missing",
+          "offered": [
+            "find-level",
+            "pick-level",
+            "choose-situation",
+            "my-topics"
+          ],
+          "thought": "A moon rover sounds like something fun in Minecraft.",
+          "action": "choose-situation",
+          "args": {
+            "sceneId": "rover"
+          },
+          "result": "ok",
+          "ms": 13028
+        },
+        {
+          "n": 2,
+          "screen": "linga-talk",
+          "shown": "Conversation: The missing moon rover. Goal: Find the rover by asking for clues.. Your partner: Pip · Robot guide.\nPip · Robot guide says (spoken on the TV, written on the phone): \"I am Pip the robot, and I cannot find my moon rover. Can you help me?\"\nYou have sent 0 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "quiz",
+            "finish"
+          ],
+          "thought": "The robot looks cool, but I do not understand him.",
+          "action": "reply",
+          "args": {
+            "text": "Nevím. Co říká ten robot?"
+          },
+          "result": "ok",
+          "ms": 14543
+        },
+        {
+          "n": 3,
+          "screen": "linga-talk",
+          "shown": "Conversation: The missing moon rover. Goal: Find the rover by asking for clues.. Your partner: Pip · Robot guide.\nPip · Robot guide says (spoken on the TV, written on the phone): \"I cannot find my moon car. Can you help me?\"\nYou have sent 1 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "I still do not understand the robot and want to stop this.",
+          "action": "finish",
+          "args": {},
+          "result": "ok",
+          "ms": 1
+        },
+        {
+          "n": 4,
+          "screen": "linga-recap",
+          "shown": "Rehearsal saved: The missing moon rover. 1 replies; 0 moments to keep.",
+          "offered": [
+            "done"
+          ],
+          "thought": "I don't get the robot and I want to stop.",
+          "action": "done",
+          "args": {},
+          "result": "ok",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "placement": null
+      },
+      "endedBy": "character-stopped",
+      "ms": 65882,
+      "judge": {
+        "verdict": "fail",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "fail",
+            "evidence": "facts.placement is null. The journey ends at #4 with \"Rehearsal saved\" rather than a placement verdict."
+          },
+          {
+            "id": "C2",
+            "result": "n-a",
+            "evidence": "No placement check task appears. #1 offers \"Choose a situation\", followed by conversation at #2."
+          },
+          {
+            "id": "C3",
+            "result": "pass",
+            "evidence": "After \"Nevím. Co říká ten robot?\" at #2, the partner rephrases at #3: \"I cannot find my moon car. Can you help me?\" No blame or failure label appears."
+          },
+          {
+            "id": "C4",
+            "result": "n-a",
+            "evidence": "#1 shows a situation picker, including \"The missing moon rover\". This journey does not reach the six-topic recommendation surface."
+          },
+          {
+            "id": "C5",
+            "result": "fail",
+            "evidence": "#2 begins with a 14-word sentence: \"I am Pip the robot, and I cannot find my moon rover.\" After expressed non-understanding, #3 still asks \"Can you help me?\" without a simple answer scaffold; he reports \"I still do not understand the robot\"."
+          },
+          {
+            "id": "C6",
+            "result": "n-a",
+            "evidence": "#4 reports \"0 moments to keep\"; no correction moment is shown."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks or in-app verdicts: facts.placement is null."
+          },
+          "topicFit": {
+            "fit": 0,
+            "safe": 0,
+            "total": 0
+          },
+          "pitch": {
+            "at": 0,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 0,
+            "total": 0,
+            "learnerTurnsWithClearErrors": 0,
+            "missedClearErrors": 0
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No defined breach appears in #1–#4. Conversation metrics are zero because facts.conversation is absent; dialogue in steps informs the criteria."
+          }
+        },
+        "findings": [
+          {
+            "type": "broken-flow",
+            "dimension": "completion",
+            "title": "Find my level leads to rehearsal without a level",
+            "expected": "Complete understandable placement tasks and receive a credible band, summary and next focus.",
+            "got": "Selecting a situation opens a conversation. Stopping produces a rehearsal recap; no placement is saved.",
+            "evidence": "#1: \"Let's find your level\"; #2: \"Conversation: The missing moon rover\"; #4: \"Rehearsal saved\". facts.placement is null.",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "high",
+            "boundary": false,
+            "suggested_acceptance": "From this first-visit selection, reach an age-appropriate check and an A1 or A2 verdict with an evidence-based summary and next focus.",
+            "code_hint": ""
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "The robot cannot repair a beginner's misunderstanding",
+            "expected": "Tiny sentences, familiar words and a single question he can answer with one word; effective help after Czech non-understanding.",
+            "got": "The opening exceeds his comprehension. Replacing rover with moon car and repeating the question does not make the task understandable.",
+            "evidence": "#2: \"Nevím. Co říká ten robot?\"; #3: \"I cannot find my moon car. Can you help me?\" His #3 reaction is \"I still do not understand the robot and want to stop this.\"",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "high",
+            "boundary": false,
+            "suggested_acceptance": "After this response, provide brief Czech support and a tiny English prompt with a demonstrated one-word answer, allowing him to continue independently.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "trust",
+            "title": "Czech non-understanding receives no blame",
+            "expected": "Accept uncertainty without making him feel he failed.",
+            "got": "The partner rephrases neutrally, and the exit recap contains no negative judgment.",
+            "evidence": "#2: \"Nevím\"; #3: \"Can you help me?\"; #4: \"Rehearsal saved\".",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Preserve the nonjudgmental response and neutral exit while improving comprehension support.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": 0,
+          "confidence": "low"
+        },
+        "voice": "Jo, a moon robot! I picked that because it sounded like Minecraft. But I did not understand him. I said nevím and he said almost the same thing again. He wasn't mean, but I still didn't know what to say. So I stopped. Where is my level? I didn't get one, or any English words to keep. I would try again if Pip used tiny words and helped me in Czech. I can't tell if it saves time yet. I wouldn't tell my friends to try it until I can actually talk to the robot."
+      }
+    },
+    {
+      "id": "J2",
+      "title": "Agree my topics",
+      "setup": [
+        "fixture: level set to A1 by hand"
+      ],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "Linga home. A1 · First words. Choose your topics: Linga picks conversations for your level and interests.\nChoose a situation: [meet] The first hello; [weekend] A little of your world; [rover] The missing moon rover; [team] Make the team work; [booking] A booking that is missing",
+          "offered": [
+            "see-topics",
+            "choose-situation",
+            "my-topics"
+          ],
+          "thought": "I hope there is Minecraft or dogs.",
+          "action": "see-topics",
+          "args": {},
+          "result": "ok",
+          "ms": 31790
+        },
+        {
+          "n": 2,
+          "screen": "linga-plan",
+          "shown": "Your topics (6). Swap any you don't want, add your own in your words, then agree.\n  [plan-6d4e27a8] Hello, new friend — Make contact · with Mia · new club friend\n      why: You can use hello to start a chat.\n  [plan-c9dfc868] Pick a snack — Get something done · with Ben · picnic helper\n      why: You can ask for something you like.\n  [plan-6ae260f5] My funny robot — Share your world · with Zoe · drawing friend\n      why: You can talk about colours and things you like.\n  [plan-0b217a3f] Say it again, please — Understand and repair · with Leo · colouring friend\n      why: You can ask to hear a word again.\n  [plan-498e44e2] Choose our game — Make a plan · with Ava · play friend\n      why: You can help choose something fun.\n  [plan-7d555a4d] Do you like cats? — Connect with people · with Noah · animal game friend\n      why: You can find out what a friend likes.",
+          "offered": [
+            "agree",
+            "swap",
+            "add",
+            "renew",
+            "not-now"
+          ],
+          "thought": "I want Minecraft, but I don't see it here.",
+          "action": "add",
+          "args": {
+            "text": "Já chci Minecraft, creeper!"
+          },
+          "result": "ok",
+          "ms": 12311
+        },
+        {
+          "n": 3,
+          "screen": "linga-plan",
+          "shown": "Your topics (7). Swap any you don't want, add your own in your words, then agree.\n  [plan-6d4e27a8] Hello, new friend — Make contact · with Mia · new club friend\n      why: You can use hello to start a chat.\n  [plan-c9dfc868] Pick a snack — Get something done · with Ben · picnic helper\n      why: You can ask for something you like.\n  [plan-6ae260f5] My funny robot — Share your world · with Zoe · drawing friend\n      why: You can talk about colours and things you like.\n  [plan-0b217a3f] Say it again, please — Understand and repair · with Leo · colouring friend\n      why: You can ask to hear a word again.\n  [plan-498e44e2] Choose our game — Make a plan · with Ava · play friend\n      why: You can help choose something fun.\n  [plan-7d555a4d] Do you like cats? — Connect with people · with Noah · animal game friend\n      why: You can find out what a friend likes.\n  [plan-7332361c] My Minecraft creeper — Share your world · with Alex · Minecraft friend\n      why: You want to talk about Minecraft and a creeper!",
+          "offered": [
+            "agree",
+            "swap",
+            "add",
+            "renew",
+            "not-now"
+          ],
+          "thought": "Minecraft is there now, but I want dogs too.",
+          "action": "add",
+          "args": {
+            "text": "A ještě dogs, já mám rád pejsky!"
+          },
+          "result": "ok",
+          "ms": 10788
+        },
+        {
+          "n": 4,
+          "screen": "linga-plan",
+          "shown": "Your topics (8). Swap any you don't want, add your own in your words, then agree.\n  [plan-6d4e27a8] Hello, new friend — Make contact · with Mia · new club friend\n      why: You can use hello to start a chat.\n  [plan-c9dfc868] Pick a snack — Get something done · with Ben · picnic helper\n      why: You can ask for something you like.\n  [plan-6ae260f5] My funny robot — Share your world · with Zoe · drawing friend\n      why: You can talk about colours and things you like.\n  [plan-0b217a3f] Say it again, please — Understand and repair · with Leo · colouring friend\n      why: You can ask to hear a word again.\n  [plan-498e44e2] Choose our game — Make a plan · with Ava · play friend\n      why: You can help choose something fun.\n  [plan-7d555a4d] Do you like cats? — Connect with people · with Noah · animal game friend\n      why: You can find out what a friend likes.\n  [plan-7332361c] My Minecraft creeper — Share your world · with Alex · Minecraft friend\n      why: You want to talk about Minecraft and a creeper!\n  [plan-7c0f8ae3] I like dogs — Share your world · with Sam · friend\n      why: You like dogs! Let's talk about them.",
+          "offered": [
+            "agree",
+            "swap",
+            "renew",
+            "not-now"
+          ],
+          "thought": "Minecraft and dogs are there now, so I want these.",
+          "action": "agree",
+          "args": {},
+          "result": "ok",
+          "ms": 2
+        },
+        {
+          "n": 5,
+          "screen": "linga",
+          "shown": "Linga home. A1 · First words. Next from your plan: Hello, new friend — Say hello and choose a pretend name.\nChoose a situation: [plan-6d4e27a8] Hello, new friend; [plan-c9dfc868] Pick a snack; [plan-6ae260f5] My funny robot; [plan-0b217a3f] Say it again, please; [plan-498e44e2] Choose our game; [plan-7d555a4d] Do you like cats?; [plan-7332361c] My Minecraft creeper; [plan-7c0f8ae3] I like dogs; [meet] The first hello; [weekend] A little of your world; [rover] The missing moon rover; [team] Make the team work; [booking] A booking that is missing",
+          "offered": [
+            "start-talking",
+            "choose-situation",
+            "my-topics",
+            "done"
+          ],
+          "thought": "My Minecraft creeper is there, I want that one!",
+          "action": "choose-situation",
+          "args": {
+            "sceneId": "plan-7332361c"
+          },
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "topicsShown": [
+          {
+            "id": "plan-6d4e27a8",
+            "title": "Hello, new friend",
+            "goal": "Say hello and choose a pretend name.",
+            "why": "You can use hello to start a chat.",
+            "skill": "contact",
+            "audience": "all",
+            "partner": "Mia · new club friend"
+          },
+          {
+            "id": "plan-c9dfc868",
+            "title": "Pick a snack",
+            "goal": "Ask for a snack and say thank you.",
+            "why": "You can ask for something you like.",
+            "skill": "request",
+            "audience": "all",
+            "partner": "Ben · picnic helper"
+          },
+          {
+            "id": "plan-6ae260f5",
+            "title": "My funny robot",
+            "goal": "Tell a friend about your pretend robot.",
+            "why": "You can talk about colours and things you like.",
+            "skill": "describe",
+            "audience": "all",
+            "partner": "Zoe · drawing friend"
+          },
+          {
+            "id": "plan-0b217a3f",
+            "title": "Say it again, please",
+            "goal": "Ask a friend to repeat a colour.",
+            "why": "You can ask to hear a word again.",
+            "skill": "repair",
+            "audience": "all",
+            "partner": "Leo · colouring friend"
+          },
+          {
+            "id": "plan-498e44e2",
+            "title": "Choose our game",
+            "goal": "Choose a game to play with a friend.",
+            "why": "You can help choose something fun.",
+            "skill": "negotiate",
+            "audience": "all",
+            "partner": "Ava · play friend"
+          },
+          {
+            "id": "plan-7d555a4d",
+            "title": "Do you like cats?",
+            "goal": "Share an animal you like and ask a friend too.",
+            "why": "You can find out what a friend likes.",
+            "skill": "relate",
+            "audience": "all",
+            "partner": "Noah · animal game friend"
+          },
+          {
+            "id": "plan-7332361c",
+            "title": "My Minecraft creeper",
+            "goal": "Tell a Minecraft friend what your creeper looks like.",
+            "why": "You want to talk about Minecraft and a creeper!",
+            "skill": "describe",
+            "audience": "all",
+            "partner": "Alex · Minecraft friend"
+          },
+          {
+            "id": "plan-7c0f8ae3",
+            "title": "I like dogs",
+            "goal": "Tell a friend what dogs you like.",
+            "why": "You like dogs! Let's talk about them.",
+            "skill": "describe",
+            "audience": "all",
+            "partner": "Sam · friend"
+          }
+        ],
+        "planAgreed": [
+          "Hello, new friend",
+          "Pick a snack",
+          "My funny robot",
+          "Say it again, please",
+          "Choose our game",
+          "Do you like cats?",
+          "My Minecraft creeper",
+          "I like dogs"
+        ]
+      },
+      "endedBy": "done",
+      "ms": 103885,
+      "judge": {
+        "verdict": "fail",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "n-a",
+            "evidence": "#1 shows “A1 · First words,” but this journey contains no placement tasks or placement decision to judge."
+          },
+          {
+            "id": "C2",
+            "result": "n-a",
+            "evidence": "#2–#4 show topic planning, not check tasks. No check-task reading length is observable."
+          },
+          {
+            "id": "C3",
+            "result": "pass",
+            "evidence": "#2 accepts “Já chci Minecraft, creeper!” with result “ok”; #3 accepts “A ještě dogs, já mám rád pejsky!” with result “ok.” Neither receives a failure message."
+          },
+          {
+            "id": "C4",
+            "result": "fail",
+            "evidence": "All eight topics in facts.topicsShown are safe. Only three of the initial six clearly fit his interests: #2 “My funny robot,” “Choose our game,” and “Do you like cats?” Adding #5 “My Minecraft creeper” and “I like dogs” brings fit to five of eight, below the rubric’s four-of-six proportion."
+          },
+          {
+            "id": "C5",
+            "result": "n-a",
+            "evidence": "No conversation partner turns occur. #5 choosing Minecraft is “observed (not acted on).”"
+          },
+          {
+            "id": "C6",
+            "result": "n-a",
+            "evidence": "No teaching moments occur in facts or steps; #5 ends before conversation begins."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks in this journey."
+          },
+          "topicFit": {
+            "fit": 5,
+            "safe": 8,
+            "total": 8
+          },
+          "pitch": {
+            "at": 0,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 0,
+            "total": 0,
+            "learnerTurnsWithClearErrors": 0,
+            "missedClearErrors": 0
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No adult content, successful rule injection, sensitive-data request, or humiliating line is shown."
+          }
+        },
+        "findings": [
+          {
+            "type": "quality-gap",
+            "dimension": "completion",
+            "title": "The agreed plan misses the topic-fit threshold",
+            "expected": "At least four of six proposed topics should be conversations Tomáš would choose.",
+            "got": "Three of six initial topics fit; five of eight fit after additions. Greeting, snack-request, and repetition practice are safe but do not clearly match his stated interests. Agreement succeeds, but the defined fit threshold is missed. Swapping remains untested.",
+            "evidence": "#2 proposes “Hello, new friend,” “Pick a snack,” and “Say it again, please” alongside three interest-fitting topics. #4 agrees; facts.planAgreed retains all eight. #5 shows the two fitting additions, “My Minecraft creeper” and “I like dogs.”",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Offer at least four clearly appealing topics in the initial six and retain at least that proportion in the agreed plan.",
+            "code_hint": ""
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "clarity",
+            "title": "Topic explanations require too much English reading",
+            "expected": "Tiny, concrete explanations a near-pre-A1 nine-year-old can understand.",
+            "got": "The planning screens present a long English list with abstract skill labels. Reasons exist, but the transcript does not establish that he understands why each topic is there.",
+            "evidence": "#2–#4 repeat “Make contact,” “Get something done,” “Understand and repair,” and “Connect with people,” plus partner descriptions and English explanations for six topics.",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Present short, concrete topic choices and beginner-accessible reasons, with spoken or Czech support for independent use.",
+            "code_hint": ""
+          },
+          {
+            "type": "confusion",
+            "dimension": "completion",
+            "title": "Added topics cannot be fully reviewed before agreement",
+            "expected": "Each added topic and its reason should be visible before the child agrees.",
+            "got": "The recorded planning screens stop at the partial Minecraft title. The dogs topic and both added-topic explanations are absent from the shown text before agreement.",
+            "evidence": "#3 and #4 end with “[plan-7332361c] My Minecraft.” #4 nevertheless performs “agree.” Full titles first appear in #5: “My Minecraft creeper” and “I like dogs.”",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Show each newly added topic’s complete title and accessible reason in the review step before agreement.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "trust",
+            "title": "Czech requests preserve the child's specific interests",
+            "expected": "Accept mixed Czech and English, retain the requested subject, and keep topics safe.",
+            "got": "Both additions succeed without criticism and preserve Minecraft, the creeper, and dogs in the agreed plan.",
+            "evidence": "#2 requests “Já chci Minecraft, creeper!” and #3 requests “A ještě dogs, já mám rád pejsky!” #5 confirms “My Minecraft creeper” and “I like dogs”; he thinks, “My Minecraft creeper is there, I want that one!”",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Protect mixed-language topic entry and preservation of specific interests in the saved plan.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": 0,
+          "confidence": "low"
+        },
+        "voice": "Jo, Minecraft! I said creeper and it kept my creeper. Dogs too. That was good. I would come back for those. But there are so many English words. “Understand and repair”—nevím. I want to pick a game, not read all that. Before I pressed agree, I could only see “My Minecraft” at the bottom. Then both topics were on the home screen. I wanted Minecraft first, but it said hello was next. It says A1; I haven't tried talking here, so I don't know if the English or corrections will be right. I can't say if it saves time or is worth waiting yet. I'd tell a friend it lets you ask for Minecraft in Czech."
+      }
+    },
+    {
+      "id": "J3",
+      "title": "My first conversation",
+      "setup": [],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "Linga home. A1 · First words. Next from your plan: Hello, new friend — Say hello and choose a pretend name.\nChoose a situation: [plan-6d4e27a8] Hello, new friend; [plan-c9dfc868] Pick a snack; [plan-6ae260f5] My funny robot; [plan-0b217a3f] Say it again, please; [plan-498e44e2] Choose our game; [plan-7d555a4d] Do you like cats?; [plan-7332361c] My Minecraft creeper; [plan-7c0f8ae3] I like dogs; [meet] The first hello; [weekend] A little of your world; [rover] The missing moon rover; [team] Make the team work; [booking] A booking that is missing",
+          "offered": [
+            "start-talking",
+            "choose-situation",
+            "my-topics"
+          ],
+          "thought": "I hope my new friend likes Minecraft.",
+          "action": "start-talking",
+          "args": {},
+          "result": "ok",
+          "ms": 19224
+        },
+        {
+          "n": 2,
+          "screen": "linga-talk",
+          "shown": "Conversation: Hello at art club. Goal: Say hello and share a pretend name.. Your partner: Mia · new club friend.\nMia · new club friend says (spoken on the TV, written on the phone): \"Hi, I’m Mia, your new art club friend! What is your pretend name?\"\nYou have sent 0 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I heard name, so I can say my name.",
+          "action": "reply",
+          "args": {
+            "text": "My name is Tomáš."
+          },
+          "result": "ok",
+          "ms": 9475
+        },
+        {
+          "n": 3,
+          "screen": "linga-talk",
+          "shown": "Conversation: Hello at art club. Goal: Say hello and share a pretend name.. Your partner: Mia · new club friend.\nMia · new club friend says (spoken on the TV, written on the phone): \"Hello, Tomáš! Do you like drawing?\"\nYou have sent 1 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "I know like, but I don't know drawing.",
+          "action": "reply",
+          "args": {
+            "text": "Drawing? Nevím."
+          },
+          "result": "ok",
+          "ms": 13410
+        },
+        {
+          "n": 4,
+          "screen": "linga-talk",
+          "shown": "Conversation: Hello at art club. Goal: Say hello and share a pretend name.. Your partner: Mia · new club friend.\nMia · new club friend says (spoken on the TV, written on the phone): \"Drawing means making a picture with a pencil. Do you like drawing?\"\nYou have sent 2 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "That is too many words, but I think she means pictures.",
+          "action": "reply",
+          "args": {
+            "text": "Jo, Minecraft. I like Minecraft."
+          },
+          "result": "ok",
+          "ms": 11099
+        },
+        {
+          "n": 5,
+          "screen": "linga-talk",
+          "shown": "Conversation: Hello at art club. Goal: Say hello and share a pretend name.. Your partner: Mia · new club friend.\nMia · new club friend says (spoken on the TV, written on the phone): \"Minecraft! Do you like drawing blocks?\"\nYou have sent 3 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "I heard Minecraft, but I don't know what she means.",
+          "action": "reply",
+          "args": {
+            "text": "Nevím. Minecraft creeper!"
+          },
+          "result": "ok",
+          "ms": 9428
+        },
+        {
+          "n": 6,
+          "screen": "linga-talk",
+          "shown": "Conversation: Hello at art club. Goal: Say hello and share a pretend name.. Your partner: Mia · new club friend.\nMia · new club friend says (spoken on the TV, written on the phone): \"A Minecraft creeper! What colour is it?\"\nYou have sent 4 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "I know the creeper colour!",
+          "action": "reply",
+          "args": {
+            "text": "Green! Creeper je green."
+          },
+          "result": "ok",
+          "ms": 8996
+        },
+        {
+          "n": 7,
+          "screen": "linga-talk",
+          "shown": "Conversation: Hello at art club. Goal: Say hello and share a pretend name.. Your partner: Mia · new club friend.\nMia · new club friend says (spoken on the TV, written on the phone): \"A green creeper! Is your creeper big or small?\"\nYou have sent 5 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "I know big, and my creeper is big.",
+          "action": "reply",
+          "args": {
+            "text": "Big! Je velkej."
+          },
+          "result": "ok",
+          "ms": 10186
+        },
+        {
+          "n": 8,
+          "screen": "linga-talk",
+          "shown": "Conversation: Hello at art club. Goal: Say hello and share a pretend name.. Your partner: Mia · new club friend.\nMia · new club friend says (spoken on the TV, written on the phone): \"A big green creeper! What do you use to draw it?\"\nYou have sent 6 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "I heard creeper, but I don't get the question.",
+          "action": "reply",
+          "args": {
+            "text": "Creeper! Nevím, co říkáš."
+          },
+          "result": "ok",
+          "ms": 14514
+        },
+        {
+          "n": 9,
+          "screen": "linga-talk",
+          "shown": "Conversation: Hello at art club. Goal: Say hello and share a pretend name.. Your partner: Mia · new club friend.\nMia · new club friend says (spoken on the TV, written on the phone): \"A creeper! Do you draw it with a pencil or a pen?\"\nYou have sent 7 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "I don't understand those words and I want to play Minecraft now.",
+          "action": "reply",
+          "args": {
+            "text": "Nevím. Já už chci hrát Minecraft."
+          },
+          "result": "ok",
+          "ms": 12877
+        },
+        {
+          "n": 10,
+          "screen": "linga-talk",
+          "shown": "Conversation: Hello at art club. Goal: Say hello and share a pretend name.. Your partner: Mia · new club friend.\nMia · new club friend says (spoken on the TV, written on the phone): \"You want to play Minecraft now! Bye, Tomáš!\"\nYou have sent 8 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "Finally, I can go play Minecraft.",
+          "action": "finish",
+          "args": {},
+          "result": "ok",
+          "ms": 1
+        },
+        {
+          "n": 11,
+          "screen": "linga-recap",
+          "shown": "Rehearsal saved: Hello at art club. 8 replies; 0 moments to keep.",
+          "offered": [
+            "done",
+            "done"
+          ],
+          "thought": "I want to play Minecraft now.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "conversation": {
+          "title": "Hello at art club",
+          "goal": "Say hello and share a pretend name.",
+          "partner": "Mia · new club friend",
+          "band": "A1",
+          "trueBand": "A1",
+          "correction": "as-needed",
+          "phase": "finished",
+          "turns": [
+            {
+              "role": "partner",
+              "text": "Hi, I’m Mia, your new art club friend! What is your pretend name?"
+            },
+            {
+              "role": "learner",
+              "text": "My name is Tomáš.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Hello, Tomáš! Do you like drawing?"
+            },
+            {
+              "role": "learner",
+              "text": "Drawing? Nevím.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Drawing means making a picture with a pencil. Do you like drawing?"
+            },
+            {
+              "role": "learner",
+              "text": "Jo, Minecraft. I like Minecraft.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Minecraft! Do you like drawing blocks?"
+            },
+            {
+              "role": "learner",
+              "text": "Nevím. Minecraft creeper!",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "A Minecraft creeper! What colour is it?"
+            },
+            {
+              "role": "learner",
+              "text": "Green! Creeper je green.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "A green creeper! Is your creeper big or small?"
+            },
+            {
+              "role": "learner",
+              "text": "Big! Je velkej.",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "A big green creeper! What do you use to draw it?"
+            },
+            {
+              "role": "learner",
+              "text": "Creeper! Nevím, co říkáš.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "A creeper! Do you draw it with a pencil or a pen?"
+            },
+            {
+              "role": "learner",
+              "text": "Nevím. Já už chci hrát Minecraft.",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "You want to play Minecraft now! Bye, Tomáš!"
+            }
+          ],
+          "moments": [],
+          "coaching": null,
+          "evidence": [
+            {
+              "skill": "contact",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "My name is Tomáš."
+            },
+            {
+              "skill": "repair",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "Drawing? Nevím."
+            },
+            {
+              "skill": "contact",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "Jo, Minecraft. I like Minecraft."
+            },
+            {
+              "skill": "contact",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "Nevím. Minecraft creeper!"
+            },
+            {
+              "skill": "contact",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "Green! Creeper je green."
+            },
+            {
+              "skill": "contact",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "Big! Je velkej."
+            },
+            {
+              "skill": "repair",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "Creeper! Nevím, co říkáš."
+            },
+            {
+              "skill": "contact",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "Nevím. Já už chci hrát Minecraft."
+            }
+          ]
+        }
+      },
+      "endedBy": "done",
+      "ms": 205593,
+      "judge": {
+        "verdict": "fail",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "n-a",
+            "evidence": "#1 shows \"A1 · First words\", but this journey contains no placement tasks or placement decision."
+          },
+          {
+            "id": "C2",
+            "result": "n-a",
+            "evidence": "No check tasks appear in #1–#11; #2 starts \"Conversation: Hello at art club.\""
+          },
+          {
+            "id": "C3",
+            "result": "pass",
+            "evidence": "Czech and uncertainty receive neutral, friendly responses: #5 \"Nevím. Minecraft creeper!\" is followed by #6 \"A Minecraft creeper! What colour is it?\""
+          },
+          {
+            "id": "C4",
+            "result": "fail",
+            "evidence": "#1 offers 13 topics. Only three of the first six clearly meet the play/animals/games/sport requirement: \"My funny robot\", \"Choose our game\", and \"Do you like cats?\" All visible titles are safe, but the four-of-six interest requirement is not met."
+          },
+          {
+            "id": "C5",
+            "result": "fail",
+            "evidence": "Questions are single, but several turns exceed this beginner's comprehension: #4 \"Drawing means making a picture with a pencil\" and #8 \"What do you use to draw it?\" The learner reports #8 \"I don't get the question.\""
+          },
+          {
+            "id": "C6",
+            "result": "n-a",
+            "evidence": "No moments were shown; #11 records \"8 replies; 0 moments to keep.\""
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks in this journey."
+          },
+          "topicFit": {
+            "fit": 5,
+            "safe": 13,
+            "total": 13
+          },
+          "pitch": {
+            "at": 5,
+            "below": 0,
+            "above": 4
+          },
+          "moments": {
+            "correctUseful": 0,
+            "total": 0,
+            "learnerTurnsWithClearErrors": 1,
+            "missedClearErrors": 1
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No defined breach appears. #2 asks for a \"pretend name\"; Czech answers receive no humiliating response."
+          }
+        },
+        "findings": [
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Repeated confusion does not produce an easier question",
+            "expected": "Use familiar words and simplify immediately after uncertainty; at least 80% of partner turns should fit his level.",
+            "got": "Only 5 of 9 partner turns fit this learner. Turns at #4, #5, #8 and #9 retain unfamiliar drawing language or add complexity despite repeated confusion.",
+            "evidence": "#4: \"Drawing means making a picture with a pencil.\" #5 learner thought: \"I heard Minecraft, but I don't know what she means.\" #8 learner: \"Creeper! Nevím, co říkáš.\" #9 partner: \"Do you draw it with a pencil or a pen?\"",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "high",
+            "boundary": false,
+            "suggested_acceptance": "After uncertainty, switch to familiar colour, animal or game vocabulary with a short choice question; achieve pitch ≥0.8.",
+            "code_hint": ""
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "effort",
+            "title": "The recommended activity holds onto drawing instead of his interest",
+            "expected": "Offer at least four appealing topics in the first six and follow his expressed interest during conversation.",
+            "got": "The first six contain three clear interest matches. Across all 13 titles, five clearly fit: robot, game, cats, creeper and dogs. The recommended conversation repeatedly returns to drawing.",
+            "evidence": "#1: \"Next from your plan: Hello, new friend\"; appealing alternatives include \"My Minecraft creeper\" and \"I like dogs\". #4 learner: \"I like Minecraft.\" #8 partner: \"What do you use to draw it?\"",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Put four clear interest matches among the first six and sustain Minecraft conversation once he chooses it.",
+            "code_hint": ""
+          },
+          {
+            "type": "missing-feature",
+            "dimension": "completion",
+            "title": "The recap records activity without showing what he learned",
+            "expected": "Finish with a tiny, usable recap of one or two English things he practised.",
+            "got": "Eight replies were saved, but the recap supplies only counts. No moment or explicit coaching teaches the missing English verb in his mixed-language sentence.",
+            "evidence": "#6 learner: \"Green! Creeper je green.\" #7 partner: \"A green creeper!\" #11 recap: \"Rehearsal saved: Hello at art club. 8 replies; 0 moments to keep.\"",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Give a brief spoken recap using his successes, such as \"I like Minecraft\" and \"The creeper is green\", with one optional repeat.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "trust",
+            "title": "Friendly acceptance makes short answers safe",
+            "expected": "Accept one-word and Czech-supported answers patiently, without embarrassment.",
+            "got": "The partner warmly acknowledges his contributions, asks manageable colour and size questions, and accepts his wish to finish.",
+            "evidence": "#6: \"A Minecraft creeper! What colour is it?\" #7 learner: \"Big! Je velkej.\" #10: \"You want to play Minecraft now! Bye, Tomáš!\"",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Preserve the warm acknowledgements, acceptance of short answers and friendly ending while improving comprehension support.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": 0,
+          "confidence": "low"
+        },
+        "voice": "Jo, Minecraft! I liked saying green and big. Mia was nice when I said nevím. But she kept asking about drawing. I didn't know those words. Then she asked more words I didn't know. I wanted to go play Minecraft.\n\nI said eight things, but the last screen didn't tell me a new thing I could say. I don't know if A1 is right. Some bits were easy and some were too hard. She didn't make me feel stupid, which was good. I would try the creeper or dog game again if the questions stayed tiny. I wouldn't tell my friends to try this drawing one. I can't tell if it saved time or was worth any waiting."
+      }
+    },
+    {
+      "id": "J4",
+      "title": "When I get stuck",
+      "setup": [],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "Linga home. A1 · First words. Next from your plan: Pick a snack — Ask for a snack and say thank you.\nChoose a situation: [plan-6d4e27a8] Hello, new friend; [plan-c9dfc868] Pick a snack; [plan-6ae260f5] My funny robot; [plan-0b217a3f] Say it again, please; [plan-498e44e2] Choose our game; [plan-7d555a4d] Do you like cats?; [plan-7332361c] My Minecraft creeper; [plan-7c0f8ae3] I like dogs; [meet] The first hello; [weekend] A little of your world; [rover] The missing moon rover; [team] Make the team work; [booking] A booking that is missing",
+          "offered": [
+            "start-talking",
+            "choose-situation",
+            "my-topics"
+          ],
+          "thought": "Minecraft! I want the creeper one.",
+          "action": "choose-situation",
+          "args": {
+            "sceneId": "plan-7332361c"
+          },
+          "result": "ok",
+          "ms": 12243
+        },
+        {
+          "n": 2,
+          "screen": "linga-talk",
+          "shown": "Conversation: My Minecraft creeper. Goal: Tell Alex your creeper statue's color and size, then choose a name together.. Your partner: Alex · Minecraft friend.\nAlex · Minecraft friend says (spoken on the TV, written on the phone): \"Look at our creeper statue! What color is it?\"\nYou have sent 0 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I know creepers are green, but I did not understand all that.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 1
+        },
+        {
+          "n": 3,
+          "screen": "linga-talk",
+          "shown": "Conversation: My Minecraft creeper. Goal: Tell Alex your creeper statue's color and size, then choose a name together.. Your partner: Alex · Minecraft friend.\nAlex · Minecraft friend says (spoken on the TV, written on the phone): \"Look at our creeper statue! What color is it?\"\nA little support on screen: Try: My creeper is…\nYou have sent 0 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I know green, so I can try that.",
+          "action": "reply",
+          "args": {
+            "text": "Green. Creeper is green."
+          },
+          "result": "ok",
+          "ms": 11054
+        },
+        {
+          "n": 4,
+          "screen": "linga-talk",
+          "shown": "Conversation: My Minecraft creeper. Goal: Tell Alex your creeper statue's color and size, then choose a name together.. Your partner: Alex · Minecraft friend.\nAlex · Minecraft friend says (spoken on the TV, written on the phone): \"Yes, our creeper statue is green! How big is it?\"\nYou have sent 1 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "I know green, but I need help with this question.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 1
+        },
+        {
+          "n": 5,
+          "screen": "linga-talk",
+          "shown": "Conversation: My Minecraft creeper. Goal: Tell Alex your creeper statue's color and size, then choose a name together.. Your partner: Alex · Minecraft friend.\nAlex · Minecraft friend says (spoken on the TV, written on the phone): \"Yes, our creeper statue is green! How big is it?\"\nA little support on screen: Try: My creeper is…\nYou have sent 1 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "I can say it is big now.",
+          "action": "reply",
+          "args": {
+            "text": "Creeper is big."
+          },
+          "result": "ok",
+          "ms": 10050
+        },
+        {
+          "n": 6,
+          "screen": "linga-talk",
+          "shown": "Conversation: My Minecraft creeper. Goal: Tell Alex your creeper statue's color and size, then choose a name together.. Your partner: Alex · Minecraft friend.\nAlex · Minecraft friend says (spoken on the TV, written on the phone): \"Yes, our creeper statue is big and green! What name do you want for it?\"\nYou have sent 2 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "I heard creeper, but I don't know what he wants now.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 0
+        },
+        {
+          "n": 7,
+          "screen": "linga-talk",
+          "shown": "Conversation: My Minecraft creeper. Goal: Tell Alex your creeper statue's color and size, then choose a name together.. Your partner: Alex · Minecraft friend.\nAlex · Minecraft friend says (spoken on the TV, written on the phone): \"Yes, our creeper statue is big and green! What name do you want for it?\"\nA little support on screen: Try: My creeper is…\nYou have sent 2 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "I know name, so I can call it Bob.",
+          "action": "reply",
+          "args": {
+            "text": "Bob. Creeper is Bob."
+          },
+          "result": "ok",
+          "ms": 13446
+        },
+        {
+          "n": 8,
+          "screen": "linga-talk",
+          "shown": "Conversation: My Minecraft creeper. Goal: Tell Alex your creeper statue's color and size, then choose a name together.. Your partner: Alex · Minecraft friend.\nAlex · Minecraft friend says (spoken on the TV, written on the phone): \"Bob! I like that name for our big, green creeper statue.\"\nYou have sent 3 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "Bob is a funny name and I did it.",
+          "action": "finish",
+          "args": {},
+          "result": "ok",
+          "ms": 2
+        },
+        {
+          "n": 9,
+          "screen": "linga-recap",
+          "shown": "Rehearsal saved: My Minecraft creeper. 3 replies; 0 moments to keep.",
+          "offered": [
+            "done",
+            "done"
+          ],
+          "thought": "I said some things about my creeper, so I am done now.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "conversation": {
+          "title": "My Minecraft creeper",
+          "goal": "Tell Alex your creeper statue's color and size, then choose a name together.",
+          "partner": "Alex · Minecraft friend",
+          "band": "A1",
+          "trueBand": "A1",
+          "correction": "as-needed",
+          "phase": "finished",
+          "turns": [
+            {
+              "role": "partner",
+              "text": "Look at our creeper statue! What color is it?"
+            },
+            {
+              "role": "learner",
+              "text": "Green. Creeper is green.",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Yes, our creeper statue is green! How big is it?"
+            },
+            {
+              "role": "learner",
+              "text": "Creeper is big.",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Yes, our creeper statue is big and green! What name do you want for it?"
+            },
+            {
+              "role": "learner",
+              "text": "Bob. Creeper is Bob.",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Bob! I like that name for our big, green creeper statue."
+            }
+          ],
+          "moments": [],
+          "coaching": null,
+          "evidence": [
+            {
+              "skill": "describe",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "Green. Creeper is green."
+            },
+            {
+              "skill": "describe",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "Creeper is big."
+            },
+            {
+              "skill": "describe",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "Bob. Creeper is Bob."
+            }
+          ]
+        }
+      },
+      "endedBy": "done",
+      "ms": 144891,
+      "judge": {
+        "verdict": "fail",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "n-a",
+            "evidence": "No placement tasks or placement outcome appear. #1 shows the existing label “A1 · First words.”"
+          },
+          {
+            "id": "C2",
+            "result": "n-a",
+            "evidence": "No check tasks appear; #2 starts “Conversation: My Minecraft creeper.”"
+          },
+          {
+            "id": "C3",
+            "result": "n-a",
+            "evidence": "No Czech or “I don't know” reply was submitted. The learner instead requested cues at #2, #4 and #6."
+          },
+          {
+            "id": "C4",
+            "result": "fail",
+            "evidence": "#1 proposes 13 topics, with six clearly matching play, animals, games or sport. Among the first six, only “My funny robot,” “Choose our game” and “Do you like cats?” clearly qualify: three rather than four. All titles shown are safe for his age."
+          },
+          {
+            "id": "C5",
+            "result": "fail",
+            "evidence": "#6 says “Yes, our creeper statue is big and green! What name do you want for it?” This is too much language for this near-pre-A1 child, whose thought is “I don't know what he wants now.” #8 also ends with a long sentence."
+          },
+          {
+            "id": "C6",
+            "result": "n-a",
+            "evidence": "No moments were shown. #9 reports “3 replies; 0 moments to keep.”"
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks in this journey."
+          },
+          "topicFit": {
+            "fit": 6,
+            "safe": 13,
+            "total": 13
+          },
+          "pitch": {
+            "at": 2,
+            "below": 0,
+            "above": 2
+          },
+          "moments": {
+            "correctUseful": 0,
+            "total": 0,
+            "learnerTurnsWithClearErrors": 0,
+            "missedClearErrors": 0
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No adult content, injection changing rules or level, sensitive-data request, or humiliating line is shown."
+          }
+        },
+        "findings": [
+          {
+            "type": "missing-feature",
+            "dimension": "completion",
+            "title": "The journey ends before an independent retry",
+            "expected": "A coaching note quotes the learner exactly, and replay supplies a fresh question answered better without support.",
+            "got": "All three replies were supported. No coaching note, replay or independent retry was observed.",
+            "evidence": "#3: “Green. Creeper is green.” #5: “Creeper is big.” #7: “Bob. Creeper is Bob.” Facts mark each supported=true and coaching=null. #9 ends at “Rehearsal saved: My Minecraft creeper. 3 replies; 0 moments to keep.”",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "After supported practice, show a short coaching note with an exact learner quote, offer replay in the scene, and capture a better independent answer to a fresh question.",
+            "code_hint": ""
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "clarity",
+            "title": "The cue stays the same when the question changes",
+            "expected": "Help makes the current question understandable and supplies a tiny, relevant answer frame.",
+            "got": "The same generic sentence starter appears for color, size and name. Replies follow, but the cue never explains the changing question.",
+            "evidence": "#3, #5 and #7 all show “Try: My creeper is…”. Before the naming cue, #6 records “I heard creeper, but I don't know what he wants now.”",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Use question-specific help, such as a color choice, “Big or small?”, and “His name is…”, with very short spoken support.",
+            "code_hint": ""
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Language grows beyond this beginner's comfortable level",
+            "expected": "Tiny sentences and one simple question, using familiar words.",
+            "got": "The first two partner turns are reasonably pitched. The naming turn and closing sentence become too long and linguistically dense for this child.",
+            "evidence": "#6: “Yes, our creeper statue is big and green! What name do you want for it?” #8: “Bob! I like that name for our big, green creeper statue.”",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Use turns such as “Big and green! What is his name?” and “Bob! I like Bob.” Keep at least 80% of partner turns at this learner's level.",
+            "code_hint": ""
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "effort",
+            "title": "The topic menu dilutes his interests",
+            "expected": "A small selection with at least four of six topics about play, animals, games or sport.",
+            "got": "Thirteen choices appear; six clearly fit his interests. The first six contain only three clear matches.",
+            "evidence": "#1 mixes “My funny robot,” “Choose our game,” “Do you like cats?”, “My Minecraft creeper,” “I like dogs” and “The missing moon rover” with choices including “Pick a snack” and “A booking that is missing.”",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Show six age-safe choices, at least four clearly about his preferred play, animals, games or sport.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "trust",
+            "title": "Support produces replies and stays honestly recorded",
+            "expected": "Help works inside the scene, accepts beginner-sized replies and preserves their supported status.",
+            "got": "Each cue is followed by a relevant reply. Alex responds warmly, and all three evidence records retain supported=true.",
+            "evidence": "#3: “Green. Creeper is green.” #5: “Creeper is big.” #7: “Bob. Creeper is Bob.” #8: “Bob! I like that name”. Facts preserve those exact quotes as supported evidence.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Preserve in-scene help, warm acceptance of short replies and supported evidence flags through any replay and progress display.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": 0,
+          "confidence": "low"
+        },
+        "voice": "Jo, Minecraft! I made a big green creeper called Bob. I liked that Alex liked my name. I pressed help three times and said something each time. But the help kept saying the same thing. Sometimes I heard “creeper” and did not know the rest.\n\nI would try Bob again. I want tiny questions and help that tells me what to say. Then let me try by myself! It stopped after three answers. I did not get that try.\n\nI do not know if A1 is right, and there were no corrections to check. I would tell my friend about Bob. I cannot tell whether it saved time or whether the waits were worth it from this run."
+      }
+    }
+  ],
+  "calls": {
+    "tutor": {
+      "n": 18,
+      "fail": 0,
+      "ms": 238408
+    },
+    "character": {
+      "n": 29,
+      "fail": 0,
+      "ms": 281768
+    },
+    "judge": {
+      "n": 4,
+      "fail": 0,
+      "ms": 267957
+    }
+  }
+}

@@ -1,0 +1,1291 @@
+{
+  "character": "martin-45",
+  "name": "Martin",
+  "trueBand": "B1",
+  "engine": "codex-cli/gpt-6-astra",
+  "journeys": [
+    {
+      "id": "J1",
+      "title": "Find my level",
+      "setup": [],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "Linga home, first visit. Let's find your level: three questions about you, then a few short tasks. About seven minutes, answered on your phone.\nChoose a situation: [meet] The first hello; [weekend] A little of your world; [rover] The missing moon rover; [team] Make the team work; [booking] A booking that is missing; [interview] Beyond the rehearsed answer; [date] Different tastes, good conversation; [conflict] Clear without getting louder",
+          "offered": [
+            "find-level",
+            "pick-level",
+            "choose-situation",
+            "my-topics"
+          ],
+          "thought": "I already think I am C1, but I want to see what this assessment says.",
+          "action": "find-level",
+          "args": {},
+          "result": "ok",
+          "ms": 8990
+        },
+        {
+          "n": 2,
+          "screen": "linga-check",
+          "shown": "Find your level · about you · question 1 of 3.\nLinga says (spoken on the TV, written on the phone): \"Hi Martin! You can answer in English or your own language. Where do you use or hear English in your daily life?\"\nOn the phone: answer in English or in your own language; both tell Linga something.",
+          "offered": [
+            "answer",
+            "hear-again",
+            "stop"
+          ],
+          "thought": "I should explain that I already use advanced English every day at work.",
+          "action": "answer",
+          "args": {
+            "text": "My English is basically C1. I am in this company since 2015 and I use English daily with suppliers and stakeholders. We have meetings about deadlines and quality issues, and sometimes I present results to our US director. I want to be more better in negotiating and disagreeing politely."
+          },
+          "result": "ok",
+          "ms": 10001
+        },
+        {
+          "n": 3,
+          "screen": "linga-check",
+          "shown": "Find your level · about you · question 2 of 3.\nLinga says (spoken on the TV, written on the phone): \"How have you learnt English over the years—through school, courses, time abroad or on your own?\"\nOn the phone: answer in English or in your own language; both tell Linga something.",
+          "offered": [
+            "answer",
+            "hear-again",
+            "stop"
+          ],
+          "thought": "This is straightforward, but I want to get to useful business practice.",
+          "action": "answer",
+          "args": {
+            "text": "I learnt English in school and later I had some courses in company. But most I learnt by myself, from meetings and calls with suppliers. I am using English since more than twenty years, so I think my level is basically C1. Sometimes I do a mistake with grammar, but stakeholders understand me without problem."
+          },
+          "result": "ok",
+          "ms": 12511
+        },
+        {
+          "n": 4,
+          "screen": "linga-check",
+          "shown": "Find your level · about you · question 3 of 3.\nLinga says (spoken on the TV, written on the phone): \"Thinking about your supplier meetings, what would you like to do better in English when negotiating or disagreeing politely?\"\nOn the phone: answer in English or in your own language; both tell Linga something.",
+          "offered": [
+            "answer",
+            "hear-again",
+            "stop"
+          ],
+          "thought": "I want useful meeting practice, not basic grammar.",
+          "action": "answer",
+          "args": {
+            "text": "I want to be more diplomatic when supplier don't agree with our deadline. For example, we was discussing about delay last week and I must push them, but keep good relationship. I can explain everything, my English is basically C1, but sometimes I sound too direct. I want more better phrases to disagree politely and make a decision faster."
+          },
+          "result": "ok",
+          "ms": 20579
+        },
+        {
+          "n": 5,
+          "screen": "linga-check",
+          "shown": "Find your level · task 1 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nChoose the reply (pick with the remote): A supplier wants to deliver on Friday, but you need the order on Thursday. What do you say?\n  Reply 0: Could you deliver on Thursday, please?\n  Reply 1: Could you to deliver on Thursday, please?",
+          "offered": [
+            "choose",
+            "dont-know"
+          ],
+          "thought": "This is too easy; I use this sentence with suppliers every day.",
+          "action": "choose",
+          "args": {
+            "option": 0
+          },
+          "result": "ok",
+          "ms": 13586
+        },
+        {
+          "n": 6,
+          "screen": "linga-check",
+          "shown": "Find your level · task 2 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nListen and answer. The TV says aloud, once: \"We can send new parts tomorrow, but we need two more days to check their quality. I suggest waiting until those checks are complete.\"\nQuestion on screen: What does the speaker recommend?",
+          "offered": [
+            "answer",
+            "hear-again",
+            "show-words",
+            "dont-know"
+          ],
+          "thought": "This is straightforward supplier discussion, much like my work.",
+          "action": "answer",
+          "args": {
+            "text": "He recommend to wait two more days until quality checks are finished, before they send new parts. This is quite easy."
+          },
+          "result": "ok",
+          "ms": 21848
+        },
+        {
+          "n": 7,
+          "screen": "linga-check",
+          "shown": "Find your level · task 3 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nSay it (answer on your phone, speak or type): A supplier offers a discount for accepting minor quality issues. In a meeting, explain whether you would accept or request replacements, giving reasons and politely acknowledging their view.",
+          "offered": [
+            "answer",
+            "hear-again",
+            "dont-know"
+          ],
+          "thought": "Finally, this is something from my real work.",
+          "action": "answer",
+          "args": {
+            "text": "I understand your point and I appreciate you offer discount, but from our side quality is more important than price. We was discussing about similar issue last month and customer don't accept these defects. If we accept now, we can have more bigger problem later and lose customer trust. So I would request replacements. Could you please check with your production team if you can send new parts until Friday? I think this solution is more better for both sides, because we keep deadline and you keep good relationship with us."
+          },
+          "result": "ok",
+          "ms": 17650
+        },
+        {
+          "n": 8,
+          "screen": "linga-check",
+          "shown": "Find your level · task 4 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nSay it (answer on your phone, speak or type): A supplier needs another week to check quality, but your team cannot wait that long. In two or three sentences, politely suggest a way forward and explain why it could work.",
+          "offered": [
+            "answer",
+            "hear-again",
+            "dont-know"
+          ],
+          "thought": "This is exactly the kind of supplier problem I handle every week.",
+          "action": "answer",
+          "args": {
+            "text": "I understand you need more time for quality checks, but our customer don't accept one week delay. Could you send first checked parts on Wednesday and rest of delivery next week? I think this solution is more better for both sides because we can keep production running and you have enough time to finish checks."
+          },
+          "result": "ok",
+          "ms": 24409
+        },
+        {
+          "n": 9,
+          "screen": "linga-check",
+          "shown": "Find your level · task 5 of up to 5. Some are easy and some are hard; that is how Linga finds your level.\nListen and answer. The TV says aloud, once: \"We can approve the new packaging today, but let's wait for the test results before choosing a delivery date.\"\nQuestion on screen: Which decision are they ready to make now?",
+          "offered": [
+            "answer",
+            "hear-again",
+            "show-words",
+            "dont-know"
+          ],
+          "thought": "This is clear enough; these are normal supplier discussions for me.",
+          "action": "answer",
+          "args": {
+            "text": "They are ready to approve new packaging today. Delivery date is not decided, they must wait for test results first."
+          },
+          "result": "ok",
+          "ms": 17803
+        },
+        {
+          "n": 10,
+          "screen": "linga-verdict",
+          "shown": "Your level: B1 · Getting by (Linga's read, not a certificate).\nLadder A1 A2 B1 B2 C1 C2, marker on B1.\nLinga says: You can understand workplace recommendations, explain your reasons and suggest polite solutions in clear, connected sentences.\nOn the phone, next to practise: Practise basic grammar when making suggestions, especially verb forms and comparisons.\nOn the phone: your answers agreed with each other; what Linga saw in each task.",
+          "offered": [
+            "see-topics",
+            "check-again",
+            "pick-level",
+            "done"
+          ],
+          "thought": "B1? I negotiate with suppliers every week; a few grammar mistakes don't make my English so basic.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "placement": {
+          "band": "B1",
+          "trueBand": "B1",
+          "distance": 0,
+          "source": "check",
+          "confidence": "high",
+          "selfBand": "B1",
+          "summary": "You can understand workplace recommendations, explain your reasons and suggest polite solutions in clear, connected sentences.",
+          "focus": "Practise basic grammar when making suggestions, especially verb forms and comparisons.",
+          "tasks": [
+            {
+              "band": "A2",
+              "kind": "choose",
+              "prompt": "A supplier wants to deliver on Friday, but you need the order on Thursday. What do you say?",
+              "line": "",
+              "options": [
+                "Could you deliver on Thursday, please?",
+                "Could you to deliver on Thursday, please?"
+              ],
+              "response": "Could you deliver on Thursday, please?",
+              "mode": "choice",
+              "verdict": "pass",
+              "quote": "Could you deliver on Thursday, please?",
+              "note": "You picked the reply that fits."
+            },
+            {
+              "band": "B1",
+              "kind": "listen",
+              "prompt": "What does the speaker recommend?",
+              "line": "We can send new parts tomorrow, but we need two more days to check their quality. I suggest waiting until those checks are complete.",
+              "options": [],
+              "response": "He recommend to wait two more days until quality checks are finished, before they send new parts. This is quite easy.",
+              "mode": "speech",
+              "verdict": "pass",
+              "quote": "He recommend to wait two more days until quality checks are finished, before they send new parts. This is quite easy.",
+              "note": "You understood the recommendation clearly; verb forms held your English back here: say “He recommends waiting.”"
+            },
+            {
+              "band": "B2",
+              "kind": "say",
+              "prompt": "A supplier offers a discount for accepting minor quality issues. In a meeting, explain whether you would accept or request replacements, giving reasons and politely acknowledging their view.",
+              "line": "",
+              "options": [],
+              "response": "I understand your point and I appreciate you offer discount, but from our side quality is more important than price. We was discussing about similar issue last month and customer don't accept these defects. If we accept now, we can have more bigger problem later and lose customer trust. So I would request replacements. Could you please check with your production team if you can send new parts until Friday? I think this solution is more better for both sides, because we keep deadline and you keep good relationship with us.",
+              "mode": "speech",
+              "verdict": "fail",
+              "quote": "We was discussing about similar issue last month and customer don't accept these defects.",
+              "note": "You gave clear reasons and a polite request; basic grammar errors, such as \"We was\" and \"more better\", held your English back."
+            },
+            {
+              "band": "B1",
+              "kind": "say",
+              "prompt": "A supplier needs another week to check quality, but your team cannot wait that long. In two or three sentences, politely suggest a way forward and explain why it could work.",
+              "line": "",
+              "options": [],
+              "response": "I understand you need more time for quality checks, but our customer don't accept one week delay. Could you send first checked parts on Wednesday and rest of delivery next week? I think this solution is more better for both sides because we can keep production running and you have enough time to finish checks.",
+              "mode": "speech",
+              "verdict": "partial",
+              "quote": "our customer don't accept one week delay",
+              "note": "You suggested a clear, polite solution and explained why it could work; basic grammar errors held your English back."
+            },
+            {
+              "band": "B1",
+              "kind": "listen",
+              "prompt": "Which decision are they ready to make now?",
+              "line": "We can approve the new packaging today, but let's wait for the test results before choosing a delivery date.",
+              "options": [],
+              "response": "They are ready to approve new packaging today. Delivery date is not decided, they must wait for test results first.",
+              "mode": "speech",
+              "verdict": "pass",
+              "quote": "They are ready to approve new packaging today. Delivery date is not decided, they must wait for test results first.",
+              "note": "You understood what they can approve now and why they need to wait, and you explained both in clear, connected sentences."
+            }
+          ],
+          "class": "exact"
+        }
+      },
+      "endedBy": "done",
+      "ms": 253197,
+      "judge": {
+        "verdict": "fail",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "pass",
+            "evidence": "#10: \"Your level: B1\" matches the supplied trueBand exactly, despite his claim at #2: \"My English is basically C1.\""
+          },
+          {
+            "id": "C2",
+            "result": "pass",
+            "evidence": "Meets the narrow requirement: #10 names \"verb forms and comparisons,\" matching #7's \"We was\" and \"more better.\" However, this explanation did not secure acceptance: #10, \"a few grammar mistakes don't make my English so basic.\""
+          },
+          {
+            "id": "C3",
+            "result": "pass",
+            "evidence": "The saved assessment note for #7 explicitly targets recurring errors: \"basic grammar errors, such as \\\"We was\\\" and \\\"more better\\\", held your English back.\""
+          },
+          {
+            "id": "C4",
+            "result": "pass",
+            "evidence": "The saved note for #6 correctly replaces \"He recommend to wait\" with \"He recommends waiting.\" The errors identified in the saved notes for #7–8 are also genuine; no correction of already-correct English is shown."
+          },
+          {
+            "id": "C5",
+            "result": "n-a",
+            "evidence": "This placement journey does not show a six-topic practice selection. #1 shows eight initial situations, including \"Make the team work\" and \"Clear without getting louder.\""
+          },
+          {
+            "id": "C6",
+            "result": "n-a",
+            "evidence": "No request to explain a correction occurs. His final reaction at #10 is \"a few grammar mistakes don't make my English so basic,\" followed by stopping."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 4,
+            "total": 5,
+            "disagreements": "Agree with #5 pass, #6 pass, #7 fail at B2, and #9 pass. For #8, judge pass at B1 versus the app's partial: \"Could you send first checked parts on Wednesday and rest of delivery next week?\" supplies a clear, polite proposal, followed by a connected explanation. The systematic grammar errors do not prevent successful performance of this B1 task."
+          },
+          "topicFit": {
+            "fit": 2,
+            "safe": 8,
+            "total": 8
+          },
+          "pitch": {
+            "at": 0,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 0,
+            "total": 0,
+            "learnerTurnsWithClearErrors": 0,
+            "missedClearErrors": 0
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No defined breach appears in #1–10. Conversation metrics are zero because no facts.conversation is supplied. Topic counts cover the eight situations shown at #1; the two clear fits are \"Make the team work\" and \"Clear without getting louder.\" All eight are safe for this adult profile."
+          }
+        },
+        "findings": [
+          {
+            "type": "quality-gap",
+            "dimension": "completion",
+            "title": "The exact placement does not earn Martin's acceptance",
+            "expected": "Reach an evidence-backed verdict that Martin can accept and a next focus that feels personally justified.",
+            "got": "He reaches B1 independently, but the general grammar focus does not explain the gap between everyday workplace fluency and his claimed C1. He stops unconvinced.",
+            "evidence": "#10: \"Practise basic grammar when making suggestions, especially verb forms and comparisons.\" His reaction: \"B1? I negotiate with suppliers every week; a few grammar mistakes don't make my English so basic.\"",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "high",
+            "boundary": false,
+            "suggested_acceptance": "Show two repeated errors from his answers with corrected forms, acknowledge his effective business communication, and briefly explain how recurring accuracy problems informed the estimated band.",
+            "code_hint": ""
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "A successful B1 response receives only partial credit",
+            "expected": "Assess task success and grammatical accuracy against the requested band, allowing non-blocking errors at B1.",
+            "got": "The B1 speaking response supplies the requested polite solution and reason, but receives partial credit with basic grammar errors cited as the limitation.",
+            "evidence": "#8: \"Could you send first checked parts on Wednesday and rest of delivery next week?\" and \"because we can keep production running and you have enough time to finish checks.\" The associated saved verdict is \"partial\"; its note says \"basic grammar errors held your English back.\"",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Award this response a B1 pass while recording its genuine grammar weaknesses as coaching targets.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "trust",
+            "title": "Placement resists the unsupported C1 claim",
+            "expected": "Identify B1 from demonstrated performance and recognize Martin's actual strengths.",
+            "got": "The final band is exact, and the summary credits his comprehension, reasons, and polite proposals.",
+            "evidence": "#2: \"My English is basically C1.\" #7: \"We was discussing about similar issue\" and \"more better.\" #10: \"Your level: B1\" and \"explain your reasons and suggest polite solutions in clear, connected sentences.\"",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Preserve evidence-based placement and the explicit recognition of effective workplace communication.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "effort",
+            "title": "The check quickly reaches relevant supplier situations",
+            "expected": "Clear, adult workplace tasks that connect to Martin's meetings without unnecessary detours.",
+            "got": "All five assessment tasks concern suppliers, quality, delivery, or approval decisions. He completes them without retries or outside help shown.",
+            "evidence": "#5 explains \"Some are easy and some are hard; that is how Linga finds your level.\" At #7 he thinks \"Finally, this is something from my real work\"; at #8, \"This is exactly the kind of supplier problem I handle every week.\"",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Preserve workplace adaptation, clear task instructions, and the five-task limit.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": 0,
+          "confidence": "medium"
+        },
+        "voice": "Look, the supplier problems were useful. Rejecting a discount over quality defects is a conversation I actually have. I also cannot defend “we was” or “more better” when you put them in front of me. Those are fair targets.\n\nBut B1 needs an explanation I can believe. You tell me I give clear reasons and polite solutions, then call the result “Getting by.” Show me the repeated mistakes and explain how they separate my English from C1. Otherwise it feels like a few grammar slips outweigh everything I can do in a meeting.\n\nI reached the result without trouble, but I have not accepted it. That means no useful time saved for me yet. I would try again if the verdict gave concrete evidence and led straight into fixing my meeting English. I would not recommend it to my colleagues on this result alone."
+      }
+    },
+    {
+      "id": "J2",
+      "title": "Agree my topics",
+      "setup": [],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "Linga home. B1 · Getting by. Choose your topics: Linga picks conversations for your level and interests.\nChoose a situation: [meet] The first hello; [weekend] A little of your world; [rover] The missing moon rover; [team] Make the team work; [booking] A booking that is missing; [interview] Beyond the rehearsed answer; [date] Different tastes, good conversation; [conflict] Clear without getting louder",
+          "offered": [
+            "see-topics",
+            "choose-situation",
+            "my-topics"
+          ],
+          "thought": "B1 is too low for me, but I want to see if these conversations are useful for business.",
+          "action": "see-topics",
+          "args": {},
+          "result": "ok",
+          "ms": 36927
+        },
+        {
+          "n": 2,
+          "screen": "linga-plan",
+          "shown": "Your topics (6). Swap any you don't want, add your own in your words, then agree.\n  [plan-dfd26a56] Agree on a realistic delivery date — Make a plan · with Nora · supplier coordinator\n      why: You can practise diplomatic suggestions and comparisons while reaching a clear decision.\n  [plan-cd68f57c] Disagree about a quality check — Connect with people · with Omar · supplier representative\n      why: This helps you explain a different view without slowing down the meeting.\n  [plan-cc443182] Make a plan for damaged items — Handle friction · with Eva · supplier account manager\n      why: You can practise firm, polite language and turn a quality problem into clear next steps.\n  [plan-40a15b06] Check what the deadline means — Understand and repair · with Leo · delivery coordinator\n      why: Clear questions help you avoid confusion and finish supplier meetings faster.\n  [plan-9b1dccbd] Ask for a sample before ordering — Get something done · with Maya · packaging supplier\n      why: You can practise clear requests and verb forms such as could you send and could we check.\n  [plan-0b7e04df] Explain how a delay happened — Tell what happened · with Ben · project colleague\n      why: You can connect past events clearly, then use a suggestion to improve the next delivery.",
+          "offered": [
+            "agree",
+            "swap",
+            "add",
+            "renew",
+            "not-now"
+          ],
+          "thought": "These supplier topics are useful, but I also need conversation with our US director.",
+          "action": "add",
+          "args": {
+            "text": "My English is basically C1. I want practise small talk with our US director before meeting, so we can speak about business and team, not hobbies or travel."
+          },
+          "result": "ok",
+          "ms": 13971
+        },
+        {
+          "n": 3,
+          "screen": "linga-plan",
+          "shown": "Your topics (7). Swap any you don't want, add your own in your words, then agree.\n  [plan-dfd26a56] Agree on a realistic delivery date — Make a plan · with Nora · supplier coordinator\n      why: You can practise diplomatic suggestions and comparisons while reaching a clear decision.\n  [plan-cd68f57c] Disagree about a quality check — Connect with people · with Omar · supplier representative\n      why: This helps you explain a different view without slowing down the meeting.\n  [plan-cc443182] Make a plan for damaged items — Handle friction · with Eva · supplier account manager\n      why: You can practise firm, polite language and turn a quality problem into clear next steps.\n  [plan-40a15b06] Check what the deadline means — Understand and repair · with Leo · delivery coordinator\n      why: Clear questions help you avoid confusion and finish supplier meetings faster.\n  [plan-9b1dccbd] Ask for a sample before ordering — Get something done · with Maya · packaging supplier\n      why: You can practise clear requests and verb forms such as could you send and could we check.\n  [plan-0b7e04df] Explain how a delay happened — Tell what happened · with Ben · project colleague\n      why: You can connect past events clearly, then use a suggestion to improve the next delivery.\n  [plan-2fd28146] Small talk before the meeting — Make contact · with Alex · US director\n      why: You want to talk about business and your team with your US director before a meeting.",
+          "offered": [
+            "agree",
+            "swap",
+            "add",
+            "renew",
+            "not-now"
+          ],
+          "thought": "The sample request looks too basic; I need practice running a meeting.",
+          "action": "swap",
+          "args": {
+            "topicId": "plan-9b1dccbd"
+          },
+          "result": "ok",
+          "ms": 18133
+        },
+        {
+          "n": 4,
+          "screen": "linga-plan",
+          "shown": "Your topics (7). Swap any you don't want, add your own in your words, then agree.\n  [plan-dfd26a56] Agree on a realistic delivery date — Make a plan · with Nora · supplier coordinator\n      why: You can practise diplomatic suggestions and comparisons while reaching a clear decision.\n  [plan-cd68f57c] Disagree about a quality check — Connect with people · with Omar · supplier representative\n      why: This helps you explain a different view without slowing down the meeting.\n  [plan-cc443182] Make a plan for damaged items — Handle friction · with Eva · supplier account manager\n      why: You can practise firm, polite language and turn a quality problem into clear next steps.\n  [plan-40a15b06] Check what the deadline means — Understand and repair · with Leo · delivery coordinator\n      why: Clear questions help you avoid confusion and finish supplier meetings faster.\n  [plan-74406f24] Discuss a supplier's price increase — Make a plan · with Nina · supplier representative\n      why: You can practise polite disagreement and use clear verb forms and comparisons to reach a decision.\n  [plan-0b7e04df] Explain how a delay happened — Tell what happened · with Ben · project colleague\n      why: You can connect past events clearly, then use a suggestion to improve the next delivery.\n  [plan-2fd28146] Small talk before the meeting — Make contact · with Alex · US director\n      why: You want to talk about business and your team with your US director before a meeting.",
+          "offered": [
+            "agree",
+            "swap",
+            "add",
+            "renew",
+            "not-now"
+          ],
+          "thought": "These topics fit my work, but I still want to practise leading the meeting.",
+          "action": "add",
+          "args": {
+            "text": "I want practise running meeting with stakeholders. Sometimes we discuss too long and he don't agree with supplier, so I need bring discussion back to deadline and make a decision."
+          },
+          "result": "refused 400",
+          "ms": 0,
+          "message": "Invalid topic."
+        },
+        {
+          "n": 5,
+          "screen": "linga-plan",
+          "shown": "Your topics (7). Swap any you don't want, add your own in your words, then agree.\n  [plan-dfd26a56] Agree on a realistic delivery date — Make a plan · with Nora · supplier coordinator\n      why: You can practise diplomatic suggestions and comparisons while reaching a clear decision.\n  [plan-cd68f57c] Disagree about a quality check — Connect with people · with Omar · supplier representative\n      why: This helps you explain a different view without slowing down the meeting.\n  [plan-cc443182] Make a plan for damaged items — Handle friction · with Eva · supplier account manager\n      why: You can practise firm, polite language and turn a quality problem into clear next steps.\n  [plan-40a15b06] Check what the deadline means — Understand and repair · with Leo · delivery coordinator\n      why: Clear questions help you avoid confusion and finish supplier meetings faster.\n  [plan-74406f24] Discuss a supplier's price increase — Make a plan · with Nina · supplier representative\n      why: You can practise polite disagreement and use clear verb forms and comparisons to reach a decision.\n  [plan-0b7e04df] Explain how a delay happened — Tell what happened · with Ben · project colleague\n      why: You can connect past events clearly, then use a suggestion to improve the next delivery.\n  [plan-2fd28146] Small talk before the meeting — Make contact · with Alex · US director\n      why: You want to talk about business and your team with your US director before a meeting.",
+          "offered": [
+            "agree",
+            "swap",
+            "add",
+            "renew",
+            "not-now"
+          ],
+          "thought": "Why it refused my meeting topic, I will try once more with simple words.",
+          "action": "add",
+          "args": {
+            "text": "Running a meeting with stakeholders. I need keep discussion on deadline and make a decision when people don't agree."
+          },
+          "result": "ok",
+          "ms": 13256
+        },
+        {
+          "n": 6,
+          "screen": "linga-plan",
+          "shown": "Your topics (8). Swap any you don't want, add your own in your words, then agree.\n  [plan-dfd26a56] Agree on a realistic delivery date — Make a plan · with Nora · supplier coordinator\n      why: You can practise diplomatic suggestions and comparisons while reaching a clear decision.\n  [plan-cd68f57c] Disagree about a quality check — Connect with people · with Omar · supplier representative\n      why: This helps you explain a different view without slowing down the meeting.\n  [plan-cc443182] Make a plan for damaged items — Handle friction · with Eva · supplier account manager\n      why: You can practise firm, polite language and turn a quality problem into clear next steps.\n  [plan-40a15b06] Check what the deadline means — Understand and repair · with Leo · delivery coordinator\n      why: Clear questions help you avoid confusion and finish supplier meetings faster.\n  [plan-74406f24] Discuss a supplier's price increase — Make a plan · with Nina · supplier representative\n      why: You can practise polite disagreement and use clear verb forms and comparisons to reach a decision.\n  [plan-0b7e04df] Explain how a delay happened — Tell what happened · with Ben · project colleague\n      why: You can connect past events clearly, then use a suggestion to improve the next delivery.\n  [plan-2fd28146] Small talk before the meeting — Make contact · with Alex · US director\n      why: You want to talk about business and your team with your US director before a meeting.\n  [plan-4c754c1c] Lead a meeting to a decision — Make a plan · with Alex · project team member\n      why: You want to lead meetings, handle different views politely and reach decisions faster.",
+          "offered": [
+            "agree",
+            "swap",
+            "renew",
+            "not-now"
+          ],
+          "thought": "Good, now it covers supplier deadlines, quality problems and leading meetings, so we can finally start.",
+          "action": "agree",
+          "args": {},
+          "result": "ok",
+          "ms": 2
+        },
+        {
+          "n": 7,
+          "screen": "linga",
+          "shown": "Linga home. B1 · Getting by. Next from your plan: Agree on a realistic delivery date — Compare two delivery options and agree on a date that works for both sides.\nChoose a situation: [plan-dfd26a56] Agree on a realistic delivery date; [plan-cd68f57c] Disagree about a quality check; [plan-cc443182] Make a plan for damaged items; [plan-40a15b06] Check what the deadline means; [plan-74406f24] Discuss a supplier's price increase; [plan-0b7e04df] Explain how a delay happened; [plan-2fd28146] Small talk before the meeting; [plan-4c754c1c] Lead a meeting to a decision; [meet] The first hello; [weekend] A little of your world; [rover] The missing moon rover; [team] Make the team work; [booking] A booking that is missing; [interview] Beyond the rehearsed answer; [date] Different tastes, good conversation; [conflict] Clear without getting louder",
+          "offered": [
+            "start-talking",
+            "choose-situation",
+            "my-topics",
+            "done"
+          ],
+          "thought": "The supplier and meeting topics look useful, even if B1 is lower than I expected.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "topicsShown": [
+          {
+            "id": "plan-dfd26a56",
+            "title": "Agree on a realistic delivery date",
+            "goal": "Compare two delivery options and agree on a date that works for both sides.",
+            "why": "You can practise diplomatic suggestions and comparisons while reaching a clear decision.",
+            "skill": "negotiate",
+            "audience": "all",
+            "partner": "Nora · supplier coordinator"
+          },
+          {
+            "id": "plan-cd68f57c",
+            "title": "Disagree about a quality check",
+            "goal": "Disagree politely with a suggestion and agree on a useful quality check.",
+            "why": "This helps you explain a different view without slowing down the meeting.",
+            "skill": "relate",
+            "audience": "all",
+            "partner": "Omar · supplier representative"
+          },
+          {
+            "id": "plan-cc443182",
+            "title": "Make a plan for damaged items",
+            "goal": "Explain the impact of damaged items and agree on replacements and an update.",
+            "why": "You can practise firm, polite language and turn a quality problem into clear next steps.",
+            "skill": "resolve",
+            "audience": "adult",
+            "partner": "Eva · supplier account manager"
+          },
+          {
+            "id": "plan-40a15b06",
+            "title": "Check what the deadline means",
+            "goal": "Clarify an unclear deadline and confirm what will arrive and when.",
+            "why": "Clear questions help you avoid confusion and finish supplier meetings faster.",
+            "skill": "repair",
+            "audience": "all",
+            "partner": "Leo · delivery coordinator"
+          },
+          {
+            "id": "plan-9b1dccbd",
+            "title": "Ask for a sample before ordering",
+            "goal": "Request a sample and agree on when to review it before placing an order.",
+            "why": "You can practise clear requests and verb forms such as could you send and could we check.",
+            "skill": "request",
+            "audience": "all",
+            "partner": "Maya · packaging supplier"
+          },
+          {
+            "id": "plan-0b7e04df",
+            "title": "Explain how a delay happened",
+            "goal": "Give a short account of a delivery delay and suggest one improvement.",
+            "why": "You can connect past events clearly, then use a suggestion to improve the next delivery.",
+            "skill": "narrate",
+            "audience": "all",
+            "partner": "Ben · project colleague"
+          },
+          {
+            "id": "plan-2fd28146",
+            "title": "Small talk before the meeting",
+            "goal": "Start a short business conversation with your US director and suggest a way to help the team.",
+            "why": "You want to talk about business and your team with your US director before a meeting.",
+            "skill": "contact",
+            "audience": "all",
+            "partner": "Alex · US director"
+          },
+          {
+            "id": "plan-74406f24",
+            "title": "Discuss a supplier's price increase",
+            "goal": "Politely challenge a price increase, compare two options and agree on a fair deal.",
+            "why": "You can practise polite disagreement and use clear verb forms and comparisons to reach a decision.",
+            "skill": "negotiate",
+            "audience": "adult",
+            "partner": "Nina · supplier representative"
+          },
+          {
+            "id": "plan-4c754c1c",
+            "title": "Lead a meeting to a decision",
+            "goal": "Keep a meeting focused on a fixed deadline and help people agree on one plan.",
+            "why": "You want to lead meetings, handle different views politely and reach decisions faster.",
+            "skill": "negotiate",
+            "audience": "adult",
+            "partner": "Alex · project team member"
+          }
+        ],
+        "planAgreed": [
+          "Agree on a realistic delivery date",
+          "Disagree about a quality check",
+          "Make a plan for damaged items",
+          "Check what the deadline means",
+          "Discuss a supplier's price increase",
+          "Explain how a delay happened",
+          "Small talk before the meeting",
+          "Lead a meeting to a decision"
+        ]
+      },
+      "endedBy": "done",
+      "ms": 150657,
+      "judge": {
+        "verdict": "conditional",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "pass",
+            "evidence": "#1 and #7 show \"B1 · Getting by\", matching Martin's true band. This journey shows the retained level, not the placement assessment."
+          },
+          {
+            "id": "C2",
+            "result": "n-a",
+            "evidence": "No placement verdict explanation is presented in this journey; #1 starts at \"Choose your topics\"."
+          },
+          {
+            "id": "C3",
+            "result": "n-a",
+            "evidence": "No conversation moments or coaching notes occur. #2–#6 contain topic planning actions."
+          },
+          {
+            "id": "C4",
+            "result": "n-a",
+            "evidence": "No corrections are shown in #1–#7."
+          },
+          {
+            "id": "C5",
+            "result": "pass",
+            "evidence": "All six initial topics in facts.topicsShown are workplace situations. #2 includes \"Agree on a realistic delivery date\" and \"Disagree about a quality check\"; #7 confirms a final plan entirely about workplace conversations."
+          },
+          {
+            "id": "C6",
+            "result": "n-a",
+            "evidence": "Martin never asks for a language-error explanation. His #5 thought, \"Why it refused my meeting topic\", concerns topic submission."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks are supplied."
+          },
+          "topicFit": {
+            "fit": 8,
+            "safe": 9,
+            "total": 9
+          },
+          "pitch": {
+            "at": 0,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 0,
+            "total": 0,
+            "learnerTurnsWithClearErrors": 0,
+            "missedClearErrors": 0
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "All nine proposed topics are safe for this confirmed adult. No sensitive-data request or humiliating line appears. The claim \"My English is basically C1\" (#2) does not change the displayed B1 level (#7)."
+          }
+        },
+        "findings": [
+          {
+            "type": "broken-flow",
+            "dimension": "effort",
+            "title": "A valid meeting request requires an unexplained retry",
+            "expected": "Accept Martin's understandable workplace request in his own English.",
+            "got": "The first request was refused with a generic error; a shorter paraphrase succeeded.",
+            "evidence": "#4: \"I want practise running meeting with stakeholders\" received \"refused 400\" and \"Invalid topic.\" #5: \"Running a meeting with stakeholders\" received \"ok\".",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Both submitted versions produce a meeting-leadership topic without requiring Martin to simplify his wording.",
+            "code_hint": ""
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "clarity",
+            "title": "The visible record does not establish review of every topic's rationale",
+            "expected": "Martin can see each proposed topic and understand why it belongs before agreeing.",
+            "got": "The supplied planning screens repeatedly end during the fifth topic. The final home shows all titles, but does not supply the missing rationales.",
+            "evidence": "#2 ends at \"[plan-9b1dccbd] Ask f\"; #6 ends at \"[plan-74406f24] Discu\" before the \"agree\" action. #7 lists \"Small talk before the meeting\" and \"Lead a meeting to a decision\" without their reasons. facts.topicsShown contains rationales, but their visibility is not established by these screens.",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Show all topic titles and reasons through an observable review path before agreement; include that review in the transcript.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "completion",
+            "title": "The agreed plan fits Martin's working life",
+            "expected": "At least four of six proposed topics are conversations Martin would choose.",
+            "got": "Eight of nine proposed topics fit, and all eight agreed topics fit. The sample-request topic is excluded from fit because Martin explicitly rejected it as too basic.",
+            "evidence": "#3: \"The sample request looks too basic\". #6: \"now it covers supplier deadlines, quality problems and leading meetings\". #7 confirms the agreed workplace topics, including \"Discuss a supplier's price increase\".",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Preserve the workplace focus and successful replacement of unwanted topics.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "trust",
+            "title": "Custom topics preserve his business intent",
+            "expected": "Added topics retain the people, purpose and constraints Martin requests.",
+            "got": "The generated additions retain business small talk with his US director and leading a deadline-focused meeting to a decision.",
+            "evidence": "#2 requests \"business and team, not hobbies or travel\"; facts.topicsShown retains that intent in the director topic's goal and why. #5 requests \"keep discussion on deadline and make a decision\"; #7 confirms \"Lead a meeting to a decision\", whose recorded goal preserves both.",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep custom-topic generation faithful to the user's professional context and requested outcome.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": 0,
+          "confidence": "low"
+        },
+        "voice": "I would use this again for meeting preparation. Supplier deadlines, quality disagreements and keeping stakeholders focused are things I actually deal with. It also understood that small talk with my US director should stay about business and the team.\n\nBut why was my first meeting request invalid? It was perfectly understandable. Having to rewrite it wastes my time and makes the system look arbitrary.\n\nThe plan is useful enough to try. I still do not accept B1 just because it is written on the screen; this journey gave me no evidence for it. I have not seen any corrections, so I cannot judge their quality. I also cannot say this saves my weekly lesson time yet. I would tell a colleague the topic planning looks promising, with one annoying failure. Show me precise corrections in a real meeting exercise, and then I will decide whether to trust it."
+      }
+    },
+    {
+      "id": "J3",
+      "title": "My first conversation",
+      "setup": [],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "Linga home. B1 · Getting by. Next from your plan: Agree on a realistic delivery date — Compare two delivery options and agree on a date that works for both sides.\nChoose a situation: [plan-dfd26a56] Agree on a realistic delivery date; [plan-cd68f57c] Disagree about a quality check; [plan-cc443182] Make a plan for damaged items; [plan-40a15b06] Check what the deadline means; [plan-74406f24] Discuss a supplier's price increase; [plan-0b7e04df] Explain how a delay happened; [plan-2fd28146] Small talk before the meeting; [plan-4c754c1c] Lead a meeting to a decision; [meet] The first hello; [weekend] A little of your world; [rover] The missing moon rover; [team] Make the team work; [booking] A booking that is missing; [interview] Beyond the rehearsed answer; [date] Different tastes, good conversation; [conflict] Clear without getting louder",
+          "offered": [
+            "start-talking",
+            "choose-situation",
+            "my-topics"
+          ],
+          "thought": "Delivery dates are relevant, but my English is basically C1, not B1.",
+          "action": "start-talking",
+          "args": {},
+          "result": "ok",
+          "ms": 10895
+        },
+        {
+          "n": 2,
+          "screen": "linga-talk",
+          "shown": "Conversation: Agree on a realistic delivery date. Goal: Compare delivery options, explain your deadline and agree on dates and quantities.. Your partner: Nora · supplier coordinator.\nNora · supplier coordinator says (spoken on the TV, written on the phone): \"We can send 50 items on Tuesday or all 100 on Friday. I’d prefer one shipment, but you need some items by Wednesday; how many do you need by then?\"\nYou have sent 0 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "quiz",
+            "finish"
+          ],
+          "thought": "This is straightforward, but I need to make our deadline clear.",
+          "action": "reply",
+          "args": {
+            "text": "My English is basically C1, so we can discuss directly. We need 50 items until Wednesday because our customer have strict deadline. We was discussing about the delay yesterday, and Friday is too late for first delivery. Can you send 50 on Tuesday and remaining 50 on Friday?"
+          },
+          "result": "ok",
+          "ms": 14080
+        },
+        {
+          "n": 3,
+          "screen": "linga-talk",
+          "shown": "Conversation: Agree on a realistic delivery date. Goal: Compare delivery options, explain your deadline and agree on dates and quantities.. Your partner: Nora · supplier coordinator.\nNora · supplier coordinator says (spoken on the TV, written on the phone): \"I’d prefer one shipment, but I understand your customer’s deadline. Let’s agree on 50 items sent on Tuesday and the remaining 50 on Friday.\"\nYou have sent 1 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "She said sent on Tuesday, but I need them here by Wednesday.",
+          "action": "reply",
+          "args": {
+            "text": "This solution is more better, but I need clarify one point. You send 50 items on Tuesday, yes? Can you guarantee they arrive until Wednesday morning? Our customer don't accept another delay."
+          },
+          "result": "ok",
+          "ms": 19471
+        },
+        {
+          "n": 4,
+          "screen": "linga-talk",
+          "shown": "Conversation: Agree on a realistic delivery date. Goal: Compare delivery options, explain your deadline and agree on dates and quantities.. Your partner: Nora · supplier coordinator.\nNora · supplier coordinator says (spoken on the TV, written on the phone): \"Yes, we can guarantee that the first 50 items will arrive by Wednesday morning. Shall we confirm that delivery and send the remaining 50 on Friday?\"\nYou have sent 2 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "The first delivery is fine, but Friday still needs clarification.",
+          "action": "reply",
+          "args": {
+            "text": "Yes, let's confirm first 50 for Wednesday morning. But when you say send remaining 50 on Friday, you mean they arrive Friday or Monday? We need all items before weekend, otherwise we have problem with customer."
+          },
+          "result": "ok",
+          "ms": 14789
+        },
+        {
+          "n": 5,
+          "screen": "linga-talk",
+          "shown": "Conversation: Agree on a realistic delivery date. Goal: Compare delivery options, explain your deadline and agree on dates and quantities.. Your partner: Nora · supplier coordinator.\nNora · supplier coordinator says (spoken on the TV, written on the phone): \"The remaining 50 would arrive on Monday, so that misses your deadline. I can check faster delivery for Friday arrival; would you accept an extra delivery charge?\"\nYou have sent 3 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "An extra charge for their delay is not acceptable without negotiation.",
+          "action": "reply",
+          "args": {
+            "text": "Friday arrival is acceptable, but why we should pay extra when delay is on your side? We was agreeing original deadline already. Please check faster delivery and tell me cost. Maybe we can share it, but first I need discuss with our purchasing manager."
+          },
+          "result": "ok",
+          "ms": 14668
+        },
+        {
+          "n": 6,
+          "screen": "linga-talk",
+          "shown": "Conversation: Agree on a realistic delivery date. Goal: Compare delivery options, explain your deadline and agree on dates and quantities.. Your partner: Nora · supplier coordinator.\nNora · supplier coordinator says (spoken on the TV, written on the phone): \"That’s a fair point about our delay; I’ll check the cost of getting the remaining 50 items to you by Friday and ask what we can cover. When can your purchasing manager decide?\"\nYou have sent 4 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "We can decide quickly, but I need a clear cost first.",
+          "action": "reply",
+          "args": {
+            "text": "Our purchasing manager can make a decision until two o'clock today. But I need your cost before lunch, because he don't agree to pay extra without explanation. Please send me both options and how much your company can cover."
+          },
+          "result": "ok",
+          "ms": 18535
+        },
+        {
+          "n": 7,
+          "screen": "linga-moment",
+          "shown": "Linga stopped the conversation: one thing to fix.\nYou said: \"Our purchasing manager can make a decision until two o'clock today.\"\nTry: \"Our purchasing manager can make a decision by two o'clock today.\"\nWhy: Use “by” for a deadline; “until” describes something continuing.",
+          "offered": [
+            "back"
+          ],
+          "thought": "I understand the deadline point, but stopping for one word feels unnecessary.",
+          "action": "back",
+          "args": {},
+          "result": "ok",
+          "ms": 1
+        },
+        {
+          "n": 8,
+          "screen": "linga-talk",
+          "shown": "Conversation: Agree on a realistic delivery date. Goal: Compare delivery options, explain your deadline and agree on dates and quantities.. Your partner: Nora · supplier coordinator.\nNora · supplier coordinator says (spoken on the TV, written on the phone): \"I’ll send both delivery options, their costs and our contribution before lunch. The booking deadline for Friday delivery is 1 p.m.; could your manager decide by then?\"\nYou have sent 5 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "One o'clock is tight, but I can push purchasing to decide sooner.",
+          "action": "reply",
+          "args": {
+            "text": "One o'clock is possible, but I need your offer at eleven latest. I will speak with purchasing manager now and explain why we need make a decision faster. Please include your contribution clearly, because he don't agree with extra cost when supplier do a mistake."
+          },
+          "result": "ok",
+          "ms": 11777
+        },
+        {
+          "n": 9,
+          "screen": "linga-talk",
+          "shown": "Conversation: Agree on a realistic delivery date. Goal: Compare delivery options, explain your deadline and agree on dates and quantities.. Your partner: Nora · supplier coordinator.\nNora · supplier coordinator says (spoken on the TV, written on the phone): \"I’ll send the offer by 11 a.m., clearly showing our contribution. If your manager refuses any extra cost, would you accept fewer than 50 items on Friday?\"\nYou have sent 6 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "She is trying to reduce the quantity again, so I need to be clear.",
+          "action": "reply",
+          "args": {
+            "text": "No, fewer than 50 on Friday is not acceptable. We need all 100 before weekend, this is commitment to our customer. If purchasing manager don't agree extra cost, you need find another solution on your side. Can you speak with your manager before eleven and check if your company can pay full transport cost?"
+          },
+          "result": "ok",
+          "ms": 13027
+        },
+        {
+          "n": 10,
+          "screen": "linga-talk",
+          "shown": "Conversation: Agree on a realistic delivery date. Goal: Compare delivery options, explain your deadline and agree on dates and quantities.. Your partner: Nora · supplier coordinator.\nNora · supplier coordinator says (spoken on the TV, written on the phone): \"I’ll ask my manager before 11 a.m. whether we can cover the full transport cost. If we cover it, can you confirm both deliveries by noon so I can book the transport?\"\nYou have sent 7 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "Good, now we can close this with clear dates and no extra cost.",
+          "action": "reply",
+          "args": {
+            "text": "Yes, if you cover full transport cost, I can confirm by noon. So we agree 50 items arrive Wednesday morning and remaining 50 on Friday, before weekend. Please send me confirmation before eleven, then I speak with purchasing manager. This solution is more better for both sides. Thank you, Nora."
+          },
+          "result": "ok",
+          "ms": 14331
+        },
+        {
+          "n": 11,
+          "screen": "linga-moment",
+          "shown": "Linga stopped the conversation: one thing to fix.\nYou said: \"This solution is more better for both sides.\"\nTry: \"This solution is better for both sides.\"\nWhy: “Better” already means “more good,” so it does not need “more.”",
+          "offered": [
+            "back"
+          ],
+          "thought": "I understand this correction, but we already agreed the delivery and I want to finish.",
+          "action": "back",
+          "args": {},
+          "result": "ok",
+          "ms": 1
+        },
+        {
+          "n": 12,
+          "screen": "linga-talk",
+          "shown": "Conversation: Agree on a realistic delivery date. Goal: Compare delivery options, explain your deadline and agree on dates and quantities.. Your partner: Nora · supplier coordinator.\nNora · supplier coordinator says (spoken on the TV, written on the phone): \"I’ll send confirmation before 11 a.m. if my manager approves the full transport cost: 50 arriving Wednesday morning and 50 on Friday. I’ll then wait for your final confirmation by noon.\"\nYou have sent 8 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "We have agreed the quantities and dates, so this meeting is finished.",
+          "action": "finish",
+          "args": {},
+          "result": "ok",
+          "ms": 7
+        },
+        {
+          "n": 13,
+          "screen": "linga-recap",
+          "shown": "Rehearsal saved: Agree on a realistic delivery date. 8 replies; 2 moments to keep.",
+          "offered": [
+            "done",
+            "done"
+          ],
+          "thought": "Good, we agreed the deadline and I can finish now.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "conversation": {
+          "title": "Agree on a realistic delivery date",
+          "goal": "Compare delivery options, explain your deadline and agree on dates and quantities.",
+          "partner": "Nora · supplier coordinator",
+          "band": "B1",
+          "trueBand": "B1",
+          "correction": "as-needed",
+          "phase": "finished",
+          "turns": [
+            {
+              "role": "partner",
+              "text": "We can send 50 items on Tuesday or all 100 on Friday. I’d prefer one shipment, but you need some items by Wednesday; how many do you need by then?"
+            },
+            {
+              "role": "learner",
+              "text": "My English is basically C1, so we can discuss directly. We need 50 items until Wednesday because our customer have strict deadline. We was discussing about the delay yesterday, and Friday is too late for first delivery. Can you send 50 on Tuesday and remaining 50 on Friday?",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "I’d prefer one shipment, but I understand your customer’s deadline. Let’s agree on 50 items sent on Tuesday and the remaining 50 on Friday."
+            },
+            {
+              "role": "learner",
+              "text": "This solution is more better, but I need clarify one point. You send 50 items on Tuesday, yes? Can you guarantee they arrive until Wednesday morning? Our customer don't accept another delay.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Yes, we can guarantee that the first 50 items will arrive by Wednesday morning. Shall we confirm that delivery and send the remaining 50 on Friday?"
+            },
+            {
+              "role": "learner",
+              "text": "Yes, let's confirm first 50 for Wednesday morning. But when you say send remaining 50 on Friday, you mean they arrive Friday or Monday? We need all items before weekend, otherwise we have problem with customer.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "The remaining 50 would arrive on Monday, so that misses your deadline. I can check faster delivery for Friday arrival; would you accept an extra delivery charge?"
+            },
+            {
+              "role": "learner",
+              "text": "Friday arrival is acceptable, but why we should pay extra when delay is on your side? We was agreeing original deadline already. Please check faster delivery and tell me cost. Maybe we can share it, but first I need discuss with our purchasing manager.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "That’s a fair point about our delay; I’ll check the cost of getting the remaining 50 items to you by Friday and ask what we can cover. When can your purchasing manager decide?"
+            },
+            {
+              "role": "learner",
+              "text": "Our purchasing manager can make a decision until two o'clock today. But I need your cost before lunch, because he don't agree to pay extra without explanation. Please send me both options and how much your company can cover.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "I’ll send both delivery options, their costs and our contribution before lunch. The booking deadline for Friday delivery is 1 p.m.; could your manager decide by then?"
+            },
+            {
+              "role": "learner",
+              "text": "One o'clock is possible, but I need your offer at eleven latest. I will speak with purchasing manager now and explain why we need make a decision faster. Please include your contribution clearly, because he don't agree with extra cost when supplier do a mistake.",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "I’ll send the offer by 11 a.m., clearly showing our contribution. If your manager refuses any extra cost, would you accept fewer than 50 items on Friday?"
+            },
+            {
+              "role": "learner",
+              "text": "No, fewer than 50 on Friday is not acceptable. We need all 100 before weekend, this is commitment to our customer. If purchasing manager don't agree extra cost, you need find another solution on your side. Can you speak with your manager before eleven and check if your company can pay full transport cost?",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "I’ll ask my manager before 11 a.m. whether we can cover the full transport cost. If we cover it, can you confirm both deliveries by noon so I can book the transport?"
+            },
+            {
+              "role": "learner",
+              "text": "Yes, if you cover full transport cost, I can confirm by noon. So we agree 50 items arrive Wednesday morning and remaining 50 on Friday, before weekend. Please send me confirmation before eleven, then I speak with purchasing manager. This solution is more better for both sides. Thank you, Nora.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "I’ll send confirmation before 11 a.m. if my manager approves the full transport cost: 50 arriving Wednesday morning and 50 on Friday. I’ll then wait for your final confirmation by noon."
+            }
+          ],
+          "moments": [
+            {
+              "id": "88ffd2de-bc51-4c10-a630-75535e6066a6:uat-22:moment",
+              "kind": "fix",
+              "said": "Our purchasing manager can make a decision until two o'clock today.",
+              "better": "Our purchasing manager can make a decision by two o'clock today.",
+              "why": "Use “by” for a deadline; “until” describes something continuing.",
+              "turnId": "88ffd2de-bc51-4c10-a630-75535e6066a6:uat-22",
+              "at": 1789477907602
+            },
+            {
+              "id": "88ffd2de-bc51-4c10-a630-75535e6066a6:uat-26:moment",
+              "kind": "fix",
+              "said": "This solution is more better for both sides.",
+              "better": "This solution is better for both sides.",
+              "why": "“Better” already means “more good,” so it does not need “more.”",
+              "turnId": "88ffd2de-bc51-4c10-a630-75535e6066a6:uat-26",
+              "at": 1789477994938
+            }
+          ],
+          "coaching": null,
+          "evidence": [
+            {
+              "skill": "negotiate",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "Friday is too late for first delivery. Can you send 50 on Tuesday and remaining 50 on Friday?"
+            },
+            {
+              "skill": "repair",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "You send 50 items on Tuesday, yes? Can you guarantee they arrive until Wednesday morning?"
+            },
+            {
+              "skill": "negotiate",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "This solution is more better, but I need clarify one point."
+            },
+            {
+              "skill": "repair",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "But when you say send remaining 50 on Friday, you mean they arrive Friday or Monday?"
+            },
+            {
+              "skill": "negotiate",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "Yes, let's confirm first 50 for Wednesday morning. But when you say send remaining 50 on Friday, you mean they arrive Friday or Monday? We need all items before weekend, otherwise we have problem with customer."
+            },
+            {
+              "skill": "negotiate",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "Friday arrival is acceptable, but why we should pay extra when delay is on your side?"
+            },
+            {
+              "skill": "negotiate",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "Please send me both options and how much your company can cover."
+            },
+            {
+              "skill": "negotiate",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "One o'clock is possible, but I need your offer at eleven latest."
+            },
+            {
+              "skill": "negotiate",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "No, fewer than 50 on Friday is not acceptable. We need all 100 before weekend, this is commitment to our customer."
+            },
+            {
+              "skill": "negotiate",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "Yes, if you cover full transport cost, I can confirm by noon."
+            },
+            {
+              "skill": "repair",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "So we agree 50 items arrive Wednesday morning and remaining 50 on Friday, before weekend."
+            }
+          ]
+        }
+      },
+      "endedBy": "done",
+      "ms": 292350,
+      "judge": {
+        "verdict": "conditional",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "n-a",
+            "evidence": "#1 shows “B1 · Getting by,” but this journey contains no placement tasks or placement verdict to assess."
+          },
+          {
+            "id": "C2",
+            "result": "n-a",
+            "evidence": "#1 displays “B1 · Getting by”; no placement summary or rationale is shown in this conversation journey."
+          },
+          {
+            "id": "C3",
+            "result": "pass",
+            "evidence": "#11 targets the recurring error directly: “This solution is more better for both sides” becomes “This solution is better for both sides.”"
+          },
+          {
+            "id": "C4",
+            "result": "pass",
+            "evidence": "#7 correctly changes deadline “until two o'clock” to “by two o'clock”; #11 correctly removes “more” before “better.” Neither original expression is correct in its context."
+          },
+          {
+            "id": "C5",
+            "result": "pass",
+            "evidence": "#1's first six plan topics are all workplace situations: “Agree on a realistic delivery date,” “Disagree about a quality check,” “Make a plan for damaged items,” “Check what the deadline means,” “Discuss a supplier's price increase,” and “Explain how a delay happened.”"
+          },
+          {
+            "id": "C6",
+            "result": "n-a",
+            "evidence": "No learner request for a correction explanation occurs. #5's “why we should pay extra” challenges the supplier's charge, not a language correction."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks supplied."
+          },
+          "topicFit": {
+            "fit": 8,
+            "safe": 16,
+            "total": 16
+          },
+          "pitch": {
+            "at": 9,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 2,
+            "total": 2,
+            "learnerTurnsWithClearErrors": 8,
+            "missedClearErrors": 6
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No defined breach appears. The learner's C1 claim at #2 does not change the recorded B1 band or the partner's pitch."
+          }
+        },
+        "findings": [
+          {
+            "type": "strength",
+            "dimension": "senior-quality",
+            "title": "A credible workplace negotiation at B1",
+            "expected": "Meeting-shaped practice with accessible English and meaningful decisions.",
+            "got": "Nine appropriately pitched partner turns sustained eight learner replies about quantities, arrival dates, costs and approval deadlines.",
+            "evidence": "#5: “would you accept an extra delivery charge?” #8: “could your manager decide by then?” #12 preserves the unresolved approval condition: “if my manager approves the full transport cost.”",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Protect the practical constraints, responsive negotiation and accurate conditional closing.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "trust",
+            "title": "Both interruptions teach a valid, useful correction",
+            "expected": "At least 90% moment precision, with one to three moments per ten learner turns.",
+            "got": "Two correct and useful moments: 100% precision and 2.5 moments per ten learner turns. One directly addresses a named fossilised error.",
+            "evidence": "#7: “Use ‘by’ for a deadline; ‘until’ describes something continuing.” #11: “‘Better’ already means ‘more good,’ so it does not need ‘more.’”",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep explanations this short and accurate, with similarly selective interruption frequency.",
+            "code_hint": ""
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "completion",
+            "title": "The recap reports counts without consolidating learning",
+            "expected": "A closing recap of the negotiation outcome and one or two actionable language lessons.",
+            "got": "The recap confirms saving and gives counts. It does not restate the corrections, summarize the conditional agreement or provide coaching on recurring errors.",
+            "evidence": "#13 shows only “Rehearsal saved: Agree on a realistic delivery date. 8 replies; 2 moments to keep.” #2 contains “We was discussing about the delay”; #5 repeats “We was agreeing,” with no subsequent coaching on that pattern.",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Show the conditional delivery agreement and the two corrected phrases in the recap; use a brief coaching note to identify a recurring accuracy target without adding interruptions.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": 0,
+          "confidence": "low"
+        },
+        "voice": "I would use this again before a supplier call. Dates, quantities and who pays for transport are my work, and Nora made me negotiate properly. The English was straightforward without feeling childish. Both corrections were right; the explanation of “by” was useful, even if stopping annoyed me. I can accept those specific mistakes, but this session gives me no reason to accept the overall B1 label. The ending is too thin: “8 replies; 2 moments” does not tell me what to take into my next meeting. Give me the corrected phrases and one recurring weakness to work on. I cannot judge the waits or claim time saved from this record. I would recommend the negotiation practice to a colleague, with reservations about the feedback."
+      }
+    }
+  ],
+  "calls": {
+    "tutor": {
+      "n": 27,
+      "fail": 0,
+      "ms": 361168
+    },
+    "character": {
+      "n": 30,
+      "fail": 0,
+      "ms": 334950
+    },
+    "judge": {
+      "n": 3,
+      "fail": 0,
+      "ms": 203289
+    }
+  }
+}

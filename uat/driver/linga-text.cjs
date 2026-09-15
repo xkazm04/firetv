@@ -228,7 +228,7 @@ async function child(characterId) {
     }
     if (sc === 'linga-plan' && k) {
       if (!k.topics.length) return view(sc, `Your topics. ${k.error ? `Error on screen: ${k.error}` : 'Linga is picking conversations.'}`, [A('retry', 'Try again'), A('not-now', 'Not now')]);
-      return view(sc, `Your topics (${k.topics.length}). Swap any you don't want, add your own in your words, then agree.${err(k.error)}\n${k.topics.map(t => `  [${t.id}] ${t.title} — ${cur.ENGLISH_SKILLS.find(x => x.id === t.skill)?.name} · with ${t.partner}\n      why: ${t.why}`).join('\n')}`, [A('agree', 'Agree to these topics'), A('swap', 'Swap one topic', 'topicId'), ...(k.topics.length < P.PLAN_MAX ? [A('add', 'Add a topic in your own words', 'text')] : []), A('renew', 'All new topics'), A('not-now', 'Not now')]);
+      return view(sc, `Your topics (${k.topics.length}). Swap any you don't want, add your own in your words, then agree.${err(k.error)}\n${k.topics.map(t => `  [${t.id}] ${t.title} — ${cur.ENGLISH_SKILLS.find(x => x.id === t.skill)?.name} · with ${t.partner}\n      why: ${t.why}`).join('\n')}`, [A('agree', 'Agree to these topics'), A('swap', 'Swap one topic', 'topicId'), ...(k.topics.length < P.PLAN_MAX ? [A('add', 'Add a topic in your own words (the phone field takes 160 characters)', 'text')] : []), A('renew', 'All new topics'), A('not-now', 'Not now')]);
     }
     if (c && sc === 'linga-moment' && c.moment) {
       const m = c.moment;
@@ -249,14 +249,16 @@ async function child(characterId) {
       if (c.paused) return view(sc, lines.join('\n'), [A('resume', 'Resume'), A('finish', 'Finish rehearsal')]);
       return view(sc, lines.join('\n'), [A('reply', 'Speak or type your reply on the phone', 'text'), ...(c.quizOpen ? [A('pick-phrase', 'Pick a phrase', 'option')] : []), A('cue', 'Give me a cue'), replies ? A('coach', 'Pause & coach') : A('quiz', 'Choose a phrase'), A('finish', 'Finish rehearsal')]);
     }
+    if (sc === 'linga-scenes') return view(sc, `Choose a situation. One at a time on the TV; the phone lists them all.\n${cur.eligibleScenes(p, prefs, l).map(x => `  [${x.id}] ${x.name} — ${x.goal}`).join('\n')}`, [A('choose-situation', 'Start this situation', 'sceneId'), A('back-home', 'Back to Linga home')]);
     const shown = [], actions = [], resume = c && c.phase !== 'finished' && c.turns.length > 0;
     if (resume) { shown.push(`Linga home. Your conversation "${c.title}" is waiting.`); actions.push(A('resume', 'Carry on talking')); }
     else if (k && (k.stage === 'about' || k.stage === 'tasks')) { shown.push('Linga home. You stopped the level check part way.'); actions.push(A('carry-on-check', 'Carry on'), A('restart-check', 'Start again')); }
     else if (!l.placement) { shown.push("Linga home, first visit. Let's find your level: three questions about you, then a few short tasks. About seven minutes, answered on your phone."); actions.push(A('find-level', 'Find my level'), A('pick-level', "I'll pick my level (A1 to C2)", 'band')); }
     else if (!l.plan || k?.stage === 'plan' || k?.stage === 'verdict') { shown.push(`Linga home. ${l.placement.band} · ${P.BAND_NAME[l.placement.band]}. Choose your topics: Linga picks conversations for your level and interests.`); actions.push(A('see-topics', k?.stage === 'plan' ? 'Carry on choosing' : 'See my topics')); }
     else { const r = cur.recommendScene(p, l), done = cur.planDone(l); shown.push(`Linga home. ${l.placement.band} · ${P.BAND_NAME[l.placement.band]}. ${done ? 'Every topic in your plan talked through.' : `Next from your plan: ${r.name} — ${r.goal}`}`); actions.push(A('start-talking', done ? 'Talk again' : 'Start talking')); if (done) actions.push(A('see-topics', 'New topics')); }
-    shown.push(`Choose a situation: ${cur.eligibleScenes(p, prefs, l).map(x => `[${x.id}] ${x.name}`).join('; ')}`);
-    actions.push(A('choose-situation', 'Choose a situation', 'sceneId'), A('my-topics', 'My topics (menu)'));
+    // Like the TV: situations live behind "Choose a situation" (a secondary action once placed, the menu before),
+    // never listed on the home screen itself — the first LT run listed them and five Characters skipped the check.
+    actions.push(A('open-situations', l.placement ? 'Choose a situation' : 'Menu · Choose a situation'), A('my-topics', 'Menu · My topics'));
     return view('linga', shown.join('\n'), actions);
   }
 
@@ -278,7 +280,7 @@ async function child(characterId) {
       case 'my-topics': return cmd(l.plan ? 'plan-open' : 'plan-propose');
       case 'agree': return cmd('plan-agree');
       case 'swap': return cmd('plan-swap', { topicId: d.topicId });
-      case 'add': return cmd('plan-add', { text });
+      case 'add': return cmd('plan-add', { text: text.slice(0, 160) });
       case 'renew': return cmd('plan-renew');
       case 'start-talking': return cmd('start', { sceneId: cur.recommendScene(profile(), l).id, replace: true });
       case 'choose-situation': return cmd('start', { sceneId: d.sceneId, replace: true });
@@ -292,11 +294,13 @@ async function child(characterId) {
       case 'back': return cmd('moment-done');
       case 'finish': return cmd('finish');
       case 'resume': return cmd('resume');
+      case 'open-situations': dispatch({ type: 'nav', screen: 'linga-scenes' }); return null;
+      case 'back-home': dispatch({ type: 'nav', screen: 'linga' }); return null;
       default: return null;
     }
   }
 
-  const ACTIONS = ['find-level', 'pick-level', 'carry-on-check', 'restart-check', 'answer', 'choose', 'dont-know', 'show-words', 'hear-again', 'retry', 'stop', 'see-topics', 'check-again', 'my-topics', 'agree', 'swap', 'add', 'renew', 'not-now', 'start-talking', 'choose-situation', 'retry-scene', 'reply', 'cue', 'quiz', 'pick-phrase', 'coach', 'replay', 'back', 'finish', 'resume', 'done'];
+  const ACTIONS = ['find-level', 'pick-level', 'carry-on-check', 'restart-check', 'answer', 'choose', 'dont-know', 'show-words', 'hear-again', 'retry', 'stop', 'see-topics', 'check-again', 'my-topics', 'agree', 'swap', 'add', 'renew', 'not-now', 'start-talking', 'choose-situation', 'retry-scene', 'reply', 'cue', 'quiz', 'pick-phrase', 'coach', 'replay', 'back', 'finish', 'resume', 'open-situations', 'back-home', 'done'];
   const decideSchema = { type: 'object', additionalProperties: false, required: ['thought', 'action', 'text', 'option', 'topicId', 'sceneId', 'band'], properties: { thought: { type: 'string', maxLength: 300 }, action: { type: 'string', enum: ACTIONS }, text: { type: 'string', maxLength: 900 }, option: { type: 'integer', enum: [-1, 0, 1] }, topicId: { type: 'string', maxLength: 100 }, sceneId: { type: 'string', maxLength: 100 }, band: { type: 'string', enum: ['', ...BANDS] } } };
   const characterSystem = `You play a real person using Linga — an English-practice app on a family TV, answered from a phone — in an automated acceptance test. Stay exactly in character as described in person.play: their real English level and typical errors, the language they would really use, their temperament and patience. Never improve their English and never mention testing or being an AI.
 Words the TV "says aloud" are heard once at natural speed: understand them only as well as this person's listening allows.
