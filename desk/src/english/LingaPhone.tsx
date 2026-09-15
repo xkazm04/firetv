@@ -2,7 +2,7 @@
 import { useState } from "react";
 import type { Event, Session } from "@/lib/session/store";
 import { defaultPreferences, eligibleScenes, ENGLISH_SCENES, ENGLISH_SKILLS, PROGRESS_LABEL, recommendScene } from "@/lib/english/curriculum";
-import { ABOUT_QUESTIONS, BAND_CAN, BAND_NAME, isBand, MAX_TASKS, PLAN_MAX } from "@/lib/english/placement";
+import { ABOUT_QUESTIONS, BAND_CAN, BAND_NAME, isBand, MAX_TASKS, PLAN_MAX, TOPIC_ASK_MAX } from "@/lib/english/placement";
 import { BANDS, type Band, type Conversation, type EnglishLearning, type EnglishPreferences, type LevelCheck, type Placement } from "@/lib/english/types";
 import { ReplyBox } from "./ReplyBox";
 import { useEnglish } from "./useEnglish";
@@ -119,7 +119,7 @@ function CheckPanel({lc,run,busy,hasPlan}:{lc:LevelCheck;run:Run;busy:boolean;ha
     {status}{problem}
     {!lc.topics.length&&!lc.pending&&<button className="pbtn" data-signal="true" onClick={()=>run("check-retry")}>Try again</button>}
     {lc.topics.map(t=><div className="linga-skill" key={t.id}><b>{t.title}</b><small>{skillName(t.skill)} · {t.partner}</small><small>{t.why}</small><button className="pbtn" data-secondary="true" disabled={pending} onClick={()=>run("plan-swap",{topicId:t.id})}>Swap</button></div>)}
-    {lc.topics.length<PLAN_MAX&&<label>Add a topic in your own words<input value={topic} maxLength={160} placeholder="Ordering food on holiday, talking about football…" onChange={e=>setTopic(e.target.value)}/></label>}
+    {lc.topics.length<PLAN_MAX&&<label>Add a topic in your own words<textarea value={topic} maxLength={TOPIC_ASK_MAX} placeholder="Ordering food on holiday, talking about football…" onChange={e=>setTopic(e.target.value)}/><small className="linga-note">{topic.length} of {TOPIC_ASK_MAX} characters</small></label>}
     {topic.trim()&&<button className="pbtn" disabled={pending} onClick={async()=>{if(await run("plan-add",{text:topic}))setTopic("");}}>Add this topic</button>}
     {lc.topics.length>0&&<button className="pbtn" data-signal="true" disabled={pending} onClick={()=>run("plan-agree")}>Agree to these topics</button>}
     <button className="pbtn" data-secondary="true" disabled={pending} onClick={()=>run("plan-renew")}>All new topics</button>

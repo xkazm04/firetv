@@ -11,7 +11,7 @@ import { dispatch, getSession, type Profile, type Screen } from "../session/stor
 import { getLearner, saveEnglish } from "../session/learners";
 import { audienceAllowed, defaultPreferences, ENGLISH_SKILLS, isAdult } from "./curriculum";
 import { ConversationError } from "./errors";
-import { ABOUT_QUESTIONS, BAND_JUDGE, BAND_TUTOR, cleanTopic, isBand, kindFor, PLAN_MAX, PLAN_SIZE, startBand, staircase, verdictFor } from "./placement";
+import { ABOUT_QUESTIONS, BAND_JUDGE, BAND_TUTOR, cleanTopic, isBand, kindFor, PLAN_MAX, PLAN_SIZE, startBand, staircase, TOPIC_ASK_MAX, verdictFor } from "./placement";
 import { BANDS, type Audience, type Band, type CheckTask, type EnglishLearning, type EvidenceMode, type LevelCheck, type Placement, type PlacementTask, type PlanTopic, type TaskKind } from "./types";
 
 // The right option of a "choose" task. Server memory only: the session reaches every screen.
@@ -292,7 +292,10 @@ note: one plain, kind sentence to the learner about what their answer showed; wh
       return true;
     }
     if (k.topics.length >= PLAN_MAX) throw new ConversationError(`A plan holds ${PLAN_MAX} topics. Swap one instead.`);
-    await propose(k, ctx, commandId, 1, null, "Linga could not shape that topic. Try again, or say it another way.", required(input.text, "topic", 160));
+    const asked = typeof input.text === "string" ? input.text.trim() : "";
+    if (!asked) throw new ConversationError("Say what you would like to talk about.");
+    if (asked.length > TOPIC_ASK_MAX) throw new ConversationError(`Describe the topic in up to ${TOPIC_ASK_MAX} characters.`);
+    await propose(k, ctx, commandId, 1, null, "Linga could not shape that topic. Try again, or say it another way.", asked);
     return true;
   }
   if (action === "plan-agree") {

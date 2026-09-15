@@ -11,6 +11,8 @@ export const ABOUT_QUESTIONS = 3;
 export const PLAN_SIZE = 6;
 export const PLAN_MAX = 8;
 export const TAUGHT_CAP = 60;
+/** A topic in the learner's own words. The first LT run refused five real requests at 160 characters. */
+export const TOPIC_ASK_MAX = 400;
 
 export const BAND_NAME: Record<Band, string> = { A1: "First words", A2: "Everyday basics", B1: "Getting by", B2: "Comfortable", C1: "Fluent", C2: "Near-native" };
 /** What a learner at each band can do, in the learner's words. */

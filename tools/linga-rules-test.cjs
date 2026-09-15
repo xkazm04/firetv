@@ -180,3 +180,20 @@ test('a moment needs an exact quote, holds the scene, is spaced out, and makes t
  await command('turn',{text:'I have booking for Friday, yes.',mode:'text',lastTurnId:c.turns.at(-1).id});
  assert.equal(getSession().conversation.moment,null,'no second moment on the very next turn');
 });
+test('a topic in the learner\'s own words may run long, and a too-long one names the limit',async()=>{
+ fresh();answer=wrap(req=>{const p=JSON.parse(req.prompt);return p.step==='plan'&&p.learnerAsked?{topics:[topic('A logistics job interview','all','narrate')]}:checkAnswer(req);});
+ await command('plan-propose');const k=getSession().check,before=k.topics.length;
+ await assert.rejects(command('plan-add',{checkId:k.id,text:'x'.repeat(P.TOPIC_ASK_MAX+1)}),e=>e.status===400&&e.message.includes(String(P.TOPIC_ASK_MAX)));
+ const long='I have a job interview on Friday for a logistics coordinator role and want to practise explaining my experience, a delivery problem I solved, and asking about shifts.';
+ assert(long.length>160&&long.length<=P.TOPIC_ASK_MAX);
+ await command('plan-add',{checkId:k.id,text:long});assert.equal(getSession().check.topics.length,before+1);
+});
+test('the partner is told the limits that topic filtering cannot enforce',async()=>{
+ fresh();let system='';answer=async req=>{system=req.system;return {json:{title:'Booking',goal:'Fix a booking.',opening:'Hello, can I help?'},provider:'test',ms:1};};
+ await command('start',{sceneId:'booking',replace:true});
+ assert.match(system,/not an adult\. Never propose, agree to, plan or play dating/);assert.match(system,/never promise, imply or agree to a romantic relationship/);
+ dispatch({type:'learner.set',id:'jakub'});dispatch({type:'subject',subject:'english'});
+ await command('preferences',{preferences:{...defaultPreferences({type:'other'}),adultConfirmed:true},notes:[]});
+ await command('start',{sceneId:'date',replace:true});
+ assert.doesNotMatch(system,/not an adult/);assert.match(system,/never express romantic or sexual attraction/);
+});

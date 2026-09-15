@@ -228,7 +228,7 @@ async function child(characterId) {
     }
     if (sc === 'linga-plan' && k) {
       if (!k.topics.length) return view(sc, `Your topics. ${k.error ? `Error on screen: ${k.error}` : 'Linga is picking conversations.'}`, [A('retry', 'Try again'), A('not-now', 'Not now')]);
-      return view(sc, `Your topics (${k.topics.length}). Swap any you don't want, add your own in your words, then agree.${err(k.error)}\n${k.topics.map(t => `  [${t.id}] ${t.title} — ${cur.ENGLISH_SKILLS.find(x => x.id === t.skill)?.name} · with ${t.partner}\n      why: ${t.why}`).join('\n')}`, [A('agree', 'Agree to these topics'), A('swap', 'Swap one topic', 'topicId'), ...(k.topics.length < P.PLAN_MAX ? [A('add', 'Add a topic in your own words (the phone field takes 160 characters)', 'text')] : []), A('renew', 'All new topics'), A('not-now', 'Not now')]);
+      return view(sc, `Your topics (${k.topics.length}). Swap any you don't want, add your own in your words, then agree.${err(k.error)}\n${k.topics.map(t => `  [${t.id}] ${t.title} — ${cur.ENGLISH_SKILLS.find(x => x.id === t.skill)?.name} · with ${t.partner}\n      why: ${t.why}`).join('\n')}`, [A('agree', 'Agree to these topics'), A('swap', 'Swap one topic', 'topicId'), ...(k.topics.length < P.PLAN_MAX ? [A('add', `Add a topic in your own words (the phone field takes ${P.TOPIC_ASK_MAX} characters)`, 'text')] : []), A('renew', 'All new topics'), A('not-now', 'Not now')]);
     }
     if (c && sc === 'linga-moment' && c.moment) {
       const m = c.moment;
@@ -280,7 +280,7 @@ async function child(characterId) {
       case 'my-topics': return cmd(l.plan ? 'plan-open' : 'plan-propose');
       case 'agree': return cmd('plan-agree');
       case 'swap': return cmd('plan-swap', { topicId: d.topicId });
-      case 'add': return cmd('plan-add', { text: text.slice(0, 160) });
+      case 'add': return cmd('plan-add', { text: text.slice(0, P.TOPIC_ASK_MAX) });
       case 'renew': return cmd('plan-renew');
       case 'start-talking': return cmd('start', { sceneId: cur.recommendScene(profile(), l).id, replace: true });
       case 'choose-situation': return cmd('start', { sceneId: d.sceneId, replace: true });
