@@ -123,6 +123,39 @@ test('a practice set reaches the screens with no answer in the session, the stre
   assert(!keysIn(payload.practice).includes('answer'),`${where} carries an answer field`);
  }
 });
+test('POST /api/session refuses practice.set and practice.marked from a client, and the session is untouched',async()=>{
+ const sessionRoute=require(path.join(root,'src/app/api/session/route.ts'));
+ store.dispatch({type:'reset'});store.dispatch({type:'practice.set',practice:sheet});
+ const before=JSON.stringify(store.getSession().practice);
+ const forged=[
+  {type:'practice.set',practice:{topic:'linear-one-step',marked:false,items:[{n:1,question:'x=1'}]}},
+  {type:'practice.marked',items:sheet.items.map(i=>({...i,verdict:'right',said:`Number ${i.n} is right.`}))},
+ ];
+ for(const e of forged){
+  const r=await sessionRoute.POST(new Request('http://desk/api/session',{method:'POST',body:JSON.stringify(e)}));
+  assert.equal(r.status,403,e.type);assert.match((await r.json()).error,/api\/(practice|mark)/,e.type);
+  assert.equal(JSON.stringify(store.getSession().practice),before,`${e.type} changed the session`);
+ }
+ const ok=await sessionRoute.POST(new Request('http://desk/api/session',{method:'POST',body:JSON.stringify({type:'practice.clear'})}));
+ assert.equal(ok.status,200,'a client event the screens do send still goes through');assert.equal(store.getSession().practice,null);
+});
+test('the session stream releases its 15 s ping when the client disconnects, by cancel or by abort',async()=>{
+ const streamRoute=require(path.join(root,'src/app/api/session/stream/route.ts'));
+ const realSet=globalThis.setInterval,realClear=globalThis.clearInterval,live=new Set();
+ globalThis.setInterval=(fn,ms,...a)=>{const h=realSet(fn,ms,...a);if(ms===15000)live.add(h);return h;};
+ globalThis.clearInterval=(h)=>{live.delete(h);return realClear(h);};
+ try{
+  const reader=(await streamRoute.GET()).body.getReader();await reader.read();
+  assert.equal(live.size,1,'the stream starts one keep-alive ping');
+  await reader.cancel();
+  assert.equal(live.size,0,'a cancelled reader leaves no ping running');
+  const aborted=new AbortController();
+  const r2=(await streamRoute.GET(new Request('http://desk/api/session/stream',{signal:aborted.signal}))).body.getReader();await r2.read();
+  assert.equal(live.size,1);
+  aborted.abort();
+  assert.equal(live.size,0,'an aborted request leaves no ping running');
+ }finally{for(const h of live)realClear(h);globalThis.setInterval=realSet;globalThis.clearInterval=realClear;}
+});
 test('marking grades on the server from the question alone, and the marked set carries no answer either',async()=>{
  store.dispatch({type:'reset'});store.dispatch({type:'practice.set',practice:sheet});
  looked=reply({items:marks});
