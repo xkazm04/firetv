@@ -411,7 +411,7 @@ voice: a candid first-person review in the Character's voice and background (at 
     try { record = await journey(jid); }
     catch (e) { record = { id: jid, title: J[jid].sim.title, setup: [], steps: [], facts: {}, endedBy: 'setup-failed', error: String(e.message).slice(0, 400), ms: 0 }; say(`${jid} setup failed: ${e.message.slice(0, 160)}`); }
     try {
-      const r = await role('judge', { effort: process.env.UAT_JUDGE_EFFORT || 'high', timeoutMs: 600000, system: judgeSystem, prompt: JSON.stringify({ character: { file: character.text, sim: C }, journey: J[jid].text, rubric, endedBy: record.endedBy, setup: record.setup, facts: record.facts, steps: record.steps.map(({ n, screen, shown, action, args, thought, result, message }) => ({ n, screen, shown: shown.slice(0, 900), action, args, thought, result, message })) }), schema: judgeSchema });
+      const r = await role('judge', { effort: process.env.UAT_JUDGE_EFFORT || 'high', timeoutMs: 600000, system: judgeSystem, prompt: JSON.stringify({ character: { file: character.text, sim: C }, journey: J[jid].text, rubric, endedBy: record.endedBy, setup: record.setup, facts: record.facts, steps: record.steps.map(({ n, screen, shown, action, args, thought, result, message }) => ({ n, screen, shown: shown.slice(0, 3000), action, args, thought, result, message })) }), schema: judgeSchema });
       record.judge = r.json;
       say(`${jid} judged: ${r.json.verdict} · ${r.json.criteria.filter(c => c.result === 'pass').length}/${r.json.criteria.filter(c => c.result !== 'n-a').length} criteria`);
     } catch (e) { record.judgeError = String(e.message).slice(0, 300); say(`${jid} judge failed: ${e.message.slice(0, 120)}`); }

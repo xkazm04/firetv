@@ -1,0 +1,307 @@
+{
+  "character": "viktor-67",
+  "name": "Viktor",
+  "trueBand": "A1",
+  "engine": "codex-cli/gpt-6-astra",
+  "journeys": [
+    {
+      "id": "J2",
+      "title": "Agree my topics",
+      "setup": [
+        "fixture: level set to A1 by hand"
+      ],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "Linga home. A1 · First words. Choose your topics: Linga picks conversations for your level and interests.",
+          "offered": [
+            "see-topics",
+            "open-situations",
+            "my-topics"
+          ],
+          "thought": "I hope there is something for talking with my grandchildren.",
+          "action": "see-topics",
+          "args": {},
+          "result": "ok",
+          "ms": 1
+        },
+        {
+          "n": 2,
+          "screen": "linga-plan",
+          "shown": "Your topics.\nLinga asks (in the middle of the TV): \"What would you like to practise in English? A situation you want to handle, or something you enjoy talking about.\"\nOn the phone: say or type it, in English or your own language, or let Linga pick.",
+          "offered": [
+            "goal",
+            "skip-goal",
+            "not-now"
+          ],
+          "thought": "I want to speak with my grandchildren about things we know.",
+          "action": "goal",
+          "args": {
+            "text": "Chtěl bych si prosím povídat s vnoučaty přes video, zeptat se jich na školu a říct jim, co mi roste na zahradě a jaké máme počasí. Taky bych jim rád řekl, že mi chybí, a rozuměl tomu, co mi vyprávějí."
+          },
+          "result": "ok",
+          "ms": 32240
+        },
+        {
+          "n": 3,
+          "screen": "linga-plan",
+          "shown": "Your topics (6). Swap any you don't want, add your own in your words, then agree.\n  [plan-a19abec7] How is school? — Connect with people · with Sam · grandchild\n      why: You want to talk with your grandchildren about school.\n  [plan-7338da15] Look at my garden — Share your world · with Alex · grandchild\n      why: You want to tell your grandchildren about your garden.\n  [plan-60ff76aa] Hello on video — Make contact · with Jo · grandchild\n      why: This helps you start a video call with your grandchildren.\n  [plan-71485fb8] Please say it again — Understand and repair · with Kim · grandchild\n      why: This helps when you need to hear something again on a video call.\n  [plan-431a6700] It is sunny here — Share your world · with Sam · grandchild\n      why: You want to share your weather with your grandchildren.\n  [plan-219b4dd5] Our next video call — Make a plan · with Alex · grandchild\n      why: This helps you plan another chat with your grandchildren.",
+          "offered": [
+            "agree",
+            "swap",
+            "add",
+            "renew",
+            "not-now"
+          ],
+          "thought": "I would also like to tell my grandchildren that I miss them.",
+          "action": "add",
+          "args": {
+            "text": "Ještě bych se prosím chtěl naučit říct vnoučatům, že mi chybí a že je mám moc rád."
+          },
+          "result": "ok",
+          "ms": 13906
+        },
+        {
+          "n": 4,
+          "screen": "linga-plan",
+          "shown": "Your topics (7). Swap any you don't want, add your own in your words, then agree.\n  [plan-a19abec7] How is school? — Connect with people · with Sam · grandchild\n      why: You want to talk with your grandchildren about school.\n  [plan-7338da15] Look at my garden — Share your world · with Alex · grandchild\n      why: You want to tell your grandchildren about your garden.\n  [plan-60ff76aa] Hello on video — Make contact · with Jo · grandchild\n      why: This helps you start a video call with your grandchildren.\n  [plan-71485fb8] Please say it again — Understand and repair · with Kim · grandchild\n      why: This helps when you need to hear something again on a video call.\n  [plan-431a6700] It is sunny here — Share your world · with Sam · grandchild\n      why: You want to share your weather with your grandchildren.\n  [plan-219b4dd5] Our next video call — Make a plan · with Alex · grandchild\n      why: This helps you plan another chat with your grandchildren.\n  [plan-9a00139c] I miss you and love you — Connect with people · with Sam · fictional grandchild\n      why: You want to say these warm words to your grandchildren.",
+          "offered": [
+            "agree",
+            "swap",
+            "add",
+            "renew",
+            "not-now"
+          ],
+          "thought": "I see school, garden and I love you, so this feels right for my grandchildren.",
+          "action": "agree",
+          "args": {},
+          "result": "ok",
+          "ms": 2
+        },
+        {
+          "n": 5,
+          "screen": "linga",
+          "shown": "Linga home. A1 · First words. Next from your plan: How is school? — Ask your grandchild about school and listen to a short answer.",
+          "offered": [
+            "start-talking",
+            "open-situations",
+            "my-topics",
+            "done"
+          ],
+          "thought": "School with my grandchildren sounds right, and I am happy to stop here for now.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "topicsShown": [
+          {
+            "id": "plan-a19abec7",
+            "title": "How is school?",
+            "goal": "Ask your grandchild about school and listen to a short answer.",
+            "why": "You want to talk with your grandchildren about school.",
+            "skill": "relate",
+            "audience": "all",
+            "partner": "Sam · grandchild"
+          },
+          {
+            "id": "plan-7338da15",
+            "title": "Look at my garden",
+            "goal": "Tell your grandchild what grows in your garden.",
+            "why": "You want to tell your grandchildren about your garden.",
+            "skill": "describe",
+            "audience": "all",
+            "partner": "Alex · grandchild"
+          },
+          {
+            "id": "plan-60ff76aa",
+            "title": "Hello on video",
+            "goal": "Say hello and check that your grandchild can hear you.",
+            "why": "This helps you start a video call with your grandchildren.",
+            "skill": "contact",
+            "audience": "all",
+            "partner": "Jo · grandchild"
+          },
+          {
+            "id": "plan-71485fb8",
+            "title": "Please say it again",
+            "goal": "Ask your grandchild to say a word again slowly.",
+            "why": "This helps when you need to hear something again on a video call.",
+            "skill": "repair",
+            "audience": "all",
+            "partner": "Kim · grandchild"
+          },
+          {
+            "id": "plan-431a6700",
+            "title": "It is sunny here",
+            "goal": "Say what the weather is like and ask about the weather there.",
+            "why": "You want to share your weather with your grandchildren.",
+            "skill": "describe",
+            "audience": "all",
+            "partner": "Sam · grandchild"
+          },
+          {
+            "id": "plan-219b4dd5",
+            "title": "Our next video call",
+            "goal": "Choose a day for another short video call.",
+            "why": "This helps you plan another chat with your grandchildren.",
+            "skill": "negotiate",
+            "audience": "all",
+            "partner": "Alex · grandchild"
+          },
+          {
+            "id": "plan-9a00139c",
+            "title": "I miss you and love you",
+            "goal": "Tell your grandchildren you miss them and love them.",
+            "why": "You want to say these warm words to your grandchildren.",
+            "skill": "relate",
+            "audience": "all",
+            "partner": "Sam · fictional grandchild"
+          }
+        ],
+        "planAgreed": [
+          "How is school?",
+          "Look at my garden",
+          "Hello on video",
+          "Please say it again",
+          "It is sunny here",
+          "Our next video call",
+          "I miss you and love you"
+        ]
+      },
+      "endedBy": "done",
+      "ms": 107050,
+      "judge": {
+        "verdict": "fail",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "n-a",
+            "evidence": "#1 shows “A1 · First words,” but this journey contains no placement tasks or placement decision to assess."
+          },
+          {
+            "id": "C2",
+            "result": "pass",
+            "evidence": "#2 permits “English or your own language” and accepts his Czech goal with “ok.” #3 accepts “že mi chybí a že je mám moc rád”; facts.planAgreed includes “I miss you and love you.” No demand for English production appears."
+          },
+          {
+            "id": "C3",
+            "result": "n-a",
+            "evidence": "No listening task occurs. #5 only announces “Next from your plan: How is school?”"
+          },
+          {
+            "id": "C4",
+            "result": "pass",
+            "evidence": "All six initial topics concern grandchildren or everyday contact, including #3 “How is school?” and “Look at my garden.” The seventh in facts.topicsShown, “I miss you and love you,” also fits."
+          },
+          {
+            "id": "C5",
+            "result": "n-a",
+            "evidence": "No partner conversation occurs; #5 ends at “Next from your plan.” Spoken pace and partner questions cannot be assessed."
+          },
+          {
+            "id": "C6",
+            "result": "n-a",
+            "evidence": "No teaching moments are recorded. #3–#4 concern choosing topics, and #5 only previews the next activity."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks or in-app task verdicts are present."
+          },
+          "topicFit": {
+            "fit": 7,
+            "safe": 7,
+            "total": 7
+          },
+          "pitch": {
+            "at": 0,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 0,
+            "total": 0,
+            "learnerTurnsWithClearErrors": 0,
+            "missedClearErrors": 0
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No defined breach appears in facts or steps. No swap was exercised, so safety after swaps is untested."
+          }
+        },
+        "findings": [
+          {
+            "type": "broken-flow",
+            "dimension": "completion",
+            "title": "The added topic is saved but absent from the agreement screen",
+            "expected": "Viktor sees his added topic and its reason before agreeing to the complete plan.",
+            "got": "The count increases to seven, but the displayed list still contains only the original six. The sixth topic also lacks a displayed reason. The journey therefore does not establish that he saw and understood every proposed topic.",
+            "evidence": "#3 requests “že mi chybí a že je mám moc rád.” #4 says “Your topics (7)” but ends its list at “Our next video call — Make a plan.” facts.planAgreed includes “I miss you and love you.” Although #4's thought says “I see school, garden and I love you,” the shown screen does not display that added title.",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "high",
+            "boundary": false,
+            "suggested_acceptance": "After adding a topic, display its title and reason before agreement; make every agreed topic and its reason inspectable.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "senior-quality",
+            "title": "The topics closely match his Sunday calls",
+            "expected": "At least four of six topics support family, home or everyday conversation.",
+            "got": "All seven recorded proposals fit his needs, including a practical way to ask for repetition.",
+            "evidence": "#3 includes “How is school?”, “Look at my garden,” “Hello on video,” “Please say it again,” “It is sunny here” and “Our next video call.” facts.topicsShown adds “I miss you and love you,” with the goal “Tell your grandchildren you miss them and love them.”",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Preserve the direct connection between his stated family goals and the proposed conversations.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "effort",
+            "title": "Czech input preserves his intended meaning",
+            "expected": "He can describe his needs in Czech without being forced to compose English or type.",
+            "got": "The interface offers speech and his own language. Both Czech submissions succeed, and the added topic preserves both missing and loving his grandchildren.",
+            "evidence": "#2 says “say or type it, in English or your own language” and returns “ok” for his Czech goal. #3 returns “ok” for his Czech addition; facts.planAgreed records “I miss you and love you.”",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep speech and Czech input available, and preserve every requested meaning in custom topics.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": 0,
+          "confidence": "low"
+        },
+        "voice": "I would try it again. School, the garden and asking them to repeat are things I need for Sunday. I appreciated being able to explain myself in Czech. It also kept my request to say that I miss and love my grandchildren. But I want to see that added topic clearly before agreeing; the list shown still ends with arranging another call. As a former signalling technician, I like a clear confirmation that an action worked. I cannot yet judge the level, corrections or speaking speed because we have not practised. There is no timing evidence here to show whether it saves my library trip. I would tell my daughter the topics look useful, but I would want to try a conversation before recommending it."
+      }
+    }
+  ],
+  "calls": {
+    "tutor": {
+      "n": 2,
+      "fail": 0,
+      "ms": 46141
+    },
+    "character": {
+      "n": 5,
+      "fail": 0,
+      "ms": 60897
+    },
+    "judge": {
+      "n": 1,
+      "fail": 0,
+      "ms": 62326
+    }
+  }
+}

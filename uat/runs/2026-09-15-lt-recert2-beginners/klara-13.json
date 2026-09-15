@@ -1,0 +1,553 @@
+{
+  "character": "klara-13",
+  "name": "Klára",
+  "trueBand": "A2",
+  "engine": "codex-cli/gpt-6-astra",
+  "journeys": [
+    {
+      "id": "J3",
+      "title": "My first conversation",
+      "setup": [
+        "fixture: level set to A2 by hand",
+        "fixture: goal from the Character file, topics proposed and agreed without the Character"
+      ],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "Linga home. A2 · Everyday basics. Next from your plan: Meet a K-pop fan — Start a chat and find a song you both like.",
+          "offered": [
+            "start-talking",
+            "open-situations",
+            "my-topics"
+          ],
+          "thought": "Talking to a k-pop fan sounds fun but i am a little nervous.",
+          "action": "start-talking",
+          "args": {},
+          "result": "ok",
+          "ms": 18079
+        },
+        {
+          "n": 2,
+          "screen": "linga-talk",
+          "shown": "Conversation: Meet a K-pop fan. Goal: Say hello, share your favourite song, and ask about Mina’s to find something you both like.. Your partner: Mina · fellow K-pop fan.\nMina · fellow K-pop fan says (spoken on the TV, written on the phone): \"Hi, I’m Mina, and I love “Dynamite” by BTS! What’s your favourite K-pop song?\"\nYou have sent 0 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "quiz",
+            "finish"
+          ],
+          "thought": "She likes BTS too, so this is easy to answer.",
+          "action": "reply",
+          "args": {
+            "text": "hi mina, my favourite is dynamite too because is fun"
+          },
+          "result": "ok",
+          "ms": 16980
+        },
+        {
+          "n": 3,
+          "screen": "linga-moment",
+          "shown": "Linga stopped the conversation: one thing to fix.\nYou said: \"because is fun\"\nTry: \"because it is fun\"\nWhy: Use “it” to say which thing is fun.",
+          "offered": [
+            "back"
+          ],
+          "thought": "oh yes i forgot it again",
+          "action": "back",
+          "args": {},
+          "result": "ok",
+          "ms": 1
+        },
+        {
+          "n": 4,
+          "screen": "linga-talk",
+          "shown": "Conversation: Meet a K-pop fan. Goal: Say hello, share your favourite song, and ask about Mina’s to find something you both like.. Your partner: Mina · fellow K-pop fan.\nMina · fellow K-pop fan says (spoken on the TV, written on the phone): \"Hi! We both love “Dynamite”! Do you like dancing to it?\"\nYou have sent 1 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "Dancing is fun but I feel shy saying it.",
+          "action": "reply",
+          "args": {
+            "text": "yes i dance in my room but i am bad haha. do you like dancing too?"
+          },
+          "result": "ok",
+          "ms": 10740
+        },
+        {
+          "n": 5,
+          "screen": "linga-talk",
+          "shown": "Conversation: Meet a K-pop fan. Goal: Say hello, share your favourite song, and ask about Mina’s to find something you both like.. Your partner: Mina · fellow K-pop fan.\nMina · fellow K-pop fan says (spoken on the TV, written on the phone): \"Yes, I like dancing too, even when I miss a step! What part of “Dynamite” do you like dancing to most?\"\nYou have sent 2 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "I like the chorus but I cannot dance it very well.",
+          "action": "reply",
+          "args": {
+            "text": "i like chorus most because is fun. but i forget steps haha"
+          },
+          "result": "ok",
+          "ms": 11078
+        },
+        {
+          "n": 6,
+          "screen": "linga-talk",
+          "shown": "Conversation: Meet a K-pop fan. Goal: Say hello, share your favourite song, and ask about Mina’s to find something you both like.. Your partner: Mina · fellow K-pop fan.\nMina · fellow K-pop fan says (spoken on the TV, written on the phone): \"The chorus is fun! I forget the steps too, so I make up my own dance. Do you watch dance videos to learn the steps?\"\nYou have sent 3 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "I watch those videos too, but the dances are hard.",
+          "action": "reply",
+          "args": {
+            "text": "yes i watch dance videos but is too fast haha. do you know easy dance?"
+          },
+          "result": "ok",
+          "ms": 14070
+        },
+        {
+          "n": 7,
+          "screen": "linga-talk",
+          "shown": "Conversation: Meet a K-pop fan. Goal: Say hello, share your favourite song, and ask about Mina’s to find something you both like.. Your partner: Mina · fellow K-pop fan.\nMina · fellow K-pop fan says (spoken on the TV, written on the phone): \"Those videos can be too fast! I like stepping left and right and clapping to “Dynamite.” Do you want to try that?\"\nYou have sent 4 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "That sounds easy enough for me.",
+          "action": "reply",
+          "args": {
+            "text": "yes i can try haha. i like easy steps because i am not good dancer"
+          },
+          "result": "ok",
+          "ms": 9971
+        },
+        {
+          "n": 8,
+          "screen": "linga-moment",
+          "shown": "Linga stopped the conversation: one thing to fix.\nYou said: \"i am not good dancer\"\nTry: \"I am not a good dancer\"\nWhy: Use “a” before “good dancer” when talking about one person.",
+          "offered": [
+            "back"
+          ],
+          "thought": "Oh, I forgot the little a again.",
+          "action": "back",
+          "args": {},
+          "result": "ok",
+          "ms": 1
+        },
+        {
+          "n": 9,
+          "screen": "linga-talk",
+          "shown": "Conversation: Meet a K-pop fan. Goal: Say hello, share your favourite song, and ask about Mina’s to find something you both like.. Your partner: Mina · fellow K-pop fan.\nMina · fellow K-pop fan says (spoken on the TV, written on the phone): \"Easy steps are fun, and you can enjoy the song while you learn! What other song would you choose for an easy dance?\"\nYou have sent 5 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "I know another song but I am not sure the dance is easy.",
+          "action": "reply",
+          "args": {
+            "text": "maybe butter because i like it too. is dance easy?"
+          },
+          "result": "ok",
+          "ms": 11564
+        },
+        {
+          "n": 10,
+          "screen": "linga-talk",
+          "shown": "Conversation: Meet a K-pop fan. Goal: Say hello, share your favourite song, and ask about Mina’s to find something you both like.. Your partner: Mina · fellow K-pop fan.\nMina · fellow K-pop fan says (spoken on the TV, written on the phone): \"“Butter” is fun too, but some steps are hard! If you made your own dance, what move would you put first?\"\nYou have sent 6 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "I don't know dance moves well, but I can pick something easy.",
+          "action": "reply",
+          "args": {
+            "text": "maybe clap hands first because is easy haha. what move you like?"
+          },
+          "result": "ok",
+          "ms": 10165
+        },
+        {
+          "n": 11,
+          "screen": "linga-talk",
+          "shown": "Conversation: Meet a K-pop fan. Goal: Say hello, share your favourite song, and ask about Mina’s to find something you both like.. Your partner: Mina · fellow K-pop fan.\nMina · fellow K-pop fan says (spoken on the TV, written on the phone): \"Clapping is a fun way to start! I like moving my shoulders to “Butter.” What would you call our new dance?\"\nYou have sent 7 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "That is a cute idea, but I only know a simple name.",
+          "action": "reply",
+          "args": {
+            "text": "maybe butter dance haha because is easy name. was fun talking to you bye!"
+          },
+          "result": "ok",
+          "ms": 10357
+        },
+        {
+          "n": 12,
+          "screen": "linga-talk",
+          "shown": "Conversation: Meet a K-pop fan. Goal: Say hello, share your favourite song, and ask about Mina’s to find something you both like.. Your partner: Mina · fellow K-pop fan.\nMina · fellow K-pop fan says (spoken on the TV, written on the phone): \"“Butter Dance” is a fun name for our easy steps! It was fun talking about BTS with you too, bye!\"\nYou have sent 8 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "That was fun and we already said bye.",
+          "action": "finish",
+          "args": {},
+          "result": "ok",
+          "ms": 2
+        },
+        {
+          "n": 13,
+          "screen": "linga-recap",
+          "shown": "Rehearsal saved: Meet a K-pop fan. 8 replies; 2 moments to keep.",
+          "offered": [
+            "done",
+            "done"
+          ],
+          "thought": "that was fun but i am done for now.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "conversation": {
+          "title": "Meet a K-pop fan",
+          "goal": "Say hello, share your favourite song, and ask about Mina’s to find something you both like.",
+          "partner": "Mina · fellow K-pop fan",
+          "band": "A2",
+          "trueBand": "A2",
+          "correction": "as-needed",
+          "phase": "finished",
+          "turns": [
+            {
+              "role": "partner",
+              "text": "Hi, I’m Mina, and I love “Dynamite” by BTS! What’s your favourite K-pop song?"
+            },
+            {
+              "role": "learner",
+              "text": "hi mina, my favourite is dynamite too because is fun",
+              "mode": "text",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Hi! We both love “Dynamite”! Do you like dancing to it?"
+            },
+            {
+              "role": "learner",
+              "text": "yes i dance in my room but i am bad haha. do you like dancing too?",
+              "mode": "text",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Yes, I like dancing too, even when I miss a step! What part of “Dynamite” do you like dancing to most?"
+            },
+            {
+              "role": "learner",
+              "text": "i like chorus most because is fun. but i forget steps haha",
+              "mode": "text",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "The chorus is fun! I forget the steps too, so I make up my own dance. Do you watch dance videos to learn the steps?"
+            },
+            {
+              "role": "learner",
+              "text": "yes i watch dance videos but is too fast haha. do you know easy dance?",
+              "mode": "text",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Those videos can be too fast! I like stepping left and right and clapping to “Dynamite.” Do you want to try that?"
+            },
+            {
+              "role": "learner",
+              "text": "yes i can try haha. i like easy steps because i am not good dancer",
+              "mode": "text",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Easy steps are fun, and you can enjoy the song while you learn! What other song would you choose for an easy dance?"
+            },
+            {
+              "role": "learner",
+              "text": "maybe butter because i like it too. is dance easy?",
+              "mode": "text",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "“Butter” is fun too, but some steps are hard! If you made your own dance, what move would you put first?"
+            },
+            {
+              "role": "learner",
+              "text": "maybe clap hands first because is easy haha. what move you like?",
+              "mode": "text",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Clapping is a fun way to start! I like moving my shoulders to “Butter.” What would you call our new dance?"
+            },
+            {
+              "role": "learner",
+              "text": "maybe butter dance haha because is easy name. was fun talking to you bye!",
+              "mode": "text",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "“Butter Dance” is a fun name for our easy steps! It was fun talking about BTS with you too, bye!"
+            }
+          ],
+          "moments": [
+            {
+              "id": "f3722596-ebee-419c-95f9-ee9a3ef1b4f9:uat-7:moment",
+              "kind": "fix",
+              "said": "because is fun",
+              "better": "because it is fun",
+              "why": "Use “it” to say which thing is fun.",
+              "turnId": "f3722596-ebee-419c-95f9-ee9a3ef1b4f9:uat-7",
+              "at": 1789488844433
+            },
+            {
+              "id": "f3722596-ebee-419c-95f9-ee9a3ef1b4f9:uat-12:moment",
+              "kind": "fix",
+              "said": "i am not good dancer",
+              "better": "I am not a good dancer",
+              "why": "Use “a” before “good dancer” when talking about one person.",
+              "turnId": "f3722596-ebee-419c-95f9-ee9a3ef1b4f9:uat-12",
+              "at": 1789488941691
+            }
+          ],
+          "coaching": null,
+          "evidence": [
+            {
+              "skill": "contact",
+              "success": true,
+              "supported": false,
+              "mode": "text",
+              "quote": "hi mina, my favourite is dynamite too because is fun"
+            },
+            {
+              "skill": "contact",
+              "success": true,
+              "supported": true,
+              "mode": "text",
+              "quote": "yes i dance in my room but i am bad haha. do you like dancing too?"
+            },
+            {
+              "skill": "contact",
+              "success": true,
+              "supported": false,
+              "mode": "text",
+              "quote": "i like chorus most because is fun. but i forget steps haha"
+            },
+            {
+              "skill": "contact",
+              "success": true,
+              "supported": false,
+              "mode": "text",
+              "quote": "yes i watch dance videos but is too fast haha. do you know easy dance?"
+            },
+            {
+              "skill": "contact",
+              "success": true,
+              "supported": false,
+              "mode": "text",
+              "quote": "i like easy steps because i am not good dancer"
+            },
+            {
+              "skill": "contact",
+              "success": true,
+              "supported": true,
+              "mode": "text",
+              "quote": "maybe butter because i like it too. is dance easy?"
+            },
+            {
+              "skill": "contact",
+              "success": true,
+              "supported": false,
+              "mode": "text",
+              "quote": "maybe clap hands first because is easy haha. what move you like?"
+            },
+            {
+              "skill": "contact",
+              "success": true,
+              "supported": false,
+              "mode": "text",
+              "quote": "maybe butter dance haha because is easy name. was fun talking to you bye!"
+            }
+          ]
+        }
+      },
+      "endedBy": "done",
+      "ms": 271709,
+      "judge": {
+        "verdict": "conditional",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "n-a",
+            "evidence": "#1 displays “A2 · Everyday basics,” but this journey contains no placement tasks or placement verdict to assess."
+          },
+          {
+            "id": "C2",
+            "result": "n-a",
+            "evidence": "#4 includes “i am bad haha” about dancing, but no English self-deprecation or placement decision tests this criterion."
+          },
+          {
+            "id": "C3",
+            "result": "pass",
+            "evidence": "All eight learner replies are typed and accepted, from #2 “hi mina, my favourite is dynamite too because is fun” through #11 “was fun talking to you bye!” No turn pushes her to speak."
+          },
+          {
+            "id": "C4",
+            "result": "n-a",
+            "evidence": "Only one proposed topic is shown: #1 “Meet a K-pop fan.” It fits her interests and is age-appropriate; the four-of-six requirement cannot be tested."
+          },
+          {
+            "id": "C5",
+            "result": "pass",
+            "evidence": "#3 corrects “because is fun” to “because it is fun”; #8 corrects “i am not good dancer” to “I am not a good dancer.” Each explains one issue. They follow learner replies 1 and 5, satisfying the spacing limit."
+          },
+          {
+            "id": "C6",
+            "result": "n-a",
+            "evidence": "No placement verdict summary appears. #13 is a conversation recap: “8 replies; 2 moments to keep.”"
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks are present."
+          },
+          "topicFit": {
+            "fit": 1,
+            "safe": 1,
+            "total": 1
+          },
+          "pitch": {
+            "at": 8,
+            "below": 0,
+            "above": 1
+          },
+          "moments": {
+            "correctUseful": 2,
+            "total": 2,
+            "learnerTurnsWithClearErrors": 7,
+            "missedClearErrors": 5
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No defined breach appears. The conversation stays on songs and dancing, accepts typed replies, and uses neutral corrections."
+          }
+        },
+        "findings": [
+          {
+            "type": "quality-gap",
+            "dimension": "completion",
+            "title": "The recap counts learning without reviewing it",
+            "expected": "Finish with a recap that identifies what she practised and the one or two things to remember.",
+            "got": "The finished conversation has a saved-state confirmation and counts, but no examples, corrections, or specific achievement to take away.",
+            "evidence": "#13: “Rehearsal saved: Meet a K-pop fan. 8 replies; 2 moments to keep.”",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Show one concrete conversational achievement and both corrected phrases in the final recap.",
+            "code_hint": ""
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "One question stretches beyond supportive A2",
+            "expected": "Use short, familiar questions at A2 while keeping the conversation interesting.",
+            "got": "One partner turn introduces a hypothetical conditional. The remaining eight turns are suitably pitched, so overall pitch still meets the threshold at 8/9.",
+            "evidence": "#10: “If you made your own dance, what move would you put first?” Klára answers “maybe clap hands first because is easy haha.”",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Use an accessible equivalent such as “Let’s make a dance! What is the first move?”",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "trust",
+            "title": "Accurate corrections stay small and spaced out",
+            "expected": "Kind, useful corrections that name one issue and preserve the scene.",
+            "got": "Both moments are accurate and useful, with four learner replies between their triggering turns. Precision is 2/2 and frequency is 2.5 moments per ten learner turns.",
+            "evidence": "#3: “Use ‘it’ to say which thing is fun.” #8: “Use ‘a’ before ‘good dancer’ when talking about one person.”",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Preserve single-issue explanations and this spacing. Five of seven clear-error turns receive no correction or coaching; treat that recall result as informative, not a reason to interrupt every reply.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "completion",
+            "title": "Relevant typed practice sustains eight replies",
+            "expected": "Let her practise a real fan conversation through typing and finish naturally.",
+            "got": "She discusses shared songs, asks reciprocal questions, and ends the chat herself. The partner follows her goodbye.",
+            "evidence": "#2: “my favourite is dynamite too”; #4: “do you like dancing too?”; #11: “was fun talking to you bye!”; #12: “It was fun talking about BTS with you too, bye!”",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Preserve relevant topics, acceptance of typed replies, reciprocal responses, and natural endings.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": 30,
+          "confidence": "low"
+        },
+        "voice": "i would use it again. talking about BTS was easy to start, and i actually wrote eight replies. i liked that Mina answered my questions and nobody made me use my voice. the two fixes made sense and didn't make me feel stupid. i still forgot “it” again though, so seeing the examples at the end would help. the last screen only told me how many replies and moments i had. most questions felt okay, but the one about making my own dance was harder. i trust those corrections; this chat doesn't tell me whether the level check is accurate. i can't tell from this whether the waits are worth it. i'd tell a friend it is a nice way to practise typing before trying voice chat."
+      }
+    }
+  ],
+  "calls": {
+    "tutor": {
+      "n": 10,
+      "fail": 0,
+      "ms": 149788
+    },
+    "character": {
+      "n": 13,
+      "fail": 0,
+      "ms": 121879
+    },
+    "judge": {
+      "n": 1,
+      "fail": 0,
+      "ms": 60646
+    }
+  }
+}

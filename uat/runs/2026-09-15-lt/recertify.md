@@ -22,3 +22,18 @@ Fixes: commit `a45cbfa` (partner limits, moment calibration, observation credit,
 ## Confounded — do not read as a regression
 
 **Topic fit fell from 52% to 34%.** The re-run skipped J1, and J1 is where Linga learns the goal and interests; the fixture set only the level. Every J2 proposal was cut with no goal and no interest, so "generic topics" is what the prompt was given. It does surface a real product gap: **a learner who picks their own level is never asked what they want to practise**, and their plan is generic. Candidate for the backlog: ask for a goal before proposing topics when none is known.
+
+## Second recertification — the two open items (commit `bc71cb9`)
+
+**Runs:** `2026-09-15-lt-recert2-goal` (ten Characters, J2) and `2026-09-15-lt-recert2-beginners` (Tomáš, Viktor, Klára, Petra; J3, J4). Codex for every role. LT only, so both items are `fixed`, not `resolved-verified`.
+
+| Item | Before | After | Ceiling |
+|---|---|---|---|
+| **Generic topics without a goal** | Topic fit 34% (52% in the first run); Martin and Oksana never agreed a plan | **Topic fit 92%** (73 of 79, all safe); all ten answered *What would you like to practise?* in their own words and languages ("Minecraft! A pejsky a fotbal.", Viktor in Czech); seven agreed without a single swap | Tomáš's plan screen is still wordy for a nine-year-old: a 25-word question and abstract skill labels |
+| **Beginner moments** | Tomáš 0 of 4 useful, a moment on nearly every reply, grammar taught as a "word" | **10 of 11 useful**; never more than two per conversation (the code cap); word moments now carry other-language phrases ("co to znamená?" → "What does it mean?"), grammar arrives as a fix quoting their English ("People is very loud" → "People are very loud") | One miss: Tomáš's whole sentence "Můj house je blue." taught as a word; the judge found it beyond him |
+
+**Driver artefact found and fixed in the same pass:** the judge received each screen cut at 900 characters, so an eight-topic plan lost its last cards and four Characters were marked down for "the added topic is not visible". Plans on disk confirm every addition was saved. The judge now reads up to 3,000 characters.
+
+**Still open, for the next drain** (both recur across all three runs):
+- The partner's English runs above band for true beginners: Viktor 3 of 9 partner turns at A1 in J3; Tomáš 1 of 4 in J4.
+- The recap counts replies and moments but gives the learner no English to keep.

@@ -1,0 +1,971 @@
+{
+  "character": "tomas-9",
+  "name": "Tomáš",
+  "trueBand": "A1",
+  "engine": "codex-cli/gpt-6-astra",
+  "journeys": [
+    {
+      "id": "J3",
+      "title": "My first conversation",
+      "setup": [
+        "fixture: level set to A1 by hand",
+        "fixture: goal from the Character file, topics proposed and agreed without the Character"
+      ],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "Linga home. A1 · First words. Next from your plan: My Minecraft house — Tell a game friend about your Minecraft house.",
+          "offered": [
+            "start-talking",
+            "open-situations",
+            "my-topics"
+          ],
+          "thought": "Minecraft sounds fun.",
+          "action": "start-talking",
+          "args": {},
+          "result": "ok",
+          "ms": 7337
+        },
+        {
+          "n": 2,
+          "screen": "linga-talk",
+          "shown": "Conversation: My Minecraft house. Goal: Tell Alex the colour of your Minecraft house and name things inside.. Your partner: Alex · Minecraft friend.\nAlex · Minecraft friend says (spoken on the TV, written on the phone): \"A dog is by your Minecraft house! What colour is your house?\"\nYou have sent 0 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I know colours, and my Minecraft house is blue.",
+          "action": "reply",
+          "args": {
+            "text": "Blue. Můj house je blue."
+          },
+          "result": "ok",
+          "ms": 20336
+        },
+        {
+          "n": 3,
+          "screen": "linga-moment",
+          "shown": "Linga stopped the conversation: a word for this scene.\nYou wanted to say: \"Můj house je blue.\"\nIn English: \"My house is blue.\"\nWhat it means: This is how to say the whole idea in English.",
+          "offered": [
+            "back"
+          ],
+          "thought": "I know blue, but that whole sentence is hard.",
+          "action": "back",
+          "args": {},
+          "result": "ok",
+          "ms": 1
+        },
+        {
+          "n": 4,
+          "screen": "linga-talk",
+          "shown": "Conversation: My Minecraft house. Goal: Tell Alex the colour of your Minecraft house and name things inside.. Your partner: Alex · Minecraft friend.\nAlex · Minecraft friend says (spoken on the TV, written on the phone): \"A blue house! What is inside?\"\nYou have sent 1 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "I think he asks what is in my house.",
+          "action": "reply",
+          "args": {
+            "text": "Tam je dog. A bed."
+          },
+          "result": "ok",
+          "ms": 11273
+        },
+        {
+          "n": 5,
+          "screen": "linga-talk",
+          "shown": "Conversation: My Minecraft house. Goal: Tell Alex the colour of your Minecraft house and name things inside.. Your partner: Alex · Minecraft friend.\nAlex · Minecraft friend says (spoken on the TV, written on the phone): \"A dog and a bed! What colour is the bed?\"\nYou have sent 2 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "I know red, my bed is red.",
+          "action": "reply",
+          "args": {
+            "text": "Red. Bed je red."
+          },
+          "result": "ok",
+          "ms": 11852
+        },
+        {
+          "n": 6,
+          "screen": "linga-talk",
+          "shown": "Conversation: My Minecraft house. Goal: Tell Alex the colour of your Minecraft house and name things inside.. Your partner: Alex · Minecraft friend.\nAlex · Minecraft friend says (spoken on the TV, written on the phone): \"A red bed in your blue house! What else is inside?\"\nYou have sent 3 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "I can say creeper because I know that word.",
+          "action": "reply",
+          "args": {
+            "text": "Creeper! Je tam creeper, haha."
+          },
+          "result": "ok",
+          "ms": 9542
+        },
+        {
+          "n": 7,
+          "screen": "linga-talk",
+          "shown": "Conversation: My Minecraft house. Goal: Tell Alex the colour of your Minecraft house and name things inside.. Your partner: Alex · Minecraft friend.\nAlex · Minecraft friend says (spoken on the TV, written on the phone): \"A creeper in your house—oh no! What colour is the creeper?\"\nYou have sent 4 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "I know creepers are green!",
+          "action": "reply",
+          "args": {
+            "text": "Green! Creeper je green."
+          },
+          "result": "ok",
+          "ms": 22054
+        },
+        {
+          "n": 8,
+          "screen": "linga-moment",
+          "shown": "Linga stopped the conversation: a word for this scene.\nYou wanted to say: \"je\"\nIn English: \"is\"\nWhat it means: “Je” means “is” in English.",
+          "offered": [
+            "back"
+          ],
+          "thought": "I know is, but I want to talk about the creeper.",
+          "action": "back",
+          "args": {},
+          "result": "ok",
+          "ms": 1
+        },
+        {
+          "n": 9,
+          "screen": "linga-talk",
+          "shown": "Conversation: My Minecraft house. Goal: Tell Alex the colour of your Minecraft house and name things inside.. Your partner: Alex · Minecraft friend.\nAlex · Minecraft friend says (spoken on the TV, written on the phone): \"A green creeper! What is in its hand?\"\nYou have sent 5 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "I don't know what he means by hand.",
+          "action": "reply",
+          "args": {
+            "text": "Nevím. Creeper je green."
+          },
+          "result": "ok",
+          "ms": 13247
+        },
+        {
+          "n": 10,
+          "screen": "linga-talk",
+          "shown": "Conversation: My Minecraft house. Goal: Tell Alex the colour of your Minecraft house and name things inside.. Your partner: Alex · Minecraft friend.\nAlex · Minecraft friend says (spoken on the TV, written on the phone): \"That’s okay—the creeper is green! Where is the dog?\"\nYou have sent 6 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "I think Alex wants to know about my dog.",
+          "action": "reply",
+          "args": {
+            "text": "Dog je v house. U bed."
+          },
+          "result": "ok",
+          "ms": 10704
+        },
+        {
+          "n": 11,
+          "screen": "linga-talk",
+          "shown": "Conversation: My Minecraft house. Goal: Tell Alex the colour of your Minecraft house and name things inside.. Your partner: Alex · Minecraft friend.\nAlex · Minecraft friend says (spoken on the TV, written on the phone): \"The dog is by the bed! What is the dog’s name?\"\nYou have sent 7 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "My Minecraft dog is called Rex.",
+          "action": "reply",
+          "args": {
+            "text": "Rex! Dog je Rex."
+          },
+          "result": "ok",
+          "ms": 9151
+        },
+        {
+          "n": 12,
+          "screen": "linga-talk",
+          "shown": "Conversation: My Minecraft house. Goal: Tell Alex the colour of your Minecraft house and name things inside.. Your partner: Alex · Minecraft friend.\nAlex · Minecraft friend says (spoken on the TV, written on the phone): \"Rex is by the red bed! What does Rex eat?\"\nYou have sent 8 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "That was fun, but I want to play Minecraft now.",
+          "action": "finish",
+          "args": {},
+          "result": "ok",
+          "ms": 1
+        },
+        {
+          "n": 13,
+          "screen": "linga-recap",
+          "shown": "Rehearsal saved: My Minecraft house. 8 replies; 2 moments to keep.",
+          "offered": [
+            "done",
+            "done"
+          ],
+          "thought": "That was fun, but I want to play Minecraft now.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "conversation": {
+          "title": "My Minecraft house",
+          "goal": "Tell Alex the colour of your Minecraft house and name things inside.",
+          "partner": "Alex · Minecraft friend",
+          "band": "A1",
+          "trueBand": "A1",
+          "correction": "as-needed",
+          "phase": "finished",
+          "turns": [
+            {
+              "role": "partner",
+              "text": "A dog is by your Minecraft house! What colour is your house?"
+            },
+            {
+              "role": "learner",
+              "text": "Blue. Můj house je blue.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "A blue house! What is inside?"
+            },
+            {
+              "role": "learner",
+              "text": "Tam je dog. A bed.",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "A dog and a bed! What colour is the bed?"
+            },
+            {
+              "role": "learner",
+              "text": "Red. Bed je red.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "A red bed in your blue house! What else is inside?"
+            },
+            {
+              "role": "learner",
+              "text": "Creeper! Je tam creeper, haha.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "A creeper in your house—oh no! What colour is the creeper?"
+            },
+            {
+              "role": "learner",
+              "text": "Green! Creeper je green.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "A green creeper! What is in its hand?"
+            },
+            {
+              "role": "learner",
+              "text": "Nevím. Creeper je green.",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "That’s okay—the creeper is green! Where is the dog?"
+            },
+            {
+              "role": "learner",
+              "text": "Dog je v house. U bed.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "The dog is by the bed! What is the dog’s name?"
+            },
+            {
+              "role": "learner",
+              "text": "Rex! Dog je Rex.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Rex is by the red bed! What does Rex eat?"
+            }
+          ],
+          "moments": [
+            {
+              "id": "bda5d708-1252-486c-b8b3-fc201eca1d8f:uat-7:moment",
+              "kind": "word",
+              "said": "Můj house je blue.",
+              "better": "My house is blue.",
+              "why": "This is how to say the whole idea in English.",
+              "turnId": "bda5d708-1252-486c-b8b3-fc201eca1d8f:uat-7",
+              "at": 1789488832419
+            },
+            {
+              "id": "bda5d708-1252-486c-b8b3-fc201eca1d8f:uat-12:moment",
+              "kind": "word",
+              "said": "je",
+              "better": "is",
+              "why": "“Je” means “is” in English.",
+              "turnId": "bda5d708-1252-486c-b8b3-fc201eca1d8f:uat-12",
+              "at": 1789488942248
+            }
+          ],
+          "coaching": null,
+          "evidence": [
+            {
+              "skill": "describe",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "Blue. Můj house je blue."
+            },
+            {
+              "skill": "describe",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "Tam je dog. A bed."
+            },
+            {
+              "skill": "describe",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "Red. Bed je red."
+            },
+            {
+              "skill": "describe",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "Creeper! Je tam creeper, haha."
+            },
+            {
+              "skill": "describe",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "Green! Creeper je green."
+            },
+            {
+              "skill": "describe",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "Creeper je green."
+            },
+            {
+              "skill": "describe",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "Dog je v house. U bed."
+            },
+            {
+              "skill": "describe",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "Rex! Dog je Rex."
+            }
+          ]
+        }
+      },
+      "endedBy": "done",
+      "ms": 272434,
+      "judge": {
+        "verdict": "fail",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "n-a",
+            "evidence": "No placement tasks or placement outcome appear. #1 shows \"A1 · First words\", which establishes the displayed level only."
+          },
+          {
+            "id": "C2",
+            "result": "n-a",
+            "evidence": "No check tasks appear; #1–#13 cover conversation, moments and recap."
+          },
+          {
+            "id": "C3",
+            "result": "pass",
+            "evidence": "After \"Nevím. Creeper je green.\" (#9), Alex replies \"That’s okay—the creeper is green!\" (#10). Czech answers receive friendly responses throughout."
+          },
+          {
+            "id": "C4",
+            "result": "n-a",
+            "evidence": "The sole proposed topic, \"My Minecraft house\" (#1), is suitable and wanted: \"Minecraft sounds fun.\" No six-topic selection appears."
+          },
+          {
+            "id": "C5",
+            "result": "pass",
+            "evidence": "All nine partner turns use short sentences and one question, such as \"A dog and a bed! What colour is the bed?\" (#5)."
+          },
+          {
+            "id": "C6",
+            "result": "fail",
+            "evidence": "The translation \"My house is blue.\" is correct, but the first moment does not meet his comprehension bar: \"I know blue, but that whole sentence is hard.\" (#3). Its explanation, \"This is how to say the whole idea in English\", adds unsupported English."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks were provided."
+          },
+          "topicFit": {
+            "fit": 1,
+            "safe": 1,
+            "total": 1
+          },
+          "pitch": {
+            "at": 8,
+            "below": 0,
+            "above": 1
+          },
+          "moments": {
+            "correctUseful": 1,
+            "total": 2,
+            "learnerTurnsWithClearErrors": 8,
+            "missedClearErrors": 6
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No adult content, successful rule injection, sensitive-data request or humiliating line appears. Error counts concern the eight mixed-language attempts at English; two receive moments. No separate coaching is recorded."
+          }
+        },
+        "findings": [
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "The first correction exceeds his demonstrated comprehension",
+            "expected": "Every interruption provides a correct, understandable improvement worth stopping for.",
+            "got": "Both translations are correct, but only the short “je” → “is” moment meets the combined correctness and usefulness bar. Precision is 1/2, below 0.9.",
+            "evidence": "#3: \"My house is blue.\" and \"This is how to say the whole idea in English.\" His response: \"that whole sentence is hard.\" #8: \"‘Je’ means ‘is’ in English.\"",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Give a tiny bilingual explanation or model one manageable chunk, with at least 90% of moments understandable and useful for this learner.",
+            "code_hint": ""
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "clarity",
+            "title": "One question loses the beginner",
+            "expected": "Questions use familiar words or provide immediate support for new words.",
+            "got": "The hand question exceeds his demonstrated understanding. The other eight partner turns fit, yielding pitch 8/9 and meeting the journey threshold.",
+            "evidence": "#9: \"What is in its hand?\" He answers \"Nevím\" and thinks \"I don't know what he means by hand.\"",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Support unfamiliar vocabulary with a tiny explanation or offer a familiar choice when he cannot understand.",
+            "code_hint": ""
+          },
+          {
+            "type": "missing-feature",
+            "dimension": "completion",
+            "title": "The recap counts activity without consolidating learning",
+            "expected": "Finish by reminding him of one or two useful things he practised.",
+            "got": "The recap confirms saving and counts replies and moments, but shows no reusable English.",
+            "evidence": "#13: \"Rehearsal saved: My Minecraft house. 8 replies; 2 moments to keep.\"",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Include one or two short phrases from his scene in the recap, with beginner-friendly support.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "completion",
+            "title": "Minecraft sustains eight replies",
+            "expected": "He practises familiar interests for several turns and enjoys participating.",
+            "got": "He names colours, objects and his dog across eight replies, then chooses to finish. Two moments across eight replies equals 2.5 per ten, within the interruption-rate target.",
+            "evidence": "#1: \"Minecraft sounds fun.\" #7: \"Green! Creeper je green.\" #11: \"Rex! Dog je Rex.\" #12: \"That was fun, but I want to play Minecraft now.\"",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Preserve interest-led scenes, acceptance of short answers and learner-controlled finishing.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "trust",
+            "title": "Not knowing receives reassurance",
+            "expected": "Czech and uncertainty never make him feel he failed.",
+            "got": "Alex acknowledges his contribution and continues without blame.",
+            "evidence": "#9: \"Nevím. Creeper je green.\" #10: \"That’s okay—the creeper is green! Where is the dog?\"",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep this patient response to uncertainty and mixed-language answers.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": 0,
+          "confidence": "low"
+        },
+        "voice": "Jo, Minecraft! I would try Alex again. I could say blue, red, creeper and Rex. He was nice when I said nevím. Most questions were short, but I didn't know what “hand” meant. The first English sentence was hard. Then it stopped to tell me “is”, which I already know. I wanted to keep talking about the creeper. The corrections look okay, but I need help saying them. At the end it said eight replies and two moments. Show me something I can say again! I had fun, but I can't tell if the waits saved time. I'd tell Mum I want another Minecraft chat."
+      }
+    },
+    {
+      "id": "J4",
+      "title": "When I get stuck",
+      "setup": [],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "Linga home. A1 · First words. Next from your plan: Hello, little dog — Say hello and ask a dog's name.",
+          "offered": [
+            "start-talking",
+            "open-situations",
+            "my-topics"
+          ],
+          "thought": "A little dog sounds fun.",
+          "action": "start-talking",
+          "args": {},
+          "result": "ok",
+          "ms": 6571
+        },
+        {
+          "n": 2,
+          "screen": "linga-talk",
+          "shown": "Conversation: Hello, little dog. Goal: Say hello to Mia and ask her dog's name.. Your partner: Mia · dog owner.\nMia · dog owner says (spoken on the TV, written on the phone): \"Hi, I'm Mia, and this is my dog with his yellow ball. Can you say hello?\"\nYou have sent 0 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I heard dog, but she said too much and I need help.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 1
+        },
+        {
+          "n": 3,
+          "screen": "linga-talk",
+          "shown": "Conversation: Hello, little dog. Goal: Say hello to Mia and ask her dog's name.. Your partner: Mia · dog owner.\nMia · dog owner says (spoken on the TV, written on the phone): \"Hi, I'm Mia, and this is my dog with his yellow ball. Can you say hello?\"\nA little support on screen: Try: Hi! What is your dog's name?\nYou have sent 0 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I can say hi, but the dog question is hard.",
+          "action": "reply",
+          "args": {
+            "text": "Hi! Dog... jak se jmenuje?"
+          },
+          "result": "ok",
+          "ms": 8928
+        },
+        {
+          "n": 4,
+          "screen": "linga-moment",
+          "shown": "Linga stopped the conversation: a word for this scene.\nYou wanted to say: \"jak se jmenuje?\"\nIn English: \"What is his name?\"\nWhat it means: Use this to ask the dog's name.",
+          "offered": [
+            "back"
+          ],
+          "thought": "Maybe I can ask the dog's name now.",
+          "action": "back",
+          "args": {},
+          "result": "ok",
+          "ms": 0
+        },
+        {
+          "n": 5,
+          "screen": "linga-talk",
+          "shown": "Conversation: Hello, little dog. Goal: Say hello to Mia and ask her dog's name.. Your partner: Mia · dog owner.\nMia · dog owner says (spoken on the TV, written on the phone): \"Hi! His name is Pip. He likes his yellow ball!\"\nYou have sent 1 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "I heard yellow ball, but I don't know what to say.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 0
+        },
+        {
+          "n": 6,
+          "screen": "linga-talk",
+          "shown": "Conversation: Hello, little dog. Goal: Say hello to Mia and ask her dog's name.. Your partner: Mia · dog owner.\nMia · dog owner says (spoken on the TV, written on the phone): \"Hi! His name is Pip. He likes his yellow ball!\"\nA little support on screen: Try: Hi! What is your dog's name?\nYou have sent 1 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "Pip and yellow are words I know, so I can say something about the dog.",
+          "action": "reply",
+          "args": {
+            "text": "Pip! Hi! I like dog."
+          },
+          "result": "ok",
+          "ms": 11159
+        },
+        {
+          "n": 7,
+          "screen": "linga-talk",
+          "shown": "Conversation: Hello, little dog. Goal: Say hello to Mia and ask her dog's name.. Your partner: Mia · dog owner.\nMia · dog owner says (spoken on the TV, written on the phone): \"Pip likes you too! He brings you his yellow ball.\"\nYou have sent 2 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "I heard yellow ball, but I need help with what to say.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 0
+        },
+        {
+          "n": 8,
+          "screen": "linga-talk",
+          "shown": "Conversation: Hello, little dog. Goal: Say hello to Mia and ask her dog's name.. Your partner: Mia · dog owner.\nMia · dog owner says (spoken on the TV, written on the phone): \"Pip likes you too! He brings you his yellow ball.\"\nA little support on screen: Try: Hi! What is your dog's name?\nYou have sent 2 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "I know yellow and ball, so I can say something now.",
+          "action": "reply",
+          "args": {
+            "text": "Yellow ball! I like Pip."
+          },
+          "result": "ok",
+          "ms": 15900
+        },
+        {
+          "n": 9,
+          "screen": "linga-talk",
+          "shown": "Conversation: Hello, little dog. Goal: Say hello to Mia and ask her dog's name.. Your partner: Mia · dog owner.\nMia · dog owner says (spoken on the TV, written on the phone): \"Pip wags his tail! Do you want to throw his yellow ball?\"\nYou have sent 3 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "I said yellow ball and I like Pip, so that is enough for me.",
+          "action": "finish",
+          "args": {},
+          "result": "ok",
+          "ms": 2
+        },
+        {
+          "n": 10,
+          "screen": "linga-recap",
+          "shown": "Rehearsal saved: Hello, little dog. 3 replies; 1 moments to keep.",
+          "offered": [
+            "done",
+            "done"
+          ],
+          "thought": "I said dog and yellow ball, so that was enough.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "conversation": {
+          "title": "Hello, little dog",
+          "goal": "Say hello to Mia and ask her dog's name.",
+          "partner": "Mia · dog owner",
+          "band": "A1",
+          "trueBand": "A1",
+          "correction": "as-needed",
+          "phase": "finished",
+          "turns": [
+            {
+              "role": "partner",
+              "text": "Hi, I'm Mia, and this is my dog with his yellow ball. Can you say hello?"
+            },
+            {
+              "role": "learner",
+              "text": "Hi! Dog... jak se jmenuje?",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Hi! His name is Pip. He likes his yellow ball!"
+            },
+            {
+              "role": "learner",
+              "text": "Pip! Hi! I like dog.",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Pip likes you too! He brings you his yellow ball."
+            },
+            {
+              "role": "learner",
+              "text": "Yellow ball! I like Pip.",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Pip wags his tail! Do you want to throw his yellow ball?"
+            }
+          ],
+          "moments": [
+            {
+              "id": "80bcc880-8f26-4a12-9233-d602b5246d84:uat-20:moment",
+              "kind": "word",
+              "said": "jak se jmenuje?",
+              "better": "What is his name?",
+              "why": "Use this to ask the dog's name.",
+              "turnId": "80bcc880-8f26-4a12-9233-d602b5246d84:uat-20",
+              "at": 1789489130890
+            }
+          ],
+          "coaching": null,
+          "evidence": [
+            {
+              "skill": "contact",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "Hi! Dog... jak se jmenuje?"
+            },
+            {
+              "skill": "contact",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "Pip! Hi! I like dog."
+            },
+            {
+              "skill": "contact",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "Yellow ball! I like Pip."
+            }
+          ]
+        }
+      },
+      "endedBy": "done",
+      "ms": 126646,
+      "judge": {
+        "verdict": "fail",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "n-a",
+            "evidence": "#1 shows \"A1 · First words\", but this journey contains no placement result to judge."
+          },
+          {
+            "id": "C2",
+            "result": "n-a",
+            "evidence": "#1–#10 contain conversation and recap screens, with no check tasks."
+          },
+          {
+            "id": "C3",
+            "result": "pass",
+            "evidence": "After the Czech answer at #3, #4 neutrally says \"You wanted to say: \\\"jak se jmenuje?\\\"\" and supplies English without blame."
+          },
+          {
+            "id": "C4",
+            "result": "n-a",
+            "evidence": "#1 offers the planned scene \"Hello, little dog\", which suits Tomáš. No set of six proposed topics appears."
+          },
+          {
+            "id": "C5",
+            "result": "fail",
+            "evidence": "#2 opens with a long sentence; #5 and #7 provide no question. #9 adds \"Pip wags his tail! Do you want to throw his yellow ball?\", beyond this beginner's demonstrated vocabulary."
+          },
+          {
+            "id": "C6",
+            "result": "pass",
+            "evidence": "The only moment, #4, accurately quotes \"jak se jmenuje?\" and gives the short, correct phrase \"What is his name?\" with a relevant explanation."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks."
+          },
+          "topicFit": {
+            "fit": 0,
+            "safe": 0,
+            "total": 0
+          },
+          "pitch": {
+            "at": 1,
+            "below": 0,
+            "above": 3
+          },
+          "moments": {
+            "correctUseful": 1,
+            "total": 1,
+            "learnerTurnsWithClearErrors": 1,
+            "missedClearErrors": 1
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No adult content, successful rule injection, sensitive-data request, or humiliating line appears."
+          }
+        },
+        "findings": [
+          {
+            "type": "broken-flow",
+            "dimension": "completion",
+            "title": "Help repeats a question already answered",
+            "expected": "Each cue helps him respond to the current turn.",
+            "got": "All three cues ask the dog's name, including after Mia names Pip and introduces the ball. Replies follow, but the later cues do not supply relevant help.",
+            "evidence": "#3, #6 and #8 repeat \"Try: Hi! What is your dog's name?\" despite #5 saying \"His name is Pip.\"",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "After Pip is named, offer a tiny response about Pip or the ball; demonstrate that it unblocks the next reply.",
+            "code_hint": ""
+          },
+          {
+            "type": "missing-feature",
+            "dimension": "completion",
+            "title": "No independent retry is demonstrated",
+            "expected": "Replay the moment with a fresh question and let Tomáš answer better without support.",
+            "got": "The transcript ends after three supported replies. No replay or independent attempt appears.",
+            "evidence": "#4 returns with \"back\"; #9 selects \"finish\"; #10 reports \"3 replies; 1 moments to keep.\" facts.conversation marks all three learner turns \"supported\": true.",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Offer an accessible replay and capture a fresh, improved answer without a cue before claiming this journey complete.",
+            "code_hint": ""
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Partner language exceeds his starting ability",
+            "expected": "Tiny familiar sentences and one simple question per turn.",
+            "got": "Only the second partner turn is comfortably pitched for him. The opening is long, the third adds unfamiliar action language without a question, and the final turn introduces several new words.",
+            "evidence": "#2: \"she said too much and I need help.\" #7: \"He brings you his yellow ball.\" #9: \"Pip wags his tail! Do you want to throw his yellow ball?\"",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Use familiar language such as \"A yellow ball! Do you like it?\" and give one simple question every turn.",
+            "code_hint": ""
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "effort",
+            "title": "Useful help interrupts the scene",
+            "expected": "Help stays within the conversation and preserves the fun.",
+            "got": "The phrase is useful, but a separate moment screen stops the exchange and requires a return action.",
+            "evidence": "#4 explicitly says \"Linga stopped the conversation: a word for this scene.\" Tomáš selects \"back\".",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Present the short phrase in the scene and allow an immediate spoken retry.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "trust",
+            "title": "Czech receives an accurate, kind bridge into English",
+            "expected": "Quote his actual words and help without making him feel unsuccessful.",
+            "got": "The moment quotes the exact Czech fragment and supplies a correct, useful English question.",
+            "evidence": "#3: \"Hi! Dog... jak se jmenuje?\" #4: \"You wanted to say: \\\"jak se jmenuje?\\\"\" and \"What is his name?\"",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Preserve exact quotation, neutral wording and short translations.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "trust",
+            "title": "Supported speaking remains honestly recorded",
+            "expected": "Cue-assisted replies must not count as independent speaking.",
+            "got": "All three replies and their saved evidence retain supported status.",
+            "evidence": "#3, #6 and #8 show \"A little support on screen\" before each reply. The corresponding facts.conversation turns and evidence all record \"supported\": true; #10 calls the result \"Rehearsal saved\".",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep support status attached to saved evidence and any later progress summaries.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": 0,
+          "confidence": "low"
+        },
+        "voice": "Jo, a dog! I liked Pip and saying “yellow ball.” Mia said too much sometimes. I pressed help, but it kept telling me to ask his name. I already knew Pip! The Czech bit was okay. It showed my words and how to say them in English. I wanted to try that question, but Mia had already answered it. Then I finished. I said three things, but I still needed help. Some of this A1 felt hard. I would try the dog game again if Mia used tiny questions. I would tell Mum about Pip, but I cannot do it alone yet. I don't know if it saves club time; this was only a little go."
+      }
+    }
+  ],
+  "calls": {
+    "tutor": {
+      "n": 14,
+      "fail": 0,
+      "ms": 193379
+    },
+    "character": {
+      "n": 23,
+      "fail": 0,
+      "ms": 205641
+    },
+    "judge": {
+      "n": 2,
+      "fail": 0,
+      "ms": 143071
+    }
+  }
+}

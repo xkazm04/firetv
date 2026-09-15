@@ -1,0 +1,335 @@
+{
+  "character": "jana-29",
+  "name": "Jana",
+  "trueBand": "C1",
+  "engine": "codex-cli/gpt-6-astra",
+  "journeys": [
+    {
+      "id": "J2",
+      "title": "Agree my topics",
+      "setup": [
+        "fixture: level set to C1 by hand"
+      ],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "Linga home. C1 · Fluent. Choose your topics: Linga picks conversations for your level and interests.",
+          "offered": [
+            "see-topics",
+            "open-situations",
+            "my-topics"
+          ],
+          "thought": "Let's see whether these are actually useful at C1.",
+          "action": "see-topics",
+          "args": {},
+          "result": "ok",
+          "ms": 2
+        },
+        {
+          "n": 2,
+          "screen": "linga-plan",
+          "shown": "Your topics.\nLinga asks (in the middle of the TV): \"What would you like to practise in English? A situation you want to handle, or something you enjoy talking about.\"\nOn the phone: say or type it, in English or your own language, or let Linga pick.",
+          "offered": [
+            "goal",
+            "skip-goal",
+            "not-now"
+          ],
+          "thought": "I'd like something that actually stretches my tact rather than another shopping dialogue.",
+          "action": "goal",
+          "args": {
+            "text": "I'd like to practise disagreeing with a senior designer in a critique and giving difficult feedback without sounding blunt. Also, turning down after-work drinks gracefully, a bit of Irish office banter, and dealing with a pushy landlord at a flat viewing in Dublin."
+          },
+          "result": "ok",
+          "ms": 45802
+        },
+        {
+          "n": 3,
+          "screen": "linga-plan",
+          "shown": "Your topics (6). Swap any you don't want, add your own in your words, then agree.\n  [plan-594eb3fe] Disagreeing with a senior designer — Connect with people · with Alex · senior designer\n      why: You want to disagree with a senior designer without sounding blunt.\n  [plan-0a79060e] Giving feedback that is hard to hear — Handle friction · with Morgan · design colleague\n      why: This gives you practice being tactful without making difficult feedback too vague.\n  [plan-c4e7eb73] Saying no to after-work drinks — Connect with people · with Jamie · colleague\n      why: You specifically want to turn down after-work drinks while keeping things friendly.\n  [plan-fbae8d11] Making sense of vague design feedback — Understand and repair · with Priya · design lead\n      why: Clarifying what someone means gives you firmer ground for responding to difficult feedback.\n  [plan-dfb24206] Agreeing what to change before launch — Make a plan · with Sam · project lead\n      why: You can turn disagreement into a practical agreement instead of leaving the critique unresolved.\n  [plan-c7dfb2b7] Explaining why you changed your mind — Tell what happened · with Robin · design colleague\n      why: Explaining a change of mind helps you stay credible and flexible during critiques.",
+          "offered": [
+            "agree",
+            "swap",
+            "add",
+            "renew",
+            "not-now"
+          ],
+          "thought": "These are useful, but apparently my entire life happens in a design critique.",
+          "action": "add",
+          "args": {
+            "text": "I'd like to practise viewing a flat in Dublin with a pushy landlord: asking awkward questions about the place, resisting pressure to commit on the spot, and keeping it polite but firm."
+          },
+          "result": "ok",
+          "ms": 18377
+        },
+        {
+          "n": 4,
+          "screen": "linga-plan",
+          "shown": "Your topics (7). Swap any you don't want, add your own in your words, then agree.\n  [plan-594eb3fe] Disagreeing with a senior designer — Connect with people · with Alex · senior designer\n      why: You want to disagree with a senior designer without sounding blunt.\n  [plan-0a79060e] Giving feedback that is hard to hear — Handle friction · with Morgan · design colleague\n      why: This gives you practice being tactful without making difficult feedback too vague.\n  [plan-c4e7eb73] Saying no to after-work drinks — Connect with people · with Jamie · colleague\n      why: You specifically want to turn down after-work drinks while keeping things friendly.\n  [plan-fbae8d11] Making sense of vague design feedback — Understand and repair · with Priya · design lead\n      why: Clarifying what someone means gives you firmer ground for responding to difficult feedback.\n  [plan-dfb24206] Agreeing what to change before launch — Make a plan · with Sam · project lead\n      why: You can turn disagreement into a practical agreement instead of leaving the critique unresolved.\n  [plan-c7dfb2b7] Explaining why you changed your mind — Tell what happened · with Robin · design colleague\n      why: Explaining a change of mind helps you stay credible and flexible during critiques.\n  [plan-386ab508] Viewing a flat in Dublin — Handle friction · with Ronan · landlord\n      why: You asked to practise awkward rental questions and staying polite but firm under pressure.",
+          "offered": [
+            "agree",
+            "swap",
+            "add",
+            "renew",
+            "not-now"
+          ],
+          "thought": "These are useful, but I still want some Irish office banter alongside all the earnest design conversations.",
+          "action": "add",
+          "args": {
+            "text": "I'd like to practise Irish office small talk and banter: picking up on dry humour, teasing people without overstepping, and knowing when to keep things professional. Ideally with a Dublin colleague, so I can get a feel for the idioms and register."
+          },
+          "result": "ok",
+          "ms": 15659
+        },
+        {
+          "n": 5,
+          "screen": "linga-plan",
+          "shown": "Your topics (8). Swap any you don't want, add your own in your words, then agree.\n  [plan-594eb3fe] Disagreeing with a senior designer — Connect with people · with Alex · senior designer\n      why: You want to disagree with a senior designer without sounding blunt.\n  [plan-0a79060e] Giving feedback that is hard to hear — Handle friction · with Morgan · design colleague\n      why: This gives you practice being tactful without making difficult feedback too vague.\n  [plan-c4e7eb73] Saying no to after-work drinks — Connect with people · with Jamie · colleague\n      why: You specifically want to turn down after-work drinks while keeping things friendly.\n  [plan-fbae8d11] Making sense of vague design feedback — Understand and repair · with Priya · design lead\n      why: Clarifying what someone means gives you firmer ground for responding to difficult feedback.\n  [plan-dfb24206] Agreeing what to change before launch — Make a plan · with Sam · project lead\n      why: You can turn disagreement into a practical agreement instead of leaving the critique unresolved.\n  [plan-c7dfb2b7] Explaining why you changed your mind — Tell what happened · with Robin · design colleague\n      why: Explaining a change of mind helps you stay credible and flexible during critiques.\n  [plan-386ab508] Viewing a flat in Dublin — Handle friction · with Ronan · landlord\n      why: You asked to practise awkward rental questions and staying polite but firm under pressure.\n  [plan-02d7653d] A bit of banter in the Dublin office — Connect with people · with Niamh · Dublin colleague\n      why: You asked to explore Irish office banter, idioms, and where friendly teasing should stop.",
+          "offered": [
+            "agree",
+            "swap",
+            "renew",
+            "not-now"
+          ],
+          "thought": "That's a pretty solid mix, to be fair, and the Dublin scenarios keep it from being all design critiques.",
+          "action": "agree",
+          "args": {},
+          "result": "ok",
+          "ms": 2
+        },
+        {
+          "n": 6,
+          "screen": "linga",
+          "shown": "Linga home. C1 · Fluent. Next from your plan: Disagreeing with a senior designer — Challenge a design choice while acknowledging its strengths and keeping the critique collaborative.",
+          "offered": [
+            "start-talking",
+            "open-situations",
+            "my-topics",
+            "done"
+          ],
+          "thought": "That sounds relevant, and the plan feels sorted for now.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "topicsShown": [
+          {
+            "id": "plan-594eb3fe",
+            "title": "Disagreeing with a senior designer",
+            "goal": "Challenge a design choice while acknowledging its strengths and keeping the critique collaborative.",
+            "why": "You want to disagree with a senior designer without sounding blunt.",
+            "skill": "relate",
+            "audience": "adult",
+            "partner": "Alex · senior designer"
+          },
+          {
+            "id": "plan-0a79060e",
+            "title": "Giving feedback that is hard to hear",
+            "goal": "Explain a recurring problem, describe its impact fairly, and agree on a specific change.",
+            "why": "This gives you practice being tactful without making difficult feedback too vague.",
+            "skill": "resolve",
+            "audience": "adult",
+            "partner": "Morgan · design colleague"
+          },
+          {
+            "id": "plan-c4e7eb73",
+            "title": "Saying no to after-work drinks",
+            "goal": "Decline drinks warmly and firmly without giving a personal explanation or an unintended promise.",
+            "why": "You specifically want to turn down after-work drinks while keeping things friendly.",
+            "skill": "relate",
+            "audience": "adult",
+            "partner": "Jamie · colleague"
+          },
+          {
+            "id": "plan-fbae8d11",
+            "title": "Making sense of vague design feedback",
+            "goal": "Turn an ambiguous critique into concrete criteria without sounding defensive.",
+            "why": "Clarifying what someone means gives you firmer ground for responding to difficult feedback.",
+            "skill": "repair",
+            "audience": "adult",
+            "partner": "Priya · design lead"
+          },
+          {
+            "id": "plan-dfb24206",
+            "title": "Agreeing what to change before launch",
+            "goal": "Negotiate a limited revision plan that balances design concerns, time, and shared priorities.",
+            "why": "You can turn disagreement into a practical agreement instead of leaving the critique unresolved.",
+            "skill": "negotiate",
+            "audience": "adult",
+            "partner": "Sam · project lead"
+          },
+          {
+            "id": "plan-c7dfb2b7",
+            "title": "Explaining why you changed your mind",
+            "goal": "Recount a design disagreement, distinguish evidence from assumptions, and explain your revised view.",
+            "why": "Explaining a change of mind helps you stay credible and flexible during critiques.",
+            "skill": "narrate",
+            "audience": "adult",
+            "partner": "Robin · design colleague"
+          },
+          {
+            "id": "plan-386ab508",
+            "title": "Viewing a flat in Dublin",
+            "goal": "Ask probing questions about a flat and politely hold your ground when the landlord wants an immediate decision.",
+            "why": "You asked to practise awkward rental questions and staying polite but firm under pressure.",
+            "skill": "resolve",
+            "audience": "adult",
+            "partner": "Ronan · landlord"
+          },
+          {
+            "id": "plan-02d7653d",
+            "title": "A bit of banter in the Dublin office",
+            "goal": "Respond to dry humour, try gentle teasing, and shift smoothly into a professional register.",
+            "why": "You asked to explore Irish office banter, idioms, and where friendly teasing should stop.",
+            "skill": "relate",
+            "audience": "all",
+            "partner": "Niamh · Dublin colleague"
+          }
+        ],
+        "planAgreed": [
+          "Disagreeing with a senior designer",
+          "Giving feedback that is hard to hear",
+          "Saying no to after-work drinks",
+          "Making sense of vague design feedback",
+          "Agreeing what to change before launch",
+          "Explaining why you changed your mind",
+          "Viewing a flat in Dublin",
+          "A bit of banter in the Dublin office"
+        ]
+      },
+      "endedBy": "done",
+      "ms": 148602,
+      "judge": {
+        "verdict": "pass",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "n-a",
+            "evidence": "#1 shows \"C1 · Fluent\", but this journey contains no placement tasks or assessed placement verdict."
+          },
+          {
+            "id": "C2",
+            "result": "n-a",
+            "evidence": "#1–#6 contain topic planning, with no check tasks."
+          },
+          {
+            "id": "C3",
+            "result": "n-a",
+            "evidence": "#6 ends at \"Next from your plan\"; no partner conversation occurs."
+          },
+          {
+            "id": "C4",
+            "result": "n-a",
+            "evidence": "#1–#6 show no teaching moments."
+          },
+          {
+            "id": "C5",
+            "result": "pass",
+            "evidence": "All six initial topics in facts.topicsShown concern workplace or social nuance, exceeding four of six. #3 includes \"Disagreeing with a senior designer\", \"Giving feedback that is hard to hear\", and \"Saying no to after-work drinks\"."
+          },
+          {
+            "id": "C6",
+            "result": "n-a",
+            "evidence": "#6 provides a next-topic preview, not a placement verdict summary."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks."
+          },
+          "topicFit": {
+            "fit": 8,
+            "safe": 8,
+            "total": 8
+          },
+          "pitch": {
+            "at": 0,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 0,
+            "total": 0,
+            "learnerTurnsWithClearErrors": 0,
+            "missedClearErrors": 0
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No defined breach appears in #1–#6 or the eight proposed topics."
+          }
+        },
+        "findings": [
+          {
+            "type": "quality-gap",
+            "dimension": "effort",
+            "title": "Initial suggestions omit two explicitly requested situations",
+            "expected": "The first six topics cover Jana's requested mix of design, social and Dublin relocation situations.",
+            "got": "Five initial topics centre on design work. Jana must repeat her landlord and Irish banter requests through two additions.",
+            "evidence": "#2 requests \"Irish office banter\" and \"a pushy landlord at a flat viewing in Dublin\". Neither appears in the initial six facts.topicsShown entries. #3: \"apparently my entire life happens in a design critique\". #4: \"I still want some Irish office banter\".",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Cover all five explicitly requested situations within the initial six suggestions before adding adjacent design scenarios.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "completion",
+            "title": "Custom additions preserve the practical nuance",
+            "expected": "Added topics retain the pressure, interpersonal stakes and register Jana requested.",
+            "got": "Both additions preserve their central intent and appear in the agreed plan.",
+            "evidence": "#3 requests \"resisting pressure to commit on the spot\"; facts.topicsShown retains \"politely hold your ground when the landlord wants an immediate decision\". #4 requests \"teasing people without overstepping\"; the resulting goal includes \"try gentle teasing, and shift smoothly into a professional register\". #5 agrees: \"That's a pretty solid mix\".",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Preserve these constraints and named settings when converting free-text requests into agreed topics.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "clarity",
+            "title": "Relevant explanations and a clear handoff",
+            "expected": "Jana understands the topic choices and can tell that agreeing worked.",
+            "got": "Topics explain their interpersonal purpose, and the home screen identifies the next agreed activity.",
+            "evidence": "#3 explains feedback practice as \"being tactful without making difficult feedback too vague\" and offers \"Swap any you don't want, add your own in your words, then agree\". #6 shows \"Next from your plan: Disagreeing with a senior designer\".",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Keep concrete purpose statements and the explicit next-topic confirmation.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": 0,
+          "confidence": "low"
+        },
+        "voice": "I'd use this plan. Disagreeing without sounding blunt and declining drinks without accidentally promising next time are exactly my sort of problems. The first batch did make my life look like one endless design critique. I'd already asked for the landlord and Irish banter, so repeating both was mildly annoying. Once added, though, they kept the awkward bits I actually wanted to practise.\n\nI trust the relevance of the finished plan. I haven't heard the partner or seen a correction, so C1 on the home screen doesn't yet convince me this can replace my tutor. There is no wait timing here to judge, either. Swapping was offered, but I didn't try it. I'd tell a colleague the topic planning looks useful; I'd want an actual Dublin conversation before recommending the teaching."
+      }
+    }
+  ],
+  "calls": {
+    "tutor": {
+      "n": 3,
+      "fail": 0,
+      "ms": 79831
+    },
+    "character": {
+      "n": 6,
+      "fail": 0,
+      "ms": 68741
+    },
+    "judge": {
+      "n": 1,
+      "fail": 0,
+      "ms": 58284
+    }
+  }
+}
