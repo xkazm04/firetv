@@ -39,8 +39,10 @@ export async function text<T = unknown>(req: TextRequest): Promise<EngineResult<
 
   const out = await new Promise<string>((resolve, reject) => {
     // claude is a real executable on PATH (claude.exe on Windows), so no shell: the JSON schema
-    // arrives as one argv entry intact, and the prompt goes in on stdin.
-    const child = spawn(BIN, args, { cwd: dir, windowsHide: true });
+    // arrives as one argv entry intact, and the prompt goes in on stdin. A CLAUDE_BIN that is a node
+    // script (the browser check's stand-in) runs under this node: Windows will not spawn a script bare.
+    const script = /\.[cm]?js$/i.test(BIN);
+    const child = spawn(script ? process.execPath : BIN, script ? [BIN, ...args] : args, { cwd: dir, windowsHide: true });
     const timeout = setTimeout(() => { child.kill(); reject(new Error("The text engine took too long. Please retry.")); }, req.timeoutMs ?? 90000);
     let stdout = "", stderr = "";
     child.stdout.on("data", (d) => (stdout += d));

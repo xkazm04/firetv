@@ -1,6 +1,6 @@
 /**
  * The tools that read and guard the gate: the KPI tool's artefact reading, where a learner book that was not found
- * is never a zero, and the worktree preflight that gets desk/node_modules in place before the gate runs. Run with
+ * is never a zero, and the worktree preflight that gets desk/ and tools/node_modules in place before the gate runs. Run with
  * npm test in desk/ (directly: node tools/kpi-measure-test.cjs). Fixture checkouts live in a disposable directory,
  * never desk/data — and no fixture here ever names a real node_modules, let alone removes one.
  */
@@ -107,4 +107,21 @@ test('a real directory in the way is reported, never deleted — an install is t
  const o=said();assert.equal(r.action,'blocked');assert.equal(preflight.run(r,o),1);
  assert.equal(o.lines.length,1);assert.match(o.lines[0],/has no typescript in it\. Run `npm install` in desk\/, then `npm test`\.$/);
  assert.equal(fs.readFileSync(path.join(half.modules,'react/package.json'),'utf8'),'{"name":"react"}','what was there is still there');
+});
+test('tools/node_modules is its own target: linked from a donor that has Playwright, never from one that only has desk\'s compiler',()=>{
+ const T=preflight.TOOLS;
+ install('tools-donor-a-desk-only');
+ const dir=path.join(scratch,'tools-donor-b-real'),modules=path.join(dir,'tools/node_modules');
+ fs.mkdirSync(path.join(modules,'playwright'),{recursive:true});fs.writeFileSync(path.join(modules,'playwright/package.json'),'{"name":"playwright"}');
+ const wt=bare('tools-worktree');fs.mkdirSync(path.join(wt,'tools'),{recursive:true});
+ const dest=path.join(wt,'tools/node_modules');links.push(dest);
+ assert.deepEqual(preflight.TARGETS.map(t=>t.dir),['desk','tools'],'the pretest makes sure of both installs the gate reads');
+ assert.equal(preflight.usable(modules,T),true);assert.equal(preflight.usable(modules),false,'Playwright is no compiler: the desk target still asks for typescript');
+ const r=preflight.ensure({env:{},checkout:wt,main:null,levels:1,target:T});
+ assert.equal(r.action,'linked');assert.equal(r.donor.modules,modules,'a checkout with only desk installed is passed over');
+ assert.equal(fs.realpathSync(dest),fs.realpathSync(modules));
+ const o=said();assert.equal(preflight.run(r,o),0);assert.match(o.lines[0],/^tools\/node_modules was missing — linked it to .*\. Remove the link and run `npm install` in tools\/ for an install of its own\.$/);
+ assert.equal(preflight.ensure({env:{},checkout:wt,main:null,levels:1,target:T,link:never}).action,'present','a second run is a no-op');
+ const alone=preflight.ensure({env:{TOOLS_NODE_MODULES:path.join(scratch,'nowhere')},checkout:bare('tools-worktree-alone'),main:null,levels:1,target:T});
+ const o2=said();assert.equal(preflight.run(alone,o2),1);assert.match(o2.lines[0],/^tools\/node_modules cannot run the gate: .*with playwright in it\. Run `npm install` in tools\/, then `npm test`\.$/);
 });

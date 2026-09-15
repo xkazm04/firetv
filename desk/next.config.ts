@@ -8,6 +8,8 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   allowedDevOrigins: ["127.0.0.1", "localhost", "10.0.0.*", "192.168.*.*", "*.local"],
   outputFileTracingRoot: __dirname,
+  // the browser check's own server builds apart, so it runs beside a `next dev` already holding .next/dev
+  ...(process.env.DESK_NEXT_DIST_DIR ? { distDir: process.env.DESK_NEXT_DIST_DIR } : {}),
 };
 
 export default nextConfig;

@@ -9,7 +9,7 @@ Design rules: [../docs/DESIGN-ON-AIR.md](../docs/DESIGN-ON-AIR.md).
 
 ```
 npm run dev              # http://localhost:3000
-npm test                 # the gate: type check, then the rules suites
+npm test                 # the gate: type check, the rules suites, then the Math Buddy browser check
 npm run measure          # the KPI readings, as numbers (--json for a machine)
 ```
 
@@ -54,6 +54,15 @@ For the browser integration check, start a separate server with `DESK_DATA_DIR` 
 scratch directory, then set `LINGA_TEST_ALLOW_WRITES=1` and `LINGA_TEST_URL` before running
 `node tools/linga-ui-test.cjs`. That check makes real model calls and simulates recognition events;
 it does not test microphone hardware. Other engine caches keep their existing locations.
+
+Math Buddy's browser check (`npm run test:e2e`, `tools/maths-e2e-test.cjs`) is part of the gate. It starts its own
+`next dev --webpack` on a free port with a scratch `DESK_DATA_DIR` under `artifacts/`, then drives one session in
+headless Chromium: the TV by its D-pad keys from the landing screen, the phone joining with the TV's code and
+snapping the worked sheet through a fake camera, to the marked set walked on the TV and the learner book on disk.
+Both models are stood in for: `CLAUDE_BIN` is `tools/maths-e2e-claude.cjs` (a `.cjs`/`.js`/`.mjs` `CLAUDE_BIN` runs
+under node) and `OLLAMA_HOST` is a server inside the check. It needs `tools/node_modules` (Playwright and its
+Chromium); it builds into `.next/e2e` (`DESK_NEXT_DIST_DIR`), so a `next dev` already running in `desk/` is left alone.
+A failure keeps screenshots and the server log in `artifacts/maths-e2e/`.
 
 ## Engines (all local, all swappable)
 
