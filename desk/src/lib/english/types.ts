@@ -75,6 +75,8 @@ export interface LevelCheck {
   id: string; learnerId: string; stage: "about" | "tasks" | "verdict" | "plan";
   turns: CheckTurn[]; selfBand: Band | null; goal: string; interest: string; read: string;
   task: CheckTask | null; tasks: PlacementTask[]; placement: Placement | null; topics: PlanTopic[];
+  /** no goal or interest is known yet: ask before cutting topics, which would otherwise be generic */
+  askGoal?: boolean;
   pending: string | null; error: string; commands: string[]; audioNonce: number; startedAt: number;
   provider?: string; responseMs?: number;
 }

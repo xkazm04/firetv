@@ -105,6 +105,11 @@ export function LingaTV({s,post,voice}:{s:Session;post:(e:Event)=>Promise<void>;
     hero=<><div className="linga-kicker">{self?"Self-chosen":"Linga's read · not a certificate"}</div><h1>{title}</h1><BandLadder band={b}/><div className="linga-note-line">{placement.summary||BAND_CAN[b]}</div></>;
     caption=self?"This is the level you picked.":"See the conversations Linga picks for this level, or find your level again.";captionTag=self?"Your pick":"What next";
     actions=[{label:"See my topics",help:"Linga picks conversations for this level. Swap any you don't want.",go:()=>cmd(l.plan&&lc?.stage!=="verdict"?"plan-open":"plan-propose")},{label:self?"Find my level with Linga":"Find my level again",help:"Three questions and a few short tasks, about seven minutes.",go:()=>cmd("check-start")},{label:"Pick it myself",help:"Choose a level from A1 to C2 yourself.",go:()=>{setPicking(b);post({type:"focus",focus:0});}}];
+  }else if(s.screen==="linga-plan"&&lc&&lc.askGoal){
+    tag=`Your topics · ${level}`;
+    hero=<><div className="linga-kicker">Before Linga picks your topics</div><Message text="What would you like to practise in English? A situation you want to handle, or something you enjoy talking about."/></>;
+    caption=lc.pending?"Take a moment.":"Say or type it on your phone, in English or in your own language.";captionTag="Your turn";
+    actions=[{label:"Let Linga pick",help:"Linga picks conversations for your level without a goal. You can swap any of them.",go:()=>cmd("plan-goal",{skip:true})},{label:"Not now",help:"Leave for now. Linga asks again when you come back to your topics.",go:()=>cmd("check-leave")}];
   }else if(s.screen==="linga-plan"&&lc){
     tag=`Your topics · ${level}`;title=lc.topics.length?`${lc.topics.length} conversations for you`:"Your topics";
     const selected=s.focus-1;

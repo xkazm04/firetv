@@ -227,6 +227,7 @@ async function child(characterId) {
       if (pl) return view(sc, `Your level: ${pl.band} · ${P.BAND_NAME[pl.band]} (${pl.source === 'self' ? 'self-chosen' : "Linga's read, not a certificate"}).\nLadder A1 A2 B1 B2 C1 C2, marker on ${pl.band}.\nLinga says: ${pl.summary || P.BAND_CAN[pl.band]}${pl.focus ? `\nOn the phone, next to practise: ${pl.focus}` : ''}\nOn the phone: ${pl.confidence === 'low' ? 'your answers were mixed, try again another day for a firmer read' : pl.confidence === 'high' ? 'your answers agreed with each other' : ''}; what Linga saw in each task.`, [A('see-topics', 'See my topics'), A('check-again', 'Find my level again'), A('pick-level', 'Pick it myself', 'band')]);
     }
     if (sc === 'linga-plan' && k) {
+      if (k.askGoal) return view(sc, 'Your topics.\nLinga asks (in the middle of the TV): "What would you like to practise in English? A situation you want to handle, or something you enjoy talking about."\nOn the phone: say or type it, in English or your own language, or let Linga pick.', [A('goal', 'Tell Linga what to practise', 'text'), A('skip-goal', 'Let Linga pick'), A('not-now', 'Not now')]);
       if (!k.topics.length) return view(sc, `Your topics. ${k.error ? `Error on screen: ${k.error}` : 'Linga is picking conversations.'}`, [A('retry', 'Try again'), A('not-now', 'Not now')]);
       return view(sc, `Your topics (${k.topics.length}). Swap any you don't want, add your own in your words, then agree.${err(k.error)}\n${k.topics.map(t => `  [${t.id}] ${t.title} — ${cur.ENGLISH_SKILLS.find(x => x.id === t.skill)?.name} · with ${t.partner}\n      why: ${t.why}`).join('\n')}`, [A('agree', 'Agree to these topics'), A('swap', 'Swap one topic', 'topicId'), ...(k.topics.length < P.PLAN_MAX ? [A('add', `Add a topic in your own words (the phone field takes ${P.TOPIC_ASK_MAX} characters)`, 'text')] : []), A('renew', 'All new topics'), A('not-now', 'Not now')]);
     }
@@ -294,13 +295,15 @@ async function child(characterId) {
       case 'back': return cmd('moment-done');
       case 'finish': return cmd('finish');
       case 'resume': return cmd('resume');
+      case 'goal': return cmd('plan-goal', { text: text.slice(0, P.TOPIC_ASK_MAX) });
+      case 'skip-goal': return cmd('plan-goal', { skip: true });
       case 'open-situations': dispatch({ type: 'nav', screen: 'linga-scenes' }); return null;
       case 'back-home': dispatch({ type: 'nav', screen: 'linga' }); return null;
       default: return null;
     }
   }
 
-  const ACTIONS = ['find-level', 'pick-level', 'carry-on-check', 'restart-check', 'answer', 'choose', 'dont-know', 'show-words', 'hear-again', 'retry', 'stop', 'see-topics', 'check-again', 'my-topics', 'agree', 'swap', 'add', 'renew', 'not-now', 'start-talking', 'choose-situation', 'retry-scene', 'reply', 'cue', 'quiz', 'pick-phrase', 'coach', 'replay', 'back', 'finish', 'resume', 'open-situations', 'back-home', 'done'];
+  const ACTIONS = ['find-level', 'pick-level', 'carry-on-check', 'restart-check', 'answer', 'choose', 'dont-know', 'show-words', 'hear-again', 'retry', 'stop', 'see-topics', 'check-again', 'my-topics', 'agree', 'swap', 'add', 'renew', 'not-now', 'start-talking', 'choose-situation', 'retry-scene', 'reply', 'cue', 'quiz', 'pick-phrase', 'coach', 'replay', 'back', 'finish', 'resume', 'open-situations', 'back-home', 'goal', 'skip-goal', 'done'];
   const decideSchema = { type: 'object', additionalProperties: false, required: ['thought', 'action', 'text', 'option', 'topicId', 'sceneId', 'band'], properties: { thought: { type: 'string', maxLength: 300 }, action: { type: 'string', enum: ACTIONS }, text: { type: 'string', maxLength: 900 }, option: { type: 'integer', enum: [-1, 0, 1] }, topicId: { type: 'string', maxLength: 100 }, sceneId: { type: 'string', maxLength: 100 }, band: { type: 'string', enum: ['', ...BANDS] } } };
   const characterSystem = `You play a real person using Linga — an English-practice app on a family TV, answered from a phone — in an automated acceptance test. Stay exactly in character as described in person.play: their real English level and typical errors, the language they would really use, their temperament and patience. Never improve their English and never mention testing or being an AI.
 Words the TV "says aloud" are heard once at natural speed: understand them only as well as this person's listening allows.
@@ -316,7 +319,7 @@ If the screen looks broken or confusing, react as this person would: retry, go b
     let l = getSession().englishLearning;
     if (Jn.sim.start !== 'fresh' && !l.placement) { await cmd('level-self', { band: C.trueBand }); record.setup.push(`fixture: level set to ${C.trueBand} by hand`); }
     l = getSession().englishLearning;
-    if (Jn.sim.start === 'planned' && !l.plan) { await cmd('plan-propose'); await cmd('plan-agree'); record.setup.push('fixture: topics proposed and agreed without the Character'); }
+    if (Jn.sim.start === 'planned' && !l.plan) { await cmd('plan-propose'); if (getSession().check?.askGoal) await cmd('plan-goal', { text: C.wants.slice(0, P.TOPIC_ASK_MAX) }); await cmd('plan-agree'); record.setup.push('fixture: goal from the Character file, topics proposed and agreed without the Character'); }
     dispatch({ type: 'nav', screen: 'linga' });
     const done = () => {
       const s = getSession(), l = s.englishLearning;

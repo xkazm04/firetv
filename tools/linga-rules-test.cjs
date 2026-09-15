@@ -197,3 +197,25 @@ test('the partner is told the limits that topic filtering cannot enforce',async(
  await command('start',{sceneId:'date',replace:true});
  assert.doesNotMatch(system,/not an adult/);assert.match(system,/never express romantic or sexual attraction/);
 });
+test('beginners meet fewer moments: at most two a rehearsal, three replies apart',async()=>{
+ fresh();dispatch({type:'learner.set',id:'jakub'});dispatch({type:'subject',subject:'english'});
+ await command('preferences',{preferences:{...defaultPreferences({type:'other'}),level:'A2',correction:'as-needed'},notes:[]});
+ answer=async()=>({json:{title:'Booking',goal:'Fix a booking.',opening:'Hello, can I help?'},provider:'test',ms:1});
+ await command('start',{sceneId:'booking',replace:true});
+ answer=async()=>({json:{reply:'I see. Anything else?',observations:[],moment:{kind:'fix',said:'I has booking',better:'I have a booking',why:'"I" goes with "have".'}},provider:'test',ms:1});
+ const stoppedAt=[];
+ for(let i=1;i<=10;i++){const c=getSession().conversation;await command('turn',{text:'I has booking number '+i+'.',mode:'text',lastTurnId:c.turns.at(-1).id});if(getSession().conversation.moment){stoppedAt.push(i);await command('moment-done');}}
+ assert.deepEqual(stoppedAt,[1,5]);
+});
+test('topics for a learner with no known goal wait for one, and the goal they give reaches the plan',async()=>{
+ fresh();dispatch({type:'learner.set',id:'jakub'});dispatch({type:'subject',subject:'english'});
+ await command('preferences',{preferences:{...defaultPreferences({type:'other'}),adultConfirmed:true},notes:[]});
+ let planPrompt=null;answer=async req=>{const p=JSON.parse(req.prompt);if(p.step!=='plan')throw new Error('unexpected '+p.step);planPrompt=p;return {json:{topics:[topic('A logistics job interview','all','narrate')]},provider:'test',ms:1};};
+ await command('plan-propose');let k=getSession().check;
+ assert.equal(k.askGoal,true);assert.equal(k.topics.length,0);assert.equal(planPrompt,null,'no topics are cut before the goal is known');
+ await command('plan-goal',{checkId:k.id,text:'A job interview for a logistics role on Friday'});
+ k=getSession().check;assert.equal(k.askGoal,false);assert.equal(k.topics.length,1);assert.equal(planPrompt.learner.goal,'A job interview for a logistics role on Friday');
+ assert.equal(getLearner('jakub').english.preferences.goal,'A job interview for a logistics role on Friday');
+ const plan=answer;fresh();answer=plan;dispatch({type:'learner.set',id:'jakub'});dispatch({type:'subject',subject:'english'});
+ await command('plan-propose');assert.equal(getSession().check.askGoal,false,'a goal once given is not asked again');assert.equal(getSession().check.topics.length,1);
+});

@@ -114,6 +114,13 @@ function CheckPanel({lc,run,busy,hasPlan}:{lc:LevelCheck;run:Run;busy:boolean;ha
     </>;
   }
   if(lc.stage==="verdict"&&lc.placement)return <VerdictPanel placement={lc.placement} run={run} busy={pending} hasPlan={false}/>;
+  if(lc.stage==="plan"&&lc.askGoal)return <>
+    <p><b>Your topics</b><br/>What would you like to practise in English? A situation you want to handle, or something you enjoy talking about. Any language is fine.</p>
+    {status}{problem}
+    <ReplyBox ready busy={pending} onSend={(text,_mode,_q,attempt)=>run("plan-goal",{text,commandId:attempt})}/>
+    <button className="pbtn" data-secondary="true" disabled={pending} onClick={()=>run("plan-goal",{skip:true})}>Let Linga pick</button>
+    {stop}
+  </>;
   return <>
     <p><b>Your topics</b><br/>Conversations picked for your level and interests. Swap any you don&apos;t want, or add your own.</p>
     {status}{problem}

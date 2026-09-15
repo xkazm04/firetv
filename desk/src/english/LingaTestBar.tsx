@@ -19,6 +19,7 @@ function target(s: Session): Target {
     if (k.stage === "about" && q?.role === "tutor") return { action: "check-answer", extra: { lastTurnId: q.id }, label: "Answer the question" };
     if (k.stage === "tasks" && k.task && k.task.kind !== "choose") return { action: "check-task", extra: { taskId: k.task.id }, label: k.task.kind === "listen" ? "Answer the listening task" : "Answer the task" };
   }
+  if (s.screen === "linga-plan" && k?.askGoal && !k.pending) return { action: "plan-goal", extra: {}, label: "Say what to practise" };
   const said = c?.turns.at(-1);
   if (s.screen === "linga-talk" && c && !c.pending && !c.paused && !c.quizOpen && c.phase !== "finished" && said?.role === "partner") return { action: "turn", extra: { lastTurnId: said.id }, label: `Reply to ${c.partner}` };
   return null;

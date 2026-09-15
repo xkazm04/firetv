@@ -126,7 +126,7 @@ async function advance(k: LevelCheck, ctx: Ctx, token: string): Promise<LevelChe
       };
     });
   }
-  if (k.stage === "plan" && !k.topics.length) return propose(k, ctx, token, PLAN_SIZE, null, "Linga could not put your topics together. Try again.");
+  if (k.stage === "plan" && !k.topics.length && !k.askGoal) return propose(k, ctx, token, PLAN_SIZE, null, "Linga could not put your topics together. Try again.");
   return k;
 }
 
@@ -191,9 +191,11 @@ export async function checkCommand(action: string, input: Record<string, unknown
   if (action === "plan-propose" || action === "plan-open") {
     const base = open && (open.stage === "verdict" || open.stage === "plan") ? open : blank(learnerId, "plan");
     const reuse = action === "plan-open" && learning.plan?.topics.length;
-    const k: LevelCheck = { ...base, stage: "plan", topics: reuse ? learning.plan!.topics : [], error: "" };
+    // Topics cut with no goal and no interest come out generic (second UAT run: fit fell to a third). Ask first, once.
+    const known = !!(prefs.goal || prefs.interest || base.goal || base.interest);
+    const k: LevelCheck = { ...base, stage: "plan", topics: reuse ? learning.plan!.topics : [], error: "", askGoal: !reuse && !known };
     commit(k, "linga-plan");
-    if (!reuse) await advance(k, ctx, commandId);
+    if (!reuse && known) await advance(k, ctx, commandId);
     return true;
   }
   if (!action.startsWith("check-") && !action.startsWith("plan-")) return false;
@@ -278,6 +280,19 @@ note: one plain, kind sentence to the learner about what their answer showed; wh
     return true;
   }
 
+  if (action === "plan-goal") {
+    if (k.stage !== "plan" || !k.askGoal) throw new ConversationError("Linga already knows what to plan for.", 409);
+    const said = input.skip === true ? "" : typeof input.text === "string" ? input.text.trim() : "";
+    if (input.skip !== true && !said) throw new ConversationError("Say what you would like to practise, or let Linga pick.");
+    if (said.length > TOPIC_ASK_MAX) throw new ConversationError(`Say it in up to ${TOPIC_ASK_MAX} characters.`);
+    // Kept as the learner's goal, so the next plan does not ask again; the phone's Set up shows it.
+    const now = getLearner(learnerId).english, nowPrefs = now.preferences ?? defaultPreferences(profile);
+    if (said) saveEnglish(learnerId, { ...now, preferences: { ...nowPrefs, goal: said.slice(0, 160) } });
+    const next: LevelCheck = { ...k, askGoal: false, goal: said || k.goal };
+    commit(next, "linga-plan");
+    await advance(next, { ...ctx, learning: getLearner(learnerId).english }, commandId);
+    return true;
+  }
   if (action === "plan-swap" || action === "plan-add" || action === "plan-renew") {
     if (k.stage !== "plan") throw new ConversationError("Find your level before choosing topics.", 409);
     if (action === "plan-renew") { await advance({ ...k, topics: [] }, ctx, commandId); return true; }

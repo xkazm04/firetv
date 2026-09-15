@@ -5,7 +5,7 @@ import { getLearner, saveEnglish } from "../session/learners";
 import { checkCommand, isCheckAction } from "./check";
 import { audienceAllowed, defaultPreferences, eligibleScenes, ENGLISH_SCENES, ENGLISH_SKILLS, isAdult, recommendScene } from "./curriculum";
 import { ConversationError } from "./errors";
-import { BAND_NAME, BAND_TUTOR, isBand, TAUGHT_CAP } from "./placement";
+import { BAND_NAME, BAND_TUTOR, easyBand, isBand, TAUGHT_CAP } from "./placement";
 import { mergeEvidence, parsePreferences, validateObservations } from "./rules";
 import type { Conversation, EnglishEvidence, EnglishScene, EvidenceMode, Moment, SkillId } from "./types";
 
@@ -20,8 +20,6 @@ const momentSchema=schema({kind:{type:"string",enum:["none","fix","word"]},said:
 const turnSchema=schema({reply:str(230),supportProvided:{type:"boolean"},observations:{type:"array",maxItems:2,items:schema({skill:{type:"string",enum:ENGLISH_SKILLS.map(s=>s.id)},quote:str(240),success:{type:"boolean"},confidence:{type:"string",enum:["clear","uncertain"]},note:str(180)})},moment:momentSchema});
 const coachSchema=schema({before:str(180),after:str(180),note:str(220)});
 const replaySchema=schema({reply:str(230)});
-/** A moment at most once per three learner turns, and four in one rehearsal. */
-const MOMENT_GAP=3,MOMENT_CAP=4;
 
 function screenFor(c:Conversation):Screen{return c.phase==="finished"?"linga-recap":c.moment?"linga-moment":c.phase==="coaching"?"linga-coach":"linga-talk";}
 function commit(c:Conversation,screen?:Screen){dispatch({type:"linga.changed",conversation:c,screen});}
@@ -54,12 +52,18 @@ function context(c:Conversation){
   const placement=learning.placement;
   return {scene:{title:c.title,goal:c.goal},preferences:c.preferences,adaptation,teachingNotes:learning.notes,levelCheck:placement?{band:placement.band,chosenBy:placement.source==="self"?"learner":"level check",practiseNext:placement.focus}:null,recentLearning:recent.map(e=>({skill:e.skill,success:e.success,supported:e.supported,note:e.note})),skills:ENGLISH_SKILLS.filter(s=>s.id===c.focusSkill||s.id===c.reviewSkill||s.id==="repair"),transcript:c.turns.slice(-18)};
 }
+const beginner=(c:Conversation)=>easyBand(isBand(c.preferences.level)?c.preferences.level:"A1");
+/**
+ * A moment at most once per three learner turns and four in a rehearsal. Beginners get fewer — once per four
+ * turns, two a rehearsal: at A1–A2 nearly every reply has something to fix, and in the second UAT run Tomáš met
+ * a moment on almost every reply, which stops a scene being a scene.
+ */
 function momentAllowed(c:Conversation):boolean{
-  const moments=c.moments??[];
-  if(c.preferences.correction!=="as-needed"||moments.length>=MOMENT_CAP)return false;
+  const moments=c.moments??[],gap=beginner(c)?4:3,cap=beginner(c)?2:4;
+  if(c.preferences.correction!=="as-needed"||moments.length>=cap)return false;
   const last=moments.at(-1);if(!last)return true;
   const since=c.turns.slice(c.turns.findIndex(t=>t.id===last.turnId)+1).filter(t=>t.role==="learner").length;
-  return since>=MOMENT_GAP-1;
+  return since>=gap-1;
 }
 /** A fix must quote the reply it fixes; a word must come with the sentence it belongs in. Anything else is no moment. */
 function parseMoment(value:unknown,reply:string,turnId:string):Moment|null{
@@ -163,7 +167,7 @@ export async function englishCommand(raw:unknown){
   try{
     // The first LT run: 3 moments in 16 conversations, with clear errors in most learner turns. "Most turns are none"
     // read as "almost never"; the gap and cap in momentAllowed already keep a scene a scene.
-    const momentTask=mayStop?" moment: you may stop the scene for one thing. Stop with a fix when submittedReply has an error that blurs the meaning, an error this learner has now made more than once in the transcript, or a basic error their level should already control; said is an exact excerpt of submittedReply, better is the same idea said well, why is one short reason. Stop with a word when the learner reached for a word in another language, talked around a missing word, or used a clearly wrong one; said is that word or phrase, better is a short sentence using the right English in this scene, why is what it means in plain words. When the reply has such an error, stop for it rather than letting it pass, and pick the one that matters most. Never stop for a valid alternative, a style or register choice, or a one-off slip that does not blur meaning. Otherwise kind none with empty fields.":" moment: kind none with empty fields.";
+    const momentTask=mayStop?(beginner(c)?" This learner is a beginner: stop only for a word or phrase they will need again in this scene, never on a goodbye, a thanks or a closing line.":"")+" moment: you may stop the scene for one thing. Stop with a fix when submittedReply has an error that blurs the meaning, an error this learner has now made more than once in the transcript, or a basic error their level should already control; said is an exact excerpt of submittedReply, better is the same idea said well, why is one short reason. Stop with a word when the learner reached for a word or phrase in another language, talked around a missing word, or used a clearly wrong word; said is exactly what they used (their own-language words are fine), better is the English they needed (the word or phrase, or at most one short sentence using it in this scene), why is what it means in plain words. A word moment is vocabulary only: a grammar point (a verb form, an article, word order) is a fix, and a fix needs an exact excerpt of an English reply. When the reply has such an error, stop for it rather than letting it pass, and pick the one that matters most. Never stop for a valid alternative, a style or register choice, or a one-off slip that does not blur meaning. Otherwise kind none with empty fields.":" moment: kind none with empty fields.";
     const credit=" An observation's success is true only when the quoted words themselves do what that skill describes (repair means asking to repeat, clarify or confirm meaning). A thanks, a yes, a single repeated word or a copy of your own words demonstrates no skill: make no observation for it.";
     const task=action==="turn"?{task:`Respond in character to submittedReply, then assess it against the allowed skills. Do not assess earlier turns again. Only clear evidence; uncertain observations cannot earn progress.${credit}${momentTask}`,submittedReply:reply}:action==="coach"?{task:"Coach the latest learner reply: before must be an exact nonempty substring of that reply (<=180 characters); after is one useful alternative (<=180). Note <=220: say what worked and one change. Distinguish language from chosen communication intention; do not invent an error.",submittedReply:lastLearner!.text}:{task:"Return to the scene with a new short question that practises the coaching intention. Vary the question to test reuse. Do not supply the learner's answer.",coaching:c.coaching};
     const result=await text<Record<string,unknown>>({system:tutorSystem(c),prompt:JSON.stringify({...context(c),...task}),schema:action==="turn"?turnSchema:action==="coach"?coachSchema:replaySchema,model:"fast",timeoutMs:60000,isolated:true});
