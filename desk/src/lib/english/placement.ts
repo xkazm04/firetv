@@ -13,6 +13,8 @@ export const PLAN_MAX = 8;
 export const TAUGHT_CAP = 60;
 /** A topic in the learner's own words. The first LT run refused five real requests at 160 characters. */
 export const TOPIC_ASK_MAX = 400;
+/** The level check's first question: the same for everyone, so it is written here, not generated — no wait, nothing to fail. */
+export const firstQuestion = (name: string) => `Hi ${name}! You can answer in English or in your own language. Where do you use English in your life?`;
 
 export const BAND_NAME: Record<Band, string> = { A1: "First words", A2: "Everyday basics", B1: "Getting by", B2: "Comfortable", C1: "Fluent", C2: "Near-native" };
 /** What a learner at each band can do, in the learner's words. */

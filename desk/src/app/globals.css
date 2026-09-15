@@ -76,3 +76,8 @@ button, input, textarea { font: inherit; }
 .land a { color: #F2F3F5; font-family: var(--display); font-size: 28px; text-transform: uppercase; letter-spacing: .06em; text-decoration: none; border: 3px solid rgba(255,255,255,.4); padding: 14px 24px; display: inline-block; }
 .land a:hover { background: #fff; color: #14161A; transform: skewX(-6deg); box-shadow: 12px 12px 0 #E23D28; }
 .land p { color: #98A2B3; line-height: 1.5; max-width: 60ch; }
+
+/* TEMPORARY: the Linga test answer bar under the TV frame (?test=1, dev builds only) */
+.linga-testbar { border-top: 1px solid #1F252D; border-bottom: 0; }
+.linga-testbar textarea { flex: 1 1 420px; min-height: 44px; background: #11161C; color: #F2F3F5; border: 1px solid #2A323D; padding: 6px 8px; font: inherit; font-size: 14px; resize: vertical; }
+.linga-testbar button:disabled { opacity: .45; cursor: default; }

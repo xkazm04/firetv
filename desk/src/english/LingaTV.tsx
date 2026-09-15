@@ -11,7 +11,11 @@ type Action={label:string;help:string;go:()=>void;disabled?:boolean};
 const TASK_TITLE={say:"Say it",listen:"Listen and answer",choose:"Choose the reply"} as const;
 const CHECK_SCREENS:Screen[]=["linga-check","linga-verdict","linga-plan"];
 const Mascot=()=><img className="linga-mascot" src="/brand/linga.png" alt="" />;
-const Speaker=({name}:{name:string})=><div className="linga-speaker"><span className="linga-wave">▂ ▆ ▃ ▇ ▂</span>{name}</div>;
+/**
+ * What the tutor or partner said. It lives mid-screen, never in the caption slot: the caption changes with
+ * every focused action, and a question that vanished when the learner looked at "Hear it again" was the defect.
+ */
+const Message=({text,narrow}:{text:string;narrow?:boolean})=><div className={`linga-message${text.length>150?" linga-long":""}${narrow?" linga-narrow":""}`}>{text}</div>;
 
 export function LingaTV({s,post,voice}:{s:Session;post:(e:Event)=>Promise<void>;voice:boolean}){
   const {run,busy,error}=useEnglish(s),[menu,setMenu]=useState(false),[sceneIndex,setSceneIndex]=useState(0),[chapter,setChapter]=useState(0),[picking,setPicking]=useState<Band|null>(null);
@@ -39,7 +43,8 @@ export function LingaTV({s,post,voice}:{s:Session;post:(e:Event)=>Promise<void>;
     hero=<><div className="linga-kicker">Self-chosen · Linga can find it with you any time</div><h1>{title}</h1><BandLadder band={picking}/></>;
     actions=[{label:"This is my level",help:BAND_CAN[picking],go:()=>{void run("level-self",{band:picking}).then(ok=>{if(ok)setPicking(null);});}},
       {label:"Lower",help:picking==="A1"?"A1 is the first level.":`${shift(picking,-1)} · ${BAND_CAN[shift(picking,-1)]}`,go:()=>setPicking(b=>b&&shift(b,-1))},
-      {label:"Higher",help:picking==="C2"?"C2 is the top level.":`${shift(picking,1)} · ${BAND_CAN[shift(picking,1)]}`,go:()=>setPicking(b=>b&&shift(b,1))}];
+      {label:"Higher",help:picking==="C2"?"C2 is the top level.":`${shift(picking,1)} · ${BAND_CAN[shift(picking,1)]}`,go:()=>setPicking(b=>b&&shift(b,1))},
+      {label:"Not sure · go back",help:"Go back without choosing. Linga can find your level with you instead.",go:()=>{setPicking(null);post({type:"focus",focus:0});}}];
   }else if(home){
     const resume=c&&c.phase!=="finished"&&c.turns.length>0;
     const checking=lc&&(lc.stage==="about"||lc.stage==="tasks");
@@ -54,7 +59,7 @@ export function LingaTV({s,post,voice}:{s:Session;post:(e:Event)=>Promise<void>;
     }else if(!l.placement){
       tag="Welcome";title="Let's find your level";caption="Three questions about you, then a few short tasks. About seven minutes, answered on your phone.";
       hero=<><div className="linga-kicker">Before your first conversation</div><h1>{title}</h1><div className="linga-subtitle">A1 to C2 · about 7 minutes</div><Mascot/></>;
-      actions=[{label:"Find my level",help:caption,go:()=>cmd("check-start")},{label:"I'll pick my level",help:"Choose a level from A1 to C2 yourself. Linga can find it with you later.",go:()=>setPicking(level)}];
+      actions=[{label:"Find my level",help:caption,go:()=>cmd("check-start")},{label:"I'll pick my level",help:"Choose a level from A1 to C2 yourself. Linga can find it with you later.",go:()=>{setPicking(level);post({type:"focus",focus:0});}}];
     }else if(!l.plan||lc?.stage==="plan"||lc?.stage==="verdict"){
       tag="Your topics";title="Choose your topics";caption="Linga picks conversations for your level and interests. Swap any you don't want.";
       hero=<><div className="linga-kicker">{level} · {BAND_NAME[level]}{l.placement.source==="self"?" · self-chosen":""}</div><h1>{title}</h1><div className="linga-subtitle">Conversations picked for you</div><Mascot/></>;
@@ -73,37 +78,33 @@ export function LingaTV({s,post,voice}:{s:Session;post:(e:Event)=>Promise<void>;
     const cancel:Action={label:"Cancel & come back later",help:"Stop here. Everything so far is kept.",go:()=>cmd("check-leave")};
     if(lc.stage==="about"){
       const answered=lc.turns.filter(t=>t.role==="learner").length;
-      title="Tell me about you";
-      hero=<><div className="linga-kicker">About you · question {Math.min(answered+1,ABOUT_QUESTIONS)} of {ABOUT_QUESTIONS}</div><h1>{title}</h1><Speaker name="Linga"/><Mascot/></>;
-      caption=lc.pending?(lc.turns.length?"Take a moment. Linga is reading your answer.":"Linga is getting ready."):asked?.role==="tutor"?asked.text:lc.error;
-      captionTag=lc.pending?"Preparing":"Linga · answer on your phone";
-      actions=lc.pending?[cancel]:!lc.turns.length?[{label:"Try again",help:"Ask Linga to start the level check again.",go:()=>cmd("check-retry")},stopCheck]:[{label:"Hear it again",help:"Linga asks the question again. Answer on your phone, in English or your own language.",go:()=>cmd("check-repeat")},stopCheck];
+      hero=<><div className="linga-kicker">About you · question {Math.min(answered+1,ABOUT_QUESTIONS)} of {ABOUT_QUESTIONS}</div>{asked?.role==="tutor"&&<Message text={asked.text}/>}</>;
+      caption=lc.pending?"Take a moment. Linga is reading your answer.":lc.error||"Answer on your phone, in English or in your own language.";
+      captionTag=lc.pending?"Preparing":"Your turn";
+      actions=lc.pending?[cancel]:!lc.turns.length?[{label:"Try again",help:"Start the level check again.",go:()=>cmd("check-retry")},stopCheck]:[{label:"Hear it again",help:"Linga asks the question again. Answer on your phone, in English or your own language.",go:()=>cmd("check-repeat")},stopCheck];
     }else{
-      const t=lc.task;
-      tag=`Task ${Math.min(lc.tasks.length+1,MAX_TASKS)} of up to ${MAX_TASKS}`;
+      const t=lc.task,n=Math.min(lc.tasks.length+1,MAX_TASKS);
+      tag=`Task ${n} of up to ${MAX_TASKS}`;
       if(!t){
-        title=lc.tasks.length?"Next task":"A few short tasks";
-        hero=<><div className="linga-kicker">Some are easy, some are hard · that is how Linga finds your level</div><h1>{title}</h1><Mascot/></>;
+        hero=<><div className="linga-kicker">Find your level · some tasks are easy, some are hard</div><h1 className="linga-smaller">{lc.tasks.length?"Next task":"A few short tasks"}</h1></>;
         caption=lc.pending?"Take a moment. Linga is getting the task ready.":lc.error||"Getting the task ready.";captionTag="Preparing";
         actions=lc.pending?[cancel]:[{label:"Try again",help:"Ask Linga for the task again.",go:()=>cmd("check-retry")},stopCheck];
       }else if(t.kind==="choose"){
-        title=t.prompt;
-        hero=<><div className="linga-kicker">{TASK_TITLE.choose} · pick with the remote</div><h1 className="linga-prompt">{t.prompt}</h1><div className="linga-choices">{t.options.map((x,i)=><div key={x}><small>0{i+1}</small>{x}</div>)}</div></>;
+        hero=<><div className="linga-kicker">Task {n} · {TASK_TITLE.choose} · pick with the remote</div><h1 className="linga-prompt">{t.prompt}</h1><div className="linga-choices">{t.options.map((x,i)=><div key={x}><small>0{i+1}</small>{x}</div>)}</div></>;
         caption=lc.pending?"Take a moment.":"Pick the reply that fits. Not sure? Say so; that helps too.";captionTag="Your task";
         actions=lc.pending?[cancel]:[...t.options.map((x,i)=>({label:`Reply ${i+1}`,help:x,go:()=>cmd("check-task",{taskId:t.id,option:i})})),{label:"I don't know",help:"Skip this one. That tells Linga something too.",go:()=>cmd("check-task",{taskId:t.id,skip:true})}];
       }else{
-        title=TASK_TITLE[t.kind];
-        hero=<><div className="linga-kicker">{t.kind==="listen"?"Listen, then answer on your phone":"Answer on your phone · speak or type"}</div><h1>{title}</h1>{t.kind==="listen"&&t.revealed?<div className="linga-quote">“{t.line}”</div>:<Speaker name="Linga"/>}<Mascot/></>;
-        caption=lc.pending?"Take a moment. Linga is reading your answer.":t.prompt;captionTag=lc.pending?"Preparing":t.kind==="listen"?"The question":"Your task";
+        hero=<><div className="linga-kicker">Task {n} · {TASK_TITLE[t.kind]}</div><Message text={t.prompt}/>{t.kind==="listen"&&t.revealed&&<div className="linga-note-line">“{t.line}”</div>}</>;
+        caption=lc.pending?"Take a moment. Linga is reading your answer.":t.kind==="listen"?"Listen to the TV, then answer on your phone.":"Answer on your phone: speak or type.";captionTag=lc.pending?"Preparing":"Your turn";
         actions=lc.pending?[cancel]:[{label:t.kind==="listen"?"Hear it again":"Hear the task",help:"Linga says it again.",go:()=>cmd("check-repeat")},...(t.kind==="listen"&&!t.revealed?[{label:"Show the words",help:"Read the line instead of hearing it.",go:()=>cmd("check-reveal")}]:[]),{label:"I don't know",help:"Skip this one. That tells Linga something too.",go:()=>cmd("check-task",{taskId:t.id,skip:true})}];
       }
     }
   }else if(s.screen==="linga-verdict"&&placement){
     const b=placement.band,self=placement.source==="self";
     tag="Your level";title=`${b} · ${BAND_NAME[b]}`;
-    hero=<><div className="linga-kicker">{self?"Self-chosen":"Linga's read · not a certificate"}</div><h1>{title}</h1><BandLadder band={b}/></>;
-    caption=placement.summary||BAND_CAN[b];captionTag=self?"Your pick":"Linga";
-    actions=[{label:"See my topics",help:"Linga picks conversations for this level. Swap any you don't want.",go:()=>cmd(l.plan&&lc?.stage!=="verdict"?"plan-open":"plan-propose")},{label:self?"Find my level with Linga":"Find my level again",help:"Three questions and a few short tasks, about seven minutes.",go:()=>cmd("check-start")},{label:"Pick it myself",help:"Choose a level from A1 to C2 yourself.",go:()=>setPicking(b)}];
+    hero=<><div className="linga-kicker">{self?"Self-chosen":"Linga's read · not a certificate"}</div><h1>{title}</h1><BandLadder band={b}/><div className="linga-note-line">{placement.summary||BAND_CAN[b]}</div></>;
+    caption=self?"This is the level you picked.":"See the conversations Linga picks for this level, or find your level again.";captionTag=self?"Your pick":"What next";
+    actions=[{label:"See my topics",help:"Linga picks conversations for this level. Swap any you don't want.",go:()=>cmd(l.plan&&lc?.stage!=="verdict"?"plan-open":"plan-propose")},{label:self?"Find my level with Linga":"Find my level again",help:"Three questions and a few short tasks, about seven minutes.",go:()=>cmd("check-start")},{label:"Pick it myself",help:"Choose a level from A1 to C2 yourself.",go:()=>{setPicking(b);post({type:"focus",focus:0});}}];
   }else if(s.screen==="linga-plan"&&lc){
     tag=`Your topics · ${level}`;title=lc.topics.length?`${lc.topics.length} conversations for you`:"Your topics";
     const selected=s.focus-1;
@@ -121,13 +122,14 @@ export function LingaTV({s,post,voice}:{s:Session;post:(e:Event)=>Promise<void>;
     hero=<><div className="linga-kicker">Speaking progress · {PROGRESS_LABEL[progress]}</div><h1>{title}</h1><ProgressTrack progress={progress}/>{typed>0&&<div className="linga-subtitle">{typed} written practice observations · speaking assessed separately</div>}</>;
     actions=[{label:"Previous chapter",help:ENGLISH_SKILLS[(chapter+7)%8].goal,go:()=>setChapter(x=>(x+7)%8)},{label:"Next chapter",help:ENGLISH_SKILLS[(chapter+1)%8].goal,go:()=>setChapter(x=>(x+1)%8)}];
   }else if(c&&s.screen==="linga-moment"&&c.moment){
-    const m=c.moment;tag="A moment";title=m.kind==="fix"?"One thing to fix":"A word for this scene";
-    hero=<div className="linga-comparison"><section><div className="linga-kicker">{m.kind==="fix"?"You said":"New word"}</div><div className="linga-quote">“{m.said}”</div></section><section><div className="linga-kicker">{m.kind==="fix"?"Try":"In this scene"}</div><div className="linga-quote">“{m.better}”</div></section></div>;
-    caption=m.why;captionTag=m.kind==="fix"?"Why":"What it means";
+    const m=c.moment;tag="A moment";
+    hero=<><div className="linga-comparison"><section><div className="linga-kicker">{m.kind==="fix"?"You said":"You wanted to say"}</div><div className="linga-quote">“{m.said}”</div></section><section><div className="linga-kicker">{m.kind==="fix"?"Try":"In English"}</div><div className="linga-quote">“{m.better}”</div></section></div><div className="linga-note-line">{m.why}</div></>;
+    caption="Then carry on from where the scene stopped.";captionTag=m.kind==="fix"?"One thing to fix":"A word for this scene";
     actions=[{label:"Back to the conversation",help:"Carry on from where the scene stopped.",go:()=>cmd("moment-done")}];
   }else if(c&&s.screen==="linga-coach"&&c.coaching){
-    tag="One useful change";title="Coach";caption=c.coaching.note;captionTag="Coach";
-    hero=<div className="linga-comparison"><section><div className="linga-kicker">You said</div><div className="linga-quote">“{c.coaching.before}”</div></section><section><div className="linga-kicker">One way to try it</div><div className="linga-quote">“{c.coaching.after}”</div></section></div>;
+    tag="One useful change";
+    hero=<><div className="linga-comparison"><section><div className="linga-kicker">You said</div><div className="linga-quote">“{c.coaching.before}”</div></section><section><div className="linga-kicker">One way to try it</div><div className="linga-quote">“{c.coaching.after}”</div></section></div><div className="linga-note-line">{c.coaching.note}</div></>;
+    caption="Replay the moment with a new question, or finish for today.";captionTag="Coach";
     actions=[{label:"Replay the moment",help:"Try the same intention with a new question. The first retry is supported practice.",go:()=>cmd("replay")},{label:"Finish for today",help:"Save this rehearsal and see what you practised.",go:()=>cmd("finish")}];
   }else if(c&&s.screen==="linga-recap"){
     tag="Your rehearsal";title="Take it somewhere new";
@@ -137,15 +139,16 @@ export function LingaTV({s,post,voice}:{s:Session;post:(e:Event)=>Promise<void>;
     caption=attempts.length?`Next, try ${recommendScene(p,l).name.toLowerCase()}. Your notes and learning map are on the phone.`:"You explored the scene. Try a reply next time; no speaking progress was recorded.";
     actions=[{label:"Another situation",help:"Choose a fresh context for your next conversation.",go:()=>nav("linga-scenes")},{label:"Learning map",help:"See saved evidence for each ability; printing is on the phone.",go:()=>nav("linga-map")}];
   }else if(c){
-    tag=c.phase==="replay"?"Try it again":"Conversation";title=c.goal;
+    tag=c.phase==="replay"?"Try it again":"Conversation";
     const currentScene=c.scene??ENGLISH_SCENES.find(x=>x.id===c.sceneId)!;
-    caption=c.pending?"Take a moment. Your partner is preparing the next turn.":c.paused?"The scene is paused. Resume when you are ready.":c.capture?"Listening on your phone. Stop when you are ready to review your words.":c.cue||c.turns.at(-1)?.text||"Preparing a situation that fits your goal.";
-    captionTag=c.cue?"A little support":c.pending?"Preparing":c.capture?"Your turn":c.partner;
+    const said=last?.role==="partner"?last.text:"";
+    caption=c.pending?"Take a moment. Your partner is preparing the next turn.":c.paused?"The scene is paused. Resume when you are ready.":c.capture?"Listening on your phone. Stop when you are ready to review your words.":c.cue||(said?"Answer on your phone: speak or type.":"Preparing a situation that fits your goal.");
+    captionTag=c.cue?"A little support":c.pending?"Preparing":c.capture?"Your turn":said?"Your turn":"Preparing";
     if(c.quizOpen){
       hero=<><div className="linga-kicker">A little support · recognition practice</div><h1 className="linga-smaller">{currentScene.quiz.question}</h1><div className="linga-choices">{currentScene.quiz.options.map((x,i)=><div key={x}><small>0{i+1}</small>{x}</div>)}</div></>;
       actions=currentScene.quiz.options.map((x,i)=>({label:`Option ${i+1}`,help:x,go:()=>cmd("choice",{option:i})}));
     }else{
-      hero=<><div className="linga-kicker">{c.title}</div><h1 className="linga-smaller">{title}</h1><Speaker name={c.partner}/><SceneArt kind={c.sceneId}/></>;
+      hero=<><div className="linga-kicker">{c.title} · {c.partner}</div>{said?<Message text={said} narrow/>:<h1 className="linga-smaller">{c.goal}</h1>}{said&&<div className="linga-subtitle">{c.goal}</div>}<SceneArt kind={c.sceneId}/></>;
       actions=!c.turns.length&&!c.pending?[{label:"Retry the scene",help:"Try preparing this situation again.",go:()=>cmd("start",{sceneId:c.sceneId,replace:true})},{label:"Choose another",help:"Choose a different situation.",go:()=>nav("linga-scenes")}]:c.paused?[{label:"Resume",help:"Return to the last question. Your words are kept.",go:()=>cmd("pause")},{label:"Finish rehearsal",help:"End here and keep your learning evidence.",go:()=>cmd("finish")}]:[{label:c.pending?"Cancel & go back":"Give me a cue",help:c.pending?"Cancel the pending reply and keep the conversation for later.":"Get a phrase starter, then try your own reply on the phone.",go:()=>cmd(c.pending?"leave":"cue")},{label:hasReply?"Pause & coach":"Choose a phrase",help:hasReply?"Work on one useful change, then replay this moment.":"Compare two phrases before returning to speaking.",go:()=>cmd(hasReply?"coach":"quiz"),disabled:waiting}];
     }
   }else{caption="Choose a situation to begin.";hero=<h1>A place to practise</h1>;actions=[{label:"Choose a situation",help:caption,go:()=>nav("linga-scenes")}];}
@@ -168,7 +171,7 @@ export function LingaTV({s,post,voice}:{s:Session;post:(e:Event)=>Promise<void>;
       if(k==="m"||k==="M"){setMenu(v=>!v);setPicking(null);post({type:"focus",focus:0});return;}
       if(k==="Escape"||k==="Backspace"){
         if(menu){setMenu(false);post({type:"focus",focus:-1});}
-        else if(picking)setPicking(null);
+        else if(picking){setPicking(null);post({type:"focus",focus:0});}
         else if(home)post({type:"nav",screen:"landing",focus:1});
         else if(s.screen==="linga-check"&&lc)cmd("check-leave");
         else if(c&&s.screen==="linga-talk")cmd("leave");

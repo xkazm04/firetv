@@ -182,7 +182,7 @@ function MomentPanel({c,run,busy}:{c:Conversation;run:Run;busy:boolean}){
   const m=c.moment!;
   return <>
     <p><b>{m.kind==="fix"?"One thing to fix":"A word for this scene"}</b></p>
-    <div className="linga-status">{m.kind==="fix"?<>You said “{m.said}”<br/>Try “{m.better}”</>:<>“{m.said}”<br/>{m.better}</>}</div>
+    <div className="linga-status">{m.kind==="fix"?<>You said “{m.said}”<br/>Try “{m.better}”</>:<>You wanted to say “{m.said}”<br/>In English: “{m.better}”</>}</div>
     <p>{m.why}</p>
     <button className="pbtn" data-signal="true" disabled={busy} onClick={()=>run("moment-done")}>Back to the conversation</button>
   </>;

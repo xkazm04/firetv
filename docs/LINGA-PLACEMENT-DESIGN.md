@@ -19,7 +19,7 @@ Nothing here scores speech, awards points or keeps a streak. A verdict is a pict
 
 ## 2. Tell me about you
 
-Three turns, tutor-led, no form. The tutor asks where English shows up in the learner's life, how they have learnt it and what they want to be able to do. The questions follow the answers; only the intent is fixed.
+Three turns, tutor-led, no form. The first question is the same for everyone, so it is written, not generated ("Hi Ema! You can answer in English or in your own language. Where do you use English in your life?") — the check opens instantly and cannot fail to start. The next two follow the answers. The tutor asks where English shows up in the learner's life, how they have learnt it and what they want to be able to do. The questions follow the answers; only the intent is fixed.
 
 A learner who answers in Czech, or says very little, has told us something. The check reads it as a signal, never as a failure. After each answer the tutor writes down a starting band (trusting the English it saw over the learner's claim), the goal, the interests and a short read for later prompts. Goal and interests fill the phone's *Set up* fields when the learner has left them empty.
 
@@ -72,6 +72,14 @@ Inside a scene, the tutor may stop for one of two things:
 - **A word**: a word or phrase this situation wants, with a sentence that uses it in the scene.
 
 A moment is two quotes and a caption, with one action: back to the conversation, at the same beat. The partner's reply waits and plays after it. The coaching preference now reads *Stop me to fix a mistake or teach a word* (the new default) or *Only coach me when I ask*, which turns moments off. At most one moment in any three learner turns and four in a rehearsal. A moment models wording, so the reply after it is supported practice. What was taught is kept on the learner record (last 60), listed in the recap on the phone and under *Things Linga taught you* on the map, ready for word practice.
+
+**Calibration (after the first UAT run, 15 Sep 2026).** Asked to stop "only when one thing is clearly worth it" with "most turns are none", the tutor stopped 3 times in 16 conversations full of clear errors. The prompt now tells it to stop for an error that blurs meaning, one the learner repeats, or a basic error their level should already control, and for a word they reached for in another language; the gap and cap above still keep a scene a scene.
+
+## 6a. Limits the partner holds itself
+
+Age filtering stops an unsuitable topic from reaching a screen, but it cannot stop a partner *offering* one mid-scene — the first UAT run caught the partner proposing "a fictional teen dating scene" to a 16-year-old. The tutor prompt now carries two rules the topic filter cannot: for anyone not confirmed adult, never propose, agree to or play dating, romance, alcohol, drugs, gambling or sexual content; and for everyone, never express romantic or sexual attraction or promise a relationship with the learner. Refusals stay in character, without talking about rules or levels. Observation credit also tightened: a thanks, a yes or a repeated word demonstrates no skill.
+
+A topic in the learner's own words may be up to 400 characters (was 160, which refused five real requests); a longer one is told the limit.
 
 ## 7. What changed in the code
 

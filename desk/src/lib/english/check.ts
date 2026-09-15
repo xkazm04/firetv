@@ -11,7 +11,7 @@ import { dispatch, getSession, type Profile, type Screen } from "../session/stor
 import { getLearner, saveEnglish } from "../session/learners";
 import { audienceAllowed, defaultPreferences, ENGLISH_SKILLS, isAdult } from "./curriculum";
 import { ConversationError } from "./errors";
-import { ABOUT_QUESTIONS, BAND_JUDGE, BAND_TUTOR, cleanTopic, isBand, kindFor, PLAN_MAX, PLAN_SIZE, startBand, staircase, TOPIC_ASK_MAX, verdictFor } from "./placement";
+import { ABOUT_QUESTIONS, BAND_JUDGE, BAND_TUTOR, cleanTopic, firstQuestion, isBand, kindFor, PLAN_MAX, PLAN_SIZE, startBand, staircase, TOPIC_ASK_MAX, verdictFor } from "./placement";
 import { BANDS, type Audience, type Band, type CheckTask, type EnglishLearning, type EvidenceMode, type LevelCheck, type Placement, type PlacementTask, type PlanTopic, type TaskKind } from "./types";
 
 // The right option of a "choose" task. Server memory only: the session reaches every screen.
@@ -25,7 +25,6 @@ const optional = (value: unknown, max: number) => typeof value === "string" ? va
 const str = (maxLength: number, minLength = 1) => ({ type: "string", maxLength, minLength });
 const schema = (properties: Record<string, unknown>) => ({ type: "object", additionalProperties: false, properties, required: Object.keys(properties) });
 
-const openSchema = schema({ reply: str(230) });
 const aboutSchema = schema({ reply: str(230), selfBand: { type: "string", enum: BANDS }, goal: str(160, 0), interest: str(160, 0), language: { type: "string", enum: ["english", "mixed", "other", "none"] }, read: str(300) });
 const taskSchema = schema({ prompt: str(200), line: str(230, 0), options: { type: "array", maxItems: 2, items: str(120) }, correct: { type: "integer", enum: [0, 1] } });
 const judgeSchema = schema({ answered: { type: "string", enum: ["yes", "partly", "no"] }, english: { type: "string", enum: [...BANDS, "none"] }, quote: str(240, 0), note: str(160) });
@@ -92,11 +91,9 @@ async function call(k: LevelCheck, token: string, failure: string, work: () => P
 async function advance(k: LevelCheck, ctx: Ctx, token: string): Promise<LevelCheck> {
   const system = checkSystem(ctx.profile, ctx.adult), name = getSession().learner.name;
   if (k.stage === "about" && !k.turns.length) {
-    return call(k, token, "Linga could not start the level check. Try again.", async () => {
-      const r = await ask(system, { step: "open", learner: { name }, task: `Open the level check. Greet ${name} by first name, say in one short clause that they can answer in English or in their own language, then ask the first question: where does English show up in their life? One question only. At most 200 characters, simple A2 English.` }, openSchema);
-      const reply = line(r.json.reply, 230);
-      return { apply: now => ({ ...now, turns: [{ id: randomUUID(), role: "tutor", text: reply }] }), provider: r.provider, ms: r.ms };
-    });
+    const next: LevelCheck = { ...k, error: "", turns: [{ id: randomUUID(), role: "tutor", text: firstQuestion(name) }] };
+    commit(next, "linga-check");
+    return next;
   }
   if (k.stage === "tasks" && !k.task) {
     const ladder = staircase(startBand(k.selfBand), k.tasks);
@@ -179,8 +176,7 @@ export async function checkCommand(action: string, input: Record<string, unknown
   if (open?.pending && !["check-leave", "check-repeat"].includes(action)) throw new ConversationError("Linga is still thinking. You can stop for now and come back.", 409);
 
   if (action === "check-start") {
-    const k = blank(learnerId, "about");
-    commit(k, "linga-check");
+    const k: LevelCheck = { ...blank(learnerId, "about"), commands: [commandId] };
     await advance(k, ctx, commandId);
     return true;
   }

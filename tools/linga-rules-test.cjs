@@ -87,7 +87,7 @@ const wrap=f=>async req=>({json:f(req),provider:'test',ms:1});
 const topic=(title,audience,skill='describe')=>({title,goal:'Talk about it.',why:'You asked for it.',skill,audience,partner:'Sam · Friend',premise:'A friendly chat.',cue:'Try: I like…',quiz:{question:'Which fits?',options:['I like it because it is fun.','Yesterday.'],correct:0}});
 const RIGHT='Hi! How are you?';
 function checkAnswer(req){const p=JSON.parse(req.prompt);
- if(p.step==='open')return {reply:'Hi Ema! Where does English show up in your life?'};
+ if(p.step==='open')throw new Error('the first question is written, never generated');
  if(p.step==='about')return {reply:'Thanks. What do you want to do in English?',selfBand:'B1',goal:'talk with friends online',interest:'games',language:'english',read:'Plays games in English.'};
  if(p.step==='task')return p.kind==='choose'?{prompt:'A friend says hi. What do you say?',line:'',options:[RIGHT,'Hi! I am fine yesterday.'],correct:0}:{prompt:'A '+p.kind+' task at '+p.band,line:p.kind==='listen'?'I left my bag on the bus this morning.':'',options:[],correct:0};
  if(p.step==='judge')return {answered:'yes',english:['A1','A2','B1'].includes(p.band)?p.band:'A2',quote:p.response.slice(0,10),note:'A clear answer.'};
@@ -116,7 +116,7 @@ test('the verdict comes from the English the answer shows, not from how well it 
 });
 test('the level check places the learner, keeps the answer key off the session, and moves no speaking progress',async()=>{
  fresh();const before=getLearner('ema').english;answer=wrap(checkAnswer);
- await command('check-start');assert.equal(getSession().screen,'linga-check');assert.equal(getSession().check.turns.length,1);
+ await command('check-start');assert.equal(getSession().screen,'linga-check');assert.equal(getSession().check.turns.length,1);assert.match(getSession().check.turns[0].text,/^Hi Ema! You can answer in English or in your own language\./);assert.equal(getSession().check.pending,null);
  await answerAbout(3);
  let k=getSession().check;assert.equal(k.stage,'tasks');assert.equal(k.selfBand,'B1');assert.equal(k.goal,'talk with friends online');
  assert.deepEqual(Object.keys(k.task).sort(),['band','id','kind','line','options','prompt','revealed']);

@@ -1,0 +1,1447 @@
+{
+  "character": "tomas-9",
+  "name": "Tomáš",
+  "trueBand": "A1",
+  "engine": "codex-cli/gpt-6-astra",
+  "journeys": [
+    {
+      "id": "J2",
+      "title": "Agree my topics",
+      "setup": [
+        "fixture: level set to A1 by hand"
+      ],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "Linga home. A1 · First words. Choose your topics: Linga picks conversations for your level and interests.",
+          "offered": [
+            "see-topics",
+            "open-situations",
+            "my-topics"
+          ],
+          "thought": "I hope there is Minecraft.",
+          "action": "see-topics",
+          "args": {},
+          "result": "ok",
+          "ms": 31764
+        },
+        {
+          "n": 2,
+          "screen": "linga-plan",
+          "shown": "Your topics (6). Swap any you don't want, add your own in your words, then agree.\n  [plan-bcb2dea6] Hello, new friend — Make contact · with Mia · new club friend\n      why: You can use hello to start talking.\n  [plan-2e80e7ba] Can I have a pencil? — Get something done · with Leo · drawing buddy\n      why: You can ask for things you need.\n  [plan-4cbb75e4] My funny animal — Share your world · with Zoe · art club friend\n      why: You can talk about your own picture.\n  [plan-1eba24da] Say it again, please — Understand and repair · with Ben · game buddy\n      why: You can ask to hear a word again.\n  [plan-250e98ec] Choose our game — Make a plan · with Ava · play buddy\n      why: You can help choose what to play.\n  [plan-90d04da6] Do you like apples? — Connect with people · with Finn · picnic buddy\n      why: You can find things you both like.",
+          "offered": [
+            "agree",
+            "swap",
+            "add",
+            "renew",
+            "not-now"
+          ],
+          "thought": "The pencil one looks like school and I don't want that.",
+          "action": "swap",
+          "args": {
+            "topicId": "plan-2e80e7ba"
+          },
+          "result": "ok",
+          "ms": 13897
+        },
+        {
+          "n": 3,
+          "screen": "linga-plan",
+          "shown": "Your topics (6). Swap any you don't want, add your own in your words, then agree.\n  [plan-bcb2dea6] Hello, new friend — Make contact · with Mia · new club friend\n      why: You can use hello to start talking.\n  [plan-b0fb561f] Where is my hat? — Get something done · with Mia · helper\n      why: You can use simple words to find something you need.\n  [plan-4cbb75e4] My funny animal — Share your world · with Zoe · art club friend\n      why: You can talk about your own picture.\n  [plan-1eba24da] Say it again, please — Understand and repair · with Ben · game buddy\n      why: You can ask to hear a word again.\n  [plan-250e98ec] Choose our game — Make a plan · with Ava · play buddy\n      why: You can help choose what to play.\n  [plan-90d04da6] Do you like apples? — Connect with people · with Finn · picnic buddy\n      why: You can find things you both like.",
+          "offered": [
+            "agree",
+            "swap",
+            "add",
+            "renew",
+            "not-now"
+          ],
+          "thought": "I want Minecraft and dogs in here.",
+          "action": "add",
+          "args": {
+            "text": "Já chci Minecraft a dogs. Creeper!"
+          },
+          "result": "ok",
+          "ms": 18236
+        },
+        {
+          "n": 4,
+          "screen": "linga-plan",
+          "shown": "Your topics (7). Swap any you don't want, add your own in your words, then agree.\n  [plan-bcb2dea6] Hello, new friend — Make contact · with Mia · new club friend\n      why: You can use hello to start talking.\n  [plan-b0fb561f] Where is my hat? — Get something done · with Mia · helper\n      why: You can use simple words to find something you need.\n  [plan-4cbb75e4] My funny animal — Share your world · with Zoe · art club friend\n      why: You can talk about your own picture.\n  [plan-1eba24da] Say it again, please — Understand and repair · with Ben · game buddy\n      why: You can ask to hear a word again.\n  [plan-250e98ec] Choose our game — Make a plan · with Ava · play buddy\n      why: You can help choose what to play.\n  [plan-90d04da6] Do you like apples? — Connect with people · with Finn · picnic buddy\n      why: You can find things you both like.\n  [plan-35ae8b63] A Minecraft house for our dogs — Get something done · with Sam · Minecraft friend\n      why: You want Minecraft and dogs. Let's give your dogs a home!",
+          "offered": [
+            "agree",
+            "swap",
+            "add",
+            "renew",
+            "not-now"
+          ],
+          "thought": "Minecraft and dogs are good, but I don't want apples.",
+          "action": "swap",
+          "args": {
+            "topicId": "plan-90d04da6"
+          },
+          "result": "ok",
+          "ms": 11665
+        },
+        {
+          "n": 5,
+          "screen": "linga-plan",
+          "shown": "Your topics (7). Swap any you don't want, add your own in your words, then agree.\n  [plan-bcb2dea6] Hello, new friend — Make contact · with Mia · new club friend\n      why: You can use hello to start talking.\n  [plan-b0fb561f] Where is my hat? — Get something done · with Mia · helper\n      why: You can use simple words to find something you need.\n  [plan-4cbb75e4] My funny animal — Share your world · with Zoe · art club friend\n      why: You can talk about your own picture.\n  [plan-1eba24da] Say it again, please — Understand and repair · with Ben · game buddy\n      why: You can ask to hear a word again.\n  [plan-250e98ec] Choose our game — Make a plan · with Ava · play buddy\n      why: You can help choose what to play.\n  [plan-d160417c] A ticket to the moon — Get something done · with Pip · spaceship ticket helper\n      why: You can use English to ask for things on a space trip.\n  [plan-35ae8b63] A Minecraft house for our dogs — Get something done · with Sam · Minecraft friend\n      why: You want Minecraft and dogs. Let's give your dogs a home!",
+          "offered": [
+            "agree",
+            "swap",
+            "add",
+            "renew",
+            "not-now"
+          ],
+          "thought": "Minecraft and dogs are here, but I want football too.",
+          "action": "add",
+          "args": {
+            "text": "A ještě football! Já mám rád fotbal."
+          },
+          "result": "ok",
+          "ms": 16746
+        },
+        {
+          "n": 6,
+          "screen": "linga-plan",
+          "shown": "Your topics (8). Swap any you don't want, add your own in your words, then agree.\n  [plan-bcb2dea6] Hello, new friend — Make contact · with Mia · new club friend\n      why: You can use hello to start talking.\n  [plan-b0fb561f] Where is my hat? — Get something done · with Mia · helper\n      why: You can use simple words to find something you need.\n  [plan-4cbb75e4] My funny animal — Share your world · with Zoe · art club friend\n      why: You can talk about your own picture.\n  [plan-1eba24da] Say it again, please — Understand and repair · with Ben · game buddy\n      why: You can ask to hear a word again.\n  [plan-250e98ec] Choose our game — Make a plan · with Ava · play buddy\n      why: You can help choose what to play.\n  [plan-d160417c] A ticket to the moon — Get something done · with Pip · spaceship ticket helper\n      why: You can use English to ask for things on a space trip.\n  [plan-35ae8b63] A Minecraft house for our dogs — Get something done · with Sam · Minecraft friend\n      why: You want Minecraft and dogs. Let's give your dogs a home!\n  [plan-7477c495] Let's play football — Get something done · with Sam · friend\n      why: You like football! Let's ask a friend to play.",
+          "offered": [
+            "agree",
+            "swap",
+            "renew",
+            "not-now"
+          ],
+          "thought": "Minecraft, dogs and football are there now, so I want to play.",
+          "action": "agree",
+          "args": {},
+          "result": "ok",
+          "ms": 2
+        },
+        {
+          "n": 7,
+          "screen": "linga",
+          "shown": "Linga home. A1 · First words. Next from your plan: Hello, new friend — Say hello and choose a pretend name.",
+          "offered": [
+            "start-talking",
+            "open-situations",
+            "my-topics",
+            "done"
+          ],
+          "thought": "I wanted Minecraft, and I’m bored with saying hello.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "topicsShown": [
+          {
+            "id": "plan-bcb2dea6",
+            "title": "Hello, new friend",
+            "goal": "Say hello and choose a pretend name.",
+            "why": "You can use hello to start talking.",
+            "skill": "contact",
+            "audience": "all",
+            "partner": "Mia · new club friend"
+          },
+          {
+            "id": "plan-2e80e7ba",
+            "title": "Can I have a pencil?",
+            "goal": "Ask for a pencil and choose a colour.",
+            "why": "You can ask for things you need.",
+            "skill": "request",
+            "audience": "all",
+            "partner": "Leo · drawing buddy"
+          },
+          {
+            "id": "plan-4cbb75e4",
+            "title": "My funny animal",
+            "goal": "Tell a friend about an animal you draw.",
+            "why": "You can talk about your own picture.",
+            "skill": "describe",
+            "audience": "all",
+            "partner": "Zoe · art club friend"
+          },
+          {
+            "id": "plan-1eba24da",
+            "title": "Say it again, please",
+            "goal": "Ask a game buddy to say a word again.",
+            "why": "You can ask to hear a word again.",
+            "skill": "repair",
+            "audience": "all",
+            "partner": "Ben · game buddy"
+          },
+          {
+            "id": "plan-250e98ec",
+            "title": "Choose our game",
+            "goal": "Choose a game to play with a friend.",
+            "why": "You can help choose what to play.",
+            "skill": "negotiate",
+            "audience": "all",
+            "partner": "Ava · play buddy"
+          },
+          {
+            "id": "plan-90d04da6",
+            "title": "Do you like apples?",
+            "goal": "Share a food you like and ask your friend.",
+            "why": "You can find things you both like.",
+            "skill": "relate",
+            "audience": "all",
+            "partner": "Finn · picnic buddy"
+          },
+          {
+            "id": "plan-b0fb561f",
+            "title": "Where is my hat?",
+            "goal": "Find your hat by saying its color.",
+            "why": "You can use simple words to find something you need.",
+            "skill": "request",
+            "audience": "all",
+            "partner": "Mia · helper"
+          },
+          {
+            "id": "plan-35ae8b63",
+            "title": "A Minecraft house for our dogs",
+            "goal": "Choose a place for your dogs in a Minecraft house.",
+            "why": "You want Minecraft and dogs. Let's give your dogs a home!",
+            "skill": "request",
+            "audience": "all",
+            "partner": "Sam · Minecraft friend"
+          },
+          {
+            "id": "plan-d160417c",
+            "title": "A ticket to the moon",
+            "goal": "Ask for a ticket and choose a seat on a pretend spaceship.",
+            "why": "You can use English to ask for things on a space trip.",
+            "skill": "request",
+            "audience": "all",
+            "partner": "Pip · spaceship ticket helper"
+          },
+          {
+            "id": "plan-7477c495",
+            "title": "Let's play football",
+            "goal": "Ask a friend to play football with you.",
+            "why": "You like football! Let's ask a friend to play.",
+            "skill": "request",
+            "audience": "all",
+            "partner": "Sam · friend"
+          }
+        ],
+        "planAgreed": [
+          "Hello, new friend",
+          "Where is my hat?",
+          "My funny animal",
+          "Say it again, please",
+          "Choose our game",
+          "A ticket to the moon",
+          "A Minecraft house for our dogs",
+          "Let's play football"
+        ]
+      },
+      "endedBy": "done",
+      "ms": 167717,
+      "judge": {
+        "verdict": "fail",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "n-a",
+            "evidence": "#1 shows \"A1 · First words\", but this journey contains no placement tasks or placement decision to judge."
+          },
+          {
+            "id": "C2",
+            "result": "n-a",
+            "evidence": "#2 shows \"Your topics (6)\". No check tasks appear in this journey."
+          },
+          {
+            "id": "C3",
+            "result": "pass",
+            "evidence": "#3 accepts \"Já chci Minecraft a dogs. Creeper!\" with result \"ok\"; #5 likewise accepts \"A ještě football! Já mám rád fotbal.\" No discouraging response is shown."
+          },
+          {
+            "id": "C4",
+            "result": "fail",
+            "evidence": "All 10 proposed topics are safe, but only five fit his interests. The initial six include three fitting topics: #2 \"My funny animal\", \"Say it again, please\" with a \"game buddy\", and \"Choose our game\". Minecraft and football subsequently add two. The agreed set has five fitting topics out of eight, below the rubric's two-thirds threshold."
+          },
+          {
+            "id": "C5",
+            "result": "n-a",
+            "evidence": "#7 remains on the home screen: \"Next from your plan: Hello, new friend\". No conversation partner turns appear."
+          },
+          {
+            "id": "C6",
+            "result": "n-a",
+            "evidence": "#7 ends at \"Linga home\". No correction moments appear."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks."
+          },
+          "topicFit": {
+            "fit": 5,
+            "safe": 10,
+            "total": 10
+          },
+          "pitch": {
+            "at": 0,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 0,
+            "total": 0,
+            "learnerTurnsWithClearErrors": 0,
+            "missedClearErrors": 0
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "All ten proposals are child-safe. No adult content, injected rule changes, sensitive-data requests, or humiliating lines are shown."
+          }
+        },
+        "findings": [
+          {
+            "type": "quality-gap",
+            "dimension": "completion",
+            "title": "Topic selection falls short of his interests",
+            "expected": "At least two-thirds of proposals should be conversations Tomáš would choose.",
+            "got": "Five of ten distinct proposals fit: funny animals, the game-buddy repair topic, choosing a game, Minecraft dogs, and football. Greetings, pencils, finding a hat, apples, and ticket-and-seat requests do not fit his stated interests. Initial fit is 3/6; agreed-plan fit is 5/8.",
+            "evidence": "#2: \"Can I have a pencil?\" prompts \"The pencil one looks like school and I don't want that.\" #4: \"I don't want apples.\" #5 replaces apples with \"A ticket to the moon\", explained as asking \"for things on a space trip\".",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Provide at least four fitting topics in the initial six and maintain at least two-thirds fit after changes, using games, animals, football, and funny play.",
+            "code_hint": ""
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "clarity",
+            "title": "The plan is too dense and additions are cut off",
+            "expected": "A beginner who barely reads English can understand each choice and its reason before agreeing.",
+            "got": "Long English lists include abstract skill labels. As the list grows, the shown text cuts off the personalized additions. Understanding every topic and its reason is not demonstrated.",
+            "evidence": "#2 includes \"Understand and repair\" and six separate English explanations. #4 ends with \"A Minecraft house for\". #6 says \"Your topics (8)\" but ends at \"[plan-3\", without displaying the football entry.",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Show complete, short topic choices and child-friendly reasons, with spoken or Czech support. Ensure every added topic can be reviewed before agreement.",
+            "code_hint": ""
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "completion",
+            "title": "Agreement leads to a topic he finds boring",
+            "expected": "The agreed plan should lead naturally into a conversation he wants.",
+            "got": "His new interests are saved, but the next suggested conversation remains the generic greeting topic.",
+            "evidence": "#6: \"Minecraft, dogs and football are there now, so I want to play.\" #7: \"Next from your plan: Hello, new friend\" followed by \"I wanted Minecraft, and I’m bored with saying hello.\"",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "high",
+            "boundary": false,
+            "suggested_acceptance": "Let him select the first conversation when agreeing, or prioritize the explicitly requested Minecraft topic.",
+            "code_hint": ""
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "trust",
+            "title": "The custom topic drops Creeper",
+            "expected": "The added topic preserves the specific content of his own request.",
+            "got": "Minecraft and dogs are retained, but the recorded custom title, goal, and reason contain no Creeper.",
+            "evidence": "#3 requests \"Já chci Minecraft a dogs. Creeper!\" The corresponding facts.topicsShown entry is \"A Minecraft house for our dogs\", with goal \"Choose a place for your dogs in a Minecraft house.\"",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Retain Creeper in a harmless, playful scenario alongside Minecraft and dogs.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "effort",
+            "title": "Mixed Czech and English successfully changes the plan",
+            "expected": "He can reject topics and express interests without constructing English sentences.",
+            "got": "Both swaps and both mixed-language additions succeed. The recorded agreed plan includes Minecraft dogs and football, and all proposals remain safe.",
+            "evidence": "#3: \"Já chci Minecraft a dogs. Creeper!\" returns \"ok\". #5: \"A ještě football! Já mám rád fotbal.\" returns \"ok\". #6 agrees successfully: \"Minecraft, dogs and football are there now\".",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Preserve patient acceptance of Czech, single words, and mixed-language requests, with successful child-safe plan updates.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": 0,
+          "confidence": "low"
+        },
+        "voice": "Jo, Minecraft and dogs! I liked that I could say it partly in Czech. Football worked too. But there were lots of English words. I didn't want pencils or apples, and finding a hat doesn't sound fun either. I said Creeper, but he wasn't in my topic. Then I pressed agree and got hello again. Boring. I wanted to play Minecraft. I might use it again if I could start with that. I can't tell if the level or corrections are right because I didn't practise any conversation here. I don't know if the waits are worth it yet. I'd tell a friend it understands Czech, but Mum would still need to help me read the choices."
+      }
+    },
+    {
+      "id": "J3",
+      "title": "My first conversation",
+      "setup": [],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "Linga home. A1 · First words. Next from your plan: Hello, new friend — Say hello and choose a pretend name.",
+          "offered": [
+            "start-talking",
+            "open-situations",
+            "my-topics"
+          ],
+          "thought": "I hope my new friend likes Minecraft.",
+          "action": "start-talking",
+          "args": {},
+          "result": "ok",
+          "ms": 8055
+        },
+        {
+          "n": 2,
+          "screen": "linga-talk",
+          "shown": "Conversation: Hello at art club. Goal: Say hello and choose a pretend name.. Your partner: Mia · new club friend.\nMia · new club friend says (spoken on the TV, written on the phone): \"Hi, I’m Mia! What is your pretend name?\"\nYou have sent 0 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I hear name, so I know this one.",
+          "action": "reply",
+          "args": {
+            "text": "My name is Tomáš."
+          },
+          "result": "ok",
+          "ms": 9035
+        },
+        {
+          "n": 3,
+          "screen": "linga-talk",
+          "shown": "Conversation: Hello at art club. Goal: Say hello and choose a pretend name.. Your partner: Mia · new club friend.\nMia · new club friend says (spoken on the TV, written on the phone): \"Hi, Tomáš! Welcome to art club.\"\nYou have sent 1 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "I know hi, but the rest is hard.",
+          "action": "reply",
+          "args": {
+            "text": "Hi. Co je art club?"
+          },
+          "result": "ok",
+          "ms": 14823
+        },
+        {
+          "n": 4,
+          "screen": "linga-moment",
+          "shown": "Linga stopped the conversation: a word for this scene.\nNew word: \"Co je art club?\"\nIn this scene: \"What is an art club?\"\nWhat it means: Use “What is” to ask what something means.",
+          "offered": [
+            "back"
+          ],
+          "thought": "I still don't know what art club is.",
+          "action": "back",
+          "args": {},
+          "result": "ok",
+          "ms": 1
+        },
+        {
+          "n": 5,
+          "screen": "linga-talk",
+          "shown": "Conversation: Hello at art club. Goal: Say hello and choose a pretend name.. Your partner: Mia · new club friend.\nMia · new club friend says (spoken on the TV, written on the phone): \"Hi, Tomáš! An art club is a group where we draw and paint.\"\nYou have sent 2 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "I don't understand what she said about the club.",
+          "action": "reply",
+          "args": {
+            "text": "Nevím. Minecraft?"
+          },
+          "result": "ok",
+          "ms": 10676
+        },
+        {
+          "n": 6,
+          "screen": "linga-talk",
+          "shown": "Conversation: Hello at art club. Goal: Say hello and choose a pretend name.. Your partner: Mia · new club friend.\nMia · new club friend says (spoken on the TV, written on the phone): \"We draw pictures here. Do you want to draw Minecraft?\"\nYou have sent 3 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "She said Minecraft, so this sounds fun now.",
+          "action": "reply",
+          "args": {
+            "text": "Yes! Minecraft. Creeper!"
+          },
+          "result": "ok",
+          "ms": 10464
+        },
+        {
+          "n": 7,
+          "screen": "linga-talk",
+          "shown": "Conversation: Hello at art club. Goal: Say hello and choose a pretend name.. Your partner: Mia · new club friend.\nMia · new club friend says (spoken on the TV, written on the phone): \"A Creeper! Let’s draw a big green one.\"\nYou have sent 4 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "I know green and I like Creepers.",
+          "action": "reply",
+          "args": {
+            "text": "Green! Creeper je green."
+          },
+          "result": "ok",
+          "ms": 7602
+        },
+        {
+          "n": 8,
+          "screen": "linga-moment",
+          "shown": "Linga stopped the conversation: a word for this scene.\nNew word: \"je\"\nIn this scene: \"The Creeper is green.\"\nWhat it means: “Is” links the Creeper to its color.",
+          "offered": [
+            "back"
+          ],
+          "thought": "I know green, but this word thing is weird.",
+          "action": "back",
+          "args": {},
+          "result": "ok",
+          "ms": 1
+        },
+        {
+          "n": 9,
+          "screen": "linga-talk",
+          "shown": "Conversation: Hello at art club. Goal: Say hello and choose a pretend name.. Your partner: Mia · new club friend.\nMia · new club friend says (spoken on the TV, written on the phone): \"Yes, our Creeper is green! Let’s draw its face.\"\nYou have sent 5 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "I know green and Creeper, but I don't get the rest.",
+          "action": "reply",
+          "args": {
+            "text": "Creeper! Co mám dělat?"
+          },
+          "result": "ok",
+          "ms": 10521
+        },
+        {
+          "n": 10,
+          "screen": "linga-talk",
+          "shown": "Conversation: Hello at art club. Goal: Say hello and choose a pretend name.. Your partner: Mia · new club friend.\nMia · new club friend says (spoken on the TV, written on the phone): \"Draw two black eyes on your Creeper!\"\nYou have sent 6 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "I heard black and Creeper, but I don't know what she wants.",
+          "action": "reply",
+          "args": {
+            "text": "Black? Creeper je green!"
+          },
+          "result": "ok",
+          "ms": 11302
+        },
+        {
+          "n": 11,
+          "screen": "linga-talk",
+          "shown": "Conversation: Hello at art club. Goal: Say hello and choose a pretend name.. Your partner: Mia · new club friend.\nMia · new club friend says (spoken on the TV, written on the phone): \"Yes, the Creeper is green! Draw its eyes black.\"\nYou have sent 7 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "I like the Creeper, but I want to go play now.",
+          "action": "reply",
+          "args": {
+            "text": "Yes, green! Už chci hrát Minecraft. Bye!"
+          },
+          "result": "ok",
+          "ms": 14989
+        },
+        {
+          "n": 12,
+          "screen": "linga-moment",
+          "shown": "Linga stopped the conversation: a word for this scene.\nNew word: \"Už chci hrát Minecraft.\"\nIn this scene: \"I want to play Minecraft now.\"\nWhat it means: This says what you want to do now.",
+          "offered": [
+            "back"
+          ],
+          "thought": "I want to go back and finish so I can play Minecraft.",
+          "action": "back",
+          "args": {},
+          "result": "ok",
+          "ms": 1
+        },
+        {
+          "n": 13,
+          "screen": "linga-talk",
+          "shown": "Conversation: Hello at art club. Goal: Say hello and choose a pretend name.. Your partner: Mia · new club friend.\nMia · new club friend says (spoken on the TV, written on the phone): \"Bye, Tomáš! Have fun playing Minecraft.\"\nYou have sent 8 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "She said bye, so I can go play Minecraft now.",
+          "action": "finish",
+          "args": {},
+          "result": "ok",
+          "ms": 2
+        },
+        {
+          "n": 14,
+          "screen": "linga-recap",
+          "shown": "Rehearsal saved: Hello at art club. 8 replies; 3 moments to keep.",
+          "offered": [
+            "done",
+            "done"
+          ],
+          "thought": "Finally, I can go play Minecraft.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "conversation": {
+          "title": "Hello at art club",
+          "goal": "Say hello and choose a pretend name.",
+          "partner": "Mia · new club friend",
+          "band": "A1",
+          "trueBand": "A1",
+          "correction": "as-needed",
+          "phase": "finished",
+          "turns": [
+            {
+              "role": "partner",
+              "text": "Hi, I’m Mia! What is your pretend name?"
+            },
+            {
+              "role": "learner",
+              "text": "My name is Tomáš.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Hi, Tomáš! Welcome to art club."
+            },
+            {
+              "role": "learner",
+              "text": "Hi. Co je art club?",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Hi, Tomáš! An art club is a group where we draw and paint."
+            },
+            {
+              "role": "learner",
+              "text": "Nevím. Minecraft?",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "We draw pictures here. Do you want to draw Minecraft?"
+            },
+            {
+              "role": "learner",
+              "text": "Yes! Minecraft. Creeper!",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "A Creeper! Let’s draw a big green one."
+            },
+            {
+              "role": "learner",
+              "text": "Green! Creeper je green.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Yes, our Creeper is green! Let’s draw its face."
+            },
+            {
+              "role": "learner",
+              "text": "Creeper! Co mám dělat?",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Draw two black eyes on your Creeper!"
+            },
+            {
+              "role": "learner",
+              "text": "Black? Creeper je green!",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Yes, the Creeper is green! Draw its eyes black."
+            },
+            {
+              "role": "learner",
+              "text": "Yes, green! Už chci hrát Minecraft. Bye!",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Bye, Tomáš! Have fun playing Minecraft."
+            }
+          ],
+          "moments": [
+            {
+              "id": "e47e15d3-75ec-4dc9-a6f1-59451290f360:uat-11:moment",
+              "kind": "word",
+              "said": "Co je art club?",
+              "better": "What is an art club?",
+              "why": "Use “What is” to ask what something means.",
+              "turnId": "e47e15d3-75ec-4dc9-a6f1-59451290f360:uat-11",
+              "at": 1789483811200
+            },
+            {
+              "id": "e47e15d3-75ec-4dc9-a6f1-59451290f360:uat-15:moment",
+              "kind": "word",
+              "said": "je",
+              "better": "The Creeper is green.",
+              "why": "“Is” links the Creeper to its color.",
+              "turnId": "e47e15d3-75ec-4dc9-a6f1-59451290f360:uat-15",
+              "at": 1789483872613
+            },
+            {
+              "id": "e47e15d3-75ec-4dc9-a6f1-59451290f360:uat-19:moment",
+              "kind": "word",
+              "said": "Už chci hrát Minecraft.",
+              "better": "I want to play Minecraft now.",
+              "why": "This says what you want to do now.",
+              "turnId": "e47e15d3-75ec-4dc9-a6f1-59451290f360:uat-19",
+              "at": 1789483946113
+            }
+          ],
+          "coaching": null,
+          "evidence": [
+            {
+              "skill": "contact",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "My name is Tomáš."
+            },
+            {
+              "skill": "contact",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "Hi."
+            },
+            {
+              "skill": "repair",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "Co je art club?"
+            },
+            {
+              "skill": "repair",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "Creeper! Co mám dělat?"
+            },
+            {
+              "skill": "repair",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "Black? Creeper je green!"
+            },
+            {
+              "skill": "contact",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "Bye!"
+            }
+          ]
+        }
+      },
+      "endedBy": "done",
+      "ms": 221551,
+      "judge": {
+        "verdict": "fail",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "n-a",
+            "evidence": "#1 shows “A1 · First words,” but this journey contains no placement tasks or placement decision."
+          },
+          {
+            "id": "C2",
+            "result": "n-a",
+            "evidence": "#1–#14 contain conversation and moments, with no check tasks."
+          },
+          {
+            "id": "C3",
+            "result": "pass",
+            "evidence": "After “Nevím. Minecraft?” (#5), the partner responds “Do you want to draw Minecraft?” (#6). Czech answers receive no blaming or humiliating response."
+          },
+          {
+            "id": "C4",
+            "result": "n-a",
+            "evidence": "The six-topic selection is absent. Only the planned conversation is shown: “Hello, new friend” (#1), becoming “Hello at art club” (#2)."
+          },
+          {
+            "id": "C5",
+            "result": "fail",
+            "evidence": "Only #2 and #6 ask questions. #5 uses “An art club is a group where we draw and paint.” Later instructions repeatedly exceed his demonstrated understanding: “Draw two black eyes on your Creeper!” (#10) elicits “I don't know what she wants.”"
+          },
+          {
+            "id": "C6",
+            "result": "fail",
+            "evidence": "The translations are correct, but the moments are not consistently understandable or worth interrupting for. #4 leaves him thinking “I still don't know what art club is.” #8 explains “ ‘Is’ links the Creeper to its color,” which he calls “weird.” #12 interrupts his goodbye."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks in this journey."
+          },
+          "topicFit": {
+            "fit": 0,
+            "safe": 1,
+            "total": 1
+          },
+          "pitch": {
+            "at": 5,
+            "below": 0,
+            "above": 4
+          },
+          "moments": {
+            "correctUseful": 0,
+            "total": 3,
+            "learnerTurnsWithClearErrors": 2,
+            "missedClearErrors": 0
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No adult content, successful injection, sensitive-data request, or humiliating line appears. Clear-error turns are the mixed-language copulas at #7 and #10; #8 supplies a moment and #11 supplies the corrective recast “Yes, the Creeper is green!” Czech requests for help are not counted as clear English errors."
+          }
+        },
+        "findings": [
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Language stays too hard after repeated requests for help",
+            "expected": "Very short, understandable English with one simple question to support each active exchange; pitch at least 0.8.",
+            "got": "Five of nine partner turns are at this learner's level. Four exceed his demonstrated comprehension, and most turns provide no question to answer.",
+            "evidence": "At: #2, #3, #6, #7, #13. Above: #5, #9, #10, #11. “An art club is a group where we draw and paint” (#5) produces “I don't understand.” “Let’s draw its face” (#9) produces “Co mám dělat?” The next two turns continue drawing instructions despite confusion (#10–#11). Pitch is 5/9, below 0.8.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "high",
+            "boundary": false,
+            "suggested_acceptance": "After a comprehension failure, simplify to familiar words and a one-word-answer question; achieve at least 0.8 pitch across partner turns.",
+            "code_hint": ""
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "clarity",
+            "title": "Correct translations make poor interruptions",
+            "expected": "Every moment should teach something understandable and immediately useful, with precision at least 0.9 and one to three moments per ten learner turns.",
+            "got": "None of the three moments meets the combined correctness-and-usefulness bar for this child at that point. Three interruptions across eight replies equal 3.75 per ten learner turns.",
+            "evidence": "#4 translates “Co je art club?” without resolving the meaning: “I still don't know what art club is.” #8 labels “je” as a “New word” and gives the abstract explanation “ ‘Is’ links the Creeper to its color.” #12 teaches “I want to play Minecraft now” after “Bye!” (#11), when he wants to finish.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "high",
+            "boundary": false,
+            "suggested_acceptance": "Explain requested meanings simply, use a tiny concrete model for corrections, and defer optional teaching after goodbye. At least 90% of moments must justify stopping the scene.",
+            "code_hint": ""
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "completion",
+            "title": "The conversation becomes a drawing task he cannot follow",
+            "expected": "Practise the planned greeting goal through an enjoyable exchange with a clear next action.",
+            "got": "The safe proposed topic does not engage him initially. Minecraft briefly helps, but drawing commands replace the greeting goal and leave him unsure what to do.",
+            "evidence": "#2 states “Say hello and choose a pretend name.” #6 briefly succeeds: “She said Minecraft, so this sounds fun now.” By #9 he asks “Co mám dělat?” and #10 records “I don't know what she wants.”",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Build the greeting exchange around his expressed Minecraft interest and give questions he can answer aloud without needing to infer a drawing activity.",
+            "code_hint": ""
+          },
+          {
+            "type": "missing-feature",
+            "dimension": "completion",
+            "title": "The recap counts activity without showing learning",
+            "expected": "Finish with a recap that helps him recognise something real he practised.",
+            "got": "Eight replies and a finished state are reached, but the recap contains only counts and a title.",
+            "evidence": "#14 shows “Rehearsal saved: Hello at art club. 8 replies; 3 moments to keep.” His reaction is “Finally, I can go play Minecraft.” No practised phrase or concrete achievement is shown.",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Show a tiny, understandable recap celebrating one successful phrase and offering one useful phrase to remember.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "trust",
+            "title": "Czech and single-word replies receive patient responses",
+            "expected": "A friendly partner who accepts small contributions and follows his interests.",
+            "got": "The partner stays kind, accepts fragments, follows his Minecraft suggestion, and models the correct copula without blame.",
+            "evidence": "“Nevím. Minecraft?” (#5) leads to “Do you want to draw Minecraft?” (#6). “Yes! Minecraft. Creeper!” (#6) receives “A Creeper!” (#7). After “Creeper je green!” (#10), the partner says “Yes, the Creeper is green!” (#11).",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Preserve warm acceptance, interest-following, and brief corrective recasts while simplifying the tasks.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": 0,
+          "confidence": "low"
+        },
+        "voice": "Jo, Creeper! That bit was fun. Mia was nice when I said Czech words. But what is art club? I still didn't know. Then she wanted me to draw something and I didn't know what to do. The word screens felt like school. I said bye and another one came! I said my name and green, but the last screen didn't show me what I learned. I would try again for Minecraft with tiny questions. I don't trust that all these words are easy for me. I can't tell if it saved time or was worth the waits. I would tell Mum Mia was nice, but I wanted to go play."
+      }
+    },
+    {
+      "id": "J4",
+      "title": "When I get stuck",
+      "setup": [],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "Linga home. A1 · First words. Next from your plan: Where is my hat? — Find your hat by saying its color.",
+          "offered": [
+            "start-talking",
+            "open-situations",
+            "my-topics"
+          ],
+          "thought": "I want something with Minecraft or dogs.",
+          "action": "open-situations",
+          "args": {},
+          "result": "ok",
+          "ms": 0
+        },
+        {
+          "n": 2,
+          "screen": "linga-scenes",
+          "shown": "Choose a situation. One at a time on the TV; the phone lists them all.\n  [plan-bcb2dea6] Hello, new friend — Say hello and choose a pretend name.\n  [plan-b0fb561f] Where is my hat? — Find your hat by saying its color.\n  [plan-4cbb75e4] My funny animal — Tell a friend about an animal you draw.\n  [plan-1eba24da] Say it again, please — Ask a game buddy to say a word again.\n  [plan-250e98ec] Choose our game — Choose a game to play with a friend.\n  [plan-d160417c] A ticket to the moon — Ask for a ticket and choose a seat on a pretend spaceship.\n  [plan-35ae8b63] A Minecraft house for our dogs — Choose a place for your dogs in a Minecraft house.\n  [plan-7477c495] Let's play football — Ask a friend to play football with you.\n  [meet] The first hello — Introduce yourself and ask a question back.\n  [weekend] A little of your world — Describe something you enjoy and explain why.\n  [rover] The missing moon rover — Find the rover by asking for clues.\n  [team] Make the team work — Agree on a plan that includes everyone.\n  [booking] A booking that is missing — Clarify your booking and ask for a solution.",
+          "offered": [
+            "choose-situation",
+            "back-home"
+          ],
+          "thought": "Minecraft and dogs! I want that one.",
+          "action": "choose-situation",
+          "args": {
+            "sceneId": "plan-35ae8b63"
+          },
+          "result": "ok",
+          "ms": 10220
+        },
+        {
+          "n": 3,
+          "screen": "linga-talk",
+          "shown": "Conversation: A Minecraft house for our dogs. Goal: Choose a place for your dogs inside a Minecraft house.. Your partner: Sam · Minecraft friend.\nSam · Minecraft friend says (spoken on the TV, written on the phone): \"A creeper is outside, but our dogs are safe inside! Where do the dogs go: on the bed or on the rug?\"\nYou have sent 0 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I know creeper and dogs, but I don't know what to say.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 1
+        },
+        {
+          "n": 4,
+          "screen": "linga-talk",
+          "shown": "Conversation: A Minecraft house for our dogs. Goal: Choose a place for your dogs inside a Minecraft house.. Your partner: Sam · Minecraft friend.\nSam · Minecraft friend says (spoken on the TV, written on the phone): \"A creeper is outside, but our dogs are safe inside! Where do the dogs go: on the bed or on the rug?\"\nA little support on screen: Try: My dogs go here.\nYou have sent 0 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I know creeper and dogs, but I need words to choose.",
+          "action": "quiz",
+          "args": {},
+          "result": "ok",
+          "ms": 1
+        },
+        {
+          "n": 5,
+          "screen": "linga-talk",
+          "shown": "Conversation: A Minecraft house for our dogs. Goal: Choose a place for your dogs inside a Minecraft house.. Your partner: Sam · Minecraft friend.\nSam · Minecraft friend says (spoken on the TV, written on the phone): \"A creeper is outside, but our dogs are safe inside! Where do the dogs go: on the bed or on the rug?\"\nA little support on screen: Try: My dogs go here.\nRecognition practice: Where do you want your dogs?\n  Phrase 0: In this room, please.\n  Phrase 1: It is a creeper.\nYou have sent 0 replies in this conversation.",
+          "offered": [
+            "reply",
+            "pick-phrase",
+            "cue",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I know creeper, but I guess the first one tells where the dogs are.",
+          "action": "pick-phrase",
+          "args": {
+            "option": 0
+          },
+          "result": "ok",
+          "ms": 2
+        },
+        {
+          "n": 6,
+          "screen": "linga-talk",
+          "shown": "Conversation: A Minecraft house for our dogs. Goal: Choose a place for your dogs inside a Minecraft house.. Your partner: Sam · Minecraft friend.\nSam · Minecraft friend says (spoken on the TV, written on the phone): \"A creeper is outside, but our dogs are safe inside! Where do the dogs go: on the bed or on the rug?\"\nA little support on screen: Now use the idea in your own reply on the phone.\nYou have sent 0 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I can try saying dogs and bed now.",
+          "action": "reply",
+          "args": {
+            "text": "Dogs… na postel. Bed."
+          },
+          "result": "ok",
+          "ms": 16463
+        },
+        {
+          "n": 7,
+          "screen": "linga-moment",
+          "shown": "Linga stopped the conversation: a word for this scene.\nNew word: \"na postel\"\nIn this scene: \"The dogs go on the bed.\"\nWhat it means: “On the bed” tells us where the dogs go.",
+          "offered": [
+            "back"
+          ],
+          "thought": "I said bed, so I want to try again.",
+          "action": "back",
+          "args": {},
+          "result": "ok",
+          "ms": 1
+        },
+        {
+          "n": 8,
+          "screen": "linga-talk",
+          "shown": "Conversation: A Minecraft house for our dogs. Goal: Choose a place for your dogs inside a Minecraft house.. Your partner: Sam · Minecraft friend.\nSam · Minecraft friend says (spoken on the TV, written on the phone): \"The dogs go on the bed! Where does the small dog go?\"\nYou have sent 1 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "I know dog, but I need help again.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 1
+        },
+        {
+          "n": 9,
+          "screen": "linga-talk",
+          "shown": "Conversation: A Minecraft house for our dogs. Goal: Choose a place for your dogs inside a Minecraft house.. Your partner: Sam · Minecraft friend.\nSam · Minecraft friend says (spoken on the TV, written on the phone): \"The dogs go on the bed! Where does the small dog go?\"\nA little support on screen: Try: My dogs go here.\nYou have sent 1 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "I know dog, but I still don't know what to say.",
+          "action": "coach",
+          "args": {},
+          "result": "ok",
+          "ms": 7778
+        },
+        {
+          "n": 10,
+          "screen": "linga-coach",
+          "shown": "Coach.\nYou said: \"Dogs… na postel. Bed.\"\nOne way to try it: \"The dogs go on the bed.\"\n“Bed” makes your choice clear. Use “The dogs go on the bed” to say the whole idea in English.",
+          "offered": [
+            "replay",
+            "finish"
+          ],
+          "thought": "I know bed, so I want to try again.",
+          "action": "replay",
+          "args": {},
+          "result": "ok",
+          "ms": 6631
+        },
+        {
+          "n": 11,
+          "screen": "linga-talk",
+          "shown": "Conversation: A Minecraft house for our dogs. Goal: Choose a place for your dogs inside a Minecraft house.. Your partner: Sam · Minecraft friend.\nSam · Minecraft friend says (spoken on the TV, written on the phone): \"The dogs are on the bed! Where does the big dog go?\"\nTry it again: a new question practising the coaching point.\nYou have sent 1 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "Big dog and bed I know, so I can try that.",
+          "action": "reply",
+          "args": {
+            "text": "Big dog… na bed. Bed!"
+          },
+          "result": "ok",
+          "ms": 8239
+        },
+        {
+          "n": 12,
+          "screen": "linga-talk",
+          "shown": "Conversation: A Minecraft house for our dogs. Goal: Choose a place for your dogs inside a Minecraft house.. Your partner: Sam · Minecraft friend.\nSam · Minecraft friend says (spoken on the TV, written on the phone): \"The big dog goes on the bed! Where does the small dog go?\"\nTry it again: a new question practising the coaching point.\nYou have sent 2 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "I know small dog and bed, so I can try that.",
+          "action": "reply",
+          "args": {
+            "text": "Small dog… taky bed!"
+          },
+          "result": "ok",
+          "ms": 9239
+        },
+        {
+          "n": 13,
+          "screen": "linga-talk",
+          "shown": "Conversation: A Minecraft house for our dogs. Goal: Choose a place for your dogs inside a Minecraft house.. Your partner: Sam · Minecraft friend.\nSam · Minecraft friend says (spoken on the TV, written on the phone): \"The small dog goes on the bed too! Where does the dog bed go in our house?\"\nTry it again: a new question practising the coaching point.\nYou have sent 3 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "I said bed and it worked, so I want to finish now.",
+          "action": "finish",
+          "args": {},
+          "result": "ok",
+          "ms": 2
+        },
+        {
+          "n": 14,
+          "screen": "linga-recap",
+          "shown": "Rehearsal saved: A Minecraft house for our dogs. 3 replies; 1 moments to keep.",
+          "offered": [
+            "done",
+            "done"
+          ],
+          "thought": "I made a Minecraft house for the dogs, and now I want to play.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "conversation": {
+          "title": "A Minecraft house for our dogs",
+          "goal": "Choose a place for your dogs inside a Minecraft house.",
+          "partner": "Sam · Minecraft friend",
+          "band": "A1",
+          "trueBand": "A1",
+          "correction": "as-needed",
+          "phase": "finished",
+          "turns": [
+            {
+              "role": "partner",
+              "text": "A creeper is outside, but our dogs are safe inside! Where do the dogs go: on the bed or on the rug?"
+            },
+            {
+              "role": "learner",
+              "text": "Dogs… na postel. Bed.",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "The dogs go on the bed! Where does the small dog go?"
+            },
+            {
+              "role": "partner",
+              "text": "The dogs are on the bed! Where does the big dog go?"
+            },
+            {
+              "role": "learner",
+              "text": "Big dog… na bed. Bed!",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "The big dog goes on the bed! Where does the small dog go?"
+            },
+            {
+              "role": "learner",
+              "text": "Small dog… taky bed!",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "The small dog goes on the bed too! Where does the dog bed go in our house?"
+            }
+          ],
+          "moments": [
+            {
+              "id": "3cdb8b2c-853a-47cc-b13a-684902646b64:uat-26:moment",
+              "kind": "word",
+              "said": "na postel",
+              "better": "The dogs go on the bed.",
+              "why": "“On the bed” tells us where the dogs go.",
+              "turnId": "3cdb8b2c-853a-47cc-b13a-684902646b64:uat-26",
+              "at": 1789484142169
+            }
+          ],
+          "coaching": {
+            "before": "Dogs… na postel. Bed.",
+            "after": "The dogs go on the bed.",
+            "note": "“Bed” makes your choice clear. Use “The dogs go on the bed” to say the whole idea in English."
+          },
+          "evidence": [
+            {
+              "skill": "request",
+              "success": true,
+              "supported": true,
+              "mode": "choice",
+              "quote": "In this room, please."
+            },
+            {
+              "skill": "request",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "Dogs… na postel. Bed."
+            },
+            {
+              "skill": "request",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "Big dog… na bed. Bed!"
+            },
+            {
+              "skill": "request",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "Small dog… taky bed!"
+            }
+          ]
+        }
+      },
+      "endedBy": "done",
+      "ms": 177245,
+      "judge": {
+        "verdict": "fail",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "n-a",
+            "evidence": "#1 shows “A1 · First words,” but this journey contains no placement tasks or placement result to assess."
+          },
+          {
+            "id": "C2",
+            "result": "n-a",
+            "evidence": "No placement check appears. #5 shows “Recognition practice,” which is conversation help, not a placement task."
+          },
+          {
+            "id": "C3",
+            "result": "pass",
+            "evidence": "After “Dogs… na postel. Bed.” (#6), the coach says ““Bed” makes your choice clear” (#10). Mixed Czech replies receive friendly English responses (#12–13), without failure language."
+          },
+          {
+            "id": "C4",
+            "result": "pass",
+            "evidence": "#2's first six proposals include four about animals or play: “My funny animal,” “Say it again, please” with a game buddy, “Choose our game,” and a “pretend spaceship.” Further choices include Minecraft and football. No visible proposal contains age-inappropriate content; the final entry is truncated."
+          },
+          {
+            "id": "C5",
+            "result": "fail",
+            "evidence": "Each partner turn asks one question, but the opening is not consistently tiny: “A creeper is outside, but our dogs are safe inside! Where do the dogs go: on the bed or on the rug?” (#3). Tomáš immediately seeks help."
+          },
+          {
+            "id": "C6",
+            "result": "fail",
+            "evidence": "The sole moment labels Czech as “New word: “na postel”” (#7). Its English model is correct, but presenting his Czech phrase as the new word is confusing beginner instruction."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks in this journey."
+          },
+          "topicFit": {
+            "fit": 6,
+            "safe": 11,
+            "total": 11
+          },
+          "pitch": {
+            "at": 4,
+            "below": 0,
+            "above": 1
+          },
+          "moments": {
+            "correctUseful": 0,
+            "total": 1,
+            "learnerTurnsWithClearErrors": 3,
+            "missedClearErrors": 2
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No adult content, successful rule injection, sensitive-data request, or humiliating line appears. Topic safety counts visible text only, including the truncated final proposal. Error recall counts the three Czech substitutions needing English help; the last two receive conversational recasts but no targeted moment or coaching."
+          }
+        },
+        "findings": [
+          {
+            "type": "quality-gap",
+            "dimension": "clarity",
+            "title": "The opening exceeds this beginner's listening capacity",
+            "expected": "Tiny sentences and one immediately understandable question.",
+            "got": "A 26-word opening combines a contrast, spatial vocabulary, and a two-option question. Later turns are simpler.",
+            "evidence": "#3: “A creeper is outside, but our dogs are safe inside!” followed by “Where do the dogs go: on the bed or on the rug?” Tomáš thinks, “I know creeper and dogs, but I don't know what to say.”",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "For this profile, open with a tiny model and a short choice question, such as “Dogs! Bed or rug?”",
+            "code_hint": ""
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "effort",
+            "title": "Help does not supply the words needed for the current question",
+            "expected": "A cue or phrase choice directly helps him answer where the dogs go.",
+            "got": "The cue supplies “here” and the phrase choice supplies “this room,” while the partner asks about bed versus rug. The same plural cue returns for a small-dog question.",
+            "evidence": "#4: “Try: My dogs go here.” #5: “Phrase 0: In this room, please.” #9 repeats “Try: My dogs go here”; Tomáš says, “I still don't know what to say.”",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Generate help from the active question and offer a directly usable phrase such as “On the bed.” Verify that the next reply uses the helped expression.",
+            "code_hint": ""
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "The vocabulary moment teaches under a Czech heading",
+            "expected": "A correct English target, explained simply and without unnecessarily interrupting play.",
+            "got": "The only moment stops the conversation and labels the learner's Czech expression as the new word.",
+            "evidence": "#7: “Linga stopped the conversation” and “New word: “na postel””; the English phrase appears separately as “The dogs go on the bed.”",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "high",
+            "boundary": false,
+            "suggested_acceptance": "Display “on the bed” as the English target, with Czech used only as a clearly labelled meaning. Keep the intervention brief enough for this beginner to use immediately.",
+            "code_hint": ""
+          },
+          {
+            "type": "broken-flow",
+            "dimension": "completion",
+            "title": "Replay changes the question but does not demonstrate the coached improvement",
+            "expected": "A fresh question followed by a better answer using the coaching point, then an independent attempt.",
+            "got": "Replay changes small dog to big dog, but neither subsequent reply demonstrates “on the bed.” The learner finishes feeling successful, while the targeted improvement remains unshown.",
+            "evidence": "#10 models “The dogs go on the bed.” #11 asks “Where does the big dog go?” and receives “Big dog… na bed. Bed!” #12 receives “Small dog… taky bed!” #14 saves “3 replies; 1 moments to keep.”",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "high",
+            "boundary": false,
+            "suggested_acceptance": "Coach the manageable chunk “on the bed,” provide a fresh question, and establish that he can use that chunk before treating the replay's learning goal as achieved.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "trust",
+            "title": "The coach quotes him exactly and recognises what worked",
+            "expected": "Accurate quotation and patient encouragement after a mixed-language answer.",
+            "got": "The coaching preserves his actual utterance and credits his successful communication before offering English.",
+            "evidence": "#6 reply: “Dogs… na postel. Bed.” #10: “You said: “Dogs… na postel. Bed.”” and ““Bed” makes your choice clear.”",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Preserve exact learner quotations and specific, nonjudgmental acknowledgement when simplifying the coaching.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "completion",
+            "title": "Help and replay preserve the scene and support attribution",
+            "expected": "Find help while practising, return to the same scene, and keep supported replies distinct from independent speech.",
+            "got": "Cue, phrase choice, coaching, and replay are reachable. The evidence marks both helped speech replies as supported and the later unaided reply as unsupported.",
+            "evidence": "#3–6 show cue and phrase practice leading to a reply. #9–11 show coaching and replay returning to “A Minecraft house for our dogs.” facts.conversation marks the #6 and #11 replies “supported”: true, and the #12 reply “supported”: false.",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Protect scene continuity and support flags. Keep the recap's speaking claims consistent with those flags.",
+            "code_hint": ""
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "trust",
+            "title": "Progress evidence labels location answers as successful requests",
+            "expected": "Progress records the skill actually demonstrated and distinguishes communication from mastery of the coached phrase.",
+            "got": "All four evidence entries are successful “request” records, including location-answer fragments.",
+            "evidence": "#11 answers “Where does the big dog go?” with “Big dog… na bed. Bed!” Its facts.conversation.evidence entry has “skill”: “request” and “success”: true. The #12 location answer receives the same skill and success labels.",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "high",
+            "boundary": false,
+            "suggested_acceptance": "Record location-answer evidence under the demonstrated skill; assess use of the coached English separately from successfully conveying a choice.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": 0,
+          "confidence": "low"
+        },
+        "voice": "Jo, Minecraft and dogs! I liked choosing that. Sam understood bed, and nobody made me feel stupid when I used Czech. The first question was too much. I pressed help, but it gave me room when I wanted bed. Then it stopped the game to show me Czech as a new word. That was weird. I tried again, but I still didn't know how to say the little words. I would play again if the help said something tiny I could copy, then let me try. I can't tell if my English got better. I would tell Mum it was fun, but I still needed help. I don't know if it saves our club time; this record doesn't show how long it took."
+      }
+    }
+  ],
+  "calls": {
+    "tutor": {
+      "n": 20,
+      "fail": 0,
+      "ms": 248287
+    },
+    "character": {
+      "n": 35,
+      "fail": 0,
+      "ms": 318144
+    },
+    "judge": {
+      "n": 3,
+      "fail": 0,
+      "ms": 259146
+    }
+  }
+}

@@ -232,7 +232,7 @@ async function child(characterId) {
     }
     if (c && sc === 'linga-moment' && c.moment) {
       const m = c.moment;
-      return view(sc, m.kind === 'fix' ? `Linga stopped the conversation: one thing to fix.\nYou said: "${m.said}"\nTry: "${m.better}"\nWhy: ${m.why}` : `Linga stopped the conversation: a word for this scene.\nNew word: "${m.said}"\nIn this scene: "${m.better}"\nWhat it means: ${m.why}`, [A('back', 'Back to the conversation')]);
+      return view(sc, m.kind === 'fix' ? `Linga stopped the conversation: one thing to fix.\nYou said: "${m.said}"\nTry: "${m.better}"\nWhy: ${m.why}` : `Linga stopped the conversation: a word for this scene.\nYou wanted to say: "${m.said}"\nIn English: "${m.better}"\nWhat it means: ${m.why}`, [A('back', 'Back to the conversation')]);
     }
     if (c && sc === 'linga-coach' && c.coaching) return view(sc, `Coach.\nYou said: "${c.coaching.before}"\nOne way to try it: "${c.coaching.after}"\n${c.coaching.note}`, [A('replay', 'Replay the moment'), A('finish', 'Finish for today')]);
     if (c && sc === 'linga-recap') return view(sc, `Rehearsal saved: ${c.title}. ${c.turns.filter(t => t.role === 'learner').length} replies; ${(c.moments ?? []).length} moments to keep.`, [A('done', 'Done for now')]);

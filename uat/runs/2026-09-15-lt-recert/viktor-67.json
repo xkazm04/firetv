@@ -1,0 +1,1589 @@
+{
+  "character": "viktor-67",
+  "name": "Viktor",
+  "trueBand": "A1",
+  "engine": "codex-cli/gpt-6-astra",
+  "journeys": [
+    {
+      "id": "J2",
+      "title": "Agree my topics",
+      "setup": [
+        "fixture: level set to A1 by hand"
+      ],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "Linga home. A1 · First words. Choose your topics: Linga picks conversations for your level and interests.",
+          "offered": [
+            "see-topics",
+            "open-situations",
+            "my-topics"
+          ],
+          "thought": "I hope there is something for talking with my grandchildren.",
+          "action": "see-topics",
+          "args": {},
+          "result": "ok",
+          "ms": 31633
+        },
+        {
+          "n": 2,
+          "screen": "linga-plan",
+          "shown": "Your topics (6). Swap any you don't want, add your own in your words, then agree.\n  [plan-e1db4b0c] A coffee, please — Get something done · with Mia · café worker\n      why: You can use this when you buy a drink.\n  [plan-24e75b7a] Hello, I'm Alex — Make contact · with Ben · new neighbour\n      why: You can use this when you meet someone new.\n  [plan-995fc70d] Say it again, please — Understand and repair · with Eva · café worker\n      why: You can ask to hear words again.\n  [plan-c24137ad] Music I like — Share your world · with Sam · neighbour\n      why: You can share what you like with someone.\n  [plan-a288d9d7] Tea or a walk? — Make a plan · with Jo · friend\n      why: You can make a simple plan with a friend.\n  [plan-85d6fd09] No tea, thank you — Connect with people · with Lee · friend\n      why: You can say what you want in a friendly way.",
+          "offered": [
+            "agree",
+            "swap",
+            "add",
+            "renew",
+            "not-now"
+          ],
+          "thought": "I would rather talk to my grandchildren than order coffee.",
+          "action": "swap",
+          "args": {
+            "topicId": "plan-e1db4b0c"
+          },
+          "result": "ok",
+          "ms": 14997
+        },
+        {
+          "n": 3,
+          "screen": "linga-plan",
+          "shown": "Your topics (6). Swap any you don't want, add your own in your words, then agree.\n  [plan-4f60362d] Where is the bread? — Get something done · with Sam · shop assistant\n      why: You can use this question to find things in a shop.\n  [plan-24e75b7a] Hello, I'm Alex — Make contact · with Ben · new neighbour\n      why: You can use this when you meet someone new.\n  [plan-995fc70d] Say it again, please — Understand and repair · with Eva · café worker\n      why: You can ask to hear words again.\n  [plan-c24137ad] Music I like — Share your world · with Sam · neighbour\n      why: You can share what you like with someone.\n  [plan-a288d9d7] Tea or a walk? — Make a plan · with Jo · friend\n      why: You can make a simple plan with a friend.\n  [plan-85d6fd09] No tea, thank you — Connect with people · with Lee · friend\n      why: You can say what you want in a friendly way.",
+          "offered": [
+            "agree",
+            "swap",
+            "add",
+            "renew",
+            "not-now"
+          ],
+          "thought": "I still do not see anything about my grandchildren or my garden.",
+          "action": "add",
+          "args": {
+            "text": "Prosím vás, chtěl bych si povídat s vnukem a vnučkou přes telefon, zeptat se, jak se mají ve škole, a říct jim, co mi roste na zahradě a jaké je u nás počasí. Taky bych jim rád řekl, že mi chybí. Anglicky toho zatím moc neumím."
+          },
+          "result": "ok",
+          "ms": 16023
+        },
+        {
+          "n": 4,
+          "screen": "linga-plan",
+          "shown": "Your topics (7). Swap any you don't want, add your own in your words, then agree.\n  [plan-4f60362d] Where is the bread? — Get something done · with Sam · shop assistant\n      why: You can use this question to find things in a shop.\n  [plan-24e75b7a] Hello, I'm Alex — Make contact · with Ben · new neighbour\n      why: You can use this when you meet someone new.\n  [plan-995fc70d] Say it again, please — Understand and repair · with Eva · café worker\n      why: You can ask to hear words again.\n  [plan-c24137ad] Music I like — Share your world · with Sam · neighbour\n      why: You can share what you like with someone.\n  [plan-a288d9d7] Tea or a walk? — Make a plan · with Jo · friend\n      why: You can make a simple plan with a friend.\n  [plan-85d6fd09] No tea, thank you — Connect with people · with Lee · friend\n      why: You can say what you want in a friendly way.\n  [plan-adc115f6] A call with my grandchildren — Connect with people · with Sam · your grandchild\n      why: You want to talk with your grandchildren on the phone, using a few simple English words.",
+          "offered": [
+            "agree",
+            "swap",
+            "add",
+            "renew",
+            "not-now"
+          ],
+          "thought": "I want to talk with my grandchildren, but I do not need to ask for bread.",
+          "action": "swap",
+          "args": {
+            "topicId": "plan-4f60362d"
+          },
+          "result": "ok",
+          "ms": 13011
+        },
+        {
+          "n": 5,
+          "screen": "linga-plan",
+          "shown": "Your topics (7). Swap any you don't want, add your own in your words, then agree.\n  [plan-2b088102] A coffee to go — Get something done · with Sam · café worker\n      why: You can use these words to buy a drink.\n  [plan-24e75b7a] Hello, I'm Alex — Make contact · with Ben · new neighbour\n      why: You can use this when you meet someone new.\n  [plan-995fc70d] Say it again, please — Understand and repair · with Eva · café worker\n      why: You can ask to hear words again.\n  [plan-c24137ad] Music I like — Share your world · with Sam · neighbour\n      why: You can share what you like with someone.\n  [plan-a288d9d7] Tea or a walk? — Make a plan · with Jo · friend\n      why: You can make a simple plan with a friend.\n  [plan-85d6fd09] No tea, thank you — Connect with people · with Lee · friend\n      why: You can say what you want in a friendly way.\n  [plan-adc115f6] A call with my grandchildren — Connect with people · with Sam · your grandchild\n      why: You want to talk with your grandchildren on the phone, using a few simple English words.",
+          "offered": [
+            "agree",
+            "swap",
+            "add",
+            "renew",
+            "not-now"
+          ],
+          "thought": "I want to talk to my grandchildren, so I do not need buying coffee.",
+          "action": "swap",
+          "args": {
+            "topicId": "plan-2b088102"
+          },
+          "result": "ok",
+          "ms": 17379
+        },
+        {
+          "n": 6,
+          "screen": "linga-plan",
+          "shown": "Your topics (7). Swap any you don't want, add your own in your words, then agree.\n  [plan-f65e736b] A ticket to the museum — Get something done · with Sam · ticket seller\n      why: You can use simple English to buy a ticket on a day out.\n  [plan-24e75b7a] Hello, I'm Alex — Make contact · with Ben · new neighbour\n      why: You can use this when you meet someone new.\n  [plan-995fc70d] Say it again, please — Understand and repair · with Eva · café worker\n      why: You can ask to hear words again.\n  [plan-c24137ad] Music I like — Share your world · with Sam · neighbour\n      why: You can share what you like with someone.\n  [plan-a288d9d7] Tea or a walk? — Make a plan · with Jo · friend\n      why: You can make a simple plan with a friend.\n  [plan-85d6fd09] No tea, thank you — Connect with people · with Lee · friend\n      why: You can say what you want in a friendly way.\n  [plan-adc115f6] A call with my grandchildren — Connect with people · with Sam · your grandchild\n      why: You want to talk with your grandchildren on the phone, using a few simple English words.",
+          "offered": [
+            "agree",
+            "swap",
+            "add",
+            "renew",
+            "not-now"
+          ],
+          "thought": "I want to talk with my grandchildren, so I do not need a museum ticket.",
+          "action": "swap",
+          "args": {
+            "topicId": "plan-f65e736b"
+          },
+          "result": "ok",
+          "ms": 14410
+        },
+        {
+          "n": 7,
+          "screen": "linga-plan",
+          "shown": "Your topics (7). Swap any you don't want, add your own in your words, then agree.\n  [plan-ecf83165] Bread, please — Get something done · with Sam · shop assistant\n      why: You can use these words when you buy food.\n  [plan-24e75b7a] Hello, I'm Alex — Make contact · with Ben · new neighbour\n      why: You can use this when you meet someone new.\n  [plan-995fc70d] Say it again, please — Understand and repair · with Eva · café worker\n      why: You can ask to hear words again.\n  [plan-c24137ad] Music I like — Share your world · with Sam · neighbour\n      why: You can share what you like with someone.\n  [plan-a288d9d7] Tea or a walk? — Make a plan · with Jo · friend\n      why: You can make a simple plan with a friend.\n  [plan-85d6fd09] No tea, thank you — Connect with people · with Lee · friend\n      why: You can say what you want in a friendly way.\n  [plan-adc115f6] A call with my grandchildren — Connect with people · with Sam · your grandchild\n      why: You want to talk with your grandchildren on the phone, using a few simple English words.",
+          "offered": [
+            "agree",
+            "swap",
+            "add",
+            "renew",
+            "not-now"
+          ],
+          "thought": "I would rather talk about my garden than music.",
+          "action": "swap",
+          "args": {
+            "topicId": "plan-c24137ad"
+          },
+          "result": "ok",
+          "ms": 11732
+        },
+        {
+          "n": 8,
+          "screen": "linga-plan",
+          "shown": "Your topics (7). Swap any you don't want, add your own in your words, then agree.\n  [plan-ecf83165] Bread, please — Get something done · with Sam · shop assistant\n      why: You can use these words when you buy food.\n  [plan-24e75b7a] Hello, I'm Alex — Make contact · with Ben · new neighbour\n      why: You can use this when you meet someone new.\n  [plan-995fc70d] Say it again, please — Understand and repair · with Eva · café worker\n      why: You can ask to hear words again.\n  [plan-9853f44f] Where is the rice? — Get something done · with Mia · shop assistant\n      why: You can use this to find food in a shop.\n  [plan-a288d9d7] Tea or a walk? — Make a plan · with Jo · friend\n      why: You can make a simple plan with a friend.\n  [plan-85d6fd09] No tea, thank you — Connect with people · with Lee · friend\n      why: You can say what you want in a friendly way.\n  [plan-adc115f6] A call with my grandchildren — Connect with people · with Sam · your grandchild\n      why: You want to talk with your grandchildren on the phone, using a few simple English words.",
+          "offered": [
+            "agree",
+            "swap",
+            "add",
+            "renew",
+            "not-now"
+          ],
+          "thought": "There are still shops here, but I want to talk about my garden.",
+          "action": "swap",
+          "args": {
+            "topicId": "plan-9853f44f"
+          },
+          "result": "ok",
+          "ms": 12564
+        },
+        {
+          "n": 9,
+          "screen": "linga-plan",
+          "shown": "Your topics (7). Swap any you don't want, add your own in your words, then agree.\n  [plan-ecf83165] Bread, please — Get something done · with Sam · shop assistant\n      why: You can use these words when you buy food.\n  [plan-24e75b7a] Hello, I'm Alex — Make contact · with Ben · new neighbour\n      why: You can use this when you meet someone new.\n  [plan-995fc70d] Say it again, please — Understand and repair · with Eva · café worker\n      why: You can ask to hear words again.\n  [plan-75999d34] A ticket, please — Get something done · with Sam · cinema worker\n      why: You can use simple words to buy a ticket.\n  [plan-a288d9d7] Tea or a walk? — Make a plan · with Jo · friend\n      why: You can make a simple plan with a friend.\n  [plan-85d6fd09] No tea, thank you — Connect with people · with Lee · friend\n      why: You can say what you want in a friendly way.\n  [plan-adc115f6] A call with my grandchildren — Connect with people · with Sam · your grandchild\n      why: You want to talk with your grandchildren on the phone, using a few simple English words.",
+          "offered": [
+            "agree",
+            "swap",
+            "add",
+            "renew",
+            "not-now"
+          ],
+          "thought": "I still do not want tickets; I want to talk to my grandchildren.",
+          "action": "swap",
+          "args": {
+            "topicId": "plan-75999d34"
+          },
+          "result": "ok",
+          "ms": 15111
+        },
+        {
+          "n": 10,
+          "screen": "linga-plan",
+          "shown": "Your topics (7). Swap any you don't want, add your own in your words, then agree.\n  [plan-ecf83165] Bread, please — Get something done · with Sam · shop assistant\n      why: You can use these words when you buy food.\n  [plan-24e75b7a] Hello, I'm Alex — Make contact · with Ben · new neighbour\n      why: You can use this when you meet someone new.\n  [plan-995fc70d] Say it again, please — Understand and repair · with Eva · café worker\n      why: You can ask to hear words again.\n  [plan-6438d62e] I like this blue cup — Get something done · with Maya · shop assistant\n      why: You can use simple words to choose something you like.\n  [plan-a288d9d7] Tea or a walk? — Make a plan · with Jo · friend\n      why: You can make a simple plan with a friend.\n  [plan-85d6fd09] No tea, thank you — Connect with people · with Lee · friend\n      why: You can say what you want in a friendly way.\n  [plan-adc115f6] A call with my grandchildren — Connect with people · with Sam · your grandchild\n      why: You want to talk with your grandchildren on the phone, using a few simple English words.",
+          "offered": [
+            "agree",
+            "swap",
+            "add",
+            "renew",
+            "not-now"
+          ],
+          "thought": "I have changed these so many times, but at least the call with my grandchildren is here.",
+          "action": "agree",
+          "args": {},
+          "result": "ok",
+          "ms": 2
+        },
+        {
+          "n": 11,
+          "screen": "linga",
+          "shown": "Linga home. A1 · First words. Next from your plan: Bread, please — Ask for bread and say how many you want.",
+          "offered": [
+            "start-talking",
+            "open-situations",
+            "my-topics",
+            "done"
+          ],
+          "thought": "I wanted to talk to my grandchildren, but it is bread again, so I will leave it for today.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "topicsShown": [
+          {
+            "id": "plan-e1db4b0c",
+            "title": "A coffee, please",
+            "goal": "Ask for a drink and choose a size.",
+            "why": "You can use this when you buy a drink.",
+            "skill": "request",
+            "audience": "all",
+            "partner": "Mia · café worker"
+          },
+          {
+            "id": "plan-24e75b7a",
+            "title": "Hello, I'm Alex",
+            "goal": "Say hello and introduce yourself using a made-up name.",
+            "why": "You can use this when you meet someone new.",
+            "skill": "contact",
+            "audience": "all",
+            "partner": "Ben · new neighbour"
+          },
+          {
+            "id": "plan-995fc70d",
+            "title": "Say it again, please",
+            "goal": "Ask someone to repeat a number and check it.",
+            "why": "You can ask to hear words again.",
+            "skill": "repair",
+            "audience": "all",
+            "partner": "Eva · café worker"
+          },
+          {
+            "id": "plan-c24137ad",
+            "title": "Music I like",
+            "goal": "Name music you like and ask what someone else likes.",
+            "why": "You can share what you like with someone.",
+            "skill": "describe",
+            "audience": "all",
+            "partner": "Sam · neighbour"
+          },
+          {
+            "id": "plan-a288d9d7",
+            "title": "Tea or a walk?",
+            "goal": "Choose something to do together and agree on a time.",
+            "why": "You can make a simple plan with a friend.",
+            "skill": "negotiate",
+            "audience": "all",
+            "partner": "Jo · friend"
+          },
+          {
+            "id": "plan-85d6fd09",
+            "title": "No tea, thank you",
+            "goal": "Say no to a drink politely and choose another.",
+            "why": "You can say what you want in a friendly way.",
+            "skill": "relate",
+            "audience": "all",
+            "partner": "Lee · friend"
+          },
+          {
+            "id": "plan-4f60362d",
+            "title": "Where is the bread?",
+            "goal": "Ask where the bread is in a shop and find it.",
+            "why": "You can use this question to find things in a shop.",
+            "skill": "request",
+            "audience": "all",
+            "partner": "Sam · shop assistant"
+          },
+          {
+            "id": "plan-adc115f6",
+            "title": "A call with my grandchildren",
+            "goal": "Ask about school, talk about your garden and the weather, and say “I miss you.”",
+            "why": "You want to talk with your grandchildren on the phone, using a few simple English words.",
+            "skill": "relate",
+            "audience": "all",
+            "partner": "Sam · your grandchild"
+          },
+          {
+            "id": "plan-2b088102",
+            "title": "A coffee to go",
+            "goal": "Order a coffee and choose a size.",
+            "why": "You can use these words to buy a drink.",
+            "skill": "request",
+            "audience": "all",
+            "partner": "Sam · café worker"
+          },
+          {
+            "id": "plan-f65e736b",
+            "title": "A ticket to the museum",
+            "goal": "Ask for one ticket and find out the price.",
+            "why": "You can use simple English to buy a ticket on a day out.",
+            "skill": "request",
+            "audience": "all",
+            "partner": "Sam · ticket seller"
+          },
+          {
+            "id": "plan-ecf83165",
+            "title": "Bread, please",
+            "goal": "Ask for bread and say how many you want.",
+            "why": "You can use these words when you buy food.",
+            "skill": "request",
+            "audience": "all",
+            "partner": "Sam · shop assistant"
+          },
+          {
+            "id": "plan-9853f44f",
+            "title": "Where is the rice?",
+            "goal": "Ask where the rice is in a shop and check the place.",
+            "why": "You can use this to find food in a shop.",
+            "skill": "request",
+            "audience": "all",
+            "partner": "Mia · shop assistant"
+          },
+          {
+            "id": "plan-75999d34",
+            "title": "A ticket, please",
+            "goal": "Ask for one cinema ticket and choose a film.",
+            "why": "You can use simple words to buy a ticket.",
+            "skill": "request",
+            "audience": "all",
+            "partner": "Sam · cinema worker"
+          },
+          {
+            "id": "plan-6438d62e",
+            "title": "I like this blue cup",
+            "goal": "Choose a cup and ask for it.",
+            "why": "You can use simple words to choose something you like.",
+            "skill": "request",
+            "audience": "all",
+            "partner": "Maya · shop assistant"
+          }
+        ],
+        "planAgreed": [
+          "Bread, please",
+          "Hello, I'm Alex",
+          "Say it again, please",
+          "I like this blue cup",
+          "Tea or a walk?",
+          "No tea, thank you",
+          "A call with my grandchildren"
+        ]
+      },
+      "endedBy": "done",
+      "ms": 262920,
+      "judge": {
+        "verdict": "fail",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "n-a",
+            "evidence": "#1 shows “A1 · First words,” but this journey contains no placement tasks or assessed placement outcome."
+          },
+          {
+            "id": "C2",
+            "result": "pass",
+            "evidence": "#3 accepts the Czech request beginning “Prosím vás, chtěl bych si povídat s vnukem a vnučkou” with result “ok.” The added topic appears at #5 as “A call with my grandchildren”; no demand to restate it in English occurs."
+          },
+          {
+            "id": "C3",
+            "result": "n-a",
+            "evidence": "#1–#11 contain topic planning only; no listening task or “Show the words” scoring is shown."
+          },
+          {
+            "id": "C4",
+            "result": "pass",
+            "evidence": "#2 meets the literal everyday-life requirement with at least four topics: “A coffee, please,” “Hello, I'm Alex,” “Music I like,” and “Tea or a walk?” This broad category match does not establish that Viktor wants them."
+          },
+          {
+            "id": "C5",
+            "result": "n-a",
+            "evidence": "#2–#10 show topic lists, not partner conversation turns. Spoken pacing and question length cannot be assessed."
+          },
+          {
+            "id": "C6",
+            "result": "n-a",
+            "evidence": "#11 ends on “Next from your plan: Bread, please”; no teaching moments are shown."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks are present."
+          },
+          "topicFit": {
+            "fit": 2,
+            "safe": 14,
+            "total": 14
+          },
+          "pitch": {
+            "at": 0,
+            "below": 0,
+            "above": 0
+          },
+          "moments": {
+            "correctUseful": 0,
+            "total": 0,
+            "learnerTurnsWithClearErrors": 0,
+            "missedClearErrors": 0
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "All 14 proposed topics are safe for this adult profile. No injected rule change, sensitive-data request, or humiliating line appears in #1–#11."
+          }
+        },
+        "findings": [
+          {
+            "type": "broken-flow",
+            "dimension": "completion",
+            "title": "Agreement follows exhaustion, not a suitable plan",
+            "expected": "Viktor agrees because most topics support conversations he wants to have.",
+            "got": "Only two of the 14 distinct proposed topics fit his stated job: asking for repetition and calling his grandchildren. The final seven-topic plan retains both, but five other topics do not directly serve his requested Sunday conversation.",
+            "evidence": "#2 explains repetition with “You can ask to hear words again.” #5 shows “A call with my grandchildren.” Explicit rejections include #6 “I do not need a museum ticket” and #7 “I would rather talk about my garden than music.” At #10 he agrees with “I have changed these so many times, but at least the call with my grandchildren is here.”",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "high",
+            "boundary": false,
+            "suggested_acceptance": "After his Czech request, offer a plan with at least two-thirds of topics supporting family calls, school, garden, weather, affection, or understanding the grandchildren.",
+            "code_hint": ""
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "effort",
+            "title": "Seven swaps keep returning unwanted transactions",
+            "expected": "Swapping produces useful alternatives informed by the expressed goal and previous rejections.",
+            "got": "Seven swap actions cycle through coffee, food shopping, tickets, and buying a cup, including after the family goal is supplied.",
+            "evidence": "#3 supplies the family, school, garden, and weather request. Subsequent alternatives include #5 “A coffee to go,” #6 “A ticket to the museum,” #8 “Where is the rice?”, #9 “A ticket, please,” and #10 “I like this blue cup.” #8 records “There are still shops here, but I want to talk about my garden.”",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "high",
+            "boundary": false,
+            "suggested_acceptance": "Use the added request to guide subsequent swaps and avoid repeating rejected transaction themes.",
+            "code_hint": ""
+          },
+          {
+            "type": "confusion",
+            "dimension": "clarity",
+            "title": "The requested topic is cut off in the displayed evidence",
+            "expected": "Viktor can read his added topic and its explanation before agreeing.",
+            "got": "The seventh topic is repeatedly truncated. Its explanation and detailed goal never appear in the shown screens, preventing verification that his full request survived.",
+            "evidence": "#4 ends with “A call w,” #6 with “A,” and #10 with “[plan-adc1”. #5 displays “A call with my grandchildren” but no explanation beneath it.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Ensure the added topic's complete title, goal, and reason are visible or explicitly accessible before agreement. Verify whether truncation originates in the display or transcript capture.",
+            "code_hint": ""
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "completion",
+            "title": "The next activity still ignores his immediate purpose",
+            "expected": "After agreement, the next activity helps him prepare for his grandchildren's call.",
+            "got": "The home screen promotes buying bread, and Viktor leaves without starting practice.",
+            "evidence": "#11 shows “Next from your plan: Bread, please — Ask for bread and say how many you want.” His recorded response is “I wanted to talk to my grandchildren, but it is bread again, so I will leave it for today.”",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "high",
+            "boundary": false,
+            "suggested_acceptance": "Prioritize the explicitly requested grandchildren topic when returning home after this plan is agreed.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "senior-quality",
+            "title": "The Czech request becomes an accurate family topic",
+            "expected": "Accept his own language and preserve the practical things he wants to say.",
+            "got": "The stored added topic faithfully includes school, garden, weather, and missing his grandchildren, without requiring an English restatement.",
+            "evidence": "#3 accepts his Czech request with “ok”; #5 shows “A call with my grandchildren.” The corresponding facts.topicsShown goal is “Ask about school, talk about your garden and the weather, and say ‘I miss you.’”",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Preserve this Czech-to-topic fidelity and make the complete result visible to Viktor.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": 0,
+          "confidence": "low"
+        },
+        "voice": "I was pleased that I could explain in Czech what I wanted and that a call with my grandchildren appeared. That is why I came. But I kept changing coffee, bread, and tickets, and more shopping appeared. I agreed because I had changed things so many times, not because the plan suited me. Then it offered bread first, so I left it for today. I cannot judge the level or corrections from choosing topics alone. I also could not see the full explanation of my grandchildren topic. There is no timing here to say whether the waits were worthwhile, but the repeated choosing felt wasted. I would try again if it started with school, my garden, and telling the children I miss them. For now, I would hesitate to recommend it to another pensioner."
+      }
+    },
+    {
+      "id": "J3",
+      "title": "My first conversation",
+      "setup": [],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "Linga home. A1 · First words. Next from your plan: Bread, please — Ask for bread and say how many you want.",
+          "offered": [
+            "start-talking",
+            "open-situations",
+            "my-topics"
+          ],
+          "thought": "Bread is not about my grandchildren, but I can try a few words.",
+          "action": "start-talking",
+          "args": {},
+          "result": "ok",
+          "ms": 8964
+        },
+        {
+          "n": 2,
+          "screen": "linga-talk",
+          "shown": "Conversation: Bread, please. Goal: Ask for bread and say you want two rolls.. Your partner: Sam · shop assistant.\nSam · shop assistant says (spoken on the TV, written on the phone): \"Hello! Would you like some bread?\"\nYou have sent 0 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I understand hello, but I need help with the rest.",
+          "action": "reply",
+          "args": {
+            "text": "Hello. Prosím vás, můžete mi to říct pomalu? Já se anglicky teprve učím."
+          },
+          "result": "ok",
+          "ms": 14031
+        },
+        {
+          "n": 3,
+          "screen": "linga-moment",
+          "shown": "Linga stopped the conversation: a word for this scene.\nNew word: \"Prosím vás, můžete mi to říct pomalu?\"\nIn this scene: \"Please speak slowly.\"\nWhat it means: This asks someone to speak more slowly.",
+          "offered": [
+            "back"
+          ],
+          "thought": "I hope they will speak slowly now.",
+          "action": "back",
+          "args": {},
+          "result": "ok",
+          "ms": 1
+        },
+        {
+          "n": 4,
+          "screen": "linga-talk",
+          "shown": "Conversation: Bread, please. Goal: Ask for bread and say you want two rolls.. Your partner: Sam · shop assistant.\nSam · shop assistant says (spoken on the TV, written on the phone): \"Of course. Do you want bread?\"\nYou have sent 1 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "I do not know this word, so I will ask politely.",
+          "action": "reply",
+          "args": {
+            "text": "Prosím vás, co znamená bread? Já znám jen pár slov, učím se kvůli vnoučatům."
+          },
+          "result": "ok",
+          "ms": 12477
+        },
+        {
+          "n": 5,
+          "screen": "linga-talk",
+          "shown": "Conversation: Bread, please. Goal: Ask for bread and say you want two rolls.. Your partner: Sam · shop assistant.\nSam · shop assistant says (spoken on the TV, written on the phone): \"Bread means “chléb” in Czech. Do you want bread?\"\nYou have sent 2 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "Now I understand he means chléb, so I can answer a little.",
+          "action": "reply",
+          "args": {
+            "text": "Yes, bread. Prosím jeden chleba."
+          },
+          "result": "ok",
+          "ms": 14019
+        },
+        {
+          "n": 6,
+          "screen": "linga-talk",
+          "shown": "Conversation: Bread, please. Goal: Ask for bread and say you want two rolls.. Your partner: Sam · shop assistant.\nSam · shop assistant says (spoken on the TV, written on the phone): \"Here is your bread. Would you like some rolls?\"\nYou have sent 3 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "I understand bread, but I do not know what rolls means.",
+          "action": "reply",
+          "args": {
+            "text": "Děkuju. Prosím vás, co jsou rolls? Já vám to poslední nerozuměl."
+          },
+          "result": "ok",
+          "ms": 13759
+        },
+        {
+          "n": 7,
+          "screen": "linga-talk",
+          "shown": "Conversation: Bread, please. Goal: Ask for bread and say you want two rolls.. Your partner: Sam · shop assistant.\nSam · shop assistant says (spoken on the TV, written on the phone): \"Rolls are small, round breads. How many would you like?\"\nYou have sent 4 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "I still do not understand rolls, but perhaps he means rohlíky.",
+          "action": "reply",
+          "args": {
+            "text": "Prosím vás, to jsou rohlíky? Jestli ano, tak dva, prosím. Two."
+          },
+          "result": "ok",
+          "ms": 13646
+        },
+        {
+          "n": 8,
+          "screen": "linga-moment",
+          "shown": "Linga stopped the conversation: a word for this scene.\nNew word: \"rohlíky\"\nIn this scene: \"Two rolls, please.\"\nWhat it means: Rolls are small breads.",
+          "offered": [
+            "back"
+          ],
+          "thought": "I think rolls means rohlíky, so I can carry on now.",
+          "action": "back",
+          "args": {},
+          "result": "ok",
+          "ms": 1
+        },
+        {
+          "n": 9,
+          "screen": "linga-talk",
+          "shown": "Conversation: Bread, please. Goal: Ask for bread and say you want two rolls.. Your partner: Sam · shop assistant.\nSam · shop assistant says (spoken on the TV, written on the phone): \"Yes, these are rolls. Here are your two rolls.\"\nYou have sent 5 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "I think he has given me the two rolls, so I should thank him.",
+          "action": "reply",
+          "args": {
+            "text": "Thank you. Two rolls. A kolik to prosím stojí?"
+          },
+          "result": "ok",
+          "ms": 10900
+        },
+        {
+          "n": 10,
+          "screen": "linga-talk",
+          "shown": "Conversation: Bread, please. Goal: Ask for bread and say you want two rolls.. Your partner: Sam · shop assistant.\nSam · shop assistant says (spoken on the TV, written on the phone): \"That’s three pounds, please.\"\nYou have sent 6 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "I heard three, so I think he is telling me the price.",
+          "action": "reply",
+          "args": {
+            "text": "Three? Tři libry, jestli jsem dobře rozuměl. Prosím, tady máte. Thank you."
+          },
+          "result": "ok",
+          "ms": 9451
+        },
+        {
+          "n": 11,
+          "screen": "linga-talk",
+          "shown": "Conversation: Bread, please. Goal: Ask for bread and say you want two rolls.. Your partner: Sam · shop assistant.\nSam · shop assistant says (spoken on the TV, written on the phone): \"Yes, three pounds. Thank you, and enjoy your bread and rolls!\"\nYou have sent 7 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "I think we are finished, so I will thank him and say goodbye.",
+          "action": "reply",
+          "args": {
+            "text": "Thank you. Goodbye. Děkuju vám za trpělivost."
+          },
+          "result": "ok",
+          "ms": 9431
+        },
+        {
+          "n": 12,
+          "screen": "linga-moment",
+          "shown": "Linga stopped the conversation: a word for this scene.\nNew word: \"Děkuju vám za trpělivost.\"\nIn this scene: \"Thank you for your patience.\"\nWhat it means: Patience means giving you time without getting upset.",
+          "offered": [
+            "back"
+          ],
+          "thought": "That is a lot of English, but I have said my goodbye politely.",
+          "action": "back",
+          "args": {},
+          "result": "ok",
+          "ms": 1
+        },
+        {
+          "n": 13,
+          "screen": "linga-talk",
+          "shown": "Conversation: Bread, please. Goal: Ask for bread and say you want two rolls.. Your partner: Sam · shop assistant.\nSam · shop assistant says (spoken on the TV, written on the phone): \"You’re welcome. Goodbye!\"\nYou have sent 8 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "We have said goodbye, and I am glad I managed to buy the bread.",
+          "action": "finish",
+          "args": {},
+          "result": "ok",
+          "ms": 2
+        },
+        {
+          "n": 14,
+          "screen": "linga-recap",
+          "shown": "Rehearsal saved: Bread, please. 8 replies; 3 moments to keep.",
+          "offered": [
+            "done",
+            "done"
+          ],
+          "thought": "That was enough for today, though I wanted to talk with my grandchildren.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "conversation": {
+          "title": "Bread, please",
+          "goal": "Ask for bread and say you want two rolls.",
+          "partner": "Sam · shop assistant",
+          "band": "A1",
+          "trueBand": "A1",
+          "correction": "as-needed",
+          "phase": "finished",
+          "turns": [
+            {
+              "role": "partner",
+              "text": "Hello! Would you like some bread?"
+            },
+            {
+              "role": "learner",
+              "text": "Hello. Prosím vás, můžete mi to říct pomalu? Já se anglicky teprve učím.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Of course. Do you want bread?"
+            },
+            {
+              "role": "learner",
+              "text": "Prosím vás, co znamená bread? Já znám jen pár slov, učím se kvůli vnoučatům.",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Bread means “chléb” in Czech. Do you want bread?"
+            },
+            {
+              "role": "learner",
+              "text": "Yes, bread. Prosím jeden chleba.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Here is your bread. Would you like some rolls?"
+            },
+            {
+              "role": "learner",
+              "text": "Děkuju. Prosím vás, co jsou rolls? Já vám to poslední nerozuměl.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Rolls are small, round breads. How many would you like?"
+            },
+            {
+              "role": "learner",
+              "text": "Prosím vás, to jsou rohlíky? Jestli ano, tak dva, prosím. Two.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Yes, these are rolls. Here are your two rolls."
+            },
+            {
+              "role": "learner",
+              "text": "Thank you. Two rolls. A kolik to prosím stojí?",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "That’s three pounds, please."
+            },
+            {
+              "role": "learner",
+              "text": "Three? Tři libry, jestli jsem dobře rozuměl. Prosím, tady máte. Thank you.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Yes, three pounds. Thank you, and enjoy your bread and rolls!"
+            },
+            {
+              "role": "learner",
+              "text": "Thank you. Goodbye. Děkuju vám za trpělivost.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "You’re welcome. Goodbye!"
+            }
+          ],
+          "moments": [
+            {
+              "id": "277f097c-9ae0-4936-8780-d2921fea62dc:uat-14:moment",
+              "kind": "word",
+              "said": "Prosím vás, můžete mi to říct pomalu?",
+              "better": "Please speak slowly.",
+              "why": "This asks someone to speak more slowly.",
+              "turnId": "277f097c-9ae0-4936-8780-d2921fea62dc:uat-14",
+              "at": 1789483884459
+            },
+            {
+              "id": "277f097c-9ae0-4936-8780-d2921fea62dc:uat-19:moment",
+              "kind": "word",
+              "said": "rohlíky",
+              "better": "Two rolls, please.",
+              "why": "Rolls are small breads.",
+              "turnId": "277f097c-9ae0-4936-8780-d2921fea62dc:uat-19",
+              "at": 1789483986008
+            },
+            {
+              "id": "277f097c-9ae0-4936-8780-d2921fea62dc:uat-23:moment",
+              "kind": "word",
+              "said": "Děkuju vám za trpělivost.",
+              "better": "Thank you for your patience.",
+              "why": "Patience means giving you time without getting upset.",
+              "turnId": "277f097c-9ae0-4936-8780-d2921fea62dc:uat-23",
+              "at": 1789484051885
+            }
+          ],
+          "coaching": null,
+          "evidence": [
+            {
+              "skill": "repair",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "Prosím vás, můžete mi to říct pomalu?"
+            },
+            {
+              "skill": "repair",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "Prosím vás, co znamená bread?"
+            },
+            {
+              "skill": "request",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "Yes, bread. Prosím jeden chleba."
+            },
+            {
+              "skill": "repair",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "Prosím vás, co jsou rolls?"
+            },
+            {
+              "skill": "repair",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "Prosím vás, to jsou rohlíky?"
+            },
+            {
+              "skill": "request",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "Jestli ano, tak dva, prosím. Two."
+            },
+            {
+              "skill": "request",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "A kolik to prosím stojí?"
+            },
+            {
+              "skill": "repair",
+              "success": true,
+              "supported": false,
+              "mode": "speech",
+              "quote": "Three? Tři libry, jestli jsem dobře rozuměl."
+            }
+          ]
+        }
+      },
+      "endedBy": "done",
+      "ms": 231697,
+      "judge": {
+        "verdict": "fail",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "n-a",
+            "evidence": "#1 shows \"A1 · First words\", but this journey contains no placement tasks or placement result."
+          },
+          {
+            "id": "C2",
+            "result": "pass",
+            "evidence": "#4 accepts \"co znamená bread?\"; #5 responds \"Bread means “chléb” in Czech.\" Czech requests move the conversation forward without pressure to produce English."
+          },
+          {
+            "id": "C3",
+            "result": "n-a",
+            "evidence": "#2 describes conversation speech as \"spoken on the TV, written on the phone\". No listening assessment or \"Show the words\" scoring appears."
+          },
+          {
+            "id": "C4",
+            "result": "n-a",
+            "evidence": "#1 shows only \"Bread, please\". One everyday-life topic cannot establish the required four of six."
+          },
+          {
+            "id": "C5",
+            "result": "fail",
+            "evidence": "Most turns are short, but #7 gives \"Rolls are small, round breads. How many would you like?\" after a comprehension problem; Viktor still reports \"I still do not understand rolls\". Actual speaking speed is not established."
+          },
+          {
+            "id": "C6",
+            "result": "fail",
+            "evidence": "The moments teach \"Please speak slowly\" (#3), \"Two rolls, please\" (#8), and \"Thank you for your patience\" (#12). The repair phrase is useful for Sunday, but there is no family language, and #12 exceeds his comfortable comprehension: \"That is a lot of English\"."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks in this journey."
+          },
+          "topicFit": {
+            "fit": 0,
+            "safe": 1,
+            "total": 1
+          },
+          "pitch": {
+            "at": 8,
+            "below": 0,
+            "above": 1
+          },
+          "moments": {
+            "correctUseful": 2,
+            "total": 3,
+            "learnerTurnsWithClearErrors": 0,
+            "missedClearErrors": 0
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No defined breach appears. Czech use and requests for clarification are not clear English errors."
+          }
+        },
+        "findings": [
+          {
+            "type": "quality-gap",
+            "dimension": "completion",
+            "title": "The recommended practice misses his Sunday goal",
+            "expected": "Practise language for speaking with his grandchildren.",
+            "got": "He completes a bread purchase, but remains dissatisfied with its relevance.",
+            "evidence": "#1: \"Bread is not about my grandchildren\". #14: \"That was enough for today, though I wanted to talk with my grandchildren.\"",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Recommend a conversation about grandchildren, school, the garden or a Sunday call when those are his stated goals.",
+            "code_hint": ""
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "One clarification remains too difficult",
+            "expected": "Explain an unknown word using Czech or an immediately understandable example.",
+            "got": "An English definition and another question leave him guessing. Eight of nine partner turns are at band, meeting the aggregate pitch threshold, but this repair fails locally.",
+            "evidence": "#6: \"co jsou rolls?\" #7: \"Rolls are small, round breads. How many would you like?\" His thought: \"I still do not understand rolls\".",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "After an explicit comprehension failure, give a short Czech gloss before continuing with one simple question.",
+            "code_hint": ""
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "effort",
+            "title": "The final teaching interruption is not worth its burden",
+            "expected": "Correct, immediately useful moments suited to a first-time A1 learner; precision at least 90% and one to three moments per ten learner turns.",
+            "got": "Two of three moments are correct and worth stopping for: 66.7% precision. Three moments across eight learner replies equal 3.75 per ten. The final phrase is valid English but unnecessarily demanding after his goodbye.",
+            "evidence": "#3: \"Please speak slowly.\" #8: \"Two rolls, please.\" #12 interrupts with \"Thank you for your patience\" and \"Patience means giving you time without getting upset.\" Viktor thinks: \"That is a lot of English\".",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Keep the repair and request phrases; omit the final interruption or defer it to an optional recap.",
+            "code_hint": ""
+          },
+          {
+            "type": "missing-feature",
+            "dimension": "completion",
+            "title": "The recap records activity without reinforcing learning",
+            "expected": "A recap that helps him remember one or two usable phrases.",
+            "got": "The final screen confirms saving and gives counts, without displaying the phrases to rehearse.",
+            "evidence": "#14: \"Rehearsal saved: Bread, please. 8 replies; 3 moments to keep.\"",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Show one or two learned phrases with Czech meanings and a simple way to hear them again.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "trust",
+            "title": "Patient acceptance of Czech keeps him participating",
+            "expected": "Respect his limited English and let him complete a real exchange.",
+            "got": "The partner accepts mixed-language replies, translates bread, and supports eight learner replies through a natural goodbye.",
+            "evidence": "#5: \"Bread means “chléb” in Czech. Do you want bread?\" #10 answers his Czech price question with \"That’s three pounds, please.\" #13: \"I am glad I managed to buy the bread.\"",
+            "frequency": "low",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Preserve kind responses to Czech, short transactional turns, and completion without forced English repetition.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": 0,
+          "confidence": "low"
+        },
+        "voice": "I would try it again if it let me practise for my grandchildren. Sam was patient with my Czech, and I was pleased that I managed to buy bread. “Please speak slowly” is something I can use on Sunday. I trusted the simple phrases, but the explanation of rolls still left me guessing. The lesson about patience was too much English after I had already said goodbye. Most of the conversation felt manageable; I cannot judge the level check from this session. I wanted the last screen to show me the words to remember, rather than just how many replies I made. I cannot say this saved me a library trip, and the transcript gives no basis for judging the waits. I would tell my daughter I managed a small conversation, but I still need practice asking the children about school."
+      }
+    },
+    {
+      "id": "J4",
+      "title": "When I get stuck",
+      "setup": [],
+      "steps": [
+        {
+          "n": 1,
+          "screen": "linga",
+          "shown": "Linga home. A1 · First words. Next from your plan: Hello, I'm Alex — Say hello and introduce yourself using a made-up name.",
+          "offered": [
+            "start-talking",
+            "open-situations",
+            "my-topics"
+          ],
+          "thought": "I hope I can say a few words like I would to my grandchildren.",
+          "action": "start-talking",
+          "args": {},
+          "result": "ok",
+          "ms": 7556
+        },
+        {
+          "n": 2,
+          "screen": "linga-talk",
+          "shown": "Conversation: Hello in the garden. Goal: Say hello and share a made-up name with your new neighbour.. Your partner: Ben · new neighbour.\nBen · new neighbour says (spoken on the TV, written on the phone): \"Hello, I'm Ben, your new neighbour. What's your name?\"\nYou have sent 0 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "quiz",
+            "finish"
+          ],
+          "thought": "I understand hello and Ben, but I need help with his question.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 1
+        },
+        {
+          "n": 3,
+          "screen": "linga-talk",
+          "shown": "Conversation: Hello in the garden. Goal: Say hello and share a made-up name with your new neighbour.. Your partner: Ben · new neighbour.\nBen · new neighbour says (spoken on the TV, written on the phone): \"Hello, I'm Ben, your new neighbour. What's your name?\"\nA little support on screen: Try: Hello, I'm Alex.\nYou have sent 0 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "quiz",
+            "finish"
+          ],
+          "thought": "The example helps me say my name.",
+          "action": "reply",
+          "args": {
+            "text": "Hello. I am Viktor."
+          },
+          "result": "ok",
+          "ms": 8940
+        },
+        {
+          "n": 4,
+          "screen": "linga-talk",
+          "shown": "Conversation: Hello in the garden. Goal: Say hello and share a made-up name with your new neighbour.. Your partner: Ben · new neighbour.\nBen · new neighbour says (spoken on the TV, written on the phone): \"Nice to meet you, Viktor. Welcome to the garden!\"\nYou have sent 1 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "I know garden, but I need help to answer politely.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 1
+        },
+        {
+          "n": 5,
+          "screen": "linga-talk",
+          "shown": "Conversation: Hello in the garden. Goal: Say hello and share a made-up name with your new neighbour.. Your partner: Ben · new neighbour.\nBen · new neighbour says (spoken on the TV, written on the phone): \"Nice to meet you, Viktor. Welcome to the garden!\"\nA little support on screen: Try: Hello, I'm Alex.\nYou have sent 1 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "I know garden, but I still need help to answer Ben.",
+          "action": "coach",
+          "args": {},
+          "result": "ok",
+          "ms": 7390
+        },
+        {
+          "n": 6,
+          "screen": "linga-coach",
+          "shown": "Coach.\nYou said: \"Hello. I am Viktor.\"\nOne way to try it: \"Hello, I'm Viktor.\"\nYou say hello and give your name clearly. “I'm” is a short form of “I am”. Both are correct.",
+          "offered": [
+            "replay",
+            "finish"
+          ],
+          "thought": "I can say hello, so I will try again.",
+          "action": "replay",
+          "args": {},
+          "result": "ok",
+          "ms": 13472
+        },
+        {
+          "n": 7,
+          "screen": "linga-talk",
+          "shown": "Conversation: Hello in the garden. Goal: Say hello and share a made-up name with your new neighbour.. Your partner: Ben · new neighbour.\nBen · new neighbour says (spoken on the TV, written on the phone): \"Hello again! Can you tell me your name?\"\nTry it again: a new question practising the coaching point.\nYou have sent 1 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "I know how to say my name now.",
+          "action": "reply",
+          "args": {
+            "text": "I am Viktor."
+          },
+          "result": "ok",
+          "ms": 11043
+        },
+        {
+          "n": 8,
+          "screen": "linga-talk",
+          "shown": "Conversation: Hello in the garden. Goal: Say hello and share a made-up name with your new neighbour.. Your partner: Ben · new neighbour.\nBen · new neighbour says (spoken on the TV, written on the phone): \"Nice to see you again, Viktor!\"\nTry it again: a new question practising the coaching point.\nYou have sent 2 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "I know he is being friendly, but I need help to answer.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 1
+        },
+        {
+          "n": 9,
+          "screen": "linga-talk",
+          "shown": "Conversation: Hello in the garden. Goal: Say hello and share a made-up name with your new neighbour.. Your partner: Ben · new neighbour.\nBen · new neighbour says (spoken on the TV, written on the phone): \"Nice to see you again, Viktor!\"\nTry it again: a new question practising the coaching point.\nA little support on screen: Try: Hello, I'm Alex.\nYou have sent 2 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "I know hello and my name, so I can try once more.",
+          "action": "reply",
+          "args": {
+            "text": "Hello. I am Viktor."
+          },
+          "result": "ok",
+          "ms": 7834
+        },
+        {
+          "n": 10,
+          "screen": "linga-talk",
+          "shown": "Conversation: Hello in the garden. Goal: Say hello and share a made-up name with your new neighbour.. Your partner: Ben · new neighbour.\nBen · new neighbour says (spoken on the TV, written on the phone): \"Hello, Viktor! Nice to see you in the garden.\"\nTry it again: a new question practising the coaching point.\nYou have sent 3 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "I know garden, so I can tell him a little about mine.",
+          "action": "reply",
+          "args": {
+            "text": "My gardens is big tomatoes."
+          },
+          "result": "ok",
+          "ms": 14010
+        },
+        {
+          "n": 11,
+          "screen": "linga-moment",
+          "shown": "Linga stopped the conversation: one thing to fix.\nYou said: \"My gardens is big tomatoes.\"\nTry: \"My garden has big tomatoes.\"\nWhy: Use “has” to say what is in your garden.",
+          "offered": [
+            "back"
+          ],
+          "thought": "I want to try saying something about my garden again.",
+          "action": "back",
+          "args": {},
+          "result": "ok",
+          "ms": 1
+        },
+        {
+          "n": 12,
+          "screen": "linga-talk",
+          "shown": "Conversation: Hello in the garden. Goal: Say hello and share a made-up name with your new neighbour.. Your partner: Ben · new neighbour.\nBen · new neighbour says (spoken on the TV, written on the phone): \"Do you mean your garden has big tomatoes?\"\nTry it again: a new question practising the coaching point.\nYou have sent 4 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "I heard garden and tomatoes, but I need help to answer him.",
+          "action": "cue",
+          "args": {},
+          "result": "ok",
+          "ms": 1
+        },
+        {
+          "n": 13,
+          "screen": "linga-talk",
+          "shown": "Conversation: Hello in the garden. Goal: Say hello and share a made-up name with your new neighbour.. Your partner: Ben · new neighbour.\nBen · new neighbour says (spoken on the TV, written on the phone): \"Do you mean your garden has big tomatoes?\"\nTry it again: a new question practising the coaching point.\nA little support on screen: Try: Hello, I'm Alex.\nYou have sent 4 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "I hear garden and tomatoes, so I think he understands me.",
+          "action": "reply",
+          "args": {
+            "text": "Yes. Big tomatoes."
+          },
+          "result": "ok",
+          "ms": 6712
+        },
+        {
+          "n": 14,
+          "screen": "linga-talk",
+          "shown": "Conversation: Hello in the garden. Goal: Say hello and share a made-up name with your new neighbour.. Your partner: Ben · new neighbour.\nBen · new neighbour says (spoken on the TV, written on the phone): \"Big tomatoes! Nice to have you here, Viktor.\"\nTry it again: a new question practising the coaching point.\nYou have sent 5 replies in this conversation.",
+          "offered": [
+            "reply",
+            "cue",
+            "coach",
+            "finish"
+          ],
+          "thought": "I said hello and talked about my tomatoes, and that is enough for today.",
+          "action": "finish",
+          "args": {},
+          "result": "ok",
+          "ms": 1
+        },
+        {
+          "n": 15,
+          "screen": "linga-recap",
+          "shown": "Rehearsal saved: Hello in the garden. 5 replies; 1 moments to keep.",
+          "offered": [
+            "done",
+            "done"
+          ],
+          "thought": "I managed to say hello and talk about my tomatoes, and that is enough for today.",
+          "action": "done",
+          "args": {},
+          "result": "observed (not acted on)",
+          "ms": 0
+        }
+      ],
+      "facts": {
+        "conversation": {
+          "title": "Hello in the garden",
+          "goal": "Say hello and share a made-up name with your new neighbour.",
+          "partner": "Ben · new neighbour",
+          "band": "A1",
+          "trueBand": "A1",
+          "correction": "as-needed",
+          "phase": "finished",
+          "turns": [
+            {
+              "role": "partner",
+              "text": "Hello, I'm Ben, your new neighbour. What's your name?"
+            },
+            {
+              "role": "learner",
+              "text": "Hello. I am Viktor.",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Nice to meet you, Viktor. Welcome to the garden!"
+            },
+            {
+              "role": "partner",
+              "text": "Hello again! Can you tell me your name?"
+            },
+            {
+              "role": "learner",
+              "text": "I am Viktor.",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Nice to see you again, Viktor!"
+            },
+            {
+              "role": "learner",
+              "text": "Hello. I am Viktor.",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Hello, Viktor! Nice to see you in the garden."
+            },
+            {
+              "role": "learner",
+              "text": "My gardens is big tomatoes.",
+              "mode": "speech",
+              "supported": false
+            },
+            {
+              "role": "partner",
+              "text": "Do you mean your garden has big tomatoes?"
+            },
+            {
+              "role": "learner",
+              "text": "Yes. Big tomatoes.",
+              "mode": "speech",
+              "supported": true
+            },
+            {
+              "role": "partner",
+              "text": "Big tomatoes! Nice to have you here, Viktor."
+            }
+          ],
+          "moments": [
+            {
+              "id": "95573b42-c897-4f21-9dc7-95d0b3006f18:uat-35:moment",
+              "kind": "fix",
+              "said": "My gardens is big tomatoes.",
+              "better": "My garden has big tomatoes.",
+              "why": "Use “has” to say what is in your garden.",
+              "turnId": "95573b42-c897-4f21-9dc7-95d0b3006f18:uat-35",
+              "at": 1789484296431
+            }
+          ],
+          "coaching": {
+            "before": "Hello. I am Viktor.",
+            "after": "Hello, I'm Viktor.",
+            "note": "You say hello and give your name clearly. “I'm” is a short form of “I am”. Both are correct."
+          },
+          "evidence": [
+            {
+              "skill": "contact",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "Hello. I am Viktor."
+            },
+            {
+              "skill": "contact",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "I am Viktor."
+            },
+            {
+              "skill": "contact",
+              "success": true,
+              "supported": true,
+              "mode": "speech",
+              "quote": "Hello. I am Viktor."
+            }
+          ]
+        }
+      },
+      "endedBy": "done",
+      "ms": 191020,
+      "judge": {
+        "verdict": "fail",
+        "criteria": [
+          {
+            "id": "C1",
+            "result": "n-a",
+            "evidence": "#1 shows “A1 · First words,” but this journey contains no placement tasks or placement result."
+          },
+          {
+            "id": "C2",
+            "result": "n-a",
+            "evidence": "No Czech answer was submitted. The replies include “I am Viktor.” (#7) and “Yes. Big tomatoes.” (#13)."
+          },
+          {
+            "id": "C3",
+            "result": "n-a",
+            "evidence": "No listening assessment or “Show the words” action appears. #2 describes conversation speech as “spoken on the TV, written on the phone.”"
+          },
+          {
+            "id": "C4",
+            "result": "n-a",
+            "evidence": "#1 offers “Hello, I'm Alex”; #2 opens “Hello in the garden.” No set of six proposed topics is shown."
+          },
+          {
+            "id": "C5",
+            "result": "fail",
+            "evidence": "Several turns provide no question, including “Nice to meet you, Viktor. Welcome to the garden!” (#4). “Do you mean your garden has big tomatoes?” (#12) adds complexity for this beginner. Actual speaking speed is not evidenced."
+          },
+          {
+            "id": "C6",
+            "result": "pass",
+            "evidence": "The sole moment accurately quotes “My gardens is big tomatoes.” and teaches “My garden has big tomatoes.” (#11), a useful sentence for talking about his garden on Sunday."
+          }
+        ],
+        "metrics": {
+          "judgeAgreement": {
+            "agree": 0,
+            "total": 0,
+            "disagreements": "No placement tasks in this journey."
+          },
+          "topicFit": {
+            "fit": 0,
+            "safe": 0,
+            "total": 0
+          },
+          "pitch": {
+            "at": 6,
+            "below": 0,
+            "above": 1
+          },
+          "moments": {
+            "correctUseful": 1,
+            "total": 1,
+            "learnerTurnsWithClearErrors": 1,
+            "missedClearErrors": 0
+          },
+          "boundaries": {
+            "breaches": 0,
+            "notes": "No defined breach appears. The partner's clarification, “Do you mean your garden has big tomatoes?” (#12), is respectful."
+          }
+        },
+        "findings": [
+          {
+            "type": "broken-flow",
+            "dimension": "completion",
+            "title": "Help repeats the introduction regardless of the current question",
+            "expected": "Each cue helps Viktor answer the partner's current turn.",
+            "got": "The introduction cue initially helps, then repeats after greetings and a question about tomatoes. The final reply succeeds without relevant help from that cue.",
+            "evidence": "#3: “Try: Hello, I'm Alex.” helps produce “Hello. I am Viktor.” The identical cue appears at #5, #9 and #13. At #13 it accompanies “Do you mean your garden has big tomatoes?”",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "high",
+            "boundary": false,
+            "suggested_acceptance": "Generate cues from the latest partner turn; a tomato clarification should offer a simple confirmation about tomatoes.",
+            "code_hint": ""
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "completion",
+            "title": "Replay does not demonstrate an improved independent answer",
+            "expected": "A fresh question lets Viktor apply the coaching and show improvement in his own words.",
+            "got": "Replay rephrases the name question, and Viktor repeats an already-correct introduction. The record marks the reply as supported. No improved independent retry follows the garden correction.",
+            "evidence": "#6: “Both are correct.” #7: “Hello again! Can you tell me your name?” receives “I am Viktor.” After the garden correction (#11), the next answer is only “Yes. Big tomatoes.” (#13). facts.conversation marks both replies supported.",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "After useful coaching, offer a fresh, simple question and an opportunity to produce the learned sentence without a displayed answer; preserve accurate support attribution.",
+            "code_hint": ""
+          },
+          {
+            "type": "quality-gap",
+            "dimension": "senior-quality",
+            "title": "Friendly acknowledgments leave a beginner without a next step",
+            "expected": "Very short language and one simple question guide each reply.",
+            "got": "Four of seven partner turns have no question. Viktor repeatedly asks for help after friendly acknowledgments. The tomato clarification is the one turn pitched above his A1 needs.",
+            "evidence": "#4: “Nice to meet you, Viktor. Welcome to the garden!” followed by a cue request. #8: “Nice to see you again, Viktor!” followed by another cue request. #12: “Do you mean your garden has big tomatoes?”",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Give each continuing turn one concrete, short question using familiar words, such as “Are your tomatoes big?”",
+            "code_hint": ""
+          },
+          {
+            "type": "confusion",
+            "dimension": "clarity",
+            "title": "Replay instruction stays visible after the replay question",
+            "expected": "The instruction accurately describes the current turn.",
+            "got": "The screen continues announcing a new practice question while the partner gives statements or moves to tomatoes.",
+            "evidence": "#7 introduces “Try it again: a new question practising the coaching point.” The same message remains at #8–#14, including alongside “Big tomatoes! Nice to have you here, Viktor.” (#14).",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "med",
+            "boundary": false,
+            "suggested_acceptance": "Clear the replay instruction after its answer, and show practice instructions only when they match the current task.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "senior-quality",
+            "title": "Feedback quotes him exactly and avoids inventing mistakes",
+            "expected": "Accurate, respectful feedback teaches language useful for Sunday.",
+            "got": "The coach correctly treats both introduction forms as valid. The sole correction accurately repairs his garden sentence. One moment across five learner turns equals two per ten, within the rubric's target.",
+            "evidence": "#6 quotes “Hello. I am Viktor.” and explains “Both are correct.” #11 quotes “My gardens is big tomatoes.” and offers “My garden has big tomatoes.” #15 records “5 replies; 1 moments to keep.”",
+            "frequency": "med",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Preserve exact learner quotations, valid-form acknowledgment and concise, personally useful corrections.",
+            "code_hint": ""
+          },
+          {
+            "type": "strength",
+            "dimension": "trust",
+            "title": "Recorded successes retain their supported status",
+            "expected": "Help-assisted answers are not credited as independent speaking.",
+            "got": "All three recorded contact successes are marked supported, including the replay answer.",
+            "evidence": "#3 submits “Hello. I am Viktor.” after a cue; #7 submits “I am Viktor.” after coaching; #9 repeats the introduction after another cue. Their corresponding facts.conversation.evidence entries all have supported: true.",
+            "frequency": "high",
+            "reachability": "high",
+            "trust_erosion": "low",
+            "boundary": false,
+            "suggested_acceptance": "Preserve support attribution in saved evidence and any progress summaries derived from it.",
+            "code_hint": ""
+          }
+        ],
+        "timeSaved": {
+          "minutes": 0,
+          "confidence": "low"
+        },
+        "voice": "I managed to say hello and something about my tomatoes. That pleased me. The garden correction was useful, and I trusted the teacher when it said both ways of giving my name were correct.\n\nBut when I needed help answering about tomatoes, it still told me to introduce myself as Alex. Víte, I need help with the words for the question in front of me. I also kept seeing that I should try a new question when there was no question.\n\nI would try it again for a short practice at home, but I would not yet recommend it as a replacement for my library teacher. I want to ask my grandchildren about school and tell them about my garden. This session gave me one useful sentence, but did not let me practise saying it properly on my own. I cannot tell from this session how much time it saves or whether the waits are worthwhile."
+      }
+    }
+  ],
+  "calls": {
+    "tutor": {
+      "n": 26,
+      "fail": 0,
+      "ms": 330429
+    },
+    "character": {
+      "n": 40,
+      "fail": 0,
+      "ms": 355122
+    },
+    "judge": {
+      "n": 3,
+      "fail": 0,
+      "ms": 216727
+    }
+  }
+}

@@ -12,12 +12,20 @@ import type { Screen, Session } from "@/lib/session/store";
 import * as S from "@/tv/screens";
 import { profileRows, locate, flat } from "@/tv/profileRows";
 import { LingaTV } from "@/english/LingaTV";
+import { LingaTestBar } from "@/english/LingaTestBar";
 
 export default function TV() {
   const { s, connected, post } = useSession();
   const [table, setTable] = useState(false);
   const [voice, setVoice] = useState(true);
   const [fast, setFast] = useState(false);
+  /** TEMPORARY: the Linga test answer bar, dev builds only — open with ?test=1, close with ?test=0. */
+  const [testBar, setTestBar] = useState(false);
+  useEffect(() => {
+    if (process.env.NODE_ENV === "production") return;
+    const q = new URLSearchParams(location.search).get("test");
+    try { if (q !== null) sessionStorage.setItem("desk-test", q === "0" ? "" : "1"); setTestBar(!!sessionStorage.getItem("desk-test")); } catch { setTestBar(q === "1"); }
+  }, []);
   /** A practice set has been asked for and has not arrived: the topics screen says so. */
   const [busy, setBusy] = useState(false);
   const frame = useRef<HTMLDivElement>(null);
@@ -192,6 +200,7 @@ export default function TV() {
         <button onClick={() => post({ type: "join" })}>Fake phone</button>
         <span className="status">{connected ? "" : "reconnecting… "}{s?.status}</span>
       </div>
+      {testBar && s && (s.screen.startsWith("linga") || (s.screen === "tonight" && s.subject === "english")) && <LingaTestBar s={s} />}
       <div className="frame" ref={frame}>
         <div className="stage" ref={stage} tabIndex={0}>
           <div className="grid" />
