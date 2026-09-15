@@ -16,12 +16,15 @@ import { spawn } from "node:child_process";
 import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
+import { codexText } from "./codex";
 import type { EngineResult, TextRequest } from "./types";
 
 const BIN = process.env.CLAUDE_BIN || "claude";
 const MODELS = { fast: process.env.CLAUDE_FAST_MODEL || "haiku", best: process.env.CLAUDE_BEST_MODEL || "sonnet" };
 
 export async function text<T = unknown>(req: TextRequest): Promise<EngineResult<T>> {
+  // UAT text-live runs set this in their own processes; the dev server never does.
+  if (process.env.DESK_TEXT_ENGINE === "codex") return codexText<T>(req);
   const started = Date.now();
   // Measured on 2026-09-07: `--bare` never reaches the API (exit 1, 0 ms, no message), while an
   // inline --system-prompt with --tools "" costs ~1.2k input tokens against ~18k for the default
