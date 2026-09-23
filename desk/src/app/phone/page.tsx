@@ -273,13 +273,14 @@ export default function Phone() {
           const right = pr.items.filter((i) => i.verdict === "right").length;
           const look = pr.items.length - right;
           const item = s.screen === "walk" ? pr.items[s.walkIx] : undefined;
-          const asking = !!item && (item.verdict === "wrong" || item.verdict === "unsure");
+          // an item the explanation just settled keeps the reply up; the verdict itself is the TV's to show
+          const asking = !!item && (item.verdict === "wrong" || item.verdict === "unsure" || !!reply);
           return <div className="pscreen"><h3>Practice</h3>
             <p><b>{right} right.</b> {look ? `${look} to look at.` : "Nothing to look at."}</p>
             <p>Look at the TV — it is walking the set with you.</p>
             {asking && <div className="ptalk">
               <b>How did you get there?</b>
-              {reply ? <p className="said">{reply}</p> : null}
+              {reply ? <><p className="said">{reply}</p><p>The TV has it.</p></> : null}
               {heard ? <>
                 <p>I heard: “{heard}”</p>
                 <div className="field"><button className="pbtn" data-signal="true" style={{ flex: 1 }} onClick={() => explain(heard)} disabled={busy}>Send</button>

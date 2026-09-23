@@ -802,7 +802,7 @@ export function Walk({ s, focus }: { s: Session; focus: number }) {
       {sl && <div className="slipname" style={{ marginTop: 34 }}>{sl.id.replace(/-/g, " ")} · look at {sl.points}</div>}
       <div style={{ position: "absolute", left: 0, bottom: 200 }}>
         <span className="cap" style={{ background: "transparent", color: "var(--maths)", border: "2px solid var(--maths)" }}>What the desk says</span>
-        <div className="cap-text">{it.said ?? (v === "right" ? "This one is right. Nothing more to say about it." : "The desk has no comment on this one.")}</div>
+        <div className="cap-text">{it.reply ?? it.said ?? (v === "right" ? "This one is right. Nothing more to say about it." : "The desk has no comment on this one.")}</div>
       </div>
       {last && <div className="actions"><button className="btn" data-focused={stopAt(walkStops(s), focus) === "finish"}>Finish the set</button></div>}
       <div className="ticker"><span>item <b>{s.walkIx + 1}</b> of {p.items.length}</span><i>·</i><span><b>{right}</b> right</span><i>·</i><span><b>{look}</b> to look at</span><i>·</i><span>{last ? "Select finishes" : "Left and Right walk the set"}</span></div>
