@@ -51,7 +51,7 @@ What survives a Vega port unchanged, and it is most of the code:
 
 | Layer | Ports? | Why |
 |---|---|---|
-| `core/` — schema, codec, timeline, pen engine, smoothing, hit-test, history | ✅ | No Android imports at all. Kotlin/JVM today, and the same logic is a direct port to TS if the Vega shell is React Native. |
+| `core/` — schema, codec, timeline, pen engine, smoothing, hit-test, history, pen conversation | ✅ | No Android imports at all. Kotlin/JVM today, and the same logic is a direct port to TS if the Vega shell is React Native. |
 | `companion/` — the phone PWA | ✅ | Plain web. Only its transport target changes. |
 | Annotation and tracking JSON schemas | ✅ | Wire formats, not platform APIs. |
 | Overlay rendering | ⚠️ | Compose Canvas → `react-native-svg`, which Vega does ship. Rewrite, but a mechanical one. |
@@ -74,6 +74,11 @@ What survives a Vega port unchanged, and it is most of the code:
    asserts the LAN port stops answering, then drives a stroke onto the TV through a relay. The
    relay was already on the roadmap as a hostile-Wi-Fi fallback (D3); it is now a portability
    hedge as well.
+   **2026-09-23:** that meaning then moved one layer further down, into core. `PenConversation`
+   (pairing, the hello timeout, newest-pen-wins, ping, dispatch) and `Heartbeat` (what each tick
+   sends) are a sans-IO state machine - text and ticks in, effects out - with JUnit cases in
+   `:core:test`, so the part that ports is now the part that holds the protocol.
+   `PenSessionHost` is only the coroutine driver, logging and the thumbnailer.
 4. **Do not build anything else that depends on the TV being a server.** Discovery, multi-pen and
    the watch-party experiment should all be expressible over a relay.
 
