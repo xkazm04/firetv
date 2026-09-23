@@ -39,17 +39,20 @@ export interface PracticeItem {
   studentAnswer?: string; studentWorking?: string;
   verdict?: "right" | "wrong" | "unsure";
   slip?: string; said?: string;
+  /** What the desk said back when the learner explained this item (checked in code for the answer); the Walk's caption. */
+  reply?: string;
 }
 export interface Practice { topic: string; items: PracticeItem[]; pageId?: string; marked: boolean; }
 
 /** Only the fields a screen may see — an answer riding in on an event or an older session.json stops here. */
-function shown({ n, question, studentAnswer, studentWorking, verdict, slip, said }: PracticeItem): PracticeItem {
+function shown({ n, question, studentAnswer, studentWorking, verdict, slip, said, reply }: PracticeItem): PracticeItem {
   const item: PracticeItem = { n, question };
   if (studentAnswer !== undefined) item.studentAnswer = studentAnswer;
   if (studentWorking !== undefined) item.studentWorking = studentWorking;
   if (verdict !== undefined) item.verdict = verdict;
   if (slip !== undefined) item.slip = slip;
   if (said !== undefined) item.said = said;
+  if (reply !== undefined) item.reply = reply;
   return item;
 }
 const shownPractice = (p: Practice | null | undefined): Practice | null => (p ? { ...p, items: (p.items ?? []).map(shown) } : null);
@@ -124,6 +127,7 @@ export type Event =
   | { type: "topic.open"; topic: string }
   | { type: "practice.set"; practice: Practice } | { type: "practice.marked"; items: PracticeItem[] }
   | { type: "walk"; ix: number } | { type: "practice.clear" }
+  | { type: "practice.settle"; n: number; reply: string; verdict?: "right" | "wrong"; slip?: string; said?: string }
   | { type: "job.start"; kind: JobKind; id: string; key?: string } | { type: "job.done"; kind: JobKind; id: string } | { type: "job.failed"; kind: JobKind; id: string; error: string }
   | { type: "status"; text: string } | { type: "session.end" } | { type: "reset" };
 
@@ -213,6 +217,9 @@ export function reduce(s: Session, e: Event): Session {
     case "topic.open": n.topic = e.topic; n.subject = "maths"; n.screen = "topics"; n.focus = Math.max(0, SYLLABUS.findIndex((t) => t.id === e.topic)); break;
     case "practice.set": n.practice = shownPractice(e.practice); n.topic = e.practice.topic; n.walkIx = 0; n.screen = "practice"; break;
     case "practice.marked": if (s.practice) { n.practice = { ...s.practice, items: e.items.map(shown), marked: true }; n.walkIx = 0; n.screen = "walk"; } break;
+    // an explanation: the reply always lands on its item; a verdict only on an item still unsure (a settled item stays settled)
+    case "practice.settle": if (s.practice) { n.practice = { ...s.practice, items: s.practice.items.map((it) => it.n !== e.n ? it
+      : shown(e.verdict && it.verdict === "unsure" ? { ...it, verdict: e.verdict, slip: e.slip, said: e.said ?? it.said, reply: e.reply } : { ...it, reply: e.reply })) }; } break;
     case "walk": { const len = s.practice?.items.length ?? 0; n.walkIx = len ? Math.min(len - 1, Math.max(0, e.ix)) : 0; break; }
     case "practice.clear": n.practice = null; n.topic = null; n.screen = "tonight"; n.focus = 0; break;
     case "status": n.status = e.text; break;
@@ -246,7 +253,7 @@ export function getSession() { return store.session; }
  * at the desk. The reducer stays pure: the file read happens here, at the boundary that already
  * writes to disk and pushes to subscribers.
  */
-const REHYDRATE = new Set(["learner.set", "practice.marked", "profile.save", "reset", "join", "page.read", "linga.changed", "essay.set"]);
+const REHYDRATE = new Set(["learner.set", "practice.marked", "practice.settle", "profile.save", "reset", "join", "page.read", "linga.changed", "essay.set"]);
 
 export function dispatch(e: Event): Session {
   store.session = reduce(store.session, e);
