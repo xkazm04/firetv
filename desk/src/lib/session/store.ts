@@ -10,6 +10,7 @@ import { networkInterfaces } from "node:os";
 import { AGE_RANGE } from "@/tv/profileRows";
 import path from "node:path";
 import { getLearner, type HistoryEntry, type SkillRecord } from "./learners";
+import { SYLLABUS } from "../library/syllabus";
 import type { RuleCard } from "../rules/english";
 import type { Sentence } from "../rules/essay";
 import { emptyEnglish, type Conversation, type EnglishLearning, type LevelCheck } from "../english/types";
@@ -52,6 +53,30 @@ function shown({ n, question, studentAnswer, studentWorking, verdict, slip, said
   return item;
 }
 const shownPractice = (p: Practice | null | undefined): Practice | null => (p ? { ...p, items: (p.items ?? []).map(shown) } : null);
+/**
+ * The homework pipelines (lib/desk/job.ts runs each one). One record per kind: the latest run of that kind,
+ * so a screen can tell "under way" from "done" from "failed" without inferring it from a scatter of flags.
+ * `id` names the run (a later run of the same kind replaces it, and events for an older run are dropped);
+ * `key` is what the run is about (the topic of a practice set, the item key of a hint and of its lesson pick);
+ * `error` is a sentence the desk would say, never an exception's text.
+ */
+export type JobKind = "read" | "hint" | "lesson" | "explain" | "mark" | "practice" | "analyse" | "memory";
+export type JobPhase = "running" | "done" | "failed";
+export interface Job { id: string; phase: JobPhase; startedAt: number; endedAt?: number; key?: string; error?: string; }
+export type Jobs = Partial<Record<JobKind, Job>>;
+/** Said for a run the desk was restarted in the middle of. */
+export const INTERRUPTED = "The desk was restarted before this finished. Ask again.";
+/** A saved desk has nothing running: a run that was under way when it stopped is a failed one. */
+function settled(jobs: unknown): Jobs {
+  const out: Jobs = {};
+  if (!jobs || typeof jobs !== "object") return out;
+  for (const [k, j] of Object.entries(jobs as Record<string, Job>)) {
+    if (!j || typeof j !== "object") continue;
+    out[k as JobKind] = j.phase === "running" ? { ...j, phase: "failed", endedAt: j.startedAt, error: INTERRUPTED } : j;
+  }
+  return out;
+}
+
 export interface Verdict { n: number; verdict: "strong" | "faulty" | "neutral"; note: string; }
 export interface EssayAnalysis { text: string; type: string; sentences: Sentence[]; stats: Record<string, number>; verdicts: Verdict[]; summary: string; provider?: string; }
 
@@ -76,6 +101,8 @@ export interface Session {
   writing: Record<string, SkillRecord>;
   /** what the desk noticed about this learner, and what actually happened, hydrated the same way */
   memory: string[]; history: HistoryEntry[];
+  /** the pipelines' runs, one per kind; see Job */
+  jobs: Jobs;
   status: string; log: { problems: string[]; hints: number; hard: string[]; minutes: number; started: number | null };
   updatedAt: number;
 }
@@ -90,13 +117,14 @@ export type Event =
   | { type: "page.ask"; subject: Subject } | { type: "page.unask" }
   | { type: "page.select"; pageIx: number; itemIx?: number } | { type: "item"; itemIx: number } | { type: "view"; view: "band" | "overview" }
   | { type: "hint.set"; hint: Hint } | { type: "hint.stage"; stage: 1 | 2 }
-  | { type: "lesson.set"; lesson: LessonPick | null } | { type: "lesson.pause"; paused: boolean }
+  | { type: "lesson.set"; lesson: LessonPick | null; key?: string } | { type: "lesson.pause"; paused: boolean }
   | { type: "english.set"; analysis: EnglishAnalysis } | { type: "essay.type"; essayType: string } | { type: "essay.set"; analysis: EssayAnalysis }
   | { type: "task.add"; name: string; sub: Subject; min: number } | { type: "task.done"; id: string; done: boolean }
   | { type: "timer.start" } | { type: "timer.pause" } | { type: "timer.tick"; seconds: number } | { type: "timer.skipbreak" }
   | { type: "topic.open"; topic: string }
   | { type: "practice.set"; practice: Practice } | { type: "practice.marked"; items: PracticeItem[] }
   | { type: "walk"; ix: number } | { type: "practice.clear" }
+  | { type: "job.start"; kind: JobKind; id: string; key?: string } | { type: "job.done"; kind: JobKind; id: string } | { type: "job.failed"; kind: JobKind; id: string; error: string }
   | { type: "status"; text: string } | { type: "session.end" } | { type: "reset" };
 
 const DATA = process.env.DESK_DATA_DIR || path.join(process.cwd(), "data");
@@ -126,7 +154,7 @@ export function fresh(): Session {
     hint: null, lesson: null, noLesson: false, lessonPaused: false,
     english: null, englishLearning: emptyEnglish(), conversation: null, check: null, essay: null, essayType: null,
     topic: null, practice: null, walkIx: 0, skills: {}, writing: {}, memory: [], history: [],
-    status: "", log: { problems: [], hints: 0, hard: [], minutes: 0, started: null }, updatedAt: Date.now(),
+    jobs: {}, status: "", log: { problems: [], hints: 0, hard: [], minutes: 0, started: null }, updatedAt: Date.now(),
   };
 }
 
@@ -156,9 +184,18 @@ export function reduce(s: Session, e: Event): Session {
     case "page.select": n.pageIx = e.pageIx; n.itemIx = e.itemIx ?? 0; break;
     case "item": n.itemIx = e.itemIx; break;
     case "view": n.view = e.view; break;
-    case "hint.set": n.hint = e.hint; n.screen = "hint"; n.focus = 0; n.log = { ...s.log, problems: Array.from(new Set([...s.log.problems, e.hint.key])), hints: s.log.hints + 1 }; break;
-    case "hint.stage": if (n.hint) { n.hint = { ...n.hint, stage: e.stage }; if (e.stage === 2) n.log = { ...s.log, hints: s.log.hints + 1, hard: Array.from(new Set([...s.log.hard, n.hint.problem])) }; } break;
-    case "lesson.set": n.lesson = e.lesson; n.noLesson = !e.lesson; break;
+    // every hint the model gives counts once, here; a first hint starts a new lesson pick, so the last one's lesson goes
+    case "hint.set": n.hint = e.hint; n.screen = "hint"; n.focus = 0; n.log = { ...s.log, problems: Array.from(new Set([...s.log.problems, e.hint.key])), hints: s.log.hints + 1 };
+      if (e.hint.stage === 1) { n.lesson = null; n.noLesson = false; } break;
+    case "hint.stage": if (n.hint) { n.hint = { ...n.hint, stage: e.stage }; if (e.stage === 2) n.log = { ...s.log, hard: Array.from(new Set([...s.log.hard, n.hint.problem])) }; } break;
+    // a pick made for one hint never lands on another; a lesson chosen on the TV (no key) always does
+    case "lesson.set": if (e.key !== undefined && e.key !== s.hint?.key) return s; n.lesson = e.lesson; n.noLesson = !e.lesson; break;
+    case "job.start": n.jobs = { ...s.jobs, [e.kind]: { id: e.id, phase: "running", startedAt: Date.now(), ...(e.key !== undefined ? { key: e.key } : {}) } }; break;
+    case "job.done": case "job.failed": { const j = s.jobs?.[e.kind]; if (!j || j.id !== e.id) return s;
+      n.jobs = { ...s.jobs, [e.kind]: e.type === "job.done" ? { ...j, phase: "done", endedAt: Date.now() } : { ...j, phase: "failed", endedAt: Date.now(), error: e.error } };
+      // a lesson pick that failed for the hint on screen ends the wait the same way "no lesson" does
+      if (e.type === "job.failed" && e.kind === "lesson" && j.key === s.hint?.key) { n.lesson = null; n.noLesson = true; }
+      break; }
     case "lesson.pause": n.lessonPaused = e.paused; break;
     case "english.set": n.english = e.analysis; n.screen = "sentence"; n.subject = "english"; n.focus = 0; break;
     case "essay.type": n.essayType = e.essayType; break;
@@ -172,7 +209,8 @@ export function reduce(s: Session, e: Event): Session {
       if (left === 0) { if (t.phase === "work") { t.phase = "break"; t.left = 5 * 60; t.before = s.screen; n.screen = "break"; } else { t.phase = "work"; t.left = 25 * 60; n.screen = t.before ?? "page"; } }
       n.timer = t; break; }
     case "timer.skipbreak": n.timer = { ...s.timer, phase: "work", left: 25 * 60 }; n.screen = s.timer.before ?? "page"; break;
-    case "topic.open": n.topic = e.topic; n.subject = "maths"; n.screen = "topics"; n.focus = 0; break;
+    // the open topic keeps the focus, so a set that fails is retried on the topic it was asked for
+    case "topic.open": n.topic = e.topic; n.subject = "maths"; n.screen = "topics"; n.focus = Math.max(0, SYLLABUS.findIndex((t) => t.id === e.topic)); break;
     case "practice.set": n.practice = shownPractice(e.practice); n.topic = e.practice.topic; n.walkIx = 0; n.screen = "practice"; break;
     case "practice.marked": if (s.practice) { n.practice = { ...s.practice, items: e.items.map(shown), marked: true }; n.walkIx = 0; n.screen = "walk"; } break;
     case "walk": { const len = s.practice?.items.length ?? 0; n.walkIx = len ? Math.min(len - 1, Math.max(0, e.ix)) : 0; break; }
@@ -188,13 +226,14 @@ export function reduce(s: Session, e: Event): Session {
 type Sub = (s: Session) => void;
 interface Store { session: Session; subs: Set<Sub>; ticker: NodeJS.Timeout | null; }
 const g = globalThis as unknown as { __desk?: Store };
-function load(): Session { try { if (existsSync(FILE)) { const j = JSON.parse(readFileSync(FILE, "utf8")); if (Array.isArray(j?.profiles) && j?.learner?.id && j.profiles.every((p: Profile) => p.type in AGE_RANGE)) return { ...fresh(), ...j, practice: shownPractice(j.practice), phoneUrl: phoneUrl(), reading: false, englishLearning: getLearner(j.learner.id).english, conversation: j.conversation ? { moment: null, moments: [], ...j.conversation, pending: null, capture: false, paused: true } : null, check: j.check ? { ...j.check, pending: null } : null }; } } catch {} return fresh(); }
+function load(): Session { try { if (existsSync(FILE)) { const j = JSON.parse(readFileSync(FILE, "utf8")); if (Array.isArray(j?.profiles) && j?.learner?.id && j.profiles.every((p: Profile) => p.type in AGE_RANGE)) return { ...fresh(), ...j, practice: shownPractice(j.practice), jobs: settled(j.jobs), phoneUrl: phoneUrl(), reading: false, englishLearning: getLearner(j.learner.id).english, conversation: j.conversation ? { moment: null, moments: [], ...j.conversation, pending: null, capture: false, paused: true } : null, check: j.check ? { ...j.check, pending: null } : null }; } } catch {} return fresh(); }
 if (!g.__desk) g.__desk = { session: load(), subs: new Set(), ticker: null };
 const store = g.__desk;
 // HMR can retain a session created before this feature was installed.
 if (!store.session.englishLearning) store.session.englishLearning = getLearner(store.session.learner.id).english;
 if (store.session.conversation === undefined) store.session.conversation = null;
 if (store.session.check === undefined) store.session.check = null;
+if (!store.session.jobs) store.session.jobs = {};
 if (!store.ticker) store.ticker = setInterval(() => {
   if (store.session.timer.running) dispatch({ type: "timer.tick", seconds: 1 });
   const c=store.session.conversation;
