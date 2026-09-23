@@ -4,7 +4,11 @@
  * Same discipline as rules/english.ts: the table is the closed set the model is allowed to
  * choose from. It names a mistake and points at a line. It never carries the corrected line,
  * the next step, or the answer — the student produces those, or there was no point asking.
+ *
+ * It also holds the settle rule marking and explanation share, and the check that a reply leaks nothing.
  */
+import { evaluate, verify } from "../desk/verify";
+
 export interface Slip { id: string; topics: string[]; says: string; points: string; }
 
 const ONE = "linear-one-step";
@@ -37,4 +41,56 @@ export function slipsFor(topicId: string): Slip[] {
 /** The list the prompt carries: one slip per line, id then what the desk would say. */
 export function slipVocabulary(topicId: string): string {
   return slipsFor(topicId).map((s) => `${s.id}: ${s.says} (point at ${s.points})`).join("\n");
+}
+
+// ---- settling an item: the substitution decides, the desk's line is built here, never by a model ----
+/** What the desk says on an item it has settled right, and on one it cannot settle. Neither carries a value. */
+export const RIGHT = (n: number) => `Number ${n} is right.`;
+export const ASK = (n: number) => `I got something different for number ${n}. How did you get there?`;
+
+/** A value as a learner or a marker writes it: `x = 9` is `9`. */
+export const cleanValue = (s: unknown) => (typeof s === "string" ? s.trim().replace(/^x\s*=\s*/i, "") : "");
+
+export interface Settled { verdict: "right" | "wrong"; slip?: string; said: string; }
+
+/**
+ * The verdict the substitution gave, and the line that goes with it. A slip survives only on a wrong
+ * item and only from this topic's closed vocabulary; a wrong item with no slip asks. Never a value.
+ */
+export function settled(n: number, right: boolean, slipId: unknown, topicId: string): Settled {
+  const id = typeof slipId === "string" ? slipId.trim() : "";
+  const kept = !right && slipsFor(topicId).some((s) => s.id === id) ? id : undefined;
+  return { verdict: right ? "right" : "wrong", slip: kept, said: right ? RIGHT(n) : kept ? slip(kept)!.says : ASK(n) };
+}
+
+/**
+ * Settle an item from a value the learner gave: substitute it into the question. A value the desk
+ * cannot read as arithmetic settles nothing (null) - the desk does not guess what "about nine" was.
+ */
+export function settle(item: { n: number; question: string }, value: unknown, slipId: unknown, topicId: string): Settled | null {
+  const v = cleanValue(value);
+  if (evaluate(v, 0) === null) return null;
+  return settled(item.n, verify(item.question, v), slipId, topicId);
+}
+
+/** Every number written in a line: 7, -3, 3.5, 7/2. */
+const NUMBERS = /[-−]?\d+(?:\.\d+)?(?:\s*\/\s*\d+(?:\.\d+)?)?/g;
+const WORDS: Record<string, string> = {
+  zero: "0", one: "1", two: "2", three: "3", four: "4", five: "5", six: "6", seven: "7", eight: "8", nine: "9", ten: "10",
+  eleven: "11", twelve: "12", thirteen: "13", fourteen: "14", fifteen: "15", sixteen: "16", seventeen: "17", eighteen: "18",
+  nineteen: "19", twenty: "20",
+};
+
+/**
+ * Does this line give the answer away? Any number in it - written in digits or as a word up to twenty,
+ * with or without a minus - that the substitution accepts for the question is the answer. The prompt
+ * asks the model not to say it; this is the check that does not rely on the asking.
+ */
+export function leaks(question: string, line: string): boolean {
+  if (typeof line !== "string" || !line) return false;
+  const found = [...(line.match(NUMBERS) ?? [])];
+  for (const m of line.toLowerCase().matchAll(/\b(minus |negative )?([a-z]+)\b/g)) if (WORDS[m[2]]) found.push((m[1] ? "-" : "") + WORDS[m[2]]);
+  // "12-7" reads as -7 here, so a signed number is checked with and without its sign
+  return found.map((v) => v.replace(/\s+/g, "").replace(/^−/, "-"))
+    .some((v) => verify(question, v) || (v.startsWith("-") && verify(question, v.slice(1))));
 }

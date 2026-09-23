@@ -10,7 +10,7 @@
  * Nothing here ever puts the answer on screen, and no `said` line carries a value.
  */
 import { vision } from "../engines/vision";
-import { slip as slipById, slipsFor, slipVocabulary } from "../rules/maths";
+import { ASK, cleanValue as clean, settled, slipVocabulary } from "../rules/maths";
 import { addHistory, recordAttempt } from "../session/learners";
 import { topic as topicById } from "../library/syllabus";
 import { verify } from "./verify";
@@ -43,10 +43,6 @@ interface Marked {
   verdict: "right" | "wrong"; solution: string; slip: string;
 }
 
-const RIGHT = (n: number) => `Number ${n} is right.`;
-const ASK = (n: number) => `I got something different for number ${n}. How did you get there?`;
-
-const clean = (s: unknown) => (typeof s === "string" ? s.trim().replace(/^x\s*=\s*/i, "") : "");
 
 export async function markSet(
   imageBase64: string,
@@ -73,7 +69,6 @@ export async function markSet(
 
   const byN = new Map<number, Marked>();
   for (const m of json?.items ?? []) if (m && typeof m.n === "number") byN.set(m.n, m);
-  const allowed = new Set(slipsFor(practice.topic).map((s) => s.id));
 
   let unsure = 0;
   const items: PracticeItem[] = practice.items.map((item) => {
@@ -93,16 +88,12 @@ export async function markSet(
       return { ...item, studentAnswer, studentWorking, verdict: "unsure" as const, said: ASK(item.n) };
     }
 
-    // 5 — they agree, and the substitution is what we believe.
-    const verdict: "right" | "wrong" = student ? "right" : "wrong";
-    // 6 — a slip survives only on a wrong item, and only from this topic's closed vocabulary.
-    const id = typeof m?.slip === "string" ? m.slip.trim() : "";
-    const kept = verdict === "wrong" && allowed.has(id) ? id : undefined;
-    // 7 — never a verdict on a wrong item, never a value anywhere.
-    const said = verdict === "right" ? RIGHT(item.n) : kept ? slipById(kept)!.says : ASK(item.n);
+    // 5 — they agree, and the substitution is what we believe. 6 & 7 — rules/maths settles it (the same rule
+    // an explanation uses): a slip only on a wrong item and only from this topic's vocabulary, never a value.
+    const { verdict, slip, said } = settled(item.n, student, m?.slip, practice.topic);
 
-    recordAttempt(learnerId, practice.topic, verdict === "right", kept);
-    return { ...item, studentAnswer, studentWorking, verdict, slip: kept, said };
+    recordAttempt(learnerId, practice.topic, verdict === "right", slip);
+    return { ...item, studentAnswer, studentWorking, verdict, slip, said };
   });
 
   // what happened, in one line the home screen can read back: never invented, always these counts
