@@ -26,11 +26,14 @@ function readBlock(file) {
 const characters = () => fs.readdirSync(path.join(uat, 'characters')).filter(f => f.endsWith('.md')).map(f => readBlock(path.join(uat, 'characters', f)));
 const journeys = () => Object.fromEntries(fs.readdirSync(path.join(uat, 'journeys')).filter(f => f.endsWith('.md')).map(f => { const j = readBlock(path.join(uat, 'journeys', f)); return [j.sim.id, j]; }));
 
-// start once the whole file has loaded, so every declaration below exists
-setImmediate(() => {
+// start once the whole file has loaded, so every declaration below exists; a require() (the rules suite) runs nothing
+if (require.main === module) setImmediate(() => {
   if (process.env.UAT_CHILD) child(process.env.UAT_CHILD).catch(e => { console.error(e); process.exit(1); });
   else parent().catch(e => { console.error(e); process.exit(1); });
 });
+/** The Character's decide enum: every id a Linga view can offer (lib/english/view.ts), plus leaving. */
+const actionIds = () => [...loadDesk().view.VIEW_ACTION_IDS, 'done'];
+module.exports = { actionIds };
 
 // ---------------------------------------------------------------- parent
 async function parent() {
@@ -168,7 +171,7 @@ function loadDesk() {
   const resolve = Module._resolveFilename;
   Module._resolveFilename = function (id, ...rest) { return resolve.call(this, id.startsWith('@/') ? path.join(desk, 'src', id.slice(2)) : id, ...rest); };
   require.extensions['.ts'] = (mod, file) => mod._compile(ts.transpileModule(fs.readFileSync(file, 'utf8'), { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022, esModuleInterop: true } }).outputText, file);
-  deskModules = { codex: require(path.join(desk, 'src/lib/engines/codex.ts')) };
+  deskModules = { codex: require(path.join(desk, 'src/lib/engines/codex.ts')), view: require(path.join(desk, 'src/lib/english/view.ts')) };
   return deskModules;
 }
 
@@ -203,107 +206,45 @@ async function child(characterId) {
   await cmd('preferences', { preferences: { ...cur.defaultPreferences(profile()), ...C.preferences, adultConfirmed: !!C.profile.adultConfirmed }, notes: [] });
   say(`profile ${C.name} · ${C.profile.type}${C.profile.age ? ` ${C.profile.age}` : ''} · true ${C.trueBand}`);
 
-  // ---- what the Character sees, in words, and what it can do
+  // ---- what the Character sees, in words, and what it can do: the one Linga screen model (lib/english/view.ts),
+  // the same one the TV renders, plus the phone's answer box. The driver holds the TV's local state (menu, level
+  // picker, situation and chapter browsers) the way the TV does.
   const A = (id, label, needs) => ({ id, label, ...(needs ? { needs } : {}) });
+  const V = loadDesk().view, ui = { ...V.NO_UI };
+  const inLinga = screen => screen.startsWith('linga') || screen === 'tonight';
   function surface() {
-    const s = getSession(), l = s.englishLearning, k = s.check && s.check.learnerId === s.learner.id ? s.check : null, c = s.conversation, sc = s.screen;
-    const p = profile(), prefs = l.preferences ?? cur.defaultPreferences(p);
-    const view = (screen, shown, actions) => ({ screen, shown, actions });
-    const err = e => e ? `\nError on screen: ${e}` : '';
-    if (sc === 'linga-check' && k) {
-      if (k.stage === 'about') {
-        const q = k.turns.at(-1), answered = k.turns.filter(t => t.role === 'learner').length;
-        if (!q || q.role !== 'tutor') return view(sc, `Find your level. ${k.error ? `Error on screen: ${k.error}` : 'Linga is getting ready.'}`, [A('retry', 'Try again'), A('stop', 'Stop for now')]);
-        return view(sc, `Find your level · about you · question ${Math.min(answered + 1, 3)} of 3.\nLinga says (spoken on the TV, written on the phone): "${q.text}"\nOn the phone: answer in English or in your own language; both tell Linga something.${err(k.error)}`, [A('answer', 'Send your answer from the phone', 'text'), A('hear-again', 'Hear it again'), A('stop', 'Stop for now')]);
-      }
-      const t = k.task, head = `Find your level · task ${Math.min(k.tasks.length + 1, 5)} of up to 5. Some are easy and some are hard; that is how Linga finds your level.`;
-      if (!t) return view(sc, `${head}\n${k.error ? `Error on screen: ${k.error}` : 'Getting the task ready.'}`, [A('retry', 'Try again'), A('stop', 'Stop for now')]);
-      if (t.kind === 'choose') return view(sc, `${head}\nChoose the reply (pick with the remote): ${t.prompt}\n  Reply 0: ${t.options[0]}\n  Reply 1: ${t.options[1]}${err(k.error)}`, [A('choose', 'Pick a reply', 'option'), A('dont-know', "I don't know")]);
-      if (t.kind === 'listen') return view(sc, `${head}\nListen and answer. The TV says aloud, once: "${t.line}"${t.revealed ? ' (the words are now shown on screen)' : ''}\nQuestion on screen: ${t.prompt}${err(k.error)}`, [A('answer', 'Answer on the phone', 'text'), A('hear-again', 'Hear it again'), ...(t.revealed ? [] : [A('show-words', 'Show the words')]), A('dont-know', "I don't know")]);
-      return view(sc, `${head}\nSay it (answer on your phone, speak or type): ${t.prompt}${err(k.error)}`, [A('answer', 'Answer on the phone', 'text'), A('hear-again', 'Hear the task'), A('dont-know', "I don't know")]);
-    }
-    if (sc === 'linga-verdict') {
-      const pl = k?.placement ?? l.placement;
-      if (pl) return view(sc, `Your level: ${pl.band} · ${P.BAND_NAME[pl.band]} (${pl.source === 'self' ? 'self-chosen' : "Linga's read, not a certificate"}).\nLadder A1 A2 B1 B2 C1 C2, marker on ${pl.band}.\nLinga says: ${pl.summary || P.BAND_CAN[pl.band]}${pl.focus ? `\nOn the phone, next to practise: ${pl.focus}` : ''}\nOn the phone: ${pl.confidence === 'low' ? 'your answers were mixed, try again another day for a firmer read' : pl.confidence === 'high' ? 'your answers agreed with each other' : ''}; what Linga saw in each task.`, [A('see-topics', 'See my topics'), A('check-again', 'Find my level again'), A('pick-level', 'Pick it myself', 'band')]);
-    }
-    if (sc === 'linga-plan' && k) {
-      if (k.askGoal) return view(sc, 'Your topics.\nLinga asks (in the middle of the TV): "What would you like to practise in English? A situation you want to handle, or something you enjoy talking about."\nOn the phone: say or type it, in English or your own language, or let Linga pick.', [A('goal', 'Tell Linga what to practise', 'text'), A('skip-goal', 'Let Linga pick'), A('not-now', 'Not now')]);
-      if (!k.topics.length) return view(sc, `Your topics. ${k.error ? `Error on screen: ${k.error}` : 'Linga is picking conversations.'}`, [A('retry', 'Try again'), A('not-now', 'Not now')]);
-      return view(sc, `Your topics (${k.topics.length}). Swap any you don't want, add your own in your words, then agree.${err(k.error)}\n${k.topics.map(t => `  [${t.id}] ${t.title} — ${cur.ENGLISH_SKILLS.find(x => x.id === t.skill)?.name} · with ${t.partner}\n      why: ${t.why}`).join('\n')}`, [A('agree', 'Agree to these topics'), A('swap', 'Swap one topic', 'topicId'), ...(k.topics.length < P.PLAN_MAX ? [A('add', `Add a topic in your own words (the phone field takes ${P.TOPIC_ASK_MAX} characters)`, 'text')] : []), A('renew', 'All new topics'), A('not-now', 'Not now')]);
-    }
-    if (c && sc === 'linga-moment' && c.moment) {
-      const m = c.moment;
-      return view(sc, m.kind === 'fix' ? `Linga stopped the conversation: one thing to fix.\nYou said: "${m.said}"\nTry: "${m.better}"\nWhy: ${m.why}` : `Linga stopped the conversation: a word for this scene.\nYou wanted to say: "${m.said}"\nIn English: "${m.better}"\nWhat it means: ${m.why}`, [A('back', 'Back to the conversation')]);
-    }
-    if (c && sc === 'linga-coach' && c.coaching) return view(sc, `Coach.\nYou said: "${c.coaching.before}"\nOne way to try it: "${c.coaching.after}"\n${c.coaching.note}`, [A('replay', 'Replay the moment'), A('finish', 'Finish for today')]);
-    if (c && sc === 'linga-recap') return view(sc, `Rehearsal saved: ${c.title}. ${c.turns.filter(t => t.role === 'learner').length} replies; ${(c.moments ?? []).length} moments to keep.`, [A('done', 'Done for now')]);
-    if (c && sc === 'linga-talk') {
-      if (!c.turns.length) return view(sc, `${c.title}. ${c.error ? `Error on screen: ${c.error}` : 'Preparing the scene.'}`, [A('retry-scene', 'Retry the scene'), A('choose-situation', 'Choose another', 'sceneId')]);
-      const last = c.turns.at(-1), replies = c.turns.filter(t => t.role === 'learner').length;
-      const lines = [`Conversation: ${c.title}. Goal: ${c.goal}. Your partner: ${c.partner}.`];
-      lines.push(c.paused ? 'The scene is paused.' : last?.role === 'partner' ? `${c.partner} says (spoken on the TV, written on the phone): "${last.text}"` : 'Waiting for your partner.');
-      if (c.phase === 'replay') lines.push('Try it again: a new question practising the coaching point.');
-      if (c.cue) lines.push(`A little support on screen: ${c.cue}`);
-      if (c.quizOpen && c.scene) lines.push(`Recognition practice: ${c.scene.quiz.question}\n  Phrase 0: ${c.scene.quiz.options[0]}\n  Phrase 1: ${c.scene.quiz.options[1]}`);
-      if (c.error) lines.push(`Error on screen: ${c.error}`);
-      lines.push(`You have sent ${replies} replies in this conversation.`);
-      if (c.paused) return view(sc, lines.join('\n'), [A('resume', 'Resume'), A('finish', 'Finish rehearsal')]);
-      return view(sc, lines.join('\n'), [A('reply', 'Speak or type your reply on the phone', 'text'), ...(c.quizOpen ? [A('pick-phrase', 'Pick a phrase', 'option')] : []), A('cue', 'Give me a cue'), replies ? A('coach', 'Pause & coach') : A('quiz', 'Choose a phrase'), A('finish', 'Finish rehearsal')]);
-    }
-    if (sc === 'linga-scenes') return view(sc, `Choose a situation. One at a time on the TV; the phone lists them all.\n${cur.eligibleScenes(p, prefs, l).map(x => `  [${x.id}] ${x.name} — ${x.goal}`).join('\n')}`, [A('choose-situation', 'Start this situation', 'sceneId'), A('back-home', 'Back to Linga home')]);
-    const shown = [], actions = [], resume = c && c.phase !== 'finished' && c.turns.length > 0;
-    if (resume) { shown.push(`Linga home. Your conversation "${c.title}" is waiting.`); actions.push(A('resume', 'Carry on talking')); }
-    else if (k && (k.stage === 'about' || k.stage === 'tasks')) { shown.push('Linga home. You stopped the level check part way.'); actions.push(A('carry-on-check', 'Carry on'), A('restart-check', 'Start again')); }
-    else if (!l.placement) { shown.push("Linga home, first visit. Let's find your level: three questions about you, then a few short tasks. About seven minutes, answered on your phone."); actions.push(A('find-level', 'Find my level'), A('pick-level', "I'll pick my level (A1 to C2)", 'band')); }
-    else if (!l.plan || k?.stage === 'plan' || k?.stage === 'verdict') { shown.push(`Linga home. ${l.placement.band} · ${P.BAND_NAME[l.placement.band]}. Choose your topics: Linga picks conversations for your level and interests.`); actions.push(A('see-topics', k?.stage === 'plan' ? 'Carry on choosing' : 'See my topics')); }
-    else { const r = cur.recommendScene(p, l), done = cur.planDone(l); shown.push(`Linga home. ${l.placement.band} · ${P.BAND_NAME[l.placement.band]}. ${done ? 'Every topic in your plan talked through.' : `Next from your plan: ${r.name} — ${r.goal}`}`); actions.push(A('start-talking', done ? 'Talk again' : 'Start talking')); if (done) actions.push(A('see-topics', 'New topics')); }
-    // Like the TV: situations live behind "Choose a situation" (a secondary action once placed, the menu before),
-    // never listed on the home screen itself — the first LT run listed them and five Characters skipped the check.
-    actions.push(A('open-situations', l.placement ? 'Choose a situation' : 'Menu · Choose a situation'), A('my-topics', 'Menu · My topics'));
-    return view('linga', shown.join('\n'), actions);
+    const v = V.lingaView(getSession(), ui), groups = new Map();
+    // the menu's way out of Linga (phone setup, sentence help) leaves what this run covers
+    for (const a of V.offeredActions(v)) if (!a.run.nav || inLinga(a.run.nav.screen)) (groups.get(a.id) ?? groups.set(a.id, []).get(a.id)).push(a);
+    const actions = [...groups.values()].map(list => {
+      const param = ['option', 'topicId'].find(k => new Set(list.map(x => x.run.command?.extra?.[k])).size > 1);
+      return param ? A(list[0].id, list.map(x => x.label).join(' / '), param) : A(list[0].id, list[0].label, list[0].needs);
+    });
+    if (v.answer) actions.unshift(A('answer', `${v.answer.label} on the phone (speak or type)`, 'text'));
+    return { screen: v.screen, shown: V.viewText(v), actions, view: v };
   }
 
-  async function run(d) {
-    const s = getSession(), k = s.check, c = s.conversation, l = s.englishLearning, mode = C.mode === 'text' ? 'text' : 'speech';
+  async function run(d, shown) {
+    const v = shown.view, mode = C.mode === 'text' ? 'text' : 'speech';
     const text = (d.text || '').trim() || '...';
-    switch (d.action) {
-      case 'find-level': case 'check-again': case 'restart-check': return cmd('check-start');
-      case 'carry-on-check': return cmd('check-resume');
-      case 'pick-level': return cmd('level-self', { band: d.band });
-      case 'answer': return k?.stage === 'about' ? cmd('check-answer', { text, mode, lastTurnId: k.turns.at(-1)?.id }) : cmd('check-task', { taskId: k?.task?.id, text, mode });
-      case 'choose': return cmd('check-task', { taskId: k?.task?.id, option: d.option });
-      case 'dont-know': return cmd('check-task', { taskId: k?.task?.id, skip: true });
-      case 'show-words': return cmd('check-reveal');
-      case 'hear-again': return s.screen === 'linga-check' ? cmd('check-repeat') : cmd('repeat');
-      case 'retry': return cmd('check-retry');
-      case 'stop': case 'not-now': return cmd('check-leave');
-      case 'see-topics': return cmd(k?.stage === 'plan' ? 'check-resume' : l.plan && k?.stage !== 'verdict' && !cur.planDone(l) ? 'plan-open' : 'plan-propose');
-      case 'my-topics': return cmd(l.plan ? 'plan-open' : 'plan-propose');
-      case 'agree': return cmd('plan-agree');
-      case 'swap': return cmd('plan-swap', { topicId: d.topicId });
-      case 'add': return cmd('plan-add', { text: text.slice(0, P.TOPIC_ASK_MAX) });
-      case 'renew': return cmd('plan-renew');
-      case 'start-talking': return cmd('start', { sceneId: cur.recommendScene(profile(), l).id, replace: true });
-      case 'choose-situation': return cmd('start', { sceneId: d.sceneId, replace: true });
-      case 'retry-scene': return cmd('start', { sceneId: c?.sceneId, replace: true });
-      case 'reply': return cmd('turn', { text, mode, lastTurnId: c?.turns.at(-1)?.id });
-      case 'cue': return cmd('cue');
-      case 'quiz': return cmd('quiz');
-      case 'pick-phrase': return cmd('choice', { option: d.option });
-      case 'coach': return cmd('coach');
-      case 'replay': return cmd('replay');
-      case 'back': return cmd('moment-done');
-      case 'finish': return cmd('finish');
-      case 'resume': return cmd('resume');
-      case 'goal': return cmd('plan-goal', { text: text.slice(0, P.TOPIC_ASK_MAX) });
-      case 'skip-goal': return cmd('plan-goal', { skip: true });
-      case 'open-situations': dispatch({ type: 'nav', screen: 'linga-scenes' }); return null;
-      case 'back-home': dispatch({ type: 'nav', screen: 'linga' }); return null;
-      default: return null;
+    if (d.action === 'answer') {
+      const a = v.answer;
+      return a ? cmd(a.action, { ...(a.lastTurnId ? { lastTurnId: a.lastTurnId } : {}), ...(a.taskId ? { taskId: a.taskId } : {}), text: a.action === 'plan-goal' ? text.slice(0, P.TOPIC_ASK_MAX) : text, mode }) : null;
     }
+    const list = V.offeredActions(v).filter(a => a.id === d.action);
+    const a = list.find(x => x.run.command?.extra?.option === d.option) ?? list.find(x => x.run.command?.extra?.topicId === d.topicId) ?? list[0];
+    if (!a) return null;
+    const r = a.run;
+    if (r.ui) Object.assign(ui, r.ui);
+    if (r.nav) { ui.menu = false; dispatch({ type: 'nav', screen: r.nav.screen, ...(r.nav.from ? { from: r.nav.from } : {}) }); }
+    if (!r.command) return null;
+    const need = a.needs ? { [a.needs]: a.needs === 'text' ? text.slice(0, P.TOPIC_ASK_MAX) : d[a.needs] } : {};
+    const out = await cmd(r.command.action, { ...(r.command.extra ?? {}), ...need });
+    if (r.after) Object.assign(ui, r.after);
+    return out;
   }
 
-  const ACTIONS = ['find-level', 'pick-level', 'carry-on-check', 'restart-check', 'answer', 'choose', 'dont-know', 'show-words', 'hear-again', 'retry', 'stop', 'see-topics', 'check-again', 'my-topics', 'agree', 'swap', 'add', 'renew', 'not-now', 'start-talking', 'choose-situation', 'retry-scene', 'reply', 'cue', 'quiz', 'pick-phrase', 'coach', 'replay', 'back', 'finish', 'resume', 'open-situations', 'back-home', 'goal', 'skip-goal', 'done'];
+  const ACTIONS = actionIds();
   const decideSchema = { type: 'object', additionalProperties: false, required: ['thought', 'action', 'text', 'option', 'topicId', 'sceneId', 'band'], properties: { thought: { type: 'string', maxLength: 300 }, action: { type: 'string', enum: ACTIONS }, text: { type: 'string', maxLength: 900 }, option: { type: 'integer', enum: [-1, 0, 1] }, topicId: { type: 'string', maxLength: 100 }, sceneId: { type: 'string', maxLength: 100 }, band: { type: 'string', enum: ['', ...BANDS] } } };
   const characterSystem = `You play a real person using Linga — an English-practice app on a family TV, answered from a phone — in an automated acceptance test. Stay exactly in character as described in person.play: their real English level and typical errors, the language they would really use, their temperament and patience. Never improve their English and never mention testing or being an AI.
 Words the TV "says aloud" are heard once at natural speed: understand them only as well as this person's listening allows.
@@ -320,7 +261,7 @@ If the screen looks broken or confusing, react as this person would: retry, go b
     if (Jn.sim.start !== 'fresh' && !l.placement) { await cmd('level-self', { band: C.trueBand }); record.setup.push(`fixture: level set to ${C.trueBand} by hand`); }
     l = getSession().englishLearning;
     if (Jn.sim.start === 'planned' && !l.plan) { await cmd('plan-propose'); if (getSession().check?.askGoal) await cmd('plan-goal', { text: C.wants.slice(0, P.TOPIC_ASK_MAX) }); await cmd('plan-agree'); record.setup.push('fixture: goal from the Character file, topics proposed and agreed without the Character'); }
-    dispatch({ type: 'nav', screen: 'linga' });
+    dispatch({ type: 'nav', screen: 'linga' }); Object.assign(ui, V.NO_UI);
     const done = () => {
       const s = getSession(), l = s.englishLearning;
       if (jid === 'J1') return !!(l.placement && l.placement.source === 'check' && l.placement.at >= started);
@@ -340,7 +281,7 @@ If the screen looks broken or confusing, react as this person would: retry, go b
       const step = { n: i, screen: view.screen, shown: view.shown, offered: view.actions.map(a => a.id), thought: d.thought, action: d.action, args, result: 'ok', ms: 0 };
       if (!step.offered.includes(d.action)) { step.result = 'not-offered'; steps.push(step); say(`${jid} #${i} ${view.screen} → ${d.action} (not offered)`); continue; }
       const t0 = Date.now();
-      try { await run(d); } catch (e) { step.result = e.status ? `refused ${e.status}` : 'engine-error'; step.message = String(e.message).slice(0, 300); }
+      try { await run(d, view); } catch (e) { step.result = e.status ? `refused ${e.status}` : 'engine-error'; step.message = String(e.message).slice(0, 300); }
       step.ms = Date.now() - t0;
       if (getSession().conversation) lastConversation = getSession().conversation;
       steps.push(step);
