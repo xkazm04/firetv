@@ -1,14 +1,17 @@
 "use client";
 /**
  * Every television screen, composed on On Air. Each takes the session and a `focus` index and
- * draws itself; the D-pad logic that changes them lives in app/tv/page.tsx. No two share a layout.
+ * draws itself from its stop list in tv/keys.ts - the same list the D-pad there walks, so a stop
+ * is added or moved in one place. No two share a layout.
  */
 import { useEffect, useState } from "react";
 import QRCode from "qrcode";
 import type { Profile, SchoolSystem, Session, Subject } from "@/lib/session/store";
 import type { Topic } from "@/lib/library/syllabus";
-import { LESSONS, ESSAY_TYPES } from "@/lib/library/lessons.data";
+import { ESSAY_TYPES } from "@/lib/library/lessons.data";
 import { fmt } from "./useSession";
+import { continueCard } from "./mathsRows";
+import { stopAt, LANDING_STOPS, tonightStops, learnerStops, unitStops, calendarStops, LENS_STOPS, PLAYBOOK_STOPS, HINT_STOPS, SENTENCE_STOPS, RECAP_STOPS, TOPIC_STOPS, walkStops, type TonightStop } from "./keys";
 
 
 /** The OCR writes exponents as ^n and the tutor may too; the screen shows them as printed. */
@@ -77,9 +80,10 @@ const MODULES: Array<{ name: string; ch: Session["subject"]; img: string; tag: s
   { name: "Linga", ch: "english", img: "/brand/linga.png", tag: "English · every level", d: MODULE_BLURB.english },
   { name: "Essay Master", ch: "essay", img: "/brand/essay-master.png", tag: "Essay · anyone who writes", d: MODULE_BLURB.essay },
 ];
-/** Focus 0-2 are the modules, 3-4 the two actions. The caption below the row describes whatever is focused. */
+/** The stops are the three modules, then the two actions. The caption below the row describes whatever is focused. */
 export function Landing({ s, focus }: { s: Session; focus: number }) {
-  const active = focus < 3 ? MODULES[focus] : null;
+  const at = stopAt(LANDING_STOPS, focus);
+  const active = MODULES.find((m) => m.ch === at) ?? null;
   return (<>
     <div className="band band-wedge" />
     <main className="content-full">
@@ -88,8 +92,8 @@ export function Landing({ s, focus }: { s: Session; focus: number }) {
         <div className="title" style={{ marginTop: 0 }}>Study Desk</div>
       </div>
       <div className="cards" style={{ gridTemplateColumns: "repeat(3, 1fr)", marginTop: 36 }}>
-        {MODULES.map((m, i) => (
-          <div key={m.ch} className="card" data-focused={focus === i} style={{ minHeight: 300, padding: "20px 32px 24px" }}>
+        {MODULES.map((m) => (
+          <div key={m.ch} className="card" data-focused={at === m.ch} style={{ minHeight: 300, padding: "20px 32px 24px" }}>
             <img src={m.img} alt="" style={{ height: 190, width: "100%", objectFit: "contain" }} />
             <div className="t" style={{ marginTop: "auto" }}>{m.name}</div>
           </div>
@@ -101,8 +105,8 @@ export function Landing({ s, focus }: { s: Session; focus: number }) {
           : <><span className="cap">Hints, not answers</span><div className="cap-text">The desk gives you the next step, never the answer. The TV shows; your phone does.</div></>}
       </div>
       <div className="actions">
-        <button className="btn" data-focused={focus === 3}>Continue as {s.learner.name}</button>
-        <button className="btn" data-focused={focus === 4}>Someone else</button>
+        <button className="btn" data-focused={at === "continue"}>Continue as {s.learner.name}</button>
+        <button className="btn" data-focused={at === "someone"}>Someone else</button>
       </div>
     </main>
   </>);
@@ -110,39 +114,12 @@ export function Landing({ s, focus }: { s: Session; focus: number }) {
 
 // ---- T1 ----
 /**
- * The continue card: the one thing already open in Math Buddy, offered before anything new.
- * Read straight off the session — if none of these hold there is nothing to continue and the
- * screen says nothing about it.
- */
-export interface Continue { k: string; t: string; d: string; cap: string; go: "practice" | "walk" | "page"; pageIx: number }
-export function continueCard(s: Session): Continue | null {
-  const name = s.practice ? topicById(s.practice.topic)?.name ?? s.practice.topic : "";
-  if (s.practice && !s.practice.marked) return {
-    k: "Still open", t: "Finish the set", d: `${s.practice.items.length} questions on ${name}, not marked yet.`,
-    cap: "Your questions are still on paper. Enter puts them back on screen, ready for the photo.",
-    go: "practice", pageIx: 0,
-  };
-  if (s.practice?.marked && s.walkIx < s.practice.items.length - 1) return {
-    k: "Half walked", t: "Carry on walking the set", d: `${name} · you stopped at ${s.walkIx + 1} of ${s.practice.items.length}.`,
-    cap: `The marked set is waiting at item ${s.walkIx + 1} of ${s.practice.items.length}. Enter carries on from there.`,
-    go: "walk", pageIx: 0,
-  };
-  const pi = s.pages.findIndex((p) => p.subject === "maths" && p.items.length > 0);
-  if (pi >= 0) { const p = s.pages[pi]; return {
-    k: "On the desk", t: "Back to the sheet", d: `${p.title} · ${p.items.length} problems read.`,
-    cap: "The sheet you snapped is still on the desk. Enter opens it where you were.",
-    go: "page", pageIx: pi,
-  }; }
-  return null;
-}
-
-/**
  * The two doors the D-pad meets: the sheet you were given, and a topic you choose. A label and a
  * name each — what either one does is the caption's job, and saying it twice was the old fault.
  */
-const DOORS = [
-  { k: "The sheet you were given", t: "I have homework" },
-  { k: "No sheet needed", t: "Teach me something" },
+const DOORS: Array<{ id: Exclude<TonightStop, "continue">; k: string; t: string }> = [
+  { id: "homework", k: "The sheet you were given", t: "I have homework" },
+  { id: "teach", k: "No sheet needed", t: "Teach me something" },
 ];
 function doorCaption(s: Session, i: number): string {
   if (i === 1) return "Pick a topic and the desk writes six questions to work on paper, then marks them from a photo.";
@@ -236,10 +213,10 @@ function Path({ s }: { s: Session }) {
  */
 export function Tonight({ s, focus }: { s: Session; focus: number }) {
   const cont = continueCard(s);
-  const off = cont ? 1 : 0;
+  const at = stopAt(tonightStops(s), focus);
   const secure = Object.values(s.skills ?? {}).filter((r) => r.secure).map((r) => r.topic);
   const sheets = s.pages.filter((p) => p.subject === "maths").length;
-  const door = cont && focus === 0 ? -1 : Math.max(0, Math.min(1, focus - off));
+  const door = at === "continue" ? -1 : at === "teach" ? 1 : 0;
   const title = cont ? "One thing is still open"
     : secure.length === SYLLABUS.length ? "Every topic on the path is secure"
     : secure.length ? `${COUNT[secure.length]} of ${SYLLABUS.length} topics secure`
@@ -251,14 +228,14 @@ export function Tonight({ s, focus }: { s: Session; focus: number }) {
       <div className="title">{title}</div>
       <div className="cards" style={{ gridTemplateColumns: cont ? "1.1fr 1fr 1fr" : "1fr 1fr", marginTop: 20 }}>
         {cont && (
-          <div className="card" data-focused={focus === 0} style={{ minHeight: 160 }}>
+          <div className="card" data-focused={at === "continue"} style={{ minHeight: 160 }}>
             <div className="k">{cont.k}</div>
             <div className="t" style={{ fontSize: 40 }}>{cont.t}</div>
             <div className="d" style={{ marginTop: "auto" }}>{cont.d}</div>
           </div>
         )}
-        {DOORS.map((d, i) => (
-          <div key={d.t} className="card" data-focused={focus === i + off} style={{ minHeight: 160 }}>
+        {DOORS.map((d) => (
+          <div key={d.t} className="card" data-focused={at === d.id} style={{ minHeight: 160 }}>
             <div className="k">{d.k}</div>
             <div className="t" style={{ fontSize: cont ? 40 : 46, marginTop: "auto" }}>{d.t}</div>
           </div>
@@ -267,7 +244,7 @@ export function Tonight({ s, focus }: { s: Session; focus: number }) {
       <div style={{ marginTop: 44 }}>{door === 0 ? <Sheets s={s} /> : door === 1 ? <Path s={s} /> : null}</div>
       <div style={{ position: "absolute", left: 0, bottom: 96 }}>
         <span className="cap" style={{ background: "transparent", color: "var(--maths)", border: "2px solid var(--maths)" }}>Math Buddy</span>
-        <div className="cap-text">{cont && focus === 0 ? cont.cap : doorCaption(s, Math.max(0, door))}</div>
+        <div className="cap-text">{cont && at === "continue" ? cont.cap : doorCaption(s, Math.max(0, door))}</div>
       </div>
       <div className="ticker"><span><b>{secure.length}</b> of {SYLLABUS.length} topics secure</span><i>·</i><span>{sheets ? <><b>{sheets}</b> sheet{sheets === 1 ? "" : "s"} on the desk</> : "no sheet yet"}</span><i>·</i><span>{s.practice ? (s.practice.marked ? "set marked" : "set on paper") : "no set open"}</span>
         <i>·</i>{s.joined ? <span>phone joined</span> : <span>phone code <b>{s.pin}</b> · Down to pair</span>}</div>
@@ -277,17 +254,17 @@ export function Tonight({ s, focus }: { s: Session; focus: number }) {
 
 // ---- T2 Units (guide) ----
 export function Units({ s, focus }: { s: Session; focus: number }) {
-  const list = LESSONS.filter((l) => l.subject === s.subject);
+  const list = unitStops(s);
   const next = list.find((l) => !l.done);
-  const cur = list[Math.min(focus, list.length - 1)];
+  const cur = stopAt(list, focus);
   return (<>
     <div className="band band-right" />
     <main className="content-full">
       <div className="eyebrow" data-ch={s.subject}>{NAME[s.subject]} · units</div>
       <div className="title">Tonight&apos;s units</div>
       <div className="guide" style={{ position: "absolute", left: 0, top: 130, width: 900 }}>
-        {list.map((l, i) => (
-          <div key={l.id} className="row" data-focused={focus === i} data-done={!!l.done}>
+        {list.map((l) => (
+          <div key={l.id} className="row" data-focused={l === cur} data-done={!!l.done}>
             <div className="u">Unit {l.unit}</div>
             <div className="t">{l.title}{l.id === next?.id && <span className="pill">next</span>}{l.done && <span className="pill" data-kind="done">done</span>}</div>
             <div className="d">{l.minutes} min</div>
@@ -306,7 +283,8 @@ export function Units({ s, focus }: { s: Session; focus: number }) {
 
 // ---- T2m Calendar (maths) ----
 export function Calendar({ s, focus }: { s: Session; focus: number }) {
-  const list = LESSONS.filter((l) => l.subject === "maths");
+  const list = calendarStops();
+  const cur = stopAt(list, focus);
   const nextIx = list.findIndex((l) => !l.done);
   const weeks = [["Week 1", 0, 3], ["Week 2", 3, 6], ["Week 3", 6, 8]] as const;
   return (<>
@@ -318,7 +296,7 @@ export function Calendar({ s, focus }: { s: Session; focus: number }) {
         {weeks.map(([w, a, b]) => [
           <div key={w} className="wk">{w}</div>,
           ...list.slice(a, b).map((l, j) => { const i = a + j; const state = l.done ? "done" : i === nextIx ? "next" : i > nextIx + 1 ? "locked" : "open";
-            return <div key={l.id} className="cell" data-state={state} data-focused={focus === i}><div className="t">{l.title}</div><div className="s">{state === "done" ? "completed" : state === "next" ? "next up" : state === "locked" ? "later" : `${l.minutes} min`}</div></div>; }),
+            return <div key={l.id} className="cell" data-state={state} data-focused={l === cur}><div className="t">{l.title}</div><div className="s">{state === "done" ? "completed" : state === "next" ? "next up" : state === "locked" ? "later" : `${l.minutes} min`}</div></div>; }),
           ...Array.from({ length: 3 - (b - a) }, (_, k) => <div key={w + k} />),
         ])}
       </div>
@@ -371,6 +349,7 @@ export function HintScreen({ s, focus }: { s: Session; focus: number }) {
   const h = s.hint; if (!h) return null;
   const hh = h.stage === 2 ? h.hint2 : h.hint1;
   const p = s.pages[s.pageIx];
+  const at = stopAt(HINT_STOPS, focus);
   return (<>
     <div className="band band-left" /><Rail s={s} />
     <main className="content">
@@ -391,8 +370,8 @@ export function HintScreen({ s, focus }: { s: Session; focus: number }) {
       )}
       {s.noLesson && <div className="body" style={{ marginTop: 28, color: "var(--mute)", maxWidth: "40ch" }}>No lesson in tonight&apos;s library covers this one. The hint is all there is — and that is fine.</div>}
       <div className="actions">
-        <button className="btn" data-focused={focus === 0} data-disabled={h.stage === 2}>{h.stage === 2 ? "That's both hints" : "Still stuck"}</button>
-        <button className="btn" data-focused={focus === 1} data-disabled={!s.lesson}>{s.lesson ? "Show me the lesson" : s.noLesson ? "No lesson for this" : "Finding the lesson…"}</button>
+        <button className="btn" data-focused={at === "stuck"} data-disabled={h.stage === 2}>{h.stage === 2 ? "That's both hints" : "Still stuck"}</button>
+        <button className="btn" data-focused={at === "lesson"} data-disabled={!s.lesson}>{s.lesson ? "Show me the lesson" : s.noLesson ? "No lesson for this" : "Finding the lesson…"}</button>
       </div>
     </main>
   </>);
@@ -437,7 +416,7 @@ export function SentenceScreen({ s, focus }: { s: Session; focus: number }) {
       <div className="eyebrow" data-ch="english">English · your sentence</div>
       <div className="sent" style={{ marginTop: 90, maxWidth: 1700 }}>{parts.map((p, i) => p.k ? <span key={i} className="tok" data-k={p.k} data-l={p.l}>{p.text}</span> : <span key={i}>{p.text}</span>)}</div>
       <div className="lt" style={{ position: "absolute", left: 0, bottom: 200, maxWidth: 1500 }}><div className="tag">{card.conflict ? "The rule" : "Right"}</div><div className="txt" style={{ fontSize: 38 }}>{a.explanation}</div></div>
-      <div className="actions" style={{ bottom: 60 }}><button className="btn" data-focused={focus === 0}>Try it again</button><button className="btn" data-focused={focus === 1}>Show me the unit</button></div>
+      <div className="actions" style={{ bottom: 60 }}><button className="btn" data-focused={stopAt(SENTENCE_STOPS, focus) === "again"}>Try it again</button><button className="btn" data-focused={stopAt(SENTENCE_STOPS, focus) === "unit"}>Show me the unit</button></div>
     </main>
   </>);
 }
@@ -476,15 +455,16 @@ export function EssayType({ s, focus }: { s: Session; focus: number }) {
   const dia = ["thesis", "para", "order", "concl"];
   const standings = lensStandings(s.history, s.writing);
   const totals = writingTotals(standings, s.history);
+  const at = stopAt(LENS_STOPS, focus);
   return (<>
     <div className="band band-low" />
     <main className="content-full">
       <div className="eyebrow" data-ch="essay">Essay · what should the desk look at?</div>
       <div className="title">Choose the lens</div>
       <div className="cards" style={{ gridTemplateColumns: "1fr 1fr", gridTemplateRows: "300px 300px", marginTop: 40 }}>
-        {ESSAY_TYPES.map((t, i) => (
-          <div key={t.id} className="card" data-focused={focus === i} style={{ display: "grid", gridTemplateColumns: "200px 1fr", gap: 28, alignItems: "center" }}>
-            <Diagram kind={dia[i]} focused={focus === i} />
+        {LENS_STOPS.map((t, i) => (
+          <div key={t.id} className="card" data-focused={t === at} style={{ display: "grid", gridTemplateColumns: "200px 1fr", gap: 28, alignItems: "center" }}>
+            <Diagram kind={dia[i]} focused={t === at} />
             <div><div className="t">{t.name}</div><div className="d" style={{ marginTop: 10 }}>{t.promise}</div><LensMeter l={standings.find((x) => x.id === t.id)} /></div>
           </div>
         ))}
@@ -547,15 +527,19 @@ export function Forensic({ s, table }: { s: Session; table: boolean }) {
 }
 
 // ---- T10 Playbook / X-ray ----
+const PLAYS: Record<(typeof PLAYBOOK_STOPS)[number], [string, string]> = {
+  thesis: ["Thesis", "One sentence that takes a side and says why."], para: ["Paragraph", "Claim, then evidence, then the link back."],
+  order: ["Order", "Which argument goes first, and why that one."], concl: ["Conclusion", "What the introduction promised, now delivered."],
+};
 export function Playbook({ focus }: { s: Session; focus: number }) {
-  const plays = [["Thesis", "One sentence that takes a side and says why.", "thesis"], ["Paragraph", "Claim, then evidence, then the link back.", "para"], ["Order", "Which argument goes first, and why that one.", "order"], ["Conclusion", "What the introduction promised, now delivered.", "concl"]];
+  const at = stopAt(PLAYBOOK_STOPS, focus);
   return (<>
     <div className="band band-low" />
     <main className="content-full">
       <div className="eyebrow" data-ch="essay">Essay · playbook</div>
       <div className="title">Choose a structure to work on</div>
       <div className="cards" style={{ gridTemplateColumns: "1fr 1fr", gridTemplateRows: "300px 300px", marginTop: 40 }}>
-        {plays.map(([t, d, k], i) => <div key={t} className="card" data-focused={focus === i} style={{ display: "grid", gridTemplateColumns: "200px 1fr", gap: 28, alignItems: "center" }}><Diagram kind={k} focused={focus === i} /><div><div className="t">{t}</div><div className="d" style={{ marginTop: 10 }}>{d}</div></div></div>)}
+        {PLAYBOOK_STOPS.map((k) => { const [t, d] = PLAYS[k]; return <div key={k} className="card" data-focused={k === at} style={{ display: "grid", gridTemplateColumns: "200px 1fr", gap: 28, alignItems: "center" }}><Diagram kind={k} focused={k === at} /><div><div className="t">{t}</div><div className="d" style={{ marginTop: 10 }}>{d}</div></div></div>; })}
       </div>
       <div className="ticker"><span>Select opens the x-ray</span><i>·</i><span>Back to the lens</span></div>
     </main>
@@ -600,7 +584,7 @@ export function Recap({ s, focus }: { s: Session; focus: number }) {
       </div>
       <div style={{ marginTop: 32 }}><span className="cap">Where it was hard</span>
         <div className="body" style={{ marginTop: 14 }}>{s.log.hard.length ? s.log.hard.map((h) => <div key={h}>· {h}</div>) : "Nothing needed a second hint."}</div></div>
-      <div className="actions"><button className="btn" data-focused={focus === 0}>Send to parent</button><button className="btn" data-focused={focus === 1}>Back to tonight</button></div>
+      <div className="actions"><button className="btn" data-focused={stopAt(RECAP_STOPS, focus) === "send"}>Send to parent</button><button className="btn" data-focused={stopAt(RECAP_STOPS, focus) === "tonight"}>Back to tonight</button></div>
     </main>
   </>);
 }
@@ -613,22 +597,23 @@ function picksLine(p: Profile) {
   return on.length ? `${join(on)} on, ${who}.` : `Nothing on yet, ${who}.`;
 }
 export function Learner({ s, focus }: { s: Session; focus: number }) {
-  const at = s.profiles[focus] ?? null;
+  const stop = stopAt(learnerStops(s), focus);
+  const at = stop && stop !== "add" ? stop : null;
   return (<>
     <div className="band band-left" />
     <main className="content-full">
       <div className="eyebrow">Who is at the desk?</div>
       <div className="title">Learner</div>
       <div className="cards" style={{ gridTemplateColumns: `repeat(${Math.max(3, s.profiles.length + 1)}, 1fr)`, marginTop: 44 }}>
-        {s.profiles.map((p, i) => (
-          <div key={p.id} className="card" data-focused={focus === i}>
+        {s.profiles.map((p) => (
+          <div key={p.id} className="card" data-focused={stop === p}>
             <div className="k">{TYPE_WORDS[p.type].toUpperCase()}</div>
             <div className="t">{p.name}</div>
             <div className="d">{p.modules.map((m) => NAME[m]).join(" · ")}</div>
             {p.id === s.learner.id && <div className="m">at the desk now</div>}
           </div>
         ))}
-        <div className="card" data-focused={focus === s.profiles.length}>
+        <div className="card" data-focused={stop === "add"}>
           <div className="k">New</div><div className="t">Add a learner</div><div className="d">picks on the TV, name on the phone</div>
         </div>
       </div>
@@ -717,8 +702,7 @@ const PREP = [
 export function Topics({ s, focus, busy }: { s: Session; focus: number; busy: boolean }) {
   const st = topicStates(s);
   const sys = systemOf(s.profiles.find((p) => p.id === s.learner.id));
-  const ix = busy && s.topic ? Math.max(0, SYLLABUS.findIndex((t) => t.id === s.topic)) : Math.min(focus, SYLLABUS.length - 1);
-  const at = SYLLABUS[ix];
+  const at = (busy && s.topic ? TOPIC_STOPS.find((t) => t.id === s.topic) : undefined) ?? stopAt(TOPIC_STOPS, focus)!;
   // guidance, never a gate: the topic most people take before this one, when it is not behind them yet
   const before = at.prereq.map((p) => topicById(p)).find((t) => t && st[t.id] !== "secure");
   // the wait is a line that changes, never a spinner
@@ -736,8 +720,8 @@ export function Topics({ s, focus, busy }: { s: Session; focus: number; busy: bo
               <div className="cap-text">{at.blurb}{before ? ` Most people do ${before.name} first.` : ""}</div></>}
       </div>
       <div className="cards" style={{ gridTemplateColumns: "repeat(3, 1fr)", marginTop: 56 }}>
-        {SYLLABUS.map((t, i) => (
-          <div key={t.id} className="card" data-focused={!busy && i === ix} style={{ minHeight: 250, opacity: busy && i !== ix ? 0.4 : 1 }}>
+        {TOPIC_STOPS.map((t) => (
+          <div key={t.id} className="card" data-focused={!busy && t === at} style={{ minHeight: 250, opacity: busy && t !== at ? 0.4 : 1 }}>
             <div className="k">{stateWord(s, t, st)}</div>
             <div className="t" style={{ fontSize: 40 }}>{t.name}</div>
             <div className="m">{yearWord(t, sys)}</div>
@@ -808,7 +792,7 @@ export function Walk({ s, focus }: { s: Session; focus: number }) {
         <span className="cap" style={{ background: "transparent", color: "var(--maths)", border: "2px solid var(--maths)" }}>What the desk says</span>
         <div className="cap-text">{it.said ?? (v === "right" ? "This one is right. Nothing more to say about it." : "The desk has no comment on this one.")}</div>
       </div>
-      {last && <div className="actions"><button className="btn" data-focused={focus === 0}>Finish the set</button></div>}
+      {last && <div className="actions"><button className="btn" data-focused={stopAt(walkStops(s), focus) === "finish"}>Finish the set</button></div>}
       <div className="ticker"><span>item <b>{s.walkIx + 1}</b> of {p.items.length}</span><i>·</i><span><b>{right}</b> right</span><i>·</i><span><b>{look}</b> to look at</span><i>·</i><span>{last ? "Select finishes" : "Left and Right walk the set"}</span></div>
     </main>
   </>);
