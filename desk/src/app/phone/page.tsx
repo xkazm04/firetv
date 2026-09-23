@@ -22,7 +22,7 @@ const TV_WORDS: Partial<Record<Session["screen"], string>> = {
   landing: "the start screen", pair: "the pairing code", joined: "the paired screen", tonight: "Tonight", learner: "Who is at the desk", profile: "a new learner",
   units: "the units guide", calendar: "the calendar", page: "the page", hint: "a hint", lesson: "a lesson", sentence: "your sentence",
   headtohead: "head to head", essaytype: "the essay lens", forensic: "the essay", playbook: "the playbook", xray: "the x-ray", break: "a break", recap: "the recap",
-  topics: "Teach me something", practice: "the practice set", walk: "walking the set",
+  topics: "Teach me something", practice: "the practice set", sheet: "your marked sheet", walk: "walking the set",
   linga: "Linga", "linga-scenes": "English situations", "linga-map": "your learning map", "linga-talk": "your conversation", "linga-coach": "a coaching moment", "linga-recap": "your rehearsal recap", "linga-check": "finding your level", "linga-verdict": "your level", "linga-plan": "your topics", "linga-moment": "a moment in your conversation",
 };
 export default function Phone() {
@@ -277,7 +277,7 @@ export default function Phone() {
           const asking = !!item && (item.verdict === "wrong" || item.verdict === "unsure" || !!reply);
           return <div className="pscreen"><h3>Practice</h3>
             <p><b>{right} right.</b> {look ? `${look} to look at.` : "Nothing to look at."}</p>
-            <p>Look at the TV — it is walking the set with you.</p>
+            <p>{s.screen === "walk" ? "Look at the TV — it is walking the set with you." : "Look at the TV — the whole set is on it. Pick a number there to go through it."}</p>
             {asking && <div className="ptalk">
               <b>How did you get there?</b>
               {reply ? <><p className="said">{reply}</p><p>The TV has it.</p></> : null}
