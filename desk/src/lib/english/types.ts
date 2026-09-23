@@ -52,6 +52,21 @@ export interface EnglishLearning {
 }
 export interface ConversationTurn { id: string; role: "partner" | "learner"; text: string; mode?: EvidenceMode; supported?: boolean; }
 export interface Coaching { before: string; after: string; note: string; }
+/** A rung of the rescue ladder: 1 said more simply, 2 what it means, 3 a way to start. */
+export type HelpRung = 1 | 2 | 3;
+/**
+ * The rescue ladder of the partner's current line, as the session may know it: which rungs exist and how far the
+ * learner has climbed. Never the rungs' words: the unrevealed ones stay in server memory (help.ts).
+ */
+export interface ConversationHelp {
+  /** the partner turn this ladder belongs to; help for an older line is never shown */
+  forTurn: string;
+  rungs: HelpRung[];
+  /** the highest rung revealed, 0 for none */
+  rung: 0 | HelpRung;
+  /** the cue on screen is that rung (not the quiz's or a choice's line) */
+  shown: boolean;
+}
 export interface Conversation {
   id: string; learnerId: string; sceneId: string; title: string; goal: string; partner: string;
   focusSkill: SkillId; reviewSkill?: SkillId; preferences: EnglishPreferences;
@@ -63,6 +78,8 @@ export interface Conversation {
   pending: string | null; error: string; paused: boolean;
   capture: boolean; captureAt: number; audioNonce: number;
   supported: boolean; cue: string; quizOpen: boolean;
+  /** absent on a conversation saved before the ladder, and null when the partner's line came without one */
+  help?: ConversationHelp | null;
   commands: string[]; evidence: EnglishEvidence[];
   provider?: string; responseMs?: number; startedAt: number;
 }

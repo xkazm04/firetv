@@ -110,6 +110,28 @@ const cmd = (action: string, extra?: Record<string, unknown>): ViewRun => ({ com
 const go = (screen: Screen): ViewRun => ({ nav: { screen } });
 const act = (id: ActionId, label: string, help: string, run: ViewRun, more: Partial<ViewAction> = {}): ViewAction => ({ id, label, help, run, ...more });
 
+/** The caption tag over each rung of the rescue ladder (lib/english/help.ts): the rung names itself. */
+export const RUNG_TAG = { 1: "Said more simply", 2: "What it means", 3: "A way to start" } as const;
+const RUNG_NEXT = {
+  1: "Hear the question said more simply, then answer on your phone.",
+  2: "Hear what the question means, then answer on your phone.",
+  3: "Get a way to start your reply. A reply after this counts as helped.",
+} as const;
+/**
+ * The help button as every screen shows it, from the ladder's shape on the session (never its words): its label,
+ * what it gives next, the tag over a revealed rung, and whether it is offered at all. At the top of a ladder it is
+ * not: "Choose a phrase" stays the recognition fallback. A line with no ladder gets the scene's cue, as before.
+ */
+export function helpOf(c: Conversation): { label: string; help: string; tag: string; offered: boolean } {
+  const h = c.help, next = h?.rungs.find(r => r > h.rung);
+  return {
+    label: h?.rung ? "More help" : "Help me answer",
+    help: next ? RUNG_NEXT[next] : "Get a phrase starter, then try your own reply on the phone.",
+    tag: h?.shown && h.rung ? RUNG_TAG[h.rung] : "A little support",
+    offered: !h?.rung || !!next,
+  };
+}
+
 /** The level check of the learner at the desk, if one is under way. */
 export function activeCheck(s: Session): LevelCheck | null { return s.check && s.check.learnerId === s.learner.id ? s.check : null; }
 
@@ -288,16 +310,20 @@ export function lingaView(s: Session, input: ViewInput = {}): LingaView {
     const scene = c.scene ?? ENGLISH_SCENES.find(x => x.id === c.sceneId)!;
     const said = last?.role === "partner" ? last.text : "", hasReply = c.turns.some(t => t.role === "learner");
     caption = c.pending ? "Take a moment. Your partner is preparing the next turn." : c.paused ? "The scene is paused. Resume when you are ready." : c.capture ? "Listening on your phone. Stop when you are ready to review your words." : c.cue || (said ? "Answer on your phone: speak or type." : "Preparing a situation that fits your goal.");
-    captionTag = c.cue ? "A little support" : c.pending ? "Preparing" : c.capture ? "Your turn" : said ? "Your turn" : "Preparing";
+    const help = helpOf(c);
+    captionTag = c.cue ? help.tag : c.pending ? "Preparing" : c.capture ? "Your turn" : said ? "Your turn" : "Preparing";
     if (c.quizOpen) {
       hero = { kind: "choices", kicker: "A little support · recognition practice", prompt: scene.quiz.question, options: [...scene.quiz.options], small: true };
       actions = scene.quiz.options.map((x, i) => act("pick-phrase", `Option ${i + 1}`, x, cmd("choice", { option: i })));
     } else {
       hero = { kind: "scene", kicker: `${c.title} · ${c.partner}`, title: c.goal, who: c.partner, said, subtitle: said ? c.goal : "", art: c.sceneId, small: true };
+      const quiz = act("quiz", "Choose a phrase", "Compare two phrases before returning to speaking.", cmd("quiz"), { disabled: waiting });
+      const second = hasReply ? act("coach", "Pause & coach", "Work on one useful change, then replay this moment.", cmd("coach"), { disabled: waiting }) : quiz;
+      // At the top of the ladder the help button gives way to the recognition fallback.
+      const first = c.pending ? act("cancel", "Cancel & go back", "Cancel the pending reply and keep the conversation for later.", cmd("leave")) : help.offered ? act("cue", help.label, help.help, cmd("cue")) : second === quiz ? null : quiz;
       actions = !c.turns.length && !c.pending ? [act("retry-scene", "Retry the scene", "Try preparing this situation again.", cmd("start", { sceneId: c.sceneId, replace: true })), chooseSituation("Choose a different situation.", "Choose another")]
         : c.paused ? [act("resume", "Resume", "Return to the last question. Your words are kept.", cmd("resume")), act("finish", "Finish rehearsal", "End here and keep your learning evidence.", cmd("finish"))]
-        : [c.pending ? act("cancel", "Cancel & go back", "Cancel the pending reply and keep the conversation for later.", cmd("leave")) : act("cue", "Give me a cue", "Get a phrase starter, then try your own reply on the phone.", cmd("cue")),
-          hasReply ? act("coach", "Pause & coach", "Work on one useful change, then replay this moment.", cmd("coach"), { disabled: waiting }) : act("quiz", "Choose a phrase", "Compare two phrases before returning to speaking.", cmd("quiz"), { disabled: waiting })];
+        : [...(first ? [first] : []), second];
     }
   } else { caption = "Choose a situation to begin."; actions = [chooseSituation(caption)]; }
 

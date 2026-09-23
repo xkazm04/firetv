@@ -4,7 +4,7 @@ import type { Event, Session } from "@/lib/session/store";
 import { defaultPreferences, eligibleScenes, ENGLISH_SCENES, ENGLISH_SKILLS, PROGRESS_LABEL, recommendScene } from "@/lib/english/curriculum";
 import { ABOUT_QUESTIONS, BAND_CAN, BAND_NAME, isBand, MAX_TASKS, PLAN_MAX, TOPIC_ASK_MAX } from "@/lib/english/placement";
 import { BANDS, type Band, type Conversation, type EnglishLearning, type EnglishPreferences, type LevelCheck, type Placement } from "@/lib/english/types";
-import { lingaHome } from "@/lib/english/view";
+import { helpOf, lingaHome } from "@/lib/english/view";
 import { ReplyBox } from "./ReplyBox";
 import { useEnglish } from "./useEnglish";
 
@@ -25,6 +25,7 @@ export function LingaPhone({s,post,onSentence}:{s:Session;post:(e:Event)=>Promis
   const scene=c?.scene??ENGLISH_SCENES.find(x=>x.id===c?.sceneId);
   const save=async()=>{if(await run("preferences",{preferences:prefs,notes:notes.split("\n").map(n=>n.trim()).filter(Boolean)})){setMessage("Your learning preferences are saved. They apply to your next situation.");setPanel("talk");}};
   const currentQuestion=c?.turns.at(-1)?.text;
+  const help=c&&helpOf(c);
   return <div className="pscreen linga-phone">
     <h3>Linga · {s.learner.name}</h3>
     <div className="linga-buttons"><button className="pbtn" data-secondary={panel!=="talk"} onClick={()=>setPanel("talk")}>Talk</button><button className="pbtn" data-secondary={panel!=="settings"} onClick={()=>{setPrefs(learning.preferences??defaultPreferences(profile));setNotes(learning.notes.join("\n"));setPanel("settings");}}>Set up</button><button className="pbtn" data-secondary={panel!=="map"} onClick={()=>setPanel("map")}>My map</button></div>
@@ -60,11 +61,11 @@ export function LingaPhone({s,post,onSentence}:{s:Session;post:(e:Event)=>Promis
         {c.paused?<button className="pbtn" data-signal="true" onClick={()=>run("resume")}>Resume conversation</button>:c.phase==="coaching"?<>
           <p>One way to try it: “{c.coaching?.after}”</p><button className="pbtn" data-signal="true" disabled={pending} onClick={()=>run("replay")}>Replay with a new question</button>
         </>:<>
-          {c.cue&&<p>{c.cue}</p>}
+          {c.cue&&<p><b>{help?.tag}</b><br/>{c.cue}</p>}
           {c.quizOpen&&scene&&<><p>{scene.quiz.question}</p>{scene.quiz.options.map((x,i)=><button className="pbtn" data-secondary="true" key={x} disabled={pending} onClick={()=>run("choice",{option:i})}>{x}</button>)}</>}
           <ReplyBox ready={!!currentQuestion} busy={pending} question={c.turns.at(-1)?.id} stopWhen={c.paused||!!c.pending} onCapture={active=>run("capture",{active})}
             onSend={(text,mode,question,attempt)=>run("turn",{text,mode,lastTurnId:question,commandId:attempt})} note="Recorded as written practice. Edited transcripts also stay separate from speaking evidence."/>
-          <div className="linga-buttons"><button className="pbtn" data-secondary="true" disabled={pending} onClick={()=>run("cue")}>Give me a cue</button><button className="pbtn" data-secondary="true" disabled={pending} onClick={()=>run("quiz")}>Choose a phrase</button></div>
+          <div className="linga-buttons">{help?.offered&&<button className="pbtn" data-secondary="true" disabled={pending} onClick={()=>run("cue")}>{help.label}</button>}<button className="pbtn" data-secondary="true" disabled={pending} onClick={()=>run("quiz")}>Choose a phrase</button></div>
           <button className="pbtn" data-secondary="true" disabled={pending||!c.turns.some(t=>t.role==="learner")} onClick={()=>run("coach")}>Pause & coach</button>
         </>}
         <div className="linga-buttons"><button className="pbtn" data-secondary="true" onClick={()=>run(c.pending?"leave":"repeat")}>{c.pending?"Cancel pending turn":"Repeat audio"}</button><button className="pbtn" data-secondary="true" disabled={pending} onClick={()=>run("finish")}>Finish rehearsal</button></div>
