@@ -10,8 +10,24 @@
         {
           "name": "linga",
           "description": "Linga English practice: placement check (A1-C2), agreeing topics, the tutor conversation, error moments, the phone reply box and the TV conversation screen, speech in and out. Decisions (level, error class, topic plan) stay in lib/rules and lib/english; the model only phrases.",
-          "keywords": ["english", "linga", "placement", "cefr", "conversation", "tutor", "moments", "topics", "speech", "stt", "tts"],
-          "stack": ["next.js", "react", "typescript"],
+          "keywords": [
+            "english",
+            "linga",
+            "placement",
+            "cefr",
+            "conversation",
+            "tutor",
+            "moments",
+            "topics",
+            "speech",
+            "stt",
+            "tts"
+          ],
+          "stack": [
+            "next.js",
+            "react",
+            "typescript"
+          ],
           "file_paths": [
             "desk/src/english/LingaPhone.tsx",
             "desk/src/english/LingaTV.tsx",
@@ -47,8 +63,24 @@
         {
           "name": "desk-pipelines",
           "description": "Maths and essay homework: read a photographed page, analyse it, give a withheld hint, explain, mark and verify a solution, pick and serve practice items, keep learner memory. Verdicts are decided in lib/rules; the answer is never put on screen.",
-          "keywords": ["maths", "essay", "hint", "mark", "verify", "explain", "practice", "items", "memory", "read", "ocr", "withholding"],
-          "stack": ["next.js", "typescript"],
+          "keywords": [
+            "maths",
+            "essay",
+            "hint",
+            "mark",
+            "verify",
+            "explain",
+            "practice",
+            "items",
+            "memory",
+            "read",
+            "ocr",
+            "withholding"
+          ],
+          "stack": [
+            "next.js",
+            "typescript"
+          ],
           "file_paths": [
             "desk/src/lib/desk/essay.ts",
             "desk/src/lib/desk/explain.ts",
@@ -82,8 +114,22 @@
         {
           "name": "tv-surface",
           "description": "The Study Desk television: every TV screen, its rows and focus, the On Air identity, the session subscription. Client components only; the TV never asks for typing and never shows an answer.",
-          "keywords": ["tv", "screens", "d-pad", "focus", "on air", "rows", "profile", "writing", "design"],
-          "stack": ["next.js", "react", "css"],
+          "keywords": [
+            "tv",
+            "screens",
+            "d-pad",
+            "focus",
+            "on air",
+            "rows",
+            "profile",
+            "writing",
+            "design"
+          ],
+          "stack": [
+            "next.js",
+            "react",
+            "css"
+          ],
           "file_paths": [
             "desk/src/tv/screens.tsx",
             "desk/src/tv/profileRows.ts",
@@ -100,9 +146,20 @@
         {
           "name": "phone-surface",
           "description": "The phone page: pairing by PIN, camera, pen, keyboard and mic; posts events to the session.",
-          "keywords": ["phone", "pairing", "pin", "camera", "instrument"],
-          "stack": ["next.js", "react"],
-          "file_paths": ["desk/src/app/phone/page.tsx"]
+          "keywords": [
+            "phone",
+            "pairing",
+            "pin",
+            "camera",
+            "instrument"
+          ],
+          "stack": [
+            "next.js",
+            "react"
+          ],
+          "file_paths": [
+            "desk/src/app/phone/page.tsx"
+          ]
         }
       ]
     },
@@ -113,8 +170,22 @@
         {
           "name": "engines",
           "description": "Engine adapters behind a provider field: text (Claude CLI, codex for UAT), vision and embeddings (Ollama), speech in and out (ElevenLabs). Nothing outside calls a provider directly.",
-          "keywords": ["engine", "provider", "claude cli", "codex", "ollama", "elevenlabs", "vision", "embed", "voice", "listen"],
-          "stack": ["typescript", "node"],
+          "keywords": [
+            "engine",
+            "provider",
+            "claude cli",
+            "codex",
+            "ollama",
+            "elevenlabs",
+            "vision",
+            "embed",
+            "voice",
+            "listen"
+          ],
+          "stack": [
+            "typescript",
+            "node"
+          ],
           "file_paths": [
             "desk/src/lib/engines/codex.ts",
             "desk/src/lib/engines/embed.ts",
@@ -128,8 +199,19 @@
         {
           "name": "session",
           "description": "The one server-side session, the only product state: learners and profiles on disk, events from the phone, the stream the TV renders.",
-          "keywords": ["session", "store", "learners", "profile", "stream", "sse", "state"],
-          "stack": ["typescript", "node"],
+          "keywords": [
+            "session",
+            "store",
+            "learners",
+            "profile",
+            "stream",
+            "sse",
+            "state"
+          ],
+          "stack": [
+            "typescript",
+            "node"
+          ],
           "file_paths": [
             "desk/src/lib/session/learners.ts",
             "desk/src/lib/session/store.ts",
@@ -140,8 +222,16 @@
         {
           "name": "library",
           "description": "The lesson library: syllabus, lesson data, VTT transcripts for retrieval.",
-          "keywords": ["library", "lessons", "syllabus", "vtt", "retrieval"],
-          "stack": ["typescript"],
+          "keywords": [
+            "library",
+            "lessons",
+            "syllabus",
+            "vtt",
+            "retrieval"
+          ],
+          "stack": [
+            "typescript"
+          ],
           "file_paths": [
             "desk/src/lib/library/lessons.data.ts",
             "desk/src/lib/library/lessons.ts",
@@ -158,8 +248,19 @@
         {
           "name": "pen-core",
           "description": "Pure JVM core: annotation schema and codec, timeline, letterbox mapping, pen engine, smoothing, hit-testing, undo history, wire protocol.",
-          "keywords": ["kotlin", "annotation", "pen", "protocol", "undo", "history", "smoothing"],
-          "stack": ["kotlin", "jvm"],
+          "keywords": [
+            "kotlin",
+            "annotation",
+            "pen",
+            "protocol",
+            "undo",
+            "history",
+            "smoothing"
+          ],
+          "stack": [
+            "kotlin",
+            "jvm"
+          ],
           "file_paths": [
             "core/src/main/kotlin/dev/telestrator/core/Annotation.kt",
             "core/src/main/kotlin/dev/telestrator/core/ContentRect.kt",
@@ -176,8 +277,20 @@
         {
           "name": "tv-app",
           "description": "The Android TV app: Media3 player, Compose overlay, embedded Ktor server, LAN and relay transports, QR pairing, D-pad input, thumbnails.",
-          "keywords": ["android", "compose", "media3", "ktor", "transport", "relay", "qr", "overlay"],
-          "stack": ["kotlin", "android"],
+          "keywords": [
+            "android",
+            "compose",
+            "media3",
+            "ktor",
+            "transport",
+            "relay",
+            "qr",
+            "overlay"
+          ],
+          "stack": [
+            "kotlin",
+            "android"
+          ],
           "file_paths": [
             "tv-app/build.gradle.kts",
             "tv-app/src/main/AndroidManifest.xml",
@@ -199,15 +312,35 @@
         {
           "name": "companion",
           "description": "The telestrator phone PWA: pen surface, tools, transport, local echo. Copied into the APK at build time.",
-          "keywords": ["pwa", "pen", "touch", "companion"],
-          "stack": ["html", "javascript"],
-          "file_paths": ["companion/index.html"]
+          "keywords": [
+            "pwa",
+            "pen",
+            "touch",
+            "companion"
+          ],
+          "stack": [
+            "html",
+            "javascript"
+          ],
+          "file_paths": [
+            "companion/index.html"
+          ]
         },
         {
           "name": "telestrator-harness",
           "description": "The telestrator's device harness: live UI test, relay test and stub, pen simulator, latency probe, device helpers, the dev.ps1 cycle.",
-          "keywords": ["playwright", "adb", "emulator", "latency", "relay", "harness"],
-          "stack": ["node", "powershell"],
+          "keywords": [
+            "playwright",
+            "adb",
+            "emulator",
+            "latency",
+            "relay",
+            "harness"
+          ],
+          "stack": [
+            "node",
+            "powershell"
+          ],
           "file_paths": [
             "tools/live-ui-test.mjs",
             "tools/relay-test.mjs",
@@ -216,7 +349,8 @@
             "tools/latency-probe.mjs",
             "tools/device.mjs",
             "tools/tail-diag.mjs",
-            "scripts/dev.ps1"
+            "scripts/dev.ps1",
+            "tools/package.json"
           ]
         }
       ]
@@ -228,8 +362,19 @@
         {
           "name": "uat",
           "description": "Simulated user acceptance for Linga: the LT text-live driver, Characters, journeys, rubric and accepted gaps.",
-          "keywords": ["uat", "characters", "journeys", "driver", "judge", "rubric", "codex"],
-          "stack": ["node", "markdown"],
+          "keywords": [
+            "uat",
+            "characters",
+            "journeys",
+            "driver",
+            "judge",
+            "rubric",
+            "codex"
+          ],
+          "stack": [
+            "node",
+            "markdown"
+          ],
           "file_paths": [
             "uat/driver/linga-text.cjs",
             "uat/README.md",
@@ -257,13 +402,19 @@
         {
           "name": "desk-tooling",
           "description": "KPI measurement for the Personas meters and the worktree preflight that makes the gate runnable in an autopilot worktree.",
-          "keywords": ["kpi", "measure", "preflight", "worktree"],
-          "stack": ["node"],
+          "keywords": [
+            "kpi",
+            "measure",
+            "preflight",
+            "worktree"
+          ],
+          "stack": [
+            "node"
+          ],
           "file_paths": [
             "tools/kpi-measure.cjs",
             "tools/kpi-measure-test.cjs",
-            "tools/worktree-preflight.cjs",
-            "tools/package.json"
+            "tools/worktree-preflight.cjs"
           ]
         }
       ]
@@ -275,8 +426,16 @@
         {
           "name": "vision-lab",
           "description": "Local vision-model client, the mark-as-pointer technique, OCR and hint PoCs, VTT tools.",
-          "keywords": ["vision", "vlm", "ocr", "point", "python"],
-          "stack": ["python"],
+          "keywords": [
+            "vision",
+            "vlm",
+            "ocr",
+            "point",
+            "python"
+          ],
+          "stack": [
+            "python"
+          ],
           "file_paths": [
             "vision/poc_hints.py",
             "vision/poc_hints_es.py",
@@ -290,8 +449,16 @@
         {
           "name": "prototype",
           "description": "Static HTML prototypes: the Study Desk click-through, the On Air identity and its variants, Linga conversation sketches, and the page builder.",
-          "keywords": ["prototype", "html", "identity", "on air"],
-          "stack": ["html", "python"],
+          "keywords": [
+            "prototype",
+            "html",
+            "identity",
+            "on air"
+          ],
+          "stack": [
+            "html",
+            "python"
+          ],
           "file_paths": [
             "prototype/build.py",
             "prototype/data.json",
