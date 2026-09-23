@@ -10,7 +10,7 @@
     "pretest": "node ../tools/worktree-preflight.cjs",
     "test": "npm run test:types && npm run test:rules",
     "test:types": "tsc --noEmit",
-    "test:rules": "node ../tools/linga-rules-test.cjs && node ../tools/maths-rules-test.cjs && node ../tools/essay-rules-test.cjs && node ../tools/kpi-measure-test.cjs && node ../tools/engines-rules-test.cjs"
+    "test:rules": "node ../tools/linga-rules-test.cjs && node ../tools/maths-rules-test.cjs && node ../tools/essay-rules-test.cjs && node ../tools/kpi-measure-test.cjs && node ../tools/engines-rules-test.cjs && node ../tools/tv-keys-test.cjs"
   },
   "dependencies": {
     "next": "16.3.4",
