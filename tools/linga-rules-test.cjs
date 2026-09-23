@@ -12,6 +12,7 @@ const {eligibleScenes,defaultPreferences}=require(path.join(root,'src/lib/englis
 const {cleanEnglish,mergeEvidence,validateObservations}=require(path.join(root,'src/lib/english/rules.ts'));
 const engine=require(path.join(root,'src/lib/engines/text.ts'));
 let answer=async()=>({json:{title:'A practice booking',goal:'Ask for help with a booking.',opening:'Hello. How can I help?'},provider:'test',ms:1});
+const realText=engine.text;
 engine.text=(req)=>answer(req);
 const {englishCommand}=require(path.join(root,'src/lib/english/conversation.ts'));
 const {dispatch,getSession}=require(path.join(root,'src/lib/session/store.ts'));
@@ -179,6 +180,20 @@ test('a moment needs an exact quote, holds the scene, is spaced out, and makes t
  await command('moment-done');c=getSession().conversation;assert.equal(c.moment,null);assert.equal(getSession().screen,'linga-talk');
  await command('turn',{text:'I have booking for Friday, yes.',mode:'text',lastTurnId:c.turns.at(-1).id});
  assert.equal(getSession().conversation.moment,null,'no second moment on the very next turn');
+});
+test('an optional moment or observation that overruns its limit is dropped, and the turn still lands (real text(), stub provider)',async()=>{
+ fresh();answer=async()=>({json:{title:'Booking',goal:'Fix a booking.',opening:'Hello, can I help?'},provider:'test',ms:1});
+ await command('start',{sceneId:'booking',replace:true});const c=getSession().conversation;
+ const reg=require(path.join(root,'src/lib/engines/registry.ts'));
+ reg.useProvider('text',{name:'stub',run:async()=>({raw:JSON.stringify({reply:'What name is it under?',supportProvided:false,
+  observations:[{skill:'request',quote:'I has booking',success:false,confidence:'clear',note:'n'.repeat(400)}],
+  moment:{kind:'fix',said:'I has booking',better:'I have a booking',why:'w'.repeat(300)}})})});
+ engine.text=realText;
+ try{await command('turn',{text:'I has booking for Friday.',mode:'text',lastTurnId:c.turns.at(-1).id});}
+ finally{engine.text=(req)=>answer(req);reg.resetProviders();}
+ const after=getSession().conversation;
+ assert.equal(after.error,'');assert.equal(after.turns.length,3);assert.equal(after.turns.at(-1).text,'What name is it under?');
+ assert.equal(after.moment,null,'the over-long moment is dropped, not the turn');
 });
 test('a topic in the learner\'s own words may run long, and a too-long one names the limit',async()=>{
  fresh();answer=wrap(req=>{const p=JSON.parse(req.prompt);return p.step==='plan'&&p.learnerAsked?{topics:[topic('A logistics job interview','all','narrate')]}:checkAnswer(req);});

@@ -8,7 +8,8 @@
  */
 export type JSONSchema = Record<string, unknown>;
 
-export interface TextRequest { system: string; prompt: string; schema?: JSONSchema; model?: "fast" | "best"; timeoutMs?: number; isolated?: boolean; }
+/** `schema` is what the model is asked for; `accept`, when set, is the looser shape the caller holds the answer to (optional parts it checks and drops itself). */
+export interface TextRequest { system: string; prompt: string; schema?: JSONSchema; accept?: JSONSchema; model?: "fast" | "best"; timeoutMs?: number; isolated?: boolean; }
 export interface VisionRequest { imageBase64: string; prompt: string; schema?: JSONSchema; }
 export interface SpeakRequest { text: string; voice?: string; }
 export interface EmbedRequest { texts: string[]; }

@@ -77,9 +77,9 @@ export function conform<T>(raw: unknown, s: JSONSchema | undefined, provider: st
 }
 
 /** Run one provider and hold its answer to the request's schema: the whole of text() and vision(). */
-export async function answer<Req extends { schema?: JSONSchema }, T>(p: Provider<Req, unknown>, req: Req): Promise<EngineResult<T>> {
+export async function answer<Req extends { schema?: JSONSchema; accept?: JSONSchema }, T>(p: Provider<Req, unknown>, req: Req): Promise<EngineResult<T>> {
   const started = Date.now();
   const a = await p.run(req);
   const name = a.provider ?? p.name;
-  return { json: conform<T>(a.raw, req.schema, name), provider: name, ms: Date.now() - started, raw: a.audit };
+  return { json: conform<T>(a.raw, req.accept ?? req.schema, name), provider: name, ms: Date.now() - started, raw: a.audit };
 }
