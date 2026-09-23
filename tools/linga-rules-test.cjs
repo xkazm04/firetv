@@ -344,3 +344,79 @@ test('view case 8 GUARD: a choose task shows both replies and never which one is
  assert.doesNotMatch(JSON.stringify(v),/"correct"/);
  assert.deepEqual(v.actions.filter(a=>a.id==='choose').map(a=>a.run.command.extra.option),[0,1]);
 });
+
+// ---- help that answers the question on screen: a code-run rescue ladder per partner line
+const BOOKING_CUE='Try asking: Could you check the date, please?';
+const LADDER={simpler:'What day do you come?',meaning:'date: the day, like Friday',starter:'I need the room on …'};
+let calls=0;
+/** A stubbed engine that counts its calls: the opening, then every turn answers with `reply` and `help`. */
+function ladderEngine(turn,opening={title:'Booking',goal:'Fix a booking.',opening:'Hello, can I help?',supportProvided:false}){
+ calls=0;answer=async req=>{calls++;const p=JSON.parse(req.prompt);return {json:p.submittedReply?turn(p):opening,provider:'test',ms:1};};
+}
+async function booked(turn,opening){fresh();ladderEngine(turn,opening);await command('start',{sceneId:'booking',replace:true});}
+const reply=(text='I need a room.')=>command('turn',{text,mode:'text',lastTurnId:getSession().conversation.turns.at(-1).id});
+const said=(text,patch={})=>()=>({reply:text,supportProvided:false,observations:[],...patch});
+const observed=q=>[{skill:'request',quote:q,success:true,confidence:'clear',note:'Asked clearly.'}];
+
+test('ladder case 1: three cues walk simpler, meaning, starter; only the starter makes the reply supported',async()=>{
+ await booked(said('Which date do you need?',{help:LADDER}));await reply();
+ const V=view(),walk=[];
+ for(let i=0;i<3;i++){await command('cue');const c=getSession().conversation;walk.push([c.cue,c.help&&c.help.rung,c.supported,V.lingaView(getSession(),{}).captionTag]);}
+ assert.deepEqual(walk,[[LADDER.simpler,1,false,'Said more simply'],[LADDER.meaning,2,false,'What it means'],[LADDER.starter,3,true,'A way to start']]);
+});
+test('ladder case 2: help follows the partner\'s current question, never the last one or the scene\'s static cue (the Tomas case)',async()=>{
+ const A={simpler:'Your dog\'s name?',meaning:'name: what you call him',starter:'My dog is called …'};
+ const B={simpler:'Does he like his ball?',meaning:'ball: the round toy he plays with',starter:'He likes …'};
+ await booked(said('Does Pip play with his ball every day?',{help:B}),{title:'A new dog',goal:'Talk about a dog.',opening:'What is your dog\'s name, then?',supportProvided:false,help:A});
+ await command('cue');assert.equal(getSession().conversation.cue,A.simpler);
+ await reply('His name is Pip.');await command('cue');
+ const cue=getSession().conversation.cue;
+ assert.equal(cue,B.simpler);
+ for(const x of [...Object.values(A),BOOKING_CUE])assert.notEqual(cue,x);
+});
+test('ladder case 3: a reply after the meaning rung is independent evidence; after the starter it is supported',async()=>{
+ await booked(p=>({reply:'Which date do you need?',supportProvided:false,observations:observed(p.submittedReply),help:LADDER}));
+ await reply('Could you check my booking?');await command('cue');await command('cue');
+ await reply('Could you check it for Friday?');
+ let c=getSession().conversation,learner=c.turns.at(-2);
+ assert.equal(learner.supported,false);assert(c.evidence.length&&c.evidence.filter(e=>e.turnId===learner.id).every(e=>e.supported===false));
+ await command('cue');await command('cue');await command('cue');
+ await reply('Could you check the Friday room?');
+ c=getSession().conversation;learner=c.turns.at(-2);
+ assert.equal(learner.supported,true);assert(c.evidence.filter(e=>e.turnId===learner.id).length&&c.evidence.filter(e=>e.turnId===learner.id).every(e=>e.supported===true));
+});
+test('ladder case 4: unrevealed rungs stay in server memory, off the session',async()=>{
+ await booked(said('Which date do you need?',{help:LADDER}));await reply();
+ let json=JSON.stringify(getSession());for(const x of Object.values(LADDER))assert(!json.includes(x),`not yet on the session: ${x}`);
+ await command('cue');json=JSON.stringify(getSession());
+ assert(json.includes(LADDER.simpler));assert(!json.includes(LADDER.meaning));assert(!json.includes(LADDER.starter));
+});
+test('ladder case 5: help.ts drops a malformed rung and the turn still lands; with no valid rung the cue falls back to the scene cue',async()=>{
+ const partner='Which date do you need?';
+ await booked(p=>({reply:partner,supportProvided:false,observations:observed(p.submittedReply),help:{simpler:partner,meaning:LADDER.meaning,starter:'I need a room for Friday.'}}));
+ await reply('Could you check my booking?');
+ let c=getSession().conversation;assert.equal(c.turns.at(-1).text,partner);assert.equal(c.evidence.length,1);
+ await command('cue');c=getSession().conversation;assert.equal(c.cue,LADDER.meaning);assert.equal(c.supported,false);
+ await command('cue');c=getSession().conversation;assert.equal(c.cue,LADDER.meaning,'no rung past the last valid one');
+ ladderEngine(said(partner,{help:{simpler:partner,meaning:'',starter:'I need a room for Friday.'}}));
+ await reply('Friday, please.');await command('cue');
+ c=getSession().conversation;assert.equal(c.cue,BOOKING_CUE);assert.equal(c.supported,true);
+ // through the real engine: help is optional and unchecked there, so a help the schema would refuse costs a rung, not the turn
+ const reg=require(path.join(root,'src/lib/engines/registry.ts'));
+ reg.useProvider('text',{name:'stub',run:async()=>({raw:JSON.stringify({reply:'And for how many nights?',supportProvided:false,observations:[],moment:{kind:'none',said:'',better:'',why:''},help:{simpler:'x'.repeat(400),meaning:'nights: how many times you sleep there',starter:7}})})});
+ engine.text=realText;
+ try{await reply('For Friday.');}finally{engine.text=(req)=>answer(req);reg.resetProviders();}
+ c=getSession().conversation;assert.equal(c.error,'');assert.equal(c.turns.at(-1).text,'And for how many nights?');
+ await command('cue');assert.equal(getSession().conversation.cue,'nights: how many times you sleep there');
+});
+test('ladder case 6: a cue makes no engine call, and a ladder lost to a restart falls back to the scene cue',async()=>{
+ await booked(said('Which date do you need?',{help:LADDER}));await reply();
+ const before=calls;await command('cue');await command('cue',{commandId:'same-cue'});await command('cue',{commandId:'same-cue'});assert.equal(calls,before);
+ assert.equal(getSession().conversation.help.rung,2,'a retried cue climbs one rung, not two');
+ await reply('Friday.');globalThis.__lingaHelp.clear();
+ await command('cue');const c=getSession().conversation;assert.equal(c.cue,BOOKING_CUE);assert.equal(c.supported,true);assert.equal(calls,before+1);
+});
+test('ladder case 7 GUARD: a partner line with no help gives today\'s scene cue, supported',async()=>{
+ await booked(said('Which date do you need?'));await reply();
+ await command('cue');const c=getSession().conversation;assert.equal(c.cue,BOOKING_CUE);assert.equal(c.supported,true);
+});
