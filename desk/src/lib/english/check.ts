@@ -6,6 +6,7 @@
  * plan reach the learner record — never evidence, so the check moves no skill's progress.
  */
 import { randomUUID } from "node:crypto";
+import { fit, object, schema, str } from "../engines/shape";
 import { text } from "../engines/text";
 import { dispatch, getSession, type Profile, type Screen } from "../session/store";
 import { getLearner, saveEnglish } from "../session/learners";
@@ -18,12 +19,10 @@ import { BANDS, type Audience, type Band, type CheckTask, type EnglishLearning, 
 const g = globalThis as unknown as { __lingaKeys?: Map<string, number> };
 const keys = g.__lingaKeys ??= new Map<string, number>();
 
-const object = (x: unknown): Record<string, unknown> => x && typeof x === "object" && !Array.isArray(x) ? x as Record<string, unknown> : {};
-function required(value: unknown, name: string, max = 160): string { if (typeof value !== "string" || !value.trim() || value.length > max) throw new ConversationError(`Invalid ${name}.`); return value.trim(); }
-function line(value: unknown, max: number): string { if (typeof value !== "string" || !value.trim() || value.length > max) throw new Error("The tutor returned a line that does not fit the screen."); return value.trim(); }
+// The engine already holds each answer to its schema; these second checks fit a line to the screen.
+const required = (value: unknown, name: string, max = 160) => fit(value, max, () => new ConversationError(`Invalid ${name}.`));
+const line = (value: unknown, max: number) => fit(value, max, () => new Error("The tutor returned a line that does not fit the screen."));
 const optional = (value: unknown, max: number) => typeof value === "string" ? value.trim().slice(0, max) : "";
-const str = (maxLength: number, minLength = 1) => ({ type: "string", maxLength, minLength });
-const schema = (properties: Record<string, unknown>) => ({ type: "object", additionalProperties: false, properties, required: Object.keys(properties) });
 
 const aboutSchema = schema({ reply: str(230), selfBand: { type: "string", enum: BANDS }, goal: str(160, 0), interest: str(160, 0), language: { type: "string", enum: ["english", "mixed", "other", "none"] }, read: str(300) });
 const taskSchema = schema({ prompt: str(200), line: str(230, 0), options: { type: "array", maxItems: 2, items: str(120) }, correct: { type: "integer", enum: [0, 1] } });

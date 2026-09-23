@@ -1,4 +1,5 @@
 import { randomUUID } from "node:crypto";
+import { fit, object, schema, str } from "../engines/shape";
 import { text } from "../engines/text";
 import { dispatch, getSession, type Screen } from "../session/store";
 import { getLearner, saveEnglish } from "../session/learners";
@@ -10,11 +11,9 @@ import { mergeEvidence, parsePreferences, validateObservations } from "./rules";
 import type { Conversation, EnglishEvidence, EnglishScene, EvidenceMode, Moment, SkillId } from "./types";
 
 export { ConversationError };
-const object=(x:unknown):Record<string,unknown>=>x&&typeof x==="object"&&!Array.isArray(x)?x as Record<string,unknown>:{};
-function required(value: unknown, name: string, max=160): string {if(typeof value!=="string"||!value.trim()||value.length>max)throw new ConversationError(`Invalid ${name}.`);return value.trim();}
-function line(value: unknown, max=230): string {if(typeof value!=="string"||!value.trim()||value.length>max)throw new Error("The tutor returned a response that does not fit the screen.");return value.trim();}
-const str=(maxLength:number)=>({type:"string",maxLength,minLength:1});
-const schema=(properties:Record<string,unknown>)=>({type:"object",additionalProperties:false,properties,required:Object.keys(properties)});
+// The engine already holds each answer to its schema; these second checks fit a line to the screen.
+const required=(value:unknown,name:string,max=160)=>fit(value,max,()=>new ConversationError(`Invalid ${name}.`));
+const line=(value:unknown,max=230)=>fit(value,max,()=>new Error("The tutor returned a response that does not fit the screen."));
 const openingSchema=schema({title:str(70),goal:str(120),opening:str(230),supportProvided:{type:"boolean"}});
 const momentSchema=schema({kind:{type:"string",enum:["none","fix","word"]},said:{type:"string",maxLength:180},better:{type:"string",maxLength:180},why:{type:"string",maxLength:140}});
 const turnSchema=schema({reply:str(230),supportProvided:{type:"boolean"},observations:{type:"array",maxItems:2,items:schema({skill:{type:"string",enum:ENGLISH_SKILLS.map(s=>s.id)},quote:str(240),success:{type:"boolean"},confidence:{type:"string",enum:["clear","uncertain"]},note:str(180)})},moment:momentSchema});
