@@ -234,3 +234,113 @@ test('topics for a learner with no known goal wait for one, and the goal they gi
  const plan=answer;fresh();answer=plan;dispatch({type:'learner.set',id:'jakub'});dispatch({type:'subject',subject:'english'});
  await command('plan-propose');assert.equal(getSession().check.askGoal,false,'a goal once given is not asked again');assert.equal(getSession().check.topics.length,1);
 });
+
+// ---- one screen model: the TV, the phone home, the PC test bar and the LT driver all read lib/english/view.ts
+const view=()=>require(path.join(root,'src/lib/english/view.ts'));
+const {saveEnglish}=require(path.join(root,'src/lib/session/learners.ts'));
+const DRIVER=path.resolve(__dirname,'../uat/driver/linga-text.cjs');
+const placed=(band='B1')=>({at:1,band,selfBand:null,confidence:'medium',source:'check',summary:'You get by in everyday talk.',focus:'Telling stories',tasks:[]});
+const planned=(...ids)=>({at:1,band:'B1',topics:ids.map(id=>({id,...topic('Topic '+id,'all')}))});
+const played=(...ids)=>ids.map((sceneId,i)=>({id:'s'+i,sceneId,title:sceneId,at:i+1,turns:2}));
+const convo=(patch={})=>({id:'c1',learnerId:'ema',sceneId:'booking',title:'A booking',goal:'Fix the booking.',partner:'Robin · Receptionist',focusSkill:'request',reviewSkill:'repair',preferences:defaultPreferences(),turns:[{id:'p1',role:'partner',text:'Hello. How can I help?'}],coaching:null,moment:null,moments:[],phase:'conversation',pending:null,error:'',paused:false,capture:false,captureAt:0,audioNonce:0,supported:false,cue:'',quizOpen:false,commands:[],evidence:[],startedAt:1,...patch});
+const checkOf=(patch={})=>({id:'k1',learnerId:'ema',stage:'about',turns:[{id:'q1',role:'tutor',text:'Where do you use English in your life?'}],selfBand:null,goal:'',interest:'',read:'',task:null,tasks:[],placement:null,topics:[],pending:null,error:'',commands:[],audioNonce:0,startedAt:1,...patch});
+const chooseTask={id:'t1',band:'A2',kind:'choose',prompt:'A friend says hi. What do you say?',line:'',options:[RIGHT,'Hi! I am fine yesterday.'],revealed:false};
+/** A fixture as a session the view reads; install() puts the same state in the store so a command can run on it. */
+const fixture=(screen,{conversation=null,check=null,...learning}={})=>({screen,conversation,check,learning:{...emptyEnglish(),...learning}});
+function sessionOf(fx){fresh();return {...getSession(),screen:fx.screen,conversation:fx.conversation,check:fx.check,englishLearning:fx.learning};}
+function install(fx){fresh();saveEnglish('ema',fx.learning);dispatch({type:'linga.changed',conversation:fx.conversation,check:fx.check,screen:fx.screen});return getSession();}
+const HOMES={
+ 'resume':fixture('linga',{conversation:convo({paused:true}),placement:placed(),plan:planned('p-a','p-b')}),
+ 'check-part-way':fixture('linga',{check:checkOf({stage:'tasks',turns:[],task:chooseTask})}),
+ 'no-placement':fixture('linga'),
+ 'no-plan':fixture('linga',{placement:placed()}),
+ 'plan-done':fixture('linga',{placement:placed(),plan:planned('p-a','p-b'),sessions:played('p-a','p-b')}),
+ 'next-topic':fixture('linga',{placement:placed(),plan:planned('p-a','p-b'),sessions:played('p-a')}),
+};
+const SWEEP={...HOMES,
+ about:fixture('linga-check',{check:checkOf()}),
+ choose:fixture('linga-check',{check:checkOf({stage:'tasks',turns:[],task:chooseTask})}),
+ verdict:fixture('linga-verdict',{placement:placed(),check:checkOf({stage:'verdict',turns:[],placement:placed()})}),
+ topics:fixture('linga-plan',{placement:placed(),check:checkOf({stage:'plan',turns:[],topics:planned('p-a','p-b').topics})}),
+ quiz:fixture('linga-talk',{placement:placed(),conversation:convo({quizOpen:true,cue:'Try: Could you check?'})}),
+ paused:fixture('linga-talk',{placement:placed(),conversation:convo({paused:true,error:'The tutor could not complete that turn.'})}),
+ recap:fixture('linga-recap',{placement:placed(),conversation:convo({phase:'finished',moments:[{id:'m1',kind:'fix',said:'I has booking',better:'I have a booking',why:'"I" goes with "have".',turnId:'l1',at:1},{id:'m2',kind:'word',said:'rezervace',better:'reservation',why:'The booking itself.',turnId:'l2',at:2}]})}),
+ scenes:fixture('linga-scenes',{placement:placed()}),
+};
+const offeredBy=v=>[...v.actions,...v.footer,...v.phone];
+
+test('view case 1: home decides six named states, the TV actions follow them, and the phone StartPanel renders all six',()=>{
+ const V=view();
+ assert.deepEqual([...V.HOME_STATES],Object.keys(HOMES));
+ const want={'resume':['carry-on','choose-situation'],'check-part-way':['carry-on-check','restart-check'],'no-placement':['find-level','pick-level'],'no-plan':['see-topics','choose-situation'],'plan-done':['new-topics','talk-again'],'next-topic':['start-talking','choose-situation']};
+ for(const [state,fx] of Object.entries(HOMES)){
+  const s=sessionOf(fx);
+  assert.equal(V.lingaHome(s),state);
+  assert.deepEqual(V.lingaView(s,{}).actions.map(a=>a.id),want[state],state);
+ }
+ const phone=fs.readFileSync(path.join(root,'src/english/LingaPhone.tsx'),'utf8'),start=phone.slice(phone.indexOf('function StartPanel'));
+ assert.match(start,/lingaHome\(/,'the phone StartPanel asks the view which home it is');
+ for(const state of V.HOME_STATES)assert.match(start,new RegExp(`case "${state}"`),`the phone renders ${state}`);
+});
+test('view case 2: Resume on a paused scene runs the resume command, which clears the error',async()=>{
+ const V=view(),s=install(SWEEP.paused),resume=V.lingaView(s,{}).actions.find(a=>a.id==='resume');
+ assert(resume,'a paused scene offers Resume');assert.equal(resume.run.command.action,'resume');
+ await command(resume.run.command.action,resume.run.command.extra??{});
+ const c=getSession().conversation;assert.equal(c.paused,false);assert.equal(c.error,'');
+});
+test('view case 3: the recap text carries each moment to keep, as the phone lists them',()=>{
+ const V=view(),text=V.viewText(V.lingaView(sessionOf(SWEEP.recap),{}));
+ for(const m of SWEEP.recap.conversation.moments){assert(text.includes(m.said),m.said);assert(text.includes(m.better),m.better);}
+});
+test('view case 4: the quiz keeps a typed answer, as on the phone, and the test bar takes it from the view',()=>{
+ const V=view(),a=V.lingaView(sessionOf(SWEEP.quiz),{}).answer;
+ assert(a,'an answer target during the quiz');assert.equal(a.action,'turn');assert.equal(a.lastTurnId,'p1');
+ assert.match(fs.readFileSync(path.join(root,'src/english/LingaTestBar.tsx'),'utf8'),/lingaView\(/);
+});
+test('view case 5: every offered action is a real command, a nav to a real screen, or a declared local step',async()=>{
+ const V=view(),store=fs.readFileSync(path.join(root,'src/lib/session/store.ts'),'utf8');
+ const screens=[...store.match(/export type Screen = ([^;]+);/)[1].matchAll(/"([^"]+)"/g)].map(m=>m[1]);
+ const sample={text:'I like it.',option:0,band:'B1',topicId:'p-a',sceneId:'booking'};
+ const uiKeys=['menu','picking','sceneIndex','chapter'];
+ answer=async req=>{let p={};try{p=JSON.parse(req.prompt);}catch{}return {json:p.step?checkAnswer(req):{title:'T',goal:'G',opening:'Hi?',reply:'Ok?',observations:[],before:'I like',after:'I really like',note:'n'},provider:'test',ms:1};};
+ let checked=0;
+ for(const [name,fx] of Object.entries(SWEEP))for(const ui of [{},{menu:true},{picking:'B1'}]){
+  const v=V.lingaView(sessionOf(fx),ui);
+  const all=[...offeredBy(v),...(v.answer?[{id:'answer',run:{command:{action:v.answer.action,extra:{lastTurnId:v.answer.lastTurnId,taskId:v.answer.taskId}}},needs:'text'}]:[])];
+  for(const a of all){
+   const where=`${name}${ui.menu?' (menu)':ui.picking?' (picker)':''} · ${a.id}`;
+   assert.equal(typeof a.run,'object',where);assert(a.run.command||a.run.nav||a.run.ui||a.run.focus!==undefined,`${where} does something`);
+   if(a.run.nav)assert(screens.includes(a.run.nav.screen),`${where} goes to a real screen`);
+   if(a.run.ui)assert(Object.keys(a.run.ui).every(k=>uiKeys.includes(k)),`${where} is a declared local step`);
+   if(a.run.command){
+    const s=install(fx);
+    const extra={...(a.run.command.extra??{}),...(a.needs?{[a.needs]:sample[a.needs]}:{}),...(a.needs==='text'?{mode:'text'}:{})};
+    try{await englishCommand({action:a.run.command.action,learnerId:s.learner.id,episodeId:s.conversation?.id,checkId:s.check?.id,commandId:`sweep-${++counter}`,...extra});}
+    catch(e){assert.doesNotMatch(String(e.message),/Unknown .*action/,where);}
+   }
+   checked++;
+  }
+ }
+ assert(checked>60,`swept ${checked} actions`);
+});
+test('view case 6: the driver\'s action list is the view\'s id list, not a hand copy',()=>{
+ const V=view(),seen=new Set();
+ for(const fx of Object.values(SWEEP))for(const ui of [{},{menu:true},{picking:'A2'}]){const v=V.lingaView(sessionOf(fx),ui);offeredBy(v).forEach(a=>seen.add(a.id));if(v.answer)seen.add(v.answer.id);}
+ for(const id of seen)assert(V.VIEW_ACTION_IDS.includes(id),`${id} is declared in VIEW_ACTION_IDS`);
+ const src=fs.readFileSync(DRIVER,'utf8');
+ assert.match(src,/require\.main === module/,'the driver only runs when it is the main module');
+ assert.doesNotMatch(src,/const ACTIONS = \[/,'no hand list of action ids');
+ require('node:child_process').execFileSync(process.execPath,['--check',DRIVER]);
+ assert.deepEqual(require(DRIVER).actionIds(),[...V.VIEW_ACTION_IDS,'done']);
+});
+test('view case 7 GUARD: the check speaks its question, and a paused scene stays silent',()=>{
+ const V=view();
+ const about=V.lingaView(sessionOf(SWEEP.about),{}).spoken;assert.equal(about.line,'Where do you use English in your life?');assert.equal(about.blocked,false);
+ assert.equal(V.lingaView(sessionOf(SWEEP.paused),{}).spoken.blocked,true);
+});
+test('view case 8 GUARD: a choose task shows both replies and never which one is right',()=>{
+ const V=view(),v=V.lingaView(sessionOf(SWEEP.choose),{});
+ assert.deepEqual(v.hero.options,chooseTask.options);
+ assert.doesNotMatch(JSON.stringify(v),/"correct"/);
+ assert.deepEqual(v.actions.filter(a=>a.id==='choose').map(a=>a.run.command.extra.option),[0,1]);
+});
