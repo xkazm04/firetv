@@ -147,6 +147,102 @@ test('the TV reads the jobs: Select waits while a set or a hint is being made, a
  store.dispatch({type:'topic.open',topic:'linear-two-step'});assert.equal(store.getSession().focus,1,'the open topic keeps the focus');
 });
 
+// ---- retry in place (engines B): a failed run is asked again from what the desk holds ----
+require(src('lib/engines/vision.ts'));
+/** One vision stub: a function of the call, or an error it throws. */
+const stubVision=(f)=>reg.useProvider('vision',{name:'stub',run:async(req)=>({raw:await f(req)})});
+const READ3={items:[{number:1,text:'2x+3=11',y:0.2,x:0.5},{number:2,text:'x-5=2',y:0.5,x:0.5},{number:3,text:'3x=18',y:0.8,x:0.5}]};
+const SNAP={image:'data:image/jpeg;base64,AAAA',subject:'maths',title:'Algebra',w:100,h:100};
+const retry=(body)=>require(src('app/api/session/retry/route.ts')).POST(new Request('http://desk/api/session/retry',{method:'POST',body:JSON.stringify(body)}));
+/** A fresh desk with a scratch learner and no page on it. */
+function blank(){store.dispatch({type:'reset'});store.dispatch({type:'profile.draft',patch:{id:'jobs-scratch',name:'Scratch',type:'other'}});store.dispatch({type:'profile.save'});}
+
+test('retry case 2: a read that failed is read again in place: the same page id, no second page',async()=>{
+ blank();
+ stubVision(()=>{throw new Error('ollama 500: boom');});
+ assert.equal((await post('read',SNAP)).status,502);
+ let s=store.getSession();assert.equal(s.pages.length,1);assert.equal(s.jobs.read.phase,'failed');
+ const id=s.pages[0].id;
+ let seen=0;stubVision((req)=>{seen++;assert.equal(req.imageBase64,'AAAA','the held page is what is read again');return READ3;});
+ const r=await retry({kind:'read'});
+ assert.equal(r.status,200);assert.equal(seen,1);
+ s=store.getSession();
+ assert.equal(s.pages.length,1,'no orphan page');assert.equal(s.pages[0].id,id,'the same page id');
+ assert.equal(s.pages[0].items.length,3);assert.equal(s.pages[0].img,SNAP.image);
+ assert.equal(s.jobs.read.phase,'done');assert.equal(s.jobs.read.error,undefined);
+});
+
+test('retry: a hint that failed is asked again for the same item and the same question',async()=>{
+ onPage();
+ stubText({hint:()=>{throw new Error('boom');}});
+ assert.equal((await post('hint',{askedQ:'What do I do first?',itemIx:1})).status,502);
+ assert.equal(store.getSession().jobs.hint.phase,'failed');
+ store.dispatch({type:'item',itemIx:0});
+ let prompt='';stubText({hint:(req)=>{prompt=req.prompt;return {hint:'Look at the -5.',what_to_try_next:'Undo it.'};},lesson:()=>({lesson:'none',why:'x'})});
+ assert.equal((await retry({kind:'hint'})).status,200);await drain();
+ const s=store.getSession();
+ assert.equal(s.hint.key,'k2','the item that failed, not the one now focused');assert.equal(s.hint.askedQ,'What do I do first?');
+ assert(prompt.includes('What do I do first?'));assert.equal(s.jobs.hint.phase,'done');
+});
+
+test('retry: with nothing failed there is nothing to retry, and no engine is called',async()=>{
+ onPage();
+ let asked=0;stubText({items:()=>{asked++;return {items:STATED};},hint:()=>{asked++;return {hint:'x',what_to_try_next:'y'};}});
+ for(const kind of ['practice','hint','read','mark']){const r=await retry({kind});assert.equal(r.status,409,kind);deskWorded((await r.json()).error);}
+ assert.equal(asked,0);
+});
+
+test('case 6: a practice set written for one learner does not land after the desk changed learner',async()=>{
+ store.dispatch({type:'reset'});
+ for(const id of ['scratch-a','scratch-b']){store.dispatch({type:'profile.draft',patch:{id,name:id,type:'other'}});store.dispatch({type:'profile.save'});}
+ store.dispatch({type:'learner.set',id:'scratch-a'});assert.equal(store.getSession().learner.id,'scratch-a');
+ const gate=held();let asked=0;stubText({items:async()=>{asked++;await gate.p;return {items:STATED};}});
+ const pending=post('practice',{topic:'linear-one-step'});
+ for(let i=0;i<200&&!asked;i++)await new Promise((r)=>setImmediate(r));
+ assert.equal(asked,1);
+ store.dispatch({type:'learner.set',id:'scratch-b'});
+ gate.open();const r=await pending;await drain();
+ const s=store.getSession();
+ assert.equal(s.practice,null,"scratch-a's set did not land on scratch-b");
+ assert.notEqual(s.jobs.practice?.phase,'done','the run was superseded, not done');assert.notEqual(s.jobs.practice?.phase,'running');
+ assert(!/questions ready/.test(s.status),`status: ${s.status}`);
+ assert.notEqual(r.status,200);
+});
+
+test('GUARD case 8: a read that succeeds lands its items with the same status line as before',async()=>{
+ blank();stubVision(()=>READ3);
+ const r=await post('read',SNAP);assert.equal(r.status,200);
+ const s=store.getSession();assert.equal(s.pages[0].items.length,3);assert.match(s.status,/^3 items read in \d+ s$/);
+});
+
+const session=(e)=>require(src('app/api/session/route.ts')).POST(new Request('http://desk/api/session',{method:'POST',body:JSON.stringify(e)}));
+test('case 8: POST /api/session refuses job events with 403, like linga.changed',async()=>{
+ onPage();
+ for(const e of [{type:'job.start',kind:'read',id:'forged'},{type:'job.done',kind:'read',id:'forged'},{type:'job.failed',kind:'practice',id:'forged',error:'x'}]){
+  const r=await session(e);assert.equal(r.status,403,e.type);
+ }
+ assert.deepEqual(store.getSession().jobs,{},'no forged job on the desk');
+});
+
+test('case 9: POST /api/session refuses every event only the server raises; the screens\' own events still pass',async()=>{
+ onPage();
+ stubText({items:()=>({items:STATED})});assert.equal((await post('practice',{topic:'linear-one-step'})).status,200);
+ store.dispatch({type:'practice.marked',items:store.getSession().practice.items.map((it)=>({...it,verdict:'unsure'}))});
+ const before=JSON.stringify(store.getSession().practice);
+ const serverOnly=[
+  {type:'practice.settle',n:1,reply:'Right.',verdict:'right'},{type:'practice.marked',items:[]},{type:'practice.set',practice:{topic:'x',items:[],marked:false}},
+  {type:'page.reading',page:{...PAGE,id:'forged'}},{type:'page.read',id:PAGE.id,items:[],readMs:1,provider:'x'},
+  {type:'hint.set',hint:{key:'k1',problem:'p',stage:1,hint1:null,hint2:null,askedQ:''}},{type:'hint.stage',stage:2},
+  {type:'lesson.set',lesson:null,key:'k1'},{type:'english.set',analysis:{}},{type:'essay.set',analysis:{}},
+ ];
+ for(const e of serverOnly){const r=await session(e);assert.equal(r.status,403,e.type);deskWorded((await r.json()).error);}
+ assert.equal(JSON.stringify(store.getSession().practice),before,'no verdict was settled from outside');
+ assert.equal(store.getSession().pages.length,1);
+ for(const e of [{type:'nav',screen:'page'},{type:'item',itemIx:1},{type:'status',text:'ok'},{type:'lesson.set',lesson:null},{type:'timer.start'},{type:'walk',ix:0}]){
+  assert.equal((await session(e)).status,200,e.type);
+ }
+});
+
 // last: it swaps the store module out from under the routes loaded above
 test('case 7: a job saved as running is not running after the desk restarts',()=>{
  onPage();
