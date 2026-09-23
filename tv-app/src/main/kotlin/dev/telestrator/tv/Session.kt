@@ -1,6 +1,7 @@
 package dev.telestrator.tv
 
 import dev.telestrator.core.AnnotationDoc
+import dev.telestrator.core.AnnotationTimeline
 import dev.telestrator.core.HeartbeatInput
 import dev.telestrator.core.PenEngine
 import dev.telestrator.core.PenMessage
@@ -79,17 +80,22 @@ class Session(clipId: String, videoAspect: Double) {
     fun canRedo(): Boolean = engine.canRedo
 
     /** One consistent read of what the pen heartbeat reports (see [dev.telestrator.core.Heartbeat]). */
-    fun heartbeatInput(): HeartbeatInput = HeartbeatInput(
-        t = mediaTimeMs,
-        paused = paused,
-        rate = rate,
-        annotationCount = annotationCount(),
-        canUndo = canUndo(),
-        canRedo = canRedo(),
-        durationMs = durationMs,
-        doc = doc.value,
-        revision = revision.toLong(),
-    )
+    fun heartbeatInput(): HeartbeatInput {
+        val current = doc.value
+        return HeartbeatInput(
+            t = mediaTimeMs,
+            paused = paused,
+            rate = rate,
+            annotationCount = annotationCount(),
+            canUndo = canUndo(),
+            canRedo = canRedo(),
+            durationMs = durationMs,
+            doc = current,
+            revision = revision.toLong(),
+            // Where the drawings are, so the phone can mark its scrub bar and jump between them.
+            marks = AnnotationTimeline(current).moments(),
+        )
+    }
 
     data class TransportCommand(val cmd: String, val value: Double, val nanos: Long)
 }

@@ -42,13 +42,12 @@ import androidx.media3.ui.PlayerView
 import androidx.tv.material3.Text
 import androidx.lifecycle.lifecycleScope
 import dev.telestrator.core.PenMessage
+import dev.telestrator.core.PlayerAction
+import dev.telestrator.core.TransportPlan
 import dev.telestrator.tv.transport.LanTransport
 import dev.telestrator.tv.transport.PenTransport
 import dev.telestrator.tv.transport.RelayTransport
 import kotlinx.coroutines.delay
-
-/** The fixture clip is 25 fps; one frame is 40 ms. A real clip would read this off the format. */
-private const val FRAME_MS = 40L
 
 /** 10.0.2.2 is the development host as seen from inside the Android emulator. */
 private const val DEFAULT_RELAY_WS = "ws://10.0.2.2:9787/tv"
@@ -174,31 +173,31 @@ private fun TelestratorScreen(session: Session, transport: PenTransport, clipUri
         }
     }
 
+    // What a command means is decided in core (TransportPlan, JVM-tested); this only reads the
+    // player and carries the actions out in order.
     LaunchedEffect(command) {
         val t = command ?: return@LaunchedEffect
-        when (t.cmd) {
-            "toggle" -> if (player.isPlaying) player.pause() else player.play()
-            "play" -> player.play()
-            "pause" -> player.pause()
-            "seek+" -> player.seekTo(player.currentPosition + 5_000)
-            "seek-" -> player.seekTo((player.currentPosition - 5_000).coerceAtLeast(0))
-            "seek" -> player.seekTo(t.value.toLong().coerceAtLeast(0))
-            // Frame stepping only makes sense on a still picture, and seeking while playing
-            // fights the playback clock, so stepping pauses first.
-            "step" -> {
-                player.pause()
-                val target = player.currentPosition + (t.value.toLong() * FRAME_MS)
-                player.seekTo(target.coerceAtLeast(0))
+        val actions = TransportPlan.plan(
+            cmd = t.cmd,
+            value = t.value,
+            positionMs = player.currentPosition,
+            durationMs = player.duration.coerceAtLeast(0),
+            playing = player.isPlaying,
+            doc = session.doc.value,
+        )
+        for (action in actions) {
+            when (action) {
+                PlayerAction.Play -> player.play()
+                PlayerAction.Pause -> player.pause()
+                is PlayerAction.SeekTo -> player.seekTo(action.positionMs)
+                is PlayerAction.SetRate -> {
+                    val r = action.rate.toFloat()
+                    player.playbackParameters = PlaybackParameters(r)
+                    session.rate = action.rate
+                    rate = r
+                }
+                is PlayerAction.Edit -> session.accept(action.message)
             }
-            "rate" -> {
-                val r = t.value.toFloat().coerceIn(0.1f, 2.0f)
-                player.playbackParameters = PlaybackParameters(r)
-                session.rate = r.toDouble()
-                rate = r
-            }
-            "undo" -> session.accept(PenMessage.Undo)
-            "redo" -> session.accept(PenMessage.Redo)
-            "clear" -> session.accept(PenMessage.Clear)
         }
     }
 
