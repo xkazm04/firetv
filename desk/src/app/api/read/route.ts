@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import { dispatch, getSession } from "@/lib/session/store";
 import { readPage } from "@/lib/desk/read";
 import { addHistory } from "@/lib/session/learners";
+import { refused, runJob } from "@/lib/desk/job";
 import type { Subject } from "@/lib/session/store";
 
 export const dynamic = "force-dynamic";
@@ -10,9 +11,8 @@ export async function POST(req: Request) {
   const { image, subject, title, w, h } = (await req.json()) as { image: string; subject: Subject; title: string; w: number; h: number };
   const id = `${subject}-${Date.now()}`;
   const b64 = image.replace(/^data:image\/\w+;base64,/, "");
-  dispatch({ type: "page.reading", page: { id, subject, title, img: image, w, h } });
-  dispatch({ type: "status", text: "reading the page…" });
-  try {
+  const r = await runJob("read", async () => {
+    dispatch({ type: "page.reading", page: { id, subject, title, img: image, w, h } });
     const { items, provider, ms } = await readPage(b64, subject, w, h);
     // Math Buddy's home says where you left off, so the sheet it just read is recorded — written
     // before the event, because `page.read` is what re-hydrates the record onto the session.
@@ -23,11 +23,12 @@ export async function POST(req: Request) {
       });
     }
     dispatch({ type: "page.read", id, items, readMs: ms, provider });
-    dispatch({ type: "status", text: `${items.length} items read in ${(ms / 1000).toFixed(0)} s` });
-    return NextResponse.json({ id, items: items.length, ms, provider });
-  } catch (e) {
-    dispatch({ type: "page.read", id, items: [], readMs: 0, provider: "error" });
-    dispatch({ type: "status", text: `could not read the page: ${String(e).slice(0, 120)}` });
-    return NextResponse.json({ error: String(e) }, { status: 500 });
-  }
+    return { id, items: items.length, ms, provider };
+  }, {
+    key: id, start: "reading the page…", done: (x) => `${x.items} items read in ${(x.ms / 1000).toFixed(0)} s`,
+    // the page stays on the desk, empty, so the TV stops saying "reading"
+    onFail: () => dispatch({ type: "page.read", id, items: [], readMs: 0, provider: "error" }),
+  });
+  if (!r.ok) return refused(r);
+  return NextResponse.json(r.value);
 }

@@ -2,18 +2,16 @@
 import { NextResponse } from "next/server";
 import { getSession } from "@/lib/session/store";
 import { writeMemory } from "@/lib/desk/memory";
+import { refused, runJob } from "@/lib/desk/job";
 
 export const dynamic = "force-dynamic";
 export async function POST() {
   const s = getSession();
-  try {
-    const lines = await writeMemory(s.learner.id, {
-      topic: s.practice?.topic ?? s.topic ?? undefined,
-      items: s.practice?.items,
-      hintsUsed: s.log.hints,
-    });
-    return NextResponse.json({ lines });
-  } catch (e) {
-    return NextResponse.json({ error: String(e) }, { status: 500 });
-  }
+  const r = await runJob("memory", () => writeMemory(s.learner.id, {
+    topic: s.practice?.topic ?? s.topic ?? undefined,
+    items: s.practice?.items,
+    hintsUsed: s.log.hints,
+  }));
+  if (!r.ok) return refused(r);
+  return NextResponse.json({ lines: r.value });
 }
