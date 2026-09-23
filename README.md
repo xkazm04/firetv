@@ -27,6 +27,8 @@ Chrome (real touch events)          Android TV emulator, API 34, leanback
   eraser — five colours, and a Pin toggle for drawings that should outlive the hold window.
 - **Undo / redo** as an operation log, so undoing an erase restores the annotation *in place*.
 - **Transport from the phone:** play/pause, single-frame step, 0.25×/0.5× slow motion, scrub.
+- **Review mode:** the scrub bar carries a tick for every drawn moment, and previous/next drawing
+  land the TV paused on the exact frame the ink is anchored to, so a walk-through is a row of taps.
 - **The phone can see what it is drawing on:** the paused frame arrives as a JPEG thumbnail, and
   the TV mirrors its annotation document back so the eraser is aimed rather than guessed.
 - **Two transports behind one interface:** the TV either *listens* (LAN, lowest latency, serves the
@@ -40,10 +42,10 @@ Chrome (real touch events)          Android TV emulator, API 34, leanback
 
 | Path | What |
 |---|---|
-| `core/` | Pure JVM: annotation schema + codec, timeline, letterbox mapping, pen engine, Catmull-Rom smoothing, hit-testing, undo history, wire protocol. No Android imports — 46 unit tests run in seconds with no device. |
+| `core/` | Pure JVM: annotation schema + codec, timeline, letterbox mapping, pen engine, Catmull-Rom smoothing, hit-testing, undo history, wire protocol, pen conversation, transport plan. No Android imports — 61 unit tests run in seconds with no device. |
 | `tv-app/` | Android app: Media3 player, Compose overlay, embedded Ktor server, QR pairing, D-pad input. |
 | `companion/` | The phone PWA. Single file, copied into the APK's assets at build time so there is one source of truth. |
-| `tools/` | `live-ui-test.mjs` (Playwright → real PWA → real TV → pixel assertions, 27 checks), `relay-test.mjs` + `relay-stub.mjs` (the same APK with no listening socket, 11 checks), `pen-sim.mjs` (headless protocol check), `latency-probe.mjs`. |
+| `tools/` | `live-ui-test.mjs` (Playwright → real PWA → real TV → pixel assertions, 28 checks), `relay-test.mjs` + `relay-stub.mjs` (the same APK with no listening socket, 11 checks), `pen-sim.mjs` (headless protocol check), `latency-probe.mjs`. |
 | `scripts/dev.ps1` | The whole cycle in one command. |
 | `fixtures/` | Reserved for clips; the PoC generates its own synthetic clip with ffmpeg (no copyright exposure). |
 | `vision/` | Local vision-model client and the mark-as-pointer technique. Two files, domain-neutral — see the lessons doc. |

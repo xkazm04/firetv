@@ -183,6 +183,25 @@ const run = async () => {
     `ink px ${inkAfter} -> ${inkSeeked}, t ${pausedAt} -> ${hSeek.t}`
   );
 
+  // ---- 5b. review mode: one tap back to the drawing ------------------------
+  // The TV publishes where the drawings are (state.marks); "previous drawing" must land paused on
+  // the exact frame the ink is anchored to, without the viewer scrubbing and watching.
+  const marks = await page.evaluate(() => (window.__pen.state() || {}).marks || []);
+  await page.click('#btn-mark-prev', { timeout: 4000 });
+  await sleep(1200);
+  const hJump = await health();
+  const inkJump = countInk(tvScreenshot('live-02b-jumped-to-drawing.png').png);
+  const mark = marks.length ? marks[0] : NaN;
+  check(
+    'previous drawing jumps paused onto the drawn frame and its ink',
+    Math.abs(hJump.t - mark) <= 100 && hJump.paused === true && inkJump > inkAfter * 0.6,
+    `marks [${marks.join(',')}], t ${hSeek.t} -> ${hJump.t}, paused=${hJump.paused}, ink px ${inkJump} (drawn: ${inkAfter})`
+  );
+  // Seek away again so section 6 still proves the remote brings the drawing back on its own.
+  adb('shell', 'input', 'keyevent', 'KEYCODE_DPAD_RIGHT');
+  adb('shell', 'input', 'keyevent', 'KEYCODE_DPAD_RIGHT');
+  await sleep(1200);
+
   // ---- 6. the drawing comes back on its own frame --------------------------
   adb('shell', 'input', 'keyevent', 'KEYCODE_DPAD_LEFT');
   adb('shell', 'input', 'keyevent', 'KEYCODE_DPAD_LEFT');
