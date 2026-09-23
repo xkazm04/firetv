@@ -1,6 +1,7 @@
 package dev.telestrator.tv
 
 import dev.telestrator.core.AnnotationDoc
+import dev.telestrator.core.HeartbeatInput
 import dev.telestrator.core.PenEngine
 import dev.telestrator.core.PenMessage
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -76,6 +77,19 @@ class Session(clipId: String, videoAspect: Double) {
     fun annotationCount(): Int = engine.annotationCount
     fun canUndo(): Boolean = engine.canUndo
     fun canRedo(): Boolean = engine.canRedo
+
+    /** One consistent read of what the pen heartbeat reports (see [dev.telestrator.core.Heartbeat]). */
+    fun heartbeatInput(): HeartbeatInput = HeartbeatInput(
+        t = mediaTimeMs,
+        paused = paused,
+        rate = rate,
+        annotationCount = annotationCount(),
+        canUndo = canUndo(),
+        canRedo = canRedo(),
+        durationMs = durationMs,
+        doc = doc.value,
+        revision = revision.toLong(),
+    )
 
     data class TransportCommand(val cmd: String, val value: Double, val nanos: Long)
 }

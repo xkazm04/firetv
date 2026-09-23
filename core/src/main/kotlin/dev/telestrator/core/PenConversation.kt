@@ -37,8 +37,14 @@ class PairingDesk(val pin: String, val videoAspect: Double) {
     @Synchronized
     internal fun nextGeneration(): Long = ++generationCounter
 
-    /** A new connection arrived at [openedAtMs] (any monotonic clock, as long as ticks use the same one). */
-    fun open(openedAtMs: Long): PenConversation = PenConversation(this, openedAtMs)
+    /**
+     * A new connection arrived at [openedAtMs] (any monotonic clock, as long as ticks use the same
+     * one). [onUndecodable] hears about frames that did not decode, so the shell can log them.
+     */
+    fun open(
+        openedAtMs: Long,
+        onUndecodable: (text: String, error: Throwable) -> Unit = { _, _ -> },
+    ): PenConversation = PenConversation(this, openedAtMs, onUndecodable)
 
     companion object {
         const val HELLO_TIMEOUT_MS = 5_000L
