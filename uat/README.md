@@ -29,6 +29,7 @@ uat/
   characters/*.md        ten Characters; each has a `sim` JSON block the LT driver reads
   journeys/*.md          five Linga journeys: goals and definitions of done, not scripts
   driver/linga-text.cjs  the LT driver
+  driver/surface.cjs     what a Character sees and can do: LingaTV and LingaPhone rendered for the session
   runs/<id>/             findings.json, report.md, SUMMARY.md, per-Character transcripts and voices
 ```
 

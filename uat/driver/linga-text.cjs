@@ -5,7 +5,7 @@
  *
  * One process per Character, in parallel, each with its own DESK_DATA_DIR and DESK_TEXT_ENGINE=codex.
  * Inside, the Character walks its journeys over the real command surface (`englishCommand`):
- *   screen → a text rendering of what the TV and phone show, and the actions actually offered
+ *   screen → LingaTV and LingaPhone rendered for the session (surface.cjs), and the actions they offer
  *   decide → codex plays the Character and picks one action (never sees the criteria)
  *   act    → the driver runs it through englishCommand; the tutor's model calls also go to codex
  * After each journey a codex judge scores the transcript against the Character's criteria and
@@ -13,7 +13,7 @@
  *
  * No dev server, no browser, never desk/data. See uat/env.md.
  */
-const fs = require('node:fs'), path = require('node:path'), Module = require('node:module'), { spawn } = require('node:child_process');
+const fs = require('node:fs'), path = require('node:path'), { spawn } = require('node:child_process');
 const uat = path.resolve(__dirname, '..'), desk = path.resolve(uat, '../desk');
 const BANDS = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
 const MODEL = process.env.UAT_CODEX_MODEL || 'gpt-6-astra';
@@ -33,7 +33,14 @@ if (require.main === module) setImmediate(() => {
 });
 /** The Character's decide enum: every id a Linga view can offer (lib/english/view.ts), plus leaving. */
 const actionIds = () => [...loadDesk().view.VIEW_ACTION_IDS, 'done'];
-module.exports = { actionIds };
+/** How much of one step's screens the judge reads before a cut; a cut is always named, never silent. */
+const JUDGE_SCREEN_CAP = 8000;
+const fitScreen = text => text.length <= JUDGE_SCREEN_CAP ? text : `${text.slice(0, JUDGE_SCREEN_CAP)}\n[... ${text.length - JUDGE_SCREEN_CAP} more characters not shown]`;
+/** What the judge reads for one journey: the Character, the journey, the rubric and every step with its screens. */
+function judgePayload(record, { character, journey, rubric } = {}) {
+  return { character, journey, rubric, endedBy: record.endedBy, setup: record.setup, facts: record.facts, steps: record.steps.map(({ n, screen, shown, action, args, thought, result, message }) => ({ n, screen, shown: fitScreen(shown ?? ''), action, args, thought, result, message })) };
+}
+module.exports = { actionIds, judgePayload, JUDGE_SCREEN_CAP };
 
 // ---------------------------------------------------------------- parent
 async function parent() {
@@ -76,6 +83,25 @@ function severity(f) {
 }
 const ratio = (a, b) => b ? `${a}/${b} (${Math.round(100 * a / b)}%)` : 'n/a';
 
+/**
+ * How faithfully the driver read the screens: controls rendered with no Linga action (0 is the target), view actions
+ * with no rendered control (0), actions only the phone offers, and picks of an action that was not offered.
+ */
+function driverCoverage(results) {
+  let screens = 0, notOffered = 0;
+  const strays = new Map(), unrendered = new Map(), phoneOnly = new Map(), add = (m, k) => m.set(k, (m.get(k) ?? 0) + 1);
+  for (const r of results) for (const j of r.journeys ?? []) for (const s of j.steps ?? []) {
+    if (s.result === 'observed (not acted on)') continue;
+    screens++;
+    if (s.result === 'not-offered') notOffered++;
+    for (const x of s.coverage?.strays ?? []) add(strays, `${s.screen} · ${x}`);
+    for (const x of s.coverage?.unrendered ?? []) add(unrendered, `${s.screen} · ${x}`);
+    for (const x of s.coverage?.phoneOnly ?? []) add(phoneOnly, `${s.screen} · ${x}`);
+  }
+  const list = m => m.size ? ` (${[...m].map(([k, n]) => `${k} ×${n}`).join(', ')})` : '';
+  return `${screens} screens read from the rendered TV and phone · unmapped controls ${strays.size}${list(strays)} · view actions with no control ${unrendered.size}${list(unrendered)} · phone-only actions ${phoneOnly.size}${list(phoneOnly)} · not-offered picks ${notOffered}`;
+}
+
 async function synthesize(dir, id, results, cast, ms) {
   const findings = [], rows = [], voices = [];
   const roll = { placement: { exact: 0, near: 0, miss: 0, none: 0 }, agree: [0, 0], fit: [0, 0, 0], pitch: [0, 0, 0], moments: [0, 0], breaches: 0, calls: {} };
@@ -104,6 +130,7 @@ async function synthesize(dir, id, results, cast, ms) {
   fs.writeFileSync(path.join(dir, 'findings.json'), JSON.stringify(findings, null, 2));
 
   const open = findings.filter(f => f.type !== 'strength'), strengths = findings.filter(f => f.type === 'strength');
+  const cov = driverCoverage(results);
   const calls = Object.entries(roll.calls).map(([role, c]) => `${role} ${c.n} calls, ${c.fail} failed, avg ${c.n ? Math.round(c.ms / c.n / 1000) : 0}s`).join(' · ');
   const md = [
     `# LT run ${id} — Linga`, '',
@@ -121,7 +148,8 @@ async function synthesize(dir, id, results, cast, ms) {
     `- **pitch:** at band ${ratio(roll.pitch[0], roll.pitch[0] + roll.pitch[1] + roll.pitch[2])} · below ${roll.pitch[1]} · above ${roll.pitch[2]}`,
     `- **moment precision:** ${ratio(roll.moments[0], roll.moments[1])}`,
     `- **boundaries:** ${roll.breaches} breach(es)`,
-    `- **reliability:** ${calls}`, '',
+    `- **reliability:** ${calls}`,
+    `- **driver coverage:** ${cov}`, '',
     '## Findings by impact', '',
     ...(open.length ? open.slice(0, 40).map(f => `- **${f.severity} · rank ${f.rank}** \`${f.id}\` (${f.dimension}) — ${f.title}\n  - expected: ${f.expected}\n  - got: ${f.got}\n  - evidence: ${f.evidence.join(' · ')}\n  - acceptance: ${f.suggested_acceptance}`) : ['None.']), '',
     '## What passed', '',
@@ -167,10 +195,7 @@ async function synthesize(dir, id, results, cast, ms) {
 let deskModules = null;
 function loadDesk() {
   if (deskModules) return deskModules;
-  let ts; try { ts = require(path.join(desk, 'node_modules/typescript')); } catch { console.error('Run `npm install` in desk/ first.'); process.exit(1); }
-  const resolve = Module._resolveFilename;
-  Module._resolveFilename = function (id, ...rest) { return resolve.call(this, id.startsWith('@/') ? path.join(desk, 'src', id.slice(2)) : id, ...rest); };
-  require.extensions['.ts'] = (mod, file) => mod._compile(ts.transpileModule(fs.readFileSync(file, 'utf8'), { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022, esModuleInterop: true } }).outputText, file);
+  require('./surface.cjs').install();
   deskModules = { codex: require(path.join(desk, 'src/lib/engines/codex.ts')), view: require(path.join(desk, 'src/lib/english/view.ts')) };
   return deskModules;
 }
@@ -206,34 +231,29 @@ async function child(characterId) {
   await cmd('preferences', { preferences: { ...cur.defaultPreferences(profile()), ...C.preferences, adultConfirmed: !!C.profile.adultConfirmed }, notes: [] });
   say(`profile ${C.name} · ${C.profile.type}${C.profile.age ? ` ${C.profile.age}` : ''} · true ${C.trueBand}`);
 
-  // ---- what the Character sees, in words, and what it can do: the one Linga screen model (lib/english/view.ts),
-  // the same one the TV renders, plus the phone's answer box. The driver holds the TV's local state (menu, level
-  // picker, situation and chapter browsers) the way the TV does.
+  // ---- what the Character sees and can do: LingaTV and LingaPhone as they render for this session (surface.cjs),
+  // with ids, needs and commands from the Linga screen model (lib/english/view.ts). The driver holds the TV's local
+  // state (menu, level picker, situation and chapter browsers) the way the TV does.
   const A = (id, label, needs) => ({ id, label, ...(needs ? { needs } : {}) });
-  const V = loadDesk().view, ui = { ...V.NO_UI };
+  const SF = require('./surface.cjs'), V = loadDesk().view, ui = { ...V.NO_UI };
   const inLinga = screen => screen.startsWith('linga') || screen === 'tonight';
   function surface() {
-    const v = V.lingaView(getSession(), ui), groups = new Map();
+    const sf = SF.surfaceOf(getSession(), ui);
     // the menu's way out of Linga (phone setup, sentence help) leaves what this run covers
-    for (const a of V.offeredActions(v)) if (!a.run.nav || inLinga(a.run.nav.screen)) (groups.get(a.id) ?? groups.set(a.id, []).get(a.id)).push(a);
-    const actions = [...groups.values()].map(list => {
-      const param = ['option', 'topicId'].find(k => new Set(list.map(x => x.run.command?.extra?.[k])).size > 1);
-      return param ? A(list[0].id, list.map(x => x.label).join(' / '), param) : A(list[0].id, list[0].label, list[0].needs);
-    });
-    if (v.answer) actions.unshift(A('answer', `${v.answer.label} on the phone (speak or type)`, 'text'));
-    return { screen: v.screen, shown: V.viewText(v), actions, view: v };
+    const offered = sf.offered.filter(a => !a.run?.nav || inLinga(a.run.nav.screen)), seen = { ...sf, offered };
+    const coverage = { strays: sf.strays, unrendered: sf.unrendered, phoneOnly: [...new Set(offered.filter(a => a.phoneOnly).map(a => a.id))] };
+    return { screen: sf.screen, shown: SF.surfaceText(sf), actions: SF.choices(seen), surface: seen, coverage };
   }
 
   async function run(d, shown) {
-    const v = shown.view, mode = C.mode === 'text' ? 'text' : 'speech';
+    const mode = C.mode === 'text' ? 'text' : 'speech';
     const text = (d.text || '').trim() || '...';
-    if (d.action === 'answer') {
-      const a = v.answer;
-      return a ? cmd(a.action, { ...(a.lastTurnId ? { lastTurnId: a.lastTurnId } : {}), ...(a.taskId ? { taskId: a.taskId } : {}), text: a.action === 'plan-goal' ? text.slice(0, P.TOPIC_ASK_MAX) : text, mode }) : null;
-    }
-    const list = V.offeredActions(v).filter(a => a.id === d.action);
-    const a = list.find(x => x.run.command?.extra?.option === d.option) ?? list.find(x => x.run.command?.extra?.topicId === d.topicId) ?? list[0];
+    const a = SF.pick(shown.surface, d);
     if (!a) return null;
+    if (a.id === 'answer') {
+      const x = a.answer;
+      return cmd(x.action, { ...(x.lastTurnId ? { lastTurnId: x.lastTurnId } : {}), ...(x.taskId ? { taskId: x.taskId } : {}), text: x.action === 'plan-goal' ? text.slice(0, P.TOPIC_ASK_MAX) : text, mode });
+    }
     const r = a.run;
     if (r.ui) Object.assign(ui, r.ui);
     if (r.nav) { ui.menu = false; dispatch({ type: 'nav', screen: r.nav.screen, ...(r.nav.from ? { from: r.nav.from } : {}) }); }
@@ -278,7 +298,7 @@ If the screen looks broken or confusing, react as this person would: retry, go b
       }
       if (!d || typeof d !== 'object') { record.endedBy = 'character-model-failure'; break; }
       const args = Object.fromEntries(Object.entries({ text: d.text, option: d.option, topicId: d.topicId, sceneId: d.sceneId, band: d.band }).filter(([, v]) => v !== '' && v !== -1 && v !== undefined));
-      const step = { n: i, screen: view.screen, shown: view.shown, offered: view.actions.map(a => a.id), thought: d.thought, action: d.action, args, result: 'ok', ms: 0 };
+      const step = { n: i, screen: view.screen, shown: view.shown, offered: view.actions.map(a => a.id), ...(Object.values(view.coverage).some(x => x.length) ? { coverage: view.coverage } : {}), thought: d.thought, action: d.action, args, result: 'ok', ms: 0 };
       if (!step.offered.includes(d.action)) { step.result = 'not-offered'; steps.push(step); say(`${jid} #${i} ${view.screen} → ${d.action} (not offered)`); continue; }
       const t0 = Date.now();
       try { await run(d, view); } catch (e) { step.result = e.status ? `refused ${e.status}` : 'engine-error'; step.message = String(e.message).slice(0, 300); }
@@ -352,7 +372,7 @@ voice: a candid first-person review in the Character's voice and background (at 
     try { record = await journey(jid); }
     catch (e) { record = { id: jid, title: J[jid].sim.title, setup: [], steps: [], facts: {}, endedBy: 'setup-failed', error: String(e.message).slice(0, 400), ms: 0 }; say(`${jid} setup failed: ${e.message.slice(0, 160)}`); }
     try {
-      const r = await role('judge', { effort: process.env.UAT_JUDGE_EFFORT || 'high', timeoutMs: 600000, system: judgeSystem, prompt: JSON.stringify({ character: { file: character.text, sim: C }, journey: J[jid].text, rubric, endedBy: record.endedBy, setup: record.setup, facts: record.facts, steps: record.steps.map(({ n, screen, shown, action, args, thought, result, message }) => ({ n, screen, shown: shown.slice(0, 3000), action, args, thought, result, message })) }), schema: judgeSchema });
+      const r = await role('judge', { effort: process.env.UAT_JUDGE_EFFORT || 'high', timeoutMs: 600000, system: judgeSystem, prompt: JSON.stringify(judgePayload(record, { character: { file: character.text, sim: C }, journey: J[jid].text, rubric })), schema: judgeSchema });
       record.judge = r.json;
       say(`${jid} judged: ${r.json.verdict} · ${r.json.criteria.filter(c => c.result === 'pass').length}/${r.json.criteria.filter(c => c.result !== 'n-a').length} criteria`);
     } catch (e) { record.judgeError = String(e.message).slice(0, 300); say(`${jid} judge failed: ${e.message.slice(0, 120)}`); }
