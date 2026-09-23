@@ -102,7 +102,7 @@ export default function Phone() {
     setBusy(true); setPhase("sending"); setMsg("");
     try {
       const r = await call("/api/read", { image: dataUrl, subject: sub, title, w, h }); const j = await r.json();
-      if (r.ok) { setPhase("sent"); setMsg(""); } else { setPhase("failed"); setMsg(`The desk could not read it: ${j.error}`); }
+      if (r.ok) { setPhase("sent"); setMsg(""); } else { setPhase("failed"); setMsg(j.error ?? `The desk could not read it (${r.status}).`); }
     } catch (e) { setPhase("failed"); setMsg(`That did not reach the desk: ${String(e)}`); } finally { setBusy(false); }
   };
   const toJpeg = (src: HTMLVideoElement | HTMLImageElement, sw: number, sh: number) => {
@@ -147,7 +147,7 @@ export default function Phone() {
       const r = await call("/api/mark", { image: shot.url, w: shot.w, h: shot.h });
       const j = await r.json().catch(() => ({} as { error?: string }));
       if (r.ok) setPhase("sent");
-      else { setPhase("failed"); setMsg(r.status === 404 ? "The desk cannot mark yet — that part is still being built." : `The desk could not mark it: ${j.error ?? r.status}`); }
+      else { setPhase("failed"); setMsg(r.status === 404 ? "The desk cannot mark yet — that part is still being built." : (j.error ?? `The desk could not mark it (${r.status}).`)); }
     } catch (e) { setPhase("failed"); setMsg(`That did not reach the desk: ${String(e)}`); } finally { setBusy(false); }
   };
   // the set came back marked: the sheet has done its job, so the review clears itself
@@ -165,7 +165,7 @@ export default function Phone() {
       const r = await call("/api/explain", { transcript: t, n: s?.walkIx });
       const j = await r.json().catch(() => ({} as { reply?: string; error?: string }));
       if (r.ok) { setReply(j.reply ?? "The desk heard you."); setHeard(""); }
-      else setMsg(r.status === 404 ? "The desk cannot listen back yet — that part is still being built." : `The desk could not use that: ${j.error ?? r.status}`);
+      else setMsg(r.status === 404 ? "The desk cannot listen back yet — that part is still being built." : (j.error ?? `The desk could not use that (${r.status}).`));
     } catch (e) { setMsg(`That did not reach the desk: ${String(e)}`); } finally { setBusy(false); }
   };
   /** Memory is written on the way out — and is never allowed to hold the door shut. */
