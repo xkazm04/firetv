@@ -1,0 +1,203 @@
+{
+  "host": "engines",
+  "riders": [
+    {
+      "name": "session",
+      "checked": "Read learners.ts, store.ts, api/session/route.ts, api/session/stream/route.ts in full plus the 30 store importers' engine-work routes (read, hint, practice, mark, explain, analyse), tv/useSession.ts, tv/page.tsx, phone/page.tsx; traced failure and late-result paths of engine work through the session -> slot B card targets session (engine work as a job: stale waits, late overwrites, retry in place)."
+    },
+    {
+      "name": "library",
+      "checked": "Read lessons.data.ts, lessons.ts, syllabus.ts, vtt.ts in full; hypothesis: retrieval cannot be tested under repo law because lessons.ts:47 writes path.join(cwd,'data') and ignores DESK_DATA_DIR (store.ts:102 and learners.ts:42 honour it) -> folded into card A (acceptance case 6); syllabus/vtt are pure and well-shaped, no card of their own."
+    }
+  ],
+  "files_read": [
+    "desk/src/lib/engines/codex.ts",
+    "desk/src/lib/engines/embed.ts",
+    "desk/src/lib/engines/listen.ts",
+    "desk/src/lib/engines/text.ts",
+    "desk/src/lib/engines/types.ts",
+    "desk/src/lib/engines/vision.ts",
+    "desk/src/lib/engines/voice.ts",
+    "desk/src/lib/session/learners.ts",
+    "desk/src/lib/session/store.ts",
+    "desk/src/app/api/session/route.ts",
+    "desk/src/app/api/session/stream/route.ts",
+    "desk/src/lib/library/lessons.data.ts",
+    "desk/src/lib/library/lessons.ts",
+    "desk/src/lib/library/syllabus.ts",
+    "desk/src/lib/library/vtt.ts",
+    "desk/src/lib/desk/english.ts",
+    "desk/src/lib/desk/hint.ts",
+    "desk/src/lib/desk/explain.ts",
+    "desk/src/lib/desk/pick.ts",
+    "desk/src/lib/desk/memory.ts",
+    "desk/src/lib/desk/essay.ts (20-60)",
+    "desk/src/lib/desk/items.ts (55-110)",
+    "desk/src/lib/desk/read.ts (15-60)",
+    "desk/src/lib/english/check.ts (20-110)",
+    "desk/src/lib/english/conversation.ts (1-22, 111, 173)",
+    "desk/src/app/api/read/route.ts",
+    "desk/src/app/api/hint/route.ts",
+    "desk/src/app/api/mark/route.ts",
+    "desk/src/app/api/practice/route.ts",
+    "desk/src/app/api/explain/route.ts",
+    "desk/src/app/api/analyse/route.ts",
+    "desk/src/app/api/memory/route.ts",
+    "desk/src/tv/useSession.ts",
+    "desk/src/app/tv/page.tsx (selected: 18, 30, 70, 170-210)",
+    "desk/src/app/phone/page.tsx (selected: 95-155, 185, 214-240, 304-334)",
+    "desk/src/tv/screens.tsx (selected: 340-400, 711-750)",
+    "tools/linga-rules-test.cjs (1-40)",
+    "desk/package.json (scripts)",
+    "context-map.json, .claude/scan-sweep/config.md, .claude/spark/config.md Repo law",
+    "uat/accepted-gaps.md, docs/DESIGN-ON-AIR.md (grep), docs/DESK-PROTOTYPE-PLAN.md:117"
+  ],
+  "cards": [
+    {
+      "context": "engines",
+      "host": "engines",
+      "slot": "A",
+      "lens": "architecture-challenger",
+      "title": "Engines enforce the caller's schema for every provider, behind one registry",
+      "size": "L",
+      "effort": 7,
+      "impact": 7,
+      "risk": 6,
+      "write_set": [
+        "desk/src/lib/engines/types.ts",
+        "desk/src/lib/engines/text.ts",
+        "desk/src/lib/engines/codex.ts",
+        "desk/src/lib/engines/vision.ts",
+        "desk/src/lib/engines/embed.ts",
+        "desk/src/lib/engines/voice.ts",
+        "desk/src/lib/engines/listen.ts",
+        "desk/src/lib/engines/shape.ts",
+        "desk/src/lib/engines/registry.ts",
+        "desk/src/lib/desk/pick.ts",
+        "desk/src/lib/library/lessons.ts",
+        "desk/src/lib/english/check.ts",
+        "desk/src/lib/english/conversation.ts",
+        "tools/engines-rules-test.cjs",
+        "desk/package.json"
+      ],
+      "new_files": [
+        "desk/src/lib/engines/shape.ts",
+        "desk/src/lib/engines/registry.ts",
+        "tools/engines-rules-test.cjs"
+      ],
+      "shared_surfaces": [
+        "desk/package.json",
+        "desk/src/lib/english/check.ts and conversation.ts are Linga-host files: edits there are limited to importing the five shared helpers from engines/shape.ts; serialize with any Linga card in the same wave"
+      ],
+      "acceptance": [
+        "case 1: useProvider('text', stub returning raw 'Sure! Here is the hint: look at x') then text({system,prompt,schema:{type:'object',properties:{hint:{type:'string'}},required:['hint']}}) -> rejects with EngineError {kind:'shape', provider:'stub'}; today it resolves with the prose string typed as T (tools/engines-rules-test.cjs, node:test)",
+        "case 2: stub returning raw '```json\\n{\"hint\":\"Look at x\"}\\n```' for the same schema -> resolves {json:{hint:'Look at x'}, provider:'stub'}; one fence rule for every provider (tools/engines-rules-test.cjs)",
+        "case 3: stub returning {reply: 400-char string} against {reply:{type:'string',maxLength:230}} with isolated:true -> EngineError kind 'shape', path 'reply'; today isolated Claude calls skip the schema entirely (tools/engines-rules-test.cjs)",
+        "case 4: stub returning {answered:'maybe', extra:1} against check.ts judgeSchema (enum yes|partly|no, additionalProperties:false) -> EngineError kind 'shape' naming 'answered' (tools/engines-rules-test.cjs)",
+        "case 5: pickLesson('maths','2x+3=7') with text stub {lesson:42, why:'x'} -> rejects EngineError kind 'shape'; today TypeError 'json.lesson.trim is not a function' (tools/engines-rules-test.cjs)",
+        "case 6: DESK_DATA_DIR=<os tmp>/eng-<ts> seeded with lessons/jWpiMu5LNdg.en.vtt, text stub {lesson:'jWpiMu5LNdg',why:'…'}, embed stub returning vectors where window 2 is nearest -> pick.t equals window 2's start and embeddings.json exists under DESK_DATA_DIR, desk/data untouched; today lessons.ts writes path.join(cwd,'data') (tools/engines-rules-test.cjs)",
+        "case 7: activeProvider('text') -> 'claude-cli' with DESK_TEXT_ENGINE unset, 'codex' with DESK_TEXT_ENGINE=codex, without spawning either CLI (tools/engines-rules-test.cjs)",
+        "GUARD: case 8: linga-rules-test, maths-rules-test and essay-rules-test pass unchanged with their existing engine.text / eye.vision export patching (cd desk && npm test)"
+      ],
+      "premise": [
+        "desk/src/lib/engines/types.ts:2-3 - 'Each one is a swap... the prompts and schemas on the calling side never change'; the guarantee a schema gives today depends on which provider ran",
+        "desk/src/lib/engines/text.ts:39-41 - isolated calls drop --json-schema, so Claude isolated calls get no enforcement; non-isolated Claude calls do",
+        "desk/src/lib/engines/codex.ts:40 - codex always passes --output-schema, so the same isolated request IS enforced under codex (uat/accepted-gaps.md:11 AG-5: LT runs on codex, the desk ships on claude)",
+        "desk/src/lib/engines/text.ts:63, codex.ts:58, vision.ts:28 - three copies of 'JSON.parse or cast the raw string to T': a malformed answer arrives typed as the caller's shape",
+        "desk/src/lib/engines/text.ts:62 and codex.ts:58 - the markdown-fence strip regex written twice",
+        "desk/src/lib/desk/pick.ts:19 - json.lesson.trim() throws TypeError when the model returns a non-string lesson or prose",
+        "desk/src/lib/desk/english.ts:16, hint.ts:30, essay.ts:51 - json.explanation / json.hint / json.what_to_try_next / json.summary used unchecked; app/api/analyse/route.ts:20 then calls a.summary.slice -> TypeError on a missing summary",
+        "desk/src/lib/desk/explain.ts:47-49, memory.ts:55, items.ts keep(), essay.ts:37, read.ts:32 - five callers each hand-guard their own fields instead",
+        "desk/src/lib/english/check.ts:21-26 and conversation.ts:13-17 - object/required/line/str/schema helpers defined twice, and check.ts:104 line(r.json.prompt, 200) restates check.ts:29 prompt: str(200) by hand",
+        "tools/linga-rules-test.cjs:13-15, maths-rules-test.cjs:11-13, essay-rules-test.cjs:15-16 - the only stub seam is reassigning a CJS export after transpile; embed, speak and listen have no stub path at all",
+        "desk/src/lib/library/lessons.ts:47 - DATA = path.join(process.cwd(),'data') ignores DESK_DATA_DIR, unlike store.ts:102 and learners.ts:42, so any test of retrieval writes desk/data/embeddings.json (repo law: never touch desk/data)"
+      ],
+      "rollback": "Three commits (shape.ts+registry.ts+test; engines route through them; pick/lessons/check/conversation adopt) each revert cleanly with git revert in reverse order; the engine function names and EngineResult fields are unchanged, so callers that are not in the write set compile at every step.",
+      "gate": "architecture",
+      "runner_up": "Session stream sends every page photo (1280px JPEG data URL, phone/page.tsx:109-110, stored at store.ts:27 / read/route.ts:13) to every subscriber and to session.json on every 1 s timer tick (store.ts:198-199, 217) - move images to /api/page/:id and ticks out of the persisted write.",
+      "body": "## Summary\nMake the schema a caller already declares the one enforced contract for every text and vision provider: the engine parses once, validates once, and throws a typed EngineError instead of handing back a string cast as T. Providers sit behind one registry, so tests stub every engine (text, vision, embed, speak, listen) the same way.\n\n## Description\ntypes.ts promises that a provider is a swap and the caller's schema never changes. It is not true today: a non-isolated Claude call is schema-enforced, an isolated Claude call is not (text.ts:39-41), codex always is (codex.ts:40), and Ollama vision is decoder-enforced but falls back to a raw string on parse failure (vision.ts:28). All three providers then cast an unparseable answer to T (text.ts:63, codex.ts:58, vision.ts:28). The result is that five callers hand-guard their fields, four do not (pick.ts:19 throws a TypeError, analyse route crashes on a missing summary), and Linga re-implements its schema limits by hand in two files with the same five helpers copied (check.ts:21-26, conversation.ts:13-17). A shape verdict certified at LT on codex (AG-5) does not hold on the Claude engine the desk ships with. Tests reach the engines by reassigning CJS exports; embed/speak/listen cannot be stubbed, and retrieval cannot be tested at all because lessons.ts ignores DESK_DATA_DIR.\n\nThe move: engines/shape.ts - a validator for exactly the JSON-schema subset the tree uses (type object/string/integer/number/boolean/array, properties, required, additionalProperties:false, enum, minLength/maxLength, minItems/maxItems, items; counted by grep: 72 type, 15 properties, 15 required, 21 items, 13 enum, 5 maxLength, 4 maxItems, 2 minItems, 1 minLength, 2 additionalProperties) plus the shared object/str/schema helpers; engines/registry.ts - useProvider(kind, impl), resetProviders(), activeProvider(kind), with claude-cli/codex/ollama/elevenlabs/piper/gravitone as registered defaults and DESK_TEXT_ENGINE choosing among them. text() and vision() become: provider returns raw -> strip fence once -> parse -> validate against req.schema -> EngineResult, or EngineError {kind: shape|timeout|exit|unreachable, provider, path}. pick.ts relies on the guarantee; lessons.ts honours DESK_DATA_DIR; check.ts/conversation.ts import the helpers instead of redefining them (their hand checks stay as the second, screen-fitting line).\n\n## Flow\n- caller: text({system, prompt, schema, model, isolated})\n- registry picks the text provider (claude-cli by default, codex when DESK_TEXT_ENGINE=codex, a stub in tests)\n- provider returns {raw, provider}\n- engine: fence strip -> JSON.parse -> validate(schema) -> {json, provider, ms} or throw EngineError('shape', path)\n- routes already catch and put a status line; Linga's call() already turns a throw into its error line\n\n## Expected impact\nA whole class of defect closes: a malformed model answer can no longer reach a caller typed as its shape (4 unguarded callers, 2 TypeError crash sites). The Claude and codex engines give the same shape guarantee, narrowing AG-5 without changing which engine ships. Every engine becomes stubbable through one seam, and retrieval becomes testable without touching desk/data. Decisions do not move: the validator checks shape only.\n\n## Evaluation\nClaim: the caller's schema is enforced identically for every provider, malformed answers fail as typed EngineErrors, and every engine and retrieval path can be stubbed under DESK_DATA_DIR.\nBefore: 0 of 7 acceptance cases pass (case 8 is a GUARD, green before); 3 string-as-T fallbacks, 2 fence-strip copies, 5 helpers duplicated across 2 files, 3 of 5 engines unstubbable except by export patching, 0 of 5 via a registry\nAfter: 7 of 7 (and the GUARD green); 0 string-as-T fallbacks, 1 fence rule, 1 helper module\nMethod: gate - acceptance cases written as failing tests first in tools/engines-rules-test.cjs (desk TS loader copied from tools/linga-rules-test.cjs:1-9), appended at the end of test:rules\nResult: better\nGate: architecture",
+      "evidence": "grep '^import.*engines/' desk/src -> 17 importing files: text() in english.ts, essay.ts, explain.ts, hint.ts, items.ts, memory.ts, pick.ts, check.ts, conversation.ts (x2 at :111, :173) + smoke; vision() in read.ts, mark.ts + smoke; embed() in lessons.ts (x2) + smoke; speak in api/speak; listen in api/listen.\ntext.ts:39-41: 'if (req.isolated) args.push(\"--safe-mode\"...); if (req.schema && !req.isolated) args.push(\"--json-schema\", ...)'\ncodex.ts:40: 'if (req.schema) { ... args.push(\"--output-schema\", file); }'\ntext.ts:63: 'try { json = JSON.parse(source) as T; } catch { json = result as unknown as T; }'\ncodex.ts:58: 'try { json = JSON.parse(raw.replace(/^```(?:json)?\\s*/i, \"\").replace(/\\s*```$/, \"\")) as T; } catch { json = raw as unknown as T; }'\nvision.ts:28: 'try { json = JSON.parse(content) as T; } catch { json = content as unknown as T; }'\npick.ts:19: 'const l = LESSONS.find((x) => x.id === json.lesson.trim());'\nanalyse/route.ts:20: 'dispatch({ type: \"status\", text: a.summary.slice(0, 120) });' with essay.ts:51 'summary: json.summary'\ncheck.ts:21-26 == conversation.ts:13-17 (object, required, line, str, schema)\ntools/linga-rules-test.cjs:13-15: 'const engine=require(.../engines/text.ts); ... engine.text=(req)=>answer(req);'\nlessons.ts:47: 'const DATA = path.join(process.cwd(), \"data\");' vs store.ts:102 / learners.ts:42 'process.env.DESK_DATA_DIR || path.join(process.cwd(), \"data\")'",
+      "critic": {
+        "verdict": "revise",
+        "ambition": 4,
+        "grounding": 4,
+        "falsifiability": 4,
+        "deck_line": "Approve after the citation fix: one validator and one registry so a malformed model answer can no longer arrive typed as the caller's shape, on claude and codex alike."
+      },
+      "critic_revise": "Correct the lessons.ts citation in the premise, the library rider and case 6: DATA is defined at desk/src/lib/library/lessons.ts:16 and embeddings.json is written at :30/:38 (line 47 is the embed() call)."
+    },
+    {
+      "context": "session",
+      "host": "engines",
+      "slot": "B",
+      "lens": "ux-elevation",
+      "title": "Desk work becomes a session job: no stuck waits, late results dropped, retry in place",
+      "size": "M",
+      "effort": 6,
+      "impact": 8,
+      "risk": 5,
+      "write_set": [
+        "desk/src/lib/session/store.ts",
+        "desk/src/app/api/session/route.ts",
+        "desk/src/app/api/session/retry/route.ts",
+        "desk/src/app/api/read/route.ts",
+        "desk/src/app/api/hint/route.ts",
+        "desk/src/app/api/practice/route.ts",
+        "desk/src/tv/screens.tsx",
+        "desk/src/app/tv/page.tsx",
+        "desk/src/app/phone/page.tsx",
+        "tools/session-rules-test.cjs",
+        "desk/package.json"
+      ],
+      "new_files": [
+        "desk/src/lib/session/jobs.ts",
+        "desk/src/lib/desk/work.ts",
+        "desk/src/app/api/session/retry/route.ts",
+        "tools/session-rules-test.cjs"
+      ],
+      "shared_surfaces": [
+        "desk/package.json",
+        "desk/src/lib/session/store.ts (Session and Event types are imported by 30 files)"
+      ],
+      "acceptance": [
+        "case 1: startRead({image,subject:'maths',title:'Algebra',w,h}) with vision stub throwing 'ollama 500: boom' -> s.job = {kind:'read', state:'failed'} with a fixed line 'The desk could not read that page.'; s.status contains no 'ollama'/'Error'; the page is marked failed, not left with readMs 0 (which the TV renders as 'reading' forever) (tools/session-rules-test.cjs, node:test, engines stubbed, DESK_DATA_DIR under OS tmp, scratch learner)",
+        "case 2: after case 1, retry() with the vision stub now returning 3 items -> the SAME page id gets 3 items, s.pages.length stays 1 (no orphan 0-item page), s.job cleared; today a second send appends a new page (tools/session-rules-test.cjs)",
+        "case 3: startHint({itemIx:0}) with text stub throwing -> s.job {kind:'hint', state:'failed'}; s.status is not left at 'thinking about a hint…' (today the route has no catch) (tools/session-rules-test.cjs)",
+        "case 4: startHint for item 0 whose lesson pick is held on a deferred embed/text stub; meanwhile startHint for item 1 completes; then item 0's pick resolves -> s.lesson is not item 0's lesson (dropped as superseded); today lesson.set lands unconditionally (tools/session-rules-test.cjs)",
+        "case 5: lesson pick stub throws -> s.noLesson true, so the TV's second action reads 'No lesson for this' instead of 'Finding the lesson…' forever (tools/session-rules-test.cjs)",
+        "case 6: startPractice('linear-one-step') for learner 'scratch-a' with a deferred text stub; dispatch learner.set 'scratch-b'; then the stub resolves -> no practice.set lands, s.practice stays null, job superseded (tools/session-rules-test.cjs)",
+        "case 7: a session.json written with job {state:'running'} is loaded -> job comes back {state:'failed'} with its retry input kept, so after a dev restart the phone offers Retry (tools/session-rules-test.cjs)",
+        "GUARD: case 8: a successful startRead -> page.read items and the status line 'N items read in X s' exactly as today; POST /api/session with a job.* event -> 403 like linga.changed (tools/session-rules-test.cjs)"
+      ],
+      "premise": [
+        "desk/src/lib/session/store.ts:79 - engine work in flight is represented only by the free-text status string; there is no pending/failed state a screen can act on",
+        "desk/src/app/api/hint/route.ts:23-24 - status 'thinking about a hint…' is dispatched, then hint() is awaited with no try/catch: a failure leaves that line forever and the phone's ask() (phone/page.tsx:128) has only a finally",
+        "desk/src/app/api/hint/route.ts:11,17-18 - stage 2 spreads the pre-await snapshot s.hint, so a hint set during the call is overwritten",
+        "desk/src/app/api/hint/route.ts:27-28 - pickLesson resolves later and dispatches lesson.set with no check that the hint is still for that item; its catch only writes status, so tv/screens.tsx:395 shows 'Finding the lesson…' indefinitely",
+        "desk/src/app/api/read/route.ts:11,29 - every send makes a new page id and a failure keeps the page with items [] and readMs 0; store.ts:150 appends it; tv/screens.tsx:363 renders readMs 0 as 'reading'; phone/page.tsx:112-113 counts it, so the next page is misnamed 'page N+1'",
+        "desk/src/app/api/practice/route.ts:10-14 - practice.set lands after the await with no learner check; learner.set (store.ts:141) during the call gets the other learner's set",
+        "desk/src/app/tv/page.tsx:174-175 - 'a failure leaves the wait on screen': the TV's busy flag is local state, cleared only by leaving the screen (tv/page.tsx:70), and call('/api/practice').catch(()=>{}) ignores a 500",
+        "desk/src/app/api/read/route.ts:30, mark/route.ts:22, practice/route.ts:18, explain/route.ts:20, analyse/route.ts:23 - five routes put String(e).slice(0,120) (raw engine error text) into status, which the phone prints (phone/page.tsx:231, 334)",
+        "desk/src/lib/english/check.ts:60-62,76-88 - Linga already has the pattern (pending token, result lands only on the same check, failure leaves a fixed error line); Math Buddy and Essay Master do not",
+        "desk/src/lib/session/store.ts:191 - load() already resets reading:false and conversation.pending on restart; a running job has no equivalent",
+        "docs/DESK-PROTOTYPE-PLAN.md:117 - 'M5 · hardening | ... error states' is planned scope"
+      ],
+      "rollback": "Two commits (jobs.ts + work.ts + store fields + test; routes, TV and phone adopt) revert cleanly in reverse; the job field is optional on Session and load() tolerates its absence, so a session.json written by either version loads in the other.",
+      "gate": "contract",
+      "runner_up": "Resume after reconnect: useSession's post() is fire-and-forget with no error or queue (tv/useSession.ts:21) - hold phone events while disconnected and show the desk as offline where the press is made.",
+      "body": "## Summary\nEngine work (read a page, hint + lesson pick, write a practice set) becomes a job on the one session: {id, kind, state running|failed, line, input}. Results land only while their job is still current; a failure leaves a fixed human line and one Retry press on the phone that re-runs the job with what the desk already holds; the TV shows the job state in the caption slot instead of a wait that never ends.\n\n## Description\nToday the only trace of engine work is the free-text status (store.ts:79). Counted from the tree: 4 waits that never end on failure (hint status line, 'Finding the lesson…', the Page screen's 'reading' label, the Topics prep ticker on the TV), 3 late results that land on a desk that has moved on (hint stage-2 snapshot overwrite, lesson pick for a previous item, practice set for a previous learner), 5 routes that print raw engine error text, and 1 orphan empty page per failed read that also misnames the next page. The user's job is 'get past this problem tonight'; after any engine hiccup they are left guessing whether the desk is still working, and must re-snap, re-ask or back out and re-enter. Linga already solved this for itself (check.ts call(): pending token, result lands only on the same check, fixed failure line). This card gives the rest of the desk the same guarantee through the session, where both the TV and the phone see it.\n\njobs.ts: runJob(kind, key, input, work) sets s.job running, awaits work, applies the result only if s.job.id is still this job and the learner is unchanged, otherwise drops it; on throw sets state failed with a fixed per-kind line. work.ts: startRead/startHint/startPractice (the route bodies moved here, callable from tests) and retry(), which re-runs the failed job from its held input (read: the page image and id already on the session; hint: item key + askedQ; practice: topic). Routes become thin. Session POST refuses job.* events (403, as linga.changed). On Air: the TV shows the state as the caption (red chip label + one line), never asks for typing, puts nothing of the answer on screen; Retry lives on the phone (and Enter on the focused action where the screen already has one).\n\n## Flow\n- phone: Use this page -> POST /api/read -> startRead -> job running -> TV caption 'Reading the page'\n- vision fails -> job failed 'The desk could not read that page.' -> page marked failed (no orphan, no endless 'reading')\n- phone shows the line and one Retry button -> POST /api/session/retry -> same page id re-read -> job cleared, items on the TV\n- learner moves to another item while the lesson pick runs -> the late pick is dropped\n\n## Expected impact\nRecovering from an engine failure goes from re-snap (open camera, frame, shoot, Use this page: 4 steps, plus a stray empty page on the TV) or back-out-and-re-enter to one press; no screen ever waits forever; a result is never shown against the wrong item or learner. Contract consumers of the new optional Session.job field and job events: tv/useSession.ts, app/tv/page.tsx, tv/screens.tsx, app/phone/page.tsx, english/LingaTV.tsx, english/LingaPhone.tsx, english/LingaTestBar.tsx, english/useEnglish.ts, app/english/print/page.tsx, app/api/session/route.ts, tools/linga-rules-test.cjs (reads getSession); only the first four read it, the rest compile unchanged. The TV change needs the overlay's Playwright capture on a second dev server with a seeded DESK_DATA_DIR.\n\n## Evaluation\nClaim: engine work on the session can no longer leave a screen waiting forever, land on a desk that moved on, or require re-capture to retry.\nBefore: 0 of 7 acceptance cases pass (case 8 is a GUARD, green before); 4 endless waits, 3 late-overwrite paths, 5 raw-error status sites, 1 orphan page per failed read\nAfter: 7 of 7 (GUARD green); 0 / 0 / 0 / 0\nMethod: gate - acceptance cases written as failing tests first in tools/session-rules-test.cjs (loader from tools/linga-rules-test.cjs:1-9, engines stubbed, scratch learner ids, DESK_DATA_DIR under OS tmp), plus the TV capture the overlay requires\nResult: better\nGate: contract",
+      "evidence": "grep importers of lib/session/store across desk/src -> 30 files (read/route imports it twice).\nhint/route.ts:23-24: 'dispatch({ type: \"status\", text: \"thinking about a hint…\" }); const h1 = await hint(...)' - no try in the file.\nhint/route.ts:17-18: 'const h2 = await hint(...); dispatch({ type: \"hint.set\", hint: { ...s.hint, stage: 2, ...' with s captured at :11.\nhint/route.ts:27: 'pickLesson(page.subject, item.text).then((l) => { dispatch({ type: \"lesson.set\", lesson: l }); ...'\nread/route.ts:29: 'dispatch({ type: \"page.read\", id, items: [], readMs: 0, provider: \"error\" });'\nscreens.tsx:363: '{p.readMs ? `read in ${...} s` : \"reading\"}'\nscreens.tsx:395: '{s.lesson ? \"Show me the lesson\" : s.noLesson ? \"No lesson for this\" : \"Finding the lesson…\"}'\ntv/page.tsx:175: '// P2 answers with practice.set over the session stream; a failure leaves the wait on screen' then 'call(\"/api/practice\", { topic: t.id }).catch(() => {});'\npractice/route.ts:13-14: 'await makeItems(topic, s.learner.id); dispatch({ type: \"practice.set\", ...' - no learner re-check.\nRaw error sites: read:30, mark:22, practice:18, explain:20, analyse:23 all 'String(e).slice(0, 120)'.\ncheck.ts:76-88: 'commit({ ...k, pending: token, error: \"\" } ...); ... const now = current(k, token); ... catch ... commit({ ...now, pending: null, error: failure } ...'",
+      "critic": {
+        "verdict": "revise",
+        "ambition": 4,
+        "grounding": 5,
+        "falsifiability": 5,
+        "deck_line": "Same move as desk-pipelines A from the session side; approve as the retry-in-place increment on top of A, not as a second runner."
+      },
+      "critic_revise": "Rebase onto desk-pipelines A's `jobs` record and runJob(): drop desk/src/lib/session/jobs.ts, desk/src/lib/desk/work.ts and the separate `job` field, and keep what A lacks - POST /api/session/retry re-running the failed kind from held input (same page id, no orphan page: case 2), the learner-unchanged check on practice.set (case 6), the phone Retry button and the 403 on job.* events (case 8); cases 1, 3, 4, 5 and 7 are covered by A.",
+      "depends_on": [
+        "desk-pipelines A"
+      ]
+    }
+  ]
+}

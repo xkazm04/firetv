@@ -1,0 +1,173 @@
+{
+  "host": "tv-surface",
+  "riders": [
+    {
+      "name": "phone-surface",
+      "checked": "Read desk/src/app/phone/page.tsx in full (349 lines). Hypothesis traced: the phone does not follow the TV's asks. The phone auto-switches only on join (phone/page.tsx:60) and Linga (:61); none of 8 other hand-offs where the TV tells the learner to use the phone (page.ask, practice on paper, walk talk-back, essay lens chosen, sentence retry, profile name, recap, point & ask) moves it - the learner picks one of 9 tabs (:339). No card went there: it became slot B's runner-up, because the host's marked-sheet loop has a stronger leap and stays on the TV the operator is walking. Also checked: phone line 275 keys the talk-back on s.screen === \"walk\", which card B leaves working (walk stays a screen)."
+    }
+  ],
+  "files_read": [
+    "desk/src/tv/screens.tsx",
+    "desk/src/tv/profileRows.ts",
+    "desk/src/tv/useSession.ts",
+    "desk/src/tv/writingRows.ts",
+    "desk/src/app/tv/page.tsx",
+    "desk/src/design/on-air.css",
+    "desk/src/app/globals.css",
+    "desk/src/app/layout.tsx",
+    "desk/src/app/page.tsx",
+    "desk/src/app/probe/page.tsx",
+    "desk/src/app/phone/page.tsx",
+    "desk/src/lib/session/store.ts",
+    "desk/src/lib/session/learners.ts (lines 1-80 plus the history/addHistory sites)",
+    "desk/src/english/LingaTV.tsx (lines 150-195: the actions-list focus model and its keydown)",
+    "desk/src/app/api/practice/route.ts",
+    "desk/src/app/api/mark/route.ts",
+    "desk/src/app/api/hint/route.ts",
+    "desk/src/lib/library/lessons.data.ts (ESSAY_TYPES)",
+    "desk/src/lib/rules/essay.ts (ANALYSIS_TYPES)",
+    "desk/src/lib/library/syllabus.ts (topic ids and exports)",
+    "desk/src/lib/desk/items.ts (makeItems slips read)",
+    "tools/linga-rules-test.cjs (loader, lines 1-60)",
+    "tools/maths-rules-test.cjs (lines 104-141)",
+    "tools/essay-rules-test.cjs (writingRows usage)",
+    "tools/linga-ui-test.cjs (lines 1-41)",
+    "desk/package.json",
+    "docs/DESIGN-ON-AIR.md",
+    "docs/STUDY-DESK-SCREENS.md",
+    "uat/accepted-gaps.md",
+    ".claude/scan-sweep/config.md",
+    ".claude/spark/config.md (Repo law)"
+  ],
+  "cards": [
+    {
+      "context": "tv-surface",
+      "host": "tv-surface",
+      "slot": "A",
+      "lens": "architecture-challenger",
+      "title": "One D-pad for the TV: a pure, tested keymap that shares focus stops with screens",
+      "size": "M",
+      "effort": 7,
+      "impact": 7,
+      "risk": 6,
+      "write_set": [
+        "desk/src/app/tv/page.tsx",
+        "desk/src/tv/screens.tsx",
+        "desk/src/tv/keys.ts",
+        "desk/src/tv/mathsRows.ts",
+        "desk/src/tv/profileRows.ts",
+        "tools/tv-keys-test.cjs",
+        "desk/package.json"
+      ],
+      "new_files": [
+        "desk/src/tv/keys.ts",
+        "desk/src/tv/mathsRows.ts",
+        "tools/tv-keys-test.cjs"
+      ],
+      "shared_surfaces": [
+        "desk/package.json"
+      ],
+      "acceptance": [
+        "case 1: tvKey(session{screen:'tonight', subject:'maths', a maths page with items so continueCard is non-null, focus:2}, 'right', local) -> no focus event past stop 2 (clamped), and tvKey(same, focus:2, 'select') -> events [{type:'subject',subject:'maths'},{type:'nav',screen:'topics',focus:0}]; with no continue card, focus:1 'select' -> the same nav to topics. The stop list tonightStops(s) returns ['continue','homework','teach'] / ['homework','teach'] and is the list Tonight renders from (node:test, tools/tv-keys-test.cjs)",
+        "case 2: for f in 0..3, tvKey(session{screen:'essaytype', focus:f}, 'select') -> first event {type:'essay.type', essayType: ESSAY_TYPES[f].id}; the key module holds no literal lens-id list (node:test, tools/tv-keys-test.cjs)",
+        "case 3: tvKey(session{screen:'topics', focus:1}, 'select', {busy:false}) -> events [{type:'topic.open',topic:SYLLABUS[1].id}], calls [{url:'/api/practice', body:{topic:SYLLABUS[1].id}, onFail:{busy:false}}], local {busy:true}; the executor runStep with a call stub answering 500 leaves local busy === false (today a failed set leaves 'Still writing' on screen and Select dead until Back) (node:test, tools/tv-keys-test.cjs)",
+        "case 4: tvKey(session{screen:'page', a page with items, reading:false}, 'select', {hintInFlight:true}) -> calls [] ; with hintInFlight:false -> exactly one call {url:'/api/hint'} and local {hintInFlight:true}; same guard on screen 'hint' stage 1 'select' at focus 0 (stage-2 call) (node:test, tools/tv-keys-test.cjs)",
+        "case 5: lingaOwns(s) is true for every 'linga-*' screen and for tonight+english, false for tonight+maths and every other screen; tvKey(s,'select') for any lingaOwns(s) session -> an empty step (the TV's own map never fires under Linga) (node:test, tools/tv-keys-test.cjs)",
+        "case 6: keyOf maps ArrowUp/Down/Left/Right, Enter, Backspace, Escape, m, M and ' ' to up/down/left/right/select/back/back/menu/menu/play and anything else to null; tvKey(any non-lesson screen, 'play') -> timer.start when paused, timer.pause when running; on 'lesson' -> lesson.pause toggle (node:test, tools/tv-keys-test.cjs)",
+        "GUARD: for every cell of profileRows(draft) for a high-school and an 'other' draft, tvKey(profile, up/down/left/right) yields exactly the focus flat(rows, r+-1, c) / flat(rows, r, c+-1) gives today (green before by design once the module exists: the profile screen is already the shared-rows pattern) (node:test, tools/tv-keys-test.cjs)",
+        "GUARD: the transpiled output of desk/src/tv/keys.ts and desk/src/tv/mathsRows.ts contains no require of lib/session/store or lib/session/learners (the TV stays free of node:fs; types only via `import type`) (node:test, tools/tv-keys-test.cjs). Playwright journey optional, not part of the gate: the overlay's TV capture (next dev --webpack, seeded DESK_DATA_DIR) walking landing -> tonight -> topics"
+      ],
+      "premise": [
+        "desk/src/app/tv/page.tsx:76-190 - the whole D-pad is one 115-line keydown closure inside a useEffect with 22 `case` branches; no suite under tools/ loads app/tv/page.tsx or tests a key (grep of tools/*.cjs for 'src/tv' finds only writingRows in essay-rules-test.cjs:19)",
+        "desk/src/tv/screens.tsx:3-4 - the file says it draws from `focus` and 'the D-pad logic that changes them lives in app/tv/page.tsx': every focus layout is written twice, once per file",
+        "desk/src/tv/screens.tsx:80-82,92,104-105 vs desk/src/app/tv/page.tsx:90-94 - Landing's five stops (0-2 modules, 3-4 actions) written in both files",
+        "desk/src/tv/screens.tsx:238-242 vs desk/src/app/tv/page.tsx:100-101,108-113 - Tonight's stop count (continue card + two doors) recomputed in both, each calling continueCard and re-deriving `off`",
+        "desk/src/tv/screens.tsx:485 renders ESSAY_TYPES; desk/src/app/tv/page.tsx:164 posts a hard-coded ['structure','argument','evidence','language'][f]; desk/src/lib/library/lessons.data.ts:26-31 and desk/src/lib/rules/essay.ts:50-55 hold two more copies of the same four lenses",
+        "desk/src/tv/screens.tsx:650 and desk/src/app/tv/page.tsx:125-127 - the profile screen is the one screen that already shares its stops (profileRows/locate/flat, desk/src/tv/profileRows.ts:51-66): 1 of 13 focusable screens; 12 duplicate (landing, tonight, learner, units, calendar, hint, sentence, essaytype, playbook, recap, topics, walk)",
+        "desk/src/app/tv/page.tsx:30,70,174-176 - `busy` is set on topic Select, reset only when the screen stops being 'topics'; the call is `.catch(() => {})` and its 500 is never read, so a failed /api/practice (desk/src/app/api/practice/route.ts:16-19 returns 500) leaves the 'Still writing' caption and a dead Select (`sel && !busy`)",
+        "desk/src/app/tv/page.tsx:153,157 - Select on the page and 'Still stuck' on the hint fire /api/hint on every press with no in-flight guard; each call is a model call and a hint.set that adds to log.hints (desk/src/lib/session/store.ts:159)",
+        "desk/src/app/tv/page.tsx:44,79,203,207 - the predicate `s.screen.startsWith(\"linga\") || (s.screen === \"tonight\" && s.subject === \"english\")` is written four times",
+        "desk/src/english/LingaTV.tsx:155-190 - Linga already renders and navigates from ONE actions list (label, help, go) that the caption and the keydown both read: the in-repo precedent this card extends to the other 22 screens",
+        "tools/linga-rules-test.cjs:1-9 - the loader that transpiles desk TS with desk's own typescript and resolves '@/'; a .ts module with `import type` only from store loads in node without the store"
+      ],
+      "rollback": "Three commits (test, extract keymap + stops, switch screens to stops) touch only the TV folder, the new suite and one appended package.json script; no session event, route or persisted JSON changes, so `git revert` of the series restores page.tsx's inline handler exactly and leaves no data behind.",
+      "gate": "none",
+      "runner_up": "Split screens.tsx (815 lines, 22 screens plus Rail/Path/Sheets helpers) into per-module files (maths, essay, common) with continueCard/topicStates/Path's math moved into pure row modules - real, but a file move whose benefit is weaker than making the keys testable.",
+      "body": "## Summary\nThe TV's D-pad is a 115-line closure with 22 branches that no test can reach, and 12 of 13 focusable screens write their focus layout twice - once in screens.tsx to draw `data-focused`, once in page.tsx to move and select. Extract it into `desk/src/tv/keys.ts`: `keyOf(e.key)`, `tvKey(session, key, local) -> { events, calls, local }` and one `stops(s)` list per screen that the renderer draws from, exactly as the profile screen (profileRows) and Linga (its actions list) already do.\n\n## Description\npage.tsx keeps only the executor: map the key, call tvKey, post the events in order, fire the calls, apply the local patch (and the call's onFail patch). The per-screen stop lists (landing, tonight via continueCard moved into `desk/src/tv/mathsRows.ts`, learner, essaytype from ESSAY_TYPES, playbook, hint, sentence, recap, topics, units, calendar, walk) are pure functions of the session; screens.tsx reads `stops[focus]` instead of re-counting. Two defects the extraction makes testable are fixed on the way: the stuck `busy` after a failed practice set, and the unguarded /api/hint on repeated Select. `lingaOwns(s)` replaces the four copies of the Linga predicate. Nothing is imported at runtime from lib/session/store or learners: types only.\n\n## Flow\n- keydown -> keyOf -> tvKey(s, key, {busy, table, hintInFlight}) -> {events, calls, local}\n- runStep posts events in order, fires calls, applies local, and on a failed call applies its onFail patch\n- screens.tsx: `const stops = tonightStops(s)` -> `data-focused={stops[focus] === 'teach'}`; the same list bounds the keymap's moves\n\n## Expected impact\nEvery TV screen's navigation becomes a node:test case instead of a screenshot; a new screen or a new stop is one list edited, not two files kept in lockstep. The operator's /cx walk and the next challenge card on this surface (see slot B) can write key behaviour as failing tests first. Two live defects close: a failed set no longer freezes the topics screen, and a double press no longer spends two model calls and double-counts hints.\n\n## Evaluation\nClaim: the D-pad becomes one tested module and the duplicated focus layouts collapse to one list per screen.\nBefore: 0 of 8 acceptance cases pass (keys.ts and mathsRows.ts do not exist; cases 3 and 4 also describe behaviour today's handler gets wrong); 12 of 13 focusable screens duplicate their stops; 0 D-pad tests.\nAfter: 8 of 8; 13 of 13 screens read one stop list; the keymap has a suite in test:rules.\nMethod: gate - acceptance cases written as failing tests first, then `cd desk && npm test`, plus the overlay's Playwright TV capture for a TV screen change.\nResult: better\nGate: none",
+      "evidence": "page.tsx keydown: lines 76-190; `case \"` count inside 88-187 = 22 (landing pair joined tonight learner profile units calendar page hint lesson sentence headtohead essaytype forensic playbook xray break topics practice walk recap). ScreenFor 214-240: the same 22.\nDuplicated stop counts (render vs key): landing screens.tsx:82 `focus < 3 ? MODULES[focus]` / page.tsx:91 `if (f < 3) ... move(3, 1)`; tonight screens.tsx:239 `const off = cont ? 1 : 0` / page.tsx:101 `const off = cont ? 1 : 0, N = 2 + off`; essaytype screens.tsx:485 `ESSAY_TYPES.map` / page.tsx:163-164 `move(4, 1)` + `[\"structure\", \"argument\", \"evidence\", \"language\"][f]`; playbook screens.tsx:551 four plays / page.tsx:167 `move(4, 1)`; learner screens.tsx:631 `focus === s.profiles.length` / page.tsx:117 `const n = s.profiles.length + 1`; hint 394-395 / 156 `move(2, ..)`; sentence 440 / 160; recap 603 / 186; topics 739 / 171 `move(SYLLABUS.length, ..)`.\nShared already: screens.tsx:650 `const rows = profileRows(d), at = locate(rows, focus)` and page.tsx:125 `const rows = profileRows(s.draft), at = locate(rows, f)`.\nStuck busy: page.tsx:174-176 `setBusy(true); post({ type: \"topic.open\", topic: t.id }); call(\"/api/practice\", { topic: t.id }).catch(() => {});` and page.tsx:70 `if (s && s.screen !== \"topics\") setBusy(false)`; practice/route.ts:18 `return NextResponse.json({ error: String(e) }, { status: 500 })`.\nUnguarded hint: page.tsx:153 `if (sel && p.items[s.itemIx]) call(\"/api/hint\", {});` page.tsx:157 `if (f === 0 && s.hint?.stage === 1) call(\"/api/hint\", { stage: 2 })`; store.ts:159 `hints: s.log.hints + 1` per hint.set.\nLinga predicate x4: page.tsx:44, 79, 203, 207.\nTests: `grep -n \"src/tv\" tools/*.cjs` -> only tools/essay-rules-test.cjs:19 (writingRows). No test imports app/tv/page.tsx.\nNeighbour note for the store's owner (not in this write set): a stage-2 hint adds 2 to log.hints (hint.set store.ts:159 then hint.stage store.ts:160, both dispatched by api/hint/route.ts:18-19).",
+      "critic": {
+        "verdict": "build",
+        "ambition": 4,
+        "grounding": 5,
+        "falsifiability": 5,
+        "deck_line": "Approve: the TV's D-pad becomes a tested module, twelve screens stop keeping two focus layouts in lockstep, and a failed practice set no longer freezes Topics."
+      }
+    },
+    {
+      "context": "tv-surface",
+      "host": "tv-surface",
+      "slot": "B",
+      "lens": "ux-elevation",
+      "title": "The marked sheet as one picture you act on: jump to a slip, six more, resume",
+      "size": "M",
+      "effort": 6,
+      "impact": 8,
+      "risk": 5,
+      "write_set": [
+        "desk/src/lib/session/store.ts",
+        "desk/src/tv/sheetRows.ts",
+        "desk/src/tv/mathsRows.ts",
+        "desk/src/tv/screens.tsx",
+        "desk/src/app/tv/page.tsx",
+        "desk/src/design/on-air.css",
+        "desk/src/app/phone/page.tsx",
+        "tools/tv-sheet-test.cjs",
+        "desk/package.json",
+        "docs/STUDY-DESK-SCREENS.md"
+      ],
+      "new_files": [
+        "desk/src/tv/sheetRows.ts",
+        "desk/src/tv/mathsRows.ts",
+        "tools/tv-sheet-test.cjs"
+      ],
+      "shared_surfaces": [
+        "desk/package.json"
+      ],
+      "acceptance": [
+        "case 1: reduce(session with practice {topic:'linear-one-step', marked:false, six items}, {type:'practice.marked', items with verdicts [right, wrong, right, unsure, right, right]}) -> screen 'sheet', focus 1 (the first item to look at), walkIx 0, practice kept (node:test, tools/tv-sheet-test.cjs, DESK_DATA_DIR under the OS temp dir)",
+        "case 2: the same with six 'right' verdicts -> screen 'sheet', focus 6 (the first action, 'Six more'), because there is nothing to look at (node:test, tools/tv-sheet-test.cjs)",
+        "case 3: sheetTiles(practice) -> six tiles of exactly {n, verdict, slip?} in item order, verdict 'unsure' when missing; no tile carries a question text, studentAnswer or any answer key, and sheetStops(practice) -> ['item0'..'item5','more','away'] (node:test, tools/tv-sheet-test.cjs)",
+        "case 4: sheetKey(session{screen:'sheet', focus:3}, 'select') -> events [{type:'walk',ix:3},{type:'nav',screen:'walk',focus:0}]; sheetKey(session{screen:'walk', walkIx:3}, 'back') -> [{type:'nav',screen:'sheet',focus:3}] and NO practice.clear (today page.tsx:184 clears the marked set on Back) (node:test, tools/tv-sheet-test.cjs)",
+        "case 5: sheetKey(session{screen:'sheet', focus:6 ('more'), practice.topic:'linear-two-step'}, 'select') -> events [{type:'topic.open',topic:'linear-two-step'}], calls [{url:'/api/practice', body:{topic:'linear-two-step'}}], local {busy:true} - one press from the marked sheet to a new set on the same topic, which makeItems aims at the learner's recorded slips (node:test, tools/tv-sheet-test.cjs)",
+        "case 6: sheetKey(session{screen:'sheet'}, 'back') -> [{type:'nav',screen:'tonight',focus:0}] with the practice kept, and continueCard(that session after the nav) -> {go:'sheet'}; sheetKey(sheet focus 7 ('away'), 'select') -> [{type:'practice.clear'}] and continueCard -> null or the page card (node:test, tools/tv-sheet-test.cjs)",
+        "case 7: sheetKey(session{screen:'practice', practice unmarked}, 'back') -> [{type:'nav',screen:'tonight',focus:0}] with no practice.clear, and continueCard -> {k:'Still open', go:'practice'} (today page.tsx:178 clears the set, so the 'Still open' card is reachable only by side doors) (node:test, tools/tv-sheet-test.cjs)",
+        "GUARD: tools/maths-rules-test.cjs 'marking grades on the server from the question alone, and the marked set carries no answer either' stays green, and keysIn(getSession().practice) after practice.marked includes no 'answer' or 'solution' (node:test). Playwright journey optional, not part of the gate: the overlay's TV capture of the sheet screen with a seeded marked practice in a scratch DESK_DATA_DIR, checked against On Air (one band, no prose outside the caption, nothing under 28 px)"
+      ],
+      "premise": [
+        "desk/src/lib/session/store.ts:177 - practice.marked sends the TV straight to screen 'walk' at walkIx 0: the set is met one item at a time from item 1, whatever the verdicts",
+        "desk/src/app/tv/page.tsx:179-185 - on the walk only Left/Right step one item, Select works only on the last item, and Back posts practice.clear: leaving the walk throws the marked set away",
+        "desk/src/app/tv/page.tsx:178 - Back on the unmarked practice poster also posts practice.clear before going to topics",
+        "desk/src/tv/screens.tsx:118-137 - continueCard offers 'Finish the set' (unmarked) and 'Carry on walking the set' (marked, walkIx < len-1); with Back clearing the set in both places, neither card is reachable from the D-pad, only via a break, a page snap or session.end",
+        "desk/src/tv/screens.tsx:788-789,812 - how the set went (right / to look at) exists only as two counts in the ticker; desk/src/app/phone/page.tsx:273-279 shows the same two counts on the phone. No screen draws the six verdicts together",
+        "desk/src/tv/screens.tsx:811 - 'Finish the set' is the walk's only action and leads to Tonight via practice.clear (page.tsx:183, store.ts:179 sets topic null)",
+        "desk/src/lib/desk/items.ts:91 - makeItems reads the learner's recorded slips for the topic, so a new set on the same topic is already aimed at tonight's mistakes; the TV has no door to it from the marked set",
+        "desk/src/lib/library/syllabus.ts:28,38,48 - three topics; from the last walked item a new set on the same topic takes Select (Finish) + 1-2 Right on Tonight (2 when a sheet makes the continue card lead, screens.tsx:239) + Select + k Right on Topics (k in 0..2, page.tsx:173 opens topics at focus 0) + Select = 4 to 7 presses, after first walking to the last item",
+        "desk/src/lib/session/store.ts:33-54 - PracticeItem has no answer field and `shown` strips one arriving on an event: a picture of the verdicts cannot put an answer on screen",
+        "docs/DESIGN-ON-AIR.md 'Composition rules' and memory 'TV, not a book' - a verdict is a picture, prose only in the caption, at most two actions: the sheet screen is six verdict marks, one caption, two actions",
+        "desk/src/tv/screens.tsx:791 and desk/src/design/on-air.css:150-156 - band placements already used by practice (spine) and walk (gauge); the sheet takes a placement neither uses"
+      ],
+      "rollback": "Series: test, store (Screen 'sheet' + practice.marked target), sheetRows + mathsRows, screen + CSS, keys. Reverting restores walk-first marking and Back-clears. One residue: a session.json saved while on 'sheet' would render blank after the revert - press Reset session on the bench (or Back is dead); no learner data (learners.json) is touched.",
+      "gate": "contract",
+      "runner_up": "The phone follows the TV (rider phone-surface): a pure phoneFollow(prev, next, {role, screen, dirty}) that moves the phone to capture / practice / paste / profile on the TV's asks, never while the phone holds unsent work - none of the 8 non-Linga hand-offs moves the phone today; the learner picks one of 9 tabs (phone/page.tsx:339), with a button on the joined screen for two of them (:198-200).",
+      "body": "## Summary\nWhen a practice set comes back marked, the TV drops the learner into item 1 of a one-at-a-time walk; how the set went is two numbers in a ticker, Back throws the set away, and doing six more on the same topic takes 4-7 presses through Tonight and Topics. Add a marked-sheet screen: the six verdicts as one picture, focus already on the first item to look at, Select opens that item in the walk, one action for six more on the same topic, one to put the sheet away - and Back parks the set so Tonight's continue card resumes it.\n\n## Description\nStore: Screen gains 'sheet'; practice.marked lands on 'sheet' with focus = the first wrong/unsure item (or the 'Six more' action when all are right). Pure logic in `desk/src/tv/sheetRows.ts`: sheetTiles (n, verdict, slip id - no text, no answer), sheetStops, firstToLook, sheetKey (the D-pad for sheet, walk and practice). continueCard moves to `desk/src/tv/mathsRows.ts` (shared with slot A) and gains the marked branch `go: 'sheet'`. The walk's Back and its last-item action return to the sheet at that item; the practice poster's Back parks instead of clearing. 'Six more' reuses topic.open + /api/practice exactly as Topics does, so the set is generated by the existing makeItems, already aimed at the learner's slips. The screen is On Air: a new band placement, six marks (right = white rule, look again = red block, unsure = dashed, as .verdict already draws them), the caption names the focused item, two actions, no prose outside the caption, no answers anywhere. If slot A lands first, sheetKey folds into tvKey and the cases are unchanged.\n\n## Flow\n- phone sends the worked sheet -> practice.marked -> TV on 'sheet', focus on the first slip\n- Left/Right over the six marks, Select -> the walk at that item; Back from the walk -> the sheet at that item\n- Down to the actions: 'Six more on <topic>' -> topic.open + /api/practice (Topics shows its existing preparing caption) ; 'Put the sheet away' -> practice.clear\n- Back from the sheet or the poster -> Tonight, set kept; the continue card resumes it\n\n## Expected impact\nThe learner sees in one glance which of the six went wrong, reaches a slip in one press instead of stepping through right answers, and closes the practice loop (mark -> look -> go again on the same topic) from the screen where the evidence is, in 2 presses instead of 4-7 plus the walk to the end. Leaving no longer destroys a marked set, so the continue card the screen already designed for resume becomes reachable.\n\n## Evaluation\nClaim: the marked set becomes a picture the learner acts on, the same-topic retry is one door, and Back parks instead of discarding.\nBefore: 0 of 8 acceptance cases pass (no 'sheet' screen, no sheetRows/mathsRows module, Back clears in page.tsx:178 and :184); presses from the last walked item to a new same-topic set: 4-7.\nAfter: 8 of 8; presses from the sheet to a new same-topic set: 2 (Down, Select).\nMethod: gate - acceptance cases written as failing tests first, then `cd desk && npm test` and the overlay's Playwright TV capture.\nResult: better\nGate: contract - the session's Screen union gains 'sheet' and practice.marked targets it. Consumers: desk/src/lib/session/store.ts (reduce, persisted session.json - an old 'walk' value stays valid), desk/src/app/tv/page.tsx (ScreenFor, keydown, the spoken line at :59), desk/src/app/phone/page.tsx (TV_WORDS :21-27, the talk-back check :275 stays on 'walk'), desk/src/english/LingaTV.tsx (navigates only to linga-*, pair, sentence - unaffected), uat/driver/linga-text.cjs (Linga screens only - unaffected). A new TV screen is inside the map description ('every TV screen, its rows and focus').",
+      "evidence": "store.ts:177 `case \"practice.marked\": if (s.practice) { n.practice = { ...s.practice, items: e.items.map(shown), marked: true }; n.walkIx = 0; n.screen = \"walk\"; } break;`\npage.tsx:178 `case \"practice\": { if (back) post({ type: \"practice.clear\" }).then(() => nav(\"topics\")); break; }`\npage.tsx:181-184 `if (k === \"ArrowRight\") post({ type: \"walk\", ix: s.walkIx + 1 }); ... if (sel && s.walkIx === items.length - 1) post({ type: \"practice.clear\" }); if (back) post({ type: \"practice.clear\" });`\nstore.ts:179 `case \"practice.clear\": n.practice = null; n.topic = null; n.screen = \"tonight\"; n.focus = 0;`\nscreens.tsx:120 `if (s.practice && !s.practice.marked) return { k: \"Still open\", ...` and :125 `if (s.practice?.marked && s.walkIx < s.practice.items.length - 1) return { k: \"Half walked\", ...` - both require a practice that every D-pad exit from practice/walk clears.\nscreens.tsx:812 ticker `<b>{right}</b> right ... <b>{look}</b> to look at` - the only place the whole set's outcome appears on the TV; phone/page.tsx:278 `{right} right. {look ? `${look} to look at.` ...}`.\nitems.ts:91 `const slips = me.skills[topicId]?.slips ?? [];` feeding ask(...) at :99.\nPress count, last walked item -> new set on topic k: Select (page.tsx:183) -> Tonight focus 0; Right x1 (x2 if a maths page puts the continue card first, page.tsx:101) -> Select (page.tsx:111 nav topics, focus 0) -> Right x k (k = 0..2 over 3 topics, syllabus.ts:28/38/48) -> Select (page.tsx:174) = 4..7.\nNo answer can reach the sheet: store.ts:36-41 PracticeItem {n, question, studentAnswer?, studentWorking?, verdict?, slip?, said?}; store.ts:45-53 `shown` copies only those; maths-rules-test.cjs:127-134 asserts no 'answer'/'solution' after practice.marked.",
+      "critic": {
+        "verdict": "build",
+        "ambition": 4,
+        "grounding": 5,
+        "falsifiability": 4,
+        "deck_line": "Approve: six verdicts as one picture, a slip in one press, six more on the same topic in two, and a marked set that survives Back."
+      }
+    }
+  ]
+}

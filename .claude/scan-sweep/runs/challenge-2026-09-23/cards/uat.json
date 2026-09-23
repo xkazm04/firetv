@@ -1,0 +1,180 @@
+{
+  "host": "uat",
+  "riders": [
+    {
+      "name": "desk-tooling",
+      "checked": "Read tools/kpi-measure.cjs, tools/kpi-measure-test.cjs, tools/worktree-preflight.cjs and tools/package.json in full. Hypotheses traced: (1) mainCheckout() and same() are copied word for word in kpi-measure.cjs:67-72 and worktree-preflight.cjs:315-320; (2) coveredBy() (kpi-measure.cjs:18-21) counts a module as 'under test' when any tools/ file contains its path, so mentioning a path is enough to count; (3) tools/package.json is the telestrator Playwright/ws package ('type: module', pen/live scripts), not KPI tooling, so it is mis-mapped into this context. (1) and (2) are S-size, and the preflight/learner-book logic already has 11 node:test cases, so neither reaches the challenge floor. No card went to this rider. Both cards add a suite to desk/package.json test:rules after kpi-measure-test.cjs, so this rider's gate will run them."
+    }
+  ],
+  "files_read": [
+    "uat/driver/linga-text.cjs",
+    "uat/README.md",
+    "uat/env.md",
+    "uat/rubric.md",
+    "uat/references.md",
+    "uat/accepted-gaps.md",
+    "uat/characters/adela-17.md",
+    "uat/characters/jana-29.md",
+    "uat/characters/klara-13.md",
+    "uat/characters/lukas-24.md",
+    "uat/characters/martin-45.md",
+    "uat/characters/oksana-34.md",
+    "uat/characters/ondrej-16.md",
+    "uat/characters/petra-38.md",
+    "uat/characters/tomas-9.md",
+    "uat/characters/viktor-67.md",
+    "uat/journeys/J1-find-level.md",
+    "uat/journeys/J2-agree-topics.md",
+    "uat/journeys/J3-first-conversation.md",
+    "uat/journeys/J4-stuck.md",
+    "uat/journeys/J5-boundaries.md",
+    "tools/kpi-measure.cjs",
+    "tools/kpi-measure-test.cjs",
+    "tools/worktree-preflight.cjs",
+    "tools/package.json",
+    "uat/runs/2026-09-15-lt-recert2-goal/SUMMARY.md",
+    "uat/runs/2026-09-15-lt-recert2-goal/report.md (head)",
+    "uat/runs/2026-09-15-lt-recert2-beginners/SUMMARY.md",
+    "uat/runs/2026-09-15-lt/VERIFY.md",
+    "uat/runs/2026-09-15-lt/recertify.md",
+    "uat/runs/*/findings.json and per-Character *.json (counted with node, all five runs)",
+    "desk/src/english/LingaTV.tsx",
+    "desk/src/english/LingaPhone.tsx",
+    "desk/src/english/useEnglish.ts",
+    "desk/src/english/ReplyBox.tsx (head)",
+    "desk/src/lib/english/conversation.ts (action branches)",
+    "desk/package.json",
+    "tools/linga-rules-test.cjs (loader and fixtures)",
+    ".claude/scan-sweep/config.md",
+    ".claude/spark/config.md (Repo law)",
+    "C:/Users/kazda/kiro/ai-registry/skills/uat/SKILL.md (recertify, finding schema, LC)",
+    "C:/Users/kazda/kiro/ai-registry/skills/scan-sweep/references/challenge.md sections 1, 3, 4",
+    "C:/Users/kazda/kiro/ai-registry/skills/scan-sweep/references/lenses.md (Group: challenge)"
+  ],
+  "cards": [
+    {
+      "context": "uat",
+      "host": "uat",
+      "slot": "A",
+      "lens": "architecture-challenger",
+      "title": "LT driver reads the rendered TV and phone, not a hand-written mirror of them",
+      "size": "M",
+      "effort": 7,
+      "impact": 8,
+      "risk": 6,
+      "write_set": [
+        "uat/driver/linga-text.cjs",
+        "uat/driver/surface.cjs",
+        "tools/uat-surface-test.cjs",
+        "desk/package.json",
+        "uat/env.md",
+        "uat/README.md"
+      ],
+      "new_files": [
+        "uat/driver/surface.cjs",
+        "tools/uat-surface-test.cjs"
+      ],
+      "shared_surfaces": [
+        "desk/package.json"
+      ],
+      "acceptance": [
+        "case 1: a finished conversation on screen linga-recap with two moments ({said:'I am work in hotel', better:'I work in a hotel'} and a second one) -> surfaceOf(session).shown contains both `said` and both `better` strings, as the phone's 'From this rehearsal' list shows them (LingaPhone.tsx:168). Showing only '2 moments to keep' fails the case (tools/uat-surface-test.cjs, node:test, desk TS/TSX transpiled with desk's typescript, react-dom/server from desk/node_modules, DESK_DATA_DIR in the OS temp dir)",
+        "case 2: first visit (no placement, no check, screen linga) -> the offered ids include find-level, pick-level and choose-situation, and the phone section of shown names every eligibleScenes(profile, prefs) scene, because the phone renders the 'Or choose a situation' select (LingaPhone.tsx:164,174). The TV section names none (LingaTV.tsx:62) (tools/uat-surface-test.cjs)",
+        "case 3: screen linga-verdict with a check placement of three tasks -> shown contains each task's response and note, as the phone's 'What Linga saw' shows them (LingaPhone.tsx:148). The bare words 'what Linga saw in each task' fail the case (tools/uat-surface-test.cjs)",
+        "case 4: a matrix of 15 fixture sessions (first visit, check about, choose task, listen unrevealed, listen revealed, verdict, plan ask-goal, plan topics, talk, talk quiz open, paused, moment, coach, recap, scenes). In every state, each offered action id maps to a control in that state's rendered TV or phone markup, and each rendered control is either mapped or named in BY_DESIGN_UNMAPPED (Learning map, Phone setup, Help with a sentence, Repeat audio). Strays: 0 (tools/uat-surface-test.cjs)",
+        "case 5: a listen task with revealed=false -> task.line appears only in the 'heard from the TV' channel and in neither rendered screen text. With revealed=true it also appears in the TV text (LingaTV.tsx:97) (tools/uat-surface-test.cjs)",
+        "case 6: judgePayload(record) for a step whose shown is 5,000 characters -> the judge gets the text whole, or cut with an explicit '[... N more characters not shown]' marker. A silent slice fails the case, where linga-text.cjs:414 does shown.slice(0, 3000) today (tools/uat-surface-test.cjs)"
+      ],
+      "premise": [
+        "uat/driver/linga-text.cjs:208-264 - surface() is a 57-line hand-written text rendering of the TV and phone. It reads session fields itself and never renders LingaTV.tsx or LingaPhone.tsx",
+        "uat/driver/linga-text.cjs:266-304 and :306 - a 39-line action->command switch plus a separate 36-id ACTIONS enum: three hand lists (offers, bindings, enum) that must agree with each other and with two components",
+        "uat/runs/2026-09-15-lt/VERIFY.md:44-50 - drift 1: the driver listed situations on the first-visit home and the TV did not. 5 findings were refuted and 8 more had to be scoped, and this became the run's third-ranked theme",
+        "uat/driver/linga-text.cjs:239 - the recap shows only counts ('N replies; M moments to keep'), while desk/src/english/LingaPhone.tsx:166-168 lists every moment's said -> better and why once the conversation is finished (drift 2)",
+        "counted with node over uat/runs: 24 recap findings ('the recap gives no learning takeaway') across 2026-09-15-lt, -recert and -recert2-beginners. 13 of the 24 came from conversations with 1-3 moments that the phone listed and the driver did not show. The -recert2-beginners run has 4 of 4 such findings",
+        "uat/runs/2026-09-15-lt/recertify.md:39 - 'The recap counts replies and moments but gives the learner no English to keep' was carried to the next drain as 'still open', on driver-blind evidence",
+        "desk/src/english/LingaPhone.tsx:170-174 - on a first visit the phone renders a select of every eligible situation ({pick}). linga-text.cjs:257,262 offers situations only behind 'Menu · Choose a situation'. The VERIFY fix brought the driver in line with the TV and hid a real phone affordance (drift 3, in the other direction)",
+        "uat/driver/linga-text.cjs:227 - the verdict says 'what Linga saw in each task.' with no content, while LingaPhone.tsx:148 renders each task's band, kind, verdict, prompt, response and note (drift 4)",
+        "uat/driver/linga-text.cjs:414 - the judge reads shown.slice(0, 3000). Per recertify.md:35 the earlier 900-character cut 'marked four Characters down' for topics they could see; the cut is still silent, only larger",
+        ".claude/scan-sweep/config.md:34 - the only gate on uat/driver is `node --check`. The /uat skill's LC phase asks for 'a keyless scripted provider that tests the harness itself' (ai-registry/skills/uat/SKILL.md:126)",
+        "desk/package.json test:rules and tools/linga-rules-test.cjs:4-8 - the suites already transpile desk TS with desk's own typescript through a require hook. react and react-dom 19.2.8 are desk dependencies, so server-rendering the two components in node needs no new package"
+      ],
+      "rollback": "Three commits: (1) add surface.cjs with its suite, (2) switch linga-text.cjs to call it, (3) append the suite to test:rules and update the docs. Reverting (2) puts the old closure surface back with nothing else changed. The committed run artefacts under uat/runs are never rewritten.",
+      "gate": "policy-tighten",
+      "runner_up": "A pure desk offer module (desk/src/lib/english/screens.ts) that LingaTV, LingaPhone and the driver all consume. It is the truer single source, but it rewrites two On Air surfaces (L, architecture)",
+      "body": "## Summary\nThe LT driver judges Linga through a text copy of the screens that it writes by hand. That copy has drifted from the real TV and phone four times, and each drift turned into findings that were not true: a theme that had to be refuted, a recap gap carried as 'still open', a phone situation picker the Characters never saw, and a verdict with its evidence missing. This card makes the driver render the real LingaTV and LingaPhone components (react-dom/server, in-process, as the rules suites already load desk TS) and read their text and controls. From then on a drift is a failing test or a counted line in the run report, not something found in a verification pass later.\n\n## Description\nuat/driver/surface.cjs exports surfaceOf(session) -> {screen, shown, heard, offered, unmapped}. `shown` is the text of renderToStaticMarkup(LingaTV) and renderToStaticMarkup(LingaPhone) for the session, in TV and Phone sections, with collapsed <details> marked as tap-to-open. `heard` is the one audio channel no markup carries: the question, listen line or partner line the TV speaks. `offered` comes from one table: each row is an action id, the rendered control labels it matches, what it needs (text/option/band/topicId/sceneId) and the englishCommand it sends. An action is offered only when its control is in this render. Rendered controls with no row are returned as `unmapped` and counted in report.md under 'Driver coverage'. linga-text.cjs loses surface(), run() and ACTIONS (about 97 lines) and gains a .tsx require hook (jsx: react-jsx). judgePayload() stops cutting screens silently. No product file changes, so the TV gate does not apply.\n\n## Flow\n- child() builds the session as today, then each step calls surfaceOf(getSession()) instead of the closure\n- The Character sees TV and phone text as the components render it, plus the heard line\n- The chosen action runs through the table's command. A choice with no rendered control is recorded as 'not-offered', as today\n- report.md gains one line: unmapped controls per screen (0 is the target) and not-offered picks\n- The judge reads each step whole, or with an explicit cut marker\n\n## Expected impact\nThis removes the class of finding that the operator had to refute or scope by hand: 13 in run 1 and 13 of 24 recap findings across three runs. The phone's first-visit situation picker becomes visible to the Characters. That is a real product question, where the driver hides it today. The next /uat drain then starts from findings the screens actually support. Driver changes get a gate beyond node --check.\n\n## Evaluation\nClaim: the driver's view of each Linga screen is derived from the rendered components, and every drift is a failing test or a counted report line\nBefore: 0 of 6 acceptance cases pass (surface() is a closure inside child() and cannot be imported. 4 drifts are documented, 13 of 24 recap findings were driver-blind, and the judge's cut is silent)\nAfter: 6 of 6\nMethod: gate - acceptance cases written as failing tests first\nResult: better\nGate: policy-tighten",
+      "evidence": "linga-text.cjs:239  `view(sc, \\`Rehearsal saved: ${c.title}. ${...} replies; ${(c.moments ?? []).length} moments to keep.\\`, [A('done', 'Done for now')])`\nLingaPhone.tsx:168  `{(c.moments??[]).length>0&&<div className=\"linga-transcript\"><b>From this rehearsal</b>{c.moments.map(m=>...“{m.said}” → “{m.better}”...<small>{m.why}</small>)}</div>}`\nnode count over uat/runs (recap findings, J3/J4, non-strength; conversations with >=1 moment): 2026-09-15-lt 2 of 11 · -recert 7 of 9 (adela 2, klara 3, oksana 3, ondrej 3, tomas 3, petra 2, viktor 3) · -recert2-beginners 4 of 4 (klara 2, petra 2, tomas 2, viktor 2) = 13 of 24\nLingaPhone.tsx:170-174 first visit: `<button>Find my level</button><SelfLevel .../>{pick}` where pick = `<select>...{eligibleScenes(profile,prefs,learning).map(x=><option>{x.name}</option>)}`\nlinga-text.cjs:257,262 first visit: actions find-level, pick-level, then 'Menu · Choose a situation'\nlinga-text.cjs:227 verdict: `...; what Linga saw in each task.` vs LingaPhone.tsx:148 `placement.tasks.map(t=><p><b>{t.band} · {KIND_WORD[t.kind]} · {VERDICT_WORD[t.verdict]}</b>{t.prompt}<br/>“{t.response}”<br/>{t.note}</p>)`\nVERIFY.md:48 'LT-lukas-24-J1-1, LT-oksana-34-J1-1, LT-ondrej-16-J1-1, LT-petra-38-J1-1, LT-tomas-9-J1-1 ... The driver's first-visit home listed every situation'\nlinga-text.cjs:414 `shown: shown.slice(0, 3000)`; git show f3542b5: was slice(0, 900), and 'four Characters were marked down for \"the added topic is not visible\"'\nconfig.md:34 `| uat/driver | node --check uat/driver/linga-text.cjs; ...`\ndesk/node_modules: react, react-dom present; no jsdom (static render only, no clicks)",
+      "critic": {
+        "verdict": "revise",
+        "ambition": 4,
+        "grounding": 4,
+        "falsifiability": 4,
+        "deck_line": "Same target as linga A (the driver stops judging a hand copy); approve only as the rendered-markup layer on top of linga A's view, not as a competing rewrite of surface()."
+      },
+      "critic_revise": "Sequence after linga A and consume it: `offered` (ids, needs, command) comes from lingaView(session).actions / VIEW_ACTION_IDS instead of a second hand table, while `shown` stays the renderToStaticMarkup text of LingaTV and LingaPhone; add desk/src/lib/english/view.ts as a read dependency and rewrite case 4 as 'every rendered control label matches a lingaView action and vice versa, strays 0'.",
+      "read_deps": [
+        "desk/src/lib/english/view.ts"
+      ],
+      "depends_on": [
+        "linga A"
+      ]
+    },
+    {
+      "context": "uat",
+      "host": "uat",
+      "slot": "B",
+      "lens": "ux-elevation",
+      "title": "One-command LT recertify: rerun open pairs, write back verdicts and deltas",
+      "size": "M",
+      "effort": 7,
+      "impact": 8,
+      "risk": 5,
+      "write_set": [
+        "uat/driver/linga-text.cjs",
+        "uat/driver/recertify.cjs",
+        "tools/uat-recertify-test.cjs",
+        "desk/package.json",
+        "uat/env.md",
+        "uat/README.md"
+      ],
+      "new_files": [
+        "uat/driver/recertify.cjs",
+        "tools/uat-recertify-test.cjs"
+      ],
+      "shared_surfaces": [
+        "desk/package.json"
+      ],
+      "acceptance": [
+        "case 1: plan('2026-09-15-lt-recert2-beginners') -> exactly {klara-13:[J3], petra-38:[J3,J4], tomas-9:[J3,J4], viktor-67:[J3,J4]}, 7 pairs from the open non-strength findings only. plan('2026-09-15-lt-recert') -> 26 pairs across 10 Characters (tools/uat-recertify-test.cjs, node:test, reads the committed run JSON, writes only to an OS-temp copy)",
+        "case 2: metricDelta('2026-09-15-lt', '2026-09-15-lt-recert') -> topic fit 209/405 (52%) -> 63/186 (34%), moment precision 3/3 -> 22/27. Both are computed from the per-Character JSON and equal the two runs' report.md metric lines (tools/uat-recertify-test.cjs)",
+        "case 3: confounds('2026-09-15-lt', '2026-09-15-lt-recert') -> one J2 start confound: 'after a real J1 for 5 of 10 Characters before, 0 of 10 after (fixture: level set by hand)'. This is the confound recertify.md:22-24 reasoned out by hand. confounds('2026-09-15-lt-recert', '2026-09-15-lt-recert2-goal') -> no J2 start confound (10 of 10 fixture in both runs) and one 'instrument not recorded' note, because neither run has run.json (tools/uat-recertify-test.cjs)",
+        "case 4: the stubbed judge (codexText replaced in the require cache, no codex process) returns prior rows for tomas-9 J3: LT-tomas-9-J3-1 not-seen and LT-tomas-9-J3-3 recurs -> in the temp copy of the originating findings.json, LT-tomas-9-J3-1 has resolution 'fixed' (never 'resolved-verified' at LT) with recertify_run and recertify_evidence, and LT-tomas-9-J3-3 stays 'open' with recurrence 2. The new run's matching finding carries recurs 'LT-tomas-9-J3-3' and recurrence 2 (tools/uat-recertify-test.cjs)",
+        "case 5: the judge prompt for a recertify pair carries exactly that pair's prior open finding ids, and the judge schema requires a prior[] row per id. When the judge omits an id, that id is 'not-evaluable' and never counted as fixed (tools/uat-recertify-test.cjs)",
+        "case 6: renderRecertify(...) writes recertify.md beside the ORIGINATING run with the sections 'Fixed (LT evidence)', 'Still open', 'Regressed', 'Metric deltas', 'Confounded - do not read as a regression' and 'New findings for the next drain'. Every row cites finding ids and names the run pair (tools/uat-recertify-test.cjs)"
+      ],
+      "premise": [
+        "C:/Users/kazda/kiro/ai-registry/skills/uat/SKILL.md:164 - recertify re-runs ONLY the affected character x journey and writes a diff report (resolved / still-open / regressed + metric deltas). Its artifacts live in the ORIGINATING run's dir, and resolutions are written back into that run's findings.json",
+        "SKILL.md:76 - a run that re-certifies prior findings must carry the prior ids forward. SKILL.md:78 - recurrence counts the cycles a gap came back in, and a recurring item outranks a new one of equal impact",
+        "uat/driver/linga-text.cjs:37-43 - the CLI takes only character names, --journeys and --run. There is no recertify mode and nothing reads a prior run",
+        "uat/driver/linga-text.cjs:95 - every finding is written with recurrence: 1, resolution: 'open', verdict: 'uncertain', whatever came before",
+        "counted with node: the three recertification runs (-recert 119, -recert2-goal 33, -recert2-beginners 38 = 190 findings) have 0 rows with recurrence > 1 and 0 rows with resolution 'fixed'. Each sits in a new run dir of its own, where the skill wants the originating run's dir",
+        "uat/runs/2026-09-15-lt/findings.json - 14 rows were set to 'fixed' by hand, and uat/runs/2026-09-15-lt/recertify.md:1-39 is a hand-written before/after table: cast chosen by hand (:3, :28), metric deltas typed in (:15, :32-33), and the confound reasoned out (:22-24)",
+        "counted with node: J2 started after a real J1 for 5 of 10 Characters in 2026-09-15-lt and for 0 of 10 in -recert (the per-journey `setup` array holds 'fixture: level set to X by hand'). That is the mechanical signal behind recertify.md:22-24's 'Topic fit fell from 52% to 34% ... Confounded'",
+        "finding ids are positional (linga-text.cjs:95 `LT-${character}-${j.id}-${i + 1}`): the same recap gap is LT-klara-13-J3-3 in 2026-09-15-lt and LT-klara-13-J3-1 in -recert. Ids alone cannot match across runs, so the judge must be shown the prior ids",
+        "uat/runs/*/ - no run carries an instrument record (driver hash, model, efforts, screen cap). The 900->3000 judge cut changed between -recert2-goal and the next run with no trace in the run dir. SKILL.md:126 asks for instrument identity on every dump",
+        "uat/README.md:63-67 names docs/uat-insights/ and docs/BACKLOG.md as drain homes, and neither exists in docs/. Five runs, zero drained: the operator stops at the hand-written recertify step"
+      ],
+      "rollback": "Three commits: (1) recertify.cjs with its suite (pure, nothing calls it yet), (2) --recertify in linga-text.cjs, the judge's prior[] field and run.json, (3) test:rules and the docs. Reverting (2) brings back today's CLI unchanged. A plain run without the flag gets the same judge schema minus prior[], so earlier run dirs stay readable. Nothing rewrites committed runs except an explicit --recertify invocation, and git restores those.",
+      "gate": "none",
+      "runner_up": "Run-level frequency: the synthesis recomputes frequency from how many Characters share a theme, so a single Character's repeated issue stops reaching rank 18 'blocker' (VERIFY.md:83)",
+      "body": "## Summary\nClosing the loop after a Linga fix takes the operator about five manual steps. They pick which Characters and journeys to rerun, launch a fresh run, read two reports side by side, type the before/after metrics, reason out confounds, and edit findings.json and recertify.md by hand. It has been done three times, and the /uat skill's own contract (rerun only the affected pairs, write resolutions back into the originating run, carry prior ids and recurrence) has never been met. `node uat/driver/linga-text.cjs --recertify 2026-09-15-lt-recert2-beginners` makes it one command. The run already holds the data; this card makes the driver read it.\n\n## Description\nuat/driver/recertify.cjs is a pure module over run directories. plan(prior) returns the Character x journey pairs with open non-strength findings. metricDelta(before, after) recomputes the rubric metrics from each run's per-Character JSON. confounds(before, after) flags a different journey start (real vs fixture, from `setup`), a different journey set, and a different instrument (a new run.json with driver sha256, model, efforts and judge screen cap). writeBack(prior, statuses) stamps the originating findings.json: not-seen -> 'fixed' (LT never claims 'resolved-verified'), recurs -> recurrence+1, missing -> 'not-evaluable'. renderRecertify() writes recertify.md beside the originating run, in the shape the operator already writes by hand. linga-text.cjs gains --recertify <id>. It runs plan()'s pairs, and each judge call gets that pair's prior findings with a required prior[] {id, status, evidence} in the schema. It also writes run.json on every run.\n\n## Flow\n- The operator lands a fix, then runs `--recertify <run>`\n- The driver reruns only the open pairs (7 for the beginners run, where all 10 Characters were rerun before)\n- The judge marks each prior id recurs / not-seen with step evidence\n- The originating findings.json is stamped, and recertify.md is written beside it with fixed / still open / regressed / deltas / confounds / new findings\n- /uat drain reads one table, not three documents\n\n## Expected impact\nThe fix -> proof cycle drops from a hand-written document to one command, at a fraction of the codex calls (7 pairs, where a full re-cast is 10 Characters x 2-4 journeys). Confounds like the 52% -> 34% topic-fit scare are flagged before anyone reads them as a regression. Recurrence becomes real, so an issue that keeps coming back outranks a new one, as the skill intends. Every run records its instrument, so a driver change such as the judge cut can no longer look like a product change.\n\n## Evaluation\nClaim: a recertification is one command whose output meets the skill's recertify contract and reproduces, from data, the numbers and confounds the operator has worked out by hand\nBefore: 0 of 6 acceptance cases pass (no module and no flag. 190 recertification findings with 0 recurrence > 1 and 0 written back)\nAfter: 6 of 6\nMethod: gate - acceptance cases written as failing tests first\nResult: better\nGate: none",
+      "evidence": "linga-text.cjs:39-42 `if (args[i] === '--journeys') ... else if (args[i] === '--run') runId = args[++i]; else only.push(args[i]);`\nlinga-text.cjs:95 `... verdict: 'uncertain', ... resolution: f.type === 'strength' ? 'n-a' : 'open', recurrence: 1, ...`\nnode over uat/runs: 2026-09-15-lt {open 69, fixed 14, n-a 70} · -recert 119 {open 74, n-a 45} recurrence>1: 0 · -recert2-goal 33 {open 12, n-a 21} recurrence>1: 0 · -recert2-beginners 38 {open 23, n-a 15} recurrence>1: 0\nnode over uat/runs: J2 from real J1 - 2026-09-15-lt 5, fixture 5 · -recert 0, fixture 10. Topic fit 209/405 52% -> 63/186 34%. Moments 3/3 -> 22/27. -recert2-goal 73/79 92%\nplan('-recert2-beginners') by node: petra-38 [J3,J4], viktor-67 [J3,J4], tomas-9 [J3,J4], klara-13 [J3]; plan('-recert'): 10 Characters, 26 pairs\nrecertify.md:24 'Topic fit fell from 52% to 34%. The re-run skipped J1 ... the fixture set only the level'\nSKILL.md:164 '... re-run **only** the affected `character × journey` ... Output: a diff report (resolved / still-open / regressed + the metric deltas) ... **Artifacts live in the ORIGINATING run's directory** ... write resolutions back into that run's findings.json'\nls uat/runs/*: SUMMARY.md, report.md, findings.json, <character>.json/.md (+ VERIFY.md, recertify.md in the first) - no run.json in any run\nls docs/: no BACKLOG.md, no uat-insights/",
+      "critic": {
+        "verdict": "build",
+        "ambition": 4,
+        "grounding": 5,
+        "falsifiability": 5,
+        "deck_line": "Approve: recertification becomes one command that reruns only the open pairs, stamps the originating run, and flags the confound the operator had to reason out by hand."
+      }
+    }
+  ]
+}

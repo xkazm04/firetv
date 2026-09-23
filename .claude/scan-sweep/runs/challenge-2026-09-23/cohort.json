@@ -1,0 +1,76 @@
+{
+  "cohort": [
+    {
+      "name": "linga",
+      "group": "desk-linga",
+      "files": 23,
+      "reason": "never challenged",
+      "riders": []
+    },
+    {
+      "name": "desk-pipelines",
+      "group": "desk-subjects",
+      "files": 21,
+      "reason": "never challenged",
+      "riders": []
+    },
+    {
+      "name": "uat",
+      "group": "tooling",
+      "files": 21,
+      "reason": "never challenged",
+      "riders": [
+        {
+          "name": "desk-tooling",
+          "files": 4
+        }
+      ]
+    },
+    {
+      "name": "tv-app",
+      "group": "telestrator",
+      "files": 15,
+      "reason": "never challenged",
+      "riders": [
+        {
+          "name": "companion",
+          "files": 1
+        },
+        {
+          "name": "telestrator-harness",
+          "files": 8
+        }
+      ]
+    },
+    {
+      "name": "tv-surface",
+      "group": "desk-surfaces",
+      "files": 10,
+      "reason": "never challenged",
+      "riders": [
+        {
+          "name": "phone-surface",
+          "files": 1
+        }
+      ]
+    },
+    {
+      "name": "engines",
+      "group": "desk-platform",
+      "files": 7,
+      "reason": "never challenged",
+      "riders": [
+        {
+          "name": "session",
+          "files": 4
+        },
+        {
+          "name": "library",
+          "files": 4
+        }
+      ]
+    }
+  ],
+  "eligible": 11,
+  "uncovered": 15
+}

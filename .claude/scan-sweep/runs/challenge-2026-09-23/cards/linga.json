@@ -1,0 +1,166 @@
+{
+  "host": "linga",
+  "riders": [],
+  "files_read": [
+    "desk/src/english/LingaPhone.tsx",
+    "desk/src/english/LingaTV.tsx",
+    "desk/src/english/LingaTestBar.tsx",
+    "desk/src/english/ReplyBox.tsx",
+    "desk/src/english/useEnglish.ts",
+    "desk/src/english/useEnglishAudio.ts",
+    "desk/src/lib/english/check.ts",
+    "desk/src/lib/english/conversation.ts",
+    "desk/src/lib/english/curriculum.ts",
+    "desk/src/lib/english/errors.ts",
+    "desk/src/lib/english/placement.ts",
+    "desk/src/lib/english/rules.ts",
+    "desk/src/lib/english/types.ts",
+    "desk/src/lib/rules/english.ts",
+    "desk/src/lib/desk/english.ts",
+    "desk/src/app/api/english/route.ts",
+    "desk/src/app/api/listen/route.ts",
+    "desk/src/app/api/speak/route.ts",
+    "desk/src/app/english/print/page.tsx",
+    "desk/src/design/linga.css",
+    "tools/linga-rules-test.cjs",
+    "tools/linga-ui-test.cjs",
+    "tools/linga-placement-sim.cjs",
+    "docs/LINGA-CONVERSATION-DESIGN.md",
+    "docs/LINGA-PLACEMENT-DESIGN.md",
+    "docs/LINGA-IMPLEMENTATION-PLAN.md",
+    "uat/accepted-gaps.md",
+    "uat/runs/2026-09-15-lt-recert2-goal/SUMMARY.md",
+    "uat/runs/2026-09-15-lt-recert2-beginners/SUMMARY.md",
+    "uat/runs/2026-09-15-lt-recert2-beginners/findings.json (J3/J4 help, recap and replay findings)",
+    "uat/runs/2026-09-15-lt-j1b/SUMMARY.md",
+    "uat/driver/linga-text.cjs (lines 1-60, 195-310)",
+    "desk/src/lib/session/store.ts (grep: Screen union, linga.changed, load/rehydrate)",
+    "desk/src/lib/session/learners.ts (grep: english namespace, saveEnglish)",
+    "desk/package.json (test scripts)",
+    ".claude/scan-sweep/config.md",
+    ".claude/spark/config.md (## Repo law)"
+  ],
+  "cards": [
+    {
+      "context": "linga",
+      "host": "linga",
+      "slot": "A",
+      "lens": "architecture-challenger",
+      "title": "One Linga screen model: TV, phone home, test bar and LT driver derive from it",
+      "size": "L",
+      "effort": 8,
+      "impact": 8,
+      "risk": 6,
+      "write_set": [
+        "desk/src/lib/english/view.ts",
+        "desk/src/english/LingaTV.tsx",
+        "desk/src/english/LingaPhone.tsx",
+        "desk/src/english/LingaTestBar.tsx",
+        "uat/driver/linga-text.cjs",
+        "tools/linga-rules-test.cjs"
+      ],
+      "new_files": [
+        "desk/src/lib/english/view.ts"
+      ],
+      "shared_surfaces": [
+        "uat/driver/linga-text.cjs (belongs to the uat context; coordinate with any uat card)"
+      ],
+      "acceptance": [
+        "case 1 (linga-rules-test): six fixture learners - a waiting conversation; a check stopped at stage 'tasks'; no placement; a placement and no plan; a plan with every topic started; a plan with an unstarted topic -> lingaView(session,{}).actions ids are ['carry-on','choose-situation'], ['carry-on-check','restart-check'], ['find-level','pick-level'], ['see-topics','choose-situation'], ['new-topics','talk-again'], ['start-talking','choose-situation'] respectively, and lingaHome(session) names the same six states the phone StartPanel renders",
+        "case 2 (linga-rules-test): a paused conversation -> the view's 'resume' action runs englishCommand action 'resume' (today the TV sends the 'pause' toggle); running it through englishCommand with the stub engine leaves c.paused false AND c.error ''",
+        "case 3 (linga-rules-test): a finished rehearsal with two moments -> viewText(lingaView(s)) contains both moments' said and better strings (the phone's 'From this rehearsal' list), not only the counts line the LT driver prints today",
+        "case 4 (linga-rules-test): linga-talk with c.quizOpen true -> view.answer is {action:'turn', lastTurnId: last partner turn id} (the phone keeps its ReplyBox during a quiz and the server accepts a turn); LingaTestBar's target() returns null there today",
+        "case 5 (linga-rules-test): parity sweep over ten fixture sessions -> every action a view offers either names an englishCommand action that the stubbed englishCommand accepts without 'Unknown ... action', or a nav to a member of the Screen union, or a declared local UI step (picker/menu); none is a free-form string",
+        "case 6 (linga-rules-test): the driver's decide enum is derived -> VIEW_ACTION_IDS exported by view.ts contains every id any fixture view returns, and uat/driver/linga-text.cjs builds its ACTIONS list from it (node --check plus a require of the id list in the test)",
+        "case 7 GUARD: (linga-rules-test) check stage 'about' -> view.spoken.line is the tutor's last question and blocked is false; a paused conversation -> view.spoken.blocked is true (moved verbatim from LingaTV.tsx:30-32, green before and after)",
+        "case 8 GUARD: (linga-rules-test) a 'choose' task view carries the two options and no index of the right one (the key stays in check.ts server memory)"
+      ],
+      "premise": [
+        "desk/src/english/LingaTV.tsx:40-165 - the whole TV screen model (tag, title, caption, captionTag, hero, actions) is a 126-line if/else chain inside the component; no test in tools/linga-rules-test.cjs can reach it",
+        "desk/src/english/LingaTV.tsx:49-75 - home decides six states: resume / check part-way / no placement / no plan / planDone / next topic",
+        "desk/src/english/LingaPhone.tsx:170-184 - the phone's StartPanel decides home again with three states only (no placement / no plan / next topic): no resume branch, no planDone branch, so a finished plan shows 'Next topic' on the phone and 'Every topic talked through' on the TV",
+        "uat/driver/linga-text.cjs:208-264 - surface() hand-writes a third copy of every Linga screen for the LT Character; :266-304 run() hand-maps action ids to commands; :306 ACTIONS is a hand list of 36 ids",
+        "desk/src/english/LingaTestBar.tsx:15-26 - target() is a fourth copy of 'what takes a typed answer on this screen'",
+        "desk/src/english/LingaTV.tsx:157 - paused conversation: 'Resume' runs cmd(\"pause\") (a toggle, conversation.ts:129, keeps c.error); uat/driver/linga-text.cjs:297 runs cmd('resume') (conversation.ts:123 clears error and re-routes the screen) - the LT tests a different command than the TV sends",
+        "uat/driver/linga-text.cjs:239 - recap text is 'Rehearsal saved: <title>. N replies; K moments to keep.' with one action 'done'; the phone shows each moment's said/better (LingaPhone.tsx:166-168) and the TV offers 'Another situation' and 'Learning map' (LingaTV.tsx:145)",
+        "uat/runs/2026-09-15-lt-recert2-beginners/SUMMARY.md theme 4 - 'Every J3 recap records activity without giving learners language to reuse' (4/4 Characters, backlog item 4, build) quotes exactly the driver's line-239 string: the finding was judged on the hand copy, which omits the phone's moment list",
+        "desk/src/english/LingaTestBar.tsx:24 - no answer target while c.quizOpen; desk/src/english/LingaPhone.tsx:63-65 renders ReplyBox during the quiz and uat/driver/linga-text.cjs:251 offers 'reply' during it: three surfaces, two answers",
+        "desk/src/english/LingaTV.tsx:107 vs uat/driver/linga-text.cjs:280 - 'See my topics' from the verdict: TV runs plan-open whenever a plan exists outside a check; the driver adds !planDone and runs plan-propose",
+        "desk/src/english/LingaTV.tsx:162 - the TV menu has 8 entries; the driver exposes 2 of them (:262)",
+        "uat/accepted-gaps.md:10 AG-4 - LT cannot see layout, so LT's only view of the product IS the driver's surface(); a drift there becomes a false or missing finding"
+      ],
+      "rollback": "Three commits: (1) view.ts plus its tests, unused; (2) LingaTV/LingaPhone/LingaTestBar render from it; (3) the driver consumes it. Each reverts on its own with git revert; no session, API or persisted learner shape changes, so nothing on disk depends on the new module.",
+      "gate": "architecture",
+      "runner_up": "Fold the pending-token lifecycle implemented twice (conversation.ts:28-32,109-115,166-189 and check.ts:59-63,76-88, plus required/line/object/schema helpers copied in both files) into one lib/english/operation.ts so a new model-backed action cannot forget the stale-response guard.",
+      "body": "## Summary\nLinga's screens are decided in four places that already disagree. Move the decision into one pure module, `lib/english/view.ts`: `lingaView(session, ui)` returns the TV's tag, title, caption, hero model, actions (each with an id and the command it runs), the line to speak and the answer target. LingaTV renders it, the phone's StartPanel and the PC test bar read its home state and answer target, and the LT driver prints it and derives its action list from it.\n\n## Description\nToday the TV's screen model is a 126-line if/else chain inside LingaTV.tsx (40-165), with nothing under test. The phone re-decides home with three of the TV's six states (LingaPhone.tsx:170-184). The PC test bar re-decides what takes a typed answer (LingaTestBar.tsx:15-26). The LT driver, the only eyes a text-live UAT run has (AG-4), hand-writes a third rendering of every screen and a hand list of 36 action ids (linga-text.cjs:208-306). Counted drift: (1) Resume on a paused scene sends 'pause' on the TV and 'resume' in LT; (2) the LT recap omits the phone's moment list, and the beginners run's theme 4 (4/4 Characters, a build item) quotes exactly that omitted string; (3) the test bar offers no answer during a quiz, while the phone and the driver do; (4) 'See my topics' from the verdict routes differently once a plan is done; (5) the phone home has no resume or plan-done state; (6) the driver exposes 2 of 8 menu entries. Every LT run, and every backlog drained from it, stands on the hand copy. So does every new Linga screen, which today has to be written four times.\n\n## Flow\n- view.ts: `lingaHome(s)` (six named states), `lingaView(s, ui)` -> `{screen, tag, title, caption, captionTag, hero:{kind,...data}, actions:[{id,label,help,run}], spoken, answer, recap}`, `viewText(view)` for the driver, and `VIEW_ACTION_IDS`.\n- LingaTV keeps only JSX for each hero kind (ladder, topics, comparison, choices, message, track, menu), plus key handling and the audio hook fed by `view.spoken`.\n- The LingaPhone StartPanel switches on `lingaHome`, and LingaTestBar uses `view.answer`.\n- linga-text.cjs: `surface()` = `viewText(lingaView(...))` plus the phone reply affordance from `view.answer`. `run()` executes `action.run`, and ACTIONS = VIEW_ACTION_IDS.\n- Gate: `cd desk && npm test`, `node --check uat/driver/linga-text.cjs`, and a Playwright capture of the Linga TV screens against a second dev server (config.md TV row).\n\n## Expected impact\nAn LT run judges what the TV and phone actually offer. Findings that come from the driver's copy stop reaching the backlog: the recap theme would have been judged against the moment list the phone already shows. The TV screen logic gets its first tests. A new Linga screen or action is written once. The ladder-help card (slot B) and any later Linga screen land in one place rather than four.\n\n## Evaluation\nClaim: one screen model removes the six counted drifts and makes the TV's screen logic testable\nBefore: 0 of 8 acceptance cases pass (cases 7-8 are GUARDs, green by construction once view.ts exists); 4 implementations of screen knowledge, 6 counted drifts\nAfter: 8 of 8; 1 implementation, 0 drifts in the parity sweep\nMethod: gate - acceptance cases written as failing tests first\nResult: better\nGate: architecture",
+      "evidence": "LingaTV.tsx:157 paused actions: [{label:\"Resume\",...,go:()=>cmd(\"pause\")},{label:\"Finish rehearsal\",...}] vs linga-text.cjs:297 `case 'resume': return cmd('resume');` -- conversation.ts:123 resume: commit({...c,pending:null,paused:false,capture:false,error:\"\"},screenFor(c)) vs :129 pause: commit({...c,paused:!c.paused,capture:false}).\nlinga-text.cjs:239 `Rehearsal saved: ${c.title}. ${...} replies; ${(c.moments ?? []).length} moments to keep.` , [A('done', 'Done for now')] -- LingaPhone.tsx:168 renders c.moments.map(m=> \"said\" -> \"better\" + why). grep 'Rehearsal saved' in uat/runs/2026-09-15-lt-recert2-beginners/{SUMMARY.md,findings.json}: 7 hits (LT-klara-13-J3-1, LT-petra-38-J3-2, LT-viktor-67-J3-5 ...).\nLingaTestBar.tsx:24 `... && !c.quizOpen && ...` return {action:'turn'} -- LingaPhone.tsx:63-65 quiz buttons then <ReplyBox .../> unconditionally -- conversation.ts turn path has no quizOpen guard (sets quizOpen:false at :183).\nLingaTV.tsx:107 cmd(l.plan&&lc?.stage!==\"verdict\"?\"plan-open\":\"plan-propose\") vs linga-text.cjs:280 l.plan && k?.stage !== 'verdict' && !cur.planDone(l) ? 'plan-open' : 'plan-propose'.\nLingaPhone.tsx:170-184: {!placement? ... : !learning.plan? ... : <Next topic>} (3 states) vs LingaTV.tsx:51-75 resume/checking/!placement/!plan/planDone/else (6 states).\nCounts: LingaTV chain lines 40-165 = 126; driver surface 208-264 = 57 lines, run 266-304 = 39 lines, ACTIONS :306 = 36 ids; test bar target 15-26 = 12 lines; tools/linga-rules-test.cjs has 0 tests importing LingaTV logic.",
+      "critic": {
+        "verdict": "build",
+        "ambition": 5,
+        "grounding": 5,
+        "falsifiability": 4,
+        "deck_line": "Approve: Linga's screens decided once, tested for the first time, and the LT driver stops judging a hand copy that has already produced refuted findings."
+      }
+    },
+    {
+      "context": "linga",
+      "host": "linga",
+      "slot": "B",
+      "lens": "ux-elevation",
+      "title": "Help that answers the question on screen: a code-run rescue ladder per turn",
+      "size": "M",
+      "effort": 6,
+      "impact": 8,
+      "risk": 5,
+      "write_set": [
+        "desk/src/lib/english/help.ts",
+        "desk/src/lib/english/conversation.ts",
+        "desk/src/lib/english/types.ts",
+        "desk/src/english/LingaTV.tsx",
+        "desk/src/english/LingaPhone.tsx",
+        "uat/driver/linga-text.cjs",
+        "tools/linga-rules-test.cjs"
+      ],
+      "new_files": [
+        "desk/src/lib/english/help.ts"
+      ],
+      "shared_surfaces": [
+        "uat/driver/linga-text.cjs (uat context; also in slot A's write set - build A first or rebase B onto it)"
+      ],
+      "acceptance": [
+        "case 1 (linga-rules-test, stub engine): the turn stub returns reply 'Which date do you need?' with help {simpler:'What day do you come?', meaning:'date: the day, like Friday', starter:'I need the room on …'}; three 'cue' commands -> c.cue walks simpler, then meaning, then starter; c.help.rung is 1, 2, 3; c.supported is false, false, true",
+        "case 2 (linga-rules-test): the Tomas case. Turn 1's partner line asks the dog's name (ladder A) and one cue reveals A.simpler. Turn 2's partner line asks about the ball (ladder B). A cue now -> c.cue is B.simpler and never any ladder-A text or the scene's static cue",
+        "case 3 (linga-rules-test): a reply sent after rung 2 at most -> the turn's learner record and its observations carry supported:false (help that supplied no wording can still earn independent evidence). A reply after rung 3 -> supported:true",
+        "case 4 (linga-rules-test): withholding. Right after the turn commits, JSON.stringify(getSession()) contains none of the three ladder strings. After one cue it contains only the simpler line (unrevealed rungs stay in server memory, like check.ts's answer keys)",
+        "case 5 (linga-rules-test): a malformed ladder (starter 'I need a room for Friday.' is a complete sentence; simpler equals the partner line) -> the bad rungs are dropped by help.ts. The turn still commits its partner reply and evidence. With every rung invalid, cue falls back to scene.cue with supported:true (today's behaviour)",
+        "case 6 (linga-rules-test): the 'cue' command makes zero engine calls (the stub's call counter is unchanged). A ladder lost to a server restart (help map cleared) falls back to scene.cue",
+        "case 7 GUARD: (linga-rules-test) the stub replies with no help field, as every existing test does -> cue gives scene.cue with supported:true; the quiz, moment and coach tests stay green unchanged"
+      ],
+      "premise": [
+        "desk/src/lib/english/conversation.ts:134-135 - 'cue' commits cue:scene.cue, one static string per scene contract, whatever the partner just asked, and always sets supported:true",
+        "desk/src/lib/english/curriculum.ts:17,23,29 and check.ts:150 - every built-in scene and every generated plan topic carries exactly one 'Try: ...' cue",
+        "desk/src/lib/english/conversation.ts:183 - a new partner turn clears cue to '', so the next 'Give me a cue' re-supplies the same scene.cue",
+        "uat/runs/2026-09-15-lt-recert2-beginners/SUMMARY.md theme 1 and backlog item 1 - 'Help loses track of the current question', all 3 of 3 J4 Characters, ranked first",
+        "uat/runs/2026-09-15-lt-recert2-beginners/findings.json LT-tomas-9-J4-1 - '#3, #6 and #8 repeat \"Try: Hi! What is your dog's name?\" despite #5 saying \"His name is Pip.\"'; LT-petra-38-J4-2 - booking-number cue repeated after the number was given; LT-viktor-67-J4-1 - the same weather cue for questions about contents, colours and weather",
+        "same SUMMARY theme 3 - no J4 Character demonstrates an independent reply; LT-tomas-9-J4-6 and LT-viktor-67-J4-6 - every reply is supported:true because the only help available marks every reply supported (conversation.ts:135, rules.ts:30 independent needs !supported)",
+        "docs/LINGA-CONVERSATION-DESIGN.md:53 - the designed rescue is a ladder: 'repeat -> slower/paraphrased line -> meaning cue -> phrase starter -> model-and-retry'; :152 - simpler paraphrases are 'labelled distinctly'",
+        "desk/src/lib/english/conversation.ts:18,20,22 - openingSchema, turnSchema and replaySchema already produce the partner line in one model call, which can return that line's ladder at no extra call",
+        "desk/src/lib/english/check.ts:17-19 - precedent: a choose task's key lives in server memory because 'the session reaches every screen'",
+        "desk/src/english/LingaTV.tsx:150-151 - the TV already puts c.cue in the caption slot under the tag 'A little support' (On Air: the hint is the caption)",
+        "uat/accepted-gaps.md:7-11 - AG-1..AG-5 cover pronunciation, scores, C2, LT reach and codex; none rejects contextual help, and LINGA-IMPLEMENTATION-PLAN.md rejects nothing"
+      ],
+      "rollback": "Two commits: (1) help.ts with its tests and the schema fields, which are optional and ignored when absent; (2) the cue action plus the TV and phone labels. git revert of (2) restores the static cue. Conversation.help is an optional session field and store.ts:191 spreads old conversations unchanged, so a saved session loads under either version.",
+      "gate": "contract",
+      "runner_up": "Recap that hands back the language: the TV recap shows the rehearsal's moments as a said/better pair and one phrase to reuse, instead of counts (LingaTV.tsx:139-145), with the phone's list (LingaPhone.tsx:166-168) as the source.",
+      "body": "## Summary\nWhen a learner is stuck, 'Give me a cue' hands back the same scene-level line on every turn. Linga should answer the question actually on the screen, one step at a time. Each partner line comes with its own three-rung rescue ladder: said more simply, what it means, a way to start. Code reveals one rung per request, decides which rung makes the reply supported, and keeps the unrevealed rungs off the session.\n\n## Description\nThe cue is `scene.cue` (conversation.ts:134-135), a single 'Try: ...' per scene or plan topic. The LT beginners run found stale help for 3 of 3 stuck Characters, and ranked it first: Tomas was asked for the dog's name three times after naming Pip, Petra was asked for the booking number again, and Viktor got weather help for colours. Because the only help also marks the reply supported (:135), a learner who needs any help can never earn independent evidence (rules.ts:30), which is theme 3 of the same run. The design already specifies the ladder (LINGA-CONVERSATION-DESIGN.md:53). Opening, turn and replay each already produce the partner's line in one model call. The same call returns that line's ladder: simpler (a shorter question in common words, no answer supplied), meaning (the unknown word explained, for a beginner possibly in their own language), and starter (an incomplete opening ending in an ellipsis). help.ts validates it: the simpler line must be shorter than the partner line and different from it, the starter must be short and unfinished, and a rung that fails is dropped. The ladder is kept in server memory keyed by partner turn. The rules decide in code, the model only phrases: rungs are revealed in order, and only the starter makes the reply supported. The TV caption tag names the rung ('Said more simply', 'What it means', 'A way to start'). The phone button reads 'Help me answer', then 'More help'. After the last rung, 'Choose a phrase' stays the recognition fallback.\n\n## Flow\n- The partner speaks, and its ladder is validated and stored server-side under the turn id.\n- Learner taps 'Help me answer': code reveals rung 1 in the caption, and the reply stays unsupported.\n- Taps again: rung 2. Again: rung 3, and from then on the reply is supported.\n- The next partner line brings a new ladder, so help cannot go stale.\n- With no ladder (old stub, restart, invalid rungs), the cue falls back to today's scene.cue.\n\n## Expected impact\nHelp stops going stale on the path every stuck beginner takes, which was the top-ranked finding of the latest LT run. Learners who only needed the question said more simply keep independent credit, so 'On your own' becomes reachable for the learners who ask for help, and supported is no longer the only way through. A cue costs no extra model call or wait, where a separate help call on the CLI engine would take 17-52 s (LINGA-IMPLEMENTATION-PLAN.md:52). The starter rung withholds more than today's full 'Try:' sentences.\n\n## Evaluation\nClaim: help answers the current partner turn, walks a code-ordered ladder, and leaves early-rung replies unsupported\nBefore: 0 of 7 acceptance cases pass (case 7 is a GUARD, green before by design); cue text is identical across turns in 3 of 3 J4 transcripts\nAfter: 7 of 7\nMethod: gate - acceptance cases written as failing tests first\nResult: better\nGate: contract (Conversation gains optional `help:{forTurn,rung}` and cue text now varies per turn; consumers: desk/src/english/LingaTV.tsx, desk/src/english/LingaPhone.tsx, desk/src/english/LingaTestBar.tsx (reads conversation, unaffected), uat/driver/linga-text.cjs, desk/src/lib/session/store.ts load at :191, POST /api/english response body)",
+      "evidence": "conversation.ts:134-135:\n  if(action===\"cue\"||action===\"quiz\"){\n    commit({...c,supported:true,cue:scene.cue,quizOpen:action===\"quiz\"},\"linga-talk\");return getSession();\n  }\nconversation.ts:183 (turn) sets cue:\"\" -- then the next cue re-commits scene.cue.\nrules.ts:30 const independent = spoken.filter(e=>!e.supported);\nconversation.ts:178 validateObservations(...,{...,supported:c.supported,...}) -- the supported flag from the cue flows into evidence.\nfindings.json LT-tomas-9-J4-1 evidence: \"#3, #6 and #8 repeat \\\"Try: Hi! What is your dog's name?\\\" despite #5 saying \\\"His name is Pip.\\\"\"; LT-viktor-67-J4-1: \"#5 pairs \\\"What color are they?\\\" with \\\"Try: It is sunny. These are my flowers.\\\" The mismatch repeats at #9, #16\"; LT-petra-38-J4-2: \"#4 asks \\\"which arrival date do you need?\\\" ... #5 still offers \\\"Try: Could you say the booking number again?\\\"\".\nSUMMARY (recert2-beginners) backlog 1: 'Make help answer the current difficulty' build, Petra/Tomas/Viktor = 3/3 J4 Characters.\ncheck.ts:17-19 const keys = g.__lingaKeys ??= new Map<string, number>(); // 'Server memory only: the session reaches every screen.'\nDesign: LINGA-CONVERSATION-DESIGN.md:53 'Offer repeat -> slower/paraphrased line -> meaning cue -> phrase starter -> model-and-retry'.",
+      "critic": {
+        "verdict": "build",
+        "ambition": 4,
+        "grounding": 5,
+        "falsifiability": 5,
+        "deck_line": "Approve: help follows the partner's current question, costs no extra model call, and stops marking every helped reply as supported."
+      }
+    }
+  ]
+}

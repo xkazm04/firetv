@@ -60,3 +60,7 @@ pathspec-scoped commits. Two more for this skill:
   ElevenLabs; a test that needs an engine stubs it at the `provider` seam.
 
 ## Skill improvement log
+
+- 2026-09-23 (first --challenge run): both coordinator fixes were regressions every gate passed - a stricter engine schema turning a dropped optional moment into a failed Linga turn, and a job layer whose new error sentence the phone still prefixed. Both were in the builder's own "notes", not in any red gate. Read every builder's notes for a behaviour change before starting the next wave.
+- 2026-09-23: `desk/src/lib/session/store.ts`, `desk/src/tv/screens.tsx` and `uat/driver/linga-text.cjs` are in almost every desk card's write set; twelve cards needed six waves. Expect it, and let the scouts see the cohort's other hosts so two hosts do not propose the same move (two duplicate pairs this run, both resolved by the critic as revise-into-increment).
+- 2026-09-23: the TV Playwright gate could not run for any card: the main checkout's `desk/node_modules` lacks `@next/env` (and had no `.bin`), and worktrees link to it. Every TV card substituted a server-side render. Fix the install before the next run that touches a TV screen.

@@ -1,0 +1,191 @@
+{
+  "host": "tv-app",
+  "riders": [
+    {
+      "name": "companion",
+      "checked": "Read companion/index.html in full (440 lines). Traced pairing, the reconnect path, the mirror, the scrub bar and the transport buttons. Side finding: onclose reconnects every 1 s even after a welcome with accepted=false (index.html:147-152 vs :158-163), so a phone with a stale PIN retries forever; that is an S for stabilize. Card B lands here: drawn-moment ticks on the scrub bar and previous/next drawing buttons."
+    },
+    {
+      "name": "telestrator-harness",
+      "checked": "Read all 8 files in full (live-ui-test, relay-test, relay-stub, pen-sim, latency-probe, device, tail-diag, dev.ps1). Security finding, not challenge-sized: GET /health returns the pairing PIN (Health.kt:12, served at LanTransport.kt:110), and pen-sim.mjs:25, latency-probe.mjs:24, tail-diag.mjs:73 and live-ui-test.mjs:94 all pair by reading it. Any LAN client can do the same, so the PIN check at PenSessionHost.kt:66 protects nothing on LAN. The fix is S-M for stabilize: the harness reads the PIN from logcat, as relay-test.mjs:164 already does. No harness card, because every harness tool needs a device and a builder here has none. Card B adds one operator-run journey check to live-ui-test.mjs."
+    }
+  ],
+  "files_read": [
+    "tv-app/build.gradle.kts",
+    "tv-app/src/main/AndroidManifest.xml",
+    "tv-app/src/main/kotlin/dev/telestrator/tv/Health.kt",
+    "tv-app/src/main/kotlin/dev/telestrator/tv/MainActivity.kt",
+    "tv-app/src/main/kotlin/dev/telestrator/tv/Overlay.kt",
+    "tv-app/src/main/kotlin/dev/telestrator/tv/PenSessionHost.kt",
+    "tv-app/src/main/kotlin/dev/telestrator/tv/Qr.kt",
+    "tv-app/src/main/kotlin/dev/telestrator/tv/RenderStats.kt",
+    "tv-app/src/main/kotlin/dev/telestrator/tv/Session.kt",
+    "tv-app/src/main/kotlin/dev/telestrator/tv/Thumbnailer.kt",
+    "tv-app/src/main/kotlin/dev/telestrator/tv/transport/LanTransport.kt",
+    "tv-app/src/main/kotlin/dev/telestrator/tv/transport/PenTransport.kt",
+    "tv-app/src/main/kotlin/dev/telestrator/tv/transport/RelayTransport.kt",
+    "tv-app/src/main/res/values/strings.xml",
+    "tv-app/src/main/res/values/themes.xml",
+    "companion/index.html",
+    "tools/live-ui-test.mjs",
+    "tools/relay-test.mjs",
+    "tools/relay-stub.mjs",
+    "tools/pen-sim.mjs",
+    "tools/latency-probe.mjs",
+    "tools/device.mjs",
+    "tools/tail-diag.mjs",
+    "scripts/dev.ps1",
+    "core/build.gradle.kts",
+    "core/src/main/kotlin/dev/telestrator/core/Annotation.kt",
+    "core/src/main/kotlin/dev/telestrator/core/ContentRect.kt",
+    "core/src/main/kotlin/dev/telestrator/core/History.kt",
+    "core/src/main/kotlin/dev/telestrator/core/HitTest.kt",
+    "core/src/main/kotlin/dev/telestrator/core/PenEngine.kt",
+    "core/src/main/kotlin/dev/telestrator/core/Protocol.kt",
+    "core/src/main/kotlin/dev/telestrator/core/Smoothing.kt",
+    "core/src/main/kotlin/dev/telestrator/core/Timeline.kt",
+    "core/src/test/kotlin/dev/telestrator/core/CoreTest.kt",
+    "core/src/test/kotlin/dev/telestrator/core/PenToolsTest.kt (test names)",
+    "settings.gradle.kts",
+    "gradle/libs.versions.toml (grep)",
+    "README.md",
+    "docs/POC-FINDINGS.md",
+    "docs/PLATFORM-RISK.md",
+    "docs/DESIGN-ON-AIR.md (scope, lines 1-30)",
+    "docs/STUDY-DESK-SCREENS.md:38-52",
+    "docs/DESK-PROTOTYPE-PLAN.md:38-60",
+    ".claude/scan-sweep/config.md",
+    ".claude/spark/config.md (Repo law)",
+    "context-map.json (tv-app, companion, telestrator-harness, pen-core)"
+  ],
+  "cards": [
+    {
+      "context": "tv-app",
+      "host": "tv-app",
+      "slot": "A",
+      "lens": "architecture-challenger",
+      "title": "Move the pen conversation into core as a sans-IO state machine",
+      "size": "M",
+      "effort": 6,
+      "impact": 7,
+      "risk": 5,
+      "write_set": [
+        "core/src/main/kotlin/dev/telestrator/core/PenConversation.kt",
+        "core/src/test/kotlin/dev/telestrator/core/PenConversationTest.kt",
+        "tv-app/src/main/kotlin/dev/telestrator/tv/PenSessionHost.kt",
+        "tv-app/src/main/kotlin/dev/telestrator/tv/Session.kt",
+        "docs/PLATFORM-RISK.md"
+      ],
+      "new_files": [
+        "core/src/main/kotlin/dev/telestrator/core/PenConversation.kt",
+        "core/src/test/kotlin/dev/telestrator/core/PenConversationTest.kt"
+      ],
+      "shared_surfaces": [
+        "tv-app/src/main/kotlin/dev/telestrator/tv/PenSessionHost.kt (card B also edits it: one line that adds marks to the heartbeat state; land A first)"
+      ],
+      "acceptance": [
+        "case 1 (JUnit core PenConversationTest): PairingDesk(pin=\"4821\", videoAspect=16/9); a conversation opened at 0 ms gets onText('{\"type\":\"undo\"}') -> [] and isPaired=false; then onTick(4_999) -> []; then onTick(5_000) -> [Send(Welcome(sessionId=\"\", accepted=false, reason=\"no pairing message\")), Close(\"no pairing message\")]",
+        "case 2 (JUnit core): onText(hello with pin \"0000\") -> [Send(Welcome(accepted=false, reason=\"wrong PIN\")), Close(\"wrong PIN\")]; a later onTick(10_000) -> [] (the timeout never rejects the same pen a second time)",
+        "case 3 (JUnit core): onText(hello with pin \"4821\" and clientId \"pen-a\") -> [Send(Welcome(sessionId=\"s-1\", videoAspect=16/9, accepted=true)), Paired(\"pen-a\", 1)]; then onText('{\"type\":\"undo\"}') -> [Deliver(PenMessage.Undo)]; then onTick(60_000) -> [] (a paired pen is never timed out)",
+        "case 4 (JUnit core): two conversations on one desk; A pairs (generation 1), then B pairs (generation 2). A.onText('{\"type\":\"clear\"}') -> [] and A.isCurrent=false; B.onText('{\"type\":\"clear\"}') -> [Deliver(PenMessage.Clear)] (the newest pen wins)",
+        "case 5 (JUnit core): after pairing, onText('{\"type\":\"ping\",\"id\":7}') -> [Send(Pong(7))], and the result contains no Deliver",
+        "case 6 (JUnit core): after pairing, onText(\"{not json\") -> [] and no exception",
+        "case 7 (JUnit core PenConversationTest, Heartbeat section): the input is paused, t=5000, doc D1 -> Beat(doc=Doc(rev, D1), thumbnailAtMs=5000). The same input again -> Beat(doc=null, thumbnailAtMs=null). t=5150 with D1 -> thumbnailAtMs=null (same 200 ms bucket). t=5250 -> thumbnailAtMs=5250. Playing -> doc=null and thumbnailAtMs=null. Paused again with D1 -> doc=Doc(rev, D1) (the mirror is re-sent after playback)",
+        "GUARD: case 8 (JUnit core): Beat.state copies t, paused, rate, annotationCount, canUndo, canRedo and durationMs from the input unchanged, has thumbnail=null, and encodes with \"type\":\"state\" and no null, as ProtocolTest already asserts for TvMessage.State"
+      ],
+      "premise": [
+        "tv-app/build.gradle.kts:80-82 - the only test dependencies are androidTestImplementation. There is no testImplementation, and tv-app/src contains only main/, so tv-app has no JVM test source set",
+        "tv-app/src/main/kotlin/dev/telestrator/tv/PenSessionHost.kt:50-56 - hello watchdog: rejects after HELLO_TIMEOUT_MS (5 s, :166) if the pen has not paired",
+        "PenSessionHost.kt:64-71 - before pairing, non-hello messages are ignored, and a wrong PIN gets a reject plus close",
+        "PenSessionHost.kt:76-89 - pairing bumps the shared generation, sends Welcome(\"s-<gen>\") and starts the heartbeat",
+        "PenSessionHost.kt:93 - an older pen whose generation is stale stands down, and its messages are dropped silently",
+        "PenSessionHost.kt:96-99 - ping is answered on the receive path; everything else goes to session.accept",
+        "PenSessionHost.kt:131-136 - the doc mirror is sent only while paused and only when the doc instance changed; playback resets it",
+        "PenSessionHost.kt:140-147 - a thumbnail is sent once per 200 ms bucket (THUMB_BUCKET_MS, :168), only while paused",
+        "PenSessionHost.kt:3 and :32 - the only Android ties are android.util.Log and the Thumbnailer, which wraps MediaMetadataRetriever (Thumbnailer.kt:5). The channel it talks to, PenChannel, is a plain interface (transport/PenTransport.kt:22-31)",
+        "core/src/test: 46 @Test (CoreTest.kt 13, PenToolsTest.kt 33). None covers pairing, generation, ping or heartbeat, because that logic is not in core",
+        "tools/live-ui-test.mjs:312-319 - the wrong-PIN refusal is the only one of these behaviours asserted anywhere, and only on a device. docs/POC-FINDINGS.md:72 puts the live stage at ~60 s with an emulator",
+        "docs/PLATFORM-RISK.md:170 - 'Everything that carries meaning - pairing, dispatch, the state and document heartbeat - moved into PenSessionHost'",
+        "docs/PLATFORM-RISK.md:153 - core/ is the layer that 'ports' to a Vega/TS shell, so the meaning sits in the one module that does not port",
+        "docs/STUDY-DESK-SCREENS.md:44 - the desk reuses this contract ('pairing by QR + PIN, the WebSocket ... the state heartbeat'), and today no tested reference implementation of it exists"
+      ],
+      "rollback": "Three commits: (1) core PenConversation plus Heartbeat and their tests, purely additive; (2) PenSessionHost delegates to them; (3) the PLATFORM-RISK.md row. The wire format is unchanged, so reverting (2) alone restores the old host, and reverting all three leaves core exactly as before.",
+      "gate": "none",
+      "runner_up": "Confine PenEngine to one thread with a single session inbox drained by the frame loop. Today Session.accept runs on the main thread (MainActivity.kt:199-201) and from the pen receive loop (PenSessionHost.kt:99) over the unsynchronized lists at PenEngine.kt:49/56, and the StateFlow at Session.kt:24-25 conflates rapid transport commands such as a double frame-step.",
+      "body": "## Summary\nMove the pen conversation out of the Android module into core as a sans-IO state machine. The conversation covers pairing, the hello timeout, newest-pen-wins, ping, dispatch, and the heartbeat's choice of what to send each tick. The new pieces are `PairingDesk` (PIN, video aspect, generation counter), `PenConversation` (`onText(text)` and `onTick(nowMs)` return effects: `Send`, `Close`, `Deliver`, `Paired`) and `Heartbeat` (`beat(input)` returns an optional doc mirror, an optional thumbnail request and the state message). `PenSessionHost` shrinks to a coroutine driver: text and ticks go in, effects are carried out, and logging and the Thumbnailer stay on the Android side.\n\n## Description\nPenSessionHost.kt holds eleven behaviours: hello timeout, non-hello ignored, wrong-PIN reject, generation bump with welcome, stale-pen stand-down, ping on the receive path, dispatch, disconnect accounting, doc mirror gating, thumbnail bucketing, and the 400 ms state. None has a JVM test, because tv-app has no unit-test source set. Only the wrong-PIN refusal is asserted anywhere, by the device-bound live UI test. PLATFORM-RISK.md says the meaning moved into PenSessionHost and that core is what ports, so the meaning sits in the one module that does not port. The logic touches Android only through Log and the Thumbnailer, so moving it costs a small effects vocabulary and no new dependency: core stays kotlinx-serialization only, with no coroutines.\n\n## Flow\n- LanTransport or RelayTransport hands PenSessionHost a PenChannel (unchanged)\n- Host creates `PenConversation(desk, openedAtMs)`; a watchdog coroutine calls `onTick(now)` once at the timeout\n- `receiveLoop` feeds each frame to `onText`; the host carries out the effects: `Send` -> channel.send(encode), `Close` -> channel.close, `Deliver` -> session.accept, `Paired` -> penConnected, log line and heartbeat start\n- The heartbeat loop builds a `HeartbeatInput` from Session, calls `beat`, fetches a thumbnail on Dispatchers.IO only if `thumbnailAtMs != null`, and sends doc then state\n- `finally` stays in the host (penDisconnected)\n\n## Expected impact\nEleven behaviours get 8 JUnit cases in `:core:test`, which runs in about 6 s with no device, instead of a ~60 s emulator run that covers one of them. PenSessionHost goes from 170 lines to roughly 70 lines of plumbing. A builder in this harness, which has no emulator, can now verify pairing and heartbeat changes. A Vega port, and the desk's reuse of the same contract, get a tested reference rather than Android code to reverse-engineer.\n\n## Evaluation\nClaim: the TV's pen protocol logic becomes JVM-tested and portable with no change to the wire.\nBefore: 0 of 8 acceptance cases pass (the classes do not exist). 0 of 11 host behaviours have a JVM test.\nAfter: 8 of 8. `:tv-app:compileDebugKotlin` is green with the host delegating.\nMethod: gate - acceptance cases written as failing tests first\nResult: better\nGate: none",
+      "evidence": "tv-app/build.gradle.kts:80-82 -> androidTestImplementation(libs.androidx.test.junit) / (libs.espresso.core) / (libs.uiautomator); no testImplementation. `find tv-app/src -maxdepth 1` -> tv-app/src/main only.\ngrep -c @Test core/src/test/...: CoreTest.kt 13, PenToolsTest.kt 33 (total 46, matching README.md:43); grep PenConversation|generation|Pong in core/src/test -> 0 hits for pairing/generation (ProtocolTest covers encode/decode only).\nPenSessionHost.kt:50-56 `val watchdog = launch { delay(HELLO_TIMEOUT_MS); if (paired == null) { ... reject(channel, \"no pairing message\") } }`\nPenSessionHost.kt:66-71 `if (msg.pin != session.pin) { ... reject(channel, \"wrong PIN\") ...}`\nPenSessionHost.kt:93 `if (generation.get() != myGeneration) return@receiveLoop`\nPenSessionHost.kt:132 `if (session.paused && current !== lastDoc) {`\nPenSessionHost.kt:140 `val thumbKey = if (session.paused) session.mediaTimeMs / THUMB_BUCKET_MS else Long.MIN_VALUE`\nAndroid imports in PenSessionHost.kt: only `android.util.Log` (:3) plus the Thumbnailer parameter (:32).\nPLATFORM-RISK.md:153 `core/ ... | yes | No Android imports at all ... direct port to TS` vs :170 `Everything that carries meaning ... moved into PenSessionHost`.",
+      "critic": {
+        "verdict": "revise",
+        "ambition": 4,
+        "grounding": 4,
+        "falsifiability": 5,
+        "deck_line": "Approve after the citation fix: eleven untested pen-protocol behaviours become 8 JVM cases in :core:test with no change to the wire."
+      },
+      "critic_revise": "Correct the two doc citations: docs/PLATFORM-RISK.md:71 (meaning moved into PenSessionHost) and :54 (core/ ports to TS), not :170 and :153."
+    },
+    {
+      "context": "tv-app",
+      "host": "tv-app",
+      "slot": "B",
+      "lens": "ux-elevation",
+      "title": "Review mode: drawn moments on the scrub bar, one tap to jump to each",
+      "size": "M",
+      "effort": 7,
+      "impact": 8,
+      "risk": 6,
+      "write_set": [
+        "core/src/main/kotlin/dev/telestrator/core/Timeline.kt",
+        "core/src/main/kotlin/dev/telestrator/core/Protocol.kt",
+        "core/src/main/kotlin/dev/telestrator/core/TransportPlan.kt",
+        "core/src/test/kotlin/dev/telestrator/core/ReviewModeTest.kt",
+        "tv-app/src/main/kotlin/dev/telestrator/tv/MainActivity.kt",
+        "tv-app/src/main/kotlin/dev/telestrator/tv/Session.kt",
+        "tv-app/src/main/kotlin/dev/telestrator/tv/PenSessionHost.kt",
+        "companion/index.html",
+        "tools/live-ui-test.mjs",
+        "README.md"
+      ],
+      "new_files": [
+        "core/src/main/kotlin/dev/telestrator/core/TransportPlan.kt",
+        "core/src/test/kotlin/dev/telestrator/core/ReviewModeTest.kt"
+      ],
+      "shared_surfaces": [
+        "tv-app/src/main/kotlin/dev/telestrator/tv/PenSessionHost.kt (card A rewrites it; B's edit is one field on the state message, landed after A into Heartbeat's input)"
+      ],
+      "acceptance": [
+        "case 1 (JUnit core ReviewModeTest): a doc with a stroke at fromMs 5000, an arrow at 5200, a stroke at 12000 and a name tag at 12040 -> AnnotationTimeline(doc).moments() == [5000, 12000]. Anchors within 500 ms cluster into one moment, taking the earliest",
+        "case 2 (JUnit core): with the same doc, momentAfter(0) == 5000; momentAfter(5000) == 12000 (sitting on a moment moves to the next one); momentAfter(12000) == null",
+        "case 3 (JUnit core): momentBefore(12000) == 5000; momentBefore(20000) == 12000; momentBefore(5100) == null",
+        "case 4 (JUnit core): PenEngine gets a stroke at 5000, then Undo -> AnnotationTimeline(engine.doc).moments() == []; then Redo -> [5000]. Erased or undone ink leaves no moment behind",
+        "case 5 (JUnit core): TransportPlan.plan(cmd=\"jump\", value=1.0, positionMs=0, durationMs=20000, playing=true, doc) -> [Pause, SeekTo(5000)]. plan(\"jump\", 1.0, positionMs=12000, ...) -> [] (no later drawing, nothing moves). plan(\"jump\", -1.0, positionMs=12000, ...) -> [Pause, SeekTo(5000)]",
+        "GUARD: case 6 (JUnit core): the arithmetic MainActivity.kt:180-198 performs today moves unchanged. plan(\"step\", 1.0, positionMs=5000) -> [Pause, SeekTo(5040)]; plan(\"seek-\", 0.0, positionMs=3000) -> [SeekTo(0)]; plan(\"rate\", 3.0) -> [SetRate(2.0)]; plan(\"toggle\", 0.0, playing=true) -> [Pause]; plan(\"undo\") -> [Edit(PenMessage.Undo)]",
+        "case 7 (JUnit core): TvMessage.State(t=0, paused=true, rate=1.0, annotationCount=2, marks=listOf(5000, 12000)).encode() contains \"marks\":[5000,12000]. Decoding '{\"type\":\"state\",\"t\":1,\"paused\":true,\"rate\":1.0,\"annotationCount\":0}' with ProtocolJson gives marks == [] (older senders still decode)",
+        "case 8 (tools/live-ui-test.mjs, operator-run on a device via scripts/dev.ps1, not in the builder gate): after the step-3 stroke and the step-5 seek away, clicking #btn-mark-prev -> /health t within 100 ms of the drawn moment, paused=true, and ink px back above 60% of the drawn count"
+      ],
+      "premise": [
+        "core/src/main/kotlin/dev/telestrator/core/Timeline.kt:9-10 - the timeline only answers what is visible at t. Nothing lists the moments that carry drawings, although every annotation has fromMs (Annotation.kt:32-34)",
+        "core/src/main/kotlin/dev/telestrator/core/Protocol.kt:95-106 - TvMessage.State carries t, paused, rate, annotationCount, canUndo, canRedo, durationMs and thumbnail, but not where the drawings are",
+        "companion/index.html:117-120 and :412-426 - the scrub bar is a bare 0..1000 range with a seconds label and no marks. :106-108 frame step and :111-115 rates are the only other ways to move",
+        "companion/index.html:196-198 - while playing, the phone drops its mirrored doc (tvDoc = null), so during playback the viewer has no way to see where the drawings were",
+        "tv-app/src/main/kotlin/dev/telestrator/tv/MainActivity.kt:124-133 - the remote seeks in blind 5 s hops (seek+/seek-, applied at :183-184), and the phone has frame step and scrub, so returning to a drawn frame means scrubbing and watching the TV",
+        "MainActivity.kt:177-203 - the whole transport interpretation (toggle, step x FRAME_MS=40 (:51), rate clamp 0.1..2.0, seek clamp at 0) lives inside a Composable LaunchedEffect with no test",
+        "core/src/main/kotlin/dev/telestrator/core/PenEngine.kt:13-19 (Hold) - ink is anchored to its frame and expires after 3/6/15 s, so a review of several moments is exactly the case where the drawings are off screen and have to be found again",
+        "tools/live-ui-test.mjs:125-136 and :175-191 - even the harness finds its drawing again by counting D-pad hops from a known position, which is the viewer's problem in miniature",
+        "Protocol.kt:125-130 - ProtocolJson has ignoreUnknownKeys=true, encodeDefaults=true and explicitNulls=false, so an added list field with a default of emptyList() is backward compatible for Kotlin readers. JS readers ignore unknown fields",
+        "Consumers of TvMessage.State (the contract change): companion/index.html:170-201 applyState; tools/relay-stub.mjs:91-96 spreads state into /health (it gains marks, which is harmless); tools/relay-test.mjs:200-234 and tools/pen-sim.mjs:44-47 read other fields; tools/live-ui-test.mjs:429 via window.__pen.state; core ProtocolTest (CoreTest.kt:165-170, still green: an empty list encodes as [] and not null)"
+      ],
+      "rollback": "Four commits: (1) core moments, TransportPlan and the State.marks field with tests, additive since State's default is an empty list; (2) MainActivity delegates to TransportPlan and handles jump, and Session/host publish marks; (3) companion ticks and buttons; (4) the live-ui-test journey and a README line. Reverting (3) leaves a TV that sends an unused field. Reverting (1)-(2) restores the old when-block verbatim.",
+      "gate": "direction",
+      "runner_up": "A pairing card that gets out of the picture. The white QR card is always drawn over the top-right of the video (MainActivity.kt:223-228, 245-269; the harness even masks it out at live-ui-test.mjs:56). It would collapse to a chip once a pen is connected and come back, with the reason, when the pen drops or a wrong PIN is tried.",
+      "body": "## Summary\nGive the telestrator a review mode. The TV publishes the list of drawn moments, the phone's scrub bar shows them as ticks, and two buttons (previous drawing / next drawing) send a new transport command `jump`. The TV answers `jump` by pausing on the exact frame the ink is anchored to. The decision about which moment comes next is made in core (`AnnotationTimeline.moments/momentAfter/momentBefore`), next to a `TransportPlan` that pulls the untested transport when-block out of a Composable.\n\n## Description\nA telestrator is used to draw on several paused frames and then walk someone through them. Today the walk-through is blind. Ink expires after its hold window, the phone forgets the mirrored doc once playback starts, the scrub bar is an unmarked range, and the remote seeks in 5 s hops. To find drawing number three, the viewer scrubs and watches the TV until ink appears, even though the TV holds a `fromMs` for every annotation. The data is already there, and this card puts it where the navigation decision is made. The move also turns the transport interpretation into a pure function (`plan(cmd, value, positionMs, durationMs, playing, doc) -> List<PlayerAction>`), so frame step, the rate clamp and the new jump are tested on the JVM rather than only on a device. This is inside the companion's declared scope ('transport'), but the tv-app and companion map descriptions do not name drawn-moment navigation, hence gate direction. It is also a contract change, an added optional `marks: List<Long>` on `TvMessage.State`; every consumer is listed in the premise and none breaks.\n\n## Flow\n- Viewer draws on frames at 5.0 s and 12.0 s (as today)\n- Each 400 ms state now carries `marks: [5000, 12000]` (from Session -> engine.doc -> AnnotationTimeline.moments)\n- Phone: the scrub bar shows two ticks at marks/duration; the status reads 'drawing 1 of 2' when t sits on a mark; [prev drawing] / [next drawing] are disabled at the ends\n- Tap [next drawing] -> `{type:'transport', cmd:'jump', value:1}` -> TV `TransportPlan.plan` -> Pause + SeekTo(12000) -> the frame and its ink are on screen, and the thumbnail and mirror follow through the existing paused heartbeat\n- The remote is unchanged (D-pad and FF/RW keep their meanings); binding FF/RW to jump while paused is left for later\n\n## Expected impact\nReturning to any drawn frame takes one tap instead of an open-ended scrub-and-look loop, and the ticks show where every drawing is before the viewer moves at all. Presenting a play review becomes a sequence of next taps. The transport rules get their first tests: 5 transport verbs pinned by a GUARD case.\n\n## Evaluation\nClaim: the viewer can reach every drawn moment directly, and the transport decisions become JVM-tested.\nBefore: 0 of 7 JVM acceptance cases pass (moments, TransportPlan and marks do not exist). Returning to a drawing takes an unbounded number of scrub steps.\nAfter: 7 of 7 in `:core:test`, `:tv-app:compileDebugKotlin` green. Case 8 is an operator-run device journey.\nMethod: gate - acceptance cases written as failing tests first\nResult: better\nGate: direction",
+      "evidence": "Timeline.kt (whole class, 17 lines): only `visibleAt(tMs)` and `progressAt(a, tMs)`; no enumeration of moments.\nProtocol.kt:95-106 `data class State(val t: Long, val paused: Boolean, val rate: Double, val annotationCount: Int, val canUndo: Boolean = false, val canRedo: Boolean = false, val durationMs: Long = 0, val thumbnail: String? = null)`.\ncompanion/index.html:117-120 `<span class=\"lbl\" id=\"scrub-t\">0.0s</span><input id=\"scrub\" type=\"range\" min=\"0\" max=\"1000\" ...>`, with no marks.\ncompanion/index.html:195-198 `} else if (!m.paused) { pad.style.backgroundImage = ''; tvDoc = null; ...}`.\nMainActivity.kt:128-129 `KEYCODE_MEDIA_FAST_FORWARD, KEYCODE_DPAD_RIGHT -> \"seek+\"` / `REWIND, DPAD_LEFT -> \"seek-\"`; :183-184 `seekTo(currentPosition +/- 5_000)`.\nMainActivity.kt:188-192 `\"step\" -> { player.pause(); val target = player.currentPosition + (t.value.toLong() * FRAME_MS); player.seekTo(target.coerceAtLeast(0)) }` sits inside `LaunchedEffect(command)` (:177), and no test covers it.\nProtocol.kt:125-130 `ProtocolJson = Json { ignoreUnknownKeys = true; encodeDefaults = true; classDiscriminator = \"type\"; explicitNulls = false }`.\nrelay-stub.mjs:93-96 `if (m.type === 'state') { const { thumbnail, ...rest } = m; lastState = rest; }`, so the new field passes through to /health untouched.",
+      "critic": {
+        "verdict": "build",
+        "ambition": 5,
+        "grounding": 5,
+        "falsifiability": 4,
+        "deck_line": "Approve (direction): the viewer reaches any drawn frame in one tap instead of scrubbing and watching; the transport rules get their first tests."
+      }
+    }
+  ]
+}
