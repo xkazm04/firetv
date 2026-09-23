@@ -11,7 +11,7 @@ import type { Topic } from "@/lib/library/syllabus";
 import { ESSAY_TYPES } from "@/lib/library/lessons.data";
 import { fmt } from "./useSession";
 import { continueCard } from "./mathsRows";
-import { stopAt, LANDING_STOPS, tonightStops, learnerStops, unitStops, calendarStops, LENS_STOPS, PLAYBOOK_STOPS, HINT_STOPS, SENTENCE_STOPS, RECAP_STOPS, TOPIC_STOPS, walkStops, type TonightStop } from "./keys";
+import { running, practiceFailed, stopAt, LANDING_STOPS, tonightStops, learnerStops, unitStops, calendarStops, LENS_STOPS, PLAYBOOK_STOPS, HINT_STOPS, SENTENCE_STOPS, RECAP_STOPS, TOPIC_STOPS, walkStops, type TonightStop } from "./keys";
 
 
 /** The OCR writes exponents as ^n and the tutor may too; the screen shows them as printed. */
@@ -314,6 +314,9 @@ export function PageScreen({ s, view }: { s: Session; view: "band" | "overview" 
   const bh = it ? (it.band[1] - it.band[0]) * scale : 0;
   const top = it ? Math.max(0, Math.min(p.h * scale - H, it.band[0] * scale - bh * 0.9)) : 0;
   const ovScale = H / p.h;
+  // what the pipelines behind this page are doing, in the caption: a read that failed, a hint on its way or not coming
+  const read = s.jobs?.read?.key === p.id ? s.jobs.read : undefined, hj = it && s.jobs?.hint?.key === it.key ? s.jobs.hint : undefined;
+  const pageLine = read?.phase === "failed" ? "could not read this page — snap it again" : hj?.phase === "running" ? "thinking about a hint…" : hj?.phase === "failed" ? "no hint that time — Select to try again" : undefined;
   return (<>
     <div className="band band-rule" />
     <main className="content-full">
@@ -329,7 +332,7 @@ export function PageScreen({ s, view }: { s: Session; view: "band" | "overview" 
           <img className="img" src={p.img} alt="" style={{ width: p.w * ovScale, left: (W - p.w * ovScale) / 2 }} />
           {it && <div className="focus-band" style={{ top: it.band[0] * ovScale, height: (it.band[1] - it.band[0]) * ovScale, left: (W - p.w * ovScale) / 2, right: (W - p.w * ovScale) / 2 }} />}
         </>)}
-        {s.reading && <div className="cap" style={{ position: "absolute", left: 30, bottom: 24, zIndex: 2 }}>reading the page…</div>}
+        {(s.reading || pageLine) && <div className="cap" style={{ position: "absolute", left: 30, bottom: 24, zIndex: 2 }}>{s.reading ? "reading the page…" : pageLine}</div>}
       </div>
       {it && !s.reading && (
         <div className="lt" style={{ marginTop: 24, maxWidth: 1728 }}><div className="tag">{p.subject === "essay" ? `¶ ${it.n}` : `Item ${it.n}`}</div><div className="txt" style={{ fontSize: 36 }}>{p.subject === "essay" ? it.text.slice(0, 110) + "…" : shown(it.text)}</div></div>
@@ -338,7 +341,7 @@ export function PageScreen({ s, view }: { s: Session; view: "band" | "overview" 
         {s.pages.map((pg, i) => <div key={pg.id} className="thumb" data-current={i === s.pageIx} style={{ backgroundImage: `url(${pg.img})` }} />)}
       </div>
       <div className="ticker" style={{ left: 120 * s.pages.length + 40 }}>
-        <span>{p.items.length} items</span><i>·</i><span>{p.readMs ? `read in ${(p.readMs / 1000).toFixed(0)} s` : "reading"}</span><i>·</i><span>Select for a hint</span><i>·</i><span>Menu for the overview</span>
+        <span>{p.items.length} items</span><i>·</i><span>{p.readMs ? `read in ${(p.readMs / 1000).toFixed(0)} s` : read?.phase === "failed" ? "not read" : "reading"}</span><i>·</i><span>{hj?.phase === "failed" ? "Select to try again" : "Select for a hint"}</span><i>·</i><span>Menu for the overview</span>
       </div>
     </main>
   </>);
@@ -350,6 +353,9 @@ export function HintScreen({ s, focus }: { s: Session; focus: number }) {
   const hh = h.stage === 2 ? h.hint2 : h.hint1;
   const p = s.pages[s.pageIx];
   const at = stopAt(HINT_STOPS, focus);
+  // the lesson pick runs as its own job, keyed to this hint: under way, found, none, or failed
+  const pick = s.jobs?.lesson?.key === h.key ? s.jobs.lesson : undefined;
+  const pickFailed = pick?.phase === "failed" ? pick.error ?? "" : null;
   return (<>
     <div className="band band-left" /><Rail s={s} />
     <main className="content">
@@ -368,10 +374,10 @@ export function HintScreen({ s, focus }: { s: Session; focus: number }) {
           {h.rule.warning && <div className="warn">{h.rule.warning}</div>}
         </dl>
       )}
-      {s.noLesson && <div className="body" style={{ marginTop: 28, color: "var(--mute)", maxWidth: "40ch" }}>No lesson in tonight&apos;s library covers this one. The hint is all there is — and that is fine.</div>}
+      {s.noLesson && <div className="body" style={{ marginTop: 28, color: "var(--mute)", maxWidth: "40ch" }}>{pickFailed ? `${pickFailed} The hint is all there is this time.` : <>No lesson in tonight&apos;s library covers this one. The hint is all there is — and that is fine.</>}</div>}
       <div className="actions">
         <button className="btn" data-focused={at === "stuck"} data-disabled={h.stage === 2}>{h.stage === 2 ? "That's both hints" : "Still stuck"}</button>
-        <button className="btn" data-focused={at === "lesson"} data-disabled={!s.lesson}>{s.lesson ? "Show me the lesson" : s.noLesson ? "No lesson for this" : "Finding the lesson…"}</button>
+        <button className="btn" data-focused={at === "lesson"} data-disabled={!s.lesson}>{s.lesson ? "Show me the lesson" : pickFailed !== null ? "No lesson this time" : s.noLesson ? "No lesson for this" : "Finding the lesson…"}</button>
       </div>
     </main>
   </>);
@@ -699,10 +705,14 @@ const PREP = [
   "Checking every one comes out clean…",
   "Still writing. They will appear here — nothing to press.",
 ];
-export function Topics({ s, focus, busy }: { s: Session; focus: number; busy: boolean }) {
+export function Topics({ s, focus, busy: asked }: { s: Session; focus: number; busy: boolean }) {
   const st = topicStates(s);
   const sys = systemOf(s.profiles.find((p) => p.id === s.learner.id));
+  // the wait is this TV's own press, or a set the desk is already writing for anyone
+  const busy = asked || running(s, "practice");
   const at = (busy && s.topic ? TOPIC_STOPS.find((t) => t.id === s.topic) : undefined) ?? stopAt(TOPIC_STOPS, focus)!;
+  // a set that did not come back says so on its own card, and Select asks again
+  const failed = busy ? null : practiceFailed(s, at.id);
   // guidance, never a gate: the topic most people take before this one, when it is not behind them yet
   const before = at.prereq.map((p) => topicById(p)).find((t) => t && st[t.id] !== "secure");
   // the wait is a line that changes, never a spinner
@@ -716,6 +726,7 @@ export function Topics({ s, focus, busy }: { s: Session; focus: number; busy: bo
       <div style={{ marginTop: 34, minHeight: 190 }}>
         {busy
           ? <><span className="cap">Preparing</span><div className="cap-text">{PREP[step]}</div></>
+          : failed ? <><span className="cap">Not written</span><div className="cap-text">{failed}</div></>
           : <><span className="cap" style={{ background: "transparent", color: "var(--maths)", border: "2px solid var(--maths)" }}>{at.strand}</span>
               <div className="cap-text">{at.blurb}{before ? ` Most people do ${before.name} first.` : ""}</div></>}
       </div>
@@ -730,6 +741,7 @@ export function Topics({ s, focus, busy }: { s: Session; focus: number; busy: bo
       </div>
       <div className="ticker">{busy
         ? <><span>writing <b>six</b> questions</span><i>·</i><span>about a minute</span><i>·</i><span>nothing to press</span></>
+        : failed ? <><span>{at.name}</span><i>·</i><span>no set this time</span><i>·</i><span>Select to try again</span><i>·</i><span>Menu, Up or Back · Math Buddy</span></>
         : <><span><b>{SYLLABUS.length}</b> topics</span><i>·</i><span>six questions a set</span><i>·</i><span>about a minute a set</span><i>·</i><span>years · {SYS_TAG[sys]}</span><i>·</i><span>Select to begin</span><i>·</i><span>Menu, Up or Back · Math Buddy</span></>}</div>
     </main>
   </>);

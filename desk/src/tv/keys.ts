@@ -6,7 +6,7 @@
  * list from here, so the screen that draws `data-focused` and the key that moves it share one list.
  * Types only from the store: the TV never loads the filesystem-backed session modules.
  */
-import type { Event, Profile, Screen, Session, Subject } from "@/lib/session/store";
+import type { Event, JobKind, Profile, Screen, Session, Subject } from "@/lib/session/store";
 import { LESSONS, ESSAY_TYPES, type Lesson } from "@/lib/library/lessons.data";
 import { SYLLABUS, type Topic } from "@/lib/library/syllabus";
 import { profileRows, locate, flat } from "@/tv/profileRows";
@@ -78,14 +78,21 @@ class Out implements Step {
     if (k === "right") this.move(n, 1); if (k === "left") this.move(n, -1);
     if (k === "down") this.move(n, cols); if (k === "up") this.move(n, -cols);
   }
-  /** Ask for a hint unless one is already on its way: each one is a model call and counts in the log. */
+  /** Ask for a hint unless one is already on its way (here, or as a running job): each one is a model call and counts in the log. */
   hint(local: Local, body: Record<string, unknown>) {
-    if (local.hintInFlight) return;
+    if (local.hintInFlight || running(this.s, "hint")) return;
     this.calls.push({ url: "/api/hint", body, onFail: { hintInFlight: false }, onDone: { hintInFlight: false } });
     this.local.hintInFlight = true;
   }
 }
 type Handler = (s: Session, k: Key, local: Local, o: Out) => void;
+/** A pipeline of this kind is under way on the desk (store.ts `jobs`), whoever asked for it. */
+export function running(s: Session, kind: JobKind): boolean { return s.jobs?.[kind]?.phase === "running"; }
+/** The practice set for this topic failed: the Topics caption says so, and Select asks again. */
+export function practiceFailed(s: Session, topicId: string | undefined): string | null {
+  const j = s.jobs?.practice;
+  return j?.phase === "failed" && j.key === topicId ? j.error ?? null : null;
+}
 const lessonEvent = (l: Lesson, why: string): Event => ({ type: "lesson.set", lesson: { id: l.id, title: l.title, t: 0, text: l.concepts.join(" · "), why, youtube: l.youtube } });
 
 const KEYMAP: Partial<Record<Screen, Handler>> = {
@@ -197,7 +204,7 @@ const KEYMAP: Partial<Record<Screen, Handler>> = {
     if (k === "right") o.move(TOPIC_STOPS.length, 1); if (k === "left") o.move(TOPIC_STOPS.length, -1);
     // nothing is locked here: Select starts whatever is focused. Menu and Up go home, where the path lives.
     if (k === "up" || k === "menu") o.nav("tonight");
-    if (k === "select" && !local.busy) { const t = stopAt(TOPIC_STOPS, s.focus); if (t) {
+    if (k === "select" && !local.busy && !running(s, "practice")) { const t = stopAt(TOPIC_STOPS, s.focus); if (t) {
       o.ev({ type: "topic.open", topic: t.id });
       // the set arrives as practice.set over the session stream; a failed call gives Select back
       o.calls.push({ url: "/api/practice", body: { topic: t.id }, onFail: { busy: false } });
