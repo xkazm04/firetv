@@ -55,6 +55,14 @@
   input[type=range] { flex:1; accent-color:var(--ink); min-width:0; }
   .lbl { color:var(--dim); font-size:11px; align-self:center; flex:0 0 auto;
     font-variant-numeric:tabular-nums; }
+
+  /* Review mode: one tick per drawn moment. Inset by half the range thumb so a tick sits where the
+     thumb lands when the TV is on that frame. */
+  #scrubwrap { position:relative; flex:1; min-width:0; display:flex; }
+  #marks { position:absolute; inset:0 8px; pointer-events:none; }
+  #marks i { position:absolute; top:50%; width:3px; height:16px; margin:-8px 0 0 -1.5px;
+    border-radius:2px; background:var(--ink); opacity:.55; }
+  #marks i.on { opacity:1; }
 </style>
 </head>
 <body>
@@ -108,6 +116,11 @@
     <button id="btn-next">Frame ▶</button>
   </div>
 
+  <div class="row" id="review">
+    <button id="btn-mark-prev" disabled title="Previous drawing">◀ Drawing</button>
+    <button id="btn-mark-next" disabled title="Next drawing">Drawing ▶</button>
+  </div>
+
   <div class="row" id="rates">
     <button data-rate="0.25" aria-pressed="false">0.25×</button>
     <button data-rate="0.5"  aria-pressed="false">0.5×</button>
@@ -116,7 +129,10 @@
 
   <div class="row">
     <span class="lbl" id="scrub-t">0.0s</span>
-    <input id="scrub" type="range" min="0" max="1000" value="0" step="1">
+    <div id="scrubwrap">
+      <input id="scrub" type="range" min="0" max="1000" value="0" step="1">
+      <div id="marks"></div>
+    </div>
   </div>
 </nav>
 
@@ -176,9 +192,41 @@
     }
   }
 
+  // ---- review mode: the drawn moments the TV publishes ---------------------
+  // The same rule as AnnotationTimeline in core: the playhead "sits on" a moment from one frame
+  // before it until MOMENT_SPAN_MS after it; next skips the moment it sits on, and so does prev.
+  const MOMENT_SPAN_MS = 500, ON_MOMENT_LEAD_MS = 40;
+  const momentAfter = (marks, t) => marks.find((m) => m > t + ON_MOMENT_LEAD_MS) ?? null;
+  const momentBefore = (marks, t) => [...marks].reverse().find((m) => m + MOMENT_SPAN_MS <= t) ?? null;
+  const momentAt = (marks, t) => marks.findIndex((m) => t >= m - ON_MOMENT_LEAD_MS && t < m + MOMENT_SPAN_MS);
+
+  let marksKey = '';
+  function applyMarks(m) {
+    const marks = m.marks || [];
+    const on = momentAt(marks, m.t);
+    const key = marks.join(',') + '|' + m.durationMs + '|' + on;
+    if (key !== marksKey) {
+      marksKey = key;
+      const box = $('marks');
+      box.textContent = '';
+      if (m.durationMs > 0) {
+        marks.forEach((at, i) => {
+          const tick = document.createElement('i');
+          tick.style.left = Math.min(100, (at / m.durationMs) * 100) + '%';
+          if (i === on) tick.className = 'on';
+          box.appendChild(tick);
+        });
+      }
+    }
+    $('btn-mark-prev').disabled = momentBefore(marks, m.t) === null;
+    $('btn-mark-next').disabled = momentAfter(marks, m.t) === null;
+    return on >= 0 ? ' · drawing ' + (on + 1) + ' of ' + marks.length : '';
+  }
+
   function applyState(m) {
     statusEl.textContent =
-      (m.paused ? 'paused' : 'playing') + ' · ' + (m.t / 1000).toFixed(1) + 's · ink=' + m.annotationCount;
+      (m.paused ? 'paused' : 'playing') + ' · ' + (m.t / 1000).toFixed(1) + 's · ink=' + m.annotationCount +
+      applyMarks(m);
     $('btn-undo').disabled = !m.canUndo;
     $('btn-redo').disabled = !m.canRedo;
     $('btn-playpause').textContent = m.paused ? 'Play' : 'Pause';
@@ -408,6 +456,9 @@
   $('btn-playpause').addEventListener('click', () => send({ type: 'transport', cmd: 'toggle' }));
   $('btn-prev').addEventListener('click', () => send({ type: 'transport', cmd: 'step', value: -1 }));
   $('btn-next').addEventListener('click', () => send({ type: 'transport', cmd: 'step', value: 1 }));
+  // The TV decides which moment is next (TransportPlan "jump") and lands paused on it.
+  $('btn-mark-prev').addEventListener('click', () => send({ type: 'transport', cmd: 'jump', value: -1 }));
+  $('btn-mark-next').addEventListener('click', () => send({ type: 'transport', cmd: 'jump', value: 1 }));
 
   const scrub = $('scrub');
   scrub.addEventListener('pointerdown', () => { scrubbing = true; });
