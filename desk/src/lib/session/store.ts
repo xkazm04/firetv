@@ -66,7 +66,9 @@ const shownPractice = (p: Practice | null | undefined): Practice | null => (p ? 
  */
 export type JobKind = "read" | "hint" | "lesson" | "explain" | "mark" | "practice" | "analyse" | "memory";
 export type JobPhase = "running" | "done" | "failed";
-export interface Job { id: string; phase: JobPhase; startedAt: number; endedAt?: number; key?: string; error?: string; }
+/** What a run was asked with, held so a failed run can be asked again in place (POST /api/session/retry). Never an answer, never an image. */
+export type JobInput = Record<string, string | number>;
+export interface Job { id: string; phase: JobPhase; startedAt: number; endedAt?: number; key?: string; error?: string; input?: JobInput; }
 export type Jobs = Partial<Record<JobKind, Job>>;
 /** Said for a run the desk was restarted in the middle of. */
 export const INTERRUPTED = "The desk was restarted before this finished. Ask again.";
@@ -129,7 +131,7 @@ export type Event =
   | { type: "practice.set"; practice: Practice } | { type: "practice.marked"; items: PracticeItem[] }
   | { type: "walk"; ix: number } | { type: "practice.clear" }
   | { type: "practice.settle"; n: number; reply: string; verdict?: "right" | "wrong"; slip?: string; said?: string }
-  | { type: "job.start"; kind: JobKind; id: string; key?: string } | { type: "job.done"; kind: JobKind; id: string } | { type: "job.failed"; kind: JobKind; id: string; error: string }
+  | { type: "job.start"; kind: JobKind; id: string; key?: string; input?: JobInput } | { type: "job.done"; kind: JobKind; id: string } | { type: "job.failed"; kind: JobKind; id: string; error: string }
   | { type: "status"; text: string } | { type: "session.end" } | { type: "reset" };
 
 const DATA = process.env.DESK_DATA_DIR || path.join(process.cwd(), "data");
@@ -195,7 +197,7 @@ export function reduce(s: Session, e: Event): Session {
     case "hint.stage": if (n.hint) { n.hint = { ...n.hint, stage: e.stage }; if (e.stage === 2) n.log = { ...s.log, hard: Array.from(new Set([...s.log.hard, n.hint.problem])) }; } break;
     // a pick made for one hint never lands on another; a lesson chosen on the TV (no key) always does
     case "lesson.set": if (e.key !== undefined && e.key !== s.hint?.key) return s; n.lesson = e.lesson; n.noLesson = !e.lesson; break;
-    case "job.start": n.jobs = { ...s.jobs, [e.kind]: { id: e.id, phase: "running", startedAt: Date.now(), ...(e.key !== undefined ? { key: e.key } : {}) } }; break;
+    case "job.start": n.jobs = { ...s.jobs, [e.kind]: { id: e.id, phase: "running", startedAt: Date.now(), ...(e.key !== undefined ? { key: e.key } : {}), ...(e.input ? { input: e.input } : {}) } }; break;
     case "job.done": case "job.failed": { const j = s.jobs?.[e.kind]; if (!j || j.id !== e.id) return s;
       n.jobs = { ...s.jobs, [e.kind]: e.type === "job.done" ? { ...j, phase: "done", endedAt: Date.now() } : { ...j, phase: "failed", endedAt: Date.now(), error: e.error } };
       // a lesson pick that failed for the hint on screen ends the wait the same way "no lesson" does
@@ -228,6 +230,8 @@ export function reduce(s: Session, e: Event): Session {
     case "session.end": n.timer = { ...s.timer, running: false }; n.screen = "recap"; n.focus = 0; break;
     case "reset": return fresh();
   }
+  // a set being written is for the learner who asked: another learner at the desk supersedes it, and its late result is dropped by id
+  if (n.learner.id !== s.learner.id && s.jobs?.practice?.phase === "running") { n.jobs = { ...s.jobs }; delete n.jobs.practice; }
   return n;
 }
 

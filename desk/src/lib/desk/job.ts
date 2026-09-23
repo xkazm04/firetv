@@ -9,7 +9,7 @@
  * bar and the phone keep working; it may carry the engine's detail, the job's error never does.
  */
 import { NextResponse } from "next/server";
-import { dispatch, getSession, type JobKind } from "../session/store";
+import { dispatch, getSession, type JobInput, type JobKind } from "../session/store";
 import { EngineError, type EngineErrorKind } from "../engines/types";
 
 export interface JobRun {
@@ -26,6 +26,11 @@ export interface JobOptions<T> {
   start?: string;
   /** Status line when it succeeds. */
   done?: (value: T) => string;
+  /**
+   * What the run was asked with, held on the job so POST /api/session/retry can ask again in place:
+   * the route's own request body, minus anything big (a page is held on the session by its id, not its image).
+   */
+  input?: JobInput;
   /** Put the session right before the failure is recorded (e.g. a page stops "reading"). */
   onFail?: (e: unknown) => void;
 }
@@ -50,6 +55,10 @@ const WHY: Record<EngineErrorKind, string> = {
   shape: "The answer came back in pieces.",
 };
 export const BUSY = "The desk is already on it.";
+/** A run whose result no longer fits the desk (another learner sat down, the page went): dropped, not failed. */
+export const MOVED_ON = "The desk has moved on since that was asked.";
+/** POST /api/session/retry with no failed run of that kind. */
+export const NOTHING = "There is nothing to try again.";
 
 /** The sentence a failed run leaves on the session: never an exception's text or its stack. */
 export function jobError(kind: JobKind, e: unknown): string {
@@ -66,7 +75,7 @@ export async function runJob<T>(kind: JobKind, work: (run: JobRun) => Promise<T>
   if (now?.phase === "running" && !opts.supersedes) return { ok: false, status: 409, error: BUSY };
   const id = runId(kind);
   const run: JobRun = { id, current: () => getSession().jobs?.[kind]?.id === id };
-  dispatch({ type: "job.start", kind, id, ...(opts.key !== undefined ? { key: opts.key } : {}) });
+  dispatch({ type: "job.start", kind, id, ...(opts.key !== undefined ? { key: opts.key } : {}), ...(opts.input ? { input: opts.input } : {}) });
   if (opts.start) dispatch({ type: "status", text: opts.start });
   try {
     const value = await work(run);

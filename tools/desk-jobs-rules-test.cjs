@@ -246,10 +246,11 @@ test('case 9: POST /api/session refuses every event only the server raises; the 
 // last: it swaps the store module out from under the routes loaded above
 test('case 7: a job saved as running is not running after the desk restarts',()=>{
  onPage();
- const saved={...store.getSession(),jobs:{read:{id:'r1',phase:'running',startedAt:Date.now()-5000}}};
+ const saved={...store.getSession(),jobs:{read:{id:'r1',phase:'running',startedAt:Date.now()-5000,key:PAGE.id,input:{id:PAGE.id}}}};
  fs.writeFileSync(path.join(data,'session.json'),JSON.stringify(saved));
  clearInterval(globalThis.__desk.ticker);delete globalThis.__desk;delete require.cache[storeFile];store=require(storeFile);
  const job=store.getSession().jobs?.read;
  assert(job,'the saved job is still on record');assert.notEqual(job.phase,'running');
  assert.equal(job.phase,'failed');deskWorded(job.error);assert.equal(store.getSession().reading,false);
+ assert.deepEqual(job.input,{id:PAGE.id},'the run keeps what it was asked with, so the phone can offer Try again');
 });
