@@ -7,7 +7,7 @@ import { useEffect, useRef, useState } from "react";
 import { useSession, call, fmt } from "@/tv/useSession";
 import { ESSAY_TYPES } from "@/lib/library/lessons.data";
 import { BRAND as MODULE } from "@/tv/profileRows";
-import type { Session, Subject } from "@/lib/session/store";
+import type { JobKind, Session, Subject } from "@/lib/session/store";
 import { LingaPhone } from "@/english/LingaPhone";
 
 type PScreen = "join" | "joined" | "capture" | "practice" | "point" | "say" | "paste" | "tonight" | "parent" | "profile" | "linga";
@@ -55,6 +55,8 @@ export default function Phone() {
   const [reply, setReply] = useState("");
   /** What the desk noticed tonight, read once on the way out. */
   const [memory, setMemory] = useState<string[] | null>(null);
+  /** A failed run the learner has stepped past ("Snap a new page"): its Try again is not offered again. */
+  const [passed, setPassed] = useState("");
 
   // a fresh join lands on the confirmation, never straight into the camera
   useEffect(() => { if (s?.joined && screen === "join") setScreen("joined"); }, [s?.joined, screen]);
@@ -102,7 +104,8 @@ export default function Phone() {
     setBusy(true); setPhase("sending"); setMsg("");
     try {
       const r = await call("/api/read", { image: dataUrl, subject: sub, title, w, h }); const j = await r.json();
-      if (r.ok) { setPhase("sent"); setMsg(""); } else { setPhase("failed"); setMsg(j.error ?? `The desk could not read it (${r.status}).`); }
+      // a run that failed (502) is on the desk with its sentence and a Try again; only a refusal needs the line here
+      if (r.ok) { setPhase("sent"); setMsg(""); } else { setPhase("failed"); setMsg(r.status === 502 ? "" : (j.error ?? `The desk could not read it (${r.status}).`)); }
     } catch (e) { setPhase("failed"); setMsg(`That did not reach the desk: ${String(e)}`); } finally { setBusy(false); }
   };
   const toJpeg = (src: HTMLVideoElement | HTMLImageElement, sw: number, sh: number) => {
@@ -125,7 +128,23 @@ export default function Phone() {
     let best = 0; page.items.forEach((it, i) => { if (Math.abs(it.cy - y) < Math.abs(page.items[best].cy - y)) best = i; });
     setRing({ x: e.clientX - r.left, y: e.clientY - r.top }); post({ type: "item", itemIx: best }); if (s?.screen !== "page") post({ type: "nav", screen: "page" });
   };
-  const ask = async () => { if (!page) return; setBusy(true); try { await call("/api/hint", { askedQ: q, itemIx: s?.itemIx }); setQ(""); } finally { setBusy(false); } };
+  const ask = async () => { if (!page) return; setBusy(true); setMsg("");
+    try { const r = await call("/api/hint", { askedQ: q, itemIx: s?.itemIx }); setQ("");
+      if (!r.ok && r.status !== 502) { const j = await r.json().catch(() => ({} as { error?: string })); setMsg(j.error ?? `The desk could not ask (${r.status}).`); } }
+    catch (e) { setMsg(`That did not reach the desk: ${String(e)}`); } finally { setBusy(false); } };
+  /** The desk's failed run of this kind that can be asked again in place: it holds what it was asked with. */
+  const failed = (kind: JobKind) => { const j = s?.jobs?.[kind]; return j?.phase === "failed" && j.input && j.id !== passed ? j : null; };
+  /** A hint that failed for the item the TV is on. */
+  const hintAgain = (() => { const h = failed("hint"); return h && page && h.key === page.items[s?.itemIx ?? 0]?.key ? h : null; })();
+  /** One press: the desk asks again with what it holds — the same page, the same item and question, the same topic. */
+  const retry = async (kind: JobKind) => {
+    setBusy(true); setMsg(""); if (kind === "read") setPhase("sending");
+    try {
+      const r = await call("/api/session/retry", { kind }); const j = await r.json().catch(() => ({} as { error?: string }));
+      if (kind === "read") setPhase(r.ok ? "sent" : "failed");
+      if (!r.ok && r.status !== 502) setMsg(j.error ?? `The desk could not try again (${r.status}).`);
+    } catch (e) { if (kind === "read") setPhase("failed"); setMsg(`That did not reach the desk: ${String(e)}`); } finally { setBusy(false); }
+  };
   const listen = (into: (t: string) => void) => {
     // Web Speech is not in TypeScript's DOM lib; the shape we use is small enough to declare here.
     type Rec = { lang: string; onresult: (ev: { results: Array<Array<{ transcript: string }>> }) => void; onerror: () => void; start: () => void; stop: () => void };
@@ -215,6 +234,8 @@ export default function Phone() {
           const done = phase === "sent" && !reading;
           const read = page?.items.length ?? 0;
           const n = pagesOf(subject);
+          // a read that failed: the page is already on the desk, so it is read again there, not sent twice
+          const again = !reading ? failed("read") : null;
           return <div className="pscreen"><h3>Capture a page</h3>
             {s?.awaiting && !picking
               ? <p><b>{MODULE[s.awaiting]}</b> — the TV is waiting for this page. <button className="plink" onClick={() => setPicking(true)}>change</button></p>
@@ -231,6 +252,13 @@ export default function Phone() {
             {(phase === "sending" || phase === "sent") && <p>{reading ? "Reading the page…" : read ? `Read: ${read} problems` : s?.status || "Read."}</p>}
 
             {reading ? <button className="pbtn" disabled>Reading…</button>
+              : again && (phase === "failed" || !shot) ? <>
+                  <p>{again.error}</p>
+                  <div className="field">
+                    <button className="pbtn" data-signal="true" style={{ flex: 1 }} onClick={() => retry("read")} disabled={busy}>Try again</button>
+                    <button className="pbtn" data-secondary="true" onClick={() => { setPassed(again.id); retake(); }}>Snap a new page</button>
+                  </div>
+                </>
               : done ? <div className="field">
                   <button className="pbtn" data-signal="true" style={{ flex: 1 }} onClick={() => { setShot(null); setPhase("idle"); setMsg(""); }}>Add another page</button>
                   <button className="pbtn" data-secondary="true" onClick={() => setScreen("point")}>Point &amp; ask</button>
@@ -249,8 +277,11 @@ export default function Phone() {
 
         {screen === "practice" && s && (() => {
           const pr = s.practice;
+          const unwritten = failed("practice");
           if (!pr) return <div className="pscreen"><h3>Practice</h3>
-            <p>The practice set starts on the TV — open <b>Teach me something</b> there and pick a topic. Six problems land on the big screen; you work them on paper.</p></div>;
+            {unwritten ? <><p>{unwritten.error}</p>
+                <button className="pbtn" data-signal="true" onClick={() => retry("practice")} disabled={busy}>Try again</button></>
+              : <p>The practice set starts on the TV — open <b>Teach me something</b> there and pick a topic. Six problems land on the big screen; you work them on paper.</p>}</div>;
 
           // not marked: the sheet is still on the table. Snap all six at once, review it, then send.
           if (!pr.marked) return <div className="pscreen"><h3>Practice</h3>
@@ -307,7 +338,9 @@ export default function Phone() {
               {ring && <div className="ring" style={{ left: ring.x, top: ring.y }} />}</div>
             <div className="field"><input placeholder="What do you want to know?" value={q} onChange={(e) => setQ(e.target.value)} /><button className="pbtn" data-secondary="true" onClick={() => listen(setQ)}>Mic</button></div>
             <div className="presets">{["What do I do first?", "Why is this negative?", "Which rule is this?"].map((p) => <button key={p} onClick={() => setQ(p)}>{p}</button>)}</div>
-            <button className="pbtn" data-signal="true" onClick={ask} disabled={busy || s?.reading}>{s?.reading ? "TV is still reading…" : "Ask the desk"}</button>
+            {hintAgain && <><p>{hintAgain.error}</p>
+              <button className="pbtn" data-signal="true" onClick={() => retry("hint")} disabled={busy}>Try again</button></>}
+            <button className="pbtn" data-signal={hintAgain ? undefined : "true"} data-secondary={hintAgain ? "true" : undefined} onClick={ask} disabled={busy || s?.reading}>{s?.reading ? "TV is still reading…" : "Ask the desk"}</button>
           </> : <p>Capture a page first.</p>}</div>}
 
         {screen === "say" && <div className="pscreen"><h3>Say a sentence</h3><p>English. Speak it or type it; the TV shows what the time word decides.</p>
