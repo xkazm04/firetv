@@ -30,7 +30,9 @@ uat/
   journeys/*.md          five Linga journeys: goals and definitions of done, not scripts
   driver/linga-text.cjs  the LT driver
   driver/surface.cjs     what a Character sees and can do: LingaTV and LingaPhone rendered for the session
-  runs/<id>/             findings.json, report.md, SUMMARY.md, per-Character transcripts and voices
+  driver/recertify.cjs   recertify from a run's own data: open pairs, metric deltas, confounds, write-back
+  runs/<id>/             findings.json, report.md, SUMMARY.md, run.json, per-Character transcripts and voices
+  runs/<id>/recert-<k>/  a rerun of <id>'s open pairs; recertify.md (then recertify-<k>.md) sits beside <id>'s findings
 ```
 
 ## Run
@@ -39,9 +41,10 @@ uat/
 node uat/driver/linga-text.cjs                       # every Character, their bound journeys, in parallel
 node uat/driver/linga-text.cjs viktor-67 adela-17    # only these Characters
 node uat/driver/linga-text.cjs --journeys J1,J2      # only these journeys
+node uat/driver/linga-text.cjs --recertify 2026-09-15-lt-recert2-beginners   # after a fix: rerun only what is open
 ```
 
-See `env.md` for the engine switches. A run writes `uat/runs/<date>-lt/`.
+See `env.md` for the engine switches. A run writes `uat/runs/<date>-lt/`. A recertify writes into the run it recertifies (see env.md, *Recertify*).
 
 ## Character template
 
