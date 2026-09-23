@@ -187,3 +187,98 @@ test('expectedIndex reads age against each system\'s own year: -1 before the pat
  for(const sys of ['us','uk','cz','de'])for(const age of [16,40,120])assert.equal(expectedIndex(sys,age),SYLLABUS.length,`${sys} age ${age}`);
  assert.notEqual(expectedIndex('uk',4),0,'nothing behind them is -1, never 0');
 });
+
+// ---- "How did you get there?" settles the item: the learner's spoken value, substituted on the walk ----
+/** A marked walk on the session, as the phone and the TV see it: items 4-6 are unsure (the marker and the substitution disagree). */
+async function markedWalk(){
+ store.dispatch({type:'reset'});store.dispatch({type:'practice.set',practice:sheet});
+ looked=reply({items:marks});
+ const {items}=await markSet('img',store.getSession().practice,store.getSession().learner.id);
+ store.dispatch({type:'practice.marked',items});
+ return store.getSession().learner.id;
+}
+const said=(json)=>{answer=reply(json);};
+async function explainAt(ix,transcript='I took one away and got nine'){
+ const route=require(path.join(root,'src/app/api/explain/route.ts'));
+ const r=await route.POST(new Request('http://desk/api/explain',{method:'POST',body:JSON.stringify({transcript,n:ix})}));
+ return {status:r.status,body:await r.json()};
+}
+const record=(id)=>JSON.parse(JSON.stringify(getLearner(id).skills['linear-one-step']??null));
+test('case 1: an unsure item whose spoken value substitutes is settled right, and the attempt is recorded once',async()=>{
+ const me=await markedWalk(),before=record(me);
+ assert.equal(store.getSession().practice.items[3].verdict,'unsure');
+ said({reply:'Look at the line where the 1 moved.',value:'9',slip:'unclear'});
+ const r=await explainAt(3);
+ assert.equal(r.status,200);assert.equal(r.body.settled,'right');
+ const it=store.getSession().practice.items[3];
+ assert.equal(it.verdict,'right');assert.equal(it.said,'Number 4 is right.');assert.equal(it.slip,undefined);
+ const after=record(me);assert.equal(after.seen,before.seen+1);assert.equal(after.right,before.right+1);
+ assert.equal(store.getSession().skills['linear-one-step'].seen,after.seen,'the session reads the learner record back');
+});
+test('case 2: a spoken value that does not substitute settles the item wrong, with the slip from the topic\'s vocabulary',async()=>{
+ const me=await markedWalk(),before=record(me);
+ said({reply:'Check what happened to the 1.',value:'x = 11',slip:'sign-lost-moving'});
+ const r=await explainAt(3,'I moved the one over and got eleven');
+ assert.equal(r.status,200);assert.equal(r.body.settled,'wrong');
+ const it=store.getSession().practice.items[3];
+ assert.equal(it.verdict,'wrong');assert.equal(it.slip,'sign-lost-moving');assert.equal(it.said,slip('sign-lost-moving').says);
+ const after=record(me);assert.equal(after.seen,before.seen+1);assert.equal(after.right,before.right);assert(after.slips.includes('sign-lost-moving'));
+});
+test('case 3: a value the desk cannot read leaves the item unsure and the learner record alone',async()=>{
+ const me=await markedWalk(),before=record(me);
+ for(const value of ['','about nine']){
+  said({reply:'Tell me the number you ended with.',value,slip:'unclear'});
+  const r=await explainAt(3);
+  assert.equal(r.status,200,value);assert.equal(r.body.settled,undefined,value);
+  const it=store.getSession().practice.items[3];
+  assert.equal(it.verdict,'unsure',value);assert.equal(it.reply,'Tell me the number you ended with.','the reply still reaches the walk');assert.equal(it.said,'I got something different for number 4. How did you get there?',value);
+ }
+ assert.deepEqual(record(me),before);
+});
+test('case 4: a settled item is never settled or recorded again',async()=>{
+ const me=await markedWalk(),before=record(me);
+ assert.equal(store.getSession().practice.items[1].verdict,'wrong');
+ for(let k=0;k<2;k++){
+  said({reply:'Look at the line where the 5 moved.',value:'7',slip:'unclear'});
+  const r=await explainAt(1,'I added five and got seven');
+  assert.equal(r.status,200);assert.equal(r.body.settled,undefined);
+  assert.equal(store.getSession().practice.items[1].verdict,'wrong');assert.equal(store.getSession().practice.items[1].reply,'Look at the line where the 5 moved.','reply only');assert.equal(store.getSession().practice.items[1].said,slip('sign-lost-moving').says);
+  assert.deepEqual(record(me),before,`call ${k+1}`);
+ }
+});
+test('case 5: a reply that gives the answer away is stopped in code, and the item\'s own line stands in',async()=>{
+ store.dispatch({type:'reset'});
+ store.dispatch({type:'practice.set',practice:{topic:'linear-one-step',marked:false,items:[{n:1,question:'2x+3=11'},{n:2,question:'x-5=2'}]}});
+ const ask='I got something different for number 2. How did you get there?';
+ store.dispatch({type:'practice.marked',items:[{n:1,question:'2x+3=11',verdict:'right',said:'Number 1 is right.'},{n:2,question:'x-5=2',verdict:'unsure',said:ask}]});
+ for(const leak of ['You should get 7.','so x = 7','Nearly: x = 7/1 is where it lands.','It comes out at seven.','Work out 12-7.']){
+  said({reply:leak,value:'',slip:'unclear'});
+  const r=await explainAt(1,'I did something');
+  assert.equal(r.status,200);
+  const it=store.getSession().practice.items[1];
+  for(const [where,text] of [['the route',r.body.reply],['the session',it.reply],['the status line',store.getSession().status]]){
+   const numbers=(String(text).match(/-?\d+(\.\d+)?(\/\d+)?/g)??[]).filter(v=>verify('x-5=2',v));
+   assert.deepEqual(numbers,[],`${where} carries the answer after «${leak}»: ${text}`);
+  }
+  assert.equal(r.body.reply,ask);assert.equal(it.reply,ask);
+ }
+ said({reply:'Look at the line where the 5 moved.',value:'',slip:'unclear'});
+ assert.equal((await explainAt(1)).body.reply,'Look at the line where the 5 moved.','a number from the question is not the answer');
+});
+test('case 6: the desk\'s reply rides on the walk item, for the TV\'s caption slot',async()=>{
+ await markedWalk();
+ said({reply:'Look at the line where the 1 moved.',value:'about nine',slip:'unclear'});
+ await explainAt(4,'I am not sure');
+ assert.equal(store.getSession().practice.items[4].reply,'Look at the line where the 1 moved.');
+ assert.equal(store.getSession().practice.items[3].reply,undefined,'only the item explained');
+});
+test('GUARD case 7: after settling, no line on any item carries a value, and the session carries no answer',async()=>{
+ await markedWalk();
+ for(const [ix,value] of [[3,'9'],[4,'x = 6'],[5,'about eight'],[1,'7']]){said({reply:'Look again at the step where x was left alone.',value,slip:'arithmetic-slip'});await explainAt(ix);}
+ const p=store.getSession().practice;
+ for(const i of p.items){
+  const numbers=((i.said??'').match(/-?\d+(\/\d+)?/g)??[]).filter(v=>v!==String(i.n));assert.deepEqual(numbers,[],`item ${i.n} said: ${i.said}`);
+  const leaked=((i.reply??'').match(/-?\d+(\.\d+)?(\/\d+)?/g)??[]).filter(v=>verify(i.question,v));assert.deepEqual(leaked,[],`item ${i.n} reply: ${i.reply}`);
+ }
+ const keys=keysIn(p);assert(!keys.includes('answer'));assert(!keys.includes('solution'));
+});
