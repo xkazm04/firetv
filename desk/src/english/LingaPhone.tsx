@@ -4,6 +4,7 @@ import type { Event, Session } from "@/lib/session/store";
 import { defaultPreferences, eligibleScenes, ENGLISH_SCENES, ENGLISH_SKILLS, PROGRESS_LABEL, recommendScene } from "@/lib/english/curriculum";
 import { ABOUT_QUESTIONS, BAND_CAN, BAND_NAME, isBand, MAX_TASKS, PLAN_MAX, TOPIC_ASK_MAX } from "@/lib/english/placement";
 import { BANDS, type Band, type Conversation, type EnglishLearning, type EnglishPreferences, type LevelCheck, type Placement } from "@/lib/english/types";
+import { lingaHome } from "@/lib/english/view";
 import { ReplyBox } from "./ReplyBox";
 import { useEnglish } from "./useEnglish";
 
@@ -158,30 +159,55 @@ function SelfLevel({run,busy,start}:{run:Run;busy:boolean;start:Band}){
   </details>;
 }
 
+/** Linga home on the phone: the same six states the TV decides (lib/english/view.ts). */
 function StartPanel({s,learning,run,busy}:{s:Session;learning:EnglishLearning;run:Run;busy:boolean}){
   const profile=s.profiles.find(p=>p.id===s.learner.id),c=s.conversation,prefs=learning.preferences??defaultPreferences(profile);
-  const next=recommendScene(profile,learning),placement=learning.placement;
+  const next=recommendScene(profile,learning),placement=learning.placement,home=lingaHome(s);
   const pick=<label>Or choose a situation<select defaultValue="" onChange={e=>{if(e.target.value)void run("start",{sceneId:e.target.value,replace:true});e.target.value="";}} disabled={busy}><option value="">Choose…</option>{eligibleScenes(profile,prefs,learning).map(x=><option key={x.id} value={x.id}>{x.name}</option>)}</select></label>;
+  const level=placement&&<p className="linga-note">Your level: <b>{placement.band} · {BAND_NAME[placement.band]}</b>{placement.source==="self"?" · self-chosen":""}</p>;
+  const planned=<div className="linga-buttons"><button className="pbtn" data-secondary="true" disabled={busy} onClick={()=>run("plan-open")}>My topics</button><button className="pbtn" data-secondary="true" disabled={busy} onClick={()=>run("check-start")}>Find my level again</button></div>;
+  let body;
+  switch(home){
+    case "resume":body=<>
+      <p>Your conversation <b>{c?.title}</b> is waiting. Carry on from the last question.</p>
+      <button className="pbtn" data-signal="true" disabled={busy} onClick={()=>run("resume")}>Carry on talking</button>
+      {pick}
+    </>;break;
+    case "check-part-way":body=<>
+      <p><b>Find your level</b><br/>You stopped part way. Carry on from where you were.</p>
+      <button className="pbtn" data-signal="true" disabled={busy} onClick={()=>run("check-resume")}>Carry on</button>
+      <button className="pbtn" data-secondary="true" disabled={busy} onClick={()=>run("check-start")}>Start again</button>
+    </>;break;
+    case "no-placement":body=<>
+      <p><b>Let&apos;s find your level</b><br/>Three questions about you, then a few short tasks. About seven minutes. Answer in English or your own language.</p>
+      <button className="pbtn" data-signal="true" disabled={busy} onClick={()=>run("check-start")}>Find my level</button>
+      <SelfLevel run={run} busy={busy} start={isBand(prefs.level)?prefs.level:"A1"}/>
+      {pick}
+    </>;break;
+    case "no-plan":body=<>
+      <VerdictPanel placement={placement!} run={run} busy={busy} hasPlan={false}/>
+      {pick}
+    </>;break;
+    case "plan-done":body=<>
+      {level}
+      <p><b>Every topic talked through</b><br/>Ask Linga for a fresh set of conversations, or go back to one you enjoyed.</p>
+      <button className="pbtn" data-signal="true" disabled={busy} onClick={()=>run("plan-propose")}>New topics</button>
+      <button className="pbtn" data-secondary="true" disabled={busy} onClick={()=>run("start",{sceneId:next.id,replace:true})}>Talk again: {next.name}</button>
+      {pick}{planned}
+    </>;break;
+    case "next-topic":body=<>
+      {level}
+      <p>Next topic: <b>{next.name}</b><br/>{next.goal}</p>
+      <button className="pbtn" data-signal="true" disabled={busy} onClick={()=>run("start",{sceneId:next.id,replace:true})}>Start talking</button>
+      {pick}{planned}
+    </>;break;
+  }
   return <>
     {c?.phase==="finished"&&<>
       <p className="linga-status">Rehearsal saved. Your map shows the evidence you collected.</p>
       {(c.moments??[]).length>0&&<div className="linga-transcript"><b>From this rehearsal</b>{c.moments.map(m=><p key={m.id}>{m.kind==="fix"?<>“{m.said}” → “{m.better}”</>:<>“{m.said}”: {m.better}</>}<br/><small>{m.why}</small></p>)}</div>}
     </>}
-    {!placement?<>
-      <p><b>Let&apos;s find your level</b><br/>Three questions about you, then a few short tasks. About seven minutes. Answer in English or your own language.</p>
-      <button className="pbtn" data-signal="true" disabled={busy} onClick={()=>run("check-start")}>Find my level</button>
-      <SelfLevel run={run} busy={busy} start={isBand(prefs.level)?prefs.level:"A1"}/>
-      {pick}
-    </>:!learning.plan?<>
-      <VerdictPanel placement={placement} run={run} busy={busy} hasPlan={false}/>
-      {pick}
-    </>:<>
-      <p className="linga-note">Your level: <b>{placement.band} · {BAND_NAME[placement.band]}</b>{placement.source==="self"?" · self-chosen":""}</p>
-      <p>Next topic: <b>{next.name}</b><br/>{next.goal}</p>
-      <button className="pbtn" data-signal="true" disabled={busy} onClick={()=>run("start",{sceneId:next.id,replace:true})}>Start talking</button>
-      {pick}
-      <div className="linga-buttons"><button className="pbtn" data-secondary="true" disabled={busy} onClick={()=>run("plan-open")}>My topics</button><button className="pbtn" data-secondary="true" disabled={busy} onClick={()=>run("check-start")}>Find my level again</button></div>
-    </>}
+    {body}
   </>;
 }
 

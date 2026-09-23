@@ -7,22 +7,16 @@
  */
 import { useEffect, useRef, useState } from "react";
 import type { Session } from "@/lib/session/store";
+import { lingaView } from "@/lib/english/view";
 import { requestId, useEnglish } from "./useEnglish";
 
 type Target = { action: string; extra: Record<string, string>; label: string } | null;
 
-/** The question on screen that takes a spoken or typed answer; a choice task is answered with the remote. */
+/** The question on screen that takes a spoken or typed answer, as the view decides it; a choice is answered with the remote. */
 function target(s: Session): Target {
-  const k = s.check && s.check.learnerId === s.learner.id ? s.check : null, c = s.conversation;
-  if (s.screen === "linga-check" && k && !k.pending) {
-    const q = k.turns.at(-1);
-    if (k.stage === "about" && q?.role === "tutor") return { action: "check-answer", extra: { lastTurnId: q.id }, label: "Answer the question" };
-    if (k.stage === "tasks" && k.task && k.task.kind !== "choose") return { action: "check-task", extra: { taskId: k.task.id }, label: k.task.kind === "listen" ? "Answer the listening task" : "Answer the task" };
-  }
-  if (s.screen === "linga-plan" && k?.askGoal && !k.pending) return { action: "plan-goal", extra: {}, label: "Say what to practise" };
-  const said = c?.turns.at(-1);
-  if (s.screen === "linga-talk" && c && !c.pending && !c.paused && !c.quizOpen && c.phase !== "finished" && said?.role === "partner") return { action: "turn", extra: { lastTurnId: said.id }, label: `Reply to ${c.partner}` };
-  return null;
+  const a = lingaView(s).answer;
+  if (!a) return null;
+  return { action: a.action, extra: { ...(a.lastTurnId ? { lastTurnId: a.lastTurnId } : {}), ...(a.taskId ? { taskId: a.taskId } : {}) }, label: a.label };
 }
 
 interface Recognition { lang: string; continuous: boolean; interimResults: boolean; onresult: ((e: { results: ArrayLike<{ [i: number]: { transcript: string } }> }) => void) | null; onerror: ((e: { error: string }) => void) | null; onend: (() => void) | null; start: () => void; stop: () => void; }
