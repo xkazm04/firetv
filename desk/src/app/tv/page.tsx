@@ -131,6 +131,7 @@ function ScreenFor({ s, table, busy }: { s: Session; table: boolean; busy: boole
     case "recap": return <S.Recap s={s} focus={f} />;
     case "topics": return <S.Topics s={s} focus={f} busy={busy} />;
     case "practice": return <S.PracticeScreen s={s} />;
+    case "sheet": return <S.Sheet s={s} focus={f} />;
     case "walk": return <S.Walk s={s} focus={f} />;
   }
 }

@@ -8,6 +8,7 @@
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { networkInterfaces } from "node:os";
 import { AGE_RANGE } from "@/tv/profileRows";
+import { firstToLook } from "@/tv/sheetRows";
 import path from "node:path";
 import { getLearner, type HistoryEntry, type SkillRecord } from "./learners";
 import { SYLLABUS } from "../library/syllabus";
@@ -16,7 +17,7 @@ import type { Sentence } from "../rules/essay";
 import { emptyEnglish, type Conversation, type EnglishLearning, type LevelCheck } from "../english/types";
 
 export type Subject = "maths" | "english" | "essay";
-export type Screen = "landing" | "pair" | "joined" | "tonight" | "units" | "calendar" | "page" | "hint" | "lesson" | "sentence" | "headtohead" | "essaytype" | "forensic" | "playbook" | "xray" | "break" | "recap" | "learner" | "profile" | "topics" | "practice" | "walk" | "linga" | "linga-scenes" | "linga-map" | "linga-talk" | "linga-coach" | "linga-recap" | "linga-check" | "linga-verdict" | "linga-plan" | "linga-moment";
+export type Screen = "landing" | "pair" | "joined" | "tonight" | "units" | "calendar" | "page" | "hint" | "lesson" | "sentence" | "headtohead" | "essaytype" | "forensic" | "playbook" | "xray" | "break" | "recap" | "learner" | "profile" | "topics" | "practice" | "sheet" | "walk" | "linga" | "linga-scenes" | "linga-map" | "linga-talk" | "linga-coach" | "linga-recap" | "linga-check" | "linga-verdict" | "linga-plan" | "linga-moment";
 
 export type StudentType = "elementary" | "high-school" | "other";
 /** The school system a learner's progress is read against. One per profile; the desk defaults to UK. */
@@ -216,7 +217,8 @@ export function reduce(s: Session, e: Event): Session {
     // the open topic keeps the focus, so a set that fails is retried on the topic it was asked for
     case "topic.open": n.topic = e.topic; n.subject = "maths"; n.screen = "topics"; n.focus = Math.max(0, SYLLABUS.findIndex((t) => t.id === e.topic)); break;
     case "practice.set": n.practice = shownPractice(e.practice); n.topic = e.practice.topic; n.walkIx = 0; n.screen = "practice"; break;
-    case "practice.marked": if (s.practice) { n.practice = { ...s.practice, items: e.items.map(shown), marked: true }; n.walkIx = 0; n.screen = "walk"; } break;
+    // a marked set lands on the sheet - all six verdicts at once - focused on the first item to look at
+    case "practice.marked": if (s.practice) { n.practice = { ...s.practice, items: e.items.map(shown), marked: true }; n.walkIx = 0; n.screen = "sheet"; n.focus = firstToLook(n.practice.items); } break;
     // an explanation: the reply always lands on its item; a verdict only on an item still unsure (a settled item stays settled)
     case "practice.settle": if (s.practice) { n.practice = { ...s.practice, items: s.practice.items.map((it) => it.n !== e.n ? it
       : shown(e.verdict && it.verdict === "unsure" ? { ...it, verdict: e.verdict, slip: e.slip, said: e.said ?? it.said, reply: e.reply } : { ...it, reply: e.reply })) }; } break;

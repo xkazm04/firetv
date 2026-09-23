@@ -12,6 +12,7 @@ import { ESSAY_TYPES } from "@/lib/library/lessons.data";
 import { fmt } from "./useSession";
 import { continueCard } from "./mathsRows";
 import { running, practiceFailed, stopAt, LANDING_STOPS, tonightStops, learnerStops, unitStops, calendarStops, LENS_STOPS, PLAYBOOK_STOPS, HINT_STOPS, SENTENCE_STOPS, RECAP_STOPS, TOPIC_STOPS, walkStops, type TonightStop } from "./keys";
+import { sheetTiles, sheetStops, tileOf, type SheetTile } from "./sheetRows";
 
 
 /** The OCR writes exponents as ^n and the tutor may too; the screen shows them as printed. */
@@ -766,12 +767,56 @@ export function PracticeScreen({ s }: { s: Session }) {
         <span className="cap">What to do</span>
         <div className="cap-text">Work all six on paper, then snap the whole sheet with the phone. The desk marks it and walks you through it here.</div>
       </div>
-      <div className="ticker"><span><b>{p.items.length}</b> questions</span><i>·</i><span>{t?.name ?? p.topic}</span><i>·</i><span>the phone is waiting for the sheet</span><i>·</i><span>Back to the topics</span></div>
+      <div className="ticker"><span><b>{p.items.length}</b> questions</span><i>·</i><span>{t?.name ?? p.topic}</span><i>·</i><span>the phone is waiting for the sheet</span><i>·</i><span>Back keeps it for later</span></div>
     </main>
   </>);
 }
 
-// ---- M3 Walk · one marked item at a time. Band: gauge. Hero: a lower-third and a verdict mark. ----
+// ---- M3 Sheet · the marked set as one picture. Band: shelf. Hero: the verdict tiles standing on it. ----
+const TILE_WORD = { right: "Right", wrong: "Look again", unsure: "Not sure" } as const;
+const HOW_MANY = ["None", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten"];
+/** What the caption says about the focused tile: where to look, never what the answer is. */
+function tileCaption(t: SheetTile): string {
+  if (t.verdict === "right") return `Number ${t.n} came back right. Select opens it all the same.`;
+  if (t.verdict === "unsure") return `The desk could not be sure about number ${t.n}. Select opens it; tell the desk on the phone how you got there.`;
+  const sl = t.slip ? slipById(t.slip) : undefined;
+  return sl ? `Number ${t.n} needs another look, starting at ${sl.points}. Select opens it.` : `Number ${t.n} needs another look. Select opens it.`;
+}
+export function Sheet({ s, focus }: { s: Session; focus: number }) {
+  const p = s.practice;
+  if (!p || !p.marked) return <main className="content-full"><div className="title">No marked set on the desk</div></main>;
+  const t = topicById(p.topic), name = t?.name ?? p.topic;
+  const tiles = sheetTiles(p), at = stopAt(sheetStops(p), focus), ix = tileOf(at), tile = ix === null ? undefined : tiles[ix];
+  const right = tiles.filter((x) => x.verdict === "right").length, look = tiles.length - right;
+  return (<>
+    <div className="band band-shelf" />
+    <main className="content-full">
+      <div className="eyebrow" data-ch="maths">Math Buddy · your sheet, marked · {name}</div>
+      <div className="title">{look ? `${HOW_MANY[look] ?? look} to look at` : `All ${HOW_MANY[tiles.length]?.toLowerCase() ?? tiles.length} right`}</div>
+      <div className="tiles" style={{ gridTemplateColumns: `repeat(${tiles.length}, 1fr)` }}>
+        {tiles.map((x, i) => (
+          <div key={x.n} className="tile" data-v={x.verdict} data-focused={ix === i}>
+            <div className="n">{x.n}</div>
+            <div className="w">{TILE_WORD[x.verdict]}</div>
+          </div>
+        ))}
+      </div>
+      <div style={{ position: "absolute", left: 0, top: 500 }}>
+        <span className="cap" style={{ background: "transparent", color: "var(--maths)", border: "2px solid var(--maths)" }}>{tile ? `Number ${tile.n}` : at === "more" ? "Six more" : "Put away"}</span>
+        <div className="cap-text">{tile ? tileCaption(tile)
+          : at === "more" ? `Six new questions on ${name}, aimed at the slips the desk has seen. Work them on paper, like this set.`
+          : "The set leaves the desk. What it showed is already in your record."}</div>
+      </div>
+      <div className="actions">
+        <button className="btn" data-focused={at === "more"}>Six more</button>
+        <button className="btn" data-focused={at === "away"}>Put the sheet away</button>
+      </div>
+      <div className="ticker"><span><b>{right}</b> right</span><i>·</i><span><b>{look}</b> to look at</span><i>·</i><span>{name}</span><i>·</i><span>Select opens one</span><i>·</i><span>Back keeps it for later</span></div>
+    </main>
+  </>);
+}
+
+// ---- M4 Walk · one marked item at a time. Band: gauge. Hero: a lower-third and a verdict mark. ----
 const VERDICT_WORD = { right: "Right", wrong: "Look again", unsure: "The desk is not sure" } as const;
 export function Walk({ s, focus }: { s: Session; focus: number }) {
   const p = s.practice;
@@ -804,8 +849,8 @@ export function Walk({ s, focus }: { s: Session; focus: number }) {
         <span className="cap" style={{ background: "transparent", color: "var(--maths)", border: "2px solid var(--maths)" }}>What the desk says</span>
         <div className="cap-text">{it.reply ?? it.said ?? (v === "right" ? "This one is right. Nothing more to say about it." : "The desk has no comment on this one.")}</div>
       </div>
-      {last && <div className="actions"><button className="btn" data-focused={stopAt(walkStops(s), focus) === "finish"}>Finish the set</button></div>}
-      <div className="ticker"><span>item <b>{s.walkIx + 1}</b> of {p.items.length}</span><i>·</i><span><b>{right}</b> right</span><i>·</i><span><b>{look}</b> to look at</span><i>·</i><span>{last ? "Select finishes" : "Left and Right walk the set"}</span></div>
+      {last && <div className="actions"><button className="btn" data-focused={stopAt(walkStops(s), focus) === "sheet"}>Back to the sheet</button></div>}
+      <div className="ticker"><span>item <b>{s.walkIx + 1}</b> of {p.items.length}</span><i>·</i><span><b>{right}</b> right</span><i>·</i><span><b>{look}</b> to look at</span><i>·</i><span>{last ? "Select · the whole sheet" : "Left and Right walk the set"}</span><i>·</i><span>Back · the whole sheet</span></div>
     </main>
   </>);
 }

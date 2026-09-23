@@ -11,6 +11,7 @@ import { LESSONS, ESSAY_TYPES, type Lesson } from "@/lib/library/lessons.data";
 import { SYLLABUS, type Topic } from "@/lib/library/syllabus";
 import { profileRows, locate, flat } from "@/tv/profileRows";
 import { continueCard } from "@/tv/mathsRows";
+import { sheetStops, firstToLook, tileOf } from "@/tv/sheetRows";
 
 /** The remote's buttons. The keyboard stands in for it on the bench. */
 export type Key = "up" | "down" | "left" | "right" | "select" | "back" | "menu" | "play";
@@ -60,8 +61,8 @@ export const HINT_STOPS = ["stuck", "lesson"] as const;
 export const SENTENCE_STOPS = ["again", "unit"] as const;
 export const RECAP_STOPS = ["send", "tonight"] as const;
 export const TOPIC_STOPS: readonly Topic[] = SYLLABUS;
-/** The walk has one action, on its last item. */
-export function walkStops(s: Session): Array<"finish"> { const n = s.practice?.items.length ?? 0; return n && s.walkIx === n - 1 ? ["finish"] : []; }
+/** The walk has one action, on its last item: back to the sheet. */
+export function walkStops(s: Session): Array<"sheet"> { const n = s.practice?.items.length ?? 0; return n && s.walkIx === n - 1 ? ["sheet"] : []; }
 
 // ---- the keymap ----
 class Out implements Step {
@@ -77,6 +78,17 @@ class Out implements Step {
   grid(k: Key, n: number, cols: number) {
     if (k === "right") this.move(n, 1); if (k === "left") this.move(n, -1);
     if (k === "down") this.move(n, cols); if (k === "up") this.move(n, -cols);
+  }
+  /**
+   * Ask for a practice set on a topic, unless one is already being written (here, or as a running
+   * job). Topics and the sheet's "Six more" both come here; the set arrives as practice.set over the
+   * session stream, and a failed call gives Select back.
+   */
+  set(local: Local, topic: string) {
+    if (local.busy || running(this.s, "practice")) return;
+    this.ev({ type: "topic.open", topic });
+    this.calls.push({ url: "/api/practice", body: { topic }, onFail: { busy: false } });
+    this.local.busy = true;
   }
   /** Ask for a hint unless one is already on its way (here, or as a running job): each one is a model call and counts in the log. */
   hint(local: Local, body: Record<string, unknown>) {
@@ -121,7 +133,7 @@ const KEYMAP: Partial<Record<Screen, Handler>> = {
     const cont = at === "continue" ? continueCard(s) : null;
     if (cont) {
       if (cont.go === "page") { o.ev({ type: "page.select", pageIx: cont.pageIx }); o.nav("page"); }
-      else o.nav(cont.go);
+      else o.nav(cont.go, cont.focus);
     } else if (at === "teach") o.nav("topics");
     else { const pi = s.pages.findIndex((p) => p.subject === "maths");
       if (pi >= 0) { o.ev({ type: "page.select", pageIx: pi }); o.nav("page"); } else o.ev({ type: "page.ask", subject: "maths" }); }
@@ -204,20 +216,32 @@ const KEYMAP: Partial<Record<Screen, Handler>> = {
     if (k === "right") o.move(TOPIC_STOPS.length, 1); if (k === "left") o.move(TOPIC_STOPS.length, -1);
     // nothing is locked here: Select starts whatever is focused. Menu and Up go home, where the path lives.
     if (k === "up" || k === "menu") o.nav("tonight");
-    if (k === "select" && !local.busy && !running(s, "practice")) { const t = stopAt(TOPIC_STOPS, s.focus); if (t) {
-      o.ev({ type: "topic.open", topic: t.id });
-      // the set arrives as practice.set over the session stream; a failed call gives Select back
-      o.calls.push({ url: "/api/practice", body: { topic: t.id }, onFail: { busy: false } });
-      o.local.busy = true;
-    } }
+    if (k === "select") { const t = stopAt(TOPIC_STOPS, s.focus); if (t) o.set(local, t.id); }
     if (k === "back") o.nav("tonight");
   },
-  practice: (_, k, __, o) => { if (k === "back") { o.ev({ type: "practice.clear" }); o.nav("topics"); } },
+  // the set on paper is parked, not thrown away: Tonight's continue card puts it back
+  practice: (_, k, __, o) => { if (k === "back") o.nav("tonight"); },
+  // the marked set as one picture: the tiles on one row, the two actions below
+  sheet: (s, k, local, o) => {
+    const p = s.practice; if (!p) { if (k === "back") o.nav("tonight"); return; }
+    const stops = sheetStops(p), at = stopAt(stops, s.focus), tile = tileOf(at), n = p.items.length;
+    if (tile !== null) {
+      if (k === "right") o.move(n, 1); if (k === "left") o.move(n, -1);
+      if (k === "down") o.focus(stops.indexOf("more"));
+      if (k === "select") { o.ev({ type: "walk", ix: tile }); o.nav("walk"); }
+    } else {
+      if (k === "right") o.focus(stops.indexOf("away")); if (k === "left") o.focus(stops.indexOf("more"));
+      if (k === "up") o.focus(Math.min(firstToLook(p.items), n - 1));
+      if (k === "select" && at === "more") o.set(local, p.topic);
+      if (k === "select" && at === "away") o.ev({ type: "practice.clear" });
+    }
+    if (k === "back") o.nav("tonight");
+  },
+  // one item at a time; leaving it goes back to the sheet at that item, never clears the set
   walk: (s, k, _, o) => {
     if (k === "right") o.ev({ type: "walk", ix: s.walkIx + 1 });
     if (k === "left") o.ev({ type: "walk", ix: s.walkIx - 1 });
-    if (k === "select" && stopAt(walkStops(s), s.focus) === "finish") o.ev({ type: "practice.clear" });
-    if (k === "back") o.ev({ type: "practice.clear" });
+    if ((k === "select" && stopAt(walkStops(s), s.focus) === "sheet") || k === "back") o.nav("sheet", s.walkIx);
   },
   recap: (s, k, _, o) => {
     const at = stopAt(RECAP_STOPS, s.focus);

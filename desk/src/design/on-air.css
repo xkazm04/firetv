@@ -155,6 +155,23 @@
 .band-gauge[data-v="right"] { background: linear-gradient(to top, #fff 0 var(--fill, 0%), rgba(255,255,255,.10) var(--fill, 0%) 100%); }
 .band-gauge[data-v="unsure"] { background: linear-gradient(to top, rgba(255,255,255,.34) 0 var(--fill, 0%), rgba(255,255,255,.10) var(--fill, 0%) 100%); }
 
+/* sheet: a shelf across the stage that the marked set's tiles stand on - the edge of the picture */
+.band-shelf { left: -96px; top: 436px; width: 1920px; height: 18px; clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); }
+
+/* ---- sheet: the marked set as one picture - a tile per item, the tile IS its verdict mark.
+   Right is a white rule, look again a red block, not sure a dashed outline: the .verdict grammar, per item. ---- */
+.tiles { position: absolute; left: 0; right: 0; top: 176px; display: grid; gap: 28px; align-items: end; }
+.tile { height: 236px; display: flex; flex-direction: column; justify-content: flex-end; gap: 10px; padding: 0 26px 22px; font-family: var(--display); text-transform: uppercase; transition: transform .1s; }
+.tile .n { font-size: 120px; font-weight: 800; line-height: .9; font-variant-numeric: tabular-nums; }
+.tile .w { font-size: 30px; font-weight: 800; letter-spacing: .1em; }
+.tile[data-v="right"] { color: #fff; border-bottom: 8px solid #fff; }
+.tile[data-v="wrong"] { color: #fff; background: linear-gradient(180deg, var(--signal), var(--signal-2)); }
+.tile[data-v="unsure"] { color: var(--mute); border: 3px dashed rgba(255,255,255,.34); }
+.tile[data-focused="true"] { transform: skewX(-6deg) scale(1.04); box-shadow: 14px 14px 0 var(--signal); }
+.tile[data-focused="true"][data-v="right"], .tile[data-focused="true"][data-v="unsure"] { background: #fff; color: var(--ink); border-color: #fff; }
+.tile[data-focused="true"][data-v="wrong"] { box-shadow: 14px 14px 0 #fff; }
+@media (prefers-reduced-motion: reduce) { .tile { transition: none; } }
+
 /* ---- practice: six questions as a poster, nothing focusable ---- */
 .qs { display: grid; grid-template-columns: 1fr 1fr; gap: 58px 130px; }
 .qs .q { display: grid; grid-template-columns: 74px 1fr; align-items: baseline; gap: 20px; }
