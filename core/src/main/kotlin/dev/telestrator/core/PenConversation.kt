@@ -143,6 +143,8 @@ data class HeartbeatInput(
     val durationMs: Long,
     val doc: AnnotationDoc,
     val revision: Long,
+    /** The drawn moments of review mode (see [AnnotationTimeline.moments]). */
+    val marks: List<Long> = emptyList(),
 )
 
 /**
@@ -197,6 +199,7 @@ class Heartbeat {
                 canRedo = input.canRedo,
                 durationMs = input.durationMs,
                 thumbnail = null,
+                marks = input.marks,
             ),
         )
     }

@@ -103,6 +103,11 @@ sealed interface TvMessage {
         val durationMs: Long = 0,
         /** JPEG data URL of the paused frame, so the phone can show what it is drawing on. */
         val thumbnail: String? = null,
+        /**
+         * The drawn moments (ms, ascending) the phone marks on its scrub bar and jumps between. The
+         * empty default keeps older senders decodable; an empty list encodes as `[]`, never null.
+         */
+        val marks: List<Long> = emptyList(),
     ) : TvMessage
 
     /**
