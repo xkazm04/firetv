@@ -21,7 +21,8 @@ import { spawn } from "node:child_process";
 import { mkdtempSync, readFileSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import path from "node:path";
-import type { EngineResult, SpeakRequest } from "./types";
+import { provider, register } from "./registry";
+import { EngineError, type EngineResult, type Provider, type SpeakRequest } from "./types";
 
 const KEY = process.env.ELEVENLABS_API_KEY || "";
 // A calm, clear voice; overridable. Voice ids are ElevenLabs' public library ids.
@@ -53,19 +54,31 @@ async function piperSpeak(text: string): Promise<Buffer> {
   } finally { rmSync(dir, { recursive: true, force: true }); }
 }
 
+export const piper: Provider<SpeakRequest, Buffer> = {
+  name: "piper",
+  async run(req) { return { raw: await piperSpeak(req.text), provider: `piper/${voiceName(PIPER_VOICE)}` }; },
+};
+
+export const elevenlabs: Provider<SpeakRequest, Buffer> = {
+  name: "elevenlabs",
+  async run(req) {
+    const reported = "elevenlabs/turbo-v2.5";
+    if (!KEY) throw new EngineError("unreachable", reported, "no voice engine: set PIPER_BIN and PIPER_VOICE, or ELEVENLABS_API_KEY");
+    const res = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${req.voice || VOICE}?output_format=mp3_44100_64`, {
+      method: "POST",
+      headers: { "xi-api-key": KEY, "Content-Type": "application/json", Accept: "audio/mpeg" },
+      body: JSON.stringify({ text: req.text, model_id: "eleven_turbo_v2_5", voice_settings: { stability: 0.5, similarity_boost: 0.7 } }),
+    }).catch((e: Error) => { throw new EngineError("unreachable", reported, `elevenlabs is not reachable: ${e.message}`); });
+    if (!res.ok) throw new EngineError("exit", reported, `elevenlabs ${res.status}: ${(await res.text()).slice(0, 300)}`);
+    return { raw: Buffer.from(await res.arrayBuffer()), provider: reported };
+  },
+};
+
+// The preference chain: Piper when it is fully configured, else ElevenLabs (which says so when it has no key).
+register("speak", [piper, elevenlabs], () => (piperReady() ? "piper" : "elevenlabs"));
+
 export async function speak(req: SpeakRequest): Promise<EngineResult<Buffer>> {
-  const started = Date.now();
-  if (piperReady()) {
-    const audio = await piperSpeak(req.text);
-    return { json: audio, provider: `piper/${voiceName(PIPER_VOICE)}`, ms: Date.now() - started };
-  }
-  if (!KEY) throw new Error("no voice engine: set PIPER_BIN and PIPER_VOICE, or ELEVENLABS_API_KEY");
-  const res = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${req.voice || VOICE}?output_format=mp3_44100_64`, {
-    method: "POST",
-    headers: { "xi-api-key": KEY, "Content-Type": "application/json", Accept: "audio/mpeg" },
-    body: JSON.stringify({ text: req.text, model_id: "eleven_turbo_v2_5", voice_settings: { stability: 0.5, similarity_boost: 0.7 } }),
-  });
-  if (!res.ok) throw new Error(`elevenlabs ${res.status}: ${(await res.text()).slice(0, 300)}`);
-  const audio = Buffer.from(await res.arrayBuffer());
-  return { json: audio, provider: "elevenlabs/turbo-v2.5", ms: Date.now() - started };
+  const started = Date.now(), p = provider("speak");
+  const a = await p.run(req);
+  return { json: a.raw, provider: a.provider ?? p.name, ms: Date.now() - started };
 }

@@ -72,7 +72,7 @@ test('case 6: retrieval reads and caches under DESK_DATA_DIR and seeks to the ne
  const w=lessonWindows(LESSON);
  assert(w.length>=3,`the seeded transcript has at least three windows (got ${w.length})`);
  const unit=(i)=>w.map((_,j)=>j===i?1:0);
- reg().useProvider('embed',{name:'stub',run:async({texts})=>({raw:texts.length===1?unit(2):texts.map((_,i)=>unit(i))})});
+ reg().useProvider('embed',{name:'stub',run:async({texts})=>({raw:texts.length===1?[unit(2)]:texts.map((_,i)=>unit(i))})});
  const {pickLesson}=load('desk/pick.ts');
  const pick=await pickLesson('maths','2x+3=7');
  assert.equal(pick.id,LESSON);assert.equal(pick.t,w[2].t);

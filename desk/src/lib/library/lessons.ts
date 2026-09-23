@@ -8,12 +8,13 @@ import path from "node:path";
 import { parseVtt, windows, type Cue } from "./vtt";
 import { embed, cosine } from "../engines/embed";
 
-// Maths lessons are Khan Academy (CC BY-NC-SA); transcripts live in desk/data/lessons (local only).
+// Maths lessons are Khan Academy (CC BY-NC-SA); transcripts live in <data>/lessons (local only).
 import { LESSONS } from "./lessons.data";
 export { LESSONS };
 export type { Lesson } from "./lessons.data";
 
-const DATA = path.join(process.cwd(), "data");
+// The same data directory as the session store and the learner records (store.ts, learners.ts).
+const DATA = process.env.DESK_DATA_DIR || path.join(process.cwd(), "data");
 const cache = new Map<string, Cue[]>();
 let vectors: Map<string, number[][]> | null = null;
 
@@ -24,7 +25,7 @@ export function lessonWindows(id: string): Cue[] {
   cache.set(id, w); return w;
 }
 
-/** Embed every window once; cached to data/embeddings.json so a restart does not pay again. */
+/** Embed every window once; cached to <data>/embeddings.json so a restart does not pay again. */
 export async function ensureVectors(): Promise<Map<string, number[][]>> {
   if (vectors) return vectors;
   const f = path.join(DATA, "embeddings.json");
