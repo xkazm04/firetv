@@ -38,6 +38,10 @@ test` always, and the gradle line whenever anything Kotlin changed. The rules su
 through `desk/package.json`'s `test:rules`; a new suite is appended at the END of that chain
 under the shared-surface lock.
 
+A fresh worktree needs two gitignored files copied from the main checkout before the gradle
+line can pass: `local.properties` (SDK path) and `tv-app/src/main/res/raw/fixture_clip.mp4`
+(without it `R.raw` does not exist and `MainActivity.kt` fails to compile).
+
 `npm test`'s `pretest` (`tools/worktree-preflight.cjs`) links `desk/node_modules` from the main
 checkout when a worktree has none. The main checkout's `desk/node_modules/.bin` was missing on
 2026-09-23 (tsc not found); `npm rebuild --ignore-scripts` restored the links.
