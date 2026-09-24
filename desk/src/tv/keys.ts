@@ -7,7 +7,7 @@
  * Types only from the store: the TV never loads the filesystem-backed session modules.
  */
 import type { Event, JobKind, Profile, Screen, Session, Subject } from "@/lib/session/store";
-import { LESSONS, ESSAY_TYPES, type Lesson } from "@/lib/library/lessons.data";
+import { LESSONS, ESSAY_TYPES, PLAYBOOK, playFor, type Lesson } from "@/lib/library/lessons.data";
 import { SYLLABUS, type Topic } from "@/lib/library/syllabus";
 import { profileRows, locate, flat } from "@/tv/profileRows";
 import { continueCard } from "@/tv/mathsRows";
@@ -27,6 +27,10 @@ export const LOCAL: Local = { busy: false, table: false, hintInFlight: false };
 /** A POST the key fires after its events. `onFail` is applied on a non-ok answer or a network error, `onDone` on an ok one. */
 export interface Call { url: string; body: Record<string, unknown>; onFail?: Partial<Local>; onDone?: Partial<Local> }
 export interface Step { events: Event[]; calls: Call[]; local: Partial<Local> }
+
+/** Essay Master draws its own screens (essay/EssayTV.tsx, the Specimen design); the On Air shell steps aside for them. */
+export const ESSAY_SCREENS = ["essaytype", "forensic", "playbook", "xray"] as const satisfies readonly Screen[];
+export function essayOwns(s: Session): boolean { return (ESSAY_SCREENS as readonly Screen[]).includes(s.screen); }
 
 /** Linga draws and drives its own screens (english/LingaTV.tsx); the TV's map stays out of them. */
 export function lingaOwns(s: Session): boolean {
@@ -53,10 +57,30 @@ export function learnerStops(s: Session): Array<Profile | "add"> { return [...s.
 /** The units of the module on screen; the calendar is Math Buddy's lessons on file. */
 export function unitStops(s: Session): Lesson[] { return LESSONS.filter((l) => l.subject === s.subject); }
 export function calendarStops(): Lesson[] { return LESSONS.filter((l) => l.subject === "maths"); }
-/** The lenses, straight from the library - a 2 x 2 grid. */
+/** The lenses, straight from the library, top to bottom. */
 export const LENS_STOPS = ESSAY_TYPES;
-/** The playbook's four structures - a 2 x 2 grid. */
-export const PLAYBOOK_STOPS = ["thesis", "para", "order", "concl"] as const;
+/** Essay Master's home: the four lenses, then the last paragraph's card (Right) when a paragraph has been read. */
+export type LensStop = (typeof ESSAY_TYPES)[number] | "last";
+export function lensStops(s: Session): LensStop[] { return s.essay ? [...LENS_STOPS, "last"] : [...LENS_STOPS]; }
+/** The lens the paragraph on the desk was read through, as a stop; the first lens when there is none. */
+export function readingLens(s: Session): number { return Math.max(0, LENS_STOPS.findIndex((t) => t.id === s.essay?.type)); }
+/** The playbook's four structures, straight from the library, top to bottom. */
+export const PLAYBOOK_STOPS = PLAYBOOK;
+/**
+ * The forensic page: its actions run Left/Right along the bottom; Up/Down walk the paragraph's sentences
+ * instead (the essay.at event), so the page is always about one sentence and one action is focused.
+ */
+export const FORENSIC_STOPS = ["rewrite", "why", "next", "back"] as const;
+/** The sentence the forensic page is about, as an index: the one walked to, else the first faulty one, else the first. */
+export function forensicAt(s: Session): number {
+  const a = s.essay; if (!a?.sentences.length) return 0;
+  const chosen = s.essayAt == null ? -1 : a.sentences.findIndex((x) => x.n === s.essayAt);
+  if (chosen >= 0) return chosen;
+  const faulty = new Set(a.verdicts.filter((v) => v.verdict === "faulty").map((v) => v.n));
+  return Math.max(0, a.sentences.findIndex((x) => faulty.has(x.n)));
+}
+/** What Rewrite on my phone puts on the status line; the page inks the move while it is the status. */
+export const rewriteStatus = (n: number) => `sentence ${n}: rewrite it in your own words on the phone's Essay tab, then analyse again`;
 export const HINT_STOPS = ["stuck", "lesson"] as const;
 export const SENTENCE_STOPS = ["again", "unit"] as const;
 export const RECAP_STOPS = ["send", "tonight"] as const;
@@ -203,14 +227,44 @@ const KEYMAP: Partial<Record<Screen, Handler>> = {
     if (k === "back") o.nav("units");
   },
   headtohead: (s, k, _, o) => { if (k === "back") o.nav(s.english ? "sentence" : "units"); },
+  // the lenses top to bottom; Right reaches the last paragraph's card, Select there opens its reading
   essaytype: (s, k, _, o) => {
-    o.grid(k, LENS_STOPS.length, 2);
-    if (k === "select") { const t = stopAt(LENS_STOPS, s.focus)!.id; o.ev({ type: "essay.type", essayType: t }); o.ev({ type: "status", text: `${t} lens chosen — paste or dictate the paragraph on the phone` }); }
-    if (k === "menu") o.nav("playbook"); if (k === "back") o.nav("tonight");
+    const stops = lensStops(s), at = stopAt(stops, s.focus);
+    if (at === "last") {
+      if (k === "left") o.focus(readingLens(s));
+      if (k === "select") { o.ev({ type: "essay.at", n: null }); o.nav("forensic"); }
+    } else {
+      if (k === "down") o.move(LENS_STOPS.length, 1); if (k === "up") o.move(LENS_STOPS.length, -1);
+      if (k === "right" && stops.includes("last")) o.focus(stops.indexOf("last"));
+      if (k === "select" && at) { o.ev({ type: "essay.type", essayType: at.id }); o.ev({ type: "status", text: `${at.id} lens chosen — paste or dictate the paragraph on the phone` }); }
+    }
+    if (k === "menu") o.nav("playbook", 0, "essaytype");
+    if (k === "back") o.nav("landing", LANDING_STOPS.indexOf("essay"));
   },
-  forensic: (_, k, local, o) => { if (k === "menu") o.local.table = !local.table; if (k === "select") o.nav("playbook"); if (k === "back") o.nav("essaytype"); },
-  playbook: (s, k, _, o) => { o.grid(k, PLAYBOOK_STOPS.length, 2); if (k === "select") o.nav("xray"); if (k === "back") o.nav(s.essay ? "forensic" : "essaytype"); },
-  xray: (_, k, __, o) => { if (k === "back") o.nav("playbook"); },
+  // one sentence at a time: Up/Down walk the paragraph, Left/Right the actions; Menu is the table, where Up/Down still walk
+  forensic: (s, k, local, o) => {
+    if (k === "menu") { o.local.table = !local.table; return; }
+    if (k === "back") { if (local.table) o.local.table = false; else o.nav("essaytype", readingLens(s)); return; }
+    const a = s.essay; if (!a?.sentences.length) return;
+    const i = forensicAt(s), n = a.sentences.length;
+    const go = (j: number) => { if (j !== i) o.ev({ type: "essay.at", n: a.sentences[j].n }); };
+    if (k === "down") go(Math.min(n - 1, i + 1)); if (k === "up") go(Math.max(0, i - 1));
+    if (local.table) { if (k === "select") o.local.table = false; return; }
+    if (k === "right") o.move(FORENSIC_STOPS.length, 1); if (k === "left") o.move(FORENSIC_STOPS.length, -1);
+    if (k !== "select") return;
+    const at = stopAt(FORENSIC_STOPS, s.focus);
+    if (at === "rewrite") o.ev({ type: "status", text: rewriteStatus(a.sentences[i].n) });
+    if (at === "why") o.nav("playbook", PLAYBOOK_STOPS.indexOf(playFor(a.type)), "forensic");
+    if (at === "next") go((i + 1) % n);
+    if (at === "back") o.nav("essaytype", readingLens(s));
+  },
+  // the four structures top to bottom; Back (or Menu) returns to where the playbook was opened from
+  playbook: (s, k, _, o) => {
+    if (k === "down") o.move(PLAYBOOK_STOPS.length, 1); if (k === "up") o.move(PLAYBOOK_STOPS.length, -1);
+    if (k === "select") o.nav("xray", s.focus);
+    if (k === "back" || k === "menu") { if (s.back === "forensic" && s.essay) o.nav("forensic", FORENSIC_STOPS.indexOf("why")); else o.nav("essaytype", s.essay ? readingLens(s) : 0); }
+  },
+  xray: (s, k, __, o) => { if (k === "back" || k === "menu") o.nav("playbook", s.focus); },
   break: (_, k, __, o) => { if (k === "select") o.ev({ type: "timer.skipbreak" }); },
   topics: (s, k, local, o) => {
     if (k === "right") o.move(TOPIC_STOPS.length, 1); if (k === "left") o.move(TOPIC_STOPS.length, -1);

@@ -90,7 +90,7 @@ export function Forensic({ s, table }: { s: Session; table: boolean }) {
 }
 
 // ---- T10 Playbook / X-ray ----
-const PLAYS: Record<(typeof PLAYBOOK_STOPS)[number], [string, string]> = {
+const PLAYS: Record<(typeof PLAYBOOK_STOPS)[number]["id"], [string, string]> = {
   thesis: ["Thesis", "One sentence that takes a side and says why."], para: ["Paragraph", "Claim, then evidence, then the link back."],
   order: ["Order", "Which argument goes first, and why that one."], concl: ["Conclusion", "What the introduction promised, now delivered."],
 };
@@ -102,7 +102,7 @@ export function Playbook({ focus }: { s: Session; focus: number }) {
       <div className="eyebrow" data-ch="essay">Essay · playbook</div>
       <div className="title">Choose a structure to work on</div>
       <div className="cards" style={{ gridTemplateColumns: "1fr 1fr", gridTemplateRows: "300px 300px", marginTop: 40 }}>
-        {PLAYBOOK_STOPS.map((k) => { const [t, d] = PLAYS[k]; return <div key={k} className="card" data-focused={k === at} style={{ display: "grid", gridTemplateColumns: "200px 1fr", gap: 28, alignItems: "center" }}><Diagram kind={k} focused={k === at} /><div><div className="t">{t}</div><div className="d" style={{ marginTop: 10 }}>{d}</div></div></div>; })}
+        {PLAYBOOK_STOPS.map(({ id: k }) => { const [t, d] = PLAYS[k]; return <div key={k} className="card" data-focused={k === at?.id} style={{ display: "grid", gridTemplateColumns: "200px 1fr", gap: 28, alignItems: "center" }}><Diagram kind={k} focused={k === at?.id} /><div><div className="t">{t}</div><div className="d" style={{ marginTop: 10 }}>{d}</div></div></div>; })}
       </div>
       <div className="ticker"><span>Select opens the x-ray</span><i>·</i><span>Back to the lens</span></div>
     </main>

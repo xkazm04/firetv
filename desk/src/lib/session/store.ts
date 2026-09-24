@@ -97,6 +97,8 @@ export interface Session {
   awaiting: Subject | null;
   hint: Hint | null; lesson: LessonPick | null; noLesson: boolean; lessonPaused: boolean;
   english: EnglishAnalysis | null; essay: EssayAnalysis | null; essayType: string | null;
+  /** The sentence (its number) the forensic page is about; null for the default, the first faulty one. */
+  essayAt?: number | null;
   englishLearning: EnglishLearning; conversation: Conversation | null;
   /** finding the level and agreeing the topics, while it is under way */
   check: LevelCheck | null;
@@ -125,7 +127,7 @@ export type Event =
   | { type: "page.select"; pageIx: number; itemIx?: number } | { type: "item"; itemIx: number } | { type: "view"; view: "band" | "overview" }
   | { type: "hint.set"; hint: Hint } | { type: "hint.stage"; stage: 1 | 2 }
   | { type: "lesson.set"; lesson: LessonPick | null; key?: string } | { type: "lesson.pause"; paused: boolean }
-  | { type: "english.set"; analysis: EnglishAnalysis } | { type: "essay.type"; essayType: string } | { type: "essay.set"; analysis: EssayAnalysis }
+  | { type: "english.set"; analysis: EnglishAnalysis } | { type: "essay.type"; essayType: string } | { type: "essay.set"; analysis: EssayAnalysis } | { type: "essay.at"; n: number | null }
   | { type: "task.add"; name: string; sub: Subject; min: number } | { type: "task.done"; id: string; done: boolean }
   | { type: "timer.start" } | { type: "timer.pause" } | { type: "timer.tick"; seconds: number } | { type: "timer.skipbreak" }
   | { type: "topic.open"; topic: string }
@@ -160,7 +162,7 @@ export function fresh(): Session {
     timer: { left: 25 * 60, running: false, phase: "work" },
     pages: [], pageIx: 0, itemIx: 0, reading: false, awaiting: null,
     hint: null, lesson: null, noLesson: false, lessonPaused: false,
-    english: null, englishLearning: emptyEnglish(), conversation: null, check: null, essay: null, essayType: null,
+    english: null, englishLearning: emptyEnglish(), conversation: null, check: null, essay: null, essayType: null, essayAt: null,
     topic: null, practice: null, walkIx: 0, skills: {}, writing: {}, memory: [], history: [],
     jobs: {}, status: "", log: { problems: [], hints: 0, hard: [], minutes: 0, started: null }, updatedAt: Date.now(),
   };
@@ -207,7 +209,9 @@ export function reduce(s: Session, e: Event): Session {
     case "lesson.pause": n.lessonPaused = e.paused; break;
     case "english.set": n.english = e.analysis; n.screen = "sentence"; n.subject = "english"; n.focus = 0; break;
     case "essay.type": n.essayType = e.essayType; break;
-    case "essay.set": n.essay = e.analysis; n.screen = "forensic"; n.subject = "essay"; n.focus = 0; break;
+    // a new reading opens on its first faulty sentence; essay.at walks the paragraph (a number it does not have is the default)
+    case "essay.set": n.essay = e.analysis; n.essayAt = null; n.screen = "forensic"; n.subject = "essay"; n.focus = 0; break;
+    case "essay.at": n.essayAt = e.n !== null && s.essay?.sentences.some((x) => x.n === e.n) ? e.n : null; break;
     case "task.add": n.tasks = [...s.tasks, { id: "t" + Date.now(), sub: e.sub, name: e.name, min: e.min, done: false }]; break;
     case "task.done": n.tasks = s.tasks.map((t) => (t.id === e.id ? { ...t, done: e.done } : t)); break;
     case "timer.start": n.timer = { ...s.timer, running: true }; if (!s.log.started) n.log = { ...s.log, started: Date.now() }; break;

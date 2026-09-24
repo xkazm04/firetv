@@ -191,6 +191,18 @@ test('cleanFix is the one rule: the TV and the engine read the same shape',()=>{
  assert.deepEqual(cleanFix({move:'Claim, then evidence',pattern:'[Your claim]. For example, [the evidence].'}),{move:'Claim, then evidence',pattern:'[Your claim]. For example, [the evidence].'},'a pattern may open on a slot');
  assert.equal(cleanFix(undefined),undefined);
 });
+test('with no fix of its own, a faulty sentence falls back to its lens\'s playbook lesson: a named move and a slotted pattern',()=>{
+ const {PLAYBOOK,ESSAY_TYPES,playFor}=require(path.join(root,'src/lib/library/lessons.data.ts'));
+ const {cleanFix}=require(path.join(root,'src/lib/rules/essay.ts'));
+ for(const p of PLAYBOOK){
+  assert.equal(cleanFix({move:'Stand in move',pattern:p.pattern})?.pattern,p.pattern,`${p.id}: the pattern passes the rule a model's pattern must pass`);
+  const n=p.move.split(/\s+/).length;assert.ok(n>=2&&n<=7,`${p.id}: the move is named in a few words (${n}); Paragraph's is the brief's own seven`);
+ }
+ assert.equal(PLAYBOOK.find(p=>p.id==='para').move,'Claim, then evidence, then the link back','Paragraph\'s move is its own line');
+ for(const t of ESSAY_TYPES)assert.ok(PLAYBOOK.includes(playFor(t.id)),`${t.id} names a playbook lesson`);
+ assert.equal(playFor('argument').id,'thesis');assert.equal(playFor('structure').id,'para');
+ assert.equal(playFor('no-such-lens').id,'para','an unknown lens still gets a move, never an empty slot');assert.equal(playFor(null).id,'para');
+});
 test('the model is asked for a fix only on a faulty verdict, as a move and a slotted pattern, never a rewrite',async()=>{
  seen=[];answer=reply({verdicts:[],summary:'s'});
  await analyseEssay(THREE,'argument','essay-anon');
@@ -346,6 +358,20 @@ test('a reading reaches the session: the episode and the lens estimate both rehy
  assert.equal(s.history.filter(h=>h.kind==='writing').at(-1).label,'Structure');
  dispatch({type:'reset'});
  assert.equal(getSession().writing.structure.seen,1,'reset wipes the session, not the learner record');
+});
+test('essay.at walks the forensic page over sentences that exist, and a new reading starts again at its first faulty one',async()=>{
+ dispatch({type:'reset'});
+ assert.equal(getSession().essayAt,null,'a fresh desk has no sentence chosen');
+ answer=reply({verdicts:[{n:4,verdict:'faulty',note:'x',fix:CONCEDE}],summary:'s'});
+ const a=await analyseEssay(SIX,'argument',getSession().learner.id);
+ dispatch({type:'essay.set',analysis:a});
+ assert.equal(getSession().essayAt,null,'essay.set opens on the default');
+ assert.equal(getSession().essay.verdicts[0].fix.move,CONCEDE.move,'the fix rides into the session with its verdict');
+ dispatch({type:'essay.at',n:2});assert.equal(getSession().essayAt,2);
+ dispatch({type:'essay.at',n:7});assert.equal(getSession().essayAt,null,'a sentence the paragraph lacks is the default');
+ dispatch({type:'essay.at',n:5});dispatch({type:'essay.at',n:null});assert.equal(getSession().essayAt,null);
+ dispatch({type:'essay.at',n:3});dispatch({type:'essay.set',analysis:a});assert.equal(getSession().essayAt,null,'a new reading forgets the old place');
+ dispatch({type:'reset'});
 });
 test('the lens cards: one standing per lens, in the order the TV draws them',()=>{
  const empty=lensStandings([],{});

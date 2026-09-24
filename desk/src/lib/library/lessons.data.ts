@@ -23,9 +23,33 @@ export const LESSONS: Lesson[] = [
   { id: "es-4", subject: "essay", unit: 4, title: "Conclusion — deliver what the introduction promised", minutes: 5, concepts: ["conclusion"] },
 ];
 
+/**
+ * Essay Master's lenses. `lesson` names the playbook structure that teaches what the lens looks for: it is
+ * the move a faulty sentence falls back to when its reading carries no fix of its own.
+ */
 export const ESSAY_TYPES = [
-  { id: "structure", name: "Structure", promise: "Which sentence does which job — claim, evidence, link — and what is missing." },
-  { id: "argument", name: "Argument", promise: "Does the paragraph take a side, and does every sentence push the same way?" },
-  { id: "evidence", name: "Evidence", promise: "What here is a fact a reader can check, and what is only an opinion." },
-  { id: "language", name: "Language", promise: "Sentence length, rhythm, connectors, repeated words." },
+  { id: "structure", name: "Structure", promise: "Which sentence does which job — claim, evidence, link — and what is missing.", lesson: "para" },
+  { id: "argument", name: "Argument", promise: "Does the paragraph take a side, and does every sentence push the same way?", lesson: "thesis" },
+  { id: "evidence", name: "Evidence", promise: "What here is a fact a reader can check, and what is only an opinion.", lesson: "para" },
+  { id: "language", name: "Language", promise: "Sentence length, rhythm, connectors, repeated words.", lesson: "para" },
 ] as const;
+
+/**
+ * The playbook: Essay Master's four structure lessons (es-1..es-4 above), each as a line, a move (the lesson
+ * named as a technique, the way a reading's fix names one) and a pattern — a sentence frame with [slots] for
+ * the learner's own content. A frame teaches the shape; it never writes the sentence.
+ */
+export const PLAYBOOK = [
+  { id: "thesis", lessonId: "es-1", title: "Thesis", line: "One sentence that takes a side and says why.", move: "Take a side, then say why", pattern: "[Your side], because [your reason]." },
+  { id: "para", lessonId: "es-2", title: "Paragraph", line: "Claim, then evidence, then the link back.", move: "Claim, then evidence, then the link back", pattern: "[Your claim]. For example, [the evidence]. This shows [the link back]." },
+  { id: "order", lessonId: "es-3", title: "Order", line: "Which argument goes first, and why that one.", move: "Strongest first, then the rest", pattern: "First, [your strongest argument]. Then [the next one]." },
+  { id: "concl", lessonId: "es-4", title: "Conclusion", line: "What the introduction promised, now delivered.", move: "Promise, then deliver", pattern: "So [what the introduction promised], because [what you showed]." },
+] as const;
+export type Play = (typeof PLAYBOOK)[number];
+/** The unit and minutes of a playbook structure, from the lesson it stands for. */
+export function playLesson(p: Play): Lesson | undefined { return LESSONS.find((l) => l.id === p.lessonId); }
+/** The playbook structure a lens teaches through; Paragraph for a lens this version does not know. */
+export function playFor(lens: string | null | undefined): Play {
+  const id = ESSAY_TYPES.find((t) => t.id === lens)?.lesson;
+  return PLAYBOOK.find((p) => p.id === id) ?? PLAYBOOK[1];
+}
