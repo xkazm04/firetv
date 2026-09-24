@@ -140,3 +140,16 @@ test('extra: the sheet rows stay free of the filesystem-backed session modules',
  const out=ts.transpileModule(fs.readFileSync(path.join(root,'src/tv/sheetRows.ts'),'utf8'),opts).outputText;
  assert.doesNotMatch(out,/require\([^)]*lib\/session\/(store|learners)/);
 });
+
+test('extra: a located slip (slipAt) rides only on a wrong item, as a line, a span and a kind - junk never reaches a screen',()=>{
+ const {reduce}=store();
+ const s=session({screen:'practice',practice:unmarked()});
+ const items=marked(['wrong','right','wrong','unsure','wrong','wrong']).items.map((it,ix)=>({...it,slipAt:[{line:1,span:'- 7',kind:'sign',answer:'x = 6'},{line:0,kind:'sign'},{line:-1,kind:'sign'},{line:2},{line:1.5},{line:0,span:'  ',kind:'bogus'}][ix]}));
+ const n=reduce(s,{type:'practice.marked',items}).practice.items;
+ assert.deepEqual(n[0].slipAt,{line:1,span:'- 7',kind:'sign'},'only line, span and kind are kept');
+ assert.equal(n[1].slipAt,undefined,'a right item carries no slip position');
+ assert.equal(n[2].slipAt,undefined,'a negative line is dropped');
+ assert.equal(n[3].slipAt,undefined,'an unsure item carries no slip position');
+ assert.equal(n[4].slipAt,undefined,'a line that is not a whole number is dropped');
+ assert.deepEqual(n[5].slipAt,{line:0},'an empty span and an unknown kind are dropped, the line stays');
+});

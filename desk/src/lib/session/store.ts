@@ -42,11 +42,27 @@ export interface PracticeItem {
   slip?: string; said?: string;
   /** What the desk said back when the learner explained this item (checked in code for the answer); the Walk's caption. */
   reply?: string;
+  /**
+   * Where in the learner's working the slip sits, when the marker can say: the line (0 = the first line of
+   * `studentWorking`), the part of that line, and the kind of mark it takes. The learner's own writing, never a
+   * value the answer needs. Nothing fills it yet (mark.ts reports no position); a screen that finds none places
+   * the slip from its rulebook `points`, or marks the line.
+   */
+  slipAt?: SlipAt;
 }
+export interface SlipAt { line: number; span?: string; kind?: "missing" | "sign" | "extra" }
+const slipAtOf = (x: unknown): SlipAt | undefined => {
+  const o = x as Partial<SlipAt> | null;
+  if (!o || typeof o !== "object" || !Number.isInteger(o.line) || o.line! < 0) return undefined;
+  const at: SlipAt = { line: o.line! };
+  if (typeof o.span === "string" && o.span.trim()) at.span = o.span;
+  if (o.kind === "missing" || o.kind === "sign" || o.kind === "extra") at.kind = o.kind;
+  return at;
+};
 export interface Practice { topic: string; items: PracticeItem[]; pageId?: string; marked: boolean; }
 
 /** Only the fields a screen may see — an answer riding in on an event or an older session.json stops here. */
-function shown({ n, question, studentAnswer, studentWorking, verdict, slip, said, reply }: PracticeItem): PracticeItem {
+function shown({ n, question, studentAnswer, studentWorking, verdict, slip, said, reply, slipAt }: PracticeItem): PracticeItem {
   const item: PracticeItem = { n, question };
   if (studentAnswer !== undefined) item.studentAnswer = studentAnswer;
   if (studentWorking !== undefined) item.studentWorking = studentWorking;
@@ -54,6 +70,8 @@ function shown({ n, question, studentAnswer, studentWorking, verdict, slip, said
   if (slip !== undefined) item.slip = slip;
   if (said !== undefined) item.said = said;
   if (reply !== undefined) item.reply = reply;
+  const at = slipAtOf(slipAt);
+  if (at && verdict === "wrong") item.slipAt = at;
   return item;
 }
 const shownPractice = (p: Practice | null | undefined): Practice | null => (p ? { ...p, items: (p.items ?? []).map(shown) } : null);
