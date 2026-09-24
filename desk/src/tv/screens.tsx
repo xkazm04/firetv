@@ -17,7 +17,7 @@ export const shown = (s: string) => s.replace(/\^2/g, "²").replace(/\^3/g, "³"
 import { BRAND, MODULE_BLURB, TYPE_WORDS, profileRows, locate, onModules } from "@/tv/profileRows";
 const NAME = BRAND;
 
-export function Rail({ s }: { s: Session }) {
+function Rail({ s }: { s: Session }) {
   return (
     <aside className="rail">
       <div className="learner"><small>Now studying</small>{s.learner.name}</div>
@@ -26,7 +26,7 @@ export function Rail({ s }: { s: Session }) {
     </aside>
   );
 }
-export const Clock = ({ s, right }: { s: Session; right?: boolean }) => (
+const Clock = ({ s, right }: { s: Session; right?: boolean }) => (
   <div className="clock" style={{ position: "absolute", top: 0, ...(right ? { right: 0, textAlign: "right" } : { left: 0 }) }} data-phase={s.timer.phase}>{fmt(s.timer.left)}<small>{s.timer.running ? "On the clock" : "Paused"}</small></div>
 );
 

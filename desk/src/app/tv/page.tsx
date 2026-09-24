@@ -101,10 +101,10 @@ export default function TV() {
       {testBar && s && lingaOwns(s) && <LingaTestBar s={s} />}
       <div className="frame" ref={frame}>
         <div className="stage" ref={stage} tabIndex={0}>
-          {/* Essay Master is its own app (Specimen): the whole stage, no On Air grid or band; it keeps the 5% margins itself */}
-          {s && essayOwns(s) ? <EssayTV s={s} table={loc.table} /> : <>
+          {/* Essay Master (Specimen) and Math Buddy (Lamplight) are their own apps: the whole stage, no On Air grid or band; each keeps the 5% margins itself */}
+          {s && essayOwns(s) ? <EssayTV s={s} table={loc.table} /> : s && mathsOwns(s) ? <MathsTV s={s} busy={loc.busy} /> : <>
             <div className="grid" />
-            <div className="safe">{s ? lingaOwns(s) ? <LingaTV s={s} post={post} voice={voice}/> : <ScreenFor s={s} busy={loc.busy} /> : null}</div>
+            <div className="safe">{s ? lingaOwns(s) ? <LingaTV s={s} post={post} voice={voice}/> : <ScreenFor s={s} /> : null}</div>
           </>}
         </div>
       </div>
@@ -112,10 +112,9 @@ export default function TV() {
   );
 }
 
-/** The shell's screens (On Air). Math Buddy's are routed to MathsTV before this is asked (tv/keys.ts `mathsOwns`). */
-function ScreenFor({ s, busy }: { s: Session; busy: boolean }) {
+/** The shell's screens (On Air). Math Buddy's go to MathsTV before this is asked (tv/keys.ts `mathsOwns`). */
+function ScreenFor({ s }: { s: Session }) {
   const f = s.focus;
-  if (mathsOwns(s)) return <MathsTV s={s} busy={busy} />;
   switch (s.screen) {
     case "landing": return <S.Landing s={s} focus={f} />;
     case "pair": return <S.Pair s={s} />;

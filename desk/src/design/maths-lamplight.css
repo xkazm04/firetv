@@ -1,0 +1,505 @@
+/*
+  Lamplight - Math Buddy's design language. Rules in docs/DESIGN-MATH-BUDDY.md; this file is those rules as CSS,
+  ported from the contest winner (math-buddy-landing-r2-r3, entry C, variant 1: index.html and review.html) value
+  for value: its night ground and lamp, its paper, its amber and pen orange, its Fraunces / Caveat / Manrope.
+  Everything is scoped under .maths-tv and every layout class carries the mb- prefix, so On Air's global classes
+  (.rail, .cap, .card, .band, .clock ...) never reach in and nothing here leaks out. The maths classes (.mx and its
+  parts) are the winner's own names, also only under .maths-tv. Sizes are for the 1920 x 1080 stage; the stage
+  scales as a whole. The 5% safe area is 96 px left and right, 54 px top and bottom.
+*/
+
+.maths-tv {
+  /* the night, the lamp, the paper, two inks */
+  --mb-night: #0B1030;
+  --mb-night-2: #060818;
+  --mb-amber: #FFC56B;
+  --mb-amber-2: #FFB13D;
+  --mb-amber-lo: #FFD891;
+  --mb-cream: #F5EEDF;
+  --mb-cream-hi: #FFF6E6;
+  --mb-paper: #F5EEDF;
+  --mb-paper-hi: #FFF8EA;
+  --mb-paper-lo: #E4D8C0;
+  --mb-ink: #27304A;          /* the learner's pencil and the printed question */
+  --mb-print: #1D2440;
+  --mb-blue: #3A4A7A;         /* the learner's own words, a blue hand */
+  --mb-navy: #1A1D38;         /* text on amber */
+  --mb-sky: #8FB8FF;          /* the margin rule, the SCHOOL tick */
+  --mb-pen: #D9741A;          /* the desk's pen */
+  --mb-pen-d: #A9530E;
+  --mb-mute: rgba(245, 238, 223, .62);
+  --mb-faint: rgba(245, 238, 223, .14);
+  --mb-grid: rgba(39, 48, 74, .075);
+  /* three faces: next/font's variables (maths/fonts.ts) first, the system behind them */
+  --mb-serif: var(--maths-face-serif, "Fraunces"), Georgia, "Times New Roman", serif;
+  --mb-sans: var(--maths-face-sans, "Manrope"), "Segoe UI", system-ui, -apple-system, Roboto, sans-serif;
+  --mb-hand: var(--maths-face-hand, "Caveat"), "Segoe Print", "Bradley Hand", "Comic Sans MS", cursive;
+  --mb-ease: cubic-bezier(.2, .8, .2, 1);
+  /* the paper's squares: every line of working takes whole squares */
+  --mb-sq: 48px;
+  /* the learner's working, and the printed question above it */
+  --mb-hs: 72px;
+  --mb-ps: 46px;
+
+  position: absolute; inset: 0; overflow: hidden;
+  font-family: var(--mb-sans); color: var(--mb-cream);
+  background:
+    radial-gradient(1400px 520px at 50% 118%, rgba(70, 52, 40, .55), transparent 70%),
+    linear-gradient(180deg, #0C1233 0%, #0A0F2B 48%, #080B22 70%, #060818 100%);
+}
+.maths-tv *, .maths-tv *::before, .maths-tv *::after { box-sizing: border-box; }
+
+/* ---- the lamp: one warm pool on the desk; it breathes, and never needs to ---- */
+.maths-tv .mb-lamp { position: absolute; left: -360px; top: -300px; width: 1560px; height: 1320px; pointer-events: none; opacity: .9;
+  background: radial-gradient(closest-side at 50% 52%, rgba(255, 205, 125, .40), rgba(255, 177, 61, .20) 38%, rgba(255, 160, 60, .07) 66%, transparent 100%); }
+.maths-tv .mb-lamp i { position: absolute; inset: 0; background: radial-gradient(closest-side at 50% 52%, rgba(255, 226, 170, .22), transparent 55%); animation: mb-breathe 7s ease-in-out infinite; }
+.maths-tv[data-lamp="paper"] .mb-lamp { left: -300px; top: -280px; width: 1760px; height: 1420px; opacity: .85; }
+.maths-tv[data-lamp="blank"] .mb-lamp { left: -520px; top: -180px; }
+.maths-tv[data-lamp="wide"] .mb-lamp { left: 80px; top: -380px; width: 1760px; height: 1400px; opacity: .7; }
+@keyframes mb-breathe { 0%, 100% { opacity: .85; } 45% { opacity: 1; } 52% { opacity: .93; } 58% { opacity: 1; } }
+
+/* ---- labels: Manrope caps, furniture only (20-22 px, never the only carrier of a meaning) ---- */
+.maths-tv .mb-lab { font-size: 21px; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; }
+.maths-tv .mb-kick { font-size: 22px; font-weight: 800; letter-spacing: .2em; text-transform: uppercase; color: var(--mb-amber); display: flex; align-items: center; gap: 14px; white-space: nowrap; }
+.maths-tv .mb-kick svg { width: 52px; height: 40px; overflow: visible; }
+.maths-tv .mb-kick svg path { fill: none; stroke: var(--mb-amber-2); stroke-width: 3.6; stroke-linecap: round; stroke-linejoin: round; }
+
+/* ---- the top bar: the mark and wordmark, a crumb, the chips ---- */
+.maths-tv .mb-top { position: absolute; left: 96px; right: 96px; top: 54px; height: 76px; display: flex; align-items: center; justify-content: space-between; z-index: 20; }
+.maths-tv .mb-brand { display: flex; align-items: center; gap: 20px; min-width: 0; }
+.maths-tv .mb-mark { width: 64px; height: 64px; flex: 0 0 64px; filter: drop-shadow(0 6px 22px rgba(255, 177, 61, .35)); }
+.maths-tv .mb-mark svg { width: 64px; height: 64px; display: block; }
+.maths-tv .mb-word { font-family: var(--mb-serif); font-size: 48px; font-weight: 600; letter-spacing: -.015em; font-variation-settings: "opsz" 144, "SOFT" 100; color: var(--mb-cream); line-height: 1; white-space: nowrap; }
+.maths-tv .mb-word em { font-style: italic; font-weight: 500; color: var(--mb-amber); }
+.maths-tv .mb-crumb { display: flex; align-items: center; gap: 22px; margin-left: 14px; min-width: 0; }
+.maths-tv .mb-crumb .sep { width: 2px; height: 44px; background: rgba(245, 238, 223, .2); border-radius: 1px; flex: none; }
+.maths-tv .mb-crumb .tp { font-family: var(--mb-serif); font-size: 38px; font-weight: 500; font-variation-settings: "opsz" 96, "SOFT" 80; color: rgba(245, 238, 223, .8); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 720px; }
+.maths-tv .mb-status { display: flex; align-items: center; gap: 22px; }
+.maths-tv .mb-chip { height: 64px; border-radius: 32px; display: flex; align-items: center; gap: 14px; padding: 0 24px 0 10px; background: rgba(245, 238, 223, .06); border: 1.5px solid var(--mb-faint); color: rgba(245, 238, 223, .86); font-size: 30px; font-weight: 600; white-space: nowrap; }
+.maths-tv .mb-chip .av { width: 46px; height: 46px; border-radius: 50%; display: grid; place-items: center; font-family: var(--mb-serif); font-weight: 600; font-size: 30px; background: linear-gradient(145deg, #2B3470, #1A2050); color: var(--mb-amber); border: 1.5px solid rgba(255, 197, 107, .5); }
+.maths-tv .mb-glyph { display: flex; align-items: center; gap: 10px; color: rgba(245, 238, 223, .7); white-space: nowrap; }
+.maths-tv .mb-glyph svg { width: 40px; height: 40px; }
+.maths-tv .mb-glyph .pin { font-size: 30px; font-weight: 700; letter-spacing: .12em; color: var(--mb-cream); }
+.maths-tv .mb-clock { padding: 0 24px; gap: 12px; font-variant-numeric: tabular-nums; min-width: 292px; justify-content: center; }
+.maths-tv .mb-clock .t { font-size: 32px; font-weight: 700; }
+.maths-tv .mb-clock svg { width: 26px; height: 26px; }
+.maths-tv .mb-clock[data-running="false"] { color: rgba(245, 238, 223, .6); }
+.maths-tv .mb-clock[data-running="true"] { color: var(--mb-amber); border-color: rgba(255, 197, 107, .55); background: rgba(255, 177, 61, .1); }
+/* the set as a tally: six numbers, ticked or ringed, the one under the lamp lit */
+.maths-tv .mb-tally { display: flex; align-items: center; gap: 6px; }
+.maths-tv .mb-tm { position: relative; width: 58px; height: 62px; display: grid; place-items: center; font-family: var(--mb-hand); font-weight: 700; font-size: 40px; line-height: 1; color: rgba(245, 238, 223, .5); transition: color .3s, transform .3s var(--mb-ease); }
+.maths-tv .mb-tm svg { position: absolute; inset: 0; width: 58px; height: 62px; overflow: visible; }
+.maths-tv .mb-tm svg path { fill: none; stroke-linecap: round; stroke-linejoin: round; }
+.maths-tv .mb-tm[data-v="right"] svg path { stroke: rgba(255, 177, 61, .8); stroke-width: 4; }
+.maths-tv .mb-tm[data-v="wrong"] svg path { stroke: rgba(217, 116, 26, .6); stroke-width: 3.5; }
+.maths-tv .mb-tm[data-v="unsure"] svg path { stroke: rgba(143, 184, 255, .7); stroke-width: 3; stroke-dasharray: 6 6; }
+.maths-tv .mb-tm[data-v="right"] span { transform: translateX(-9px); }
+.maths-tv .mb-tm[data-cur="true"] { color: var(--mb-cream-hi); transform: scale(1.18); }
+.maths-tv .mb-tm[data-cur="true"] svg path { stroke: var(--mb-amber-2); stroke-width: 4.5; }
+
+/* ---- the one caption slot ---- */
+.maths-tv .mb-cap { position: absolute; left: 96px; top: 708px; width: 1728px; min-height: 92px; z-index: 6; font-size: 34px; line-height: 1.24; font-weight: 500; color: rgba(245, 238, 223, .94); text-wrap: balance; animation: mb-rise .32s var(--mb-ease) both; }
+.maths-tv .mb-cap .slip { color: var(--mb-amber); font-size: 32px; display: flex; align-items: center; gap: 14px; margin-top: 6px; }
+.maths-tv .mb-cap .slip svg { width: 30px; height: 30px; flex: 0 0 30px; }
+.maths-tv .mb-cap .lead { display: inline-block; margin-right: 14px; color: var(--mb-amber); }
+@keyframes mb-rise { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+/* ---- the action pills: an icon disc, a word; the focused one is lit amber ---- */
+.maths-tv .mb-acts { position: absolute; left: 96px; right: 96px; top: 946px; height: 80px; display: flex; gap: 26px; z-index: 8; align-items: center; }
+.maths-tv .mb-act { height: 80px; border-radius: 40px; display: flex; align-items: center; gap: 16px; padding: 0 34px 0 14px; white-space: nowrap; background: rgba(245, 238, 223, .06); border: 1.5px solid rgba(245, 238, 223, .16); color: rgba(245, 238, 223, .86); font: inherit; font-size: 34px; font-weight: 700;
+  transition: transform .26s var(--mb-ease), background .26s, box-shadow .26s, color .26s, border-color .26s; }
+.maths-tv .mb-act .ic { width: 56px; height: 56px; border-radius: 50%; display: grid; place-items: center; background: rgba(255, 197, 107, .12); color: var(--mb-amber); flex: 0 0 56px; transition: background .26s, color .26s; }
+.maths-tv .mb-act .ic svg { width: 32px; height: 32px; }
+.maths-tv .mb-act .pp { display: flex; gap: 7px; margin-left: 4px; }
+.maths-tv .mb-act .pp i { width: 14px; height: 14px; border-radius: 50%; border: 2.5px solid currentColor; opacity: .7; }
+.maths-tv .mb-act .pp i.on { background: currentColor; opacity: 1; }
+.maths-tv .mb-act[data-disabled="true"]:not([data-focused="true"]) { opacity: .5; }
+.maths-tv .mb-act[data-focused="true"] { background: linear-gradient(160deg, var(--mb-amber-lo), var(--mb-amber-2)); color: var(--mb-navy); border-color: transparent; transform: scale(1.08); box-shadow: 0 0 0 4px rgba(255, 197, 107, .35), 0 12px 44px rgba(255, 177, 61, .55); }
+.maths-tv .mb-act[data-focused="true"] .ic { background: var(--mb-navy); color: var(--mb-amber); }
+.maths-tv .mb-updn { margin-left: auto; display: flex; align-items: center; gap: 14px; color: rgba(245, 238, 223, .5); font-size: 28px; font-weight: 600; }
+.maths-tv .mb-updn svg { width: 40px; height: 30px; opacity: .22; }
+.maths-tv .mb-updn svg.on { opacity: .9; color: var(--mb-amber); }
+
+/* ---- the paper: warm cream, 48 px squares, a blue margin rule ---- */
+.maths-tv .mb-paper { position: relative; border-radius: 6px; color: var(--mb-ink);
+  background:
+    linear-gradient(var(--mb-grid) 1.5px, transparent 1.5px) 0 0 / var(--mb-sq) var(--mb-sq),
+    linear-gradient(90deg, var(--mb-grid) 1.5px, transparent 1.5px) 0 0 / var(--mb-sq) var(--mb-sq),
+    radial-gradient(120% 70% at 26% 14%, var(--mb-paper-hi) 0%, var(--mb-paper) 48%, var(--mb-paper-lo) 100%);
+  box-shadow: 0 2px 0 rgba(255, 255, 255, .4) inset, 0 24px 40px rgba(0, 0, 0, .45), 0 50px 100px rgba(0, 0, 0, .4); }
+.maths-tv .mb-paper::before { content: ""; position: absolute; left: 96px; top: 0; bottom: 0; width: 2px; background: rgba(143, 184, 255, .6); }
+.maths-tv .mb-sheethead { height: var(--mb-sq); margin-left: 144px; margin-right: 48px; display: flex; align-items: center; justify-content: space-between; white-space: nowrap; gap: 24px; }
+.maths-tv .mb-sheethead .st { font-family: var(--mb-serif); font-size: 32px; font-weight: 600; letter-spacing: -.005em; font-variation-settings: "opsz" 72, "SOFT" 50; color: rgba(39, 48, 74, .72); overflow: hidden; text-overflow: ellipsis; }
+.maths-tv .mb-sheethead .who { font-family: var(--mb-hand); font-size: 52px; font-weight: 600; color: var(--mb-blue); line-height: 1; }
+/* the reading window: the paper slides under the lamp so the item in hand sits in its light */
+.maths-tv .mb-win { position: absolute; left: 96px; top: 146px; width: 1150px; height: 778px; z-index: 4;
+  -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 40px, #000 calc(100% - 56px), transparent 100%);
+          mask-image: linear-gradient(180deg, transparent 0, #000 40px, #000 calc(100% - 56px), transparent 100%); }
+.maths-tv .mb-pan { position: absolute; left: 0; top: 0; width: 100%; transition: transform .76s var(--mb-ease); }
+.maths-tv .mb-win .mb-paper { width: 1130px; margin-left: 10px; padding: var(--mb-sq) 0 calc(var(--mb-sq) * 2); transform: rotate(-.45deg); transform-origin: 50% 30%; }
+.maths-tv .mb-item { position: relative; padding-left: 144px; transition: opacity .5s ease; }
+.maths-tv .mb-item .num { position: absolute; left: 0; top: 0; width: 96px; height: calc(var(--mb-sq) * 2); display: grid; place-items: center; font-weight: 800; font-size: 32px; line-height: 1; color: rgba(39, 48, 74, .5); }
+.maths-tv .mb-item .num .nr { position: absolute; left: 50%; top: 50%; width: 64px; height: 62px; margin: -31px 0 0 -32px; overflow: visible; }
+.maths-tv .mb-item .num .nr path { fill: none; stroke: var(--mb-pen); stroke-width: 4; stroke-linecap: round; }
+.maths-tv .mb-item[data-v="wrong"] .num { color: rgba(39, 48, 74, .8); }
+.maths-tv .mb-item[data-dim="true"] { opacity: .36; }
+/* every row is a whole number of squares tall; the maths is centred in them */
+.maths-tv .mb-row { position: relative; display: flex; align-items: center; white-space: nowrap; height: calc(var(--mb-sq) * 2); }
+.maths-tv .mb-row[data-tall="true"] { height: calc(var(--mb-sq) * 3); }
+.maths-tv .mb-row .rin { position: relative; display: inline-block; white-space: nowrap; line-height: 1; }
+.maths-tv .mb-row.q .rin { font-size: var(--mb-ps); }
+.maths-tv .mb-row.w .rin { font-size: var(--mb-hs); }
+.maths-tv .mb-row.w[data-after="true"] .rin { opacity: .4; }
+.maths-tv .mb-item[data-v="wrong"] .mb-row.q, .maths-tv .mb-item[data-open="true"] .mb-row.q { margin-bottom: calc(var(--mb-sq) * .5); }
+/* the margin arrow at the line that went wrong */
+.maths-tv .mb-row .marrow { position: absolute; left: -138px; top: 50%; width: 110px; height: 40px; margin-top: -20px; overflow: visible; }
+.maths-tv .mb-row .marrow path { fill: none; stroke: var(--mb-pen); stroke-width: 5.5; stroke-linecap: round; stroke-linejoin: round; }
+
+/* ================= the maths, set by hand and in print ================= */
+.maths-tv .mx { display: inline-block; white-space: nowrap; line-height: 1; vertical-align: baseline; }
+.maths-tv .mx.hand { font-family: var(--mb-hand); font-weight: 600; color: var(--mb-ink); }
+.maths-tv .mx.print { font-family: var(--mb-serif); font-weight: 500; font-variation-settings: "opsz" 72, "SOFT" 30; color: var(--mb-print); }
+.maths-tv .mx span, .maths-tv .mx b, .maths-tv .mx i { font-style: normal; }
+.maths-tv .mx.print .mi { font-style: italic; }
+.maths-tv .mx.print .mt { font-family: var(--mb-serif); font-style: normal; font-weight: 600; }
+.maths-tv .mx .mt { white-space: pre; }
+.maths-tv .mx.hand .mt { font-size: .8em; color: rgba(39, 48, 74, .78); }
+.maths-tv .mx .mo { display: inline-block; }
+.maths-tv .mx .mo.bin { margin: 0 .26em; }
+.maths-tv .mx.hand .mo.bin .mm { margin-left: .05em; }
+.maths-tv .mx .mo.rel { margin: 0 .28em; }
+.maths-tv .mx.print .mo.bin { margin: 0 .22em; }
+.maths-tv .mx .mo.un { margin: 0 .1em 0 0; }
+/* a minus before a stacked fraction keeps clear of its bar */
+.maths-tv .mx .mo.un + .mf { margin-left: .3em; }
+.maths-tv .mx .mfn { margin-right: .1em; }
+.maths-tv .mx.hand .mfn { margin-right: .2em; }
+.maths-tv .mx .msc > .mfn { margin-right: 0; }
+.maths-tv .mx .msc:has(> .mfn) { margin-right: .12em; }
+.maths-tv .mx.hand .msc:has(> .mfn) { margin-right: .2em; }
+.maths-tv .mx .mpu { margin-right: .06em; }
+.maths-tv .mx .md.big { font-size: 1.16em; vertical-align: -.04em; }
+/* a hand minus is a pen stroke, not a font's dash */
+.maths-tv .mx.hand .mm { display: inline-block; width: .38em; height: .075em; border-radius: .04em; background: currentColor; vertical-align: .25em; transform: rotate(-4deg); }
+.maths-tv .mx.hand .mo.un .mm { width: .3em; }
+/* stacked fractions: numerator, a drawn bar, denominator - centred on the minus sign's height, never cramped */
+.maths-tv .mx .mf { position: relative; display: inline-flex; flex-direction: column; align-items: center; vertical-align: middle; top: -.1em; margin: 0 .12em; line-height: 1; }
+.maths-tv .mx .mf.l { font-size: .78em; }
+.maths-tv .mx .mf.s { font-size: .7em; }
+.maths-tv .mx .mf .fnu, .maths-tv .mx .mf .fde { display: block; padding: 0 .14em; }
+.maths-tv .mx .mf .fb { align-self: stretch; height: .08em; min-height: 3px; background: currentColor; border-radius: .05em; margin: .1em -.04em .06em; }
+.maths-tv .mx.hand .mf .fb { transform: rotate(-1.4deg); }
+.maths-tv .mx.print .mf { top: -.06em; }
+.maths-tv .mx.print .mf .fb { height: .055em; min-height: 2px; transform: none; margin: .08em 0 .06em; }
+.maths-tv .mx .msc { display: inline-block; white-space: nowrap; }
+.maths-tv .mx .sup { display: inline-block; font-size: .6em; vertical-align: .64em; margin-left: .02em; }
+.maths-tv .mx .sup.hi { vertical-align: 1em; }
+.maths-tv .mx.print .sup { vertical-align: .74em; }
+.maths-tv .mx.print .sup.hi { vertical-align: .86em; }
+.maths-tv .mx .sub { display: inline-block; font-size: .6em; vertical-align: -.34em; margin-left: .03em; }
+.maths-tv .mx .msp { display: inline-block; height: 1px; }
+.maths-tv .mx .gl { display: inline-block; overflow: visible; vertical-align: 0; }
+.maths-tv .mx .gl path { fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; }
+.maths-tv .mx .gl circle { fill: currentColor; stroke: none; }
+.maths-tv .mx .gl.int { width: .44em; height: 1.56em; vertical-align: -.44em; margin: 0 .06em 0 .02em; }
+.maths-tv .mx.print .gl.int { width: .4em; height: 1.5em; vertical-align: -.42em; }
+.maths-tv .mx .gl.pi { width: .5em; height: .44em; }
+.maths-tv .mx .gl.le { width: .46em; height: .6em; vertical-align: -.08em; }
+/* a root: the hand draws its tick, the print sets the sign; a bar runs over the radicand */
+.maths-tv .mx .msq { display: inline-flex; align-items: stretch; vertical-align: -.12em; margin: 0 .06em; }
+.maths-tv .mx .msq .gl.root { width: .46em; height: auto; align-self: stretch; margin-right: -.04em; }
+.maths-tv .mx .msq .msq-s { font-size: 1.1em; line-height: 1; }
+.maths-tv .mx .msq-b { border-top: .07em solid currentColor; padding: .08em .08em 0 .06em; }
+.maths-tv .mx.print .msq-b { border-top-width: .05em; }
+
+/* ================= the desk's pen, inside the line ================= */
+.maths-tv .mx .err, .maths-tv .mx .slot, .maths-tv .tick { position: relative; display: inline-block; vertical-align: baseline; }
+.maths-tv .mx .mo.flag { position: relative; }
+.maths-tv .mk { position: absolute; overflow: visible; pointer-events: none; animation: mb-draw .52s cubic-bezier(.4, .1, .3, 1) .35s both; }
+.maths-tv .mk path { fill: none; stroke: var(--mb-pen); stroke-width: 5.5; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
+.maths-tv .mk.thin path, .maths-tv .mk.dash path { stroke-width: 4; }
+.maths-tv .mk.dash path { stroke-dasharray: 13 11; }
+.maths-tv .mk.wash { animation: mb-fade .36s ease .35s both; }
+.maths-tv .mk.wash path { fill: rgba(255, 177, 61, .2); stroke: none; }
+/* sign: that one symbol, ringed, with a wash behind it */
+.maths-tv .err.k-sign > .mk.ring, .maths-tv .err.k-sign > .mk.wash { left: -.34em; top: -.1em; width: calc(100% + .68em); height: calc(100% + .26em); }
+.maths-tv .err.k-sign > .mk.wash { left: -.2em; top: .02em; width: calc(100% + .4em); height: calc(100% + .02em); }
+/* extra: struck through, still readable under the stroke */
+.maths-tv .err.k-extra > .inner { opacity: .72; }
+.maths-tv .err.k-extra > .mk.strike { left: -.12em; top: 0; width: calc(100% + .24em); height: 100%; }
+/* missing: a light bracket under the part, then a gap - an empty dashed box and a caret under it */
+.maths-tv .err.k-missing > .mk.under { left: 0; top: 100%; width: 100%; height: .32em; margin-top: .06em; }
+.maths-tv .mx .slot { width: 2.3em; height: .9em; margin: 0 .22em; vertical-align: -.16em; animation: mb-open .52s var(--mb-ease) .2s both; }
+.maths-tv .slot > .mk.box { left: 0; top: 0; width: 100%; height: 100%; }
+.maths-tv .slot > .mk.caret { left: 50%; top: 100%; width: .7em; height: .46em; margin: .16em 0 0 -.35em; animation: mb-draw .52s cubic-bezier(.4, .1, .3, 1) .7s both, mb-caret 1.4s ease-in-out 1.3s infinite; }
+/* a line the data can only place as a line: a wavy pen line under all of it */
+.maths-tv .err.k-line > .mk.wave { left: -.1em; top: 100%; width: calc(100% + .2em); height: .24em; margin-top: .04em; }
+.maths-tv .tick { width: .72em; height: .56em; margin-left: .45em; vertical-align: -.02em; }
+.maths-tv .tick svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; animation: mb-draw .45s ease .2s both; }
+.maths-tv .tick path { fill: none; stroke: var(--mb-pen); stroke-width: 5.5; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
+@keyframes mb-draw { from { clip-path: inset(-20% 100% -20% -20%); } to { clip-path: inset(-20% -20% -20% -20%); } }
+@keyframes mb-fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes mb-open { from { width: 0; margin: 0; } }
+@keyframes mb-caret { 50% { transform: translateY(-5px); } }
+
+/* ================= the side: the slip, and the taped card that is the caption slot ================= */
+.maths-tv .mb-side { position: absolute; left: 1290px; top: 152px; width: 534px; height: 770px; z-index: 5; display: flex; flex-direction: column; animation: mb-rise .3s var(--mb-ease) both; }
+.maths-tv .mb-khead { display: flex; align-items: center; justify-content: space-between; height: 52px; }
+.maths-tv .mb-stitle { text-wrap: balance; font-family: var(--mb-serif); font-size: 54px; line-height: 1.04; font-weight: 560; letter-spacing: -.02em; font-variation-settings: "opsz" 144, "SOFT" 100; margin-top: 14px; color: var(--mb-cream-hi); }
+.maths-tv .mb-stitle em, .maths-tv .mb-title em, .maths-tv .mb-htitle em { font-style: italic; color: var(--mb-amber); }
+.maths-tv .mb-card { margin-top: 34px; position: relative; border-radius: 10px; padding: 26px 34px; color: var(--mb-navy); transform: rotate(.7deg);
+  background: radial-gradient(120% 90% at 20% 0%, #FFFBF1 0%, #F7F0E1 55%, #E9DEC7 100%);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, .5), 0 2px 0 rgba(255, 255, 255, .5) inset; }
+.maths-tv .mb-card::before { content: ""; position: absolute; left: 50%; top: -20px; width: 150px; height: 40px; margin-left: -75px; transform: rotate(-3deg); background: linear-gradient(180deg, rgba(255, 214, 150, .92), rgba(255, 197, 107, .82)); box-shadow: 0 2px 8px rgba(0, 0, 0, .25); }
+.maths-tv .mb-card .said { display: flex; align-items: flex-start; gap: 16px; padding-bottom: 16px; margin-bottom: 18px; border-bottom: 2.5px solid rgba(217, 116, 26, .45); }
+.maths-tv .mb-card .said svg { width: 36px; height: 36px; flex: 0 0 36px; margin-top: 6px; color: var(--mb-blue); }
+.maths-tv .mb-card .said span { font-family: var(--mb-hand); font-size: 44px; font-weight: 600; line-height: 1.02; color: var(--mb-blue); text-wrap: pretty; }
+.maths-tv .mb-card .hl { display: flex; align-items: center; gap: 14px; height: 36px; }
+.maths-tv .mb-card .hl .mb-lab { color: var(--mb-pen-d); }
+.maths-tv .mb-card .pips { display: flex; gap: 8px; }
+.maths-tv .mb-card .pips i { width: 16px; height: 16px; border-radius: 50%; border: 2.5px solid var(--mb-pen-d); }
+.maths-tv .mb-card .pips i.on { background: var(--mb-pen); border-color: var(--mb-pen); }
+.maths-tv .mb-card .ht { margin-top: 10px; font-size: 34px; line-height: 1.3; font-weight: 600; text-wrap: pretty; }
+.maths-tv .mb-card .nx { margin-top: 14px; display: flex; align-items: flex-start; gap: 14px; font-family: var(--mb-hand); font-size: 48px; font-weight: 700; line-height: 1.02; color: var(--mb-pen-d); text-wrap: balance; }
+.maths-tv .mb-card .nx svg { width: 44px; height: 30px; flex: 0 0 44px; margin-top: 10px; }
+.maths-tv .mb-card .quiet { margin-top: 18px; padding-top: 14px; border-top: 2px dashed rgba(39, 48, 74, .22); font-size: 30px; line-height: 1.28; font-weight: 500; color: rgba(26, 29, 56, .74); }
+
+/* ================= Tonight: the sheet on the desk, two doors, the ruler ================= */
+.maths-tv .mb-hero { position: absolute; left: 96px; top: 150px; width: 1110px; height: 540px; z-index: 3; }
+.maths-tv .mb-hero::before { content: ""; position: absolute; left: 0; top: -14px; right: -14px; bottom: 0; border-radius: 34px;
+  background: radial-gradient(90% 120% at 30% 40%, rgba(255, 197, 107, .16), rgba(255, 177, 61, .04) 70%);
+  box-shadow: 0 0 0 4px rgba(255, 197, 107, .95), 0 0 80px rgba(255, 177, 61, .32), inset 0 0 60px rgba(255, 177, 61, .08);
+  opacity: 0; transform: scale(.985); transition: opacity .3s, transform .4s var(--mb-ease); }
+.maths-tv .mb-hero[data-focused="true"]::before { opacity: 1; transform: none; }
+.maths-tv .mb-art { position: absolute; left: 0; top: 0; width: 640px; height: 540px; perspective: 1700px; perspective-origin: 50% 10%; }
+.maths-tv .mb-stack { position: absolute; left: 96px; top: 60px; width: 450px; height: 440px; transform-style: preserve-3d; transform: rotateX(21deg) rotateZ(-4deg); transition: transform .7s var(--mb-ease), filter .5s; filter: brightness(.74) saturate(.88); }
+.maths-tv .mb-hero[data-focused="true"] .mb-stack { filter: none; transform: rotateX(17deg) rotateZ(-3deg) translate3d(0, -22px, 46px); }
+.maths-tv .mb-sheet { position: absolute; inset: 0; border-radius: 6px; color: var(--mb-ink);
+  background:
+    linear-gradient(rgba(39, 48, 74, .075) 1.5px, transparent 1.5px) 0 0 / 28px 28px,
+    linear-gradient(90deg, rgba(39, 48, 74, .075) 1.5px, transparent 1.5px) 0 0 / 28px 28px,
+    radial-gradient(120% 90% at 22% 8%, var(--mb-paper-hi) 0%, var(--mb-paper) 45%, #E2D6BE 100%);
+  box-shadow: 0 2px 0 rgba(255, 255, 255, .4) inset, 0 18px 30px rgba(0, 0, 0, .45), 0 40px 80px rgba(0, 0, 0, .35); }
+.maths-tv .mb-sheet.under { filter: brightness(.8) saturate(.9); }
+.maths-tv .mb-sheet.under .scrib { position: absolute; left: 60px; height: 3px; border-radius: 2px; background: rgba(39, 48, 74, .28); }
+.maths-tv .mb-hero[data-focused="true"] .mb-sheet.top { box-shadow: 0 0 0 4px rgba(255, 197, 107, .95), 0 0 60px rgba(255, 177, 61, .65), 0 40px 60px rgba(0, 0, 0, .5), 0 80px 120px rgba(0, 0, 0, .4); }
+.maths-tv .mb-tab { position: absolute; top: -42px; white-space: nowrap; height: 46px; padding: 0 18px; border-radius: 10px 10px 0 0; display: flex; align-items: center; font-size: 21px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; color: var(--mb-ink); background: linear-gradient(180deg, #EFE4CC, #E3D5B8); box-shadow: 0 -4px 12px rgba(0, 0, 0, .25); }
+.maths-tv .mb-sheet.top .mb-tab { background: linear-gradient(180deg, #FFE3AE, var(--mb-amber)); }
+.maths-tv .mb-sheet .margin { position: absolute; left: 64px; top: 0; bottom: 0; width: 2px; background: rgba(143, 184, 255, .55); }
+.maths-tv .mb-shead { position: absolute; left: 84px; right: 24px; top: 16px; height: 54px; display: flex; align-items: baseline; justify-content: space-between; gap: 16px; border-bottom: 2px solid rgba(39, 48, 74, .18); }
+.maths-tv .mb-shead .ex { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-family: var(--mb-serif); font-weight: 600; font-size: 31px; letter-spacing: -.01em; font-variation-settings: "opsz" 72, "SOFT" 60; }
+.maths-tv .mb-shead .who { font-family: var(--mb-hand); font-size: 34px; font-weight: 600; color: var(--mb-blue); }
+.maths-tv .mb-rows { position: absolute; left: 0; right: 0; top: 80px; }
+.maths-tv .mb-srow { height: 43px; display: flex; align-items: center; position: relative; }
+.maths-tv .mb-srow .n { width: 64px; text-align: center; font-weight: 700; font-size: 28px; color: rgba(39, 48, 74, .55); flex: none; }
+.maths-tv .mb-srow .qx { padding-left: 22px; font-size: 31px; line-height: 1; white-space: nowrap; overflow: hidden; max-width: 360px; }
+.maths-tv .mb-srow .qx .mx.hand { font-size: 35px; }
+.maths-tv .mb-readline { position: absolute; left: 70px; right: 14px; height: 42px; border-radius: 8px;
+  background: linear-gradient(90deg, rgba(255, 197, 107, 0), rgba(255, 190, 90, .55) 8%, rgba(255, 190, 90, .5) 85%, rgba(255, 197, 107, 0));
+  box-shadow: 0 0 26px rgba(255, 177, 61, .55); mix-blend-mode: multiply; }
+.maths-tv .mb-readline::after { content: ""; position: absolute; left: 10px; right: 10px; bottom: -3px; height: 3px; border-radius: 2px; background: #E08A1E; box-shadow: 0 0 12px var(--mb-amber-2); }
+.maths-tv .mb-boxes { position: absolute; left: 78px; right: 20px; top: 86px; display: flex; flex-direction: column; gap: 8px; }
+.maths-tv .mb-box { height: 49px; border: 2px solid rgba(39, 48, 74, .22); border-radius: 8px; position: relative; display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 0 12px 0 16px; background: rgba(255, 255, 255, .25); }
+.maths-tv .mb-box .qx { font-size: 34px; line-height: 1; white-space: nowrap; overflow: hidden; position: relative; }
+.maths-tv .mb-box .la { font-family: var(--mb-hand); font-size: 31px; font-weight: 700; color: var(--mb-pen); line-height: 1; white-space: nowrap; }
+.maths-tv .mb-box .ring { position: absolute; left: -10px; top: -8px; width: calc(100% + 20px); height: calc(100% + 16px); overflow: visible; }
+.maths-tv .mb-box .ring path, .maths-tv .mb-box .tk path { fill: none; stroke: var(--mb-pen); stroke-width: 3.5; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
+.maths-tv .mb-box .tk { width: 48px; height: 40px; flex: 0 0 48px; }
+.maths-tv .mb-box .tk path { stroke-width: 5.5; }
+.maths-tv .mb-box[data-look="true"] { background: rgba(255, 197, 107, .28); box-shadow: 0 0 0 3px rgba(255, 177, 61, .6), 0 0 24px rgba(255, 177, 61, .5); }
+.maths-tv .mb-box[data-v="unsure"] .la { color: #5B78B8; }
+.maths-tv .mb-pencil { position: absolute; left: 444px; top: 96px; width: 34px; height: 290px; transform: rotate(-16deg); filter: drop-shadow(10px 16px 10px rgba(0, 0, 0, .5)); }
+.maths-tv .mb-empty { position: absolute; left: 84px; right: 30px; top: 120px; font-family: var(--mb-hand); font-size: 38px; font-weight: 600; line-height: 1.25; color: rgba(39, 48, 74, .55); white-space: normal; }
+.maths-tv .mb-startline { position: absolute; left: 84px; right: 40px; top: 210px; height: 4px; border-radius: 2px; background: linear-gradient(90deg, #E08A1E, rgba(224, 138, 30, .1)); box-shadow: 0 0 16px rgba(255, 177, 61, .6); }
+.maths-tv .mb-startdot { position: absolute; left: 74px; top: 201px; width: 22px; height: 22px; border-radius: 50%; background: #E08A1E; box-shadow: 0 0 0 6px rgba(255, 177, 61, .25), 0 0 20px var(--mb-amber-2); }
+.maths-tv .mb-htext { position: absolute; left: 676px; top: 44px; width: 420px; transition: transform .4s var(--mb-ease); }
+.maths-tv .mb-htitle { text-wrap: balance; font-family: var(--mb-serif); font-size: 76px; line-height: 1; font-weight: 560; letter-spacing: -.02em; font-variation-settings: "opsz" 144, "SOFT" 100; margin-top: 18px; color: rgba(245, 238, 223, .82); transition: color .3s; }
+.maths-tv .mb-detail { text-wrap: balance; margin-top: 22px; font-size: 33px; line-height: 1.28; color: rgba(245, 238, 223, .72); font-weight: 500; }
+.maths-tv .mb-detail .tally { display: flex; gap: 10px; margin-top: 4px; }
+.maths-tv .mb-detail .tally svg { width: 48px; height: 48px; }
+.maths-tv .mb-detail .tally path { fill: none; stroke-linecap: round; stroke-linejoin: round; }
+.maths-tv .mb-ok { margin-top: 30px; display: flex; align-items: center; gap: 14px; opacity: 0; transform: translateY(8px); transition: opacity .3s, transform .3s var(--mb-ease); }
+.maths-tv .mb-ok .ok { text-transform: uppercase; width: 54px; height: 54px; border-radius: 50%; display: grid; place-items: center; font-size: 20px; font-weight: 800; letter-spacing: .06em; background: var(--mb-navy); color: var(--mb-amber); }
+.maths-tv .mb-ok .mb-lab { color: var(--mb-navy); }
+.maths-tv .mb-hero[data-focused="true"] .mb-htitle { color: #FFF9EE; }
+.maths-tv .mb-hero[data-focused="true"] .mb-detail { color: rgba(245, 238, 223, .92); }
+.maths-tv .mb-hero[data-focused="true"] .mb-htext { transform: translateX(8px); }
+.maths-tv .mb-hero[data-focused="true"] .mb-ok { opacity: 1; transform: none; background: linear-gradient(160deg, var(--mb-amber-lo), var(--mb-amber-2)); border-radius: 40px; padding: 8px 30px 8px 8px; width: max-content; box-shadow: 0 10px 40px rgba(255, 177, 61, .5); }
+/* the first evening: a blank sheet, a starting line, and the doors grow */
+.maths-tv .mb-title { position: absolute; left: 96px; top: 164px; margin: 0; font-family: var(--mb-serif); font-weight: 560; font-size: 68px; line-height: 1.05; letter-spacing: -.02em; font-variation-settings: "opsz" 144, "SOFT" 100; color: var(--mb-cream-hi); white-space: nowrap; z-index: 3; }
+.maths-tv .mb-hero.blank { top: 270px; height: 430px; width: 520px; }
+.maths-tv .mb-hero.blank .mb-art { width: 520px; height: 430px; }
+.maths-tv .mb-hero.blank .mb-stack { left: 40px; top: 40px; width: 400px; height: 360px; filter: none; }
+.maths-tv .mb-hero.blank::before { display: none; }
+/* the doors */
+.maths-tv .mb-doors { position: absolute; left: 1238px; top: 176px; width: 586px; height: 498px; display: flex; gap: 26px; z-index: 5; }
+.maths-tv .mb-door { flex: 1; position: relative; border-radius: 28px; padding: 26px 26px 28px; display: flex; flex-direction: column; min-width: 0;
+  background: linear-gradient(170deg, rgba(245, 238, 223, .075), rgba(245, 238, 223, .03)); border: 1.5px solid rgba(245, 238, 223, .13); color: rgba(245, 238, 223, .84);
+  transition: transform .32s var(--mb-ease), background .32s, box-shadow .32s, color .32s, border-color .32s, opacity .32s; }
+.maths-tv .mb-door .art { height: 220px; display: flex; align-items: center; justify-content: center; color: rgba(255, 197, 107, .85); }
+.maths-tv .mb-door .art svg { width: 230px; height: 210px; overflow: visible; }
+.maths-tv .mb-door .mb-kick { margin-top: auto; color: rgba(255, 197, 107, .9); font-size: 20px; line-height: 1.35; white-space: normal; }
+.maths-tv .mb-door .dt { font-family: var(--mb-serif); font-size: 48px; line-height: 1.02; font-weight: 580; letter-spacing: -.015em; font-variation-settings: "opsz" 144, "SOFT" 100; margin-top: 12px; }
+.maths-tv .mb-door[data-focused="true"] { transform: translateY(-14px) scale(1.045); color: var(--mb-navy); border-color: transparent;
+  background: linear-gradient(165deg, #FFE1A6 0%, var(--mb-amber) 48%, #F5A23A 100%);
+  box-shadow: 0 0 0 4px rgba(255, 214, 150, .55), 0 24px 70px rgba(255, 166, 50, .5), 0 30px 60px rgba(0, 0, 0, .45); }
+.maths-tv .mb-door[data-focused="true"] .art, .maths-tv .mb-door[data-focused="true"] .mb-kick { color: var(--mb-navy); }
+.maths-tv .mb-doors[data-dim="true"] .mb-door:not([data-focused="true"]) { opacity: .62; }
+.maths-tv .mb-door[data-waiting="true"] .art { animation: mb-breathe 2.4s ease-in-out infinite; }
+.maths-tv .mb-doors.wide { left: 600px; top: 282px; width: 1224px; height: 400px; }
+.maths-tv .mb-doors.wide .mb-door { flex-direction: row; align-items: center; gap: 22px; padding: 28px 34px; }
+.maths-tv .mb-doors.wide .mb-door .art { height: auto; flex: 0 0 250px; }
+.maths-tv .mb-doors.wide .mb-door .art svg { width: 250px; height: 230px; }
+.maths-tv .mb-doors.wide .mb-door .txt { display: flex; flex-direction: column; }
+.maths-tv .mb-doors.wide .mb-door .mb-kick { margin-top: 0; }
+.maths-tv .mb-doors.wide .mb-door .dt { font-size: 60px; }
+
+/* ================= the ruler: the topic path as a boxwood ruler ================= */
+.maths-tv .mb-ruler { position: absolute; left: 96px; top: 798px; width: 1728px; height: 228px; z-index: 4; }
+.maths-tv .mb-rbody { position: absolute; left: 0; right: 0; top: 38px; height: 78px; border-radius: 7px;
+  background:
+    repeating-linear-gradient(90deg, rgba(58, 36, 14, .8) 0 2px, transparent 2px 60px) 24px 0 / 100% 22px no-repeat,
+    repeating-linear-gradient(90deg, rgba(58, 36, 14, .55) 0 1.5px, transparent 1.5px 12px) 24px 0 / 100% 12px no-repeat,
+    linear-gradient(180deg, rgba(255, 255, 255, .34), rgba(255, 255, 255, 0) 20%, rgba(0, 0, 0, 0) 78%, rgba(0, 0, 0, .28)),
+    repeating-linear-gradient(1.2deg, rgba(110, 70, 30, .07) 0 3px, transparent 3px 11px),
+    linear-gradient(90deg, #E7C68F 0%, #D6AC6E 35%, #C0925A 70%, #A57A47 100%);
+  box-shadow: 0 20px 34px rgba(0, 0, 0, .55), inset 0 1px 0 rgba(255, 255, 255, .55), inset 0 -2px 0 rgba(0, 0, 0, .25); }
+.maths-tv .mb-major { position: absolute; top: 38px; width: 3px; height: 34px; background: #3A240E; border-radius: 0 0 2px 2px; }
+.maths-tv .mb-major.start { height: 78px; width: 5px; background: #2A1A0A; }
+.maths-tv .mb-strand { position: absolute; top: 62px; font-size: 20px; font-weight: 800; letter-spacing: .2em; text-transform: uppercase; color: rgba(58, 36, 14, .85); white-space: nowrap; }
+.maths-tv .mb-topic { position: absolute; top: 26px; height: 196px; border-radius: 18px; transition: opacity .3s, background .3s, box-shadow .3s, transform .3s var(--mb-ease); }
+.maths-tv .mb-groove { position: absolute; left: 12px; right: 12px; top: 58px; height: 20px; border-radius: 10px; background: rgba(58, 36, 14, .16); box-shadow: inset 0 2px 3px rgba(0, 0, 0, .28); overflow: hidden; }
+.maths-tv .mb-groove .fill { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 10px; transform-origin: 0 50%; animation: mb-grow 1.1s var(--mb-ease) .4s both; }
+.maths-tv .mb-topic[data-s="secure"] .fill { width: 100%; background: linear-gradient(180deg, #3B4668, #1E2640); box-shadow: inset 0 1px 0 rgba(255, 255, 255, .25); }
+.maths-tv .mb-topic[data-s="prog"] .fill { background: repeating-linear-gradient(115deg, rgba(39, 48, 74, .95) 0 3px, rgba(39, 48, 74, .35) 3px 8px); border-radius: 10px 4px 4px 10px; }
+.maths-tv .mb-topic[data-s="unseen"] .mb-groove { background: transparent; box-shadow: none; border: 2px dashed rgba(58, 36, 14, .4); }
+@keyframes mb-grow { from { transform: scaleX(0); } }
+.maths-tv .mb-slips { position: absolute; right: 22px; top: 34px; display: flex; gap: 6px; }
+.maths-tv .mb-slips svg { width: 26px; height: 22px; }
+.maths-tv .mb-slips path { fill: none; stroke: #2A2F45; stroke-width: 2.6; stroke-linecap: round; }
+.maths-tv .mb-tl { position: absolute; left: 12px; right: 12px; top: 98px; text-align: center; transition: transform .3s var(--mb-ease); }
+.maths-tv .mb-tn { font-size: 29px; line-height: 1.1; font-weight: 700; color: rgba(245, 238, 223, .9); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.maths-tv .mb-ty { margin-top: 6px; font-size: 21px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: rgba(245, 238, 223, .55); }
+.maths-tv .mb-topic[data-s="unseen"] .mb-tn { color: rgba(245, 238, 223, .6); }
+.maths-tv .mb-marker, .maths-tv .mb-flag { position: absolute; top: 0; width: 0; height: 120px; z-index: 3; pointer-events: none; }
+.maths-tv .mb-marker .nd { position: absolute; left: -3px; top: 30px; width: 6px; height: 88px; border-radius: 3px; background: linear-gradient(180deg, #FFE0A0, var(--mb-amber-2)); box-shadow: 0 0 0 1.5px rgba(40, 22, 5, .7), 0 0 18px var(--mb-amber-2), 0 0 40px rgba(255, 177, 61, .7); }
+.maths-tv .mb-marker .mc { position: absolute; top: 0; left: 0; transform: translateX(-50%); height: 34px; padding: 0 14px; border-radius: 17px; display: flex; align-items: center; font-size: 21px; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; color: var(--mb-navy); background: linear-gradient(180deg, #FFE0A0, var(--mb-amber-2)); box-shadow: 0 0 24px rgba(255, 177, 61, .8); white-space: nowrap; }
+.maths-tv .mb-marker[data-start="true"] .mc { transform: translateX(-14px); }
+.maths-tv .mb-marker .halo { position: absolute; left: -90px; top: -40px; width: 180px; height: 180px; border-radius: 50%; background: radial-gradient(closest-side, rgba(255, 190, 90, .35), transparent); animation: mb-breathe 5s ease-in-out infinite; }
+.maths-tv .mb-flag .nd { position: absolute; left: -2px; top: 30px; width: 4px; height: 88px; background: repeating-linear-gradient(180deg, var(--mb-sky) 0 8px, transparent 8px 13px); filter: drop-shadow(0 0 1.5px rgba(8, 16, 48, .95)) drop-shadow(0 0 10px rgba(143, 184, 255, .6)); }
+.maths-tv .mb-flag .mc { position: absolute; top: 0; text-transform: uppercase; height: 34px; padding: 0 14px; border-radius: 17px; display: flex; align-items: center; font-size: 21px; font-weight: 800; letter-spacing: .16em; color: var(--mb-sky); border: 2px solid var(--mb-sky); background: rgba(10, 18, 52, .85); white-space: nowrap; transform: translateX(-50%); }
+.maths-tv .mb-flag[data-end="true"] .mc { transform: translateX(-100%) translateX(2px); }
+.maths-tv .mb-flag[data-start="true"] .mc { transform: translateX(-2px); }
+.maths-tv .mb-gapline { position: absolute; top: 32px; height: 2px; background: repeating-linear-gradient(90deg, rgba(143, 184, 255, .7) 0 6px, transparent 6px 12px); z-index: 2; }
+/* the Topics screen: the same ruler, larger, and each topic is a stop */
+.maths-tv .mb-ruler.big { top: 580px; height: 400px; }
+.maths-tv .mb-ruler.big .mb-rbody { top: 60px; height: 96px; }
+.maths-tv .mb-ruler.big .mb-major { top: 60px; height: 40px; }
+.maths-tv .mb-ruler.big .mb-major.start { height: 96px; }
+.maths-tv .mb-ruler.big .mb-strand { top: 90px; }
+.maths-tv .mb-ruler.big .mb-topic { top: 40px; height: 320px; }
+.maths-tv .mb-ruler.big .mb-groove { top: 82px; height: 24px; border-radius: 12px; }
+.maths-tv .mb-ruler.big .mb-slips { top: 50px; }
+.maths-tv .mb-ruler.big .mb-tl { top: 132px; }
+.maths-tv .mb-ruler.big .mb-tn { font-family: var(--mb-serif); font-size: 44px; font-weight: 560; line-height: 1.05; font-variation-settings: "opsz" 144, "SOFT" 100; letter-spacing: -.01em; }
+.maths-tv .mb-ruler.big .mb-st { margin-top: 8px; font-size: 28px; font-weight: 600; color: rgba(245, 238, 223, .72); }
+.maths-tv .mb-ruler.big .mb-marker, .maths-tv .mb-ruler.big .mb-flag { top: 14px; }
+.maths-tv .mb-ruler.big .mb-gapline { top: 46px; }
+.maths-tv .mb-ruler[data-active="true"] .mb-topic:not([data-focused="true"]) { opacity: .5; }
+.maths-tv .mb-topic[data-focused="true"] { background: linear-gradient(180deg, rgba(255, 197, 107, .16), rgba(255, 197, 107, .06)); box-shadow: 0 0 0 4px rgba(255, 197, 107, .95), 0 0 44px rgba(255, 177, 61, .55); transform: translateY(-6px); }
+.maths-tv .mb-topic[data-focused="true"] .mb-tn { color: #FFFFFF; }
+.maths-tv .mb-topic[data-focused="true"] .mb-ty { color: var(--mb-amber); }
+.maths-tv .mb-topic[data-busy="true"] { animation: mb-pulse 1.8s ease-in-out infinite; }
+@keyframes mb-pulse { 50% { box-shadow: 0 0 0 4px rgba(255, 197, 107, .95), 0 0 80px rgba(255, 177, 61, .8); } }
+.maths-tv .mb-lede { position: absolute; left: 96px; top: 300px; width: 1500px; min-height: 180px; }
+.maths-tv .mb-lede .mb-kick { margin-bottom: 18px; }
+.maths-tv .mb-lede p { margin: 0; font-size: 38px; line-height: 1.3; font-weight: 500; color: rgba(245, 238, 223, .94); text-wrap: balance; max-width: 1400px; animation: mb-rise .32s var(--mb-ease) both; }
+
+/* ================= Practice: six questions on the paper ================= */
+.maths-tv .mb-practice { position: absolute; left: 96px; top: 150px; width: 1150px; height: 800px; }
+.maths-tv .mb-practice .mb-paper { position: absolute; inset: 0 0 auto 10px; padding: var(--mb-sq) 0 var(--mb-sq); transform: rotate(-.35deg); }
+.maths-tv .mb-practice .mb-item .num { height: calc(var(--mb-sq) * 2); }
+.maths-tv .mb-practice .mb-row.q .rin { font-size: 52px; }
+.maths-tv .mb-practice .mb-row.gap { height: calc(var(--mb-sq) * .5); }
+
+/* ================= Sheet: the marked set, one item under the lamp ================= */
+.maths-tv .mb-item[data-focused="true"]::before { content: ""; position: absolute; left: 70px; right: 24px; top: -10px; bottom: -6px; border-radius: 14px; background: rgba(255, 197, 107, .22); box-shadow: 0 0 0 4px rgba(255, 177, 61, .75), 0 0 34px rgba(255, 177, 61, .45); }
+.maths-tv .mb-item .lookword { font-family: var(--mb-hand); font-size: 44px; font-weight: 700; color: var(--mb-pen); margin-left: .6em; }
+.maths-tv .mb-item[data-v="unsure"] .lookword { color: #5B78B8; }
+.maths-tv .mb-item .ok { position: absolute; right: 44px; top: 50%; margin-top: -30px; display: flex; align-items: center; gap: 12px; padding: 4px 22px 4px 4px; border-radius: 34px; background: linear-gradient(160deg, var(--mb-amber-lo), var(--mb-amber-2)); color: var(--mb-navy); box-shadow: 0 8px 30px rgba(255, 177, 61, .45); z-index: 2; }
+.maths-tv .mb-item .ok b { text-transform: uppercase; width: 52px; height: 52px; border-radius: 50%; display: grid; place-items: center; background: var(--mb-navy); color: var(--mb-amber); font-size: 20px; letter-spacing: .06em; }
+.maths-tv .mb-item .ok .mb-lab { color: var(--mb-navy); }
+
+/* ================= Page: the snapped sheet, read ================= */
+.maths-tv .mb-reading { position: absolute; left: 144px; right: 48px; height: 6px; border-radius: 3px; background: #E08A1E; box-shadow: 0 0 20px var(--mb-amber-2); animation: mb-read 2.2s ease-in-out infinite alternate; }
+@keyframes mb-read { from { top: 110px; } to { top: 620px; } }
+.maths-tv .mb-photo { position: absolute; left: 1290px; top: 560px; width: 534px; height: 340px; border-radius: 10px; overflow: hidden; background: #1a1d2c; box-shadow: 0 18px 40px rgba(0, 0, 0, .5); transform: rotate(-1deg); }
+.maths-tv .mb-photo img { position: absolute; left: 0; width: 100%; height: auto; filter: sepia(.25) brightness(.92); }
+.maths-tv .mb-photo .mb-band { position: absolute; left: 0; right: 0; border-left: 6px solid var(--mb-amber-2); background: rgba(255, 177, 61, .28); box-shadow: 0 0 20px rgba(255, 177, 61, .5); }
+.maths-tv .mb-photo .mb-lab { position: absolute; left: 14px; bottom: 12px; padding: 4px 12px; border-radius: 6px; background: rgba(6, 8, 24, .8); color: var(--mb-cream); }
+.maths-tv .mb-overview { position: absolute; left: 96px; top: 150px; width: 1728px; height: 780px; display: flex; justify-content: center; }
+.maths-tv .mb-overview .mb-frame { position: relative; height: 780px; border-radius: 8px; overflow: hidden; box-shadow: 0 0 0 3px rgba(255, 197, 107, .35), 0 30px 80px rgba(0, 0, 0, .6); transform: rotate(-.6deg); }
+.maths-tv .mb-overview img { display: block; height: 780px; width: auto; filter: sepia(.2) brightness(.95); }
+.maths-tv .mb-overview .mb-band { position: absolute; left: 0; right: 0; border-left: 8px solid var(--mb-amber-2); background: rgba(255, 177, 61, .26); box-shadow: 0 0 30px rgba(255, 177, 61, .55); }
+.maths-tv .mb-facts { display: flex; flex-wrap: wrap; gap: 10px 24px; margin-top: 18px; font-size: 28px; font-weight: 600; color: var(--mb-mute); }
+.maths-tv .mb-facts b { color: var(--mb-cream); font-weight: 700; }
+
+/* ================= Hint: the problem under the lamp, the taped card ================= */
+.maths-tv .mb-hint-paper { position: absolute; left: 96px; top: 150px; width: 1150px; height: 760px; }
+.maths-tv .mb-hint-paper .mb-paper { position: absolute; inset: 0; padding: var(--mb-sq) 0; transform: rotate(-.45deg); overflow: hidden; }
+.maths-tv .mb-hint-paper .mb-row.q .rin { font-size: 56px; }
+.maths-tv .mb-hint-paper .mb-row.q { height: auto; min-height: calc(var(--mb-sq) * 3); white-space: normal; }
+.maths-tv .mb-hint-paper .mb-row.q .rin { white-space: normal; line-height: 1.4; max-width: 900px; }
+.maths-tv .mb-hint-paper .mb-row.q .mx { white-space: normal; }
+.maths-tv .mb-hint-paper .blank { position: relative; margin: 0 48px 0 144px; height: calc(var(--mb-sq) * 2); border-bottom: 2px dashed rgba(39, 48, 74, .16); }
+.maths-tv .mb-hint-paper .blank .mb-lab { position: absolute; left: 0; bottom: 10px; color: rgba(39, 48, 74, .35); }
+.maths-tv .mb-rule { margin-top: 24px; color: var(--mb-navy); font-size: 30px; line-height: 1.3; }
+.maths-tv .mb-rule dt { font-size: 21px; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; color: var(--mb-pen-d); margin-top: 10px; }
+.maths-tv .mb-rule dd { margin: 0; }
+
+/* ================= Lesson: the lamp-lit frame ================= */
+.maths-tv .mb-screen { position: absolute; left: 96px; top: 170px; width: 1120px; height: 630px; border-radius: 16px; background: #000; box-shadow: 0 0 0 10px #2A2016, 0 0 0 12px rgba(255, 197, 107, .35), 0 0 120px rgba(255, 177, 61, .28), 0 40px 90px rgba(0, 0, 0, .7); overflow: hidden; }
+.maths-tv .mb-screen iframe { display: block; border: 0; }
+.maths-tv .mb-screen .none { position: absolute; inset: 0; display: grid; place-items: center; padding: 60px; text-align: center; font-family: var(--mb-serif); font-size: 44px; line-height: 1.2; color: var(--mb-cream); font-variation-settings: "opsz" 96, "SOFT" 80; }
+.maths-tv .mb-lesson-side { position: absolute; left: 1290px; top: 160px; width: 534px; }
+.maths-tv .mb-lesson-side .mb-stitle { font-size: 50px; }
+.maths-tv .mb-chips { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 22px; }
+.maths-tv .mb-chips span { font-size: 28px; font-weight: 600; padding: 8px 18px; border-radius: 24px; border: 1.5px solid rgba(255, 197, 107, .45); color: var(--mb-amber); }
+.maths-tv .mb-paused { position: absolute; left: 96px; top: 830px; font-size: 30px; font-weight: 600; color: var(--mb-mute); display: flex; align-items: center; gap: 14px; }
+.maths-tv .mb-paused svg { width: 28px; height: 28px; color: var(--mb-amber); }
+
+/* ================= Units and the calendar: a contents page, a planner ================= */
+.maths-tv .mb-contents { position: absolute; left: 96px; top: 150px; width: 1150px; }
+.maths-tv .mb-contents .mb-paper { padding: calc(var(--mb-sq) * .5) 0 var(--mb-sq); transform: rotate(-.35deg); }
+.maths-tv .mb-unit { position: relative; display: grid; grid-template-columns: 96px 1fr auto; align-items: center; height: calc(var(--mb-sq) * 2); padding-right: 48px; }
+.maths-tv .mb-unit .u { text-align: center; font-family: var(--mb-hand); font-size: 44px; font-weight: 700; color: rgba(39, 48, 74, .55); }
+.maths-tv .mb-unit .t { padding-left: 48px; font-family: var(--mb-serif); font-size: 40px; font-weight: 560; font-variation-settings: "opsz" 72, "SOFT" 50; color: var(--mb-print); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.maths-tv .mb-unit .m { font-family: var(--mb-hand); font-size: 40px; font-weight: 600; color: rgba(39, 48, 74, .6); display: flex; align-items: center; gap: 10px; }
+.maths-tv .mb-unit .tick { font-size: 56px; margin-left: 0; }
+.maths-tv .mb-unit .next { font-size: 21px; font-weight: 800; letter-spacing: .16em; text-transform: uppercase; color: var(--mb-pen-d); border: 2px solid var(--mb-pen); border-radius: 18px; padding: 2px 12px; font-family: var(--mb-sans); }
+.maths-tv .mb-unit[data-focused="true"]::before { content: ""; position: absolute; left: 70px; right: 24px; top: 6px; bottom: 6px; border-radius: 14px; background: rgba(255, 197, 107, .26); box-shadow: 0 0 0 4px rgba(255, 177, 61, .75), 0 0 34px rgba(255, 177, 61, .45); }
+.maths-tv .mb-unit > * { position: relative; }
+.maths-tv .mb-planner { position: absolute; left: 96px; top: 160px; width: 1728px; display: grid; grid-template-columns: 170px repeat(3, 1fr); gap: 26px 26px; }
+.maths-tv .mb-planner .wk { font-family: var(--mb-hand); font-size: 48px; font-weight: 700; color: var(--mb-amber); align-self: center; }
+.maths-tv .mb-cell { position: relative; min-height: 200px; border-radius: 10px; padding: 22px 26px; color: var(--mb-navy); transform: rotate(var(--r, 0deg));
+  background: radial-gradient(120% 90% at 20% 0%, #FFFBF1 0%, #F7F0E1 55%, #E9DEC7 100%); box-shadow: 0 14px 30px rgba(0, 0, 0, .45); transition: transform .3s var(--mb-ease), box-shadow .3s; }
+.maths-tv .mb-cell .t { font-family: var(--mb-serif); font-size: 36px; line-height: 1.1; font-weight: 560; font-variation-settings: "opsz" 72, "SOFT" 60; text-wrap: balance; }
+.maths-tv .mb-cell .s { position: absolute; left: 26px; bottom: 18px; font-family: var(--mb-hand); font-size: 38px; font-weight: 700; color: var(--mb-pen-d); display: flex; align-items: center; gap: 8px; }
+.maths-tv .mb-cell .s .tick { font-size: 44px; margin-left: 0; }
+.maths-tv .mb-cell[data-state="locked"] { background: transparent; color: rgba(245, 238, 223, .7); border: 2.5px dashed rgba(245, 238, 223, .3); box-shadow: none; }
+.maths-tv .mb-cell[data-state="locked"] .s { color: rgba(245, 238, 223, .55); }
+.maths-tv .mb-cell[data-state="next"]::before { content: ""; position: absolute; left: 50%; top: -16px; width: 110px; height: 30px; margin-left: -55px; transform: rotate(-3deg); background: linear-gradient(180deg, rgba(255, 214, 150, .92), rgba(255, 197, 107, .82)); }
+.maths-tv .mb-cell[data-focused="true"] { transform: translateY(-10px) scale(1.04); box-shadow: 0 0 0 4px rgba(255, 197, 107, .95), 0 0 60px rgba(255, 177, 61, .55), 0 24px 50px rgba(0, 0, 0, .5); }
+.maths-tv .mb-cell[data-state="locked"][data-focused="true"] { background: rgba(255, 197, 107, .12); border-color: var(--mb-amber); color: var(--mb-cream-hi); }
+
+/* ---- under reduced motion: every pen stroke is already drawn, nothing breathes, nothing slides ---- */
+@media (prefers-reduced-motion: reduce) {
+  .maths-tv *, .maths-tv *::before, .maths-tv *::after { animation: none !important; transition: none !important; }
+}
+
+/* a printed line that is mostly words (a page's problem, a hint's problem) wraps at its word spaces */
+.maths-tv .mb-row.q.wrap { height: auto; min-height: calc(var(--mb-sq) * 2); padding: 14px 150px 14px 0; white-space: normal; }
+.maths-tv .mb-row.q.wrap .rin, .maths-tv .mb-row.q.wrap .mx { white-space: normal; line-height: 1.3; }
+.maths-tv .mb-row.q.wrap .mt { white-space: pre-wrap; }
+/* on the walk the open item is the one in hand: the lamp and the full ink say so, not a box */
+.maths-tv[data-screen="walk"] .mb-item[data-focused="true"]::before { display: none; }
