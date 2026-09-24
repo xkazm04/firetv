@@ -119,6 +119,17 @@ const SIXV=[{n:1,verdict:'strong',note:'clear'},{n:3,verdict:'neutral',note:''},
 const essay=(patch={})=>session({subject:'essay',essay:reading(SIXV),essayAt:null,...patch});
 const at=(s,step)=>{const e=step.events.filter(x=>x.type==='essay.at');return e.length?e.at(-1).n:undefined;};
 
+test('essay 1: essayOwns names exactly the four Essay Master screens, and the TV routes them to their own module',()=>{
+ const {essayOwns,ESSAY_SCREENS}=keys();
+ assert.deepEqual([...ESSAY_SCREENS],['essaytype','forensic','playbook','xray']);
+ for(const screen of SCREENS)assert.equal(essayOwns(session({screen,subject:'essay'})),ESSAY_SCREENS.includes(screen),screen);
+ const page=fs.readFileSync(path.join(root,'src/app/tv/page.tsx'),'utf8');
+ assert.match(page,/essayOwns\(s\)/,'page.tsx asks the keymap, not a list of its own');
+ assert.match(page,/@\/essay\/EssayTV/);
+ const screens=fs.readFileSync(path.join(root,'src/tv/screens.tsx'),'utf8');
+ for(const n of ['EssayType','Forensic','Playbook','Xray'])assert.doesNotMatch(screens,new RegExp(`export function ${n}\\b`),`${n} left the shared screens`);
+});
+
 test('essay 2: the lens home is four lenses top to bottom, and Right reaches the last paragraph only when there is one',()=>{
  const {tvKey,lensStops}=keys();
  assert.equal(lensStops(session({screen:'essaytype'})).length,4,'nothing read: no card to reach');
