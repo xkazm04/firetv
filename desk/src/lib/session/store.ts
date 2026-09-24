@@ -9,6 +9,7 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { networkInterfaces } from "node:os";
 import { AGE_RANGE } from "@/tv/profileRows";
 import { firstToLook } from "@/tv/sheetRows";
+import { LANDING_REST } from "@/tv/landingRows";
 import path from "node:path";
 import { getLearner, type HistoryEntry, type SkillRecord } from "./learners";
 import { SYLLABUS } from "../library/syllabus";
@@ -171,7 +172,7 @@ export function fresh(): Session {
       { id: "ema", name: "Ema", type: "high-school", age: 16, modules: ["maths", "english", "essay"] },
       { id: "jakub", name: "Jakub", type: "other", modules: ["english", "essay"] },
     ], draft: null,
-    subject: "maths", screen: "landing", focus: 0, view: "band",
+    subject: "maths", screen: "landing", focus: LANDING_REST, view: "band",
     tasks: [
       { id: "t1", sub: "maths", name: "Algebra — Exercise 4.2, all ten", min: 25, done: false },
       { id: "t2", sub: "english", name: "Unit 6 — past simple vs present perfect", min: 15, done: false },
@@ -192,7 +193,8 @@ export function reduce(s: Session, e: Event): Session {
     case "linga.changed": if (e.conversation !== undefined) n.conversation = e.conversation; if (e.check !== undefined) n.check = e.check; if (e.screen) { n.screen = e.screen; n.subject = "english"; n.focus = e.focus ?? (["linga-talk", "linga-coach", "linga-check", "linga-verdict", "linga-moment"].includes(e.screen) ? -1 : 0); } break;
     // a draft in progress owns the screen: joining must not throw the parent off the profile
     case "join": n.joined = true; if (s.screen !== "profile") { n.screen = "joined"; n.focus = 0; } break;
-    case "nav": n.screen = e.screen; n.focus = e.focus ?? 0; if (e.from) n.back = e.from; break;
+    // the landing with no stop named: the lamp rests on what was left (tv/landingRows.ts LANDING_REST)
+    case "nav": n.screen = e.screen; n.focus = e.focus ?? (e.screen === "landing" ? LANDING_REST : 0); if (e.from) n.back = e.from; break;
     case "focus": n.focus = e.focus; break;
     case "learner.set": { const p = s.profiles.find((x) => x.id === e.id); if (!p) break; if (p.id !== s.learner.id) { n.conversation = null; n.check = null; } n.learner = { id: p.id, name: p.name }; n.screen = "tonight"; n.focus = 0; break; }
     case "profile.draft": { const d: Profile = { ...(s.draft ?? { id: "p" + Date.now(), name: "", type: "high-school" as StudentType, modules: ["maths", "english", "essay"] as Subject[] }), ...e.patch };

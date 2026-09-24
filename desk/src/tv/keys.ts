@@ -12,6 +12,7 @@ import { SYLLABUS, type Topic } from "@/lib/library/syllabus";
 import { profileRows, locate, flat } from "@/tv/profileRows";
 import { continueCard } from "@/tv/mathsRows";
 import { sheetStops, firstToLook, tileOf } from "@/tv/sheetRows";
+import { landingAt, landingFocus, landingModules, landingStops, continueStop } from "@/tv/landingRows";
 
 /** The remote's buttons. The keyboard stands in for it on the bench. */
 export type Key = "up" | "down" | "left" | "right" | "select" | "back" | "menu" | "play";
@@ -57,11 +58,13 @@ const clampIx = (n: number, f: number) => Math.max(0, Math.min(n - 1, f));
 /** The stop the focus is on; a focus past the end is the last stop. */
 export function stopAt<T>(stops: readonly T[], f: number): T | undefined { return stops.length ? stops[clampIx(stops.length, f)] : undefined; }
 
-/** Landing: the three modules on one row, the two actions below. */
-export const LANDING_MODULES = ["maths", "english", "essay"] as const satisfies readonly Subject[];
-export const LANDING_STOPS = [...LANDING_MODULES, "continue", "someone"] as const;
-export type LandingStop = (typeof LANDING_STOPS)[number];
-const MODULE_HOME: Record<Subject, Screen> = { maths: "tonight", english: "linga", essay: "essaytype" };
+/**
+ * Landing: the desk (tv/landingRows.ts). The apps on the learner's profile lie in a row, the place card above
+ * them, the unpaired phone below right. There is no Continue button: the lamp rests on the app with something
+ * waiting (focus LANDING_REST), and Select on the place card is "someone else".
+ */
+export { LANDING_MODULES, LANDING_REST, landingStops, landingFocus, landingAt, type LandingStop } from "@/tv/landingRows";
+export const MODULE_HOME: Record<Subject, Screen> = { maths: "tonight", english: "linga", essay: "essaytype" };
 
 /** Math Buddy's home: the thing already open leads, then the two doors. */
 export type TonightStop = "continue" | "homework" | "teach";
@@ -147,23 +150,29 @@ export function practiceFailed(s: Session, topicId: string | undefined): string 
 const lessonEvent = (l: Lesson, why: string): Event => ({ type: "lesson.set", lesson: { id: l.id, title: l.title, t: 0, text: l.concepts.join(" · "), why, youtube: l.youtube } });
 
 const KEYMAP: Partial<Record<Screen, Handler>> = {
+  // the lamp moves between the objects on the desk: Left/Right along the apps, Up to the place card, Down to an unpaired phone
   landing: (s, k, _, o) => {
-    const at = stopAt(LANDING_STOPS, s.focus)!;
-    if (at === "maths" || at === "english" || at === "essay") {
-      if (k === "right") o.move(LANDING_MODULES.length, 1); if (k === "left") o.move(LANDING_MODULES.length, -1);
-      if (k === "down") o.focus(LANDING_STOPS.indexOf("continue"));
+    const stops = landingStops(s), i = landingAt(s), at = stops[i], apps = landingModules(s).length;
+    const to = (j: number) => { if (j >= 0 && j !== s.focus) o.ev({ type: "focus", focus: j }); };
+    if (k === "back") { const c = continueStop(s); to(c ? stops.indexOf(c.app) : stops.indexOf("place")); return; }
+    if (at === "place") {
+      if (k === "down" && apps) to(Math.floor((apps - 1) / 2));
+      if (k === "select") o.nav("learner", 0, "landing");
+    } else if (at === "phone") {
+      if (k === "up" || k === "left") to(apps ? apps - 1 : stops.indexOf("place"));
+      if (k === "select") o.nav("pair", 0, "landing");
+    } else if (at) {
+      if (k === "right" && i < apps - 1) to(i + 1); if (k === "left" && i > 0) to(i - 1);
+      if (k === "up") to(stops.indexOf("place"));
+      if (k === "down") to(stops.indexOf("phone"));
       if (k === "select") { o.ev({ type: "subject", subject: at }); o.nav(MODULE_HOME[at]); }
-    } else {
-      if (k === "right") o.focus(LANDING_STOPS.indexOf("someone")); if (k === "left") o.focus(LANDING_STOPS.indexOf("continue"));
-      if (k === "up") o.focus(0);
-      if (k === "select") { if (at === "continue") o.nav("tonight"); else o.nav("learner", 0, "landing"); }
     }
   },
-  pair: (s, k, _, o) => { if (k === "back") o.nav(s.back ?? "landing"); },
+  pair: (s, k, _, o) => { if (k === "back") { const to = s.back ?? "landing"; o.nav(to, to === "landing" ? landingFocus(s, "phone") : 0); } },
   joined: (_, k, __, o) => { if (k === "select" || k === "back") o.nav("tonight"); },
   tonight: (s, k, _, o) => {
     const stops = tonightStops(s), at = stopAt(stops, s.focus);
-    if (k === "back") { if (s.awaiting) o.ev({ type: "page.unask" }); else o.nav("landing"); return; }
+    if (k === "back") { if (s.awaiting) o.ev({ type: "page.unask" }); else o.nav("landing", landingFocus(s, "maths")); return; }
     if (k === "right") o.move(stops.length, 1); if (k === "left") o.move(stops.length, -1);
     if (k === "up") o.nav("learner", 0, "tonight");
     if (k === "down" && !s.joined) o.nav("pair", 0, "tonight");
@@ -180,7 +189,7 @@ const KEYMAP: Partial<Record<Screen, Handler>> = {
   learner: (s, k, _, o) => {
     const stops = learnerStops(s), at = stopAt(stops, s.focus);
     if (k === "right") o.move(stops.length, 1); if (k === "left") o.move(stops.length, -1);
-    if (k === "back") o.nav(s.back ?? "landing");
+    if (k === "back") { const to = s.back ?? "landing"; o.nav(to, to === "landing" ? landingFocus(s, "place") : 0); }
     if (k === "select") { if (at && at !== "add") o.ev({ type: "learner.set", id: at.id }); else { o.ev({ type: "profile.draft", patch: {} }); o.nav("profile"); } }
     if (k === "menu" && at && at !== "add") { o.ev({ type: "profile.draft", patch: { id: at.id, name: at.name, type: at.type, age: at.age, system: at.system, modules: at.modules } }); o.nav("profile"); }
   },
@@ -254,7 +263,7 @@ const KEYMAP: Partial<Record<Screen, Handler>> = {
       if (k === "select" && at) { o.ev({ type: "essay.type", essayType: at.id }); o.ev({ type: "status", text: `${at.id} lens chosen — paste or dictate the paragraph on the phone` }); }
     }
     if (k === "menu") o.nav("playbook", 0, "essaytype");
-    if (k === "back") o.nav("landing", LANDING_STOPS.indexOf("essay"));
+    if (k === "back") o.nav("landing", landingFocus(s, "essay"));
   },
   // one sentence at a time: Up/Down walk the paragraph, Left/Right the actions; Menu is the table, where Up/Down still walk
   forensic: (s, k, local, o) => {

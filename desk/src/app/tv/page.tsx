@@ -116,7 +116,6 @@ export default function TV() {
 function ScreenFor({ s }: { s: Session }) {
   const f = s.focus;
   switch (s.screen) {
-    case "landing": return <S.Landing s={s} focus={f} />;
     case "pair": return <S.Pair s={s} />;
     case "joined": return <S.Joined s={s} />;
     case "learner": return <S.Learner s={s} focus={f} />;

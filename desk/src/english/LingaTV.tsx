@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import type { Event, Screen, Session } from "@/lib/session/store";
 import { ENGLISH_SCENES } from "@/lib/english/curriculum";
 import { activeCheck, artOf, lingaView, NO_UI, progressDots, type ArtKey, type Hero, type LingaUi, type LingaView, type ViewAction } from "@/lib/english/view";
+import { landingFocus } from "@/tv/landingRows";
 import { useEnglish } from "./useEnglish";
 import { useEnglishAudio } from "./useEnglishAudio";
 import { ART } from "./art";
@@ -43,7 +44,7 @@ export function LingaTV({s,post,voice}:{s:Session;post:(e:Event)=>Promise<void>;
       if(k==="Escape"||k==="Backspace"){
         if(menu){patch({menu:false});post({type:"focus",focus:-1});}
         else if(picking){patch({picking:null});post({type:"focus",focus:0});}
-        else if(home)post({type:"nav",screen:"landing",focus:1});
+        else if(home)post({type:"nav",screen:"landing",focus:landingFocus(s,"english")});
         else if(s.screen==="linga-check"&&lc)cmd("check-leave");
         else if(c&&s.screen==="linga-talk")cmd("leave");
         else if(c&&s.screen==="linga-moment")cmd("moment-done");

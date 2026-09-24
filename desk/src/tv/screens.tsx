@@ -1,20 +1,20 @@
 "use client";
 /**
- * The shell's television screens, composed on On Air: the Study Desk landing, pairing, the learner and
- * profile picks, the break and the recap, and the page / hint / lesson / units screens when English or Essay
- * Master is on the desk. Math Buddy draws its own (maths/MathsTV.tsx), Linga and Essay Master theirs. Each
- * takes the session and a `focus` index and draws itself from its stop list in tv/keys.ts - the same list
- * the D-pad there walks, so a stop is added or moved in one place.
+ * The shell's television screens, composed on On Air: pairing, the learner and profile picks, the break and
+ * the recap, and the page / hint / lesson / units screens when English or Essay Master is on the desk. The
+ * landing is the desk itself (landing/LandingTV.tsx); Math Buddy draws its own (maths/MathsTV.tsx), Linga and
+ * Essay Master theirs. Each takes the session and a `focus` index and draws itself from its stop list in
+ * tv/keys.ts - the same list the D-pad there walks, so a stop is added or moved in one place.
  */
 import { useEffect, useState } from "react";
 import QRCode from "qrcode";
 import type { Profile, Session } from "@/lib/session/store";
 import { fmt } from "./useSession";
-import { stopAt, LANDING_STOPS, learnerStops, unitStops, HINT_STOPS, SENTENCE_STOPS, RECAP_STOPS } from "./keys";
+import { stopAt, learnerStops, unitStops, HINT_STOPS, SENTENCE_STOPS, RECAP_STOPS } from "./keys";
 
 /** The OCR writes exponents as ^n and the tutor may too; the screen shows them as printed. */
 export const shown = (s: string) => s.replace(/\^2/g, "²").replace(/\^3/g, "³").replace(/\*\*/g, "").replace(/\$/g, "");
-import { BRAND, MODULE_BLURB, TYPE_WORDS, profileRows, locate, onModules } from "@/tv/profileRows";
+import { BRAND, TYPE_WORDS, profileRows, locate, onModules } from "@/tv/profileRows";
 const NAME = BRAND;
 
 function Rail({ s }: { s: Session }) {
@@ -69,45 +69,6 @@ export function Pair({ s }: { s: Session }) {
   </>);
 }
 
-
-// ---- S1 Landing ----
-/** The three modules, each branded as its own app: a name, an illustration, and one caption when it is active. */
-const MODULES: Array<{ name: string; ch: Session["subject"]; img: string; tag: string; d: string }> = [
-  { name: "Math Buddy", ch: "maths", img: "/brand/math-buddy.png", tag: "Maths · high school", d: MODULE_BLURB.maths },
-  { name: "Linga", ch: "english", img: "/brand/linga.png", tag: "English · every level", d: MODULE_BLURB.english },
-  { name: "Essay Master", ch: "essay", img: "/brand/essay-master.png", tag: "Essay · anyone who writes", d: MODULE_BLURB.essay },
-];
-/** The stops are the three modules, then the two actions. The caption below the row describes whatever is focused. */
-export function Landing({ s, focus }: { s: Session; focus: number }) {
-  const at = stopAt(LANDING_STOPS, focus);
-  const active = MODULES.find((m) => m.ch === at) ?? null;
-  return (<>
-    <div className="band band-wedge" />
-    <main className="content-full">
-      <div style={{ display: "flex", alignItems: "center", gap: 28 }}>
-        <img src="/brand/mark-telestrator.png" alt="" width={96} height={96} />
-        <div className="title" style={{ marginTop: 0 }}>Study Desk</div>
-      </div>
-      <div className="cards" style={{ gridTemplateColumns: "repeat(3, 1fr)", marginTop: 36 }}>
-        {MODULES.map((m) => (
-          <div key={m.ch} className="card" data-focused={at === m.ch} style={{ minHeight: 300, padding: "20px 32px 24px" }}>
-            <img src={m.img} alt="" style={{ height: 190, width: "100%", objectFit: "contain" }} />
-            <div className="t" style={{ marginTop: "auto" }}>{m.name}</div>
-          </div>
-        ))}
-      </div>
-      <div style={{ marginTop: 44 }}>
-        {active
-          ? <><span className="cap" style={{ background: "transparent", color: `var(--${active.ch})`, border: `2px solid var(--${active.ch})` }}>{active.tag}</span><div className="cap-text">{active.d}</div></>
-          : <><span className="cap">Hints, not answers</span><div className="cap-text">The desk gives you the next step, never the answer. The TV shows; your phone does.</div></>}
-      </div>
-      <div className="actions">
-        <button className="btn" data-focused={at === "continue"}>Continue as {s.learner.name}</button>
-        <button className="btn" data-focused={at === "someone"}>Someone else</button>
-      </div>
-    </main>
-  </>);
-}
 
 /** A day, in the words a person would use. Calendar days, not elapsed hours. */
 const DAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
