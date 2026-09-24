@@ -4,7 +4,8 @@
 *"Artstyle with large potential to illustrate lessons and different topics."* It won on its topic page, where
 an arch opens onto a fully illustrated hotel lobby with Robin the receptionist. That illustration style is what
 the product bought, and everything below exists to protect it. Linga is now its own app. Its TV screens use the
-Open Door; Math Buddy has its own ([Lamplight](DESIGN-MATH-BUDDY.md)) and the shell (the landing, pairing) stays [On Air](DESIGN-ON-AIR.md).
+Open Door; Math Buddy has its own ([Lamplight](DESIGN-MATH-BUDDY.md)), the landing is [the desk](DESIGN-STUDY-DESK.md) and the rest of the
+shell (pairing) stays [On Air](DESIGN-ON-AIR.md).
 
 ## The idea in one line
 

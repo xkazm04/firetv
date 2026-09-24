@@ -6,7 +6,7 @@ for handwritten math. Nice theme pallette for given topic."* It won round 3 on i
 working (fractions, exponents, integrals, logs, trig) is set in the learner's own hand and the desk's pen marks the
 error **inside the line, by kind**. The handwritten maths is what the product bought; everything below exists to
 protect it and to let it carry complex maths. Math Buddy is now its own app. Its TV screens use Lamplight; the
-shell of Study Desk (landing, pairing, learner, profile, break, recap) stays [On Air](DESIGN-ON-AIR.md), Linga is
+landing is [the desk](DESIGN-STUDY-DESK.md), the rest of the shell (pairing, learner, profile, break, recap) stays [On Air](DESIGN-ON-AIR.md), Linga is
 [the Open Door](DESIGN-LINGA.md) and Essay Master [Specimen](DESIGN-ESSAY-MASTER.md).
 
 The CSS is `desk/src/design/maths-lamplight.css`, scoped under `.maths-tv`. The screens are

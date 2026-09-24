@@ -49,6 +49,29 @@ what travels over it: a *page* instead of a video frame, a *hint* instead of a s
 
 Each: what it is for · what is on it · what the D-pad does · what state feeds it.
 
+### S1 · Landing (the desk) — *built 2026-09-25*
+The first screen: whose desk it is, and which app to open. *Left on the Desk*
+([DESIGN-STUDY-DESK.md](DESIGN-STUDY-DESK.md)): a walnut desk at night seen from above, the leather blotter with
+the embossed wordmark, a place card ("Ema's desk"), the phone, and one object per app on the learner's profile,
+each in its app's own brand and showing what it has waiting - Math Buddy's sheet (the marked set ticked and ringed
+from its verdicts, an open set or a snapped page in print, else a blank sheet), Linga's arch with the scene of the
+next topic or of the conversation left mid-way, Essay Master's card with the lens last read and the paragraph's
+arrows. The lamp's pool of light is the focus and starts on the object with something waiting (the sage
+CONTINUE tag: marked > left mid-way > next > last). One caption slot names the lit object in a sentence. There is
+no Continue button and no Someone else button: the lamp is already on what was left, and the place card is the
+way to someone else.
+*D-pad:* Left/Right along the apps; Up to the place card; Down from the place card to the app under it, and from
+an app to the phone while it is unpaired; Select on an app plays the zoom into its colours, then opens its home
+(Math Buddy Tonight, Linga home, Essay Master's lenses) after a `subject` event; Select on the place card opens the
+learner switcher, on the unpaired phone the pairing screen (both with `from: landing`); Back brings the lamp home
+to the CONTINUE object. A nav to the landing without a focus rests the lamp (`LANDING_REST`, -1); Back from an
+app's home, the switcher or pairing lands on the object it came from.
+*Feeds:* the profile's modules (`onModules`), `continueCard` and `practice` (Math Buddy), Linga's own home view
+(`lingaView`, `lingaHome`, `progressDots`), the writing record and history (`lensStandings`, `writingTotals`, the
+session's `essay` when this learner read it), `joined` / `pin` / `phoneUrl`.
+*Code:* `desk/src/landing/LandingTV.tsx`, `desk/src/tv/landingRows.ts`, the `landing` entry of the keymap in
+`desk/src/tv/keys.ts`, `desk/src/design/desk-landing.css`. Tests: `tools/tv-keys-test.cjs` (landing 1-4).
+
 ### T0 · Pair
 Shown until a phone connects. QR + 4-digit PIN, centred; one line of instruction. The only screen
 with nothing in the rail. *Reuses the pairing card as is.*

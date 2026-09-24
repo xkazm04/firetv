@@ -4,6 +4,7 @@
 Everything below is a rule the screens follow, not a mood board. Since 2026-09-24 it is the shell's language
 (landing, pairing, learner, profile, break, recap): the three modules are apps with their own - Linga is
 [the Open Door](DESIGN-LINGA.md), Essay Master [Specimen](DESIGN-ESSAY-MASTER.md), Math Buddy [Lamplight](DESIGN-MATH-BUDDY.md).
+Since 2026-09-25 the landing no longer uses On Air either: it is the desk itself, [Left on the Desk](DESIGN-STUDY-DESK.md).
 
 ## The idea in one line
 
