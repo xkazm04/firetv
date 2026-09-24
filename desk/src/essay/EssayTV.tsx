@@ -33,7 +33,7 @@ export function EssayTV({ s, table }: { s: Session; table: boolean }) {
 // ---------------------------------------------------------------- the shell: brand, chips, caption
 
 /** The mark: a whole E with the citron caret after it. */
-function Brand() {
+export function Brand() {
   return (
     <header className="em-brand" data-role="essay-mark">
       <svg className="em-mark" viewBox="0 0 64 72" aria-hidden="true"><path fill={BONE} d="M4 6h40v12H17v12h23v12H17v12h27v12H4z" /><rect x="52" y="1" width="8" height="70" fill={CIT} /></svg>
@@ -81,7 +81,7 @@ const ACT_ICON: Record<(typeof FORENSIC_STOPS)[number], ReactNode> = {
 const ACT_WORD: Record<(typeof FORENSIC_STOPS)[number], string> = { rewrite: "Rewrite on my phone", why: "Why this matters", next: "Next sentence", back: "Back to the paragraph" };
 
 /** An arrow the length of a sentence: with the side the paragraph takes, or (against) pointing back at it. */
-function Arrow({ len, against, color, h = 28, className }: { len: number; against?: boolean; color: string; h?: number; className?: string }) {
+export function Arrow({ len, against, color, h = 28, className }: { len: number; against?: boolean; color: string; h?: number; className?: string }) {
   const y = h / 2, t = 7, head = h * 0.62;
   const d = against
     ? `M${len} ${y - t / 2}H${head}V1L0 ${y}L${head} ${h - 1}V${y + t / 2}H${len}z`

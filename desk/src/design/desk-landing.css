@@ -1,0 +1,263 @@
+/*
+  Left on the Desk - the Study Desk landing (docs/DESIGN-STUDY-DESK.md). Ported from the contest winner
+  (study-desk-landing, entry A, variant 2) value for value: the walnut, the leather blotter and its embossed
+  wordmark, the one sage accent, the lamp's pool of light, the objects and their lift, the flicker-on and the zoom.
+  Everything is scoped under .desk-tv and every class carries the dk- prefix. The apps' objects borrow their apps'
+  own scopes for what is inside them - .maths-tv (Lamplight's typesetter and wordmark), .essay-tv (Specimen's
+  faces and mark), Linga's mark and art - and this file only places and sizes them on the desk. Sizes are for the
+  1920 x 1080 stage; the stage scales as a whole. The 5% safe area is 96 px left and right, 54 px top and bottom.
+*/
+
+.desk-tv {
+  /* the desk's own colours: bone type, one sage accent, the warm-white focus ring */
+  --dk-bone: #EFE8DC;
+  --dk-sage: #A9BBA3;
+  --dk-sage-d: #6F8471;
+  --dk-sage-ink: #152019;
+  --dk-ring: #FFF3DF;
+  --dk-leather: #1b2420;
+  --dk-card-ink: #3A2417;
+  /* the apps' inks, for their objects and their zoom */
+  --dk-night: #0B1030;
+  --dk-amber: #FFC56B;
+  --dk-pen: #D9741A;
+  --dk-sky: #8FB8FF;
+  --dk-paper-ink: #27304A;
+  --dk-cream: #FFF9EC;
+  --dk-plum: #41273D;
+  --dk-frame: #6A3946;
+  --dk-wine: #9C4D55;
+  --dk-peach: #D89475;
+  --dk-black: #0B0B0D;
+  --dk-cit: #DCFF4E;
+  --dk-em-bone: #EEE9E0;
+  /* faces: the desk's Figtree (landing/fonts.ts), the apps' own behind their variables, the system behind them */
+  --dk-house: var(--desk-face-house, "Figtree"), "Segoe UI", system-ui, Roboto, sans-serif;
+  --dk-mono: var(--essay-face-mono, "IBM Plex Mono"), Consolas, "Courier New", monospace;
+  --dk-serif: Georgia, "Times New Roman", serif;
+  --dk-arial: Arial, Helvetica, sans-serif;
+  --dk-ease: cubic-bezier(.25, .8, .25, 1);
+
+  position: absolute; inset: 0; overflow: hidden;
+  font-family: var(--dk-house); color: var(--dk-bone);
+  /* walnut, top-down: long grain bands, fine pores, a warm centre */
+  background:
+    radial-gradient(ellipse 70% 60% at 50% 46%, rgba(120, 72, 38, .30), transparent 70%),
+    repeating-linear-gradient(91deg, rgba(0, 0, 0, .10) 0 2px, transparent 2px 7px, rgba(255, 214, 170, .035) 7px 8px, transparent 8px 19px),
+    repeating-linear-gradient(89.3deg, transparent 0 60px, rgba(0, 0, 0, .16) 60px 64px, transparent 64px 150px, rgba(255, 200, 150, .05) 150px 158px, transparent 158px 260px),
+    linear-gradient(90deg, #3a2415 0%, #4a2e1a 14%, #3b2416 27%, #533420 43%, #3e2717 58%, #4d301c 74%, #382214 88%, #45291a 100%);
+}
+.desk-tv *, .desk-tv *::before, .desk-tv *::after { box-sizing: border-box; }
+.desk-tv::after { content: ""; position: absolute; inset: 0; pointer-events: none; z-index: 4; background: radial-gradient(ellipse 80% 75% at 50% 50%, transparent 55%, rgba(0, 0, 0, .55) 100%); }
+
+/* ---- the blotter: green leather, stitched, with a walnut lip along the front where the caption sits ---- */
+.desk-tv .dk-blotter { position: absolute; left: 118px; top: 124px; width: 1684px; height: 890px; border-radius: 14px; z-index: 1;
+  background:
+    radial-gradient(ellipse at 30% 20%, rgba(255, 255, 255, .035), transparent 60%),
+    repeating-radial-gradient(circle at 17% 31%, rgba(0, 0, 0, .05) 0 1px, transparent 1px 3px),
+    linear-gradient(160deg, #243029, var(--dk-leather) 55%, #18201c);
+  box-shadow: 0 2px 0 rgba(255, 240, 220, .06) inset, 0 -3px 0 rgba(0, 0, 0, .35) inset, 0 22px 40px rgba(0, 0, 0, .45), 0 3px 6px rgba(0, 0, 0, .5); }
+.desk-tv .dk-blotter::before { content: ""; position: absolute; inset: 14px; border: 2px dashed rgba(239, 232, 220, .12); border-radius: 8px; }
+.desk-tv .dk-lip { position: absolute; left: 0; right: 0; bottom: 0; height: 104px; border-radius: 0 0 14px 14px; background: linear-gradient(180deg, #2a1b12, #22160f); box-shadow: 0 2px 0 rgba(255, 230, 200, .07) inset; }
+.desk-tv .dk-lip::before { content: ""; position: absolute; left: 14px; right: 14px; top: 10px; bottom: 14px; border: 2px dashed rgba(239, 232, 220, .10); border-radius: 6px; }
+/* the wordmark, embossed into the leather */
+.desk-tv .dk-plate { position: absolute; left: 150px; top: 146px; z-index: 2; display: flex; align-items: center; gap: 14px; color: rgba(239, 232, 220, .72);
+  font: 700 32px/1 var(--dk-house); letter-spacing: -.01em; text-shadow: 0 -1px 0 rgba(0, 0, 0, .7), 0 1px 0 rgba(255, 255, 255, .08); }
+.desk-tv .dk-plate svg { width: 44px; height: 44px; filter: drop-shadow(0 -1px 0 rgba(0, 0, 0, .6)) drop-shadow(0 1px 0 rgba(255, 255, 255, .08)); }
+
+/* ---- the lamp, top right, seen from above; decoration, outside the safe area on purpose ---- */
+.desk-tv .dk-lamp { position: absolute; right: -64px; top: -150px; width: 290px; height: 290px; border-radius: 50%; z-index: 26; pointer-events: none;
+  background: radial-gradient(circle at 40% 64%, #7a6c55 0, #4a4033 30%, #27211a 64%, #16120e 100%);
+  box-shadow: 0 0 0 5px #2a231a, 0 0 0 8px rgba(255, 214, 160, .28), 0 0 90px 34px rgba(255, 190, 120, .20), 0 34px 60px rgba(0, 0, 0, .6); }
+.desk-tv .dk-lamp::before { content: ""; position: absolute; left: 36%; top: 56%; width: 26px; height: 26px; border-radius: 50%; background: radial-gradient(circle at 40% 40%, #b8a37a, #4a3d2b); }
+
+/* ---- the light: a warm pool on the lit object, the rest of the room dimmed; both glide to the focus ---- */
+.desk-tv .dk-pool { position: absolute; left: 0; top: 0; width: 1800px; height: 1800px; z-index: 5; pointer-events: none; mix-blend-mode: screen;
+  background: radial-gradient(circle at center, rgba(255, 206, 140, .55) 0, rgba(255, 190, 120, .30) 280px, rgba(255, 180, 110, .10) 560px, rgba(255, 180, 110, 0) 860px);
+  transform: translate(calc(var(--px) - 900px), calc(var(--py) - 900px)); transition: transform .45s var(--dk-ease); }
+.desk-tv .dk-dim { position: absolute; left: 0; top: 0; width: 4400px; height: 4400px; z-index: 20; pointer-events: none;
+  background: radial-gradient(circle at center, rgba(8, 5, 3, 0) 0, rgba(8, 5, 3, 0) 340px, rgba(8, 5, 3, .36) 700px, rgba(8, 5, 3, .54) 1150px, rgba(8, 5, 3, .62) 2200px);
+  transform: translate(calc(var(--px) - 2200px), calc(var(--py) - 2200px)); transition: transform .45s var(--dk-ease); }
+.desk-tv .dk-dim[data-wide] { transform: translate(calc(var(--px) - 2200px), calc(var(--py) - 2200px)) scale(.7); }
+
+/* ---- the flicker-on: the room is dark, then the lamp catches ---- */
+.desk-tv .dk-blackout { position: absolute; inset: 0; z-index: 200; pointer-events: none; background: #030201; opacity: 0; }
+.desk-tv[data-boot] .dk-blackout { animation: dk-flick 1.15s linear both; }
+@keyframes dk-flick { 0% { opacity: 1; } 22% { opacity: 1; } 30% { opacity: .42; } 36% { opacity: .96; } 46% { opacity: .26; } 52% { opacity: .7; } 64% { opacity: .1; } 100% { opacity: 0; } }
+
+/* ---- the objects: put down at an angle; the lit one straightens, lifts and wears the ring ---- */
+.desk-tv .dk-objects { position: absolute; inset: 0; z-index: 10; }
+.desk-tv .dk-obj { position: absolute; z-index: 10; transform: rotate(var(--r)); outline: 6px solid transparent; outline-offset: 14px;
+  box-shadow: 0 18px 28px rgba(0, 0, 0, .5), 0 4px 8px rgba(0, 0, 0, .4);
+  transition: transform .45s var(--dk-ease), box-shadow .45s var(--dk-ease), outline-color .2s; }
+.desk-tv .dk-obj[data-focused="true"] { z-index: 30; transform: rotate(calc(var(--r) * .25)) scale(1.06); outline-color: var(--dk-ring);
+  box-shadow: 0 46px 80px rgba(0, 0, 0, .62), 0 12px 22px rgba(0, 0, 0, .45); }
+/* CONTINUE: the one sage tag, on what was left */
+.desk-tv .dk-ctag { position: absolute; top: -24px; left: 26px; z-index: 3; display: flex; align-items: center; gap: 10px; background: var(--dk-sage); color: var(--dk-sage-ink);
+  font: 800 21px/1 var(--dk-house); letter-spacing: .16em; text-transform: uppercase; padding: 11px 16px 11px 14px; border-radius: 6px; box-shadow: 0 6px 14px rgba(0, 0, 0, .4); }
+.desk-tv .dk-ctag i { width: 12px; height: 12px; border-radius: 50%; background: var(--dk-sage-ink); box-shadow: 0 0 0 3px rgba(21, 32, 25, .25); }
+
+/* ---- Math Buddy: the sheet on its night-blue folder (Lamplight's typesetter draws the maths) ---- */
+.desk-tv .dk-mb { background: linear-gradient(170deg, #161d4a, var(--dk-night) 70%); border-radius: 18px; }
+.desk-tv .dk-mb[data-focused="true"] { box-shadow: 0 46px 80px rgba(0, 0, 0, .62), 0 0 110px 26px rgba(255, 197, 107, .26); animation: dk-warm 3.4s ease-in-out infinite; }
+@keyframes dk-warm { 0%, 100% { box-shadow: 0 46px 80px rgba(0, 0, 0, .62), 0 0 100px 20px rgba(255, 197, 107, .20); } 50% { box-shadow: 0 46px 80px rgba(0, 0, 0, .62), 0 0 140px 40px rgba(255, 197, 107, .36); } }
+.desk-tv .dk-mb .dk-folder { position: absolute; inset: 0; overflow: visible; background: none; border-radius: 18px; padding: 18px 18px 0; display: flex; flex-direction: column; }
+.desk-tv .dk-sheet { position: relative; flex: 1; min-height: 0; border-radius: 4px; color: var(--dk-paper-ink);
+  background: linear-gradient(rgba(39, 48, 74, .075) 1.5px, transparent 1.5px) 0 0 / 30px 30px, linear-gradient(90deg, rgba(39, 48, 74, .075) 1.5px, transparent 1.5px) 0 0 / 30px 30px, linear-gradient(170deg, #F8F2E5, #F5EEDF 60%, #EDE4D1);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, .35); }
+.desk-tv .dk-sheet::before { content: ""; position: absolute; left: 62px; top: 0; bottom: 0; width: 2px; background: rgba(143, 184, 255, .6); }
+.desk-tv .dk-tab { position: absolute; top: -44px; right: 34px; z-index: -1; background: linear-gradient(#EFE6D2, #E4D9C2); color: var(--dk-paper-ink); font: 800 21px/1 var(--mb-sans); letter-spacing: .16em; text-transform: uppercase; padding: 12px 18px 20px; border-radius: 9px 9px 0 0; }
+.desk-tv .dk-topic { font: 600 38px/1.1 var(--mb-serif); font-variation-settings: "SOFT" 50, "opsz" 72; letter-spacing: -.01em; padding: 20px 18px 6px 80px; white-space: nowrap; overflow: hidden; }
+.desk-tv .dk-topic .dk-fit { display: inline-block; }
+.desk-tv .dk-rows { padding: 0 10px; }
+.desk-tv .dk-row { display: grid; grid-template-columns: 52px minmax(0, 1fr) auto 52px; align-items: center; min-height: 56px; font-size: 44px; }
+/* a power or an index never drops under the ten-foot floor, however small the line is set */
+.desk-tv .dk-row .mx .sup, .desk-tv .dk-row .mx .sub { font-size: max(.64em, 28px); }
+.desk-tv .dk-row:not([data-v]) { font-size: 38px; }
+.desk-tv .dk-row .dk-n { font: 600 30px/1 var(--mb-hand); color: rgba(39, 48, 74, .5); text-align: center; }
+.desk-tv .dk-row .dk-q { padding-left: 18px; white-space: nowrap; overflow: hidden; }
+.desk-tv .dk-row .dk-q .dk-fit { display: inline-block; }
+.desk-tv .dk-row .dk-a { white-space: nowrap; padding: 0 10px 0 16px; }
+.desk-tv .dk-row .dk-mk { display: flex; justify-content: center; }
+.desk-tv .dk-ringed { position: relative; display: inline-block; padding: 0 8px; }
+.desk-tv .dk-ring { position: absolute; left: -10px; top: -12px; width: calc(100% + 20px); height: calc(100% + 22px); overflow: visible; pointer-events: none; }
+.desk-tv .dk-tk { width: 46px; height: 40px; overflow: visible; }
+.desk-tv .dk-tk path, .desk-tv .dk-ring path { fill: none; stroke: var(--dk-pen); stroke-width: 5; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1; stroke-dashoffset: 0; vector-effect: non-scaling-stroke; }
+.desk-tv .dk-ringed[data-ring="unsure"] .dk-ring path { stroke: var(--dk-sky); stroke-width: 4; stroke-dasharray: 7 7; }
+/* lit: the desk's pen draws its marks in, one after another */
+.desk-tv .dk-mb[data-focused="true"] .dk-tk path, .desk-tv .dk-mb[data-focused="true"] .dk-ringed:not([data-ring="unsure"]) .dk-ring path { animation: dk-draw .55s ease-out both; animation-delay: calc(.25s + var(--i, 0) * .16s); }
+@keyframes dk-draw { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+.desk-tv .dk-blank { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font: 600 58px/1 var(--mb-hand); color: rgba(39, 48, 74, .55); transform: rotate(-4deg); }
+.desk-tv .dk-mbfoot { height: 88px; flex: none; display: flex; align-items: center; gap: 16px; padding-left: 6px; }
+.desk-tv .dk-mbfoot .mb-mark, .desk-tv .dk-mbfoot .mb-mark svg { width: 52px; height: 52px; flex-basis: 52px; }
+.desk-tv .dk-mbfoot .mb-word { font-size: 42px; }
+.desk-tv .dk-pencil { position: absolute; right: -46px; bottom: 92px; width: 340px; height: 38px; transform: rotate(-9deg); filter: drop-shadow(0 10px 8px rgba(0, 0, 0, .45)); z-index: 4; pointer-events: none; }
+
+/* ---- Linga: the Open Door on a cream card ---- */
+.desk-tv .dk-lg { background: var(--dk-cream); border: 2px solid #D6C5AF; border-radius: 16px; padding: 22px 26px 24px; display: flex; flex-direction: column; color: #261F29; }
+.desk-tv .dk-lghead { display: flex; align-items: center; }
+.desk-tv .dk-lghead .lo-mark { display: flex; align-items: center; gap: 14px; font: 700 44px/1 var(--dk-serif); letter-spacing: -1.6px; color: #261F29; }
+.desk-tv .dk-lghead .lo-mark svg { width: 52px; height: 52px; }
+.desk-tv .dk-lvl { margin-left: auto; background: var(--dk-plum); color: var(--dk-cream); font: 700 30px/1 var(--dk-arial); padding: 9px 14px; border-radius: 9px; }
+.desk-tv .dk-arch { position: relative; margin-top: 18px; flex: 1; min-height: 0; border: 12px solid var(--dk-frame); border-radius: 999px 999px 6px 6px; overflow: hidden; background: var(--dk-peach); box-shadow: inset 0 0 0 8px rgba(255, 235, 201, .23); }
+.desk-tv .dk-art { position: absolute; inset: 0; }
+.desk-tv .dk-art svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+/* a state of the journey (the open door before a level, the path of doors) stands on the warm gradient */
+.desk-tv .dk-arch[data-scene="false"] { background: linear-gradient(180deg, #e9a882, var(--dk-peach) 70%, #c9806a); }
+.desk-tv .dk-arch[data-scene="false"] .dk-art { inset: 14% 8% 0; }
+.desk-tv .dk-sill { height: 18px; flex: none; margin: 0 -12px; background: #5d3548; border-radius: 4px; box-shadow: 0 8px 0 -2px #ad766c; }
+.desk-tv .dk-ptag { position: absolute; left: 18px; right: 18px; bottom: 18px; z-index: 2; display: flex; }
+/* the name tag keeps Linga's 28 px; a long one takes a second line rather than leave the arch */
+.desk-tv .dk-ptag span { display: inline-block; max-width: 100%; background: #fff3dc; color: #493147; font: 800 28px/1.15 var(--dk-arial); padding: 9px 16px; border-radius: 8px; box-shadow: 0 6px 14px rgba(65, 34, 45, .18); }
+.desk-tv .dk-lgtitle { flex: none; font: 400 38px/1.1 var(--dk-serif); letter-spacing: -.9px; margin-top: 22px; text-wrap: balance; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.desk-tv .dk-midway { flex: none; display: flex; align-items: center; gap: 10px; margin-top: 14px; }
+.desk-tv .dk-midway b { width: 14px; height: 14px; border-radius: 50%; background: var(--dk-wine); }
+.desk-tv .dk-midway b[data-dot="open"] { background: transparent; border: 2.5px solid var(--dk-wine); }
+.desk-tv .dk-midway b[data-dot="current"] { width: 40px; border-radius: 8px; background: var(--dk-peach); }
+.desk-tv .dk-midway span { font: 900 20px/1 var(--dk-arial); letter-spacing: .2em; text-transform: uppercase; color: var(--dk-wine); margin-left: 10px; }
+/* lit: the scene drifts, the pendant lamp swings */
+.desk-tv .dk-lg[data-focused="true"] .dk-art svg { animation: dk-drift 9s ease-in-out infinite alternate; }
+.desk-tv .dk-lg[data-focused="true"] .lo-lamp { transform-box: view-box; transform-origin: var(--lo-lamp-x) 0; animation: dk-swing 3.6s ease-in-out infinite; }
+@keyframes dk-drift { from { transform: scale(1.02) translateX(6px); } to { transform: scale(1.07) translateX(-8px); } }
+@keyframes dk-swing { 0%, 100% { transform: rotate(-4deg); } 50% { transform: rotate(4deg); } }
+
+/* ---- Essay Master: the specimen card (Specimen's faces and mark) ---- */
+.desk-tv .dk-em { background: var(--dk-black); border-radius: 10px; border: 1px solid rgba(238, 233, 224, .10); }
+.desk-tv .dk-em .dk-card { position: absolute; inset: 0; overflow: hidden; background: none; border-radius: 10px; padding: 30px 34px 34px; display: flex; flex-direction: column; color: var(--dk-em-bone); }
+.desk-tv .dk-card .em-brand { position: static; gap: 16px; }
+.desk-tv .dk-card .em-mark { width: 36px; height: 40px; }
+.desk-tv .dk-card .em-wm { font-size: 42px; }
+.desk-tv .dk-lens { position: relative; margin-top: auto; padding-top: 10px; white-space: nowrap;
+  font: 800 132px/.86 var(--em-disp); text-transform: uppercase; font-stretch: 75%; font-variation-settings: "wdth" 75, "opsz" 96; letter-spacing: -.015em; }
+.desk-tv .dk-lens > .dk-fit { position: relative; display: inline-block; }
+.desk-tv .dk-lens-gh { color: rgba(238, 233, 224, .13); }
+.desk-tv .dk-lens-ink { position: absolute; left: 0; top: 0; color: var(--dk-em-bone); clip-path: inset(0 calc(100% - var(--dk-f)) 0 0); }
+.desk-tv .dk-cur { position: absolute; top: -.02em; left: var(--dk-f); width: 10px; height: 1.02em; margin-left: -5px; background: var(--dk-cit); transform: skewX(-7deg); }
+.desk-tv .dk-em[data-focused="true"] .dk-cur { animation: dk-cur 1.05s steps(1) infinite; }
+@keyframes dk-cur { 50% { opacity: 0; } }
+.desk-tv .dk-raillab { margin-top: 34px; }
+.desk-tv .dk-rail { display: flex; justify-content: space-between; margin-top: 16px; }
+.desk-tv .dk-arr { display: flex; flex-direction: column; align-items: center; gap: 10px; color: rgba(238, 233, 224, .42); font: 600 28px/1 var(--dk-mono); }
+.desk-tv .dk-arr svg { width: 56px; height: 26px; overflow: visible; }
+.desk-tv .dk-rail[data-many] .dk-arr svg { width: 40px; }
+.desk-tv .dk-arr[data-against] { color: var(--dk-cit); }
+/* lit: the sentence that argues the other way turns round */
+.desk-tv .dk-em[data-focused="true"] .dk-arr[data-against] svg { animation: dk-turn .9s .35s both var(--dk-ease); }
+@keyframes dk-turn { 0% { transform: scaleX(-1); } 45% { transform: scaleX(.05); } 100% { transform: scaleX(1); } }
+.desk-tv .dk-emline { margin-top: 30px; font: 600 30px/1.2 var(--dk-mono); color: rgba(238, 233, 224, .62); }
+.desk-tv .dk-ghosts { margin-top: auto; }
+.desk-tv .dk-ghosts > div { white-space: nowrap; overflow: hidden; }
+.desk-tv .dk-hatch { display: inline-block; color: transparent; background: repeating-linear-gradient(135deg, rgba(238, 233, 224, .34) 0 3px, transparent 3px 11px); -webkit-background-clip: text; background-clip: text;
+  font: 800 104px/.96 var(--em-disp); text-transform: uppercase; font-stretch: 75%; font-variation-settings: "wdth" 75, "opsz" 96; letter-spacing: -.01em; white-space: nowrap; }
+.desk-tv .dk-nothing { margin-top: 22px; font: 600 46px/1 var(--em-disp); font-variation-settings: "wdth" 88; color: var(--dk-em-bone); }
+
+/* ---- the phone: paired, a chip; not yet, the address and the code on its screen ---- */
+.desk-tv .dk-ph { background: linear-gradient(150deg, #2b2c30, #0f1012 60%, #1a1b1e); border-radius: 40px; padding: 14px 16px 14px 38px;
+  box-shadow: 0 18px 28px rgba(0, 0, 0, .55), 0 4px 8px rgba(0, 0, 0, .4), inset 0 0 0 2px rgba(255, 255, 255, .07); }
+.desk-tv .dk-ph::before { content: ""; position: absolute; left: 16px; top: 50%; width: 11px; height: 11px; margin-top: -5px; border-radius: 50%; background: #2f333a; box-shadow: inset 0 0 0 2px #15171a; }
+.desk-tv .dk-scr { height: 100%; border-radius: 28px; overflow: hidden; background: radial-gradient(circle at 22% 25%, #2d3e35, #141c18 70%); display: flex; align-items: center; gap: 24px; padding: 0 36px; color: var(--dk-bone); }
+.desk-tv .dk-lk { width: 64px; height: 64px; flex: none; color: var(--dk-sage); }
+.desk-tv .dk-lk svg { width: 64px; height: 64px; }
+.desk-tv .dk-pn { font: 700 40px/1.05 var(--dk-house); letter-spacing: -.01em; }
+.desk-tv .dk-pn small { display: block; margin-top: 10px; font: 800 20px/1 var(--dk-house); letter-spacing: .2em; color: var(--dk-sage); text-transform: uppercase; }
+.desk-tv .dk-ph[data-paired="false"] { z-index: 25; box-shadow: 0 0 0 2px rgba(169, 187, 163, .45), 0 0 90px 16px rgba(169, 187, 163, .26), 0 22px 34px rgba(0, 0, 0, .55); }
+.desk-tv .dk-ph[data-paired="false"]:not([data-focused="true"]) { animation: dk-breathe 3.2s ease-in-out infinite; }
+.desk-tv .dk-ph[data-paired="false"][data-focused="true"] { z-index: 30; }
+@keyframes dk-breathe { 50% { box-shadow: 0 0 0 2px rgba(169, 187, 163, .6), 0 0 130px 30px rgba(169, 187, 163, .36), 0 22px 34px rgba(0, 0, 0, .55); } }
+.desk-tv .dk-pair { display: flex; flex-direction: column; gap: 12px; width: 100%; min-width: 0; }
+.desk-tv .dk-lab { font: 800 20px/1 var(--dk-house); letter-spacing: .2em; color: var(--dk-sage); text-transform: uppercase; }
+.desk-tv .dk-url { font: 600 30px/1 var(--dk-mono); color: var(--dk-bone); white-space: nowrap; overflow: hidden; }
+.desk-tv .dk-url .dk-fit { display: inline-block; }
+.desk-tv .dk-pins { display: flex; gap: 14px; margin-top: 6px; }
+.desk-tv .dk-pins b { width: 96px; height: 112px; display: flex; align-items: center; justify-content: center; font: 600 92px/1 var(--dk-mono); color: #FFF6E6; background: rgba(239, 232, 220, .07); border: 2px solid rgba(169, 187, 163, .55); border-radius: 14px; }
+
+/* ---- the place card: whose desk it is; lit, it offers the desk to someone else ---- */
+.desk-tv .dk-pc { background: linear-gradient(180deg, #F7F1E6 0, #F7F1E6 20px, #D8CDBA 20px, #E3D9C8 23px, #F0E9DD 32px, #EDE5D8 100%); border-radius: 6px; color: var(--dk-card-ink);
+  display: flex; align-items: center; justify-content: center; gap: 16px; padding-top: 18px; font: 700 44px/1 var(--dk-house); letter-spacing: -.015em; white-space: nowrap; }
+.desk-tv .dk-pc > svg { width: 40px; height: 40px; }
+.desk-tv .dk-se { position: absolute; left: calc(100% + 30px); top: 50%; transform: translate(-10px, -40%); opacity: 0; display: flex; align-items: center; gap: 12px;
+  background: var(--dk-sage-ink); color: var(--dk-sage); border: 2px solid var(--dk-sage); font: 800 21px/1 var(--dk-house); letter-spacing: .16em; padding: 12px 16px; border-radius: 8px; text-transform: uppercase;
+  transition: opacity .3s, transform .3s var(--dk-ease); }
+.desk-tv .dk-se svg { width: 26px; height: 26px; }
+.desk-tv .dk-pc[data-focused="true"] .dk-se { opacity: 1; transform: translate(0, -40%); }
+
+/* ---- the one caption slot, on the blotter's lip: a sage label and one sentence ---- */
+.desk-tv .dk-cap { position: absolute; left: 156px; top: 926px; z-index: 40; width: 1130px; height: 80px; display: flex; align-items: center; animation: dk-rise .35s var(--dk-ease) both; }
+.desk-tv .dk-cap[data-narrow] { width: 980px; }
+.desk-tv .dk-cap p { margin: 0; font: 500 34px/1.16 var(--dk-house); color: var(--dk-bone); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; text-wrap: pretty; }
+.desk-tv .dk-cap b { font: 800 21px/1 var(--dk-house); letter-spacing: .18em; color: var(--dk-sage); text-transform: uppercase; margin-right: 18px; vertical-align: .18em; }
+@keyframes dk-rise { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+
+/* ---- Select: the lit object opens into its app's own colours, then the app is on screen ---- */
+.desk-tv .dk-zoom { position: absolute; z-index: 80; overflow: hidden; border-radius: 16px;
+  left: var(--zx); top: var(--zy); width: var(--zw); height: var(--zh); transform: rotate(var(--zr));
+  transition: left .55s var(--dk-ease), top .55s var(--dk-ease), width .55s var(--dk-ease), height .55s var(--dk-ease), transform .55s var(--dk-ease), border-radius .55s var(--dk-ease); }
+.desk-tv .dk-zoom[data-full] { left: 0; top: 0; width: 1920px; height: 1080px; transform: none; border-radius: 0; }
+.desk-tv .dk-zin { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 44px; opacity: 0; transition: opacity .3s; }
+.desk-tv .dk-zoom[data-full] .dk-zin { opacity: 1; transition: opacity .3s .22s; }
+.desk-tv .dk-zoom[data-app="maths"] { background: radial-gradient(circle at 16% 12%, rgba(255, 197, 107, .30), transparent 42%), radial-gradient(circle at 80% 90%, rgba(143, 184, 255, .10), transparent 40%), var(--dk-night); color: #F5EEDF; }
+.desk-tv .dk-zoom[data-app="english"] { background: radial-gradient(circle at 22% 50%, #fbf4e6 0, transparent 46%), linear-gradient(135deg, #f5eee1, #e5dccd); color: #261F29; }
+.desk-tv .dk-zoom[data-app="essay"] { background: var(--dk-black); color: var(--dk-em-bone); }
+.desk-tv .dk-zoom[data-app="place"], .desk-tv .dk-zoom[data-app="phone"] { background: radial-gradient(circle at 50% 40%, rgba(255, 200, 130, .12), transparent 50%), linear-gradient(160deg, #243029, #161d19); color: var(--dk-bone); }
+.desk-tv .dk-zbrand { position: static; inset: auto; background: none; overflow: visible; display: flex; align-items: center; gap: 28px; }
+.desk-tv .dk-zbrand.maths-tv .mb-mark, .desk-tv .dk-zbrand.maths-tv .mb-mark svg { width: 120px; height: 120px; flex-basis: 120px; }
+.desk-tv .dk-zbrand.maths-tv .mb-word { font-size: 118px; }
+.desk-tv .dk-zbrand .lo-mark { display: flex; align-items: center; gap: 22px; font: 700 110px/1 var(--dk-serif); letter-spacing: -4px; }
+.desk-tv .dk-zbrand .lo-mark svg { width: 112px; height: 112px; }
+.desk-tv .dk-zbrand.essay-tv .em-brand { position: static; gap: 26px; }
+.desk-tv .dk-zbrand.essay-tv .em-mark { width: 80px; height: 90px; }
+.desk-tv .dk-zbrand.essay-tv .em-wm { font-size: 92px; }
+.desk-tv .dk-zhouse { font: 700 96px/1 var(--dk-house); letter-spacing: -.02em; }
+.desk-tv .dk-zhouse svg { width: 120px; height: 120px; color: var(--dk-sage); }
+.desk-tv .dk-zword { font: 700 44px/1.1 var(--dk-house); }
+.desk-tv .dk-zoom[data-app="maths"] .dk-zword { font-family: var(--mb-sans); color: var(--dk-amber); }
+.desk-tv .dk-zoom[data-app="english"] .dk-zword { font: 800 40px/1 var(--dk-arial); letter-spacing: .14em; text-transform: uppercase; color: var(--dk-wine); }
+.desk-tv .dk-zoom[data-app="essay"] .dk-zword { font: 600 30px/1 var(--dk-mono); letter-spacing: .2em; text-transform: uppercase; color: var(--dk-cit); }
+.desk-tv .dk-zoom[data-app="place"] .dk-zword, .desk-tv .dk-zoom[data-app="phone"] .dk-zword { color: var(--dk-sage); }
+
+/* ---- reduced motion: every glide, lift, draw and zoom is a cut; the room is simply lit ---- */
+@media (prefers-reduced-motion: reduce) {
+  .desk-tv *, .desk-tv *::before, .desk-tv *::after { transition: none !important; animation: none !important; }
+  .desk-tv .dk-blackout { display: none; }
+  .desk-tv .dk-zin { opacity: 1; }
+}

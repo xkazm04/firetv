@@ -327,6 +327,7 @@ test('landing 4: Back from each app, the switcher and the pairing screen lands o
  const store=fs.readFileSync(path.join(root,'src/lib/session/store.ts'),'utf8');
  assert.match(store,/e\.focus \?\? \(e\.screen === "landing" \? LANDING_REST : 0\)/,'a nav to the landing without a stop rests the lamp');
  assert.match(store,/screen: "landing", focus: LANDING_REST/,'a fresh desk starts at rest');
+ const tv=fs.readFileSync(path.join(root,'src/app/tv/page.tsx'),'utf8');assert.match(tv,/@\/landing\/LandingTV/,'the TV routes the landing to its own module');
  assert.doesNotMatch(fs.readFileSync(path.join(root,'src/tv/screens.tsx'),'utf8'),/export function Landing\b/,'the On Air landing is gone');
 });
 

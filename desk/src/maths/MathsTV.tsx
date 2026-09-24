@@ -58,7 +58,7 @@ function Amber({ text }: { text: string }) {
 }
 
 /** The mark: an equals sign whose lower bar steps forward, on an orange rounded square. */
-function Mark() {
+export function Mark() {
   return (
     <div className="mb-mark" data-role="maths-mark" aria-hidden="true">
       <svg viewBox="0 0 64 64">

@@ -42,13 +42,13 @@ export function Counter({ u, y = 504, top = P.paper }: { u: string; y?: number; 
   </>;
 }
 
-/** A warm pendant lamp hanging from the top of the arch. */
+/** A warm pendant lamp hanging from the top of the arch. `lo-lamp` hangs from its cord (the landing swings it). */
 export function Lamp({ u, x, len = 91 }: { u: string; x: number; len?: number }) {
-  return <>
+  return <g className="lo-lamp" style={{ "--lo-lamp-x": `${x}px` } as React.CSSProperties}>
     <path d={`M${x} 0v${len}`} stroke={P.plum500} strokeWidth="7"/>
     <path d={`M${x - 46} ${len}q46 53 93 0Z`} fill={P.cream}/>
     <ellipse cx={x} cy={len + 14} rx="65" ry="16" fill="#f8dbb1" opacity=".45" filter={`url(#${u}soft)`}/>
-  </>;
+  </g>;
 }
 
 /** The hotel's potted plant, standing with its pot's base at x, y. */

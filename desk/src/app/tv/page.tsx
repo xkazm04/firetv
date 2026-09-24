@@ -9,7 +9,8 @@ import { useSession, call } from "@/tv/useSession";
 import type { Session } from "@/lib/session/store";
 import * as S from "@/tv/screens";
 import { EssayTV } from "@/essay/EssayTV";
-import { essayOwns, keyOf, lingaOwns, mathsOwns, runStep, tvKey, LOCAL, type Local } from "@/tv/keys";
+import { essayOwns, keyOf, landingAt, landingStops, lingaOwns, mathsOwns, runStep, tvKey, LOCAL, type LandingStop, type Local } from "@/tv/keys";
+import { LandingTV, ZOOM_MS } from "@/landing/LandingTV";
 import { MathsTV } from "@/maths/MathsTV";
 import { LingaTV } from "@/english/LingaTV";
 import { LingaTestBar } from "@/english/LingaTestBar";
@@ -76,13 +77,32 @@ export default function TV() {
   // the demo clock: ×60 when asked, so the break screen is reachable
   useEffect(() => { if (!fast) return; const t = setInterval(() => post({ type: "timer.tick", seconds: 59 }), 1000); return () => clearInterval(t); }, [fast, post]);
 
+  /**
+   * The landing's Select: the lit object zooms into its app's colours, then the step runs. While it plays the
+   * D-pad waits. Under reduced motion the zoom is a cut and the app opens at once.
+   */
+  const [zoom, setZoom] = useState<LandingStop | null>(null);
+  const zooming = useRef(false);
+  useEffect(() => { if (s?.screen !== "landing" && zooming.current) { zooming.current = false; setZoom(null); } }, [s?.screen]);
+
   // ---- D-pad: the keymap is tv/keys.ts; this is only its executor ----
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (!s || lingaOwns(s)) return;
       const k = keyOf(e.key); if (!k) return;
       e.preventDefault();
-      void runStep(tvKey(s, k, local.current), { post, call, apply });
+      if (zooming.current) return;
+      const step = tvKey(s, k, local.current);
+      const stop = s.screen === "landing" && k === "select" ? landingStops(s)[landingAt(s)] : undefined;
+      if (stop && step.events.some((x) => x.type === "nav")) {
+        const cut = matchMedia("(prefers-reduced-motion: reduce)").matches;
+        zooming.current = true; setZoom(stop);
+        setTimeout(() => { void runStep(step, { post, call, apply }).catch(() => {}); }, cut ? 0 : ZOOM_MS);
+        // a post that never lands must not leave the desk frozen behind the zoom
+        setTimeout(() => { if (zooming.current) { zooming.current = false; setZoom(null); } }, 4000);
+        return;
+      }
+      void runStep(step, { post, call, apply });
     };
     addEventListener("keydown", onKey); return () => removeEventListener("keydown", onKey);
   }, [s, post, apply]);
@@ -101,8 +121,8 @@ export default function TV() {
       {testBar && s && lingaOwns(s) && <LingaTestBar s={s} />}
       <div className="frame" ref={frame}>
         <div className="stage" ref={stage} tabIndex={0}>
-          {/* Essay Master (Specimen) and Math Buddy (Lamplight) are their own apps: the whole stage, no On Air grid or band; each keeps the 5% margins itself */}
-          {s && essayOwns(s) ? <EssayTV s={s} table={loc.table} /> : s && mathsOwns(s) ? <MathsTV s={s} busy={loc.busy} /> : <>
+          {/* The landing (the desk), Essay Master (Specimen) and Math Buddy (Lamplight) draw the whole stage, no On Air grid or band; each keeps the 5% margins itself */}
+          {s && s.screen === "landing" ? <LandingTV s={s} zoom={zoom} /> : s && essayOwns(s) ? <EssayTV s={s} table={loc.table} /> : s && mathsOwns(s) ? <MathsTV s={s} busy={loc.busy} /> : <>
             <div className="grid" />
             <div className="safe">{s ? lingaOwns(s) ? <LingaTV s={s} post={post} voice={voice}/> : <ScreenFor s={s} /> : null}</div>
           </>}
@@ -112,7 +132,7 @@ export default function TV() {
   );
 }
 
-/** The shell's screens (On Air). Math Buddy's go to MathsTV before this is asked (tv/keys.ts `mathsOwns`). */
+/** The shell's screens (On Air). The landing, Math Buddy's and Essay Master's are drawn before this is asked. */
 function ScreenFor({ s }: { s: Session }) {
   const f = s.focus;
   switch (s.screen) {

@@ -24,7 +24,7 @@ async function waitCommand(page,fn,label){const t=Date.now();const response=page
  const tv=await browser.newPage({viewport:{width:1920,height:1150}}),phone=await browser.newPage({viewport:{width:390,height:844}});
  for(const page of [tv,phone])page.on('pageerror',e=>errors.push(e.message));
  await phone.addInitScript(()=>{class FakeRecognition{start(){setTimeout(()=>this.onresult?.({results:[{isFinal:true,0:{transcript:'Could you tell me which bridge you mean, please?'}}]}),60);}stop(){this.onend?.();}abort(){this.onend?.();}}window.SpeechRecognition=FakeRecognition;});
- await tv.goto(base+'/tv');await tv.waitForSelector('.stage .card');await tv.locator('.stage').click({position:{x:20,y:20}});await tv.keyboard.press('Enter');await tv.waitForSelector('.linga-tv');assert.equal((await current()).subject,'english');
+ await tv.goto(base+'/tv');await tv.waitForSelector('[data-role="desk-object"]');await tv.locator('.stage').click({position:{x:20,y:20}});await tv.keyboard.press('Enter');await tv.waitForSelector('.linga-tv');assert.equal((await current()).subject,'english');
  await phone.goto(base+'/phone');await phone.waitForSelector('.linga-phone');
  if(reuse)await waitCommand(tv,()=>tv.getByRole('button',{name:'Carry on talking',exact:true}).click(),'resume');else await waitCommand(tv,()=>tv.getByRole('button',{name:'Start talking',exact:true}).click(),'start');await tv.waitForSelector('.linga-speaker');
  await phone.getByLabel('Your reply',{exact:true}).fill('Where is the rover?');
@@ -43,8 +43,8 @@ async function waitCommand(page,fn,label){const t=Date.now();const response=page
  await phone.getByRole('button',{name:'My map',exact:true}).click();assert.equal(await phone.locator('.linga-skill').count(),8);
  const print=await browser.newPage();await print.goto(base+'/english/print?learner=linga-browser-child');await print.waitForSelector('.linga-print table');assert.equal(await print.locator('tbody tr').count(),8);await print.pdf({path:path.join(out,'learning-map.pdf'),format:'A4',preferCSSPageSize:true});
  assert.equal(await phone.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
- await event({type:'nav',screen:'landing',focus:0});await tv.waitForSelector('.card');await tv.keyboard.press('Enter');await tv.waitForFunction(()=>!document.querySelector('.linga-tv'));assert.equal((await current()).subject,'maths');
- await event({type:'nav',screen:'landing',focus:2});await tv.waitForSelector('.card');await tv.keyboard.press('Enter');await tv.waitForFunction(async()=>{const s=await(await fetch('/api/session')).json();return s.screen==='essaytype';});assert.equal((await current()).subject,'essay');
+ await event({type:'nav',screen:'landing',focus:0});await tv.waitForSelector('[data-role="desk-object"]');await tv.keyboard.press('Enter');await tv.waitForFunction(()=>!document.querySelector('.linga-tv'));assert.equal((await current()).subject,'maths');
+ await event({type:'nav',screen:'landing',focus:2});await tv.waitForSelector('[data-role="desk-object"]');await tv.keyboard.press('Enter');await tv.waitForFunction(async()=>{const s=await(await fetch('/api/session')).json();return s.screen==='essaytype';});assert.equal((await current()).subject,'essay');
  assert.deepEqual(errors,[]);
  fs.writeFileSync(path.join(out,'results.json'),JSON.stringify({timings,errors,checks:['real model: scene, two replies, coach, replay, finish','simulated speech: capture, transcript confirmation, supported modality','age-restricted API rejected','TV/phone session sync','D-pad entry/menu/back','eight-chapter actual evidence print','mobile width','Math and Essay entrances'],speechLimit:'Recognition events are simulated; no physical microphone or room audio tested.'},null,2));
  console.log(JSON.stringify({passed:true,timings,errors,artifacts:out}));
