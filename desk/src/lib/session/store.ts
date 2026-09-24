@@ -13,7 +13,7 @@ import path from "node:path";
 import { getLearner, type HistoryEntry, type SkillRecord } from "./learners";
 import { SYLLABUS } from "../library/syllabus";
 import type { RuleCard } from "../rules/english";
-import type { Sentence } from "../rules/essay";
+import type { Fix, Sentence } from "../rules/essay";
 import { emptyEnglish, type Conversation, type EnglishLearning, type LevelCheck } from "../english/types";
 
 export type Subject = "maths" | "english" | "essay";
@@ -83,7 +83,8 @@ function settled(jobs: unknown): Jobs {
   return out;
 }
 
-export interface Verdict { n: number; verdict: "strong" | "faulty" | "neutral"; note: string; }
+/** One sentence's reading. `fix` (the move and a slotted pattern) only ever rides on a faulty verdict; older sessions have none. */
+export interface Verdict { n: number; verdict: "strong" | "faulty" | "neutral"; note: string; fix?: Fix; }
 export interface EssayAnalysis { text: string; type: string; sentences: Sentence[]; stats: Record<string, number>; verdicts: Verdict[]; summary: string; provider?: string; }
 
 export interface Session {

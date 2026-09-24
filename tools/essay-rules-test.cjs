@@ -138,6 +138,73 @@ test('verdicts the model malformed never reach the screen, and never throw',asyn
   assert.deepEqual(a.verdicts,[],JSON.stringify(verdicts));
  }
 });
+// ---- the fix: how to rephrase a faulty sentence, as a named move and a pattern with [slots] - never the sentence rewritten ----
+const SIX='Many students arrive at school exhausted. Research found that the body clock shifts later. An early start therefore cuts into sleep. Of course, a lot of teenagers just stay up on their phones, so it is really their own fault. Schools that moved the start saw attendance rise. A later start is a way of teaching them when they can learn.';
+const CONCEDE={move:'Concede, then turn it back',pattern:'Although [the other side], [why your claim still holds].'};
+test('a faulty verdict keeps a valid fix, trimmed, and the verdict itself is untouched',async()=>{
+ answer=reply({verdicts:[{n:4,verdict:'faulty',note:'This argues the other side.',fix:{move:'  Concede,  then turn it back ',pattern:' Although [the other side],\n [why your claim still holds]. '}}],summary:'s'});
+ const a=await analyseEssay(SIX,'argument','essay-fix');
+ assert.equal(a.sentences.length,6);
+ assert.deepEqual(a.verdicts,[{n:4,verdict:'faulty',note:'This argues the other side.',fix:CONCEDE}],'whitespace collapses; move and pattern survive as given');
+});
+test('a fix on a strong or neutral verdict is dropped, and the verdict stays',async()=>{
+ answer=reply({verdicts:[{n:1,verdict:'strong',note:'clear side',fix:CONCEDE},{n:3,verdict:'neutral',note:'',fix:CONCEDE},{n:4,verdict:'faulty',note:'other side',fix:CONCEDE}],summary:'s'});
+ const a=await analyseEssay(SIX,'argument','essay-fix');
+ assert.deepEqual(a.verdicts.map(v=>[v.n,v.verdict,'fix' in v]),[[1,'strong',false],[3,'neutral',false],[4,'faulty',true]]);
+});
+test('a fix without a [slot] is dropped - a rewritten sentence is not a pattern',async()=>{
+ for(const pattern of [
+  'Although some teenagers do stay up on their phones, even those who switch off early are not sleepy until after midnight.',
+  'Although the other side, why your claim still holds.',
+  'Although [], [why].',
+ ]){
+  answer=reply({verdicts:[{n:4,verdict:'faulty',note:'other side',fix:{move:'Concede, then turn it back',pattern}}],summary:'s'});
+  const a=await analyseEssay(SIX,'argument','essay-fix');
+  assert.equal(a.verdicts.length,1,'the verdict is never lost with its fix');
+  assert.equal(a.verdicts[0].fix,undefined,pattern);
+  assert.equal(a.verdicts[0].note,'other side');
+ }
+});
+test('a pattern that is the learner\'s sentence around a slot, or mostly words, is dropped',async()=>{
+ for(const pattern of [
+  'Of course, a lot of teenagers just stay up on their phones, so [why your claim still holds].',
+  'Although many people think that teenagers are lazy and never go to bed on time, [why].',
+  'Although [the other side] ] [why].',
+  'Although [the other side, [why your claim still holds].',
+ ]){
+  answer=reply({verdicts:[{n:4,verdict:'faulty',note:'x',fix:{move:'Concede, then turn it back',pattern}}],summary:'s'});
+  assert.equal((await analyseEssay(SIX,'argument','essay-fix')).verdicts[0].fix,undefined,pattern);
+ }
+});
+test('a malformed fix never reaches the screen and never throws',async()=>{
+ for(const fix of [null,'Concede, then turn it back','[a], [b]',42,[CONCEDE],{move:'Concede'},{pattern:CONCEDE.pattern},{move:7,pattern:CONCEDE.pattern},{move:CONCEDE.move,pattern:['[a]']},
+  {move:'Concede',pattern:CONCEDE.pattern},{move:'One two three four five six seven',pattern:CONCEDE.pattern},{move:'Concede [then] turn',pattern:CONCEDE.pattern},
+  {move:CONCEDE.move,pattern:'Although ['+'x'.repeat(55)+'], ['+'y'.repeat(55)+'], and ['+'z'.repeat(55)+'].'}]){
+  answer=reply({verdicts:[{n:4,verdict:'faulty',note:'x',fix}],summary:'s'});
+  const a=await analyseEssay(SIX,'argument','essay-fix');
+  assert.deepEqual(a.verdicts,[{n:4,verdict:'faulty',note:'x'}],JSON.stringify(fix));
+ }
+});
+test('cleanFix is the one rule: the TV and the engine read the same shape',()=>{
+ const {cleanFix}=require(path.join(root,'src/lib/rules/essay.ts'));
+ assert.deepEqual(cleanFix(CONCEDE,'Of course, a lot of teenagers just stay up on their phones.'),CONCEDE);
+ assert.deepEqual(cleanFix({move:'Claim, then evidence',pattern:'[Your claim]. For example, [the evidence].'}),{move:'Claim, then evidence',pattern:'[Your claim]. For example, [the evidence].'},'a pattern may open on a slot');
+ assert.equal(cleanFix(undefined),undefined);
+});
+test('the model is asked for a fix only on a faulty verdict, as a move and a slotted pattern, never a rewrite',async()=>{
+ seen=[];answer=reply({verdicts:[],summary:'s'});
+ await analyseEssay(THREE,'argument','essay-anon');
+ const {system,schema}=seen[0];
+ assert.match(system,/For a 'faulty' verdict only, add a fix/);
+ assert.match(system,/never their sentence rewritten/);
+ assert.match(system,/\[slot\]/);
+ assert.match(system,/No fix on strong or neutral verdicts/);
+ const item=schema.properties.verdicts.items;
+ assert.deepEqual(item.required,['n','verdict','note'],'fix is optional: a model that omits it still answers inside the schema');
+ assert.deepEqual(item.properties.fix.required,['move','pattern']);
+ assert.equal(item.properties.fix.properties.pattern.maxLength,undefined,'no length limit in the schema: an over-long fix loses the fix, not the reading');
+});
+
 test('an unknown lens falls back to the first one rather than failing the reading',async()=>{
  seen=[];answer=reply({verdicts:[],summary:'s'});
  await analyseEssay(THREE,'no-such-lens','essay-anon');
