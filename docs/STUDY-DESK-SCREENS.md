@@ -98,11 +98,11 @@ End of session. What was covered (problems touched, hints used, lessons watched)
 since answers are not checked). One button: **"Send to parent"** → phone. *Feeds:* session log.
 
 ### M3 · Marked sheet (Math Buddy practice) — *built 2026-09-23*
-Where a practice set lands when the phone's photo of it comes back marked. The whole set as one
-picture: a tile per item standing on the band (a red shelf across the stage), and **the tile is
-its verdict mark** — right is a white rule, look again a red block, not sure a dashed outline.
-Each tile shows its number and one condensed word; never the question, what the learner wrote
-or an answer. The title counts what to look at ("Two to look at", "All six right"); the caption
+Where a practice set lands when the phone's photo of it comes back marked. The whole set on the
+learner's paper under the lamp (Lamplight, [DESIGN-MATH-BUDDY.md](DESIGN-MATH-BUDDY.md)): each item
+folded to its printed question and the one line of their working the desk's pen is on - a right item
+is its question and a tick, a wrong one its marked line (the pen inside the line where the data places
+it), an unsure one its last line and "not sure". Never an answer the learner did not write. The title counts what to look at ("Two to look at", "All six right"); the caption
 names the focused item and where to start looking (the slip's `points`), the only prose on screen.
 Two actions: **Six more** (a new set on the same topic, written by the same `/api/practice` job
 as Topics and aimed at the learner's recorded slips) and **Put the sheet away** (clears the set).
@@ -115,8 +115,8 @@ way ("Finish the set").
 *Feeds:* `practice.items[].verdict` and `slip` as the store holds them (marking, or an
 explanation that settled an unsure item later) — the sheet never recomputes a verdict.
 *Code:* `desk/src/tv/sheetRows.ts` (tiles, stops, first to look at), the `sheet` entry of the
-keymap in `desk/src/tv/keys.ts`, `Sheet` in `desk/src/tv/screens.tsx`, `.band-shelf` / `.tile`
-in `desk/src/design/on-air.css`. Tests: `tools/tv-sheet-test.cjs`.
+keymap in `desk/src/tv/keys.ts`, `Sheet` / `Walk` in `desk/src/maths/MathsTV.tsx`, the pen in
+`desk/src/maths/working.ts`, `desk/src/design/maths-lamplight.css`. Tests: `tools/tv-sheet-test.cjs`.
 
 ### T3-es · Hint, Spanish variant — *B′ passed; in scope.*
 Same screen as T3 with one addition: the **rule card** the resolver produced is shown as a real

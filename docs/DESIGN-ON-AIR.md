@@ -1,7 +1,9 @@
 # On Air — the Study Desk design philosophy
 
 **Chosen 2026-09-07** from five directions ([prototype/identity/variants.html](../prototype/identity/variants.html)).
-Everything below is a rule the screens follow, not a mood board.
+Everything below is a rule the screens follow, not a mood board. Since 2026-09-24 it is the shell's language
+(landing, pairing, learner, profile, break, recap): the three modules are apps with their own - Linga is
+[the Open Door](DESIGN-LINGA.md), Essay Master [Specimen](DESIGN-ESSAY-MASTER.md), Math Buddy [Lamplight](DESIGN-MATH-BUDDY.md).
 
 ## The idea in one line
 
