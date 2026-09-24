@@ -1,12 +1,606 @@
-/* Linga inherits the 1920 × 1080 On Air stage and its fonts. */
-.linga-tv .linga-top{position:relative;z-index:1}.linga-tv .band-left-thin{width:320px;left:-240px}
-.linga-tv .band-rule{top:-54px;left:-96px}.linga-tv .linga-caption{top:590px}.linga-tv .linga-quote{font-size:44px}.linga-tv[data-view=linga-coach] .band.band-divider{height:400px}
-.linga-tv{position:absolute;inset:0}.linga-top{display:flex;gap:28px;align-items:center;font-family:var(--display);font-size:34px;text-transform:uppercase;letter-spacing:.07em}.linga-top b{font-size:44px}.linga-top span{color:var(--english)}.linga-top em{margin-left:auto;font-size:28px;font-style:normal;color:var(--mute)}.linga-hero{position:absolute;left:120px;right:36px;top:165px;height:400px}.linga-hero h1{font-family:var(--display);font-size:96px;line-height:1.04;text-transform:uppercase;margin:18px 0 0;max-width:1080px;font-weight:800;letter-spacing:.01em}.linga-hero h1.linga-smaller{font-size:78px;max-width:1100px}.linga-kicker{display:block;font-size:28px;letter-spacing:.08em;text-transform:uppercase;color:var(--english);line-height:1.25}.linga-subtitle{font-family:var(--display);font-size:30px;text-transform:uppercase;letter-spacing:.06em;color:var(--mute);margin-top:32px}.linga-mascot{position:absolute;right:0;top:0;width:400px;height:370px;object-fit:contain}.linga-scene-art{position:absolute;right:0;top:0;width:340px;height:340px;color:var(--english)}.linga-caption{position:absolute;left:120px;right:70px;top:625px;min-height:148px}.linga-caption>div{font-size:42px;line-height:1.28;margin-top:14px;max-width:1480px}.linga-actions{position:absolute;left:120px;bottom:76px;display:flex;gap:24px}.linga-actions button{cursor:pointer}.linga-actions button:disabled{opacity:.45;cursor:wait}.linga-footer{position:absolute;left:0;right:0;bottom:0;display:flex;gap:32px;align-items:center;font-family:var(--display);font-size:28px;color:var(--mute);text-transform:uppercase;letter-spacing:.04em}.linga-footer span{margin-right:auto}.linga-footer button{border:0;background:transparent;color:var(--paper);font:inherit;cursor:pointer}.linga-speaker{display:flex;gap:28px;align-items:center;font-size:30px;text-transform:uppercase;margin-top:45px}.linga-wave{letter-spacing:5px;color:var(--english)}.linga-comparison{display:grid;grid-template-columns:1fr 1fr;gap:150px}.linga-quote{font-size:48px;line-height:1.2;margin-top:30px}.linga-tv[data-view=linga-coach] .band-divider{height:500px;top:150px;left:780px;width:100px}.linga-track{display:flex;gap:35px;margin-top:56px}.linga-track>div{flex:1;position:relative;color:var(--mute);font-size:30px;border-top:2px solid var(--line);padding-top:20px}.linga-track i{display:block;position:absolute;top:-12px;width:22px;height:22px;border:2px solid var(--mute);background:var(--ink);border-radius:50%}.linga-track [data-reached=true]{color:var(--paper);border-color:var(--english)}.linga-track [data-reached=true] i{background:var(--english);border-color:var(--english)}.linga-choices{display:flex;gap:64px;margin-top:42px}.linga-choices>div{width:48%;font-size:42px;line-height:1.25;border-top:2px solid var(--english);padding-top:18px}.linga-choices small{display:block;color:var(--english);font-size:28px;margin-bottom:12px}.linga-menu-list{display:grid;grid-template-columns:1fr 1fr;gap:22px 64px;font-family:var(--display);font-size:36px;text-transform:uppercase;margin-top:32px}.linga-menu-list [data-selected=true]{color:var(--english)}.linga-menu-actions button{display:none}.linga-menu-actions button[data-focused=true]{display:block}.linga-tv[data-view=menu] h1{font-size:76px}.linga-tv[data-view=linga-map] h1{font-size:88px}
-.linga-phone label{display:flex;flex-direction:column;gap:6px;color:#425365}.linga-phone input,.linga-phone select,.linga-phone textarea{width:100%;padding:12px;border:1px solid #b8c5cf;background:#fff;color:#1b2632;border-radius:3px;font:inherit}.linga-phone textarea{min-height:100px;resize:vertical}.linga-phone .linga-check{flex-direction:row;align-items:start}.linga-phone .linga-check input{width:auto;margin-top:4px}.linga-phone .linga-buttons{display:flex;gap:8px;flex-wrap:wrap}.linga-phone .linga-buttons button{flex:1}.linga-phone details{border-top:1px solid #c5cdd5;padding-top:14px}.linga-phone summary{cursor:pointer;font-weight:600}.linga-phone .linga-transcript{display:flex;flex-direction:column;gap:12px;margin-top:14px}.linga-phone .linga-transcript p{padding:10px 12px;border-left:3px solid #bdc7d0;background:#fff}.linga-phone .linga-transcript p[data-role=learner]{border-color:#cba137}.linga-phone .linga-transcript b{display:block;font-size:12px;color:#526071;margin-bottom:4px}.linga-phone .linga-error{color:#a22d1d;background:#fff1ec;padding:12px}.linga-phone .linga-status{padding:12px;border-left:3px solid #bb8c10;background:#fff}.linga-phone .linga-skill{padding:12px 0;border-bottom:1px solid #c5cdd5}.linga-phone .linga-skill small{display:block;color:#526071;margin-top:4px}.linga-phone .linga-note{font-size:12px}.linga-phone a{color:#235c85}.linga-print{max-width:850px;margin:40px auto;background:white;color:#15202b;padding:40px;line-height:1.5}.linga-print table{border-collapse:collapse;width:100%;font-size:14px}.linga-print td,.linga-print th{text-align:left;padding:10px 8px;border-bottom:1px solid #ccc}.linga-print h1{font-size:36px}.linga-print button{padding:12px 24px;cursor:pointer}.linga-print h2{font-size:20px}.linga-print footer{font-size:12px;border-top:1px solid #ccc;margin-top:30px;padding-top:14px}@media print{@page{size:A4;margin:13mm}body{background:white!important;color:#111!important}.linga-print{padding:0;margin:0;font-size:10pt;max-width:none}.linga-print h1{font-size:24pt;margin:0}.linga-print h2{font-size:13pt;margin-top:12pt}.linga-print table{font-size:9pt}.linga-print td,.linga-print th{padding:6pt}.linga-print .no-print{display:none}.linga-print footer{font-size:8pt}.linga-print tr{break-inside:avoid}}
+/*
+ * Linga · The Open Door (docs/DESIGN-LINGA.md)
+ *
+ * Linga's TV screens are a doorway into a place: an arch on a plinth with the situation behind it, the words beside
+ * it in Georgia and Arial on warm cream. Everything here is scoped under .linga-tv so it never reaches the rest of
+ * Study Desk, which stays On Air (design/on-air.css). Values are the winning entry's own: its colours, sizes, radii
+ * and shadows, carried over as tokens rather than approximated.
+ *
+ * The phone (.linga-phone) and the printable learning map (.linga-print) keep their own rules at the end.
+ */
 
-.linga-tv[data-view=linga-moment] .band-divider{height:500px;top:150px;left:780px;width:100px}
-.linga-ladder{gap:22px}.linga-ladder>div{font-family:var(--display);font-size:40px}.linga-ladder small{display:block;font-family:var(--body,inherit);font-size:22px;letter-spacing:.04em;text-transform:uppercase;margin-top:8px;color:var(--mute)}.linga-track [data-here=true]{color:var(--english)}.linga-track [data-here=true] i{width:38px;height:38px;top:-20px}
-.linga-hero h1.linga-prompt{font-family:inherit;font-size:50px;line-height:1.2;text-transform:none;font-weight:600;letter-spacing:0}.linga-tv[data-view=linga-check] .linga-choices>div{font-size:38px}
-.linga-topics{display:grid;grid-template-columns:1fr 1fr;gap:16px 56px;font-family:var(--display);font-size:32px;line-height:1.1;text-transform:uppercase;margin-top:24px;max-width:1500px}.linga-topics>div{border-left:4px solid transparent;padding-left:16px}.linga-topics [data-selected=true]{color:var(--english);border-color:var(--english)}.linga-topics small{display:block;font-size:20px;letter-spacing:.06em;color:var(--mute);margin-top:4px}.linga-tv[data-view=linga-plan] h1{font-size:64px}.linga-phone .linga-band{display:flex;align-items:baseline;gap:12px;padding:12px 0}.linga-phone .linga-band b{font-size:44px;line-height:1;color:#1b2632}.linga-phone .linga-band span{font-size:18px;color:#526071;text-transform:uppercase;letter-spacing:.05em}.linga-phone .linga-skill .pbtn{margin-top:8px}
+/* ---------------------------------------------------------------- tokens and the stage */
+.linga-tv {
+  /* ground */
+  --lo-ground: #eee9dd;
+  --lo-ground-glow: #fbf4e6;
+  --lo-ground-from: #f5eee1;
+  --lo-ground-to: #e5dccd;
+  /* ink and plum */
+  --lo-ink: #261f29;
+  --lo-plum: #41273d;          /* the focused action */
+  --lo-plum-ink: #372532;      /* action text */
+  --lo-plum-line: #6b4953;     /* action outline */
+  --lo-plum-deep: #493147;     /* badge, name tag text */
+  --lo-frame: #6a3946;         /* the arch */
+  --lo-plinth: #5d3548;
+  --lo-plinth-lip: #ad766c;
+  --lo-shadow: #6e283c;
+  --lo-mark: #8b3f50;
+  /* wine: labels and the rule */
+  --lo-overline: #a64d4d;
+  --lo-label: #9c4d55;
+  --lo-rule: #bb675b;
+  --lo-quote: #b45d61;
+  --lo-dot: #913e4c;
+  /* peach and amber */
+  --lo-amber: #d89367;
+  --lo-glow: #f6d0a2;
+  --lo-arch-fill: #d89475;
+  /* cream */
+  --lo-cream: #fff8e8;         /* text on plum */
+  --lo-card: #fff9ec;
+  --lo-card-line: #d6c5af;
+  --lo-tag: #fff3dc;
+  --lo-step-open: #eadfce;
+  /* quiet text */
+  --lo-caption: #5a5051;
+  --lo-data: #423238;
+  --lo-sentence: #3f2a3c;
+  --lo-muted: #775f5d;
+  --lo-muted-line: #8b6d66;
+  --lo-line: #bcaca1;
+  --lo-chip-line: #775d5d;
+  --lo-chip-ink: #332332;
+  /* type */
+  --lo-serif: Georgia, "Times New Roman", serif;
+  --lo-sans: Arial, Helvetica, sans-serif;
 
-.linga-hero .linga-message{font-size:52px;line-height:1.22;margin-top:28px;max-width:1600px;font-weight:500}.linga-hero .linga-message.linga-long{font-size:42px}.linga-hero .linga-message.linga-narrow{max-width:1300px}.linga-hero .linga-note-line{font-size:32px;line-height:1.3;color:var(--mute);margin-top:26px;max-width:1560px}
+  /* The stage is On Air's; Linga covers all of it, safe area included, and keeps its own 5% margins. */
+  position: absolute;
+  left: -96px;
+  top: -54px;
+  width: 1920px;
+  height: 1080px;
+  overflow: hidden;
+  background: var(--lo-ground);
+  color: var(--lo-ink);
+  font-family: var(--lo-sans);
+}
+.linga-tv::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 23% 53%, var(--lo-ground-glow) 0, transparent 45%), linear-gradient(135deg, var(--lo-ground-from), var(--lo-ground-to));
+  pointer-events: none;
+}
+.linga-tv button { font-family: var(--lo-sans); }
+.linga-tv .lo-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* ---------------------------------------------------------------- header: the mark and the learner */
+.linga-tv .lo-top {
+  position: absolute;
+  left: 105px;
+  right: 106px;
+  top: 66px;
+  z-index: 10;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.linga-tv .lo-mark {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-family: var(--lo-serif);
+  font-size: 45px;
+  font-weight: bold;
+  letter-spacing: -2px;
+}
+.linga-tv .lo-mark svg { width: 59px; height: 59px; }
+.linga-tv .lo-learner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-width: 172px;
+  padding: 15px 22px;
+  border: 2px solid var(--lo-chip-line);
+  border-radius: 12px;
+  color: var(--lo-chip-ink);
+  font-size: 28px;
+  font-weight: 700;
+}
+.linga-tv .lo-learner svg { width: 16px; height: 28px; }
+
+/* ---------------------------------------------------------------- the arch */
+.linga-tv .lo-arch { position: absolute; left: 109px; top: 170px; width: 827px; height: 792px; z-index: 2; }
+.linga-tv .lo-arch-shadow {
+  position: absolute;
+  left: 35px;
+  top: 35px;
+  width: 745px;
+  height: 735px;
+  border-radius: 380px 380px 8px 8px;
+  background: var(--lo-shadow);
+  filter: blur(25px);
+  opacity: .25;
+  transform: translate(15px, 13px);
+}
+.linga-tv .lo-door {
+  position: absolute;
+  left: 18px;
+  top: 0;
+  width: 773px;
+  height: 756px;
+  overflow: hidden;
+  border: 19px solid var(--lo-frame);
+  border-radius: 390px 390px 7px 7px;
+  background: var(--lo-arch-fill);
+  box-shadow: inset 0 0 0 12px rgba(255, 235, 201, .23), 0 25px 45px rgba(78, 44, 47, .22);
+}
+.linga-tv .lo-door > svg { display: block; width: 100%; height: 100%; }
+.linga-tv .lo-plinth {
+  position: absolute;
+  left: 0;
+  bottom: 18px;
+  width: 810px;
+  height: 25px;
+  border-radius: 4px;
+  background: var(--lo-plinth);
+}
+.linga-tv .lo-plinth::after {
+  content: "";
+  position: absolute;
+  left: 20px;
+  bottom: -15px;
+  width: 770px;
+  height: 15px;
+  background: var(--lo-plinth-lip);
+}
+/* a state of the journey: the warm gradient, a ring of light, the hill, the brand line */
+.linga-tv .lo-arch-symbol .lo-door { background: linear-gradient(150deg, #c78069 0, #e7aa87 42%, #ffdaa4 100%); }
+.linga-tv .lo-arch-symbol .lo-door::before {
+  content: "";
+  position: absolute;
+  left: -82px;
+  top: 30px;
+  width: 900px;
+  height: 900px;
+  border: 2px solid rgba(255, 246, 218, .35);
+  border-radius: 50%;
+}
+.linga-tv .lo-arch-symbol .lo-door::after {
+  content: "";
+  position: absolute;
+  inset: auto -80px -130px -80px;
+  height: 340px;
+  border-radius: 50% 50% 0 0;
+  background: linear-gradient(0deg, #834053, #b65b62);
+  transform: rotate(-7deg);
+}
+.linga-tv .lo-symbol {
+  position: absolute;
+  left: 111px;
+  top: 150px;
+  z-index: 2;
+  width: 512px;
+  height: 440px;
+  filter: drop-shadow(0 22px 24px rgba(71, 34, 45, .18));
+}
+.linga-tv .lo-symbol svg { width: 100%; height: 100%; }
+.linga-tv .lo-door-label {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 95px;
+  z-index: 4;
+  color: #fff5e7;
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  text-align: center;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+/* the name tag: a cream chip over a situation, a lit dot over the hill of a state */
+.linga-tv .lo-tag { position: absolute; z-index: 4; font-size: 29px; }
+.linga-tv .lo-arch-scene .lo-tag {
+  left: 57px;
+  bottom: 74px;
+  padding: 13px 20px;
+  border-radius: 8px;
+  background: var(--lo-tag);
+  color: var(--lo-plum-deep);
+  box-shadow: 0 6px 14px rgba(65, 34, 45, .14);
+  font-weight: 800;
+}
+.linga-tv .lo-arch-symbol .lo-tag {
+  left: 102px;
+  right: 102px;
+  bottom: 97px;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  color: #fff9e9;
+  font-weight: 700;
+}
+.linga-tv .lo-arch-symbol .lo-tag::before {
+  content: "";
+  flex: none;
+  width: 49px;
+  height: 49px;
+  border-radius: 50%;
+  background: #fff6dd;
+  box-shadow: inset 0 0 0 13px #b46265;
+}
+
+/* ---------------------------------------------------------------- the words beside the arch */
+.linga-tv .lo-panel {
+  position: absolute;
+  left: 1012px;
+  top: 185px;
+  bottom: 139px;
+  z-index: 3;
+  width: 790px;
+  display: flex;
+  flex-direction: column;
+}
+.linga-tv[data-hero="intro"] .lo-panel { left: 1000px; top: 217px; }
+.linga-tv .lo-body { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; align-items: flex-start; }
+.linga-tv .lo-head { position: absolute; left: 110px; top: 185px; z-index: 3; width: 1000px; }
+
+.linga-tv .lo-kicker {
+  margin: 0 0 21px;
+  color: var(--lo-overline);
+  font-size: 22px;
+  font-weight: 900;
+  letter-spacing: 4px;
+  line-height: 1.25;
+  text-transform: uppercase;
+}
+.linga-tv .lo-kicker strong { margin-right: 10px; color: var(--lo-frame); font-size: 28px; letter-spacing: 0; }
+
+.linga-tv .lo-title {
+  max-width: 770px;
+  margin: 0;
+  font-family: var(--lo-serif);
+  font-size: 78px;
+  font-weight: 400;
+  letter-spacing: -2.7px;
+  line-height: 1.08;
+  text-wrap: balance;
+}
+.linga-tv[data-hero="intro"] .lo-title[data-size="l"] { font-size: 82px; letter-spacing: -3px; }
+.linga-tv .lo-title[data-size="m"] { font-size: 66px; letter-spacing: -2.2px; }
+.linga-tv .lo-title[data-size="s"] { font-size: 56px; letter-spacing: -1.6px; line-height: 1.1; }
+.linga-tv .lo-head .lo-title { max-width: 1000px; }
+.linga-tv .lo-prompt {
+  margin: 0;
+  font-family: var(--lo-serif);
+  font-size: 48px;
+  font-weight: 400;
+  letter-spacing: -1px;
+  line-height: 1.15;
+  text-wrap: balance;
+}
+
+/* the caption slot: the rule, its label, one sentence */
+.linga-tv .lo-rule { display: flex; align-items: center; gap: 18px; margin: 25px 0 16px; }
+.linga-tv .lo-rule i { flex: none; width: 120px; height: 7px; border-radius: 10px; background: var(--lo-rule); }
+.linga-tv .lo-rule span { color: var(--lo-label); font-size: 22px; font-weight: 900; letter-spacing: 3px; text-transform: uppercase; }
+.linga-tv .lo-caption > div { max-width: 720px; color: var(--lo-caption); font-size: 32px; line-height: 1.3; }
+.linga-tv[data-hero="intro"] .lo-caption > div { font-size: 33px; line-height: 1.35; }
+.linga-tv .lo-head .lo-caption > div { max-width: 900px; }
+
+.linga-tv .lo-data {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin-top: 24px;
+  color: var(--lo-data);
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1.25;
+}
+.linga-tv .lo-data-key {
+  flex: none;
+  padding: 11px 16px;
+  border-radius: 8px;
+  background: var(--lo-plum-deep);
+  color: #fff1dc;
+  font-size: 22px;
+  font-weight: 900;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+/* ---------------------------------------------------------------- the sentence card */
+.linga-tv .lo-card {
+  position: relative;
+  width: 752px;
+  max-width: 100%;
+  margin-top: 44px;
+  padding: 22px 27px 20px 36px;
+  border: 2px solid var(--lo-card-line);
+  border-radius: 12px;
+  background: var(--lo-card);
+  box-shadow: 0 15px 30px rgba(96, 61, 57, .10);
+}
+.linga-tv .lo-card::before {
+  content: "\201C";
+  position: absolute;
+  left: -22px;
+  top: -25px;
+  color: var(--lo-quote);
+  font-family: var(--lo-serif);
+  font-size: 88px;
+  line-height: 1;
+}
+.linga-tv .lo-card-label { color: var(--lo-label); font-size: 22px; font-weight: 900; letter-spacing: 3px; text-transform: uppercase; }
+.linga-tv .lo-card-text { margin-top: 9px; color: var(--lo-sentence); font-family: var(--lo-serif); font-size: 41px; line-height: 1.18; }
+.linga-tv .lo-card-text.lo-mid { font-size: 38px; }
+.linga-tv .lo-card-text.lo-long { font-size: 33px; line-height: 1.22; }
+.linga-tv .lo-card-text.lo-xlong { font-size: 30px; line-height: 1.22; }
+/* two cards on one screen (a task and its words): tighter, so the caption and actions keep their room */
+.linga-tv .lo-card.lo-compact { padding: 16px 24px 16px 32px; }
+.linga-tv .lo-card.lo-compact .lo-card-text { font-size: 34px; }
+.linga-tv .lo-card.lo-compact + .lo-card.lo-compact { margin-top: 24px; }
+.linga-tv .lo-said { margin-top: 22px; }
+.linga-tv .lo-said + .lo-card { margin-top: 30px; }
+
+/* ---------------------------------------------------------------- actions */
+.linga-tv .lo-actions { flex: none; display: flex; flex-direction: column; gap: 15px; width: 752px; margin-top: 22px; }
+.linga-tv .lo-action {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  height: 87px;
+  padding: 0 30px;
+  border: 2px solid var(--lo-plum-line);
+  border-radius: 12px;
+  background: transparent;
+  color: var(--lo-plum-ink);
+  font-size: 31px;
+  font-weight: 800;
+  line-height: 1.08;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color .18s, color .18s, border-color .18s, box-shadow .18s, transform .18s;
+}
+.linga-tv .lo-primary { height: 91px; font-size: 34px; }
+.linga-tv .lo-action[data-focused="true"] {
+  border-color: var(--lo-plum);
+  background: var(--lo-plum);
+  color: var(--lo-cream);
+  box-shadow: 0 0 0 8px rgba(82, 38, 59, .15), 0 16px 35px rgba(80, 34, 51, .2);
+  transform: translateX(13px);
+}
+/* nothing focused yet (the conversation and the level check start so): Enter runs the first action, and it shows */
+.linga-tv .lo-action[data-rest="true"] { border: 4px solid var(--lo-plum); padding: 0 28px; box-shadow: 0 0 0 6px rgba(82, 38, 59, .10); }
+.linga-tv .lo-action:disabled { opacity: .45; cursor: wait; }
+.linga-tv .lo-arrow { flex: none; width: 30px; height: 30px; opacity: 0; }
+.linga-tv .lo-action[data-focused="true"] .lo-arrow { opacity: 1; }
+.linga-tv .lo-phone { flex: none; width: 300px; height: 44px; }
+.linga-tv .lo-phone text { font-family: var(--lo-sans); font-size: 22px; font-weight: 900; letter-spacing: 2px; }
+/* three actions: the primary across, two secondaries under it (the topic page) */
+.linga-tv .lo-panel .lo-actions[data-count="3"]:not(.lo-choice-row) { display: grid; grid-template-columns: 1fr 1fr; gap: 13px; }
+.linga-tv .lo-panel .lo-actions[data-count="3"]:not(.lo-choice-row) .lo-primary { grid-column: 1 / 3; }
+.linga-tv .lo-panel .lo-actions[data-count="3"]:not(.lo-choice-row) .lo-secondary { height: 100px; padding: 0 26px; font-size: 28px; }
+.linga-tv .lo-panel .lo-actions[data-count="3"] .lo-action[data-focused="true"] { transform: translateX(8px); }
+/* a choice: equal buttons side by side */
+.linga-tv .lo-actions.lo-choice-row { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; gap: 13px; }
+.linga-tv .lo-choice-row .lo-action { padding: 0 24px; font-size: 30px; }
+.linga-tv .lo-choice-row .lo-action[data-focused="true"] { transform: translateY(-6px); }
+/* the topics screen: only the focused action shows */
+.linga-tv .lo-single .lo-action { display: none; }
+.linga-tv .lo-single .lo-action[data-focused="true"],
+.linga-tv .lo-single:not(:has([data-focused="true"])) .lo-action:first-child { display: flex; }
+
+/* ---------------------------------------------------------------- what the words hold */
+.linga-tv .lo-choices { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; width: 100%; margin-top: 28px; }
+.linga-tv .lo-choices > div {
+  padding: 18px 22px 20px;
+  border: 2px solid var(--lo-card-line);
+  border-radius: 12px;
+  background: var(--lo-card);
+  color: var(--lo-sentence);
+  font-family: var(--lo-serif);
+  font-size: 34px;
+  line-height: 1.18;
+  transition: border-color .18s;
+}
+.linga-tv .lo-choices > div[data-selected="true"] { border-color: var(--lo-plum); }
+.linga-tv .lo-choices small { display: block; margin-bottom: 8px; color: var(--lo-label); font-family: var(--lo-sans); font-size: 22px; font-weight: 900; letter-spacing: 3px; text-transform: uppercase; }
+
+.linga-tv .lo-compare { width: 100%; }
+.linga-tv .lo-before span,
+.linga-tv .lo-note-label { display: block; color: var(--lo-muted-line); font-size: 22px; font-weight: 900; letter-spacing: 3px; text-transform: uppercase; }
+.linga-tv .lo-before q { display: block; margin-top: 8px; color: #7b6a6c; font-family: var(--lo-serif); font-size: 40px; line-height: 1.2; }
+.linga-tv .lo-compare .lo-card { margin-top: 40px; }
+.linga-tv .lo-note { max-width: 720px; margin-top: 24px; color: var(--lo-data); font-size: 30px; font-weight: 700; line-height: 1.3; }
+
+/* speaking progress: stepping stones on a dashed path */
+.linga-tv .lo-stones { display: flex; width: 100%; margin-top: 36px; }
+.linga-tv .lo-stones > div { position: relative; flex: 1; padding: 52px 12px 0 0; color: var(--lo-muted-line); font-size: 28px; font-weight: 700; line-height: 1.15; }
+.linga-tv .lo-stones > div:not(:last-child)::before { content: ""; position: absolute; left: 18px; right: -18px; top: 16px; border-top: 4px dashed #cdb9a6; }
+.linga-tv .lo-stones > div[data-reached="true"]:not([data-here="true"])::before { border-top-style: solid; border-color: var(--lo-frame); }
+.linga-tv .lo-stones i { position: absolute; left: 0; top: 0; z-index: 1; width: 36px; height: 36px; border: 3px solid #cdb9a6; border-radius: 50%; background: var(--lo-step-open); }
+.linga-tv .lo-stones [data-reached="true"] { color: var(--lo-ink); }
+.linga-tv .lo-stones [data-reached="true"] i { border-color: var(--lo-frame); background: var(--lo-frame); }
+.linga-tv .lo-stones [data-here="true"] i { border-color: var(--lo-amber); background: var(--lo-amber); box-shadow: 0 0 0 8px rgba(216, 147, 103, .25); }
+
+/* ---------------------------------------------------------------- the ladder: the level as steps */
+.linga-tv[data-layout="ladder"] .lo-note-card { position: absolute; left: 1160px; top: 196px; width: 650px; margin: 0; }
+.linga-tv .lo-steps {
+  position: absolute;
+  left: 110px;
+  right: 110px;
+  bottom: 292px;
+  z-index: 2;
+  height: 380px;
+  display: flex;
+  align-items: flex-end;
+  gap: 14px;
+}
+.linga-tv .lo-steps::after {
+  content: "";
+  position: absolute;
+  left: -10px;
+  right: -10px;
+  bottom: -25px;
+  height: 25px;
+  border-radius: 4px;
+  background: var(--lo-plinth);
+  box-shadow: 0 15px 0 -2px var(--lo-plinth-lip);
+}
+.linga-tv .lo-step {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  padding: 22px 24px;
+  border-radius: 14px 14px 4px 4px;
+  background: var(--lo-step-open);
+  color: var(--lo-muted-line);
+}
+.linga-tv .lo-step b { display: block; font-family: var(--lo-serif); font-size: 52px; font-weight: 400; line-height: 1; }
+.linga-tv .lo-step small { display: block; margin-top: 10px; font-size: 22px; font-weight: 900; letter-spacing: 2px; line-height: 1.2; text-transform: uppercase; }
+.linga-tv .lo-step[data-reached="true"] { background: var(--lo-frame); color: #fff1dc; }
+.linga-tv .lo-step[data-here="true"] { background: var(--lo-amber); color: #352135; box-shadow: 0 16px 35px rgba(80, 34, 51, .2); }
+.linga-tv .lo-step[data-here="true"]::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 0;
+  z-index: -1;
+  width: 440px;
+  height: 440px;
+  border-radius: 50%;
+  background: var(--lo-glow);
+  opacity: .7;
+  transform: translate(-50%, -50%);
+}
+.linga-tv .lo-flag { position: absolute; left: 24px; top: -96px; width: 60px; height: 90px; }
+.linga-tv[data-layout="ladder"] .lo-actions { position: absolute; left: 110px; right: 110px; bottom: 139px; z-index: 3; width: auto; flex-direction: row; gap: 15px; margin: 0; }
+.linga-tv[data-layout="ladder"] .lo-action { flex: 1; min-width: 0; }
+.linga-tv[data-layout="ladder"] .lo-action[data-focused="true"] { transform: translateY(-6px); }
+
+/* ---------------------------------------------------------------- the topic plan: a row of doors */
+.linga-tv .lo-doors {
+  position: absolute;
+  left: 110px;
+  right: 110px;
+  top: 440px;
+  z-index: 2;
+  display: flex;
+  justify-content: center;
+  gap: 26px;
+}
+.linga-tv .lo-topic { display: flex; flex: 0 1 300px; flex-direction: column; min-width: 0; transition: opacity .18s, transform .18s; }
+.linga-tv .lo-mini {
+  height: 226px;
+  overflow: hidden;
+  border: 10px solid var(--lo-frame);
+  border-radius: 150px 150px 6px 6px;
+  background: var(--lo-arch-fill);
+  box-shadow: 0 14px 26px rgba(78, 44, 47, .2);
+  transition: border-color .18s;
+}
+.linga-tv .lo-mini svg { display: block; width: 100%; height: 100%; }
+.linga-tv .lo-topic b { margin-top: 18px; font-family: var(--lo-serif); font-size: 32px; font-weight: 400; letter-spacing: -.5px; line-height: 1.12; }
+.linga-tv .lo-topic small { margin-top: 10px; color: var(--lo-overline); font-size: 22px; font-weight: 900; letter-spacing: .5px; text-transform: uppercase; }
+.linga-tv .lo-doors[data-selecting="true"] .lo-topic:not([data-selected="true"]) .lo-mini { opacity: .55; }
+.linga-tv .lo-doors[data-selecting="true"] .lo-topic:not([data-selected="true"]) b { color: var(--lo-caption); }
+/* while Linga picks: empty doors, dashed, waiting to be filled */
+.linga-tv .lo-ghost .lo-mini { border: 6px dashed var(--lo-line); background: rgba(255, 249, 236, .5); box-shadow: none; }
+.linga-tv .lo-topic[data-selected="true"] { transform: translateY(-12px); }
+.linga-tv .lo-topic[data-selected="true"] .lo-mini { border-color: var(--lo-amber); }
+.linga-tv .lo-doors:is([data-count="6"], [data-count="7"], [data-count="8"]) .lo-mini { height: 190px; border-width: 8px; }
+.linga-tv .lo-doors:is([data-count="6"], [data-count="7"], [data-count="8"]) .lo-topic b { font-size: 28px; }
+.linga-tv[data-layout="plan"] .lo-head { width: 1700px; }
+.linga-tv[data-layout="plan"] .lo-head .lo-caption > div { max-width: 1500px; }
+.linga-tv[data-layout="plan"] .lo-actions { position: absolute; left: 110px; bottom: 139px; z-index: 3; margin: 0; }
+
+/* ---------------------------------------------------------------- the menu */
+.linga-tv[data-layout="menu"] .lo-head { top: 217px; width: 800px; }
+.linga-tv[data-layout="menu"] .lo-actions { position: absolute; left: 1012px; top: 185px; z-index: 3; gap: 12px; margin: 0; }
+.linga-tv[data-layout="menu"] .lo-action { height: 74px; font-size: 30px; }
+
+/* ---------------------------------------------------------------- footer: where, how far, what is happening */
+.linga-tv .lo-footer {
+  position: absolute;
+  left: 105px;
+  right: 105px;
+  bottom: 58px;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  gap: 34px;
+  padding-top: 18px;
+  border-top: 2px solid var(--lo-line);
+  color: var(--lo-muted);
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.linga-tv .lo-where { color: var(--lo-plum-deep); }
+.linga-tv .lo-dots { display: flex; gap: 10px; margin-left: auto; }
+.linga-tv .lo-dots i { width: 12px; height: 12px; border: 2px solid var(--lo-muted-line); border-radius: 50%; }
+.linga-tv .lo-dots i[data-dot="done"] { border-color: var(--lo-dot); background: var(--lo-dot); }
+.linga-tv .lo-dots i[data-dot="current"] { width: 36px; border-color: var(--lo-amber); border-radius: 10px; background: var(--lo-amber); }
+.linga-tv .lo-status { min-width: 0; margin-left: auto; overflow: hidden; text-overflow: ellipsis; }
+.linga-tv .lo-footer button { padding: 0; border: 0; background: transparent; color: var(--lo-plum-deep); font: inherit; letter-spacing: inherit; text-transform: inherit; cursor: pointer; }
+
+@media (prefers-reduced-motion: reduce) {
+  .linga-tv *, .linga-tv *::before, .linga-tv *::after { transition: none !important; animation: none !important; }
+}
+
+/* ---------------------------------------------------------------- the phone (not the TV) */
+.linga-phone label { display: flex; flex-direction: column; gap: 6px; color: #425365; }
+.linga-phone input, .linga-phone select, .linga-phone textarea { width: 100%; padding: 12px; border: 1px solid #b8c5cf; border-radius: 3px; background: #fff; color: #1b2632; font: inherit; }
+.linga-phone textarea { min-height: 100px; resize: vertical; }
+.linga-phone .linga-check { flex-direction: row; align-items: start; }
+.linga-phone .linga-check input { width: auto; margin-top: 4px; }
+.linga-phone .linga-buttons { display: flex; flex-wrap: wrap; gap: 8px; }
+.linga-phone .linga-buttons button { flex: 1; }
+.linga-phone details { padding-top: 14px; border-top: 1px solid #c5cdd5; }
+.linga-phone summary { cursor: pointer; font-weight: 600; }
+.linga-phone .linga-transcript { display: flex; flex-direction: column; gap: 12px; margin-top: 14px; }
+.linga-phone .linga-transcript p { padding: 10px 12px; border-left: 3px solid #bdc7d0; background: #fff; }
+.linga-phone .linga-transcript p[data-role=learner] { border-color: #cba137; }
+.linga-phone .linga-transcript b { display: block; margin-bottom: 4px; color: #526071; font-size: 12px; }
+.linga-phone .linga-error { padding: 12px; background: #fff1ec; color: #a22d1d; }
+.linga-phone .linga-status { padding: 12px; border-left: 3px solid #bb8c10; background: #fff; }
+.linga-phone .linga-skill { padding: 12px 0; border-bottom: 1px solid #c5cdd5; }
+.linga-phone .linga-skill small { display: block; margin-top: 4px; color: #526071; }
+.linga-phone .linga-skill .pbtn { margin-top: 8px; }
+.linga-phone .linga-note { font-size: 12px; }
+.linga-phone a { color: #235c85; }
+.linga-phone .linga-band { display: flex; align-items: baseline; gap: 12px; padding: 12px 0; }
+.linga-phone .linga-band b { color: #1b2632; font-size: 44px; line-height: 1; }
+.linga-phone .linga-band span { color: #526071; font-size: 18px; letter-spacing: .05em; text-transform: uppercase; }
+
+/* ---------------------------------------------------------------- the printable learning map (not the TV) */
+.linga-print { max-width: 850px; margin: 40px auto; padding: 40px; background: white; color: #15202b; line-height: 1.5; }
+.linga-print table { width: 100%; border-collapse: collapse; font-size: 14px; }
+.linga-print td, .linga-print th { padding: 10px 8px; border-bottom: 1px solid #ccc; text-align: left; }
+.linga-print h1 { font-size: 36px; }
+.linga-print h2 { font-size: 20px; }
+.linga-print button { padding: 12px 24px; cursor: pointer; }
+.linga-print footer { margin-top: 30px; padding-top: 14px; border-top: 1px solid #ccc; font-size: 12px; }
+@media print {
+  @page { size: A4; margin: 13mm; }
+  body { background: white !important; color: #111 !important; }
+  .linga-print { max-width: none; margin: 0; padding: 0; font-size: 10pt; }
+  .linga-print h1 { margin: 0; font-size: 24pt; }
+  .linga-print h2 { margin-top: 12pt; font-size: 13pt; }
+  .linga-print table { font-size: 9pt; }
+  .linga-print td, .linga-print th { padding: 6pt; }
+  .linga-print .no-print { display: none; }
+  .linga-print footer { font-size: 8pt; }
+  .linga-print tr { break-inside: avoid; }
+}
