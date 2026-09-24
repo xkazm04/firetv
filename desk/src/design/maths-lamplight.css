@@ -142,6 +142,10 @@
 .maths-tv .mb-item .num .nr { position: absolute; left: 50%; top: 50%; width: 64px; height: 62px; margin: -31px 0 0 -32px; overflow: visible; }
 .maths-tv .mb-item .num .nr path { fill: none; stroke: var(--mb-pen); stroke-width: 4; stroke-linecap: round; }
 .maths-tv .mb-item[data-v="wrong"] .num { color: rgba(39, 48, 74, .8); }
+/* a right item folds to its question: the print a step smaller and lighter, so the wrong ones lead (the winner's .item.right rule) */
+.maths-tv .mb-item[data-v="right"] .num { color: rgba(39, 48, 74, .42); }
+.maths-tv .mb-item[data-v="right"] .mb-row.q .rin { font-size: 40px; }
+.maths-tv .mb-item[data-v="right"] .mx.print { font-size: 40px; color: rgba(29, 36, 64, .86); }
 .maths-tv .mb-item[data-dim="true"] { opacity: .36; }
 /* every row is a whole number of squares tall; the maths is centred in them */
 .maths-tv .mb-row { position: relative; display: flex; align-items: center; white-space: nowrap; height: calc(var(--mb-sq) * 2); }
