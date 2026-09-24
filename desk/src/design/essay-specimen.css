@@ -1,0 +1,235 @@
+/*
+  Specimen — Essay Master's design language. Rules in docs/DESIGN-ESSAY-MASTER.md; this file is those rules
+  as CSS, ported from the contest winner (essay-master-landing-r2, entry B, variant 3) value for value.
+  Everything is scoped under .essay-tv, and every class carries the em- prefix, so On Air's global classes
+  (.rail, .cap, .card, .band ...) never reach in and nothing here leaks out. Sizes are for the 1920 x 1080
+  stage; the stage scales as a whole. The 5% safe area is 96 px left and right, 54 px top and bottom.
+*/
+@property --em-f { syntax: "<percentage>"; inherits: true; initial-value: 0%; }
+@property --em-u { syntax: "<percentage>"; inherits: true; initial-value: 0%; }
+
+.essay-tv {
+  /* the ground, the text, one accent */
+  --em-bg: #0B0B0D;
+  --em-bg-lift: #17171B;
+  --em-bone: #EEE9E0;
+  --em-mute: rgba(238, 233, 224, .62);
+  --em-faint: rgba(238, 233, 224, .26);
+  --em-hair: rgba(238, 233, 224, .12);
+  --em-cit: #DCFF4E;
+  --em-hatch: repeating-linear-gradient(135deg, rgba(238, 233, 224, .46) 0 3px, transparent 3px 11px);
+  /* two faces: next/font's variables (essay/fonts.ts) first, the system behind them */
+  --em-disp: var(--essay-face-display, "Bricolage Grotesque"), "Arial Narrow", "Segoe UI", system-ui, sans-serif;
+  --em-mono: var(--essay-face-mono, "IBM Plex Mono"), Consolas, "Courier New", monospace;
+  --em-ease: cubic-bezier(.2, .8, .2, 1);
+
+  position: absolute; inset: 0; overflow: hidden;
+  color: var(--em-bone); font-family: var(--em-disp);
+  background: radial-gradient(1200px 900px at 30% 55%, var(--em-bg-lift) 0%, var(--em-bg) 60%), var(--em-bg);
+}
+.essay-tv[data-screen="forensic"] { background: radial-gradient(1200px 900px at 40% 60%, var(--em-bg-lift) 0%, var(--em-bg) 60%), var(--em-bg); }
+.essay-tv *, .essay-tv *::before, .essay-tv *::after { box-sizing: border-box; }
+
+/* ---- labels: mono caps, furniture only (20-22 px, never the only carrier of a meaning) ---- */
+.essay-tv .em-lbl { font-family: var(--em-mono); font-size: 21px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--em-mute); }
+.essay-tv .em-key { font-family: var(--em-mono); font-size: 20px; font-weight: 600; letter-spacing: .1em; padding: 4px 10px; border: 2px solid var(--em-faint); border-radius: 4px; color: var(--em-mute); }
+
+/* ---- the brand: a whole E with the citron caret after it, and the wordmark ---- */
+.essay-tv .em-brand { position: absolute; left: 96px; top: 54px; display: flex; align-items: center; gap: 20px; font-size: 54px; font-weight: 800; }
+.essay-tv .em-mark { width: 64px; height: 72px; display: block; }
+.essay-tv .em-wm { font-size: 54px; font-weight: 800; letter-spacing: -.02em; line-height: 1; font-variation-settings: "wdth" 80; }
+.essay-tv .em-wm b { font-weight: 300; margin-left: 6px; }
+
+/* ---- the header chips: Menu, the focus timer, the phone, the learner ---- */
+.essay-tv .em-top { position: absolute; right: 96px; top: 56px; display: flex; align-items: center; gap: 18px; }
+.essay-tv .em-pill { display: flex; align-items: center; gap: 12px; height: 64px; padding: 0 24px; border: 2px solid var(--em-hair); border-radius: 4px; font-size: 30px; font-weight: 600; white-space: nowrap; color: var(--em-bone); background: transparent;
+  transition: transform .25s, background .25s, color .25s, box-shadow .25s, border-color .25s; }
+.essay-tv .em-pill svg { width: 28px; height: 28px; flex: none; }
+.essay-tv .em-pill .em-t { font-family: var(--em-mono); font-weight: 600; font-size: 30px; }
+.essay-tv .em-pill.run { border-color: var(--em-cit); }
+.essay-tv .em-pill.run .em-t { color: var(--em-cit); }
+.essay-tv .em-pill.lit { border-color: var(--em-cit); color: var(--em-cit); }
+.essay-tv .em-av { width: 48px; height: 48px; display: grid; place-items: center; background: var(--em-bone); color: var(--em-bg); font-weight: 800; font-size: 30px; border-radius: 2px; }
+
+/* ---- focus: a blinking text caret and a citron ring - one focused thing on screen ---- */
+.essay-tv .em-caret { position: absolute; background: var(--em-cit); opacity: 0; }
+.essay-tv .is-focused > .em-caret { opacity: 1; animation: em-caret 1.05s steps(1) infinite; }
+
+/* ================= the lens home ================= */
+.essay-tv .em-stack { position: absolute; left: 96px; top: 176px; width: 1180px; height: 800px; }
+.essay-tv .em-stack > .em-h { position: absolute; left: 52px; top: 0; }
+.essay-tv .em-tot { position: absolute; right: 0; top: 0; display: flex; gap: 28px; }
+.essay-tv .em-tot b { color: var(--em-bone); font-weight: 600; font-size: 30px; margin-right: 6px; }
+/* one blend group: the Evidence highlighter multiplies inside the stack, so it reads citron, not the page behind */
+.essay-tv .em-rows { position: absolute; left: 0; top: 42px; width: 1180px; isolation: isolate; }
+.essay-tv .em-w { position: relative; height: 190px; display: flex; align-items: center; opacity: .6; transition: opacity .35s; }
+.essay-tv .em-w::after { content: ""; position: absolute; left: 52px; right: 0; bottom: 22px; height: 2px; background: var(--em-hair); }
+.essay-tv .em-w > .em-caret { left: 14px; top: 26px; width: 12px; height: 136px; }
+.essay-tv .em-w.is-focused { opacity: 1; }
+/* the lens word: a faint plate, inked from the left as far as the learner has got */
+.essay-tv .em-type { position: relative; margin-left: 52px; font-size: 188px; font-weight: 800; line-height: 1; letter-spacing: -.015em; text-transform: uppercase;
+  font-stretch: 75%; font-variation-settings: "wdth" 75, "opsz" 96; white-space: nowrap; transition: transform .45s var(--em-ease); }
+.essay-tv .em-type .em-ol { color: rgba(238, 233, 224, .13); }
+.essay-tv .em-type .em-sol { position: absolute; left: 0; top: 0; color: var(--em-bone); clip-path: inset(-20px calc(100% - var(--em-f)) -20px -20px); animation: em-fill 1.4s var(--em-ease) both; }
+.essay-tv .em-type span { display: inline-block; transition: transform .5s var(--em-ease); }
+.essay-tv .em-w.none .em-type .em-ol span { color: transparent; background: repeating-linear-gradient(135deg, rgba(238, 233, 224, .5) 0 3px, transparent 3px 11px); -webkit-background-clip: text; background-clip: text; }
+.essay-tv .em-w.none.is-focused .em-type .em-ol span { background-image: repeating-linear-gradient(135deg, rgba(238, 233, 224, .8) 0 3px, transparent 3px 11px); }
+.essay-tv .em-w.is-focused:not(.none) .em-type .em-ol { color: rgba(238, 233, 224, .2); }
+/* the mastery meter: a citron cursor bar standing at the ink's edge, cutting through the word */
+.essay-tv .em-type .em-sol .em-ink { position: absolute; top: 8%; bottom: 8%; left: calc(var(--em-f) - 6px); width: 6px; background: var(--em-cit); }
+.essay-tv .em-w .em-st { position: absolute; left: 1040px; top: 44px; width: 240px; font-size: 30px; font-weight: 600; line-height: 1.3; }
+.essay-tv .em-w .em-st .em-lbl { display: flex; align-items: center; gap: 8px; }
+.essay-tv .em-w .em-st .em-sec { color: var(--em-cit); font-size: 28px; }
+.essay-tv .em-w .em-st .em-sec svg { width: 26px; height: 26px; }
+.essay-tv .em-w .em-st .em-d { display: block; color: var(--em-bone); }
+.essay-tv .em-w.none .em-st .em-d { color: var(--em-mute); font-weight: 500; }
+/* what each lens does to a sentence, played on its own word when focused */
+.essay-tv .em-w .em-hl { position: absolute; left: 52px; top: 96px; height: 62px; width: 0; max-width: 900px; background: var(--em-cit); opacity: .9; mix-blend-mode: multiply; transition: width .7s var(--em-ease); }
+.essay-tv .em-w .em-arrow { position: absolute; top: 58px; left: 900px; width: 84px; height: 72px; opacity: 0; transition: opacity .3s, transform .5s; transform: translateX(-20px); }
+.essay-tv .em-w .em-brk { position: absolute; left: 52px; bottom: 30px; height: 14px; opacity: 0; transition: opacity .4s; overflow: visible; }
+.essay-tv .em-w.is-focused[data-k="structure"] .g2 { transform: translateX(26px); }
+.essay-tv .em-w.is-focused[data-k="structure"] .g3 { transform: translateX(52px); }
+.essay-tv .em-w.is-focused[data-k="structure"] .em-brk { opacity: 1; }
+.essay-tv .em-w.is-focused[data-k="argument"] .em-type { transform: skewX(-9deg) translateX(18px); }
+.essay-tv .em-w.is-focused[data-k="argument"] .em-arrow { opacity: 1; transform: none; }
+.essay-tv .em-w.is-focused[data-k="evidence"] .em-hl { width: var(--em-hw); }
+.essay-tv .em-w.is-focused[data-k="language"] .em-type span { animation: em-wave 1.6s ease-in-out infinite; animation-delay: calc(var(--n) * 90ms); }
+.essay-tv .em-w[data-k="book"] .em-type .em-sol { animation: none; }
+/* Select floods the chosen word with citron */
+.essay-tv .em-w.commit .em-type .em-sol { color: var(--em-cit); animation: em-commit 1.1s var(--em-ease); }
+
+/* the right column: the last paragraph as a picture, and the one caption */
+.essay-tv .em-side { position: absolute; left: 1336px; top: 176px; width: 488px; }
+.essay-tv .em-panel { position: relative; font-size: 30px; font-weight: 600; padding: 26px 28px 28px; border: 2px solid var(--em-hair); border-radius: 4px; transition: border-color .3s, box-shadow .3s, transform .3s; }
+.essay-tv .em-panel.is-focused { border-color: var(--em-bone); box-shadow: 0 0 0 4px var(--em-cit); transform: translateX(-6px); }
+.essay-tv .em-panel h2 { margin: 16px 0 0; font-size: 44px; font-weight: 600; line-height: 1.1; letter-spacing: -.01em; font-variation-settings: "wdth" 88; }
+.essay-tv .em-panel h2.em-big { font-size: 60px; }
+.essay-tv .em-panel .em-meta { display: flex; align-items: center; gap: 12px; margin-top: 16px; font-size: 30px; font-weight: 600; color: var(--em-cit); }
+.essay-tv .em-panel .em-meta svg { width: 30px; height: 30px; }
+.essay-tv .em-panel .em-strip { margin-top: 22px; display: block; }
+.essay-tv .em-door { display: flex; align-items: center; gap: 16px; margin-top: 20px; padding-top: 22px; border-top: 2px solid var(--em-hair); font-size: 34px; font-weight: 600; }
+.essay-tv .em-door svg { width: 62px; height: 36px; }
+.essay-tv .em-door .em-key { margin-left: auto; }
+.essay-tv .em-panel.is-focused .em-door .em-key { color: var(--em-bone); border-color: var(--em-bone); }
+.essay-tv .em-ways { display: flex; gap: 30px; margin-top: 30px; }
+.essay-tv .em-ways div { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+.essay-tv .em-ways svg { width: 48px; height: 48px; }
+.essay-tv .em-caption { position: absolute; left: 1336px; top: 858px; width: 488px; height: 168px; }
+
+/* the one caption slot: a citron label and one sentence */
+.essay-tv .em-cap { animation: em-rise .35s var(--em-ease) both; }
+.essay-tv .em-cap > .em-lbl { color: var(--em-cit); }
+.essay-tv .em-cap p { margin: 10px 0 0; font-size: 34px; line-height: 1.2; font-weight: 500; font-variation-settings: "wdth" 92; }
+
+/* ================= one sentence: the forensic page ================= */
+/* the paragraph, drawn: one arrow per sentence, the length of the sentence; the faulty ones point back */
+.essay-tv .em-rail { position: absolute; left: 96px; top: 148px; width: 250px; font-family: var(--em-mono); font-size: 30px; font-weight: 600; }
+.essay-tv .em-rail .em-rrows { margin-top: 22px; }
+.essay-tv .em-r { position: relative; height: var(--em-rh, 96px); display: flex; align-items: center; gap: 16px; padding-left: 30px; opacity: .42; transition: opacity .3s, background .3s; }
+.essay-tv .em-r .em-n { font-family: var(--em-mono); font-size: 30px; font-weight: 600; width: 34px; }
+.essay-tv .em-r svg { display: block; overflow: visible; }
+.essay-tv .em-r.cur { opacity: 1; }
+.essay-tv .em-r.cur .em-n { color: var(--em-bone); }
+.essay-tv .em-r.bad .em-n { color: var(--em-cit); }
+
+.essay-tv .em-main { position: absolute; left: 414px; top: 148px; width: 1410px; height: 800px; display: flex; flex-direction: column;
+  --em-sent-size: 54px; --em-move-size: 128px; }
+.essay-tv .em-crumb { display: flex; align-items: center; gap: 14px; height: 28px; flex: none; }
+.essay-tv .em-crumb svg { width: 28px; height: 28px; color: var(--em-cit); }
+.essay-tv .em-crumb .em-ln { color: var(--em-cit); }
+.essay-tv .em-sent { position: relative; margin: 14px 0 0; max-width: 1380px; font-size: var(--em-sent-size); font-weight: 600; line-height: 1.16; letter-spacing: -.005em; font-variation-settings: "wdth" 86, "opsz" 60; flex: none; }
+.essay-tv .em-sent .em-q { position: absolute; left: -74px; top: -18px; font-size: 170px; line-height: 1; font-weight: 800; color: var(--em-cit); font-variation-settings: "wdth" 75; }
+.essay-tv .em-sent .em-land { background: linear-gradient(var(--em-cit), var(--em-cit)) 0 100% / var(--em-u) 8px no-repeat; padding-bottom: 6px; animation: em-underline .8s var(--em-ease) .35s both; }
+.essay-tv .em-sent .em-back { display: inline-block; width: 62px; height: 36px; margin-left: 14px; vertical-align: -2px; }
+.essay-tv .em-note { position: relative; margin-top: 22px; min-height: 116px; max-width: 1180px; flex: none; font-size: 34px; font-weight: 500; font-variation-settings: "wdth" 92; }
+.essay-tv .em-note[data-verdict="neutral"] .em-cap > .em-lbl { color: var(--em-mute); }
+.essay-tv .em-note p { margin: 8px 0 0; font-size: 34px; line-height: 1.22; font-weight: 500; font-variation-settings: "wdth" 92; }
+
+/* the move, in the landing's giant type: what the sentence already does is inked, what it misses is hatched */
+.essay-tv .em-move { position: relative; margin-top: 28px; flex: none; }
+/* the giant type: set on the block, so every line (and the contract) reads 800, width 75 */
+.essay-tv .em-move-type { font-size: var(--em-move-size); line-height: .94; font-weight: 800; text-transform: uppercase; letter-spacing: -.01em; font-stretch: 75%; font-variation-settings: "wdth" 75, "opsz" 96; }
+.essay-tv .em-g { position: relative; font-size: 1em; line-height: .94; font-weight: 800; text-transform: uppercase; letter-spacing: -.01em; font-stretch: 75%; font-variation-settings: "wdth" 75, "opsz" 96; white-space: var(--em-move-wrap, nowrap); margin-top: 6px; }
+.essay-tv .em-g .em-wd { position: relative; display: inline-block; }
+.essay-tv .em-g .em-solid { color: var(--em-bone); }
+.essay-tv .em-g .em-hatch { color: transparent; background: var(--em-hatch); -webkit-background-clip: text; background-clip: text; }
+.essay-tv .em-g .em-gink { position: absolute; left: 0; top: 0; color: var(--em-cit); clip-path: inset(-20px calc(100% - var(--em-f)) -20px -20px); --em-f: 0%; }
+.essay-tv .em-g .em-cursor { position: absolute; left: -26px; top: 10%; bottom: 6%; width: 12px; background: var(--em-cit); animation: em-caret 1.05s steps(1) infinite; }
+.essay-tv .em-l2 { padding-left: 1.67em; }
+.essay-tv .em-hook { position: absolute; left: .11em; top: .03em; width: 1.33em; height: .78em; overflow: visible; }
+/* its own size is 28 px, so its place is measured in the move's size, not in em */
+.essay-tv .em-then { position: absolute; left: calc(var(--em-move-size) * .41); top: calc(var(--em-move-size) * .03); font-family: var(--em-mono); font-size: 28px; font-weight: 600; letter-spacing: .12em; color: var(--em-cit); text-transform: uppercase; }
+.essay-tv .em-move.done .em-gink { animation: em-ink 1.2s var(--em-ease) forwards; }
+.essay-tv .em-move.done .em-cursor { opacity: 0; animation: none; }
+.essay-tv .em-role .em-arr { display: inline-block; width: 150px; height: 110px; margin-left: 36px; vertical-align: middle; }
+.essay-tv .em-role.neutral .em-wd { color: rgba(238, 233, 224, .5); }
+.essay-tv .em-none { font-size: 44px; font-weight: 600; color: var(--em-mute); margin-top: 10px; font-variation-settings: "wdth" 88; }
+
+/* the pattern: a sentence frame whose slots the learner fills on the phone */
+.essay-tv .em-pat { position: relative; margin-top: 24px; flex: none; font-size: 44px; font-weight: 700; font-variation-settings: "wdth" 88; }
+.essay-tv .em-pat .em-hd { display: flex; align-items: center; gap: 18px; }
+.essay-tv .em-pat .em-line { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-top: 12px; }
+.essay-tv .em-op { font-size: 44px; line-height: 64px; font-weight: 700; color: var(--em-cit); white-space: nowrap; font-variation-settings: "wdth" 88; }
+.essay-tv .em-pn { font-size: 44px; font-weight: 700; color: var(--em-bone); font-variation-settings: "wdth" 88; }
+.essay-tv .em-slot { display: inline-flex; align-items: center; gap: 12px; min-height: 64px; padding: 6px 20px; font-weight: 400; border: 3px dashed rgba(238, 233, 224, .42); border-radius: 6px; font-size: 32px; line-height: 1.2; font-variation-settings: "wdth" 90; }
+.essay-tv .em-slot svg { width: 34px; height: 22px; flex: none; }
+.essay-tv .em-slot em { font-style: normal; color: var(--em-mute); }
+.essay-tv .em-pat.compact .em-op, .essay-tv .em-pat.compact .em-pn { font-size: 36px; line-height: 56px; }
+.essay-tv .em-pat.compact .em-slot { font-size: 28px; min-height: 56px; padding: 4px 14px; }
+
+/* actions: the first is the one that matters */
+.essay-tv .em-acts { position: absolute; left: 414px; top: 962px; display: flex; gap: 16px; }
+.essay-tv .em-act { height: 64px; font-size: 30px; padding: 0 22px; font-variation-settings: "wdth" 86; }
+.essay-tv .em-act.prim { border-color: var(--em-cit); color: var(--em-cit); }
+.essay-tv .em-act.is-focused { background: var(--em-bone); color: var(--em-bg); border-color: var(--em-bone); box-shadow: 0 0 0 4px var(--em-cit); transform: scale(1.05); }
+
+/* the table (Menu): the paragraph as rows - mono labels, role chips, length bars */
+.essay-tv .em-table { position: absolute; left: 96px; top: 148px; width: 1728px; }
+.essay-tv .em-figs { display: flex; gap: 44px; margin-top: 18px; }
+.essay-tv .em-figs div { display: flex; align-items: baseline; gap: 12px; }
+.essay-tv .em-figs b { font-family: var(--em-mono); font-size: 44px; font-weight: 600; color: var(--em-bone); line-height: 1; }
+.essay-tv .em-thead, .essay-tv .em-trow { display: grid; grid-template-columns: 52px 72px 1fr 220px 300px 96px; align-items: center; column-gap: 24px; }
+.essay-tv .em-thead { margin-top: 30px; padding-bottom: 12px; border-bottom: 2px solid var(--em-hair); }
+.essay-tv .em-trow { position: relative; min-height: 104px; padding: 12px 0; border-bottom: 2px solid var(--em-hair); opacity: .62; }
+.essay-tv .em-trow.is-focused { opacity: 1; background: rgba(238, 233, 224, .06); }
+.essay-tv .em-trow > .em-caret { left: 14px; top: 22px; bottom: 22px; width: 10px; }
+.essay-tv .em-trow .em-n { font-family: var(--em-mono); font-size: 30px; font-weight: 600; }
+.essay-tv .em-trow.bad .em-n { color: var(--em-cit); }
+.essay-tv .em-trow .em-tx { font-size: 30px; line-height: 1.22; font-weight: 500; font-variation-settings: "wdth" 90; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.essay-tv .em-chip { justify-self: start; font-family: var(--em-mono); font-size: 28px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; padding: 4px 14px; border: 2px solid var(--em-faint); border-radius: 4px; }
+.essay-tv .em-chip[data-r="claim"] { border-color: var(--em-bone); }
+.essay-tv .em-chip[data-r="evidence"] { border-style: dashed; }
+.essay-tv .em-len { display: flex; align-items: center; gap: 14px; }
+.essay-tv .em-len i { display: block; height: 18px; background: var(--em-bone); }
+.essay-tv .em-trow.bad .em-len i { background: var(--em-cit); }
+.essay-tv .em-len b { font-family: var(--em-mono); font-size: 28px; font-weight: 600; }
+.essay-tv .em-keys { position: absolute; left: 96px; top: 962px; display: flex; align-items: center; gap: 14px; height: 64px; }
+
+/* ================= the playbook and the x-ray ================= */
+.essay-tv .em-xray { position: absolute; left: 96px; top: 148px; width: 1728px; }
+.essay-tv .em-xrow { display: grid; grid-template-columns: 560px 1fr; column-gap: 60px; align-items: center; min-height: 236px; border-bottom: 2px solid var(--em-hair); transition: opacity .3s; }
+.essay-tv .em-xrow.dim { opacity: .38; }
+.essay-tv .em-xword { position: relative; justify-self: start; isolation: isolate; font-size: 128px; line-height: .94; font-weight: 800; text-transform: uppercase; letter-spacing: -.01em; font-stretch: 75%; font-variation-settings: "wdth" 75, "opsz" 96; white-space: nowrap; }
+.essay-tv .em-xword .em-xhl { position: absolute; left: 0; right: 0; top: 52%; height: 38%; background: var(--em-cit); mix-blend-mode: multiply; opacity: .9; }
+.essay-tv .em-xword svg { display: inline-block; width: 150px; height: 100px; margin-left: 24px; vertical-align: middle; overflow: visible; }
+.essay-tv .em-xtext { font-size: 40px; line-height: 1.22; font-weight: 500; font-variation-settings: "wdth" 90; }
+.essay-tv .em-xtext mark { background: none; color: var(--em-cit); box-shadow: inset 0 -6px 0 var(--em-cit); padding-bottom: 2px; }
+.essay-tv .em-xcap { position: absolute; left: 96px; top: 900px; width: 1728px; }
+
+/* ---- motion ---- */
+@keyframes em-caret { 0% { opacity: 1; } 50% { opacity: 0; } }
+@keyframes em-fill { from { --em-f: 0%; } }
+@keyframes em-commit { from { --em-f: 0%; } to { --em-f: 100%; } }
+@keyframes em-ink { from { --em-f: 0%; } to { --em-f: 100%; } }
+@keyframes em-underline { from { --em-u: 0%; } to { --em-u: 100%; } }
+@keyframes em-wave { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-22px); } }
+@keyframes em-rise { from { opacity: 0; transform: translateY(8px); } }
+.essay-tv .em-rise { animation: em-rise .6s var(--em-ease) both; }
+
+/* reduced motion: every movement is a cut - the caret holds still, the ink and the underline are simply there */
+@media (prefers-reduced-motion: reduce) {
+  .essay-tv *, .essay-tv *::before, .essay-tv *::after { animation: none !important; transition: none !important; }
+  .essay-tv .is-focused > .em-caret { opacity: 1; }
+  .essay-tv .em-move.done .em-gink { --em-f: 100%; }
+  .essay-tv .em-sent .em-land { --em-u: 100%; }
+}

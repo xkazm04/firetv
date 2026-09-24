@@ -138,6 +138,85 @@ test('verdicts the model malformed never reach the screen, and never throw',asyn
   assert.deepEqual(a.verdicts,[],JSON.stringify(verdicts));
  }
 });
+// ---- the fix: how to rephrase a faulty sentence, as a named move and a pattern with [slots] - never the sentence rewritten ----
+const SIX='Many students arrive at school exhausted. Research found that the body clock shifts later. An early start therefore cuts into sleep. Of course, a lot of teenagers just stay up on their phones, so it is really their own fault. Schools that moved the start saw attendance rise. A later start is a way of teaching them when they can learn.';
+const CONCEDE={move:'Concede, then turn it back',pattern:'Although [the other side], [why your claim still holds].'};
+test('a faulty verdict keeps a valid fix, trimmed, and the verdict itself is untouched',async()=>{
+ answer=reply({verdicts:[{n:4,verdict:'faulty',note:'This argues the other side.',fix:{move:'  Concede,  then turn it back ',pattern:' Although [the other side],\n [why your claim still holds]. '}}],summary:'s'});
+ const a=await analyseEssay(SIX,'argument','essay-fix');
+ assert.equal(a.sentences.length,6);
+ assert.deepEqual(a.verdicts,[{n:4,verdict:'faulty',note:'This argues the other side.',fix:CONCEDE}],'whitespace collapses; move and pattern survive as given');
+});
+test('a fix on a strong or neutral verdict is dropped, and the verdict stays',async()=>{
+ answer=reply({verdicts:[{n:1,verdict:'strong',note:'clear side',fix:CONCEDE},{n:3,verdict:'neutral',note:'',fix:CONCEDE},{n:4,verdict:'faulty',note:'other side',fix:CONCEDE}],summary:'s'});
+ const a=await analyseEssay(SIX,'argument','essay-fix');
+ assert.deepEqual(a.verdicts.map(v=>[v.n,v.verdict,'fix' in v]),[[1,'strong',false],[3,'neutral',false],[4,'faulty',true]]);
+});
+test('a fix without a [slot] is dropped - a rewritten sentence is not a pattern',async()=>{
+ for(const pattern of [
+  'Although some teenagers do stay up on their phones, even those who switch off early are not sleepy until after midnight.',
+  'Although the other side, why your claim still holds.',
+  'Although [], [why].',
+ ]){
+  answer=reply({verdicts:[{n:4,verdict:'faulty',note:'other side',fix:{move:'Concede, then turn it back',pattern}}],summary:'s'});
+  const a=await analyseEssay(SIX,'argument','essay-fix');
+  assert.equal(a.verdicts.length,1,'the verdict is never lost with its fix');
+  assert.equal(a.verdicts[0].fix,undefined,pattern);
+  assert.equal(a.verdicts[0].note,'other side');
+ }
+});
+test('a pattern that is the learner\'s sentence around a slot, or mostly words, is dropped',async()=>{
+ for(const pattern of [
+  'Of course, a lot of teenagers just stay up on their phones, so [why your claim still holds].',
+  'Although many people think that teenagers are lazy and never go to bed on time, [why].',
+  'Although [the other side] ] [why].',
+  'Although [the other side, [why your claim still holds].',
+ ]){
+  answer=reply({verdicts:[{n:4,verdict:'faulty',note:'x',fix:{move:'Concede, then turn it back',pattern}}],summary:'s'});
+  assert.equal((await analyseEssay(SIX,'argument','essay-fix')).verdicts[0].fix,undefined,pattern);
+ }
+});
+test('a malformed fix never reaches the screen and never throws',async()=>{
+ for(const fix of [null,'Concede, then turn it back','[a], [b]',42,[CONCEDE],{move:'Concede'},{pattern:CONCEDE.pattern},{move:7,pattern:CONCEDE.pattern},{move:CONCEDE.move,pattern:['[a]']},
+  {move:'Concede',pattern:CONCEDE.pattern},{move:'One two three four five six seven',pattern:CONCEDE.pattern},{move:'Concede [then] turn',pattern:CONCEDE.pattern},
+  {move:CONCEDE.move,pattern:'Although ['+'x'.repeat(55)+'], ['+'y'.repeat(55)+'], and ['+'z'.repeat(55)+'].'}]){
+  answer=reply({verdicts:[{n:4,verdict:'faulty',note:'x',fix}],summary:'s'});
+  const a=await analyseEssay(SIX,'argument','essay-fix');
+  assert.deepEqual(a.verdicts,[{n:4,verdict:'faulty',note:'x'}],JSON.stringify(fix));
+ }
+});
+test('cleanFix is the one rule: the TV and the engine read the same shape',()=>{
+ const {cleanFix}=require(path.join(root,'src/lib/rules/essay.ts'));
+ assert.deepEqual(cleanFix(CONCEDE,'Of course, a lot of teenagers just stay up on their phones.'),CONCEDE);
+ assert.deepEqual(cleanFix({move:'Claim, then evidence',pattern:'[Your claim]. For example, [the evidence].'}),{move:'Claim, then evidence',pattern:'[Your claim]. For example, [the evidence].'},'a pattern may open on a slot');
+ assert.equal(cleanFix(undefined),undefined);
+});
+test('with no fix of its own, a faulty sentence falls back to its lens\'s playbook lesson: a named move and a slotted pattern',()=>{
+ const {PLAYBOOK,ESSAY_TYPES,playFor}=require(path.join(root,'src/lib/library/lessons.data.ts'));
+ const {cleanFix}=require(path.join(root,'src/lib/rules/essay.ts'));
+ for(const p of PLAYBOOK){
+  assert.equal(cleanFix({move:'Stand in move',pattern:p.pattern})?.pattern,p.pattern,`${p.id}: the pattern passes the rule a model's pattern must pass`);
+  const n=p.move.split(/\s+/).length;assert.ok(n>=2&&n<=7,`${p.id}: the move is named in a few words (${n}); Paragraph's is the brief's own seven`);
+ }
+ assert.equal(PLAYBOOK.find(p=>p.id==='para').move,'Claim, then evidence, then the link back','Paragraph\'s move is its own line');
+ for(const t of ESSAY_TYPES)assert.ok(PLAYBOOK.includes(playFor(t.id)),`${t.id} names a playbook lesson`);
+ assert.equal(playFor('argument').id,'thesis');assert.equal(playFor('structure').id,'para');
+ assert.equal(playFor('no-such-lens').id,'para','an unknown lens still gets a move, never an empty slot');assert.equal(playFor(null).id,'para');
+});
+test('the model is asked for a fix only on a faulty verdict, as a move and a slotted pattern, never a rewrite',async()=>{
+ seen=[];answer=reply({verdicts:[],summary:'s'});
+ await analyseEssay(THREE,'argument','essay-anon');
+ const {system,schema}=seen[0];
+ assert.match(system,/For a 'faulty' verdict only, add a fix/);
+ assert.match(system,/never their sentence rewritten/);
+ assert.match(system,/\[slot\]/);
+ assert.match(system,/No fix on strong or neutral verdicts/);
+ const item=schema.properties.verdicts.items;
+ assert.deepEqual(item.required,['n','verdict','note'],'fix is optional: a model that omits it still answers inside the schema');
+ assert.deepEqual(item.properties.fix.required,['move','pattern']);
+ assert.equal(item.properties.fix.properties.pattern.maxLength,undefined,'no length limit in the schema: an over-long fix loses the fix, not the reading');
+});
+
 test('an unknown lens falls back to the first one rather than failing the reading',async()=>{
  seen=[];answer=reply({verdicts:[],summary:'s'});
  await analyseEssay(THREE,'no-such-lens','essay-anon');
@@ -279,6 +358,20 @@ test('a reading reaches the session: the episode and the lens estimate both rehy
  assert.equal(s.history.filter(h=>h.kind==='writing').at(-1).label,'Structure');
  dispatch({type:'reset'});
  assert.equal(getSession().writing.structure.seen,1,'reset wipes the session, not the learner record');
+});
+test('essay.at walks the forensic page over sentences that exist, and a new reading starts again at its first faulty one',async()=>{
+ dispatch({type:'reset'});
+ assert.equal(getSession().essayAt,null,'a fresh desk has no sentence chosen');
+ answer=reply({verdicts:[{n:4,verdict:'faulty',note:'x',fix:CONCEDE}],summary:'s'});
+ const a=await analyseEssay(SIX,'argument',getSession().learner.id);
+ dispatch({type:'essay.set',analysis:a});
+ assert.equal(getSession().essayAt,null,'essay.set opens on the default');
+ assert.equal(getSession().essay.verdicts[0].fix.move,CONCEDE.move,'the fix rides into the session with its verdict');
+ dispatch({type:'essay.at',n:2});assert.equal(getSession().essayAt,2);
+ dispatch({type:'essay.at',n:7});assert.equal(getSession().essayAt,null,'a sentence the paragraph lacks is the default');
+ dispatch({type:'essay.at',n:5});dispatch({type:'essay.at',n:null});assert.equal(getSession().essayAt,null);
+ dispatch({type:'essay.at',n:3});dispatch({type:'essay.set',analysis:a});assert.equal(getSession().essayAt,null,'a new reading forgets the old place');
+ dispatch({type:'reset'});
 });
 test('the lens cards: one standing per lens, in the order the TV draws them',()=>{
  const empty=lensStandings([],{});

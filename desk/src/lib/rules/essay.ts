@@ -54,3 +54,36 @@ export const ANALYSIS_TYPES = [
   { id: "language", name: "Language", promise: "Sentence length, rhythm, connectors, repeated words.", lens: "Judge the writing itself: monotonous sentence length, missing connectors, repetition, vague words like 'bad' or 'important'." },
 ] as const;
 export type AnalysisType = (typeof ANALYSIS_TYPES)[number]["id"];
+
+/**
+ * How to rephrase a faulty sentence: the move (a technique, named in 2-6 words) and the pattern (a
+ * sentence frame whose content is left as [slots]). Teaching, not ghostwriting - so a "pattern" with no
+ * slot, one that is mostly literal words, or one that copies the learner's own sentence is refused.
+ */
+export interface Fix { move: string; pattern: string; }
+const SLOT = /\[[^[\]]{1,60}\]/g;
+export const FIX_LIMITS = { moveWords: [2, 6], moveChars: 48, patternChars: 160, literalWords: 10, copiedRun: 4 } as const;
+const wordsOf = (t: string) => t.toLowerCase().match(/[a-z0-9']+/g) ?? [];
+
+/** The model's `fix`, cleaned, or undefined when it is not a move and a slotted pattern. Never throws. */
+export function cleanFix(raw: unknown, sentence = ""): Fix | undefined {
+  if (!raw || typeof raw !== "object" || Array.isArray(raw)) return undefined;
+  const { move, pattern } = raw as Record<string, unknown>;
+  if (typeof move !== "string" || typeof pattern !== "string") return undefined;
+  const m = move.replace(/\s+/g, " ").trim(), p = pattern.replace(/\s+/g, " ").trim();
+  const n = m.split(" ").filter(Boolean).length;
+  if (n < FIX_LIMITS.moveWords[0] || n > FIX_LIMITS.moveWords[1] || m.length > FIX_LIMITS.moveChars || /[[\]]/.test(m)) return undefined;
+  if (p.length > FIX_LIMITS.patternChars || !(p.match(SLOT) ?? []).length) return undefined;
+  // brackets only as whole slots; the words around the slots are a frame, not a sentence
+  const literal = p.replace(SLOT, " ");
+  if (/[[\]]/.test(literal)) return undefined;
+  const lit = wordsOf(literal);
+  if (lit.length > FIX_LIMITS.literalWords) return undefined;
+  // a run of the learner's own words in the frame is their sentence rewritten around a slot
+  const own = wordsOf(sentence), k = FIX_LIMITS.copiedRun;
+  if (own.length >= k) {
+    const runs = new Set(own.slice(0, own.length - k + 1).map((_, i) => own.slice(i, i + k).join(" ")));
+    for (let i = 0; i + k <= lit.length; i++) if (runs.has(lit.slice(i, i + k).join(" "))) return undefined;
+  }
+  return { move: m, pattern: p };
+}

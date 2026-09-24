@@ -8,7 +8,8 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { useSession, call } from "@/tv/useSession";
 import type { Session } from "@/lib/session/store";
 import * as S from "@/tv/screens";
-import { keyOf, lingaOwns, runStep, tvKey, LOCAL, type Local } from "@/tv/keys";
+import { EssayTV } from "@/essay/EssayTV";
+import { essayOwns, keyOf, lingaOwns, runStep, tvKey, LOCAL, type Local } from "@/tv/keys";
 import { LingaTV } from "@/english/LingaTV";
 import { LingaTestBar } from "@/english/LingaTestBar";
 
@@ -99,15 +100,18 @@ export default function TV() {
       {testBar && s && lingaOwns(s) && <LingaTestBar s={s} />}
       <div className="frame" ref={frame}>
         <div className="stage" ref={stage} tabIndex={0}>
-          <div className="grid" />
-          <div className="safe">{s ? lingaOwns(s) ? <LingaTV s={s} post={post} voice={voice}/> : <ScreenFor s={s} table={loc.table} busy={loc.busy} /> : null}</div>
+          {/* Essay Master is its own app (Specimen): the whole stage, no On Air grid or band; it keeps the 5% margins itself */}
+          {s && essayOwns(s) ? <EssayTV s={s} table={loc.table} /> : <>
+            <div className="grid" />
+            <div className="safe">{s ? lingaOwns(s) ? <LingaTV s={s} post={post} voice={voice}/> : <ScreenFor s={s} busy={loc.busy} /> : null}</div>
+          </>}
         </div>
       </div>
     </div>
   );
 }
 
-function ScreenFor({ s, table, busy }: { s: Session; table: boolean; busy: boolean }) {
+function ScreenFor({ s, busy }: { s: Session; busy: boolean }) {
   const f = s.focus;
   switch (s.screen) {
     case "landing": return <S.Landing s={s} focus={f} />;
@@ -123,10 +127,6 @@ function ScreenFor({ s, table, busy }: { s: Session; table: boolean; busy: boole
     case "lesson": return <S.LessonScreen s={s} />;
     case "sentence": return <S.SentenceScreen s={s} focus={f} />;
     case "headtohead": return <S.HeadToHead s={s} />;
-    case "essaytype": return <S.EssayType s={s} focus={f} />;
-    case "forensic": return <S.Forensic s={s} table={table} />;
-    case "playbook": return <S.Playbook s={s} focus={f} />;
-    case "xray": return <S.Xray s={s} />;
     case "break": return <S.BreakScreen s={s} />;
     case "recap": return <S.Recap s={s} focus={f} />;
     case "topics": return <S.Topics s={s} focus={f} busy={busy} />;
