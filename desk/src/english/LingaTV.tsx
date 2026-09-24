@@ -125,7 +125,7 @@ function artFor(h:Hero,s:Session):ArtKey{
 }
 
 /** A title in Georgia, one size smaller for each step in length so it never takes a third line. */
-function Title({text}:{text:string}){return <h1 className="lo-title" data-role="linga-title" data-size={text.length<=18?"l":text.length<=34?"m":"s"}>{text}</h1>;}
+function Title({text}:{text:string}){return <h1 className="lo-title" data-role="linga-title" data-size={text.length<=34?"l":text.length<=50?"m":"s"}>{text}</h1>;}
 
 /** The words beside the arch, in the order the eye takes them: where, what, the caption, then what it holds. */
 function Body({v,s,caption}:{v:LingaView;s:Session;caption:React.ReactNode}){
