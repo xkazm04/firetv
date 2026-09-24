@@ -37,7 +37,22 @@ export function lingaOwns(s: Session): boolean {
   return s.screen.startsWith("linga") || (s.screen === "tonight" && s.subject === "english");
 }
 
-// ---- the stop lists: one per screen, drawn by screens.tsx and walked by tvKey ----
+/** Math Buddy's own screens, whatever the subject says: its home and the practice loop, and the calendar of its lessons. */
+export const MATHS_SCREENS = ["tonight", "topics", "practice", "sheet", "walk", "calendar"] as const satisfies readonly Screen[];
+/**
+ * Math Buddy draws its screens (maths/MathsTV.tsx, the Lamplight design): its own, and the screens it shares
+ * with the other modules while maths is what is on them - a maths page and its hint, the maths units and lesson.
+ * Linga's Tonight stays Linga's. The keymap is the same either way; only who draws the screen changes.
+ */
+export function mathsOwns(s: Session): boolean {
+  if (lingaOwns(s)) return false;
+  if ((MATHS_SCREENS as readonly Screen[]).includes(s.screen)) return true;
+  if (s.screen === "page" || s.screen === "hint") return (s.pages[s.pageIx]?.subject ?? s.subject) === "maths";
+  if (s.screen === "units" || s.screen === "lesson") return s.subject === "maths";
+  return false;
+}
+
+// ---- the stop lists: one per screen, drawn by the module screens and walked by tvKey ----
 const clampIx = (n: number, f: number) => Math.max(0, Math.min(n - 1, f));
 /** The stop the focus is on; a focus past the end is the last stop. */
 export function stopAt<T>(stops: readonly T[], f: number): T | undefined { return stops.length ? stops[clampIx(stops.length, f)] : undefined; }

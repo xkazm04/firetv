@@ -41,7 +41,7 @@ test('case 1: Tonight has one stop list - continue card, homework, teach - and S
  assert.deepEqual(tvKey(withCont,'select',LOCAL).events,[{type:'subject',subject:'maths'},{type:'nav',screen:'topics',focus:0}]);
  assert.deepEqual(tvKey(session({screen:'tonight',focus:1}),'select',LOCAL).events,[{type:'subject',subject:'maths'},{type:'nav',screen:'topics',focus:0}]);
  assert.deepEqual(tvKey(session({screen:'tonight',pages:[page()],focus:0}),'select',LOCAL).events,[{type:'subject',subject:'maths'},{type:'page.select',pageIx:0},{type:'nav',screen:'page',focus:0}],'the continue card opens the sheet it names');
- const tonight=fs.readFileSync(path.join(root,'src/tv/screens.tsx'),'utf8').split('export function Tonight')[1].split('\nexport function')[0];
+ const tonight=fs.readFileSync(path.join(root,'src/maths/MathsTV.tsx'),'utf8').split('export function Tonight')[1].split('\nexport function')[0];
  assert.match(tonight,/tonightStops\(s\)/,'Tonight renders from the same stop list');
  assert.doesNotMatch(tonight,/const off = /,'Tonight no longer re-derives the continue offset');
 });
@@ -108,6 +108,23 @@ test('case 6: keyOf maps the keyboard to the remote, and Play is the clock excep
  }
  assert.deepEqual(tvKey(session({screen:'lesson',lessonPaused:false,lesson:{id:'l',title:'L',t:0,text:'',why:''}}),'play',LOCAL).events,[{type:'lesson.pause',paused:true}]);
  assert.deepEqual(tvKey(session({screen:'lesson',lessonPaused:true,lesson:{id:'l',title:'L',t:0,text:'',why:''}}),'play',LOCAL).events,[{type:'lesson.pause',paused:false}]);
+});
+
+test('maths 1: mathsOwns names Math Buddy\'s screens, the shared ones only while maths is on them, and the TV routes them to their own module',()=>{
+ const {mathsOwns,lingaOwns,essayOwns,MATHS_SCREENS}=keys();
+ assert.deepEqual([...MATHS_SCREENS],['tonight','topics','practice','sheet','walk','calendar']);
+ for(const screen of SCREENS)for(const subject of ['maths','english','essay']){
+  const s=session({screen,subject,pages:[page(subject)]});
+  const want=!lingaOwns(s)&&(MATHS_SCREENS.includes(screen)||(['page','hint','units','lesson'].includes(screen)&&subject==='maths'));
+  assert.equal(mathsOwns(s),want,`${screen}/${subject}`);
+  assert.ok(!(mathsOwns(s)&&(lingaOwns(s)||essayOwns(s))),`${screen}/${subject} has one owner`);
+ }
+ assert.equal(mathsOwns(session({screen:'page',subject:'english',pages:[page('maths')]})),true,'the page decides a page screen, not the subject');
+ for(const screen of ['landing','pair','joined','learner','profile','break','recap'])assert.equal(mathsOwns(session({screen})),false,`${screen} stays in the shell`);
+ const tv=fs.readFileSync(path.join(root,'src/app/tv/page.tsx'),'utf8');
+ assert.match(tv,/mathsOwns\(s\)/,'page.tsx asks the keymap');assert.match(tv,/@\/maths\/MathsTV/);
+ const screens=fs.readFileSync(path.join(root,'src/tv/screens.tsx'),'utf8');
+ for(const n of ['Tonight','Topics','PracticeScreen','Sheet','Walk','Calendar'])assert.doesNotMatch(screens,new RegExp(`export function ${n}\\b`),`${n} left the shared screens`);
 });
 
 // ---- Essay Master (essay/EssayTV.tsx): the lens home, one sentence at a time, the playbook, the x-ray ----

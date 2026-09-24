@@ -9,7 +9,8 @@ import { useSession, call } from "@/tv/useSession";
 import type { Session } from "@/lib/session/store";
 import * as S from "@/tv/screens";
 import { EssayTV } from "@/essay/EssayTV";
-import { essayOwns, keyOf, lingaOwns, runStep, tvKey, LOCAL, type Local } from "@/tv/keys";
+import { essayOwns, keyOf, lingaOwns, mathsOwns, runStep, tvKey, LOCAL, type Local } from "@/tv/keys";
+import { MathsTV } from "@/maths/MathsTV";
 import { LingaTV } from "@/english/LingaTV";
 import { LingaTestBar } from "@/english/LingaTestBar";
 
@@ -111,17 +112,17 @@ export default function TV() {
   );
 }
 
+/** The shell's screens (On Air). Math Buddy's are routed to MathsTV before this is asked (tv/keys.ts `mathsOwns`). */
 function ScreenFor({ s, busy }: { s: Session; busy: boolean }) {
   const f = s.focus;
+  if (mathsOwns(s)) return <MathsTV s={s} busy={busy} />;
   switch (s.screen) {
     case "landing": return <S.Landing s={s} focus={f} />;
     case "pair": return <S.Pair s={s} />;
     case "joined": return <S.Joined s={s} />;
-    case "tonight": return <S.Tonight s={s} focus={f} />;
     case "learner": return <S.Learner s={s} focus={f} />;
     case "profile": return <S.ProfileScreen s={s} focus={f} />;
     case "units": return <S.Units s={s} focus={f} />;
-    case "calendar": return <S.Calendar s={s} focus={f} />;
     case "page": return <S.PageScreen s={s} view={s.view} />;
     case "hint": return <S.HintScreen s={s} focus={f} />;
     case "lesson": return <S.LessonScreen s={s} />;
@@ -129,9 +130,6 @@ function ScreenFor({ s, busy }: { s: Session; busy: boolean }) {
     case "headtohead": return <S.HeadToHead s={s} />;
     case "break": return <S.BreakScreen s={s} />;
     case "recap": return <S.Recap s={s} focus={f} />;
-    case "topics": return <S.Topics s={s} focus={f} busy={busy} />;
-    case "practice": return <S.PracticeScreen s={s} />;
-    case "sheet": return <S.Sheet s={s} focus={f} />;
-    case "walk": return <S.Walk s={s} focus={f} />;
+    default: return null;
   }
 }
