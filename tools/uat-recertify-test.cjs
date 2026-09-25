@@ -33,9 +33,12 @@ registry.useProvider('text', { name: 'stub', run: async () => { calls.tutor++; t
 const codex = require(path.join(root, 'src/lib/engines/codex.ts'));
 codex.codexCli.run = async () => { throw new Error('codex must never be launched by this suite'); };
 const seen = [];
+// a queued judge reply goes through the engine's own shape rule (shape.ts answer()), as codex's answer does live:
+// an answer the request's shape rejects throws here exactly as it would in a run
+const shape = require(path.join(root, 'src/lib/engines/shape.ts'));
 codex.codexText = async req => {
   calls.codex++; seen.push(req);
-  if (req.schema?.required?.includes('verdict') && judgeReplies.length) return { json: judgeReplies.shift(), provider: 'stub', raw: '' };
+  if (req.schema?.required?.includes('verdict') && judgeReplies.length) { const reply = judgeReplies.shift(); return shape.answer({ name: 'stub', run: async () => ({ raw: JSON.stringify(reply), provider: 'stub' }) }, req); }
   throw new Error('stub: no reply queued for this call');
 };
 after(() => {
@@ -252,4 +255,34 @@ test('case 7a (guard): a well-formed prior[] answer, one row per id, is taken as
   assert.equal(R().priorStatuses(IDS, jd.prior)['P-2'].finding, 0);
   assert.equal(D().judgeRequest(rec, CTX).schema.properties.prior.minItems, 3, 'codex is asked for one row per id');
   assert.equal(D().judgeRequest(rec, CTX).schema.properties.prior.maxItems, 3);
+});
+test('case 7: prior[] is checked in code: a missing, duplicated or unknown id, or no array at all, is not-evaluable for that id and never throws the pair', async () => {
+  const ids = IDS, rec = priorRecord(ids), judged = judgedAs(rec), statuses = jd => statusesOf(ids, jd);
+
+  // a missing id: that id is not-evaluable, the rest stand
+  assert.deepEqual(statuses(await judged([row('P-1', 'not-seen'), row('P-2', 'recurs', 0)])), { 'P-1': 'not-seen', 'P-2': 'recurs', 'P-3': 'not-evaluable' });
+  // a duplicated id: answered twice is not answered once, so it proves nothing either way
+  assert.deepEqual(statuses(await judged([row('P-1', 'recurs', 0), row('P-1', 'not-seen'), row('P-2', 'not-seen'), row('P-3', 'not-seen')])), { 'P-1': 'not-evaluable', 'P-2': 'not-seen', 'P-3': 'not-seen' });
+  // an id the judge was never shown is dropped, and stamps nothing
+  const extra = R().priorStatuses(ids, (await judged([row('P-1', 'not-seen'), row('P-2', 'not-seen'), row('P-3', 'recurs', 0), row('P-9', 'not-seen')])).prior, { endedBy: 'done' });
+  assert.deepEqual(Object.keys(extra).sort(), ids);
+  // no prior[] at all, or not an array: every id is not-evaluable
+  for (const bad of [undefined, { id: 'P-1', status: 'not-seen' }, 'P-1 not-seen', null]) {
+    assert.deepEqual(statuses(await judged(bad)), { 'P-1': 'not-evaluable', 'P-2': 'not-evaluable', 'P-3': 'not-evaluable' }, `prior ${JSON.stringify(bad)}`);
+  }
+  // a row with a status outside the three, or a non-integer finding
+  const odd = R().priorStatuses(ids, [row('P-1', 'fixed'), { id: 'P-2', status: 'recurs', evidence: 3, finding: '0' }, row('P-3', 'not-seen')], { endedBy: 'done' });
+  assert.equal(odd['P-1'].status, 'not-evaluable'); assert.equal(odd['P-2'].status, 'recurs'); assert.equal(odd['P-2'].finding, -1); assert.equal(odd['P-3'].status, 'not-seen');
+});
+test('case 7b: a duplicated recurs row cannot carry one prior finding forward twice in the rerun\'s findings.json', async () => {
+  const dir = path.join(tmp, `dup-${crypto.randomUUID().slice(0, 8)}`); fs.mkdirSync(dir, { recursive: true });
+  const rec = priorRecord(['P-1']);
+  rec.prior[0].recurrence = 1;
+  judgeReplies.push({ ...JUDGED, findings: [stubFinding({ title: 'one' }), stubFinding({ title: 'two' })], prior: [row('P-1', 'recurs', 0), row('P-1', 'recurs', 1)] });
+  rec.judge = await D().judgeJourney(rec, CTX);
+  const result = { character: 'x', name: 'X', trueBand: 'A1', engine: 'stub', journeys: [{ ...rec, id: 'J0', ms: 0 }], calls: {} };
+  await D().synthesize(dir, 'dup', [result], [], 0);
+  const fresh = readJson(path.join(dir, 'findings.json'));
+  assert.equal(fresh.length, 2);
+  assert.equal(fresh.filter(f => f.recurs).length, 0, 'P-1 answered twice is not-evaluable, so neither fresh finding restates it');
 });

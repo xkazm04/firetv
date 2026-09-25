@@ -89,10 +89,20 @@ timeSaved.minutes: against the Character's traditional way for this journey's jo
 voice: a candid first-person review in the Character's voice and background (at most 180 words, English, a word of their own language allowed): would I use it again, what delighted or frustrated me, do I trust the level and the corrections, is it worth the waits, what is missing for my job, would I tell someone.`;
 const priorRule = `
 This is a recertification. "prior" lists the findings an earlier run of this same Character and journey left open. Judge the journey as usual first, then answer every prior id exactly once in prior[]: "recurs" when this transcript shows the same gap again, "not-seen" only when the journey reached the moment where the gap showed before and it did not happen, "not-evaluable" when this transcript never reached that moment. evidence: the step numbers and a quote. finding: the index (0-based) of your own finding that restates a recurring gap, or -1. Report a recurring gap in findings too, so its evidence is current.`;
+/**
+ * What a recertify pair's answer is held to: the asked shape except prior[], which is not checked here at all. Codex is
+ * asked for one row per id (minItems = maxItems; a live smoke on 25 Sep 2026 accepted the keywords), but an answer
+ * that misses, repeats or invents an id must not throw the pair: recertify.cjs priorStatuses() checks it id by id,
+ * and whatever is not answered exactly once is not-evaluable.
+ */
+function judgeAccept(ids) {
+  const s = judgeSchema(ids);
+  return { ...s, required: s.required.filter(k => k !== 'prior'), properties: { ...s.properties, prior: {} } };
+}
 /** One journey's judge request: the payload, the system prompt and the schema, with prior[] only for a recertify pair. */
 function judgeRequest(record, ctx) {
   const ids = (record.prior ?? []).map(p => p.id);
-  return { effort: process.env.UAT_JUDGE_EFFORT || 'high', timeoutMs: 600000, system: judgeSystem + (ids.length ? priorRule : ''), prompt: JSON.stringify(judgePayload(record, ctx)), schema: judgeSchema(ids) };
+  return { effort: process.env.UAT_JUDGE_EFFORT || 'high', timeoutMs: 600000, system: judgeSystem + (ids.length ? priorRule : ''), prompt: JSON.stringify(judgePayload(record, ctx)), schema: judgeSchema(ids), ...(ids.length ? { accept: judgeAccept(ids) } : {}) };
 }
 /** Judges one journey; `call` is the child's counted codex role, codexText itself by default. */
 async function judgeJourney(record, ctx, call = req => loadDesk().codex.codexText(req)) {
@@ -195,10 +205,11 @@ async function synthesize(dir, id, results, cast, ms) {
       const passed = jd ? jd.criteria.filter(c => c.result === 'pass').length : 0, applicable = jd ? jd.criteria.filter(c => c.result !== 'n-a').length : 0;
       rows.push({ who: r.character, j: j.id, verdict: jd?.verdict ?? (j.error ? 'error' : 'unjudged'), criteria: `${passed}/${applicable}`, placement: j.facts?.placement ? `${j.facts.placement.band} vs ${j.facts.placement.trueBand} · ${j.facts.placement.class}` : '', pitch: m && (m.pitch.at + m.pitch.below + m.pitch.above) ? `${m.pitch.at}/${m.pitch.at + m.pitch.below + m.pitch.above}` : '', moments: m && m.moments.total ? `${m.moments.correctUseful}/${m.moments.total}` : '', breaches: m?.boundaries.breaches ?? '', steps: j.steps.length, minutes: +(j.ms / 60000).toFixed(1), ended: j.endedBy });
       // a recertify pair: the judge names which of its findings restates a prior open one; that one carries it forward
-      const linked = new Map();
-      for (const p of jd?.prior ?? []) {
-        const was = (j.prior ?? []).find(x => x.id === p.id);
-        if (p.status === 'recurs' && was && Number.isInteger(p.finding) && jd.findings[p.finding]?.type !== 'strength' && !linked.has(p.finding)) linked.set(p.finding, was);
+      // (the answer is read through priorStatuses, so an id answered twice links nothing)
+      const linked = new Map(), answered = jd ? require('./recertify.cjs').priorStatuses((j.prior ?? []).map(x => x.id), jd.prior) : {};
+      for (const was of j.prior ?? []) {
+        const p = answered[was.id];
+        if (p?.status === 'recurs' && p.finding >= 0 && jd.findings[p.finding]?.type !== 'strength' && !linked.has(p.finding)) linked.set(p.finding, was);
       }
       (jd?.findings ?? []).forEach((f, i) => {
         const s = severity(f), was = linked.get(i);
@@ -429,7 +440,7 @@ If the screen looks broken or confusing, react as this person would: retry, go b
     try {
       const judged = await judgeJourney(record, { character: { file: character.text, sim: C }, journey: J[jid].text, rubric }, req => role('judge', req));
       record.judge = judged;
-      say(`${jid} judged: ${judged.verdict} · ${judged.criteria.filter(c => c.result === 'pass').length}/${judged.criteria.filter(c => c.result !== 'n-a').length} criteria${judged.prior ? ` · prior ${judged.prior.map(p => `${p.id} ${p.status}`).join(', ')}` : ''}`);
+      say(`${jid} judged: ${judged.verdict} · ${judged.criteria.filter(c => c.result === 'pass').length}/${judged.criteria.filter(c => c.result !== 'n-a').length} criteria${Array.isArray(judged.prior) ? ` · prior ${judged.prior.map(p => `${p?.id} ${p?.status}`).join(', ')}` : ''}`);
     } catch (e) { record.judgeError = String(e.message).slice(0, 300); say(`${jid} judge failed: ${e.message.slice(0, 120)}`); }
     result.journeys.push(record);
     save();

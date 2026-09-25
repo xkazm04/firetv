@@ -146,15 +146,18 @@ function confounds(before, after) {
 // ---------------------------------------------------------------- write-back
 const STATUSES = ['recurs', 'not-seen', 'not-evaluable'];
 /**
- * The judge's answer for each prior id it was shown; an id it left out is not-evaluable, an id answered twice keeps its
- * first answer. Code decides what counts as fixed: not-seen is only taken from a journey that reached its end
+ * The judge's answer for each prior id it was shown, checked here rather than by the schema (linga-text.cjs judgeAccept):
+ * every id must be answered exactly once. An id it left out, answered with a status outside the three, or answered
+ * more than once is not-evaluable; an id it was never shown is dropped; a prior[] that is not an array answers nothing.
+ * Code decides what counts as fixed: not-seen is only taken from a journey that reached its end
  * (endedBy 'done'); a journey that crashed, stalled or was abandoned never saw the moment, so it is not-evaluable.
  */
 function priorStatuses(ids, rows = [], { endedBy } = {}) {
-  const out = {};
+  const out = {}, all = Array.isArray(rows) ? rows.filter(r => r && typeof r === 'object') : [];
   for (const id of ids) {
-    const row = (rows ?? []).find(r => r && r.id === id && STATUSES.includes(r.status));
-    out[id] = !row ? { status: 'not-evaluable', evidence: 'the judge gave no row for this finding', finding: -1 }
+    const mine = all.filter(r => r.id === id), row = mine.length === 1 && STATUSES.includes(mine[0].status) ? mine[0] : null;
+    out[id] = mine.length > 1 ? { status: 'not-evaluable', evidence: `the judge answered this finding ${mine.length} times, not once`, finding: -1 }
+      : !row ? { status: 'not-evaluable', evidence: mine.length ? `the judge's status ${JSON.stringify(mine[0].status)} is not one of ${STATUSES.join('|')}` : 'the judge gave no row for this finding', finding: -1 }
       : row.status === 'not-seen' && endedBy !== undefined && endedBy !== 'done' ? { status: 'not-evaluable', evidence: `the journey ended ${endedBy}, so not seeing it proves nothing; judge: ${String(row.evidence ?? '')}`, finding: -1 }
       : { status: row.status, evidence: String(row.evidence ?? ''), finding: Number.isInteger(row.finding) ? row.finding : -1 };
   }
