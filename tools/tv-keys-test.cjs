@@ -198,6 +198,22 @@ test('essay 4: Left/Right walk the four actions, and each action does its one th
  assert.deepEqual(tvKey(f(2),'back',LOCAL).events,[{type:'nav',screen:'essaytype',focus:1}]);
 });
 
+test('essay 4b: a rewrite that holds hands focus to Next sentence while another sentence is faulty; one still faulty keeps it on Rewrite',()=>{
+ const {focusAfterRewrite,FORENSIC_STOPS}=keys();
+ const fix={move:'Concede, then turn it back',pattern:'Although [the other side], [why your claim still holds].'};
+ const was={text:'Some people say early starts teach discipline.',verdict:'faulty',fix};
+ const after=(v4,v6)=>reading([{n:1,verdict:'strong',note:'clear'},{n:4,note:'x',was,...v4},{n:6,verdict:'faulty',note:'x',...v6}]);
+ const next=FORENSIC_STOPS.indexOf('next');
+ assert.equal(focusAfterRewrite(after({verdict:'strong'}),4,0),next,'holds, sentence 6 still faulty: Next sentence');
+ assert.equal(focusAfterRewrite(after({verdict:'neutral'}),4,0),next,'a neutral re-reading holds too');
+ assert.equal(focusAfterRewrite(after({verdict:'faulty',fix}),4,0),0,'still faulty: focus stays on Rewrite');
+ assert.equal(focusAfterRewrite(after({verdict:'strong'},{verdict:'strong'}),4,0),0,'holds but nothing else faulty: focus stays');
+ assert.equal(focusAfterRewrite(after({verdict:'strong'},{verdict:'strong'}),4,3),3,'... wherever it was');
+ assert.equal(focusAfterRewrite(reading(SIXV),4,1),1,'no rewrite yet (no was): unchanged');
+ const store=fs.readFileSync(path.join(root,'src/lib/session/store.ts'),'utf8');
+ assert.match(store,/case "essay\.revised":[^\n]*\n\s+n\.focus = focusAfterRewrite\(e\.analysis, e\.n, s\.screen === "forensic" \? s\.focus : 0\)/,'the essay.revised reducer moves focus through the keymap\'s rule');
+});
+
 test('essay 5: Menu is the table; there Up/Down still walk, Select or Back close it, Left/Right do nothing',()=>{
  const {tvKey}=keys();
  const s=essay({screen:'forensic',focus:1}),T={...LOCAL,table:true};

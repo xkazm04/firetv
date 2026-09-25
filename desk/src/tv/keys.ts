@@ -6,7 +6,8 @@
  * list from here, so the screen that draws `data-focused` and the key that moves it share one list.
  * Types only from the store: the TV never loads the filesystem-backed session modules.
  */
-import type { Event, JobKind, Profile, Screen, Session, Subject } from "@/lib/session/store";
+import type { EssayAnalysis, Event, JobKind, Profile, Screen, Session, Subject } from "@/lib/session/store";
+import { rewriteState } from "@/lib/rules/essay";
 import { LESSONS, ESSAY_TYPES, PLAYBOOK, playFor, type Lesson } from "@/lib/library/lessons.data";
 import { SYLLABUS, type Topic } from "@/lib/library/syllabus";
 import { profileRows, locate, flat } from "@/tv/profileRows";
@@ -97,6 +98,14 @@ export function forensicAt(s: Session): number {
   if (chosen >= 0) return chosen;
   const faulty = new Set(a.verdicts.filter((v) => v.verdict === "faulty").map((v) => v.n));
   return Math.max(0, a.sentences.findIndex((x) => faulty.has(x.n)));
+}
+/**
+ * Where the forensic page's focus lands when a rewrite of sentence `n` comes back (essay.revised), from `focus`:
+ * on Next sentence when the rewrite holds and another sentence is still faulty - this one is done; else it stays.
+ */
+export function focusAfterRewrite(a: EssayAnalysis, n: number, focus: number): number {
+  const more = a.verdicts.some((v) => v.n !== n && v.verdict === "faulty");
+  return rewriteState(a.verdicts.find((v) => v.n === n)) === "holds" && more ? FORENSIC_STOPS.indexOf("next") : focus;
 }
 /** What Rewrite on my phone puts on the status line; the page inks the move while it is the status. */
 export const rewriteStatus = (n: number) => `sentence ${n}: rewrite it in your own words on the phone's Essay tab, then analyse again`;

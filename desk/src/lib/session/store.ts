@@ -10,6 +10,7 @@ import { networkInterfaces } from "node:os";
 import { AGE_RANGE } from "@/tv/profileRows";
 import { firstToLook } from "@/tv/sheetRows";
 import { LANDING_REST } from "@/tv/landingRows";
+import { focusAfterRewrite } from "@/tv/keys";
 import path from "node:path";
 import { getLearner, saveLearner, type HistoryEntry, type SkillRecord } from "./learners";
 import { SYLLABUS } from "../library/syllabus";
@@ -242,8 +243,10 @@ export function reduce(s: Session, e: Event): Session {
     case "essay.type": n.essayType = e.essayType; break;
     // a new reading opens on its first faulty sentence; essay.at walks the paragraph (a number it does not have is the default)
     case "essay.set": n.essay = e.analysis; n.essayAt = null; n.screen = "forensic"; n.subject = "essay"; n.focus = 0; break;
-    // one sentence rewritten in place (POST /api/analyse kind 'rewrite'): the TV stays on it, on its forensic page
-    case "essay.revised": n.essay = e.analysis; n.essayAt = e.analysis.sentences.some((x) => x.n === e.n) ? e.n : null; n.subject = "essay"; if (s.screen !== "forensic") { n.screen = "forensic"; n.focus = 0; } break;
+    // one sentence rewritten in place (POST /api/analyse kind 'rewrite'): the TV stays on it, on its forensic page;
+    // a rewrite that holds, with another sentence still faulty, hands focus to Next sentence (tv/keys focusAfterRewrite)
+    case "essay.revised": n.essay = e.analysis; n.essayAt = e.analysis.sentences.some((x) => x.n === e.n) ? e.n : null; n.subject = "essay";
+      n.focus = focusAfterRewrite(e.analysis, e.n, s.screen === "forensic" ? s.focus : 0); n.screen = "forensic"; break;
     case "essay.at": n.essayAt = e.n !== null && s.essay?.sentences.some((x) => x.n === e.n) ? e.n : null; break;
     case "task.add": n.tasks = [...s.tasks, { id: "t" + Date.now(), sub: e.sub, name: e.name, min: e.min, done: false }]; break;
     case "task.done": n.tasks = s.tasks.map((t) => (t.id === e.id ? { ...t, done: e.done } : t)); break;
