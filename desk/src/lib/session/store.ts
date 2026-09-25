@@ -15,7 +15,7 @@ import { getLearner, saveLearner, type HistoryEntry, type SkillRecord } from "./
 import { SYLLABUS } from "../library/syllabus";
 import type { RuleCard } from "../rules/english";
 import { restatedLine } from "../rules/maths";
-import type { Fix, Sentence } from "../rules/essay";
+import type { Fix, Sentence, Was } from "../rules/essay";
 import { emptyEnglish, type Conversation, type EnglishLearning, type LevelCheck } from "../english/types";
 
 export type Subject = "maths" | "english" | "essay";
@@ -103,8 +103,11 @@ function settled(jobs: unknown): Jobs {
   return out;
 }
 
-/** One sentence's reading. `fix` (the move and a slotted pattern) only ever rides on a faulty verdict; older sessions have none. */
-export interface Verdict { n: number; verdict: "strong" | "faulty" | "neutral"; note: string; fix?: Fix; }
+/**
+ * One sentence's reading. `fix` (the move and a slotted pattern) only ever rides on a faulty verdict; older sessions have none.
+ * `was` is set only by a rewrite of this sentence (essay.revised): the sentence as first read, its verdict and the fix it was taught.
+ */
+export interface Verdict { n: number; verdict: "strong" | "faulty" | "neutral"; note: string; fix?: Fix; was?: Was; }
 export interface EssayAnalysis { text: string; type: string; sentences: Sentence[]; stats: Record<string, number>; verdicts: Verdict[]; summary: string; provider?: string; }
 
 export interface Session {
@@ -151,6 +154,7 @@ export type Event =
   | { type: "hint.set"; hint: Hint } | { type: "hint.stage"; stage: 1 | 2 }
   | { type: "lesson.set"; lesson: LessonPick | null; key?: string } | { type: "lesson.pause"; paused: boolean }
   | { type: "english.set"; analysis: EnglishAnalysis } | { type: "essay.type"; essayType: string } | { type: "essay.set"; analysis: EssayAnalysis } | { type: "essay.at"; n: number | null }
+  | { type: "essay.revised"; analysis: EssayAnalysis; n: number }
   | { type: "task.add"; name: string; sub: Subject; min: number } | { type: "task.done"; id: string; done: boolean }
   | { type: "timer.start" } | { type: "timer.pause" } | { type: "timer.tick"; seconds: number } | { type: "timer.skipbreak" }
   | { type: "topic.open"; topic: string }
@@ -238,6 +242,8 @@ export function reduce(s: Session, e: Event): Session {
     case "essay.type": n.essayType = e.essayType; break;
     // a new reading opens on its first faulty sentence; essay.at walks the paragraph (a number it does not have is the default)
     case "essay.set": n.essay = e.analysis; n.essayAt = null; n.screen = "forensic"; n.subject = "essay"; n.focus = 0; break;
+    // one sentence rewritten in place (POST /api/analyse kind 'rewrite'): the TV stays on it, on its forensic page
+    case "essay.revised": n.essay = e.analysis; n.essayAt = e.analysis.sentences.some((x) => x.n === e.n) ? e.n : null; n.subject = "essay"; if (s.screen !== "forensic") { n.screen = "forensic"; n.focus = 0; } break;
     case "essay.at": n.essayAt = e.n !== null && s.essay?.sentences.some((x) => x.n === e.n) ? e.n : null; break;
     case "task.add": n.tasks = [...s.tasks, { id: "t" + Date.now(), sub: e.sub, name: e.name, min: e.min, done: false }]; break;
     case "task.done": n.tasks = s.tasks.map((t) => (t.id === e.id ? { ...t, done: e.done } : t)); break;

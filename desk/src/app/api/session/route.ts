@@ -17,6 +17,7 @@ const SERVER_ONLY: Partial<Record<Event["type"], string>> = {
   "page.reading": "Send the page to /api/read.", "page.read": "Send the page to /api/read.",
   "hint.set": "Ask for a hint on /api/hint.", "hint.stage": "Ask for a hint on /api/hint.",
   "english.set": "Send the sentence to /api/analyse.", "essay.set": "Send the essay to /api/analyse.",
+  "essay.revised": "Send the rewritten sentence to /api/analyse.",
 };
 
 /**
