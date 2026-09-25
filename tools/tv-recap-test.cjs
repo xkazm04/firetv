@@ -4,7 +4,8 @@
  * counts, and the recap's keys end the evening from the landing (Menu), open what a tile names and go back to the
  * desk at rest. Run with npm test in desk/ (directly: node tools/tv-recap-test.cjs). The store writes to a scratch
  * DESK_DATA_DIR under the OS temp dir, never desk/data. The follow-ups open the recap the way the TV does, through
- * /api/memory with the text engine stubbed at the provider registry - no model is called.
+ * /api/memory with the text engine stubbed at the provider registry - no model is called - and scan the shell's and
+ * the module screens' imports for cycles.
  */
 const fs=require('node:fs'),os=require('node:os'),path=require('node:path'),assert=require('node:assert/strict'),Module=require('node:module');
 const {test,after}=require('node:test');
@@ -185,7 +186,7 @@ test('extra: the recap rows stay free of the filesystem-backed session modules',
  assert.doesNotMatch(out,/require\([^)]*lib\/session\/(store|learners)/);
 });
 
-// ---- follow-up 2026-09-25 (tv-recap): the recap draws without the model, and asks it at most once an evening
+// ---- follow-up 2026-09-25 (tv-recap): the recap draws without the model, and asks it at most once an evening; the shell and the modules import no cycle
 require.extensions['.tsx']=(mod,file)=>mod._compile(ts.transpileModule(fs.readFileSync(file,'utf8'),{compilerOptions:{...opts.compilerOptions,jsx:ts.JsxEmit.ReactJSX}}).outputText,file);
 // next/font runs only under Next: here each face module answers with its class names
 for(const [f,e] of [['maths/fonts.ts',{MATHS_FONTS:'maths-fonts'}],['essay/fonts.ts',{ESSAY_FONTS:'essay-fonts'}],['landing/fonts.ts',{DESK_FONTS:'desk-fonts'}]]){
@@ -274,4 +275,45 @@ test('GUARD: the recap\'s tiles are drawn exactly as before - Ema\'s evening and
  const hash=(x)=>require('node:crypto').createHash('sha256').update(x).digest('hex').slice(0,16);
  assert.equal(hash(draw(evening(),NOW)),GOLDEN.ema);
  assert.equal(hash(draw(jakub(),NOW)),GOLDEN.jakub);
+});
+
+/** Every static import and re-export among `files`, as edges. Comments never count: the parser skips them. */
+function importGraph(files,read){
+ const g=new Map(files.map((f)=>[f,[]]));
+ for(const f of files){
+  const sf=ts.createSourceFile(f,read(f),ts.ScriptTarget.ES2022,false,f.endsWith('.tsx')?ts.ScriptKind.TSX:ts.ScriptKind.TS);
+  for(const st of sf.statements){
+   const id=(ts.isImportDeclaration(st)||ts.isExportDeclaration(st))&&st.moduleSpecifier&&ts.isStringLiteral(st.moduleSpecifier)?st.moduleSpecifier.text:null;
+   if(!id||!(id.startsWith('@/')||id.startsWith('.')))continue;
+   const base=id.startsWith('@/')?path.join(root,'src',id.slice(2)):path.resolve(path.dirname(f),id);
+   const to=[base,base+'.ts',base+'.tsx',path.join(base,'index.ts'),path.join(base,'index.tsx')].map((x)=>path.normalize(x)).find((x)=>g.has(x));
+   if(to)g.get(f).push(to);
+  }
+ }
+ return g;
+}
+/** The cycles a depth-first walk closes: none exactly when the graph has none. */
+function cycles(g){
+ const out=[],state=new Map(),stack=[];
+ const walk=(v)=>{state.set(v,1);stack.push(v);for(const w of g.get(v)){if(state.get(w)===1)out.push([...stack.slice(stack.indexOf(w)),w]);else if(!state.get(w))walk(w);}stack.pop();state.set(v,2);};
+ for(const v of g.keys())if(!state.get(v))walk(v);
+ return out;
+}
+const SCANNED=['tv','maths','essay','landing'].map((d)=>path.join(root,'src',d));
+const scanned=()=>SCANNED.flatMap((d)=>fs.readdirSync(d).filter((f)=>/\.tsx?$/.test(f)).map((f)=>path.normalize(path.join(d,f))));
+const named=(c)=>c.map((x)=>path.relative(path.join(root,'src'),x).replace(/\\/g,'/')).join(' -> ');
+
+test('follow-up 4: the shell and the module screens import no cycle - tv, maths, essay, landing',()=>{
+ assert.deepEqual(cycles(importGraph(scanned(),(f)=>fs.readFileSync(f,'utf8'))).map(named),[]);
+ // the marks both sides draw are a leaf: no import at all
+ const marks=path.join(root,'src/tv/marks.tsx');
+ assert.equal(ts.preProcessFile(fs.readFileSync(marks,'utf8'),true,true).importedFiles.length,0,'tv/marks.tsx imports nothing');
+});
+
+test('follow-up 4, the scan bites: a seeded import cycle is found, and the same import in a comment is not',()=>{
+ const files=scanned(),rows=files.find((f)=>f.endsWith('recapRows.ts')),read=(f)=>fs.readFileSync(f,'utf8');
+ const seed=(line)=>(f)=>f===rows?`${line}\n${read(f)}`:read(f);
+ const through=(c)=>c.some((x)=>x===rows);
+ assert.ok(cycles(importGraph(files,seed('import { day } from "@/tv/screens";'))).some(through),'recapRows -> screens -> recapRows');
+ assert.ok(!cycles(importGraph(files,seed('// import { day } from "@/tv/screens";\n/* import { day } from "./screens"; */'))).some(through),'a commented import is not an edge');
 });
