@@ -399,19 +399,21 @@ export function ProfileScreen({ s, focus }: { s: Session; focus: number }) {
       <div className="eyebrow">{editing ? `Preferences · ${d!.name}` : "New learner"}</div>
       <div className="title">{name || "Name it on the phone"}</div>
       <div className="body" style={{ color: "var(--mute)", marginTop: 16 }}>{s.joined ? "Type the name on the phone's Profile tab" : `Phone code ${s.pin} · Menu to pair, or open the phone's Profile tab`}</div>
-      <div className="guide" style={{ marginTop: 20, maxWidth: 1680 }}>
+      {/* the rows take their width from the picks, so their rules stop short of the band */}
+      <div className="guide" style={{ marginTop: 16, width: "fit-content" }}>
         {rows.slice(0, -1).map((row, r) => (
-          <div key={row.title} className="row" style={{ gridTemplateColumns: "240px 1fr", padding: "10px 0" }}>
+          <div key={row.title} className="row" style={{ gridTemplateColumns: "220px auto", padding: "6px 0" }}>
             <div className="u">{row.title}</div>
             <div style={{ display: "flex", gap: row.cells.length > 3 ? 12 : 20 }}>
               {row.cells.map((c, i) => (
-                <button key={c.label} className="btn" data-focused={at.r === r && at.c === i} style={{ whiteSpace: "nowrap", ...(row.cells.length > 3 ? { padding: "14px 22px" } : null), ...(c.sub ? { "--pick": `var(--${c.sub})` } as React.CSSProperties : null) }} data-chosen={chosen(c)}>{c.label}</button>
+                <button key={c.label} className="btn" data-focused={at.r === r && at.c === i} style={{ whiteSpace: "nowrap", padding: "14px 20px", ...(c.sub ? { "--pick": `var(--${c.sub})` } as React.CSSProperties : null) }} data-chosen={chosen(c)}>{c.label}</button>
               ))}
             </div>
           </div>
         ))}
       </div>
-      {cell.kind !== "age" && <div style={{ position: "absolute", left: 0, bottom: 216 }}>
+      {/* the caption follows the rows, so no row can sit under it */}
+      {cell.kind !== "age" && <div style={{ marginTop: 24 }}>
         <span className="cap">{cell.label}</span>
         <div className="cap-text">{cell.blurb}</div>
       </div>}

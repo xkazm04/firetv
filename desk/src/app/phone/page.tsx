@@ -21,10 +21,10 @@ const SAMPLES: Array<{ id: Subject; title: string; file: string }> = [
 
 /** The TV's screens in the user's words, for the phone's status line. */
 const TV_WORDS: Partial<Record<Session["screen"], string>> = {
-  landing: "the start screen", pair: "the pairing code", joined: "the paired screen", tonight: "Tonight", learner: "Who is at the desk", profile: "a new learner",
+  landing: "the desk", pair: "the pairing code", joined: "the paired screen", tonight: "Math Buddy", learner: "the learners", profile: "the learner's picks",
   units: "the units guide", calendar: "the calendar", page: "the page", hint: "a hint", lesson: "a lesson", sentence: "your sentence",
-  headtohead: "head to head", essaytype: "the essay lens", forensic: "the essay", playbook: "the playbook", xray: "the x-ray", break: "a break", recap: "the recap",
-  topics: "Teach me something", practice: "the practice set", sheet: "your marked sheet", walk: "walking the set",
+  headtohead: "head to head", essaytype: "Essay Master", forensic: "your paragraph", playbook: "the playbook", xray: "the x-ray", break: "a break", recap: "the recap",
+  topics: "Math Buddy's topics", practice: "the practice set", sheet: "your marked sheet", walk: "a marked item",
   linga: "Linga", "linga-scenes": "English situations", "linga-map": "your learning map", "linga-talk": "your conversation", "linga-coach": "a coaching moment", "linga-recap": "your rehearsal recap", "linga-check": "finding your level", "linga-verdict": "your level", "linga-plan": "your topics", "linga-moment": "a moment in your conversation",
 };
 export default function Phone() {
@@ -263,7 +263,7 @@ export default function Phone() {
           {s && (s.draft || s.screen === "profile") ? <>
             <p>The TV takes the picks; type the name here.</p>
             <div className="field"><input placeholder="Name" value={pname} onChange={(e) => { setPname(e.target.value); post({ type: "profile.draft", patch: { name: e.target.value } }); }} /></div>
-            <div className="field"><button className="pbtn" data-signal="true" style={{ flex: 1 }} onClick={() => post({ type: "profile.save" })}>Save</button>
+            <div className="field"><button className="pbtn" data-signal="true" style={{ flex: 1 }} disabled={!pname.trim()} onClick={() => post({ type: "profile.save" })}>Save</button>
               <button className="pbtn" data-secondary="true" onClick={() => post({ type: "profile.discard" })}>Cancel</button></div>
           </> : <p>Add or edit a learner on the TV; the name is typed here.</p>}</div>}
 
