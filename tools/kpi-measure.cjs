@@ -5,6 +5,7 @@
  * A reading it could not take is null and says why — never a 0, because a 0 recorded as a measurement is a claim.
  */
 const fs = require("node:fs"), path = require("node:path"), { spawnSync } = require("node:child_process");
+const { mainCheckout, same } = require("./checkout.cjs");
 const root = path.resolve(__dirname, "..");
 const desk = path.join(root, "desk");
 
@@ -14,10 +15,55 @@ function testSources() {
     .filter(f => /\.(cjs|mjs)$/.test(f) && !f.startsWith("kpi-measure"))
     .map(f => ({ file: `tools/${f}`, text: fs.readFileSync(path.join(__dirname, f), "utf8") }));
 }
-/** A module counts as covered when some file under tools/ names its path. Requires and @/ imports both hit. */
+/**
+ * The code of a source with its comments blanked out. Strings, template literals and regex literals are walked over
+ * whole, so a `//` inside 'http://…' or a /\/\*…/ pattern is not taken for a comment. Newlines are kept.
+ */
+function stripComments(text) {
+  let out = "", i = 0, last = "";
+  const n = text.length;
+  // a `/` starts a regex literal where an expression can begin; after a value it is division
+  const regexCanStart = () => last === "" || /[(,=:[!&|?{};+\-*%<>~^]$/.test(last) || /\b(return|typeof|case|in|of|delete|void|throw|new|else|do|yield|await)$/.test(last);
+  while (i < n) {
+    const c = text[i], d = text[i + 1];
+    if (c === "/" && d === "/") { while (i < n && text[i] !== "\n") i++; continue; }
+    if (c === "/" && d === "*") {
+      const end = text.indexOf("*/", i + 2), stop = end < 0 ? n : end + 2;
+      out += text.slice(i, stop).replace(/[^\n]/g, " "); i = stop; continue;
+    }
+    if (c === "'" || c === '"' || c === "`") {
+      let j = i + 1;
+      while (j < n && text[j] !== c) { if (text[j] === "\\") j++; else if (c !== "`" && text[j] === "\n") break; j++; }
+      out += text.slice(i, j + 1); i = j + 1; last = c; continue;
+    }
+    if (c === "/" && regexCanStart()) {
+      let j = i + 1, cls = false;
+      while (j < n && text[j] !== "\n") {
+        if (text[j] === "\\") { j += 2; continue; }
+        if (text[j] === "[") cls = true; else if (text[j] === "]") cls = false; else if (text[j] === "/" && !cls) break;
+        j++;
+      }
+      out += text.slice(i, j + 1); i = j + 1; last = "/"; continue;
+    }
+    out += c; i++;
+    if (!/\s/.test(c)) last = /[\w$]/.test(c) ? (/[\w$]$/.test(last) ? last + c : c) : c;
+  }
+  return out;
+}
+/**
+ * A module counts as covered when some file under tools/ loads it: a require() or a dynamic import() whose argument
+ * names its path, or a static `import … from` of it (@/ aliases included). Named in a comment, or read as text, is not a load.
+ */
 function coveredBy(sources, modulePath) {
   const stem = modulePath.replace(/^src\//, "").replace(/\.ts$/, "");
-  return sources.filter(s => s.text.includes(stem)).map(s => s.file);
+  const loads = code => {
+    const specs = [];
+    for (const m of code.matchAll(/\b(?:require|import)\s*\(([^;\n]*)/g)) specs.push(m[1]);
+    for (const m of code.matchAll(/\bimport\b[^;]*?\bfrom\s*(['"`])([^'"`\n]*)\1/g)) specs.push(m[2]);
+    for (const m of code.matchAll(/\bimport\s*(['"`])([^'"`\n]*)\1/g)) specs.push(m[2]);
+    return specs.some(s => s.includes(stem));
+  };
+  return sources.filter(s => loads(stripComments(s.text))).map(s => s.file);
 }
 
 // KPI 1 — Linga conversation-loop checks passing. The suite is the gate; parse its own count, never our own.
@@ -63,13 +109,7 @@ function typecheckErrors() {
 }
 
 // The artefact: what the learners on this machine actually have. Code that exists proves nothing.
-/** The main worktree is the operator's checkout, where the desk actually runs. Empty when git is not there. */
-function mainCheckout(cwd = root) {
-  const r = spawnSync("git", ["worktree", "list", "--porcelain"], { cwd, encoding: "utf8" });
-  const m = r.status === 0 && (r.stdout || "").match(/^worktree (.+)$/m);
-  return m ? path.resolve(m[1].trim()) : null;
-}
-const same = (a, b) => process.platform === "win32" ? path.resolve(a).toLowerCase() === path.resolve(b).toLowerCase() : path.resolve(a) === path.resolve(b);
+// mainCheckout and same come from tools/checkout.cjs, shared with the worktree preflight.
 
 /**
  * Where the learner book is. DESK_DATA_DIR, when set, is the answer and nothing else is tried — it is what the app itself reads.
@@ -173,5 +213,5 @@ function print(r, asJson) {
   }
 }
 
-module.exports = { findLearnerBook, learnerEvidence, writingPersisted, testSources, coveredBy };
+module.exports = { findLearnerBook, learnerEvidence, writingPersisted, testSources, coveredBy, stripComments, mainCheckout, same };
 if (require.main === module) print(measure(), process.argv.includes("--json"));

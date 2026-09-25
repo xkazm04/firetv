@@ -114,6 +114,14 @@ test('a real directory in the way is reported, never deleted — an install is t
 const {coveredBy}=require('./kpi-measure.cjs');
 const src=(file,text)=>({file,text});
 const V='src/lib/desk/verify.ts';
+test('a module named only in a comment is not covered',()=>{
+ assert.deepEqual(coveredBy([src('tools/line.cjs',"// see src/lib/desk/verify.ts for the rules\nconst x=1;\n")],V),[],'a line comment is not a load');
+ assert.deepEqual(coveredBy([src('tools/block.cjs',"/**\n * Tests for require(path.join(root,'src/lib/desk/verify.ts')) will come later.\n */\nconst x=1;\n")],V),[],'a require written inside a block comment is not a load');
+ assert.deepEqual(coveredBy([src('tools/tail.cjs',"const a=require('node:fs'); // TODO src/lib/desk/verify.ts\n")],V),[],'a trailing comment on a line that requires something else is not a load of this module');
+});
+test('a module read as text, not loaded, is not covered',()=>{
+ assert.deepEqual(coveredBy([src('tools/scan.cjs',"const t=fs.readFileSync(path.join(root,'src/lib/desk/verify.ts'),'utf8');\n")],V),[]);
+});
 test('a module that is required or imported is covered (guard)',()=>{
  const hits=coveredBy([
   src('tools/req.cjs',"const {verify}=require(path.join(root,'src/lib/desk/verify.ts'));\n"),
@@ -130,4 +138,24 @@ test('the maths core reading on this tree is unchanged: every credited module is
   assert.ok(coveredBy(sources,m).includes('tools/maths-rules-test.cjs'),`${m} is loaded by maths-rules-test`);
  for(const m of ['src/lib/rules/essay.ts','src/lib/desk/essay.ts'])
   assert.ok(coveredBy(sources,m).includes('tools/essay-rules-test.cjs'),`${m} is loaded by essay-rules-test`);
+});
+
+// One copy of where the operator's checkout is: the KPI tool and the preflight must never disagree about it.
+test('kpi-measure and the preflight resolve the same main checkout, from one shared helper',()=>{
+ const checkoutPath=path.join(__dirname,'checkout.cjs');
+ assert.ok(fs.existsSync(checkoutPath),'tools/checkout.cjs holds mainCheckout and same');
+ const shared=require(checkoutPath),kpi=require('./kpi-measure.cjs');
+ assert.equal(kpi.mainCheckout,shared.mainCheckout,'kpi-measure uses the shared mainCheckout');
+ assert.equal(preflight.mainCheckout,shared.mainCheckout,'the preflight uses the shared mainCheckout');
+ assert.equal(kpi.same,shared.same);assert.equal(preflight.same,shared.same);
+ const main=shared.mainCheckout();
+ assert.ok(main,'this repo is a git checkout');
+ assert.equal(kpi.mainCheckout(),preflight.mainCheckout());
+ assert.ok(shared.same(main,path.resolve(main.toUpperCase()))===(process.platform==='win32'),'same() ignores case on Windows only');
+ const strip=t=>t.replace(/\/\*[\s\S]*?\*\//g,'').replace(/^\s*\/\/.*$/gm,'');
+ for(const f of ['kpi-measure.cjs','worktree-preflight.cjs']){
+  const code=strip(fs.readFileSync(path.join(__dirname,f),'utf8'));
+  assert.doesNotMatch(code,/function\s+mainCheckout\b/,`${f} keeps no copy of mainCheckout`);
+  assert.doesNotMatch(code,/const\s+same\s*=/,`${f} keeps no copy of same`);
+ }
 });

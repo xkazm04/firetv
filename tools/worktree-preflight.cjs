@@ -7,7 +7,9 @@
  * way, is one line telling the human to run `npm install` in desk/ and a non-zero exit — never an unreadable stack.
  * Read-only towards every donor: it creates a link, and never writes into or deletes anything it did not create.
  */
-const fs = require("node:fs"), path = require("node:path"), { spawnSync } = require("node:child_process");
+const fs = require("node:fs"), path = require("node:path");
+// The main worktree is the operator's checkout; an autopilot worktree is cut from it and it is the likeliest donor.
+const { mainCheckout, same } = require("./checkout.cjs");
 const root = path.resolve(__dirname, "..");
 
 /** The compiler both halves of the gate need: tsc --noEmit is desk's own, and the rules suites require() it to transpile. */
@@ -24,13 +26,6 @@ function occupant(dest) {
   try { entries = fs.readdirSync(dest); } catch { return { kind: "directory", entries: -1 }; }
   return { kind: entries.length ? "directory" : "empty", entries: entries.length };
 }
-/** The main worktree is the operator's checkout; an autopilot worktree is cut from it and it is the likeliest donor. */
-function mainCheckout(cwd = root) {
-  const r = spawnSync("git", ["worktree", "list", "--porcelain"], { cwd, encoding: "utf8" });
-  const m = r.status === 0 && (r.stdout || "").match(/^worktree (.+)$/m);
-  return m ? path.resolve(m[1].trim()) : null;
-}
-const same = (a, b) => process.platform === "win32" ? path.resolve(a).toLowerCase() === path.resolve(b).toLowerCase() : path.resolve(a) === path.resolve(b);
 
 /**
  * Where a donor install could be, nearest first: DESK_NODE_MODULES when set, then the main checkout, then every
@@ -88,5 +83,5 @@ function run(result = ensure(), out = console) {
   return 1;
 }
 
-module.exports = { usable, occupant, donorCandidates, findDonor, ensure, linkDir, run };
+module.exports = { usable, occupant, donorCandidates, findDonor, ensure, linkDir, run, mainCheckout, same };
 if (require.main === module) process.exit(run());
