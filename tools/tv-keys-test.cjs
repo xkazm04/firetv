@@ -46,6 +46,23 @@ test('case 1: Tonight has one stop list - continue card, homework, teach - and S
  assert.doesNotMatch(tonight,/const off = /,'Tonight no longer re-derives the continue offset');
 });
 
+test('case 1b: Menu is Tonight\'s door to the lessons on file - the lamp on the next one to watch - and Tonight names it in one chip',()=>{
+ const {tvKey,TONIGHT_MENU,unitsFocus}=keys();
+ const {LESSONS}=require(path.join(root,'src/lib/library/lessons.data.ts'));
+ const maths=LESSONS.filter((l)=>l.subject==='maths');
+ assert.deepEqual(tvKey(session({screen:'tonight',focus:1}),'menu',LOCAL).events,[{type:'subject',subject:'maths'},{type:'nav',screen:'units',focus:0}],'nothing watched: the first lesson');
+ const watched=[{at:1,kind:'lesson',label:maths[0].title,detail:'watched',ref:maths[0].id}];
+ assert.equal(unitsFocus(session({history:watched})),1);
+ assert.deepEqual(tvKey(session({screen:'tonight',pages:[page()],history:watched}),'menu',LOCAL).events,[{type:'subject',subject:'maths'},{type:'nav',screen:'units',focus:1}],'the next lesson, with the continue card up too');
+ assert.deepEqual(tvKey(session({screen:'tonight',subject:'english'}),'menu',LOCAL).events,[],'Linga\'s Tonight is Linga\'s');
+ assert.deepEqual(tvKey(session({screen:'units',focus:0}),'back',LOCAL).events,[{type:'nav',screen:'tonight',focus:0}],'and Back comes home');
+ const mtv=fs.readFileSync(path.join(root,'src/maths/MathsTV.tsx'),'utf8'),tonight=mtv.split('export function Tonight')[1].split('\nexport function')[0];
+ assert.match(tonight,/menu=\{TONIGHT_MENU\}/,'Tonight carries the one label');assert.equal(TONIGHT_MENU,'Lessons');
+ const units=mtv.split('export function Units')[1].split('\nexport function')[0];
+ assert.doesNotMatch(units+fs.readFileSync(path.join(root,'src/tv/screens.tsx'),'utf8'),/Tonight(’|&apos;|')s units/,'the list is not "tonight\'s"');
+ assert.match(units,/lessonStates\(list, s\.history\)/,'Units ticks from the learner\'s history');
+});
+
 test('case 2: Select on the lens screen posts ESSAY_TYPES[f], and the keymap holds no lens-id list',()=>{
  const {tvKey}=keys();
  for(let f=0;f<4;f++)assert.deepEqual(tvKey(session({screen:'essaytype',subject:'essay',focus:f}),'select',LOCAL).events[0],{type:'essay.type',essayType:ESSAY_TYPES[f].id});

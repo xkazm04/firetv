@@ -12,8 +12,10 @@ import { firstToLook } from "@/tv/sheetRows";
 import { LANDING_REST } from "@/tv/landingRows";
 import { focusAfterRewrite } from "@/tv/keys";
 import path from "node:path";
-import { getLearner, saveLearner, type HistoryEntry, type SkillRecord } from "./learners";
+import { addHistory, getLearner, saveLearner, type HistoryEntry, type SkillRecord } from "./learners";
 import { SYLLABUS } from "../library/syllabus";
+import { LESSONS } from "../library/lessons.data";
+import { watchDue, type Watch } from "../library/watched";
 import type { RuleCard } from "../rules/english";
 import { restatedLine, slipsFor } from "../rules/maths";
 import type { Fix, Sentence, Was } from "../rules/essay";
@@ -130,6 +132,8 @@ export interface Session {
   /** The desk has asked for a page and is waiting for the phone to snap it. */
   awaiting: Subject | null;
   hint: Hint | null; lesson: LessonPick | null; noLesson: boolean; lessonPaused: boolean;
+  /** the open lesson as it plays, for the watched rule (library/watched.ts); set by the reducer only (watchOf) */
+  watch?: Watch | null;
   english: EnglishAnalysis | null; essay: EssayAnalysis | null; essayType: string | null;
   /** The sentence (its number) the forensic page is about; null for the default, the first faulty one. */
   essayAt?: number | null;
@@ -169,6 +173,8 @@ export type Event =
   | { type: "page.select"; pageIx: number; itemIx?: number } | { type: "item"; itemIx: number } | { type: "view"; view: "band" | "overview" }
   | { type: "hint.set"; hint: Hint } | { type: "hint.stage"; stage: 1 | 2; owner?: string }
   | { type: "lesson.set"; lesson: LessonPick | null; key?: string } | { type: "lesson.pause"; paused: boolean }
+  // raised by the desk's own clock when the lesson on screen has played long enough (watchDue); never posted by a screen
+  | { type: "lesson.watched" }
   | { type: "english.set"; analysis: EnglishAnalysis } | { type: "essay.type"; essayType: string } | { type: "essay.set"; analysis: EssayAnalysis } | { type: "essay.at"; n: number | null }
   | { type: "essay.revised"; analysis: EssayAnalysis; n: number }
   | { type: "task.add"; name: string; sub: Subject; min: number } | { type: "task.done"; id: string; done: boolean }
@@ -356,7 +362,10 @@ export function reduce(s: Session, e: Event): Session {
     // a pick made for one hint never lands on another; a lesson chosen on the TV (no key) always does
     case "lesson.set": if (e.key !== undefined && e.key !== s.hint?.key) { const who = awayWith(s, (x) => x.hint?.key === e.key); if (!who) return s;
         toAway(s, n, who, (x) => ({ ...x, lesson: e.lesson && { ...e.lesson, owner: who }, noLesson: !e.lesson })); break; }
-      n.lesson = e.lesson && { ...e.lesson, owner: s.hint?.owner ?? me }; n.noLesson = !e.lesson; break;
+      n.lesson = e.lesson && { ...e.lesson, owner: s.hint?.owner ?? me }; n.noLesson = !e.lesson;
+      // a new lesson opens playing (the embed autoplays): the last one's Pause is not this one's
+      if (e.lesson && e.lesson.id !== s.lesson?.id) n.lessonPaused = false; break;
+    case "lesson.watched": if (s.watch && watchDue(s.watch, Date.now())) n.watch = { ...s.watch, logged: true }; break;
     case "job.start": n.jobs = { ...s.jobs, [e.kind]: { id: e.id, phase: "running", startedAt: Date.now(), ...(e.key !== undefined ? { key: e.key } : {}), ...(e.input ? { input: e.input } : {}) } }; break;
     case "job.done": case "job.failed": { const j = s.jobs?.[e.kind]; if (!j || j.id !== e.id) return s;
       n.jobs = { ...s.jobs, [e.kind]: e.type === "job.done" ? { ...j, phase: "done", endedAt: Date.now() } : { ...j, phase: "failed", endedAt: Date.now(), error: e.error } };
@@ -404,14 +413,40 @@ export function reduce(s: Session, e: Event): Session {
   }
   // a set being written is for the learner who asked: another learner at the desk supersedes it, and its late result is dropped by id
   if (n.learner?.id !== s.learner?.id && s.jobs?.practice?.phase === "running") { n.jobs = { ...s.jobs }; delete n.jobs.practice; }
+  const w = watchOf(n.watch ?? null, n, n.updatedAt);
+  if (w !== (n.watch ?? null)) n.watch = w;
   return n;
+}
+
+/**
+ * The lesson's watch after any event (library/watched.ts has the rule): it runs while the lesson screen is on, the
+ * lesson open and not paused; a stretch that ends is added to what it had played. A different lesson, or another
+ * learner at the desk, starts from nothing - played time is the seated learner's, on this lesson. Unchanged, the
+ * same object comes back.
+ */
+export function watchOf(was: Watch | null, n: Session, now: number): Watch | null {
+  const l = n.lesson, who = n.learner;
+  // no one seated: nothing is being watched by anyone
+  if (!l || !who) return null;
+  const on = n.screen === "lesson" && !n.lessonPaused;
+  const mine = was && was.id === l.id && was.owner === who.id ? was : null;
+  if (!mine && !on) return null;
+  const w = mine ?? { id: l.id, owner: who.id, ms: 0, since: null, logged: false };
+  if (on) return w.since === null ? { ...w, since: now } : w;
+  return w.since === null ? w : { ...w, ms: w.ms + Math.max(0, now - w.since), since: null };
+}
+
+/** The watched lesson's dated line, in its learner's own history - what Units and the calendar tick by. */
+function logWatched(w: Watch): void {
+  const l = LESSONS.find((x) => x.id === w.id);
+  addHistory(w.owner, { at: Date.now(), kind: "lesson", label: l?.title ?? getSession().lesson?.title ?? w.id, detail: "watched", ref: w.id });
 }
 
 // ---- the singleton, HMR-proof ----
 type Sub = (s: Session) => void;
 interface Store { session: Session; subs: Set<Sub>; ticker: NodeJS.Timeout | null; }
 const g = globalThis as unknown as { __desk?: Store };
-function load(): Session { try { if (existsSync(FILE)) { const j = JSON.parse(readFileSync(FILE, "utf8")); if (Array.isArray(j?.profiles) && (j?.learner === null || j?.learner?.id) && j.profiles.every((p: Profile) => p.type in AGE_RANGE)) return settleOwners({ ...fresh(), ...j, practice: shownPractice(j.practice), away: awayShown(j.away), jobs: settled(j.jobs), phoneUrl: phoneUrl(), reading: false, englishLearning: j.learner ? getLearner(j.learner.id).english : emptyEnglish(), conversation: j.conversation ? { moment: null, moments: [], ...j.conversation, pending: null, capture: false, paused: true } : null, check: j.check ? { ...j.check, pending: null } : null }, (id) => getLearner(id).history); } } catch {} return fresh(); }
+function load(): Session { try { if (existsSync(FILE)) { const j = JSON.parse(readFileSync(FILE, "utf8")); if (Array.isArray(j?.profiles) && (j?.learner === null || j?.learner?.id) && j.profiles.every((p: Profile) => p.type in AGE_RANGE)) return settleOwners({ ...fresh(), ...j, practice: shownPractice(j.practice), away: awayShown(j.away), jobs: settled(j.jobs), watch: null, phoneUrl: phoneUrl(), reading: false, englishLearning: j.learner ? getLearner(j.learner.id).english : emptyEnglish(), conversation: j.conversation ? { moment: null, moments: [], ...j.conversation, pending: null, capture: false, paused: true } : null, check: j.check ? { ...j.check, pending: null } : null }, (id) => getLearner(id).history); } } catch {} return fresh(); }
 /** The away learners' work as saved: an answer that reached the file stops here too, and a read under way ended with the desk. */
 function awayShown(a: unknown): Record<string, MathsSlot> | undefined {
   if (!a || typeof a !== "object") return undefined;
@@ -428,6 +463,7 @@ if (!store.session.jobs) store.session.jobs = {};
 try { store.session = settleOwners(store.session, (id) => getLearner(id).history); } catch {}
 if (!store.ticker) store.ticker = setInterval(() => {
   if (store.session.timer.running) dispatch({ type: "timer.tick", seconds: 1 });
+  if (watchDue(store.session.watch, Date.now())) dispatch({ type: "lesson.watched" });
   const c=store.session.conversation;
   if(c?.capture&&Date.now()-c.captureAt>50000)dispatch({type:"linga.changed",conversation:{...c,capture:false}});
 }, 1000);
@@ -438,7 +474,7 @@ export function getSession() { return store.session; }
  * at the desk. The reducer stays pure: the file read happens here, at the boundary that already
  * writes to disk and pushes to subscribers.
  */
-const REHYDRATE = new Set(["learner.set", "practice.marked", "practice.settle", "profile.save", "reset", "join", "page.read", "linga.changed", "essay.set"]);
+const REHYDRATE = new Set(["learner.set", "practice.marked", "practice.settle", "profile.save", "reset", "join", "page.read", "linga.changed", "essay.set", "lesson.watched"]);
 
 /**
  * A settled item changes its set's count: the line marking wrote (the last practice line, this topic, this n)
@@ -453,8 +489,11 @@ function restateMarked(s: Session): void {
 }
 
 export function dispatch(e: Event): Session {
+  const was = store.session.watch;
   store.session = reduce(store.session, e);
   if (e.type === "practice.settle" && e.verdict) try { restateMarked(store.session); } catch {}
+  const w = store.session.watch;
+  if (e.type === "lesson.watched" && w?.logged && !was?.logged) try { logWatched(w); } catch {}
   if (REHYDRATE.has(e.type)) {
     const id = store.session.learner?.id;
     if (id) try { const l = getLearner(id); store.session = { ...store.session, skills: l.skills, writing: l.writing, memory: l.memory, history: l.history, englishLearning: l.english }; } catch {}

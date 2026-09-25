@@ -21,12 +21,14 @@ export interface SkillRecord {
 /** One thing that actually happened at the desk, so it can say where you left off. */
 export interface HistoryEntry {
   at: number;                       // ms epoch
-  kind: "homework" | "practice" | "writing";
-  label: string;                    // the topic's name, the page's title, or the lens that was read
-  detail: string;                   // e.g. "4 of 6 right", "10 problems read", "2 of 5 sentences to fix"
+  kind: "homework" | "practice" | "writing" | "lesson";
+  label: string;                    // the topic's name, the page's title, the lens that was read, or the lesson's title
+  detail: string;                   // e.g. "4 of 6 right", "10 problems read", "2 of 5 sentences to fix", "watched"
+  /** what the line is about, when that has an id: a lesson line's lesson (library/lessons.data.ts), which Units and the calendar tick by */
+  ref?: string;
 }
 
-const KINDS: HistoryEntry["kind"][] = ["homework", "practice", "writing"];
+const KINDS: HistoryEntry["kind"][] = ["homework", "practice", "writing", "lesson"];
 
 export interface Learner {
   id: string;
@@ -101,9 +103,23 @@ function clean(id: string, l: unknown): Learner {
       // an unknown kind on disk reads back as practice, the kind this field had before the others
       kind: KINDS.includes(h.kind) ? h.kind : "practice",
       label: String(h.label), detail: typeof h.detail === "string" ? h.detail : "",
-    }))
-    .slice(-HISTORY_CAP);
-  return { id, english: cleanEnglish(o.english), skills, writing, memory: Array.isArray(o.memory) ? o.memory.filter((m): m is string => typeof m === "string").slice(-MEMORY_CAP) : [], history };
+      ...(typeof h.ref === "string" && h.ref ? { ref: h.ref } : {}),
+    }));
+  return { id, english: cleanEnglish(o.english), skills, writing, memory: Array.isArray(o.memory) ? o.memory.filter((m): m is string => typeof m === "string").slice(-MEMORY_CAP) : [], history: capped(history) };
+}
+
+/**
+ * The history as kept: the last HISTORY_CAP lines, and besides them each lesson's latest watched line (kind "lesson",
+ * with its ref) wherever it falls - a tick on Units is a claim, so the record behind it never rolls off the end.
+ * At most one line per lesson, so the lines kept besides the cap are bounded by the library. Order is kept.
+ */
+export function capped(history: HistoryEntry[]): HistoryEntry[] {
+  const latest = new Map<string, number>();
+  history.forEach((h, i) => { if (h.kind === "lesson" && h.ref) latest.set(h.ref, i); });
+  const pinned = new Set(latest.values());
+  const rest = history.map((_, i) => i).filter((i) => !pinned.has(i) && !(history[i].kind === "lesson" && history[i].ref));
+  const kept = new Set([...pinned, ...rest.slice(-HISTORY_CAP)]);
+  return history.filter((_, i) => kept.has(i));
 }
 
 export function getLearner(id: string): Learner {
@@ -113,7 +129,7 @@ export function getLearner(id: string): Learner {
 
 export function saveLearner(l: Learner): void {
   const book = readAll();
-  book[l.id] = { ...l, memory: l.memory.slice(-MEMORY_CAP), history: (l.history ?? []).slice(-HISTORY_CAP) };
+  book[l.id] = { ...l, memory: l.memory.slice(-MEMORY_CAP), history: capped(l.history ?? []) };
   writeAll(book);
 }
 
@@ -172,11 +188,11 @@ export function addMemory(id: string, line: string): void {
   saveLearner(l);
 }
 
-/** One thing that happened, appended. Newest last; the oldest fall off the end. */
+/** One thing that happened, appended. Newest last; the oldest fall off the end, except a lesson's watched line (capped). */
 export function addHistory(id: string, e: HistoryEntry): void {
   if (!e || !e.label?.trim()) return;
   const l = getLearner(id);
-  l.history = [...l.history, { ...e, label: e.label.trim(), detail: (e.detail ?? "").trim() }].slice(-HISTORY_CAP);
+  l.history = capped([...l.history, { ...e, label: e.label.trim(), detail: (e.detail ?? "").trim() }]);
   saveLearner(l);
 }
 

@@ -278,6 +278,61 @@ test('rewrite case 6: POST /api/session refuses essay.revised with 403, as it re
  assert.equal(store.getSession().essay,null,'no revised reading was put on the desk from outside');
 });
 
+const watched=()=>require(src('lib/library/watched.ts'));
+const {LESSONS}=require(src('lib/library/lessons.data.ts'));
+const MATHS=LESSONS.filter((l)=>l.subject==='maths');
+const lessonLine=(ref,at=1)=>({at,kind:'lesson',label:MATHS.find((l)=>l.id===ref)?.title??ref,detail:'watched',ref});
+/** Open a library lesson the way Units does: its pick, then the lesson screen. */
+const openLesson=(l)=>{store.dispatch({type:'lesson.set',lesson:{id:l.id,title:l.title,t:0,text:l.concepts.join(' · '),why:'x',youtube:l.youtube}});store.dispatch({type:'nav',screen:'lesson'});};
+/** Wind the running watch back by `ms`, as if the lesson had been playing that long. */
+const played=(ms)=>{const g=globalThis.__desk;g.session={...g.session,watch:{...g.session.watch,since:g.session.watch.since-ms}};};
+
+test('watched case 1: the rule - half the running time, 30 s floor, 2 min cap; no history, no ticks: the first lesson is next and every other open',()=>{
+ const W=watched();
+ assert.equal(W.watchNeedMs(2),60000);assert.equal(W.watchNeedMs(0.5),30000,'the floor');assert.equal(W.watchNeedMs(9),120000,'the cap');assert.equal(W.watchNeedMs(undefined),120000,'no running time: the cap');
+ assert.ok(!LESSONS.some((l)=>'done' in l),'the library claims nothing watched');
+ assert.deepEqual(W.lessonStates(MATHS,[]),['next','open','open','open','open','open','open','open']);
+ assert.deepEqual(W.lessonStates(MATHS,[{at:1,kind:'practice',label:MATHS[0].title,detail:'4 of 6 right'}]),W.lessonStates(MATHS,[]),'only a lesson line ticks a lesson');
+ assert.deepEqual(W.lessonStates(MATHS,[lessonLine(MATHS[0].id)]),['done','next','open','later','later','later','later','later']);
+ assert.deepEqual(W.lessonStates(MATHS,[lessonLine(MATHS[2].id)]),['next','open','done','later','later','later','later','later'],'a lesson skipped is still next');
+});
+
+test('watched case 2: a lesson played past its time writes one dated line in the seated learner\'s history, and Units ticks it; paused or short, nothing',()=>{
+ store.dispatch({type:'reset'});
+ for(const id of ['watch-a','watch-b']){store.dispatch({type:'profile.draft',patch:{id,name:id,type:'high-school'}});store.dispatch({type:'profile.save'});}
+ store.dispatch({type:'learner.set',id:'watch-a'});store.dispatch({type:'subject',subject:'maths'});
+ const W=watched(),u1=MATHS[0],need=W.lessonNeedMs(u1.id);
+ openLesson(u1);
+ let s=store.getSession();assert.equal(s.watch.id,u1.id);assert.equal(s.watch.owner,'watch-a');assert.notEqual(s.watch.since,null,'playing: the stretch runs');
+ played(need-5000);store.dispatch({type:'lesson.watched'});
+ assert.ok(!store.getSession().history.some((h)=>h.kind==='lesson'),'not yet played long enough: no line');
+ store.dispatch({type:'lesson.pause',paused:true});s=store.getSession();
+ assert.equal(s.watch.since,null,'paused: the stretch ends');assert.ok(s.watch.ms>=need-5000);
+ const ms=s.watch.ms;store.dispatch({type:'focus',focus:0});store.dispatch({type:'lesson.watched'});
+ assert.equal(store.getSession().watch.ms,ms,'paused time does not count');assert.ok(!store.getSession().history.some((h)=>h.kind==='lesson'),'still short: no line');
+ store.dispatch({type:'lesson.pause',paused:false});played(6000);assert.ok(W.watchDue(store.getSession().watch,Date.now()));
+ const t0=Date.now();store.dispatch({type:'lesson.watched'});
+ s=store.getSession();const lines=s.history.filter((h)=>h.kind==='lesson');
+ assert.equal(lines.length,1);assert.equal(lines[0].ref,u1.id);assert.equal(lines[0].label,u1.title);assert.ok(lines[0].at>=t0,'dated');
+ assert.equal(W.lessonStates(MATHS,s.history)[0],'done','Units and the calendar tick it from the history');
+ store.dispatch({type:'lesson.watched'});store.dispatch({type:'nav',screen:'units'});openLesson(u1);played(need*2);store.dispatch({type:'lesson.watched'});
+ assert.equal(store.getSession().history.filter((h)=>h.kind==='lesson').length,1,'played on, the lesson is written once');
+ store.dispatch({type:'learner.set',id:'watch-b'});s=store.getSession();
+ assert.equal(s.watch,null,'another learner at the desk: the watch is not theirs');
+ assert.deepEqual(W.lessonStates(MATHS,s.history)[0],'next','the tick is watch-a\'s, not watch-b\'s');
+ openLesson(MATHS[1]);store.dispatch({type:'nav',screen:'units'});
+ s=store.getSession();assert.equal(s.watch.since,null,'off the lesson screen, the clock stops');
+});
+
+test('watched case 3: a watched line never rolls off the history, and a watch is not something a screen can post',async()=>{
+ const {capped}=require(src('lib/session/learners.ts'));
+ const many=Array.from({length:30},(_,i)=>({at:i+10,kind:'practice',label:'t',detail:`${i}`}));
+ const kept=capped([lessonLine(MATHS[0].id,1),lessonLine(MATHS[1].id,2),...many,lessonLine(MATHS[0].id,99)]);
+ assert.equal(kept.filter((h)=>h.kind==='practice').length,20,'the other lines keep their cap');
+ assert.deepEqual(kept.filter((h)=>h.kind==='lesson').map((h)=>[h.ref,h.at]),[[MATHS[1].id,2],[MATHS[0].id,99]],'one line per lesson, the latest, however old');
+ onPage();const r=await session({type:'lesson.watched'});assert.equal(r.status,403);deskWorded((await r.json()).error);
+});
+
 // last: it swaps the store module out from under the routes loaded above
 test('case 7: a job saved as running is not running after the desk restarts',()=>{
  onPage();
