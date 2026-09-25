@@ -6,7 +6,7 @@
  * so the tile drawn lit and the stop the keys walk are one list. Types only from the store: the TV never loads the
  * filesystem-backed session modules.
  */
-import type { Session, Subject } from "@/lib/session/store";
+import type { Session, Subject, Task } from "@/lib/session/store";
 import { ESSAY_TYPES } from "@/lib/library/lessons.data";
 import { landingModules } from "@/tv/landingRows";
 import { BRAND } from "@/tv/profileRows";
@@ -122,6 +122,19 @@ export function recapLine(t: RecapTile): string {
   const lenses = Array.from(new Set(t.readings.map((x) => x.lens)));
   const against = t.readings.reduce((a, x) => a + x.against, 0), of = t.readings.reduce((a, x) => a + x.of, 0);
   return `${name} - ${times(t.readings.length, "reading")}${lenses.length ? ` (${lenses.join(", ")})` : ""}: ${against} of ${counted(of, "sentence")} to fix`;
+}
+
+/**
+ * The phone's Tonight list, for the parent's recap only (the TV stays one tile per app): how many of the learner's
+ * own tasks are ticked, then the names of the ones still open, in the learner's own words - "Tonight's list - 1 of 3
+ * done; still to do: Unit 6 · Essay draft" (a dot between, since a name may hold its own comma). The session's
+ * tasks are the seated learner's (store.ts MathsSlot), so the list is this learner's. No tasks, no line.
+ */
+export function tasksLine(tasks: Task[] | undefined): string | null {
+  const all = tasks ?? []; if (!all.length) return null;
+  const open = all.filter((t) => !t.done).map((t) => t.name.trim()).filter(Boolean);
+  const head = `Tonight's list - ${all.length - open.length} of ${all.length} done`;
+  return open.length ? `${head}; still to do: ${open.join(" · ")}` : head;
 }
 
 /** The recap's stops: the tiles, left to right, then back to the desk. */

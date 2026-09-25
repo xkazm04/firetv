@@ -186,7 +186,8 @@ function phoneUrl(): string {
 
 /**
  * Math Buddy's evening for one learner: the pages they snapped, the set they are on, the hint and its lesson, the walk,
- * and the hints they asked for (the recap's count). The session's own fields hold the seated learner's; a learner who
+ * and the hints they asked for (the recap's count) - and their list for tonight (the phone's Tonight: task.add,
+ * task.done), which the parent's recap reads. The session's own fields hold the seated learner's; a learner who
  * leaves the desk takes theirs to `away`, untouched, and gets it back when they sit down again - so every screen, the
  * phone and the routes read only the learner at the desk, and nothing is thrown away on a switch.
  */
@@ -194,11 +195,12 @@ export interface MathsSlot {
   pages: Page[]; pageIx: number; itemIx: number; reading: boolean;
   hint: Hint | null; lesson: LessonPick | null; noLesson: boolean; lessonPaused: boolean;
   topic: string | null; practice: Practice | null; walkIx: number; log: { problems: string[]; hints: number; hard: string[] };
+  tasks: Task[];
 }
-const emptySlot = (): MathsSlot => ({ pages: [], pageIx: 0, itemIx: 0, reading: false, hint: null, lesson: null, noLesson: false, lessonPaused: false, topic: null, practice: null, walkIx: 0, log: { problems: [], hints: 0, hard: [] } });
+const emptySlot = (): MathsSlot => ({ pages: [], pageIx: 0, itemIx: 0, reading: false, hint: null, lesson: null, noLesson: false, lessonPaused: false, topic: null, practice: null, walkIx: 0, log: { problems: [], hints: 0, hard: [] }, tasks: [] });
 const slotOf = (s: Session): MathsSlot => ({ pages: s.pages, pageIx: s.pageIx, itemIx: s.itemIx, reading: s.reading, hint: s.hint, lesson: s.lesson, noLesson: s.noLesson, lessonPaused: s.lessonPaused,
-  topic: s.topic, practice: s.practice, walkIx: s.walkIx, log: { problems: s.log.problems, hints: s.log.hints, hard: s.log.hard } });
-const emptyOf = (x: MathsSlot) => !x.pages.length && !x.practice && !x.hint && !x.lesson && !x.topic && !x.log.hints && !x.log.problems.length;
+  topic: s.topic, practice: s.practice, walkIx: s.walkIx, log: { problems: s.log.problems, hints: s.log.hints, hard: s.log.hard }, tasks: s.tasks ?? [] });
+const emptyOf = (x: MathsSlot) => !x.pages.length && !x.practice && !x.hint && !x.lesson && !x.topic && !x.log.hints && !x.log.problems.length && !x.tasks?.length;
 /** A slot onto the session's fields; the log keeps the desk's clock (minutes, started), which is the evening's, not a learner's. */
 function withSlot(n: Session, x: MathsSlot): void { const { log, ...rest } = x; Object.assign(n, rest); n.log = { ...n.log, ...log }; }
 /** Who sits down: the learner leaving takes their work to `away`, the learner arriving gets theirs back (or a clean desk). */
@@ -250,7 +252,9 @@ export function settleOwners(s: Session, historyOf: (id: string) => HistoryEntry
     return { pages: ps, pageIx: ix >= 0 ? ix : Math.max(0, ps.length - 1), itemIx: ix >= 0 ? s.itemIx : 0, reading: ix >= 0 && s.reading,
       hint: hi ? hint : null, lesson: lesson?.owner === id ? lesson : null, noLesson: hi && s.noLesson, lessonPaused: hi && s.lessonPaused,
       topic: pr || (!practice && id === at) ? s.topic : null, practice: pr ? practice : null, walkIx: pr ? s.walkIx : 0,
-      log: id === hintsOf ? { problems: s.log.problems, hints: s.log.hints, hard: s.log.hard } : { problems: [], hints: 0, hard: [] } };
+      log: id === hintsOf ? { problems: s.log.problems, hints: s.log.hints, hard: s.log.hard } : { problems: [], hints: 0, hard: [] },
+      // tonight's list carries no stamp: it stays with the learner at the desk when the session was saved
+      tasks: id === at ? s.tasks ?? [] : [] };
   };
   const n: Session = { ...s }, away = { ...(s.away ?? {}) };
   withSlot(n, slotFor(at));
@@ -346,7 +350,9 @@ export function reduce(s: Session, e: Event): Session {
     case "essay.revised": n.essay = e.analysis; n.essayAt = e.analysis.sentences.some((x) => x.n === e.n) ? e.n : null; n.subject = "essay";
       n.focus = focusAfterRewrite(e.analysis, e.n, s.screen === "forensic" ? s.focus : 0); n.screen = "forensic"; break;
     case "essay.at": n.essayAt = e.n !== null && s.essay?.sentences.some((x) => x.n === e.n) ? e.n : null; break;
-    case "task.add": n.tasks = [...s.tasks, { id: "t" + Date.now(), sub: e.sub, name: e.name, min: e.min, done: false }]; break;
+    // an id no task on the list has, so two added in the same millisecond are ticked apart
+    case "task.add": { let id = "t" + Date.now(); for (let k = 1; s.tasks.some((t) => t.id === id); k++) id = `t${Date.now()}-${k}`;
+      n.tasks = [...s.tasks, { id, sub: e.sub, name: e.name, min: e.min, done: false }]; break; }
     case "task.done": n.tasks = s.tasks.map((t) => (t.id === e.id ? { ...t, done: e.done } : t)); break;
     case "timer.start": n.timer = { ...s.timer, running: true }; if (!s.log.started) n.log = { ...s.log, started: Date.now() }; break;
     case "timer.pause": n.timer = { ...s.timer, running: false }; break;

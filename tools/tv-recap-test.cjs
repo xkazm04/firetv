@@ -375,3 +375,45 @@ test('S77: the phone\'s Recap is the TV\'s tiles in words - a line per app, the 
  assert.match(sec,/mins > 0/,'minutes only when the timer ran');
  assert.match(phone,/Arrives when the session ends\./);
 });
+
+test('S78: the parent\'s Recap gets one line for tonight\'s list - how many done, the open ones by name; no tasks, no line; never a TV tile',()=>{
+ const {recapRows,recapLine,tasksLine}=recap();
+ const T=(id,name,done=false)=>({id,sub:'maths',name,min:10,done});
+ assert.equal(tasksLine([T('a','Algebra 4.2',true),T('b','Unit 6'),T('c','Essay draft',true)]),'Tonight\'s list - 2 of 3 done; still to do: Unit 6');
+ assert.equal(tasksLine([T('a','Algebra 4.2'),T('b','Unit 6')]),'Tonight\'s list - 0 of 2 done; still to do: Algebra 4.2 · Unit 6');
+ assert.equal(tasksLine([T('a','Algebra 4.2',true)]),'Tonight\'s list - 1 of 1 done','all done: no still-to-do');
+ assert.equal(tasksLine([]),null,'no tasks, no line');assert.equal(tasksLine(undefined),null);
+ // the TV stays one tile per app: tasks add no tile and change no tile's line
+ const s=evening({tasks:[T('a','Algebra 4.2'),T('b','Unit 6',true)]});
+ assert.deepEqual(recapRows(s,NOW).map((t)=>t.app),['maths','english','essay']);
+ assert.deepEqual(recapRows(s,NOW).map(recapLine),recapRows(evening(),NOW).map(recapLine));
+ // the phone draws the line from the same module, after the tiles, and only when there is one
+ const phone=fs.readFileSync(path.join(root,'src/app/phone/page.tsx'),'utf8');
+ const sec=phone.split('screen === "parent"')[1]?.split('</div>}')[0]??'';
+ assert.ok(sec.includes('tasksLine(s.tasks)'),'the parent panel calls tasksLine');
+ assert.match(sec,/\{list && <li/,'no tasks, no line');
+});
+
+test('S78: tonight\'s list is this learner\'s - the seated learner adds and ticks their own, a switch takes it along and switching back restores it',()=>{
+ const {reduce,settleOwners}=store(),{tasksLine}=recap();
+ let x=session({tasks:[]});
+ x=reduce(x,{type:'task.add',name:'Algebra 4.2',sub:'maths',min:10});
+ x=reduce(x,{type:'task.add',name:'Unit 6',sub:'english',min:10});
+ x=reduce(x,{type:'task.done',id:x.tasks[0].id,done:true});
+ const emas=x.tasks;assert.equal(tasksLine(emas),'Tonight\'s list - 1 of 2 done; still to do: Unit 6');
+ const jak=reduce(x,{type:'learner.set',id:'jakub'});
+ assert.deepEqual(jak.tasks,[],'Jakub sits down to his own (empty) list, not Ema\'s');assert.equal(tasksLine(jak.tasks),null,'so his recap has no list line');
+ assert.deepEqual(jak.away.ema.tasks,emas,'Ema\'s list waits for her');
+ let j=reduce(jak,{type:'task.add',name:'Irregular verbs',sub:'english',min:10});
+ j=reduce(j,{type:'task.done',id:emas[1].id,done:true});
+ assert.equal(j.tasks.length,1);assert.equal(j.tasks[0].done,false,'a tick for an id not on his list changes nothing');
+ const back=reduce(j,{type:'learner.set',id:'ema'});
+ assert.deepEqual(back.tasks,emas,'switching back restores her list, untouched');assert.equal(back.away.jakub.tasks[0].name,'Irregular verbs');
+ assert.equal(reduce(back,{type:'learner.set',id:'jakub'}).tasks[0].name,'Irregular verbs','and his waits for him');
+ // a learner with only a list is not "empty": it is kept in away; a saved session without tasks in a slot reads as none
+ const settled=settleOwners({...session({tasks:emas}),pages:[{id:'maths-1',subject:'maths',title:'p',img:'',w:1,h:1,items:[]}]},()=>[]);
+ assert.deepEqual(settled.tasks,emas,'an unstamped desk keeps its list with the learner at the desk');
+ // no screen is sent another learner's list
+ const {view}=require(path.join(root,'src/lib/session/pairing.ts'));
+ for(const role of ['tv','phone'])assert.ok(!JSON.stringify(view(jak,role)).includes('Unit 6'),role);
+});
