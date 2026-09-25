@@ -8,12 +8,13 @@
  * as tap-to-open. `heard` is the one channel no markup carries: the line the TV speaks.
  *
  * `offered` takes its ids, needs and commands from the Linga screen model (lib/english/view.ts), never from a table
- * of its own. Each rendered control is tied to a view action: a TV button by its label (the TV prints the view's
- * labels), a phone control by the command its own handler sends, caught at the useEnglish seam and never posted.
- * A phone control whose command this screen's view does not offer is tied to the action the view defines for the
- * same session on another Linga screen (the phone's start panel keeps its situation list on home, for one) and is
- * marked `phoneOnly`. A rendered control tied to nothing, and not in BY_DESIGN_UNMAPPED, is a stray; a view action
- * with no rendered control is unrendered. Both are drifts between the screens and the view, and both should be 0.
+ * of its own. Each rendered control is tied to a view action: a TV button by its label to the view's TV row or footer
+ * (the TV prints the view's labels, and never draws the view's phone-side list), a phone control by the command its
+ * own handler sends, caught at the useEnglish seam and never posted. The view offers every control the phone draws,
+ * on its TV row or as a phone-side action (`on: 'phone'`). A phone control whose command this screen's view does not
+ * offer is a drift the detector still catches: it is tied to the action the view defines for the same session on
+ * another Linga screen and marked `phoneOnly`, and should be 0. A rendered control tied to nothing, and not in
+ * BY_DESIGN_UNMAPPED, is a stray; a view action with no rendered control is unrendered. Both should be 0 too.
  *
  * No browser, no dev server, no model call; nothing here posts to the desk.
  */
@@ -178,9 +179,8 @@ const LINGA_SCREENS = ['linga', 'linga-check', 'linga-verdict', 'linga-plan', 'l
 /**
  * Every action the view defines for this session on any Linga screen, with or without the menu, and with the
  * conversation or the check at rest: no quiz, pause, moment or pending turn over the conversation, and the same
- * conversation before its first reply; the check between two steps, and at its questions. This is where a control
- * the phone keeps on screen longer than the TV (a situation list on home, Stop during a task, Choose a phrase after
- * a reply) finds its id.
+ * conversation before its first reply; the check between two steps, and at its questions. This is where a phone
+ * control the view has stopped offering on this screen finds its id, so the drift is named rather than a stray.
  */
 function catalogue(s) {
   const out = [], c = s.conversation, lc = s.check;
@@ -210,7 +210,9 @@ function surfaceOf(s, ui = {}) {
     if (side === 'tv') {
       // the TV prints the view's own labels, and "Select · " before each menu entry
       const label = c.label.replace(/^Select · /, '');
-      row.action = offers.find(a => a.label === label && !tied.get(a).length && [...v.actions, ...v.footer].includes(a)) ?? offers.find(a => a.label === label) ?? null;
+      // only the TV row and footer: a TV button that drew a phone-side action would be a stray
+      const tvRow = [...v.actions, ...v.footer];
+      row.action = tvRow.find(a => a.label === label && !tied.get(a).length) ?? tvRow.find(a => a.label === label) ?? null;
       if (row.action) tied.get(row.action).push(row);
       continue;
     }

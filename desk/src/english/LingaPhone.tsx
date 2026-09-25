@@ -4,7 +4,7 @@ import type { Event, Session } from "@/lib/session/store";
 import { defaultPreferences, eligibleScenes, ENGLISH_SCENES, ENGLISH_SKILLS, PROGRESS_LABEL, recommendScene } from "@/lib/english/curriculum";
 import { ABOUT_QUESTIONS, BAND_CAN, BAND_NAME, isBand, MAX_TASKS, PLAN_MAX, TOPIC_ASK_MAX } from "@/lib/english/placement";
 import { BANDS, type Band, type Conversation, type EnglishLearning, type EnglishPreferences, type LevelCheck, type Placement } from "@/lib/english/types";
-import { helpOf, lingaHome } from "@/lib/english/view";
+import { helpOf, lingaHome, lingaView, offeredActions, phonePanel, type ViewAction } from "@/lib/english/view";
 import { ReplyBox } from "./ReplyBox";
 import { useEnglish } from "./useEnglish";
 
@@ -25,7 +25,9 @@ export function LingaPhone({s,post,onSentence}:{s:Session;post:(e:Event)=>Promis
   const scene=c?.scene??ENGLISH_SCENES.find(x=>x.id===c?.sceneId);
   const save=async()=>{if(await run("preferences",{preferences:prefs,notes:notes.split("\n").map(n=>n.trim()).filter(Boolean)})){setMessage("Your learning preferences are saved. They apply to your next situation.");setPanel("talk");}};
   const currentQuestion=c?.turns.at(-1)?.text;
-  const help=c&&helpOf(c);
+  // what the phone may draw beyond its own panel's fixed controls comes from the Linga screen model (lib/english/view.ts)
+  const offered=offeredActions(lingaView(s)),offer=(id:string)=>offered.find(a=>a.id===id);
+  const cue=offer("cue"),quiz=offer("quiz"),panelOf=phonePanel(s);
   return <div className="pscreen linga-phone">
     <h3>Linga · {s.learner.name}</h3>
     <div className="linga-buttons"><button className="pbtn" data-secondary={panel!=="talk"} onClick={()=>setPanel("talk")}>Talk</button><button className="pbtn" data-secondary={panel!=="settings"} onClick={()=>{setPrefs(learning.preferences??defaultPreferences(profile));setNotes(learning.notes.join("\n"));setPanel("settings");}}>Set up</button><button className="pbtn" data-secondary={panel!=="map"} onClick={()=>setPanel("map")}>My map</button></div>
@@ -51,9 +53,9 @@ export function LingaPhone({s,post,onSentence}:{s:Session;post:(e:Event)=>Promis
       <details><summary>Recent evidence</summary><div className="linga-transcript">{learning.evidence.slice(-12).reverse().map(e=><p key={e.id}><b>{skillName(e.skill)} · {e.mode} · {e.supported?"with support":"without a supplied phrase"}</b>“{e.quote}”<br/>{e.note}</p>)}{!learning.evidence.length&&<p>Nothing recorded yet. Start with a conversation.</p>}</div></details>
     </>}
     {panel==="talk"&&<>
-      {lc?<CheckPanel lc={lc} run={run} busy={busy} hasPlan={!!learning.plan}/>
-      :c&&c.moment?<MomentPanel c={c} run={run} busy={pending}/>
-      :!c||c.phase==="finished"?<StartPanel s={s} learning={learning} run={run} busy={pending}/>
+      {panelOf==="check"&&lc?<CheckPanel lc={lc} run={run} busy={busy} hasPlan={!!learning.plan} leave={offered.find(a=>a.run.command?.action==="check-leave")}/>
+      :panelOf==="moment"&&c?<MomentPanel c={c} run={run} busy={pending}/>
+      :panelOf==="start"||!c?<StartPanel s={s} learning={learning} run={run} busy={pending} list={!!offer("pick-situation")}/>
       :<>
         <p><b>{c.title}</b><br/>{c.goal}</p>
         <div className="linga-status" aria-live="polite">{c.pending?"Your partner is preparing a reply…":c.paused?"Paused. Resume when you are ready.":c.phase==="coaching"?c.coaching?.note:currentQuestion||"Preparing your scene…"}</div>
@@ -61,11 +63,11 @@ export function LingaPhone({s,post,onSentence}:{s:Session;post:(e:Event)=>Promis
         {c.paused?<button className="pbtn" data-signal="true" onClick={()=>run("resume")}>Resume conversation</button>:c.phase==="coaching"?<>
           <p>One way to try it: “{c.coaching?.after}”</p><button className="pbtn" data-signal="true" disabled={pending} onClick={()=>run("replay")}>Replay with a new question</button>
         </>:<>
-          {c.cue&&<p><b>{help?.tag}</b><br/>{c.cue}</p>}
+          {c.cue&&<p><b>{helpOf(c).tag}</b><br/>{c.cue}</p>}
           {c.quizOpen&&scene&&<><p>{scene.quiz.question}</p>{scene.quiz.options.map((x,i)=><button className="pbtn" data-secondary="true" key={x} disabled={pending} onClick={()=>run("choice",{option:i})}>{x}</button>)}</>}
           <ReplyBox ready={!!currentQuestion} busy={pending} question={c.turns.at(-1)?.id} stopWhen={c.paused||!!c.pending} onCapture={active=>run("capture",{active})}
             onSend={(text,mode,question,attempt)=>run("turn",{text,mode,lastTurnId:question,commandId:attempt})} note="Recorded as written practice. Edited transcripts also stay separate from speaking evidence."/>
-          <div className="linga-buttons">{help?.offered&&<button className="pbtn" data-secondary="true" disabled={pending} onClick={()=>run("cue")}>{help.label}</button>}<button className="pbtn" data-secondary="true" disabled={pending} onClick={()=>run("quiz")}>Choose a phrase</button></div>
+          <div className="linga-buttons">{cue&&<button className="pbtn" data-secondary="true" disabled={pending} onClick={()=>run("cue")}>{cue.label}</button>}{quiz&&<button className="pbtn" data-secondary="true" disabled={pending} onClick={()=>run("quiz")}>{quiz.label}</button>}</div>
           <button className="pbtn" data-secondary="true" disabled={pending||!c.turns.some(t=>t.role==="learner")} onClick={()=>run("coach")}>Pause & coach</button>
         </>}
         <div className="linga-buttons"><button className="pbtn" data-secondary="true" onClick={()=>run(c.pending?"leave":"repeat")}>{c.pending?"Cancel pending turn":"Repeat audio"}</button><button className="pbtn" data-secondary="true" disabled={pending} onClick={()=>run("finish")}>Finish rehearsal</button></div>
@@ -80,12 +82,13 @@ export function LingaPhone({s,post,onSentence}:{s:Session;post:(e:Event)=>Promis
 }
 
 /** Finding the level, the verdict and the topic handshake, as the phone holds them. */
-function CheckPanel({lc,run,busy,hasPlan}:{lc:LevelCheck;run:Run;busy:boolean;hasPlan:boolean}){
+function CheckPanel({lc,run,busy,hasPlan,leave}:{lc:LevelCheck;run:Run;busy:boolean;hasPlan:boolean;leave?:ViewAction}){
   const [topic,setTopic]=useState("");
   const pending=busy||!!lc.pending;
   const status=lc.pending&&<div className="linga-status" aria-live="polite">Linga is thinking… this can take a little while.</div>;
   const problem=lc.error&&!lc.pending&&<p className="linga-error" role="alert">{lc.error}</p>;
-  const stop=<button className="pbtn" data-secondary="true" onClick={()=>run("check-leave")}>{lc.stage==="plan"?"Not now":"Stop for now"}</button>;
+  // Stop for now / Not now, as the view offers it (on the TV row, or as the phone's own through the tasks and the topics)
+  const stop=leave&&<button className="pbtn" data-secondary="true" onClick={()=>run("check-leave")}>{leave.label}</button>;
   if(lc.stage==="about"){
     const q=lc.turns.at(-1),answered=lc.turns.filter(t=>t.role==="learner").length;
     return <>
@@ -161,10 +164,10 @@ function SelfLevel({run,busy,start}:{run:Run;busy:boolean;start:Band}){
 }
 
 /** Linga home on the phone: the same six states the TV decides (lib/english/view.ts). */
-function StartPanel({s,learning,run,busy}:{s:Session;learning:EnglishLearning;run:Run;busy:boolean}){
+function StartPanel({s,learning,run,busy,list}:{s:Session;learning:EnglishLearning;run:Run;busy:boolean;list:boolean}){
   const profile=s.profiles.find(p=>p.id===s.learner.id),c=s.conversation,prefs=learning.preferences??defaultPreferences(profile);
   const next=recommendScene(profile,learning),placement=learning.placement,home=lingaHome(s);
-  const pick=<label>Or choose a situation<select defaultValue="" onChange={e=>{if(e.target.value)void run("start",{sceneId:e.target.value,replace:true});e.target.value="";}} disabled={busy}><option value="">Choose…</option>{eligibleScenes(profile,prefs,learning).map(x=><option key={x.id} value={x.id}>{x.name}</option>)}</select></label>;
+  const pick=list&&<label>Or choose a situation<select defaultValue="" onChange={e=>{if(e.target.value)void run("start",{sceneId:e.target.value,replace:true});e.target.value="";}} disabled={busy}><option value="">Choose…</option>{eligibleScenes(profile,prefs,learning).map(x=><option key={x.id} value={x.id}>{x.name}</option>)}</select></label>;
   const level=placement&&<p className="linga-note">Your level: <b>{placement.band} · {BAND_NAME[placement.band]}</b>{placement.source==="self"?" · self-chosen":""}</p>;
   const planned=<div className="linga-buttons"><button className="pbtn" data-secondary="true" disabled={busy} onClick={()=>run("plan-open")}>My topics</button><button className="pbtn" data-secondary="true" disabled={busy} onClick={()=>run("check-start")}>Find my level again</button></div>;
   let body;

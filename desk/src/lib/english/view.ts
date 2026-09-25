@@ -105,7 +105,7 @@ export interface LingaView {
   actions: ViewAction[];
   /** the TV footer: the menu, and Repeat audio during a conversation */
   footer: ViewAction[];
-  /** what the paired phone adds that takes a value or lives only there */
+  /** phone-side actions: what the paired phone draws beyond the TV row (a value it takes, a control only it keeps); the TV never draws these */
   phone: ViewAction[];
   answer: Answer | null;
   spoken: Spoken;
@@ -157,6 +157,17 @@ export function lingaHome(s: Session): HomeState {
   if (!l.plan || lc?.stage === "plan" || lc?.stage === "verdict") return "no-plan";
   if (planDone(l)) return "plan-done";
   return "next-topic";
+}
+
+/**
+ * What the paired phone's Talk tab holds, whatever the TV shows: the level check, a moment, its start panel (Linga
+ * home, the same six states) or the live conversation. LingaPhone picks its panel from this, and the view's phone
+ * list offers what that panel draws.
+ */
+export type PhonePanel = "check" | "moment" | "start" | "talk";
+export function phonePanel(s: Session): PhonePanel {
+  const c = s.conversation;
+  return activeCheck(s) ? "check" : c?.moment ? "moment" : !c || c.phase === "finished" ? "start" : "talk";
 }
 
 /** The screen's typed or spoken answer, if it takes one now. A choice is answered with the remote, not here. */
@@ -371,17 +382,37 @@ export function lingaView(s: Session, input: ViewInput = {}): LingaView {
     ...(c && !isHome && !onCheck ? [act("repeat", "Repeat audio", "Hear the last line again.", cmd("repeat"))] : []),
   ];
 
-  // The phone. While no check or live conversation holds it, its start panel can start any situation from a list.
-  // That list is offered with the situations screen and never on home: the first LT run listed situations on the
-  // first-visit home and five Characters skipped the level check. Before a level, the start panel also takes a band
-  // by hand. On the topics screen it takes a topic in the learner's own words; during a rehearsal it can finish.
-  const phone: ViewAction[] = [];
-  const idle = !lc && (!c || c.phase === "finished");
-  if (idle && s.screen === "linga-scenes" && !menu && !picking) {
-    phone.push(act("pick-situation", "Choose a situation from the phone's list", "Start any situation from the phone's list.", cmd("start", { replace: true }), { needs: "sceneId" }));
-    details.push(`On the phone, every situation:\n${scenes.map(x => `  [${x.id}] ${x.name} — ${x.goal}`).join("\n")}`);
+  // The phone. Its Talk tab holds a panel of its own whatever the TV shows (phonePanel), and every control that panel
+  // draws is offered: by the TV row above when the row runs the same command, else here, as a phone-side action the
+  // TV never draws. The start panel is Linga home on the phone: this learner's home buttons, a band by hand before a
+  // level, and the list of every situation. The owner decided (2026-09-25) that the view offers that list wherever
+  // the phone draws it, on home and on the recap too; the level check stays the start panel's first button. The check
+  // keeps Stop / Not now on the phone through the tasks and the topics, and the conversation keeps Help me answer and
+  // Choose a phrase after a reply and under the quiz. On the topics screen the phone takes a topic in the learner's
+  // own words; during a rehearsal it can finish.
+  const phone: ViewAction[] = [], panel = phonePanel(s);
+  const sameRun = (a: ViewAction, b: ViewAction) => !!a.run.command && !!b.run.command && JSON.stringify(a.run.command) === JSON.stringify(b.run.command);
+  const onPhone = (a: ViewAction) => { if (!actions.some(x => sameRun(x, a))) phone.push(a); };
+  if (panel === "start") {
+    const h = lingaHome(s), again = (self: boolean) => act("check-again", self ? "Find my level with Linga" : "Find my level again", "Three questions and a few short tasks, about seven minutes.", cmd("check-start"));
+    const talk = (id: ActionId, label: string) => act(id, label, recommended.goal, cmd("start", { sceneId: recommended.id, replace: true }));
+    const mine = act("my-topics", "My topics", "See the conversations in your plan, swap them or ask for new ones.", cmd("plan-open"));
+    const start = h === "no-placement" ? [act("find-level", "Find my level", "Three questions about you, then a few short tasks. About seven minutes, answered on your phone.", cmd("check-start"))]
+      : h === "no-plan" ? [act("see-topics", "See my topics", "Linga picks conversations for this level. Swap any you don't want.", cmd("plan-propose")), again(l.placement?.source === "self")]
+      : h === "plan-done" ? [act("new-topics", "New topics", "Linga suggests a fresh set of conversations for your level.", cmd("plan-propose")), talk("talk-again", "Talk again"), mine, again(false)]
+      : h === "next-topic" ? [talk("start-talking", "Start talking"), mine, again(false)] : [];
+    start.forEach(onPhone);
+    onPhone(act("pick-situation", "Choose a situation from the phone's list", "Start any situation from the phone's list.", cmd("start", { replace: true }), { needs: "sceneId" }));
+    if (s.screen === "linga-scenes" && !menu && !picking) details.push(`On the phone, every situation:\n${scenes.map(x => `  [${x.id}] ${x.name} — ${x.goal}`).join("\n")}`);
+    if (h === "no-placement") onPhone(act("pick-band", "Pick my level on the phone (A1 to C2)", "Use a level from A1 to C2 you choose yourself.", cmd("level-self"), { needs: "band" }));
   }
-  if (idle && home === "no-placement" && !menu) phone.push(act("pick-band", "Pick my level on the phone (A1 to C2)", "Use a level from A1 to C2 you choose yourself.", cmd("level-self"), { needs: "band" }));
+  if (panel === "check" && lc && lc.stage !== "verdict")
+    onPhone(lc.stage === "plan" ? act("not-now", "Not now", "Leave for now. Linga asks again when you come back to your topics.", cmd("check-leave")) : stopCheck);
+  if (panel === "talk" && c && !c.paused && c.phase !== "coaching") {
+    const help = helpOf(c);
+    if (help.offered) onPhone(act("cue", help.label, help.help, cmd("cue"), { disabled: waiting }));
+    onPhone(act("quiz", "Choose a phrase", "Compare two phrases before returning to speaking.", cmd("quiz"), { disabled: waiting }));
+  }
   if (s.screen === "linga-plan" && lc && !lc.askGoal && !lc.pending && lc.topics.length && lc.topics.length < PLAN_MAX)
     phone.push(act("add-topic", "Add a topic in your own words on the phone", "Linga adds a conversation for what you describe.", cmd("plan-add"), { needs: "text" }));
   if (c && c.phase !== "finished" && !lc && s.screen === "linga-talk" && !c.paused && !menu)
