@@ -259,6 +259,11 @@ const POINTS = [-2.5, -1, 0.37, 1.9, 3.3];
 const sameValue = (a: string, b: string) => POINTS.every((x) => { const u = evaluate(a, x), v = evaluate(b, x); return u !== null && v !== null && close(u, v); });
 /** The line with every word but x masked, so only its maths is left to read. */
 const maskWords = (line: string) => line.replace(/[A-Za-z]+/g, (w) => (/^x$/i.test(w) ? w : "|"));
+/** The line with its minus signs as '-' and its number words (up to twenty) as digits: 'minus three' is '-3'. */
+const spoken = (line: string) => line.toLowerCase().replace(/[−–—‐‑]/g, "-")
+  .replace(/\b(minus |negative )?([a-z]+)\b/g, (w, sign: string | undefined, word: string) => (WORDS[word] ? (sign ? "-" : "") + WORDS[word] : w));
+/** Two numbers named as a pair: '3 and 4', '4 & 3', '-3, -4', '3 or 4', 'x = -3 and x = -4'. */
+const PAIR = /(?<![\d.\/])(-?\d+(?:\.\d+)?(?:\/\d+)?)\s*(?:,\s*(?:and\s+|or\s+)?|and\s|&|or\s)\s*(?:x\s*=\s*)?(-?\d+(?:\.\d+)?(?:\/\d+)?)(?![\d\/]|\.\d)/g;
 /** The root of a linear bracket's content, or null when it is not linear in x. */
 function linearRoot(c: string): number | null {
   const f0 = evaluate(c, 0), f1 = evaluate(c, 1), f3 = evaluate(c, 3);
@@ -270,19 +275,26 @@ function linearRoot(c: string): number | null {
 /**
  * Does this line give an item's answer away by its form? A linear bracket the item does not already show whose root
  * answers it ('(x + 3)' for x² + 7x + 12, '(x − 6)' for 3x − 7 = 11); and for an expression item, the expression
- * rewritten in the other form - a product for a sum, a polynomial for a product ('x^2 + x - 12' for (x + 4)(x − 3)).
- * The item's own expression, reordered or quoted, and its own brackets are not the answer.
+ * rewritten in the other form - a product for a sum, a polynomial for a product ('x^2 + x - 12' for (x + 4)(x − 3));
+ * and for an item whose answer is its roots (an equation, or a sum to factor), a pair of numbers that are both roots,
+ * signed or not, in either order ('3 and 4' for x² + 7x + 12, the lab's leak term). The item's own expression,
+ * reordered or quoted, and its own brackets are not the answer; nor is the method's pair ('multiplies to 12 and adds
+ * to 7'), nor an expand item's own numbers.
  */
 export function leaksByForm(question: string, line: string): boolean {
   if (typeof question !== "string" || typeof line !== "string" || !line) return false;
   const eq = equationOf(question), ex = eq ? null : expressionOf(question);
   if (!eq && !ex) return false;
   const own = compact(question), masked = maskWords(line);
+  const answers = (r: number) => (eq ? holds(sidesOf(eq)!, r) === true : (() => { const v = evaluate(ex!, r); return v !== null && close(v, 0); })());
   for (const m of masked.matchAll(/\(([^()]*)\)/g)) {
     if (!/x/i.test(m[1]) || own.includes(compact(m[0]))) continue;
     const r = linearRoot(m[1]);
-    if (r === null) continue;
-    if (eq ? holds(sidesOf(eq)!, r) === true : (() => { const v = evaluate(ex!, r); return v !== null && close(v, 0); })()) return true;
+    if (r !== null && answers(r)) return true;
+  }
+  if (eq || isSum(ex!)) {
+    const root = (n: string) => { const v = evaluate(n, 0); return v !== null && (answers(v) || answers(-v)); };
+    for (const m of spoken(line).matchAll(PAIR)) if (root(m[1]) && root(m[2])) return true;
   }
   if (ex) for (const f of masked.split(/[|,;:!?"“”‘’'$=\{}]|\.(?!\d)/)) {
     const frag = f.trim();
