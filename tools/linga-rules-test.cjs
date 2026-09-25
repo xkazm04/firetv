@@ -517,3 +517,102 @@ test('turn case 7 GUARD: leave during a turn in flight cancels it, and the late 
  await assert.rejects(inflight,e=>e.status===409);
  c=getSession().conversation;assert.equal(c.turns.length,1);assert.equal(c.pending,null);
 });
+
+// ---- taught phrases come back: review.ts picks one due item, the partner invites it, code sees it reused
+const review=()=>require(path.join(root,'src/lib/english/review.ts'));
+const TAUGHT_A={id:'old1:t1:moment',kind:'fix',said:'I has booking',better:'I have a booking',why:'"I" goes with "have".',turnId:'old1:t1',at:10,sceneId:'booking',title:'A hotel booking'};
+/** older than A, but already used again: never due */
+const TAUGHT_B={id:'old2:t2:moment',kind:'word',said:'rezervace',better:'reservation',why:'The booking itself.',turnId:'old2:t2',at:5,sceneId:'booking',title:'A hotel booking',offered:1,reusedAt:6,reusedIn:'old3',reusedQuote:'reservation'};
+const TAUGHT_C={id:'old4:t4:moment',kind:'word',said:'svačina',better:'a snack',why:'Food you eat between meals.',turnId:'old4:t4',at:20,sceneId:'weekend',title:'A weekend plan'};
+const REUSED='Hi, I have a booking for Friday.';
+const REVIEW={id:TAUGHT_A.id,kind:'fix',better:'I have a booking',fromTitle:'A hotel booking'};
+/** a learner whose record holds these taught items, and an engine that keeps every prompt it was sent */
+let prompts=[];
+async function taughtStart(taught,opening={title:'Rover',goal:'Find the rover.',opening:'Hello there. Where are you going?',supportProvided:false},turnReply='Lovely. And what name is it under?'){
+ fresh();saveEnglish('ema',{...emptyEnglish(),taught});prompts=[];
+ answer=async req=>{const p=JSON.parse(req.prompt);prompts.push(p);return {json:p.submittedReply?{reply:turnReply,supportProvided:false,observations:[]}:opening,provider:'test',ms:1};};
+ await command('start',{sceneId:'rover',replace:true});
+ return getSession().conversation;
+}
+const taughtOf=id=>getLearner('ema').english.taught.find(t=>t.id===id);
+
+test('review case 1: start picks the due taught item, the opening prompt invites it without saying it, and the item is counted as offered',async()=>{
+ const c=await taughtStart([TAUGHT_B,TAUGHT_A]);
+ assert.equal(c.review.id,TAUGHT_A.id);assert.equal(c.review.better,'I have a booking');assert.equal(c.review.fromTitle,'A hotel booking');
+ const bring=prompts[0].bringBack;
+ assert(bring,'the opening prompt carries bringBack');assert.equal(bring.phrase,'I have a booking');
+ assert.match(bring.task,/invite/i);assert.match(bring.task,/never say it/i);
+ assert.equal(taughtOf(TAUGHT_A.id).offered,1);assert.equal(taughtOf(TAUGHT_B.id).offered,1,'the reused item is not offered again');
+});
+test('review case 2: an unsupported reply that uses the phrase is recorded by code, on the record and on the scene',async()=>{
+ const c=await taughtStart([TAUGHT_B,TAUGHT_A]);
+ await reply(REUSED);
+ assert.equal(prompts[1].bringBack.phrase,'I have a booking','every turn prompt carries it while it is not yet used');
+ const t=taughtOf(TAUGHT_A.id);
+ assert.equal(typeof t.reusedAt,'number');assert.equal(t.reusedIn,c.id);assert.equal(t.reusedQuote,'I have a booking');
+ const now=getSession().conversation;assert.equal(now.review.used,REUSED);assert.equal(now.review.usedTurn,now.turns.at(-2).id);
+ await reply('Smith. S, M, I, T, H.');assert.equal(prompts[2].bringBack,undefined,'once used, the partner stops inviting it');
+ // normalised containment, in code: case, spacing, punctuation and curly apostrophes do not matter; a near miss is no reuse
+ const R=review(),scene=convo({turns:[{id:'p1',role:'partner',text:'Hello. How can I help?'}],review:REVIEW});
+ assert.equal(R.reuseOf('Hello!  I HAVE   a booking, yes.',scene),'I HAVE   a booking');
+ assert.equal(R.reuseOf('I have booking.',scene),null);assert.equal(R.reuseOf('I have a bookings list',scene),null);
+ assert.equal(R.reuseOf('I don’t know',convo({review:{...REVIEW,better:"I don't know"}})),'I don’t know');
+});
+test('review case 3: no reuse after the starter rung, or after the partner already said the phrase in this scene',async()=>{
+ let c=await taughtStart([TAUGHT_A],{title:'Booking',goal:'Fix a booking.',opening:'Which date do you need?',supportProvided:false,help:LADDER});
+ assert.equal(c.review.id,TAUGHT_A.id);
+ await command('cue');await command('cue');await command('cue');assert.equal(getSession().conversation.supported,true);
+ await reply(REUSED);
+ assert.equal(taughtOf(TAUGHT_A.id).reusedAt,undefined,'a supported reply is not reuse');assert.equal(getSession().conversation.review.used,undefined);
+ c=await taughtStart([TAUGHT_A],{title:'Booking',goal:'Fix a booking.',opening:'Good evening. I have a booking list here. Your name?',supportProvided:false});
+ assert.equal(c.review.id,TAUGHT_A.id);
+ await reply(REUSED);
+ assert.equal(taughtOf(TAUGHT_A.id).reusedAt,undefined,'a copy of the partner\'s own words is not reuse');assert.equal(getSession().conversation.review.used,undefined);
+});
+test('review case 4: the recap is the before-and-after picture when used, and the sentence to take with you when not',()=>{
+ const V=view(),turns=[{id:'p1',role:'partner',text:'Hello. How can I help?'},{id:'l1',role:'learner',text:REUSED,mode:'speech'},{id:'p2',role:'partner',text:'Which name is it under?'}];
+ let v=V.lingaView(sessionOf(fixture('linga-recap',{placement:placed(),taught:[TAUGHT_A],conversation:convo({phase:'finished',turns,review:{...REVIEW,used:REUSED,usedTurn:'l1'}})})),{});
+ assert.equal(v.hero.kind,'comparison');
+ assert.deepEqual(v.hero.before,{kicker:'Linga taught · A hotel booking',quote:'I have a booking'});
+ assert.deepEqual(v.hero.after,{kicker:'You said it tonight',quote:REUSED});
+ assert.equal(v.hero.art,'done','the arch shows the star-burst');
+ assert.match(v.hero.data,/1 spoken/,'the counts stay in the data line');
+ const text=V.viewText(v);assert(text.includes('"I have a booking"'));assert(text.includes(`"${REUSED}"`));
+ assert(v.baseCaption.split(/\s+/).length<=25,'the caption stays short');
+ v=V.lingaView(sessionOf(fixture('linga-recap',{placement:placed(),taught:[TAUGHT_A],conversation:convo({phase:'finished',turns,review:REVIEW})})),{});
+ assert.equal(v.hero.kind,'track');assert.equal(v.hero.sentence,'I have a booking');assert.match(v.hero.subtitle,/1 spoken/);
+ assert(V.viewText(v).includes('I have a booking'));assert(v.baseCaption.split(/\s+/).length<=25);
+});
+test('review case 5: withholding - during the scene the phrase is on no screen until the learner has used it',()=>{
+ const V=view();
+ for(const [screen,c] of [['linga-talk',convo({turns:REPLIED})],['linga-talk',convo({turns:REPLIED,quizOpen:true})],['linga-talk',convo({turns:REPLIED,paused:true})],['linga-coach',TURN_STATES.coaching[1]],['linga-moment',TURN_STATES.moment[1]]])
+  for(const ui of [{},{menu:true}]){
+   const v=V.lingaView(sessionOf(fixture(screen,{placement:placed(),taught:[TAUGHT_A],conversation:{...c,review:REVIEW}})),ui);
+   assert(!JSON.stringify(v).includes('I have a booking'),`${screen}${ui.menu?' (menu)':''} withholds the phrase`);
+   assert(!V.viewText(v).includes('I have a booking'));
+  }
+ const turns=[{id:'p1',role:'partner',text:'Hello. How can I help?'},{id:'l1',role:'learner',text:REUSED,mode:'speech'},{id:'p2',role:'partner',text:'Which name is it under?'}];
+ const v=V.lingaView(sessionOf(fixture('linga-talk',{placement:placed(),taught:[TAUGHT_A],conversation:convo({turns,review:{...REVIEW,used:REUSED,usedTurn:'l1'}})})),{});
+ assert(v.baseCaption.includes('I have a booking'),'once used, the next screen says so');assert.equal(v.captionTag,'Used again');
+ assert(v.baseCaption.split(/\s+/).length<=25);
+});
+test('review case 6: an item offered in two scenes without reuse is not due a third time',async()=>{
+ const R=review();
+ assert.equal(R.dueTaught([{...TAUGHT_A,offered:2},TAUGHT_C],'new').id,TAUGHT_C.id);
+ assert.equal(R.dueTaught([TAUGHT_C,TAUGHT_A],'new').id,TAUGHT_A.id,'oldest first');
+ assert.equal(R.dueTaught([TAUGHT_A],'old1'),null,'never from the rehearsal that taught it');
+ let c=await taughtStart([{...TAUGHT_A,offered:2},TAUGHT_C]);assert.equal(c.review.id,TAUGHT_C.id);
+ c=await taughtStart([{...TAUGHT_A,offered:2},TAUGHT_B]);assert.equal(c.review,null);assert.equal(prompts[0].bringBack,undefined);
+ assert.equal(taughtOf(TAUGHT_A.id).offered,2);
+});
+test('review case 7: cleanEnglish keeps a taught item\'s review fields and drops one with a malformed reusedAt',()=>{
+ const kept={...TAUGHT_A,offered:1,reusedAt:99,reusedIn:'c9',reusedQuote:'I have a booking'};
+ const taught=cleanEnglish({taught:[kept,{...TAUGHT_A,id:'bad',reusedAt:'yesterday'},TAUGHT_C]}).taught;
+ assert.deepEqual(taught.map(t=>t.id),[TAUGHT_A.id,TAUGHT_C.id]);
+ assert.deepEqual(taught[0],kept);assert.deepEqual(taught[1],TAUGHT_C,'an item never offered keeps no review fields');
+});
+test('review case 8 GUARD: a learner with no taught items gets no review and no bringBack',async()=>{
+ const c=await taughtStart([]);
+ assert.equal(c.review??null,null);assert(!('bringBack' in prompts[0]));
+ await reply(REUSED);assert(!('bringBack' in prompts[1]));
+});
