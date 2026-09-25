@@ -4,7 +4,7 @@ surfaces: ["tv", "phone"]
 vault: ["C:/Users/kazda/kiro/firetv/.cx"]
 vault_subdir: Cx
 design_doc: docs/DESIGN-ON-AIR.md       # the shell's; each app has its own, see Design law by surface
-screens_source: docs/STUDY-DESK-SCREENS.md   # stale since the 2026-09-24 redesigns: read the code (see Screens)
+screens_source: docs/STUDY-DESK-SCREENS.md   # rewritten from the code 2026-09-25; the code wins where they differ (see Screens)
 executor: opus
 stops_per_session: 3
 commit_format: "cx(S<n>): <screen> - <what changed>"   # no commit gate in this repo (checked 2026-09-25)
