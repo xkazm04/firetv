@@ -6,7 +6,7 @@
  */
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useSession, call } from "@/tv/useSession";
-import type { Session } from "@/lib/session/store";
+import type { Event, Session } from "@/lib/session/store";
 import * as S from "@/tv/screens";
 import { EssayTV } from "@/essay/EssayTV";
 import { essayOwns, keyOf, landingAt, landingStops, lingaOwns, mathsOwns, runStep, tvKey, LOCAL, type LandingStop, type Local } from "@/tv/keys";
@@ -17,6 +17,7 @@ import { LingaTestBar } from "@/english/LingaTestBar";
 
 export default function TV() {
   const { s, connected, post } = useSession();
+  const postOnly = useCallback(async (e: Event) => { await post(e); }, [post]);
   const [voice, setVoice] = useState(true);
   const [fast, setFast] = useState(false);
   /** TEMPORARY: the Linga test answer bar, dev builds only — open with ?test=1, close with ?test=0. */
@@ -39,7 +40,7 @@ export default function TV() {
   const audio = useRef<HTMLAudioElement | null>(null);
   const linkedModule = useRef(false);
   useEffect(() => {
-    if (!s || linkedModule.current) return;
+    if (!s || linkedModule.current || notTheTV(s)) return;
     linkedModule.current = true;
     if (new URLSearchParams(window.location.search).get("module") === "english") {
       void post({ type: "subject", subject: "english" }).then(() => post({ type: "nav", screen: "linga" }));
@@ -88,7 +89,7 @@ export default function TV() {
   // ---- D-pad: the keymap is tv/keys.ts; this is only its executor ----
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (!s || lingaOwns(s)) return;
+      if (!s || notTheTV(s) || lingaOwns(s)) return;
       const k = keyOf(e.key); if (!k) return;
       e.preventDefault();
       if (zooming.current) return;
@@ -122,14 +123,32 @@ export default function TV() {
       <div className="frame" ref={frame}>
         <div className="stage" ref={stage} tabIndex={0}>
           {/* The landing (the desk), Essay Master (Specimen) and Math Buddy (Lamplight) draw the whole stage, no On Air grid or band; each keeps the 5% margins itself */}
-          {s && s.screen === "landing" ? <LandingTV s={s} zoom={zoom} /> : s && essayOwns(s) ? <EssayTV s={s} table={loc.table} /> : s && mathsOwns(s) ? <MathsTV s={s} busy={loc.busy} /> : <>
+          {s && notTheTV(s) ? <NotThisTV /> : s && s.screen === "landing" ? <LandingTV s={s} zoom={zoom} /> : s && essayOwns(s) ? <EssayTV s={s} table={loc.table} /> : s && mathsOwns(s) ? <MathsTV s={s} busy={loc.busy} /> : <>
             <div className="grid" />
-            <div className="safe">{s ? lingaOwns(s) ? <LingaTV s={s} post={post} voice={voice}/> : <ScreenFor s={s} /> : null}</div>
+            <div className="safe">{s ? lingaOwns(s) ? <LingaTV s={s} post={postOnly} voice={voice}/> : <ScreenFor s={s} /> : null}</div>
           </>}
         </div>
       </div>
     </div>
   );
+}
+
+/**
+ * A browser without the desk's key sees the lobby (lib/session/pairing.ts), not the desk: it is not this desk's
+ * TV until it opens the address the desk printed at start (/tv?key=...). One On Air line, nothing to press.
+ */
+const notTheTV = (s: Session) => s.viewer === "guest" || s.viewer === "phone";
+function NotThisTV() {
+  return (<>
+    <div className="grid" />
+    <div className="band band-rule" />
+    <main className="content-full" data-role="not-this-tv" style={{ display: "grid", placeItems: "center", textAlign: "center" }}>
+      <div style={{ maxWidth: 1200 }}>
+        <div className="title">Not this desk&rsquo;s TV</div>
+        <div className="cap-text" style={{ marginInline: "auto" }}>Open the TV address the desk printed.</div>
+      </div>
+    </main>
+  </>);
 }
 
 /** The shell's screens (On Air). The landing, Math Buddy's and Essay Master's are drawn before this is asked. */

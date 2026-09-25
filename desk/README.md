@@ -14,10 +14,16 @@ npm run measure          # the KPI readings, as numbers (--json for a machine)
 ```
 
 - **/tv** — the television. Open at 1920×1080 (or let it scale). Keyboard is the D-pad: arrows,
-  Enter = Select, Backspace/Escape = Back, M = Menu, Space = Play/Pause.
+  Enter = Select, Backspace/Escape = Back, M = Menu, Space = Play/Pause. The first time, open the
+  address the desk prints at start, `TV: http://<ip>:3000/tv?key=...`: the key makes that browser the
+  TV (a cookie; the key leaves the address). Without it /tv says "Not this desk's TV". The key is kept
+  in `data/pairing.json` (under `DESK_DATA_DIR` when set), so a scripted capture reads it from there.
 - **/phone** — the phone. Open on a real phone on the same Wi-Fi at `http://<this PC's IP>:3000/phone`
   (the landing page prints the address), or in a second browser window. Without a camera, the
-  Capture screen offers three sample pages.
+  Capture screen offers three sample pages. A phone joins by giving the server the code the TV shows
+  (scan the QR, or type it); the server checks it and remembers that phone until the session is reset.
+  Until then the phone sees only the lobby, and every API route but the session's own answers 401
+  (`src/proxy.ts`; who is who is `src/lib/session/pairing.ts`).
 - **/tv?module=english** — Linga's conversation entrance. Choose a situation, respond on the
   phone's Linga tab, ask for a cue or coaching, replay the moment, and finish with saved progress.
 - **/english/print** — the current learner's printable English learning map.
@@ -52,7 +58,8 @@ The isolated logic/service checks run as part of `npm test` in `desk/` (`npm run
 or `node tools/linga-rules-test.cjs` from the repository root).
 For the browser integration check, start a separate server with `DESK_DATA_DIR` pointing to a
 scratch directory, then set `LINGA_TEST_ALLOW_WRITES=1` and `LINGA_TEST_URL` before running
-`node tools/linga-ui-test.cjs`. That check makes real model calls and simulates recognition events;
+`node tools/linga-ui-test.cjs`, with `DESK_DATA_DIR` set to the server's directory too (the test
+opens the TV with the key kept there). That check makes real model calls and simulates recognition events;
 it does not test microphone hardware. Other engine caches keep their existing locations.
 
 ## Engines (all local, all swappable)
@@ -79,6 +86,8 @@ src/lib/engines/              text · vision · voice · embed — one function 
 src/lib/desk/                 read a page · hint · pick a lesson · analyse a sentence · analyse a paragraph
 src/lib/rules/                decisions made in code: English tenses, essay sentence roles
 src/lib/session/store.ts      the one session, its reducer, SSE fan-out, JSON persistence
+src/lib/session/pairing.ts    the TV key, the phone cookie, and each caller's view of the session
+src/proxy.ts                  the gate: every API request classified TV / phone / guest
 src/lib/library/              the syllabus, transcripts, windowing, embedding cache
 data/                         session.json, lessons/*.vtt, embeddings.json, sample pages (local only)
 ```

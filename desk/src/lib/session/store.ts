@@ -134,11 +134,14 @@ export interface Session {
   jobs: Jobs;
   status: string; log: { problems: string[]; hints: number; hard: string[]; minutes: number; started: number | null };
   updatedAt: number;
+  /** Who this copy was drawn for (lib/session/pairing.ts view): never stored, set only on what a route sends. */
+  viewer?: "tv" | "phone" | "guest";
 }
 
 export type Event =
   | { type: "linga.changed"; conversation?: Conversation | null; check?: LevelCheck | null; screen?: Screen; focus?: number }
-  | { type: "join" } | { type: "nav"; screen: Screen; focus?: number; from?: Screen } | { type: "focus"; focus: number }
+  // a join carries the code the phone was given; the session route checks it (lib/session/pairing.ts), the reducer does not
+  | { type: "join"; code?: string } | { type: "leave" } | { type: "nav"; screen: Screen; focus?: number; from?: Screen } | { type: "focus"; focus: number }
   | { type: "subject"; subject: Subject }
   | { type: "learner.set"; id: string }
   | { type: "profile.draft"; patch: Partial<Profile> } | { type: "profile.save" } | { type: "profile.discard" }
@@ -194,6 +197,8 @@ export function reduce(s: Session, e: Event): Session {
     case "linga.changed": if (e.conversation !== undefined) n.conversation = e.conversation; if (e.check !== undefined) n.check = e.check; if (e.screen) { n.screen = e.screen; n.subject = "english"; n.focus = e.focus ?? (["linga-talk", "linga-coach", "linga-check", "linga-verdict", "linga-moment"].includes(e.screen) ? -1 : 0); } break;
     // a draft in progress owns the screen: joining must not throw the parent off the profile
     case "join": n.joined = true; if (s.screen !== "profile") { n.screen = "joined"; n.focus = 0; } break;
+    // a phone forgetting the desk drops its own cookie (the session route); the desk itself does not change
+    case "leave": return s;
     // the landing with no stop named: the lamp rests on what was left (tv/landingRows.ts LANDING_REST)
     case "nav": n.screen = e.screen; n.focus = e.focus ?? (e.screen === "landing" ? LANDING_REST : 0); if (e.from) n.back = e.from; break;
     case "focus": n.focus = e.focus; break;

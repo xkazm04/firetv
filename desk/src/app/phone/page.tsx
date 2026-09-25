@@ -3,11 +3,11 @@
  * The phone: the instrument. Camera, pen, keyboard, mic. It never renders the big view.
  * Student and Parent are two roles on one page for the prototype.
  */
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useSession, call, fmt } from "@/tv/useSession";
 import { ESSAY_TYPES } from "@/lib/library/lessons.data";
 import { BRAND as MODULE } from "@/tv/profileRows";
-import type { JobKind, Session, Subject } from "@/lib/session/store";
+import type { Event, JobKind, Session, Subject } from "@/lib/session/store";
 import { LingaPhone } from "@/english/LingaPhone";
 import { follow, type PScreen } from "./panelFor";
 
@@ -26,7 +26,9 @@ const TV_WORDS: Partial<Record<Session["screen"], string>> = {
   linga: "Linga", "linga-scenes": "English situations", "linga-map": "your learning map", "linga-talk": "your conversation", "linga-coach": "a coaching moment", "linga-recap": "your rehearsal recap", "linga-check": "finding your level", "linga-verdict": "your level", "linga-plan": "your topics", "linga-moment": "a moment in your conversation",
 };
 export default function Phone() {
-  const { s, connected, post } = useSession();
+  const { s, connected, post, reconnect } = useSession();
+  /** Linga's panel posts and moves on; only the join reads the answer. */
+  const postOnly = useCallback(async (e: Event) => { await post(e); }, [post]);
   const [role, setRole] = useState<"student" | "parent">("student");
   const [screen, setScreen] = useState<PScreen>("join");
   const [pin, setPin] = useState("");
@@ -58,14 +60,15 @@ export default function Phone() {
   /** A failed run the learner has stepped past ("Snap a new page"): its Try again is not offered again. */
   const [passed, setPassed] = useState("");
 
-  // the QR on the TV carries the code: arrive with ?pin= and the phone joins itself, then tidies the bar
+  // the QR on the TV carries the code: arrive with ?pin= and the phone gives it to the desk, which checks it, then tidies the bar
   useEffect(() => {
     if (!s || s.joined) return;
     const q = new URLSearchParams(location.search).get("pin");
-    if (!q || q !== s.pin) return;
-    post({ type: "join" });
+    if (!q) return;
+    remembered.current = null;
     history.replaceState(null, "", location.pathname);
-  }, [s?.pin, s?.joined]); // eslint-disable-line react-hooks/exhaustive-deps
+    void join(q, true);
+  }, [s?.joined]); // eslint-disable-line react-hooks/exhaustive-deps
   // the input mirrors the draft; a new draft (or none) resets what is typed here
   useEffect(() => { setPname(s?.draft?.name ?? ""); }, [s?.draft?.id]); // eslint-disable-line react-hooks/exhaustive-deps
   // the TV asked for a page: the capture tab follows what it is waiting for
@@ -83,17 +86,27 @@ export default function Phone() {
   useEffect(() => { if (cam && video.current && video.current.srcObject !== cam) video.current.srcObject = cam; }, [cam, shot]);
 
   const [bad, setBad] = useState(false);
-  const join = async (code = pin) => {
-    if (s && code === s.pin) { await post({ type: "join" }); setMsg(""); try { localStorage.setItem("desk.pin", code); } catch {} }
-    else { setMsg("That code is not on the TV."); setBad(true); setTimeout(() => setBad(false), 500); }
+  /**
+   * The desk checks the code (api/session): a match sets this phone's cookie and the stream reopens as a joined
+   * phone; a refusal says why. Quiet for a code the phone brought (the QR, a remembered one): no shake for those.
+   */
+  const join = async (code = pin, quiet = false) => {
+    let r: Response | null = null;
+    try { r = await post({ type: "join", code }); } catch {}
+    if (r?.ok) { setMsg(""); try { localStorage.setItem("desk.pin", code); } catch {} reconnect(); return; }
+    if (quiet) return;
+    const j = r ? await r.json().catch(() => ({} as { error?: string })) as { error?: string } : {};
+    setMsg(r ? j.error ?? "That code is not on the TV." : "That did not reach the desk."); setBad(true); setTimeout(() => setBad(false), 500);
   };
   // four digits join by themselves; Join stays as the fallback tap
   const onPin = (v: string) => { const d = v.replace(/\D/g, "").slice(0, 4); setPin(d); if (d.length === 4 && s && !s.joined) join(d); };
   // the phone remembers the desk: a code kept from an earlier join lets it in without asking
   const remembered = useRef<string | null>(null);
   useEffect(() => { try { remembered.current = localStorage.getItem("desk.pin"); } catch {} }, []);
-  useEffect(() => { if (s && !s.joined && remembered.current && remembered.current === s.pin) { remembered.current = null; post({ type: "join" }); } }, [s?.pin, s?.joined]); // eslint-disable-line react-hooks/exhaustive-deps
-  const forget = () => { try { localStorage.removeItem("desk.pin"); } catch {} remembered.current = null; setMsg("This phone will ask for the code next time."); };
+  useEffect(() => { if (s && !s.joined && remembered.current) { const code = remembered.current; remembered.current = null; void join(code, true); } }, [s?.joined]); // eslint-disable-line react-hooks/exhaustive-deps
+  // the desk forgets this phone too: its cookie goes, and the stream reopens as a guest
+  const forget = () => { try { localStorage.removeItem("desk.pin"); } catch {} remembered.current = null; setMsg("This phone will ask for the code next time.");
+    void post({ type: "leave" }).then(() => reconnect(), () => {}); };
 
   // the phone stays where it is: the hand-off is shown, not jumped over
   const send = async (dataUrl: string, w: number, h: number, sub: Subject, title: string) => {
@@ -218,7 +231,7 @@ export default function Phone() {
         <div className="link">{s?.joined ? <><b>joined</b> · {s.learner.name}</> : connected ? "not joined" : "connecting…"}{s && <small>TV · {TV_WORDS[s.screen] ?? s.screen}</small>}</div>
       </div>
       <div className="pbody">
-        {screen === "linga" && s && <LingaPhone key={`${s.learner.id}:${s.conversation?.id??"setup"}:${s.check?.id??""}`} s={s} post={post} onSentence={()=>setScreen("say")}/>}
+        {screen === "linga" && s && <LingaPhone key={`${s.learner.id}:${s.conversation?.id??"setup"}:${s.check?.id??""}`} s={s} post={postOnly} onSentence={()=>setScreen("say")}/>}
         {screen === "join" && <div className="pscreen"><h3>Join the desk</h3>
           <p>{!s ? "Looking for the TV…" : s.screen === "pair" ? "The TV is showing the code. Scan it, or type it here." : `The TV is on ${TV_WORDS[s.screen] ?? s.screen}. Ask it for the code, then type it here.`}</p>
           {s && s.screen !== "pair" && <button className="pbtn" data-secondary="true" onClick={() => post({ type: "nav", screen: "pair", from: s.screen })}>Show the code on the TV</button>}
