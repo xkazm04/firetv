@@ -60,14 +60,14 @@ export function Pair({ s }: { s: Session }) {
   return (<>
     <div className="band band-rule" />
     <div className="content-full" style={{ display: "grid", placeItems: "center", textAlign: "center" }}>
-      <div style={{ maxWidth: 560 }}>
+      <div style={{ maxWidth: 1100 }}>
         <div className="eyebrow">Study Desk · pair a phone</div>
         <div className="qr" style={{ margin: "40px auto 28px", width: 300, height: 300, background: "#fff", display: "grid", placeItems: "center" }} dangerouslySetInnerHTML={{ __html: svg }} />
-        <div className="lt">
+        <div className="lt" style={{ maxWidth: 560, margin: "0 auto" }}>
           <div className="tag">Code</div>
           <div className="txt" style={{ letterSpacing: ".3em", fontVariantNumeric: "tabular-nums" }}>{s.pin}</div>
         </div>
-        <div className="body" style={{ color: "var(--mute)", marginTop: 24 }}>Scan, or open <span style={{ color: "var(--paper)" }}>{s.phoneUrl}</span> on your phone and type the code.</div>
+        <div className="body" style={{ color: "var(--mute)", marginTop: 24 }}>Scan, or open <span style={{ color: "var(--paper)" }}>{s.phoneUrl.replace(/^https?:\/\//, "")}</span> on your phone and type the code.</div>
       </div>
     </div>
     <div className="ticker"><span>Waiting for a phone</span><i>·</i><span>code <b>{s.pin}</b></span><i>·</i><span>same Wi-Fi as the TV</span></div>
