@@ -20,7 +20,7 @@ export async function POST(req: Request) {
   const prev = s.hint;
   if (body.stage === 2 && prev && prev.key === item.key) {
     const r = await runJob("hint", async () => {
-      const h2 = await hint(page.subject, item.text, { previous: prev.hint1?.hint, askedQ: prev.askedQ, rule: prev.rule });
+      const h2 = await hint(page.subject, item.text, { previous: [prev.hint1?.hint, prev.hint1?.next].filter(Boolean).join(" "), askedQ: prev.askedQ, rule: prev.rule });
       dispatch({ type: "hint.set", hint: { ...prev, stage: 2, hint2: { hint: h2.hint, next: h2.next }, ms: h2.ms } });
       dispatch({ type: "hint.stage", stage: 2 });
       return h2;
