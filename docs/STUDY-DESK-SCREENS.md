@@ -65,7 +65,8 @@ an app to the phone while it is unpaired; Select on an app plays the zoom into i
 (Math Buddy Tonight, Linga home, Essay Master's lenses) after a `subject` event; Select on the place card opens the
 learner switcher, on the unpaired phone the pairing screen (both with `from: landing`); Back brings the lamp home
 to the CONTINUE object. A nav to the landing without a focus rests the lamp (`LANDING_REST`, -1); Back from an
-app's home, the switcher or pairing lands on the object it came from.
+app's home, the switcher or pairing lands on the object it came from. Choosing a learner in the switcher, or saving a profile,
+returns to the desk with the lamp at rest on what that learner left - never straight into one app.
 *Feeds:* the profile's modules (`onModules`), `continueCard` and `practice` (Math Buddy), Linga's own home view
 (`lingaView`, `lingaHome`, `progressDots`), the writing record and history (`lensStandings`, `writingTotals`, the
 session's `essay` when this learner read it), `joined` / `pin` / `phoneUrl`.

@@ -192,6 +192,14 @@ test('retry: with nothing failed there is nothing to retry, and no engine is cal
  assert.equal(asked,0);
 });
 
+test('case 5b: choosing or saving a learner goes to the desk with the lamp at rest, never into Math Buddy',()=>{
+ store.dispatch({type:'reset'});
+ store.dispatch({type:'profile.draft',patch:{id:'scratch-words',name:'Words',type:'other',modules:['english','essay']}});store.dispatch({type:'profile.save'});
+ let s=store.getSession();assert.equal(s.learner.id,'scratch-words');assert.equal(s.screen,'landing','a saved profile opens the desk');assert.equal(s.focus,-1);
+ store.dispatch({type:'nav',screen:'tonight'});store.dispatch({type:'learner.set',id:'scratch-words'});
+ s=store.getSession();assert.equal(s.screen,'landing','a chosen learner opens the desk, not Tonight');assert.equal(s.focus,-1,'the lamp rests on what this learner left');
+});
+
 test('case 6: a practice set written for one learner does not land after the desk changed learner',async()=>{
  store.dispatch({type:'reset'});
  for(const id of ['scratch-a','scratch-b']){store.dispatch({type:'profile.draft',patch:{id,name:id,type:'other'}});store.dispatch({type:'profile.save'});}
