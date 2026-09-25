@@ -322,3 +322,55 @@ test('case 12: a wrong settle leaves k where it stands',async()=>{
  assert.equal(getLearner(me).history.length,n);
  const p=store.getSession().practice.items;assert.equal(lineNow(me).detail,`${p.filter(i=>i.verdict==='right').length} of ${p.length} right`,'the line is what the verdicts say');
 });
+
+// ---- the pen: where the working broke, decided in rules/maths from the learner's own lines and a root found in code ----
+const M=()=>require(path.join(root,'src/lib/rules/maths.ts'));
+test('pen case 1: rootOf finds the linear root in code, and claims none for anything that is not linear',()=>{
+ const {rootOf}=M();assert.equal(typeof rootOf,'function');
+ assert.equal(rootOf('3x - 7 = 11'),6);assert.equal(rootOf('x/2 = 4'),8);assert.equal(rootOf('2x = 7'),3.5);
+ assert.equal(rootOf('x^2 = 9'),null,'three points not collinear: not linear');
+ assert.equal(rootOf('3 = 3'),null,'no x to find');assert.equal(rootOf('2x + = 1'),null,'not arithmetic');
+});
+test('pen case 2: the first line the root stops satisfying, and a sign mark when one flipped term repairs it',()=>{
+ assert.deepEqual(M().locate('3x - 7 = 11',['3x = 11 - 7','3x = 4','x = 4/3']),{line:0,span:'- 7',kind:'sign'});
+});
+test('pen case 3: a broken line no single sign flip repairs is marked as a line, with no kind and no span',()=>{
+ assert.deepEqual(M().locate('2x + 6 = 10',['2x + 6 = 10','x + 6 = 5','x = -1']),{line:1});
+});
+test('pen case 4: a line that is not arithmetic is skipped, never blamed; no failing line, no lines or no linear root claims nothing',()=>{
+ const {locate}=M(),q='3x - 7 = 11';
+ assert.deepEqual(locate(q,['take 7 from both sides','3x = 4','x = 4/3']),{line:1});
+ assert.equal(locate(q,['3x = 18','x = 6']),undefined);assert.equal(locate(q,[]),undefined);
+ assert.equal(locate('x^2 = 9',['x = 4']),undefined);
+});
+test('pen case 5: withholding - no sign is ringed on a line where x stands alone, so the answer\'s own sign is never marked',()=>{
+ assert.deepEqual(M().locate('3x - 7 = 11',['3x = 18','x = -6']),{line:1});
+});
+test('pen case 6: marking puts slipAt on a wrong item from its own lines and it reaches the session; verdicts unchanged, no answer anywhere',async()=>{
+ const pen={...sheet,items:sheet.items.map(i=>i.n===2?{...i,question:'3x - 7 = 11'}:i)};
+ const penMarks=marks.map(m=>m.n===2?{n:2,studentAnswer:'4/3',studentWorking:'3x = 11 - 7\n3x = 4\nx = 4/3',verdict:'wrong',solution:'6',slip:'sign-lost-moving'}:m);
+ let asked;looked=(req)=>{asked=req;return reply({items:penMarks})();};
+ store.dispatch({type:'reset'});store.dispatch({type:'practice.set',practice:pen});
+ const {items}=await markSet('img',store.getSession().practice,'maths-pen-mark');
+ assert.deepEqual(items.map(i=>i.verdict),['right','wrong','wrong','unsure','unsure','unsure'],'GUARD: the verdicts are the substitution\'s, as before');
+ assert.deepEqual(items[1].slipAt,{line:0,span:'- 7',kind:'sign'});
+ for(const i of items)if(i.verdict!=='wrong')assert.equal(i.slipAt,undefined,`item ${i.n} is ${i.verdict}`);
+ assert.match(asked.prompt,/one step per line/,'the lines the pen is drawn on are asked for');
+ store.dispatch({type:'practice.marked',items});
+ assert.deepEqual(store.getSession().practice.items[1].slipAt,{line:0,span:'- 7',kind:'sign'},'kept through practice.marked');
+ const keys=keysIn(store.getSession());assert(!keys.includes('answer'));assert(!keys.includes('solution'));
+});
+test('pen case 7: an unsure item settled wrong by an explanation gets its slipAt from the same rule; settled right, none',async()=>{
+ const walk=async()=>{
+  store.dispatch({type:'reset'});store.dispatch({type:'practice.set',practice:sheet});
+  looked=reply({items:marks.map(m=>m.n===4?{...m,studentWorking:'x = 10 + 1'}:m)});
+  const {items}=await markSet('img',store.getSession().practice,store.getSession().learner.id);
+  store.dispatch({type:'practice.marked',items});assert.equal(store.getSession().practice.items[3].verdict,'unsure');
+ };
+ await walk();said({reply:'Check what happened to the 1.',value:'11',slip:'sign-lost-moving'});
+ assert.equal((await explainAt(3,'I moved the one over and got eleven')).body.settled,'wrong');
+ let it=store.getSession().practice.items[3];assert.equal(it.verdict,'wrong');assert.deepEqual(it.slipAt,{line:0});
+ await walk();said({reply:'Look at the line where the 1 moved.',value:'9',slip:'unclear'});
+ assert.equal((await explainAt(3)).body.settled,'right');
+ it=store.getSession().practice.items[3];assert.equal(it.verdict,'right');assert.equal(it.slipAt,undefined);
+});
