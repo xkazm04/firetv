@@ -14,7 +14,9 @@
  * on its TV row or as a phone-side action (`on: 'phone'`). A phone control whose command this screen's view does not
  * offer is a drift the detector still catches: it is tied to the action the view defines for the same session on
  * another Linga screen and marked `phoneOnly`, and should be 0. A rendered control tied to nothing, and not in
- * BY_DESIGN_UNMAPPED, is a stray; a view action with no rendered control is unrendered. Both should be 0 too.
+ * BY_DESIGN_UNMAPPED, is a stray; a view action with no rendered control is unrendered. Both should be 0 too. A
+ * disabled control drawn for a disabled view action is that action's control (drawn, not offered to pick); a disabled
+ * control never stands in for an enabled action, and is never a stray.
  *
  * No browser, no dev server, no model call; nothing here posts to the desk.
  */
@@ -201,23 +203,33 @@ function surfaceOf(s, ui = {}) {
   const tv = renderOne(R.LingaTV, { s, post, voice: false }, ui), phone = renderOne(R.LingaPhone, { s, post, onSentence: () => R.sink?.push({ module: 'sentence' }) });
   const tvRead = read(tv.html), phoneRead = read(phone.html);
   const offers = [...V.offeredActions(v)];
-  const tied = new Map(offers.map(a => [a, []])), controls = [];
+  // `tied`: the enabled controls of each offered action; `dimmed`: the disabled controls of a disabled action
+  const tied = new Map(offers.map(a => [a, []])), dimmed = new Map(offers.map(a => [a, []])), controls = [];
   let cat = null;
   for (const [side, r, rec] of [['tv', tvRead, tv], ['phone', phoneRead, phone]]) for (const c of r.controls) {
     const row = { side, tag: c.tag, label: c.label, disabled: c.disabled, options: c.options.map(o => o.text), action: null, phoneOnly: false, byDesign: BY_DESIGN_UNMAPPED[c.label] ?? null, effect: null };
     controls.push(row);
-    if (c.disabled) continue;
     if (side === 'tv') {
       // the TV prints the view's own labels, and "Select · " before each menu entry
       const label = c.label.replace(/^Select · /, '');
       // only the TV row and footer: a TV button that drew a phone-side action would be a stray
-      const tvRow = [...v.actions, ...v.footer];
-      row.action = tvRow.find(a => a.label === label && !tied.get(a).length) ?? tvRow.find(a => a.label === label) ?? null;
-      if (row.action) tied.get(row.action).push(row);
+      const tvRow = [...v.actions, ...v.footer].filter(a => !c.disabled || a.disabled), ties = c.disabled ? dimmed : tied;
+      row.action = tvRow.find(a => a.label === label && !ties.get(a).length) ?? tvRow.find(a => a.label === label) ?? null;
+      if (row.action) ties.get(row.action).push(row);
       continue;
     }
     const effects = press(rec.controls[c.index], c), eff = effects.find(e => e.run || e.post?.type === 'nav') ?? effects[0] ?? null;
     row.effect = eff;
+    if (c.disabled) {
+      // a disabled control for a disabled view action is a match: the action is drawn, as the view has it. A disabled
+      // control never stands in for an enabled action, and is never a stray or phone-only.
+      if (eff && (eff.run || eff.post?.type === 'nav')) {
+        const off = offers.filter(a => a.disabled && runs(a, eff));
+        row.action = off.find(a => a.label === c.label) ?? off.find(a => !dimmed.get(a).length) ?? off[0] ?? null;
+        if (row.action) dimmed.get(row.action).push(row);
+      }
+      continue;
+    }
     if (!eff || (!eff.run && eff.post?.type !== 'nav')) continue; // a local step (a tab, a text box being typed in, a picker's value)
     if (eff.run && v.answer && eff.run.action === v.answer.action && c.tag === 'textarea') { row.action = 'answer'; continue; }
     const prefer = list => list.find(a => a.label === c.label) ?? list.find(a => c.tag === 'select' ? a.needs : !a.needs) ?? list[0] ?? null;
@@ -240,7 +252,7 @@ function surfaceOf(s, ui = {}) {
   const answered = v.answer && controls.some(r => r.action === 'answer');
   if (answered) offered.unshift({ id: 'answer', label: v.answer.label, needs: 'text', answer: v.answer, on: 'phone' });
   const strays = controls.filter(r => !r.disabled && !r.action && !r.byDesign && r.effect && (r.effect.run || r.effect.post)).map(r => `${r.side}: ${r.label}`);
-  const unrendered = [...offers.filter(a => !tied.get(a).length).map(a => a.id), ...(v.answer && !answered ? ['answer'] : [])];
+  const unrendered = [...offers.filter(a => !tied.get(a).length && !dimmed.get(a).length).map(a => a.id), ...(v.answer && !answered ? ['answer'] : [])];
   const heard = v.audible && !v.spoken.blocked ? v.spoken.line : '';
   const shown = `TV\n${tvRead.text}\n\nPhone\n${phoneRead.text}`;
   return { screen: v.screen, shown, heard, tv: tvRead.text, phone: phoneRead.text, offered, controls, strays, unrendered, view: v };
