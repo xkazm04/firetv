@@ -95,7 +95,7 @@ export default function Phone() {
   const join = async (code = pin, quiet = false) => {
     let r: Response | null = null;
     try { r = await post({ type: "join", code }); } catch {}
-    if (r?.ok) { setMsg(""); try { localStorage.setItem("desk.pin", code); } catch {} reconnect(); return; }
+    if (r?.ok) { setMsg(""); try { localStorage.setItem("desk.pin", code); setHasDesk(true); } catch {} reconnect(); return; }
     if (quiet) return;
     const j = r ? await r.json().catch(() => ({} as { error?: string })) as { error?: string } : {};
     setMsg(r ? j.error ?? "That code is not on the TV." : "That did not reach the desk."); setBad(true); setTimeout(() => setBad(false), 500);
@@ -104,10 +104,12 @@ export default function Phone() {
   const onPin = (v: string) => { const d = v.replace(/\D/g, "").slice(0, 4); setPin(d); if (d.length === 4 && s && !s.joined) join(d); };
   // the phone remembers the desk: a code kept from an earlier join lets it in without asking
   const remembered = useRef<string | null>(null);
-  useEffect(() => { try { remembered.current = localStorage.getItem("desk.pin"); } catch {} }, []);
+  /** Whether this phone holds a desk to forget: the Forget link is offered only then. */
+  const [hasDesk, setHasDesk] = useState(false);
+  useEffect(() => { try { remembered.current = localStorage.getItem("desk.pin"); setHasDesk(!!remembered.current); } catch {} }, []);
   useEffect(() => { if (s && !s.joined && remembered.current) { const code = remembered.current; remembered.current = null; void join(code, true); } }, [s?.joined]); // eslint-disable-line react-hooks/exhaustive-deps
   // the desk forgets this phone too: its cookie goes, and the stream reopens as a guest
-  const forget = () => { try { localStorage.removeItem("desk.pin"); } catch {} remembered.current = null; setMsg("This phone will ask for the code next time.");
+  const forget = () => { try { localStorage.removeItem("desk.pin"); } catch {} remembered.current = null; setHasDesk(false); setMsg("This phone will ask for the code next time.");
     void post({ type: "leave" }).then(() => reconnect(), () => {}); };
 
   // the phone stays where it is: the hand-off is shown, not jumped over
@@ -242,10 +244,10 @@ export default function Phone() {
       <div className="pbody">
         {screen === "linga" && s && <LingaPhone key={`${s.learner.id}:${s.conversation?.id??"setup"}:${s.check?.id??""}`} s={s} post={postOnly} onSentence={()=>setScreen("say")}/>}
         {screen === "join" && <div className="pscreen"><h3>Join the desk</h3>
-          <p>{!s ? "Looking for the TV…" : s.screen === "pair" ? "The TV is showing the code. Scan it, or type it here." : `The TV is on ${TV_WORDS[s.screen] ?? s.screen}. Ask it for the code, then type it here.`}</p>
+          <p>{!s ? "Looking for the TV…" : s.screen === "pair" ? "The TV is showing the code. Type it here." : `The TV is on ${TV_WORDS[s.screen] ?? s.screen}. Ask it for the code, then type it here.`}</p>
           {s && s.screen !== "pair" && <button className="pbtn" data-secondary="true" onClick={() => post({ type: "nav", screen: "pair", from: s.screen })}>Show the code on the TV</button>}
           <div className="field" data-bad={bad}><input inputMode="numeric" placeholder="4-digit code" value={pin} onChange={(e) => onPin(e.target.value)} /><button className="pbtn" data-signal="true" onClick={() => join()}>Join</button></div>
-          <p style={{ fontSize: 12 }}>The TV serves this page itself; nothing to install. This phone remembers the desk once it has joined. <button className="plink" onClick={forget}>Forget this desk</button></p>
+          <p style={{ fontSize: 12 }}>The TV serves this page itself; nothing to install. This phone remembers the desk once it has joined.{hasDesk && <> <button className="plink" onClick={forget}>Forget this desk</button></>}</p>
           <button className="pbtn" data-secondary="true" onClick={() => nav("profile")}>Naming a new learner? Open Profile.</button></div>}
 
         {screen === "joined" && s && <div className="pscreen"><h3>On the desk</h3>
