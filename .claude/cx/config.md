@@ -3,10 +3,11 @@ product: "Study Desk"
 surfaces: ["tv", "phone"]
 vault: ["C:/Users/kazda/kiro/firetv/.cx"]
 vault_subdir: Cx
-design_doc: docs/DESIGN-ON-AIR.md
-screens_source: docs/STUDY-DESK-SCREENS.md
+design_doc: docs/DESIGN-ON-AIR.md       # the shell's; each app has its own, see Design law by surface
+screens_source: docs/STUDY-DESK-SCREENS.md   # stale since the 2026-09-24 redesigns: read the code (see Screens)
 executor: opus
 stops_per_session: 3
+commit_format: "cx(S<n>): <screen> - <what changed>"   # no commit gate in this repo (checked 2026-09-25)
 ---
 
 # /cx overlay - firetv (Study Desk)
@@ -28,55 +29,70 @@ and it is law for the walk: a proposal that needs the philosophy changed is rais
 
 Audiences: English is for anybody (Duolingo-like); maths mainly for high-school students; essays primarily for students, with adult review and a more philosophical conversation on top of the review in scope.
 
+## Design law by surface
+
+Since the 2026-09-24/25 contests each app is its own brand, and a proposal is judged against the doc of the
+surface it touches:
+
+- landing - `docs/DESIGN-STUDY-DESK.md` (Left on the Desk: walnut, the lamp, objects in each app's brand)
+- Math Buddy (tonight, topics, practice, sheet, walk, maths page/hint/lesson/units/calendar) - `docs/DESIGN-MATH-BUDDY.md` (Lamplight)
+- Linga (every `linga*` screen, tonight while the subject is english) - `docs/DESIGN-LINGA.md` (the Open Door)
+- Essay Master (essaytype, forensic, playbook, xray) - `docs/DESIGN-ESSAY-MASTER.md` (Specimen)
+- the shell (pair, joined, learner, profile, break, recap, sentence, headtohead, the english/essay page and hint) - `docs/DESIGN-ON-AIR.md`
+
 ## Screens
 
-TV screens are keyed by the session's `screen` id in `desk/src/lib/session/store.ts`; compositions
-in `desk/src/tv/screens.tsx`; the inventory with D-pad behaviour in `docs/STUDY-DESK-SCREENS.md`.
+The session's `screen` union is `desk/src/lib/session/store.ts:22`; `desk/src/app/tv/page.tsx` routes a screen
+to `LandingTV`, `EssayTV` (`essayOwns`), `MathsTV` (`mathsOwns`), `LingaTV` (`lingaOwns`) or the shell's
+`tv/screens.tsx`, in that order; the D-pad is `KEYMAP` in `desk/src/tv/keys.ts` (Linga keys in `english/LingaTV.tsx`).
+The phone is `desk/src/app/phone/page.tsx` (tabs: Capture, Practice, Point & ask, Linga, Say it, Essay, Tonight,
+Recap, Profile) and `english/LingaPhone.tsx`; which panel follows which TV screen is `phone/panelFor.ts`.
 
-- pair - tv - reset the session (`POST /api/session {"type":"reset"}`), open /tv
-- tonight - tv - after join; Left/Right over tasks, Enter opens a subject, Menu marks done, Up = learner
-- units - tv - Enter on the English or Essay task; Up/Down rows, Menu = head-to-head / playbook
-- calendar - tv - from maths units, Menu
-- page - tv - after a phone snap or Down from tonight; Up/Down items, Menu = overview, Enter = hint
-- hint - tv - Enter on a page item; Left/Right actions, Enter = still stuck / lesson, Back = page
-- lesson - tv - from hint (Show me the lesson) or units (Enter); Space pauses, Back returns
-- sentence - tv - from the phone's Say it; Enter on "Show me the unit" = head-to-head
-- headtohead - tv - from units (Menu) or sentence
-- essaytype - tv - Enter on the Essay task; arrows over four lenses, Enter chooses
-- forensic - tv - from the phone's Essay after a lens; Menu = table view, Enter = playbook
-- playbook / xray - tv - from essaytype (Menu) or forensic (Enter); Enter on a play = xray
-- break - tv - Clock x60 in the dev bar, then wait; Enter skips
-- recap - tv - End session on the phone's Tonight; Enter = send to parent
-- learner - tv - Up from tonight
-- join / capture / point / say / paste / tonight / parent - phone - the bottom nav on /phone
+- landing - tv - the start and every `learner.set`; Left/Right the apps, Up the place card, Down the phone while unpaired, Menu ends the evening
+- pair / joined - tv - the landing's phone stop; a phone `join` lands on joined
+- learner / profile - tv (+ phone for the name) - the place card; add, or Menu on a profile to edit
+- tonight / topics / practice / sheet / walk - tv (Math Buddy) - Select Math Buddy; Teach me something -> topics
+- page / hint / lesson - tv - Homework on tonight + a phone capture (`/api/read`), Select an item (`/api/hint`)
+- units / calendar - tv - only as Back targets, or Menu from a maths lesson
+- linga / linga-check / -verdict / -plan / -scenes / -talk / -moment / -coach / -recap / -map - tv - Select Linga; every step is `POST /api/english`
+- essaytype / forensic / playbook / xray - tv - Select Essay Master; the phone's Essay tab posts `/api/analyse`
+- sentence / headtohead - tv - the phone's Say it; Linga's menu "Sentence help"
+- break / recap - tv - a finished work block (the TV bar's Clock x60); Menu on the landing or End session on the phone
+
+Content screens need the real routes (they call the engines; `practice.set`, `hint.set`, `essay.set`,
+`linga.changed` and the like are server-only and answer 403 to a posted event).
 
 ## Run
 
+Pairing is a server fact since 2026-09-25: the TV page needs `/tv?key=<key>` from `<DESK_DATA_DIR>/pairing.json`,
+and a phone joins with `/phone?pin=<pin>` (the TV's `GET /api/session` carries the pin). A plain `/tv` shows
+"Not this desk's TV".
+
+Never walk against `desk/data` (the owner's): copy it and point `DESK_DATA_DIR` at the copy. Next refuses a
+second `next dev` in the same checkout, so when the owner's server is up the walk runs in its own worktree
+(junction `desk/node_modules` and `tools/node_modules` to the operator's, copy `desk/.env.local`) with webpack:
+
 ```
-cd desk && npm run dev                     # http://localhost:3000/tv and /phone
+DESK_DATA_DIR=<copy> npx next dev --webpack -p 3210          # in <worktree>/desk
 ```
 
-Capture a TV screen with Playwright from `tools/` (installed for the live UI test):
-
-```
-cd tools && node -e "const {chromium}=require('playwright');(async()=>{const b=await chromium.launch();const p=await b.newPage({viewport:{width:1920,height:1130}});await p.goto('http://localhost:3000/tv');await p.waitForTimeout(3000);await (await p.$('.frame')).screenshot({path:process.argv[1]});await b.close();})();" <out.png>
-```
-
-Drive the screen first by posting session events to `/api/session` (nav, page.select, item) or by
-sending keys in the same Playwright script; the phone is `/phone` at 430x900. Reads take ~25 s
-(vision), hints 2-8 s, the first lesson pick ~1 min - wait for the status line before capturing.
+Drive and capture with Playwright from `tools/node_modules` (load it with `createRequire`): open
+`/tv?key=`, post events to `/api/session` with the TV's cookie, press keys on `.stage`, and screenshot `.frame`
+at a 1920x1130 viewport; the phone is a second context at 430x900 opened on `/phone?pin=`. Reads take ~25 s,
+hints 2-8 s, a practice set about a minute, a Linga turn 10-30 s (claude-cli) - wait for the screen's own
+text before capturing.
 
 ## Gates
 
 ```
-cd desk && npx tsc --noEmit -p tsconfig.json
+cd desk && npm test          # tsc --noEmit plus the rules suites (worktree-preflight links node_modules first)
 ```
 
 plus a re-capture of the changed screen compared against the acceptance line in the brief.
 
 ## Repo law
 
-- On Air (`docs/DESIGN-ON-AIR.md`): one band per screen; no two screens share a layout; the hint
+- On Air (`docs/DESIGN-ON-AIR.md`, the shell's language; each app follows its own doc - see Design law by surface): one band per screen; no two screens share a layout; the hint
   is the caption and the timer is the clock; condensed caps label, Barlow reads; red signals,
   white speaks, charcoal holds; cuts not fades; focus is a skew with a hard red shadow; subject
   channel colours are thin - tags and strokes only; 5% safe zone; nothing under 28 px; the TV
