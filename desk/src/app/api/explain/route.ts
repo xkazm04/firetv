@@ -4,14 +4,15 @@
  * item already wrong, a slip the explanation names from the topic's vocabulary becomes the item's shown slip.
  */
 import { NextResponse } from "next/server";
-import { dispatch, getSession } from "@/lib/session/store";
+import { dispatch, getSession, NOBODY_AT_DESK } from "@/lib/session/store";
 import { explainItem } from "@/lib/desk/explain";
 import { refused, runJob } from "@/lib/desk/job";
 
 export const dynamic = "force-dynamic";
 export async function POST(req: Request) {
   const { transcript, n } = (await req.json().catch(() => ({}))) as { transcript?: string; n?: number };
-  const s = getSession();
+  const s = getSession(), who = s.learner;
+  if (!who) return NextResponse.json({ error: NOBODY_AT_DESK }, { status: 409 });
   const practice = s.practice;
   if (!practice) return NextResponse.json({ error: "no practice set" }, { status: 400 });
   const item = practice.items[typeof n === "number" ? n : s.walkIx];
@@ -23,7 +24,7 @@ export async function POST(req: Request) {
     return !!now && now.owner === practice.owner && now.topic === practice.topic && it?.question === item.question ? it : undefined;
   };
   const r = await runJob("explain", async () => {
-    const x = await explainItem(item, transcript ?? "", practice.topic, s.learner.id, () => same()?.verdict === "unsure");
+    const x = await explainItem(item, transcript ?? "", practice.topic, who.id, () => same()?.verdict === "unsure");
     // an unsure item settles; a wrong one only takes the slip the explanation named (the reducer keeps its verdict and pen)
     if (same()) dispatch({ type: "practice.settle", n: item.n, reply: x.reply, ...(x.settled ?? x.renamed ?? {}) });
     return x;

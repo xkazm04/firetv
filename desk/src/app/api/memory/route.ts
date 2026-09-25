@@ -15,18 +15,20 @@ import { refused, runJob } from "@/lib/desk/job";
 export const dynamic = "force-dynamic";
 
 /** Everything the memory prompt is asked with, bar the notes it already holds, as a short key. */
-function evening(s: Session, topic: string | undefined): string {
+function evening(s: Session, who: string, topic: string | undefined): string {
   const items = (s.practice?.items ?? []).map((i) => [i.n, i.question, i.verdict ?? null, i.slip ?? null, i.studentWorking ?? null]);
-  return createHash("sha256").update(JSON.stringify([s.learner.id, topic ?? null, items, s.log.hints])).digest("hex").slice(0, 16);
+  return createHash("sha256").update(JSON.stringify([who, topic ?? null, items, s.log.hints])).digest("hex").slice(0, 16);
 }
 
 export async function POST() {
-  const s = getSession();
+  const s = getSession(), who = s.learner;
+  // an evening no one sat at teaches the desk nothing about anyone
+  if (!who) return NextResponse.json({ lines: [] });
   const topic = s.practice?.topic ?? s.topic ?? undefined;
   if (!s.practice?.items?.length && !s.log.hints) return NextResponse.json({ lines: [] });
-  const key = evening(s, topic), last = s.jobs?.memory;
+  const key = evening(s, who.id, topic), last = s.jobs?.memory;
   if (last?.phase === "done" && last.key === key) return NextResponse.json({ lines: [] });
-  const r = await runJob("memory", () => writeMemory(s.learner.id, {
+  const r = await runJob("memory", () => writeMemory(who.id, {
     topic,
     items: s.practice?.items,
     hintsUsed: s.log.hints,

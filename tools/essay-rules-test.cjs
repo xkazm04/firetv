@@ -347,7 +347,7 @@ test('learners.json without a writing record loads, and a malformed one is clean
 
 // ---- what the TV reads: the session carries the record, and Essay Master's lens cards stand on it ----
 test('a reading reaches the session: the episode and the lens estimate both rehydrate on essay.set',async()=>{
- dispatch({type:'reset'});
+ dispatch({type:'reset'});dispatch({type:'learner.set',id:'ema'});
  const id=getSession().learner.id;
  assert.deepEqual(getSession().writing,{},'a learner who never wrote has no lens measured');
  answer=faults([]);
@@ -356,11 +356,11 @@ test('a reading reaches the session: the episode and the lens estimate both rehy
  const s=getSession();
  assert.equal(s.writing.structure.seen,1);assert.equal(s.writing.structure.estimate,0.3);
  assert.equal(s.history.filter(h=>h.kind==='writing').at(-1).label,'Structure');
- dispatch({type:'reset'});
+ dispatch({type:'reset'});dispatch({type:'learner.set',id:'ema'});
  assert.equal(getSession().writing.structure.seen,1,'reset wipes the session, not the learner record');
 });
 test('essay.at walks the forensic page over sentences that exist, and a new reading starts again at its first faulty one',async()=>{
- dispatch({type:'reset'});
+ dispatch({type:'reset'});dispatch({type:'learner.set',id:'ema'});
  assert.equal(getSession().essayAt,null,'a fresh desk has no sentence chosen');
  answer=reply({verdicts:[{n:4,verdict:'faulty',note:'x',fix:CONCEDE}],summary:'s'});
  const a=await analyseEssay(SIX,'argument',getSession().learner.id);
@@ -371,7 +371,7 @@ test('essay.at walks the forensic page over sentences that exist, and a new read
  dispatch({type:'essay.at',n:7});assert.equal(getSession().essayAt,null,'a sentence the paragraph lacks is the default');
  dispatch({type:'essay.at',n:5});dispatch({type:'essay.at',n:null});assert.equal(getSession().essayAt,null);
  dispatch({type:'essay.at',n:3});dispatch({type:'essay.set',analysis:a});assert.equal(getSession().essayAt,null,'a new reading forgets the old place');
- dispatch({type:'reset'});
+ dispatch({type:'reset'});dispatch({type:'learner.set',id:'ema'});
 });
 test('the lens cards: one standing per lens, in the order the TV draws them',()=>{
  const empty=lensStandings([],{});
@@ -448,17 +448,17 @@ test('rewrite case 2: revise refuses a rewrite that is not one new sentence, in 
  for(const [n,text] of refusals){const r=revise(R3(),n,text);assert.equal(r.ok,false,`${n} ${JSON.stringify(text)}`);deskWorded(r.error);}
  assert.match(revise(R3(),2,'It is bad. Very bad.').error,/one sentence/i);
  assert.match(revise(R3(),4,STUDY).error,/no sentence 4/i);
- dispatch({type:'reset'});dispatch({type:'essay.set',analysis:R3()});
+ dispatch({type:'reset'});dispatch({type:'learner.set',id:'ema'});dispatch({type:'essay.set',analysis:R3()});
  seen=[];answer=reply({verdicts:[{n:2,verdict:'strong',note:'x'}]});
  for(const [n,text] of refusals){const res=await analyse({kind:'rewrite',n,text});assert.equal(res.status,400,`${n} ${JSON.stringify(text)}`);deskWorded((await res.json()).error);}
  assert.equal((await analyse({kind:'rewrite',n:'two',text:STUDY})).status,400,'a sentence number that is not a number');
  assert.equal(seen.length,0,'no engine call for a refused rewrite');
  assert.equal(getSession().essay.sentences[1].text,OLD2,'the desk is unchanged');
  assert.equal(getSession().jobs.analyse,undefined,'no run was started');
- dispatch({type:'reset'});
+ dispatch({type:'reset'});dispatch({type:'learner.set',id:'ema'});
  assert.equal((await analyse({kind:'rewrite',n:2,text:STUDY})).status,400,'no paragraph on the desk: nothing to rewrite in');
  assert.equal(seen.length,0);
- dispatch({type:'reset'});
+ dispatch({type:'reset'});dispatch({type:'learner.set',id:'ema'});
 });
 
 test('rewrite case 3: reviseSentence re-judges sentence n alone, in its paragraph, against the move it was taught; the other verdicts are kept by code',async()=>{
@@ -515,7 +515,7 @@ test('rewrite case 4: a rewrite judged still faulty keeps a fix only when it pas
 });
 
 test('rewrite case 5: POST /api/analyse kind rewrite lands on the desk as essay.revised - the TV stays on the sentence, and nothing is added to the learner record',async()=>{
- dispatch({type:'reset'});
+ dispatch({type:'reset'});dispatch({type:'learner.set',id:'ema'});
  const id=getSession().learner.id;
  answer=faults([2]);
  const first=await analyseEssay(THREE,'evidence',id);dispatch({type:'essay.set',analysis:first});
@@ -534,7 +534,7 @@ test('rewrite case 5: POST /api/analyse kind rewrite lands on the desk as essay.
  assert.equal(getLearner(id).history.length,history,'a rewrite is not another paragraph read');
  assert.equal(JSON.stringify(getLearner(id).writing),writing,'and not another attempt on the lens');
  assert.equal(s.history.length,history);
- dispatch({type:'reset'});
+ dispatch({type:'reset'});dispatch({type:'learner.set',id:'ema'});
 });
 
 test('rewrite case 7: rewriteState reads the verdict, and the TV inks the move from it, not from the status line',()=>{

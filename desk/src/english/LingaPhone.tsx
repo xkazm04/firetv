@@ -16,8 +16,8 @@ const skillName=(id:string)=>ENGLISH_SKILLS.find(x=>x.id===id)?.name??"";
 
 export function LingaPhone({s,post,onSentence}:{s:Session;post:(e:Event)=>Promise<void>;onSentence:()=>void}){
   const {run,busy,error}=useEnglish(s),c=s.conversation;
-  const profile=s.profiles.find(p=>p.id===s.learner.id),learning=s.englishLearning;
-  const lc=s.check&&s.check.learnerId===s.learner.id?s.check:null;
+  const profile=s.profiles.find(p=>p.id===s.learner?.id),learning=s.englishLearning;
+  const lc=s.check&&s.check.learnerId===s.learner?.id?s.check:null;
   const [panel,setPanel]=useState<"talk"|"settings"|"map">("talk");
   const [prefs,setPrefs]=useState<EnglishPreferences>(learning.preferences??defaultPreferences(profile));
   const [notes,setNotes]=useState(learning.notes.join("\n"));
@@ -32,7 +32,7 @@ export function LingaPhone({s,post,onSentence}:{s:Session;post:(e:Event)=>Promis
   // where the conversation stands in its turn, and what the server takes there (lib/english/turn.ts)
   const st=c?turnState(c):null,inFlight=st==="preparing"||st==="waiting",refused=(action:string)=>busy||!c||!accepts(c,action);
   return <div className="pscreen linga-phone">
-    <h3>Linga · {s.learner.name}</h3>
+    <h3>Linga · {s.learner?.name}</h3>
     <div className="linga-buttons"><button className="pbtn" data-secondary={panel!=="talk"} onClick={()=>setPanel("talk")}>Talk</button><button className="pbtn" data-secondary={panel!=="settings"} onClick={()=>{setPrefs(learning.preferences??defaultPreferences(profile));setNotes(learning.notes.join("\n"));setPanel("settings");}}>Set up</button><button className="pbtn" data-secondary={panel!=="map"} onClick={()=>setPanel("map")}>My map</button></div>
     {panel==="settings"&&<>
       <p>Choose what feels useful. English level, imagination and social challenge are separate.</p>
@@ -51,7 +51,7 @@ export function LingaPhone({s,post,onSentence}:{s:Session;post:(e:Event)=>Promis
     {panel==="map"&&<>
       <p>Your speaking evidence is separate from written and multiple-choice practice. These are learning indicators, not a certified level.</p>
       {ENGLISH_SKILLS.map(skill=>{const all=learning.evidence.filter(e=>e.skill===skill.id);return <div className="linga-skill" key={skill.id}><b>{skill.name}</b><small>Speaking: {PROGRESS_LABEL[learning.achievements[skill.id]??"not-tried"]}</small><small>{all.filter(e=>e.mode==="text").length} written · {all.filter(e=>e.mode==="choice").length} choice observations</small></div>;})}
-      <a href={`/english/print?learner=${encodeURIComponent(s.learner.id)}`} target="_blank" rel="noreferrer">Open printable learning map</a>
+      <a href={`/english/print?learner=${encodeURIComponent(s.learner?.id ?? "")}`} target="_blank" rel="noreferrer">Open printable learning map</a>
       <details><summary>Things Linga taught you</summary><div className="linga-transcript">{learning.taught.filter(m=>!(c&&c.phase!=="finished"&&c.review?.id===m.id&&!c.review.used)).slice(-12).reverse().map(m=><p key={m.id}><b>{m.title} · {m.kind==="fix"?"a fix":"a word"}</b>{m.kind==="fix"?<>“{m.said}” → “{m.better}”</>:<>“{m.said}”: {m.better}</>}<br/>{m.why}{m.reusedAt!==undefined&&<><br/><small>Used again{learning.sessions.find(x=>x.id===m.reusedIn)?` in ${learning.sessions.find(x=>x.id===m.reusedIn)!.title}`:""}: “{m.reusedQuote}”</small></>}</p>)}{!learning.taught.length&&<p>Nothing yet. Linga stops a conversation when one thing is worth keeping.</p>}</div></details>
       <details><summary>Recent evidence</summary><div className="linga-transcript">{learning.evidence.slice(-12).reverse().map(e=><p key={e.id}><b>{skillName(e.skill)} · {e.mode} · {e.supported?"with support":"without a supplied phrase"}</b>“{e.quote}”<br/>{e.note}</p>)}{!learning.evidence.length&&<p>Nothing recorded yet. Start with a conversation.</p>}</div></details>
     </>}
@@ -168,7 +168,7 @@ function SelfLevel({run,busy,start}:{run:Run;busy:boolean;start:Band}){
 
 /** Linga home on the phone: the same six states the TV decides (lib/english/view.ts). */
 function StartPanel({s,learning,run,busy,list}:{s:Session;learning:EnglishLearning;run:Run;busy:boolean;list:boolean}){
-  const profile=s.profiles.find(p=>p.id===s.learner.id),c=s.conversation,prefs=learning.preferences??defaultPreferences(profile);
+  const profile=s.profiles.find(p=>p.id===s.learner?.id),c=s.conversation,prefs=learning.preferences??defaultPreferences(profile);
   const next=recommendScene(profile,learning),placement=learning.placement,home=lingaHome(s);
   const pick=list&&<label>Or choose a situation<select defaultValue="" onChange={e=>{if(e.target.value)void run("start",{sceneId:e.target.value,replace:true});e.target.value="";}} disabled={busy}><option value="">Choose…</option>{eligibleScenes(profile,prefs,learning).map(x=><option key={x.id} value={x.id}>{x.name}</option>)}</select></label>;
   const level=placement&&<p className="linga-note">Your level: <b>{placement.band} · {BAND_NAME[placement.band]}</b>{placement.source==="self"?" · self-chosen":""}</p>;

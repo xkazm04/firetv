@@ -152,7 +152,7 @@ export function helpOf(c: Conversation): { label: string; help: string; tag: str
 }
 
 /** The level check of the learner at the desk, if one is under way. */
-export function activeCheck(s: Session): LevelCheck | null { return s.check && s.check.learnerId === s.learner.id ? s.check : null; }
+export function activeCheck(s: Session): LevelCheck | null { return s.check && s.check.learnerId === s.learner?.id ? s.check : null; }
 
 export function lingaHome(s: Session): HomeState {
   const c = s.conversation, lc = activeCheck(s), l = s.englishLearning;
@@ -197,7 +197,7 @@ function answerOf(s: Session, lc: LevelCheck | null, c: Conversation | null): An
 export function lingaView(s: Session, input: ViewInput = {}): LingaView {
   const ui: LingaUi = { ...NO_UI, ...Object.fromEntries(Object.entries(input).filter(([k, v]) => k in NO_UI && v !== undefined)) };
   const { menu, picking, sceneIndex, chapter } = ui;
-  const p = s.profiles.find(p => p.id === s.learner.id), l = s.englishLearning, prefs = l.preferences ?? defaultPreferences(p);
+  const p = s.profiles.find(p => p.id === s.learner?.id), l = s.englishLearning, prefs = l.preferences ?? defaultPreferences(p);
   const level: Band = l.placement?.band ?? (isBand(prefs.level) ? prefs.level : "A1");
   const scenes = eligibleScenes(p, prefs, l), recommended = recommendScene(p, l), c = s.conversation;
   const lc = activeCheck(s), placement = lc?.placement ?? l.placement;

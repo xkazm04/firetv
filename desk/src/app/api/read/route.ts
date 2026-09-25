@@ -4,7 +4,7 @@
  * the same page id, its image from the session, so a retry never adds a second page.
  */
 import { NextResponse } from "next/server";
-import { dispatch, getSession } from "@/lib/session/store";
+import { dispatch, getSession, NOBODY_AT_DESK } from "@/lib/session/store";
 import { readPage } from "@/lib/desk/read";
 import { addHistory } from "@/lib/session/learners";
 import { refused, runJob } from "@/lib/desk/job";
@@ -19,7 +19,8 @@ export async function POST(req: Request) {
   if (!image) return NextResponse.json({ error: "no page" }, { status: 400 });
   const id = held?.id ?? `${subject}-${Date.now()}`;
   // the page is the learner's who snapped it: stamped now, and its history line goes to them even if the desk changes hands mid-read
-  const owner = held?.owner ?? getSession().learner.id;
+  const owner = held?.owner ?? getSession().learner?.id;
+  if (!owner) return NextResponse.json({ error: NOBODY_AT_DESK }, { status: 409 });
   const b64 = image.replace(/^data:image\/\w+;base64,/, "");
   const r = await runJob("read", async () => {
     dispatch({ type: "page.reading", page: { id, subject, title, img: image, w, h, owner } });

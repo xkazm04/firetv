@@ -57,7 +57,7 @@ function commit(k: LevelCheck | null, screen?: Screen) {
 /** The check a slow model call started for must still be the one on the desk, waiting on that call. */
 function current(k: LevelCheck, token?: string): LevelCheck {
   const s = getSession(), now = s.check;
-  if (s.learner.id !== k.learnerId || now?.id !== k.id || (token && now.pending !== token)) throw new ConversationError("The level check has changed. Return to the current step.", 409);
+  if (s.learner?.id !== k.learnerId || now?.id !== k.id || (token && now.pending !== token)) throw new ConversationError("The level check has changed. Return to the current step.", 409);
   return now;
 }
 function blank(learnerId: string, stage: LevelCheck["stage"]): LevelCheck {
@@ -88,7 +88,7 @@ async function call(k: LevelCheck, token: string, failure: string, work: () => P
 
 /** Whatever the check is missing next, fetch it: the first question, the next task, the verdict, the topics. */
 async function advance(k: LevelCheck, ctx: Ctx, token: string): Promise<LevelCheck> {
-  const system = checkSystem(ctx.profile, ctx.adult), name = getSession().learner.name;
+  const system = checkSystem(ctx.profile, ctx.adult), name = getSession().learner?.name ?? ctx.profile.name;
   if (k.stage === "about" && !k.turns.length) {
     const next: LevelCheck = { ...k, error: "", turns: [{ id: randomUUID(), role: "tutor", text: firstQuestion(name) }] };
     commit(next, "linga-check");
@@ -220,7 +220,7 @@ export async function checkCommand(action: string, input: Record<string, unknown
     const answered = k.turns.filter(t => t.role === "learner").length + 1, final = answered >= ABOUT_QUESTIONS;
     const next = await call(k, commandId, "Linga could not read that answer. Your answer is still on the phone; send it again.", async () => {
       const r = await ask(checkSystem(profile, ctx.adult), {
-        step: "about", learner: { name: s.learner.name }, transcript: k.turns.map(t => ({ role: t.role, text: t.text })), latestAnswer: answer, questionsAnswered: answered,
+        step: "about", learner: { name: s.learner?.name ?? profile.name }, transcript: k.turns.map(t => ({ role: t.role, text: t.text })), latestAnswer: answer, questionsAnswered: answered,
         task: `${final ? "That was the last question. reply: a short thanks, and say a few short tasks come next. No question." : "reply: the next question, following what they just said. Across the three questions cover where English shows up in their life, how they have learnt it (school years, courses, time abroad, on their own), and what they want to be able to do in English. One question only, at most 200 characters, pitched at the English they are showing."}
 Then your read of everything so far. selfBand: your best estimate of their band from how they describe their learning, how they rate themselves, and the English they actually wrote; when their claim and their English disagree, trust their English; answers only in another language point to A1. goal and interest: short English phrases from what they said, empty if not said. language: the language of latestAnswer. read: one or two sentences for the tutor about what you learned, without sensitive details.`,
       }, aboutSchema);

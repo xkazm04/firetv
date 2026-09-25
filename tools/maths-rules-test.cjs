@@ -107,7 +107,7 @@ const keysIn=(o)=>o&&typeof o==='object'?Object.entries(o).flatMap(([k,v])=>[k,.
 const stated=[{question:'2x+3=11',answer:'4'},{question:'x-5=2',answer:'7'},{question:'3x=18',answer:'6'},{question:'x+1=10',answer:'9'},{question:'5x=35',answer:'7'},{question:'x/2=4',answer:'8'}];
 test('a practice set reaches the screens with no answer in the session, the stream or the saved desk',async()=>{
  const practiceRoute=require(path.join(root,'src/app/api/practice/route.ts')),sessionRoute=require(path.join(root,'src/app/api/session/route.ts')),streamRoute=require(path.join(root,'src/app/api/session/stream/route.ts'));
- store.dispatch({type:'reset'});answer=reply({items:stated});
+ store.dispatch({type:'reset'});store.dispatch({type:'learner.set',id:'ema'});answer=reply({items:stated});
  const made=await practiceRoute.POST(new Request('http://desk/api/practice',{method:'POST',body:JSON.stringify({topic:'linear-one-step'})}));
  assert.equal(made.status,200);assert.deepEqual(Object.keys(await made.json()).sort(),['items','ms','provider','tries']);
  const got=await (await sessionRoute.GET()).json();
@@ -124,7 +124,7 @@ test('a practice set reaches the screens with no answer in the session, the stre
  }
 });
 test('marking grades on the server from the question alone, and the marked set carries no answer either',async()=>{
- store.dispatch({type:'reset'});store.dispatch({type:'practice.set',practice:sheet});
+ store.dispatch({type:'reset'});store.dispatch({type:'learner.set',id:'ema'});store.dispatch({type:'practice.set',practice:sheet});
  looked=reply({items:marks});
  const {items}=await markSet('img',store.getSession().practice,'maths-server-marks');
  assert.deepEqual(items.map(i=>i.verdict),['right','wrong','wrong','unsure','unsure','unsure'],'the verdicts come from substitution, with no stored answer to lean on');
@@ -133,7 +133,7 @@ test('marking grades on the server from the question alone, and the marked set c
  assert(!keys.includes('answer'));assert(!keys.includes('solution'),'the marker\'s own solution stays on the server');
 });
 test('an answer arriving on an event, or from a desk saved before this change, is stripped before any screen sees it',()=>{
- store.dispatch({type:'reset'});
+ store.dispatch({type:'reset'});store.dispatch({type:'learner.set',id:'ema'});
  store.dispatch({type:'practice.set',practice:{topic:'linear-one-step',marked:false,items:stated.map((c,ix)=>({n:ix+1,...c}))}});
  assert(!keysIn(store.getSession()).includes('answer'),'practice.set');
  store.dispatch({type:'practice.marked',items:stated.map((c,ix)=>({n:ix+1,...c,verdict:'right',said:`Number ${ix+1} is right.`}))});
@@ -191,7 +191,7 @@ test('expectedIndex reads age against each system\'s own year: -1 before the pat
 // ---- "How did you get there?" settles the item: the learner's spoken value, substituted on the walk ----
 /** A marked walk on the session, as the phone and the TV see it: items 4-6 are unsure (the marker and the substitution disagree). */
 async function markedWalk(){
- store.dispatch({type:'reset'});store.dispatch({type:'practice.set',practice:sheet});
+ store.dispatch({type:'reset'});store.dispatch({type:'learner.set',id:'ema'});store.dispatch({type:'practice.set',practice:sheet});
  looked=reply({items:marks});
  const {items}=await markSet('img',store.getSession().practice,store.getSession().learner.id);
  store.dispatch({type:'practice.marked',items});
@@ -269,7 +269,7 @@ test('case 4b: on an item already wrong, a slip the explanation names from the t
  assert.equal(store.getSession().practice.items[0].slip,undefined,'a right item takes no slip');
 });
 test('case 5: a reply that gives the answer away is stopped in code, and the item\'s own line stands in',async()=>{
- store.dispatch({type:'reset'});
+ store.dispatch({type:'reset'});store.dispatch({type:'learner.set',id:'ema'});
  store.dispatch({type:'practice.set',practice:{topic:'linear-one-step',marked:false,items:[{n:1,question:'2x+3=11'},{n:2,question:'x-5=2'}]}});
  const ask='I got something different for number 2. How did you get there?';
  store.dispatch({type:'practice.marked',items:[{n:1,question:'2x+3=11',verdict:'right',said:'Number 1 is right.'},{n:2,question:'x-5=2',verdict:'unsure',said:ask}]});
@@ -373,7 +373,7 @@ test('pen case 6: marking puts slipAt on a wrong item from its own lines and it 
  const pen={...sheet,items:sheet.items.map(i=>i.n===2?{...i,question:'3x - 7 = 11'}:i)};
  const penMarks=marks.map(m=>m.n===2?{n:2,studentAnswer:'4/3',studentWorking:'3x = 11 - 7\n3x = 4\nx = 4/3',verdict:'wrong',solution:'6',slip:'sign-lost-moving'}:m);
  let asked;looked=(req)=>{asked=req;return reply({items:penMarks})();};
- store.dispatch({type:'reset'});store.dispatch({type:'practice.set',practice:pen});
+ store.dispatch({type:'reset'});store.dispatch({type:'learner.set',id:'ema'});store.dispatch({type:'practice.set',practice:pen});
  const {items}=await markSet('img',store.getSession().practice,'maths-pen-mark');
  assert.deepEqual(items.map(i=>i.verdict),['right','wrong','wrong','unsure','unsure','unsure'],'GUARD: the verdicts are the substitution\'s, as before');
  assert.deepEqual(items[1].slipAt,{line:0,span:'- 7',kind:'sign'});
@@ -385,7 +385,7 @@ test('pen case 6: marking puts slipAt on a wrong item from its own lines and it 
 });
 test('pen case 7: an unsure item settled wrong by an explanation gets its slipAt from the same rule; settled right, none',async()=>{
  const walk=async()=>{
-  store.dispatch({type:'reset'});store.dispatch({type:'practice.set',practice:sheet});
+  store.dispatch({type:'reset'});store.dispatch({type:'learner.set',id:'ema'});store.dispatch({type:'practice.set',practice:sheet});
   looked=reply({items:marks.map(m=>m.n===4?{...m,studentWorking:'x = 10 + 1'}:m)});
   const {items}=await markSet('img',store.getSession().practice,store.getSession().learner.id);
   store.dispatch({type:'practice.marked',items});assert.equal(store.getSession().practice.items[3].verdict,'unsure');

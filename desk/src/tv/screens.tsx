@@ -25,7 +25,7 @@ const NAME = BRAND;
 function Rail({ s }: { s: Session }) {
   return (
     <aside className="rail">
-      <div className="learner"><small>Now studying</small>{s.learner.name}</div>
+      <div className="learner"><small>Now studying</small>{s.learner?.name}</div>
       <div>{onModules(s).map((x) => <div key={x} className="subj" data-on={s.subject === x}>{NAME[x]}</div>)}</div>
       <div className="clock" data-phase={s.timer.phase}>{fmt(s.timer.left)}<small>{s.timer.running ? (s.timer.phase === "work" ? "On the clock" : "Break") : s.log.started ? "Paused" : "Press Play to start"}</small></div>
     </aside>
@@ -42,11 +42,11 @@ export function Joined({ s }: { s: Session }) {
     <div className="band band-low" />
     <main className="content-full">
       <div className="eyebrow">Paired</div>
-      <div className="title" style={{ maxWidth: 900 }}>{s.learner.name}’s phone is on the desk</div>
+      <div className="title" style={{ maxWidth: 900 }}>{s.learner ? `${s.learner.name}’s phone` : "The phone"} is on the desk</div>
       <img src="/brand/paired.png" alt="" style={{ position: "absolute", right: 0, top: 40, width: 760, height: 520, objectFit: "contain" }} />
       <div style={{ position: "absolute", left: 0, bottom: 216, maxWidth: 900 }}>
         <span className="cap">What now</span>
-        <div className="cap-text">Open an app on the desk, or snap the page on the phone.</div>
+        <div className="cap-text">{s.learner ? "Open an app on the desk, or snap the page on the phone." : "Now choose whose desk it is: Up to the place card on the desk."}</div>
       </div>
       <div className="actions"><button className="btn" data-focused>The desk</button></div>
     </main>
@@ -314,7 +314,7 @@ export function Recap({ s, focus }: { s: Session; focus: number }) {
       <div className="title rc-title">Tonight, done</div>
       <div className="rc-tiles">{tiles.map((t) => <RecapTileOf key={t.app} t={t} lit={at === t.app} />)}</div>
       <div className="rc-foot">
-        <div className="rc-cap"><span className="cap">{s.learner.name}</span><div className="cap-text">{recapCaption(tiles)}</div></div>
+        <div className="rc-cap"><span className="cap">{s.learner?.name}</span><div className="cap-text">{recapCaption(tiles)}</div></div>
         <div className="rc-acts">
           <span className="rc-chip" data-role="recap-parent">On the parent’s phone</span>
           <button className="btn" data-role="recap-desk" data-focused={at === "desk"}>Back to the desk</button>
@@ -398,7 +398,7 @@ export function Learner({ s, focus }: { s: Session; focus: number }) {
             <div className="k">{TYPE_WORDS[p.type].toUpperCase()}</div>
             <div className="t">{p.name}</div>
             <div className="d">{p.modules.map((m) => NAME[m]).join(" · ")}</div>
-            {p.id === s.learner.id && <div className="m">at the desk now</div>}
+            {p.id === s.learner?.id && <div className="m">at the desk now</div>}
           </div>
         ))}
         <div className="card" data-focused={stop === "add"}>
@@ -407,7 +407,7 @@ export function Learner({ s, focus }: { s: Session; focus: number }) {
       </div>
       <div style={{ marginTop: 44 }}>
         {at
-          ? <><span className="cap">{TYPE_WORDS[at.type]}</span><div className="cap-text">{picksLine(at)} {at.id === s.learner.id ? "Enter goes back to the desk" : "Enter to sit at this desk"}, Menu to change the picks.</div></>
+          ? <><span className="cap">{TYPE_WORDS[at.type]}</span><div className="cap-text">{picksLine(at)} {at.id === s.learner?.id ? "Enter goes back to the desk" : "Enter to sit at this desk"}, Menu to change the picks.</div></>
           : <><span className="cap">New learner</span><div className="cap-text">The TV takes the picks, the phone takes the name.</div></>}
       </div>
     </main>

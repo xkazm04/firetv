@@ -40,7 +40,7 @@ function Top({ s, menu, lit }: { s: Session; menu: string; lit?: boolean }) {
       <div className="em-pill" data-role="essay-chip"><span className="em-key">MENU</span><span>{menu}</span></div>
       <div className={`em-pill${s.timer.running ? " run" : ""}`} data-role="essay-chip"><span className="em-lbl" style={{ fontSize: 20 }}>{s.timer.phase === "break" ? "Break" : "Focus"}</span><span className="em-t">{fmt(s.timer.left)}</span></div>
       <div className={`em-pill${lit ? " lit" : ""}`} data-role="essay-chip">{PHONE}<span>{s.joined ? "Phone joined" : `PIN ${s.pin}`}</span></div>
-      <div className="em-pill" data-role="essay-chip"><span className="em-av">{s.learner.name.charAt(0)}</span><span>{s.learner.name}</span></div>
+      <div className="em-pill" data-role="essay-chip"><span className="em-av">{s.learner?.name.charAt(0)}</span><span>{s.learner?.name}</span></div>
     </div>
   );
 }
