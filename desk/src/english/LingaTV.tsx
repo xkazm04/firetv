@@ -77,7 +77,7 @@ export function LingaTV({s,post,voice}:{s:Session;post:(e:Event)=>Promise<void>;
     return <button className={`lo-action ${primary?"lo-primary":"lo-secondary"}`} data-role={primary?"linga-primary":"linga-secondary"} key={`${i}:${a.label}`} data-focused={focus===i} data-rest={focus<0&&i===0&&!a.disabled?true:undefined} disabled={a.disabled||(waiting&&!cancel(a))} onMouseEnter={()=>post({type:"focus",focus:i})} onMouseLeave={()=>{if(s.screen==="linga-talk")post({type:"focus",focus:-1});}} onClick={()=>go(a)}>
       {menu&&<span className="lo-sr">Select · </span>}<span className="lo-label">{a.label}</span>{PHONE_ACTIONS.has(a.id)?<OnYourPhone/>:<Arrow/>}
     </button>;})}</nav>;
-  return <div className="linga-tv" data-view={v.screen} data-layout={layout} data-hero={h.kind}>
+  return <div className="linga-tv" data-view={v.screen} data-layout={layout} data-hero={h.kind} data-goal={layout==="door"&&s.screen!=="linga-scenes"&&talkGoal(h)?true:undefined}>
     <header className="lo-top"><Mark/><Learner name={s.learner.name} up={home&&!menu&&!picking}/></header>
     {layout==="door"&&<>
       {art&&<Arch art={art} tag={tag} speaker={s.screen==="linga-talk"}/>}
@@ -130,6 +130,9 @@ function artFor(h:Hero,s:Session):ArtKey{
   }
 }
 
+/** The conversation's goal under a partner's line, when the line leaves it room; the column then flows up from the actions (linga.css). */
+function talkGoal(h:Hero):string|null{return h.kind==="scene"&&h.said&&h.subtitle&&h.said.length<=140?h.subtitle:null;}
+
 /** A title in Georgia, one size smaller for each step in length so it never takes a third line. */
 function Title({text}:{text:string}){return <h1 className="lo-title" data-role="linga-title" data-size={text.length<=34?"l":text.length<=50?"m":"s"}>{text}</h1>;}
 
@@ -148,7 +151,8 @@ function Body({v,s,caption}:{v:LingaView;s:Session;caption:React.ReactNode}){
     case "scene":{
       if(s.screen==="linga-scenes")return <><Kicker band={h.band} text={`${h.subtitle} · ${h.minutes} min`}/><Title text={h.title}/>{caption}<SentenceCard label="A sentence to take with you" text={h.sentence}/></>;
       const kicker=h.kicker.endsWith(` · ${h.partner}`)?h.kicker.slice(0,-(h.partner.length+3)):h.kicker;
-      return <><Kicker text={kicker}/>{h.said?<SentenceCard className="lo-said linga-message" label={`${h.who.split(" · ")[0]} says`} text={h.said} role="linga-said"/>:<Title text={h.title}/>}{caption}{h.said&&h.subtitle&&h.said.length<=140&&<DataLine><span className="lo-data-key">Goal</span>{h.subtitle}</DataLine>}</>;
+      const goal=talkGoal(h);
+      return <><Kicker text={kicker}/>{h.said?<SentenceCard className={`lo-said linga-message${goal?" lo-with-goal":""}`} label={`${h.who.split(" · ")[0]} says`} text={h.said} role="linga-said"/>:<Title text={h.title}/>}{caption}{goal&&<DataLine><span className="lo-data-key">Goal</span>{goal}</DataLine>}</>;
     }
     // On the recap, the phrase this scene invited and the learner has yet to use stands where the title would be.
     case "track":return <><Kicker text={h.kicker}/>{h.sentence?<SentenceCard className="lo-compact" label="A sentence to take with you" text={h.sentence}/>:<Title text={h.title}/>}<Stones progress={h.progress}/>{h.subtitle&&<DataLine>{h.subtitle}</DataLine>}{caption}</>;

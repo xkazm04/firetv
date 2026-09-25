@@ -349,6 +349,18 @@
 .linga-tv .lo-said { margin-top: 22px; }
 .linga-tv .lo-said + .lo-card { margin-top: 30px; }
 
+/* a partner's line with the goal under it: the card takes the next size down, the rhythm tightens, and the
+   column grows up from the actions (anchored 139 px above the bottom) instead of running into them */
+.linga-tv[data-goal] .lo-panel { top: auto; min-height: 756px; }
+.linga-tv[data-goal] .lo-kicker { margin-bottom: 14px; }
+.linga-tv[data-goal] .lo-said { margin-top: 20px; padding-top: 14px; padding-bottom: 14px; }
+.linga-tv[data-goal] .lo-said .lo-card-text { margin-top: 6px; }
+.linga-tv[data-goal] .lo-rule { margin: 18px 0 10px; }
+.linga-tv[data-goal] .lo-data { margin-top: 16px; }
+.linga-tv .lo-with-goal .lo-card-text { font-size: 38px; }
+.linga-tv .lo-with-goal .lo-card-text.lo-mid { font-size: 33px; line-height: 1.22; }
+.linga-tv .lo-with-goal .lo-card-text:is(.lo-long, .lo-xlong) { font-size: 30px; line-height: 1.2; }
+
 /* ---------------------------------------------------------------- actions */
 .linga-tv .lo-actions { flex: none; display: flex; flex-direction: column; gap: 15px; width: 752px; margin-top: 22px; }
 .linga-tv .lo-action {
