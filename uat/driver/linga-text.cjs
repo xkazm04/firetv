@@ -3,11 +3,18 @@
  *
  *   node uat/driver/linga-text.cjs [character …] [--journeys J1,J2] [--run <id>]
  *   node uat/driver/linga-text.cjs --recertify <run> [character …]
+ *   node uat/driver/linga-text.cjs --recertify [character …]
+ *   node uat/driver/linga-text.cjs --status
+ *   (any of them with --runs <dir> in place of uat/runs/)
  *
- * --recertify reruns only the Character x journey pairs of <run> that still have open findings (recertify.cjs plan),
- * inside that run as recert-<k>/. Each judge is shown the pair's open finding ids and answers each (prior[]); the
- * answers are written back into <run>/findings.json and <run>/recertify.md is written beside it. Every run records
- * its instrument (model, efforts, judge screen cap, driver hashes) in run.json.
+ * --recertify <run> reruns only the Character x journey pairs of <run> that still have open findings (recertify.cjs
+ * plan), inside that run as recert-<k>/. Each judge is shown the pair's open finding ids and answers each (prior[]);
+ * the answers are written back into <run>/findings.json and <run>/recertify.md is written beside it.
+ * --recertify with no run reruns every pair with an open gap in ANY run (ledger.cjs, recertify.cjs planLedger), inside
+ * the newest of those runs as recert-<k>/; each judge answers all of its pair's open rows by global id (<run>/<id>),
+ * and each answer is stamped into the run that owns the row (finishLedger), then uat/runs/OPEN.md is rewritten.
+ * --status writes and prints OPEN.md: what is open now, by pair, and how long each row has gone unasked. No model call.
+ * Every run records its instrument (model, efforts, judge screen cap, driver hashes) in run.json.
  *
  * One process per Character, in parallel, each with its own DESK_DATA_DIR and DESK_TEXT_ENGINE=codex.
  * Inside, the Character walks its journeys over the real command surface (`englishCommand`):
@@ -132,50 +139,85 @@ async function judgeRecord(record, ctx, call) {
   Object.assign(record, { verdict: v.verdict, verdictWhy: v.why, verdictNotes: v.notes, judgeVerdict: v.judgeVerdict });
   return record;
 }
-module.exports = { actionIds, judgePayload, judgeRequest, judgeJourney, judgeRecord, synthesize, JUDGE_SCREEN_CAP };
+const RUNS_DIR = path.join(uat, 'runs');
+/**
+ * The command line. A word after --recertify that is neither a flag nor a Character id is a run (today's per-run
+ * recertify); nothing, a flag or a Character id after it is the ledger recertify of every run. --status wins over both.
+ */
+function parseArgs(args, { runs = RUNS_DIR, characters: ids = null } = {}) {
+  const out = { only: [], runs, journeys: null, run: null, recertify: null };
+  let status = false, ledger = false;
+  const known = () => ids ?? (ids = characters().map(c => c.sim.id));
+  for (let i = 0; i < args.length; i++) {
+    const a = args[i];
+    if (a === '--runs') out.runs = path.resolve(args[++i]);
+    else if (a === '--journeys') out.journeys = args[++i].split(',');
+    else if (a === '--run') out.run = args[++i];
+    else if (a === '--status') status = true;
+    else if (a === '--recertify') {
+      const next = args[i + 1];
+      if (next !== undefined && !next.startsWith('--') && !known().includes(next)) out.recertify = args[++i];
+      else ledger = true;
+    } else out.only.push(a);
+  }
+  return { mode: status ? 'status' : out.recertify ? 'recertify' : ledger ? 'ledger' : 'run', ...out };
+}
+/** --status: OPEN.md from the ledger of every run, written beside the runs and returned. Reads files only; no model. */
+function statusCommand({ runs = RUNS_DIR } = {}) {
+  return require('./ledger.cjs').writeStatus(runs);
+}
+module.exports = { actionIds, judgePayload, judgeRequest, judgeJourney, judgeRecord, synthesize, parseArgs, statusCommand, JUDGE_SCREEN_CAP };
 
 // ---------------------------------------------------------------- parent
 async function parent() {
-  const args = process.argv.slice(2), only = [];
-  let pickJourneys = null, runId = null, recertify = null;
-  for (let i = 0; i < args.length; i++) {
-    if (args[i] === '--journeys') pickJourneys = args[++i].split(',');
-    else if (args[i] === '--run') runId = args[++i];
-    else if (args[i] === '--recertify') recertify = args[++i];
-    else only.push(args[i]);
+  const all = characters(), a = parseArgs(process.argv.slice(2), { characters: all.map(c => c.sim.id) });
+  if (a.mode === 'status') {
+    const out = statusCommand({ runs: a.runs });
+    console.log(`${out.md}\nWrote ${path.relative(process.cwd(), out.file)}`);
+    return;
   }
-  const all = characters();
+  const only = a.only, pickJourneys = a.journeys, runId = a.run, recertify = a.recertify, runsDir = a.runs;
   for (const n of only) if (!all.some(c => c.sim.id === n)) { console.error(`Unknown character ${n}. Known: ${all.map(c => c.sim.id).join(', ')}`); process.exit(2); }
   const RC = require('./recertify.cjs');
-  let cast = all.filter(c => !only.length || only.includes(c.sim.id)), id, dir, dataDir, logDir, pairs = null, prior = null;
+  let cast = all.filter(c => !only.length || only.includes(c.sim.id)), id, dir, dataDir, logDir, pairs = null, prior = null, ledgerPrior = null;
+  if ((recertify || a.mode === 'ledger') && (runId || pickJourneys)) { console.error('--recertify picks its own run dir and journeys; drop --run and --journeys.'); process.exit(2); }
   if (recertify) {
     // only the pairs that still have open findings, inside the originating run
-    if (runId || pickJourneys) { console.error('--recertify picks its own run dir and journeys; drop --run and --journeys.'); process.exit(2); }
-    prior = path.isAbsolute(recertify) ? recertify : path.join(uat, 'runs', recertify);
+    prior = path.isAbsolute(recertify) ? recertify : path.join(runsDir, recertify);
     if (!fs.existsSync(path.join(prior, 'findings.json'))) { console.error(`No findings.json in ${prior}.`); process.exit(2); }
     pairs = Object.fromEntries(Object.entries(RC.plan(prior)).filter(([c]) => cast.some(x => x.sim.id === c)));
     cast = cast.filter(c => pairs[c.sim.id]);
     if (!cast.length) { console.log(`Nothing open to recertify in ${RC.runId(prior)}.`); process.exit(0); }
     const slot = RC.nextRerun(prior);
     dir = slot.dir; id = RC.runId(dir); dataDir = slot.data; logDir = slot.logs;
+  } else if (a.mode === 'ledger') {
+    // every pair with an open gap in any run, inside the newest run that holds one
+    const plan = RC.planLedger(require('./ledger.cjs').ledger(runsDir), { characters: cast.map(c => c.sim.id) });
+    pairs = plan.pairs; ledgerPrior = plan.prior;
+    cast = cast.filter(c => pairs[c.sim.id]);
+    if (!cast.length) { console.log(`Nothing open to recertify under ${runsDir}.`); process.exit(0); }
+    const slot = RC.nextRerun(path.join(runsDir, plan.home));
+    dir = slot.dir; id = RC.runId(dir); dataDir = slot.data; logDir = slot.logs;
   } else {
     const day = new Date().toISOString().slice(0, 10);
     id = runId ?? `${day}-lt`;
-    for (let n = 2; !runId && fs.existsSync(path.join(uat, 'runs', id)); n++) id = `${day}-lt-${n}`;
-    dir = path.join(uat, 'runs', id); dataDir = path.join(dir, 'data'); logDir = path.join(dir, 'logs');
+    for (let n = 2; !runId && fs.existsSync(path.join(runsDir, id)); n++) id = `${day}-lt-${n}`;
+    dir = path.join(runsDir, id); dataDir = path.join(dir, 'data'); logDir = path.join(dir, 'logs');
   }
   fs.mkdirSync(logDir, { recursive: true });
   fs.mkdirSync(dir, { recursive: true });
-  // the instrument, so a driver or model change can never pass for a product change
-  fs.writeFileSync(path.join(dir, 'run.json'), JSON.stringify({ id, started: new Date().toISOString(), cast: cast.map(c => c.sim.id), journeys: pickJourneys, recertify: prior ? RC.runId(prior) : null, pairs, instrument: RC.instrumentOf({ model: MODEL, judgeScreenCap: JUDGE_SCREEN_CAP }) }, null, 2));
+  // the instrument, so a driver or model change can never pass for a product change; a ledger rerun also records
+  // exactly which rows each pair's judge is shown
+  fs.writeFileSync(path.join(dir, 'run.json'), JSON.stringify({ id, started: new Date().toISOString(), cast: cast.map(c => c.sim.id), journeys: pickJourneys, recertify: prior ? RC.runId(prior) : null, pairs, ...(ledgerPrior ? { ledger: { prior: ledgerPrior } } : {}), instrument: RC.instrumentOf({ model: MODEL, judgeScreenCap: JUDGE_SCREEN_CAP }) }, null, 2));
   const pairCount = pairs && Object.values(pairs).reduce((n, js) => n + js.length, 0);
-  console.log(`LT run ${id} · ${cast.length} Character(s) · codex/${MODEL}${pickJourneys ? ` · journeys ${pickJourneys.join(',')}` : ''}${pairs ? ` · recertify ${pairCount} open pair(s) of ${RC.runId(prior)}` : ''}`);
+  const rowCount = ledgerPrior && Object.values(ledgerPrior).flatMap(Object.values).reduce((n, rows) => n + rows.length, 0);
+  console.log(`LT run ${id} · ${cast.length} Character(s) · codex/${MODEL}${pickJourneys ? ` · journeys ${pickJourneys.join(',')}` : ''}${prior ? ` · recertify ${pairCount} open pair(s) of ${RC.runId(prior)}` : ''}${ledgerPrior ? ` · recertify ${pairCount} open pair(s), ${rowCount} open row(s) from every run` : ''}`);
   const started = Date.now();
   const codes = await Promise.all(cast.map(c => new Promise(resolve => {
     const log = fs.createWriteStream(path.join(logDir, `${c.sim.id}.log`));
     const journeysOf = pairs ? pairs[c.sim.id] : pickJourneys ?? [];
     const p = spawn(process.execPath, [__filename], {
-      env: { ...process.env, UAT_CHILD: c.sim.id, UAT_RUN_DIR: dir, UAT_RUN_ID: id, UAT_JOURNEYS: journeysOf.join(','), ...(prior ? { UAT_RECERTIFY: prior } : {}), DESK_TEXT_ENGINE: 'codex', DESK_DATA_DIR: path.join(dataDir, c.sim.id) },
+      env: { ...process.env, UAT_CHILD: c.sim.id, UAT_RUN_DIR: dir, UAT_RUN_ID: id, UAT_JOURNEYS: journeysOf.join(','), ...(prior ? { UAT_RECERTIFY: prior } : {}), ...(ledgerPrior ? { UAT_LEDGER: '1' } : {}), DESK_TEXT_ENGINE: 'codex', DESK_DATA_DIR: path.join(dataDir, c.sim.id) },
       stdio: ['ignore', 'pipe', 'pipe'],
     });
     p.stdout.on('data', d => { log.write(d); for (const l of String(d).split(/\r?\n/)) if (l.startsWith('» ')) console.log(`[${c.sim.id}] ${l.slice(2)}`); });
@@ -188,6 +230,10 @@ async function parent() {
   if (prior) {
     const out = RC.finish(prior, dir);
     console.log(`Recertified ${RC.runId(prior)}: ${out.fixed} fixed (LT), ${out.recurs} recur, ${out.notEvaluable} not evaluable · wrote ${path.relative(process.cwd(), out.file)} and stamped ${path.relative(process.cwd(), path.join(prior, 'findings.json'))}`);
+  }
+  if (ledgerPrior) {
+    const out = RC.finishLedger(dir, { runs: runsDir });
+    console.log(`Recertified from the ledger: ${out.fixed} fixed (LT), ${out.recurs} recur, ${out.notEvaluable} not evaluable (rows) · stamped ${Object.entries(out.stamped).map(([r, n]) => `${r} ${n}`).join(', ') || 'nothing'} · wrote ${path.relative(process.cwd(), out.file)}`);
   }
   process.exit(results.some(r => r.crashed) ? 1 : 0);
 }
@@ -460,12 +506,15 @@ If the screen looks broken or confusing, react as this person would: retry, go b
   const selection = (process.env.UAT_JOURNEYS || '').split(',').filter(Boolean);
   const mine = C.journeys.filter(j => !selection.length || selection.includes(j));
   const recertify = process.env.UAT_RECERTIFY || null;
+  // a ledger rerun: the rows each pair's judge is shown were fixed by the parent in run.json (global ids, every run)
+  const ledgerPrior = process.env.UAT_LEDGER ? JSON.parse(fs.readFileSync(path.join(dir, 'run.json'), 'utf8')).ledger?.prior?.[C.id] ?? {} : null;
   for (const jid of mine) {
     let record;
     try { record = await journey(jid); }
     catch (e) { record = { id: jid, title: J[jid].sim.title, setup: [], steps: [], facts: {}, endedBy: 'setup-failed', error: String(e.message).slice(0, 400), ms: 0 }; say(`${jid} setup failed: ${e.message.slice(0, 160)}`); }
     // a recertify pair carries the findings the originating run left open here; the judge answers each
     if (recertify) record.prior = require('./recertify.cjs').openFindings(recertify, C.id, jid);
+    else if (ledgerPrior) record.prior = ledgerPrior[jid] ?? [];
     await judgeRecord(record, { character: { file: character.text, sim: C }, journey: J[jid].text, rubric }, req => role('judge', req));
     const judged = record.judge;
     if (!judged) say(`${jid} judge failed: ${String(record.judgeError).slice(0, 120)}`);

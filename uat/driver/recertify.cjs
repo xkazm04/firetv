@@ -12,6 +12,8 @@
  *   renderRecertify(prior, r)  -> recertify.md beside the originating run; Regressed compares the code verdicts
  *                                 (verdict.cjs verdictOf), never the judge's own, so a changed judge mood is not a regression
  *   finish(prior, rerun)       -> writeBack + renderRecertify, from the rerun's own files
+ *   planLedger(ledger)         -> every pair with an open gap in ANY run (ledger.cjs), each with its gaps' global ids
+ *   finishLedger(rerun)        -> each answer stamped into the findings.json of the run that owns the row; OPEN.md rewritten
  *
  * A run is an id under uat/runs/ or a directory. A rerun lives inside its originating run as recert-<k>/.
  * LT never claims `resolved-verified`: that takes live L2 evidence. Nothing here calls a model.
@@ -272,14 +274,54 @@ function finish(prior, rerun) {
   return { file: renderRecertify(prior, rerun), ...count };
 }
 
+// ---------------------------------------------------------------- recertify from the ledger (every run at once)
+/**
+ * Every Character x journey with an open gap in any run (ledger.cjs), optionally only these `characters`: `pairs` as
+ * plan() gives them, `prior` per pair (the rows its judge is shown, each named by its gap's global id and carrying the
+ * run that holds it), and `home`, the newest run holding a planned gap: the rerun lives inside it as recert-<k>/.
+ */
+function planLedger(L, { characters } = {}) {
+  const gaps = L.open.filter(g => !characters || characters.includes(g.character)), prior = {};
+  for (const g of gaps) ((prior[g.character] ??= {})[g.journey] ??= []).push({ id: g.id, run: g.head.run, type: g.type, dimension: g.head.dimension, title: g.title, expected: g.head.expected, got: g.head.got, evidence: g.head.evidence, recurrence: g.recurrence });
+  const sorted = Object.fromEntries(Object.entries(prior).sort(([a], [b]) => a.localeCompare(b)).map(([c, js]) => [c, Object.fromEntries(Object.entries(js).sort(([a], [b]) => jn(a) - jn(b)))]));
+  const newest = gaps.reduce((m, g) => (m && m.head.order >= g.head.order ? m : g), null);
+  const home = newest ? (L.runs[newest.head.order].parent ?? newest.head.run) : null;
+  return { pairs: Object.fromEntries(Object.entries(sorted).map(([c, js]) => [c, Object.keys(js)])), prior: sorted, open: gaps.length, home };
+}
+/**
+ * After a ledger rerun: the judge's answer for each global id it was shown (priorStatuses, as finish() reads it), a
+ * planned id with no judged answer not-evaluable, and each answer stamped by writeBack() into the findings.json of
+ * EVERY run holding an open row of that gap, under the row's own local id. The stamp fields are the per-run ones
+ * (recertify_run = this rerun's id, recertify_status, recertify_evidence; fixed / recurrence + 1 / recurred_as); no id
+ * is rewritten. Then <runs>/OPEN.md is rewritten. Counts are rows stamped.
+ */
+function finishLedger(rerun, { runs = RUNS } = {}) {
+  const LG = require('./ledger.cjs'), id = runId(rerun), fresh = findings(rerun), statuses = {};
+  for (const r of results(rerun)) for (const j of r.journeys) {
+    if (!j.prior?.length) continue;
+    for (const [gid, s] of Object.entries(priorStatuses(j.prior.map(p => p.id), j.judge?.prior, { endedBy: j.endedBy ?? 'unknown' }))) statuses[gid] = { ...s, ...(s.status === 'recurs' ? { as: fresh.find(f => f.recurs === gid)?.id } : {}) };
+  }
+  // a planned pair that never reached its judge (a crash) is not-evaluable, not silently skipped
+  for (const js of Object.values(runJson(rerun)?.ledger?.prior ?? {})) for (const rows of Object.values(js)) for (const p of rows) statuses[p.id] ??= { status: 'not-evaluable', evidence: 'the pair did not reach a judged end in the rerun', finding: -1 };
+  const L = LG.ledger(runs), perRun = {};
+  for (const [gid, s] of Object.entries(statuses)) for (const row of L.byGid.get(gid)?.rows ?? []) if (row.run !== id && LG.isOpen(row)) (perRun[row.run] ??= {})[row.id] = s;
+  const count = { fixed: 0, recurs: 0, notEvaluable: 0 }, stamped = {};
+  for (const [run, st] of Object.entries(perRun)) {
+    const c = writeBack(path.join(runs, run), id, st);
+    stamped[run] = c.fixed + c.recurs + c.notEvaluable;
+    for (const k of Object.keys(count)) count[k] += c[k];
+  }
+  return { ...count, stamped, file: LG.writeStatus(runs).file };
+}
+
 /** What produced a run: every run writes this into run.json so a driver change cannot pass for a product change. */
 function instrumentOf({ model, judgeScreenCap }) {
   const sha = f => crypto.createHash('sha256').update(fs.readFileSync(path.join(__dirname, f))).digest('hex').slice(0, 16);
   return {
     model, judgeScreenCap,
     efforts: { tutor: process.env.UAT_CODEX_EFFORT || 'medium', character: process.env.UAT_CODEX_EFFORT || 'medium', judge: process.env.UAT_JUDGE_EFFORT || 'high' },
-    driver: Object.fromEntries(['linga-text.cjs', 'surface.cjs', 'recertify.cjs', 'verdict.cjs'].map(f => [f, sha(f)])),
+    driver: Object.fromEntries(['linga-text.cjs', 'surface.cjs', 'recertify.cjs', 'verdict.cjs', 'ledger.cjs'].map(f => [f, sha(f)])),
   };
 }
 
-module.exports = { RUNS, runId, results, plan, openFindings, ratio, rollUp, metricDelta, confounds, priorStatuses, writeBack, nextRerun, renderRecertify, finish, instrumentOf, START_SHIFT };
+module.exports = { RUNS, runId, results, plan, openFindings, ratio, rollUp, metricDelta, confounds, priorStatuses, writeBack, nextRerun, renderRecertify, finish, planLedger, finishLedger, instrumentOf, START_SHIFT };
