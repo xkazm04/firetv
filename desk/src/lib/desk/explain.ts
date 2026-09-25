@@ -13,7 +13,7 @@
  * for the answer (`leaks`) - a reply that gives it away is replaced by the item's own line.
  */
 import { text } from "../engines/text";
-import { ASK, leaks, settle, slipsFor, slipVocabulary, type Settled } from "../rules/maths";
+import { ASK, leaks, settle, settled, slipsFor, slipVocabulary, type Settled } from "../rules/maths";
 import { topic } from "../library/syllabus";
 import { getLearner, recordAttempt } from "../session/learners";
 import type { PracticeItem } from "../session/store";
@@ -67,8 +67,11 @@ export async function explain(
  * What an explanation does to its item. `settled` is set only when the item was unsure and the spoken
  * value could be read: the substitution decided it, and the attempt went to the learner record once.
  * `reply` never carries a number the substitution accepts for the question.
+ * `renamed` is set only when the item was already wrong and the model named a slip from this topic's
+ * vocabulary (the same `settled` rule marking uses): the item's shown slip and line follow the conversation.
+ * Its verdict, its pen (`slipAt`) and the learner record are left as they were.
  */
-export interface Explained { reply: string; slip?: string; settled?: Settled; }
+export interface Explained { reply: string; slip?: string; settled?: Settled; renamed?: { slip: string; said: string }; }
 
 export async function explainItem(
   item: PracticeItem,
@@ -81,8 +84,10 @@ export async function explainItem(
   const heard = await explain(item.question, transcript, topicId, learnerId);
   const verdict = stillUnsure() ? settle(item, heard.value, heard.slip, topicId) : null;
   if (verdict) recordAttempt(learnerId, topicId, verdict.verdict === "right", verdict.slip);
+  // an item already wrong: the slip the conversation found replaces the marker's, when the rulebook has it (no verdict, no record)
+  const named = !verdict && item.verdict === "wrong" && heard.slip ? settled(item.n, false, heard.slip, topicId) : null;
   // the item's own line stands in for a reply that gives the answer away (or says nothing)
   const own = verdict?.said ?? item.said ?? ASK(item.n);
   const reply = heard.reply && !leaks(item.question, heard.reply) ? heard.reply : own;
-  return { reply, slip: heard.slip, ...(verdict ? { settled: verdict } : {}) };
+  return { reply, slip: heard.slip, ...(verdict ? { settled: verdict } : {}), ...(named?.slip ? { renamed: { slip: named.slip, said: named.said } } : {}) };
 }

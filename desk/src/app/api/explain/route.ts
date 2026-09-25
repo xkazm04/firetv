@@ -1,6 +1,7 @@
 /**
  * The learner said how they got there; the desk answers with a step, never the answer. On an item the
- * desk was not sure about, the value they say they got is substituted (rules/maths) and the item settles.
+ * desk was not sure about, the value they say they got is substituted (rules/maths) and the item settles. On an
+ * item already wrong, a slip the explanation names from the topic's vocabulary becomes the item's shown slip.
  */
 import { NextResponse } from "next/server";
 import { dispatch, getSession } from "@/lib/session/store";
@@ -23,7 +24,8 @@ export async function POST(req: Request) {
   };
   const r = await runJob("explain", async () => {
     const x = await explainItem(item, transcript ?? "", practice.topic, s.learner.id, () => same()?.verdict === "unsure");
-    if (same()) dispatch({ type: "practice.settle", n: item.n, reply: x.reply, ...(x.settled ?? {}) });
+    // an unsure item settles; a wrong one only takes the slip the explanation named (the reducer keeps its verdict and pen)
+    if (same()) dispatch({ type: "practice.settle", n: item.n, reply: x.reply, ...(x.settled ?? x.renamed ?? {}) });
     return x;
   }, { key: String(item.n), start: "listening…", done: (x) => x.reply });
   if (!r.ok) return refused(r);

@@ -246,6 +246,28 @@ test('case 4: a settled item is never settled or recorded again',async()=>{
   assert.deepEqual(record(me),before,`call ${k+1}`);
  }
 });
+test('case 4b: on an item already wrong, a slip the explanation names from the topic\'s vocabulary becomes its slip - verdict, pen and record untouched',async()=>{
+ const me=await markedWalk(),before=record(me),was=store.getSession().practice.items[1];
+ assert.equal(was.verdict,'wrong');assert.equal(was.slip,'sign-lost-moving');
+ for(const s of ['unclear','made-up','bracket-first-term-only']){
+  said({reply:'Look at the line where the 5 moved.',value:'-3',slip:s});await explainAt(1,'I took five away');
+  const it=store.getSession().practice.items[1];
+  assert.equal(it.slip,'sign-lost-moving',`${s} is outside the vocabulary: the title stays`);assert.equal(it.said,was.said,s);
+ }
+ said({reply:'Re-do the arithmetic on that line.',value:'-3',slip:'arithmetic-slip'});
+ const r=await explainAt(1,'I took five away and got minus three');
+ assert.equal(r.status,200);assert.equal(r.body.settled,undefined,'a wrong item is not settled again');
+ const it=store.getSession().practice.items[1];
+ assert.equal(it.verdict,'wrong');assert.equal(it.slip,'arithmetic-slip','the title follows the conversation');
+ assert.equal(it.said,slip('arithmetic-slip').says);assert.equal(it.reply,'Re-do the arithmetic on that line.');
+ assert.deepEqual(it.slipAt,was.slipAt,'the pen stays where the learner\'s lines put it');
+ assert.deepEqual(record(me),before,'no second attempt is recorded');
+ // the reducer holds the same line against an event that did not come through the rules
+ store.dispatch({type:'practice.settle',n:2,reply:'x',slip:'collect-x-wrong-sign',said:'free text'});
+ assert.equal(store.getSession().practice.items[1].slip,'arithmetic-slip');
+ store.dispatch({type:'practice.settle',n:1,reply:'x',slip:'arithmetic-slip'});
+ assert.equal(store.getSession().practice.items[0].slip,undefined,'a right item takes no slip');
+});
 test('case 5: a reply that gives the answer away is stopped in code, and the item\'s own line stands in',async()=>{
  store.dispatch({type:'reset'});
  store.dispatch({type:'practice.set',practice:{topic:'linear-one-step',marked:false,items:[{n:1,question:'2x+3=11'},{n:2,question:'x-5=2'}]}});

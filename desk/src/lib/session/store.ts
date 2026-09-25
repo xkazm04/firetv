@@ -14,7 +14,7 @@ import path from "node:path";
 import { getLearner, saveLearner, type HistoryEntry, type SkillRecord } from "./learners";
 import { SYLLABUS } from "../library/syllabus";
 import type { RuleCard } from "../rules/english";
-import { restatedLine } from "../rules/maths";
+import { restatedLine, slipsFor } from "../rules/maths";
 import type { Fix, Sentence, Was } from "../rules/essay";
 import { emptyEnglish, type Conversation, type EnglishLearning, type LevelCheck } from "../english/types";
 
@@ -259,9 +259,12 @@ export function reduce(s: Session, e: Event): Session {
     case "practice.set": n.practice = shownPractice(e.practice); n.topic = e.practice.topic; n.walkIx = 0; n.screen = "practice"; break;
     // a marked set lands on the sheet - all six verdicts at once - focused on the first item to look at
     case "practice.marked": if (s.practice) { n.practice = { ...s.practice, items: e.items.map(shown), marked: true }; n.walkIx = 0; n.screen = "sheet"; n.focus = firstToLook(n.practice.items); } break;
-    // an explanation: the reply always lands on its item; a verdict only on an item still unsure (a settled item stays settled)
-    case "practice.settle": if (s.practice) { n.practice = { ...s.practice, items: s.practice.items.map((it) => it.n !== e.n ? it
-      : shown(e.verdict && it.verdict === "unsure" ? { ...it, verdict: e.verdict, slip: e.slip, said: e.said ?? it.said, reply: e.reply, slipAt: e.slipAt } : { ...it, reply: e.reply })) }; } break;
+    // an explanation: the reply always lands on its item; a verdict only on an item still unsure (a settled item stays settled);
+    // on an item already wrong, a slip with no verdict renames it - from the topic's vocabulary only, verdict and pen untouched
+    case "practice.settle": if (s.practice) { const topic = s.practice.topic; n.practice = { ...s.practice, items: s.practice.items.map((it) => it.n !== e.n ? it
+      : shown(e.verdict && it.verdict === "unsure" ? { ...it, verdict: e.verdict, slip: e.slip, said: e.said ?? it.said, reply: e.reply, slipAt: e.slipAt }
+        : !e.verdict && e.slip && it.verdict === "wrong" && slipsFor(topic).some((x) => x.id === e.slip) ? { ...it, slip: e.slip, said: e.said ?? it.said, reply: e.reply }
+        : { ...it, reply: e.reply })) }; } break;
     case "walk": { const len = s.practice?.items.length ?? 0; n.walkIx = len ? Math.min(len - 1, Math.max(0, e.ix)) : 0; break; }
     case "practice.clear": n.practice = null; n.topic = null; n.screen = "tonight"; n.focus = 0; break;
     case "status": n.status = e.text; break;
