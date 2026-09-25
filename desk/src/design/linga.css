@@ -349,17 +349,32 @@
 .linga-tv .lo-said { margin-top: 22px; }
 .linga-tv .lo-said + .lo-card { margin-top: 30px; }
 
-/* a partner's line with the goal under it: the card takes the next size down, the rhythm tightens, and the
-   column grows up from the actions (anchored 139 px above the bottom) instead of running into them */
-.linga-tv[data-goal] .lo-panel { top: auto; min-height: 756px; }
-.linga-tv[data-goal] .lo-kicker { margin-bottom: 14px; }
-.linga-tv[data-goal] .lo-said { margin-top: 20px; padding-top: 14px; padding-bottom: 14px; }
-.linga-tv[data-goal] .lo-said .lo-card-text { margin-top: 6px; }
-.linga-tv[data-goal] .lo-rule { margin: 18px 0 10px; }
-.linga-tv[data-goal] .lo-data { margin-top: 16px; }
-.linga-tv .lo-with-goal .lo-card-text { font-size: 38px; }
-.linga-tv .lo-with-goal .lo-card-text.lo-mid { font-size: 33px; line-height: 1.22; }
-.linga-tv .lo-with-goal .lo-card-text:is(.lo-long, .lo-xlong) { font-size: 30px; line-height: 1.2; }
+/* the words column on the door: it stands on the actions (anchored 139 px above the bottom) and grows UP when
+   its words are taller than the room, so they never run into the actions. A screen that fits keeps its place
+   (top 185, 217 on home) to the pixel. When the column would climb past the arch's crown (y 160) LingaTV steps
+   the type down, one data-fit step at a time, the documented steps first:
+   1: the rhythm tightens and the sentence card takes the next size down (41 -> 38, 38 -> 33, 33 -> 30)
+      (a partner's line with the goal under it starts here);
+   2: every card at 30;
+   3: the rest to its floor: caption, note and quote to 28-34, the title one size down. Nothing under 28 px. */
+.linga-tv[data-layout="door"] .lo-panel { top: auto; min-height: 756px; }
+.linga-tv[data-layout="door"][data-hero="intro"] .lo-panel { min-height: 724px; }
+.linga-tv[data-fit] .lo-kicker { margin-bottom: 14px; }
+.linga-tv[data-fit] .lo-said { margin-top: 20px; padding-top: 14px; padding-bottom: 14px; }
+.linga-tv[data-fit] .lo-said .lo-card-text { margin-top: 6px; }
+.linga-tv[data-fit] .lo-rule { margin: 18px 0 10px; }
+.linga-tv[data-fit] .lo-data { margin-top: 16px; }
+.linga-tv[data-fit] .lo-compare .lo-card { margin-top: 28px; }
+.linga-tv[data-fit] .lo-note { margin-top: 16px; }
+.linga-tv[data-fit] .lo-card-text { font-size: 38px; }
+.linga-tv[data-fit] .lo-card-text.lo-mid { font-size: 33px; line-height: 1.22; }
+.linga-tv[data-fit] .lo-card-text:is(.lo-long, .lo-xlong) { font-size: 30px; line-height: 1.2; }
+.linga-tv:is([data-fit="2"], [data-fit="3"]) .lo-card .lo-card-text { font-size: 30px; line-height: 1.2; }
+.linga-tv[data-fit="3"] .lo-caption > div { font-size: 28px; line-height: 1.28; }
+.linga-tv[data-fit="3"] .lo-note { max-width: 752px; font-size: 28px; line-height: 1.28; }
+.linga-tv[data-fit="3"] .lo-before q { font-size: 34px; }
+.linga-tv[data-fit="3"] .lo-title[data-size="l"] { font-size: 66px; letter-spacing: -2.2px; }
+.linga-tv[data-fit="3"] .lo-title:is([data-size="m"], [data-size="s"]) { font-size: 56px; letter-spacing: -1.6px; line-height: 1.1; }
 
 /* ---------------------------------------------------------------- actions */
 .linga-tv .lo-actions { flex: none; display: flex; flex-direction: column; gap: 15px; width: 752px; margin-top: 22px; }

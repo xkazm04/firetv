@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import type { Event, Screen, Session } from "@/lib/session/store";
 import { ENGLISH_SCENES } from "@/lib/english/curriculum";
 import { accepts } from "@/lib/english/turn";
@@ -17,6 +17,8 @@ const PHONE_ACTIONS=new Set(["start-talking","start-situation","carry-on"]);
 const PAGING_ACTIONS=new Set(["next-situation","previous-chapter","next-chapter"]);
 /** The Open Door composition a screen takes: the arch beside the words, the wide ladder, the row of doors, the menu. */
 type Layout="door"|"ladder"|"plan"|"menu";
+/** The door's words column grows up from the actions; past the arch's crown the type steps down (linga.css, data-fit). */
+const FIT_CEILING=160,FIT_STEPS=3;
 
 export function LingaTV({s,post,voice}:{s:Session;post:(e:Event)=>Promise<void>;voice:boolean}){
   const {run,busy,error}=useEnglish(s),[ui,setUi]=useState<LingaUi>(NO_UI);
@@ -67,6 +69,12 @@ export function LingaTV({s,post,voice}:{s:Session;post:(e:Event)=>Promise<void>;
   /** A choice has no primary: every option is the same kind of button. */
   const choice=h.kind==="choices"&&!menu;
   const art=layout==="door"?artFor(h,s):null;
+  // the door's column: a screen that fits stays as drawn; a taller one climbs to the crown, then steps its type down
+  const panel=useRef<HTMLElement>(null);
+  const fitKey=layout==="door"?`${s.screen}|${JSON.stringify(h)}|${v.caption}|${v.captionTag}|${actions.length}`:"";
+  const [fitted,setFitted]=useState({key:"",step:0});
+  const fit=fitted.key===fitKey?fitted.step:layout==="door"&&s.screen!=="linga-scenes"&&talkGoal(h)?1:0;
+  useLayoutEffect(()=>{const p=panel.current;if(p&&p.offsetTop<FIT_CEILING&&fit<FIT_STEPS)setFitted({key:fitKey,step:fit+1});});
   const tag=h.kind==="intro"?h.nameTag:h.kind==="scene"?h.partner:h.kind==="choices"&&s.screen==="linga-talk"?c?.partner:undefined;
   const dots=progressDots(s);
   const status=waiting?(onCheck?"Linga is thinking…":"Preparing a reply…"):c?.capture&&!onCheck?"Phone microphone active":audioStatus||"TV shows · Phone speaks";
@@ -77,11 +85,11 @@ export function LingaTV({s,post,voice}:{s:Session;post:(e:Event)=>Promise<void>;
     return <button className={`lo-action ${primary?"lo-primary":"lo-secondary"}`} data-role={primary?"linga-primary":"linga-secondary"} key={`${i}:${a.label}`} data-focused={focus===i} data-rest={focus<0&&i===0&&!a.disabled?true:undefined} disabled={a.disabled||(waiting&&!cancel(a))} onMouseEnter={()=>post({type:"focus",focus:i})} onMouseLeave={()=>{if(s.screen==="linga-talk")post({type:"focus",focus:-1});}} onClick={()=>go(a)}>
       {menu&&<span className="lo-sr">Select · </span>}<span className="lo-label">{a.label}</span>{PHONE_ACTIONS.has(a.id)?<OnYourPhone/>:<Arrow/>}
     </button>;})}</nav>;
-  return <div className="linga-tv" data-view={v.screen} data-layout={layout} data-hero={h.kind} data-goal={layout==="door"&&s.screen!=="linga-scenes"&&talkGoal(h)?true:undefined}>
+  return <div className="linga-tv" data-view={v.screen} data-layout={layout} data-hero={h.kind} data-fit={fit||undefined}>
     <header className="lo-top"><Mark/><Learner name={s.learner.name} up={home&&!menu&&!picking}/></header>
     {layout==="door"&&<>
       {art&&<Arch art={art} tag={tag} speaker={s.screen==="linga-talk"}/>}
-      <section className="lo-panel"><div className="lo-body"><Body v={v} s={s} caption={caption}/></div>{nav}</section>
+      <section className="lo-panel" ref={panel}><div className="lo-body"><Body v={v} s={s} caption={caption}/></div>{nav}</section>
     </>}
     {layout==="ladder"&&h.kind==="ladder"&&<>
       <section className="lo-head"><Kicker text={h.kicker}/><Title text={h.title}/>{caption}</section>
@@ -130,7 +138,7 @@ function artFor(h:Hero,s:Session):ArtKey{
   }
 }
 
-/** The conversation's goal under a partner's line, when the line leaves it room; the column then flows up from the actions (linga.css). */
+/** The conversation's goal under a partner's line, when the line leaves it room; the screen then starts one type step down (linga.css, data-fit). */
 function talkGoal(h:Hero):string|null{return h.kind==="scene"&&h.said&&h.subtitle&&h.said.length<=140?h.subtitle:null;}
 
 /** A title in Georgia, one size smaller for each step in length so it never takes a third line. */
@@ -152,7 +160,7 @@ function Body({v,s,caption}:{v:LingaView;s:Session;caption:React.ReactNode}){
       if(s.screen==="linga-scenes")return <><Kicker band={h.band} text={`${h.subtitle} · ${h.minutes} min`}/><Title text={h.title}/>{caption}<SentenceCard label="A sentence to take with you" text={h.sentence}/></>;
       const kicker=h.kicker.endsWith(` · ${h.partner}`)?h.kicker.slice(0,-(h.partner.length+3)):h.kicker;
       const goal=talkGoal(h);
-      return <><Kicker text={kicker}/>{h.said?<SentenceCard className={`lo-said linga-message${goal?" lo-with-goal":""}`} label={`${h.who.split(" · ")[0]} says`} text={h.said} role="linga-said"/>:<Title text={h.title}/>}{caption}{goal&&<DataLine><span className="lo-data-key">Goal</span>{goal}</DataLine>}</>;
+      return <><Kicker text={kicker}/>{h.said?<SentenceCard className="lo-said linga-message" label={`${h.who.split(" · ")[0]} says`} text={h.said} role="linga-said"/>:<Title text={h.title}/>}{caption}{goal&&<DataLine><span className="lo-data-key">Goal</span>{goal}</DataLine>}</>;
     }
     // On the recap, the phrase this scene invited and the learner has yet to use stands where the title would be.
     case "track":return <><Kicker text={h.kicker}/>{h.sentence?<SentenceCard className="lo-compact" label="A sentence to take with you" text={h.sentence}/>:<Title text={h.title}/>}<Stones progress={h.progress}/>{h.subtitle&&<DataLine>{h.subtitle}</DataLine>}{caption}</>;
