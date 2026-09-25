@@ -451,6 +451,8 @@
 
 /* speaking progress: stepping stones on a dashed path */
 .linga-tv .lo-stones { display: flex; width: 100%; margin-top: 36px; }
+.linga-tv .lo-stones-label { margin-top: 32px; color: var(--lo-label); font-size: 22px; font-weight: 900; letter-spacing: 3px; text-transform: uppercase; }
+.linga-tv .lo-stones-label + .lo-stones { margin-top: 14px; }
 .linga-tv .lo-stones > div { position: relative; flex: 1; padding: 52px 12px 0 0; color: var(--lo-muted-line); font-size: 28px; font-weight: 700; line-height: 1.15; }
 .linga-tv .lo-stones > div:not(:last-child)::before { content: ""; position: absolute; left: 18px; right: -18px; top: 16px; border-top: 4px dashed #cdb9a6; }
 .linga-tv .lo-stones > div[data-reached="true"]:not([data-here="true"])::before { border-top-style: solid; border-color: var(--lo-frame); }

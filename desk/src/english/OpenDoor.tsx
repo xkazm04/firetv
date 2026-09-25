@@ -79,9 +79,10 @@ export function BandSteps({ band }: { band: Band }) {
 /** Speaking progress as stepping stones: four marks on a dashed path, the reached ones filled, the last one warm. */
 export function Stones({ progress }: { progress: Progress }) {
   const at = PROGRESS_ORDER.indexOf(progress);
-  return <div className="lo-stones linga-track" data-role="linga-track">
+  // the path measures speaking aloud only (rules/english counts spoken evidence): say so, or a typed conversation reads as "Not tried"
+  return <><div className="lo-stones-label">Speaking it aloud</div><div className="lo-stones linga-track" data-role="linga-track">
     {PROGRESS_ORDER.map((id, i) => <div key={id} data-reached={i <= at} data-here={i === at}><i/>{PROGRESS_LABEL[id]}</div>)}
-  </div>;
+  </div></>;
 }
 
 /** The footer's progress marks: done, the current one, the ones still open. Decoration for the tag beside it. */
