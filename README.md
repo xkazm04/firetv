@@ -26,6 +26,10 @@ Chrome (real touch events)          Android TV emulator, API 34, leanback
 - **Tools:** freehand (smoothed, pressure-varying width), arrow, circle, spotlight, name tag,
   eraser — five colours, and a Pin toggle for drawings that should outlive the hold window.
 - **Undo / redo** as an operation log, so undoing an erase restores the annotation *in place*.
+- **Edits you can see:** like the eraser, no edit changes ink off screen. Clear cleans the frame on
+  screen (Clear all is its own button, and the remote's Down still clears the clip). An undo or redo
+  whose ink is on another frame names it on the phone ("Undo · 5.0s"); the first press takes the TV
+  there, paused, and the next press acts.
 - **Transport from the phone:** play/pause, single-frame step, 0.25×/0.5× slow motion, scrub.
 - **Review mode:** the scrub bar carries a tick for every drawn moment, and previous/next drawing
   land the TV paused on the exact frame the ink is anchored to, so a walk-through is a row of taps.
@@ -42,7 +46,7 @@ Chrome (real touch events)          Android TV emulator, API 34, leanback
 
 | Path | What |
 |---|---|
-| `core/` | Pure JVM: annotation schema + codec, timeline, letterbox mapping, pen engine, Catmull-Rom smoothing, hit-testing, undo history, wire protocol, pen conversation, transport plan. No Android imports — 61 unit tests run in seconds with no device. |
+| `core/` | Pure JVM: annotation schema + codec, timeline, letterbox mapping, pen engine, Catmull-Rom smoothing, hit-testing, undo history, wire protocol, pen conversation, transport plan. No Android imports — 79 unit tests run in seconds with no device. |
 | `tv-app/` | Android app: Media3 player, Compose overlay, embedded Ktor server, QR pairing, D-pad input. |
 | `companion/` | The phone PWA. Single file, copied into the APK's assets at build time so there is one source of truth. |
 | `tools/` | `live-ui-test.mjs` (Playwright → real PWA → real TV → pixel assertions, 28 checks), `relay-test.mjs` + `relay-stub.mjs` (the same APK with no listening socket, 11 checks), `pen-sim.mjs` (headless protocol check), `latency-probe.mjs`. |

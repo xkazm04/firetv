@@ -115,10 +115,13 @@
     <button id="btn-hold" aria-pressed="false" title="Keep drawings until cleared">Pin</button>
   </div>
 
+  <!-- Clear is this frame, like the eraser; Clear all is the whole clip. An undo or redo whose ink
+       is on another frame names that frame, and its first press takes the TV there. -->
   <div class="row">
     <button id="btn-undo" disabled>Undo</button>
     <button id="btn-redo" disabled>Redo</button>
-    <button id="btn-clear">Clear</button>
+    <button id="btn-clear" title="Clear this frame">Clear</button>
+    <button id="btn-clear-all" title="Clear every drawing in the clip">Clear all</button>
   </div>
 
   <div class="row">
@@ -242,12 +245,22 @@
     return on >= 0 ? ' · drawing ' + (on + 1) + ' of ' + marks.length : '';
   }
 
+  // The TV says when the next undo or redo acts on another frame (state.undoAtMs / redoAtMs); the
+  // button names that frame, so the first press, which takes the TV there, is not a surprise.
+  function editButton(id, verb, can, atMs) {
+    const b = $(id);
+    b.disabled = !can;
+    const away = can && typeof atMs === 'number';
+    b.textContent = away ? verb + ' · ' + (atMs / 1000).toFixed(1) + 's' : verb;
+    b.title = away ? 'Goes to ' + (atMs / 1000).toFixed(1) + 's first' : '';
+  }
+
   function applyState(m) {
     statusEl.textContent =
       (m.paused ? 'paused' : 'playing') + ' · ' + (m.t / 1000).toFixed(1) + 's · ink=' + m.annotationCount +
       applyMarks(m);
-    $('btn-undo').disabled = !m.canUndo;
-    $('btn-redo').disabled = !m.canRedo;
+    editButton('btn-undo', 'Undo', m.canUndo, m.undoAtMs);
+    editButton('btn-redo', 'Redo', m.canRedo, m.redoAtMs);
     $('btn-playpause').textContent = m.paused ? 'Play' : 'Pause';
     $('scrub-t').textContent = (m.t / 1000).toFixed(1) + 's';
     if (m.t !== (prevT ?? -1)) { prevT = m.t; }
@@ -488,7 +501,8 @@
 
   $('btn-undo').addEventListener('click', () => send({ type: 'undo' }));
   $('btn-redo').addEventListener('click', () => send({ type: 'redo' }));
-  $('btn-clear').addEventListener('click', () => send({ type: 'clear' }));
+  $('btn-clear').addEventListener('click', () => send({ type: 'clearFrame' }));
+  $('btn-clear-all').addEventListener('click', () => send({ type: 'clear' }));
   $('btn-playpause').addEventListener('click', () => send({ type: 'transport', cmd: 'toggle' }));
   $('btn-prev').addEventListener('click', () => send({ type: 'transport', cmd: 'step', value: -1 }));
   $('btn-next').addEventListener('click', () => send({ type: 'transport', cmd: 'step', value: 1 }));

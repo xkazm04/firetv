@@ -269,6 +269,35 @@ const run = async () => {
     `ink px ${inkAfterErase} -> ${inkRestored}`
   );
 
+  // ---- 9b. an undo whose ink is on another frame goes there first --------
+  // The next undo removes the arrow from step 7 (the erase was undone above, so it sits on the redo
+  // side). Seek past its hold window: the phone's Undo must name the arrow's frame, the first press
+  // must land the TV paused there with nothing removed, and only the second press removes it.
+  adb('shell', 'input', 'keyevent', 'KEYCODE_DPAD_RIGHT');
+  adb('shell', 'input', 'keyevent', 'KEYCODE_DPAD_RIGHT');
+  await sleep(1200);
+  const away = await page.evaluate(() => ({
+    at: (window.__pen.state() || {}).undoAtMs,
+    label: document.getElementById('btn-undo').textContent,
+  }));
+  const inkBeforeTrip = (await health()).annotations;
+  await page.click('#btn-undo');
+  await sleep(1200);
+  const hTrip = await health();
+  await page.click('#btn-undo');
+  await sleep(900);
+  const hUndone = await health();
+  check(
+    'an off-screen undo names its frame, goes there paused, and acts on the next press',
+    typeof away.at === 'number' && /\d+\.\ds/.test(away.label) &&
+      Math.abs(hTrip.t - away.at) <= 100 && hTrip.paused === true && hTrip.annotations === inkBeforeTrip &&
+      hUndone.annotations === inkBeforeTrip - 1,
+    `button "${away.label}", t -> ${hTrip.t} (undoAtMs ${away.at}), ink ${inkBeforeTrip} -> ${hTrip.annotations} -> ${hUndone.annotations}`
+  );
+  // Put the arrow back (on screen now: one press) so the sections below start from the same ink.
+  await page.click('#btn-redo');
+  await sleep(700);
+
   // ---- 10. name tag -------------------------------------------------------
   await page.click('[data-tool="tag"]');
   await page.click('[data-color="#FFD400"]');
