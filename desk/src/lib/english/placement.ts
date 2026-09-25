@@ -133,6 +133,39 @@ export function cleanTopic(value: unknown): PlanTopic | null {
   if (!text(q.question, 160) || !Array.isArray(q.options) || q.options.length !== 2 || !q.options.every(o => text(o, 160)) || ![0, 1].includes(q.correct as number)) return null;
   return { id: t.id as string, title: t.title as string, goal: t.goal as string, why: t.why as string, skill: t.skill as SkillId, audience: t.audience as PlanTopic["audience"], partner: t.partner as string, premise: t.premise as string, cue: t.cue as string, quiz: { question: q.question as string, options: [q.options[0] as string, q.options[1] as string], correct: q.correct as number } };
 }
+/**
+ * Does a plan carry the learner's interest? The phone promises "conversations picked for your level and
+ * interests"; a plan that only served the goal once had 0 of 6 topics in "travelling and cooking".
+ *
+ * A word check, simple on purpose: the interest's content words ("travelling and cooking" -> travel, cook)
+ * against the words of a topic's title and premise, both cut to a rough stem (travelling = traveller =
+ * travels = travel, cooking = cooked = cook, games = gaming). `why` does not count: a line saying "you like
+ * cooking" over a meeting scene is not a cooking topic. Limits, known: no synonyms or related words (a trip to
+ * Rome is not "travelling", a recipe is not "cooking"), no compounds (cookbook), English words only, and a
+ * scene that names the interest in passing counts. The model is told to name the interest, so the rule
+ * and the prompt meet on the same words.
+ */
+const INTEREST_STOP = new Set("a an the and or of in on at to for with about into from my me our their his her its it i we you they is are be being like likes love loves enjoy enjoys enjoying really very much lots lot also too all any some kind kinds sort sorts other others things thing stuff new good fun free time hobby hobbies interest interests interested especially etc english learn learning practise practice talk talking speak speaking people".split(" "));
+export function stemWord(word: string): string {
+  let w = word.toLowerCase();
+  if (w.endsWith("ies") && w.length > 4) w = w.slice(0, -3) + "i";
+  else for (const suffix of ["ings", "ing", "ers", "er", "es", "ed", "s"]) {
+    if (!w.endsWith(suffix) || w.length - suffix.length < 3 || (suffix === "s" && w.endsWith("ss"))) continue;
+    w = w.slice(0, -suffix.length); break;
+  }
+  if (w.length > 3 && w.endsWith("e")) w = w.slice(0, -1);
+  if (w.endsWith("y")) w = w.slice(0, -1) + "i";
+  if (w.length > 3 && w.at(-1) === w.at(-2) && !"aeiou".includes(w.at(-1)!)) w = w.slice(0, -1);
+  return w;
+}
+const words = (text: string) => text.toLowerCase().split(/[^a-z]+/).filter(w => w.length >= 3 && !INTEREST_STOP.has(w));
+/** The interest's content words as stems; empty when no interest is known, and then nothing is required. */
+export function interestWords(interest: string): string[] { return [...new Set(words(interest).map(stemWord))]; }
+export function touchesInterest(topic: Pick<PlanTopic, "title" | "premise">, stems: string[]): boolean {
+  if (!stems.length) return false;
+  const own = new Set(words(`${topic.title} ${topic.premise}`).map(stemWord));
+  return stems.some(s => own.has(s));
+}
 export function cleanPlan(value: unknown): Plan | null {
   const p = obj(value);
   if (!isBand(p.band) || typeof p.at !== "number" || !Array.isArray(p.topics)) return null;
