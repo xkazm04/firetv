@@ -23,6 +23,7 @@ pitch · moment precision · moment recall · boundaries · reliability
   "title": "My first conversation",
   "start": "planned",
   "budget": 26,
+  "gates": [{"metric": "pitch", "min": 0.8}, {"metric": "moments", "min": 0.9, "none": "pass"}],
   "instruction": "Start talking about the topic Linga recommends from your plan. Reply the way you really would, with your real mistakes. If Linga stops to show you something, read it and carry on. Finish the conversation when it feels natural, after about eight of your replies."
 }
 ```

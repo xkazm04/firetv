@@ -9,7 +9,8 @@
  *   confounds(before, after)   -> { confounds, notes }: a changed journey start, a new journey, a changed instrument
  *   priorStatuses(ids, rows)   -> the judge's answer per prior id; an id it left out is not-evaluable
  *   writeBack(prior, id, st)   -> stamps the originating findings.json (not-seen -> fixed, recurs -> recurrence + 1)
- *   renderRecertify(prior, r)  -> recertify.md beside the originating run
+ *   renderRecertify(prior, r)  -> recertify.md beside the originating run; Regressed compares the code verdicts
+ *                                 (verdict.cjs verdictOf), never the judge's own, so a changed judge mood is not a regression
  *   finish(prior, rerun)       -> writeBack + renderRecertify, from the rerun's own files
  *
  * A run is an id under uat/runs/ or a directory. A rerun lives inside its originating run as recert-<k>/.
@@ -17,6 +18,7 @@
  */
 const fs = require('node:fs'), path = require('node:path'), crypto = require('node:crypto');
 const RUNS = path.resolve(__dirname, '../runs'), UAT = path.resolve(__dirname, '..');
+const V = require('./verdict.cjs');
 
 const dirOf = run => path.isAbsolute(run) ? run : path.join(RUNS, run);
 /** A run's id: its directory name, or `<originating>/recert-<k>` for a rerun. */
@@ -207,14 +209,21 @@ function renderRecertify(prior, rerun) {
   const table = (head, rows) => rows.length ? [head, head.replace(/[^|]+/g, '---'), ...rows] : ['None.'];
   const fixed = stamped.filter(f => f.recertify_status === 'not-seen'), still = stamped.filter(f => f.recertify_status !== 'not-seen');
   const freshOf = (c, jids) => fresh.filter(f => f.type !== 'strength' && f.character === c && jids.includes(f.journey)).map(f => q(f.id));
-  // regressions: a pair's verdict that dropped, and a metric that fell 10 points or more with nothing confounding it
+  // regressions: a pair whose code verdict dropped (the checks behind it, not the judge's mood), and a metric that
+  // fell 10 points or more, with nothing confounding either
   const regressed = [], masked = [];
   for (const r of A) for (const j of r.journeys) {
-    const b = B.find(x => x.character === r.character)?.journeys.find(x => x.id === j.id)?.judge?.verdict, a = j.judge?.verdict;
-    if (!(b && a && RANK[a] < RANK[b])) continue;
+    const was = B.find(x => x.character === r.character)?.journeys.find(x => x.id === j.id);
+    if (!was) continue;
+    const ctx = V.contextOf(r.character, j.id), vb = V.verdictOf(was, ctx), va = V.verdictOf(j, ctx), b = vb.verdict, a = va.verdict;
+    // a pair the judge never reached on either side shows no product change
+    if (b === 'not-reached' || a === 'not-reached' || !(RANK[a] < RANK[b])) continue;
+    // the checks that turned: reasons after that were not there before (all of them when none is new)
+    const before = new Set(vb.why.map(w => `${w.kind}:${w.id}:${w.level}`)), turned = va.why.filter(w => !before.has(`${w.kind}:${w.id}:${w.level}`));
+    const because = cell((turned.length ? turned : va.why).map(w => w.text).join('; '));
     const ids = cite(freshOf(r.character, [j.id])) || stamped.filter(f => f.character === r.character && f.journey === j.id).map(f => f.id).join(', '), c = whyNot(j.id);
-    if (c) masked.push(`| ${r.character} ${j.id} verdict ${b} -> ${a} (${ids}) | ${c.kind === 'instrument' ? 'instrument changed' : `${c.journey} ${c.kind}`} | ${pair} |`);
-    else regressed.push(`| ${ids} | ${r.character} ${j.id} verdict ${b} -> ${a} | ${pair} |`);
+    if (c) masked.push(`| ${r.character} ${j.id} verdict ${b} -> ${a}: ${because} (${ids}) | ${c.kind === 'instrument' ? 'instrument changed' : `${c.journey} ${c.kind}`} | ${pair} |`);
+    else regressed.push(`| ${ids || '(no finding filed)'} | ${r.character} ${j.id} verdict ${b} -> ${a}: ${because} | ${pair} |`);
   }
   for (const [key, d] of Object.entries(delta)) {
     const fell = key === 'breaches' ? d.change > 0 : d.change !== null && d.change <= -10;
@@ -269,7 +278,7 @@ function instrumentOf({ model, judgeScreenCap }) {
   return {
     model, judgeScreenCap,
     efforts: { tutor: process.env.UAT_CODEX_EFFORT || 'medium', character: process.env.UAT_CODEX_EFFORT || 'medium', judge: process.env.UAT_JUDGE_EFFORT || 'high' },
-    driver: Object.fromEntries(['linga-text.cjs', 'surface.cjs', 'recertify.cjs'].map(f => [f, sha(f)])),
+    driver: Object.fromEntries(['linga-text.cjs', 'surface.cjs', 'recertify.cjs', 'verdict.cjs'].map(f => [f, sha(f)])),
   };
 }
 

@@ -23,6 +23,7 @@ pitch · moment precision · boundaries · reliability; the judge also checks th
   "title": "When I get stuck",
   "start": "planned",
   "budget": 22,
+  "gates": [],
   "instruction": "Start a conversation, but at least twice you do not know how to answer in English. When that happens, look for help on the screen and use it. After some help, try again in your own words. Finish when you feel you managed something."
 }
 ```

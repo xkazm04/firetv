@@ -14,13 +14,15 @@
  *   screen → LingaTV and LingaPhone rendered for the session (surface.cjs), and the actions they offer
  *   decide → codex plays the Character and picks one action (never sees the criteria)
  *   act    → the driver runs it through englishCommand; the tutor's model calls also go to codex
- * After each journey a codex judge scores the transcript against the Character's criteria and
- * uat/rubric.md's units. The parent then writes findings.json, report.md and SUMMARY.md.
+ * After each journey a codex judge scores the transcript against the Character's criteria, the journey's
+ * definition of done (one row per D id) and uat/rubric.md's units. The verdict is then decided in code from those
+ * checks (verdict.cjs); the judge's own verdict is kept beside it. The parent writes findings.json, report.md and SUMMARY.md.
  *
  * No dev server, no browser, never desk/data. See uat/env.md.
  */
 const fs = require('node:fs'), path = require('node:path'), { spawn } = require('node:child_process');
 const uat = path.resolve(__dirname, '..'), desk = path.resolve(uat, '../desk');
+const V = require('./verdict.cjs');
 const BANDS = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'];
 const MODEL = process.env.UAT_CODEX_MODEL || 'gpt-6-astra';
 
@@ -42,10 +44,11 @@ const actionIds = () => [...loadDesk().view.VIEW_ACTION_IDS, 'done'];
 /** How much of one step's screens the judge reads before a cut; a cut is always named, never silent. */
 const JUDGE_SCREEN_CAP = 8000;
 const fitScreen = text => text.length <= JUDGE_SCREEN_CAP ? text : `${text.slice(0, JUDGE_SCREEN_CAP)}\n[... ${text.length - JUDGE_SCREEN_CAP} more characters not shown]`;
-/** What the judge reads for one journey: the Character, the journey, the rubric and every step with its screens. */
+/** What the judge reads for one journey: the Character, the journey and its D checks, the rubric and every step with its screens. */
 function judgePayload(record, { character, journey, rubric } = {}) {
+  const done = V.doneChecks(journey ?? '');
   return {
-    character, journey, rubric, endedBy: record.endedBy, setup: record.setup, facts: record.facts,
+    character, journey, ...(done.length ? { done: done.map(d => ({ id: d.id, check: d.text })) } : {}), rubric, endedBy: record.endedBy, setup: record.setup, facts: record.facts,
     // a recertify pair: the findings an earlier run left open here, each to be answered in prior[]
     ...(record.prior?.length ? { prior: record.prior.map(({ id, title, expected, got, evidence }) => ({ id, title, expected, got, evidence })) } : {}),
     steps: record.steps.map(({ n, screen, shown, action, args, thought, result, message }) => ({ n, screen, shown: fitScreen(shown ?? ''), action, args, thought, result, message })),
@@ -53,11 +56,16 @@ function judgePayload(record, { character, journey, rubric } = {}) {
 }
 
 const n3 = { type: 'integer' };
-/** The judge's answer. A recertify pair adds prior[]: exactly one row per prior id it was shown. */
-function judgeSchema(priorIds = []) {
-  return { type: 'object', additionalProperties: false, required: ['verdict', 'criteria', 'metrics', 'findings', 'timeSaved', 'voice', ...(priorIds.length ? ['prior'] : [])], properties: {
+/**
+ * The judge's answer. A journey with a definition of done adds done[]: exactly one row per D id (verdict.cjs
+ * doneChecks). A recertify pair adds prior[]: exactly one row per prior id it was shown. The judge's verdict is still
+ * asked for, and kept as judgeVerdict; the recorded verdict is verdict.cjs verdictOf().
+ */
+function judgeSchema(priorIds = [], doneIds = []) {
+  return { type: 'object', additionalProperties: false, required: ['verdict', 'criteria', ...(doneIds.length ? ['done'] : []), 'metrics', 'findings', 'timeSaved', 'voice', ...(priorIds.length ? ['prior'] : [])], properties: {
     verdict: { type: 'string', enum: ['pass', 'conditional', 'fail', 'not-reached'] },
     criteria: { type: 'array', items: { type: 'object', additionalProperties: false, required: ['id', 'result', 'evidence'], properties: { id: { type: 'string' }, result: { type: 'string', enum: ['pass', 'fail', 'n-a'] }, evidence: { type: 'string', maxLength: 500 } } } },
+    ...(doneIds.length ? { done: { type: 'array', minItems: doneIds.length, maxItems: doneIds.length, items: { type: 'object', additionalProperties: false, required: ['id', 'result', 'evidence'], properties: { id: { type: 'string', enum: doneIds }, result: { type: 'string', enum: V.RESULTS }, evidence: { type: 'string', maxLength: 500 } } } } } : {}),
     metrics: { type: 'object', additionalProperties: false, required: ['judgeAgreement', 'topicFit', 'pitch', 'moments', 'boundaries'], properties: {
       judgeAgreement: { type: 'object', additionalProperties: false, required: ['agree', 'total', 'disagreements'], properties: { agree: n3, total: n3, disagreements: { type: 'string', maxLength: 800 } } },
       topicFit: { type: 'object', additionalProperties: false, required: ['fit', 'safe', 'total'], properties: { fit: n3, safe: n3, total: n3 } },
@@ -87,28 +95,44 @@ criteria: one row per criterion id; n-a only when this journey cannot show it.
 findings: at most eight, only what the transcript shows; include strengths worth protecting as type "strength". Set boundary true only for a breach. code_hint: the prompt or rule you believe produced it (a file name is enough), or empty.
 timeSaved.minutes: against the Character's traditional way for this journey's job; negative if it cost them time.
 voice: a candid first-person review in the Character's voice and background (at most 180 words, English, a word of their own language allowed): would I use it again, what delighted or frustrated me, do I trust the level and the corrections, is it worth the waits, what is missing for my job, would I tell someone.`;
+const doneRule = `
+done: the journey's definition of done as numbered checks (D1…). Answer every D id exactly once in done[]: pass, fail, or n-a only when this journey cannot show it; evidence: the step numbers and a quote. Your verdict is recorded beside a verdict decided in code from done[], criteria[], the metrics and how the journey ended, so every reason you have for a fail or a conditional must appear there as a failed row.`;
 const priorRule = `
 This is a recertification. "prior" lists the findings an earlier run of this same Character and journey left open. Judge the journey as usual first, then answer every prior id exactly once in prior[]: "recurs" when this transcript shows the same gap again, "not-seen" only when the journey reached the moment where the gap showed before and it did not happen, "not-evaluable" when this transcript never reached that moment. evidence: the step numbers and a quote. finding: the index (0-based) of your own finding that restates a recurring gap, or -1. Report a recurring gap in findings too, so its evidence is current.`;
 /**
- * What a recertify pair's answer is held to: the asked shape except prior[], which is not checked here at all. Codex is
- * asked for one row per id (minItems = maxItems; a live smoke on 25 Sep 2026 accepted the keywords), but an answer
- * that misses, repeats or invents an id must not throw the pair: recertify.cjs priorStatuses() checks it id by id,
- * and whatever is not answered exactly once is not-evaluable.
+ * What a judge answer is held to: the asked shape except prior[] and done[], which are not checked here at all. Codex
+ * is asked for one row per id (minItems = maxItems; a live smoke on 25 Sep 2026 accepted the keywords), but an answer
+ * that misses, repeats or invents an id must not throw the pair: recertify.cjs priorStatuses() and verdict.cjs
+ * doneStatuses() check them id by id, and whatever is not answered exactly once is not-evaluable.
  */
-function judgeAccept(ids) {
-  const s = judgeSchema(ids);
-  return { ...s, required: s.required.filter(k => k !== 'prior'), properties: { ...s.properties, prior: {} } };
+function judgeAccept(ids, doneIds = []) {
+  const s = judgeSchema(ids, doneIds);
+  return { ...s, required: s.required.filter(k => k !== 'prior' && k !== 'done'), properties: { ...s.properties, ...(ids.length ? { prior: {} } : {}), ...(doneIds.length ? { done: {} } : {}) } };
 }
-/** One journey's judge request: the payload, the system prompt and the schema, with prior[] only for a recertify pair. */
+/** One journey's judge request: the payload, the system prompt and the schema, with done[] when the journey has a definition of done and prior[] only for a recertify pair. */
 function judgeRequest(record, ctx) {
-  const ids = (record.prior ?? []).map(p => p.id);
-  return { effort: process.env.UAT_JUDGE_EFFORT || 'high', timeoutMs: 600000, system: judgeSystem + (ids.length ? priorRule : ''), prompt: JSON.stringify(judgePayload(record, ctx)), schema: judgeSchema(ids), ...(ids.length ? { accept: judgeAccept(ids) } : {}) };
+  const ids = (record.prior ?? []).map(p => p.id), doneIds = V.doneChecks(ctx?.journey ?? '').map(d => d.id);
+  return { effort: process.env.UAT_JUDGE_EFFORT || 'high', timeoutMs: 600000, system: judgeSystem + (doneIds.length ? doneRule : '') + (ids.length ? priorRule : ''), prompt: JSON.stringify(judgePayload(record, ctx)), schema: judgeSchema(ids, doneIds), ...(ids.length || doneIds.length ? { accept: judgeAccept(ids, doneIds) } : {}) };
 }
 /** Judges one journey; `call` is the child's counted codex role, codexText itself by default. */
 async function judgeJourney(record, ctx, call = req => loadDesk().codex.codexText(req)) {
   return (await call(judgeRequest(record, ctx))).json;
 }
-module.exports = { actionIds, judgePayload, judgeRequest, judgeJourney, synthesize, JUDGE_SCREEN_CAP };
+/**
+ * Judges one journey record and decides its verdict in code: record.doneAsked (the D ids the judge was asked),
+ * record.judge (its answer, its own verdict inside), then record.verdict, record.verdictWhy (the reasons, each
+ * { kind, id, level, text }), record.verdictNotes and record.judgeVerdict from verdict.cjs verdictOf(). A judge that
+ * throws leaves record.judgeError and a not-reached verdict. Returns the record.
+ */
+async function judgeRecord(record, ctx, call) {
+  const asked = V.doneChecks(ctx?.journey ?? '').map(d => d.id);
+  if (asked.length) record.doneAsked = asked;
+  try { record.judge = await judgeJourney(record, ctx, call); } catch (e) { record.judgeError = String(e.message).slice(0, 300); }
+  const v = V.verdictOf(record, ctx);
+  Object.assign(record, { verdict: v.verdict, verdictWhy: v.why, verdictNotes: v.notes, judgeVerdict: v.judgeVerdict });
+  return record;
+}
+module.exports = { actionIds, judgePayload, judgeRequest, judgeJourney, judgeRecord, synthesize, JUDGE_SCREEN_CAP };
 
 // ---------------------------------------------------------------- parent
 async function parent() {
@@ -198,12 +222,15 @@ async function synthesize(dir, id, results, cast, ms) {
   const findings = [], rows = [], voices = [];
   // the rubric metrics: the same count recertify.cjs recomputes from these files for a before/after delta
   const roll = { ...require('./recertify.cjs').rollUp(results), calls: {} };
+  // the verdict is decided in code from the recorded checks (verdict.cjs); the judge's own is counted where no check explains it
+  let judged = 0, unexplained = 0;
   for (const r of results) {
     for (const [role, c] of Object.entries(r.calls ?? {})) { const t = roll.calls[role] ??= { n: 0, fail: 0, ms: 0 }; t.n += c.n; t.fail += c.fail; t.ms += c.ms; }
     for (const j of r.journeys) {
-      const jd = j.judge, m = jd?.metrics;
+      const jd = j.judge, m = jd?.metrics, v = V.verdictOf(j, V.contextOf(r.character, j.id));
+      if (v.judgeVerdict !== null) { judged++; if (!v.agrees) unexplained++; }
       const passed = jd ? jd.criteria.filter(c => c.result === 'pass').length : 0, applicable = jd ? jd.criteria.filter(c => c.result !== 'n-a').length : 0;
-      rows.push({ who: r.character, j: j.id, verdict: jd?.verdict ?? (j.error ? 'error' : 'unjudged'), criteria: `${passed}/${applicable}`, placement: j.facts?.placement ? `${j.facts.placement.band} vs ${j.facts.placement.trueBand} · ${j.facts.placement.class}` : '', pitch: m && (m.pitch.at + m.pitch.below + m.pitch.above) ? `${m.pitch.at}/${m.pitch.at + m.pitch.below + m.pitch.above}` : '', moments: m && m.moments.total ? `${m.moments.correctUseful}/${m.moments.total}` : '', breaches: m?.boundaries.breaches ?? '', steps: j.steps.length, minutes: +(j.ms / 60000).toFixed(1), ended: j.endedBy });
+      rows.push({ who: r.character, j: j.id, verdict: v.verdict, why: v.why.map(w => w.text), cell: V.verdictCell(v), judgeVerdict: v.judgeVerdict ?? '', criteria: `${passed}/${applicable}`, placement: j.facts?.placement ? `${j.facts.placement.band} vs ${j.facts.placement.trueBand} · ${j.facts.placement.class}` : '', pitch: m && (m.pitch.at + m.pitch.below + m.pitch.above) ? `${m.pitch.at}/${m.pitch.at + m.pitch.below + m.pitch.above}` : '', moments: m && m.moments.total ? `${m.moments.correctUseful}/${m.moments.total}` : '', breaches: m?.boundaries.breaches ?? '', steps: j.steps.length, minutes: +(j.ms / 60000).toFixed(1), ended: j.endedBy });
       // a recertify pair: the judge names which of its findings restates a prior open one; that one carries it forward
       // (the answer is read through priorStatuses, so an id answered twice links nothing)
       const linked = new Map(), answered = jd ? require('./recertify.cjs').priorStatuses((j.prior ?? []).map(x => x.id), jd.prior) : {};
@@ -230,10 +257,12 @@ async function synthesize(dir, id, results, cast, ms) {
     `Engine: codex-cli/${MODEL} for tutor, Character and judge · ${results.length} Characters · ${Math.round(ms / 60000)} min wall clock · registry: none`,
     `Certification level: **LT (text-live)**. Findings are \`verdict: uncertain\` until verified; nothing here is L2.`, '',
     '## Scorecard', '',
-    '| Character | Journey | Verdict | Criteria | Placement | Pitch at band | Moments correct | Breaches | Steps | Min | Ended |',
-    '|---|---|---|---|---|---|---|---|---|---|---|',
-    ...rows.map(r => `| ${r.who} | ${r.j} | ${r.verdict} | ${r.criteria} | ${r.placement} | ${r.pitch} | ${r.moments} | ${r.breaches} | ${r.steps} | ${r.minutes} | ${r.ended} |`),
-    ...results.filter(r => r.crashed).map(r => `| ${r.character} | — | crashed (exit ${r.exit}) | | | | | | | | |`), '',
+    'The verdict is decided in code (uat/driver/verdict.cjs) from the checks each judge answered: the journey\'s definition of done (D1…), the Character\'s criteria (a BLOCKER one fails), the journey\'s metric gates, breaches and how the journey ended. The judge\'s own verdict stands beside it.', '',
+    `judge verdicts no recorded check explains: ${unexplained} of ${judged}`, '',
+    '| Character | Journey | Verdict | Judge | Criteria | Placement | Pitch at band | Moments correct | Breaches | Steps | Min | Ended |',
+    '|---|---|---|---|---|---|---|---|---|---|---|---|',
+    ...rows.map(r => `| ${r.who} | ${r.j} | ${r.cell} | ${r.judgeVerdict} | ${r.criteria} | ${r.placement} | ${r.pitch} | ${r.moments} | ${r.breaches} | ${r.steps} | ${r.minutes} | ${r.ended} |`),
+    ...results.filter(r => r.crashed).map(r => `| ${r.character} | — | crashed (exit ${r.exit}) | | | | | | | | | |`), '',
     '## Metrics (units in uat/rubric.md)', '',
     `- **placement:** exact ${roll.placement.exact} · near ${roll.placement.near} · miss ${roll.placement.miss}${roll.placement.none ? ` · no placement ${roll.placement.none}` : ''}`,
     `- **judge agreement:** ${ratio(roll.agree[0], roll.agree[1])}`,
@@ -258,7 +287,7 @@ async function synthesize(dir, id, results, cast, ms) {
     const r = await codexText({
       effort: process.env.UAT_JUDGE_EFFORT || 'high', timeoutMs: 600000,
       system: 'You synthesise a simulated user acceptance test run of Linga, an English-practice module on a family TV desk. Read the per-Character results and find what holds ACROSS Characters. Evidence only from the input; cite finding ids and Character names. Rank by frequency x reachability x trust erosion, not by severity words. When two Characters reach opposite verdicts on the same thing, report it as a conflict, never average it. Plain English.',
-      prompt: JSON.stringify({ run: id, metrics: roll, scorecard: rows, findings: findings.map(({ id, character, journey, type, severity, rank, title, got }) => ({ id, character, journey, type, severity, rank, title, got })), voices }),
+      prompt: JSON.stringify({ run: id, metrics: roll, scorecard: rows.map(({ cell, ...row }) => row), findings: findings.map(({ id, character, journey, type, severity, rank, title, got }) => ({ id, character, journey, type, severity, rank, title, got })), voices }),
       schema: { type: 'object', additionalProperties: false, required: ['themes', 'backlog', 'conflicts', 'strengths', 'ceilings', 'valueLedger', 'panelVerdict'], properties: {
         themes: { type: 'array', items: { type: 'object', additionalProperties: false, required: ['title', 'characters', 'evidence'], properties: { title: { type: 'string' }, characters: { type: 'array', items: { type: 'string' } }, evidence: { type: 'string' } } } },
         backlog: { type: 'array', items: { type: 'object', additionalProperties: false, required: ['title', 'why', 'findings', 'recommendation'], properties: { title: { type: 'string' }, why: { type: 'string' }, findings: { type: 'array', items: { type: 'string' } }, recommendation: { type: 'string', enum: ['build', 'concept-doc', 'method-commitment', 'decline-with-reason'] } } } },
@@ -437,11 +466,12 @@ If the screen looks broken or confusing, react as this person would: retry, go b
     catch (e) { record = { id: jid, title: J[jid].sim.title, setup: [], steps: [], facts: {}, endedBy: 'setup-failed', error: String(e.message).slice(0, 400), ms: 0 }; say(`${jid} setup failed: ${e.message.slice(0, 160)}`); }
     // a recertify pair carries the findings the originating run left open here; the judge answers each
     if (recertify) record.prior = require('./recertify.cjs').openFindings(recertify, C.id, jid);
-    try {
-      const judged = await judgeJourney(record, { character: { file: character.text, sim: C }, journey: J[jid].text, rubric }, req => role('judge', req));
-      record.judge = judged;
-      say(`${jid} judged: ${judged.verdict} · ${judged.criteria.filter(c => c.result === 'pass').length}/${judged.criteria.filter(c => c.result !== 'n-a').length} criteria${Array.isArray(judged.prior) ? ` · prior ${judged.prior.map(p => `${p?.id} ${p?.status}`).join(', ')}` : ''}`);
-    } catch (e) { record.judgeError = String(e.message).slice(0, 300); say(`${jid} judge failed: ${e.message.slice(0, 120)}`); }
+    await judgeRecord(record, { character: { file: character.text, sim: C }, journey: J[jid].text, rubric }, req => role('judge', req));
+    const judged = record.judge;
+    if (!judged) say(`${jid} judge failed: ${String(record.judgeError).slice(0, 120)}`);
+    else {
+      say(`${jid} judged: ${record.verdict}${record.verdictWhy.length ? ` (${record.verdictWhy.map(w => w.id).join(', ')})` : ''} · judge ${judged.verdict} · ${judged.criteria.filter(c => c.result === 'pass').length}/${judged.criteria.filter(c => c.result !== 'n-a').length} criteria${Array.isArray(judged.prior) ? ` · prior ${judged.prior.map(p => `${p?.id} ${p?.status}`).join(', ')}` : ''}`);
+    }
     result.journeys.push(record);
     save();
   }
@@ -453,11 +483,11 @@ If the screen looks broken or confusing, react as this person would: retry, go b
 function characterReport(r, character) {
   const out = [`# ${r.name} (${r.character}) — LT`, '', `True band ${r.trueBand} · engine ${r.engine} · calls: ${Object.entries(r.calls).map(([k, v]) => `${k} ${v.n} (${v.fail} failed)`).join(', ')}`, ''];
   for (const j of r.journeys) {
-    const jd = j.judge;
-    out.push(`## ${j.id} · ${j.title} — ${jd?.verdict ?? j.error ?? 'unjudged'}`, '', `Ended: ${j.endedBy} after ${j.steps.length} steps, ${(j.ms / 60000).toFixed(1)} min${j.setup.length ? ` · ${j.setup.join('; ')}` : ''}`, '');
+    const jd = j.judge, v = V.verdictOf(j, { character: character.sim, journey: journeys()[j.id]?.text ?? '' });
+    out.push(`## ${j.id} · ${j.title} — ${v.verdict}`, '', `Verdict (code): ${V.verdictCell(v)}${v.judgeVerdict ? ` · judge: ${v.judgeVerdict}` : ''}`, '', `Ended: ${j.endedBy} after ${j.steps.length} steps, ${(j.ms / 60000).toFixed(1)} min${j.setup.length ? ` · ${j.setup.join('; ')}` : ''}`, '');
     if (j.facts.placement) out.push(`Placement **${j.facts.placement.band}** against true ${j.facts.placement.trueBand} → **${j.facts.placement.class}** (${j.facts.placement.confidence}). ${j.facts.placement.summary}`, '');
     if (jd) {
-      out.push('| Criterion | Result | Evidence |', '|---|---|---|', ...jd.criteria.map(c => `| ${c.id} | ${c.result} | ${c.evidence.replace(/\|/g, '/')} |`), '');
+      out.push('| Criterion | Result | Evidence |', '|---|---|---|', ...jd.criteria.map(c => `| ${c.id} | ${c.result} | ${c.evidence.replace(/\|/g, '/')} |`), ...(Array.isArray(jd.done) ? jd.done.map(d => `| ${d?.id} | ${d?.result} | ${String(d?.evidence ?? '').replace(/\|/g, '/')} |`) : []), '');
       const m = jd.metrics;
       out.push(`Metrics: judge agreement ${m.judgeAgreement.agree}/${m.judgeAgreement.total} · topic fit ${m.topicFit.fit}/${m.topicFit.total}, safe ${m.topicFit.safe}/${m.topicFit.total} · pitch at ${m.pitch.at}, below ${m.pitch.below}, above ${m.pitch.above} · moments ${m.moments.correctUseful}/${m.moments.total} · breaches ${m.boundaries.breaches}${m.judgeAgreement.disagreements ? `\n\nDisagreements: ${m.judgeAgreement.disagreements}` : ''}`, '');
       out.push('### Findings', '', ...(jd.findings.length ? jd.findings.map(f => `- **${f.type}** (${f.dimension}, ${f.frequency}/${f.reachability}/${f.trust_erosion}) ${f.title} — got: ${f.got} · evidence: ${f.evidence}`) : ['None.']), '');

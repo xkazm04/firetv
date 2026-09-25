@@ -23,6 +23,7 @@ topic fit · boundaries · reliability
   "title": "Agree my topics",
   "start": "placed",
   "budget": 14,
+  "gates": [{"metric": "topicFit", "min": [4, 6]}, {"metric": "topicSafe", "all": true}],
   "instruction": "You know your level now. Look at the conversations Linga suggests. Swap any you would not want, add one of your own if something you care about is missing, and agree when the set feels right for you."
 }
 ```

@@ -24,6 +24,7 @@ placement · check length · judge agreement · boundaries · reliability
   "title": "Find my level",
   "start": "fresh",
   "budget": 22,
+  "gates": [{"metric": "placement", "in": ["exact", "near"]}],
   "instruction": "This is your first time in Linga. The profile is set up. Do what you would naturally do on a first visit. When you see your level, react to it honestly, then stop."
 }
 ```
