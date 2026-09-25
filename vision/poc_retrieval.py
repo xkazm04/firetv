@@ -12,6 +12,9 @@ Includes two queries whose concept is NOT in the library (percentages, triangle 
 answer there is a low score and "no segment", and that is scored too.
 
     python vision/poc_retrieval.py
+
+Re-measured on the product, not this copy: `npm run bench` in desk/ sends QUERIES through desk's own
+pickLesson() and scores it against ACCEPT (tools/lab-bench.cjs).
 """
 import glob
 import math
@@ -50,6 +53,22 @@ QUERIES = [
     ("What is 15% of 240?", "NOT IN LIBRARY — expect no hit"),
     ("The angles of a triangle are x, 2x and 3x. Find x.", "NOT IN LIBRARY — expect no hit"),
 ]
+
+# The lessons that teach each query's method, read off the `expect` labels above against TITLES; [] is
+# "none" — the right answer for the two problems the library does not cover. A pick outside the list is
+# wrong. JSON-literal on purpose: tools/lab-corpus.cjs reads QUERIES and ACCEPT out of this file as text, so
+# `npm run bench` in desk/ scores the product's pickLesson() against the same ground truth, without Python.
+ACCEPT = {
+    "Solve for x: 3x - 7 = 11": ["bAerID24QJ0"],
+    "Solve for x: 2x^2 - 5x - 3 = 0": ["2ZzuZvz33X0", "u1SAo2GiX8A"],
+    "Factor completely: x^2 + 7x + 12": ["D3a8NnpQ2vU", "u1SAo2GiX8A"],
+    "Solve the system: 2x + y = 7 and x - y = 2": ["uzyd_mIJaoc", "V7H1oUHXPkg"],
+    "Solve: x/4 + 3 = 8": ["jWpiMu5LNdg", "bAerID24QJ0"],
+    "Solve for x: 5(x - 2) = 3x + 8": ["bAerID24QJ0"],
+    "Does 2x + 3 = 2x + 5 have a solution?": ["qsL_5Y8uWPU"],
+    "What is 15% of 240?": [],
+    "The angles of a triangle are x, 2x and 3x. Find x.": []
+}
 
 STOP = set("the a an and or of to in is it this that we you i so if then be are was for on with as "
            "at by have has do does can just like get got going go what which our your let me us "

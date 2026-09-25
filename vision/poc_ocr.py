@@ -12,6 +12,11 @@ what the model read, for judging by eye since there is no ground truth for them.
 
     python vision/poc_ocr.py             # render, degrade at three levels, read, score
     python vision/poc_ocr.py --photos    # read real photos, print, no scoring
+
+Re-measured on the product, not this copy: `npm run bench` in desk/ reads the phone's sample pages
+(prototype/data.json, byte-identical to desk/public/samples) through desk's own readPage(), scores
+equations_intact as ported here, and adds what production changed: whether the phone's tap at an item's
+true centre selects it, given the centres the model reported (tools/lab-bench.cjs).
 """
 import argparse
 import difflib

@@ -11,6 +11,10 @@ printed for a human to judge, because a model grading its own hints is not evide
 
     python vision/poc_hints.py                 # all subjects
     python vision/poc_hints.py --subject math
+
+Re-measured on the product, not this copy: `npm run bench` in desk/ replays the recorded maths hints
+(prototype/data.json) through desk's own hint() and its one leak rule, rules/maths leaks(); PROBLEMS["math"]
+is read out of this file as text (tools/lab-corpus.cjs), so keep its lines JSON-literal.
 """
 import argparse
 import json
