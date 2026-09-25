@@ -47,8 +47,8 @@ export interface PracticeItem {
   /**
    * Where in the learner's working the slip sits, when the marker can say: the line (0 = the first line of
    * `studentWorking`), the part of that line, and the kind of mark it takes. The learner's own writing, never a
-   * value the answer needs. Nothing fills it yet (mark.ts reports no position); a screen that finds none places
-   * the slip from its rulebook `points`, or marks the line.
+   * value the answer needs. rules/maths `locate` fills it at marking and at a wrong settle; a screen that finds
+   * none marks the answer line.
    */
   slipAt?: SlipAt;
 }
@@ -156,7 +156,7 @@ export type Event =
   | { type: "topic.open"; topic: string }
   | { type: "practice.set"; practice: Practice } | { type: "practice.marked"; items: PracticeItem[] }
   | { type: "walk"; ix: number } | { type: "practice.clear" }
-  | { type: "practice.settle"; n: number; reply: string; verdict?: "right" | "wrong"; slip?: string; said?: string }
+  | { type: "practice.settle"; n: number; reply: string; verdict?: "right" | "wrong"; slip?: string; said?: string; slipAt?: SlipAt }
   | { type: "job.start"; kind: JobKind; id: string; key?: string; input?: JobInput } | { type: "job.done"; kind: JobKind; id: string } | { type: "job.failed"; kind: JobKind; id: string; error: string }
   | { type: "status"; text: string } | { type: "session.end" } | { type: "reset" };
 
@@ -255,7 +255,7 @@ export function reduce(s: Session, e: Event): Session {
     case "practice.marked": if (s.practice) { n.practice = { ...s.practice, items: e.items.map(shown), marked: true }; n.walkIx = 0; n.screen = "sheet"; n.focus = firstToLook(n.practice.items); } break;
     // an explanation: the reply always lands on its item; a verdict only on an item still unsure (a settled item stays settled)
     case "practice.settle": if (s.practice) { n.practice = { ...s.practice, items: s.practice.items.map((it) => it.n !== e.n ? it
-      : shown(e.verdict && it.verdict === "unsure" ? { ...it, verdict: e.verdict, slip: e.slip, said: e.said ?? it.said, reply: e.reply } : { ...it, reply: e.reply })) }; } break;
+      : shown(e.verdict && it.verdict === "unsure" ? { ...it, verdict: e.verdict, slip: e.slip, said: e.said ?? it.said, reply: e.reply, slipAt: e.slipAt } : { ...it, reply: e.reply })) }; } break;
     case "walk": { const len = s.practice?.items.length ?? 0; n.walkIx = len ? Math.min(len - 1, Math.max(0, e.ix)) : 0; break; }
     case "practice.clear": n.practice = null; n.topic = null; n.screen = "tonight"; n.focus = 0; break;
     case "status": n.status = e.text; break;

@@ -10,7 +10,7 @@
  * Nothing here ever puts the answer on screen, and no `said` line carries a value.
  */
 import { vision } from "../engines/vision";
-import { ASK, cleanValue as clean, rightLine, settled, slipVocabulary } from "../rules/maths";
+import { ASK, cleanValue as clean, locate, rightLine, settled, slipVocabulary, workingLines } from "../rules/maths";
 import { addHistory, recordAttempt } from "../session/learners";
 import { topic as topicById } from "../library/syllabus";
 import { verify } from "./verify";
@@ -59,7 +59,7 @@ export async function markSet(
       `For each numbered item, report:\n` +
       `- n: the item number.\n` +
       `- studentAnswer: the final value of x the student wrote, as a plain number or simple fraction. Empty string if they wrote none.\n` +
-      `- studentWorking: a short plain-text transcription of their working, or an empty string if there is none.\n` +
+      `- studentWorking: their working transcribed exactly as written, one step per line (a newline between steps), or an empty string if there is none.\n` +
       `- verdict: "right" if you believe their final value is correct, "wrong" otherwise.\n` +
       `- solution: YOUR OWN value of x for that equation, worked out yourself, as a plain number or simple fraction.\n` +
       `- slip: the id of the mistake you think they made, chosen from this list, or the word "unclear" if you cannot tell:\n${vocab}\n\n` +
@@ -93,7 +93,9 @@ export async function markSet(
     const { verdict, slip, said } = settled(item.n, student, m?.slip, practice.topic);
 
     recordAttempt(learnerId, practice.topic, verdict === "right", slip);
-    return { ...item, studentAnswer, studentWorking, verdict, slip, said };
+    // 8 - where the working broke: rules/maths locates it from the learner's own lines and a root found in code
+    const slipAt = verdict === "wrong" ? locate(item.question, workingLines({ studentWorking, studentAnswer })) : undefined;
+    return { ...item, studentAnswer, studentWorking, verdict, slip, said, ...(slipAt ? { slipAt } : {}) };
   });
 
   // what happened, in one line the home screen can read back: never invented, always these counts
