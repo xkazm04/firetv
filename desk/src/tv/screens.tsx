@@ -415,7 +415,7 @@ export function Learner({ s, focus }: { s: Session; focus: number }) {
 }
 
 // ---- S2 Profile · the picks on the TV, the name on the phone ----
-/** Focus: 0-2 the type of student, 3-5 the modules, 6 Save, 7 Back. */
+/** Focus walks profileRows (tv/profileRows.ts): the type, the age for a school type, the school system, the interests, the actions. */
 export function ProfileScreen({ s, focus }: { s: Session; focus: number }) {
   const d = s.draft;
   const editing = !!d && s.profiles.some((p) => p.id === d.id);

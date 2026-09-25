@@ -114,12 +114,12 @@ test('case 5: lingaOwns names the Linga screens once, and the TV map never fires
  assert.doesNotMatch(page,/startsWith\("linga"\)/,'page.tsx no longer spells the Linga predicate');
 });
 
-test('case 6: keyOf maps the keyboard to the remote, and Play is the clock except on the lesson',()=>{
+test('case 6: keyOf maps the keyboard to the remote, and Play is the clock except on the lesson (and the landing, nav 6)',()=>{
  const {keyOf,tvKey}=keys();
  const want={ArrowUp:'up',ArrowDown:'down',ArrowLeft:'left',ArrowRight:'right',Enter:'select',Backspace:'back',Escape:'back',m:'menu',M:'menu',' ':'play'};
  for(const [k,v] of Object.entries(want))assert.equal(keyOf(k),v,k);
  for(const k of ['a','Tab','Shift','Delete','PageDown','x','0',''])assert.equal(keyOf(k),null,k);
- for(const screen of ['landing','tonight','page','hint','topics','walk','recap','break']){
+ for(const screen of ['tonight','page','hint','topics','walk','recap','break']){
   assert.deepEqual(tvKey(session({screen}),'play',LOCAL).events,[{type:'timer.start'}],screen);
   assert.deepEqual(tvKey(session({screen,timer:{running:true,left:10,phase:'work'}}),'play',LOCAL).events,[{type:'timer.pause'}],screen);
  }
@@ -396,4 +396,57 @@ test('GUARD: the landing rows stay free of the filesystem-backed session modules
  const out=ts.transpileModule(fs.readFileSync(LROWS,'utf8'),opts).outputText;
  assert.doesNotMatch(out,/require\([^)]*lib\/session\/(store|learners)/);
  rows();assert.ok(!Object.keys(require.cache).some(k=>/session[\\/](store|learners)\.ts$/.test(k)),'loading the landing rows pulled the store in');
+});
+
+// ---- T14: navigation oddities read from the code ----
+test('nav 1 (T14): Back on the learner switcher never returns to a profile screen it was left from - the loop Profile > Pair > Profile > switcher',()=>{
+ const {tvKey}=keys();
+ // the switcher's Menu edits a profile, the profile's Menu opens the pair screen (back = profile), Back from there and from the profile: the switcher still holds back = profile
+ assert.deepEqual(tvKey(session({screen:'learner',back:'profile'}),'back',LOCAL).events,[{type:'nav',screen:'landing',focus:3}],'the desk, the lamp on the place card');
+ for(const back of ['pair','essaytype','forensic'])assert.equal(tvKey(session({screen:'learner',back}),'back',LOCAL).events[0].screen,'landing',back);
+ assert.deepEqual(tvKey(session({screen:'learner',back:'tonight'}),'back',LOCAL).events,[{type:'nav',screen:'tonight',focus:0}],'opened from Tonight, Back is Tonight');
+});
+
+test('nav 2 (T14): Back from an Essay Master page or its units is Essay Master\'s home, never Math Buddy\'s Tonight',()=>{
+ const {tvKey}=keys();
+ const essayPage=session({screen:'page',subject:'essay',pages:[page('essay')]});
+ assert.deepEqual(tvKey(essayPage,'back',LOCAL).events,[{type:'nav',screen:'essaytype',focus:0}]);
+ assert.deepEqual(tvKey(essayPage,'left',LOCAL).events,[{type:'nav',screen:'essaytype',focus:0}],'Left off the first page too');
+ assert.deepEqual(tvKey(session({screen:'page',subject:'essay'}),'back',LOCAL).events,[{type:'nav',screen:'essaytype',focus:0}],'no page left');
+ for(const k of ['back','left'])assert.deepEqual(tvKey(session({screen:'units',subject:'essay'}),k,LOCAL).events,[{type:'nav',screen:'essaytype',focus:0}],k);
+ assert.deepEqual(tvKey(session({screen:'page',pages:[page()]}),'back',LOCAL).events,[{type:'nav',screen:'tonight',focus:0}],'a maths page still goes to Tonight');
+ assert.deepEqual(tvKey(session({screen:'units'}),'back',LOCAL).events,[{type:'nav',screen:'tonight',focus:0}],'maths units still go to Tonight');
+});
+
+test('nav 3 (T14): Back always works on a page being read - it leaves the screen; the other keys wait for the read',()=>{
+ const {tvKey}=keys();
+ const reading=session({screen:'page',pages:[page()],reading:true});
+ assert.deepEqual(tvKey(reading,'back',LOCAL).events,[{type:'nav',screen:'tonight',focus:0}]);
+ for(const k of ['up','down','right','select','menu'])assert.deepEqual(tvKey(reading,k,LOCAL).events,[],k);
+});
+
+test('nav 4 (T14): Back from Sentence help goes back to Linga, not to the English units',()=>{
+ const {tvKey}=keys();
+ assert.deepEqual(tvKey(session({screen:'sentence',subject:'english'}),'back',LOCAL).events,[{type:'nav',screen:'linga',focus:0}]);
+});
+
+test('nav 5 (T14): Back from a lesson with no hint lands Units on the unit that was playing',()=>{
+ const {tvKey,unitStops}=keys();
+ const s=session({screen:'units'}),units=unitStops(s);
+ for(const ix of [0,2,units.length-1]){
+  const l=units[ix],lesson={id:l.id,title:l.title,t:0,text:'',why:''};
+  assert.deepEqual(tvKey(session({screen:'lesson',lesson}),'back',LOCAL).events,[{type:'nav',screen:'units',focus:ix}],l.id);
+ }
+ const hint={stage:1};
+ assert.deepEqual(tvKey(session({screen:'lesson',hint,lesson:{id:units[0].id,title:'',t:0,text:'',why:''}}),'back',LOCAL).events,[{type:'nav',screen:'hint',focus:1}],'with a hint up, Back is the hint on its lesson stop');
+});
+
+test('nav 6 (T14): Play/Pause on the landing does nothing - the desk draws no clock',()=>{
+ const {tvKey}=keys();
+ for(const timer of [{running:false,left:1500,phase:'work'},{running:true,left:10,phase:'work'}]){const r=tvKey(session({screen:'landing',timer}),'play',LOCAL);assert.deepEqual([r.events,r.calls],[[],[]]);}
+});
+
+test('nav 7 (T14): no stale focus comment on the profile screen, no unused shownTasks',()=>{
+ assert.doesNotMatch(fs.readFileSync(path.join(root,'src/tv/screens.tsx'),'utf8'),/Focus: 0-2 the type of student/);
+ assert.doesNotMatch(fs.readFileSync(path.join(root,'src/tv/profileRows.ts'),'utf8'),/shownTasks/);
 });
