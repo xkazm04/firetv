@@ -10,6 +10,7 @@ import type { EssayAnalysis, Event, JobKind, Profile, Screen, Session, Subject }
 import { rewriteState } from "@/lib/rules/essay";
 import { LESSONS, ESSAY_TYPES, PLAYBOOK, playFor, type Lesson } from "@/lib/library/lessons.data";
 import { SYLLABUS, type Topic } from "@/lib/library/syllabus";
+import { lessonStates } from "@/lib/library/watched";
 import { profileRows, locate, flat } from "@/tv/profileRows";
 import { continueCard } from "@/tv/mathsRows";
 import { sheetStops, firstToLook, tileOf } from "@/tv/sheetRows";
@@ -77,6 +78,10 @@ export function learnerStops(s: Session): Array<Profile | "add"> { return [...s.
 /** The units of the module on screen; the calendar is Math Buddy's lessons on file. */
 export function unitStops(s: Session): Lesson[] { return LESSONS.filter((l) => l.subject === s.subject); }
 export function calendarStops(): Lesson[] { return LESSONS.filter((l) => l.subject === "maths"); }
+/** Where Units opens from Tonight: on Math Buddy's next lesson to watch (library/watched.ts), else the first. */
+export function unitsFocus(s: Session): number { return Math.max(0, lessonStates(calendarStops(), s.history).indexOf("next")); }
+/** Where Tonight's Menu goes, as its one chip names it (maths/MathsTV.tsx Tonight): the lessons on file. */
+export const TONIGHT_MENU = "Lessons";
 /** The lenses, straight from the library, top to bottom. */
 export const LENS_STOPS = ESSAY_TYPES;
 /** Essay Master's home: the four lenses, then the last paragraph's card (Right) when a paragraph has been read. */
@@ -190,6 +195,8 @@ const KEYMAP: Partial<Record<Screen, Handler>> = {
     if (k === "right") o.move(stops.length, 1); if (k === "left") o.move(stops.length, -1);
     if (k === "up") o.nav("learner", 0, "tonight");
     if (k === "down" && !s.joined) o.nav("pair", 0, "tonight");
+    // Menu is Tonight's one unused button: the lessons on file, the lamp on the next one to watch (tonightDoor names it)
+    if (k === "menu") { o.ev({ type: "subject", subject: "maths" }); o.nav("units", unitsFocus(s)); return; }
     if (k !== "select") return;
     o.ev({ type: "subject", subject: "maths" });
     const cont = at === "continue" ? continueCard(s) : null;

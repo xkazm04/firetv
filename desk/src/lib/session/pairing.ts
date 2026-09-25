@@ -109,7 +109,7 @@ export function view(s: Session, role: Role | null): Session {
     ...seen, viewer: "guest", pin: "", joined: false,
     profiles: [], draft: s.screen === "profile" ? s.draft : null, tasks: [], back: undefined,
     pages: [], pageIx: 0, itemIx: 0, reading: false, awaiting: null,
-    hint: null, lesson: null, noLesson: false, lessonPaused: false,
+    hint: null, lesson: null, noLesson: false, lessonPaused: false, watch: null,
     english: null, essay: null, essayType: null, essayAt: null,
     englishLearning: emptyEnglish(), conversation: null, check: null,
     topic: null, practice: null, walkIx: 0, skills: {}, writing: {}, memory: [], history: [], jobs: {},

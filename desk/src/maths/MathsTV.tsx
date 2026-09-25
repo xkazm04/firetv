@@ -13,9 +13,10 @@ import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from "re
 import type { Page, PracticeItem, SchoolSystem, Session } from "@/lib/session/store";
 import { SYLLABUS, expectedIndex, topic as topicById, type Topic } from "@/lib/library/syllabus";
 import { LESSONS } from "@/lib/library/lessons.data";
+import { lessonStates } from "@/lib/library/watched";
 import { slip as slipById } from "@/lib/rules/maths";
 import { continueCard, type Continue } from "@/tv/mathsRows";
-import { running, practiceFailed, stopAt, tonightStops, calendarStops, unitStops, walkStops, HINT_STOPS, TOPIC_STOPS, type TonightStop } from "@/tv/keys";
+import { running, practiceFailed, stopAt, tonightStops, calendarStops, unitStops, walkStops, HINT_STOPS, TOPIC_STOPS, TONIGHT_MENU, type TonightStop } from "@/tv/keys";
 import { sheetTiles, sheetStops, tileOf } from "@/tv/sheetRows";
 import { systemOf } from "@/tv/profileRows";
 import { fmt } from "@/tv/useSession";
@@ -86,10 +87,11 @@ const KIND_ICON: Record<string, ReactNode> = {
 };
 
 /** The chips: the learner, the phone, the clock. Status, never a stop. */
-function Chips({ s, clock = true, phone = true, learner = true }: { s: Session; clock?: boolean; phone?: boolean; learner?: boolean }) {
+function Chips({ s, clock = true, phone = true, learner = true, menu }: { s: Session; clock?: boolean; phone?: boolean; learner?: boolean; menu?: string }) {
   const run = s.timer.running;
   return (
     <div className="mb-status">
+      {menu && <div className="mb-glyph" data-role="maths-menu">{ICON.lesson}<span className="mb-lab">Menu</span><span className="to">{menu}</span></div>}
       {learner && <div className="mb-chip" data-role="maths-chip"><span className="av">{s.learner.name.charAt(0)}</span>{s.learner.name}</div>}
       {phone && (s.joined
         ? <div className="mb-glyph" data-role="maths-chip">{PHONE}<span className="mb-lab">Phone</span></div>
@@ -396,7 +398,7 @@ export function Tonight({ s, focus }: { s: Session; focus: number }) {
     : secure.length ? `${COUNT[secure.length]} of ${SYLLABUS.length} topics secure`
     : "Linear equations, from the first step";
   return (<>
-    <Top s={s} />
+    <Top s={s} right={<Chips s={s} menu={TONIGHT_MENU} />} />
     {cont ? <Hero s={s} cont={cont} focused={at === "continue"} /> : <><h1 className="mb-title" data-role="maths-title"><Amber text={title} /></h1><BlankHero s={s} /></>}
     <div className={`mb-doors${cont ? "" : " wide"}`} data-dim={at !== "continue" || undefined}>
       {DOORS.map((d) => (
@@ -749,8 +751,7 @@ export function LessonScreen({ s }: { s: Session }) {
 // ---------------------------------------------------------------- T2 Units and T2m Calendar: a contents page, a planner
 
 export function Units({ s, focus }: { s: Session; focus: number }) {
-  const list = unitStops(s);
-  const next = list.find((l) => !l.done);
+  const list = unitStops(s), state = lessonStates(list, s.history);
   const cur = stopAt(list, focus);
   const pan = usePaper(focus);
   return (<>
@@ -758,12 +759,12 @@ export function Units({ s, focus }: { s: Session; focus: number }) {
     <div className="mb-win" style={{ top: 146, height: 880 }}>
       <div className="mb-pan" ref={pan}>
         <div className="mb-paper" data-role="maths-sheet">
-          <header className="mb-sheethead"><span className="st" data-role="maths-title">Tonight’s units</span><span className="who">{s.learner.name}</span></header>
-          {list.map((l) => (
-            <div key={l.id} className="mb-unit" data-focused={l === cur || undefined} data-cur={l === cur || undefined}>
+          <header className="mb-sheethead"><span className="st" data-role="maths-title">Lessons on file</span><span className="who">{s.learner.name}</span></header>
+          {list.map((l, i) => (
+            <div key={l.id} className="mb-unit" data-focused={l === cur || undefined} data-cur={l === cur || undefined} data-state={state[i]}>
               <span className="u">{l.unit}</span>
               <span className="t">{l.title}</span>
-              <span className="m">{l.done ? <Tick /> : l.id === next?.id ? <span className="next">Next</span> : null}{l.minutes} min</span>
+              <span className="m">{state[i] === "done" ? <Tick /> : state[i] === "next" ? <span className="next">Next</span> : null}{l.minutes} min</span>
             </div>
           ))}
         </div>
@@ -779,9 +780,8 @@ export function Units({ s, focus }: { s: Session; focus: number }) {
 }
 
 export function Calendar({ s, focus }: { s: Session; focus: number }) {
-  const list = calendarStops();
+  const list = calendarStops(), states = lessonStates(list, s.history), done = states.filter((x) => x === "done").length;
   const cur = stopAt(list, focus);
-  const nextIx = list.findIndex((l) => !l.done);
   const weeks = [["Week 1", 0, 3], ["Week 2", 3, 6], ["Week 3", 6, 8]] as const;
   const tilt = [-0.8, 0.6, -0.4, 0.9, -0.6, 0.5, -0.9, 0.4];
   return (<>
@@ -791,17 +791,17 @@ export function Calendar({ s, focus }: { s: Session; focus: number }) {
       {weeks.map(([w, a, b]) => [
         <div key={w} className="wk">{w}</div>,
         ...list.slice(a, b).map((l, j) => {
-          const i = a + j, state = l.done ? "done" : i === nextIx ? "next" : i > nextIx + 1 ? "locked" : "open";
+          const i = a + j, state = states[i];
           return (
             <div key={l.id} className="mb-cell" data-state={state} data-focused={l === cur || undefined} style={{ "--r": `${tilt[i % tilt.length]}deg` } as React.CSSProperties}>
               <div className="t">{l.title}</div>
-              <div className="s">{state === "done" ? <><Tick />done</> : state === "next" ? "next up" : state === "locked" ? "later" : `${l.minutes} min`}</div>
+              <div className="s">{state === "done" ? <><Tick />done</> : state === "next" ? "next up" : state === "later" ? "later" : `${l.minutes} min`}</div>
             </div>
           );
         }),
         ...Array.from({ length: 3 - (b - a) }, (_, k) => <div key={w + k} />),
       ])}
     </div>
-    <Caption text={`${list.filter((l) => l.done).length} of ${list.length} lessons done. Select opens the lesson; Back returns to the units.`} top={960} />
+    <Caption text={`${done ? `${done} of ${list.length} lessons watched` : "No lesson watched yet"}. Select opens the lesson; Back returns to the units.`} top={960} />
   </>);
 }

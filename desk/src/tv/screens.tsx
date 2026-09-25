@@ -11,6 +11,7 @@ import QRCode from "qrcode";
 import type { Profile, Session } from "@/lib/session/store";
 import { fmt } from "./useSession";
 import { stopAt, learnerStops, unitStops, recapStops, HINT_STOPS, SENTENCE_STOPS } from "./keys";
+import { lessonStates } from "@/lib/library/watched";
 import { recapRows, recapCaption, type RecapTile, type MathsTile, type LingaTile, type EssayTile } from "./recapRows";
 import { MathsMark, EssayBrand, EssayArrow } from "./marks";
 import { MATHS_FONTS } from "@/maths/fonts";
@@ -86,19 +87,18 @@ export function day(at: number): string {
 
 // ---- T2 Units (guide) ----
 export function Units({ s, focus }: { s: Session; focus: number }) {
-  const list = unitStops(s);
-  const next = list.find((l) => !l.done);
+  const list = unitStops(s), state = lessonStates(list, s.history);
   const cur = stopAt(list, focus);
   return (<>
     <div className="band band-right" />
     <main className="content-full">
       <div className="eyebrow" data-ch={s.subject}>{NAME[s.subject]} · units</div>
-      <div className="title">Tonight&apos;s units</div>
+      <div className="title">Lessons on file</div>
       <div className="guide" style={{ position: "absolute", left: 0, top: 130, width: 900 }}>
-        {list.map((l) => (
-          <div key={l.id} className="row" data-focused={l === cur} data-done={!!l.done}>
+        {list.map((l, i) => (
+          <div key={l.id} className="row" data-focused={l === cur} data-done={state[i] === "done"}>
             <div className="u">Unit {l.unit}</div>
-            <div className="t">{l.title}{l.id === next?.id && <span className="pill">next</span>}{l.done && <span className="pill" data-kind="done">done</span>}</div>
+            <div className="t">{l.title}{state[i] === "next" && <span className="pill">next</span>}{state[i] === "done" && <span className="pill" data-kind="done">watched</span>}</div>
             <div className="d">{l.minutes} min</div>
           </div>
         ))}
@@ -108,7 +108,7 @@ export function Units({ s, focus }: { s: Session; focus: number }) {
         <div className="headline" style={{ marginTop: 18, fontSize: 40 }}>{cur?.title}</div>
         <div className="body" style={{ marginTop: 20, color: "var(--mute)" }}>Teaches: {cur?.concepts.join(" · ")}</div>
       </div>
-      <div className="ticker"><span><b>{list.length}</b> units</span><i>·</i><span>{list.filter((l) => l.done).length} done</span><i>·</i><span>{s.subject === "maths" ? "Menu for the calendar" : s.subject === "english" ? "Menu for the head-to-head" : "Menu for the playbook"}</span></div>
+      <div className="ticker"><span><b>{list.length}</b> units</span><i>·</i><span>{state.filter((x) => x === "done").length} watched</span><i>·</i><span>{s.subject === "maths" ? "Menu for the calendar" : s.subject === "english" ? "Menu for the head-to-head" : "Menu for the playbook"}</span></div>
     </main>
   </>);
 }
