@@ -11,6 +11,7 @@ import type { Event, JobKind, Session, Subject } from "@/lib/session/store";
 import { LingaPhone } from "@/english/LingaPhone";
 import { follow, type PScreen } from "./panelFor";
 import { forensicAt } from "@/tv/keys";
+import { nearestItem } from "@/lib/desk/select";
 
 const SAMPLES: Array<{ id: Subject; title: string; file: string }> = [
   { id: "maths", title: "Algebra — Exercise 4.2", file: "/samples/maths.jpg" },
@@ -142,7 +143,7 @@ export default function Phone() {
       setMsg(r.ok ? "on the TV" : (j as { error?: string }).error ?? "failed"); } catch { setMsg("That did not reach the desk."); } finally { setBusy(false); } };
   const tap = (e: React.PointerEvent<HTMLDivElement>) => {
     if (!page) return; const r = e.currentTarget.getBoundingClientRect(); const y = ((e.clientY - r.top) / r.height) * page.h;
-    let best = 0; page.items.forEach((it, i) => { if (Math.abs(it.cy - y) < Math.abs(page.items[best].cy - y)) best = i; });
+    const best = nearestItem(page.items, y);
     setRing({ x: e.clientX - r.left, y: e.clientY - r.top }); post({ type: "item", itemIx: best }); if (s?.screen !== "page") post({ type: "nav", screen: "page" });
   };
   const ask = async () => { if (!page) return; setBusy(true); setMsg("");
