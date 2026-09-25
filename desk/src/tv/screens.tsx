@@ -356,12 +356,14 @@ function picksLine(p: Profile) {
 export function Learner({ s, focus }: { s: Session; focus: number }) {
   const stop = stopAt(learnerStops(s), focus);
   const at = stop && stop !== "add" ? stop : null;
+  // The corner band: its diagonal ends at y ~270 on the safe box's right edge, so the card row (from y ~330) and the
+  // caption stand on charcoal whole; a left band would cut through the first card and the caption.
   return (<>
-    <div className="band band-left" />
+    <div className="band band-corner" />
     <main className="content-full">
       <div className="eyebrow">Who is at the desk?</div>
       <div className="title">Learner</div>
-      <div className="cards" style={{ gridTemplateColumns: `repeat(${Math.max(3, s.profiles.length + 1)}, 1fr)`, marginTop: 44 }}>
+      <div className="cards" style={{ gridTemplateColumns: `repeat(${Math.max(3, s.profiles.length + 1)}, 1fr)`, marginTop: 170 }}>
         {s.profiles.map((p) => (
           <div key={p.id} className="card" data-focused={stop === p}>
             <div className="k">{TYPE_WORDS[p.type].toUpperCase()}</div>
@@ -376,7 +378,7 @@ export function Learner({ s, focus }: { s: Session; focus: number }) {
       </div>
       <div style={{ marginTop: 44 }}>
         {at
-          ? <><span className="cap">{TYPE_WORDS[at.type]}</span><div className="cap-text">{picksLine(at)} Enter to sit at this desk, Menu to change the picks.</div></>
+          ? <><span className="cap">{TYPE_WORDS[at.type]}</span><div className="cap-text">{picksLine(at)} {at.id === s.learner.id ? "Enter goes back to the desk" : "Enter to sit at this desk"}, Menu to change the picks.</div></>
           : <><span className="cap">New learner</span><div className="cap-text">The TV takes the picks, the phone takes the name.</div></>}
       </div>
     </main>
