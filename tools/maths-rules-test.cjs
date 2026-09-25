@@ -6,7 +6,7 @@ let ts;try{ts=require(path.join(root,'node_modules/typescript'));}catch{console.
 const resolve=Module._resolveFilename;
 Module._resolveFilename=function(id,...args){return resolve.call(this,id.startsWith('@/')?path.join(root,'src',id.slice(2)):id,...args);};
 require.extensions['.ts']=(mod,file)=>mod._compile(ts.transpileModule(fs.readFileSync(file,'utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022,esModuleInterop:true}}).outputText,file);
-process.env.DESK_DATA_DIR=path.resolve(__dirname,'../artifacts/maths-rules',String(Date.now()));
+process.env.DESK_DATA_DIR=fs.mkdtempSync(path.join(require('node:os').tmpdir(),'desk-maths-rules-'));
 const {verify,evaluate}=require(path.join(root,'src/lib/desk/verify.ts'));
 const engine=require(path.join(root,'src/lib/engines/text.ts')),eye=require(path.join(root,'src/lib/engines/vision.ts'));
 let answer,seen=[];engine.text=(req)=>{seen.push(req);return answer(req);};
@@ -21,7 +21,7 @@ const {SYLLABUS,SYSTEM_START,topic,nextTopic,expectedIndex}=require(path.join(ro
 const {LESSONS}=require(path.join(root,'src/lib/library/lessons.data.ts'));
 const storeFile=path.join(root,'src/lib/session/store.ts');
 let store=require(storeFile);
-after(()=>clearInterval(globalThis.__desk.ticker));
+after(()=>{clearInterval(globalThis.__desk.ticker);fs.rmSync(process.env.DESK_DATA_DIR,{recursive:true,force:true});});
 const reply=(json)=>async()=>({json,provider:'test',ms:1});
 
 test('verify accepts a value that satisfies the equation and rejects one that does not',()=>{
@@ -281,4 +281,44 @@ test('GUARD case 7: after settling, no line on any item carries a value, and the
   const leaked=((i.reply??'').match(/-?\d+(\.\d+)?(\/\d+)?/g)??[]).filter(v=>verify(i.question,v));assert.deepEqual(leaked,[],`item ${i.n} reply: ${i.reply}`);
  }
  const keys=keysIn(p);assert(!keys.includes('answer'));assert(!keys.includes('solution'));
+});
+
+// ---- the set's "k of n right" line in the learner's history: counted from the item verdicts, restated when an item settles ----
+const lineNow=(me)=>getLearner(me).history.filter(h=>h.kind==='practice').at(-1);
+test('case 8: rules/maths counts the line from the verdicts alone - an unsure or wrong item is not right',()=>{
+ const {rightLine}=require(path.join(root,'src/lib/rules/maths.ts'));
+ assert.equal(typeof rightLine,'function','one rule for marking and settle');
+ assert.equal(rightLine([{verdict:'right'},{verdict:'wrong'},{verdict:'unsure'},{},{verdict:'right'}]),'2 of 5 right');
+ assert.equal(rightLine([]),'0 of 0 right');
+});
+test('GUARD case 9: marking alone writes one line, "1 of 6 right", as before',async()=>{
+ const me=store.getSession().learner.id,before=getLearner(me).history.length;
+ await markedWalk();
+ assert.equal(getLearner(me).history.length,before+1);assert.equal(lineNow(me).detail,'1 of 6 right');
+ assert.equal(store.getSession().history.at(-1).detail,'1 of 6 right');
+});
+test('case 10: an item that settles right restates the line k+1 of n, in the learner record and the session, and adds no entry',async()=>{
+ const me=await markedWalk(),n=getLearner(me).history.length;
+ said({reply:'Look at the line where the 1 moved.',value:'9',slip:'unclear'});
+ assert.equal((await explainAt(3)).body.settled,'right');
+ assert.equal(lineNow(me).detail,'2 of 6 right','k+1 of n after an item settles right');
+ assert.equal(store.getSession().history.at(-1).detail,'2 of 6 right','the session reads the restated line back');
+ assert.equal(getLearner(me).history.length,n,'a settle restates the marking line, it adds none');
+});
+test('case 11: an item settled twice is counted once',async()=>{
+ const me=await markedWalk();
+ for(let k=0;k<2;k++){said({reply:'Look at the line where the 1 moved.',value:'9',slip:'unclear'});await explainAt(3);}
+ assert.equal(lineNow(me).detail,'2 of 6 right');
+});
+test('case 12: a wrong settle leaves k where it stands',async()=>{
+ const me=await markedWalk(),n=getLearner(me).history.length;
+ said({reply:'Check the step where x was left alone.',value:'11',slip:'arithmetic-slip'});
+ assert.equal((await explainAt(4)).body.settled,'wrong');
+ assert.equal(lineNow(me).detail,'1 of 6 right','a wrong settle alone moves nothing');
+ said({reply:'Look at the line where the 1 moved.',value:'9',slip:'unclear'});await explainAt(3);
+ said({reply:'Check the step where x was left alone.',value:'11',slip:'arithmetic-slip'});
+ assert.equal((await explainAt(5)).body.settled,'wrong');
+ assert.equal(lineNow(me).detail,'2 of 6 right','after a right settle, a wrong one leaves 2');
+ assert.equal(getLearner(me).history.length,n);
+ const p=store.getSession().practice.items;assert.equal(lineNow(me).detail,`${p.filter(i=>i.verdict==='right').length} of ${p.length} right`,'the line is what the verdicts say');
 });
