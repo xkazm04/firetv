@@ -175,17 +175,22 @@ export function phonePanel(s: Session): PhonePanel {
   return activeCheck(s) ? "check" : st === "moment" ? "moment" : !st || st === "finished" ? "start" : "talk";
 }
 
-/** The screen's typed or spoken answer, if it takes one now. A choice is answered with the remote, not here. */
+/**
+ * The typed or spoken answer the phone's reply box takes now, if any. It follows the panel the phone holds, not the
+ * TV screen: with the TV on Linga home the phone still answers the check's question or the partner's line. A choice
+ * is answered with the remote, not here.
+ */
 function answerOf(s: Session, lc: LevelCheck | null, c: Conversation | null): Answer | null {
-  if (s.screen === "linga-check" && lc && !lc.pending) {
+  const panel = phonePanel(s);
+  if (panel === "check" && lc && !lc.pending) {
     const q = lc.turns.at(-1);
     if (lc.stage === "about" && q?.role === "tutor") return { id: "answer", action: "check-answer", label: "Answer the question", lastTurnId: q.id };
     if (lc.stage === "tasks" && lc.task && lc.task.kind !== "choose") return { id: "answer", action: "check-task", label: lc.task.kind === "listen" ? "Answer the listening task" : "Answer the task", taskId: lc.task.id };
+    if (lc.stage === "plan" && lc.askGoal) return { id: "answer", action: "plan-goal", label: "Say what to practise" };
   }
-  if (s.screen === "linga-plan" && lc?.askGoal && !lc.pending) return { id: "answer", action: "plan-goal", label: "Say what to practise" };
-  // The phone keeps its reply box during the recognition quiz, and a turn is accepted there.
+  // The phone keeps its reply box during the recognition quiz, and a turn is accepted there: the turn table decides.
   const said = c?.turns.at(-1);
-  if (s.screen === "linga-talk" && c && accepts(c, "turn") && said?.role === "partner") return { id: "answer", action: "turn", label: `Reply to ${c.partner}`, lastTurnId: said.id };
+  if (panel === "talk" && c && accepts(c, "turn") && said?.role === "partner") return { id: "answer", action: "turn", label: `Reply to ${c.partner}`, lastTurnId: said.id };
   return null;
 }
 
@@ -392,6 +397,9 @@ export function lingaView(s: Session, input: ViewInput = {}): LingaView {
     caption = actions[Math.max(0, s.focus)]?.help ?? actions[0].help;
   }
 
+  // While a reply is in flight the TV draws every row action but Cancel disabled: the view says so too.
+  if (waiting) actions = actions.map(a => a.id === "cancel" || a.disabled ? a : { ...a, disabled: true });
+
   const baseCaption = caption;
   if (s.focus >= 0 && !waiting && !c?.capture && actions[s.focus]) caption = actions[s.focus].help;
   const error = input.error || (!isHome && (onCheck ? lc?.error : c?.error)) || "";
@@ -403,16 +411,18 @@ export function lingaView(s: Session, input: ViewInput = {}): LingaView {
   ];
 
   // The phone. Its Talk tab holds a panel of its own whatever the TV shows (phonePanel), and every control that panel
-  // draws is offered: by the TV row above when the row runs the same command, else here, as a phone-side action the
-  // TV never draws. The start panel is Linga home on the phone: this learner's home buttons, a band by hand before a
-  // level, and the list of every situation. The owner decided (2026-09-25) that the view offers that list wherever
-  // the phone draws it, on home and on the recap too; the level check stays the start panel's first button. The check
-  // keeps Stop / Not now on the phone through the tasks and the topics, and the conversation keeps Help me answer and
-  // Choose a phrase after a reply and under the quiz. On the topics screen the phone takes a topic in the learner's
-  // own words; during a rehearsal it can finish.
+  // draws is offered: by the TV row or footer above when they run the same command, else here, as a phone-side action
+  // the TV never draws. So with the TV on Linga home while a conversation or the level check is under way, the phone's
+  // live panel is offered here in full. The start panel is Linga home on the phone: this learner's home buttons, a band
+  // by hand before a level, and the list of every situation. The owner decided (2026-09-25) that the view offers that
+  // list wherever the phone draws it, on home and on the recap too; the level check stays the start panel's first
+  // button. The check keeps Stop / Not now on the phone through the tasks and the topics, and the conversation keeps
+  // Help me answer and Choose a phrase after a reply and under the quiz. On the topics screen the phone takes a topic
+  // in the learner's own words; during a rehearsal it can finish. A conversation command here is disabled wherever the
+  // turn table (turn.ts) refuses it, as on the TV.
   const phone: ViewAction[] = [], panel = phonePanel(s);
   const sameRun = (a: ViewAction, b: ViewAction) => !!a.run.command && !!b.run.command && JSON.stringify(a.run.command) === JSON.stringify(b.run.command);
-  const onPhone = (a: ViewAction) => { if (!actions.some(x => sameRun(x, a))) phone.push(a); };
+  const onPhone = (a: ViewAction) => { if (![...actions, ...footer].some(x => sameRun(x, a))) phone.push(a); };
   if (panel === "start") {
     const h = lingaHome(s), again = (self: boolean) => act("check-again", self ? "Find my level with Linga" : "Find my level again", "Three questions and a few short tasks, about seven minutes.", cmd("check-start"));
     const talk = (id: ActionId, label: string) => act(id, label, recommended.goal, cmd("start", { sceneId: recommended.id, replace: true }));
@@ -426,18 +436,44 @@ export function lingaView(s: Session, input: ViewInput = {}): LingaView {
     if (s.screen === "linga-scenes" && !menu && !picking) details.push(`On the phone, every situation:\n${scenes.map(x => `  [${x.id}] ${x.name} — ${x.goal}`).join("\n")}`);
     if (h === "no-placement") onPhone(act("pick-band", "Pick my level on the phone (A1 to C2)", "Use a level from A1 to C2 you choose yourself.", cmd("level-self"), { needs: "band" }));
   }
-  if (panel === "check" && lc && lc.stage !== "verdict")
-    onPhone(lc.stage === "plan" ? act("not-now", "Not now", "Leave for now. Linga asks again when you come back to your topics.", cmd("check-leave")) : stopCheck);
-  // the phone's live panel: not while it draws Resume (the learner paused) or the coach
-  if (panel === "talk" && c && !c.paused && st !== "coaching") {
-    const help = helpOf(c);
-    if (help.offered) onPhone(act("cue", help.label, help.help, cmd("cue"), { disabled: waiting || refused("cue") }));
-    onPhone(act("quiz", "Choose a phrase", "Compare two phrases before returning to speaking.", cmd("quiz"), { disabled: waiting || refused("quiz") }));
+  if (panel === "check" && lc) {
+    // the check as the phone holds it; its buttons are disabled while Linga is thinking
+    const t = lc.task, dim = (a: ViewAction): ViewAction => lc.pending ? { ...a, disabled: true } : a;
+    const retry = act("retry", "Try again", "Ask Linga again.", cmd("check-retry"));
+    if ((lc.stage === "about" && !lc.turns.length || lc.stage === "tasks" && !t || lc.stage === "plan" && !lc.askGoal && !lc.topics.length) && !lc.pending) onPhone(retry);
+    if (lc.stage === "tasks" && t) {
+      if (t.kind === "listen" && !t.revealed) [act("hear-again", "Hear it again", "Linga says it again.", cmd("check-repeat")), act("show-words", "Show the words", "Read the line instead of hearing it.", cmd("check-reveal"))].map(dim).forEach(onPhone);
+      if (t.kind === "choose") t.options.forEach((x, i) => onPhone(dim(act("choose", `Reply ${i + 1}`, x, cmd("check-task", { taskId: t.id, option: i })))));
+      onPhone(dim(act("dont-know", "I don't know", "Skip this one. That tells Linga something too.", cmd("check-task", { taskId: t.id, skip: true }))));
+    }
+    if (lc.stage === "verdict" && lc.placement) [act("see-topics", "See my topics", "Linga picks conversations for this level. Swap any you don't want.", cmd("plan-propose")), act("check-again", lc.placement.source === "self" ? "Find my level with Linga" : "Find my level again", "Three questions and a few short tasks, about seven minutes.", cmd("check-start"))].map(dim).forEach(onPhone);
+    if (lc.stage === "plan" && lc.askGoal) onPhone(dim(act("skip-goal", "Let Linga pick", "Linga picks conversations for your level without a goal. You can swap any of them.", cmd("plan-goal", { skip: true }))));
+    if (lc.stage === "plan" && !lc.askGoal) {
+      lc.topics.forEach(x => onPhone(dim(act("swap", "Swap this topic", x.why, cmd("plan-swap", { topicId: x.id })))));
+      if (lc.topics.length) onPhone(dim(act("agree", "Agree to these topics", "Save these as your plan. Linga starts with the first one.", cmd("plan-agree"))));
+      onPhone(dim(act("renew", "All new topics", "Replace every topic with a fresh set.", cmd("plan-renew"))));
+      if (!lc.pending && lc.topics.length && lc.topics.length < PLAN_MAX)
+        phone.push(act("add-topic", "Add a topic in your own words on the phone", "Linga adds a conversation for what you describe.", cmd("plan-add"), { needs: "text" }));
+    }
+    if (lc.stage !== "verdict") onPhone(lc.stage === "plan" ? act("not-now", "Not now", "Leave for now. Linga asks again when you come back to your topics.", cmd("check-leave")) : stopCheck);
   }
-  if (s.screen === "linga-plan" && lc && !lc.askGoal && !lc.pending && lc.topics.length && lc.topics.length < PLAN_MAX)
-    phone.push(act("add-topic", "Add a topic in your own words on the phone", "Linga adds a conversation for what you describe.", cmd("plan-add"), { needs: "text" }));
-  if (c && st !== "finished" && !lc && s.screen === "linga-talk" && !c.paused && !menu)
-    phone.push(act("finish", "Finish rehearsal (phone)", "End this scene and save a recap.", cmd("finish"), { disabled: refused("finish") }));
+  if (panel === "moment" && c) onPhone(act("back", "Back to the conversation", "Carry on from where the scene stopped.", cmd("moment-done"), { disabled: refused("moment-done") }));
+  // the phone's live conversation: Resume while the learner paused, the coach's replay, else the reply helpers
+  if (panel === "talk" && c) {
+    if (c.paused) onPhone(act("resume", "Resume conversation", "Return to the last question. Your words are kept.", cmd("resume"), { disabled: refused("resume") }));
+    else if (st === "coaching") onPhone(act("replay", "Replay with a new question", "Try the same intention with a new question. The first retry is supported practice.", cmd("replay"), { disabled: refused("replay") }));
+    else {
+      const help = helpOf(c), scene = c.scene ?? ENGLISH_SCENES.find(x => x.id === c.sceneId);
+      if (help.offered) onPhone(act("cue", help.label, help.help, cmd("cue"), { disabled: waiting || refused("cue") }));
+      onPhone(act("quiz", "Choose a phrase", "Compare two phrases before returning to speaking.", cmd("quiz"), { disabled: waiting || refused("quiz") }));
+      if (c.quizOpen && scene) scene.quiz.options.forEach((x, i) => onPhone(act("pick-phrase", `Option ${i + 1}`, x, cmd("choice", { option: i }), { disabled: refused("choice") })));
+      onPhone(act("coach", "Pause & coach", "Work on one useful change, then replay this moment.", cmd("coach"), { disabled: waiting || refused("coach") }));
+    }
+    onPhone(inFlight ? act("cancel", "Cancel pending turn", "Cancel the pending reply and keep the conversation for later.", cmd("leave"), { disabled: refused("leave") })
+      : act("repeat", "Repeat audio", "Hear the last line again.", cmd("repeat"), { disabled: refused("repeat") }));
+    onPhone(act("finish", "Finish rehearsal (phone)", "End this scene and save a recap.", cmd("finish"), { disabled: refused("finish") }));
+    if (st === "unprepared") onPhone(act("retry-scene", "Retry preparing scene", "Try preparing this situation again.", cmd("start", { sceneId: c.sceneId, replace: true })));
+  }
 
   return { screen: menu ? "menu" : picking ? "linga-verdict" : s.screen, home, tag, title, captionTag, baseCaption, caption, error, hero, actions, footer, phone, answer: answerOf(s, lc, c), spoken, audible, waiting, recap, details };
 }
