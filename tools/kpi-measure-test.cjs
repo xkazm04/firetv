@@ -108,3 +108,26 @@ test('a real directory in the way is reported, never deleted — an install is t
  assert.equal(o.lines.length,1);assert.match(o.lines[0],/has no typescript in it\. Run `npm install` in desk\/, then `npm test`\.$/);
  assert.equal(fs.readFileSync(path.join(half.modules,'react/package.json'),'utf8'),'{"name":"react"}','what was there is still there');
 });
+
+// Coverage is a load, not a mention. A module a tools file only names - in a comment, or as a file it reads as text -
+// is not under test; only a require() or an import of it is. The texts below are fixtures, never files on disk.
+const {coveredBy}=require('./kpi-measure.cjs');
+const src=(file,text)=>({file,text});
+const V='src/lib/desk/verify.ts';
+test('a module that is required or imported is covered (guard)',()=>{
+ const hits=coveredBy([
+  src('tools/req.cjs',"const {verify}=require(path.join(root,'src/lib/desk/verify.ts'));\n"),
+  src('tools/url.cjs',"const u='http://example.test/a';const {verify}=require(path.join(root, 'src/lib/desk/verify.ts'));\n"),
+  src('tools/esm.mjs',"import { verify } from '@/lib/desk/verify';\n"),
+  src('tools/dyn.mjs',"const m=await import('../desk/src/lib/desk/verify.ts');\n"),
+  src('tools/other.cjs',"const {makeItems}=require(path.join(root,'src/lib/desk/items.ts'));\n"),
+ ],V);
+ assert.deepEqual(hits,['tools/req.cjs','tools/url.cjs','tools/esm.mjs','tools/dyn.mjs'],'a // inside a string is not a comment, and a require of another module is not this one');
+});
+test('the maths core reading on this tree is unchanged: every credited module is loaded by a real suite (guard)',()=>{
+ const k=require('./kpi-measure.cjs'),sources=k.testSources();
+ for(const m of ['src/lib/desk/verify.ts','src/lib/desk/items.ts','src/lib/rules/maths.ts','src/lib/library/syllabus.ts'])
+  assert.ok(coveredBy(sources,m).includes('tools/maths-rules-test.cjs'),`${m} is loaded by maths-rules-test`);
+ for(const m of ['src/lib/rules/essay.ts','src/lib/desk/essay.ts'])
+  assert.ok(coveredBy(sources,m).includes('tools/essay-rules-test.cjs'),`${m} is loaded by essay-rules-test`);
+});
