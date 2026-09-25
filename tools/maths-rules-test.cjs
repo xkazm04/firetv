@@ -87,7 +87,7 @@ test('hints withhold the answer and the second hint must go one step further',as
  const h1=await hint('maths','2x+3=11',{});
  assert.equal(h1.hint,'Look at what is added to 2x.');assert.equal(h1.next,'Undo it on both sides.');
  await hint('maths','2x+3=11',{previous:h1.hint,askedQ:'where do I start?'});
- const [first,second]=seen;
+ assert.equal(seen.length,2,'a clean hint is one prompt per stage: no re-ask');const [first,second]=seen;
  for(const r of seen)assert.match(r.system,/never state the final answer, never write the completed solution/);
  assert.match(first.prompt,/Give the FIRST hint/);assert.doesNotMatch(first.prompt,/ONE STEP FURTHER/);
  assert.match(second.prompt,/«Look at what is added to 2x\.»/);assert.match(second.prompt,/ONE STEP FURTHER/);assert.match(second.prompt,/still stop short of the answer/);
