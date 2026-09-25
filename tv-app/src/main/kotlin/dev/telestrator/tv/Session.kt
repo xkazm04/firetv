@@ -5,6 +5,7 @@ import dev.telestrator.core.AnnotationTimeline
 import dev.telestrator.core.HeartbeatInput
 import dev.telestrator.core.PenEngine
 import dev.telestrator.core.PenMessage
+import dev.telestrator.core.asTransport
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import java.util.concurrent.atomic.AtomicInteger
@@ -56,10 +57,18 @@ class Session(clipId: String, videoAspect: Double) {
     fun penDisconnected(): Int = pens.decrementAndGet().coerceAtLeast(0).also { pens.set(it) }
 
     fun accept(msg: PenMessage) {
-        if (msg is PenMessage.Transport) {
-            _transport.value = TransportCommand(msg.cmd, msg.value, System.nanoTime())
+        // Undo and redo take the planner's road, the remote's and the phone's alike: the ink they
+        // touch may be on another frame, and only the planner sees the player (TransportPlan).
+        val transport = msg as? PenMessage.Transport ?: msg.asTransport()
+        if (transport != null) {
+            _transport.value = TransportCommand(transport.cmd, transport.value, System.nanoTime())
             return
         }
+        edit(msg)
+    }
+
+    /** Applies an edit to the document at the current media time. The plan's [dev.telestrator.core.PlayerAction.Edit] lands here. */
+    fun edit(msg: PenMessage) {
         engine.accept(msg, mediaTimeMs)
         revisionCounter.incrementAndGet()
         // Do not rebuild the document here. A pen streaming at 60 Hz would make the renderer
@@ -79,6 +88,12 @@ class Session(clipId: String, videoAspect: Double) {
     fun canUndo(): Boolean = engine.canUndo
     fun canRedo(): Boolean = engine.canRedo
 
+    /** The frame the next undo takes the player to first, or null when it acts on screen at [atMs]. */
+    fun undoAt(atMs: Long = mediaTimeMs): Long? = engine.undoAt(atMs)
+
+    /** As [undoAt], for the next redo. */
+    fun redoAt(atMs: Long = mediaTimeMs): Long? = engine.redoAt(atMs)
+
     /** One consistent read of what the pen heartbeat reports (see [dev.telestrator.core.Heartbeat]). */
     fun heartbeatInput(): HeartbeatInput {
         val current = doc.value
@@ -94,6 +109,9 @@ class Session(clipId: String, videoAspect: Double) {
             revision = revision.toLong(),
             // Where the drawings are, so the phone can mark its scrub bar and jump between them.
             marks = AnnotationTimeline(current).moments(),
+            // Where an undo or redo would go first, so the phone's button can say so before it travels.
+            undoAtMs = undoAt(),
+            redoAtMs = redoAt(),
         )
     }
 

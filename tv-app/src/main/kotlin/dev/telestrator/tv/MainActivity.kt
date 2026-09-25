@@ -177,13 +177,16 @@ private fun TelestratorScreen(session: Session, transport: PenTransport, clipUri
     // player and carries the actions out in order.
     LaunchedEffect(command) {
         val t = command ?: return@LaunchedEffect
+        val positionMs = player.currentPosition
         val actions = TransportPlan.plan(
             cmd = t.cmd,
             value = t.value,
-            positionMs = player.currentPosition,
+            positionMs = positionMs,
             durationMs = player.duration.coerceAtLeast(0),
             playing = player.isPlaying,
             doc = session.doc.value,
+            undoAtMs = session.undoAt(positionMs),
+            redoAtMs = session.redoAt(positionMs),
         )
         for (action in actions) {
             when (action) {
@@ -196,7 +199,7 @@ private fun TelestratorScreen(session: Session, transport: PenTransport, clipUri
                     session.rate = action.rate
                     rate = r
                 }
-                is PlayerAction.Edit -> session.accept(action.message)
+                is PlayerAction.Edit -> session.edit(action.message)
             }
         }
     }
