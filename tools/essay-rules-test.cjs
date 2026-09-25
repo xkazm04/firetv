@@ -412,3 +412,146 @@ test('the Writing KPI counts a learner with a writing episode, from the book a r
  assert.equal(r.withWriting,writers,'a writing record is an episode in the history, not a `writing` field');
  assert.equal(r.reading,Object.values(book).reduce((n,l)=>n+(l.history||[]).length,0));
 });
+
+// ---- rewrite one sentence in place: re-judged alone, and the move inks only if it holds ----
+const rules=()=>require(path.join(root,'src/lib/rules/essay.ts'));
+const deskEssay=()=>require(path.join(root,'src/lib/desk/essay.ts'));
+const analyse=(body)=>require(path.join(root,'src/app/api/analyse/route.ts')).POST(new Request('http://desk/api/analyse',{method:'POST',body:JSON.stringify(body)}));
+const deskWorded=(line)=>{assert.equal(typeof line,'string');assert(line.length>0);assert(!/\b\w*Error:|undefined|NaN/.test(line),`not desk-worded: ${line}`);};
+/** THREE as the desk read it through the Evidence lens: 1 strong, 2 faulty (no fix of its own), 3 neutral. */
+const R3=(verdicts=[{n:1,verdict:'strong',note:'A clear side.'},{n:2,verdict:'faulty',note:'Whose research?'},{n:3,verdict:'neutral',note:'Fine.'}])=>{const s=splitSentences(THREE);return {text:THREE,type:'evidence',sentences:s,stats:paragraphStats(s),verdicts,summary:'One source is missing.',provider:'test'};};
+const STUDY='According to a 2019 study, teenagers fall asleep two hours later.';
+const OLD2='Research found that teenagers fall asleep later.';
+
+test('rewrite case 1: revise puts one sentence in place, recomputed in code, and the paragraph around it keeps its numbers',()=>{
+ const {revise}=rules();
+ const before=R3(),r=revise(before,2,STUDY);
+ assert.equal(r.ok,true,r.error);
+ const a=r.reading;
+ assert.deepEqual(a.sentences.map(x=>x.n),[1,2,3],'the numbering stands');
+ assert.deepEqual(a.sentences[1],{...splitSentences(STUDY)[0],n:2},'sentence 2 is the rewrite: role, words and connectors from the rule, not carried over');
+ assert.equal(a.sentences[1].text,STUDY);assert.equal(a.sentences[1].words,11);assert.equal(a.sentences[1].role,'evidence');
+ assert.deepEqual(a.sentences[0],before.sentences[0]);assert.deepEqual(a.sentences[2],before.sentences[2]);
+ assert.deepEqual(a.stats,paragraphStats(a.sentences),'the stats are recounted');
+ assert.equal(a.text,`${before.sentences[0].text} ${STUDY} ${before.sentences[2].text}`,'the text is rebuilt from the sentences');
+ assert.deepEqual(splitSentences(a.text).map(x=>x.text),a.sentences.map(x=>x.text),'and splits back into the same sentences');
+ assert.deepEqual(a.verdicts,before.verdicts,'revise decides no verdict');
+ assert.equal(before.sentences[1].text,OLD2,'the reading it was given is not mutated');
+ const b=revise(before,3,'Research shows the start should move.').reading;
+ assert.equal(b.sentences[2].role,'evidence');
+ assert.deepEqual([b.stats.evidence,b.stats.links],[2,0],'the evidence count follows the new sentence');
+});
+
+test('rewrite case 2: revise refuses a rewrite that is not one new sentence, in the desk\'s words, before any model is asked',async()=>{
+ const {revise}=rules();
+ const refusals=[[2,'It is bad. Very bad.'],[2,'   '],[2,''],[2,'  research found that TEENAGERS   fall asleep later. '],[4,STUDY],[0,STUDY],[2,'teenagers fall asleep two hours later.']];
+ for(const [n,text] of refusals){const r=revise(R3(),n,text);assert.equal(r.ok,false,`${n} ${JSON.stringify(text)}`);deskWorded(r.error);}
+ assert.match(revise(R3(),2,'It is bad. Very bad.').error,/one sentence/i);
+ assert.match(revise(R3(),4,STUDY).error,/no sentence 4/i);
+ dispatch({type:'reset'});dispatch({type:'essay.set',analysis:R3()});
+ seen=[];answer=reply({verdicts:[{n:2,verdict:'strong',note:'x'}]});
+ for(const [n,text] of refusals){const res=await analyse({kind:'rewrite',n,text});assert.equal(res.status,400,`${n} ${JSON.stringify(text)}`);deskWorded((await res.json()).error);}
+ assert.equal((await analyse({kind:'rewrite',n:'two',text:STUDY})).status,400,'a sentence number that is not a number');
+ assert.equal(seen.length,0,'no engine call for a refused rewrite');
+ assert.equal(getSession().essay.sentences[1].text,OLD2,'the desk is unchanged');
+ assert.equal(getSession().jobs.analyse,undefined,'no run was started');
+ dispatch({type:'reset'});
+ assert.equal((await analyse({kind:'rewrite',n:2,text:STUDY})).status,400,'no paragraph on the desk: nothing to rewrite in');
+ assert.equal(seen.length,0);
+ dispatch({type:'reset'});
+});
+
+test('rewrite case 3: reviseSentence re-judges sentence n alone, in its paragraph, against the move it was taught; the other verdicts are kept by code',async()=>{
+ const {reviseSentence}=deskEssay(),{playFor}=require(path.join(root,'src/lib/library/lessons.data.ts'));
+ const before=R3();
+ seen=[];answer=reply({verdicts:[{n:1,verdict:'faulty',note:'the model changed its mind'},{n:2,verdict:'strong',note:'It names its source now.'},{n:3,verdict:'strong',note:'also changed'}]});
+ const a=await reviseSentence(before,2,STUDY);
+ assert.equal(seen.length,1,'one model call');
+ assert.deepEqual(a.verdicts.find(v=>v.n===1),before.verdicts[0],'verdict 1 is kept, not asked');
+ assert.deepEqual(a.verdicts.find(v=>v.n===3),before.verdicts[2],'verdict 3 is kept, not asked');
+ assert.deepEqual(a.verdicts.map(v=>v.n),[1,2,3],'one verdict per sentence, in order');
+ const v2=a.verdicts.find(v=>v.n===2);
+ assert.equal(v2.verdict,'strong');assert.equal(v2.note,'It names its source now.');
+ assert.deepEqual(v2.was,{text:OLD2,verdict:'faulty'},'verdict 2 remembers the sentence it replaced');
+ assert.equal(a.sentences[1].text,STUDY);assert.equal(a.summary,before.summary);assert.equal(a.type,'evidence');
+ const {system,prompt}=seen[0];
+ assert.match(system,/sentence 2 alone/i,'the model is asked for sentence 2 alone');
+ assert.match(system,/Lens for this reading: Evidence/);
+ assert.match(system,/Never rewrite their sentences/);
+ for(const [k,x] of a.sentences.entries())assert.ok(prompt.includes(`${k+1}. ${x.text}`),`the whole numbered paragraph: ${x.n}`);
+ assert.ok(prompt.includes(playFor('evidence').move),'the move the page taught (the playbook, when the verdict had no fix of its own)');
+ assert.ok(prompt.includes(OLD2),'the sentence before the rewrite');
+ // a verdict with its own fix: that move is the one asked about, and it rides on `was` so the TV can ink it
+ const FIX={move:'Name the source',pattern:'According to [who], [what they found].'};
+ seen=[];answer=reply({verdicts:[{n:2,verdict:'strong',note:'ok'}]});
+ const b=await reviseSentence(R3([{n:2,verdict:'faulty',note:'Whose?',fix:FIX}]),2,STUDY);
+ assert.ok(seen[0].prompt.includes(FIX.move));
+ assert.deepEqual(b.verdicts,[{n:2,verdict:'strong',note:'ok',was:{text:OLD2,verdict:'faulty',fix:FIX}}]);
+ // a second rewrite of the same sentence still remembers the first reading of it
+ seen=[];answer=reply({verdicts:[{n:2,verdict:'strong',note:'again'}]});
+ const c=await reviseSentence(b,2,'A 2019 study found that teenagers fall asleep two hours later.');
+ assert.deepEqual(c.verdicts[0].was,b.verdicts[0].was);
+ // a model that does not answer for sentence n fails the run; it never invents a verdict
+ answer=reply({verdicts:[{n:1,verdict:'strong',note:'x'}]});
+ await assert.rejects(reviseSentence(before,2,STUDY));
+ answer=reply({verdicts:[{n:2,verdict:'great',note:'x'}]});
+ await assert.rejects(reviseSentence(before,2,STUDY));
+});
+
+test('rewrite case 4: a rewrite judged still faulty keeps a fix only when it passes cleanFix against the NEW sentence',async()=>{
+ const {reviseSentence}=deskEssay();
+ const COPY={move:'Name the source',pattern:'[Who] says teenagers fall asleep two hours later.'};
+ answer=reply({verdicts:[{n:2,verdict:'faulty',note:'Which study?',fix:COPY}]});
+ const a=await reviseSentence(R3(),2,STUDY);
+ const v=a.verdicts.find(x=>x.n===2);
+ assert.equal(v.verdict,'faulty');assert.equal(v.note,'Which study?');
+ assert.equal(v.fix,undefined,'four of the rewrite\'s own words in the pattern: the fix is dropped, the verdict stays');
+ const {cleanFix}=rules();assert.deepEqual(cleanFix(COPY,OLD2),COPY,'against the old sentence the same pattern would have passed');
+ const FAIR={move:'Name the source',pattern:'According to [who], [what they found].'};
+ answer=reply({verdicts:[{n:2,verdict:'faulty',note:'Which study?',fix:FAIR}]});
+ assert.deepEqual((await reviseSentence(R3(),2,STUDY)).verdicts.find(x=>x.n===2).fix,FAIR,'a clean pattern stays');
+ answer=reply({verdicts:[{n:2,verdict:'strong',note:'ok',fix:FAIR}]});
+ assert.equal((await reviseSentence(R3(),2,STUDY)).verdicts.find(x=>x.n===2).fix,undefined,'no fix on a verdict that holds');
+});
+
+test('rewrite case 5: POST /api/analyse kind rewrite lands on the desk as essay.revised - the TV stays on the sentence, and nothing is added to the learner record',async()=>{
+ dispatch({type:'reset'});
+ const id=getSession().learner.id;
+ answer=faults([2]);
+ const first=await analyseEssay(THREE,'evidence',id);dispatch({type:'essay.set',analysis:first});
+ dispatch({type:'essay.at',n:2});dispatch({type:'nav',screen:'forensic',focus:0});
+ const history=getLearner(id).history.length,writing=JSON.stringify(getLearner(id).writing);
+ assert.equal(getSession().history.length,history);
+ answer=reply({verdicts:[{n:2,verdict:'strong',note:'It names its source now.'}]});
+ const res=await analyse({kind:'rewrite',n:2,text:STUDY});
+ assert.equal(res.status,200);
+ const s=getSession();
+ assert.equal(s.essay.sentences[1].text,STUDY);
+ assert.equal(s.essay.verdicts.find(v=>v.n===2).was.verdict,'faulty');
+ assert.equal(s.essayAt,2,'the TV stays on the sentence that was rewritten');
+ assert.equal(s.screen,'forensic');
+ assert.equal(s.jobs.analyse.phase,'done');assert.equal(s.jobs.analyse.key,'sentence:2');
+ assert.equal(getLearner(id).history.length,history,'a rewrite is not another paragraph read');
+ assert.equal(JSON.stringify(getLearner(id).writing),writing,'and not another attempt on the lens');
+ assert.equal(s.history.length,history);
+ dispatch({type:'reset'});
+});
+
+test('rewrite case 7: rewriteState reads the verdict, and the TV inks the move from it, not from the status line',()=>{
+ const {rewriteState}=rules();
+ assert.equal(typeof rewriteState,'function');
+ assert.equal(rewriteState(undefined),'none');
+ assert.equal(rewriteState({n:2,verdict:'faulty',note:'x'}),'none','no rewrite yet');
+ assert.equal(rewriteState({n:2,verdict:'strong',note:'x'}),'none');
+ const was={text:OLD2,verdict:'faulty'};
+ assert.equal(rewriteState({n:2,verdict:'strong',note:'x',was}),'holds');
+ assert.equal(rewriteState({n:2,verdict:'neutral',note:'x',was}),'holds');
+ assert.equal(rewriteState({n:2,verdict:'faulty',note:'x',was}),'still');
+ const tv=fs.readFileSync(path.join(root,'src/essay/EssayTV.tsx'),'utf8');
+ assert.match(tv,/rewriteState\(/,'EssayTV asks the rule');
+ const inked=[...tv.matchAll(/\binked=\{([^}]*)\}/g)].map(m=>m[1]);
+ assert.ok(inked.length>=2,'Page and Move take inked');
+ for(const x of inked)assert.doesNotMatch(x,/\blit\b|status|rewriteStatus/,`inked={${x}} is not derived from the status line`);
+ const derived=tv.match(/const (\w+) = [^;]*rewriteStatus\(/);
+ if(derived)for(const x of inked)assert.doesNotMatch(x,new RegExp(`\\b${derived[1]}\\b`),'the lit phone chip and the ink are two things');
+});

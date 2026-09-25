@@ -251,6 +251,13 @@ test('case 9: POST /api/session refuses every event only the server raises; the 
  }
 });
 
+test('rewrite case 6: POST /api/session refuses essay.revised with 403, as it refuses essay.set',async()=>{
+ onPage();
+ const r=await session({type:'essay.revised',n:1,analysis:{text:'Forged.',type:'structure',sentences:[{n:1,text:'Forged.',words:1,connectors:[],role:'claim'}],stats:{},verdicts:[{n:1,verdict:'strong',note:'x'}],summary:'s'}});
+ assert.equal(r.status,403);deskWorded((await r.json()).error);
+ assert.equal(store.getSession().essay,null,'no revised reading was put on the desk from outside');
+});
+
 // last: it swaps the store module out from under the routes loaded above
 test('case 7: a job saved as running is not running after the desk restarts',()=>{
  onPage();
