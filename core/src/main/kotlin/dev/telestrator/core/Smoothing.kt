@@ -23,18 +23,26 @@ data class Cubic(
 object Smoothing {
 
     /**
-     * Removes points closer together than [minDistance] in normalized units. A finger held still
-     * emits dozens of points per second at the same place; keeping them adds cost and, once
+     * Points closer than this, in content-width units, are the finger holding still. The TV's
+     * incremental stroke cache uses the same figure.
+     */
+    const val MIN_POINT_DISTANCE: Double = 0.004
+
+    /**
+     * Removes points closer together than [minDistance], measured by [metric] in content-width
+     * units so the threshold is the same on screen whichever way the finger moves. A finger held
+     * still emits dozens of points per second at the same place; keeping them adds cost and, once
      * pressure varies, visible lumps.
      */
-    fun decimate(points: List<List<Double>>, minDistance: Double = 0.004): List<List<Double>> {
+    fun decimate(
+        points: List<List<Double>>,
+        metric: Metric,
+        minDistance: Double = MIN_POINT_DISTANCE,
+    ): List<List<Double>> {
         if (points.size < 3) return points
         val out = mutableListOf(points.first())
         for (p in points.subList(1, points.size - 1)) {
-            val last = out.last()
-            val dx = p[0] - last[0]
-            val dy = p[1] - last[1]
-            if (dx * dx + dy * dy >= minDistance * minDistance) out += p
+            if (metric.apart(out.last(), p, minDistance)) out += p
         }
         out += points.last()
         return out
@@ -73,8 +81,8 @@ object Smoothing {
     }
 
     /** Convenience: decimate then fit, which is what the renderer always wants. */
-    fun path(points: List<List<Double>>, tension: Double = 1.0): List<Cubic> =
-        toCubics(decimate(points), tension)
+    fun path(points: List<List<Double>>, metric: Metric, tension: Double = 1.0): List<Cubic> =
+        toCubics(decimate(points, metric), tension)
 
     /**
      * Stroke width for a sample, given the style width and the pen pressure. A stylus or a

@@ -45,6 +45,9 @@ class PenEngine(
 
     private var overrideHoldMs: Long? = null
 
+    /** Every distance the engine measures (radii, eraser reach, decimation) goes through this. */
+    private val metric = Metric(videoAspect)
+
     private val ids = AtomicLong(0)
     private val committed = mutableListOf<Annotation>()
     private val history = History()
@@ -123,7 +126,7 @@ class PenEngine(
                     livePoints += xyp
                     // Decimate once, on commit: the live stroke keeps every sample so the ink
                     // under the finger stays honest, but what gets stored is what gets drawn.
-                    val finished = meta.copy(points = Smoothing.decimate(livePoints.toList()))
+                    val finished = meta.copy(points = Smoothing.decimate(livePoints.toList(), metric))
                     clearLive()
                     // A tap with under two points is not a stroke; drop it rather than draw a dot.
                     if (finished.points.size >= 2) commit(finished)
@@ -139,11 +142,11 @@ class PenEngine(
             "arrow" -> Annotation.Arrow(nextId(), tMs, tMs + hold, style, msg.from, msg.to)
             "circle" -> Annotation.Circle(
                 nextId(), tMs, tMs + hold, style,
-                center = msg.from, radius = distance(msg.from, msg.to),
+                center = msg.from, radius = metric.distance(msg.from, msg.to),
             )
             "spotlight" -> Annotation.Spotlight(
                 nextId(), tMs, tMs + hold, style,
-                center = msg.from, radius = distance(msg.from, msg.to).coerceAtLeast(0.03),
+                center = msg.from, radius = metric.distance(msg.from, msg.to).coerceAtLeast(0.03),
             )
             else -> null
         }
@@ -170,7 +173,7 @@ class PenEngine(
         // Only things the viewer can currently see are erasable; reaching through a hidden
         // annotation from another part of the clip would be baffling.
         val visible = AnnotationTimeline(doc).visibleAt(tMs)
-        val target = HitTest.pick(visible, msg.x, msg.y, msg.tolerance) ?: return
+        val target = HitTest.pick(visible, msg.x, msg.y, metric, msg.tolerance) ?: return
         val index = committed.indexOfFirst { it.id == target.id }
         if (index < 0) return
         committed.removeAt(index)
@@ -180,11 +183,5 @@ class PenEngine(
     private fun clearLive() {
         liveMeta = null
         livePoints.clear()
-    }
-
-    private fun distance(a: List<Double>, b: List<Double>): Double {
-        val dx = b[0] - a[0]
-        val dy = b[1] - a[1]
-        return kotlin.math.sqrt(dx * dx + dy * dy)
     }
 }

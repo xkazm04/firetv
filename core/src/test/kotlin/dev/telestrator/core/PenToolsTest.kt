@@ -16,7 +16,7 @@ class SmoothingTest {
     @Test
     fun `decimation drops samples from a finger that is not moving`() {
         val jittery = List(50) { listOf(0.5 + it * 1e-5, 0.5, 0.5) }
-        val out = Smoothing.decimate(jittery)
+        val out = Smoothing.decimate(jittery, Metric(16.0 / 9.0))
         assertEquals(2, out.size, "a stationary finger should collapse to its endpoints")
         assertEquals(jittery.first(), out.first())
         assertEquals(jittery.last(), out.last())
@@ -25,7 +25,7 @@ class SmoothingTest {
     @Test
     fun `decimation keeps the shape of a real gesture`() {
         val stroke = line(40)
-        val out = Smoothing.decimate(stroke, minDistance = 0.004)
+        val out = Smoothing.decimate(stroke, Metric(16.0 / 9.0), minDistance = 0.004)
         assertTrue(out.size in 10..41, "unexpected point count: ${out.size}")
         assertEquals(stroke.first(), out.first())
         assertEquals(stroke.last(), out.last())
@@ -85,6 +85,8 @@ class SmoothingTest {
 
 class HitTestTest {
 
+    private val metric = Metric(16.0 / 9.0)
+
     private val stroke = Annotation.Stroke(
         "s", 0, 10_000,
         points = listOf(listOf(0.2, 0.5, 0.5), listOf(0.8, 0.5, 0.5)),
@@ -95,28 +97,28 @@ class HitTestTest {
     @Test
     fun `distance to a segment clamps at the ends instead of using the infinite line`() {
         // Straight out from the middle.
-        assertEquals(0.1, HitTest.pointToSegment(0.5, 0.6, 0.2, 0.5, 0.8, 0.5), 1e-9)
+        assertEquals(0.1, Metric(1.0).pointToSegment(0.5, 0.6, 0.2, 0.5, 0.8, 0.5), 1e-9)
         // Beyond the end: distance must grow along the axis, not stay at zero.
-        assertEquals(0.2, HitTest.pointToSegment(1.0, 0.5, 0.2, 0.5, 0.8, 0.5), 1e-9)
+        assertEquals(0.2, Metric(1.0).pointToSegment(1.0, 0.5, 0.2, 0.5, 0.8, 0.5), 1e-9)
     }
 
     @Test
     fun `a tap on the ink picks the stroke and a tap away from it picks nothing`() {
-        assertEquals("s", HitTest.pick(listOf(stroke), 0.5, 0.51)?.id)
-        assertNull(HitTest.pick(listOf(stroke), 0.5, 0.9))
+        assertEquals("s", HitTest.pick(listOf(stroke), 0.5, 0.51, metric)?.id)
+        assertNull(HitTest.pick(listOf(stroke), 0.5, 0.9, metric))
     }
 
     @Test
     fun `a circle is grabbed by its ring, not by the space it encloses`() {
-        assertNotNull(HitTest.pick(listOf(circle), 0.7, 0.5), "on the ring")
-        assertNull(HitTest.pick(listOf(circle), 0.5, 0.5), "the middle of a ring is not the ring")
+        assertNotNull(HitTest.pick(listOf(circle), 0.7, 0.5, metric), "on the ring")
+        assertNull(HitTest.pick(listOf(circle), 0.5, 0.5, metric), "the middle of a ring is not the ring")
     }
 
     @Test
     fun `a spotlight is grabbed anywhere inside it`() {
         val spot = Annotation.Spotlight("sp", 0, 10_000, center = listOf(0.5, 0.5), radius = 0.2)
-        assertNotNull(HitTest.pick(listOf(spot), 0.5, 0.5))
-        assertNull(HitTest.pick(listOf(spot), 0.95, 0.95))
+        assertNotNull(HitTest.pick(listOf(spot), 0.5, 0.5, metric))
+        assertNull(HitTest.pick(listOf(spot), 0.95, 0.95, metric))
     }
 
     @Test
@@ -125,13 +127,13 @@ class HitTestTest {
             "top", 0, 10_000,
             points = listOf(listOf(0.2, 0.505, 0.5), listOf(0.8, 0.505, 0.5)),
         )
-        assertEquals("top", HitTest.pick(listOf(stroke, overlapping), 0.5, 0.5)?.id)
+        assertEquals("top", HitTest.pick(listOf(stroke, overlapping), 0.5, 0.5, metric)?.id)
     }
 
     @Test
     fun `tolerance is honoured`() {
-        assertNull(HitTest.pick(listOf(arrow), 0.2, 0.15, tolerance = 0.01))
-        assertNotNull(HitTest.pick(listOf(arrow), 0.2, 0.15, tolerance = 0.1))
+        assertNull(HitTest.pick(listOf(arrow), 0.2, 0.15, metric, tolerance = 0.01))
+        assertNotNull(HitTest.pick(listOf(arrow), 0.2, 0.15, metric, tolerance = 0.1))
     }
 }
 

@@ -53,6 +53,7 @@ sealed interface PenMessage {
     data class Erase(
         val x: Double,
         val y: Double,
+        /** Grab radius as a fraction of the picture width, the same in every direction (see [Metric]). */
         val tolerance: Double = HitTest.DEFAULT_TOLERANCE,
     ) : PenMessage
 
