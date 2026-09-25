@@ -9,6 +9,7 @@
 import type { Session, Subject } from "@/lib/session/store";
 import { ESSAY_TYPES } from "@/lib/library/lessons.data";
 import { landingModules } from "@/tv/landingRows";
+import { BRAND } from "@/tv/profileRows";
 
 /** An app with nothing tonight says so in two words. */
 export const RECAP_EMPTY = "Not tonight";
@@ -85,6 +86,42 @@ export function recapCaption(tiles: RecapTile[]): string {
   if (tiles.every((t) => t.empty)) return "A quiet evening.";
   const n = toLook(tiles);
   return n ? `Good evening's work - ${NUMBER[n] ?? n} to look at together.` : "Good evening's work - all of it right.";
+}
+
+/** "1 hint", "3 hints": a count and its noun, the plural when it is not one. */
+export function counted(n: number, one: string, many = `${one}s`): string { return `${n} ${n === 1 ? one : many}`; }
+const times = (n: number, one: string, many = `${one}s`) => `${NUMBER[n] ?? n} ${n === 1 ? one : many}`;
+
+/**
+ * The parent's phone reads the same evening in words: one short line per tile, the app's name then its counts -
+ * "Math Buddy - one set: 3 right, 1 slip, 2 the desk was not sure of; 3 pages; 1 hint", "Linga - not tonight".
+ * Built from recapRows' tiles only, so it carries what the picture carries and nothing more: counts and a lens
+ * name, never a problem, a question, an answer or a verb form.
+ */
+export function recapLine(t: RecapTile): string {
+  const name = BRAND[t.app];
+  if (t.empty) return `${name} - ${t.empty.toLowerCase()}`;
+  const parts: string[] = [];
+  if (t.app === "maths") {
+    if (t.sets.length) {
+      const right = t.sets.reduce((a, x) => a + x.right, 0), unsure = t.sets.reduce((a, x) => a + (x.unsure ?? 0), 0);
+      const slips = t.sets.reduce((a, x) => a + x.of - x.right - (x.unsure ?? 0), 0);
+      const said = [`${right} right`];
+      if (slips) said.push(counted(slips, "slip"));
+      if (unsure) said.push(`${unsure} the desk was not sure of`);
+      parts.push(`${times(t.sets.length, "set")}: ${said.join(", ")}`);
+    }
+    if (t.pages) parts.push(counted(t.pages, "page"));
+    if (t.hints) parts.push(counted(t.hints, "hint"));
+    return `${name} - ${parts.join("; ")}`;
+  }
+  if (t.app === "english") {
+    const turns = t.talks.reduce((a, x) => a + x, 0);
+    return `${name} - ${times(t.talks.length, "conversation")}, ${counted(turns, "reply", "replies")}`;
+  }
+  const lenses = Array.from(new Set(t.readings.map((x) => x.lens)));
+  const against = t.readings.reduce((a, x) => a + x.against, 0), of = t.readings.reduce((a, x) => a + x.of, 0);
+  return `${name} - ${times(t.readings.length, "reading")}${lenses.length ? ` (${lenses.join(", ")})` : ""}: ${against} of ${counted(of, "sentence")} to fix`;
 }
 
 /** The recap's stops: the tiles, left to right, then back to the desk. */

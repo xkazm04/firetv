@@ -345,3 +345,33 @@ test('S76 case 2: an older line, "3 of 6 right", parses and draws exactly as bef
  assert.equal(restatedLine('3 of 6 right',TONIGHT),'3 of 6 right, 2 not sure','a settle restates an older line in the new form');
  assert.equal(restatedLine('3 of 6 right, 2 not sure',TONIGHT.slice(0,5)),null,'a line for another n is not this set\'s');
 });
+
+test('S77: the phone\'s Recap is the TV\'s tiles in words - a line per app, the TV\'s caption, no problem text, plurals right',()=>{
+ const {recapRows,recapLine,recapCaption,counted}=recap();
+ const lines=(s)=>recapRows(s,NOW).map(recapLine);
+ const s=evening({history:[...evening().history.filter((h)=>h.kind!=='practice'),
+  {at:TODAY(17),kind:'practice',label:'Two-step equations',detail:'3 of 6 right, 2 not sure'},
+  {at:TODAY(18),kind:'homework',label:'Sheet two',detail:'1 problem read'},{at:TODAY(18),kind:'homework',label:'Sheet three',detail:'2 problems read'}],
+  log:{...evening().log,hints:1}});
+ assert.deepEqual(lines(s),[
+  'Math Buddy - one set: 3 right, 1 slip, 2 the desk was not sure of; 3 pages; 1 hint',
+  'Linga - two conversations, 11 replies',
+  'Essay Master - one reading (Argument): 2 of 5 sentences to fix']);
+ assert.deepEqual(lines(jakub()),['Linga - not tonight','Essay Master - not tonight'],'an app with nothing tonight says so');
+ assert.deepEqual(lines(session({log:{started:null,minutes:0,problems:['k'],hard:[],hints:1}})),['Math Buddy - 1 hint','Linga - not tonight','Essay Master - not tonight']);
+ // one line per tile, in the tiles' order: the phone draws from recapRows, it does not re-read the session
+ for(const x of [s,evening(),jakub(),session()]){const t=recapRows(x,NOW);assert.equal(t.map(recapLine).length,t.length);}
+ // no problem text, question, answer or hinted problem in the lines or the caption
+ const flat=lines(s).join('\n')+recapCaption(recapRows(s,NOW));
+ for(const h of s.log.hard)assert.ok(!flat.includes(h),'a hinted problem\'s text');
+ for(const i of s.practice.items){assert.ok(!flat.includes(i.question),i.question);assert.ok(!flat.includes(i.studentAnswer),i.studentAnswer);}
+ assert.equal(counted(1,'hint'),'1 hint');assert.equal(counted(2,'problem'),'2 problems');assert.equal(counted(1,'reply','replies'),'1 reply');
+ // the phone renders these, and the TV's caption, from the same module - not rules of its own
+ const phone=fs.readFileSync(path.join(root,'src/app/phone/page.tsx'),'utf8');
+ const sec=phone.split('screen === "parent"')[1]?.split('</div>}')[0]??'';
+ assert.match(phone,/from "@\/tv\/recapRows"/,'the phone imports the recap rows');
+ for(const f of ['recapRows(s','recapLine(t)','recapCaption(tiles)'])assert.ok(sec.includes(f),`the parent panel calls ${f}`);
+ assert.doesNotMatch(sec,/\} problems ·|\} hints\b/,'no hand-made plural');
+ assert.match(sec,/mins > 0/,'minutes only when the timer ran');
+ assert.match(phone,/Arrives when the session ends\./);
+});

@@ -12,6 +12,7 @@ import type { Event, JobKind, Session, Subject } from "@/lib/session/store";
 import { LingaPhone } from "@/english/LingaPhone";
 import { follow, type PScreen } from "./panelFor";
 import { forensicAt } from "@/tv/keys";
+import { counted, recapCaption, recapLine, recapRows } from "@/tv/recapRows";
 import { nearestItem } from "@/lib/desk/select";
 
 const SAMPLES: Array<{ id: Subject; title: string; file: string }> = [
@@ -407,8 +408,15 @@ export default function Phone() {
             {memory.length ? <ul>{memory.map((l) => <li key={l}>{l}</li>)}</ul> : <ul><li>Nothing written down tonight.</li></ul>}</div>}</div>}
 
         {screen === "parent" && s && <div className="pscreen"><h3>Recap</h3>
-          {s.screen === "recap" || s.log.problems.length ? <div className="precap"><b>{s.learner.name}, tonight</b>{Math.round(s.log.minutes)} minutes on task · {s.log.problems.length} problems · {s.log.hints} hints
-            <ul>{s.log.hard.length ? s.log.hard.map((h) => <li key={h}>Needed a second hint: {h}</li>) : <li>Nothing needed a second hint.</li>}</ul></div> : <p>Arrives when the session ends.</p>}
+          {s.screen === "recap" || s.log.problems.length ? (() => {
+            // the TV's recap in words: the same tiles (tv/recapRows.ts), a line each, then the TV's caption sentence
+            const tiles = recapRows(s, Date.now()), mins = Math.round(s.log.minutes);
+            const tally = [mins > 0 ? counted(mins, "minute") + " on task" : "", s.log.problems.length ? counted(s.log.problems.length, "problem") : "", s.log.hints ? counted(s.log.hints, "hint") : ""].filter(Boolean).join(" · ");
+            return <div className="precap" data-role="phone-recap"><b>{s.learner.name}, tonight</b>{tally}
+              <ul>{tiles.map((t) => <li key={t.app} data-app={t.app}>{recapLine(t)}</li>)}</ul>
+              <p style={{ margin: "10px 0 0", fontWeight: 600 }}>{recapCaption(tiles)}</p>
+              <ul>{s.log.hard.length ? s.log.hard.map((h) => <li key={h}>Needed a second hint: {h}</li>) : <li>Nothing needed a second hint.</li>}</ul></div>;
+          })() : <p>Arrives when the session ends.</p>}
           <p style={{ fontSize: 12 }}>The TV shows {TV_WORDS[s.screen] ?? "the desk"}{s.status && Object.values(s.jobs ?? {}).some((j) => j?.phase === "running") ? <> · {s.status}</> : null}.</p></div>}
 
         <div className="pstatus">{msg}</div>
