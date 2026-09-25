@@ -163,6 +163,8 @@ export function practiceFailed(s: Session, topicId: string | undefined): string 
   const j = s.jobs?.practice;
   return j?.phase === "failed" && j.key === topicId ? j.error ?? null : null;
 }
+/** Where a shared screen (a page, the units) goes home to: Essay Master's lenses for essay work, else Tonight (Linga's, under english). */
+const homeOf = (s: Session, sub: Subject) => sub === "essay" ? { screen: "essaytype" as Screen, focus: readingLens(s) } : { screen: "tonight" as Screen, focus: 0 };
 const lessonEvent = (l: Lesson, why: string): Event => ({ type: "lesson.set", lesson: { id: l.id, title: l.title, t: 0, text: l.concepts.join(" · "), why, youtube: l.youtube } });
 
 const KEYMAP: Partial<Record<Screen, Handler>> = {
@@ -212,7 +214,8 @@ const KEYMAP: Partial<Record<Screen, Handler>> = {
   learner: (s, k, _, o) => {
     const stops = learnerStops(s), at = stopAt(stops, s.focus);
     if (k === "right") o.move(stops.length, 1); if (k === "left") o.move(stops.length, -1);
-    if (k === "back") { const to = s.back ?? "landing"; o.nav(to, to === "landing" ? landingFocus(s, "place") : 0); }
+    // Back returns to the screen that opened the switcher; a stale back (a profile, the pair screen) is the desk
+    if (k === "back") { if (s.back === "tonight") o.nav("tonight"); else o.nav("landing", landingFocus(s, "place")); }
     if (k === "select") { if (at && at !== "add") o.ev({ type: "learner.set", id: at.id }); else { o.ev({ type: "profile.draft", patch: {} }); o.nav("profile"); } }
     if (k === "menu" && at && at !== "add") { o.ev({ type: "profile.draft", patch: { id: at.id, name: at.name, type: at.type, age: at.age, system: at.system, modules: at.modules } }); o.nav("profile"); }
   },
@@ -236,7 +239,7 @@ const KEYMAP: Partial<Record<Screen, Handler>> = {
     if (k === "down") o.move(stops.length, 1); if (k === "up") o.move(stops.length, -1);
     if (k === "select") { const l = stopAt(stops, s.focus); if (l) { o.ev(lessonEvent(l, `Unit ${l.unit}, chosen by you.`)); o.nav("lesson"); } }
     if (k === "menu") o.nav(s.subject === "maths" ? "calendar" : s.subject === "english" ? "headtohead" : "playbook");
-    if (k === "back" || k === "left") o.nav("tonight");
+    if (k === "back" || k === "left") { const h = homeOf(s, s.subject); o.nav(h.screen, h.focus); }
   },
   calendar: (s, k, _, o) => {
     const stops = calendarStops();
@@ -245,15 +248,16 @@ const KEYMAP: Partial<Record<Screen, Handler>> = {
     if (k === "back") o.nav("units");
   },
   page: (s, k, local, o) => {
-    const p = s.pages[s.pageIx]; if (!p) { if (k === "back") o.nav("tonight"); return; }
-    if (s.reading) return;
+    const p = s.pages[s.pageIx], h = homeOf(s, p?.subject ?? s.subject);
+    // Back always leaves, a page still being read included (the read lands on the page when it is done)
+    if (k === "back") { o.nav(h.screen, h.focus); return; }
+    if (!p || s.reading) return;
     if (k === "down") o.ev({ type: "item", itemIx: Math.min(p.items.length - 1, s.itemIx + 1) });
     if (k === "up") o.ev({ type: "item", itemIx: Math.max(0, s.itemIx - 1) });
     if (k === "right" && s.pageIx < s.pages.length - 1) o.ev({ type: "page.select", pageIx: s.pageIx + 1 });
-    if (k === "left") { if (s.pageIx > 0) o.ev({ type: "page.select", pageIx: s.pageIx - 1 }); else o.nav("tonight"); }
+    if (k === "left") { if (s.pageIx > 0) o.ev({ type: "page.select", pageIx: s.pageIx - 1 }); else o.nav(h.screen, h.focus); }
     if (k === "menu") o.ev({ type: "view", view: s.view === "band" ? "overview" : "band" });
     if (k === "select" && p.items[s.itemIx]) o.hint(local, {});
-    if (k === "back") o.nav("tonight");
   },
   hint: (s, k, local, o) => {
     const at = stopAt(HINT_STOPS, s.focus);
@@ -263,7 +267,7 @@ const KEYMAP: Partial<Record<Screen, Handler>> = {
   },
   lesson: (s, k, _, o) => {
     if (k === "play") o.ev({ type: "lesson.pause", paused: !s.lessonPaused });
-    if (k === "back") o.nav(s.hint ? "hint" : "units", 1);
+    if (k === "back") { if (s.hint) o.nav("hint", HINT_STOPS.indexOf("lesson")); else o.nav("units", Math.max(0, unitStops(s).findIndex((l) => l.id === s.lesson?.id))); }
     if (k === "menu") o.nav(s.subject === "english" ? "headtohead" : s.subject === "essay" ? "xray" : "calendar");
   },
   sentence: (s, k, _, o) => {
@@ -271,7 +275,7 @@ const KEYMAP: Partial<Record<Screen, Handler>> = {
     if (k === "left") o.move(SENTENCE_STOPS.length, -1); if (k === "right") o.move(SENTENCE_STOPS.length, 1);
     if (k === "select" && at === "unit") o.nav("headtohead");
     if (k === "select" && at === "again") o.ev({ type: "status", text: "say or type another sentence on the phone" });
-    if (k === "back") o.nav("units");
+    if (k === "back") o.nav("linga");
   },
   headtohead: (s, k, _, o) => { if (k === "back") o.nav(s.english ? "sentence" : "units"); },
   // the lenses top to bottom; Right reaches the last paragraph's card, Select there opens its reading
@@ -370,7 +374,8 @@ const KEYMAP: Partial<Record<Screen, Handler>> = {
 export function tvKey(s: Session, key: Key, local: Local = LOCAL): Step {
   const o = new Out(s);
   if (lingaOwns(s)) return { events: [], calls: [], local: {} };
-  // Play/Pause is the clock everywhere the clock is on screen; only the lesson keeps it for the video.
+  // Play/Pause is the clock everywhere the clock is on screen; the lesson keeps it for the video, and the landing draws no clock.
+  if (key === "play" && s.screen === "landing") return { events: [], calls: [], local: {} };
   if (key === "play" && s.screen !== "lesson") o.ev({ type: s.timer.running ? "timer.pause" : "timer.start" });
   else KEYMAP[s.screen]?.(s, key, local, o);
   return { events: o.events, calls: o.calls, local: o.local };
