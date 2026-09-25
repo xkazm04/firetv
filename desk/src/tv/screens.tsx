@@ -227,8 +227,8 @@ export function SentenceScreen({ s, focus }: { s: Session; focus: number }) {
   return (<>
     <div className="band band-rule" />
     <main className="content-full">
-      <div className="eyebrow" data-ch="english">English · your sentence</div>
-      <div className="sent" style={{ marginTop: 90, maxWidth: 1700 }}>{parts.map((p, i) => p.k ? <span key={i} className="tok" data-k={p.k} data-l={p.l}>{p.text}</span> : <span key={i}>{p.text}</span>)}</div>
+      <div className="eyebrow" data-ch="english" style={{ marginTop: 40 }}>English · your sentence</div>
+      <div className="sent" style={{ marginTop: 50, maxWidth: 1700 }}>{parts.map((p, i) => p.k ? <span key={i} className="tok" data-k={p.k} data-l={p.l}>{p.text}</span> : <span key={i}>{p.text}</span>)}</div>
       <div className="lt" style={{ position: "absolute", left: 0, bottom: 200, maxWidth: 1500 }}><div className="tag">{card.conflict ? "The rule" : "Right"}</div><div className="txt" style={{ fontSize: 38 }}>{a.explanation}</div></div>
       <div className="actions" style={{ bottom: 60 }}><button className="btn" data-focused={stopAt(SENTENCE_STOPS, focus) === "again"}>Try it again</button><button className="btn" data-focused={stopAt(SENTENCE_STOPS, focus) === "unit"}>Show me the unit</button></div>
     </main>
