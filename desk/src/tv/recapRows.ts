@@ -13,16 +13,24 @@ import { landingModules } from "@/tv/landingRows";
 /** An app with nothing tonight says so in two words. */
 export const RECAP_EMPTY = "Not tonight";
 
-export interface MathsTile { app: "maths"; empty: string | null; sets: Array<{ right: number; of: number }>; pages: number; hints: number; second: number }
+/** A marked set: `right` ticks, then `of - right - unsure` slips, then `unsure` items the desk could not decide. */
+export interface MathsTile { app: "maths"; empty: string | null; sets: Array<{ right: number; of: number; unsure?: number }>; pages: number; hints: number; second: number }
 export interface LingaTile { app: "english"; empty: string | null; talks: number[] }
 export interface EssayTile { app: "essay"; empty: string | null; readings: Array<{ lens: string; against: number; of: number }> }
 export type RecapTile = MathsTile | LingaTile | EssayTile;
 
-/** The counts a history line carries, by its kind; a line this does not know gives none, and nothing is guessed. */
-export interface Detail { right?: number; of?: number; pages?: number; problems?: number; against?: number }
+/**
+ * The counts a history line carries, by its kind; a line this does not know gives none, and nothing is guessed.
+ * A practice line is "k of n right" (rules/maths rightLine), with ", u not sure" when the desk could not decide u
+ * items; a line without it (every line written before it existed) gives no unsure count and draws as it always did.
+ */
+export interface Detail { right?: number; of?: number; unsure?: number; pages?: number; problems?: number; against?: number }
 export function parseDetail(kind: string, detail: string): Detail {
   const d = (detail ?? "").trim();
-  if (kind === "practice") { const m = /^(\d+) of (\d+) right$/.exec(d); if (m && +m[1] <= +m[2]) return { right: +m[1], of: +m[2] }; }
+  if (kind === "practice") {
+    const m = /^(\d+) of (\d+) right(?:, (\d+) not sure)?$/.exec(d), u = m?.[3] ? +m[3] : 0;
+    if (m && +m[1] + u <= +m[2]) return u ? { right: +m[1], of: +m[2], unsure: u } : { right: +m[1], of: +m[2] };
+  }
   if (kind === "homework") { const m = /^(\d+) problems? read$/.exec(d); if (m) return { pages: 1, problems: +m[1] }; }
   if (kind === "writing") { const m = /^(\d+) of (\d+) sentences? to fix$/.exec(d); if (m && +m[1] <= +m[2]) return { against: +m[1], of: +m[2] }; }
   return {};
@@ -42,7 +50,7 @@ export function recapRows(s: Session, now: number): RecapTile[] {
       let pages = 0;
       for (const h of mine) {
         const c = parseDetail(h.kind, h.detail);
-        if (c.right !== undefined && c.of !== undefined) sets.push({ right: c.right, of: c.of });
+        if (c.right !== undefined && c.of !== undefined) sets.push(c.unsure ? { right: c.right, of: c.of, unsure: c.unsure } : { right: c.right, of: c.of });
         if (c.pages) pages += c.pages;
       }
       const hints = s.log?.hints ?? 0, second = s.log?.hard?.length ?? 0;
@@ -60,7 +68,10 @@ export function recapRows(s: Session, now: number): RecapTile[] {
 }
 
 const NUMBER = ["no", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"];
-/** How many things tonight came back to look at together: the sets' slips and the readings' sentences to fix. */
+/**
+ * How many things tonight came back to look at together: the sets' slips and the items the desk was not sure of
+ * (both want talking through; the picture tells them apart), and the readings' sentences to fix.
+ */
 export function toLook(tiles: RecapTile[]): number {
   let n = 0;
   for (const t of tiles) {

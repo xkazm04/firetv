@@ -298,7 +298,8 @@ export function BreakScreen({ s }: { s: Session }) {
 // ---- T12 Recap: tonight, done ----
 /**
  * The whole evening as one picture (tv/recapRows.ts): a tile per app on the desk, each in its own app's language -
- * Math Buddy's sheet with a tick for each right answer and the pen's ring for each slip, a page per sheet read and
+ * Math Buddy's sheet with a tick for each right answer, the pen's ring for each slip and a dashed ring for each item
+ * the desk was not sure of (lines that do not say how many draw none), a page per sheet read and
  * a lamp per hint (ringed when it took a second); Linga's card with a plum mark per conversation, sized by its
  * replies; Essay Master's black card with an arrow per sentence read, the ones to fix turned round in citron.
  * Only the caption slot holds a sentence. Select on a tile opens what its app still has on the desk; the parent's
@@ -332,6 +333,8 @@ function RecapTileOf({ t, lit }: { t: RecapTile; lit: boolean }) {
 }
 const PEN_TICK = <svg className="rc-tk" viewBox="0 0 46 40" aria-hidden="true"><path d="M5 22 L17 33 L42 5" /></svg>;
 const PEN_RING = <svg className="rc-ring" viewBox="0 0 46 40" aria-hidden="true"><path d="M27 4 C42 4 45 15 43 23 C40 35 16 39 7 30 C0 23 4 8 18 5 C22 4 26 4 30 6" /></svg>;
+/** Lamplight's unsure mark: no tick and no slip, the pen's ring dashed in the paper's "not sure" blue. */
+const PEN_ASK = <svg className="rc-ask" viewBox="0 0 46 40" aria-hidden="true"><path d="M27 4 C42 4 45 15 43 23 C40 35 16 39 7 30 C0 23 4 8 18 5 C22 4 26 4 30 6" /></svg>;
 const PAGE = <svg className="rc-page" viewBox="0 0 40 50" aria-hidden="true"><path d="M3 3h24l10 10v34H3z" /><path d="M9 20h20M9 28h20M9 36h14" /></svg>;
 function RecapMaths({ t }: { t: MathsTile }) {
   const lamps = Array.from({ length: Math.min(t.hints, 12) }, (_, i) => i < t.second);
@@ -340,7 +343,7 @@ function RecapMaths({ t }: { t: MathsTile }) {
     <div className="rc-sheet">
       {t.empty ? <div className="rc-none">{t.empty}</div> : <>
         {t.sets.slice(-3).map((x, k) => (
-          <div key={k} className="rc-set" data-role="recap-set">{Array.from({ length: Math.min(x.of, 12) }, (_, i) => <i key={i} data-v={i < x.right ? "right" : "look"}>{i < x.right ? PEN_TICK : PEN_RING}</i>)}</div>
+          <div key={k} className="rc-set" data-role="recap-set">{Array.from({ length: Math.min(x.of, 12) }, (_, i) => { const v = i < x.right ? "right" : i >= x.of - (x.unsure ?? 0) ? "unsure" : "look"; return <i key={i} data-v={v}>{v === "right" ? PEN_TICK : v === "unsure" ? PEN_ASK : PEN_RING}</i>; })}</div>
         ))}
         {t.pages > 0 && <div className="rc-pages" data-role="recap-pages">{Array.from({ length: Math.min(t.pages, 8) }, (_, i) => <i key={i}>{PAGE}</i>)}</div>}
         {lamps.length > 0 && <div className="rc-lamps" data-role="recap-hints">{lamps.map((two, i) => <b key={i} data-second={two || undefined} />)}</div>}

@@ -242,8 +242,9 @@
 .rc .rc-mb .rc-none { font-family: var(--mb-hand); font-size: 56px; color: var(--mb-blue); }
 .rc .rc-set { display: flex; flex-wrap: wrap; gap: 8px 6px; }
 .rc .rc-set i { display: block; width: 56px; height: 48px; }
-.rc .rc-tk, .rc .rc-ring { width: 56px; height: 48px; overflow: visible; }
-.rc .rc-tk path, .rc .rc-ring path { fill: none; stroke: var(--mb-pen); stroke-width: 5; stroke-linecap: round; stroke-linejoin: round; }
+.rc .rc-tk, .rc .rc-ring, .rc .rc-ask { width: 56px; height: 48px; overflow: visible; }
+.rc .rc-tk path, .rc .rc-ring path, .rc .rc-ask path { fill: none; stroke: var(--mb-pen); stroke-width: 5; stroke-linecap: round; stroke-linejoin: round; }
+.rc .rc-ask path { stroke: #5B78B8; stroke-width: 4; stroke-dasharray: 7 8; } /* not sure: the paper's unsure blue (maths-lamplight .mb-box), dashed */
 .rc .rc-pages { display: flex; gap: 12px; }
 .rc .rc-page { width: 52px; height: 66px; }
 .rc .rc-page path:first-child { fill: var(--mb-paper-lo); stroke: var(--mb-ink); stroke-width: 2.5; stroke-linejoin: round; }

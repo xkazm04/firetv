@@ -79,16 +79,20 @@ export function settle(item: { n: number; question: string } & Pick<PracticeItem
 }
 
 /**
- * The set's line in the learner's history: "k of n right". Counted from the verdicts the substitution
- * set on the items, never from a model's word. Marking writes it; a settle restates it from the same
- * verdicts - a recount, not a count-up, so an item settled twice is still one item.
+ * The set's line in the learner's history: "k of n right", and ", u not sure" when the desk could not decide u of
+ * them (Lamplight's dashed ring: an unsure item is neither a tick nor a slip, and the recap draws it as one).
+ * Counted from the verdicts the substitution set on the items, never from a model's word. With no unsure item
+ * the line is the old "k of n right" exactly, so older lines and newer ones read alike. Marking writes it; a
+ * settle restates it from the same verdicts - a recount, not a count-up, so an item settled twice is still one item.
  */
-export const rightLine = (items: readonly { verdict?: string }[]) =>
-  `${items.filter((i) => i.verdict === "right").length} of ${items.length} right`;
+export const rightLine = (items: readonly { verdict?: string }[]) => {
+  const u = items.filter((i) => i.verdict !== "right" && i.verdict !== "wrong").length; // unsure, or no verdict: never drawn as a slip
+  return `${items.filter((i) => i.verdict === "right").length} of ${items.length} right${u ? `, ${u} not sure` : ""}`;
+};
 
-/** The restated line for a history entry that is this set's line (same n), or null when it is not. */
+/** The restated line for a history entry that is this set's line (same n, either form), or null when it is not. */
 export function restatedLine(detail: string, items: readonly { verdict?: string }[]): string | null {
-  const m = /^\d+ of (\d+) right$/.exec(detail);
+  const m = /^\d+ of (\d+) right(?:, \d+ not sure)?$/.exec(detail);
   return m && Number(m[1]) === items.length ? rightLine(items) : null;
 }
 

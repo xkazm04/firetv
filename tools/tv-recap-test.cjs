@@ -317,3 +317,31 @@ test('follow-up 4, the scan bites: a seeded import cycle is found, and the same 
  assert.ok(cycles(importGraph(files,seed('import { day } from "@/tv/screens";'))).some(through),'recapRows -> screens -> recapRows');
  assert.ok(!cycles(importGraph(files,seed('// import { day } from "@/tv/screens";\n/* import { day } from "./screens"; */'))).some(through),'a commented import is not an edge');
 });
+
+// ---- S76 (cx): the desk's "not sure" reaches the recap - a dashed ring, never a slip; an older line draws as it always did
+const TONIGHT=[{verdict:'right'},{verdict:'right'},{verdict:'right'},{verdict:'wrong'},{verdict:'unsure'},{verdict:'unsure'}];
+const marksOf=(html)=>[...html.matchAll(/data-role="recap-set">(.*?)<\/div>/g)].map((m)=>[...m[1].matchAll(/data-v="(\w+)"><svg class="(rc-\w+)"/g)].map((x)=>`${x[1]}:${x[2]}`));
+test('S76 case 1: a set marked 3 right, 1 wrong, 2 not sure draws 3 ticks, 1 pen ring and 2 dashed rings',()=>{
+ const {rightLine}=require(path.join(root,'src/lib/rules/maths.ts')),{parseDetail,recapRows,recapCaption}=recap();
+ const line=rightLine(TONIGHT);
+ assert.equal(line,'3 of 6 right, 2 not sure','the line marking writes');
+ assert.deepEqual(parseDetail('practice',line),{right:3,of:6,unsure:2},'the recap reads back what marking wrote');
+ for(const d of ['3 of 6 right, 4 not sure','3 of 6 right, not sure','3 of 6 right, 2 unsure','3 of 6 right,2 not sure'])
+  assert.deepEqual(parseDetail('practice',d),{},`"${d}" gives no counts`);
+ const s=evening({history:[{at:TODAY(17),kind:'practice',label:'Two-step equations',detail:line}]});
+ const rows=recapRows(s,NOW);
+ assert.deepEqual(rows[0].sets,[{right:3,of:6,unsure:2}]);
+ assert.deepEqual(marksOf(draw(s,NOW)),[['right:rc-tk','right:rc-tk','right:rc-tk','look:rc-ring','unsure:rc-ask','unsure:rc-ask']],'no tick and no slip for what the desk could not decide');
+ assert.match(recapCaption(rows),/three to look at together/,'the not-sure items still want talking through: 1 slip + 2 not sure');
+ const {mathsWaiting}=require(path.join(root,'src/tv/landingRows.ts'));
+ assert.equal(mathsWaiting({...s,practice:null}).line,'Last time: Two-step equations · 3 of 6 right, 2 not sure.','the landing reads the line whole');
+});
+test('S76 case 2: an older line, "3 of 6 right", parses and draws exactly as before - three ticks, three pen rings, no dashed ring',()=>{
+ const {parseDetail,recapRows}=recap(),{restatedLine}=require(path.join(root,'src/lib/rules/maths.ts'));
+ assert.deepEqual(parseDetail('practice','3 of 6 right'),{right:3,of:6},'no unsure count is guessed');
+ const s=evening({history:[{at:TODAY(17),kind:'practice',label:'Two-step equations',detail:'3 of 6 right'}]});
+ assert.deepEqual(recapRows(s,NOW)[0].sets,[{right:3,of:6}]);
+ assert.deepEqual(marksOf(draw(s,NOW)),[['right:rc-tk','right:rc-tk','right:rc-tk','look:rc-ring','look:rc-ring','look:rc-ring']]);
+ assert.equal(restatedLine('3 of 6 right',TONIGHT),'3 of 6 right, 2 not sure','a settle restates an older line in the new form');
+ assert.equal(restatedLine('3 of 6 right, 2 not sure',TONIGHT.slice(0,5)),null,'a line for another n is not this set\'s');
+});
