@@ -222,3 +222,60 @@
 .card[data-focused="true"] .lens .w { color: #3A3F47; } .card[data-focused="true"] .lens .w[data-secure="true"] { color: var(--signal); }
 .card[data-focused="true"] .lens .track { background: rgba(20,22,26,.12); } .card[data-focused="true"] .lens .track i { background: var(--signal); }
 .nothing { font-family: var(--display); font-size: 48px; font-weight: 800; text-transform: uppercase; letter-spacing: .06em; color: var(--mute); }
+
+/* ---- T12 · the recap: tonight as one picture. The shell is On Air (title, caption, the desk button); each tile
+   speaks its own app's language - Lamplight's sheet, the Open Door's card, Specimen's black card - with the app's
+   tokens and faces, overridden here only where a full-stage root must sit in a row (tv/screens.tsx, tv/recapRows.ts) ---- */
+.rc-tiles { position: absolute; left: 0; right: 0; top: 118px; height: 640px; display: flex; gap: 48px; }
+.rc .rc-tile { position: relative; inset: auto; flex: 0 0 544px; height: 100%; overflow: hidden; padding: 26px 26px 28px; display: flex; flex-direction: column;
+  transition: transform .25s cubic-bezier(.2, .8, .2, 1), outline-color .25s; outline: 6px solid transparent; outline-offset: 8px; }
+.rc .rc-tile[data-focused="true"] { transform: translateY(-12px); outline-color: #FFF3DF; }
+.rc .rc-head { display: flex; align-items: center; gap: 16px; flex: none; }
+.rc .rc-none { margin: auto; font-size: 44px; text-align: center; }
+/* Math Buddy: the night folder, the paper, the pen's ticks and rings, a page per sheet read, a lamp per hint */
+.rc .rc-mb { background: linear-gradient(170deg, #161d4a, var(--mb-night) 70%); border-radius: 18px; }
+.rc .rc-mb .mb-mark, .rc .rc-mb .mb-mark svg { width: 52px; height: 52px; flex-basis: 52px; }
+.rc .rc-mb .mb-word { font-size: 42px; }
+.rc .rc-sheet { position: relative; flex: 1; margin-top: 24px; border-radius: 4px; color: var(--mb-ink); padding: 34px 18px 26px 84px; display: flex; flex-direction: column; gap: 34px;
+  background: linear-gradient(var(--mb-grid) 1px, transparent 1px) 0 0 / 100% 48px, linear-gradient(180deg, var(--mb-paper-hi), var(--mb-paper)); }
+.rc .rc-sheet::before { content: ""; position: absolute; left: 60px; top: 0; bottom: 0; width: 2px; background: rgba(143, 184, 255, .6); }
+.rc .rc-mb .rc-none { font-family: var(--mb-hand); font-size: 56px; color: var(--mb-blue); }
+.rc .rc-set { display: flex; flex-wrap: wrap; gap: 8px 6px; }
+.rc .rc-set i { display: block; width: 56px; height: 48px; }
+.rc .rc-tk, .rc .rc-ring { width: 56px; height: 48px; overflow: visible; }
+.rc .rc-tk path, .rc .rc-ring path { fill: none; stroke: var(--mb-pen); stroke-width: 5; stroke-linecap: round; stroke-linejoin: round; }
+.rc .rc-pages { display: flex; gap: 12px; }
+.rc .rc-page { width: 52px; height: 66px; }
+.rc .rc-page path:first-child { fill: var(--mb-paper-lo); stroke: var(--mb-ink); stroke-width: 2.5; stroke-linejoin: round; }
+.rc .rc-page path:last-child { fill: none; stroke: var(--mb-ink); stroke-width: 2.5; stroke-linecap: round; opacity: .55; }
+.rc .rc-lamps { display: flex; flex-wrap: wrap; gap: 20px; padding-left: 6px; }
+.rc .rc-lamps b { width: 40px; height: 40px; border-radius: 50%; background: radial-gradient(circle at 35% 30%, var(--mb-amber-lo), var(--mb-amber-2) 70%); box-shadow: 0 0 14px rgba(255, 177, 61, .55); }
+.rc .rc-lamps b[data-second] { box-shadow: 0 0 0 4px var(--mb-paper), 0 0 0 8px var(--mb-pen); }
+/* Linga: the cream card, the plum arch, a mark per conversation sized by its replies */
+.rc .rc-lg { background: #FFF9EC; border: 2px solid #D6C5AF; border-radius: 16px; color: #261F29; }
+.rc .rc-lg .lo-mark { display: flex; align-items: center; gap: 14px; font: 700 44px/1 Georgia, "Times New Roman", serif; letter-spacing: -1.6px; }
+.rc .rc-lg .lo-mark svg { width: 52px; height: 52px; }
+.rc .rc-door { position: relative; flex: 1; margin: 28px 24px 0; border: 10px solid #6A3946; border-bottom: 0; border-radius: 240px 240px 0 0;
+  background: radial-gradient(420px 300px at 50% 100%, #F6D0A2, #EADFCE 70%); box-shadow: 0 16px 0 -2px #5D3548; display: flex; }
+.rc .rc-lg .rc-none { font-family: Georgia, "Times New Roman", serif; font-style: italic; color: #775F5D; margin-bottom: 70px; }
+.rc .rc-talks { margin: auto auto 34px; display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: center; gap: 16px; padding: 0 24px; }
+.rc .rc-talks b { width: var(--rc-d); height: var(--rc-d); border-radius: 50%; background: #41273D; color: #FFF8E8; display: grid; place-items: center;
+  font: 700 32px/1 Georgia, "Times New Roman", serif; box-shadow: 0 6px 0 #6E283C; }
+/* Essay Master: the black specimen card, an arrow per sentence, the ones to fix turned round in citron */
+.rc .rc-em { background: var(--em-bg); border: 1px solid var(--em-hair); border-radius: 10px; color: var(--em-bone); }
+.rc .rc-em .em-brand { position: static; gap: 14px; }
+.rc .rc-em .em-mark { width: 36px; height: 40px; }
+.rc .rc-em .em-wm { font-size: 40px; }
+.rc .rc-reads { margin-top: 56px; display: flex; flex-direction: column; gap: 48px; }
+.rc .rc-lens { font: 600 32px/1 var(--em-mono); letter-spacing: .12em; text-transform: uppercase; color: var(--em-mute); }
+.rc .rc-rail { margin-top: 22px; display: flex; flex-wrap: wrap; gap: 16px 14px; }
+.rc .rc-rail i { display: block; color: rgba(238, 233, 224, .5); }
+.rc .rc-rail i[data-against] { color: var(--em-cit); }
+.rc .rc-rail svg { width: 72px; height: 34px; display: block; overflow: visible; }
+.rc .rc-em .rc-none { font-family: var(--em-disp); font-weight: 800; font-size: 56px; letter-spacing: -.01em; color: var(--em-mute); }
+/* the shell's foot: the caption slot, the parent's chip (not a stop) and the one way back */
+.rc-foot { position: absolute; left: 0; right: 0; bottom: 0; display: flex; justify-content: space-between; align-items: flex-end; gap: 48px; }
+.rc-cap .cap-text { max-width: 960px; }
+.rc-acts { display: flex; align-items: center; gap: 28px; flex: none; }
+.rc-chip { font-family: var(--display); font-size: 28px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--mute); border: 2px solid var(--line); padding: 14px 22px; white-space: nowrap; }
+.rc-cap .cap { font-size: 28px; }

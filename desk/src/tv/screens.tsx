@@ -10,7 +10,13 @@ import { useEffect, useState } from "react";
 import QRCode from "qrcode";
 import type { Profile, Session } from "@/lib/session/store";
 import { fmt } from "./useSession";
-import { stopAt, learnerStops, unitStops, HINT_STOPS, SENTENCE_STOPS, RECAP_STOPS } from "./keys";
+import { stopAt, learnerStops, unitStops, recapStops, HINT_STOPS, SENTENCE_STOPS } from "./keys";
+import { recapRows, recapCaption, type RecapTile, type MathsTile, type LingaTile, type EssayTile } from "./recapRows";
+import { Mark as MathsMark } from "@/maths/MathsTV";
+import { MATHS_FONTS } from "@/maths/fonts";
+import { Mark as LingaMark } from "@/english/OpenDoor";
+import { Brand as EssayBrand, Arrow as EssayArrow } from "@/essay/EssayTV";
+import { ESSAY_FONTS } from "@/essay/fonts";
 
 /** The OCR writes exponents as ^n and the tutor may too; the screen shows them as printed. */
 export const shown = (s: string) => s.replace(/\^2/g, "²").replace(/\^3/g, "³").replace(/\*\*/g, "").replace(/\$/g, "");
@@ -255,7 +261,7 @@ export function HeadToHead({ }: { s: Session }) {
   </>);
 }
 
-// ---- T11 Break · T12 Recap · T13 Learner ----
+// ---- T11 Break ----
 export function BreakScreen({ s }: { s: Session }) {
   return (
     <main className="content-full" style={{ display: "grid", placeItems: "center", textAlign: "center" }}>
@@ -264,21 +270,82 @@ export function BreakScreen({ s }: { s: Session }) {
     </main>
   );
 }
+// ---- T12 Recap: tonight, done ----
+/**
+ * The whole evening as one picture (tv/recapRows.ts): a tile per app on the desk, each in its own app's language -
+ * Math Buddy's sheet with a tick for each right answer and the pen's ring for each slip, a page per sheet read and
+ * a lamp per hint (ringed when it took a second); Linga's card with a plum mark per conversation, sized by its
+ * replies; Essay Master's black card with an arrow per sentence read, the ones to fix turned round in citron.
+ * Only the caption slot holds a sentence. Select on a tile opens what its app still has on the desk; the parent's
+ * copy is on the phone already (its Recap tab), so the chip says so and is not a stop.
+ */
 export function Recap({ s, focus }: { s: Session; focus: number }) {
+  const [now] = useState(() => Date.now());
+  const tiles = recapRows(s, now), at = stopAt(recapStops(s), focus);
   return (<>
-    <div className="band band-left-thin" /><Rail s={s} />
-    <main className="content">
-      <div className="eyebrow">Tonight, done</div>
-      <div className="title">{s.log.problems.length ? (s.log.hard.length ? "Good session — things to look at together" : "Good session") : "Short session"}</div>
-      <div className="cards" style={{ gridTemplateColumns: "repeat(3, 1fr)", marginTop: 36 }}>
-        {[[Math.round(s.log.minutes), "minutes on task"], [s.log.problems.length, "problems looked at"], [s.log.hints, "hints used"]].map(([v, k]) => <div key={String(k)} className="card" style={{ minHeight: 0 }}><div className="clock" style={{ fontSize: 96 }}>{v}</div><div className="k">{k}</div></div>)}
+    <div className="band band-rule" />
+    <main className="content-full rc" data-role="recap">
+      <div className="title rc-title">Tonight, done</div>
+      <div className="rc-tiles">{tiles.map((t) => <RecapTileOf key={t.app} t={t} lit={at === t.app} />)}</div>
+      <div className="rc-foot">
+        <div className="rc-cap"><span className="cap">{s.learner.name}</span><div className="cap-text">{recapCaption(tiles)}</div></div>
+        <div className="rc-acts">
+          <span className="rc-chip" data-role="recap-parent">On the parent’s phone</span>
+          <button className="btn" data-role="recap-desk" data-focused={at === "desk"}>Back to the desk</button>
+        </div>
       </div>
-      <div style={{ marginTop: 32 }}><span className="cap">Where it was hard</span>
-        <div className="body" style={{ marginTop: 14 }}>{s.log.hard.length ? s.log.hard.map((h) => <div key={h}>· {h}</div>) : "Nothing needed a second hint."}</div></div>
-      <div className="actions"><button className="btn" data-focused={stopAt(RECAP_STOPS, focus) === "send"}>Send to parent</button><button className="btn" data-focused={stopAt(RECAP_STOPS, focus) === "tonight"}>Back to tonight</button></div>
     </main>
   </>);
 }
+function RecapTileOf({ t, lit }: { t: RecapTile; lit: boolean }) {
+  const cls = t.app === "maths" ? `maths-tv ${MATHS_FONTS} rc-mb` : t.app === "english" ? "rc-lg" : `essay-tv ${ESSAY_FONTS} rc-em`;
+  return (
+    <div className={`rc-tile ${cls}`} data-role="recap-tile" data-app={t.app} data-focused={lit} data-empty={!!t.empty || undefined}>
+      {t.app === "maths" ? <RecapMaths t={t} /> : t.app === "english" ? <RecapLinga t={t} /> : <RecapEssay t={t} />}
+    </div>
+  );
+}
+const PEN_TICK = <svg className="rc-tk" viewBox="0 0 46 40" aria-hidden="true"><path d="M5 22 L17 33 L42 5" /></svg>;
+const PEN_RING = <svg className="rc-ring" viewBox="0 0 46 40" aria-hidden="true"><path d="M27 4 C42 4 45 15 43 23 C40 35 16 39 7 30 C0 23 4 8 18 5 C22 4 26 4 30 6" /></svg>;
+const PAGE = <svg className="rc-page" viewBox="0 0 40 50" aria-hidden="true"><path d="M3 3h24l10 10v34H3z" /><path d="M9 20h20M9 28h20M9 36h14" /></svg>;
+function RecapMaths({ t }: { t: MathsTile }) {
+  const lamps = Array.from({ length: Math.min(t.hints, 12) }, (_, i) => i < t.second);
+  return (<>
+    <div className="rc-head"><MathsMark /><div className="mb-word">Math <em>Buddy</em></div></div>
+    <div className="rc-sheet">
+      {t.empty ? <div className="rc-none">{t.empty}</div> : <>
+        {t.sets.slice(-3).map((x, k) => (
+          <div key={k} className="rc-set" data-role="recap-set">{Array.from({ length: Math.min(x.of, 12) }, (_, i) => <i key={i} data-v={i < x.right ? "right" : "look"}>{i < x.right ? PEN_TICK : PEN_RING}</i>)}</div>
+        ))}
+        {t.pages > 0 && <div className="rc-pages" data-role="recap-pages">{Array.from({ length: Math.min(t.pages, 8) }, (_, i) => <i key={i}>{PAGE}</i>)}</div>}
+        {lamps.length > 0 && <div className="rc-lamps" data-role="recap-hints">{lamps.map((two, i) => <b key={i} data-second={two || undefined} />)}</div>}
+      </>}
+    </div>
+  </>);
+}
+function RecapLinga({ t }: { t: LingaTile }) {
+  return (<>
+    <div className="rc-head"><LingaMark /></div>
+    <div className="rc-door">
+      {t.empty ? <div className="rc-none">{t.empty}</div>
+        : <div className="rc-talks">{t.talks.slice(-5).map((n, i) => <b key={i} data-role="recap-talk" style={{ "--rc-d": `${Math.round(48 + Math.min(n, 14) * 8)}px` } as React.CSSProperties}>{n}</b>)}</div>}
+    </div>
+  </>);
+}
+function RecapEssay({ t }: { t: EssayTile }) {
+  return (<>
+    <div className="rc-head"><EssayBrand /></div>
+    {t.empty ? <div className="rc-none">{t.empty}</div>
+      : <div className="rc-reads">{t.readings.slice(-3).map((r, k) => (
+        <div key={k} className="rc-read" data-role="recap-reading">
+          <div className="rc-lens">{r.lens}</div>
+          <div className="rc-rail">{Array.from({ length: Math.min(r.of, 12) }, (_, i) => { const back = i >= r.of - r.against; return <i key={i} data-against={back || undefined}><EssayArrow len={72} h={34} against={back} color="currentColor" /></i>; })}</div>
+        </div>
+      ))}</div>}
+  </>);
+}
+
+// ---- T13 Learner ----
 /** The student type, said in words — the card's kicker and the caption's chip. */
 /** One sentence from the picks: what this desk is set up to do. */
 function picksLine(p: Profile) {

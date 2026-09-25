@@ -13,6 +13,7 @@ import { profileRows, locate, flat } from "@/tv/profileRows";
 import { continueCard } from "@/tv/mathsRows";
 import { sheetStops, firstToLook, tileOf } from "@/tv/sheetRows";
 import { landingAt, landingFocus, landingModules, landingStops, continueStop } from "@/tv/landingRows";
+import { recapStops, ownReading } from "@/tv/recapRows";
 
 /** The remote's buttons. The keyboard stands in for it on the bench. */
 export type Key = "up" | "down" | "left" | "right" | "select" | "back" | "menu" | "play";
@@ -101,7 +102,8 @@ export function forensicAt(s: Session): number {
 export const rewriteStatus = (n: number) => `sentence ${n}: rewrite it in your own words on the phone's Essay tab, then analyse again`;
 export const HINT_STOPS = ["stuck", "lesson"] as const;
 export const SENTENCE_STOPS = ["again", "unit"] as const;
-export const RECAP_STOPS = ["send", "tonight"] as const;
+/** The recap: one tile per app on the desk, then back to the desk (tv/recapRows.ts). */
+export { recapStops, type RecapStop } from "@/tv/recapRows";
 export const TOPIC_STOPS: readonly Topic[] = SYLLABUS;
 /** The walk has one action, on its last item: back to the sheet. */
 export function walkStops(s: Session): Array<"sheet"> { const n = s.practice?.items.length ?? 0; return n && s.walkIx === n - 1 ? ["sheet"] : []; }
@@ -150,10 +152,12 @@ export function practiceFailed(s: Session, topicId: string | undefined): string 
 const lessonEvent = (l: Lesson, why: string): Event => ({ type: "lesson.set", lesson: { id: l.id, title: l.title, t: 0, text: l.concepts.join(" · "), why, youtube: l.youtube } });
 
 const KEYMAP: Partial<Record<Screen, Handler>> = {
-  // the lamp moves between the objects on the desk: Left/Right along the apps, Up to the place card, Down to an unpaired phone
+  // the lamp moves between the objects on the desk: Left/Right along the apps, Up to the place card, Down to an unpaired phone;
+  // Menu ends tonight wherever the lamp is - what the phone's End session does: the recap, and the memory written
   landing: (s, k, _, o) => {
     const stops = landingStops(s), i = landingAt(s), at = stops[i], apps = landingModules(s).length;
     const to = (j: number) => { if (j >= 0 && j !== s.focus) o.ev({ type: "focus", focus: j }); };
+    if (k === "menu") { o.ev({ type: "session.end" }); o.calls.push({ url: "/api/memory", body: {} }); return; }
     if (k === "back") { const c = continueStop(s); to(c ? stops.indexOf(c.app) : stops.indexOf("place")); return; }
     if (at === "place") {
       if (k === "down" && apps) to(Math.floor((apps - 1) / 2));
@@ -321,11 +325,21 @@ const KEYMAP: Partial<Record<Screen, Handler>> = {
     if (k === "left") o.ev({ type: "walk", ix: s.walkIx - 1 });
     if ((k === "select" && stopAt(walkStops(s), s.focus) === "sheet") || k === "back") o.nav("sheet", s.walkIx);
   },
+  // tonight as one picture: Left/Right along the tiles, then the desk; Select opens what a tile's app still has on
+  // the desk, through the helpers the landing and Tonight use; Back, or the desk, is the landing with the lamp at rest
   recap: (s, k, _, o) => {
-    const at = stopAt(RECAP_STOPS, s.focus);
-    if (k === "left") o.move(RECAP_STOPS.length, -1); if (k === "right") o.move(RECAP_STOPS.length, 1);
-    if (k === "select" && at === "send") o.ev({ type: "status", text: "recap sent to the parent's phone" });
-    if ((k === "select" && at === "tonight") || k === "back") o.nav("tonight");
+    const stops = recapStops(s), at = stopAt(stops, s.focus);
+    if (k === "left") o.move(stops.length, -1); if (k === "right") o.move(stops.length, 1);
+    if (k === "back" || (k === "select" && (at === "desk" || !at))) { o.ev({ type: "nav", screen: "landing" }); return; }
+    if (k !== "select" || !at || at === "desk") return;
+    o.ev({ type: "subject", subject: at });
+    if (at === "maths") {
+      const cont = continueCard(s);
+      if (cont?.go === "page") { o.ev({ type: "page.select", pageIx: cont.pageIx }); o.nav("page"); }
+      else if (cont) o.nav(cont.go, cont.focus);
+      else o.nav(MODULE_HOME.maths);
+    } else if (at === "essay" && ownReading(s)) { o.ev({ type: "essay.at", n: null }); o.nav("forensic"); }
+    else o.nav(MODULE_HOME[at]);
   },
 };
 

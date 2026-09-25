@@ -160,7 +160,7 @@ function EssayObject({ w }: { w: EssayWaiting }) {
 
 const LAST_VERB: Record<Subject, string> = { maths: "Practised", english: "Talked", essay: "Read" };
 function captionOf(s: Session, at: LandingStop | undefined, all: Waiting[]): { label: string; text: string } {
-  if (at === "place") return { label: "Someone else", text: "Select to hand the desk to another learner." };
+  if (at === "place") return { label: "Someone else", text: "Select hands the desk on. Menu ends tonight." };
   if (at === "phone") return { label: "Phone", text: "Open the address on your phone, then enter the four digits." };
   const w = all.find((x) => x.app === at);
   if (!w) return { label: "Study Desk", text: "No apps are on this profile yet. Select the place card to change it." };

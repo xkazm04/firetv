@@ -116,10 +116,15 @@ The timer's other face. When a work block ends: full-screen, calm, the break cou
 next. Select skips the break; Back does nothing (a break you can't accidentally cancel).
 *Feeds:* timer.
 
-### T6 · Recap
-End of session. What was covered (problems touched, hints used, lessons watched), time on task,
-"where it was hard" (the problems that needed hint 2 — the honest version of the mistake journal,
-since answers are not checked). One button: **"Send to parent"** → phone. *Feeds:* session log.
+### T6 · Recap — *"Tonight, done", rebuilt 2026-09-25*
+End of session, reached from the phone's End session or Menu on the landing. The whole evening as one
+picture: a tile per app on the profile, each in its own app's language, from tonight's work only —
+Math Buddy's marked sets as ticks and rings, pages read, hints (second hints ringed); Linga's
+conversations as marks sized by their replies; Essay Master's readings as arrows, the ones to fix
+reversed. "Not tonight" for an app with nothing. No problem texts: the one sentence is the caption.
+Select on a tile opens what that app still has on the desk; **"Back to the desk"** (and Back) is
+the landing at rest. The parent's copy is the phone's Recap tab (P4), shown as a chip, not a button.
+*Feeds:* history, englishLearning.sessions, session log (`tv/recapRows.ts`).
 
 ### M3 · Marked sheet (Math Buddy practice) — *built 2026-09-23*
 Where a practice set lands when the phone's photo of it comes back marked. The whole set on the
@@ -174,7 +179,7 @@ tool (existing), a one-line question box, a mic button (stubbed: types instead).
 4. **No lesson:** a problem the library does not cover → T3 shows *"no lesson covers this yet"*
    as a calm state, not a failure.
 5. **Timer:** T1 start 25 min → T5 break → back to T2 where it was.
-6. **Recap:** end → T6 → "Send to parent" → P4.
+6. **Recap:** Menu on the landing (or End session on the phone) → T6 → Select a tile → what it names, or Back → the desk; the phone's P4 shows the same evening.
 
 ## 6. What is stubbed, and how honestly
 

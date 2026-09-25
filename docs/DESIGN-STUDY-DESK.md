@@ -5,7 +5,8 @@ reasoning). The landing is the first screen of the TV app: whose desk it is, and
 It is the umbrella over three apps that already have their own design languages - Math Buddy is
 [Lamplight](DESIGN-MATH-BUDDY.md), Linga [the Open Door](DESIGN-LINGA.md), Essay Master [Specimen](DESIGN-ESSAY-MASTER.md) -
 and its job is to hold them together without flattening them. The rest of the shell (pairing, the learner switcher,
-profile, break, recap) stays [On Air](DESIGN-ON-AIR.md).
+profile, break, recap) stays [On Air](DESIGN-ON-AIR.md); the recap's tiles are the exception inside it, each drawn in
+its own app's language like the objects here (see "Tonight, done" below).
 
 The CSS is `desk/src/design/desk-landing.css`, scoped under `.desk-tv` with `dk-` classes. The screen is
 `desk/src/landing/LandingTV.tsx`, routed from `desk/src/app/tv/page.tsx` when the session is on `landing`. What
@@ -67,9 +68,23 @@ on what was left.
 | Down | from the place card, to the app under it; from an app, to the phone while it is unpaired |
 | Select | an app: the zoom, then its home (Math Buddy Tonight, Linga home, Essay Master's lenses); the place card: the learner switcher; the phone: pairing |
 | Back | the lamp goes home to the CONTINUE object |
+| Menu | ends tonight, wherever the lamp is: the recap, and what the desk noticed is written (`/api/memory`), as the phone's End session does |
 
 Arriving without a stop named (a fresh desk, a nav with no focus) the focus is `LANDING_REST` (-1) and the lamp
 rests on the CONTINUE object. Back from an app's home, the switcher or pairing lands on the object it came from.
+
+## Tonight, done (the recap)
+
+Menu on the desk ends the evening and shows it as one picture (`desk/src/tv/recapRows.ts`, the `Recap` screen in
+`desk/src/tv/screens.tsx`): one tile per app on the profile, in the desk's order, each from tonight's work only (the
+dated history lines and Linga's conversations since local midnight). Math Buddy's sheet carries a pen tick per right
+answer and a ring per slip for each marked set, a page per sheet read and an amber lamp per hint, ringed when it took
+a second. Linga's card holds a plum mark per conversation, sized by its replies. Essay Master's black card has an
+arrow per sentence read, the ones to fix turned round in citron. An app with nothing tonight says "Not tonight". No
+problem text, question or answer is on it; the caption slot holds the one sentence. Left / Right walk the tiles and
+then "Back to the desk"; Select on a tile opens what that app still has on the desk (the marked set at its first
+slip, this learner's reading, Linga's home); Back, or the desk, is this landing with the lamp at rest. "On the
+parent's phone" is a chip, not a stop: the phone's Recap tab already shows the evening.
 
 ## Motion
 
