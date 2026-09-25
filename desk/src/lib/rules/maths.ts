@@ -73,6 +73,20 @@ export function settle(item: { n: number; question: string }, value: unknown, sl
   return settled(item.n, verify(item.question, v), slipId, topicId);
 }
 
+/**
+ * The set's line in the learner's history: "k of n right". Counted from the verdicts the substitution
+ * set on the items, never from a model's word. Marking writes it; a settle restates it from the same
+ * verdicts - a recount, not a count-up, so an item settled twice is still one item.
+ */
+export const rightLine = (items: readonly { verdict?: string }[]) =>
+  `${items.filter((i) => i.verdict === "right").length} of ${items.length} right`;
+
+/** The restated line for a history entry that is this set's line (same n), or null when it is not. */
+export function restatedLine(detail: string, items: readonly { verdict?: string }[]): string | null {
+  const m = /^\d+ of (\d+) right$/.exec(detail);
+  return m && Number(m[1]) === items.length ? rightLine(items) : null;
+}
+
 /** Every number written in a line: 7, -3, 3.5, 7/2. */
 const NUMBERS = /[-−]?\d+(?:\.\d+)?(?:\s*\/\s*\d+(?:\.\d+)?)?/g;
 const WORDS: Record<string, string> = {

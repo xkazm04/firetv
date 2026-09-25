@@ -10,7 +10,7 @@
  * Nothing here ever puts the answer on screen, and no `said` line carries a value.
  */
 import { vision } from "../engines/vision";
-import { ASK, cleanValue as clean, settled, slipVocabulary } from "../rules/maths";
+import { ASK, cleanValue as clean, rightLine, settled, slipVocabulary } from "../rules/maths";
 import { addHistory, recordAttempt } from "../session/learners";
 import { topic as topicById } from "../library/syllabus";
 import { verify } from "./verify";
@@ -97,11 +97,11 @@ export async function markSet(
   });
 
   // what happened, in one line the home screen can read back: never invented, always these counts
-  const right = items.filter((i) => i.verdict === "right").length;
+  // (rules/maths; a later settle restates the same line from the same verdicts - session/store)
   addHistory(learnerId, {
     at: Date.now(), kind: "practice",
     label: topicById(practice.topic)?.name ?? practice.topic,
-    detail: `${right} of ${items.length} right`,
+    detail: rightLine(items),
   });
 
   return { items, provider, ms, unsure };

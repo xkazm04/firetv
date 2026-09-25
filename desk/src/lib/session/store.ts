@@ -11,9 +11,10 @@ import { AGE_RANGE } from "@/tv/profileRows";
 import { firstToLook } from "@/tv/sheetRows";
 import { LANDING_REST } from "@/tv/landingRows";
 import path from "node:path";
-import { getLearner, type HistoryEntry, type SkillRecord } from "./learners";
+import { getLearner, saveLearner, type HistoryEntry, type SkillRecord } from "./learners";
 import { SYLLABUS } from "../library/syllabus";
 import type { RuleCard } from "../rules/english";
+import { restatedLine } from "../rules/maths";
 import type { Fix, Sentence } from "../rules/essay";
 import { emptyEnglish, type Conversation, type EnglishLearning, type LevelCheck } from "../english/types";
 
@@ -287,8 +288,20 @@ export function getSession() { return store.session; }
  */
 const REHYDRATE = new Set(["learner.set", "practice.marked", "practice.settle", "profile.save", "reset", "join", "page.read", "linga.changed", "essay.set"]);
 
+/**
+ * A settled item changes its set's count: the line marking wrote (the last practice line, this topic, this n)
+ * is restated from the item verdicts as they now stand (rules/maths). A recount, and no entry is added.
+ */
+function restateMarked(s: Session): void {
+  const p = s.practice, l = getLearner(s.learner.id);
+  const at = l.history.findLastIndex((h) => h.kind === "practice"), h = l.history[at];
+  const detail = p?.marked && h?.label === (SYLLABUS.find((t) => t.id === p.topic)?.name ?? p.topic) ? restatedLine(h.detail, p.items) : null;
+  if (detail && detail !== h.detail) saveLearner({ ...l, history: l.history.map((x, i) => (i === at ? { ...x, detail } : x)) });
+}
+
 export function dispatch(e: Event): Session {
   store.session = reduce(store.session, e);
+  if (e.type === "practice.settle" && e.verdict) try { restateMarked(store.session); } catch {}
   if (REHYDRATE.has(e.type)) {
     try { const l = getLearner(store.session.learner.id); store.session = { ...store.session, skills: l.skills, writing: l.writing, memory: l.memory, history: l.history, englishLearning: l.english }; } catch {}
   }
