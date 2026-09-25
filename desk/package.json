@@ -10,7 +10,7 @@
     "pretest": "node ../tools/worktree-preflight.cjs",
     "test": "npm run test:types && npm run test:rules",
     "test:types": "tsc --noEmit",
-    "test:rules": "node ../tools/linga-rules-test.cjs && node ../tools/maths-rules-test.cjs && node ../tools/maths-type-test.cjs && node ../tools/essay-rules-test.cjs && node ../tools/kpi-measure-test.cjs && node ../tools/engines-rules-test.cjs && node ../tools/tv-keys-test.cjs && node ../tools/desk-jobs-rules-test.cjs && node ../tools/uat-surface-test.cjs && node ../tools/tv-sheet-test.cjs && node ../tools/uat-recertify-test.cjs && node ../tools/phone-panel-test.cjs && node ../tools/uat-verdict-test.cjs && node ../tools/desk-pairing-test.cjs && node ../tools/tv-recap-test.cjs"
+    "test:rules": "node ../tools/linga-rules-test.cjs && node ../tools/maths-rules-test.cjs && node ../tools/maths-type-test.cjs && node ../tools/essay-rules-test.cjs && node ../tools/kpi-measure-test.cjs && node ../tools/engines-rules-test.cjs && node ../tools/tv-keys-test.cjs && node ../tools/desk-jobs-rules-test.cjs && node ../tools/uat-surface-test.cjs && node ../tools/tv-sheet-test.cjs && node ../tools/uat-recertify-test.cjs && node ../tools/phone-panel-test.cjs && node ../tools/uat-verdict-test.cjs && node ../tools/desk-pairing-test.cjs && node ../tools/tv-recap-test.cjs && node ../tools/withhold-rules-test.cjs"
   },
   "dependencies": {
     "next": "16.3.4",
