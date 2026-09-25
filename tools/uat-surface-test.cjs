@@ -184,6 +184,90 @@ test('case 10 GUARD: a phone control the view stops offering is still caught as 
   assert(!sf.controls.some(c => c.side === 'tv' && c.label === 'Pause & coach'), 'the TV follows the seeded view');
 });
 
+/**
+ * The TV on Linga home while the phone still holds a live panel: a conversation mid-turn (the learner's turn, a reply
+ * in flight, paused, the quiz, the coach, a moment), the level check mid-question or mid-task, its verdict and its
+ * topics; and the same on two other TV screens the phone does not follow.
+ */
+const BUSY = {
+  'home, talk your turn': fixture('linga', { placement: placed(), conversation: convo({ turns: replied }) }),
+  'home, talk waiting': fixture('linga', { placement: placed(), conversation: convo({ turns: replied, pending: 'held' }) }),
+  'home, check question': fixture('linga', { check: checkOf() }),
+  'home, check choose task': fixture('linga', { check: checkOf({ stage: 'tasks', turns: [], task: chooseTask }) }),
+  'home, check listening': fixture('linga', { check: checkOf({ stage: 'tasks', turns: [], task: listenTask(false) }) }),
+  'home, talk paused': fixture('linga', { placement: placed(), conversation: convo({ turns: replied, paused: true }) }),
+  'home, talk quiz open': fixture('linga', { placement: placed(), conversation: convo({ turns: replied, quizOpen: true, cue: 'Try: Could you check?' }) }),
+  'home, talk coaching': fixture('linga', { placement: placed(), conversation: convo({ turns: replied, phase: 'coaching', coaching: { before: 'I am work in hotel', after: 'I work in a hotel', note: 'Say what you do with the verb alone.' } }) }),
+  'home, moment': fixture('linga', { placement: placed(), conversation: convo({ turns: replied, moment: MOMENTS[0] }) }),
+  'home, check verdict': fixture('linga', { placement: placed(), check: checkOf({ stage: 'verdict', turns: [], placement: placed({ tasks: TASKS }) }) }),
+  'home, check topics': fixture('linga', { placement: placed(), check: checkOf({ stage: 'plan', turns: [], topics: planned('p-a', 'p-b').topics }) }),
+  'home, check ask-goal': fixture('linga', { placement: placed(), check: checkOf({ stage: 'plan', turns: [], askGoal: true }) }),
+  'scenes, talk your turn': fixture('linga-scenes', { placement: placed(), conversation: convo({ turns: replied }) }),
+  'map, check question': fixture('linga-map', { check: checkOf() }),
+};
+const T = require(path.join(root, 'src/lib/english/turn.ts')), same = (a, b) => JSON.stringify(a) === JSON.stringify(b);
+test('case 11: TV on Linga home, phone mid-conversation or mid-check: phone-only 0, strays 0, unrendered 0, and the TV row stays home', () => {
+  const S = surface(), found = [], wrong = [];
+  const HOME_ROW = { resume: ['carry-on', 'choose-situation'], 'check-part-way': ['carry-on-check', 'restart-check'], 'no-plan': ['see-topics', 'choose-situation'] };
+  for (const [name, fx] of Object.entries(BUSY)) for (const ui of [{}, { menu: true }]) {
+    const at = `${name}${ui.menu ? ' (menu)' : ''}`, s = sessionOf(fx), sf = S.surfaceOf(s, ui);
+    for (const c of sf.controls.filter(c => c.phoneOnly)) found.push(`${at}: ${c.label || c.tag} -> ${c.action.id}`);
+    for (const x of sf.strays) wrong.push(`${at}: stray ${x}`);
+    for (const x of sf.unrendered) wrong.push(`${at}: unrendered ${x}`);
+    for (const a of sf.offered) if (!V.VIEW_ACTION_IDS.includes(a.id)) wrong.push(`${at}: ${a.id} is no view id`);
+    // the Open Door keeps its home row: the phone's live panel is offered on the phone only
+    if (!ui.menu && sf.view.home) assert.deepEqual(sf.view.actions.map(a => a.id), HOME_ROW[sf.view.home], `${at}: the TV row is home's`);
+    for (const c of sf.controls.filter(c => c.side === 'tv' && c.action)) assert(!sf.view.phone.includes(c.action), `${at}: the TV draws ${c.label}`);
+    // the turn table decides: an enabled conversation action is one it accepts, a refused one is disabled
+    const c = s.conversation;
+    if (c) for (const a of V.offeredActions(sf.view)) if (a.run.command && T.isTurnAction(a.run.command.action))
+      assert.equal(!!a.disabled, !T.accepts(c, a.run.command.action), `${at}: ${a.id} (${a.run.command.action}) follows the turn table`);
+    if (sf.view.answer?.action === 'turn') assert(T.accepts(c, 'turn'), `${at}: the reply is one the table takes`);
+    // withholding: the unrevealed listening line is heard on neither screen, and named by no phone-side action
+    if (fx.check?.task?.kind === 'listen') { assert(!sf.shown.includes(LINE), `${at}: the line is not shown`); assert(!JSON.stringify(sf.view.phone).includes(LINE), `${at}: no action names the line`); }
+  }
+  assert.deepEqual(wrong, [], `strays and unrendered ${wrong.length}:\n  ${wrong.join('\n  ')}`);
+  assert.equal(found.length, 0, `phone-only controls ${found.length}:\n  ${found.join('\n  ')}`);
+});
+
+test('case 12: a disabled view action with a disabled control is a match, not unrendered, and it is not offered to pick', () => {
+  const S = surface();
+  const waiting = fixture('linga-talk', { placement: placed(), conversation: convo({ turns: replied, pending: 'held' }) });
+  const unprepared = fixture('linga-talk', { placement: placed(), conversation: convo({ turns: [] }) });
+  for (const [name, fx] of [['waiting', waiting], ['unprepared', unprepared], ['home, talk waiting', BUSY['home, talk waiting']]]) {
+    const sf = S.surfaceOf(sessionOf(fx)), off = V.offeredActions(sf.view).filter(a => a.disabled);
+    assert(off.length > 0, `${name}: the view holds a disabled action`);
+    assert.deepEqual(sf.unrendered, [], `${name}: view actions with no rendered control`);
+    for (const a of off) {
+      assert(sf.controls.some(c => c.disabled && c.action === a), `${name}: ${a.id} is tied to its disabled control`);
+      assert(!sf.offered.some(o => o.id === a.id && same(o.run, a.run)), `${name}: disabled ${a.id} is not offered to pick`);
+    }
+  }
+  const sf = S.surfaceOf(sessionOf(waiting)), coach = sf.controls.find(c => c.side === 'tv' && c.label === 'Pause & coach');
+  assert(coach && coach.disabled && coach.action?.id === 'coach', 'the TV\'s disabled Pause & coach is the view\'s disabled coach');
+});
+
+test('case 13 GUARD: a disabled control never stands in for an enabled view action', () => {
+  const S = surface(), lingaView = V.lingaView;
+  // seed: the view offers the phone's Finish enabled while a reply is pending; the phone still draws it disabled by the turn table
+  V.lingaView = (s, ui) => { const v = lingaView(s, ui); return { ...v, phone: v.phone.map(a => a.id === 'finish' ? { ...a, disabled: false } : a) }; };
+  let sf;
+  try { sf = S.surfaceOf(sessionOf(fixture('linga-talk', { placement: placed(), conversation: convo({ turns: replied, pending: 'held' }) }))); } finally { V.lingaView = lingaView; }
+  assert(sf.controls.some(c => c.side === 'phone' && c.label === 'Finish rehearsal' && c.disabled && !c.action), 'the disabled control stays untied');
+  assert(sf.unrendered.includes('finish'), `the enabled finish has no control (got ${sf.unrendered.join(', ')})`);
+});
+
+test('case 14 GUARD: a seeded stray is still caught with the TV on home and the phone mid-conversation', () => {
+  const S = surface(), lingaView = V.lingaView;
+  // seed: no Linga view anywhere offers "repeat", which the phone's live panel still draws
+  const drop = v => ({ ...v, actions: v.actions.filter(a => a.id !== 'repeat'), footer: v.footer.filter(a => a.id !== 'repeat'), phone: v.phone.filter(a => a.id !== 'repeat') });
+  V.lingaView = (s, ui) => drop(lingaView(s, ui));
+  let sf;
+  try { sf = S.surfaceOf(sessionOf(BUSY['home, talk your turn'])); } finally { V.lingaView = lingaView; }
+  assert(sf.strays.includes('phone: Repeat audio'), `caught (got ${sf.strays.join(', ')})`);
+  assert(!sf.controls.some(c => c.label === 'Repeat audio' && c.action), 'tied to nothing');
+});
+
 test('case 6: the judge reads a long screen whole, or with the cut named, never silently cut', () => {
   const { judgePayload, JUDGE_SCREEN_CAP } = require(DRIVER);
   const step = shown => ({ n: 1, screen: 'linga-talk', shown, action: 'answer', args: {}, thought: '', result: 'ok' });
