@@ -22,7 +22,7 @@ import { day } from "@/tv/screens";
 import { MATHS_FONTS } from "./fonts";
 import { MathText, Tick } from "./MathText";
 import { isTall, parseMath } from "./typeset";
-import { KIND_WORD, working } from "./working";
+import { KIND_WORD, lookAt, working } from "./working";
 
 /** The root every Math Buddy screen is drawn in. `busy` is the TV's own wait for a practice set. */
 export function MathsTV({ s, busy }: { s: Session; busy: boolean }) {
@@ -484,22 +484,8 @@ export function PracticeScreen({ s }: { s: Session }) {
 
 // ---------------------------------------------------------------- M3 Sheet and M4 Walk: the marked set on the paper
 
-/** Names for the rulebook's slips (lib/rules/maths.ts ids), set in Fraunces. An id the rulebook does not know is spelled out. */
-const SLIP_NAME: Record<string, string> = {
-  "undo-wrong-order": "Undone in the wrong order",
-  "sign-lost-moving": "Sign lost crossing the equals",
-  "divided-one-term": "Only one term divided",
-  "bracket-first-term-only": "Bracket on the first term only",
-  "collect-x-wrong-sign": "x-terms gathered with the wrong sign",
-  "multiplied-not-divided": "Multiplied instead of divided",
-  "added-not-subtracted": "Done again instead of undone",
-  "one-side-only": "Done to one side only",
-  "arithmetic-slip": "A number came out wrong",
-  "negative-mishandled": "A minus sign dropped",
-  "fraction-not-cleared": "The fraction left in place",
-  "answer-not-checked": "The answer not checked",
-};
-const slipName = (id: string) => SLIP_NAME[id] ?? humanTopic(id);
+/** A slip's name as the rulebook keeps it (lib/rules/maths.ts), set in Fraunces. An id the rulebook does not know is spelled out. */
+const slipName = (id: string) => slipById(id)?.name ?? humanTopic(id);
 
 const TALLY_R = <svg viewBox="0 0 58 62" aria-hidden="true"><path d="M36 40 L42 47 L56 28" /></svg>;
 const TALLY_W = <svg viewBox="0 0 58 62" aria-hidden="true"><path d="M18 20 C 22 10, 42 10, 46 22 C 50 36, 40 52, 28 50 C 16 49, 11 38, 13 26 C 14 22, 17 19, 22 17" /></svg>;
@@ -516,11 +502,11 @@ function Tally({ items, cur }: { items: PracticeItem[]; cur: number | null }) {
 
 /** The side of the paper: the kind of mark, the slip's name, and the taped card - the screen's one caption slot. */
 function SlipSide({ it, points }: { it: PracticeItem; points?: string }) {
-  const v = it.verdict ?? "unsure", w = working(it, points);
+  const v = it.verdict ?? "unsure", w = working(it);
   const kind = v === "right" ? "right" : v === "unsure" ? "unsure" : w.mark?.kind ?? "line";
   const word = v === "right" ? "Right" : v === "unsure" ? "Not sure" : KIND_WORD[kind as keyof typeof KIND_WORD];
   const said = it.reply ?? it.said ?? (v === "right" ? `Number ${it.n} is right.` : "The desk has no comment on this one.");
-  const next = v === "wrong" && points ? `Look at ${points}.` : v === "unsure" ? "Tell the desk on the phone how you got there." : null;
+  const next = v === "wrong" ? lookAt(it, points) : v === "unsure" ? "Tell the desk on the phone how you got there." : null;
   return (
     <aside className="mb-side" key={`${it.n}-${v}`}>
       <div className="mb-khead"><div className="mb-kick">{KIND_ICON[kind]}{word}</div></div>
@@ -539,8 +525,7 @@ function SlipSide({ it, points }: { it: PracticeItem; points?: string }) {
 /** An item on the marked paper. Open: the question and every line of working; folded: the question, and the line the pen is on. */
 function MarkedItem({ it, open, focused, cur, dim, okLabel }: { it: PracticeItem; open: boolean; focused?: boolean; cur?: boolean; dim?: boolean; okLabel?: string }) {
   const v = it.verdict ?? "unsure";
-  const sl = it.slip ? slipById(it.slip) : undefined;
-  const w = working(it, sl?.points);
+  const w = working(it);
   const rows: ReactNode[] = [];
   if (v === "right") {
     if (open) w.lines.forEach((l, k) => rows.push(<HandRow key={k} line={l} tick={w.ticks[k]} />));

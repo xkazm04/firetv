@@ -150,13 +150,9 @@ test('9: the working as lines, and the pen placed only where the data puts it',(
  assert.deepEqual(W.workingLines({studentWorking:'3x = 18 -> x = 6'}),['3x = 18','x = 6']);
  assert.deepEqual(W.workingLines({studentWorking:'',studentAnswer:'6'}),['x = 6'],'a bare value is a value of x');
  assert.deepEqual(W.workingLines({studentWorking:''}),[]);
- assert.equal(W.lineOfPoints('the second line',3),1);assert.equal(W.lineOfPoints('the last line',3),2);assert.equal(W.lineOfPoints('the first line of working',3),0);
- assert.equal(W.lineOfPoints('the line where the term moved',3),null,'a place, not a line');assert.equal(W.lineOfPoints('the third line',2),null,'a line the working does not have');
  const base={n:1,question:'3x - 7 = 11',studentWorking:'3x = 11 - 7\n3x = 4\nx = 4/3'};
  const right=W.working({...base,verdict:'right'});assert.deepEqual(right.ticks,[false,false,true],'right: the answer line is ticked, nothing else claimed');assert.equal(right.mark,null);
  const unsure=W.working({...base,verdict:'unsure'});assert.equal(unsure.mark,null);assert.ok(unsure.ticks.every(x=>!x));
- const pts=W.working({...base,verdict:'wrong',slip:'sign-lost-moving'},'the second line');
- assert.equal(pts.at,1);assert.deepEqual(pts.mark,{kind:'line'});assert.deepEqual(pts.ticks,[true,false,false]);assert.equal(pts.placed,'points');
  const place=W.working({...base,verdict:'wrong',slip:'sign-lost-moving'},'the line where the term moved');
  assert.equal(place.at,2,'no line named: the answer line, which the verdict is about');assert.equal(place.placed,'answer');assert.ok(place.ticks.every(x=>!x));
  const at=W.working({...base,verdict:'wrong',slip:'sign-lost-moving',slipAt:{line:0,span:'- 7',kind:'sign'}},'the second line');
@@ -164,4 +160,29 @@ test('9: the working as lines, and the pen placed only where the data puts it',(
  const check=W.working({...base,verdict:'wrong',slip:'answer-not-checked'},'the original equation');
  assert.equal(check.mark.kind,'missing');assert.equal(check.at,2,'the check belongs after the last line');
  assert.equal(W.working({...base,verdict:'wrong',slipAt:{line:9,kind:'sign',span:'x'}}).placed,'answer','a line past the working is not trusted');
+});
+
+test('10 (pen case 8): no prose ordinal places the pen or earns a tick, the card agrees with the pen, and the slip names are kept once',()=>{
+ const M=require(path.join(root,'src/lib/rules/maths.ts'));
+ const base={n:1,question:'3x - 7 = 11',studentWorking:'3x = 11 - 7\n3x = 4\nx = 4/3'};
+ const pts=W.working({...base,verdict:'wrong',slip:'sign-lost-moving'},'the second line');
+ assert.equal(pts.placed,'answer');assert.equal(pts.at,2);assert.deepEqual(pts.mark,{kind:'line'});assert.deepEqual(pts.ticks,[false,false,false],'no tick the desk did not check');
+ assert.equal(typeof W.lookAt,'function');
+ assert.equal(W.lookAt({...base,verdict:'wrong',slip:'sign-lost-moving',slipAt:{line:0,span:'- 7',kind:'sign'}},'the second line'),'Look where the pen is.');
+ assert.equal(W.lookAt({...base,verdict:'wrong',slip:'sign-lost-moving'},'the second line'),'Look at the second line.');
+ assert.equal(W.lookAt({...base,verdict:'right'},'the second line'),null);
+ // the line split is one rule, shared by the server's locate and the TV's pen
+ assert.equal(typeof M.workingLines,'function');assert.equal(W.workingLines,M.workingLines);
+ // ticks before a located slip only on the lines the desk could read as arithmetic
+ assert.deepEqual(W.working({...base,studentWorking:'3x = 18\nx = -6',verdict:'wrong',slipAt:{line:1}}).ticks,[true,false]);
+ assert.deepEqual(W.working({...base,studentWorking:'take 7 from both sides\n3x = 4\nx = 4/3',verdict:'wrong',slipAt:{line:1}}).ticks,[false,false,false]);
+ const TODAY={
+  'undo-wrong-order':'Undone in the wrong order','sign-lost-moving':'Sign lost crossing the equals','divided-one-term':'Only one term divided',
+  'bracket-first-term-only':'Bracket on the first term only','collect-x-wrong-sign':'x-terms gathered with the wrong sign',
+  'multiplied-not-divided':'Multiplied instead of divided','added-not-subtracted':'Done again instead of undone','one-side-only':'Done to one side only',
+  'arithmetic-slip':'A number came out wrong','negative-mishandled':'A minus sign dropped','fraction-not-cleared':'The fraction left in place',
+  'answer-not-checked':'The answer not checked',
+ };
+ assert.deepEqual(Object.fromEntries(M.SLIPS.map(s=>[s.id,s.name])),TODAY);
+ assert.doesNotMatch(fs.readFileSync(path.join(root,'src/maths/MathsTV.tsx'),'utf8'),/SLIP_NAME/,'one list, in rules/maths');
 });

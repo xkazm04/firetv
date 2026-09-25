@@ -11,8 +11,8 @@ landing is [the desk](DESIGN-STUDY-DESK.md), the rest of the shell (pairing, lea
 
 The CSS is `desk/src/design/maths-lamplight.css`, scoped under `.maths-tv`. The screens are
 `desk/src/maths/MathsTV.tsx`, routed by `mathsOwns` in `desk/src/tv/keys.ts`. The maths is read by
-`desk/src/maths/typeset.ts` and set by `desk/src/maths/MathText.tsx`; the pen is placed by
-`desk/src/maths/working.ts`. The faces come from `desk/src/maths/fonts.ts`.
+`desk/src/maths/typeset.ts` and set by `desk/src/maths/MathText.tsx`; the pen is located by
+`desk/src/lib/rules/maths.ts` and drawn by `desk/src/maths/working.ts`. The faces come from `desk/src/maths/fonts.ts`.
 
 ## The idea in one line
 
@@ -122,11 +122,16 @@ The question row sits half a square above its working.
 Every marked line also gets a margin arrow, the item number is ringed, lines after the mark fade to 40%, and the
 kicker beside the paper draws the same mark next to its word (MISSING, WRONG SIGN, NOT ALLOWED, LOOK AGAIN).
 
-**Where the pen goes** (`working.ts`), most specific first: the marker's `slipAt` (a line, a span of it and a
-kind - an optional `PracticeItem` field the store keeps only on a wrong item; nothing fills it yet); else the slip's
-rulebook `points` when it names a line ("the second line", "the last line") - that line is marked and the lines
-before it ticked; `answer-not-checked` opens a gap after the last line; else the answer line, which the verdict is
-about, is marked and nothing else is claimed.
+**Where the pen goes** is decided on the server, in `lib/rules/maths.ts`: `rootOf` finds the linear root in code
+(two evaluations, a third to prove the line), and `locate` returns the first line of the learner's working that stops
+holding at that root, with a ringed sign only when flipping exactly one written sign repairs the line - never on a
+line where x stands alone, so the answer's own sign is never ringed. A line in words is skipped, never blamed.
+Marking and a wrong settle write it into `slipAt` (a line, a span of it and a kind - kept by the store only on a
+wrong item). `working.ts` only draws it, most specific first: `slipAt`, with a tick on each earlier line that reads
+as arithmetic (it held at the root); `answer-not-checked` opens a gap after the last line; else the answer line,
+which the verdict is about, is marked and nothing else is claimed. The rulebook's prose `points` never places the
+pen or earns a tick; the taped card says "Look where the pen is." when the pen was placed from the working. The
+line split (`workingLines`) and the slip names are one rule each, in `rules/maths`.
 
 ## Components
 
