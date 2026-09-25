@@ -17,7 +17,7 @@ const SCHEMA = {
   type: "object",
   properties: {
     hint: { type: "string", description: "The hint, said to the learner as \"you\"; the learner reads it on the TV and hears it aloud." },
-    what_to_try_next: { type: "string", description: "One concrete thing the learner can do on their paper now, said to them as \"you\". Not a note for a teacher, parent or tutor." },
+    what_to_try_next: { type: "string", description: "Where to look or what to write down on their paper now, said to them as \"you\". Never the answer to the hint's own question. Not a note for a teacher, parent or tutor." },
   },
   required: ["hint", "what_to_try_next"],
 };
@@ -42,7 +42,11 @@ export async function hint(subject: Subject, problem: string, opts: { previous?:
     `Two or three sentences at most. Plain text only — no LaTeX, no markdown; write x^2 as x². This will be read aloud.\n\n` +
     `Who reads it: the learner, on the TV and aloud - both the hint and what_to_try_next. Speak to them as "you". ` +
     `Never refer to the learner in the third person and never write instructions for a teacher, parent or tutor. ` +
-    `what_to_try_next is one concrete thing the learner can do on their paper now. ` +
+    `what_to_try_next is one concrete thing the learner can do on their paper now: WHERE to look or WHAT to write down ` +
+    `(circle a term, copy a line, write the two sides one under the other, write their own answer to the hint's question). ` +
+    `The hint asks the learner a question; what_to_try_next must never answer it. Never name in it the operation, the number ` +
+    `or the result the hint's question is asking for - if the hint asks "what undoes the + 5?", what_to_try_next does not ` +
+    `say "subtract 5"; it says where to write their answer. ` +
     `You have not seen their work and they have not answered you: do not open with praise, agreement or a verdict ` +
     `(no "Perfect", "Great", "Right", "Good"); start with the maths.` +
     (opts.rule ? `\n\nThe grammar that applies has been worked out already. Use it and do not contradict it:\n${cardText(opts.rule)}` : "");
