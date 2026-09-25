@@ -31,8 +31,11 @@ uat/
   driver/linga-text.cjs  the LT driver
   driver/surface.cjs     what a Character sees and can do: LingaTV and LingaPhone rendered for the session
   driver/recertify.cjs   recertify from a run's own data: open pairs, metric deltas, confounds, write-back
+  driver/ledger.cjs      one open ledger across every run: run-qualified ids, recurs chains, unasked counts, OPEN.md
+  driver/verdict.cjs     the journey verdict decided in code from named checks
   runs/<id>/             findings.json, report.md, SUMMARY.md, run.json, per-Character transcripts and voices
   runs/<id>/recert-<k>/  a rerun of <id>'s open pairs; recertify.md (then recertify-<k>.md) sits beside <id>'s findings
+  runs/OPEN.md           derived by --status (and after a ledger recertify): what is open now across every run
 ```
 
 ## Run
@@ -41,10 +44,12 @@ uat/
 node uat/driver/linga-text.cjs                       # every Character, their bound journeys, in parallel
 node uat/driver/linga-text.cjs viktor-67 adela-17    # only these Characters
 node uat/driver/linga-text.cjs --journeys J1,J2      # only these journeys
-node uat/driver/linga-text.cjs --recertify 2026-09-15-lt-recert2-beginners   # after a fix: rerun only what is open
+node uat/driver/linga-text.cjs --recertify 2026-09-15-lt-recert2-beginners   # after a fix: rerun only what that run left open
+node uat/driver/linga-text.cjs --status              # what is open now across every run (writes runs/OPEN.md; no model call)
+node uat/driver/linga-text.cjs --recertify           # rerun every pair with an open row in any run
 ```
 
-See `env.md` for the engine switches. A run writes `uat/runs/<date>-lt/`. A recertify writes into the run it recertifies (see env.md, *Recertify*).
+See `env.md` for the engine switches. A run writes `uat/runs/<date>-lt/`. A recertify writes into the run it recertifies (see env.md, *Recertify*); a recertify with no run stamps each answer into the run that owns the row (env.md, *The open ledger*). Start a drain from `--status`: it lists every open row by its run-qualified id `<run>/<id>` and how many later runs passed it by unasked.
 
 ## Character template
 
