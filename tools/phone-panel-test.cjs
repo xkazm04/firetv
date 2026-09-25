@@ -104,6 +104,7 @@ const FIXTURES={
  walk:{s:session({screen:'walk',practice:set(true)}),panel:'practice',why:'Tell the desk on the phone how you got there'},
  page:{s:session({screen:'page',pages:[page],jobs:{read:{id:'j1',kind:'read',phase:'failed',key:'p1',error:'x',startedAt:0}}}),panel:'capture',why:'The desk could not read this page. Snap it again on the phone'},
  essaytype:{s:session({screen:'essaytype',subject:'essay'}),panel:'paste',why:'Paste, type or dictate one paragraph on the phone'},
+ sentence:{s:session({screen:'sentence',subject:'english',english:null}),panel:'say',why:'Say one sentence on your phone (nothing checked yet)'},
  forensic:{s:session({screen:'forensic',subject:'essay'}),panel:'paste',why:'Rewrite on my phone'},
 };
 for(const sc of SCREENS)if(sc.startsWith('linga'))FIXTURES[sc]={s:session({screen:sc,subject:'english'}),panel:'linga',why:'Linga: answer on your phone',linga:true};

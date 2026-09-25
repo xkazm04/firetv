@@ -11,7 +11,7 @@ import { lingaOwns } from "@/tv/keys";
 /** The phone's panels. */
 export type PScreen = "join" | "joined" | "capture" | "practice" | "point" | "say" | "paste" | "tonight" | "parent" | "profile" | "linga";
 
-type Seen = Pick<Session, "joined" | "screen" | "subject" | "awaiting" | "practice" | "pages" | "pageIx" | "jobs">;
+type Seen = Pick<Session, "joined" | "screen" | "subject" | "awaiting" | "practice" | "pages" | "pageIx" | "jobs"> & Partial<Pick<Session, "english">>;
 
 /** A hand-off: the panel it wants, and a key that changes only when the TV asks for something new. */
 interface Cue { panel: PScreen; key: string }
@@ -39,6 +39,8 @@ function cueFor(s: Seen): Cue | null {
     }
     // "Paste, type or dictate one paragraph on the phone" / "Rewrite on my phone"
     case "essaytype": case "forensic": return { panel: "paste", key: sc };
+    // "Say one sentence on your phone": the sentence screen with nothing to check yet (Linga's Sentence help)
+    case "sentence": return s.english ? null : { panel: "say", key: "sentence:empty" };
     // "circle on the phone" (a paused lesson): no phone panel circles a lesson frame, so the phone stays
     default: return null;
   }

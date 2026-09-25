@@ -216,7 +216,16 @@ export function LessonScreen({ s }: { s: Session }) {
 
 // ---- T6 Your sentence ----
 export function SentenceScreen({ s, focus }: { s: Session; focus: number }) {
-  const a = s.english; if (!a) return null;
+  const a = s.english;
+  // nothing to check yet (Linga's menu, Sentence help): one ask, not a blank screen
+  if (!a) return (<>
+    <div className="band band-rule" />
+    <main className="content-full">
+      <div className="eyebrow" style={{ marginTop: 40 }}>English · your sentence</div>
+      <div className="title" style={{ marginTop: 50 }}>Nothing yet</div>
+      <div style={{ position: "absolute", left: 0, bottom: 216 }}><span className="cap">Your turn</span><div className="cap-text">Say one sentence on your phone; the TV shows what the time word decides.</div></div>
+    </main>
+  </>);
   const { card } = a;
   const parts: Array<{ text: string; k?: "tense" | "marker"; l?: string }> = [];
   let rest = a.sentence;
