@@ -182,9 +182,6 @@ private fun DrawScope.drawNameTag(a: Annotation.NameTag, rect: ContentRect) {
  */
 private const val PRESSURE_BUCKETS = 6
 
-/** Matches [Smoothing.decimate]'s default: points closer than this are the finger holding still. */
-private const val MIN_POINT_DISTANCE = 0.004
-
 /** Catmull-Rom at the tension the renderer has always used; kept here so spans can be fitted one at a time. */
 private const val SPLINE_K = 1.0 / 6.0
 
@@ -248,6 +245,7 @@ private class StrokeRender {
         if (this.rect != rect || a.points.size < consumedRaw) reset(rect)
 
         val pts = a.points
+        val minPx = rect.w(Smoothing.MIN_POINT_DISTANCE).toDouble()
         while (consumedRaw < pts.size) {
             val p = pts[consumedRaw++]
             lastRawX = p[0]
@@ -258,9 +256,11 @@ private class StrokeRender {
                 kept += doubleArrayOf(lastRawX, lastRawY, lastRawP)
                 continue
             }
-            val dx = lastRawX - last[0]
-            val dy = lastRawY - last[1]
-            if (dx * dx + dy * dy >= MIN_POINT_DISTANCE * MIN_POINT_DISTANCE) {
+            // Measured in pixels, which is round on screen by construction: the same threshold
+            // as Smoothing.decimate, whose Metric measures in content-width units.
+            val dx = (lastRawX - last[0]) * rect.width
+            val dy = (lastRawY - last[1]) * rect.height
+            if (dx * dx + dy * dy >= minPx * minPx) {
                 kept += doubleArrayOf(lastRawX, lastRawY, lastRawP)
             }
         }
