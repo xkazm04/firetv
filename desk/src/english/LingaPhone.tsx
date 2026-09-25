@@ -4,6 +4,7 @@ import type { Event, Session } from "@/lib/session/store";
 import { defaultPreferences, eligibleScenes, ENGLISH_SCENES, ENGLISH_SKILLS, PROGRESS_LABEL, recommendScene } from "@/lib/english/curriculum";
 import { ABOUT_QUESTIONS, BAND_CAN, BAND_NAME, isBand, MAX_TASKS, PLAN_MAX, TOPIC_ASK_MAX } from "@/lib/english/placement";
 import { BANDS, type Band, type Conversation, type EnglishLearning, type EnglishPreferences, type LevelCheck, type Placement } from "@/lib/english/types";
+import { accepts, turnState } from "@/lib/english/turn";
 import { helpOf, lingaHome, lingaView, offeredActions, phonePanel, type ViewAction } from "@/lib/english/view";
 import { ReplyBox } from "./ReplyBox";
 import { useEnglish } from "./useEnglish";
@@ -28,6 +29,8 @@ export function LingaPhone({s,post,onSentence}:{s:Session;post:(e:Event)=>Promis
   // what the phone may draw beyond its own panel's fixed controls comes from the Linga screen model (lib/english/view.ts)
   const offered=offeredActions(lingaView(s)),offer=(id:string)=>offered.find(a=>a.id===id);
   const cue=offer("cue"),quiz=offer("quiz"),panelOf=phonePanel(s);
+  // where the conversation stands in its turn, and what the server takes there (lib/english/turn.ts)
+  const st=c?turnState(c):null,inFlight=st==="preparing"||st==="waiting",refused=(action:string)=>busy||!c||!accepts(c,action);
   return <div className="pscreen linga-phone">
     <h3>Linga · {s.learner.name}</h3>
     <div className="linga-buttons"><button className="pbtn" data-secondary={panel!=="talk"} onClick={()=>setPanel("talk")}>Talk</button><button className="pbtn" data-secondary={panel!=="settings"} onClick={()=>{setPrefs(learning.preferences??defaultPreferences(profile));setNotes(learning.notes.join("\n"));setPanel("settings");}}>Set up</button><button className="pbtn" data-secondary={panel!=="map"} onClick={()=>setPanel("map")}>My map</button></div>
@@ -58,20 +61,20 @@ export function LingaPhone({s,post,onSentence}:{s:Session;post:(e:Event)=>Promis
       :panelOf==="start"||!c?<StartPanel s={s} learning={learning} run={run} busy={pending} list={!!offer("pick-situation")}/>
       :<>
         <p><b>{c.title}</b><br/>{c.goal}</p>
-        <div className="linga-status" aria-live="polite">{c.pending?"Your partner is preparing a reply…":c.paused?"Paused. Resume when you are ready.":c.phase==="coaching"?c.coaching?.note:currentQuestion||"Preparing your scene…"}</div>
+        <div className="linga-status" aria-live="polite">{inFlight?"Your partner is preparing a reply…":c.paused?"Paused. Resume when you are ready.":st==="coaching"?c.coaching?.note:currentQuestion||"Preparing your scene…"}</div>
         {c.error&&<p className="linga-error" role="alert">{c.error}</p>}
-        {c.paused?<button className="pbtn" data-signal="true" onClick={()=>run("resume")}>Resume conversation</button>:c.phase==="coaching"?<>
-          <p>One way to try it: “{c.coaching?.after}”</p><button className="pbtn" data-signal="true" disabled={pending} onClick={()=>run("replay")}>Replay with a new question</button>
+        {c.paused?<button className="pbtn" data-signal="true" disabled={refused("resume")} onClick={()=>run("resume")}>Resume conversation</button>:st==="coaching"?<>
+          <p>One way to try it: “{c.coaching?.after}”</p><button className="pbtn" data-signal="true" disabled={refused("replay")} onClick={()=>run("replay")}>Replay with a new question</button>
         </>:<>
           {c.cue&&<p><b>{helpOf(c).tag}</b><br/>{c.cue}</p>}
-          {c.quizOpen&&scene&&<><p>{scene.quiz.question}</p>{scene.quiz.options.map((x,i)=><button className="pbtn" data-secondary="true" key={x} disabled={pending} onClick={()=>run("choice",{option:i})}>{x}</button>)}</>}
-          <ReplyBox ready={!!currentQuestion} busy={pending} question={c.turns.at(-1)?.id} stopWhen={c.paused||!!c.pending} onCapture={active=>run("capture",{active})}
+          {c.quizOpen&&scene&&<><p>{scene.quiz.question}</p>{scene.quiz.options.map((x,i)=><button className="pbtn" data-secondary="true" key={x} disabled={refused("choice")} onClick={()=>run("choice",{option:i})}>{x}</button>)}</>}
+          <ReplyBox ready={!!currentQuestion} busy={pending} question={c.turns.at(-1)?.id} stopWhen={!accepts(c,"capture")} onCapture={active=>run("capture",{active})}
             onSend={(text,mode,question,attempt)=>run("turn",{text,mode,lastTurnId:question,commandId:attempt})} note="Recorded as written practice. Edited transcripts also stay separate from speaking evidence."/>
-          <div className="linga-buttons">{cue&&<button className="pbtn" data-secondary="true" disabled={pending} onClick={()=>run("cue")}>{cue.label}</button>}{quiz&&<button className="pbtn" data-secondary="true" disabled={pending} onClick={()=>run("quiz")}>{quiz.label}</button>}</div>
-          <button className="pbtn" data-secondary="true" disabled={pending||!c.turns.some(t=>t.role==="learner")} onClick={()=>run("coach")}>Pause & coach</button>
+          <div className="linga-buttons">{cue&&<button className="pbtn" data-secondary="true" disabled={busy||cue.disabled} onClick={()=>run("cue")}>{cue.label}</button>}{quiz&&<button className="pbtn" data-secondary="true" disabled={busy||quiz.disabled} onClick={()=>run("quiz")}>{quiz.label}</button>}</div>
+          <button className="pbtn" data-secondary="true" disabled={refused("coach")} onClick={()=>run("coach")}>Pause & coach</button>
         </>}
-        <div className="linga-buttons"><button className="pbtn" data-secondary="true" onClick={()=>run(c.pending?"leave":"repeat")}>{c.pending?"Cancel pending turn":"Repeat audio"}</button><button className="pbtn" data-secondary="true" disabled={pending} onClick={()=>run("finish")}>Finish rehearsal</button></div>
-        {!c.turns.length&&!c.pending&&<button className="pbtn" onClick={()=>run("start",{sceneId:c.sceneId,replace:true})}>Retry preparing scene</button>}
+        <div className="linga-buttons"><button className="pbtn" data-secondary="true" onClick={()=>run(inFlight?"leave":"repeat")}>{inFlight?"Cancel pending turn":"Repeat audio"}</button><button className="pbtn" data-secondary="true" disabled={refused("finish")} onClick={()=>run("finish")}>Finish rehearsal</button></div>
+        {st==="unprepared"&&<button className="pbtn" onClick={()=>run("start",{sceneId:c.sceneId,replace:true})}>Retry preparing scene</button>}
         <details><summary>Conversation transcript</summary><div className="linga-transcript">{c.turns.map(t=><p key={t.id} data-role={t.role}><b>{t.role==="learner"?`You · ${t.mode==="speech"?"spoken":"written"}`:c.partner}</b>{t.text}</p>)}</div></details>
       </>}
       <button className="pbtn" data-secondary="true" onClick={()=>post({type:"subject",subject:"english"}).then(()=>post({type:"nav",screen:"linga"}))}>Linga on the TV</button>
@@ -174,7 +177,7 @@ function StartPanel({s,learning,run,busy,list}:{s:Session;learning:EnglishLearni
   switch(home){
     case "resume":body=<>
       <p>Your conversation <b>{c?.title}</b> is waiting. Carry on from the last question.</p>
-      <button className="pbtn" data-signal="true" disabled={busy} onClick={()=>run("resume")}>Carry on talking</button>
+      <button className="pbtn" data-signal="true" disabled={busy||!!c&&!accepts(c,"resume")} onClick={()=>run("resume")}>Carry on talking</button>
       {pick}
     </>;break;
     case "check-part-way":body=<>
@@ -221,6 +224,6 @@ function MomentPanel({c,run,busy}:{c:Conversation;run:Run;busy:boolean}){
     <p><b>{m.kind==="fix"?"One thing to fix":"A word for this scene"}</b></p>
     <div className="linga-status">{m.kind==="fix"?<>You said “{m.said}”<br/>Try “{m.better}”</>:<>You wanted to say “{m.said}”<br/>In English: “{m.better}”</>}</div>
     <p>{m.why}</p>
-    <button className="pbtn" data-signal="true" disabled={busy} onClick={()=>run("moment-done")}>Back to the conversation</button>
+    <button className="pbtn" data-signal="true" disabled={busy||!accepts(c,"moment-done")} onClick={()=>run("moment-done")}>Back to the conversation</button>
   </>;
 }

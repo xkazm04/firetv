@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import type { Event, Screen, Session } from "@/lib/session/store";
 import { ENGLISH_SCENES } from "@/lib/english/curriculum";
+import { accepts } from "@/lib/english/turn";
 import { activeCheck, artOf, lingaView, NO_UI, progressDots, type ArtKey, type Hero, type LingaUi, type LingaView, type ViewAction } from "@/lib/english/view";
 import { landingFocus } from "@/tv/landingRows";
 import { useEnglish } from "./useEnglish";
@@ -51,7 +52,8 @@ export function LingaTV({s,post,voice}:{s:Session;post:(e:Event)=>Promise<void>;
         else{patch({menu:false});post({type:"nav",screen:"linga",focus:0});}
         return;
       }
-      if(k===" "){if(c&&!onCheck)cmd("pause");return;}
+      // Space pauses and resumes the scene, only where the turn takes a pause: never over a reply in flight
+      if(k===" "){if(c&&!onCheck&&accepts(c,"pause"))cmd("pause");return;}
       if(k==="ArrowUp"&&home&&!menu&&!picking){post({type:"nav",screen:"learner",from:"linga"});return;}
       if(k.startsWith("Arrow")){const delta=k==="ArrowRight"||k==="ArrowDown"?1:-1;post({type:"focus",focus:focus<0?0:(focus+delta+actions.length)%actions.length});return;}
       const a=actions[Math.max(0,focus)];if(a&&!a.disabled&&(!waiting||cancel(a)))go(a);

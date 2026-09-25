@@ -9,6 +9,7 @@ import { ConversationError } from "./errors";
 import { climb, keepLadder, MEANING_MAX, SIMPLER_MAX, STARTER_MAX, supportedBy, validLadder } from "./help";
 import { BAND_NAME, BAND_TUTOR, easyBand, isBand, TAUGHT_CAP } from "./placement";
 import { mergeEvidence, parsePreferences, validateObservations } from "./rules";
+import { accepts, isTurnAction, refusal } from "./turn";
 import type { Conversation, EnglishEvidence, EnglishScene, EvidenceMode, Moment, SkillId } from "./types";
 
 export { ConversationError };
@@ -130,18 +131,17 @@ export async function englishCommand(raw:unknown){
   if(c.commands.includes(commandId))return getSession();
   const prefs=learning.preferences??defaultPreferences(profile),scene=sceneOf(c);
   if(!scene||!audienceAllowed(profile,prefs,scene.audience))throw new ConversationError("This situation is no longer available for this learner.",403);
+  // Stopping the phone's microphone is never refused: it only ever ends a capture.
+  if(action==="capture"&&input.active!==true){commit({...c,capture:false,captureAt:Date.now()});return getSession();}
+  if(!isTurnAction(action))throw new ConversationError("Unknown conversation action.");
+  // One guard for the whole turn (turn.ts): the table the view and both devices read decides what this state takes.
+  if(!accepts(c,action))throw new ConversationError(refusal(c,action),409);
   if(action==="leave") {commit({...c,pending:null,paused:true,capture:false,quizOpen:false},"linga");return getSession();}
-  if(action==="resume") {commit({...c,pending:null,paused:false,capture:false,error:""},screenFor(c));return getSession();}
-  if(action==="moment-done") {if(c.moment)commit({...c,moment:null},"linga-talk");return getSession();}
-  if(action==="capture"){
-    if(input.active===true&&(c.pending||c.paused||c.phase==="finished"||c.phase==="coaching"||c.moment))throw new ConversationError("Return to the conversation before speaking.",409);
-    commit({...c,capture:input.active===true,captureAt:Date.now()});return getSession();
-  }
+  if(action==="resume") {commit({...c,paused:false,capture:false,error:""},screenFor(c));return getSession();}
+  if(action==="moment-done") {commit({...c,moment:null},"linga-talk");return getSession();}
+  if(action==="capture") {commit({...c,capture:true,captureAt:Date.now()});return getSession();}
   if(action==="pause") {commit({...c,paused:!c.paused,capture:false});return getSession();}
   if(action==="repeat") {commit({...c,audioNonce:c.audioNonce+1,capture:false});return getSession();}
-  if(c.pending)throw new ConversationError("The partner is preparing a reply. You can cancel and return later.",409);
-  if(c.phase==="finished")throw new ConversationError("This rehearsal has finished. Start a new situation.",409);
-  if(c.moment&&action!=="finish")throw new ConversationError("Take in the moment on the TV, then carry on.",409);
   if(action==="cue"){
     // The next rung of the line on screen, or the scene's cue when that line has no ladder. No model call. The
     // command id is kept, so a retried request cannot climb a second rung.
@@ -153,7 +153,7 @@ export async function englishCommand(raw:unknown){
   }
   if(action==="choice"){
     const quiz=scene.quiz;
-    if(!c.quizOpen||![0,1].includes(input.option as number))throw new ConversationError("Choose one of the displayed phrases.");
+    if(![0,1].includes(input.option as number))throw new ConversationError("Choose one of the displayed phrases.");
     const correct=input.option===quiz.correct;
     const e:EnglishEvidence={id:`${c.id}:${commandId}:choice`,episodeId:c.id,turnId:commandId,sceneId:c.sceneId,skill:c.focusSkill,at:Date.now(),mode:"choice",supported:true,success:correct,quote:quiz.options[input.option as number],note:"Recognised a supporting phrase; not speaking evidence."};
     saveEnglish(learnerId,mergeEvidence(learning,[e]));
@@ -164,20 +164,16 @@ export async function englishCommand(raw:unknown){
     saveEnglish(learnerId,{...learning,sessions:[...learning.sessions.filter(x=>x.id!==c.id),entry].slice(-30)});
     commit({...c,phase:"finished",moment:null,capture:false,quizOpen:false,paused:false,commands:[...c.commands,commandId]},"linga-recap");return getSession();
   }
-  if(!["turn","coach","replay"].includes(action))throw new ConversationError("Unknown conversation action.");
-  if(c.paused)throw new ConversationError("Resume the conversation first.",409);
+  // what is left is turn, coach or replay: each asks the model
   if(c.turns.filter(t=>t.role==="learner").length>=24&&action==="turn")throw new ConversationError("A good place to pause. Finish this rehearsal and start a new scene.");
   let reply="",mode:EvidenceMode="text";
   if(action==="turn"){
-    if(!c.turns.length)throw new ConversationError("Prepare the scene before sending a reply.",409);
-    if(c.phase==="coaching")throw new ConversationError("Replay the coaching moment before replying.",409);
     if(input.lastTurnId!==c.turns.at(-1)?.id)throw new ConversationError("A new question arrived. Review it before sending your reply.",409);
     reply=required(input.text,"reply",1200);
     if(!["speech","text"].includes(String(input.mode)))throw new ConversationError("Choose a speech or typed reply.");
     mode=input.mode as EvidenceMode;
   }
   const lastLearner=[...c.turns].reverse().find(t=>t.role==="learner");
-  if(action==="coach"&&!lastLearner)throw new ConversationError("Try a reply first; use a cue if you need help.");
   if(action==="replay"&&!c.coaching)throw new ConversationError("Ask for a coaching moment first.");
   const mayStop=action==="turn"&&momentAllowed(c);
   commit({...c,pending:commandId,capture:false,error:""});
