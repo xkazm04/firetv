@@ -12,10 +12,9 @@ import type { Profile, Session } from "@/lib/session/store";
 import { fmt } from "./useSession";
 import { stopAt, learnerStops, unitStops, recapStops, HINT_STOPS, SENTENCE_STOPS } from "./keys";
 import { recapRows, recapCaption, type RecapTile, type MathsTile, type LingaTile, type EssayTile } from "./recapRows";
-import { Mark as MathsMark } from "@/maths/MathsTV";
+import { MathsMark, EssayBrand, EssayArrow } from "./marks";
 import { MATHS_FONTS } from "@/maths/fonts";
 import { Mark as LingaMark } from "@/english/OpenDoor";
-import { Brand as EssayBrand, Arrow as EssayArrow } from "@/essay/EssayTV";
 import { ESSAY_FONTS } from "@/essay/fonts";
 
 /** The OCR writes exponents as ^n and the tutor may too; the screen shows them as printed. */

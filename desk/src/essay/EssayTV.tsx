@@ -14,9 +14,10 @@ import { stopAt, lensStops, forensicAt, rewriteStatus, LENS_STOPS, PLAYBOOK_STOP
 import { lensStandings, writingTotals } from "@/tv/writingRows";
 import { fmt } from "@/tv/useSession";
 import { day } from "@/tv/screens";
+import { CIT, BONE, EssayBrand as Brand, EssayArrow as Arrow } from "@/tv/marks";
 import { ESSAY_FONTS } from "./fonts";
 
-const CIT = "#DCFF4E", BONE = "#EEE9E0", MUTE = "rgba(238,233,224,.5)";
+const MUTE = "rgba(238,233,224,.5)";
 
 /** The root every Essay Master screen is drawn in. `table` is the TV's own Menu toggle on the forensic page. */
 export function EssayTV({ s, table }: { s: Session; table: boolean }) {
@@ -32,15 +33,6 @@ export function EssayTV({ s, table }: { s: Session; table: boolean }) {
 
 // ---------------------------------------------------------------- the shell: brand, chips, caption
 
-/** The mark: a whole E with the citron caret after it. */
-export function Brand() {
-  return (
-    <header className="em-brand" data-role="essay-mark">
-      <svg className="em-mark" viewBox="0 0 64 72" aria-hidden="true"><path fill={BONE} d="M4 6h40v12H17v12h23v12H17v12h27v12H4z" /><rect x="52" y="1" width="8" height="70" fill={CIT} /></svg>
-      <div className="em-wm">ESSAY<b>MASTER</b></div>
-    </header>
-  );
-}
 /** The header chips: what Menu does here, the focus timer, the phone, the learner. Status, never a stop. */
 function Top({ s, menu, lit }: { s: Session; menu: string; lit?: boolean }) {
   return (
@@ -80,14 +72,6 @@ const ACT_ICON: Record<(typeof FORENSIC_STOPS)[number], ReactNode> = {
 };
 const ACT_WORD: Record<(typeof FORENSIC_STOPS)[number], string> = { rewrite: "Rewrite on my phone", why: "Why this matters", next: "Next sentence", back: "Back to the paragraph" };
 
-/** An arrow the length of a sentence: with the side the paragraph takes, or (against) pointing back at it. */
-export function Arrow({ len, against, color, h = 28, className }: { len: number; against?: boolean; color: string; h?: number; className?: string }) {
-  const y = h / 2, t = 7, head = h * 0.62;
-  const d = against
-    ? `M${len} ${y - t / 2}H${head}V1L0 ${y}L${head} ${h - 1}V${y + t / 2}H${len}z`
-    : `M0 ${y - t / 2}H${len - head}V1L${len} ${y}L${len - head} ${h - 1}V${y + t / 2}H0z`;
-  return <svg className={className} width={len} height={h} viewBox={`0 0 ${len} ${h}`} aria-hidden="true"><path d={d} fill={color} /></svg>;
-}
 /** A word as letters in three groups: Structure splits on them, Language ripples through them. */
 function Letters({ word }: { word: string }) {
   const n = word.length, a = Math.ceil(n / 3), b = Math.ceil((2 * n) / 3);
