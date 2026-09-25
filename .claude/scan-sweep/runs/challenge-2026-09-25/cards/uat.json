@@ -1,0 +1,155 @@
+{
+  "host": "uat",
+  "riders": [],
+  "files_read": [
+    ".claude/scan-sweep/runs/challenge-2026-09-25/scout-brief.md",
+    ".claude/scan-sweep/runs/challenge-2026-09-25/cohort.json",
+    ".claude/skills/scan-sweep/references/challenge.md",
+    ".claude/skills/scan-sweep/references/lenses.md (Group: challenge)",
+    ".claude/scan-sweep/config.md (Repo law)",
+    ".claude/spark/config.md (Repo law)",
+    ".claude/scan-sweep/runs/challenge-2026-09-23/deck.md",
+    ".claude/scan-sweep/runs/challenge-2026-09-23/findings.jsonl",
+    ".claude/scan-sweep/runs/challenge-2026-09-23/cards/uat.json",
+    ".claude/scan-history/open-backlogs.jsonl (uat rows)",
+    ".personas/memory-outbox.jsonl (uat rows)",
+    ".claude/skills/uat/SKILL.md (certification levels, finding schema, run, recertify, drain)",
+    "context-map.json (tooling group)",
+    "uat/driver/linga-text.cjs",
+    "uat/driver/surface.cjs",
+    "uat/driver/recertify.cjs",
+    "uat/README.md",
+    "uat/env.md",
+    "uat/rubric.md",
+    "uat/references.md",
+    "uat/accepted-gaps.md",
+    "uat/.gitignore",
+    "uat/journeys/J1-find-level.md",
+    "uat/journeys/J2-agree-topics.md",
+    "uat/journeys/J3-first-conversation.md",
+    "uat/journeys/J4-stuck.md",
+    "uat/journeys/J5-boundaries.md",
+    "uat/characters/tomas-9.md (full) and the sim block of all ten Characters",
+    "tools/uat-surface-test.cjs",
+    "tools/uat-recertify-test.cjs",
+    "desk/package.json (test scripts)",
+    "uat/runs/2026-09-15-lt/VERIFY.md",
+    "uat/runs/2026-09-15-lt/recertify.md",
+    "uat/runs/2026-09-15-lt-recert2-beginners/report.md",
+    "uat/runs/2026-09-15-lt-recert2-beginners/SUMMARY.md",
+    "uat/runs/*/findings.json (all five, counted by script)",
+    "uat/runs/*/<character>.json judge blocks (all 84 judged journeys, counted by script)",
+    "desk/src/lib/english/view.ts (exports only)"
+  ],
+  "cards": [
+    {
+      "context": "uat",
+      "host": "uat",
+      "slot": "A",
+      "lens": "architecture-challenger",
+      "title": "Journey verdicts decided in code from named checks, not by the judge",
+      "size": "M",
+      "effort": 6,
+      "impact": 8,
+      "risk": 5,
+      "write_set": [
+        "uat/driver/verdict.cjs",
+        "uat/driver/linga-text.cjs",
+        "uat/driver/recertify.cjs",
+        "uat/journeys/J1-find-level.md",
+        "uat/journeys/J2-agree-topics.md",
+        "uat/journeys/J3-first-conversation.md",
+        "uat/journeys/J4-stuck.md",
+        "uat/journeys/J5-boundaries.md",
+        "uat/rubric.md",
+        "uat/env.md",
+        "tools/uat-verdict-test.cjs",
+        "desk/package.json"
+      ],
+      "new_files": [
+        "uat/driver/verdict.cjs",
+        "tools/uat-verdict-test.cjs"
+      ],
+      "shared_surfaces": [
+        "desk/package.json (append node ../tools/uat-verdict-test.cjs to test:rules)"
+      ],
+      "acceptance": [
+        "case 1: doneChecks() over the five journey files -> J1 5 checks, J2 4, J3 4, J4 4, J5 4, ids D1..Dn in the order of the '## Definition of done' bullets, each carrying its bullet text. judgeRequest() for a J4 record -> schema.required includes 'done', schema.properties.done.items.properties.id.enum is ['D1','D2','D3','D4'] with minItems = maxItems = 4, and the prompt carries the four check texts (tools/uat-verdict-test.cjs, node:test, desk TS via surface.cjs install(), codexText stubbed in the require cache as tools/uat-recertify-test.cjs:39 does, no codex process)",
+        "case 2: a stubbed J4 judge reply with every criterion pass, clean metrics, verdict 'pass' and done [D1 pass, D2 fail '#6 coaching improves an old answer', D3 pass, D4 pass] -> verdictOf() returns verdict 'fail', why names 'D2' with its evidence, judgeVerdict 'pass', agrees false (tools/uat-verdict-test.cjs)",
+        "case 3: the committed viktor-67 J3 of 2026-09-15-lt-recert2-beginners (pitch at 3 of 9, J3 gate 0.8) -> 'fail' with a reason naming pitch 3/9 under 80%. The committed petra-38 J4 of the same run (criteria 3/3, pitch 4/4, moments 1/1, 0 breaches, ended done, no done rows) -> 'pass' with the note 'no definition-of-done rows', judgeVerdict 'fail', agrees false (tools/uat-verdict-test.cjs, reads the committed JSON, writes nothing)",
+        "case 4: a failed criterion whose check starts 'BLOCKER:' (ondrej-16 C1) -> 'fail' naming C1; a failed ordinary criterion with everything else passing -> 'conditional' naming it; metrics.boundaries.breaches 1 or a finding with boundary true -> 'fail' naming the breach (tools/uat-verdict-test.cjs)",
+        "case 5: endedBy 'budget' or 'character-stopped' -> 'fail' with 'ended <how> before done'; endedBy 'setup-failed', 'character-model-failure' or no judge -> 'not-reached'; a done id answered twice, left out or with a status outside pass|fail|n-a -> that check is not-evaluable and the verdict is never 'pass' (at best 'conditional', naming the check) (tools/uat-verdict-test.cjs)",
+        "case 6: over the 84 judged journeys of the five committed runs, verdictOf() reproduces the judge's verdict on 42 under the rule in this card, and every code verdict other than 'pass' carries at least one reason that names a check id, a metric gate, a breach or the ending. synthesize() (synthesis call stubbed to throw) writes report.md whose scorecard Verdict cell is the code verdict with its reasons, and a line 'judge verdicts no recorded check explains: N' (tools/uat-verdict-test.cjs, output in the OS temp dir)",
+        "case 7: renderRecertify() over temp copies: a pair whose judge verdict drops pass -> fail while verdictOf() is 'pass' in both runs is NOT listed under Regressed; a pair whose D2 passed before and fails after IS listed, citing D2 and the run pair (tools/uat-verdict-test.cjs)",
+        "case 8 GUARD: tools/uat-recertify-test.cjs and tools/uat-surface-test.cjs stay green unchanged; a judge reply without done[] (the committed runs, and the stubs in uat-recertify-test) is accepted and never throws the pair (accept schema, as judgeAccept does for prior[]) (npm test in desk/)"
+      ],
+      "premise": [
+        "uat/driver/linga-text.cjs:59 - the judge schema has verdict as a free enum pass|conditional|fail|not-reached; nothing in the driver derives it",
+        "uat/driver/linga-text.cjs:82 - judgeSystem tells the judge to judge 'the journey's definition of done', but the schema has no row per done item: the DoD is read as prose (journey: J[jid].text at linga-text.cjs:441)",
+        "uat/driver/linga-text.cjs:206 - the report scorecard prints jd.verdict beside a criteria count; linga-text.cjs:457 prints it again per Character",
+        "uat/driver/recertify.cjs:193 and :212-217 - recertify's Regressed section ranks the judge's free-hand verdicts (RANK[a] < RANK[b]) with no check behind them",
+        "uat/runs/2026-09-15-lt-recert2-beginners/SUMMARY.md:46 - the synthesis itself reports 'Petra's J4 is marked fail despite criteria 3/3; the input does not explain that scoring relationship'",
+        "uat/journeys/J2-agree-topics.md:13, J3-first-conversation.md:12-13, J1-find-level.md:12 - the DoD states metric gates (topic fit >= 4 of 6, pitch >= 0.8, moment precision >= 0.9, placement exact or near) the driver already has as counted metrics; rubric.md:28-35 fixes their units",
+        "uat/characters/ondrej-16.md:58-59, lukas-24.md:60 - three criteria are marked 'BLOCKER:' in text; no code reads the marker",
+        "uat/runs/2026-09-15-lt/VERIFY.md:44 - the operator's own method lesson: severity and frequency need a code-level definition, not the per-journey judge's",
+        "uat/runs/2026-09-15-lt/recertify.md:35 - viktor-67 J2 of recert2-goal was failed for 'the added topic is absent from the agreement screen', a driver artefact (judge screen cut at 900 characters); a fail that named its check would have pointed at J2's DoD bullet 2 at once"
+      ],
+      "rollback": "Two commits (test, then feat) plus a docs commit; verdict.cjs is new and the driver keeps the judge's own verdict as judgeVerdict, so git revert of the series restores the free-hand verdict with no data migration. Committed runs are never rewritten: verdictOf() reads them.",
+      "gate": "none",
+      "runner_up": "Journey semantics (start fixture, done() predicate, facts) move out of the driver's `if (jid === 'J1')` branches (linga-text.cjs:374-383, 418-427, recertify.cjs:111) into the journey files, so a sixth journey is a file, not three driver edits",
+      "body": "## Summary\nThe UAT's headline number - each journey's pass/conditional/fail - is chosen free-hand by the codex judge. Half of the 84 judged journeys on disk cannot be reproduced from the checks the same run recorded. Make the judge answer atomic named checks (the journey's Definition-of-done bullets, D1..Dn, beside the Character's criteria it already answers) and decide the verdict in code from those checks, the metric gates the DoD states, blocker criteria, breaches and how the journey ended.\n\n## Description\nThe skill's consistency harness is 'judgement externalized into explicit, scored criteria'. The driver honours that for criteria and metrics, then lets the judge pick the verdict anyway (linga-text.cjs:59). On the committed runs: 15 journeys are 'fail' with every applicable criterion passing, 20 are 'conditional' with every criterion passing, and a rule over the recorded checks (criteria, metric gates, breaches, ending) agrees with the judge on 42 of 84. The missing inputs are the DoD bullets, which the judge reads as prose (linga-text.cjs:441) and never answers item by item. The verdict then feeds three consumers: the report scorecard (linga-text.cjs:206), the per-Character report (:457) and recertify's regression detector (recertify.cjs:212-217), which today flags a regression when a model's mood changes.\n\nThe move: a pure uat/driver/verdict.cjs with doneChecks(journeyFile) (the '## Definition of done' bullets become D1..Dn, derived, never hand-copied), gates from a `gates` field in each journey's sim block (J1 placement exact|near, J2 topic fit >= 4/6 and safe = all, J3 pitch >= 0.8 and moments >= 0.9, J5 0 breaches), and verdictOf(record, ctx) -> {verdict, why[], judgeVerdict, agrees}. The judge schema gains done[] with one row per D id (minItems = maxItems, checked in code like prior[]). Code order: not-reached (no judge, setup or model failure) -> fail (ended before done, breach, BLOCKER criterion, failed D check, missed gate) -> conditional (failed ordinary criterion, unanswered D check) -> pass. The judge's own verdict is kept as judgeVerdict, and the report counts where no check explains it: that is a finding about the judge, not about Linga. Decisions stay in code (repo law) - applied to the harness that judges the product.\n\n## Flow\n- child: judge answers criteria[], done[] (new), metrics, findings, as before\n- verdictOf() decides the verdict and names its reasons; record.verdict + record.verdictWhy saved\n- report.md scorecard: 'fail - D2 (#6), pitch 1/4 < 80%' instead of a bare 'fail'; plus 'judge verdicts no recorded check explains: N'\n- recertify: Regressed compares code verdicts; a changed judge mood alone is not a regression\n- run.json driver hash changes, so recertify.cjs confounds() already marks the instrument change\n\n## Expected impact\nEvery verdict an operator reads can be traced to a check with step evidence. The 24 committed verdicts that are harsher than every recorded check become either explained (a D row) or visible as judge noise. Recertify stops reporting regressions that no check supports. A driver artefact like the 900-character cut is found from the scorecard instead of by re-reading transcripts.\n\n## Evaluation\nClaim: the journey verdict is reproducible from named checks; recertify regressions rest on checks\nBefore: 0 of 8 acceptance cases pass; 42 of 84 committed verdicts reproducible from the recorded checks, 0 of 84 carry a reason\nAfter: 8 of 8; every non-pass verdict carries >= 1 named reason\nMethod: gate - acceptance cases written as failing tests first\nResult: better\nGate: none",
+      "evidence": "Script over uat/runs/*/<character>.json (84 judged journeys): allpass_but_fail 15, allpass_conditional 20. Examples: 2026-09-15-lt-recert2-beginners petra-38 J4 criteria 3/3 verdict fail endedBy done; 2026-09-15-lt martin-45 J1 4/4 fail (placement B1 vs B1 exact); 2026-09-15-lt-recert2-goal viktor-67 J2 2/2 fail, topic fit 7/7 (the 900-char driver artefact). Rule over recorded checks (ended, breach, BLOCKER criterion, J1 placement, J2 fit>=4/6 & safe, J3 pitch>=0.8 & moments>=0.9, else conditional on any failed criterion) vs judge: [(conditional,conditional) 4, (conditional,fail) 2, (conditional,pass) 19, (fail,conditional) 16, (fail,fail) 29, (fail,pass) 5, (pass,pass) 9] -> agree 42 of 84. grep -c '^- ' uat/journeys/*.md -> J1 5, J2 4, J3 4, J4 4, J5 4 DoD bullets. linga-text.cjs:59 `verdict: { type: 'string', enum: ['pass', 'conditional', 'fail', 'not-reached'] }`; recertify.cjs:213 `...?.judge?.verdict, a = j.judge?.verdict;` :214 `if (!(b && a && RANK[a] < RANK[b])) continue;`"
+    },
+    {
+      "context": "uat",
+      "host": "uat",
+      "slot": "B",
+      "lens": "ux-elevation",
+      "title": "One open ledger across every run: status and recertify-all in one command",
+      "size": "M",
+      "effort": 7,
+      "impact": 8,
+      "risk": 6,
+      "write_set": [
+        "uat/driver/ledger.cjs",
+        "uat/driver/recertify.cjs",
+        "uat/driver/linga-text.cjs",
+        "uat/env.md",
+        "uat/README.md",
+        "tools/uat-ledger-test.cjs",
+        "desk/package.json"
+      ],
+      "new_files": [
+        "uat/driver/ledger.cjs",
+        "tools/uat-ledger-test.cjs"
+      ],
+      "shared_surfaces": [
+        "desk/package.json (append node ../tools/uat-ledger-test.cjs to test:rules)"
+      ],
+      "acceptance": [
+        "case 1: ledger(<temp copy of uat/runs>) -> 360 rows from the five runs, 186 open non-strength, each with a global id '<runId>/<id>' and all 186 distinct, while their local ids are only 114 distinct and 51 of those name a different finding in more than one run (tools/uat-ledger-test.cjs, node:test, copies the committed runs to the OS temp dir and asserts uat/runs byte-identical at the end, as tools/uat-recertify-test.cjs:18-26 does)",
+        "case 2: planLedger(ledger) -> 36 Character x journey pairs over 10 Characters. tomas-9 J4 carries 13 open rows from 3 runs (4 from 2026-09-15-lt, 5 from -lt-recert, 4 from -lt-recert2-beginners), where plan('2026-09-15-lt-recert2-beginners') offers 4 of them (tools/uat-ledger-test.cjs)",
+        "case 3: 2026-09-15-lt/LT-tomas-9-J3-3 ('The recap records activity without showing what he learned') -> unasked 2: its pair ran again in -lt-recert and -lt-recert2-beginners and neither judge was shown it. A row from the newest run of its pair -> unasked 0. Runs are ordered by run.json started, else by directory name, a recert-<k> after its parent (tools/uat-ledger-test.cjs)",
+        "case 4: recertify from the ledger, stubbed judge for tomas-9 J4 (codexText replaced in the require cache): the judge request's prior ids are exactly the 13 global ids (enum, minItems = maxItems = 13); answers 2026-09-15-lt/LT-tomas-9-J4-1 not-seen and 2026-09-15-lt-recert/LT-tomas-9-J4-2 recurs, the rest left out -> in the temp copies, the first row is 'fixed' in 2026-09-15-lt/findings.json, the second stays open with recurrence 2 in -lt-recert/findings.json, the other 11 are stamped not-evaluable in their own runs, every stamp names the rerun in recertify_run; planLedger then lists 12 open rows for the pair (tools/uat-ledger-test.cjs)",
+        "case 5: a rerun finding carrying recurs '<run>/<id>' folds into one gap in the ledger: recurrence 2, first seen <run>, last seen the rerun, counted once in the open total and once in the pair (tools/uat-ledger-test.cjs)",
+        "case 6: statusOf(ledger) -> markdown with the line '186 open in 36 pairs across 5 runs', one section per Character x journey ordered by highest rank, each row the global id, severity, title and 'unasked since <run>' when unasked > 0, the next command 'node uat/driver/linga-text.cjs --recertify', and 'drained 0 of 5 runs' because no docs/uat-insights/<run>.md exists (the README.md:67-71 home). `linga-text.cjs --status` prints it and writes uat/runs/OPEN.md with no model call (tools/uat-ledger-test.cjs, codexText stubbed to throw)",
+        "case 7 GUARD: `--recertify <run>` with a run id plans exactly as today (7 pairs for 2026-09-15-lt-recert2-beginners, 26 for 2026-09-15-lt-recert) and tools/uat-recertify-test.cjs passes unchanged (npm test in desk/)"
+      ],
+      "premise": [
+        "uat/driver/linga-text.cjs:216 - a finding's id is positional within one run: `LT-${r.character}-${j.id}-${i + 1}`, so the same id names a different finding in every run",
+        "uat/driver/recertify.cjs:228 - the recertify report itself concedes 'Rerun finding ids are positional' and prefixes them by hand in prose",
+        "uat/driver/linga-text.cjs:120 and :129-136 - --recertify takes exactly one run; the plan is RC.plan(prior) over that run alone",
+        "uat/driver/recertify.cjs:35-44 - plan() and openFindings() read one findings.json; recertify.cjs:170-182 writeBack() stamps one file; recertify.cjs:187-192 the rerun lives under that one run",
+        "uat/driver/linga-text.cjs:216 - recurrence is set only through a recertify prior link; every one of the 360 committed rows has recurrence 1",
+        "uat/runs/2026-09-15-lt/recertify.md:37-39 - the operator wrote by hand that the recap and beginner-pitch gaps 'recur across all three runs'; the data holds them as 24 unrelated open recap rows (11 in -lt, 9 in -lt-recert, 4 in -lt-recert2-beginners)",
+        "uat/README.md:67-71 - the drain homes are docs/uat-insights/<run-id>.md and docs/BACKLOG.md; neither exists, so none of the five runs has been drained",
+        ".claude/skills/uat/SKILL.md (Mode: drain) - the drain ranks 'recurrence first' and warns that per-app homes no mode wrote is 'how one repo accumulated five undrained runs'; the ranking input it needs is the cross-run recurrence this repo does not record"
+      ],
+      "rollback": "ledger.cjs and its test are new; recertify.cjs gains planLedger/finishLedger beside the untouched per-run plan/finish, and the driver's no-argument --recertify and --status are new branches. git revert of the series leaves the per-run recertify exactly as it is; committed runs are only read by the tests (temp copies), and a live recertify's stamps are the same fields recertify_run / recertify_status / recertify_evidence it writes today.",
+      "gate": "none",
+      "runner_up": "Every run, not only --recertify, shows each judge its pair's open ledger rows in prior[], so no open row ages unasked and a full run doubles as a recertification",
+      "body": "## Summary\nAn operator who asks 'what is open for Linga, and what do I rerun?' today reads five findings.json files (186 open rows), two hand-written notes (VERIFY.md, recertify.md) and then recertifies one run, which asks about 7 of the 36 pairs that hold open rows. Derive one ledger from every run, give each finding a global id, and turn it into two commands: --status (what is open now, by pair, with how long it has gone unasked) and --recertify with no run (rerun every pair with an open row, each judge answering all of that pair's open rows across runs, stamps written back into each originating run).\n\n## Description\nThe driver names findings by position (linga-text.cjs:216), so 51 of the 114 distinct open ids name a different finding in each run, and recurrence can only be linked inside one --recertify <run> (recertify.cjs:35-44, 170-182). The five committed runs therefore hold 186 open rows, all recurrence 1, although the operator recorded by hand that two gaps recur across all three runs (runs/2026-09-15-lt/recertify.md:37-39). 30 of the 36 open pairs have open rows in more than one run; tomas-9 J4 has 13 from three runs, and recertifying the newest run asks about 4. Older rows have no door back in. The drain, whose first ranking key is recurrence, has never been run (README.md:67-71 homes absent).\n\nuat/driver/ledger.cjs folds the runs in order (run.json started, else directory name; recert-<k> after its parent) into rows keyed '<runId>/<id>', resolving each recertify stamp and each rerun row's recurs link into one gap chain, and counting for each open row how many later runs ran its pair without asking about it (unasked). planLedger() gives the pairs and their open global ids; finishLedger() reuses priorStatuses() and writes each answer back into the findings.json of the run that owns the row; statusOf() renders the operator view. linga-text.cjs gains `--status` (no model call) and `--recertify` with no run, which places the rerun under the newest originating run as recert-<k> so the existing layout holds.\n\n## Flow\n- node uat/driver/linga-text.cjs --status -> OPEN.md: 186 open in 36 pairs across 5 runs; per pair, rows by rank with 'unasked since <run>'; drained 0 of 5; the next command\n- node uat/driver/linga-text.cjs --recertify -> every pair with an open row; each judge sees that pair's open rows from every run (global ids)\n- answers stamped into each originating findings.json; recurs chains fold; status re-rendered\n- --recertify <run> unchanged for a targeted rerun\n\n## Expected impact\nFive reads and a guess become one command, and the rerun covers every open row instead of the newest run's share (36 pairs instead of 7). Recurrence becomes data, so the drain's 'recurrence first' ranking can run from the JSON. Stale rows stop being invisible: each says how many reruns have passed it by.\n\n## Evaluation\nClaim: one derived ledger answers 'what is open now' and drives a recertify of all of it\nBefore: 0 of 7 acceptance cases pass; 186 open rows across 5 files, 7 of 36 pairs reachable by one --recertify, recurrence 1 on 360 of 360 rows\nAfter: 7 of 7\nMethod: gate - acceptance cases written as failing tests first\nResult: better\nGate: none",
+      "evidence": "Script over uat/runs/*/findings.json: 2026-09-15-lt 153 rows (open 69, fixed 14, refuted 5, strength 65); -lt-j1b 17 (open 8); -lt-recert 119 (open 74); -lt-recert2-beginners 38 (open 23); -lt-recert2-goal 33 (open 12) -> 360 rows, 186 open non-strength. recurrence {1: 360}, recurs-links 0 in every run. 'open ids appearing in >1 run: 51 of 114'. Pairs with open rows 36 over 10 Characters; 30 span more than one run; tomas-9 J4 Counter({'-lt-recert': 5, '-lt-recert2-beginners': 4, '-lt': 4}). Same id, three findings: LT-petra-38-J4-1 = 'Replay does not demonstrate the coached skill' (-lt), 'Second help request does not address the current difficulty' (-lt-recert), 'The guest takes the receptionist's role' (-lt-recert2-beginners). Recap gap open rows: 11 (-lt), 9 (-lt-recert), 4 (-lt-recert2-beginners). ls docs/uat-insights -> No such file or directory; docs/BACKLOG.md absent. linga-text.cjs:216 `id: `LT-${r.character}-${j.id}-${i + 1}``."
+    }
+  ]
+}

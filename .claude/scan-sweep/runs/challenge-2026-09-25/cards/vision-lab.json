@@ -1,0 +1,174 @@
+{
+  "host": "vision-lab",
+  "riders": [
+    {
+      "name": "prototype",
+      "checked": "Read prototype/build.py in full, prototype/data.json's structure (3 pages with images, 22 recorded PoC hints, 8 retrieval picks, 8 lessons), the structure and logic of src/index.html (page, hint and phone-tap code), identity/on-air.src.html, identity/variants.html and linga-conversations.html. Hypothesis: the prototype holds the only committed ground truth for the pages the phone offers as samples. Confirmed: the data.json maths and essay images are md5-identical to desk/public/samples/maths.jpg and essay.jpg, and an overlay of the item cx/cy values lands on every printed line. Card B uses data.json as its corpus, read only. Also found: index.html:609 prototyped the phone's nearest-cy tap rule against true item centres, and production feeds that rule the model's own guesses. No card targets the HTML itself. Restyling is ruled out (the contest winners own the design languages). One S noted but not carded: build.py builds only study-desk.html, and on-air.src.html's __MATH_IMG__ placeholder has no builder in the tree."
+    }
+  ],
+  "files_read": [
+    "vision/vlm.py",
+    "vision/point.py",
+    "vision/vtt.py",
+    "vision/poc_hints.py",
+    "vision/poc_hints_es.py",
+    "vision/poc_ocr.py",
+    "vision/poc_retrieval.py",
+    "prototype/build.py",
+    "prototype/data.json (structure, recorded hints, picks, page truth; images decoded and overlaid)",
+    "prototype/src/index.html (structure + page/hint/tap logic)",
+    "prototype/identity/on-air.src.html (structure)",
+    "prototype/identity/variants.html (structure)",
+    "prototype/linga-conversations.html",
+    "docs/POC-FINDINGS.md",
+    "docs/FRAME-ANALYSIS-LESSONS.md",
+    "docs/STUDY-DESK-POC-RESULTS.md",
+    "desk/src/lib/engines/vision.ts",
+    "desk/src/lib/engines/registry.ts",
+    "desk/src/lib/engines/types.ts",
+    "desk/src/lib/desk/read.ts",
+    "desk/src/lib/desk/hint.ts",
+    "desk/src/lib/desk/pick.ts",
+    "desk/src/lib/desk/mark.ts",
+    "desk/src/lib/desk/items.ts",
+    "desk/src/lib/desk/explain.ts",
+    "desk/src/lib/desk/english.ts",
+    "desk/src/lib/desk/essay.ts",
+    "desk/src/lib/desk/job.ts",
+    "desk/src/lib/desk/verify.ts",
+    "desk/src/lib/rules/maths.ts",
+    "desk/src/lib/rules/english.ts",
+    "desk/src/lib/library/vtt.ts",
+    "desk/src/lib/library/lessons.ts",
+    "desk/src/lib/library/lessons.data.ts",
+    "desk/src/lib/library/syllabus.ts",
+    "desk/src/app/api/read/route.ts",
+    "desk/src/app/api/hint/route.ts",
+    "desk/src/app/phone/page.tsx (tap/select, samples)",
+    "desk/src/app/tv/page.tsx (speech)",
+    "desk/src/tv/screens.tsx (hint screen)",
+    "desk/src/maths/MathsTV.tsx (hint next)",
+    "desk/src/lib/session/store.ts (Hint type, hint.set)",
+    "tools/engines-rules-test.cjs (loader + stub pattern)",
+    "tools/maths-rules-test.cjs (hint/leak cases)",
+    "tools/kpi-measure.cjs (head)",
+    "desk/package.json",
+    "context-map.json",
+    ".claude/scan-sweep/config.md",
+    ".claude/spark/config.md",
+    ".claude/scan-sweep/runs/challenge-2026-09-23/deck.md",
+    ".claude/scan-sweep/runs/challenge-2026-09-23/findings.jsonl",
+    "artifacts/vision/desk/hints/hints.json (local, gitignored: cross-checked against data.json)"
+  ],
+  "cards": [
+    {
+      "context": "desk-pipelines",
+      "host": "vision-lab",
+      "slot": "A",
+      "lens": "architecture-challenger",
+      "title": "The lab's leak oracle gates every hint line before it reaches the TV",
+      "size": "M",
+      "effort": 6,
+      "impact": 8,
+      "risk": 5,
+      "write_set": [
+        "desk/src/lib/rules/maths.ts",
+        "desk/src/lib/desk/hint.ts",
+        "tools/withhold-rules-test.cjs",
+        "desk/package.json"
+      ],
+      "new_files": [
+        "tools/withhold-rules-test.cjs"
+      ],
+      "shared_surfaces": [
+        "desk/package.json"
+      ],
+      "acceptance": [
+        "case 1: rules/maths leaks('Solve for x:  3x − 7 = 11', 'so x = 6') -> true; equationOf('Solve:  x/4 + 3 = 8') -> 'x/4 + 3 = 8'; equationOf('Find the slope of the line through (2, 5) and (6, 13)') -> null. Today leaks returns false for the item as read_page transcribes it (tools/withhold-rules-test.cjs)",
+        "case 2: for each of the 4 single-variable equation items on prototype/data.json's maths page (n = 1, 2, 7, 10), a stubbed text provider first answers {hint:'Nearly there: x = <answer>.', what_to_try_next:'Check it.'} and then a clean hint -> hint('maths', item.text) returns the clean hint. The stub was called exactly twice, and the second prompt says the previous hint gave the answer away (tools/withhold-rules-test.cjs)",
+        "case 3: the stub leaks on both calls -> hint() returns the item's code-written withheld line from rules/maths (25 words or fewer, containing no value that verify() accepts) and next === ''. No third model call is made (tools/withhold-rules-test.cjs)",
+        "case 4: a leak in what_to_try_next alone is caught: 'Solve for x:  3x − 7 = 11' with {hint:'Look at the -7.', what_to_try_next:'Then divide 18 by 3 to get 6.'} -> a re-ask, and neither returned field carries 6 (tools/withhold-rules-test.cjs)",
+        "case 5: expression items leak by form. 'Factor completely:  x² + 7x + 12' with hint 'It factors as (x + 3)(x + 4).' -> flagged (an equivalent product, and a linear bracket whose root zeroes the expression). 'Expand:  (x + 4)(x − 3)' with 'you should reach x^2 + x - 12' -> flagged (tools/withhold-rules-test.cjs)",
+        "case 6 GUARD: the 24 recorded real maths hint stages in prototype/data.json (hint + what_to_try_next, 12 problems x 2 stages) replayed through the gate -> 0 flagged, 0 re-asks. This matches the PoC's hand judgement of 0/12 leaked (STUDY-DESK-POC-RESULTS.md:66) (tools/withhold-rules-test.cjs)",
+        "case 7 GUARD: method numbers are not answers. 'Add 7 to both sides, then divide by 3.' for 'Solve for x:  3x − 7 = 11' -> not flagged and returned verbatim. The existing tools/maths-rules-test.cjs:85-94 case still sees exactly two prompts (tools/withhold-rules-test.cjs + tools/maths-rules-test.cjs)"
+      ],
+      "premise": [
+        "vision/poc_hints.py:87-98 - the lab's leak oracle checks a hint against the KNOWN answer's leak terms; poc_hints.py:111-113 runs it on both fields of both stages (hint + what_to_try_next)",
+        "vision/poc_hints_es.py:155-164 - iteration 1 showed that oracle was blind to an answer assembled from parts; assembles() was added. STUDY-DESK-POC-RESULTS.md:116 - the second hint assembled the answer 6/6 while 'the automatic leak check missed all six'",
+        "docs/STUDY-DESK-POC-RESULTS.md:7-9 - kill criterion B: the model leaks the answer on more than one problem in ten",
+        "desk/src/lib/rules/maths.ts:103-110 - production's leak rule is substitution-based (verify), a third implementation with different semantics; its only caller is desk/src/lib/desk/explain.ts:86 (built by the 2026-09-23 desk-pipelines B card)",
+        "desk/src/lib/desk/hint.ts:29-30 - hint() returns json.hint and json.what_to_try_next as the model wrote them. No check runs",
+        "desk/src/app/api/hint/route.ts:24,33 - both stages are dispatched into the session unchanged; desk/src/tv/screens.tsx:169-170 and desk/src/maths/MathsTV.tsx:738 draw hint and next on the TV; desk/src/app/tv/page.tsx:64 speaks the hint aloud",
+        "tools/maths-rules-test.cjs:85-94 - the test titled 'hints withhold the answer' checks only the prompt WORDING (assert.match on r.system). Nothing checks the output",
+        "desk/src/lib/desk/read.ts:27 - items are transcribed 'exactly as printed', so a maths item reads 'Solve for x:  3x − 7 = 11' (prototype/data.json pages[0].items[0].text)",
+        "desk/src/lib/desk/verify.ts:58 - lex() returns null on any letter but x, and verify.ts:156 splits the whole item on '=', so 'Solve for x:  3x − 7 ' never evaluates. rules/maths leaks() is blind to every item a read page produces",
+        "Count: 5 model-written fields reach the TV from maths help (hint1.hint, hint1.next, hint2.hint, hint2.next, explain reply) and 1 of them is checked. There are 3 leak implementations (poc_hints.leaks, poc_hints_es.assembles, rules/maths.leaks)",
+        "No test harness runs Python in this repo: desk/package.json:11-13 chains tsc and node suites only, and vision/*.py are run by hand (poc_hints.py:12-13). This card's cases run in the node:test suite it creates, tools/withhold-rules-test.cjs, which uses the transpile loader and useProvider stub from tools/engines-rules-test.cjs"
+      ],
+      "rollback": "Three commits: test(desk-pipelines) adds tools/withhold-rules-test.cjs and the test:rules entry; feat(desk-pipelines) adds equationOf/expression checks and the withheld lines to rules/maths.ts and the gate in hint.ts; the package.json line is its own commit under the shared-surface lock. git revert of the series puts hint() back to unchecked. No session shape changes: Hint in store.ts:33 keeps the same fields, and a withheld line is plain text in them. Nothing persisted.",
+      "gate": "policy-tighten",
+      "runner_up": "The English rule card carries the form the student must produce ('go → went', '-ed', 'have/has + past participle' in rules/english.ts:20-24). That is the PoC B′ iteration-1 condition under which hint 2 assembled the answer 6/6. It is linga's seam, so it is named here and not carded.",
+      "body": "## Summary\nThe lab proved that a hint must be checked, not only asked, to withhold: the model assembled the answer 6/6 once it had the parts, and the checker itself had to learn that. Production kept the asking and dropped the checking on the hint path. This card makes the lab's oracle the one withholding rule on the hint path. It also makes that rule able to read an item the way a photographed page actually delivers it.\n\n## Description\nThe leak rule exists three times: vision/poc_hints.py leaks (known answer), vision/poc_hints_es.py assembles (answer built from parts), and desk/src/lib/rules/maths.ts leaks (substitution). Only the last is in the product, and it runs on one of the five model-written fields that reach the TV from maths help: the explain reply. The hint path, which is the PoC B pipeline itself, puts hint and next on screen and speaks the hint with no check at all. rules/maths leaks() could not help if it were wired in. It substitutes into the item, and a read page's item is 'Solve for x:  3x − 7 = 11'. verify() cannot lex the words, so the probe returns leaks = false for 'x = 6' on all 4 equation items of the corpus page. With the words stripped, it returns true for all 4. The structural move: rules/maths gains equationOf(itemText) and an expression form check (an equivalent product or polynomial, or a linear bracket whose root zeroes the expression: the PoC's '(x+3)', '(x+4)', 'x^2 + x - 12' leak terms, derived rather than hand-listed). leaks() reads through equationOf. hint() runs the gate on both fields, re-asks once and names the leak, and after a second leak falls back to a withheld line written in rules/maths. The decision stays in code, which is repo law. Scope, stated honestly: single-variable equations and one-variable expressions (Factor, Expand). Systems, word problems and slope items have no oracle in the product and stay unchecked. The English and essay hint subjects are out of scope.\n\n## Flow\n- A /api/hint request arrives; hint('maths', item.text) asks the model as today\n- rules/maths withholds(item.text, line) runs on hint and on what_to_try_next\n- if clean, the hint is returned as today (0 re-asks on the 24 recorded real hints)\n- if leaked, one re-ask with 'your last hint gave the answer away; go one step, stop short'\n- if it leaks again, the item's withheld line from rules/maths, next = ''\n- the session, TV and speech receive the same Hint shape as before\n\n## Expected impact\nA child can no longer be shown or read out the answer on the hint screen when the model slips. That is the product's stance ('withholding is the product') and PoC B's kill criterion, now enforced in code instead of only requested in a prompt. The lab corpus in prototype/data.json becomes the rule's contract test, so a future prompt or engine change that starts leaking goes red in test:rules.\n\n## Evaluation\nClaim: every maths hint line bound for the TV passes one code-owned withholding rule that can read the item as the page gives it\nBefore: 0 of 5 non-guard acceptance cases pass (probe: leaks() catches 0 of 4 outright answers on the corpus page's equation items; 1 of 5 TV-bound maths model fields is checked)\nAfter: 7 of 7\nMethod: gate - acceptance cases written as failing tests first\nResult: better\nGate: policy-tighten",
+      "evidence": "Probe (desk TS transpiled with desk's own typescript, rules/maths.ts leaks over prototype/data.json):\n1 \"Solve for x:  3x − 7 = 11\" leaks(\"x = 6\")= false  stripped= true\n2 \"Solve for x:  2x² − 5x − 3 = 0\" leaks(\"x = 3\")= false  stripped= true\n7 \"Solve:  x/4 + 3 = 8\" leaks(\"x = 20\")= false  stripped= true\n10 \"Solve for x:  5(x − 2) = 3x + 8\" leaks(\"x = 9\")= false  stripped= true\nrecorded maths hint stages 24 flagged by production leaks (prefix stripped): 0\n\nhint.ts:29-30  const { json, provider, ms } = await text<...>(...); return { hint: json.hint, next: json.what_to_try_next, provider, ms };\nroute.ts:33  dispatch({ type: \"hint.set\", hint: { ... hint1: { hint: h1.hint, next: h1.next } ... } })\nscreens.tsx:169  <div className=\"cap-text\">{hh ? shown(hh.hint) : \"…\"}</div>\ntv/page.tsx:64  const line = s.screen === \"hint\" ? (s.hint?.stage === 2 ? s.hint.hint2?.hint : s.hint?.hint1?.hint) : ...  (spoken via /api/speak)\ngrep 'leaks(' desk/src -> rules/maths.ts:103 (definition), desk/explain.ts:86 (only caller)\nmaths-rules-test.cjs:90  for(const r of seen)assert.match(r.system,/never state the final answer, never write the completed solution/);"
+    },
+    {
+      "context": "vision-lab",
+      "host": "vision-lab",
+      "slot": "B",
+      "lens": "ux-elevation",
+      "title": "npm run bench: the desk's read, hint and pick scored against the lab",
+      "size": "M",
+      "effort": 7,
+      "impact": 8,
+      "risk": 4,
+      "write_set": [
+        "tools/lab-bench.cjs",
+        "tools/lab-corpus.cjs",
+        "tools/lab-bench-test.cjs",
+        "desk/src/lib/desk/select.ts",
+        "desk/src/app/phone/page.tsx",
+        "desk/package.json",
+        "docs/STUDY-DESK-POC-RESULTS.md",
+        "vision/poc_ocr.py",
+        "vision/poc_hints.py",
+        "vision/poc_retrieval.py"
+      ],
+      "new_files": [
+        "tools/lab-bench.cjs",
+        "tools/lab-corpus.cjs",
+        "tools/lab-bench-test.cjs",
+        "desk/src/lib/desk/select.ts"
+      ],
+      "shared_surfaces": [
+        "desk/package.json"
+      ],
+      "acceptance": [
+        "case 1: a replay vision provider answers the maths sample page (prototype/data.json pages[0], md5-identical to desk/public/samples/maths.jpg) with the true items (text as printed; x, y = truth cx/w, cy/h) -> runBench({replay}).read.maths = {found:10, of:10, exact:10, selects:10}, verdict 'pass' (tools/lab-bench-test.cjs)",
+        "case 2: the replay drops item 2's exponent ('2x − 5x − 3 = 0') and swaps the y of items 3 and 4 -> exact 9/10 and selects 8/10, and the report names items 2, 3 and 4. 'selects' is computed by the SAME nearestItem() the phone's tap calls (tools/lab-bench-test.cjs)",
+        "case 3: a replay text provider returns the 24 recorded PoC maths hint stages from prototype/data.json through the production hint() -> hints = {leaked:0, of:12, latex:3}. This reproduces the lab's 0/12 (STUDY-DESK-POC-RESULTS.md:66) and its LaTeX finding (:82) on the product's code path (tools/lab-bench-test.cjs)",
+        "case 4: the stub answers 'x = 6' for 'Solve for x: 3x - 7 = 11' and 'x = 20' for 'Solve: x/4 + 3 = 8' -> hints.leaked 2/12, kill criterion B 'fail' and process exit code 1 from `node tools/lab-bench.cjs --replay <that fixture>` (tools/lab-bench-test.cjs)",
+        "case 5: a stub pick provider replays the PoC's run-3 picks (triangle -> bAerID24QJ0, percentage -> none) through the production pickLesson() -> retrieval 8/9, equal to the baseline. Answering 'none' to all 9 -> 2/9 and verdict 'fail' (tools/lab-bench-test.cjs)",
+        "case 6: `--json` -> one object {read, hints, retrieval, baseline, verdicts, providers}; baseline carries the PoC figures (read exact 10/10, ring 16/16, leaked 0/12, retrieval 8/9); providers names 'replay' for every engine used (tools/lab-bench-test.cjs)",
+        "case 7: nearestItem([{cy:245},{cy:366},{cy:486}], 300) -> 0 and nearestItem(same, 430) -> 2. desk/src/app/phone/page.tsx calls nearestItem from lib/desk/select (source check), so the bench and the phone share one selection rule (tools/lab-bench-test.cjs)",
+        "case 8 GUARD: a replay run sets DESK_DATA_DIR to an OS-temp dir, writes nothing under desk/data (mtime of desk/data unchanged) and makes no network call (global fetch stubbed to throw) (tools/lab-bench-test.cjs)",
+        "CRITIC REVISE (binding): Case 5 and lab-corpus.cjs: source the 9 retrieval queries and their acceptable lesson ids (or 'none') from vision/poc_retrieval.py:42-52, not from data.json, whose 8 picks are not the run-3 result (triangle -> 'Linear equations 1', 2x+3=2x+5 absent); the replay fixture for case 5 must be a separate recorded answer set, and the case must also assert that a pick outside the acceptable set for a query counts as wrong."
+      ],
+      "premise": [
+        "The lab measures copies of the product, not the product. vision/vlm.py:26-27,44,50-55 is ollamaVision in desk/src/lib/engines/vision.ts:15-16,24,30-31 (same host, model, options and think retry). vision/vtt.py:17-70 is desk/src/lib/library/vtt.ts:4-37 line for line. vision/poc_retrieval.py:121-135 pick_lesson is the ancestor of desk/src/lib/desk/pick.ts:12-23, which has since added concept tags and a 'why'. vision/poc_ocr.py:214-222 read_items is the ancestor of desk/src/lib/desk/read.ts:24-37. That is 4 pipeline pairs, and every PoC figure was taken on the Python side",
+        "Production diverged exactly where nothing measures it. desk/src/lib/desk/read.ts:28 asks the model for each item's centre as fractions, but the PoC schema (poc_ocr.py:186-192) asked only number + text, and the PoC's selection was a ring burned into the photo (poc_ocr.py:260-279), scoring 16/16 (STUDY-DESK-POC-RESULTS.md:34)",
+        "desk/src/app/phone/page.tsx:122-126 - production selects the item whose MODEL-REPORTED cy is nearest the tap, on y only. prototype/src/index.html:609 prototyped the same rule against true centres (prototype/data.json). The gap between model centres and true centres has never been measured",
+        "prototype/data.json is committed ground truth for the pages the phone actually offers. The md5 of pages[0].img = desk/public/samples/maths.jpg = 9cc665cda7eb52477cf35b1abfd40c47 and pages[2].img = essay.jpg = 02e9a115e86a67ddc0be7e918ac74d51 (desk/src/app/phone/page.tsx:14-18 SAMPLES). The items carry printed text and photo-space cx/cy, and an overlay lands on every printed line. It also holds the 24 recorded maths hint stages and the run-3 picks",
+        "Every PoC reports for a human to read: poc_ocr.py:246-247 prints a line, poc_hints.py:122 says 'correctness and usefulness are judged by reading it', poc_retrieval.py:187 says 'Judge by hand'. The verdicts live in a doc table (STUDY-DESK-POC-RESULTS.md:11-17) that nothing recomputes",
+        "The decision this should inform is open: STUDY-DESK-POC-RESULTS.md:180-183 ('Bedrock for the read is a measured need'), desk/src/lib/engines/vision.ts:9 ('Later: Bedrock vision'), and the text engine already switches between claude-cli and codex (engines/registry.ts:3-4). There is no instrument to judge a provider against the lab's figures",
+        "No test harness runs Python in this repo: desk/package.json:11-13 chains tsc and node:test suites only, and vision/*.py are run by hand (poc_ocr.py:13-14). This card creates the harness: tools/lab-bench.cjs (operator command, live or --replay) and tools/lab-bench-test.cjs (node:test, replay/stub providers via useProvider, engines/registry.ts:25-28)",
+        "desk/src/lib/library/lessons.ts:29-41 writes <DATA>/embeddings.json when it is missing, so the bench must pin DESK_DATA_DIR to a temp dir (repo law: never touch desk/data)"
+      ],
+      "rollback": "Commits: test(vision-lab) adds tools/lab-bench-test.cjs and the test:rules entry; feat(vision-lab) adds lab-bench.cjs, lab-corpus.cjs and the bench script; refactor(phone) moves the tap rule into lib/desk/select.ts with no behaviour change; docs(vision-lab) adds the re-measure line to POC-RESULTS and the PoC docstrings. The package.json edits are separate commits under the shared-surface lock. Everything is additive except the one-line phone call site, and git revert of the series restores it. No product state, session shape or persisted data is touched.",
+      "gate": "direction",
+      "runner_up": "Ring-as-pointer selection: burn the phone's circle into the held page and ask the vision model which item is inside (point.py, 16/16), instead of the nearest model-reported cy. It is phone-surface's seam and costs a vision call per circle, so the bench above should measure first whether nearest-cy is actually wrong.",
+      "body": "## Summary\nToday, to learn whether the desk still does what the lab proved, an operator runs four Python scripts that exercise Python copies of the pipelines, reads their printouts by hand and compares them with a table in a doc. And the one thing production changed, item positions from the model and a tap picking the nearest one, was never measured at all. This card gives the operator one command, `npm run bench` in desk/. It runs the lab's corpus through the PRODUCTION read, hint and lesson-pick modules on whatever engine is registered, prints the PoC baseline beside this run's figure and a pass/fail per kill criterion, and exits non-zero on a fail.\n\n## Description\nThe corpus is already in the tree. prototype/data.json holds the maths and essay sample pages the phone offers (md5-identical to desk/public/samples), with every item's printed text and photo-space centre, the 24 recorded maths hint stages and the run-3 lesson picks. tools/lab-corpus.cjs loads it and adds the small tables that live only in Python today: known answers and leak terms (poc_hints.py:26-39), and the 9 retrieval queries with their acceptable lesson ids or 'none' (poc_retrieval.py:42-52). The pipeline code is not copied. The bench calls desk's readPage, hint and pickLesson through the engines registry, so a result is a result about the product. The scorers are the lab's own, ported: equations_intact and sim (poc_ocr.py:198-211), leaks + assembles (poc_hints.py:87-98, poc_hints_es.py:157-162), and the right/none tally. One new measure: 'selects', meaning whether the phone's tap at an item's true centre picks that item, given the centres the model reported. To judge the rule the phone actually runs, the rule moves out of phone/page.tsx into a pure, client-safe lib/desk/select.ts, and both call it. Live mode is operator-only (Ollama/Claude/codex; DESK_TEXT_ENGINE=codex re-runs on codex, so two runs compare engines). --replay feeds recorded answers and is what the gate suite runs. The bench always runs with DESK_DATA_DIR in the OS temp dir. The phone and TV do not change.\n\n## Flow\n- `npm run bench` (or `-- --replay`, `-- --json`)\n- read: sample pages -> readPage -> found / exact / selects / mean cy error, per page\n- hints: 12 problems x 2 stages -> hint() -> leaked (lab rule), LaTeX in spoken fields, stage 2 repeating stage 1\n- lessons: 9 queries -> pickLesson() -> right, including 'none' on the 2 out-of-library problems\n- a table: pipeline | lab baseline | this run | provider | seconds, then a verdict per PoC kill criterion (STUDY-DESK-POC-RESULTS.md:7-9) and exit 0/1\n\n## Expected impact\nThe lab stops being a snapshot from 7 September and becomes the yardstick the desk's pipelines are judged against, on the product's own code. The pending engine decision (Bedrock or codex for read and hint) gets a number instead of an impression. The first live run answers an open question: whether the model's item positions, which production trusts for every tap and every TV band, hold up the way the ring did (16/16).\n\n## Evaluation\nClaim: one command re-measures the lab's figures on the production pipelines and says pass/fail per kill criterion. The gate path is deterministic under replay\nBefore: 0 of 8 acceptance cases pass (the bench does not exist; the product's item selection has 0 measurements, and every baseline in POC-RESULTS was taken on Python copies)\nAfter: 8 of 8\nMethod: gate - acceptance cases written as failing tests first\nResult: better\nGate: direction (a capability the vision-lab description does not name. It is inside the lab group's declared scope, 'Research code ... that inform the product')",
+      "evidence": "md5 (Git Bash md5sum / node crypto over data.json images):\n9cc665cda7eb52477cf35b1abfd40c47 desk/public/samples/maths.jpg == data.json pages[0] (math) == artifacts ocr/math_mild.jpg\n02e9a115e86a67ddc0be7e918ac74d51 desk/public/samples/essay.jpg == data.json pages[2] (essay) == artifacts ocr/essay_mild.jpg\nOverlay of data.json cx/cy on pages[0]: all 10 rings land on the printed item lines.\nphone/page.tsx:124  let best = 0; page.items.forEach((it, i) => { if (Math.abs(it.cy - y) < Math.abs(page.items[best].cy - y)) best = i; });\nprototype/src/index.html:609  let best = 0; p.items.forEach((it, i) => { if (Math.abs(it.cy - y) < Math.abs(p.items[best].cy - y)) best = i; });\nread.ts:28  `For each item give its number, its text, and the position of its centre as fractions of the image ...`\npoc_ocr.py:186-192 ITEMS_SCHEMA properties: number, text (no position)\nRecorded maths hints in data.json: 24 stages, LaTeX in 7 fields across 3 problems (quadratic, system, slope); production leaks() flags 0 of 24 once the item prefix is stripped.\ngit ls-files | grep .py -> only prototype/build.py and vision/*.py; no script in desk/package.json or tools/package.json invokes python.",
+      "critic_revise": "Case 5 and lab-corpus.cjs: source the 9 retrieval queries and their acceptable lesson ids (or 'none') from vision/poc_retrieval.py:42-52, not from data.json, whose 8 picks are not the run-3 result (triangle -> 'Linear equations 1', 2x+3=2x+5 absent); the replay fixture for case 5 must be a separate recorded answer set, and the case must also assert that a pick outside the acceptable set for a query counts as wrong."
+    }
+  ]
+}

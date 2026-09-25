@@ -1,0 +1,53 @@
+{
+  "cohort": [
+    {
+      "name": "pen-core",
+      "group": "telestrator",
+      "files": 10,
+      "reason": "never challenged",
+      "riders": []
+    },
+    {
+      "name": "vision-lab",
+      "group": "lab",
+      "files": 7,
+      "reason": "never challenged",
+      "riders": [
+        {
+          "name": "prototype",
+          "files": 6
+        }
+      ]
+    },
+    {
+      "name": "linga",
+      "group": "desk-linga",
+      "files": 23,
+      "reason": "last challenged 2026-09-23",
+      "riders": []
+    },
+    {
+      "name": "desk-pipelines",
+      "group": "desk-subjects",
+      "files": 21,
+      "reason": "last challenged 2026-09-23",
+      "riders": []
+    },
+    {
+      "name": "uat",
+      "group": "tooling",
+      "files": 21,
+      "reason": "last challenged 2026-09-23",
+      "riders": []
+    },
+    {
+      "name": "tv-surface",
+      "group": "desk-surfaces",
+      "files": 10,
+      "reason": "last challenged 2026-09-23",
+      "riders": []
+    }
+  ],
+  "eligible": 8,
+  "uncovered": 3
+}
