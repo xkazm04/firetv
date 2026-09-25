@@ -320,7 +320,7 @@ export function lingaView(s: Session, input: ViewInput = {}): LingaView {
     tag = `Situation ${i + 1} of ${scenes.length}`; title = scene.name; caption = scene.goal;
     hero = { kind: "scene", kicker: `${scene.partner} · ${scene.minutes} minutes`, title, who: "", said: "", subtitle: skillName(scene.skill), art: scene.id, small: false,
       partner: scene.partner, sentence: sentenceOf(scene.cue), illustration: artOf(scene.id, scene.skill), band: level, minutes: scene.minutes };
-    actions = [act("start-situation", "Start this situation", scene.goal, cmd("start", { sceneId: scene.id, replace: true })), act("next-situation", "Next situation", scenes[(i + 1) % scenes.length].goal, { ui: { sceneIndex: (i + 1) % scenes.length } })];
+    actions = [act("start-situation", "Start this situation", scene.goal, cmd("start", { sceneId: scene.id, replace: true })), act("next-situation", "Next situation", `${scenes[(i + 1) % scenes.length].name}.`, { ui: { sceneIndex: (i + 1) % scenes.length } })];
   } else if (s.screen === "linga-map") {
     const skill = ENGLISH_SKILLS[chapter % 8], progress = l.achievements[skill.id] ?? "not-tried";
     const typed = l.evidence.filter(e => e.skill === skill.id && e.mode === "text").length;
