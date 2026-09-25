@@ -326,7 +326,8 @@ export function lingaView(s: Session, input: ViewInput = {}): LingaView {
     const typed = l.evidence.filter(e => e.skill === skill.id && e.mode === "text").length;
     tag = `Chapter ${chapter % 8 + 1} of 8`; title = skill.name; caption = skill.goal;
     hero = { kind: "track", kicker: `Speaking progress · ${PROGRESS_LABEL[progress]}`, title, progress, subtitle: typed > 0 ? `${typed} written practice observations · speaking assessed separately` : "", illustration: SKILL_ART[skill.id] };
-    actions = [act("previous-chapter", "Previous chapter", ENGLISH_SKILLS[(chapter + 7) % 8].goal, { ui: { chapter: (chapter + 7) % 8 } }), act("next-chapter", "Next chapter", ENGLISH_SKILLS[(chapter + 1) % 8].goal, { ui: { chapter: (chapter + 1) % 8 } })];
+    // Next first (the map opens on chapter 1, where Previous wraps to 8); each caption names the chapter it goes to, not its goal, which reads as this chapter's
+    actions = [act("next-chapter", "Next chapter", `${ENGLISH_SKILLS[(chapter + 1) % 8].name}.`, { ui: { chapter: (chapter + 1) % 8 } }), act("previous-chapter", "Previous chapter", `${ENGLISH_SKILLS[(chapter + 7) % 8].name}.`, { ui: { chapter: (chapter + 7) % 8 } })];
   } else if (c && s.screen === "linga-moment" && c.moment) {
     const m = c.moment; tag = "A moment";
     hero = { kind: "comparison", before: { kicker: m.kind === "fix" ? "You said" : "You wanted to say", quote: m.said }, after: { kicker: m.kind === "fix" ? "Try" : "In English", quote: m.better }, note: m.why };
