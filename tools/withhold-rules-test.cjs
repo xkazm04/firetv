@@ -131,3 +131,20 @@ test('case 7 GUARD: method numbers are not answers, and a clean hint is still ex
  const all=[...seen];stub(reply);await hint('maths','2x+3=11',{previous:h1.hint,askedQ:'where do I start?'});
  assert.equal(all.length+seen.length,2);
 });
+
+test('case 8: a factor item leaks when a hint names its roots as a pair - "3 and 4", reversed, signed or in words',()=>{
+ const factor=item(3).text,quad='Solve for x:  x² − 7x + 12 = 0',plus='Solve for x:  x² + 7x + 12 = 0',mixed='Factor completely:  x² + x − 12';
+ assert.match(factor,/factor/i);
+ for(const q of [factor,quad,plus])for(const l of ['try 3 and 4','Hint: the numbers are 3 and 4.','4 and 3 are the ones.','-3 and -4','−4 and −3','the pair is three and four','x = -3 and x = -4','try 3 & 4','3, 4'])
+  assert.equal(maths.leaks(q,l),true,`${q} | ${l}`);
+ assert.equal(maths.leaks(mixed,'the numbers are 4 and -3'),true,'(x + 4)(x − 3): its roots as a pair');
+ assert.equal(maths.leaks(mixed,'-3 and 4'),true,'reversed');
+});
+
+test('case 9 GUARD: the method\'s coefficient pair is not the roots, and an expand item\'s own numbers are method talk',()=>{
+ const factor=item(3).text,quad='Solve for x:  x² − 7x + 12 = 0',expand='Expand:  (x + 4)(x − 3)';
+ for(const q of [factor,quad])for(const l of ['What multiplies to 12 and adds to 7?','Look for two numbers whose product is 12 and whose sum is 7.','Your clues are 12 and 7.','Try the pairs 1 and 12, then 2 and 6.'])
+  assert.equal(maths.leaks(q,l),false,`${q} | ${l}`);
+ assert.equal(maths.leaks(expand,'Multiply the Outer terms (x and -3) and the Inner terms (4 and x) separately.'),false);
+ assert.equal(maths.leaks(expand,'The brackets hold 4 and -3; multiply each by each.'),false,'an expand item\'s answer is the polynomial, not its roots');
+});
