@@ -12,7 +12,6 @@ fun healthJson(session: Session, transport: String): String {
     return healthBody(
         HealthReading(
             transport = transport,
-            pin = session.pin,
             annotations = session.annotationCount(),
             revision = session.revision,
             t = session.mediaTimeMs,

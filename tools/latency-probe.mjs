@@ -5,10 +5,10 @@
  * What this does NOT measure is compositor-to-photons on the TV panel; that needs on-device
  * render instrumentation (design doc 6.2). Treat the number as a floor, not the whole budget.
  *
- * Usage: node latency-probe.mjs [--host <ip>:8765] [--seconds 6]
+ * Usage: node latency-probe.mjs [--host <ip>:8765] [--seconds 6] [--pin <PIN>]
  */
 import WebSocket from 'ws';
-import { TV_HOST } from './device.mjs';
+import { pairingPin, TV_HOST } from './device.mjs';
 
 const args = Object.fromEntries(
   process.argv.slice(2).flatMap((a, i, all) => (a.startsWith('--') ? [[a.slice(2), all[i + 1]]] : []))
@@ -19,13 +19,7 @@ const seconds = Number(args.seconds ?? 6);
 // backpressure caused by the pen stream itself.
 const idle = process.argv.includes('--idle');
 
-const pin = await fetch(`http://${host}/health`)
-  .then((r) => r.json())
-  .then((h) => h.pin)
-  .catch(() => {
-    console.error('[latency] cannot reach the TV at', host);
-    process.exit(2);
-  });
+const pin = pairingPin(args, 'latency');
 
 const ws = new WebSocket(`ws://${host}/ws`);
 const inflight = new Map();

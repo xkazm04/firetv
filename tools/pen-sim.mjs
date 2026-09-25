@@ -4,10 +4,10 @@
  * This is the fast inner-loop check — no browser, no touch emulation — that the transport, the
  * codec and the pen engine agree with each other on a real device.
  *
- * Usage: node pen-sim.mjs [--host <ip>:8765] [--shape arc|arrow|circle|spotlight]
+ * Usage: node pen-sim.mjs [--host <ip>:8765] [--shape arc|arrow|circle|spotlight] [--pin <PIN>]
  */
 import WebSocket from 'ws';
-import { TV_HOST } from './device.mjs';
+import { pairingPin, TV_HOST } from './device.mjs';
 
 const args = Object.fromEntries(
   process.argv.slice(2).flatMap((a, i, all) => (a.startsWith('--') ? [[a.slice(2), all[i + 1]]] : []))
@@ -18,15 +18,8 @@ const shape = args.shape ?? 'arc';
 const ws = new WebSocket(`ws://${host}/ws`);
 const seen = { welcome: false, accepted: false, states: 0, lastState: null };
 
-// The TV rotates a PIN per session and rejects a pen that cannot quote it, so read it from the
-// same health endpoint a human would read off the QR card.
-const pin = await fetch(`http://${host}/health`)
-  .then((r) => r.json())
-  .then((h) => h.pin)
-  .catch(() => {
-    console.error('[pen-sim] cannot reach the TV at', host);
-    process.exit(2);
-  });
+// The TV rotates a PIN per session and rejects a pen that cannot quote it.
+const pin = pairingPin(args, 'pen-sim');
 
 const send = (o) => ws.send(JSON.stringify(o));
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));

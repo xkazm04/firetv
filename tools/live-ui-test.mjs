@@ -8,13 +8,13 @@
  *
  * Nothing here is checked by eye, so it can run in CI.
  *
- * Usage: node live-ui-test.mjs [--out ../artifacts]
+ * Usage: node live-ui-test.mjs [--out ../artifacts] [--pin <PIN>]
  */
 import { chromium } from 'playwright';
 import { readFileSync, mkdirSync, writeFileSync } from 'node:fs';
 import { PNG } from 'pngjs';
 import path from 'node:path';
-import { makeAdb, TV_BASE } from './device.mjs';
+import { makeAdb, pairingPin, TV_BASE } from './device.mjs';
 
 const BASE = TV_BASE;
 const args = Object.fromEntries(
@@ -91,7 +91,7 @@ const run = async () => {
   const consoleErrors = [];
   page.on('pageerror', (e) => consoleErrors.push(String(e)));
 
-  await page.goto(`${BASE}/?pin=${h.pin}`, { waitUntil: 'domcontentloaded' });
+  await page.goto(`${BASE}/?pin=${pairingPin(args, 'live')}`, { waitUntil: 'domcontentloaded' });
   await page.waitForFunction(() => window.__pen && window.__pen.isConnected(), null, { timeout: 15000 });
   check('PWA loaded from the TV and paired over ws:// using the on-screen PIN', true);
 

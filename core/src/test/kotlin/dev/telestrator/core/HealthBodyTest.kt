@@ -5,16 +5,17 @@ import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Test
 import java.util.Locale
 
 class HealthBodyTest {
 
+    /** The session PIN the TV is showing; it must not come back out of /health. */
     private val pin = "4821"
 
     private fun reading() = HealthReading(
         transport = "lan",
-        pin = pin,
         annotations = 3,
         revision = 17,
         t = 12_480,
@@ -54,5 +55,12 @@ class HealthBodyTest {
         } finally {
             Locale.setDefault(saved)
         }
+    }
+
+    @Test
+    fun `the body does not hand the pairing PIN to whoever can reach the port`() {
+        val body = healthBody(reading())
+        assertFalse("pin" in parse(body).keys, "health body has a pin key: $body")
+        assertFalse(pin in body, "health body carries the PIN: $body")
     }
 }

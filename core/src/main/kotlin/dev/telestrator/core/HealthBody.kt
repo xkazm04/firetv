@@ -5,10 +5,13 @@ import java.util.Locale
 /**
  * One reading of the TV's diagnostics, as the platform shell gathers it off the live session and
  * the render stats. Plain values, so what `/health` says can be decided and tested on the JVM.
+ *
+ * There is no pairing PIN here, on purpose: `/health` is served to anyone who can reach the port,
+ * and a PIN any LAN client can read protects nothing. The viewer reads the PIN off the QR card;
+ * the harness reads it out of logcat over adb, which only an authorised machine can open.
  */
 data class HealthReading(
     val transport: String,
-    val pin: String,
     val annotations: Int,
     val revision: Int,
     val t: Long,
@@ -34,7 +37,7 @@ data class HealthReading(
  */
 fun healthBody(r: HealthReading): String {
     fun ms(v: Double) = "%.3f".format(Locale.ROOT, v)
-    return """{"ok":true,"transport":"${r.transport}","pin":"${r.pin}",""" +
+    return """{"ok":true,"transport":"${r.transport}",""" +
         """"annotations":${r.annotations},"revision":${r.revision},""" +
         """"t":${r.t},"durationMs":${r.durationMs},""" +
         """"paused":${r.paused},"rate":${r.rate},"pens":${r.pens},""" +

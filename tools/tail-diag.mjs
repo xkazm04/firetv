@@ -15,13 +15,13 @@
  * a network stall, which ruled out Wi-Fi power save and the radio in one run and pointed at the
  * overlay's per-frame stroke refitting instead.
  *
- * Usage: node tail-diag.mjs [--host <ip>:8765] [--seconds 15] [--nopause]
+ * Usage: node tail-diag.mjs [--host <ip>:8765] [--seconds 15] [--nopause] [--pin <PIN>]
  *   --nopause  leave the video playing. Worth running both ways: the render path only costs what
  *              it costs while frames are actually being produced.
  */
 import WebSocket from 'ws';
 import net from 'node:net';
-import { TV_HOST } from './device.mjs';
+import { pairingPin, TV_HOST } from './device.mjs';
 
 const args = Object.fromEntries(
   process.argv.slice(2).flatMap((a, i, all) => (a.startsWith('--') ? [[a.slice(2), all[i + 1]]] : []))
@@ -70,7 +70,7 @@ async function tcpLoop() {
 }
 
 // ---- ws path: the real pen load -------------------------------------------
-const pin = await fetch(`http://${host}/health`).then((r) => r.json()).then((h) => h.pin);
+const pin = pairingPin(args, 'diag');
 const ws = new WebSocket(`ws://${host}/ws`);
 const inflight = new Map();
 

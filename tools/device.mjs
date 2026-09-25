@@ -36,7 +36,7 @@ export const IS_TUNNELLED = /^(127\.0\.0\.1|localhost)\b/.test(TV_HOST);
  * adb, already pointed at the right device. Returns a Buffer, because one caller pulls a PNG
  * through it and decoding that as text corrupts it.
  */
-export function makeAdb({ maxBuffer = 1 << 28 } = {}) {
+export function makeAdb({ maxBuffer = 1 << 28, timeout } = {}) {
   const selector = ADB_SERIAL ? ['-s', ADB_SERIAL] : [];
   // Capture stderr rather than inheriting it. adb narrates progress there even when it succeeds
   // ("1 file pulled, 0 skipped"), and PowerShell turns any stderr line from a native command into
@@ -44,7 +44,7 @@ export function makeAdb({ maxBuffer = 1 << 28 } = {}) {
   // on a *successful* pull. Piping keeps it out of the way; execFileSync still throws on a real
   // non-zero exit, with the captured stderr attached to the error.
   return (...a) =>
-    execFileSync(ADB_BIN, [...selector, ...a], { maxBuffer, stdio: ['ignore', 'pipe', 'pipe'] });
+    execFileSync(ADB_BIN, [...selector, ...a], { maxBuffer, timeout, stdio: ['ignore', 'pipe', 'pipe'] });
 }
 
 /**
@@ -77,4 +77,30 @@ export function hostAddressForDevice(tvHost = TV_HOST) {
     return n;
   };
   return candidates.sort((a, b) => shared(b, deviceIp) - shared(a, deviceIp))[0];
+}
+
+/** The PIN in the last pairing line MainActivity logged (`transport=... pairing=<url>?pin=NNNN`), or undefined. */
+export const pinFromLogcat = (log) => [...log.matchAll(/pairing=\S*[?&]pin=(\d{4})/g)].at(-1)?.[1];
+
+/**
+ * The pairing PIN for a tool that pairs as a pen. /health no longer carries it: anything that can reach the port
+ * could read it there. Read it where only an authorised adb client can - the pairing line MainActivity logs at
+ * launch - or take --pin, the one on the TV's QR card. Exits 2 with a sentence when neither is there. The read is
+ * bounded: with no device attached, `adb logcat` waits for one forever instead of failing.
+ */
+export function pairingPin(args, tag, adb = makeAdb({ timeout: 10_000 })) {
+  if (args.pin) return args.pin;
+  let log;
+  try {
+    log = adb('logcat', '-d', '-s', 'Telestrator:I').toString();
+  } catch (e) {
+    console.error(`[${tag}] cannot read logcat over adb; pass --pin <PIN>.`, e.message);
+    process.exit(2);
+  }
+  const pin = pinFromLogcat(log);
+  if (!pin) {
+    console.error(`[${tag}] no pairing line in logcat; relaunch the TV app or pass --pin <PIN>`);
+    process.exit(2);
+  }
+  return pin;
 }

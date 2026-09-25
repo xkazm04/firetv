@@ -22,7 +22,7 @@ import path from 'node:path';
 import WebSocket from 'ws';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
-import { makeAdb, TV_HOST, hostAddressForDevice } from './device.mjs';
+import { makeAdb, TV_HOST, hostAddressForDevice, pinFromLogcat } from './device.mjs';
 const args = Object.fromEntries(
   process.argv.slice(2).flatMap((a, i, all) => (a.startsWith('--') ? [[a.slice(2), all[i + 1]]] : []))
 );
@@ -162,7 +162,7 @@ const run = async () => {
   // The viewer would read the PIN off the QR card on screen; a script reads the same string
   // out of logcat.
   const line = adb('logcat', '-d', '-s', 'Telestrator:I');
-  const pin = /pairing=.*?pin=(\d{4})/.exec(line)?.[1];
+  const pin = pinFromLogcat(line.toString());
   const via = /transport=(\w+)/.exec(line)?.[1];
   check('the app reports it is running on the relay transport', via === 'relay', `transport=${via}`);
   check('pairing details are available without a LAN server', !!pin, `pin=${pin}`);
