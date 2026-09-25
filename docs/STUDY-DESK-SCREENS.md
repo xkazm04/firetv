@@ -1,11 +1,20 @@
-# Study Desk — screen inventory for the HTML/CSS prototype
+# Study Desk — screen inventory
 
-**Date:** 2026-09-07 · the modelling checkpoint after [STUDY-DESK-POC-RESULTS.md](STUDY-DESK-POC-RESULTS.md).
-Nothing here is built yet. This is the list to argue with before it is.
+**Read from the code on 2026-09-25** (main at `4bce3c7`). This replaces the 2026-09-07 modelling checkpoint, which
+described a product that no longer exists: Tonight as a task board, lesson keys, and only S1 / T0-T6 / M3.
+Screens are named here by their id in the `Screen` union, the name the code uses. The S/T/M numbers in code
+comments are older than this page and do not match each other. Every key below was checked against `KEYMAP`, not
+remembered. To recheck a line, open the file it cites.
 
-**Bar, as agreed:** prototypes reflect the Fire TV app interface, high visual quality, but above all
-*working* — every screen wired to the flows that passed the PoCs, D-pad navigable, with the phone
-page beside it. Cloud calls are stubbed behind the same interface they will have later (no AWS yet).
+| What | Where |
+|---|---|
+| The screen ids (33) | `desk/src/lib/session/store.ts:23` (`Screen`) |
+| What a session event does to `screen` / `focus` / `back` | `reduce` in `desk/src/lib/session/store.ts` |
+| Which component draws a screen | `desk/src/app/tv/page.tsx` (the `essayOwns`, `mathsOwns` and `lingaOwns` tests are in `desk/src/tv/keys.ts`) |
+| The D-pad | `KEYMAP` and `tvKey` in `desk/src/tv/keys.ts`; Linga's own keys in `desk/src/english/LingaTV.tsx`, its actions in `lingaView` (`desk/src/lib/english/view.ts`) |
+| Where Linga's server moves the screen | `commit` in `desk/src/lib/english/conversation.ts` (`screenFor`) and `desk/src/lib/english/check.ts` (`stageScreen`) |
+| The phone | `desk/src/app/phone/page.tsx`, `desk/src/english/LingaPhone.tsx`; which panel follows which screen: `desk/src/app/phone/panelFor.ts` |
+| Tests that hold these | `tools/tv-keys-test.cjs`, `tools/tv-sheet-test.cjs`, `tools/tv-recap-test.cjs`, `tools/phone-panel-test.cjs`, `tools/linga-ui-test.cjs` |
 
 ---
 
@@ -17,39 +26,71 @@ numbers as stated:
 
 | Rule | Value | What it means for us |
 |---|---|---|
-| Design target | **1920 × 1080**, rendered as 960 × 540 dp at xhdpi | the prototype is a 1920×1080 page; everything in dp × 2 |
-| Safe zone | nothing in the **outer 5%** of any edge | 96 px side margins, 54 px top/bottom, hard |
-| Body text minimum | **14 sp ≈ 28 px at 1080p** | our body is 32 px; the worksheet's *own* text must be rendered at ≥ 28 px, which is why a page is shown one problem-band at a time, not whole |
-| System font | Helvetica Neue Regular | Helvetica Neue / Arial stack; system-native look |
+| Design target | **1920 × 1080**, rendered as 960 × 540 dp at xhdpi | the TV page is one 1920×1080 stage scaled to the window (`app/tv/page.tsx`) |
+| Safe zone | nothing in the **outer 5%** of any edge | 96 px side margins, 54 px top/bottom, hard. The landing, Math Buddy and Essay Master draw the whole stage and keep the margins themselves |
+| Body text minimum | **14 sp ≈ 28 px at 1080p** | a worksheet is shown one problem band at a time, not whole, so its printed text lands at ≥ 28 px |
 | Input | **D-pad only** — Up/Down/Left/Right/Select/Back/Menu/Play-Pause | every screen is a focus graph; no hover, no scroll wheel, no pointer |
-| Focus | must be **unmistakable** at 3 m; Select shows a momentary pressed state | 4 px light ring + 1.06 scale + lift; pressed = 0.97 scale for 120 ms |
-| Colour | less saturated; **cool over warm**; TV contrast is higher than a monitor's | deep slate ground, muted blue accent, warm colour reserved for the *hint* and the *timer* so they read as the living things on screen |
-| Density | low; horizontal content rows; global nav on the left | one job per screen; the left rail is the session's spine |
+| Focus | must be **unmistakable** at 3 m | each surface draws it its own way (the lamp's pool, a filled plum door, a citron caret, the On Air ring); see section 3 |
+| Density | low | one job per screen; a verdict is a picture and prose lives only in the caption slot |
 | Text entry | system keyboard is painful | the TV never asks for typing — the phone does it |
 
 **The rule that shapes the product most:** *the TV never asks for typing.* Anything that needs a
 camera, a keyboard, a microphone or a finger happens on the phone. The TV shows, the phone does.
 
+On the bench the keyboard stands in for the remote (`keyOf`, `desk/src/tv/keys.ts`): arrows are the D-pad,
+**Enter** is Select, **Backspace** or **Escape** is Back, **M** is Menu, **Space** is Play/Pause.
+
 ## 2. Two surfaces, one session
 
 ```
-TV (Fire OS app, D-pad)                         Phone (PWA served by the TV, no install)
-┌──────────────────────────────────┐            ┌──────────────────────┐
-│ rail │  the big shared view      │  ws://     │ camera · pen · text  │
-│      │  page · hint · lesson     │◀──────────▶│ the student's hands  │
-│      │  timer · task board       │  state     │ (and the parent's)   │
-└──────────────────────────────────┘            └──────────────────────┘
+TV  /tv?key=<key>  (D-pad)                     Phone  /phone?pin=<pin>  (no install)
+┌──────────────────────────────────┐           ┌──────────────────────┐
+│ the big shared view, drawn from  │   SSE     │ camera · mic · text  │
+│ session.screen by one of five    │◀────────▶ │ the learner's hands  │
+│ owners (section 4)               │  events   │ (and the parent's)   │
+└──────────────────────────────────┘           └──────────────────────┘
+                       one Session on the server (store.ts)
 ```
 
-Both already exist in the telestrator: pairing by QR + PIN, the WebSocket, the pen, the frame
-thumbnail back to the phone, the state heartbeat. The prototype reuses that contract and changes
-what travels over it: a *page* instead of a video frame, a *hint* instead of a stroke document.
+The session lives on the server and is pushed to both screens as it changes; the TV and the phone POST events
+(`nav`, `focus`, `item`, `timer.start` ...). The engines' results (`page.reading`, `hint.set`, `practice.set`,
+`practice.marked`, `essay.set`, `english.set`, `linga.changed` ...) come only from the server routes. A browser
+without the desk's key sees "Not this desk's TV" (`NotThisTV`, `app/tv/page.tsx`) and no keys work there.
 
-## 3. TV screens
+**Play/Pause** is the work clock on every screen but `lesson`, where it plays the video, and Linga's, where Space
+pauses the scene (`tvKey`). A work block is 25 minutes; when it runs out the TV goes to `break`.
 
-Each: what it is for · what is on it · what the D-pad does · what state feeds it.
+## 3. The design law per surface
 
-### S1 · Landing (the desk) — *built 2026-09-25*
+- **The landing** — *Left on the Desk*: a walnut desk at night, each app an object in its own brand showing what it has waiting; the lamp starts on what was left. [DESIGN-STUDY-DESK.md](DESIGN-STUDY-DESK.md)
+- **Math Buddy** — *Lamplight*: homework under a lamp; the learner's working in their own hand, the desk's pen marking the one place to look again, never the answer. [DESIGN-MATH-BUDDY.md](DESIGN-MATH-BUDDY.md)
+- **Linga** — *the Open Door*: every screen is an arch on the left with the situation behind it and the few words to walk in beside it. [DESIGN-LINGA.md](DESIGN-LINGA.md)
+- **Essay Master** — *Specimen*: the type is the diagram; lenses inked as progress, the missing half hatched, the move set large, the sentence never written for you. [DESIGN-ESSAY-MASTER.md](DESIGN-ESSAY-MASTER.md)
+- **The shell** — *On Air*: the screen is a broadcast, not a menu; one band per screen, the caption and the clock are the living elements. [DESIGN-ON-AIR.md](DESIGN-ON-AIR.md)
+
+## 4. Who draws which screen
+
+`app/tv/page.tsx` asks in this order and the first yes draws the whole stage:
+
+| Test | Draws | Screens |
+|---|---|---|
+| `screen === "landing"` | `LandingTV` (`desk/src/landing/LandingTV.tsx`) | `landing` |
+| `essayOwns` | `EssayTV` (`desk/src/essay/EssayTV.tsx`) | `essaytype`, `forensic`, `playbook`, `xray` |
+| `mathsOwns` | `MathsTV` (`desk/src/maths/MathsTV.tsx`) | `tonight` (unless Linga's), `topics`, `practice`, `sheet`, `walk`, `calendar`; and `page` / `hint` when the page is a maths page, `units` / `lesson` when the subject is maths |
+| `lingaOwns` | `LingaTV` (`desk/src/english/LingaTV.tsx`) | every `linga*` screen, and `tonight` when the subject is English (Linga's home) |
+| otherwise | `ScreenFor`, the shell (`desk/src/tv/screens.tsx`) | `pair`, `joined`, `learner`, `profile`, `break`, `recap`, `sentence`, `headtohead`; and `page`, `hint`, `lesson`, `units` for English and Essay Master |
+
+The keys follow the same split: under `lingaOwns` `tvKey` returns nothing and `LingaTV` takes the keys; everywhere
+else `KEYMAP[screen]` does. A screen's key handler is the same whoever draws it.
+
+## 5. TV screens
+
+In the key columns, `→ x` means the key goes to screen `x`. A key not listed does nothing on that screen (except
+Play/Pause, section 2).
+
+### 5.1 The desk
+
+#### `landing` · Left on the Desk
 The first screen: whose desk it is, and which app to open. *Left on the Desk*
 ([DESIGN-STUDY-DESK.md](DESIGN-STUDY-DESK.md)): a walnut desk at night seen from above, the leather blotter with
 the embossed wordmark, a place card ("Ema's desk"), the phone, and one object per app on the learner's profile,
@@ -60,73 +101,74 @@ arrows. The lamp's pool of light is the focus and starts on the object with some
 CONTINUE tag: marked > left mid-way > next > last). One caption slot names the lit object in a sentence. There is
 no Continue button and no Someone else button: the lamp is already on what was left, and the place card is the
 way to someone else.
+*Reached:* the session's first screen; every `learner.set` and `profile.save`; Back from an app's home, the
+switcher or pairing (lamp on the object it came from); `joined`'s Select or Back and the recap's desk (lamp at rest).
 *D-pad:* Left/Right along the apps; Up to the place card; Down from the place card to the app under it, and from
-an app to the phone while it is unpaired; Select on an app plays the zoom into its colours, then opens its home
-(Math Buddy Tonight, Linga home, Essay Master's lenses) after a `subject` event; Select on the place card opens the
-learner switcher, on the unpaired phone the pairing screen (both with `from: landing`); Back brings the lamp home
-to the CONTINUE object. A nav to the landing without a focus rests the lamp (`LANDING_REST`, -1); Back from an
-app's home, the switcher or pairing lands on the object it came from. Choosing a learner in the switcher, or saving a profile,
-returns to the desk with the lamp at rest on what that learner left - never straight into one app.
+an app to the phone while it is unpaired (Up or Left from the phone goes back to the last app); Select on an app
+plays the zoom into its colours, then opens its home (`tonight` for Math Buddy, `linga`, `essaytype`) after a
+`subject` event; Select on the place card → `learner`, on the unpaired phone → `pair` (both with `from: landing`);
+Back brings the lamp home to the CONTINUE object (the place card when nothing waits); **Menu ends tonight** wherever
+the lamp is - `session.end` → `recap`, and the memory is written (`/api/memory`), as the phone's End session does.
+A nav to the landing without a focus rests the lamp (`LANDING_REST`, -1). Choosing a learner in the switcher, or
+saving a profile, returns to the desk with the lamp at rest on what that learner left - never straight into one app.
 *Feeds:* the profile's modules (`onModules`), `continueCard` and `practice` (Math Buddy), Linga's own home view
 (`lingaView`, `lingaHome`, `progressDots`), the writing record and history (`lensStandings`, `writingTotals`, the
 session's `essay` when this learner read it), `joined` / `pin` / `phoneUrl`.
 *Code:* `desk/src/landing/LandingTV.tsx`, `desk/src/tv/landingRows.ts`, the `landing` entry of the keymap in
 `desk/src/tv/keys.ts`, `desk/src/design/desk-landing.css`. Tests: `tools/tv-keys-test.cjs` (landing 1-4).
 
-### T0 · Pair
-Shown until a phone connects. QR + 4-digit PIN, centred; one line of instruction. The only screen
-with nothing in the rail. *Reuses the pairing card as is.*
+### 5.2 The shell (On Air, `desk/src/tv/screens.tsx`)
 
-### T1 · Tonight
-The session's home. Left rail: learner name, subject chips (Maths · Essay · Spanish*), timer.
-Content: **tonight's task board** — assignment cards in a horizontal row, each with subject, title,
-estimated minutes, done/not. Focus moves along the row; Select opens the task; Menu marks done.
-Below the row, one quiet line: *"Point your phone at the page to begin."*
-*Feeds:* task list (from the phone, or seeded), timer state, learner profile.
+| Screen | What it is | Reached | D-pad → next |
+|---|---|---|---|
+| `pair` (`Pair`) | QR + 4-digit code centred, the phone's address, a "Waiting for a phone" ticker | the landing's unpaired phone; Down on Math Buddy's `tonight` while unpaired; Menu on `profile` while unpaired; Linga's menu "Phone setup"; the phone's Join panel "Show the code on the TV" (each sets `back`) | Back → `back` (the landing on its phone, else that screen). A phone's `join` → `joined` |
+| `joined` (`Joined`) | "Ema's phone is on the desk", one picture, "Open an app on the desk, or snap the page on the phone", one action: The desk | a `join` while the TV was waiting for a phone (unpaired, or on `pair` / `joined`) and not on `profile`. A phone joining mid-evening does not move the TV | Select or Back → `landing` (lamp at rest) |
+| `learner` (`Learner`) | who is at the desk: one card per profile, then Add a learner | the landing's place card; Up on Math Buddy's `tonight`; Up on Linga's home; Cancel on the phone's Profile / Back on `profile` (`profile.discard`) | Left/Right the cards; Select a learner → `learner.set` → `landing`; Select Add a learner → `profile` (new draft); Menu on a learner → `profile` (edit that learner); Back → `back` (the landing on its place card, else that screen) |
+| `profile` (`ProfileScreen`) | the picks on the TV, the name on the phone: rows Type of student, Age (school types only), School system, Interested in, then Save / Back (`profileRows`, `desk/src/tv/profileRows.ts`) | Add a learner, or Menu on a learner, in `learner` | Left/Right in a row, Up/Down between rows keeping the column; Select picks (interests toggle); Select Save → `profile.save` (needs the name typed on the phone) → `landing`; Select Back, or Back → `profile.discard` → `learner`; Menu while unpaired → `pair` |
+| `break` (`BreakScreen`) | see below | the work clock runs out | Select → the screen the break interrupted |
+| `recap` (`Recap`) | see below | `session.end`: Menu on the landing, or End session on the phone's Tonight | Left/Right the tiles and the desk; Select a tile → what that app still has on the desk; Select the desk, or Back → `landing` at rest |
+| `sentence` (`SentenceScreen`) | the English sentence checked: the time word and the verb that disagree, marked; "Nothing yet" before any sentence | `english.set` (the phone's Say it → `/api/analyse` kind english); Linga's menu "Sentence help" | Left/Right between Try it again / Show me the unit; Select Show me the unit → `headtohead`; Select Try it again → a status line to the phone; Back → `units` |
+| `headtohead` (`HeadToHead`) | past simple vs present perfect, one example each that never answers the learner's sentence | Show me the unit on `sentence`; Menu on English `units` or `lesson` | Back → `sentence` when a sentence is checked, else `units` |
+| `page` / `hint` / `lesson` / `units` | the English and Essay Master versions of Math Buddy's screens below, in On Air | as below, with an English or essay page | as below |
 
-### T2 · Page
-The heart. The captured worksheet fills the content area — **one problem band at a time**, so the
-printed text lands ≥ 28 px; Up/Down moves between problems (bands) and the current one is the
-focused element; Left/Right pages through the multi-page stack. A page strip along the bottom
-shows thumbnails of captured pages with the current one highlighted. The rail shows subject, page
-n/N, timer, and a "hint" affordance that lights when a problem is focused.
-*Feeds:* OCR result (items with numbers and bands), circle from the phone (sets focus to that
-item and lights the hint affordance), page stack.
-*Reading state:* a 25-second read is real; the band shows the photo immediately, greyed, with a
-"reading…" progress line, and items become focusable as they arrive.
-
-### T3 · Hint
-Opened from a focused problem (Select, or the phone's circle + ask). The problem sits at the top,
-large, exactly as printed; the hint below it in the warm colour, spoken via TTS as it appears.
-Two actions in a row: **"Still stuck"** (escalates — hint 2, which must go one step further) and
-**"Show me the lesson"** (T4, only if retrieval found one). Back returns to the page with the
-hint kept in a side panel so the student can work with it visible.
-*Feeds:* hint 1 / hint 2 from the tutor stub; retrieval result (or *"no lesson covers this"*,
-which is a first-class state, not an error).
-
-### T4 · Lesson
-The video player with the retrieved lesson **already seeked to the segment**; a one-line "why
-this" above it (*"Factoring quadratics — chosen because your problem needs to factor x² + 7x +
-12"*), concept card on the rail (from the transcript pipeline). Play/Pause, Left/Right skip 10 s,
-Back returns to the hint. Pause + circle from the phone = pause-and-ask on the frame.
-*Feeds:* lesson id + timestamp + concept card; the frame path for pause-and-ask.
-
-### T5 · Break
+#### `break`
 The timer's other face. When a work block ends: full-screen, calm, the break countdown, what's
-next. Select skips the break; Back does nothing (a break you can't accidentally cancel).
-*Feeds:* timer.
+next ("Stand up. The page will still be here."). Select skips the break; Back does nothing (a break you can't
+accidentally cancel). When the break runs out, or is skipped, the TV returns to the screen it interrupted
+(`timer.before`).
+*Feeds:* timer. *Code:* `BreakScreen` in `desk/src/tv/screens.tsx`; `timer.tick` / `timer.skipbreak` in `store.ts`.
 
-### T6 · Recap — *"Tonight, done", rebuilt 2026-09-25*
+#### `recap` · "Tonight, done"
 End of session, reached from the phone's End session or Menu on the landing. The whole evening as one
 picture: a tile per app on the profile, each in its own app's language, from tonight's work only —
-Math Buddy's marked sets as ticks and rings, pages read, hints (second hints ringed); Linga's
-conversations as marks sized by their replies; Essay Master's readings as arrows, the ones to fix
-reversed. "Not tonight" for an app with nothing. No problem texts: the one sentence is the caption.
-Select on a tile opens what that app still has on the desk; **"Back to the desk"** (and Back) is
-the landing at rest. The parent's copy is the phone's Recap tab (P4), shown as a chip, not a button.
-*Feeds:* history, englishLearning.sessions, session log (`tv/recapRows.ts`).
+Math Buddy's marked sets as ticks and rings (a dashed ring where the desk was not sure), pages read, hints
+(second hints ringed); Linga's conversations as marks sized by their replies; Essay Master's readings as arrows,
+the ones to fix reversed. "Not tonight" for an app with nothing. No problem texts: the one sentence is the caption.
+Left/Right walk the tiles, then **"Back to the desk"**. Select on a tile opens what that app still has on the desk
+(Math Buddy's continue card, else `tonight`; Essay Master's reading → `forensic` when it is this learner's, else
+`essaytype`; Linga → `linga`); the desk (and Back) is the landing at rest. The parent's copy is the phone's Recap
+tab, shown as a chip, not a button.
+*Feeds:* history, englishLearning.sessions, session log (`desk/src/tv/recapRows.ts`). Tests: `tools/tv-recap-test.cjs`.
 
-### M3 · Marked sheet (Math Buddy practice) — *built 2026-09-23*
+### 5.3 Math Buddy (Lamplight, `desk/src/maths/MathsTV.tsx`)
+
+| Screen | What it is | Reached | D-pad → next |
+|---|---|---|---|
+| `tonight` (`Tonight`) | Math Buddy's home: the continue card when something is open (Finish the set / Back to the marked set / Back to the sheet, `continueCard` in `desk/src/tv/mathsRows.ts`), else the path title and a blank sheet; two doors, **I have homework** and **Teach me something**; the topic ruler | Select Math Buddy on the landing; Back from `page`, `topics`, `practice`, `sheet`, `units`; `practice.clear` | Left/Right the stops; Select the card → where it leads (`practice`, `sheet` at the first to look at, or `page`); Select homework → the first maths page (`page`), or with none asks the phone for a photo (`page.ask`: the door says "Waiting for the photo"); Select Teach me something → `topics`; Up → `learner`; Down while unpaired → `pair`; Back cancels a pending ask, else → `landing` on Math Buddy |
+| `topics` (`Topics`) | "Pick a topic": the ruler large, one stop per syllabus topic, its blurb, and while a set is written the preparing lines | Teach me something on `tonight`; `topic.open` | Left/Right the topics; Select → asks `/api/practice` for six questions (nothing locked); Up, Menu or Back → `tonight`. The set arriving (`practice.set`) → `practice` |
+| `practice` (`PracticeScreen`) | the six questions on the paper, to work on real paper | `practice.set`; Finish the set on `tonight` | Back → `tonight`, the set kept. The phone's Practice tab snaps the worked sheet (`/api/mark`) → `practice.marked` → `sheet` |
+| `sheet` (`Sheet`) | see below | `practice.marked`; Back to the marked set on `tonight`; Back or the last item on `walk` | see below |
+| `walk` (`Walk`) | one marked item at a time: the question, the learner's working with the pen in it, the caption; the phone asks "How did you get there?" | Select a tile on `sheet` | Left/Right the items; on the last item Select → `sheet`; Back → `sheet` at this item. An explanation (`/api/explain`) settles the item in place |
+| `page` (`PageScreen`) | the snapped worksheet, one problem band at a time, a "reading…" state while the read runs; Menu flips to the whole photo | `page.reading` (a phone capture, `/api/read`); homework or the continue card on `tonight`; a tap on the phone's Point & ask | Up/Down the problems; Right the next page; Left the previous page, or → `tonight` from the first; Menu band ↔ overview; Select → asks `/api/hint` → `hint.set` → `hint`; Back → `tonight`. While a page is being read no key does anything |
+| `hint` (`HintScreen`) | the problem under the lamp and the hint on a taped card; spoken | `hint.set` (Select on `page`, or Ask the desk on the phone) | Left/Right between Still stuck / Show me the lesson; Select Still stuck on a first hint → asks for the second (`/api/hint` stage 2); Select the lesson, once one is picked → `lesson`; Back → `page` |
+| `lesson` (`LessonScreen`) | the picked lesson in a lamp-lit frame, with its why | Show me the lesson on `hint`; Select on `units` or `calendar` | Play/Pause the video; Back → `hint` when there is one, else `units`; Menu → `calendar` (English → `headtohead`, essay → `xray`) |
+| `units` (`Units`) | a contents page: the subject's units | only as a Back target: `lesson` with no hint, `calendar`, `sentence`, `headtohead` | Up/Down the units; Select → `lesson`; Menu → `calendar` (English → `headtohead`, essay → `playbook`); Back or Left → `tonight` |
+| `calendar` (`Calendar`) | a planner: Math Buddy's lessons on file, three to a row | Menu on maths `units` or `lesson` | the arrows over the grid (3 wide); Select → `lesson`; Back → `units` |
+
+`page`, `hint`, `lesson` and `units` are Math Buddy's only for maths; for an English or essay page the shell draws
+them with the same keys. `tonight` is Math Buddy's unless the subject is English, when it is Linga's home.
+
+#### `sheet` · the marked sheet
 Where a practice set lands when the phone's photo of it comes back marked. The whole set on the
 learner's paper under the lamp (Lamplight, [DESIGN-MATH-BUDDY.md](DESIGN-MATH-BUDDY.md)): each item
 folded to its printed question and the one line of their working the desk's pen is on - a right item
@@ -137,66 +179,111 @@ Two actions: **Six more** (a new set on the same topic, written by the same `/ap
 as Topics and aimed at the learner's recorded slips) and **Put the sheet away** (clears the set).
 *D-pad:* focus lands on the first item to look at (on *Six more* when all are right).
 Left/Right over the tiles, Down to the actions, Up back to the first item to look at. Select on a
-tile opens it in the walk (M4); Back from the walk, or Select on its last item, returns to the
-sheet at that item. Back from the sheet goes to Tonight **with the set kept**: Tonight's continue
-card ("Back to the marked set") reopens it. Back from the unmarked poster keeps its set the same
-way ("Finish the set").
+tile opens it in the walk (`walk`); Back from the walk, or Select on its last item, returns to the
+sheet at that item. Back from the sheet goes to `tonight` **with the set kept**: Tonight's continue
+card ("Back to the marked set") reopens it. Back from the unmarked set (`practice`) keeps its set the same
+way ("Finish the set"). Put the sheet away → `tonight`.
 *Feeds:* `practice.items[].verdict` and `slip` as the store holds them (marking, or an
 explanation that settled an unsure item later) — the sheet never recomputes a verdict.
 *Code:* `desk/src/tv/sheetRows.ts` (tiles, stops, first to look at), the `sheet` entry of the
 keymap in `desk/src/tv/keys.ts`, `Sheet` / `Walk` in `desk/src/maths/MathsTV.tsx`, the pen in
 `desk/src/maths/working.ts`, `desk/src/design/maths-lamplight.css`. Tests: `tools/tv-sheet-test.cjs`.
 
-### T3-es · Hint, Spanish variant — *B′ passed; in scope.*
-Same screen as T3 with one addition: the **rule card** the resolver produced is shown as a real
-object beside the hint — *marker → tense → person*, with the irregularity warning if any — and it
-stays on the page panel afterwards. It never shows the ending; it names the row of the student's
-chart. This is the whole point of the design and it is what makes the TV version different from a
-phone app that just prints *iremos*.
+### 5.4 Linga (the Open Door, `desk/src/english/LingaTV.tsx`)
 
-## 4. Phone screens
+Linga drives its own screens. Every action on its row is data from `lingaView` (`desk/src/lib/english/view.ts`):
+a command to `POST /api/english`, a nav, or a step of the TV's local state. The server then moves the screen with a
+`linga.changed` event: `screenFor` in `conversation.ts` (finished → `linga-recap`, a moment → `linga-moment`,
+coaching → `linga-coach`, else `linga-talk`) and `stageScreen` in `check.ts` (`linga-check`, `linga-verdict`,
+`linga-plan`).
 
-Deliberately few, deliberately plain — the phone is the instrument.
+**Linga's keys** (the handler in `LingaTV.tsx`, the same on every Linga screen):
 
-### P0 · Join — scan, PIN, done. *Exists.*
-### P1 · Capture — camera view, "snap page" button, page counter; after a snap, the thumbnail
-and "add another page". Also a **"use the camera as a document camera"** toggle that re-snaps
-every few seconds while the student writes (the continuous-capture idea from the scope doc).
-### P2 · Point & ask — the captured page as a thumbnail (the existing frame mirror), the circle
-tool (existing), a one-line question box, a mic button (stubbed: types instead). Sends
-`{page, region, question}`.
-### P3 · Tonight — add/edit tasks, mark done; the timer's start/pause. The keyboard lives here.
-### P4 · Parent — the recap when it arrives; nothing else.
+| Key | Does |
+|---|---|
+| Left/Right/Up/Down | move along the action row, wrapping (Right/Down forward, Left/Up back). From the resting focus (-1) any arrow lands on the first action |
+| Up on Linga home | → `learner` (`from: linga`), not the row |
+| Select | runs the focused action (the first one at rest); while Linga is thinking only Cancel runs |
+| Menu | opens or closes Linga's menu (below) |
+| Play/Pause | pauses or resumes the scene, where the turn takes a pause |
+| Back | closes the menu or the level picker if open; on Linga home → `landing` on Linga; on `linga-check` → `check-leave` (→ `linga`, the place kept); on `linga-talk` → `leave` (→ `linga`, the scene paused); on `linga-moment` → `moment-done` (→ `linga-talk`); anywhere else → `linga` |
 
-## 5. Flows the prototype must actually run
+| Screen | What it is | Reached | Actions (Select) → next |
+|---|---|---|---|
+| `linga` (and `tonight` with English) — Linga home | one of six home states (`lingaHome`): resume, check part-way, no level yet, no plan, plan done, next topic | Select Linga on the landing or the recap; the phone's "Linga on the TV"; `/tv?module=english`; `leave`, `check-leave`, `plan-agree`; Back from most Linga screens | resume: Carry on talking → `linga-talk`, Choose a situation → `linga-scenes`. Part-way: Carry on → the check's screen, Start again → `linga-check`. No level: Find my level → `linga-check`, I'll pick my level → the level picker. No plan: See my topics / Carry on choosing → `linga-plan`, Choose a situation. Plan done: New topics → `linga-plan`, Talk again → `linga-talk`. Next topic: Start talking → `linga-talk`, Choose a situation |
+| `linga-check` | finding the level: three questions about you, then short tasks (say, listen, choose); answered on the phone except a choice | `check-start`, `check-resume` | About you: Hear it again, Stop for now (Try again before the first question). Tasks: Reply 1..n and I don't know (a choice); Hear it again / Hear the task, Show the words (listening), I don't know. While thinking: Cancel & come back later. Done → `linga-verdict` |
+| `linga-verdict` | your level on the ladder, Linga's read or your own pick | the check finishing; This is my level in the picker (`level-self`); My level in the menu | See my topics → `linga-plan`; Find my level again → `linga-check`; Pick it myself → the level picker |
+| (the level picker) | local state over the ladder, drawn as `linga-verdict` | I'll pick my level / Pick it myself | This is my level → `linga-verdict`; Lower / Higher move the band; Not sure · go back closes it |
+| `linga-plan` | the row of topic doors for your level, or first "What would you like to practise?" | See my topics, New topics, My topics (`plan-propose` / `plan-open`) | Asking the goal: Let Linga pick, Not now (→ `linga`). Topics: Agree to these topics → `linga`; Swap this topic (one per topic, only the focused shown); All new topics. The phone adds a topic in words |
+| `linga-scenes` | one situation at a time behind the arch, its goal and a sentence to take with you | Choose a situation (home, menu, recap, an unprepared scene) | Start this situation → `linga-talk`; Next situation (local) |
+| `linga-talk` | the conversation: the partner's line in the arch, the goal, the caption; the learner answers on the phone | `start`, `resume`, `moment-done`, the turn coming back | Help me answer / More help (the rescue ladder), Choose a phrase (opens the recognition quiz: Option 1..n), Pause & coach → `linga-coach`; while a reply is on its way Cancel & go back → `linga`; paused: Resume, Finish rehearsal → `linga-recap`; a scene that did not prepare: Retry the scene, Choose another |
+| `linga-moment` | one thing worth keeping, before and after | a turn that comes back with a moment | Back to the conversation → `linga-talk` |
+| `linga-coach` | one useful change: you said / one way to try it | Pause & coach | Replay the moment → `linga-talk`; Finish for today → `linga-recap` |
+| `linga-recap` | the rehearsal done: the phrase to take with you, or "It came back" when a taught phrase was used again; replies and moments counted | `finish` | Another situation → `linga-scenes`; Learning map → `linga-map` |
+| `linga-map` | the eight abilities, one chapter at a time, with speaking progress | Learning map (recap, menu) | Next chapter, Previous chapter (local) |
+| (Linga's menu) | local state, drawn over any Linga screen as the menu | Menu | Back to the scene; Learning map → `linga-map`; Choose a situation → `linga-scenes`; My level → `linga-verdict` (or the check when there is no level); My topics → `linga-plan`; Phone setup → `pair`; Sentence help → `sentence`; Finish rehearsal (during one) → `linga-recap` |
 
-1. **Cold start:** T0 → phone P0 → T1 (seeded tasks) → P1 snap → T2 shows page, reads, items
-   become focusable.
-2. **Stuck:** T2 focus problem 3 → Select → T3 hint 1 (TTS) → "Still stuck" → hint 2 → "Show me
-   the lesson" → T4 seeked → Back → Back → T2 with hint panel.
-3. **Point from the phone:** P2 circle problem 7 + "why is this negative?" → T2 focus jumps to 7
-   → T3 with the question shown above the hint.
-4. **No lesson:** a problem the library does not cover → T3 shows *"no lesson covers this yet"*
-   as a calm state, not a failure.
-5. **Timer:** T1 start 25 min → T5 break → back to T2 where it was.
-6. **Recap:** Menu on the landing (or End session on the phone) → T6 → Select a tile → what it names, or Back → the desk; the phone's P4 shows the same evening.
+### 5.5 Essay Master (Specimen, `desk/src/essay/EssayTV.tsx`)
 
-## 6. What is stubbed, and how honestly
+| Screen | What it is | Reached | D-pad → next |
+|---|---|---|---|
+| `essaytype` (`EssayType`) — the lens home | the four lenses top to bottom, each inked as far as the learner has got; the last paragraph's card on the right once one is read | Select Essay Master on the landing; the recap's essay tile with no reading of this learner's; Back from `forensic`, `playbook` | Up/Down the lenses; Right → the last paragraph's card, Left back to its lens; Select a lens → `essay.type` and "paste or dictate the paragraph on the phone" (the phone's Essay tab posts `/api/analyse` → `essay.set` → `forensic`); Select the card → `forensic`; Menu → `playbook`; Back → `landing` on Essay Master |
+| `forensic` (`Forensic`) — one sentence | the paragraph as a rail of arrows, one sentence at a time: its verdict, the move that fixes it (hatched until a rewrite holds), one caption | `essay.set`; `essay.revised` (a rewrite from the phone); the last paragraph's card; the recap's essay tile | Up/Down walk the sentences; Left/Right the actions Rewrite on my phone / Why this matters / Next sentence / Back to the paragraph; Select Rewrite → the status line (the phone's Essay tab offers that sentence); Why this matters → `playbook` on this lens's structure; Next sentence → the next one (wraps); Back to the paragraph, or Back → `essaytype` on this lens. Menu opens the table of every sentence (Up/Down still walk; Select or Back close it) |
+| `playbook` (`Playbook`) | the four structures top to bottom | Menu on `essaytype`; Why this matters on `forensic`; Menu on essay `units`; Back from `xray` | Up/Down the structures; Select → `xray`; Back or Menu → `forensic` on Why this matters when it came from there, else `essaytype` |
+| `xray` (`Xray`) | one structure laid open | Select on `playbook`; Menu on an essay `lesson` | Back or Menu → `playbook` on that structure |
 
-| Stub | Behaviour | Real thing later |
-|---|---|---|
-| OCR | the PoC's rendered pages and their known items; a fake 3-second "reading…" | Bedrock vision, ~5 s; local model, 25 s |
-| Tutor | the PoC's logged hints for the 12 maths + 4 essay problems, served by problem id | Bedrock text |
-| Retrieval | the PoC's syllabus-pick results, incl. the two *none* cases | same code, bigger library |
-| TTS | browser `speechSynthesis` | Polly / ElevenLabs |
-| Voice in | typed | Transcribe |
+## 6. The phone
 
-Stubbing with *real PoC output* rather than lorem ipsum matters: the screens get judged against
-what the model actually says, including its LaTeX and its length.
+One page, two roles (Student / Parent toggle at the top), a tab bar: **Capture, Practice, Point & ask, Linga,
+Say it, Essay, Tonight, Recap, Profile**, plus the Join and Joined panels which are not tabs. The tabs wait for a
+joined phone, except Profile. The status line under the role says what the TV is on, in words (`TV_WORDS`).
 
-## 7. Open before building
+**Following the TV** (`follow`, `panelFor.ts`, tested by `tools/phone-panel-test.cjs`): when the TV's screen
+*changes into* a hand-off, the Student phone moves once to the panel that does it. The same screen updating does
+not move it, so a tab the learner picked stays picked. It never moves the Parent role, never takes a panel away from
+busy hands (typing, a shot held unsent, recording), and a phone that has just joined lands on Joined rather than in
+the camera.
 
-- **Whole page vs. problem band** on T2: the 28 px rule forces bands for a full worksheet; is a
-  zoomed-out whole-page view still wanted as the "overview" state?
-- **Rail always visible, or collapses during T2/T4** to give the page the full width?
-- **Parent on their own phone (P2 pointing), or is one phone enough for the prototype?**
+| Panel (tab) | What it does | Follows the TV screen | Sends |
+|---|---|---|---|
+| Join | type the 4-digit code, or arrive with it from the QR; remembers the desk; "Show the code on the TV" | any screen while unjoined (except `profile`) | `join`; `nav pair` (from the current screen) |
+| Joined | "On the desk": Snap the page, Set up tonight first, or Name the new learner | `joined`; where a fresh join lands | — (moves to a panel) |
+| Profile | the new or edited learner's name; Save / Cancel | `profile` (joined or not) | `profile.draft` (name), `profile.save` → `landing`, `profile.discard` → `learner` |
+| Capture | camera, a module picker (or the module the TV asked for), Snap / Use this page / Retake, samples; after a read: Add another page, Point & ask; Try again for a failed read | `tonight` while it waits for a photo (`awaiting`); `page` when that page's read failed | `/api/read` → `page.reading` → `page`; `/api/session/retry` |
+| Practice | no set: "open Teach me something on the TV"; unmarked set: snap the whole worked sheet, Send my working; marked: "N right, M to look at", and on the walk "How did you get there?" (hold to talk, or type) | `practice`, `sheet`, `walk` | `/api/mark` → `practice.marked` → `sheet`; `/api/explain` → `practice.settle` |
+| Point & ask | the page mirror with the TV's band; tap a problem, a question (typed, preset or Mic), Ask the desk | — (picked by hand, or from Capture) | a tap → `item` and `nav page`; `/api/hint` → `hint.set` → `hint` |
+| Linga | `LingaPhone`, below | every Linga screen (`lingaOwns`) | `/api/english` commands |
+| Say it | an English sentence, typed, preset or Mic; Check it on the TV | `sentence` with nothing checked yet (Linga's Sentence help) | `/api/analyse` kind english → `english.set` → `sentence` |
+| Essay | the paragraph and the lens, Dictate, Analyse on the TV; on `forensic`, the TV's sentence to rewrite in your own words | `essaytype`, `forensic` | `/api/analyse` kind essay → `essay.set` → `forensic`; kind rewrite → `essay.revised` |
+| Tonight | the assignment list (add, tick done), the work clock Start/Pause, End session, then "What the desk noticed" | — | `task.add`, `task.done`, `timer.start` / `timer.pause`; End session: `/api/memory`, then `session.end` → `recap` |
+| Recap (Parent) | the TV's recap in words, app by app (`recapRows`), the caption sentence, what needed a second hint; "Arrives when the session ends" before | — (the Parent role opens it) | — |
+
+**Linga on the phone** (`desk/src/english/LingaPhone.tsx`): three buttons, **Talk / Set up / My map**.
+Talk holds a panel of its own whatever the TV shows (`phonePanel`, `view.ts`): the level check (the question or
+task, the answer box, Stop / Not now, the topic handshake with Swap and "add a topic in your own words"), a moment
+(Back to the conversation), the start panel (Linga home on the phone: the same six states, a band chosen by hand,
+and a list of every situation), or the live conversation (the partner's line, the reply box that records or takes
+text, Help me answer, Choose a phrase, Pause & coach, Resume, Replay, Repeat audio / Cancel, Finish rehearsal, the
+transcript). Set up holds the level, interests, goal, preferences and notes; My map the eight abilities, what Linga
+taught, recent evidence and a printable map (`/english/print`). Two buttons under Talk: **Linga on the TV** (→
+`linga`) and **Help with a sentence** (the Say it panel).
+
+## 7. The flows, as the code runs them
+
+1. **Pairing:** `landing` → Down to the phone → Select → `pair` → the phone joins → `joined` → Select → `landing`.
+2. **Homework:** `landing` → Math Buddy → `tonight` → I have homework → the phone's Capture opens → Use this page →
+   `page` reads, problems become focusable → Select → `hint` (spoken) → Still stuck → the second hint → Show me the
+   lesson → `lesson` → Back → `hint` → Back → `page`.
+3. **Point from the phone:** Point & ask, tap problem 7 (the TV goes to `page` on it) + "why is this negative?" →
+   `hint`.
+4. **Practice:** `tonight` → Teach me something → `topics` → Select → `practice` → the phone snaps the worked sheet →
+   `sheet` → a tile → `walk` → the phone explains → the item settles → Back → `sheet` → Six more or Put the sheet
+   away.
+5. **Essay:** `landing` → Essay Master → `essaytype` → a lens → the phone's Essay tab → `forensic` → Rewrite on my
+   phone → `essay.revised` → Next sentence; Why this matters → `playbook` → `xray`.
+6. **Linga:** `landing` → Linga → `linga` → Find my level → `linga-check` → `linga-verdict` → See my topics →
+   `linga-plan` → Agree → `linga` → Start talking → `linga-talk` → (`linga-moment`, `linga-coach`) → Finish →
+   `linga-recap` → Learning map → `linga-map`.
+7. **Timer:** Play/Pause (or Start on the phone's Tonight) → 25 minutes → `break` → back where it was.
+8. **Recap:** Menu on the landing (or End session on the phone) → `recap` → Select a tile → what it names, or Back →
+   the desk; the phone's Recap tab shows the same evening.
