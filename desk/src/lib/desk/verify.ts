@@ -148,15 +148,24 @@ export function evaluate(expr: string, x: number): number | null {
   } catch { return null; }
 }
 
-/** Does `value` satisfy `equation`? Both sides evaluated, compared within 1e-9 relative tolerance. */
-export function verify(equation: string, value: string): boolean {
-  if (typeof equation !== "string" || typeof value !== "string") return false;
+/**
+ * Substitute `value` into `equation`: true when it holds, false when it plainly fails, and null when the
+ * substitution cannot be made at all - the value does not read as a number, or the equation is not one
+ * equation of arithmetic. Both sides compared within 1e-9 relative tolerance.
+ */
+export function substitute(equation: unknown, value: unknown): boolean | null {
+  if (typeof equation !== "string" || typeof value !== "string") return null;
   const x = evaluate(value, 0);          // the value may itself be an expression: -3, 7/2
-  if (x === null) return false;
+  if (x === null) return null;
   const sides = normalise(equation).split("=");
-  if (sides.length !== 2) return false;
+  if (sides.length !== 2) return null;
   const a = evaluate(sides[0], x);
   const b = evaluate(sides[1], x);
-  if (a === null || b === null) return false;
+  if (a === null || b === null) return null;
   return Math.abs(a - b) <= 1e-9 * Math.max(1, Math.abs(a), Math.abs(b));
+}
+
+/** Does `value` satisfy `equation`? Only a substitution that holds says yes; one that cannot be made says no. */
+export function verify(equation: string, value: string): boolean {
+  return substitute(equation, value) === true;
 }

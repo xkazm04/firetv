@@ -53,9 +53,9 @@ const marks=[
  {n:2,studentAnswer:'x = -3',studentWorking:'x=2-5',verdict:'wrong',solution:'7',slip:'sign-lost-moving'},
  {n:3,studentAnswer:'5',studentWorking:'',verdict:'wrong',solution:'6',slip:'bracket-first-term-only'},
  {n:4,studentAnswer:'9',studentWorking:'',verdict:'right',solution:'8',slip:'unclear'},
- {n:5,studentAnswer:'6',studentWorking:'',verdict:'right',solution:'7',slip:'unclear'},
+ {n:5,studentAnswer:'six?',studentWorking:'',verdict:'right',solution:'7',slip:'unclear'},
 ];
-test('marking believes the substitution, and says nothing when the marker and the substitution disagree',async()=>{
+test('marking believes the substitution, and asks when it cannot substitute: a wrong model solution, no readable answer, no mark',async()=>{
  looked=reply({items:marks});
  const r=await markSet('img',sheet,'maths-mark');
  assert.deepEqual(r.items.map(i=>i.verdict),['right','wrong','wrong','unsure','unsure','unsure']);assert.equal(r.unsure,3);
@@ -63,6 +63,35 @@ test('marking believes the substitution, and says nothing when the marker and th
  assert.equal(r.items[1].studentAnswer,'-3');assert.equal(r.items[1].slip,'sign-lost-moving');assert.equal(r.items[1].said,slip('sign-lost-moving').says);
  assert.equal(r.items[2].slip,undefined,'a slip from another topic is dropped');assert.match(r.items[2].said,/How did you get there\?/);
  for(const i of r.items.slice(3)){assert.equal(i.slip,undefined);assert.match(i.said,/How did you get there\?/);}
+});
+// S50 (T8): when the model can solve the item and the answer substitutes cleanly, the substitution decides - the model's verdict is overruled
+const walkSheet={topic:'linear-two-step',marked:false,items:['14 = 2x + 6','−2x + 3 = −1','2x+3=11','5x-4=21'].map((question,ix)=>({n:ix+1,question}))};
+test('T8: a model verdict the substitution contradicts is overruled, both ways; the slip still comes only from the vocabulary',async()=>{
+ looked=reply({items:[
+  {n:1,studentAnswer:'x = 4',studentWorking:'8 = 2x\nx = 4',verdict:'wrong',solution:'4',slip:'arithmetic-slip'},
+  {n:2,studentAnswer:'x = −2',studentWorking:'−2x = −4\nx = −2',verdict:'right',solution:'2',slip:'sign-lost-moving'},
+  {n:3,studentAnswer:'5',studentWorking:'',verdict:'right',solution:'4',slip:'bracket-first-term-only'},
+  {n:4,studentAnswer:'5',studentWorking:'',verdict:'right',solution:'5',slip:'unclear'},
+ ]});
+ const r=await markSet('img',walkSheet,'maths-t8');
+ assert.deepEqual(r.items.map(i=>i.verdict),['right','wrong','wrong','right'],'model says wrong, substitution right -> right; model says right, substitution wrong -> wrong');
+ assert.equal(r.unsure,0,'the walk\'s items 5 and 6 are no longer "not sure"');
+ assert.equal(r.items[0].slip,undefined,'a right item takes no slip, whatever the model named');assert.equal(r.items[0].said,'Number 1 is right.');
+ assert.equal(r.items[1].slip,'sign-lost-moving');assert.equal(r.items[1].said,slip('sign-lost-moving').says);
+ assert.equal(r.items[2].slip,undefined,'a slip from another topic is dropped');assert.match(r.items[2].said,/How did you get there\?/);
+ const rec=getLearner('maths-t8').skills['linear-two-step'];assert.equal(rec.seen,4);assert.equal(rec.right,2);
+});
+test('T8: the desk still asks when the answer does not substitute or the model cannot solve the item',async()=>{
+ looked=reply({items:[
+  {n:1,studentAnswer:'about four',studentWorking:'',verdict:'right',solution:'4',slip:'unclear'},
+  {n:2,studentAnswer:'',studentWorking:'−2x = −4',verdict:'wrong',solution:'2',slip:'sign-lost-moving'},
+  {n:3,studentAnswer:'4',studentWorking:'',verdict:'right',solution:'5',slip:'unclear'},
+  {n:4,studentAnswer:'3',studentWorking:'',verdict:'wrong',solution:'',slip:'arithmetic-slip'},
+ ]});
+ const r=await markSet('img',walkSheet,'maths-t8-ask');
+ assert.deepEqual(r.items.map(i=>i.verdict),['unsure','unsure','unsure','unsure'],'unparseable answer, no answer, a model solution that fails verify, no model solution');
+ assert.equal(r.unsure,4);assert.equal(getLearner('maths-t8-ask').skills['linear-two-step'],undefined,'nothing unsure reaches the record');
+ for(const i of r.items){assert.equal(i.slip,undefined);assert.match(i.said,/How did you get there\?/);}
 });
 test('no marked line carries a value, and only settled items reach the learner record',async()=>{
  looked=reply({items:marks});
@@ -189,7 +218,7 @@ test('expectedIndex reads age against each system\'s own year: -1 before the pat
 });
 
 // ---- "How did you get there?" settles the item: the learner's spoken value, substituted on the walk ----
-/** A marked walk on the session, as the phone and the TV see it: items 4-6 are unsure (the marker and the substitution disagree). */
+/** A marked walk on the session, as the phone and the TV see it: items 4-6 are unsure (the marker's solution fails, the answer does not read, no mark). */
 async function markedWalk(){
  store.dispatch({type:'reset'});store.dispatch({type:'practice.set',practice:sheet});
  looked=reply({items:marks});
