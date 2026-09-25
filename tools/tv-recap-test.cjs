@@ -3,7 +3,8 @@
  * on the desk did since the start of today into one tile per app, parseDetail reads the history's own one-line
  * counts, and the recap's keys end the evening from the landing (Menu), open what a tile names and go back to the
  * desk at rest. Run with npm test in desk/ (directly: node tools/tv-recap-test.cjs). The store writes to a scratch
- * DESK_DATA_DIR under the OS temp dir, never desk/data; no route or model is called.
+ * DESK_DATA_DIR under the OS temp dir, never desk/data. The follow-ups open the recap the way the TV does, through
+ * /api/memory with the text engine stubbed at the provider registry - no model is called.
  */
 const fs=require('node:fs'),os=require('node:os'),path=require('node:path'),assert=require('node:assert/strict'),Module=require('node:module');
 const {test,after}=require('node:test');
@@ -182,4 +183,95 @@ test('GUARD: the phone still receives the recap, and its End session still posts
 test('extra: the recap rows stay free of the filesystem-backed session modules',()=>{
  const out=ts.transpileModule(fs.readFileSync(RECAP,'utf8'),opts).outputText;
  assert.doesNotMatch(out,/require\([^)]*lib\/session\/(store|learners)/);
+});
+
+// ---- follow-up 2026-09-25 (tv-recap): the recap draws without the model, and asks it at most once an evening
+require.extensions['.tsx']=(mod,file)=>mod._compile(ts.transpileModule(fs.readFileSync(file,'utf8'),{compilerOptions:{...opts.compilerOptions,jsx:ts.JsxEmit.ReactJSX}}).outputText,file);
+// next/font runs only under Next: here each face module answers with its class names
+for(const [f,e] of [['maths/fonts.ts',{MATHS_FONTS:'maths-fonts'}],['essay/fonts.ts',{ESSAY_FONTS:'essay-fonts'}],['landing/fonts.ts',{DESK_FONTS:'desk-fonts'}]]){
+ const file=path.join(root,'src',f),m=new Module(file);m.filename=file;m.loaded=true;m.exports=e;require.cache[file]=m;}
+const reg=()=>require(path.join(root,'src/lib/engines/registry.ts'));
+const {renderToStaticMarkup}=require(path.join(root,'node_modules/react-dom/server'));
+const {createElement}=require(path.join(root,'node_modules/react'));
+/** The Recap screen as the TV draws it, at `now` (its clock is Date.now, as on the TV). */
+function draw(s,now){const {Recap}=require(path.join(root,'src/tv/screens.tsx'));const real=Date.now;if(now)Date.now=()=>now;
+ try{return renderToStaticMarkup(createElement(Recap,{s,focus:0}));}finally{Date.now=real;}}
+/** The text engine, stubbed at the provider seam; `asked` counts the calls that reached it. */
+let asked=0;
+function engine(answer){asked=0;delete process.env.DESK_TEXT_ENGINE;require(path.join(root,'src/lib/desk/memory.ts'));
+ reg().useProvider('text',{name:'stub',run:async()=>{asked++;return {raw:answer()};}});}
+const SCRATCH='recap-scratch',DAYS2=2*86400000;
+/** Ema's evening at the real clock (the routes read the store, not a fixed now), on a scratch learner id. */
+function seat(patch={}){
+ const now=Date.now(),e=evening(),at=(x)=>x===YESTERDAY?now-DAYS2:now;
+ globalThis.__desk.session={...store().fresh(),...e,learner:{id:SCRATCH,name:'Ema'},profiles:[{...EMA,id:SCRATCH},JAKUB],screen:'landing',focus:-1,
+  history:e.history.map((h)=>({...h,at:at(h.at)})),
+  englishLearning:{...noEnglish,sessions:e.englishLearning.sessions.map((x)=>({...x,at:at(x.at)}))},jobs:{},...patch};
+}
+/** Menu on the landing, as the TV does it: the key's events into the store, then its calls to their routes. */
+async function openRecap(){
+ const s=store().getSession(),step=keys().tvKey(s,'menu',LOCAL),status=[];
+ for(const e of step.events)store().dispatch(e);
+ for(const c of step.calls)status.push((await require(path.join(root,'src/app',c.url,'route.ts')).POST(new Request(`http://desk${c.url}`,{method:'POST',body:JSON.stringify(c.body)}))).status);
+ return {s:store().getSession(),status};
+}
+const backToDesk=()=>{for(const e of keys().tvKey(store().getSession(),'back',LOCAL).events)store().dispatch(e);};
+const lined=()=>JSON.stringify({lines:['They undo the constant first once they see it.']});
+
+test('follow-up 1: the recap opens with the text engine down - every tile and the caption drawn',async()=>{
+ const {recapRows,recapCaption}=recap();
+ try{
+  seat();engine(()=>{throw new Error('engine down');});
+  const {s}=await openRecap();
+  assert.equal(s.screen,'recap');
+  const html=draw(s);
+  assert.equal((html.match(/data-role="recap-tile"/g)??[]).length,3,'a tile per app on the desk');
+  for(const app of ['maths','english','essay'])assert.match(html,new RegExp(`data-app="${app}"`));
+  assert.equal((html.match(/data-role="recap-set"/g)??[]).length,1);assert.equal((html.match(/data-role="recap-talk"/g)??[]).length,2);
+  const cap=/<div class="cap-text">([^<]+)<\/div>/.exec(html);
+  assert.ok(cap&&cap[1].trim(),'a caption');
+  assert.equal(cap[1],recapCaption(recapRows(s,Date.now())).replace(/'/g,'&#x27;'),'the caption is the rows\' own sentence');
+ }finally{reg().resetProviders();}
+});
+
+test('follow-up 2: two opens of the same evening -> at most one engine call',async()=>{
+ try{
+  seat();engine(lined);
+  assert.deepEqual((await openRecap()).status,[200]);backToDesk();
+  assert.deepEqual((await openRecap()).status,[200]);
+  assert.ok(asked<=1,`engine calls for two opens: ${asked}`);
+  assert.equal(asked,1,'the evening is still written down once');
+ }finally{reg().resetProviders();}
+});
+
+test('follow-up 3: an evening with nothing to note (no marked set, no hint) opens with no engine call',async()=>{
+ try{
+  seat({practice:null,topic:null,log:{started:null,minutes:0,problems:[],hard:[],hints:0}});engine(lined);
+  const r=await require(path.join(root,'src/app/api/memory/route.ts')).POST(new Request('http://desk/api/memory',{method:'POST',body:'{}'}));
+  assert.equal(r.status,200);assert.deepEqual(await r.json(),{lines:[]});
+  assert.equal(asked,0,`engine calls: ${asked}`);
+ }finally{reg().resetProviders();}
+});
+
+test('GUARD: new work after an open, or a write that failed, is still written down',async()=>{
+ try{
+  seat();engine(lined);
+  await openRecap();backToDesk();
+  globalThis.__desk.session={...store().getSession(),log:{...store().getSession().log,hints:4}};
+  await openRecap();
+  assert.equal(asked,2,'a hint asked since is new: the desk writes again');
+  seat();let fail=true;engine(()=>{if(fail){fail=false;throw new Error('engine down');}return lined();});
+  assert.deepEqual((await openRecap()).status,[502]);backToDesk();
+  assert.deepEqual((await openRecap()).status,[200]);
+  assert.equal(asked,2,'a failed write is asked again');
+ }finally{reg().resetProviders();}
+});
+
+// The markup the Recap drew for these evenings before the follow-up (recorded at ad6c731): the tiles, the marks and
+// the caption do not change with where the marks' code lives or with how the memory is written.
+const GOLDEN={ema:'6584d25f6a2d4cd2',jakub:'459bdc34371da4e6'};
+test('GUARD: the recap\'s tiles are drawn exactly as before - Ema\'s evening and Jakub\'s quiet one',()=>{
+ const hash=(x)=>require('node:crypto').createHash('sha256').update(x).digest('hex').slice(0,16);
+ assert.equal(hash(draw(evening(),NOW)),GOLDEN.ema);
+ assert.equal(hash(draw(jakub(),NOW)),GOLDEN.jakub);
 });
