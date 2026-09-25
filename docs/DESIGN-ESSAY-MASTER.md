@@ -17,7 +17,9 @@ it reads from the sofa. Bold type that still carries nested, readable content.
    word or row; a bone plate with a citron ring on a focused action. Nothing else on screen looks focused.
 2. **Ink means done, hatch means still to write.** A lens is inked from the left as far as the learner
    has got, with a citron cursor bar at the ink's edge. A lens never read is a hatched plate. The half of
-   a move a sentence misses is hatched, with the caret waiting at it; Rewrite on my phone inks it.
+   a move a sentence misses is hatched, with the caret waiting at it. Ink is a claim of done, so pressing
+   Rewrite on my phone does not ink it: the move inks only when the rewrite, re-judged alone, holds
+   (`rules/essay` `rewriteState` is `holds`). A rewrite still faulty stays hatched, and the caption says why.
 3. **Arrows mean direction.** A paragraph is a column of arrows, one per sentence, as long as the
    sentence. A sentence that argues against the paragraph points back, in citron. Slots carry an arrow for
    the side they stand for.
@@ -78,7 +80,9 @@ Both faces come through `next/font/google` (`desk/src/essay/fonts.ts`), self-hos
   at its edge (`essay-lens-word`, `essay-lens-meter`); status beside it: Secure / Read + a day / Not read.
 - **Specimen card** — the last paragraph as a strip of blocks (faulty ones citron, pointing back) and a
   door to the sentence that needs a look (`essay-specimen-card`).
-- **Rail** — the paragraph as arrows, the current sentence at full strength (`essay-rail`).
+- **Rail** — the paragraph as arrows, the current sentence at full strength (`essay-rail`). A rewritten
+  sentence keeps its old arrow as a faint ghost just under the new one (`essay-ghost`): a reversed ghost
+  under a forward arrow is the turn, drawn.
 - **The sentence** — the learner's words, the clause it ends on underlined in citron, a reversed arrow.
 - **The move** — line one solid, a citron hook and THEN, line two hatched with the caret (`essay-move`).
 - **The pattern** — literal words in 44 px around dashed slots (`essay-pattern`, `essay-slot`).
@@ -92,6 +96,10 @@ Both faces come through `next/font/google` (`desk/src/essay/fonts.ts`), self-hos
 - The sentence page reads top to bottom: sentence, problem, move, pattern; the rail stays on the left,
   the actions at the bottom. It opens on the first faulty sentence; Up/Down walk the paragraph,
   Left/Right the actions, Menu is the table.
+- Rewrite on my phone hands the phone the sentence on screen, the learner's own words, to edit and send
+  (POST /api/analyse kind `rewrite`). The desk re-judges that one sentence in its paragraph, through the
+  same lens, against the move the page taught; every other verdict is kept. The page stays on the
+  sentence, and a rewrite is not another paragraph read: no writing episode, no lens attempt.
 - A strong sentence shows its job in the giant type and "Nothing to fix"; a neutral one is quiet.
 - A faulty sentence without its own fix takes its lens's playbook lesson as the move - never an empty slot.
 

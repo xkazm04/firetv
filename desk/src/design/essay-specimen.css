@@ -131,6 +131,8 @@
 .essay-tv .em-r.cur { opacity: 1; }
 .essay-tv .em-r.cur .em-n { color: var(--em-bone); }
 .essay-tv .em-r.bad .em-n { color: var(--em-cit); }
+/* a rewritten sentence: the old arrow as a faint ghost just under the new one, same start - the turn is the picture */
+.essay-tv .em-r .em-ghost { position: absolute; left: 80px; top: calc(50% + 17px); opacity: .8; pointer-events: none; }
 
 .essay-tv .em-main { position: absolute; left: 414px; top: 148px; width: 1410px; height: 800px; display: flex; flex-direction: column;
   --em-sent-size: 54px; --em-move-size: 128px; }

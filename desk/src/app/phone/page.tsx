@@ -10,6 +10,7 @@ import { BRAND as MODULE } from "@/tv/profileRows";
 import type { Event, JobKind, Session, Subject } from "@/lib/session/store";
 import { LingaPhone } from "@/english/LingaPhone";
 import { follow, type PScreen } from "./panelFor";
+import { forensicAt } from "@/tv/keys";
 
 const SAMPLES: Array<{ id: Subject; title: string; file: string }> = [
   { id: "maths", title: "Algebra — Exercise 4.2", file: "/samples/maths.jpg" },
@@ -132,6 +133,13 @@ export default function Phone() {
   const retake = () => { setShot(null); setPhase("idle"); setMsg(""); };
 
   const page = s?.pages[s.pageIx];
+  // the TV is on one sentence of the paragraph: the Essay tab offers that sentence, the learner's own words, to rewrite
+  const onSentence = s?.screen === "forensic" && s.essay?.sentences.length ? s.essay.sentences[forensicAt(s)] : null;
+  const [rewrite, setRewrite] = useState("");
+  useEffect(() => { if (onSentence) setRewrite(onSentence.text); }, [onSentence?.n, onSentence?.text]); // eslint-disable-line react-hooks/exhaustive-deps
+  const sendRewrite = async () => { if (!onSentence) return; setBusy(true); setMsg("the desk is reading it…");
+    try { const r = await call("/api/analyse", { kind: "rewrite", n: onSentence.n, text: rewrite }); const j = await r.json().catch(() => ({} as { error?: string }));
+      setMsg(r.ok ? "on the TV" : (j as { error?: string }).error ?? "failed"); } catch { setMsg("That did not reach the desk."); } finally { setBusy(false); } };
   const tap = (e: React.PointerEvent<HTMLDivElement>) => {
     if (!page) return; const r = e.currentTarget.getBoundingClientRect(); const y = ((e.clientY - r.top) / r.height) * page.h;
     let best = 0; page.items.forEach((it, i) => { if (Math.abs(it.cy - y) < Math.abs(page.items[best].cy - y)) best = i; });
@@ -375,7 +383,12 @@ export default function Phone() {
           <div className="presets">{["I have gone to school yesterday.", "I lived here since 2019.", "We will visit Prague next week.", "She went to the cinema last night."].map((p) => <button key={p} onClick={() => setSentence(p)}>{p}</button>)}</div>
           <button className="pbtn" data-signal="true" disabled={busy} onClick={async () => { setBusy(true); setMsg("sending…"); try { const r = await call("/api/analyse", { kind: "english", sentence }); setMsg(r.ok ? "on the TV" : "failed"); } finally { setBusy(false); } }}>Check it on the TV</button></div>}
 
-        {screen === "paste" && <div className="pscreen"><h3>Your paragraph</h3><p>Paste it, or dictate it. Pick the lens — or pick it on the TV.</p>
+        {screen === "paste" && onSentence && <div className="pscreen" data-role="essay-rewrite"><h3>Sentence {onSentence.n}</h3><p>Rewrite it in your own words. The desk reads this one sentence again, in its paragraph.</p>
+          <div className="field"><textarea value={rewrite} onChange={(e) => setRewrite(e.target.value)} /></div>
+          <div className="field"><button className="pbtn" data-secondary="true" onClick={() => listen((t) => setRewrite(t))}>Dictate</button>
+            <button className="pbtn" data-signal="true" style={{ flex: 1 }} disabled={busy} onClick={sendRewrite}>Send</button></div></div>}
+
+        {screen === "paste" && !onSentence && <div className="pscreen"><h3>Your paragraph</h3><p>Paste it, or dictate it. Pick the lens — or pick it on the TV.</p>
           <div className="types">{ESSAY_TYPES.map((t) => <label key={t.id}><input type="radio" name="etype" checked={etype === t.id} onChange={() => setEtype(t.id)} /><span><b>{t.name}</b><small>{t.promise}</small></span></label>)}</div>
           <div className="field"><textarea value={essay} onChange={(e) => setEssay(e.target.value)} /></div>
           <div className="field"><button className="pbtn" data-secondary="true" onClick={() => listen((t) => setEssay((v) => (v + " " + t).trim()))}>Dictate</button>

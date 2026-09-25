@@ -7,9 +7,9 @@
  * band, safe box) steps aside: this root is the whole 1920 x 1080 stage and keeps the 5% margins itself.
  */
 import { useEffect, useLayoutEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
-import type { Session, Verdict } from "@/lib/session/store";
+import type { Job, Session, Verdict } from "@/lib/session/store";
 import { ESSAY_TYPES, playFor, playLesson, type Play } from "@/lib/library/lessons.data";
-import { cleanFix, type Fix } from "@/lib/rules/essay";
+import { rewriteState, taught, type Fix } from "@/lib/rules/essay";
 import { stopAt, lensStops, forensicAt, rewriteStatus, LENS_STOPS, PLAYBOOK_STOPS, FORENSIC_STOPS } from "@/tv/keys";
 import { lensStandings, writingTotals } from "@/tv/writingRows";
 import { fmt } from "@/tv/useSession";
@@ -250,13 +250,14 @@ function useCommit(status: string): string | null {
 
 // ---------------------------------------------------------------- one sentence (forensic)
 
-/** What the page teaches for a faulty sentence: the reading's own fix, or the lens's playbook lesson as the move. */
+/**
+ * What the page teaches (rules/essay taught): for a faulty sentence the reading's own fix, or the lens's playbook
+ * lesson as the move; for a rewrite that holds, the move it was taught - the one the ink now claims.
+ */
 function teaching(v: Verdict | undefined, type: string): { fix: Fix; from: Play | null } | null {
-  if (v?.verdict !== "faulty") return null;
-  const own = cleanFix(v.fix);
-  if (own) return { fix: own, from: null };
   const play = playFor(type);
-  return { fix: { move: play.move, pattern: play.pattern }, from: play };
+  const t = taught(v, { move: play.move, pattern: play.pattern });
+  return t ? { fix: t.fix, from: t.own ? null : play } : null;
 }
 
 /**
@@ -277,12 +278,15 @@ export function Forensic({ s, table }: { s: Session; table: boolean }) {
   const verdicts = new Map(a.verdicts.map((v) => [v.n, v]));
   const v = verdicts.get(sn.n);
   const lens = ESSAY_TYPES.find((t) => t.id === a.type) ?? ESSAY_TYPES[0];
+  // the phone chip lights while the rewrite is on the phone; the move inks only once a rewrite holds (rules/essay)
   const lit = s.status === rewriteStatus(sn.n);
+  const holds = rewriteState(v) === "holds";
+  const job = s.jobs?.analyse?.key === `sentence:${sn.n}` ? s.jobs.analyse : undefined;
   if (table) return <Table s={s} a={a} cur={i} verdicts={verdicts} />;
   return (<>
     <Brand /><Top s={s} menu="Table" lit={lit} />
     <Rail a={a} cur={i} verdicts={verdicts} />
-    <Page key={sn.n} sn={sn} n={N} v={v} lens={lens} type={a.type} inked={lit} />
+    <Page key={sn.n} sn={sn} n={N} v={v} lens={lens} type={a.type} inked={holds} job={job} />
     <nav className="em-acts">
       {FORENSIC_STOPS.map((k, j) => (
         <div key={k} className={`em-pill em-act${j === 0 ? " prim" : ""}${stopAt(FORENSIC_STOPS, s.focus) === k ? " is-focused" : ""}`} data-focused={stopAt(FORENSIC_STOPS, s.focus) === k} {...(j === 0 ? { "data-role": "essay-primary" } : {})}>
@@ -306,11 +310,13 @@ function Rail({ a, cur, verdicts }: { a: Reading; cur: number; verdicts: Map<num
       <div className="em-lbl">Paragraph</div>
       <div className="em-rrows">
         {a.sentences.map((x, j) => {
-          const vd = verdictOf(verdicts, x.n), bad = vd === "faulty";
+          const vd = verdictOf(verdicts, x.n), bad = vd === "faulty", was = verdicts.get(x.n)?.was;
           return (
-            <div key={x.n} className={`em-r${bad ? " bad" : ""}${j === cur ? " cur" : ""}`} data-verdict={vd} data-current={j === cur}>
+            <div key={x.n} className={`em-r${bad ? " bad" : ""}${j === cur ? " cur" : ""}`} data-verdict={vd} data-current={j === cur} data-rewrite={rewriteState(verdicts.get(x.n))}>
               <span className="em-n">{x.n}</span>
               <Arrow len={Math.round(56 + (124 * x.words) / maxW)} against={bad} color={bad ? CIT : vd === "strong" ? BONE : MUTE} />
+              {/* a rewritten sentence keeps its old arrow as a ghost under the new one: the before and after as one picture */}
+              {was && <span className="em-ghost" data-role="essay-ghost"><Arrow len={Math.round(56 + (124 * Math.min(maxW, was.text.split(/\s+/).length)) / maxW)} h={16} against={was.verdict === "faulty"} color={MUTE} /></span>}
             </div>
           );
         })}
@@ -320,10 +326,10 @@ function Rail({ a, cur, verdicts }: { a: Reading; cur: number; verdicts: Map<num
 }
 
 /** The one sentence the page is about. Keyed by sentence, so moving along the paragraph remounts it (and its fit). */
-function Page({ sn, n, v, lens, type, inked }: { sn: Sent; n: number; v: Verdict | undefined; lens: (typeof ESSAY_TYPES)[number]; type: string; inked: boolean }) {
+function Page({ sn, n, v, lens, type, inked, job }: { sn: Sent; n: number; v: Verdict | undefined; lens: (typeof ESSAY_TYPES)[number]; type: string; inked: boolean; job?: Job }) {
   const main = useRef<HTMLElement>(null);
   const t = teaching(v, type);
-  const vd = v?.verdict ?? "neutral";
+  const vd = v?.verdict ?? "neutral", state = rewriteState(v);
   // fit: the move's widest line to the column, then the whole page to its 800 px - the move and the sentence give way, never the actions
   useLayoutEffect(() => {
     const el = main.current; if (!el) return;
@@ -346,7 +352,12 @@ function Page({ sn, n, v, lens, type, inked }: { sn: Sent; n: number; v: Verdict
   }, [sn.n, sn.text, t?.fix.move, t?.fix.pattern]);
 
   const note = v?.note?.trim();
-  const noteCap = vd === "faulty" ? { label: "Look again · the problem", text: note || `Read it again through the ${lens.name} lens: ${lens.promise}` }
+  // the rewrite's run on this sentence speaks first; then what the rewrite did; then the reading's own note
+  const noteCap = job?.phase === "running" ? { label: "Reading", text: `The desk is reading sentence ${sn.n} again.` }
+    : job?.phase === "failed" && state === "none" ? { label: "Not read", text: job.error ?? "The sentence did not come back. Send it again from the phone." }
+    : state === "holds" ? { label: "Rewrite · it holds", text: note || "It makes the move now." }
+    : state === "still" ? { label: "Rewrite · not yet", text: note || `Read it again through the ${lens.name} lens: ${lens.promise}` }
+    : vd === "faulty" ? { label: "Look again · the problem", text: note || `Read it again through the ${lens.name} lens: ${lens.promise}` }
     : vd === "strong" ? { label: "Well done", text: note || "This sentence does its job." }
     : { label: "Neutral", text: note || "Nothing flagged." };
   return (
