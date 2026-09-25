@@ -286,7 +286,7 @@ export function lingaView(s: Session, input: ViewInput = {}): LingaView {
         caption = lc.pending ? "Take a moment. Linga is getting the task ready." : lc.error || "Getting the task ready."; captionTag = "Preparing";
         actions = lc.pending ? [cancel] : [act("retry", "Try again", "Ask Linga for the task again.", cmd("check-retry")), stopCheck];
       } else if (t.kind === "choose") {
-        hero = { kind: "choices", kicker: `Task ${n} · ${TASK_TITLE.choose} · pick with the remote`, prompt: t.prompt, options: [...t.options], small: false };
+        hero = { kind: "choices", kicker: `Task ${n} · ${TASK_TITLE.choose} on the TV`, prompt: t.prompt, options: [...t.options], small: false };
         caption = lc.pending ? "Take a moment." : "Pick the reply that fits. Not sure? Say so; that helps too."; captionTag = "Your task";
         actions = lc.pending ? [cancel] : [...t.options.map((x, i) => act("choose", `Reply ${i + 1}`, x, cmd("check-task", { taskId: t.id, option: i }))), act("dont-know", "I don't know", "Skip this one. That tells Linga something too.", cmd("check-task", { taskId: t.id, skip: true }))];
       } else {
