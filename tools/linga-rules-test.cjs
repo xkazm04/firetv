@@ -616,3 +616,26 @@ test('review case 8 GUARD: a learner with no taught items gets no review and no 
  assert.equal(c.review??null,null);assert(!('bringBack' in prompts[0]));
  await reply(REUSED);assert(!('bringBack' in prompts[1]));
 });
+
+// ---- T10: the tutor's calls run with thinking off, and only they do ----
+test('thinking case 1: opening, turn, coach and replay ask for thinking off; the level check and its plan do not',async()=>{
+ const seen=[];
+ const partner=()=>({reply:'Which dates did you book?',supportProvided:false,observations:[],moment:{kind:'none',said:'',better:'',why:''},help:{simpler:'',meaning:'',starter:''}});
+ fresh();answer=async(req)=>{const p=JSON.parse(req.prompt);seen.push({who:'linga',task:p.task.slice(0,12),thinking:req.thinking});
+  return {json:/^Prepare/.test(p.task)?{title:'A practice booking',goal:'Ask for help with a booking.',opening:'Hello. How can I help?'}:/^Coach/.test(p.task)?{before:'two nights',after:'two nights, please',note:'Clear. Add please.'}:partner(),provider:'test',ms:1};};
+ await command('start',{sceneId:'booking'});
+ await command('turn',{text:'I booked two nights.',mode:'text',lastTurnId:getSession().conversation.turns.at(-1).id});
+ await command('coach');await command('replay');
+ assert.equal(seen.length,4,'one model call each for opening, turn, coach and replay');
+ for(const c of seen)assert.equal(c.thinking,false,`${c.task} asks for thinking off`);
+ fresh();answer=async(req)=>{seen.push({who:'check',step:JSON.parse(req.prompt).step,thinking:req.thinking});return wrap(checkAnswer)(req);};
+ await command('check-start');await answerAbout(3);
+ const others=seen.filter(c=>c.who==='check');
+ assert(others.length>=3,'the level check asked the model');
+ for(const c of others)assert.equal(c.thinking,undefined,`the ${c.step} step keeps the model's own thinking`);
+});
+test('thinking case 2: no text() caller outside the conversation asks for thinking off',()=>{
+ const walk=(d)=>fs.readdirSync(d,{withFileTypes:true}).flatMap(e=>e.isDirectory()?walk(path.join(d,e.name)):/\.tsx?$/.test(e.name)?[path.join(d,e.name)]:[]);
+ const callers=walk(path.join(root,'src')).filter(f=>!f.includes(path.join('lib','engines'))&&/thinking\s*:\s*false/.test(fs.readFileSync(f,'utf8'))).map(f=>path.relative(root,f).split(path.sep).join('/'));
+ assert.deepEqual(callers,['src/lib/english/conversation.ts']);
+});

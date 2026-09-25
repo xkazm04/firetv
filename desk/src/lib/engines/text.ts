@@ -24,6 +24,15 @@ import { EngineError, type EngineResult, type Provider, type TextRequest } from 
 const BIN = process.env.CLAUDE_BIN || "claude";
 const MODELS = { fast: process.env.CLAUDE_FAST_MODEL || "haiku", best: process.env.CLAUDE_BEST_MODEL || "sonnet" };
 
+/**
+ * The child's environment. `thinking: false` sets MAX_THINKING_TOKENS=0, the CLI's switch for hidden reasoning
+ * (it has no flag for it; `--effort low` barely moved it). Measured 2026-09-25 on Linga turns with haiku (T10 A/B):
+ * thinking on, ~7k output tokens, 52-90 s and 5 timeouts in 15 calls; off, ~220 tokens and 4-6 s, none.
+ */
+export function childEnv(req: Pick<TextRequest, "thinking">): NodeJS.ProcessEnv {
+  return req.thinking === false ? { ...process.env, MAX_THINKING_TOKENS: "0" } : process.env;
+}
+
 /** The Claude CLI. It only produces the answer; text() parses and checks it, as for every provider. */
 export const claudeCli: Provider<TextRequest, unknown> = {
   name: "claude-cli",
@@ -46,7 +55,7 @@ export const claudeCli: Provider<TextRequest, unknown> = {
     const out = await new Promise<string>((resolve, reject) => {
       // claude is a real executable on PATH (claude.exe on Windows), so no shell: the JSON schema
       // arrives as one argv entry intact, and the prompt goes in on stdin.
-      const child = spawn(BIN, args, { cwd: dir, windowsHide: true });
+      const child = spawn(BIN, args, { cwd: dir, windowsHide: true, env: childEnv(req) });
       const timeout = setTimeout(() => { child.kill(); reject(new EngineError("timeout", reported, "The text engine took too long. Please retry.")); }, req.timeoutMs ?? 90000);
       let stdout = "", stderr = "";
       child.stdout.on("data", (d) => (stdout += d));
