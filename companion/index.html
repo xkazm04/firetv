@@ -21,6 +21,11 @@
     white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
   #status.bad { color:#f85149; }
 
+  /* Shown only when the TV refused the pairing: the PIN is typed again here, inline, for the same
+     reason the label box below is not prompt(). */
+  #pinbox { display:none; gap:6px; padding:8px 12px; border-bottom:1px solid var(--line); }
+  #pinbox.show { display:flex; }
+
   #padwrap { flex:1; display:grid; place-items:start center; padding:10px; min-height:0; }
   /* The pen surface carries the *video's* aspect ratio, so a normalized point means the same
      place on the phone and on the TV. Without this, every stroke arrives stretched. */
@@ -38,7 +43,7 @@
   #tagbox { position:absolute; inset:auto 8px 8px 8px; display:none; gap:6px;
     background:rgba(13,17,23,.95); border:1px solid var(--line); border-radius:8px; padding:8px; }
   #tagbox.show { display:flex; }
-  #tagtext { flex:1; min-width:0; background:#010409; border:1px solid var(--line); border-radius:6px;
+  #tagtext, #pintext { flex:1; min-width:0; background:#010409; border:1px solid var(--line); border-radius:6px;
     color:var(--fg); padding:8px; font-size:15px; }
 
   nav { padding:0 10px 12px; display:flex; flex-direction:column; gap:6px; }
@@ -71,6 +76,12 @@
   <strong>Pen</strong>
   <span id="status">connecting…</span>
 </header>
+
+<form id="pinbox" autocomplete="off">
+  <input id="pintext" type="text" inputmode="numeric" maxlength="8" placeholder="PIN on the TV"
+    aria-label="PIN on the TV" enterkeyhint="go">
+  <button style="flex:0 0 72px">Pair</button>
+</form>
 
 <div id="padwrap">
   <div id="pad">
@@ -144,25 +155,29 @@
   const statusEl = $('status'), dot = $('dot'), hint = $('hint');
   const tagbox = $('tagbox'), tagtext = $('tagtext');
 
-  const pin = new URLSearchParams(location.search).get('pin') || '0000';
+  let pin = new URLSearchParams(location.search).get('pin') || '0000';
   const clientId = 'pen-' + Math.random().toString(36).slice(2, 8);
 
   let tool = 'freehand';
   let color = '#FFD400';
   let sticky = false;
-  let ws = null, connected = false, paired = false;
+  let ws = null, connected = false, paired = false, refused = false;
   let lastState = null, scrubbing = false, tvDoc = null, prevT = null;
 
   // ---- transport -----------------------------------------------------------
   function connect() {
-    ws = new WebSocket('ws://' + location.host + '/ws');
+    const sock = (ws = new WebSocket('ws://' + location.host + '/ws'));
     ws.onopen = () => {
       connected = true;
       send({ type: 'hello', pin, clientId });
     };
     ws.onclose = () => {
+      if (sock !== ws) return; // a socket already replaced by a PIN retry
       connected = paired = false;
       dot.classList.remove('on');
+      // A refusal is the TV's answer, not a dropped line: the same PIN would be refused again,
+      // every second, forever. Wait for the viewer to type the PIN instead. A drop comes back.
+      if (refused) return;
       if (!statusEl.classList.contains('bad')) statusEl.textContent = 'reconnecting…';
       setTimeout(connect, 1000);
     };
@@ -173,8 +188,12 @@
   function onMessage(m) {
     if (m.type === 'welcome') {
       if (!m.accepted) {
-        statusEl.textContent = 'not paired: ' + (m.reason || 'rejected') + ' — rescan the QR on the TV';
+        refused = true;
+        statusEl.textContent = (m.reason || 'not paired') + ' · type the PIN from the TV';
         statusEl.classList.add('bad');
+        pinbox.classList.add('show');
+        pintext.value = '';
+        pintext.focus();
         return;
       }
       paired = true;
@@ -248,6 +267,23 @@
     drawMirror();
   }
   connect();
+
+  const pinbox = $('pinbox'), pintext = $('pintext');
+  pinbox.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const typed = pintext.value.trim();
+    if (!typed) return;
+    pin = typed;
+    // A reload keeps the PIN the viewer typed rather than the one the TV refused.
+    const q = new URLSearchParams(location.search);
+    q.set('pin', pin);
+    history.replaceState(null, '', '?' + q);
+    refused = false;
+    pinbox.classList.remove('show');
+    statusEl.classList.remove('bad');
+    statusEl.textContent = 'pairing…';
+    connect();
+  });
 
   // ---- pen surface ---------------------------------------------------------
   function fit() {
