@@ -52,7 +52,7 @@ export function LingaPhone({s,post,onSentence}:{s:Session;post:(e:Event)=>Promis
       <p>Your speaking evidence is separate from written and multiple-choice practice. These are learning indicators, not a certified level.</p>
       {ENGLISH_SKILLS.map(skill=>{const all=learning.evidence.filter(e=>e.skill===skill.id);return <div className="linga-skill" key={skill.id}><b>{skill.name}</b><small>Speaking: {PROGRESS_LABEL[learning.achievements[skill.id]??"not-tried"]}</small><small>{all.filter(e=>e.mode==="text").length} written · {all.filter(e=>e.mode==="choice").length} choice observations</small></div>;})}
       <a href={`/english/print?learner=${encodeURIComponent(s.learner.id)}`} target="_blank" rel="noreferrer">Open printable learning map</a>
-      <details><summary>Things Linga taught you</summary><div className="linga-transcript">{learning.taught.slice(-12).reverse().map(m=><p key={m.id}><b>{m.title} · {m.kind==="fix"?"a fix":"a word"}</b>{m.kind==="fix"?<>“{m.said}” → “{m.better}”</>:<>“{m.said}”: {m.better}</>}<br/>{m.why}</p>)}{!learning.taught.length&&<p>Nothing yet. Linga stops a conversation when one thing is worth keeping.</p>}</div></details>
+      <details><summary>Things Linga taught you</summary><div className="linga-transcript">{learning.taught.filter(m=>!(c&&c.phase!=="finished"&&c.review?.id===m.id&&!c.review.used)).slice(-12).reverse().map(m=><p key={m.id}><b>{m.title} · {m.kind==="fix"?"a fix":"a word"}</b>{m.kind==="fix"?<>“{m.said}” → “{m.better}”</>:<>“{m.said}”: {m.better}</>}<br/>{m.why}{m.reusedAt!==undefined&&<><br/><small>Used again{learning.sessions.find(x=>x.id===m.reusedIn)?` in ${learning.sessions.find(x=>x.id===m.reusedIn)!.title}`:""}: “{m.reusedQuote}”</small></>}</p>)}{!learning.taught.length&&<p>Nothing yet. Linga stops a conversation when one thing is worth keeping.</p>}</div></details>
       <details><summary>Recent evidence</summary><div className="linga-transcript">{learning.evidence.slice(-12).reverse().map(e=><p key={e.id}><b>{skillName(e.skill)} · {e.mode} · {e.supported?"with support":"without a supplied phrase"}</b>“{e.quote}”<br/>{e.note}</p>)}{!learning.evidence.length&&<p>Nothing recorded yet. Start with a conversation.</p>}</div></details>
     </>}
     {panel==="talk"&&<>
@@ -212,6 +212,8 @@ function StartPanel({s,learning,run,busy,list}:{s:Session;learning:EnglishLearni
   return <>
     {c?.phase==="finished"&&<>
       <p className="linga-status">Rehearsal saved. Your map shows the evidence you collected.</p>
+      {c.review?.used&&<div className="linga-transcript"><b>Used again tonight</b><p>“{c.review.better}”, taught in {c.review.fromTitle}<br/><small>You said: “{c.review.used}”</small></p></div>}
+      {c.review&&!c.review.used&&<div className="linga-transcript"><b>A sentence to take with you</b><p>“{c.review.better}”, from {c.review.fromTitle}</p></div>}
       {(c.moments??[]).length>0&&<div className="linga-transcript"><b>From this rehearsal</b>{c.moments.map(m=><p key={m.id}>{m.kind==="fix"?<>“{m.said}” → “{m.better}”</>:<>“{m.said}”: {m.better}</>}<br/><small>{m.why}</small></p>)}</div>}
     </>}
     {body}

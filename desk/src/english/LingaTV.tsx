@@ -116,7 +116,7 @@ function artFor(h:Hero,s:Session):ArtKey{
     case "intro":return h.art;
     case "scene":return h.illustration;
     case "track":return h.illustration;
-    case "comparison":return "coach";
+    case "comparison":return h.art??"coach";
     case "message":return s.screen==="linga-plan"?"plan":"check";
     case "heading":return "check";
     case "choices":{
@@ -147,11 +147,12 @@ function Body({v,s,caption}:{v:LingaView;s:Session;caption:React.ReactNode}){
       const kicker=h.kicker.endsWith(` · ${h.partner}`)?h.kicker.slice(0,-(h.partner.length+3)):h.kicker;
       return <><Kicker text={kicker}/>{h.said?<SentenceCard className="lo-said linga-message" label={`${h.who.split(" · ")[0]} says`} text={h.said} role="linga-said"/>:<Title text={h.title}/>}{caption}{h.said&&h.subtitle&&h.said.length<=140&&<DataLine><span className="lo-data-key">Goal</span>{h.subtitle}</DataLine>}</>;
     }
-    case "track":return <><Kicker text={h.kicker}/><Title text={h.title}/><Stones progress={h.progress}/>{h.subtitle&&<DataLine>{h.subtitle}</DataLine>}{caption}</>;
+    // On the recap, the phrase this scene invited and the learner has yet to use stands where the title would be.
+    case "track":return <><Kicker text={h.kicker}/>{h.sentence?<SentenceCard className="lo-compact" label="A sentence to take with you" text={h.sentence}/>:<Title text={h.title}/>}<Stones progress={h.progress}/>{h.subtitle&&<DataLine>{h.subtitle}</DataLine>}{caption}</>;
     case "comparison":return <><Kicker text={v.tag}/><div className="lo-compare linga-comparison">
       <div className="lo-before"><span>{h.before.kicker}</span><q>{h.before.quote}</q></div>
       <SentenceCard label={h.after.kicker} text={h.after.quote}/>
-    </div>{h.note&&<div className="lo-note">{h.note}</div>}{caption}</>;
+    </div>{h.note&&<div className="lo-note">{h.note}</div>}{caption}{h.data&&<DataLine>{h.data}</DataLine>}</>;
     case "plain":return <><Title text={h.title}/>{caption}</>;
     default:return null;
   }

@@ -9,6 +9,7 @@ import { ConversationError } from "./errors";
 import { climb, keepLadder, MEANING_MAX, SIMPLER_MAX, STARTER_MAX, supportedBy, validLadder } from "./help";
 import { BAND_NAME, BAND_TUTOR, easyBand, isBand, TAUGHT_CAP } from "./placement";
 import { mergeEvidence, parsePreferences, validateObservations } from "./rules";
+import { bringBack, dueTaught, markReused, offer, reuseOf, reviewOf, usedLine } from "./review";
 import { accepts, isTurnAction, refusal } from "./turn";
 import type { Conversation, EnglishEvidence, EnglishScene, EvidenceMode, Moment, SkillId } from "./types";
 
@@ -55,13 +56,14 @@ Every partner reply is one or two sentences, at most 230 characters, ending in a
 With every line you say, return help: the rescue ladder for that line, shown one rung at a time only if the learner asks. simpler: your line said again, shorter and in more common words; a question stays a question and never contains its answer. meaning: the one word or phrase in your line a learner at this level may not know, and what it means in plain words ("word: meaning"). starter: the first two to six words of one possible reply, ending in "…", never a whole sentence and never the full answer. Leave a rung empty when it does not fit.
 Return only the specified JSON.`;
 }
-function context(c:Conversation){
-  const learning=getLearner(c.learnerId).english;
+/** The tutor's input for every call. `invite` adds the taught item this scene brings back (review.ts), until it is used. */
+function context(c:Conversation,invite=true){
+  const learning=getLearner(c.learnerId).english,bring=invite?bringBack(c,learning.taught):null;
   const recent=learning.evidence.filter(e=>e.skill===c.focusSkill&&e.mode!=="choice").slice(-4);
   const struggles=recent.filter(e=>!e.success).length,independent=recent.filter(e=>e.success&&!e.supported).length;
   const adaptation=struggles>=2?"Use a shorter question and a concrete example. Offer a phrase starter if needed, setting supportProvided=true. Stay in the scene.":independent>=3?"Ask a less predictable follow-up within the learner's chosen level and social challenge. Avoid another copy of a question they already answered.":"Keep one manageable question per turn. Respond to the learner's need before adding difficulty.";
   const placement=learning.placement;
-  return {scene:{title:c.title,goal:c.goal},preferences:c.preferences,adaptation,teachingNotes:learning.notes,levelCheck:placement?{band:placement.band,chosenBy:placement.source==="self"?"learner":"level check",practiseNext:placement.focus}:null,recentLearning:recent.map(e=>({skill:e.skill,success:e.success,supported:e.supported,note:e.note})),skills:ENGLISH_SKILLS.filter(s=>s.id===c.focusSkill||s.id===c.reviewSkill||s.id==="repair"),transcript:c.turns.slice(-18)};
+  return {scene:{title:c.title,goal:c.goal},preferences:c.preferences,adaptation,teachingNotes:learning.notes,levelCheck:placement?{band:placement.band,chosenBy:placement.source==="self"?"learner":"level check",practiseNext:placement.focus}:null,recentLearning:recent.map(e=>({skill:e.skill,success:e.success,supported:e.supported,note:e.note})),skills:ENGLISH_SKILLS.filter(s=>s.id===c.focusSkill||s.id===c.reviewSkill||s.id==="repair"),transcript:c.turns.slice(-18),...(bring?{bringBack:bring}:{})};
 }
 const beginner=(c:Conversation)=>easyBand(isBand(c.preferences.level)?c.preferences.level:"A1");
 /**
@@ -116,12 +118,15 @@ export async function englishCommand(raw:unknown){
     if(s.conversation?.pending)throw new ConversationError("A scene is already being prepared. You can cancel it.",409);
     if(s.conversation&&s.conversation.phase!=="finished"&&input.replace!==true)throw new ConversationError("Finish or leave the current scene before starting another.",409);
     const due=learning.evidence.filter(e=>e.success&&e.skill!==scene.skill&&Date.now()-e.at>3*86400000).sort((a,b)=>a.at-b.at)[0];
-    const c:Conversation={id:randomUUID(),learnerId,sceneId:scene.id,title:scene.name,goal:scene.goal,partner:scene.partner,focusSkill:scene.skill,reviewSkill:due?.skill??"repair",preferences:prefs,scene,turns:[],coaching:null,moment:null,moments:[],phase:"conversation",pending:commandId,error:"",paused:false,capture:false,captureAt:0,audioNonce:0,supported:false,cue:"",quizOpen:false,commands:[],evidence:[],startedAt:Date.now()};
+    // One taught item comes back (review.ts): code picks it, the partner makes room for it without saying it.
+    const id=randomUUID(),taught=dueTaught(learning.taught,id);
+    const c:Conversation={id,learnerId,sceneId:scene.id,title:scene.name,goal:scene.goal,partner:scene.partner,focusSkill:scene.skill,reviewSkill:due?.skill??"repair",preferences:prefs,scene,turns:[],coaching:null,moment:null,moments:[],phase:"conversation",pending:commandId,error:"",paused:false,capture:false,captureAt:0,audioNonce:0,supported:false,cue:"",quizOpen:false,commands:[],evidence:[],startedAt:Date.now(),review:taught?reviewOf(taught):null};
     dispatch({type:"timer.pause"});commit(c,"linga-talk");
     try{
       const result=await text<Record<string,unknown>>({system:tutorSystem(c),prompt:JSON.stringify({...context(c),task:"Prepare a fitting scene and opening question. Title <=70 characters, goal <=120, opening <=230. Give an easy entry at the learner's level. Use the learner's interest as a detail within the scene contract; do not change its purpose."}),schema:openingSchema,accept:openingAccept,model:"fast",timeoutMs:60000,isolated:true});
       checkCurrent(c,commandId);
       const opening={id:randomUUID(),role:"partner" as const,text:line(result.json.opening)};
+      if(c.review){const now=getLearner(learnerId).english;saveEnglish(learnerId,{...now,taught:offer(now.taught,c.review.id)});}
       commit({...c,title:line(result.json.title,70),goal:line(result.json.goal,120),turns:[opening],supported:result.json.supportProvided!==false,help:keepLadder(opening.id,validLadder(result.json.help,opening.text)),pending:null,commands:[commandId],provider:result.provider,responseMs:result.ms},"linga-talk");
       return getSession();
     }catch(e){try{const now=checkCurrent(c,commandId);commit({...now,pending:null,error:"The scene could not be prepared. Try again or choose another situation."});}catch{/* superseded */}throw e;}
@@ -183,18 +188,20 @@ export async function englishCommand(raw:unknown){
     const momentTask=mayStop?(beginner(c)?" This learner is a beginner: stop only for a word or phrase they will need again in this scene, never on a goodbye, a thanks or a closing line.":"")+" moment: you may stop the scene for one thing. Stop with a fix when submittedReply has an error that blurs the meaning, an error this learner has now made more than once in the transcript, or a basic error their level should already control; said is an exact excerpt of submittedReply, better is the same idea said well, why is one short reason. Stop with a word when the learner reached for a word or phrase in another language, talked around a missing word, or used a clearly wrong word; said is exactly what they used (their own-language words are fine), better is the English they needed (the word or phrase, or at most one short sentence using it in this scene), why is what it means in plain words. A word moment is vocabulary only: a grammar point (a verb form, an article, word order) is a fix, and a fix needs an exact excerpt of an English reply. When the reply has such an error, stop for it rather than letting it pass, and pick the one that matters most. Never stop for a valid alternative, a style or register choice, or a one-off slip that does not blur meaning. Otherwise kind none with empty fields.":" moment: kind none with empty fields.";
     const credit=" An observation's success is true only when the quoted words themselves do what that skill describes (repair means asking to repeat, clarify or confirm meaning). A thanks, a yes, a single repeated word or a copy of your own words demonstrates no skill: make no observation for it.";
     const task=action==="turn"?{task:`Respond in character to submittedReply, then assess it against the allowed skills. Do not assess earlier turns again. Only clear evidence; uncertain observations cannot earn progress.${credit}${momentTask}`,submittedReply:reply}:action==="coach"?{task:"Coach the latest learner reply: before must be an exact nonempty substring of that reply (<=180 characters); after is one useful alternative (<=180). Note <=220: say what worked and one change. Distinguish language from chosen communication intention; do not invent an error.",submittedReply:lastLearner!.text}:{task:"Return to the scene with a new short question that practises the coaching intention. Vary the question to test reuse. Do not supply the learner's answer.",coaching:c.coaching};
-    const result=await text<Record<string,unknown>>({system:tutorSystem(c),prompt:JSON.stringify({...context(c),...task}),schema:action==="turn"?turnSchema:action==="coach"?coachSchema:replaySchema,accept:action==="turn"?turnAccept:action==="replay"?replayAccept:undefined,model:"fast",timeoutMs:60000,isolated:true});
+    const result=await text<Record<string,unknown>>({system:tutorSystem(c),prompt:JSON.stringify({...context(c,action!=="coach"),...task}),schema:action==="turn"?turnSchema:action==="coach"?coachSchema:replaySchema,accept:action==="turn"?turnAccept:action==="replay"?replayAccept:undefined,model:"fast",timeoutMs:60000,isolated:true});
     const current=checkCurrent(c,commandId);
     let next:Conversation={...current,pending:null,error:"",commands:[...c.commands,commandId].slice(-100),provider:result.provider,responseMs:result.ms};
     if(action==="turn"){
       const partnerReply=line(result.json.reply),turnId=`${c.id}:${commandId}`;
       const observations=validateObservations(result.json.observations,{episodeId:c.id,turnId,sceneId:c.sceneId,at:Date.now(),mode,supported:c.supported,text:reply,skills:[...new Set([c.focusSkill,c.reviewSkill??"repair","repair"])] as SkillId[]});
       const moment=mayStop?parseMoment(result.json.moment,reply,turnId):null;
-      const learned=mergeEvidence(getLearner(learnerId).english,observations);
-      saveEnglish(learnerId,moment?{...learned,taught:[...learned.taught,{...moment,sceneId:c.sceneId,title:c.title}].slice(-TAUGHT_CAP)}:learned);
+      // Reuse is decided here, in code (review.ts): the reply as sent, on the scene as it stood when it was sent.
+      const reused=reuseOf(reply,c),learned=mergeEvidence(getLearner(learnerId).english,observations);
+      const taught=moment?[...learned.taught,{...moment,sceneId:c.sceneId,title:c.title}].slice(-TAUGHT_CAP):learned.taught;
+      saveEnglish(learnerId,{...learned,taught:reused&&c.review?markReused(taught,c.review.id,c.id,reused,Date.now()):taught});
       // a moment models wording, so the reply after it is supported practice
       const partner={id:randomUUID(),role:"partner" as const,text:partnerReply};
-      next={...next,turns:[...c.turns,{id:turnId,role:"learner",text:reply,mode,supported:c.supported},partner],supported:moment?true:result.json.supportProvided!==false,moment,moments:moment?[...(c.moments??[]),moment]:c.moments??[],cue:"",quizOpen:false,help:keepLadder(partner.id,validLadder(result.json.help,partner.text),c.help?.forTurn),evidence:[...c.evidence,...observations]};
+      next={...next,turns:[...c.turns,{id:turnId,role:"learner",text:reply,mode,supported:c.supported},partner],supported:moment?true:result.json.supportProvided!==false,moment,moments:moment?[...(c.moments??[]),moment]:c.moments??[],cue:"",quizOpen:false,help:keepLadder(partner.id,validLadder(result.json.help,partner.text),c.help?.forTurn),evidence:[...c.evidence,...observations],...(reused&&c.review?{review:{...c.review,used:usedLine(reply,reused),usedTurn:turnId}}:{})};
     }else if(action==="coach"){
       const before=line(result.json.before,180);if(!lastLearner!.text.includes(before))throw new Error("The coach did not quote the learner accurately.");
       next={...next,phase:"coaching",coaching:{before,after:line(result.json.after,180),note:line(result.json.note,220)},supported:true,quizOpen:false,cue:"",help:c.help&&{...c.help,shown:false}};

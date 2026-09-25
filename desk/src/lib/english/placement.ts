@@ -144,6 +144,11 @@ export function cleanTaught(value: unknown): Taught[] {
   return value.flatMap(v => {
     const m = obj(v);
     if (!["fix", "word"].includes(String(m.kind)) || !text(m.id, 200) || !text(m.said, 240) || !text(m.better, 240) || !text(m.why, 240) || !text(m.turnId, 200) || !text(m.sceneId, 100) || !text(m.title, 100) || typeof m.at !== "number") return [];
-    return [{ id: m.id as string, kind: m.kind as Taught["kind"], said: m.said as string, better: m.better as string, why: m.why as string, turnId: m.turnId as string, sceneId: m.sceneId as string, title: m.title as string, at: m.at }];
+    // The review fields (review.ts) are optional; one that is present and malformed drops the item, as any other field would.
+    if (m.offered !== undefined && !(Number.isInteger(m.offered) && (m.offered as number) >= 0)) return [];
+    if (m.reusedAt !== undefined && !(typeof m.reusedAt === "number" && Number.isFinite(m.reusedAt))) return [];
+    if (m.reusedIn !== undefined && !text(m.reusedIn, 200) || m.reusedQuote !== undefined && !text(m.reusedQuote, 240)) return [];
+    const review = { ...(m.offered !== undefined && { offered: m.offered as number }), ...(m.reusedAt !== undefined && { reusedAt: m.reusedAt as number }), ...(m.reusedIn !== undefined && { reusedIn: m.reusedIn as string }), ...(m.reusedQuote !== undefined && { reusedQuote: m.reusedQuote as string }) };
+    return [{ id: m.id as string, kind: m.kind as Taught["kind"], said: m.said as string, better: m.better as string, why: m.why as string, turnId: m.turnId as string, sceneId: m.sceneId as string, title: m.title as string, at: m.at, ...review }];
   }).slice(-TAUGHT_CAP);
 }

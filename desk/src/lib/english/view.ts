@@ -86,8 +86,12 @@ export type Hero =
   | { kind: "scene"; kicker: string; title: string; who: string; said: string; subtitle: string; art: string; small: boolean;
       /** the scene's partner, for the name tag; its cue as a sentence to take with you; its picture; the level and length */
       partner: string; sentence: string; illustration: SceneArt; band: Band; minutes: string }
-  | { kind: "track"; kicker: string; title: string; progress: Progress; subtitle: string; illustration: ArtKey }
-  | { kind: "comparison"; before: { kicker: string; quote: string }; after: { kicker: string; quote: string }; note: string }
+  | { kind: "track"; kicker: string; title: string; progress: Progress; subtitle: string; illustration: ArtKey;
+      /** on the recap: the taught phrase this scene invited and the learner did not use, to take with them */
+      sentence?: string }
+  | { kind: "comparison"; before: { kicker: string; quote: string }; after: { kicker: string; quote: string }; note: string;
+      /** the picture in the arch when it is not the coach's; the data line under the picture */
+      art?: ArtKey; data?: string }
   | { kind: "menu"; kicker: string; title: string; entries: string[]; selected: number }
   | { kind: "plain"; title: string };
 export interface LingaView {
@@ -332,8 +336,15 @@ export function lingaView(s: Session, input: ViewInput = {}): LingaView {
     tag = "Your rehearsal"; title = "Take it somewhere new";
     const attempts = c.turns.filter(t => t.role === "learner"), spokenCount = attempts.filter(t => t.mode === "speech").length, moments = c.moments ?? [];
     recap = { title: c.title, replies: attempts.length, spoken: spokenCount, moments: moments.map(({ kind, said, better, why }) => ({ kind, said, better, why })) };
-    hero = { kind: "track", kicker: c.title, title, progress: l.achievements[c.focusSkill] ?? "not-tried", subtitle: `${spokenCount} spoken · ${attempts.length - spokenCount} written replies${moments.length ? ` · ${moments.length} ${moments.length === 1 ? "moment" : "moments"} to keep` : ""}`, illustration: "done" };
+    const counts = `${spokenCount} spoken · ${attempts.length - spokenCount} written replies${moments.length ? ` · ${moments.length} ${moments.length === 1 ? "moment" : "moments"} to keep` : ""}`;
+    const rv = c.review;
     caption = attempts.length ? `Next, try ${recommended.name.toLowerCase()}. Your notes and learning map are on the phone.` : "You explored the scene. Try a reply next time; no speaking progress was recorded.";
+    if (rv?.used) {
+      // What Linga taught in an earlier scene, beside the learner's own words tonight: the verdict is the picture.
+      title = "It came back";
+      hero = { kind: "comparison", before: { kicker: `Linga taught · ${rv.fromTitle}`, quote: rv.better }, after: { kicker: "You said it tonight", quote: rv.used }, note: "", art: "done", data: counts };
+      caption = `You used it without help. Next, try ${recommended.name.toLowerCase()}.`;
+    } else hero = { kind: "track", kicker: c.title, title, progress: l.achievements[c.focusSkill] ?? "not-tried", subtitle: counts, illustration: "done", ...(rv ? { sentence: rv.better } : {}) };
     actions = [chooseSituation("Choose a fresh context for your next conversation.", "Another situation"), act("learning-map", "Learning map", "See saved evidence for each ability; printing is on the phone.", go("linga-map"))];
   } else if (c) {
     tag = c.phase === "replay" ? "Try it again" : "Conversation";
@@ -342,6 +353,11 @@ export function lingaView(s: Session, input: ViewInput = {}): LingaView {
     caption = inFlight ? "Take a moment. Your partner is preparing the next turn." : st === "paused" ? "The scene is paused. Resume when you are ready." : c.capture ? "Listening on your phone. Stop when you are ready to review your words." : c.cue || (said ? "Answer on your phone: speak or type." : "Preparing a situation that fits your goal.");
     const help = helpOf(c);
     captionTag = c.cue ? help.tag : inFlight ? "Preparing" : c.capture || said ? "Your turn" : "Preparing";
+    // The reply that used a taught phrase again: the next line says so, once. Before that the phrase is on no screen.
+    const lastLearner = [...c.turns].reverse().find(t => t.role === "learner");
+    if (c.review?.used && c.review.usedTurn === lastLearner?.id && st === "your-turn" && !c.cue && !c.capture) {
+      caption = `“${c.review.better}”, from ${c.review.fromTitle}. Now answer on your phone.`; captionTag = "Used again";
+    }
     if (c.quizOpen) {
       hero = { kind: "choices", kicker: "A little support · recognition practice", prompt: scene.quiz.question, options: [...scene.quiz.options], small: true };
       actions = scene.quiz.options.map((x, i) => act("pick-phrase", `Option ${i + 1}`, x, cmd("choice", { option: i }), { disabled: refused("choice") }));
@@ -461,8 +477,8 @@ export function viewText(v: LingaView): string {
     case "choices": out.push(h.kicker, h.prompt, ...h.options.map((x, i) => `  option ${i}: ${x}`)); break;
     case "topics": out.push(h.kicker, ...h.topics.map(t => `  [${t.id}] ${t.title} — ${t.skill}\n      why: ${t.why}`)); break;
     case "scene": out.push(h.kicker, ...(h.said ? [said(h.said, h.who || v.spoken.speaker)] : []), h.said ? `Goal: ${h.subtitle}` : `${h.title}${h.subtitle ? ` · ${h.subtitle}` : ""}`); break;
-    case "track": out.push(h.kicker, `Speaking progress: ${PROGRESS_LABEL[h.progress]}`, ...(h.subtitle ? [h.subtitle] : [])); break;
-    case "comparison": out.push(`${h.before.kicker}: "${h.before.quote}"`, `${h.after.kicker}: "${h.after.quote}"`, h.note); break;
+    case "track": out.push(h.kicker, `Speaking progress: ${PROGRESS_LABEL[h.progress]}`, ...(h.subtitle ? [h.subtitle] : []), ...(h.sentence ? [`A sentence to take with you: "${h.sentence}"`] : [])); break;
+    case "comparison": out.push(`${h.before.kicker}: "${h.before.quote}"`, `${h.after.kicker}: "${h.after.quote}"`, ...(h.note ? [h.note] : []), ...(h.data ? [h.data] : [])); break;
     case "menu": out.push(`${h.kicker} menu · ${h.title}`); break;
     case "plain": out.push(h.title); break;
   }
