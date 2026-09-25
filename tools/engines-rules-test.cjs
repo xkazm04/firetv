@@ -100,3 +100,38 @@ test('GUARD case 8: the CJS export patching the rules suites use still reaches t
   const look=async()=>({json:{items:[]},provider:'test',ms:1});eye.vision=look;assert.equal(eye.vision,look);
  }finally{engine.text=real;eye.vision=realVision;}
 });
+
+// One re-ask, only for strings past their maxLength, only when the caller asks for it (Linga's calls pass shorten).
+const PLAN={type:'object',additionalProperties:false,properties:{topics:{type:'array',items:{type:'object',additionalProperties:false,properties:{why:{type:'string',maxLength:20,minLength:1},skill:{type:'string',enum:['ask','tell']}},required:['why','skill']}}},required:['topics']};
+const stubSeq=(...raws)=>{const prompts=[];reg().useProvider('text',{name:'stub',run:async(req)=>{prompts.push(req.prompt);const r=raws[Math.min(prompts.length-1,raws.length-1)];if(r instanceof Error)throw r;return {raw:r};}});return prompts;};
+
+test('case 9: an answer broken only by overlong strings is re-asked once with each overrun named, and the fitting second answer is accepted',async()=>{
+ const prompts=stubSeq({topics:[{why:'x'.repeat(25),skill:'ask'},{why:'ok',skill:'tell'}]},{topics:[{why:'short now',skill:'ask'},{why:'ok',skill:'tell'}]});
+ const {text}=load('engines/text.ts');
+ const r=await text({system:'s',prompt:'p',schema:PLAN,isolated:true,shorten:true});
+ assert.deepEqual(r.json.topics.map(t=>t.why),['short now','ok']);
+ assert.equal(prompts.length,2,'exactly one extra call');
+ assert.match(prompts[1],/^p\n/,'the re-ask keeps the original prompt');
+ assert.match(prompts[1],/Shorten: topics\[0\]\.why is 25 characters, at most 20\./,'the overrun is named with its limit');
+});
+
+test('case 10: a break that is not a length overrun is not re-asked: the first rejection stands, one call',async()=>{
+ const prompts=stubSeq({topics:[{why:'x'.repeat(25),skill:'sing'}]},{topics:[{why:'fine',skill:'ask'}]});
+ const {text}=load('engines/text.ts');
+ await assert.rejects(text({system:'s',prompt:'p',schema:PLAN,isolated:true,shorten:true}),(e)=>{isShape('topics[0].why')(e);assert.match(e.message,/sing/);return true;});
+ assert.equal(prompts.length,1,'no re-ask when an enum is broken too');
+ const plain=stubSeq({topics:[{why:'x'.repeat(25),skill:'ask'}]},{topics:[{why:'fine',skill:'ask'}]});
+ await assert.rejects(text({system:'s',prompt:'p',schema:PLAN,isolated:true}),isShape('topics[0].why'));
+ assert.equal(plain.length,1,'no re-ask without shorten');
+});
+
+test('case 11: a second answer that still fails, or a re-ask that errors, ends in the original rejection',async()=>{
+ const {text}=load('engines/text.ts');
+ const long={topics:[{why:'x'.repeat(25),skill:'ask'}]};
+ const prompts=stubSeq(long,{topics:[{why:'y'.repeat(30),skill:'ask'},{why:'z'.repeat(40),skill:'tell'}]});
+ await assert.rejects(text({system:'s',prompt:'p',schema:PLAN,isolated:true,shorten:true}),(e)=>{isShape('topics[0].why')(e);assert.match(e.message,/25 characters, at most 20/);assert.doesNotMatch(e.message,/30 characters|topics\[1\]/);return true;});
+ assert.equal(prompts.length,2,'at most one extra call');
+ const again=stubSeq(long,new (engineError())('timeout','stub','too slow'));
+ await assert.rejects(text({system:'s',prompt:'p',schema:PLAN,isolated:true,shorten:true}),(e)=>{isShape('topics[0].why')(e);assert.match(e.message,/25 characters/);return true;});
+ assert.equal(again.length,2);
+});

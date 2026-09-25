@@ -58,28 +58,57 @@ export function validate(value: unknown, s: JSONSchema, path = ""): Array<[strin
   return out;
 }
 
+/** The rejection for a parsed answer that breaks `s`, naming its first five breaks. */
+const outside = (provider: string, broken: Array<[string, string]>) =>
+  new EngineError("shape", provider, `${provider} answered outside the schema: ${broken.slice(0, 5).map(([p, why]) => `${p || "(answer)"} ${why}`).join("; ")}`, broken[0][0]);
+
+/** The raw answer parsed: a string is fence-stripped and parsed, a parsed value is taken as is. */
+function parse(raw: unknown, s: JSONSchema | undefined, provider: string): unknown {
+  if (typeof raw !== "string") return raw;
+  try { return JSON.parse(stripFence(raw)); } catch {
+    if (!s) return raw;
+    throw new EngineError("shape", provider, `${provider} did not answer with JSON: ${raw.slice(0, 120)}`, "");
+  }
+}
+
 /**
  * The raw answer as the caller's shape. A string is fence-stripped and parsed; a parsed value is taken as is.
  * With no schema there is no contract: JSON when it parses, the text otherwise.
  */
 export function conform<T>(raw: unknown, s: JSONSchema | undefined, provider: string): T {
-  let value = raw;
-  if (typeof raw === "string") {
-    try { value = JSON.parse(stripFence(raw)); } catch {
-      if (!s) return raw as T;
-      throw new EngineError("shape", provider, `${provider} did not answer with JSON: ${raw.slice(0, 120)}`, "");
-    }
-  }
+  const value = parse(raw, s, provider);
   if (!s) return value as T;
   const broken = validate(value, s);
-  if (broken.length) throw new EngineError("shape", provider, `${provider} answered outside the schema: ${broken.slice(0, 5).map(([p, why]) => `${p || "(answer)"} ${why}`).join("; ")}`, broken[0][0]);
+  if (broken.length) throw outside(provider, broken);
   return value as T;
 }
 
-/** Run one provider and hold its answer to the request's schema: the whole of text() and vision(). */
-export async function answer<Req extends { schema?: JSONSchema; accept?: JSONSchema }, T>(p: Provider<Req, unknown>, req: Req): Promise<EngineResult<T>> {
+/** A break that is only a string running past its maxLength: the one kind a re-ask may repair. */
+const LONG = /^\d+ characters, at most \d+$/;
+export const onlyTooLong = (broken: Array<[string, string]>) => broken.length > 0 && broken.every(([, why]) => LONG.test(why));
+
+/**
+ * Run one provider and hold its answer to the request's schema: the whole of text() and vision().
+ * With `shorten`, an answer broken ONLY by strings over their maxLength is asked for once more with each
+ * overrun named; the second answer is held to the same schema, and if it fails too the first rejection
+ * stands. No limit moves and nothing is cut here: the model rewrites its own strings or the call fails.
+ */
+export async function answer<Req extends { schema?: JSONSchema; accept?: JSONSchema; prompt?: string; shorten?: boolean }, T>(p: Provider<Req, unknown>, req: Req): Promise<EngineResult<T>> {
   const started = Date.now();
   const a = await p.run(req);
-  const name = a.provider ?? p.name;
-  return { json: conform<T>(a.raw, req.accept ?? req.schema, name), provider: name, ms: Date.now() - started, raw: a.audit };
+  const name = a.provider ?? p.name, s = req.accept ?? req.schema;
+  const value = parse(a.raw, s, name);
+  const broken = s ? validate(value, s) : [];
+  if (!broken.length) return { json: value as T, provider: name, ms: Date.now() - started, raw: a.audit };
+  const first = outside(name, broken);
+  if (!req.shorten || typeof req.prompt !== "string" || !onlyTooLong(broken)) throw first;
+  const named = broken.map(([path, why]) => `${path || "(answer)"} is ${why}`).join("; ");
+  console.info(`[engines] ${name} re-asked once to shorten: ${named}`);
+  try {
+    const b = await p.run({ ...req, prompt: `${req.prompt}\n\nYour previous answer was:\n${JSON.stringify(value)}\nIt broke length limits. Shorten: ${named}. Rewrite only those strings within their limits, keep every other field as it was, and return the whole JSON object again.` });
+    const again = b.provider ?? p.name;
+    return { json: conform<T>(b.raw, s, again), provider: again, ms: Date.now() - started, raw: b.audit };
+  } catch {
+    throw first;
+  }
 }
