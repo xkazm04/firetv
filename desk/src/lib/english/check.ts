@@ -12,7 +12,7 @@ import { dispatch, getSession, type Profile, type Screen } from "../session/stor
 import { getLearner, saveEnglish } from "../session/learners";
 import { audienceAllowed, defaultPreferences, ENGLISH_SKILLS, isAdult } from "./curriculum";
 import { ConversationError } from "./errors";
-import { ABOUT_QUESTIONS, BAND_JUDGE, BAND_TUTOR, cleanTopic, firstQuestion, isBand, kindFor, PLAN_MAX, PLAN_SIZE, startBand, staircase, TOPIC_ASK_MAX, verdictFor } from "./placement";
+import { ABOUT_QUESTIONS, BAND_JUDGE, BAND_TUTOR, cleanTopic, firstQuestion, interestWords, isBand, kindFor, PLAN_MAX, PLAN_SIZE, startBand, staircase, TOPIC_ASK_MAX, touchesInterest, verdictFor } from "./placement";
 import { BANDS, type Audience, type Band, type CheckTask, type EnglishLearning, type EvidenceMode, type LevelCheck, type Placement, type PlacementTask, type PlanTopic, type TaskKind } from "./types";
 
 // The right option of a "choose" task. Server memory only: the session reaches every screen.
@@ -138,26 +138,46 @@ async function propose(k: LevelCheck, ctx: Ctx, token: string, count: number, sw
   const learning = ctx.learning, prefs = learning.preferences ?? defaultPreferences(ctx.profile);
   const band: Band = learning.placement?.band ?? prefs.level;
   const allowed = allowedAudiences(ctx);
+  // The interest the learner gave reaches the plan (S57): known, and no topic kept in the plan carries it, so this
+  // answer must. Checked in code (placement.ts touchesInterest) and asked for once more with the gap named; the
+  // desk never writes a topic itself, so a second miss keeps the first answer. A topic in the learner's own words is exempt.
+  const stems = asked ? [] : interestWords(prefs.interest || k.interest);
+  const need = stems.length > 0 && !k.topics.some(t => t.id !== swap && touchesInterest(t, stems));
   const system = `${checkSystem(ctx.profile, ctx.adult)}
 Now you are planning this learner's conversation practice. Each topic is a scene contract a conversation partner will play later: ordinary, safe situations with fictional details. No explicit content, no humiliation, threats or manipulation.`;
-  return call(k, token, failure, async () => {
-    const r = await ask(system, {
-      step: "plan", count, band, bandGuide: BAND_TUTOR[band],
-      learner: { goal: prefs.goal || k.goal, interest: prefs.interest || k.interest, read: k.read, focus: learning.placement?.focus ?? "", teachingNotes: learning.notes, mayPractise: allowed },
-      skills: ENGLISH_SKILLS, avoid: k.topics.map(t => t.title), ...(asked ? { learnerAsked: asked } : {}),
-      task: `${asked ? "Shape exactly one topic from learnerAsked, keeping what the learner wants to talk about." : `Propose ${count} conversation topic${count > 1 ? "s" : ""} this learner would want to have in English, pitched at ${band}.${count > 1 ? " Spread them over at least four different skills and put the two closest to their goal first." : " Make it different from the topics in avoid."}`}
+  const inInterest = " naming it in the title or premise";
+  const request = {
+    step: "plan", count, band, bandGuide: BAND_TUTOR[band],
+    learner: { goal: prefs.goal || k.goal, interest: prefs.interest || k.interest, read: k.read, focus: learning.placement?.focus ?? "", teachingNotes: learning.notes, mayPractise: allowed },
+    skills: ENGLISH_SKILLS, avoid: k.topics.map(t => t.title), ...(asked ? { learnerAsked: asked } : {}),
+    task: `${asked ? "Shape exactly one topic from learnerAsked, keeping what the learner wants to talk about." : `Propose ${count} conversation topic${count > 1 ? "s" : ""} this learner would want to have in English, pitched at ${band}.${count > 1 ? ` Spread them over at least four different skills and put the two closest to their goal first${need ? `, and set at least two in their interest (learner.interest),${inInterest}` : ""}.` : ` Make it different from the topics in avoid.${need ? ` Set it in their interest (learner.interest),${inInterest}.` : ""}`}`}
 Each topic: title (at most 48 characters, plain words the learner would use); goal (what the learner achieves by talking, at most 120); why (one line to the learner saying why this topic is in their plan, at most 120); skill (one id from skills); partner ("Name · role", fictional, at most 40); premise (the scene contract: the situation, the learner's aim, what makes it go well, at most 400); cue (a phrase starter beginning "Try:", at most 90); quiz (a question and two short phrases; one serves the scene's aim, correct is its index).
 audience: "adult" for anything only adults should practise (dating, alcohol, adult workplace conflict); "older" for 15 and over (job interviews, sharp disagreements); otherwise "all". Mark it honestly — the desk filters by age. Only propose audiences listed in mayPractise.`,
-    }, planSchema(count), 120000);
+  };
+  const pick = (json: Record<string, unknown>) => {
     const titles = new Set(k.topics.filter(t => t.id !== swap).map(t => t.title.toLowerCase()));
-    const fresh = (Array.isArray(r.json.topics) ? r.json.topics : [])
+    return (Array.isArray(json.topics) ? json.topics : [])
       .map(t => cleanTopic({ ...object(t), id: `plan-${randomUUID().slice(0, 8)}` }))
       .filter((t): t is PlanTopic => !!t && allowed.includes(t.audience) && !titles.has(t.title.toLowerCase()) && !!titles.add(t.title.toLowerCase()))
       .slice(0, count);
+  };
+  return call(k, token, failure, async () => {
+    const r = await ask(system, request, planSchema(count), 120000);
+    let fresh = pick(r.json), provider = r.provider, ms = r.ms;
+    if (need && fresh.length && !fresh.some(t => touchesInterest(t, stems))) {
+      const gap = `Your previous answer had no topic set in the learner's interest (learner.interest): ${fresh.map(t => t.title).join("; ")}. Answer again under the same rules, with ${count > 1 ? "at least two topics" : "the topic"} set in that interest,${inInterest}${count > 1 ? ", still with the two closest to their goal first" : ""}.`;
+      console.info("Linga plan: no topic carried the learner's interest; asked once more.");
+      try {
+        const again = await ask(system, { ...request, task: `${request.task}\n${gap}` }, planSchema(count), 120000), second = pick(again.json);
+        ms += again.ms;
+        if (second.some(t => touchesInterest(t, stems))) { fresh = second; provider = again.provider; }
+        else console.warn("Linga plan: the second answer missed the interest too; the first is kept.");
+      } catch (e) { console.warn("Linga plan: the interest re-ask failed; the first answer is kept:", e instanceof Error ? e.message : e); }
+    }
     if (!fresh.length) throw new Error("The tutor returned no topic this learner can practise.");
     return {
       apply: now => ({ ...now, topics: swap ? now.topics.map(t => t.id === swap ? fresh[0] : t) : [...now.topics, ...fresh].slice(0, PLAN_MAX) }),
-      provider: r.provider, ms: r.ms,
+      provider, ms,
     };
   });
 }

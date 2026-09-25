@@ -234,6 +234,44 @@ test('topics for a learner with no known goal wait for one, and the goal they gi
  const plan=answer;fresh();answer=plan;dispatch({type:'learner.set',id:'jakub'});dispatch({type:'subject',subject:'english'});
  await command('plan-propose');assert.equal(getSession().check.askGoal,false,'a goal once given is not asked again');assert.equal(getSession().check.topics.length,1);
 });
+const scene=(title,premise='A chat in the office.')=>({title,premise});
+test('a topic touches the interest when its title or premise names one of the interest\'s words, in any common form',()=>{
+ assert.deepEqual(P.interestWords('travelling and cooking'),['travel','cook']);
+ assert.deepEqual(P.interestWords('I love really good video games'),['video','gam']);
+ assert.deepEqual(P.interestWords(''),[]);assert.deepEqual(P.interestWords('  and the  '),[],'stop words alone are no interest');
+ const w=P.interestWords('travelling and cooking');
+ assert(P.touchesInterest(scene('Cooking dinner for friends'),w));
+ assert(P.touchesInterest(scene('Asking for directions','You are a traveller lost in Porto and ask a local the way.'),w),'the premise counts');
+ assert(P.touchesInterest(scene('Travel plans with a colleague'),w));assert(P.touchesInterest(scene('Sharing a recipe','You cooked a new dish and explain it.'),w));
+ assert(!P.touchesInterest(scene('Share your idea in a team meeting'),w));
+ assert(!P.touchesInterest({title:'A meeting at work',premise:'Agree next steps with your manager.',why:'You love cooking.'},w),'why is not the scene');
+ assert(!P.touchesInterest(scene('Booking a table','A trip to Rome with a recipe book.'),w),'known limit: related words (trip, recipe) do not count');
+ assert(!P.touchesInterest(scene('Cooking dinner'),[]),'no interest known: nothing touches it');
+ assert(P.touchesInterest(scene('Gaming with friends'),P.interestWords('games')));
+ const plan=[scene('Share your idea in a team meeting'),scene('Summarise a project update'),scene('Cooking for your team'),scene('Planning a trip')];
+ assert.equal(plan.filter(t=>P.touchesInterest(t,w)).length,1);
+ assert.equal(plan.slice(0,2).filter(t=>P.touchesInterest(t,w)).length,0);
+});
+test('a plan that misses a known interest is asked for once more with the gap named; no topic is written by the desk',async()=>{
+ const setUp=async interest=>{fresh();dispatch({type:'learner.set',id:'jakub'});dispatch({type:'subject',subject:'english'});
+  await command('preferences',{preferences:{...defaultPreferences({type:'other'}),adultConfirmed:true,goal:'speak more fluently in meetings',interest},notes:[]});};
+ const work=[topic('Share your idea in a team meeting','all','relate'),topic('Summarise a project update','all','narrate')];
+ const withCooking=[topic('Share your idea in a team meeting','all','relate'),topic('Cooking dinner for your team','all','describe')];
+ let calls=[];const plans=(...answers)=>{calls=[];answer=async req=>{const p=JSON.parse(req.prompt);if(p.step!=='plan')throw new Error('unexpected '+p.step);calls.push(p);return {json:{topics:answers[Math.min(calls.length-1,answers.length-1)].slice(0,p.count)},provider:'test',ms:1};};};
+ await setUp('travelling and cooking');plans(work,withCooking);await command('plan-propose');
+ assert.equal(calls.length,2);assert.match(calls[0].task,/set at least two in their interest/);assert.match(calls[1].task,/no topic set in the learner's interest/);assert.match(calls[1].task,/Share your idea in a team meeting/);
+ assert.deepEqual(getSession().check.topics.map(t=>t.title),withCooking.map(t=>t.title),'the second answer, which carries the interest, is the plan');
+ await setUp('travelling and cooking');plans(work,work);await command('plan-propose');
+ assert.equal(calls.length,2);assert.deepEqual(getSession().check.topics.map(t=>t.title),work.map(t=>t.title),'a second miss keeps the first plan: no topic is made up');
+ await setUp('travelling and cooking');plans(withCooking);await command('plan-propose');assert.equal(calls.length,1,'a plan that carries the interest is not asked again');
+ let k=getSession().check;const workTopic=k.topics.find(t=>t.title.startsWith('Share'));plans([topic('Chair a short stand-up','all','request')]);
+ await command('plan-swap',{checkId:k.id,topicId:workTopic.id});assert.equal(calls.length,1,'a swap that leaves an interest topic in the plan is free');
+ k=getSession().check;const cookTopic=k.topics.find(t=>t.title.startsWith('Cooking'));plans([topic('Chair a long meeting','all','request')],[topic('Travel tips at lunch','all','request')]);
+ await command('plan-swap',{checkId:k.id,topicId:cookTopic.id});assert.equal(calls.length,2,'swapping out the last interest topic asks for one back');
+ assert(getSession().check.topics.some(t=>t.title==='Travel tips at lunch'));
+ await setUp('');plans(work);await command('plan-propose');assert.equal(calls.length,1,'no interest known: no requirement');assert.doesNotMatch(calls[0].task,/interest/);
+ k=getSession().check;plans([topic('Talk about cooking','all','describe')]);await command('plan-add',{checkId:k.id,text:'my weekend'});assert.equal(calls.length,1);
+});
 
 // ---- one screen model: the TV, the phone home, the PC test bar and the LT driver all read lib/english/view.ts
 const view=()=>require(path.join(root,'src/lib/english/view.ts'));
