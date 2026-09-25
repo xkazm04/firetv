@@ -236,7 +236,24 @@ export function SentenceScreen({ s, focus }: { s: Session; focus: number }) {
 }
 
 // ---- T7 Head-to-head ----
-export function HeadToHead({ }: { s: Session }) {
+/**
+ * The head-to-head's example sentences. Withholding is the product: an example must never be the corrected
+ * form of what the learner wrote, so none of them answers a phone preset, and an example sharing the learner's
+ * verb (by its first three letters: go/gone/went is caught by the irregular set) is skipped for the next one.
+ */
+const H2H: Record<"past" | "perfect", Array<[string, string, string]>> = {
+  past: [["She ", "watched", " a film last week."], ["We ", "finished", " the project yesterday."], ["He ", "cooked", " dinner two days ago."]],
+  perfect: [["He ", "has worked", " here for three years."], ["We ", "have known", " them since 2019."], ["She ", "has visited", " Rome twice."]],
+};
+const GO = /^(go|goes|going|gone|went)$/i;
+function example(side: "past" | "perfect", verb: string | null | undefined): [string, string, string] {
+  const own = (verb ?? "").toLowerCase().split(/\s+/).pop() ?? "";
+  const same = (v: string) => { const w = v.split(" ").pop()!.toLowerCase(); return !!own && (w.slice(0, 3) === own.slice(0, 3) || (GO.test(w) && GO.test(own))); };
+  return H2H[side].find(([, v]) => !same(v)) ?? H2H[side][0];
+}
+
+export function HeadToHead({ s }: { s: Session }) {
+  const verb = s.english?.card.verb, past = example("past", verb), perfect = example("perfect", verb);
   return (<>
     <div className="band band-divider" />
     <main className="content-full">
@@ -245,7 +262,7 @@ export function HeadToHead({ }: { s: Session }) {
         <div className="title" style={{ fontSize: 84 }}>Past<br />simple</div>
         <div className="body" style={{ marginTop: 20, color: "var(--mute)", maxWidth: 640 }}>The action is over and the time is closed.</div>
         <div style={{ marginTop: 26, display: "flex", gap: 10, flexWrap: "wrap" }}>{["yesterday", "in 2019", "last week", "ago"].map((m) => <span key={m} className="chan" style={{ border: "2px solid var(--english)", color: "var(--english)", padding: "6px 14px" }}>{m}</span>)}</div>
-        <div className="headline" style={{ marginTop: 40, fontSize: 44 }}>I <b style={{ color: "var(--english)" }}>went</b> to school yesterday.</div>
+        <div className="headline" style={{ marginTop: 40, fontSize: 44 }}>{past[0]}<b style={{ color: "var(--english)" }}>{past[1]}</b>{past[2]}</div>
       </div>
       <div style={{ position: "absolute", left: "50%", top: "40%", transform: "translate(-50%,-50%) skewX(-12deg)", fontFamily: "var(--display)", fontSize: 120, fontWeight: 800, textShadow: "12px 12px 0 var(--signal-2)", zIndex: 2 }}>vs</div>
       <div style={{ position: "absolute", right: 0, top: 40, width: "46%", textAlign: "right" }}>
@@ -253,7 +270,7 @@ export function HeadToHead({ }: { s: Session }) {
         <div className="title" style={{ fontSize: 84 }}>Present<br />perfect</div>
         <div className="body" style={{ marginTop: 20, color: "var(--mute)", maxWidth: 640, marginLeft: "auto" }}>The time reaches up to now, or the result is still with us.</div>
         <div style={{ marginTop: 26, display: "flex", gap: 10, flexWrap: "wrap", justifyContent: "flex-end" }}>{["since", "for", "already", "ever"].map((m) => <span key={m} className="chan" style={{ border: "2px solid var(--english)", color: "var(--english)", padding: "6px 14px" }}>{m}</span>)}</div>
-        <div className="headline" style={{ marginTop: 40, fontSize: 44 }}>I <b style={{ color: "var(--english)" }}>have lived</b> here since 2019.</div>
+        <div className="headline" style={{ marginTop: 40, fontSize: 44 }}>{perfect[0]}<b style={{ color: "var(--english)" }}>{perfect[1]}</b>{perfect[2]}</div>
       </div>
       <div style={{ position: "absolute", left: 0, right: 0, bottom: 0, textAlign: "center" }}><span className="cap">The question to ask</span><div className="cap-text" style={{ margin: "18px auto 0" }}>Is the time <b>closed</b> or still <b>open</b>? Find the time word first — the tense follows.</div></div>
     </main>
