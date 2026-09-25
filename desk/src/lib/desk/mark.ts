@@ -1,11 +1,16 @@
 /**
  * Mark one photo of the whole worked set — then re-check the marker.
  *
- * The vision model reads the handwriting and offers a verdict. That is evidence. `verify` is the
+ * The vision model reads the handwriting and offers a verdict. That is evidence, not the mark. `verify` is the
  * truth: it substitutes the model's own solution into the question, and the student's answer too.
- * If the model's solution is wrong the model is unreliable on that item; if the model's verdict
- * disagrees with the substitution the two disagree. Either way the desk says nothing — it asks.
- * A wrong guess in front of a child costs more than a question does.
+ * When the desk can check, it decides: if the model's own solution holds (the model can solve the item, so its
+ * read of the page is trusted) and the student's answer substitutes cleanly (it reads as a number and the
+ * question evaluates, so it plainly holds or plainly fails), the substitution is the verdict, and a model verdict
+ * that disagrees with it is overruled. When the desk cannot check, it says nothing — it asks ("not sure"): the
+ * model's solution does not hold, or the student's answer is missing or does not read as a number. The model
+ * reports no confidence in its read, so an answer that does not parse is the only doubtful-read signal there is.
+ * A wrong guess in front of a child costs more than a question does; so does a question about an item the
+ * arithmetic has already settled. (S50: this replaces "when they disagree the desk does not pick a winner".)
  *
  * Nothing here ever puts the answer on screen, and no `said` line carries a value.
  */
@@ -13,7 +18,7 @@ import { vision } from "../engines/vision";
 import { ASK, cleanValue as clean, locate, rightLine, settled, slipVocabulary, workingLines } from "../rules/maths";
 import { addHistory, recordAttempt } from "../session/learners";
 import { topic as topicById } from "../library/syllabus";
-import { verify } from "./verify";
+import { substitute, verify } from "./verify";
 import type { Practice, PracticeItem } from "../session/store";
 
 const SCHEMA = {
@@ -77,19 +82,21 @@ export async function markSet(
     const studentWorking = typeof m?.studentWorking === "string" ? m.studentWorking.trim() : "";
     const solution = clean(m?.solution);
 
-    // 1 & 2 — the desk substitutes, for the model's own solution and for the student's answer.
+    // 1 — the desk substitutes the model's own solution: can the model solve this item at all?
     const truth = solution ? verify(item.question, solution) : false;
-    const student = studentAnswer ? verify(item.question, studentAnswer) : false;
+    // 2 — and the student's answer: true or false when it substitutes cleanly, null when it cannot be substituted.
+    const student = studentAnswer ? substitute(item.question, studentAnswer) : null;
 
-    // 3 — the model cannot solve its own question, so its verdict is worth nothing here.
-    // 4 — the model and the substitution disagree; the desk does not pick a winner.
-    if (!solution || !truth || (m?.verdict === "right") !== student) {
+    // 3 — the model cannot solve its own question, so its read of the page is worth nothing here.
+    // 4 — no answer, or one that does not read as a number: there is nothing to substitute, and the desk does not guess.
+    if (!truth || student === null) {
       unsure++;
       return { ...item, studentAnswer, studentWorking, verdict: "unsure" as const, said: ASK(item.n) };
     }
 
-    // 5 — they agree, and the substitution is what we believe. 6 & 7 — rules/maths settles it (the same rule
-    // an explanation uses): a slip only on a wrong item and only from this topic's vocabulary, never a value.
+    // 5 — both substitute, so the arithmetic decides; a model verdict that disagrees is overruled. 6 & 7 — rules/maths
+    // settles it (the same rule an explanation uses): a slip only on a wrong item and only from this topic's vocabulary,
+    // never a value.
     const { verdict, slip, said } = settled(item.n, student, m?.slip, practice.topic);
 
     recordAttempt(learnerId, practice.topic, verdict === "right", slip);
