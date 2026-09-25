@@ -33,6 +33,10 @@ object TransportPlan {
         durationMs: Long = 0,
         playing: Boolean = false,
         doc: AnnotationDoc? = null,
+        /** The frame the next undo acts on when it is not on screen ([PenEngine.undoAt]). */
+        undoAtMs: Long? = null,
+        /** As [undoAtMs], for the next redo ([PenEngine.redoAt]). */
+        redoAtMs: Long? = null,
     ): List<PlayerAction> = when (cmd) {
         "toggle" -> listOf(if (playing) PlayerAction.Pause else PlayerAction.Play)
         "play" -> listOf(PlayerAction.Play)
@@ -59,9 +63,14 @@ object TransportPlan {
             }
             if (target == null) emptyList() else listOf(PlayerAction.Pause, PlayerAction.SeekTo(target))
         }
-        "undo" -> listOf(PlayerAction.Edit(PenMessage.Undo))
-        "redo" -> listOf(PlayerAction.Edit(PenMessage.Redo))
+        // An edit the viewer cannot see is an edit they cannot judge: when the ink is on another
+        // frame, the first press goes there, paused, and the next press acts on screen.
+        "undo" -> if (undoAtMs == null) listOf(PlayerAction.Edit(PenMessage.Undo)) else visit(undoAtMs)
+        "redo" -> if (redoAtMs == null) listOf(PlayerAction.Edit(PenMessage.Redo)) else visit(redoAtMs)
         "clear" -> listOf(PlayerAction.Edit(PenMessage.Clear))
         else -> emptyList()
     }
+
+    private fun visit(frameMs: Long): List<PlayerAction> =
+        listOf(PlayerAction.Pause, PlayerAction.SeekTo(frameMs.coerceAtLeast(0)))
 }

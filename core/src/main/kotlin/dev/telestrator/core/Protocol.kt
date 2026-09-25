@@ -61,9 +61,15 @@ sealed interface PenMessage {
     @SerialName("transport")
     data class Transport(val cmd: String, val value: Double = 0.0) : PenMessage
 
+    /** Every annotation at every moment of the clip: the phone's Clear all and the remote's Down. */
     @Serializable
     @SerialName("clear")
     data object Clear : PenMessage
+
+    /** Only what is on screen at the current frame, like the eraser; one undo brings it back. */
+    @Serializable
+    @SerialName("clearFrame")
+    data object ClearFrame : PenMessage
 
     @Serializable
     @SerialName("undo")
@@ -77,6 +83,19 @@ sealed interface PenMessage {
     @Serializable
     @SerialName("ping")
     data class Ping(val id: Long) : PenMessage
+}
+
+/**
+ * The transport command a pen message stands for, or null when it goes straight to the engine.
+ *
+ * Undo and redo may have to move the player first (the ink they touch can be on another frame), so
+ * the phone's presses take the same road as the remote's: through [TransportPlan], which sees the
+ * player. Everything else is an edit at the current frame and needs no plan.
+ */
+fun PenMessage.asTransport(): PenMessage.Transport? = when (this) {
+    PenMessage.Undo -> PenMessage.Transport("undo")
+    PenMessage.Redo -> PenMessage.Transport("redo")
+    else -> null
 }
 
 /** TV -> phone messages. */
@@ -109,6 +128,13 @@ sealed interface TvMessage {
          * empty default keeps older senders decodable; an empty list encodes as `[]`, never null.
          */
         val marks: List<Long> = emptyList(),
+        /**
+         * Where the next undo will take the TV before it acts (see [PenEngine.undoAt]), so the
+         * phone can say so on its button. Absent when the undo acts on the frame on screen.
+         */
+        val undoAtMs: Long? = null,
+        /** As [undoAtMs], for the next redo. */
+        val redoAtMs: Long? = null,
     ) : TvMessage
 
     /**

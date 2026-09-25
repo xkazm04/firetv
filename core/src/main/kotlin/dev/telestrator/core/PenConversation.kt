@@ -145,6 +145,10 @@ data class HeartbeatInput(
     val revision: Long,
     /** The drawn moments of review mode (see [AnnotationTimeline.moments]). */
     val marks: List<Long> = emptyList(),
+    /** Where the next undo takes the TV first, or null when it acts on screen ([PenEngine.undoAt]). */
+    val undoAtMs: Long? = null,
+    /** As [undoAtMs], for the next redo. */
+    val redoAtMs: Long? = null,
 )
 
 /**
@@ -200,6 +204,8 @@ class Heartbeat {
                 durationMs = input.durationMs,
                 thumbnail = null,
                 marks = input.marks,
+                undoAtMs = input.undoAtMs,
+                redoAtMs = input.redoAtMs,
             ),
         )
     }

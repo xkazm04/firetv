@@ -12,6 +12,12 @@ sealed interface Op {
     data class Add(val annotation: Annotation) : Op
     data class Remove(val index: Int, val annotation: Annotation) : Op
     data class ClearAll(val previous: List<Annotation>) : Op
+
+    /**
+     * Several annotations taken out at once (Clear on one frame). [removed] holds each one with the
+     * index it had, ascending, so the undo puts every one back where it was, not on the end.
+     */
+    data class RemoveSet(val removed: List<IndexedValue<Annotation>>) : Op
 }
 
 class History {
@@ -21,6 +27,12 @@ class History {
 
     val canUndo: Boolean get() = undoStack.isNotEmpty()
     val canRedo: Boolean get() = redoStack.isNotEmpty()
+
+    /** The operation the next [undo] would invert, without inverting it. */
+    fun peekUndo(): Op? = undoStack.lastOrNull()
+
+    /** The operation the next [redo] would re-apply, without applying it. */
+    fun peekRedo(): Op? = redoStack.lastOrNull()
 
     /** Records an operation that has just been applied. Any redo branch is abandoned. */
     fun record(op: Op) {
@@ -56,6 +68,10 @@ class History {
             is Op.Add -> target += op.annotation
             is Op.Remove -> if (op.index in target.indices) target.removeAt(op.index)
             is Op.ClearAll -> target.clear()
+            is Op.RemoveSet -> {
+                val ids = op.removed.mapTo(HashSet()) { it.value.id }
+                target.removeAll { it.id in ids }
+            }
         }
     }
 
@@ -67,6 +83,8 @@ class History {
                 target.clear()
                 target.addAll(op.previous)
             }
+            // Ascending, so each index is counted in the list as it was when the set came out.
+            is Op.RemoveSet -> for ((index, a) in op.removed) target.add(index.coerceIn(0, target.size), a)
         }
     }
 

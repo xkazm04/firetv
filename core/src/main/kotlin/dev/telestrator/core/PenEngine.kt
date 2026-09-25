@@ -84,10 +84,21 @@ class PenEngine(
             is PenMessage.Shape -> handleShape(msg, mediaTimeMs)
             is PenMessage.Tag -> handleTag(msg, mediaTimeMs)
             is PenMessage.Erase -> handleErase(msg, mediaTimeMs)
+            // The whole clip: the remote's Down key and the phone's Clear all.
             is PenMessage.Clear -> {
                 if (committed.isNotEmpty()) history.record(Op.ClearAll(committed.toList()))
                 committed.clear()
                 clearLive()
+            }
+            // The frame on screen only, by the eraser's rule: what the viewer cannot see stays.
+            is PenMessage.ClearFrame -> {
+                clearLive()
+                val removed = committed.withIndex()
+                    .filter { mediaTimeMs >= it.value.fromMs && mediaTimeMs <= it.value.toMs }
+                if (removed.isNotEmpty()) {
+                    committed.removeAll { a -> removed.any { it.value === a } }
+                    history.record(Op.RemoveSet(removed))
+                }
             }
             is PenMessage.Undo -> {
                 clearLive()
@@ -100,6 +111,37 @@ class PenEngine(
             is PenMessage.Hello, is PenMessage.Transport, is PenMessage.Ping -> Unit
         }
     }
+
+    /**
+     * The frame the next undo acts on, when that frame is not the one on screen at [tMs]; null when
+     * the undo would act where the viewer is looking, when it is a whole-clip clear, or when there
+     * is nothing to undo. The transport plan turns a non-null answer into a trip there, paused, so
+     * no edit ever changes ink the viewer cannot see (the rule the eraser already follows).
+     */
+    fun undoAt(tMs: Long): Long? = frameOf(history.peekUndo(), tMs)
+
+    /** As [undoAt], for the next redo. */
+    fun redoAt(tMs: Long): Long? = frameOf(history.peekRedo(), tMs)
+
+    private fun frameOf(op: Op?, tMs: Long): Long? {
+        val touched = when (op) {
+            null, is Op.ClearAll -> return null
+            is Op.Add -> listOf(op.annotation)
+            is Op.Remove -> listOf(op.annotation)
+            is Op.RemoveSet -> op.removed.map { it.value }
+        }
+        if (touched.isEmpty() || touched.any { onScreen(it, tMs) }) return null
+        // A cleared frame's annotations were all on screen together at the latest of their
+        // anchors, so that is the one frame that shows every one of them.
+        return touched.maxOf { it.fromMs }
+    }
+
+    /**
+     * Visible at [tMs], or one frame short of its anchor: a seek can land a frame early (the same
+     * lead review mode's jump allows), and a trip that never counts as arrived would loop forever.
+     */
+    private fun onScreen(a: Annotation, tMs: Long): Boolean =
+        tMs >= a.fromMs - AnnotationTimeline.ON_MOMENT_LEAD_MS && tMs <= a.toMs
 
     private fun commit(a: Annotation) {
         committed += a
