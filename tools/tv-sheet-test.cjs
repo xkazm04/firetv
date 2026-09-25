@@ -127,6 +127,99 @@ test('case 7: Back from the unmarked poster parks the set, and "Still open" is r
  const cont=continueCard(home);assert.equal(cont&&cont.k,'Still open');assert.equal(cont.go,'practice');
 });
 
+// ---- S82: only this learner's. Math Buddy's work is stamped with its learner; another learner at the desk gets a clean desk ----
+const landing=()=>require(path.join(root,'src/tv/landingRows.ts'));
+const TWO=[{id:'ema',name:'Ema',type:'high-school',age:16,system:'uk',modules:['maths','english','essay']},{id:'tom',name:'Tom',type:'high-school',age:15,system:'uk',modules:['maths']}];
+const PAGE_EMA={id:'maths-100',subject:'maths',title:'Algebra - Exercise 4.2',img:'',w:1,h:1,items:[{n:1,text:'2x+3=11',cx:0,cy:0,band:[0,1],key:'k1'}],owner:'ema'};
+const HINT_EMA={key:'k1',problem:'2x+3=11',stage:1,hint1:{hint:'Undo the +3 first.',next:'What is left?'},hint2:null,askedQ:'',owner:'ema'};
+function emaEvening(patch={}){
+ return session({profiles:TWO,screen:'sheet',focus:1,topic:'linear-one-step',practice:{...marked(['right','wrong','right','unsure','right','right']),owner:'ema'},
+  pages:[PAGE_EMA],hint:HINT_EMA,log:{started:1,minutes:12,problems:['k1'],hard:[],hints:1},...patch});
+}
+
+test('case 8 (S82): a set owned by Ema is not on Tom\'s landing, Tonight or sheet; switching back gives her all of it untouched',()=>{
+ const {reduce}=store(),{continueCard}=maths(),{mathsWaiting,continueStop}=landing(),{tvKey}=keys();
+ const s=emaEvening();
+ assert.equal(continueCard(s).go,'sheet','Ema\'s own desk offers her marked set');
+ const tom=reduce(s,{type:'learner.set',id:'tom'});
+ assert.equal(tom.learner.id,'tom');
+ assert.equal(tom.practice,null,'no set of Ema\'s on Tom\'s desk');assert.deepEqual(tom.pages,[],'no page of Ema\'s');assert.equal(tom.hint,null);assert.equal(tom.lesson,null);assert.equal(tom.topic,null);
+ assert.equal(tom.log.hints,0,'Ema\'s hints are not counted on Tom\'s recap');assert.equal(tom.log.minutes,12,'the evening\'s clock stays the desk\'s');
+ assert.equal(continueCard(tom),null,'Tonight has nothing of Ema\'s to continue');
+ const w=mathsWaiting(tom);assert.equal(w.kind,'none');assert.deepEqual(w.lines,[],'the landing object draws none of her questions or answers');
+ const c=continueStop(tom);assert.ok(!c||!c.tagged,'CONTINUE is not tagged on Ema\'s work');
+ // on the sheet screen Tom gets the app's empty state, and Back goes home
+ const onSheet={...tom,screen:'sheet',focus:0};assert.equal(onSheet.practice,null);
+ assert.deepEqual(tvKey(onSheet,'back',LOCAL).events,[{type:'nav',screen:'tonight',focus:0}]);
+ assert.ok(!JSON.stringify({...tom,away:undefined}).includes('studentAnswer'),'none of her answers ride on the seated session');
+ const ema=reduce(tom,{type:'learner.set',id:'ema'});
+ assert.deepEqual(ema.practice,s.practice,'her marked set, untouched');assert.deepEqual(ema.pages,s.pages);assert.deepEqual(ema.hint,s.hint);
+ assert.equal(ema.topic,'linear-one-step');assert.equal(ema.log.hints,1);
+ assert.equal(continueCard(ema).go,'sheet');assert.equal(mathsWaiting(ema).kind,'marked');
+ assert.deepEqual(ema.away,{},'nothing is left behind in away once she is back (Tom had nothing)');
+});
+
+test('case 9 (S82): Tom\'s own set is stamped his and never replaces Ema\'s; each learner sits down to their own',()=>{
+ const {reduce}=store(),{continueCard}=maths();
+ let x=reduce(emaEvening(),{type:'learner.set',id:'tom'});
+ x=reduce(x,{type:'practice.set',practice:unmarked('linear-two-step')});
+ assert.equal(x.practice.owner,'tom','stamped for the learner at the desk');assert.equal(continueCard(x).k,'Still open');
+ x=reduce(x,{type:'learner.set',id:'ema'});
+ assert.equal(x.practice.owner,'ema');assert.equal(x.practice.marked,true,'Ema\'s marked set, not Tom\'s new one');
+ x=reduce(x,{type:'learner.set',id:'tom'});
+ assert.equal(x.practice.topic,'linear-two-step');assert.equal(x.practice.marked,false);
+ // a new learner saved at the desk sits down to a clean desk too
+ let y=reduce(emaEvening(),{type:'profile.draft',patch:{name:'Ana',type:'high-school',age:15,modules:['maths']}});
+ y=reduce(y,{type:'profile.save'});assert.equal(y.practice,null);assert.deepEqual(y.pages,[]);assert.ok(y.away.ema.practice,'Ema\'s set waits for her');
+});
+
+test('case 10 (S82): an unstamped (legacy) set still shows to the learner at the desk; settleOwners names owners from the desk\'s own record',()=>{
+ const {reduce,settleOwners}=store(),{continueCard}=maths();
+ const legacy=session({profiles:TWO,topic:'linear-one-step',practice:marked(['right','right','wrong','right','right','right'])});
+ assert.equal(legacy.practice.owner,undefined);
+ assert.equal(continueCard(legacy).go,'sheet','the single-learner desk keeps its set');
+ assert.equal(settleOwners(legacy,()=>[]).practice.owner,'ema','no record names anyone: the learner at the desk when it was saved');
+ const round=reduce(reduce(legacy,{type:'learner.set',id:'tom'}),{type:'learner.set',id:'ema'});
+ assert.equal(continueCard(round).go,'sheet','it went away with her and came back');
+ // a page snapped while Ema sat, read as she sat (her homework line), saved with Tom at the desk: it is hers
+ const saved=session({profiles:TWO,learner:{id:'tom',name:'Tom'},pages:[{...PAGE_EMA,owner:undefined}],hint:{...HINT_EMA,owner:undefined},
+  lesson:{id:'L1',title:'Two-step',t:0,text:'',why:''},log:{started:1,minutes:5,problems:['k1'],hard:[],hints:1}});
+ const hist={ema:[{at:150,kind:'homework',label:PAGE_EMA.title,detail:'1 problem read'}],tom:[]};
+ const settled=settleOwners(saved,(id)=>hist[id]??[]);
+ assert.deepEqual(settled.pages,[],'not on Tom\'s desk');assert.equal(settled.hint,null);assert.equal(settled.lesson,null);assert.equal(settled.log.hints,0);
+ assert.equal(settled.away.ema.pages[0].owner,'ema');assert.equal(settled.away.ema.hint.owner,'ema');assert.equal(settled.away.ema.lesson.owner,'ema');assert.equal(settled.away.ema.log.hints,1);
+ assert.equal(settleOwners(settled,(id)=>hist[id]??[]),settled,'settled once, left alone after');
+ const back=reduce(settled,{type:'learner.set',id:'ema'});
+ assert.equal(back.pages[0].id,PAGE_EMA.id);assert.equal(maths().continueCard(back).go,'page');
+ // a homework line written before the page was snapped is not its read
+ const early=settleOwners({...saved,pages:[{...PAGE_EMA,id:'maths-200',owner:undefined}]},(id)=>hist[id]??[]);
+ assert.equal(early.pages[0].owner,'tom');
+});
+
+test('case 11 (S82): a result that lands after its learner left goes to their work, never onto the seated learner\'s',()=>{
+ const {reduce}=store();
+ const s=emaEvening({practice:{...unmarked(),owner:'ema'},pages:[{...PAGE_EMA,items:[]}],screen:'practice'});
+ const tom=reduce(s,{type:'learner.set',id:'tom'});
+ const items=Q.map((question,ix)=>({n:ix+1,question,studentAnswer:'1',verdict:'right'}));
+ let x=reduce(tom,{type:'practice.marked',items,owner:'ema'});
+ assert.equal(x.screen,'landing','Tom\'s screen does not jump to Ema\'s sheet');assert.equal(x.practice,null);assert.equal(x.away.ema.practice.marked,true);
+ x=reduce(x,{type:'page.read',id:PAGE_EMA.id,items:PAGE_EMA.items,readMs:1,provider:'t'});
+ assert.deepEqual(x.pages,[]);assert.equal(x.away.ema.pages[0].items.length,1,'her page is read where it waits');
+ x=reduce(x,{type:'hint.set',hint:{...HINT_EMA,key:'k1'}});
+ assert.equal(x.hint,null,'Ema\'s late hint is not on Tom\'s screen');assert.notEqual(x.screen,'hint');assert.equal(x.log.hints,0);assert.equal(x.away.ema.log.hints,2);
+ x=reduce(x,{type:'lesson.set',lesson:{id:'L1',title:'Two-step',t:0,text:'',why:''},key:'k1'});
+ assert.equal(x.lesson,null);assert.equal(x.away.ema.lesson.id,'L1');assert.equal(x.away.ema.lesson.owner,'ema');
+ const ema=reduce(x,{type:'learner.set',id:'ema'});
+ assert.equal(ema.practice.marked,true);assert.equal(ema.pages[0].items.length,1);assert.equal(ema.hint.key,'k1');assert.equal(ema.lesson.id,'L1');
+});
+
+test('case 12 (S82): no screen is sent the away learners\' work',()=>{
+ const {reduce}=store(),{view}=require(path.join(root,'src/lib/session/pairing.ts'));
+ const tom=reduce(emaEvening(),{type:'learner.set',id:'tom'});
+ assert.ok(tom.away.ema);
+ for(const role of ['tv','phone','guest'])assert.equal('away' in view(tom,role),false,role);
+});
+
 test('GUARD: a marked set in the real store carries no answer or solution anywhere',()=>{
  const st=store();
  st.dispatch({type:'reset'});

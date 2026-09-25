@@ -21,8 +21,8 @@ export async function POST(req: Request) {
   if (body.stage === 2 && prev && prev.key === item.key) {
     const r = await runJob("hint", async () => {
       const h2 = await hint(page.subject, item.text, { previous: [prev.hint1?.hint, prev.hint1?.next].filter(Boolean).join(" "), askedQ: prev.askedQ, rule: prev.rule });
-      dispatch({ type: "hint.set", hint: { ...prev, stage: 2, hint2: { hint: h2.hint, next: h2.next }, ms: h2.ms } });
-      dispatch({ type: "hint.stage", stage: 2 });
+      dispatch({ type: "hint.set", hint: { ...prev, stage: 2, hint2: { hint: h2.hint, next: h2.next }, ms: h2.ms, owner: prev.owner ?? s.learner.id } });
+      dispatch({ type: "hint.stage", stage: 2, owner: prev.owner ?? s.learner.id });
       return h2;
     }, { key: item.key, input: { itemIx, stage: 2, askedQ: prev.askedQ }, start: "thinking one step further…", done: (h2) => `second hint in ${(h2.ms / 1000).toFixed(1)} s` });
     return r.ok ? NextResponse.json({ stage: 2, ...r.value }) : refused(r);
@@ -30,7 +30,7 @@ export async function POST(req: Request) {
   const rule = page.subject === "english" ? resolveEnglish(item.text) : undefined;
   const r = await runJob("hint", async () => {
     const h1 = await hint(page.subject, item.text, { askedQ: body.askedQ, rule });
-    dispatch({ type: "hint.set", hint: { key: item.key, problem: item.text, stage: 1, hint1: { hint: h1.hint, next: h1.next }, hint2: null, askedQ: body.askedQ ?? "", rule, provider: h1.provider, ms: h1.ms } });
+    dispatch({ type: "hint.set", hint: { key: item.key, problem: item.text, stage: 1, hint1: { hint: h1.hint, next: h1.next }, hint2: null, askedQ: body.askedQ ?? "", rule, provider: h1.provider, ms: h1.ms, owner: s.learner.id } });
     return h1;
   }, { key: item.key, input: { itemIx, askedQ: body.askedQ ?? "" }, start: "thinking about a hint…", done: (h1) => `hint in ${(h1.ms / 1000).toFixed(1)} s · finding the lesson…` });
   if (!r.ok) return refused(r);

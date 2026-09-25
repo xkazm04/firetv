@@ -20,7 +20,7 @@ export async function POST(req: Request) {
   const same = () => {
     const now = getSession().practice;
     const it = now?.items.find((x) => x.n === item.n);
-    return !!now && now.topic === practice.topic && it?.question === item.question ? it : undefined;
+    return !!now && now.owner === practice.owner && now.topic === practice.topic && it?.question === item.question ? it : undefined;
   };
   const r = await runJob("explain", async () => {
     const x = await explainItem(item, transcript ?? "", practice.topic, s.learner.id, () => same()?.verdict === "unsure");

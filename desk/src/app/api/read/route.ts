@@ -18,14 +18,16 @@ export async function POST(req: Request) {
   const { img: image, subject, title, w, h } = held ?? { img: body.image ?? "", subject: body.subject ?? "maths", title: body.title ?? "Page", w: body.w ?? 0, h: body.h ?? 0 };
   if (!image) return NextResponse.json({ error: "no page" }, { status: 400 });
   const id = held?.id ?? `${subject}-${Date.now()}`;
+  // the page is the learner's who snapped it: stamped now, and its history line goes to them even if the desk changes hands mid-read
+  const owner = held?.owner ?? getSession().learner.id;
   const b64 = image.replace(/^data:image\/\w+;base64,/, "");
   const r = await runJob("read", async () => {
-    dispatch({ type: "page.reading", page: { id, subject, title, img: image, w, h } });
+    dispatch({ type: "page.reading", page: { id, subject, title, img: image, w, h, owner } });
     const { items, provider, ms } = await readPage(b64, subject, w, h);
     // Math Buddy's home says where you left off, so the sheet it just read is recorded — written
     // before the event, because `page.read` is what re-hydrates the record onto the session.
     if (subject === "maths") {
-      addHistory(getSession().learner.id, {
+      addHistory(owner, {
         at: Date.now(), kind: "homework", label: title,
         detail: `${items.length} problem${items.length === 1 ? "" : "s"} read`,
       });

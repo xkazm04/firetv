@@ -14,7 +14,7 @@ export async function POST(req: Request) {
     const made = await makeItems(topic, learner);
     // written for the learner who asked: after a learner change the run is superseded and the set is dropped
     if (!run.current() || getSession().learner.id !== learner) return null;
-    dispatch({ type: "practice.set", practice: { topic, items: made.items, marked: false } });
+    dispatch({ type: "practice.set", practice: { topic, items: made.items, marked: false, owner: learner } });
     return made;
   }, { key: topic, input: { topic }, start: START, done: (m) => (m ? `${m.items.length} questions ready in ${(m.ms / 1000).toFixed(0)} s` : "") });
   if (!r.ok) return refused(r);

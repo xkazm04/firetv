@@ -13,7 +13,8 @@ export async function POST(req: Request) {
   const b64 = (image ?? "").replace(/^data:image\/\w+;base64,/, "");
   const r = await runJob("mark", async () => {
     const { items, provider, ms, unsure } = await markSet(b64, practice, s.learner.id);
-    dispatch({ type: "practice.marked", items });
+    // the set is the learner's it was written for: a mark that ends after they left lands on their set, not the next learner's
+    dispatch({ type: "practice.marked", items, owner: practice.owner ?? s.learner.id });
     const right = items.filter((i) => i.verdict === "right").length;
     const wrong = items.filter((i) => i.verdict === "wrong").length;
     return { right, wrong, unsure, provider, ms };

@@ -96,15 +96,17 @@ export function liveRole(req?: Request | null): Role | null {
 
 /**
  * The session as this caller may see it. The TV: all of it, pin included. A phone: all of it but the pin, and
- * joined - this device is. A guest: the lobby - where the TV is, whose desk it is, and the name being typed while
+ * joined - this device is. No caller is sent the Math Buddy work of learners not at the desk (`away`). A guest: the lobby - where the TV is, whose desk it is, and the name being typed while
  * the TV is on the profile; nothing of the learner's evening, and no pin. In-process (null): the session itself.
  */
 export function view(s: Session, role: Role | null): Session {
   if (role === null) return s;
-  if (role === "tv") return { ...s, viewer: "tv" };
-  if (role === "phone") return { ...s, pin: "", joined: true, viewer: "phone" };
+  // the other learners' Math Buddy work (store.ts MathsSlot) is theirs: no screen is sent it
+  const { away: _away, ...seen } = s;
+  if (role === "tv") return { ...seen, viewer: "tv" };
+  if (role === "phone") return { ...seen, pin: "", joined: true, viewer: "phone" };
   return {
-    ...s, viewer: "guest", pin: "", joined: false,
+    ...seen, viewer: "guest", pin: "", joined: false,
     profiles: [], draft: s.screen === "profile" ? s.draft : null, tasks: [], back: undefined,
     pages: [], pageIx: 0, itemIx: 0, reading: false, awaiting: null,
     hint: null, lesson: null, noLesson: false, lessonPaused: false,
