@@ -135,3 +135,14 @@ test('case 11: a second answer that still fails, or a re-ask that errors, ends i
  await assert.rejects(text({system:'s',prompt:'p',schema:PLAN,isolated:true,shorten:true}),(e)=>{isShape('topics[0].why')(e);assert.match(e.message,/25 characters/);return true;});
  assert.equal(again.length,2);
 });
+
+test('case 12: thinking:false gives the claude child MAX_THINKING_TOKENS=0; any other request leaves the environment as it is',()=>{
+ const {childEnv}=load('engines/text.ts');
+ const prior=process.env.MAX_THINKING_TOKENS;delete process.env.MAX_THINKING_TOKENS;
+ try{
+  assert.equal(childEnv({thinking:false}).MAX_THINKING_TOKENS,'0');
+  assert.equal(childEnv({}).MAX_THINKING_TOKENS,undefined);
+  assert.equal(childEnv({thinking:true}).MAX_THINKING_TOKENS,undefined);
+  assert.equal(childEnv({thinking:false}).PATH??childEnv({thinking:false}).Path,process.env.PATH??process.env.Path,'the rest of the environment is kept');
+ }finally{if(prior!==undefined)process.env.MAX_THINKING_TOKENS=prior;}
+});
