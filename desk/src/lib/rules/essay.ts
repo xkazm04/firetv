@@ -87,3 +87,54 @@ export function cleanFix(raw: unknown, sentence = ""): Fix | undefined {
   }
   return { move: m, pattern: p };
 }
+
+// ---- rewriting one sentence in place ----
+
+/** A reading as the desk holds it (session/store EssayAnalysis), in the shape these rules need. */
+export interface VerdictLike { n: number; verdict: "strong" | "faulty" | "neutral"; note: string; fix?: Fix; was?: Was; }
+/** The sentence a rewrite replaced, as the paragraph was first read: its text, its verdict and the fix it was taught. */
+export interface Was { text: string; verdict: VerdictLike["verdict"]; fix?: Fix; }
+export interface ReadingLike { text: string; type: string; sentences: Sentence[]; stats: Record<string, number>; verdicts: VerdictLike[]; summary: string; provider?: string; }
+
+const norm = (t: string) => t.replace(/\s+/g, " ").trim();
+
+/**
+ * Sentence `n` of a reading, rewritten by the learner: one sentence in, one out. The new sentence is split,
+ * measured and given its first-pass role by the same rule as a paragraph; the numbering stands, the stats are
+ * recounted and the text is rebuilt from the sentences. No verdict is decided here. Refused, in the desk's words
+ * and before any model is asked: no such sentence, a blank one, two sentences, the same sentence again (up to
+ * case and spacing), and one that would not stay one sentence where it stands in the paragraph.
+ */
+export function revise<R extends ReadingLike>(reading: R, n: number, text: string): { ok: true; reading: R } | { ok: false; error: string } {
+  const at = Number.isInteger(n) ? reading.sentences.findIndex((s) => s.n === n) : -1;
+  if (at < 0) return { ok: false, error: Number.isInteger(n) ? `The paragraph on the desk has no sentence ${n}.` : "Say which sentence: its number on the TV." };
+  const t = norm(typeof text === "string" ? text : "");
+  if (!t) return { ok: false, error: `Write sentence ${n} first, then send it.` };
+  const one = splitSentences(t);
+  if (one.length !== 1) return { ok: false, error: `That is ${one.length} sentences. Send sentence ${n} as one sentence.` };
+  if (t.toLowerCase() === norm(reading.sentences[at].text).toLowerCase()) return { ok: false, error: `That is sentence ${n} as it was. Change it, then send it.` };
+  const sentences = reading.sentences.map((s, i) => (i === at ? { ...one[0], n: s.n } : s));
+  const rebuilt = sentences.map((s) => s.text).join(" ");
+  const again = splitSentences(rebuilt);
+  if (again.length !== sentences.length || again.some((s, i) => s.text !== sentences[i].text))
+    return { ok: false, error: `In the paragraph that would not stay one sentence. Start it with a capital and end it with a full stop.` };
+  return { ok: true, reading: { ...reading, text: rebuilt, sentences, stats: paragraphStats(sentences) } };
+}
+
+/** Where a sentence stands after a rewrite: none yet, a rewrite that holds (no longer faulty), or one still faulty. */
+export type RewriteState = "none" | "holds" | "still";
+export function rewriteState(v: Pick<VerdictLike, "verdict" | "was"> | undefined): RewriteState {
+  if (!v?.was) return "none";
+  return v.verdict === "faulty" ? "still" : "holds";
+}
+
+/**
+ * The move a sentence's page teaches: a faulty verdict's own fix, else the lens's playbook move (given); for a
+ * rewrite that holds, the move that was taught before it (the one the ink now claims). Null where nothing is taught.
+ */
+export function taught(v: Pick<VerdictLike, "verdict" | "fix" | "was"> | undefined, playbook: Fix): { fix: Fix; own: boolean } | null {
+  const from = v?.verdict === "faulty" ? v.fix : rewriteState(v) === "holds" && v?.was?.verdict === "faulty" ? v.was.fix : null;
+  if (from === null) return null;
+  const own = cleanFix(from);
+  return own ? { fix: own, own: true } : { fix: playbook, own: false };
+}
