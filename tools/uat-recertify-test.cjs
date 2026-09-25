@@ -235,3 +235,21 @@ test('case 6: renderRecertify() writes recertify.md beside the ORIGINATING run, 
   assert.match(md, /LT only/);
   assert.equal(out.fixed, 1); assert.equal(out.recurs, 1); assert.equal(out.notEvaluable, 1);
 });
+
+// ---- case 7
+// Codex is asked for exactly one prior[] row per id (minItems = maxItems = ids; a live smoke on 25 Sep 2026 accepted
+// the schema), but nothing in the answer is trusted to hold it: code checks every id, and a bad prior[] never throws the pair.
+const JUDGED = { verdict: 'pass', criteria: [], metrics: { judgeAgreement: { agree: 0, total: 0, disagreements: '' }, topicFit: { fit: 0, safe: 0, total: 0 }, pitch: { at: 0, below: 0, above: 0 }, moments: { correctUseful: 0, total: 0, learnerTurnsWithClearErrors: 0, missedClearErrors: 0 }, boundaries: { breaches: 0, notes: '' } }, findings: [], timeSaved: { minutes: 0, confidence: 'low' }, voice: '' };
+const row = (id, status, finding = -1) => ({ id, status, evidence: `#1 ${status}`, finding });
+const priorRecord = ids => ({ endedBy: 'done', setup: [], facts: {}, steps: [], prior: ids.map(id => ({ id, title: id, expected: '', got: '', evidence: [] })) });
+const CTX = { character: { sim: { id: 'x' } }, journey: 'J0', rubric: '' };
+const IDS = ['P-1', 'P-2', 'P-3'];
+const judgedAs = rec => async prior => { judgeReplies.push({ ...JUDGED, ...(prior === undefined ? {} : { prior }) }); return D().judgeJourney(rec, CTX); };
+const statusesOf = (ids, jd) => Object.fromEntries(Object.entries(R().priorStatuses(ids, jd.prior, { endedBy: 'done' })).map(([k, v]) => [k, v.status]));
+test('case 7a (guard): a well-formed prior[] answer, one row per id, is taken as it stands', async () => {
+  const rec = priorRecord(IDS), jd = await judgedAs(rec)([row('P-1', 'not-seen'), row('P-2', 'recurs', 0), row('P-3', 'not-evaluable')]);
+  assert.deepEqual(statusesOf(IDS, jd), { 'P-1': 'not-seen', 'P-2': 'recurs', 'P-3': 'not-evaluable' });
+  assert.equal(R().priorStatuses(IDS, jd.prior)['P-2'].finding, 0);
+  assert.equal(D().judgeRequest(rec, CTX).schema.properties.prior.minItems, 3, 'codex is asked for one row per id');
+  assert.equal(D().judgeRequest(rec, CTX).schema.properties.prior.maxItems, 3);
+});
