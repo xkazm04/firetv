@@ -12,6 +12,7 @@
 import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from "react";
 import type { Page, PracticeItem, SchoolSystem, Session } from "@/lib/session/store";
 import { SYLLABUS, expectedIndex, topic as topicById, type Topic } from "@/lib/library/syllabus";
+import { LESSONS } from "@/lib/library/lessons.data";
 import { slip as slipById } from "@/lib/rules/maths";
 import { continueCard, type Continue } from "@/tv/mathsRows";
 import { running, practiceFailed, stopAt, tonightStops, calendarStops, unitStops, walkStops, HINT_STOPS, TOPIC_STOPS, type TonightStop } from "@/tv/keys";
@@ -724,7 +725,11 @@ export function LessonScreen({ s }: { s: Session }) {
   const l = s.lesson;
   if (!l) return <><Top s={s} /><h1 className="mb-title" data-role="maths-title"><Amber text="No lesson open" /></h1></>;
   const src = l.youtube ? `https://www.youtube-nocookie.com/embed/${l.youtube}?start=${l.t}&autoplay=1&rel=0&modestbranding=1` : null;
-  const concepts = l.text.split(" · ").map((x) => x.trim()).filter(Boolean).slice(0, 6);
+  // Concepts are labels: the library entry's own when there is one (a hint's pick carries a transcript chunk in
+  // `text`; the library's lesson pick carries the concepts joined by " · "). Over four words is not a concept.
+  const concepts = (LESSONS.find((x) => x.id === l.id)?.concepts ?? l.text.split(" · "))
+    .map((x) => x.trim()).filter((x) => x && x.split(/\s+/).length <= 4).slice(0, 6);
+  const why = prose(l.why).replace(/^(\W*)(\p{Ll})/u, (_, a: string, c: string) => a + c.toUpperCase());
   return (<>
     <Top s={s} crumb="The lesson" right={<Chips s={s} learner={false} phone={false} />} />
     <div className="mb-screen" data-role="maths-sheet">
@@ -736,7 +741,7 @@ export function LessonScreen({ s }: { s: Session }) {
       <div className="mb-kick">The part that matters · {fmt(l.t)}</div>
       <div className="mb-stitle" data-role="maths-title"><Amber text={l.title} /></div>
       {concepts.length > 0 && <div className="mb-chips">{concepts.map((c) => <span key={c}>{c}</span>)}</div>}
-      <p className="mb-cap" style={{ position: "static", width: "auto", minHeight: 0, marginTop: 28, fontSize: 32 }}>{prose(l.why)}</p>
+      <p className="mb-cap" style={{ position: "static", width: "auto", minHeight: 0, marginTop: 28, fontSize: 32 }}>{why}</p>
     </aside>
   </>);
 }
