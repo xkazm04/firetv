@@ -104,14 +104,20 @@ const WORDS: Record<string, string> = {
  * Does this line give the answer away? Any number in it - written in digits or as a word up to twenty,
  * with or without a minus - that the substitution accepts for the question is the answer. The prompt
  * asks the model not to say it; this is the check that does not rely on the asking.
+ *
+ * The one leak rule, for explain's reply and for every hint line. It reads the question as a photographed page
+ * gives it ('Solve for x:  3x − 7 = 11' is its equation, `equationOf`), and an expression item leaks by form as
+ * well (`leaksByForm`): the lab's oracle (vision/poc_hints.py) derived, not hand-listed.
  */
 export function leaks(question: string, line: string): boolean {
   if (typeof line !== "string" || !line) return false;
+  const eq = equationOf(question) ?? question;
   const found = [...(line.match(NUMBERS) ?? [])];
   for (const m of line.toLowerCase().matchAll(/\b(minus |negative )?([a-z]+)\b/g)) if (WORDS[m[2]]) found.push((m[1] ? "-" : "") + WORDS[m[2]]);
   // "12-7" reads as -7 here, so a signed number is checked with and without its sign
   return found.map((v) => v.replace(/\s+/g, "").replace(/^−/, "-"))
-    .some((v) => verify(question, v) || (v.startsWith("-") && verify(question, v.slice(1))));
+    .some((v) => verify(eq, v) || (v.startsWith("-") && verify(eq, v.slice(1))))
+    || leaksByForm(question, line);
 }
 
 // ---- the pen: where the learner's working broke, found in code from their own lines ----
@@ -219,4 +225,79 @@ export function locate(question: string, lines: readonly string[]): SlipAt | und
     return span ? { line: k, span, kind: "sign" } : { line: k };
   }
   return undefined;
+}
+
+// ---- the hint path: the leak rule reads an item as a photographed page gives it ----
+/** The maths after an item's label ('Solve for x:', 'Factor completely:'), or the whole text when it has none. */
+const afterLabel = (text: string) => {
+  const s = text.trim(), i = s.lastIndexOf(":");
+  return (i >= 0 ? s.slice(i + 1) : s).trim().replace(/[.?!]+$/, "").trim();
+};
+
+/**
+ * The one single-variable equation an item asks about, as printed: 'Solve for x:  3x − 7 = 11' is '3x − 7 = 11'.
+ * A system, a word problem or a slope item has none (null) - no oracle, so the desk claims nothing about it.
+ */
+export function equationOf(itemText: unknown): string | null {
+  if (typeof itemText !== "string") return null;
+  const e = afterLabel(itemText);
+  return /x/i.test(e) && readsAsArithmetic(e) ? e : null;
+}
+
+/** The one-variable expression an item works on ('Factor completely:  x² + 7x + 12'), or null. */
+export function expressionOf(itemText: unknown): string | null {
+  if (typeof itemText !== "string") return null;
+  const e = afterLabel(itemText);
+  return e && !e.includes("=") && /x/i.test(e) && evaluate(e, 0.37) !== null ? e : null;
+}
+
+/** How a line is written, for comparison: no spaces, ² as ^2, one minus. */
+const compact = (s: string) => s.toLowerCase().replace(/\s+/g, "").replace(/²/g, "^2").replace(/[−–—‐‑]/g, "-");
+/** A sum has a top-level + or - after its first term; otherwise it is a product (or one term). */
+const isSum = (e: string) => { const first = e.search(/\S/); return termSigns(e).some((j) => j > first); };
+const POINTS = [-2.5, -1, 0.37, 1.9, 3.3];
+const sameValue = (a: string, b: string) => POINTS.every((x) => { const u = evaluate(a, x), v = evaluate(b, x); return u !== null && v !== null && close(u, v); });
+/** The line with every word but x masked, so only its maths is left to read. */
+const maskWords = (line: string) => line.replace(/[A-Za-z]+/g, (w) => (/^x$/i.test(w) ? w : "|"));
+/** The root of a linear bracket's content, or null when it is not linear in x. */
+function linearRoot(c: string): number | null {
+  const f0 = evaluate(c, 0), f1 = evaluate(c, 1), f3 = evaluate(c, 3);
+  if (f0 === null || f1 === null || f3 === null) return null;
+  const slope = f1 - f0;
+  return Math.abs(slope) > 1e-9 && close(f3, f0 + 3 * slope) ? -f0 / slope : null;
+}
+
+/**
+ * Does this line give an item's answer away by its form? A linear bracket the item does not already show whose root
+ * answers it ('(x + 3)' for x² + 7x + 12, '(x − 6)' for 3x − 7 = 11); and for an expression item, the expression
+ * rewritten in the other form - a product for a sum, a polynomial for a product ('x^2 + x - 12' for (x + 4)(x − 3)).
+ * The item's own expression, reordered or quoted, and its own brackets are not the answer.
+ */
+export function leaksByForm(question: string, line: string): boolean {
+  if (typeof question !== "string" || typeof line !== "string" || !line) return false;
+  const eq = equationOf(question), ex = eq ? null : expressionOf(question);
+  if (!eq && !ex) return false;
+  const own = compact(question), masked = maskWords(line);
+  for (const m of masked.matchAll(/\(([^()]*)\)/g)) {
+    if (!/x/i.test(m[1]) || own.includes(compact(m[0]))) continue;
+    const r = linearRoot(m[1]);
+    if (r === null) continue;
+    if (eq ? holds(sidesOf(eq)!, r) === true : (() => { const v = evaluate(ex!, r); return v !== null && close(v, 0); })()) return true;
+  }
+  if (ex) for (const f of masked.split(/[|,;:!?"“”‘’'$=\{}]|\.(?!\d)/)) {
+    const frag = f.trim();
+    if (/x/i.test(frag) && evaluate(frag, 0.37) !== null && isSum(frag) !== isSum(ex) && sameValue(frag, ex)) return true;
+  }
+  return false;
+}
+
+/**
+ * The line the TV shows and speaks when the model's hint gave the answer away twice: written here, never by a model,
+ * per kind of item. It points at the method and carries no number - nothing on it can be the answer.
+ */
+export function withheldLine(itemText: string): string {
+  if (equationOf(itemText)) return "Undo what is done to x, step by step, the same on both sides. The value of x is yours to find.";
+  if (expressionOf(itemText) && /^\s*factor/i.test(itemText)) return "Look for a pair of numbers that multiply to the last term and add to the middle coefficient. Finding them is yours.";
+  if (expressionOf(itemText) && /^\s*expand/i.test(itemText)) return "Multiply every term in the first bracket by every term in the second, then collect the like terms.";
+  return "Go back to the last step you are sure of and take the next. The answer stays yours to find.";
 }
