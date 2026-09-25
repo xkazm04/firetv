@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "product": "Study Desk (firetv)",
-  "note": "Written 2026-09-23 when /scan-sweep was adopted. Map order is group order, then context order. file_paths are repo-relative, as git ls-files prints them. Tests that exercise a context are listed with it.",
+  "note": "Written 2026-09-23 when /scan-sweep was adopted; remapped 2026-09-25 after the module redesigns, when math-buddy, essay-master and landing became contexts of their own. Map order is group order, then context order. file_paths are repo-relative, as git ls-files prints them. Tests that exercise a context are listed with it. Left out on purpose: binaries and images, the Linga art illustrations (desk/src/english/art/), lockfiles, uat/runs/** (run output) and uat/.gitignore.",
   "groups": [
     {
       "name": "desk-linga",
@@ -9,7 +9,7 @@
       "contexts": [
         {
           "name": "linga",
-          "description": "Linga English practice: placement check (A1-C2), agreeing topics, the tutor conversation, error moments, the phone reply box and the TV conversation screen, speech in and out. Decisions (level, error class, topic plan) stay in lib/rules and lib/english; the model only phrases.",
+          "description": "Linga English practice: placement check (A1-C2), agreeing topics, the tutor conversation and its turn table, the rescue ladder, taught phrases brought back, error moments, the phone reply box and the TV conversation screen in Linga's own design language, the Open Door (docs/DESIGN-LINGA.md), speech in and out. One screen model (lib/english/view.ts) feeds the TV, the phone, the test bar and the LT driver. Decisions (level, error class, topic plan, what a turn accepts) stay in lib/rules and lib/english; the model only phrases.",
           "keywords": [
             "english",
             "linga",
@@ -21,7 +21,12 @@
             "topics",
             "speech",
             "stt",
-            "tts"
+            "tts",
+            "open door",
+            "turn",
+            "view",
+            "rescue ladder",
+            "review"
           ],
           "stack": [
             "next.js",
@@ -49,6 +54,11 @@
             "desk/src/app/api/speak/route.ts",
             "desk/src/app/english/print/page.tsx",
             "desk/src/design/linga.css",
+            "desk/src/english/OpenDoor.tsx",
+            "desk/src/lib/english/view.ts",
+            "desk/src/lib/english/turn.ts",
+            "desk/src/lib/english/help.ts",
+            "desk/src/lib/english/review.ts",
             "tools/linga-rules-test.cjs",
             "tools/linga-ui-test.cjs",
             "tools/linga-placement-sim.cjs"
@@ -58,11 +68,11 @@
     },
     {
       "name": "desk-subjects",
-      "description": "The maths and essay homework pipelines of the Study Desk",
+      "description": "Math Buddy and Essay Master: the homework pipelines they share, and each module's own television in its own design language",
       "contexts": [
         {
           "name": "desk-pipelines",
-          "description": "Maths and essay homework: read a photographed page, analyse it, give a withheld hint, explain, mark and verify a solution, pick and serve practice items, keep learner memory. Verdicts are decided in lib/rules; the answer is never put on screen.",
+          "description": "Maths and essay homework: read a photographed page, analyse it, give a withheld hint, explain, mark and verify a solution, pick and serve practice items, keep learner memory. Every pipeline runs as a typed session job through one runner: one run of a kind at a time, a desk-worded failure, try again in place. Verdicts are decided in lib/rules; the answer is never put on screen.",
           "keywords": [
             "maths",
             "essay",
@@ -75,7 +85,10 @@
             "memory",
             "read",
             "ocr",
-            "withholding"
+            "withholding",
+            "jobs",
+            "retry",
+            "leaks"
           ],
           "stack": [
             "next.js",
@@ -101,19 +114,110 @@
             "desk/src/app/api/practice/route.ts",
             "desk/src/app/api/read/route.ts",
             "desk/src/app/api/smoke/route.ts",
+            "desk/src/lib/desk/job.ts",
+            "desk/src/lib/desk/select.ts",
+            "desk/src/app/api/session/retry/route.ts",
             "tools/maths-rules-test.cjs",
-            "tools/essay-rules-test.cjs"
+            "tools/essay-rules-test.cjs",
+            "tools/desk-jobs-rules-test.cjs",
+            "tools/withhold-rules-test.cjs"
+          ]
+        },
+        {
+          "name": "math-buddy",
+          "description": "Math Buddy's television in its own design language, Lamplight (docs/DESIGN-MATH-BUDDY.md): Tonight, the topics, six questions on paper, the marked sheet and its walk, and the page, hint, lesson, units and calendar while maths is on them. The learner's working is set in their own hand by the maths reader (typeset.ts, MathText.tsx), and the desk's pen goes only where the data puts it (working.ts). The pipelines behind it are desk-pipelines; the verdict is never recomputed here.",
+          "keywords": [
+            "math buddy",
+            "maths",
+            "lamplight",
+            "tonight",
+            "sheet",
+            "walk",
+            "typeset",
+            "tex",
+            "working",
+            "pen marks",
+            "fonts"
+          ],
+          "stack": [
+            "next.js",
+            "react",
+            "typescript",
+            "css"
+          ],
+          "file_paths": [
+            "desk/src/maths/MathsTV.tsx",
+            "desk/src/maths/MathText.tsx",
+            "desk/src/maths/typeset.ts",
+            "desk/src/maths/working.ts",
+            "desk/src/maths/fonts.ts",
+            "desk/src/tv/mathsRows.ts",
+            "desk/src/tv/sheetRows.ts",
+            "desk/src/design/maths-lamplight.css",
+            "tools/maths-type-test.cjs",
+            "tools/tv-sheet-test.cjs"
+          ]
+        },
+        {
+          "name": "essay-master",
+          "description": "Essay Master's television in its own design language, Specimen (docs/DESIGN-ESSAY-MASTER.md): the lens home, one sentence at a time with the table behind Menu, the playbook and the x-ray, each drawn from the session and the stop lists in tv/keys.ts. The essay pipeline behind it is desk-pipelines.",
+          "keywords": [
+            "essay master",
+            "essay",
+            "specimen",
+            "lens",
+            "forensic",
+            "playbook",
+            "x-ray",
+            "fonts"
+          ],
+          "stack": [
+            "next.js",
+            "react",
+            "typescript",
+            "css"
+          ],
+          "file_paths": [
+            "desk/src/essay/EssayTV.tsx",
+            "desk/src/essay/fonts.ts",
+            "desk/src/design/essay-specimen.css"
           ]
         }
       ]
     },
     {
       "name": "desk-surfaces",
-      "description": "The two Study Desk surfaces: the TV (D-pad, On Air design law) and the phone (the instrument)",
+      "description": "The Study Desk surfaces: the landing (the desk itself), the TV shell (D-pad, On Air design law) and the phone (the instrument)",
       "contexts": [
         {
+          "name": "landing",
+          "description": "The Study Desk landing, \"Left on the Desk\" (docs/DESIGN-STUDY-DESK.md): a walnut desk at night with each app the learner has on lying on it as an object in its own brand, the place card, the phone while none is paired, and the lamp as the focus. Everything an object shows is read off the session (tv/landingRows.ts, shared with the D-pad); with nothing there it says so in two words.",
+          "keywords": [
+            "landing",
+            "left on the desk",
+            "desk",
+            "lamp",
+            "objects",
+            "continue",
+            "place card",
+            "fonts"
+          ],
+          "stack": [
+            "next.js",
+            "react",
+            "typescript",
+            "css"
+          ],
+          "file_paths": [
+            "desk/src/landing/LandingTV.tsx",
+            "desk/src/landing/fonts.ts",
+            "desk/src/tv/landingRows.ts",
+            "desk/src/design/desk-landing.css"
+          ]
+        },
+        {
           "name": "tv-surface",
-          "description": "The Study Desk television: every TV screen, its rows and focus, the On Air identity, the session subscription. Client components only; the TV never asks for typing and never shows an answer.",
+          "description": "The Study Desk television shell: the D-pad as data (tv/keys.ts, every screen's stop list), the shell's own screens on On Air (pairing, the learner and profile picks, the break, the recap of tonight, and page, hint, lesson and units when English or Essay Master is on the desk), the hand-over to each module's own screens, the session subscription. Client components only; the TV never asks for typing and never shows an answer.",
           "keywords": [
             "tv",
             "screens",
@@ -123,7 +227,11 @@
             "rows",
             "profile",
             "writing",
-            "design"
+            "design",
+            "keys",
+            "keymap",
+            "recap",
+            "shell"
           ],
           "stack": [
             "next.js",
@@ -140,25 +248,34 @@
             "desk/src/app/globals.css",
             "desk/src/app/layout.tsx",
             "desk/src/app/page.tsx",
-            "desk/src/app/probe/page.tsx"
+            "desk/src/app/probe/page.tsx",
+            "desk/src/tv/keys.ts",
+            "desk/src/tv/recapRows.ts",
+            "tools/tv-keys-test.cjs",
+            "tools/tv-recap-test.cjs"
           ]
         },
         {
           "name": "phone-surface",
-          "description": "The phone page: pairing by PIN, camera, pen, keyboard and mic; posts events to the session.",
+          "description": "The phone page: joins with the code the TV shows, checked on the server; camera, pen, keyboard and mic; posts events to the session and follows the TV to the panel each screen hands off to (panelFor.ts).",
           "keywords": [
             "phone",
             "pairing",
             "pin",
             "camera",
-            "instrument"
+            "instrument",
+            "hand-off",
+            "panel",
+            "follow"
           ],
           "stack": [
             "next.js",
             "react"
           ],
           "file_paths": [
-            "desk/src/app/phone/page.tsx"
+            "desk/src/app/phone/page.tsx",
+            "desk/src/app/phone/panelFor.ts",
+            "tools/phone-panel-test.cjs"
           ]
         }
       ]
@@ -169,7 +286,7 @@
       "contexts": [
         {
           "name": "engines",
-          "description": "Engine adapters behind a provider field: text (Claude CLI, codex for UAT), vision and embeddings (Ollama), speech in and out (ElevenLabs). Nothing outside calls a provider directly.",
+          "description": "Engine adapters behind one provider registry: text (Claude CLI, codex for UAT), vision and embeddings (Ollama), speech in and out (ElevenLabs, piper). Every answer passes one shape rule against the caller's schema or is a typed EngineError; a test stubs any engine through the registry. Nothing outside calls a provider directly.",
           "keywords": [
             "engine",
             "provider",
@@ -180,7 +297,11 @@
             "vision",
             "embed",
             "voice",
-            "listen"
+            "listen",
+            "registry",
+            "schema",
+            "shape",
+            "stub"
           ],
           "stack": [
             "typescript",
@@ -193,12 +314,15 @@
             "desk/src/lib/engines/text.ts",
             "desk/src/lib/engines/types.ts",
             "desk/src/lib/engines/vision.ts",
-            "desk/src/lib/engines/voice.ts"
+            "desk/src/lib/engines/voice.ts",
+            "desk/src/lib/engines/registry.ts",
+            "desk/src/lib/engines/shape.ts",
+            "tools/engines-rules-test.cjs"
           ]
         },
         {
           "name": "session",
-          "description": "The one server-side session, the only product state: learners and profiles on disk, events from the phone, the stream the TV renders.",
+          "description": "The one server-side session, the only product state: learners and profiles on disk, events from the phone, the stream the TV renders. Pairing is a server fact: one module tells the TV (the desk's key, printed at start), a joined phone and a guest apart, and one proxy applies it to every API route.",
           "keywords": [
             "session",
             "store",
@@ -206,7 +330,12 @@
             "profile",
             "stream",
             "sse",
-            "state"
+            "state",
+            "pairing",
+            "key",
+            "cookie",
+            "proxy",
+            "guest"
           ],
           "stack": [
             "typescript",
@@ -216,7 +345,11 @@
             "desk/src/lib/session/learners.ts",
             "desk/src/lib/session/store.ts",
             "desk/src/app/api/session/route.ts",
-            "desk/src/app/api/session/stream/route.ts"
+            "desk/src/app/api/session/stream/route.ts",
+            "desk/src/lib/session/pairing.ts",
+            "desk/src/proxy.ts",
+            "desk/src/instrumentation.ts",
+            "tools/desk-pairing-test.cjs"
           ]
         },
         {
@@ -247,7 +380,7 @@
       "contexts": [
         {
           "name": "pen-core",
-          "description": "Pure JVM core: annotation schema and codec, timeline, letterbox mapping, pen engine, smoothing, hit-testing, undo history, wire protocol.",
+          "description": "Pure JVM core: annotation schema and codec, timeline, letterbox mapping, the one metric in normalized space, pen engine, smoothing, hit-testing, undo history, wire protocol, the pen conversation as a sans-IO state machine (pairing, newest-pen-wins, heartbeat), transport plans and the /health body.",
           "keywords": [
             "kotlin",
             "annotation",
@@ -255,7 +388,13 @@
             "protocol",
             "undo",
             "history",
-            "smoothing"
+            "smoothing",
+            "state machine",
+            "pairing",
+            "transport",
+            "health",
+            "metric",
+            "review mode"
           ],
           "stack": [
             "kotlin",
@@ -270,8 +409,17 @@
             "core/src/main/kotlin/dev/telestrator/core/Protocol.kt",
             "core/src/main/kotlin/dev/telestrator/core/Smoothing.kt",
             "core/src/main/kotlin/dev/telestrator/core/Timeline.kt",
+            "core/src/main/kotlin/dev/telestrator/core/HealthBody.kt",
+            "core/src/main/kotlin/dev/telestrator/core/Metric.kt",
+            "core/src/main/kotlin/dev/telestrator/core/PenConversation.kt",
+            "core/src/main/kotlin/dev/telestrator/core/TransportPlan.kt",
             "core/src/test/kotlin/dev/telestrator/core/CoreTest.kt",
-            "core/src/test/kotlin/dev/telestrator/core/PenToolsTest.kt"
+            "core/src/test/kotlin/dev/telestrator/core/PenToolsTest.kt",
+            "core/src/test/kotlin/dev/telestrator/core/HealthBodyTest.kt",
+            "core/src/test/kotlin/dev/telestrator/core/MetricTest.kt",
+            "core/src/test/kotlin/dev/telestrator/core/PenConversationTest.kt",
+            "core/src/test/kotlin/dev/telestrator/core/ReviewModeTest.kt",
+            "core/src/test/kotlin/dev/telestrator/core/VisibleEditsTest.kt"
           ]
         },
         {
@@ -311,19 +459,22 @@
         },
         {
           "name": "companion",
-          "description": "The telestrator phone PWA: pen surface, tools, transport, local echo. Copied into the APK at build time.",
+          "description": "The telestrator phone PWA: pen surface, tools, transport, local echo, and telling a refused PIN from a dropped line. Copied into the APK at build time.",
           "keywords": [
             "pwa",
             "pen",
             "touch",
-            "companion"
+            "companion",
+            "refusal",
+            "reconnect"
           ],
           "stack": [
             "html",
             "javascript"
           ],
           "file_paths": [
-            "companion/index.html"
+            "companion/index.html",
+            "tools/companion-refusal-test.mjs"
           ]
         },
         {
@@ -361,7 +512,7 @@
       "contexts": [
         {
           "name": "uat",
-          "description": "Simulated user acceptance for Linga: the LT text-live driver, Characters, journeys, rubric and accepted gaps.",
+          "description": "Simulated user acceptance for Linga: the LT text-live driver reading the rendered TV and phone, the journey verdict decided in code from named checks, one open ledger across runs and one-command recertify; Characters, journeys, rubric and accepted gaps.",
           "keywords": [
             "uat",
             "characters",
@@ -369,7 +520,11 @@
             "driver",
             "judge",
             "rubric",
-            "codex"
+            "codex",
+            "surface",
+            "verdict",
+            "ledger",
+            "recertify"
           ],
           "stack": [
             "node",
@@ -377,6 +532,10 @@
           ],
           "file_paths": [
             "uat/driver/linga-text.cjs",
+            "uat/driver/surface.cjs",
+            "uat/driver/verdict.cjs",
+            "uat/driver/ledger.cjs",
+            "uat/driver/recertify.cjs",
             "uat/README.md",
             "uat/env.md",
             "uat/rubric.md",
@@ -396,17 +555,22 @@
             "uat/journeys/J2-agree-topics.md",
             "uat/journeys/J3-first-conversation.md",
             "uat/journeys/J4-stuck.md",
-            "uat/journeys/J5-boundaries.md"
+            "uat/journeys/J5-boundaries.md",
+            "tools/uat-surface-test.cjs",
+            "tools/uat-verdict-test.cjs",
+            "tools/uat-ledger-test.cjs",
+            "tools/uat-recertify-test.cjs"
           ]
         },
         {
           "name": "desk-tooling",
-          "description": "KPI measurement for the Personas meters and the worktree preflight that makes the gate runnable in an autopilot worktree.",
+          "description": "KPI measurement for the Personas meters, the worktree preflight that makes the gate runnable in an autopilot worktree, and the one finder of the operator's main checkout that both use.",
           "keywords": [
             "kpi",
             "measure",
             "preflight",
-            "worktree"
+            "worktree",
+            "checkout"
           ],
           "stack": [
             "node"
@@ -414,7 +578,8 @@
           "file_paths": [
             "tools/kpi-measure.cjs",
             "tools/kpi-measure-test.cjs",
-            "tools/worktree-preflight.cjs"
+            "tools/worktree-preflight.cjs",
+            "tools/checkout.cjs"
           ]
         }
       ]
@@ -425,16 +590,20 @@
       "contexts": [
         {
           "name": "vision-lab",
-          "description": "Local vision-model client, the mark-as-pointer technique, OCR and hint PoCs, VTT tools.",
+          "description": "Local vision-model client, the mark-as-pointer technique, OCR, hint and retrieval PoCs, VTT tools; and the lab bench, which runs the lab's corpus through the production read, hint and lesson pick and scores them with the lab's rules.",
           "keywords": [
             "vision",
             "vlm",
             "ocr",
             "point",
-            "python"
+            "python",
+            "lab bench",
+            "corpus",
+            "replay"
           ],
           "stack": [
-            "python"
+            "python",
+            "node"
           ],
           "file_paths": [
             "vision/poc_hints.py",
@@ -443,7 +612,10 @@
             "vision/poc_retrieval.py",
             "vision/point.py",
             "vision/vlm.py",
-            "vision/vtt.py"
+            "vision/vtt.py",
+            "tools/lab-bench.cjs",
+            "tools/lab-corpus.cjs",
+            "tools/lab-bench-test.cjs"
           ]
         },
         {
