@@ -9,8 +9,8 @@ import { ESSAY_TYPES } from "@/lib/library/lessons.data";
 import { BRAND as MODULE } from "@/tv/profileRows";
 import type { JobKind, Session, Subject } from "@/lib/session/store";
 import { LingaPhone } from "@/english/LingaPhone";
+import { follow, type PScreen } from "./panelFor";
 
-type PScreen = "join" | "joined" | "capture" | "practice" | "point" | "say" | "paste" | "tonight" | "parent" | "profile" | "linga";
 const SAMPLES: Array<{ id: Subject; title: string; file: string }> = [
   { id: "maths", title: "Algebra — Exercise 4.2", file: "/samples/maths.jpg" },
   { id: "english", title: "English — Unit 6", file: "/samples/english.jpg" },
@@ -58,10 +58,6 @@ export default function Phone() {
   /** A failed run the learner has stepped past ("Snap a new page"): its Try again is not offered again. */
   const [passed, setPassed] = useState("");
 
-  // a fresh join lands on the confirmation, never straight into the camera
-  useEffect(() => { if (s?.joined && screen === "join") setScreen("joined"); }, [s?.joined, screen]);
-  useEffect(() => { if (s?.joined && s.screen.startsWith("linga") && role === "student") setScreen("linga"); }, [s?.screen, s?.joined, role]);
-  useEffect(() => { if (s && !s.joined && screen !== "join" && screen !== "profile") setScreen("join"); }, [s?.joined]); // eslint-disable-line react-hooks/exhaustive-deps
   // the QR on the TV carries the code: arrive with ?pin= and the phone joins itself, then tidies the bar
   useEffect(() => {
     if (!s || s.joined) return;
@@ -145,13 +141,16 @@ export default function Phone() {
       if (!r.ok && r.status !== 502) setMsg(j.error ?? `The desk could not try again (${r.status}).`);
     } catch (e) { if (kind === "read") setPhase("failed"); setMsg(`That did not reach the desk: ${String(e)}`); } finally { setBusy(false); }
   };
+  /** A Mic press is listening: the phone does not move away from the field it is filling. */
+  const hearing = useRef(false);
   const listen = (into: (t: string) => void) => {
     // Web Speech is not in TypeScript's DOM lib; the shape we use is small enough to declare here.
-    type Rec = { lang: string; onresult: (ev: { results: Array<Array<{ transcript: string }>> }) => void; onerror: () => void; start: () => void; stop: () => void };
+    type Rec = { lang: string; onresult: (ev: { results: Array<Array<{ transcript: string }>> }) => void; onerror: () => void; onend: () => void; start: () => void; stop: () => void };
     const w = window as unknown as { SpeechRecognition?: new () => Rec; webkitSpeechRecognition?: new () => Rec };
     const SR = w.SpeechRecognition ?? w.webkitSpeechRecognition;
     if (!SR) { setMsg("No speech recognition in this browser — type instead."); return null; }
-    const r = new SR(); r.lang = "en-US"; r.onresult = (ev) => into(ev.results[0][0].transcript); r.onerror = () => setMsg("did not catch that"); r.start(); setMsg("listening…");
+    const r = new SR(); r.lang = "en-US"; r.onresult = (ev) => into(ev.results[0][0].transcript); r.onerror = () => { hearing.current = false; setMsg("did not catch that"); }; r.onend = () => { hearing.current = false; };
+    r.start(); hearing.current = true; setMsg("listening…");
     return r; // the caller may hold the button and stop it on release
   };
   // is there a mic path at all on this device? asked once, so the fallback is offered before a failed press
@@ -194,6 +193,21 @@ export default function Phone() {
     catch { setMemory([]); }
     finally { setBusy(false); await post({ type: "session.end" }); }
   };
+
+  // The phone follows the TV (panelFor.ts): when the TV's screen changes into a hand-off, the phone moves once to
+  // the panel that does it. A same-screen update moves nothing, so a tab the learner picked stays picked; busy hands
+  // (typing, a shot held unsent, a recording) are never interrupted; a fresh join lands on the confirmation.
+  const seen = useRef<string | null | undefined>(undefined);
+  useEffect(() => {
+    if (!s) return;
+    const el = document.activeElement;
+    const typing = el instanceof HTMLTextAreaElement || (el instanceof HTMLInputElement && !["checkbox", "radio", "button", "submit"].includes(el.type)) || (el instanceof HTMLElement && el.isContentEditable);
+    const held = (screen === "capture" || screen === "practice") && !!shot && phase !== "sent";
+    const busyHands = typing || held || holding || hearing.current || !!s.conversation?.capture;
+    const step = follow(seen.current, s, { panel: screen, role, busy: busyHands });
+    seen.current = step.key;
+    if (step.to) setScreen(step.to);
+  }, [s, role, screen]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // The nav waits for a joined phone — except Profile, which a first arrival needs before joining.
   const nav = (n: PScreen) => { if (!s?.joined && n !== "profile") return; setScreen(n); };
