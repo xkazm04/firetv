@@ -251,12 +251,12 @@ export default function Phone() {
           <button className="pbtn" data-secondary="true" onClick={() => nav("profile")}>Naming a new learner? Open Profile.</button></div>}
 
         {screen === "joined" && s && <div className="pscreen"><h3>On the desk</h3>
-          <p>Joined as <b>{s.learner.name}</b>. {["landing", "pair", "joined", "tonight"].includes(s.screen) ? "Snap the page and the TV opens it." : `The TV is on ${TV_WORDS[s.screen] ?? s.screen}.`}</p>
+          <p>Joined as <b>{s.learner.name}</b>. {["landing", "pair", "joined"].includes(s.screen) ? "Open an app on the TV and this phone follows it." : `The TV is on ${TV_WORDS[s.screen] ?? s.screen}.`}</p>
           {s.screen === "profile" || s.draft
             ? <button className="pbtn" data-signal="true" onClick={() => nav("profile")}>Name the new learner</button>
             : <button className="pbtn" data-signal="true" onClick={() => nav("capture")}>{s.awaiting ? `Snap the ${MODULE[s.awaiting]} page` : "Snap the page"}</button>}
           <button className="pbtn" data-secondary="true" onClick={() => nav("tonight")}>Set up tonight first</button>
-          <p style={{ fontSize: 12 }}>Not {s.learner.name}? Press Up on the TV's Tonight to switch who is at the desk.</p></div>}
+          <p style={{ fontSize: 12 }}>Not {s.learner.name}? On the TV's desk, press Up to the place card and Select to switch who is at the desk.</p></div>}
 
         {screen === "profile" && <div className="pscreen"><h3>Profile</h3>
           <p>At the desk now: <b>{s?.learner.name ?? "—"}</b></p>

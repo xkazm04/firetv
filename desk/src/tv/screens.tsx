@@ -46,9 +46,9 @@ export function Joined({ s }: { s: Session }) {
       <img src="/brand/paired.png" alt="" style={{ position: "absolute", right: 0, top: 40, width: 760, height: 520, objectFit: "contain" }} />
       <div style={{ position: "absolute", left: 0, bottom: 216, maxWidth: 900 }}>
         <span className="cap">What now</span>
-        <div className="cap-text">Snap the page on the phone and it appears here. Or press Enter to see what is on tonight.</div>
+        <div className="cap-text">Open an app on the desk, or snap the page on the phone.</div>
       </div>
-      <div className="actions"><button className="btn" data-focused>Tonight</button></div>
+      <div className="actions"><button className="btn" data-focused>The desk</button></div>
     </main>
   </>);
 }

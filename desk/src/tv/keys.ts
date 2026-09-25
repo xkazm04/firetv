@@ -12,7 +12,7 @@ import { SYLLABUS, type Topic } from "@/lib/library/syllabus";
 import { profileRows, locate, flat } from "@/tv/profileRows";
 import { continueCard } from "@/tv/mathsRows";
 import { sheetStops, firstToLook, tileOf } from "@/tv/sheetRows";
-import { landingAt, landingFocus, landingModules, landingStops, continueStop } from "@/tv/landingRows";
+import { LANDING_REST, landingAt, landingFocus, landingModules, landingStops, continueStop } from "@/tv/landingRows";
 import { recapStops, ownReading } from "@/tv/recapRows";
 
 /** The remote's buttons. The keyboard stands in for it on the bench. */
@@ -173,7 +173,8 @@ const KEYMAP: Partial<Record<Screen, Handler>> = {
     }
   },
   pair: (s, k, _, o) => { if (k === "back") { const to = s.back ?? "landing"; o.nav(to, to === "landing" ? landingFocus(s, "phone") : 0); } },
-  joined: (_, k, __, o) => { if (k === "select" || k === "back") o.nav("tonight"); },
+  // the desk is home: Select or Back rests the lamp there, as choosing a learner does (store.ts learner.set)
+  joined: (_, k, __, o) => { if (k === "select" || k === "back") o.nav("landing", LANDING_REST); },
   tonight: (s, k, _, o) => {
     const stops = tonightStops(s), at = stopAt(stops, s.focus);
     if (k === "back") { if (s.awaiting) o.ev({ type: "page.unask" }); else o.nav("landing", landingFocus(s, "maths")); return; }
