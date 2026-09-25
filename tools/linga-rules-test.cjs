@@ -420,3 +420,100 @@ test('ladder case 7 GUARD: a partner line with no help gives today\'s scene cue,
  await booked(said('Which date do you need?'));await reply();
  await command('cue');const c=getSession().conversation;assert.equal(c.cue,BOOKING_CUE);assert.equal(c.supported,true);
 });
+
+// ---- the turn: one named state and one table (lib/english/turn.ts) the server enforces and the view reads
+const turn=()=>require(path.join(root,'src/lib/english/turn.ts'));
+const REPLIED=[{id:'p1',role:'partner',text:'Hello. How can I help?'},{id:'l1',role:'learner',text:'I am work in hotel',mode:'text'},{id:'p2',role:'partner',text:'Which hotel is it?'}];
+const MOMENT={id:'l1:moment',kind:'fix',said:'I am work',better:'I work',why:'Work is the verb here.',turnId:'l1',at:1};
+/** One conversation per turn state, and the screen it stands on. */
+const TURN_STATES={
+ preparing:['linga-talk',convo({turns:[],pending:'held'})],
+ waiting:['linga-talk',convo({turns:REPLIED,pending:'held'})],
+ paused:['linga-talk',convo({turns:REPLIED,paused:true})],
+ moment:['linga-moment',convo({turns:REPLIED,moment:MOMENT,moments:[MOMENT]})],
+ coaching:['linga-coach',convo({turns:REPLIED,phase:'coaching',coaching:{before:'I am work in hotel',after:'I work in a hotel',note:'Say what you do with the verb alone.'}})],
+ quiz:['linga-talk',convo({turns:REPLIED,quizOpen:true,cue:'Try: Could you check?'})],
+ 'your-turn':['linga-talk',convo({turns:REPLIED})],
+ finished:['linga-recap',convo({turns:REPLIED,phase:'finished'})],
+ unprepared:['linga-talk',convo({turns:[]})],
+};
+const CONVERSATION_ACTIONS=['turn','cue','quiz','choice','coach','replay','capture','pause','resume','repeat','leave','finish','moment-done'];
+/** A stub engine that answers every conversation call well: the opening, a turn, a coach that quotes the reply, a replay. */
+function answerAll(){answer=async req=>{const p=JSON.parse(req.prompt);return {json:/^Coach/.test(p.task??'')?{before:p.submittedReply.slice(0,6),after:'I work in a hotel',note:'Try the verb alone.'}:{title:'T',goal:'G',opening:'Hi?',reply:'Ok. And then?',observations:[]},provider:'test',ms:1};};}
+const extraFor=(action,c)=>action==='turn'?{text:'I like it.',mode:'text',lastTurnId:c.turns.at(-1)?.id}:action==='choice'?{option:0}:action==='capture'?{active:true}:{};
+
+test('turn case 1: each fixture names its state, and paused while a reply is pending is waiting',()=>{
+ const T=turn();
+ for(const [name,[,c]] of Object.entries(TURN_STATES))assert.equal(T.turnState(c),name,name);
+ assert.equal(T.turnState(convo({turns:REPLIED,paused:true,pending:'held'})),'waiting','precedence: a pending reply wins over paused');
+});
+test('turn case 2: pause during a turn in flight is refused, and the turn lands with its evidence',async()=>{
+ fresh();await command('start',{sceneId:'booking',replace:true});
+ let release;answer=()=>new Promise(r=>release=r);
+ const inflight=command('turn',{text:'Could you help?',mode:'text',lastTurnId:getSession().conversation.turns.at(-1).id,commandId:'held-turn'});
+ await assert.rejects(command('pause'),e=>e.status===409);
+ assert.equal(getSession().conversation.paused,false);
+ release({json:{reply:'Of course. What is the name?',observations:[{skill:'request',quote:'Could you help?',success:true,confidence:'clear',note:'Asked for help.'}]},provider:'test',ms:1});
+ await inflight;
+ const c=getSession().conversation;assert.equal(c.turns.length,3);assert.equal(c.evidence.length,1);assert.equal(c.pending,null);
+});
+test('turn case 3: resume during a turn in flight is refused, the token stays, and the reply lands',async()=>{
+ fresh();await command('start',{sceneId:'booking',replace:true});
+ let release;answer=()=>new Promise(r=>release=r);
+ const inflight=command('turn',{text:'Could you help?',mode:'text',lastTurnId:getSession().conversation.turns.at(-1).id,commandId:'held-reply'});
+ await assert.rejects(command('resume'),e=>e.status===409);
+ assert.equal(getSession().conversation.pending,'held-reply');
+ release({json:{reply:'Of course. What is the name?',observations:[]},provider:'test',ms:1});
+ await inflight;
+ assert.equal(getSession().conversation.turns.length,3);
+});
+test('turn case 4: in every state the view offers, an enabled conversation action is one the server accepts',async()=>{
+ const V=view(),sample={text:'I like it.',option:0,band:'B1',topicId:'p-a',sceneId:'booking'};
+ const sweep={...SWEEP,...Object.fromEntries(Object.entries(TURN_STATES).map(([name,[screen,c]])=>['turn '+name,fixture(screen,{placement:placed(),conversation:c})])),
+  'paused+pending':fixture('linga-talk',{placement:placed(),conversation:convo({turns:REPLIED,paused:true,pending:'held'})})};
+ let checked=0;
+ for(const [name,fx] of Object.entries(sweep))for(const ui of [{},{menu:true}]){
+  const v=V.lingaView(sessionOf(fx),ui);
+  const all=[...offeredBy(v),...(v.answer?[{id:'answer',run:{command:{action:v.answer.action,extra:{lastTurnId:v.answer.lastTurnId}}},needs:'text'}]:[])];
+  for(const a of all){
+   if(a.disabled||!a.run.command||!CONVERSATION_ACTIONS.includes(a.run.command.action))continue;
+   const where=`${name}${ui.menu?' (menu)':''} · ${a.id} (${a.run.command.action})`;
+   const s=install(fx);answerAll();
+   const extra={...extraFor(a.run.command.action,s.conversation),...(a.run.command.extra??{}),...(a.needs?{[a.needs]:sample[a.needs]}:{}),...(a.needs==='text'?{mode:'text'}:{})};
+   try{await englishCommand({action:a.run.command.action,learnerId:s.learner.id,episodeId:s.conversation?.id,commandId:`turn-sweep-${++counter}`,...extra});}
+   catch(e){assert(e.status!==409||/A new question arrived/.test(e.message),`${where} is offered enabled but refused: ${e.message}`);}
+   checked++;
+  }
+ }
+ assert(checked>30,`swept ${checked} conversation actions`);
+});
+test('turn case 5: the server refuses 409 exactly what the table refuses, in every state',async()=>{
+ const T=turn(),wrong=[];
+ for(const [name,[screen,c]] of Object.entries(TURN_STATES))for(const action of CONVERSATION_ACTIONS){
+  const s=install(fixture(screen,{placement:placed(),conversation:c}));answerAll();
+  const ok=T.accepts(c,action);
+  let got='accepted';
+  try{await englishCommand({action,learnerId:s.learner.id,episodeId:c.id,commandId:`turn-table-${++counter}`,...extraFor(action,c)});}
+  catch(e){got=e.status===409?'refused':`error ${e.status}: ${e.message}`;}
+  if(got!==(ok?'accepted':'refused'))wrong.push(`${name} · ${action}: table ${ok?'accepts':'refuses'}, server ${got}`);
+ }
+ assert.deepEqual(wrong,[]);
+});
+test('turn case 6: a paused scene with a reply pending draws Resume disabled, and no enabled phone control sends pause, resume or finish',()=>{
+ const S=require(path.resolve(__dirname,'../uat/driver/surface.cjs'));
+ const sf=S.surfaceOf(sessionOf(fixture('linga-talk',{placement:placed(),conversation:convo({turns:REPLIED,paused:true,pending:'held'})})));
+ const resume=sf.controls.find(c=>c.side==='phone'&&c.label==='Resume conversation');
+ assert(resume,'the phone draws Resume');assert.equal(resume.disabled,true,'Resume is disabled while the reply is pending');
+ const sends=sf.controls.filter(c=>c.side==='phone'&&!c.disabled&&['pause','resume','finish'].includes(c.effect?.run?.action)).map(c=>c.label);
+ assert.deepEqual(sends,[]);
+});
+test('turn case 7 GUARD: leave during a turn in flight cancels it, and the late reply is dropped by its id',async()=>{
+ fresh();await command('start',{sceneId:'booking',replace:true});
+ let release;answer=()=>new Promise(r=>release=r);
+ const inflight=command('turn',{text:'Could you help?',mode:'text',lastTurnId:getSession().conversation.turns.at(-1).id});
+ await command('leave');
+ let c=getSession().conversation;assert.equal(c.pending,null);assert.equal(c.paused,true);
+ release({json:{reply:'Of course.',observations:[]},provider:'test',ms:1});
+ await assert.rejects(inflight,e=>e.status===409);
+ c=getSession().conversation;assert.equal(c.turns.length,1);assert.equal(c.pending,null);
+});
