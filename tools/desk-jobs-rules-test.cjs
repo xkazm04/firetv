@@ -200,6 +200,26 @@ test('case 5b: choosing or saving a learner goes to the desk with the lamp at re
  s=store.getSession();assert.equal(s.screen,'landing','a chosen learner opens the desk, not Tonight');assert.equal(s.focus,-1,'the lamp rests on what this learner left');
 });
 
+test('case 5c (S34 T4): a fresh desk seats no one - apps ask who first, no work is written for no one, and one pick seats a learner',async()=>{
+ store.dispatch({type:'reset'});
+ let s=store.getSession();
+ assert.equal(s.learner,null,'a reset desk has no one at it');assert.equal(s.screen,'landing');
+ assert.deepEqual(s.profiles.map(p=>p.id),['ema','jakub'],'the demo profiles stay on the switcher');
+ store.dispatch({type:'nav',screen:'tonight'});
+ s=store.getSession();assert.equal(s.screen,'learner','an app asked for with no one seated is the learner switcher');assert.equal(s.back,'landing');
+ store.dispatch({type:'nav',screen:'landing'});
+ for(const e of [{type:'page.reading',page:PAGE},{type:'practice.set',practice:{topic:'linear-one-step',items:[],marked:false}},{type:'topic.open',topic:'linear-one-step'},{type:'session.end'},{type:'timer.start'}])store.dispatch(e);
+ s=store.getSession();
+ assert.deepEqual([s.pages.length,s.practice,s.topic,s.screen,s.timer.running],[0,null,null,'landing',false],'nothing is written for no one');
+ for(const [name,body] of [['read',SNAP],['practice',{topic:'linear-one-step'}],['analyse',{kind:'essay',text:'x',type:'argument'}]]){
+  const r=await post(name,body);assert.equal(r.status,409,name);assert.match((await r.json()).error,/No one is at the desk/,name);
+ }
+ assert.deepEqual((await (await route('memory').POST()).json()).lines,[],'no evening to write down');
+ store.dispatch({type:'learner.set',id:'ema'});
+ s=store.getSession();assert.deepEqual(s.learner,{id:'ema',name:'Ema'});assert.equal(s.screen,'landing');assert.equal(s.focus,-1);
+ assert.deepEqual(s.away??{},{},'the empty chair left nothing behind');
+});
+
 test('case 6: a practice set written for one learner does not land after the desk changed learner',async()=>{
  store.dispatch({type:'reset'});
  for(const id of ['scratch-a','scratch-b']){store.dispatch({type:'profile.draft',patch:{id,name:id,type:'other'}});store.dispatch({type:'profile.save'});}

@@ -1,6 +1,6 @@
 /** Generate a verified practice set on a topic and put it on the desk. */
 import { NextResponse } from "next/server";
-import { dispatch, getSession } from "@/lib/session/store";
+import { dispatch, getSession, NOBODY_AT_DESK } from "@/lib/session/store";
 import { makeItems } from "@/lib/desk/items";
 import { MOVED_ON, refused, runJob } from "@/lib/desk/job";
 
@@ -9,11 +9,12 @@ const START = "writing a practice set…";
 export async function POST(req: Request) {
   const { topic } = (await req.json().catch(() => ({}))) as { topic?: string };
   if (!topic) return NextResponse.json({ error: "no topic" }, { status: 400 });
-  const learner = getSession().learner.id;
+  const learner = getSession().learner?.id;
+  if (!learner) return NextResponse.json({ error: NOBODY_AT_DESK }, { status: 409 });
   const r = await runJob("practice", async (run) => {
     const made = await makeItems(topic, learner);
     // written for the learner who asked: after a learner change the run is superseded and the set is dropped
-    if (!run.current() || getSession().learner.id !== learner) return null;
+    if (!run.current() || getSession().learner?.id !== learner) return null;
     dispatch({ type: "practice.set", practice: { topic, items: made.items, marked: false, owner: learner } });
     return made;
   }, { key: topic, input: { topic }, start: START, done: (m) => (m ? `${m.items.length} questions ready in ${(m.ms / 1000).toFixed(0)} s` : "") });

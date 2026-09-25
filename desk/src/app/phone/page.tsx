@@ -241,10 +241,10 @@ export default function Phone() {
     <div className="phone">
       <div className="ptop">
         <div className="who"><button aria-pressed={role === "student"} onClick={() => { setRole("student"); }}>Student</button><button aria-pressed={role === "parent"} onClick={() => { setRole("parent"); setScreen("parent"); }}>Parent</button></div>
-        <div className="link">{s?.joined ? <><b>joined</b> · {s.learner.name}</> : connected ? "not joined" : "connecting…"}{s && <small>TV · {TV_WORDS[s.screen] ?? s.screen}</small>}</div>
+        <div className="link">{s?.joined ? <><b>joined</b>{s.learner && <> · {s.learner.name}</>}</> : connected ? "not joined" : "connecting…"}{s && <small>TV · {TV_WORDS[s.screen] ?? s.screen}</small>}</div>
       </div>
       <div className="pbody">
-        {screen === "linga" && s && <LingaPhone key={`${s.learner.id}:${s.conversation?.id??"setup"}:${s.check?.id??""}`} s={s} post={postOnly} onSentence={()=>setScreen("say")}/>}
+        {screen === "linga" && s && <LingaPhone key={`${s.learner?.id ?? ""}:${s.conversation?.id??"setup"}:${s.check?.id??""}`} s={s} post={postOnly} onSentence={()=>setScreen("say")}/>}
         {screen === "join" && <div className="pscreen"><h3>Join the desk</h3>
           <p>{!s ? "Looking for the TV…" : s.screen === "pair" ? "The TV is showing the code. Type it here." : `The TV is on ${TV_WORDS[s.screen] ?? s.screen}. Ask it for the code, then type it here.`}</p>
           {s && s.screen !== "pair" && <button className="pbtn" data-secondary="true" onClick={() => post({ type: "nav", screen: "pair", from: s.screen })}>Show the code on the TV</button>}
@@ -253,15 +253,18 @@ export default function Phone() {
           <button className="pbtn" data-secondary="true" onClick={() => nav("profile")}>Naming a new learner? Open Profile.</button></div>}
 
         {screen === "joined" && s && <div className="pscreen"><h3>On the desk</h3>
-          <p>Joined as <b>{s.learner.name}</b>. {["landing", "pair", "joined"].includes(s.screen) ? "Open an app on the TV and this phone follows it." : `The TV is on ${TV_WORDS[s.screen] ?? s.screen}.`}</p>
+          {/* a fresh desk has no one at it yet: the phone says so, and offers no snap until someone sits down (the page would be no one's) */}
+          {s.learner
+            ? <p>Joined as <b>{s.learner.name}</b>. {["landing", "pair", "joined"].includes(s.screen) ? "Open an app on the TV and this phone follows it." : `The TV is on ${TV_WORDS[s.screen] ?? s.screen}.`}</p>
+            : <p>Joined. No one is at the desk yet: on the TV, press Up to the place card and Select to choose who is studying.</p>}
           {s.screen === "profile" || s.draft
             ? <button className="pbtn" data-signal="true" onClick={() => nav("profile")}>Name the new learner</button>
-            : <button className="pbtn" data-signal="true" onClick={() => nav("capture")}>{s.awaiting ? `Snap the ${MODULE[s.awaiting]} page` : "Snap the page"}</button>}
+            : s.learner && <button className="pbtn" data-signal="true" onClick={() => nav("capture")}>{s.awaiting ? `Snap the ${MODULE[s.awaiting]} page` : "Snap the page"}</button>}
           <button className="pbtn" data-secondary="true" onClick={() => nav("tonight")}>Set up tonight first</button>
-          <p style={{ fontSize: 12 }}>Not {s.learner.name}? On the TV's desk, press Up to the place card and Select to switch who is at the desk.</p></div>}
+          {s.learner && <p style={{ fontSize: 12 }}>Not {s.learner.name}? On the TV's desk, press Up to the place card and Select to switch who is at the desk.</p>}</div>}
 
         {screen === "profile" && <div className="pscreen"><h3>Profile</h3>
-          <p>At the desk now: <b>{s?.learner.name ?? "—"}</b></p>
+          <p>At the desk now: <b>{s?.learner?.name ?? "no one yet"}</b></p>
           {s && (s.draft || s.screen === "profile") ? <>
             <p>The TV takes the picks; type the name here.</p>
             <div className="field"><input placeholder="Name" value={pname} onChange={(e) => { setPname(e.target.value); post({ type: "profile.draft", patch: { name: e.target.value } }); }} /></div>
@@ -413,7 +416,7 @@ export default function Phone() {
             // ...and, on the phone only, tonight's list (the learner's own tasks): no tasks, no line
             const tiles = recapRows(s, Date.now()), mins = Math.round(s.log.minutes), list = tasksLine(s.tasks);
             const tally = [mins > 0 ? counted(mins, "minute") + " on task" : "", s.log.problems.length ? counted(s.log.problems.length, "problem") : "", s.log.hints ? counted(s.log.hints, "hint") : ""].filter(Boolean).join(" · ");
-            return <div className="precap" data-role="phone-recap"><b>{s.learner.name}, tonight</b>{tally}
+            return <div className="precap" data-role="phone-recap"><b>{s.learner ? `${s.learner.name}, tonight` : "Tonight"}</b>{tally}
               <ul>{tiles.map((t) => <li key={t.app} data-app={t.app}>{recapLine(t)}</li>)}{list && <li data-app="tasks">{list}</li>}</ul>
               <p style={{ margin: "10px 0 0", fontWeight: 600 }}>{recapCaption(tiles)}</p>
               <ul>{s.log.hard.length ? s.log.hard.map((h) => <li key={h}>Needed a second hint: {h}</li>) : <li>Nothing needed a second hint.</li>}</ul></div>;

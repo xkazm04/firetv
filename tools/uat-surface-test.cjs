@@ -44,7 +44,7 @@ const TASKS = [
   { id: 'c', band: 'B2', kind: 'say', prompt: 'Argue for a four-day week.', line: '', options: [], response: 'It is better because people are more happy.', mode: 'text', verdict: 'partial', quote: 'more happy', note: 'A reason, but the comparative slips.' },
 ];
 const fixture = (screen, { conversation = null, check = null, ...learning } = {}) => ({ screen, conversation, check, learning: { ...emptyEnglish(), ...learning } });
-function sessionOf(fx) { dispatch({ type: 'reset' }); dispatch({ type: 'subject', subject: 'english' }); return { ...getSession(), screen: fx.screen, conversation: fx.conversation, check: fx.check, englishLearning: fx.learning }; }
+function sessionOf(fx) { dispatch({ type: 'reset' }); dispatch({ type: 'learner.set', id: 'ema' }); dispatch({ type: 'subject', subject: 'english' }); return { ...getSession(), screen: fx.screen, conversation: fx.conversation, check: fx.check, englishLearning: fx.learning }; }
 
 /** The fifteen states of case 4, from a first visit to the recap. */
 const STATES = {

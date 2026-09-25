@@ -25,7 +25,7 @@ export function LingaTV({s,post,voice}:{s:Session;post:(e:Event)=>Promise<void>;
   const v=lingaView(s,{...ui,busy,error});
   const {menu,picking}=ui,c=s.conversation,lc=activeCheck(s),home=v.home!==null,onCheck=CHECK_SCREENS.includes(s.screen);
   const audioStatus=useEnglishAudio(v.spoken,voice,v.audible);
-  useEffect(()=>{setUi(NO_UI);},[s.learner.id]);
+  useEffect(()=>{setUi(NO_UI);},[s.learner?.id]);
   const patch=(p:Partial<LingaUi>)=>setUi(u=>({...u,...p}));
   const cmd=(action:string)=>{void run(action);};
   /** Runs what the view says an action does: a local step, a focus, a nav, a command. */
@@ -86,7 +86,7 @@ export function LingaTV({s,post,voice}:{s:Session;post:(e:Event)=>Promise<void>;
       {menu&&<span className="lo-sr">Select · </span>}<span className="lo-label">{a.label}</span>{PHONE_ACTIONS.has(a.id)?<OnYourPhone/>:<Arrow/>}
     </button>;})}</nav>;
   return <div className="linga-tv" data-view={v.screen} data-layout={layout} data-hero={h.kind} data-fit={fit||undefined}>
-    <header className="lo-top"><Mark/><Learner name={s.learner.name} up={home&&!menu&&!picking}/></header>
+    <header className="lo-top"><Mark/><Learner name={s.learner?.name ?? ""} up={home&&!menu&&!picking}/></header>
     {layout==="door"&&<>
       {art&&<Arch art={art} tag={tag} speaker={s.screen==="linga-talk"}/>}
       <section className="lo-panel" ref={panel}><div className="lo-body"><Body v={v} s={s} caption={caption}/></div>{nav}</section>

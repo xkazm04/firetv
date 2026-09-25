@@ -3,7 +3,7 @@ import type { Profile, SchoolSystem, Session, StudentType, Subject, Task } from 
 const ALL: Subject[] = ["maths", "english", "essay"];
 /** What the learner at the desk is interested in. No profile row means everything stays on. */
 export function onModules(s: Session): Subject[] {
-  const me = s.profiles.find((p) => p.id === s.learner.id);
+  const me = s.profiles.find((p) => p.id === s.learner?.id);
   return me?.modules ?? ALL;
 }
 /** The board and the D-pad share one list: the tasks whose module the learner has on. */

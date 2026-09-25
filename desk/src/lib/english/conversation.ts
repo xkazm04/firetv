@@ -37,7 +37,7 @@ function commit(c:Conversation,screen?:Screen){dispatch({type:"linga.changed",co
 function sceneOf(c:Conversation):EnglishScene|undefined{return c.scene??ENGLISH_SCENES.find(s=>s.id===c.sceneId);}
 function checkCurrent(c:Conversation,token?:string):Conversation{
   const s=getSession(),now=s.conversation;
-  if(s.learner.id!==c.learnerId||s.subject!=="english"||now?.id!==c.id||(token&&now.pending!==token))throw new ConversationError("This conversation has changed. Return to the current scene.",409);
+  if(s.learner?.id!==c.learnerId||s.subject!=="english"||now?.id!==c.id||(token&&now.pending!==token))throw new ConversationError("This conversation has changed. Return to the current scene.",409);
   return now;
 }
 function tutorSystem(c:Conversation):string{
@@ -91,7 +91,7 @@ function parseMoment(value:unknown,reply:string,turnId:string):Moment|null{
 export async function englishCommand(raw:unknown){
   const input=object(raw),s=getSession();
   const learnerId=required(input.learnerId,"learner"),action=required(input.action,"action",30);
-  if(s.learner.id!==learnerId)throw new ConversationError("The learner at the desk changed. Try again.",409);
+  if(s.learner?.id!==learnerId)throw new ConversationError("The learner at the desk changed. Try again.",409);
   const profile=s.profiles.find(p=>p.id===learnerId);
   if(!profile)throw new ConversationError("Choose a learner first.");
   const learning=getLearner(learnerId).english;

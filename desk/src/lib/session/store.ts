@@ -116,8 +116,13 @@ function settled(jobs: unknown): Jobs {
 export interface Verdict { n: number; verdict: "strong" | "faulty" | "neutral"; note: string; fix?: Fix; was?: Was; }
 export interface EssayAnalysis { text: string; type: string; sentences: Sentence[]; stats: Record<string, number>; verdicts: Verdict[]; summary: string; provider?: string; }
 
+/** The learner sitting at the desk: a profile's id and name. */
+export interface AtDesk { id: string; name: string }
+
 export interface Session {
-  pin: string; joined: boolean; phoneUrl: string; learner: { id: string; name: string };
+  pin: string; joined: boolean; phoneUrl: string;
+  /** Who is at the desk; null on a fresh desk until someone sits down (the place card asks "Whose desk?"). */
+  learner: AtDesk | null;
   profiles: Profile[]; draft: Profile | null;
   subject: Subject; screen: Screen; focus: number; view: "band" | "overview"; back?: Screen;
   tasks: Task[]; timer: { left: number; running: boolean; phase: "work" | "break"; before?: Screen };
@@ -205,9 +210,11 @@ const emptyOf = (x: MathsSlot) => !x.pages.length && !x.practice && !x.hint && !
 function withSlot(n: Session, x: MathsSlot): void { const { log, ...rest } = x; Object.assign(n, rest); n.log = { ...n.log, ...log }; }
 /** Who sits down: the learner leaving takes their work to `away`, the learner arriving gets theirs back (or a clean desk). */
 function seat(s: Session, n: Session, id: string): void {
-  if (id === s.learner.id) return;
-  const away = { ...(s.away ?? {}) }, left = slotOf(s);
-  if (emptyOf(left)) delete away[s.learner.id]; else away[s.learner.id] = left;
+  const was = s.learner?.id;
+  if (id === was) return;
+  const away = { ...(s.away ?? {}) };
+  // an empty chair leaves nothing behind: the reducer writes no work while no one is at the desk
+  if (was) { const left = slotOf(s); if (emptyOf(left)) delete away[was]; else away[was] = left; }
   withSlot(n, away[id] ?? emptySlot()); delete away[id]; n.away = away;
 }
 /** A result that lands after its learner left the desk goes to their work in `away`, never onto the seated learner's. */
@@ -225,6 +232,7 @@ const awayWith = (s: Session, has: (x: MathsSlot) => boolean) => Object.keys(s.a
  * the seated learner's stays in the session's fields and every other learner's goes to `away`. Pure: histories are passed in.
  */
 export function settleOwners(s: Session, historyOf: (id: string) => HistoryEntry[]): Session {
+  if (!s.learner) return s;
   const at = s.learner.id, cur = s.pages[s.pageIx]?.id;
   if (s.pages.every((p) => p.owner === at) && (!s.practice || s.practice.owner === at) && (!s.hint || s.hint.owner === at) && (!s.lesson || s.lesson.owner === at)) return s;
   const hist = new Map<string, HistoryEntry[]>();
@@ -266,7 +274,8 @@ export function settleOwners(s: Session, historyOf: (id: string) => HistoryEntry
 
 export function fresh(): Session {
   return {
-    pin: String(1000 + Math.floor(Math.random() * 9000)), joined: false, phoneUrl: phoneUrl(), learner: { id: "ema", name: "Ema" },
+    pin: String(1000 + Math.floor(Math.random() * 9000)), joined: false, phoneUrl: phoneUrl(), learner: null,
+    // the demo profiles are on the switcher, but a fresh desk seats no one: the place card asks whose desk it is
     profiles: [
       { id: "ema", name: "Ema", type: "high-school", age: 16, modules: ["maths", "english", "essay"] },
       { id: "jakub", name: "Jakub", type: "other", modules: ["english", "essay"] },
@@ -286,8 +295,21 @@ export function fresh(): Session {
   };
 }
 
+/**
+ * With no one at the desk (a fresh desk) nothing is written for no one: the work an app, a route or the phone would leave
+ * is dropped, and an app asked for is the learner switcher first - who is at the desk is the first question.
+ */
+const NEEDS_LEARNER = new Set<Event["type"]>(["linga.changed", "page.reading", "page.read", "page.ask", "page.select", "item", "hint.set", "hint.stage", "lesson.set",
+  "english.set", "essay.type", "essay.set", "essay.revised", "essay.at", "timer.start", "topic.open", "practice.set", "practice.marked", "practice.settle",
+  "walk", "practice.clear", "session.end"]);
+/** What a route answers when work is asked for and no one is at the desk to own it. */
+export const NOBODY_AT_DESK = "No one is at the desk yet. Choose who on the TV's place card.";
+/** The screens a desk with no one at it can show: the desk itself, pairing, and choosing or making a learner. */
+export const UNSEATED_SCREENS = new Set<Screen>(["landing", "pair", "joined", "learner", "profile"]);
+
 export function reduce(s: Session, e: Event): Session {
-  const n: Session = { ...s, updatedAt: Date.now() };
+  if (!s.learner && NEEDS_LEARNER.has(e.type)) return s;
+  const n: Session = { ...s, updatedAt: Date.now() }, me = s.learner?.id ?? "";
   switch (e.type) {
     case "linga.changed": if (e.conversation !== undefined) n.conversation = e.conversation; if (e.check !== undefined) n.check = e.check; if (e.screen) { n.screen = e.screen; n.subject = "english"; n.focus = e.focus ?? (["linga-talk", "linga-coach", "linga-check", "linga-verdict", "linga-moment"].includes(e.screen) ? -1 : 0); } break;
     // a join shows the Joined screen only to a TV waiting to be paired (no phone yet, or on the code, or already there);
@@ -297,10 +319,11 @@ export function reduce(s: Session, e: Event): Session {
     // a phone forgetting the desk drops its own cookie (the session route); the desk itself does not change
     case "leave": return s;
     // the landing with no stop named: the lamp rests on what was left (tv/landingRows.ts LANDING_REST)
-    case "nav": n.screen = e.screen; n.focus = e.focus ?? (e.screen === "landing" ? LANDING_REST : 0); if (e.from) n.back = e.from; break;
+    case "nav": if (!s.learner && !UNSEATED_SCREENS.has(e.screen)) { n.screen = "learner"; n.focus = 0; n.back = "landing"; break; }
+      n.screen = e.screen; n.focus = e.focus ?? (e.screen === "landing" ? LANDING_REST : 0); if (e.from) n.back = e.from; break;
     case "focus": n.focus = e.focus; break;
     // a learner chosen or saved goes to the desk, not to one app: the lamp rests on what that learner left, among their own apps
-    case "learner.set": { const p = s.profiles.find((x) => x.id === e.id); if (!p) break; if (p.id !== s.learner.id) { n.conversation = null; n.check = null; n.english = null; } seat(s, n, p.id); n.learner = { id: p.id, name: p.name }; n.screen = "landing"; n.focus = LANDING_REST; break; }
+    case "learner.set": { const p = s.profiles.find((x) => x.id === e.id); if (!p) break; if (p.id !== s.learner?.id) { n.conversation = null; n.check = null; n.english = null; } seat(s, n, p.id); n.learner = { id: p.id, name: p.name }; n.screen = "landing"; n.focus = LANDING_REST; break; }
     case "profile.draft": { const d: Profile = { ...(s.draft ?? { id: "p" + Date.now(), name: "", type: "high-school" as StudentType, modules: ["maths", "english", "essay"] as Subject[] }), ...e.patch };
       const r = AGE_RANGE[d.type]; if (!r || (d.age !== undefined && (d.age < r[0] || d.age > r[1]))) delete d.age; n.draft = d; break; }
     case "profile.save": { const d = s.draft; if (!d || !d.name.trim()) break; const has = s.profiles.some((p) => p.id === d.id);
@@ -309,7 +332,7 @@ export function reduce(s: Session, e: Event): Session {
     case "profile.discard": n.draft = null; n.screen = "learner"; n.focus = 0; break;
     case "subject": n.subject = e.subject; break;
     case "page.reading": { const ix = s.pages.findIndex((p) => p.id === e.page.id);
-      const page: Page = { ...e.page, items: [], owner: e.page.owner ?? s.learner.id }; n.pages = ix >= 0 ? s.pages.map((p, i) => (i === ix ? page : p)) : [...s.pages, page];
+      const page: Page = { ...e.page, items: [], owner: e.page.owner ?? me }; n.pages = ix >= 0 ? s.pages.map((p, i) => (i === ix ? page : p)) : [...s.pages, page];
       n.pageIx = ix >= 0 ? ix : n.pages.length - 1; n.itemIx = 0; n.reading = true; n.screen = "page"; n.subject = e.page.subject; n.awaiting = null; break; }
     // the desk asks for a page and stays where it is; the phone answers with page.reading
     case "page.ask": n.awaiting = e.subject; n.subject = e.subject; break;
@@ -323,17 +346,17 @@ export function reduce(s: Session, e: Event): Session {
     case "item": n.itemIx = e.itemIx; break;
     case "view": n.view = e.view; break;
     // every hint the model gives counts once, here; a first hint starts a new lesson pick, so the last one's lesson goes
-    case "hint.set": { const hint = { ...e.hint, owner: e.hint.owner ?? s.learner.id };
-      if (hint.owner !== s.learner.id) { toAway(s, n, hint.owner, (x) => ({ ...x, hint, ...(hint.stage === 1 ? { lesson: null, noLesson: false } : {}),
+    case "hint.set": { const hint = { ...e.hint, owner: e.hint.owner ?? me };
+      if (hint.owner !== me) { toAway(s, n, hint.owner, (x) => ({ ...x, hint, ...(hint.stage === 1 ? { lesson: null, noLesson: false } : {}),
         log: { ...x.log, problems: Array.from(new Set([...x.log.problems, hint.key])), hints: x.log.hints + 1 } })); break; }
       n.hint = hint; n.screen = "hint"; n.focus = 0; n.log = { ...s.log, problems: Array.from(new Set([...s.log.problems, e.hint.key])), hints: s.log.hints + 1 };
       if (e.hint.stage === 1) { n.lesson = null; n.noLesson = false; } break; }
-    case "hint.stage": if (e.owner && e.owner !== s.learner.id) { toAway(s, n, e.owner, (x) => (x.hint ? { ...x, hint: { ...x.hint, stage: e.stage }, log: e.stage === 2 ? { ...x.log, hard: Array.from(new Set([...x.log.hard, x.hint.problem])) } : x.log } : null)); break; }
+    case "hint.stage": if (e.owner && e.owner !== me) { toAway(s, n, e.owner, (x) => (x.hint ? { ...x, hint: { ...x.hint, stage: e.stage }, log: e.stage === 2 ? { ...x.log, hard: Array.from(new Set([...x.log.hard, x.hint.problem])) } : x.log } : null)); break; }
       if (n.hint) { n.hint = { ...n.hint, stage: e.stage }; if (e.stage === 2) n.log = { ...s.log, hard: Array.from(new Set([...s.log.hard, n.hint.problem])) }; } break;
     // a pick made for one hint never lands on another; a lesson chosen on the TV (no key) always does
     case "lesson.set": if (e.key !== undefined && e.key !== s.hint?.key) { const who = awayWith(s, (x) => x.hint?.key === e.key); if (!who) return s;
         toAway(s, n, who, (x) => ({ ...x, lesson: e.lesson && { ...e.lesson, owner: who }, noLesson: !e.lesson })); break; }
-      n.lesson = e.lesson && { ...e.lesson, owner: s.hint?.owner ?? s.learner.id }; n.noLesson = !e.lesson; break;
+      n.lesson = e.lesson && { ...e.lesson, owner: s.hint?.owner ?? me }; n.noLesson = !e.lesson; break;
     case "job.start": n.jobs = { ...s.jobs, [e.kind]: { id: e.id, phase: "running", startedAt: Date.now(), ...(e.key !== undefined ? { key: e.key } : {}), ...(e.input ? { input: e.input } : {}) } }; break;
     case "job.done": case "job.failed": { const j = s.jobs?.[e.kind]; if (!j || j.id !== e.id) return s;
       n.jobs = { ...s.jobs, [e.kind]: e.type === "job.done" ? { ...j, phase: "done", endedAt: Date.now() } : { ...j, phase: "failed", endedAt: Date.now(), error: e.error } };
@@ -363,9 +386,9 @@ export function reduce(s: Session, e: Event): Session {
     case "timer.skipbreak": n.timer = { ...s.timer, phase: "work", left: 25 * 60 }; n.screen = s.timer.before ?? "page"; break;
     // the open topic keeps the focus, so a set that fails is retried on the topic it was asked for
     case "topic.open": n.topic = e.topic; n.subject = "maths"; n.screen = "topics"; n.focus = Math.max(0, SYLLABUS.findIndex((t) => t.id === e.topic)); break;
-    case "practice.set": n.practice = shownPractice({ ...e.practice, owner: e.practice.owner ?? s.learner.id }); n.topic = e.practice.topic; n.walkIx = 0; n.screen = "practice"; break;
+    case "practice.set": n.practice = shownPractice({ ...e.practice, owner: e.practice.owner ?? me }); n.topic = e.practice.topic; n.walkIx = 0; n.screen = "practice"; break;
     // a marked set lands on the sheet - all six verdicts at once - focused on the first item to look at
-    case "practice.marked": if (e.owner && e.owner !== s.learner.id) { toAway(s, n, e.owner, (x) => (x.practice ? { ...x, practice: { ...x.practice, items: e.items.map(shown), marked: true }, walkIx: 0 } : null)); break; }
+    case "practice.marked": if (e.owner && e.owner !== me) { toAway(s, n, e.owner, (x) => (x.practice ? { ...x, practice: { ...x.practice, items: e.items.map(shown), marked: true }, walkIx: 0 } : null)); break; }
       if (s.practice) { n.practice = { ...s.practice, items: e.items.map(shown), marked: true }; n.walkIx = 0; n.screen = "sheet"; n.focus = firstToLook(n.practice.items); } break;
     // an explanation: the reply always lands on its item; a verdict only on an item still unsure (a settled item stays settled);
     // on an item already wrong, a slip with no verdict renames it - from the topic's vocabulary only, verdict and pen untouched
@@ -380,7 +403,7 @@ export function reduce(s: Session, e: Event): Session {
     case "reset": return fresh();
   }
   // a set being written is for the learner who asked: another learner at the desk supersedes it, and its late result is dropped by id
-  if (n.learner.id !== s.learner.id && s.jobs?.practice?.phase === "running") { n.jobs = { ...s.jobs }; delete n.jobs.practice; }
+  if (n.learner?.id !== s.learner?.id && s.jobs?.practice?.phase === "running") { n.jobs = { ...s.jobs }; delete n.jobs.practice; }
   return n;
 }
 
@@ -388,7 +411,7 @@ export function reduce(s: Session, e: Event): Session {
 type Sub = (s: Session) => void;
 interface Store { session: Session; subs: Set<Sub>; ticker: NodeJS.Timeout | null; }
 const g = globalThis as unknown as { __desk?: Store };
-function load(): Session { try { if (existsSync(FILE)) { const j = JSON.parse(readFileSync(FILE, "utf8")); if (Array.isArray(j?.profiles) && j?.learner?.id && j.profiles.every((p: Profile) => p.type in AGE_RANGE)) return settleOwners({ ...fresh(), ...j, practice: shownPractice(j.practice), away: awayShown(j.away), jobs: settled(j.jobs), phoneUrl: phoneUrl(), reading: false, englishLearning: getLearner(j.learner.id).english, conversation: j.conversation ? { moment: null, moments: [], ...j.conversation, pending: null, capture: false, paused: true } : null, check: j.check ? { ...j.check, pending: null } : null }, (id) => getLearner(id).history); } } catch {} return fresh(); }
+function load(): Session { try { if (existsSync(FILE)) { const j = JSON.parse(readFileSync(FILE, "utf8")); if (Array.isArray(j?.profiles) && (j?.learner === null || j?.learner?.id) && j.profiles.every((p: Profile) => p.type in AGE_RANGE)) return settleOwners({ ...fresh(), ...j, practice: shownPractice(j.practice), away: awayShown(j.away), jobs: settled(j.jobs), phoneUrl: phoneUrl(), reading: false, englishLearning: j.learner ? getLearner(j.learner.id).english : emptyEnglish(), conversation: j.conversation ? { moment: null, moments: [], ...j.conversation, pending: null, capture: false, paused: true } : null, check: j.check ? { ...j.check, pending: null } : null }, (id) => getLearner(id).history); } } catch {} return fresh(); }
 /** The away learners' work as saved: an answer that reached the file stops here too, and a read under way ended with the desk. */
 function awayShown(a: unknown): Record<string, MathsSlot> | undefined {
   if (!a || typeof a !== "object") return undefined;
@@ -397,7 +420,7 @@ function awayShown(a: unknown): Record<string, MathsSlot> | undefined {
 if (!g.__desk) g.__desk = { session: load(), subs: new Set(), ticker: null };
 const store = g.__desk;
 // HMR can retain a session created before this feature was installed.
-if (!store.session.englishLearning) store.session.englishLearning = getLearner(store.session.learner.id).english;
+if (!store.session.englishLearning) store.session.englishLearning = store.session.learner ? getLearner(store.session.learner.id).english : emptyEnglish();
 if (store.session.conversation === undefined) store.session.conversation = null;
 if (store.session.check === undefined) store.session.check = null;
 if (!store.session.jobs) store.session.jobs = {};
@@ -422,6 +445,7 @@ const REHYDRATE = new Set(["learner.set", "practice.marked", "practice.settle", 
  * is restated from the item verdicts as they now stand (rules/maths). A recount, and no entry is added.
  */
 function restateMarked(s: Session): void {
+  if (!s.learner) return;
   const p = s.practice, l = getLearner(s.learner.id);
   const at = l.history.findLastIndex((h) => h.kind === "practice"), h = l.history[at];
   const detail = p?.marked && h?.label === (SYLLABUS.find((t) => t.id === p.topic)?.name ?? p.topic) ? restatedLine(h.detail, p.items) : null;
@@ -432,7 +456,8 @@ export function dispatch(e: Event): Session {
   store.session = reduce(store.session, e);
   if (e.type === "practice.settle" && e.verdict) try { restateMarked(store.session); } catch {}
   if (REHYDRATE.has(e.type)) {
-    try { const l = getLearner(store.session.learner.id); store.session = { ...store.session, skills: l.skills, writing: l.writing, memory: l.memory, history: l.history, englishLearning: l.english }; } catch {}
+    const id = store.session.learner?.id;
+    if (id) try { const l = getLearner(id); store.session = { ...store.session, skills: l.skills, writing: l.writing, memory: l.memory, history: l.history, englishLearning: l.english }; } catch {}
   }
   try { mkdirSync(DATA, { recursive: true }); writeFileSync(FILE, JSON.stringify(store.session)); } catch {}
   store.subs.forEach((fn) => { try { fn(store.session); } catch {} });

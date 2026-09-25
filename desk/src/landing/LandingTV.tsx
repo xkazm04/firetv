@@ -159,7 +159,8 @@ function EssayObject({ w }: { w: EssayWaiting }) {
 
 const LAST_VERB: Record<Subject, string> = { maths: "Practised", english: "Talked", essay: "Read" };
 function captionOf(s: Session, at: LandingStop | undefined, all: Waiting[]): { label: string; text: string } {
-  if (at === "place") return { label: "Someone else", text: "Select hands the desk on. Menu ends tonight." };
+  if (at === "place") return s.learner ? { label: "Someone else", text: "Select hands the desk on. Menu ends tonight." }
+    : { label: "Whose desk?", text: "Select to choose who is studying tonight." };
   if (at === "phone") return { label: "Phone", text: "Open the address on your phone, then enter the four digits." };
   const w = all.find((x) => x.app === at);
   if (!w) return { label: "Study Desk", text: "No apps are on this profile yet. Select the place card to change it." };
@@ -194,8 +195,9 @@ let litFor: string | null = null;
 // ---------------------------------------------------------------- the desk
 
 export function LandingTV({ s, zoom }: { s: Session; zoom: LandingStop | null }) {
-  const [boot] = useState(() => litFor !== s.learner.id);
-  useEffect(() => { litFor = s.learner.id; }, [s.learner.id]);
+  const who = s.learner?.id ?? "";
+  const [boot] = useState(() => litFor !== who);
+  useEffect(() => { litFor = who; }, [who]);
   const stops = landingStops(s), i = landingAt(s), at = stops[i];
   const all = deskWaiting(s), apps = all.map((w) => w.app);
   const cont = continueStop(s);
@@ -203,7 +205,7 @@ export function LandingTV({ s, zoom }: { s: Session; zoom: LandingStop | null })
   const boxes = layout(apps, fresh);
   const lit = at ? boxes[at] : PLACE, [cx, cy] = centre(lit);
   const cap = captionOf(s, at, all);
-  const root = useFit(`${s.learner.id}|${s.updatedAt}|${apps.join()}`);
+  const root = useFit(`${who}|${s.updatedAt}|${apps.join()}`);
   const place = (b: Box, extra?: CSSProperties): CSSProperties => ({ left: b[0], top: b[1], width: b[2], height: b[3], "--r": `${b[4]}deg`, ...extra } as CSSProperties);
   const url = s.phoneUrl.replace(/^https?:\/\//, "");
 
@@ -225,13 +227,13 @@ export function LandingTV({ s, zoom }: { s: Session; zoom: LandingStop | null })
         {all.map(object)}
         <div className="dk-obj dk-ph" data-role="desk-phone" data-paired={s.joined} data-focused={at === "phone"} style={place(boxes.phone)}>
           {s.joined
-            ? <div className="dk-scr"><span className="dk-lk">{LINK}</span><div className="dk-pn">{s.learner.name} · paired<small>Phone</small></div></div>
+            ? <div className="dk-scr"><span className="dk-lk">{LINK}</span><div className="dk-pn">{s.learner ? `${s.learner.name} · paired` : "Paired"}<small>Phone</small></div></div>
             : <div className="dk-scr"><div className="dk-pair"><div className="dk-lab">On your phone, open</div><div className="dk-url"><span className="dk-fit" data-min="28">{url}</span></div>
                 <div className="dk-pins" data-role="desk-pin" aria-label={`Code ${s.pin}`}>{s.pin.split("").map((d, k) => <b key={k}>{d}</b>)}</div></div></div>}
         </div>
         <div className="dk-obj dk-pc" data-role="desk-place-card" data-focused={at === "place"} style={place(boxes.place)}>
-          <HouseMark ink="#3A2417" cut="#EDE5D8" /><span>{s.learner.name}’s desk</span>
-          <div className="dk-se">{SWAP}Someone else</div>
+          <HouseMark ink="#3A2417" cut="#EDE5D8" /><span>{s.learner ? `${s.learner.name}’s desk` : "Whose desk?"}</span>
+          <div className="dk-se">{SWAP}{s.learner ? "Someone else" : "Choose who"}</div>
         </div>
       </div>
       <div className="dk-dim" aria-hidden="true" data-wide={at === "place" || undefined} />
@@ -239,7 +241,8 @@ export function LandingTV({ s, zoom }: { s: Session; zoom: LandingStop | null })
       <div className="dk-cap" data-role="desk-caption" data-narrow={fresh || undefined} key={cap.label + cap.text}>
         <p><b>{cap.label}</b>{cap.text}</p>
       </div>
-      {zoom && boxes[zoom] && <Zoom stop={zoom} box={boxes[zoom]} />}
+      {/* an app Selected before anyone sat down opens the switcher: the zoom says so, in the desk's own leather */}
+      {zoom && boxes[zoom] && <Zoom stop={!s.learner && zoom !== "phone" ? "place" : zoom} box={boxes[zoom]} />}
       <div className="dk-blackout" aria-hidden="true" />
     </div>
   );

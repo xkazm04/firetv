@@ -46,9 +46,11 @@ on what was left.
    object straightens, lifts (1.06) and wears a 6 px warm-white ring. The lamp starts on the object with something
    waiting, marked with the one sage **CONTINUE** tag: a marked set, then something left mid-way, then the next
    step, then the last thing done (the most recent on a tie). With nothing waiting there is no tag and the lamp
-   rests on the first app.
+   rests on the first app. With no phone paired and nothing waiting, the lamp rests on the phone instead: every
+   app's first real step needs it.
 5. **The lit object comes alive.** The pen draws its ticks and rings in; Linga's scene drifts and its pendant
-   lamp swings; the citron cursor blinks and the reversed arrow turns round; the place card offers "Someone else";
+   lamp swings; the citron cursor blinks and the reversed arrow turns round; the place card offers "Someone else"
+   (on a fresh desk no one sits at yet it asks "Whose desk?", and Select on any object opens the learner switcher first);
    an unpaired phone breathes sage until it is lit.
 6. **A verdict is a picture; sentences live in one slot.** Ticks, rings, the reversed arrow, the mid-way marks and
    the inked lens carry the state. The one caption slot on the blotter's lip holds a sage label and one sentence
@@ -67,11 +69,11 @@ on what was left.
 | Up | to the place card |
 | Down | from the place card, to the app under it; from an app, to the phone while it is unpaired |
 | Select | an app: the zoom, then its home (Math Buddy Tonight, Linga home, Essay Master's lenses); the place card: the learner switcher; the phone: pairing |
-| Back | the lamp goes home to the CONTINUE object |
+| Back | the lamp goes home to where it rests (principle 4) |
 | Menu | ends tonight, wherever the lamp is: the recap, and what the desk noticed is written (`/api/memory`), as the phone's End session does |
 
 Arriving without a stop named (a fresh desk, a nav with no focus) the focus is `LANDING_REST` (-1) and the lamp
-rests on the CONTINUE object. Back from an app's home, the switcher or pairing lands on the object it came from.
+rests on the CONTINUE object; with nothing waiting, on the phone while none is paired, else on the first app (`restStop`). Back from an app's home, the switcher or pairing lands on the object it came from.
 
 ## Tonight, done (the recap)
 

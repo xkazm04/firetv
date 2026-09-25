@@ -1,6 +1,6 @@
 /** A hint for the focused item (or the item the phone circled), then the lesson pick behind it. */
 import { NextResponse } from "next/server";
-import { dispatch, getSession } from "@/lib/session/store";
+import { dispatch, getSession, NOBODY_AT_DESK } from "@/lib/session/store";
 import { hint } from "@/lib/desk/hint";
 import { pickLesson } from "@/lib/desk/pick";
 import { BUSY, refused, runJob } from "@/lib/desk/job";
@@ -9,7 +9,8 @@ import { resolveEnglish } from "@/lib/rules/english";
 export const dynamic = "force-dynamic";
 export async function POST(req: Request) {
   const body = (await req.json().catch(() => ({}))) as { askedQ?: string; stage?: 1 | 2; itemIx?: number };
-  const s = getSession();
+  const s = getSession(), who = s.learner;
+  if (!who) return NextResponse.json({ error: NOBODY_AT_DESK }, { status: 409 });
   const page = s.pages[s.pageIx]; if (!page) return NextResponse.json({ error: "no page" }, { status: 400 });
   const itemIx = typeof body.itemIx === "number" ? body.itemIx : s.itemIx;
   const item = page.items[itemIx]; if (!item) return NextResponse.json({ error: "no item" }, { status: 400 });
@@ -21,8 +22,8 @@ export async function POST(req: Request) {
   if (body.stage === 2 && prev && prev.key === item.key) {
     const r = await runJob("hint", async () => {
       const h2 = await hint(page.subject, item.text, { previous: [prev.hint1?.hint, prev.hint1?.next].filter(Boolean).join(" "), askedQ: prev.askedQ, rule: prev.rule });
-      dispatch({ type: "hint.set", hint: { ...prev, stage: 2, hint2: { hint: h2.hint, next: h2.next }, ms: h2.ms, owner: prev.owner ?? s.learner.id } });
-      dispatch({ type: "hint.stage", stage: 2, owner: prev.owner ?? s.learner.id });
+      dispatch({ type: "hint.set", hint: { ...prev, stage: 2, hint2: { hint: h2.hint, next: h2.next }, ms: h2.ms, owner: prev.owner ?? who.id } });
+      dispatch({ type: "hint.stage", stage: 2, owner: prev.owner ?? who.id });
       return h2;
     }, { key: item.key, input: { itemIx, stage: 2, askedQ: prev.askedQ }, start: "thinking one step further…", done: (h2) => `second hint in ${(h2.ms / 1000).toFixed(1)} s` });
     return r.ok ? NextResponse.json({ stage: 2, ...r.value }) : refused(r);
@@ -30,7 +31,7 @@ export async function POST(req: Request) {
   const rule = page.subject === "english" ? resolveEnglish(item.text) : undefined;
   const r = await runJob("hint", async () => {
     const h1 = await hint(page.subject, item.text, { askedQ: body.askedQ, rule });
-    dispatch({ type: "hint.set", hint: { key: item.key, problem: item.text, stage: 1, hint1: { hint: h1.hint, next: h1.next }, hint2: null, askedQ: body.askedQ ?? "", rule, provider: h1.provider, ms: h1.ms, owner: s.learner.id } });
+    dispatch({ type: "hint.set", hint: { key: item.key, problem: item.text, stage: 1, hint1: { hint: h1.hint, next: h1.next }, hint2: null, askedQ: body.askedQ ?? "", rule, provider: h1.provider, ms: h1.ms, owner: who.id } });
     return h1;
   }, { key: item.key, input: { itemIx, askedQ: body.askedQ ?? "" }, start: "thinking about a hint…", done: (h1) => `hint in ${(h1.ms / 1000).toFixed(1)} s · finding the lesson…` });
   if (!r.ok) return refused(r);

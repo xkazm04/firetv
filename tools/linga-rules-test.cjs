@@ -20,7 +20,7 @@ const {getLearner,recordAttempt}=require(path.join(root,'src/lib/session/learner
 after(()=>clearInterval(globalThis.__desk.ticker));
 let counter=0;
 function command(action,extra={}){const s=getSession();return englishCommand({action,learnerId:s.learner.id,episodeId:s.conversation?.id,commandId:`test-${++counter}`,...extra});}
-function fresh(){dispatch({type:'reset'});dispatch({type:'subject',subject:'english'});answer=async()=>({json:{title:'A practice booking',goal:'Ask for help with a booking.',opening:'Hello. How can I help?'},provider:'test',ms:1});}
+function fresh(){dispatch({type:'reset'});dispatch({type:'learner.set',id:'ema'});dispatch({type:'subject',subject:'english'});answer=async()=>({json:{title:'A practice booking',goal:'Ask for help with a booking.',opening:'Hello. How can I help?'},provider:'test',ms:1});}
 const evidence=(patch={})=>({id:'e1',episodeId:'ep1',turnId:'t1',sceneId:'booking',skill:'request',at:Date.now(),mode:'speech',supported:false,success:true,quote:'Could you help?',note:'Asked for help.',...patch});
 
 test('age and adult confirmation are independent from English level',()=>{
@@ -57,7 +57,7 @@ test('duplicate turn commits once, failed reply is retryable, and English preser
  assert.equal(getLearner('ema').english.achievements.request,'not-tried');
  await command('finish');await command('finish',{commandId:'second-finish'}).catch(()=>{});
  assert.equal(getLearner('ema').english.sessions.length,1);
- dispatch({type:'reset'});assert.equal(getSession().englishLearning.evidence.length,1);assert.equal(getLearner('ema').skills['linear-one-step'].seen,1);
+ dispatch({type:'reset'});dispatch({type:'learner.set',id:'ema'});assert.equal(getSession().englishLearning.evidence.length,1);assert.equal(getLearner('ema').skills['linear-one-step'].seen,1);
 });
 test('late model response cannot enter a different learner session',async()=>{
  fresh();let release;answer=()=>new Promise(r=>release=r);

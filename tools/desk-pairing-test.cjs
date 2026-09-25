@@ -46,7 +46,7 @@ const through=async(url,{method='POST',cookie,headers={}}={})=>{const r=await pr
 
 /** A desk with a learner's evening on it: a page, a practice set, a conversation, history, memory. */
 function evening(screen='landing'){
- store.dispatch({type:'reset'});
+ store.dispatch({type:'reset'});store.dispatch({type:'learner.set',id:'ema'});
  const s=store.getSession();
  globalThis.__desk.session={...s,screen,subject:'maths',draft:{id:'p1',name:'Ada',type:'elementary',modules:['english']},
   pages:[{id:'m1',subject:'maths',title:'Sheet',img:'data:image/jpeg;base64,AAAA',w:10,h:10,items:[{n:1,text:'2x+3=11',cx:0,cy:0,band:[0,1],key:'k1'}]}],

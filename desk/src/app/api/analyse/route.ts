@@ -3,7 +3,7 @@
  * sentence of the paragraph on the desk, rewritten on the phone and re-judged alone (desk/essay reviseSentence).
  */
 import { NextResponse } from "next/server";
-import { dispatch, getSession } from "@/lib/session/store";
+import { dispatch, getSession, NOBODY_AT_DESK } from "@/lib/session/store";
 import { analyseSentence } from "@/lib/desk/english";
 import { analyseEssay, reviseSentence } from "@/lib/desk/essay";
 import { refused, runJob } from "@/lib/desk/job";
@@ -14,6 +14,9 @@ type Body = { kind: "english"; sentence: string } | { kind: "essay"; text: strin
 
 export async function POST(req: Request) {
   const body = (await req.json()) as Body;
+  // a reading is somebody's: with no one at the desk there is no one to read it for
+  const who = getSession().learner;
+  if (!who) return NextResponse.json({ error: NOBODY_AT_DESK }, { status: 409 });
   if (body.kind === "english") {
     const r = await runJob("analyse", async () => {
       const a = await analyseSentence(body.sentence);
@@ -42,7 +45,7 @@ export async function POST(req: Request) {
   }
   const r = await runJob("analyse", async () => {
     dispatch({ type: "essay.type", essayType: body.type });
-    const a = await analyseEssay(body.text, body.type, getSession().learner.id);
+    const a = await analyseEssay(body.text, body.type, who.id);
     dispatch({ type: "essay.set", analysis: a });
     return a;
   }, { key: "essay", start: `reading your paragraph — ${body.type} lens…`, done: (a) => a.summary.slice(0, 120) });

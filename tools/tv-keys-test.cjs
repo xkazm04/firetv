@@ -347,6 +347,34 @@ test('landing 4: Back from each app, the switcher and the pairing screen lands o
  assert.doesNotMatch(fs.readFileSync(path.join(root,'src/tv/screens.tsx'),'utf8'),/export function Landing\b/,'the On Air landing is gone');
 });
 
+test('landing 5 (S34 T5): with nothing waiting and no phone paired the lamp rests on the phone; paired, on the first app as before',()=>{
+ const {landingAt,landingStops,restStop}=rows();const {tvKey}=keys();
+ const unpaired=desk({joined:false});
+ assert.equal(landingStops(unpaired)[landingAt(unpaired)],'phone','a fresh, unpaired desk: the lamp is on the phone');
+ assert.equal(restStop(unpaired),4);
+ assert.equal(landingAt(desk()),0,'paired, nothing waiting: the first app, unchanged');
+ assert.equal(landingAt(desk({joined:false,history:[readIt]})),2,'something waiting beats the phone: the CONTINUE object');
+ assert.equal(landingAt(desk({joined:false,focus:1})),1,'a named stop is kept');
+ assert.equal(focusAfter(desk({joined:false,focus:0}),tvKey(desk({joined:false,focus:0}),'back',LOCAL)),4,'Back on the desk goes home to the phone while nothing is waiting');
+ const none=desk({joined:false,learner:null});
+ assert.equal(landingStops(none)[landingAt(none)],'phone','a desk no one sits at yet rests on the phone too');
+ assert.equal(landingAt(desk({learner:null})),0,'...and paired, on the first app');
+ const doc=fs.readFileSync(path.join(root,'../docs/DESIGN-STUDY-DESK.md'),'utf8');
+ assert.match(doc,/no phone paired and nothing waiting[^.]*lamp rests on the phone/i,'the design doc says where the lamp rests on an unpaired desk');
+});
+
+test('landing 6 (S34 T4): a desk with no one at it - every app is on it, empty, and any Select asks who is at the desk first',()=>{
+ const {landingStops,deskWaiting}=rows();const {tvKey}=keys();
+ const none=(patch={})=>desk({learner:null,...patch});
+ assert.deepEqual(landingStops(none()),['maths','english','essay','place'],'no profile to read: all three apps lie on the desk');
+ assert.deepEqual(deskWaiting(none()).map(w=>w.empty),['Not started','Not started','Nothing read'],'no one\'s work: each object says so in two words');
+ for(const f of [0,1,2])assert.deepEqual(tvKey(none({focus:f}),'select',LOCAL).events,[{type:'nav',screen:'learner',focus:0,from:'landing'}],'an app opens the learner switcher first, never the app');
+ assert.deepEqual(tvKey(none({focus:3}),'select',LOCAL).events,[{type:'nav',screen:'learner',focus:0,from:'landing'}],'the place card opens the switcher');
+ {const m=tvKey(none({focus:0}),'menu',LOCAL);assert.deepEqual([m.events,m.calls],[[],[]],'no one\'s evening to end');}
+ const card=fs.readFileSync(path.join(root,'src/landing/LandingTV.tsx'),'utf8');
+ assert.match(card,/s\.learner \? `\$\{s\.learner\.name\}’s desk` : "Whose desk\?"/,'the place card invites when no one sits at the desk');
+});
+
 test('GUARD: the landing rows stay free of the filesystem-backed session modules',()=>{
  const out=ts.transpileModule(fs.readFileSync(LROWS,'utf8'),opts).outputText;
  assert.doesNotMatch(out,/require\([^)]*lib\/session\/(store|learners)/);

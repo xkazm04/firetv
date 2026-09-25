@@ -90,7 +90,7 @@ function Chips({ s, clock = true, phone = true, learner = true }: { s: Session; 
   const run = s.timer.running;
   return (
     <div className="mb-status">
-      {learner && <div className="mb-chip" data-role="maths-chip"><span className="av">{s.learner.name.charAt(0)}</span>{s.learner.name}</div>}
+      {learner && <div className="mb-chip" data-role="maths-chip"><span className="av">{s.learner?.name.charAt(0)}</span>{s.learner?.name}</div>}
       {phone && (s.joined
         ? <div className="mb-glyph" data-role="maths-chip">{PHONE}<span className="mb-lab">Phone</span></div>
         : <div className="mb-glyph" data-role="maths-chip">{PHONE}<span className="mb-lab">Pin</span><span className="pin">{s.pin}</span></div>)}
@@ -224,7 +224,7 @@ function stateWord(s: Session, t: Topic, st: Record<string, TState>): string {
  * an age and a school type to read it from - no invented comparison. On Topics the topics are the stops.
  */
 function Ruler({ s, big, focus, busy }: { s: Session; big?: boolean; focus?: number; busy?: boolean }) {
-  const me = s.profiles.find((p) => p.id === s.learner.id);
+  const me = s.profiles.find((p) => p.id === s.learner?.id);
   const sys = systemOf(me);
   const skills = s.skills ?? {};
   const N = SYLLABUS.length, PAD = 26, W = 1728, span = (W - PAD * 2) / N;
@@ -259,7 +259,7 @@ function Ruler({ s, big, focus, busy }: { s: Session; big?: boolean; focus?: num
       })}
       {fx !== null && <div className="mb-gapline" style={{ left: Math.min(mx, fx), width: Math.abs(fx - mx) }} />}
       {fx !== null && <div className="mb-flag" data-end={exp !== null && exp >= N || undefined} data-start={exp !== null && exp <= 0 || undefined} style={{ left: fx }}><div className="nd" /><div className="mc">School</div></div>}
-      <div className="mb-marker" data-start={!has || undefined} style={{ left: mx }}><div className="halo" /><div className="nd" /><div className="mc">{s.learner.name}</div></div>
+      <div className="mb-marker" data-start={!has || undefined} style={{ left: mx }}><div className="halo" /><div className="nd" /><div className="mc">{s.learner?.name}</div></div>
     </div>
   );
 }
@@ -327,7 +327,7 @@ function UnderSheets({ s }: { s: Session }) {
 function Hero({ s, cont, focused }: { s: Session; cont: Continue; focused: boolean }) {
   const p = s.practice;
   let sheet: ReactNode, detail: ReactNode = cont.d;
-  const head = (ex: string) => <div className="mb-shead"><span className="ex">{ex}</span><span className="who">{s.learner.name}</span></div>;
+  const head = (ex: string) => <div className="mb-shead"><span className="ex">{ex}</span><span className="who">{s.learner?.name}</span></div>;
   if (cont.go === "sheet" && p) {
     const name = topicById(p.topic)?.name ?? humanTopic(p.topic);
     const first = p.items.findIndex((it) => it.verdict !== "right");
@@ -379,7 +379,7 @@ function BlankHero({ s }: { s: Session }) {
   return (
     <section className="mb-hero blank" data-role="maths-sheet">
       <div className="mb-art"><div className="mb-stack">
-        <div className="mb-sheet top"><div className="margin" /><div className="mb-shead"><span className="ex">Start here</span><span className="who">{s.learner.name}</span></div>
+        <div className="mb-sheet top"><div className="margin" /><div className="mb-shead"><span className="ex">Start here</span><span className="who">{s.learner?.name}</span></div>
           <div className="mb-startdot" /><div className="mb-startline" /></div>
         <Pencil style={{ left: 330, top: 120, height: 260 }} />
       </div></div>
@@ -452,7 +452,7 @@ export function PracticeScreen({ s }: { s: Session }) {
     <Top s={s} crumb={name} />
     <div className="mb-practice">
       <div className="mb-paper" data-role="maths-sheet">
-        <header className="mb-sheethead"><span className="st">{name}</span><span className="who">{s.learner.name}</span></header>
+        <header className="mb-sheethead"><span className="st">{name}</span><span className="who">{s.learner?.name}</span></header>
         {p.items.map((it) => (
           <section key={it.n} className="mb-item"><div className="num">{it.n}</div><PrintRow text={it.question} /></section>
         ))}
@@ -561,7 +561,7 @@ export function Sheet({ s, focus }: { s: Session; focus: number }) {
     <div className="mb-win">
       <div className="mb-pan" ref={pan}>
         <div className="mb-paper" data-role="maths-sheet">
-          <header className="mb-sheethead"><span className="st" data-role="maths-title">{look ? `${HOW_MANY[look] ?? look} to look at` : `All ${HOW_MANY[tiles.length]?.toLowerCase() ?? tiles.length} right`}</span><span className="who">{s.learner.name}</span></header>
+          <header className="mb-sheethead"><span className="st" data-role="maths-title">{look ? `${HOW_MANY[look] ?? look} to look at` : `All ${HOW_MANY[tiles.length]?.toLowerCase() ?? tiles.length} right`}</span><span className="who">{s.learner?.name}</span></header>
           {p.items.map((it, i) => <MarkedItem key={it.n} it={it} open={false} focused={ix === i} cur={i === curIx} okLabel="Open" />)}
         </div>
       </div>
@@ -601,7 +601,7 @@ export function Walk({ s, focus }: { s: Session; focus: number }) {
     <div className="mb-win">
       <div className="mb-pan" ref={pan}>
         <div className="mb-paper" data-role="maths-sheet">
-          <header className="mb-sheethead"><span className="st" data-role="maths-title">{name}</span><span className="who">{s.learner.name}</span></header>
+          <header className="mb-sheethead"><span className="st" data-role="maths-title">{name}</span><span className="who">{s.learner?.name}</span></header>
           {p.items.map((x, i) => <MarkedItem key={x.n} it={x} open={i === s.walkIx} focused={i === s.walkIx && !last} cur={i === s.walkIx} dim={i !== s.walkIx} />)}
         </div>
       </div>
@@ -647,7 +647,7 @@ export function PageScreen({ s }: { s: Session }) {
     <div className="mb-win" key="band">
       <div className="mb-pan" ref={pan}>
         <div className="mb-paper" data-role="maths-sheet">
-          <header className="mb-sheethead"><span className="st" data-role="maths-title">{p.title}</span><span className="who">{s.learner.name}</span></header>
+          <header className="mb-sheethead"><span className="st" data-role="maths-title">{p.title}</span><span className="who">{s.learner?.name}</span></header>
           {s.reading && <div className="mb-reading" />}
           {p.items.map((x, i) => (
             <section key={x.key} className="mb-item" data-focused={(i === s.itemIx && !s.reading) || undefined} data-cur={i === s.itemIx || undefined}>
@@ -693,7 +693,7 @@ export function HintScreen({ s, focus }: { s: Session; focus: number }) {
     <Top s={s} crumb={n !== undefined ? `Number ${n}` : p?.title} right={<Chips s={s} learner={false} />} />
     <div className="mb-hint-paper">
       <div className="mb-paper" data-role="maths-sheet">
-        <header className="mb-sheethead"><span className="st">{p?.title ?? ""}</span><span className="who">{s.learner.name}</span></header>
+        <header className="mb-sheethead"><span className="st">{p?.title ?? ""}</span><span className="who">{s.learner?.name}</span></header>
         <section className="mb-item" data-v="wrong" data-cur="true">
           {n !== undefined && <div className="num" style={{ height: 144 }}>{n}<NumRing /></div>}
           <PrintRow text={h.problem} wrap />
@@ -758,7 +758,7 @@ export function Units({ s, focus }: { s: Session; focus: number }) {
     <div className="mb-win" style={{ top: 146, height: 880 }}>
       <div className="mb-pan" ref={pan}>
         <div className="mb-paper" data-role="maths-sheet">
-          <header className="mb-sheethead"><span className="st" data-role="maths-title">Tonight’s units</span><span className="who">{s.learner.name}</span></header>
+          <header className="mb-sheethead"><span className="st" data-role="maths-title">Tonight’s units</span><span className="who">{s.learner?.name}</span></header>
           {list.map((l) => (
             <div key={l.id} className="mb-unit" data-focused={l === cur || undefined} data-cur={l === cur || undefined}>
               <span className="u">{l.unit}</span>

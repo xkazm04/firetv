@@ -13,7 +13,7 @@ import { SYLLABUS, type Topic } from "@/lib/library/syllabus";
 import { profileRows, locate, flat } from "@/tv/profileRows";
 import { continueCard } from "@/tv/mathsRows";
 import { sheetStops, firstToLook, tileOf } from "@/tv/sheetRows";
-import { LANDING_REST, landingAt, landingFocus, landingModules, landingStops, continueStop } from "@/tv/landingRows";
+import { LANDING_REST, landingAt, landingFocus, landingModules, landingStops, restStop } from "@/tv/landingRows";
 import { recapStops, ownReading } from "@/tv/recapRows";
 
 /** The remote's buttons. The keyboard stands in for it on the bench. */
@@ -65,7 +65,7 @@ export function stopAt<T>(stops: readonly T[], f: number): T | undefined { retur
  * them, the unpaired phone below right. There is no Continue button: the lamp rests on the app with something
  * waiting (focus LANDING_REST), and Select on the place card is "someone else".
  */
-export { LANDING_MODULES, LANDING_REST, landingStops, landingFocus, landingAt, type LandingStop } from "@/tv/landingRows";
+export { LANDING_MODULES, LANDING_REST, landingStops, landingFocus, landingAt, restStop, type LandingStop } from "@/tv/landingRows";
 export const MODULE_HOME: Record<Subject, Screen> = { maths: "tonight", english: "linga", essay: "essaytype" };
 
 /** Math Buddy's home: the thing already open leads, then the two doors. */
@@ -166,8 +166,9 @@ const KEYMAP: Partial<Record<Screen, Handler>> = {
   landing: (s, k, _, o) => {
     const stops = landingStops(s), i = landingAt(s), at = stops[i], apps = landingModules(s).length;
     const to = (j: number) => { if (j >= 0 && j !== s.focus) o.ev({ type: "focus", focus: j }); };
-    if (k === "menu") { o.ev({ type: "session.end" }); o.calls.push({ url: "/api/memory", body: {} }); return; }
-    if (k === "back") { const c = continueStop(s); to(c ? stops.indexOf(c.app) : stops.indexOf("place")); return; }
+    // no one at the desk has no evening to end
+    if (k === "menu") { if (s.learner) { o.ev({ type: "session.end" }); o.calls.push({ url: "/api/memory", body: {} }); } return; }
+    if (k === "back") { to(restStop(s)); return; }
     if (at === "place") {
       if (k === "down" && apps) to(Math.floor((apps - 1) / 2));
       if (k === "select") o.nav("learner", 0, "landing");
@@ -178,7 +179,8 @@ const KEYMAP: Partial<Record<Screen, Handler>> = {
       if (k === "right" && i < apps - 1) to(i + 1); if (k === "left" && i > 0) to(i - 1);
       if (k === "up") to(stops.indexOf("place"));
       if (k === "down") to(stops.indexOf("phone"));
-      if (k === "select") { o.ev({ type: "subject", subject: at }); o.nav(MODULE_HOME[at]); }
+      // an app opened at a desk no one has sat down at asks who first: its work is somebody's (store.ts NEEDS_LEARNER)
+      if (k === "select") { if (!s.learner) { o.nav("learner", 0, "landing"); return; } o.ev({ type: "subject", subject: at }); o.nav(MODULE_HOME[at]); }
     }
   },
   pair: (s, k, _, o) => { if (k === "back") { const to = s.back ?? "landing"; o.nav(to, to === "landing" ? landingFocus(s, "phone") : 0); } },

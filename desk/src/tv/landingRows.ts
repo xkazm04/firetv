@@ -22,7 +22,8 @@ export const LANDING_MODULES = ["maths", "english", "essay"] as const satisfies 
 export type LandingStop = Subject | "place" | "phone";
 /**
  * The landing's resting focus. Arriving on the landing without a stop named (a fresh desk, a nav with no focus),
- * the lamp starts on the object with something waiting - the CONTINUE object - rather than on whatever is first.
+ * the lamp starts on the object with something waiting - the CONTINUE object - rather than on whatever is first;
+ * with nothing waiting and no phone paired, on the phone (restStop).
  */
 export const LANDING_REST = -1;
 
@@ -117,7 +118,7 @@ export function mathsWaiting(s: Session): MathsWaiting {
 const LINGA_KIND: Record<HomeState, WaitKind> = { resume: "resume", "check-part-way": "resume", "next-topic": "next", "no-plan": "next", "plan-done": "last", "no-placement": "none" };
 export function lingaWaiting(s: Session): LingaWaiting {
   // Linga's home, as Linga itself would draw it for this learner: a conversation left by someone else is not theirs
-  const mine = s.conversation && s.conversation.learnerId === s.learner.id ? s.conversation : null;
+  const mine = s.conversation && s.conversation.learnerId === s.learner?.id ? s.conversation : null;
   const at: Session = { ...s, screen: "linga", focus: LANDING_REST, conversation: mine };
   const v = lingaView(at), home = v.home ?? "no-placement", l = s.englishLearning;
   const hero = v.hero.kind === "intro" ? v.hero : null;
@@ -171,10 +172,20 @@ export function continueStop(s: Session): { app: Subject; tagged: boolean } | nu
   return best.kind === "none" ? { app: all[0].app, tagged: false } : { app: best.app, tagged: true };
 }
 
-/** The stop the lamp is on: the focus index, or at rest the continue object (the place card on a desk with no apps). */
+/**
+ * Where the lamp rests (LANDING_REST, and Back on the desk): the CONTINUE object. With nothing waiting, the phone while
+ * none is paired - every app's first real step needs it - else the first app; the place card on a desk with no apps.
+ */
+export function restStop(s: Session): number {
+  const stops = landingStops(s), c = continueStop(s);
+  if (c?.tagged) return stops.indexOf(c.app);
+  if (!s.joined) return stops.indexOf("phone");
+  return c ? stops.indexOf(c.app) : stops.indexOf("place");
+}
+
+/** The stop the lamp is on: the focus index, or at rest restStop. */
 export function landingAt(s: Session): number {
   const stops = landingStops(s);
   if (s.focus >= 0) return Math.min(stops.length - 1, s.focus);
-  const c = continueStop(s);
-  return c ? stops.indexOf(c.app) : stops.indexOf("place");
+  return restStop(s);
 }
