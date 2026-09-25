@@ -186,3 +186,24 @@ matched so the choice is made on those rather than on the model's reading of a t
   will be spoken.
 - **Lessons need concept tags** authored for matching; retrieval should choose from the syllabus,
   and "no lesson covers this" must remain a first-class answer.
+
+---
+
+## Re-measuring on the product — `npm run bench`
+
+Every figure above was taken on the Python copies in `vision/`. `npm run bench` in `desk/` runs the same corpus
+through the product's own `readPage`, `hint` and `pickLesson` and prints each baseline above beside this run,
+with a pass/fail per kill criterion. It exits 1 on a fail. The corpus is `prototype/data.json` (the phone's
+sample pages, byte-identical to `desk/public/samples`, and the 24 recorded maths hint stages) plus the tables
+read as text from `vision/poc_hints.py` and `vision/poc_retrieval.py` (`QUERIES`, and `ACCEPT`, the lessons that
+teach each query). No Python runs.
+
+- **Replay** (the default, and what `npm test` runs through `tools/lab-bench-test.cjs`): recorded answers
+  at the provider seam, with no model and no network. The read replays the page's truth, so replay checks the
+  harness, not a model. The hints replay the recorded stages (0/12 leaked by `rules/maths` `leaks()`, LaTeX
+  in 3), and the picks replay run 3 above (8/9).
+- **Live** (`npm run bench -- --live`, operator only): the registered engines. `DESK_TEXT_ENGINE=codex`
+  switches the text side, so two runs compare engines. It adds one figure the lab never had: **tap selects**.
+  The phone picks the item whose *model-reported* centre is nearest the tap (`lib/desk/select.ts`). The bench
+  taps each item's true centre and counts how often that rule picks the right item. The ring scored 16/16. The
+  nearest centre has not been measured live yet.
