@@ -148,3 +148,39 @@ test('case 9 GUARD: the method\'s coefficient pair is not the roots, and an expa
  assert.equal(maths.leaks(expand,'Multiply the Outer terms (x and -3) and the Inner terms (4 and x) separately.'),false);
  assert.equal(maths.leaks(expand,'The brackets hold 4 and -3; multiply each by each.'),false,'an expand item\'s answer is the polynomial, not its roots');
 });
+
+test('case 10: English - a present or bare verb against a finished-time marker is a conflict decided in code; the other forms still win, and correct sentences stay clean',()=>{
+ const en=load('rules/english.ts');
+ const card=(s)=>en.resolveEnglish(s);
+ const clash=(s,wrote,is,tense)=>{const c=card(s);assert.deepEqual(c.conflict,{wrote,is},s);assert.equal(c.tense,tense,s);assert.equal(c.verb,wrote.split(/\s+/).pop(),s);return c;};
+ const clean=(s,tense)=>{const c=card(s);assert.equal(c.conflict,null,s);assert.equal(c.tense,tense,s);return c;};
+ const go=clash('She go to the cinema last night.','go','present simple','past-simple');
+ assert.match(en.cardText(go),/The student wrote “go”, which is the present simple; that disagrees with the marker\./);
+ assert.doesNotMatch(JSON.stringify(go.conflict)+go.verb,/\bwent\b/,'the conflict never carries the form the learner must produce');
+ clash('I play football yesterday.','play','present simple','past-simple');
+ clash('Yesterday I play football.','play','present simple','past-simple');
+ clash('My brother go to school yesterday.','go','present simple','past-simple');
+ clash('I have gone to school yesterday.','have gone','present perfect','past-simple');
+ clash('I lived here since 2019.','lived','past simple','present-perfect');
+ clash('I live here since 2019.','live','present simple','present-perfect');
+ clean('She went to the cinema last night.','past-simple');
+ clean('Did she go to the cinema last night?','past-simple');
+ clean('She didn\'t go to the cinema last night.','past-simple');
+ clean('She bought a car yesterday.','past-simple');
+ clean('The big dog bit me yesterday.','past-simple');
+ clean('We will visit Prague next week.','future');
+ clean('I never eat meat.','present-perfect');
+ const habit=clean('She usually goes to school.','present-simple');assert.equal(habit.verb,'goes');
+ const fact=clean('I live here.','present-simple');assert.equal(fact.verb,'live');
+});
+
+test('case 11: English - the rule card never uses the learner\'s own verb as its example pair (it would be the answer)',()=>{
+ const en=load('rules/english.ts');
+ for(const s of ['She go to the cinema last night.','I have gone to school yesterday.','They went there last week.']){
+  const c=en.resolveEnglish(s);
+  assert.doesNotMatch(c.findIt,/\bgo\b|\bwent\b|\bgone\b/,s);
+  assert.doesNotMatch(en.cardText(c),/go → went|go → gone/,s);
+ }
+ // another verb keeps the default pair
+ assert.match(en.resolveEnglish('I play football yesterday.').findIt,/go → went/);
+});
