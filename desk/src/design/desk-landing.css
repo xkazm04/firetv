@@ -111,8 +111,10 @@
 .desk-tv .dk-topic .dk-fit { display: inline-block; }
 .desk-tv .dk-rows { padding: 0 10px; }
 .desk-tv .dk-row { display: grid; grid-template-columns: 52px minmax(0, 1fr) auto 52px; align-items: center; min-height: 56px; font-size: 44px; }
-/* a power or an index never drops under the ten-foot floor, however small the line is set */
-.desk-tv .dk-row .mx .sup, .desk-tv .dk-row .mx .sub { font-size: max(.64em, 28px); }
+/* a power or an index never drops under the ten-foot floor, however small the line is set. The floor goes on what
+   is inside it, not on the .sup/.sub box: that box keeps Lamplight's 60%, so its raise (an em of its own size) stays
+   the Page's +.64em/-.34em of the base, and a floored digit grows up from that baseline instead of lifting off it */
+.desk-tv .dk-row .mx :is(.sup, .sub) > :not(.mf) { font-size: max(1em, 28px); }
 .desk-tv .dk-row:not([data-v]) { font-size: 38px; }
 .desk-tv .dk-row .dk-n { font: 600 30px/1 var(--mb-hand); color: rgba(39, 48, 74, .5); text-align: center; }
 .desk-tv .dk-row .dk-q { padding-left: 18px; white-space: nowrap; overflow: hidden; }
