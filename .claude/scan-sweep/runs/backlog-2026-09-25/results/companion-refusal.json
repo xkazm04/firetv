@@ -1,0 +1,10 @@
+{"id":"companion-refusal","finding":"After a wrong PIN the companion page reconnects every second, forever","status":"landed","shas":["fae19bb","0a6a553"],
+ "tests_added":4,"cases_red_before":3,"cases_green_after":4,"guard_cases":1,
+ "gates":{"node --check tools/companion-refusal-test.mjs":0,"node tools/companion-refusal-test.mjs --seconds 60":0},
+ "files_changed":["companion/index.html","tools/companion-refusal-test.mjs"],
+ "lines_changed":196,
+ "before":"58 reconnects in the 60 s after the refusal (58/min, 59 refusals), no PIN prompt; 3 of 4 checks red",
+ "after":"0 reconnects in 60 s (1 refusal), inline PIN prompt shown, the right PIN typed into it pairs; drop guard 2 connections / 2 welcomed; 4 of 4 green",
+ "prior_attempt_used":"5e9c36f (harness) + 346a509 (fix); companion/index.html unchanged since their base 12ce6ec, rebuilt verbatim and re-measured",
+ "deviations":"None. No TV-side change: the page keys on welcome{accepted:false} (PenConversation.reject), not the close code, so it holds on LAN and relay alike. The harness is standalone (needs tools/node_modules Playwright Chromium) and is not wired into desk npm test.",
+ "notes":"User-visible on the phone page: after a wrong PIN the status reads '<reason> · type the PIN from the TV' and an inline 'PIN on the TV' box + Pair button appears under the header; it no longer retries on its own. Submitting reconnects with the typed PIN and rewrites ?pin= in the URL (history.replaceState) so a reload keeps it. The old status text 'not paired: ... - rescan the QR on the TV' is gone. A plain network drop still reconnects after 1 s. The page ships inside the APK via the tv-app companion asset copy; not run on a device."}
