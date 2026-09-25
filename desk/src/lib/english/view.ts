@@ -406,7 +406,7 @@ export function lingaView(s: Session, input: ViewInput = {}): LingaView {
   if (error) { caption = error; captionTag = "Try again"; }
 
   const footer = [
-    act("menu", "Menu · M", menu ? "Close the menu." : "Open the menu.", { ui: { menu: !menu, picking: null }, focus: 0 }),
+    act("menu", "Menu", menu ? "Close the menu." : "Open the menu.", { ui: { menu: !menu, picking: null }, focus: 0 }),
     ...(c && !isHome && !onCheck ? [act("repeat", "Repeat audio", "Hear the last line again.", cmd("repeat"), { disabled: refused("repeat") })] : []),
   ];
 
