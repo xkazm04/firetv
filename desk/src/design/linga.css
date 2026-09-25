@@ -433,18 +433,38 @@
 .linga-tv .lo-stones [data-here="true"] i { border-color: var(--lo-amber); background: var(--lo-amber); box-shadow: 0 0 0 8px rgba(216, 147, 103, .25); }
 
 /* ---------------------------------------------------------------- the ladder: the level as steps */
-.linga-tv[data-layout="ladder"] .lo-note-card { position: absolute; left: 1160px; top: 196px; width: 650px; margin: 0; }
-.linga-tv .lo-steps {
+/* one column from the kicker's line down to the plinth: the card at its top right, the steps at its foot.
+   The steps are 380 px at most and give up height to a longer card, so the two never meet;
+   the lowest step keeps 130 px so its name stays readable. */
+.linga-tv[data-layout="ladder"] .lo-stage {
   position: absolute;
   left: 110px;
   right: 110px;
+  top: 196px;
   bottom: 292px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 24px;
+}
+.linga-tv[data-layout="ladder"] .lo-note-card { position: relative; z-index: 3; flex: none; width: 650px; margin: 0; }
+/* a long read gets the room between the caption and the edge, not a smaller type than the scale's 30 */
+.linga-tv[data-layout="ladder"] .lo-note-card.lo-wide { width: 780px; }
+.linga-tv[data-layout="ladder"] .lo-note-card .lo-card-text { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 6; overflow: hidden; }
+.linga-tv .lo-steps {
+  position: relative;
+  align-self: stretch;
   z-index: 2;
-  height: 380px;
+  flex: 0 1 380px;
+  min-height: 230px;
+  margin-top: auto;
   display: flex;
   align-items: flex-end;
   gap: 14px;
 }
+/* the flag stands 96 px above C1 and C2, which sit under the card: keep its room inside the steps' box */
+.linga-tv .lo-note-card + .lo-steps[data-here-at="4"],
+.linga-tv .lo-note-card + .lo-steps[data-here-at="5"] { padding-top: 100px; }
 .linga-tv .lo-steps::after {
   content: "";
   position: absolute;

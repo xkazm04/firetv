@@ -68,8 +68,8 @@ export function DataLine({ children }: { children: ReactNode }) { return <div cl
 /** The level as a picture: six steps rising from A1 to C2, the learner's step lit and flagged. */
 export function BandSteps({ band }: { band: Band }) {
   const here = BANDS.indexOf(band);
-  return <div className="lo-steps linga-ladder" data-role="linga-steps">
-    {BANDS.map((b, i) => <div key={b} className="lo-step" data-reached={i <= here} data-here={i === here} style={{ height: `${34 + i * 13}%` }}>
+  return <div className="lo-steps linga-ladder" data-role="linga-steps" data-here-at={here}>
+    {BANDS.map((b, i) => <div key={b} className="lo-step" data-reached={i <= here} data-here={i === here} style={{ height: `calc(130px + (100% - 130px) * ${i} / 5)` }}>
       {i === here && <svg className="lo-flag" viewBox="0 0 60 90" aria-hidden="true" focusable="false"><path d="M10 88V6" stroke="#5d3548" strokeWidth="7" strokeLinecap="round"/><path d="M13 8l42 15-42 15Z" fill="#b65e61"/></svg>}
       <b>{b}</b><small>{BAND_NAME[b]}</small>
     </div>)}
