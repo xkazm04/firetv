@@ -79,7 +79,10 @@ test('case 2: a first visit offers the level check, the level picker and the pho
   assert(scenes.length > 2);
   for (const x of scenes) { assert(sf.phone.includes(x.name), `the phone names ${x.name}`); assert(!sf.tv.includes(x.name), `the TV does not name ${x.name}`); }
   const pick = sf.offered.find(a => a.id === 'pick-situation');
-  assert.equal(pick.needs, 'sceneId'); assert.equal(pick.run.command.action, 'start'); assert.equal(pick.phoneOnly, true);
+  assert.equal(pick.needs, 'sceneId'); assert.equal(pick.run.command.action, 'start');
+  // the view offers it as a phone-side action; it is no longer borrowed from another screen as phone-only
+  assert.equal(pick.on, 'phone'); assert(sf.view.phone.some(a => a.id === 'pick-situation'), 'the view\'s phone list holds it');
+  assert(!('phoneOnly' in pick), 'not marked phoneOnly');
 });
 
 test('case 3: the verdict shows what Linga saw in each task: its response and its note', () => {
@@ -118,6 +121,67 @@ test('case 5: a listening line is heard, not shown, until the learner asks for t
   assert(hidden.offered.some(a => a.id === 'show-words'));
   const shown = S.surfaceOf(sessionOf(STATES['listen revealed']));
   assert(shown.tv.includes(LINE), 'revealed, the TV shows it');
+});
+
+test('case 7: in fifteen states every control the phone draws is a view action on that screen: phone-only 0', () => {
+  const S = surface(), found = [];
+  for (const [name, fx] of Object.entries(STATES)) {
+    const sf = S.surfaceOf(sessionOf(fx));
+    for (const c of sf.controls.filter(c => c.phoneOnly)) found.push(`${name}: ${c.label || c.tag} -> ${c.action.id}`);
+    for (const a of sf.offered.filter(a => a.phoneOnly)) assert(found.some(f => f.startsWith(`${name}:`)), `${name}: offered ${a.id} as phone-only`);
+  }
+  assert.equal(found.length, 0, `phone-only controls ${found.length}:\n  ${found.join('\n  ')}`);
+});
+
+/** The phone-side actions the owner asked the view to offer (2026-09-25), and the only states of the fifteen they are on. */
+const PHONE_SIDE = {
+  'pick-situation': ['first visit', 'recap', 'scenes'],
+  'stop': ['choose task', 'listen unrevealed', 'listen revealed'],
+  'not-now': ['plan topics'],
+  'quiz': ['talk', 'talk quiz open'],
+  'cue': ['talk quiz open'],
+};
+test('case 8: the situation list, Stop / Not now and the reply helpers are phone-side view actions on exactly their screens', () => {
+  const S = surface();
+  const on = Object.fromEntries(Object.keys(PHONE_SIDE).map(id => [id, []]));
+  for (const [name, fx] of Object.entries(STATES)) {
+    const s = sessionOf(fx), v = V.lingaView(s, {}), sf = S.surfaceOf(s);
+    for (const a of v.phone) if (a.id in on) on[a.id].push(name);
+    for (const id of Object.keys(PHONE_SIDE)) if (v.phone.some(a => a.id === id)) {
+      const o = sf.offered.find(a => a.id === id && a.on === 'phone');
+      assert(o, `${name}: ${id} is drawn on the phone and offered there (got ${sf.offered.map(a => `${a.id}@${a.on}`).join(', ')})`);
+    }
+    // withholding: a phone-side action names no answer the view keeps back
+    const words = JSON.stringify(v.phone.map(a => [a.label, a.help]));
+    if (fx.check?.task?.kind === 'listen' && !fx.check.task.revealed) assert(!words.includes(LINE), `${name}: the listening line stays unheard`);
+    if (fx.conversation && !fx.conversation.quizOpen) {
+      const scene = require(path.join(root, 'src/lib/english/curriculum.ts')).ENGLISH_SCENES.find(x => x.id === fx.conversation.sceneId);
+      for (const x of scene.quiz.options) assert(!words.includes(x), `${name}: no quiz option before the quiz is opened`);
+    }
+  }
+  assert.deepEqual(on, PHONE_SIDE);
+});
+
+test('case 9 GUARD: the TV draws no phone-side action, and its components never read the view\'s phone list', () => {
+  const S = surface();
+  for (const [name, fx] of Object.entries(STATES)) for (const ui of [{}, { menu: true }]) {
+    const sf = S.surfaceOf(sessionOf(fx), ui);
+    for (const c of sf.controls.filter(c => c.side === 'tv' && c.action)) assert(!sf.view.phone.includes(c.action), `${name}${ui.menu ? ' (menu)' : ''}: the TV draws ${c.label}`);
+  }
+  const strip = src => src.replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|[^:"'`])\/\/.*$/gm, '$1');
+  for (const f of ['src/english/LingaTV.tsx', 'src/english/OpenDoor.tsx']) assert.doesNotMatch(strip(fs.readFileSync(path.join(root, f), 'utf8')), /\.phone\b/, `${f} reads no phone list`);
+});
+
+test('case 10 GUARD: a phone control the view stops offering is still caught as phone-only', () => {
+  const S = surface(), lingaView = V.lingaView;
+  // seed a stray: the talk screen's view forgets "Pause & coach", which the phone still draws by its own condition
+  V.lingaView = (s, ui) => { const v = lingaView(s, ui); return s.screen === 'linga-talk' ? { ...v, actions: v.actions.filter(a => a.id !== 'coach'), phone: v.phone.filter(a => a.id !== 'coach') } : v; };
+  let sf;
+  try { sf = S.surfaceOf(sessionOf(STATES.talk)); } finally { V.lingaView = lingaView; }
+  const seeded = sf.controls.find(c => c.side === 'phone' && c.label === 'Pause & coach');
+  assert(seeded && seeded.phoneOnly === true && seeded.action.id === 'coach', `the seeded control is phone-only (got ${JSON.stringify(seeded && { phoneOnly: seeded.phoneOnly, action: seeded.action?.id })})`);
+  assert(sf.offered.some(a => a.id === 'coach' && a.phoneOnly === true));
+  assert(!sf.controls.some(c => c.side === 'tv' && c.label === 'Pause & coach'), 'the TV follows the seeded view');
 });
 
 test('case 6: the judge reads a long screen whole, or with the cut named, never silently cut', () => {
