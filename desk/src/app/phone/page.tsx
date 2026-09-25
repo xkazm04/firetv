@@ -409,7 +409,7 @@ export default function Phone() {
         {screen === "parent" && s && <div className="pscreen"><h3>Recap</h3>
           {s.screen === "recap" || s.log.problems.length ? <div className="precap"><b>{s.learner.name}, tonight</b>{Math.round(s.log.minutes)} minutes on task · {s.log.problems.length} problems · {s.log.hints} hints
             <ul>{s.log.hard.length ? s.log.hard.map((h) => <li key={h}>Needed a second hint: {h}</li>) : <li>Nothing needed a second hint.</li>}</ul></div> : <p>Arrives when the session ends.</p>}
-          <p style={{ fontSize: 12 }}>The TV shows: {s.screen} · {s.status}</p></div>}
+          <p style={{ fontSize: 12 }}>The TV shows {TV_WORDS[s.screen] ?? "the desk"}{s.status && Object.values(s.jobs ?? {}).some((j) => j?.phase === "running") ? <> · {s.status}</> : null}.</p></div>}
 
         <div className="pstatus">{msg}</div>
       </div>

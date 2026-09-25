@@ -205,6 +205,9 @@ test('case 8: the Parent role is never moved; arrival never opens the camera una
  assert.equal(follow(undefined,FIXTURES.essaytype.s,at('join')).to,'paste','a join during Essay Master goes to the paragraph');
  assert.equal(follow(undefined,LINGA.s,at('join')).to,'linga','a join during Linga goes to Linga, as before');
  assert.equal(follow(undefined,session({screen:'units'}),at('join',{busy:true})).to,'joined','the code typed on the join panel is done once joined');
+ // a join mid-session leaves the TV where it was (store.ts join): the phone still arrives somewhere useful, never on the empty join panel
+ assert.equal(follow(undefined,session({screen:'page'}),at('join')).to,'joined','a join while the TV is on a page: the confirmation, which names the TV screen');
+ assert.equal(follow(undefined,session({screen:'recap'}),at('join',{role:'parent'})).to,'joined','a parent joining at the recap lands on the confirmation too');
  assert.equal(follow(undefined,session({joined:false,screen:'landing'}),at('profile')).to,null,'an unjoined phone may name a learner');
 });
 

@@ -200,8 +200,10 @@ export function reduce(s: Session, e: Event): Session {
   const n: Session = { ...s, updatedAt: Date.now() };
   switch (e.type) {
     case "linga.changed": if (e.conversation !== undefined) n.conversation = e.conversation; if (e.check !== undefined) n.check = e.check; if (e.screen) { n.screen = e.screen; n.subject = "english"; n.focus = e.focus ?? (["linga-talk", "linga-coach", "linga-check", "linga-verdict", "linga-moment"].includes(e.screen) ? -1 : 0); } break;
-    // a draft in progress owns the screen: joining must not throw the parent off the profile
-    case "join": n.joined = true; if (s.screen !== "profile") { n.screen = "joined"; n.focus = 0; } break;
+    // a join shows the Joined screen only to a TV waiting to be paired (no phone yet, or on the code, or already there);
+    // mid-session a phone slips in silently - the learner's page stays. A draft in progress owns the screen: never the profile
+    case "join": { const waiting = !s.joined || s.screen === "pair" || s.screen === "joined"; n.joined = true;
+      if (waiting && s.screen !== "profile") { n.screen = "joined"; n.focus = 0; } break; }
     // a phone forgetting the desk drops its own cookie (the session route); the desk itself does not change
     case "leave": return s;
     // the landing with no stop named: the lamp rests on what was left (tv/landingRows.ts LANDING_REST)

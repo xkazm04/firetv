@@ -179,6 +179,27 @@ test('GUARD: the QR path - the Pair screen\'s phoneUrl?pin= posted as a join lan
  const again=await post({type:'join',code},'guest');assert.equal(again.status,200);
 });
 
+test('case 7: a join shows Joined only to a TV waiting to be paired - mid-session a phone (a parent, or a remembered one rejoining) slips in and the page stays',async()=>{
+ const {follow}=require(src('app/phone/panelFor.ts'));
+ // the first phone ever: the TV was not joined, so it confirms, from wherever it stood
+ evening('landing');let pin=store.getSession().pin;
+ let r=await post({type:'join',code:pin},'guest');assert.equal(r.status,200);assert.equal(store.getSession().screen,'joined','first join -> the Joined screen');
+ // the TV on the code: it is waiting for a phone, so the join confirms even on a joined desk
+ globalThis.__desk.session={...store.getSession(),screen:'pair',focus:1};
+ r=await post({type:'join',code:pin},'guest');assert.equal(r.status,200);assert.equal(store.getSession().screen,'joined','join while on pair -> joined');assert.equal(store.getSession().focus,0);
+ // Ema on her page, the desk already joined: a parent's phone joins and the TV does not move
+ globalThis.__desk.session={...store.getSession(),screen:'page',focus:2,itemIx:1};
+ r=await post({type:'join',code:pin},'guest');assert.equal(r.status,200);
+ let s=store.getSession();assert.equal(s.joined,true);assert.equal(s.screen,'page','join mid-session -> the page stays');assert.equal(s.focus,2);assert.equal(s.itemIx,1);
+ const v=await r.json();assert.equal(v.screen,'page');
+ const step=follow(undefined,v,{panel:'join',role:'student',busy:false});assert.equal(step.to,'joined','the phone lands on its confirmation, not a blank panel');
+ // Ema's own phone reloads (its cookie gone) and rejoins with the code it remembered: the same silent join
+ r=await post({type:'join',code:pin},'guest');assert.equal(r.status,200);s=store.getSession();assert.equal(s.screen,'page','a remembered rejoin mid-session -> stays');assert.equal(s.focus,2);
+ // a draft still owns the screen: never the profile, even for a first phone
+ evening('profile');pin=store.getSession().pin;
+ r=await post({type:'join',code:pin},'guest');assert.equal(r.status,200);assert.equal(store.getSession().screen,'profile');
+});
+
 test('GUARD: an in-process caller with no proxy header keeps the whole session and the open join',async()=>{
  evening('landing');
  const full=await (await sessionRoute().GET()).json();assert.equal(full.pin,store.getSession().pin);assert.equal(full.pages.length,1);
