@@ -38,8 +38,8 @@ export function topicName(id: string): string { return topicIn(id)?.name ?? huma
  * from its own name ("Calculus 1") - a course's first topic is not what the learner signed up for.
  */
 export function pathFirst(path: MathPath): string {
-  const p = PATHS[path];
-  return p.school ? p.topics[0]?.name ?? p.name : p.name;
+  // the path's own name, for the school path too (owner decision 2026-09-29: 'Linear equations, from the first step')
+  return PATHS[path].name;
 }
 
 /** The learner's path as Tonight counts it: the path, its topics, the ones latched secure, and its first words. */
@@ -106,8 +106,8 @@ export function workWhat(n: number): string {
 
 /**
  * Tonight's title when nothing is open: every topic secure, "N of M topics secure", or on the first evening the path
- * from the first step (`pathFirst`: the school path's first topic, a course's name) - read from the path, so a new
- * first topic renames it. The defaults are the school path's.
+ * from the first step (`pathFirst`: the path's own name, 'Linear equations' or 'Calculus 1'). The defaults are the
+ * school path's.
  */
 export function secureTitle(secure: number, total = PATHS.school.topics.length, first = pathFirst("school")): string {
   if (total > 0 && secure >= total) return "Every topic on the path is secure";

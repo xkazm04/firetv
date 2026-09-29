@@ -298,7 +298,8 @@ test('data 1: a count above the word list is written in digits, never "undefined
 
 test('data 2: the first evening\'s title is the first topic on the path, from the syllabus',()=>{
  const {secureTitle}=R();const {SYLLABUS}=require(path.join(root,'src/lib/library/syllabus.ts'));
- assert.equal(secureTitle(0,SYLLABUS.length),`${SYLLABUS[0].name}, from the first step`);
+ // owner decision 2026-09-29: the school path's first evening reads 'Linear equations', the path's name, not its first topic
+ assert.equal(secureTitle(0,SYLLABUS.length),'Linear equations, from the first step');
  assert.equal(secureTitle(0,5,'Limits'),'Limits, from the first step','whatever the first topic is');
 });
 
@@ -383,14 +384,14 @@ test('path 4: Tonight\'s title counts the learner\'s path - "N of 22", every top
  assert.equal(secureTitle(0,22,pathFirst('calc1')),'Calculus 1, from the first step');
  assert.equal(secureTitle(7,22,pathFirst('calc1')),'7 of 22 topics secure');
  assert.equal(secureTitle(22,22,pathFirst('calc1')),'Every topic on the path is secure');
- assert.equal(pathFirst('school'),'One-step equations','the school path keeps its first topic');
+ assert.equal(pathFirst('school'),'Linear equations','the school path reads by its own name, not its first topic (owner decision 2026-09-29)');
  const seven=Object.fromEntries(calcIds().slice(0,7).map(id=>[id,rec(id,0.9,true)]));
  const title=(s)=>{const p=pathSecure(s);return secureTitle(p.secure.length,p.topics.length,p.first);};
  assert.equal(title(onPath(CALC,{...seven,'linear-one-step':rec('linear-one-step',0.9,true)})),'7 of 22 topics secure','a school record is not one of the 22');
  assert.equal(title(onPath(CALC,{})),'Calculus 1, from the first step');
- assert.equal(title(onPath(SCHOOL,seven)),'One-step equations, from the first step','calc1 records on a school profile count for nothing');
+ assert.equal(title(onPath(SCHOOL,seven)),'Linear equations, from the first step','calc1 records on a school profile count for nothing');
  assert.equal(title(onPath(SCHOOL,{'linear-one-step':rec('linear-one-step',0.9,true)})),'One of 3 topics secure');
- assert.equal(title({skills:{}}),'One-step equations, from the first step','no learner: the school path');
+ assert.equal(title({skills:{}}),'Linear equations, from the first step','no learner: the school path');
 });
 
 test('path 5: MathsTV names and counts through the path - no topicById, no SYLLABUS, and a year word only for a topic with a year',()=>{
