@@ -15,9 +15,10 @@ screen; the way in always looks the same.
 
 ## Principles
 
-1. **The picture carries the lesson.** Each of the eight situations has its own illustrated place with its
-   partner facing the learner. A plan topic without a picture of its own borrows the one that practises the
-   same skill. If an illustration looks generic, fix the illustration; don't add words.
+1. **The picture carries the lesson.** Each of the eight drawn situations has its own illustrated place with its
+   partner facing the learner. A plan topic, and each of the three school situations (Say that again, please;
+   Our group project; The lost jacket), has no picture of its own yet and borrows the one that practises the
+   same skill (the rover, the planning room, the hotel desk). If an illustration looks generic, fix the illustration; don't add words.
 2. **One arch per screen, on the left.** The right side holds the words: overline, Georgia title, the rule, the
    caption, what the screen holds (a sentence card, choices, stepping stones), then the actions. When a screen
    needs the width (the level ladder, the row of topic doors, the menu), the arch gives way to that picture,
@@ -119,6 +120,16 @@ whatever should glow.
 - A **state** is 510 × 440: one big soft circle, one symbol (a door standing open, a path of doors, a corrected
   bubble, the star-burst) and a wine hill.
 - The café scene is friendly: no hearts, candles or roses.
+
+## Who sees which situation
+
+Eleven situations are built in, and age decides which of them a learner is offered (`audienceAllowed`, `lib/english/curriculum.ts`);
+English level never does. Five are for everyone; two are for 15 and over; one is for adults only; the three school
+situations are for a learner under 18 (or, with no age set, an elementary or high-school profile) and never for
+type Other or for an adult. Model-written plan topics may not be school situations in Phase 1. So a 12-year-old is
+offered eight (five for everyone and the three school ones), a 16-year-old ten, an adult eight (the school ones give
+way to the two for 15 and over and the one for adults); the TV's "Situation n of N" counts that learner's own list,
+never a constant.
 
 ## Composition rules
 

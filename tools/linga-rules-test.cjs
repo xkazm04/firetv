@@ -683,3 +683,76 @@ test('thinking case 2: no text() caller outside the conversation asks for thinki
  assert.equal((items.match(/thinking\s*:\s*false/g)||[]).length,1,'items.ts asks for thinking off once: the Calculus spec writer');
  assert.match(items.split('function askCalc')[1]??'',/thinking:\s*false/,'and that one is in askCalc, not the school question writer');
 });
+
+// ---- Family mode, W1: three school situations, offered to learners under 18 and to no one else
+const {ENGLISH_SCENES,ENGLISH_SKILLS,audienceAllowed}=require(path.join(root,'src/lib/english/curriculum.ts'));
+const SCHOOL=['teacher','project','lost'];
+const schoolIds=list=>list.filter(x=>x.audience==='school').map(x=>x.id);
+const prefsOf=p=>defaultPreferences(p);
+test('scene ids are unique, and the three school situations are authored to the scene contract',()=>{
+ const ids=ENGLISH_SCENES.map(x=>x.id);assert.equal(new Set(ids).size,ids.length);
+ assert.deepEqual(schoolIds(ENGLISH_SCENES),SCHOOL,'exactly the three school situations, in this order');
+ const skills=ENGLISH_SKILLS.map(x=>x.id);
+ for(const id of SCHOOL){
+  const x=ENGLISH_SCENES.find(s=>s.id===id);
+  assert(skills.includes(x.skill),`${id}: a known skill`);
+  assert.equal(x.quiz.options.length,2,`${id}: two options`);assert([0,1].includes(x.quiz.correct),`${id}: correct is 0 or 1`);
+  assert(x.quiz.options.every(o=>typeof o==='string'&&o.trim())&&x.quiz.question.trim(),`${id}: a question and two phrases`);
+  assert.match(x.cue,/^Try(?: asking)?:/,`${id}: the cue starts like the others`);
+  assert.match(x.minutes,/^(6–8|8–10)$/,`${id}: minutes`);
+  assert.match(x.premise,/classmate|teacher|school (?:staff|helper)/i,`${id}: the premise names the partner's part`);
+  assert.match(x.premise,/fictional|made-up/i,`${id}: fictional`);
+  assert.doesNotMatch(x.premise+x.goal+x.cue+x.partner,/date|romanc|flirt|alcohol|gambl/i,`${id}: family-safe words`);
+ }
+ assert.deepEqual(['teacher','project','lost'].map(id=>ENGLISH_SCENES.find(s=>s.id===id).skill),['repair','negotiate','request']);
+});
+test('each school situation resolves a picture that exists (it borrows its skill\'s)',()=>{
+ const {artOf,SCENE_ART}=view(),art=fs.readFileSync(path.join(root,'src/english/art/index.tsx'),'utf8');
+ for(const id of SCHOOL){
+  const x=ENGLISH_SCENES.find(s=>s.id===id),key=artOf(x.id,x.skill);
+  assert(SCENE_ART.includes(key),`${id} -> ${key} is a scene picture`);
+  assert(new RegExp('^\\s*'+key+':\\s*\\{\\s*Art:','m').test(art),`${key} has a drawing in art/index.tsx`);
+ }
+});
+test('school situations go to learners under 18 (age 15 counts) and never to "other" or an adult',()=>{
+ const yes=[{type:'high-school',age:12},{type:'elementary',age:9},{type:'elementary',age:13},{type:'high-school',age:15},{type:'high-school',age:17},{type:'elementary'},{type:'high-school'}];
+ const no=[{type:'other'},{type:'other',age:12},{type:'high-school',age:18},{type:'high-school',age:19},{type:'elementary',age:18},undefined];
+ for(const p of yes){assert.deepEqual(schoolIds(eligibleScenes(p,prefsOf(p))),SCHOOL,JSON.stringify(p));assert(audienceAllowed(p,prefsOf(p),'school'));}
+ for(const p of no){assert.deepEqual(schoolIds(eligibleScenes(p,prefsOf(p))),[],JSON.stringify(p));assert(!audienceAllowed(p,prefsOf(p),'school'));}
+ assert(!audienceAllowed({type:'other'},{...prefsOf({type:'other'}),adultConfirmed:true},'school'),'a confirmed adult "other" is not offered a classroom either');
+ assert.deepEqual(schoolIds(eligibleScenes({id:'t',name:'Teen',type:'high-school',age:15},prefsOf({type:'high-school'}))),SCHOOL,'age 15 is under 18, so a 15-year-old gets them');
+});
+test('the school branch leaves all, older and adult exactly as they were',()=>{
+ const rows=[{type:'elementary',age:8},{type:'elementary',age:12},{type:'high-school',age:15},{type:'high-school',age:18},{type:'other'},{type:'elementary'},{type:'high-school'}];
+ for(const p of rows)for(const confirmed of [false,true]){
+  const prefs={...prefsOf(p),adultConfirmed:confirmed};
+  assert.equal(audienceAllowed(p,prefs,'all'),true);
+  assert.equal(audienceAllowed(p,prefs,'older'),(p.age??0)>=15||p.type==='other');
+  assert.equal(audienceAllowed(p,prefs,'adult'),p.age!==undefined?p.age>=18:p.type==='other'&&confirmed);
+ }
+ assert(!eligibleScenes({type:'other'},{...prefsOf(),adultConfirmed:true}).some(s=>s.audience==='school'));
+ assert.equal(eligibleScenes({type:'other'},{...prefsOf(),adultConfirmed:true}).length,ENGLISH_SCENES.length-3,'an adult sees every situation but the three school ones');
+});
+test('a first-time learner keeps today\'s first scene, and says school in their own words to start with a school one',()=>{
+ const kid={type:'elementary',age:12},teen={type:'high-school',age:16},adult={type:'other'};
+ assert.equal(recommendScene(kid,emptyEnglish()).id,'rover');assert.equal(recommendScene(teen,emptyEnglish()).id,'team');assert.equal(recommendScene(adult,emptyEnglish()).id,'booking');
+ const wish=(p,interest)=>recommendScene(p,{...emptyEnglish(),preferences:{...prefsOf(p),interest}});
+ assert.equal(wish(kid,'my teacher talks fast').id,'teacher');assert.equal(wish(teen,'a science project with classmates').id,'project');assert.equal(wish(kid,'I lost things').id,'lost');
+ assert.equal(wish(adult,'my teacher and homework').id,'booking','an adult who says school is not given a classroom');
+});
+test('the conversation route refuses a school situation for "other" and for an 18+ profile, and serves it under 18',async()=>{
+ const seat=(id,patch)=>{dispatch({type:'profile.draft',patch:{id,name:id,modules:['english'],...patch}});dispatch({type:'profile.save'});dispatch({type:'subject',subject:'english'});};
+ fresh();assert.equal(getSession().profiles.find(p=>p.id==='jakub').type,'other');
+ dispatch({type:'learner.set',id:'jakub'});
+ for(const id of SCHOOL)await assert.rejects(command('start',{sceneId:id}),e=>e.status===403&&/not available/.test(e.message),`other: ${id}`);
+ assert.equal(getSession().conversation,null);
+ fresh();seat('grown',{type:'high-school',age:18});
+ for(const id of SCHOOL)await assert.rejects(command('start',{sceneId:id}),e=>e.status===403,`18: ${id}`);
+ assert.equal(getSession().conversation,null);
+ fresh();seat('kid12',{type:'elementary',age:12});
+ for(const id of SCHOOL){answer=async()=>({json:{title:'At school',goal:'Practise.',opening:'Hello there.'},provider:'test',ms:1});await command('start',{sceneId:id,replace:true});assert.equal(getSession().conversation.sceneId,id);assert.equal(getSession().conversation.scene.audience,'school');}
+ // the second check, on a scene already running: a profile that stops being entitled is refused at the next command
+ getSession().profiles.find(p=>p.id==='kid12').age=18;
+ const last=getSession().conversation.turns.at(-1).id;
+ await assert.rejects(command('turn',{text:'Could you say that again?',mode:'text',lastTurnId:last}),e=>e.status===403&&/no longer available/.test(e.message));
+});

@@ -28,6 +28,15 @@ export const ENGLISH_SCENES: EnglishScene[] = [
   { id: "booking", name: "A booking that is missing", goal: "Clarify your booking and ask for a solution.", partner: "Robin · Receptionist", skill: "request", audience: "all", minutes: "8–12",
     premise: "A hotel or activity reservation cannot be found. Use fictional names and details. Clarify the date, request help and agree a practical solution. For children use a family activity with a guardian present.", cue: "Try asking: Could you check the date, please?",
     quiz: { question: "Which phrase asks for help?", options: ["My booking was yesterday.", "Could you check my booking, please?"], correct: 1 } },
+  { id: "teacher", name: "Say that again, please", goal: "Ask your teacher to repeat or explain, then say what you understood.", partner: "Ms Hale · Teacher", skill: "repair", audience: "school", minutes: "6–8",
+    premise: "A calm moment in class. The partner is a friendly teacher who gives an instruction a little too fast, such as a page number, a homework task or a new word. The learner asks the teacher to repeat it, say it more slowly or explain a word, then says back what they understood. Ordinary school life, fictional names, patient and kind. Never ask for real personal details.", cue: "Try asking: Could you say that again, please?",
+    quiz: { question: "Which phrase asks the teacher to repeat?", options: ["Could you say that again, please?", "I already know that."], correct: 0 } },
+  { id: "project", name: "Our group project", goal: "Share ideas with a classmate and agree who does what.", partner: "Noor · Classmate", skill: "negotiate", audience: "school", minutes: "8–10",
+    premise: "Two classmates plan a small school project together, such as a poster about animals or a short talk for the class. The partner is a classmate, and each of them prefers a different topic or a different job. The learner suggests options, listens to the classmate's idea and helps agree a plan where everyone has a part. Friendly, fictional names, no teasing and no pressure.", cue: "Try: I could draw the pictures. What would you like to do?",
+    quiz: { question: "Which phrase gives a classmate a choice?", options: ["We do it my way.", "Would you rather draw or write?"], correct: 1 } },
+  { id: "lost", name: "The lost jacket", goal: "Describe what you lost and ask for help finding it.", partner: "Mr Ortiz · School helper", skill: "request", audience: "school", minutes: "6–8",
+    premise: "The learner has lost something ordinary at school, such as a blue jacket, a water bottle or a notebook, and asks for help at the school office. The partner is a friendly school staff member. The learner describes the thing (colour, size, where and when it was last seen), answers a question or two and agrees what happens next, for example checking the lost property box or coming back tomorrow. Use a made-up item and fictional names; never ask for a real name, address, phone number or class.", cue: "Try asking: Excuse me, I lost my jacket. Can you help me?",
+    quiz: { question: "Which phrase describes the lost thing?", options: ["The bell rings at eight.", "It is a blue jacket with a white zip."], correct: 1 } },
   { id: "interview", name: "Beyond the rehearsed answer", goal: "Explain your own contribution in an interview.", partner: "Jordan · Interviewer", skill: "narrate", audience: "older", minutes: "10–15",
     premise: "A professional interview asks for a specific action and result, followed by a contextual follow-up. Accept fictional examples for practice. Do not invent the learner's credentials. For teens use a club, volunteer or school role.", cue: "Try: I changed something, so that…",
     quiz: { question: "Which answer names a specific action?", options: ["I introduced a shared checklist.", "I was very helpful."], correct: 0 } },
@@ -44,8 +53,12 @@ export function defaultPreferences(p?: Profile): EnglishPreferences {
 export function isAdult(p: Profile | undefined, prefs: EnglishPreferences): boolean {
   return p?.age !== undefined ? p.age >= 18 : p?.type === "other" && prefs.adultConfirmed;
 }
-/** Age gates content; English level never does. */
+/**
+ * Age gates content; English level never does. School situations are for a learner under 18 (or, with no age, an
+ * elementary or high-school profile), never for "other" and never for an adult, so an adult is not offered a classroom.
+ */
 export function audienceAllowed(p: Profile | undefined, prefs: EnglishPreferences, audience: Audience): boolean {
+  if (audience === "school") return p?.type !== "other" && (p?.age !== undefined ? p.age < 18 : p?.type === "elementary" || p?.type === "high-school");
   return audience === "adult" ? isAdult(p, prefs) : audience === "older" ? (p?.age ?? 0) >= 15 || p?.type === "other" : true;
 }
 /** The agreed plan's topics, as scenes the conversation can run. */
@@ -84,7 +97,9 @@ export function recommendScene(p: Profile | undefined, learning: EnglishLearning
     const index = allowed.findIndex(x => x.id === last.sceneId);
     return allowed[(index + 1) % allowed.length];
   }
-  const desired = /interview|career|job/.test(words) ? "interview" : /date|dating/.test(words) ? "date" : /conflict|deadline/.test(words) ? "conflict" : p?.type === "elementary" ? "rover" : /game|team/.test(words) ? "team" : p?.type === "high-school" ? "team" : "booking";
+  // A learner who names school in their own words starts with the matching school situation (only when it is theirs to see).
+  const schoolWish = /teacher|lesson|homework|school/.test(words) ? "teacher" : /project|classmate/.test(words) ? "project" : /\blost\b/.test(words) ? "lost" : "";
+  const desired = /interview|career|job/.test(words) ? "interview" : /date|dating/.test(words) ? "date" : /conflict|deadline/.test(words) ? "conflict" : schoolWish && allowed.some(x => x.id === schoolWish) ? schoolWish : p?.type === "elementary" ? "rover" : /game|team/.test(words) ? "team" : p?.type === "high-school" ? "team" : "booking";
   return allowed.find(x => x.id === desired) ?? allowed[0];
 }
 export const PROGRESS_LABEL: Record<Progress, string> = { "not-tried": "Not tried", "with-help": "With help", independent: "On your own", transfer: "Used elsewhere" };

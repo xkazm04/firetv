@@ -221,7 +221,7 @@ coaching → `linga-coach`, else `linga-talk`) and `stageScreen` in `check.ts` (
 | `linga-verdict` | your level on the ladder, Linga's read or your own pick | the check finishing; This is my level in the picker (`level-self`); My level in the menu | See my topics → `linga-plan`; Find my level again → `linga-check`; Pick it myself → the level picker |
 | (the level picker) | local state over the ladder, drawn as `linga-verdict` | I'll pick my level / Pick it myself | This is my level → `linga-verdict`; Lower / Higher move the band; Not sure · go back closes it |
 | `linga-plan` | the row of topic doors for your level, or first "What would you like to practise?" | See my topics, New topics, My topics (`plan-propose` / `plan-open`) | Asking the goal: Let Linga pick, Not now (→ `linga`). Topics: Agree to these topics → `linga`; Swap this topic (one per topic, only the focused shown); All new topics. The phone adds a topic in words |
-| `linga-scenes` | one situation at a time behind the arch, its goal and a sentence to take with you | Choose a situation (home, menu, recap, an unprepared scene) | Start this situation → `linga-talk`; Next situation (local) |
+| `linga-scenes` | one situation at a time behind the arch, its goal and a sentence to take with you; the list is what this learner's age allows (`eligibleScenes`): the three school situations show for a learner under 18 and never for type Other or an adult, so "Situation n of N" counts the learner's own list | Choose a situation (home, menu, recap, an unprepared scene) | Start this situation → `linga-talk`; Next situation (local) |
 | `linga-talk` | the conversation: the partner's line in the arch, the goal, the caption; the learner answers on the phone | `start`, `resume`, `moment-done`, the turn coming back | Help me answer / More help (the rescue ladder), Choose a phrase (opens the recognition quiz: Option 1..n), Pause & coach → `linga-coach`; while a reply is on its way Cancel & go back → `linga`; paused: Resume, Finish rehearsal → `linga-recap`; a scene that did not prepare: Retry the scene, Choose another |
 | `linga-moment` | one thing worth keeping, before and after | a turn that comes back with a moment | Back to the conversation → `linga-talk` |
 | `linga-coach` | one useful change: you said / one way to try it | Pause & coach | Replay the moment → `linga-talk`; Finish for today → `linga-recap` |
@@ -268,7 +268,7 @@ the camera.
 Talk holds a panel of its own whatever the TV shows (`phonePanel`, `view.ts`): the level check (the question or
 task, the answer box, Stop / Not now, the topic handshake with Swap and "add a topic in your own words"), a moment
 (Back to the conversation), the start panel (Linga home on the phone: the same six states, a band chosen by hand,
-and a list of every situation), or the live conversation (the partner's line, the reply box that records or takes
+and a list of every situation this learner is offered), or the live conversation (the partner's line, the reply box that records or takes
 text, Help me answer, Choose a phrase, Pause & coach, Resume, Replay, Repeat audio / Cancel, Finish rehearsal, the
 transcript). Set up holds the level, interests, goal, preferences and notes; My map the eight abilities, what Linga
 taught, recent evidence and a printable map (`/english/print`). Two buttons under Talk: **Linga on the TV** (→

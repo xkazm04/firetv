@@ -14,8 +14,9 @@ import { accepts, turnState } from "./turn";
 import type { Band, Conversation, LevelCheck, Progress, SkillId } from "./types";
 
 /**
- * The picture behind the arch (english/art): one of the eight situations, or a piece for a state of the journey.
- * A plan topic has no picture of its own; it borrows the situation that practises the same skill.
+ * The picture behind the arch (english/art): one of the eight drawn situations, or a piece for a state of the journey.
+ * A plan topic, and each of the three school situations, has no picture of its own; it borrows the situation that
+ * practises the same skill.
  */
 export const SCENE_ART = ["meet", "weekend", "rover", "team", "booking", "interview", "date", "conflict"] as const;
 export type SceneArt = typeof SCENE_ART[number];
