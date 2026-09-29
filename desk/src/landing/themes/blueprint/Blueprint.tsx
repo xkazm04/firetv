@@ -304,8 +304,8 @@ export function BlueprintLanding({ view, zoom, boot }: ThemeLandingProps) {
       <div className="bp-brand"><Mark draw /><span className="wm">Study Desk</span></div>
 
       <div className="bp-actions">
-        <button className="btn pri" data-role="desk-continue" tabIndex={-1}>{I.play}<span>{view.primary}</span></button>
-        <button className="btn gh" data-role="desk-place-card" data-focused={at === "place"} tabIndex={-1}>{I.swap}<span>{view.place}</span></button>
+        <button className="bp-btn pri" data-role="desk-continue" tabIndex={-1}>{I.play}<span>{view.primary}</span></button>
+        <button className="bp-btn gh" data-role="desk-place-card" data-focused={at === "place"} tabIndex={-1}>{I.swap}<span>{view.place}</span></button>
       </div>
 
       <div className="bp-hints" aria-hidden="true">

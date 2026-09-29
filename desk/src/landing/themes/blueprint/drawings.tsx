@@ -224,7 +224,7 @@ export function essay(none: boolean, sentIn: number | null, parasIn: number): Dr
   }
   const lensY = none ? 300 : sent ? barY(sent - 1) + 9 : 300;
   idle.push(
-    <g key="lens" className="lens"><g transform={`translate(${none ? 270 : 316} ${lensY})`}>
+    <g key="lens" className="lensg"><g transform={`translate(${none ? 270 : 316} ${lensY})`}>
       <circle className="lr" r={52} /><circle className="lr2" r={44} /><path className="lh" d="M37 37L84 84" /><path className="lg" d="M-30 -26A44 44 0 0 1 4 -40" />
     </g></g>,
   );
