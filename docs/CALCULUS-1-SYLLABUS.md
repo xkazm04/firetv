@@ -101,11 +101,12 @@ degraded:
 | `cases-one-line` | c06-q1 | `\begin{cases}` reads as one line, with no rows (a declared design choice, but still a degrade). |
 | `circ-as-degree` | c01-q1 | `f \circ g` draws the composition ring as a degree sign, °. |
 
-**The pen (found by `maths-calculus-live.cjs --dry`).** `markLine` leaks raw TeX when the pen's span cuts through a
-TeX construct. Take the working line `y' = \frac{\frac{1}{x}\cdot x - \ln x \cdot 1}{x^2}` marked at `- \ln`:
-the pre and post parts no longer parse as TeX, fall back to plain text, and put `\frac{`, `\cdot` and `}{` on the
-TV. The same happens to the limit line in c14-w1. This affects the Sheet and the Walk whenever a slip is located
-inside a TeX working line. It belongs to `typeset.ts` and is outside this baseline's write set.
+**The pen (found by `maths-calculus-live.cjs --dry`, fixed the same day).** `markLine` leaked raw TeX when the pen's
+span cut through a TeX construct: for `y' = \frac{\frac{1}{x}\cdot x - \ln x \cdot 1}{x^2}` marked at `- \ln`, the
+pre and post parts fell back to plain text and put `\frac{`, `\cdot` and `}{` on the TV (the limit line in c14-w1
+did the same). `markLine` now splits a TeX line only on a balanced boundary and otherwise marks the whole line; over
+every working line of this corpus, at every start and end (71,423 spans), the spans that set command text went from
+30,260 to 0.
 
 **Captions are prose.** The TV passes a caption through `prose()` into the card and never through `parseMath`. The
 suite still runs the reader's checks on captions, and additionally checks the longest word against the card.
@@ -153,6 +154,32 @@ It then checks each screen:
 
 It writes `artifacts/math-calculus/<topic>-<screen>.png`, `report.json` and `report.md`. The Topics screen still
 shows the school spine, because Calculus is not on it (see above).
+
+The script leaves out of the overflow check the Tonight thumbnails (`.mb-srow .qx`, `.mb-box .qx`), which crop the
+paper by design (`overflow: hidden`), allows 2 px of slack on a row's height and on the safe zone, and ignores the
+one console line its own empty voice stub causes (`ERR_REQUEST_RANGE_NOT_SATISFIABLE` on a `blob:` URL). Every
+other error still counts. The slips it places are synthetic (a sign span from the working), so the pen may ring a
+place the real `locate` would never name, for example inside `x_(n+1)`.
+
+### What the first live run found (2026-09-29, 22 topics x 7 screens = 154 screens)
+
+| run | violations | what |
+|---|---|---|
+| first, unfiltered | 56 screens | 39 were this script's own noise (thumbnails, voice stub, 1 px); 17 were real |
+| the 17 real | 17 screens | Practice: 12 long printed questions ran past the paper (1028 to 1805 px in 996 px), 5 left the safe zone (right edge up to 1954, bottom to 1100) and bled under the side card; Page: the 80-digit number overflowed a wrapped row; Walk: c16-w1 was 172 px tall in a 152 px row; Sheet and Walk: raw `\frac{`, `\cdot` (the pen in a TeX line) |
+| after the wave-3 fixes | 0 screens | `node tools/maths-calculus-live.cjs --strict` exits 0: `154/154 screens reached, 0 with a violation` |
+
+The fixes are three: Practice is fitted to the paper like the Sheet and the Walk (`fitRow` through `usePaper`, 28 px
+floor; when six tall questions still do not fit, the paper is drawn on smaller squares, 48 down to 36 px, and
+calc1-limit-laws settles at 40 px); a row taller than its squares grows to the next whole square, and a wrapped
+row breaks an unbreakable token; and the pen marks the whole line rather than cut a TeX construct.
+
+Read the `too-wide` and `too-tall` rows of the offline degrade table above as an estimate for a one-line row. The
+live run is the measurement: for those, the TV fits, wraps or grows the row and nothing overflows, leaves the safe
+zone or shows command text. The other degrades (`slash`, `script-one-letter`, `unknown-tex`, `cases-one-line`,
+`circ-as-degree`) are about how the maths is set, not how wide it is, so the live run does not measure them and they
+stand as declared. And what the desk cannot do with these items is untouched: it cannot check them (see the section
+above).
 
 ## The baseline table (`node tools/maths-calculus-test.cjs`)
 
