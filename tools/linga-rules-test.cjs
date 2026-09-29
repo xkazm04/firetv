@@ -675,5 +675,11 @@ test('thinking case 1: opening, turn, coach and replay ask for thinking off; the
 test('thinking case 2: no text() caller outside the conversation asks for thinking off',()=>{
  const walk=(d)=>fs.readdirSync(d,{withFileTypes:true}).flatMap(e=>e.isDirectory()?walk(path.join(d,e.name)):/\.tsx?$/.test(e.name)?[path.join(d,e.name)]:[]);
  const callers=walk(path.join(root,'src')).filter(f=>!f.includes(path.join('lib','engines'))&&/thinking\s*:\s*false/.test(fs.readFileSync(f,'utf8'))).map(f=>path.relative(root,f).split(path.sep).join('/'));
- assert.deepEqual(callers,['src/lib/english/conversation.ts']);
+ // the conversation (wave S59: 4-6 s a turn instead of 52-90 s) and Calculus spec writing (2026-09-29, tools/calc-model-yield.cjs
+ // on 6 topics: 7-14 s instead of 62-90 s with two engine timeouts; the desk checks every spec in code, so a hasty spec costs
+ // one refused spec, never a wrong verdict). Hints, marking, the school question writer and the level check keep their thinking.
+ assert.deepEqual(callers,['src/lib/desk/items.ts','src/lib/english/conversation.ts']);
+ const items=fs.readFileSync(path.join(root,'src/lib/desk/items.ts'),'utf8').replace(/\/\*[\s\S]*?\*\//g,'').replace(/(^|[^:"'`])\/\/.*$/gm,'$1');
+ assert.equal((items.match(/thinking\s*:\s*false/g)||[]).length,1,'items.ts asks for thinking off once: the Calculus spec writer');
+ assert.match(items.split('function askCalc')[1]??'',/thinking:\s*false/,'and that one is in askCalc, not the school question writer');
 });
