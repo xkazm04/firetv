@@ -12,12 +12,19 @@
  * A wrong guess in front of a child costs more than a question does; so does a question about an item the
  * arithmetic has already settled. (S50: this replaces "when they disagree the desk does not pick a winner".)
  *
+ * A Calculus item (one with a `spec`, rules/calc) is marked by CODE alone. For a set that carries specs the model is
+ * asked only to READ the page - the final answer as plain text, the working line by line, a slip id from the topic's
+ * list - never to solve and never for a verdict; a verdict or a solution it volunteers is never read. The verdict is
+ * checkAnswer(spec, studentAnswer) (rules/maths settleSpec): right, wrong, or unsure when the answer cannot be read or
+ * compared - ASK, and no attempt. The slip is code's own (sign, lost-constant) where it names one, else the model's
+ * pick from the topic's vocabulary, only on a wrong item. A Calculus item has no pen position (locate reads linear lines).
+ *
  * Nothing here ever puts the answer on screen, and no `said` line carries a value.
  */
 import { vision } from "../engines/vision";
-import { ASK, cleanValue as clean, locate, rightLine, settled, slipVocabulary, workingLines } from "../rules/maths";
+import { ASK, cleanValue as clean, locate, rightLine, settled, settleSpec, slipVocabulary, workingLines } from "../rules/maths";
 import { addHistory, recordAttempt } from "../session/learners";
-import { topic as topicById } from "../library/syllabus";
+import { topicIn } from "../library/paths";
 import { degenerate, substitute, verify } from "./verify";
 import type { Practice, PracticeItem } from "../session/store";
 
@@ -48,6 +55,43 @@ interface Marked {
   verdict: "right" | "wrong"; solution: string; slip: string;
 }
 
+/** A Calculus page, read: what is written, and a slip pick. No verdict and no solution is asked for. */
+const CALC_SCHEMA = {
+  type: "object",
+  properties: {
+    items: {
+      type: "array",
+      items: {
+        type: "object",
+        properties: {
+          n: { type: "integer" },
+          studentAnswer: { type: "string" },
+          studentWorking: { type: "string" },
+          slip: { type: "string" },
+        },
+        required: ["n", "studentAnswer", "studentWorking", "slip"],
+      },
+    },
+  },
+  required: ["items"],
+};
+
+/** Only the fields the desk reads from a Calculus page: a `verdict` or `solution` the model adds is not among them. */
+interface Read { n: number; studentAnswer: string; studentWorking: string; slip: string; }
+
+function calcPrompt(practice: Practice, vocab: string): string {
+  const sheet = practice.items.map((i) => `${i.n}. ${i.question}`).join("\n");
+  return `This is a photo of a student's handwritten working on these ${practice.items.length} Calculus questions:\n${sheet}\n\n` +
+    `Read the page. For each numbered item, report:\n` +
+    `- n: the item number.\n` +
+    `- studentAnswer: the final answer the student wrote, as plain text: an expression in x using ^ for powers, sqrt(), e^, ln, sin, cos and so on, ` +
+    `or a number or a fraction. Include +C if they wrote it. Copy what they wrote; empty string if they wrote no final answer.\n` +
+    `- studentWorking: their working transcribed exactly as written, one step per line (a newline between steps), or an empty string if there is none.\n` +
+    `- slip: if you can see a mistake in their working, its id from this list, or the word "unclear" if you cannot tell or see none:\n${vocab}\n\n` +
+    `Do not solve the questions and do not judge the answers - only read what is on the page. ` +
+    `Plain text only, no LaTeX. Report every item, in order. Do not invent items that are not on the page.`;
+}
+
 
 /**
  * `stillSame` is asked after the model answers, as explainItem asks `stillUnsure`: is this set still the one on the
@@ -61,6 +105,8 @@ export async function markSet(
   stillSame: () => boolean = () => true,
 ): Promise<{ items: PracticeItem[]; provider: string; ms: number; unsure: number; landed: boolean }> {
   const vocab = slipVocabulary(practice.topic);
+  // a set that carries specs is a Calculus set: the model reads it and code marks it
+  if (practice.items.some((i) => i.spec)) return markCalc(imageBase64, practice, learnerId, stillSame, vocab);
   const sheet = practice.items.map((i) => `${i.n}. ${i.question}`).join("\n");
 
   const { json, provider, ms } = await vision<{ items: Marked[] }>({
@@ -113,18 +159,65 @@ export async function markSet(
     return { ...item, studentAnswer, studentWorking, verdict, slip, said, ...(slipAt ? { slipAt } : {}) };
   });
 
+  return land(practice, learnerId, stillSame, items, attempts, { provider, ms, unsure });
+}
+
+/** A Calculus set: the model reads the page, checkAnswer marks each item from its spec. */
+async function markCalc(
+  imageBase64: string,
+  practice: Practice,
+  learnerId: string,
+  stillSame: () => boolean,
+  vocab: string,
+): Promise<{ items: PracticeItem[]; provider: string; ms: number; unsure: number; landed: boolean }> {
+  const { json, provider, ms } = await vision<{ items: Read[] }>({ imageBase64, prompt: calcPrompt(practice, vocab), schema: CALC_SCHEMA });
+
+  const byN = new Map<number, Read>();
+  for (const m of json?.items ?? []) if (m && typeof m.n === "number") byN.set(m.n, m);
+
+  let unsure = 0;
+  const attempts: { right: boolean; slip?: string }[] = [];
+  const items: PracticeItem[] = practice.items.map((item) => {
+    const m = byN.get(item.n);
+    // only what is written on the page is read: never a verdict, never a solution
+    const studentAnswer = typeof m?.studentAnswer === "string" ? m.studentAnswer.trim() : "";
+    const studentWorking = typeof m?.studentWorking === "string" ? m.studentWorking.trim() : "";
+    // checkAnswer decides from the spec; unsure (blank, unreadable, not comparable, or no spec) asks and records nothing
+    const s = settleSpec(item.n, item.spec, studentAnswer, m?.slip, practice.topic);
+    if (!s) {
+      unsure++;
+      return { ...item, studentAnswer, studentWorking, verdict: "unsure" as const, said: ASK(item.n) };
+    }
+    attempts.push({ right: s.verdict === "right", slip: s.slip });
+    // no pen position on a Calculus item: the Walk falls back to the answer line
+    return { ...item, studentAnswer, studentWorking, verdict: s.verdict, slip: s.slip, said: s.said };
+  });
+
+  return land(practice, learnerId, stillSame, items, attempts, { provider, ms, unsure });
+}
+
+/** Record a marked set once, and only while it is still the set on the desk. */
+function land(
+  practice: Practice,
+  learnerId: string,
+  stillSame: () => boolean,
+  items: PracticeItem[],
+  attempts: { right: boolean; slip?: string }[],
+  run: { provider: string; ms: number; unsure: number },
+): { items: PracticeItem[]; provider: string; ms: number; unsure: number; landed: boolean } {
   // 9 - the desk has moved on while the model read the page: the verdicts are not this set's to record
-  if (!stillSame()) return { items, provider, ms, unsure, landed: false };
+  if (!stillSame()) return { items, ...run, landed: false };
 
   // only settled items reach the record, each once, and only for the set still on the desk
   for (const a of attempts) recordAttempt(learnerId, practice.topic, a.right, a.slip);
   // what happened, in one line the home screen can read back: never invented, always these counts
-  // (rules/maths; a later settle restates the same line from the same verdicts - session/store)
+  // (rules/maths; a later settle restates the same line from the same verdicts - session/store). The label is the
+  // topic's name on whichever path it belongs to (topicIn), as session/store's restate reads it.
   addHistory(learnerId, {
     at: Date.now(), kind: "practice",
-    label: topicById(practice.topic)?.name ?? practice.topic,
+    label: topicIn(practice.topic)?.name ?? practice.topic,
     detail: rightLine(items),
   });
 
-  return { items, provider, ms, unsure, landed: true };
+  return { items, ...run, landed: true };
 }

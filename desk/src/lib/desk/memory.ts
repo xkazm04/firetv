@@ -7,7 +7,7 @@
  * does not write the same sentence forty times.
  */
 import { text } from "../engines/text";
-import { topic } from "../library/syllabus";
+import { topicIn } from "../library/paths";
 import { addMemory, getLearner } from "../session/learners";
 import { slip as slipById } from "../rules/maths";
 import type { PracticeItem } from "../session/store";
@@ -24,10 +24,10 @@ export async function writeMemory(
 ): Promise<string[]> {
   const existing = getLearner(learnerId).memory;
   const items = session.items ?? [];
-  const t = session.topic ? topic(session.topic) : undefined;
+  const t = session.topic ? topicIn(session.topic) : undefined;
 
   const rows = items.map((i) => {
-    const s = i.slip ? slipById(i.slip) : undefined;
+    const s = i.slip ? slipById(i.slip, session.topic) : undefined;
     return `${i.n}. ${i.question} — ${i.verdict ?? "not marked"}` +
       (s ? ` (${s.id}: ${s.says})` : "") +
       (i.studentWorking ? ` — their working: ${i.studentWorking}` : "");

@@ -1,15 +1,18 @@
 /**
- * The slip vocabulary for linear equations, decided in code.
+ * The slip vocabulary for linear equations - and, through rules/calc CALC_SLIPS, for the calc1 topics - decided in code.
  *
  * Same discipline as rules/english.ts: the table is the closed set the model is allowed to
  * choose from. It names a mistake and points at a line. It never carries the corrected line,
  * the next step, or the answer — the student produces those, or there was no point asking.
  *
  * It also holds the settle rule marking and explanation share, and the check that a reply leaks nothing.
+ * It imports rules/calc and the calc1 spine (both pure, client-safe) and nothing session-backed.
  */
 import { evaluate, substitute, verify } from "../desk/verify";
 import type { PracticeItem, SlipAt } from "../session/store";
 import { spanStarts } from "../../maths/typeset";
+import { CALC_SLIPS, checkAnswer, slipsFor as calcSlipsFor } from "./calc";
+import { CALC1_SPINE } from "../library/calculus1.spine";
 
 /** `name` is what the TV sets as the slip's title; `says` is the desk's line; `points` the place in words. */
 export interface Slip { id: string; topics: string[]; says: string; points: string; name: string; }
@@ -33,12 +36,29 @@ export const SLIPS: Slip[] = [
   { id: "answer-not-checked", topics: [ONE, TWO, BOTH], says: "The working stops before the check. Put your value back into the original equation and see whether the two sides agree.", points: "the original equation", name: "The answer not checked" },
 ];
 
-export function slip(id: string): Slip | undefined {
-  return SLIPS.find((s) => s.id === id);
+/**
+ * The Calculus slips (rules/calc CALC_SLIPS) as Slips, each tagged with the calc1 topics whose practice shapes it
+ * applies to (calculus1.spine: a topic's shapes; rules/calc slipsFor(shape), unioned over them). Their words are
+ * rules/calc's own; like the school table, none carries a value.
+ */
+const CALC_AS_SLIPS: Slip[] = CALC_SLIPS.map((c) => ({
+  id: c.id, says: c.says, points: c.points, name: c.name,
+  topics: CALC1_SPINE.filter((t) => t.shapes.some((sh) => calcSlipsFor(sh).includes(c.id))).map((t) => t.id),
+}));
+const isCalcTopic = (topicId: string) => CALC1_SPINE.some((t) => t.id === topicId);
+
+/**
+ * A slip by id: the school table first (so a shared id such as 'arithmetic-slip' reads as it always has), then the
+ * Calculus slips. With `topicId`, that topic's own list is asked first, so a shared id reads in the topic's words.
+ */
+export function slip(id: string, topicId?: string): Slip | undefined {
+  return (topicId ? slipsFor(topicId).find((s) => s.id === id) : undefined)
+    ?? SLIPS.find((s) => s.id === id) ?? CALC_AS_SLIPS.find((s) => s.id === id);
 }
 
+/** The closed list for a topic: the school table for a school id, the Calculus slips of its shapes for a calc1 id. */
 export function slipsFor(topicId: string): Slip[] {
-  return SLIPS.filter((s) => s.topics.includes(topicId));
+  return isCalcTopic(topicId) ? CALC_AS_SLIPS.filter((s) => s.topics.includes(topicId)) : SLIPS.filter((s) => s.topics.includes(topicId));
 }
 
 /** The list the prompt carries: one slip per line, id then what the desk would say. */
@@ -62,8 +82,20 @@ export interface Settled { verdict: "right" | "wrong"; slip?: string; said: stri
  */
 export function settled(n: number, right: boolean, slipId: unknown, topicId: string): Settled {
   const id = typeof slipId === "string" ? slipId.trim() : "";
-  const kept = !right && slipsFor(topicId).some((s) => s.id === id) ? id : undefined;
-  return { verdict: right ? "right" : "wrong", slip: kept, said: right ? RIGHT(n) : kept ? slip(kept)!.says : ASK(n) };
+  const own = right ? undefined : slipsFor(topicId).find((s) => s.id === id);
+  return { verdict: right ? "right" : "wrong", slip: own?.id, said: right ? RIGHT(n) : own ? own.says : ASK(n) };
+}
+
+/**
+ * Settle a Calculus item (one with a spec) from an answer as written or said: rules/calc checkAnswer decides, from the
+ * spec alone. 'unsure' - blank, unreadable, not comparable - settles nothing (null): the desk does not guess. The slip
+ * is checkAnswer's own where it names one (sign, lost-constant), else the pick offered, and either survives only on a
+ * wrong item and only from the topic's list (`settled`). No pen position: `locate` reads linear lines only.
+ */
+export function settleSpec(n: number, spec: unknown, answer: unknown, slipId: unknown, topicId: string): Settled | null {
+  const c = checkAnswer(spec, typeof answer === "string" ? answer : "");
+  if (c.verdict === "unsure") return null;
+  return settled(n, c.verdict === "right", c.slip ?? slipId, topicId);
 }
 
 /**

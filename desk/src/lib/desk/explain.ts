@@ -11,10 +11,17 @@
  * rules/maths substitutes it into the question, exactly as marking does, and an unsure item settles
  * on what the substitution says. The model never decides right or wrong. Its reply is checked in code
  * for the answer (`leaks`) - a reply that gives it away is replaced by the item's own line.
+ *
+ * A Calculus item (one with a `spec`) is heard the same way, spoken to as a first-year university student on the
+ * Calculus 1 course: the model transcribes the final answer they say they got (an expression or a number, as plain
+ * text), rules/calc checkAnswer settles an unsure item from it (rules/maths settleSpec), and the reply is checked
+ * with leaksCalc(spec, reply).
  */
 import { text } from "../engines/text";
-import { ASK, leaks, settle, settled, slipsFor, slipVocabulary, type Settled } from "../rules/maths";
+import { ASK, leaks, settle, settled, settleSpec, slipsFor, slipVocabulary, type Settled } from "../rules/maths";
+import { leaksCalc } from "../rules/calc";
 import { topic } from "../library/syllabus";
+import { PATHS, topicIn } from "../library/paths";
 import { getLearner, recordAttempt } from "../session/learners";
 import type { PracticeItem } from "../session/store";
 
@@ -29,7 +36,10 @@ export async function explain(
   transcript: string,
   topicId: string,
   learnerId: string,
+  /** The item is a Calculus one: the university stance, and the final answer as an expression or a number. */
+  calc = false,
 ): Promise<{ reply: string; slip?: string; value: string; provider: string; ms: number }> {
+  if (calc) return explainCalc(itemQuestion, transcript, topicId, learnerId);
   const t = topic(topicId);
   const memory = getLearner(learnerId).memory;
 
@@ -51,7 +61,47 @@ export async function explain(
     `value: the final value of x the student says they got, written as a plain number or simple fraction (nine is 9, ` +
     `minus three is -3, seven halves is 7/2). Their value, not yours — do not work it out. An empty string if they did not say one.`;
 
-  const { json, provider, ms } = await text<{ reply: string; slip: string; value: string }>({ system, prompt, schema: SCHEMA, model: "best" });
+  return heard(await text<{ reply: string; slip: string; value: string }>({ system, prompt, schema: SCHEMA, model: "best" }), topicId);
+}
+
+/** A Calculus item heard: the university stance, the calc1 topic from topicIn, the answer as an expression or a number. */
+async function explainCalc(
+  itemQuestion: string,
+  transcript: string,
+  topicId: string,
+  learnerId: string,
+): Promise<{ reply: string; slip?: string; value: string; provider: string; ms: number }> {
+  const t = topicIn(topicId);
+  const memory = getLearner(learnerId).memory;
+
+  const system =
+    `You are a calculus tutor listening to a first-year university student on the ${PATHS.calc1.name} course explain their own working out loud. ` +
+    `Socratic rules, absolute: never state the final answer, never give the completed line, never say whether they are right or wrong. ` +
+    `Point at the step they should look at again, or at the step that was the good one. ` +
+    `One or two sentences. Plain text only — no LaTeX, no markdown; write x^2 as x². This will be read aloud.`;
+
+  const prompt =
+    `Topic: ${t?.name ?? topicId}\n${t?.blurb ?? ""}\n\n` +
+    `The question: ${itemQuestion}\n\n` +
+    `What the student said, transcribed from speech. The transcription may be rough or misheard — read it charitably ` +
+    `and answer what they meant:\n«${transcript}»\n\n` +
+    (memory.length ? `What the desk has learned about this student:\n${memory.map((m) => `- ${m}`).join("\n")}\n\n` : "") +
+    `Reply to them in one or two sentences that point at the step, not the answer.\n\n` +
+    `You may also name the mistake you heard, as an id from this list — or the word "unclear" if none of them fits ` +
+    `or their reasoning was sound:\n${slipVocabulary(topicId)}\n\n` +
+    `value: the final answer the student says they got, as plain text - an expression in x using ^ for powers, sqrt(), ` +
+    `e^, ln, sin, cos and so on, or a number or a fraction (six x plus two is 6x + 2, minus three is -3, seven halves is ` +
+    `7/2, x squared plus C is x^2 + C; include +C if they say it). Their answer, not yours — do not work it out. ` +
+    `An empty string if they did not say one.`;
+
+  return heard(await text<{ reply: string; slip: string; value: string }>({ system, prompt, schema: SCHEMA, model: "best" }), topicId);
+}
+
+/** What was heard, as the desk keeps it: a slip only from the topic's list. */
+function heard(
+  { json, provider, ms }: { json: { reply: string; slip: string; value: string } | null | undefined; provider: string; ms: number },
+  topicId: string,
+): { reply: string; slip?: string; value: string; provider: string; ms: number } {
   const allowed = new Set(slipsFor(topicId).map((s) => s.id));
   const id = typeof json?.slip === "string" ? json.slip.trim() : "";
   return {
@@ -81,13 +131,18 @@ export async function explainItem(
   /** Is this item still on the walk, as it was, and still unsure? Asked after the model answers - the set may have moved on. */
   stillUnsure: () => boolean,
 ): Promise<Explained> {
-  const heard = await explain(item.question, transcript, topicId, learnerId);
-  const verdict = stillUnsure() ? settle(item, heard.value, heard.slip, topicId) : null;
+  const calc = !!item.spec;
+  const h = await explain(item.question, transcript, topicId, learnerId, calc);
+  // a Calculus item settles by checkAnswer from its spec (null when unsure); a school item by substitution
+  const verdict = !stillUnsure() ? null
+    : calc ? settleSpec(item.n, item.spec, h.value, h.slip, topicId)
+    : settle(item, h.value, h.slip, topicId);
   if (verdict) recordAttempt(learnerId, topicId, verdict.verdict === "right", verdict.slip);
   // an item already wrong: the slip the conversation found replaces the marker's, when the rulebook has it (no verdict, no record)
-  const named = !verdict && item.verdict === "wrong" && heard.slip ? settled(item.n, false, heard.slip, topicId) : null;
+  const named = !verdict && item.verdict === "wrong" && h.slip ? settled(item.n, false, h.slip, topicId) : null;
   // the item's own line stands in for a reply that gives the answer away (or says nothing)
   const own = verdict?.said ?? item.said ?? ASK(item.n);
-  const reply = heard.reply && !leaks(item.question, heard.reply) ? heard.reply : own;
-  return { reply, slip: heard.slip, ...(verdict ? { settled: verdict } : {}), ...(named?.slip ? { renamed: { slip: named.slip, said: named.said } } : {}) };
+  const gives = calc ? leaksCalc(item.spec, h.reply) : leaks(item.question, h.reply);
+  const reply = h.reply && !gives ? h.reply : own;
+  return { reply, slip: h.slip, ...(verdict ? { settled: verdict } : {}), ...(named?.slip ? { renamed: { slip: named.slip, said: named.said } } : {}) };
 }
