@@ -1,1 +1,309 @@
-/* Blueprint landing theme (contest A/3): locked off, see landing/themes/index.ts. Filled by the blueprint port. */
+/*
+  Blueprint - the drafting-sheet look of the Study Desk landing (contest study-desk-landing, entry A, variant 3),
+  ported value for value. LOCKED OFF: nothing selects this theme (landing/themes/index.ts THEMES_ENABLED), so none of
+  this paints today; it is here so the look is kept, typechecked and testable until product decides the age tiers.
+  Everything is scoped under .desk-tv.bp; the winner's #ids are bp- classes, its art classes (l1, l2, d, c, dr ...)
+  live inside that scope only. Its level-1 detail view, its own switcher and the crumb are not ported: the product
+  opens an app or the learner switcher through tv/keys.ts. The winner's "level 2" (the app opens) is [data-zoom].
+  Sizes are for the 1920 x 1080 stage; the 5% safe zone is 96 px left and right, 54 px top and bottom.
+*/
+
+.desk-tv.bp {
+  --cream: #f3efe4; --deep: #08103a; --deep2: #0b1650; --board: #1a3399;
+  --acc: #ffe45c; --accg: 255, 228, 92;
+  --f-display: var(--desk-face-bp-display, "Jost"), "Century Gothic", "Segoe UI", Arial, sans-serif;
+  --f-body: var(--desk-face-bp-body, "IBM Plex Sans"), "Segoe UI", system-ui, Arial, sans-serif;
+  --f-mono: var(--desk-face-bp-mono, "IBM Plex Mono"), Consolas, "Courier New", monospace;
+  --ease: cubic-bezier(.22, .8, .24, 1);
+  --arr: 1;
+  position: absolute; inset: 0; overflow: hidden; background: var(--deep); color: var(--cream);
+  font-family: var(--f-body); -webkit-font-smoothing: antialiased; user-select: none; cursor: default;
+}
+.desk-tv.bp > * { position: absolute; }
+.desk-tv.bp button { font: inherit; color: inherit; background: none; border: 0; padding: 0; margin: 0; cursor: pointer; outline: none; }
+
+/* ---------- ground */
+.desk-tv.bp .bp-ground { left: 0; top: 0; width: 1920px; height: 1080px; background: radial-gradient(ellipse 64% 82% at var(--lx, 50%) 46%, #1d38a6 0%, #16298a 30%, #0e1c66 58%, #08103a 100%); }
+.desk-tv.bp .bp-vig { left: 0; top: 0; width: 1920px; height: 1080px; background: radial-gradient(ellipse 78% 88% at 50% 48%, transparent 52%, rgba(2, 4, 22, .62) 100%); pointer-events: none; }
+.desk-tv.bp .bp-grain { left: 0; top: 0; width: 1920px; height: 1080px; pointer-events: none; opacity: .55; background-size: 160px 160px; }
+.desk-tv.bp .bp-gridpool {
+  left: 0; top: 0; width: 1920px; height: 1080px; pointer-events: none;
+  -webkit-mask-image: radial-gradient(ellipse 720px 560px at 50% 54%, #000 0%, rgba(0, 0, 0, .6) 46%, transparent 100%); mask-image: radial-gradient(ellipse 720px 560px at 50% 54%, #000 0%, rgba(0, 0, 0, .6) 46%, transparent 100%);
+  transition: transform .72s var(--ease);
+}
+.desk-tv.bp .bp-gridlines {
+  position: absolute; left: -720px; top: 0; width: 3360px; height: 1080px; transition: transform .72s var(--ease);
+  background-image: linear-gradient(rgba(255, 255, 255, .14) 1.5px, transparent 1.5px), linear-gradient(90deg, rgba(255, 255, 255, .14) 1.5px, transparent 1.5px), linear-gradient(rgba(255, 255, 255, .055) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, .055) 1px, transparent 1px);
+  background-size: 120px 120px, 120px 120px, 24px 24px, 24px 24px;
+}
+.desk-tv.bp .bp-gridfine { position: absolute; inset: 0; opacity: 0; transition: opacity .8s; background-image: linear-gradient(rgba(255, 255, 255, .05) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, .05) 1px, transparent 1px); background-size: 8px 8px; }
+.desk-tv.bp[data-zoom] .bp-gridfine { opacity: 1; }
+.desk-tv.bp .bp-bgcons { left: 0; top: 0; width: 1920px; height: 1080px; pointer-events: none; transition: transform .72s var(--ease); }
+.desk-tv.bp .bp-bgcons svg { position: absolute; left: -720px; top: 0; overflow: visible; }
+.desk-tv.bp .bp-bgcons * { fill: none; stroke: var(--cream); stroke-width: 1.5; opacity: .13; stroke-linecap: round; }
+.desk-tv.bp .bp-flood { left: 0; top: 0; width: 4800px; height: 4800px; margin: -2400px 0 0 -2400px; border-radius: 50%; background: var(--acc); transform: translate3d(var(--fx, 960px), var(--fy, 900px), 0) scale(0); transition: transform .52s cubic-bezier(.6, .02, .2, 1); pointer-events: none; will-change: transform; }
+.desk-tv.bp[data-zoom] .bp-flood { transform: translate3d(var(--fx, 960px), var(--fy, 900px), 0) scale(1); }
+
+/* ---------- drawings */
+.desk-tv.bp .bp-drawings .dr { position: absolute; left: 0; top: 0; width: 600px; height: 600px; transform-origin: 50% 50%; transition: transform .8s cubic-bezier(.4, .02, .14, 1), opacity .55s ease; will-change: transform; pointer-events: none; --accent: #fff; --glow: 255, 255, 255; }
+.desk-tv.bp .dr svg { display: block; overflow: visible; }
+.desk-tv.bp .dr svg * { fill: none; stroke: var(--cream); stroke-linecap: round; stroke-linejoin: round; }
+.desk-tv.bp .dr .l1 { stroke-width: 4; } .desk-tv.bp .dr .l2 { stroke-width: 2.2; } .desk-tv.bp .dr .l3s { stroke-width: 1.5; }
+.desk-tv.bp .dr .c { stroke-width: 1.5; stroke-dasharray: 5 8; opacity: .34; }
+.desk-tv.bp .dr .tk, .desk-tv.bp .dr .gh { stroke-dasharray: none; stroke-width: 1.5; opacity: .22; }
+.desk-tv.bp .dr .lin { stroke-dasharray: 9 7; opacity: .7; stroke-width: 1.6; }
+.desk-tv.bp .dr .dashdot { stroke-dasharray: 22 6 3 6; opacity: .6; stroke-width: 1.5; }
+.desk-tv.bp .dr .ah { fill: var(--cream); stroke: none; }
+.desk-tv.bp .dr .hc { stroke-width: 1.2; opacity: .5; }
+.desk-tv.bp .dr .d { stroke-dasharray: 1.02 1.02; stroke-dashoffset: 0; }
+.desk-tv.bp .dr .dot { fill: var(--deep); stroke: var(--cream); stroke-width: 1.6; }
+.desk-tv.bp .dr .hookd { fill: var(--cream); stroke: none; }
+.desk-tv.bp .dr .wash { opacity: 0; transition: opacity .7s ease; }
+.desk-tv.bp .dr.cur .wash { opacity: 1; }
+.desk-tv.bp .dr .wf { fill: var(--accent); stroke: none; opacity: .26; }
+.desk-tv.bp .dr .wf.cone { opacity: .1; }
+.desk-tv.bp .dr .cloud { fill: rgba(8, 16, 58, .72); stroke: var(--cream); stroke-width: 2.2; stroke-dasharray: 9 7; }
+.desk-tv.bp .dr .qm { stroke-width: 3.4; } .desk-tv.bp .dr .qd { fill: var(--cream); stroke: none; }
+.desk-tv.bp .dr .pf { fill: var(--deep2); stroke: var(--cream); stroke-width: 2.2; }
+.desk-tv.bp .dr .dot.on { fill: var(--accent); stroke: var(--accent); }
+.desk-tv.bp .dr .halo { fill: rgba(var(--glow), .18); stroke: none; }
+.desk-tv.bp .dr .glow { fill: var(--accent); stroke: none; }
+.desk-tv.bp .dr .rays { stroke: var(--accent); stroke-width: 3; }
+.desk-tv.bp .dr .hint { opacity: 0; transition: opacity .6s; }
+.desk-tv.bp .dr.cur .hint { opacity: 1; }
+.desk-tv.bp .dr .arc { stroke: var(--accent); stroke-width: 3.4; stroke-dasharray: 1.02 1.02; stroke-dashoffset: 1.02; opacity: 0; }
+.desk-tv.bp .dr .brk { stroke: var(--accent); stroke-width: 6; opacity: 0; transition: opacity .35s; }
+.desk-tv.bp .dr[data-focused="true"] .brk { opacity: 1; }
+.desk-tv.bp .dr .ghost .c { stroke: var(--accent); opacity: .9; stroke-dasharray: 4 5; }
+.desk-tv.bp .dr .snd { stroke: var(--accent); stroke-width: 2.5; opacity: 0; }
+.desk-tv.bp .dr .wvb { stroke: var(--cream); stroke-width: 4; stroke-linecap: round; opacity: .9; }
+.desk-tv.bp .dr.cur .wvb { stroke: var(--accent); }
+.desk-tv.bp .dr .wvb.q { opacity: .35; }
+.desk-tv.bp .dr .pause rect { fill: var(--accent); stroke: none; opacity: 0; }
+.desk-tv.bp .dr.cur .pause rect { opacity: .95; }
+.desk-tv.bp .dr .mk { fill: var(--accent); stroke: none; }
+.desk-tv.bp .dr .spk { stroke: var(--accent); stroke-width: 2.4; }
+.desk-tv.bp .dr .lr { stroke: var(--accent); stroke-width: 5; } .desk-tv.bp .dr .lr2 { stroke: var(--cream); stroke-width: 1.5; opacity: .6; }
+.desk-tv.bp .dr .lh { stroke: var(--accent); stroke-width: 9; } .desk-tv.bp .dr .lg { stroke: var(--cream); stroke-width: 3; opacity: .7; }
+.desk-tv.bp .dr:not(.cur) .lr, .desk-tv.bp .dr:not(.cur) .lh { stroke: var(--cream); }
+.desk-tv.bp .dr .l2c { stroke: var(--accent); stroke-width: 3.2; }
+.desk-tv.bp .dr .curl .ah { fill: var(--accent); }
+.desk-tv.bp .dr .tab rect { fill: transparent; }
+.desk-tv.bp .dr:not(.cur) .idle { opacity: .92; }
+.desk-tv.bp .dr:before { content: ""; position: absolute; left: 70px; top: 462px; width: 460px; height: 110px; background: radial-gradient(ellipse at center, rgba(2, 4, 26, .5) 0%, rgba(2, 4, 26, .22) 45%, transparent 72%); pointer-events: none; }
+
+/* focused = inked in */
+.desk-tv.bp .dr:not(.cur) { opacity: .82; }
+.desk-tv.bp .dr.cur .base { filter: drop-shadow(0 0 5px rgba(var(--glow), .45)); }
+.desk-tv.bp .dr.cur .idle { filter: drop-shadow(0 0 6px rgba(var(--glow), .7)); }
+/* an app with nothing on the desk: no lit fill, no lantern, no lit mark */
+.desk-tv.bp .dr[data-fresh] .wash, .desk-tv.bp .dr[data-fresh] .hint, .desk-tv.bp .dr[data-fresh] .dot.on { opacity: 0; }
+.desk-tv.bp .dr[data-fresh].cur .base { filter: none; }
+
+/* idle motion: focused drawing only */
+@keyframes bp-wpulse { 0%, 100% { opacity: .24; } 50% { opacity: .5; } }
+@keyframes bp-halo { 0%, 100% { transform: scale(1); opacity: .7; } 50% { transform: scale(1.35); opacity: 1; } }
+@keyframes bp-arcd { 0% { stroke-dashoffset: 1.02; opacity: 1; } 55% { stroke-dashoffset: 0; opacity: 1; } 88% { stroke-dashoffset: 0; opacity: 1; } 100% { stroke-dashoffset: 0; opacity: 0; } }
+@keyframes bp-ring { 0%, 100% { transform: rotate(0); } 4% { transform: rotate(-7deg); } 9% { transform: rotate(6deg); } 14% { transform: rotate(-5deg); } 19% { transform: rotate(3deg); } 25% { transform: rotate(0); } }
+@keyframes bp-snd { 0%, 100% { opacity: 0; } 4% { opacity: .9; } 25% { opacity: 0; } }
+@keyframes bp-wv { 0%, 100% { transform: scaleY(.4); } 50% { transform: scaleY(1.15); } }
+@keyframes bp-tabl { 0%, 100% { fill: rgba(var(--glow), 0); } 8%, 20% { fill: rgba(var(--glow), .6); } 30% { fill: rgba(var(--glow), 0); } }
+@keyframes bp-sweep { 0%, 100% { transform: translate(-46px, 0); } 50% { transform: translate(20px, 0); } }
+@keyframes bp-curl { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(6px, 0); } }
+.desk-tv.bp .dr.cur .wf[class*=" s"] { animation: bp-wpulse 3.6s ease-in-out infinite; }
+.desk-tv.bp .dr.cur .wf.s0 { animation-delay: 0s; } .desk-tv.bp .dr.cur .wf.s1 { animation-delay: .3s; } .desk-tv.bp .dr.cur .wf.s2 { animation-delay: .6s; }
+.desk-tv.bp .dr.cur .wf.s3 { animation-delay: .9s; } .desk-tv.bp .dr.cur .wf.s4 { animation-delay: 1.2s; } .desk-tv.bp .dr.cur .wf.s5 { animation-delay: 1.5s; }
+.desk-tv.bp .dr.cur .halo { animation: bp-halo 2.4s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+.desk-tv.bp .dr.cur .arc { animation: bp-arcd 6s ease-in-out infinite; }
+.desk-tv.bp .dr.cur .bell { animation: bp-ring 4.4s ease-in-out infinite; transform-box: fill-box; transform-origin: 50% 100%; }
+.desk-tv.bp .dr.cur .snd { animation: bp-snd 4.4s ease-in-out infinite; }
+.desk-tv.bp .dr.cur .wave:not(.froze) .wvb { animation: bp-wv 1.5s ease-in-out infinite; animation-delay: calc(var(--bi) * -.19s); transform-box: fill-box; transform-origin: center; }
+.desk-tv.bp .dr.cur .tab rect { animation: bp-tabl 6s ease-in-out infinite; animation-delay: calc(var(--ti) * 1.1s); }
+.desk-tv.bp .dr.cur .lens { animation: bp-sweep 7s ease-in-out infinite; }
+.desk-tv.bp .dr.cur .curl { animation: bp-curl 2.6s ease-in-out infinite; }
+
+/* the app opens: inverted linework on the accent flood */
+.desk-tv.bp .dr.inv svg * { stroke: var(--deep); }
+.desk-tv.bp .dr.inv .ah, .desk-tv.bp .dr.inv .hookd, .desk-tv.bp .dr.inv .qd, .desk-tv.bp .dr.inv .mk { fill: var(--deep); }
+.desk-tv.bp .dr.inv .wf { fill: var(--deep); opacity: .14; }
+.desk-tv.bp .dr.inv .dot { fill: transparent; stroke: var(--deep); }
+.desk-tv.bp .dr.inv .cloud { fill: rgba(255, 255, 255, .18); }
+.desk-tv.bp .dr.inv .pf { fill: transparent; }
+.desk-tv.bp .dr.inv .base, .desk-tv.bp .dr.inv .idle { filter: none; }
+.desk-tv.bp .dr.inv .brk, .desk-tv.bp .dr.inv .arc, .desk-tv.bp .dr.inv .rays, .desk-tv.bp .dr.inv .glow, .desk-tv.bp .dr.inv .halo, .desk-tv.bp .dr.inv .lantern { display: none; }
+.desk-tv.bp .dr.inv .wvb, .desk-tv.bp .dr.inv .lr, .desk-tv.bp .dr.inv .lh, .desk-tv.bp .dr.inv .l2c, .desk-tv.bp .dr.inv .pause rect { stroke: var(--deep); fill: none; }
+.desk-tv.bp .dr.inv .curl .ah, .desk-tv.bp .dr.inv .pause rect { fill: var(--deep); }
+
+/* ---------- names */
+.desk-tv.bp .bp-names .gn, .desk-tv.bp .bp-names .sn { position: absolute; left: 0; top: 0; white-space: nowrap; font-family: var(--f-display); text-transform: uppercase; transform-origin: 0 0; transition: transform .72s var(--ease), opacity .5s ease; will-change: transform; pointer-events: none; }
+.desk-tv.bp .bp-names .gn { font-weight: 300; font-size: 200px; line-height: 1; letter-spacing: .05em; color: transparent; -webkit-text-stroke: 2px var(--cream); opacity: 0; }
+.desk-tv.bp .bp-names .gn.cur { opacity: 1; }
+.desk-tv.bp .bp-names .gn .fill { position: absolute; left: 0; top: 0; color: var(--ai); -webkit-text-stroke: 0; clip-path: inset(0 100% 0 0); transition: clip-path .9s var(--ease) .05s; }
+.desk-tv.bp .bp-names .gn.cur .fill { clip-path: inset(0 0 0 0); }
+.desk-tv.bp[data-zoom] .bp-names .gn { -webkit-text-stroke-color: var(--deep); }
+.desk-tv.bp[data-zoom] .bp-names .gn .fill { color: var(--deep); }
+.desk-tv.bp .bp-names .sn { font-weight: 400; font-size: 36px; line-height: 1; letter-spacing: .16em; text-align: center; width: 460px; color: var(--ai); opacity: 0; }
+.desk-tv.bp .bp-names .sn.on { opacity: .92; }
+
+/* ---------- top-left brand */
+.desk-tv.bp .bp-brand { left: 96px; top: 54px; height: 72px; display: flex; align-items: center; gap: 18px; }
+.desk-tv.bp .bp-brand svg { width: 64px; height: 64px; overflow: visible; }
+.desk-tv.bp .bp-brand svg * { fill: none; stroke: var(--cream); stroke-width: 3.2; stroke-linecap: round; stroke-linejoin: round; }
+.desk-tv.bp .bp-brand .mk .d { stroke-dasharray: 1.02 1.02; }
+.desk-tv.bp .bp-brand .wm { font: 400 34px/1 var(--f-display); letter-spacing: .3em; text-transform: uppercase; white-space: nowrap; margin-right: -.3em; }
+.desk-tv.bp[data-zoom] .bp-brand svg * { stroke: var(--deep); }
+.desk-tv.bp[data-zoom] .bp-brand .wm { color: var(--deep); }
+
+/* ---------- callout */
+.desk-tv.bp .bp-callout { box-sizing: border-box; padding: 24px 30px 26px; transition: opacity .35s ease; pointer-events: none; }
+.desk-tv.bp .bp-callout .cf { position: absolute; left: 0; top: 0; overflow: visible; }
+.desk-tv.bp .bp-callout .cf path { fill: rgba(9, 17, 62, .9); stroke: var(--cream); stroke-width: 2; }
+.desk-tv.bp .bp-callout .cf .tick { fill: none; stroke: var(--acc); stroke-width: 4; stroke-linecap: round; }
+.desk-tv.bp .bp-callout .cc { position: relative; animation: bp-coin .5s var(--ease) both; }
+.desk-tv.bp .co-line { font: 500 36px/1.2 var(--f-body); letter-spacing: .005em; text-wrap: balance; }
+.desk-tv.bp .co-sub { margin-top: 2px; font: 500 34px/1.2 var(--f-body); color: var(--acc); }
+.desk-tv.bp .co-detail { margin-top: 10px; font: 400 28px/1.3 var(--f-body); opacity: .8; }
+.desk-tv.bp .co-nothing { font: 500 46px/1.1 var(--f-display); letter-spacing: .06em; text-transform: uppercase; }
+.desk-tv.bp .co-tag { margin-top: 12px; font: 400 32px/1.28 var(--f-body); opacity: .86; }
+.desk-tv.bp .chip { display: inline-flex; align-items: center; gap: 10px; height: 38px; padding: 0 14px 0 10px; border: 1.5px solid rgba(243, 239, 228, .8); border-radius: 19px; margin-top: 14px; font: 500 20px/1 var(--f-body); letter-spacing: .14em; text-transform: uppercase; }
+.desk-tv.bp .chip svg { width: 24px; height: 24px; fill: none; stroke: var(--acc); stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+@keyframes bp-coin { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+.desk-tv.bp .bp-leader { left: 0; top: 0; pointer-events: none; overflow: visible; }
+.desk-tv.bp .bp-leader .lead { fill: none; stroke: var(--acc); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; filter: drop-shadow(0 0 6px rgba(var(--accg), .7)); stroke-dasharray: 1.02 1.02; stroke-dashoffset: 0; animation: bp-leadd .8s ease-out both; }
+.desk-tv.bp .bp-leader .lc { fill: none; stroke: var(--acc); stroke-width: 3; }
+.desk-tv.bp .bp-leader .lc2 { fill: rgba(var(--accg), .25); stroke: none; }
+@keyframes bp-leadd { from { stroke-dashoffset: 1.02; } to { stroke-dashoffset: 0; } }
+.desk-tv.bp[data-zoom] .bp-leader, .desk-tv.bp[data-zoom] .bp-callout { opacity: 0; pointer-events: none; }
+.desk-tv.bp .bp-leader, .desk-tv.bp .bp-callout { transition: opacity .3s; }
+
+/* ---------- actions */
+.desk-tv.bp .bp-actions { left: 96px; top: 906px; height: 88px; display: flex; align-items: center; gap: 26px; transition: opacity .35s; }
+.desk-tv.bp[data-zoom] .bp-actions { opacity: 0; pointer-events: none; }
+.desk-tv.bp .btn { height: 84px; padding: 0 44px; border-radius: 8px; font: 600 34px/1 var(--f-body); letter-spacing: .01em; display: flex; align-items: center; gap: 16px; white-space: nowrap; transition: transform .28s var(--ease), box-shadow .28s, background .28s, color .28s; position: relative; }
+.desk-tv.bp .btn.pri { background: var(--cream); color: var(--deep); }
+.desk-tv.bp .btn.gh { border: 2px solid var(--cream); color: var(--cream); font-weight: 500; background: rgba(8, 16, 58, .4); }
+.desk-tv.bp .btn svg { width: 30px; height: 30px; fill: none; stroke: currentColor; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+.desk-tv.bp .btn[data-focused="true"] { transform: translateY(-6px) scale(1.07); box-shadow: 0 0 0 6px rgba(var(--accg), .9), 0 0 46px rgba(var(--accg), .55), 0 18px 30px rgba(2, 4, 22, .5); }
+.desk-tv.bp .btn.gh[data-focused="true"] { background: var(--cream); color: var(--deep); }
+
+/* ---------- hints */
+.desk-tv.bp .bp-hints { left: 1100px; width: 724px; justify-content: flex-end; top: 64px; height: 44px; display: flex; align-items: center; gap: 34px; font: 500 20px/1 var(--f-body); letter-spacing: .16em; text-transform: uppercase; opacity: .78; white-space: nowrap; }
+.desk-tv.bp .bp-hints span { display: flex; align-items: center; gap: 10px; }
+.desk-tv.bp .bp-hints svg { width: 30px; height: 30px; fill: none; stroke: var(--cream); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.desk-tv.bp .bp-hints .fillg { fill: var(--cream); stroke: none; }
+.desk-tv.bp[data-zoom] .bp-hints { color: var(--deep); }
+.desk-tv.bp[data-zoom] .bp-hints svg { stroke: var(--deep); }
+.desk-tv.bp[data-zoom] .bp-hints .fillg { fill: var(--deep); }
+
+/* ---------- title block: who is at the desk, the phone, where in the sheet */
+.desk-tv.bp .bp-title { left: 1290px; top: 896px; width: 534px; height: 130px; box-sizing: border-box; background: rgba(7, 14, 52, .9); border: 2px solid rgba(243, 239, 228, .9); display: grid; grid-template-columns: 300px 234px; grid-template-rows: 80px 50px; }
+.desk-tv.bp .bp-title .tc { display: flex; align-items: center; gap: 14px; padding: 0 18px; border-right: 1.5px solid rgba(243, 239, 228, .4); border-bottom: 1.5px solid rgba(243, 239, 228, .4); box-sizing: border-box; }
+.desk-tv.bp .bp-title .tc:nth-child(2n) { border-right: 0; }
+.desk-tv.bp .bp-title .tc:nth-child(n+3) { border-bottom: 0; }
+.desk-tv.bp .mono-c { width: 54px; height: 54px; border-radius: 50%; border: 2.5px solid var(--cream); display: flex; align-items: center; justify-content: center; font: 400 32px/1 var(--f-display); flex: none; }
+.desk-tv.bp .bp-title .nm { font: 500 36px/1 var(--f-display); letter-spacing: .08em; text-transform: uppercase; }
+.desk-tv.bp .bp-title .pen { width: 100%; height: 70px; }
+.desk-tv.bp .bp-title .pen * { fill: none; stroke: var(--cream); stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
+.desk-tv.bp .bp-title .pen .lit { stroke: var(--acc); filter: drop-shadow(0 0 5px rgba(var(--accg), .9)); }
+.desk-tv.bp .bp-title .pen .dim { opacity: .45; }
+.desk-tv.bp .bp-title .pen .dotl { stroke-dasharray: 1 8; stroke-width: 3; }
+.desk-tv.bp .bp-title .pips { display: flex; align-items: center; gap: 8px; }
+.desk-tv.bp .bp-title .pip { width: 14px; height: 14px; border-radius: 50%; border: 2px solid var(--cream); box-sizing: border-box; }
+.desk-tv.bp .bp-title .pip.on { background: var(--acc); border-color: var(--acc); box-shadow: 0 0 12px rgba(var(--accg), .9); }
+.desk-tv.bp .bp-title .lv { font: 500 20px/1 var(--f-body); letter-spacing: .18em; text-transform: uppercase; }
+.desk-tv.bp .bp-title .tm { display: flex; align-items: center; gap: 10px; }
+.desk-tv.bp .bp-title .tm svg { width: 32px; height: 32px; fill: none; stroke: var(--cream); stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+.desk-tv.bp .bp-title .tm span { font: 500 20px/1 var(--f-body); letter-spacing: .16em; text-transform: uppercase; }
+
+/* ---------- the unpaired phone: the address and the code, in the sheet's own linework */
+.desk-tv.bp .bp-phone { left: 0; top: 0; width: 640px; height: 1080px; pointer-events: none; opacity: 0; transition: opacity .5s; }
+.desk-tv.bp[data-unpaired] .bp-phone { opacity: 1; }
+.desk-tv.bp .bp-phone .ph { position: absolute; left: 110px; top: 150px; width: 360px; height: 576px; box-sizing: border-box; border: 4px solid var(--cream); border-radius: 46px; background: linear-gradient(180deg, rgba(26, 51, 153, .5), rgba(8, 16, 58, .72)); transition: box-shadow .28s; }
+.desk-tv.bp .bp-phone .ph:before { content: ""; position: absolute; left: 50%; top: 16px; width: 90px; height: 14px; margin-left: -45px; border-radius: 7px; border: 2.5px solid var(--cream); }
+.desk-tv.bp .bp-phone .ph:after { content: ""; position: absolute; left: 50%; bottom: 16px; width: 110px; height: 6px; margin-left: -55px; border-radius: 3px; background: var(--cream); opacity: .7; }
+.desk-tv.bp .bp-phone[data-focused="true"] .ph { box-shadow: 0 0 0 6px rgba(var(--accg), .9), 0 0 46px rgba(var(--accg), .55); }
+.desk-tv.bp .bp-phone .scr { position: absolute; left: 22px; right: 22px; top: 56px; bottom: 40px; border: 1.5px dashed rgba(243, 239, 228, .4); border-radius: 22px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 22px; }
+.desk-tv.bp .bp-phone .pl { display: flex; align-items: center; gap: 10px; font: 500 20px/1 var(--f-body); letter-spacing: .2em; text-transform: uppercase; }
+.desk-tv.bp .bp-phone .pl svg { width: 28px; height: 28px; fill: none; stroke: var(--acc); stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+.desk-tv.bp .bp-phone .pin { font: 500 128px/1 var(--f-mono); letter-spacing: .04em; color: var(--cream); text-shadow: 0 0 30px rgba(var(--accg), .35); }
+.desk-tv.bp .bp-phone .pdots { display: flex; gap: 14px; }
+.desk-tv.bp .bp-phone .pdots i { width: 16px; height: 16px; border-radius: 50%; border: 2px solid var(--cream); opacity: .6; }
+.desk-tv.bp .bp-phone .url { position: absolute; left: 96px; top: 752px; box-sizing: border-box; height: 68px; padding: 0 26px; border: 2px solid var(--cream); border-radius: 6px; background: rgba(8, 16, 58, .85); display: flex; align-items: center; font: 500 30px/1 var(--f-mono); white-space: nowrap; letter-spacing: 0; }
+.desk-tv.bp .bp-phone svg.penline { position: absolute; left: 0; top: 0; overflow: visible; }
+.desk-tv.bp .bp-phone svg.penline path { fill: none; stroke: var(--acc); stroke-width: 3; stroke-dasharray: 2 10; stroke-linecap: round; opacity: .8; }
+@keyframes bp-flow { to { stroke-dashoffset: -48; } }
+.desk-tv.bp .bp-phone svg.penline path { animation: bp-flow 2.4s linear infinite; }
+
+/* ---------- the app opens */
+.desk-tv.bp .bp-launch { left: 96px; top: 270px; width: 700px; height: 400px; opacity: 0; pointer-events: none; transition: opacity .3s .2s; color: var(--deep); }
+.desk-tv.bp[data-zoom] .bp-launch { opacity: 1; }
+.desk-tv.bp .bp-launch .op { font: 400 46px/1 var(--f-display); letter-spacing: .34em; text-transform: uppercase; }
+.desk-tv.bp .bp-launch .dimline { margin-top: 70px; width: 640px; height: 60px; overflow: visible; }
+.desk-tv.bp .bp-launch .dimline * { fill: none; stroke: var(--deep); stroke-width: 3; stroke-linecap: round; }
+.desk-tv.bp .bp-launch .dimline .ah2 { fill: var(--deep); stroke: none; }
+.desk-tv.bp .bp-launch .dimline .pr { stroke-dasharray: 1.02 1.02; stroke-dashoffset: 1.02; }
+.desk-tv.bp[data-zoom] .bp-launch .dimline .pr { animation: bp-prog .45s cubic-bezier(.5, .1, .3, 1) .15s both; }
+@keyframes bp-prog { from { stroke-dashoffset: 1.02; } to { stroke-dashoffset: 0; } }
+
+/* ---------- sheet frame, index, halo, motes */
+.desk-tv.bp .bp-sheetframe { left: 0; top: 0; width: 1920px; height: 1080px; pointer-events: none; }
+.desk-tv.bp .bp-sheetframe * { fill: none; stroke: var(--cream); stroke-width: 1.5; opacity: .3; }
+.desk-tv.bp[data-zoom] .bp-sheetframe * { stroke: var(--deep); }
+.desk-tv.bp .bp-index { left: 96px; top: 376px; width: 360px; transition: opacity .4s, transform .8s cubic-bezier(.4, .02, .14, 1); }
+.desk-tv.bp[data-zoom] .bp-index, .desk-tv.bp[data-unpaired] .bp-index { opacity: 0; pointer-events: none; }
+.desk-tv.bp .bp-index .ix { display: flex; align-items: center; height: 66px; box-sizing: border-box; border: 1.5px solid rgba(243, 239, 228, .42); margin-top: -1.5px; background: rgba(8, 16, 58, .55); position: relative; transition: background .4s, border-color .4s, transform .5s var(--ease); opacity: .85; }
+.desk-tv.bp .bp-index .ix b { width: 58px; text-align: center; font: 400 34px/1 var(--f-display); border-right: 1.5px solid rgba(243, 239, 228, .42); height: 100%; display: flex; align-items: center; justify-content: center; box-sizing: border-box; }
+.desk-tv.bp .bp-index .ix span { flex: 1; padding-left: 18px; font: 400 28px/1 var(--f-display); letter-spacing: .09em; text-transform: uppercase; white-space: nowrap; }
+.desk-tv.bp .bp-index .ix i { width: 16px; height: 16px; margin-right: 20px; border-radius: 50%; border: 2.5px solid var(--c); box-sizing: border-box; transition: background .4s, box-shadow .4s, transform .4s; }
+.desk-tv.bp .bp-index .ix.on { background: rgba(var(--cg), .17); border-color: var(--c); opacity: 1; z-index: 2; transform: translateX(14px); }
+.desk-tv.bp .bp-index .ix.on b { border-right-color: var(--c); color: var(--c); }
+.desk-tv.bp .bp-index .ix.on i { background: var(--c); box-shadow: 0 0 14px rgba(var(--cg), .9); transform: scale(1.25); }
+.desk-tv.bp .bp-index .ix.on:before { content: ""; position: absolute; left: -14px; top: 50%; margin-top: -9px; border: 9px solid transparent; border-left: 14px solid var(--c); border-right: 0; }
+.desk-tv.bp .bp-halo { left: 0; top: 0; width: 1100px; height: 1100px; margin: -550px 0 0 -550px; background: radial-gradient(circle, rgba(var(--accg), .22) 0%, rgba(var(--accg), .08) 38%, transparent 68%); transition: transform .8s cubic-bezier(.4, .02, .14, 1), opacity .5s; pointer-events: none; will-change: transform; }
+.desk-tv.bp[data-unpaired] .bp-halo { opacity: .35; }
+.desk-tv.bp[data-zoom] .bp-halo { opacity: 0; }
+.desk-tv.bp .bp-motes { left: 0; top: 0; width: 1920px; height: 1080px; pointer-events: none; }
+
+/* ---------- a desk with no app on it */
+.desk-tv.bp .bp-empty { left: 96px; top: 376px; width: 760px; }
+.desk-tv.bp .bp-empty .co-nothing { font-size: 52px; }
+
+/* ---------- arrival beat: the room is entered (this page load, for this learner) */
+@keyframes bp-dro { from { stroke-dashoffset: 1.02; } to { stroke-dashoffset: 0; } }
+@keyframes bp-fin { from { opacity: 0; } to { opacity: 1; } }
+@keyframes bp-finu { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+@keyframes bp-poolin { from { opacity: 0; transform: scale(.4); } to { opacity: 1; transform: none; } }
+@keyframes bp-fillsw { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
+@keyframes bp-nmin { from { opacity: 0; letter-spacing: .18em; } to { opacity: 1; } }
+@keyframes bp-washin { from { opacity: 0; } to { opacity: 1; } }
+.desk-tv.bp[data-boot] .bp-gridpool { animation: bp-poolin calc(1.2s * var(--arr)) ease-out calc(.1s * var(--arr)) both; transform-origin: 50% 54%; }
+.desk-tv.bp[data-boot] .bp-bgcons, .desk-tv.bp[data-boot] .bp-vig { animation: bp-fin calc(1s * var(--arr)) ease calc(.2s * var(--arr)) both; }
+.desk-tv.bp[data-boot] .dr .base .d { animation: bp-dro calc(260ms * var(--arr)) linear calc((320 + var(--k) * 620 / var(--n)) * 1ms * var(--arr)) both; }
+.desk-tv.bp[data-boot] .dr.cur .base .d { animation-delay: calc((260 + var(--k) * 1050 / var(--n)) * 1ms * var(--arr)); }
+.desk-tv.bp[data-boot] .dr .cons, .desk-tv.bp[data-boot] .dr .dots, .desk-tv.bp[data-boot] .dr .cloudg { animation: bp-fin calc(.7s * var(--arr)) ease calc(.9s * var(--arr)) both; }
+.desk-tv.bp[data-boot] .dr.cur .wash, .desk-tv.bp[data-boot] .dr.cur .hint { animation: bp-washin calc(.8s * var(--arr)) ease calc(1.25s * var(--arr)) both; }
+.desk-tv.bp[data-boot] .dr { transition: none; }
+.desk-tv.bp[data-boot] .bp-names .gn.cur { animation: bp-nmin calc(.8s * var(--arr)) var(--ease) calc(.45s * var(--arr)) both; }
+.desk-tv.bp[data-boot] .bp-names .gn.cur .fill { animation: bp-fillsw calc(.9s * var(--arr)) var(--ease) calc(1.15s * var(--arr)) both; }
+.desk-tv.bp[data-boot] .bp-names .sn.on { animation: bp-fin calc(.6s * var(--arr)) ease calc(.9s * var(--arr)) both; }
+.desk-tv.bp[data-boot] .bp-brand .mk .d { animation: bp-dro calc(.9s * var(--arr)) ease-out calc(.1s * var(--arr)) both; }
+.desk-tv.bp[data-boot] .bp-brand .wm { animation: bp-fin calc(.7s * var(--arr)) ease calc(.7s * var(--arr)) both; }
+.desk-tv.bp[data-boot] .bp-callout { animation: bp-finu calc(.6s * var(--arr)) var(--ease) calc(1.35s * var(--arr)) both; }
+.desk-tv.bp[data-boot] .bp-leader .lead { animation: bp-leadd calc(.8s * var(--arr)) ease-out calc(1.6s * var(--arr)) both; }
+.desk-tv.bp[data-boot] .bp-leader .lc, .desk-tv.bp[data-boot] .bp-leader .lc2 { animation: bp-fin calc(.4s * var(--arr)) ease calc(2s * var(--arr)) both; }
+.desk-tv.bp[data-boot] .bp-actions, .desk-tv.bp[data-boot] .bp-title { animation: bp-finu calc(.6s * var(--arr)) var(--ease) calc(1s * var(--arr)) both; }
+.desk-tv.bp[data-boot] .bp-hints { animation: bp-fin calc(.6s * var(--arr)) ease calc(1.4s * var(--arr)) both; }
+.desk-tv.bp[data-boot] .bp-phone { animation: bp-finu calc(.7s * var(--arr)) var(--ease) calc(.5s * var(--arr)) both; }
+.desk-tv.bp[data-boot] .bp-phone .pin { animation: bp-fin calc(.6s * var(--arr)) ease calc(1s * var(--arr)) both; }
+.desk-tv.bp[data-boot] .bp-sheetframe { animation: bp-fin calc(1s * var(--arr)) ease calc(.1s * var(--arr)) both; }
+.desk-tv.bp[data-boot] .bp-index { animation: bp-finu calc(.6s * var(--arr)) var(--ease) calc(1.1s * var(--arr)) both; }
+.desk-tv.bp[data-boot] .bp-halo, .desk-tv.bp[data-boot] .bp-motes { animation: bp-fin calc(1.2s * var(--arr)) ease calc(.6s * var(--arr)) both; }
+
+/* ---------- reduced motion: cuts */
+@media (prefers-reduced-motion: reduce) {
+  .desk-tv.bp *, .desk-tv.bp *:before, .desk-tv.bp *:after { animation: none !important; transition: none !important; }
+  .desk-tv.bp .dr .arc { stroke-dashoffset: 0; opacity: .9; }
+  .desk-tv.bp .dr .snd { opacity: .5; }
+  .desk-tv.bp .bp-flood { transform: translate3d(var(--fx, 960px), var(--fy, 900px), 0) scale(0); }
+  .desk-tv.bp[data-zoom] .bp-flood { transform: translate3d(var(--fx, 960px), var(--fy, 900px), 0) scale(1); }
+}

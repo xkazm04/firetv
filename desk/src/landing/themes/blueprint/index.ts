@@ -1,8 +1,8 @@
-import { createElement } from "react";
 import type { LandingTheme } from "../types";
+import { BlueprintLanding } from "./Blueprint";
 
-/** Placeholder until the blueprint port lands: the drafting-sheet look (contest A/3), kept locked (themes/index.ts). */
-export const BLUEPRINT: LandingTheme = {
-  id: "blueprint", label: "Blueprint (contest A/3)",
-  Landing: () => createElement("div", { "data-role": "desk-scene", "data-theme": "blueprint" }),
-};
+/**
+ * The shortlisted drafting-sheet look (contest A/3, "blueprint"). Kept for the day product splits the landing by age
+ * (children vs adolescent); LOCKED OFF meanwhile - the registry (themes/index.ts) does not let anything select it.
+ */
+export const BLUEPRINT: LandingTheme = { id: "blueprint", label: "Blueprint (contest A/3)", Landing: BlueprintLanding };
