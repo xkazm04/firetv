@@ -171,7 +171,10 @@ line split (`workingLines`) and the slip names are one rule each, in `rules/math
   from the same latched record as the inked groove (`topicStates` in `desk/src/tv/mathsRows.ts`), never from a count
   of tonight's right answers, so a hatched groove never says Secure. `maths-ruler`.
 - **The paper** - cream, 48 px squares, a sky margin rule at 96 px, the sheet title in Fraunces and the learner's
-  name in the blue hand; it pans so the item in hand is under the lamp. `maths-sheet`.
+  name in the blue hand; it pans so the item in hand is under the lamp. A line too long for the paper - a long line
+  of working, a long printed question - is fitted to it (`fitRow` in `desk/src/tv/mathsRows.ts`): it shrinks in
+  2 px steps, never under the 28 px floor, with the pen's gap box and the tick inside the paper and "=" still under
+  "="; a line too wide even at 28 px wraps onto whole squares between its typeset parts. `maths-sheet`.
 - **Hand and print lines** - `maths-hand`, `maths-print`, fractions `maths-frac`, ticks `maths-tick`.
 - **Tally** - the set as six hand-drawn numbers in the top bar: ticked, ringed, dashed when unsure; the current one
   lit.

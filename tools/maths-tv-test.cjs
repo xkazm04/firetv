@@ -119,3 +119,55 @@ test('ruler 3: the TV no longer re-decides Secure from a count of right answers'
  assert.ok(!/function topicStates/.test(src),'topicStates lives in tv/mathsRows.ts');
  assert.ok(/topicStates/.test(src)&&/from "@\/tv\/mathsRows"/.test(src),'MathsTV.tsx reads the states from tv/mathsRows.ts');
 });
+
+// ---------------------------------------------------------------- 3. a long line is fitted to the paper
+
+/** The usable width of a row on the Walk's paper: 1130 px of paper less the 144 px margin, less the pen's overhang. */
+const ROOM=1130-144-16;
+/** A line measured the way the browser does: every em scales, but scripts never compute under 28 px (the floor). */
+const measure=(chars,scripts=0)=>(px)=>chars*0.46*px+scripts*0.6*Math.max(0.6*px,28);
+
+test('fit 1: a 40-character working line at 72 px is fitted inside the paper, never under 28 px',()=>{
+ const {fitRow,FIT_FLOOR}=R();
+ assert.equal(FIT_FLOOR,28);
+ const w=measure(40,3);
+ assert.ok(w(72)>ROOM,`the line overflows at 72 px (${w(72)} > ${ROOM})`);
+ const f=fitRow(72,ROOM,w);
+ assert.equal(f.wrap,false);
+ assert.ok(f.size>=28&&f.size<72,`fitted to ${f.size} px`);
+ assert.ok(w(f.size)<=ROOM,`scrollWidth ${w(f.size)} <= ${ROOM} after fitting`);
+ assert.ok(w(f.size+2)>ROOM||f.size+2>72,'and as large as it can be, to the 2 px step');
+});
+
+test('fit 2: a 72 px line that already fits is unchanged, and measured once',()=>{
+ const {fitRow}=R();
+ let calls=0;const w=(px)=>{calls++;return measure(18)(px);};
+ assert.deepEqual(fitRow(72,ROOM,w),{size:72,wrap:false});
+ assert.equal(calls,1);
+ assert.deepEqual(fitRow(46,ROOM,measure(30)),{size:46,wrap:false},'a printed question that fits');
+});
+
+test('fit 3: a line that cannot fit at 28 px stays at 28 px and wraps',()=>{
+ const {fitRow}=R();
+ const w=measure(120);
+ assert.ok(w(28)>ROOM);
+ assert.deepEqual(fitRow(72,ROOM,w),{size:28,wrap:true});
+ assert.deepEqual(fitRow(24,ROOM,measure(200)),{size:24,wrap:true},'a size already under the floor is never inflated');
+ assert.deepEqual(fitRow(72,0,measure(10)),{size:72,wrap:false},'no measured room (not laid out yet): left as it is');
+});
+
+test('fit 4: the "=" margin comes out of the room, so an aligned continued line still fits',()=>{
+ const {fitRow}=R();
+ const w=measure(30),margin=300;
+ const f=fitRow(72,ROOM-margin,w);
+ assert.ok(w(f.size)+margin<=ROOM,`${w(f.size)} + ${margin} <= ${ROOM}`);
+});
+
+test('fit 5: the paper wires the fit - MathsTV measures each row with fitRow, the CSS has the wrap and no fixed 40 px on the maths',()=>{
+ const strip=(s)=>s.replace(/\/\*[\s\S]*?\*\//g,'').replace(/(^|[^:"'`])\/\/.*$/gm,'$1');
+ const tv=strip(fs.readFileSync(path.join(root,'src/maths/MathsTV.tsx'),'utf8'));
+ assert.ok(/fitRow\(/.test(tv)&&/import \{[^}]*fitRow[^}]*\} from "@\/tv\/mathsRows"/.test(tv),'MathsTV.tsx calls fitRow from tv/mathsRows.ts');
+ const css=strip(fs.readFileSync(path.join(root,'src/design/maths-lamplight.css'),'utf8'));
+ assert.ok(/\.mb-row\[data-fit="wrap"\]/.test(css),'a row that cannot fit at the floor wraps');
+ assert.ok(!/\.mx\.print\s*\{[^}]*font-size:\s*40px/.test(css),'the right item sets its size on the row, so a fitted size reaches the maths');
+});

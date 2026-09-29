@@ -146,7 +146,8 @@
 /* a right item folds to its question: the print a step smaller and lighter, so the wrong ones lead (the winner's .item.right rule) */
 .maths-tv .mb-item[data-v="right"] .num { color: rgba(39, 48, 74, .42); }
 .maths-tv .mb-item[data-v="right"] .mb-row.q .rin { font-size: 40px; }
-.maths-tv .mb-item[data-v="right"] .mx.print { font-size: 40px; color: rgba(29, 36, 64, .86); }
+/* its size is the row's (above), so a line fitted to the paper (MathsTV usePaper) shrinks the maths with it */
+.maths-tv .mb-item[data-v="right"] .mx.print { color: rgba(29, 36, 64, .86); }
 .maths-tv .mb-item[data-dim="true"] { opacity: .36; }
 /* every row is a whole number of squares tall; the maths is centred in them */
 .maths-tv .mb-row { position: relative; display: flex; align-items: center; white-space: nowrap; height: calc(var(--mb-sq) * 2); }
@@ -155,6 +156,11 @@
 .maths-tv .mb-row.q .rin { font-size: var(--mb-ps); }
 .maths-tv .mb-row.w .rin { font-size: var(--mb-hs); }
 .maths-tv .mb-row.w[data-after="true"] .rin { opacity: .4; }
+/* a line too wide for the paper even at the 28 px floor (usePaper sets data-fit): it wraps, onto whole squares,
+   between the typeset parts - never inside a fraction, a power, a root or a pen mark, each one box */
+.maths-tv .mb-row[data-fit="wrap"] { height: auto; min-height: calc(var(--mb-sq) * 2); padding: 12px 0; white-space: normal; }
+.maths-tv .mb-row[data-fit="wrap"] .rin, .maths-tv .mb-row[data-fit="wrap"] .mx { white-space: normal; line-height: 1.5; max-width: 100%; }
+.maths-tv .mb-row[data-fit="wrap"] .mt { white-space: pre-wrap; }
 .maths-tv .mb-item[data-v="wrong"] .mb-row.q, .maths-tv .mb-item[data-open="true"] .mb-row.q { margin-bottom: calc(var(--mb-sq) * .5); }
 /* the margin arrow at the line that went wrong */
 .maths-tv .mb-row .marrow { position: absolute; left: -138px; top: 50%; width: 110px; height: 40px; margin-top: -20px; overflow: visible; }

@@ -63,3 +63,33 @@ export function continueCard(s: Session): Continue | null {
   }; }
   return null;
 }
+
+/** The ten-foot floor: no line of maths on the paper is set under 28 px (the landing's useFit keeps the same one). */
+export const FIT_FLOOR = 28;
+/** A row's fitted size in px, and whether it must wrap because even the floor is too wide. */
+export interface RowFit { size: number; wrap: boolean }
+
+/**
+ * Fits one line of the paper (a line of working, a printed question) to the room it has: the largest size, from
+ * `base` down in 2 px steps, at which `widthAt(size)` - the line's measured width at that size, in stage px - is
+ * within `room`. Never above `base`, never under the floor; a line too wide even at the floor stays at the floor
+ * and wraps. The width is measured, not assumed, because a line does not shrink in proportion: its scripts and
+ * fraction parts stop at the floor. A line that fits is measured once and left as it is. Pure, so a test calls it
+ * with widths; MathsTV.tsx measures `.rin` scrollWidth.
+ */
+export function fitRow(base: number, room: number, widthAt: (px: number) => number, floor = FIT_FLOOR): RowFit {
+  if (!(room > 0) || !(base > 0)) return { size: base, wrap: false };
+  const w0 = widthAt(base);
+  if (w0 <= room) return { size: base, wrap: false };
+  if (base <= floor) return { size: base, wrap: true };
+  // a proportional first guess (on the 2 px step), then down in steps until it fits
+  let size = Math.max(floor, Math.min(base - 2, base - 2 * Math.ceil((base - (base * room) / w0) / 2)));
+  for (let guard = 0; guard < 40; guard++) {
+    if (widthAt(size) <= room) break;
+    if (size <= floor) return { size: floor, wrap: true };
+    size = Math.max(floor, size - 2);
+  }
+  // step back up while the next size still fits (the guess can undershoot a line whose scripts sit at the floor)
+  while (size + 2 < base && widthAt(size + 2) <= room) size += 2;
+  return { size, wrap: false };
+}

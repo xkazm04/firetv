@@ -15,7 +15,7 @@ import { SYLLABUS, expectedIndex, topic as topicById, type Topic } from "@/lib/l
 import { LESSONS } from "@/lib/library/lessons.data";
 import { lessonStates } from "@/lib/library/watched";
 import { slip as slipById } from "@/lib/rules/maths";
-import { continueCard, stateWord, topicStates, type Continue } from "@/tv/mathsRows";
+import { continueCard, fitRow, stateWord, topicStates, type Continue } from "@/tv/mathsRows";
 import { running, practiceFailed, stopAt, tonightStops, calendarStops, unitStops, walkStops, HINT_STOPS, TOPIC_STOPS, TONIGHT_MENU, type TonightStop } from "@/tv/keys";
 import { sheetTiles, sheetStops, tileOf } from "@/tv/sheetRows";
 import { systemOf } from "@/tv/profileRows";
@@ -133,10 +133,15 @@ function Act({ icon, label, focused, primary, pips, disabled }: { icon: ReactNod
 
 // ---------------------------------------------------------------- the paper: rows that pan under the lamp
 
+/** How far the desk's pen can reach past a line's last glyph (a ring round a sign, a strike), kept inside the paper. */
+const PEN_PAD = 16;
 /**
- * Slides the paper so the item in hand sits under the lamp (the winner's pan), and hangs a continued line's
- * "=" under the "=" above it, as a careful student aligns working. Measured after layout and again when the
- * faces arrive, in stage pixels (the stage is scaled as a whole).
+ * Slides the paper so the item in hand sits under the lamp (the winner's pan), fits each line to the paper (a
+ * long line of working or a long printed question shrinks to its room, never under the 28 px floor, and wraps only
+ * when even the floor is too wide - so the pen's gap box and the tick stay on the paper), and hangs a continued
+ * line's "=" under the "=" above it, as a careful student aligns working. Measured after layout and again when the
+ * faces arrive, in stage pixels (the stage is scaled as a whole). The pen's marks are set in em inside the line, so
+ * they scale with it.
  */
 function usePaper(dep: unknown) {
   const pan = useRef<HTMLDivElement>(null);
@@ -144,17 +149,32 @@ function usePaper(dep: unknown) {
     const el = pan.current; if (!el) return;
     const lay = () => {
       const paper = el.querySelector<HTMLElement>(".mb-paper"); if (!paper) return;
-      // "=" under "="
+      // every line fitted to the paper (tv/mathsRows.ts `fitRow`), and "=" under "="
       paper.querySelectorAll<HTMLElement>(".mb-item").forEach((item) => {
         let anchor: number | null = null;
-        item.querySelectorAll<HTMLElement>(".mb-row.w .rin").forEach((rin) => {
-          rin.style.marginLeft = "0px";
-          const mx = rin.querySelector<HTMLElement>(".mx"); if (!mx) return;
+        item.querySelectorAll<HTMLElement>(".mb-row").forEach((row) => {
+          const rin = row.querySelector<HTMLElement>(":scope > .rin"); if (!rin) return;
+          const hand = row.classList.contains("w");
+          if (hand) rin.style.marginLeft = "0px";
+          rin.style.fontSize = ""; delete row.dataset.fit;
+          const mx = rin.querySelector<HTMLElement>(".mx");
           const k = rin.getBoundingClientRect().width / Math.max(1, rin.offsetWidth) || 1;
-          const first = mx.firstElementChild as HTMLElement | null, eq = mx.querySelector<HTMLElement>(".mo.eq");
+          const first = mx?.firstElementChild as HTMLElement | null | undefined, eq = mx?.querySelector<HTMLElement>(".mo.eq");
           const x = (e: HTMLElement) => (e.getBoundingClientRect().left - rin.getBoundingClientRect().left) / k;
-          if (first?.classList.contains("eq") && anchor !== null) { rin.style.marginLeft = `${Math.max(0, anchor - x(first))}px`; return; }
-          anchor = eq ? x(eq) : null;
+          const continued = hand && anchor !== null && !!first?.classList.contains("eq");
+          const hang = () => (continued && first ? Math.max(0, anchor! - x(first)) : 0);
+          // the room: the row's width inside its padding, less the hang and the pen's overhang past the last glyph
+          const cs = getComputedStyle(row);
+          const inner = row.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight) - PEN_PAD;
+          const base = parseFloat(getComputedStyle(rin).fontSize);
+          const widthAt = (px: number) => { rin.style.fontSize = px === base ? "" : `${px}px`; return rin.scrollWidth; };
+          let margin = hang(), fit = fitRow(base, inner - margin, widthAt);
+          // the alignment gives way before a line has to wrap
+          if (fit.wrap && margin) { margin = 0; fit = fitRow(base, inner, widthAt); }
+          rin.style.fontSize = fit.size === base ? "" : `${fit.size}px`;
+          if (fit.wrap) row.dataset.fit = "wrap";
+          if (margin) rin.style.marginLeft = `${hang()}px`;
+          if (hand && mx && !continued) anchor = eq ? x(eq) : null;
         });
       });
       // the pan
