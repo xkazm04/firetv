@@ -282,3 +282,43 @@ test('jobs 4: MathsTV draws the two states from tv/mathsRows.ts in the desk\'s v
  const css=cssSrc();
  assert.match(css,/\.mb-job\s*\{[^}]*font-family:\s*var\(--mb-sans\)/,'set in Manrope, the desk\'s voice');
 });
+
+// ---------------------------------------------------------------- 6. counts and weeks from the data, not hand-kept lists
+
+test('data 1: a count above the word list is written in digits, never "undefined"',()=>{
+ const {countWord,secureTitle}=R();
+ assert.equal(countWord(1),'One');assert.equal(countWord(5),'Five');
+ assert.equal(countWord(7),'7');assert.equal(countWord(12),'12');
+ assert.equal(secureTitle(7,9),'7 of 9 topics secure');
+ assert.equal(secureTitle(12,20),'12 of 20 topics secure');
+ assert.equal(secureTitle(2,3),'Two of 3 topics secure','today\'s wording is kept');
+ assert.equal(secureTitle(3,3),'Every topic on the path is secure');
+ for(const n of [0,1,6,7,12,40])assert.doesNotMatch(secureTitle(n,41),/undefined/);
+});
+
+test('data 2: the first evening\'s title is the first topic on the path, from the syllabus',()=>{
+ const {secureTitle}=R();const {SYLLABUS}=require(path.join(root,'src/lib/library/syllabus.ts'));
+ assert.equal(secureTitle(0,SYLLABUS.length),`${SYLLABUS[0].name}, from the first step`);
+ assert.equal(secureTitle(0,5,'Limits'),'Limits, from the first step','whatever the first topic is');
+});
+
+test('data 3: the calendar\'s weeks come from the lesson count - three a week, the last shorter - so every focusable lesson is drawn',()=>{
+ const {calendarWeeks}=R();
+ assert.deepEqual(calendarWeeks(8),[['Week 1',0,3],['Week 2',3,6],['Week 3',6,8]],'today\'s eight lessons: the weeks as before');
+ assert.deepEqual(calendarWeeks(9),[['Week 1',0,3],['Week 2',3,6],['Week 3',6,9]]);
+ const w14=calendarWeeks(14);
+ assert.equal(w14.length,5);assert.deepEqual(w14[4],['Week 5',12,14]);
+ for(const n of [0,1,8,9,14]){
+  const drawn=calendarWeeks(n).flatMap(([,a,b])=>Array.from({length:b-a},(_,k)=>a+k));
+  assert.deepEqual(drawn,Array.from({length:n},(_,i)=>i),`every one of ${n} lessons drawn once, in order`);
+ }
+});
+
+test('data 4: MathsTV keeps no hand list - no COUNT, no fixed weeks, no literal first-evening title',()=>{
+ const tv=tvSrc();
+ assert.doesNotMatch(tv,/const COUNT\b/,'no COUNT word list');
+ assert.doesNotMatch(tv,/\["Week 1",\s*0,\s*3\]/,'no fixed weeks');
+ assert.doesNotMatch(tv,/Linear equations, from the first step/,'no literal title');
+ assert.match(fnBody(tv,'Calendar'),/calendarWeeks\(list\.length\)/,'the weeks are the lesson count\'s');
+ assert.match(fnBody(tv,'Tonight'),/secureTitle\(/,'the title is secureTitle\'s');
+});

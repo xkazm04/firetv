@@ -15,7 +15,7 @@ import { SYLLABUS, expectedIndex, topic as topicById, type Topic } from "@/lib/l
 import { LESSONS } from "@/lib/library/lessons.data";
 import { lessonStates } from "@/lib/library/watched";
 import { slip as slipById } from "@/lib/rules/maths";
-import { continueCard, explainLine, fitRow, markLine, paperSquare, rowSquares, stateWord, topicStates, SQUARE, type Continue, type JobLine } from "@/tv/mathsRows";
+import { calendarWeeks, continueCard, explainLine, fitRow, markLine, paperSquare, rowSquares, secureTitle, stateWord, topicStates, SQUARE, type Continue, type JobLine } from "@/tv/mathsRows";
 import { running, practiceFailed, stopAt, tonightStops, calendarStops, unitStops, walkStops, HINT_STOPS, TOPIC_STOPS, TONIGHT_MENU, type TonightStop } from "@/tv/keys";
 import { sheetTiles, sheetStops, tileOf } from "@/tv/sheetRows";
 import { systemOf } from "@/tv/profileRows";
@@ -305,7 +305,6 @@ function doorCaption(s: Session, i: number): string {
   if (s.pages.some((p) => p.subject === "maths")) return "The sheet is already on the desk. Enter opens it, one problem at a time.";
   return "Snap the sheet on the phone and the desk reads it, one problem at a time — hints, never the answer.";
 }
-const COUNT = ["", "One", "Two", "Three", "Four", "Five"];
 
 function DoorArt({ id }: { id: "homework" | "teach" }) {
   if (id === "homework") return (
@@ -419,11 +418,10 @@ function BlankHero({ s }: { s: Session }) {
 export function Tonight({ s, focus }: { s: Session; focus: number }) {
   const cont = continueCard(s);
   const at = stopAt(tonightStops(s), focus);
-  const secure = Object.values(s.skills ?? {}).filter((r) => r.secure).map((r) => r.topic);
+  // the topics on the path that are secure (a record for a topic off the path is not one of "N of M")
+  const secure = SYLLABUS.filter((t) => s.skills?.[t.id]?.secure);
   const door = at === "continue" ? -1 : at === "teach" ? 1 : 0;
-  const title = secure.length === SYLLABUS.length ? "Every topic on the path is secure"
-    : secure.length ? `${COUNT[secure.length]} of ${SYLLABUS.length} topics secure`
-    : "Linear equations, from the first step";
+  const title = secureTitle(secure.length, SYLLABUS.length);
   return (<>
     <Top s={s} right={<Chips s={s} menu={TONIGHT_MENU} />} />
     {cont ? <Hero s={s} cont={cont} focused={at === "continue"} /> : <><h1 className="mb-title" data-role="maths-title"><Amber text={title} /></h1><BlankHero s={s} /></>}
@@ -817,7 +815,7 @@ export function Units({ s, focus }: { s: Session; focus: number }) {
 export function Calendar({ s, focus }: { s: Session; focus: number }) {
   const list = calendarStops(), states = lessonStates(list, s.history), done = states.filter((x) => x === "done").length;
   const cur = stopAt(list, focus);
-  const weeks = [["Week 1", 0, 3], ["Week 2", 3, 6], ["Week 3", 6, 8]] as const;
+  const weeks = calendarWeeks(list.length);
   const tilt = [-0.8, 0.6, -0.4, 0.9, -0.6, 0.5, -0.9, 0.4];
   return (<>
     <Top s={s} crumb="Lessons on file" />

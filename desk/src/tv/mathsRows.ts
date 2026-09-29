@@ -64,6 +64,30 @@ export function continueCard(s: Session): Continue | null {
   return null;
 }
 
+const COUNT_WORDS = ["", "One", "Two", "Three", "Four", "Five"];
+/** A count as Tonight's title writes it: a word up to five, digits past the word list (never "undefined"). */
+export function countWord(n: number): string { return COUNT_WORDS[n] || String(n); }
+
+/**
+ * Tonight's title when nothing is open: every topic secure, "N of M topics secure", or on the first evening the first
+ * topic on the path (SYLLABUS[0]) from the first step - read from the syllabus, so a new first topic renames it.
+ */
+export function secureTitle(secure: number, total = SYLLABUS.length, first = SYLLABUS[0]?.name ?? ""): string {
+  if (total > 0 && secure >= total) return "Every topic on the path is secure";
+  if (secure > 0) return `${countWord(secure)} of ${total} topics secure`;
+  return `${first}, from the first step`;
+}
+
+/**
+ * The calendar's weeks over `n` lessons: three a week, the last one shorter, as [label, from, to) - the same three
+ * wide grid the D-pad walks (tv/keys.ts calendarStops, `grid(k, n, 3)`), so every lesson that can be focused is drawn.
+ */
+export function calendarWeeks(n: number): Array<[string, number, number]> {
+  const out: Array<[string, number, number]> = [];
+  for (let a = 0, w = 1; a < n; a += 3, w++) out.push([`Week ${w}`, a, Math.min(n, a + 3)]);
+  return out;
+}
+
 /** The ten-foot floor: no line of maths on the paper is set under 28 px (the landing's useFit keeps the same one). */
 export const FIT_FLOOR = 28;
 /** A row's fitted size in px, and whether it must wrap because even the floor is too wide. */
