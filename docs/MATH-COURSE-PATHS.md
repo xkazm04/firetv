@@ -1,6 +1,7 @@
 # Math course paths
 
-**Read from the code on 2026-09-29** (branch `perfect/2026-09-29-calculus` at `02da1c2`). A learner in Math Buddy is
+**Read from the code on 2026-09-29** (branch `perfect/2026-09-29-calculus` at `02da1c2`; the tests table also
+covers `a7ef54e`). A learner in Math Buddy is
 on one Math course, a **path**: the school path (linear equations, with school-year bands) or Calculus 1 (a
 university first course, with no school year). This page says what a path is, why Calculus is one, how a Calculus
 item is decided in code, how the answer is withheld, and what it takes to add another path. Every number on it was
@@ -291,6 +292,7 @@ provider registry, and data directories are disposable, under the OS temp dir.
 | `tools/calc-hint-test.cjs` | `specFromQuestion` reads back every printed question, plus a table of page phrasings (some must stay null); the fixed sentences; hint re-ask and fallback; the stance by path; no lesson pick on calc1 |
 | `tools/calc-practice-test.cjs` | specs in, six checked items out, easy to hard; no truth on any item or view; the schema and prompt ask only for specs; a second round; all-bad rounds fail and keep the old set |
 | `tools/calc-marking-test.cjs` | calc1 slip lists; marking by `checkAnswer` on each shape; the model's verdict is never read or used as a fallback; explanation settling and leak replacement; the evening note's topic name |
+| `tools/calc-course-test.cjs` | the whole course as one flow through the real routes (practice, mark, explain, hint). For each of the 22 topics: a code-printed set, a page marked by `checkAnswer` while the stub volunteers a false "right", an unsure item settled by explanation, a hint re-asked then withheld, and four evenings latching the topic secure, until Tonight says every topic is secure. After every step the TV, phone and guest views carry no answer, truth or `zero` key. The school path runs beside it, unchanged |
 | `tools/maths-course-test.cjs` | `mathPath` kept and junk dropped; `topic.open` focus; Topics walks the path; the frontier; Menu-edit; the Maths course row; set names on the landing and the phone |
 | `tools/maths-ruler-test.cjs` | the school ruler's old formulas; the panning ruler; the strip |
 | `tools/maths-tv-test.cjs` | topic states by path (a record off the path is ignored), `topicName`, the Tonight title by path; also the captions' prose, the paper's fit and the job lines |
