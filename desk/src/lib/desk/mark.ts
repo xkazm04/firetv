@@ -49,11 +49,17 @@ interface Marked {
 }
 
 
+/**
+ * `stillSame` is asked after the model answers, as explainItem asks `stillUnsure`: is this set still the one on the
+ * desk, unmarked? When it is not (another set landed, the desk was reset), the verdicts are returned with
+ * `landed: false` and nothing reaches the learner record - no attempt, no history line.
+ */
 export async function markSet(
   imageBase64: string,
   practice: Practice,
   learnerId: string,
-): Promise<{ items: PracticeItem[]; provider: string; ms: number; unsure: number }> {
+  stillSame: () => boolean = () => true,
+): Promise<{ items: PracticeItem[]; provider: string; ms: number; unsure: number; landed: boolean }> {
   const vocab = slipVocabulary(practice.topic);
   const sheet = practice.items.map((i) => `${i.n}. ${i.question}`).join("\n");
 
@@ -76,6 +82,7 @@ export async function markSet(
   for (const m of json?.items ?? []) if (m && typeof m.n === "number") byN.set(m.n, m);
 
   let unsure = 0;
+  const attempts: { right: boolean; slip?: string }[] = [];
   const items: PracticeItem[] = practice.items.map((item) => {
     const m = byN.get(item.n);
     const studentAnswer = clean(m?.studentAnswer);
@@ -100,12 +107,17 @@ export async function markSet(
     // never a value.
     const { verdict, slip, said } = settled(item.n, student, m?.slip, practice.topic);
 
-    recordAttempt(learnerId, practice.topic, verdict === "right", slip);
+    attempts.push({ right: verdict === "right", slip });
     // 8 - where the working broke: rules/maths locates it from the learner's own lines and a root found in code
     const slipAt = verdict === "wrong" ? locate(item.question, workingLines({ studentWorking, studentAnswer })) : undefined;
     return { ...item, studentAnswer, studentWorking, verdict, slip, said, ...(slipAt ? { slipAt } : {}) };
   });
 
+  // 9 - the desk has moved on while the model read the page: the verdicts are not this set's to record
+  if (!stillSame()) return { items, provider, ms, unsure, landed: false };
+
+  // only settled items reach the record, each once, and only for the set still on the desk
+  for (const a of attempts) recordAttempt(learnerId, practice.topic, a.right, a.slip);
   // what happened, in one line the home screen can read back: never invented, always these counts
   // (rules/maths; a later settle restates the same line from the same verdicts - session/store)
   addHistory(learnerId, {
@@ -114,5 +126,5 @@ export async function markSet(
     detail: rightLine(items),
   });
 
-  return { items, provider, ms, unsure };
+  return { items, provider, ms, unsure, landed: true };
 }

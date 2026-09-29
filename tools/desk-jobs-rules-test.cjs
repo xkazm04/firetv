@@ -371,6 +371,69 @@ test('empty case 3: an unknown topic is refused 400 before any job starts; a mal
  const p=await raw('practice','{not json').catch((e)=>e);assert(p instanceof Response);assert.equal(p.status,400);
 });
 
+// ---- mark-lands-once-on-its-set: a mark lands only on the set it marked, and only once ----
+const {getLearner}=require(src('lib/session/learners.ts'));
+const {MOVED_ON}=require(src('lib/desk/job.ts'));
+const MARKS={items:[
+ {n:1,studentAnswer:'4',studentWorking:'2x=8',verdict:'right',solution:'4',slip:'unclear'},
+ {n:2,studentAnswer:'3',studentWorking:'',verdict:'wrong',solution:'7',slip:'unclear'},
+ {n:3,studentAnswer:'',studentWorking:'',verdict:'wrong',solution:'6',slip:'unclear'},
+ {n:4,studentAnswer:'9',studentWorking:'',verdict:'right',solution:'9',slip:'unclear'},
+ {n:5,studentAnswer:'7',studentWorking:'',verdict:'right',solution:'7',slip:'unclear'},
+ {n:6,studentAnswer:'8',studentWorking:'',verdict:'right',solution:'8',slip:'unclear'},
+]};
+const PHOTO={image:'data:image/jpeg;base64,AAAA',w:100,h:100};
+const SET_B=[{question:'2x+1=9',answer:'4'},{question:'3x-2=10',answer:'4'},{question:'5x+5=20',answer:'3'},{question:'4x-4=12',answer:'4'},{question:'2x+7=13',answer:'3'},{question:'6x+1=13',answer:'2'}];
+const record=(id)=>{const l=getLearner(id);return {lines:l.history.length,skills:JSON.stringify(l.skills)};};
+test('mark case 1: a set B that lands while set A is being marked stays unmarked; the mark answers 409 and records nothing for A',async()=>{
+ onPage();
+ stubText({items:()=>({items:STATED})});assert.equal((await post('practice',{topic:'linear-one-step'})).status,200);
+ const gate=held();let seen=0;stubVision(async()=>{seen++;await gate.p;return MARKS;});
+ const pending=post('mark',PHOTO);
+ for(let i=0;i<200&&!seen;i++)await new Promise((r)=>setImmediate(r));
+ assert.equal(seen,1,'the mark of set A is under way');
+ stubText({items:()=>({items:SET_B})});assert.equal((await post('practice',{topic:'linear-two-step'})).status,200,'set B lands from Topics');
+ const was=record('jobs-scratch');
+ gate.open();const r=await pending;
+ assert.equal(r.status,409);assert.equal((await r.json()).error,MOVED_ON);
+ const s=store.getSession();
+ assert.equal(s.practice.topic,'linear-two-step');assert.equal(s.practice.marked,false,'set B stays unmarked');
+ assert.deepEqual(s.practice.items.map((i)=>i.question),SET_B.map((c)=>c.question));assert(s.practice.items.every((i)=>i.verdict===undefined));
+ assert.deepEqual(record('jobs-scratch'),was,'no attempt and no history line for set A');
+ assert(!/right, \d+ to look at/.test(s.status),`status: ${s.status}`);
+});
+test('mark case 2: a normal mark lands as before; marking the same set again is refused 409 before any vision call',async()=>{
+ onPage();
+ stubText({items:()=>({items:STATED})});assert.equal((await post('practice',{topic:'linear-one-step'})).status,200);
+ const was=record('jobs-scratch');
+ let seen=0;stubVision(()=>{seen++;return MARKS;});
+ const r=await post('mark',PHOTO);
+ assert.equal(r.status,200);const b=await r.json();
+ assert.deepEqual([b.right,b.wrong,b.unsure],[4,1,1]);
+ let s=store.getSession();assert.equal(s.practice.marked,true);assert.equal(s.screen,'sheet');
+ assert.deepEqual(s.practice.items.map((i)=>i.verdict),['right','wrong','unsure','right','right','right']);
+ assert.equal(record('jobs-scratch').lines,was.lines+1,'one history line');assert.equal(s.history.at(-1).detail,'4 of 6 right, 1 not sure');
+ assert.equal(s.status,'4 right, 1 to look at, 1 to talk through');
+ const after=record('jobs-scratch');
+ const again=await post('mark',PHOTO);
+ assert.equal(again.status,409);deskWorded((await again.json()).error);
+ assert.equal(seen,1,'no second vision call');assert.deepEqual(record('jobs-scratch'),after,'no second attempt or history line');
+});
+test('GUARD mark case 3: a mark that ends after its learner left still lands on their set in away, recorded once',async()=>{
+ store.dispatch({type:'reset'});
+ for(const id of ['mark-a','mark-b']){store.dispatch({type:'profile.draft',patch:{id,name:id,type:'other'}});store.dispatch({type:'profile.save'});}
+ store.dispatch({type:'learner.set',id:'mark-a'});
+ stubText({items:()=>({items:STATED})});assert.equal((await post('practice',{topic:'linear-one-step'})).status,200);
+ const gate=held();let seen=0;stubVision(async()=>{seen++;await gate.p;return MARKS;});
+ const pending=post('mark',PHOTO);
+ for(let i=0;i<200&&!seen;i++)await new Promise((r)=>setImmediate(r));
+ const was=record('mark-a');
+ store.dispatch({type:'learner.set',id:'mark-b'});
+ gate.open();assert.equal((await pending).status,200);
+ const s=store.getSession();assert.equal(s.practice,null,'nothing landed on mark-b');
+ assert.equal(s.away['mark-a'].practice.marked,true);assert.equal(record('mark-a').lines,was.lines+1);
+});
+
 // last: it swaps the store module out from under the routes loaded above
 test('case 7: a job saved as running is not running after the desk restarts',()=>{
  onPage();
