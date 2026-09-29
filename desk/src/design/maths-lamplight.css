@@ -161,6 +161,9 @@
 .maths-tv .mb-row[data-fit="wrap"] { height: auto; min-height: calc(var(--mb-sq) * 2); padding: 12px 0; white-space: normal; }
 .maths-tv .mb-row[data-fit="wrap"] .rin, .maths-tv .mb-row[data-fit="wrap"] .mx { white-space: normal; line-height: 1.5; max-width: 100%; }
 .maths-tv .mb-row[data-fit="wrap"] .mt { white-space: pre-wrap; }
+/* a wrapped line that holds one unbreakable token (an 80-digit number, a long word) breaks it rather than run off
+   the paper; a line that fits on one line (no data-fit) is never broken */
+.maths-tv .mb-row[data-fit="wrap"] .mx { overflow-wrap: anywhere; }
 .maths-tv .mb-item[data-v="wrong"] .mb-row.q, .maths-tv .mb-item[data-open="true"] .mb-row.q { margin-bottom: calc(var(--mb-sq) * .5); }
 /* the margin arrow at the line that went wrong */
 .maths-tv .mb-row .marrow { position: absolute; left: -138px; top: 50%; width: 110px; height: 40px; margin-top: -20px; overflow: visible; }
@@ -530,5 +533,9 @@
 .maths-tv .mb-row.q.wrap { height: auto; min-height: calc(var(--mb-sq) * 2); padding: 14px 150px 14px 0; white-space: normal; }
 .maths-tv .mb-row.q.wrap .rin, .maths-tv .mb-row.q.wrap .mx { white-space: normal; line-height: 1.3; }
 .maths-tv .mb-row.q.wrap .mt { white-space: pre-wrap; }
+.maths-tv .mb-row.q.wrap .mx { overflow-wrap: anywhere; }
+/* on the Page the item under the lamp carries its OK · Hint badge (44 px in, about 160 px wide): every problem keeps
+   clear of it, so a wrapped line never runs under the badge and nothing reflows as the lamp moves */
+.maths-tv[data-screen="page"] .mb-row.q.wrap { padding-right: 216px; }
 /* on the walk the open item is the one in hand: the lamp and the full ink say so, not a box */
 .maths-tv[data-screen="walk"] .mb-item[data-focused="true"]::before { display: none; }

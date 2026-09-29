@@ -126,7 +126,9 @@ both (`x_n^2`, `int_0^1`, `[F(x)]_a^b`, `sum_(i=1)^n`) stacks them in one column
 that starts with "=" hangs its "=" under the "=" above.
 
 **Rows.** Every row takes whole squares: a plain line two (96 px), a line with a fraction, an integral, a sum or
-product sign, a limit under lim or a stacked pair of scripts three.
+product sign, a limit under lim or a stacked pair of scripts three. A line taller than that (a fraction over a
+subscripted fraction, a wrapped line) takes the next whole number of squares that holds it (`rowSquares` in
+`desk/src/tv/mathsRows.ts`, measured in the same pass as the fit), so no line is ever taller than its row.
 The question row sits half a square above its working.
 
 **The four marks** (pen `#D9741A`, 5.5 px, drawn left to right, `data-role="maths-error"` with `data-kind`):
@@ -174,7 +176,11 @@ line split (`workingLines`) and the slip names are one rule each, in `rules/math
   name in the blue hand; it pans so the item in hand is under the lamp. A line too long for the paper - a long line
   of working, a long printed question - is fitted to it (`fitRow` in `desk/src/tv/mathsRows.ts`): it shrinks in
   2 px steps, never under the 28 px floor, with the pen's gap box and the tick inside the paper and "=" still under
-  "="; a line too wide even at 28 px wraps onto whole squares between its typeset parts. `maths-sheet`.
+  "="; a line too wide even at 28 px wraps onto whole squares between its typeset parts, and a single token too
+  long for a line (an 80-digit number, a long word) breaks where it must - only on a wrapped line. The Practice
+  sheet takes the same fit; it has nothing to pan to, so when its six questions run past the safe line it is drawn
+  on smaller squares (48 down to 36 px, `paperSquare`) until all of it is on screen. On a snapped Page every problem
+  keeps clear of the lit item's OK · Hint badge. `maths-sheet`.
 - **Hand and print lines** - `maths-hand`, `maths-print`, fractions `maths-frac`, ticks `maths-tick`.
 - **Tally** - the set as six hand-drawn numbers in the top bar: ticked, ringed, dashed when unsure; the current one
   lit.

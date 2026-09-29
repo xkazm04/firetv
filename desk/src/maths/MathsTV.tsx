@@ -15,7 +15,7 @@ import { SYLLABUS, expectedIndex, topic as topicById, type Topic } from "@/lib/l
 import { LESSONS } from "@/lib/library/lessons.data";
 import { lessonStates } from "@/lib/library/watched";
 import { slip as slipById } from "@/lib/rules/maths";
-import { continueCard, fitRow, stateWord, topicStates, type Continue } from "@/tv/mathsRows";
+import { continueCard, fitRow, paperSquare, rowSquares, stateWord, topicStates, SQUARE, type Continue } from "@/tv/mathsRows";
 import { running, practiceFailed, stopAt, tonightStops, calendarStops, unitStops, walkStops, HINT_STOPS, TOPIC_STOPS, TONIGHT_MENU, type TonightStop } from "@/tv/keys";
 import { sheetTiles, sheetStops, tileOf } from "@/tv/sheetRows";
 import { systemOf } from "@/tv/profileRows";
@@ -141,42 +141,25 @@ const PEN_PAD = 16;
  * when even the floor is too wide - so the pen's gap box and the tick stay on the paper), and hangs a continued
  * line's "=" under the "=" above it, as a careful student aligns working. Measured after layout and again when the
  * faces arrive, in stage pixels (the stage is scaled as a whole). The pen's marks are set in em inside the line, so
- * they scale with it.
+ * they scale with it. In the same pass each row takes whole squares: a line taller than its two (or three) squares
+ * gets the next whole number of them (tv/mathsRows.ts `rowSquares`). With a `room` (the Practice sheet, which has
+ * nothing to pan to) the paper is not panned but fitted: when its rows run past the room it is drawn on smaller
+ * squares (`paperSquare`) until all of it is on screen.
  */
-function usePaper(dep: unknown) {
+function usePaper(dep: unknown, room?: number) {
   const pan = useRef<HTMLDivElement>(null);
   useLayoutEffect(() => {
     const el = pan.current; if (!el) return;
     const lay = () => {
       const paper = el.querySelector<HTMLElement>(".mb-paper"); if (!paper) return;
-      // every line fitted to the paper (tv/mathsRows.ts `fitRow`), and "=" under "="
-      paper.querySelectorAll<HTMLElement>(".mb-item").forEach((item) => {
-        let anchor: number | null = null;
-        item.querySelectorAll<HTMLElement>(".mb-row").forEach((row) => {
-          const rin = row.querySelector<HTMLElement>(":scope > .rin"); if (!rin) return;
-          const hand = row.classList.contains("w");
-          if (hand) rin.style.marginLeft = "0px";
-          rin.style.fontSize = ""; delete row.dataset.fit;
-          const mx = rin.querySelector<HTMLElement>(".mx");
-          const k = rin.getBoundingClientRect().width / Math.max(1, rin.offsetWidth) || 1;
-          const first = mx?.firstElementChild as HTMLElement | null | undefined, eq = mx?.querySelector<HTMLElement>(".mo.eq");
-          const x = (e: HTMLElement) => (e.getBoundingClientRect().left - rin.getBoundingClientRect().left) / k;
-          const continued = hand && anchor !== null && !!first?.classList.contains("eq");
-          const hang = () => (continued && first ? Math.max(0, anchor! - x(first)) : 0);
-          // the room: the row's width inside its padding, less the hang and the pen's overhang past the last glyph
-          const cs = getComputedStyle(row);
-          const inner = row.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight) - PEN_PAD;
-          const base = parseFloat(getComputedStyle(rin).fontSize);
-          const widthAt = (px: number) => { rin.style.fontSize = px === base ? "" : `${px}px`; return rin.scrollWidth; };
-          let margin = hang(), fit = fitRow(base, inner - margin, widthAt);
-          // the alignment gives way before a line has to wrap
-          if (fit.wrap && margin) { margin = 0; fit = fitRow(base, inner, widthAt); }
-          rin.style.fontSize = fit.size === base ? "" : `${fit.size}px`;
-          if (fit.wrap) row.dataset.fit = "wrap";
-          if (margin) rin.style.marginLeft = `${hang()}px`;
-          if (hand && mx && !continued) anchor = eq ? x(eq) : null;
-        });
-      });
+      paper.style.removeProperty("--mb-sq");
+      let rows = fitRows(paper);
+      if (room !== undefined && paper.offsetHeight > room) {
+        const sq = SQUARE, used = rows.reduce((n, r) => n + r.px, 0);
+        const sq2 = paperSquare(rows, Math.round((paper.offsetHeight - used) / sq), room);
+        if (sq2 !== sq) { paper.style.setProperty("--mb-sq", `${sq2}px`); rows = fitRows(paper); }
+      }
+      if (room !== undefined) { el.style.transform = ""; return; }
       // the pan
       const cur = paper.querySelector<HTMLElement>('[data-cur="true"]');
       const WH = el.parentElement?.offsetHeight ?? 778, PH = paper.offsetHeight;
@@ -188,8 +171,52 @@ function usePaper(dep: unknown) {
     let live = true;
     document.fonts?.ready.then(() => { if (live) lay(); });
     return () => { live = false; };
-  }, [dep]);
+  }, [dep, room]);
   return pan;
+}
+
+/**
+ * Every line on the paper fitted to it (tv/mathsRows.ts `fitRow`), "=" under "=", and each row a whole number of
+ * squares (`rowSquares`). Returns each row's measured height, its minimum squares and the px it now takes.
+ */
+function fitRows(paper: HTMLElement): Array<{ h: number; min: number; px: number }> {
+  const out: Array<{ h: number; min: number; px: number }> = [];
+  paper.querySelectorAll<HTMLElement>(".mb-item").forEach((item) => {
+    let anchor: number | null = null;
+    item.querySelectorAll<HTMLElement>(".mb-row").forEach((row) => {
+      const rin = row.querySelector<HTMLElement>(":scope > .rin"); if (!rin) return;
+      const hand = row.classList.contains("w");
+      if (hand) rin.style.marginLeft = "0px";
+      rin.style.fontSize = ""; delete row.dataset.fit; row.style.height = "";
+      const mx = rin.querySelector<HTMLElement>(".mx");
+      const k = rin.getBoundingClientRect().width / Math.max(1, rin.offsetWidth) || 1;
+      const first = mx?.firstElementChild as HTMLElement | null | undefined, eq = mx?.querySelector<HTMLElement>(".mo.eq");
+      const x = (e: HTMLElement) => (e.getBoundingClientRect().left - rin.getBoundingClientRect().left) / k;
+      const continued = hand && anchor !== null && !!first?.classList.contains("eq");
+      const hang = () => (continued && first ? Math.max(0, anchor! - x(first)) : 0);
+      // the room: the row's width inside its padding, less the hang and the pen's overhang past the last glyph
+      const cs = getComputedStyle(row);
+      const inner = row.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight) - PEN_PAD;
+      const base = parseFloat(getComputedStyle(rin).fontSize);
+      const widthAt = (px: number) => { rin.style.fontSize = px === base ? "" : `${px}px`; return rin.scrollWidth; };
+      let margin = hang(), fit = fitRow(base, inner - margin, widthAt);
+      // the alignment gives way before a line has to wrap
+      if (fit.wrap && margin) { margin = 0; fit = fitRow(base, inner, widthAt); }
+      rin.style.fontSize = fit.size === base ? "" : `${fit.size}px`;
+      if (fit.wrap) row.dataset.fit = "wrap";
+      if (margin) rin.style.marginLeft = `${hang()}px`;
+      if (hand && mx && !continued) anchor = eq ? x(eq) : null;
+      // whole squares: a wrapped row by its own height, a one-line row by its maths
+      const sq = parseFloat(cs.getPropertyValue("--mb-sq")) || SQUARE;
+      const wrapped = fit.wrap || row.classList.contains("wrap");
+      const min = row.dataset.tall === "true" ? 3 : 2;
+      const h = wrapped ? row.offsetHeight : (mx ?? rin).offsetHeight;
+      const n = rowSquares(h, sq, min);
+      if (wrapped || n > min) row.style.height = `${n * sq}px`;
+      out.push({ h, min, px: row.offsetHeight });
+    });
+  });
+  return out;
 }
 
 /** The ring every teacher draws round an item number. */
@@ -442,13 +469,20 @@ export function Topics({ s, focus, busy: asked }: { s: Session; focus: number; b
 
 function humanTopic(id: string): string { const w = id.replace(/[-_]+/g, " ").trim(); return w.charAt(0).toUpperCase() + w.slice(1); }
 
+/**
+ * The room the Practice sheet has, in stage px: from its top (design/maths-lamplight.css .mb-practice, 150) to the
+ * safe line (1026), less 12 px for the paper's tilt. All six questions are on it at once - there is nothing to pan to.
+ */
+const PRACTICE_ROOM = 1026 - 150 - 12;
+
 export function PracticeScreen({ s }: { s: Session }) {
   const p = s.practice;
+  const pan = usePaper(p ? `${p.topic}|${p.items.map((it) => it.question).join("\n")}` : "", PRACTICE_ROOM);
   if (!p) return <><Top s={s} /><h1 className="mb-title" data-role="maths-title"><Amber text="No set on the desk" /></h1></>;
   const name = topicById(p.topic)?.name ?? humanTopic(p.topic);
   return (<>
     <Top s={s} crumb={name} />
-    <div className="mb-practice">
+    <div className="mb-practice" ref={pan}>
       <div className="mb-paper" data-role="maths-sheet">
         <header className="mb-sheethead"><span className="st">{name}</span><span className="who">{s.learner?.name}</span></header>
         {p.items.map((it) => (

@@ -93,3 +93,33 @@ export function fitRow(base: number, room: number, widthAt: (px: number) => numb
   while (size + 2 < base && widthAt(size + 2) <= room) size += 2;
   return { size, wrap: false };
 }
+
+/** The paper's square in px, as drawn (design/maths-lamplight.css `--mb-sq`). */
+export const SQUARE = 48;
+
+/**
+ * How many whole squares a row of the paper takes: its own minimum (two, three for a tall line), or - when the line
+ * is taller than that (a fraction over a subscripted fraction, a wrapped line) - the next whole number of squares
+ * that holds it, so every row stays a whole number of squares and no line is taller than its row. A pixel over is
+ * sub-pixel layout, not a new square.
+ */
+export function rowSquares(content: number, sq = SQUARE, min = 2): number {
+  if (!(content > 0) || !(sq > 0)) return min;
+  return Math.max(min, Math.ceil((content - 1) / sq));
+}
+
+/** The squares a paper may be drawn on when its rows do not fit its room, largest (the paper as drawn) first. */
+export const PAPER_SQUARES = [48, 46, 44, 42, 40, 38, 36];
+
+/**
+ * The largest square at which a paper with a fixed room (the Practice sheet: every question must be on screen, there
+ * is nothing to pan to) fits: `chrome` squares of its own (its padding and its head) plus each row's whole squares
+ * (`rowSquares` of its measured height `h`, never under its `min`). Nothing fits: the smallest square.
+ */
+export function paperSquare(rows: ReadonlyArray<{ h: number; min: number }>, chrome: number, room: number, sizes: readonly number[] = PAPER_SQUARES): number {
+  for (const sq of sizes) {
+    const squares = chrome + rows.reduce((n, r) => n + rowSquares(r.h, sq, r.min), 0);
+    if (squares * sq <= room) return sq;
+  }
+  return sizes[sizes.length - 1];
+}

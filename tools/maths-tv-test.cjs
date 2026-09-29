@@ -171,3 +171,60 @@ test('fit 5: the paper wires the fit - MathsTV measures each row with fitRow, th
  assert.ok(/\.mb-row\[data-fit="wrap"\]/.test(css),'a row that cannot fit at the floor wraps');
  assert.ok(!/\.mx\.print\s*\{[^}]*font-size:\s*40px/.test(css),'the right item sets its size on the row, so a fitted size reaches the maths');
 });
+
+// ---------------------------------------------------------------- 4. the Practice paper, and rows of whole squares
+
+const stripSrc=(s)=>s.replace(/\/\*[\s\S]*?\*\//g,'').replace(/(^|[^:"'`\\])\/\/.*$/gm,'$1');
+const tvSrc=()=>stripSrc(fs.readFileSync(path.join(root,'src/maths/MathsTV.tsx'),'utf8'));
+const cssSrc=()=>stripSrc(fs.readFileSync(path.join(root,'src/design/maths-lamplight.css'),'utf8'));
+/** The body of one function in MathsTV.tsx, up to the next top-level function. */
+const fnBody=(src,name)=>{const i=src.search(new RegExp(`function ${name}\\b`));assert.ok(i>=0,`MathsTV.tsx has ${name}`);const j=src.slice(i+1).search(/\n(?:export )?function /);return src.slice(i,j<0?undefined:i+1+j);};
+
+test('fit 6: a printed Practice question (52 px) takes the same fit - it shrinks, never under 28 px, and wraps only when 28 px is too wide',()=>{
+ const {fitRow}=R();
+ const PRACTICE_ROOM=1140-144-16;
+ // calc1-extrema: 1644 px at 52 px
+ const w=(px)=>1644*px/52;
+ const f=fitRow(52,PRACTICE_ROOM,w);
+ assert.equal(f.wrap,false);assert.ok(f.size>=28&&w(f.size)<=PRACTICE_ROOM,`fitted to ${f.size} px`);
+ // calc1-definite-integral: 1805 px at 52, its scripts already at the floor, so 28 px is still too wide
+ const w2=(px)=>1805*px/52+120*(1-px/52)*3;
+ assert.deepEqual(fitRow(52,PRACTICE_ROOM,w2),{size:28,wrap:true});
+});
+
+test('rows 1: a line taller than its squares grows to the next whole square, never under its own minimum',()=>{
+ const {rowSquares,SQUARE}=R();
+ assert.equal(SQUARE,48,'the paper\'s square (--mb-sq)');
+ assert.equal(rowSquares(172,48,3),4,'calc1-newton: a 172 px hand line in a three-square row takes four');
+ assert.equal(rowSquares(150,48,2),4,'150 px is more than three squares');
+ assert.equal(rowSquares(90,48,2),2,'a short line keeps its two squares');
+ assert.equal(rowSquares(120,48,3),3,'a tall row never shrinks under three');
+ assert.equal(rowSquares(144.6,48,3),3,'a sub-pixel over its row is not a new square');
+ assert.equal(rowSquares(0,48,2),2,'nothing measured: the minimum');
+ assert.equal(rowSquares(105,40,3),3,'on smaller squares');
+});
+
+test('rows 2: the Practice paper keeps all six questions inside the safe zone by taking smaller squares, largest first',()=>{
+ const {paperSquare,PAPER_SQUARES}=R();
+ assert.equal(PAPER_SQUARES[0],48,'the first try is the paper as drawn');
+ assert.ok(PAPER_SQUARES.every((x,i)=>i===0||x<PAPER_SQUARES[i-1]),'largest first');
+ const six=(h,min)=>Array.from({length:6},()=>({h,min}));
+ // calc1-limit-laws: six limits, each about 105 px, each a tall (three-square) row; 3 squares of chrome
+ assert.equal(paperSquare(six(105,3),3,864),40,'(3 + 18) x 40 = 840 <= 864; at 42 it is 882');
+ assert.equal(paperSquare(six(40,2),3,864),48,'six plain questions fit on the paper as drawn');
+ assert.equal(paperSquare(six(400,2),3,864),PAPER_SQUARES[PAPER_SQUARES.length-1],'nothing fits: the smallest square');
+});
+
+test('rows 3: the Practice screen is fitted by usePaper like the Sheet and the Walk, row heights are whole squares, and a wrapped line breaks a long token',()=>{
+ const tv=tvSrc();
+ assert.match(fnBody(tv,'PracticeScreen'),/usePaper\(/,'PracticeScreen measures its paper with usePaper');
+ assert.match(fnBody(tv,'PracticeScreen'),/ref=\{pan\}/,'and hands it the paper');
+ assert.match(fnBody(tv,'usePaper'),/fitRows\(/,'usePaper lays the rows with fitRows');
+ assert.match(fnBody(tv,'fitRows'),/fitRow\(/,'which fits each line (fitRow)');
+ assert.match(fnBody(tv,'fitRows'),/rowSquares\(/,'and rounds each row to whole squares in the same pass (tv/mathsRows.ts rowSquares)');
+ assert.match(fnBody(tv,'usePaper'),/paperSquare\(/,'and a paper with a room to it is fitted, not panned (paperSquare)');
+ const css=cssSrc();
+ assert.match(css,/\.mb-row\[data-fit="wrap"\][^{]*\.mx[^{]*\{[^}]*overflow-wrap:\s*anywhere/,'a row wrapped at the floor breaks an unbreakable token');
+ assert.match(css,/\.mb-row\.q\.wrap[^{]*\.mx[^{]*\{[^}]*overflow-wrap:\s*anywhere/,'so does a printed line that wraps at its word spaces');
+ assert.doesNotMatch(css.replace(/\.mb-row(\[data-fit="wrap"\]|\.q\.wrap)[^{]*\{[^}]*\}/g,''),/overflow-wrap:\s*anywhere/,'and a normal fitted line is left as it is');
+});
