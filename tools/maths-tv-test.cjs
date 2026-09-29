@@ -83,3 +83,39 @@ test('prose 6: the maths reader reads the respelled power as the same maths as t
  const same=(a,b)=>assert.equal(flatten(parseMath(a)).replace(/\s+/g,''),flatten(parseMath(b)).replace(/\s+/g,''),`${a} and ${b} read the same`);
  for(const s of ['x^{n+1}','x^{-1/2}','e^(2x)','x^2y','x^{2n}','x^-1','x^10']) same(prose(s),s);
 });
+
+// ---------------------------------------------------------------- 2. the ruler: one rule for "Secure"
+
+const rec=(topic,estimate,secure,seen=6)=>({topic,seen,right:Math.round(seen*estimate),estimate,secure,lastSeen:0,slips:[]});
+/** A marked set on `topic` with `right` of six right. */
+const tonight=(topic,right)=>({topic,marked:true,items:Array.from({length:6},(_,k)=>({n:k+1,question:`x + ${k} = ${k+3}`,verdict:k<right?'right':'wrong'}))});
+const TS=(skills,practice=null,topic=null)=>({skills,practice,topic});
+
+test('ruler 1: tonight\'s 5 of 6 right does not make a topic Secure - only the latched record does',()=>{
+ const {topicStates,stateWord}=R();
+ const s=TS({'linear-one-step':rec('linear-one-step',0.58,false)},tonight('linear-one-step',5),'linear-one-step');
+ const st=topicStates(s);
+ assert.notEqual(st['linear-one-step'],'secure','the groove is hatched, so the word is not Secure');
+ assert.equal(stateWord(s,'linear-one-step',st),'In progress');
+ const s2=TS({'linear-one-step':rec('linear-one-step',0.9,true)},tonight('linear-one-step',5),'linear-one-step');
+ const st2=topicStates(s2);
+ assert.equal(st2['linear-one-step'],'secure');
+ assert.equal(stateWord(s2,'linear-one-step',st2),'Secure');
+ // the same record without tonight's set: the word never depends on the set
+ assert.equal(stateWord(TS({'linear-one-step':rec('linear-one-step',0.9,true)}),'linear-one-step',topicStates(TS({'linear-one-step':rec('linear-one-step',0.9,true)}))),'Secure');
+ assert.equal(stateWord(TS({}),'linear-two-step',topicStates(TS({}))),'Not started');
+});
+
+test('ruler 2: "next" is derived only from latched secure topics',()=>{
+ const {topicStates}=R();
+ assert.equal(topicStates(TS({'linear-one-step':rec('linear-one-step',0.58,false)},tonight('linear-one-step',6)))['linear-two-step'],'later','a perfect set tonight does not open the next topic on its own');
+ assert.equal(topicStates(TS({'linear-one-step':rec('linear-one-step',0.9,true)}))['linear-two-step'],'next');
+ assert.equal(topicStates(TS({}))['linear-one-step'],'next','a topic with no prerequisites is next from the start');
+});
+
+test('ruler 3: the TV no longer re-decides Secure from a count of right answers',()=>{
+ const src=fs.readFileSync(path.join(root,'src/maths/MathsTV.tsx'),'utf8').replace(/\/\*[\s\S]*?\*\//g,'').replace(/(^|[^:"'`])\/\/.*$/gm,'$1');
+ assert.ok(!/>=\s*5/.test(src),'MathsTV.tsx holds no ">= 5" rule');
+ assert.ok(!/function topicStates/.test(src),'topicStates lives in tv/mathsRows.ts');
+ assert.ok(/topicStates/.test(src)&&/from "@\/tv\/mathsRows"/.test(src),'MathsTV.tsx reads the states from tv/mathsRows.ts');
+});

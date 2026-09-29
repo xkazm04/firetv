@@ -3,8 +3,31 @@
  * the D-pad (tv/keys.ts). Types only from the store - the TV never loads the filesystem.
  */
 import type { Screen, Session } from "@/lib/session/store";
-import { topic as topicById } from "@/lib/library/syllabus";
+import { SYLLABUS, topic as topicById } from "@/lib/library/syllabus";
 import { firstToLook } from "@/tv/sheetRows";
+
+/** Where a topic stands on the path: secure (latched), the one in hand, open next, or later. */
+export type TopicState = "secure" | "here" | "next" | "later";
+
+/**
+ * What the learner's record says about each topic on the path. "Secure" is the latched record alone
+ * (lib/session/learners.ts: estimate 0.85 with four attempts seen, never unset) - the same record the ruler's
+ * groove is drawn from, so a hatched groove never says Secure. Tonight's marked set is already in that record
+ * once it is marked; the TV never re-decides it from a count of right answers. "next" is a topic whose
+ * prerequisites are all latched secure.
+ */
+export function topicStates(s: Pick<Session, "skills" | "topic">): Record<string, TopicState> {
+  const done = new Set<string>(Object.values(s.skills ?? {}).filter((r) => r.secure).map((r) => r.topic));
+  const out: Record<string, TopicState> = {};
+  for (const t of SYLLABUS) out[t.id] = done.has(t.id) ? "secure" : s.topic === t.id ? "here" : t.prereq.every((p) => done.has(p)) ? "next" : "later";
+  return out;
+}
+
+/** A description of fact, never of permission: nothing on the path is locked. */
+export function stateWord(s: Pick<Session, "skills">, id: string, st: Record<string, TopicState>): "Secure" | "In progress" | "Not started" {
+  if (st[id] === "secure") return "Secure";
+  return st[id] === "here" || (s.skills?.[id]?.seen ?? 0) > 0 ? "In progress" : "Not started";
+}
 
 /**
  * Where the continue card leads. Every target is a Screen the D-pad navigates to, at `focus`; "page"

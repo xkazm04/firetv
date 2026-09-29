@@ -167,7 +167,9 @@ line split (`workingLines`) and the slip names are one rule each, in `rules/math
 - **The ruler** - the topic path as a boxwood ruler: secure topics inked navy, an in-progress one hatched to its
   estimate, unseen ones a dashed groove, slips as pencil scratches. The learner's name on a lamp-lit needle at the
   frontier; SCHOOL on a sky dashed tick where the school system would have them, only when the profile has an age
-  and a school type. `maths-ruler`.
+  and a school type. On Topics each topic carries a word - Secure, In progress, Not started - and "Secure" comes
+  from the same latched record as the inked groove (`topicStates` in `desk/src/tv/mathsRows.ts`), never from a count
+  of tonight's right answers, so a hatched groove never says Secure. `maths-ruler`.
 - **The paper** - cream, 48 px squares, a sky margin rule at 96 px, the sheet title in Fraunces and the learner's
   name in the blue hand; it pans so the item in hand is under the lamp. `maths-sheet`.
 - **Hand and print lines** - `maths-hand`, `maths-print`, fractions `maths-frac`, ticks `maths-tick`.

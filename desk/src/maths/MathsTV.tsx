@@ -15,7 +15,7 @@ import { SYLLABUS, expectedIndex, topic as topicById, type Topic } from "@/lib/l
 import { LESSONS } from "@/lib/library/lessons.data";
 import { lessonStates } from "@/lib/library/watched";
 import { slip as slipById } from "@/lib/rules/maths";
-import { continueCard, type Continue } from "@/tv/mathsRows";
+import { continueCard, stateWord, topicStates, type Continue } from "@/tv/mathsRows";
 import { running, practiceFailed, stopAt, tonightStops, calendarStops, unitStops, walkStops, HINT_STOPS, TOPIC_STOPS, TONIGHT_MENU, type TonightStop } from "@/tv/keys";
 import { sheetTiles, sheetStops, tileOf } from "@/tv/sheetRows";
 import { systemOf } from "@/tv/profileRows";
@@ -194,20 +194,6 @@ function PrintRow({ text, tick, wrap }: { text: string; tick?: boolean; wrap?: b
 const SYS_WORD: Record<SchoolSystem, (t: Topic) => string> = {
   us: (t) => `Grade ${t.year.us}`, uk: (t) => `Year ${t.year.uk}`, cz: (t) => `${t.year.cz}. ročník`, de: (t) => `Klasse ${t.year.de}`,
 };
-type TState = "secure" | "here" | "next" | "later";
-/** What the session alone says about each topic (the measured record, plus tonight's marked set). */
-function topicStates(s: Session): Record<string, TState> {
-  const done = new Set<string>(Object.values(s.skills ?? {}).filter((r) => r.secure).map((r) => r.topic));
-  if (s.practice?.marked && s.practice.items.filter((i) => i.verdict === "right").length >= 5) done.add(s.practice.topic);
-  const out: Record<string, TState> = {};
-  for (const t of SYLLABUS) out[t.id] = done.has(t.id) ? "secure" : s.topic === t.id ? "here" : t.prereq.every((p) => done.has(p)) ? "next" : "later";
-  return out;
-}
-/** A description of fact, never of permission: nothing on the path is locked. */
-function stateWord(s: Session, t: Topic, st: Record<string, TState>): string {
-  if (st[t.id] === "secure") return "Secure";
-  return st[t.id] === "here" || (s.skills?.[t.id]?.seen ?? 0) > 0 ? "In progress" : "Not started";
-}
 
 /**
  * The path as a boxwood ruler: secure topics inked solid, one in progress hatched as far as the estimate, an
@@ -245,7 +231,7 @@ function Ruler({ s, big, focus, busy }: { s: Session; big?: boolean; focus?: num
           <div key={t.id} className="mb-topic" data-s={state} data-focused={focus === i || undefined} data-busy={(busy && focus === i) || undefined} style={{ left: PAD + i * span + 6, width: span - 12 }}>
             <div className="mb-groove">{state !== "unseen" && <div className="fill" style={state === "prog" ? { width: `${Math.max(8, Math.min(100, (sk?.estimate ?? 0) * 100))}%` } : undefined} />}</div>
             {slips.length > 0 && <div className="mb-slips" aria-label={`${slips.length} slips seen`}>{slips.map((x) => <span key={x}>{SLIP_MARK}</span>)}</div>}
-            <div className="mb-tl"><div className="mb-tn">{t.name}</div><div className="mb-ty">{SYS_WORD[sys](t)}</div>{st && <div className="mb-st">{stateWord(s, t, st)}</div>}</div>
+            <div className="mb-tl"><div className="mb-tn">{t.name}</div><div className="mb-ty">{SYS_WORD[sys](t)}</div>{st && <div className="mb-st">{stateWord(s, t.id, st)}</div>}</div>
           </div>
         );
       })}
