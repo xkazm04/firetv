@@ -333,6 +333,44 @@ test('watched case 3: a watched line never rolls off the history, and a watch is
  onPage();const r=await session({type:'lesson.watched'});assert.equal(r.status,403);deskWorded((await r.json()).error);
 });
 
+// ---- practice-empty-set-is-failure: no verifiable question is a failed set, never an empty paper ----
+const WRONG=STATED.map((c)=>({question:c.question,answer:String(Number(c.answer)+1)}));
+test('empty case 1: two rounds with every candidate rejected answer 502, fail the job in desk words, and leave the previous set untouched',async()=>{
+ onPage();
+ stubText({items:()=>({items:STATED})});assert.equal((await post('practice',{topic:'linear-one-step'})).status,200);
+ const before=JSON.stringify(store.getSession().practice);
+ let asked=0;stubText({items:()=>{asked++;return {items:WRONG};}});
+ const r=await post('practice',{topic:'linear-two-step'});
+ assert.equal(r.status,502);const {error}=await r.json();deskWorded(error);assert.match(error,/^The desk could not write this set\./);
+ assert.equal(asked,2,'both rounds were asked');
+ const s=store.getSession();
+ assert.equal(s.jobs.practice.phase,'failed');assert.match(s.jobs.practice.error,/^The desk could not write this set\./);assert.equal(s.jobs.practice.key,'linear-two-step');
+ assert.equal(JSON.stringify(s.practice),before,'no practice.set: the previous set is untouched');
+ assert(!/questions ready/.test(s.status),`status: ${s.status}`);
+ // and it can be asked again in place
+ stubText({items:()=>({items:STATED})});
+ const again=await retry({kind:'practice'});assert.equal(again.status,200);
+ const t=store.getSession();assert.equal(t.practice.topic,'linear-two-step');assert.equal(t.practice.items.length,6);assert.equal(t.jobs.practice.phase,'done');
+});
+test('empty case 2: a partial set of 4 still lands as 4',async()=>{
+ onPage();
+ stubText({items:()=>({items:STATED.slice(0,4)})});
+ const r=await post('practice',{topic:'linear-one-step'});
+ assert.equal(r.status,200);assert.equal((await r.json()).items,4);
+ assert.equal(store.getSession().practice.items.length,4);assert.equal(store.getSession().jobs.practice.phase,'done');
+});
+test('empty case 3: an unknown topic is refused 400 before any job starts; a malformed body to /api/mark answers 400, not a throw',async()=>{
+ onPage();
+ let asked=0;stubText({items:()=>{asked++;return {items:STATED};}});
+ const r=await post('practice',{topic:'no-such-topic'});
+ assert.equal(r.status,400);assert.match((await r.json()).error,/no such topic/);
+ assert.equal(asked,0);assert.equal(store.getSession().jobs.practice,undefined,'no job was started');
+ const raw=(name,body)=>route(name).POST(new Request(`http://desk/api/${name}`,{method:'POST',body}));
+ const m=await raw('mark','{not json').catch((e)=>e);
+ assert(m instanceof Response,`the mark route answered instead of throwing (${m})`);assert.equal(m.status,400);deskWorded((await m.json()).error);
+ const p=await raw('practice','{not json').catch((e)=>e);assert(p instanceof Response);assert.equal(p.status,400);
+});
+
 // last: it swaps the store module out from under the routes loaded above
 test('case 7: a job saved as running is not running after the desk restarts',()=>{
  onPage();

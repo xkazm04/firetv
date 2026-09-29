@@ -5,8 +5,12 @@ import { markSet } from "@/lib/desk/mark";
 import { refused, runJob } from "@/lib/desk/job";
 
 export const dynamic = "force-dynamic";
+const NO_PHOTO = "The desk did not get a photo of the set. Snap it again.";
 export async function POST(req: Request) {
-  const { image } = (await req.json()) as { image: string; w: number; h: number };
+  // a body that is not the phone's snap is refused in desk words, never an unhandled throw (a 500)
+  const body = (await req.json().catch(() => null)) as { image?: unknown; w?: number; h?: number } | null;
+  if (!body || typeof body !== "object") return NextResponse.json({ error: NO_PHOTO }, { status: 400 });
+  const image = typeof body.image === "string" ? body.image : "";
   const s = getSession(), who = s.learner;
   if (!who) return NextResponse.json({ error: NOBODY_AT_DESK }, { status: 409 });
   const practice = s.practice;
