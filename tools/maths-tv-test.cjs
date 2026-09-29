@@ -228,3 +228,57 @@ test('rows 3: the Practice screen is fitted by usePaper like the Sheet and the W
  assert.match(css,/\.mb-row\.q\.wrap[^{]*\.mx[^{]*\{[^}]*overflow-wrap:\s*anywhere/,'so does a printed line that wraps at its word spaces');
  assert.doesNotMatch(css.replace(/\.mb-row(\[data-fit="wrap"\]|\.q\.wrap)[^{]*\{[^}]*\}/g,''),/overflow-wrap:\s*anywhere/,'and a normal fitted line is left as it is');
 });
+
+// ---------------------------------------------------------------- 5. marking and explaining, on the TV
+
+const job=(phase,extra={})=>({id:'j-'+phase,phase,startedAt:1000,...(phase==='running'?{}:{endedAt:2000}),...extra});
+const unmarked={topic:'linear-one-step',marked:false,items:[{n:1,question:'x + 1 = 3'}]};
+const markedSet={topic:'linear-one-step',marked:true,items:[{n:1,question:'x + 1 = 3',verdict:'unsure'},{n:2,question:'x + 2 = 5',verdict:'wrong'}]};
+
+test('jobs 1: while the set is being marked Practice says so; a failed mark shows its own sentence and that snapping again tries again',()=>{
+ const {markLine}=R();
+ assert.equal(markLine({practice:unmarked,jobs:{}}),null,'nothing asked: the caption is unchanged');
+ const run=markLine({practice:unmarked,jobs:{mark:job('running')}});
+ assert.equal(run.phase,'running');assert.match(run.text,/marking the set/,run.text);
+ assert.doesNotMatch(run.text,/\d+\s*(s|sec|seconds|min)/,'no invented timer');
+ const bad=markLine({practice:unmarked,jobs:{mark:job('failed',{error:'The desk could not mark the set. It took too long.'})}});
+ assert.equal(bad.phase,'failed');
+ assert.ok(bad.text.startsWith('The desk could not mark the set. It took too long.'),`the job's own sentence first: ${bad.text}`);
+ assert.match(bad.text,/[Ss]nap(ping)? the sheet again/,'and that snapping again tries again');
+ const plain=markLine({practice:unmarked,jobs:{mark:job('failed',{error:'The desk could not mark the set. Try again.'})}});
+ assert.doesNotMatch(plain.text,/Try again\..*Snap/,'"Try again." is not said twice: the snap line says how');
+ assert.equal(markLine({practice:unmarked,jobs:{mark:job('done')}}),null,'a done mark: unchanged');
+});
+
+test('jobs 2: a failed mark belongs to the set it was for - a newer set, or a marked set, shows none',()=>{
+ const {markLine}=R();
+ const failed=job('failed',{error:'The desk could not mark the set. Try again.'});
+ assert.equal(markLine({practice:unmarked,jobs:{mark:failed,practice:{id:'p',phase:'done',startedAt:2500,endedAt:3000}}}),null,'a set written after the failed mark');
+ assert.notEqual(markLine({practice:unmarked,jobs:{mark:failed,practice:{id:'p',phase:'done',startedAt:100,endedAt:500}}}),null,'the set the mark failed on');
+ assert.equal(markLine({practice:markedSet,jobs:{mark:job('running')}}),null,'a marked set is on the sheet, not waiting');
+ assert.equal(markLine({practice:null,jobs:{mark:job('running')}}),null);
+});
+
+test('jobs 3: while an explanation runs the open item shows the desk thinking; a failed one shows its sentence; only for its own item',()=>{
+ const {explainLine}=R();
+ assert.equal(explainLine({practice:markedSet,jobs:{}},1),null,'nothing asked: unchanged');
+ const run=explainLine({practice:markedSet,jobs:{explain:job('running',{key:'1'})}},1);
+ assert.equal(run.phase,'running');assert.match(run.text,/^The desk is /,run.text);
+ assert.equal(explainLine({practice:markedSet,jobs:{explain:job('running',{key:'1'})}},2),null,'another item on the walk: unchanged');
+ const bad=explainLine({practice:markedSet,jobs:{explain:job('failed',{key:'2',error:'The desk could not follow that. It took too long.'})}},2);
+ assert.deepEqual(bad,{phase:'failed',text:'The desk could not follow that. It took too long.'},'the job\'s own sentence, nothing added');
+ assert.equal(explainLine({practice:markedSet,jobs:{explain:job('done',{key:'1'})}},1),null);
+ assert.equal(explainLine({practice:markedSet,jobs:{explain:job('failed',{key:'1',error:'x'}),mark:{id:'m',phase:'done',startedAt:2500,endedAt:3000}}},1),null,'a failure from a set marked before this one is not shown');
+});
+
+test('jobs 4: MathsTV draws the two states from tv/mathsRows.ts in the desk\'s voice, and adds no stop',()=>{
+ const tv=tvSrc();
+ assert.match(tv,/import \{[^}]*markLine[^}]*\} from "@\/tv\/mathsRows"/,'markLine from tv/mathsRows.ts');
+ assert.match(tv,/import \{[^}]*explainLine[^}]*\} from "@\/tv\/mathsRows"/,'explainLine from tv/mathsRows.ts');
+ assert.match(fnBody(tv,'PracticeScreen'),/markLine\(/,'the Practice caption reads markLine');
+ assert.match(fnBody(tv,'Walk'),/explainLine\(/,'the Walk reads explainLine');
+ assert.match(tv,/data-role="maths-job"/,'the state line has a hook');
+ assert.doesNotMatch(tv.match(/function JobNote[\s\S]*?\n}/)?.[0]??'',/data-focused/,'the state line is not a stop');
+ const css=cssSrc();
+ assert.match(css,/\.mb-job\s*\{[^}]*font-family:\s*var\(--mb-sans\)/,'set in Manrope, the desk\'s voice');
+});

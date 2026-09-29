@@ -94,6 +94,48 @@ export function fitRow(base: number, room: number, widthAt: (px: number) => numb
   return { size, wrap: false };
 }
 
+/**
+ * A job's state as the TV says it: running, or failed with the job's own sentence (lib/desk/job.ts). Never an
+ * answer, a verdict or a model's words - only the desk's fixed sentences.
+ */
+export interface JobLine { phase: "running" | "failed"; text: string }
+type JobsOf = Pick<Session, "jobs" | "practice">;
+/** When a run last moved: its end, or its start while it runs. */
+const at = (j: { startedAt: number; endedAt?: number } | undefined) => (j ? j.endedAt ?? j.startedAt : -Infinity);
+
+/** Practice, while the photographed set is being marked. */
+export const MARKING = "The desk is marking the set…";
+/** Practice, after a failed mark: how to ask again (the phone's snap is the retry). */
+export const SNAP_AGAIN = "Snap the sheet again and the desk tries again.";
+/**
+ * The Practice caption's state: the set is being marked, or the mark failed (its sentence, then that snapping again
+ * tries again - the sentence's own "Try again." is dropped, as the snap line says how). A failure belongs to the
+ * set it was for: once a newer set has been written it is not shown. Otherwise null, and the caption is unchanged.
+ */
+export function markLine(s: JobsOf): JobLine | null {
+  const p = s.practice, j = s.jobs?.mark;
+  if (!p || p.marked || !j) return null;
+  if (j.phase === "running") return { phase: "running", text: MARKING };
+  if (j.phase !== "failed" || at(s.jobs?.practice) > at(j)) return null;
+  const said = (j.error ?? "The desk could not mark the set.").replace(/\s*Try again\.\s*$/, "");
+  return { phase: "failed", text: `${said} ${SNAP_AGAIN}` };
+}
+
+/** The Walk, while the learner's explanation of the open item is being thought over. */
+export const THINKING = "The desk is thinking over what you said…";
+/**
+ * The open item's state on the Walk: the explanation of item `n` is running, or it failed (its own sentence). Only
+ * for its own item (the job's key is the item's number), and only on the set it was for: a failure from before this
+ * set was marked is not shown. Otherwise null, and the item is unchanged.
+ */
+export function explainLine(s: JobsOf, n: number): JobLine | null {
+  const j = s.jobs?.explain;
+  if (!s.practice?.marked || !j || j.key !== String(n)) return null;
+  if (j.phase === "running") return { phase: "running", text: THINKING };
+  if (j.phase !== "failed" || at(s.jobs?.mark) > at(j)) return null;
+  return { phase: "failed", text: j.error ?? "The desk could not follow that. Try again." };
+}
+
 /** The paper's square in px, as drawn (design/maths-lamplight.css `--mb-sq`). */
 export const SQUARE = 48;
 

@@ -15,7 +15,7 @@ import { SYLLABUS, expectedIndex, topic as topicById, type Topic } from "@/lib/l
 import { LESSONS } from "@/lib/library/lessons.data";
 import { lessonStates } from "@/lib/library/watched";
 import { slip as slipById } from "@/lib/rules/maths";
-import { continueCard, fitRow, paperSquare, rowSquares, stateWord, topicStates, SQUARE, type Continue } from "@/tv/mathsRows";
+import { continueCard, explainLine, fitRow, markLine, paperSquare, rowSquares, stateWord, topicStates, SQUARE, type Continue, type JobLine } from "@/tv/mathsRows";
 import { running, practiceFailed, stopAt, tonightStops, calendarStops, unitStops, walkStops, HINT_STOPS, TOPIC_STOPS, TONIGHT_MENU, type TonightStop } from "@/tv/keys";
 import { sheetTiles, sheetStops, tileOf } from "@/tv/sheetRows";
 import { systemOf } from "@/tv/profileRows";
@@ -120,6 +120,10 @@ function Top({ s, crumb, right }: { s: Session; crumb?: string; right?: ReactNod
 /** The one caption slot. A new caption rises in; under reduced motion it cuts. */
 function Caption({ text, lead, top }: { text: string; lead?: string; top?: number }) {
   return <div className="mb-cap" key={text} style={top !== undefined ? { top } : undefined}>{lead && <span className="lead">{lead}</span>}{text}</div>;
+}
+/** A job's state on a taped card, in the desk's voice (tv/mathsRows.ts `markLine`, `explainLine`). Status, never a stop. */
+function JobNote({ job }: { job: JobLine }) {
+  return <div className="mb-job" data-role="maths-job" data-phase={job.phase}>{job.text}</div>;
 }
 /** One pill; the first action on a screen is primary. */
 function Act({ icon, label, focused, primary, pips, disabled }: { icon: ReactNode; label: string; focused: boolean; primary?: boolean; pips?: [number, number]; disabled?: boolean }) {
@@ -480,6 +484,7 @@ export function PracticeScreen({ s }: { s: Session }) {
   const pan = usePaper(p ? `${p.topic}|${p.items.map((it) => it.question).join("\n")}` : "", PRACTICE_ROOM);
   if (!p) return <><Top s={s} /><h1 className="mb-title" data-role="maths-title"><Amber text="No set on the desk" /></h1></>;
   const name = topicById(p.topic)?.name ?? humanTopic(p.topic);
+  const job = markLine(s);
   return (<>
     <Top s={s} crumb={name} />
     <div className="mb-practice" ref={pan}>
@@ -496,7 +501,7 @@ export function PracticeScreen({ s }: { s: Session }) {
       <div className="mb-card" data-role="maths-hint">
         <div className="hl"><span className="mb-lab">What to do</span></div>
         <div className="ht">Work all six on paper, then snap the whole sheet with the phone. The desk marks it and walks you through it here.</div>
-        <div className="nx">{ARROW}<span>{s.joined ? "The phone is waiting for the sheet." : `Pair the phone first · PIN ${s.pin}`}</span></div>
+        {job ? <JobNote job={job} /> : <div className="nx">{ARROW}<span>{s.joined ? "The phone is waiting for the sheet." : `Pair the phone first · PIN ${s.pin}`}</span></div>}
       </div>
     </aside>
   </>);
@@ -521,7 +526,7 @@ function Tally({ items, cur }: { items: PracticeItem[]; cur: number | null }) {
 }
 
 /** The side of the paper: the kind of mark, the slip's name, and the taped card - the screen's one caption slot. */
-function SlipSide({ it, points }: { it: PracticeItem; points?: string }) {
+function SlipSide({ it, points, job }: { it: PracticeItem; points?: string; job?: JobLine | null }) {
   const v = it.verdict ?? "unsure", w = working(it);
   const kind = v === "right" ? "right" : v === "unsure" ? "unsure" : w.mark?.kind ?? "line";
   const word = v === "right" ? "Right" : v === "unsure" ? "Not sure" : KIND_WORD[kind as keyof typeof KIND_WORD];
@@ -536,7 +541,7 @@ function SlipSide({ it, points }: { it: PracticeItem; points?: string }) {
       <div className="mb-card" data-role="maths-hint">
         <div className="hl"><span className="mb-lab">{it.reply ? "The desk replied" : "The desk says"}</span></div>
         <div className="ht" data-role="maths-said">{prose(said)}</div>
-        {next && <div className="nx">{ARROW}<span>{prose(next)}</span></div>}
+        {job ? <JobNote job={job} /> : next && <div className="nx">{ARROW}<span>{prose(next)}</span></div>}
       </div>
     </aside>
   );
@@ -638,7 +643,7 @@ export function Walk({ s, focus }: { s: Session; focus: number }) {
         </div>
       </div>
     </div>
-    <SlipSide it={it} points={sl?.points} />
+    <SlipSide it={it} points={sl?.points} job={explainLine(s, it.n)} />
     <div className="mb-acts">
       {last && <Act icon={ICON.back} label="Back to the sheet" focused={stopAt(walkStops(s), focus) === "sheet"} primary />}
       <div className="mb-updn"><Chev dir="l" on={s.walkIx > 0} /><span>{it.n} of {p.items.length}</span><Chev dir="r" on={!last} /></div>

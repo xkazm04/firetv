@@ -294,6 +294,11 @@
 .maths-tv .mb-card .ht { margin-top: 10px; font-size: 34px; line-height: 1.3; font-weight: 600; text-wrap: pretty; }
 .maths-tv .mb-card .nx { margin-top: 14px; display: flex; align-items: flex-start; gap: 14px; font-family: var(--mb-hand); font-size: 48px; font-weight: 700; line-height: 1.02; color: var(--mb-pen-d); text-wrap: balance; }
 .maths-tv .mb-card .nx svg { width: 44px; height: 30px; flex: 0 0 44px; margin-top: 10px; }
+/* a job's state on the card (marking the set, thinking over what was said, or its failure): the desk's own voice in
+   Manrope, never the hand; a running one breathes, a failed one is the pen's colour */
+.maths-tv .mb-card .mb-job { margin-top: 16px; padding-top: 14px; border-top: 2px dashed rgba(39, 48, 74, .22); font-family: var(--mb-sans); font-size: 32px; line-height: 1.28; font-weight: 700; color: var(--mb-navy); text-wrap: pretty; }
+.maths-tv .mb-card .mb-job[data-phase="running"] { animation: mb-breathe 2.4s ease-in-out infinite; }
+.maths-tv .mb-card .mb-job[data-phase="failed"] { color: var(--mb-pen-d); }
 .maths-tv .mb-card .quiet { margin-top: 18px; padding-top: 14px; border-top: 2px dashed rgba(39, 48, 74, .22); font-size: 30px; line-height: 1.28; font-weight: 500; color: rgba(26, 29, 56, .74); }
 
 /* ================= Tonight: the sheet on the desk, two doors, the ruler ================= */
