@@ -4,10 +4,22 @@
  * a first-class answer (lessons §7: a menu tends to get something picked).
  */
 import { text } from "../engines/text";
-import { LESSONS, bestWindow } from "../library/lessons";
+import { LESSONS, bestWindow, type Lesson } from "../library/lessons";
+import { equationOf, expressionOf, leaks } from "../rules/maths";
 import type { LessonPick, Subject } from "../session/store";
 
 const SCHEMA = { type: "object", properties: { lesson: { type: "string" }, why: { type: "string" } }, required: ["lesson", "why"] };
+
+/**
+ * The "why" the TV shows under the lesson. On a maths problem the desk can check, the model's sentence passes the one
+ * leak rule (rules/maths leaks()) like every hint line; a sentence that gives the answer away is replaced by one
+ * built here from the lesson's own concept tags, and that one is checked too. English and essay have no equation.
+ */
+function checkedWhy(subject: Subject, problem: string, l: Lesson, why: string): string {
+  if (subject !== "maths" || (!equationOf(problem) && !expressionOf(problem)) || !leaks(problem, why)) return why;
+  const own = `Chosen because your problem needs this lesson's method: ${l.concepts[0]}.`;
+  return l.concepts[0] && !leaks(problem, own) ? own : "Chosen because your problem needs the method this lesson teaches.";
+}
 
 export async function pickLesson(subject: Subject, problem: string): Promise<LessonPick | null> {
   const menu = LESSONS.filter((l) => l.subject === subject).map((l) => `- ${l.id}: ${l.title} — teaches: ${l.concepts.join(", ")}`).join("\n");
@@ -19,5 +31,5 @@ export async function pickLesson(subject: Subject, problem: string): Promise<Les
   const l = LESSONS.find((x) => x.id === json.lesson.trim());
   if (!l) return null;
   const w = l.youtube ? await bestWindow(l.id, `${problem}. ${l.concepts.join(", ")}`) : null;
-  return { id: l.id, title: l.title, t: w?.t ?? 0, text: w?.text ?? "", why: json.why, youtube: l.youtube };
+  return { id: l.id, title: l.title, t: w?.t ?? 0, text: w?.text ?? "", why: checkedWhy(subject, problem, l, json.why), youtube: l.youtube };
 }

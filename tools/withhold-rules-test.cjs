@@ -206,3 +206,28 @@ test('case 13 GUARD: method numbers, lists and differences stay clean under the 
  assert.equal(maths.leaks('Solve for x:  3x − 7 = 11','Twenty-one is too big; add 7 first.'),false);
  assert.equal(maths.leaks('Solve for x:  3x − 7 = 11','Someone once said: one side at a time.'),false);
 });
+
+test('case 14: the lesson picker\'s "why" passes the one leak rule - a leaking why becomes a sentence built in code; a clean one is kept; none is still null',async()=>{
+ const {pickLesson}=load('desk/pick.ts');
+ const {LESSONS}=load('library/lessons.ts');
+ const lesson=LESSONS.find((l)=>l.id==='bAerID24QJ0');
+ for(const [problem,why] of [['3x-7=11','chosen because your problem needs both sides, so x = 6'],['Solve for x:  3x − 7 = 11','chosen because you undo -7 and then divide: x is six']]){
+  stub({lesson:lesson.id,why});
+  const p=await pickLesson('maths',problem);
+  assert.equal(seen.length,1,'one model call, no re-ask');
+  assert.equal(p.id,lesson.id);
+  assert.notEqual(p.why,why,problem);
+  assert.equal(p.why,`Chosen because your problem needs this lesson's method: ${lesson.concepts[0]}.`,problem);
+  assert.equal(maths.leaks(problem,p.why),false,p.why);
+  for(const v of numbers(p.why))assert.equal(verify('3x-7=11',v),false,`the why carries ${v}`);
+ }
+ const clean='chosen because your problem needs the same step on both sides';
+ stub({lesson:lesson.id,why:clean});
+ assert.equal((await pickLesson('maths','3x-7=11')).why,clean,'a clean why is kept verbatim');
+ stub({lesson:'none',why:'none of these teach it'});
+ assert.equal(await pickLesson('maths','3x-7=11'),null,'none is still a first-class answer');
+ // english and essay have no equation: the maths rule is not run on them
+ const en='chosen because your problem needs 1 irregular past form';
+ stub({lesson:'en-5',why:en});
+ assert.equal((await pickLesson('english','x + 1 = 2')).why,en,'the subject gates the rule, not the text');
+});
