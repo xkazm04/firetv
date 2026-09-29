@@ -131,9 +131,9 @@
 
 /* ----- the pairing postcard: the address and the code, real ----- */
 .pp .pp-postcard { position: absolute; left: 1246px; top: 168px; width: 556px; height: 540px; z-index: 4; transform: rotate(2.6deg); pointer-events: none; transition: transform .3s cubic-bezier(.2, .9, .3, 1.25); }
-.pp .pp-postcard[data-focused="true"] { transform: rotate(0deg) scale(1.04); }
+.pp .pp-postcard[data-focused="true"] { transform: rotate(0deg); }
 .pp .pp-pcd { position: absolute; inset: 0; border-radius: 26px; background: linear-gradient(#fffaf0, #f1e5c9); box-shadow: 0 30px 40px rgba(45, 25, 12, .4), 0 6px 10px rgba(45, 25, 12, .2), inset 0 3px 0 #fff; transition: box-shadow .3s; }
-.pp .pp-postcard[data-focused="true"] .pp-pcd { box-shadow: 0 0 0 5px #fff7e2, 0 0 0 11px #f7c95a, 0 0 40px 14px rgba(247, 201, 90, .5), 0 30px 40px rgba(45, 25, 12, .4); }
+.pp .pp-postcard[data-focused="true"] .pp-pcd { box-shadow: 0 0 0 4px #fff7e2, 0 0 0 9px #f7c95a, 0 0 40px 14px rgba(247, 201, 90, .5), 0 30px 40px rgba(45, 25, 12, .4); }
 .pp .pp-pcd::before { content: ""; position: absolute; left: 26px; right: 26px; top: 20px; height: 4px; border-radius: 2px; background: repeating-linear-gradient(90deg, #d9563a 0 18px, transparent 18px 30px); opacity: .7; }
 .pp .pp-wave { position: absolute; left: 26px; top: 34px; width: 504px; height: 150px; }
 .pp .pp-pin { position: absolute; left: 0; right: 0; top: 190px; text-align: center; font: 500 136px/1 var(--pp-mono); letter-spacing: .06em; color: var(--pp-ink); white-space: nowrap; }
