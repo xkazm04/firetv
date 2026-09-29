@@ -231,3 +231,10 @@ test('case 14: the lesson picker\'s "why" passes the one leak rule - a leaking w
  stub({lesson:'en-5',why:en});
  assert.equal((await pickLesson('english','x + 1 = 2')).why,en,'the subject gates the rule, not the text');
 });
+
+test('case 15: a line with "constructor" or "toString" in it is read as words - no function source is spliced into the reading',()=>{
+ // spliced, 'constructor' became 'function Object() { [native code] }' and its closing brace made '- 3' a signed -3
+ for(const l of ['the constructor - 3 is not it','Constructor - 3','toString - 3','the valueOf - 3'])assert.equal(maths.leaks('x+5=2',l),false,`x+5=2 | ${l}`);
+ assert.equal(maths.leaks('x+5=2','the constructor says minus 3'),true,'a real leak beside the word is still caught');
+ assert.equal(maths.leaks('x+5=2','Look at the constructor of the line.'),false);
+});

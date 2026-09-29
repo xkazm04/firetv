@@ -454,3 +454,24 @@ test('gate case 3: marking asks about a degenerate item and an x-answer - never 
  for(const i of r.items.slice(0,4))assert.equal(i.said,require(path.join(root,'src/lib/rules/maths.ts')).ASK(i.n),`item ${i.n} asks`);
  const rec=getLearner('maths-gate-mark').skills['linear-one-step'];assert.equal(rec.seen,1,'only the real item reaches the record');assert.equal(rec.right,1);
 });
+
+// ---- settle-x-answer-is-unsure: a spoken value in x settles nothing, by the same rule marking uses (substitute) ----
+test('settle case 1: a spoken value containing x leaves the item unsure (null); a clean number settles right or wrong as before',()=>{
+ const {settle,RIGHT}=M(),it={n:4,question:'x+1=10',studentWorking:'',studentAnswer:''};
+ for(const v of ['5x','x','x = 5x','2x-1','X'])assert.equal(settle(it,v,'unclear','linear-one-step'),null,`${v} is not a value of x`);
+ // x=0 is the root here: a value in x read at 0 would settle it wrongly right
+ const zero={n:1,question:'2x+3=3',studentWorking:'',studentAnswer:''};
+ for(const v of ['5x','x'])assert.equal(settle(zero,v,'unclear','linear-one-step'),null,`${v} on 2x+3=3`);
+ const right=settle(it,'9','unclear','linear-one-step');assert.equal(right.verdict,'right');assert.equal(right.said,RIGHT(4));
+ assert.equal(settle(it,'x = 9','unclear','linear-one-step').verdict,'right');
+ const wrong=settle(it,'11','sign-lost-moving','linear-one-step');assert.equal(wrong.verdict,'wrong');assert.equal(wrong.slip,'sign-lost-moving');
+ assert.equal(settle(zero,'0','unclear','linear-one-step').verdict,'right');
+ for(const v of ['','about nine',undefined])assert.equal(settle(it,v,'unclear','linear-one-step'),null,String(v));
+});
+test('settle case 2: through the explain route, a spoken "5x" leaves the unsure item unsure and the record alone',async()=>{
+ const me=await markedWalk(),before=record(me);
+ said({reply:'Tell me the number you ended with.',value:'5x',slip:'arithmetic-slip'});
+ const r=await explainAt(3,'I got five x');
+ assert.equal(r.status,200);assert.equal(r.body.settled,undefined);
+ assert.equal(store.getSession().practice.items[3].verdict,'unsure');assert.deepEqual(record(me),before);
+});

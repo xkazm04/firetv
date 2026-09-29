@@ -7,7 +7,7 @@
  *
  * It also holds the settle rule marking and explanation share, and the check that a reply leaks nothing.
  */
-import { evaluate, verify } from "../desk/verify";
+import { evaluate, substitute, verify } from "../desk/verify";
 import type { PracticeItem, SlipAt } from "../session/store";
 
 /** `name` is what the TV sets as the slip's title; `says` is the desk's line; `points` the place in words. */
@@ -66,14 +66,15 @@ export function settled(n: number, right: boolean, slipId: unknown, topicId: str
 }
 
 /**
- * Settle an item from a value the learner gave: substitute it into the question. A value the desk
- * cannot read as arithmetic settles nothing (null) - the desk does not guess what "about nine" was.
- * An item settled wrong is located in its own working by the rule marking uses (`locate`).
+ * Settle an item from a value the learner gave: substitute it into the question, by the one rule marking
+ * uses (`substitute`). A value the substitution cannot make settles nothing (null) - the desk does not guess
+ * what "about nine" was, and a value in x ("5x") is not a value of x. An item settled wrong is located in its
+ * own working by the rule marking uses (`locate`).
  */
 export function settle(item: { n: number; question: string } & Pick<PracticeItem, "studentWorking" | "studentAnswer">, value: unknown, slipId: unknown, topicId: string): Settled | null {
-  const v = cleanValue(value);
-  if (evaluate(v, 0) === null) return null;
-  const s = settled(item.n, verify(item.question, v), slipId, topicId);
+  const right = substitute(item.question, cleanValue(value));
+  if (right === null) return null;
+  const s = settled(item.n, right, slipId, topicId);
   const at = s.verdict === "wrong" ? locate(item.question, workingLines(item)) : undefined;
   return at ? { ...s, slipAt: at } : s;
 }
@@ -110,10 +111,11 @@ const NUMBER_WORD = /\b(twenty|thirty|forty|fifty|sixty|seventy|eighty|ninety)(?
  * A line as it would be said, with its numbers in digits: lower case, every dash a '-', number words to ninety-nine
  * as digits, 'and a half' as .5, 'minus 3' and 'negative three' as -3, and a minus standing apart from its number
  * ('x = - 3') joined to it - only where no number, x or bracket stands before it, so 'x - 3' stays a subtraction.
+ * A word is a number only as WORDS' own key: 'constructor' is a word, never Object's function spliced in as text.
  */
 const said = (line: string) => line.toLowerCase().replace(/[−–—‐‑]/g, "-")
   .replace(NUMBER_WORD, (w, tens: string | undefined, unit: string | undefined, word: string | undefined) =>
-    tens ? String(Number(WORDS[tens]) + (unit ? Number(WORDS[unit]) : 0)) : WORDS[word!] ?? w)
+    tens ? String(Number(WORDS[tens]) + (unit ? Number(WORDS[unit]) : 0)) : Object.hasOwn(WORDS, word!) ? WORDS[word!] : w)
   .replace(/(\d+)\s+and\s+a\s+half\b/g, "$1.5")
   .replace(/\b(?:minus|negative)\s*(?=\d)/g, "-")
   .replace(/(^|[^\s\da-z)\]²])(\s*)-\s+(?=\d)/g, "$1$2-");
