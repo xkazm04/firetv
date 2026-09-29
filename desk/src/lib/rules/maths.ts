@@ -9,6 +9,7 @@
  */
 import { evaluate, substitute, verify } from "../desk/verify";
 import type { PracticeItem, SlipAt } from "../session/store";
+import { spanStarts } from "../../maths/typeset";
 
 /** `name` is what the TV sets as the slip's title; `says` is the desk's line; `points` the place in words. */
 export interface Slip { id: string; topics: string[]; says: string; points: string; name: string; }
@@ -212,30 +213,34 @@ function termSigns(side: string): number[] {
 }
 
 /**
- * The one written sign whose flip makes the line hold at the root, as the span to ring ("- 7"), or null when no
- * flip, more than one, or only an unwritten leading plus would repair it. Never on a line where x stands alone:
- * ringing that sign would ring the sign of the answer itself.
+ * The one written sign whose flip makes the line hold at the root, as the span to ring ("- 7") and where in the
+ * whole line that span starts, or null when no flip, more than one, or only an unwritten leading plus would repair
+ * it. Never on a line where x stands alone: ringing that sign would ring the sign of the answer itself.
  */
-function oneSignFlip(sides: Sides, root: number): string | null {
+function oneSignFlip(sides: Sides, root: number): { span: string; at: number } | null {
   if (sides.some((side) => /^\s*x\s*$/i.test(side))) return null;
-  const repairs: { span: string | null }[] = [];
+  const repairs: ({ span: string; at: number } | null)[] = [];
   sides.forEach((side, i) => {
     const at = termSigns(side), with_ = (t: string): Sides => (i === 0 ? [t, sides[1]] : [sides[0], t]);
+    // the line is `left=right` (sidesOf splits on its one "="), so the right side starts one past the left
+    const offset = i === 0 ? 0 : sides[0].length + 1;
     at.forEach((j, t) => {
       const flipped = side.slice(0, j) + (side[j] === "+" ? "-" : "+") + side.slice(j + 1);
-      if (holds(with_(flipped), root)) repairs.push({ span: side.slice(j, at[t + 1] ?? side.length).trim() });
+      if (holds(with_(flipped), root)) repairs.push({ span: side.slice(j, at[t + 1] ?? side.length).trim(), at: offset + j });
     });
     const first = side.search(/\S/);
-    if (first >= 0 && !at.includes(first) && holds(with_(side.slice(0, first) + "-" + side.slice(first)), root)) repairs.push({ span: null });
+    if (first >= 0 && !at.includes(first) && holds(with_(side.slice(0, first) + "-" + side.slice(first)), root)) repairs.push(null);
   });
-  return repairs.length === 1 ? repairs[0].span : null;
+  return repairs.length === 1 ? repairs[0] : null;
 }
 
 /**
  * Where the learner's working broke: the first line that stops holding at the question's root, found in code
  * (`rootOf`), never taken from a model's solution. A sign kind and span only when flipping exactly one written sign
- * repairs the line. A line that is not arithmetic is skipped, never blamed; no linear root, no claim. The position
- * is the learner's own writing - it names a line and a part of it, never the value that would make it right.
+ * repairs the line; when the line holds that span's text more than once, `nth` names which occurrence (as the
+ * pen's `spanStarts` counts them), and a first occurrence carries none. A line that is not arithmetic is skipped,
+ * never blamed; no linear root, no claim. The position is the learner's own writing - it names a line and a part
+ * of it, never the value that would make it right.
  */
 export function locate(question: string, lines: readonly string[]): SlipAt | undefined {
   const root = rootOf(question);
@@ -243,8 +248,12 @@ export function locate(question: string, lines: readonly string[]): SlipAt | und
   for (let k = 0; k < lines.length; k++) {
     const sides = sidesOf(lines[k]);
     if (!sides || !readsAsArithmetic(lines[k]) || holds(sides, root) !== false) continue;
-    const span = oneSignFlip(sides, root);
-    return span ? { line: k, span, kind: "sign" } : { line: k };
+    const flip = oneSignFlip(sides, root);
+    if (!flip) return { line: k };
+    const nth = spanStarts(lines[k], flip.span).findIndex((s) => s.at === flip.at);
+    // the span was cut from this line at `at`, so it is always found there; if not, mark the line rather than guess
+    if (nth < 0) return { line: k };
+    return nth > 0 ? { line: k, span: flip.span, kind: "sign", nth } : { line: k, span: flip.span, kind: "sign" };
   }
   return undefined;
 }

@@ -43,7 +43,9 @@ export function working(it: PracticeItem): Working {
   const at = it.slipAt;
   if (at && at.line < n) {
     for (let k = 0; k < at.line; k++) ticks[k] = readsAsArithmetic(lines[k]);
-    return { lines, at: at.line, mark: at.kind && at.span ? { kind: at.kind, span: at.span } : { kind: "line" }, ticks, placed: "slipAt" };
+    // the occurrence rides with the span, so a sign written twice on the line is ringed where the server found it
+    const mark: LineMarkSpec = at.kind && at.span ? { kind: at.kind, span: at.span, ...(at.nth !== undefined ? { nth: at.nth } : {}) } : { kind: "line" };
+    return { lines, at: at.line, mark, ticks, placed: "slipAt" };
   }
   if (it.slip === "answer-not-checked") return { lines, at: n - 1, mark: { kind: "missing", span: lines[n - 1] }, ticks, placed: "check" };
   return { lines, at: n - 1, mark: { kind: "line" }, ticks, placed: "answer" };

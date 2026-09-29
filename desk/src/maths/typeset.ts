@@ -534,29 +534,47 @@ export function isTall(nodes: MNode[]): boolean {
 // ------------------------------------------------------------------ the desk's pen inside a line
 
 export type ErrorKind = "sign" | "missing" | "extra";
-/** Where the pen goes in one line: `span` is the part of the line it is about, `kind` what is wrong with it. */
-export interface LineMarkSpec { kind: ErrorKind | "line"; span?: string }
+/**
+ * Where the pen goes in one line: `span` is the part of the line it is about, `kind` what is wrong with it, and
+ * `nth` which occurrence of the span it means (0 = the first, as `spanStarts` counts them) when the line holds
+ * the same text more than once. No `nth` is the first occurrence.
+ */
+export interface LineMarkSpec { kind: ErrorKind | "line"; span?: string; nth?: number }
 export type MarkedLine =
   | { kind: "line"; nodes: MNode[] }
   | { kind: ErrorKind; pre: MNode[]; mid: MNode[]; post: MNode[]; trail: MNode[] };
 
 /**
+ * Every place in a line a span starts, left to right, with the text it covers there: the span's words are found
+ * with any run of whitespace between them, so the line keeps its own spacing, and every start is counted, even
+ * one inside an earlier match. One rule for the server that names an occurrence (rules/maths `locate`, as
+ * `slipAt.nth`) and the pen that rings it, so an `nth` means the same place on both sides.
+ */
+export function spanStarts(line: string, span: string): { at: number; text: string }[] {
+  const words = span.trim().split(/\s+/).filter(Boolean).map((w) => w.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"));
+  if (!words.length) return [];
+  const re = new RegExp(words.join("\\s+"), "g"), out: { at: number; text: string }[] = [];
+  for (let m = re.exec(line); m; m = re.exec(line)) { out.push({ at: m.index, text: m[0] }); re.lastIndex = m.index + 1; }
+  return out;
+}
+
+/**
  * Split a line around the span the mark is about and read each part, the winner's way: the offending sign is
  * flagged inside the span (`sign`), the span is struck (`extra`), or a gap opens after it (`missing`, with a
- * comma that belongs to the span kept before the gap, in `trail`). A span the line does not hold, or a mark
- * with no span, marks the whole line - the pen never guesses a place the data does not name.
+ * comma that belongs to the span kept before the gap, in `trail`). The occurrence `nth` names is the one marked;
+ * with none, the first. A span the line does not hold, an occurrence it does not have, or a mark with no span
+ * marks the whole line - the pen never guesses a place the data does not name.
  */
 export function markLine(line: string, mark: LineMarkSpec): MarkedLine {
   const whole = (): MarkedLine => ({ kind: "line", nodes: parseMath(line) });
   if (mark.kind === "line" || !mark.span) return whole();
   const tex = looksTex(line);
-  // the span is found with any run of whitespace, so the line keeps its own spacing
-  const words = mark.span.trim().split(/\s+/).filter(Boolean).map((w) => w.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"));
-  const found = words.length ? new RegExp(words.join("\\s+")).exec(line) : null;
+  const nth = Number.isInteger(mark.nth) && mark.nth! >= 0 ? mark.nth! : 0;
+  const found = spanStarts(line, mark.span)[nth];
   if (!found) return whole();
-  const at = found.index, end = at + found[0].length;
+  const at = found.at, end = at + found.text.length;
   const read = (x: string) => (tex ? parseTexOr(x) : parsePlain(x));
-  const pre = read(line.slice(0, at)), mid = read(found[0]);
+  const pre = read(line.slice(0, at)), mid = read(found.text);
   let post = read(line.slice(end));
   const trail: MNode[] = [];
   if (mark.kind === "sign") {

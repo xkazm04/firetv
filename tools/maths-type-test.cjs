@@ -324,3 +324,43 @@ test('19: the ten-foot floor - an exponent, a subscript, a root index or a fract
  // the floor never inflates big text: the hand at 72 px keeps its 60% scripts and 78% fractions
  assert.equal(+sup(hand).toFixed(2),43.2);assert.equal(+sub(hand).toFixed(2),43.2);assert.equal(+fl(hand).toFixed(2),56.16);assert.equal(+idx(hand).toFixed(2),36);
 });
+
+test('20: the pen rings the sign the server found, not the first sign that reads the same',()=>{
+ const M=require(path.join(root,'src/lib/rules/maths.ts'));
+ const V=require(path.join(root,'src/lib/desk/verify.ts'));
+ // the reproduction: the slip is the right-hand "- 1"; the left one is correct
+ const q='x - 1 = 2',line='2x - 1 = 2 + 2 - 1';
+ const at=M.locate(q,[line]);
+ assert.deepEqual(at,{line:0,span:'- 1',kind:'sign',nth:1},'locate names the second "- 1"');
+ const rels=(nodes)=>count(nodes,'rel');
+ const m=T.markLine(line,{kind:'sign',span:'- 1',nth:1});
+ assert.equal(m.kind,'sign');assert.equal(rels(m.pre),1,'the ringed "- 1" is after the equals sign');assert.ok(m.mid.some(n=>n.flag));
+ // through the paper: the item's slipAt reaches the mark with its occurrence
+ const w=W.working({n:1,question:q,studentWorking:line,verdict:'wrong',slipAt:at});
+ assert.deepEqual(w.mark,{kind:'sign',span:'- 1',nth:1});
+ assert.equal(rels(T.markLine(line,w.mark).pre),1);
+ // an old slipAt with no occurrence rings the first match, as before; a single match is unchanged
+ assert.equal(rels(T.markLine(line,{kind:'sign',span:'- 1'}).pre),0,'no nth: the first match');
+ assert.deepEqual(M.locate('3x - 7 = 11',['3x = 11 - 7','3x = 4','x = 4/3']),{line:0,span:'- 7',kind:'sign'},'one match: no nth, as today');
+ assert.equal(rels(T.markLine('3x = 11 - 7',{kind:'sign',span:'- 7'}).pre),1);
+ // an occurrence the line does not hold marks the whole line - the pen never guesses
+ assert.equal(T.markLine(line,{kind:'sign',span:'- 1',nth:2}).kind,'line');
+ // brute force over simple linear lines: wherever locate names a sign, flipping the one the pen rings repairs the line
+ let named=0,later=0;
+ const sg=['+','-'],num=[1,2,3];
+ for(const q2 of ['x - 1 = 2','x + 2 = 5','2x - 1 = 5','3x + 1 = 7','x - 3 = 1'])
+  for(const p of [1,2,3])for(const o1 of sg)for(const a of num)for(const b of num)for(const o2 of sg)for(const c of num)for(const o3 of sg)for(const d of num){
+   const l=`${p===1?'':p}x ${o1} ${a} = ${b} ${o2} ${c} ${o3} ${d}`;
+   const s=M.locate(q2,[l]);if(!s||s.kind!=='sign')continue;
+   named++;if(s.nth)later++;
+   const mk=T.markLine(l,{kind:'sign',span:s.span,...(s.nth!==undefined?{nth:s.nth}:{})});
+   assert.equal(mk.kind,'sign',l);
+   // where the ringed span starts in the line: the letters and digits before it are the ones the pen set before it
+   const before=alnum(T.flatten(mk.pre)).length;
+   let pos=-1;for(let j=0;j<l.length;j++)if(l.startsWith(s.span,j)&&alnum(l.slice(0,j)).length===before){pos=j;break;}
+   assert.ok(pos>=0,`${l}: the ringed span is in the line`);
+   const fixed=l.slice(0,pos)+(l[pos]==='+'?'-':'+')+l.slice(pos+1),[L,R]=fixed.split('='),x=M.rootOf(q2);
+   assert.ok(Math.abs(V.evaluate(L,x)-V.evaluate(R,x))<1e-9,`${q2} | ${l}: flipping the ringed sign (${s.span}, nth ${s.nth??0}) repairs the line`);
+  }
+ assert.ok(named>=100,`the brute force names a sign on ${named} lines`);assert.ok(later>=20,`${later} of them are a later occurrence`);
+});

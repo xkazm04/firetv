@@ -246,3 +246,19 @@ test('extra: a located slip (slipAt) rides only on a wrong item, as a line, a sp
  assert.equal(n[4].slipAt,undefined,'a line that is not a whole number is dropped');
  assert.deepEqual(n[5].slipAt,{line:0},'an empty span and an unknown kind are dropped, the line stays');
 });
+
+test('extra: a located slip keeps which occurrence of its span it means only as a whole number from 0 - junk is dropped, the rest stays',()=>{
+ const {reduce}=store();
+ const s=session({screen:'practice',practice:unmarked()});
+ const span={span:'- 1',kind:'sign'};
+ const items=marked(['wrong','wrong','wrong','wrong','wrong','wrong']).items.map((it,ix)=>({...it,slipAt:[{line:0,...span,nth:1},{line:0,...span,nth:0},{line:0,...span,nth:-1},{line:0,...span,nth:1.5},{line:0,...span,nth:'1'},{line:0,...span}][ix]}));
+ const n=reduce(s,{type:'practice.marked',items}).practice.items;
+ assert.deepEqual(n[0].slipAt,{line:0,span:'- 1',kind:'sign',nth:1},'a later occurrence is kept');
+ assert.deepEqual(n[1].slipAt,{line:0,span:'- 1',kind:'sign',nth:0},'the first occurrence is kept');
+ for(const k of [2,3,4])assert.deepEqual(n[k].slipAt,{line:0,span:'- 1',kind:'sign'},`nth ${JSON.stringify(items[k].slipAt.nth)} is dropped, the place stays`);
+ assert.deepEqual(n[5].slipAt,{line:0,span:'- 1',kind:'sign'},'an old slipAt without nth is unchanged');
+ // a wrong settle carries it too
+ const u=session({screen:'practice',practice:{...marked(['unsure','right','right','right','right','right']),marked:true}});
+ const v=reduce(u,{type:'practice.settle',n:1,reply:'I see.',verdict:'wrong',slipAt:{line:0,...span,nth:2}}).practice.items[0];
+ assert.deepEqual(v.slipAt,{line:0,span:'- 1',kind:'sign',nth:2});
+});

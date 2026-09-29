@@ -60,13 +60,18 @@ export interface PracticeItem {
    */
   slipAt?: SlipAt;
 }
-export interface SlipAt { line: number; span?: string; kind?: "missing" | "sign" | "extra" }
+/**
+ * `nth`: which occurrence of `span` in the line is meant (0 = the first, as maths/typeset `spanStarts` counts
+ * them), when the line holds the same text more than once. Absent - an older slipAt too - means the first.
+ */
+export interface SlipAt { line: number; span?: string; kind?: "missing" | "sign" | "extra"; nth?: number }
 const slipAtOf = (x: unknown): SlipAt | undefined => {
   const o = x as Partial<SlipAt> | null;
   if (!o || typeof o !== "object" || !Number.isInteger(o.line) || o.line! < 0) return undefined;
   const at: SlipAt = { line: o.line! };
   if (typeof o.span === "string" && o.span.trim()) at.span = o.span;
   if (o.kind === "missing" || o.kind === "sign" || o.kind === "extra") at.kind = o.kind;
+  if (Number.isInteger(o.nth) && o.nth! >= 0) at.nth = o.nth;
   return at;
 };
 export interface Practice { topic: string; items: PracticeItem[]; pageId?: string; marked: boolean; owner?: string; }
