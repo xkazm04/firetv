@@ -15,7 +15,7 @@ import { SYLLABUS, expectedIndex, topic as topicById, type Topic } from "@/lib/l
 import { LESSONS } from "@/lib/library/lessons.data";
 import { lessonStates } from "@/lib/library/watched";
 import { slip as slipById } from "@/lib/rules/maths";
-import { calendarWeeks, continueCard, explainLine, fitRow, markLine, paperSquare, rowSquares, secureTitle, stateWord, topicStates, SQUARE, type Continue, type JobLine } from "@/tv/mathsRows";
+import { calendarWeeks, continueCard, explainLine, fitRow, markLine, paperSquare, rowSquares, secureTitle, stateWord, topicStates, workWhat, SQUARE, type Continue, type JobLine } from "@/tv/mathsRows";
 import { running, practiceFailed, stopAt, tonightStops, calendarStops, unitStops, walkStops, HINT_STOPS, TOPIC_STOPS, TONIGHT_MENU, type TonightStop } from "@/tv/keys";
 import { sheetTiles, sheetStops, tileOf } from "@/tv/sheetRows";
 import { systemOf } from "@/tv/profileRows";
@@ -498,7 +498,7 @@ export function PracticeScreen({ s }: { s: Session }) {
       <div className="mb-stitle" data-role="maths-title">Work these on <em>paper</em></div>
       <div className="mb-card" data-role="maths-hint">
         <div className="hl"><span className="mb-lab">What to do</span></div>
-        <div className="ht">Work all six on paper, then snap the whole sheet with the phone. The desk marks it and walks you through it here.</div>
+        <div className="ht">Work {workWhat(p.items.length)} on paper, then snap the whole sheet with the phone. The desk marks it and walks you through it here.</div>
         {job ? <JobNote job={job} /> : <div className="nx">{ARROW}<span>{s.joined ? "The phone is waiting for the sheet." : `Pair the phone first · PIN ${s.pin}`}</span></div>}
       </div>
     </aside>

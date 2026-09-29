@@ -68,6 +68,17 @@ const COUNT_WORDS = ["", "One", "Two", "Three", "Four", "Five"];
 /** A count as Tonight's title writes it: a word up to five, digits past the word list (never "undefined"). */
 export function countWord(n: number): string { return COUNT_WORDS[n] || String(n); }
 
+const SET_WORDS = ["", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"];
+/**
+ * What the Practice card tells the learner to work, for a set of n questions: how many, in words up to ten and digits
+ * past that. The desk writes six by default, but a set may hold fewer (a failed round keeps what it verified). Only the
+ * count is here: the ask itself ("snap the whole sheet with the phone") stays in MathsTV's copy, where the phone's
+ * hand-off test (tools/phone-panel-test.cjs) reads it.
+ */
+export function workWhat(n: number): string {
+  return n === 1 ? "the question" : n === 2 ? "both" : `all ${SET_WORDS[n] || String(n)}`;
+}
+
 /**
  * Tonight's title when nothing is open: every topic secure, "N of M topics secure", or on the first evening the first
  * topic on the path (SYLLABUS[0]) from the first step - read from the syllabus, so a new first topic renames it.

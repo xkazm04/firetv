@@ -322,3 +322,16 @@ test('data 4: MathsTV keeps no hand list - no COUNT, no fixed weeks, no literal 
  assert.match(fnBody(tv,'Calendar'),/calendarWeeks\(list\.length\)/,'the weeks are the lesson count\'s');
  assert.match(fnBody(tv,'Tonight'),/secureTitle\(/,'the title is secureTitle\'s');
 });
+
+// ---------------------------------------------------------------- 7. the Practice card counts the questions it is about
+
+test('count 1: the Practice card says how many questions to work, not a literal "all six"',()=>{
+ const {workWhat}=R();
+ assert.equal(workWhat(6),'all six');assert.equal(workWhat(3),'all three');assert.equal(workWhat(10),'all ten');
+ assert.equal(workWhat(2),'both');assert.equal(workWhat(1),'the question');
+ assert.equal(workWhat(11),'all 11','past ten the count is digits');
+ for(const n of [0,1,2,3,6,10,11,40])assert.doesNotMatch(workWhat(n),/undefined|NaN/);
+ const tv=stripSrc(fs.readFileSync(path.join(root,'src/maths/MathsTV.tsx'),'utf8'));
+ assert.doesNotMatch(tv,/Work all six/,'no literal count in the card');
+ assert.match(tv,/Work \{workWhat\(p\.items\.length\)\} on paper, then snap the whole sheet with the phone/,'the card says the set\'s own count and still asks for the phone in its own copy (the hand-off test reads it there)');
+});
