@@ -49,6 +49,11 @@
 }
 .maths-tv *, .maths-tv *::before, .maths-tv *::after { box-sizing: border-box; }
 
+/* ---- Desk display (on-air.css): the chips run to the stage's edges; the lamp and the screen under it keep their
+   TV geometry at the stage's centre, and the row of actions, drawn side to side, takes the offset on both sides ---- */
+.stage[data-display="desk"] .maths-tv > :not(.mb-top, .mb-acts) { translate: var(--desk-dx) var(--desk-dy); }
+.stage[data-display="desk"] .maths-tv > .mb-acts { left: calc(96px + var(--desk-dx)); right: calc(96px + var(--desk-dx)); top: calc(946px + var(--desk-dy)); }
+
 /* ---- the lamp: one warm pool on the desk; it breathes, and never needs to ---- */
 .maths-tv .mb-lamp { position: absolute; left: -360px; top: -300px; width: 1560px; height: 1320px; pointer-events: none; opacity: .9;
   background: radial-gradient(closest-side at 50% 52%, rgba(255, 205, 125, .40), rgba(255, 177, 61, .20) 38%, rgba(255, 160, 60, .07) 66%, transparent 100%); }

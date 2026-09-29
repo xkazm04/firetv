@@ -69,17 +69,19 @@ export default function TV() {
     catch { setDisplay(q === "desk" ? "desk" : "tv"); }
   }, []);
   const toggleDisplay = () => setDisplay((d) => { const n = d === "desk" ? "tv" : "desk"; try { localStorage.setItem("desk-display", n); } catch {} return n; });
+  /** The stage this screen is drawn on. The landing is one picture with nothing more to fit, so it keeps the TV's. */
+  const shown: Display = s?.screen === "landing" ? "tv" : display;
 
   // fit the whole stage in its box (width and height), centred; the box is what the bar leaves of the window
   useEffect(() => {
-    const { w, h } = STAGE[display];
+    const { w, h } = STAGE[shown];
     const fit = () => {
       if (!frame.current || !stage.current) return;
       const r = frame.current.getBoundingClientRect(), k = Math.min(r.width / w, r.height / h);
       stage.current.style.transform = `translate(${Math.round((r.width - w * k) / 2)}px, ${Math.round((r.height - h * k) / 2)}px) scale(${k})`;
     };
     fit(); const ro = new ResizeObserver(fit); if (frame.current) ro.observe(frame.current); return () => ro.disconnect();
-  }, [s?.screen, display]);
+  }, [s?.screen, shown]);
 
   // speak what is new: the hint, the explanation, the verdict
   useEffect(() => {
@@ -145,7 +147,7 @@ export default function TV() {
       </div>
       {testBar && s && lingaOwns(s) && <LingaTestBar s={s} />}
       <div className="frame" ref={frame}>
-        <div className="stage" ref={stage} tabIndex={0} data-display={display}>
+        <div className="stage" ref={stage} tabIndex={0} data-display={shown}>
           {/* The landing (the desk), Essay Master (Specimen) and Math Buddy (Lamplight) draw the whole stage, no On Air grid or band; each keeps the 5% margins itself */}
           {s && notTheTV(s) ? <NotThisTV /> : s && s.screen === "landing" ? <LandingTV s={s} zoom={zoom} /> : s && essayOwns(s) ? <EssayTV s={s} table={loc.table} /> : s && mathsOwns(s) ? <MathsTV s={s} busy={loc.busy} /> : <>
             <div className="grid" />
