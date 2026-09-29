@@ -518,3 +518,17 @@ test('learners case 3: a write that fails is logged, not silent',()=>{
  finally{fs.chmodSync(booked(),0o666);fs.writeFileSync(booked(),good);}
  assert(logged.some((l)=>/learners\.json/.test(l)),`the failed write is logged: ${JSON.stringify(logged)}`);
 });
+
+test('answer line per course: workingLines decides x = from the item alone - a spec item keeps its bare answer, a school item is unchanged byte for byte',()=>{
+ const {workingLines,settle}=require(path.join(root,'src/lib/rules/maths.ts'));
+ // every calc1 practice shape's bare answer, as a reader returns it: never turned into a value of x
+ const CALC=[[{shape:'evaluate',f:'x^2 + 3x',at:'2'},'10'],[{shape:'limit',f:'sin(3x)/x',at:'0'},'3'],[{shape:'derivative',f:'3x^2 + 2x'},'6x + 2'],
+  [{shape:'derivative-at',f:'x^3',at:'2'},'12'],[{shape:'critical-point',f:'x^2 - 4x + 1',on:['0','5']},'2'],[{shape:'derivative',f:'3x^2 + 2x'},'-6x - 2']];
+ for(const [spec,a] of CALC){const got=workingLines({spec,studentWorking:'',studentAnswer:a});assert.deepEqual(got,[a],`${spec.shape} ${a}`);assert.ok(!got.some(l=>/^x\s*=/.test(l)&&!/^x\s*=/.test(a)),`${spec.shape}: ${got}`);}
+ // the school path: the outputs today's rule gives, pinned
+ const SCHOOL=[['','4',['x = 4']],['','-3',['x = -3']],['','7/2',['x = 7/2']],['','x = 5',['x = 5']],['','5x',['5x']],['',' ',[]],['','',[]],
+  ['2x = 8\nx = 4','4',['2x = 8','x = 4']],['2x = 8; x = 4','',['2x = 8','x = 4']],['2x = 8 -> x = 4','4',['2x = 8','x = 4']]];
+ for(const [w,a,want] of SCHOOL)assert.deepEqual(workingLines({studentWorking:w,studentAnswer:a}),want,`${JSON.stringify(w)} / ${JSON.stringify(a)}`);
+ // settle on a school item still locates from the x = line it always read
+ assert.deepEqual(settle({n:1,question:'x + 3 = 7',studentWorking:'',studentAnswer:'5'},'5','arithmetic-slip','linear-one-step').slipAt,{line:0});
+});

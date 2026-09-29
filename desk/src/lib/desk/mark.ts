@@ -155,7 +155,7 @@ export async function markSet(
 
     attempts.push({ right: verdict === "right", slip });
     // 8 - where the working broke: rules/maths locates it from the learner's own lines and a root found in code
-    const slipAt = verdict === "wrong" ? locate(item.question, workingLines({ studentWorking, studentAnswer })) : undefined;
+    const slipAt = verdict === "wrong" ? locate(item.question, workingLines({ ...item, studentWorking, studentAnswer })) : undefined;
     return { ...item, studentAnswer, studentWorking, verdict, slip, said, ...(slipAt ? { slipAt } : {}) };
   });
 

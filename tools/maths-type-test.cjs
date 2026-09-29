@@ -401,3 +401,25 @@ test('21: the pen never cuts through a TeX construct - a span inside one marks t
  }
  assert.ok(spans>=50000,`${spans} spans tried`);assert.ok(rung>=spans/4,`${rung} of ${spans} spans are still ringed`);
 });
+
+test('12 (answer line per course): a Calculus item with no working shows its answer as written, never as a value of x; the school line is unchanged',()=>{
+ const spec={shape:'derivative',f:'3x^2 + 2x'},lim={shape:'limit',f:'sin(3x)/x',at:'0'};
+ assert.deepEqual(W.workingLines({spec,studentWorking:'',studentAnswer:'3x^2 + 2x'}),['3x^2 + 2x']);
+ assert.deepEqual(W.workingLines({spec:lim,studentWorking:'',studentAnswer:'3'}),['3'],'a limit of 3 is not x = 3');
+ assert.deepEqual(W.workingLines({spec,studentWorking:'',studentAnswer:' 12 '}),['12']);
+ assert.deepEqual(W.workingLines({spec,studentWorking:'',studentAnswer:"f'(x) = 6x + 2"}),["f'(x) = 6x + 2"],'what the learner wrote is kept as written');
+ assert.deepEqual(W.workingLines({spec,studentWorking:'',studentAnswer:'y = 6x + 2'}),['y = 6x + 2']);
+ assert.deepEqual(W.workingLines({spec,studentWorking:''}),[]);
+ assert.deepEqual(W.workingLines({spec,studentWorking:'d/dx 3x^2 = 6x\nd/dx 2x = 2',studentAnswer:'6x + 2'}),['d/dx 3x^2 = 6x','d/dx 2x = 2'],'working lines are used as before');
+ // the school path, byte for byte
+ assert.deepEqual(W.workingLines({studentWorking:'',studentAnswer:'4'}),['x = 4']);
+ assert.deepEqual(W.workingLines({studentWorking:'',studentAnswer:'-7/2'}),['x = -7/2']);
+ assert.deepEqual(W.workingLines({studentWorking:'',studentAnswer:'x = 4'}),['x = 4']);
+ assert.deepEqual(W.workingLines({spec:undefined,studentWorking:'',studentAnswer:'4'}),['x = 4'],'an absent spec is the school path');
+ // the walk state the TV draws for a Calculus item holds no invented x
+ for(const verdict of ['right','wrong','unsure']){
+  const w=W.working({n:1,question:'Find the limit as x → 0 of sin(3x)/x',spec:lim,studentWorking:'',studentAnswer:'3',verdict});
+  assert.deepEqual(w.lines,['3'],verdict);assert.ok(w.lines.every(l=>!/x\s*=/.test(l)),`${verdict}: ${JSON.stringify(w.lines)}`);
+ }
+ assert.deepEqual(W.working({n:1,question:'3x - 7 = 11',studentWorking:'',studentAnswer:'6',verdict:'right'}).lines,['x = 6']);
+});

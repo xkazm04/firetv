@@ -179,14 +179,18 @@ export function leaks(question: string, line: string): boolean {
 /**
  * The learner's working, one line per step: the transcription's own line breaks, `;` and arrows between steps.
  * One rule for the server that locates a slip and the TV that draws it, so a `slipAt.line` means the same line.
+ * With no working the one line is the answer: on the school path a bare value is a value of x; an item with a spec
+ * (a Calculus item - a limit, a derivative, a value of f) asks for no x, so its answer stands as the learner wrote it.
+ * Callers pass the whole item, so the path is decided here and nowhere else.
  */
-export function workingLines(it: Pick<PracticeItem, "studentWorking" | "studentAnswer">): string[] {
+export function workingLines(it: Pick<PracticeItem, "studentWorking" | "studentAnswer"> & { spec?: unknown }): string[] {
   const w = (it.studentWorking ?? "").trim();
   const lines = w ? w.split(/\r?\n|;\s*|\s+(?:→|⇒|=>|->)\s+/).map((l) => l.trim()).filter(Boolean) : [];
   if (lines.length) return lines;
   const a = (it.studentAnswer ?? "").trim();
   if (!a) return [];
-  // the marker cleans "x = " off a value; a bare value is a value of x, as every question on the path asks
+  if (it.spec !== undefined && it.spec !== null) return [a];
+  // the marker cleans "x = " off a value; a bare value is a value of x, as every question on the school path asks
   return [/[=a-zA-Z]/.test(a) ? a : `x = ${a}`];
 }
 

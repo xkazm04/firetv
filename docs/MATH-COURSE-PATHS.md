@@ -277,7 +277,9 @@ because it is the fallback. No test pins this case.
   SCHOOL tick.
 - **A marked Calculus item.** It has no pen position, so a wrong one gets the wavy underline on its answer line and
   the card's "Look at ..." from the slip's `points`. The slip's title is the `CALC_SLIPS` name, for example "The
-  constant left off".
+  constant left off". An answer marked with no working is drawn as the learner wrote it: `workingLines`
+  (`rules/maths.ts`) adds `x = ` to a bare value only on an item without a spec, so a limit of 3 shows `3`, never
+  `x = 3` (`tools/maths-type-test.cjs` test 12).
 
 ## 8. The tests and tools that pin it
 
@@ -382,9 +384,6 @@ Linear algebra needs a different engine altogether.
   arrows, ∑, ∂ and ′ fall back to a system face that has not been seen on a Fire TV.
 - **Newton items are limited** to steps whose iterates the 5e-3 tolerance can tell apart. For `x^2 - 2` from 1,
   that is one step. The corpus's own Newton question, asking for x_3, is refused.
-- **A bare-number answer is drawn as a value of x.** `workingLines` (`rules/maths.ts`) prints an answer with no `=`
-  and no letter as `x = <answer>`, "as every question on the path asks". That is true of the school path, but it
-  means a Calculus item marked with no working and an answer such as `1/3` shows `x = 1/3` on the paper.
 - **The hint's leak check follows the item, the stance follows the learner.** A school learner photographing a
   Calculus page gets the school stance and a lesson pick. The page's hint still gets `leaksCalc` when the item reads
   as a spec.

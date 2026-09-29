@@ -159,8 +159,9 @@ line split (`workingLines`) and the slip names are one rule each, in `rules/math
 ([MATH-COURSE-PATHS.md](MATH-COURSE-PATHS.md)) writes no `slipAt`. A wrong Calculus item takes the third step: the
 answer line gets the wavy underline, and the card says "Look at ..." with the slip's place in words. The slip's
 title is its Calculus name, for example "The constant left off" or "The inside not differentiated". A right one
-ticks its answer line. One quirk comes from the shared line split: an answer written with no working, no `=` and
-no letter is drawn as `x = <answer>`, so a bare Calculus answer such as `1/3` shows as `x = 1/3`.
+ticks its answer line. With no working, the shared line split draws the answer alone: on the school path a bare
+value is drawn as `x = <answer>`, but an item with a spec asks for no x, so a Calculus answer such as `1/3` or
+`3x^2 + 2x` is drawn exactly as the learner wrote it.
 
 ## Components
 
