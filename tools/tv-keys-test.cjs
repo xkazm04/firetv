@@ -493,3 +493,10 @@ test('course lessons 2: the Math Buddy blurb speaks for either path - no "school
  assert.match(MODULE_BLURB.maths,/never the answer/,'the promise stays');
  assert.ok(MODULE_BLURB.maths.split(/(?<=\.)\s/).length<=2,'short: at most two sentences');
 });
+
+test('course lessons 3: the landing card for Math Buddy says the same as the profile blurb - no "school maths" on either',()=>{
+ // only the code lines that assign a blurb are read: a line comment may quote the old wording, a string may not
+ const landing=fs.readFileSync(path.join(root,'src/tv/landingRows.ts'),'utf8').split('\n').filter((l)=>/^\s*(maths|english|essay):\s*"/.test(l)).join('\n');
+ assert.doesNotMatch(landing,/school maths/i,'the landing blurb does not assume the school path');
+ assert.match(landing,/maths: "Learn and practise maths on your own path, one step at a time\."/,'its first sentence is the profile blurb\'s first sentence');
+});

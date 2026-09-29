@@ -86,7 +86,7 @@ export type Waiting = MathsWaiting | LingaWaiting | EssayWaiting;
 
 const firstSentence = (t: string) => (t.match(/^.*?[.!?](\s|$)/)?.[0] ?? t).trim();
 const BLURB_ONE: Record<Subject, string> = {
-  maths: "Learn and practise school maths one step at a time.",
+  maths: "Learn and practise maths on your own path, one step at a time.",
   english: "Practise real situations in English.",
   essay: "See what your paragraph does and what it lacks.",
 };
