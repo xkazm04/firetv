@@ -25,6 +25,9 @@ const SERVER_ONLY: Partial<Record<Event["type"], string>> = {
  * The session as the caller may see it (lib/session/pairing.ts): the TV all of it, a phone all but the pin, a
  * guest the lobby. The proxy names the caller in x-desk-role; an in-process call has none and gets the session.
  */
+// Two signatures: the one Next's generated route types check (a Request) and the in-process one (none, the whole session).
+export async function GET(): Promise<Response>;
+export async function GET(req: Request): Promise<Response>;
 export async function GET(req?: Request) { return NextResponse.json(view(getSession(), roleFrom(req))); }
 export async function POST(req: Request) {
   const role = roleFrom(req);

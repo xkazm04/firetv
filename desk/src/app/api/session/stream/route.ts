@@ -7,6 +7,9 @@ import { getSession, subscribe, type Session } from "@/lib/session/store";
 import { liveRole, view } from "@/lib/session/pairing";
 
 export const dynamic = "force-dynamic";
+// Two signatures: the one Next's generated route types check (a Request) and the in-process one (none).
+export async function GET(): Promise<Response>;
+export async function GET(req: Request): Promise<Response>;
 export async function GET(req?: Request) {
   const enc = new TextEncoder();
   let unsub = () => {};
