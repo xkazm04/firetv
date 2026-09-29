@@ -7,10 +7,16 @@
  * A maths hint is checked, not only asked (PoC B: the model assembled the answer once it had the parts). Both
  * fields pass rules/maths leaks(); a leak is re-asked once, naming the field; a second leak - or a re-ask that
  * fails - gives the item's withheld line from rules/maths and an empty next. The shape is the same either way.
+ *
+ * A Calculus item is read from its printed text into a spec (rules/calc specFromQuestion, null when unsure); when it
+ * reads, each field also passes the shape-aware leaksCalc, and the fallback is the shape's fixed sentence from
+ * rules/calc. The stance follows the learner's Math path, which the route reads from the session and passes in.
  */
 import { text } from "../engines/text";
 import { cardText, type RuleCard } from "../rules/english";
 import { leaks, withheldLine } from "../rules/maths";
+import { leaksCalc, specFromQuestion, withheldCalc, type CalcSpec } from "../rules/calc";
+import type { MathPath } from "../library/paths";
 import type { Subject } from "../session/store";
 
 const SCHEMA = {
@@ -28,16 +34,25 @@ const STANCE: Record<Subject, string> = {
   english: "an English tutor for a Czech teenager learning English; explain in plain English, examples in English",
   essay: "a writing tutor for a 15-year-old",
 };
+/** The maths stance on the Calculus 1 path: a university course, its methods and its notation. */
+const CALC_STANCE =
+  "a maths tutor for a first-year university student in Calculus I. Use the course's methods and notation - limits, " +
+  "the derivative rules, antiderivatives and the Fundamental Theorem - and name the rule that applies";
+
+const stanceOf = (subject: Subject, path?: MathPath) => (subject === "maths" && path === "calc1" ? CALC_STANCE : STANCE[subject]);
+
+/** Does this line give the item's answer away: the one leak rule, and the shape's own check when the item reads as a Calculus spec. */
+const leaksLine = (problem: string, spec: CalcSpec | null, line: string) => leaks(problem, line) || (spec !== null && leaksCalc(spec, line));
 
 /** Which field of a maths hint gives the item's answer away, in words for the re-ask, or null when neither does. */
-function leakedIn(problem: string, said: Said): string | null {
-  const inHint = leaks(problem, said.hint), inNext = leaks(problem, said.what_to_try_next);
+function leakedIn(problem: string, spec: CalcSpec | null, said: Said): string | null {
+  const inHint = leaksLine(problem, spec, said.hint), inNext = leaksLine(problem, spec, said.what_to_try_next);
   return inHint && inNext ? "the hint and what to try next" : inHint ? "the hint" : inNext ? "what to try next" : null;
 }
 
-export async function hint(subject: Subject, problem: string, opts: { previous?: string; askedQ?: string; rule?: RuleCard }) {
+export async function hint(subject: Subject, problem: string, opts: { previous?: string; askedQ?: string; rule?: RuleCard; path?: MathPath }) {
   const system =
-    `You are ${STANCE[subject]}. Socratic rules, absolute: never state the final answer, never write the completed solution, ` +
+    `You are ${stanceOf(subject, opts.path)}. Socratic rules, absolute: never state the final answer, never write the completed solution, ` +
     `never fill in a blank, never state a verb form or an ending. Point at the method, the next step, or the mistake to avoid. ` +
     `Two or three sentences at most. Plain text only — no LaTeX, no markdown; write x^2 as x². This will be read aloud.\n\n` +
     `Who reads it: the learner, on the TV and aloud - both the hint and what_to_try_next. Speak to them as "you". ` +
@@ -56,11 +71,12 @@ export async function hint(subject: Subject, problem: string, opts: { previous?:
   const prompt = `Problem: ${problem}\n` + (opts.askedQ ? `The student asked: "${opts.askedQ}"\n` : "") + `\n${stage}`;
   const ask = (extra: string) => text<Said>({ system, prompt: prompt + extra, schema: SCHEMA, model: "fast" });
   const first = await ask("");
-  const leaked = subject === "maths" ? leakedIn(problem, first.json) : null;
+  const spec = subject === "maths" ? specFromQuestion(problem) : null;
+  const leaked = subject === "maths" ? leakedIn(problem, spec, first.json) : null;
   if (!leaked) return { hint: first.json.hint, next: first.json.what_to_try_next, provider: first.provider, ms: first.ms };
   // the leaked line is not handed back; the model is told where it leaked and asked again, once
   const again = await ask(`\n\nYour previous hint gave the answer away (in ${leaked}). Write it again: one step, and stop short of the answer.`).catch(() => null);
   const ms = first.ms + (again?.ms ?? 0), provider = again?.provider ?? first.provider;
-  if (again && !leakedIn(problem, again.json)) return { hint: again.json.hint, next: again.json.what_to_try_next, provider, ms };
-  return { hint: withheldLine(problem), next: "", provider, ms };
+  if (again && !leakedIn(problem, spec, again.json)) return { hint: again.json.hint, next: again.json.what_to_try_next, provider, ms };
+  return { hint: spec ? withheldCalc(spec) : withheldLine(problem), next: "", provider, ms };
 }

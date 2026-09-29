@@ -563,3 +563,282 @@ export const CALC_SLIPS: readonly CalcSlip[] = [
 export function slipsFor(shape: unknown): string[] {
   return isShape(shape) ? CALC_SLIPS.filter((s) => s.shapes.includes(shape)).map((s) => s.id) : [];
 }
+
+// ------------------------------------------------------------------ reading a printed question back into a spec
+
+/** Longest question text the reader tries: a page item is one line, and the engine reads at most MAX_LENGTH anyway. */
+const MAX_QUESTION = 300;
+
+/** A printed question in one spelling: dashes, arrows, primes, the integral sign, infinity; no item number, no final stop. */
+const normalQuestion = (t: string) => tidy(t
+  .replace(/[−–—‐‑]/g, "-").replace(/→|⟶/g, "->").replace(/[’‘′ʹ]/g, "'")
+  .replace(/∫\s*(?=_)/g, "int").replace(/∫\s*/g, "int ").replace(/∞/g, "infinity"))
+  .replace(/^(?:\d{1,2}[.)]|\(\d{1,2}\)|[a-h]\)|\([a-h]\))\s+/i, "")
+  // 'Differentiate: y = x e^x' - a colon straight after the leading words
+  .replace(/^([a-z][a-z' ]*?)\s*:\s*/i, "$1 ")
+  .replace(/\s*[.?]$/, "");
+
+const CLOSING: Record<string, string> = { "(": ")", "[": "]", "{": "}" };
+/** Where the bracket opened at s[i] closes, or -1. */
+function closeAt(s: string, i: number): number {
+  const open = s[i], close = CLOSING[open];
+  if (!close) return -1;
+  let depth = 0;
+  for (let k = i; k < s.length; k++) {
+    if (s[k] === open) depth++;
+    else if (s[k] === close && --depth === 0) return k;
+  }
+  return -1;
+}
+/** Does one bracket pair wrap the whole text? */
+const wrapped = (s: string) => s.length > 1 && closeAt(s, 0) === s.length - 1;
+
+/** A parameter as a spec carries it: a plain decimal as a number, a constant ('pi/4', 'ln(7)/2') as its text; null when it does not read. */
+function paramOf(t: string): Num | null {
+  let s = tidy(t);
+  if (wrapped(s)) s = tidy(s.slice(1, -1));
+  if (/^[+-]?\d+(\.\d+)?$/.test(s)) { const v = Number(s); return fin(v) ? v : null; }
+  return num(s) === null ? null : s;
+}
+
+/**
+ * The function as the question writes it, or null: an expression in x the engine reads, with no '=' and no +C. With
+ * `unwrap`, one bracket pair around a whole sum is the question's own (question() brackets a sum after int and lim).
+ */
+function fnOf(t: string, unwrap: boolean): string | null {
+  let s = tidy(t);
+  if (unwrap && s.startsWith("(") && wrapped(s)) {
+    const inner = compile(s.slice(1, -1));
+    if (inner && isSum(inner)) s = tidy(s.slice(1, -1));
+  }
+  if (!s || s.includes("=")) return null;
+  const e = compile(s);
+  return e && e.usesX && !e.constant ? s : null;
+}
+
+/** An interval as '[a, b]' or '(a, b)'. */
+function intervalOf(t: string): [Num, Num] | null {
+  const s = tidy(t);
+  if (!/^[[(]/.test(s) || !/[\])]$/.test(s)) return null;
+  const inner = s.slice(1, -1), parts: string[] = [];
+  let depth = 0, from = 0;
+  for (let k = 0; k < inner.length; k++) {
+    const c = inner[k];
+    if ("([{".includes(c)) depth++;
+    else if (")]}".includes(c)) depth--;
+    else if (c === "," && depth === 0) { parts.push(inner.slice(from, k)); from = k + 1; }
+  }
+  parts.push(inner.slice(from));
+  if (parts.length !== 2) return null;
+  const a = paramOf(parts[0]), b = paramOf(parts[1]);
+  return a === null || b === null ? null : [a, b];
+}
+
+type Approach = { at: Num | "inf" | "-inf"; side?: "+" | "-" };
+/** Where x goes: a number with an optional side ('0+', '2^-', 'from the right'), or infinity with its sign. */
+function approachOf(t: string, words?: string): Approach | null {
+  let s = tidy(t).replace(/\s+/g, "").replace(/⁺/g, "+").replace(/⁻/g, "-").replace(/^(negative|minus)/i, "-").replace(/^(positive|plus)/i, "+");
+  let side: "+" | "-" | undefined = words ? (/right|above/i.test(words) ? "+" : "-") : undefined;
+  if (/^\+?(infinity|inf)$/i.test(s)) return side ? null : { at: "inf" };
+  if (/^-(infinity|inf)$/i.test(s)) return side ? null : { at: "-inf" };
+  const m = /^(.+?)\^?([+-])$/.exec(s);
+  if (m && !side) { side = m[2] as "+" | "-"; s = m[1]; }
+  const at = paramOf(s);
+  return at === null ? null : side ? { at, side } : { at };
+}
+
+/** The bound after 'int_' or '^': a bracketed group, or a bare run up to `stop`. [bound, rest] or null. */
+function boundOf(s: string, stop: RegExp): [string, string] | null {
+  if (CLOSING[s[0]]) {
+    const end = closeAt(s, 0);
+    return end < 0 ? null : [s.slice(1, end), s.slice(end + 1)];
+  }
+  const m = stop.exec(s);
+  const end = m ? m.index : s.length;
+  return end === 0 ? null : [s.slice(0, end), s.slice(end)];
+}
+
+const VERB = String.raw`(?:find|evaluate|compute|calculate|determine|work out|what is)`;
+/** 'f(x) = ', 'g(x)=', 'y = ' before a function. */
+const FN = String.raw`(?:(?:[a-z]\s*\(\s*x\s*\)|y)\s*=\s*)?`;
+/** A domain the page adds after the function ('for x > 0'): read and set aside. */
+const DOMAIN = String.raw`(?:\s*,?\s*(?:for|where|when)\s+x\s*(?:>=|<=|>|<|≥|≤|!=|≠)\s*[+-]?(?:\d+(?:\.\d+)?|pi|π|e))?`;
+/** A parameter inside f(...) or f'(...): one level of brackets. */
+const ARG = String.raw`((?:[^()]|\([^()]*\))+?)`;
+const GIVEN = String.raw`(?:for|if|when|given|where)`;
+const re = (s: string) => new RegExp(`^${s}$`, "i");
+
+/** The page's phrasings, in order: each a pattern and the spec its groups make (null when a piece does not read). */
+const READERS: [RegExp, (m: RegExpExecArray) => CalcSpec | null][] = [
+  // f(3) for f(x) = ...
+  [re(`${VERB}\\s+([a-z])\\s*\\(\\s*${ARG}\\s*\\)\\s+${GIVEN}\\s+\\1\\s*\\(\\s*x\\s*\\)\\s*=\\s*(.+)`), (m) => {
+    const at = paramOf(m[2]), f = fnOf(m[3], false);
+    return at === null || !f ? null : { shape: "evaluate", f, at };
+  }],
+  // f'(x) / f'(2) for f(x) = ..., also 'Use the definition to find f'(x) ...'
+  [re(`(?:use\\s+the\\s+definition(?:\\s+of\\s+(?:the\\s+|a\\s+)?derivative)?\\s+to\\s+)?${VERB}\\s+([a-z])'\\s*\\(\\s*${ARG}\\s*\\)\\s+${GIVEN}\\s+\\1\\s*\\(\\s*x\\s*\\)\\s*=\\s*(.+?)${DOMAIN}`), (m) => {
+    const f = fnOf(m[3], false);
+    if (!f) return null;
+    if (/^x$/i.test(tidy(m[2]))) return { shape: "derivative", f };
+    const at = paramOf(m[2]);
+    return at === null ? null : { shape: "derivative-at", f, at };
+  }],
+  // dy/dx for y = ...
+  [re(`${VERB}\\s+(?:dy\\s*/\\s*dx|y')\\s+${GIVEN}\\s+y\\s*=\\s*(.+?)${DOMAIN}`), (m) => {
+    const f = fnOf(m[1], false);
+    return f ? { shape: "derivative", f } : null;
+  }],
+  // the derivative of ... (at x = a)
+  [re(`${VERB}\\s+the\\s+derivative\\s+of\\s+(?:the\\s+function\\s+)?${FN}(.+?)(?:\\s+at\\s+x\\s*=\\s*([^\\s,]+))?${DOMAIN}`), (m) => {
+    const f = fnOf(m[1], false);
+    if (!f) return null;
+    if (m[2] === undefined) return { shape: "derivative", f };
+    const at = paramOf(m[2]);
+    return at === null ? null : { shape: "derivative-at", f, at };
+  }],
+  // Differentiate ...
+  [re(`differentiate\\s+(?:the\\s+function\\s+)?${FN}(.+?)(?:\\s+with\\s+respect\\s+to\\s+x)?${DOMAIN}`), (m) => {
+    const f = fnOf(m[1], false);
+    return f ? { shape: "derivative", f } : null;
+  }],
+  // d/dx (...)
+  [re(`(?:${VERB}\\s+)?d\\s*/\\s*dx\\s*(.+)`), (m) => {
+    const f = fnOf(m[1], true);
+    return f ? { shape: "derivative", f } : null;
+  }],
+  // the slope of the tangent to y = ... at x = a
+  [re(`${VERB}\\s+the\\s+slope\\s+of\\s+the\\s+tangent(?:\\s+line)?\\s+to\\s+(?:the\\s+(?:curve|graph)\\s+(?:of\\s+)?)?${FN}(.+?)\\s+at\\s+(?:the\\s+point\\s+where\\s+)?x\\s*=\\s*([^\\s,]+)`), (m) => {
+    const f = fnOf(m[1], false), at = paramOf(m[2]);
+    return !f || at === null ? null : { shape: "derivative-at", f, at };
+  }],
+  // the limit of ... as x approaches a (from the right)
+  [re(`${VERB}\\s+the\\s+limit\\s+of\\s+(.+?)\\s+as\\s+x\\s+(?:approaches|tends\\s+to|goes\\s+to|->)\\s+(.+?)(?:\\s+from\\s+the\\s+(right|left|above|below))?`), (m) => limitSpec(m[1], approachOf(m[2], m[3]))],
+  // the limit as x approaches a (from the right) of ...
+  [re(`${VERB}\\s+the\\s+limit\\s+as\\s+x\\s+(?:approaches|tends\\s+to|goes\\s+to|->)\\s+(.+?)(?:\\s+from\\s+the\\s+(right|left|above|below))?\\s+of\\s+(.+)`), (m) => limitSpec(m[3], approachOf(m[1], m[2]))],
+  // lim_(x->a) ...
+  [re(`(?:${VERB}\\s+)?lim\\s*_?\\s*(.+)`), (m) => {
+    const rest = m[1];
+    let inner: string, after: string;
+    if (CLOSING[rest[0]]) {
+      const end = closeAt(rest, 0);
+      if (end < 0) return null;
+      inner = rest.slice(1, end); after = rest.slice(end + 1);
+    } else {
+      const b = /^(x\s*->\s*\S+)\s+(.+)$/.exec(rest);
+      if (!b) return null;
+      inner = b[1]; after = b[2];
+    }
+    const x = /^\s*x\s*->\s*(.+)$/.exec(inner);
+    return x ? limitSpec(after, approachOf(x[1])) : null;
+  }],
+  // the integral of ... from a to b
+  [re(`${VERB}\\s+(?:the\\s+)?(?:definite\\s+)?integral\\s+of\\s+${FN}(.+?)(?:\\s*d\\s*x)?\\s+from\\s+(?:x\\s*=\\s*)?(\\S+)\\s+to\\s+(?:x\\s*=\\s*)?(\\S+)`), (m) => definiteSpec(m[1], m[2], m[3])],
+  // the integral from a to b of ...
+  [re(`${VERB}\\s+(?:the\\s+)?(?:definite\\s+)?integral\\s+from\\s+(?:x\\s*=\\s*)?(\\S+)\\s+to\\s+(?:x\\s*=\\s*)?(\\S+)\\s+of\\s+(.+?)(?:\\s*d\\s*x)?`), (m) => definiteSpec(m[3], m[1], m[2])],
+  // the (indefinite) integral / antiderivative of ...
+  [re(`${VERB}\\s+(?:the\\s+|an\\s+)?(?:most\\s+general\\s+|general\\s+)?(?:antiderivative|indefinite\\s+integral|integral)\\s+of\\s+(?:the\\s+function\\s+)?${FN}(.+?)(?:\\s*d\\s*x|\\s+with\\s+respect\\s+to\\s+x)?${DOMAIN}`), (m) => {
+    const f = fnOf(m[1], true);
+    return f ? { shape: "antiderivative", f } : null;
+  }],
+  // int ... dx, int_a^b ... dx
+  [re(`(?:${VERB}\\s+)?(?:the\\s+(?:definite\\s+|indefinite\\s+)?integral\\s+)?int(.+)`), (m) => {
+    const rest = m[1];
+    if (rest[0] === "_") {
+      const lo = boundOf(rest.slice(1), /\^/);
+      if (!lo || lo[1][0] !== "^") return null;
+      const hi = boundOf(lo[1].slice(1), /\s/);
+      if (!hi) return null;
+      const body = /^\s*(.+?)\s*d\s*x$/i.exec(hi[1]);
+      return body ? definiteSpec(body[1], lo[0], hi[0]) : null;
+    }
+    const body = /^\s+(.+?)\s*d\s*x$/i.exec(rest);
+    const f = body ? fnOf(body[1], true) : null;
+    return f ? { shape: "antiderivative", f } : null;
+  }],
+  // the critical point of ... on [a, b]
+  [re(`${VERB}\\s+the\\s+critical\\s+(?:point|number)\\s+of\\s+${FN}(.+?)\\s+(?:on|in|over)\\s+(?:the\\s+interval\\s+)?([[(].*[\\])])`), (m) => {
+    const f = fnOf(m[1], false), on = intervalOf(m[2]);
+    return !f || !on ? null : { shape: "critical-point", f, on };
+  }],
+  // the maximum / minimum value of ... on [a, b] (not 'local': a local extremum need not be the interval's)
+  [re(`${VERB}\\s+the\\s+(?:absolute\\s+|global\\s+)?(maximum|minimum|max|min|largest|smallest|greatest|least)(?:\\s+value)?\\s+of\\s+${FN}(.+?)\\s+(?:on|in|over)\\s+(?:the\\s+interval\\s+)?([[(].*[\\])])`), (m) => {
+    const f = fnOf(m[2], false), on = intervalOf(m[3]);
+    const kind = /^(maximum|max|largest|greatest)$/i.test(m[1]) ? "max" : "min";
+    return !f || !on ? null : { shape: "extremum", f, on, kind };
+  }],
+  // Use Newton's method on ... (= 0) with x_1 = a to find x_n
+  [re(`use\\s+newton'?s\\s+method\\s+(?:on|for|with|to\\s+solve)\\s+(?:the\\s+equation\\s+)?${FN}(.+?)(?:\\s*=\\s*0)?\\s*,?\\s+(?:with|starting\\s+(?:with|from|at))\\s+x_?\\(?([01])\\)?\\s*=\\s*([^\\s,]+)\\s*,?\\s+(?:to\\s+)?(?:find|compute|calculate|approximate)\\s+x_?\\(?(\\d{1,2})\\)?`), (m) => {
+    const f = fnOf(m[1], false), x0 = paramOf(m[3]);
+    const steps = Number(m[4]) - Number(m[2]);
+    return !f || x0 === null ? null : { shape: "newton-step", f, x0, steps };
+  }],
+];
+
+function limitSpec(fText: string, to: Approach | null): CalcSpec | null {
+  const f = fnOf(fText, true);
+  if (!f || !to) return null;
+  return to.side ? { shape: "limit", f, at: to.at, side: to.side } : { shape: "limit", f, at: to.at };
+}
+
+function definiteSpec(fText: string, aText: string, bText: string): CalcSpec | null {
+  const f = fnOf(fText, true), a = paramOf(aText), b = paramOf(bText);
+  return !f || a === null || b === null ? null : { shape: "definite-integral", f, a, b };
+}
+
+/**
+ * The spec a printed Calculus task is, read in code from its text - or null. It knows the phrasings a Calculus page
+ * and our own question() use, one pattern per phrasing, each anchored to the whole text: derivative ('Differentiate
+ * f(x) = ...', 'Find the derivative of ...', 'Find dy/dx for y = ...', "Find f'(x) for ..."), derivative-at ("Find
+ * f'(a) for ...", 'the slope of the tangent to y = ... at x = a'), evaluate ('Find f(a) for ...'), limits ('Find
+ * lim_(x->a) ...', 'the limit as x approaches a of ...', one-sided and at infinity), antiderivative ('the integral /
+ * antiderivative of ...', an integral sign with no bounds), definite integral (with bounds, or 'from a to b'),
+ * critical point and extremum on an interval, and Newton's method.
+ * Conservative: a phrasing it does not know, a function that is not one expression in x (another letter, a second
+ * part, an '='), or a spec wellFormed refuses, is null - so a hint on a text it cannot read is left to the school
+ * rule, never checked against a guess. A definite integral that is zero is read as the symmetry question it is
+ * (`zero: true`). Pure and deterministic: a fresh object per call.
+ */
+export function specFromQuestion(text: unknown): CalcSpec | null {
+  if (typeof text !== "string" || !text.trim() || text.length > MAX_QUESTION) return null;
+  const t = normalQuestion(text);
+  for (const [pattern, make] of READERS) {
+    const m = pattern.exec(t);
+    if (!m) continue;
+    const spec = make(m);
+    if (!spec) continue;
+    const w = wellFormed(spec);
+    if (w.ok) return spec;
+    if (spec.shape === "definite-integral" && !w.ok && w.why === REJECT.integralZero) {
+      const zero: CalcSpec = { ...spec, zero: true };
+      if (wellFormed(zero).ok) return zero;
+    }
+    return null;
+  }
+  return null;
+}
+
+// ------------------------------------------------------------------ the line when a hint gave the answer away twice
+
+/**
+ * The line the TV shows and speaks when the model's hint on a Calculus item gave the answer away twice: written here,
+ * never by a model, one per shape. It names the method and carries no number and no number word (leaksCalc reads
+ * 'one' as 1), so nothing on it can be the answer.
+ */
+export const CALC_WITHHELD: Readonly<Record<CalcShape, string>> = {
+  evaluate: "Put the value in for x everywhere it appears, then work it out piece by piece. The number is yours to find.",
+  derivative: "Name the rule the expression is built with, then say the first step out loud.",
+  "derivative-at": "Find the derivative as a function first, then put the point in. The value is yours to work out.",
+  antiderivative: "Name the rule that undoes each term's derivative, and remember the arbitrary constant. The antiderivative is yours to write.",
+  "definite-integral": "Find an antiderivative first, then take its value at the lower limit from its value at the upper limit.",
+  limit: "Say what the expression does as x approaches its target, then name the step that makes it clear. The limit is yours to find.",
+  "critical-point": "Find where the derivative vanishes inside the interval. The point is yours to find.",
+  extremum: "Find where the derivative vanishes inside the interval, then compare the function's values there and at the ends.",
+  "newton-step": "Write the Newton step from the function and its derivative, then apply it from the value you have, step by step.",
+};
+const WITHHELD_ANY = "Go back to the last step you are sure of and take the next. The answer stays yours to find.";
+
+/** The withheld line for a spec, chosen by its shape; a general line when there is no shape. */
+export function withheldCalc(spec: unknown): string {
+  const shape = spec && typeof spec === "object" ? (spec as { shape?: unknown }).shape : undefined;
+  return isShape(shape) ? CALC_WITHHELD[shape] : WITHHELD_ANY;
+}
