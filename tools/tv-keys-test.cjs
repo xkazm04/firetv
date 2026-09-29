@@ -325,13 +325,13 @@ test('landing 3: the D-pad moves the lamp between the objects, and Select opens 
  const at=(focus,patch={})=>desk({focus,...patch});
  assert.equal(focusAfter(at(0),tvKey(at(0),'right',LOCAL)),1);assert.equal(focusAfter(at(2),tvKey(at(2),'right',LOCAL)),2,'Right on the last app stays');
  assert.equal(focusAfter(at(0),tvKey(at(0),'left',LOCAL)),0);
- assert.equal(focusAfter(at(1),tvKey(at(1),'up',LOCAL)),3,'Up is the place card');
- assert.equal(focusAfter(at(3),tvKey(at(3),'down',LOCAL)),1,'Down from the place card is the app under it');
+ assert.equal(focusAfter(at(1),tvKey(at(1),'down',LOCAL)),3,'Down is Someone else (the place)');
+ assert.equal(focusAfter(at(3),tvKey(at(3),'up',LOCAL)),1,'Up from Someone else is the app above it');
  assert.deepEqual(tvKey(at(3),'left',LOCAL).events,[]);
- assert.deepEqual(tvKey(at(1),'down',LOCAL).events,[],'a paired phone is not a stop');
+ assert.deepEqual(tvKey(at(1),'up',LOCAL).events,[],'a paired phone is not a stop');
  const fresh=(f)=>at(f,{joined:false});
- assert.equal(focusAfter(fresh(0),tvKey(fresh(0),'down',LOCAL)),4,'Down reaches the unpaired phone');
- assert.equal(focusAfter(fresh(4),tvKey(fresh(4),'up',LOCAL)),2);
+ assert.equal(focusAfter(fresh(0),tvKey(fresh(0),'up',LOCAL)),4,'Up reaches the unpaired phone (top right)');
+ assert.equal(focusAfter(fresh(4),tvKey(fresh(4),'down',LOCAL)),2);
  assert.deepEqual(tvKey(fresh(4),'select',LOCAL).events,[{type:'nav',screen:'pair',focus:0,from:'landing'}],'the phone opens the pairing screen');
  for(const [f,sub,home] of [[0,'maths','tonight'],[1,'english','linga'],[2,'essay','essaytype']])
   assert.deepEqual(tvKey(at(f),'select',LOCAL).events,[{type:'subject',subject:sub},{type:'nav',screen:home,focus:0}],sub);
@@ -341,7 +341,7 @@ test('landing 3: the D-pad moves the lamp between the objects, and Select opens 
  assert.equal(focusAfter(rest,tvKey(rest,'left',LOCAL)),1,'at rest the arrows move from the CONTINUE object');
  assert.equal(focusAfter(at(3,{history:[readIt]}),tvKey(at(3,{history:[readIt]}),'back',LOCAL)),2,'Back brings the lamp home to the CONTINUE object');
  const j=(f)=>desk({focus:f,learner:{id:'jakub',name:'Jakub'}});
- assert.equal(focusAfter(j(1),tvKey(j(1),'right',LOCAL)),1,'Jakub has two apps');assert.equal(focusAfter(j(2),tvKey(j(2),'down',LOCAL)),0);
+ assert.equal(focusAfter(j(1),tvKey(j(1),'right',LOCAL)),1,'Jakub has two apps');assert.equal(focusAfter(j(2),tvKey(j(2),'up',LOCAL)),0);
  assert.deepEqual(tvKey(j(0),'select',LOCAL).events,[{type:'subject',subject:'english'},{type:'nav',screen:'linga',focus:0}]);
 });
 
@@ -377,7 +377,7 @@ test('landing 5 (S34 T5): with nothing waiting and no phone paired the lamp rest
  assert.equal(landingStops(none)[landingAt(none)],'phone','a desk no one sits at yet rests on the phone too');
  assert.equal(landingAt(desk({learner:null})),0,'...and paired, on the first app');
  const doc=fs.readFileSync(path.join(root,'../docs/DESIGN-STUDY-DESK.md'),'utf8');
- assert.match(doc,/no phone paired and nothing waiting[^.]*lamp rests on the phone/i,'the design doc says where the lamp rests on an unpaired desk');
+ assert.match(doc,/no phone paired and nothing waiting[^.]*(lamp|light) rests on the phone/i,'the design doc says where the lamp rests on an unpaired desk');
 });
 
 test('landing 6 (S34 T4): a desk with no one at it - every app is on it, empty, and any Select asks who is at the desk first',()=>{
@@ -388,8 +388,8 @@ test('landing 6 (S34 T4): a desk with no one at it - every app is on it, empty, 
  for(const f of [0,1,2])assert.deepEqual(tvKey(none({focus:f}),'select',LOCAL).events,[{type:'nav',screen:'learner',focus:0,from:'landing'}],'an app opens the learner switcher first, never the app');
  assert.deepEqual(tvKey(none({focus:3}),'select',LOCAL).events,[{type:'nav',screen:'learner',focus:0,from:'landing'}],'the place card opens the switcher');
  {const m=tvKey(none({focus:0}),'menu',LOCAL);assert.deepEqual([m.events,m.calls],[[],[]],'no one\'s evening to end');}
- const card=fs.readFileSync(path.join(root,'src/landing/LandingTV.tsx'),'utf8');
- assert.match(card,/s\.learner \? `\$\{s\.learner\.name\}’s desk` : "Whose desk\?"/,'the place card invites when no one sits at the desk');
+ const {landingView}=require(path.join(root,'src/landing/model.ts'));
+ {const v=landingView(none()),w=landingView(desk());assert.deepEqual([v.place,v.primary],['Choose who','Choose who is studying'],'the second action invites when no one sits at the desk');assert.deepEqual([w.place,w.primary],['Someone else','Start as Ema'],'and offers someone else when one does');}
 });
 
 test('GUARD: the landing rows stay free of the filesystem-backed session modules',()=>{

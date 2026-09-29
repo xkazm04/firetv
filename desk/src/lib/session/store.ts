@@ -350,7 +350,7 @@ const NEEDS_LEARNER = new Set<Event["type"]>(["linga.changed", "page.reading", "
   "english.set", "essay.type", "essay.set", "essay.revised", "essay.at", "timer.start", "topic.open", "practice.set", "practice.marked", "practice.settle",
   "walk", "practice.clear", "session.end"]);
 /** What a route answers when work is asked for and no one is at the desk to own it. */
-export const NOBODY_AT_DESK = "No one is at the desk yet. Choose who on the TV's place card.";
+export const NOBODY_AT_DESK = "No one is at the desk yet. Choose who on the TV's desk (Down to Choose who).";
 /** The screens a desk with no one at it can show: the desk itself, pairing, and choosing or making a learner. */
 export const UNSEATED_SCREENS = new Set<Screen>(["landing", "pair", "joined", "learner", "profile"]);
 

@@ -1,15 +1,16 @@
 /**
- * The desk's own face, self-hosted by next/font (no request to Google at runtime): Figtree, as the winning landing
- * set it for Study Desk itself - the embossed wordmark, the place card, the phone and the caption. The apps' objects
- * keep their own faces (maths/fonts.ts, essay/fonts.ts; Linga is Georgia and Arial). Exposed as a CSS variable that
- * only the landing root carries; design/desk-landing.css builds --dk-house from it with system faces behind.
+ * The landing's faces, self-hosted by next/font (no request to Google at runtime). The default look ("paper", the
+ * contest winner A/1) sets its paper-cut names and headings in Fraunces (a variable serif with an optical-size axis,
+ * so the huge title and the 40px wordmark each get their own cut), its words in DM Sans, and the pairing code and
+ * address in DM Mono. Each is exposed as a CSS variable that only the landing root carries; design/desk-landing.css
+ * builds --pp-serif / --pp-sans / --pp-mono from them with system faces behind. Another look brings its own faces
+ * (themes/blueprint/fonts.ts) so a theme that is never drawn never asks for them.
  */
-import { Figtree } from "next/font/google";
+import { DM_Mono, DM_Sans, Fraunces } from "next/font/google";
 
-const house = Figtree({
-  subsets: ["latin", "latin-ext"], weight: ["500", "600", "700", "800"], display: "swap",
-  variable: "--desk-face-house", fallback: ["Segoe UI", "system-ui", "Roboto", "sans-serif"],
-});
+const serif = Fraunces({ subsets: ["latin", "latin-ext"], axes: ["opsz"], display: "swap", variable: "--desk-face-serif", fallback: ["Georgia", "Times New Roman", "serif"] });
+const sans = DM_Sans({ subsets: ["latin", "latin-ext"], weight: ["400", "500", "700"], display: "swap", variable: "--desk-face-sans", fallback: ["Segoe UI", "system-ui", "Arial", "sans-serif"] });
+const mono = DM_Mono({ subsets: ["latin", "latin-ext"], weight: ["500"], display: "swap", variable: "--desk-face-mono", fallback: ["Consolas", "Courier New", "monospace"] });
 
-/** The class that declares the font variable; it goes on the landing root and nowhere else. */
-export const DESK_FONTS = house.variable;
+/** The class that declares the font variables; it goes on the landing root and nowhere else. */
+export const DESK_FONTS = `${serif.variable} ${sans.variable} ${mono.variable}`;

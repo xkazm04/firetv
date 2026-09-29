@@ -1,265 +1,202 @@
 /*
-  Left on the Desk - the Study Desk landing (docs/DESIGN-STUDY-DESK.md). Ported from the contest winner
-  (study-desk-landing, entry A, variant 2) value for value: the walnut, the leather blotter and its embossed
-  wordmark, the one sage accent, the lamp's pool of light, the objects and their lift, the flicker-on and the zoom.
-  Everything is scoped under .desk-tv and every class carries the dk- prefix. The apps' objects borrow their apps'
-  own scopes for what is inside them - .maths-tv (Lamplight's typesetter and wordmark), .essay-tv (Specimen's
-  faces and mark), Linga's mark and art - and this file only places and sizes them on the desk. Sizes are for the
-  1920 x 1080 stage; the stage scales as a whole. The 5% safe area is 96 px left and right, 54 px top and bottom.
+  Small Worlds - the Study Desk landing, look "paper" (docs/DESIGN-STUDY-DESK.md). Ported value for value from the
+  contest winner (study-desk-landing-fresh, entry A, variant 1): warm paper, one light from the upper left, huge
+  paper-cut names over layered worlds, a paper shelf with arched tiles. Everything is scoped under .desk-tv.pp and
+  every class carries the pp- prefix, so it cannot leak into the shell or into another look (design/desk-landing-
+  blueprint.css). Sizes are for the 1920 x 1080 stage; the stage scales as a whole. The 5% safe area is 96 px left
+  and right, 54 px top and bottom. Words at or above 28 px carry meaning; the 20 px labels (chips, key hints) never
+  carry it alone.
 */
 
-.desk-tv {
-  /* the desk's own colours: bone type, one sage accent, the warm-white focus ring */
-  --dk-bone: #EFE8DC;
-  --dk-sage: #A9BBA3;
-  --dk-sage-d: #6F8471;
-  --dk-sage-ink: #152019;
-  --dk-ring: #FFF3DF;
-  --dk-leather: #1b2420;
-  --dk-card-ink: #3A2417;
-  /* the apps' inks, for their objects and their zoom */
-  --dk-night: #0B1030;
-  --dk-amber: #FFC56B;
-  --dk-pen: #D9741A;
-  --dk-sky: #8FB8FF;
-  --dk-paper-ink: #27304A;
-  --dk-cream: #FFF9EC;
-  --dk-plum: #41273D;
-  --dk-frame: #6A3946;
-  --dk-wine: #9C4D55;
-  --dk-peach: #D89475;
-  --dk-black: #0B0B0D;
-  --dk-cit: #DCFF4E;
-  --dk-em-bone: #EEE9E0;
-  /* faces: the desk's Figtree (landing/fonts.ts), the apps' own behind their variables, the system behind them */
-  --dk-house: var(--desk-face-house, "Figtree"), "Segoe UI", system-ui, Roboto, sans-serif;
-  --dk-mono: var(--essay-face-mono, "IBM Plex Mono"), Consolas, "Courier New", monospace;
-  --dk-serif: Georgia, "Times New Roman", serif;
-  --dk-arial: Arial, Helvetica, sans-serif;
-  --dk-ease: cubic-bezier(.25, .8, .25, 1);
-
-  position: absolute; inset: 0; overflow: hidden;
-  font-family: var(--dk-house); color: var(--dk-bone);
-  /* walnut, top-down: long grain bands, fine pores, a warm centre */
-  background:
-    radial-gradient(ellipse 70% 60% at 50% 46%, rgba(120, 72, 38, .30), transparent 70%),
-    repeating-linear-gradient(91deg, rgba(0, 0, 0, .10) 0 2px, transparent 2px 7px, rgba(255, 214, 170, .035) 7px 8px, transparent 8px 19px),
-    repeating-linear-gradient(89.3deg, transparent 0 60px, rgba(0, 0, 0, .16) 60px 64px, transparent 64px 150px, rgba(255, 200, 150, .05) 150px 158px, transparent 158px 260px),
-    linear-gradient(90deg, #3a2415 0%, #4a2e1a 14%, #3b2416 27%, #533420 43%, #3e2717 58%, #4d301c 74%, #382214 88%, #45291a 100%);
+.desk-tv.pp {
+  /* the app in the light sets --pp-deep / -deepLo / -hi / -ex inline (themes/paper/Paper.tsx); maths is the default */
+  --pp-deep: #2b3fa8; --pp-deepLo: #1b2778; --pp-hi: #6a82ea; --pp-ex: #24357f;
+  --pp-ink: #2b1d16; --pp-cream: #f6ecd9;
+  --pp-serif: var(--desk-face-serif, "Fraunces"), Fraunces, Georgia, "Times New Roman", serif;
+  --pp-sans: var(--desk-face-sans, "DM Sans"), "DM Sans", "Segoe UI", system-ui, Arial, sans-serif;
+  --pp-mono: var(--desk-face-mono, "DM Mono"), "DM Mono", Consolas, "Courier New", monospace;
+  --pp-ease: cubic-bezier(.2, .8, .2, 1);
+  position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; overflow: hidden;
+  background: #f6ecd9; color: var(--pp-ink); user-select: none; -webkit-user-select: none; cursor: default;
+  font-family: var(--pp-sans); font-size: 32px; line-height: 1.2;
 }
-.desk-tv *, .desk-tv *::before, .desk-tv *::after { box-sizing: border-box; }
-.desk-tv::after { content: ""; position: absolute; inset: 0; pointer-events: none; z-index: 4; background: radial-gradient(ellipse 80% 75% at 50% 50%, transparent 55%, rgba(0, 0, 0, .55) 100%); }
+.pp *, .pp *::before, .pp *::after { box-sizing: border-box; }
 
-/* ---- the blotter: green leather, stitched, with a walnut lip along the front where the caption sits ---- */
-.desk-tv .dk-blotter { position: absolute; left: 118px; top: 124px; width: 1684px; height: 890px; border-radius: 14px; z-index: 1;
-  background:
-    radial-gradient(ellipse at 30% 20%, rgba(255, 255, 255, .035), transparent 60%),
-    repeating-radial-gradient(circle at 17% 31%, rgba(0, 0, 0, .05) 0 1px, transparent 1px 3px),
-    linear-gradient(160deg, #243029, var(--dk-leather) 55%, #18201c);
-  box-shadow: 0 2px 0 rgba(255, 240, 220, .06) inset, 0 -3px 0 rgba(0, 0, 0, .35) inset, 0 22px 40px rgba(0, 0, 0, .45), 0 3px 6px rgba(0, 0, 0, .5); }
-.desk-tv .dk-blotter::before { content: ""; position: absolute; inset: 14px; border: 2px dashed rgba(239, 232, 220, .12); border-radius: 8px; }
-.desk-tv .dk-lip { position: absolute; left: 0; right: 0; bottom: 0; height: 104px; border-radius: 0 0 14px 14px; background: linear-gradient(180deg, #2a1b12, #22160f); box-shadow: 0 2px 0 rgba(255, 230, 200, .07) inset; }
-.desk-tv .dk-lip::before { content: ""; position: absolute; left: 14px; right: 14px; top: 10px; bottom: 14px; border: 2px dashed rgba(239, 232, 220, .10); border-radius: 6px; }
-/* the wordmark, embossed into the leather */
-.desk-tv .dk-plate { position: absolute; left: 150px; top: 146px; z-index: 2; display: flex; align-items: center; gap: 14px; color: rgba(239, 232, 220, .72);
-  font: 700 32px/1 var(--dk-house); letter-spacing: -.01em; text-shadow: 0 -1px 0 rgba(0, 0, 0, .7), 0 1px 0 rgba(255, 255, 255, .08); }
-.desk-tv .dk-plate svg { width: 44px; height: 44px; filter: drop-shadow(0 -1px 0 rgba(0, 0, 0, .6)) drop-shadow(0 1px 0 rgba(255, 255, 255, .08)); }
+/* ----- arrival: the mark draws itself, the world opens out of it ----- */
+.pp .pp-intro { position: absolute; inset: 0; z-index: 0; background: radial-gradient(ellipse at 50% 45%, #fbf3e2, #f0e2c6); animation: pp-fade-out .22s 1.24s forwards; }
+.pp .pp-ibox { position: absolute; left: 0; right: 0; top: 250px; text-align: center; animation: pp-ibox-out .34s .7s ease-in forwards; }
+.pp .pp-imark { width: 300px; height: 300px; margin: 0 auto; color: var(--pp-ink); }
+.pp .pp-imark svg { width: 300px; height: 300px; overflow: visible; }
+.pp .pp-imark .pp-arc { stroke-dasharray: 1; animation: pp-draw .46s cubic-bezier(.4, 0, .2, 1) backwards; }
+.pp .pp-imark .pp-arc:nth-of-type(2) { animation-delay: .11s; } .pp .pp-imark .pp-arc:nth-of-type(3) { animation-delay: .22s; } .pp .pp-imark .pp-arc:nth-of-type(4) { animation-delay: .33s; }
+.pp .pp-imark .pp-lit { transform-box: fill-box; transform-origin: 50% 100%; animation: pp-lit .36s .38s var(--pp-ease) backwards; }
+.pp .pp-iword { font: 700 84px/1 var(--pp-serif); margin-top: 30px; letter-spacing: .01em; animation: pp-word .42s .38s var(--pp-ease) backwards; }
+@keyframes pp-draw { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+@keyframes pp-lit { from { opacity: 0; transform: scale(.6); } to { opacity: 1; transform: scale(1); } }
+@keyframes pp-word { from { opacity: 0; translate: 0 16px; } to { opacity: 1; translate: 0 0; } }
+@keyframes pp-ibox-out { from { opacity: 1; scale: 1; } to { opacity: 0; scale: 1.12; } }
+@keyframes pp-fade-out { to { opacity: 0; visibility: hidden; } }
+.pp[data-boot] .pp-worlds { animation: pp-reveal .64s .64s cubic-bezier(.5, 0, .2, 1) backwards; }
+.pp[data-boot] .pp-ledge { animation: pp-rise .6s .98s var(--pp-ease) backwards; }
+.pp[data-boot] .pp-chrome { animation: pp-fade-in .42s 1.04s backwards; }
+.pp[data-boot] .pp-postcard { animation: pp-card .7s 1.1s var(--pp-ease) backwards; }
+@keyframes pp-reveal { from { clip-path: circle(0 at 960px 400px); } to { clip-path: circle(1300px at 960px 400px); } }
+@keyframes pp-rise { from { translate: 0 340px; } to { translate: 0 0; } }
+@keyframes pp-fade-in { from { opacity: 0; } to { opacity: 1; } }
+@keyframes pp-card { from { translate: 90px 40px; opacity: 0; rotate: 10deg; } to { translate: 0 0; opacity: 1; rotate: 0deg; } }
 
-/* ---- the lamp, top right, seen from above; decoration, outside the safe area on purpose ---- */
-.desk-tv .dk-lamp { position: absolute; right: -64px; top: -150px; width: 290px; height: 290px; border-radius: 50%; z-index: 26; pointer-events: none;
-  background: radial-gradient(circle at 40% 64%, #7a6c55 0, #4a4033 30%, #27211a 64%, #16120e 100%);
-  box-shadow: 0 0 0 5px #2a231a, 0 0 0 8px rgba(255, 214, 160, .28), 0 0 90px 34px rgba(255, 190, 120, .20), 0 34px 60px rgba(0, 0, 0, .6); }
-.desk-tv .dk-lamp::before { content: ""; position: absolute; left: 36%; top: 56%; width: 26px; height: 26px; border-radius: 50%; background: radial-gradient(circle at 40% 40%, #b8a37a, #4a3d2b); }
+/* ----- the world in the light ----- */
+.pp .pp-worlds { position: absolute; inset: 0; z-index: 1; }
+.pp .pp-host { position: absolute; inset: 0; transform-origin: 1920px 560px; transition: transform .8s var(--pp-ease); }
+.pp .pp-host.pp-back { z-index: 0; } .pp .pp-host.pp-front { z-index: 2; }
+.pp[data-unpaired] .pp-host { transform: translate(-120px, 0) scale(1.05); }
+.pp .pp-wset { position: absolute; inset: 0; }
+.pp .pp-layer { position: absolute; left: -140px; top: 0; width: 2200px; height: 1080px; will-change: transform, opacity; }
+.pp .pp-layer svg { display: block; width: 2200px; height: 1080px; overflow: visible; }
+.pp .pp-layer[data-k="hill"] { filter: drop-shadow(0 -5px 10px rgba(45, 25, 12, .24)); }
+.pp .pp-layer[data-k="hero"] { filter: drop-shadow(6px 12px 14px rgba(45, 25, 12, .32)); }
+.pp .pp-layer[data-k="soft"] { filter: drop-shadow(0 8px 10px rgba(45, 25, 12, .12)); }
+/* a world sliding in from the side the D-pad went, one sliding out the other way; layers travel by their own factor */
+.pp .pp-wset[data-mode="choose"] .pp-layer { animation: pp-in .7s var(--pp-ease) backwards; }
+.pp .pp-wset[data-mode="arrive"] .pp-layer { animation: pp-up .65s calc(.7s + var(--i) * .045s) var(--pp-ease) backwards; }
+.pp .pp-wset[data-mode="fade"] .pp-layer { animation: pp-up .56s calc(var(--i) * .04s) var(--pp-ease) backwards; }
+.pp .pp-wset[data-mode="leave"] .pp-layer { animation: pp-out .64s cubic-bezier(.4, 0, .2, 1) forwards; }
+@keyframes pp-in { from { translate: calc(var(--dir) * 1920px * max(.15, var(--d))) 24px; opacity: 0; } 62% { opacity: 1; } to { translate: 0 0; opacity: 1; } }
+@keyframes pp-up { from { translate: 0 90px; opacity: 0; } to { translate: 0 0; opacity: 1; } }
+@keyframes pp-out { 0%, 25% { translate: 0 0; opacity: 1; } to { translate: calc(var(--dir) * -1920px * max(.15, var(--d))) 0; opacity: 0; } }
 
-/* ---- the light: a warm pool on the lit object, the rest of the room dimmed; both glide to the focus ---- */
-.desk-tv .dk-pool { position: absolute; left: 0; top: 0; width: 1800px; height: 1800px; z-index: 5; pointer-events: none; mix-blend-mode: screen;
-  background: radial-gradient(circle at center, rgba(255, 206, 140, .55) 0, rgba(255, 190, 120, .30) 280px, rgba(255, 180, 110, .10) 560px, rgba(255, 180, 110, 0) 860px);
-  transform: translate(calc(var(--px) - 900px), calc(var(--py) - 900px)); transition: transform .45s var(--dk-ease); }
-.desk-tv .dk-dim { position: absolute; left: 0; top: 0; width: 4400px; height: 4400px; z-index: 20; pointer-events: none;
-  background: radial-gradient(circle at center, rgba(8, 5, 3, 0) 0, rgba(8, 5, 3, 0) 340px, rgba(8, 5, 3, .36) 700px, rgba(8, 5, 3, .54) 1150px, rgba(8, 5, 3, .62) 2200px);
-  transform: translate(calc(var(--px) - 2200px), calc(var(--py) - 2200px)); transition: transform .45s var(--dk-ease); }
-.desk-tv .dk-dim[data-wide] { transform: translate(calc(var(--px) - 2200px), calc(var(--py) - 2200px)) scale(.7); }
+.pp .pp-title {
+  position: absolute; left: 0; top: 0; z-index: 1; white-space: nowrap; line-height: 1; transform-origin: 0 0; pointer-events: none;
+  font-family: var(--pp-serif); font-weight: 700; font-size: 240px; color: #fdf6e6; letter-spacing: -.01em;
+  text-shadow: 0 2px 0 var(--pp-ex), 0 4px 0 var(--pp-ex), 0 6px 0 var(--pp-ex), 0 8px 0 var(--pp-ex), 0 10px 0 var(--pp-ex), 0 12px 0 var(--pp-ex), 0 26px 30px rgba(35, 15, 8, .38);
+}
+.pp .pp-ch { display: inline-block; animation: pp-ch-in .56s calc(.12s + var(--i) * .03s) cubic-bezier(.2, .9, .3, 1.1) backwards; }
+.pp[data-boot] .pp-ch { animation-delay: calc(.9s + var(--i) * .03s); }
+.pp .pp-title[data-still] .pp-ch { animation: none; }
+@keyframes pp-ch-in { from { translate: 0 70px; opacity: 0; } to { translate: 0 0; opacity: 1; } }
+.pp .pp-fx { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; z-index: 2; pointer-events: none; }
 
-/* ---- the flicker-on: the room is dark, then the lamp catches ---- */
-.desk-tv .dk-blackout { position: absolute; inset: 0; z-index: 200; pointer-events: none; background: #030201; opacity: 0; }
-.desk-tv[data-boot] .dk-blackout { animation: dk-flick 1.15s linear both; }
-@keyframes dk-flick { 0% { opacity: 1; } 22% { opacity: 1; } 30% { opacity: .42; } 36% { opacity: .96; } 46% { opacity: .26; } 52% { opacity: .7; } 64% { opacity: .1; } 100% { opacity: 0; } }
+/* ----- the shelf ----- */
+.pp .pp-ledge { position: absolute; inset: 0; z-index: 5; pointer-events: none; transition: transform .7s var(--pp-ease); }
+.pp[data-zoom] .pp-ledge { transform: translateY(330px); visibility: hidden; transition: transform .7s var(--pp-ease), visibility 0s .7s; }
+.pp .pp-ledge-paper {
+  position: absolute; left: 0; top: 828px; width: 1920px; height: 252px;
+  background: linear-gradient(#fbf3e0 0, #f3e7cd 40%, #ead9b8 100%);
+  box-shadow: 0 -16px 34px rgba(45, 25, 12, .34), 0 -3px 6px rgba(45, 25, 12, .18);
+}
+.pp .pp-ledge-paper::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 12px; background: linear-gradient(#fffdf5, #f6ebd2); border-bottom: 2px solid rgba(255, 255, 255, .8); }
+.pp .pp-ledge-paper::after { content: ""; position: absolute; left: 0; right: 0; top: 14px; height: 30px; background: linear-gradient(rgba(120, 80, 40, .10), rgba(120, 80, 40, 0)); }
+.pp .pp-cap { position: absolute; left: 96px; top: 858px; width: 620px; pointer-events: none; animation: pp-cap-in .34s var(--pp-ease); }
+@keyframes pp-cap-in { from { opacity: 0; translate: 0 12px; } to { opacity: 1; translate: 0 0; } }
+.pp .pp-chip { display: inline-flex; align-items: center; gap: 10px; height: 34px; padding: 0 16px 0 10px; border-radius: 17px; background: rgba(255, 253, 244, .9); box-shadow: 0 2px 4px rgba(45, 25, 12, .16); font-size: 20px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; margin-bottom: 6px; }
+.pp .pp-chip svg { display: block; }
+.pp .pp-cl { font-size: 38px; line-height: 1.1; font-weight: 700; color: var(--pp-ink); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.pp .pp-cd { font-size: 28px; line-height: 1.2; color: #4b392e; margin-top: 6px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 
-/* ---- the objects: put down at an angle; the lit one straightens, lifts and wears the ring ---- */
-.desk-tv .dk-objects { position: absolute; inset: 0; z-index: 10; }
-.desk-tv .dk-obj { position: absolute; z-index: 10; transform: rotate(var(--r)); outline: 6px solid transparent; outline-offset: 14px;
-  box-shadow: 0 18px 28px rgba(0, 0, 0, .5), 0 4px 8px rgba(0, 0, 0, .4);
-  transition: transform .45s var(--dk-ease), box-shadow .45s var(--dk-ease), outline-color .2s; }
-.desk-tv .dk-obj[data-focused="true"] { z-index: 30; transform: rotate(calc(var(--r) * .25)) scale(1.06); outline-color: var(--dk-ring);
-  box-shadow: 0 46px 80px rgba(0, 0, 0, .62), 0 12px 22px rgba(0, 0, 0, .45); }
-/* CONTINUE: the one sage tag, on what was left */
-.desk-tv .dk-ctag { position: absolute; top: -24px; left: 26px; z-index: 3; display: flex; align-items: center; gap: 10px; background: var(--dk-sage); color: var(--dk-sage-ink);
-  font: 800 21px/1 var(--dk-house); letter-spacing: .16em; text-transform: uppercase; padding: 11px 16px 11px 14px; border-radius: 6px; box-shadow: 0 6px 14px rgba(0, 0, 0, .4); }
-.desk-tv .dk-ctag i { width: 12px; height: 12px; border-radius: 50%; background: var(--dk-sage-ink); box-shadow: 0 0 0 3px rgba(21, 32, 25, .25); }
+.pp .pp-rail { position: absolute; inset: 0; pointer-events: none; }
+.pp .pp-stamp { position: absolute; top: 872px; width: 180px; height: 154px; }
+.pp .pp-stamp .pp-win {
+  position: relative; width: 112px; height: 112px; margin: 0 auto; border-radius: 56px 56px 14px 14px; overflow: hidden; background: #f6ecd9;
+  border: 3px solid #fff8e8; box-shadow: 0 8px 14px rgba(45, 25, 12, .28); filter: saturate(.5) brightness(1.05); opacity: .9;
+  transition: transform .38s cubic-bezier(.2, .9, .3, 1.25), box-shadow .3s, filter .3s, opacity .3s;
+}
+.pp .pp-win svg { display: block; }
+.pp .pp-stamp .pp-nm { position: absolute; left: -20px; right: -20px; top: 118px; text-align: center; font-size: 28px; line-height: 34px; white-space: nowrap; color: #6a5446; font-weight: 500; transition: color .3s; }
+.pp .pp-stamp[data-sel="true"] .pp-win { transform: translateY(-24px) scale(1.2); filter: none; opacity: 1; box-shadow: 0 16px 24px rgba(45, 25, 12, .34), 0 0 0 4px #fff7e2; }
+.pp .pp-stamp[data-sel="true"] .pp-nm { color: var(--pp-ink); font-weight: 700; }
+.pp .pp-stamp[data-focused="true"] .pp-win { transform: translateY(-36px) scale(1.32); box-shadow: 0 0 0 4px #fff7e2, 0 0 0 9px var(--pp-deep), 0 0 0 14px #f7c95a, 0 0 40px 16px rgba(247, 201, 90, .55), 0 28px 30px rgba(45, 25, 12, .4); }
 
-/* ---- Math Buddy: the sheet on its night-blue folder (Lamplight's typesetter draws the maths) ---- */
-.desk-tv .dk-mb { background: linear-gradient(170deg, #161d4a, var(--dk-night) 70%); border-radius: 18px; }
-.desk-tv .dk-mb[data-focused="true"] { box-shadow: 0 46px 80px rgba(0, 0, 0, .62), 0 0 110px 26px rgba(255, 197, 107, .26); animation: dk-warm 3.4s ease-in-out infinite; }
-@keyframes dk-warm { 0%, 100% { box-shadow: 0 46px 80px rgba(0, 0, 0, .62), 0 0 100px 20px rgba(255, 197, 107, .20); } 50% { box-shadow: 0 46px 80px rgba(0, 0, 0, .62), 0 0 140px 40px rgba(255, 197, 107, .36); } }
-.desk-tv .dk-mb .dk-folder { position: absolute; inset: 0; overflow: visible; background: none; border-radius: 18px; padding: 18px 18px 0; display: flex; flex-direction: column; }
-.desk-tv .dk-sheet { position: relative; flex: 1; min-height: 0; border-radius: 4px; color: var(--dk-paper-ink);
-  background: linear-gradient(rgba(39, 48, 74, .075) 1.5px, transparent 1.5px) 0 0 / 30px 30px, linear-gradient(90deg, rgba(39, 48, 74, .075) 1.5px, transparent 1.5px) 0 0 / 30px 30px, linear-gradient(170deg, #F8F2E5, #F5EEDF 60%, #EDE4D1);
-  box-shadow: 0 8px 18px rgba(0, 0, 0, .35); }
-.desk-tv .dk-sheet::before { content: ""; position: absolute; left: 62px; top: 0; bottom: 0; width: 2px; background: rgba(143, 184, 255, .6); }
-.desk-tv .dk-tab { position: absolute; top: -44px; right: 34px; z-index: -1; background: linear-gradient(#EFE6D2, #E4D9C2); color: var(--dk-paper-ink); font: 800 21px/1 var(--mb-sans); letter-spacing: .16em; text-transform: uppercase; padding: 12px 18px 20px; border-radius: 9px 9px 0 0; }
-.desk-tv .dk-topic { font: 600 38px/1.1 var(--mb-serif); font-variation-settings: "SOFT" 50, "opsz" 72; letter-spacing: -.01em; padding: 20px 18px 6px 80px; white-space: nowrap; overflow: hidden; }
-.desk-tv .dk-topic .dk-fit { display: inline-block; }
-.desk-tv .dk-rows { padding: 0 10px; }
-.desk-tv .dk-row { display: grid; grid-template-columns: 52px minmax(0, 1fr) auto 52px; align-items: center; min-height: 56px; font-size: 44px; }
-/* a power or an index never drops under the ten-foot floor, however small the line is set. The floor goes on what
-   is inside it, not on the .sup/.sub box: that box keeps Lamplight's 60%, so its raise (an em of its own size) stays
-   the Page's +.64em/-.34em of the base, and a floored digit grows up from that baseline instead of lifting off it */
-.desk-tv .dk-row .mx :is(.sup, .sub) > :not(.mf) { font-size: max(1em, 28px); }
-.desk-tv .dk-row:not([data-v]) { font-size: 38px; }
-.desk-tv .dk-row .dk-n { font: 600 30px/1 var(--mb-hand); color: rgba(39, 48, 74, .5); text-align: center; }
-.desk-tv .dk-row .dk-q { padding-left: 18px; white-space: nowrap; overflow: hidden; }
-.desk-tv .dk-row .dk-q .dk-fit { display: inline-block; }
-.desk-tv .dk-row .dk-a { white-space: nowrap; padding: 0 10px 0 16px; }
-.desk-tv .dk-row .dk-mk { display: flex; justify-content: center; }
-.desk-tv .dk-ringed { position: relative; display: inline-block; padding: 0 8px; }
-.desk-tv .dk-ring { position: absolute; left: -10px; top: -12px; width: calc(100% + 20px); height: calc(100% + 22px); overflow: visible; pointer-events: none; }
-.desk-tv .dk-tk { width: 46px; height: 40px; overflow: visible; }
-.desk-tv .dk-tk path, .desk-tv .dk-ring path { fill: none; stroke: var(--dk-pen); stroke-width: 5; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1; stroke-dashoffset: 0; vector-effect: non-scaling-stroke; }
-.desk-tv .dk-ringed[data-ring="unsure"] .dk-ring path { stroke: var(--dk-sky); stroke-width: 4; stroke-dasharray: 7 7; }
-/* lit: the desk's pen draws its marks in, one after another */
-.desk-tv .dk-mb[data-focused="true"] .dk-tk path, .desk-tv .dk-mb[data-focused="true"] .dk-ringed:not([data-ring="unsure"]) .dk-ring path { animation: dk-draw .55s ease-out both; animation-delay: calc(.25s + var(--i, 0) * .16s); }
-@keyframes dk-draw { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
-.desk-tv .dk-blank { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font: 600 58px/1 var(--mb-hand); color: rgba(39, 48, 74, .55); transform: rotate(-4deg); }
-.desk-tv .dk-mbfoot { height: 88px; flex: none; display: flex; align-items: center; gap: 16px; padding-left: 6px; }
-.desk-tv .dk-mbfoot .mb-mark, .desk-tv .dk-mbfoot .mb-mark svg { width: 52px; height: 52px; flex-basis: 52px; }
-.desk-tv .dk-mbfoot .mb-word { font-size: 42px; }
-.desk-tv .dk-pencil { position: absolute; right: -46px; bottom: 92px; width: 340px; height: 38px; transform: rotate(-9deg); filter: drop-shadow(0 10px 8px rgba(0, 0, 0, .45)); z-index: 4; pointer-events: none; }
+.pp .pp-actions { position: absolute; inset: 0; pointer-events: none; }
+.pp .pp-cont, .pp .pp-else { position: absolute; left: 1296px; width: 528px; display: flex; align-items: center; transition: background-color .5s, transform .3s cubic-bezier(.2, .9, .3, 1.25), box-shadow .3s, color .3s; }
+.pp .pp-cont { top: 860px; height: 84px; padding: 0 34px; border-radius: 42px; background: var(--pp-deep); color: #fff8ea; font-size: 32px; font-weight: 700; justify-content: space-between; box-shadow: 0 10px 18px rgba(45, 25, 12, .32), inset 0 2px 0 rgba(255, 255, 255, .28); }
+.pp .pp-cont svg { color: #fff8ea; }
+.pp .pp-else { top: 962px; height: 58px; padding: 0 22px; border-radius: 29px; font-size: 30px; font-weight: 500; gap: 14px; color: #43322a; }
+.pp .pp-else[data-focused="true"] { transform: scale(1.07); transform-origin: 100% 50%; background: #fffaf0; color: var(--pp-ink); box-shadow: 0 0 0 4px #f7c95a, 0 0 30px 10px rgba(247, 201, 90, .45), 0 10px 18px rgba(45, 25, 12, .28); }
 
-/* ---- Linga: the Open Door on a cream card ---- */
-.desk-tv .dk-lg { background: var(--dk-cream); border: 2px solid #D6C5AF; border-radius: 16px; padding: 22px 26px 24px; display: flex; flex-direction: column; color: #261F29; }
-.desk-tv .dk-lghead { display: flex; align-items: center; }
-.desk-tv .dk-lghead .lo-mark { display: flex; align-items: center; gap: 14px; font: 700 44px/1 var(--dk-serif); letter-spacing: -1.6px; color: #261F29; }
-.desk-tv .dk-lghead .lo-mark svg { width: 52px; height: 52px; }
-.desk-tv .dk-lvl { margin-left: auto; background: var(--dk-plum); color: var(--dk-cream); font: 700 30px/1 var(--dk-arial); padding: 9px 14px; border-radius: 9px; }
-.desk-tv .dk-arch { position: relative; margin-top: 18px; flex: 1; min-height: 0; border: 12px solid var(--dk-frame); border-radius: 999px 999px 6px 6px; overflow: hidden; background: var(--dk-peach); box-shadow: inset 0 0 0 8px rgba(255, 235, 201, .23); }
-.desk-tv .dk-art { position: absolute; inset: 0; }
-.desk-tv .dk-art svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
-/* a state of the journey (the open door before a level, the path of doors) stands on the warm gradient */
-.desk-tv .dk-arch[data-scene="false"] { background: linear-gradient(180deg, #e9a882, var(--dk-peach) 70%, #c9806a); }
-.desk-tv .dk-arch[data-scene="false"] .dk-art { inset: 14% 8% 0; }
-.desk-tv .dk-sill { height: 18px; flex: none; margin: 0 -12px; background: #5d3548; border-radius: 4px; box-shadow: 0 8px 0 -2px #ad766c; }
-.desk-tv .dk-ptag { position: absolute; left: 18px; right: 18px; bottom: 18px; z-index: 2; display: flex; }
-/* the name tag keeps Linga's 28 px; a long one takes a second line rather than leave the arch */
-.desk-tv .dk-ptag span { display: inline-block; max-width: 100%; background: #fff3dc; color: #493147; font: 800 28px/1.15 var(--dk-arial); padding: 9px 16px; border-radius: 8px; box-shadow: 0 6px 14px rgba(65, 34, 45, .18); }
-.desk-tv .dk-lgtitle { flex: none; font: 400 38px/1.1 var(--dk-serif); letter-spacing: -.9px; margin-top: 22px; text-wrap: balance; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-.desk-tv .dk-midway { flex: none; display: flex; align-items: center; gap: 10px; margin-top: 14px; }
-.desk-tv .dk-midway b { width: 14px; height: 14px; border-radius: 50%; background: var(--dk-wine); }
-.desk-tv .dk-midway b[data-dot="open"] { background: transparent; border: 2.5px solid var(--dk-wine); }
-.desk-tv .dk-midway b[data-dot="current"] { width: 40px; border-radius: 8px; background: var(--dk-peach); }
-.desk-tv .dk-midway span { font: 900 20px/1 var(--dk-arial); letter-spacing: .2em; text-transform: uppercase; color: var(--dk-wine); margin-left: 10px; }
-/* lit: the scene drifts, the pendant lamp swings */
-.desk-tv .dk-lg[data-focused="true"] .dk-art svg { animation: dk-drift 9s ease-in-out infinite alternate; }
-.desk-tv .dk-lg[data-focused="true"] .lo-lamp { transform-box: view-box; transform-origin: var(--lo-lamp-x) 0; animation: dk-swing 3.6s ease-in-out infinite; }
-@keyframes dk-drift { from { transform: scale(1.02) translateX(6px); } to { transform: scale(1.07) translateX(-8px); } }
-@keyframes dk-swing { 0%, 100% { transform: rotate(-4deg); } 50% { transform: rotate(4deg); } }
+/* ----- chrome: the desk's mark, who is at the desk, the phone, the keys ----- */
+.pp .pp-chrome { position: absolute; inset: 0; z-index: 12; pointer-events: none; }
+.pp .pp-chrome > div { position: absolute; }
+.pp .pp-brand { left: 96px; top: 52px; height: 68px; display: flex; align-items: center; gap: 14px; color: var(--pp-ink); transition: color .5s; }
+.pp .pp-brand svg { display: block; filter: drop-shadow(0 3px 3px rgba(45, 25, 12, .3)); overflow: visible; }
+.pp .pp-wm { font: 700 40px/1 var(--pp-serif); letter-spacing: .005em; white-space: nowrap; }
+.pp[data-zoom] .pp-brand, .pp[data-zoom] .pp-who { color: #fff8ea; text-shadow: none; }
+.pp .pp-badge { right: 96px; top: 54px; height: 64px; display: flex; align-items: center; gap: 18px; }
+.pp .pp-disc { width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font: 700 32px/1 var(--pp-serif); color: #fff8ea; box-shadow: 0 5px 8px rgba(45, 25, 12, .3), inset 0 3px 0 rgba(255, 255, 255, .3), 0 0 0 4px rgba(255, 250, 235, .85); }
+.pp .pp-who { font-size: 34px; font-weight: 700; color: var(--pp-ink); text-shadow: 0 1px 0 rgba(255, 255, 255, .5); }
+.pp .pp-ph { display: flex; align-items: center; padding: 6px 12px; border-radius: 22px; background: rgba(255, 250, 235, .82); box-shadow: 0 3px 5px rgba(45, 25, 12, .16); }
+.pp .pp-ph svg { display: block; }
+.pp .pp-hints { right: 96px; top: 132px; display: flex; gap: 12px; }
+.pp .pp-h { display: flex; align-items: center; gap: 8px; height: 34px; padding: 0 14px 0 10px; border-radius: 17px; background: rgba(255, 250, 235, .82); box-shadow: 0 2px 4px rgba(45, 25, 12, .14); font-size: 20px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: rgba(43, 29, 22, .82); }
+.pp .pp-h svg { display: block; width: 22px; height: 22px; }
 
-/* ---- Essay Master: the specimen card (Specimen's faces and mark) ---- */
-.desk-tv .dk-em { background: var(--dk-black); border-radius: 10px; border: 1px solid rgba(238, 233, 224, .10); }
-.desk-tv .dk-em .dk-card { position: absolute; inset: 0; overflow: hidden; background: none; border-radius: 10px; padding: 30px 34px 34px; display: flex; flex-direction: column; color: var(--dk-em-bone); }
-.desk-tv .dk-card .em-brand { position: static; gap: 16px; }
-.desk-tv .dk-card .em-mark { width: 36px; height: 40px; }
-.desk-tv .dk-card .em-wm { font-size: 42px; }
-.desk-tv .dk-lens { position: relative; margin-top: auto; padding-top: 10px; white-space: nowrap;
-  font: 800 132px/.86 var(--em-disp); text-transform: uppercase; font-stretch: 75%; font-variation-settings: "wdth" 75, "opsz" 96; letter-spacing: -.015em; }
-.desk-tv .dk-lens > .dk-fit { position: relative; display: inline-block; }
-.desk-tv .dk-lens-gh { color: rgba(238, 233, 224, .13); }
-.desk-tv .dk-lens-ink { position: absolute; left: 0; top: 0; color: var(--dk-em-bone); clip-path: inset(0 calc(100% - var(--dk-f)) 0 0); }
-.desk-tv .dk-cur { position: absolute; top: -.02em; left: var(--dk-f); width: 10px; height: 1.02em; margin-left: -5px; background: var(--dk-cit); transform: skewX(-7deg); }
-.desk-tv .dk-em[data-focused="true"] .dk-cur { animation: dk-cur 1.05s steps(1) infinite; }
-@keyframes dk-cur { 50% { opacity: 0; } }
-.desk-tv .dk-raillab { margin-top: 34px; }
-.desk-tv .dk-rail { display: flex; justify-content: space-between; margin-top: 16px; }
-.desk-tv .dk-arr { display: flex; flex-direction: column; align-items: center; gap: 10px; color: rgba(238, 233, 224, .42); font: 600 28px/1 var(--dk-mono); }
-.desk-tv .dk-arr svg { width: 56px; height: 26px; overflow: visible; }
-.desk-tv .dk-rail[data-many] .dk-arr svg { width: 40px; }
-.desk-tv .dk-arr[data-against] { color: var(--dk-cit); }
-/* lit: the sentence that argues the other way turns round */
-.desk-tv .dk-em[data-focused="true"] .dk-arr[data-against] svg { animation: dk-turn .9s .35s both var(--dk-ease); }
-@keyframes dk-turn { 0% { transform: scaleX(-1); } 45% { transform: scaleX(.05); } 100% { transform: scaleX(1); } }
-.desk-tv .dk-emline { margin-top: 30px; font: 600 30px/1.2 var(--dk-mono); color: rgba(238, 233, 224, .62); }
-.desk-tv .dk-ghosts { margin-top: auto; }
-.desk-tv .dk-ghosts > div { white-space: nowrap; overflow: hidden; }
-.desk-tv .dk-hatch { display: inline-block; color: transparent; background: repeating-linear-gradient(135deg, rgba(238, 233, 224, .34) 0 3px, transparent 3px 11px); -webkit-background-clip: text; background-clip: text;
-  font: 800 104px/.96 var(--em-disp); text-transform: uppercase; font-stretch: 75%; font-variation-settings: "wdth" 75, "opsz" 96; letter-spacing: -.01em; white-space: nowrap; }
-.desk-tv .dk-nothing { margin-top: 22px; font: 600 46px/1 var(--em-disp); font-variation-settings: "wdth" 88; color: var(--dk-em-bone); }
+/* ----- the pairing postcard: the address and the code, real ----- */
+.pp .pp-postcard { position: absolute; left: 1246px; top: 168px; width: 556px; height: 540px; z-index: 4; transform: rotate(2.6deg); pointer-events: none; transition: transform .3s cubic-bezier(.2, .9, .3, 1.25); }
+.pp .pp-pcd { position: absolute; inset: 0; border-radius: 26px; background: linear-gradient(#fffaf0, #f1e5c9); box-shadow: 0 30px 40px rgba(45, 25, 12, .4), 0 6px 10px rgba(45, 25, 12, .2), inset 0 3px 0 #fff; transition: box-shadow .3s; }
+.pp .pp-postcard[data-focused="true"] .pp-pcd { box-shadow: 0 0 0 4px #fff7e2, 0 0 0 9px #f7c95a, 0 0 40px 14px rgba(247, 201, 90, .5), 0 30px 40px rgba(45, 25, 12, .4); }
+.pp .pp-pcd::before { content: ""; position: absolute; left: 26px; right: 26px; top: 20px; height: 4px; border-radius: 2px; background: repeating-linear-gradient(90deg, #d9563a 0 18px, transparent 18px 30px); opacity: .7; }
+.pp .pp-wave { position: absolute; left: 26px; top: 34px; width: 504px; height: 150px; }
+.pp .pp-pin { position: absolute; left: 0; right: 0; top: 190px; text-align: center; font: 500 136px/1 var(--pp-mono); letter-spacing: .06em; color: var(--pp-ink); white-space: nowrap; }
+.pp .pp-url { position: absolute; left: 0; right: 0; top: 356px; text-align: center; font: 500 30px/1.2 var(--pp-mono); letter-spacing: -.02em; color: rgba(43, 29, 22, .86); overflow-wrap: anywhere; }
+.pp .pp-dots { position: absolute; left: 0; right: 0; top: 440px; display: flex; gap: 22px; justify-content: center; }
+.pp .pp-dots i { width: 22px; height: 22px; border-radius: 50%; background: var(--pp-deep); animation: pp-dotp 1.6s ease-in-out infinite; }
+.pp .pp-dots i:nth-child(2) { animation-delay: .25s; } .pp .pp-dots i:nth-child(3) { animation-delay: .5s; }
+@keyframes pp-dotp { 0%, 100% { opacity: .25; transform: scale(.8); } 50% { opacity: 1; transform: scale(1.15); } }
+.pp .pp-dashw { animation: pp-dashw 1.6s linear infinite; }
+@keyframes pp-dashw { to { stroke-dashoffset: -34; } }
 
-/* ---- the phone: paired, a chip; not yet, the address and the code on its screen ---- */
-.desk-tv .dk-ph { background: linear-gradient(150deg, #2b2c30, #0f1012 60%, #1a1b1e); border-radius: 40px; padding: 14px 16px 14px 38px;
-  box-shadow: 0 18px 28px rgba(0, 0, 0, .55), 0 4px 8px rgba(0, 0, 0, .4), inset 0 0 0 2px rgba(255, 255, 255, .07); }
-.desk-tv .dk-ph::before { content: ""; position: absolute; left: 16px; top: 50%; width: 11px; height: 11px; margin-top: -5px; border-radius: 50%; background: #2f333a; box-shadow: inset 0 0 0 2px #15171a; }
-.desk-tv .dk-scr { height: 100%; border-radius: 28px; overflow: hidden; background: radial-gradient(circle at 22% 25%, #2d3e35, #141c18 70%); display: flex; align-items: center; gap: 24px; padding: 0 36px; color: var(--dk-bone); }
-.desk-tv .dk-lk { width: 64px; height: 64px; flex: none; color: var(--dk-sage); }
-.desk-tv .dk-lk svg { width: 64px; height: 64px; }
-.desk-tv .dk-pn { font: 700 40px/1.05 var(--dk-house); letter-spacing: -.01em; }
-.desk-tv .dk-pn small { display: block; margin-top: 10px; font: 800 20px/1 var(--dk-house); letter-spacing: .2em; color: var(--dk-sage); text-transform: uppercase; }
-.desk-tv .dk-ph[data-paired="false"] { z-index: 25; box-shadow: 0 0 0 2px rgba(169, 187, 163, .45), 0 0 90px 16px rgba(169, 187, 163, .26), 0 22px 34px rgba(0, 0, 0, .55); }
-.desk-tv .dk-ph[data-paired="false"]:not([data-focused="true"]) { animation: dk-breathe 3.2s ease-in-out infinite; }
-.desk-tv .dk-ph[data-paired="false"][data-focused="true"] { z-index: 30; }
-@keyframes dk-breathe { 50% { box-shadow: 0 0 0 2px rgba(169, 187, 163, .6), 0 0 130px 30px rgba(169, 187, 163, .36), 0 22px 34px rgba(0, 0, 0, .55); } }
-.desk-tv .dk-pair { display: flex; flex-direction: column; gap: 12px; width: 100%; min-width: 0; }
-.desk-tv .dk-lab { font: 800 20px/1 var(--dk-house); letter-spacing: .2em; color: var(--dk-sage); text-transform: uppercase; }
-.desk-tv .dk-url { font: 600 30px/1 var(--dk-mono); color: var(--dk-bone); white-space: nowrap; overflow: hidden; }
-.desk-tv .dk-url .dk-fit { display: inline-block; }
-.desk-tv .dk-pins { display: flex; gap: 14px; margin-top: 6px; }
-.desk-tv .dk-pins b { width: 96px; height: 112px; display: flex; align-items: center; justify-content: center; font: 600 92px/1 var(--dk-mono); color: #FFF6E6; background: rgba(239, 232, 220, .07); border: 2px solid rgba(169, 187, 163, .55); border-radius: 14px; }
+/* ----- Select: the world opens ----- */
+.pp .pp-zoom { position: absolute; inset: 0; z-index: 8; pointer-events: none; }
+.pp .pp-flood { position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 40%, var(--pp-hi) -20%, var(--pp-deep) 45%, var(--pp-deepLo) 100%); animation: pp-flood .52s cubic-bezier(.5, 0, .2, 1) backwards; }
+@keyframes pp-flood { from { clip-path: circle(0 at var(--ox) var(--oy)); } to { clip-path: circle(2400px at var(--ox) var(--oy)); } }
+.pp .pp-zscene { position: absolute; left: 0; top: 0; overflow: visible; }
+.pp .pp-zc { position: absolute; left: 0; right: 0; top: 0; height: 1080px; text-align: center; color: #fff8ea; }
+.pp .pp-halo { position: absolute; left: 610px; top: 60px; width: 700px; height: 700px; border-radius: 50%; background: radial-gradient(circle, rgba(255, 236, 170, .34), rgba(255, 236, 170, 0) 66%); }
+.pp .pp-emb { position: absolute; left: 720px; top: 210px; width: 480px; height: 400px; animation: pp-emb .4s .12s cubic-bezier(.2, .9, .3, 1.15) backwards; }
+.pp .pp-emb .pp-win { width: 300px; height: 300px; margin: 0 auto; border-radius: 150px 150px 26px 26px; overflow: hidden; border: 8px solid #fff8e8; box-shadow: 0 26px 40px rgba(20, 10, 6, .45); background: #f6ecd9; }
+.pp .pp-zhouse { width: 100%; height: 100%; display: grid; place-items: center; color: var(--pp-ink); background: linear-gradient(#fdf6e6, #eddfc0); }
+@keyframes pp-emb { from { translate: 0 50px; scale: .7; opacity: 0; } to { translate: 0 0; scale: 1; opacity: 1; } }
+.pp .pp-sty { position: absolute; left: 0; right: 0; top: 592px; display: flex; justify-content: center; align-items: center; gap: 10px; font-size: 20px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: rgba(255, 248, 234, .8); }
+.pp .pp-sty i { display: block; width: 14px; height: 14px; transform: rotate(45deg); border-radius: 3px; background: #d9a441; box-shadow: 0 0 0 2px rgba(255, 248, 230, .7); }
+.pp .pp-op { position: absolute; left: 0; right: 0; top: 656px; font-size: 40px; font-weight: 500; letter-spacing: .04em; color: rgba(255, 248, 234, .86); animation: pp-word .36s .2s var(--pp-ease) backwards; }
+.pp .pp-znm { position: absolute; left: 0; right: 0; top: 706px; font: 700 116px/1 var(--pp-serif); text-shadow: 0 4px 0 var(--pp-deepLo), 0 20px 30px rgba(20, 10, 6, .4); animation: pp-word .36s .25s var(--pp-ease) backwards; }
+.pp .pp-zbar { position: absolute; left: 700px; top: 866px; width: 520px; height: 10px; border-radius: 5px; background: rgba(255, 248, 234, .25); overflow: hidden; }
+.pp .pp-zbar i { display: block; height: 100%; width: 100%; background: linear-gradient(90deg, #ffe27a, #fff5c8); border-radius: 5px; transform-origin: 0 0; animation: pp-bar .5s .1s cubic-bezier(.4, .1, .3, 1) backwards; }
+@keyframes pp-bar { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+.pp[data-zoom] .pp-fx { z-index: 9; }
 
-/* ---- the place card: whose desk it is; lit, it offers the desk to someone else ---- */
-.desk-tv .dk-pc { background: linear-gradient(180deg, #F7F1E6 0, #F7F1E6 20px, #D8CDBA 20px, #E3D9C8 23px, #F0E9DD 32px, #EDE5D8 100%); border-radius: 6px; color: var(--dk-card-ink);
-  display: flex; align-items: center; justify-content: center; gap: 16px; padding-top: 18px; font: 700 44px/1 var(--dk-house); letter-spacing: -.015em; white-space: nowrap; }
-.desk-tv .dk-pc > svg { width: 40px; height: 40px; }
-.desk-tv .dk-se { position: absolute; left: calc(100% + 30px); top: 50%; transform: translate(-10px, -40%); opacity: 0; display: flex; align-items: center; gap: 12px;
-  background: var(--dk-sage-ink); color: var(--dk-sage); border: 2px solid var(--dk-sage); font: 800 21px/1 var(--dk-house); letter-spacing: .16em; padding: 12px 16px; border-radius: 8px; text-transform: uppercase;
-  transition: opacity .3s, transform .3s var(--dk-ease); }
-.desk-tv .dk-se svg { width: 26px; height: 26px; }
-.desk-tv .dk-pc[data-focused="true"] .dk-se { opacity: 1; transform: translate(0, -40%); }
+.pp .pp-grain { position: absolute; inset: 0; z-index: 30; pointer-events: none; background-size: 200px 200px, 100% 100%; }
 
-/* ---- the one caption slot, on the blotter's lip: a sage label and one sentence ---- */
-.desk-tv .dk-cap { position: absolute; left: 156px; top: 926px; z-index: 40; width: 1130px; height: 80px; display: flex; align-items: center; animation: dk-rise .35s var(--dk-ease) both; }
-.desk-tv .dk-cap[data-narrow] { width: 980px; }
-.desk-tv .dk-cap p { margin: 0; font: 500 34px/1.16 var(--dk-house); color: var(--dk-bone); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; text-wrap: pretty; }
-.desk-tv .dk-cap b { font: 800 21px/1 var(--dk-house); letter-spacing: .18em; color: var(--dk-sage); text-transform: uppercase; margin-right: 18px; vertical-align: .18em; }
-@keyframes dk-rise { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+/* ----- art animation ----- */
+.pp .pp-pulse { animation: pp-pulse 3.4s ease-in-out infinite; }
+@keyframes pp-pulse { 0%, 100% { opacity: .22; } 50% { opacity: .78; } }
+.pp .pp-flick { animation: pp-flick 2.6s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+@keyframes pp-flick { 0%, 100% { opacity: .72; transform: scale(1); } 30% { opacity: 1; transform: scale(1.07); } 60% { opacity: .82; transform: scale(.97); } }
+.pp .pp-drift { animation: pp-drift 9s ease-in-out infinite alternate; }
+@keyframes pp-drift { from { transform: translate(0, -6px); } to { transform: translate(10px, 8px); } }
+.pp .pp-bob { animation: pp-bob 6s ease-in-out infinite alternate; }
+@keyframes pp-bob { from { transform: translateY(-7px); } to { transform: translateY(7px); } }
+.pp .pp-wv { animation: pp-wv 1.15s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+@keyframes pp-wv { 0%, 100% { transform: scaleY(.42); } 50% { transform: scaleY(1); } }
+.pp .pp-dot { animation: pp-dot 1.4s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+@keyframes pp-dot { 0%, 100% { opacity: .35; transform: scale(.8); } 50% { opacity: 1; transform: scale(1.18); } }
+.pp .pp-hook { animation: pp-hook 2.4s ease-out infinite; transform-box: fill-box; transform-origin: center; }
+@keyframes pp-hook { 0% { opacity: .95; transform: scale(.55); } 100% { opacity: 0; transform: scale(1.9); } }
+.pp .pp-keys { animation: pp-keys 5s ease-in-out infinite; transform-box: fill-box; transform-origin: 50% 0; }
+@keyframes pp-keys { 0%, 100% { transform: rotate(-2.2deg); } 50% { transform: rotate(2.2deg); } }
+.pp .pp-bell { animation: pp-bell 5s ease-in-out infinite; transform-box: fill-box; transform-origin: 50% 100%; }
+@keyframes pp-bell { 0%, 80%, 100% { transform: rotate(0); } 84% { transform: rotate(-8deg); } 88% { transform: rotate(7deg); } 92% { transform: rotate(-4deg); } 96% { transform: rotate(2deg); } }
+.pp .pp-ring { animation: pp-ringw 5s ease-out infinite; opacity: 0; }
+@keyframes pp-ringw { 0%, 82% { opacity: 0; } 86% { opacity: 1; } 100% { opacity: 0; } }
+.pp .pp-sweep { animation: pp-sweep 8s ease-in-out infinite alternate; }
+@keyframes pp-sweep { from { transform: translateX(-90px); } to { transform: translateX(120px); } }
+.pp .pp-tw { animation: pp-tw 3.2s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+@keyframes pp-tw { 0%, 100% { opacity: .4; transform: scale(.8); } 50% { opacity: 1; transform: scale(1.1); } }
+.pp .pp-marker { stroke-dasharray: 900; animation: pp-mk 6s ease-in-out infinite; }
+@keyframes pp-mk { 0% { stroke-dashoffset: 900; } 30%, 100% { stroke-dashoffset: 0; } }
 
-/* ---- Select: the lit object opens into its app's own colours, then the app is on screen ---- */
-.desk-tv .dk-zoom { position: absolute; z-index: 80; overflow: hidden; border-radius: 16px;
-  left: var(--zx); top: var(--zy); width: var(--zw); height: var(--zh); transform: rotate(var(--zr));
-  transition: left .55s var(--dk-ease), top .55s var(--dk-ease), width .55s var(--dk-ease), height .55s var(--dk-ease), transform .55s var(--dk-ease), border-radius .55s var(--dk-ease); }
-.desk-tv .dk-zoom[data-full] { left: 0; top: 0; width: var(--stage-w); height: var(--stage-h); transform: none; border-radius: 0; }
-.desk-tv .dk-zin { position: absolute; left: 0; top: 0; width: var(--stage-w); height: var(--stage-h); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 44px; opacity: 0; transition: opacity .3s; }
-.desk-tv .dk-zoom[data-full] .dk-zin { opacity: 1; transition: opacity .3s .22s; }
-.desk-tv .dk-zoom[data-app="maths"] { background: radial-gradient(circle at 16% 12%, rgba(255, 197, 107, .30), transparent 42%), radial-gradient(circle at 80% 90%, rgba(143, 184, 255, .10), transparent 40%), var(--dk-night); color: #F5EEDF; }
-.desk-tv .dk-zoom[data-app="english"] { background: radial-gradient(circle at 22% 50%, #fbf4e6 0, transparent 46%), linear-gradient(135deg, #f5eee1, #e5dccd); color: #261F29; }
-.desk-tv .dk-zoom[data-app="essay"] { background: var(--dk-black); color: var(--dk-em-bone); }
-.desk-tv .dk-zoom[data-app="place"], .desk-tv .dk-zoom[data-app="phone"] { background: radial-gradient(circle at 50% 40%, rgba(255, 200, 130, .12), transparent 50%), linear-gradient(160deg, #243029, #161d19); color: var(--dk-bone); }
-.desk-tv .dk-zbrand { position: static; inset: auto; background: none; overflow: visible; display: flex; align-items: center; gap: 28px; }
-.desk-tv .dk-zbrand.maths-tv .mb-mark, .desk-tv .dk-zbrand.maths-tv .mb-mark svg { width: 120px; height: 120px; flex-basis: 120px; }
-.desk-tv .dk-zbrand.maths-tv .mb-word { font-size: 118px; }
-.desk-tv .dk-zbrand .lo-mark { display: flex; align-items: center; gap: 22px; font: 700 110px/1 var(--dk-serif); letter-spacing: -4px; }
-.desk-tv .dk-zbrand .lo-mark svg { width: 112px; height: 112px; }
-.desk-tv .dk-zbrand.essay-tv .em-brand { position: static; gap: 26px; }
-.desk-tv .dk-zbrand.essay-tv .em-mark { width: 80px; height: 90px; }
-.desk-tv .dk-zbrand.essay-tv .em-wm { font-size: 92px; }
-.desk-tv .dk-zhouse { font: 700 96px/1 var(--dk-house); letter-spacing: -.02em; }
-.desk-tv .dk-zhouse svg { width: 120px; height: 120px; color: var(--dk-sage); }
-.desk-tv .dk-zword { font: 700 44px/1.1 var(--dk-house); }
-.desk-tv .dk-zoom[data-app="maths"] .dk-zword { font-family: var(--mb-sans); color: var(--dk-amber); }
-.desk-tv .dk-zoom[data-app="english"] .dk-zword { font: 800 40px/1 var(--dk-arial); letter-spacing: .14em; text-transform: uppercase; color: var(--dk-wine); }
-.desk-tv .dk-zoom[data-app="essay"] .dk-zword { font: 600 30px/1 var(--dk-mono); letter-spacing: .2em; text-transform: uppercase; color: var(--dk-cit); }
-.desk-tv .dk-zoom[data-app="place"] .dk-zword, .desk-tv .dk-zoom[data-app="phone"] .dk-zword { color: var(--dk-sage); }
-
-/* ---- reduced motion: every glide, lift, draw and zoom is a cut; the room is simply lit ---- */
+/* reduced motion: everything is where it ends up, and the hand-off is a cut (app/tv/page.tsx does not wait) */
 @media (prefers-reduced-motion: reduce) {
-  .desk-tv *, .desk-tv *::before, .desk-tv *::after { transition: none !important; animation: none !important; }
-  .desk-tv .dk-blackout { display: none; }
-  .desk-tv .dk-zin { opacity: 1; }
+  .pp *, .pp *::before, .pp *::after { animation: none !important; transition: none !important; }
+  .pp .pp-intro, .pp .pp-wset[data-mode="leave"] { display: none; }
+  .pp .pp-marker { stroke-dasharray: none; }
 }

@@ -68,6 +68,8 @@ function drawers(){
    const sc=m[1]??m[2],f=fileOf(file,text,m[3],m[4]);assert.ok(f,`${rel}: cannot find where ${m[4]} (for ${sc}) comes from`);add(sc,f,m[4]);
   }
  }
+ // the landing's words are its view-model's (landing/model.ts), drawn by whichever theme is on: the pairing ask lives there
+ add('landing',path.join(SRC,'landing/model.ts'),'landingView');
  // Linga draws every screen lingaOwns gives it (app/tv/page.tsx: lingaOwns(s) ? <LingaTV ...>)
  assert.match(code(path.join(SRC,'app/tv/page.tsx')),/lingaOwns\(s\)\s*\?\s*<LingaTV\b/,'the TV still hands Linga\'s screens to LingaTV');
  for(const sc of SCREENS)if(lingaOwns({screen:sc,subject:'maths'}))add(sc,path.join(SRC,'english/LingaTV.tsx'),'LingaTV');

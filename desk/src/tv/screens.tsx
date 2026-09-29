@@ -48,7 +48,7 @@ export function Joined({ s }: { s: Session }) {
       <img src="/brand/paired.png" alt="" style={{ position: "absolute", right: 0, top: 40, width: 760, height: 520, objectFit: "contain" }} />
       <div style={{ position: "absolute", left: 0, bottom: 216, maxWidth: 900 }}>
         <span className="cap">What now</span>
-        <div className="cap-text">{s.learner ? "Open an app on the desk, or snap the page on the phone." : "Now choose whose desk it is: Up to the place card on the desk."}</div>
+        <div className="cap-text">{s.learner ? "Open an app on the desk, or snap the page on the phone." : "Now choose whose desk it is: Down to Choose who on the desk."}</div>
       </div>
       <div className="actions"><button className="btn" data-focused>The desk</button></div>
     </main>
@@ -77,14 +77,7 @@ export function Pair({ s }: { s: Session }) {
 }
 
 
-/** A day, in the words a person would use. Calendar days, not elapsed hours. */
-const DAYS = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-export function day(at: number): string {
-  const d = new Date(at), mid = (t: Date) => Date.UTC(t.getFullYear(), t.getMonth(), t.getDate());
-  const n = Math.round((mid(new Date()) - mid(d)) / 86400000);
-  return n <= 0 ? "Today" : n === 1 ? "Yesterday" : n < 7 ? DAYS[d.getDay()] : `${d.getDate()} ${MONTHS[d.getMonth()]}`;
-}
+export { day } from "@/tv/day";
 
 // ---- T2 Units (guide) ----
 export function Units({ s, focus }: { s: Session; focus: number }) {

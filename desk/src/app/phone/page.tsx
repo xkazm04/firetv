@@ -256,12 +256,12 @@ export default function Phone() {
           {/* a fresh desk has no one at it yet: the phone says so, and offers no snap until someone sits down (the page would be no one's) */}
           {s.learner
             ? <p>Joined as <b>{s.learner.name}</b>. {["landing", "pair", "joined"].includes(s.screen) ? "Open an app on the TV and this phone follows it." : `The TV is on ${TV_WORDS[s.screen] ?? s.screen}.`}</p>
-            : <p>Joined. No one is at the desk yet: on the TV, press Up to the place card and Select to choose who is studying.</p>}
+            : <p>Joined. No one is at the desk yet: on the TV, press Down to Choose who and Select to choose who is studying.</p>}
           {s.screen === "profile" || s.draft
             ? <button className="pbtn" data-signal="true" onClick={() => nav("profile")}>Name the new learner</button>
             : s.learner && <button className="pbtn" data-signal="true" onClick={() => nav("capture")}>{s.awaiting ? `Snap the ${MODULE[s.awaiting]} page` : "Snap the page"}</button>}
           <button className="pbtn" data-secondary="true" onClick={() => nav("tonight")}>Set up tonight first</button>
-          {s.learner && <p style={{ fontSize: 12 }}>Not {s.learner.name}? On the TV's desk, press Up to the place card and Select to switch who is at the desk.</p>}</div>}
+          {s.learner && <p style={{ fontSize: 12 }}>Not {s.learner.name}? On the TV's desk, press Down to Someone else and Select to switch who is at the desk.</p>}</div>}
 
         {screen === "profile" && <div className="pscreen"><h3>Profile</h3>
           <p>At the desk now: <b>{s?.learner?.name ?? "no one yet"}</b></p>

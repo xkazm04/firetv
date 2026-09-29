@@ -63,9 +63,10 @@ const clampIx = (n: number, f: number) => Math.max(0, Math.min(n - 1, f));
 export function stopAt<T>(stops: readonly T[], f: number): T | undefined { return stops.length ? stops[clampIx(stops.length, f)] : undefined; }
 
 /**
- * Landing: the desk (tv/landingRows.ts). The apps on the learner's profile lie in a row, the place card above
- * them, the unpaired phone below right. There is no Continue button: the lamp rests on the app with something
- * waiting (focus LANDING_REST), and Select on the place card is "someone else".
+ * Landing: the desk (tv/landingRows.ts; landing/themes/ draws it). The apps on the learner's profile lie in a row on
+ * the shelf, the unpaired phone above them (top right), "Someone else" (the place) below them (bottom right). The
+ * big "Continue as ..." button is not a stop of its own: it names what Select does on the app in the light. The lamp
+ * rests on the app with something waiting (focus LANDING_REST), and Select on the place is "someone else".
  */
 export { LANDING_MODULES, LANDING_REST, landingStops, landingFocus, landingAt, restStop, type LandingStop } from "@/tv/landingRows";
 export const MODULE_HOME: Record<Subject, Screen> = { maths: "tonight", english: "linga", essay: "essaytype" };
@@ -188,8 +189,9 @@ const homeOf = (s: Session, sub: Subject) => sub === "essay" ? { screen: "essayt
 const lessonEvent = (l: Lesson, why: string): Event => ({ type: "lesson.set", lesson: { id: l.id, title: l.title, t: 0, text: l.concepts.join(" · "), why, youtube: l.youtube } });
 
 const KEYMAP: Partial<Record<Screen, Handler>> = {
-  // the lamp moves between the objects on the desk: Left/Right along the apps, Up to the place card, Down to an unpaired phone;
-  // Menu ends tonight wherever the lamp is - what the phone's End session does: the recap, and the memory written
+  // the light moves between the things on the desk: Left/Right along the shelf of apps, Up to an unpaired phone (top right),
+  // Down to Someone else (bottom right); Menu ends tonight wherever it is - what the phone's End session does: the recap,
+  // and the memory written
   landing: (s, k, _, o) => {
     const stops = landingStops(s), i = landingAt(s), at = stops[i], apps = landingModules(s).length;
     const to = (j: number) => { if (j >= 0 && j !== s.focus) o.ev({ type: "focus", focus: j }); };
@@ -197,15 +199,15 @@ const KEYMAP: Partial<Record<Screen, Handler>> = {
     if (k === "menu") { if (s.learner) { o.ev({ type: "session.end" }); o.calls.push({ url: "/api/memory", body: {} }); } return; }
     if (k === "back") { to(restStop(s)); return; }
     if (at === "place") {
-      if (k === "down" && apps) to(Math.floor((apps - 1) / 2));
+      if (k === "up") to(apps ? Math.floor((apps - 1) / 2) : stops.indexOf("phone"));
       if (k === "select") o.nav("learner", 0, "landing");
     } else if (at === "phone") {
-      if (k === "up" || k === "left") to(apps ? apps - 1 : stops.indexOf("place"));
+      if (k === "down" || k === "left") to(apps ? apps - 1 : stops.indexOf("place"));
       if (k === "select") o.nav("pair", 0, "landing");
     } else if (at) {
       if (k === "right" && i < apps - 1) to(i + 1); if (k === "left" && i > 0) to(i - 1);
-      if (k === "up") to(stops.indexOf("place"));
-      if (k === "down") to(stops.indexOf("phone"));
+      if (k === "up") to(stops.indexOf("phone"));
+      if (k === "down") to(stops.indexOf("place"));
       // an app opened at a desk no one has sat down at asks who first: its work is somebody's (store.ts NEEDS_LEARNER)
       if (k === "select") { if (!s.learner) { o.nav("learner", 0, "landing"); return; } o.ev({ type: "subject", subject: at }); o.nav(MODULE_HOME[at]); }
     }
