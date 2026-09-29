@@ -302,6 +302,8 @@ class Parser {
       // sin(x)^2 is (sin x)^2: the power after the bracket belongs to the function's value, taken in power()
       return this.bracketed();
     }
+    // ln|x|: an absolute value is a bracketed argument too
+    if (p.k === "|") return this.atom();
     let sign = 0;
     if (this.isOp("-")) { sign = -1; this.i++; } else if (this.isOp("+")) { sign = 1; this.i++; }
     let a = this.bareFactor(true);

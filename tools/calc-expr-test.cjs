@@ -83,7 +83,7 @@ const S3=Math.sqrt(3),EDGE=[
  ['sin(3x)/x',0.1,Math.sin(0.3)/0.1],['sin 3x',0.1,Math.sin(0.3)],['sin x cos x',0.5,Math.sin(0.5)*Math.cos(0.5)],['ln x/x',2,Math.log(2)/2],
  ['sin x^2',1.5,Math.sin(2.25)],['e^sin x',1,Math.exp(Math.sin(1))],['ln ln x',10,Math.log(Math.log(10))],['sqrt(x)sqrt(x)',5,5],
  ['1/(1 + 1/(1 + 1/x))',1,2/3],['((x))',7,7],['[x + 1]^2',2,9],['{x}',4,4],['X^2',3,9],['x ^ 2',3,9],['3 x',2,6],
- ['sec^2 x - tan^2 x',0.7,1],['1/sqrt(3)',0,1/S3],['sqrt 3/2',0,S3/2],['x^x',2,4],['(x^2)^(1/2)',-3,3],
+ ['sec^2 x - tan^2 x',0.7,1],['ln|x|',-2,Math.log(2)],['4ln|x| + 1',-1,1],['1/sqrt(3)',0,1/S3],['sqrt 3/2',0,S3/2],['x^x',2,4],['(x^2)^(1/2)',-3,3],
 ];
 
 /** Readings that must refuse: an unknown letter, a dangling operator, empty, a number juxtaposed with a number. */
