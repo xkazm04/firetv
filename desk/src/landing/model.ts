@@ -53,6 +53,8 @@ export interface LandingView {
   learner: { name: string; initial: string; tone: number } | null;
   /** an unpaired phone lies on the desk as a stop (it carries the address and the code) */
   phone: { paired: boolean; pin: string; url: string };
+  /** the caption slot: the app in the light, or the pairing instruction while the D-pad is on the unpaired phone */
+  caption: Caption;
   /** the big action: what Select does on the app in the light; and the second: who is at the desk */
   primary: string;
   place: string;
@@ -132,8 +134,10 @@ export function landingView(s: Session, lastApp: Subject | null = null): Landing
   const atApp = at && ids.includes(at as Subject) ? (at as Subject) : null;
   const world = atApp ?? (lastApp && ids.includes(lastApp) ? lastApp : cont?.app ?? ids[0] ?? null);
   const learner = learnerOf(s), wApp = apps.find((a) => a.id === world) ?? null;
+  const caption: Caption = at === "phone" ? { chip: null, head: "Pair your phone", sub: "Open the address on your phone, then enter the four digits." }
+    : wApp ? wApp.caption : { chip: null, head: "No apps yet", sub: "This profile has no apps on it. Select Someone else to change it." };
   return {
-    stops, at, apps, world, learner,
+    stops, at, apps, world, learner, caption,
     phone: { paired: s.joined, pin: s.pin, url: s.phoneUrl.replace(/^https?:\/\//, "") },
     primary: primaryLabel(learner?.name ?? null, wApp?.kind ?? null),
     place: learner ? "Someone else" : "Choose who",
