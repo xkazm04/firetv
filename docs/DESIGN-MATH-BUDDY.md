@@ -46,7 +46,10 @@ look again. Never the answer.
    is coloured.
 8. **Ten-foot law.** 1920 × 1080 stage, 5% safe zone (96 / 54 px), nothing under 28 px except 20–22 px uppercase
    labels that never carry a meaning alone. Working maths at 72 px, printed maths at 46–56 px; a fraction's parts
-   are 70–78% of the line, never superscript-sized. D-pad only. Under `prefers-reduced-motion` the lamp stops
+   are 70–78% of the line, never superscript-sized. The law reaches inside the line: exponents, subscripts, a
+   root's index and a fraction's parts are floored at 28 px (`max(.6em, 28px)`, `max(.78em, 28px)`), so a 40 px
+   folded item, an exponent inside a printed fraction and a Tonight row all read; the floor never inflates the
+   72 px hand (its exponents stay 43.2 px). `tools/maths-type-test.cjs` reads the stylesheet and fails if it slips. D-pad only. Under `prefers-reduced-motion` the lamp stops
    breathing and every pen stroke is already drawn.
 
 ## Tokens
@@ -110,12 +113,14 @@ latin/latin-ext, so Greek, arrows, ∑, ∂ and ′ are set in a system fallback
 **Fractions.** `a/b` stacks only where it is clearly a fraction: no space around the slash, an operand each side,
 no word in either. The numerator is everything glued to the slash on its left (`7π`, `dy`, `2(x+1)`, `(a+b)` with
 its grouping brackets dropped, a function with its bracketed argument: `sin(x)/x` is sin x over x, never sin of x/x); the denominator is one number, a run of letters (`dx`) or one bracket. `3 / 4`,
-`and/or` keep their slash. Numerator and denominator are 78% of the line (70% for `½` and `\tfrac`), with
+`and/or` keep their slash. Numerator and denominator are 78% of the line (70% for `½` and `\tfrac`), never under
+28 px, with
 .14em side padding and a drawn bar (.08em, tilted 1.4° in the hand) centred on the minus sign's height.
 
 **Spacing.** Binary operators .26em each side in the hand (.22em in print), relations .28em, a unary minus
 .1em, a function name .2em before its argument; two spaces in the source are a wide gap (1em), as a student leaves
-between two results. Superscripts are 60% at +.64em (+1em on a bracket), subscripts 60% at −.34em; a symbol with
+between two results. Superscripts are 60% at +.64em (+1em on a bracket), subscripts 60% at −.34em, both never under
+28 px (a root's index 50%, the same floor); a symbol with
 both (`x_n^2`, `int_0^1`, `[F(x)]_a^b`, `sum_(i=1)^n`) stacks them in one column, superscript above, as tall as the
 ∫ or ∑ beside it. A continued line
 that starts with "=" hangs its "=" under the "=" above.

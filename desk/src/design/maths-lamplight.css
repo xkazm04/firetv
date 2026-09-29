@@ -189,19 +189,21 @@
 .maths-tv .mx.hand .mo.un .mm { width: .3em; }
 /* stacked fractions: numerator, a drawn bar, denominator - centred on the minus sign's height, never cramped */
 .maths-tv .mx .mf { position: relative; display: inline-flex; flex-direction: column; align-items: center; vertical-align: middle; top: -.1em; margin: 0 .12em; line-height: 1; }
-.maths-tv .mx .mf.l { font-size: .78em; }
-.maths-tv .mx .mf.s { font-size: .7em; }
+/* the ten-foot floor: a fraction's parts, and every script below, never compute under 28 px (a 40 px right item, a
+   fraction inside a printed question, a Tonight row), and the floor never inflates big text (72 px hand: 78% / 60%) */
+.maths-tv .mx .mf.l { font-size: max(.78em, 28px); }
+.maths-tv .mx .mf.s { font-size: max(.7em, 28px); }
 .maths-tv .mx .mf .fnu, .maths-tv .mx .mf .fde { display: block; padding: 0 .14em; }
 .maths-tv .mx .mf .fb { align-self: stretch; height: .08em; min-height: 3px; background: currentColor; border-radius: .05em; margin: .1em -.04em .06em; }
 .maths-tv .mx.hand .mf .fb { transform: rotate(-1.4deg); }
 .maths-tv .mx.print .mf { top: -.06em; }
 .maths-tv .mx.print .mf .fb { height: .055em; min-height: 2px; transform: none; margin: .08em 0 .06em; }
 .maths-tv .mx .msc { display: inline-block; white-space: nowrap; }
-.maths-tv .mx .sup { display: inline-block; font-size: .6em; vertical-align: .64em; margin-left: .02em; }
+.maths-tv .mx .sup { display: inline-block; font-size: max(.6em, 28px); vertical-align: .64em; margin-left: .02em; }
 .maths-tv .mx .sup.hi { vertical-align: 1em; }
 .maths-tv .mx.print .sup { vertical-align: .74em; }
 .maths-tv .mx.print .sup.hi { vertical-align: .86em; }
-.maths-tv .mx .sub { display: inline-block; font-size: .6em; vertical-align: -.34em; margin-left: .03em; }
+.maths-tv .mx .sub { display: inline-block; font-size: max(.6em, 28px); vertical-align: -.34em; margin-left: .03em; }
 .maths-tv .mx .msp { display: inline-block; height: 1px; }
 .maths-tv .mx .gl { display: inline-block; overflow: visible; vertical-align: 0; }
 .maths-tv .mx .gl path { fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; }

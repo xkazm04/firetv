@@ -296,3 +296,31 @@ test('18: prime, partial, absolute value, and every arc function',()=>{
  for(const fn of ['arcsec','arccot','arccsc','arcsin']){const n=T.parseMath(fn+'(x)');assert.equal(n[0].t,'fn',fn);assert.equal(n[0].v,fn);}
  assert.equal(T.parseMath('arcsecx')[0].v,'arcsec','glued like arcsinx');
 });
+
+test('19: the ten-foot floor - an exponent, a subscript, a root index or a fraction part never computes under 28 px',()=>{
+ // the stylesheet as rules, comments stripped first so a commented-out floor never counts
+ const css=fs.readFileSync(path.join(root,'src/design/maths-lamplight.css'),'utf8').replace(/\/\*[\s\S]*?\*\//g,'');
+ const rules=[...css.matchAll(/([^{}]+)\{([^{}]*)\}/g)].map(m=>({sels:m[1].split(',').map(s=>s.trim().replace(/\s+/g,' ')),decl:m[2]}));
+ /** The font-size a rule gives at a parent size: max(a em, b px), a em, or b px. */
+ const sizer=(v)=>{
+  const mx=/^max\(\s*([\d.]+)em\s*,\s*([\d.]+)px\s*\)$/.exec(v);if(mx)return (b)=>Math.max(+mx[1]*b,+mx[2]);
+  const em=/^([\d.]+)em$/.exec(v);if(em)return (b)=>+em[1]*b;
+  const px=/^([\d.]+)px$/.exec(v);if(px)return ()=>+px[1];
+  throw new Error('unreadable font-size '+v);
+ };
+ const fontSize=(sel)=>{let f=null;for(const r of rules){if(!r.sels.includes(sel))continue;const m=/(?:^|;)\s*font-size\s*:\s*([^;]+?)\s*(?:;|$)/.exec(r.decl);if(m)f=sizer(m[1]);}assert.ok(f,`${sel} sets a font-size`);return f;};
+ const sup=fontSize('.maths-tv .mx .sup'),sub=fontSize('.maths-tv .mx .sub'),fl=fontSize('.maths-tv .mx .mf.l'),fs_=fontSize('.maths-tv .mx .mf.s'),idx=fontSize('.maths-tv .mx .msq-i');
+ // every later rule that resizes a script or a fraction part must keep the floor too
+ for(const r of rules) for(const s of r.sels){
+  if(!/\.(sup|sub|msq-i|mf\.[ls])$/.test(s))continue;const m=/(?:^|;)\s*font-size\s*:\s*([^;]+?)\s*(?:;|$)/.exec(r.decl);if(!m)continue;
+  assert.ok(sizer(m[1])(20)>=28,`${s} { font-size: ${m[1]} } loses the 28px floor`);
+ }
+ const print=46,right=40,hand=72;
+ for(const [what,px] of [['a 46 px printed exponent',sup(print)],['a 46 px printed subscript',sub(print)],['a 40 px right-item exponent',sup(right)],
+  ['an exponent inside a printed fraction',sup(fl(print))],['an exponent inside a right item\'s fraction',sup(fl(right))],['an exponent inside a small fraction',sup(fs_(print))],
+  ['a printed fraction part',fl(print)],['a small printed fraction part',fs_(print)],['a root index in print',idx(print)],
+  ['a Tonight row exponent (31 px print)',sup(31)],['a Tonight box exponent (34 px hand)',sup(34)],['a Tonight row exponent (35 px hand)',sup(35)],['a Tonight fraction part (31 px)',fl(31)]])
+  assert.ok(px>=28,`${what} computes to ${px.toFixed(1)} px, under the ten-foot floor`);
+ // the floor never inflates big text: the hand at 72 px keeps its 60% scripts and 78% fractions
+ assert.equal(+sup(hand).toFixed(2),43.2);assert.equal(+sub(hand).toFixed(2),43.2);assert.equal(+fl(hand).toFixed(2),56.16);assert.equal(+idx(hand).toFixed(2),36);
+});
