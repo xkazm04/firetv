@@ -184,3 +184,25 @@ test('case 11: English - the rule card never uses the learner\'s own verb as its
  // another verb keeps the default pair
  assert.match(en.resolveEnglish('I play football yesterday.').findIt,/go → went/);
 });
+
+test('case 12: the answer said aloud leaks - a spoken or spaced minus, a decimal comma, number words past twenty, "and a half"',()=>{
+ for(const l of ['minus 3','x = negative 3','x=- 3','x = − 3','the answer is minus three','Negative 3, then check it.'])assert.equal(maths.leaks('x+5=2',l),true,`x+5=2 | ${l}`);
+ for(const l of ['3,5','x = 3,5','three and a half','x is 3 and a half'])assert.equal(maths.leaks('2x=7',l),true,`2x=7 | ${l}`);
+ for(const l of ['twenty-one','twenty one','x = twenty-one'])assert.equal(maths.leaks('x+1=22',l),true,`x+1=22 | ${l}`);
+ assert.equal(maths.leaks('x-99=0','ninety-nine'),true,'words to at least ninety-nine');
+ assert.equal(maths.leaks('x+40=0','minus forty'),true);
+ assert.equal(maths.leaks('Solve for x:  x + 5 = 2','so x = minus 3'),true,'as the page gives it');
+});
+
+test('case 13 GUARD: method numbers, lists and differences stay clean under the spoken reading',()=>{
+ assert.equal(maths.leaks('x+3=5','Take 3 from both sides'),false);
+ assert.equal(maths.leaks('x+3=5','Take away 3 from each side, then read x.'),false);
+ // a comma then a space is a list; digit,digit followed by ,digit is a list too - never 1.2 or 2.3
+ for(const l of ['try 1, 2, 3','1, 2','try 1,2,3','1,2,3,4'])assert.equal(maths.leaks('10x=12',l),false,`10x=12 | ${l}`);
+ for(const l of ['try 1, 2, 3','try 1,2,3'])assert.equal(maths.leaks('10x=23',l),false,`10x=23 | ${l}`);
+ assert.equal(maths.leaks('10x=12','1,2'),true,'a lone digit,digit is a decimal comma');
+ // a minus after a number or x is a subtraction, not a signed answer
+ assert.equal(maths.leaks('x+3=0','Look at x - 3 and x + 3.'),false,'"x - 3" is not -3');
+ assert.equal(maths.leaks('Solve for x:  3x − 7 = 11','Twenty-one is too big; add 7 first.'),false);
+ assert.equal(maths.leaks('Solve for x:  3x − 7 = 11','Someone once said: one side at a time.'),false);
+});

@@ -101,13 +101,30 @@ const NUMBERS = /[-−]?\d+(?:\.\d+)?(?:\s*\/\s*\d+(?:\.\d+)?)?/g;
 const WORDS: Record<string, string> = {
   zero: "0", one: "1", two: "2", three: "3", four: "4", five: "5", six: "6", seven: "7", eight: "8", nine: "9", ten: "10",
   eleven: "11", twelve: "12", thirteen: "13", fourteen: "14", fifteen: "15", sixteen: "16", seventeen: "17", eighteen: "18",
-  nineteen: "19", twenty: "20",
+  nineteen: "19", twenty: "20", thirty: "30", forty: "40", fifty: "50", sixty: "60", seventy: "70", eighty: "80", ninety: "90",
 };
+/** A number word, a tens word with its unit ('twenty-one', 'twenty one') read first so it is never 20 then 1. */
+const NUMBER_WORD = /\b(twenty|thirty|forty|fifty|sixty|seventy|eighty|ninety)(?:(?:-|\s+)(one|two|three|four|five|six|seven|eight|nine)\b)?|\b([a-z]+)\b/g;
 
 /**
- * Does this line give the answer away? Any number in it - written in digits or as a word up to twenty,
- * with or without a minus - that the substitution accepts for the question is the answer. The prompt
- * asks the model not to say it; this is the check that does not rely on the asking.
+ * A line as it would be said, with its numbers in digits: lower case, every dash a '-', number words to ninety-nine
+ * as digits, 'and a half' as .5, 'minus 3' and 'negative three' as -3, and a minus standing apart from its number
+ * ('x = - 3') joined to it - only where no number, x or bracket stands before it, so 'x - 3' stays a subtraction.
+ */
+const said = (line: string) => line.toLowerCase().replace(/[−–—‐‑]/g, "-")
+  .replace(NUMBER_WORD, (w, tens: string | undefined, unit: string | undefined, word: string | undefined) =>
+    tens ? String(Number(WORDS[tens]) + (unit ? Number(WORDS[unit]) : 0)) : WORDS[word!] ?? w)
+  .replace(/(\d+)\s+and\s+a\s+half\b/g, "$1.5")
+  .replace(/\b(?:minus|negative)\s*(?=\d)/g, "-")
+  .replace(/(^|[^\s\da-z)\]²])(\s*)-\s+(?=\d)/g, "$1$2-");
+/** A decimal comma read as a point ('3,5' is 3.5); a comma in a list ('1, 2, 3', '1,2,3') is left a list. */
+const decimalComma = (line: string) => line.replace(/(?<!\d,|[\d.])(\d+),(\d+)(?!,\d|\d)/g, "$1.$2");
+
+/**
+ * Does this line give the answer away? Any number in it - in digits, as number words to ninety-nine, with a written,
+ * spaced or spoken minus ('minus 3', 'x = - 3'), a decimal comma ('3,5') or 'and a half' - that the substitution
+ * accepts for the question is the answer. The prompt asks the model not to say it; this is the check that does not
+ * rely on the asking.
  *
  * The one leak rule, for explain's reply and for every hint line. It reads the question as a photographed page
  * gives it ('Solve for x:  3x − 7 = 11' is its equation, `equationOf`), and an expression item leaks by form as
@@ -116,8 +133,7 @@ const WORDS: Record<string, string> = {
 export function leaks(question: string, line: string): boolean {
   if (typeof line !== "string" || !line) return false;
   const eq = equationOf(question) ?? question;
-  const found = [...(line.match(NUMBERS) ?? [])];
-  for (const m of line.toLowerCase().matchAll(/\b(minus |negative )?([a-z]+)\b/g)) if (WORDS[m[2]]) found.push((m[1] ? "-" : "") + WORDS[m[2]]);
+  const found = [...(decimalComma(said(line)).match(NUMBERS) ?? [])];
   // "12-7" reads as -7 here, so a signed number is checked with and without its sign
   return found.map((v) => v.replace(/\s+/g, "").replace(/^−/, "-"))
     .some((v) => verify(eq, v) || (v.startsWith("-") && verify(eq, v.slice(1))))
@@ -263,9 +279,8 @@ const POINTS = [-2.5, -1, 0.37, 1.9, 3.3];
 const sameValue = (a: string, b: string) => POINTS.every((x) => { const u = evaluate(a, x), v = evaluate(b, x); return u !== null && v !== null && close(u, v); });
 /** The line with every word but x masked, so only its maths is left to read. */
 const maskWords = (line: string) => line.replace(/[A-Za-z]+/g, (w) => (/^x$/i.test(w) ? w : "|"));
-/** The line with its minus signs as '-' and its number words (up to twenty) as digits: 'minus three' is '-3'. */
-const spoken = (line: string) => line.toLowerCase().replace(/[−–—‐‑]/g, "-")
-  .replace(/\b(minus |negative )?([a-z]+)\b/g, (w, sign: string | undefined, word: string) => (WORDS[word] ? (sign ? "-" : "") + WORDS[word] : w));
+/** The line with its minus signs as '-' and its number words as digits: 'minus three' is '-3' (`said`, the one reading). */
+const spoken = said;
 /** Two numbers named as a pair: '3 and 4', '4 & 3', '-3, -4', '3 or 4', 'x = -3 and x = -4'. */
 const PAIR = /(?<![\d.\/])(-?\d+(?:\.\d+)?(?:\/\d+)?)\s*(?:,\s*(?:and\s+|or\s+)?|and\s|&|or\s)\s*(?:x\s*=\s*)?(-?\d+(?:\.\d+)?(?:\/\d+)?)(?![\d\/]|\.\d)/g;
 /** The root of a linear bracket's content, or null when it is not linear in x. */
