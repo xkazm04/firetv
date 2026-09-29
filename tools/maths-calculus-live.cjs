@@ -25,6 +25,12 @@
  * It saves artifacts/math-calculus/<topic>-<screen>.png and report.json + report.md (pass/fail per check, with the
  * offending selector and the measured value). Non-strict by default (prints violations, exits 0); --strict exits 1
  * on any violation or unreachable screen. A screen that cannot be reached is reported as such, and the run goes on.
+ *
+ * --path calc1: the scratch learner is seated on the Calculus 1 path (a profile.draft patch, mathPath 'calc1'), so every
+ * screen above is drawn for a Calculus learner, and then the path's rulers are walked: Topics at every focus 0..21 and
+ * Tonight with 0, 7, 15 and 22 topics latched secure, with the same checks plus the ruler's own (RULER_CHECKS: the
+ * focused name whole and on the stage, every name >= 34 px, strand labels apart, no gap at either end of the track).
+ * Those are saved as artifacts/math-calculus/path-calc1-<screen>-<n>.png and added to the same report.
  */
 const fs=require('node:fs'),os=require('node:os'),path=require('node:path'),Module=require('node:module');
 
@@ -44,6 +50,9 @@ const strict=argv.includes('--strict');
 /** --dry: no server, no browser - build every topic x screen state and render it with MathsTV to static markup. */
 const dry=argv.includes('--dry');
 const topicsArg=(()=>{const i=argv.indexOf('--topics');return i>=0&&argv[i+1]?argv[i+1].split(',').map(s=>s.trim()).filter(Boolean):null;})();
+/** --path calc1: seat the learner on the Calculus 1 path and walk its rulers too. Only calc1 is a path to ask for. */
+const pathArg=(()=>{const i=argv.indexOf('--path');return i>=0?argv[i+1]??'':null;})();
+if(pathArg!==null&&pathArg!=='calc1'){console.error(`Unknown path "${pathArg}": --path takes calc1 (the school path is the run with no --path).`);process.exit(2);}
 const base=process.env.MATHS_LIVE_URL||'http://localhost:3217';
 const SERVER_DATA=process.env.DESK_DATA_DIR;
 let key,chromium;
@@ -164,6 +173,60 @@ function measure({LABELS,SAFE}){
  return v;
 }
 
+// ------------------------------------------------------------------ --path calc1: the path's rulers
+
+/** The profile the scratch learner is seated with: on the Calculus 1 path when --path calc1 asks for it. */
+const PROFILE={id:'calc-live',name:'Calc',type:'other',modules:['maths'],...(pathArg==='calc1'?{mathPath:'calc1'}:{})};
+/** The first `n` topics of the path latched secure (lib/session/learners.ts' record shape), and the next one in hand. */
+function skillsFor(ids,n){
+ const out=Object.fromEntries(ids.slice(0,n).map(id=>[id,{topic:id,seen:6,right:6,estimate:0.92,secure:true,lastSeen:0,slips:[]}]));
+ if(n<ids.length)out[ids[n]]={topic:ids[n],seen:4,right:2,estimate:0.45,secure:false,lastSeen:0,slips:['sign','order']};
+ return out;
+}
+/** The path runs: Topics at every focus (7 topics secure, the 8th in hand), Tonight with 0, 7, 15 and 22 secure. */
+function pathStates(base0){
+ const ids=require(path.join(root,'src/lib/library/paths.ts')).topicsOf('calc1').map(t=>t.id);
+ const clean={...base0,practice:null,topic:null,pages:[],hint:null};
+ const R=(s,...events)=>events.reduce((x,e)=>reduce(x,e),s);
+ return [
+  ...ids.map((_,n)=>({screen:'topics',n,s:{...R(clean,{type:'nav',screen:'topics',focus:n}),focus:n,skills:skillsFor(ids,7)}})),
+  ...[0,7,15,22].map(n=>({screen:'tonight',n,s:{...R(clean,{type:'nav',screen:'tonight'}),skills:skillsFor(ids,n)}})),
+ ];
+}
+/** The ruler's own checks, run in the TV page after `measure`: each a list of violations with a selector and a value. */
+function measureRuler({SAFE}){
+ const stage=document.querySelector('.stage'),sr=stage.getBoundingClientRect(),k=sr.width/1920||1;
+ const box=(el)=>{const r=el.getBoundingClientRect();return {x:(r.left-sr.left)/k,y:(r.top-sr.top)/k,r:(r.right-sr.left)/k,b:(r.bottom-sr.top)/k};};
+ const v={focusName:[],strandLabels:[],trackEnds:[],ruler:[]};
+ const ruler=document.querySelector('.maths-tv [data-role="maths-ruler"]');
+ if(!ruler){v.ruler.push({selector:'[data-role="maths-ruler"]',value:'no ruler on the screen'});return v;}
+ // the focused topic's name: whole (no line clamped, no word clipped), >= 34 px, and inside the safe zone
+ const tn=ruler.querySelector('.mb-topic[data-focused="true"] .mb-tn');
+ if(ruler.classList.contains('big')){
+  if(!tn)v.focusName.push({selector:'.mb-topic[data-focused] .mb-tn',value:'no focused topic'});
+  else{
+   const b=box(tn),fs=parseFloat(getComputedStyle(tn).fontSize),txt=tn.textContent.slice(0,40);
+   if(tn.scrollWidth>tn.clientWidth+1)v.focusName.push({selector:'.mb-tn (focused)',value:`scrollWidth ${tn.scrollWidth} > clientWidth ${tn.clientWidth} "${txt}"`});
+   // clamped = a whole line more than shown; a glyph's ink a pixel or two past its line box is not a hidden line
+   if(tn.scrollHeight>tn.clientHeight+fs*0.4)v.focusName.push({selector:'.mb-tn (focused)',value:`clamped: scrollHeight ${tn.scrollHeight} > ${tn.clientHeight} at ${fs}px "${txt}"`});
+   if(b.x<SAFE.x0-2||b.r>SAFE.x1+2||b.y<SAFE.y0-2||b.b>SAFE.y1+2)v.focusName.push({selector:'.mb-tn (focused)',value:`x ${b.x.toFixed(0)}-${b.r.toFixed(0)}, y ${b.y.toFixed(0)}-${b.b.toFixed(0)}`});
+   if(fs<34-0.5)v.focusName.push({selector:'.mb-tn (focused)',value:`${fs}px, under 34`});
+  }
+  for(const n of ruler.querySelectorAll('.mb-tn')){const fs=parseFloat(getComputedStyle(n).fontSize);if(fs<34-0.5)v.focusName.push({selector:'.mb-tn',value:`${fs}px "${n.textContent.slice(0,30)}"`});}
+ }
+ // strand labels: none over another, in track order
+ const labels=[...ruler.querySelectorAll('.mb-strand')].map(el=>({el,b:box(el)})).sort((a,b)=>a.b.x-b.b.x);
+ for(let i=1;i<labels.length;i++)if(labels[i-1].b.r>labels[i].b.x+0.5)v.strandLabels.push({selector:'.mb-strand',value:`"${labels[i-1].el.textContent}" ends at ${labels[i-1].b.r.toFixed(0)}, "${labels[i].el.textContent}" starts at ${labels[i].b.x.toFixed(0)}`});
+ // the track: no gap at either end of the ruler window
+ const win=ruler.querySelector('.mb-rwin'),track=ruler.querySelector('.mb-rtrack');
+ if(win&&track){const w=box(win),t=box(track);
+  if(t.x>w.x+1)v.trackEnds.push({selector:'.mb-rtrack',value:`starts at ${t.x.toFixed(0)}, the window at ${w.x.toFixed(0)}`});
+  if(t.r<w.r-1)v.trackEnds.push({selector:'.mb-rtrack',value:`ends at ${t.r.toFixed(0)}, the window at ${w.r.toFixed(0)}`});}
+ const rb=box(ruler);if(rb.x<SAFE.x0-2||rb.r>SAFE.x1+2||rb.b>SAFE.y1+2)v.ruler.push({selector:'.mb-ruler',value:`x ${rb.x.toFixed(0)}-${rb.r.toFixed(0)}, bottom ${rb.b.toFixed(0)}`});
+ return v;
+}
+const RULER_CHECKS=['focusName','strandLabels','trackEnds','ruler'];
+
 // ------------------------------------------------------------------ --dry: the states, offline
 
 function dryRun(){
@@ -174,7 +237,7 @@ function dryRun(){
  const React=require(path.join(root,'node_modules/react')),{renderToStaticMarkup}=require(path.join(root,'node_modules/react-dom/server'));
  const {fresh}=require(path.join(root,'src/lib/session/store.ts'));
  const {MathsTV}=require(path.join(root,'src/maths/MathsTV.tsx'));
- const base0={...[{type:'profile.draft',patch:{id:'calc-live',name:'Calc',type:'other',modules:['maths']}},{type:'profile.save'},{type:'join'}].reduce((s,e)=>reduce(s,e),fresh()),viewer:'tv'};
+ const base0={...[{type:'profile.draft',patch:PROFILE},{type:'profile.save'},{type:'join'}].reduce((s,e)=>reduce(s,e),fresh()),viewer:'tv'};
  const quiet=console.error;console.error=()=>{};// useLayoutEffect's server warning, once per render
  let bad=0;
  try{
@@ -186,8 +249,15 @@ function dryRun(){
     catch(e){why='MathsTV threw: '+e.message;}}
    if(why){bad++;console.log(`FAIL ${t.id} ${screen}: ${why}`);}
   }}
+  if(pathArg)for(const p of pathStates(base0)){
+   let why='';
+   try{const html=renderToStaticMarkup(React.createElement(MathsTV,{s:p.s,busy:false}));
+    if(!html.includes(`data-screen="${p.screen}"`))why='MathsTV drew another screen';else if(!html.includes('data-role="maths-ruler"'))why='no ruler';}
+   catch(e){why='MathsTV threw: '+e.message;}
+   if(why){bad++;console.log(`FAIL path-${pathArg} ${p.screen}-${p.n}: ${why}`);}
+  }
  }finally{console.error=quiet;stopTicker();}
- console.log(`dry: ${topics.length} topics x ${SCREENS.length} screens built and rendered with MathsTV; ${bad} failed`);
+ console.log(`dry: ${topics.length} topics x ${SCREENS.length} screens built and rendered with MathsTV${pathArg?`, and the ${pathArg} path's rulers`:''}; ${bad} failed`);
  process.exitCode=bad?1:0;
 }
 
@@ -198,7 +268,7 @@ else (async()=>{
  const started=new Date().toISOString();
  fs.mkdirSync(out,{recursive:true});
  await asTheTV();
- await post({type:'profile.draft',patch:{id:'calc-live',name:'Calc',type:'other',modules:['maths']}});
+ await post({type:'profile.draft',patch:PROFILE});
  await post({type:'profile.save'});
  const browser=await chromium.launch({headless:true});
  const results=[];
@@ -212,6 +282,9 @@ else (async()=>{
   const base0=await current();
   if(base0.learner?.id!=='calc-live')throw new Error(`The scratch learner is not at the desk (it is ${base0.learner?.id ?? 'no one'}).`);
   if(base0.viewer!=='tv')throw new Error('The session was not read as the TV.');
+  const seated=(base0.profiles??[]).find(p=>p.id==='calc-live');
+  if(pathArg&&seated?.mathPath!==pathArg)throw new Error(`The scratch learner was not seated on the ${pathArg} path (the desk kept mathPath ${JSON.stringify(seated?.mathPath)}).`);
+  if(!pathArg&&seated?.mathPath)throw new Error(`The scratch learner is still on the ${seated.mathPath} path.`);
   // the TV's session is the stream this script serves; nothing else about the page is touched
   let served=base0;
   await tv.route('**/api/session/stream',(r)=>r.fulfill({status:200,headers:{'Content-Type':'text/event-stream','Cache-Control':'no-cache'},body:`data: ${JSON.stringify(served)}\n\n`}));
@@ -228,49 +301,58 @@ else (async()=>{
   // the bench's bar is the dev harness, not the television: hidden, so the stage is the whole 1920 x 1080 window
   await tv.addStyleTag({content:'.bench .bar{display:none!important}'});
   await tv.waitForSelector('.stage',{timeout:20000});
+  /** One screen: serve the state, wait for the TV to draw it, measure it, save the PNG, and record the row. */
+  const shoot=async({topic,screen,shown,state,file,ruler})=>{
+   const marker=`calc-live ${topic} ${shown} ${Date.now()}`;
+   served=reduce(state,{type:'status',text:marker});
+   const row={topic,screen:shown,reached:false,checks:{},screenshot:null};
+   errors.length=0;
+   try{
+    await tv.waitForFunction(({m,screen})=>document.querySelector('.bench .status')?.textContent.includes(m)&&document.querySelector('.maths-tv')?.getAttribute('data-screen')===screen,{m:marker,screen},{timeout:12000});
+    await tv.evaluate(()=>document.fonts.ready);
+    await tv.waitForTimeout(250);
+    row.reached=true;
+   }catch{
+    const at=await tv.evaluate(()=>({screen:document.querySelector('.maths-tv')?.getAttribute('data-screen')??null,status:document.querySelector('.bench .status')?.textContent??null})).catch(()=>({}));
+    row.reason=`could not reach "${shown}" for ${topic}: the TV shows ${at.screen?`the "${at.screen}" screen`:'no Math Buddy screen'}${at.status?` (status "${at.status.slice(0,80)}")`:''}`;
+    console.log('UNREACHED '+row.reason);
+    results.push(row);return;
+   }
+   const v=await tv.evaluate(measure,{LABELS,SAFE});
+   if(v.missing){row.reached=false;row.reason=v.why?`${topic} ${shown}: ${v.why}`:`the "${screen}" screen drew no .maths-tv stage`;console.log('UNREACHED '+row.reason);results.push(row);return;}
+   await tv.screenshot({path:path.join(out,file)});row.screenshot=file;
+   const add=(name,items)=>{row.checks[name]={pass:!items.length,items};};
+   add('errors',errors.map(e=>({selector:'(page)',value:e})));
+   add('overflow',v.overflow);add('rowHeight',v.rowHeight);add('safeZone',v.safe);add('fontSize',v.fontSize);add('labels',v.label);add('backslash',v.backslash);
+   if(ruler){const rv=await tv.evaluate(measureRuler,{SAFE});for(const n of RULER_CHECKS)add(n,rv[n]);}
+   const bad=Object.entries(row.checks).filter(([,c])=>!c.pass);
+   console.log(`${bad.length?'FAIL':'ok  '} ${topic} ${shown}${bad.map(([n,c])=>` | ${n}: ${c.items.length} (${c.items[0].selector} = ${c.items[0].value})`).join('')}`);
+   results.push(row);
+  };
   for(const t of topics){
    const states=statesFor(t,base0);
-   for(const screen of SCREENS){
-    const marker=`calc-live ${t.id} ${screen} ${Date.now()}`;
-    served=reduce(states[screen],{type:'status',text:marker});
-    const row={topic:t.id,screen,reached:false,checks:{},screenshot:null};
-    errors.length=0;
-    try{
-     await tv.waitForFunction(({m,screen})=>document.querySelector('.bench .status')?.textContent.includes(m)&&document.querySelector('.maths-tv')?.getAttribute('data-screen')===screen,{m:marker,screen},{timeout:12000});
-     await tv.evaluate(()=>document.fonts.ready);
-     await tv.waitForTimeout(250);
-     row.reached=true;
-    }catch{
-     const at=await tv.evaluate(()=>({screen:document.querySelector('.maths-tv')?.getAttribute('data-screen')??null,status:document.querySelector('.bench .status')?.textContent??null})).catch(()=>({}));
-     row.reason=`could not reach "${screen}" for ${t.id}: the TV shows ${at.screen?`the "${at.screen}" screen`:'no Math Buddy screen'}${at.status?` (status "${at.status.slice(0,80)}")`:''}`;
-     console.log('UNREACHED '+row.reason);
-     results.push(row);continue;
-    }
-    const v=await tv.evaluate(measure,{LABELS,SAFE});
-    if(v.missing){row.reached=false;row.reason=v.why?`${t.id} ${screen}: ${v.why}`:`the "${screen}" screen drew no .maths-tv stage`;console.log('UNREACHED '+row.reason);results.push(row);continue;}
-    const file=`${t.id}-${screen}.png`;await tv.screenshot({path:path.join(out,file)});row.screenshot=file;
-    const add=(name,items)=>{row.checks[name]={pass:!items.length,items};};
-    add('errors',errors.map(e=>({selector:'(page)',value:e})));
-    add('overflow',v.overflow);add('rowHeight',v.rowHeight);add('safeZone',v.safe);add('fontSize',v.fontSize);add('labels',v.label);add('backslash',v.backslash);
-    const bad=Object.entries(row.checks).filter(([,c])=>!c.pass);
-    console.log(`${bad.length?'FAIL':'ok  '} ${t.id} ${screen}${bad.map(([n,c])=>` | ${n}: ${c.items.length} (${c.items[0].selector} = ${c.items[0].value})`).join('')}`);
-    results.push(row);
-   }
+   for(const screen of SCREENS)await shoot({topic:t.id,screen,shown:screen,state:states[screen],file:`${t.id}-${screen}.png`});
   }
+  // the path's rulers: Topics at every focus, Tonight at four records
+  if(pathArg)for(const p of pathStates(base0))await shoot({topic:`path-${pathArg}`,screen:p.screen,shown:`${p.screen}-${p.n}`,state:p.s,file:`path-${pathArg}-${p.screen}-${p.n}.png`,ruler:true});
   await tv.unroute('**/api/session/stream');
  }finally{await browser.close();stopTicker();}
  // ---- the report
  const failed=results.filter(r=>!r.reached||Object.values(r.checks).some(c=>!c.pass));
- const report={base,started,finished:new Date().toISOString(),strict,labels:LABELS,safeZone:SAFE,screens:SCREENS,topics:topics.map(t=>t.id),
-  totals:{runs:results.length,reached:results.filter(r=>r.reached).length,failed:failed.length},results};
+ const pathRows=results.filter(r=>r.topic.startsWith('path-')),pathFailed=failed.filter(r=>r.topic.startsWith('path-'));
+ const report={base,started,finished:new Date().toISOString(),strict,path:pathArg??'school',labels:LABELS,safeZone:SAFE,screens:SCREENS,topics:topics.map(t=>t.id),
+  totals:{runs:results.length,reached:results.filter(r=>r.reached).length,failed:failed.length},
+  ...(pathArg?{pathTotals:{runs:pathRows.length,reached:pathRows.filter(r=>r.reached).length,failed:pathFailed.length}}:{}),results};
  fs.writeFileSync(path.join(out,'report.json'),JSON.stringify(report,null,2));
- const cell=(r,n)=>!r.reached?'n/a':r.checks[n].pass?'pass':`FAIL ${r.checks[n].items.length}`;
- const names=['errors','overflow','rowHeight','safeZone','fontSize','labels','backslash'];
- const md=['# Calculus 1 on the TV (live)','',`${base} · ${report.started} · ${strict?'strict':'non-strict'} · ${report.totals.reached}/${report.totals.runs} screens reached · ${report.totals.failed} with a violation`,'',
+ const cell=(r,n)=>!r.reached?'n/a':!r.checks[n]?'-':r.checks[n].pass?'pass':`FAIL ${r.checks[n].items.length}`;
+ const names=['errors','overflow','rowHeight','safeZone','fontSize','labels','backslash',...(pathArg?RULER_CHECKS:[])];
+ const md=['# Calculus 1 on the TV (live)','',`${base} · ${report.started} · ${strict?'strict':'non-strict'} · the ${report.path} path · ${report.totals.reached}/${report.totals.runs} screens reached · ${report.totals.failed} with a violation`,'',
+  ...(pathArg?[`The ${pathArg} path's rulers (Topics at every focus, Tonight at 0, 7, 15 and 22 secure): ${report.pathTotals.reached}/${report.pathTotals.runs} reached · ${report.pathTotals.failed} with a violation. Ruler checks: ${RULER_CHECKS.join(', ')} ("-" where a check does not apply).`,'']:[]),
   `| topic | screen | ${names.join(' | ')} | screenshot |`,`|---|---|${names.map(()=>'---').join('|')}|---|`,
   ...results.map(r=>`| ${r.topic} | ${r.screen} | ${names.map(n=>cell(r,n)).join(' | ')} | ${r.screenshot??(r.reason||'')} |`),'','## Violations','',
   ...results.flatMap(r=>[...(!r.reached?[`- ${r.topic} ${r.screen}: ${r.reason}`]:[]),...Object.entries(r.checks).flatMap(([n,c])=>c.items.slice(0,5).map(i=>`- ${r.topic} ${r.screen} · ${n} · \`${i.selector}\` · ${i.value}`))])];
  fs.writeFileSync(path.join(out,'report.md'),md.join('\n')+'\n');
+ if(pathArg)console.log(`\npath ${pathArg}: ${report.pathTotals.reached}/${report.pathTotals.runs} ruler screens reached, ${report.pathTotals.failed} with a violation.`);
  console.log(`\n${report.totals.reached}/${report.totals.runs} screens reached, ${report.totals.failed} with a violation. Report: ${path.join(out,'report.md')}`);
  if(strict&&failed.length)process.exitCode=1;
 })().catch(e=>{stopTicker();console.error(e.message||e);process.exitCode=1;});

@@ -175,7 +175,17 @@ line split (`workingLines`) and the slip names are one rule each, in `rules/math
   (`learnerPath` in `desk/src/lib/library/paths.ts`): the school path draws each topic's school year and the SCHOOL
   tick; a course path (Calculus 1) has no school year, so it draws no year word, no SCHOOL tick and no gap line
   (`expectedOn` is null). Every screen names a set by its path's name for it (`topicName`), never a spelled-out id.
-  `maths-ruler`.
+  Where each box, tick, strand label and needle goes is `rulerModel` in `desk/src/tv/rulerRows.ts`; the three-topic
+  school path is drawn exactly as before. A path too long for one box per topic on the big ruler (under 288 px a
+  slot: Calculus 1's 22 topics in six strands) **pans under the lamp** like the paper: the track is wider than the
+  stage and slides (the paper's .76 s pan) so the focused topic's centre sits under the lamp, clamped so neither end
+  ever shows a gap; the focused topic takes a 640 px slot so its whole name is shown in at most three lines, fitted
+  from 44 down to 34 px (`fitName`); every other name is 34 px, three lines at most; an edge with more to show fades
+  and carries a chevron; strand labels sit at their strand's start and clamp to its width with an ellipsis (the
+  focused strand's full name is always in the lede's kicker). On Tonight a path of more than eight topics is drawn
+  as a **strip** (`stripModel`): one bar per strand, as wide as its share of the topics and never under 96 px, inked
+  by its share of latched-secure topics, the learner's needle at the frontier (the first topic not secure whose
+  prerequisites are); no topic names, no year. `maths-ruler`; the chevrons are `maths-more`.
 - **The paper** - cream, 48 px squares, a sky margin rule at 96 px, the sheet title in Fraunces and the learner's
   name in the blue hand; it pans so the item in hand is under the lamp. A line too long for the paper - a long line
   of working, a long printed question - is fitted to it (`fitRow` in `desk/src/tv/mathsRows.ts`): it shrinks in
@@ -201,8 +211,8 @@ line split (`workingLines`) and the slip names are one rule each, in `rules/math
 
 | screen | composition |
 |---|---|
-| Tonight | top bar; the sheet on the desk + kicker, title, detail, OK Open (or the first-evening title and blank sheet); two doors; the caption; the ruler |
-| Topics | "Pick a *topic*"; the strand and blurb (or Preparing / Not written); the ruler, larger, each topic a stop |
+| Tonight | top bar; the sheet on the desk + kicker, title, detail, OK Open (or the first-evening title and blank sheet); two doors; the caption; the ruler (a path of more than eight topics: the strand strip) |
+| Topics | "Pick a *topic*"; the strand and blurb (or Preparing / Not written); the ruler, larger, each topic on the learner's path a stop (a long path pans under the lamp, chevrons at the edges) |
 | Practice | the paper with the six questions in print; the side: "Work these on *paper*" and the taped card |
 | Sheet | the tally; the marked set on the paper, each item folded to its question and the line the pen is on, the focused one lit with OK Open; the side: kind, slip name, taped card; pills Six more, Put the sheet away |
 | Walk | the same paper with one item open: every line of working, ticks, the mark, later lines faded; the side card; Back to the sheet on the last item |

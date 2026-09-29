@@ -448,6 +448,28 @@
 .maths-tv .mb-topic[data-focused="true"] .mb-ty { color: var(--mb-amber); }
 .maths-tv .mb-topic[data-busy="true"] { animation: mb-pulse 1.8s ease-in-out infinite; }
 @keyframes mb-pulse { 50% { box-shadow: 0 0 0 4px rgba(255, 197, 107, .95), 0 0 80px rgba(255, 177, 61, .8); } }
+/* a path too long for one box per topic (tv/rulerRows.ts rulerModel): on Topics a track wider than the stage pans
+   under the lamp like the paper - the window clips it to the ruler's 1728 px (the safe zone), an edge with more to
+   show fades and carries a chevron, the focused topic takes a wide slot so its whole name fits (useNameFit) */
+.maths-tv .mb-rwin { position: absolute; left: 0; right: 0; top: -40px; bottom: -24px; overflow: hidden; }
+.maths-tv .mb-rwin[data-l="true"] { -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 150px); mask-image: linear-gradient(90deg, transparent 0, #000 150px); }
+.maths-tv .mb-rwin[data-r="true"] { -webkit-mask-image: linear-gradient(90deg, #000 calc(100% - 150px), transparent 100%); mask-image: linear-gradient(90deg, #000 calc(100% - 150px), transparent 100%); }
+.maths-tv .mb-rwin[data-l="true"][data-r="true"] { -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 150px, #000 calc(100% - 150px), transparent 100%); mask-image: linear-gradient(90deg, transparent 0, #000 150px, #000 calc(100% - 150px), transparent 100%); }
+.maths-tv .mb-rtrack { position: absolute; left: 0; top: 40px; height: 400px; transition: transform .76s var(--mb-ease); }
+.maths-tv .mb-ruler[data-pan="true"] .mb-topic { transition: left .76s var(--mb-ease), width .76s var(--mb-ease), opacity .3s, background .3s, box-shadow .3s, transform .3s var(--mb-ease); }
+.maths-tv .mb-ruler[data-pan="true"] .mb-tn { font-size: 34px; line-height: 1.08; -webkit-line-clamp: 3; }
+.maths-tv .mb-ruler[data-pan="true"] .mb-topic[data-focused="true"] .mb-tn { font-size: 44px; }
+.maths-tv .mb-ruler[data-pan="true"] .mb-strand, .maths-tv .mb-seg .mb-strand { overflow: hidden; text-overflow: ellipsis; }
+.maths-tv .mb-rchev { position: absolute; top: 176px; width: 64px; height: 64px; display: grid; place-items: center; border-radius: 50%; background: rgba(10, 14, 30, .72); color: var(--mb-amber); z-index: 6; pointer-events: none; }
+.maths-tv .mb-rchev.l { left: 0; }
+.maths-tv .mb-rchev.r { right: 0; }
+.maths-tv .mb-rchev svg { width: 40px; height: 30px; }
+/* Tonight for a long path (tv/rulerRows.ts stripModel): a bar per strand, inked by its share of secure topics */
+.maths-tv .mb-seg { position: absolute; top: 26px; height: 196px; }
+.maths-tv .mb-seg .fill { background: linear-gradient(180deg, #3B4668, #1E2640); box-shadow: inset 0 1px 0 rgba(255, 255, 255, .25); }
+.maths-tv .mb-seg[data-s="unseen"] .mb-groove { background: transparent; box-shadow: none; border: 2px dashed rgba(58, 36, 14, .4); }
+.maths-tv .mb-seg .mb-strand { left: 12px; top: 104px; color: rgba(245, 238, 223, .72); }
+.maths-tv .mb-marker[data-end="true"] .mc { transform: translateX(-100%) translateX(14px); }
 .maths-tv .mb-lede { position: absolute; left: 96px; top: 300px; width: 1500px; min-height: 180px; }
 .maths-tv .mb-lede .mb-kick { margin-bottom: 18px; }
 .maths-tv .mb-lede p { margin: 0; font-size: 38px; line-height: 1.3; font-weight: 500; color: rgba(245, 238, 223, .94); text-wrap: balance; max-width: 1400px; animation: mb-rise .32s var(--mb-ease) both; }

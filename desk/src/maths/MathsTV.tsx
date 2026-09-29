@@ -15,6 +15,7 @@ import { expectedOn, learnerPath, topicIn, topicsOf, type PathTopic } from "@/li
 import { LESSONS } from "@/lib/library/lessons.data";
 import { lessonStates } from "@/lib/library/watched";
 import { slip as slipById } from "@/lib/rules/maths";
+import { PAD, STRIP_AFTER, fitName, flagX, needleX, rulerModel, stripModel } from "@/tv/rulerRows";
 import { calendarWeeks, continueCard, explainLine, fitRow, humanTopic, markLine, paperSquare, pathSecure, rowSquares, secureTitle, stateWord, topicName, topicStates, workWhat, SQUARE, type Continue, type JobLine } from "@/tv/mathsRows";
 import { running, practiceFailed, stopAt, tonightStops, calendarStops, unitStops, walkStops, HINT_STOPS, TONIGHT_MENU, type TonightStop } from "@/tv/keys";
 import { sheetTiles, sheetStops, tileOf } from "@/tv/sheetRows";
@@ -251,47 +252,111 @@ const SYS_WORD: Record<SchoolSystem, (y: NonNullable<PathTopic["year"]>) => stri
  * The path as a boxwood ruler: secure topics inked solid, one in progress hatched as far as the estimate, an
  * unseen one a dashed groove, slips as pencil scratches. The learner's needle stands at the frontier; the
  * SCHOOL tick stands where the learner's school system would normally have them, and only when the profile has
- * an age and a school type to read it from - no invented comparison. On Topics the topics are the stops.
+ * an age and a school type to read it from - no invented comparison. On Topics the topics are the stops. Where
+ * everything goes is tv/rulerRows.ts `rulerModel`: one box per topic across the ruler, or - on Topics, for a path
+ * too long for that (Calculus 1) - a track wider than the stage that pans under the lamp like the paper, the
+ * focused topic wide enough for its whole name, strand labels clamped to their strands, a chevron at each edge
+ * that has more to show.
  */
 function Ruler({ s, big, focus, busy }: { s: Session; big?: boolean; focus?: number; busy?: boolean }) {
   const me = s.profiles.find((p) => p.id === s.learner?.id);
   const sys = systemOf(me);
   const skills = s.skills ?? {};
   const path = learnerPath(s), topics = topicsOf(path);
-  const N = topics.length, PAD = 26, W = 1728, span = (W - PAD * 2) / N;
+  const st = topicStates(s);
+  const m = rulerModel(topics, st, focus, big);
+  const N = topics.length;
   const has = topics.some((t) => skills[t.id]);
   let frontier = N - 1;
   for (let i = 0; i < N; i++) { if (!skills[topics[i].id]?.secure) { frontier = i; break; } }
   const fsk = skills[topics[frontier].id];
-  const mx = !has ? PAD : PAD + (frontier + (fsk ? (fsk.secure ? 1 : Math.max(0, Math.min(1, fsk.estimate))) : 0)) * span;
+  const mx = !has ? PAD : needleX(m, frontier, fsk ? (fsk.secure ? 1 : Math.max(0, Math.min(1, fsk.estimate))) : 0);
   const age = me && me.type !== "other" ? me.age : undefined;
   // a course path has no school year to be behind or ahead of: no SCHOOL tick, no gap line (expectedOn is null)
   const exp = age === undefined ? null : expectedOn(path, sys, age);
-  const fx = exp === null ? null : PAD + Math.max(0, Math.min(N, exp)) * span;
-  const st = big ? topicStates(s) : null;
-  const strands = topics.map((t, i) => (i === 0 || topics[i - 1].strand !== t.strand ? t.strand : null));
+  const fx = exp === null ? null : flagX(m, exp);
+  const clampStrands = m.strands.length > 1;
+  const win = useNameFit(m.pan, `${path}|${focus}`);
+  const body = (<>
+    <div className="mb-rbody" />
+    <div className="mb-major start" style={{ left: PAD - 2 }} />
+    {m.topics.map((t, i) => i > 0 && <div key={"m" + t.id} className="mb-major" style={{ left: t.sx - 1.5 }} />)}
+    <div className="mb-major" style={{ left: m.end - 1.5 }} />
+    {m.strands.map((g) => <div key={"s" + g.name} className="mb-strand" style={clampStrands ? { left: g.labelX, maxWidth: g.labelW } : { left: g.labelX }}>{g.label}</div>)}
+    {topics.map((t, i) => {
+      const sk = skills[t.id], box = m.topics[i];
+      const state = sk?.secure ? "secure" : sk ? "prog" : "unseen";
+      const slips = (sk?.slips ?? []).slice(0, 4);
+      return (
+        <div key={t.id} className="mb-topic" data-s={state} data-focused={focus === i || undefined} data-busy={(busy && focus === i) || undefined} style={{ left: box.x, width: box.w }}>
+          <div className="mb-groove">{state !== "unseen" && <div className="fill" style={state === "prog" ? { width: `${Math.max(8, Math.min(100, (sk?.estimate ?? 0) * 100))}%` } : undefined} />}</div>
+          {slips.length > 0 && <div className="mb-slips" aria-label={`${slips.length} slips seen`}>{slips.map((x) => <span key={x}>{SLIP_MARK}</span>)}</div>}
+          {/* on a panning ruler the name is laid out at its box's final width at once, so the fit never measures a box mid-slide */}
+          <div className="mb-tl" style={m.pan ? { right: "auto", width: box.w - 24 } : undefined}><div className="mb-tn">{t.name}</div>{t.year && <div className="mb-ty">{SYS_WORD[sys](t.year)}</div>}{big && <div className="mb-st">{stateWord(s, t.id, st)}</div>}</div>
+        </div>
+      );
+    })}
+    {fx !== null && <div className="mb-gapline" style={{ left: Math.min(mx, fx), width: Math.abs(fx - mx) }} />}
+    {fx !== null && <div className="mb-flag" data-end={exp !== null && exp >= N || undefined} data-start={exp !== null && exp <= 0 || undefined} style={{ left: fx }}><div className="nd" /><div className="mc">School</div></div>}
+    <div className="mb-marker" data-start={!has || undefined} style={{ left: mx }}><div className="halo" /><div className="nd" /><div className="mc">{s.learner?.name}</div></div>
+  </>);
+  if (!m.pan) return <div className={`mb-ruler${big ? " big" : ""}`} data-role="maths-ruler" data-active={focus !== undefined || undefined}>{body}</div>;
   return (
-    <div className={`mb-ruler${big ? " big" : ""}`} data-role="maths-ruler" data-active={focus !== undefined || undefined}>
+    <div className="mb-ruler big" data-role="maths-ruler" data-active={focus !== undefined || undefined} data-pan="true">
+      <div className="mb-rwin" ref={win} data-l={m.more.l || undefined} data-r={m.more.r || undefined}>
+        <div className="mb-rtrack" style={{ width: m.trackWidth, transform: `translateX(${-m.offset}px)` }}>{body}</div>
+      </div>
+      {m.more.l && <div className="mb-rchev l" data-role="maths-more"><Chev dir="l" on /></div>}
+      {m.more.r && <div className="mb-rchev r" data-role="maths-more"><Chev dir="r" on /></div>}
+    </div>
+  );
+}
+
+/**
+ * On a panning ruler, the focused topic's name is shown whole: the largest of 44 down to 34 px (tv/rulerRows.ts
+ * `fitName`) at which it is in at most three lines with no word clipped, measured after layout and again when the
+ * faces arrive. A ruler that does not pan keeps its names as the stylesheet sets them.
+ */
+function useNameFit(pan: boolean, dep: unknown) {
+  const ref = useRef<HTMLDivElement>(null);
+  useLayoutEffect(() => {
+    const el = ref.current; if (!pan || !el) return;
+    const fit = () => {
+      el.querySelectorAll<HTMLElement>(".mb-tn").forEach((x) => x.style.removeProperty("font-size"));
+      const tn = el.querySelector<HTMLElement>('.mb-topic[data-focused="true"] .mb-tn'); if (!tn) return;
+      // a clamped line is a whole line more than shown; a glyph's ink past its line box is a pixel or two, not a line
+      const px = fitName((size) => { tn.style.fontSize = `${size}px`; return tn.scrollHeight <= tn.clientHeight + size * 0.4 && tn.scrollWidth <= tn.clientWidth + 1; });
+      tn.style.fontSize = `${px}px`;
+    };
+    fit();
+    let live = true;
+    document.fonts?.ready.then(() => { if (live) fit(); });
+    return () => { live = false; };
+  }, [pan, dep]);
+  return ref;
+}
+
+/**
+ * Tonight's ruler for a long path (more than STRIP_AFTER topics): one bar per strand, as wide as its share of the
+ * topics, filled by its share of latched-secure topics (`topicStates`), the learner's needle at the frontier - the
+ * first topic not secure whose prerequisites are (tv/rulerRows.ts `stripModel`). No topic names and no school year:
+ * the path's topics are on Topics.
+ */
+function Strip({ s }: { s: Session }) {
+  const m = stripModel(topicsOf(learnerPath(s)), topicStates(s));
+  return (
+    <div className="mb-ruler strip" data-role="maths-ruler">
       <div className="mb-rbody" />
       <div className="mb-major start" style={{ left: PAD - 2 }} />
-      {topics.map((t, i) => i > 0 && <div key={"m" + t.id} className="mb-major" style={{ left: PAD + i * span - 1.5 }} />)}
-      <div className="mb-major" style={{ left: PAD + N * span - 1.5 }} />
-      {strands.map((x, i) => x && <div key={"s" + i} className="mb-strand" style={{ left: PAD + i * span + 20 }}>{x}</div>)}
-      {topics.map((t, i) => {
-        const sk = skills[t.id];
-        const state = sk?.secure ? "secure" : sk ? "prog" : "unseen";
-        const slips = (sk?.slips ?? []).slice(0, 4);
-        return (
-          <div key={t.id} className="mb-topic" data-s={state} data-focused={focus === i || undefined} data-busy={(busy && focus === i) || undefined} style={{ left: PAD + i * span + 6, width: span - 12 }}>
-            <div className="mb-groove">{state !== "unseen" && <div className="fill" style={state === "prog" ? { width: `${Math.max(8, Math.min(100, (sk?.estimate ?? 0) * 100))}%` } : undefined} />}</div>
-            {slips.length > 0 && <div className="mb-slips" aria-label={`${slips.length} slips seen`}>{slips.map((x) => <span key={x}>{SLIP_MARK}</span>)}</div>}
-            <div className="mb-tl"><div className="mb-tn">{t.name}</div>{t.year && <div className="mb-ty">{SYS_WORD[sys](t.year)}</div>}{st && <div className="mb-st">{stateWord(s, t.id, st)}</div>}</div>
-          </div>
-        );
-      })}
-      {fx !== null && <div className="mb-gapline" style={{ left: Math.min(mx, fx), width: Math.abs(fx - mx) }} />}
-      {fx !== null && <div className="mb-flag" data-end={exp !== null && exp >= N || undefined} data-start={exp !== null && exp <= 0 || undefined} style={{ left: fx }}><div className="nd" /><div className="mc">School</div></div>}
-      <div className="mb-marker" data-start={!has || undefined} style={{ left: mx }}><div className="halo" /><div className="nd" /><div className="mc">{s.learner?.name}</div></div>
+      {m.segments.map((g, i) => i > 0 && <div key={"m" + g.name} className="mb-major" style={{ left: g.x - 1.5 }} />)}
+      <div className="mb-major" style={{ left: m.x0 + m.width - 1.5 }} />
+      {m.segments.map((g) => (
+        <div key={g.name} className="mb-seg" data-s={g.secure === g.count ? "secure" : g.secure ? "prog" : "unseen"} style={{ left: g.x + 6, width: g.w - 12 }}>
+          <div className="mb-groove">{g.secure > 0 && <div className="fill" style={{ width: `${g.share * 100}%` }} />}</div>
+          <div className="mb-strand" style={{ maxWidth: g.labelW }}>{g.label}</div>
+        </div>
+      ))}
+      <div className="mb-marker" data-start={m.needle.at === "start" || undefined} data-end={m.needle.at === "end" || undefined} style={{ left: m.needle.x }}><div className="halo" /><div className="nd" /><div className="mc">{s.learner?.name}</div></div>
     </div>
   );
 }
@@ -437,7 +502,7 @@ export function Tonight({ s, focus }: { s: Session; focus: number }) {
       ))}
     </div>
     <Caption text={cont && at === "continue" ? cont.cap : doorCaption(s, Math.max(0, door))} />
-    <Ruler s={s} />
+    {topics.length > STRIP_AFTER ? <Strip s={s} /> : <Ruler s={s} />}
   </>);
 }
 
