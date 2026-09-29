@@ -11,12 +11,12 @@
  */
 import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from "react";
 import type { Page, PracticeItem, SchoolSystem, Session } from "@/lib/session/store";
-import { SYLLABUS, expectedIndex, topic as topicById, type Topic } from "@/lib/library/syllabus";
+import { expectedOn, learnerPath, topicIn, topicsOf, type PathTopic } from "@/lib/library/paths";
 import { LESSONS } from "@/lib/library/lessons.data";
 import { lessonStates } from "@/lib/library/watched";
 import { slip as slipById } from "@/lib/rules/maths";
-import { calendarWeeks, continueCard, explainLine, fitRow, markLine, paperSquare, rowSquares, secureTitle, stateWord, topicStates, workWhat, SQUARE, type Continue, type JobLine } from "@/tv/mathsRows";
-import { running, practiceFailed, stopAt, tonightStops, calendarStops, unitStops, walkStops, HINT_STOPS, TOPIC_STOPS, TONIGHT_MENU, type TonightStop } from "@/tv/keys";
+import { calendarWeeks, continueCard, explainLine, fitRow, humanTopic, markLine, paperSquare, pathSecure, rowSquares, secureTitle, stateWord, topicName, topicStates, workWhat, SQUARE, type Continue, type JobLine } from "@/tv/mathsRows";
+import { running, practiceFailed, stopAt, tonightStops, calendarStops, unitStops, walkStops, HINT_STOPS, TONIGHT_MENU, type TonightStop } from "@/tv/keys";
 import { sheetTiles, sheetStops, tileOf } from "@/tv/sheetRows";
 import { systemOf } from "@/tv/profileRows";
 import { fmt } from "@/tv/useSession";
@@ -242,8 +242,9 @@ function PrintRow({ text, tick, wrap }: { text: string; tick?: boolean; wrap?: b
 
 // ---------------------------------------------------------------- the ruler: the topic path
 
-const SYS_WORD: Record<SchoolSystem, (t: Topic) => string> = {
-  us: (t) => `Grade ${t.year.us}`, uk: (t) => `Year ${t.year.uk}`, cz: (t) => `${t.year.cz}. ročník`, de: (t) => `Klasse ${t.year.de}`,
+/** A topic's school year as the learner's school system says it. Handed a year, never a topic: a course topic has none. */
+const SYS_WORD: Record<SchoolSystem, (y: NonNullable<PathTopic["year"]>) => string> = {
+  us: (y) => `Grade ${y.us}`, uk: (y) => `Year ${y.uk}`, cz: (y) => `${y.cz}. ročník`, de: (y) => `Klasse ${y.de}`,
 };
 
 /**
@@ -256,25 +257,27 @@ function Ruler({ s, big, focus, busy }: { s: Session; big?: boolean; focus?: num
   const me = s.profiles.find((p) => p.id === s.learner?.id);
   const sys = systemOf(me);
   const skills = s.skills ?? {};
-  const N = SYLLABUS.length, PAD = 26, W = 1728, span = (W - PAD * 2) / N;
-  const has = SYLLABUS.some((t) => skills[t.id]);
+  const path = learnerPath(s), topics = topicsOf(path);
+  const N = topics.length, PAD = 26, W = 1728, span = (W - PAD * 2) / N;
+  const has = topics.some((t) => skills[t.id]);
   let frontier = N - 1;
-  for (let i = 0; i < N; i++) { if (!skills[SYLLABUS[i].id]?.secure) { frontier = i; break; } }
-  const fsk = skills[SYLLABUS[frontier].id];
+  for (let i = 0; i < N; i++) { if (!skills[topics[i].id]?.secure) { frontier = i; break; } }
+  const fsk = skills[topics[frontier].id];
   const mx = !has ? PAD : PAD + (frontier + (fsk ? (fsk.secure ? 1 : Math.max(0, Math.min(1, fsk.estimate))) : 0)) * span;
   const age = me && me.type !== "other" ? me.age : undefined;
-  const exp = age === undefined ? null : expectedIndex(sys, age);
+  // a course path has no school year to be behind or ahead of: no SCHOOL tick, no gap line (expectedOn is null)
+  const exp = age === undefined ? null : expectedOn(path, sys, age);
   const fx = exp === null ? null : PAD + Math.max(0, Math.min(N, exp)) * span;
   const st = big ? topicStates(s) : null;
-  const strands = SYLLABUS.map((t, i) => (i === 0 || SYLLABUS[i - 1].strand !== t.strand ? t.strand : null));
+  const strands = topics.map((t, i) => (i === 0 || topics[i - 1].strand !== t.strand ? t.strand : null));
   return (
     <div className={`mb-ruler${big ? " big" : ""}`} data-role="maths-ruler" data-active={focus !== undefined || undefined}>
       <div className="mb-rbody" />
       <div className="mb-major start" style={{ left: PAD - 2 }} />
-      {SYLLABUS.map((t, i) => i > 0 && <div key={"m" + t.id} className="mb-major" style={{ left: PAD + i * span - 1.5 }} />)}
+      {topics.map((t, i) => i > 0 && <div key={"m" + t.id} className="mb-major" style={{ left: PAD + i * span - 1.5 }} />)}
       <div className="mb-major" style={{ left: PAD + N * span - 1.5 }} />
       {strands.map((x, i) => x && <div key={"s" + i} className="mb-strand" style={{ left: PAD + i * span + 20 }}>{x}</div>)}
-      {SYLLABUS.map((t, i) => {
+      {topics.map((t, i) => {
         const sk = skills[t.id];
         const state = sk?.secure ? "secure" : sk ? "prog" : "unseen";
         const slips = (sk?.slips ?? []).slice(0, 4);
@@ -282,7 +285,7 @@ function Ruler({ s, big, focus, busy }: { s: Session; big?: boolean; focus?: num
           <div key={t.id} className="mb-topic" data-s={state} data-focused={focus === i || undefined} data-busy={(busy && focus === i) || undefined} style={{ left: PAD + i * span + 6, width: span - 12 }}>
             <div className="mb-groove">{state !== "unseen" && <div className="fill" style={state === "prog" ? { width: `${Math.max(8, Math.min(100, (sk?.estimate ?? 0) * 100))}%` } : undefined} />}</div>
             {slips.length > 0 && <div className="mb-slips" aria-label={`${slips.length} slips seen`}>{slips.map((x) => <span key={x}>{SLIP_MARK}</span>)}</div>}
-            <div className="mb-tl"><div className="mb-tn">{t.name}</div><div className="mb-ty">{SYS_WORD[sys](t)}</div>{st && <div className="mb-st">{stateWord(s, t.id, st)}</div>}</div>
+            <div className="mb-tl"><div className="mb-tn">{t.name}</div>{t.year && <div className="mb-ty">{SYS_WORD[sys](t.year)}</div>}{st && <div className="mb-st">{stateWord(s, t.id, st)}</div>}</div>
           </div>
         );
       })}
@@ -357,7 +360,7 @@ function Hero({ s, cont, focused }: { s: Session; cont: Continue; focused: boole
   let sheet: ReactNode, detail: ReactNode = cont.d;
   const head = (ex: string) => <div className="mb-shead"><span className="ex">{ex}</span><span className="who">{s.learner?.name}</span></div>;
   if (cont.go === "sheet" && p) {
-    const name = topicById(p.topic)?.name ?? humanTopic(p.topic);
+    const name = topicName(p.topic);
     const first = p.items.findIndex((it) => it.verdict !== "right");
     sheet = (
       <div className="mb-sheet top"><div className="mb-tab" style={{ left: 40 }}>{cont.k}</div><div className="margin" />{head(name)}
@@ -375,7 +378,7 @@ function Hero({ s, cont, focused }: { s: Session; cont: Continue; focused: boole
     detail = <span className="tally" aria-label={cont.d}>{p.items.map((it) => <span key={it.n}>{it.verdict === "right" ? TALLY_TICK : it.verdict === "wrong" ? TALLY_RING : TALLY_ASK}</span>)}</span>;
   } else if (cont.go === "practice" && p) {
     sheet = (
-      <div className="mb-sheet top"><div className="mb-tab" style={{ left: 40 }}>{cont.k}</div><div className="margin" />{head(topicById(p.topic)?.name ?? humanTopic(p.topic))}
+      <div className="mb-sheet top"><div className="mb-tab" style={{ left: 40 }}>{cont.k}</div><div className="margin" />{head(topicName(p.topic))}
         <div className="mb-rows">{p.items.slice(0, 8).map((it) => <div key={it.n} className="mb-srow"><span className="n">{it.n}</span><span className="qx"><MathText text={it.question} voice="print" /></span></div>)}</div>
       </div>
     );
@@ -418,10 +421,10 @@ function BlankHero({ s }: { s: Session }) {
 export function Tonight({ s, focus }: { s: Session; focus: number }) {
   const cont = continueCard(s);
   const at = stopAt(tonightStops(s), focus);
-  // the topics on the path that are secure (a record for a topic off the path is not one of "N of M")
-  const secure = SYLLABUS.filter((t) => s.skills?.[t.id]?.secure);
+  // the topics on the learner's path that are secure (a record for a topic off the path is not one of "N of M")
+  const { topics, secure, first } = pathSecure(s);
   const door = at === "continue" ? -1 : at === "teach" ? 1 : 0;
-  const title = secureTitle(secure.length, SYLLABUS.length);
+  const title = secureTitle(secure.length, topics.length, first);
   return (<>
     <Top s={s} right={<Chips s={s} menu={TONIGHT_MENU} />} />
     {cont ? <Hero s={s} cont={cont} focused={at === "continue"} /> : <><h1 className="mb-title" data-role="maths-title"><Amber text={title} /></h1><BlankHero s={s} /></>}
@@ -448,11 +451,13 @@ const PREP = [
 ];
 export function Topics({ s, focus, busy: asked }: { s: Session; focus: number; busy: boolean }) {
   const st = topicStates(s);
+  // the stops are the learner's path (the D-pad's own list is tv/keys.ts TOPIC_STOPS)
+  const stops = topicsOf(learnerPath(s));
   const busy = asked || running(s, "practice");
-  const at = (busy && s.topic ? TOPIC_STOPS.find((t) => t.id === s.topic) : undefined) ?? stopAt(TOPIC_STOPS, focus)!;
-  const ix = TOPIC_STOPS.indexOf(at);
+  const at = (busy && s.topic ? stops.find((t) => t.id === s.topic) : undefined) ?? stopAt(stops, focus)!;
+  const ix = stops.indexOf(at);
   const failed = busy ? null : practiceFailed(s, at.id);
-  const before = at.prereq.map((p) => topicById(p)).find((t) => t && st[t.id] !== "secure");
+  const before = at.prereq.map((p) => topicIn(p)).find((t) => t && st[t.id] !== "secure");
   const [step, setStep] = useState(0);
   useEffect(() => { if (!busy) { setStep(0); return; } const t = setInterval(() => setStep((x) => Math.min(PREP.length - 1, x + 1)), 2600); return () => clearInterval(t); }, [busy]);
   return (<>
@@ -469,8 +474,6 @@ export function Topics({ s, focus, busy: asked }: { s: Session; focus: number; b
 
 // ---------------------------------------------------------------- M2 Practice: six questions on the paper
 
-function humanTopic(id: string): string { const w = id.replace(/[-_]+/g, " ").trim(); return w.charAt(0).toUpperCase() + w.slice(1); }
-
 /**
  * The room the Practice sheet has, in stage px: from its top (design/maths-lamplight.css .mb-practice, 150) to the
  * safe line (1026), less 12 px for the paper's tilt. All six questions are on it at once - there is nothing to pan to.
@@ -481,7 +484,7 @@ export function PracticeScreen({ s }: { s: Session }) {
   const p = s.practice;
   const pan = usePaper(p ? `${p.topic}|${p.items.map((it) => it.question).join("\n")}` : "", PRACTICE_ROOM);
   if (!p) return <><Top s={s} /><h1 className="mb-title" data-role="maths-title"><Amber text="No set on the desk" /></h1></>;
-  const name = topicById(p.topic)?.name ?? humanTopic(p.topic);
+  const name = topicName(p.topic);
   const job = markLine(s);
   return (<>
     <Top s={s} crumb={name} />
@@ -587,7 +590,7 @@ export function Sheet({ s, focus }: { s: Session; focus: number }) {
   const at = p?.marked ? stopAt(sheetStops(p), focus) : undefined, ix = tileOf(at);
   const pan = usePaper(`${ix}|${p?.items.length}`);
   if (!p || !p.marked) return <><Top s={s} /><h1 className="mb-title" data-role="maths-title"><Amber text="No marked set on the desk" /></h1></>;
-  const name = topicById(p.topic)?.name ?? humanTopic(p.topic);
+  const name = topicName(p.topic);
   const right = tiles.filter((x) => x.verdict === "right").length, look = tiles.length - right;
   const tile = ix === null ? undefined : tiles[ix];
   const curIx = ix ?? Math.min(tiles.length - 1, Math.max(0, p.items.findIndex((x) => x.verdict !== "right")));
@@ -628,7 +631,7 @@ export function Walk({ s, focus }: { s: Session; focus: number }) {
   const pan = usePaper(`${s.walkIx}|${p?.items.length}`);
   const it = p?.items[s.walkIx];
   if (!p || !it) return <><Top s={s} /><h1 className="mb-title" data-role="maths-title"><Amber text="Nothing to walk" /></h1></>;
-  const name = topicById(p.topic)?.name ?? humanTopic(p.topic);
+  const name = topicName(p.topic);
   const last = s.walkIx === p.items.length - 1;
   const sl = it.slip ? slipById(it.slip) : undefined;
   return (<>

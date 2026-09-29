@@ -171,7 +171,11 @@ line split (`workingLines`) and the slip names are one rule each, in `rules/math
   frontier; SCHOOL on a sky dashed tick where the school system would have them, only when the profile has an age
   and a school type. On Topics each topic carries a word - Secure, In progress, Not started - and "Secure" comes
   from the same latched record as the inked groove (`topicStates` in `desk/src/tv/mathsRows.ts`), never from a count
-  of tonight's right answers, so a hatched groove never says Secure. `maths-ruler`.
+  of tonight's right answers, so a hatched groove never says Secure. The ruler is the learner's own path
+  (`learnerPath` in `desk/src/lib/library/paths.ts`): the school path draws each topic's school year and the SCHOOL
+  tick; a course path (Calculus 1) has no school year, so it draws no year word, no SCHOOL tick and no gap line
+  (`expectedOn` is null). Every screen names a set by its path's name for it (`topicName`), never a spelled-out id.
+  `maths-ruler`.
 - **The paper** - cream, 48 px squares, a sky margin rule at 96 px, the sheet title in Fraunces and the learner's
   name in the blue hand; it pans so the item in hand is under the lamp. A line too long for the paper - a long line
   of working, a long printed question - is fitted to it (`fitRow` in `desk/src/tv/mathsRows.ts`): it shrinks in

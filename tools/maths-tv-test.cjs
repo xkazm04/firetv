@@ -335,3 +335,78 @@ test('count 1: the Practice card says how many questions to work, not a literal 
  assert.doesNotMatch(tv,/Work all six/,'no literal count in the card');
  assert.match(tv,/Work \{workWhat\(p\.items\.length\)\} on paper, then snap the whole sheet with the phone/,'the card says the set\'s own count and still asks for the phone in its own copy (the hand-off test reads it there)');
 });
+
+// ---------------------------------------------------------------- 8. the TV reads the learner's path (lib/library/paths.ts)
+
+const CALC=[{id:'ada',name:'Ada',type:'other',modules:['maths'],mathPath:'calc1'}],SCHOOL=[{id:'ben',name:'Ben',type:'high-school',modules:['maths']}];
+/** A session on a path: the learner at the desk and their skills. */
+const onPath=(profiles,skills,topic=null)=>({skills,topic,practice:null,profiles,learner:{id:profiles[0].id,name:profiles[0].name}});
+const calcIds=()=>require(path.join(root,'src/lib/library/paths.ts')).topicsOf('calc1').map(t=>t.id);
+
+test('path 1: on the calc1 path the states are the Calculus topics - a latched calc1-functions opens the topics whose only prereq it is',()=>{
+ const {topicStates,stateWord}=R();
+ const s=onPath(CALC,{'calc1-functions':rec('calc1-functions',0.9,true)});
+ const st=topicStates(s);
+ assert.deepEqual(Object.keys(st),calcIds(),'one state per topic on the learner\'s path, in path order');
+ assert.equal(st['calc1-functions'],'secure');
+ for(const id of ['calc1-trig','calc1-exp-log','calc1-limit-idea'])assert.equal(st[id],'next',`${id} needs only calc1-functions`);
+ assert.equal(st['calc1-limit-laws'],'later');assert.equal(st['calc1-trig-derivatives'],'later','two prereqs, neither secure');
+ assert.equal(stateWord(s,'calc1-functions',st),'Secure');
+ assert.equal(topicStates(onPath(CALC,{},'calc1-chain'))['calc1-chain'],'here','the topic in hand');
+ assert.equal(topicStates(onPath(CALC,{'calc1-functions':rec('calc1-functions',0.9,false)}))['calc1-trig'],'later','an unlatched record opens nothing');
+});
+
+test('path 2: a record off the learner\'s path is ignored - calc1 on a school profile, school on a calc1 profile',()=>{
+ const {topicStates}=R();
+ const school=topicStates(onPath(SCHOOL,{'calc1-functions':rec('calc1-functions',0.9,true)}));
+ assert.deepEqual(Object.keys(school),['linear-one-step','linear-two-step','linear-both-sides']);
+ assert.equal(school['linear-one-step'],'next');assert.ok(!('calc1-functions' in school));
+ const calc=topicStates(onPath(CALC,{'linear-one-step':rec('linear-one-step',0.9,true)}));
+ assert.ok(!('linear-one-step' in calc));assert.equal(calc['calc1-functions'],'next');
+ assert.ok(!Object.values(calc).includes('secure'),'nothing on the calc1 path is secure');
+ // without profiles or a learner: the school path, as the ruler cases above call it
+ assert.deepEqual(Object.keys(topicStates({skills:{},topic:null})),['linear-one-step','linear-two-step','linear-both-sides']);
+});
+
+test('path 3: a topic is named by its path (topicIn), humanised only when no path knows the id',()=>{
+ const {topicName,continueCard}=R();
+ assert.equal(topicName('calc1-functions'),'Functions, and new functions from old');
+ assert.notEqual(topicName('calc1-functions'),'Calc1 functions');
+ assert.equal(topicName('linear-two-step'),'Two-step equations');
+ assert.equal(topicName('calc1-no-such-topic'),'Calc1 no such topic','an unknown id is spelled out');
+ const s={...onPath(CALC,{}),pages:[],practice:{topic:'calc1-functions',marked:false,items:[{n:1,question:'f(x) = x^2'}]}};
+ assert.match(continueCard(s).d,/on Functions, and new functions from old, not marked/);
+});
+
+test('path 4: Tonight\'s title counts the learner\'s path - "N of 22", every topic, or the path from the first step',()=>{
+ const {secureTitle,pathFirst,pathSecure}=R();
+ assert.equal(secureTitle(0,22,pathFirst('calc1')),'Calculus 1, from the first step');
+ assert.equal(secureTitle(7,22,pathFirst('calc1')),'7 of 22 topics secure');
+ assert.equal(secureTitle(22,22,pathFirst('calc1')),'Every topic on the path is secure');
+ assert.equal(pathFirst('school'),'One-step equations','the school path keeps its first topic');
+ const seven=Object.fromEntries(calcIds().slice(0,7).map(id=>[id,rec(id,0.9,true)]));
+ const title=(s)=>{const p=pathSecure(s);return secureTitle(p.secure.length,p.topics.length,p.first);};
+ assert.equal(title(onPath(CALC,{...seven,'linear-one-step':rec('linear-one-step',0.9,true)})),'7 of 22 topics secure','a school record is not one of the 22');
+ assert.equal(title(onPath(CALC,{})),'Calculus 1, from the first step');
+ assert.equal(title(onPath(SCHOOL,seven)),'One-step equations, from the first step','calc1 records on a school profile count for nothing');
+ assert.equal(title(onPath(SCHOOL,{'linear-one-step':rec('linear-one-step',0.9,true)})),'One of 3 topics secure');
+ assert.equal(title({skills:{}}),'One-step equations, from the first step','no learner: the school path');
+});
+
+test('path 5: MathsTV names and counts through the path - no topicById, no SYLLABUS, and a year word only for a topic with a year',()=>{
+ const tv=tvSrc();
+ assert.doesNotMatch(tv,/\btopicById\b/,'no syllabus-only lookup');
+ assert.doesNotMatch(tv,/\bSYLLABUS\b/,'no direct read of the school list');
+ assert.doesNotMatch(tv,/\bexpectedIndex\b/,'the school comparison is asked through expectedOn');
+ assert.match(tv,/expectedOn\(/);
+ const calls=[...tv.matchAll(/SYS_WORD\[[^\]]+\]\(([^)]*)\)/g)];
+ assert.ok(calls.length>0,'the year word is still drawn on the school path');
+ for(const m of calls){
+  const arg=m[1].trim();assert.match(arg,/\.year$/,`SYS_WORD is handed a year, not a topic: ${m[0]}`);
+  const before=tv.slice(Math.max(0,m.index-120),m.index);
+  assert.ok(before.includes(`${arg} &&`)||before.includes(`${arg} ?`),`SYS_WORD is only asked when ${arg} is there: ${before.slice(-60)}${m[0]}`);
+ }
+ for(const fn of ['Hero','PracticeScreen','Sheet','Walk'])assert.match(fnBody(tv,fn),/topicName\(/,`${fn} names the set with topicName`);
+ assert.match(fnBody(tv,'Topics'),/topicIn\(/,'"Most people do X first" reads topicIn');
+ assert.match(fnBody(tv,'Tonight'),/pathSecure\(s\)/,'Tonight counts the learner\'s path');
+});

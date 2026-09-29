@@ -3,24 +3,49 @@
  * the D-pad (tv/keys.ts). Types only from the store - the TV never loads the filesystem.
  */
 import type { Screen, Session } from "@/lib/session/store";
-import { SYLLABUS, topic as topicById } from "@/lib/library/syllabus";
+import { PATHS, learnerPath, topicIn, topicsOf, type MathPath, type PathTopic } from "@/lib/library/paths";
 import { firstToLook } from "@/tv/sheetRows";
 
 /** Where a topic stands on the path: secure (latched), the one in hand, open next, or later. */
 export type TopicState = "secure" | "here" | "next" | "later";
 
+/** Who is at the desk, for the path: without profiles or a learner it is the school path (paths.ts `learnerPath`). */
+type OnPath = Partial<Pick<Session, "profiles" | "learner">>;
+
 /**
- * What the learner's record says about each topic on the path. "Secure" is the latched record alone
+ * What the learner's record says about each topic on THEIR path (paths.ts `learnerPath`: the school path, or the
+ * Calculus 1 course when the profile says so), in path order. "Secure" is the latched record alone
  * (lib/session/learners.ts: estimate 0.85 with four attempts seen, never unset) - the same record the ruler's
  * groove is drawn from, so a hatched groove never says Secure. Tonight's marked set is already in that record
  * once it is marked; the TV never re-decides it from a count of right answers. "next" is a topic whose
- * prerequisites are all latched secure.
+ * prerequisites are all latched secure. A record for a topic on another path is not read.
  */
-export function topicStates(s: Pick<Session, "skills" | "topic">): Record<string, TopicState> {
+export function topicStates(s: Pick<Session, "skills" | "topic"> & OnPath): Record<string, TopicState> {
   const done = new Set<string>(Object.values(s.skills ?? {}).filter((r) => r.secure).map((r) => r.topic));
   const out: Record<string, TopicState> = {};
-  for (const t of SYLLABUS) out[t.id] = done.has(t.id) ? "secure" : s.topic === t.id ? "here" : t.prereq.every((p) => done.has(p)) ? "next" : "later";
+  for (const t of topicsOf(learnerPath(s))) out[t.id] = done.has(t.id) ? "secure" : s.topic === t.id ? "here" : t.prereq.every((p) => done.has(p)) ? "next" : "later";
   return out;
+}
+
+/** A topic id spelled out as words ("calc1-no-such" -> "Calc1 no such"): only for an id no path knows. */
+export function humanTopic(id: string): string { const w = id.replace(/[-_]+/g, " ").trim(); return w.charAt(0).toUpperCase() + w.slice(1); }
+
+/** A practice topic's name as the TV writes it: its path's name for it (paths.ts `topicIn`), else the id spelled out. */
+export function topicName(id: string): string { return topicIn(id)?.name ?? humanTopic(id); }
+
+/**
+ * The first evening's words on a path: a school path starts from its first topic ("One-step equations"), a course
+ * from its own name ("Calculus 1") - a course's first topic is not what the learner signed up for.
+ */
+export function pathFirst(path: MathPath): string {
+  const p = PATHS[path];
+  return p.school ? p.topics[0]?.name ?? p.name : p.name;
+}
+
+/** The learner's path as Tonight counts it: the path, its topics, the ones latched secure, and its first words. */
+export function pathSecure(s: Pick<Session, "skills"> & OnPath): { path: MathPath; topics: PathTopic[]; secure: PathTopic[]; first: string } {
+  const path = learnerPath(s), topics = topicsOf(path);
+  return { path, topics, secure: topics.filter((t) => s.skills?.[t.id]?.secure), first: pathFirst(path) };
 }
 
 /** A description of fact, never of permission: nothing on the path is locked. */
@@ -42,7 +67,7 @@ export type ContinueGo = Extract<Screen, "practice" | "sheet" | "page">;
  */
 export interface Continue { k: string; t: string; d: string; cap: string; go: ContinueGo; pageIx: number; focus: number }
 export function continueCard(s: Session): Continue | null {
-  const name = s.practice ? topicById(s.practice.topic)?.name ?? s.practice.topic : "";
+  const name = s.practice ? topicName(s.practice.topic) : "";
   if (s.practice && !s.practice.marked) return {
     k: "Still open", t: "Finish the set", d: `${s.practice.items.length} questions on ${name}, not marked yet.`,
     cap: "Your questions are still on paper. Enter puts them back on screen, ready for the photo.",
@@ -80,10 +105,11 @@ export function workWhat(n: number): string {
 }
 
 /**
- * Tonight's title when nothing is open: every topic secure, "N of M topics secure", or on the first evening the first
- * topic on the path (SYLLABUS[0]) from the first step - read from the syllabus, so a new first topic renames it.
+ * Tonight's title when nothing is open: every topic secure, "N of M topics secure", or on the first evening the path
+ * from the first step (`pathFirst`: the school path's first topic, a course's name) - read from the path, so a new
+ * first topic renames it. The defaults are the school path's.
  */
-export function secureTitle(secure: number, total = SYLLABUS.length, first = SYLLABUS[0]?.name ?? ""): string {
+export function secureTitle(secure: number, total = PATHS.school.topics.length, first = pathFirst("school")): string {
   if (total > 0 && secure >= total) return "Every topic on the path is secure";
   if (secure > 0) return `${countWord(secure)} of ${total} topics secure`;
   return `${first}, from the first step`;
