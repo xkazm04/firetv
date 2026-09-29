@@ -186,3 +186,15 @@ test('10 (pen case 8): no prose ordinal places the pen or earns a tick, the card
  assert.deepEqual(Object.fromEntries(M.SLIPS.map(s=>[s.id,s.name])),TODAY);
  assert.doesNotMatch(fs.readFileSync(path.join(root,'src/maths/MathsTV.tsx'),'utf8'),/SLIP_NAME/,'one list, in rules/maths');
 });
+
+test('11: a stacked fraction never splits a function from its bracketed argument',()=>{
+ const frac=(s)=>T.parseMath(s).find(x=>x.t==='frac');
+ const a=T.parseMath('sin(x)/x');assert.equal(a.length,1,'sin(x)/x is one fraction, not sin beside a fraction');
+ assert.equal(T.flatten(a[0].num),'sin(x)');assert.equal(T.flatten(a[0].den),'x');
+ const b=frac('ln(x+1)/(x+1)');assert.equal(T.flatten(b.num),'ln(x+1)');assert.equal(T.flatten(b.den),'x+1');
+ assert.equal(T.flatten(frac('2sin(x)/3').num),'2sin(x)');
+ assert.equal(T.flatten(frac('log_2(x)/x').num),'log_(2)(x)','a function with its base keeps its argument too');
+ // what did not change: a bare function name glued to its argument, and every earlier fraction
+ assert.equal(flat('2sin²x − sinx'),'2sin^(2)x−sinx');
+ assert.equal(flat('(x+1)/(x-1)'),'(x+1)/(x−1)');assert.equal(flat('dy/dx'),'(dy)/(dx)');assert.equal(flat('7pi/6'),'(7π)/(6)');assert.equal(flat('x/4'),'(x)/(4)');
+});

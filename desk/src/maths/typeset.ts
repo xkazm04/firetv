@@ -318,7 +318,9 @@ function fractions(list: Raw[]): Raw[] {
     if (a < 0) continue;
     if (out[a].t === "close") { a = openOf(out, a); if (a < 0) continue; }
     else if (!isOperand(out[a])) continue;
-    while (a > 0 && (isOperand(out[a - 1]) || (out[a - 1].t === "close" && openOf(out, a - 1) >= 0))) a = out[a - 1].t === "close" ? openOf(out, a - 1) : a - 1;
+    // a function goes with its bracketed argument: sin(x)/x is (sin x) over x, never sin (x over x)
+    const fnArg = (j: number) => out[j].t === "open" && out[j - 1].t === "fn";
+    while (a > 0 && (isOperand(out[a - 1]) || fnArg(a) || (out[a - 1].t === "close" && openOf(out, a - 1) >= 0))) a = out[a - 1].t === "close" ? openOf(out, a - 1) : a - 1;
     // denominator: one number, or a run of letters, or one bracket, with its power
     let b = k + 1;
     const first = out[b];

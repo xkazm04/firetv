@@ -98,7 +98,7 @@ know. It never throws and never drops a character (`tools/maths-type-test.cjs`).
 
 **Fractions.** `a/b` stacks only where it is clearly a fraction: no space around the slash, an operand each side,
 no word in either. The numerator is everything glued to the slash on its left (`7π`, `dy`, `2(x+1)`, `(a+b)` with
-its grouping brackets dropped); the denominator is one number, a run of letters (`dx`) or one bracket. `3 / 4`,
+its grouping brackets dropped, a function with its bracketed argument: `sin(x)/x` is sin x over x, never sin of x/x); the denominator is one number, a run of letters (`dx`) or one bracket. `3 / 4`,
 `and/or` keep their slash. Numerator and denominator are 78% of the line (70% for `½` and `\tfrac`), with
 .14em side padding and a drawn bar (.08em, tilted 1.4° in the hand) centred on the minus sign's height.
 
