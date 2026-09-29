@@ -12,6 +12,7 @@ import type { Profile, Session } from "@/lib/session/store";
 import { fmt } from "./useSession";
 import { stopAt, learnerStops, unitStops, recapStops, HINT_STOPS, SENTENCE_STOPS } from "./keys";
 import { lessonStates } from "@/lib/library/watched";
+import { pathOf } from "@/lib/library/paths";
 import { recapRows, recapCaption, type RecapTile, type MathsTile, type LingaTile, type EssayTile } from "./recapRows";
 import { MathsMark, EssayBrand, EssayArrow } from "./marks";
 import { MATHS_FONTS } from "@/maths/fonts";
@@ -415,13 +416,13 @@ export function Learner({ s, focus }: { s: Session; focus: number }) {
 }
 
 // ---- S2 Profile · the picks on the TV, the name on the phone ----
-/** Focus walks profileRows (tv/profileRows.ts): the type, the age for a school type, the school system, the interests, the actions. */
+/** Focus walks profileRows (tv/profileRows.ts): the type, the age for a school type, the school system, the interests, the Maths course while Maths is on, the actions. */
 export function ProfileScreen({ s, focus }: { s: Session; focus: number }) {
   const d = s.draft;
   const editing = !!d && s.profiles.some((p) => p.id === d.id);
   const name = d?.name.trim() ?? "";
   const rows = profileRows(d), at = locate(rows, focus), cell = rows[at.r].cells[at.c];
-  const chosen = (c: (typeof cell)) => (c.kind === "type" && d?.type === c.type) || (c.kind === "age" && d?.age === c.age) || (c.kind === "system" && d?.system === c.system) || (c.kind === "interest" && !!c.sub && !!d?.modules.includes(c.sub));
+  const chosen = (c: (typeof cell)) => (c.kind === "type" && d?.type === c.type) || (c.kind === "age" && d?.age === c.age) || (c.kind === "system" && d?.system === c.system) || (c.kind === "interest" && !!c.sub && !!d?.modules.includes(c.sub)) || (c.kind === "path" && pathOf(d) === c.path);
   return (<>
     <div className="band band-right" />
     <main className="content-full">

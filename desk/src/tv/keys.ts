@@ -10,6 +10,7 @@ import type { EssayAnalysis, Event, JobKind, Profile, Screen, Session, Subject }
 import { rewriteState } from "@/lib/rules/essay";
 import { LESSONS, ESSAY_TYPES, PLAYBOOK, playFor, type Lesson } from "@/lib/library/lessons.data";
 import { SYLLABUS, type Topic } from "@/lib/library/syllabus";
+import { learnerPath, nextOn, topicsOf, type PathTopic } from "@/lib/library/paths";
 import { lessonStates } from "@/lib/library/watched";
 import { profileRows, locate, flat } from "@/tv/profileRows";
 import { continueCard } from "@/tv/mathsRows";
@@ -118,7 +119,19 @@ export const HINT_STOPS = ["stuck", "lesson"] as const;
 export const SENTENCE_STOPS = ["again", "unit"] as const;
 /** The recap: one tile per app on the desk, then back to the desk (tv/recapRows.ts). */
 export { recapStops, type RecapStop } from "@/tv/recapRows";
+/** The school syllabus as a stop list: kept for the existing tests. The Topics screen walks `topicStops(s)`. */
 export const TOPIC_STOPS: readonly Topic[] = SYLLABUS;
+/** Topics: the stops of the learner's own path (library/paths.ts learnerPath) - the school syllabus, or Calculus 1. */
+export function topicStops(s: Pick<Session, "profiles" | "learner">): readonly PathTopic[] { return topicsOf(learnerPath(s)); }
+/**
+ * Where "Teach me something" opens Topics: on the learner's frontier - the first topic of their path not latched
+ * secure whose prerequisites all are (paths.ts nextOn) - and on the first stop when nothing is secure or everything is.
+ */
+export function topicsFocus(s: Pick<Session, "profiles" | "learner" | "skills">): number {
+  const path = learnerPath(s), done = Object.values(s.skills ?? {}).filter((r) => r?.secure).map((r) => r.topic);
+  const next = done.length ? nextOn(path, done) : undefined;
+  return next ? Math.max(0, topicsOf(path).findIndex((t) => t.id === next.id)) : 0;
+}
 /** The walk has one action, on its last item: back to the sheet. */
 export function walkStops(s: Session): Array<"sheet"> { const n = s.practice?.items.length ?? 0; return n && s.walkIx === n - 1 ? ["sheet"] : []; }
 
@@ -207,7 +220,7 @@ const KEYMAP: Partial<Record<Screen, Handler>> = {
     if (cont) {
       if (cont.go === "page") { o.ev({ type: "page.select", pageIx: cont.pageIx }); o.nav("page"); }
       else o.nav(cont.go, cont.focus);
-    } else if (at === "teach") o.nav("topics");
+    } else if (at === "teach") o.nav("topics", topicsFocus(s));
     else { const pi = s.pages.findIndex((p) => p.subject === "maths");
       if (pi >= 0) { o.ev({ type: "page.select", pageIx: pi }); o.nav("page"); } else o.ev({ type: "page.ask", subject: "maths" }); }
   },
@@ -217,10 +230,10 @@ const KEYMAP: Partial<Record<Screen, Handler>> = {
     // Back returns to the screen that opened the switcher; a stale back (a profile, the pair screen) is the desk
     if (k === "back") { if (s.back === "tonight") o.nav("tonight"); else o.nav("landing", landingFocus(s, "place")); }
     if (k === "select") { if (at && at !== "add") o.ev({ type: "learner.set", id: at.id }); else { o.ev({ type: "profile.draft", patch: {} }); o.nav("profile"); } }
-    if (k === "menu" && at && at !== "add") { o.ev({ type: "profile.draft", patch: { id: at.id, name: at.name, type: at.type, age: at.age, system: at.system, modules: at.modules } }); o.nav("profile"); }
+    if (k === "menu" && at && at !== "add") { o.ev({ type: "profile.draft", patch: { id: at.id, name: at.name, type: at.type, age: at.age, system: at.system, modules: at.modules, mathPath: at.mathPath } }); o.nav("profile"); }
   },
   profile: (s, k, _, o) => {
-    // rows of picks (type, age when a school type, school system, interests, actions); Up/Down keep the column
+    // rows of picks (type, age when a school type, school system, interests, the Maths course when Maths is on, actions); Up/Down keep the column
     const rows = profileRows(s.draft), at = locate(rows, s.focus), cell = rows[at.r].cells[at.c];
     if (k === "right") o.focus(flat(rows, at.r, at.c + 1)); if (k === "left") o.focus(flat(rows, at.r, at.c - 1));
     if (k === "down" && at.r < rows.length - 1) o.focus(flat(rows, at.r + 1, at.c)); if (k === "up" && at.r > 0) o.focus(flat(rows, at.r - 1, at.c));
@@ -228,6 +241,7 @@ const KEYMAP: Partial<Record<Screen, Handler>> = {
       if (cell.kind === "type" && cell.type) o.ev({ type: "profile.draft", patch: { type: cell.type } });
       else if (cell.kind === "age") o.ev({ type: "profile.draft", patch: { age: cell.age } });
       else if (cell.kind === "system" && cell.system) o.ev({ type: "profile.draft", patch: { system: cell.system } });
+      else if (cell.kind === "path" && cell.path) o.ev({ type: "profile.draft", patch: { mathPath: cell.path } });
       else if (cell.kind === "interest" && cell.sub) { const m = cell.sub, on = s.draft?.modules ?? []; o.ev({ type: "profile.draft", patch: { modules: on.includes(m) ? on.filter((x) => x !== m) : [...on, m] } }); }
       else if (cell.kind === "save") o.ev({ type: "profile.save" }); else o.ev({ type: "profile.discard" });
     }
@@ -318,10 +332,11 @@ const KEYMAP: Partial<Record<Screen, Handler>> = {
   xray: (s, k, __, o) => { if (k === "back" || k === "menu") o.nav("playbook", s.focus); },
   break: (_, k, __, o) => { if (k === "select") o.ev({ type: "timer.skipbreak" }); },
   topics: (s, k, local, o) => {
-    if (k === "right") o.move(TOPIC_STOPS.length, 1); if (k === "left") o.move(TOPIC_STOPS.length, -1);
+    const stops = topicStops(s);
+    if (k === "right") o.move(stops.length, 1); if (k === "left") o.move(stops.length, -1);
     // nothing is locked here: Select starts whatever is focused. Menu and Up go home, where the path lives.
     if (k === "up" || k === "menu") o.nav("tonight");
-    if (k === "select") { const t = stopAt(TOPIC_STOPS, s.focus); if (t) o.set(local, t.id); }
+    if (k === "select") { const t = stopAt(stops, s.focus); if (t) o.set(local, t.id); }
     if (k === "back") o.nav("tonight");
   },
   // the set on paper is parked, not thrown away: Tonight's continue card puts it back

@@ -6,7 +6,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useSession, call, fmt } from "@/tv/useSession";
 import { ESSAY_TYPES } from "@/lib/library/lessons.data";
-import { SYLLABUS } from "@/lib/library/syllabus";
+import { topicIn } from "@/lib/library/paths";
 import { BRAND as MODULE } from "@/tv/profileRows";
 import type { Event, JobKind, Session, Subject } from "@/lib/session/store";
 import { LingaPhone } from "@/english/LingaPhone";
@@ -328,7 +328,7 @@ export default function Phone() {
 
           // not marked: the sheet is still on the table. Snap all six at once, review it, then send.
           if (!pr.marked) return <div className="pscreen"><h3>Practice</h3>
-            <p><b>{SYLLABUS.find((t) => t.id === pr.topic)?.name ?? "The set"}</b> — work all {pr.items.length} on paper. When every one is done, snap the whole sheet in one photo.</p>
+            <p><b>{topicIn(pr.topic)?.name ?? "The set"}</b> — work all {pr.items.length} on paper. When every one is done, snap the whole sheet in one photo.</p>
             <div className="cam">
               {cam ? <video ref={video} autoPlay playsInline muted /> : !shot && <span>camera</span>}
               {shot && <img src={shot.url} alt="the sheet you just snapped" />}

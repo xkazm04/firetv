@@ -1,4 +1,5 @@
 import type { Profile, SchoolSystem, Session, StudentType, Subject } from "@/lib/session/store";
+import { PATHS, type MathPath } from "@/lib/library/paths";
 
 const ALL: Subject[] = ["maths", "english", "essay"];
 /** What the learner at the desk is interested in. No profile row means everything stays on. */
@@ -39,16 +40,22 @@ export const TYPE_BLURB: Record<StudentType, string> = {
 };
 
 /** One focusable pick on the profile screen. */
-export interface Cell { kind: "type" | "age" | "system" | "interest" | "save" | "back"; label: string; blurb: string; type?: StudentType; age?: number; system?: SchoolSystem; sub?: Subject }
+export interface Cell { kind: "type" | "age" | "system" | "interest" | "path" | "save" | "back"; label: string; blurb: string; type?: StudentType; age?: number; system?: SchoolSystem; sub?: Subject; path?: MathPath }
 export interface Row { title: string; cells: Cell[] }
 
-/** The pick rows for a draft: type, age (school types only), school system, interests, actions. The TV and the D-pad share this. */
+/** The Math courses a learner can be on, in the order the profile row shows them: the school path first (the default). */
+export const COURSES: MathPath[] = ["school", "calc1"];
+/**
+ * The pick rows for a draft: type, age (school types only), school system, interests, the Maths course (only while
+ * Maths is on), actions. The TV and the D-pad share this.
+ */
 export function profileRows(d: Profile | null): Row[] {
   const t = d?.type ?? "high-school", r = AGE_RANGE[t];
   const rows: Row[] = [{ title: "Type of student", cells: TYPES.map((x) => ({ kind: "type", label: TYPE_WORDS[x], blurb: TYPE_BLURB[x], type: x })) }];
   if (r) rows.push({ title: "Age", cells: Array.from({ length: r[1] - r[0] + 1 }, (_, i) => r[0] + i).map((n) => ({ kind: "age", label: String(n), blurb: "", age: n })) });
   rows.push({ title: "School system", cells: SYSTEMS.map((x) => ({ kind: "system", label: SYSTEM_WORDS[x], blurb: SYSTEM_BLURB[x], system: x })) });
   rows.push({ title: "Interested in", cells: (["maths", "english", "essay"] as Subject[]).map((m) => ({ kind: "interest", label: BRAND[m], blurb: MODULE_BLURB[m], sub: m })) });
+  if ((d?.modules ?? ALL).includes("maths")) rows.push({ title: "Maths course", cells: COURSES.map((p) => ({ kind: "path", label: PATHS[p].name, blurb: PATHS[p].blurb, path: p })) });
   rows.push({ title: "", cells: [{ kind: "save", label: "Save", blurb: "Sit at this desk with these picks." }, { kind: "back", label: "Back", blurb: "Throw the draft away and go back." }] });
   return rows;
 }

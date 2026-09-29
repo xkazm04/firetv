@@ -5,7 +5,7 @@
  * list. Types only from the store: the TV never loads the filesystem-backed session modules.
  */
 import type { PracticeItem, Session, Subject } from "@/lib/session/store";
-import { topic as topicById } from "@/lib/library/syllabus";
+import { topicIn } from "@/lib/library/paths";
 import { lingaView, progressDots, type ArtKey, type Dot, type HomeState } from "@/lib/english/view";
 import { BAND_NAME } from "@/lib/english/placement";
 import { ESSAY_TYPES } from "@/lib/library/lessons.data";
@@ -96,13 +96,13 @@ export function mathsWaiting(s: Session): MathsWaiting {
   const past = (s.history ?? []).filter((h) => h.kind === "homework" || h.kind === "practice").at(-1) ?? null;
   const base = { app: "maths" as const, right: null, of: null, lines: [] as SheetLine[], empty: null as string | null };
   if (cont && cont.go === "sheet" && p) {
-    const name = topicById(p.topic)?.name ?? p.topic, right = p.items.filter((i) => i.verdict === "right").length;
+    const name = topicIn(p.topic)?.name ?? p.topic, right = p.items.filter((i) => i.verdict === "right").length;
     return { ...base, kind: "marked", at: null, tab: cont.k, title: name, right, of: p.items.length,
       lines: p.items.map((i) => ({ n: i.n, question: i.question, answer: i.studentAnswer, verdict: i.verdict ?? "unsure", voice: "hand" })),
       line: `${name} · ${right} of ${p.items.length} right. The marked set is still on the desk.` };
   }
   if (cont && cont.go === "practice" && p) {
-    const name = topicById(p.topic)?.name ?? p.topic;
+    const name = topicIn(p.topic)?.name ?? p.topic;
     return { ...base, kind: "resume", at: null, tab: cont.k, title: name,
       lines: p.items.map((i) => ({ n: i.n, question: i.question, voice: "print" })), line: cont.d };
   }

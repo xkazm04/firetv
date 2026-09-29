@@ -13,7 +13,7 @@ import { LANDING_REST } from "@/tv/landingRows";
 import { focusAfterRewrite } from "@/tv/keys";
 import path from "node:path";
 import { addHistory, getLearner, saveLearner, type HistoryEntry, type SkillRecord } from "./learners";
-import { SYLLABUS } from "../library/syllabus";
+import { learnerPath, topicIn, topicsOf, type MathPath } from "../library/paths";
 import { LESSONS } from "../library/lessons.data";
 import { watchDue, type Watch } from "../library/watched";
 import type { RuleCard } from "../rules/english";
@@ -27,7 +27,20 @@ export type Screen = "landing" | "pair" | "joined" | "tonight" | "units" | "cale
 export type StudentType = "elementary" | "high-school" | "other";
 /** The school system a learner's progress is read against. One per profile; the desk defaults to UK. */
 export type SchoolSystem = "us" | "uk" | "cz" | "de";
-export interface Profile { id: string; name: string; type: StudentType; age?: number; system?: SchoolSystem; modules: Subject[]; }
+/** `mathPath`: the Math course the learner is on (library/paths.ts) - absent is the school path. */
+export interface Profile { id: string; name: string; type: StudentType; age?: number; system?: SchoolSystem; modules: Subject[]; mathPath?: MathPath; }
+/** Only 'school' and 'calc1' are paths: any other mathPath (a draft patch, an older or hand-edited session.json) is dropped. */
+function pathChecked<T extends { mathPath?: unknown }>(p: T): T {
+  if (p.mathPath === undefined || p.mathPath === "school" || p.mathPath === "calc1") return p;
+  const q = { ...p }; delete q.mathPath; return q;
+}
+/**
+ * A practice topic's name as the desk writes it, on whichever path it belongs to: topicIn(id)?.name ?? id. For every
+ * school id it is exactly the label mark.ts writes (topicById(id)?.name ?? id); tools/maths-course-test.cjs pins that.
+ */
+export const topicLabel = (id: string): string => topicIn(id)?.name ?? id;
+/** Is this history label the one a set on `topic` was written under: its name - or its bare id, which mark.ts writes for an id the syllabus lacks. */
+const labelOf = (label: string, topic: string) => label === topicLabel(topic) || label === topic;
 
 
 export interface PageItem { n: number; text: string; cx: number; cy: number; band: [number, number]; key: string; }
@@ -256,9 +269,9 @@ export function settleOwners(s: Session, historyOf: (id: string) => HistoryEntry
   const pages = s.pages.map((p) => (p.owner ? p : { ...p, owner: readBy(p) ?? at }));
   let practice = s.practice;
   if (practice && !practice.owner) {
-    const topic = practice.topic, name = SYLLABUS.find((t) => t.id === topic)?.name ?? topic;
+    const topic = practice.topic;
     let byLine: [string, number] | null = null;
-    if (practice.marked) for (const id of ids) for (const h of lines(id)) if (h.kind === "practice" && h.label === name && (!byLine || h.at > byLine[1])) byLine = [id, h.at];
+    if (practice.marked) for (const id of ids) for (const h of lines(id)) if (h.kind === "practice" && labelOf(h.label, topic) && (!byLine || h.at > byLine[1])) byLine = [id, h.at];
     const pageId = practice.pageId;
     practice = { ...practice, owner: pages.find((p) => p.id === pageId)?.owner ?? byLine?.[0] ?? at };
   }
@@ -335,7 +348,7 @@ export function reduce(s: Session, e: Event): Session {
     case "focus": n.focus = e.focus; break;
     // a learner chosen or saved goes to the desk, not to one app: the lamp rests on what that learner left, among their own apps
     case "learner.set": { const p = s.profiles.find((x) => x.id === e.id); if (!p) break; if (p.id !== s.learner?.id) { n.conversation = null; n.check = null; n.english = null; } seat(s, n, p.id); n.learner = { id: p.id, name: p.name }; n.screen = "landing"; n.focus = LANDING_REST; break; }
-    case "profile.draft": { const d: Profile = { ...(s.draft ?? { id: "p" + Date.now(), name: "", type: "high-school" as StudentType, modules: ["maths", "english", "essay"] as Subject[] }), ...e.patch };
+    case "profile.draft": { const d: Profile = pathChecked({ ...(s.draft ?? { id: "p" + Date.now(), name: "", type: "high-school" as StudentType, modules: ["maths", "english", "essay"] as Subject[] }), ...e.patch });
       const r = AGE_RANGE[d.type]; if (!r || (d.age !== undefined && (d.age < r[0] || d.age > r[1]))) delete d.age; n.draft = d; break; }
     case "profile.save": { const d = s.draft; if (!d || !d.name.trim()) break; const has = s.profiles.some((p) => p.id === d.id);
       n.profiles = has ? s.profiles.map((p) => (p.id === d.id ? d : p)) : [...s.profiles, d];
@@ -398,8 +411,9 @@ export function reduce(s: Session, e: Event): Session {
       if (left === 0) { if (t.phase === "work") { t.phase = "break"; t.left = 5 * 60; t.before = s.screen; n.screen = "break"; } else { t.phase = "work"; t.left = 25 * 60; n.screen = t.before ?? "page"; } }
       n.timer = t; break; }
     case "timer.skipbreak": n.timer = { ...s.timer, phase: "work", left: 25 * 60 }; n.screen = s.timer.before ?? "page"; break;
-    // the open topic keeps the focus, so a set that fails is retried on the topic it was asked for
-    case "topic.open": n.topic = e.topic; n.subject = "maths"; n.screen = "topics"; n.focus = Math.max(0, SYLLABUS.findIndex((t) => t.id === e.topic)); break;
+    // the open topic keeps the focus, so a set that fails is retried on the topic it was asked for; the focus is the topic's
+    // place on the learner's own path (a topic of the other path, or an unknown id, is the first stop)
+    case "topic.open": n.topic = e.topic; n.subject = "maths"; n.screen = "topics"; n.focus = Math.max(0, topicsOf(learnerPath(s)).findIndex((t) => t.id === e.topic)); break;
     case "practice.set": n.practice = shownPractice({ ...e.practice, owner: e.practice.owner ?? me }); n.topic = e.practice.topic; n.walkIx = 0; n.screen = "practice"; break;
     // a marked set lands on the sheet - all six verdicts at once - focused on the first item to look at
     case "practice.marked": if (e.owner && e.owner !== me) { toAway(s, n, e.owner, (x) => (x.practice ? { ...x, practice: { ...x.practice, items: e.items.map(shown), marked: true }, walkIx: 0 } : null)); break; }
@@ -451,7 +465,7 @@ function logWatched(w: Watch): void {
 type Sub = (s: Session) => void;
 interface Store { session: Session; subs: Set<Sub>; ticker: NodeJS.Timeout | null; }
 const g = globalThis as unknown as { __desk?: Store };
-function load(): Session { try { if (existsSync(FILE)) { const j = JSON.parse(readFileSync(FILE, "utf8")); if (Array.isArray(j?.profiles) && (j?.learner === null || j?.learner?.id) && j.profiles.every((p: Profile) => p.type in AGE_RANGE)) return settleOwners({ ...fresh(), ...j, practice: shownPractice(j.practice), away: awayShown(j.away), jobs: settled(j.jobs), watch: null, phoneUrl: phoneUrl(), reading: false, englishLearning: j.learner ? getLearner(j.learner.id).english : emptyEnglish(), conversation: j.conversation ? { moment: null, moments: [], ...j.conversation, pending: null, capture: false, paused: true } : null, check: j.check ? { ...j.check, pending: null } : null }, (id) => getLearner(id).history); } } catch {} return fresh(); }
+function load(): Session { try { if (existsSync(FILE)) { const j = JSON.parse(readFileSync(FILE, "utf8")); if (Array.isArray(j?.profiles) && (j?.learner === null || j?.learner?.id) && j.profiles.every((p: Profile) => p.type in AGE_RANGE)) return settleOwners({ ...fresh(), ...j, profiles: j.profiles.map(pathChecked), practice: shownPractice(j.practice), away: awayShown(j.away), jobs: settled(j.jobs), watch: null, phoneUrl: phoneUrl(), reading: false, englishLearning: j.learner ? getLearner(j.learner.id).english : emptyEnglish(), conversation: j.conversation ? { moment: null, moments: [], ...j.conversation, pending: null, capture: false, paused: true } : null, check: j.check ? { ...j.check, pending: null } : null }, (id) => getLearner(id).history); } } catch {} return fresh(); }
 /** The away learners' work as saved: an answer that reached the file stops here too, and a read under way ended with the desk. */
 function awayShown(a: unknown): Record<string, MathsSlot> | undefined {
   if (!a || typeof a !== "object") return undefined;
@@ -489,7 +503,7 @@ function restateMarked(s: Session): void {
   if (!s.learner) return;
   const p = s.practice, l = getLearner(s.learner.id);
   const at = l.history.findLastIndex((h) => h.kind === "practice"), h = l.history[at];
-  const detail = p?.marked && h?.label === (SYLLABUS.find((t) => t.id === p.topic)?.name ?? p.topic) ? restatedLine(h.detail, p.items) : null;
+  const detail = p?.marked && h && labelOf(h.label, p.topic) ? restatedLine(h.detail, p.items) : null;
   if (detail && detail !== h.detail) saveLearner({ ...l, history: l.history.map((x, i) => (i === at ? { ...x, detail } : x)) });
 }
 
