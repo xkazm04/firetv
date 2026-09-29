@@ -292,16 +292,48 @@ const approach = (at: Num | "inf" | "-inf", side?: "+" | "-") => (at === "inf" ?
 const approachTex = (at: Num | "inf" | "-inf", side?: "+" | "-") => (at === "inf" ? "\\infty" : at === "-inf" ? "-\\infty" : `${numTex(at)}${side ? `^${side}` : ""}`);
 
 /**
+ * The spec and its function when every field question() prints is there and of its type - the function reads with x
+ * and no +C, no answer key, each point a number the desk reads, an interval of exactly two in order, a known kind,
+ * whole steps from one to six, a side of '+', '-' or none ('' is the model's two-sided limit) - else null. Structure
+ * only, never the truth: a degenerate question still prints (wellFormed refuses it), a malformed one never throws.
+ */
+function printable(spec: unknown): { s: CalcSpec; f: Expr } | null {
+  if (!spec || typeof spec !== "object" || !isShape((spec as { shape?: unknown }).shape)) return null;
+  const s = spec as CalcSpec & Record<string, unknown>;
+  if (["answer", "truth", "solution", "value"].some((k) => k in s)) return null;
+  const f = typeof s.f === "string" ? compile(s.f) : null;
+  if (!f || f.constant || !f.usesX) return null;
+  const has = (...n: unknown[]) => n.every((v) => num(v) !== null);
+  const inOrder = (on: unknown) => Array.isArray(on) && on.length === 2 && has(on[0], on[1]) && num(on[0])! < num(on[1])!;
+  const ok = (() => {
+    switch (s.shape) {
+      case "evaluate": case "derivative-at": return has(s.at);
+      case "derivative": case "antiderivative": return true;
+      case "definite-integral": return has(s.a, s.b);
+      case "limit": {
+        const side = s.side as unknown;
+        if (side !== undefined && side !== "" && side !== "+" && side !== "-") return false;
+        return s.at === "inf" || s.at === "-inf" ? !side : has(s.at);
+      }
+      case "critical-point": return inOrder(s.on);
+      case "extremum": return inOrder(s.on) && (s.kind === "max" || s.kind === "min");
+      case "newton-step": return has(s.x0) && Number.isInteger(s.steps) && s.steps >= 1 && s.steps <= MAX_STEPS;
+    }
+  })();
+  return ok ? { s, f } : null;
+}
+
+/**
  * The question, printed by code from the spec, as the plain text our prompts use and the TeX the typesetter reads:
  * 'Differentiate f(x) = 3x^2 + 2x.', 'Find lim_(x->0) sin(3x)/x.', 'Evaluate int_0^3 2x dx.', 'Find the critical point
- * of f(x) = x^2 - 4x + 1 on [0, 5].' Null when the spec's function or a parameter does not read. It never carries
- * the answer: the spec has none, and the only numbers printed are the spec's own parameters.
+ * of f(x) = x^2 - 4x + 1 on [0, 5].' Null when the spec is malformed (printable): a malformed spec reaches here from
+ * a model, a session file or a page reader, and it is a null, never a throw. It never carries the answer: the spec
+ * has none, and the only numbers printed are the spec's own parameters.
  */
 export function question(spec: unknown): { plain: string; tex: string } | null {
-  if (!spec || typeof spec !== "object" || !isShape((spec as { shape?: unknown }).shape)) return null;
-  const s = spec as CalcSpec;
-  const f = typeof s.f === "string" ? compile(s.f) : null;
-  if (!f) return null;
+  const p = printable(spec);
+  if (!p) return null;
+  const { s, f } = p;
   const F = tidy(s.f), Ft = toTex(f);
   const Fb = isSum(f) ? `(${F})` : F, Fbt = isSum(f) ? `(${Ft})` : Ft;
   const nums = (...n: unknown[]) => n.every((v) => num(v) !== null);

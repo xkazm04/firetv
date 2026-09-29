@@ -275,3 +275,118 @@ test('8: a spec carries no answer, and the checks are fast enough for a request 
  console.log(`# slowest check: ${worst.toFixed(2)} ms (${what}), least of three timings`);
  assert.ok(worst<50,`${what}: ${worst} ms`);
 });
+
+/**
+ * Never throws (property): rules/calc promises a malformed spec is a null, an 'unsure' or a refusal - never a 500. Specs
+ * reach it from a model (items.ts), from a session file (PracticeItem.spec after a restart) and from a page reader, so
+ * every public function is fed junk: non-objects, each shape with each field removed and each field replaced by junk,
+ * bad intervals, type swaps, extra keys, and 3000 seeded random mutations of valid specs. No call throws, each returns
+ * within 50 ms (least of three timings when the first is slow), and a spec malformed by construction is refused by
+ * wellFormed with a why, printed by question as null, judged 'unsure' by checkAnswer and never leaks.
+ */
+test('9: never throws - every public function on malformed and randomly mutated specs (property, 3000 mutations)',()=>{
+ const util=require('node:util');
+ const show=(v)=>util.inspect(v,{maxStringLength:40,maxArrayLength:6,depth:4,breakLength:Infinity});
+ const BIG='x'.repeat(10000),HUGE=1e308;
+ const BASES=[EV,D,DA,AD,DI,LS,{shape:'limit',f:'(3x^2 - x)/(2x^2 + 5)',at:'inf'},CP,EX,NW];
+ const NUM_FIELDS=new Set(['at','a','b','x0']);
+ const JUNK=[null,undefined,NaN,Infinity,-Infinity,{},{a:1},BIG,[[1,[2,[3]]]],[],true];
+ const ANSWERS=['1','','x^2 + C','inf',BIG,null,5];
+ const LINES=['the answer is 1','x^2','it goes to infinity','',null,BIG];
+ const failures=[];
+ let calls=0,slowest=0,slowWhat='';
+ /** Call fn; record a throw (with the input) or a call slower than 50 ms (least of three), else return its value. */
+ const call=(name,args,fn)=>{
+  calls++;
+  let out,best=Infinity;
+  for(let k=0;k<3;k++){
+   const t=process.hrtime.bigint();
+   try{out=fn();}catch(e){failures.push(`${name}(${args.map(show).join(', ')}) threw ${e&&e.constructor&&e.constructor.name}: ${e&&e.message}`);return {threw:true};}
+   best=Math.min(best,Number(process.hrtime.bigint()-t)/1e6);
+   if(best<=50)break;
+  }
+  if(best>slowest){slowest=best;slowWhat=`${name}(${show(args[0])})`;}
+  if(best>50)failures.push(`${name}(${args.map(show).join(', ')}) took ${best.toFixed(1)} ms`);
+  return {out};
+ };
+ /** Every public function on one input; `malformed` asserts the refusals, otherwise only the invariants. */
+ const probe=(spec,malformed,label,lite)=>{
+  const w=call('wellFormed',[spec],()=>C.wellFormed(spec));
+  const q=call('question',[spec],()=>C.question(spec));
+  const answers=lite?['1','x^2 + C']:ANSWERS,lines=lite?['the answer is 1']:LINES;
+  const verdicts=answers.map(a=>call('checkAnswer',[spec,a],()=>C.checkAnswer(spec,a)));
+  const leaks=lines.map(l=>call('leaksCalc',[spec,l],()=>C.leaksCalc(spec,l)));
+  call('specFromQuestion',[spec],()=>C.specFromQuestion(spec));
+  const wh=call('withheldCalc',[spec],()=>C.withheldCalc(spec));
+  const shape=spec&&typeof spec==='object'?spec.shape:spec;
+  const sl=call('slipsFor',[shape],()=>C.slipsFor(shape));
+  if(w.threw)return;
+  const ok=w.out&&w.out.ok===true;
+  if(!ok&&!(w.out&&w.out.ok===false&&typeof w.out.why==='string'&&w.out.why))failures.push(`${label}: wellFormed(${show(spec)}) -> ${show(w.out)}, not {ok:false, why}`);
+  if(malformed&&ok)failures.push(`${label}: wellFormed(${show(spec)}) accepted a malformed spec`);
+  if(!wh.threw&&(typeof wh.out!=='string'||!wh.out))failures.push(`${label}: withheldCalc(${show(spec)}) -> ${show(wh.out)}`);
+  if(!sl.threw&&!Array.isArray(sl.out))failures.push(`${label}: slipsFor(${show(shape)}) -> ${show(sl.out)}`);
+  if(ok){
+   if(!q.threw&&!(q.out&&typeof q.out.plain==='string'&&typeof q.out.tex==='string'))failures.push(`${label}: question(${show(spec)}) of a well-formed spec -> ${show(q.out)}`);
+   else if(!q.threw&&!lite){const back=call('specFromQuestion',[q.out.plain],()=>C.specFromQuestion(q.out.plain));if(!back.threw&&back.out!==null&&!C.wellFormed(back.out).ok)failures.push(`${label}: specFromQuestion read back a spec wellFormed refuses: ${show(back.out)}`);}
+   return;
+  }
+  // malformed by construction prints nothing; a refused mutation may be merely degenerate (it still prints), never junk
+  if(!q.threw&&malformed&&q.out!==null)failures.push(`${label}: question(${show(spec)}) of a malformed spec -> ${show(q.out)}, want null`);
+  if(!q.threw&&q.out!==null&&!(typeof q.out.plain==='string'&&typeof q.out.tex==='string'&&!/undefined|NaN|\[object|Infinity|null/.test(q.out.plain+q.out.tex)))failures.push(`${label}: question(${show(spec)}) printed junk: ${show(q.out)}`);
+  verdicts.forEach((v,i)=>{if(!v.threw&&!(v.out&&v.out.verdict==='unsure'))failures.push(`${label}: checkAnswer(${show(spec)}, ${show(answers[i])}) -> ${show(v.out)}, want unsure`);});
+  leaks.forEach((l,i)=>{if(!l.threw&&l.out!==false)failures.push(`${label}: leaksCalc(${show(spec)}, ${show(lines[i])}) -> ${show(l.out)}, want false`);});
+ };
+ // non-objects and empty containers
+ for(const v of [null,undefined,0,42,NaN,Infinity,HUGE,'derivative','x^2',BIG,[],[D],[[1,[2]]],true,{},()=>1])probe(v,true,'non-spec');
+ // per shape: each field removed, each field replaced by junk, type swaps, answer keys
+ let built=0;
+ for(const base of BASES){
+  probe(base,false,'base');
+  for(const k of Object.keys(base)){
+   const {[k]:_,...rest}=base;void _;probe(rest,true,`${base.shape} without ${k}`);built++;
+   for(const j of JUNK){probe({...base,[k]:j},true,`${base.shape}.${k}=junk`);built++;}
+   // a huge number: malformed where a number does not belong; where one does, only the invariants hold
+   probe({...base,[k]:HUGE},!NUM_FIELDS.has(k),`${base.shape}.${k}=huge`);built++;
+   // a string where a number belongs, a number where a string belongs
+   probe({...base,[k]:NUM_FIELDS.has(k)||k==='steps'?'three':7},true,`${base.shape}.${k} type-swapped`);built++;
+  }
+  for(const k of ['answer','truth','solution','value']){probe({...base,[k]:'1'},true,`${base.shape} with ${k}`);built++;}
+  // extra unknown keys change nothing
+  const extra={...base,difficulty:'easy',foo:{bar:[1]},note:BIG};
+  probe(extra,false,`${base.shape} with extra keys`);built++;
+  assert.deepEqual(C.wellFormed(extra),C.wellFormed(base),`${base.shape}: extra keys change nothing`);
+  if(Array.isArray(base.on)){
+   const [a,b]=base.on;
+   for(const on of [[],[a],[a,b,b+1],[b,a],[a,a],[a,'banana'],['banana',b],[a,[b]],[{},b],[a,null],[a,NaN],[a,Infinity],[BIG,b]]){probe({...base,on},true,`${base.shape}.on=${show(on)}`);built++;}
+   for(const on of [{0:a,1:b,length:2},`${a},${b}`]){probe({...base,on},true,`${base.shape}.on not an array`);built++;}
+  }
+ }
+ // 3000 seeded random mutations of valid specs: the invariants only (a mutation may happen to be valid)
+ let seed=20260929;
+ const rnd=()=>{seed|=0;seed=(seed+0x6D2B79F5)|0;let t=Math.imul(seed^(seed>>>15),1|seed);t=(t+Math.imul(t^(t>>>7),61|t))^t;return((t^(t>>>14))>>>0)/4294967296;};
+ const pick=(a)=>a[Math.floor(rnd()*a.length)];
+ const POOL=[0,1,-1,2,3,0.5,-2.5,5,10,1e6,-1e6,HUGE,-HUGE,1e-300,NaN,Infinity,null,undefined,'pi','pi/4','2','-1','ln(2)','x','x^2','inf','-inf','+','-','max','min','banana','',BIG,[],[0,5],[5,0],[0],[0,1,2],['pi',4],{},true,'sin(x)','1/x','x^3 - 12x','e^x',...C.CALC_SHAPES];
+ const KEYS=['shape','f','at','a','b','on','kind','x0','steps','side','zero'];
+ let valid=0;
+ for(let n=0;n<3000;n++){
+  const s=structuredClone(pick(BASES));
+  for(let m=1+Math.floor(rnd()*3);m>0;m--){
+   const op=rnd();
+   if(op<0.2){const ks=Object.keys(s);if(ks.length)delete s[pick(ks)];}
+   else if(op<0.6)s[pick(KEYS)]=pick(POOL);
+   else if(op<0.75)s.shape=pick(C.CALC_SHAPES);
+   else if(op<0.85&&Array.isArray(s.on)){const o=rnd();s.on=o<0.3?s.on.slice().reverse():o<0.6?s.on.slice(0,Math.floor(rnd()*2)):[...s.on,pick(POOL)];}
+   else if(op<0.95){const ks=Object.keys(s).filter(k=>k!=='shape');if(ks.length>1){const x=pick(ks),y=pick(ks);[s[x],s[y]]=[s[y],s[x]];}}
+   else s[pick(['foo','difficulty','zero','side'])]=pick(POOL);
+  }
+  if(C.wellFormed(s).ok)valid++;
+  probe(s,false,`mutation ${n}`,true);
+ }
+ console.log(`# never-throws: ${calls} calls, ${built} constructed malformed specs, 3000 mutations (${valid} still valid), slowest ${slowest.toFixed(2)} ms (${slowWhat})`);
+ // throws first: they are the 500s
+ failures.sort((p,q)=>Number(q.includes(') threw '))-Number(p.includes(') threw ')));
+ if(failures.length)console.log(`# ${failures.filter(f=>f.includes(') threw ')).length} throws, ${failures.length} failures in all`);
+ if(failures.length)console.log(failures.slice(0,15).map(f=>`# FAIL ${f}`).join('\n'));
+ assert.deepEqual(failures.slice(0,15),[],`${failures.length} failures`);
+});
