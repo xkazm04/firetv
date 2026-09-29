@@ -6,7 +6,8 @@
  * desk would say. One run of a kind at a time: a second request while one is running is refused (409) with
  * no engine call - unless the job `supersedes` (the lesson pick: a new hint's pick replaces the old one's,
  * and the old run's events are dropped by id). The free-text `status` line is still written, so the bench
- * bar and the phone keep working; it may carry the engine's detail, the job's error never does.
+ * bar and the phone keep working; on a failure it is the job's desk sentence alone. The engine's detail can
+ * carry raw model output - an answer - so it goes to the server log (kind, run id, detail), never to a screen.
  */
 import { NextResponse } from "next/server";
 import { dispatch, getSession, type JobInput, type JobKind } from "../session/store";
@@ -86,10 +87,12 @@ export async function runJob<T>(kind: JobKind, work: (run: JobRun) => Promise<T>
     return { ok: true, value };
   } catch (e) {
     const error = jobError(kind, e);
+    // the engine's detail can carry raw model output (an answer): it goes to the server log, never to a screen
+    console.error(`desk job failed: ${kind} ${id}: ${detail(e)}`);
     if (run.current()) {
       try { opts.onFail?.(e); } catch {}
       dispatch({ type: "job.failed", kind, id, error });
-      dispatch({ type: "status", text: `${error} (${detail(e)})` });
+      dispatch({ type: "status", text: error });
     }
     return { ok: false, status: 502, error };
   }

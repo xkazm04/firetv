@@ -434,6 +434,23 @@ test('GUARD mark case 3: a mark that ends after its learner left still lands on 
  assert.equal(s.away['mark-a'].practice.marked,true);assert.equal(record('mark-a').lines,was.lines+1);
 });
 
+// ---- status-line-desk-words-only: a failure puts only desk words on the TV's status line; the detail goes to the server log ----
+test('status case 1: a hint whose engine answered raw text fails with the desk sentence on the status line - no excerpt, no answer - and the detail in the server log',async()=>{
+ onPage();
+ stubText({hint:()=>'x = 6 is the answer'});
+ const logged=[],was=console.error;console.error=(...a)=>{logged.push(a.map(String).join(' '));};
+ let r;try{r=await post('hint',{});}finally{console.error=was;}
+ const sentence='The desk could not come up with a hint just now. The answer came back in pieces.';
+ assert.equal(r.status,502);assert.equal((await r.json()).error,sentence,'the route\'s error body is the desk sentence, as before');
+ const s=store.getSession();
+ assert.equal(s.jobs.hint.phase,'failed');assert.equal(s.jobs.hint.error,sentence,'job.failed carries the same sentence, as before');
+ assert.equal(s.status,sentence,'the status line is the desk sentence alone');
+ assert(!s.status.includes('6'),`the status line carries the answer: ${s.status}`);assert(!s.status.includes('('),`the status line carries a detail: ${s.status}`);
+ const line=logged.find((l)=>l.includes(s.jobs.hint.id));
+ assert(line,`the server log names the run: ${JSON.stringify(logged)}`);
+ assert.match(line,/\bhint\b/);assert.match(line,/x = 6 is the answer/,'the detail is kept for the server log');
+});
+
 // last: it swaps the store module out from under the routes loaded above
 test('case 7: a job saved as running is not running after the desk restarts',()=>{
  onPage();
