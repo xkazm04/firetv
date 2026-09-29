@@ -38,7 +38,7 @@ async function desk({ who = EMA, paired = true, nobody = false } = {}) {
   await event({ type: 'nav', screen: 'landing', focus: -1 });
 }
 const lit = (page) => page.locator('[data-role="desk-scene"]').getAttribute('data-lit');
-const press = async (page, k) => { await page.keyboard.press(k); await page.waitForTimeout(140); };
+const press = async (page, k) => { await page.keyboard.press(k); await page.waitForTimeout(480); };
 async function waitScreen(page, fn, ms = 6000) { const t0 = Date.now(); for (;;) { const s = await current(); if (fn(s)) return { s, ms: Date.now() - t0 }; if (Date.now() - t0 > ms) throw new Error('screen never got there: ' + s.screen); await page.waitForTimeout(20); } }
 
 /** Everything the landing shows as words or controls stays inside the 5% safe zone; meaning is never under 28px. */

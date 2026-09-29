@@ -111,7 +111,7 @@
 .pp .pp-cont { top: 860px; height: 84px; padding: 0 34px; border-radius: 42px; background: var(--pp-deep); color: #fff8ea; font-size: 32px; font-weight: 700; justify-content: space-between; box-shadow: 0 10px 18px rgba(45, 25, 12, .32), inset 0 2px 0 rgba(255, 255, 255, .28); }
 .pp .pp-cont svg { color: #fff8ea; }
 .pp .pp-else { top: 962px; height: 58px; padding: 0 22px; border-radius: 29px; font-size: 30px; font-weight: 500; gap: 14px; color: #43322a; }
-.pp .pp-else[data-focused="true"] { transform: scale(1.07); background: #fffaf0; color: var(--pp-ink); box-shadow: 0 0 0 4px #f7c95a, 0 0 30px 10px rgba(247, 201, 90, .45), 0 10px 18px rgba(45, 25, 12, .28); }
+.pp .pp-else[data-focused="true"] { transform: scale(1.07); transform-origin: 100% 50%; background: #fffaf0; color: var(--pp-ink); box-shadow: 0 0 0 4px #f7c95a, 0 0 30px 10px rgba(247, 201, 90, .45), 0 10px 18px rgba(45, 25, 12, .28); }
 
 /* ----- chrome: the desk's mark, who is at the desk, the phone, the keys ----- */
 .pp .pp-chrome { position: absolute; inset: 0; z-index: 12; pointer-events: none; }
