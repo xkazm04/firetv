@@ -573,9 +573,15 @@ export function markLine(line: string, mark: LineMarkSpec): MarkedLine {
   const found = spanStarts(line, mark.span)[nth];
   if (!found) return whole();
   const at = found.at, end = at + found.text.length;
-  const read = (x: string) => (tex ? parseTexOr(x) : parsePlain(x));
-  const pre = read(line.slice(0, at)), mid = read(found.text);
-  let post = read(line.slice(end));
+  let pre: MNode[], mid: MNode[], post: MNode[];
+  if (tex) {
+    // a TeX line is split only on a balanced boundary, and only when every part still reads as TeX: a span that
+    // cuts through a \frac, a \sqrt or a group would leave parts that fall back to plain text and set raw commands
+    if (!texBoundary(line, at, end)) return whole();
+    try { pre = parseTex(line.slice(0, at)); mid = parseTex(found.text); post = parseTex(line.slice(end)); } catch { return whole(); }
+  } else {
+    pre = parsePlain(line.slice(0, at)); mid = parsePlain(found.text); post = parsePlain(line.slice(end));
+  }
   const trail: MNode[] = [];
   if (mark.kind === "sign") {
     const f = firstSign(mid);
@@ -590,7 +596,25 @@ export function markLine(line: string, mark: LineMarkSpec): MarkedLine {
   post = [...gap(after, trail[0] ?? mid[mid.length - 1], post[0]), ...post];
   return { kind: mark.kind, pre: pre2, mid, post, trail };
 }
-function parseTexOr(x: string): MNode[] { try { return parseTex(x); } catch { return parsePlain(x); } }
+/**
+ * Is [at, end) of a TeX line a place the pen may cut? Neither end falls inside a command's name (`\fr|ac`, `\|,`),
+ * the span starts outside every brace group, every `{` and every `\left` it opens it also closes, and it closes
+ * none it did not open. An escaped brace (`\{`) is a character, not a group.
+ */
+function texBoundary(line: string, at: number, end: number): boolean {
+  let outer = 0, inner = 0, pairs = 0;
+  for (const m of line.matchAll(/\\([a-zA-Z]+|[^])|[{}]/g)) {
+    const k = m.index!, stop = k + m[0].length;
+    if (k >= end) break;
+    if (m[0][0] === "\\" && ((at > k && at < stop) || (end > k && end < stop))) return false;
+    if (k < at) { if (m[0] === "{") outer++; else if (m[0] === "}") outer--; continue; }
+    if (m[0] === "{") inner++;
+    else if (m[0] === "}") { if (--inner < 0) return false; }
+    else if (m[1] === "left") pairs++;
+    else if (m[1] === "right") { if (--pairs < 0) return false; }
+  }
+  return outer === 0 && inner === 0 && pairs === 0;
+}
 function firstSign(nodes: MNode[]): (MNode & { t: "bin" }) | null {
   for (const n of nodes) if (n.t === "bin" && (n.v === "+" || n.v === "−" || n.v === "±")) return n;
   return null;

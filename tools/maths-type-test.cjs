@@ -364,3 +364,40 @@ test('20: the pen rings the sign the server found, not the first sign that reads
   }
  assert.ok(named>=100,`the brute force names a sign on ${named} lines`);assert.ok(later>=20,`${later} of them are a later occurrence`);
 });
+
+test('21: the pen never cuts through a TeX construct - a span inside one marks the whole line, a balanced span is still ringed',()=>{
+ const {CALCULUS_1}=require(path.join(root,'src/lib/library/calculus1.ts'));
+ // each part the pen sets, on its own (a plain "s" before "qrt" is two parts, not the word sqrt)
+ const parts=(m)=>m.kind==='line'?[m.nodes]:[m.pre,m.mid,m.post,m.trail];
+ const raw=(m)=>{const f=parts(m).map(p=>T.flatten(p));return f.some(x=>/\\|frac|sqrt/.test(x))?f.join(' | '):null;};
+ // the live offenders: calc1-log-derivative (c11-w1) and calc1-shape (c14-w1), marked inside a \frac
+ const log="y' = \\frac{\\frac{1}{x}\\cdot x - \\ln x \\cdot 1}{x^2}";
+ const cut=T.markLine(log,{kind:'sign',span:'- \\ln'});
+ assert.equal(cut.kind,'line','a span inside a \\frac argument marks the whole line');assert.equal(raw(cut),null);
+ const lim='\\lim_{x \\to 0} \\frac{e^x - 1 - x}{x^2} = \\lim_{x \\to 0} \\frac{e^x - 1}{2x}';
+ assert.equal(T.markLine(lim,{kind:'sign',span:'- 1 - x'}).kind,'line');
+ assert.equal(T.markLine(lim,{kind:'extra',span:'x}{x^2} ='}).kind,'line','a span that closes a group it did not open');
+ // a \left without its \right inside the span, and a span that starts inside a command's name
+ const sq='f(g(x)) = \\left(\\sqrt{x - 3}\\right)^2 + 1';
+ assert.equal(T.markLine(sq,{kind:'extra',span:'\\left(\\sqrt{x - 3}'}).kind,'line','a \\left whose \\right is outside the span');
+ assert.equal(T.markLine('x = \\frac{\\ln 7}{2}',{kind:'extra',span:'frac{\\ln 7}{2}'}).kind,'line','a span that starts inside \\frac');
+ // balanced spans are still ringed: a whole \frac, a whole \left...\right, and a span outside every group
+ const whole=T.markLine('\\frac{dy}{dx} = -\\frac{x}{y}',{kind:'sign',span:'-\\frac{x}{y}'});
+ assert.equal(whole.kind,'sign');assert.equal(count(whole.mid,'frac'),1);assert.ok(whole.mid.some(n=>n.flag));assert.equal(raw(whole),null);
+ const pair=T.markLine(sq,{kind:'extra',span:'\\left(\\sqrt{x - 3}\\right)^2'});
+ assert.equal(pair.kind,'extra');assert.equal(count(pair.mid,'sqrt'),1);assert.equal(raw(pair),null);
+ const out=T.markLine(lim,{kind:'missing',span:'= \\lim_{x \\to 0}'});assert.equal(out.kind,'missing');assert.equal(count(out.pre,'frac'),1);assert.equal(raw(out),null);
+ // brute force: every working line of the Calculus corpus, TeX and plain, marked at every span it holds
+ let spans=0,rung=0;const kinds=['sign','extra','missing'];
+ for(const topic of CALCULUS_1.topics)for(const ex of topic.examples){
+  if(ex.kind!=='working')continue;
+  for(const form of [ex.tex,ex.plain])for(const line of (form||'').split('\n')){
+   for(let a=0;a<line.length;a++)for(let b=a+1;b<=line.length;b++){
+    const span=line.slice(a,b);if(!span.trim())continue;
+    const m=T.markLine(line,{kind:kinds[(a+b)%3],span});spans++;if(m.kind!=='line')rung++;
+    const bad=raw(m);if(bad!==null)assert.fail(`${ex.id} | ${line} | span ${JSON.stringify(span)} sets ${bad}`);
+   }
+  }
+ }
+ assert.ok(spans>=50000,`${spans} spans tried`);assert.ok(rung>=spans/4,`${rung} of ${spans} spans are still ringed`);
+});
