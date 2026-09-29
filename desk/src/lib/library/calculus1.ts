@@ -11,10 +11,11 @@
  *
  * The spine itself - each topic's id, sessions, sections, name, strand, blurb, prerequisites and practice shapes -
  * lives in calculus1.spine.ts, and paths.ts reads it there as the 'calc1' path beside the school path (SYLLABUS,
- * which stays the school-year list: its bands, TOPIC_STOPS, COUNT and expectedIndex have no place for a university
- * course). This file takes each topic's spine fields from CALC1_SPINE and only ADDS its examples, by topic id; the
- * example corpus is a FIXTURE for tests and docs (tools/maths-calculus-test.cjs, tools/maths-calculus-live.cjs,
- * docs/CALCULUS-1-SYLLABUS.md), not wired into lessons, practice or a screen.
+ * which stays the school-year list: its year bands and expectedIndex have no place for a university course). A
+ * learner on that path is served by the path's own wiring (docs/MATH-COURSE-PATHS.md), never by this file. This file
+ * takes each topic's spine fields from CALC1_SPINE and only ADDS its examples, by topic id; the example corpus is a
+ * FIXTURE for tests and docs (tools/maths-calculus-test.cjs, tools/maths-calculus-live.cjs, the calc-*-test.cjs
+ * suites, docs/CALCULUS-1-SYLLABUS.md), not wired into lessons, practice or a screen.
  *
  * Each example DECLARES what the reader does with it today - `render` for the plain form, `renderTex` for the TeX
  * form, `check` for what verify.ts can read - and the offline test asserts the declaration against what it observes,

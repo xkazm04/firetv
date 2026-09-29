@@ -33,8 +33,9 @@ look again. Never the answer.
    written. The pen marks a place only when the data names it; when all the data knows is the line, the line
    gets a wavy underline and a margin arrow. No guessed positions.
 4. **Ticks are claims, so they are earned.** A tick follows a line only when the marking vouches for it: the
-   answer line of a right item (the substitution checked the value), and the lines before a slip the data
-   places. An unsure item gets no tick and no mark, just a dashed ring and "not sure".
+   answer line of a right item (the substitution checked the value, or on a Calculus item `checkAnswer` did), and
+   the lines before a slip the data places. An unsure item gets no tick and no mark, just a dashed ring and "not
+   sure".
 5. **One lamp, one thing in its light.** The item in hand sits under the lamp (the paper pans to it); the rest of
    the set is dimmed or folded. Exactly one element looks focused: the amber door, the amber pill, the lifted
    sheet, the ringed topic on the ruler, or the item on the paper with its OK chip.
@@ -79,7 +80,7 @@ All three faces come through `next/font/google`, self-hosted; only the `.maths-t
 | screen title | Fraunces 560 | 68 | same |
 | door title | Fraunces 580 | 48 (60 wide) | same |
 | slip name, side title | Fraunces 560 | 54 | same |
-| topic name on the big ruler | Fraunces 560 | 44 | same |
+| topic name on the big ruler | Fraunces 560 | 44 (a panning ruler: the focused name 44 down to 34, the others 34) | same |
 | **working (hand)** | Caveat 600 | **72** | on two squares, three with a fraction or ∫ |
 | **question (print)** | Fraunces 500, italic variables | **46** (52 practice, 56 hint) | opsz 72, SOFT 30 |
 | crumb | Fraunces 500 | 38 | opsz 96, SOFT 80 |
@@ -154,6 +155,13 @@ which the verdict is about, is marked and nothing else is claimed. The rulebook'
 pen or earns a tick; the taped card says "Look where the pen is." when the pen was placed from the working. The
 line split (`workingLines`) and the slip names are one rule each, in `rules/maths`.
 
+**A Calculus item has no pen position.** `locate` reads linear lines only, so marking a Calculus set
+([MATH-COURSE-PATHS.md](MATH-COURSE-PATHS.md)) writes no `slipAt`. A wrong Calculus item takes the third step: the
+answer line gets the wavy underline, and the card says "Look at ..." with the slip's place in words. The slip's
+title is its Calculus name, for example "The constant left off" or "The inside not differentiated". A right one
+ticks its answer line. One quirk comes from the shared line split: an answer written with no working, no `=` and
+no letter is drawn as `x = <answer>`, so a bare Calculus answer such as `1/3` shows as `x = 1/3`.
+
 ## Components
 
 - **Mark** - an orange rounded square (radial `#FFEBC4 → #FFC56B → #E8891F`) holding an equals sign whose lower
@@ -174,7 +182,10 @@ line split (`workingLines`) and the slip names are one rule each, in `rules/math
   of tonight's right answers, so a hatched groove never says Secure. The ruler is the learner's own path
   (`learnerPath` in `desk/src/lib/library/paths.ts`): the school path draws each topic's school year and the SCHOOL
   tick; a course path (Calculus 1) has no school year, so it draws no year word, no SCHOOL tick and no gap line
-  (`expectedOn` is null). Every screen names a set by its path's name for it (`topicName`), never a spelled-out id.
+  (`expectedOn` is null). The learner picks the path on the profile's Maths course row (the shell's profile
+  screen). Every screen names a set by its path's name for it (`topicName`), never a spelled-out id. Teach me
+  something opens Topics at the learner's **frontier**, the first topic not latched secure whose prerequisites all
+  are (`topicsFocus` in `desk/src/tv/keys.ts`), and at the first stop when nothing or everything is secure.
   Where each box, tick, strand label and needle goes is `rulerModel` in `desk/src/tv/rulerRows.ts`; the three-topic
   school path is drawn exactly as before. A path too long for one box per topic on the big ruler (under 288 px a
   slot: Calculus 1's 22 topics in six strands) **pans under the lamp** like the paper: the track is wider than the
@@ -200,8 +211,12 @@ line split (`workingLines`) and the slip names are one rule each, in `rules/math
   lit.
 - **Taped card** - a cream card with a strip of amber tape: the one caption slot beside the paper. On the hint:
   the learner's question from the phone in the blue hand (`maths-said`), HINT with two pips, the hint, and the next
-  step in the pen-dark hand. On the sheet and walk: THE DESK SAYS / THE DESK REPLIED over the desk's line
-  (`maths-said`) and "Look at ..." from the rulebook. `maths-hint`.
+  step in the pen-dark hand. A hint on a Calculus page is written in a first-year Calculus I stance when the learner
+  is on the calc1 path. It is checked against the task's own answer whenever the task reads into a Calculus spec.
+  When it gives the answer away twice, the card shows the shape's fixed sentence instead, for example "Find the
+  derivative as a function first, then put the point in. The value is yours to work out." On the calc1 path there
+  is no lesson to show, so the lesson pill says "No lesson for this". On the sheet and walk: THE DESK SAYS / THE
+  DESK REPLIED over the desk's line (`maths-said`) and "Look at ..." from the rulebook. `maths-hint`.
 - **Slip name** - Fraunces 54 with its last word in amber italic. `maths-slip`.
 - **Pills** - 80 px, an icon disc, a word; focused is amber and scales 1.08. The first action is primary.
   `maths-primary`, `maths-secondary`.
@@ -212,12 +227,12 @@ line split (`workingLines`) and the slip names are one rule each, in `rules/math
 | screen | composition |
 |---|---|
 | Tonight | top bar; the sheet on the desk + kicker, title, detail, OK Open (or the first-evening title and blank sheet); two doors; the caption; the ruler (a path of more than eight topics: the strand strip) |
-| Topics | "Pick a *topic*"; the strand and blurb (or Preparing / Not written); the ruler, larger, each topic on the learner's path a stop (a long path pans under the lamp, chevrons at the edges) |
-| Practice | the paper with the six questions in print; the side: "Work these on *paper*" and the taped card |
-| Sheet | the tally; the marked set on the paper, each item folded to its question and the line the pen is on, the focused one lit with OK Open; the side: kind, slip name, taped card; pills Six more, Put the sheet away |
+| Topics | "Pick a *topic*"; the strand and blurb (or Preparing / Not written); the ruler, larger, each topic on the learner's path a stop, the lamp opening on the frontier (a long path pans under the lamp, chevrons at the edges) |
+| Practice | the paper headed with the topic's name on its path, with the six questions in print (on Calculus 1, questions the desk printed itself from its specs: "Differentiate f(x) = ...", "Find lim_(x->0) ..."); the side: "Work these on *paper*" and the taped card |
+| Sheet | the tally; the marked set on the paper, each item folded to its question and the line the pen is on, the focused one lit with OK Open; the side: kind, slip name, taped card; pills Six more ("Six more on" the topic's name), Put the sheet away |
 | Walk | the same paper with one item open: every line of working, ticks, the mark, later lines faded; the side card; Back to the sheet on the last item |
 | Page | the snapped sheet as paper, its OCR'd problems in print, the one under the lamp lifted with OK Hint; the side: problem count, read time, the real photo with the band; Menu shows the photo whole |
-| Hint | the problem on the paper, lines left for the learner's own working; the taped card with hint 1 then hint 2; pills Still stuck, Show me the lesson |
+| Hint | the problem on the paper, lines left for the learner's own working; the taped card with hint 1 then hint 2; pills Still stuck, Show me the lesson (on the calc1 path, "No lesson for this") |
 | Lesson | the video in a lamp-lit wooden frame; the side: the part that matters, the concepts, why |
 | Units, Calendar | a contents page on the paper; a planner of index cards (done ticked in pen, next taped, later dashed) |
 

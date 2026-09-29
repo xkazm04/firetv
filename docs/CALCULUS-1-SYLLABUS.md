@@ -52,22 +52,32 @@ order, and every topic has at least four examples. Each example is a `question` 
 `page` (a printed line as a snapped sheet reads). Each one is written as the plain text our prompts ask the models
 for, and most also as TeX.
 
-## Why a separate spine, and what promoting it would take
+## A path, not an appendix
 
-`SYLLABUS` (`desk/src/lib/library/syllabus.ts`) is the school-year spine: three linear-equation topics with
-US/UK/CZ/DE year bands. Several things read it as the whole path. `expectedIndex` counts topics a learner of a given
-age is already past. `TOPIC_STOPS` is the D-pad's stop list on the Topics screen. `COUNT` and the Tonight title say
-"n of 3 topics secure". `topic.open` focuses on a `SYLLABUS` index, and `settleOwners` and `continueCard` name a
-set by it. If Calculus were appended to it, a 16-year-old would count as behind on a university course, and the
-ruler would run to 25 stops. `CALCULUS_1` is therefore a fixture only, and nothing reads it but the tests.
+Calculus 1 is a Math course a learner can be on: the `calc1` path, beside the school path. The design is written
+once in [MATH-COURSE-PATHS.md](MATH-COURSE-PATHS.md); this section only says where the course lives.
 
-Promoting it would take four things:
+`SYLLABUS` (`desk/src/lib/library/syllabus.ts`) stays the school-year spine: three linear-equation topics with
+US/UK/CZ/DE year bands, read by `expectedIndex`. Appended to it, Calculus would count a 16-year-old as behind on a
+university course, and the Topics stops would run to 25. So the 22 topics have their own spine,
+`CALC1_SPINE` (`desk/src/lib/library/calculus1.spine.ts`): ids, names, strands, blurbs, prerequisites and the
+practice shapes each topic may use. `paths.ts` builds both paths, and every screen and pipeline asks it for the
+learner's path (`Profile.mathPath`, chosen on the profile's Maths course row). A course path has no school year,
+so its ruler has no year word and no SCHOOL tick. This file, `calculus1.ts`, takes its spine fields from
+`CALC1_SPINE` and adds the example corpus, which is still a fixture for the tests and this page, not wired into a
+screen.
 
-1. A notion of a course (a learner's path) that `expectedIndex`, the ruler and the Tonight count read, instead of
-   one global list.
-2. Practice generation and marking that can serve Calculus (see "What the desk can check" below).
-3. Lesson picks for its topics.
-4. Declared fixes for the degrades below.
+The four things promotion needed, as they stand on 2026-09-29:
+
+1. **A course the ruler, the Tonight count and `expectedIndex` read.** Done: `paths.ts` (`learnerPath`, `topicsOf`,
+   `expectedOn`, which is null on a course).
+2. **Practice and marking that serve Calculus.** Done, decided in code. A practice item is a spec the desk prints
+   and judges itself (`rules/calc.ts`), and marking asks the model only to read the page (see "What the desk can
+   check in code" below).
+3. **Lesson picks.** Not done. There is no Calculus lesson library, so on the calc1 path the hint's lesson job ends
+   as "no lesson" without asking the picker.
+4. **Declared fixes for the degrades below.** The width and height degrades are fitted, wrapped or grown on the TV
+   (the live run below). The five notation degrades stand as declared.
 
 ## What the reader does today
 
@@ -113,20 +123,44 @@ suite still runs the reader's checks on captions, and additionally checks the lo
 
 ## What the desk can check in code
 
-Only 2 of the 108 examples can be checked in code: `c13-q2` (`3x^2 - 12 = 0` at 2) and `c15-q2`
-(`20 - 2x = 0` at 10). These are the bare equations in x that a working reaches. `verify.ts` reads one
-equation of arithmetic in x. It cannot read:
+**Calculus is decided in code, by shape.** A Calculus item is one of nine shapes: evaluate, derivative,
+derivative-at, antiderivative, definite-integral, limit, critical-point, extremum and newton-step. `checkAnswer`
+recomputes the truth from the spec with the expression engine (`desk/src/lib/rules/calc-expr.ts`) and gives right,
+wrong or unsure. A model never gives the verdict. Every practice item the desk writes on the calc1 path is a spec,
+so every one is checkable by construction: a spec the desk cannot work out, or whose truth makes a poor question, is
+never kept. The shapes, their tolerances and the withholding rules are in
+[MATH-COURSE-PATHS.md](MATH-COURSE-PATHS.md).
 
-- a limit, a derivative, an integral or a sum;
-- a function name or any other letter (`c`, `h`, `t`, `u`, `y`);
-- ≈;
-- a question worded as a sentence.
+**`verify.ts` still reads 2 of the 108.** The third column of the baseline table below is `verify.ts`, the school
+path's check: one equation of arithmetic in x. It reads `c13-q2` (`3x^2 - 12 = 0` at 2) and `c15-q2`
+(`20 - 2x = 0` at 10), and nothing with a limit, a derivative, an integral, a function name, another letter, ≈ or
+a sentence. That column is a ratchet on the old check, not the Calculus checker.
 
-It cannot confirm an approximation either: Newton's 17/12 does not satisfy x² - 2 = 0. So practice generation
-(whose stated answers are verified by substitution) and marking (whose verdicts rest on it) cannot serve Calculus
-today. That is the L direction `calculus-check-layer`: a checker per answer shape, such as a value at a point, an
-antiderivative up to a constant, a limit value and a definite integral, before any Calculus set is written or
-marked.
+**What a photographed page reads into.** A task on a snapped page is read in code by `specFromQuestion`. When it
+reads, the hint's leak check knows the answer. When it does not, the desk claims nothing about the task. Measured by
+a one-off script (not committed) that runs `specFromQuestion` on every `question` and `page` example of
+`CALCULUS_1`, plain and TeX:
+
+| examples | read into a spec | of which shape |
+|---|---|---|
+| 31 questions (plain) | 13 | derivative 6 (c07-q1, c08-q1, c09-q1, c10-q2, c11-q1, c11-q2), limit 5 (c04-q1, c05-q1, c05-q2, c05-q3, c14-q1), definite-integral 2 (c20-q1, c21-q1) |
+| 33 page lines (plain) | 0 | - |
+| 64 TeX forms of the above | 0 | - (the reader takes plain text only) |
+
+Why the other 18 questions do not read:
+
+| reason | examples |
+|---|---|
+| a word problem: a situation in sentences | c12-q1 (the sphere), c15-q1 (the rectangle) |
+| more than one part, or more than one function | c01-q1 (f and g composed), c06-q1 (a piecewise f, find c), c13-q1 (the maximum and the minimum), c17-q1 (f from f' and f(1)), c18-q1 (write the sum, then its limit), c22-q1 (the area between two curves) |
+| a task that is not one of the nine shapes | c02-q1 and c03-q1 (solve an equation), c03-q2 (log arithmetic, no x), c14-q2 (inflection points) |
+| a letter other than x | c09-q2 (theta), c10-q1 (y, implicit), c19-q1 (t, and g defined by an integral) |
+| a bare equation, with no task words | c13-q2, c15-q2 |
+| read, then refused by `wellFormed` | c16-q1: Newton's x_3 = 17/12 is within the shape's 5e-3 of x_4, so the desk cannot tell the asked-for iterate from the next |
+
+Of the 33 page lines, 31 are printed statements (a formula, an identity, a result given with its value), so there
+is nothing to answer. The other two are tasks outside the shapes: c01-p1 (sketch a graph) and c03-p1 (find an
+inverse).
 
 ## The live test
 
@@ -152,8 +186,12 @@ It then checks each screen:
 - text is 28 px or larger, except the design's 20-22 px uppercase labels;
 - no backslash appears.
 
-It writes `artifacts/math-calculus/<topic>-<screen>.png`, `report.json` and `report.md`. The Topics screen still
-shows the school spine, because Calculus is not on it (see above).
+It writes `artifacts/math-calculus/<topic>-<screen>.png`, `report.json` and `report.md`. Without `--path`, the
+scratch learner is on the school path, so its Topics screen shows the school spine. `--path calc1` seats it on
+Calculus 1 (`mathPath: "calc1"`), so every screen is drawn for a Calculus learner. The run then walks the path's
+rulers: Topics at every focus from 0 to 21, and Tonight with 0, 7, 15 and 22 topics secure. Those screens are
+checked for the focused name shown whole, every name at 34 px or more, strand labels apart, and no gap at either end
+of the track. They are saved as `path-calc1-<screen>-<n>.png`.
 
 The script leaves out of the overflow check the Tonight thumbnails (`.mb-srow .qx`, `.mb-box .qx`), which crop the
 paper by design (`overflow: hidden`), allows 2 px of slack on a row's height and on the safe zone, and ignores the
@@ -178,8 +216,13 @@ Read the `too-wide` and `too-tall` rows of the offline degrade table above as an
 live run is the measurement: for those, the TV fits, wraps or grows the row and nothing overflows, leaves the safe
 zone or shows command text. The other degrades (`slash`, `script-one-letter`, `unknown-tex`, `cases-one-line`,
 `circ-as-degree`) are about how the maths is set, not how wide it is, so the live run does not measure them and they
-stand as declared. And what the desk cannot do with these items is untouched: it cannot check them (see the section
-above).
+stand as declared. The live run draws the corpus. It does not mark it: how far a page's tasks can be checked is in
+"What the desk can check in code" above.
+
+**The path run (2026-09-29).** Commit `84e5f76` records the Director's `node tools/maths-calculus-live.cjs --path
+calc1 --strict`: 180/180 screens reached with 0 violations, 26/26 of them the path's rulers. The first `--path` run
+had 22 of 26 red, because 2 px of glyph ink counted as a clamped name; the fit and the check now allow under half a
+line. It was not re-run for this page.
 
 ## The baseline table (`node tools/maths-calculus-test.cjs`)
 
