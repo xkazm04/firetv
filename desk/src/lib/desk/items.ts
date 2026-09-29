@@ -197,7 +197,9 @@ function askCalc(topicId: string, shapes: CalcShape[], memory: string[], slips: 
     `- Vary the difficulty and the kind of function, and give each spec a difficulty from 1 (gentlest) to 5 (hardest).\n` +
     (leavesUnused(shapes) ? `- A field the shape does not use is left as an empty string (0 for steps).\n` : "") +
     `- Do not work any question out: give the specs only.`;
-  return text<{ specs: unknown[] }>({ system: CALC_SYSTEM, prompt, schema: calcSchema(shapes, want), accept: CALC_ACCEPT, model: "fast" });
+  // thinking off: writing nine short specs is not a reasoning task and the desk checks every one in code. Measured live
+  // (tools/calc-model-yield.cjs, 6 topics): on = 62-90 s a call with two engine timeouts, off = 7-14 s and every set made
+  return text<{ specs: unknown[] }>({ system: CALC_SYSTEM, prompt, schema: calcSchema(shapes, want), accept: CALC_ACCEPT, model: "fast", thinking: false });
 }
 
 /** A point as the spec holds it: a plain numeral as a number, inf / -inf for a limit, a constant as its plain text. */

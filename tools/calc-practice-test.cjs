@@ -135,6 +135,9 @@ test('3: the model is asked only for specs - the topic\'s own shapes by enum, ty
   await makeItems(fx.topic,LEARNER);
   const req=seen[0];
   assert.equal(req.model,'fast');
+  // measured live 2026-09-29 (tools/calc-model-yield.cjs, 6 topics): thinking on took 62-90 s a call and two topics timed
+  // out at the engine's 90 s; thinking off took 7-14 s with a spec yield of 81 percent and every set made
+  assert.equal(req.thinking,false,`${fx.topic}: spec writing runs with hidden reasoning off`);
   const words=JSON.stringify(req.schema)+req.system+req.prompt;
   assert.doesNotMatch(words,/answer|solution/i,`${fx.topic}: the request names an answer`);
   const list=req.schema.properties.specs;
