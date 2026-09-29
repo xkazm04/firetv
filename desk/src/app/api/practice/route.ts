@@ -1,8 +1,8 @@
-/** Generate a verified practice set on a topic and put it on the desk. */
+/** Generate a verified practice set on a topic of either Math path and put it on the desk (a Calculus item with its spec). */
 import { NextResponse } from "next/server";
 import { dispatch, getSession, NOBODY_AT_DESK } from "@/lib/session/store";
 import { makeItems } from "@/lib/desk/items";
-import { topic as topicById } from "@/lib/library/syllabus";
+import { topicIn } from "@/lib/library/paths";
 import { MOVED_ON, refused, runJob } from "@/lib/desk/job";
 
 export const dynamic = "force-dynamic";
@@ -11,8 +11,8 @@ export async function POST(req: Request) {
   const body = (await req.json().catch(() => null)) as { topic?: unknown } | null;
   const topic = body && typeof body === "object" ? body.topic : undefined;
   if (!topic || typeof topic !== "string") return NextResponse.json({ error: "no topic" }, { status: 400 });
-  // a topic the syllabus does not have is not a set the desk can write: refused before any job starts
-  if (!topicById(topic)) return NextResponse.json({ error: "no such topic" }, { status: 400 });
+  // a topic on neither Math path (library/paths.ts) is not a set the desk can write: refused before any job starts
+  if (!topicIn(topic)) return NextResponse.json({ error: "no such topic" }, { status: 400 });
   const learner = getSession().learner?.id;
   if (!learner) return NextResponse.json({ error: NOBODY_AT_DESK }, { status: 409 });
   const r = await runJob("practice", async (run) => {

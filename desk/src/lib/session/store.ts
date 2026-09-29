@@ -18,6 +18,7 @@ import { LESSONS } from "../library/lessons.data";
 import { watchDue, type Watch } from "../library/watched";
 import type { RuleCard } from "../rules/english";
 import { restatedLine, slipsFor } from "../rules/maths";
+import { CALC_SHAPES, type CalcSpec } from "../rules/calc";
 import type { Fix, Sentence, Was } from "../rules/essay";
 import { emptyEnglish, type Conversation, type EnglishLearning, type LevelCheck } from "../english/types";
 
@@ -72,6 +73,11 @@ export interface PracticeItem {
    * none marks the answer line.
    */
   slipAt?: SlipAt;
+  /**
+   * A Calculus item's spec (rules/calc.ts): its shape and the parameters its question prints, so marking can judge the
+   * learner's answer by recomputing the truth. It holds nothing the question does not already print - no result.
+   */
+  spec?: CalcSpec;
 }
 /**
  * `nth`: which occurrence of `span` in the line is meant (0 = the first, as maths/typeset `spanStarts` counts
@@ -89,8 +95,23 @@ const slipAtOf = (x: unknown): SlipAt | undefined => {
 };
 export interface Practice { topic: string; items: PracticeItem[]; pageId?: string; marked: boolean; owner?: string; }
 
+/** A spec's own parameters, by name: the ones its question prints. `zero` (the result, for a symmetry item) is not one. */
+const SPEC_KEYS = ["f", "at", "a", "b", "side", "on", "kind", "x0", "steps"] as const;
+const plainValue = (v: unknown) => typeof v === "string" || (typeof v === "number" && Number.isFinite(v));
+/** A spec as a screen may see it: a known shape and only its printed parameters - any other key (an answer) stops here. */
+function specShown(x: unknown): CalcSpec | undefined {
+  const o = x as Record<string, unknown> | null;
+  if (!o || typeof o !== "object" || !(CALC_SHAPES as readonly unknown[]).includes(o.shape)) return undefined;
+  const out: Record<string, unknown> = { shape: o.shape };
+  for (const k of SPEC_KEYS) {
+    const v = o[k];
+    if (k === "on") { if (Array.isArray(v) && v.length === 2 && v.every(plainValue)) out.on = [v[0], v[1]]; }
+    else if (plainValue(v)) out[k] = v;
+  }
+  return out as unknown as CalcSpec;
+}
 /** Only the fields a screen may see — an answer riding in on an event or an older session.json stops here. */
-function shown({ n, question, studentAnswer, studentWorking, verdict, slip, said, reply, slipAt }: PracticeItem): PracticeItem {
+function shown({ n, question, studentAnswer, studentWorking, verdict, slip, said, reply, slipAt, spec }: PracticeItem): PracticeItem {
   const item: PracticeItem = { n, question };
   if (studentAnswer !== undefined) item.studentAnswer = studentAnswer;
   if (studentWorking !== undefined) item.studentWorking = studentWorking;
@@ -100,6 +121,8 @@ function shown({ n, question, studentAnswer, studentWorking, verdict, slip, said
   if (reply !== undefined) item.reply = reply;
   const at = slipAtOf(slipAt);
   if (at && verdict === "wrong") item.slipAt = at;
+  const sp = specShown(spec);
+  if (sp) item.spec = sp;
   return item;
 }
 const shownPractice = (p: Practice | null | undefined): Practice | null => (p ? { ...p, items: (p.items ?? []).map(shown) } : null);

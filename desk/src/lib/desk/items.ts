@@ -6,6 +6,11 @@
  * every candidate goes through `verify` before it is allowed into the set, and a candidate that
  * fails is simply discarded. We ask for n + 3 in the first call so the usual handful of rejects
  * costs nothing; only if the survivors still fall short do we go back for more.
+ *
+ * A topic on the Calculus 1 path (library/paths.ts) takes the other road: the model writes SPECS - a shape from the
+ * topic's own list and its parameters - and never a question in words or its result. Code keeps a spec only when
+ * rules/calc says it is well formed, prints the question from it, orders the set easy to hard, and carries the spec
+ * on the item so marking can judge with no stored truth (makeCalcItems).
  */
 import { text } from "../engines/text";
 import { topic } from "../library/syllabus";
@@ -13,6 +18,10 @@ import { getLearner } from "../session/learners";
 import { slip as slipById, type Slip } from "../rules/maths";
 import { degenerate, verify } from "./verify";
 import type { PracticeItem } from "../session/store";
+import { pathOfTopic, topicIn } from "../library/paths";
+import { CALC1_SPINE } from "../library/calculus1.spine";
+import { CALC_SLIPS, leaksCalc, question as printed, wellFormed, type CalcShape, type CalcSpec } from "../rules/calc";
+import type { JSONSchema } from "../engines/types";
 
 const SCHEMA = {
   type: "object",
@@ -86,6 +95,7 @@ export async function makeItems(
   learnerId: string,
   n = 6,
 ): Promise<{ items: PracticeItem[]; provider: string; ms: number; tries: number }> {
+  if (pathOfTopic(topicId) === "calc1") return makeCalcItems(topicId, learnerId, n);
   const me = getLearner(learnerId);
   const memory = me.memory;
   // the named mistakes this learner has made HERE: the set is written for them, not for the topic
@@ -109,4 +119,160 @@ export async function makeItems(
   }
 
   return { items: items.slice(0, n).map((it, ix) => ({ ...it, n: ix + 1 })), provider, ms, tries };
+}
+
+// ------------------------------------------------------------------ Calculus 1: specs, printed and checked by code
+
+type Param = "at" | "a" | "b" | "side" | "on" | "kind" | "x0" | "steps";
+/** The parameters each shape takes beyond its function: what its question prints, nothing more. */
+const PARAMS: Record<CalcShape, readonly Param[]> = {
+  evaluate: ["at"], derivative: [], "derivative-at": ["at"], antiderivative: [], "definite-integral": ["a", "b"],
+  limit: ["at", "side"], "critical-point": ["on"], extremum: ["on", "kind"], "newton-step": ["x0", "steps"],
+};
+/**
+ * A point is a string in the plain notation, because it may be a constant (pi/4) or, for a limit, inf - and the
+ * engine's schema check reads one type per field. A plain numeral comes back as a number (point()).
+ */
+const POINT = { type: "string", minLength: 1, maxLength: 24 };
+const PARAM_SCHEMA: Record<Param, JSONSchema> = {
+  at: POINT, a: POINT, b: POINT, x0: POINT,
+  // "" is a two-sided limit
+  side: { type: "string", enum: ["", "+", "-"] },
+  on: { type: "array", items: POINT, minItems: 2, maxItems: 2 },
+  kind: { type: "string", enum: ["max", "min"] },
+  steps: { type: "integer" },
+};
+/** What each shape asks, and what its parameters mean - for the prompt. */
+const SHAPE_LINES: Record<CalcShape, string> = {
+  evaluate: "evaluate: f and at - the question is to find f(at).",
+  derivative: "derivative: f - the question is to differentiate f.",
+  "derivative-at": "derivative-at: f and at - the question is to find f'(at).",
+  antiderivative: "antiderivative: f - the question is to find the indefinite integral of f.",
+  "definite-integral": "definite-integral: f, a and b - the question is to evaluate the integral of f from a to b; pick bounds where it is not zero.",
+  limit: "limit: f, at and side - the question is to find the limit of f as x approaches at (a number, or inf or -inf); side is an empty string for a two-sided limit, + or - for one side of a number; pick one where the limit exists.",
+  "critical-point": "critical-point: f and on [lo, hi] - the question is to find the critical point of f on that interval; exactly one must lie strictly inside it.",
+  extremum: "extremum: f, on [lo, hi] and kind (max or min) - the question is to find that extreme value of f on the interval; it must be reached strictly inside, not at an end.",
+  "newton-step": "newton-step: f, x0 and steps (1 to 3) - the question is that many Newton's method steps on f(x) = 0 from x0.",
+};
+
+const CALC_SYSTEM =
+  "You choose practice questions for a university Calculus 1 desk, as specs the desk prints and checks itself. " +
+  "Give only the specs as JSON. Never write a question in words, and never work a question out or state what it comes to: the desk does that itself. " +
+  "Write every function in x in plain notation on one line: powers with ^ (x^2, x^(1/2)), sqrt(x), e^(2x), sin(x), cos(x), tan(x), ln(x), " +
+  "an implicit product written as 3x or 2sin(x), and brackets wherever they are needed. No LaTeX, no markdown, no dollar signs, and no words inside an expression.";
+
+/** The topic's own practice shapes, from the spine. */
+const shapesOf = (topicId: string): CalcShape[] => CALC1_SPINE.find((t) => t.id === topicId)?.shapes.slice() ?? [];
+/** True when a shape of the topic leaves a field of the shared schema unused (two shapes with different parameters). */
+const leavesUnused = (shapes: CalcShape[]) => { const all = new Set(shapes.flatMap((s) => PARAMS[s])); return shapes.some((s) => PARAMS[s].length < all.size); };
+
+/** One schema: the shape restricted to the topic's own list, every parameter typed, a difficulty, and no other field. */
+function calcSchema(shapes: CalcShape[], want: number): JSONSchema {
+  const props: Record<string, JSONSchema> = { shape: { type: "string", enum: shapes }, f: { type: "string", minLength: 1, maxLength: 80 } };
+  for (const k of new Set(shapes.flatMap((s) => PARAMS[s]))) props[k] = PARAM_SCHEMA[k];
+  props.difficulty = { type: "integer", minimum: 1, maximum: 5 };
+  const item = { type: "object", additionalProperties: false, properties: props, required: Object.keys(props) };
+  return { type: "object", additionalProperties: false, properties: { specs: { type: "array", maxItems: want, items: item } }, required: ["specs"] };
+}
+/** The reply is held only to "a list of objects": one spec off its shape is dropped by code, not the whole round. */
+const CALC_ACCEPT: JSONSchema = { type: "object", properties: { specs: { type: "array", items: { type: "object" } } }, required: ["specs"] };
+
+function askCalc(topicId: string, shapes: CalcShape[], memory: string[], slips: string[], want: number, avoid: string[]) {
+  const t = topicIn(topicId);
+  // the slips as the desk would say them, never as ids
+  const said = slips.map((id) => CALC_SLIPS.find((x) => x.id === id)).filter((x): x is (typeof CALC_SLIPS)[number] => !!x);
+  const known = said.length
+    ? `Mistakes this student has actually made on this topic before:\n${said.map((x) => `- ${x.says} (it shows at ${x.points})`).join("\n")}\n` +
+      `Include questions where a mistake like these would show itself. Do not flag which ones, and do not make those questions any harder than the rest.\n\n`
+    : `The desk has recorded no mistakes for this student on this topic. Spread the questions evenly across the usual ways this topic goes wrong.\n\n`;
+  const prompt =
+    `Topic: ${t?.name ?? topicId}\n${t?.blurb ?? ""}\n\n` +
+    (memory.length ? `What the desk has learned about this student:\n${memory.map((m) => `- ${m}`).join("\n")}\n\n` : "") +
+    known +
+    (avoid.length ? `Do not repeat any of these, which the student already has:\n${avoid.map((q) => `- ${q}`).join("\n")}\n\n` : "") +
+    `Write ${want} specs for practice questions on this topic, using only these shapes:\n${shapes.map((s) => `- ${SHAPE_LINES[s]}`).join("\n")}\n` +
+    `Rules:\n` +
+    `- Use small integers and simple fractions (1/2, -3/4) as parameters and coefficients; write a point as a number or a constant such as pi/4, in plain notation.\n` +
+    `- Every question must be workable by hand in a few minutes.\n` +
+    `- Vary the difficulty and the kind of function, and give each spec a difficulty from 1 (gentlest) to 5 (hardest).\n` +
+    (leavesUnused(shapes) ? `- A field the shape does not use is left as an empty string (0 for steps).\n` : "") +
+    `- Do not work any question out: give the specs only.`;
+  return text<{ specs: unknown[] }>({ system: CALC_SYSTEM, prompt, schema: calcSchema(shapes, want), accept: CALC_ACCEPT, model: "fast" });
+}
+
+/** A point as the spec holds it: a plain numeral as a number, inf / -inf for a limit, a constant as its plain text. */
+function point(v: unknown, limit = false): number | string | undefined {
+  if (typeof v === "number") return Number.isFinite(v) ? v : undefined;
+  if (typeof v !== "string") return undefined;
+  const t = v.trim();
+  if (!t) return undefined;
+  if (limit && /^\+?(inf|infinity|∞)$/i.test(t)) return "inf";
+  if (limit && /^[-−](inf|infinity|∞)$/i.test(t)) return "-inf";
+  return /^[+-]?\d+(\.\d+)?$/.test(t) ? Number(t) : t;
+}
+
+/** Keys that would carry a result: a spec with one is refused whole (rules/calc wellFormed refuses the same). */
+const RESULT_KEYS = ["answer", "solution", "truth", "value", "result"];
+
+/** A raw spec from the model as a CalcSpec holding only its shape's parameters, or null when it is off the topic's list. */
+function toSpec(raw: unknown, shapes: CalcShape[]): { spec: CalcSpec; difficulty: number } | null {
+  if (!raw || typeof raw !== "object" || Array.isArray(raw)) return null;
+  const r = raw as Record<string, unknown>;
+  if (RESULT_KEYS.some((k) => k in r)) return null;
+  const shape = r.shape as CalcShape;
+  if (!shapes.includes(shape) || typeof r.f !== "string" || !r.f.trim()) return null;
+  const out: Record<string, unknown> = { shape, f: r.f.trim() };
+  for (const k of PARAMS[shape]) {
+    const v = r[k];
+    if (k === "side") { if (v === "+" || v === "-") out.side = v; }
+    else if (k === "kind" || k === "steps") out[k] = v;
+    else if (k === "on") out.on = Array.isArray(v) ? v.map((x) => point(x)) : v;
+    else out[k] = point(v, shape === "limit" && k === "at");
+  }
+  const d = Number(r.difficulty);
+  return { spec: out as unknown as CalcSpec, difficulty: Number.isFinite(d) ? Math.min(5, Math.max(1, Math.round(d))) : 3 };
+}
+
+const sameKey = (q: string) => q.replace(/\s+/g, "").toLowerCase();
+
+/**
+ * A Calculus 1 set: at most n + 3 specs asked for (the topic's own shapes, typed parameters, a difficulty, no result
+ * anywhere), each kept only when it is on the topic's list, well formed (rules/calc), printable, not stating its own
+ * result in its question, and not a question already kept; then ordered by difficulty and the expression's length,
+ * and the first n taken. A second round asks for what is still missing, naming what is kept. The item is
+ * { n, question: the printed question, spec } - the spec carries only what the question prints.
+ */
+async function makeCalcItems(topicId: string, learnerId: string, n: number): Promise<{ items: PracticeItem[]; provider: string; ms: number; tries: number }> {
+  const me = getLearner(learnerId);
+  const memory = me.memory;
+  const slips = me.skills[topicId]?.slips ?? [];
+  const shapes = shapesOf(topicId);
+  const kept: { spec: CalcSpec; question: string; difficulty: number }[] = [];
+  const seen = new Set<string>();
+  let provider = "";
+  let ms = 0;
+  let tries = 0;
+
+  for (let round = 0; round < 2 && kept.length < n; round++) {
+    const want = round === 0 ? n + 3 : n - kept.length + 3;
+    const r = await askCalc(topicId, shapes, memory, slips, want, kept.map((k) => k.question));
+    tries++;
+    provider = r.provider;
+    ms += r.ms;
+    for (const raw of Array.isArray(r.json?.specs) ? r.json.specs : []) {
+      const c = toSpec(raw, shapes);
+      // wellFormed first: question() is only asked of a spec the desk can read whole
+      if (!c || !wellFormed(c.spec).ok) continue;
+      const q = printed(c.spec);
+      // a question that prints its own result (differentiate e^x) is no question
+      if (!q || leaksCalc(c.spec, q.plain)) continue;
+      const k = sameKey(q.plain);
+      if (seen.has(k)) continue;
+      seen.add(k);
+      kept.push({ spec: c.spec, question: q.plain, difficulty: c.difficulty });
+    }
+  }
+
+  const ordered = kept.slice().sort((a, b) => a.difficulty - b.difficulty || a.spec.f.length - b.spec.f.length);
+  return { items: ordered.slice(0, n).map((k, ix) => ({ n: ix + 1, question: k.question, spec: k.spec })), provider, ms, tries };
 }
