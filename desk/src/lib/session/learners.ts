@@ -55,18 +55,52 @@ const WRITING_CLEAN_BELOW = 0.25;
 
 type Book = Record<string, Learner>;
 
-function readAll(): Book {
-  try {
-    if (existsSync(FILE)) {
-      const j = JSON.parse(readFileSync(FILE, "utf8"));
-      if (j && typeof j === "object" && !Array.isArray(j)) return j as Book;
-    }
-  } catch {}
-  return {};
+const why = (e: unknown) => (e instanceof Error ? e.message : String(e));
+let told = "";
+/** A read failure goes to the server log, once per distinct failure: getLearner runs on every request. */
+function tell(line: string): void {
+  if (line !== told) console.error(line);
+  told = line;
 }
 
-function writeAll(book: Book): void {
-  try { mkdirSync(DATA, { recursive: true }); writeFileSync(FILE, JSON.stringify(book)); } catch {}
+/**
+ * learners.json as a book, or null when a file is there that the desk cannot read as one. No file, or an empty
+ * one, is an empty book (nothing to lose); anything else unreadable is somebody's mastery the desk must not
+ * write over - every learner is in this one file.
+ */
+function readBook(): Book | null {
+  let text: string;
+  try {
+    if (!existsSync(FILE)) return {};
+    text = readFileSync(FILE, "utf8");
+  } catch (e) {
+    if ((e as NodeJS.ErrnoException)?.code === "ENOENT") return {};
+    tell(`learners.json could not be read, so it will not be written over: ${why(e)}`);
+    return null;
+  }
+  if (!text.trim()) return {};
+  try {
+    const j = JSON.parse(text);
+    if (j && typeof j === "object" && !Array.isArray(j)) { told = ""; return j as Book; }
+    tell("learners.json is not a book of learners, so it will not be written over");
+  } catch (e) {
+    tell(`learners.json is not readable JSON, so it will not be written over: ${why(e)}`);
+  }
+  return null;
+}
+
+/** What the desk reads: the book, or an empty one while learners.json cannot be read (and is left alone). */
+function readAll(): Book {
+  return readBook() ?? {};
+}
+
+/** Put one learner into the book on disk - never over a file that could not be read. A failure is logged. */
+function writeLearner(id: string, l: Learner): void {
+  const book = readBook();
+  if (!book) { console.error(`learners.json left as it is: ${id}'s change was not saved`); return; }
+  book[id] = l;
+  try { mkdirSync(DATA, { recursive: true }); writeFileSync(FILE, JSON.stringify(book)); }
+  catch (e) { console.error(`learners.json could not be written: ${id}'s change was not saved: ${why(e)}`); }
 }
 
 function blank(id: string): Learner { return { id, english: emptyEnglish(), skills: {}, writing: {}, memory: [], history: [] }; }
@@ -128,14 +162,13 @@ export function getLearner(id: string): Learner {
 }
 
 export function saveLearner(l: Learner): void {
-  const book = readAll();
-  book[l.id] = { ...l, memory: l.memory.slice(-MEMORY_CAP), history: capped(l.history ?? []) };
-  writeAll(book);
+  writeLearner(l.id, { ...l, memory: l.memory.slice(-MEMORY_CAP), history: capped(l.history ?? []) });
 }
 
-/** English commits report a disk failure instead of claiming progress was saved. */
+/** English commits report a disk failure instead of claiming progress was saved - an unreadable learners.json too. */
 export function saveEnglish(id: string, english: EnglishLearning): void {
-  const book = readAll();
+  const book = readBook();
+  if (!book) throw new Error("learners.json could not be read, so progress was not saved over it");
   book[id] = { ...getLearner(id), english };
   mkdirSync(DATA, { recursive: true });
   writeFileSync(FILE, JSON.stringify(book));
