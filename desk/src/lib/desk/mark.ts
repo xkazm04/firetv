@@ -18,7 +18,7 @@ import { vision } from "../engines/vision";
 import { ASK, cleanValue as clean, locate, rightLine, settled, slipVocabulary, workingLines } from "../rules/maths";
 import { addHistory, recordAttempt } from "../session/learners";
 import { topic as topicById } from "../library/syllabus";
-import { substitute, verify } from "./verify";
+import { degenerate, substitute, verify } from "./verify";
 import type { Practice, PracticeItem } from "../session/store";
 
 const SCHEMA = {
@@ -82,8 +82,9 @@ export async function markSet(
     const studentWorking = typeof m?.studentWorking === "string" ? m.studentWorking.trim() : "";
     const solution = clean(m?.solution);
 
-    // 1 — the desk substitutes the model's own solution: can the model solve this item at all?
-    const truth = solution ? verify(item.question, solution) : false;
+    // 1 — the desk substitutes the model's own solution: can the model solve this item at all? An item any answer
+    // satisfies (an identity, no x) is not one the arithmetic can settle, so it asks too.
+    const truth = solution && !degenerate(item.question) ? verify(item.question, solution) : false;
     // 2 — and the student's answer: true or false when it substitutes cleanly, null when it cannot be substituted.
     const student = studentAnswer ? substitute(item.question, studentAnswer) : null;
 

@@ -11,7 +11,7 @@ import { text } from "../engines/text";
 import { topic } from "../library/syllabus";
 import { getLearner } from "../session/learners";
 import { slip as slipById, type Slip } from "../rules/maths";
-import { verify } from "./verify";
+import { degenerate, verify } from "./verify";
 import type { PracticeItem } from "../session/store";
 
 const SCHEMA = {
@@ -74,6 +74,7 @@ function keep(cands: Candidate[] | undefined, have: PracticeItem[]): Candidate[]
     const k = q.replace(/\s+/g, "").toLowerCase();
     if (seen.has(k)) continue;
     if (!verify(q, a)) continue;          // the one gate: the stated answer must actually satisfy it
+    if (degenerate(q)) continue;          // ...and it must be the answer that does: an identity or no-x equation takes any
     seen.add(k);
     out.push({ question: q, answer: a });
   }

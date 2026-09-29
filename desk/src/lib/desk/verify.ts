@@ -8,7 +8,8 @@
  * it. Substitute the value into the equation and see whether the two sides agree.
  *
  * No dependencies, no `eval`, no `new Function` — a tokenizer and a recursive-descent parser.
- * Malformed input never throws: `verify` returns false, `evaluate` returns null.
+ * Malformed input never throws: `verify` returns false, `evaluate` returns null. A check only means something when
+ * the answer matters: `degenerate` names the equation any answer satisfies, and a value in x is never a value.
  */
 
 type Tok =
@@ -155,7 +156,9 @@ export function evaluate(expr: string, x: number): number | null {
  */
 export function substitute(equation: unknown, value: unknown): boolean | null {
   if (typeof equation !== "string" || typeof value !== "string") return null;
-  const x = evaluate(value, 0);          // the value may itself be an expression: -3, 7/2
+  // the value may itself be an expression (-3, 7/2) but never one in x: '5x' or a bare 'x' is not a value of x
+  if (lex(value)?.some((t) => t.k === "x")) return null;
+  const x = evaluate(value, 0);
   if (x === null) return null;
   const sides = normalise(equation).split("=");
   if (sides.length !== 2) return null;
@@ -168,4 +171,27 @@ export function substitute(equation: unknown, value: unknown): boolean | null {
 /** Does `value` satisfy `equation`? Only a substitution that holds says yes; one that cannot be made says no. */
 export function verify(equation: string, value: string): boolean {
   return substitute(equation, value) === true;
+}
+
+/** Unrelated values no school item has for a root: an equation that holds at two of them holds for (almost) any x. */
+const SAMPLES = [0.37, -1.73, 2.91, 7.31, -11.13];
+
+/**
+ * An equation whose verdict cannot depend on the learner's answer: it has no x at all (3+4=7), or it holds at
+ * several unrelated values of x (2(x+1)=2x+2, an identity). Any answer "satisfies" it, so it is not a question.
+ * Many roots are not this: x^2=4 holds at 2 and -2 and at none of the samples. Unreadable input is not degenerate -
+ * `verify` already says no to it.
+ */
+export function degenerate(equation: unknown): boolean {
+  if (typeof equation !== "string") return false;
+  const sides = normalise(equation).split("=");
+  if (sides.length !== 2) return false;
+  if (evaluate(sides[0], SAMPLES[0]) === null || evaluate(sides[1], SAMPLES[0]) === null) return false;
+  if (!sides.some((s) => lex(s)?.some((t) => t.k === "x"))) return true;
+  let holds = 0;
+  for (const x of SAMPLES) {
+    const a = evaluate(sides[0], x), b = evaluate(sides[1], x);
+    if (a !== null && b !== null && Math.abs(a - b) <= 1e-9 * Math.max(1, Math.abs(a), Math.abs(b))) holds++;
+  }
+  return holds >= 2;
 }

@@ -426,3 +426,31 @@ test('pen case 7: an unsure item settled wrong by an explanation gets its slipAt
  assert.equal((await explainAt(3)).body.settled,'right');
  it=store.getSession().practice.items[3];assert.equal(it.verdict,'right');assert.equal(it.slipAt,undefined);
 });
+
+// ---- practice-gate-rejects-identities: an item whose verdict cannot depend on the answer never reaches the set ----
+test('gate case 1: an identity or an equation with no x is rejected at the gate, whatever answer it states; a real item and x^2=4 are kept',async()=>{
+ answer=reply({items:[{question:'3+4=7',answer:'5'},{question:'2(x+1)=2x+2',answer:'-100'},{question:'2x+3=3',answer:'5x'},{question:'2x+3=11',answer:'4'},{question:'x^2=4',answer:'2'}]});
+ const r=await makeItems('linear-one-step','maths-gate',2);
+ assert.deepEqual(r.items.map(i=>i.question),['2x+3=11','x^2=4'],'only items whose verdict depends on the answer');
+ assert.equal(r.tries,1);
+});
+test('gate case 2: an answer that itself contains x is never read as a number; well-formed items verify exactly as before',()=>{
+ const {substitute}=require(path.join(root,'src/lib/desk/verify.ts'));
+ for(const v of ['5x','x','2x-1','X'])assert.equal(substitute('2x+3=3',v),null,`${v} is not a number`);
+ assert.equal(verify('2x+3=3','5x'),false);assert.equal(verify('2x+3=3','0'),true);
+ assert.equal(substitute('2x+3=11','4'),true);assert.equal(substitute('2x+3=11','5'),false);assert.equal(substitute('2x=7','7/2'),true);
+});
+test('gate case 3: marking asks about a degenerate item and an x-answer - never "right"; a real item still marks right',async()=>{
+ const odd={topic:'linear-one-step',marked:false,items:['3+4=7','2(x+1)=2x+2','2x+3=3','2x+1=1','2x+3=11'].map((question,ix)=>({n:ix+1,question}))};
+ looked=reply({items:[
+  {n:1,studentAnswer:'5',studentWorking:'',verdict:'right',solution:'5',slip:'unclear'},
+  {n:2,studentAnswer:'-100',studentWorking:'',verdict:'right',solution:'1',slip:'unclear'},
+  {n:3,studentAnswer:'x = x',studentWorking:'2x = 0',verdict:'right',solution:'0',slip:'unclear'},
+  {n:4,studentAnswer:'5x',studentWorking:'',verdict:'right',solution:'0',slip:'unclear'},
+  {n:5,studentAnswer:'4',studentWorking:'2x=8',verdict:'right',solution:'4',slip:'unclear'},
+ ]});
+ const r=await markSet('img',odd,'maths-gate-mark');
+ assert.deepEqual(r.items.map(i=>i.verdict),['unsure','unsure','unsure','unsure','right']);assert.equal(r.unsure,4);
+ for(const i of r.items.slice(0,4))assert.equal(i.said,require(path.join(root,'src/lib/rules/maths.ts')).ASK(i.n),`item ${i.n} asks`);
+ const rec=getLearner('maths-gate-mark').skills['linear-one-step'];assert.equal(rec.seen,1,'only the real item reaches the record');assert.equal(rec.right,1);
+});
