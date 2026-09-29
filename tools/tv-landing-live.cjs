@@ -98,7 +98,7 @@ async function frame(page, label) {
       await press(page, 'ArrowUp'); assert.equal(await lit(page), 'english', 'a paired phone is not a stop: Up stays');
       // Select on Someone else: the switcher, and Back lands on it again
       await press(page, 'ArrowDown'); await page.keyboard.press('Enter');
-      await waitScreen(page, (s) => s.screen === 'learner'); await press(page, 'Backspace');
+      await waitScreen(page, (s) => s.screen === 'learner'); await page.waitForSelector('[data-role="desk-scene"]', { state: 'detached' }); await press(page, 'Backspace');
       await waitScreen(page, (s) => s.screen === 'landing'); await page.waitForTimeout(300);
       assert.equal(await lit(page), 'place', 'Back from the switcher lands on Someone else');
       // Back on the desk rests the light again
@@ -134,7 +134,7 @@ async function frame(page, label) {
       await shot('first-run'); await frame(page, `first-run ${W}`);
       await press(page, 'ArrowDown'); assert.equal(await lit(page), 'essay', 'Down from the phone is the last app');
       await press(page, 'ArrowUp'); assert.equal(await lit(page), 'phone', 'Up from an app is the phone');
-      await page.keyboard.press('Enter'); await waitScreen(page, (s) => s.screen === 'pair');
+      await page.keyboard.press('Enter'); await waitScreen(page, (s) => s.screen === 'pair'); await page.waitForSelector('[data-role="desk-scene"]', { state: 'detached' });
       await press(page, 'Backspace'); await waitScreen(page, (s) => s.screen === 'landing'); await page.waitForTimeout(300);
       assert.equal(await lit(page), 'phone', 'Back from pairing lands on the phone');
 
