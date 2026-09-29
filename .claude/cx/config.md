@@ -34,7 +34,7 @@ Audiences: English is for anybody (Duolingo-like); maths mainly for high-school 
 Since the 2026-09-24/25 contests each app is its own brand, and a proposal is judged against the doc of the
 surface it touches:
 
-- landing - `docs/DESIGN-STUDY-DESK.md` (Left on the Desk: walnut, the lamp, objects in each app's brand)
+- landing - `docs/DESIGN-STUDY-DESK.md` (Small Worlds: a paper-cut world per app, a paper shelf; the look is a theme, `desk/src/landing/themes/`)
 - Math Buddy (tonight, topics, practice, sheet, walk, maths page/hint/lesson/units/calendar) - `docs/DESIGN-MATH-BUDDY.md` (Lamplight)
 - Linga (every `linga*` screen, tonight while the subject is english) - `docs/DESIGN-LINGA.md` (the Open Door)
 - Essay Master (essaytype, forensic, playbook, xray) - `docs/DESIGN-ESSAY-MASTER.md` (Specimen)

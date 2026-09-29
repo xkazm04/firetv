@@ -1,6 +1,6 @@
 /**
  * The apps' marks and Essay Master's arrow, drawn wherever an app is named: its own screens (maths/MathsTV.tsx,
- * essay/EssayTV.tsx), the landing's desk (landing/LandingTV.tsx) and the recap's tiles (tv/screens.tsx). A leaf:
+ * essay/EssayTV.tsx) and the recap's tiles (tv/screens.tsx); the landing draws its own key art (landing/themes/). A leaf:
  * it imports nothing of the shell or the modules, so each side draws them without importing the other. Linga's
  * mark lives with its design (english/OpenDoor.tsx), which is a leaf already.
  */

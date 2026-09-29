@@ -64,7 +64,7 @@ pauses the scene (`tvKey`). A work block is 25 minutes; when it runs out the TV 
 
 ## 3. The design law per surface
 
-- **The landing** — *Left on the Desk*: a walnut desk at night, each app an object in its own brand showing what it has waiting; the lamp starts on what was left. [DESIGN-STUDY-DESK.md](DESIGN-STUDY-DESK.md)
+- **The landing** — *Small Worlds*: the app in the light fills the screen as a paper-cut world, a paper shelf holds what it has waiting and one tile per app; the light starts on what was left; the look is a theme. [DESIGN-STUDY-DESK.md](DESIGN-STUDY-DESK.md)
 - **Math Buddy** — *Lamplight*: homework under a lamp; the learner's working in their own hand, the desk's pen marking the one place to look again, never the answer. [DESIGN-MATH-BUDDY.md](DESIGN-MATH-BUDDY.md)
 - **Linga** — *the Open Door*: every screen is an arch on the left with the situation behind it and the few words to walk in beside it. [DESIGN-LINGA.md](DESIGN-LINGA.md)
 - **Essay Master** — *Specimen*: the type is the diagram; lenses inked as progress, the missing half hatched, the move set large, the sentence never written for you. [DESIGN-ESSAY-MASTER.md](DESIGN-ESSAY-MASTER.md)
@@ -92,32 +92,33 @@ Play/Pause, section 2).
 
 ### 5.1 The desk
 
-#### `landing` · Left on the Desk
-The first screen: whose desk it is, and which app to open. *Left on the Desk*
-([DESIGN-STUDY-DESK.md](DESIGN-STUDY-DESK.md)): a walnut desk at night seen from above, the leather blotter with
-the embossed wordmark, a place card ("Ema's desk"), the phone, and one object per app on the learner's profile,
-each in its app's own brand and showing what it has waiting - Math Buddy's sheet (the marked set ticked and ringed
-from its verdicts, an open set or a snapped page in print, else a blank sheet), Linga's arch with the scene of the
-next topic or of the conversation left mid-way, Essay Master's card with the lens last read and the paragraph's
-arrows. The lamp's pool of light is the focus and starts on the object with something waiting (the sage
-CONTINUE tag: marked > left mid-way > next > last). One caption slot names the lit object in a sentence. There is
-no Continue button and no Someone else button: the lamp is already on what was left, and the place card is the
-way to someone else.
+#### `landing` · Small Worlds
+The first screen: whose desk it is, and which app to open. *Small Worlds*
+([DESIGN-STUDY-DESK.md](DESIGN-STUDY-DESK.md)): the app in the light fills the screen - its name cut from paper over
+a small world (Math Buddy's stairs lit by the marked set's right answers, Linga's hotel reception with the
+conversation left mid-way or the next one waiting, Essay Master's page of sentence bars with the loupe on the one to
+fix) - and a paper shelf below holds a caption (a chip for when, a headline, one line; about 25 words), one arched
+tile per app on the learner's profile, the big *Continue as Ema* and *Someone else*. Top right: the phone and who is
+at the desk; an unpaired phone is a postcard with the desk's real address and code. The light starts on the app with
+something waiting (marked > left mid-way > next > last). The look is a theme (`desk/src/landing/themes/`): paper today,
+a blueprint look kept and locked off until product splits the landing by age.
 *Reached:* the session's first screen; every `learner.set` and `profile.save`; Back from an app's home, the
-switcher or pairing (lamp on the object it came from); `joined`'s Select or Back and the recap's desk (lamp at rest).
-*D-pad:* Left/Right along the apps; Up to the place card; Down from the place card to the app under it, and from
-an app to the phone while it is unpaired (Up or Left from the phone goes back to the last app); Select on an app
-plays the zoom into its colours, then opens its home (`tonight` for Math Buddy, `linga`, `essaytype`) after a
-`subject` event; Select on the place card → `learner`, on the unpaired phone → `pair` (both with `from: landing`);
-Back brings the lamp home to the CONTINUE object (the place card when nothing waits); **Menu ends tonight** wherever
-the lamp is - `session.end` → `recap`, and the memory is written (`/api/memory`), as the phone's End session does.
-A nav to the landing without a focus rests the lamp (`LANDING_REST`, -1). Choosing a learner in the switcher, or
-saving a profile, returns to the desk with the lamp at rest on what that learner left - never straight into one app.
+switcher or pairing (light on the object it came from); `joined`'s Select or Back and the recap's desk (light at rest).
+*D-pad:* Left/Right along the shelf of apps; Up to the phone (top right) while it is unpaired; Down to Someone else
+(bottom right), and from there Up back to the app above it (Down or Left from the phone goes back to the last app);
+Select on an app plays the hand-off into its colours, then opens its home (`tonight` for Math Buddy, `linga`,
+`essaytype`) after a `subject` event; Select on Someone else → `learner`, on the unpaired phone → `pair` (both with
+`from: landing`); the *Continue as ...* button is not a stop, it names what Select does; Back brings the light home to
+the CONTINUE app (the phone while none is paired and nothing waits); **Menu ends tonight** wherever the light is -
+`session.end` → `recap`, and the memory is written (`/api/memory`), as the phone's End session does.
+A nav to the landing without a focus rests the light (`LANDING_REST`, -1). Choosing a learner in the switcher, or
+saving a profile, returns to the desk with the light at rest on what that learner left - never straight into one app.
 *Feeds:* the profile's modules (`onModules`), `continueCard` and `practice` (Math Buddy), Linga's own home view
 (`lingaView`, `lingaHome`, `progressDots`), the writing record and history (`lensStandings`, `writingTotals`, the
 session's `essay` when this learner read it), `joined` / `pin` / `phoneUrl`.
-*Code:* `desk/src/landing/LandingTV.tsx`, `desk/src/tv/landingRows.ts`, the `landing` entry of the keymap in
-`desk/src/tv/keys.ts`, `desk/src/design/desk-landing.css`. Tests: `tools/tv-keys-test.cjs` (landing 1-4).
+*Code:* `desk/src/landing/` (model, seam, themes), `desk/src/tv/landingRows.ts`, the `landing` entry of the keymap in
+`desk/src/tv/keys.ts`, `desk/src/design/desk-landing.css`. Tests: `tools/tv-keys-test.cjs` (landing 1-6),
+`tools/tv-landing-test.cjs`, `tools/tv-landing-live.cjs`.
 
 ### 5.2 The shell (On Air, `desk/src/tv/screens.tsx`)
 

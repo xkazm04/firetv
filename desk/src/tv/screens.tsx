@@ -48,7 +48,7 @@ export function Joined({ s }: { s: Session }) {
       <img src="/brand/paired.png" alt="" style={{ position: "absolute", right: 0, top: 40, width: 760, height: 520, objectFit: "contain" }} />
       <div style={{ position: "absolute", left: 0, bottom: 216, maxWidth: 900 }}>
         <span className="cap">What now</span>
-        <div className="cap-text">{s.learner ? "Open an app on the desk, or snap the page on the phone." : "Now choose whose desk it is: Up to the place card on the desk."}</div>
+        <div className="cap-text">{s.learner ? "Open an app on the desk, or snap the page on the phone." : "Now choose whose desk it is: Down to Choose who on the desk."}</div>
       </div>
       <div className="actions"><button className="btn" data-focused>The desk</button></div>
     </main>

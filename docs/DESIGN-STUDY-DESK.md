@@ -1,79 +1,99 @@
-# Left on the Desk: the Study Desk landing
+# Small Worlds: the Study Desk landing
 
-**Chosen 2026-09-25** in the study-desk-landing contest (entry A, variant 2; the entry's `NOTES.md` has the
-reasoning). The landing is the first screen of the TV app: whose desk it is, and which of the three apps to open.
-It is the umbrella over three apps that already have their own design languages - Math Buddy is
+**Chosen 2026-09-29** in the study-desk-landing-fresh contest (entry A, variant 1; it replaces "Left on the Desk",
+chosen 2026-09-25). The landing is the first screen of the TV app: whose desk it is, and which of the three apps to
+open. It is the umbrella over three apps that already have their own design languages - Math Buddy is
 [Lamplight](DESIGN-MATH-BUDDY.md), Linga [the Open Door](DESIGN-LINGA.md), Essay Master [Specimen](DESIGN-ESSAY-MASTER.md) -
 and its job is to hold them together without flattening them. The rest of the shell (pairing, the learner switcher,
 profile, break, recap) stays [On Air](DESIGN-ON-AIR.md); the recap's tiles are the exception inside it, each drawn in
-its own app's language like the objects here (see "Tonight, done" below).
-
-The CSS is `desk/src/design/desk-landing.css`, scoped under `.desk-tv` with `dk-` classes. The screen is
-`desk/src/landing/LandingTV.tsx`, routed from `desk/src/app/tv/page.tsx` when the session is on `landing`. What
-each app has waiting, the stops and where the lamp starts are `desk/src/tv/landingRows.ts`; the keys are the
-`landing` entry of `desk/src/tv/keys.ts`. The desk's face is Figtree (`desk/src/landing/fonts.ts`).
+its own app's language (see "Tonight, done" below).
 
 ## The idea in one line
 
-**What you left is still lying where you left it.** A walnut study desk at night, seen from above, one lamp on.
-Each app is an object on the desk in its own brand, showing what it has waiting for this learner. The lamp starts
-on what was left.
+**Each app is a small world, and the one in the light fills the screen.** Its name is cut from paper over layered
+hills, stairs, a hotel desk or a page; a paper shelf below holds what that world has waiting for this learner, one
+arched tile per app, and the one big action: *Continue as Ema*.
+
+## Structure: data, keys, look
+
+The landing is split so its look is a **theme** and nothing else is:
+
+| Piece | File | Owns |
+|---|---|---|
+| The session's rows | `desk/src/tv/landingRows.ts` | which apps are on the desk, the stops, what each app has waiting, where the light rests |
+| The keys | `desk/src/tv/keys.ts` (`landing`) | the D-pad, the Select hand-off's step, Back, Menu |
+| The view-model | `desk/src/landing/model.ts` | the caption (about 25 words), the art state of each app, the two actions' words, the phone's real code and address, the honesty rules; pure, no React |
+| The seam | `desk/src/landing/LandingTV.tsx` | reads the session once, keeps "the room is being entered" and "the app the D-pad was last on", hands both to the theme |
+| A theme | `desk/src/landing/themes/<id>/` | only what the eye sees: `paper` (below) and `blueprint` (locked) |
+| The registry | `desk/src/landing/themes/index.ts` | `THEMES`, `themeFor()`, and `THEMES_ENABLED` (false) |
+| The Select hand-off's wait | `desk/src/app/tv/page.tsx` | plays the theme's zoom, waits `ZOOM_MS` (560), then runs the step; reduced motion does not wait |
+
+The default theme, **paper**, is contest A/1. `desk/src/landing/themes/paper/` draws it: `Paper.tsx` (the landing),
+`worlds.tsx` (the key art per app, as layered SVG components), `stamps.tsx` (each app's small arched picture),
+`glyphs.tsx` (the house mark, the icons, the pairing postcard's picture), `shapes.tsx` (bars, clouds, seeded hills, the
+shared gradients). Its CSS is `desk/src/design/desk-landing.css`, scoped under `.desk-tv.pp` with `pp-` classes and
+loaded from `app/globals.css` like the other designs. Its faces - Fraunces for the paper-cut names and headings, DM
+Sans for words, DM Mono for the pairing code - are self-hosted by `next/font` (`desk/src/landing/fonts.ts`).
+
+### The blueprint theme is kept and locked
+
+Contest A/3, a drafting-sheet look (a blue blueprint sheet, an index list, a callout with a leader line, line
+drawings), was shortlisted, not chosen. It is ported as the second theme (`themes/blueprint/`, CSS in
+`design/desk-landing-blueprint.css` under `.desk-tv.bp`, faces in `themes/blueprint/fonts.ts`) so the look is kept,
+typechecked and testable. **Nothing can select it**: `THEMES_ENABLED` is `false`, so `themeFor()` answers paper to any
+request; no route, query parameter, setting, storage key or profile field names a theme; `LandingTV` asks the registry
+for the default with no argument. The owner will later split the look by age (a children's landing, an adolescent
+one); until product decides the tiers, turning themes on means flipping the constant *and* giving it a real source in
+the same change. `tools/tv-landing-test.cjs` proves the blueprint renders when a test instantiates it and that the app
+cannot reach it (it fails if anything else names it or asks `themeFor()` for a theme). Bundling: the registry imports
+the blueprint statically, so its code and CSS still ship though they are never drawn; making it tree-shake would mean
+a dynamic import, left for the day the flag is turned on.
 
 ## Principles
 
-1. **Study Desk is the desk, not a fourth brand.** Walnut, a green leather blotter with the wordmark embossed
-   into it, one sage accent (`#A9BBA3`), bone type (`#EFE8DC`), and a place card saying whose desk it is. The
-   desk frames the apps; it never recolours them.
-2. **Each object quotes its app, unmistakably.** An object is made of its app's own parts, not a drawing of them:
-   - *Math Buddy* is its night-blue folder with a sheet on it: the real practice set in the learner's hand
-     (`MathText`, Lamplight's typesetter), a tick after each right item and the pen's ring around each slip,
-     dashed sky where the desk is not sure; the Lamplight mark and "Math *Buddy*" wordmark below. A set not yet
-     marked is its questions in print; a snapped page is its problems in print. Nothing on the desk: a blank sheet
-     saying so.
-   - *Linga* is its cream card with the plum arch on a plinth and the scene behind it, taken from Linga's own view
-     of home (`lingaView`): the scene of the next topic or of the conversation left mid-way, its name tag, the
-     level badge, and the marks under it (the replies so far, the check's steps, or the plan's topics). Before a
-     level, the Open Door's own open door.
-   - *Essay Master* is its black specimen card with the E-and-caret mark: the lens last read, inked as far as the
-     learner has got with it and cut by the citron cursor there; under it the paragraph on the desk as arrows,
-     one a sentence, the one that argues the other way reversed in citron. Nothing read: the lens names as
-     hatched ghosts.
-3. **Only what is real, and only this learner's.** Every object reads the session. A set, a conversation or a
-   reading belonging to someone else is not shown. An empty object says so in two words ("Not started",
-   "Nothing read", "Nothing open"), never invented progress, never a made-up equation. Only the apps on the
-   profile lie on the desk; no age is compared for a learner without a school system.
-4. **The lamp is the focus.** A warm pool of light sits on exactly one object; the rest of the room dims. The lit
-   object straightens, lifts (1.06) and wears a 6 px warm-white ring. The lamp starts on the object with something
-   waiting, marked with the one sage **CONTINUE** tag: a marked set, then something left mid-way, then the next
-   step, then the last thing done (the most recent on a tie). With nothing waiting there is no tag and the lamp
-   rests on the first app. With no phone paired and nothing waiting, the lamp rests on the phone instead: every
-   app's first real step needs it.
-5. **The lit object comes alive.** The pen draws its ticks and rings in; Linga's scene drifts and its pendant
-   lamp swings; the citron cursor blinks and the reversed arrow turns round; the place card offers "Someone else"
-   (on a fresh desk no one sits at yet it asks "Whose desk?", and Select on any object opens the learner switcher first);
-   an unpaired phone breathes sage until it is lit.
-6. **A verdict is a picture; sentences live in one slot.** Ticks, rings, the reversed arrow, the mid-way marks and
-   the inked lens carry the state. The one caption slot on the blotter's lip holds a sage label and one sentence
-   about the lit object.
-7. **The phone is an object too.** Paired, it is a chip on the desk (status, not a stop). Not yet, its screen
-   carries the address and the four-digit code in big type, and it is a stop: Select opens the pairing screen.
-8. **Ten-foot law.** 1920 x 1080 stage, 5% safe zone (96 / 54 px) for every object and the caption (the lamp in
-   the corner is decoration); nothing under 28 px except 20-22 px uppercase labels (CONTINUE, a tab, PARAGRAPH,
-   MID-WAY, PHONE) that never carry a meaning alone; exactly one lit object; D-pad only.
+1. **Only what is real, and only this learner's.** Every word and number is read off the session
+   (`landing/model.ts`). A set, a conversation or a reading belonging to someone else is not shown. An app with
+   nothing on the desk says so in two words ("Not started", "Nothing read"), never invented progress: its art shows
+   no lit step, no level, no paragraph. Only the apps on the profile lie on the shelf; no age is compared for a
+   learner without a school system.
+2. **The world in the light says what is waiting, in pictures first.** Math Buddy's stairs are lit by the marked
+   set's right answers, of the questions asked, with the lantern on the next step; Linga's reception shows the
+   waiting or unfinished conversation (its bubble stops mid-way when it was left) and the empty hook; Essay Master's
+   page shows the paragraph's sentence bars with the one that argues the other way in coral and the loupe on it.
+   The art is stylised and says so ("Stylised" on the hand-off).
+3. **A television, not a book.** One caption slot on the shelf: a chip (when: Marked, Left Wednesday, Read yesterday,
+   Next up), one headline, one line under it - about 25 words. The big button names what Select does on the app in
+   the light (*Continue as Ema*, *Start as Ema* when nothing is waiting, *Choose who is studying* when no one is
+   seated).
+4. **One thing in the light.** The tile of the app in the world is lifted and ringed (indigo, then warm gold); the
+   others sit desaturated. The light starts on the app with something waiting (marked, then left mid-way, then the
+   next step, then the last thing done; the most recent on a tie), else on the phone while none is paired, else on
+   the first app. The world stays on the last app while the D-pad is on Someone else or the phone.
+5. **The phone is a stop only while it is unpaired.** Paired, it is a chip beside who is at the desk. Unpaired, it is
+   a postcard with the desk's real address and four-digit code in big type; Select opens the pairing screen.
+6. **The learner is a disc.** Top right: the phone, the learner's initial in a colour by their place in the profiles,
+   their name. No one seated: "Whose desk?".
+7. **Ten-foot law.** 1920 x 1080 stage, 5% safe zone (96 / 54 px) for every word and control (the art and the paper
+   shelf bleed off the edge on purpose); nothing meaning-carrying under 28 px; the 20 px chips and key hints are
+   uppercase labels that never carry a meaning alone; D-pad only. `tools/tv-landing-live.cjs` measures the safe
+   zone, the type floor and the caption's word count on the real page at 1920 x 1080 and 1280 x 720.
 
 ## The D-pad
 
 | Key | What it does |
 |---|---|
-| Left / Right | the lamp moves along the apps (clamped at both ends) |
-| Up | to the place card |
-| Down | from the place card, to the app under it; from an app, to the phone while it is unpaired |
-| Select | an app: the zoom, then its home (Math Buddy Tonight, Linga home, Essay Master's lenses); the place card: the learner switcher; the phone: pairing |
-| Back | the lamp goes home to where it rests (principle 4) |
-| Menu | ends tonight, wherever the lamp is: the recap, and what the desk noticed is written (`/api/memory`), as the phone's End session does |
+| Left / Right | the light moves along the shelf of apps (clamped at both ends); the world slides the way it went |
+| Up | from an app, to the unpaired phone (top right); nothing when it is paired. From Someone else, back to the app above it (the middle one) |
+| Down | from an app, to Someone else (bottom right). From the phone, back to the last app |
+| Select | an app: the hand-off, then its home (Math Buddy Tonight, Linga home, Essay Master's lenses); Someone else: the learner switcher; the phone: pairing; with no one seated, any app opens the switcher first |
+| Back | the light goes home to where it rests (principle 4) |
+| Menu | ends tonight, wherever the light is: the recap, and what the desk noticed is written (`/api/memory`), as the phone's End session does |
 
-Arriving without a stop named (a fresh desk, a nav with no focus) the focus is `LANDING_REST` (-1) and the lamp
-rests on the CONTINUE object; with nothing waiting, on the phone while none is paired, else on the first app (`restStop`). Back from an app's home, the switcher or pairing lands on the object it came from.
+The big *Continue as ...* button is not a stop of its own: it names what Select does on the app in the light.
+Arriving without a stop named (a fresh desk, a nav with no focus) the focus is `LANDING_REST` (-1) and the light
+rests on the CONTINUE app; with no phone paired and nothing waiting the lamp rests on the phone, else on the first app
+(`restStop`). Back from an app's home, the switcher or pairing lands on the object it came from. (When this look
+replaced Left on the Desk, Up and Down swapped to follow where the phone and Someone else now sit.)
 
 ## Tonight, done (the recap)
 
@@ -85,20 +105,33 @@ a second. Linga's card holds a plum mark per conversation, sized by its replies.
 arrow per sentence read, the ones to fix turned round in citron. An app with nothing tonight says "Not tonight". No
 problem text, question or answer is on it; the caption slot holds the one sentence. Left / Right walk the tiles and
 then "Back to the desk"; Select on a tile opens what that app still has on the desk (the marked set at its first
-slip, this learner's reading, Linga's home); Back, or the desk, is this landing with the lamp at rest. "On the
+slip, this learner's reading, Linga's home); Back, or the desk, is this landing with the light at rest. "On the
 parent's phone" is a chip, not a stop: the phone's Recap tab already shows the evening.
 
 ## Motion
 
-- **Flicker-on.** The room is dark, then the lamp catches (1.15 s), once when someone sits down at the desk.
-- **Glide.** The pool of light and the dimming glide to the lit object (.45 s); the object lifts and straightens.
-- **Zoom.** Select grows the lit object until the stage is its app's own colours - Lamplight night, the Open
-  Door's cream, Specimen black, or the desk's leather for the switcher and pairing - with the app's mark on it
-  (.55 s), then the app opens. The keys wait while it plays.
-- **Reduced motion.** Every glide, lift, draw, flicker and zoom is a cut: the room is simply lit, and Select opens
-  the app at once.
+- **Arrival.** Once when someone sits down at the desk: the house mark draws itself (three arches, the innermost
+  lit), the world opens out of it in a circle, the shelf rises, the chrome fades in (about 1.8 s).
+- **Choosing.** Left / Right slide the old world out and the new one in from the side the D-pad went; each layer
+  travels by its own factor (hills barely, the hero pieces fully); the name's letters rise in one by one (.7 s).
+- **Hand-off.** Select floods the stage from the tile in the app's own colours (Lamplight blue, Linga's terracotta,
+  Essay Master's green) with its arched picture, "Opening" and its name, then the app opens (`ZOOM_MS`, 560 ms). The
+  keys wait while it plays.
+- **Reduced motion.** No arrival, no drift, no slide: the world is simply there, and Select opens the app at once.
 
 ## What the landing is not
 
-Not a menu of three tiles, not a fourth colour scheme laid over the apps, not a dashboard of numbers. No
-Continue button: the lamp is already on what you left.
+Not a menu of three tiles, not a fourth colour scheme laid over the apps, not a dashboard of numbers. Choosing a
+learner in the switcher, or saving a profile, returns to the desk with the light at rest on what that learner left -
+never straight into one app. **Menu ends tonight** wherever the light is - `session.end` -> `recap`, and the memory is
+written (`/api/memory`).
+
+*Feeds:* the profile's modules (`onModules`), `continueCard` and `practice` (Math Buddy), Linga's own home view
+(`lingaView`, `lingaHome`, `progressDots`), the writing record and history (`lensStandings`, `writingTotals`, the
+session's `essay` when this learner read it), `joined` / `pin` / `phoneUrl`.
+*Code:* `desk/src/landing/` (model, seam, themes), `desk/src/tv/landingRows.ts`, the `landing` entry of the keymap in
+`desk/src/tv/keys.ts`, `desk/src/design/desk-landing.css`. *Tests:* `tools/tv-keys-test.cjs` (landing 1-6),
+`tools/tv-landing-test.cjs` (the view-model, the paper theme, the blueprint lock), `tools/tv-landing-live.cjs` (the
+real page: D-pad, hand-off, reduced motion, safe zone, type floor; needs a server). *Promotion:* the paper port was
+held to the winner's computed styles with `style-contract.py` (20 roles: title, tiles, shelf, caption, both actions,
+chrome).

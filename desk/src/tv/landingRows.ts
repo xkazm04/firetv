@@ -1,8 +1,9 @@
 /**
- * The Study Desk landing's pure rows: which objects lie on the desk, where the lamp starts, and what each app has
- * waiting for the learner at the desk - read straight off the session, never invented. Shared by the landing
- * (landing/LandingTV.tsx) and the D-pad (tv/keys.ts), so the object drawn lit and the stop the keys walk are one
- * list. Types only from the store: the TV never loads the filesystem-backed session modules.
+ * The Study Desk landing's pure rows: which apps lie on the desk, where the light (the "lamp") starts, and what each
+ * app has waiting for the learner at the desk - read straight off the session, never invented. Shared by the
+ * landing's view-model (landing/model.ts, which every theme draws) and the D-pad (tv/keys.ts), so the app drawn in
+ * the light and the stop the keys walk are one list. "Place" is Someone else. Types only from the store: the TV
+ * never loads the filesystem-backed session modules.
  */
 import type { PracticeItem, Session, Subject } from "@/lib/session/store";
 import { topicIn } from "@/lib/library/paths";
