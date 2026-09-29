@@ -10,7 +10,7 @@ import type { EssayAnalysis, Event, JobKind, Profile, Screen, Session, Subject }
 import { rewriteState } from "@/lib/rules/essay";
 import { LESSONS, ESSAY_TYPES, PLAYBOOK, playFor, type Lesson } from "@/lib/library/lessons.data";
 import { SYLLABUS, type Topic } from "@/lib/library/syllabus";
-import { learnerPath, nextOn, topicsOf, type PathTopic } from "@/lib/library/paths";
+import { learnerPath, nextOn, topicsOf, type MathPath, type PathTopic } from "@/lib/library/paths";
 import { lessonStates } from "@/lib/library/watched";
 import { profileRows, locate, flat } from "@/tv/profileRows";
 import { continueCard } from "@/tv/mathsRows";
@@ -76,11 +76,18 @@ export function tonightStops(s: Session): TonightStop[] { return continueCard(s)
 
 /** Who is at the desk: every profile, then "add a learner". */
 export function learnerStops(s: Session): Array<Profile | "add"> { return [...s.profiles, "add"]; }
-/** The units of the module on screen; the calendar is Math Buddy's lessons on file. */
-export function unitStops(s: Session): Lesson[] { return LESSONS.filter((l) => l.subject === s.subject); }
-export function calendarStops(): Lesson[] { return LESSONS.filter((l) => l.subject === "maths"); }
+/**
+ * A module's lessons on file; a maths lesson only on its own path (a lesson with no path is the school path's).
+ * Calculus 1 has no lesson library, so on that path Math Buddy's list is empty and its screens say so.
+ */
+export function lessonsOn(subject: Subject, path: MathPath, lessons: readonly Lesson[] = LESSONS): Lesson[] {
+  return lessons.filter((l) => l.subject === subject && (subject !== "maths" || (l.path ?? "school") === path));
+}
+/** The units of the module on screen; the calendar is Math Buddy's lessons on file - both the learner's path's. */
+export function unitStops(s: Session): Lesson[] { return lessonsOn(s.subject, learnerPath(s)); }
+export function calendarStops(s: Session): Lesson[] { return lessonsOn("maths", learnerPath(s)); }
 /** Where Units opens from Tonight: on Math Buddy's next lesson to watch (library/watched.ts), else the first. */
-export function unitsFocus(s: Session): number { return Math.max(0, lessonStates(calendarStops(), s.history).indexOf("next")); }
+export function unitsFocus(s: Session): number { return Math.max(0, lessonStates(calendarStops(s), s.history).indexOf("next")); }
 /** Where Tonight's Menu goes, as its one chip names it (maths/MathsTV.tsx Tonight): the lessons on file. */
 export const TONIGHT_MENU = "Lessons";
 /** The lenses, straight from the library, top to bottom. */
@@ -256,7 +263,7 @@ const KEYMAP: Partial<Record<Screen, Handler>> = {
     if (k === "back" || k === "left") { const h = homeOf(s, s.subject); o.nav(h.screen, h.focus); }
   },
   calendar: (s, k, _, o) => {
-    const stops = calendarStops();
+    const stops = calendarStops(s);
     o.grid(k, stops.length, 3);
     if (k === "select") { const l = stopAt(stops, s.focus); if (l) { o.ev(lessonEvent(l, `Unit ${l.unit}.`)); o.nav("lesson"); } }
     if (k === "back") o.nav("units");

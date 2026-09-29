@@ -2,9 +2,13 @@
  * The syllabus, as data — safe for the browser. Server-side retrieval lives in lessons.ts. Whether a lesson was
  * watched is the learner's, not the library's: library/watched.ts reads it off their own history.
  */
+import type { MathPath } from "./paths";
+
 export interface Lesson {
   id: string; subject: "maths" | "english" | "essay"; unit: number; title: string; minutes: number;
   concepts: string[]; youtube?: string;
+  /** The maths path the lesson belongs to; none means the school path. There is no Calculus lesson yet. */
+  path?: MathPath;
 }
 
 export const LESSONS: Lesson[] = [

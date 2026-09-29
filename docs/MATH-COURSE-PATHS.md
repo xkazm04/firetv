@@ -274,7 +274,8 @@ because it is the fallback. No test pins this case.
 - **Names.** Every screen names a set by its path's name for it (`topicName`, which uses `topicIn`): the crumb and
   the sheet head on Practice, Sheet and Walk, "Six more on ..." on the Sheet, the Tonight card, and the history
   label. A course topic has no year, so no year word is drawn under it, and `expectedOn` is null, so there is no
-  SCHOOL tick.
+  SCHOOL tick. Topics' "Most people do X first." names X in running text (`inRunningText` in `tv/mathsRows.ts`):
+  "the chain rule and implicit differentiation", but "Newton's method" keeps its capital.
 - **A marked Calculus item.** It has no pen position, so a wrong one gets the wavy underline on its answer line and
   the card's "Look at ..." from the slip's `points`. The slip's title is the `CALC_SLIPS` name, for example "The
   constant left off". An answer marked with no working is drawn as the learner wrote it: `workingLines`
@@ -378,8 +379,11 @@ Linear algebra needs a different engine altogether.
   and area functions in t are not shapes.
 - **The reader's quality on real handwriting is unmeasured.** Marking tests stub the vision model. No real photo of
   Calculus working has been read and compared.
-- **No Calculus lesson library.** There are no lesson picks, and Units and Calendar still list the school maths
-  lessons (`LESSONS`) whatever the learner's path. Math Buddy's module blurb still says "school maths".
+- **No Calculus lesson library.** There are no lesson picks and no Calculus lessons. Units and the Calendar list
+  the lessons of the learner's path (`lessonsOn` in `tv/keys.ts`; a lesson with no `path` is the school path's), so
+  on Calculus 1 they show one line, "No lessons for Calculus 1 yet. The desk explains a step when you ask.", with
+  nothing to focus. Math Buddy's module blurb (`MODULE_BLURB` in `tv/profileRows.ts`) speaks for either path; the
+  landing's own one-line copy (`BLURB_ONE` in `tv/landingRows.ts`) still says "school maths".
 - **Glyphs on a real Fire TV are unverified.** `fonts.ts` loads the latin and latin-ext subsets only, so Greek,
   arrows, ∑, ∂ and ′ fall back to a system face that has not been seen on a Fire TV.
 - **Newton items are limited** to steps whose iterates the 5e-3 tolerance can tell apart. For `x^2 - 2` from 1,

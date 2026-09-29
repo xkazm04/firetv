@@ -125,6 +125,22 @@ export function calendarWeeks(n: number): Array<[string, number, number]> {
   return out;
 }
 
+/** What Units and the Calendar say on a path with no lessons on file (Calculus 1 has no lesson library). */
+export function noLessonsLine(path: MathPath): string {
+  return `No lessons for ${PATHS[path].name} yet. The desk explains a step when you ask.`;
+}
+
+/** First words that are a person's name, kept capitalised in running text: a listed name, or any Name's. */
+const PROPER_FIRST = /^(?:Newton's|L'Hospital's|Riemann|\p{Lu}[\p{L}'’-]*['’]s)(?=[\s,;:]|$)/u;
+/**
+ * A topic's name as it reads mid-sentence ("Most people do the chain rule ... first."): its first letter lowercased,
+ * unless the name opens with a proper name (Newton's method, L'Hospital's rule, Riemann sums). Nothing else changes.
+ */
+export function inRunningText(name: string): string {
+  if (!name || PROPER_FIRST.test(name)) return name;
+  return name.charAt(0).toLowerCase() + name.slice(1);
+}
+
 /** The ten-foot floor: no line of maths on the paper is set under 28 px (the landing's useFit keeps the same one). */
 export const FIT_FLOOR = 28;
 /** A row's fitted size in px, and whether it must wrap because even the floor is too wide. */

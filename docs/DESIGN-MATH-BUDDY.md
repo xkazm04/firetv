@@ -235,7 +235,7 @@ value is drawn as `x = <answer>`, but an item with a spec asks for no x, so a Ca
 | Page | the snapped sheet as paper, its OCR'd problems in print, the one under the lamp lifted with OK Hint; the side: problem count, read time, the real photo with the band; Menu shows the photo whole |
 | Hint | the problem on the paper, lines left for the learner's own working; the taped card with hint 1 then hint 2; pills Still stuck, Show me the lesson (on the calc1 path, "No lesson for this") |
 | Lesson | the video in a lamp-lit wooden frame; the side: the part that matters, the concepts, why |
-| Units, Calendar | a contents page on the paper; a planner of index cards (done ticked in pen, next taped, later dashed) |
+| Units, Calendar | a contents page on the paper; a planner of index cards (done ticked in pen, next taped, later dashed). Both list the learner's path's lessons only; on a path with none (Calculus 1) each shows its title and one caption, "No lessons for Calculus 1 yet. The desk explains a step when you ask.", with nothing to focus |
 
 ## What Lamplight is not
 

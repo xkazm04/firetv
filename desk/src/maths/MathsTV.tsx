@@ -16,7 +16,7 @@ import { LESSONS } from "@/lib/library/lessons.data";
 import { lessonStates } from "@/lib/library/watched";
 import { slip as slipById } from "@/lib/rules/maths";
 import { PAD, STRIP_AFTER, fitName, flagX, needleX, rulerModel, stripModel } from "@/tv/rulerRows";
-import { calendarWeeks, continueCard, explainLine, fitRow, humanTopic, markLine, paperSquare, pathSecure, rowSquares, secureTitle, stateWord, topicName, topicStates, workWhat, SQUARE, type Continue, type JobLine } from "@/tv/mathsRows";
+import { calendarWeeks, continueCard, explainLine, fitRow, humanTopic, inRunningText, markLine, noLessonsLine, paperSquare, pathSecure, rowSquares, secureTitle, stateWord, topicName, topicStates, workWhat, SQUARE, type Continue, type JobLine } from "@/tv/mathsRows";
 import { running, practiceFailed, stopAt, tonightStops, calendarStops, unitStops, walkStops, HINT_STOPS, TONIGHT_MENU, type TonightStop } from "@/tv/keys";
 import { sheetTiles, sheetStops, tileOf } from "@/tv/sheetRows";
 import { systemOf } from "@/tv/profileRows";
@@ -516,7 +516,7 @@ const PREP = [
 ];
 export function Topics({ s, focus, busy: asked }: { s: Session; focus: number; busy: boolean }) {
   const st = topicStates(s);
-  // the stops are the learner's path (the D-pad's own list is tv/keys.ts TOPIC_STOPS)
+  // the stops are the learner's path, the same list the D-pad walks (tv/keys.ts topicStops(s))
   const stops = topicsOf(learnerPath(s));
   const busy = asked || running(s, "practice");
   const at = (busy && s.topic ? stops.find((t) => t.id === s.topic) : undefined) ?? stopAt(stops, focus)!;
@@ -531,7 +531,7 @@ export function Topics({ s, focus, busy: asked }: { s: Session; focus: number; b
     <div className="mb-lede" key={busy ? "busy" + step : failed ? "failed" : at.id}>
       {busy ? <><div className="mb-kick">{KIND_ICON.six}Preparing · {at.name}</div><p>{PREP[step]}</p></>
         : failed ? <><div className="mb-kick">Not written</div><p>{failed}</p></>
-        : <><div className="mb-kick">{at.strand} · six questions a set</div><p>{at.blurb}{before ? ` Most people do ${before.name} first.` : ""}</p></>}
+        : <><div className="mb-kick">{at.strand} · six questions a set</div><p>{at.blurb}{before ? ` Most people do ${inRunningText(before.name)} first.` : ""}</p></>}
     </div>
     <Ruler s={s} big focus={ix} busy={busy} />
   </>);
@@ -855,6 +855,12 @@ export function Units({ s, focus }: { s: Session; focus: number }) {
   const list = unitStops(s), state = lessonStates(list, s.history);
   const cur = stopAt(list, focus);
   const pan = usePaper(focus);
+  // a path with no lessons on file (Calculus 1): one honest line, nothing to focus; Back still goes home
+  if (!list.length) return (<>
+    <Top s={s} crumb="Units" />
+    <h1 className="mb-title" data-role="maths-title" style={{ top: 150 }}><Amber text="Lessons on file" /></h1>
+    <Caption text={`${noLessonsLine(learnerPath(s))} Back returns to Tonight.`} />
+  </>);
   return (<>
     <Top s={s} crumb="Units" />
     <div className="mb-win" style={{ top: 146, height: 880 }}>
@@ -881,10 +887,15 @@ export function Units({ s, focus }: { s: Session; focus: number }) {
 }
 
 export function Calendar({ s, focus }: { s: Session; focus: number }) {
-  const list = calendarStops(), states = lessonStates(list, s.history), done = states.filter((x) => x === "done").length;
+  const list = calendarStops(s), states = lessonStates(list, s.history), done = states.filter((x) => x === "done").length;
   const cur = stopAt(list, focus);
   const weeks = calendarWeeks(list.length);
   const tilt = [-0.8, 0.6, -0.4, 0.9, -0.6, 0.5, -0.9, 0.4];
+  if (!list.length) return (<>
+    <Top s={s} crumb="Lessons on file" />
+    <h1 className="mb-title" data-role="maths-title" style={{ top: 150 }}>Where you <em>are</em></h1>
+    <Caption text={`${noLessonsLine(learnerPath(s))} Back returns to the units.`} top={960} />
+  </>);
   return (<>
     <Top s={s} crumb="Lessons on file" />
     <h1 className="mb-title" data-role="maths-title" style={{ top: 150 }}>Where you <em>are</em></h1>

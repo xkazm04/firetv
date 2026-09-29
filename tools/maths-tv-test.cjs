@@ -410,3 +410,35 @@ test('path 5: MathsTV names and counts through the path - no topicById, no SYLLA
  assert.match(fnBody(tv,'Topics'),/topicIn\(/,'"Most people do X first" reads topicIn');
  assert.match(fnBody(tv,'Tonight'),/pathSecure\(s\)/,'Tonight counts the learner\'s path');
 });
+
+test('course copy 1: "Most people do X first" names X in running text - lowercased, unless it opens with a proper name',()=>{
+ const {inRunningText}=R();
+ assert.equal(typeof inRunningText,'function');
+ assert.equal(inRunningText('The chain rule and implicit differentiation'),'the chain rule and implicit differentiation');
+ assert.equal(inRunningText('One-step equations'),'one-step equations');
+ assert.equal(inRunningText('The second derivative, L\'Hospital\'s rule and curve sketching'),'the second derivative, L\'Hospital\'s rule and curve sketching','a proper name later in the name keeps its capital');
+ for(const kept of ['Newton\'s method','L\'Hospital\'s rule','Riemann sums','Riemann','Fermat\'s theorem','Rolle’s theorem'])assert.equal(inRunningText(kept),kept,kept);
+ assert.equal(inRunningText(''),'');
+ const P=require(path.join(root,'src/lib/library/paths.ts'));
+ const PROPER=/^(?:Newton's|L'Hospital's|Riemann|[A-Z][\w']*['’]s)(?=\s|,|$)/;
+ const names=[...P.topicsOf('school'),...P.topicsOf('calc1')].map(t=>t.name);
+ assert.ok(names.length>=25);
+ for(const name of names){
+  const got=inRunningText(name);
+  assert.equal(got.slice(1),name.slice(1),`only the first letter may change: ${name}`);
+  if(PROPER.test(name))assert.equal(got,name,`no lowercased proper name: ${name}`);
+  else assert.equal(got[0],name[0].toLowerCase(),`no capital mid-sentence: ${name}`);
+  assert.doesNotMatch(` Most people do ${got} first.`,/do [A-Z](?![\w]*['’]s)(?!iemann)/,name);
+ }
+ assert.match(fnBody(tvSrc(),'Topics'),/Most people do \$\{inRunningText\(before\.name\)\} first\./,'Topics uses the rule');
+});
+
+test('course copy 2: Units and the Calendar take the session and say plainly when a path has no lessons; the Topics comment names topicStops',()=>{
+ const {noLessonsLine}=R();
+ assert.equal(noLessonsLine('calc1'),'No lessons for Calculus 1 yet. The desk explains a step when you ask.');
+ const tv=tvSrc();
+ assert.match(fnBody(tv,'Units'),/unitStops\(s\)/);assert.match(fnBody(tv,'Calendar'),/calendarStops\(s\)/);
+ for(const fn of ['Units','Calendar'])assert.match(fnBody(tv,fn),/noLessonsLine\(learnerPath\(s\)\)/,`${fn} draws the empty state`);
+ const raw=fs.readFileSync(path.join(root,'src/maths/MathsTV.tsx'),'utf8');
+ assert.doesNotMatch(raw,/TOPIC_STOPS/,'the D-pad walks topicStops(s), not TOPIC_STOPS');
+});

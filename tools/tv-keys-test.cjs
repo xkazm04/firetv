@@ -450,3 +450,46 @@ test('nav 7 (T14): no stale focus comment on the profile screen, no unused shown
  assert.doesNotMatch(fs.readFileSync(path.join(root,'src/tv/screens.tsx'),'utf8'),/Focus: 0-2 the type of student/);
  assert.doesNotMatch(fs.readFileSync(path.join(root,'src/tv/profileRows.ts'),'utf8'),/shownTasks/);
 });
+
+test('course lessons 1: Units and the Calendar list the lessons of the learner\'s path - the school list as today, none on Calculus 1',()=>{
+ const {tvKey,unitStops,calendarStops,unitsFocus,lessonsOn}=keys();
+ const {LESSONS}=require(path.join(root,'src/lib/library/lessons.data.ts'));
+ const SCHOOL=['jWpiMu5LNdg','bAerID24QJ0','qsL_5Y8uWPU','D3a8NnpQ2vU','u1SAo2GiX8A','2ZzuZvz33X0','uzyd_mIJaoc','V7H1oUHXPkg'];
+ const calc=(patch={})=>session({profiles:[{id:'ema',name:'Ema',type:'other',age:19,system:'uk',modules:['maths'],mathPath:'calc1'}],...patch});
+ assert.equal(typeof lessonsOn,'function','the lesson filter by path is one helper in tv/keys.ts');
+ assert.deepEqual(lessonsOn('maths','school').map(l=>l.id),SCHOOL,'the school path lists what it lists today, in order');
+ assert.deepEqual(lessonsOn('maths','calc1'),[],'no Calculus lesson library, none invented');
+ assert.deepEqual(lessonsOn('english','calc1').map(l=>l.id),LESSONS.filter(l=>l.subject==='english').map(l=>l.id),'a path is a maths thing: other modules keep their units');
+ const extra=[...LESSONS,{id:'c1',subject:'maths',unit:1,title:'Limits',minutes:5,concepts:[],path:'calc1'}];
+ assert.deepEqual(lessonsOn('maths','calc1',extra).map(l=>l.id),['c1'],'a lesson tagged with a path is that path\'s only');
+ assert.deepEqual(lessonsOn('maths','school',extra).map(l=>l.id),SCHOOL);
+ // the stop lists take the session
+ assert.deepEqual(unitStops(session()).map(l=>l.id),SCHOOL);assert.deepEqual(calendarStops(session()).map(l=>l.id),SCHOOL);
+ assert.deepEqual(unitStops(calc()),[]);assert.deepEqual(calendarStops(calc()),[]);
+ assert.deepEqual(unitStops(session({subject:'english'})).map(l=>l.id),LESSONS.filter(l=>l.subject==='english').map(l=>l.id));
+ assert.equal(unitsFocus(calc()),0);
+ // the empty lists hold no focusable item, and Back still works
+ // (Play is the clock's key on every screen, not a stop, so it is not asked here)
+ for(const k of ['up','down','right','select'])assert.deepEqual(tvKey(calc({screen:'units'}),k,LOCAL).events,[],`units ${k}`);
+ assert.deepEqual(tvKey(calc({screen:'units'}),'left',LOCAL).events,[{type:'nav',screen:'tonight',focus:0}],'Left on Units is Back, as on the school path');
+ for(const k of ['up','down','left','right','select'])assert.deepEqual(tvKey(calc({screen:'calendar'}),k,LOCAL).events,[],`calendar ${k}`);
+ assert.deepEqual(tvKey(calc({screen:'units'}),'back',LOCAL).events,[{type:'nav',screen:'tonight',focus:0}]);
+ assert.deepEqual(tvKey(calc({screen:'units'}),'menu',LOCAL).events,[{type:'nav',screen:'calendar',focus:0}]);
+ assert.deepEqual(tvKey(calc({screen:'calendar'}),'back',LOCAL).events,[{type:'nav',screen:'units',focus:0}]);
+ assert.deepEqual(tvKey(calc({screen:'tonight',focus:1}),'menu',LOCAL).events,[{type:'subject',subject:'maths'},{type:'nav',screen:'units',focus:0}]);
+ // the school path's keys, as before
+ assert.deepEqual(tvKey(session({screen:'calendar',focus:0}),'right',LOCAL).events,[{type:'focus',focus:1}]);
+ assert.equal(tvKey(session({screen:'units',focus:2}),'select',LOCAL).events.at(-1).screen,'lesson');
+ // a comment-stripped scan: both stop lists take the session, and every caller hands it over
+ const strip=(s)=>s.replace(/\/\*[\s\S]*?\*\//g,'').replace(/(^|[^:"'`\\])\/\/.*$/gm,'$1');
+ const k=strip(fs.readFileSync(KEYS,'utf8')),tv=strip(fs.readFileSync(path.join(root,'src/maths/MathsTV.tsx'),'utf8'));
+ assert.match(k,/export function unitStops\(s: Session\)/);assert.match(k,/export function calendarStops\(s: Session\)/);
+ for(const src of [k,tv,strip(fs.readFileSync(path.join(root,'src/tv/screens.tsx'),'utf8'))])assert.doesNotMatch(src,/(?:unitStops|calendarStops)\(\s*\)/,'no stop list asked without the session');
+});
+
+test('course lessons 2: the Math Buddy blurb speaks for either path - no "school maths"',()=>{
+ const {MODULE_BLURB}=require(path.join(root,'src/tv/profileRows.ts'));
+ assert.doesNotMatch(MODULE_BLURB.maths,/school maths/i);
+ assert.match(MODULE_BLURB.maths,/never the answer/,'the promise stays');
+ assert.ok(MODULE_BLURB.maths.split(/(?<=\.)\s/).length<=2,'short: at most two sentences');
+});

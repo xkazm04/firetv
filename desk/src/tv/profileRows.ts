@@ -14,7 +14,7 @@ export const AGE_RANGE: Record<StudentType, [number, number] | null> = { element
 /** The three modules, branded as apps. One blurb each, used wherever a module is described. */
 export const BRAND: Record<Subject, string> = { maths: "Math Buddy", english: "Linga", essay: "Essay Master" };
 export const MODULE_BLURB: Record<Subject, string> = {
-  maths: "Learn and practise school maths one step at a time. The desk gives you the next step, never the answer.",
+  maths: "Learn and practise maths on your own path, one step at a time. The desk gives you the next step, never the answer.",
   english: "Practise real situations in English. Talk, get one useful coaching note, and try the moment again.",
   essay: "An analyst for written thoughts. See what your paragraph does and what it lacks, never rewritten for you.",
 };
