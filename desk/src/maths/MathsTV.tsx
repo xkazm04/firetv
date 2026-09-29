@@ -24,6 +24,7 @@ import { day } from "@/tv/screens";
 import { MathsMark as Mark } from "@/tv/marks";
 import { MATHS_FONTS } from "./fonts";
 import { MathText, Tick } from "./MathText";
+import { prose } from "./prose";
 import { isTall, parseMath } from "./typeset";
 import { KIND_WORD, lookAt, working } from "./working";
 
@@ -128,17 +129,6 @@ function Act({ icon, label, focused, primary, pips, disabled }: { icon: ReactNod
       {pips && <span className="pp">{Array.from({ length: pips[1] }, (_, i) => <i key={i} className={i < pips[0] ? "on" : undefined} />)}</span>}
     </div>
   );
-}
-
-/** A sentence from the desk that carries maths: powers as printed, real minus signs, and "x = −7" never split. */
-export function prose(t: string): string {
-  const SUP: Record<string, string> = { "0": "⁰", "1": "¹", "2": "²", "3": "³", "4": "⁴", "5": "⁵", "6": "⁶", "7": "⁷", "8": "⁸", "9": "⁹", "-": "⁻", n: "ⁿ", x: "ˣ" };
-  const nb = " ";
-  return String(t ?? "")
-    .replace(/\*\*(?=[-\dnx])/g, "^").replace(/\*\*/g, "").replace(/\$/g, "")
-    .replace(/\^\{?(-?[\dnx]+)\}?/g, (_, e: string) => [...e].map((c) => SUP[c] ?? c).join(""))
-    .replace(/(\S) - (?=\S)/g, `$1${nb}−${nb}`).replace(/(^|[\s(=])-(?=[\dx(])/g, "$1−")
-    .replace(/(\S) ([=+−<>≤≥×÷]) (?=\S)/g, `$1${nb}$2${nb}`);
 }
 
 // ---------------------------------------------------------------- the paper: rows that pan under the lamp
