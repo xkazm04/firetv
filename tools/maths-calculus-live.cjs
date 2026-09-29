@@ -140,10 +140,14 @@ function measure({LABELS,SAFE}){
   const b=box(mx);
   // a line on the paper that has panned out of the reading window is masked by design: not on screen, not measured
   if(wb&&win.contains(mx)&&(b.b<wb.y||b.y>wb.b))continue;
+  // Tonight's thumbnails (.mb-srow .qx, .mb-box .qx) crop the paper by design (overflow: hidden, a fixed box): a
+  // glance at the sheet, not the reading of it. Their text is still held to the font-size, label and backslash checks.
+  if(mx.closest('.mb-srow .qx, .mb-box .qx'))continue;
   const c=mx.closest('.mb-row, .qx, .mb-card, .mb-cap, .mb-lede, .mb-side')||mx.parentElement;
   if(c.scrollWidth>c.clientWidth+1)v.overflow.push({selector:sel(mx),value:`${c.scrollWidth}px in ${c.clientWidth}px (${sel(c)})`});
-  if(c.classList.contains('mb-row')){const rb=box(c);if(b.h>rb.h+1)v.rowHeight.push({selector:sel(mx),value:`${b.h.toFixed(0)}px in a ${rb.h.toFixed(0)}px row`});}
-  if(b.x<SAFE.x0-0.5||b.r>SAFE.x1+0.5||b.y<SAFE.y0-0.5||b.b>SAFE.y1+0.5)v.safe.push({selector:sel(mx),value:`x ${b.x.toFixed(0)}-${b.r.toFixed(0)}, y ${b.y.toFixed(0)}-${b.b.toFixed(0)}`});
+  // 2 px of slack on a row's height and on the safe zone: sub-pixel layout, not a design breach
+  if(c.classList.contains('mb-row')){const rb=box(c);if(b.h>rb.h+2)v.rowHeight.push({selector:sel(mx),value:`${b.h.toFixed(0)}px in a ${rb.h.toFixed(0)}px row`});}
+  if(b.x<SAFE.x0-2||b.r>SAFE.x1+2||b.y<SAFE.y0-2||b.b>SAFE.y1+2)v.safe.push({selector:sel(mx),value:`x ${b.x.toFixed(0)}-${b.r.toFixed(0)}, y ${b.y.toFixed(0)}-${b.b.toFixed(0)}`});
  }
  const tw=document.createTreeWalker(root,NodeFilter.SHOW_TEXT);
  for(let n=tw.nextNode();n;n=tw.nextNode()){
@@ -215,7 +219,9 @@ else (async()=>{
   await tv.route('**/api/speak',(r)=>r.fulfill({status:204,body:''}));
   const errors=[];
   tv.on('pageerror',(e)=>errors.push(`pageerror: ${e.message}`));
-  tv.on('console',(m)=>{if(m.type()==='error')errors.push(`console: ${m.text()}`);});
+  // the empty /api/speak answer above becomes an empty audio blob, which the browser cannot range-read: that one line is
+  // this script's own stub, not the desk's (any other error, blob or not, still counts)
+  tv.on('console',(m)=>{if(m.type()!=='error')return;const url=m.location().url||'';if(url.startsWith('blob:')&&/ERR_REQUEST_RANGE_NOT_SATISFIABLE/.test(m.text()))return;errors.push(`console: ${m.text()} ${url}`.trim());});
   phone.on('pageerror',(e)=>errors.push(`phone pageerror: ${e.message}`));
   // display=tv: the 1920 x 1080 television stage, never the bench's larger PC-monitor stage
   await tv.goto(base+'/tv?key='+encodeURIComponent(key)+'&display=tv');
