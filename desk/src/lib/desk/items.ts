@@ -150,9 +150,9 @@ const SHAPE_LINES: Record<CalcShape, string> = {
   antiderivative: "antiderivative: f - the question is to find the indefinite integral of f.",
   "definite-integral": "definite-integral: f, a and b - the question is to evaluate the integral of f from a to b; pick bounds where it is not zero.",
   limit: "limit: f, at and side - the question is to find the limit of f as x approaches at (a number, or inf or -inf); side is an empty string for a two-sided limit, + or - for one side of a number; pick one where the limit exists.",
-  "critical-point": "critical-point: f and on [lo, hi] - the question is to find the critical point of f on that interval; exactly one must lie strictly inside it.",
-  extremum: "extremum: f, on [lo, hi] and kind (max or min) - the question is to find that extreme value of f on the interval; it must be reached strictly inside, not at an end.",
-  "newton-step": "newton-step: f, x0 and steps (1 to 3) - the question is that many Newton's method steps on f(x) = 0 from x0.",
+  "critical-point": "critical-point: f and on [lo, hi] - the question is to find the critical point of f on that interval; exactly one turning point of f lies in the interval, well inside it and not near either end.",
+  extremum: "extremum: f, on [lo, hi] and kind (max or min) - the question is to find that extreme value of f on the interval; it is reached at a turning point well inside the interval, not near an end.",
+  "newton-step": "newton-step: f, x0 and steps (1 or 2) - the question is that many Newton's method steps on f(x) = 0 from x0; pick x0 clearly away from the root so the steps differ visibly.",
 };
 
 const CALC_SYSTEM =

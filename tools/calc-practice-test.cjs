@@ -228,3 +228,14 @@ test('7: the route accepts a calc1 id and refuses one on neither path; a school 
  assert.deepEqual(s.practice.items.map((i)=>i.question),STATED.map((c)=>c.question));
  assert.ok(s.practice.items.every((i)=>!('spec' in i)),'a school item has no spec');
 });
+
+// the live run of 22 topics (tools/calc-model-yield.cjs, 2026-09-29) refused 9 Newton specs (iterates too close to tell
+// apart), 6 endpoint extrema and 3 non-unique critical points: the shape lines steer the model away from each
+test('8: the shape lines tell the model how to pick a spec the desk will keep',()=>{
+ const src=fs.readFileSync(path.join(root,'src/lib/desk/items.ts'),'utf8');
+ const line=(id)=>{const m=new RegExp('"?'+id+'"?: "([^\\n]*)",').exec(src.split('const SHAPE_LINES')[1]??'');assert.ok(m,id+' has a shape line');return m[1];};
+ assert.match(line('newton-step'),/steps \(1 or 2\)/,'one or two steps: later iterates cannot be told apart at the checker\'s tolerance');
+ assert.match(line('newton-step'),/clearly away from the root/,'a start near the root gives iterates that agree');
+ assert.match(line('extremum'),/well inside/,'the turning point sits well inside the interval, not near an end');
+ assert.match(line('critical-point'),/exactly one turning point.*well inside/,'one turning point, well inside');
+});
