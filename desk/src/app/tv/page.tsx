@@ -1,6 +1,6 @@
 "use client";
 /**
- * The television. One 1920×1080 stage scaled to the window; the keyboard is the D-pad
+ * The television. One 1920×1080 stage fitted to the window (a 2880×1620 stage in the bench's Desk display); the keyboard is the D-pad
  * (arrows, Enter = Select, Backspace/Escape = Back, M = Menu, Space = Play/Pause).
  * Everything it shows comes from the session stream; everything it changes is an event.
  */
@@ -14,6 +14,14 @@ import { LandingTV, ZOOM_MS } from "@/landing/LandingTV";
 import { MathsTV } from "@/maths/MathsTV";
 import { LingaTV } from "@/english/LingaTV";
 import { LingaTestBar } from "@/english/LingaTestBar";
+
+/**
+ * The bench's display. "tv" is the television: a 1920×1080 stage, what the device, the captures and the tests see.
+ * "desk" is for testing on a PC monitor: a 2880×1620 stage, so every element is two thirds of its TV size and the
+ * layouts that stretch get the room. Chosen with ?display=desk|tv or the bar's toggle; this browser remembers it.
+ */
+type Display = "tv" | "desk";
+const STAGE: Record<Display, { w: number; h: number }> = { tv: { w: 1920, h: 1080 }, desk: { w: 2880, h: 1620 } };
 
 export default function TV() {
   const { s, connected, post } = useSession();
@@ -34,6 +42,7 @@ export default function TV() {
   const [loc, setLoc] = useState<Local>(LOCAL);
   const local = useRef<Local>(LOCAL);
   const apply = useCallback((p: Partial<Local>) => { local.current = { ...local.current, ...p }; setLoc(local.current); }, []);
+  const bench = useRef<HTMLDivElement>(null);
   const frame = useRef<HTMLDivElement>(null);
   const stage = useRef<HTMLDivElement>(null);
   const spoken = useRef<string>("");
@@ -53,11 +62,24 @@ export default function TV() {
     }
   }, [s?.screen, s?.subject]);
 
-  // scale the stage to its box
+  const [display, setDisplay] = useState<Display>("tv");
   useEffect(() => {
-    const fit = () => { if (frame.current && stage.current) stage.current.style.transform = `scale(${frame.current.getBoundingClientRect().width / 1920})`; };
-    fit(); addEventListener("resize", fit); return () => removeEventListener("resize", fit);
-  }, [s?.screen]);
+    const q = new URLSearchParams(location.search).get("display");
+    try { if (q === "tv" || q === "desk") localStorage.setItem("desk-display", q); setDisplay(localStorage.getItem("desk-display") === "desk" ? "desk" : "tv"); }
+    catch { setDisplay(q === "desk" ? "desk" : "tv"); }
+  }, []);
+  const toggleDisplay = () => setDisplay((d) => { const n = d === "desk" ? "tv" : "desk"; try { localStorage.setItem("desk-display", n); } catch {} return n; });
+
+  // fit the whole stage in its box (width and height), centred; the box is what the bar leaves of the window
+  useEffect(() => {
+    const { w, h } = STAGE[display];
+    const fit = () => {
+      if (!frame.current || !stage.current) return;
+      const r = frame.current.getBoundingClientRect(), k = Math.min(r.width / w, r.height / h);
+      stage.current.style.transform = `translate(${Math.round((r.width - w * k) / 2)}px, ${Math.round((r.height - h * k) / 2)}px) scale(${k})`;
+    };
+    fit(); const ro = new ResizeObserver(fit); if (frame.current) ro.observe(frame.current); return () => ro.disconnect();
+  }, [s?.screen, display]);
 
   // speak what is new: the hint, the explanation, the verdict
   useEffect(() => {
@@ -109,7 +131,7 @@ export default function TV() {
   }, [s, post, apply]);
 
   return (
-    <div className="bench">
+    <div className="bench" ref={bench}>
       <div className="bar">
         <b>Study Desk · TV</b>
         <span><kbd>←</kbd><kbd>↑</kbd><kbd>↓</kbd><kbd>→</kbd> D-pad · <kbd>Enter</kbd> Select · <kbd>Backspace</kbd> Back · <kbd>M</kbd> Menu · <kbd>Space</kbd> Play/Pause</span>
@@ -117,11 +139,13 @@ export default function TV() {
         <button aria-pressed={fast} onClick={() => setFast((v) => !v)}>Clock ×60</button>
         <button onClick={() => post({ type: "reset" })}>Reset session</button>
         <button onClick={() => post({ type: "join" })}>Fake phone</button>
+        <button aria-pressed={display === "desk"} onClick={toggleDisplay} title="A 2880×1620 stage for a PC monitor; off is the 1920×1080 TV">Desk display</button>
+        <button onClick={() => void bench.current?.requestFullscreen().catch(() => {})} title="The stage alone; Esc leaves">Fullscreen</button>
         <span className="status">{connected ? "" : "reconnecting… "}{s?.status}</span>
       </div>
       {testBar && s && lingaOwns(s) && <LingaTestBar s={s} />}
       <div className="frame" ref={frame}>
-        <div className="stage" ref={stage} tabIndex={0}>
+        <div className="stage" ref={stage} tabIndex={0} data-display={display}>
           {/* The landing (the desk), Essay Master (Specimen) and Math Buddy (Lamplight) draw the whole stage, no On Air grid or band; each keeps the 5% margins itself */}
           {s && notTheTV(s) ? <NotThisTV /> : s && s.screen === "landing" ? <LandingTV s={s} zoom={zoom} /> : s && essayOwns(s) ? <EssayTV s={s} table={loc.table} /> : s && mathsOwns(s) ? <MathsTV s={s} busy={loc.busy} /> : <>
             <div className="grid" />

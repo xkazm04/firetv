@@ -35,6 +35,8 @@
 .essay-tv .em-key { font-family: var(--em-mono); font-size: 20px; font-weight: 600; letter-spacing: .1em; padding: 4px 10px; border: 2px solid var(--em-faint); border-radius: 4px; color: var(--em-mute); }
 
 /* ---- the brand: a whole E with the citron caret after it, and the wordmark ---- */
+/* Desk display (on-air.css): the brand and the chips run to the stage's corners; the screen between them sits at its centre. */
+.stage[data-display="desk"] .essay-tv > :not(.em-brand, .em-top) { translate: var(--desk-dx) var(--desk-dy); }
 .essay-tv .em-brand { position: absolute; left: 96px; top: 54px; display: flex; align-items: center; gap: 20px; font-size: 54px; font-weight: 800; }
 .essay-tv .em-mark { width: 64px; height: 72px; display: block; }
 .essay-tv .em-wm { font-size: 54px; font-weight: 800; letter-spacing: -.02em; line-height: 1; font-variation-settings: "wdth" 80; }

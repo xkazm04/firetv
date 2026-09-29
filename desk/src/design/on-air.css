@@ -1,6 +1,7 @@
 /*
   On Air — the Study Desk design system. Rules in docs/DESIGN-ON-AIR.md; this file is those rules
-  as CSS. Sizes are for the 1920×1080 stage; the stage scales as a whole.
+  as CSS. Sizes are for the 1920×1080 stage; the stage scales as a whole. The bench's Desk display (PC testing
+  only) makes the stage 2880×1620: anything that spans the stage reads --stage-w / --stage-h, never 1920 / 1080.
 */
 :root {
   --ink: #14161A; --ink-2: #1A1D22; --paper: #F2F3F5; --mute: rgba(255,255,255,.62); --line: rgba(255,255,255,.14);
@@ -10,20 +11,25 @@
 }
 
 /* ---- the stage: one committed dark world, every ground painted ---- */
-.stage { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; transform-origin: 0 0; background: var(--ink); color: var(--paper); font-family: var(--body); overflow: hidden; outline: none; }
+.stage { --stage-w: 1920px; --stage-h: 1080px; position: absolute; left: 0; top: 0; width: var(--stage-w); height: var(--stage-h); transform-origin: 0 0; background: var(--ink); color: var(--paper); font-family: var(--body); overflow: hidden; outline: none; }
 .grid { position: absolute; inset: 0; background-image: linear-gradient(rgba(255,255,255,.035) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.035) 1px, transparent 1px); background-size: 120px 120px; }
+.stage[data-display="desk"] { --stage-w: 2880px; --stage-h: 1620px; }
+/* A module drawn as one 1920×1080 composition keeps it whole in the Desk display: its header and footer run to
+   the stage's edges, and everything between them moves by this offset to the stage's centre (`translate`, which
+   adds to any transform). On the TV the offset is never applied. */
+.stage[data-display="desk"] { --desk-dx: calc((var(--stage-w) - 1920px) / 2); --desk-dy: calc((var(--stage-h) - 1080px) / 2); }
 .safe { position: absolute; inset: 54px 96px; z-index: 1; }
 
 /* ---- the band: one per screen ---- */
 .band { position: absolute; background: linear-gradient(180deg, var(--signal), var(--signal-2)); }
 .band::after { content: ""; position: absolute; inset: 0; background: repeating-linear-gradient(180deg, rgba(255,255,255,.05) 0 2px, transparent 2px 6px); }
-.band-left { left: -200px; top: 0; width: 760px; height: 1080px; clip-path: polygon(0 0, 100% 0, 60% 100%, 0 100%); }
-.band-left-thin { left: -200px; top: 0; width: 520px; height: 1080px; clip-path: polygon(0 0, 100% 0, 72% 100%, 0 100%); }
-.band-right { right: -200px; top: 0; width: 700px; height: 1080px; clip-path: polygon(40% 0, 100% 0, 100% 100%, 0 100%); }
-.band-rule { left: 0; top: 0; width: 1920px; height: 16px; }
+.band-left { left: -200px; top: 0; width: 760px; height: var(--stage-h); clip-path: polygon(0 0, 100% 0, 60% 100%, 0 100%); }
+.band-left-thin { left: -200px; top: 0; width: 520px; height: var(--stage-h); clip-path: polygon(0 0, 100% 0, 72% 100%, 0 100%); }
+.band-right { right: -200px; top: 0; width: 700px; height: var(--stage-h); clip-path: polygon(40% 0, 100% 0, 100% 100%, 0 100%); }
+.band-rule { left: 0; top: 0; width: var(--stage-w); height: 16px; }
 .band-wedge { left: 0; bottom: 0; width: 900px; height: 260px; clip-path: polygon(0 0, 100% 100%, 0 100%); }
-.band-low { left: -200px; top: 0; width: 900px; height: 1080px; clip-path: polygon(0 55%, 100% 100%, 0 100%); }
-.band-divider { left: 760px; top: 0; width: 400px; height: 1080px; clip-path: polygon(60% 0, 100% 0, 40% 100%, 0 100%); }
+.band-low { left: -200px; top: 0; width: 900px; height: var(--stage-h); clip-path: polygon(0 55%, 100% 100%, 0 100%); }
+.band-divider { left: 760px; top: 0; width: 400px; height: var(--stage-h); clip-path: polygon(60% 0, 100% 0, 40% 100%, 0 100%); }
 
 /* ---- rail ---- */
 .rail { position: absolute; left: 0; top: 0; width: 300px; display: flex; flex-direction: column; gap: 26px; }
@@ -150,13 +156,13 @@
 .band-spine { left: 858px; top: -54px; width: 14px; height: 660px; }
 /* walk: a gauge down the left edge — its height is how far through the marked set we are,
    its colour is the verdict of the item on screen. A band with a job. */
-.band-gauge { left: -96px; top: -54px; width: 26px; height: 1080px;
+.band-gauge { left: -96px; top: -54px; width: 26px; height: var(--stage-h);
   background: linear-gradient(to top, var(--signal) 0 var(--fill, 0%), rgba(255,255,255,.10) var(--fill, 0%) 100%); }
 .band-gauge[data-v="right"] { background: linear-gradient(to top, #fff 0 var(--fill, 0%), rgba(255,255,255,.10) var(--fill, 0%) 100%); }
 .band-gauge[data-v="unsure"] { background: linear-gradient(to top, rgba(255,255,255,.34) 0 var(--fill, 0%), rgba(255,255,255,.10) var(--fill, 0%) 100%); }
 
 /* sheet: a shelf across the stage that the marked set's tiles stand on - the edge of the picture */
-.band-shelf { left: -96px; top: 436px; width: 1920px; height: 18px; clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); }
+.band-shelf { left: -96px; top: 436px; width: var(--stage-w); height: 18px; clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); }
 
 /* ---- sheet: the marked set as one picture - a tile per item, the tile IS its verdict mark.
    Right is a white rule, look again a red block, not sure a dashed outline: the .verdict grammar, per item. ---- */

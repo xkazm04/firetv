@@ -74,7 +74,8 @@ export function LingaTV({s,post,voice}:{s:Session;post:(e:Event)=>Promise<void>;
   const fitKey=layout==="door"?`${s.screen}|${JSON.stringify(h)}|${v.caption}|${v.captionTag}|${actions.length}`:"";
   const [fitted,setFitted]=useState({key:"",step:0});
   const fit=fitted.key===fitKey?fitted.step:layout==="door"&&s.screen!=="linga-scenes"&&talkGoal(h)?1:0;
-  useLayoutEffect(()=>{const p=panel.current;if(p&&p.offsetTop<FIT_CEILING&&fit<FIT_STEPS)setFitted({key:fitKey,step:fit+1});});
+  // the Desk display's taller stage lifts the bottom-anchored column (linga.css); the ceiling is measured as on the TV
+  useLayoutEffect(()=>{const p=panel.current,root=p?.offsetParent as HTMLElement|null,lift=root?root.clientHeight-1080:0;if(p&&p.offsetTop-lift<FIT_CEILING&&fit<FIT_STEPS)setFitted({key:fitKey,step:fit+1});});
   const tag=h.kind==="intro"?h.nameTag:h.kind==="scene"?h.partner:h.kind==="choices"&&s.screen==="linga-talk"?c?.partner:undefined;
   const dots=progressDots(s);
   const status=waiting?(onCheck?"Linga is thinking…":"Preparing a reply…"):c?.capture&&!onCheck?"Phone microphone active":audioStatus||"TV shows · Phone speaks";

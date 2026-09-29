@@ -234,8 +234,8 @@
 .desk-tv .dk-zoom { position: absolute; z-index: 80; overflow: hidden; border-radius: 16px;
   left: var(--zx); top: var(--zy); width: var(--zw); height: var(--zh); transform: rotate(var(--zr));
   transition: left .55s var(--dk-ease), top .55s var(--dk-ease), width .55s var(--dk-ease), height .55s var(--dk-ease), transform .55s var(--dk-ease), border-radius .55s var(--dk-ease); }
-.desk-tv .dk-zoom[data-full] { left: 0; top: 0; width: 1920px; height: 1080px; transform: none; border-radius: 0; }
-.desk-tv .dk-zin { position: absolute; left: 0; top: 0; width: 1920px; height: 1080px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 44px; opacity: 0; transition: opacity .3s; }
+.desk-tv .dk-zoom[data-full] { left: 0; top: 0; width: var(--stage-w); height: var(--stage-h); transform: none; border-radius: 0; }
+.desk-tv .dk-zin { position: absolute; left: 0; top: 0; width: var(--stage-w); height: var(--stage-h); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 44px; opacity: 0; transition: opacity .3s; }
 .desk-tv .dk-zoom[data-full] .dk-zin { opacity: 1; transition: opacity .3s .22s; }
 .desk-tv .dk-zoom[data-app="maths"] { background: radial-gradient(circle at 16% 12%, rgba(255, 197, 107, .30), transparent 42%), radial-gradient(circle at 80% 90%, rgba(143, 184, 255, .10), transparent 40%), var(--dk-night); color: #F5EEDF; }
 .desk-tv .dk-zoom[data-app="english"] { background: radial-gradient(circle at 22% 50%, #fbf4e6 0, transparent 46%), linear-gradient(135deg, #f5eee1, #e5dccd); color: #261F29; }

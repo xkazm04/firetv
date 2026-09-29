@@ -60,8 +60,8 @@
   position: absolute;
   left: -96px;
   top: -54px;
-  width: 1920px;
-  height: 1080px;
+  width: var(--stage-w);
+  height: var(--stage-h);
   overflow: hidden;
   background: var(--lo-ground);
   color: var(--lo-ink);
@@ -76,6 +76,18 @@
 }
 .linga-tv button { font-family: var(--lo-sans); }
 .linga-tv .lo-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* Desk display (on-air.css): the header and the footer run to the stage's edges; the composition between them keeps
+   its TV geometry at the stage's centre. A part placed from the top moves down by the offset, one placed from the
+   bottom moves up by it, one stretched between the sides takes it on both. The door's fit reads the same lift
+   (LingaTV.tsx), so a column steps its type down exactly where it would on the TV. */
+.stage[data-display="desk"] .linga-tv :is(.lo-arch, .lo-head),
+.stage[data-display="desk"] .linga-tv[data-layout="menu"] > .lo-actions { translate: var(--desk-dx) var(--desk-dy); }
+.stage[data-display="desk"] .linga-tv[data-layout="door"] .lo-panel,
+.stage[data-display="desk"] .linga-tv[data-layout="plan"] > .lo-actions { translate: var(--desk-dx) calc(-1 * var(--desk-dy)); }
+.stage[data-display="desk"] .linga-tv[data-layout="ladder"] .lo-stage { inset: calc(196px + var(--desk-dy)) calc(110px + var(--desk-dx)) calc(292px + var(--desk-dy)); }
+.stage[data-display="desk"] .linga-tv[data-layout="ladder"] > .lo-actions { left: calc(110px + var(--desk-dx)); right: calc(110px + var(--desk-dx)); bottom: calc(139px + var(--desk-dy)); }
+.stage[data-display="desk"] .linga-tv .lo-doors { left: calc(110px + var(--desk-dx)); right: calc(110px + var(--desk-dx)); top: calc(440px + var(--desk-dy)); }
 
 /* ---------------------------------------------------------------- header: the mark and the learner */
 .linga-tv .lo-top {
