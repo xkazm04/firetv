@@ -93,8 +93,19 @@ super/subscripts (`x²`, `e²ˣ`, `log₂`), vulgar fractions (`½`), `sqrt(...)
 `log_2`, `ln`, trig with or without a space (`sin x`, `sinx`), `<=` `>=` `!=`, `*` (× between numbers, · otherwise),
 `÷`, `×`. Runs of three or more letters (and English two-letter words: *or, of, to, cm* ...) are words; `dx`, `xy`,
 `uv` stay maths. TeX is read when a line carries a command (`\frac`, `\int`, `\sqrt`, `\log_2`, `\big(`,
-`\text{}`, `\quad` ...). TeX it cannot read is read again as plain text; plain text keeps any character it does not
-know. It never throws and never drops a character (`tools/maths-type-test.cjs`).
+`\text{}`, `\quad` ...). A TeX command the reader does not know keeps its name as a word where it stands and the rest
+of the line is still typeset; TeX whose braces do not close is read again as plain text; plain text keeps any
+character it does not know. It never throws and never drops a character (`tools/maths-type-test.cjs`).
+
+**Calculus notation.** `x->a`, `\to`, `\rightarrow` are one arrow. A limit (`lim_(x->0)`, `\lim_{x\to 0}`) is set
+under lim. A root keeps its index: `\sqrt[3]{x}`, `sqrt[3](x)`, `cbrt(x)`, `∛x` are cube roots, the 3 small at the
+sign's top-left. `sum_(i=1)^n`, `\sum`, `\prod`, `∑` are the big signs (1.3em); "sum" in a sentence stays a word.
+Greek has one list: every letter the plain reader takes as a variable has a TeX name (`\delta`, `\epsilon`, `\rho`,
+`\tau`, `\Sigma`, `\Omega` ...); a typed-out name (`theta`, `delta`) is the letter only beside maths (`sin(theta)`,
+`2theta`, `theta = 30`, `cos theta`), and stays English in a sentence. Also `\prime`, `\partial`, `\lvert x \rvert`,
+`\abs{x}`, `\left| ... \right|`, and `arcsec` / `arccsc` / `arccot` as functions. `\begin{cases}` is not laid out
+as rows: it reads as one line, an open brace, the rows side by side with a wide gap. The faces load only
+latin/latin-ext, so Greek, arrows, ∑, ∂ and ′ are set in a system fallback face.
 
 **Fractions.** `a/b` stacks only where it is clearly a fraction: no space around the slash, an operand each side,
 no word in either. The numerator is everything glued to the slash on its left (`7π`, `dy`, `2(x+1)`, `(a+b)` with
@@ -104,10 +115,13 @@ its grouping brackets dropped, a function with its bracketed argument: `sin(x)/x
 
 **Spacing.** Binary operators .26em each side in the hand (.22em in print), relations .28em, a unary minus
 .1em, a function name .2em before its argument; two spaces in the source are a wide gap (1em), as a student leaves
-between two results. Superscripts are 60% at +.64em (+1em on a bracket), subscripts 60% at −.34em. A continued line
+between two results. Superscripts are 60% at +.64em (+1em on a bracket), subscripts 60% at −.34em; a symbol with
+both (`x_n^2`, `int_0^1`, `[F(x)]_a^b`, `sum_(i=1)^n`) stacks them in one column, superscript above, as tall as the
+∫ or ∑ beside it. A continued line
 that starts with "=" hangs its "=" under the "=" above.
 
-**Rows.** Every row takes whole squares: a plain line two (96 px), a line with a fraction or an integral three.
+**Rows.** Every row takes whole squares: a plain line two (96 px), a line with a fraction, an integral, a sum or
+product sign, a limit under lim or a stacked pair of scripts three.
 The question row sits half a square above its working.
 
 **The four marks** (pen `#D9741A`, 5.5 px, drawn left to right, `data-role="maths-error"` with `data-kind`):

@@ -12,8 +12,11 @@ let ts;try{ts=require(path.join(root,'node_modules/typescript'));}catch{console.
 const resolve=Module._resolveFilename;
 Module._resolveFilename=function(id,...args){return resolve.call(this,id.startsWith('@/')?path.join(root,'src',id.slice(2)):id,...args);};
 require.extensions['.ts']=(mod,file)=>mod._compile(ts.transpileModule(fs.readFileSync(file,'utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022,esModuleInterop:true}}).outputText,file);
+require.extensions['.tsx']=(mod,file)=>mod._compile(ts.transpileModule(fs.readFileSync(file,'utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022,esModuleInterop:true,jsx:ts.JsxEmit.ReactJSX}}).outputText,file);
 const T=require(path.join(root,'src/maths/typeset.ts'));
 const W=require(path.join(root,'src/maths/working.ts'));
+/** A line as the TV sets it (MathText, server-rendered): what the stacked scripts, limits and root indices look like. */
+const html=(s,voice='print')=>{const React=require(path.join(root,'node_modules/react'));const {renderToStaticMarkup}=require(path.join(root,'node_modules/react-dom/server'));const {MathText}=require(path.join(root,'src/maths/MathText.tsx'));return renderToStaticMarkup(React.createElement(MathText,{text:s,voice}));};
 
 const types=(nodes)=>{const out=[];T.walk(nodes,n=>out.push(n.t));return out;};
 const count=(nodes,t)=>types(nodes).filter(x=>x===t).length;
@@ -197,4 +200,99 @@ test('11: a stacked fraction never splits a function from its bracketed argument
  // what did not change: a bare function name glued to its argument, and every earlier fraction
  assert.equal(flat('2sin²x − sinx'),'2sin^(2)x−sinx');
  assert.equal(flat('(x+1)/(x-1)'),'(x+1)/(x−1)');assert.equal(flat('dy/dx'),'(dy)/(dx)');assert.equal(flat('7pi/6'),'(7π)/(6)');assert.equal(flat('x/4'),'(x)/(4)');
+});
+
+// ---- Calculus 1: the notation it is written in
+
+test('12: arrows and limits - x->a is an arrow, and the limit sits under lim',()=>{
+ const arrow=(s)=>T.parseMath(s).some(n=>n.t==='rel'&&n.v==='→');
+ assert.ok(arrow('x->a'),'x->a is one arrow, not x - > a');assert.equal(flat('x->a'),'x→a');
+ assert.ok(arrow('x \\to a'));assert.ok(arrow('x \\rightarrow a'));
+ const l=T.parseMath('lim_(x->0) sin(x)/x');
+ assert.equal(l[0].t,'fn');assert.equal(l[0].v,'lim');assert.equal(T.flatten(l[0].sub),'x→0');
+ assert.equal(T.flatten(l.find(n=>n.t==='frac').num),'sin(x)');
+ const lt=T.parseMath('\\lim_{x\\to 0} \\frac{\\sin x}{x}');
+ assert.equal(lt[0].v,'lim');assert.equal(T.flatten(lt[0].sub).replace(/\s/g,''),'x→0');assert.equal(count(lt,'frac'),1);
+ assert.ok(T.isTall(T.parseMath('lim_(x->a) f(x)')),'a limit under lim takes three squares');
+ for(const s of ['lim_(x->0) sin(x)/x','\\lim_{x\\to 0} \\frac{\\sin x}{x}']){
+  const h=html(s);
+  assert.match(h,/<span class="mlim"><span class="mfn">lim<\/span><span class="sub">.*→.*<\/span><\/span>/,`${s}: the limit is set under lim`);
+  assert.doesNotMatch(h,/class="msc"><span class="mfn">lim/,`${s}: never a subscript beside lim`);
+ }
+});
+
+test('13: roots carry their index - a cube root is never shown as a square root',()=>{
+ const root=(s)=>{let r=null;T.walk(T.parseMath(s),n=>{if(!r&&n.t==='sqrt')r=n;});return r;};
+ for(const [s,i,b] of [['\\sqrt[3]{x}','3','x'],['\\sqrt[n]{x}','n','x'],['sqrt[3](x)','3','x'],['cbrt(x)','3','x'],['∛x','3','x'],['∛(x+1)','3','x+1'],['∜(16)','4','16']]){
+  const r=root(s);assert.ok(r,`${s} is a root`);assert.equal(T.flatten(r.idx||[]),i,`${s} has index ${i}`);assert.equal(T.flatten(r.body),b,`${s}: its radicand`);
+ }
+ assert.equal(root('\\sqrt{x}').idx,undefined);assert.equal(root('sqrt(x)').idx,undefined);assert.equal(flat('sqrt(x + 1)'),'√(x+1)','a square root flattens as before');
+ assert.equal(flat('\\sqrt[3]{x}'),'√[3](x)','the index is a character, and it is kept');
+ for(const v of ['print','hand']){
+  const h=html('\\sqrt[3]{x}',v);
+  assert.match(h,/<span class="msq"><span class="msq-i">.*3.*<\/span>.*<span class="msq-b">/,`${v}: the index is set at the root's top-left, before the radicand`);
+ }
+ assert.doesNotMatch(html('sqrt(x)'),/msq-i/);
+});
+
+test('14: a symbol with a subscript and a superscript sets them in one column, the superscript above',()=>{
+ const both=(s)=>{let r=null;T.walk(T.parseMath(s),n=>{if(!r&&n.sup&&n.sub)r=n;});return r;};
+ for(const [s,t,sub,sup] of [['x_n^2','var','n','2'],['int_0^1 x dx','int','0','1'],['[F(x)]_a^b','close','a','b'],['sum_{i=1}^n i','op','i=1','n'],['\\int_0^1 x\\,dx','int','0','1']]){
+  const n=both(s);assert.ok(n,`${s} holds both scripts on one symbol`);assert.equal(n.t,t,s);assert.equal(T.flatten(n.sub),sub);assert.equal(T.flatten(n.sup),sup);
+  const h=html(s);
+  assert.match(h,/<span class="mst"><span class="sup[^"]*">((?!<span class="sub").)*<\/span><span class="sub">/,`${s}: one column, superscript first (above)`);
+  assert.ok(T.isTall(T.parseMath(s)),`${s}: a stacked pair takes three squares`);
+ }
+ assert.doesNotMatch(html('x^2 + y_1'),/class="mst"/,'a single script stays where it was');
+ assert.ok(!T.isTall(T.parseMath('x^2 + y_1')));
+});
+
+test('15: sums and products - the sign with its limits stacked, and the TeX line keeps its fraction',()=>{
+ const s=T.parseMath('\\sum_{i=1}^{n} i = \\frac{n(n+1)}{2}');
+ assert.equal(s[0].t,'op');assert.equal(s[0].v,'∑');assert.equal(T.flatten(s[0].sub),'i=1');assert.equal(T.flatten(s[0].sup),'n');
+ assert.equal(count(s,'frac'),1,'one command the reader did not know used to collapse this line to raw text');
+ const p=T.parseMath('sum_(i=1)^n i');assert.equal(p[0].t,'op');assert.equal(T.flatten(p[0].sub),'i=1');assert.equal(T.flatten(p[0].sup),'n');
+ assert.equal(T.parseMath('\\prod_{k=1}^{n} k')[0].v,'∏');assert.equal(T.parseMath('∑_(k=0)^9 k')[0].t,'op');
+ assert.ok(!types(T.parseMath('Find the sum of 3 and 4')).includes('op'),'"sum" in a sentence stays a word');
+ assert.match(html('\\sum_{i=1}^{n} i'),/<span class="mop">∑<\/span><span class="mst">/);
+});
+
+test('16: an unknown TeX command degrades to its name, and the rest of the line is still typeset',()=>{
+ const n=T.parseMath('\\frac{1}{2} + \\weird x');
+ assert.equal(count(n,'frac'),1,'the fraction survives the unknown command');
+ assert.ok(n.some(x=>x.t==='text'&&x.v==='weird'),'the command keeps its name, as a word');assert.ok(!T.flatten(n).includes('\\'),'no backslash on the TV');
+ assert.ok(T.flatten(T.parseMath('\\unknown{x} + 1')).includes('unknown'));
+ const c=T.parseMath('f(x) = \\begin{cases} x^2 & x < 0 \\\\ x & x \\ge 0 \\end{cases}');
+ const cf=T.flatten(c);assert.ok(!cf.includes('\\'),`cases degrades to readable text: ${cf}`);assert.ok(!/begin|cases/.test(cf),cf);
+ assert.match(cf.replace(/\s/g,''),/x<0.*x≥0/);
+ assert.equal(count(T.parseMath('\\left| x - 1 \\right| \\le \\epsilon'),'open'),1,'\\left| opens');
+ // the Calculus vocabulary, shuffled: never a throw, from the reader or from the TV's setter
+ const bits=['\\sum','\\prod','\\sqrt[','\\sqrt','\\lim','\\limits','_','^','{','}','[',']','(',')','->','\\to','\\left','\\right','|','\\lvert','\\rvert','\\abs','\\begin{cases}','\\end{cases}','&','\\\\','∛','∑','Σ','theta','sum','cbrt','sqrt','lim','x','n','1','0','+','=','/','\\frac','\\weird','\\prime','\\partial','²',' '];
+ let seed=11;const rnd=()=>{seed=(seed*1103515245+12345)%2147483648;return seed/2147483648;};
+ for(let k=0;k<2000;k++){
+  let s='';const len=1+Math.floor(rnd()*12);for(let j=0;j<len;j++)s+=bits[Math.floor(rnd()*bits.length)];
+  assert.doesNotThrow(()=>{const n=T.parseMath(s);T.flatten(n);T.isTall(n);T.markLine(s,{kind:'extra',span:s.slice(0,4)});if(k%8===0)html(s,k%16?'print':'hand');},s);
+ }
+});
+
+test('17: Greek - every letter the reader knows has a TeX name, and a Greek word in a sentence stays English',()=>{
+ const names=['alpha','beta','gamma','delta','epsilon','varepsilon','theta','lambda','mu','rho','sigma','tau','phi','omega','Delta','Sigma','Omega'];
+ const glyph=(name)=>{const n=T.parseMath('\\'+name+' + 1')[0];return n.v;};
+ for(const name of names){const g=glyph(name);assert.ok(g&&T.GREEK.includes(g),`\\${name} -> ${g} is a letter the plain reader knows`);}
+ for(const ch of T.GREEK) assert.ok(Object.values(T.GREEK_TEX).includes(ch),`${ch} has a TeX name`);
+ for(const ch of T.GREEK) assert.equal(T.parseMath('2'+ch)[1].t,'var',`${ch} typed as a glyph is a variable`);
+ // a typed name is the letter only beside maths
+ assert.equal(flat('sin(theta)'),'sin(θ)');assert.equal(flat('2theta'),'2θ');assert.equal(flat('theta = 30'),'θ=30');assert.equal(flat('cos theta'),'cosθ');
+ assert.equal(flat('delta x'),'δ x');assert.equal(flat('epsilon > 0'),'ε>0');assert.equal(flat('Delta y = 3 Delta x'),'Δ y=3 Δ x');
+ assert.equal(flat('the delta of the river'),'the delta of the river','English stays English');
+ assert.equal(flat('Find theta.'),'Find theta.');assert.equal(flat('beta version'),'beta version');
+});
+
+test('18: prime, partial, absolute value, and every arc function',()=>{
+ const f=T.parseMath("f^{\\prime}(x) = 2x \\cdot g'(x)");assert.equal(T.flatten(f[0].sup),'′');
+ assert.ok(T.flatten(T.parseMath('\\frac{\\partial f}{\\partial x}')).includes('∂'));assert.ok(T.parseMath('∂f').some(n=>n.t==='sym'&&n.v==='∂'));
+ assert.equal(T.flatten(T.parseMath('\\lvert x \\rvert = 3')).replace(/\s/g,''),'|x|=3');
+ assert.equal(T.flatten(T.parseMath('\\abs{x - 1} < \\delta')).replace(/\s/g,''),'|x−1|<δ');
+ for(const fn of ['arcsec','arccot','arccsc','arcsin']){const n=T.parseMath(fn+'(x)');assert.equal(n[0].t,'fn',fn);assert.equal(n[0].v,fn);}
+ assert.equal(T.parseMath('arcsecx')[0].v,'arcsec','glued like arcsinx');
 });

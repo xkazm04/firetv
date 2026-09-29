@@ -1,7 +1,8 @@
 /**
  * One line of maths, set in a Lamplight voice: `hand` is the learner's working (Caveat, in ink, a drawn minus,
  * drawn ∫ π ≤ ≥ √ where a handwriting face has none), `print` is a question as printed on the sheet (Fraunces,
- * italic variables). Stacked fractions, powers, subscripts and the desk's pen marks inside the line, by kind:
+ * italic variables). Stacked fractions, powers, subscripts (both on one symbol stacked in one column), a limit
+ * under lim, a root's index, and the desk's pen marks inside the line, by kind:
  * a flipped sign is ringed, an extra part struck, a missing part opens a gap with a caret; a mark the data can
  * only place on a line underlines the line. Reads with typeset.ts; if anything in it fails, the raw string is
  * shown in the same voice - never an exception, never a dropped character.
@@ -34,7 +35,7 @@ export function Tick({ className }: { className?: string }) {
 }
 
 interface St { prev: string | null }
-const OP_BEFORE_UNARY = /^(bin|rel|open|punct|sp|text)$/;
+const OP_BEFORE_UNARY = /^(bin|rel|open|punct|sp|text|op)$/;
 
 function nodes(list: MNode[], voice: Voice, st: St, key = ""): ReactNode[] {
   return list.map((n, k) => node(n, voice, st, `${key}${k}.`));
@@ -60,6 +61,7 @@ function node(n: MNode, voice: Voice, st: St, key: string): ReactNode {
     case "text": el = <span className="mt">{n.v}</span>; break;
     case "int": el = <span className="mint" aria-label="integral">{GLYPH.int[voice]}</span>; break;
     case "fn": el = <span className="mfn">{n.v}</span>; break;
+    case "op": el = <span className="mop">{n.v}</span>; break;
     case "sym": el = n.v === "π" && voice === "hand" ? <span className="mi" aria-label="pi">{GLYPH.pi}</span> : <span className="mi">{n.v}</span>; break;
     case "sp": el = <span className="msp" style={n.w < 0 ? { marginLeft: `${n.w}em` } : { width: `${n.w}em` }} />; break;
     case "frac":
@@ -72,9 +74,32 @@ function node(n: MNode, voice: Voice, st: St, key: string): ReactNode {
       );
       break;
     case "grp": el = <span className="mg">{nodes(n.body, voice, st, key + "g")}</span>; break;
-    case "sqrt": el = <span className="msq">{voice === "hand" ? GLYPH.root : <span className="msq-s">√</span>}<span className="msq-b">{nodes(n.body, voice, { prev: null }, key + "r")}</span></span>; break;
+    case "sqrt":
+      el = (
+        <span className="msq">
+          {n.idx && <span className="msq-i">{nodes(n.idx, voice, { prev: null }, key + "i")}</span>}
+          {voice === "hand" ? GLYPH.root : <span className="msq-s">√</span>}
+          <span className="msq-b">{nodes(n.body, voice, { prev: null }, key + "r")}</span>
+        </span>
+      );
+      break;
   }
-  if (n.sup || n.sub) {
+  if (n.t === "fn" && n.v === "lim" && n.sub) {
+    // the limit is set under lim, as it is written on paper
+    el = <span className="mlim">{el}<span className="sub">{nodes(n.sub, voice, { prev: null }, key + "b")}</span></span>;
+    if (n.sup) el = <span className="msc">{el}<span className="sup">{nodes(n.sup, voice, { prev: null }, key + "p")}</span></span>;
+  } else if (n.sup && n.sub) {
+    // both scripts on one symbol: one column, the superscript above the subscript (x_n^2, int_0^1, [F(x)]_a^b)
+    el = (
+      <span className="msc">
+        {el}
+        <span className="mst">
+          <span className={`sup${n.t === "close" ? " hi" : ""}`}>{nodes(n.sup, voice, { prev: null }, key + "p")}</span>
+          <span className="sub">{nodes(n.sub, voice, { prev: null }, key + "b")}</span>
+        </span>
+      </span>
+    );
+  } else if (n.sup || n.sub) {
     el = (
       <span className="msc">
         {el}

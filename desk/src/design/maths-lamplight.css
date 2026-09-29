@@ -216,6 +216,22 @@
 .maths-tv .mx .msq .msq-s { font-size: 1.1em; line-height: 1; }
 .maths-tv .mx .msq-b { border-top: .07em solid currentColor; padding: .08em .08em 0 .06em; }
 .maths-tv .mx.print .msq-b { border-top-width: .05em; }
+/* a root's index (a cube root's 3) sits small at the sign's top-left, over its short arm */
+.maths-tv .mx .msq-i { align-self: flex-start; font-size: max(.5em, 28px); line-height: 1; margin: -.28em -.42em 0 0; position: relative; z-index: 1; }
+/* both scripts on one symbol (x_n^2, int_0^1, [F(x)]_a^b, sum_(i=1)^n): one column, the superscript above the
+   subscript at the scripts' own size; beside an integral or a sum sign the column is as tall as the sign */
+.maths-tv .mx .mst { display: inline-flex; flex-direction: column; align-items: flex-start; justify-content: space-between; vertical-align: middle; line-height: 1; margin-left: .03em; }
+.maths-tv .mx .mst > .sup, .maths-tv .mx .mst > .sub { margin-left: 0; line-height: 1; }
+.maths-tv .mx .mst > .sub { margin-top: .12em; }
+.maths-tv .mx .msc:has(> .mint) > .mst { height: 1.5em; margin-left: -.02em; }
+.maths-tv .mx .msc:has(> .mop) > .mst { height: 1.36em; }
+/* a big operator: the sum and product signs, a size above the line */
+.maths-tv .mx .mop { display: inline-block; font-size: 1.3em; line-height: 1; vertical-align: -.14em; margin: 0 .04em 0 0; }
+/* a limit is set under lim, centred, the arrow and all */
+.maths-tv .mx .mlim { display: inline-flex; flex-direction: column; align-items: center; line-height: 1; margin-right: .16em; }
+.maths-tv .mx .mlim > .mfn { margin-right: 0; }
+.maths-tv .mx .mlim > .sub { margin: .1em 0 0; }
+.maths-tv .mx .mlim > .sub .mo.rel { margin: 0 .12em; }
 
 /* ================= the desk's pen, inside the line ================= */
 .maths-tv .mx .err, .maths-tv .mx .slot, .maths-tv .tick { position: relative; display: inline-block; vertical-align: baseline; }
