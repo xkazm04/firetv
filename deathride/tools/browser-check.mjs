@@ -9,7 +9,8 @@ for(const p of pages)p.on('pageerror',e=>errors.push(e.message));
 for(const p of pages){await p.goto(base+'/?pin='+pin);await p.waitForFunction(()=>document.getElementById('player').textContent.startsWith('PLAYER'))}
 const stats=async()=>await(await fetch(base+'/stats')).json();assert.equal((await stats()).slots.filter(s=>s.connected).length,2);
 const p=pages[0],cdp=await contexts[0].newCDPSession(p);
-await p.screenshot({path:'../evidence/controller.png'});
+await p.screenshot({path:process.env.BROWSER_SCREENSHOT||'../evidence/controller.png'});
+await p.locator('#settings').tap();await p.locator('#feelChoice').selectOption('Loose');await p.waitForTimeout(300);assert.equal((await stats()).feel.id,'Loose');await p.locator('#closeFeel').tap();
 const box=async id=>await p.locator('#'+id).boundingBox();let steer=await box('steer'),gas=await box('gas');
 const steerPoint={x:Math.round(steer.x+steer.width*.75),y:Math.round(steer.y+steer.height*.5),id:1,radiusX:8,radiusY:8};
 const gasPoint={x:Math.round(gas.x+gas.width*.5),y:Math.round(gas.y+gas.height*.5),id:2,radiusX:8,radiusY:8};
@@ -22,4 +23,4 @@ await p.locator('#race').tap();await p.waitForTimeout(3200);assert.equal((await 
 const before=(await stats()).flashFrames;await p.locator('#flash').dispatchEvent('pointerdown',{pointerId:8});assert.equal(await p.locator('#flashscreen').evaluate(e=>e.classList.contains('on')),true);await p.waitForTimeout(150);assert.equal((await stats()).flashFrames,before+1);
 await p.locator('#leave').tap();await p.waitForTimeout(150);assert.equal((await stats()).phase,'lobby');assert.deepEqual(errors,[]);
 const result={browser:'Chromium headless, 896 x 414, mobile touch emulation; not a physical phone',checks:['two browser contexts pair','simultaneous steer + throttle via CDP touch','release steer holds gas','release gas clears throttle','reload reclaims original car','start/countdown/race','phone white and one TV flash','lobby command','zero page exceptions'],capabilities:await p.evaluate(()=>({secureContext:isSecureContext,wakeLock:'wakeLock'in navigator,fullscreen:!!document.fullscreenEnabled})),errors};
-await writeFile('../evidence/browser-check.json',JSON.stringify(result,null,2));console.log(JSON.stringify(result,null,2));await browser.close();
+await writeFile(process.env.BROWSER_OUTPUT||'../evidence/browser-check.json',JSON.stringify(result,null,2));console.log(JSON.stringify(result,null,2));await browser.close();

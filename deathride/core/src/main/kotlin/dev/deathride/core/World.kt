@@ -1,8 +1,8 @@
 package dev.deathride.core
 
 import kotlin.math.*
-import java.lang.StrictMath.cos
-import java.lang.StrictMath.sin
+import dev.deathride.core.StrictTrig.cos
+import dev.deathride.core.StrictTrig.sin
 import java.lang.StrictMath.atan2
 import java.lang.StrictMath.sqrt
 import java.lang.StrictMath.exp
@@ -136,6 +136,8 @@ class Car(val id: Int, track: Track) {
     var x=0.0; var y=0.0; var vx=0.0; var vy=0.0; var heading=0.0; var yaw=0.0
     var previousX=0.0; var previousY=0.0; var previousHeading=0.0
     val lap=LapCounter(track.lengthM,track.startM)
+    var feel=FeelProfiles.spike
+    var filteredSteer=0.0; var filteredThrottle=0.0
     var human=false; var finishSeconds=-1.0; var position=id+1; var impact=0.0
     var aiMode=AiMode.DRIVE; var aiDwell=0; var aiBlockedSteps=0; var aiLane=0.0
     var aiReason=0; var aiPerceivedGapM=1000.0
@@ -147,18 +149,26 @@ interface Handling { fun integrate(car: Car, input: InputFrame, spec: CarSpec, d
 class SlipHandling : Handling {
     override fun integrate(car: Car,input: InputFrame,spec: CarSpec,dt: Double) {
         val speed=car.speedMps
+        val profile=car.feel
+        val shaped=if(car.human)profile.shape(input.steer) else input.steer
+        val rate=if(shaped==0.0)profile.steerReturnPerSecond else profile.steerRisePerSecond
+        car.filteredSteer+=(shaped-car.filteredSteer).coerceIn(-rate*dt,rate*dt)
+        val requested=if(profile.throttleExponent==1.0 || input.throttle==0.0 || input.throttle==1.0)input.throttle else power(input.throttle,profile.throttleExponent)
+        car.filteredThrottle=if(requested<car.filteredThrottle)requested else min(requested,car.filteredThrottle+profile.throttleRisePerSecond*dt)
+        val throttle=if(input.brake>0.0)0.0 else car.filteredThrottle
+        val brake=(input.brake*profile.brakeScale).coerceIn(0.0,1.0)
         val slip=if(speed>1.0)wrapAngle(atan2(car.vy,car.vx)-car.heading) else 0.0
-        val desiredYaw=-input.steer*spec.steeringRateRadPerSecond*(speed+spec.launchSteeringMps*input.throttle)/(speed+7.0)+slip*spec.yawStabilityPerSecond*(1-input.brake*spec.brakeGripLoss)
-        car.yaw+=(desiredYaw-car.yaw)*(1-exp(-dt/spec.yawResponseSeconds))
+        val desiredYaw=-car.filteredSteer*profile.authority(speed)*spec.steeringRateRadPerSecond*(speed+spec.launchSteeringMps*throttle)/(speed+7.0)+slip*spec.yawStabilityPerSecond*profile.stabilityScale*(1-brake*spec.brakeGripLoss)
+        car.yaw+=(desiredYaw-car.yaw)*(1-exp(-dt/(spec.yawResponseSeconds*profile.yawResponseScale)))
         car.heading=wrapAngle(car.heading+car.yaw*dt)
         val cx=cos(car.heading); val cy=sin(car.heading)
         var forward=car.vx*cx+car.vy*cy
         var lateral=-car.vx*cy+car.vy*cx
-        val gripScale=1.0-input.brake*spec.brakeGripLoss
+        val gripScale=1.0-brake*spec.brakeGripLoss
         val wanted=lateral*(1-exp(-spec.lateralGripPerSecond*gripScale*dt))
         val forceLimit=spec.maxLateralAccelerationMps2*gripScale*dt
         lateral-=wanted.coerceIn(-forceLimit,forceLimit)
-        forward=(forward+(input.throttle*spec.accelerationMps2-input.brake*spec.brakeMps2)*dt).coerceAtLeast(0.0)
+        forward=(forward+(throttle*spec.accelerationMps2-brake*spec.brakeMps2)*dt).coerceAtLeast(0.0)
         forward*=exp(-spec.rollingDragPerSecond*dt)
         car.vx=cx*forward-cy*lateral; car.vy=cy*forward+cx*lateral
         val magnitude=car.speedMps
@@ -189,6 +199,7 @@ class World(val seed: Int=17, val spec: CarSpec=CarSpec(), val track: Track=Trac
             val s=track.startM-6.0-(c.id/2)*7.0
             track.sample(s, if(c.id%2==0) -3.2 else 3.2,point)
             c.x=point.x; c.y=point.y; c.heading=point.heading; c.vx=0.0; c.vy=0.0; c.yaw=0.0
+            c.filteredSteer=0.0; c.filteredThrottle=0.0
             c.previousX=c.x; c.previousY=c.y; c.previousHeading=c.heading; c.lap.reset(s)
             c.finishSeconds=-1.0; c.position=c.id+1; c.impact=0.0; c.aiDwell=0; c.aiBlockedSteps=0; c.aiMode=AiMode.DRIVE
             c.aiLane=((c.id*7+seed)%5-2)*1.7; c.aiInput.set(0.0,0.0,0.0)

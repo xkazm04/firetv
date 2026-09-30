@@ -80,6 +80,8 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
                 when(keycode) {
                     Input.Keys.ENTER,Input.Keys.SPACE,Input.Keys.DPAD_CENTER,Input.Keys.BUTTON_A -> { if(phase=="lobby" || phase=="results")startRace(); return true }
                     Input.Keys.BACK,Input.Keys.ESCAPE,Input.Keys.BUTTON_B -> { if(phase!="lobby")lobby() else Gdx.app.exit(); return true }
+                    Input.Keys.LEFT -> { selectFeel(-1); return true }
+                    Input.Keys.RIGHT -> { selectFeel(1); return true }
                     Input.Keys.UP -> if(phase=="lobby") { server.resetPairing(); keyboard=false; return true }
                 }
                 if(keycode==Input.Keys.W || keycode==Input.Keys.A || keycode==Input.Keys.D || keycode==Input.Keys.S)keyboard=true
@@ -88,6 +90,9 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         }
         previousNanos=System.nanoTime()
         rebuildUi()
+    }
+    private fun selectFeel(direction: Int) {
+        server.feelRequest.set((FeelProfiles.all.indexOf(server.feel)+direction).mod(FeelProfiles.all.size))
     }
     private fun startRace() { world.reset(); phase="countdown"; countdown=3.0; accumulator=0.0; stateTime=0.0; server.phase=phase; logger("race countdown"); rebuildUi() }
     private fun lobby() { phase="lobby"; world.reset(); stateTime=0.0; server.phase=phase; rebuildUi() }
@@ -98,6 +103,9 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         val nanos=System.nanoTime(); val actual=(nanos-previousNanos)/1e9; previousNanos=nanos
         val now=server.nowMs(); server.metrics.frameMs.add(actual*1000,now); server.frameNumber++
         val elapsed=actual.coerceIn(0.0,.1); stateTime+=elapsed; uiTime+=elapsed; smokeTime+=actual
+        val feelIndex=server.feelRequest.getAndSet(-1)
+        if(feelIndex>=0) { server.feel=FeelProfiles.all[feelIndex]; logger("feel ${server.feel.json}") }
+        for(c in world.cars)c.feel=if(c.human)server.feel else FeelProfiles.spike
         when(server.command.getAndSet(0)) { 1 -> if(phase=="lobby" || phase=="results")startRace(); 2 -> lobby() }
         if(actual>.1)server.metrics.discardedSimMs.add(((actual-.1)*1000).toLong(),now)
         if(phase=="countdown") { countdown-=elapsed; if(countdown<=0) { phase="race"; server.phase=phase; stateTime=0.0 } }
@@ -105,7 +113,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
             accumulator+=elapsed
             var steps=0
             while(accumulator>=Tuning.STEP_SECONDS && steps<6) {
-                for(i in 0..1) { world.cars[i].human=server.slots[i].claimed; server.consume(i,server.nowMs(),inputs[i]) }
+                for(i in 0..1) { world.cars[i].human=server.slots[i].claimed; world.cars[i].feel=if(world.cars[i].human)server.feel else FeelProfiles.spike; server.consume(i,server.nowMs(),inputs[i]) }
                 if(keyboard && !server.slots[0].claimed) {
                     world.cars[0].human=true
                     val left=Gdx.input.isKeyPressed(Input.Keys.A)||Gdx.input.isKeyPressed(Input.Keys.LEFT)
@@ -232,6 +240,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         text.setColor(Color.WHITE); headline.setColor(Color.WHITE); detail.setColor(muted)
         text.addText("DEATH RIDE",59f,685f)
         detail.addText(Presentation.CONCEPT+"  /  "+Presentation.TAGLINE,59f,661f)
+        detail.addText("FEEL: "+server.feel.id+"   LEFT / RIGHT TO CHANGE",59f,630f)
         detail.addText("LOCAL CIRCUIT     /     6 CARS     /     3 LAPS",873f,682f)
         detail.addText(if(phase=="lobby")"A live race. A phone in your hand." else "BACK  Lobby       W A S D  Drive       ENTER  Race",873f,660f)
         for(c in world.cars) {

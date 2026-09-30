@@ -1,6 +1,17 @@
 # Owner checks
 
-Each wave appends here what the owner should try on the Stick with the phone, and what "good" and "bad" look like.
-Feel is only ever certified by the owner.
+Feel is certified only by the owner. Automated evidence is under `deathride/evidence/phase1`.
 
-(empty until wave W1 lands)
+## W1 ? Feel Lab (2026-09-30)
+
+On the Stick open **Death Ride** (`dev.deathride.tv`). Pair from the TV QR. LEFT/RIGHT on the remote changes the session preset live; the phone's preset button opens the settings sheet. Both displays should agree without a race restart. Balanced is a proposal, not a verdict. Spike retains the original steering coefficients; brake now overrides GO.
+
+For **each of Spike, Loose, Agile, Balanced, Stable**, do these three exercises and label each **too twitchy / right / too heavy**:
+
+1. Slow at the end of the straight and make the tightest hairpin you can. Good: achievable thumb travel and a predictable radius. Bad: running out of pad, delayed turn-in, or an unexpected spin.
+2. Slalom left/right down the straight. Good: each direction change arrives when expected. Bad: an oscillation grows, or your thumb must wait for the car.
+3. Hold a bend, briefly brake, then countersteer and release. Good: the slide can be caught. Bad: snap-back, uncatchable rotation, or a heavy car refusing the requested turn.
+
+Record preset, maneuver, speed, and the three-word rating. Loose deliberately permits more slip; Stable deliberately softens small corrections. Check simultaneous GO+BRAKE stops propulsion and releasing GO coasts immediately.
+
+Optical check: film phone and TV together at 240 fps for at least 30 FLASH TEST taps. Count frame separation ? 1000/240 ms and record p50/p95/max. Good against the proposed rubric: p50 <=120 ms, p95 <=180 ms. Bad: a growing delay or missed flash. Optical latency and physical-phone comfort are **not measured** by the automated network test.

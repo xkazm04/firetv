@@ -46,6 +46,10 @@ class LinkTest {
             val bad=Listener(); val badWs=connect(bad); badWs.sendText("""{"t":"hello","pin":"invalid"}""",true).join(); assertEquals("error",bad.next("error")["t"]!!.jsonPrimitive.content); badWs.abort()
             val good=Listener(); val ws=connect(good); ws.sendText("""{"t":"hello","pin":"${host.pin}"}""",true).join()
             val welcome=good.next("welcome"); val token=welcome["token"]!!.jsonPrimitive.content; assertEquals(0,welcome["slot"]!!.jsonPrimitive.int)
+            ws.sendText("""{"t":"feel","id":"Loose"}""",true).join()
+            repeat(100) { if(host.feelRequest.get()<0)Thread.sleep(10) }
+            assertEquals(1,host.feelRequest.getAndSet(-1))
+            ws.sendText("""{"t":"feel","id":"invalid"}""",true).join()
             ws.sendText("this is not JSON",true).join()
             ws.sendText("""{"t":"i","q":1,"ts":0,"s":0.4,"a":1,"b":0,"f":0}""",true).join(); assertTrue(good.next("ack")["accepted"]!!.jsonPrimitive.boolean)
             ws.sendText("""{"t":"i","q":0,"ts":0,"s":-1,"a":1,"b":0,"f":0}""",true).join(); assertFalse(good.next("ack")["accepted"]!!.jsonPrimitive.boolean)
