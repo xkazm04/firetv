@@ -5,6 +5,7 @@ import { certWords, monthOf } from "@/lib/english/cert";
 import { defaultPreferences, eligibleScenes, ENGLISH_SCENES, ENGLISH_SKILLS, PROGRESS_LABEL, recommendScene } from "@/lib/english/curriculum";
 import { ABOUT_QUESTIONS, BAND_CAN, BAND_NAME, isBand, MAX_TASKS, PLAN_MAX, TOPIC_ASK_MAX } from "@/lib/english/placement";
 import { BANDS, type Band, type Conversation, type EnglishLearning, type EnglishPreferences, type LevelCheck, type Placement } from "@/lib/english/types";
+import { practiceLine } from "@/lib/english/rules";
 import { accepts, turnState } from "@/lib/english/turn";
 import { helpOf, lingaHome, lingaView, offeredActions, phonePanel, type ViewAction } from "@/lib/english/view";
 import { ReplyBox } from "./ReplyBox";
@@ -52,7 +53,7 @@ export function LingaPhone({s,post,onSentence}:{s:Session;post:(e:Event)=>Promis
     {panel==="map"&&<>
       {(learning.certificates??[]).length>0&&<CertificateWords learning={learning}/>}
       <p>What you say and what you type both count toward On your own; picking a phrase does not. These are learning indicators.</p>
-      {ENGLISH_SKILLS.map(skill=>{const all=learning.evidence.filter(e=>e.skill===skill.id);return <div className="linga-skill" key={skill.id}><b>{skill.name}</b><small>Progress: {PROGRESS_LABEL[learning.achievements[skill.id]??"not-tried"]}</small><small>{all.filter(e=>e.mode==="text").length} written · {all.filter(e=>e.mode==="choice").length} choice observations</small></div>;})}
+      {ENGLISH_SKILLS.map(skill=><div className="linga-skill" key={skill.id}><b>{skill.name}</b><small>Progress: {PROGRESS_LABEL[learning.achievements[skill.id]??"not-tried"]}</small><small>{practiceLine(learning.evidence, skill.id, "phone")}</small></div>)}
       <a href={`/english/print?learner=${encodeURIComponent(s.learner?.id ?? "")}`} target="_blank" rel="noreferrer">Open printable learning map</a>
       <details><summary>Things Linga taught you</summary><div className="linga-transcript">{learning.taught.filter(m=>!(c&&c.phase!=="finished"&&c.review?.id===m.id&&!c.review.used)).slice(-12).reverse().map(m=><p key={m.id}><b>{m.title} · {m.kind==="fix"?"a fix":"a word"}</b>{m.kind==="fix"?<>“{m.said}” → “{m.better}”</>:<>“{m.said}”: {m.better}</>}<br/>{m.why}{m.reusedAt!==undefined&&<><br/><small>Used again{learning.sessions.find(x=>x.id===m.reusedIn)?` in ${learning.sessions.find(x=>x.id===m.reusedIn)!.title}`:""}: “{m.reusedQuote}”</small></>}</p>)}{!learning.taught.length&&<p>Nothing yet. Linga stops a conversation when one thing is worth keeping.</p>}</div></details>
       <details><summary>Recent evidence</summary><div className="linga-transcript">{learning.evidence.slice(-12).reverse().map(e=><p key={e.id}><b>{skillName(e.skill)} · {e.mode} · {e.supported?"with support":"without a supplied phrase"}</b>“{e.quote}”<br/>{e.note}</p>)}{!learning.evidence.length&&<p>Nothing recorded yet. Start with a conversation.</p>}</div></details>

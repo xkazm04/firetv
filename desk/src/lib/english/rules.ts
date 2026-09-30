@@ -36,6 +36,13 @@ export function cleanEnglish(value: unknown): EnglishLearning {
  * recognition, never production: it never counts. A level-check task is never evidence at all (check.ts).
  */
 export const COUNTING_MODES: ReadonlyArray<EnglishEvidence["mode"]> = ["speech", "text"];
+/** Spoken, written and picked, as the phone's map and the printable map both say them. One counter, so the two cannot drift. */
+export function practiceLine(evidence: EnglishEvidence[], skill: SkillId, layout: "phone" | "print"): string {
+  const all = evidence.filter(e => e.skill === skill);
+  const n = (mode: EnglishEvidence["mode"]) => all.filter(e => e.mode === mode).length;
+  const spoken = `${n("speech")} spoken`, written = `${n("text")} written`;
+  return layout === "print" ? `${spoken}\n${written}\n${n("choice")} choices` : `${spoken} · ${written} · ${n("choice")} choice observations`;
+}
 export function evidenceProgress(evidence: EnglishEvidence[], skill: SkillId): Progress {
   const own = evidence.filter(e=>e.skill===skill && COUNTING_MODES.includes(e.mode) && e.success);
   const independent = own.filter(e=>!e.supported);

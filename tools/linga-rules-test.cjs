@@ -816,3 +816,18 @@ test('the reply box stays closed until the scene is ready',()=>{
  assert.match(closed,/Not yet/);
  assert.equal(open.includes('Not yet'),false);
 });
+test('the map and the print name spoken practice, not only written and choice',()=>{
+ const {practiceLine}=require(path.join(root,'src/lib/english/rules.ts'));
+ const ev=mode=>({id:mode,episodeId:'ep',turnId:'t',sceneId:'booking',skill:'request',at:1,mode,supported:false,success:true,quote:'q',note:'n'});
+ assert.equal(practiceLine([ev('speech'),ev('text'),ev('choice')],'request','phone'),'1 spoken · 1 written · 1 choice observations');
+ assert.equal(practiceLine([ev('speech'),ev('text'),ev('choice')],'request','print'),'1 spoken\n1 written\n1 choices');
+ assert.equal(practiceLine([ev('speech'),ev('speech')],'request','phone'),'2 spoken · 0 written · 0 choice observations');
+ assert.equal(practiceLine([ev('text')],'narrate','phone'),'0 spoken · 0 written · 0 choice observations');
+ const strip=file=>fs.readFileSync(file,'utf8').replace(/\/\*[\s\S]*?\*\//g,'').replace(/\/\/.*$/gm,'');
+ const phoneSrc=strip(path.join(root,'src/english/LingaPhone.tsx'));
+ const printSrc=strip(path.join(root,'src/app/english/print/page.tsx'));
+ assert.match(phoneSrc,/practiceLine\(/);
+ assert.match(printSrc,/practiceLine\(/);
+ assert.equal(/mode==="text"/.test(phoneSrc),false,'the phone still counts written by hand');
+ assert.equal(/mode==="text"/.test(printSrc),false,'the print still counts written by hand');
+});
