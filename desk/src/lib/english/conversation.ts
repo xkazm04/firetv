@@ -5,7 +5,7 @@ import { dispatch, getSession, type Screen } from "../session/store";
 import { addDigest, getLearner, saveEnglish } from "../session/learners";
 import { markSeen, withCertificate } from "./cert";
 import { checkCommand, isCheckAction } from "./check";
-import { audienceAllowed, defaultPreferences, eligibleScenes, ENGLISH_SCENES, ENGLISH_SKILLS, isAdult, recommendScene } from "./curriculum";
+import { audienceAllowed, defaultPreferences, eligibleScenes, ENGLISH_SCENES, ENGLISH_SKILLS, isAdult, oldestDue, recommendScene } from "./curriculum";
 import { ConversationError } from "./errors";
 import { climb, keepLadder, MEANING_MAX, SIMPLER_MAX, STARTER_MAX, supportedBy, validLadder } from "./help";
 import { appendPlacement, BAND_NAME, BAND_TUTOR, easyBand, isBand, TAUGHT_CAP } from "./placement";
@@ -132,7 +132,7 @@ export async function englishCommand(raw:unknown){
     if(s.conversation?.commands.includes(commandId))return getSession();
     if(s.conversation?.pending)throw new ConversationError("A scene is already being prepared. You can cancel it.",409);
     if(s.conversation&&s.conversation.phase!=="finished"&&input.replace!==true)throw new ConversationError("Finish or leave the current scene before starting another.",409);
-    const due=learning.evidence.filter(e=>e.success&&e.skill!==scene.skill&&Date.now()-e.at>3*86400000).sort((a,b)=>a.at-b.at)[0];
+    const due=oldestDue(learning.evidence,scene.skill);
     // One taught item comes back (review.ts): code picks it, the partner makes room for it without saying it.
     const id=randomUUID(),taught=dueTaught(learning.taught,id);
     const c:Conversation={id,learnerId,sceneId:scene.id,title:scene.name,goal:scene.goal,partner:scene.partner,focusSkill:scene.skill,reviewSkill:due?.skill??"repair",preferences:prefs,scene,turns:[],coaching:null,moment:null,moments:[],phase:"conversation",pending:commandId,error:"",paused:false,capture:false,captureAt:0,audioNonce:0,supported:false,cue:"",quizOpen:false,commands:[],evidence:[],startedAt:Date.now(),review:taught?reviewOf(taught):null};

@@ -74,6 +74,12 @@ export function planDone(l: EnglishLearning): boolean {
   const topics = l.plan?.topics ?? [], started = new Set(l.sessions.map(x => x.sceneId));
   return topics.length > 0 && topics.every(t => started.has(t.id));
 }
+/** Evidence old enough to practise again. Three days, the same wait in scene choice and in the review skill. */
+export const DUE_MS = 3 * 86400000;
+/** The oldest successful piece, skipping `except` (the scene's own skill, so a review is a different ability). */
+export function oldestDue<T extends { success: boolean; skill: string; at: number }>(evidence: T[], except?: string): T | undefined {
+  return evidence.filter(e => e.success && e.skill !== except && Date.now() - e.at > DUE_MS).sort((a, b) => a.at - b.at)[0];
+}
 export function recommendScene(p: Profile | undefined, learning: EnglishLearning): EnglishScene {
   const prefs = learning.preferences ?? defaultPreferences(p);
   // An agreed plan leads: the next topic not yet talked through, then the one whose skill is due.
@@ -83,7 +89,7 @@ export function recommendScene(p: Profile | undefined, learning: EnglishLearning
     const unstarted = plan.find(x => !started.has(x.id));
     if (unstarted) return unstarted;
     const lastId = learning.sessions.at(-1)?.sceneId;
-    const due = learning.evidence.filter(e => e.success && Date.now() - e.at > 3 * 86400000).sort((a, b) => a.at - b.at)[0];
+    const due = oldestDue(learning.evidence);
     return plan.find(x => due && x.skill === due.skill && x.id !== lastId) ?? plan[(plan.findIndex(x => x.id === lastId) + 1) % plan.length];
   }
   const words = `${prefs.goal} ${prefs.interest}`.toLowerCase();
@@ -91,7 +97,7 @@ export function recommendScene(p: Profile | undefined, learning: EnglishLearning
   const allowed = eligibleScenes(p, prefs).filter(x=>x.id!=="date"||/date|dating/.test(words));
   const last = learning.sessions.at(-1);
   if (last) {
-    const due = learning.evidence.filter(e => e.success && Date.now() - e.at > 3 * 86400000).sort((a,b) => a.at-b.at)[0];
+    const due = oldestDue(learning.evidence);
     const next = allowed.find(x => due && x.skill === due.skill && x.id !== last.sceneId);
     if (next) return next;
     const index = allowed.findIndex(x => x.id === last.sceneId);

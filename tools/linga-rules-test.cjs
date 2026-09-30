@@ -831,3 +831,33 @@ test('the map and the print name spoken practice, not only written and choice',(
  assert.equal(/mode==="text"/.test(phoneSrc),false,'the phone still counts written by hand');
  assert.equal(/mode==="text"/.test(printSrc),false,'the print still counts written by hand');
 });
+test('a skill practised more than three days ago is due, and the same wait is written once',()=>{
+ const {oldestDue,DUE_MS,recommendScene}=require(path.join(root,'src/lib/english/curriculum.ts'));
+ const day=86400000,now=Date.now();
+ const ev=(skill,age,success=true)=>({id:skill+age,episodeId:'ep',turnId:'t',sceneId:'booking',skill,at:now-age,mode:'speech',supported:false,success,quote:'q',note:'n'});
+ const rows=[ev('describe',5*day),ev('request',4*day),ev('narrate',day),ev('repair',6*day,false)];
+ assert.equal(oldestDue(rows).skill,'describe','the oldest success is due');
+ assert.equal(oldestDue(rows,'describe').skill,'request','review skips the scene\'s own skill');
+ assert.equal(oldestDue([ev('narrate',day)]),undefined);
+ assert.equal(oldestDue([ev('request',DUE_MS-60000)]),undefined,'three days is not yet due');
+ assert.equal(oldestDue([ev('request',DUE_MS+60000)]).skill,'request');
+ const kid={type:'elementary',age:12};
+ const learning=evidence=> ({...emptyEnglish(),evidence,sessions:[{id:'s1',sceneId:'weekend',title:'Weekend',at:1,turns:1}]});
+ assert.equal(recommendScene(kid,learning([ev('request',4*day)])).id,'booking','four days returns the due situation');
+ assert.equal(recommendScene(kid,learning([ev('request',day)])).id,'rover','one day rotates to the next situation');
+ assert.equal(recommendScene(kid,learning([ev('request',4*day,false)])).id,'rover','a failed reply is not due');
+ const quiz={question:'Which fits?',options:['I like it because it is fun.','Yesterday.'],correct:0};
+ const planTopic=(id,skill)=>({id,title:id,goal:'Talk about it.',why:'You asked for it.',skill,audience:'all',partner:'Sam · Friend',premise:'A friendly chat.',cue:'Try: I like…',quiz});
+ const plan=(evidence,last='t-weekend')=>{
+  const sessions=['t-rover','t-booking','t-weekend'].filter(id=>id!==last).map((sceneId,i)=>({id:'s'+i,sceneId,title:sceneId,at:i+1,turns:1}));
+  sessions.push({id:'last',sceneId:last,title:last,at:9,turns:1});
+  return {...emptyEnglish(),evidence,plan:{at:1,band:'B1',topics:[planTopic('t-weekend','describe'),planTopic('t-rover','repair'),planTopic('t-booking','request')]},sessions};
+ };
+ assert.equal(recommendScene(kid,plan([ev('request',4*day)])).id,'t-booking');
+ assert.equal(recommendScene(kid,plan([ev('request',day)])).id,'t-rover');
+ assert.equal(recommendScene(kid,plan([ev('describe',5*day),ev('request',4*day)],'t-rover')).id,'t-weekend','the older success leads');
+ const strip=file=>fs.readFileSync(file,'utf8').replace(/\/\*[\s\S]*?\*\//g,'').replace(/\/\/.*$/gm,'');
+ const src=[path.join(root,'src/lib/english/curriculum.ts'),path.join(root,'src/lib/english/conversation.ts')].map(strip);
+ assert.equal(src.join('\n').match(/86400000/g).length,1,'the three-day wait is written once');
+ assert.match(src[0],/oldestDue\(/);assert.match(src[1],/oldestDue\(/);
+});
