@@ -85,6 +85,26 @@ export function nextOn(path: MathPath, secure: string[]): PathTopic | undefined 
   return topicsOf(path).find((t) => !secure.includes(t.id) && t.prereq.every((p) => secure.includes(p)));
 }
 
+/** The index just after the last of `ids` that is secure: 0 when none is, ids.length when the last one is. */
+export function afterLastSecure(ids: readonly string[], isSecure: (id: string) => boolean): number {
+  for (let i = ids.length - 1; i >= 0; i--) if (isSecure(ids[i])) return i + 1;
+  return 0;
+}
+
+/**
+ * The learner's frontier on a path - where the needle stands and where "Teach me something" opens Topics:
+ *   - a school path: the first topic not secure AFTER the last secure one, else the first topic (Family W5b). A unit
+ *     placed before topics a learner has already secured (fractions before linear equations) does not send them back
+ *     to the start: with one-step equations secure the frontier is two-step equations, not the new first unit;
+ *   - a course path (Calculus 1): the first topic not secure whose prerequisites all are (`nextOn`), as always.
+ * Undefined when there is none left (the last topic of a school path is secure; everything is, on a course).
+ */
+export function frontierOn(path: MathPath, secure: readonly string[]): PathTopic | undefined {
+  const topics = topicsOf(path);
+  if (!PATHS[path].school) return nextOn(path, [...secure]);
+  return topics[afterLastSecure(topics.map((t) => t.id), (id) => secure.includes(id))];
+}
+
 /**
  * How many topics on the path a learner of that age is normally already past (expectedIndex for the school path);
  * null for a course path, which has no school year to be behind or ahead of.

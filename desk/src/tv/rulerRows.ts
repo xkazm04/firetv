@@ -5,10 +5,11 @@
  * The three-topic school path comes out exactly as the ruler always drew it (tools/maths-ruler-test.cjs holds the old
  * formulas against this module).
  *
- * Pure: only types are imported (the path's topics, the TV's topic states), never the store, the learners file or the
- * filesystem, so the TV and a test may each read it (the tools/tv-keys-test.cjs GUARD pattern).
+ * Pure: types, and the frontier rule from library/paths.ts (client-safe library data), are all it imports - never the
+ * store, the learners file or the filesystem, so the TV and a test may each read it (the tools/tv-keys-test.cjs GUARD
+ * pattern).
  */
-import type { PathTopic } from "@/lib/library/paths";
+import { afterLastSecure, type PathTopic } from "@/lib/library/paths";
 import type { TopicState } from "@/tv/mathsRows";
 
 /** The ruler's width on the stage: 1920 less the two 96 px safe margins (design/maths-lamplight.css .mb-ruler). */
@@ -120,13 +121,38 @@ export function rulerModel(topics: RulerTopic[], states: Record<string, TopicSta
 }
 
 /**
- * The learner's needle: at topic `frontier` (the first not latched secure), `fill` of the way through it (its
- * estimate; 1 when it is secure). A frontier past the last topic is the end of the ruler.
+ * The learner's needle: at topic `frontier` (`rulerFrontier`), `fill` of the way through it (its estimate; 1 when it
+ * is secure). A frontier past the last topic is the end of the ruler.
  */
 export function needleX(m: RulerModel, frontier: number, fill: number): number {
   if (!m.pan) return PAD + (frontier + fill) * m.span;
   const t = m.topics[frontier];
   return t ? t.sx + clamp(fill, 0, 1) * t.sw : m.end;
+}
+
+/**
+ * The topic the learner's needle stands in (an index into `topics`):
+ *   - a school path (Family W5b): the first topic not latched secure AFTER the last latched one, else the first topic
+ *     (paths.ts `frontierOn`), so a unit placed before topics a learner already secured does not send the needle back
+ *     to the start; with the last topic secure, the last topic (the needle then stands at its end, filled);
+ *   - a course path: the first topic not latched secure, else the last - as the ruler always drew it.
+ */
+export function rulerFrontier(topics: Array<Pick<PathTopic, "id">>, isSecure: (id: string) => boolean, school: boolean): number {
+  const N = topics.length;
+  if (school) return Math.min(N - 1, afterLastSecure(topics.map((t) => t.id), isSecure));
+  for (let i = 0; i < N; i++) if (!isSecure(topics[i].id)) return i;
+  return N - 1;
+}
+
+/**
+ * What of the school comparison the ruler draws: the SCHOOL tick whenever the path has a school year for the learner
+ * (`exp` from paths.ts `expectedOn`, null on a course or with no age), and the gap line between the needle and the
+ * tick only once the learner has a Math placement (owner decision D2, Family Phase 1: a gap drawn from a guessed place
+ * makes a new learner look behind). Phase 1 has no Math placement, so no gap line is drawn; its code stays for one.
+ */
+export function schoolMarks(exp: number | null, placed: boolean): { tick: boolean; gap: boolean } {
+  const tick = exp !== null;
+  return { tick, gap: tick && placed };
 }
 
 /** The SCHOOL tick after `exp` topics (paths.ts `expectedOn`, school paths only), clamped to the ruler. */
@@ -159,10 +185,11 @@ export interface StripModel {
 /**
  * Tonight's ruler for a long path: one bar per strand across the ruler's 1676 px, as wide as its share of the topics
  * but never under MIN_SEG, each filled by its share of latched-secure topics, and the learner's needle at the frontier
- * - the first topic not secure whose prerequisites all are - one slot in for each topic of its strand before it.
- * Widths are whole pixels and sum to the strip.
+ * one slot in for each topic of its strand before it. The frontier is, on a course (`school` false), the first topic
+ * not secure whose prerequisites all are; on a school path, the first topic not secure after the last secure one
+ * (paths.ts `frontierOn`, the same rule as the ruler's `rulerFrontier`). Widths are whole pixels and sum to the strip.
  */
-export function stripModel(topics: Array<Pick<PathTopic, "id" | "strand" | "prereq">>, states: Record<string, TopicState>): StripModel {
+export function stripModel(topics: Array<Pick<PathTopic, "id" | "strand" | "prereq">>, states: Record<string, TopicState>, school = false): StripModel {
   const width = TRACK - PAD * 2;
   const groups: Array<{ name: string; ids: string[] }> = [];
   topics.forEach((t, i) => { const last = groups[groups.length - 1]; if (last && topics[i - 1]?.strand === t.strand) last.ids.push(t.id); else groups.push({ name: t.strand, ids: [t.id] }); });
@@ -186,8 +213,8 @@ export function stripModel(topics: Array<Pick<PathTopic, "id" | "strand" | "prer
     const labelX = x + 18, labelW = Math.max(0, sw - 36);
     return { name: g.name, count: g.ids.length, secure: n, share: n / g.ids.length, x, w: sw, labelX, labelW, label: clampLabel(g.name, labelW) };
   });
-  const fi = topics.findIndex((t) => !secure.has(t.id) && t.prereq.every((p) => secure.has(p)));
-  if (fi < 0) return { x0: PAD, width, segments, needle: { index: topics.length, x: PAD + width, at: "end" } };
+  const fi = school ? afterLastSecure(topics.map((t) => t.id), (id) => secure.has(id)) : topics.findIndex((t) => !secure.has(t.id) && t.prereq.every((p) => secure.has(p)));
+  if (fi < 0 || fi >= topics.length) return { x0: PAD, width, segments, needle: { index: topics.length, x: PAD + width, at: "end" } };
   const gi = groups.findIndex((g) => g.ids.includes(topics[fi].id)), g = segments[gi], j = groups[gi].ids.indexOf(topics[fi].id);
   const x = g.x + (g.w * j) / g.count;
   return { x0: PAD, width, segments, needle: { index: fi, x, at: x <= PAD ? "start" : "mid" } };

@@ -68,7 +68,7 @@ handler walks `topicStops(s)`.
 `SYLLABUS` is a school-year spine: Add and subtract fractions, then three linear-equation topics, each with the year
 it is met in the US, UK, Czech and German systems (the fractions years, US 5, UK 6, CZ 5, DE 5, are from memory and
 unchecked; a maths teacher reads them). `expectedIndex(system, age)` counts the topics a learner of that age is normally past, and the
-ruler's SCHOOL tick and gap line stand there. Appended to that list, Calculus would count a 16-year-old as 22
+ruler's SCHOOL tick stands there (the gap line to the needle is hidden until a Math placement exists, D2). Appended to that list, Calculus would count a 16-year-old as 22
 topics behind on a university course, and the Topics stop list would run to 25. So Calculus got its own list, and
 the desk asks for a list by path: `expectedOn(path, system, age)` is `expectedIndex` on the school path and `null`
 on a course, so a Calculus learner's ruler draws no year word, no SCHOOL tick and no gap line.
@@ -307,9 +307,18 @@ because it is the fallback. No test pins this case.
   maths** and **Calculus 1**, and the chosen cell is `pathOf(draft)`, so a new learner has School maths
   chosen. The one caption under the rows is the focused cell's label and its path's blurb, for example "Calculus 1"
   over "A university first course in calculus, from functions and limits through derivatives to integrals."
-- **Topics.** The stops are the learner's path. "Teach me something" opens Topics at the **frontier**: the first
-  topic not latched secure whose prerequisites all are (`nextOn`). It opens on the first stop when nothing is
-  secure or everything is (`tools/maths-course-test.cjs` test 4: 0, 7 and 22 secure).
+- **Topics.** The stops are the learner's path. "Teach me something" opens Topics at the **frontier**
+  (`frontierOn`): on Calculus 1 the first topic not latched secure whose prerequisites all are (`nextOn`); on the
+  school path the first topic not latched secure AFTER the last latched one, else the first (Family W5b), so the
+  fractions unit placed first does not send a learner who secured one-step equations back to the start. It opens on
+  the first stop when nothing is secure or nothing is left (`tools/maths-course-test.cjs` test 4: 0, 7 and 22 secure;
+  `tools/school-ruler-test.cjs` test 1 for the school path).
+- **The needle and the SCHOOL tick.** The needle stands at the same frontier (`rulerFrontier`, `stripModel` in
+  `tv/rulerRows.ts`, both reading `afterLastSecure` from `paths.ts` on a school path; a course keeps its old rules,
+  pinned by `tools/school-ruler-test.cjs` test 2). The SCHOOL tick is drawn for a school path; the gap line between
+  needle and tick waits for a Math placement (`schoolMarks`, owner decision D2) and Phase 1 has none, so it is never
+  drawn; the code that draws it stays (`tools/school-ruler-test.cjs` tests 3 and 4 render MathsTV for all four
+  systems).
 - **The panning ruler.** A path pans on Topics when one box per topic would give a slot under `MIN_SPAN` (288 px).
   The school path's slot is 419 px (four topics); Calculus 1's would be 76.2 px, so it pans. The focused slot is `FOCUS_SPAN`,
   640 px (a 628 px box), and every other slot is 288 px (a 276 px box). The track is 6,740 px, slid by
@@ -349,7 +358,11 @@ provider registry, and data directories are disposable, under the OS temp dir.
 | `tools/maths-course-test.cjs` | `mathPath` kept and junk dropped; `topic.open` focus; Topics walks the path; the frontier; Menu-edit; the Maths course row; set names on the landing and the phone |
 | `tools/maths-ruler-test.cjs` | the school ruler's old formulas; the panning ruler; the strip |
 | `tools/maths-tv-test.cjs` | topic states by path (a record off the path is ignored), `topicName`, the Tonight title by path; also the captions' prose, the paper's fit and the job lines |
-| `tools/maths-calculus-test.cjs` | the reader baseline over the corpus, a ratchet on declared statuses |
+| `tools/maths-calculus-test.cjs` | the reader baseline over the corpus, a ratchet on declared statuses; test 7: every generated fractions question renders with two stacked fractions |
+| `tools/school-rules-test.cjs` | the school number core (W5a): the reader, `check`, `leaksSchool`, the generator |
+| `tools/school-practice-test.cjs` | a fractions set by code with zero engine calls, six distinct, tiers by code, the route's code/0, the spec through the store and a reload, a linear topic still calling once |
+| `tools/school-marking-test.cjs` | the unit's closed slip list; the shape dispatch; a stubbed sheet marked under uk, cz and us; `specFromQuestion` (53 phrasings); the two-strike hint fallback and the unit stance; the lesson skip; explanation settle and leak; the Calculus explain prompt byte for byte |
+| `tools/school-ruler-test.cjs` | the school frontier on the ruler, the strip and Topics; Calculus unchanged; the SCHOOL tick drawn and no gap line in MathsTV for every system |
 
 **The live probe** is not in `npm test`; the Director runs it against an isolated server:
 
@@ -358,6 +371,11 @@ MATHS_LIVE_ALLOW_WRITES=1 MATHS_LIVE_URL=http://localhost:3217 DESK_DATA_DIR=<th
   node tools/maths-calculus-live.cjs [--strict] [--topics a,b] [--path calc1]
 node tools/maths-calculus-live.cjs --dry      # no server, no browser
 ```
+
+`tools/school-fractions-live.cjs` (Family W5b, skips unless `SCHOOL_FRACTIONS_URL` is set) walks a 12-year-old UK learner
+through Tonight, Topics and a fractions set on a second `next dev --webpack` server whose text engine cannot be
+reached, and asserts the practice route's code/0, the safe zone, the type floor, the numerals at 28 px or more, the
+tick without a gap line and the needle for a fresh learner and one with one-step equations secure.
 
 `--path calc1` seats the scratch learner on Calculus 1. It walks Topics at every focus from 0 to 21 and Tonight
 with 0, 7, 15 and 22 topics secure. Commit `84e5f76` records the Director's run: `--path calc1 --strict` reached

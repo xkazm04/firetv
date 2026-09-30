@@ -183,19 +183,26 @@ the desk cannot read with one meaning (`0,75` on a UK profile, a rounded decimal
   a pencil); focused is lit amber and lifts.
 - **The ruler** - the topic path as a boxwood ruler: secure topics inked navy, an in-progress one hatched to its
   estimate, unseen ones a dashed groove, slips as pencil scratches. The learner's name on a lamp-lit needle at the
-  frontier; SCHOOL on a sky dashed tick where the school system would have them, only when the profile has an age
-  and a school type. On Topics each topic carries a word - Secure, In progress, Not started - and "Secure" comes
+  frontier (`rulerFrontier` in `desk/src/tv/rulerRows.ts`: on the school path the first topic not secure after the
+  last secure one, so a learner who secured one-step equations keeps the needle on two-step equations when a unit is
+  placed before them; on a course the first topic not secure); SCHOOL on a sky dashed tick where the school system
+  would have them, only when the profile has an age and a school type. The dashed gap line between the needle and
+  the tick is **not drawn** until the learner has a Math placement (owner decision D2, Family Phase 1: `schoolMarks`
+  in `rulerRows.ts`, `mathPlaced` in `desk/src/tv/mathsRows.ts`, false for everyone in Phase 1); its code stays. On Topics each topic carries a word - Secure, In progress, Not started - and "Secure" comes
   from the same latched record as the inked groove (`topicStates` in `desk/src/tv/mathsRows.ts`), never from a count
   of tonight's right answers, so a hatched groove never says Secure. The ruler is the learner's own path
   (`learnerPath` in `desk/src/lib/library/paths.ts`): the school path draws each topic's school year and the SCHOOL
   tick; a course path (Calculus 1) has no school year, so it draws no year word, no SCHOOL tick and no gap line
   (`expectedOn` is null). The learner picks the path on the profile's Maths course row (the shell's profile
   screen). Every screen names a set by its path's name for it (`topicName`), never a spelled-out id. Teach me
-  something opens Topics at the learner's **frontier**, the first topic not latched secure whose prerequisites all
-  are (`topicsFocus` in `desk/src/tv/keys.ts`), and at the first stop when nothing or everything is secure.
+  something opens Topics at the learner's **frontier** (`topicsFocus` in `desk/src/tv/keys.ts`, `frontierOn` in
+  `paths.ts`: the needle's rule on the school path, the first topic not latched secure whose prerequisites all are on
+  a course), and at the first stop when nothing is secure or nothing is left.
   Where each box, tick, strand label and needle goes is `rulerModel` in `desk/src/tv/rulerRows.ts`; the school path,
   **School maths** (four topics since Family W5b: Add and subtract fractions, then the three linear-equation topics,
-  in two strands), keeps one box per topic, as before. A path too long for one box per topic on the big ruler (under 288 px a
+  in two strands), keeps one box per topic, as before: 419 px slots, where the focused name is fitted whole in two
+  lines from 44 down to 34 px (`fitName`; "Equations with brackets and x on both sides" sets at 40 px) and the others
+  keep 44 px, two lines, clamped. A path too long for one box per topic on the big ruler (under 288 px a
   slot: Calculus 1's 22 topics in six strands) **pans under the lamp** like the paper: the track is wider than the
   stage and slides (the paper's .76 s pan) so the focused topic's centre sits under the lamp, clamped so neither end
   ever shows a gap; the focused topic takes a 640 px slot so its whole name is shown in at most three lines, fitted
@@ -203,8 +210,8 @@ the desk cannot read with one meaning (`0,75` on a UK profile, a rounded decimal
   and carries a chevron; strand labels sit at their strand's start and clamp to its width with an ellipsis (the
   focused strand's full name is always in the lede's kicker). On Tonight a path of more than eight topics is drawn
   as a **strip** (`stripModel`): one bar per strand, as wide as its share of the topics and never under 96 px, inked
-  by its share of latched-secure topics, the learner's needle at the frontier (the first topic not secure whose
-  prerequisites are); no topic names, no year. `maths-ruler`; the chevrons are `maths-more`.
+  by its share of latched-secure topics, the learner's needle at the frontier (on a course the first topic not secure
+  whose prerequisites are; on a school path the needle's rule above); no topic names, no year. `maths-ruler`; the chevrons are `maths-more`.
 - **The paper** - cream, 48 px squares, a sky margin rule at 96 px, the sheet title in Fraunces and the learner's
   name in the blue hand; it pans so the item in hand is under the lamp. A line too long for the paper - a long line
   of working, a long printed question - is fitted to it (`fitRow` in `desk/src/tv/mathsRows.ts`): it shrinks in

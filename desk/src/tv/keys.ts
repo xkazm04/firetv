@@ -10,7 +10,7 @@ import type { EssayAnalysis, Event, JobKind, Profile, Screen, Session, Subject }
 import { rewriteState } from "@/lib/rules/essay";
 import { LESSONS, ESSAY_TYPES, PLAYBOOK, playFor, type Lesson } from "@/lib/library/lessons.data";
 import { SYLLABUS, type Topic } from "@/lib/library/syllabus";
-import { learnerPath, nextOn, topicsOf, type MathPath, type PathTopic } from "@/lib/library/paths";
+import { frontierOn, learnerPath, topicsOf, type MathPath, type PathTopic } from "@/lib/library/paths";
 import { lessonStates } from "@/lib/library/watched";
 import { profileRows, locate, flat } from "@/tv/profileRows";
 import { continueCard } from "@/tv/mathsRows";
@@ -132,12 +132,13 @@ export const TOPIC_STOPS: readonly Topic[] = SYLLABUS;
 /** Topics: the stops of the learner's own path (library/paths.ts learnerPath) - the school syllabus, or Calculus 1. */
 export function topicStops(s: Pick<Session, "profiles" | "learner">): readonly PathTopic[] { return topicsOf(learnerPath(s)); }
 /**
- * Where "Teach me something" opens Topics: on the learner's frontier - the first topic of their path not latched
- * secure whose prerequisites all are (paths.ts nextOn) - and on the first stop when nothing is secure or everything is.
+ * Where "Teach me something" opens Topics: on the learner's frontier (paths.ts frontierOn, the same rule as the
+ * ruler's needle) - on a school path the first topic not latched secure after the last latched one, on a course the
+ * first not latched secure whose prerequisites all are - and on the first stop when nothing is secure or none is left.
  */
 export function topicsFocus(s: Pick<Session, "profiles" | "learner" | "skills">): number {
   const path = learnerPath(s), done = Object.values(s.skills ?? {}).filter((r) => r?.secure).map((r) => r.topic);
-  const next = done.length ? nextOn(path, done) : undefined;
+  const next = done.length ? frontierOn(path, done) : undefined;
   return next ? Math.max(0, topicsOf(path).findIndex((t) => t.id === next.id)) : 0;
 }
 /** The walk has one action, on its last item: back to the sheet. */

@@ -11,12 +11,12 @@
  */
 import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from "react";
 import type { Page, PracticeItem, SchoolSystem, Session } from "@/lib/session/store";
-import { expectedOn, learnerPath, topicIn, topicsOf, type PathTopic } from "@/lib/library/paths";
+import { PATHS, expectedOn, learnerPath, topicIn, topicsOf, type PathTopic } from "@/lib/library/paths";
 import { LESSONS } from "@/lib/library/lessons.data";
 import { lessonStates } from "@/lib/library/watched";
 import { slip as slipById } from "@/lib/rules/maths";
-import { PAD, STRIP_AFTER, fitName, flagX, needleX, rulerModel, stripModel } from "@/tv/rulerRows";
-import { calendarWeeks, continueCard, explainLine, fitRow, humanTopic, inRunningText, markLine, noLessonsLine, paperSquare, pathSecure, rowSquares, secureTitle, stateWord, topicName, topicStates, workWhat, SQUARE, type Continue, type JobLine } from "@/tv/mathsRows";
+import { PAD, STRIP_AFTER, fitName, flagX, needleX, rulerFrontier, rulerModel, schoolMarks, stripModel } from "@/tv/rulerRows";
+import { calendarWeeks, continueCard, explainLine, fitRow, humanTopic, inRunningText, markLine, mathPlaced, noLessonsLine, paperSquare, pathSecure, rowSquares, secureTitle, stateWord, topicName, topicStates, workWhat, SQUARE, type Continue, type JobLine } from "@/tv/mathsRows";
 import { running, practiceFailed, stopAt, tonightStops, calendarStops, unitStops, walkStops, HINT_STOPS, TONIGHT_MENU, type TonightStop } from "@/tv/keys";
 import { sheetTiles, sheetStops, tileOf } from "@/tv/sheetRows";
 import { systemOf } from "@/tv/profileRows";
@@ -250,9 +250,11 @@ const SYS_WORD: Record<SchoolSystem, (y: NonNullable<PathTopic["year"]>) => stri
 
 /**
  * The path as a boxwood ruler: secure topics inked solid, one in progress hatched as far as the estimate, an
- * unseen one a dashed groove, slips as pencil scratches. The learner's needle stands at the frontier; the
- * SCHOOL tick stands where the learner's school system would normally have them, and only when the profile has
- * an age and a school type to read it from - no invented comparison. On Topics the topics are the stops. Where
+ * unseen one a dashed groove, slips as pencil scratches. The learner's needle stands at the frontier (rulerRows
+ * `rulerFrontier`: on a school path the first topic not secure after the last secure one); the SCHOOL tick stands
+ * where the learner's school system would normally have them, and only when the profile has an age and a school type
+ * to read it from - no invented comparison. The gap line between the two waits for a Math placement (`schoolMarks`,
+ * owner decision D2), and Phase 1 has none, so it is not drawn. On Topics the topics are the stops. Where
  * everything goes is tv/rulerRows.ts `rulerModel`: one box per topic across the ruler, or - on Topics, for a path
  * too long for that (Calculus 1) - a track wider than the stage that pans under the lamp like the paper, the
  * focused topic wide enough for its whole name, strand labels clamped to their strands, a chevron at each edge
@@ -267,16 +269,18 @@ function Ruler({ s, big, focus, busy }: { s: Session; big?: boolean; focus?: num
   const m = rulerModel(topics, st, focus, big);
   const N = topics.length;
   const has = topics.some((t) => skills[t.id]);
-  let frontier = N - 1;
-  for (let i = 0; i < N; i++) { if (!skills[topics[i].id]?.secure) { frontier = i; break; } }
+  const frontier = rulerFrontier(topics, (id) => !!skills[id]?.secure, PATHS[path].school);
   const fsk = skills[topics[frontier].id];
   const mx = !has ? PAD : needleX(m, frontier, fsk ? (fsk.secure ? 1 : Math.max(0, Math.min(1, fsk.estimate))) : 0);
   const age = me && me.type !== "other" ? me.age : undefined;
-  // a course path has no school year to be behind or ahead of: no SCHOOL tick, no gap line (expectedOn is null)
+  // a course path has no school year to be behind or ahead of: no SCHOOL tick, no gap line (expectedOn is null); on a
+  // school path the tick is drawn and the gap line waits for a Math placement (D2), which Phase 1 does not have
   const exp = age === undefined ? null : expectedOn(path, sys, age);
-  const fx = exp === null ? null : flagX(m, exp);
+  const marks = schoolMarks(exp, mathPlaced(s));
+  const fx = exp === null || !marks.tick ? null : flagX(m, exp);
   const clampStrands = m.strands.length > 1;
-  const win = useNameFit(m.pan, `${path}|${focus}`);
+  // the focused name is fitted whole on the big ruler, panning or not (four school topics make 419 px slots)
+  const win = useNameFit(m.pan || !!big, `${path}|${focus}`);
   const body = (<>
     <div className="mb-rbody" />
     <div className="mb-major start" style={{ left: PAD - 2 }} />
@@ -296,11 +300,11 @@ function Ruler({ s, big, focus, busy }: { s: Session; big?: boolean; focus?: num
         </div>
       );
     })}
-    {fx !== null && <div className="mb-gapline" style={{ left: Math.min(mx, fx), width: Math.abs(fx - mx) }} />}
+    {fx !== null && marks.gap && <div className="mb-gapline" style={{ left: Math.min(mx, fx), width: Math.abs(fx - mx) }} />}
     {fx !== null && <div className="mb-flag" data-end={exp !== null && exp >= N || undefined} data-start={exp !== null && exp <= 0 || undefined} style={{ left: fx }}><div className="nd" /><div className="mc">School</div></div>}
     <div className="mb-marker" data-start={!has || undefined} style={{ left: mx }}><div className="halo" /><div className="nd" /><div className="mc">{s.learner?.name}</div></div>
   </>);
-  if (!m.pan) return <div className={`mb-ruler${big ? " big" : ""}`} data-role="maths-ruler" data-active={focus !== undefined || undefined}>{body}</div>;
+  if (!m.pan) return <div className={`mb-ruler${big ? " big" : ""}`} ref={big ? win : undefined} data-role="maths-ruler" data-active={focus !== undefined || undefined}>{body}</div>;
   return (
     <div className="mb-ruler big" data-role="maths-ruler" data-active={focus !== undefined || undefined} data-pan="true">
       <div className="mb-rwin" ref={win} data-l={m.more.l || undefined} data-r={m.more.r || undefined}>
@@ -313,14 +317,16 @@ function Ruler({ s, big, focus, busy }: { s: Session; big?: boolean; focus?: num
 }
 
 /**
- * On a panning ruler, the focused topic's name is shown whole: the largest of 44 down to 34 px (tv/rulerRows.ts
- * `fitName`) at which it is in at most three lines with no word clipped, measured after layout and again when the
- * faces arrive. A ruler that does not pan keeps its names as the stylesheet sets them.
+ * On the big (Topics) ruler, the focused topic's name is shown whole: the largest of 44 down to 34 px (tv/rulerRows.ts
+ * `fitName`) at which it is in the lines its box allows (three on a panning ruler, two on one that does not) with no
+ * word clipped, measured after layout and again when the faces arrive. Tonight's small ruler keeps its names as the
+ * stylesheet sets them. (Family W5b: the school path's fourth topic narrowed its slots to 419 px, where "Equations
+ * with brackets and x on both sides" no longer fits two lines at 44 px.)
  */
-function useNameFit(pan: boolean, dep: unknown) {
+function useNameFit(on: boolean, dep: unknown) {
   const ref = useRef<HTMLDivElement>(null);
   useLayoutEffect(() => {
-    const el = ref.current; if (!pan || !el) return;
+    const el = ref.current; if (!on || !el) return;
     const fit = () => {
       el.querySelectorAll<HTMLElement>(".mb-tn").forEach((x) => x.style.removeProperty("font-size"));
       const tn = el.querySelector<HTMLElement>('.mb-topic[data-focused="true"] .mb-tn'); if (!tn) return;
@@ -332,18 +338,20 @@ function useNameFit(pan: boolean, dep: unknown) {
     let live = true;
     document.fonts?.ready.then(() => { if (live) fit(); });
     return () => { live = false; };
-  }, [pan, dep]);
+  }, [on, dep]);
   return ref;
 }
 
 /**
  * Tonight's ruler for a long path (more than STRIP_AFTER topics): one bar per strand, as wide as its share of the
- * topics, filled by its share of latched-secure topics (`topicStates`), the learner's needle at the frontier - the
- * first topic not secure whose prerequisites are (tv/rulerRows.ts `stripModel`). No topic names and no school year:
+ * topics, filled by its share of latched-secure topics (`topicStates`), the learner's needle at the frontier - on a
+ * course the first topic not secure whose prerequisites are, on a school path the first not secure after the last
+ * secure one (tv/rulerRows.ts `stripModel`). No topic names and no school year:
  * the path's topics are on Topics.
  */
 function Strip({ s }: { s: Session }) {
-  const m = stripModel(topicsOf(learnerPath(s)), topicStates(s));
+  const path = learnerPath(s);
+  const m = stripModel(topicsOf(path), topicStates(s), PATHS[path].school);
   return (
     <div className="mb-ruler strip" data-role="maths-ruler">
       <div className="mb-rbody" />

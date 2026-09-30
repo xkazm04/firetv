@@ -48,6 +48,15 @@ export function pathSecure(s: Pick<Session, "skills"> & OnPath): { path: MathPat
   return { path, topics, secure: topics.filter((t) => s.skills?.[t.id]?.secure), first: pathFirst(path) };
 }
 
+/**
+ * Has the learner a Math placement - a measured place on their path, not one read off their age? The ruler draws the
+ * gap line between their needle and the SCHOOL tick only then (rulerRows `schoolMarks`, owner decision D2, Family
+ * Phase 1). No Math placement exists in Phase 1 (the placement staircase is Phase 2), so it is false for everyone.
+ */
+export function mathPlaced(_s?: unknown): boolean {
+  return false;
+}
+
 /** A description of fact, never of permission: nothing on the path is locked. */
 export function stateWord(s: Pick<Session, "skills">, id: string, st: Record<string, TopicState>): "Secure" | "In progress" | "Not started" {
   if (st[id] === "secure") return "Secure";
