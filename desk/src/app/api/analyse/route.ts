@@ -7,7 +7,7 @@ import { dispatch, getSession, NOBODY_AT_DESK } from "@/lib/session/store";
 import { analyseSentence } from "@/lib/desk/english";
 import { analyseEssay, reviseSentence } from "@/lib/desk/essay";
 import { refused, runJob } from "@/lib/desk/job";
-import { revise, rewriteState, type AnalysisType } from "@/lib/rules/essay";
+import { essayTooLong, revise, rewriteState, type AnalysisType } from "@/lib/rules/essay";
 import { learnerAge } from "@/lib/rules/voice";
 
 export const dynamic = "force-dynamic";
@@ -46,6 +46,10 @@ export async function POST(req: Request) {
     });
     return r.ok ? NextResponse.json(r.value) : refused(r);
   }
+  // one paragraph per reading: a longer text is refused with a sentence, never cut down (the cap is in rules/essay,
+  // not measured: revisit after live use). The phone splits a file or message into paragraphs before it sends one.
+  const tooLong = essayTooLong(body.text);
+  if (tooLong) return NextResponse.json({ error: tooLong }, { status: 400 });
   const r = await runJob("analyse", async () => {
     dispatch({ type: "essay.type", essayType: body.type });
     const a = await analyseEssay(body.text, body.type, who.id, age);

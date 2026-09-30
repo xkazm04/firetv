@@ -6,6 +6,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useSession, call, fmt } from "@/tv/useSession";
 import { ESSAY_TYPES } from "@/lib/library/lessons.data";
+import { essayFileProblem, essayTooLong, paragraphsOf } from "@/lib/rules/essay";
 import { topicIn } from "@/lib/library/paths";
 import { BRAND as MODULE } from "@/tv/profileRows";
 import type { Event, JobKind, Session, Subject } from "@/lib/session/store";
@@ -18,7 +19,7 @@ import { nearestItem } from "@/lib/desk/select";
 const SAMPLES: Array<{ id: Subject; title: string; file: string }> = [
   { id: "maths", title: "Algebra — Exercise 4.2", file: "/samples/maths.jpg" },
   { id: "english", title: "English — Unit 6", file: "/samples/english.jpg" },
-  { id: "essay", title: "Later school starts — draft", file: "/samples/essay.jpg" },
+  // no essay page: Essay Master takes text (a file or a message on the Essay panel), never a photo of handwriting
 ];
 
 /** The TV's screens in the user's words, for the phone's status line. */
@@ -40,7 +41,21 @@ export default function Phone() {
   const [subject, setSubject] = useState<Subject>("maths");
   const [q, setQ] = useState("");
   const [sentence, setSentence] = useState("I have gone to school yesterday.");
-  const [essay, setEssay] = useState("Many students are tired. Sleep is important. Schools start early. This is bad.");
+  /**
+   * The Essay panel's text: a file or a message split into paragraphs (rules/essay paragraphsOf), and the one the
+   * textarea shows. The desk reads ONE paragraph at a time; Next steps to the next. All of it lives in this page's
+   * state: a picked file is read here in the browser and never uploaded, stored or kept, and it is gone when the
+   * phone page closes. Only the current paragraph goes to the desk, when Analyse is pressed.
+   */
+  const [paras, setParas] = useState<string[]>(["Many students are tired. Sleep is important. Schools start early. This is bad."]);
+  const [pix, setPix] = useState(0);
+  /** The paragraphs the desk has already read, by index: after one, Next is the button to press. */
+  const [readIx, setReadIx] = useState<number[]>([]);
+  /** The panel's own lines: a problem (a file the desk will not take, a paragraph that is too long), and a plain word on how a text was split. */
+  const [note, setNote] = useState("");
+  const [info, setInfo] = useState("");
+  const essay = paras[pix] ?? "";
+  const setEssay = (f: (v: string) => string) => setParas((ps) => ps.map((p, i) => (i === pix ? f(p) : p)));
   const [etype, setEtype] = useState("structure");
   const [pname, setPname] = useState("");
   const [ring, setRing] = useState<{ x: number; y: number } | null>(null);
@@ -76,7 +91,7 @@ export default function Phone() {
   // the input mirrors the draft; a new draft (or none) resets what is typed here
   useEffect(() => { setPname(s?.draft?.name ?? ""); }, [s?.draft?.id]); // eslint-disable-line react-hooks/exhaustive-deps
   // the TV asked for a page: the capture tab follows what it is waiting for
-  useEffect(() => { if (s?.awaiting) setSubject(s.awaiting); }, [s?.awaiting]);
+  useEffect(() => { if (s?.awaiting && s.awaiting !== "essay") setSubject(s.awaiting); }, [s?.awaiting]);
   useEffect(() => { if (s?.essayType && role === "student" && screen !== "paste" && s.screen === "essaytype") { setEtype(s.essayType); } }, [s?.essayType, s?.screen, role, screen]);
 
   // camera on when a screen is asking for a photo: capture, or practice with a set still to mark
@@ -145,6 +160,45 @@ export default function Phone() {
   const sendRewrite = async () => { if (!onSentence) return; setBusy(true); setMsg("the desk is reading it…");
     try { const r = await call("/api/analyse", { kind: "rewrite", n: onSentence.n, text: rewrite }); const j = await r.json().catch(() => ({} as { error?: string }));
       setMsg(r.ok ? "on the TV" : (j as { error?: string }).error ?? "failed"); } catch { setMsg("That did not reach the desk."); } finally { setBusy(false); } };
+  /** Load a text as a list of paragraphs, the first one showing. */
+  const loadParagraphs = (ps: string[], said: string) => { setParas(ps); setPix(0); setReadIx([]); setNote(""); setInfo(said); setMsg(""); };
+  const goPara = (i: number) => { if (i >= 0 && i < paras.length) { setPix(i); setNote(""); setInfo(""); setMsg(""); } };
+  /** A file the learner picked: checked, read here in the browser (no upload), split on blank lines. */
+  const pickFile = async (f: File | undefined) => {
+    if (!f) return;
+    setNote(""); setInfo("");
+    const before = essayFileProblem(f);
+    if (before) return setNote(before);
+    let text = "";
+    try { text = await f.text(); } catch { return setNote("The desk could not read that file. Try another one."); }
+    const after = essayFileProblem(f, text);
+    if (after) return setNote(after);
+    const ps = paragraphsOf(text);
+    if (!ps.length) return setNote("That file is empty. Pick one with some writing in it.");
+    loadParagraphs(ps, ps.length > 1 ? `${f.name}: ${ps.length} paragraphs. The desk reads one at a time.` : "");
+  };
+  /** A pasted message with blank lines is split the same way; a paste without any goes in as it always did. */
+  const onEssayPaste = (e: React.ClipboardEvent<HTMLTextAreaElement>) => {
+    const t = e.currentTarget, pasted = e.clipboardData.getData("text");
+    const ps = paragraphsOf(t.value.slice(0, t.selectionStart) + pasted + t.value.slice(t.selectionEnd));
+    if (ps.length < 2) return;
+    e.preventDefault(); loadParagraphs(ps, `That is ${ps.length} paragraphs. The desk reads one at a time.`);
+  };
+  /** Analyse the paragraph showing. Blank lines typed into it split it first; the desk still reads only the first part. */
+  const analyseParagraph = async () => {
+    const ps = paragraphsOf(essay); if (!ps.length) return;
+    const one = ps[0], tooLong = essayTooLong(one);
+    if (tooLong) return setNote(tooLong);
+    if (ps.length > 1) { setParas((all) => [...all.slice(0, pix), ...ps, ...all.slice(pix + 1)]); setReadIx([]); }
+    setNote(""); setInfo(""); setBusy(true); setMsg("the desk is reading it…");
+    try {
+      const r = await call("/api/analyse", { kind: "essay", text: one, type: etype });
+      if (r.ok) { setMsg("on the TV"); setReadIx((x) => [...x, pix]); }
+      else { const j = await r.json().catch(() => ({} as { error?: string })); setMsg(""); setNote((j as { error?: string }).error ?? "The desk could not read that one. Try again."); }
+    } catch { setMsg(""); setNote("That did not reach the desk."); } finally { setBusy(false); }
+  };
+  /** From the sentence rewrite panel, on to the next paragraph: the TV goes back to the lens home, the phone to its paragraph. */
+  const nextFromRewrite = () => { goPara(pix + 1); void post({ type: "nav", screen: "essaytype", focus: Math.max(0, ESSAY_TYPES.findIndex((t) => t.id === etype)) }); };
   const tap = (e: React.PointerEvent<HTMLDivElement>) => {
     if (!page) return; const r = e.currentTarget.getBoundingClientRect(); const y = ((e.clientY - r.top) / r.height) * page.h;
     const best = nearestItem(page.items, y);
@@ -259,7 +313,9 @@ export default function Phone() {
             : <p>Joined. No one is at the desk yet: on the TV, press Down to Choose who and Select to choose who is studying.</p>}
           {s.screen === "profile" || s.draft
             ? <button className="pbtn" data-signal="true" onClick={() => nav("profile")}>Name the new learner</button>
-            : s.learner && <button className="pbtn" data-signal="true" onClick={() => nav("capture")}>{s.awaiting ? `Snap the ${MODULE[s.awaiting]} page` : "Snap the page"}</button>}
+            : s.learner && (s.awaiting === "essay"
+              ? <button className="pbtn" data-signal="true" onClick={() => nav("paste")}>Send your paragraph</button>
+              : <button className="pbtn" data-signal="true" onClick={() => nav("capture")}>{s.awaiting ? `Snap the ${MODULE[s.awaiting]} page` : "Snap the page"}</button>)}
           <button className="pbtn" data-secondary="true" onClick={() => nav("tonight")}>Set up tonight first</button>
           {s.learner && <p style={{ fontSize: 12 }}>Not {s.learner.name}? On the TV's desk, press Down to Someone else and Select to switch who is at the desk.</p>}</div>}
 
@@ -280,9 +336,9 @@ export default function Phone() {
           // a read that failed: the page is already on the desk, so it is read again there, not sent twice
           const again = !reading ? failed("read") : null;
           return <div className="pscreen"><h3>Capture a page</h3>
-            {s?.awaiting && !picking
+            {s?.awaiting && s.awaiting !== "essay" && !picking
               ? <p><b>{MODULE[s.awaiting]}</b> — the TV is waiting for this page. <button className="plink" onClick={() => setPicking(true)}>change</button></p>
-              : <div className="field"><select value={subject} onChange={(e) => setSubject(e.target.value as Subject)}><option value="maths">Math Buddy</option><option value="english">Linga</option><option value="essay">Essay Master</option></select></div>}
+              : <div className="field"><select value={subject} onChange={(e) => setSubject(e.target.value as Subject)}><option value="maths">Math Buddy</option><option value="english">Linga</option></select></div>}
             {phase === "idle" && !shot && n >= 1 && <p>Page {n + 1} of the {MODULE[subject]} sheet</p>}
             <div className="cam">
               {cam ? <video ref={video} autoPlay playsInline muted /> : !shot && <span>camera</span>}
@@ -394,13 +450,22 @@ export default function Phone() {
         {screen === "paste" && onSentence && <div className="pscreen" data-role="essay-rewrite"><h3>Sentence {onSentence.n}</h3><p>Rewrite it in your own words. The desk reads this one sentence again, in its paragraph.</p>
           <div className="field"><textarea value={rewrite} onChange={(e) => setRewrite(e.target.value)} /></div>
           <div className="field"><button className="pbtn" data-secondary="true" onClick={() => listen((t) => setRewrite(t))}>Dictate</button>
-            <button className="pbtn" data-signal="true" style={{ flex: 1 }} disabled={busy} onClick={sendRewrite}>Send</button></div></div>}
+            <button className="pbtn" data-signal="true" style={{ flex: 1 }} disabled={busy} onClick={sendRewrite}>Send</button></div>
+          {pix + 1 < paras.length && <button className="pbtn" data-secondary="true" data-role="essay-next-from-rewrite" onClick={nextFromRewrite}>Next paragraph ({pix + 2} of {paras.length})</button>}</div>}
 
-        {screen === "paste" && !onSentence && <div className="pscreen"><h3>Your paragraph</h3><p>Paste it, or dictate it. Pick the lens — or pick it on the TV.</p>
-          <div className="types">{ESSAY_TYPES.map((t) => <label key={t.id}><input type="radio" name="etype" checked={etype === t.id} onChange={() => setEtype(t.id)} /><span><b>{t.name}</b><small>{t.promise}</small></span></label>)}</div>
-          <div className="field"><textarea value={essay} onChange={(e) => setEssay(e.target.value)} /></div>
+        {screen === "paste" && !onSentence && <div className="pscreen" data-role="essay-paragraph"><h3>Your paragraph</h3>
+          <p>Send a .txt or .md file, or type, paste or dictate a message. The desk reads one paragraph at a time. Pick the lens, or pick it on the TV.</p>
+          <div className="types" data-compact="true">{ESSAY_TYPES.map((t) => <label key={t.id}><input type="radio" name="etype" checked={etype === t.id} onChange={() => setEtype(t.id)} /><span><b>{t.name}</b></span></label>)}</div>
+          <p style={{ fontSize: 14 }}>{ESSAY_TYPES.find((t) => t.id === etype)?.promise}</p>
+          <label className="pbtn pfile" data-secondary="true">Choose a file (.txt or .md)<input type="file" accept=".txt,.md,text/plain,text/markdown" data-role="essay-file" onChange={(e) => { const f = e.target.files?.[0]; e.target.value = ""; void pickFile(f); }} /></label>
+          {paras.length > 1 && <div className="pparas" data-role="essay-paras">
+            <button className="pbtn" data-secondary="true" aria-label="Previous paragraph" disabled={pix === 0} onClick={() => goPara(pix - 1)}>Previous</button>
+            <b aria-live="polite">Paragraph {pix + 1} of {paras.length}</b>
+            <button className="pbtn" data-signal={readIx.includes(pix) ? "true" : undefined} data-secondary={readIx.includes(pix) ? undefined : "true"} aria-label="Next paragraph" disabled={pix + 1 >= paras.length} onClick={() => goPara(pix + 1)}>Next</button></div>}
+          <div className="field"><textarea aria-label="The paragraph the desk will read" value={essay} onChange={(e) => { const v = e.target.value; setEssay(() => v); }} onPaste={onEssayPaste} /></div>
+          {note ? <p role="alert" data-role="essay-note" style={{ color: "#B8261A" }}>{note}</p> : info ? <p data-role="essay-info">{info}</p> : null}
           <div className="field"><button className="pbtn" data-secondary="true" onClick={() => listen((t) => setEssay((v) => (v + " " + t).trim()))}>Dictate</button>
-            <button className="pbtn" data-signal="true" style={{ flex: 1 }} disabled={busy} onClick={async () => { setBusy(true); setMsg("the desk is reading it…"); try { const r = await call("/api/analyse", { kind: "essay", text: essay, type: etype }); setMsg(r.ok ? "on the TV" : "failed"); } finally { setBusy(false); } }}>Analyse on the TV</button></div></div>}
+            <button className="pbtn" data-signal="true" style={{ flex: 1 }} disabled={busy || !essay.trim()} onClick={analyseParagraph}>Analyse on the TV</button></div></div>}
 
         {screen === "tonight" && s && <div className="pscreen"><h3>Tonight</h3>
           <div className="tlist">{s.tasks.map((t) => <label key={t.id}><input type="checkbox" checked={t.done} onChange={(e) => post({ type: "task.done", id: t.id, done: e.target.checked })} /><span>{t.name}</span><small>{t.min}m</small></label>)}</div>
@@ -432,6 +497,7 @@ export default function Phone() {
   );
 }
 
+/** A name for tonight's list, tagged with its module. Essay stays a choice here: an essay assignment is a task to do, not a page to snap. */
 function AddTask({ onAdd }: { onAdd: (name: string, sub: Subject) => void }) {
   const [v, setV] = useState(""); const [sub, setSub] = useState<Subject>("maths");
   return <div className="field"><select value={sub} onChange={(e) => setSub(e.target.value as Subject)}><option value="maths">Math Buddy</option><option value="english">Linga</option><option value="essay">Essay Master</option></select>

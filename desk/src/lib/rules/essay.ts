@@ -35,6 +35,68 @@ export function splitSentences(text: string): Sentence[] {
   });
 }
 
+// ---- text in: files and messages, one paragraph at a time ----
+
+/**
+ * The paragraphs of a text the learner sent (a .txt or .md file, or a message typed or dictated on the phone),
+ * in order. The desk reads ONE paragraph at a time; this only says where one ends and the next begins. The rule is
+ * deliberately plain: a blank line (any run of two or more line breaks, CRLF included, a line of only spaces counts
+ * as blank) ends a paragraph; the line breaks inside one become single spaces; empties are dropped. A markdown
+ * heading line (starts with 1-6 # and a space) is its own item, so a title never fuses with the first paragraph
+ * under it; the learner steps past it with Next. Nothing cleverer than that is tried. No blank line means one
+ * paragraph, and that one reads exactly as it did before this existed. Never throws; a non-string gives [].
+ */
+export function paragraphsOf(text: unknown): string[] {
+  if (typeof text !== "string") return [];
+  const out: string[] = [];
+  let cur: string[] = [];
+  const flush = () => { if (cur.length) { out.push(cur.join(" ")); cur = []; } };
+  for (const raw of text.replace(/\r\n?|\u2028|\u2029/g, "\n").split("\n")) {
+    const line = raw.trim();
+    if (!line) flush();
+    else if (/^#{1,6}\s+\S/.test(line)) { flush(); out.push(line); }
+    else cur.push(line);
+  }
+  flush();
+  return out;
+}
+
+/**
+ * Two limits on what the phone may send. Neither is measured: they are set conservatively (a file of a few pages
+ * is well under 100 KB of plain text; 4000 characters is about 650 words, far past any one paragraph a learner of
+ * 11-13 writes) and are to be revisited after live use.
+ */
+export const ESSAY_FILE_MAX_BYTES = 100 * 1024;
+export const ESSAY_PARAGRAPH_MAX_CHARS = 4000;
+
+/** The plain sentence for a paragraph over the cap, or null when it fits. Never truncates: the learner splits it. */
+export function essayTooLong(text: unknown): string | null {
+  if (typeof text !== "string" || text.length <= ESSAY_PARAGRAPH_MAX_CHARS) return null;
+  return `That paragraph is too long to read in one go. Split it in two and send one part at a time (up to ${ESSAY_PARAGRAPH_MAX_CHARS} characters).`;
+}
+
+/**
+ * Whether a file the learner picked can be read as text, checked in the browser before anything is read into the
+ * panel (nothing is uploaded or kept). Call it with the file's name, type and size, then again with the text once
+ * it is read: a binary file that was renamed .txt shows itself in the text (a NUL, or a run of replacement marks).
+ * Returns the desk's plain sentence for the problem, or null when the file is fine. Never throws.
+ */
+export function essayFileProblem(f: { name?: unknown; type?: unknown; size?: unknown }, text?: string): string | null {
+  const name = typeof f?.name === "string" ? f.name.toLowerCase() : "";
+  const type = typeof f?.type === "string" ? f.type.toLowerCase() : "";
+  const size = typeof f?.size === "number" && Number.isFinite(f.size) ? f.size : -1;
+  // a phone often cannot name the type of a .md file (empty, or a generic binary type), so those pass on the name
+  const typeOk = type === "" || type.startsWith("text/") || type === "application/octet-stream";
+  if (!/\.(txt|md)$/.test(name) || !typeOk) return "The desk reads .txt and .md files. Pick one of those, or type the paragraph here.";
+  if (size === 0) return "That file is empty. Pick one with some writing in it.";
+  if (size < 0 || size > ESSAY_FILE_MAX_BYTES) return `That file is too big. Keep it under ${ESSAY_FILE_MAX_BYTES / 1024} KB, or send a few paragraphs at a time.`;
+  if (text !== undefined) {
+    if (text.includes("\u0000") || (text.match(/\uFFFD/g) ?? []).length > 3) return "That does not look like plain text. Save it as a .txt or .md file and pick it again.";
+    if (!text.trim()) return "That file is empty. Pick one with some writing in it.";
+  }
+  return null;
+}
+
 export function paragraphStats(sentences: Sentence[]) {
   const words = sentences.reduce((a, s) => a + s.words, 0);
   return {

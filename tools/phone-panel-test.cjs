@@ -220,3 +220,38 @@ test('case 9: the phone page follows through panelFor, with no screen switch of 
  assert.doesNotMatch(src,/startsWith\("linga"\)[^\n]*setScreen\("linga"\)/,'the Linga-only switch is gone');
  assert.doesNotMatch(src,/type PScreen =/,'one PScreen, in panelFor.ts');
 });
+
+test('case 10 (W3): an essay is never snapped - a wait for an essay page, or an essay page that would not read, sends the phone to the Essay panel',()=>{
+ const {panelFor,follow}=P();
+ // the maths versions keep going to the camera
+ assert.equal(panelFor(session({screen:'tonight',awaiting:'maths'})),'capture');
+ assert.equal(panelFor(session({screen:'tonight',awaiting:'english'})),'capture');
+ // an essay wait: the Essay panel, from a phone that has joined, and from one on another tab
+ const waiting=session({screen:'tonight',subject:'essay',awaiting:'essay'});
+ assert.equal(panelFor(waiting),'paste','the TV waiting for an essay page: Essay panel, not Capture');
+ assert.equal(walk(JOINED_FROM,waiting),'paste');
+ assert.equal(follow(undefined,waiting,at('join')).to,'paste','a join while the TV waits for an essay lands on the Essay panel (no camera to open)');
+ // an essay page whose read failed (a page from before this change) is not asked for again by camera
+ const epage={...page,id:'e1',subject:'essay'};
+ const unread=session({screen:'page',subject:'essay',pages:[epage],jobs:{read:{id:'j2',kind:'read',phase:'failed',key:'e1',error:'x',startedAt:0}}});
+ assert.equal(panelFor(unread),'paste','an unread essay page: Essay panel, not Capture');
+ assert.equal(panelFor(session({screen:'page',pages:[page],jobs:{read:{id:'j1',kind:'read',phase:'failed',key:'p1',error:'x',startedAt:0}}})),'capture','a maths page that would not read is still snapped again');
+ // the phone page never offers Capture with an essay anywhere
+ assert.ok(!['capture'].includes(panelFor(session({screen:'essaytype',subject:'essay'}))),'the lens home is the Essay panel');
+});
+
+test('case 11 (W3): the capture panel no longer offers Essay Master - not in the subject list, not among the samples',()=>{
+ const src=code(PAGE);
+ const capture=src.slice(src.indexOf('{screen === "capture" && ('),src.indexOf('{screen === "practice" && s'));
+ const options=[...capture.matchAll(/<option value="(\w+)">/g)].map(m=>m[1]);
+ assert.deepEqual(options,['maths','english'],'the capture subject list is Math Buddy and Linga');
+ const samples=src.slice(src.indexOf('const SAMPLES'),src.indexOf('];',src.indexOf('const SAMPLES')));
+ assert.deepEqual([...samples.matchAll(/id: "(\w+)"/g)].map(m=>m[1]),['maths','english'],'no essay sample page');
+ assert.doesNotMatch(capture,/Essay Master/);
+ // Tonight's list still takes an essay assignment: a task to do, not a page to snap
+ const add=src.slice(src.indexOf('function AddTask'));
+ assert.match(add,/<option value="essay">Essay Master<\/option>/,'an essay assignment can still be added to tonight\'s list');
+ // the Essay panel takes files and messages
+ assert.match(src,/type="file" accept="\.txt,\.md,/,'the Essay panel has a file picker for .txt and .md');
+ assert.match(src,/Paragraph \{pix \+ 1\} of \{paras\.length\}/,'and says which paragraph it is on');
+});
