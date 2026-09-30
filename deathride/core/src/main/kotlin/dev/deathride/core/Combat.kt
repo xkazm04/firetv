@@ -58,6 +58,8 @@ class Combat(private val world: World,val enabled: Boolean) {
     val damageTaken=DoubleArray(Tuning.CAR_COUNT)
     val damageFlashSeconds=DoubleArray(Tuning.CAR_COUNT)
     val wreckSeconds=DoubleArray(Tuning.CAR_COUNT){-1.0}
+    val firstDamageSeconds=DoubleArray(Tuning.CAR_COUNT){-1.0}
+    val repairPickupsTaken=IntArray(Tuning.CAR_COUNT);val ammoPickupsTaken=IntArray(Tuning.CAR_COUNT)
     val shots=IntArray(Weapons.all.size);val hits=IntArray(DamageKind.entries.size);val deaths=IntArray(DamageKind.entries.size)
     val traceSeconds=DoubleArray(Tuning.CAR_COUNT);val traceX=DoubleArray(Tuning.CAR_COUNT);val traceY=DoubleArray(Tuning.CAR_COUNT)
     val traceEndX=DoubleArray(Tuning.CAR_COUNT);val traceEndY=DoubleArray(Tuning.CAR_COUNT)
@@ -89,6 +91,7 @@ class Combat(private val world: World,val enabled: Boolean) {
     fun reset() {
         hp.fill(CombatRules["maxHp"]);states.fill(LifeState.ACTIVE);cooldowns.fill(0.0);ramCooldown.fill(0.0);wallCooldown.fill(0.0)
         selectedWeapon.fill(0);kills.fill(0);damageEvents.fill(0);damageDealt.fill(0.0);damageTaken.fill(0.0);damageFlashSeconds.fill(0.0);wreckSeconds.fill(-1.0)
+        firstDamageSeconds.fill(-1.0);repairPickupsTaken.fill(0);ammoPickupsTaken.fill(0)
         shots.fill(0);hits.fill(0);deaths.fill(0);traceSeconds.fill(0.0);lastTarget.fill(-1);activation=0;poolExhaustions=0;oneShotKills=0
         for(i in world.cars.indices)for(w in Weapons.all.indices)ammunition[i*Weapons.all.size+w]=capacity(i,w)
         for(p in projectiles){p.active=false;p.hitMask=0}
@@ -100,6 +103,7 @@ class Combat(private val world: World,val enabled: Boolean) {
     internal fun damage(id: Int,raw: Double,source: Int,kind: DamageKind) {
         if(!enabled || !canAct(id) || raw<=0 || armingSeconds>0)return
         val dealt=min(hp[id],raw*(1-world.cars[id].armorReduction))
+        if(dealt>0 && firstDamageSeconds[id]<0)firstDamageSeconds[id]=world.seconds
         val full=hp[id]>=CombatRules["maxHp"]
         hp[id]=max(0.0,hp[id]-dealt);damageTaken[id]+=dealt;damageEvents[id]++;hits[kind.ordinal]++
         damageFlashSeconds[id]=CombatRules["damageFlashSeconds"]
@@ -263,12 +267,13 @@ class Combat(private val world: World,val enabled: Boolean) {
             p.cooldownSeconds=max(0.0,p.cooldownSeconds-dt)
             if(p.cooldownSeconds>0)continue
             for(c in world.cars)if(canAct(c.id) && inRadius(c,p.x,p.y,p.type.radiusM)) {
-                if(p.type.id=="repair") { if(hp[c.id]>=CombatRules["maxHp"])continue;repair(c.id,p.type.amount) }
+                if(p.type.id=="repair") { if(hp[c.id]>=CombatRules["maxHp"])continue;repair(c.id,p.type.amount);repairPickupsTaken[c.id]++ }
                 else {
                     var missing=false
                     for(w in Weapons.all.indices)if(ammo(c.id,w)<capacity(c.id,w))missing=true
                     if(!missing)continue
                     for(w in Weapons.all.indices) { val n=c.id*Weapons.all.size+w;ammunition[n]=min(capacity(c.id,w),ammunition[n]+if(w==Weapons.RIVET)p.type.amount.toInt() else 1) }
+                    ammoPickupsTaken[c.id]++
                 }
                 p.cooldownSeconds=p.type.respawnSeconds;break
             }

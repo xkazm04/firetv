@@ -21,3 +21,14 @@ The driving page deliberately sets `touch-action: none`. Giving only an overflow
 ## 2026-09-30 - Career sheet visibility is earlier than catalog binding
 
 The first W7 browser assertion saw a generic option-enabled result before the failure screenshot showed the native disabled flag. The sheet can be made visible by the phase HUD before asynchronous catalog/profile binding is complete. Wait for the native option property as the readiness condition, and separately test that the TV rejects a locked-car start. No host gate bypass was found; a screenshot taken after an assertion is not proof of the DOM state at the assertion's instant. Source: W7 `career-check.mjs` and `career-idle-check.mjs` on AFTKM.
+
+## 2026-09-30 — W8 integration observations
+
+- Full profile/traffic telemetry outgrew Android logcat's single-line payload. Keep the periodic `DeathRide` log record to frame/simulation/input-age/combat metrics; read `/stats` for full state. A truncated log line must never be treated as a valid JSON measurement.
+- A shared camera that includes resolved human cars keeps zooming out around a distant wreck. Follow active human drivers and make the main HUD's driver explicit; retain wrecks on the minimap and in results.
+- A mixed Monte Carlo preset must cross scenario dimensions. Using `seed % 5` for both course and lead class produces five paired cases instead of all 25. The W8 upgraded-lead preset now changes course after each full class rotation, with coverage checked in the smoke test.
+- The W8 Home/resume run preserved the framebuffer scenery (identical before/after images), but that observation does not force or certify every possible Android GL-context-loss path.
+
+- W8 sustained measurement: ordinary `dumpsys meminfo <process>` coincided with an explicit copying GC and roughly 110-130 ms render interval every minute. The device's own `dumpsys meminfo -h` documents `--local` as "only collect details locally, don't call process." Use `--local` for sustained PSS sampling; its real device output still includes TOTAL PSS and GL mtrack. Preserve the initial intrusive run and identify this measurement cost rather than quietly discarding its stalls.
+
+- W8 scenery profiling on AFTKM: rebuilding a 3072-square procedural target in one frame took 110-121 ms for warm geometry plus 179-206 ms finishing/disposing its temporary renderer. Reuse one framebuffer/renderer and yield between bounded primitive groups using a data-defined budget. Hold countdown until ready and cancel old work on a new course choice. The nominal 3 ms budget excludes submission overhead; report measured slice maxima rather than promising a hard OS scheduling deadline.

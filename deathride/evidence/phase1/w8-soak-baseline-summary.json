@@ -1,0 +1,448 @@
+{
+  "hardware": {
+    "model": "AFTKM",
+    "display": "Physical size: 3840x2160\r\nOverride size: 1920x1080\r\n",
+    "wifi": "Wifi is enabled\r\nWifi scanning is only available when wifi is enabled\r\nWifi is connected to \"O2-Internet_100\"\r\nWifiInfo: SSID: XXX, BSSID: XXX, MAC: XXX, OUI: 7c:f1:7e, Supplicant state: COMPLETED, Wi-Fi standard: 0, RSSI: -49, Link speed: 172Mbps, Tx Link speed: 172Mbps, Max Supported Tx Link speed: -1Mbps, Rx Link speed: -1Mbps, Max Supported Rx Link speed: -1Mbps, Frequency: 2442MHz, Net ID: 0, Metered hint: false, score: 60\r\nsuccessfulTxPackets: 6727312\r\nsuccessfulTxPacketsPerSecond: 4.382299332360131\r\nretriedTxPackets: 0\r\nretriedTxPacketsPerSecond: 0.0\r\nlostTxPackets: 0\r\nlostTxPacketsPerSecond: 0.0\r\nsuccessfulRxPackets: 8564131\r\nsuccessfulRxPacketsPerSecond: 3.154754761225134\r\n",
+    "startedUtc": "2026-09-30T19:32:47.188Z",
+    "preheated": true
+  },
+  "apkSha256": "d5dbc0eff7df2d8f5b2b1af092c03f62ac2bb507fb32acdee17b5c369ed8b2c0",
+  "inputDurationSeconds": 900.174216,
+  "completed": false,
+  "ranFullDuration": true,
+  "checksPassed": false,
+  "inputHz": [
+    29.999748404257783,
+    29.999748404257783
+  ],
+  "clients": [
+    {
+      "slot": 0,
+      "sent": 27005,
+      "accepted": 27002,
+      "rejected": 3,
+      "pending": 0,
+      "bestRtt": 4.974300000001676,
+      "offset": 10386.176630000002,
+      "rtt": {
+        "n": 27005,
+        "p50": 10.70879999990575,
+        "p95": 63.30840000000899,
+        "max": 531.591599999927
+      }
+    },
+    {
+      "slot": 1,
+      "sent": 27005,
+      "accepted": 27001,
+      "rejected": 4,
+      "pending": 0,
+      "bestRtt": 4.987500000046566,
+      "offset": 10386.588407000061,
+      "rtt": {
+        "n": 27005,
+        "p50": 10.979900000034831,
+        "p95": 63.75809999999183,
+        "max": 531.7736000000732
+      }
+    }
+  ],
+  "minute1": {
+    "frame": {
+      "second": 60.0188926,
+      "phase": "race",
+      "track": "foundry",
+      "fullRace": true,
+      "p50": 16.856923,
+      "p95": 21.011385,
+      "max": 27.792,
+      "count": 599
+    },
+    "inputAgeMs": [
+      {
+        "p50": 20.59081700000388,
+        "p95": 39.70928599999752,
+        "max": 49.217124999995576,
+        "count": 600
+      },
+      {
+        "p50": 20.576236000008066,
+        "p95": 39.98142100000405,
+        "max": 51.883882000001904,
+        "count": 600
+      }
+    ],
+    "simStepMs": {
+      "p50": 1.289923,
+      "p95": 1.953539,
+      "max": 6.116385,
+      "count": 600
+    }
+  },
+  "minute15": {
+    "frame": {
+      "second": 900.0545598,
+      "phase": "race",
+      "track": "redline",
+      "fullRace": true,
+      "p50": 16.753923,
+      "p95": 21.121615,
+      "max": 25.047692,
+      "count": 600
+    },
+    "inputAgeMs": [
+      {
+        "p50": 20.588176999939606,
+        "p95": 38.68276999995578,
+        "max": 54.53240100003313,
+        "count": 600
+      },
+      {
+        "p50": 20.39116199989803,
+        "p95": 38.908892999985255,
+        "max": 54.11436199990567,
+        "count": 600
+      }
+    ],
+    "simStepMs": {
+      "p50": 1.170307,
+      "p95": 1.915538,
+      "max": 4.502308,
+      "count": 600
+    }
+  },
+  "allWindows": {
+    "windows": 90,
+    "frameSamples": 53583,
+    "worstP95": {
+      "second": 260.15164239999996,
+      "phase": "race",
+      "track": "crucible",
+      "fullRace": false,
+      "p50": 16.908154000000003,
+      "p95": 21.657,
+      "max": 389.323077,
+      "count": 575
+    },
+    "worstMax": {
+      "second": 90.05178420000001,
+      "phase": "race",
+      "track": "switchback",
+      "fullRace": false,
+      "p50": 16.702846,
+      "p95": 21.124231,
+      "max": 566.5717689999999,
+      "count": 567
+    }
+  },
+  "activeWindows": {
+    "windows": 73,
+    "frameSamples": 43698,
+    "worstP95": {
+      "second": 160.0851822,
+      "phase": "race",
+      "track": "switchback",
+      "fullRace": true,
+      "p50": 16.553923,
+      "p95": 21.631154,
+      "max": 28.370461,
+      "count": 599
+    },
+    "worstMax": {
+      "second": 190.12158879999998,
+      "phase": "race",
+      "track": "redline",
+      "fullRace": true,
+      "p50": 16.716307999999998,
+      "p95": 20.790154,
+      "max": 129.49653899999998,
+      "count": 594
+    }
+  },
+  "sinceProcessStartFrameMs": {
+    "p50": 16.7,
+    "p95": 21,
+    "max": 566.5717689999999,
+    "count": 54303
+  },
+  "discardedSimulationMs": {
+    "last10s": 0,
+    "sinceStart": 4036
+  },
+  "loadDiscardedSimulationMs": 3990,
+  "worstActiveInputAgeMs": [
+    {
+      "p95": 44.94582100000116,
+      "max": 117.86228999996092
+    },
+    {
+      "p95": 45.890898000012385,
+      "max": 126.30448100005742
+    }
+  ],
+  "inputCounters": [
+    {
+      "stale": {
+        "last10s": 0,
+        "sinceStart": 130
+      },
+      "dropped": {
+        "last10s": 0,
+        "sinceStart": 3
+      },
+      "outOfOrder": {
+        "last10s": 0,
+        "sinceStart": 0
+      }
+    },
+    {
+      "stale": {
+        "last10s": 0,
+        "sinceStart": 92
+      },
+      "dropped": {
+        "last10s": 0,
+        "sinceStart": 4
+      },
+      "outOfOrder": {
+        "last10s": 0,
+        "sinceStart": 0
+      }
+    }
+  ],
+  "loadInputCounterDelta": [
+    {
+      "stale": 22,
+      "dropped": 3,
+      "outOfOrder": 0
+    },
+    {
+      "stale": 20,
+      "dropped": 4,
+      "outOfOrder": 0
+    }
+  ],
+  "loadObservations": {
+    "racePolls": 5049,
+    "sixActivePolls": 1113,
+    "weaponEffectPolls": 2824,
+    "peakProjectiles": 2,
+    "peakMines": 18,
+    "peakBlasts": 2,
+    "surfaces": [
+      "Asphalt",
+      "Kerb",
+      "Oil",
+      "Gravel",
+      "Ice"
+    ]
+  },
+  "phaseWallSeconds": {
+    "lobby": 6.397392599999901,
+    "countdown": 38.06437050000009,
+    "race": 853.6347181,
+    "results": 2.0398149000000387
+  },
+  "telemetryPolling": "100 ms wait after each HTTP response, nominal maximum 10 Hz; response time lowers actual rate",
+  "observedRacePollHz": 5.914707887277529,
+  "completedRaces": 12,
+  "courses": [
+    "crucible",
+    "foundry",
+    "redline",
+    "runoff",
+    "switchback"
+  ],
+  "completedRaceShots": 3791,
+  "thermal": [
+    {
+      "second": 0,
+      "status": 0,
+      "sensors": {
+        "CPU": 56.253,
+        "GPU": 40.292,
+        "BATTERY": 39.656,
+        "SKIN": 40.002
+      },
+      "pssKb": 124748
+    },
+    {
+      "second": 60,
+      "status": 0,
+      "sensors": {
+        "CPU": 55.78,
+        "GPU": 40.198,
+        "BATTERY": 39.565,
+        "SKIN": 39.93
+      },
+      "pssKb": 122790
+    },
+    {
+      "second": 120,
+      "status": 0,
+      "sensors": {
+        "CPU": 55.657,
+        "GPU": 40.147,
+        "BATTERY": 39.513,
+        "SKIN": 39.895
+      },
+      "pssKb": 121410
+    },
+    {
+      "second": 180,
+      "status": 0,
+      "sensors": {
+        "CPU": 55.473,
+        "GPU": 40.145,
+        "BATTERY": 39.511,
+        "SKIN": 39.834
+      },
+      "pssKb": 124340
+    },
+    {
+      "second": 240,
+      "status": 0,
+      "sensors": {
+        "CPU": 55.516,
+        "GPU": 40.093,
+        "BATTERY": 39.457,
+        "SKIN": 39.834
+      },
+      "pssKb": 120159
+    },
+    {
+      "second": 300,
+      "status": 0,
+      "sensors": {
+        "CPU": 55.485,
+        "GPU": 40.092,
+        "BATTERY": 39.405,
+        "SKIN": 39.821
+      },
+      "pssKb": 120253
+    },
+    {
+      "second": 360,
+      "status": 0,
+      "sensors": {
+        "CPU": 55.664,
+        "GPU": 40.129,
+        "BATTERY": 39.546,
+        "SKIN": 39.919
+      },
+      "pssKb": 119765
+    },
+    {
+      "second": 420,
+      "status": 0,
+      "sensors": {
+        "CPU": 55.459,
+        "GPU": 40.026,
+        "BATTERY": 39.405,
+        "SKIN": 39.779
+      },
+      "pssKb": 121482
+    },
+    {
+      "second": 480,
+      "status": 0,
+      "sensors": {
+        "CPU": 55.394,
+        "GPU": 39.99,
+        "BATTERY": 39.353,
+        "SKIN": 39.736
+      },
+      "pssKb": 120252
+    },
+    {
+      "second": 540,
+      "status": 0,
+      "sensors": {
+        "CPU": 55.291,
+        "GPU": 39.989,
+        "BATTERY": 39.352,
+        "SKIN": 39.764
+      },
+      "pssKb": 122536
+    },
+    {
+      "second": 600,
+      "status": 0,
+      "sensors": {
+        "CPU": 55.301,
+        "GPU": 39.951,
+        "BATTERY": 39.352,
+        "SKIN": 39.727
+      },
+      "pssKb": 118314
+    },
+    {
+      "second": 660,
+      "status": 0,
+      "sensors": {
+        "CPU": 55.196,
+        "GPU": 39.886,
+        "BATTERY": 39.297,
+        "SKIN": 39.68
+      },
+      "pssKb": 122333
+    },
+    {
+      "second": 720,
+      "status": 0,
+      "sensors": {
+        "CPU": 55.179,
+        "GPU": 39.886,
+        "BATTERY": 39.247,
+        "SKIN": 39.635
+      },
+      "pssKb": 120312
+    },
+    {
+      "second": 780,
+      "status": 0,
+      "sensors": {
+        "CPU": 55.297,
+        "GPU": 39.886,
+        "BATTERY": 39.248,
+        "SKIN": 39.641
+      },
+      "pssKb": 119376
+    },
+    {
+      "second": 840,
+      "status": 0,
+      "sensors": {
+        "CPU": 55.185,
+        "GPU": 39.92,
+        "BATTERY": 39.28,
+        "SKIN": 39.628
+      },
+      "pssKb": 118170
+    },
+    {
+      "second": 900,
+      "status": 0,
+      "sensors": {
+        "CPU": 55.177,
+        "GPU": 39.85,
+        "BATTERY": 39.211,
+        "SKIN": 39.594
+      },
+      "pssKb": 121877
+    },
+    {
+      "second": 900.174216,
+      "status": 0,
+      "sensors": {
+        "CPU": 55.274,
+        "GPU": 39.85,
+        "BATTERY": 39.211,
+        "SKIN": 39.591
+      },
+      "pssKb": 117309
+    }
+  ],
+  "errors": [],
+  "failure": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n\n3 !== 0\n\n    at file:///C:/Users/kazda/kiro/firetv-deathride/deathride/tools/stick-soak.mjs:54:33\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)"
+}

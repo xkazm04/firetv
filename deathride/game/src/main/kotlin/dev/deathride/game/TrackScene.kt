@@ -9,31 +9,38 @@ import com.badlogic.gdx.utils.ScreenUtils
 import dev.deathride.core.*
 import kotlin.math.*
 
-/** Static scenery is synthesized once per course into one texture; there are no image assets. */
-class TrackScene(private val course: Course) {
-    private val textureSize=VisualTuning["sceneryTextureSize"].toInt()
-    private val buffer=FrameBuffer(Pixmap.Format.RGBA8888,textureSize,textureSize,false)
-    private val region=TextureRegion(buffer.colorBufferTexture).apply { flip(false,true);texture.setFilter(Texture.TextureFilter.Linear,Texture.TextureFilter.Linear) }
+/** One reusable GPU target and renderer; never allocate/delete them at a course change. */
+class SceneryCanvas {
+    val textureSize=VisualTuning["sceneryTextureSize"].toInt()
+    val buffer=FrameBuffer(Pixmap.Format.RGBA8888,textureSize,textureSize,false)
+    val renderer=ShapeRenderer(24000)
+    fun dispose() { renderer.dispose();buffer.dispose() }
+}
+/** Deterministic static geometry is generated in bounded render-thread slices, with no image assets. */
+class TrackScene(private val course: Course,private val canvas: SceneryCanvas) {
+    private val region=TextureRegion(canvas.buffer.colorBufferTexture).apply { flip(false,true);texture.setFilter(Texture.TextureFilter.Linear,Texture.TextureFilter.Linear) }
+    var ready=false;private set
+    private var buildFrames=0
+    private var buildCpuMs=0.0
+    private var buildMaxMs=0.0
     private val margin=VisualTuning["sceneryMarginM"]
     private val left=(course.minX-margin).toFloat();private val bottom=(course.minY-margin).toFloat()
     private val width=(course.maxX-course.minX+margin*2).toFloat();private val height=(course.maxY-course.minY+margin*2).toFloat()
     val center=FloatArray((VisualTuning["roadSamples"].toInt()+1)*2)
     val samples=VisualTuning["roadSamples"].toInt()
-    init {
-        val r=ShapeRenderer(24000);val point=TrackPoint();val q=TrackPoint();val rand=java.util.Random(VisualTuning["scenerySeed"].toLong())
-        buffer.begin();Gdx.gl.glViewport(0,0,textureSize,textureSize)
+    private val projectionMatrix=Matrix4().setToOrtho2D(left,bottom,width,height)
+    private val baking=sequence {
+        val r=canvas.renderer;val point=TrackPoint();val q=TrackPoint();val rand=java.util.Random(VisualTuning["scenerySeed"].toLong())
         val desert=course.theme=="desert";val wet=course.theme=="wetland"
         ScreenUtils.clear(if(desert).29f else .13f,if(desert).25f else .19f,if(wet).20f else .15f,1f)
-        r.projectionMatrix=Matrix4().setToOrtho2D(left,bottom,width,height)
-        r.begin(ShapeRenderer.ShapeType.Filled)
         // Ground grain, stones and scrub: seeded decoration, never simulation randomness.
         repeat(VisualTuning["groundGrainCount"].toInt()) {
             val x=left+rand.nextFloat()*width;val y=bottom+rand.nextFloat()*height;val v=rand.nextFloat()*.055f
             r.setColor((if(desert).32f else .15f)+v,(if(desert).28f else .21f)+v,(if(wet).23f else .17f)+v,1f)
-            r.rect(x,y,.25f+rand.nextFloat()*1.4f,.15f+rand.nextFloat()*.8f)
+            r.rect(x,y,.25f+rand.nextFloat()*1.4f,.15f+rand.nextFloat()*.8f);yield(Unit)
         }
         // Outer shoulders underneath a continuous asphalt ribbon.
-        fun ribbon(extra: Double,layer: Int) {
+        suspend fun SequenceScope<Unit>.ribbon(extra: Double,layer: Int) {
             for(i in 0 until samples) {
                 val s=course.lengthM*i/samples;val next=course.lengthM*(i+1)/samples
                 val w=course.widthAt(s)+extra;val wn=course.widthAt(next)+extra
@@ -51,7 +58,7 @@ class TrackScene(private val course: Course) {
                 course.sample(s,-w,point);val bx=point.x.toFloat();val by=point.y.toFloat()
                 course.sample(next,-wn,point);val cx=point.x.toFloat();val cy=point.y.toFloat()
                 course.sample(next,wn,point);val dx=point.x.toFloat();val dy=point.y.toFloat()
-                r.triangle(ax,ay,bx,by,cx,cy);r.triangle(ax,ay,cx,cy,dx,dy)
+                r.triangle(ax,ay,bx,by,cx,cy);r.triangle(ax,ay,cx,cy,dx,dy);yield(Unit)
             }
         }
         ribbon(2.2,0);ribbon(1.1,1);ribbon(0.0,2)
@@ -63,7 +70,7 @@ class TrackScene(private val course: Course) {
                 "Ice" -> r.setColor(v+.09f,v+.21f,v+.24f,1f)
                 else -> r.setColor(v,v+.025f,v+.035f,1f)
             }
-            r.rect(point.x.toFloat(),point.y.toFloat(),.16f+rand.nextFloat()*.35f,.1f+rand.nextFloat()*.25f)
+            r.rect(point.x.toFloat(),point.y.toFloat(),.16f+rand.nextFloat()*.35f,.1f+rand.nextFloat()*.25f);yield(Unit)
         }
         for(i in 0..samples) {
             val s=course.lengthM*i/samples;course.sample(s,0.0,point);center[i*2]=point.x.toFloat();center[i*2+1]=point.y.toFloat()
@@ -78,8 +85,9 @@ class TrackScene(private val course: Course) {
                 r.setColor(.50f,.55f,.52f,1f);r.rectLine(point.x.toFloat(),point.y.toFloat(),q.x.toFloat(),q.y.toFloat(),.32f)
                 if(i%6==0) { r.setColor(.15f,.18f,.17f,1f);r.circle(point.x.toFloat()+.3f,point.y.toFloat()-.3f,.65f,8);r.setColor(.45f,.49f,.45f,1f);r.circle(point.x.toFloat(),point.y.toFloat(),.48f,8) }
             }
-            if(i%9<3) { course.sample(s,0.0,point);course.sample(next,0.0,q);r.setColor(.46f,.48f,.43f,1f);r.rectLine(point.x.toFloat(),point.y.toFloat(),q.x.toFloat(),q.y.toFloat(),.16f) }
+            if(i%9<3) { course.sample(s,0.0,point);course.sample(next,0.0,q);r.setColor(.46f,.48f,.43f,1f);r.rectLine(point.x.toFloat(),point.y.toFloat(),q.x.toFloat(),q.y.toFloat(),.16f) };yield(Unit)
         }
+        yield(Unit)
         val start=course.startFraction*course.lengthM
         val w=course.widthAt(start)-Movement.vergeWidthM
         var lane=-w
@@ -89,7 +97,7 @@ class TrackScene(private val course: Course) {
                 course.sample(start+row*.9,lane,point);course.sample(start+row*.9,min(w,lane+.9),q)
                 val v=if((checker+row)%2==0).87f else .10f;r.setColor(v,v,v,1f)
                 r.rectLine(point.x.toFloat(),point.y.toFloat(),q.x.toFloat(),q.y.toFloat(),.9f)
-            };lane+=.9;checker++
+            };lane+=.9;checker++;yield(Unit)
         }
         for(spot in course.spots) {
             val s=(course.startFraction+spot.fraction)*course.lengthM;course.sample(s,spot.laneM,point)
@@ -101,6 +109,7 @@ class TrackScene(private val course: Course) {
             }
             if(spot.kind=="hazard") { r.setColor(.08f,.12f,.14f,1f);r.ellipse(point.x.toFloat()-3,point.y.toFloat()-1.8f,6f,3.6f,24);r.setColor(.15f,.22f,.25f,1f);r.ellipse(point.x.toFloat()-1.8f,point.y.toFloat()-.7f,3.4f,1.4f,18) }
         }
+        yield(Unit)
         // Recognizable infield landmarks, placed only well clear of the road.
         val projection=Projection()
         repeat(VisualTuning["landmarkCount"].toInt()) {
@@ -113,14 +122,16 @@ class TrackScene(private val course: Course) {
                 r.setColor(.22f,.27f,.25f,1f);for(j in 1..5)r.rect(x+j*1.25f,y+.3f,.15f,4.2f)
             }
         }
+        yield(Unit)
         // Repeated grandstand steps and service bays give the start area an authored landmark.
         for(side in -1..1 step 2)for(row in 0..4) {
             val laneM=side*(course.widthAt(start)+5+row*1.1)
             course.sample(start-22,laneM,point);course.sample(start+18,laneM,q)
             r.setColor(.07f,.09f,.10f,1f);r.rectLine(point.x.toFloat()+.7f,point.y.toFloat()-.8f,q.x.toFloat()+.7f,q.y.toFloat()-.8f,1.3f)
             r.setColor(.30f+row*.025f,.34f+row*.02f,.34f+row*.015f,1f);r.rectLine(point.x.toFloat(),point.y.toFloat(),q.x.toFloat(),q.y.toFloat(),.95f)
-            for(seat in 0..20) { course.sample(start-21+seat*1.85,laneM,point);r.setColor(if(seat%3==0).72f else .28f,.35f,.24f,1f);r.circle(point.x.toFloat(),point.y.toFloat(),.30f,6) }
+            for(seat in 0..20) { course.sample(start-21+seat*1.85,laneM,point);r.setColor(if(seat%3==0).72f else .28f,.35f,.24f,1f);r.circle(point.x.toFloat(),point.y.toFloat(),.30f,6) };yield(Unit)
         }
+        yield(Unit)
         // Direction chevrons at the approach to sharper bends are visible at driving scale.
         for(i in 0 until course.count step 20)if(course.curvature[i]>TrackRules["straightCurvature"]) {
             for(j in 0..2) {
@@ -131,10 +142,21 @@ class TrackScene(private val course: Course) {
                 r.rectLine((px-cx*1.3+cy).toFloat(),(py-cy*1.3-cx).toFloat(),px.toFloat(),py.toFloat(),.18f)
             }
         }
-        r.end();buffer.end();r.dispose()
+    }.iterator()
+    fun advance() {
+        if(ready)return
+        val started=System.nanoTime();val deadline=started+(VisualTuning["sceneryBuildBudgetMs"]*1e6).toLong()
+        canvas.buffer.begin();Gdx.gl.glViewport(0,0,canvas.textureSize,canvas.textureSize)
+        val r=canvas.renderer;r.projectionMatrix=projectionMatrix;r.begin(ShapeRenderer.ShapeType.Filled)
+        do {
+            if(!baking.hasNext()) { ready=true;break }
+            baking.next()
+        } while(System.nanoTime()<deadline)
+        r.end();canvas.buffer.end();buildFrames++;val sliceMs=(System.nanoTime()-started)/1e6;buildCpuMs+=sliceMs;buildMaxMs=max(buildMaxMs,sliceMs)
+        if(ready)Gdx.app.log("DeathRide","sceneryBake ${course.id} slicedFrames=$buildFrames totalCpuMs=$buildCpuMs maxSliceMs=$buildMaxMs")
     }
     fun draw(batch: SpriteBatch) { batch.draw(region,left,bottom,width,height) }
-    fun dispose()=buffer.dispose()
+
 }
 
 /** Fixed-size visual history; motion effects are cosmetic and do not feed physics. */

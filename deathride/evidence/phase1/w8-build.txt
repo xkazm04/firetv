@@ -1,0 +1,224 @@
+WARNING: We recommend using a newer Android Gradle plugin to use compileSdk = 36
+
+This Android Gradle plugin (8.7.3) was tested up to compileSdk = 35.
+
+You are strongly encouraged to update your project to use a newer
+Android Gradle plugin that has been tested with compileSdk = 36.
+
+If you are already using the latest version of the Android Gradle plugin,
+you may need to wait until a newer version with support for compileSdk = 36 is available.
+
+For more information refer to the compatibility table:
+https://d.android.com/r/tools/api-level-support
+
+To suppress this warning, add/update
+    android.suppressUnsupportedCompileSdk=36
+to this project's gradle.properties.
+> Task :core:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :game:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :link:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :game:processResources NO-SOURCE
+> Task :link:processResources NO-SOURCE
+> Task :link:processTestResources NO-SOURCE
+> Task :app:extractNatives UP-TO-DATE
+> Task :app:preBuild UP-TO-DATE
+> Task :app:preDebugBuild UP-TO-DATE
+> Task :app:mergeDebugNativeDebugMetadata NO-SOURCE
+> Task :app:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :core:compileKotlin UP-TO-DATE
+> Task :core:compileJava NO-SOURCE
+> Task :core:processResources UP-TO-DATE
+> Task :core:classes UP-TO-DATE
+> Task :core:jar UP-TO-DATE
+> Task :app:checkDebugAarMetadata UP-TO-DATE
+> Task :app:generateDebugResValues UP-TO-DATE
+> Task :app:mapDebugSourceSetPaths UP-TO-DATE
+> Task :app:generateDebugResources UP-TO-DATE
+> Task :app:mergeDebugResources UP-TO-DATE
+> Task :link:compileKotlin UP-TO-DATE
+> Task :app:packageDebugResources UP-TO-DATE
+> Task :link:compileJava NO-SOURCE
+> Task :link:classes UP-TO-DATE
+> Task :link:jar UP-TO-DATE
+> Task :app:parseDebugLocalResources UP-TO-DATE
+> Task :app:createDebugCompatibleScreenManifests UP-TO-DATE
+> Task :app:extractDeepLinksDebug UP-TO-DATE
+> Task :app:processDebugMainManifest UP-TO-DATE
+> Task :app:processDebugManifest UP-TO-DATE
+> Task :app:processDebugManifestForPackage UP-TO-DATE
+> Task :core:compileTestKotlin UP-TO-DATE
+> Task :core:compileTestJava NO-SOURCE
+> Task :core:processTestResources NO-SOURCE
+> Task :core:testClasses UP-TO-DATE
+> Task :app:processDebugResources UP-TO-DATE
+> Task :app:javaPreCompileDebug UP-TO-DATE
+> Task :app:mergeDebugShaders UP-TO-DATE
+> Task :app:compileDebugShaders NO-SOURCE
+> Task :app:generateDebugAssets UP-TO-DATE
+> Task :app:mergeDebugAssets UP-TO-DATE
+> Task :app:compressDebugAssets UP-TO-DATE
+> Task :app:desugarDebugFileDependencies UP-TO-DATE
+> Task :app:checkDebugDuplicateClasses UP-TO-DATE
+> Task :app:mergeExtDexDebug UP-TO-DATE
+> Task :app:mergeDebugJniLibFolders UP-TO-DATE
+> Task :app:validateSigningDebug UP-TO-DATE
+> Task :app:writeDebugAppMetadata UP-TO-DATE
+> Task :app:writeDebugSigningConfigVersions UP-TO-DATE
+> Task :link:compileTestKotlin
+> Task :link:compileTestJava NO-SOURCE
+> Task :link:testClasses UP-TO-DATE
+> Task :game:compileKotlin
+> Task :game:compileJava NO-SOURCE
+> Task :game:classes UP-TO-DATE
+> Task :game:jar
+> Task :app:mergeDebugNativeLibs UP-TO-DATE
+> Task :app:stripDebugDebugSymbols UP-TO-DATE
+> Task :app:compileDebugKotlin
+> Task :app:compileDebugJavaWithJavac NO-SOURCE
+> Task :app:dexBuilderDebug UP-TO-DATE
+> Task :app:processDebugJavaRes UP-TO-DATE
+> Task :app:mergeProjectDexDebug UP-TO-DATE
+> Task :app:mergeDebugGlobalSynthetics UP-TO-DATE
+> Task :app:mergeLibDexDebug
+> Task :app:mergeDebugJavaResource
+> Task :app:packageDebug
+> Task :app:createDebugApkListingFileRedirect UP-TO-DATE
+> Task :app:assembleDebug
+
+> Task :link:test
+
+LinkTest > badPinMalformedInputAndLifecycleAreContained() STANDARD_ERROR
+    SLF4J: Failed to load class "org.slf4j.impl.StaticLoggerBinder".
+    SLF4J: Defaulting to no-operation (NOP) logger implementation
+    SLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder for further details.
+
+LinkTest > badPinMalformedInputAndLifecycleAreContained() PASSED
+
+LinkTest > statsWindowAndLifetimeHaveIndependentCounts() PASSED
+
+LinkTest > occupiedPortReportsFailureWithoutKillingTheHost() PASSED
+
+> Task :core:test
+
+BalanceSmokeTest > scenarioCastAndDamageTimingAreValidAndReplay() PASSED
+
+CareerTest > orderedContentUnlocksCupTargetsAndDuplicateSettlement() PASSED
+
+CareerTest > versionOneMigratesAndImpossibleCareerStateIsRejected() PASSED
+
+CareerTest > tiersChangeDecisionsWithoutChangingPower() PASSED
+
+CareerTest > campaignCombatReplaysAndAllocatesNothing() PASSED
+
+CareerTest > twoThousandSeededCareersPerTierReportPacingAndWinRate() PASSED
+
+CarsTest > lapAndPairedRaceMatrix() PASSED
+
+CarsTest > catalogHasFiveClassesAndEveryMappingIsConsumed() PASSED
+
+CombatTest > rayAndSweptProjectileNeverHitShooterAndUseAmmoCooldown() PASSED
+
+CombatTest > seededCombatResolvesAllCoursesAndReplayMatches() PASSED
+
+CombatTest > armorHasOneAuthorityAndWreckRejectsEveryAction() PASSED
+
+CombatTest > staleAndReconnectClearAllAttackHolds() PASSED
+
+CombatTest > mineArmsThenHitsEachCarOnceIncludingOwnerAndPoolReuseIsClean() PASSED
+
+CombatTest > pickupsRespectCapsRespawnAndUnavailableMounts() PASSED
+
+CombatTest > activeCombatAllocatesNothingAcrossRepeatedLiveStarts() PASSED
+
+CombatTest > startProtectionIsVisibleAndDoesNotSpendAmmunition() PASSED
+
+CombatTest > ramsDeduplicatePerPairAndLastSurvivorWins() PASSED
+
+DriftTest > brakingUnloadsLateralGrip() PASSED
+
+DriftTest > countersteeringCatchesTheSlide() STANDARD_OUT
+    Countersteer: slip 21.85452018530294 to 9.603135582092992 degrees in 0.2 simulated seconds
+
+DriftTest > countersteeringCatchesTheSlide() PASSED
+
+FeelTest > humanProfilesAllocateNothingAfterWarmup() PASSED
+
+FeelTest > strictKernelsMatchAcrossTrackAngleRange() PASSED
+
+FeelTest > shapingAndDeterminismAndImmediatePropulsionRelease() PASSED
+
+FeelTest > tracesAndDeclaredBands() PASSED
+
+GarageTest > offersChargeOnceStayOnTheirCarAndRejectClassLimits() PASSED
+
+GarageTest > receiptsAreIdempotentInsuredAndBounded() PASSED
+
+GarageTest > seededEconomyAndExtremesHaveNoDebtOrUnboundedPower() PASSED
+
+GarageTest > saveRoundTripRejectsCorruptionAndRecoversPreviousGoodCopy() PASSED
+
+GarageTest > everyPartChangesItsPromisedPhysicalOrCombatConsumer() PASSED
+
+MovementTest > transferDriftSurfaceOrderingAndStaleSafety() PASSED
+
+MovementTest > everySurfaceCompletesSeededAiRacesDeterministically() PASSED
+
+MovementTest > glancingRetainsTangentButHeadOnLosesSpeed() PASSED
+
+MovementTest > massContactsConserveLinearMomentumAndFavorHeavyCar() PASSED
+
+MovementTest > advancedMovementAllocatesNothing() PASSED
+
+SoakTest > fixedStepHasNoSteadyStateAllocations() STANDARD_OUT
+    World.step allocated 0 bytes over 10,000 warmed steps on this JVM
+
+SoakTest > fixedStepHasNoSteadyStateAllocations() PASSED
+
+SoakTest > wallRecoveryDoesNotNeedReverseOrTeleport() PASSED
+
+SoakTest > fifteenSimulatedMinutesStayFiniteAndBounded() STANDARD_OUT
+    900 simulated seconds, 12 full six-car races; not a real-time/device soak
+
+SoakTest > fifteenSimulatedMinutesStayFiniteAndBounded() PASSED
+
+SoakTest > finishedHumanDoesNotHandSteeringToAi() PASSED
+
+TracksTest > authoredCourseStepAllocatesNothing() PASSED
+
+TracksTest > sixCarsFinishEveryCourseAndReplayDeterministically() PASSED
+
+TracksTest > samplingProjectionAndSequentialGatesAgree() PASSED
+
+TracksTest > scaleContractIsPhysicalReadableAndVaried() PASSED
+
+TracksTest > allAuthoredContentPassesGeometryAndPacingLint() PASSED
+
+TracksTest > longCarHasContactThroughItsMiddle() PASSED
+
+TracksTest > linterRejectsNarrowReorderedAndCrossingCourses() PASSED
+
+WorldTest > lapCountsOnceAndGateSkippingFails() PASSED
+
+WorldTest > staleFramesHoldSteeringAndDropThrottle() PASSED
+
+WorldTest > speedCoastBrakingAndTimeBasis() STANDARD_OUT
+    Braking distance: 15 m/s -> 4.536974074091895 m; 25 m/s -> 12.01870009215559 m
+    Full-lock slip after 2 s: 23.1528688186324 degrees; coast after 1 s: 24.07556393887442 m/s
+
+WorldTest > speedCoastBrakingAndTimeBasis() PASSED
+
+WorldTest > deterministicSixtySeconds() PASSED
+
+WorldTest > gapsNonFiniteAndReconnectAreBounded() PASSED
+
+WorldTest > collidingCarsSeparate() PASSED
+
+WorldTest > wallsContainBothCarCircles() PASSED
+
+WorldTest > twentySeededSixCarRacesComplete() STANDARD_OUT
+    20 seeds / 120 finishers / six cars / 3 laps; race seconds min=70.84999999999727 max=74.59999999999705
+
+WorldTest > twentySeededSixCarRacesComplete() PASSED
+
+BUILD SUCCESSFUL in 1m 19s
+47 actionable tasks: 9 executed, 38 up-to-date
