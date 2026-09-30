@@ -576,6 +576,26 @@ test('essay icons: every svg in EssayTV is hidden from the accessibility tree',(
  assert.ok(tags.length>=18,'the icon set and the drawn marks are all in this file');
 });
 
+test('x-ray rows: every playbook structure names rows the model paragraph actually has',()=>{
+ const {PLAYBOOK}=require(path.join(root,'src/lib/library/lessons.data.ts'));
+ const tv=fs.readFileSync(path.join(root,'src/essay/EssayTV.tsx'),'utf8');
+ const stripped=tv.replace(/\/\*[\s\S]*?\*\//g,'').replace(/\/\/.*$/gm,'');
+ const at=stripped.indexOf('const XRAY_ROWS'),end=stripped.indexOf('export function Xray');
+ assert.ok(at>0&&end>at);
+ const block=stripped.slice(at,end);
+ const lit=block.match(/const XRAY_ROWS[^=]*=\s*(\{[\s\S]*?\});/);
+ assert.ok(lit,'XRAY_ROWS is a literal map');
+ const rows=Function(`"use strict"; return (${lit[1]});`)();
+ const roles=(block.match(/role:\s*"/g)||[]).length;
+ assert.equal(roles,3,'the model paragraph is claim, evidence, link');
+ const ids=PLAYBOOK.map(p=>p.id);
+ assert.deepEqual(Object.keys(rows).sort(),[...ids].sort(),'a structure with no row list would light every sentence');
+ for(const id of ids){
+  assert.ok(rows[id].length>0,id);
+  for(const i of rows[id])assert.ok(Number.isInteger(i)&&i>=0&&i<roles,`${id} lights row ${i}, and the paragraph has ${roles}`);
+ }
+});
+
 // ---- W3: text in, one paragraph at a time (paragraphsOf, the file check, the length cap) ----
 const {paragraphsOf,essayFileProblem,essayTooLong,ESSAY_FILE_MAX_BYTES,ESSAY_PARAGRAPH_MAX_CHARS}=require(path.join(root,'src/lib/rules/essay.ts'));
 const P1='Many students are tired. Sleep is important. Schools start early. This is bad.';
