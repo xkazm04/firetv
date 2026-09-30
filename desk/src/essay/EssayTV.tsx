@@ -52,23 +52,23 @@ function Caption({ label, text, className }: { label: string; text: string; clas
 // ---------------------------------------------------------------- drawing kit
 
 const ICON: Record<string, ReactNode> = {
-  structure: <svg viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="3.5" width="18" height="4.5" /><rect x="3" y="10" width="11" height="4.5" /><rect x="3" y="16.5" width="15" height="4.5" /></svg>,
-  argument: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.8" strokeLinecap="square"><path d="M3 12h16M13 5.5l6.5 6.5-6.5 6.5" /></svg>,
-  evidence: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6"><circle cx="10" cy="10" r="7" /><path d="M15.2 15.2L21 21M6.8 10.2l2.3 2.3 4.2-4.6" /></svg>,
-  language: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.8"><path d="M2 13c2.2-6 4.4-6 6.6 0s4.4 6 6.6 0 4.4-6 6.8-1" /></svg>,
+  structure: <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="3" y="3.5" width="18" height="4.5" /><rect x="3" y="10" width="11" height="4.5" /><rect x="3" y="16.5" width="15" height="4.5" /></svg>,
+  argument: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.8" strokeLinecap="square" aria-hidden="true"><path d="M3 12h16M13 5.5l6.5 6.5-6.5 6.5" /></svg>,
+  evidence: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" aria-hidden="true"><circle cx="10" cy="10" r="7" /><path d="M15.2 15.2L21 21M6.8 10.2l2.3 2.3 4.2-4.6" /></svg>,
+  language: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.8" aria-hidden="true"><path d="M2 13c2.2-6 4.4-6 6.6 0s4.4 6 6.6 0 4.4-6 6.8-1" /></svg>,
 };
-const SEAL = <svg viewBox="0 0 24 24"><rect x="1" y="1" width="22" height="22" fill="currentColor" /><path d="M6.5 12.5l3.5 3.5 7.5-8" fill="none" stroke="#0B0B0D" strokeWidth="3" /></svg>;
-const PHONE = <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="6" y="2" width="12" height="20" rx="2" /><path d="M10.5 18.5h3" /></svg>;
+const SEAL = <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="1" y="1" width="22" height="22" fill="currentColor" /><path d="M6.5 12.5l3.5 3.5 7.5-8" fill="none" stroke="#0B0B0D" strokeWidth="3" /></svg>;
+const PHONE = <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true"><rect x="6" y="2" width="12" height="20" rx="2" /><path d="M10.5 18.5h3" /></svg>;
 const WAYS = [
-  <svg key="p" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><rect x="6" y="4" width="12" height="17" rx="1" /><path d="M9 4V2.5h6V4M9 10h6M9 14h4" /></svg>,
-  <svg key="t" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><rect x="2" y="6" width="20" height="12" rx="1" /><path d="M6 10h1M10 10h1M14 10h1M7 14h10" /></svg>,
-  <svg key="d" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><rect x="9" y="2" width="6" height="12" rx="3" /><path d="M5 11a7 7 0 0 0 14 0M12 18v4" /></svg>,
+  <svg key="p" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true"><rect x="6" y="4" width="12" height="17" rx="1" /><path d="M9 4V2.5h6V4M9 10h6M9 14h4" /></svg>,
+  <svg key="t" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true"><rect x="2" y="6" width="20" height="12" rx="1" /><path d="M6 10h1M10 10h1M14 10h1M7 14h10" /></svg>,
+  <svg key="d" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" aria-hidden="true"><rect x="9" y="2" width="6" height="12" rx="3" /><path d="M5 11a7 7 0 0 0 14 0M12 18v4" /></svg>,
 ];
 const ACT_ICON: Record<(typeof FORENSIC_STOPS)[number], ReactNode> = {
   rewrite: PHONE,
-  why: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6"><path d="M4 9a8 8 0 1 1 8 8M12 13V9" /><path d="M4 9l-2.5 3M4 9l3 2.4" /></svg>,
-  next: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.8" strokeLinecap="square"><path d="M12 3v16M5.5 12.5L12 19l6.5-6.5" /></svg>,
-  back: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.8" strokeLinecap="square"><path d="M21 12H5M11 5.5L4.5 12l6.5 6.5" /></svg>,
+  why: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" aria-hidden="true"><path d="M4 9a8 8 0 1 1 8 8M12 13V9" /><path d="M4 9l-2.5 3M4 9l3 2.4" /></svg>,
+  next: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.8" strokeLinecap="square" aria-hidden="true"><path d="M12 3v16M5.5 12.5L12 19l6.5-6.5" /></svg>,
+  back: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.8" strokeLinecap="square" aria-hidden="true"><path d="M21 12H5M11 5.5L4.5 12l6.5 6.5" /></svg>,
 };
 const ACT_WORD: Record<(typeof FORENSIC_STOPS)[number], string> = { rewrite: "Rewrite on my phone", why: "Why this matters", next: "Next sentence", back: "Back to the paragraph" };
 

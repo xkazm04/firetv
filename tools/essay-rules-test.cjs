@@ -567,6 +567,15 @@ test('specimen door: OK is offered only while the last-paragraph card is the foc
  for(const d of doors)assert.match(d,/\{focused && <span className="em-key">OK<\/span>\}/,'Select on a lens chooses the lens; the card must not advertise OK until it is the focus');
 });
 
+test('essay icons: every svg in EssayTV is hidden from the accessibility tree',()=>{
+ const tv=fs.readFileSync(path.join(root,'src/essay/EssayTV.tsx'),'utf8');
+ const stripped=tv.replace(/\/\*[\s\S]*?\*\//g,'').replace(/\/\/.*$/gm,'');
+ const tags=[...stripped.matchAll(/<svg\b[^>]*>/g)].map(m=>m[0]);
+ const bare=tags.filter(t=>!/aria-hidden=/.test(t));
+ assert.equal(bare.length,0,`${bare.length} of ${tags.length} svg tags omit aria-hidden: ${bare[0]??''}`);
+ assert.ok(tags.length>=18,'the icon set and the drawn marks are all in this file');
+});
+
 // ---- W3: text in, one paragraph at a time (paragraphsOf, the file check, the length cap) ----
 const {paragraphsOf,essayFileProblem,essayTooLong,ESSAY_FILE_MAX_BYTES,ESSAY_PARAGRAPH_MAX_CHARS}=require(path.join(root,'src/lib/rules/essay.ts'));
 const P1='Many students are tired. Sleep is important. Schools start early. This is bad.';
