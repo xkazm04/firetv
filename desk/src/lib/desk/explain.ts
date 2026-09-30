@@ -15,16 +15,23 @@
  * A Calculus item (one with a `spec`) is heard the same way, spoken to as a first-year university student on the
  * Calculus 1 course: the model transcribes the final answer they say they got (an expression or a number, as plain
  * text), rules/calc checkAnswer settles an unsure item from it (rules/maths settleSpec), and the reply is checked
- * with leaksCalc(spec, reply).
+ * with leaksCalc(spec, reply). Only a spec of a Calculus SHAPE is a Calculus item.
+ *
+ * A school item (a spec of a school shape, rules/school; Family W5b: add and subtract fractions) takes the school
+ * stance with the learner's age voice, exactly the school system prompt; the model transcribes the answer they say as
+ * figures (a fraction, a mixed number, a decimal), rules/school check settles an unsure item from it by the learner's
+ * school system (rules/maths settleSpec), the slip is only the one code detects (the model is not asked for one, and a
+ * wrong item is never renamed from the conversation), and the reply is checked with leaksSchool(spec, reply).
  */
 import { text } from "../engines/text";
-import { ASK, leaks, settle, settled, settleSpec, slipsFor, slipVocabulary, type Settled } from "../rules/maths";
+import { ASK, isCalcSpec, leaks, settle, settled, settleSpec, slipsFor, slipVocabulary, type Settled } from "../rules/maths";
 import { leaksCalc } from "../rules/calc";
+import { DEFAULT_SCHOOL_SYSTEM, isSchoolSpec, leaksSchool } from "../rules/school";
 import { voiceOf, withManner } from "../rules/voice";
 import { topic } from "../library/syllabus";
 import { PATHS, topicIn } from "../library/paths";
 import { getLearner, recordAttempt } from "../session/learners";
-import type { PracticeItem } from "../session/store";
+import type { PracticeItem, SchoolSystem } from "../session/store";
 
 const SCHEMA = {
   type: "object",
@@ -49,12 +56,7 @@ export async function explain(
   const t = topic(topicId);
   const memory = getLearner(learnerId).memory;
 
-  const system = withManner(
-    `You are a maths tutor listening to a school student explain their own working out loud. ` +
-    `${EXPLAIN_WITHHOLD} ` +
-    `Point at the step they should look at again, or at the step that was the good one. ` +
-    `One or two sentences. Plain text only — no LaTeX, no markdown; write x^2 as x². This will be read aloud.`,
-    voiceOf("maths", age));
+  const system = schoolSystem(age);
 
   const prompt =
     `Topic: ${t?.name ?? topicId}\n${t?.blurb ?? ""}\n\n` +
@@ -69,6 +71,52 @@ export async function explain(
     `minus three is -3, seven halves is 7/2). Their value, not yours — do not work it out. An empty string if they did not say one.`;
 
   return heard(await text<{ reply: string; slip: string; value: string }>({ system, prompt, schema: SCHEMA, model: "best" }), topicId);
+}
+
+/** The school stance, in the learner's age voice (rules/voice): the linear items' and the school units' system prompt, one text. */
+const schoolSystem = (age?: number) => withManner(
+  `You are a maths tutor listening to a school student explain their own working out loud. ` +
+  `${EXPLAIN_WITHHOLD} ` +
+  `Point at the step they should look at again, or at the step that was the good one. ` +
+  `One or two sentences. Plain text only — no LaTeX, no markdown; write x^2 as x². This will be read aloud.`,
+  voiceOf("maths", age));
+
+const SCHOOL_SCHEMA = {
+  type: "object",
+  properties: { reply: { type: "string" }, value: { type: "string" } },
+  required: ["reply", "value"],
+};
+
+/**
+ * A school unit's item heard (Family W5b): the school stance and voice, the unit from topicIn, the answer said as
+ * figures. No slip is asked for: a school slip is detected by code from the spec, never named by a model.
+ */
+export async function explainSchool(
+  itemQuestion: string,
+  transcript: string,
+  topicId: string,
+  learnerId: string,
+  age?: number,
+): Promise<{ reply: string; slip?: string; value: string; provider: string; ms: number }> {
+  const t = topicIn(topicId);
+  const memory = getLearner(learnerId).memory;
+  const prompt =
+    `Topic: ${t?.name ?? topicId}\n${t?.blurb ?? ""}\n\n` +
+    `The question: ${itemQuestion}\n\n` +
+    `What the student said, transcribed from speech. The transcription may be rough or misheard — read it charitably ` +
+    `and answer what they meant:\n«${transcript}»\n\n` +
+    (memory.length ? `What the desk has learned about this student:\n${memory.map((m) => `- ${m}`).join("\n")}\n\n` : "") +
+    `Reply to them in one or two sentences that point at the step, not the answer.\n\n` +
+    `value: the final answer the student says they got, written in figures as they said it: a whole number, a fraction, ` +
+    `a mixed number or a decimal (eleven twelfths is 11/12, one and five twelfths is 1 5/12, nought point five is 0.5). ` +
+    `Their answer, not yours — do not work it out and do not simplify it. An empty string if they did not say one.`;
+  const { json, provider, ms } = await text<{ reply: string; value: string }>({ system: schoolSystem(age), prompt, schema: SCHOOL_SCHEMA, model: "best" });
+  return {
+    reply: (typeof json?.reply === "string" ? json.reply : "").trim(),
+    value: typeof json?.value === "string" ? json.value.trim() : "",
+    provider,
+    ms,
+  };
 }
 
 /** A Calculus item heard: the university stance, the calc1 topic from topicIn, the answer as an expression or a number. */
@@ -139,19 +187,23 @@ export async function explainItem(
   stillUnsure: () => boolean,
   /** The seated profile's age (the route reads it); optional, so a call without one speaks as it always has. */
   age?: number,
+  /** The seated profile's school system, for reading a school item's answer (the route reads it); UK when not given. */
+  system: SchoolSystem = DEFAULT_SCHOOL_SYSTEM,
 ): Promise<Explained> {
-  const calc = !!item.spec;
-  const h = await explain(item.question, transcript, topicId, learnerId, calc, age);
-  // a Calculus item settles by checkAnswer from its spec (null when unsure); a school item by substitution
+  // the spec's shape says which engine: a Calculus shape is a Calculus item, a school shape a school unit's item
+  const calc = isCalcSpec(item.spec), school = isSchoolSpec(item.spec);
+  const h = school ? await explainSchool(item.question, transcript, topicId, learnerId, age) : await explain(item.question, transcript, topicId, learnerId, calc, age);
+  // an item with a spec settles by its engine's check (null when unsure); a linear item by substitution
   const verdict = !stillUnsure() ? null
-    : calc ? settleSpec(item.n, item.spec, h.value, h.slip, topicId)
+    : calc || school ? settleSpec(item.n, item.spec, h.value, h.slip, topicId, system)
     : settle(item, h.value, h.slip, topicId);
   if (verdict) recordAttempt(learnerId, topicId, verdict.verdict === "right", verdict.slip);
-  // an item already wrong: the slip the conversation found replaces the marker's, when the rulebook has it (no verdict, no record)
-  const named = !verdict && item.verdict === "wrong" && h.slip ? settled(item.n, false, h.slip, topicId) : null;
+  // an item already wrong: the slip the conversation found replaces the marker's, when the rulebook has it (no verdict,
+  // no record) - never on a school item, whose slip only code detects
+  const named = !verdict && !school && item.verdict === "wrong" && h.slip ? settled(item.n, false, h.slip, topicId) : null;
   // the item's own line stands in for a reply that gives the answer away (or says nothing)
   const own = verdict?.said ?? item.said ?? ASK(item.n);
-  const gives = calc ? leaksCalc(item.spec, h.reply) : leaks(item.question, h.reply);
+  const gives = calc ? leaksCalc(item.spec, h.reply) : school ? leaksSchool(item.spec, h.reply) : leaks(item.question, h.reply);
   const reply = h.reply && !gives ? h.reply : own;
   return { reply, slip: h.slip, ...(verdict ? { settled: verdict } : {}), ...(named?.slip ? { renamed: { slip: named.slip, said: named.said } } : {}) };
 }

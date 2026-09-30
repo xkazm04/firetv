@@ -163,6 +163,12 @@ ticks its answer line. With no working, the shared line split draws the answer a
 value is drawn as `x = <answer>`, but an item with a spec asks for no x, so a Calculus answer such as `1/3` or
 `3x^2 + 2x` is drawn exactly as the learner wrote it.
 
+**A school fractions item** (Family W5b) is marked by code too (`rules/school.ts` `check`, the answer read by the learner's
+school system) and has no pen position either: a wrong one gets the wavy underline on its answer line, the slip's title
+from the unit's closed list ("Added the tops and the bottoms", "The top not scaled with the bottom", "Added the tops,
+kept one bottom", "Subtracted the wrong way round") only when code detected it, and otherwise the desk asks. An answer
+the desk cannot read with one meaning (`0,75` on a UK profile, a rounded decimal) is the dashed ring, "not sure".
+
 ## Components
 
 - **Mark** - an orange rounded square (radial `#FFEBC4 → #FFC56B → #E8891F`) holding an equals sign whose lower

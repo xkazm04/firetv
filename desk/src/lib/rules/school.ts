@@ -927,3 +927,108 @@ export const SCHOOL_GENERATORS: Readonly<Record<string, (seed: number, tier: 1 |
 /** The generator for a topic id, or null: an own key only, so 'constructor' is not a unit. */
 export const generatorFor = (topicId: unknown) =>
   typeof topicId === "string" && Object.prototype.hasOwnProperty.call(SCHOOL_GENERATORS, topicId) ? SCHOOL_GENERATORS[topicId] : null;
+
+/** Is this a school spec by its shape (never a Calculus one: the two shape lists share no name)? It says nothing of whether it is well formed. */
+export const isSchoolSpec = (spec: unknown): spec is SchoolSpec =>
+  !!spec && typeof spec === "object" && (SCHOOL_SHAPES as readonly unknown[]).includes((spec as { shape?: unknown }).shape);
+
+/** The slips each unit's items can show, by topic id: a closed list, in SCHOOL_SLIPS order. Only the fractions unit has any. */
+export const SCHOOL_UNIT_SLIPS: Readonly<Record<string, readonly string[]>> = {
+  "frac-add-sub": ["tops-and-bottoms", "top-not-scaled", "tops-one-bottom", "wrong-direction"],
+};
+
+/** The system the desk reads a learner's numbers by when their profile names none (tv/profileRows DEFAULT_SYSTEM is the same, tested). */
+export const DEFAULT_SCHOOL_SYSTEM: SchoolSystem = "uk";
+/** The school system of the learner at the desk, from their profile; the desk's default (UK) when nobody, no profile or no system. */
+export function learnerSystem(s: { profiles?: { id: string; system?: unknown }[]; learner?: { id: string } | null }): SchoolSystem {
+  const id = s.learner?.id;
+  const sys = id ? s.profiles?.find((p) => p.id === id)?.system : undefined;
+  return isSystem(sys) ? sys : DEFAULT_SCHOOL_SYSTEM;
+}
+
+// ------------------------------------------------------------------ reading a task back into a spec, for the hint's leak check
+
+/** Longest task text the reader tries: one line on a worksheet with its instruction. */
+const MAX_TASK = 200;
+/** One fraction as a worksheet prints it: a top and a bottom of up to three digits, no leading zero. */
+const FRAC_SRC = String.raw`([1-9]\d{0,2})\s*\/\s*([1-9]\d{0,2})`;
+const VERB_SRC = String.raw`(?:work out|calculate|evaluate|compute|find|what is|what's)`;
+/** The phrasings read, each giving the two fractions (tops and bottoms in m[1..4]) and whether it is a subtraction; `swap` puts the second first. */
+const TASKS: { re: RegExp; minus: (m: RegExpExecArray) => boolean; swap?: boolean }[] = [
+  // '3/4 + 1/6', 'Work out 3/4 - 1/6', 'Calculate: 2/3 + 1/5', 'What is 1/2 + 1/4', '3/4 plus 1/6'
+  { re: new RegExp(String.raw`^(?:${VERB_SRC}\s*:?\s*)?${FRAC_SRC}\s*(\+|-|plus|minus)\s*${FRAC_SRC}$`, "i"), minus: (m) => /^(?:-|minus)$/i.test(m[3]) },
+  // 'Add 3/4 and 1/6', 'Add 1/6 to 3/4', 'Find the sum of 2/3 and 1/5'
+  { re: new RegExp(String.raw`^(?:add|find the sum of|the sum of)\s+${FRAC_SRC}\s+(and|to)\s+${FRAC_SRC}$`, "i"), minus: () => false },
+  // 'Subtract 1/6 from 3/4', 'Take 1/4 away from 5/6', 'Take 1/4 from 5/6': the second take away the first
+  { re: new RegExp(String.raw`^(?:subtract|take)\s+${FRAC_SRC}\s+(away from|from)\s+${FRAC_SRC}$`, "i"), minus: () => true, swap: true },
+];
+
+/**
+ * A worksheet task on adding or subtracting two fractions, read back into the `compute` spec it asks, for the hint's
+ * leak check - or null. Conservative: what it does not read with one meaning is null, and a null task gets no school
+ * leak check (the general rule still runs), exactly as an unread Calculus task does. It reads:
+ *   - an item label first ('1.', '2)', '(b)', 'c)');
+ *   - two fractions a/b joined by + or - (or 'plus', 'minus'), after an optional 'Work out', 'Calculate', 'Evaluate',
+ *     'Compute', 'Find', 'What is' (a colon after it too); 'Add A and B', 'Add A to B', 'Find the sum of A and B';
+ *     'Subtract B from A', 'Take B (away) from A' (A - B);
+ *   - after it: nothing, '=', '= ?', '= ___', a full stop or a question mark; then optionally one instruction the desk
+ *     prints itself: 'Give your answer in its simplest form.' / 'in its lowest terms' / 'Simplify your answer.' (form
+ *     simplest) or 'Give your answer as a decimal.' (form decimal).
+ * Null for: whole numbers, decimals or mixed numbers as operands, three or more terms, any letter in the maths (an x),
+ * × and ÷, brackets, number words, an answer after '=', a bottom of 1 or 0, a leading zero, 'the difference between'
+ * (its order is not said), any other word, and a spec wellFormed refuses (a subtraction below zero is one). The
+ * printed question of a practice item (`question`) reads back to its own spec. Pure; never throws.
+ */
+export function specFromQuestion(text: unknown): SchoolSpec | null {
+  if (typeof text !== "string" || !text.trim() || text.length > MAX_TASK) return null;
+  try {
+    let t = normalise(text);
+    t = t.replace(/^(?:\d{1,2}[.)]|\(\d{1,2}\)|[a-h]\)|\([a-h]\))\s+/i, "");
+    let form: SchoolSpec["form"];
+    const tail = /[.?!]?\s*(?:(give your answer in its (?:simplest form|lowest terms)|simplify your answer)|(give your answer as a decimal))\.?$/i.exec(t);
+    if (tail) { form = tail[1] ? "simplest" : "decimal"; t = t.slice(0, tail.index).trim(); }
+    t = t.replace(/\s*(?:=\s*(?:\?|_+|\.{3}|…)?)?\s*[.?!]?$/, "").trim();
+    for (const { re, minus, swap } of TASKS) {
+      const m = re.exec(t);
+      if (!m) continue;
+      const [p, q] = swap ? [[m[4], m[5]], [m[1], m[2]]] : [[m[1], m[2]], [m[4], m[5]]];
+      const spec: SchoolSpec = { shape: "compute", expr: `${p[0]}/${p[1]} ${minus(m) ? "-" : "+"} ${q[0]}/${q[1]}`, ...(form ? { form } : {}) };
+      const r = read(spec);
+      if (!r.ok) return null;
+      // a bottom of 1 is a whole number written as a fraction: not this unit's task
+      if (r.node.k !== "op" || r.node.a.k !== "frac" || r.node.b.k !== "frac") return null;
+      return spec;
+    }
+    return null;
+  } catch {
+    return null;
+  }
+}
+
+/** The unit a school spec belongs to, by topic id: a sum or difference of two fractions is add and subtract fractions. Null otherwise. */
+export function unitOf(spec: unknown): string | null {
+  try {
+    const r = read(spec);
+    if (!r.ok) return null;
+    const n = r.node;
+    return n.k === "op" && (n.op === "+" || n.op === "-") && n.a.k === "frac" && n.b.k === "frac" ? "frac-add-sub" : null;
+  } catch {
+    return null;
+  }
+}
+
+// ------------------------------------------------------------------ the line when a hint gave the answer away twice
+
+/**
+ * The line the TV shows and speaks when the model's hint on a school item gave the answer away twice: written here,
+ * never by a model. It points at the method and carries no digit and no number word (leaksSchool reads words as
+ * numbers), so nothing on it can be the answer.
+ */
+export const SCHOOL_WITHHELD = {
+  "frac-add-sub": "Make the bottoms the same first: find a number both bottoms go into and rewrite each fraction over it. Then combine only the tops. The answer is yours to work out.",
+  any: "Go back to the last step you are sure of and take the next. The answer stays yours to find.",
+} as const;
+/** The withheld line for a school spec, chosen by its unit; the general line for any other. */
+export function withheldSchool(spec: unknown): string {
+  return unitOf(spec) === "frac-add-sub" ? SCHOOL_WITHHELD["frac-add-sub"] : SCHOOL_WITHHELD.any;
+}

@@ -8,6 +8,7 @@ import { NextResponse } from "next/server";
 import { dispatch, getSession, NOBODY_AT_DESK, type Practice } from "@/lib/session/store";
 import { markSet } from "@/lib/desk/mark";
 import { MOVED_ON, refused, runJob } from "@/lib/desk/job";
+import { learnerSystem } from "@/lib/rules/school";
 
 export const dynamic = "force-dynamic";
 const START = "marking the set…";
@@ -39,7 +40,8 @@ export async function POST(req: Request) {
   };
   const r = await runJob("mark", async (run) => {
     const still = () => run.current() && same();
-    const { items, provider, ms, unsure, landed } = await markSet(b64, practice, who.id, still);
+    // a school item's answer is read by the seated learner's school system ('0,5' is a half in cz and de)
+    const { items, provider, ms, unsure, landed } = await markSet(b64, practice, who.id, still, learnerSystem(s));
     if (!landed || !still()) return null;
     dispatch({ type: "practice.marked", items, owner });
     const right = items.filter((i) => i.verdict === "right").length;

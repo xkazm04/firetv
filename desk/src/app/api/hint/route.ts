@@ -2,7 +2,9 @@
  * A hint for the focused item (or the item the phone circled), then the lesson pick behind it. The learner's Math
  * path is read here and handed to hint(); on the Calculus path a maths item has no lesson library to pick from, so
  * the lesson job ends as 'no lesson' without asking the picker (which would offer a school algebra video). The seated
- * profile's age is read here too, for the tutor's voice (rules/voice).
+ * profile's age is read here too, for the tutor's voice (rules/voice). A maths task that reads as a school unit with no
+ * lesson in the library (rules/school specFromQuestion: add and subtract fractions, Family W5b) ends the same way, so
+ * the hint screen says "No lesson for this" instead of offering a linear-equations video.
  */
 import { NextResponse } from "next/server";
 import { dispatch, getSession, NOBODY_AT_DESK } from "@/lib/session/store";
@@ -12,6 +14,7 @@ import { BUSY, refused, runJob } from "@/lib/desk/job";
 import { resolveEnglish } from "@/lib/rules/english";
 import { learnerPath } from "@/lib/library/paths";
 import { learnerAge } from "@/lib/rules/voice";
+import { specFromQuestion as schoolSpecFromQuestion } from "@/lib/rules/school";
 
 export const dynamic = "force-dynamic";
 export async function POST(req: Request) {
@@ -45,7 +48,8 @@ export async function POST(req: Request) {
   if (!r.ok) return refused(r);
   // the lesson behind the hint, keyed to it: a newer hint's pick replaces this one, and a pick that lands late is dropped
   void runJob("lesson", async (run) => {
-    const l = page.subject === "maths" && path === "calc1" ? null : await pickLesson(page.subject, item.text);
+    const noLibrary = page.subject === "maths" && (path === "calc1" || schoolSpecFromQuestion(item.text) !== null);
+    const l = noLibrary ? null : await pickLesson(page.subject, item.text);
     if (run.current()) dispatch({ type: "lesson.set", lesson: l, key: item.key });
     return l;
   }, { key: item.key, supersedes: true, done: (l) => (l ? `lesson: ${l.title}` : "no lesson covers this one") });

@@ -1,18 +1,21 @@
 /**
- * The slip vocabulary for linear equations - and, through rules/calc CALC_SLIPS, for the calc1 topics - decided in code.
+ * The slip vocabulary for linear equations - and, through rules/calc CALC_SLIPS, for the calc1 topics, and through
+ * rules/school SCHOOL_SLIPS, for the school units that have them (Family W5b: add and subtract fractions) - decided in code.
  *
  * Same discipline as rules/english.ts: the table is the closed set the model is allowed to
  * choose from. It names a mistake and points at a line. It never carries the corrected line,
  * the next step, or the answer — the student produces those, or there was no point asking.
  *
  * It also holds the settle rule marking and explanation share, and the check that a reply leaks nothing.
- * It imports rules/calc and the calc1 spine (both pure, client-safe) and nothing session-backed.
+ * It imports rules/calc, rules/school and the calc1 spine (all pure, client-safe) and nothing session-backed.
  */
 import { evaluate, substitute, verify } from "../desk/verify";
 import type { PracticeItem, SlipAt } from "../session/store";
 import { spanStarts } from "../../maths/typeset";
-import { CALC_SLIPS, checkAnswer, slipsFor as calcSlipsFor } from "./calc";
+import { CALC_SHAPES, CALC_SLIPS, checkAnswer, slipsFor as calcSlipsFor } from "./calc";
 import { CALC1_SPINE } from "../library/calculus1.spine";
+import { DEFAULT_SCHOOL_SYSTEM, SCHOOL_SLIPS, SCHOOL_UNIT_SLIPS, check as schoolCheck, isSchoolSpec } from "./school";
+import type { SchoolSystem } from "../session/store";
 
 /** `name` is what the TV sets as the slip's title; `says` is the desk's line; `points` the place in words. */
 export interface Slip { id: string; topics: string[]; says: string; points: string; name: string; }
@@ -48,17 +51,32 @@ const CALC_AS_SLIPS: Slip[] = CALC_SLIPS.map((c) => ({
 const isCalcTopic = (topicId: string) => CALC1_SPINE.some((t) => t.id === topicId);
 
 /**
+ * The school units' slips (rules/school SCHOOL_SLIPS, Family W5b) as Slips, each tagged with the units whose closed
+ * list (SCHOOL_UNIT_SLIPS) names it. Their words are rules/school's own; none carries a value. Each is detected by code
+ * from the spec's own operands (rules/school check), never picked by a model.
+ */
+const SCHOOL_AS_SLIPS: Slip[] = SCHOOL_SLIPS.map((c) => ({
+  id: c.id, says: c.says, points: c.points, name: c.name,
+  topics: Object.keys(SCHOOL_UNIT_SLIPS).filter((u) => SCHOOL_UNIT_SLIPS[u].includes(c.id)),
+}));
+
+/**
  * A slip by id: the school table first (so a shared id such as 'arithmetic-slip' reads as it always has), then the
- * Calculus slips. With `topicId`, that topic's own list is asked first, so a shared id reads in the topic's words.
+ * Calculus slips, then the school units' slips. With `topicId`, that topic's own list is asked first, so a shared id
+ * reads in the topic's words.
  */
 export function slip(id: string, topicId?: string): Slip | undefined {
   return (topicId ? slipsFor(topicId).find((s) => s.id === id) : undefined)
-    ?? SLIPS.find((s) => s.id === id) ?? CALC_AS_SLIPS.find((s) => s.id === id);
+    ?? SLIPS.find((s) => s.id === id) ?? CALC_AS_SLIPS.find((s) => s.id === id) ?? SCHOOL_AS_SLIPS.find((s) => s.id === id);
 }
 
-/** The closed list for a topic: the school table for a school id, the Calculus slips of its shapes for a calc1 id. */
+/**
+ * The closed list for a topic: the linear table for a linear id, the Calculus slips of its shapes for a calc1 id, the
+ * unit's own list for a school unit (SCHOOL_UNIT_SLIPS). Nothing outside a topic's list can be named on its items.
+ */
 export function slipsFor(topicId: string): Slip[] {
-  return isCalcTopic(topicId) ? CALC_AS_SLIPS.filter((s) => s.topics.includes(topicId)) : SLIPS.filter((s) => s.topics.includes(topicId));
+  if (isCalcTopic(topicId)) return CALC_AS_SLIPS.filter((s) => s.topics.includes(topicId));
+  return [...SLIPS, ...SCHOOL_AS_SLIPS].filter((s) => s.topics.includes(topicId));
 }
 
 /** The list the prompt carries: one slip per line, id then what the desk would say. */
@@ -86,13 +104,28 @@ export function settled(n: number, right: boolean, slipId: unknown, topicId: str
   return { verdict: right ? "right" : "wrong", slip: own?.id, said: right ? RIGHT(n) : own ? own.says : ASK(n) };
 }
 
+/** Is this a Calculus spec by its shape? A school spec never is (the shape lists share no name). */
+export const isCalcSpec = (spec: unknown): boolean =>
+  !!spec && typeof spec === "object" && (CALC_SHAPES as readonly unknown[]).includes((spec as { shape?: unknown }).shape);
+
 /**
- * Settle a Calculus item (one with a spec) from an answer as written or said: rules/calc checkAnswer decides, from the
- * spec alone. 'unsure' - blank, unreadable, not comparable - settles nothing (null): the desk does not guess. The slip
- * is checkAnswer's own where it names one (sign, lost-constant), else the pick offered, and either survives only on a
- * wrong item and only from the topic's list (`settled`). No pen position: `locate` reads linear lines only.
+ * Settle an item with a spec from an answer as written or said, dispatched on the spec's shape - never both engines:
+ *   - a Calculus spec: rules/calc checkAnswer decides, from the spec alone. The slip is checkAnswer's own where it names
+ *     one (sign, lost-constant), else the pick offered;
+ *   - a school spec (Family W5b): rules/school check(spec, answer, system) decides, reading the answer by the learner's
+ *     school system (`system`, the desk's default UK when not given: '0,5' is a half in cz and de, unsure in us and
+ *     uk). The slip is ONLY the one code detected from the spec's operands: a pick offered is ignored.
+ * 'unsure' - blank, unreadable, a rounding, a form the question did not ask for, not comparable - settles nothing
+ * (null): the desk does not guess. A slip survives only on a wrong item and only from the topic's list (`settled`).
+ * No pen position: `locate` reads linear lines only. A spec of neither kind settles nothing.
  */
-export function settleSpec(n: number, spec: unknown, answer: unknown, slipId: unknown, topicId: string): Settled | null {
+export function settleSpec(n: number, spec: unknown, answer: unknown, slipId: unknown, topicId: string, system: SchoolSystem = DEFAULT_SCHOOL_SYSTEM): Settled | null {
+  if (isSchoolSpec(spec)) {
+    const v = schoolCheck(spec, typeof answer === "string" ? answer : "", system);
+    if (v.verdict === "unsure") return null;
+    return settled(n, v.verdict === "right", v.slip, topicId);
+  }
+  if (!isCalcSpec(spec)) return null;
   const c = checkAnswer(spec, typeof answer === "string" ? answer : "");
   if (c.verdict === "unsure") return null;
   return settled(n, c.verdict === "right", c.slip ?? slipId, topicId);

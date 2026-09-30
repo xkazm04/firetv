@@ -19,14 +19,22 @@
  * compared - ASK, and no attempt. The slip is code's own (sign, lost-constant) where it names one, else the model's
  * pick from the topic's vocabulary, only on a wrong item. A Calculus item has no pen position (locate reads linear lines).
  *
+ * A school item (a `spec` of a school shape, rules/school; Family W5b: add and subtract fractions) is marked by CODE
+ * the same way, with its own reading prompt: the model is asked for the child's final answer and working exactly as
+ * written - a fraction, a mixed number, a decimal with its comma or point - never an expression in x, never a verdict,
+ * a solution or a slip. The verdict is rules/school check(spec, studentAnswer, system), `system` being the seated
+ * learner's school system (the route reads it; UK when none): unsure asks and records nothing. The slip is the one
+ * code detects from the spec's operands, from the unit's closed list. Still one vision call per sheet.
+ *
  * Nothing here ever puts the answer on screen, and no `said` line carries a value.
  */
 import { vision } from "../engines/vision";
-import { ASK, cleanValue as clean, locate, rightLine, settled, settleSpec, slipVocabulary, workingLines } from "../rules/maths";
+import { ASK, cleanValue as clean, isCalcSpec, locate, rightLine, settled, settleSpec, slipVocabulary, workingLines } from "../rules/maths";
+import { DEFAULT_SCHOOL_SYSTEM, isSchoolSpec } from "../rules/school";
 import { addHistory, recordAttempt } from "../session/learners";
 import { topicIn } from "../library/paths";
 import { degenerate, substitute, verify } from "./verify";
-import type { Practice, PracticeItem } from "../session/store";
+import type { Practice, PracticeItem, SchoolSystem } from "../session/store";
 
 const SCHEMA = {
   type: "object",
@@ -92,6 +100,39 @@ function calcPrompt(practice: Practice, vocab: string): string {
     `Plain text only, no LaTeX. Report every item, in order. Do not invent items that are not on the page.`;
 }
 
+/** A school page, read: what is written and nothing else. No slip is asked for: a school slip is detected by code. */
+const SCHOOL_SCHEMA = {
+  type: "object",
+  properties: {
+    items: {
+      type: "array",
+      items: {
+        type: "object",
+        properties: {
+          n: { type: "integer" },
+          studentAnswer: { type: "string" },
+          studentWorking: { type: "string" },
+        },
+        required: ["n", "studentAnswer", "studentWorking"],
+      },
+    },
+  },
+  required: ["items"],
+};
+
+/** The reading prompt for a school sheet: the child's working and final answer as written, never an expression in x. */
+export function schoolPrompt(practice: Practice): string {
+  const sheet = practice.items.map((i) => `${i.n}. ${i.question}`).join("\n");
+  return `This is a photo of a student's handwritten working on these ${practice.items.length} school maths questions:\n${sheet}\n\n` +
+    `Read the page. For each numbered item, report:\n` +
+    `- n: the item number.\n` +
+    `- studentAnswer: the final answer the student wrote, copied exactly as written: a whole number, a fraction such as 5/12, ` +
+    `a mixed number such as 1 5/12, or a decimal with the comma or point they used. Do not simplify, convert or correct it. ` +
+    `Empty string if they wrote no final answer.\n` +
+    `- studentWorking: their working transcribed exactly as written, one step per line (a newline between steps), or an empty string if there is none.\n\n` +
+    `Do not solve the questions and do not judge the answers - only read what is on the page. ` +
+    `Plain text only, no LaTeX. Report every item, in order. Do not invent items that are not on the page.`;
+}
 
 /**
  * `stillSame` is asked after the model answers, as explainItem asks `stillUnsure`: is this set still the one on the
@@ -103,10 +144,13 @@ export async function markSet(
   practice: Practice,
   learnerId: string,
   stillSame: () => boolean = () => true,
+  /** The seated learner's school system, for reading a school item's answer (rules/school readNumber). UK when not given. */
+  system: SchoolSystem = DEFAULT_SCHOOL_SYSTEM,
 ): Promise<{ items: PracticeItem[]; provider: string; ms: number; unsure: number; landed: boolean }> {
   const vocab = slipVocabulary(practice.topic);
-  // a set that carries specs is a Calculus set: the model reads it and code marks it
-  if (practice.items.some((i) => i.spec)) return markCalc(imageBase64, practice, learnerId, stillSame, vocab);
+  // a set that carries specs is read by the model and marked by code; the spec's shape says which engine and which prompt
+  if (practice.items.some((i) => isSchoolSpec(i.spec))) return markSchool(imageBase64, practice, learnerId, stillSame, system);
+  if (practice.items.some((i) => isCalcSpec(i.spec))) return markCalc(imageBase64, practice, learnerId, stillSame, vocab);
   const sheet = practice.items.map((i) => `${i.n}. ${i.question}`).join("\n");
 
   const { json, provider, ms } = await vision<{ items: Marked[] }>({
@@ -190,6 +234,38 @@ async function markCalc(
     }
     attempts.push({ right: s.verdict === "right", slip: s.slip });
     // no pen position on a Calculus item: the Walk falls back to the answer line
+    return { ...item, studentAnswer, studentWorking, verdict: s.verdict, slip: s.slip, said: s.said };
+  });
+
+  return land(practice, learnerId, stillSame, items, attempts, { provider, ms, unsure });
+}
+
+/** A school set: the model reads the page with the school prompt, rules/school check marks each item from its spec. */
+async function markSchool(
+  imageBase64: string,
+  practice: Practice,
+  learnerId: string,
+  stillSame: () => boolean,
+  system: SchoolSystem,
+): Promise<{ items: PracticeItem[]; provider: string; ms: number; unsure: number; landed: boolean }> {
+  const { json, provider, ms } = await vision<{ items: Read[] }>({ imageBase64, prompt: schoolPrompt(practice), schema: SCHOOL_SCHEMA });
+
+  const byN = new Map<number, Read>();
+  for (const m of json?.items ?? []) if (m && typeof m.n === "number") byN.set(m.n, m);
+
+  let unsure = 0;
+  const attempts: { right: boolean; slip?: string }[] = [];
+  const items: PracticeItem[] = practice.items.map((item) => {
+    const m = byN.get(item.n);
+    // only the answer string it transcribed reaches the check: never a verdict, a solution or a slip the model adds
+    const studentAnswer = typeof m?.studentAnswer === "string" ? m.studentAnswer.trim() : "";
+    const studentWorking = typeof m?.studentWorking === "string" ? m.studentWorking.trim() : "";
+    const s = settleSpec(item.n, item.spec, studentAnswer, undefined, practice.topic, system);
+    if (!s) {
+      unsure++;
+      return { ...item, studentAnswer, studentWorking, verdict: "unsure" as const, said: ASK(item.n) };
+    }
+    attempts.push({ right: s.verdict === "right", slip: s.slip });
     return { ...item, studentAnswer, studentWorking, verdict: s.verdict, slip: s.slip, said: s.said };
   });
 

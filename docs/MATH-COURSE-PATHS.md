@@ -110,6 +110,26 @@ linear equations, because it is met first.
   fraction (`fractions` in `typeset.ts`), both operands stacked, at the fraction-part size max(.78em, 28 px). The
   typeset ratchet (`tools/maths-calculus-test.cjs` test 7) sets every question of seeds 0..99 at both tiers, plain
   and TeX, and asserts each renders on the practice row with exactly two stacked fractions.
+- **Marking, by code.** `markSet` (`desk/src/lib/desk/mark.ts`) sends a set with school specs to `markSchool`: one
+  vision call with the school reading prompt (`schoolPrompt`: the final answer and the working exactly as written, a
+  fraction, a mixed number or a decimal with its own comma or point; never "an expression in x"; no verdict, solution
+  or slip asked for). `settleSpec` (`rules/maths.ts`) dispatches on the spec's shape: a school spec is judged by
+  `check(spec, studentAnswer, system)`, `system` being the seated learner's school system (`learnerSystem`, UK when the
+  profile has none), so `0,75` is three quarters in cz and de and unsure in us and uk. Unsure asks and records
+  nothing. The slip is only the one code detects from the spec's operands; the unit's closed list is
+  `SCHOOL_UNIT_SLIPS` (`tops-and-bottoms`, `top-not-scaled`, `tops-one-bottom`, `wrong-direction`), served by
+  `slipsFor` with `SCHOOL_SLIPS`' own words. A school item has no pen position.
+- **Hints.** `hint.ts` also reads the task with `specFromQuestion` from `rules/school.ts` ('3/4 + 1/6', 'Work out
+  3/4 - 1/6', 'Add 3/4 and 1/6', 'Subtract 1/6 from 3/4', a practice item's printed question; null for anything it
+  cannot read with one meaning: whole numbers, decimals, mixed numbers, three terms, words, an x). When it reads, both
+  fields pass `leaksSchool`, a second leak gives the unit's fixed sentence (`withheldSchool`), and the stance names the
+  unit ("This sheet is the unit "Add and subtract fractions"") instead of the linear-equations sheet. The hint route
+  asks no lesson pick for such a task, so the hint screen says "No lesson for this". An unread task is checked as before.
+- **Explanations.** `explainItem` treats a spec as Calculus only when its shape is a Calculus shape. A school item is
+  heard in the school stance with the learner's age voice (`explainSchool`: the same system prompt as a linear item,
+  the answer said as figures, no slip asked for), settled by `check` under the learner's system, never renamed from the
+  conversation, and a reply that states the answer (`leaksSchool`) is replaced by the item's own line. The Calculus
+  prompt is byte for byte what it was (`tools/school-marking-test.cjs` test 9).
 
 ## 3. The spec model
 
