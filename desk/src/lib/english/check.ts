@@ -11,6 +11,7 @@ import { text } from "../engines/text";
 import { dispatch, getSession, type Profile, type Screen } from "../session/store";
 import { getLearner, saveEnglish } from "../session/learners";
 import { audienceAllowed, defaultPreferences, ENGLISH_SKILLS, isAdult } from "./curriculum";
+import { withCertificate } from "./cert";
 import { ConversationError } from "./errors";
 import { ABOUT_QUESTIONS, appendPlacement, BAND_JUDGE, BAND_TUTOR, cleanTopic, firstQuestion, interestWords, isBand, kindFor, PLAN_MAX, PLAN_SIZE, startBand, staircase, TOPIC_ASK_MAX, touchesInterest, verdictFor } from "./placement";
 import { BANDS, type Audience, type Band, type CheckTask, type EnglishLearning, type EvidenceMode, type LevelCheck, type Placement, type PlacementTask, type PlanTopic, type TaskKind } from "./types";
@@ -121,6 +122,10 @@ async function advance(k: LevelCheck, ctx: Ctx, token: string): Promise<LevelChe
           const learning = getLearner(now.learnerId).english, prefs = learning.preferences ?? defaultPreferences(ctx.profile);
           // the live placement is overwritten as before; the check is also appended to the record of checks (W10)
           saveEnglish(now.learnerId, { ...learning, placement, placements: appendPlacement(learning.placements, placement), preferences: { ...prefs, level: placement.band, goal: prefs.goal || now.goal, interest: prefs.interest || now.interest } });
+          // a finished check can complete a certificate from evidence already on the record (cert.ts); the check's own
+          // tasks are never evidence, so they add nothing to it
+          const earned = withCertificate(getLearner(now.learnerId).english, placement.at);
+          if (earned.cert) saveEnglish(now.learnerId, earned.learning);
           return { ...now, stage: "verdict", placement };
         }, provider: r.provider, ms: r.ms,
       };

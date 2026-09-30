@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import type { Event, Session } from "@/lib/session/store";
+import { certWords, monthOf } from "@/lib/english/cert";
 import { defaultPreferences, eligibleScenes, ENGLISH_SCENES, ENGLISH_SKILLS, PROGRESS_LABEL, recommendScene } from "@/lib/english/curriculum";
 import { ABOUT_QUESTIONS, BAND_CAN, BAND_NAME, isBand, MAX_TASKS, PLAN_MAX, TOPIC_ASK_MAX } from "@/lib/english/placement";
 import { BANDS, type Band, type Conversation, type EnglishLearning, type EnglishPreferences, type LevelCheck, type Placement } from "@/lib/english/types";
@@ -49,6 +50,7 @@ export function LingaPhone({s,post,onSentence}:{s:Session;post:(e:Event)=>Promis
       <button className="pbtn" data-signal="true" disabled={pending} onClick={save}>Save preferences</button>
     </>}
     {panel==="map"&&<>
+      {(learning.certificates??[]).length>0&&<CertificateWords learning={learning}/>}
       <p>What you say and what you type both count toward On your own; picking a phrase does not. These are learning indicators.</p>
       {ENGLISH_SKILLS.map(skill=>{const all=learning.evidence.filter(e=>e.skill===skill.id);return <div className="linga-skill" key={skill.id}><b>{skill.name}</b><small>Progress: {PROGRESS_LABEL[learning.achievements[skill.id]??"not-tried"]}</small><small>{all.filter(e=>e.mode==="text").length} written · {all.filter(e=>e.mode==="choice").length} choice observations</small></div>;})}
       <a href={`/english/print?learner=${encodeURIComponent(s.learner?.id ?? "")}`} target="_blank" rel="noreferrer">Open printable learning map</a>
@@ -81,6 +83,18 @@ export function LingaPhone({s,post,onSentence}:{s:Session;post:(e:Event)=>Promis
       <button className="pbtn" data-secondary="true" onClick={onSentence}>Help with a sentence</button>
     </>}
     {error&&<p className="linga-error" role="alert">{error}</p>}{message&&<p role="status">{message}</p>}
+  </div>;
+}
+
+/**
+ * The newest certificate in words (cert.ts certWords: band, topics, skills with spoken or written, the one quote) and
+ * the earlier ones by band and month. No count anywhere, as on the TV plate.
+ */
+function CertificateWords({learning}:{learning:EnglishLearning}){
+  const held=learning.certificates,[latest,...rest]=[...held].reverse(),[head,...lines]=certWords(latest);
+  return <div className="linga-cert" data-role="linga-cert">
+    <b>{head}</b>{lines.map(x=><p key={x}>{x}</p>)}
+    {rest.length>0&&<details><summary>Earlier certificates</summary><div className="linga-transcript">{rest.map(c=><p key={c.id}><b>{c.band} {BAND_NAME[c.band]}</b>Issued in {monthOf(c.at)}{c.topics.length?`. Your topics then: ${c.topics.join(", ")}.`:"."}</p>)}</div></details>}
   </div>;
 }
 

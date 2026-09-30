@@ -43,6 +43,21 @@ export interface PlacementRecord {
   /** the check's one-sentence read, as the placement holds it; absent for a band picked by hand */
   summary?: string;
 }
+/** One skill on a certificate: how the learner showed it (said or typed) and one of their own lines that shows it. */
+export interface CertSkill { skill: SkillId; mode: "spoken" | "written"; quote: string; at: number; }
+/**
+ * A certificate (Family W10, cert.ts): a snapshot issued by code from the evidence. Append-only and never edited:
+ * whether it has been opened is kept apart, in EnglishLearning.seenIds.
+ */
+export interface Certificate {
+  id: string; at: number; band: Band;
+  /** the plan topics the learner chose, as they were titled when it was issued */
+  topics: string[];
+  /** every required skill, in the order of the eight */
+  skills: CertSkill[];
+  /** the date of the level check it rests on */
+  checkAt: number;
+}
 /** A generated conversation topic: a scene contract the learner agreed to. */
 export interface PlanTopic {
   id: string; title: string; goal: string; why: string; skill: SkillId; audience: Audience;
@@ -72,6 +87,10 @@ export interface EnglishLearning {
   placement: Placement | null; plan: Plan | null; taught: Taught[];
   /** every level check and hand-picked band, oldest first, append-only (placement.ts appendPlacement, capped) */
   placements: PlacementRecord[];
+  /** certificates issued by code (cert.ts), oldest first, append-only */
+  certificates: Certificate[];
+  /** the certificates already opened; the one place a certificate's state changes, so the certificate never does */
+  seenIds: string[];
 }
 export interface ConversationTurn { id: string; role: "partner" | "learner"; text: string; mode?: EvidenceMode; supported?: boolean; }
 export interface Coaching { before: string; after: string; note: string; }
@@ -122,4 +141,4 @@ export interface LevelCheck {
   pending: string | null; error: string; commands: string[]; audioNonce: number; startedAt: number;
   provider?: string; responseMs?: number;
 }
-export function emptyEnglish(): EnglishLearning { return { preferences: null, notes: [], evidence: [], achievements: {}, sessions: [], placement: null, plan: null, taught: [], placements: [] }; }
+export function emptyEnglish(): EnglishLearning { return { preferences: null, notes: [], evidence: [], achievements: {}, sessions: [], placement: null, plan: null, taught: [], placements: [], certificates: [], seenIds: [] }; }

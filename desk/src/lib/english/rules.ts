@@ -1,4 +1,5 @@
 import { ENGLISH_SKILLS, PROGRESS_ORDER } from "./curriculum";
+import { cleanCertificates, cleanSeen } from "./cert";
 import { cleanPlacement, cleanPlacements, cleanPlan, cleanTaught, isBand } from "./placement";
 import { emptyEnglish, type EnglishEvidence, type EnglishLearning, type EnglishPreferences, type Progress, type SkillId } from "./types";
 
@@ -21,6 +22,8 @@ export function cleanEnglish(value: unknown): EnglishLearning {
   for (const [key, val] of Object.entries(obj(v.achievements))) if (isSkill(key) && PROGRESS_ORDER.includes(val as Progress)) result.achievements[key] = val as Progress;
   result.placement = cleanPlacement(v.placement);
   result.placements = cleanPlacements(v.placements);
+  result.certificates = cleanCertificates(v.certificates);
+  result.seenIds = cleanSeen(v.seenIds, result.certificates);
   result.plan = cleanPlan(v.plan);
   result.taught = cleanTaught(v.taught);
   result.sessions = Array.isArray(v.sessions) ? v.sessions.filter((s): s is EnglishLearning["sessions"][number] => {const x=obj(s);return typeof x.id === "string" && typeof x.sceneId === "string" && typeof x.title === "string" && typeof x.at === "number" && typeof x.turns === "number";}).slice(-30) : [];

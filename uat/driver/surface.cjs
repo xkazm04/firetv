@@ -177,7 +177,7 @@ function runs(a, eff) {
   return false;
 }
 
-const LINGA_SCREENS = ['linga', 'linga-check', 'linga-verdict', 'linga-plan', 'linga-scenes', 'linga-map', 'linga-talk', 'linga-moment', 'linga-coach', 'linga-recap'];
+const LINGA_SCREENS = ['linga', 'linga-check', 'linga-verdict', 'linga-plan', 'linga-scenes', 'linga-map', 'linga-talk', 'linga-moment', 'linga-coach', 'linga-recap', 'linga-cert', 'linga-certs'];
 /**
  * Every action the view defines for this session on any Linga screen, with or without the menu, and with the
  * conversation or the check at rest: no quiz, pause, moment or pending turn over the conversation, and the same

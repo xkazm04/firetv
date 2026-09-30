@@ -54,7 +54,9 @@ Six rungs, one marker, the tutor's one-sentence summary in the caption. The phon
 
 From here on every level on screen is a band: the Linga home kicker reads `B1 · Getting by`. A band picked by hand, on the TV or in *Set up*, says *self-chosen*. *My level* in the menu shows the ladder again and offers the check.
 
-**The check earns no progress.** Placement tasks are elicited, supported and out of context, which is everything the evidence rules exclude. They are stored on the placement and never reach `evidence` or a skill's progress.
+**The check earns no progress.** Placement tasks are elicited, supported and out of context, which is everything the evidence rules exclude. They are stored on the placement and never reach `evidence` or a skill's progress. (Since Family W10 a typed conversation reply counts toward progress as a spoken one does, owner decision D4; a level-check task, typed or spoken, still never does.)
+
+**Every check is kept (Family W10).** The live `placement` is still overwritten by each check, as the screens and prompts read it. Beside it, `EnglishLearning.placements` is a record of checks, append-only and capped at twelve (the oldest drops): each check that completes appends `{at, band, confidence, source: "check", summary}`, and a band picked by hand (the TV picker, or a changed level in *Set up*) appends `{at, band, confidence: "low", source: "self"}`. No task and no answer is kept. A re-check never removes an earlier entry, so growth over terms is on the record. An old learner file loads with an empty record; its current placement is not back-filled, so the record starts with the first check after W10. The record is what a certificate rests on (`lib/english/cert.ts`): only the LATEST entry counts, and only when it is a check with medium or high confidence; a band picked by hand is recorded and never certifies.
 
 ## 5. Your topics
 
@@ -108,6 +110,8 @@ In `tools/linga-rules-test.cjs`, under `npm test`:
 6. A hand-picked band is stored as self-chosen; old three-word levels read as bands.
 7. A moment needs an exact quote, holds the scene, is spaced out, and makes the next reply supported.
 
+In `tools/cert-rules-test.cjs` (Family W10): a check typed from start to end moves no evidence; a completed check appends to the record and keeps the earlier entries; a band picked by hand appends as "self"; the record is capped, whitelisted and loads empty from an old file; a certificate never rests on a "self" entry, a low-confidence check, or an older check than the latest.
+
 **Scenario runs.** `node tools/linga-placement-sim.cjs [persona…]` plays synthetic learners through the real engine, each in its own process and data dir: a young A1, a B1 teen, a fluent C1 adult, Czech only, an overclaimer, one-word answers. It checks the band lands in the expected range, the check stays within five tasks, no evidence is written, and the proposed topics suit the learner's age. Reports go to `artifacts/linga-placement-sim/<stamp>/`.
 
 | Persona | First run (judge gave the verdict) | After `verdictFor` |
@@ -123,4 +127,4 @@ Each persona takes 10–17 minutes with six running at once. Under that load a f
 
 ## 9. Not yet
 
-Word practice and games built on what moments collect. Writing Linga sessions to the shared history so the parent recap shows them. Re-checking the level automatically after a number of sessions.
+Word practice and games built on what moments collect. Writing Linga sessions to the shared history so the parent recap shows them. Re-checking the level automatically after a number of sessions. Showing the record of checks as a picture of growth over terms (it is kept, not yet drawn).

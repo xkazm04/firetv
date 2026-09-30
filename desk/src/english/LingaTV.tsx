@@ -8,14 +8,14 @@ import { landingFocus } from "@/tv/landingRows";
 import { useEnglish } from "./useEnglish";
 import { useEnglishAudio } from "./useEnglishAudio";
 import { ART } from "./art";
-import { Arch, Arrow, BandSteps, Caption, DataLine, Dots, Kicker, Learner, Mark, OnYourPhone, SentenceCard, Stones } from "./OpenDoor";
+import { Arch, Arrow, BandSteps, Caption, DataLine, Dots, Kicker, Learner, Mark, OnYourPhone, Plate, SentenceCard, Stones } from "./OpenDoor";
 
 const CHECK_SCREENS:Screen[]=["linga-check","linga-verdict","linga-plan"];
 /** Actions whose next step is speaking on the phone: they carry the phone badge. */
 const PHONE_ACTIONS=new Set(["start-talking","start-situation","carry-on"]);
 /** Actions that page to a neighbour: their help is the neighbour's goal, so the caption names the action, not "Your mission". */
-const PAGING_ACTIONS=new Set(["next-situation","previous-chapter","next-chapter"]);
-/** The Open Door composition a screen takes: the arch beside the words, the wide ladder, the row of doors, the menu. */
+const PAGING_ACTIONS=new Set(["next-situation","previous-chapter","next-chapter","earlier-certificates","open-certificate"]);
+/** The Open Door composition a screen takes: the arch beside the words, the wide ladder, the row of doors, the menu (also the list of certificates). */
 type Layout="door"|"ladder"|"plan"|"menu";
 /** The door's words column grows up from the actions; past the arch's crown the type steps down (linga.css, data-fit). */
 const FIT_CEILING=160,FIT_STEPS=3;
@@ -63,7 +63,7 @@ export function LingaTV({s,post,voice}:{s:Session;post:(e:Event)=>Promise<void>;
     addEventListener("keydown",handler);return()=>removeEventListener("keydown",handler);
   });
   const h=v.hero;
-  const layout:Layout=menu?"menu":h.kind==="ladder"?"ladder":h.kind==="topics"?"plan":"door";
+  const layout:Layout=menu||h.kind==="certs"?"menu":h.kind==="ladder"?"ladder":h.kind==="topics"?"plan":"door";
   /** The topics screen shows only the focused action: one "Swap this topic" per topic would be a wall of buttons. */
   const single=layout==="plan"&&actions.length>2;
   /** A choice has no primary: every option is the same kind of button. */
@@ -76,7 +76,7 @@ export function LingaTV({s,post,voice}:{s:Session;post:(e:Event)=>Promise<void>;
   const fit=fitted.key===fitKey?fitted.step:layout==="door"&&s.screen!=="linga-scenes"&&talkGoal(h)?1:0;
   // the Desk display's taller stage lifts the bottom-anchored column (linga.css); the ceiling is measured as on the TV
   useLayoutEffect(()=>{const p=panel.current,root=p?.offsetParent as HTMLElement|null,lift=root?root.clientHeight-1080:0;if(p&&p.offsetTop-lift<FIT_CEILING&&fit<FIT_STEPS)setFitted({key:fitKey,step:fit+1});});
-  const tag=h.kind==="intro"?h.nameTag:h.kind==="scene"?h.partner:h.kind==="choices"&&s.screen==="linga-talk"?c?.partner:undefined;
+  const tag=h.kind==="intro"?h.nameTag:h.kind==="cert"?h.issued:h.kind==="scene"?h.partner:h.kind==="choices"&&s.screen==="linga-talk"?c?.partner:undefined;
   const dots=progressDots(s);
   const status=waiting?(onCheck?"Linga is thinking…":"Preparing a reply…"):c?.capture&&!onCheck?"Phone microphone active":audioStatus||"TV shows · Phone speaks";
   const paging=actions[focus];
@@ -108,7 +108,7 @@ export function LingaTV({s,post,voice}:{s:Session;post:(e:Event)=>Promise<void>;
       </div>;}):[0,1,2,3].map(i=><div key={i} className="lo-topic lo-ghost" aria-hidden="true"><div className="lo-mini"/></div>)}</div>
       {nav}
     </>}
-    {layout==="menu"&&h.kind==="menu"&&<>
+    {layout==="menu"&&(h.kind==="menu"||h.kind==="certs")&&<>
       <section className="lo-head"><Kicker text={h.kicker}/><Title text={h.title}/>{caption}</section>
       {nav}
     </>}
@@ -129,6 +129,7 @@ function artFor(h:Hero,s:Session):ArtKey{
     case "scene":return h.illustration;
     case "track":return h.illustration;
     case "comparison":return h.art??"coach";
+    case "cert":return "cert";
     case "message":return s.screen==="linga-plan"?"plan":"check";
     case "heading":return "check";
     case "choices":{
@@ -169,6 +170,8 @@ function Body({v,s,caption}:{v:LingaView;s:Session;caption:React.ReactNode}){
       <div className="lo-before"><span>{h.before.kicker}</span><q>{h.before.quote}</q></div>
       <SentenceCard label={h.after.kicker} text={h.after.quote}/>
     </div>{h.note&&<div className="lo-note">{h.note}</div>}{caption}{h.data&&<DataLine>{h.data}</DataLine>}</>;
+    // the certificate: the band and its name, the caption's one sentence, then the plate (OpenDoor Plate)
+    case "cert":return <><Kicker text={h.kicker}/><Title text={h.title}/>{caption}<Plate topics={h.topics} skills={h.skills} quote={h.quote}/></>;
     case "plain":return <><Title text={h.title}/>{caption}</>;
     default:return null;
   }

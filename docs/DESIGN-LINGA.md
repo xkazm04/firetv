@@ -96,8 +96,16 @@ four skin tones and four hair tones.
 - **Caption slot**: the rule, its label, one sentence. `data-role="linga-caption"`.
 - **Band steps**: six steps rising A1 → C2 on a plinth. Reached steps are plum, the learner's is amber with a
   flag and a glow, and the rest are pale.
-- **Stepping stones**: four marks on a dashed path for speaking progress; the reached ones are plum and the
-  current one amber.
+- **Stepping stones**: four marks on a dashed path for progress, labelled SAYING OR TYPING IT: a spoken and a typed
+  reply both count (owner decision D4, Family W10); a phrase picked from two never does. The reached ones are plum
+  and the current one amber.
+- **Certificate plate** (Family W10, `Plate` in `OpenDoor.tsx`, `lo-plate` in `linga.css`): a dry card, never a
+  trophy. Cream, with a second inner line like a printed sheet. Row labels are 20 px uppercase and run in before
+  their words: YOUR TOPICS (the plan topics the learner chose, as they titled them, at most six, Georgia 30 px),
+  SPOKEN ON YOUR OWN and WRITTEN ON YOUR OWN (the required skills, Arial 800 at 28 px, grouped by how each was
+  shown), then IN YOUR OWN WORDS · <skill> over one of the learner's own lines in Georgia and quotation marks. A
+  topic or a skill never breaks across a line; the dot between two stays with the first. No count, no score, no
+  percent, no ribbon or star: the band in the title is the only figure on the screen. `data-role="linga-plate"`.
 - **Topic doors**: one small arch per topic with its situation's picture, a Georgia title and the skill as a
   label. The topic being swapped lifts and turns amber, and the others dim.
 - **Footer**: a 2 px rule, then where you are, the progress dots, what is happening now (TV SHOWS · PHONE
@@ -121,7 +129,8 @@ whatever should glow.
   jacket. The rover's hiding place is a question over a boulder. The café has two
   different drinks for two different tastes.
 - A **state** is 510 × 440: one big soft circle, one symbol (a door standing open, a path of doors, a corrected
-  bubble, the star-burst) and a wine hill.
+  bubble, the star-burst, the framed sheet of a certificate on a small plinth with a plain round seal) and a wine
+  hill.
 - The café scene is friendly: no hearts, candles or roses.
 
 ## Who sees which situation
@@ -133,6 +142,27 @@ type Other or for an adult. Model-written plan topics may not be school situatio
 offered eight (five for everyone and the three school ones), a 16-year-old ten, an adult eight (the school ones give
 way to the two for 15 and over and the one for adults); the TV's "Situation n of N" counts that learner's own list,
 never a constant.
+
+## The certificate (Family W10)
+
+The owner asked for "dry certifications as reward system", with "the topic choice" adjusting "the certification
+requirements". So the certificate is a plate, issued by code (`lib/english/cert.ts`), never by the model, and it
+reads like a document, not a prize: no game word (points, score, streak, level up, badge, reward), no count, no
+percent, no digit but the band's. It never decays and is never taken away.
+
+- **The plate** (`linga-cert`): the arch holds the framed-sheet state picture with ISSUED IN <MONTH> as its tag; on
+  the right the overline CERTIFICATE, the title as the band and its name ("A2 Everyday basics"), the caption slot
+  under HOW IT WAS ISSUED with one sentence ("Issued from what you said and wrote, not from an exam."; "said" or
+  "wrote" alone when every skill was shown one way), then the plate. Actions: Back to Linga and, when more than one
+  certificate is held, Earlier certificates, as a row of two doors (the row saves a door's height for the plate). The
+  caption slot shows the focused door's help, so Back carries the issuing sentence. A full plate (six topics, seven
+  skills) steps its type down with the door's fit steps and stays at 28 px or more.
+- **Home** offers a new, unopened certificate once: its hero is the framed sheet, the kicker the band, the title "A
+  new certificate", and "Your certificate" is the first door (Enter runs it), beside the state's own first door.
+  Opening it marks it seen (a list apart from the certificate, which is never edited), and home is itself again.
+- **The list** (`linga-certs`, the menu's composition): one door per certificate, newest first (the newest seven),
+  named by band and date in words ("A1 First words · 12 June"), and Back to Linga.
+- **The menu** has My certificate only once one is held.
 
 ## Composition rules
 

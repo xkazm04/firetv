@@ -8,6 +8,7 @@
  * of the TV's own local state (the menu, the level picker, the situation and chapter browsers).
  */
 import type { Screen, Session } from "../session/store";
+import { dayMonth, plateOf, unseenCertificate } from "./cert";
 import { defaultPreferences, eligibleScenes, ENGLISH_SCENES, ENGLISH_SKILLS, planDone, PROGRESS_LABEL, recommendScene } from "./curriculum";
 import { ABOUT_QUESTIONS, BAND_CAN, BAND_NAME, easyBand, isBand, MAX_TASKS, PLAN_MAX, shift } from "./placement";
 import { accepts, turnState } from "./turn";
@@ -20,7 +21,7 @@ import type { Band, Conversation, LevelCheck, Progress, SkillId } from "./types"
  */
 export const SCENE_ART = ["meet", "weekend", "rover", "team", "booking", "interview", "date", "conflict", "teacher", "lost"] as const;
 export type SceneArt = typeof SCENE_ART[number];
-export type ArtKey = SceneArt | "check" | "plan" | "coach" | "done" | "start";
+export type ArtKey = SceneArt | "check" | "plan" | "coach" | "done" | "start" | "cert";
 export const SKILL_ART: Record<SkillId, SceneArt> = { contact: "meet", describe: "weekend", repair: "rover", negotiate: "team", request: "booking", narrate: "interview", relate: "date", resolve: "conflict" };
 export function artOf(sceneId: string, skill: SkillId): SceneArt { return (SCENE_ART as readonly string[]).includes(sceneId) ? sceneId as SceneArt : SKILL_ART[skill]; }
 /** The sentence to take with you: a scene's cue without its "Try…:" lead. */
@@ -46,6 +47,8 @@ export const VIEW_ACTION_IDS = [
   "resume", "finish", "retry-scene", "cue", "quiz", "pick-phrase", "coach", "replay", "back", "learning-map",
   // the menu
   "menu-back", "my-level", "my-topics", "phone-setup", "sentence-help",
+  // the certificate (Family W10): home's door to a new one, the menu's, the plate and the list of them
+  "your-certificate", "my-certificate", "earlier-certificates", "open-certificate", "certificate-back",
   // the TV footer
   "menu", "repeat",
   // the phone: a typed or spoken answer, and the pickers that take a value
@@ -54,8 +57,10 @@ export const VIEW_ACTION_IDS = [
 export type ActionId = typeof VIEW_ACTION_IDS[number];
 
 /** The TV's own state, which never reaches the session. */
-export interface LingaUi { menu: boolean; picking: Band | null; sceneIndex: number; chapter: number; }
-export const NO_UI: LingaUi = { menu: false, picking: null, sceneIndex: 0, chapter: 0 };
+export interface LingaUi { menu: boolean; picking: Band | null; sceneIndex: number; chapter: number;
+  /** the certificate on the plate, by id; null for the newest */
+  cert: string | null; }
+export const NO_UI: LingaUi = { menu: false, picking: null, sceneIndex: 0, chapter: 0, cert: null };
 /** What lingaView reads besides the session: the TV's state, and a request in flight or its error. */
 export interface ViewInput extends Partial<LingaUi> { busy?: boolean; error?: string; }
 
@@ -94,6 +99,11 @@ export type Hero =
       /** the picture in the arch when it is not the coach's; the data line under the picture */
       art?: ArtKey; data?: string }
   | { kind: "menu"; kicker: string; title: string; entries: string[]; selected: number }
+  /** a certificate as a dry plate (cert.ts plateOf): the band, the chosen topics, each skill with spoken or written, one quote */
+  | { kind: "cert"; kicker: string; title: string; band: Band; issued: string; topics: string[];
+      skills: Array<{ name: string; mode: "spoken" | "written" }>; quote: { skill: string; text: string } | null }
+  /** every certificate held, newest first, one door each */
+  | { kind: "certs"; kicker: string; title: string; entries: string[]; selected: number }
   | { kind: "plain"; title: string };
 export interface LingaView {
   /** the TV's data-view: "menu", the picker's "linga-verdict", else the session screen */
@@ -123,6 +133,8 @@ export interface LingaView {
   details: string[];
 }
 
+/** the list of certificates names the newest seven: seven doors and Back fill the list's column */
+const CERTS_SHOWN = 7;
 const TASK_TITLE = { say: "Say it", listen: "Listen and answer", choose: "Choose the reply" } as const;
 const CHECK_SCREENS: Screen[] = ["linga-check", "linga-verdict", "linga-plan"];
 const skillName = (id: string) => ENGLISH_SKILLS.find(x => x.id === id)?.name ?? "";
@@ -270,6 +282,14 @@ export function lingaView(s: Session, input: ViewInput = {}): LingaView {
         actions = [act("start-talking", "Start talking", caption, cmd("start", { sceneId: recommended.id, replace: true })), chooseSituation("Choose a goal and practise it in a conversation.")];
         break;
     }
+    // A certificate issued and not opened yet (cert.ts): it is home's first door, the one Enter runs, until it is
+    // opened; the state's own first door stays beside it. Not over a conversation or a check left part way.
+    const fresh = unseenCertificate(l);
+    if (fresh && home !== "resume" && home !== "check-part-way") {
+      title = "A new certificate"; captionTag = "Issued by Linga"; caption = "Linga issued it from your own words. Open it to see what it holds.";
+      hero = intro(`${fresh.band} · ${BAND_NAME[fresh.band]}`, plateOf(fresh).issued, "cert", "Yours to keep");
+      actions = [act("your-certificate", "Your certificate", "See the certificate Linga issued from your own words.", { ...cmd("cert-open", { certId: fresh.id }), ui: { cert: fresh.id } }), ...actions.slice(0, 1)];
+    }
   } else if (s.screen === "linga-check" && lc) {
     tag = "Find your level";
     const cancel = act("cancel", "Cancel & come back later", "Stop here. Everything so far is kept.", cmd("check-leave"));
@@ -322,6 +342,27 @@ export function lingaView(s: Session, input: ViewInput = {}): LingaView {
     hero = { kind: "scene", kicker: `${scene.partner} · ${scene.minutes} minutes`, title, who: "", said: "", subtitle: skillName(scene.skill), art: scene.id, small: false,
       partner: scene.partner, sentence: sentenceOf(scene.cue), illustration: artOf(scene.id, scene.skill), band: level, minutes: scene.minutes };
     actions = [act("start-situation", "Start this situation", scene.goal, cmd("start", { sceneId: scene.id, replace: true })), act("next-situation", "Next situation", `${scenes[(i + 1) % scenes.length].name}.`, { ui: { sceneIndex: (i + 1) % scenes.length } })];
+  } else if (s.screen === "linga-cert") {
+    // the plate (Family W10): what cert.ts issued, in words; no count, no score, no digit but the band's
+    const held = l.certificates ?? [], cert = held.find(x => x.id === ui.cert) ?? held.at(-1);
+    const back = (help: string) => act("certificate-back", "Back to Linga", help, go("linga"));
+    tag = "Your certificate"; captionTag = "How it was issued";
+    if (!cert) {
+      title = "No certificate yet"; caption = "Linga issues one from your own words after a level check."; hero = { kind: "plain", title }; actions = [back(caption)];
+    } else {
+      const p = plateOf(cert);
+      title = p.title; caption = p.caption;
+      hero = { kind: "cert", kicker: "Certificate", title, band: p.band, issued: p.issued, topics: p.topics, skills: p.skills.map(({ name, mode }) => ({ name, mode })), quote: p.quote && { skill: p.quote.name, text: p.quote.text } };
+      // Back carries the caption's sentence: the caption slot shows the focused action's help
+      actions = [back(p.caption), ...(held.length > 1 ? [act("earlier-certificates", "Earlier certificates", "Every certificate Linga has issued you, one door each.", go("linga-certs"))] : [])];
+    }
+  } else if (s.screen === "linga-certs") {
+    const held = [...(l.certificates ?? [])].reverse().slice(0, CERTS_SHOWN);
+    tag = "Your certificates"; title = "Every certificate you hold"; captionTag = "Kept for good";
+    caption = "A certificate stays yours. A later check never takes it away.";
+    actions = [...held.map(c => act("open-certificate", `${c.band} ${BAND_NAME[c.band]} · ${dayMonth(c.at)}`, c.topics.length ? `Your topics then: ${c.topics.slice(0, 3).join(", ")}.` : "Issued from what you said and wrote.", { ...cmd("cert-open", { certId: c.id }), ui: { cert: c.id } })),
+      act("certificate-back", "Back to Linga", "Back to Linga home.", go("linga"))];
+    hero = { kind: "certs", kicker: "Linga", title, entries: actions.map(a => a.label), selected: s.focus };
   } else if (s.screen === "linga-map") {
     const skill = ENGLISH_SKILLS[chapter % 8], progress = l.achievements[skill.id] ?? "not-tried";
     const typed = l.evidence.filter(e => e.skill === skill.id && e.mode === "text").length;
@@ -389,6 +430,7 @@ export function lingaView(s: Session, input: ViewInput = {}): LingaView {
       act("learning-map", "Learning map", "Explore the abilities you can practise and your progress in each.", go("linga-map")),
       chooseSituation("Choose a new scene; your existing evidence stays saved."),
       act("my-level", "My level", l.placement ? `${level} · ${BAND_NAME[level]}. See it, find it again, or pick it yourself.` : "Find your level with three questions and a few short tasks.", l.placement ? go("linga-verdict") : { ...cmd("check-start"), ui: close }),
+      ...(l.certificates?.length ? [act("my-certificate", "My certificate", "See your newest certificate, issued by Linga from your own words.", { ...cmd("cert-open"), ui: { ...close, cert: null } })] : []),
       act("my-topics", "My topics", "See the conversations in your plan, swap them or ask for new ones.", { ...cmd(l.plan ? "plan-open" : "plan-propose"), ui: close }),
       act("phone-setup", "Phone setup", "Open Linga on the phone to set your interests, goals and learning preferences.", { nav: { screen: "pair", from: s.screen } }),
       act("sentence-help", "Sentence help", "Open Say it on the phone for help with a particular sentence.", go("sentence")),
@@ -518,6 +560,8 @@ export function viewText(v: LingaView): string {
     case "track": out.push(h.kicker, `Progress: ${PROGRESS_LABEL[h.progress]}`, ...(h.subtitle ? [h.subtitle] : []), ...(h.sentence ? [`A sentence to take with you: "${h.sentence}"`] : [])); break;
     case "comparison": out.push(`${h.before.kicker}: "${h.before.quote}"`, `${h.after.kicker}: "${h.after.quote}"`, ...(h.note ? [h.note] : []), ...(h.data ? [h.data] : [])); break;
     case "menu": out.push(`${h.kicker} menu · ${h.title}`); break;
+    case "cert": out.push(h.kicker, `${h.issued}.`, ...(h.topics.length ? [`Your topics: ${h.topics.join(", ")}`] : []), `Shown on your own: ${h.skills.map(x => `${x.name} (${x.mode})`).join(", ")}`, ...(h.quote ? [`In your own words, ${h.quote.skill}: "${h.quote.text}"`] : [])); break;
+    case "certs": out.push(`${h.kicker} · ${h.title}`); break;
     case "plain": out.push(h.title); break;
   }
   // A line the TV speaks but does not show: a listening task is heard, not read.

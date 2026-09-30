@@ -218,6 +218,19 @@ scratch learner id.
 - Tests: rows in `tools/linga-rules-test.cjs`: requirement grows with chosen topics; a "self" placement never certifies; a certificate survives the 400-evidence cap because it snapshots; corrupt entries dropped.
 - Acceptance: gate; TV capture of the plate (safe zone, >= 28 px body, one caption slot for any sentence). Docs updated in the same commit.
 - Calls: 0. Authoring: 4u (base-skill table by band, from CEFR can-do lines already in `placement.ts:22-29`, a teacher reads it) and 1u plate copy.
+- **W10 built, 2026-09-30, on main in two commits** (`06b3ea2` typed evidence and the record of checks; then the certificate). `npm test` 754 -> 764 (40 suites, `cert-rules` appended; two rows are another session's) -> 781 passing; no live model call in any gate. Capture: `tools/linga-cert-live.cjs` (artifacts/linga-cert/, own server on 3475 from a temporary copy, engines unreachable).
+- Base skills (`lib/english/cert.ts` BASE_SKILLS, each row citing its BAND_CAN line; a teacher reads it):
+
+  | A1 | A2 | B1 | B2 | C1 and C2 |
+  |---|---|---|---|---|
+  | contact, repair, request | + describe | + narrate, negotiate | + relate | + resolve (all eight) |
+- Requirement: the band's base plus the skill of every topic in the agreed plan (a custom or swapped topic by its skill), never more than eight. Issue: the LATEST entry of `placements` is a check with medium or high confidence (its band is certified); every required skill at least "on your own"; each has an own quote (unsupported, successful, spoken or typed evidence; re-checked against tonight's replies when at hand); no certificate yet for that band and requirement. Issued only at a conversation's finish and a check's completion, never at read time; a snapshot, append-only (cap 12), opened state in `seenIds`.
+- D4: `evidenceProgress` counts `speech` and `text` (a picked phrase never; a check task never); the pinned row in `linga-rules-test` was revised with it, and the map, stones and printable map stopped saying "speaking only".
+- Not on the plate: a count, score, percent, streak or date digit; the check's tasks; any model word. Topics are printed as the learner's plan titled them (a digit in a title would show); a quote with a digit is passed over for one without.
+- Limits: a quote from an earlier conversation cannot be re-checked against its reply (only its stored, once-validated form); a pre-W10 placement does not certify until the next check; relate and resolve have no built-in scene for under-15s, only plan topics; the table and plate copy are unread by a teacher.
+
+### Phase 1 complete (2026-09-30)
+Done: W1 three school situations in Linga; W2 tutor voice by age; W3 Essay input by text file or phone message; W4 the seam (`Profile.mode`, no parent lock, D1); W5 the school number engine and fractions end to end; W6 typed answers; W7 the twelve school units (15 topics, all written and marked by code); W8 two entrances and the step-up line; W9 the digest and the Sunday page; W10 typed evidence, the record of checks and the dry certificate. Deliberately Phase 2: scan-a-failed-test; the intermediate-calculation interface and voice reasoning input; the two-paragraph essay reading; Linga Listen and Read tracks and their doors; Essay plan slots and the Piece record; the shelf and Term Evening; the parent lock and the Adult entry (A5). Open human gates: a teacher reads the school years and conflicts, the unit wording, the `DO_IT` act lines, the base-skill table and the three school scenes; the owner's 20-worksheet photo test (or W6 accepted as the primary route); a person reads live model output under the young voice (11-13).
 
 ### Stance check (how each new reward is drawn)
 | Thing | Drawn as | Why it holds the stance | Where it bends |

@@ -291,6 +291,8 @@ const chooseTask={id:'t1',band:'A2',kind:'choose',prompt:'A friend says hi. What
 const fixture=(screen,{conversation=null,check=null,...learning}={})=>({screen,conversation,check,learning:{...emptyEnglish(),...learning}});
 function sessionOf(fx){fresh();return {...getSession(),screen:fx.screen,conversation:fx.conversation,check:fx.check,englishLearning:fx.learning};}
 function install(fx){fresh();saveEnglish('ema',fx.learning);dispatch({type:'linga.changed',conversation:fx.conversation,check:fx.check,screen:fx.screen});return getSession();}
+const CERT_OLD={id:'cert-A2-old',at:new Date(2026,5,12).getTime(),band:'A2',topics:['Topic p-a'],skills:[{skill:'contact',mode:'spoken',quote:'Hi, I am Ema.',at:1}],checkAt:1};
+const CERT_NEW={id:'cert-B1-new',at:new Date(2026,8,20).getTime(),band:'B1',topics:['Topic p-a','Topic p-b'],skills:[{skill:'contact',mode:'written',quote:'Nice to meet you.',at:2}],checkAt:2};
 const HOMES={
  'resume':fixture('linga',{conversation:convo({paused:true}),placement:placed(),plan:planned('p-a','p-b')}),
  'check-part-way':fixture('linga',{check:checkOf({stage:'tasks',turns:[],task:chooseTask})}),
@@ -308,6 +310,10 @@ const SWEEP={...HOMES,
  paused:fixture('linga-talk',{placement:placed(),conversation:convo({paused:true,error:'The tutor could not complete that turn.'})}),
  recap:fixture('linga-recap',{placement:placed(),conversation:convo({phase:'finished',moments:[{id:'m1',kind:'fix',said:'I has booking',better:'I have a booking',why:'"I" goes with "have".',turnId:'l1',at:1},{id:'m2',kind:'word',said:'rezervace',better:'reservation',why:'The booking itself.',turnId:'l2',at:2}]})}),
  scenes:fixture('linga-scenes',{placement:placed()}),
+ // Family W10: a certificate not yet opened on home, the plate, and the list of them (tools/cert-rules-test.cjs has the rules)
+ 'cert-home':fixture('linga',{placement:placed(),plan:planned('p-a','p-b'),sessions:played('p-a'),certificates:[CERT_OLD,CERT_NEW],seenIds:[CERT_OLD.id]}),
+ cert:fixture('linga-cert',{placement:placed(),certificates:[CERT_OLD,CERT_NEW],seenIds:[CERT_OLD.id,CERT_NEW.id]}),
+ certs:fixture('linga-certs',{placement:placed(),certificates:[CERT_OLD,CERT_NEW],seenIds:[CERT_OLD.id,CERT_NEW.id]}),
 };
 const offeredBy=v=>[...v.actions,...v.footer,...v.phone];
 
@@ -343,7 +349,7 @@ test('view case 5: every offered action is a real command, a nav to a real scree
  const V=view(),store=fs.readFileSync(path.join(root,'src/lib/session/store.ts'),'utf8');
  const screens=[...store.match(/export type Screen = ([^;]+);/)[1].matchAll(/"([^"]+)"/g)].map(m=>m[1]);
  const sample={text:'I like it.',option:0,band:'B1',topicId:'p-a',sceneId:'booking'};
- const uiKeys=['menu','picking','sceneIndex','chapter'];
+ const uiKeys=['menu','picking','sceneIndex','chapter','cert'];
  answer=async req=>{let p={};try{p=JSON.parse(req.prompt);}catch{}return {json:p.step?checkAnswer(req):{title:'T',goal:'G',opening:'Hi?',reply:'Ok?',observations:[],before:'I like',after:'I really like',note:'n'},provider:'test',ms:1};};
  let checked=0;
  for(const [name,fx] of Object.entries(SWEEP))for(const ui of [{},{menu:true},{picking:'B1'}]){

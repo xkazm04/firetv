@@ -12,7 +12,7 @@ import { Handover } from "./Handover";
 import { Interview } from "./Interview";
 import { Meet } from "./Meet";
 import { Rover } from "./Rover";
-import { Check, Coach, Done, Plan, Start } from "./States";
+import { Check, Coach, Done, Plan, Plate, Start } from "./States";
 import { Team } from "./Team";
 import { Weekend } from "./Weekend";
 
@@ -32,6 +32,7 @@ export const ART: Record<ArtKey, { Art: () => React.JSX.Element; label: string }
   coach: { Art: Coach, label: "A speech bubble with one part marked, and a better one with a check" },
   done: { Art: Done, label: "A star-burst with a check" },
   start: { Art: Start, label: "A page with a way in" },
+  cert: { Art: Plate, label: "A framed certificate standing on a plinth, with a plain round seal" },
 };
 
 export function isScene(art: ArtKey): art is SceneArt { return (SCENE_ART as readonly string[]).includes(art); }

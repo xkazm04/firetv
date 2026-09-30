@@ -67,6 +67,24 @@ export function Plan() {
   </Symbol>;
 }
 
+/**
+ * A certificate (Family W10): a framed sheet standing on a small plinth, a heading line and three lines of words, and a
+ * plain round seal. Dry on purpose: no ribbon, no star, no trophy, no number.
+ */
+export function Plate() {
+  return <Symbol>
+    <circle cx="255" cy="184" r="162" fill={P.peach200}/>
+    <path d="M136 52h238v318H136Z" fill={P.plum400}/>
+    <path d="M156 72h198v278H156Z" fill={P.cream}/>
+    <path d="M168 84h174v254H168Z" fill="none" stroke={P.paper} strokeWidth="4"/>
+    <path d="M198 128h114" stroke={P.rose900} strokeWidth="15" strokeLinecap="round"/>
+    <path d="M198 180h114M198 214h86M198 248h104" stroke={P.peach600} strokeWidth="9" strokeLinecap="round"/>
+    <circle cx="300" cy="298" r="27" fill={P.rose600}/><circle cx="300" cy="298" r="13" fill={P.honey}/>
+    <path d="M118 370h274v20H118Z" fill={P.plinth}/><path d="M100 390h310v18H100Z" fill="#7a4a55"/>
+    <path d="M90 408q168-60 330 0v32H90Z" fill="#a64f62"/>
+  </Symbol>;
+}
+
 /** A moment of coaching: what was said, one part marked; what to try, with a check. */
 export function Coach() {
   return <Symbol>

@@ -473,6 +473,42 @@
 .linga-tv .lo-stones [data-reached="true"] i { border-color: var(--lo-frame); background: var(--lo-frame); }
 .linga-tv .lo-stones [data-here="true"] i { border-color: var(--lo-amber); background: var(--lo-amber); box-shadow: 0 0 0 8px rgba(216, 147, 103, .25); }
 
+/* ---------------------------------------------------------------- the certificate: a dry plate (Family W10) */
+/* a cream card with a second, inner line: a sheet, not a trophy. Row labels are 20 px uppercase and run in before
+   their words, so a plate of six topics and seven skills still stands beside the arch; every word a learner reads is
+   28 px or more, a topic or a skill never breaks across a line, and nothing on it is a figure but the band. */
+.linga-tv .lo-plate {
+  width: 752px;
+  max-width: 100%;
+  margin-top: 28px;
+  padding: 22px 32px 24px;
+  border: 2px solid var(--lo-card-line);
+  border-radius: 12px;
+  background: var(--lo-card);
+  box-shadow: inset 0 0 0 9px var(--lo-card), inset 0 0 0 11px #e8d9c4, 0 15px 30px rgba(96, 61, 57, .10);
+}
+.linga-tv .lo-plate-row { margin: 0; }
+.linga-tv .lo-plate-row + .lo-plate-row { margin-top: 16px; }
+.linga-tv .lo-plate-label { margin-right: 14px; color: var(--lo-label); font-family: var(--lo-sans); font-size: 20px; font-weight: 900; letter-spacing: 3px; text-transform: uppercase; white-space: nowrap; }
+.linga-tv div.lo-plate-label { margin: 0 0 4px; line-height: 1.2; }
+.linga-tv .lo-plate-topics { color: var(--lo-sentence); font-family: var(--lo-serif); font-size: 30px; line-height: 1.3; }
+.linga-tv .lo-plate-skills { color: var(--lo-ink); font-size: 28px; font-weight: 800; line-height: 1.3; }
+.linga-tv .lo-plate-skills + .lo-plate-skills { margin-top: 8px; }
+.linga-tv :is(.lo-plate-topic, .lo-plate-skill) { white-space: nowrap; }
+.linga-tv .lo-plate-dot { margin: 0 4px; color: var(--lo-quote); font-weight: 400; }
+.linga-tv .lo-plate-quote { color: var(--lo-sentence); font-family: var(--lo-serif); font-size: 34px; line-height: 1.2; }
+.linga-tv[data-hero="cert"] .lo-caption > div { max-width: 752px; }
+/* two doors side by side: Back, and the earlier certificates; the row saves a door's height for the plate */
+.linga-tv[data-hero="cert"] .lo-panel .lo-actions[data-count="2"] { flex-direction: row; gap: 13px; }
+.linga-tv[data-hero="cert"] .lo-panel .lo-actions[data-count="2"] .lo-action { flex: 1 1 auto; min-width: 0; height: 91px; padding: 0 22px; gap: 14px; white-space: nowrap; }
+.linga-tv[data-hero="cert"] .lo-panel .lo-actions[data-count="2"] .lo-primary { flex: 0 0 auto; }
+.linga-tv[data-hero="cert"] .lo-panel .lo-actions[data-count="2"] .lo-action[data-focused="true"] { transform: translateY(-6px); }
+/* the door's fit steps (above) reach the plate too: tighter rows first, then the Georgia lines to their floor */
+.linga-tv[data-hero="cert"][data-fit] .lo-plate { margin-top: 18px; padding: 16px 28px 18px; }
+.linga-tv[data-hero="cert"][data-fit] .lo-plate-row + .lo-plate-row { margin-top: 10px; }
+.linga-tv[data-hero="cert"]:is([data-fit="2"], [data-fit="3"]) .lo-plate-topics { font-size: 28px; }
+.linga-tv[data-hero="cert"]:is([data-fit="2"], [data-fit="3"]) .lo-plate-quote { font-size: 30px; }
+
 /* ---------------------------------------------------------------- the ladder: the level as steps */
 /* one column from the kicker's line down to the plinth: the card at its top right, the steps at its foot.
    The steps are 380 px at most and give up height to a longer card, so the two never meet;
@@ -641,6 +677,9 @@
 .linga-phone .linga-skill .pbtn { margin-top: 8px; }
 .linga-phone .linga-note { font-size: 12px; }
 .linga-phone a { color: #235c85; }
+.linga-phone .linga-cert { display: flex; flex-direction: column; gap: 8px; padding: 14px 14px 12px; border: 1px solid #c9b48a; border-radius: 4px; background: #fffaf0; }
+.linga-phone .linga-cert > b { color: #1b2632; font-size: 18px; }
+.linga-phone .linga-cert p { margin: 0; }
 .linga-phone .linga-band { display: flex; align-items: baseline; gap: 12px; padding: 12px 0; }
 .linga-phone .linga-band b { color: #1b2632; font-size: 44px; line-height: 1; }
 .linga-phone .linga-band span { color: #526071; font-size: 18px; letter-spacing: .05em; text-transform: uppercase; }

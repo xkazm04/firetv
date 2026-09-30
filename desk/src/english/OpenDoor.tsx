@@ -2,7 +2,7 @@
  * The Open Door, Linga's own design language (docs/DESIGN-LINGA.md): the pieces every Linga TV screen is built
  * from. LingaTV composes them; the styles are design/linga.css, scoped under .linga-tv.
  */
-import type { ReactNode } from "react";
+import { Fragment, type ReactNode } from "react";
 import { PROGRESS_LABEL, PROGRESS_ORDER } from "@/lib/english/curriculum";
 import { BAND_NAME } from "@/lib/english/placement";
 import { BANDS, type Band, type Progress } from "@/lib/english/types";
@@ -84,6 +84,22 @@ export function Stones({ progress }: { progress: Progress }) {
     {PROGRESS_ORDER.map((id, i) => <div key={id} data-reached={i <= at} data-here={i === at}><i/>{PROGRESS_LABEL[id]}</div>)}
   </div></>;
 }
+
+/**
+ * A certificate's plate (Family W10): a dry card. The topics the learner chose in Georgia; the skills shown on their
+ * own, under SPOKEN ON YOUR OWN or WRITTEN ON YOUR OWN as each was shown; one of their own lines in quotation marks
+ * under the skill it shows. No count, no score, no percent: the band in the title is the only figure on the screen.
+ */
+export function Plate({ topics, skills, quote }: { topics: string[]; skills: Array<{ name: string; mode: string }>; quote: { skill: string; text: string } | null }) {
+  return <div className="lo-plate" data-role="linga-plate">
+    {topics.length > 0 && <p className="lo-plate-row lo-plate-topics"><span className="lo-plate-label">Your topics</span> {topics.map((t, i) => <Fragment key={t}>{i > 0 && <Dot/>}<span className="lo-plate-topic">{t}</span></Fragment>)}</p>}
+    {(["spoken", "written"] as const).map(mode => { const shown = skills.filter(s => s.mode === mode); return shown.length > 0 && <p key={mode} className="lo-plate-row lo-plate-skills" data-mode={mode}><span className="lo-plate-label">{mode} on your own</span> {shown.map((s, i) => <Fragment key={s.name}>{i > 0 && <Dot/>}<span className="lo-plate-skill">{s.name}</span></Fragment>)}</p>; })}
+    {quote && <div className="lo-plate-row"><div className="lo-plate-label">In your own words · {quote.skill}</div><div className="lo-plate-quote" data-role="linga-plate-quote">“{quote.text}”</div></div>}
+  </div>;
+}
+
+/** The dot between two topics or two skills on the plate, with the spaces a line may break at. */
+const Dot = () => <span className="lo-plate-dot" aria-hidden="true"> · </span>;
 
 /** The footer's progress marks: done, the current one, the ones still open. Decoration for the tag beside it. */
 export function Dots({ dots }: { dots: Dot[] }) {

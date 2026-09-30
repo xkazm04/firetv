@@ -3,6 +3,7 @@ import { fit, object, schema, str } from "../engines/shape";
 import { text } from "../engines/text";
 import { dispatch, getSession, type Screen } from "../session/store";
 import { addDigest, getLearner, saveEnglish } from "../session/learners";
+import { markSeen, withCertificate } from "./cert";
 import { checkCommand, isCheckAction } from "./check";
 import { audienceAllowed, defaultPreferences, eligibleScenes, ENGLISH_SCENES, ENGLISH_SKILLS, isAdult, recommendScene } from "./curriculum";
 import { ConversationError } from "./errors";
@@ -114,6 +115,15 @@ export async function englishCommand(raw:unknown){
     return getSession();
   }
   const commandId=required(input.commandId,"command id",100);
+  if(action==="cert-open"){
+    // Open a certificate on the TV (the newest when none is named) and mark it seen: the one change a certificate's
+    // state ever sees, kept apart from the certificate itself (cert.ts markSeen). No model call.
+    const now=getLearner(learnerId).english,id=typeof input.certId==="string"?input.certId:now.certificates.at(-1)?.id;
+    const cert=now.certificates.find(x=>x.id===id);
+    if(!cert)throw new ConversationError("There is no certificate to show yet.",404);
+    const seen=markSeen(now,cert.id);if(seen!==now)saveEnglish(learnerId,seen);
+    dispatch({type:"linga.changed",screen:"linga-cert"});return getSession();
+  }
   if(isCheckAction(action)){await checkCommand(action,input,profile,commandId);return getSession();}
   if(action==="start"){
     const prefs=learning.preferences??defaultPreferences(profile),allowed=eligibleScenes(profile,prefs,learning);
@@ -175,6 +185,10 @@ export async function englishCommand(raw:unknown){
     // the week's digest (Family W9, rules/digest): the scene, its skill and the replies counted, never a word of them;
     // once per conversation, as the sessions list keeps it once
     if(!learning.sessions.some(x=>x.id===c.id))addDigest(learnerId,{at:entry.at,kind:"english",sceneId:c.sceneId,skill:c.focusSkill,turns:entry.turns});
+    // a certificate, when this rehearsal completes what one needs (cert.ts): issued by code from the record, tonight's
+    // quotes checked again against the replies as sent. Never at read time, never back-issued.
+    const words=Object.fromEntries(c.turns.filter(t=>t.role==="learner").map(t=>[t.id,t.text]));
+    const earned=withCertificate(getLearner(learnerId).english,entry.at,words);if(earned.cert)saveEnglish(learnerId,earned.learning);
     commit({...c,phase:"finished",moment:null,capture:false,quizOpen:false,paused:false,commands:[...c.commands,commandId]},"linga-recap");return getSession();
   }
   // what is left is turn, coach or replay: each asks the model
