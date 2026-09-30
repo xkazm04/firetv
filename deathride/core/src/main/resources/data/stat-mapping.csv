@@ -1,0 +1,10 @@
+parameter,stat,base,perPoint
+maxSpeedMps,speed,20,2
+accelerationMps2,acceleration,5,1.2
+lateralGripPerSecond,grip,3,0.6
+maxLateralAccelerationMps2,grip,10,2
+armorReduction,armor,0,0.04
+massKg,mass,600,110
+steeringRateRadPerSecond,handling,1,0.12
+yawResponseSeconds,handling,0.2,-0.012
+weaponSlots,slots,0,1

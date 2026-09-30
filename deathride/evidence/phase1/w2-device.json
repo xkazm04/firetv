@@ -1,0 +1,182 @@
+{
+  "device": "AFTKM via LAN; Chromium touch emulation, not physical phone",
+  "checks": [
+    "All five classes selected on paired phone; host agrees; seven stat bars",
+    "Selected class starts race and responds to phone throttle"
+  ],
+  "errors": [],
+  "stats": {
+    "feel": {
+      "id": "Balanced",
+      "deadZone": 0.03,
+      "exponent": 1,
+      "touchTravelPx": 115,
+      "touchTravelFraction": 0.28,
+      "steerRisePerSecond": 6,
+      "steerReturnPerSecond": 10,
+      "lowSpeedAuthority": 1.35,
+      "highSpeedAuthority": 1.05,
+      "speedBlendMps": 30,
+      "yawResponseScale": 0.75,
+      "stabilityScale": 1.1,
+      "throttleRisePerSecond": 3,
+      "throttleExponent": 1.15,
+      "brakeScale": 1,
+      "yawMinRadPerSecond": 0.4,
+      "yawMaxRadPerSecond": 2,
+      "turnInMaxSeconds": 0.8,
+      "recoveryMaxSeconds": 2.5
+    },
+    "units": "ms",
+    "uptimeMs": 24657.890848,
+    "phase": "lobby",
+    "raceSeconds": 0.2833333333333333,
+    "paused": false,
+    "frameNumber": 1459,
+    "flashFrames": 0,
+    "heapUsedMB": 20.778099060058594,
+    "frameTimeMs": {
+      "lifetimeBinMs": 0.1,
+      "lifetimeCapMs": 5000,
+      "last10s": {
+        "p50": 16.677768999999998,
+        "p95": 21.498845999999997,
+        "max": 24.517231,
+        "count": 600
+      },
+      "sinceStart": {
+        "p50": 16.6,
+        "p95": 20.700000000000003,
+        "max": 136.121385,
+        "count": 1459
+      }
+    },
+    "simStepMs": {
+      "lifetimeBinMs": 0.001,
+      "lifetimeCapMs": 50,
+      "last10s": {
+        "p50": 0.428462,
+        "p95": 1.042923,
+        "max": 5.465539,
+        "count": 420
+      },
+      "sinceStart": {
+        "p50": 0.424,
+        "p95": 1.036,
+        "max": 6.695769,
+        "count": 1292
+      }
+    },
+    "discardedSimulationMs": {
+      "last10s": 0,
+      "sinceStart": 42
+    },
+    "quantiles": "last10s exact (4096 samples); sinceStart histogram (resolution/cap declared per metric); max exact",
+    "slots": [
+      {
+        "slot": 0,
+        "connected": true,
+        "reserved": true,
+        "clockSynced": true,
+        "inputAgeMs": {
+          "lifetimeBinMs": 0.1,
+          "lifetimeCapMs": 5000,
+          "last10s": {
+            "p50": 22.99892301787986,
+            "p95": 44.096461982117034,
+            "max": 105.41776898211901,
+            "count": 225
+          },
+          "sinceStart": {
+            "p50": 22.900000000000002,
+            "p95": 44,
+            "max": 105.41776898211901,
+            "count": 225
+          }
+        },
+        "stale": {
+          "last10s": 1,
+          "sinceStart": 1
+        },
+        "dropped": {
+          "last10s": 0,
+          "sinceStart": 0
+        },
+        "outOfOrder": {
+          "last10s": 0,
+          "sinceStart": 0
+        },
+        "effectiveThrottle": 0,
+        "effectiveSteer": 0,
+        "car": {
+          "id": "Trail",
+          "role": "Corner specialist",
+          "stats": {
+            "speed": 5,
+            "acceleration": 6,
+            "grip": 10,
+            "armor": 4,
+            "mass": 4,
+            "handling": 7,
+            "slots": 2
+          }
+        },
+        "speedMps": 0,
+        "xM": -5.999999999999943,
+        "yM": 36.8
+      },
+      {
+        "slot": 1,
+        "connected": false,
+        "reserved": false,
+        "clockSynced": false,
+        "inputAgeMs": {
+          "lifetimeBinMs": 0.1,
+          "lifetimeCapMs": 5000,
+          "last10s": {
+            "p50": 0,
+            "p95": 0,
+            "max": 0,
+            "count": 0
+          },
+          "sinceStart": {
+            "p50": 0,
+            "p95": 0,
+            "max": 0,
+            "count": 0
+          }
+        },
+        "stale": {
+          "last10s": 0,
+          "sinceStart": 0
+        },
+        "dropped": {
+          "last10s": 0,
+          "sinceStart": 0
+        },
+        "outOfOrder": {
+          "last10s": 0,
+          "sinceStart": 0
+        },
+        "effectiveThrottle": 0,
+        "effectiveSteer": 0,
+        "car": {
+          "id": "Line",
+          "role": "Balanced racer",
+          "stats": {
+            "speed": 6,
+            "acceleration": 6,
+            "grip": 6,
+            "armor": 5,
+            "mass": 5,
+            "handling": 6,
+            "slots": 2
+          }
+        },
+        "speedMps": 2.9619682298961885,
+        "xM": -5.601705857706381,
+        "yM": 43.20443757418297
+      }
+    ]
+  }
+}

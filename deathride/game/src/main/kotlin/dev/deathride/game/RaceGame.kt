@@ -24,6 +24,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
     private lateinit var detail: GlyphLayer
     private lateinit var server: RaceServer
     private val world=World()
+    private val selectedCars=IntArray(6){it%CarCatalog.all.size}
     private val inputs=Array(6){InputFrame()}
     private val view=FitViewport(1280f,720f)
     private val worldMatrix=Matrix4()
@@ -66,7 +67,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         large=BitmapFont().apply { data.setScale(3.4f); setUseIntegerPositions(false); region.texture.setFilter(Texture.TextureFilter.Linear,Texture.TextureFilter.Linear) }
         small=BitmapFont().apply { data.setScale(1.05f); setUseIntegerPositions(false); region.texture.setFilter(Texture.TextureFilter.Linear,Texture.TextureFilter.Linear) }
         text=GlyphLayer(font); headline=GlyphLayer(large); detail=GlyphLayer(small)
-        server=RaceServer(assets,logger); server.start()
+        server=RaceServer(assets,logger); for(i in world.cars.indices)CarCatalog.apply(world.cars[i],selectedCars[i]); server.start()
         val p=TrackPoint()
         for(i in 0..240) {
             val s=world.track.lengthM*i/240
@@ -82,6 +83,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
                     Input.Keys.BACK,Input.Keys.ESCAPE,Input.Keys.BUTTON_B -> { if(phase!="lobby")lobby() else Gdx.app.exit(); return true }
                     Input.Keys.LEFT -> { selectFeel(-1); return true }
                     Input.Keys.RIGHT -> { selectFeel(1); return true }
+                    Input.Keys.DOWN -> if(phase=="lobby" || phase=="results") { server.slots[0].carRequest.set((selectedCars[0]+1)%CarCatalog.all.size); return true }
                     Input.Keys.UP -> if(phase=="lobby") { server.resetPairing(); keyboard=false; return true }
                 }
                 if(keycode==Input.Keys.W || keycode==Input.Keys.A || keycode==Input.Keys.D || keycode==Input.Keys.S)keyboard=true
@@ -103,6 +105,11 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         val nanos=System.nanoTime(); val actual=(nanos-previousNanos)/1e9; previousNanos=nanos
         val now=server.nowMs(); server.metrics.frameMs.add(actual*1000,now); server.frameNumber++
         val elapsed=actual.coerceIn(0.0,.1); stateTime+=elapsed; uiTime+=elapsed; smokeTime+=actual
+        for(i in server.slots.indices) {
+            val choice=server.slots[i].carRequest.getAndSet(-1)
+            if(choice>=0 && (phase=="lobby" || phase=="results")) { selectedCars[i]=choice; CarCatalog.apply(world.cars[i],choice); logger("car slot=$i ${CarCatalog.all[choice].id}") }
+            server.slots[i].carJson=CarCatalog.all[selectedCars[i]].json
+        }
         val feelIndex=server.feelRequest.getAndSet(-1)
         if(feelIndex>=0) { server.feel=FeelProfiles.all[feelIndex]; logger("feel ${server.feel.json}") }
         for(c in world.cars)c.feel=if(c.human)server.feel else FeelProfiles.spike
@@ -214,7 +221,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         shape.color=bg; shape.rect(0f,637f,1280f,83f); shape.rect(0f,0f,1280f,66f)
         shape.color=accent; shape.rect(40f,650f,4f,36f)
         if(phase=="lobby") {
-            shape.color=bg; shape.rect(46f,89f,392f,530f)
+            shape.color=bg; shape.rect(675f,305f,555f,290f); shape.rect(46f,89f,392f,530f)
             shape.setColor(.16f,.23f,.27f,1f); shape.rect(47f,90f,390f,2f)
             shape.color=accent; shape.rect(70f,116f,344f,44f)
         }
@@ -239,6 +246,18 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         text.clear(); headline.clear(); detail.clear()
         text.setColor(Color.WHITE); headline.setColor(Color.WHITE); detail.setColor(muted)
         text.addText("DEATH RIDE",59f,685f)
+        if(phase=="lobby") {
+            val car=CarCatalog.all[selectedCars[0]]
+            text.addText(car.id+" / "+car.role,690f,575f)
+            for(i in CarCatalog.statNames.indices) {
+                val stat=CarCatalog.statNames[i]; val value=car.stats.getValue(stat)
+                uiBuilder.clear(); uiBuilder.append(stat).append("  ").append(value)
+                detail.addText(uiBuilder,695f,538f-i*25)
+                uiBuilder.clear(); repeat(value){uiBuilder.append('|')}
+                text.addText(uiBuilder,850f,538f-i*25)
+            }
+            detail.addText("DOWN: next car   /   phone: choose your car",695f,333f)
+        }
         detail.addText(Presentation.CONCEPT+"  /  "+Presentation.TAGLINE,59f,661f)
         detail.addText("FEEL: "+server.feel.id+"   LEFT / RIGHT TO CHANGE",59f,630f)
         detail.addText("LOCAL CIRCUIT     /     6 CARS     /     3 LAPS",873f,682f)

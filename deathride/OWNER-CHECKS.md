@@ -15,3 +15,9 @@ For **each of Spike, Loose, Agile, Balanced, Stable**, do these three exercises 
 Record preset, maneuver, speed, and the three-word rating. Loose deliberately permits more slip; Stable deliberately softens small corrections. Check simultaneous GO+BRAKE stops propulsion and releasing GO coasts immediately.
 
 Optical check: film phone and TV together at 240 fps for at least 30 FLASH TEST taps. Count frame separation ? 1000/240 ms and record p50/p95/max. Good against the proposed rubric: p50 <=120 ms, p95 <=180 ms. Bad: a growing delay or missed flash. Optical latency and physical-phone comfort are **not measured** by the automated network test.
+
+## W2 ? Five cars (2026-09-30)
+
+In the lobby, DOWN cycles P1's car on the TV; each phone's CAR button selects its own car. Try Needle, Line, Bastion, Comet and Trail. Confirm the same name and seven stat bars on phone/TV. Good: selections survive a race/rematch and cannot change mid-race. Bad: the name changes while performance does not, or one phone changes the other car.
+
+Drive the same bend in Trail then Comet, and accelerate in Needle then Bastion. Good: Trail holds the corner; Comet gains speed on a clear straight; Needle launches quickly; Bastion feels slower. Bad: every class feels identical or one is better at everything. Armor and mounts are future combat capacity until W4, not a tested advantage yet. Report car + preset + maneuver; felt verdict **not measured**.

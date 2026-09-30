@@ -38,8 +38,8 @@ saying exactly what the owner should try and what "good" and "bad" look like; (7
 
 | # | Id | Wave | Depends on | Status | Commit | Date |
 |---|---|---|---|---|---|---|
-| 1 | W1 | **Feel Lab**: research and calibration of steering, throttle and brake; live presets; telemetry | - | done; owner feel pending | W1: feat: add live Feel Lab | 2026-09-30 |
-| 2 | W2 | **Cars and stats**: car classes, the stat model, data-driven car specs | W1 | not started | | |
+| 1 | W1 | **Feel Lab**: research and calibration of steering, throttle and brake; live presets; telemetry | - | done; owner feel pending | aaa8546 | 2026-09-30 |
+| 2 | W2 | **Cars and stats**: car classes, the stat model, data-driven car specs | W1 | done; owner feel pending | W2: feat: add five data-driven car classes | 2026-09-30 |
 | 3 | W3 | **Advanced vehicle movement**: weight transfer, handbrake and drift, surfaces, mass-based collisions | W2 | not started | | |
 | 4 | W4 | **Weapons and damage**: weapon design and execution, HP, armor, wrecks, and **the controller layout rethink** | W3 | not started | | |
 | 5 | W5 | **Parts and shop**: parts design, economy, garage on TV and phone, save file | W4 | not started | | |
@@ -171,3 +171,7 @@ honest tier of truth for each claim (exists, valid, wired, behaves, felt), and a
 ### W1 ? 2026-09-30
 
 Design first: `deathride/W1-feel-research.md`. Added five data profiles, shared shaping, live remote/phone controls, 60 scripted traces, declared bands and strict allocation tests. Fixed Java 22 math allocations using deterministic polynomial kernels and exp/log powers. `:core:test :link:test :app:assembleDebug -PappId=dev.deathride.tv -PappLabel="Death Ride"`: green (18 core, 3 link). Installed and launched on AFTKM; remote and browser settings switch live. `tools/browser-check.mjs`: pass against Stick; `tools/probe.mjs ... 60`: pass with two 30 Hz clients. 60 s at 30.013 Hz, 1816 frames per slot. Last 10 s input age p50/p95/max: P1 20.93/41.58/63.81 ms (n=597); P2 20.77/41.07/113.04 ms (n=597). Frame interval 16.62/21.53/141.61 ms (n=593). These are network/simulation ages, not input-to-photon. Lifetime ages include the intentional silence/countdown and are not steady-load latency. Six successive windows are preserved in `w1-probe.json`. Owner exercises in `deathride/OWNER-CHECKS.md`. Optical latency and owner feel not measured. Latest APK remains installed. Next: W2 cars/stat model, lap and duel matrix.
+
+### W2 ? 2026-09-30
+
+Design first: `deathride/W2-cars-and-stats.md`. Added five car CSVs, one stat mapping table, per-car physical specs, remote/phone selection and matching bars. Preserved Spike baseline via `physics.csv`. Headless matrix: 270 finish observations (18/class/type), 120 paired races; Trail leads tight/mixed and Comet fast. Comet tuning corrected a first-run failure to express its straight-line role. `:core:test :link:test :app:assembleDebug`: green, 20 core + 3 link. Installed release id/label on AFTKM; `tools/wave-check.mjs ... 2` and remote DOWN passed; evidence and APK hash in design note. Owner feel, combat balance, optical latency not measured. Latest build installed. Next W3: surfaces, transfer, handbrake and mass collisions.

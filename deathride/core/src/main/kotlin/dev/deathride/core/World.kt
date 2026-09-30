@@ -15,21 +15,21 @@ object Tuning {
     const val RACE_LAPS = 3
 }
 data class CarSpec(
-    val maxSpeedMps: Double = 30.0,
-    val accelerationMps2: Double = 12.0,
-    val brakeMps2: Double = 22.0,
-    val rollingDragPerSecond: Double = 0.22,
-    val lateralGripPerSecond: Double = 7.0,
-    val maxLateralAccelerationMps2: Double = 22.0,
-    val brakeGripLoss: Double = .6,
-    val yawResponseSeconds: Double = .12,
-    val yawStabilityPerSecond: Double = 1.4,
-    val steeringRateRadPerSecond: Double = 1.65,
-    val launchSteeringMps: Double = 3.0,
-    val massKg: Double = 950.0,
-    val restitution: Double = 0.24,
-    val circleRadiusM: Double = 1.3,
-    val circleOffsetM: Double = 1.05
+    val maxSpeedMps: Double = Physics.base.getValue("maxSpeedMps"),
+    val accelerationMps2: Double = Physics.base.getValue("accelerationMps2"),
+    val brakeMps2: Double = Physics.base.getValue("brakeMps2"),
+    val rollingDragPerSecond: Double = Physics.base.getValue("rollingDragPerSecond"),
+    val lateralGripPerSecond: Double = Physics.base.getValue("lateralGripPerSecond"),
+    val maxLateralAccelerationMps2: Double = Physics.base.getValue("maxLateralAccelerationMps2"),
+    val brakeGripLoss: Double = Physics.base.getValue("brakeGripLoss"),
+    val yawResponseSeconds: Double = Physics.base.getValue("yawResponseSeconds"),
+    val yawStabilityPerSecond: Double = Physics.base.getValue("yawStabilityPerSecond"),
+    val steeringRateRadPerSecond: Double = Physics.base.getValue("steeringRateRadPerSecond"),
+    val launchSteeringMps: Double = Physics.base.getValue("launchSteeringMps"),
+    val massKg: Double = Physics.base.getValue("massKg"),
+    val restitution: Double = Physics.base.getValue("restitution"),
+    val circleRadiusM: Double = Physics.base.getValue("circleRadiusM"),
+    val circleOffsetM: Double = Physics.base.getValue("circleOffsetM")
 )
 class InputFrame(var steer: Double = 0.0, var throttle: Double = 0.0, var brake: Double = 0.0) {
     fun set(s: Double, a: Double, b: Double) { steer = s.coerceIn(-1.0,1.0); throttle = a.coerceIn(0.0,1.0); brake = b.coerceIn(0.0,1.0) }
@@ -136,6 +136,8 @@ class Car(val id: Int, track: Track) {
     var x=0.0; var y=0.0; var vx=0.0; var vy=0.0; var heading=0.0; var yaw=0.0
     var previousX=0.0; var previousY=0.0; var previousHeading=0.0
     val lap=LapCounter(track.lengthM,track.startM)
+    var spec=CarSpec()
+    var carClass: CarClass?=null
     var feel=FeelProfiles.spike
     var filteredSteer=0.0; var filteredThrottle=0.0
     var human=false; var finishSeconds=-1.0; var position=id+1; var impact=0.0
@@ -185,7 +187,7 @@ class Snapshot {
     fun x(i: Int)=state[i*4]; fun y(i: Int)=state[i*4+1]; fun heading(i: Int)=state[i*4+2]; fun speed(i: Int)=state[i*4+3]
 }
 class World(val seed: Int=17, val spec: CarSpec=CarSpec(), val track: Track=Track(), val handling: Handling=SlipHandling()) {
-    val cars=Array(Tuning.CAR_COUNT) { Car(it,track) }
+    val cars=Array(Tuning.CAR_COUNT) { Car(it,track).also { c -> c.spec=spec } }
     val snapshot=Snapshot(); val previousSnapshot=Snapshot()
     private val projection=Projection(); private val point=TrackPoint()
     val trace=IntArray(Tuning.CAR_COUNT*600)
@@ -212,7 +214,7 @@ class World(val seed: Int=17, val spec: CarSpec=CarSpec(), val track: Track=Trac
         for(c in cars) {
             c.previousX=c.x; c.previousY=c.y; c.previousHeading=c.heading; c.impact*=.87
             val input=if(c.human) inputs[c.id] else { driveAi(c); c.aiInput }
-            handling.integrate(c,input,spec,dt)
+            handling.integrate(c,input,c.spec,dt)
             contain(c)
             trace[((steps%600)*6)+c.id]=c.aiMode.ordinal*10+c.aiReason
         }
@@ -252,13 +254,14 @@ class World(val seed: Int=17, val spec: CarSpec=CarSpec(), val track: Track=Trac
         val slip=if(c.speedMps>2.0) wrapAngle(atan2(c.vy,c.vx)-c.heading) else 0.0
         val error=wrapAngle(desired-c.heading-slip*.35)
         val steer=(-error*2.3+c.yaw*.18).coerceIn(-1.0,1.0)
-        val target=if(point.curvature>0) 23.0-skill.cornerMarginMps else 29.0
+        val target=if(c.carClass==null) { if(point.curvature>0) 23.0-skill.cornerMarginMps else 29.0 } else min(c.spec.maxSpeedMps*CarCatalog.aiCruiseFraction, if(point.curvature>0) sqrt(c.spec.maxLateralAccelerationMps2*CarCatalog.aiGripFraction/point.curvature)-skill.cornerMarginMps else c.spec.maxSpeedMps)
         val cornerTarget=target*(1.0-min(.55,abs(error)*.4))
         val a=if(c.speedMps<cornerTarget) 1.0 else .12
         val b=if(c.speedMps>cornerTarget+2.0) .45 else 0.0
         c.aiInput.set(steer,a,b)
     }
     fun contain(c: Car) {
+        val spec=c.spec
         val radius=spec.circleRadiusM
         for(end in -1..1 step 2) {
             val ox=cos(c.heading)*spec.circleOffsetM*end; val oy=sin(c.heading)*spec.circleOffsetM*end

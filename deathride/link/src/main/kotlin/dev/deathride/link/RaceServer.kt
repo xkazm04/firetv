@@ -20,6 +20,8 @@ import kotlin.math.*
 
 class Slot(val id: Int) {
     val input=InputMailbox()
+    val carRequest=AtomicInteger(-1)
+    @Volatile var carJson=CarCatalog.all[id].json
     @Volatile var token=""
     @Volatile var connected=false
     @Volatile var generation=0
@@ -83,7 +85,7 @@ class RaceServer(private val assets: (String)->String, private val log: (String)
                         get("/") { call.response.header("Cache-Control","no-store"); call.respondText(html,ContentType.Text.Html) }
                         get("/manifest.webmanifest") { call.respondText(manifest,ContentType.Application.Json) }
                         get("/stats") { call.response.header("Cache-Control","no-store"); call.respondText(statsJson(),ContentType.Application.Json) }
-                        get("/catalog") { call.respondText("{\"feelProfiles\":${FeelProfiles.json}}",ContentType.Application.Json) }
+                        get("/catalog") { call.respondText("{\"feelProfiles\":${FeelProfiles.json},\"cars\":${CarCatalog.json},\"statMax\":${CarCatalog.statMax}}",ContentType.Application.Json) }
                         get("/health") { call.respondText("{\"ok\":true,\"phase\":\"$phase\",\"slots\":${slots.count{it.connected}}}",ContentType.Application.Json) }
                         webSocket("/ws") { handle(this) }
                     }
@@ -115,7 +117,7 @@ class RaceServer(private val assets: (String)->String, private val log: (String)
             socket.send("{\"t\":\"welcome\",\"slot\":${s.id},\"token\":\"${s.token}\",\"tvNow\":${nowMs()},\"phase\":\"$phase\"}")
             hudJob=socket.launch {
                 while(isActive && generation==s.generation) {
-                    socket.send("{\"t\":\"hud\",\"speed\":${s.speed},\"lap\":${s.lap},\"pos\":${s.position},\"hp\":100,\"feel\":${feel.json},\"impact\":${s.impact},\"phase\":\"$phase\",\"stale\":${s.stale},\"paused\":$paused}")
+                    socket.send("{\"t\":\"hud\",\"speed\":${s.speed},\"lap\":${s.lap},\"pos\":${s.position},\"hp\":100,\"feel\":${feel.json},\"car\":${s.carJson},\"impact\":${s.impact},\"phase\":\"$phase\",\"stale\":${s.stale},\"paused\":$paused}")
                     delay(100)
                 }
                 socket.close(CloseReason(CloseReason.Codes.NORMAL,"replaced"))
@@ -137,6 +139,7 @@ class RaceServer(private val assets: (String)->String, private val log: (String)
                         if(accepted && msg["f"]?.jsonPrimitive?.intOrNull==1) flash.set(true)
                         socket.send("{\"t\":\"ack\",\"q\":$q,\"tvNow\":$now,\"accepted\":$accepted}")
                     }
+                    "car" -> { val index=CarCatalog.all.indexOfFirst { it.id==msg.text("id") }; if(index>=0 && (phase=="lobby" || phase=="results"))s.carRequest.set(index) }
                     "feel" -> { val index=FeelProfiles.all.indexOfFirst { it.id==msg.text("id") }; if(index>=0)feelRequest.set(index) }
                     "start" -> command.compareAndSet(0,1)
                     "lobby" -> command.set(2)
@@ -159,7 +162,7 @@ class RaceServer(private val assets: (String)->String, private val log: (String)
         sb.append("{\"feel\":${feel.json},\"units\":\"ms\",\"uptimeMs\":$now,\"phase\":\"$phase\",\"raceSeconds\":$raceSeconds,\"paused\":$paused,\"frameNumber\":$frameNumber,\"flashFrames\":$flashFrames,\"heapUsedMB\":${(runtime.totalMemory()-runtime.freeMemory())/1048576.0},\"frameTimeMs\":${metrics.frameMs.json(now)},\"simStepMs\":${metrics.simMs.json(now)},\"discardedSimulationMs\":${metrics.discardedSimMs.json(now)},\"quantiles\":\"last10s exact (4096 samples); sinceStart histogram (resolution/cap declared per metric); max exact\",\"slots\":[")
         for(i in slots.indices) {
             if(i>0)sb.append(','); val s=slots[i]
-            sb.append("{\"slot\":$i,\"connected\":${s.connected},\"reserved\":${s.claimed},\"clockSynced\":${s.clockSynced},\"inputAgeMs\":${metrics.inputAgeMs[i].json(now)},\"stale\":${metrics.stale[i].json(now)},\"dropped\":${metrics.dropped[i].json(now)},\"outOfOrder\":${metrics.outOfOrder[i].json(now)},\"effectiveThrottle\":${s.effectiveThrottle},\"effectiveSteer\":${s.effectiveSteer},\"speedMps\":${s.speed},\"xM\":${s.x},\"yM\":${s.y}}")
+            sb.append("{\"slot\":$i,\"connected\":${s.connected},\"reserved\":${s.claimed},\"clockSynced\":${s.clockSynced},\"inputAgeMs\":${metrics.inputAgeMs[i].json(now)},\"stale\":${metrics.stale[i].json(now)},\"dropped\":${metrics.dropped[i].json(now)},\"outOfOrder\":${metrics.outOfOrder[i].json(now)},\"effectiveThrottle\":${s.effectiveThrottle},\"effectiveSteer\":${s.effectiveSteer},\"car\":${s.carJson},\"speedMps\":${s.speed},\"xM\":${s.x},\"yM\":${s.y}}")
         }
         sb.append("]}"); return sb.toString()
     }
