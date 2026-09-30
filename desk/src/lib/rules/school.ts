@@ -5,7 +5,8 @@
  * marking judges it with `check`, and hints and explanations pass `leaksSchool`. W7 batch 1 adds three units on the
  * same machinery: equivalent fractions (shapes `missing` and `simplify`), a fraction of an amount (`fraction-of`) and
  * multiply and divide fractions (`compute` with × or ÷), each with its generator, closed slip list, task reader and
- * withheld line; the leak rule below gains a per-shape profile (`leakProfile`).
+ * withheld line; the leak rule below gains a per-shape profile (`leakProfile`). W7 batch 2 adds the decimals and percent
+ * strand: add, subtract and multiply decimals (`compute` with decimal operands, money with a € or £ sign).
  *
  * The stances this file holds:
  *   - Code decides right and wrong. The truth is recomputed from the spec every time with EXACT rational arithmetic
@@ -49,7 +50,9 @@
  *   2. a decimal or percent within one unit of its last written place of the answer (0.9, 0.92, 0.9167, 92%);
  *   3. for an answer over one, its fractional part (the 5/12 of 1 5/12);
  *   4. a bare whole number that is the answer's top over a working denominator: the summed numerator (9 + 2 = 11 for
- *      11/12). The working denominators are the answer's own, and for `a/b ± c/d` the lcm and b × d;
+ *      11/12). The working denominators are the answer's own, and for `a/b ± c/d` the lcm and b × d. For a decimals
+ *      item (W7 batch 2) it is the answer's digits with the point left out (715 for 4.35 + 2.8, 144 for 3.6 × 0.4), and
+ *      an answer over one has no fractional-part target (rule 3); money said aloud reads as a decimal ("13 pounds 80");
  *   5. a ratio whose quotient is the answer (11:12);
  *   6. two numbers joined by an operation (+, -, x, ×, ÷, plus, minus, take away, times, divided by, "a less than
  *      b") whose value is the answer ("1 - 1/12", "1/12 less than 1"), or, for two whole numbers, the summed top
@@ -94,6 +97,8 @@ const withinPlace = (a: Q, b: Q, k: number) => { const d = sub(a, b); return bab
 function terminating(a: Q): boolean { let d = a.d; const two = BigInt(2), five = BigInt(5); while (d % two === Z) d /= two; while (d % five === Z) d /= five; return d === ONE; }
 /** a × 10^k is a whole number: a can be written exactly with k decimal places. */
 const exactAt = (a: Q, k: number) => (a.n * pow10(k)) % a.d === Z;
+/** The fewest decimal places that write a terminating value exactly (0 for a whole number); 12 at most. */
+function placesNeeded(a: Q): number { let k = 0; while (k < 12 && !exactAt(a, k)) k++; return k; }
 
 /** A rational as the desk hands it out: lowest terms, d > 0, both safe integers (the reader's bounds keep them so). */
 export interface Rat { n: number; d: number }
@@ -290,7 +295,9 @@ export function readNumber(answer: unknown, system: unknown): Reading | null {
  *   - compute: a numeric question with no unknown, "Work out 3/4 + 1/6", "Work out 2/3 × 3/4". `form: "simplest"` asks
  *     for lowest terms, `form: "decimal"` for a decimal (the value must terminate); `unit` is the unit the answer is in;
  *     `allowNegative` lets the value be zero or below (a subtraction that crosses zero). Units: add and subtract
- *     fractions (a/b ± c/d), multiply and divide fractions (a/b × c/d, a/b ÷ c/d, Family W7).
+ *     fractions (a/b ± c/d), multiply and divide fractions (a/b × c/d, a/b ÷ c/d, Family W7), add, subtract and
+ *     multiply decimals (4.35 + 2.8, 3.6 × 0.4; W7 batch 2), where a € or £ `unit` prints its sign before each amount
+ *     ("Work out €4.35 + €2.80.", "Work out £3.45 × 4.": the count is not money).
  *   - fraction-of (W7, "A fraction of an amount"): expr "a/b of N", a proper fraction of a whole amount, "Find 3/5 of
  *     40 kg."; `unit` is the amount's unit (and the answer's). The value is a/b × N, exactly.
  *   - missing (W7, "Equivalent fractions"): expr "a/b = ?/d" or "a/b = c/?", one number missing on the right, "Fill in
@@ -615,6 +622,32 @@ const UNIT_WORD: Record<Unit, string> = { cm: "cm", m: "m", km: "km", mm: "mm", 
 const AMOUNT_WORD: Record<Unit, string> = { ...UNIT_WORD, m: "metres", g: "grams", l: "litres", h: "hours", s: "seconds" };
 
 /**
+ * A two-number computation with a decimal in it (Family W7 batch 2, "Add, subtract and multiply decimals"): its operation,
+ * the two numbers exactly, and the places each is written to (trailing zeros counted: 2.80 has two); or null for any
+ * other expression (a fraction, a division, three numbers, two whole numbers).
+ */
+type DecOp = { op: "+" | "-" | "×"; a: Q; b: Q; pa: number; pb: number };
+function decimalPair(n: Node): DecOp | null {
+  if (n.k !== "op" || n.op === "÷" || n.a.k !== "num" || n.b.k !== "num" || (n.a.whole && n.b.whole)) return null;
+  const places = (x: { s: string; whole: boolean }) => (x.whole ? 0 : x.s.split(".")[1].length);
+  return { op: n.op, a: n.a.q, b: n.b.q, pa: places(n.a), pb: places(n.b) };
+}
+/** The places a decimal's working carries: the longer of the two for + and -, their sum for ×. */
+const workingPlaces = (d: DecOp) => (d.op === "×" ? d.pa + d.pb : Math.max(d.pa, d.pb));
+
+/**
+ * A money sum as a worksheet prints it (W7 batch 2): a € or £ sign before each amount of an addition or subtraction
+ * ("€4.35 + €2.80"), and before the amount only of an amount times a whole count ("£3.45 × 4"); null otherwise (another
+ * unit, a fraction, a count that is not whole), and the question then names the unit after it as before.
+ */
+function moneyLine(n: Node, unit: Unit): { plain: string; tex: string } | null {
+  if ((unit !== "€" && unit !== "£") || n.k !== "op" || n.a.k !== "num" || n.b.k !== "num") return null;
+  if (n.op === "+" || n.op === "-") return { plain: `${unit}${n.a.s} ${n.op} ${unit}${n.b.s}`, tex: `${unit}${n.a.s} ${n.op} ${unit}${n.b.s}` };
+  if (n.op === "×" && n.b.whole) return { plain: `${unit}${n.a.s} × ${n.b.s}`, tex: `${unit}${n.a.s} \\times ${n.b.s}` };
+  return null;
+}
+
+/**
  * The question, printed by code from the spec, as plain text and the TeX the typesetter reads: 'Work out 3/4 + 1/6.'
  * and '\text{Work out } \frac{3}{4} + \frac{1}{6}.', with 'Give your answer in its simplest form.' (or 'as a
  * decimal.', or 'in cm.') after it when the spec asks. Null when the spec is malformed; never a throw, never the
@@ -638,7 +671,10 @@ export function question(spec: unknown): { plain: string; tex: string } | null {
     }
     if (K.k === "simplify") return { plain: `Write ${K.a}/${K.b} in its simplest form.`, tex: `\\text{Write } \\frac{${K.a}}{${K.b}} \\text{ in its simplest form.}` };
     const { node } = st, s = st.spec as ComputeSpec;
-    const tail =s.form === "simplest" ? "Give your answer in its simplest form." : s.form === "decimal" ? "Give your answer as a decimal." : s.unit ? `Give your answer in ${UNIT_WORD[s.unit]}.` : "";
+    // money (W7 batch 2): "Work out €4.35 + €2.80.", "Work out £3.45 × 4." - the sign on each amount, never on a count
+    const money = s.unit ? moneyLine(node, s.unit) : null;
+    if (money && !s.form) return { plain: `Work out ${money.plain}.`, tex: `\\text{Work out } ${money.tex}.` };
+    const tail = s.form === "simplest" ? "Give your answer in its simplest form." : s.form === "decimal" ? "Give your answer as a decimal." : s.unit ? `Give your answer in ${UNIT_WORD[s.unit]}.` : "";
     return {
       plain: `Work out ${plainOf(node)}.${tail ? ` ${tail}` : ""}`,
       tex: `\\text{Work out } ${texOf(node)}.${tail ? ` \\text{ ${tail}}` : ""}`,
@@ -672,6 +708,10 @@ export const SCHOOL_SLIPS: readonly SchoolSlip[] = [
   { id: "kept-second", name: "The fraction you divide by not flipped", says: "Dividing by a fraction is multiplying by it turned upside down. The fraction you divide by was not turned over before multiplying.", points: "the line where the division became a multiplication" },
   { id: "flipped-first", name: "The wrong fraction flipped", says: "The first fraction was turned upside down. Only the fraction you divide by is turned over.", points: "the fraction that was turned over" },
   { id: "bottoms-added", name: "Multiplied the tops, added the bottoms", says: "The tops were multiplied but the bottoms were added. The tops and the bottoms are both multiplied.", points: "the bottom of the answer" },
+  // add, subtract and multiply decimals (Family W7 batch 2)
+  { id: "dec-lined-up", name: "Lined up the last digits, not the points", says: "The numbers were lined up by their last digits instead of by their decimal points. Write them with the points one under the other, then add or take away.", points: "the line where the numbers were written one under the other" },
+  { id: "dec-point-product", name: "The point put back in the wrong place", says: "The digits of the product are right but the point is in the wrong place. Count the digits after the points in the question: the answer has that many after its point.", points: "the decimal point in the answer" },
+  { id: "dec-point-dropped", name: "The point left out", says: "The digits are right but the decimal point was never put back, so the answer is far too big. Put the point back where the places say.", points: "the answer" },
 ];
 
 /** The common factors of a and b above 1, smallest first. */
@@ -690,7 +730,10 @@ function commonFactors(a: bigint, b: bigint): bigint[] {
  *   - a/b = ?/d (m = ad/b): a + (d − b) the same added; a one part only; a×d and a×b÷d (the other way) the wrong
  *     factor. a/b = c/? (m = bc/a): b + (c − a); b; b×c and b×a÷c. A missing number must be a whole number above 0;
  *   - simplify a/b: (a÷g)/b and a/(b÷g) one part only, (a÷g)/(b÷h) with g ≠ h the wrong factor, over every common
- *     factor g, h above 1.
+ *     factor g, h above 1;
+ *   - decimals a ± b, a × b (W7 batch 2), P the working's places (the longer of the two for ±, their sum for ×): the
+ *     numbers lined up by their last digits, (a·10^pa ± b·10^pb) / 10^P, when their places differ; the point put back
+ *     by the wrong count, the value × 10^k for k = -1 and 1..P-1 (products only); the point left out, the value × 10^P.
  */
 function slipCandidates(r: ReadOk): [string, Q][] {
   const out: [string, Q][] = [];
@@ -719,8 +762,25 @@ function slipCandidates(r: ReadOk): [string, Q][] {
     return out;
   }
   const node = r.node;
+  const dp = decimalPair(node);
+  if (dp) {
+    // W7 batch 2, decimals: the digits right and the point wrong, from the operands' own places
+    const T = r.truth, P = workingPlaces(dp);
+    const shifted = (k: number) => (k >= 0 ? mul(T, qi(pow10(k))) : mk(T.n, T.d * pow10(-k)));
+    if (dp.op !== "×") {
+      if (dp.pa !== dp.pb) {
+        const ia = mul(dp.a, qi(pow10(dp.pa))).n, ib = mul(dp.b, qi(pow10(dp.pb))).n, s = dp.op === "+" ? ia + ib : ia - ib;
+        if (s > Z) push("dec-lined-up", mk(s, pow10(P)));
+      }
+    } else {
+      push("dec-point-product", shifted(-1));
+      for (let k = 1; k < P; k++) push("dec-point-product", shifted(k));
+    }
+    push("dec-point-dropped", shifted(P));
+    return out;
+  }
   if (node.k !== "op") return [];
-  const part = (n: Node): [bigint, bigint] | null => (n.k === "frac" ? [n.n, n.d] : n.k === "num" && n.whole ? [n.q.n, ONE] : null);
+  const part =(n: Node): [bigint, bigint] | null => (n.k === "frac" ? [n.n, n.d] : n.k === "num" && n.whole ? [n.q.n, ONE] : null);
   const p = part(node.a), q = part(node.b);
   if (!p || !q) return [];
   const [a, b] = p, [c, d] = q;
@@ -996,6 +1056,9 @@ function leakText(line: string): string {
   t = t.replace(/(\d+)(?:\s+|\s*\/\s*)(\d+)(?:st|nd|rd|th)s?\b/g, "$1/$2").replace(/(\d)(?:st|nd|rd|th)s?\b/g, "$1");
   t = t.replace(/(\d+)\s+([a-z]+(?:-[a-z]+)?)\b/g, (m0, n: string, w: string) => { const o = ordOf(w); return o ? `${n}/${o}` : m0; });
   t = wordsToDigits(t);
+  // money said the way it is spoken (W7 batch 2): "13 pounds 80", "£13 and 80p", "4 euros 5" are 13.80, 13.80, 4.05
+  t = t.replace(/([£€$])\s?(\d+)\s*(?:and\s*)?(\d{1,2})\s*(?:p|pence|c|cents?)\b/g, (_, s: string, w: string, c: string) => `${s}${w}.${c.padStart(2, "0")}`)
+    .replace(/(\d+)\s*(?:pounds?|euros?|dollars?)\s*(?:and\s*)?(\d{1,2})(?:\s*(?:p|pence|cents?))?(?![\d,/]|\.\d)/g, (_, w: string, c: string) => `${w}.${c.padStart(2, "0")}`);
   t = t.replace(/(\d+)\s+(?:over|out\s+of)\s+(\d+)/g, "$1/$2").replace(/(\d+)\s+and\s+(\d+\s*\/\s*\d+)/g, "$1 $2");
   return t;
 }
@@ -1039,6 +1102,14 @@ function leakProfile(r: ReadOk): LeakProfile {
       else if (n0.op === "×") dens.add(q1 * t2);
       else dens.add(q1 * s2);
     }
+  }
+  const dp = decimalPair(n0);
+  if (dp) {
+    // decimals (W7 batch 2): the answer's digits with the point left out are the answer too ("715, then put the point
+    // back" for 4.35 + 2.8), at the working's places and the answer's own; no fractional part is a target (0.15 of 7.15)
+    const bare = new Set<string>();
+    for (const k of new Set([workingPlaces(dp), placesNeeded(T)])) { const d = mul(T, qi(pow10(k))); if (d.d === ONE) bare.add(String(d.n)); }
+    return { T, targets: [T], lowestOnly: false, bare, restated, written: [] };
   }
   const bare = new Set<string>();
   for (const L of dens) if (L % T.d === Z) bare.add(String((T.n * L) / T.d));
@@ -1324,6 +1395,65 @@ export function genMulDiv(seed: unknown, tier: unknown): SchoolSpec | null {
   return tier === 1 ? { shape: "compute", expr: "2/3 × 3/4" } : { shape: "compute", expr: "3/4 ÷ 2/5" };
 }
 
+// ------------------------------------------------------------------ the W7 batch 2 generators: decimals and percent
+
+/** A whole number of `p`-th places written as a decimal: (435, 2) is "4.35", (5, 2) "0.05", (28, 1) "2.8". */
+function decimalText(units: number, p: number): string {
+  if (p === 0) return String(units);
+  const s = String(units).padStart(p + 1, "0");
+  return `${s.slice(0, -p)}.${s.slice(-p)}`;
+}
+/** The money signs a decimals or percent question prints before an amount. */
+const MONEY: readonly Unit[] = ["€", "£"];
+
+/**
+ * One "Add, subtract and multiply decimals" item, from a seed and a tier that code computed:
+ *   - tier 1: ADD or SUBTRACT two decimals, in three of four items written to different numbers of places (4.35 + 2.8,
+ *     where the points must be lined up), 0.01 to 99.99, the larger first for a subtraction; one seed in three is money,
+ *     two amounts in euros or pounds to the penny (€4.35 + €2.80);
+ *   - tier 2: MULTIPLY: a decimal of one or two places (1.2..19.9 or 0.12..4.99) by a decimal of one place (0.2..0.9 or
+ *     1.1..4.9: 3.6 × 0.4, 2.45 × 1.3), or, one seed in three, a money amount to 24.99 by a whole count 3..9 (£3.45 × 4).
+ * A decimal that is not money never ends in 0; a value that is a whole number, or equal to either number, is drawn
+ * again, and so is any item whose printed question gives its answer away. Pure and seeded; null for a bad seed or tier.
+ */
+export function genDecimal(seed: unknown, tier: unknown): SchoolSpec | null {
+  const rnd = seeded(seed, tier, 0x5eed1104);
+  if (!rnd) return null;
+  function pick<T>(xs: readonly T[]): T { return xs[Math.floor(rnd!() * xs.length)]; }
+  const int = (lo: number, hi: number) => lo + Math.floor(rnd!() * (hi - lo + 1));
+  /** lo..hi units, never ending in 0 (a non-money decimal) or never a whole amount (money: 4.00 becomes 4.05). */
+  const units = (lo: number, hi: number, money: boolean) => { const u = int(lo, hi); return money ? (u % 100 === 0 ? u + 5 : u) : u % 10 === 0 ? u + 1 : u; };
+  const money = (seed as number) % 3 === 0;
+  for (let t = 0; t < MAX_TRIES; t++) {
+    let spec: SchoolSpec;
+    if (tier === 1) {
+      const minus = rnd() < 0.5;
+      let a: string, b: string;
+      if (money) { a = decimalText(units(105, 4999, true), 2); b = decimalText(units(55, 2999, true), 2); }
+      else {
+        const pa = rnd() < 0.5 ? 1 : 2, pb = rnd() < 0.75 ? 3 - pa : pa;
+        a = decimalText(units(pa === 1 ? 11 : 101, pa === 1 ? 999 : 9999, false), pa);
+        b = decimalText(units(1, pb === 1 ? 199 : 1999, false), pb);
+      }
+      if (minus && Number(a) < Number(b)) [a, b] = [b, a];
+      spec = { shape: "compute", expr: `${a} ${minus ? "-" : "+"} ${b}`, ...(money ? { unit: pick(MONEY) } : {}) };
+    } else if (money) {
+      spec = { shape: "compute", expr: `${decimalText(units(105, 2499, true), 2)} × ${int(3, 9)}`, unit: pick(MONEY) };
+    } else {
+      // sizes a column multiplication by hand takes: 1.2..19.9 or 0.12..4.99, by 0.2..0.9 or 1.1..4.9
+      const pa = rnd() < 0.5 ? 1 : 2;
+      const a = decimalText(units(12, pa === 1 ? 199 : 499, false), pa), b = decimalText(rnd() < 0.5 ? int(2, 9) : units(11, 49, false), 1);
+      spec = { shape: "compute", expr: `${a} × ${b}` };
+    }
+    const r = read(spec);
+    if (!r.ok || r.truth.d === ONE) continue;
+    const dp = decimalPair(r.node);
+    if (!dp || eq(r.truth, dp.a) || eq(r.truth, dp.b)) continue;
+    if (fair(spec)) return spec;
+  }
+  return tier === 1 ? { shape: "compute", expr: "4.35 + 2.8" } : { shape: "compute", expr: "3.6 × 0.4" };
+}
+
 /**
  * The units whose practice sets code writes, by syllabus topic id, each with its generator (Family W5b: add and
  * subtract fractions; W7 batch 1: equivalent fractions, a fraction of an amount, multiply and divide fractions). A
@@ -1334,6 +1464,7 @@ export const SCHOOL_GENERATORS: Readonly<Record<string, (seed: number, tier: 1 |
   "frac-of-amount": (seed, tier) => genOfAmount(seed, tier),
   "frac-add-sub": (seed, tier) => gen(seed, tier),
   "frac-mul-div": (seed, tier) => genMulDiv(seed, tier),
+  "dec-arith": (seed, tier) => genDecimal(seed, tier),
 };
 /** The generator for a topic id, or null: an own key only, so 'constructor' is not a unit. */
 export const generatorFor = (topicId: unknown) =>
@@ -1349,6 +1480,7 @@ export const SCHOOL_UNIT_SLIPS: Readonly<Record<string, readonly string[]>> = {
   "frac-of-amount": ["of-upside-down", "of-one-part", "of-not-divided", "of-rest"],
   "frac-add-sub": ["tops-and-bottoms", "top-not-scaled", "tops-one-bottom", "wrong-direction"],
   "frac-mul-div": ["added-not-multiplied", "kept-second", "flipped-first", "bottoms-added"],
+  "dec-arith": ["dec-lined-up", "dec-point-product", "dec-point-dropped"],
 };
 
 /** The system the desk reads a learner's numbers by when their profile names none (tv/profileRows DEFAULT_SYSTEM is the same, tested). */
@@ -1474,6 +1606,42 @@ function readSimplify(t0: string): SchoolSpec | null {
   return null;
 }
 
+/** A decimal or whole number as a worksheet prints it, an optional € or £ before it: 4.35, 0.4, 12, €2.80 (m[sign], m[number]). */
+const MONEY_DEC_SRC = String.raw`([€£])?\s?((?:0|[1-9]\d{0,3})(?:\.\d{1,3})?)`;
+/** The phrasings of two numbers added, subtracted or multiplied, each giving sign and number (m[1..2], m[4..5]) and the operation word m[3]. */
+const DEC_TASKS: { re: RegExp; op: (w: string) => "+" | "-" | "×"; swap?: boolean }[] = [
+  // '4.35 + 2.8', 'Work out 3.6 × 0.4', 'Calculate €4.35 + €2.80', '3.6 x 0.4', '4.35 plus 2.8'
+  { re: new RegExp(String.raw`^(?:${VERB_SRC}\s*:?\s*)?${MONEY_DEC_SRC}\s*(\+|-|plus|minus|×|x|\*|times)\s*${MONEY_DEC_SRC}$`, "i"), op: (w) => (/^(?:\+|plus)$/i.test(w) ? "+" : /^(?:-|minus)$/i.test(w) ? "-" : "×") },
+  // 'Add 4.35 and 2.8', 'Add 2.8 to 4.35', 'Find the sum of 4.35 and 2.8'
+  { re: new RegExp(String.raw`^(?:add|find the sum of|the sum of)\s+${MONEY_DEC_SRC}\s+(and|to)\s+${MONEY_DEC_SRC}$`, "i"), op: () => "+" },
+  // 'Subtract 2.25 from 7.5', 'Take 2.25 (away) from 7.5': the second take away the first
+  { re: new RegExp(String.raw`^(?:subtract|take)\s+${MONEY_DEC_SRC}\s+(away from|from)\s+${MONEY_DEC_SRC}$`, "i"), op: () => "-", swap: true },
+  // 'Multiply 3.6 by 0.4', 'Find the product of 3.6 and 0.4'
+  { re: new RegExp(String.raw`^(?:multiply|find the product of|the product of)\s+${MONEY_DEC_SRC}\s+(by|and)\s+${MONEY_DEC_SRC}$`, "i"), op: () => "×" },
+];
+
+/**
+ * Two numbers, at least one a decimal, added, subtracted or multiplied (W7 batch 2, "Add, subtract and multiply decimals");
+ * or null. Money: the same € or £ before both amounts of a sum or difference, or before the first of an amount times a
+ * whole count ('£3.45 × 4'); any other placing of a sign is null.
+ */
+function readDecimal(t0: string): SchoolSpec | null {
+  const t = t0.replace(/\s*(?:=\s*(?:\?|_+|\.{3}|…)?)?\s*[.?!]?$/, "").trim();
+  for (const { re, op, swap } of DEC_TASKS) {
+    const m = re.exec(t);
+    if (!m) continue;
+    let [sa, a, sb, b] = [m[1], m[2], m[4], m[5]];
+    if (swap) [sa, a, sb, b] = [sb, b, sa, a];
+    const o = op(m[3]);
+    if (!a.includes(".") && !b.includes(".")) return null;
+    if (o === "×" ? sb !== undefined || (sa !== undefined && b.includes(".")) : sa !== sb) return null;
+    const spec: SchoolSpec = { shape: "compute", expr: `${a} ${o} ${b}`, ...(sa ? { unit: sa as Unit } : {}) };
+    const r = read(spec);
+    return r.ok && decimalPair(r.node) ? spec : null;
+  }
+  return null;
+}
+
 /**
  * A worksheet task of a school fractions unit, read back into the spec it asks, for the hint's leak check - or null.
  * Conservative: what it does not read with one meaning is null, and a null task gets no school leak check (the general
@@ -1492,8 +1660,13 @@ function readSimplify(t0: string): SchoolSpec | null {
  *     'Fill in the missing number:', 'Complete:', 'Copy and complete'; 'Write a/b with a denominator of d', 'Write a/b
  *     as a fraction with denominator d', 'Write a/b with a numerator of c';
  *   - simplify (W7): 'Simplify a/b' (optionally 'fully', 'completely', 'to its lowest terms'), 'Reduce a/b (to lowest
- *     terms)', 'Write / Express a/b in its simplest form / lowest terms', 'Cancel a/b (down)'.
- * Null for: whole numbers, decimals or mixed numbers as operands (a whole amount after 'of' excepted), three or more
+ *     terms)', 'Write / Express a/b in its simplest form / lowest terms', 'Cancel a/b (down)';
+ *   - decimals (W7 batch 2): two numbers, at least one a decimal with a point (up to three places), joined by +, -, ×, x,
+ *     *, 'plus', 'minus', 'times' after the same verbs, or 'Add A and B', 'Add B to A', 'Subtract B from A', 'Take B
+ *     (away) from A', 'Multiply A by B', 'Find the product of A and B', 'Find the sum of A and B'; money with the same €
+ *     or £ before both amounts of a sum or a difference, or before the amount of an amount times a whole count. Never a
+ *     division, a decimal comma (a list too), a sign on one amount only or on a count, or two currencies.
+ * Null for: whole numbers or mixed numbers as operands (a whole amount after 'of' excepted), a decimal beside a fraction, three or more
  * terms, any letter in the maths (an x), brackets, number words, an answer after '=', a bottom of 1 or 0, a leading
  * zero, 'the difference between' (its order is not said), a fraction of a fraction, a decimal or a thousands-separated
  * amount, two gaps or none, any other word, and a spec wellFormed refuses (a subtraction below zero, a simplify of a
@@ -1505,7 +1678,7 @@ export function specFromQuestion(text: unknown): SchoolSpec | null {
   try {
     let t = normalise(text);
     t = t.replace(/^(?:\d{1,2}[.)]|\(\d{1,2}\)|[a-h]\)|\([a-h]\))\s+/i, "");
-    return readMissing(t) ?? readSimplify(t) ?? readOf(t) ?? readCombined(t);
+    return readMissing(t) ?? readSimplify(t) ?? readOf(t) ?? readCombined(t) ?? readDecimal(t);
   } catch {
     return null;
   }
@@ -1514,7 +1687,8 @@ export function specFromQuestion(text: unknown): SchoolSpec | null {
 /**
  * The unit a school spec belongs to, by topic id, or null: a sum or difference of two fractions is add and subtract
  * fractions, a product or quotient of two fractions multiply and divide fractions (W7), a fraction of an amount its own
- * unit, a missing number or a simplify equivalent fractions.
+ * unit, a missing number or a simplify equivalent fractions; two numbers with a decimal among them added, subtracted or
+ * multiplied the decimals unit (W7 batch 2).
  */
 export function unitOf(spec: unknown): string | null {
   try {
@@ -1523,6 +1697,7 @@ export function unitOf(spec: unknown): string | null {
     if (r.kind.k === "of") return "frac-of-amount";
     if (r.kind.k === "missing" || r.kind.k === "simplify") return "frac-equivalent";
     const n = r.node;
+    if (decimalPair(n)) return "dec-arith";
     if (n.k !== "op" || n.a.k !== "frac" || n.b.k !== "frac") return null;
     return n.op === "+" || n.op === "-" ? "frac-add-sub" : "frac-mul-div";
   } catch {
@@ -1542,6 +1717,7 @@ export const SCHOOL_WITHHELD = {
   "frac-of-amount": "Divide the amount by the bottom number to find the size of a single part, then multiply by the top number to take that many parts. The answer is yours to work out.",
   "frac-add-sub": "Make the bottoms the same first: find a number both bottoms go into and rewrite each fraction over it. Then combine only the tops. The answer is yours to work out.",
   "frac-mul-div": "To multiply, multiply the tops together and the bottoms together. To divide, turn the fraction you divide by upside down and multiply instead. Simplify at the end. The answer is yours to work out.",
+  "dec-arith": "To add or take away, write the numbers with their decimal points one under the other, filling empty places with zeros. To multiply, multiply as if there were no points, then give the answer as many digits after its point as the question's numbers have between them. The answer is yours to work out.",
   any: "Go back to the last step you are sure of and take the next. The answer stays yours to find.",
 } as const;
 /** The withheld line for a school spec, chosen by its unit; the general line for any other. */

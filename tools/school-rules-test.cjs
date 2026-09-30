@@ -468,12 +468,15 @@ const MD_SPELLINGS=[
 ];
 
 const W7_SLIPS={};
+/** The W7 batch 2 units whose tables are at the end of this file (decimals and percent). */
+const B2_UNITS=['dec-arith'];
 test(`W7 SPELLINGS equivalent fractions: ${EQ_SPELLINGS.length} written answers, zero false-right, zero false-wrong`,()=>{Object.assign(W7_SLIPS,spellings('EQ_SPELLINGS equivalent fractions',EQ_SPELLINGS,'frac-equivalent'));});
 test(`W7 SPELLINGS a fraction of an amount: ${OF_SPELLINGS.length} written answers, zero false-right, zero false-wrong`,()=>{Object.assign(W7_SLIPS,spellings('OF_SPELLINGS a fraction of an amount',OF_SPELLINGS,'frac-of-amount'));});
 test(`W7 SPELLINGS multiply and divide fractions: ${MD_SPELLINGS.length} written answers, zero false-right, zero false-wrong`,()=>{Object.assign(W7_SLIPS,spellings('MD_SPELLINGS multiply and divide fractions',MD_SPELLINGS,'frac-mul-div'));});
 test('W7 SLIPS: every slip on the closed list belongs to exactly one unit, carries no value, and every unit\'s list is detected',()=>{
  const units=Object.keys(S.SCHOOL_UNIT_SLIPS);
- assert.deepEqual(units.sort(),['frac-add-sub','frac-equivalent','frac-mul-div','frac-of-amount']);
+ // W7 batch 2 adds the decimals and percent units, each with its own closed list (tables at the end of this file)
+ assert.deepEqual(units.sort(),['frac-add-sub','frac-equivalent','frac-mul-div','frac-of-amount',...B2_UNITS].sort());
  const listed=units.flatMap((u)=>S.SCHOOL_UNIT_SLIPS[u]);
  assert.equal(new Set(listed).size,listed.length,'no slip id is on two units');
  assert.deepEqual([...listed].sort(),S.SCHOOL_SLIPS.map((s)=>s.id).sort(),'the closed list is exactly the units\' lists');
@@ -683,4 +686,171 @@ test('W7 PURITY: random strings through check and leaksSchool on every new shape
  for (const o of [null,undefined,0,{},[],{shape:'missing'},{shape:'simplify',expr:42},{shape:'fraction-of',expr:'3/5 of 40',unit:'parsec'}]){
   assert.equal(S.check(o,'9','uk').verdict,'unsure');assert.equal(S.leaksSchool(o,'9'),false);assert.equal(S.question(o),null);assert.equal(S.unitOf(o),null);
  }
+});
+
+// ================================================================== Family W7 batch 2: decimals and percent
+// "Add, subtract and multiply decimals" (compute with decimal operands, money allowed). Every expected verdict below was
+// worked by hand from the arithmetic first (the value and each slip's value are in the comments), then run. The gates
+// are the batch-1 gates: zero false-right, zero false-wrong, every slip of the unit detected at least twice, every leak
+// refused, no legit hint refused (the conflicts the strict rule accepts are listed apart).
+
+// ------------------------------------------------------------------ add, subtract and multiply decimals
+const DA1=cs('4.35 + 2.8');              // 7.15. lined up by last digits 435 + 28 = 463 -> 4.63; the point left out 715
+const DA2=cs('7.5 - 2.25');              // 5.25. lined up 75 - 225 < 0 (none); the point left out 525
+const DA3=cs('8.45 - 2.3');              // 6.15. lined up 845 - 23 = 822 -> 8.22; the point left out 615
+const DA4=cs('3.6 × 0.4');               // 1.44. the point by the wrong count 0.144, 14.4; the point left out 144
+const DA5=cs('2.45 × 1.3');              // 3.185. the wrong count 0.3185, 31.85, 318.5; the point left out 3185
+const DA6=cs('4.35 + 2.80',{unit:'€'});  // €7.15. same places, so no lining-up slip; the point left out 715
+const DA7=cs('3.45 × 4',{unit:'£'});     // £13.80. the wrong count 1.38, 138; the point left out 1380
+const DA8=cs('12.6 + 0.75');             // 13.35. lined up 126 + 75 = 201 -> 2.01; the point left out 1335
+const DA9=cs('0.7 × 0.3');               // 0.21. the wrong count 0.021, 2.1; the point left out 21
+const B2_SPELLINGS={
+ 'dec-arith':[
+  // 4.35 + 2.8 = 7.15: an equal value in any form is right; a rounding is unsure; a whole number is an exact claim
+  [DA1,'7.15','uk','right'],[DA1,'7.150','us','right'],[DA1,'7,15','cz','right'],[DA1,'7,15','de','right'],[DA1,'x = 7.15','uk','right'],[DA1,'143/20','uk','right'],[DA1,'7 3/20','uk','right'],
+  [DA1,'7,15','uk','unsure'],[DA1,'7.2','uk','unsure'],[DA1,'7.1','uk','unsure'],[DA1,'7.15 cm','uk','unsure'],[DA1,'seven point one five','uk','unsure'],[DA1,'','uk','unsure'],[DA1,'4.35 + 2.8','uk','unsure'],
+  [DA1,'4.63','uk','wrong','dec-lined-up'],[DA1,'4,63','cz','wrong','dec-lined-up'],[DA1,'715','uk','wrong','dec-point-dropped'],[DA1,'7','uk','wrong'],[DA1,'7.16','uk','wrong'],[DA1,'-7.15','uk','wrong'],[DA1,'0.715','uk','wrong'],
+  // 7.5 - 2.25 = 5.25
+  [DA2,'5.25','uk','right'],[DA2,'5.250','uk','right'],[DA2,'21/4','uk','right'],[DA2,'5 1/4','uk','right'],[DA2,'5,25','de','right'],[DA2,'5.2','uk','unsure'],[DA2,'5.3','uk','unsure'],
+  [DA2,'525','uk','wrong','dec-point-dropped'],[DA2,'5.26','uk','wrong'],[DA2,'-5.25','uk','wrong'],[DA2,'4.75','uk','wrong'],
+  // 8.45 - 2.3 = 6.15
+  [DA3,'6.15','uk','right'],[DA3,'6.1','uk','unsure'],[DA3,'8.22','uk','wrong','dec-lined-up'],[DA3,'615','uk','wrong','dec-point-dropped'],[DA3,'6.42','uk','wrong'],
+  // 3.6 × 0.4 = 1.44
+  [DA4,'1.44','uk','right'],[DA4,'1,44','cz','right'],[DA4,'36/25','uk','right'],[DA4,'1 11/25','uk','right'],[DA4,'144%','uk','right'],[DA4,'1.4','uk','unsure'],[DA4,'1.5','uk','unsure'],[DA4,'1,44','us','unsure'],[DA4,'1.44 m','uk','unsure'],
+  [DA4,'14.4','uk','wrong','dec-point-product'],[DA4,'0.144','uk','wrong','dec-point-product'],[DA4,'144','uk','wrong','dec-point-dropped'],[DA4,'4','uk','wrong'],[DA4,'12.4','uk','wrong'],
+  // 2.45 × 1.3 = 3.185; in cz a lone point before three digits is not guessed, in uk a comma before three digits groups thousands
+  [DA5,'3.185','uk','right'],[DA5,'3,185','cz','right'],[DA5,'3.185','cz','unsure'],[DA5,'3.19','uk','unsure'],[DA5,'3.18','uk','unsure'],[DA5,'3.2','uk','unsure'],[DA5,'3.185 kg','uk','unsure'],
+  [DA5,'31.85','uk','wrong','dec-point-product'],[DA5,'0.3185','uk','wrong','dec-point-product'],[DA5,'318.5','uk','wrong','dec-point-product'],[DA5,'3185','uk','wrong','dec-point-dropped'],[DA5,'3,185','uk','wrong','dec-point-dropped'],
+  // €4.35 + €2.80 = €7.15: a missing sign is not held against the value; another currency is unsure, never converted
+  [DA6,'€7.15','uk','right'],[DA6,'7.15','uk','right'],[DA6,'7,15 €','de','right'],[DA6,'7.15 €','de','right'],[DA6,'7.15 euros','uk','right'],[DA6,'€ 7.15','uk','right'],
+  [DA6,'7,15 €','uk','unsure'],[DA6,'£7.15','uk','unsure'],[DA6,'€7.2','uk','unsure'],[DA6,'715p','uk','unsure'],[DA6,'€715','uk','wrong','dec-point-dropped'],[DA6,'€7','uk','wrong'],
+  // £3.45 × 4 = £13.80
+  [DA7,'£13.80','uk','right'],[DA7,'13.8','uk','right'],[DA7,'£13.8','uk','right'],[DA7,'€13.80','uk','unsure'],
+  [DA7,'£138','uk','wrong','dec-point-product'],[DA7,'£1.38','uk','wrong','dec-point-product'],[DA7,'1380','uk','wrong','dec-point-dropped'],[DA7,'£13.00','uk','wrong'],[DA7,'12.80','uk','wrong'],
+  // 12.6 + 0.75 = 13.35
+  [DA8,'13.35','uk','right'],[DA8,'13.4','uk','unsure'],[DA8,'13.3','uk','unsure'],[DA8,'2.01','uk','wrong','dec-lined-up'],[DA8,'1335','uk','wrong','dec-point-dropped'],
+  // 0.7 × 0.3 = 0.21
+  [DA9,'0.21','uk','right'],[DA9,'.21','us','right'],[DA9,'21/100','uk','right'],[DA9,'21%','uk','right'],[DA9,'0.2','uk','unsure'],[DA9,'0,21','uk','unsure'],
+  [DA9,'2.1','uk','wrong','dec-point-product'],[DA9,'0.021','uk','wrong','dec-point-product'],[DA9,'21','uk','wrong','dec-point-dropped'],[DA9,'1.0','uk','wrong'],
+ ],
+};
+const B2_LEAKS={
+ 'dec-arith':[
+  [DA1,'The answer is 7.15.'],[DA1,'You get seven point one five.'],[DA1,'4.35 + 2.8 = 7.15'],[DA1,'It comes to 7.150.'],[DA1,'715, then put the point back.'],[DA1,'About 7.2.'],
+  [DA1,'In Czech notation that is 7,15.'],[DA1,'4.35 + 2.80 = 7.15'],[DA1,'That is 143/20.'],[DA1,'Seven and three twentieths.'],[DA1,'715 hundredths.'],
+  [DA2,'It is 5.25.'],[DA2,'Five and a quarter.'],[DA2,'525 hundredths'],
+  [DA4,'It is 1.44.'],[DA4,'36 × 4 = 144, then count the places.'],[DA4,'One point four four.'],[DA4,'The answer is 1,44.'],[DA4,'3.6 × 0.4 = 1.44'],[DA4,'Roughly 1.4.'],[DA4,'0.4 lots of 3.6 is 1.44'],
+  [DA7,'It is £13.80.'],[DA7,'345 × 4 = 1380'],[DA7,'13.8'],[DA7,'Thirteen pounds eighty.'],[DA7,'£13 and 80p'],[DA7,'138, then put the point in.'],
+  [DA9,'0.21'],[DA9,'7 × 3 = 21'],[DA9,'Twenty-one hundredths.'],
+ ],
+};
+const B2_LEGIT={
+ 'dec-arith':[
+  [DA1,'Line up the decimal points.'],[DA1,'Write 2.8 as 2.80 so both have two places.'],[DA1,'Add the hundredths first.'],[DA1,'Estimate first: about 4 + 3.'],[DA1,'The answer is a bit more than 7.'],
+  [DA1,'Now work out 4.35 + 2.80.'],[DA1,'2.8 is the same as 2.80.'],[DA1,'0.35 + 0.8 = 1.15, so carry the 1.'],[DA1,'4 + 2 = 6 for the whole numbers.'],[DA1,'Put a zero after the 8.'],
+  [DA4,'Ignore the points and multiply.'],[DA4,'Count the digits after the points: there are two.'],[DA4,'The answer will be less than 3.6.'],[DA4,'0.4 is less than 1, so the answer is smaller than 3.6.'],[DA4,'Think of 0.4 as 4 tenths.'],
+  [DA4,'Now work out 3.6 × 0.4.'],[DA7,'Multiply the pounds and the pence separately.'],[DA7,'£3 × 4 = £12.'],[DA7,'45p × 4 is 180p.'],[DA7,'Keep the £ sign in your answer.'],[DA7,'Your answer should be in pounds and pence.'],
+  [DA3,'Write 2.3 as 2.30 before you subtract.'],[DA3,'Take away the hundredths first.'],[DA3,'Check by adding your answer to 2.3.'],[DA9,'There are two digits after the points in the question.'],
+ ],
+};
+/**
+ * B2 CONFLICTS: legit hints the strict rule refuses, accepted and reported. A decimal's answer written without its point
+ * is the answer (rule 4 for decimals: "715, then put the point back"), so the whole-number working that gives exactly
+ * those digits is refused too, even as a first move ("multiply 36 by 4" makes 144, the digits of 1.44).
+ */
+const B2_CONFLICTS=[
+ [DA4,'Multiply 36 by 4 first.'],[DA9,'7 × 3 is a times-table fact.'],
+];
+
+/** The references: each unit's answer by hand in whole hundredths or thousandths, never the module's evaluator. */
+const decUnits=(s)=>{const [w,f='']=s.split('.');return {n:Number(w+f),p:f.length};};
+const B2REF={
+ 'dec-arith':(s)=>{
+  const m=/^(\d+(?:\.\d+)?) ([-+×]) (\d+(?:\.\d+)?)$/.exec(s.expr);if(!m||s.shape!=='compute')return null;
+  const a=decUnits(m[1]),b=decUnits(m[3]),op=m[2];
+  let n,p;if(op==='×'){n=a.n*b.n;p=a.p+b.p;}else{p=Math.max(a.p,b.p);const x=a.n*10**(p-a.p),y=b.n*10**(p-b.p);n=op==='+'?x+y:x-y;}
+  const text=(n/10**p).toFixed(p);return {a:m[1],b:m[3],op,pa:a.p,pb:b.p,n,p,truth:text,nums:[m[1],m[3]]};
+ },
+};
+const B2GEN={'dec-arith':S.genDecimal};
+/** Each unit's tier, as school.ts documents it, asserted on the reference reading. */
+const B2_TIER={
+ 'dec-arith':(s,r,tier)=>{
+  const money=s.unit!==undefined;
+  if(money)assert.ok(['€','£'].includes(s.unit),`money in euros or pounds: ${s.unit}`);
+  if(tier===1){assert.ok(r.op==='+'||r.op==='-',`tier 1 adds or subtracts: ${s.expr}`);if(money)assert.ok(r.pa===2&&r.pb===2,'money to the penny');else assert.ok(r.pa>=1&&r.pa<=2&&r.pb>=1&&r.pb<=2&&!/0$/.test(r.a)&&!/0$/.test(r.b),s.expr);}
+  else if(money){assert.equal(r.op,'×');assert.ok(r.pa===2&&r.pb===0&&+r.b>=3&&+r.b<=9,`money times a count 3..9: ${s.expr}`);}
+  else{assert.equal(r.op,'×');assert.ok(r.pb===1&&(r.pa===1||r.pa===2)&&+r.a<=19.9&&+r.b<=4.9,`a decimal by a one-place decimal: ${s.expr}`);}
+  assert.ok(Number(r.truth)>0&&!Number.isInteger(Number(r.truth)),`a decimal answer: ${s.expr} = ${r.truth}`);
+ },
+};
+
+for (const unit of B2_UNITS){
+ test(`W7b SPELLINGS ${unit}: ${B2_SPELLINGS[unit].length} written answers, zero false-right, zero false-wrong`,()=>{spellings(`B2_SPELLINGS ${unit}`,B2_SPELLINGS[unit],unit);});
+ test(`W7b LEAKS ${unit}: ${B2_LEAKS[unit].length} hints that give the answer away are refused; ${B2_LEGIT[unit].length} legit hints pass`,()=>{
+  const leaks=B2_LEAKS[unit],legit=B2_LEGIT[unit];
+  const missed=leaks.filter(([s,h])=>!S.leaksSchool(s,h)).map(([s,h])=>`${JSON.stringify(s)} | ${h}`);
+  const flagged=legit.filter(([s,h])=>S.leaksSchool(s,h)).map(([s,h])=>`${JSON.stringify(s)} | ${h}`);
+  const specs=new Set([...leaks,...legit].map(([s])=>JSON.stringify(s)));
+  console.log(`# W7b LEAKS ${unit}: ${leaks.length} (missed ${missed.length}), LEGIT ${legit.length} (flagged ${flagged.length}), specs ${specs.size}`);
+  assert.deepEqual(missed,[],'every leaking hint is caught');
+  assert.deepEqual(flagged,[],'no legit hint is flagged');
+  assert.ok(leaks.length>=15&&legit.length>=20&&specs.size>=3);
+  for (const [s] of [...leaks,...legit]) assert.equal(S.unitOf(s),unit,`${JSON.stringify(s)} is a ${unit} spec`);
+ });
+ test(`W7b GENERATOR ${unit}: seeds 1..200 for tiers 1 and 2 give well-formed, distinct items of the documented tier, judged right by a reference`,()=>{
+  const g=B2GEN[unit],ref=B2REF[unit],counts={};
+  assert.equal(S.SCHOOL_GENERATORS[unit],S.generatorFor(unit));
+  for (const tier of [1,2]){
+   const seen=new Set();
+   for (let seed=1;seed<=200;seed++){
+    const s=g(seed,tier);
+    assert.ok(s,`seed ${seed} tier ${tier}`);assert.deepEqual(g(seed,tier),s,'same seed, same spec');
+    assert.deepEqual(S.generatorFor(unit)(seed,tier),s,'the registered generator is this one');
+    assert.deepEqual(S.wellFormed(s),{ok:true},JSON.stringify(s));assert.equal(S.unitOf(s),unit);
+    const r=ref(s);assert.ok(r,`the reference reads ${JSON.stringify(s)}`);
+    B2_TIER[unit](s,r,tier);
+    const q=S.question(s).plain;
+    const off=r.off??((r.n+10**r.p)/10**r.p).toFixed(r.p);
+    for (const sys of ['uk','us']){
+     assert.equal(S.check(s,r.truth,sys).verdict,'right',`${q} = ${r.truth} (${sys})`);
+     assert.equal(S.check(s,off,sys).verdict,'wrong',`${q} != ${off}`);
+    }
+    for (const sys of ['cz','de']) assert.equal(S.check(s,r.truth.replace('.',','),sys).verdict,'right',`${q} = ${r.truth} with a decimal comma (${sys})`);
+    assert.ok(S.leaksSchool(s,`The answer is ${r.truth}.`),`the answer leaks: ${q}`);
+    assert.ok(!S.leaksSchool(s,q),`the question does not: ${q}`);
+    assert.ok(!S.leaksSchool(s,S.withheldSchool(s)),'the withheld line leaks nothing');
+    assert.deepEqual(S.specFromQuestion(q),s,`${q} reads back to its spec`);
+    seen.add(JSON.stringify(s));
+   }
+   counts[tier]=seen.size;
+  }
+  console.log(`# W7b GENERATOR ${unit} distinct specs over seeds 1..200: tier 1 ${counts[1]}, tier 2 ${counts[2]}`);
+  assert.ok(counts[1]>=100&&counts[2]>=100,'seeds spread');
+  for (const bad of [-1,1.5,NaN,'1',null,undefined,2**32]) assert.equal(g(bad,1),null);
+  for (const bad of [0,3,'1',null,1.5]) assert.equal(g(1,bad),null);
+ });
+}
+test('W7b CONFLICTS: the strict leak rule refuses these legit hints, and that cost is accepted and reported',()=>{
+ for (const [s,h] of B2_CONFLICTS) assert.equal(S.leaksSchool(s,h),true,`${JSON.stringify(s)} | ${h}`);
+ console.log(`# W7b accepted conflicts ${B2_CONFLICTS.length}`);
+});
+
+test('W7b question: each new item prints plain text and TeX, never its answer, keeps every number through the typesetter, and reads back to its spec',()=>{
+ const P=[
+  [DA1,'Work out 4.35 + 2.8.'],[DA4,'Work out 3.6 × 0.4.'],[DA6,'Work out €4.35 + €2.80.'],[DA7,'Work out £3.45 × 4.'],[DA2,'Work out 7.5 - 2.25.'],
+  // a dollar is never printed as '$' (TeX's delimiter): a money sum in dollars names its unit after it
+  [cs('4.35 + 2.80',{unit:'$'}),'Work out 4.35 + 2.80. Give your answer in dollars.'],
+ ];
+ for (const [s,plain] of P){
+  const q=S.question(s);
+  assert.equal(q.plain,plain);assert.ok(!S.leaksSchool(s,q.plain),`the question itself is not a leak: ${q.plain}`);
+  for (const line of [q.plain,q.tex]){
+   const flat=T.flatten(T.parseMath(line));
+   for (const d of s.expr.match(/\d+(?:\.\d+)?/g)) assert.ok(flat.includes(d),`${line} keeps ${d}: ${flat}`);
+   if (s.unit==='€'||s.unit==='£') assert.equal(flat.split(s.unit).length-1,s.expr.includes('×')?1:2,`${line}: the sign before each amount`);
+  }
+ }
+ assert.deepEqual(S.specFromQuestion('Work out €4.35 + €2.80.'),DA6);assert.deepEqual(S.specFromQuestion('Work out £3.45 × 4.'),DA7);
+ assert.equal(S.question(cs('4.35 + 2.80',{unit:'€',form:'decimal'})).plain,'Work out 4.35 + 2.80. Give your answer as a decimal.','a form asked keeps the old wording');
 });

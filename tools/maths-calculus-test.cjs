@@ -340,6 +340,28 @@ test('7b: the W7 school corpus - every question the three new generators print r
  assert.equal(off.length,0,'a W7 school question that does not set cleanly:\n'+off.join('\n'));
 });
 
+test('7c: the W7 batch-2 school corpus - every decimals and percent question the new generators print renders on the practice sheet, every number, point, percent sign and unit kept',()=>{
+ // decimals: 'Work out 4.35 + 2.8.', 'Work out €4.35 + €2.80.', 'Work out £3.45 × 4.' (no fraction stacked; a decimal is one number, its point kept)
+ const S=require(path.join(root,'src/lib/rules/school.ts'));
+ const GENS=[[S.genDecimal,()=>0]];
+ const off=[];let n=0;
+ for(const [g,fracs] of GENS)for(const tier of [1,2])for(let seed=0;seed<100;seed++){
+  const sp=g(seed,tier),q=S.question(sp);n++;
+  for(const [form,line,tex] of [['plain',q.plain,false],['tex',q.tex,true]]){
+   const st=renderStatus(line,'question',tex);
+   if(st!=='renders')off.push(`${sp.shape} ${tier}/${seed} ${form} ${line}: ${st}`);
+   let fr=0;T.walk(T.parseMath(line),(x)=>{if(x.t==='frac')fr++;});
+   if(fr!==fracs(sp))off.push(`${sp.shape} ${tier}/${seed} ${form} ${line}: ${fr} stacked fractions`);
+   const flat=T.flatten(T.parseMath(line));
+   for(const d of sp.expr.match(/\d+(?:\.\d+)?/g))if(!flat.includes(d))off.push(`${line}: ${d} is lost (${flat})`);
+   if(/%/.test(sp.expr)&&!flat.includes('%'))off.push(`${line}: the percent sign is lost (${flat})`);
+   if(sp.unit&&!/[€£]|kg|grams|km|metres|cm|litres|ml|minutes|dollars/.test(flat))off.push(`${line}: the unit ${sp.unit} is lost (${flat})`);
+  }
+ }
+ assert.equal(n,GENS.length*200);
+ assert.equal(off.length,0,'a W7 batch-2 school question that does not set cleanly:\n'+off.join('\n'));
+});
+
 after(()=>{
  // the baseline table: topic x example -> render (plain | tex), check
  const pad=(s,n)=>String(s).padEnd(n);

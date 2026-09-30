@@ -284,3 +284,63 @@ test('W7 1: the school path has seven topics - four fractions units, then the th
  assert.equal(P.PATHS.school.blurb,'School maths from equivalent fractions to equations with brackets and x on both sides.');
 });
 
+// ------------------------------------------------------------------ Family W7 batch 2: decimals and percent, written by code
+/** Each unit's tier, as its generator documents it (rules/school), read back from the spec alone. */
+const B2_TIER={
+ 'dec-arith':(sp)=>(/×/.test(sp.expr)?2:1),
+};
+/** The printed question of each unit, and the keys its spec may carry. */
+const B2_SHAPE={
+ 'dec-arith':[/^Work out (?:[€£]?\d+\.\d+ [-+] [€£]?\d+\.\d+|[€£]?\d+(?:\.\d+)? × \d+(?:\.\d+)?)\.$/,['shape','expr','unit']],
+};
+for(const unit of Object.keys(B2_TIER)){
+ test(`W7b 2-${unit}: makeSchoolItems writes six distinct items by code - three tier 1, then three tier 2 - pure for a seed, with no engine call`,()=>{
+  noModel();
+  for(let seed=1;seed<=40;seed++){
+   const r=makeSchoolItems(unit,6,seed*7919);
+   assert.equal(seen.length,0,'no text engine call');
+   assert.equal(r.provider,'code');assert.equal(r.tries,0);assert.equal(r.items.length,6);
+   assert.deepEqual(r.items.map((i)=>i.tier),[1,1,1,2,2,2],'tier 1 first, then tier 2');
+   assert.equal(new Set(r.items.map((i)=>i.question.replace(/\s+/g,''))).size,6,'six distinct questions');
+   for(const it of r.items){
+    assert.ok(S.wellFormed(it.spec).ok,JSON.stringify(it.spec));assert.equal(S.unitOf(it.spec),unit);
+    assert.equal(it.question,S.question(it.spec).plain,'the question is printed by code from the spec');
+    assert.match(it.question,B2_SHAPE[unit][0]);
+    assert.equal(it.tier,B2_TIER[unit](it.spec),`${it.question}: the stored tier is the one its spec shows, computed by code`);
+    assert.equal(S.leaksSchool(it.spec,it.question),false,'the question does not state its own answer');
+    assert.ok(!('difficulty' in it)&&!('answer' in it),'no model difficulty, no answer');
+    assert.deepEqual(Object.keys(it.spec).filter((k)=>!B2_SHAPE[unit][1].includes(k)),[],'the spec carries only its own keys');
+   }
+   assert.deepEqual(makeSchoolItems(unit,6,seed*7919).items,r.items,'the same seed gives the same set');
+  }
+  const sets=new Set([1,1000,99999,123456789,4000000000].map((s)=>makeSchoolItems(unit,6,s).items.map((i)=>i.question).join('|')));
+  assert.equal(sets.size,5,'five seeds, five different sets');
+  assert.equal(makeSchoolItems(unit,6,0xffffffff).items.length,6);
+ });
+}
+
+test('W7b 5b: the batch-2 specs survive the store - practice.set, practice.marked, practice.settle and a reload - and a Calculus spec and the batch-1 specs are untouched',()=>{
+ seat();
+ const specs=[{shape:'compute',expr:'4.35 + 2.8'},{shape:'compute',expr:'4.35 + 2.80',unit:'€'},{shape:'compute',expr:'3.45 × 4',unit:'£'},{shape:'compute',expr:'3.6 × 0.4'},
+  {shape:'missing',expr:'3/4 = ?/12'},{shape:'fraction-of',expr:'5/8 of 72',unit:'€'}];
+ const calc={shape:'critical-point',f:'x^2 - 4x + 1',on:[0,5]};
+ const N=specs.length;
+ const items=[...specs.map((spec,i)=>({n:i+1,question:S.question(spec).plain,spec,tier:1+(i%2)})),{n:N+1,question:'q',spec:calc}];
+ store.dispatch({type:'practice.set',practice:{topic:'dec-arith',marked:false,items}});
+ const got=()=>store.getSession().practice.items;
+ assert.deepEqual(got().slice(0,N).map((i)=>i.spec),specs,'practice.set keeps every key');
+ store.dispatch({type:'practice.marked',items:got().map((it)=>({...it,verdict:'unsure',said:'x'}))});
+ assert.deepEqual(got().slice(0,N).map((i)=>i.spec),specs,'practice.marked keeps them');
+ store.dispatch({type:'practice.settle',n:2,reply:'ok',verdict:'right',said:'Number 2 is right.'});
+ assert.deepEqual(got()[1].spec,specs[1]);
+ clearInterval(globalThis.__desk.ticker);delete globalThis.__desk;delete require.cache[storeFile];store=require(storeFile);
+ assert.deepEqual(store.getSession().practice.items.slice(0,N).map((i)=>i.spec),specs,'loaded from session.json and re-validated');
+ assert.deepEqual(store.getSession().practice.items[N].spec,calc,'the Calculus spec is untouched by the reload');
+ assert.deepEqual(store.getSession().practice.items.slice(0,N).map((i)=>i.tier),specs.map((_,i)=>1+(i%2)));
+ const put=(spec)=>{store.dispatch({type:'practice.set',practice:{topic:'dec-arith',marked:false,items:[{n:1,question:'q',spec,tier:1}]}});return store.getSession().practice.items[0];};
+ assert.deepEqual(put({shape:'compute',expr:'4.35 + 2.8',answer:'7.15',value:7.15}).spec,{shape:'compute',expr:'4.35 + 2.8'},'an answer stops at the store');
+ for(const bad of [{shape:'compute',expr:'4.3567 + 1'},{shape:'compute',expr:'2.25 - 7.5'},{shape:'compute',expr:'4.35 + 2.8',unit:'CZK'}]){
+  const it=put(bad);assert.equal(it.spec,undefined,JSON.stringify(bad));assert.equal(it.tier,undefined,'no spec, no tier');
+ }
+});
+

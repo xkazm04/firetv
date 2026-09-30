@@ -180,7 +180,8 @@ const TASKS=[
  // W7: multiply and divide fractions is a unit now, so these two (refused in W5b) read as its specs
  ['3/4 × 1/6','3/4 × 1/6'],['3/4 ÷ 1/6','3/4 ÷ 1/6'],
  // refused: not two fractions combined, or not read with one meaning
- ['3 + 4',null],['0.5 + 0.25',null],['1/2 + 1/3 + 1/4',null],['three quarters plus one sixth',null],['3/4 + x',null],['Solve x + 1/2 = 3/4',null],
+ // W7 batch 2: '0.5 + 0.25' (refused in W5b) reads as "Add, subtract and multiply decimals" now; its row is in W7b 4 below
+ ['3 + 4',null],['1/2 + 1/3 + 1/4',null],['three quarters plus one sixth',null],['3/4 + x',null],['Solve x + 1/2 = 3/4',null],
  ['(3/4 + 1/6',null],['3/4 + 1/6)',null],['1 1/2 + 3/4',null],['3/4 + 1/6 = 11/12',null],['1/6 - 3/4',null],
  ['3/0 + 1/6',null],['Find the difference between 3/4 and 1/6',null],['',null],['3/4 + 1/6 and 1/2',null],['2 + 3/4',null],['Work out 3/4 + 1/6 please',null],
  ['3/1 + 1/6',null],['03/4 + 1/6',null],['Differentiate x^2 + 1/2',null],['Solve for x:  3x − 7 = 11',null],['Work out 1/3 + 1/5. Give your answer as a decimal.',null],
@@ -642,3 +643,84 @@ test('W7 8: a hint on each new unit\'s task names the unit in its stance, and a 
   assert.equal(seenText.length,1,`${task}: a legit hint passes on the first ask`);assert.equal(h.hint,clean);
  }
 });
+
+// ------------------------------------------------------------------ 8. Family W7 batch 2: decimals and percent, read, withheld and marked
+/** [task text, the spec it reads as (null: refused)] per unit; each spec's value is worked in school-rules-test. */
+const B2_TASKS={
+ 'dec-arith':[
+  ['Work out 4.35 + 2.8',cs('4.35 + 2.8')],['Work out 4.35 + 2.8.',cs('4.35 + 2.8')],['4.35 + 2.8',cs('4.35 + 2.8')],['4.35 + 2.8 =',cs('4.35 + 2.8')],['4.35 + 2.8 = ?',cs('4.35 + 2.8')],
+  ['Calculate 3.6 × 0.4',cs('3.6 × 0.4')],['3.6 x 0.4',cs('3.6 × 0.4')],['3.6 * 0.4',cs('3.6 × 0.4')],['3.6 times 0.4',cs('3.6 × 0.4')],['What is 7.5 - 2.25?',cs('7.5 - 2.25')],
+  ['7.5 minus 2.25',cs('7.5 - 2.25')],['7.5 − 2.25',cs('7.5 - 2.25')],['Subtract 2.25 from 7.5',cs('7.5 - 2.25')],['Take 2.25 away from 7.5',cs('7.5 - 2.25')],['Add 4.35 and 2.8',cs('4.35 + 2.8')],
+  ['Add 2.8 to 4.35',cs('2.8 + 4.35')],['Find the sum of 4.35 and 2.8',cs('4.35 + 2.8')],['Multiply 3.6 by 0.4',cs('3.6 × 0.4')],['Find the product of 3.6 and 0.4',cs('3.6 × 0.4')],
+  ['Work out €4.35 + €2.80.',cs('4.35 + 2.80',{unit:'€'})],['£3.45 × 4',cs('3.45 × 4',{unit:'£'})],['(b) 12.6 + 0.75',cs('12.6 + 0.75')],['3. 0.7 × 0.3',cs('0.7 × 0.3')],
+  ['Evaluate 8.45 - 2.3',cs('8.45 - 2.3')],['4 × 0.25',cs('4 × 0.25')],['0.5 + 0.25',cs('0.5 + 0.25')],
+  // refused
+  ['4.35 + 2.8 + 1.2',null],['4.35 + 2.8 = 7.15',null],['3.6 ÷ 0.4',null],['4,35 + 2,8',null],['3 + 4',null],['1/2 + 0.25',null],['4 × £3.45',null],['€4.35 + 2.80',null],
+  ['€4.35 + £2.80',null],['2.25 - 7.5',null],['4.3567 + 1',null],['Work out 4.35 + 2.8 please',null],['Add 4.35',null],['A pen costs £1.35. How much do 4 pens cost?',null],
+  ['4.35 + x',null],['3.6 : 0.4',null],['£3.45 × 4.5',null],['1.5.2 + 3',null],['4.35 + 2.8. Give your answer as a fraction.',null],['Work out 04.35 + 2.8',null],
+ ],
+};
+const B2GEN={'dec-arith':S.genDecimal};
+for(const unit of Object.keys(B2_TASKS)){
+ const rows=B2_TASKS[unit];
+ test(`W7b 4-${unit}: specFromQuestion reads the unit's tasks conservatively - ${rows.length} phrasings, ${rows.filter((t)=>t[1]===null).length} of them refused`,()=>{
+  assert.ok(rows.length>=25&&rows.filter((t)=>t[1]===null).length>=10);
+  for(const [text,want] of rows){
+   const got=S.specFromQuestion(text);
+   if(want===null){assert.equal(got,null,`refused: ${JSON.stringify(text)}`);continue;}
+   assert.deepEqual(got,want,text);
+   assert.ok(S.wellFormed(got).ok);assert.equal(S.unitOf(got),unit,`${text} is a ${unit} task`);
+   assert.equal(C.specFromQuestion(text),null,`${text}: not a Calculus task`);
+  }
+  for(const tier of [1,2])for(let seed=0;seed<200;seed++){const sp=B2GEN[unit](seed,tier);assert.deepEqual(S.specFromQuestion(S.question(sp).plain),sp,`${unit} ${tier}/${seed}`);}
+ });
+ test(`W7b 5-${unit}: the withheld sentence names the unit's method, carries no number, and leaks nothing on any generated item`,()=>{
+  const line=S.SCHOOL_WITHHELD[unit];
+  assert.equal(typeof line,'string');assert.doesNotMatch(line,/\d/);assert.match(line,/The answer is yours to work out\.$/);
+  for(const other of Object.keys(S.SCHOOL_UNIT_SLIPS))if(other!==unit)assert.notEqual(S.SCHOOL_WITHHELD[other],line,'each unit has its own line');
+  for(const tier of [1,2])for(let seed=0;seed<200;seed++){const sp=B2GEN[unit](seed,tier);assert.equal(S.leaksSchool(sp,line),false,`${unit} ${tier}/${seed}`);assert.equal(S.withheldSchool(sp),line);}
+  for(const [,sp] of rows.filter((r)=>r[1]))assert.equal(S.withheldSchool(sp),line);
+ });
+}
+
+/** A full set per unit: right, each of its slips, unsure, blank. Expected verdicts worked by hand (school-rules-test comments). */
+const B2_PAGES={
+ 'dec-arith':[
+  {spec:cs('4.35 + 2.8'),a:'7.15',want:['right']},{spec:cs('4.35 + 2.8'),a:'4.63',want:['wrong','dec-lined-up']},{spec:cs('3.6 × 0.4'),a:'14.4',want:['wrong','dec-point-product']},
+  {spec:cs('3.6 × 0.4'),a:'144',want:['wrong','dec-point-dropped']},{spec:cs('4.35 + 2.80',{unit:'€'}),a:'€7.15',want:['right']},{spec:cs('3.45 × 4',{unit:'£'}),a:'£13.8',want:['right']},
+  {spec:cs('4.35 + 2.8'),a:'7.2',want:['unsure']},{spec:cs('3.6 × 0.4'),a:'',want:['unsure']},{spec:cs('3.45 × 4',{unit:'£'}),a:'€13.80',want:['unsure']},
+ ],
+};
+for(const unit of Object.keys(B2_PAGES)){
+ const page=B2_PAGES[unit];
+ test(`W7b 6-${unit}: a full set (right, every slip, unsure, blank) is marked by code the same from a read photo and from typed answers, and calls no model when typed`,async()=>{
+  const ids=[...new Set(page.filter((p)=>p.want[1]).map((p)=>p.want[1]))];
+  assert.deepEqual(ids.sort(),[...S.SCHOOL_UNIT_SLIPS[unit]].sort(),'the set shows every slip of the unit');
+  assert.ok(page.some((p)=>p.want[0]==='right')&&page.some((p)=>p.want[0]==='unsure')&&page.some((p)=>!p.a),'right, unsure and blank are on it');
+  assert.deepEqual(M.slipsFor(unit).map((s)=>s.id),[...S.SCHOOL_UNIT_SLIPS[unit]],'slipsFor is the unit\'s closed list');
+  for(const s of M.slipsFor(unit)){assert.deepEqual(s.topics,[unit]);assert.doesNotMatch(s.says+s.name+s.points,/\d/,`${s.id}: no value on it`);}
+  const put=()=>store.dispatch({type:'practice.set',practice:{topic:unit,marked:false,items:page.map((p,i)=>({n:i+1,question:question(p.spec),spec:p.spec,tier:1}))}});
+  seat('uk');put();
+  stubVision(()=>({items:page.map((p,i)=>({n:i+1,studentAnswer:p.a,studentWorking:'',verdict:'right',solution:'1',slip:'dec-lined-up'}))}));
+  stubText(()=>{throw new Error('no text call while marking');});
+  assert.equal((await post('mark',PHOTO)).status,200);
+  assert.equal(seenVision.length,1);assert.equal(seenText.length,0);
+  const photo=verdicts(),photoSkill={...learners.getLearner(LEARNER).skills[unit]};
+  seat('uk');put();noModel();
+  const r=await post('mark',{answers:page.map((p)=>p.a)});
+  assert.equal(r.status,200);assert.equal(seenVision.length+seenText.length,0,'no model call');
+  assert.equal((await r.json()).provider,'code');
+  const typed=verdicts();
+  assert.deepEqual(typed,photo,'the same verdicts, slips and lines from a photo and from typing');
+  page.forEach((p,i)=>{
+   const [verdict,slip]=p.want,it=typed[i];
+   assert.equal(it.verdict,verdict,`#${i+1} ${JSON.stringify(p.a)} on ${p.spec.expr}`);assert.equal(it.slip,slip,`#${i+1}: the slip code detected`);
+   if(verdict==='right')assert.equal(it.said,M.RIGHT(i+1));else if(slip)assert.equal(it.said,S.SCHOOL_SLIPS.find((x)=>x.id===slip).says);else assert.equal(it.said,M.ASK(i+1));
+  });
+  const settledN=page.filter((p)=>p.want[0]!=='unsure').length,right=page.filter((p)=>p.want[0]==='right').length;
+  const sk=learners.getLearner(LEARNER).skills[unit];
+  assert.equal(sk.seen,settledN,'only settled items reach the record');assert.equal(sk.seen,photoSkill.seen);assert.equal(sk.right,right);
+  assert.equal(lastLine().detail,`${right} of ${page.length} right, ${page.length-settledN} not sure`);
+  store.getSession().practice.items.forEach((it,i)=>assert.deepEqual(it.spec,page[i].spec,'the spec survives marking'));
+ });
+}
