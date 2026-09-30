@@ -319,6 +319,7 @@ test('data 3: the calendar\'s weeks come from the lesson count - three a week, t
 test('data 4: MathsTV keeps no hand list - no COUNT, no fixed weeks, no literal first-evening title',()=>{
  const tv=tvSrc();
  assert.doesNotMatch(tv,/const COUNT\b/,'no COUNT word list');
+ assert.doesNotMatch(tv,/HOW_MANY\b/,'no second count word list beside the sheet');
  assert.doesNotMatch(tv,/\["Week 1",\s*0,\s*3\]/,'no fixed weeks');
  assert.doesNotMatch(tv,/(Linear equations|School maths), from the first step/,'no literal title');
  assert.match(fnBody(tv,'Calendar'),/calendarWeeks\(list\.length\)/,'the weeks are the lesson count\'s');
@@ -336,6 +337,24 @@ test('count 1: the Practice card says how many questions to work, not a literal 
  const tv=stripSrc(fs.readFileSync(path.join(root,'src/maths/MathsTV.tsx'),'utf8'));
  assert.doesNotMatch(tv,/Work all six/,'no literal count in the card');
  assert.match(tv,/Work \{workWhat\(p\.items\.length\)\} on paper, then snap the whole sheet with the phone/,'the card says the set\'s own count and still asks for the phone in its own copy (the hand-off test reads it there)');
+});
+
+test('count 2: the marked sheet\'s headline uses the same counts as the Practice card',()=>{
+ const {sheetHead}=R();
+ assert.equal(sheetHead(0,1),'All of it right','one question, all of it right');
+ assert.equal(sheetHead(0,2),'Both right');
+ assert.equal(sheetHead(0,6),'All six right');
+ assert.equal(sheetHead(0,10),'All ten right');
+ assert.equal(sheetHead(0,11),'All 11 right','past ten the count is digits');
+ assert.equal(sheetHead(1,6),'One to look at');
+ assert.equal(sheetHead(2,6),'Two to look at');
+ assert.equal(sheetHead(6,6),'Six to look at');
+ assert.equal(sheetHead(10,11),'Ten to look at');
+ assert.equal(sheetHead(11,11),'11 to look at');
+ for(const [look,total] of [[0,1],[0,2],[0,6],[0,11],[1,6],[2,6],[6,6],[11,11]])
+  assert.doesNotMatch(sheetHead(look,total),/undefined|NaN|All one right|All two right/);
+ const tv=tvSrc();
+ assert.match(fnBody(tv,'Sheet'),/sheetHead\(look,\s*tiles\.length\)/,'Sheet asks sheetHead for the headline');
 });
 
 // ---------------------------------------------------------------- 8. the TV reads the learner's path (lib/library/paths.ts)

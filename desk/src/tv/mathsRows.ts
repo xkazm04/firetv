@@ -130,6 +130,26 @@ export function workWhat(n: number): string {
   return n === 1 ? "the question" : n === 2 ? "both" : `all ${SET_WORDS[n] || String(n)}`;
 }
 
+/** A count as the sheet's title writes it: a word up to ten (capitalised when it opens the line), digits past that. */
+function sheetCount(n: number, cap: boolean): string {
+  const w = SET_WORDS[n];
+  if (!w) return String(n);
+  return cap ? w.charAt(0).toUpperCase() + w.slice(1) : w;
+}
+
+/**
+ * The marked sheet's headline. Something still to look at is counted the way the title already was
+ * ("One to look at", "Six to look at", "11 to look at"). An all-right set of one is "All of it right",
+ * of two "Both right", and any longer set "All six right" — the same one-and-two the Practice card
+ * says (`workWhat`), said as a title. The line under the actions stays digits.
+ */
+export function sheetHead(look: number, total: number): string {
+  if (look > 0) return `${sheetCount(look, true)} to look at`;
+  if (total === 1) return "All of it right";
+  if (total === 2) return "Both right";
+  return `All ${sheetCount(total, false)} right`;
+}
+
 /**
  * Tonight's title when nothing is open: every topic secure, "N of M topics secure", or on the first evening the path
  * from the first step (`pathFirst`: the path's own name, 'School maths' or 'Calculus 1'). The defaults are the

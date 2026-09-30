@@ -16,7 +16,7 @@ import { LESSONS } from "@/lib/library/lessons.data";
 import { lessonStates } from "@/lib/library/watched";
 import { slip as slipById } from "@/lib/rules/maths";
 import { PAD, STRIP_AFTER, fitName, flagOnStage, flagX, needleX, rulerFrontier, rulerModel, schoolMarks, stripFlag, stripModel } from "@/tv/rulerRows";
-import { calendarWeeks, continueCard, explainLine, fitRow, humanTopic, inRunningText, markLine, mathPlaced, noLessonsLine, paperSquare, pathSecure, rowSquares, secureTitle, stateWord, stretchSecure, topicName, topicStates, usualSeen, workWhat, SQUARE, type Continue, type JobLine } from "@/tv/mathsRows";
+import { calendarWeeks, continueCard, explainLine, fitRow, humanTopic, inRunningText, markLine, mathPlaced, noLessonsLine, paperSquare, pathSecure, rowSquares, secureTitle, sheetHead, stateWord, stretchSecure, topicName, topicStates, usualSeen, workWhat, SQUARE, type Continue, type JobLine } from "@/tv/mathsRows";
 import { running, practiceFailed, stopAt, tonightStops, calendarStops, unitStops, walkStops, HINT_STOPS, TONIGHT_MENU, type TonightStop } from "@/tv/keys";
 import { PREPARE_CHOICES, PREPARE_DOOR, SYS_WORD, choiceLine, prepareGroups, prepareModel } from "@/tv/prepareRows";
 import { sheetTiles, sheetStops, tileOf } from "@/tv/sheetRows";
@@ -761,8 +761,6 @@ function MarkedItem({ it, open, focused, cur, dim, okLabel }: { it: PracticeItem
   );
 }
 
-const HOW_MANY = ["None", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten"];
-
 /**
  * M3 · the marked set on the paper: every item folded to its question and the line the desk's pen is on,
  * right ones ticked. Left/Right walk the items (the paper slides under the lamp), Down reaches the two actions.
@@ -782,7 +780,7 @@ export function Sheet({ s, focus }: { s: Session; focus: number }) {
     <div className="mb-win">
       <div className="mb-pan" ref={pan}>
         <div className="mb-paper" data-role="maths-sheet">
-          <header className="mb-sheethead"><span className="st" data-role="maths-title">{look ? `${HOW_MANY[look] ?? look} to look at` : `All ${HOW_MANY[tiles.length]?.toLowerCase() ?? tiles.length} right`}</span><span className="who">{s.learner?.name}</span></header>
+          <header className="mb-sheethead"><span className="st" data-role="maths-title">{sheetHead(look, tiles.length)}</span><span className="who">{s.learner?.name}</span></header>
           {p.items.map((it, i) => <MarkedItem key={it.n} it={it} open={false} focused={ix === i} cur={i === curIx} okLabel="Open" />)}
         </div>
       </div>
