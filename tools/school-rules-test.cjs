@@ -471,7 +471,7 @@ const W7_SLIPS={};
 /** The W7 batch 2 units whose tables are at the end of this file (decimals and percent). */
 const B2_UNITS=['dec-arith','dec-convert','pct-of-amount','pct-change'];
 /** The W7 batch 3 units, after them (ratio, rates, area, mean and range). */
-const B3_UNITS=['ratio-share','unit-rate','area'];
+const B3_UNITS=['ratio-share','unit-rate','area','mean-range'];
 test(`W7 SPELLINGS equivalent fractions: ${EQ_SPELLINGS.length} written answers, zero false-right, zero false-wrong`,()=>{Object.assign(W7_SLIPS,spellings('EQ_SPELLINGS equivalent fractions',EQ_SPELLINGS,'frac-equivalent'));});
 test(`W7 SPELLINGS a fraction of an amount: ${OF_SPELLINGS.length} written answers, zero false-right, zero false-wrong`,()=>{Object.assign(W7_SLIPS,spellings('OF_SPELLINGS a fraction of an amount',OF_SPELLINGS,'frac-of-amount'));});
 test(`W7 SPELLINGS multiply and divide fractions: ${MD_SPELLINGS.length} written answers, zero false-right, zero false-wrong`,()=>{Object.assign(W7_SLIPS,spellings('MD_SPELLINGS multiply and divide fractions',MD_SPELLINGS,'frac-mul-div'));});
@@ -1160,6 +1160,16 @@ const AT2=ar('triangle base 5 height 3');        // 7.5 cm2. added 8; not halved
 const AT3=ar('triangle base 9 height 7');        // 31.5 cm2. added 16; not halved 63
 const AC1=ar('rectangles 8 by 3 and 4 by 2');    // 24 + 8 = 32 cm2. the four sides added 17, the two perimeters 34; one rectangle 24 or 8
 const AC2=ar('rectangles 6 by 5 and 9 by 7');    // 30 + 63 = 93 cm2. added 27, perimeters 54; one rectangle 30 or 63
+
+// ------------------------------------------------------------------ mean and range
+const st=(expr)=>({shape:'stat',expr});
+const SM1=st('mean 4, 7, 9, 10');          // 30 / 4 = 7.5. not divided 30; the wrong count 30/3 = 10, 30/5 = 6; the middle (7 + 9)/2 = 8, and 7, 9
+const SM2=st('mean 2, 9, 4, 6, 4');        // 25 / 5 = 5 (the count: the generator never draws it). not divided 25; the wrong count 6.25, 25/6 (4.17); the middle 4
+const SM3=st('mean 12, 17, 11, 14');       // 54 / 4 = 13.5. not divided 54; the wrong count 18, 10.8; the middle 13, and 12, 14
+const SM4=st('mean 4, 8, 6, 15, 3, 9');    // 45 / 6 = 7.5. not divided 45; the wrong count 9, 45/7 (6.43); the middle 7, and 6, 8
+const SR1=st('range 12, 5, 9, 20, 7');     // 20 - 5 = 15. the largest 20; the wrong way round 5 - 20 = -15
+const SR2=st('range 31, 18, 52, 27');      // 52 - 18 = 34. the largest 52; -34
+const SR3=st('range 9, 3, 6, 11');         // 11 - 3 = 8. the largest 11; -8
 const B3_SPELLINGS={
  'ratio-share':[
   // 12:18 in its simplest form = 2:3: a ratio in lowest terms is right; an equal ratio not in lowest terms is unsure
@@ -1247,6 +1257,29 @@ const B3_SPELLINGS={
   // rectangles 6 cm by 5 cm and 9 cm by 7 cm = 93 cm2
   [AC2,'93','uk','right'],[AC2,'93 cm²','uk','right'],[AC2,'30','uk','wrong','area-one-part'],[AC2,'63','uk','wrong','area-one-part'],[AC2,'27','uk','wrong','area-added-sides'],[AC2,'54','uk','wrong','area-added-sides'],[AC2,'33','uk','wrong'],
  ],
+ 'mean-range':[
+  // the mean of 4, 7, 9, 10 = 7.5 in any written form; a unit, a percent, words are unsure; a whole number is an exact claim
+  [SM1,'7.5','uk','right'],[SM1,'7,5','cz','right'],[SM1,'15/2','uk','right'],[SM1,'7 1/2','uk','right'],[SM1,'x = 7.5','uk','right'],[SM1,'7.50','uk','right'],
+  [SM1,'7,5','uk','unsure'],[SM1,'7.5 cm','uk','unsure'],[SM1,'7.5%','uk','unsure'],[SM1,'seven and a half','uk','unsure'],[SM1,'','uk','unsure'],
+  [SM1,'30','uk','wrong','stat-not-divided'],[SM1,'10','uk','wrong','stat-wrong-count'],[SM1,'6','uk','wrong','stat-wrong-count'],[SM1,'8','uk','wrong','stat-median'],
+  [SM1,'9','uk','wrong','stat-median'],[SM1,'7','uk','wrong','stat-median'],[SM1,'7.4','uk','wrong'],[SM1,'-7.5','uk','wrong'],
+  // 2, 9, 4, 6, 4 -> 5
+  [SM2,'5','uk','right'],[SM2,'5.0','uk','right'],[SM2,'25','uk','wrong','stat-not-divided'],[SM2,'6.25','uk','wrong','stat-wrong-count'],[SM2,'4.17','uk','wrong','stat-wrong-count'],
+  [SM2,'4','uk','wrong','stat-median'],[SM2,'6','uk','wrong'],[SM2,'5 kg','uk','unsure'],
+  // 12, 17, 11, 14 -> 13.5
+  [SM3,'13.5','uk','right'],[SM3,'27/2','uk','right'],[SM3,'13,5','de','right'],[SM3,'54','uk','wrong','stat-not-divided'],[SM3,'18','uk','wrong','stat-wrong-count'],[SM3,'10.8','uk','wrong','stat-wrong-count'],
+  [SM3,'13','uk','wrong','stat-median'],[SM3,'12','uk','wrong','stat-median'],[SM3,'14','uk','wrong','stat-median'],[SM3,'13.4','uk','wrong'],
+  // 4, 8, 6, 15, 3, 9 -> 7.5
+  [SM4,'7.5','uk','right'],[SM4,'45','uk','wrong','stat-not-divided'],[SM4,'9','uk','wrong','stat-wrong-count'],[SM4,'6.43','uk','wrong','stat-wrong-count'],[SM4,'7','uk','wrong','stat-median'],
+  [SM4,'8','uk','wrong','stat-median'],[SM4,'6','uk','wrong','stat-median'],[SM4,'7.5 m','uk','unsure'],
+  // the range of 12, 5, 9, 20, 7 = 15: the smallest less the largest is below zero and is the slip, never unsure
+  [SR1,'15','uk','right'],[SR1,'15.0','uk','right'],[SR1,'x = 15','uk','right'],[SR1,'20','uk','wrong','range-largest'],[SR1,'-15','uk','wrong','range-backwards'],[SR1,'−15','uk','wrong','range-backwards'],
+  [SR1,'5','uk','wrong'],[SR1,'16','uk','wrong'],[SR1,'15%','uk','unsure'],[SR1,'15 cm','uk','unsure'],[SR1,'fifteen','uk','unsure'],[SR1,'','uk','unsure'],[SR1,'5 to 20','uk','unsure'],[SR1,'5-20','uk','unsure'],
+  // 31, 18, 52, 27 -> 34
+  [SR2,'34','uk','right'],[SR2,'52','uk','wrong','range-largest'],[SR2,'-34','uk','wrong','range-backwards'],[SR2,'18','uk','wrong'],[SR2,'35','uk','wrong'],
+  // 9, 3, 6, 11 -> 8
+  [SR3,'8','uk','right'],[SR3,'8.0','uk','right'],[SR3,'11','uk','wrong','range-largest'],[SR3,'-8','uk','wrong','range-backwards'],[SR3,'3','uk','wrong'],
+ ],
 };
 const B3_LEAKS={
  'ratio-share':[
@@ -1270,6 +1303,12 @@ const B3_LEAKS={
   [AT2,'It is 7.5.'],[AT2,'Seven and a half.'],[AT2,'15 ÷ 2'],
   [AC1,'24 + 8 = 32'],[AC1,'24 + 8'],[AC1,'The total is 32 cm2.'],[AC1,'Thirty-two.'],
   [AR3,'7.5 × 4 = 30'],
+ ],
+ 'mean-range':[
+  [SM1,'The mean is 7.5.'],[SM1,'30 ÷ 4 = 7.5'],[SM1,'30 ÷ 4'],[SM1,'Seven and a half.'],[SM1,'Divide 30 by 4 to get 7.5.'],[SM1,'About 7.5.'],[SM1,'7 1/2'],[SM1,'15/2'],
+  [SM2,'The mean is 5.'],[SM2,'25 ÷ 5'],
+  [SR1,'The range is 15.'],[SR1,'20 - 5 = 15'],[SR1,'20 - 5'],[SR1,'20 take away 5'],[SR1,'Fifteen.'],
+  [SR2,'52 - 18'],[SR2,'It is 34.'],
  ],
 };
 const B3_LEGIT={
@@ -1299,6 +1338,14 @@ const B3_LEGIT={
   [AC1,'Find the area of each rectangle first.'],[AC1,'8 × 3 = 24'],[AC1,'4 × 2 = 8'],[AC1,'Then add the two areas.'],[AC1,'The first rectangle is 24 cm2.'],
   [AR2,'Multiply 12 by 9.'],[AR2,'Your answer is in square metres.'],[AR3,'Multiply 7.5 by 4.'],[AR3,'7 × 4 = 28 and half of 4 is 2.'],
  ],
+ 'mean-range':[
+  [SM1,'Add the numbers, then divide by how many there are.'],[SM1,'Add them up first.'],[SM1,'4 + 7 + 9 + 10 = 30'],[SM1,'The total is 30.'],[SM1,'There are 4 numbers.'],
+  [SM1,'Divide the total by 4.'],[SM1,'Your mean will be between 4 and 10.'],[SM1,'The mean does not have to be a whole number.'],
+  [SM3,'Add the four numbers first.'],[SM3,'12 + 17 + 11 + 14 = 54'],[SM3,'Now divide 54 by the number of values.'],
+  [SR1,'Find the largest and the smallest numbers.'],[SR1,'The largest is 20.'],[SR1,'The smallest is 5.'],[SR1,'Subtract the smallest from the largest.'],
+  [SR1,'Put the numbers in order first: 5, 7, 9, 12, 20.'],[SR1,'The range is never negative.'],[SR2,'The largest number is 52 and the smallest is 18.'],
+  [SM1,'Count the numbers: there are four.'],[SM4,'Count the numbers: there are 6.'],[SM3,'The middle two numbers are 12 and 14.'],[SR3,'Look for the biggest and the smallest.'],
+ ],
 };
 /**
  * B3 CONFLICTS: legit hints the strict rule refuses, accepted and reported. A ratio's lowest parts leak alone (2 and 3
@@ -1310,6 +1357,9 @@ const B3_CONFLICTS=[
  [RS1,'Step 2: divide both numbers by the same number.'],[RS2,'Both numbers are in the five times table.'],[RS2,'Divide both by 5.'],
  // a rate's answer in cents or pence is the answer too (560 for €5.60), so whole-number working that makes it is refused
  [RC1,'Multiply 70 by 8, then write it in euros.'],
+ // a mean equal to the count (2, 9, 4, 6, 4 has five numbers and a mean of 5): naming the count names the answer; the
+ // generator never draws that case
+ [SM2,'Add them and divide by 5.'],[SM2,'There are five numbers in the list.'],
 ];
 
 /** The references: each unit's answer by hand, with this file's own gcd, never the module's evaluator. */
@@ -1347,8 +1397,18 @@ const B3REF={
   if(m){const [a,b,c,d]=m.slice(1).map(Number),e=8*(a*b+c*d);return {fig:'composite',sides:[a,b,c,d],truth:eighths(e),off:eighths(e+8),nums:[a,b,c,d]};}
   return null;
  },
+ // the mean in hundredths, by hand
+ 'mean-range':(s)=>{
+  const m=/^(mean|range) (\d+(?:, \d+)+)$/.exec(s.expr);if(!m||s.shape!=='stat')return null;
+  const xs=m[2].split(', ').map(Number),n=xs.length,total=xs.reduce((a,b)=>a+b,0),max=Math.max(...xs),min=Math.min(...xs);
+  if(m[1]==='range')return {stat:'range',xs,n,truth:String(max-min),off:String(max-min+1),nums:xs};
+  const h=total*100/n;assert.ok(Number.isInteger(h),`${s.expr}: two places at most`);
+  const fmt=(x)=>(x%100===0?String(x/100):(x/100).toFixed(2).replace(/0$/,''));
+  const sorted=[...xs].sort((a,b)=>a-b),median=n%2?sorted[(n-1)/2]:(sorted[n/2-1]+sorted[n/2])/2;
+  return {stat:'mean',xs,n,total,median,truth:fmt(h),off:fmt(h+100),nums:xs};
+ },
 };
-const B3GEN={'ratio-share':S.genRatio,'unit-rate':S.genRate,'area':S.genArea};
+const B3GEN={'ratio-share':S.genRatio,'unit-rate':S.genRate,'area':S.genArea,'mean-range':S.genStat};
 /** Each unit's tier, as school.ts documents it, asserted on the reference reading. */
 const B3_TIER={
  'ratio-share':(s,r,tier)=>{
@@ -1384,6 +1444,13 @@ const B3_TIER={
   }else if(r.fig==='composite')assert.ok([a,b,c,d].every((x)=>whole(x)&&x>=2&&x<=9)&&a*b!==c*d&&s.unit==='cm2',`tier 2 two rectangles: ${s.expr}`);
   else if(r.fig==='triangle')assert.ok(whole(a)&&whole(b)&&a>=3&&a<=15&&b>=3&&b<=11&&(a*b)%2===1&&s.unit==='cm2',`tier 2 triangle, a half: ${s.expr}`);
   else assert.ok(!whole(a)&&a>=2.5&&a<=11.5&&whole(b)&&b%2===0&&b>=2&&b<=12&&['cm2','m2'].includes(s.unit),`tier 2 rectangle, a half side: ${s.expr}`);
+ },
+ 'mean-range':(s,r,tier)=>{
+  assert.ok(!r.nums.includes(Number(r.truth)),'the list does not print its answer');
+  if(tier===1)assert.ok((r.n===4||r.n===5)&&r.xs.every((x)=>x>=1&&x<=20)&&(r.stat==='range'||Number.isInteger(Number(r.truth))),`tier 1: four or five numbers 1..20, a whole mean: ${s.expr}`);
+  else if(r.stat==='mean')assert.ok(r.n>=4&&r.n<=6&&r.xs.every((x)=>x>=2&&x<=60)&&!Number.isInteger(Number(r.truth)),`tier 2: a mean that is not whole: ${s.expr}`);
+  else assert.ok(r.n===6&&r.xs.every((x)=>x>=2&&x<=99),`tier 2: the range of six numbers 2..99: ${s.expr}`);
+  if(r.stat==='mean'){assert.notEqual(r.median,Number(r.truth),'the mean is not the middle value');assert.notEqual(r.n,Number(r.truth),'the mean is not the count');}
  },
 };
 
@@ -1451,6 +1518,9 @@ const B3_PRINTS={
   [AR1,'Find the area of a rectangle 7 cm by 4 cm.'],[AR2,'Find the area of a rectangle 12 metres by 9 metres.'],[AR3,'Find the area of a rectangle 7.5 cm by 4 cm.'],
   [AT1,'Find the area of a triangle, base 10 cm, height 6 cm.'],[AC1,'Find the total area of rectangles 8 cm by 3 cm and 4 cm by 2 cm.'],
  ],
+ 'mean-range':[
+  [SM1,'Work out the mean of 4, 7, 9 and 10.'],[SR1,'Find the range of 12, 5, 9, 20 and 7.'],[SM4,'Work out the mean of 4, 8, 6, 15, 3 and 9.'],[SR3,'Find the range of 9, 3, 6 and 11.'],
+ ],
 };
 const B3_BAD={
  'ratio-share':[
@@ -1470,6 +1540,10 @@ const B3_BAD={
   [ar('rectangle 7 by 4','cm'),'square unit'],[{shape:'area',expr:'rectangle 7 by 4'},'square unit'],[ar('rectangle 0 by 4'),'zero'],[ar('rectangle 7.25 by 4'),'cannot read'],[ar('square 5'),'cannot read'],
   [ar('triangle 10 by 6'),'cannot read'],[ar('rectangle 999 by 999'),'larger'],[ar('rectangle 2000 by 4'),'cannot read'],[ar('triangle base 2.5 height 3.5'),'two decimal places'],
   [{...AR1,answer:28},'no answer field'],[{...AR1,form:'decimal'},'does not take'],[ar('rectangle 7 by 4','parsec'),'unit is not'],[ar('rectangles 8 by 3'),'cannot read'],
+ ],
+ 'mean-range':[
+  [st('mean 1, 2, 4'),'two decimal places'],[st('range 5, 5, 5'),'the same'],[st('mean 4, 7'),'cannot read'],[st('mean 4, 7, 9, 10, 1, 2, 3, 4, 5, 6, 7'),'cannot read'],[st('median 4, 7, 9'),'cannot read'],
+  [st('mean 4.5, 7, 9'),'cannot read'],[st('mean 4,7,9'),'cannot read'],[st('mean 04, 7, 9'),'cannot read'],[{...SM1,unit:'cm'},'does not take'],[{...SM1,answer:'7.5'},'no answer field'],[st('mean 1000, 7, 9'),'cannot read'],
  ],
 };
 for (const unit of B3_UNITS){

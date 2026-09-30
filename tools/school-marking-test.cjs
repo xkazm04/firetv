@@ -823,7 +823,7 @@ test('W7b 9: an unsure decimals or percent item is explained in the school stanc
 });
 
 // ------------------------------------------------------------------ 9. Family W7 batch 3: ratio, rates, area, mean and range - read, withheld and marked
-const ra=(expr,unit)=>({shape:'ratio',expr,...(unit?{unit}:{})}),rt=(expr,unit)=>({shape:'rate',expr,unit}),ar=(expr,unit='cm2')=>({shape:'area',expr,unit});
+const ra=(expr,unit)=>({shape:'ratio',expr,...(unit?{unit}:{})}),rt=(expr,unit)=>({shape:'rate',expr,unit}),ar=(expr,unit='cm2')=>({shape:'area',expr,unit}),st=(expr)=>({shape:'stat',expr});
 /** [task text, the spec it reads as (null: refused)] per unit; each spec's value is worked in school-rules-test. */
 const B3_TASKS={
  'ratio-share':[
@@ -870,8 +870,22 @@ const B3_TASKS={
   ['A garden is 7 m by 4 m. Find its area.',null],['Find the area of a rectangle 7.25 cm by 4 cm',null],['Find the area of a rectangle 0 cm by 4 cm',null],['Find the area of a triangle, base 10 cm, height 6 cm, side 8 cm',null],
   ['Find the area of rectangles 8 cm by 3 cm and 4 cm by 2 cm',null],['Find the area of a rectangle 7 cm by 4 cm and a triangle, base 10 cm, height 6 cm',null],['Find the area of a rectangle 7 inches by 4 inches',null],
  ],
+ 'mean-range':[
+  ['Work out the mean of 4, 7, 9 and 10',st('mean 4, 7, 9, 10')],['Work out the mean of 4, 7, 9 and 10.',st('mean 4, 7, 9, 10')],['Find the mean of 4, 7, 9, 10',st('mean 4, 7, 9, 10')],
+  ['Calculate the mean of 4, 7, 9 and 10',st('mean 4, 7, 9, 10')],['What is the mean of 4, 7, 9 and 10?',st('mean 4, 7, 9, 10')],['Find the mean of these numbers: 4, 7, 9, 10',st('mean 4, 7, 9, 10')],
+  ['Find the mean of 4, 7, 9, and 10',st('mean 4, 7, 9, 10')],['find the mean of 4, 7, 9 and 10',st('mean 4, 7, 9, 10')],['(a) Find the mean of 4, 7, 9 and 10',st('mean 4, 7, 9, 10')],
+  ['Work out the mean of 2, 9, 4, 6 and 4',st('mean 2, 9, 4, 6, 4')],['Find the mean of 12, 17, 11, 14',st('mean 12, 17, 11, 14')],['Find the range of 12, 5, 9, 20 and 7',st('range 12, 5, 9, 20, 7')],
+  ['Work out the range of 12, 5, 9, 20, 7',st('range 12, 5, 9, 20, 7')],['What is the range of 12, 5, 9, 20 and 7?',st('range 12, 5, 9, 20, 7')],['Find the range of these numbers: 12, 5, 9, 20, 7',st('range 12, 5, 9, 20, 7')],
+  ['Calculate the range of 31, 18, 52 and 27',st('range 31, 18, 52, 27')],['3. Find the range of 9, 3, 6, 11',st('range 9, 3, 6, 11')],['Find the mean of 4, 8, 6, 15, 3 and 9',st('mean 4, 8, 6, 15, 3, 9')],
+  ['Work out the mean of 0, 7, 9 and 12',st('mean 0, 7, 9, 12')],
+  // refused
+  ['Find the median of 4, 7, 9 and 10',null],['Find the mode of 4, 7, 9 and 10',null],['Find the mean and range of 4, 7, 9 and 10',null],['Find the mean of 4, 7, 9 and x',null],
+  ['Find the mean of 4.5, 7, 9 and 10',null],['Find the mean of -4, 7, 9 and 10',null],['Find the mean of 4,7,9,10',null],['Find the average of 4, 7, 9 and 10',null],
+  ['The mean of 4, 7, x and 10 is 8. Find x.',null],['Tom scored 4, 7, 9 and 10. What is his mean score?',null],['Find the mean of 4 and 7',null],['Find the mean of 1, 2 and 4',null],
+  ['Find the range of 5, 5, 5 and 5',null],['Find the mean of 4, 7, 9 and 10 cm',null],['Find the range of 12, 5, 9, 20 and 7 and the mean',null],['Work out the mean of 04, 7, 9 and 10',null],
+ ],
 };
-const B3GEN={'ratio-share':S.genRatio,'unit-rate':S.genRate,'area':S.genArea};
+const B3GEN={'ratio-share':S.genRatio,'unit-rate':S.genRate,'area':S.genArea,'mean-range':S.genStat};
 for(const unit of Object.keys(B3_TASKS)){
  const rows=B3_TASKS[unit];
  test(`W7c 4-${unit}: specFromQuestion reads the unit's tasks conservatively - ${rows.length} phrasings, ${rows.filter((t)=>t[1]===null).length} of them refused`,()=>{
@@ -913,6 +927,11 @@ const B3_PAGES={
   {spec:ar('rectangles 8 by 3 and 4 by 2'),a:'24',want:['wrong','area-one-part']},{spec:ar('triangle base 5 height 3'),a:'7.5',want:['right']},{spec:ar('rectangle 7 by 4'),a:'28 cm',want:['unsure']},
   {spec:ar('rectangles 8 by 3 and 4 by 2'),a:'',want:['unsure']},{spec:ar('rectangle 12 by 9','m2'),a:'108 m²',want:['right']},{spec:ar('rectangle 7 by 4'),a:'28 m2',want:['unsure']},
   {spec:ar('triangle base 10 height 6'),a:'16',want:['wrong','area-added-sides']},
+ ],
+ 'mean-range':[
+  {spec:st('mean 4, 7, 9, 10'),a:'7.5',want:['right']},{spec:st('mean 4, 7, 9, 10'),a:'30',want:['wrong','stat-not-divided']},{spec:st('mean 4, 7, 9, 10'),a:'10',want:['wrong','stat-wrong-count']},
+  {spec:st('mean 12, 17, 11, 14'),a:'13',want:['wrong','stat-median']},{spec:st('range 12, 5, 9, 20, 7'),a:'20',want:['wrong','range-largest']},{spec:st('range 12, 5, 9, 20, 7'),a:'-15',want:['wrong','range-backwards']},
+  {spec:st('range 12, 5, 9, 20, 7'),a:'15',want:['right']},{spec:st('mean 4, 7, 9, 10'),a:'7.5 cm',want:['unsure']},{spec:st('range 12, 5, 9, 20, 7'),a:'',want:['unsure']},{spec:st('mean 4, 7, 9, 10'),a:'7,5',want:['unsure']},
  ],
 };
 for(const unit of Object.keys(B3_PAGES)){

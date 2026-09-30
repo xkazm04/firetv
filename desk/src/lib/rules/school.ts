@@ -16,7 +16,9 @@
  * ?:15."; the only shape whose answer may be a PAIR, read by its own strict reader, `readPair`); unit rates and direct
  * proportion (`rate`: "5 pens cost €3.50. What do 8 pens cost?", "240 km in 3 hours. How far in 5 hours?", a short
  * statement and one question, never a story); the area of rectangles, triangles and two rectangles together (`area`,
- * "Find the area of a rectangle 7 cm by 4 cm.", its answer in square units).
+ * "Find the area of a rectangle 7 cm by 4 cm.", its answer in square units); the mean and the range of a short list (`stat`:
+ * "Work out the mean of 4, 7, 9 and 10.", "Find the range of 12, 5, 9, 20 and 7."; a missing value that gives a stated mean
+ * is not a unit of Phase 1).
  *
  * The stances this file holds:
  *   - Code decides right and wrong. The truth is recomputed from the spec every time with EXACT rational arithmetic
@@ -339,6 +341,9 @@ export function readNumber(answer: unknown, system: unknown): Reading | null {
  *     height 6" or "rectangles 8 by 3 and 4 by 2" (two rectangles joined, their areas added: described in words, never a
  *     figure - Phase 1 draws none); sides whole or a half (7.5), at most 1000; `unit` cm2 or m2, required: the answer's
  *     square unit, the sides printed in cm or metres. The value is ab, bh/2 or ab + cd exactly.
+ *   - stat (W7 batch 3, "Mean and range"): expr "mean 4, 7, 9, 10" or "range 12, 5, 9, 20, 7", three to ten whole numbers
+ *     0..999 in the order printed; no unit. The mean is the total over the count exactly, allowed only when it terminates
+ *     within two decimal places; the range the largest less the smallest, above nothing.
  */
 export type ComputeSpec = { shape: "compute"; expr: string; form?: "simplest" | "decimal"; unit?: Unit; allowNegative?: true };
 export type FractionOfSpec = { shape: "fraction-of"; expr: string; unit?: Unit };
@@ -352,9 +357,10 @@ export type PercentChangeSpec = { shape: "percent-change"; expr: string; unit?: 
 export type RatioSpec = { shape: "ratio"; expr: string; unit?: Unit };
 export type RateSpec = { shape: "rate"; expr: string; unit: Unit };
 export type AreaSpec = { shape: "area"; expr: string; unit: Unit };
-export type SchoolSpec = ComputeSpec | FractionOfSpec | MissingSpec | SimplifySpec | ConvertSpec | PercentOfSpec | PercentChangeSpec | RatioSpec | RateSpec | AreaSpec;
+export type StatSpec = { shape: "stat"; expr: string };
+export type SchoolSpec = ComputeSpec | FractionOfSpec | MissingSpec | SimplifySpec | ConvertSpec | PercentOfSpec | PercentChangeSpec | RatioSpec | RateSpec | AreaSpec | StatSpec;
 export type SchoolShape = SchoolSpec["shape"];
-export const SCHOOL_SHAPES: readonly SchoolShape[] = ["compute", "fraction-of", "missing", "simplify", "convert", "percent-of", "percent-change", "ratio", "rate", "area"];
+export const SCHOOL_SHAPES: readonly SchoolShape[] = ["compute", "fraction-of", "missing", "simplify", "convert", "percent-of", "percent-change", "ratio", "rate", "area", "stat"];
 /** The shapes whose amount may carry a unit (the answer is in it too). */
 const AMOUNT_SHAPES: readonly SchoolShape[] = ["fraction-of", "percent-of", "percent-change"];
 /** Every shape that may carry a `unit` (W7 batch 3: a ratio's shared amount; each kind says whether it takes one). */
@@ -515,6 +521,7 @@ const REJECT = {
   sameRate: "The question asks about the same number it gives: there is nothing to work out.",
   rateUnit: "A cost is in euros or pounds and a distance in km, and the spec names the one it is.",
   areaUnit: "An area names its square unit, cm2 or m2.",
+  sameList: "Every number in the list is the same: there is nothing to work out.",
 } as const;
 
 /**
@@ -536,7 +543,9 @@ type Kind =
   // W7 batch 3: q1 items cost p (or p km in q1 hours); the cost (distance) of q2
   | { k: "rate"; measure: "cost" | "distance"; q1: bigint; p: Q; ptext: string; q2: bigint; noun: string }
   // W7 batch 3: a rectangle's two sides, a triangle's base and height, or two rectangles' four sides, as written
-  | { k: "area"; fig: "rectangle" | "triangle" | "composite"; sides: Q[]; texts: string[] };
+  | { k: "area"; fig: "rectangle" | "triangle" | "composite"; sides: Q[]; texts: string[] }
+  // W7 batch 3: the mean or the range of a list, in the order printed
+  | { k: "stat"; stat: "mean" | "range"; xs: bigint[] };
 type Structure = { ok: true; spec: SchoolSpec; node: Node; kind: Kind } | { ok: false; why: string };
 /** `pair` (W7 batch 3, a ratio share): the two amounts in the ratio's order; `truth` is then the first of them. */
 type ReadOk = { ok: true; spec: SchoolSpec; node: Node; kind: Kind; truth: Q; pair?: [Q, Q] };
@@ -568,6 +577,8 @@ const AREA_RES: [RegExp, "rectangle" | "triangle" | "composite"][] = [
   [new RegExp(String.raw`^triangle base ${SIDE_SRC} height ${SIDE_SRC}$`), "triangle"],
   [new RegExp(String.raw`^rectangles ${SIDE_SRC} by ${SIDE_SRC} and ${SIDE_SRC} by ${SIDE_SRC}$`), "composite"],
 ];
+/** W7 batch 3: "mean 4, 7, 9, 10" or "range 12, 5, 9, 20, 7": three to ten whole numbers, a comma and a space between. */
+const STAT_RE = /^(mean|range) ((?:0|[1-9]\d{0,2})(?:, (?:0|[1-9]\d{0,2})){2,9})$/;
 const sideQ = (x: string): Q => { const [w, f = ""] = x.split("."); return mk(BigInt(w + f), pow10(f.length))!; };
 const fracNode = (n: bigint, d: bigint): Node => ({ k: "frac", n, d });
 
@@ -634,6 +645,12 @@ function structure(spec: unknown): Structure {
       return { ok: true, spec: s as SchoolSpec, node, kind: { k: "area", fig, sides, texts } };
     }
     return { ok: false, why: REJECT.read };
+  }
+  if (shape === "stat") {
+    const m = STAT_RE.exec(s.expr);
+    if (!m) return { ok: false, why: REJECT.read };
+    const xs = m[2].split(", ").map((x) => BigInt(x));
+    return { ok: true, spec: s as SchoolSpec, node: { k: "num", q: qi(xs[0]), s: String(xs[0]), whole: true }, kind: { k: "stat", stat: m[1] as "mean" | "range", xs } };
   }
   if (shape === "convert") {
     if (!(FORMS_ASKED as readonly unknown[]).includes(s.to)) return { ok: false, why: REJECT.form };
@@ -815,6 +832,14 @@ function readKind(st: Extract<Structure, { ok: true }>): Read {
     if (!exactAt(truth, 2)) return { ok: false, why: REJECT.twoPlaces };
     return ok(truth);
   }
+  if (K.k === "stat") {
+    // W7 batch 3: the total over the count, to two places at most; the largest less the smallest, above nothing
+    const max = K.xs.reduce((a, b) => (b > a ? b : a)), min = K.xs.reduce((a, b) => (b < a ? b : a));
+    if (max === min) return { ok: false, why: REJECT.sameList };
+    if (K.stat === "range") return ok(qi(max - min));
+    const truth = mk(K.xs.reduce((a, b) => a + b, Z), BigInt(K.xs.length))!;
+    return exactAt(truth, 2) ? ok(truth) : { ok: false, why: REJECT.twoPlaces };
+  }
   return { ok: false, why: REJECT.shape };
 }
 
@@ -861,7 +886,8 @@ const specUnit = (s: SchoolSpec): Unit | undefined => (s.shape === "compute" || 
  * lowest terms, a ≠ b, whole shares neither printed, or "a:b = ?:k" / "a:b = k:?" with a whole missing term the question
  * does not print; numbers at most 1000. `rate` "q1 noun cost p, q2" (€ or £) or "D km in h1 h, q2" (km): q1 at least 2,
  * q2 not q1, a value to two places at most that the question does not print. `area` a rectangle, a triangle (base and
- * height) or two rectangles, sides whole or a half above nothing, `unit` cm2 or m2.
+ * height) or two rectangles, sides whole or a half above nothing, `unit` cm2 or m2. `stat` a mean or range of three to ten
+ * whole numbers 0..999, not all the same, a mean to two places at most.
  */
 export function wellFormed(spec: unknown): { ok: true } | { ok: false; why: string } {
   try {
@@ -980,6 +1006,12 @@ export function question(spec: unknown): { plain: string; tex: string } | null {
       const am = amountText(String(K.T), specUnit(st.spec));
       return { plain: `Share ${am.plain} in the ratio ${K.a}:${K.b}.`, tex: `\\text{Share } ${am.tex} \\text{ in the ratio } ${K.a}:${K.b}.` };
     }
+    if (K.k === "stat") {
+      // W7 batch 3: "Work out the mean of 4, 7, 9 and 10.", "Find the range of 12, 5, 9, 20 and 7." - the list in its order
+      const xs = K.xs.map(String), list = `${xs.slice(0, -1).join(", ")} and ${xs[xs.length - 1]}`;
+      const lead = K.stat === "mean" ? "Work out the mean of" : "Find the range of";
+      return { plain: `${lead} ${list}.`, tex: `\\text{${lead} } ${xs.slice(0, -1).join(", ")} \\text{ and } ${xs[xs.length - 1]}.` };
+    }
     if (K.k === "area") {
       // W7 batch 3: "Find the area of a rectangle 7 cm by 4 cm.", "Find the area of a triangle, base 10 cm, height 6 cm.",
       // "Find the total area of rectangles 8 cm by 3 cm and 4 cm by 2 cm." - a side in metres is printed as the word (a
@@ -1087,6 +1119,12 @@ export const SCHOOL_SLIPS: readonly SchoolSlip[] = [
   { id: "area-added-sides", name: "Added the lengths", says: "The lengths were added, which measures a distance round the shape, not the space inside it. An area comes from multiplying.", points: "the line where the lengths were combined" },
   { id: "area-no-half", name: "The half left out", says: "The base and the height were multiplied but the result was not halved. A triangle takes up half of the rectangle drawn around it.", points: "the last line" },
   { id: "area-one-part", name: "Only one rectangle", says: "This is the area of only one of the two rectangles. Find the area of each rectangle, then add them together.", points: "the last line" },
+  // mean and range (Family W7 batch 3)
+  { id: "stat-not-divided", name: "Added but did not divide", says: "The numbers were added but the total was not shared out. The mean is the total divided by how many numbers there are.", points: "the last line" },
+  { id: "stat-wrong-count", name: "Divided by the wrong count", says: "The total was divided by the wrong number. Count the numbers in the list again and divide by exactly that many.", points: "the division" },
+  { id: "stat-median", name: "Took the middle value", says: "This is the middle value of the list put in order, not the mean. The mean shares the total out equally among the numbers.", points: "the answer" },
+  { id: "range-largest", name: "The largest number only", says: "This is the largest number of the list only. The range is the largest take away the smallest.", points: "the answer" },
+  { id: "range-backwards", name: "Took away the wrong way round", says: "The largest was taken away from the smallest, so the answer is below zero. The range is the largest take away the smallest, and it is never negative.", points: "the subtraction" },
 ];
 
 /** The common factors of a and b above 1, smallest first. */
@@ -1120,6 +1158,8 @@ function commonFactors(a: bigint, b: bigint): bigint[] {
  *     divided; p ÷ q2 × q1 divided by the number asked about (q2 above 1);
  *   - an area (W7 batch 3): the lengths added (a + b, 2(a + b); b + h; the four sides and the two perimeters), a triangle
  *     not halved (bh), one rectangle of two (ab, cd);
+ *   - a mean (W7 batch 3): the total not divided, the total over one fewer or one more than the count, the middle value
+ *     (the median, and each middle number of an even list); a range: the largest alone, the smallest less the largest;
  *   - decimals a ± b, a × b (W7 batch 2), P the working's places (the longer of the two for ±, their sum for ×): the
  *     numbers lined up by their last digits, (a·10^pa ± b·10^pb) / 10^P, when their places differ; the point put back
  *     by the wrong count, the value × 10^k for k = -1 and 1..P-1 (products only); the point left out, the value × 10^P.
@@ -1179,6 +1219,21 @@ function slipCandidates(r: ReadOk): [string, Q][] {
     const whole = (x: bigint) => (x > Z ? qi(x) : null);
     push("ratio-added-same", whole(given + K.known - other));
     if ((other * K.known) % given === Z) push("ratio-swapped", whole((other * K.known) / given));
+    return out;
+  }
+  if (K.k === "stat") {
+    // W7 batch 3, a mean: the total not divided; the total over one fewer or one more than the count; the middle value of the
+    // list in order (the median, and for an even count each of the two middle numbers). A range: the largest alone; the
+    // smallest less the largest, below zero
+    const xs = [...K.xs].sort((a, b) => (a < b ? -1 : a > b ? 1 : 0)), n = BigInt(xs.length), total = xs.reduce((a, b) => a + b, Z);
+    const max = xs[xs.length - 1], min = xs[0];
+    if (K.stat === "range") { push("range-largest", qi(max)); push("range-backwards", qi(min - max)); return out; }
+    push("stat-not-divided", qi(total));
+    push("stat-wrong-count", mk(total, n - ONE));
+    push("stat-wrong-count", mk(total, n + ONE));
+    const mid = xs.length >> 1;
+    if (xs.length % 2) push("stat-median", qi(xs[mid]));
+    else { push("stat-median", mk(xs[mid - 1] + xs[mid], BigInt(2))); push("stat-median", qi(xs[mid - 1])); push("stat-median", qi(xs[mid])); }
     return out;
   }
   if (K.k === "area") {
@@ -1492,7 +1547,7 @@ export function check(spec: unknown, writing: unknown, system: unknown): SchoolV
     if ((K.k === "pct-of" || K.k === "pct-change") && form === "percent" && (eq(mul(v, qi(BigInt(100))), t) || eq(v, t))) return { verdict: "unsure", form, why: WHY.amountAsPercent };
     // W7 batch 3: an amount of these units is never a percentage (unsure, the desk does not guess what was meant); a cost's
     // value in cents or pence written bare (560 for €5.60) is the answer in another unit or a slip, and the desk does not guess
-    if ((K.k === "rate" || K.k === "area") && form === "percent") return { verdict: "unsure", form, why: WHY.amountAsPercent };
+    if ((K.k === "rate" || K.k === "area" || K.k === "stat") && form === "percent") return { verdict: "unsure", form, why: WHY.amountAsPercent };
     if (K.k === "rate" && K.measure === "cost" && !reading.unit && !eq(v, t) && eq(v, mul(t, qi(BigInt(100))))) return { verdict: "unsure", form, why: WHY.pence };
     const simplest = K.k === "simplify" || (r.spec.shape === "compute" && r.spec.form === "simplest");
     const decimalAsked = r.spec.shape === "compute" && r.spec.form === "decimal";
@@ -1698,6 +1753,14 @@ function leakProfile(r: ReadOk): LeakProfile {
     // W7 batch 3: either amount alone, or both as a ratio; the size of a single part (T ÷ (a + b)) is a step and passes
     const [s1, s2] = r.pair!;
     return { T: s1, targets: [s1, s2], lowestOnly: false, bare: new Set(), restated: [], written: [], pair: [s1, s2], alsoT: [s2] };
+  }
+  if (K.k === "stat") {
+    // W7 batch 3: the mean or range in any form (and, not whole, its digits with the point left out). The total, the count,
+    // the largest and the smallest are steps and pass; the last step - the total over the count, the largest less the
+    // smallest - makes the answer and is refused (rule 6), with no question operation to restate
+    const bare = new Set<string>();
+    if (T.d !== ONE) bare.add(String(mul(T, qi(pow10(placesNeeded(T)))).n));
+    return { T, targets: [T], lowestOnly: false, bare, restated: [], written: [] };
   }
   if (K.k === "area") {
     // W7 batch 3: the value in any form (and, not whole, its digits with the point left out); a rectangle's own a × b is
@@ -2389,9 +2452,38 @@ export function genArea(seed: unknown, tier: unknown): SchoolSpec | null {
 }
 
 /**
+ * One "Mean and range" item, from a seed and a tier that code computed, a mean or a range turning with the seed (half and
+ * half at tier 1, two means in three at tier 2), the list printed in the order drawn, never sorted:
+ *   - tier 1: four or five numbers 1..20 with a WHOLE mean, or their range;
+ *   - tier 2: four to six numbers 2..60 whose mean is NOT whole but ends within two places (a quarter, a fifth, a half), or
+ *     the range of six numbers 2..99.
+ * Drawn again: an answer the list prints, a mean equal to the middle value (the median slip would give it) or to the count
+ * (a hint may say "divide by 5"), any known wrong method that gives the right value. Pure and seeded; null for a bad seed or tier.
+ */
+export function genStat(seed: unknown, tier: unknown): SchoolSpec | null {
+  const rnd = seeded(seed, tier, 0x5eed180b);
+  if (!rnd) return null;
+  const int = (lo: number, hi: number) => lo + Math.floor(rnd!() * (hi - lo + 1));
+  for (let t = 0; t < MAX_TRIES; t++) {
+    const range = tier === 1 ? ((seed as number) + t) % 2 === 1 : ((seed as number) + t) % 3 === 2;
+    const n = tier === 1 ? int(4, 5) : range ? 6 : int(4, 6), [lo, hi] = tier === 1 ? [1, 20] : range ? [2, 99] : [2, 60];
+    const xs = Array.from({ length: n }, () => int(lo, hi)), total = xs.reduce((a, b) => a + b, 0);
+    if (!range && (tier === 1 ? total % n !== 0 : total % n === 0)) continue;
+    const spec: SchoolSpec = { shape: "stat", expr: `${range ? "range" : "mean"} ${xs.join(", ")}` };
+    const r = read(spec);
+    if (!r.ok || slipCandidates(r).some(([, c]) => eq(c, r.truth))) continue;
+    // a mean equal to the count: "divide by how many there are" would name the answer
+    if (!range && eq(r.truth, qi(BigInt(n)))) continue;
+    if (fair(spec)) return spec;
+  }
+  return tier === 1 ? { shape: "stat", expr: "mean 4, 7, 9, 12" } : { shape: "stat", expr: "mean 4, 7, 9, 10" };
+}
+
+/**
  * The units whose practice sets code writes, by syllabus topic id, each with its generator (Family W5b: add and
  * subtract fractions; W7 batch 1: equivalent fractions, a fraction of an amount, multiply and divide fractions; W7 batch
- * 2: decimals and percent; W7 batch 3: ratio and sharing, unit rates, area). A topic not here is written as it always was.
+ * 2: decimals and percent; W7 batch 3: ratio and sharing, unit rates, area, mean and range). A topic not here is written as
+ * it always was.
  */
 export const SCHOOL_GENERATORS: Readonly<Record<string, (seed: number, tier: 1 | 2) => SchoolSpec | null>> = {
   "frac-equivalent": (seed, tier) => genEquivalent(seed, tier),
@@ -2405,6 +2497,7 @@ export const SCHOOL_GENERATORS: Readonly<Record<string, (seed: number, tier: 1 |
   "ratio-share": (seed, tier) => genRatio(seed, tier),
   "unit-rate": (seed, tier) => genRate(seed, tier),
   "area": (seed, tier) => genArea(seed, tier),
+  "mean-range": (seed, tier) => genStat(seed, tier),
 };
 /** The generator for a topic id, or null: an own key only, so 'constructor' is not a unit. */
 export const generatorFor = (topicId: unknown) =>
@@ -2427,6 +2520,7 @@ export const SCHOOL_UNIT_SLIPS: Readonly<Record<string, readonly string[]>> = {
   "ratio-share": ["ratio-split-each", "ratio-as-amounts", "ratio-swapped", "ratio-by-difference", "ratio-added-same"],
   "unit-rate": ["rate-wrong-way", "rate-multiplied", "rate-other-quantity"],
   "area": ["area-added-sides", "area-no-half", "area-one-part"],
+  "mean-range": ["stat-not-divided", "stat-wrong-count", "stat-median", "range-largest", "range-backwards"],
 };
 
 /** The system the desk reads a learner's numbers by when their profile names none (tv/profileRows DEFAULT_SYSTEM is the same, tested). */
@@ -2759,6 +2853,22 @@ function readArea(t0: string): SchoolSpec | null {
 }
 
 /**
+ * A mean or range task (W7 batch 3, "Mean and range"), or null: 'Work out / Find / Calculate / What is the mean (range) of
+ * 4, 7, 9 and 10', 'of these numbers: 4, 7, 9, 10'; three to ten whole numbers, a comma AND a space between them (in cz and
+ * de '4,7' is a decimal), 'and' before the last one or not. A median, a mode, an 'average' (which one?), a mean and a
+ * range together, a decimal or a negative in the list, a letter, a missing value that gives a stated mean, a story, and a
+ * spec wellFormed refuses (a mean past two places, a list of one number repeated) are all null.
+ */
+function readStat(t0: string): SchoolSpec | null {
+  const t = t0.replace(/[.?!]$/, "").trim(), N = String.raw`(?:0|[1-9]\d{0,2})`;
+  const m = new RegExp(String.raw`^(?:work out|find|calculate|what is)\s+the\s+(mean|range)\s+of\s+(?:these numbers:\s+)?(${N}(?:, ${N})*)(?:,? and (${N}))?$`, "i").exec(t);
+  if (!m) return null;
+  const xs = [...m[2].split(", "), ...(m[3] !== undefined ? [m[3]] : [])];
+  const spec: SchoolSpec = { shape: "stat", expr: `${m[1].toLowerCase()} ${xs.join(", ")}` };
+  return read(spec).ok ? spec : null;
+}
+
+/**
  * A worksheet task of a school fractions unit, read back into the spec it asks, for the hint's leak check - or null.
  * Conservative: what it does not read with one meaning is null, and a null task gets no school leak check (the general
  * rule still runs), exactly as an unread Calculus task does. After an item label ('1.', '2)', '(b)', 'c)') it reads:
@@ -2784,7 +2894,8 @@ function readArea(t0: string): SchoolSpec | null {
  *     division, a decimal comma (a list too), a sign on one amount only or on a count, or two currencies;
  *   - ratio and sharing (W7 batch 3): `readRatio`'s phrasings (a bare 'a:b' is null: ':' also divides in cz and de);
  *   - unit rates (W7 batch 3): `readRate`'s phrasings, a statement and one question, never a story;
- *   - area (W7 batch 3): `readArea`'s phrasings, every side with the same length unit.
+ *   - area (W7 batch 3): `readArea`'s phrasings, every side with the same length unit;
+ *   - mean and range (W7 batch 3): `readStat`'s phrasings, a list with a comma and a space between its numbers.
  * Null for: whole numbers or mixed numbers as operands (a whole amount after 'of' excepted), a decimal beside a fraction, three or more
  * terms, any letter in the maths (an x), brackets, number words, an answer after '=', a bottom of 1 or 0, a leading
  * zero, 'the difference between' (its order is not said), a fraction of a fraction, a decimal or a thousands-separated
@@ -2798,7 +2909,7 @@ export function specFromQuestion(text: unknown): SchoolSpec | null {
     let t = normalise(text);
     t = t.replace(/^(?:\d{1,2}[.)]|\(\d{1,2}\)|[a-h]\)|\([a-h]\))\s+/i, "");
     return readMissing(t) ?? readSimplify(t) ?? readOf(t) ?? readCombined(t) ?? readDecimal(t) ?? readConvert(t) ?? readPercentOf(t) ?? readPercentChange(t)
-      ?? readRatio(t) ?? readRate(t) ?? readArea(t);
+      ?? readRatio(t) ?? readRate(t) ?? readArea(t) ?? readStat(t);
   } catch {
     return null;
   }
@@ -2809,7 +2920,7 @@ export function specFromQuestion(text: unknown): SchoolSpec | null {
  * fractions, a product or quotient of two fractions multiply and divide fractions (W7), a fraction of an amount its own
  * unit, a missing number or a simplify equivalent fractions; two numbers with a decimal among them added, subtracted or
  * multiplied the decimals unit (W7 batch 2); any `ratio` spec "Ratio and sharing", any `rate` spec "Unit rates and direct
- * proportion", any `area` spec its unit (W7 batch 3).
+ * proportion", any `area` spec its unit, any `stat` spec "Mean and range" (W7 batch 3).
  */
 export function unitOf(spec: unknown): string | null {
   try {
@@ -2823,6 +2934,7 @@ export function unitOf(spec: unknown): string | null {
     if (r.kind.k === "ratio-simplify" || r.kind.k === "ratio-share" || r.kind.k === "ratio-missing") return "ratio-share";
     if (r.kind.k === "rate") return "unit-rate";
     if (r.kind.k === "area") return "area";
+    if (r.kind.k === "stat") return "mean-range";
     const n = r.node;
     if (decimalPair(n)) return "dec-arith";
     if (n.k !== "op" || n.a.k !== "frac" || n.b.k !== "frac") return null;
@@ -2848,6 +2960,7 @@ export const SCHOOL_WITHHELD = {
   "pct-of-amount": "A percentage of an amount is that many hundredths of it. Find a single hundredth of the amount first and build the percentage up from it, or write the percentage as a decimal and multiply the amount by it. The answer is yours to work out.",
   "pct-change": "First find the percentage of the amount: that is the change. Then add it on for an increase, or take it off for a decrease. The answer is yours to work out.",
   "dec-arith": "To add or take away, write the numbers with their decimal points one under the other, filling empty places with zeros. To multiply, multiply as if there were no points, then give the answer as many digits after its point as the question's numbers have between them. The answer is yours to work out.",
+  "mean-range": "The mean is the total of the numbers divided by how many numbers there are. The range is the largest number take away the smallest. The answer is yours to work out.",
   "area": "The area of a rectangle is its length times its width. For a triangle, multiply the base by the height and halve the result. For two rectangles together, find the area of each and add them. The answer is yours to work out.",
   "unit-rate": "Find the value of a single one first: divide the cost or the distance by how many there are in the first sentence. Then multiply by the number the question asks about. The answer is yours to work out.",
   "ratio-share": "To share in a ratio, add the ratio's numbers to find how many equal parts there are, divide the amount by that to find the size of a single part, then multiply by each number of the ratio. To simplify a ratio or find a missing number, multiply or divide both numbers by the same number. The answer is yours to work out.",

@@ -418,10 +418,14 @@ const B3_TIER={
   const d=/^(\d+) km in (\d+) h, \d+$/.exec(sp.expr);return (2*Number(d[1])/Number(d[2]))%2===0?1:2;},
  // tier 1: a rectangle with whole sides or a triangle with a whole area; tier 2: two rectangles, a half in the area or a side
  'area':(sp)=>{if(/^rectangles /.test(sp.expr)||/\.5/.test(sp.expr))return 2;const t=/^triangle base (\d+) height (\d+)$/.exec(sp.expr);return t&&(Number(t[1])*Number(t[2]))%2===1?2:1;},
+ // tier 1: a whole mean, or the range of four or five numbers; tier 2: a mean that is not whole, or the range of six
+ 'mean-range':(sp)=>{const [k,list]=[sp.expr.split(' ')[0],sp.expr.slice(sp.expr.indexOf(' ')+1).split(', ').map(Number)];
+  return k==='range'?(list.length===6?2:1):(list.reduce((a,b)=>a+b,0)%list.length===0?1:2);},
 };
 /** The printed question of each unit, and the keys its spec may carry. */
 const B3_SHAPE={
  'ratio-share':[/^(?:Write \d+:\d+ in its simplest form\.|Fill in the missing number: \d+:\d+ = (?:\?:\d+|\d+:\?)\.|Share (?:[€£]\d+|\d+(?: [a-z]+)?) in the ratio \d+:\d+\.)$/,['shape','expr','unit']],
+ 'mean-range':[/^(?:Work out the mean|Find the range) of \d+(?:, \d+)* and \d+\.$/,['shape','expr']],
  'area':[/^(?:Find the area of a rectangle \d+(?:\.5)? (?:cm|metres) by \d+(?:\.5)? (?:cm|metres)\.|Find the area of a triangle, base \d+ cm, height \d+ cm\.|Find the total area of rectangles \d+ cm by \d+ cm and \d+ cm by \d+ cm\.)$/,['shape','expr','unit']],
  'unit-rate':[/^(?:\d+ (pens|books|cards|eggs|cups|kg) cost [€£]\d+(?:\.\d\d)?\. What (?:do \d+ \1|does 1 (?:pen|book|card|egg|cup|kg)) cost\?|\d+ km in \d+ hours\. How far in (?:1 hour|\d+ hours)\?)$/,['shape','expr','unit']],
 };
@@ -453,6 +457,11 @@ for(const unit of Object.keys(B3_TIER)){
 
 /** The batch-3 specs a round trip carries, and the ones the store must drop (a key the shape does not take, a malformed one). */
 const B3_STORE={
+ 'mean-range':{
+  keep:[{shape:'stat',expr:'mean 4, 7, 9, 10'},{shape:'stat',expr:'range 12, 5, 9, 20, 7'},{shape:'stat',expr:'mean 4, 8, 6, 15, 3, 9'}],
+  answer:[{shape:'stat',expr:'mean 4, 7, 9, 10',answer:'7.5',value:7.5},{shape:'stat',expr:'mean 4, 7, 9, 10'}],
+  drop:[{shape:'stat',expr:'mean 1, 2, 4'},{shape:'stat',expr:'range 5, 5, 5'},{shape:'stat',expr:'mean 4, 7, 9, 10',unit:'cm'},{shape:'stat',expr:'median 4, 7, 9'},{shape:'stat',expr:'mean 4, 7, 9, 10',to:'decimal'},{shape:'stat',expr:'mean 4, 7'}],
+ },
  'area':{
   keep:[{shape:'area',expr:'rectangle 7 by 4',unit:'cm2'},{shape:'area',expr:'rectangle 12 by 9',unit:'m2'},{shape:'area',expr:'triangle base 5 height 3',unit:'cm2'},{shape:'area',expr:'rectangles 8 by 3 and 4 by 2',unit:'cm2'}],
   answer:[{shape:'area',expr:'rectangle 7 by 4',unit:'cm2',answer:'28',value:28},{shape:'area',expr:'rectangle 7 by 4',unit:'cm2'}],
@@ -493,5 +502,5 @@ test('W7c 5b: the batch-3 specs survive the store - practice.set, practice.marke
  }
  const src=fs.readFileSync(storeFile,'utf8');
  assert.match(src,/const SCHOOL_SPEC_KEYS = \["expr", "form", "unit", "allowNegative", "to"\] as const;/,'W7 batch 3 adds no store key: expr and unit carry every new shape');
- for(const sh of ['ratio','rate','area']){assert.ok(S.SCHOOL_SHAPES.includes(sh));assert.ok(!C.CALC_SHAPES.includes(sh),`${sh} is not a Calculus shape`);assert.equal(C.wellFormed({shape:sh,expr:'12:18'}).ok,false);}
+ for(const sh of ['ratio','rate','area','stat']){assert.ok(S.SCHOOL_SHAPES.includes(sh));assert.ok(!C.CALC_SHAPES.includes(sh),`${sh} is not a Calculus shape`);assert.equal(C.wellFormed({shape:sh,expr:'12:18'}).ok,false);}
 });

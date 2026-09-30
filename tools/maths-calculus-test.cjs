@@ -369,11 +369,12 @@ test('7d: the W7 batch-3 school corpus - every ratio, rate, area and mean or ran
  // ratio: 'Write 12:18 in its simplest form.', 'Share €60 in the ratio 2:3.', 'Fill in the missing number: 2:3 = ?:15.' - no
  // fraction stacked, the ratio's colon kept between its numbers; rates: '5 pens cost €3.50. What do 8 pens cost?', '240 km in
  // 3 hours. How far in 5 hours?'; areas: 'Find the area of a triangle, base 10 cm, height 6 cm.' and two rectangles, the
- // longest row ('Find the total area of rectangles 9 cm by 7 cm and 6 cm by 5 cm.'), which the sheet fits at about 35 px. A row wider than the paper at 52 px is not a break: the
+ // longest row ('Find the total area of rectangles 9 cm by 7 cm and 6 cm by 5 cm.'), which the sheet fits at about 35 px;
+ // mean and range: 'Work out the mean of 48, 27, 39, 41, 58 and 10.', the list in the order drawn, every number kept. A row wider than the paper at 52 px is not a break: the
  // sheet fits it (MathsTV fitRows, tv/mathsRows fitRow) down in 2 px steps, and this batch holds it at 34 px or more (the
  // floor is 28).
  const S=require(path.join(root,'src/lib/rules/school.ts'));
- const GENS=[S.genRatio,S.genRate,S.genArea];
+ const GENS=[S.genRatio,S.genRate,S.genArea,S.genStat];
  const off=[];let n=0,fitted=0,smallest=52;
  for(const g of GENS)for(const tier of [1,2])for(let seed=0;seed<100;seed++){
   const sp=g(seed,tier),q=S.question(sp);n++;
