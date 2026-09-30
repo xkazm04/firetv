@@ -2,7 +2,7 @@ import { randomUUID } from "node:crypto";
 import { fit, object, schema, str } from "../engines/shape";
 import { text } from "../engines/text";
 import { dispatch, getSession, type Screen } from "../session/store";
-import { getLearner, saveEnglish } from "../session/learners";
+import { addDigest, getLearner, saveEnglish } from "../session/learners";
 import { checkCommand, isCheckAction } from "./check";
 import { audienceAllowed, defaultPreferences, eligibleScenes, ENGLISH_SCENES, ENGLISH_SKILLS, isAdult, recommendScene } from "./curriculum";
 import { ConversationError } from "./errors";
@@ -170,6 +170,9 @@ export async function englishCommand(raw:unknown){
   if(action==="finish"){
     const entry={id:c.id,sceneId:c.sceneId,title:c.title,at:Date.now(),turns:c.turns.filter(t=>t.role==="learner").length};
     saveEnglish(learnerId,{...learning,sessions:[...learning.sessions.filter(x=>x.id!==c.id),entry].slice(-30)});
+    // the week's digest (Family W9, rules/digest): the scene, its skill and the replies counted, never a word of them;
+    // once per conversation, as the sessions list keeps it once
+    if(!learning.sessions.some(x=>x.id===c.id))addDigest(learnerId,{at:entry.at,kind:"english",sceneId:c.sceneId,skill:c.focusSkill,turns:entry.turns});
     commit({...c,phase:"finished",moment:null,capture:false,quizOpen:false,paused:false,commands:[...c.commands,commandId]},"linga-recap");return getSession();
   }
   // what is left is turn, coach or replay: each asks the model

@@ -34,7 +34,8 @@
 import { vision } from "../engines/vision";
 import { ASK, cleanValue as clean, isCalcSpec, locate, rightLine, rootOf, settle, settled, settleSpec, slipVocabulary, workingLines } from "../rules/maths";
 import { DEFAULT_SCHOOL_SYSTEM, isSchoolSpec } from "../rules/school";
-import { addHistory, recordAttempt } from "../session/learners";
+import { addDigest, addHistory, recordAttempt } from "../session/learners";
+import { mathsEntry } from "../rules/digest";
 import { topicIn } from "../library/paths";
 import { degenerate, substitute, verify } from "./verify";
 import type { Practice, PracticeItem, SchoolSystem } from "../session/store";
@@ -362,6 +363,10 @@ function land(
     label: topicIn(practice.topic)?.name ?? practice.topic,
     detail: rightLine(items),
   });
+  // ...and the week's digest (Family W9, rules/digest): one entry for this set - counts, the unit, the step-up flag and
+  // the most frequent code-detected slip - never a question or an answer. An explanation that settles an item later
+  // restates it in place (session/store restateMarked), as it restates the history line.
+  addDigest(learnerId, mathsEntry(practice.topic, items, practice.stretch === true || items.some((i) => i.stretch === true), Date.now()));
 
   return { items, ...run, landed: true };
 }

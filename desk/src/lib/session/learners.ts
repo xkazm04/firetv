@@ -9,6 +9,7 @@ import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { emptyEnglish, type EnglishLearning } from "../english/types";
 import { cleanEnglish } from "../english/rules";
+import { DIGEST_CAP, cleanDigest, type DigestEntry } from "../rules/digest";
 
 export interface SkillRecord {
   topic: string; seen: number; right: number;
@@ -54,6 +55,13 @@ export interface Learner {
   writing: Record<string, SkillRecord>;
   memory: string[];         // plain sentences the model reads, newest last, capped at 40
   history: HistoryEntry[];  // what happened, newest last, capped at 20
+  /**
+   * The week, recorded (Family W9, rules/digest): one dated entry per marked set, finished Linga conversation and Essay
+   * reading - ids from closed lists and counts only, never text - newest last, capped at DIGEST_CAP. A separate list from
+   * the history (whose cap and pin are unchanged); the Sunday page (rules/week) is its only reader, and it is never
+   * hydrated into the session (no screen is sent it). A learners.json written before W9 loads with none.
+   */
+  digest: DigestEntry[];
 }
 
 // the same data dir the session store uses — derived the same way, not hard-coded
@@ -119,7 +127,7 @@ function writeLearner(id: string, l: Learner): void {
   catch (e) { console.error(`learners.json could not be written: ${id}'s change was not saved: ${why(e)}`); }
 }
 
-function blank(id: string): Learner { return { id, english: emptyEnglish(), skills: {}, writing: {}, memory: [], history: [] }; }
+function blank(id: string): Learner { return { id, english: emptyEnglish(), skills: {}, writing: {}, memory: [], history: [], digest: [] }; }
 
 /** A finite whole number of at least 0, else 0. */
 const count = (v: unknown) => { const n = Number(v); return Number.isFinite(n) && n > 0 ? Math.floor(n) : 0; };
@@ -178,7 +186,9 @@ function clean(id: string, l: unknown): Learner {
       label: String(h.label), detail: typeof h.detail === "string" ? h.detail : "",
       ...(typeof h.ref === "string" && h.ref ? { ref: h.ref } : {}),
     }));
-  return { id, english: cleanEnglish(o.english), skills, writing, memory: Array.isArray(o.memory) ? o.memory.filter((m): m is string => typeof m === "string").slice(-MEMORY_CAP) : [], history: capped(history) };
+  return { id, english: cleanEnglish(o.english), skills, writing, memory: Array.isArray(o.memory) ? o.memory.filter((m): m is string => typeof m === "string").slice(-MEMORY_CAP) : [], history: capped(history),
+    // the week's digest, whitelisted entry by entry (rules/digest cleanDigest); none on a file written before it existed
+    digest: cleanDigest(o.digest) };
 }
 
 /**
@@ -201,7 +211,7 @@ export function getLearner(id: string): Learner {
 }
 
 export function saveLearner(l: Learner): void {
-  writeLearner(l.id, { ...l, memory: l.memory.slice(-MEMORY_CAP), history: capped(l.history ?? []) });
+  writeLearner(l.id, { ...l, memory: l.memory.slice(-MEMORY_CAP), history: capped(l.history ?? []), digest: (l.digest ?? []).slice(-DIGEST_CAP) });
 }
 
 /** English commits report a disk failure instead of claiming progress was saved - an unreadable learners.json too. */
@@ -286,6 +296,18 @@ export function addHistory(id: string, e: HistoryEntry): void {
   if (!e || !e.label?.trim()) return;
   const l = getLearner(id);
   l.history = capped([...l.history, { ...e, label: e.label.trim(), detail: (e.detail ?? "").trim() }]);
+  saveLearner(l);
+}
+
+/**
+ * One thing done, appended to the week's digest (Family W9): cleaned by the same whitelist a read uses (an entry it
+ * cannot trust is not written), newest last, the oldest dropped past DIGEST_CAP. Never raises the history's cap.
+ */
+export function addDigest(id: string, e: DigestEntry): void {
+  const [clean] = cleanDigest([e]);
+  if (!clean) return;
+  const l = getLearner(id);
+  l.digest = [...l.digest, clean].slice(-DIGEST_CAP);
   saveLearner(l);
 }
 

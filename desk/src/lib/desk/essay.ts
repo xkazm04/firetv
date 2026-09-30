@@ -6,7 +6,7 @@
 import { text } from "../engines/text";
 import { ANALYSIS_TYPES, cleanFix, paragraphStats, revise, splitSentences, taught, type AnalysisType } from "../rules/essay";
 import { playFor } from "../library/lessons.data";
-import { addHistory, recordWriting } from "../session/learners";
+import { addDigest, addHistory, recordWriting } from "../session/learners";
 import { voiceOf, withManner } from "../rules/voice";
 import type { EssayAnalysis, Verdict } from "../session/store";
 
@@ -73,6 +73,8 @@ export async function analyseEssay(raw: string, type: AnalysisType, learnerId: s
       detail: `${faulty} of ${sentences.length} sentence${sentences.length === 1 ? "" : "s"} to fix`,
     });
     recordWriting(learnerId, lens.id, sentences.length, faulty);
+    // the week's digest (Family W9, rules/digest): the lens and the two counts, never a sentence
+    addDigest(learnerId, { at: Date.now(), kind: "essay", lens: lens.id, sentences: sentences.length, faulty });
   }
 
   return { text: raw, type, sentences, stats, verdicts, summary: json.summary, provider };

@@ -18,6 +18,7 @@ import { LESSONS } from "../library/lessons.data";
 import { watchDue, type Watch } from "../library/watched";
 import type { RuleCard } from "../rules/english";
 import { restatedLine, slipsFor } from "../rules/maths";
+import { mathsEntry } from "../rules/digest";
 import { CALC_SHAPES, type CalcSpec } from "../rules/calc";
 import { SCHOOL_SHAPES, wellFormed as schoolWellFormed, type SchoolSpec } from "../rules/school";
 import type { Fix, Sentence, Was } from "../rules/essay";
@@ -592,13 +593,19 @@ const REHYDRATE = new Set(["learner.set", "practice.marked", "practice.settle", 
 /**
  * A settled item changes its set's count: the line marking wrote (the last practice line, this topic, this n)
  * is restated from the item verdicts as they now stand (rules/maths). A recount, and no entry is added.
+ * The week's digest entry for the same set (Family W9: the last maths entry, this topic, this n) is restated the same
+ * way (rules/digest mathsEntry: its counts and its slip), keeping its date and its step-up flag.
  */
 function restateMarked(s: Session): void {
   if (!s.learner) return;
   const p = s.practice, l = getLearner(s.learner.id);
   const at = l.history.findLastIndex((h) => h.kind === "practice"), h = l.history[at];
   const detail = p?.marked && h && labelOf(h.label, p.topic) ? restatedLine(h.detail, p.items) : null;
-  if (detail && detail !== h.detail) saveLearner({ ...l, history: l.history.map((x, i) => (i === at ? { ...x, detail } : x)) });
+  const history = detail && detail !== h.detail ? l.history.map((x, i) => (i === at ? { ...x, detail } : x)) : null;
+  const di = l.digest.findLastIndex((d) => d.kind === "maths"), d = l.digest[di];
+  const entry = p?.marked && d?.kind === "maths" && d.topic === p.topic && d.total === p.items.length ? mathsEntry(p.topic, p.items, d.stretch === true, d.at) : null;
+  const digest = entry && JSON.stringify(entry) !== JSON.stringify(d) ? l.digest.map((x, i) => (i === di ? entry : x)) : null;
+  if (history || digest) saveLearner({ ...l, ...(history ? { history } : {}), ...(digest ? { digest } : {}) });
 }
 
 export function dispatch(e: Event): Session {
