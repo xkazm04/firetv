@@ -84,6 +84,32 @@ test('prose 6: the maths reader reads the respelled power as the same maths as t
  for(const s of ['x^{n+1}','x^{-1/2}','e^(2x)','x^2y','x^{2n}','x^-1','x^10']) same(prose(s),s);
 });
 
+test('prose 7: a caption spells the bars, the norm and a cases brace the reader draws',()=>{
+ const {prose}=P(),{parseMath,flatten}=T();
+ const same=(src)=>{
+  const said=prose(src);
+  assert.ok(!/\\/.test(said),`no backslash survives: ${JSON.stringify(src)} -> ${JSON.stringify(said)}`);
+  assert.doesNotMatch(said,/\b(?:lvert|rvert|lVert|rVert|Vert|vert|langle|rangle|Leftarrow|abs|norm|mid)\b/,said);
+  assert.equal(flatten(parseMath(said)).replace(/\s+/g,''),flatten(parseMath(src)).replace(/\s+/g,''),`${JSON.stringify(src)} -> ${JSON.stringify(said)}`);
+ };
+ // the twelve commands typeset.ts draws as a glyph and prose used to spell (calc pages c01-p1, c05-p2, c06-q1, c19-p2)
+ for(const s of [
+  '$\\lvert x \\rvert$',
+  '$\\vert x$',
+  '$\\lVert v \\rVert$',
+  '$\\Vert v$',
+  '$\\langle a, b \\rangle$',
+  '$A \\Leftarrow B$',
+  '$x \\mid y$',
+  '$\\abs{x - 1}$',
+  '$\\norm{v}$',
+  '$\\begin{cases} cx + 1 & x < 2 \\\\ x^2 - c & x \\ge 2 \\end{cases}$',
+ ]) same(s);
+ assert.equal(prose('$\\sqrt[3]{8}$'),'³√8','a root index stays the printed caption the suite already pins');
+ for(const s of ['$\\lvert x - 2 \\rvert - 1$','$\\abs{x - 1}$','$\\begin{cases} cx + 1 & x < 2 \\\\ x^2 - c & x \\ge 2 \\end{cases}$'])
+  assert.equal(digits(prose(s)),digits(s),`digits in = digits out for ${s}`);
+});
+
 // ---------------------------------------------------------------- 2. the ruler: one rule for "Secure"
 
 const rec=(topic,estimate,secure,seen=6)=>({topic,seen,right:Math.round(seen*estimate),estimate,secure,lastSeen:0,slips:[]});

@@ -7,6 +7,8 @@
  * power is raised only when every character in it has a printed superscript; otherwise it stays on the line,
  * bracketed (x^(−1/2)) - never a partial superscript that reads as different maths. The printed forms are the
  * ones the maths reader (typeset.ts, its SUP and SUB tables) reads back, so the reader sees the same maths.
+ * Named bars (\lvert, \Vert, \langle, \mid, \Leftarrow), \abs and \norm, and a cases brace are the same
+ * characters that reader draws.
  *
  * Pure and dependency-free (no next/font), so node tests it; MathsTV.tsx imports it.
  */
@@ -26,7 +28,8 @@ const SUB: Readonly<Record<string, string>> = {
 const TEX_CHAR: Readonly<Record<string, string>> = {
   pi: "π", infty: "∞", cdot: "·", times: "×", div: "÷", pm: "±", mp: "∓",
   le: "≤", leq: "≤", ge: "≥", geq: "≥", ne: "≠", neq: "≠", lt: "<", gt: ">", approx: "≈", equiv: "≡", sim: "∼", propto: "∝",
-  to: "→", rightarrow: "→", longrightarrow: "→", leftarrow: "←", Rightarrow: "⇒", implies: "⇒", Leftrightarrow: "⇔", iff: "⇔", mapsto: "↦",
+  to: "→", rightarrow: "→", longrightarrow: "→", leftarrow: "←", Leftarrow: "⇐", Rightarrow: "⇒", implies: "⇒", Leftrightarrow: "⇔", iff: "⇔", mapsto: "↦",
+  lvert: "|", rvert: "|", vert: "|", lVert: "‖", rVert: "‖", Vert: "‖", langle: "⟨", rangle: "⟩", mid: "|",
   in: "∈", notin: "∉", subset: "⊂", subseteq: "⊆", cup: "∪", cap: "∩", emptyset: "∅",
   ldots: "…", dots: "…", cdots: "⋯", degree: "°", circ: "°", prime: "′", partial: "∂", nabla: "∇", ell: "ℓ",
   int: "∫", sum: "∑", prod: "∏",
@@ -105,17 +108,31 @@ function texToText(src: string): string {
     if (TEX_FN.has(n)) return n;
     if (n === "%" || n === "$" || n === "#" || n === "&" || n === "_") return n;
     if (n === "|") return "‖";
-    if (n === "begin" || n === "end") { if (src[i] === "{") { i++; group(); } return " "; }
+    // \abs{x} and \norm{v}: the argument between its bars, as the reader draws them
+    if (n === "abs" || n === "norm") { const b = n === "abs" ? "|" : "‖"; return `${b}${arg()}${b}`; }
+    if (n === "begin") {
+      let env = "";
+      if (src[i] === "{") { i++; env = group(); }
+      if (env.replace(/\*$/, "") !== "cases") return " ";
+      // one line, an open brace, the rows side by side: & and \\ are gaps (typeset.ts)
+      let body = "";
+      while (i < src.length && !src.startsWith("\\end", i)) {
+        if (src[i] === "&") { i++; body += " "; continue; }
+        body += next();
+      }
+      return LB + body;
+    }
+    if (n === "end") { if (src[i] === "{") { i++; group(); } return ""; }
     // any other command keeps its name, as a word
     return /^[a-zA-Z]/.test(n) ? (src[i] === "{" ? `${n} ` : n) : "";
   };
-  const next = (): string => {
+  function next(): string {
     const c = src[i];
     if (c === "\\") return command();
     if (c === "{") { i++; return `{${group()}}`; }
     const ch = String.fromCodePoint(src.codePointAt(i)!); i += ch.length;
     return ch;
-  };
+  }
   let out = "";
   while (i < src.length) out += next();
   return out;
