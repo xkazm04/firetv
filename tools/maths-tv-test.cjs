@@ -110,6 +110,23 @@ test('prose 7: a caption spells the bars, the norm and a cases brace the reader 
   assert.equal(digits(prose(s)),digits(s),`digits in = digits out for ${s}`);
 });
 
+test('prose 8: every printed superscript and subscript is raised, and the reader reads it back',()=>{
+ const {prose}=P(),{parseMath,flatten}=T();
+ // typeset.ts SUP and SUB. A missing glyph falls back to a bracket the reader also accepts, so the glyph itself has to be required.
+ const sup={"0":"⁰","1":"¹","2":"²","3":"³","4":"⁴","5":"⁵","6":"⁶","7":"⁷","8":"⁸","9":"⁹","+":"⁺","-":"⁻","−":"⁻","=":"⁼","(":"⁽",")":"⁾",n:"ⁿ",x:"ˣ",y:"ʸ",i:"ⁱ",k:"ᵏ",a:"ᵃ",b:"ᵇ",t:"ᵗ"};
+ const sub={"0":"₀","1":"₁","2":"₂","3":"₃","4":"₄","5":"₅","6":"₆","7":"₇","8":"₈","9":"₉","+":"₊","-":"₋","−":"₋","=":"₌","(":"₍",")":"₎",x:"ₓ",n:"ₙ",a:"ₐ",i:"ᵢ",k:"ₖ"};
+ for(const [c,g] of Object.entries(sup)){
+  const src=`x^{${c}}`, said=prose(src);
+  assert.ok(said.includes(g),`${JSON.stringify(src)} should print ${g}, got ${JSON.stringify(said)}`);
+  assert.equal(flatten(parseMath(said)).replace(/\s+/g,''),flatten(parseMath(src)).replace(/\s+/g,''),src);
+ }
+ for(const [c,g] of Object.entries(sub)){
+  const src=`x_{${c}}`, said=prose(src);
+  assert.ok(said.includes(g),`${JSON.stringify(src)} should print ${g}, got ${JSON.stringify(said)}`);
+  assert.equal(flatten(parseMath(said)).replace(/\s+/g,''),flatten(parseMath(src)).replace(/\s+/g,''),src);
+ }
+});
+
 // ---------------------------------------------------------------- 2. the ruler: one rule for "Secure"
 
 const rec=(topic,estimate,secure,seen=6)=>({topic,seen,right:Math.round(seen*estimate),estimate,secure,lastSeen:0,slips:[]});
