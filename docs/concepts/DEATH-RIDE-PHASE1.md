@@ -40,8 +40,9 @@ saying exactly what the owner should try and what "good" and "bad" look like; (7
 |---|---|---|---|---|---|---|
 | 1 | W1 | **Feel Lab**: research and calibration of steering, throttle and brake; live presets; telemetry | - | done; owner feel pending | aaa8546 | 2026-09-30 |
 | 2 | W2 | **Cars and stats**: car classes, the stat model, data-driven car specs | W1 | done; owner feel pending | bd5eb67 | 2026-09-30 |
-| 3 | W3 | **Advanced vehicle movement**: weight transfer, handbrake and drift, surfaces, mass-based collisions | W2 | done; owner feel pending | W3: feat: add weight transfer and surface movement | 2026-09-30 |
-| 4 | W4 | **Weapons and damage**: weapon design and execution, HP, armor, wrecks, and **the controller layout rethink** | W3 | not started | | |
+| 3 | W3 | **Advanced vehicle movement**: weight transfer, handbrake and drift, surfaces, mass-based collisions | W2 | done; owner feel pending | 2e238cb | 2026-09-30 |
+| 4 | W4 | **Weapons and damage**: weapon design and execution, HP, armor, wrecks, and **the controller layout rethink** | W3, C1 | design note drafted (uncommitted by the run, committed by host), not implemented | | |
+| 4b | C1 | **Calibration round (added by host)**: the owner rates W1-W3 by hand on the Stick; one default preset and tightened bands follow | W3 + owner | waiting for the owner | | |
 | 5 | W5 | **Parts and shop**: parts design, economy, garage on TV and phone, save file | W4 | not started | | |
 | 6 | W6 | **Tracks**: track format, authoring, linter, a set of tracks that escalate | W3 | not started | | |
 | 7 | W7 | **Campaign**: ladder, rivals, difficulty, progression, pacing simulation | W5, W6 | not started | | |
@@ -168,14 +169,57 @@ honest tier of truth for each claim (exists, valid, wired, behaves, felt), and a
 
 (the executing agent appends here; one entry per wave: wave, date, what changed, commands run with results, what is `not measured`, next wave)
 
-### W1 ? 2026-09-30
+### W1, 2026-09-30
 
-Design first: `deathride/W1-feel-research.md`. Added five data profiles, shared shaping, live remote/phone controls, 60 scripted traces, declared bands and strict allocation tests. Fixed Java 22 math allocations using deterministic polynomial kernels and exp/log powers. `:core:test :link:test :app:assembleDebug -PappId=dev.deathride.tv -PappLabel="Death Ride"`: green (18 core, 3 link). Installed and launched on AFTKM; remote and browser settings switch live. `tools/browser-check.mjs`: pass against Stick; `tools/probe.mjs ... 60`: pass with two 30 Hz clients. 60 s at 30.013 Hz, 1816 frames per slot. Last 10 s input age p50/p95/max: P1 20.93/41.58/63.81 ms (n=597); P2 20.77/41.07/113.04 ms (n=597). Frame interval 16.62/21.53/141.61 ms (n=593). These are network/simulation ages, not input-to-photon. Lifetime ages include the intentional silence/countdown and are not steady-load latency. Six successive windows are preserved in `w1-probe.json`. Owner exercises in `deathride/OWNER-CHECKS.md`. Optical latency and owner feel not measured. Latest APK remains installed. Next: W2 cars/stat model, lap and duel matrix.
+Design first: `docs/concepts/deathride/W1-feel-research.md`. Added five data profiles, shared shaping, live remote/phone controls, 60 scripted traces, declared bands and strict allocation tests. Fixed Java 22 math allocations using deterministic polynomial kernels and exp/log powers. `:core:test :link:test :app:assembleDebug -PappId=dev.deathride.tv -PappLabel="Death Ride"`: green (18 core, 3 link). Installed and launched on AFTKM; remote and browser settings switch live. `tools/browser-check.mjs`: pass against Stick; `tools/probe.mjs ... 60`: pass with two 30 Hz clients. 60 s at 30.013 Hz, 1816 frames per slot. Last 10 s input age p50/p95/max: P1 20.93/41.58/63.81 ms (n=597); P2 20.77/41.07/113.04 ms (n=597). Frame interval 16.62/21.53/141.61 ms (n=593). These are network/simulation ages, not input-to-photon. Lifetime ages include the intentional silence/countdown and are not steady-load latency. Six successive windows are preserved in `w1-probe.json`. Owner exercises in `deathride/OWNER-CHECKS.md`. Optical latency and owner feel not measured. Latest APK remains installed. Next: W2 cars/stat model, lap and duel matrix.
 
-### W2 ? 2026-09-30
+### W2, 2026-09-30
 
-Design first: `deathride/W2-cars-and-stats.md`. Added five car CSVs, one stat mapping table, per-car physical specs, remote/phone selection and matching bars. Preserved Spike baseline via `physics.csv`. Headless matrix: 270 finish observations (18/class/type), 120 paired races; Trail leads tight/mixed and Comet fast. Comet tuning corrected a first-run failure to express its straight-line role. `:core:test :link:test :app:assembleDebug`: green, 20 core + 3 link. Installed release id/label on AFTKM; `tools/wave-check.mjs ... 2` and remote DOWN passed; evidence and APK hash in design note. Owner feel, combat balance, optical latency not measured. Latest build installed. Next W3: surfaces, transfer, handbrake and mass collisions.
+Design first: `docs/concepts/deathride/W2-cars-and-stats.md`. Added five car CSVs, one stat mapping table, per-car physical specs, remote/phone selection and matching bars. Preserved Spike baseline via `physics.csv`. Headless matrix: 270 finish observations (18/class/type), 120 paired races; Trail leads tight/mixed and Comet fast. Comet tuning corrected a first-run failure to express its straight-line role. `:core:test :link:test :app:assembleDebug`: green, 20 core + 3 link. Installed release id/label on AFTKM; `tools/wave-check.mjs ... 2` and remote DOWN passed; evidence and APK hash in design note. Owner feel, combat balance, optical latency not measured. Latest build installed. Next W3: surfaces, transfer, handbrake and mass collisions.
 
-### W3 ? 2026-09-30
+### W3, 2026-09-30
 
-Design first: `deathride/W3-movement.md`. Added data surfaces/transfer, handbrake/drift hysteresis, kerb/verge penalty, unequal-mass impulses, bounded spin and ram input for W4. Fixed duplicate AI grip speed reduction found by ice completion test. 18 races/108 finishes over six surfaces: all finish within 180 s, deterministic replays; 10,000 advanced steps allocate zero bytes. `:core:test :link:test :app:assembleDebug`: green, 25 core + 3 link. On AFTKM, `tools/wave-check.mjs ... 3` confirms live surfaces and multi-touch drift; remote MENU selects Gravel. Latest release build installed. Owner feel, optical latency and physical-phone ergonomics not measured. Historical test reports now go to build/reports and are copied only into their own wave evidence. Next W4: weapons, one HP authority, wrecks, controller layouts.
+Design first: `docs/concepts/deathride/W3-movement.md`. Added data surfaces/transfer, handbrake/drift hysteresis, kerb/verge penalty, unequal-mass impulses, bounded spin and ram input for W4. Fixed duplicate AI grip speed reduction found by ice completion test. 18 races/108 finishes over six surfaces: all finish within 180 s, deterministic replays; 10,000 advanced steps allocate zero bytes. `:core:test :link:test :app:assembleDebug`: green, 25 core + 3 link. On AFTKM, `tools/wave-check.mjs ... 3` confirms live surfaces and multi-touch drift; remote MENU selects Gravel. Latest release build installed. Owner feel, optical latency and physical-phone ergonomics not measured. Historical test reports now go to build/reports and are copied only into their own wave evidence. Next W4: weapons, one HP authority, wrecks, controller layouts.
+
+## f. Reconciliation after W1-W3 (host, 2026-09-30 17:05)
+
+The run was told to do W1-W8, and the owner asked for W1-W3 only, so the host stopped it once W3 was committed. It took about 30 minutes
+of wall clock for three waves (16:35 to 17:04). It had begun the W4 design note when stopped; that note is kept as a draft.
+
+**What the host verified itself, not from the run's claims.** `gradlew :core:test :link:test :app:assembleDebug` re-run from scratch
+with `--rerun-tasks`: BUILD SUCCESSFUL in 21 s; 25 core tests (CarsTest 2, DriftTest 2, FeelTest 4, MovementTest 5, SoakTest 4,
+WorldTest 8) and 3 link tests, 0 failures. The release id `dev.deathride.tv` is installed on the Stick at 10.0.0.139 (updated 17:01).
+Not re-checked by the host: the Stick evidence (browser-check, probe, wave-check), which is on record in the design notes.
+
+**What the run produced.**
+
+| Wave | Delivered | Numbers worth keeping |
+|---|---|---|
+| W1 | `FeelProfile` data (Spike, Loose, Agile, Balanced, Stable), shared input shaping in `core`, live preset switch from the remote (LEFT/RIGHT) and the phone settings sheet, 60 scripted steering traces, allocation fix for Java 22 trig | At 18 m/s full lock: turn-in 90% Spike 0.183 s, Loose 0.133, Agile 0.150, Balanced 0.233, Stable 0.317; radius 15.3 m Spike vs 13.7-13.9 m for Loose/Agile/Balanced; slip 8.6 deg Spike, 38.6 Loose, 20.5 Agile, 12.3 Balanced, 7.9 Stable. Input age over Wi-Fi (2.4 GHz, 30 Hz load, 60 s): p50 ~21 ms, p95 ~41 ms, max 64-113 ms. |
+| W2 | five cars (Needle, Line, Bastion, Comet, Trail), one stat-mapping table, seven stat bars on phone and TV, car pick per phone | 120 paired duels, 270 finishes: Trail leads tight and mixed, Comet leads fast, Bastion slowest everywhere (armor is unproven until W4). |
+| W3 | load transfer, handbrake and drift with hysteresis, four surfaces plus kerb and verge, mass-based collision impulses, ram input for W4 | Three-lap six-car race times: asphalt 69-72 s, gravel 84-87, oil 97-102, ice 115-121, kerb 77-81. An ice failure was traced to the AI applying grip twice and fixed. Zero allocation over 10,000 steps with everything on. |
+
+**Findings and risks the host sees.**
+
+1. **Nothing has been felt yet.** Every wave says "owner feel pending". Three waves of movement changes are stacked on a control the owner
+   already called tough, and only the owner can certify any of it. This is the main risk, and the reason for C1 below.
+2. **The proposed default may work against the complaint.** The owner's issue was "turning tough". The run proposed **Balanced** as the human default, but its
+   90% turn-in (0.233 s) is *slower* than the old Spike (0.183 s) while its radius is tighter (13.9 m against 15.3 m). Agile turns in faster
+   (0.150 s) with the same radius but a 20 degree slip. The note does not name a root cause; it lists candidates. Which one is "tough" is for the owner's thumb to decide.
+3. **Brake now overrides GO for every profile**, including Spike. That changes the old baseline, and the run says so. Worth confirming it feels right.
+4. **The 141 ms worst frame** in the W1 probe (p95 21.5 ms) matches the startup outlier seen in the contest apps. Not yet explained.
+5. **The Stick was on 2.4 GHz Wi-Fi** during measurement. Input age will look different on 5 GHz. Record the band with every measurement.
+6. **Balance claims are so far movement-only.** Bastion's slowness is by design and unproven until weapons exist; W2 says so.
+7. **Small bookkeeping errors in the run's records, fixed by the host:** the W3 status row held a commit message instead of the hash, the log
+   used wrong paths for the design notes, and en dashes were written as question marks.
+
+**Next steps, in order.**
+
+1. **C1, owner playtest (now).** Follow `deathride/OWNER-CHECKS.md` for W1, then W2, then W3, on the Stick with the phone.
+   Record for each of the five presets: "too twitchy / right / too heavy" for hairpin, slalom, slide catch. Also try the five cars, the
+   four surfaces, and the drift button. Optionally film the flash test at 240 fps (30 taps) for the optical latency number.
+2. **Calibration run from the owner's ratings.** One default preset, tightened bands, and any fix for what felt wrong. Small run.
+3. **W4, weapons and damage and the layout rethink**, from the drafted design note. The draft proposes weapons Rivet (rapid forward gun),
+   Hammer (slow heavy projectile), Mine (rear drop with an arming delay), and three layouts to try (Classic, Cruise, Split) with a
+   left-handed mirror. Its layout choice depends on how steering ends up feeling, which is why C1 comes first.
+4. W5 to W8 unchanged, in order. At this pace they could be one or two runs, with the owner check between W5 and W6.
