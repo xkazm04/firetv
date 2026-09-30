@@ -10,14 +10,15 @@
  * itself. Stable `data-role` hooks (maths-*) name the parts a host checks.
  */
 import { useEffect, useLayoutEffect, useRef, useState, type ReactNode } from "react";
-import type { Page, PracticeItem, SchoolSystem, Session } from "@/lib/session/store";
-import { PATHS, expectedOn, learnerPath, topicIn, topicsOf, type PathTopic } from "@/lib/library/paths";
+import type { Page, PracticeItem, Session } from "@/lib/session/store";
+import { PATHS, expectedOn, learnerPath, topicIn, topicsOf } from "@/lib/library/paths";
 import { LESSONS } from "@/lib/library/lessons.data";
 import { lessonStates } from "@/lib/library/watched";
 import { slip as slipById } from "@/lib/rules/maths";
 import { PAD, STRIP_AFTER, fitName, flagOnStage, flagX, needleX, rulerFrontier, rulerModel, schoolMarks, stripFlag, stripModel } from "@/tv/rulerRows";
-import { calendarWeeks, continueCard, explainLine, fitRow, humanTopic, inRunningText, markLine, mathPlaced, noLessonsLine, paperSquare, pathSecure, rowSquares, secureTitle, stateWord, topicName, topicStates, workWhat, SQUARE, type Continue, type JobLine } from "@/tv/mathsRows";
+import { calendarWeeks, continueCard, explainLine, fitRow, humanTopic, inRunningText, markLine, mathPlaced, noLessonsLine, paperSquare, pathSecure, rowSquares, secureTitle, stateWord, stretchSecure, topicName, topicStates, usualSeen, workWhat, SQUARE, type Continue, type JobLine } from "@/tv/mathsRows";
 import { running, practiceFailed, stopAt, tonightStops, calendarStops, unitStops, walkStops, HINT_STOPS, TONIGHT_MENU, type TonightStop } from "@/tv/keys";
+import { PREPARE_CHOICES, PREPARE_DOOR, SYS_WORD, choiceLine, prepareGroups, prepareModel } from "@/tv/prepareRows";
 import { sheetTiles, sheetStops, tileOf } from "@/tv/sheetRows";
 import { systemOf } from "@/tv/profileRows";
 import { fmt } from "@/tv/useSession";
@@ -29,16 +30,20 @@ import { prose } from "./prose";
 import { isTall, parseMath } from "./typeset";
 import { KIND_WORD, lookAt, working } from "./working";
 
-/** The root every Math Buddy screen is drawn in. `busy` is the TV's own wait for a practice set. */
-export function MathsTV({ s, busy }: { s: Session; busy: boolean }) {
+/**
+ * The root every Math Buddy screen is drawn in. `busy` is the TV's own wait for a practice set; `ask` the lit cell of Get
+ * ready for school's two-cell question (tv/keys Local `prepareAsk`: null while its list is walked).
+ */
+export function MathsTV({ s, busy, ask = null }: { s: Session; busy: boolean; ask?: 0 | 1 | null }) {
   const f = s.focus;
   const blank = s.screen === "tonight" && !continueCard(s);
-  const lamp = ["sheet", "walk", "page", "hint", "practice", "units"].includes(s.screen) ? "paper" : blank ? "blank" : s.screen === "topics" || s.screen === "calendar" ? "wide" : "desk";
+  const lamp = ["sheet", "walk", "page", "hint", "practice", "units"].includes(s.screen) ? "paper" : blank ? "blank" : s.screen === "topics" || s.screen === "prepare" || s.screen === "calendar" ? "wide" : "desk";
   return (
     <div className={`maths-tv ${MATHS_FONTS}`} data-screen={s.screen} data-lamp={lamp}>
       <div className="mb-lamp" aria-hidden="true"><i /></div>
       {s.screen === "tonight" ? <Tonight s={s} focus={f} />
         : s.screen === "topics" ? <Topics s={s} focus={f} busy={busy} />
+        : s.screen === "prepare" ? <Prepare s={s} focus={f} busy={busy} ask={ask} />
         : s.screen === "practice" ? <PracticeScreen s={s} />
         : s.screen === "sheet" ? <Sheet s={s} focus={f} />
         : s.screen === "walk" ? <Walk s={s} focus={f} />
@@ -243,11 +248,6 @@ function PrintRow({ text, tick, wrap }: { text: string; tick?: boolean; wrap?: b
 
 // ---------------------------------------------------------------- the ruler: the topic path
 
-/** A topic's school year as the learner's school system says it. Handed a year, never a topic: a course topic has none. */
-const SYS_WORD: Record<SchoolSystem, (y: NonNullable<PathTopic["year"]>) => string> = {
-  us: (y) => `Grade ${y.us}`, uk: (y) => `Year ${y.uk}`, cz: (y) => `${y.cz}. ročník`, de: (y) => `Klasse ${y.de}`,
-};
-
 /**
  * The path as a boxwood ruler: secure topics inked solid, one in progress hatched as far as the estimate, an
  * unseen one a dashed groove, slips as pencil scratches. The learner's needle stands at the frontier (rulerRows
@@ -268,7 +268,9 @@ function Ruler({ s, big, focus, busy }: { s: Session; big?: boolean; focus?: num
   const st = topicStates(s);
   const m = rulerModel(topics, st, focus, big);
   const N = topics.length;
-  const has = topics.some((t) => skills[t.id]);
+  // a usual record with nothing seen (made by a step-up attempt, Family W8) is drawn as no record
+  const has = topics.some((t) => usualSeen(s, t.id));
+  const up = stretchSecure(s);
   const frontier = rulerFrontier(topics, (id) => !!skills[id]?.secure, PATHS[path].school);
   const fsk = skills[topics[frontier].id];
   const mx = !has ? PAD : needleX(m, frontier, fsk ? (fsk.secure ? 1 : Math.max(0, Math.min(1, fsk.estimate))) : 0);
@@ -290,14 +292,17 @@ function Ruler({ s, big, focus, busy }: { s: Session; big?: boolean; focus?: num
     <div className="mb-major start" style={{ left: PAD - 2 }} />
     {m.topics.map((t, i) => i > 0 && <div key={"m" + t.id} className="mb-major" style={{ left: t.sx - 1.5 }} />)}
     <div className="mb-major" style={{ left: m.end - 1.5 }} />
-    {m.strands.map((g) => <div key={"s" + g.name} className="mb-strand" style={clampStrands ? { left: g.labelX, maxWidth: g.labelW } : { left: g.labelX }}>{g.label}</div>)}
+    {/* keyed by place: a strand may appear twice on a path (Equations), as on the strip */}
+    {m.strands.map((g, i) => <div key={`s${i}`} className="mb-strand" style={clampStrands ? { left: g.labelX, maxWidth: g.labelW } : { left: g.labelX }}>{g.label}</div>)}
     {topics.map((t, i) => {
       const sk = skills[t.id], box = m.topics[i];
-      const state = sk?.secure ? "secure" : sk ? "prog" : "unseen";
+      const state = sk?.secure ? "secure" : usualSeen(s, t.id) ? "prog" : "unseen";
       const slips = (sk?.slips ?? []).slice(0, 4);
       return (
         <div key={t.id} className="mb-topic" data-s={state} data-focused={focus === i || undefined} data-busy={(busy && focus === i) || undefined} style={{ left: box.x, width: box.w }}>
           <div className="mb-groove">{state !== "unseen" && <div className="fill" style={state === "prog" ? { width: `${Math.max(8, Math.min(100, (sk?.estimate ?? 0) * 100))}%` } : undefined} />}</div>
+          {/* the step-up picture (Family W8): a second, thinner ink line under the groove once the step-up record latches */}
+          {up.has(t.id) && <div className="mb-ink2" data-role="maths-stretch" />}
           {slips.length > 0 && <div className="mb-slips" aria-label={`${slips.length} slips seen`}>{slips.map((x) => <span key={x}>{SLIP_MARK}</span>)}</div>}
           {/* on a panning ruler the name is laid out at its box's final width at once, so the fit never measures a box mid-slide */}
           <div className="mb-tl" style={m.pan ? { right: "auto", width: box.w - 24 } : undefined}><div className="mb-tn">{t.name}</div>{t.year && <div className="mb-ty">{SYS_WORD[sys](t.year)}</div>}{big && <div className="mb-st">{stateWord(s, t.id, st)}</div>}</div>
@@ -358,7 +363,8 @@ function useNameFit(on: boolean, dep: unknown) {
  */
 function Strip({ s }: { s: Session }) {
   const path = learnerPath(s);
-  const m = stripModel(topicsOf(path), topicStates(s), PATHS[path].school);
+  const up = stretchSecure(s);
+  const m = stripModel(topicsOf(path), topicStates(s), PATHS[path].school, (id) => up.has(id));
   const me = s.profiles.find((p) => p.id === s.learner?.id);
   const age = me && me.type !== "other" ? me.age : undefined;
   const exp = age === undefined ? null : expectedOn(path, systemOf(me), age);
@@ -374,6 +380,8 @@ function Strip({ s }: { s: Session }) {
       {m.segments.map((g, i) => (
         <div key={`s${i}`} className="mb-seg" data-s={g.secure === g.count ? "secure" : g.secure ? "prog" : "unseen"} style={{ left: g.x + 6, width: g.w - 12 }}>
           <div className="mb-groove">{g.secure > 0 && <div className="fill" style={{ width: `${g.share * 100}%` }} />}</div>
+          {/* the strand's step-up line (Family W8): as long as its share of topics with a latched step-up, never a count */}
+          {g.stretch > 0 && <div className="mb-ink2" data-role="maths-stretch" style={{ right: "auto", width: `calc((100% - 24px) * ${g.stretchShare})` }} />}
           <div className="mb-strand" style={{ maxWidth: g.labelW }}>{g.lines.map((l, k) => <span key={k} className="ln">{l}</span>)}</div>
         </div>
       ))}
@@ -386,18 +394,34 @@ function Strip({ s }: { s: Session }) {
 
 // ---------------------------------------------------------------- M0 Tonight: the sheet on the desk, two doors, the ruler
 
-const DOORS: Array<{ id: Exclude<TonightStop, "continue">; k: string; t: string }> = [
+type Door = Exclude<TonightStop, "continue">;
+const DOORS: Array<{ id: Door; k: string; t: string }> = [
   { id: "homework", k: "The sheet you were given", t: "I have homework" },
   { id: "teach", k: "No sheet needed", t: "Teach me something" },
+  // Family W8: help in school before the lesson, for a learner on a school path (tv/keys tonightStops)
+  { id: "prepare", k: "Before the lesson", t: "Get ready for school" },
 ];
-function doorCaption(s: Session, i: number): string {
-  if (i === 1) return "Pick a topic and the desk writes six questions to work on paper, then marks them from a photo.";
+function doorCaption(s: Session, door: Door): string {
+  if (door === "teach") return "Pick a topic and the desk writes six questions to work on paper, then marks them from a photo.";
+  if (door === "prepare") return PREPARE_DOOR;
   if (s.awaiting === "maths") return "Waiting for the Math Buddy page. Snap it on the phone — it appears here.";
   if (s.pages.some((p) => p.subject === "maths")) return "The sheet is already on the desk. Enter opens it, one problem at a time.";
   return "Snap the sheet on the phone and the desk reads it, one problem at a time — hints, never the answer.";
 }
 
-function DoorArt({ id }: { id: "homework" | "teach" }) {
+function DoorArt({ id }: { id: Door }) {
+  // a school bag with a sheet peeking out: what goes to school tomorrow
+  if (id === "prepare") return (
+    <svg viewBox="0 0 230 210" fill="none" stroke="currentColor" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d="M92 44 v-14 a10 10 0 0 1 10 -10 h26 a10 10 0 0 1 10 10 v14" strokeWidth="4.5" />
+      <g opacity=".55"><path d="M84 30 L150 22 L156 70 L90 76 Z" /><path d="M100 40 h36 M102 54 h26" strokeWidth="3.5" /></g>
+      <rect x="54" y="44" width="122" height="152" rx="26" strokeWidth="4.5" />
+      <rect x="60" y="50" width="110" height="140" rx="21" fill="currentColor" opacity=".08" stroke="none" />
+      <path d="M54 96 h122" strokeWidth="3.5" opacity=".75" />
+      <rect x="82" y="120" width="66" height="48" rx="10" strokeWidth="3.5" />
+      <path d="M104 120 v-8 h22 v8" strokeWidth="3.5" />
+    </svg>
+  );
   if (id === "homework") return (
     <svg viewBox="0 0 230 210" fill="none" stroke="currentColor" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
       <g opacity=".55"><path d="M26 64 L170 52 L184 196 L40 206 Z" /><path d="M52 92 h60 M56 118 h84 M58 144 h52 M60 170 h72" strokeWidth="3.5" /></g>
@@ -511,20 +535,21 @@ export function Tonight({ s, focus }: { s: Session; focus: number }) {
   const at = stopAt(tonightStops(s), focus);
   // the topics on the learner's path that are secure (a record for a topic off the path is not one of "N of M")
   const { topics, secure, first } = pathSecure(s);
-  const door = at === "continue" ? -1 : at === "teach" ? 1 : 0;
+  const stops = tonightStops(s), doors = DOORS.filter((d) => stops.includes(d.id));
+  const door: Door = at === "teach" || at === "prepare" ? at : "homework";
   const title = secureTitle(secure.length, topics.length, first);
   return (<>
     <Top s={s} right={<Chips s={s} menu={TONIGHT_MENU} />} />
     {cont ? <Hero s={s} cont={cont} focused={at === "continue"} /> : <><h1 className="mb-title" data-role="maths-title"><Amber text={title} /></h1><BlankHero s={s} /></>}
-    <div className={`mb-doors${cont ? "" : " wide"}`} data-dim={at !== "continue" || undefined}>
-      {DOORS.map((d) => (
+    <div className={`mb-doors${cont ? "" : " wide"}${doors.length > 2 ? " three" : ""}`} data-dim={at !== "continue" || undefined}>
+      {doors.map((d) => (
         <div key={d.id} className="mb-door" data-focused={at === d.id} data-role={!cont && d.id === "homework" ? "maths-primary" : "maths-secondary"} data-waiting={(d.id === "homework" && s.awaiting === "maths") || undefined}>
           <div className="art"><DoorArt id={d.id} /></div>
           <div className="txt"><div className="mb-kick">{d.id === "homework" && s.awaiting === "maths" ? "Waiting for the photo" : d.k}</div><div className="dt">{d.t}</div></div>
         </div>
       ))}
     </div>
-    <Caption text={cont && at === "continue" ? cont.cap : doorCaption(s, Math.max(0, door))} />
+    <Caption text={cont && at === "continue" ? cont.cap : doorCaption(s, door)} />
     {topics.length > STRIP_AFTER ? <Strip s={s} /> : <Ruler s={s} />}
   </>);
 }
@@ -554,9 +579,79 @@ export function Topics({ s, focus, busy: asked }: { s: Session; focus: number; b
     <div className="mb-lede" key={busy ? "busy" + step : failed ? "failed" : at.id}>
       {busy ? <><div className="mb-kick">{KIND_ICON.six}Preparing · {at.name}</div><p>{PREP[step]}</p></>
         : failed ? <><div className="mb-kick">Not written</div><p>{failed}</p></>
-        : <><div className="mb-kick">{at.strand} · six questions a set</div><p>{at.blurb}{before ? ` Most people do ${inRunningText(before.name)} first.` : ""}</p></>}
+        : <><div className="mb-kick">{at.strand} · six questions a set{stretchSecure(s).has(at.id) && <Stepped />}</div><p>{at.blurb}{before ? ` Most people do ${inRunningText(before.name)} first.` : ""}</p></>}
     </div>
     <Ruler s={s} big focus={ix} busy={busy} />
+  </>);
+}
+
+/**
+ * The focused topic's step-up, on its detail (Family W8): the groove's two lines drawn small - the ink and the sky line
+ * under it - beside the words "A step up". A picture with a label, never a count.
+ */
+function Stepped() {
+  return <span className="mb-stepped" data-role="maths-stretch"><svg viewBox="0 0 52 40" aria-hidden="true"><path className="a" d="M4 16 H48" /><path className="b" d="M4 28 H48" /></svg>A step up</span>;
+}
+
+// ---------------------------------------------------------------- W8 Get ready for school: units by strand, the usual or a step up
+
+/**
+ * Help in school, BEFORE the lesson (Family W8): the school units grouped by strand, each with the learner's own school-year
+ * word (`SYS_WORD` for the unit's year in their system), and nothing else of the path - no ruler, no Secure word, no
+ * needle, no SCHOOL tick. A scroller under the lamp like the Topics ruler (tv/prepareRows `prepareModel`); Select on a unit
+ * asks "The usual" or "A step up" (`ask`, the lit cell) and writes the set through the same /api/practice route as Topics.
+ */
+export function Prepare({ s, focus, busy: asked, ask }: { s: Session; focus: number; busy: boolean; ask: 0 | 1 | null }) {
+  const groups = prepareGroups(s);
+  const stops = groups.flatMap((g) => g.units);
+  const me = s.profiles.find((p) => p.id === s.learner?.id);
+  const sys = systemOf(me);
+  const busy = asked || running(s, "practice");
+  const at = stopAt(stops, focus);
+  const ix = at ? stops.indexOf(at) : 0;
+  const m = prepareModel(groups, ix);
+  const asking = ask === 0 || ask === 1;
+  const failed = busy || !at ? null : practiceFailed(s, at.id);
+  const [step, setStep] = useState(0);
+  useEffect(() => { if (!busy) { setStep(0); return; } const t = setInterval(() => setStep((x) => Math.min(PREP.length - 1, x + 1)), 2600); return () => clearInterval(t); }, [busy]);
+  if (!at) return <><Top s={s} crumb="Get ready for school" /><h1 className="mb-title" data-role="maths-title"><Amber text="Get ready for school" /></h1></>;
+  return (<>
+    <Top s={s} crumb="Get ready for school" />
+    <h1 className="mb-title" data-role="maths-title"><Amber text="What is school doing?" /></h1>
+    <div className="mb-lede mb-prep-lede" data-asking={asking || undefined} key={busy ? "busy" + step : asking ? `ask${ask}` : failed ? "failed" : at.id}>
+      {asking ? <>
+        <div className="mb-kick">{busy ? <>{KIND_ICON.six}Preparing · {at.name}</> : at.name}</div>
+        <div className="mb-choice" data-role="maths-choice">
+          {PREPARE_CHOICES.map((c, i) => (
+            <div key={c.id} className="mb-cell2" data-id={c.id} data-focused={!busy && ask === i} data-dim={(busy && ask !== i) || undefined}>
+              <span className="k">{c.k}</span><span className="t">{c.t}</span>
+            </div>
+          ))}
+        </div>
+        <p>{busy ? PREP[step] : failed ?? choiceLine(ask)}</p>
+      </> : <>
+        <div className="mb-kick">{at.strand} · six questions a set</div>
+        <p>{at.blurb}</p>
+      </>}
+    </div>
+    <div className="mb-prep" data-role="maths-prepare" data-asking={asking || undefined}>
+      <div className="mb-pwin" data-l={m.more.l || undefined} data-r={m.more.r || undefined}>
+        <div className="mb-ptrack" style={{ width: m.trackWidth, transform: `translateX(${-m.offset}px)` }}>
+          {m.strands.map((g) => <div key={"g" + g.strand} className="mb-pstrand" style={{ left: g.x, width: g.w }}><span style={{ marginLeft: g.labelX - g.x }}>{g.strand}</span></div>)}
+          {m.cards.map((c, i) => {
+            const u = stops[i];
+            return (
+              <div key={c.id} className="mb-unit2" data-focused={(!asking && i === ix) || undefined} data-held={(asking && i === ix) || undefined} style={{ left: c.x, width: c.w }}>
+                <div className="nm">{u.name}</div>
+                {u.year && <div className="yr">{SYS_WORD[sys](u.year)}</div>}
+              </div>
+            );
+          })}
+        </div>
+      </div>
+      {m.more.l && <div className="mb-rchev l" data-role="maths-more"><Chev dir="l" on /></div>}
+      {m.more.r && <div className="mb-rchev r" data-role="maths-more"><Chev dir="r" on /></div>}
+    </div>
   </>);
 }
 

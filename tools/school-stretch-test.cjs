@@ -9,7 +9,7 @@
  * through the store, typed and photo marking, and an explanation's settle. No number and no points reach the history.
  * Run with npm test in desk/ (directly: node tools/school-stretch-test.cjs). No model is called - the text and vision
  * engines are stubbed at the provider registry and THROW where a school set must not call them - and the data directory
- * is disposable, under the OS temp dir.
+ * is disposable, under the OS temp dir. Test 8 walks the Get ready for school door (tv/keys) into the same route.
  */
 const fs=require('node:fs'),os=require('node:os'),path=require('node:path'),assert=require('node:assert/strict'),Module=require('node:module');
 const {test,after,afterEach}=require('node:test');
@@ -91,7 +91,7 @@ test('1: the baseline mix - four and two when the unit is ahead of the learner\'
  assert.equal(at('mean-range',11,'de'),'standard','a German 11-year-old (Klasse 6) on a Klasse 6 unit');
  assert.equal(at('frac-equivalent',undefined,'cz'),'standard','no age: the standard mix');
  assert.equal(R.setMix('linear-one-step',{age:10,system:'uk'},false),'easier','a linear topic has a year too (its set has no tiers: the model writes it)');
- assert.equal(R.setMix('calc1-limits',{age:10,system:'uk'},false),'standard','a course topic has no school year');
+ assert.equal(R.setMix('calc1-functions',{age:10,system:'uk'},false),'standard','a course topic has no school year');
 });
 
 // ------------------------------------------------------------------ 2. a step up is harder, same content, zero calls
@@ -311,4 +311,26 @@ test('7: nothing in the school and step-up code reads a model\'s difficulty; the
  assert.doesNotMatch(code['lib/rules/stretch.ts'],/engines\/|\btext\(|\bvision\(/,'the mix rule calls no engine');
  // the Calculus road still sorts by the model's own difficulty - and that is all it does there: it is no reward lever
  assert.match(items.split('async function makeCalcItems')[1].split('// ----')[0],/sort\(\(a, b\) => a\.difficulty - b\.difficulty/);
+});
+
+// ------------------------------------------------------------------ 8. from the remote to the set (Family W8, the Get ready for school door)
+test('8: Get ready for school end to end - the keys\' own call writes the usual set or a step up through the code route, zero model calls, and the screen waits on Get ready for school until the set lands',async()=>{
+ const K=require(src('tv/keys.ts'));
+ const {prepareStops}=require(src('tv/prepareRows.ts'));
+ for(const [cell,flag] of [[0,false],[1,true]]){
+  seat({age:12,system:'uk'});noModel();
+  store.dispatch({type:'nav',screen:'prepare',focus:0});
+  const s=store.getSession(),f=prepareStops(s).findIndex((u)=>u.id===UNIT);
+  store.dispatch({type:'focus',focus:f});
+  const step=K.tvKey(store.getSession(),'select',{...K.LOCAL,prepareAsk:cell});
+  for(const e of step.events)store.dispatch(e);
+  assert.equal(store.getSession().screen,'prepare','the screen stays while the set is written');
+  assert.equal(step.calls.length,1);assert.equal(step.calls[0].url,'/api/practice');
+  const r=await post('practice',step.calls[0].body);
+  assert.equal(r.status,200);assert.equal(seen.length,0,'no engine was called');
+  const n=store.getSession(),p=n.practice;
+  assert.equal(n.screen,'practice');assert.equal(p.topic,UNIT);
+  assert.equal(p.stretch===true,flag);assert.ok(p.items.every((i)=>(i.stretch===true)===flag));
+  assert.deepEqual(tiers(p.items),flag?[1,1,2,2,2,2]:[1,1,1,2,2,2]);
+ }
 });

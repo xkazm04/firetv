@@ -43,8 +43,8 @@ look again. Never the answer.
    carry the verdict. The one caption slot (the line under the hero, or the taped card beside the paper) holds
    the desk's sentence.
 7. **Amber is light, orange is the pen.** Amber `#FFC56B` / `#FFB13D` is the lamp and the focus; pen orange
-   `#D9741A` is the desk's marking on paper; sky `#8FB8FF` is the margin rule and the SCHOOL tick. Nothing else
-   is coloured.
+   `#D9741A` is the desk's marking on paper; sky `#8FB8FF` is the margin rule, the SCHOOL tick and the step-up's
+   second ink line. Nothing else is coloured.
 8. **Ten-foot law.** 1920 × 1080 stage, 5% safe zone (96 / 54 px), nothing under 28 px except 20–22 px uppercase
    labels that never carry a meaning alone. Working maths at 72 px, printed maths at 46–56 px; a fraction's parts
    are 70–78% of the line, never superscript-sized. The law reaches inside the line: exponents, subscripts, a
@@ -62,7 +62,7 @@ look again. Never the answer.
 --mb-paper: #F5EEDF;  --mb-paper-hi: #FFF8EA;  --mb-paper-lo: #E4D8C0; /* the sheet, 48 px squares */
 --mb-ink: #27304A;    /* the hand */       --mb-print: #1D2440;  /* the print */
 --mb-blue: #3A4A7A;   /* the learner's own words */  --mb-navy: #1A1D38;  /* text on amber */
---mb-sky: #8FB8FF;    /* margin rule, SCHOOL */      --mb-pen: #D9741A;  --mb-pen-d: #A9530E;  /* the desk's pen */
+--mb-sky: #8FB8FF;    /* margin rule, SCHOOL, the step-up line */      --mb-pen: #D9741A;  --mb-pen-d: #A9530E;  /* the desk's pen */
 --mb-serif: Fraunces (opsz 9–144, SOFT 0–100, wght, italic), Georgia;
 --mb-hand:  Caveat (wght 400–700), Segoe Print, Bradley Hand;
 --mb-sans:  Manrope (wght 200–800), Segoe UI, system-ui;
@@ -181,8 +181,29 @@ the desk cannot read with one meaning (`0,75` on a UK profile, a rounded decimal
   set (questions in the hand, ticks and "look again" rings), the six unmarked questions, or the snapped page (its
   OCR'd problems in print with a highlighter reading line). Older sheets peek out underneath with day tabs from the
   real history. A pencil lies on it. The first evening is a blank sheet with a starting line - no invented sum.
-- **Doors** - two illustrated cards, I have homework (phone over a sheet) and Teach me something (a calendar and
-  a pencil); focused is lit amber and lifts.
+- **Doors** - illustrated cards, I have homework (phone over a sheet), Teach me something (a calendar and a pencil)
+  and, for a learner on the school path, Get ready for school (a school bag with a sheet in it; Family W8, help in
+  school before the lesson); focused is lit amber and lifts. A Calculus learner has the first two only. Three doors keep
+  the door type (48 px, 60 px on the first evening's wide row) and shrink the artwork instead: on the first evening they
+  stand side by side, art (176 px) over text; beside the continue card the 586 px column cannot hold three side by
+  side, so they stack as rows (art 112 px, text beside it, the lit one slides left instead of up). Left/Right walk
+  them in stop order either way. Each door's caption is one sentence.
+- **Get ready for school** (Family W8, `Prepare`, `desk/src/tv/prepareRows.ts`) - the units as cards (Fraunces 38,
+  four lines at most, the year word below in Manrope 30 amber) under strand headings (20 px uppercase labels with a
+  rule under them), on a track that pans under the lamp like the Topics ruler, a heading kept on the stage past the
+  left fade. The lit card is amber and lifts; its glow stays inside the window. Nothing of the path is drawn here. The
+  question is two cells (Fraunces 48 with a 21 px label above: "Your level" / "The usual", "More of the harder ones" /
+  "A step up"); while it is open the unit is held (an amber outline, not lit) and the rest of the cards dim, so the lit
+  cell is the one thing lit. `maths-prepare`, `maths-choice`.
+- **The second ink line** (Family W8, the step-up) - a unit whose step-up record has latched (`SkillRecord.stretch` in
+  `desk/src/lib/session/learners.ts`, `stretchSecure` in `desk/src/tv/mathsRows.ts`) gets a second, thinner line
+  (6 px, `--mb-sky`, a 1.5 px navy edge so it reads on the boxwood) under its groove on the ruler, 6 px below the ink
+  (4 px on the big ruler). On Tonight's strip a strand's second line is as long as its share of such units. On Topics
+  the focused unit's kicker draws the same two lines small with the words "A step up". It is a picture that latches:
+  never a digit, a count, a percent or the word points (`tools/school-ruler-test.cjs` W8 3); it is drawn exactly as
+  the records say, so a unit whose usual record is not secure can carry it (the learner stretched first), and the
+  groove, the word under the topic and Tonight's "N of M topics secure" stay about the usual record. Static: it does
+  not grow in. `.mb-ink2`, `data-role="maths-stretch"`.
 - **The ruler** - the topic path as a boxwood ruler: secure topics inked navy, an in-progress one hatched to its
   estimate, unseen ones a dashed groove, slips as pencil scratches. The learner's name on a lamp-lit needle at the
   frontier (`rulerFrontier` in `desk/src/tv/rulerRows.ts`: on the school path the first topic not secure after the
@@ -252,7 +273,8 @@ the desk cannot read with one meaning (`0,75` on a UK profile, a rounded decimal
 
 | screen | composition |
 |---|---|
-| Tonight | top bar; the sheet on the desk + kicker, title, detail, OK Open (or the first-evening title and blank sheet); two doors; the caption; the ruler (a path of more than eight topics: the strand strip) |
+| Tonight | top bar; the sheet on the desk + kicker, title, detail, OK Open (or the first-evening title and blank sheet); two doors, three on the school path (Get ready for school, W8); the caption; the ruler (a path of more than eight topics: the strand strip, with a step-up line under a bar where units' step-ups have latched) |
+| Get ready for school | top bar with the crumb; "What is school *doing?*"; the lit unit's strand and blurb, or the two cells and the lit cell's sentence; the units as cards by strand, each with the learner's year word, panning under the lamp |
 | Topics | "Pick a *topic*"; the strand and blurb (or Preparing / Not written); the ruler, larger, each topic on the learner's path a stop, the lamp opening on the frontier (a long path pans under the lamp, chevrons at the edges) |
 | Practice | the paper headed with the topic's name on its path, with the six questions in print (on Calculus 1, questions the desk printed itself from its specs: "Differentiate f(x) = ...", "Find lim_(x->0) ..."; on a school unit, six the desk wrote itself with no model call, three at tier 1 then three at tier 2: "Work out 3/4 + 1/6.", "Fill in the missing number: 3/4 = ?/12." with the gap '?' stacked over 12 at the fraction size, "Write 18/24 in its simplest form.", "Find 3/5 of 40 kg.", "Work out 3/4 ÷ 1/2.", the fractions stacked); the side: "Work these on *paper*" and the taped card |
 | Sheet | the tally; the marked set on the paper, each item folded to its question and the line the pen is on, the focused one lit with OK Open; the side: kind, slip name, taped card; pills Six more ("Six more on" the topic's name), Put the sheet away |

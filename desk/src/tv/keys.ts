@@ -10,13 +10,14 @@ import type { EssayAnalysis, Event, JobKind, Profile, Screen, Session, Subject }
 import { rewriteState } from "@/lib/rules/essay";
 import { LESSONS, ESSAY_TYPES, PLAYBOOK, playFor, type Lesson } from "@/lib/library/lessons.data";
 import { SYLLABUS, type Topic } from "@/lib/library/syllabus";
-import { frontierOn, learnerPath, topicsOf, type MathPath, type PathTopic } from "@/lib/library/paths";
+import { PATHS, frontierOn, learnerPath, topicsOf, type MathPath, type PathTopic } from "@/lib/library/paths";
 import { lessonStates } from "@/lib/library/watched";
 import { profileRows, locate, flat } from "@/tv/profileRows";
 import { continueCard } from "@/tv/mathsRows";
 import { sheetStops, firstToLook, tileOf } from "@/tv/sheetRows";
 import { LANDING_REST, landingAt, landingFocus, landingModules, landingStops, restStop } from "@/tv/landingRows";
 import { recapStops, ownReading } from "@/tv/recapRows";
+import { prepareStops } from "@/tv/prepareRows";
 
 /** The remote's buttons. The keyboard stands in for it on the bench. */
 export type Key = "up" | "down" | "left" | "right" | "select" | "back" | "menu" | "play";
@@ -26,9 +27,13 @@ const KEYBOARD = new Map<string, Key>([
 ]);
 export function keyOf(k: string): Key | null { return KEYBOARD.get(k) ?? null; }
 
-/** What the TV holds for itself, outside the session: the practice wait, the forensic table, a hint on its way. */
-export interface Local { busy: boolean; table: boolean; hintInFlight: boolean }
-export const LOCAL: Local = { busy: false, table: false, hintInFlight: false };
+/**
+ * What the TV holds for itself, outside the session: the practice wait, the forensic table, a hint on its way, and on
+ * Get ready for school the two-cell question after Select on a unit (`prepareAsk`: null while the list is walked, else
+ * the lit cell - 0 "The usual", 1 "A step up"; tv/prepareRows PREPARE_CHOICES). Absent is null.
+ */
+export interface Local { busy: boolean; table: boolean; hintInFlight: boolean; prepareAsk?: 0 | 1 | null }
+export const LOCAL: Local = { busy: false, table: false, hintInFlight: false, prepareAsk: null };
 /** A POST the key fires after its events. `onFail` is applied on a non-ok answer or a network error, `onDone` on an ok one. */
 export interface Call { url: string; body: Record<string, unknown>; onFail?: Partial<Local>; onDone?: Partial<Local> }
 export interface Step { events: Event[]; calls: Call[]; local: Partial<Local> }
@@ -43,7 +48,7 @@ export function lingaOwns(s: Session): boolean {
 }
 
 /** Math Buddy's own screens, whatever the subject says: its home and the practice loop, and the calendar of its lessons. */
-export const MATHS_SCREENS = ["tonight", "topics", "practice", "sheet", "walk", "calendar"] as const satisfies readonly Screen[];
+export const MATHS_SCREENS = ["tonight", "topics", "prepare", "practice", "sheet", "walk", "calendar"] as const satisfies readonly Screen[];
 /**
  * Math Buddy draws its screens (maths/MathsTV.tsx, the Lamplight design): its own, and the screens it shares
  * with the other modules while maths is what is on them - a maths page and its hint, the maths units and lesson.
@@ -71,9 +76,16 @@ export function stopAt<T>(stops: readonly T[], f: number): T | undefined { retur
 export { LANDING_MODULES, LANDING_REST, landingStops, landingFocus, landingAt, restStop, type LandingStop } from "@/tv/landingRows";
 export const MODULE_HOME: Record<Subject, Screen> = { maths: "tonight", english: "linga", essay: "essaytype" };
 
-/** Math Buddy's home: the thing already open leads, then the two doors. */
-export type TonightStop = "continue" | "homework" | "teach";
-export function tonightStops(s: Session): TonightStop[] { return continueCard(s) ? ["continue", "homework", "teach"] : ["homework", "teach"]; }
+/**
+ * Math Buddy's home: the thing already open leads, then the doors - I have homework (help in school, during), Teach me
+ * something (home: the ruler) and, for a learner on a school path, Get ready for school (help in school, before; Family
+ * W8). A learner on a course (Calculus 1) keeps the two doors exactly as before.
+ */
+export type TonightStop = "continue" | "homework" | "teach" | "prepare";
+export function tonightStops(s: Session): TonightStop[] {
+  const doors: TonightStop[] = PATHS[learnerPath(s)].school ? ["homework", "teach", "prepare"] : ["homework", "teach"];
+  return continueCard(s) ? ["continue", ...doors] : doors;
+}
 
 /** Who is at the desk: every profile, then "add a learner". */
 export function learnerStops(s: Session): Array<Profile | "add"> { return [...s.profiles, "add"]; }
@@ -161,13 +173,14 @@ class Out implements Step {
   }
   /**
    * Ask for a practice set on a topic, unless one is already being written (here, or as a running
-   * job). Topics and the sheet's "Six more" both come here; the set arrives as practice.set over the
-   * session stream, and a failed call gives Select back.
+   * job). Topics, the sheet's "Six more" and Get ready for school all come here; the set arrives as practice.set over the
+   * session stream, and a failed call gives Select back. `stretch` asks for "a step up" (Family W8); `stay` keeps the
+   * screen that asked (Get ready for school) instead of opening Topics while the set is written.
    */
-  set(local: Local, topic: string) {
+  set(local: Local, topic: string, opts: { stretch?: boolean; stay?: boolean } = {}) {
     if (local.busy || running(this.s, "practice")) return;
-    this.ev({ type: "topic.open", topic });
-    this.calls.push({ url: "/api/practice", body: { topic }, onFail: { busy: false } });
+    this.ev(opts.stay ? { type: "topic.open", topic, stay: true } : { type: "topic.open", topic });
+    this.calls.push({ url: "/api/practice", body: opts.stretch ? { topic, stretch: true } : { topic }, onFail: { busy: false } });
     this.local.busy = true;
   }
   /** Ask for a hint unless one is already on its way (here, or as a running job): each one is a model call and counts in the log. */
@@ -231,6 +244,8 @@ const KEYMAP: Partial<Record<Screen, Handler>> = {
       if (cont.go === "page") { o.ev({ type: "page.select", pageIx: cont.pageIx }); o.nav("page"); }
       else o.nav(cont.go, cont.focus);
     } else if (at === "teach") o.nav("topics", topicsFocus(s));
+    // Get ready for school opens on its list, the question closed
+    else if (at === "prepare") { o.local.prepareAsk = null; o.nav("prepare", 0); }
     else { const pi = s.pages.findIndex((p) => p.subject === "maths");
       if (pi >= 0) { o.ev({ type: "page.select", pageIx: pi }); o.nav("page"); } else o.ev({ type: "page.ask", subject: "maths" }); }
   },
@@ -349,6 +364,25 @@ const KEYMAP: Partial<Record<Screen, Handler>> = {
     if (k === "select") { const t = stopAt(stops, s.focus); if (t) o.set(local, t.id); }
     if (k === "back") o.nav("tonight");
   },
+  // Get ready for school (Family W8): Left/Right walk the units strand by strand; Select asks "The usual" or "A step up"
+  // (two cells, "The usual" lit), Left/Right between them, Select writes the set as Topics does - staying here while it is
+  // written - and Back closes the question on the same unit. Up, Menu or Back on the list go home, the lamp on this door.
+  prepare: (s, k, local, o) => {
+    const stops = prepareStops(s), unit = stopAt(stops, s.focus);
+    const writing = local.busy || running(s, "practice");
+    const ask = local.prepareAsk;
+    if (ask === 0 || ask === 1) {
+      if (k === "back") { o.local.prepareAsk = null; return; }
+      if (writing) return;
+      if (k === "left" && ask > 0) o.local.prepareAsk = 0;
+      if (k === "right" && ask < 1) o.local.prepareAsk = 1;
+      if (k === "select" && unit) o.set(local, unit.id, { stretch: ask === 1, stay: true });
+      return;
+    }
+    if (k === "up" || k === "menu" || k === "back") { o.nav("tonight", Math.max(0, tonightStops(s).indexOf("prepare"))); return; }
+    if (k === "right") o.move(stops.length, 1); if (k === "left") o.move(stops.length, -1);
+    if (k === "select" && unit && !writing) o.local.prepareAsk = 0;
+  },
   // the set on paper is parked, not thrown away: Tonight's continue card puts it back
   practice: (_, k, __, o) => { if (k === "back") o.nav("tonight"); },
   // the marked set as one picture: the tiles on one row, the two actions below
@@ -362,7 +396,8 @@ const KEYMAP: Partial<Record<Screen, Handler>> = {
     } else {
       if (k === "right") o.focus(stops.indexOf("away")); if (k === "left") o.focus(stops.indexOf("more"));
       if (k === "up") o.focus(Math.min(firstToLook(p.items), n - 1));
-      if (k === "select" && at === "more") o.set(local, p.topic);
+      // six more of the same kind: a step up asks for a step up again (Family W8)
+      if (k === "select" && at === "more") o.set(local, p.topic, p.stretch ? { stretch: true } : {});
       if (k === "select" && at === "away") o.ev({ type: "practice.clear" });
     }
     if (k === "back") o.nav("tonight");

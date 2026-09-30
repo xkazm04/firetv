@@ -25,7 +25,7 @@ import type { Mode } from "../rules/mode";
 import { emptyEnglish, type Conversation, type EnglishLearning, type LevelCheck } from "../english/types";
 
 export type Subject = "maths" | "english" | "essay";
-export type Screen = "landing" | "pair" | "joined" | "tonight" | "units" | "calendar" | "page" | "hint" | "lesson" | "sentence" | "headtohead" | "essaytype" | "forensic" | "playbook" | "xray" | "break" | "recap" | "learner" | "profile" | "topics" | "practice" | "sheet" | "walk" | "linga" | "linga-scenes" | "linga-map" | "linga-talk" | "linga-coach" | "linga-recap" | "linga-check" | "linga-verdict" | "linga-plan" | "linga-moment";
+export type Screen = "landing" | "pair" | "joined" | "tonight" | "units" | "calendar" | "page" | "hint" | "lesson" | "sentence" | "headtohead" | "essaytype" | "forensic" | "playbook" | "xray" | "break" | "recap" | "learner" | "profile" | "topics" | "prepare" | "practice" | "sheet" | "walk" | "linga" | "linga-scenes" | "linga-map" | "linga-talk" | "linga-coach" | "linga-recap" | "linga-check" | "linga-verdict" | "linga-plan" | "linga-moment";
 
 export type StudentType = "elementary" | "high-school" | "other";
 /** The school system a learner's progress is read against. One per profile; the desk defaults to UK. */
@@ -270,7 +270,8 @@ export type Event =
   | { type: "essay.revised"; analysis: EssayAnalysis; n: number }
   | { type: "task.add"; name: string; sub: Subject; min: number } | { type: "task.done"; id: string; done: boolean }
   | { type: "timer.start" } | { type: "timer.pause" } | { type: "timer.tick"; seconds: number } | { type: "timer.skipbreak" }
-  | { type: "topic.open"; topic: string }
+  // `stay`: the set is asked for from Get ready for school (Family W8), whose screen stays put while it is written
+  | { type: "topic.open"; topic: string; stay?: boolean }
   | { type: "practice.set"; practice: Practice } | { type: "practice.marked"; items: PracticeItem[]; owner?: string }
   | { type: "walk"; ix: number } | { type: "practice.clear" }
   | { type: "practice.settle"; n: number; reply: string; verdict?: "right" | "wrong"; slip?: string; said?: string; slipAt?: SlipAt }
@@ -506,7 +507,7 @@ export function reduce(s: Session, e: Event): Session {
     case "timer.skipbreak": n.timer = { ...s.timer, phase: "work", left: 25 * 60 }; n.screen = s.timer.before ?? "page"; break;
     // the open topic keeps the focus, so a set that fails is retried on the topic it was asked for; the focus is the topic's
     // place on the learner's own path (a topic of the other path, or an unknown id, is the first stop)
-    case "topic.open": n.topic = e.topic; n.subject = "maths"; n.screen = "topics"; n.focus = Math.max(0, topicsOf(learnerPath(s)).findIndex((t) => t.id === e.topic)); break;
+    case "topic.open": n.topic = e.topic; n.subject = "maths"; if (e.stay) break; n.screen = "topics"; n.focus = Math.max(0, topicsOf(learnerPath(s)).findIndex((t) => t.id === e.topic)); break;
     case "practice.set": n.practice = shownPractice({ ...e.practice, owner: e.practice.owner ?? me }); n.topic = e.practice.topic; n.walkIx = 0; n.screen = "practice"; break;
     // a marked set lands on the sheet - all six verdicts at once - focused on the first item to look at
     case "practice.marked": if (e.owner && e.owner !== me) { toAway(s, n, e.owner, (x) => (x.practice ? { ...x, practice: { ...x.practice, items: e.items.map(shown), marked: true }, walkIx: 0 } : null)); break; }

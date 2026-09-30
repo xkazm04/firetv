@@ -28,7 +28,7 @@ const TV_WORDS: Partial<Record<Session["screen"], string>> = {
   landing: "the desk", pair: "the pairing code", joined: "the paired screen", tonight: "Math Buddy", learner: "the learners", profile: "the learner's picks",
   units: "the units guide", calendar: "the calendar", page: "the page", hint: "a hint", lesson: "a lesson", sentence: "your sentence",
   headtohead: "head to head", essaytype: "Essay Master", forensic: "your paragraph", playbook: "the playbook", xray: "the x-ray", break: "a break", recap: "the recap",
-  topics: "Math Buddy's topics", practice: "the practice set", sheet: "your marked sheet", walk: "a marked item",
+  topics: "Math Buddy's topics", prepare: "getting ready for school", practice: "the practice set", sheet: "your marked sheet", walk: "a marked item",
   linga: "Linga", "linga-scenes": "English situations", "linga-map": "your learning map", "linga-talk": "your conversation", "linga-coach": "a coaching moment", "linga-recap": "your rehearsal recap", "linga-check": "finding your level", "linga-verdict": "your level", "linga-plan": "your topics", "linga-moment": "a moment in your conversation",
 };
 export default function Phone() {

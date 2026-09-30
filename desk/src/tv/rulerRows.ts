@@ -221,8 +221,12 @@ export function labelNeed(name: string, ch = LABEL_CH): number {
   return best * ch;
 }
 
-/** One strand on Tonight's strip: how many topics, how many latched secure, and its bar and label (`lines`, top to bottom; `label` their words). */
-export interface StripSegment { name: string; count: number; secure: number; share: number; x: number; w: number; labelX: number; labelW: number; label: string; lines: string[] }
+/**
+ * One strand on Tonight's strip: how many topics, how many latched secure, and its bar and label (`lines`, top to bottom;
+ * `label` their words); and how many have a latched step-up record (`stretch`, Family W8) and their share, which the
+ * strip draws as a second, thinner line under the bar - a length, never a number.
+ */
+export interface StripSegment { name: string; count: number; secure: number; share: number; stretch: number; stretchShare: number; x: number; w: number; labelX: number; labelW: number; label: string; lines: string[] }
 export interface StripModel {
   x0: number;
   width: number;
@@ -241,7 +245,7 @@ export interface StripModel {
  * not secure whose prerequisites all are; on a school path, the first topic not secure after the last secure one
  * (paths.ts `frontierOn`, the same rule as the ruler's `rulerFrontier`). Widths are whole pixels and sum to the strip.
  */
-export function stripModel(topics: Array<Pick<PathTopic, "id" | "strand" | "prereq">>, states: Record<string, TopicState>, school = false): StripModel {
+export function stripModel(topics: Array<Pick<PathTopic, "id" | "strand" | "prereq">>, states: Record<string, TopicState>, school = false, stretched: (id: string) => boolean = () => false): StripModel {
   const width = TRACK - PAD * 2;
   const groups: Array<{ name: string; ids: string[] }> = [];
   topics.forEach((t, i) => { const last = groups[groups.length - 1]; if (last && topics[i - 1]?.strand === t.strand) last.ids.push(t.id); else groups.push({ name: t.strand, ids: [t.id] }); });
@@ -264,10 +268,10 @@ export function stripModel(topics: Array<Pick<PathTopic, "id" | "strand" | "prer
   bounds[bounds.length - 1] = PAD + width;
   const secure = new Set(topics.filter((t) => states[t.id] === "secure").map((t) => t.id));
   const segments: StripSegment[] = groups.map((g, i) => {
-    const x = bounds[i], sw = bounds[i + 1] - bounds[i], n = g.ids.filter((id) => secure.has(id)).length;
+    const x = bounds[i], sw = bounds[i + 1] - bounds[i], n = g.ids.filter((id) => secure.has(id)).length, up = g.ids.filter((id) => stretched(id)).length;
     const labelX = x + 18, labelW = Math.max(0, sw - STRIP_INSET);
     const lines = wrapLabel(g.name, labelW, STRIP_CH) ?? [clampLabel(g.name, labelW, STRIP_CH)];
-    return { name: g.name, count: g.ids.length, secure: n, share: n / g.ids.length, x, w: sw, labelX, labelW, label: lines.join(" "), lines };
+    return { name: g.name, count: g.ids.length, secure: n, share: n / g.ids.length, stretch: up, stretchShare: up / g.ids.length, x, w: sw, labelX, labelW, label: lines.join(" "), lines };
   });
   const fi = school ? afterLastSecure(topics.map((t) => t.id), (id) => secure.has(id)) : topics.findIndex((t) => !secure.has(t.id) && t.prereq.every((p) => secure.has(p)));
   if (fi < 0 || fi >= topics.length) return { x0: PAD, width, segments, needle: { index: topics.length, x: PAD + width, at: "end" } };

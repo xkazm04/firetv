@@ -257,7 +257,9 @@ in the learner's system. The age is read only for a learner at school (type "oth
 **A step up** (`stepUpMix`) is the next rung above the learner's baseline: easier becomes standard, standard becomes
 harder. So a step-up set is strictly harder than the baseline set for the same learner on the same unit (more tier-2
 items) with the same content and six distinct questions (`tools/school-stretch-test.cjs` test 2, every unit with a
-generator, ages 10-14 and none, all four systems). `POST /api/practice` takes `{ topic, stretch: true }` and reads the
+generator, ages 10-14 and none, all four systems). The Tonight door **Get ready for school** asks for it: a unit, then
+"The usual" or "A step up" (`docs/STUDY-DESK-SCREENS.md` 5.3, `prepare`); "Six more" on a step-up sheet asks for a step
+up again. `POST /api/practice` takes `{ topic, stretch: true }` and reads the
 seated profile's age and system. On a topic with no generator (the three linear topics, Calculus 1) the model road
 has no tiers, so a step-up set is asked for exactly as a usual one; only its record differs.
 

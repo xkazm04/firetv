@@ -238,3 +238,106 @@ test('6: the strand strip at fifteen topics - six bars (Equations twice), every 
  const C0=RR.stripModel(CALC,Object.fromEntries(CALC.map((t,i)=>[t.id,i<7?'secure':'later'])));
  const d=C0.segments[2];assert.equal(C0.needle.x,d.x+d.w*1/6,'one sixth into Derivatives, as maths-ruler-test pins');
 });
+
+// ------------------------------------------------------------------ Family W8: three doors, Get ready for school, the second ink line
+const PR=require(src('tv/prepareRows.ts'));
+/** Tonight, Topics or Get ready for school as MathsTV draws it, with the two-cell question's lit cell (`ask`). */
+function drawW8(s,ask=null){const {MathsTV}=require(src('maths/MathsTV.tsx'));const q=console.error;console.error=()=>{};try{return renderToStaticMarkup(createElement(MathsTV,{s,busy:false,ask}));}finally{console.error=q;}}
+const count=(html,re)=>(html.match(re)||[]).length;
+const textOf=(html)=>html.replace(/<[^>]*>/g,' ');
+/** Each topic box on the ruler, by the name it carries: its markup. */
+const boxes=(html)=>Object.fromEntries(html.split('class="mb-topic"').slice(1).map((chunk)=>[/<div class="mb-tn">([^<]*)</.exec(chunk)?.[1],chunk.split('class="mb-tl"')[0]]));
+
+test('W8 1: Tonight draws three doors for a school learner (beside the continue card as a column, on the first evening as a row) and two for a Calculus learner, as before',()=>{
+ const fresh={...seated({system:'uk'}),screen:'tonight',focus:2,skills:{}};
+ const html=draw(fresh);
+ assert.match(html,/class="mb-doors wide three"/);assert.equal(count(html,/class="mb-door"/g),3);
+ assert.ok(['I have homework','Teach me something','Get ready for school'].every((t)=>html.includes(`<div class="dt">${t}</div>`)));
+ assert.ok(html.indexOf('I have homework')<html.indexOf('Teach me something')&&html.indexOf('Teach me something')<html.indexOf('Get ready for school'),'the doors in their stop order');
+ assert.match(html,/data-focused="true"[^>]*>(?:(?!class="mb-door").)*Get ready for school/,'the lamp on the third door');
+ assert.ok(html.includes(PR.PREPARE_DOOR),'its caption');
+ const withSet={...fresh,focus:3,practice:{topic:'frac-add-sub',marked:false,items:[{n:1,question:'Work out 1/2 + 1/4.'}]}};
+ const col=draw(withSet);assert.match(col,/class="mb-doors three"/,'beside the continue card: the column of three');assert.equal(count(col,/class="mb-door"/g),3);
+ // a Calculus learner: two doors, the classes and words they always had
+ const calc={...seated({type:'other',age:19,mathPath:'calc1'}),screen:'tonight',focus:1,skills:{}};
+ const c=draw(calc);assert.match(c,/class="mb-doors wide"/);assert.doesNotMatch(c,/three|Get ready for school/);assert.equal(count(c,/class="mb-door"/g),2);
+ assert.match(draw({...calc,focus:2,practice:withSet.practice}),/class="mb-doors"/);
+});
+
+test('W8 2: Get ready for school lists the units by strand with the learner\'s own year word and nothing else of the path - one thing lit - in every school system',()=>{
+ const W={us:'Grade',uk:'Year',cz:'ročník',de:'Klasse'};
+ for(const system of ['us','uk','cz','de']){
+  const s={...seated({system}),screen:'prepare',focus:4,skills:skillsOf([ONE,F])};
+  const html=draw(s);
+  assert.match(html,/data-role="maths-prepare"/,system);
+  const heads=[...html.matchAll(/class="mb-pstrand"[^>]*><span[^>]*>([^<]*)</g)].map((m)=>m[1]);
+  assert.deepEqual(heads,['Fractions','Equations','Decimals and percent','Ratio and rates','Geometry and data'],`${system}: strands in order`);
+  const cards=[...html.matchAll(/class="mb-unit2"[^>]*><div class="nm">([^<]*)<\/div><div class="yr">([^<]*)</g)].map((m)=>[m[1],m[2]]);
+  const units=PR.prepareStops(s);
+  assert.deepEqual(cards.map((c)=>c[0]),units.map((u)=>u.name),`${system}: every unit, strand by strand`);
+  cards.forEach(([name,yr],i)=>{assert.equal(yr,PR.SYS_WORD[system](units[i].year),`${system} ${name}`);assert.ok(yr.includes(W[system]));});
+  // nothing of the path: no ruler, no state word, no needle, no SCHOOL tick, no gap line
+  assert.doesNotMatch(html,/maths-ruler|mb-marker|mb-flag|mb-gapline|mb-groove|mb-ink2/,`${system}: no ruler`);
+  assert.doesNotMatch(textOf(html),/\b(Secure|In progress|Not started|School)\b/,`${system}: no state word, no SCHOOL tick`);
+  assert.equal(count(html,/data-focused="true"/g),1,`${system}: one thing lit`);
+  assert.match(html,new RegExp(`data-focused="true"[^>]*><div class="nm">${units[4].name}<`),'the lamp on the focused unit');
+ }
+ // the question: two cells, "The usual" lit, the unit held and not lit; then "A step up"
+ const s={...seated({system:'uk'}),screen:'prepare',focus:2,skills:{}};
+ for(const ask of [0,1]){
+  const html=drawW8(s,ask),name=PR.prepareStops(s)[2].name;
+  assert.equal(count(html,/class="mb-cell2"/g),2);assert.equal(count(html,/data-focused="true"/g),1,'one thing lit: the cell');
+  assert.match(html,new RegExp(`class="mb-cell2" data-id="${ask?'stretch':'usual'}" data-focused="true"`));
+  assert.match(html,new RegExp(`data-held="true"[^>]*><div class="nm">${name}<`),'the unit is held under the question');
+  assert.ok(html.includes(PR.choiceLine(ask)),'the lit cell\'s sentence');
+  assert.doesNotMatch(textOf(html.split('class="mb-lede')[1].split('data-role="maths-prepare"')[0]),/[0-9]/,'no number anywhere on the question');
+ }
+ // a Calculus learner has no units here (and no door to reach it)
+ const calc=draw({...seated({type:'other',age:19,mathPath:'calc1'}),screen:'prepare',focus:0,skills:{}});
+ assert.doesNotMatch(calc,/mb-unit2|mb-cell2/);
+});
+
+test('W8 3: the second ink line is drawn exactly for a latched step-up record - on the Topics ruler, the strand strip and the topic\'s detail - never a digit, and static',()=>{
+ const up=(topic,usual,latched)=>({topic,seen:usual?6:0,right:usual?6:0,estimate:usual?0.9:0,secure:usual,lastSeen:1,slips:[],stretch:{seen:6,right:latched?6:3,estimate:latched?0.9:0.5,secure:latched,lastSeen:1}});
+ // usual-secure only (add and subtract), step-up only (area), both (ratio), a step-up not latched (unit rates)
+ const skills={[F]:rec(F),[AR]:up(AR,false,true),[RS]:up(RS,true,true),[UR]:up(UR,false,false)};
+ const name=(id)=>SCHOOL.find((t)=>t.id===id).name;
+ for(const focus of [2,9,11]){
+  const html=draw({...seated({system:'uk'}),screen:'topics',focus,skills});
+  const b=boxes(html);
+  for(const t of SCHOOL)assert.equal(/data-role="maths-stretch"/.test(b[t.name]??''),[AR,RS].includes(t.id),`focus ${focus}: ${t.name}`);
+  assert.equal(count(html,/class="mb-ink2"/g),2);
+  // the usual record decides the groove: area's usual record has nothing seen, so its groove is unseen, and its word Not started
+  assert.match(b[name(AR)],/data-s="unseen"/);assert.match(b[name(RS)],/data-s="secure"/);assert.match(b[name(UR)],/data-s="unseen"/);
+ }
+ // the detail: the focused topic's kicker carries the small picture when its step-up has latched
+ const onArea=draw({...seated({system:'uk'}),screen:'topics',focus:11,skills}),onRate=draw({...seated({system:'uk'}),screen:'topics',focus:10,skills});
+ assert.match(onArea,/class="mb-lede"[\s\S]*?class="mb-stepped" data-role="maths-stretch"/);assert.doesNotMatch(onRate.split('class="mb-lede"')[1].split('data-role="maths-ruler"')[0],/mb-stepped/);
+ assert.match(onArea,/Not started/,'the word stays about the usual record');
+ // the strip on Tonight: a second line under a bar, as long as its share; none where no step-up has latched
+ const t=draw({...seated({system:'uk'}),screen:'tonight',focus:0,skills});
+ const segs=t.split('class="mb-seg"').slice(1);
+ const ink=segs.map((g)=>{const m=/class="mb-ink2" data-role="maths-stretch" style="right:auto;width:calc\(\(100% - 24px\) \* ([\d.]+)\)"/.exec(g);return m?Number(m[1]):0;});
+ assert.deepEqual(ink,[0,0,0,0.5,0.5,0],'Ratio and rates: ratio latched, unit rates not; Geometry and data: area');
+ // never a digit in the mark's own text, and the Tonight title counts the usual records only
+ for(const html of [t,onArea])for(const m of html.matchAll(/data-role="maths-stretch"[^>]*>([\s\S]*?)<\/(?:div|span)>/g))assert.doesNotMatch(textOf(m[1]),/[0-9]/);
+ assert.match(t,/Two of 15 topics <em>secure/,'add and subtract and ratio: the usual records');
+ // static: no animation on the line, and reduced motion stills everything else
+ const css=fs.readFileSync(src('design/maths-lamplight.css'),'utf8');
+ const rules=[...css.matchAll(/([^{}]*mb-ink2[^{}]*)\{([^}]*)\}/g)];
+ assert.ok(rules.length>=2);for(const r of rules)assert.doesNotMatch(r[2],/animation|transition/,`static: ${r[1].trim()}`);
+ assert.match(css,/@media \(prefers-reduced-motion: reduce\) \{\s*\.maths-tv \*, \.maths-tv \*::before, \.maths-tv \*::after \{ animation: none !important; transition: none !important; \}/);
+ assert.match(css,/\.mb-ink2 \{[^}]*background: var\(--mb-sky\)/,'the lamp\'s sky token');
+});
+
+test('W8 4: a set asked from Get ready for school keeps the screen while it is written (topic.open with stay), and lands on the practice sheet',()=>{
+ const s=seated({system:'uk'});
+ store.dispatch({type:'nav',screen:'prepare',focus:6});
+ store.dispatch({type:'topic.open',topic:'pct-change',stay:true});
+ let n=store.getSession();assert.deepEqual([n.screen,n.focus,n.topic,n.subject],['prepare',6,'pct-change','maths']);
+ store.dispatch({type:'topic.open',topic:'pct-change'});n=store.getSession();
+ assert.deepEqual([n.screen,n.focus],['topics',8],'Topics as before');
+ store.dispatch({type:'practice.set',practice:{topic:'pct-change',marked:false,stretch:true,items:[{n:1,question:'Increase 60 by 15%.',stretch:true}]}});
+ assert.equal(store.getSession().screen,'practice');assert.equal(store.getSession().practice.stretch,true);
+ assert.ok(s.learner);
+});

@@ -57,6 +57,23 @@ export function mathPlaced(_s?: unknown): boolean {
   return false;
 }
 
+/**
+ * The topics on the learner's path whose step-up record has latched secure (lib/session/learners.ts SkillRecord.stretch,
+ * Family W8): the ruler and the strip draw each as a second, thinner ink line under its groove. Read from the record
+ * alone, whatever the usual record says - a learner may have stretched first. Never a count on screen.
+ */
+export function stretchSecure(s: Pick<Session, "skills"> & OnPath): Set<string> {
+  return new Set(topicsOf(learnerPath(s)).filter((t) => s.skills?.[t.id]?.stretch?.secure === true).map((t) => t.id));
+}
+
+/**
+ * Has the learner a usual record on this topic - one attempt seen? A step-up attempt on a topic with no record makes a
+ * usual record with nothing seen (learners.ts recordAttempt), which the ruler draws as it drew no record: an unseen groove.
+ */
+export function usualSeen(s: Pick<Session, "skills">, id: string): boolean {
+  return (s.skills?.[id]?.seen ?? 0) > 0;
+}
+
 /** A description of fact, never of permission: nothing on the path is locked. */
 export function stateWord(s: Pick<Session, "skills">, id: string, st: Record<string, TopicState>): "Secure" | "In progress" | "Not started" {
   if (st[id] === "secure") return "Secure";

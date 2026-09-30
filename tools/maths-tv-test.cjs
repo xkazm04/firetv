@@ -451,3 +451,97 @@ test('course copy 2: Units and the Calendar take the session and say plainly whe
  const raw=fs.readFileSync(path.join(root,'src/maths/MathsTV.tsx'),'utf8');
  assert.doesNotMatch(raw,/TOPIC_STOPS/,'the D-pad walks topicStops(s), not TOPIC_STOPS');
 });
+
+// ---------------------------------------------------------------- Family W8: Get ready for school and the step-up line, the pure parts
+
+const PR=()=>require(path.join(root,'src/tv/prepareRows.ts'));
+const onW8=(profile,skills={})=>({profiles:[{id:'a',name:'A',type:'elementary',age:12,system:'uk',modules:['maths'],...profile}],learner:{id:'a'},skills});
+const wordsOf=(t)=>t.trim().split(/\s+/).length;
+
+test('W8 prepare 1: the units grouped by strand - strands in the order the path meets them, every school unit once, the three linear topics one Equations group - and none for a Calculus learner',()=>{
+ const {prepareGroups,prepareStops}=PR();
+ const P=require(path.join(root,'src/lib/library/paths.ts'));
+ const g=prepareGroups(onW8({}));
+ assert.deepEqual(g.map((x)=>x.strand),['Fractions','Equations','Decimals and percent','Ratio and rates','Geometry and data']);
+ assert.deepEqual(g.map((x)=>x.units.map((u)=>u.id)),[
+  ['frac-equivalent','frac-of-amount','frac-add-sub','frac-mul-div'],['linear-one-step','linear-two-step','linear-both-sides'],
+  ['dec-arith','dec-convert','pct-of-amount','pct-change'],['ratio-share','unit-rate'],['area','mean-range']]);
+ const ids=prepareStops(onW8({})).map((u)=>u.id);
+ assert.deepEqual([...ids].sort(),P.topicsOf('school').map((t)=>t.id).sort(),'every school unit, once');
+ assert.deepEqual(prepareGroups(onW8({mathPath:'calc1',type:'other',age:19})),[]);assert.deepEqual(prepareStops(onW8({mathPath:'calc1'})),[]);
+ assert.equal(prepareStops({skills:{}}).length,15,'no learner: the school path');
+});
+
+test('W8 prepare 2: each unit carries the learner\'s own year word - Grade, Year, ročník, Klasse - from its year in their system',()=>{
+ const {prepareStops,SYS_WORD}=PR();
+ const units=prepareStops(onW8({}));
+ const want={us:(t)=>`Grade ${t.year.us}`,uk:(t)=>`Year ${t.year.uk}`,cz:(t)=>`${t.year.cz}. ročník`,de:(t)=>`Klasse ${t.year.de}`};
+ for(const sys of ['us','uk','cz','de'])for(const u of units)assert.equal(SYS_WORD[sys](u.year),want[sys](u),`${sys} ${u.id}`);
+ const at=(id)=>units.find((u)=>u.id===id);
+ assert.deepEqual(['us','uk','cz','de'].map((sys)=>SYS_WORD[sys](at('frac-add-sub').year)),['Grade 5','Year 6','5. ročník','Klasse 5']);
+ assert.deepEqual(['us','uk','cz','de'].map((sys)=>SYS_WORD[sys](at('area').year)),['Grade 7','Year 8','7. ročník','Klasse 6']);
+ // MathsTV reads the one word list (no second copy)
+ const tv=fs.readFileSync(path.join(root,'src/maths/MathsTV.tsx'),'utf8');
+ assert.doesNotMatch(tv,/const SYS_WORD/);assert.match(tv,/import \{[^}]*SYS_WORD[^}]*\} from "@\/tv\/prepareRows"/);
+});
+
+test('W8 prepare 3: the scroller pans like the Topics ruler - the focused card under the lamp, neither end showing a gap, strands apart',()=>{
+ const {prepareGroups,prepareModel,WINDOW,CARD,CARD_GAP,GROUP_GAP,EDGE}=PR();
+ const g=prepareGroups(onW8({}));
+ const m0=prepareModel(g,0);
+ assert.equal(m0.cards.length,15);assert.equal(m0.offset,0);assert.deepEqual(m0.more,{l:false,r:true});
+ assert.equal(m0.cards[0].x,EDGE);assert.ok(m0.trackWidth>WINDOW,'fifteen cards pan');
+ // a strand break is wider than a card gap; strand headings span their cards
+ assert.equal(m0.cards[4].x-(m0.cards[3].x+CARD),GROUP_GAP,'Fractions to Equations');assert.equal(m0.cards[2].x-(m0.cards[1].x+CARD),CARD_GAP);
+ m0.strands.forEach((s,i)=>{const cs=m0.cards.filter((c)=>c.group===i);assert.equal(s.x,cs[0].x);assert.equal(s.w,cs.at(-1).x+CARD-cs[0].x);});
+ for(let f=0;f<15;f++){
+  const m=prepareModel(g,f),c=m.cards[f];
+  assert.ok(m.offset>=0&&m.offset<=m.trackWidth-WINDOW,`${f}: clamped`);
+  assert.ok(c.x-m.offset>=0&&c.x+c.w-m.offset<=WINDOW,`${f}: the focused card is on the stage`);
+  if(m.offset>0&&m.offset<m.trackWidth-WINDOW)assert.equal(c.x+c.w/2-m.offset,WINDOW/2,`${f}: under the lamp`);
+ }
+ const last=prepareModel(g,14);assert.equal(last.offset,last.trackWidth-WINDOW);assert.deepEqual(last.more,{l:true,r:false});
+ // a strand heading: at its strand's start, or - when the strand starts off the stage - kept past the left fade while it fits over its cards
+ const {FADE,HEAD_CH}=PR();
+ for(let f=0;f<15;f++){const m=prepareModel(g,f);for(const s of m.strands){
+  assert.ok(s.labelX>=s.x&&s.labelX<=s.x+s.w,`${f} ${s.strand}: over its cards`);
+  if(m.offset===0)assert.equal(s.labelX,s.x);
+  else if(s.x<m.offset+FADE&&s.x+s.w-s.strand.length*HEAD_CH>=m.offset+FADE)assert.equal(s.labelX,m.offset+FADE,`${f} ${s.strand}: kept on the stage`);
+ }}
+ assert.ok(prepareModel(g,13).strands.some((s)=>s.labelX>s.x),'panned to area, a heading has moved on to the stage');
+ assert.deepEqual(prepareModel([],0),{cards:[],strands:[],trackWidth:WINDOW,offset:0,more:{l:false,r:false}});
+});
+
+test('W8 prepare 4: the words - one sentence per caption slot, 25 words or fewer, no digit, no em dash, no points; two cells, "The usual" first',()=>{
+ const {PREPARE_CHOICES,PREPARE_DOOR,choiceLine}=PR();
+ assert.deepEqual(PREPARE_CHOICES.map((c)=>c.t),['The usual','A step up']);
+ for(const line of [PREPARE_DOOR,choiceLine(0),choiceLine(1),...PREPARE_CHOICES.flatMap((c)=>[c.t,c.k])]){
+  assert.ok(wordsOf(line)<=25,line);assert.doesNotMatch(line,/[0-9]|—|point|score|%/i,line);
+ }
+ for(const line of [PREPARE_DOOR,choiceLine(0),choiceLine(1)])assert.match(line,/^[A-Z][^.!?]*\.$/,`one sentence: ${line}`);
+ assert.notEqual(choiceLine(0),choiceLine(1));
+});
+
+test('W8 ruler 1: stretchSecure reads the latched step-up record alone, on the learner\'s path - whatever the usual record says',()=>{
+ const {stretchSecure,usualSeen,topicStates}=R();
+ const rec=(topic,usual,up)=>({topic,seen:usual?6:0,right:usual?6:0,estimate:usual?0.9:0,secure:usual,lastSeen:1,slips:[],...(up===undefined?{}:{stretch:{seen:6,right:6,estimate:up?0.9:0.5,secure:up,lastSeen:1}})});
+ const skills={'frac-add-sub':rec('frac-add-sub',true),'area':rec('area',false,true),'ratio-share':rec('ratio-share',true,true),'unit-rate':rec('unit-rate',false,false),'calc1-functions':rec('calc1-functions',true,true)};
+ assert.deepEqual([...stretchSecure(onW8({},skills))].sort(),['area','ratio-share'],'step-up secure alone, and both; not a step-up in progress, not another path');
+ assert.deepEqual([...stretchSecure(onW8({mathPath:'calc1'},skills))],['calc1-functions']);
+ assert.deepEqual([...stretchSecure(onW8({},{}))],[]);
+ // a usual record with nothing seen (made by a step-up attempt) is not seen, and never Secure
+ assert.equal(usualSeen({skills},'area'),false);assert.equal(usualSeen({skills},'frac-add-sub'),true);assert.equal(usualSeen({skills},'mean-range'),false);
+ const st=topicStates({...onW8({},skills),topic:null});
+ assert.equal(st['area']==='secure',false,'the Topics word and Tonight\'s count stay about the usual record');assert.equal(st['ratio-share'],'secure');
+});
+
+test('W8 ruler 2: the strip carries each strand\'s share of step-up-secure topics as a length - the usual bars unchanged',()=>{
+ const RR=require(path.join(root,'src/tv/rulerRows.ts'));
+ const P=require(path.join(root,'src/lib/library/paths.ts'));
+ const SCHOOL=P.topicsOf('school'),st=Object.fromEntries(SCHOOL.map((t)=>[t.id,t.id==='frac-add-sub'?'secure':'later']));
+ const plain=RR.stripModel(SCHOOL,st,true),up=RR.stripModel(SCHOOL,st,true,(id)=>['area','ratio-share','unit-rate','frac-equivalent'].includes(id));
+ assert.deepEqual(up.segments.map((g)=>[g.name,g.stretch,g.stretchShare]),[['Fractions',1,0.25],['Equations',0,0],['Decimals and percent',0,0],['Ratio and rates',2,1],['Geometry and data',1,0.5],['Equations',0,0]]);
+ assert.deepEqual(plain.segments.map((g)=>[g.stretch,g.stretchShare]),plain.segments.map(()=>[0,0]),'no step-up record: nothing to draw');
+ const strip=(m)=>m.segments.map(({stretch,stretchShare,...rest})=>rest);
+ assert.deepEqual(strip(up),strip(plain),'the bars, their ink, labels and the needle are the usual record\'s alone');assert.deepEqual(up.needle,plain.needle);
+});
