@@ -63,6 +63,9 @@ button, input, textarea { font: inherit; }
 .tlist label span { flex: 1; } .tlist label small { color: #5E6E7E; font-family: var(--display); }
 .precap { background: #fff; border: 1px solid #D7DEE5; padding: 14px; line-height: 1.5; } .precap b { display: block; font-size: 16px; margin-bottom: 6px; }
 .precap ul { margin: 6px 0 0; padding-left: 18px; color: #5E6E7E; }
+/* the Sunday page (Family W9): the recap's card, a heading per section, short lines */
+.pweek { margin-top: 12px; } .pweek h4 { margin: 12px 0 2px; font-size: 13px; text-transform: uppercase; letter-spacing: .04em; color: #1B2632; }
+.pweek p { margin: 0 0 4px; color: #3F4E5C; overflow-wrap: anywhere; } .pweek p[data-section="week"] { color: #1B2632; font-weight: 600; }
 .samples { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; } .samples button { border: 1px solid #D7DEE5; background: #fff; padding: 8px; font-size: 12px; cursor: pointer; }
 .types { display: grid; gap: 8px; } .types label { display: grid; grid-template-columns: auto 1fr; gap: 10px; align-items: start; background: #fff; border: 1px solid #D7DEE5; padding: 10px 12px; }
 .types label b { font-family: var(--display); font-size: 16px; text-transform: uppercase; letter-spacing: .04em; } .types label small { color: #5E6E7E; display: block; }

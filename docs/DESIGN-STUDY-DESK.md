@@ -108,6 +108,20 @@ then "Back to the desk"; Select on a tile opens what that app still has on the d
 slip, this learner's reading, Linga's home); Back, or the desk, is this landing with the light at rest. "On the
 parent's phone" is a chip, not a stop: the phone's Recap tab already shows the evening.
 
+**The Sunday page (the recap's companion, parent only, in words; Family W9).** Under tonight's recap, the phone's Recap
+tab (Parent role) carries "This week": the seated learner's past seven days (local midnight six days back to now),
+written by code from the learner's own weekly digest (`desk/src/lib/rules/digest.ts`, `desk/src/lib/rules/week.ts`),
+never by a model. In order, and only where something true can be said: how many evenings had work; Math Buddy, per unit
+worked (three at most, then "and N more"), the last set's count right, and "a step up taken" in words; one thing to look
+at, the week's most frequent code-detected slip by its plain name, only when it came twice or more, phrased as a fact
+about the work; Linga's conversations with the situations' names; Essay Master's readings with their lenses; and one
+thing to try together, a single everyday act from an authored table keyed by the unit worked most (a teacher reads the
+table). An empty week is "Nothing this week." It is words, not a picture - the TV draws a verdict, the parent's page
+says it - with counts of things done as the recap's are, never a percentage, a ranking, praise, a sibling, a school
+year or age, a problem, an answer or a transcript. Lines stay within 14 words and the page within 90 (headings
+aside). It is never on the TV. Phase 1 writes it in English only (the page follows the desk's language, and the desk
+is English in Phase 1); the Parent tab is a household convenience, not a lock (Phase 1 has no parent lock, D1).
+
 ## Motion
 
 - **Arrival.** Once when someone sits down at the desk: the house mark draws itself (three arches, the innermost

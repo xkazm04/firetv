@@ -19,6 +19,7 @@ import { watchDue, type Watch } from "../library/watched";
 import type { RuleCard } from "../rules/english";
 import { restatedLine, slipsFor } from "../rules/maths";
 import { mathsEntry } from "../rules/digest";
+import { sundayPage, sundayWords, type WeekLine } from "../rules/week";
 import { CALC_SHAPES, type CalcSpec } from "../rules/calc";
 import { SCHOOL_SHAPES, wellFormed as schoolWellFormed, type SchoolSpec } from "../rules/school";
 import type { Fix, Sentence, Was } from "../rules/essay";
@@ -240,6 +241,12 @@ export interface Session {
   writing: Record<string, SkillRecord>;
   /** what the desk noticed about this learner, and what actually happened, hydrated the same way */
   memory: string[]; history: HistoryEntry[];
+  /**
+   * The Sunday page (Family W9, rules/week): the seated learner's past seven days as the phone's Parent tab words it,
+   * assembled on the server from their own digest at the dispatch boundary (weekOf). Only these lines travel - the digest
+   * itself never does - and only to a phone (lib/session/pairing.ts view). Null with no one seated.
+   */
+  week?: WeekLine[] | null;
   /** the pipelines' runs, one per kind; see Job */
   jobs: Jobs;
   /**
@@ -575,6 +582,8 @@ if (store.session.check === undefined) store.session.check = null;
 if (!store.session.jobs) store.session.jobs = {};
 // ...and one whose Math Buddy work has no owner yet (settleOwners)
 try { store.session = settleOwners(store.session, (id) => getLearner(id).history); } catch {}
+// the Sunday page is drawn fresh for whoever is seated, never taken from the file
+try { store.session = { ...store.session, week: weekOf(store.session) }; } catch {}
 if (!store.ticker) store.ticker = setInterval(() => {
   if (store.session.timer.running) dispatch({ type: "timer.tick", seconds: 1 });
   if (watchDue(store.session.watch, Date.now())) dispatch({ type: "lesson.watched" });
@@ -608,6 +617,18 @@ function restateMarked(s: Session): void {
   if (history || digest) saveLearner({ ...l, ...(history ? { history } : {}), ...(digest ? { digest } : {}) });
 }
 
+/**
+ * The Sunday page's lines for the learner at the desk, from their own record (rules/week, no model): null with no one
+ * seated. Read at the boundary, like the history: after an event that can change the record or who is seated, and when
+ * a session ends. The page is a household convenience on the phone's Parent tab, not a locked view (Phase 1 has no
+ * parent lock, owner decision D1).
+ */
+export function weekOf(s: Session, now = Date.now()): WeekLine[] | null {
+  const id = s.learner?.id;
+  if (!id) return null;
+  return sundayWords(sundayPage(getLearner(id), s.profiles.find((p) => p.id === id), now));
+}
+
 export function dispatch(e: Event): Session {
   const was = store.session.watch;
   store.session = reduce(store.session, e);
@@ -618,6 +639,7 @@ export function dispatch(e: Event): Session {
     const id = store.session.learner?.id;
     if (id) try { const l = getLearner(id); store.session = { ...store.session, skills: l.skills, writing: l.writing, memory: l.memory, history: l.history, englishLearning: l.english }; } catch {}
   }
+  if (REHYDRATE.has(e.type) || e.type === "session.end") try { store.session = { ...store.session, week: weekOf(store.session) }; } catch {}
   try { mkdirSync(DATA, { recursive: true }); writeFileSync(FILE, JSON.stringify(store.session)); } catch {}
   store.subs.forEach((fn) => { try { fn(store.session); } catch {} });
   return store.session;

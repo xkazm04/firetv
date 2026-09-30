@@ -16,6 +16,7 @@ import { forensicAt } from "@/tv/keys";
 import { counted, recapCaption, recapLine, recapRows, tasksLine } from "@/tv/recapRows";
 import { nearestItem } from "@/lib/desk/select";
 import { TYPED_ANSWER_MAX } from "@/lib/rules/maths";
+import { WEEK_EMPTY, type WeekLine } from "@/lib/rules/week";
 
 const SAMPLES: Array<{ id: Subject; title: string; file: string }> = [
   { id: "maths", title: "Algebra — Exercise 4.2", file: "/samples/maths.jpg" },
@@ -537,6 +538,7 @@ export default function Phone() {
               <p style={{ margin: "10px 0 0", fontWeight: 600 }}>{recapCaption(tiles)}</p>
               <ul>{s.log.hard.length ? s.log.hard.map((h) => <li key={h}>Needed a second hint: {h}</li>) : <li>Nothing needed a second hint.</li>}</ul></div>;
           })() : <p>Arrives when the session ends.</p>}
+          <WeekPage lines={s.learner ? s.week : null} />
           <p style={{ fontSize: 12 }}>The TV shows {TV_WORDS[s.screen] ?? "the desk"}{s.status && Object.values(s.jobs ?? {}).some((j) => j?.phase === "running") ? <> · {s.status}</> : null}.</p></div>}
 
         <div className="pstatus">{msg}</div>
@@ -546,6 +548,20 @@ export default function Phone() {
       </div>
     </div>
   );
+}
+
+/**
+ * The Sunday page (Family W9): the seated learner's past seven days in words, under tonight's recap. The lines are
+ * assembled on the server from the learner's own record (rules/week, no model) and are all the phone is sent of it. With
+ * no one seated, or nothing done this week, it is two words. The Parent tab is a household convenience, not a locked view:
+ * Phase 1 has no parent lock (owner decision D1), so anyone holding the joined phone can read it.
+ */
+function WeekPage({ lines }: { lines: WeekLine[] | null | undefined }) {
+  const shown: WeekLine[] = lines?.length ? lines : [{ section: "week", text: WEEK_EMPTY }];
+  return <div className="precap pweek" data-role="phone-week"><b>This week</b>
+    {shown.map((l, i) => l.head
+      ? <h4 key={i} data-section={l.section}>{l.text}</h4>
+      : <p key={i} data-section={l.section} data-line="true">{l.text}</p>)}</div>;
 }
 
 /** A name for tonight's list, tagged with its module. Essay stays a choice here: an essay assignment is a task to do, not a page to snap. */
