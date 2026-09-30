@@ -706,13 +706,31 @@ test('scene ids are unique, and the three school situations are authored to the 
  }
  assert.deepEqual(['teacher','project','lost'].map(id=>ENGLISH_SCENES.find(s=>s.id===id).skill),['repair','negotiate','request']);
 });
-test('each school situation resolves a picture that exists (it borrows its skill\'s)',()=>{
- const {artOf,SCENE_ART}=view(),art=fs.readFileSync(path.join(root,'src/english/art/index.tsx'),'utf8');
+test('each school situation resolves a picture that exists: teacher and lost have their own, project borrows the team\'s',()=>{
+ const {artOf,SCENE_ART,SKILL_ART}=view(),art=fs.readFileSync(path.join(root,'src/english/art/index.tsx'),'utf8');
+ const pick=id=>{const x=ENGLISH_SCENES.find(s=>s.id===id);return artOf(x.id,x.skill);};
  for(const id of SCHOOL){
-  const x=ENGLISH_SCENES.find(s=>s.id===id),key=artOf(x.id,x.skill);
+  const key=pick(id);
   assert(SCENE_ART.includes(key),`${id} -> ${key} is a scene picture`);
   assert(new RegExp('^\\s*'+key+':\\s*\\{\\s*Art:','m').test(art),`${key} has a drawing in art/index.tsx`);
  }
+ assert.equal(pick('teacher'),'teacher','Ms Hale has her own classroom, not the rover');
+ assert.equal(pick('lost'),'lost','Mr Ortiz has his own corridor, not the hotel desk');
+ assert.equal(pick('project'),'team','the group project still borrows the planning room');
+ assert(SCENE_ART.includes('teacher')&&SCENE_ART.includes('lost')&&!SCENE_ART.includes('project'));
+ for(const key of ['teacher','lost']){
+  const label=new RegExp('^\\s*'+key+':\\s*\\{[^\\n]*label:\\s*"([^"]+)"','m').exec(art)?.[1];
+  assert(label&&label.length>40,`${key} has a screen-reader label that describes it`);
+  assert.doesNotMatch(label,/hotel|robot|moon|rover|suitcase|reception|Pip|Robin/i,`${key}'s label describes its own picture`);
+ }
+ assert.match(art,/teacher:[^\n]*Ms Hale/);assert.match(art,/lost:[^\n]*Mr Ortiz/);
+});
+test('own pictures for teacher and lost change no other scene and no plan topic',()=>{
+ const {artOf,SCENE_ART,SKILL_ART}=view();
+ assert.deepEqual(SKILL_ART,{contact:'meet',describe:'weekend',repair:'rover',negotiate:'team',request:'booking',narrate:'interview',relate:'date',resolve:'conflict'},'the skill pictures a plan topic borrows are exactly as before');
+ assert.deepEqual(SCENE_ART.slice(0,8),['meet','weekend','rover','team','booking','interview','date','conflict'],'the first eight pictures keep their keys');
+ for(const x of ENGLISH_SCENES.filter(s=>!['teacher','lost'].includes(s.id))) assert.equal(artOf(x.id,x.skill),SCENE_ART.slice(0,8).includes(x.id)?x.id:SKILL_ART[x.skill],`${x.id} keeps the picture it had`);
+ for(const skill of Object.keys(SKILL_ART)) for(const id of ['topic-1','plan-abc','teachers','lost-and-found','']) assert.equal(artOf(id,skill),SKILL_ART[skill],`a plan topic "${id}" of skill ${skill} still borrows ${SKILL_ART[skill]}`);
 });
 test('school situations go to learners under 18 (age 15 counts) and never to "other" or an adult',()=>{
  const yes=[{type:'high-school',age:12},{type:'elementary',age:9},{type:'elementary',age:13},{type:'high-school',age:15},{type:'high-school',age:17},{type:'elementary'},{type:'high-school'}];

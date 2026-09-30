@@ -14,11 +14,11 @@ import { accepts, turnState } from "./turn";
 import type { Band, Conversation, LevelCheck, Progress, SkillId } from "./types";
 
 /**
- * The picture behind the arch (english/art): one of the eight drawn situations, or a piece for a state of the journey.
- * A plan topic, and each of the three school situations, has no picture of its own; it borrows the situation that
- * practises the same skill.
+ * The picture behind the arch (english/art): one of the ten drawn situations, or a piece for a state of the journey.
+ * A scene whose id is in SCENE_ART has its own picture. A plan topic, and the school situation "project", have none;
+ * they borrow the situation that practises the same skill (SKILL_ART).
  */
-export const SCENE_ART = ["meet", "weekend", "rover", "team", "booking", "interview", "date", "conflict"] as const;
+export const SCENE_ART = ["meet", "weekend", "rover", "team", "booking", "interview", "date", "conflict", "teacher", "lost"] as const;
 export type SceneArt = typeof SCENE_ART[number];
 export type ArtKey = SceneArt | "check" | "plan" | "coach" | "done" | "start";
 export const SKILL_ART: Record<SkillId, SceneArt> = { contact: "meet", describe: "weekend", repair: "rover", negotiate: "team", request: "booking", narrate: "interview", relate: "date", resolve: "conflict" };

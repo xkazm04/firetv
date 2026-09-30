@@ -6,6 +6,8 @@ import type { ArtKey, SceneArt } from "@/lib/english/view";
 import { SCENE_ART } from "@/lib/english/view";
 import { Booking } from "./Booking";
 import { Cafe } from "./Cafe";
+import { Classroom } from "./Classroom";
+import { Corridor } from "./Corridor";
 import { Handover } from "./Handover";
 import { Interview } from "./Interview";
 import { Meet } from "./Meet";
@@ -23,6 +25,8 @@ export const ART: Record<ArtKey, { Art: () => React.JSX.Element; label: string }
   interview: { Art: Interview, label: "An office: Jordan reads a page across the interview desk" },
   date: { Art: Cafe, label: "A café table: Taylor holds a cup of tea, a glass of juice on the other side" },
   conflict: { Art: Handover, label: "A project desk: Morgan explains, a date circled on the calendar and a page missing from the folder" },
+  teacher: { Art: Classroom, label: "A classroom: Ms Hale the teacher stands beside the chalkboard, where a sentence stops after Turn to page and the page number is a dashed gap" },
+  lost: { Art: Corridor, label: "A school corridor: Mr Ortiz the school helper opens a hand towards an empty wall hook where a jacket should hang, drawn as a dashed outline, above a shelf of other lost things" },
   check: { Art: Check, label: "An open door with light across two steps" },
   plan: { Art: Plan, label: "A path of doors, the nearest one open" },
   coach: { Art: Coach, label: "A speech bubble with one part marked, and a better one with a check" },
