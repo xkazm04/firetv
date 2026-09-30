@@ -29,7 +29,7 @@
  * Nothing here ever puts the answer on screen, and no `said` line carries a value.
  */
 import { vision } from "../engines/vision";
-import { ASK, cleanValue as clean, isCalcSpec, locate, rightLine, settled, settleSpec, slipVocabulary, workingLines } from "../rules/maths";
+import { ASK, cleanValue as clean, isCalcSpec, locate, rightLine, rootOf, settle, settled, settleSpec, slipVocabulary, workingLines } from "../rules/maths";
 import { DEFAULT_SCHOOL_SYSTEM, isSchoolSpec } from "../rules/school";
 import { addHistory, recordAttempt } from "../session/learners";
 import { topicIn } from "../library/paths";
@@ -270,6 +270,61 @@ async function markSchool(
   });
 
   return land(practice, learnerId, stillSame, items, attempts, { provider, ms, unsure });
+}
+
+/**
+ * A set answered by typing (Family W6): the phone sends one string per question, in item order, and CODE marks each one
+ * at once - no photo, no vision call, no model call of any kind (a test makes the
+ * vision and text engines throw). The verdicts are the ones a photographed sheet's transcribed strings would get,
+ * because they come from the same checkers:
+ *   - an item with a `spec` (school or Calculus) is settled by `settleSpec(n, spec, answer, undefined, topic, system)`,
+ *     `system` being the seated learner's (the route reads it): a school answer by rules/school check, a Calculus one by
+ *     checkAnswer, the slip being code's own where it names one, never a model's pick;
+ *   - an item WITHOUT a spec (a linear equation the model wrote) is settled by `settle`, the substitution rule marking
+ *     uses, from the typed value ("x = 4" and "4" are the same value; a value in x is not accepted). A photographed
+ *     linear item needs the model's own solution to hold before its read of the page is trusted; a typed one has no model
+ *     to trust, so the desk asks the same of the equation itself: it must be one the desk can solve in code (a single
+ *     linear root, `rootOf`) and not an identity, else it is "not sure", never a guess.
+ * A BLANK answer is unsure - "not sure", no verdict, never wrong, no attempt - exactly as the photo path treats an
+ * answer the model read as empty (checkAnswer and substitute both settle nothing on ''). Junk that does not read is unsure
+ * the same way. The typed string is the item's `studentAnswer`; there is no working and no pen position (`slipAt` is
+ * never set, so the sheet draws the answer line, as it does for any item with an answer and no located slip).
+ * Then the SAME `land`: one attempt per settled item, one history line, only while the set is still the one on the desk.
+ */
+export function markTyped(
+  answers: readonly string[],
+  practice: Practice,
+  learnerId: string,
+  stillSame: () => boolean = () => true,
+  system: SchoolSystem = DEFAULT_SCHOOL_SYSTEM,
+): { items: PracticeItem[]; provider: string; ms: number; unsure: number; landed: boolean } {
+  let unsure = 0;
+  const attempts: { right: boolean; slip?: string }[] = [];
+  const items: PracticeItem[] = practice.items.map((item, i) => {
+    // what was typed, on one line: a stray newline or run of spaces is the keyboard's, not the child's
+    const studentAnswer = typeof answers[i] === "string" ? oneLine(answers[i]) : "";
+    const s = studentAnswer ? typedSettle(item, studentAnswer, practice.topic, system) : null;
+    if (!s) {
+      unsure++;
+      return { ...item, studentAnswer, studentWorking: "", verdict: "unsure" as const, said: ASK(item.n) };
+    }
+    attempts.push({ right: s.verdict === "right", slip: s.slip });
+    return { ...item, studentAnswer, studentWorking: "", verdict: s.verdict, slip: s.slip, said: s.said };
+  });
+  return land(practice, learnerId, stillSame, items, attempts, { provider: "code", ms: 0, unsure });
+}
+
+/** What was typed, on one line: a control character (a newline, a tab) or a run of spaces is the keyboard's, not the child's. */
+const oneLine = (t: string) => Array.from(t, (c) => (c.charCodeAt(0) < 32 || c.charCodeAt(0) === 127 ? " " : c)).join("").split(" ").filter(Boolean).join(" ");
+
+/** One typed answer settled by the item's own kind of truth (see markTyped); null asks. Never sets a pen position. */
+function typedSettle(item: PracticeItem, answer: string, topic: string, system: SchoolSystem) {
+  if (item.spec !== undefined) return settleSpec(item.n, item.spec, answer, undefined, topic, system);
+  if (degenerate(item.question) || rootOf(item.question) === null) return null;
+  const s = settle({ n: item.n, question: item.question, studentAnswer: answer, studentWorking: "" }, answer, undefined, topic);
+  if (!s) return null;
+  const { slipAt: _pen, ...rest } = s; // no working was written, so there is no line to put the pen on
+  return rest;
 }
 
 /** Record a marked set once, and only while it is still the set on the desk. */

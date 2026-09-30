@@ -255,3 +255,71 @@ test('case 11 (W3): the capture panel no longer offers Essay Master - not in the
  assert.match(src,/type="file" accept="\.txt,\.md,/,'the Essay panel has a file picker for .txt and .md');
  assert.match(src,/Paragraph \{pix \+ 1\} of \{paras\.length\}/,'and says which paragraph it is on');
 });
+
+test('case 12 (W6): a typed mark lands the phone where a photo mark lands it - the same Practice panel, the same hand-off key',()=>{
+ const {panelFor,follow}=P();
+ // the marked set is one hand-off whichever way it was handed in: the TV goes practice -> sheet either way
+ const open=FIXTURES.practice,marked=FIXTURES.sheet;
+ assert.equal(panelFor(open.s),'practice');assert.equal(panelFor(marked.s),'practice');
+ assert.equal(walk({s:open.s,panel:'practice'},marked.s),'practice','the phone that typed (or snapped) stays on Practice, which now shows the count');
+ assert.equal(walk({s:open.s,panel:'tonight'},marked.s),'practice','a phone on another tab is brought to Practice, as after a photo');
+ // typing hands are never interrupted by the mark landing (the page lets go of the box on Send), and the phone is still on Practice
+ const k=follow(undefined,open.s,at('practice')).key;
+ const landed=follow(k,marked.s,at('practice',{busy:true}));
+ assert.equal(landed.to,null,'busy hands: the phone stays put, already where a photo mark would send it');
+ assert.equal(follow(landed.key,marked.s,at('practice')).to,null,'and is not moved later');
+ // the camera is opened for the unmarked set only (a join lands on the confirmation), never for the marked one
+ assert.equal(follow(undefined,open.s,at('join')).to,'joined');
+ assert.equal(follow(undefined,marked.s,at('join')).to,'practice','a join after the mark goes to the count');
+});
+
+test('case 13 (W6): the phone Practice panel has two routes - snap the sheet, type the answers - and the typed one is a phone-sized form',()=>{
+ const src=code(PAGE);
+ const panel=src.slice(src.indexOf('{screen === "practice" && s'),src.indexOf('{screen === "point"'));
+ // both routes are offered side by side, the snap route still working and first
+ assert.match(panel,/Snap the sheet<\/button>/);assert.match(panel,/Type my answers<\/button>/);
+ assert.ok(panel.indexOf('Snap the sheet</button>')<panel.indexOf('Type my answers</button>'),'the snap route is listed first');
+ assert.match(panel,/Send my working/,'the photo route is unchanged');assert.match(panel,/sendWorking/);
+ // one box per question, numbered, each with its plain question above it
+ assert.match(panel,/pr\.items\.map\(\(it, i\) => <div className="pask"/,'one box per item');
+ assert.match(panel,/<label htmlFor=\{`ans-\$\{it\.n\}`\}><b>\{it\.n\}\.<\/b> \{it\.question\}<\/label>/,'the item\'s plain question above its box, numbered');
+ // a text box that does not correct, capitalise or complete what a child types
+ for(const a of ['type="text"','inputMode="text"','autoComplete="off"','autoCorrect="off"','autoCapitalize="off"','spellCheck={false}','maxLength={TYPED_ANSWER_MAX}'])assert.ok(panel.includes(a),`the answer box has ${a}`);
+ // Enter moves to the next box; the last one lets the keyboard go
+ assert.match(panel,/e\.key !== "Enter"/);assert.match(panel,/boxes\.current\[i \+ 1\]\?\.focus\(\)/,'Enter goes to the next box');
+ assert.match(panel,/enterKeyHint=\{i < n - 1 \? "next" : "done"\}/);assert.match(panel,/e\.currentTarget\.blur\(\)/,'and the last one closes the keyboard');
+ // Send is disabled until a box has text; a blank box is sent as an empty string, one per question
+ assert.match(panel,/Send my answers/);assert.match(panel,/disabled=\{!any \|\| busy\}/);assert.match(panel,/const n = pr\.items\.length, any = typed\.some\(\(t\) => t\.trim\(\)\)/);
+ assert.match(src,/answers: Array\.from\(\{ length: n \}, \(_, i\) => typed\[i\] \?\? ""\)/,'every question is sent, a blank as ""');
+ assert.match(src,/call\("\/api\/mark", \{ answers:/,'to the mark route, with no image');
+ assert.match(src,/document\.activeElement\.blur\(\)/,'the box in hand is let go before sending, so the phone can follow the TV');
+ // the camera is on for the snap route only
+ assert.match(src,/camWanted = screen === "capture" \|\| \(screen === "practice" && !!s\?\.practice && !s\.practice\.marked && route === "snap"\)/);
+ // the box's own cap is the rule's: the one number
+ const rules=fs.readFileSync(path.join(SRC,'lib/rules/maths.ts'),'utf8');
+ assert.match(rules,/export const TYPED_ANSWER_MAX = 40;/);assert.match(src,/TYPED_ANSWER_MAX/);
+ // phone-sized: the tap targets are at least 44 px, and the size that stops a phone zooming into a field is 16 px
+ const css=fs.readFileSync(path.join(SRC,'app/globals.css'),'utf8');
+ const rule=(sel)=>{const m=css.match(new RegExp(`(?:^|\\n)${sel.replace(/[.\[\]"=]/g,'\\$&')} \\{([^}]*)\\}`));assert.ok(m,`${sel} is styled`);return m[1];};
+ const px=(decl,prop)=>Number((decl.match(new RegExp(`${prop}: (\\d+)px`))||[])[1]);
+ assert.ok(px(rule('.pask input'),'min-height')>=44,'the answer box is at least 44 px tall');
+ assert.ok(px(rule('.proute button'),'min-height')>=44,'the route buttons are at least 44 px tall');
+ assert.ok(px(rule('.pask input'),'font-size')>=16,'16 px or more, so a phone does not zoom in');
+ assert.match(rule('.pask input'),/width: 100%/);assert.match(rule('.pask input'),/box-sizing: border-box/,'the box never runs past the phone\'s edge');
+ assert.match(rule('.pask label'),/overflow-wrap: anywhere/,'a long question wraps');
+ // copy: plain and short, and no dash of any kind in what the typed route says
+ const typedPart=panel.slice(panel.indexOf('route === "type" ?'),panel.indexOf('Send my answers')+20);
+ const words=[...typedPart.matchAll(/>([^<>{}]{3,})</g)].map(m=>m[1]);
+ assert.ok(words.some(w=>/Type your answer to each question/.test(w)),'the typed route says what to do');
+ for(const w of words)assert.doesNotMatch(w,/[—–]/u,w);
+});
+
+test('case 14 (W6): the TV\'s Practice card is not made false by the typed route, and still asks nothing to be typed on the TV',()=>{
+ const tv=code(path.join(SRC,'maths/MathsTV.tsx'));
+ assert.match(tv,/The phone is waiting for the sheet or your answers\./,'the card names both ways in');
+ assert.doesNotMatch(tv,/The phone is waiting for the sheet\./);
+ // the ask stays the snap, in the TV\'s own copy (the hand-off scan reads it); the TV never asks for typing
+ assert.match(tv,/then snap the whole sheet with the phone/);
+ const card=tv.slice(tv.indexOf('The phone is waiting for the sheet or your answers.')-200,tv.indexOf('The phone is waiting for the sheet or your answers.')+80);
+ assert.doesNotMatch(card,/\btype\b/i,'no typing asked of the TV');
+});

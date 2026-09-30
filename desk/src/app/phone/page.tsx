@@ -15,6 +15,7 @@ import { follow, type PScreen } from "./panelFor";
 import { forensicAt } from "@/tv/keys";
 import { counted, recapCaption, recapLine, recapRows, tasksLine } from "@/tv/recapRows";
 import { nearestItem } from "@/lib/desk/select";
+import { TYPED_ANSWER_MAX } from "@/lib/rules/maths";
 
 const SAMPLES: Array<{ id: Subject; title: string; file: string }> = [
   { id: "maths", title: "Algebra — Exercise 4.2", file: "/samples/maths.jpg" },
@@ -78,6 +79,16 @@ export default function Phone() {
   const [memory, setMemory] = useState<string[] | null>(null);
   /** A failed run the learner has stepped past ("Snap a new page"): its Try again is not offered again. */
   const [passed, setPassed] = useState("");
+  /**
+   * How the worked set is handed in (Family W6): snap the sheet, or type the answers. Typed answers live in this page's
+   * state, one box per question, and are sent only when the learner presses Send. A new set starts on the snap route with
+   * empty boxes; the camera runs only on the snap route.
+   */
+  const [route, setRoute] = useState<"snap" | "type">("snap");
+  const [typed, setTyped] = useState<string[]>([]);
+  const boxes = useRef<(HTMLInputElement | null)[]>([]);
+  const openSet = s?.practice && !s.practice.marked ? `${s.practice.topic}:${s.practice.items.map((i) => i.question).join("|")}` : "";
+  useEffect(() => { setRoute("snap"); setTyped([]); }, [openSet]);
 
   // the QR on the TV carries the code: arrive with ?pin= and the phone gives it to the desk, which checks it, then tidies the bar
   useEffect(() => {
@@ -95,7 +106,7 @@ export default function Phone() {
   useEffect(() => { if (s?.essayType && role === "student" && screen !== "paste" && s.screen === "essaytype") { setEtype(s.essayType); } }, [s?.essayType, s?.screen, role, screen]);
 
   // camera on when a screen is asking for a photo: capture, or practice with a set still to mark
-  const camWanted = screen === "capture" || (screen === "practice" && !!s?.practice && !s.practice.marked);
+  const camWanted = screen === "capture" || (screen === "practice" && !!s?.practice && !s.practice.marked && route === "snap");
   useEffect(() => {
     if (!camWanted) { cam?.getTracks().forEach((t) => t.stop()); setCam(null); return; }
     navigator.mediaDevices?.getUserMedia({ video: { facingMode: "environment", width: { ideal: 1920 } } }).then((st) => { setCam(st); if (video.current) video.current.srcObject = st; }).catch(() => setMsg(screen === "capture" ? "No camera here — use a sample page below." : "No camera here."));
@@ -248,6 +259,23 @@ export default function Phone() {
       else { setPhase("failed"); setMsg(r.status === 404 ? "The desk cannot mark yet — that part is still being built." : (j.error ?? `The desk could not mark it (${r.status}).`)); }
     } catch (e) { setPhase("failed"); setMsg(`That did not reach the desk: ${String(e)}`); } finally { setBusy(false); }
   };
+  /**
+   * The typed answers, one string per question in order (a blank for one left). Code marks them at once on the desk; the
+   * phone then follows the TV to the sheet exactly as after a photo (the panel is the same one, now showing the count).
+   * The focused box is let go first: a phone with typing hands is never moved (panelFor follow), and this one is done.
+   */
+  const sendTyped = async () => {
+    const n = s?.practice?.items.length ?? 0;
+    if (!n || busy) return;
+    if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
+    setBusy(true); setPhase("sending"); setMsg("");
+    try {
+      const r = await call("/api/mark", { answers: Array.from({ length: n }, (_, i) => typed[i] ?? "") });
+      const j = await r.json().catch(() => ({} as { error?: string }));
+      if (r.ok) setPhase("sent");
+      else { setPhase("failed"); setMsg(j.error ?? `The desk could not mark it (${r.status}).`); }
+    } catch (e) { setPhase("failed"); setMsg(`That did not reach the desk: ${String(e)}`); } finally { setBusy(false); }
+  };
   // the set came back marked: the sheet has done its job, so the review clears itself
   useEffect(() => { if (screen === "practice" && s?.practice?.marked) { setShot(null); setPhase("idle"); } }, [s?.practice?.marked]); // eslint-disable-line react-hooks/exhaustive-deps
   // a new item on the walk is a new question: last time's transcript and answer do not belong to it
@@ -382,21 +410,44 @@ export default function Phone() {
                 <button className="pbtn" data-signal="true" onClick={() => retry("practice")} disabled={busy}>Try again</button></>
               : <p>The practice set starts on the TV — open <b>Teach me something</b> there and pick a topic. Six problems land on the big screen; you work them on paper.</p>}</div>;
 
-          // not marked: the sheet is still on the table. Snap all six at once, review it, then send.
+          // not marked: the sheet is still on the table. Two ways in: snap all six at once, or type the six answers.
           if (!pr.marked) return <div className="pscreen"><h3>Practice</h3>
-            <p><b>{topicIn(pr.topic)?.name ?? "The set"}</b> — work all {pr.items.length} on paper. When every one is done, snap the whole sheet in one photo.</p>
-            <div className="cam">
-              {cam ? <video ref={video} autoPlay playsInline muted /> : !shot && <span>camera</span>}
-              {shot && <img src={shot.url} alt="the sheet you just snapped" />}
-              {cam && !shot && <div className="guide"><i /><i /><i /><i /></div>}
+            <div className="proute" data-role="practice-route" role="group" aria-label="How to hand in the set">
+              <button aria-pressed={route === "snap"} onClick={() => { setRoute("snap"); setMsg(""); }}>Snap the sheet</button>
+              <button aria-pressed={route === "type"} onClick={() => { setRoute("type"); setMsg(""); }}>Type my answers</button>
             </div>
-            {!shot && <p>Fill the frame with the sheet, all four corners inside.</p>}
-            {phase === "sending" ? <><p>Sent. The desk is marking the set…</p><button className="pbtn" disabled>Marking the set…</button></>
-              : shot ? <div className="field">
-                  <button className="pbtn" data-signal="true" style={{ flex: 1 }} onClick={sendWorking} disabled={busy}>Send my working</button>
-                  <button className="pbtn" data-secondary="true" onClick={retake}>Retake</button>
+            {route === "type" ? (() => {
+              const n = pr.items.length, any = typed.some((t) => t.trim());
+              return <>
+                <p><b>{topicIn(pr.topic)?.name ?? "The set"}</b>. Type your answer to each question. Leave one empty if you skipped it.</p>
+                <div className="pasks" data-role="practice-typed">
+                  {pr.items.map((it, i) => <div className="pask" key={it.n}>
+                    <label htmlFor={`ans-${it.n}`}><b>{it.n}.</b> {it.question}</label>
+                    <input id={`ans-${it.n}`} data-role="typed-answer" ref={(el) => { boxes.current[i] = el; }} type="text" inputMode="text" autoComplete="off" autoCorrect="off" autoCapitalize="off" spellCheck={false}
+                      enterKeyHint={i < n - 1 ? "next" : "done"} maxLength={TYPED_ANSWER_MAX} value={typed[i] ?? ""} disabled={phase === "sending"}
+                      aria-label={`Your answer to question ${it.n}`}
+                      onChange={(e) => setTyped((t) => { const v = Array.from({ length: n }, (_, k) => t[k] ?? ""); v[i] = e.target.value; return v; })}
+                      onKeyDown={(e) => { if (e.key !== "Enter") return; e.preventDefault(); if (i < n - 1) boxes.current[i + 1]?.focus(); else e.currentTarget.blur(); }} />
+                  </div>)}
                 </div>
-              : <button className="pbtn" onClick={snap} disabled={!cam || busy}>{cam ? "Snap the sheet" : "No camera on this device"}</button>}
+                {phase === "sending" ? <><p>Sent. The desk is marking the set…</p><button className="pbtn" disabled>Marking the set…</button></>
+                  : <button className="pbtn" data-signal="true" onClick={sendTyped} disabled={!any || busy}>Send my answers</button>}
+              </>;
+            })() : <>
+              <p><b>{topicIn(pr.topic)?.name ?? "The set"}</b> — work all {pr.items.length} on paper. When every one is done, snap the whole sheet in one photo.</p>
+              <div className="cam">
+                {cam ? <video ref={video} autoPlay playsInline muted /> : !shot && <span>camera</span>}
+                {shot && <img src={shot.url} alt="the sheet you just snapped" />}
+                {cam && !shot && <div className="guide"><i /><i /><i /><i /></div>}
+              </div>
+              {!shot && <p>Fill the frame with the sheet, all four corners inside.</p>}
+              {phase === "sending" ? <><p>Sent. The desk is marking the set…</p><button className="pbtn" disabled>Marking the set…</button></>
+                : shot ? <div className="field">
+                    <button className="pbtn" data-signal="true" style={{ flex: 1 }} onClick={sendWorking} disabled={busy}>Send my working</button>
+                    <button className="pbtn" data-secondary="true" onClick={retake}>Retake</button>
+                  </div>
+                : <button className="pbtn" onClick={snap} disabled={!cam || busy}>{cam ? "Snap the sheet" : "No camera on this device"}</button>}
+            </>}
           </div>;
 
           // marked: the count, and not one verdict. The walk itself belongs to the TV.

@@ -575,7 +575,7 @@ export function PracticeScreen({ s }: { s: Session }) {
       <div className="mb-card" data-role="maths-hint">
         <div className="hl"><span className="mb-lab">What to do</span></div>
         <div className="ht">Work {workWhat(p.items.length)} on paper, then snap the whole sheet with the phone. The desk marks it and walks you through it here.</div>
-        {job ? <JobNote job={job} /> : <div className="nx">{ARROW}<span>{s.joined ? "The phone is waiting for the sheet." : `Pair the phone first · PIN ${s.pin}`}</span></div>}
+        {job ? <JobNote job={job} /> : <div className="nx">{ARROW}<span>{s.joined ? "The phone is waiting for the sheet or your answers." : `Pair the phone first · PIN ${s.pin}`}</span></div>}
       </div>
     </aside>
   </>);

@@ -92,6 +92,25 @@ export const ASK = (n: number) => `I got something different for number ${n}. Ho
 /** A value as a learner or a marker writes it: `x = 9` is `9`. */
 export const cleanValue = (s: unknown) => (typeof s === "string" ? s.trim().replace(/^x\s*=\s*/i, "") : "");
 
+/** Typed answers (Family W6): the most a set may carry, and the longest one answer may be. Refused past either, never cut. */
+export const TYPED_ANSWERS_MAX = 12;
+export const TYPED_ANSWER_MAX = 40;
+
+/**
+ * Are these the typed answers to a set of `n` questions? A plain sentence when not, null when they are: a list of
+ * strings, at most TYPED_ANSWERS_MAX of them and one per question, each at most TYPED_ANSWER_MAX characters. A blank
+ * answer (the child left it) is a string like another. Pure: the route asks it, the phone's box reads the two caps.
+ */
+export function typedAnswersProblem(answers: unknown, n: number): string | null {
+  if (!Array.isArray(answers)) return "The desk did not get your answers as a list. Type them again.";
+  if (answers.length > TYPED_ANSWERS_MAX) return `That is more than ${TYPED_ANSWERS_MAX} answers, and no set is that long. Send one for each question.`;
+  if (answers.some((a) => typeof a !== "string")) return "One of the answers was not text. Type them again.";
+  if (answers.length !== n) return `This set has ${n} questions and ${answers.length} answers came. Send one for each question.`;
+  const long = (answers as string[]).findIndex((a) => a.length > TYPED_ANSWER_MAX);
+  if (long >= 0) return `Answer ${long + 1} is longer than ${TYPED_ANSWER_MAX} characters. Shorten it and send again.`;
+  return null;
+}
+
 export interface Settled { verdict: "right" | "wrong"; slip?: string; said: string; slipAt?: SlipAt; }
 
 /**

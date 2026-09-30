@@ -72,6 +72,16 @@ button, input, textarea { font: inherit; }
 .ptalk b { font-family: var(--display); font-size: 18px; text-transform: uppercase; letter-spacing: .04em; }
 .ptalk p { margin: 0; color: #5E6E7E; line-height: 1.4; }
 .ptalk p.said { color: #1B2632; border-left: 4px solid #E23D28; padding-left: 10px; }
+/* Practice, unmarked: two ways to hand in the set (snap the sheet, type the answers), and the typed answers' boxes */
+.proute { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.proute button { min-height: 48px; padding: 8px; border: 1px solid #D7DEE5; background: #fff; color: #1B2632; font-family: var(--display); font-size: 15px; font-weight: 800; text-transform: uppercase; letter-spacing: .04em; cursor: pointer; }
+.proute button[aria-pressed="true"] { background: #1B2632; border-color: #1B2632; color: #fff; }
+.pasks { display: flex; flex-direction: column; gap: 14px; }
+.pask { display: flex; flex-direction: column; gap: 6px; }
+.pask label { color: #1B2632; font-size: 14px; line-height: 1.35; overflow-wrap: anywhere; }
+.pask label b { font-family: var(--display); font-size: 16px; }
+.pask input { box-sizing: border-box; width: 100%; min-height: 48px; padding: 10px 12px; border: 1px solid #D7DEE5; background: #fff; color: #1B2632; font-size: 16px; }
+.pask input:focus { outline: 2px solid #1B2632; outline-offset: 1px; }
 .phold { border: 0; padding: 26px 16px; font-family: var(--display); font-size: 20px; font-weight: 800; text-transform: uppercase; letter-spacing: .04em; line-height: 1.15; background: #1B2632; color: #fff; cursor: pointer; touch-action: none; user-select: none; }
 .phold[data-holding="true"] { background: #E23D28; box-shadow: inset 0 0 0 4px rgba(255,255,255,.35); }
 

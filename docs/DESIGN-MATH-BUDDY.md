@@ -169,6 +169,8 @@ from the unit's closed list ("Added the tops and the bottoms", "The top not scal
 kept one bottom", "Subtracted the wrong way round") only when code detected it, and otherwise the desk asks. An answer
 the desk cannot read with one meaning (`0,75` on a UK profile, a rounded decimal) is the dashed ring, "not sure".
 
+**A typed set** (Family W6) is marked by the same code from the strings the learner typed on the phone instead of strings a model read from a photo (`markTyped` in `desk/src/lib/desk/mark.ts`, `POST /api/mark` with `answers`): one string per question, a school or Calculus item by `settleSpec` under the seated learner's system, a linear item by the substitution rule when the desk can solve the equation itself. A blank or unreadable answer is "not sure", never wrong, exactly as a photographed empty answer is. There is no working and no pen position, so a wrong typed item gets the wavy underline on its answer line. No vision call and no model call is made; the history line and the learner record are the ones a photographed sheet writes.
+
 ## Components
 
 - **Mark** - an orange rounded square (radial `#FFEBC4 → #FFC56B → #E8891F`) holding an equals sign whose lower
