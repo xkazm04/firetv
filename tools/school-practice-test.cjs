@@ -121,6 +121,7 @@ test('4: the practice route reports code and zero tries for a school unit, and t
 const W7_TIER={
  'frac-equivalent':(sp)=>{if(sp.shape==='simplify')return 2;const m=/^(\d+)\/(\d+) = (\?|\d+)\/(\?|\d+)$/.exec(sp.expr);const [a,b]=[+m[1],+m[2]];const known=+(m[3]==='?'?m[4]:m[3]);return (m[3]==='?'?known/b:known/a)>1?1:2;},
  'frac-of-amount':(sp)=>(sp.unit===undefined?1:2),
+ 'frac-mul-div':(sp)=>(/×/.test(sp.expr)?1:2),
 };
 // ------------------------------------------------------------------ the spec through the store
 test('5: a school spec survives the store - practice.set, practice.marked, practice.settle and a reload from session.json',()=>{
@@ -177,7 +178,7 @@ test('7: a linear topic still asks the engine as before - one call, its own prom
 });
 
 // ------------------------------------------------------------------ Family W7 batch 1: three more units whose sets code writes
-const W7_SHAPE={'frac-equivalent':/^(?:Fill in the missing number: \d+\/\d+ = (?:\?\/\d+|\d+\/\?)\.|Write \d+\/\d+ in its simplest form\.)$/,'frac-of-amount':/^Find \d+\/\d+ of (?:[€£$]\d+|\d+(?: [a-z]+)?)\.$/};
+const W7_SHAPE={'frac-equivalent':/^(?:Fill in the missing number: \d+\/\d+ = (?:\?\/\d+|\d+\/\?)\.|Write \d+\/\d+ in its simplest form\.)$/,'frac-of-amount':/^Find \d+\/\d+ of (?:[€£$]\d+|\d+(?: [a-z]+)?)\.$/,'frac-mul-div':/^Work out \d+\/\d+ [×÷] \d+\/\d+\.$/};
 for(const unit of Object.keys(W7_TIER)){
  test(`W7 2-${unit}: makeSchoolItems writes six distinct items by code - three tier 1, then three tier 2 - pure for a seed, with no engine call`,()=>{
   noModel();

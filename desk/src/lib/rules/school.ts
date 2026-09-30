@@ -2,10 +2,10 @@
  * School numbers, decided in code (Family Phase 1, W5a): the answer reader, the fractions checker, the hint leak
  * check and the units' generators. W5b wires them: the store keeps a school spec (session/store specShown, by
  * shape), a set on a unit in SCHOOL_GENERATORS is written here with no model call (desk/items makeSchoolItems),
- * marking judges it with `check`, and hints and explanations pass `leaksSchool`. W7 batch 1 adds units on the same
- * machinery: equivalent fractions (shapes `missing` and `simplify`) and a fraction of an amount (`fraction-of`), each
- * with its generator, closed slip list, task reader and withheld line; the leak rule below gains a per-shape profile
- * (`leakProfile`).
+ * marking judges it with `check`, and hints and explanations pass `leaksSchool`. W7 batch 1 adds three units on the
+ * same machinery: equivalent fractions (shapes `missing` and `simplify`), a fraction of an amount (`fraction-of`) and
+ * multiply and divide fractions (`compute` with × or ÷), each with its generator, closed slip list, task reader and
+ * withheld line; the leak rule below gains a per-shape profile (`leakProfile`).
  *
  * The stances this file holds:
  *   - Code decides right and wrong. The truth is recomputed from the spec every time with EXACT rational arithmetic
@@ -289,8 +289,8 @@ export function readNumber(answer: unknown, system: unknown): Reading | null {
  * union: `percent` (a percent of an amount), `pct-change`, `ratio-share`, `area` and `mean`.
  *   - compute: a numeric question with no unknown, "Work out 3/4 + 1/6", "Work out 2/3 × 3/4". `form: "simplest"` asks
  *     for lowest terms, `form: "decimal"` for a decimal (the value must terminate); `unit` is the unit the answer is in;
- *     `allowNegative` lets the value be zero or below (a subtraction that crosses zero). Unit: add and subtract
- *     fractions (a/b ± c/d).
+ *     `allowNegative` lets the value be zero or below (a subtraction that crosses zero). Units: add and subtract
+ *     fractions (a/b ± c/d), multiply and divide fractions (a/b × c/d, a/b ÷ c/d, Family W7).
  *   - fraction-of (W7, "A fraction of an amount"): expr "a/b of N", a proper fraction of a whole amount, "Find 3/5 of
  *     40 kg."; `unit` is the amount's unit (and the answer's). The value is a/b × N, exactly.
  *   - missing (W7, "Equivalent fractions"): expr "a/b = ?/d" or "a/b = c/?", one number missing on the right, "Fill in
@@ -667,6 +667,11 @@ export const SCHOOL_SLIPS: readonly SchoolSlip[] = [
   { id: "of-one-part", name: "Stopped at a single part", says: "The amount was divided by the bottom, which gives a single part. The top says how many of those parts to take.", points: "the last line" },
   { id: "of-not-divided", name: "Multiplied without dividing", says: "The amount was multiplied by the top but never divided by the bottom. A fraction of an amount is smaller than the amount.", points: "the multiplication" },
   { id: "of-rest", name: "Found the part that is left", says: "This is the part left over, not the part asked for. The top says how many parts to take.", points: "the last line" },
+  // multiply and divide fractions (Family W7)
+  { id: "added-not-multiplied", name: "Added instead of multiplied", says: "The fractions were added. Multiplying fractions means multiplying the tops together and the bottoms together.", points: "the line where the fractions were combined" },
+  { id: "kept-second", name: "The fraction you divide by not flipped", says: "Dividing by a fraction is multiplying by it turned upside down. The fraction you divide by was not turned over before multiplying.", points: "the line where the division became a multiplication" },
+  { id: "flipped-first", name: "The wrong fraction flipped", says: "The first fraction was turned upside down. Only the fraction you divide by is turned over.", points: "the fraction that was turned over" },
+  { id: "bottoms-added", name: "Multiplied the tops, added the bottoms", says: "The tops were multiplied but the bottoms were added. The tops and the bottoms are both multiplied.", points: "the bottom of the answer" },
 ];
 
 /** The common factors of a and b above 1, smallest first. */
@@ -679,6 +684,8 @@ function commonFactors(a: bigint, b: bigint): bigint[] {
 /**
  * The value each slip gives from the spec's own numbers, in SCHOOL_SLIPS order within its unit; exact, no guessing.
  *   - a/b ± c/d: the four add/sub slips (W5a);
+ *   - a/b × c/d: a/b + c/d and (a+c)/(b+d) added; ac/(b+d) the bottoms added. a/b ÷ c/d: ac/bd the fraction you divide
+ *     by kept; bc/ad the first flipped; a/b + d/c added after the flip; ad/(b+c) the bottoms added after the flip;
  *   - a/b of N: N÷a×b upside down; N÷b a single part; a×N not divided; (b−a)×N÷b the part left;
  *   - a/b = ?/d (m = ad/b): a + (d − b) the same added; a one part only; a×d and a×b÷d (the other way) the wrong
  *     factor. a/b = c/? (m = bc/a): b + (c − a); b; b×c and b×a÷c. A missing number must be a whole number above 0;
@@ -712,11 +719,24 @@ function slipCandidates(r: ReadOk): [string, Q][] {
     return out;
   }
   const node = r.node;
-  if (node.k !== "op" || (node.op !== "+" && node.op !== "-")) return [];
+  if (node.k !== "op") return [];
   const part = (n: Node): [bigint, bigint] | null => (n.k === "frac" ? [n.n, n.d] : n.k === "num" && n.whole ? [n.q.n, ONE] : null);
   const p = part(node.a), q = part(node.b);
   if (!p || !q) return [];
   const [a, b] = p, [c, d] = q;
+  if (node.op === "×") {
+    push("added-not-multiplied", mk(a * d + c * b, b * d));
+    push("added-not-multiplied", mk(a + c, b + d));
+    push("bottoms-added", mk(a * c, b + d));
+    return out;
+  }
+  if (node.op === "÷") {
+    push("added-not-multiplied", c === Z ? null : mk(a * c + d * b, b * c));
+    push("kept-second", mk(a * c, b * d));
+    push("flipped-first", mk(b * c, a * d));
+    push("bottoms-added", mk(a * d, b + c));
+    return out;
+  }
   const plus = node.op === "+";
   const comb = (x: bigint, y: bigint) => (plus ? x + y : x - y);
   push("tops-and-bottoms", mk(comb(a, c), comb(b, d)));
@@ -1280,14 +1300,40 @@ export function genOfAmount(seed: unknown, tier: unknown): SchoolSpec | null {
 }
 
 /**
+ * One "Multiply and divide fractions" item, from a seed and a tier that code computed:
+ *   - tier 1: MULTIPLY two proper fractions in lowest terms with bottoms 2..10 (2/3 × 3/4);
+ *   - tier 2: DIVIDE one by another, the same range (3/4 ÷ 2/5): the fraction you divide by is turned over first.
+ * A value that is a whole number is drawn again, and so is one whose value or fractional part equals an operand or
+ * the flipped divisor (the question would print its own answer). Pure and seeded; null for a bad seed or tier.
+ */
+export function genMulDiv(seed: unknown, tier: unknown): SchoolSpec | null {
+  const rnd = seeded(seed, tier, 0x5eed1003);
+  if (!rnd) return null;
+  function pick<T>(xs: T[]): T { return xs[Math.floor(rnd!() * xs.length)]; }
+  const fracs = properLowest(2, 10);
+  for (let t = 0; t < MAX_TRIES; t++) {
+    const [a, b] = pick(fracs), [c, d] = pick(fracs);
+    const spec: SchoolSpec = { shape: "compute", expr: `${a}/${b} ${tier === 1 ? "×" : "÷"} ${c}/${d}` };
+    const r = read(spec);
+    if (!r.ok || r.truth.d === ONE) continue;
+    const T = r.truth, part = T.n > T.d ? mk(T.n % T.d, T.d)! : T;
+    const seen = [mk(BigInt(a), BigInt(b))!, mk(BigInt(c), BigInt(d))!, mk(BigInt(d), BigInt(c))!];
+    if (seen.some((x) => eq(x, T) || eq(x, part))) continue;
+    if (fair(spec)) return spec;
+  }
+  return tier === 1 ? { shape: "compute", expr: "2/3 × 3/4" } : { shape: "compute", expr: "3/4 ÷ 2/5" };
+}
+
+/**
  * The units whose practice sets code writes, by syllabus topic id, each with its generator (Family W5b: add and
- * subtract fractions; W7 batch 1: equivalent fractions, a fraction of an amount). A topic not here is
- * written as it always was.
+ * subtract fractions; W7 batch 1: equivalent fractions, a fraction of an amount, multiply and divide fractions). A
+ * topic not here is written as it always was.
  */
 export const SCHOOL_GENERATORS: Readonly<Record<string, (seed: number, tier: 1 | 2) => SchoolSpec | null>> = {
   "frac-equivalent": (seed, tier) => genEquivalent(seed, tier),
   "frac-of-amount": (seed, tier) => genOfAmount(seed, tier),
   "frac-add-sub": (seed, tier) => gen(seed, tier),
+  "frac-mul-div": (seed, tier) => genMulDiv(seed, tier),
 };
 /** The generator for a topic id, or null: an own key only, so 'constructor' is not a unit. */
 export const generatorFor = (topicId: unknown) =>
@@ -1302,6 +1348,7 @@ export const SCHOOL_UNIT_SLIPS: Readonly<Record<string, readonly string[]>> = {
   "frac-equivalent": ["added-same", "one-part-only", "wrong-factor"],
   "frac-of-amount": ["of-upside-down", "of-one-part", "of-not-divided", "of-rest"],
   "frac-add-sub": ["tops-and-bottoms", "top-not-scaled", "tops-one-bottom", "wrong-direction"],
+  "frac-mul-div": ["added-not-multiplied", "kept-second", "flipped-first", "bottoms-added"],
 };
 
 /** The system the desk reads a learner's numbers by when their profile names none (tv/profileRows DEFAULT_SYSTEM is the same, tested). */
@@ -1328,9 +1375,15 @@ const TASKS: { re: RegExp; op: (m: RegExpExecArray) => Op; swap?: boolean }[] = 
   { re: new RegExp(String.raw`^(?:add|find the sum of|the sum of)\s+${FRAC_SRC}\s+(and|to)\s+${FRAC_SRC}$`, "i"), op: () => "+" },
   // 'Subtract 1/6 from 3/4', 'Take 1/4 away from 5/6', 'Take 1/4 from 5/6': the second take away the first
   { re: new RegExp(String.raw`^(?:subtract|take)\s+${FRAC_SRC}\s+(away from|from)\s+${FRAC_SRC}$`, "i"), op: () => "-", swap: true },
+  // W7: '2/3 × 3/4', 'Work out 2/3 x 3/4', '2/3 * 3/4', '2/3 times 3/4', '3/4 ÷ 1/2', '3/4 divided by 1/2' (never ':', a ratio too)
+  { re: new RegExp(String.raw`^(?:${VERB_SRC}\s*:?\s*)?${FRAC_SRC}\s*(×|x|\*|times|÷|divided by)\s*${FRAC_SRC}$`, "i"), op: (m) => (/^(?:÷|divided by)$/i.test(m[3]) ? "÷" : "×") },
+  // 'Multiply 2/3 by 3/4', 'Multiply 2/3 and 3/4', 'Find the product of 2/3 and 3/4'
+  { re: new RegExp(String.raw`^(?:multiply|find the product of|the product of)\s+${FRAC_SRC}\s+(by|and)\s+${FRAC_SRC}$`, "i"), op: () => "×" },
+  // 'Divide 3/4 by 1/2'
+  { re: new RegExp(String.raw`^divide\s+${FRAC_SRC}\s+(by)\s+${FRAC_SRC}$`, "i"), op: () => "÷" },
 ];
 
-/** Two fractions added or subtracted, with an optional instruction after them; or null. */
+/** Two fractions added, subtracted, multiplied or divided, with an optional instruction after them; or null. */
 function readCombined(t0: string): SchoolSpec | null {
   let t = t0;
   let form: ComputeSpec["form"];
@@ -1428,7 +1481,9 @@ function readSimplify(t0: string): SchoolSpec | null {
  *   - add and subtract: two fractions a/b joined by + or - (or 'plus', 'minus'), after an optional 'Work out',
  *     'Calculate', 'Evaluate', 'Compute', 'Find', 'What is' (a colon after it too); 'Add A and B', 'Add A to B', 'Find
  *     the sum of A and B'; 'Subtract B from A', 'Take B (away) from A' (A - B);
- *   - after it: nothing, '=', '= ?', '= ___', a full stop or a question mark; then optionally one instruction
+ *   - multiply and divide (W7): two fractions joined by ×, x, *, 'times', ÷ or 'divided by' after the same verbs;
+ *     'Multiply A by B', 'Multiply A and B', 'Find the product of A and B', 'Divide A by B'. Never ':' (a ratio too);
+ *   - for both: after it nothing, '=', '= ?', '= ___', a full stop or a question mark; then optionally one instruction
  *     the desk prints itself: 'Give your answer in its simplest form.' / 'in its lowest terms' / 'Simplify your
  *     answer.' (form simplest) or 'Give your answer as a decimal.' (form decimal);
  *   - a fraction of an amount (W7): 'Find 3/5 of 40', '3/5 of 40', 'What is 3/4 of £60?', with a unit from the reader's
@@ -1458,7 +1513,8 @@ export function specFromQuestion(text: unknown): SchoolSpec | null {
 
 /**
  * The unit a school spec belongs to, by topic id, or null: a sum or difference of two fractions is add and subtract
- * fractions, a fraction of an amount its own unit (W7), a missing number or a simplify equivalent fractions.
+ * fractions, a product or quotient of two fractions multiply and divide fractions (W7), a fraction of an amount its own
+ * unit, a missing number or a simplify equivalent fractions.
  */
 export function unitOf(spec: unknown): string | null {
   try {
@@ -1468,7 +1524,7 @@ export function unitOf(spec: unknown): string | null {
     if (r.kind.k === "missing" || r.kind.k === "simplify") return "frac-equivalent";
     const n = r.node;
     if (n.k !== "op" || n.a.k !== "frac" || n.b.k !== "frac") return null;
-    return n.op === "+" || n.op === "-" ? "frac-add-sub" : null;
+    return n.op === "+" || n.op === "-" ? "frac-add-sub" : "frac-mul-div";
   } catch {
     return null;
   }
@@ -1485,6 +1541,7 @@ export const SCHOOL_WITHHELD = {
   "frac-equivalent": "Find what the bottom was multiplied or divided by to make the new bottom, and do exactly the same to the top. To simplify, divide the top and the bottom by the biggest number that goes into both. The answer is yours to work out.",
   "frac-of-amount": "Divide the amount by the bottom number to find the size of a single part, then multiply by the top number to take that many parts. The answer is yours to work out.",
   "frac-add-sub": "Make the bottoms the same first: find a number both bottoms go into and rewrite each fraction over it. Then combine only the tops. The answer is yours to work out.",
+  "frac-mul-div": "To multiply, multiply the tops together and the bottoms together. To divide, turn the fraction you divide by upside down and multiply instead. Simplify at the end. The answer is yours to work out.",
   any: "Go back to the last step you are sure of and take the next. The answer stays yours to find.",
 } as const;
 /** The withheld line for a school spec, chosen by its unit; the general line for any other. */

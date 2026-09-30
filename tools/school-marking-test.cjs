@@ -177,9 +177,11 @@ const TASKS=[
  ['3/4+1/6','3/4 + 1/6'],['¾ + ⅙','3/4 + 1/6'],['3⁄4 − 1⁄6','3/4 - 1/6'],['Work out 3/4 + 1/6. Give your answer in its simplest form.','3/4 + 1/6','simplest'],
  ['What is 1/2 + 1/4?','1/2 + 1/4'],['Evaluate 7/10 - 2/5','7/10 - 2/5'],['3/4 plus 1/6','3/4 + 1/6'],['5/6 minus 1/4','5/6 - 1/4'],['Take 1/4 away from 5/6','5/6 - 1/4'],
  ['Find the sum of 2/3 and 1/5','2/3 + 1/5'],['Work out 1/2 + 3/4. Give your answer as a decimal.','1/2 + 3/4','decimal'],['c) 2 / 3 + 1 / 5','2/3 + 1/5'],
- // refused: not two fractions added or subtracted, or not read with one meaning
+ // W7: multiply and divide fractions is a unit now, so these two (refused in W5b) read as its specs
+ ['3/4 × 1/6','3/4 × 1/6'],['3/4 ÷ 1/6','3/4 ÷ 1/6'],
+ // refused: not two fractions combined, or not read with one meaning
  ['3 + 4',null],['0.5 + 0.25',null],['1/2 + 1/3 + 1/4',null],['three quarters plus one sixth',null],['3/4 + x',null],['Solve x + 1/2 = 3/4',null],
- ['3/4 × 1/6',null],['3/4 ÷ 1/6',null],['(3/4 + 1/6',null],['3/4 + 1/6)',null],['1 1/2 + 3/4',null],['3/4 + 1/6 = 11/12',null],['1/6 - 3/4',null],
+ ['(3/4 + 1/6',null],['3/4 + 1/6)',null],['1 1/2 + 3/4',null],['3/4 + 1/6 = 11/12',null],['1/6 - 3/4',null],
  ['3/0 + 1/6',null],['Find the difference between 3/4 and 1/6',null],['',null],['3/4 + 1/6 and 1/2',null],['2 + 3/4',null],['Work out 3/4 + 1/6 please',null],
  ['3/1 + 1/6',null],['03/4 + 1/6',null],['Differentiate x^2 + 1/2',null],['Solve for x:  3x − 7 = 11',null],['Work out 1/3 + 1/5. Give your answer as a decimal.',null],
  ['3/4 - 3/4',null],['1/2 + 1/2 + ',null],['Add 3/4',null],['1/2 + 1/4 = 3/4 ?',null],
@@ -530,8 +532,18 @@ const W7_TASKS={
   ['Find three fifths of 40',null],['Find 60% of 40',null],['Find 0.6 of 40',null],['Find 3/5 of 40.5',null],['Find 3/5 of 1,000',null],['Find 3/5 of 40 percent',null],
   ['Find 3/5 of 40 kg in grams',null],['Find 1/2 of 3/4',null],['Find 3/5 of 60p',null],['Find 3/5 of 40 pounds',null],['Find 3/5 of 40 x',null],['Find 3/5 of 040',null],['3/5 : 40',null],
  ],
+ 'frac-mul-div':[
+  ['Work out 2/3 × 3/4.',cs('2/3 × 3/4')],['2/3 × 3/4',cs('2/3 × 3/4')],['2/3 x 3/4',cs('2/3 × 3/4')],['2/3 * 3/4',cs('2/3 × 3/4')],['2/3 times 3/4',cs('2/3 × 3/4')],
+  ['Calculate 2/3 × 3/4',cs('2/3 × 3/4')],['What is 2/3 × 3/4?',cs('2/3 × 3/4')],['Multiply 2/3 by 3/4',cs('2/3 × 3/4')],['Multiply 2/3 and 3/4',cs('2/3 × 3/4')],
+  ['Find the product of 2/3 and 3/4',cs('2/3 × 3/4')],['3/4 ÷ 1/2',cs('3/4 ÷ 1/2')],['Work out 3/4 ÷ 1/2',cs('3/4 ÷ 1/2')],['3/4 divided by 1/2',cs('3/4 ÷ 1/2')],
+  ['Divide 3/4 by 1/2',cs('3/4 ÷ 1/2')],['Work out 2/3 × 3/4. Give your answer in its simplest form.',cs('2/3 × 3/4',{form:'simplest'})],['2/3 × 3/4 =',cs('2/3 × 3/4')],
+  ['2/3 × 3/4 = ?',cs('2/3 × 3/4')],['(a) 2/3 × 3/4',cs('2/3 × 3/4')],['⅔ × ¾',cs('2/3 × 3/4')],['Evaluate 5/6 ÷ 2/3',cs('5/6 ÷ 2/3')],
+  // refused
+  ['2/3 × 3/4 × 1/2',null],['1 1/2 × 2/3',null],['2/3 × 3/4 = 1/2',null],['3/4 : 1/2',null],['Divide 3/4 into 1/2',null],['2/3 ÷ 2',null],['3/4 ÷ 0/2',null],
+  ['2x/3 × 3/4',null],['(2/3) × (3/4)',null],['2/3 × 3/4 please',null],['Multiply 2/3 by 3/4 by 1/2',null],['2/3 ÷ 3/1',null],['Find the quotient of 3/4 and 1/2',null],['2/3 of 3/4',null],
+ ],
 };
-const W7GEN={'frac-equivalent':S.genEquivalent,'frac-of-amount':S.genOfAmount};
+const W7GEN={'frac-equivalent':S.genEquivalent,'frac-of-amount':S.genOfAmount,'frac-mul-div':S.genMulDiv};
 for(const unit of Object.keys(W7_TASKS)){
  const rows=W7_TASKS[unit];
  test(`W7 4-${unit}: specFromQuestion reads the unit's tasks conservatively - ${rows.length} phrasings, ${rows.filter((t)=>t[1]===null).length} of them refused`,()=>{
@@ -566,6 +578,11 @@ const W7_PAGES={
   {spec:fo('3/5 of 40'),a:'24',want:['right']},{spec:fo('3/5 of 40'),a:'66.67',want:['wrong','of-upside-down']},{spec:fo('3/5 of 40'),a:'8',want:['wrong','of-one-part']},
   {spec:fo('3/5 of 40'),a:'120',want:['wrong','of-not-divided']},{spec:fo('3/5 of 40'),a:'16',want:['wrong','of-rest']},{spec:fo('3/4 of 60','kg'),a:'45 kg',want:['right']},
   {spec:fo('3/4 of 60','kg'),a:'45 g',want:['unsure']},{spec:fo('5/8 of 72','€'),a:'',want:['unsure']},{spec:fo('5/8 of 72','€'),a:'€45',want:['right']},
+ ],
+ 'frac-mul-div':[
+  {spec:cs('2/3 × 3/4'),a:'1/2',want:['right']},{spec:cs('2/3 × 3/4'),a:'17/12',want:['wrong','added-not-multiplied']},{spec:cs('3/4 ÷ 1/2'),a:'3/8',want:['wrong','kept-second']},
+  {spec:cs('3/4 ÷ 1/2'),a:'2/3',want:['wrong','flipped-first']},{spec:cs('2/3 × 3/4'),a:'6/7',want:['wrong','bottoms-added']},{spec:cs('3/4 ÷ 1/2'),a:'1 1/2',want:['right']},
+  {spec:cs('2/5 ÷ 3/4'),a:'0.533',want:['unsure']},{spec:cs('2/3 × 3/4'),a:'',want:['unsure']},{spec:cs('5/6 ÷ 2/3'),a:'1.25',want:['right']},
  ],
 };
 for(const unit of Object.keys(W7_PAGES)){

@@ -316,13 +316,13 @@ test('7: the school corpus (Family W5b) - every fractions question the generator
  assert.equal(off.length,0,'a school question that does not set cleanly:\n'+off.join('\n'));
 });
 
-test('7b: the W7 school corpus - every question the new generators print renders on the practice sheet, its fractions (and a missing number\'s gap) stacked',()=>{
+test('7b: the W7 school corpus - every question the three new generators print renders on the practice sheet, its fractions (and a missing number\'s gap) stacked',()=>{
  // equivalent fractions: 'Fill in the missing number: 3/4 = ?/12.' stacks two (the gap '?' over 12), 'Write 18/24 in its simplest form.' one;
  // a fraction of an amount one ('Find 3/5 of 40 kg.', 'Find 3/4 of €60.'); multiply and divide two ('Work out 2/3 × 3/4.')
  const S=require(path.join(root,'src/lib/rules/school.ts'));
  const want=(sp)=>sp.shape==='simplify'||sp.shape==='fraction-of'?1:2;
  const off=[];let n=0;
- for(const g of [S.genEquivalent,S.genOfAmount])for(const tier of [1,2])for(let seed=0;seed<100;seed++){
+ for(const g of [S.genEquivalent,S.genOfAmount,S.genMulDiv])for(const tier of [1,2])for(let seed=0;seed<100;seed++){
   const sp=g(seed,tier),q=S.question(sp);n++;
   for(const [form,line,tex] of [['plain',q.plain,false],['tex',q.tex,true]]){
    const st=renderStatus(line,'question',tex);
@@ -336,7 +336,7 @@ test('7b: the W7 school corpus - every question the new generators print renders
    if(sp.unit&&!/[€£]|kg|grams|km|metres|cm|litres|ml|minutes|dollars/.test(flat))off.push(`${line}: the unit ${sp.unit} is lost (${flat})`);
   }
  }
- assert.equal(n,400);
+ assert.equal(n,600);
  assert.equal(off.length,0,'a W7 school question that does not set cleanly:\n'+off.join('\n'));
 });
 

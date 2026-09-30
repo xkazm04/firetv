@@ -440,13 +440,40 @@ const OF_SPELLINGS=[
  [O7,'2.5','uk','wrong','of-one-part'],[O7,'30','uk','wrong','of-not-divided'],[O7,'13.33','uk','wrong','of-upside-down'],[O7,'7.4','uk','wrong'],
 ];
 
+// ------------------------------------------------------------------ multiply and divide fractions
+const P1=cs('2/3 × 3/4');   // 6/12 = 1/2. added 2/3 + 3/4 = 17/12 and (2+3)/(3+4) = 5/7; bottoms added 6/7
+const P2=cs('3/5 × 2/7');   // 6/35. added 31/35 and 5/12; bottoms added 6/12 = 1/2
+const P3=cs('4/9 × 3/8');   // 12/72 = 1/6. added 59/72 and 7/17; bottoms added 12/17
+const PS=cs('2/3 × 3/4',{form:'simplest'});
+const D1=cs('3/4 ÷ 1/2');   // 3/4 × 2/1 = 3/2. added after the flip 3/4 + 2 = 11/4; kept 3/8; first flipped 4/3 × 1/2 = 2/3; bottoms added 6/5
+const D2=cs('2/5 ÷ 3/4');   // 2/5 × 4/3 = 8/15. added 2/5 + 4/3 = 26/15; kept 6/20 = 3/10; first flipped 15/8; bottoms added 8/8 = 1
+const D3=cs('5/6 ÷ 2/3');   // 5/6 × 3/2 = 15/12 = 5/4. added 7/3; kept 10/18 = 5/9; first flipped 12/15 = 4/5; bottoms added 15/8
+const MD_SPELLINGS=[
+ [P1,'1/2','uk','right'],[P1,'6/12','uk','right'],[P1,'0.5','uk','right'],[P1,'50%','us','right'],[P1,'0,5','de','right'],[P1,'3/6','uk','right'],[P1,'0,5','uk','unsure'],
+ [P1,'17/12','uk','wrong','added-not-multiplied'],[P1,'1 5/12','uk','wrong','added-not-multiplied'],[P1,'5/7','uk','wrong','added-not-multiplied'],
+ [P1,'6/7','uk','wrong','bottoms-added'],[P1,'12/14','uk','wrong','bottoms-added'],[P1,'8/9','uk','wrong'],[P1,'1/3','uk','wrong'],[P1,'-1/2','uk','wrong'],
+ [P1,'1/2 m','uk','unsure'],[P1,'a half','uk','unsure'],[P1,'','uk','unsure'],[P1,'2/3 × 3/4','uk','unsure'],[P1,'1:2','uk','unsure'],[P1,'0.49','uk','wrong'],[P1,'0.51','uk','wrong'],
+ [P2,'6/35','uk','right'],[P2,'12/70','uk','right'],[P2,'0.1714','uk','unsure'],[P2,'0.17','uk','unsure'],[P2,'31/35','uk','wrong','added-not-multiplied'],[P2,'5/12','uk','wrong','added-not-multiplied'],
+ [P2,'1/2','uk','wrong','bottoms-added'],[P2,'6/12','uk','wrong','bottoms-added'],[P2,'6/35 cm','uk','unsure'],[P2,'5/35','uk','wrong'],
+ [P3,'1/6','uk','right'],[P3,'12/72','uk','right'],[P3,'0.1667','uk','unsure'],[P3,'59/72','uk','wrong','added-not-multiplied'],[P3,'12/17','uk','wrong','bottoms-added'],[P3,'7/17','uk','wrong','added-not-multiplied'],
+ [PS,'1/2','uk','right'],[PS,'6/12','uk','unsure'],[PS,'0.5','uk','unsure'],[PS,'5/7','uk','wrong','added-not-multiplied'],
+ [D1,'3/2','uk','right'],[D1,'1 1/2','uk','right'],[D1,'1.5','us','right'],[D1,'6/4','uk','right'],[D1,'1,5','cz','right'],[D1,'150%','uk','right'],[D1,'1.50','uk','right'],[D1,'1,5','us','unsure'],
+ [D1,'3/8','uk','wrong','kept-second'],[D1,'0.375','uk','wrong','kept-second'],[D1,'2/3','uk','wrong','flipped-first'],[D1,'4/6','uk','wrong','flipped-first'],
+ [D1,'11/4','uk','wrong','added-not-multiplied'],[D1,'2 3/4','uk','wrong','added-not-multiplied'],[D1,'6/5','uk','wrong','bottoms-added'],[D1,'1.2','uk','wrong','bottoms-added'],
+ [D1,'1/2','uk','wrong'],[D1,'-3/2','uk','wrong'],[D1,'1 1/2 kg','uk','unsure'],
+ [D2,'8/15','uk','right'],[D2,'16/30','uk','right'],[D2,'0.533','uk','unsure'],[D2,'0.53','uk','unsure'],[D2,'3/10','uk','wrong','kept-second'],[D2,'6/20','uk','wrong','kept-second'],
+ [D2,'15/8','uk','wrong','flipped-first'],[D2,'1 7/8','uk','wrong','flipped-first'],[D2,'26/15','uk','wrong','added-not-multiplied'],[D2,'1','uk','wrong','bottoms-added'],[D2,'8/8','uk','wrong','bottoms-added'],[D2,'8/16','uk','wrong'],
+ [D3,'5/4','uk','right'],[D3,'1 1/4','uk','right'],[D3,'1.25','uk','right'],[D3,'15/12','uk','right'],[D3,'5/9','uk','wrong','kept-second'],[D3,'10/18','uk','wrong','kept-second'],
+ [D3,'4/5','uk','wrong','flipped-first'],[D3,'0.8','uk','wrong','flipped-first'],[D3,'7/3','uk','wrong','added-not-multiplied'],[D3,'15/8','uk','wrong','bottoms-added'],[D3,'1.875','uk','wrong','bottoms-added'],
+];
 
 const W7_SLIPS={};
 test(`W7 SPELLINGS equivalent fractions: ${EQ_SPELLINGS.length} written answers, zero false-right, zero false-wrong`,()=>{Object.assign(W7_SLIPS,spellings('EQ_SPELLINGS equivalent fractions',EQ_SPELLINGS,'frac-equivalent'));});
 test(`W7 SPELLINGS a fraction of an amount: ${OF_SPELLINGS.length} written answers, zero false-right, zero false-wrong`,()=>{Object.assign(W7_SLIPS,spellings('OF_SPELLINGS a fraction of an amount',OF_SPELLINGS,'frac-of-amount'));});
+test(`W7 SPELLINGS multiply and divide fractions: ${MD_SPELLINGS.length} written answers, zero false-right, zero false-wrong`,()=>{Object.assign(W7_SLIPS,spellings('MD_SPELLINGS multiply and divide fractions',MD_SPELLINGS,'frac-mul-div'));});
 test('W7 SLIPS: every slip on the closed list belongs to exactly one unit, carries no value, and every unit\'s list is detected',()=>{
  const units=Object.keys(S.SCHOOL_UNIT_SLIPS);
- assert.deepEqual(units.sort(),['frac-add-sub','frac-equivalent','frac-of-amount']);
+ assert.deepEqual(units.sort(),['frac-add-sub','frac-equivalent','frac-mul-div','frac-of-amount']);
  const listed=units.flatMap((u)=>S.SCHOOL_UNIT_SLIPS[u]);
  assert.equal(new Set(listed).size,listed.length,'no slip id is on two units');
  assert.deepEqual([...listed].sort(),S.SCHOOL_SLIPS.map((s)=>s.id).sort(),'the closed list is exactly the units\' lists');
@@ -456,7 +483,7 @@ test('W7 SLIPS: every slip on the closed list belongs to exactly one unit, carri
 
 // ------------------------------------------------------------------ W7 wellFormed and question
 test('W7 wellFormed: each new shape reads only its one printed spelling and refuses what makes a poor question',()=>{
- for (const s of [M1,M3,M4,M5,M6,S1,S2,S3,O1,O2,O4,O5,O6,O7]) assert.deepEqual(S.wellFormed(s),{ok:true},JSON.stringify(s));
+ for (const s of [M1,M3,M4,M5,M6,S1,S2,S3,O1,O2,O4,O5,O6,O7,P1,P2,P3,PS,D1,D2,D3]) assert.deepEqual(S.wellFormed(s),{ok:true},JSON.stringify(s));
  const bad=[
   [ms('3/4 = ?/13'),'No whole number'],[ms('3/4 = 10/?'),'No whole number'],[ms('3/4 = ?/4'),'nothing to work out'],[ms('3/4 = 3/?'),'nothing to work out'],
   [ms('3/4 = ?/?'),'cannot read'],[ms('3/4 = 9/12'),'cannot read'],[ms('?/4 = 9/12'),'cannot read'],[ms('3/4=?/12'),'cannot read'],[ms('3/1 = ?/12'),'bottom is 1'],
@@ -474,6 +501,7 @@ test('W7 question: each shape prints its question in plain text and TeX, never i
  const P=[
   [M1,'Fill in the missing number: 3/4 = ?/12.',2],[M3,'Fill in the missing number: 3/4 = 15/?.',2],[S1,'Write 18/24 in its simplest form.',1],
   [O1,'Find 3/5 of 40.',1],[O2,'Find 3/4 of 60 kg.',1],[O4,'Find 5/8 of €72.',1],[O5,'Find 3/10 of 50 metres.',1],[fo('1/4 of 8','l'),'Find 1/4 of 8 litres.',1],[fo('2/3 of 60','min'),'Find 2/3 of 60 minutes.',1],
+  [P1,'Work out 2/3 × 3/4.',2],[D1,'Work out 3/4 ÷ 1/2.',2],[PS,'Work out 2/3 × 3/4. Give your answer in its simplest form.',2],
  ];
  for (const [s,plain,fracs] of P){
   const q=S.question(s);
@@ -508,6 +536,13 @@ const W7_LEAKS={
   [O4,'It is €45.'],[O4,'9 × 5'],[O4,'45 euros'],[O4,'72 ÷ 8 × 5'],
   [O5,'5 x 3'],[O5,'Fifteen metres.'],[O5,'150 ÷ 10'],[O7,'It is 7.5.'],[O7,'Seven and a half.'],[O7,'2.5 x 3'],
  ],
+ 'frac-mul-div':[
+  [P1,'The answer is 1/2.'],[P1,'It is a half.'],[P1,'6/12'],[P1,'Six twelfths.'],[P1,'2 x 3 = 6 and 3 x 4 = 12'],[P1,'0.5'],[P1,'50%'],[P1,'Multiply the tops: 2 x 3 = 6.'],
+  [P1,'It simplifies to one half.'],[P1,'The top is 6.'],
+  [D1,'3/4 × 2/1 = 6/4'],[D1,'One and a half.'],[D1,'1.5'],[D1,'You get 3/2.'],[D1,'It is 1 1/2.'],[D1,'3 x 2 = 6'],[D1,'6 over 4'],[D1,'150%'],[D1,'three halves'],
+  [D2,'It is 8/15.'],[D2,'Eight fifteenths.'],[D2,'2/5 × 4/3 = 8/15'],[D2,'2 x 4 = 8 and 5 x 3 = 15'],[D2,'0.533'],[D2,'16/30'],
+  [P2,'3 x 2 = 6 and 5 x 7 = 35'],[P2,'Six thirty-fifths.'],[P2,'The answer is 6/35.'],[P2,'Multiply 3 by 2 for the top.'],
+ ],
 };
 const W7_LEGIT={
  'frac-equivalent':[
@@ -529,17 +564,26 @@ const W7_LEGIT={
   [O4,'Find one eighth of €72.'],[O4,'Then take 5 of those parts.'],[O4,'72 ÷ 8 = 9'],[O4,'Share €72 into 8 equal parts.'],
   [O5,'50 ÷ 10 = 5'],[O5,'Find a tenth first.'],[O5,'The answer is in metres.'],
  ],
+ 'frac-mul-div':[
+  [P1,'Multiply the tops together and the bottoms together.'],[P1,'The 3 on top and the 3 underneath cancel.'],[P1,'Cancel before you multiply.'],[P1,'Then simplify your answer.'],
+  [P1,'Now work out 2/3 × 3/4.'],[P1,'The bottoms multiply to 12.'],[P1,'3 x 4 = 12 on the bottom.'],[P1,'Your answer will be smaller than both fractions.'],
+  [D1,'Turn the fraction you divide by upside down.'],[D1,'1/2 becomes 2/1.'],[D1,'Then multiply 3/4 by 2/1.'],[D1,'Dividing by a half is the same as doubling.'],
+  [D1,'Keep, change, flip.'],[D1,'Your answer will be bigger than 3/4.'],[D1,'Now work out 3/4 ÷ 1/2.'],[D1,'How many halves fit into 3/4?'],
+  [D2,'Flip 3/4 to get 4/3.'],[D2,'Now multiply 2/5 by 4/3.'],[D2,'Keep 2/5 as it is.'],[D2,'Multiply the tops, then the bottoms.'],
+  [P2,'Nothing cancels here.'],[P2,'Check whether anything cancels first.'],
+ ],
 };
 /**
  * W7 CONFLICTS: legit hints the strict rule refuses, accepted and reported. Simplify refuses a bare whole number equal
  * to the answer's top or bottom, so for 18/24 (3/4) "divisible by 3" and "Step 4" are refused (the generator never
- * draws such an item: its answer's top and bottom never divide the scale factor).
+ * draws such an item: its answer's top and bottom never divide the scale factor). A multiplication with a top of 1
+ * makes the other top the answer's top (3/8 × 1/7 = 3/56), so naming that top alone is refused, as in W5a rule 4.
  */
 const W7_CONFLICTS=[
- [S1,'Both 18 and 24 are divisible by 3.'],[S1,'Step 4: check your answer.'],
+ [S1,'Both 18 and 24 are divisible by 3.'],[S1,'Step 4: check your answer.'],[cs('3/8 × 1/7'),'The tops are 3 and 1.'],
 ];
 
-for (const unit of ['frac-equivalent','frac-of-amount']){
+for (const unit of ['frac-equivalent','frac-of-amount','frac-mul-div']){
  test(`W7 LEAKS ${unit}: ${W7_LEAKS[unit].length} hints that give the answer away are refused; ${W7_LEGIT[unit].length} legit hints pass`,()=>{
   const leaks=W7_LEAKS[unit],legit=W7_LEGIT[unit];
   const missed=leaks.filter(([s,h])=>!S.leaksSchool(s,h)).map(([s,h])=>`${s.expr} | ${h}`);
@@ -568,8 +612,9 @@ const W7REF={
   return null;
  },
  'frac-of-amount':(s)=>{const m=/^(\d+)\/(\d+) of (\d+)$/.exec(s.expr);if(!m||s.shape!=='fraction-of')return null;const [a,b,N]=[+m[1],+m[2],+m[3]];return {a,b,N,ans:a*N/b,truth:`${a*N/b}`,nums:[a,b,N]};},
+ 'frac-mul-div':(s)=>{const m=/^(\d+)\/(\d+) ([×÷]) (\d+)\/(\d+)$/.exec(s.expr);if(!m||s.shape!=='compute')return null;const [a,b,op,c,d]=[+m[1],+m[2],m[3],+m[4],+m[5]];const [n,den]=op==='×'?[a*c,b*d]:[a*d,b*c];const g=refGcd(n,den);return {a,b,op,c,d,n:n/g,den:den/g,truth:`${n/g}/${den/g}`,nums:[a,b,c,d]};},
 };
-const W7GEN={'frac-equivalent':S.genEquivalent,'frac-of-amount':S.genOfAmount};
+const W7GEN={'frac-equivalent':S.genEquivalent,'frac-of-amount':S.genOfAmount,'frac-mul-div':S.genMulDiv};
 const W7_DISTINCT={};
 for (const unit of Object.keys(W7GEN)){
  test(`W7 GENERATOR ${unit}: seeds 1..200 for tiers 1 and 2 give well-formed, distinct items of the documented tier, judged right by a reference`,()=>{
@@ -626,7 +671,7 @@ for (const unit of Object.keys(W7GEN)){
 test('W7 PURITY: random strings through check and leaksSchool on every new shape never throw and give the same answer twice',()=>{
  let seed=777;const rnd=()=>{seed=(seed*1103515245+12345)&0x7fffffff;return seed/0x7fffffff;};
  const alphabet=['0','1','2','3','4','9','/','.',',',' ','%',':','-','?','=','x','×','÷','of','kg','€','half',' and ','by','lots of'];
- const specs=[M1,M3,S1,O1,O4];
+ const specs=[M1,M3,S1,O1,O4,P1,D1];
  for (let i=0;i<300;i++){
   let s='';const len=Math.floor(rnd()*20);for(let k=0;k<len;k++)s+=alphabet[Math.floor(rnd()*alphabet.length)];
   for (const sp of specs){
