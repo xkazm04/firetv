@@ -67,7 +67,7 @@ export const elevenlabs: Provider<SpeakRequest, Buffer> = {
     const res = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${req.voice || VOICE}?output_format=mp3_44100_64`, {
       method: "POST",
       headers: { "xi-api-key": KEY, "Content-Type": "application/json", Accept: "audio/mpeg" },
-      body: JSON.stringify({ text: req.text, model_id: "eleven_turbo_v2_5", voice_settings: { stability: 0.5, similarity_boost: 0.7 } }),
+      body: JSON.stringify({ text: req.text, model_id: "eleven_v4_turbo", voice_settings: { stability: 0.5, similarity_boost: 0.7 } }),
     }).catch((e: Error) => { throw new EngineError("unreachable", reported, `elevenlabs is not reachable: ${e.message}`); });
     if (!res.ok) throw new EngineError("exit", reported, `elevenlabs ${res.status}: ${(await res.text()).slice(0, 300)}`);
     return { raw: Buffer.from(await res.arrayBuffer()), provider: reported };
