@@ -32,6 +32,8 @@ const G=cs('1000 + 234');                // 1234
 const H=cs('999 + 1');                   // 1000
 const LC=cs('2/3 + 1/5');                // 10/15 + 3/15 = 13/15
 const LD=cs('1/3 + 1/6');                // 2/6 + 1/6 = 3/6 = 1/2
+const K=cs('2 + 3/4');                   // 11/4
+const M=cs('1000 + 1/2');                // 2001/2
 const X=cs('1/3 - 1/4');                 // 4/12 - 3/12 = 1/12
 
 // ------------------------------------------------------------------ SPELLINGS: [spec, written, system, expected, slip]
@@ -73,9 +75,13 @@ const SPELLINGS=[
  // below zero allowed: 1/4 - 3/4 = -1/2
  [N,'-1/2','uk','right'],[N,'-0.5','us','right'],[N,'−1/2','uk','right'],[N,'- 1/2','uk','right'],[N,'-2/4','uk','right'],[N,'1/2','uk','wrong','wrong-direction'],
  // thousands: 1000 + 234 = 1234; 999 + 1 = 1000
- [G,'1,234','us','right'],[G,'1,234','uk','right'],[G,'1 234','cz','right'],[G,'1 234','de','right'],[G,'1.234','de','right'],[G,'1234','cz','right'],
+ [G,'1,234','us','right'],[G,'1,234','uk','right'],[G,'1 234','cz','right'],[G,'1 234','de','right'],[G,'1.234','de','unsure'],[G,'1234','cz','right'],
  [G,'1,234.0','us','right'],[G,'1.234,0','de','right'],[G,'1 234','us','unsure'],[G,'1.234','us','wrong'],[G,'1,234','cz','wrong'],
- [H,'1.000','de','right'],[H,'1.000','cz','right'],[H,'1,000','us','right'],[H,'1 000','cz','right'],[H,'1 000','uk','unsure'],[H,'1.000','us','wrong'],[H,'1,000','cz','wrong'],
+ [H,'1.000','de','unsure'],[H,'1.000','cz','unsure'],[H,'1.000,0','de','right'],[H,'1,000','us','right'],[H,'1 000','cz','right'],[H,'1 000','uk','unsure'],[H,'1.000','us','wrong'],[H,'1,000','cz','wrong'],
+ // a lone point before three digits in cz/de is unsure, never wrong: 3/4 + 3/4 = 3/2, 2 + 3/4 = 11/4, 1000 + 1/2 = 2001/2
+ [E,'1.500','cz','unsure'],[E,'1.500','de','unsure'],[E,'1.500','us','right'],[E,'1.500','uk','right'],[E,'1,500','cz','right'],[E,'1,500','us','wrong'],
+ [K,'2.750','cz','unsure'],[K,'2.750','de','unsure'],[K,'2.750','us','right'],[K,'2,750','cz','right'],[K,'2,75','de','right'],[K,'2.75','de','right'],[K,'2 3/4','cz','right'],
+ [M,'1.000,5','cz','right'],[M,'1.000,5','de','right'],[M,'1.000,5','us','unsure'],[M,'1.000,5','uk','unsure'],[M,'1 000,5','cz','right'],[M,'1000.5','us','right'],[M,'1,000.5','uk','right'],
 ];
 
 // ------------------------------------------------------------------ READER: [written, system, expected reading or null]
@@ -87,7 +93,7 @@ const READER=[
  ['1,5','us',null],['1,5','de',num(3,2,'decimal')],['.5','uk',num(1,2,'decimal')],[',5','cz',num(1,2,'decimal')],
  ['25%','us',num(1,4,'percent')],['25 %','cz',num(1,4,'percent')],['12.5%','us',num(1,8,'percent')],['12,5 %','de',num(1,8,'percent')],['12,5 %','uk',null],['25 percent','uk',num(1,4,'percent')],
  ['1 000','cz',num(1000,1,'integer')],['1 000','de',num(1000,1,'integer')],['1 000','us',null],['1 000','uk',null],['1 000,5','cz',num(2001,2,'decimal')],['1 000,5','us',null],
- ['1.000','us',num(1,1,'decimal')],['1.000','uk',num(1,1,'decimal')],['1.000','cz',num(1000,1,'integer')],['1.000','de',num(1000,1,'integer')],
+ ['1.000','us',num(1,1,'decimal')],['1.000','uk',num(1,1,'decimal')],['1.000','cz',null],['1.000','de',null],
  ['1,000','us',num(1000,1,'integer')],['1,000','uk',num(1000,1,'integer')],['1,000','cz',num(1,1,'decimal')],['1,000','de',num(1,1,'decimal')],
  ['1.000,5','de',num(2001,2,'decimal')],['1.000,5','us',null],['12,345,678','us',num(12345678,1,'integer')],['1,00','us',null],['0.5','cz',num(1,2,'decimal')],
  ['0.500','de',num(1,2,'decimal')],['1 00','cz',null],['12.345.678','de',num(12345678,1,'integer')],['1.000 000','cz',null],
@@ -102,9 +108,15 @@ const READER=[
  ['3:2','us',ratio({n:3,d:1},{n:2,d:1})],['3 : 2','cz',ratio({n:3,d:1},{n:2,d:1})],['1,5:1','cz',ratio({n:3,d:2},{n:1,d:1})],['-3:2','us',null],['3:2:1','us',null],['3:2 cm','uk',null],
  ['about nine','uk',null],['nine','uk',null],['3 4','uk',null],['/','uk',null],['3/','uk',null],['1/0','uk',null],['12345678901','us',null],['1e9','us',null],
  ['3/4+1/6','uk',null],['','uk',null],['   ','uk',null],['idk','uk',null],['05','us',null],['007','uk',null],['1 03/4','uk',null],
- ['1 250/500','cz',null],['1 250/500','us',num(3,2,'mixed')],['1 3/2','uk',null],['0 1/2','uk',null],['1½','us',num(3,2,'mixed')],['½','us',num(1,2,'fraction')],
+ ['1 250/500','cz',null],['1 250/500','us',null],['1 250/500','uk',null],['1 3/2','uk',null],['0 1/2','uk',null],['1½','us',num(3,2,'mixed')],['½','us',num(1,2,'fraction')],
  ['−3/4','uk',num(-3,4,'fraction')],['3/-4','uk',null],['1000000/3','uk',null],['0.1234567','us',null],['999999999','us',num(999999999,1,'integer')],['1000000000','us',null],
- ['+5','uk',num(5,1,'integer')],['--5','uk',null],['25% kg','uk',null],['5 %','us',num(1,20,'percent')],['1 1/2 kg','uk',num(3,2,'mixed','kg')],['-25%','uk',num(-1,4,'percent')],
+ ['+5','uk',num(5,1,'integer')],['--5','uk',null],
+ // a lone point before three digits: 1500 by the cz/de norm, 1.5 as a calculator writes it - null there; a decimal point in us/uk
+ ['1.500','cz',null],['1.500','de',null],['1.500','us',num(3,2,'decimal')],['1.500','uk',num(3,2,'decimal')],
+ ['2.750','cz',null],['2.750','de',null],['2.750','us',num(11,4,'decimal')],['2.750','uk',num(11,4,'decimal')],
+ ['1.000.000','cz',num(1000000,1,'integer')],['1.000.000','de',num(1000000,1,'integer')],['1.000.000','us',null],['1.000.000','uk',null],
+ ['1.000,5','cz',num(2001,2,'decimal')],['1.000,5','uk',null],['1.250,75','de',num(5003,4,'decimal')],['1.25','cz',num(5,4,'decimal')],
+ ['1,500','us',num(1500,1,'integer')],['1,500','cz',num(3,2,'decimal')],['5 pounds','uk',null],['£5','uk',num(5,1,'integer','£')],['25% kg','uk',null],['5 %','us',num(1,20,'percent')],['1 1/2 kg','uk',num(3,2,'mixed','kg')],['-25%','uk',num(-1,4,'percent')],
  ['3/4','xx',null],['3/4',undefined,null],
 ];
 
@@ -151,7 +163,7 @@ const CONFLICTS=[
 // ------------------------------------------------------------------ the tests
 
 test('every spec the tables use is well formed', () => {
- for (const s of [A,AS,B,C,E,ES,F,U,N,G,H,LC,LD,X]) assert.deepEqual(S.wellFormed(s),{ok:true},s.expr);
+ for (const s of [A,AS,B,C,E,ES,F,U,N,G,H,K,M,LC,LD,X]) assert.deepEqual(S.wellFormed(s),{ok:true},s.expr);
 });
 
 test('wellFormed refuses what the desk cannot find exactly or what makes a poor question', () => {

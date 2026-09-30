@@ -23,11 +23,14 @@
  *   - us and uk: '.' is the decimal point; ',' only separates thousands in the strict 1,234 / 12,345,678 grouping, and
  *     any other comma (`0,5`, `1,5`, `1,00`) is null (a comma is also a list: `0,5` may be "0 and 5"); a space inside
  *     a number (`1 000`) is null;
- *   - cz and de: ',' is the decimal comma; thousands are a space or a point in strict groups of three (`1 000`,
- *     `1.000`, `1 000,5`, `1.000,5`); a point that cannot be such a grouping (`0.5`, `12.50`, `0.500`) can only be a
- *     decimal point, so it reads as one;
+ *   - cz and de: ',' is the decimal comma; a space in strict groups of three separates thousands (`1 000`,
+ *     `1 000,5`); a point separates thousands ONLY where it cannot be a decimal point: two or more strict groups
+ *     (`1.000.000`) or a strict group with a decimal comma (`1.000,5`); a lone point before exactly three digits with
+ *     no comma (`1.000`, `1.500`, `2.750`) is 1500 by the norm and 1.5 as a calculator writes it, so it is null; a
+ *     point that cannot be a grouping (`0.5`, `12.50`, `1.25`, `0.500`) can only be a decimal point, so it reads as one;
  *   - null: a hyphenated mixed number `1-1/2` (it is also the subtraction 1 - 1/2), a mixed number whose top has three
- *     digits in cz/de (`1 250/500` may be 1250/500), a denominator of 0, leading zeros (`05`, `1 03/4`), a sign on a
+ *     digits in any system (`1 250/500` may be 1250/500 with a space between thousands), a unit word with two
+ *     meanings ("pounds": money or weight; `£` reads), a denominator of 0, leading zeros (`05`, `1 03/4`), a sign on a
  *     ratio, a unit on a percent or a ratio, two numbers, words ("about nine", "nine"), an expression (`3/4+1/6`), a
  *     chain of equalities, more than 9 whole digits, more than 6 decimal places or fraction digits, a lone slash.
  *
@@ -122,7 +125,7 @@ const UNIT_SPELLINGS: [string, Unit][] = (() => {
   add("s", "s", "seconds", "second");
   add("€", "€", "euros", "euro");
   add("$", "$", "dollars", "dollar");
-  add("£", "£", "pounds", "pound");
+  add("£", "£"); // not "pounds": money or weight
   return out.sort((a, b) => b[0].length - a[0].length);
 })();
 
@@ -175,6 +178,8 @@ function parsePlain(t: string, sys: SchoolSystem): Plain | null {
     const a = /^(?:([1-9]\d{0,2}(?: \d{3})+)|([1-9]\d{0,2}(?:\.\d{3})+)|(\d+))?(?:,(\d+))?$/.exec(t);
     if (a && (a[1] !== undefined || a[2] !== undefined || a[3] !== undefined || a[4] !== undefined)) {
       if (a[3] !== undefined && !noLeadingZero(a[3])) return null;
+      // one point before three digits and no comma: 1.500 is 1500 by the norm, 1.5 as a calculator writes it
+      if (a[2] !== undefined && a[4] === undefined && a[2].split(".").length === 2) return null;
       whole = (a[1] ?? a[2] ?? a[3] ?? "").replace(/[ .]/g, "");
       frac = a[4];
     } else {
@@ -243,7 +248,7 @@ function readInner(answer: string, sys: SchoolSystem): Reading | null {
     const [, w, t, b] = mx;
     if (![w, t, b].every(noLeadingZero) || w === "0" || t === "0") return null;
     if (w.length > INT_DIGITS || t.length > FRAC_DIGITS || b.length > FRAC_DIGITS) return null;
-    if ((sys === "cz" || sys === "de") && t.length === 3) return null; // '1 250/500' may be 1250/500
+    if (t.length === 3) return null; // '1 250/500' may be 1250/500, a space between thousands
     const W = BigInt(w), T = BigInt(t), B = BigInt(b);
     if (!(T < B)) return null;
     return out(mk(W * B + T, B)!, "mixed", { lowest: bgcd(T, B) === ONE });
