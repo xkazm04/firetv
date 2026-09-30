@@ -556,6 +556,17 @@ test('rewrite case 7: rewriteState reads the verdict, and the TV inks the move f
  if(derived)for(const x of inked)assert.doesNotMatch(x,new RegExp(`\\b${derived[1]}\\b`),'the lit phone chip and the ink are two things');
 });
 
+test('specimen door: OK is offered only while the last-paragraph card is the focus',()=>{
+ const tv=fs.readFileSync(path.join(root,'src/essay/EssayTV.tsx'),'utf8');
+ const start=tv.indexOf('function LastParagraph');
+ const end=tv.indexOf('function useCommit');
+ assert.ok(start>0&&end>start);
+ const body=tv.slice(start,end).replace(/\/\*[\s\S]*?\*\//g,'').replace(/\/\/.*$/gm,'');
+ const doors=[...body.matchAll(/<div className="em-door">([\s\S]*?)<\/div>/g)].map(m=>m[1]);
+ assert.equal(doors.length,2,'the card has a door when a sentence needs a look, and when nothing does');
+ for(const d of doors)assert.match(d,/\{focused && <span className="em-key">OK<\/span>\}/,'Select on a lens chooses the lens; the card must not advertise OK until it is the focus');
+});
+
 // ---- W3: text in, one paragraph at a time (paragraphsOf, the file check, the length cap) ----
 const {paragraphsOf,essayFileProblem,essayTooLong,ESSAY_FILE_MAX_BYTES,ESSAY_PARAGRAPH_MAX_CHARS}=require(path.join(root,'src/lib/rules/essay.ts'));
 const P1='Many students are tired. Sleep is important. Schools start early. This is bad.';

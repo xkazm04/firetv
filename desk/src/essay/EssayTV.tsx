@@ -214,8 +214,8 @@ function LastParagraph({ a, focused }: { a: NonNullable<Session["essay"]>; focus
         <path d={`M0 10 H${W - 4} M${W - 16} 2 l12 8 -12 8`} stroke={BONE} strokeWidth="3" fill="none" opacity=".6" />
       </svg>
       {first
-        ? <div className="em-door"><svg viewBox="0 0 62 36" aria-hidden="true"><path d="M62 14.5H22V1L0 18l22 17V21.5h40z" fill={CIT} /></svg><span>Sentence {first.n}</span><span className="em-key">OK</span></div>
-        : <div className="em-door"><span>Nothing to fix</span><span className="em-key">OK</span></div>}
+        ? <div className="em-door"><svg viewBox="0 0 62 36" aria-hidden="true"><path d="M62 14.5H22V1L0 18l22 17V21.5h40z" fill={CIT} /></svg><span>Sentence {first.n}</span>{focused && <span className="em-key">OK</span>}</div>
+        : <div className="em-door"><span>Nothing to fix</span>{focused && <span className="em-key">OK</span>}</div>}
     </div>
   );
 }
