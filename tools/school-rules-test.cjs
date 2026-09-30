@@ -469,7 +469,7 @@ const MD_SPELLINGS=[
 
 const W7_SLIPS={};
 /** The W7 batch 2 units whose tables are at the end of this file (decimals and percent). */
-const B2_UNITS=['dec-arith','dec-convert','pct-of-amount'];
+const B2_UNITS=['dec-arith','dec-convert','pct-of-amount','pct-change'];
 test(`W7 SPELLINGS equivalent fractions: ${EQ_SPELLINGS.length} written answers, zero false-right, zero false-wrong`,()=>{Object.assign(W7_SLIPS,spellings('EQ_SPELLINGS equivalent fractions',EQ_SPELLINGS,'frac-equivalent'));});
 test(`W7 SPELLINGS a fraction of an amount: ${OF_SPELLINGS.length} written answers, zero false-right, zero false-wrong`,()=>{Object.assign(W7_SLIPS,spellings('OF_SPELLINGS a fraction of an amount',OF_SPELLINGS,'frac-of-amount'));});
 test(`W7 SPELLINGS multiply and divide fractions: ${MD_SPELLINGS.length} written answers, zero false-right, zero false-wrong`,()=>{Object.assign(W7_SLIPS,spellings('MD_SPELLINGS multiply and divide fractions',MD_SPELLINGS,'frac-mul-div'));});
@@ -726,6 +726,16 @@ const PO4=po('30% of 140');         // 42. divided 4.666.., 466.66..; as a whole
 const PO5=po('75% of 60');          // 45. divided 0.8, 80; as a whole 4500; ten percent 6; the rest 15
 const PO6=po('54% of 130','£');     // £70.20. divided 2.4074.., 240.7407..; as a whole 7020; ten percent 13; the rest 59.8
 const PO7=po('5% of 20');           // 1. divided 4, 400; as a whole 100; ten percent 2; the rest 19
+
+// ------------------------------------------------------------------ percent increase and decrease
+const pc=(expr,unit)=>({shape:'percent-change',expr,...(unit?{unit}:{})});
+const PC1=pc('increase 60 by 15%');        // 69. the change alone 9; the wrong way 51; the percent as a number 60 + 15 = 75
+const PC2=pc('decrease 80 by 25%','€');    // €60. the change 20; the wrong way 100; as a number 55
+const PC3=pc('increase 240 by 12.5%');     // 270. the change 30; the wrong way 210; as a number 252.5
+const PC4=pc('decrease 250 by 12%','kg');  // 220 kg. the change 30; the wrong way 280; as a number 238
+const PC5=pc('increase 50 by 35%','£');    // £67.50. the change 17.5; the wrong way 32.5; as a number 85
+const PC6=pc('decrease 140 by 30%');       // 98. the change 42; the wrong way 182; as a number 110
+const PC7=pc('increase 80 by 100%');       // 160. the change 80; the wrong way 0; as a number 180
 const B2_SPELLINGS={
  'dec-arith':[
   // 4.35 + 2.8 = 7.15: an equal value in any form is right; a rounding is unsure; a whole number is an exact claim
@@ -812,6 +822,30 @@ const B2_SPELLINGS={
   [PO7,'1','uk','right'],[PO7,'1.0','uk','right'],[PO7,'100%','uk','unsure'],[PO7,'4','uk','wrong','pct-divided'],[PO7,'400','uk','wrong','pct-divided'],[PO7,'100','uk','wrong','pct-times-whole'],
   [PO7,'2','uk','wrong','pct-ten-stopped'],[PO7,'19','uk','wrong','pct-rest'],[PO7,'0.05','uk','wrong'],[PO7,'1.5','uk','wrong'],
  ],
+ 'pct-change':[
+  // 60 increased by 15% = 69: the new amount in any number form is right; an amount with a percent sign is unsure
+  [PC1,'69','uk','right'],[PC1,'69.0','uk','right'],[PC1,'69.00','us','right'],[PC1,'x = 69','uk','right'],[PC1,'69%','uk','unsure'],[PC1,'6900%','uk','unsure'],[PC1,'69 kg','uk','unsure'],
+  [PC1,'sixty-nine','uk','unsure'],[PC1,'','uk','unsure'],
+  [PC1,'9','uk','wrong','change-only'],[PC1,'9.0','uk','wrong','change-only'],[PC1,'51','uk','wrong','change-wrong-way'],[PC1,'75','uk','wrong','change-as-number'],
+  [PC1,'70','uk','wrong'],[PC1,'68','uk','wrong'],[PC1,'-69','uk','wrong'],[PC1,'0.69','uk','wrong'],[PC1,'15','uk','wrong'],
+  // €80 decreased by 25% = €60
+  [PC2,'€60','uk','right'],[PC2,'60','uk','right'],[PC2,'60 €','de','right'],[PC2,'€60.00','uk','right'],[PC2,'60 euros','uk','right'],[PC2,'£60','uk','unsure'],[PC2,'60%','uk','unsure'],
+  [PC2,'€20','uk','wrong','change-only'],[PC2,'20','uk','wrong','change-only'],[PC2,'€100','uk','wrong','change-wrong-way'],[PC2,'100','uk','wrong','change-wrong-way'],[PC2,'€55','uk','wrong','change-as-number'],[PC2,'€61','uk','wrong'],
+  // 240 increased by 12.5% = 270
+  [PC3,'270','uk','right'],[PC3,'270.0','uk','right'],[PC3,'30','uk','wrong','change-only'],[PC3,'210','uk','wrong','change-wrong-way'],[PC3,'252.5','uk','wrong','change-as-number'],
+  [PC3,'252,5','cz','wrong','change-as-number'],[PC3,'252,5','uk','unsure'],[PC3,'271','uk','wrong'],
+  // 250 kg decreased by 12% = 220 kg: another unit is unsure, never converted
+  [PC4,'220 kg','uk','right'],[PC4,'220','uk','right'],[PC4,'220000 g','uk','unsure'],[PC4,'220 m','uk','unsure'],
+  [PC4,'30 kg','uk','wrong','change-only'],[PC4,'280 kg','uk','wrong','change-wrong-way'],[PC4,'238 kg','uk','wrong','change-as-number'],[PC4,'221 kg','uk','wrong'],
+  // £50 increased by 35% = £67.50: a whole number is an exact claim (68 is wrong), another currency unsure
+  [PC5,'£67.50','uk','right'],[PC5,'67.5','uk','right'],[PC5,'£67.5','uk','right'],[PC5,'67,5','cz','right'],[PC5,'67,50 €','cz','unsure'],
+  [PC5,'£17.50','uk','wrong','change-only'],[PC5,'17.5','uk','wrong','change-only'],[PC5,'£32.50','uk','wrong','change-wrong-way'],[PC5,'£85','uk','wrong','change-as-number'],
+  [PC5,'£67','uk','wrong'],[PC5,'£68','uk','wrong'],[PC5,'£67.6','uk','wrong'],
+  // 140 decreased by 30% = 98
+  [PC6,'98','uk','right'],[PC6,'98%','uk','unsure'],[PC6,'42','uk','wrong','change-only'],[PC6,'182','uk','wrong','change-wrong-way'],[PC6,'110','uk','wrong','change-as-number'],[PC6,'99','uk','wrong'],
+  // 80 increased by 100% = 160
+  [PC7,'160','uk','right'],[PC7,'160%','uk','unsure'],[PC7,'80','uk','wrong','change-only'],[PC7,'0','uk','wrong','change-wrong-way'],[PC7,'180','uk','wrong','change-as-number'],[PC7,'200%','uk','wrong'],
+ ],
 };
 const B2_LEAKS={
  'dec-arith':[
@@ -836,6 +870,12 @@ const B2_LEAKS={
   [PO2,'It is €9.'],[PO2,'nine euros'],[PO2,'6 + 3 = 9'],[PO2,'0.15 × 60 = 9'],
   [PO6,'£70.20'],[PO6,'seventy pounds twenty'],[PO6,'It is about 70.2.'],[PO6,'1.3 × 54'],
   [PO3,'5 kg'],[PO3,'40 ÷ 8'],[PO3,'Five kilograms.'],
+ ],
+ 'pct-change':[
+  [PC1,'The new amount is 69.'],[PC1,'sixty-nine'],[PC1,'60 + 9'],[PC1,'60 + 9 = 69'],[PC1,'60 ÷ 100 × 115'],[PC1,'60 × 115 = 6900'],[PC1,'It comes to 69.0.'],[PC1,'Add 9 to 60 to get 69.'],
+  [PC2,'It is €60.'],[PC2,'80 - 20 = 60'],[PC2,'sixty euros'],[PC2,'0.75 × 80 = 60'],[PC2,'80 take away 20'],
+  [PC5,'£67.50'],[PC5,'sixty-seven pounds fifty'],[PC5,'50 + 17.5'],[PC5,'1.35 × 50 = 67.5'],
+  [PC4,'220 kg'],[PC4,'250 - 30'],
  ],
 };
 const B2_LEGIT={
@@ -862,6 +902,13 @@ const B2_LEGIT={
   [PO3,'12.5% is an eighth.'],[PO3,'Find a quarter first, then halve it.'],[PO3,'Your answer is in kilograms.'],
   [PO6,'Find 50% and 4% of £130.'],[PO6,'1% of £130 is £1.30.'],[PO6,'Your answer will be a bit more than half of £130.'],
  ],
+ 'pct-change':[
+  [PC1,'Find 15% of 60 first.'],[PC1,'15% of 60 is 9.'],[PC1,'10% of 60 is 6, and 5% is half of that.'],[PC1,'Then add the change on to 60.'],[PC1,'Multiply 60 by 1.15.'],
+  [PC1,'An increase makes the amount bigger.'],[PC1,'Now work out 60 × 1.15.'],[PC1,'115% of 60 is the same thing.'],
+  [PC2,'Take 25% off 80.'],[PC2,'25% is a quarter.'],[PC2,'A quarter of 80 is 20.'],[PC2,'Then take that away from €80.'],[PC2,'Multiply 80 by 0.75.'],[PC2,'Your answer is less than €80.'],
+  [PC4,'Find 10% and 2% of 250 kg.'],[PC4,'12% of 250 is 30.'],[PC4,'Keep the kg in your answer.'],[PC4,'Take the change off, because it is a decrease.'],
+  [PC5,'35% of £50 is £17.50.'],[PC5,'Then add it to £50.'],
+ ],
 };
 /**
  * B2 CONFLICTS: legit hints the strict rule refuses, accepted and reported. A decimal's answer written without its point
@@ -874,6 +921,8 @@ const B2_CONFLICTS=[
  [CV6,'35% means 35 out of 100.'],[CV5,'0.6 is six tenths.'],
  // a percent of an amount refuses the percent times the amount as whole numbers: 2800 is 28 with the point left out
  [PO1,'Multiply 35 by 80, then divide by 100.'],
+ // a percent change refuses the amount times (100 ± p) as whole numbers: 6900 is 69 with the point left out
+ [PC1,'Work out 60 × 115, then divide by 100.'],
 ];
 
 /** The references: each unit's answer by hand in whole hundredths or thousandths, never the module's evaluator. */
@@ -907,8 +956,16 @@ const B2REF={
   const fmt=(x)=>{const t=(x/100).toFixed(2);return t.replace(/\.?0+$/,'');};
   return {p:Number(m[1]),half:/\.5$/.test(m[1]),N,truth:fmt(h),off:fmt(h+100)};
  },
+ 'pct-change':(s)=>{
+  const m=/^(increase|decrease) (\d+) by (\d+(?:\.5)?)%$/.exec(s.expr);if(!m||s.shape!=='percent-change')return null;
+  const up=m[1]==='increase',B=Number(m[2]),tenths=Math.round(Number(m[3])*10);
+  // the new amount in hundredths: B × (1000 ± p in tenths) ÷ 10
+  const h=B*(up?1000+tenths:1000-tenths)/10;assert.ok(Number.isInteger(h),`${s.expr}: at most two places`);
+  const fmt=(x)=>{const t=(x/100).toFixed(2);return t.replace(/\.?0+$/,'');};
+  return {up,B,p:Number(m[3]),half:/\.5$/.test(m[3]),truth:fmt(h),off:fmt(h+100)};
+ },
 };
-const B2GEN={'dec-arith':S.genDecimal,'dec-convert':S.genConvert,'pct-of-amount':S.genPercentOf};
+const B2GEN={'dec-arith':S.genDecimal,'dec-convert':S.genConvert,'pct-of-amount':S.genPercentOf,'pct-change':S.genPercentChange};
 /** Each unit's tier, as school.ts documents it, asserted on the reference reading. */
 const B2_TIER={
  'dec-arith':(s,r,tier)=>{
@@ -933,6 +990,12 @@ const B2_TIER={
   if(tier===1){assert.ok(FRIENDLY.includes(r.p)&&r.N%20===0&&r.N<=400&&s.unit===undefined,`tier 1: a friendly percent of a multiple of 20, no unit: ${s.expr}`);assert.ok(Number.isInteger(Number(r.truth)),'a whole answer');}
   else{assert.ok(r.half?r.p<40&&r.N%20===0:!FRIENDLY.includes(r.p)&&r.p<100&&r.N%10===0,`tier 2: ${s.expr}`);assert.ok(r.N<=500&&s.unit!==undefined,`tier 2 carries a unit: ${JSON.stringify(s)}`);assert.ok(!/\.\d\d/.test(r.truth),'at most one place');}
   assert.notEqual(Number(r.truth),r.N);assert.notEqual(Number(r.truth),r.p);
+ },
+ 'pct-change':(s,r,tier)=>{
+  const FRIENDLY=[5,10,20,25,30,40,50,60,70,75,80,90];
+  if(tier===1){assert.ok(FRIENDLY.includes(r.p)&&r.B%20===0&&r.B<=400&&s.unit===undefined,`tier 1: a friendly percent of a multiple of 20, no unit: ${s.expr}`);assert.ok(Number.isInteger(Number(r.truth)),'a whole answer');}
+  else{assert.ok(r.half?r.p<20&&r.B%20===0:!FRIENDLY.includes(r.p)&&r.p<=60&&r.B%10===0,`tier 2: ${s.expr}`);assert.ok(r.B<=500&&s.unit!==undefined,`tier 2 carries a unit: ${JSON.stringify(s)}`);assert.ok(!/\.\d\d/.test(r.truth),'at most one place');}
+  assert.ok(Number(r.truth)>0);assert.notEqual(Number(r.truth),r.B);assert.notEqual(Number(r.truth),r.p);
  },
 };
 
@@ -994,6 +1057,7 @@ test('W7b question: each new item prints plain text and TeX, never its answer, k
   [cs('4.35 + 2.80',{unit:'$'}),'Work out 4.35 + 2.80. Give your answer in dollars.'],
   [CV1,'Write 3/8 as a decimal.'],[CV3,'Write 7/20 as a percentage.'],[CV4,'Write 0.35 as a simplified fraction.'],[CV6,'Write 35% as a decimal.'],[CV8,'Write 12.5% as a simplified fraction.'],
   [PO1,'Find 35% of 80.'],[PO2,'Find 15% of €60.'],[PO3,'Find 12.5% of 40 kg.'],[po('20% of 60','$'),'Find 20% of 60 dollars.'],[po('25% of 80','m'),'Find 25% of 80 metres.'],
+  [PC1,'Increase 60 by 15%.'],[PC2,'Decrease €80 by 25%.'],[PC3,'Increase 240 by 12.5%.'],[PC4,'Decrease 250 kg by 12%.'],[pc('increase 60 by 15%','$'),'Increase 60 dollars by 15%.'],
  ];
  for (const [s,plain] of P){
   const q=S.question(s);
@@ -1009,7 +1073,7 @@ test('W7b question: each new item prints plain text and TeX, never its answer, k
   }
  }
  assert.deepEqual(S.specFromQuestion('Work out €4.35 + €2.80.'),DA6);assert.deepEqual(S.specFromQuestion('Work out £3.45 × 4.'),DA7);
- for (const s of [CV1,CV3,CV4,CV6,CV8,PO1,PO2,PO3]) assert.deepEqual(S.specFromQuestion(S.question(s).plain),s);
+ for (const s of [CV1,CV3,CV4,CV6,CV8,PO1,PO2,PO3,PC1,PC2,PC3,PC4]) assert.deepEqual(S.specFromQuestion(S.question(s).plain),s);
  assert.equal(S.question(cs('4.35 + 2.80',{unit:'€',form:'decimal'})).plain,'Work out 4.35 + 2.80. Give your answer as a decimal.','a form asked keeps the old wording');
 });
 
@@ -1026,14 +1090,22 @@ test('W7b wellFormed: each batch-2 shape reads only its one printed spelling and
   [po('12.5% of 7'),'two decimal places'],[po('20% of 100'),'print its own answer'],[po('12.0% of 80'),'does not end in a zero'],[po('35.25% of 80'),'cannot read'],[po('35 % of 80'),'cannot read'],
   [{...PO1,to:'decimal'},'does not take'],[{...PO1,form:'decimal'},'does not take'],[po('35% of 80','inch'),'unit is not'],[{...PO1,answer:28},'no answer field'],
  ];
- for (const s of [PO1,PO2,PO3,PO4,PO5,PO6,PO7]) assert.deepEqual(S.wellFormed(s),{ok:true},JSON.stringify(s));
+ for (const s of [PO1,PO2,PO3,PO4,PO5,PO6,PO7,PC1,PC2,PC3,PC4,PC5,PC6,PC7]) assert.deepEqual(S.wellFormed(s),{ok:true},JSON.stringify(s));
+ // a percent change: up by at most the whole, down by less than it, never a reverse percentage (it has no spelling here)
+ const badChange=[
+  [pc('decrease 80 by 100%'),'less than the whole'],[pc('increase 80 by 150%'),'at most the whole'],[pc('increase 80 by 0%'),'above nothing'],[pc('increase 2000 by 10%'),'larger'],
+  [pc('increase 7 by 12.5%'),'two decimal places'],[pc('decrease 100 by 50%'),'print its own answer'],[pc('increase 60 by 15.0%'),'does not end in a zero'],[pc('increase 60 by 15'),'cannot read'],
+  [pc('Increase 60 by 15%'),'cannot read'],[pc('raise 60 by 15%'),'cannot read'],[pc('increase 60.5 by 15%'),'cannot read'],[pc('69 after increase by 15%'),'cannot read'],
+  [{...PC1,to:'decimal'},'does not take'],[pc('increase 60 by 15%','inch'),'unit is not'],[{...PC1,answer:69},'no answer field'],
+ ];
+ for (const [s,why] of badChange){const w=S.wellFormed(s);assert.equal(w.ok,false,JSON.stringify(s));assert.ok(w.why.includes(why),`${JSON.stringify(s)}: ${w.why}`);}
  for (const [s,why] of bad){const w=S.wellFormed(s);assert.equal(w.ok,false,JSON.stringify(s));assert.ok(w.why.includes(why),`${JSON.stringify(s)}: ${w.why}`);}
 });
 
 test('W7b PURITY: random strings through check and leaksSchool on every batch-2 spec never throw and give the same answer twice',()=>{
  let seed=4242;const rnd=()=>{seed=(seed*1103515245+12345)&0x7fffffff;return seed/0x7fffffff;};
  const alphabet=['0','1','3','5','7','.',',',' ','%','/','-','€','£','$','x','×','÷','=','of','by','point','hundredths','percent',' and ','p','kg'];
- const specs=[DA1,DA6,DA7,CV1,CV3,CV4,CV6,PO1,PO2,PO6];
+ const specs=[DA1,DA6,DA7,CV1,CV3,CV4,CV6,PO1,PO2,PO6,PC1,PC2,PC5];
  for (let i=0;i<300;i++){
   let s='';const len=Math.floor(rnd()*20);for(let k=0;k<len;k++)s+=alphabet[Math.floor(rnd()*alphabet.length)];
   for (const sp of specs){

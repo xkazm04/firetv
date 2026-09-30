@@ -646,7 +646,7 @@ test('W7 8: a hint on each new unit\'s task names the unit in its stance, and a 
 });
 
 // ------------------------------------------------------------------ 8. Family W7 batch 2: decimals and percent, read, withheld and marked
-const cv=(expr,to)=>({shape:'convert',expr,to}),po=(expr,unit)=>({shape:'percent-of',expr,...(unit?{unit}:{})});
+const cv=(expr,to)=>({shape:'convert',expr,to}),po=(expr,unit)=>({shape:'percent-of',expr,...(unit?{unit}:{})}),pc=(expr,unit)=>({shape:'percent-change',expr,...(unit?{unit}:{})});
 /** [task text, the spec it reads as (null: refused)] per unit; each spec's value is worked in school-rules-test. */
 const B2_TASKS={
  'dec-arith':[
@@ -686,8 +686,21 @@ const B2_TASKS={
   ['A jacket costs 80 euro. It goes down by 25%. What is the new price?',null],['Find 35% of 80 = 28',null],['Find 35%',null],['Find 35% of x',null],['Find 35% of 1,000',null],
   ['Find 35% of 80 pounds',null],['Find 150% of 80',null],['Find 35.25% of 80',null],['Find 12.5% of 7',null],['Find 20% of 100',null],['80 is 35% of what?',null],
  ],
+ 'pct-change':[
+  ['Increase 60 by 15%',pc('increase 60 by 15%')],['Increase 60 by 15%.',pc('increase 60 by 15%')],['Increase 60 by 15 %',pc('increase 60 by 15%')],['Increase 60 by 15 percent',pc('increase 60 by 15%')],
+  ['Increase 60 by 15 per cent',pc('increase 60 by 15%')],['Decrease 80 by 25%',pc('decrease 80 by 25%')],['Reduce 80 by 25%',pc('decrease 80 by 25%')],['Decrease €80 by 25%',pc('decrease 80 by 25%','€')],
+  ['Increase £50 by 35%',pc('increase 50 by 35%','£')],['Reduce 250 kg by 12%',pc('decrease 250 by 12%','kg')],['What is 60 increased by 15%?',pc('increase 60 by 15%')],['Work out 80 decreased by 25%',pc('decrease 80 by 25%')],
+  ['Calculate 80 reduced by 25%',pc('decrease 80 by 25%')],['60 increased by 15%',pc('increase 60 by 15%')],['(d) Increase 60 by 15%',pc('increase 60 by 15%')],['increase 60 by 15%',pc('increase 60 by 15%')],
+  ['Increase 240 by 12.5%',pc('increase 240 by 12.5%')],['Increase 80 by 100%',pc('increase 80 by 100%')],['Decrease 140 by 30%',pc('decrease 140 by 30%')],['Increase 60 metres by 15%',pc('increase 60 by 15%','m')],
+  ['Find 60 increased by 15%',pc('increase 60 by 15%')],
+  // refused
+  ['Increase 60 by 15',null],['Increase 60% by 15%',null],['Increase 60 by 15% then decrease by 10%',null],['A jacket costs 80 euro. It goes down by 25%. What is the new price?',null],
+  ['60 is increased by 15%. Find the original amount.',null],['After a 15% increase a price is 69. Find the original price.',null],['Decrease 80 by 100%',null],['Decrease 80 by 150%',null],
+  ['Increase 60.5 by 15%',null],['Increase 60 by 15.25%',null],['Increase 60 by 15% and 10%',null],['Increase x by 15%',null],['Increase 60 pounds by 15%',null],['Increase 60 by 0%',null],
+  ['Increase 60 by 15% = 69',null],['Increase 1,000 by 15%',null],
+ ],
 };
-const B2GEN={'dec-arith':S.genDecimal,'dec-convert':S.genConvert,'pct-of-amount':S.genPercentOf};
+const B2GEN={'dec-arith':S.genDecimal,'dec-convert':S.genConvert,'pct-of-amount':S.genPercentOf,'pct-change':S.genPercentChange};
 for(const unit of Object.keys(B2_TASKS)){
  const rows=B2_TASKS[unit];
  test(`W7b 4-${unit}: specFromQuestion reads the unit's tasks conservatively - ${rows.length} phrasings, ${rows.filter((t)=>t[1]===null).length} of them refused`,()=>{
@@ -726,6 +739,11 @@ const B2_PAGES={
   {spec:po('35% of 80'),a:'28',want:['right']},{spec:po('35% of 80'),a:'2.29',want:['wrong','pct-divided']},{spec:po('35% of 80'),a:'2800',want:['wrong','pct-times-whole']},
   {spec:po('35% of 80'),a:'8',want:['wrong','pct-ten-stopped']},{spec:po('35% of 80'),a:'52',want:['wrong','pct-rest']},{spec:po('15% of 60','€'),a:'€9',want:['right']},
   {spec:po('35% of 80'),a:'28%',want:['unsure']},{spec:po('12.5% of 40','kg'),a:'',want:['unsure']},{spec:po('12.5% of 40','kg'),a:'5000 g',want:['unsure']},
+ ],
+ 'pct-change':[
+  {spec:pc('increase 60 by 15%'),a:'69',want:['right']},{spec:pc('increase 60 by 15%'),a:'9',want:['wrong','change-only']},{spec:pc('increase 60 by 15%'),a:'51',want:['wrong','change-wrong-way']},
+  {spec:pc('increase 60 by 15%'),a:'75',want:['wrong','change-as-number']},{spec:pc('decrease 80 by 25%','€'),a:'€60',want:['right']},{spec:pc('increase 50 by 35%','£'),a:'£67.50',want:['right']},
+  {spec:pc('increase 60 by 15%'),a:'69%',want:['unsure']},{spec:pc('decrease 250 by 12%','kg'),a:'',want:['unsure']},{spec:pc('decrease 250 by 12%','kg'),a:'220 m',want:['unsure']},
  ],
 };
 for(const unit of Object.keys(B2_PAGES)){

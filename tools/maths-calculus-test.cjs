@@ -345,7 +345,8 @@ test('7c: the W7 batch-2 school corpus - every decimals and percent question the
  const S=require(path.join(root,'src/lib/rules/school.ts'));
  // conversions: 'Write 3/8 as a decimal.' stacks the given fraction; 'Write 35% as a simplified fraction.' stacks none
  // a percent of an amount: 'Find 35% of €80.', 'Find 12.5% of 240 kg.' (no fraction; the % sign and the unit kept)
- const GENS=[[S.genDecimal,()=>0],[S.genConvert,(sp)=>(/\//.test(sp.expr)?1:0)],[S.genPercentOf,()=>0]];
+ // a percent change: 'Increase €60 by 15%.', 'Decrease 250 kg by 12%.'
+ const GENS=[[S.genDecimal,()=>0],[S.genConvert,(sp)=>(/\//.test(sp.expr)?1:0)],[S.genPercentOf,()=>0],[S.genPercentChange,()=>0]];
  const off=[];let n=0;
  for(const [g,fracs] of GENS)for(const tier of [1,2])for(let seed=0;seed<100;seed++){
   const sp=g(seed,tier),q=S.question(sp);n++;
