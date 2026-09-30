@@ -34,5 +34,5 @@ object CarCatalog {
     val mapping=Content.table("stat-mapping").map { StatMapping(it.getValue("parameter"),it.getValue("stat"),it.number("base"),it.number("perPoint")) }
     val all=Content.table("cars").map { CarClass(Content.table("cars/"+it.getValue("id")).single()) }
     val json=all.joinToString(",","[","]") { it.json }
-    fun apply(car: Car,index: Int) { val type=all[index]; car.carClass=type; car.spec=type.spec() }
+    fun apply(car: Car,index: Int) { val type=all[index]; car.carClass=type; car.spec=type.spec();car.armorReduction=type.armorReduction;car.weaponSlots=type.weaponSlots }
 }

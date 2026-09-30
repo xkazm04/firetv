@@ -1,6 +1,6 @@
 # Death Ride - Slipstream
 
-A standalone Kotlin/libGDX Fire TV spike. See `../index.html` for the evidence and verdict. The application owns the entire race; phones send only absolute input states. There are always six cars, at most two phone drivers, and three laps. There is no combat, audio, garage or downloaded game art.
+A standalone Kotlin/libGDX Fire TV spike. See `../index.html` for the evidence and verdict. The application owns the entire race; phones send only absolute input states. There are always six cars, at most two phone drivers, and three laps. Phase 1 adds authored circuits and combat. There is no audio or downloaded game art; garage/career arrive in subsequent waves.
 
 ## Build and launch
 
@@ -23,7 +23,7 @@ The current Phase 1 build is installed and checked on the reference AFTKM throug
 
 Put the TV and Android phone on the same LAN. The lobby runs an AI demonstration and shows a QR, URL, PIN, and two seat indicators. Scan the QR; the PIN travels in its URL. Alternatively open the displayed address and enter the PIN. Turn the phone sideways. Hold GO, steer with the left thumb, and use BRAKE to slow. Touch anywhere on the left pad, then drag left or right relative to that starting point. Lifting recenters the control. Tap the brake into a bend and countersteer to catch the slide.
 
-TV remote: Select starts/rematches; Back returns to the lobby, then exits; Up in the lobby clears both reservations and rotates the PIN. Phone: START RACE/REMATCH and LOBBY do the same. Desktop: press W to take car 1, WASD drives, arrows work during a race, Enter starts/rematches, Escape returns/exits. Keyboard yields car 1 to a paired phone. The TV remains awake while foregrounded.
+TV remote: Select starts/rematches; Back returns to the lobby, then exits; Up in the lobby clears both reservations and rotates the PIN. Phone: START RACE/REMATCH and LOBBY do the same. Desktop: press W to take car 1, WASD drives, arrows work during a race, F fires, G drops mines, hold E for Hammer, Shift drifts, Enter starts/rematches, Escape returns/exits. Keyboard yields car 1 to a paired phone. The TV remains awake while foregrounded.
 
 Rejoining the same browser restores its car with a stored opaque token. Backgrounding the game stops its listener so another variant can use port 8765; returning restarts it and preserves the slots. Application process death resets the session. Pairing reservations last until Up resets them or the process exits. A claimed car always keeps its human controls, including after finishing while another driver is still racing. A race ends when all human drivers finish (or all AIs if no humans), with an explicit 180-second ceiling; unfinished cars remain marked unfinished.
 
@@ -64,7 +64,7 @@ The real-time desktop soak cycles full six-car races, including countdown/result
 
 ## Architecture and tuning
 
-`core`: pure Kotlin model, fixed input mailboxes, stadium projection, sequential checkpoint laps, two-circle car contacts, strict math, bounded AI trace, and reused read-only snapshot buffers. It has no Android/libGDX imports. `link`: Ktor CIO listener, pairing and clock correction, bounded input transfer and metrics. `game`: shared libGDX rendering/race flow. `app`: Android lifecycle/manifest/native packaging. `desktop`: LWJGL3 launcher and optional diagnostics. `controller`: self-contained page served from APK assets.
+`core`: pure Kotlin model, fixed input mailboxes, stadium projection, sequential checkpoint laps, three-circle car contacts, strict math, bounded AI trace, and reused read-only snapshot buffers. It has no Android/libGDX imports. `link`: Ktor CIO listener, pairing and clock correction, bounded input transfer and metrics. `game`: shared libGDX rendering/race flow. `app`: Android lifecycle/manifest/native packaging. `desktop`: LWJGL3 launcher and optional diagnostics. `controller`: self-contained page served from APK assets.
 
 Simulation runs at 60 Hz with no unseeded randomness or wall clock. Draws interpolate two snapshots; no input prediction is used. Frame stalls execute at most six catch-up steps, recording discarded simulation milliseconds. Structural race resets and ownership changes happen on the render thread at step boundaries. Track vertices, glyph quads, inputs, snapshots, contacts and trace rings reuse storage. HUD strings use a reusable character builder. Stats sorting/encoding and WebSocket JSON allocate on network threads; startup, QR regeneration and explicit race transitions may allocate.
 
@@ -77,3 +77,5 @@ W6: MENU cycles five authored circuits in the lobby/results; CAR > Circuit selec
 Slipstream integrates yaw inertia and tire-force saturation, with brake-induced grip loss and a restoring yaw term. AI perceives its own slip and damps yaw. The camera follows with velocity look-ahead and speed zoom; two phone drivers widen the shared view, and a minimap preserves circuit context.
 
 Pinned libraries: Kotlin 2.0.21, AGP 8.7.3, libGDX 1.13.5, Ktor 2.3.12, ZXing 3.5.3, JUnit 5.10.2. libGDX 1.13.5's AndroidX dependency requires a newer compile SDK than 34; platform 36 was already available. Minimum Android API 28 and target 34 remain unchanged. Native libgDX libraries are packaged for arm64-v8a, armeabi-v7a and x86_64. Release reference: [libGDX 1.13.5 release](https://libgdx.com/news/2025/05/gdx-1-13-5).
+
+W4: Rivet, Hammer and Mine use data in `weapons.csv`; `Combat` is the HP/state authority. A four-second start protection period lets the grid spread, with a visible ARMING countdown. Armor, mounts, ammo/repair pickups, contact damage, wreck obstacles and elimination wins are live. Phone settings offer Classic/Cruise/Split and a left-handed mirror; HUD includes HP, ammunition and cooldowns. `f` remains the optical flash input; `fire`, `mine` and `weapon` are distinct absolute combat controls. `/stats` publishes the selected layout, effective attack holds, each player's combat state and aggregate weapon-pool activity. `tools/combat-check.mjs <url> <pin>` exercises all layouts on the Stick.

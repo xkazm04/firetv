@@ -186,7 +186,7 @@ class CarPainter {
         val dx=x+l*.29f*c-w*.5f*s;val dy=y+l*.29f*s+w*.5f*c
         r.triangle(ax,ay,bx,by,cx,cy);r.triangle(ax,ay,cx,cy,dx,dy)
     }
-    fun draw(r: ShapeRenderer,car: Car,px: Float,py: Float,heading: Double,color: Color,flash: Boolean,scale: Float=1f) {
+    fun draw(r: ShapeRenderer,car: Car,px: Float,py: Float,heading: Double,color: Color,flash: Boolean,scale: Float=1f,healthFraction: Float=1f,wrecked: Boolean=false) {
         val spec=CarShapes.forId(car.carClass?.id?:"Line");val l=spec.lengthM.toFloat()*scale;val w=spec.widthM.toFloat()*scale
         x=px+.35f*scale;y=py-.45f*scale;c=cos(heading).toFloat();s=sin(heading).toFloat()
         r.setColor(.025f,.035f,.04f,.65f);body(r,l*1.08f,w*1.15f,spec.noseWidth.toFloat())
@@ -194,7 +194,7 @@ class CarPainter {
         // Four tires and their sidewalls sit outside the colored shell.
         r.setColor(.035f,.045f,.05f,1f)
         for(axle in -1..1 step 2)for(side in -1..1 step 2)quad(r,axle*l*.29f-l*.105f,side*w*.43f-w*.115f,l*.21f,w*.23f)
-        r.color=if(flash)Color.WHITE else color;body(r,l,w*.87f,spec.noseWidth.toFloat())
+        if(wrecked)r.setColor(.17f,.18f,.17f,1f) else if(flash)r.color=Color.WHITE else r.color=color;body(r,l,w*.87f,spec.noseWidth.toFloat())
         r.setColor(color.r*.55f,color.g*.55f,color.b*.55f,1f);quad(r,-l*.43f,-w*.43f,l*.72f,w*.09f)
         r.setColor(min(1f,color.r+.22f),min(1f,color.g+.22f),min(1f,color.b+.22f),1f);quad(r,-l*.40f,w*.30f,l*.65f,w*.08f)
         val rl=(spec.roofLength*l).toFloat();val ro=(spec.roofOffset*l).toFloat();val rw=(spec.roofWidth*w).toFloat()
@@ -207,6 +207,12 @@ class CarPainter {
         r.setColor(.11f,.14f,.16f,1f);quad(r,l*.28f,-w*.16f,l*.10f,w*.32f)
         if(spec.spoiler) { r.setColor(.12f,.15f,.17f,1f);quad(r,-l*.40f,-w*.49f,l*.07f,w*.98f) }
         if(spec.id=="Bastion") { r.setColor(.37f,.42f,.43f,1f);quad(r,l*.43f,-w*.40f,l*.075f,w*.8f);quad(r,-l*.49f,-w*.4f,l*.06f,w*.8f) }
+        if(healthFraction<1) {
+            r.setColor(.035f,.045f,.045f,1f)
+            val dents=((1-healthFraction)*7).toInt()
+            for(i in 0 until dents)quad(r,-l*.32f+i*l*.075f,-w*.32f+(i%3)*w*.22f,l*.10f,w*.055f)
+        }
+        if(wrecked) { r.setColor(.07f,.085f,.085f,1f);quad(r,-l*.24f,-w*.26f,l*.42f,w*.52f) }
         if(spec.id=="Needle") { r.setColor(.05f,.07f,.08f,1f);quad(r,-l*.4f,-w*.20f,l*.16f,w*.40f) }
     }
 }

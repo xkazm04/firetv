@@ -1,0 +1,244 @@
+{
+  "device": "AFTKM 1080p; desktop Chrome CDP touch over LAN, not physical phone",
+  "checks": [
+    "Classic: independent steer/fire/mine pointers; ammo; release; heavy swap; expected throttle",
+    "Cruise: independent steer/fire/mine pointers; ammo; release; heavy swap; expected throttle",
+    "Split: independent steer/fire/mine pointers; ammo; release; heavy swap; expected throttle",
+    "Left-handed mirror moves steering to the right; host telemetry agrees",
+    "Disconnected phone clears attack holds on Stick"
+  ],
+  "errors": [],
+  "stats": {
+    "combatSummary": {
+      "living": 6,
+      "finished": 0,
+      "shots": 12,
+      "projectiles": 2,
+      "mines": 2,
+      "blasts": 0,
+      "poolExhaustions": 0
+    },
+    "track": {
+      "id": "foundry",
+      "name": "Foundry Ring",
+      "lesson": "Carry speed through the broad bends"
+    },
+    "surface": "Asphalt",
+    "feel": {
+      "id": "Balanced",
+      "deadZone": 0.03,
+      "exponent": 1,
+      "touchTravelPx": 115,
+      "touchTravelFraction": 0.28,
+      "steerRisePerSecond": 6,
+      "steerReturnPerSecond": 10,
+      "lowSpeedAuthority": 1.35,
+      "highSpeedAuthority": 1.05,
+      "speedBlendMps": 30,
+      "yawResponseScale": 0.75,
+      "stabilityScale": 1.1,
+      "throttleRisePerSecond": 3,
+      "throttleExponent": 1.15,
+      "brakeScale": 1,
+      "yawMinRadPerSecond": 0.4,
+      "yawMaxRadPerSecond": 2,
+      "turnInMaxSeconds": 0.8,
+      "recoveryMaxSeconds": 2.5
+    },
+    "units": "ms",
+    "uptimeMs": 92021.278775,
+    "phase": "race",
+    "raceSeconds": 4.799999999999988,
+    "paused": false,
+    "frameNumber": 5464,
+    "flashFrames": 0,
+    "heapUsedMB": 10.39361572265625,
+    "frameTimeMs": {
+      "lifetimeBinMs": 0.1,
+      "lifetimeCapMs": 5000,
+      "last10s": {
+        "p50": 16.897846,
+        "p95": 21.036307,
+        "max": 23.481461,
+        "count": 600
+      },
+      "sinceStart": {
+        "p50": 16.7,
+        "p95": 20.5,
+        "max": 105.64446199999999,
+        "count": 5464
+      }
+    },
+    "simStepMs": {
+      "lifetimeBinMs": 0.001,
+      "lifetimeCapMs": 50,
+      "last10s": {
+        "p50": 1.412462,
+        "p95": 2.084,
+        "max": 5.129923,
+        "count": 421
+      },
+      "sinceStart": {
+        "p50": 1.232,
+        "p95": 2.219,
+        "max": 13.935154,
+        "count": 4762
+      }
+    },
+    "discardedSimulationMs": {
+      "last10s": 0,
+      "sinceStart": 5
+    },
+    "quantiles": "last10s exact (4096 samples); sinceStart histogram (resolution/cap declared per metric); max exact",
+    "slots": [
+      {
+        "slot": 0,
+        "connected": false,
+        "reserved": true,
+        "clockSynced": true,
+        "inputAgeMs": {
+          "lifetimeBinMs": 0.1,
+          "lifetimeCapMs": 5000,
+          "last10s": {
+            "p50": 22.387308005971136,
+            "p95": 129.3498459940456,
+            "max": 481.43246099405224,
+            "count": 421
+          },
+          "sinceStart": {
+            "p50": 23.6,
+            "p95": 47.7,
+            "max": 481.43246099405224,
+            "count": 1517
+          }
+        },
+        "stale": {
+          "last10s": 14,
+          "sinceStart": 15
+        },
+        "dropped": {
+          "last10s": 0,
+          "sinceStart": 0
+        },
+        "outOfOrder": {
+          "last10s": 0,
+          "sinceStart": 0
+        },
+        "effectiveThrottle": 0,
+        "effectiveSteer": 0,
+        "effectiveFire": 0,
+        "effectiveMine": 0,
+        "layout": "Classic",
+        "mirrored": false,
+        "combat": {
+          "armingSeconds": 0,
+          "hp": 100,
+          "maxHp": 100,
+          "wrecked": false,
+          "weapon": 1,
+          "weaponName": "Hammer",
+          "ammo": 6,
+          "mines": 4,
+          "heavyAmmo": 6,
+          "cooldownSeconds": 0.8166666666666674,
+          "mineCooldownSeconds": 0,
+          "damageEvents": 0,
+          "kills": 0
+        },
+        "drifting": false,
+        "loadTransfer": 0,
+        "surfaceId": "Asphalt",
+        "car": {
+          "id": "Bastion",
+          "role": "Armored bruiser",
+          "stats": {
+            "speed": 4,
+            "acceleration": 3,
+            "grip": 5,
+            "armor": 10,
+            "mass": 10,
+            "handling": 3,
+            "slots": 3
+          }
+        },
+        "speedMps": 5.113656758993484,
+        "xM": -24.744129974371155,
+        "yM": 44.099083796128305
+      },
+      {
+        "slot": 1,
+        "connected": false,
+        "reserved": false,
+        "clockSynced": false,
+        "inputAgeMs": {
+          "lifetimeBinMs": 0.1,
+          "lifetimeCapMs": 5000,
+          "last10s": {
+            "p50": 0,
+            "p95": 0,
+            "max": 0,
+            "count": 0
+          },
+          "sinceStart": {
+            "p50": 0,
+            "p95": 0,
+            "max": 0,
+            "count": 0
+          }
+        },
+        "stale": {
+          "last10s": 0,
+          "sinceStart": 0
+        },
+        "dropped": {
+          "last10s": 0,
+          "sinceStart": 0
+        },
+        "outOfOrder": {
+          "last10s": 0,
+          "sinceStart": 0
+        },
+        "effectiveThrottle": 0,
+        "effectiveSteer": 0,
+        "effectiveFire": 0,
+        "effectiveMine": 0,
+        "layout": "Classic",
+        "mirrored": false,
+        "combat": {
+          "armingSeconds": 0,
+          "hp": 100,
+          "maxHp": 100,
+          "wrecked": false,
+          "weapon": 0,
+          "weaponName": "Rivet",
+          "ammo": 180,
+          "mines": 4,
+          "heavyAmmo": 5,
+          "cooldownSeconds": 0,
+          "mineCooldownSeconds": 0,
+          "damageEvents": 0,
+          "kills": 0
+        },
+        "drifting": false,
+        "loadTransfer": -0.07466371785975245,
+        "surfaceId": "Asphalt",
+        "car": {
+          "id": "Line",
+          "role": "Balanced racer",
+          "stats": {
+            "speed": 6,
+            "acceleration": 6,
+            "grip": 6,
+            "armor": 5,
+            "mass": 5,
+            "handling": 6,
+            "slots": 2
+          }
+        },
+        "speedMps": 30.75177530740206,
+        "xM": 45.57728949084935,
+        "yM": 47.553981508948546
+      }
+    ]
+  }
+}

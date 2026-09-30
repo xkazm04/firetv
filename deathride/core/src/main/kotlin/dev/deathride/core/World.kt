@@ -32,6 +32,7 @@ data class CarSpec(
     val circleOffsetM: Double = Physics.base.getValue("circleOffsetM")
 )
 class InputFrame(var steer: Double = 0.0, var throttle: Double = 0.0, var brake: Double = 0.0, var handbrake: Double = 0.0) {
+    var fire=0.0;var mine=0.0;var weapon=0
     fun set(s: Double, a: Double, b: Double) { steer = s.coerceIn(-1.0,1.0); throttle = a.coerceIn(0.0,1.0); brake = b.coerceIn(0.0,1.0) }
 }
 /** Bounded latest-state mailbox. A late packet cannot restore throttle. */
@@ -43,19 +44,21 @@ class InputMailbox {
     private var throttle = 0.0
     private var brake = 0.0
     private var handbrake=0.0
+    private var fire=0.0;private var mine=0.0;private var weapon=0
     var dropped = 0L; private set
     var outOfOrder = 0L; private set
     var staleConsumed = 0L; private set
     var accepted = 0L; private set
     var ageMs = 0.0; private set
-    @Synchronized fun offer(q: Long, generatedMs: Double, nowMs: Double, s: Double, a: Double, b: Double, h: Double=0.0): Boolean {
-        if (!generatedMs.isFinite() || !s.isFinite() || !a.isFinite() || !b.isFinite() || !h.isFinite()) { dropped++; return false }
+    @Synchronized fun offer(q: Long, generatedMs: Double, nowMs: Double, s: Double, a: Double, b: Double, h: Double=0.0, fire: Double=0.0,mine: Double=0.0,weapon: Int=0): Boolean {
+        if (!generatedMs.isFinite() || !s.isFinite() || !a.isFinite() || !b.isFinite() || !h.isFinite() || !fire.isFinite() || !mine.isFinite() || weapon !in 0..1) { dropped++; return false }
         if (q <= seq) { outOfOrder++; return false }
         if (seq >= 0 && q > seq + 1) dropped += q - seq - 1
         seq = q
         if (nowMs - generatedMs > Tuning.STALE_MS || generatedMs - nowMs > 100.0) { dropped++; return false }
         stampMs = generatedMs; receivedMs = nowMs
         steer = s.coerceIn(-1.0,1.0); throttle = a.coerceIn(0.0,1.0); brake = b.coerceIn(0.0,1.0); handbrake=h.coerceIn(0.0,1.0); accepted++
+        this.fire=fire.coerceIn(0.0,1.0);this.mine=mine.coerceIn(0.0,1.0);this.weapon=weapon
         return true
     }
     @Synchronized fun consume(nowMs: Double, out: InputFrame): Boolean {
@@ -63,10 +66,11 @@ class InputMailbox {
         val stale = nowMs - receivedMs > Tuning.STALE_MS || ageMs > Tuning.STALE_MS
         out.set(steer, if (stale) 0.0 else throttle, if (stale) 0.0 else brake)
         out.handbrake=if(stale)0.0 else handbrake
+        out.fire=if(stale)0.0 else fire;out.mine=if(stale)0.0 else mine;out.weapon=weapon
         if (stale) staleConsumed++
         return stale
     }
-    @Synchronized fun newConnection() { seq = -1; receivedMs = -1e12; throttle = 0.0; brake = 0.0; handbrake=0.0 }
+    @Synchronized fun newConnection() { seq = -1; receivedMs = -1e12; throttle = 0.0; brake = 0.0; handbrake=0.0;fire=0.0;mine=0.0 }
 }
 class TrackPoint { var x = 0.0; var y = 0.0; var heading = 0.0; var curvature = 0.0 }
 class Projection { var s = 0.0; var distance = 0.0; var nx = 0.0; var ny = 1.0 }
@@ -141,6 +145,7 @@ class LapCounter(private val lengthM: Double, private val startM: Double, privat
     }
 }
 enum class AiMode { DRIVE, OVERTAKE, RECOVER }
+enum class FinishKind { NONE, LAPS, ELIMINATION }
 data class AiSkill(val reactionSteps: Int, val lookAheadSeconds: Double, val cornerMarginMps: Double, val laneErrorM: Double)
 val AI_SKILLS = arrayOf(AiSkill(8,.68,4.0,1.0), AiSkill(5,.60,2.0,.5), AiSkill(2,.52,0.0,.1))
 class Car(val id: Int, track: Track) {
@@ -151,6 +156,8 @@ class Car(val id: Int, track: Track) {
     var loadTransfer=0.0; var drifting=false; var wallImpactMps=0.0
     var spec=CarSpec()
     var carClass: CarClass?=null
+    var armorReduction=0.0;var weaponSlots=1;var weaponDamageScale=1.0
+    var finishKind=FinishKind.NONE
     var feel=FeelProfiles.spike
     var filteredSteer=0.0; var filteredThrottle=0.0
     var human=false; var finishSeconds=-1.0; var position=id+1; var impact=0.0
@@ -208,8 +215,9 @@ class Snapshot {
     internal fun capture(cars: Array<Car>) { for(i in cars.indices) { val c=cars[i]; val n=i*4; state[n]=c.x; state[n+1]=c.y; state[n+2]=c.heading; state[n+3]=c.speedMps } }
     fun x(i: Int)=state[i*4]; fun y(i: Int)=state[i*4+1]; fun heading(i: Int)=state[i*4+2]; fun speed(i: Int)=state[i*4+3]
 }
-class World(val seed: Int=17, val spec: CarSpec=CarSpec(), val track: Track=Track(), val handling: Handling=SlipHandling()) {
+class World(val seed: Int=17, val spec: CarSpec=CarSpec(), val track: Track=Track(), val handling: Handling=SlipHandling(),combatEnabled: Boolean=false) {
     val cars=Array(Tuning.CAR_COUNT) { Car(it,track).also { c -> c.spec=spec } }
+    val combat=Combat(this,combatEnabled)
     val snapshot=Snapshot(); val previousSnapshot=Snapshot()
     private val projection=Projection(); private val point=TrackPoint()
     val ramClosingMps=DoubleArray(Tuning.CAR_COUNT*Tuning.CAR_COUNT)
@@ -217,6 +225,7 @@ class World(val seed: Int=17, val spec: CarSpec=CarSpec(), val track: Track=Trac
     var steps=0; private set
     var seconds=0.0; private set
     var finished=0; private set
+    val resolved get()=finished+combat.wreckCount
     init { reset() }
     fun reset() {
         steps=0; seconds=0.0; finished=0
@@ -229,9 +238,11 @@ class World(val seed: Int=17, val spec: CarSpec=CarSpec(), val track: Track=Trac
             c.loadTransfer=0.0; c.drifting=false; c.wallImpactMps=0.0
             c.filteredSteer=0.0; c.filteredThrottle=0.0
             c.previousX=c.x; c.previousY=c.y; c.previousHeading=c.heading; c.lap.reset(s)
-            c.finishSeconds=-1.0; c.position=c.id+1; c.impact=0.0; c.aiDwell=0; c.aiBlockedSteps=0; c.aiMode=AiMode.DRIVE
+            c.finishSeconds=-1.0;c.finishKind=FinishKind.NONE; c.position=c.id+1; c.impact=0.0; c.aiDwell=0; c.aiBlockedSteps=0; c.aiMode=AiMode.DRIVE
             c.aiLane=((c.id*7+seed)%5-2)*(if(c.carClass==null)1.7 else c.spec.circleRadiusM*2*TrackRules["aiLaneCarWidths"]); c.aiInput.set(0.0,0.0,0.0)
+            c.aiInput.fire=0.0;c.aiInput.mine=0.0;c.aiInput.weapon=0
         }
+        combat.reset()
         previousSnapshot.capture(cars); snapshot.capture(cars)
     }
     fun step(inputs: Array<InputFrame>, dt: Double=Tuning.STEP_SECONDS) {
@@ -240,32 +251,47 @@ class World(val seed: Int=17, val spec: CarSpec=CarSpec(), val track: Track=Trac
         for(c in cars) {
             c.previousX=c.x; c.previousY=c.y; c.previousHeading=c.heading; c.impact*=.87
             c.wallImpactMps=0.0; track.project(c.x,c.y,projection); c.surface=track.surfaceAt(projection.s,projection.distance)
-            val input=if(c.human) inputs[c.id] else { driveAi(c); c.aiInput }
-            handling.integrate(c,input,c.spec,dt)
+            if(combat.wrecked(c.id)) {
+                val drag=exp(-CombatRules["wreckDragPerSecond"]*dt);c.vx*=drag;c.vy*=drag;c.yaw*=drag
+                c.x+=c.vx*dt;c.y+=c.vy*dt;c.heading=wrapAngle(c.heading+c.yaw*dt)
+            } else {
+                val input=if(c.human) inputs[c.id] else { driveAi(c); c.aiInput }
+                handling.integrate(c,input,c.spec,dt)
+            }
             contain(c)
             trace[((steps%600)*6)+c.id]=c.aiMode.ordinal*10+c.aiReason
         }
         repeat(3) { for(i in 0 until cars.size) for(j in i+1 until cars.size) collide(cars[i],cars[j]); for(c in cars) contain(c) }
+        combat.step(inputs,dt)
         for(c in cars) {
+            if(combat.wrecked(c.id))continue
             track.project(c.x,c.y,projection); c.lap.update(projection.s)
-            if(c.lap.laps>=Tuning.RACE_LAPS && c.finishSeconds<0) { c.finishSeconds=seconds; finished++ }
+            if(c.lap.laps>=Tuning.RACE_LAPS && c.finishSeconds<0) { c.finishSeconds=seconds;c.finishKind=FinishKind.LAPS; finished++ }
         }
+        if(combat.enabled && combat.wreckCount==cars.size-1)for(c in cars)if(!combat.wrecked(c.id) && c.finishSeconds<0) { c.finishSeconds=seconds;c.finishKind=FinishKind.ELIMINATION;finished++ }
         for(c in cars) {
             c.position=1
             for(o in cars) if(o!==c && ahead(o,c)) c.position++
         }
         snapshot.capture(cars)
     }
-    private fun ahead(a: Car,b: Car): Boolean = if(a.finishSeconds>=0) b.finishSeconds<0 || a.finishSeconds<b.finishSeconds || a.finishSeconds==b.finishSeconds && a.id<b.id else b.finishSeconds<0 && (a.lap.progressM>b.lap.progressM || a.lap.progressM==b.lap.progressM && a.id<b.id)
+    private fun ahead(a: Car,b: Car): Boolean {
+        if(a.finishSeconds>=0)return b.finishSeconds<0 || a.finishSeconds<b.finishSeconds || a.finishSeconds==b.finishSeconds && a.id<b.id
+        if(b.finishSeconds>=0)return false
+        if(combat.wrecked(a.id)!=combat.wrecked(b.id))return !combat.wrecked(a.id)
+        if(combat.wrecked(a.id) && combat.wreckSeconds[a.id]!=combat.wreckSeconds[b.id])return combat.wreckSeconds[a.id]>combat.wreckSeconds[b.id]
+        return a.lap.progressM>b.lap.progressM || a.lap.progressM==b.lap.progressM && a.id<b.id
+    }
     private fun driveAi(c: Car) {
         val skill=AI_SKILLS[(c.id+seed).mod(3)]
         c.aiDwell++
         if(c.speedMps<1.2) c.aiBlockedSteps++ else c.aiBlockedSteps=0
         if(steps%skill.reactionSteps!=c.id%skill.reactionSteps) return
+        combat.think(c)
         track.project(c.x,c.y,projection)
         val s=projection.s
         var gap=1000.0
-        for(o in cars) if(o!==c) {
+        for(o in cars) if(o!==c && !combat.wrecked(o.id)) {
             val dx=o.x-c.x; val dy=o.y-c.y
             val along=dx*cos(c.heading)+dy*sin(c.heading)
             if(along>0 && abs(-dx*sin(c.heading)+dy*cos(c.heading))<c.spec.circleRadiusM+o.spec.circleRadiusM+TrackRules["aiLateralClearanceM"]) gap=min(gap,along)
@@ -278,7 +304,7 @@ class World(val seed: Int=17, val spec: CarSpec=CarSpec(), val track: Track=Trac
         val intendedLane=if(c.aiMode==AiMode.OVERTAKE) if(c.aiLane<0) passLane else -passLane else c.aiLane
         val noseLook=(c.spec.circleOffsetM+c.spec.circleRadiusM)*2*TrackRules["aiLookCarLengths"]
         val look=if(c.aiMode==AiMode.RECOVER) noseLook else noseLook+c.speedMps*skill.lookAheadSeconds
-        val lane=(intendedLane+(track.course?.laneAt(s+look)?:0.0)).coerceIn(-track.widthAt(s+look)*.55,track.widthAt(s+look)*.55)
+        val lane=combat.avoidMine(c,s,intendedLane+(track.course?.laneAt(s+look)?:0.0)).coerceIn(-track.widthAt(s+look)*.55,track.widthAt(s+look)*.55)
         track.sample(s+look, lane+sin(steps*.007+c.id)*skill.laneErrorM,point)
         val desired=atan2(point.y-c.y,point.x-c.x)
         val slip=if(c.speedMps>2.0) wrapAngle(atan2(c.vy,c.vx)-c.heading) else 0.0
@@ -343,6 +369,6 @@ class World(val seed: Int=17, val spec: CarSpec=CarSpec(), val track: Track=Trac
     fun stateHash(): Long {
         var hash=1125899906842597L
         for(c in cars) { hash=31*hash+c.x.toBits(); hash=31*hash+c.y.toBits(); hash=31*hash+c.vx.toBits(); hash=31*hash+c.vy.toBits(); hash=31*hash+c.heading.toBits(); hash=31*hash+c.lap.laps; hash=31*hash+c.aiMode.ordinal; hash=31*hash+c.yaw.toBits(); hash=31*hash+c.loadTransfer.toBits(); hash=31*hash+c.filteredSteer.toBits(); hash=31*hash+c.filteredThrottle.toBits(); hash=31*hash+if(c.drifting)1 else 0 }
-        return hash
+        return if(combat.enabled)combat.appendHash(hash) else hash
     }
 }

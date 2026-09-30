@@ -23,10 +23,11 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
     private lateinit var headline: GlyphLayer
     private lateinit var detail: GlyphLayer
     private lateinit var server: RaceServer
-    private var world=World(track=Track(course=Courses.all[0]))
+    private var world=World(track=Track(course=Courses.all[0]),combatEnabled=true)
     private lateinit var scene: TrackScene
     private val effects=MotionEffects()
     private val painter=CarPainter()
+    private val combatPainter=CombatPainter()
     private var selectedTrack=0
     private val selectedCars=IntArray(6){it%CarCatalog.all.size}
     private val inputs=Array(6){InputFrame()}
@@ -106,12 +107,12 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         val elapsed=actual.coerceIn(0.0,.1); stateTime+=elapsed; uiTime+=elapsed; smokeTime+=actual
         for(i in server.slots.indices) {
             val choice=server.slots[i].carRequest.getAndSet(-1)
-            if(choice>=0 && (phase=="lobby" || phase=="results")) { selectedCars[i]=choice; CarCatalog.apply(world.cars[i],choice); logger("car slot=$i ${CarCatalog.all[choice].id}") }
+            if(choice>=0 && (phase=="lobby" || phase=="results")) { selectedCars[i]=choice; CarCatalog.apply(world.cars[i],choice);world.reset();effects.clear(); logger("car slot=$i ${CarCatalog.all[choice].id}") }
             server.slots[i].carJson=CarCatalog.all[selectedCars[i]].json
         }
         val courseIndex=server.trackRequest.getAndSet(-1)
         if(courseIndex>=0 && (phase=="lobby" || phase=="results")) {
-            selectedTrack=courseIndex;world=World(track=Track(course=Courses.all[courseIndex]));for(i in world.cars.indices)CarCatalog.apply(world.cars[i],selectedCars[i]);world.reset()
+            selectedTrack=courseIndex;world=World(track=Track(course=Courses.all[courseIndex]),combatEnabled=true);for(i in world.cars.indices)CarCatalog.apply(world.cars[i],selectedCars[i]);world.reset()
             scene.dispose();scene=TrackScene(Courses.all[courseIndex]);effects.clear();server.trackJson=Courses.all[courseIndex].json;rebuildUi()
         }
         val surfaceIndex=server.surfaceRequest.getAndSet(-1)
@@ -120,6 +121,8 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         if(feelIndex>=0) { server.feel=FeelProfiles.all[feelIndex]; logger("feel ${server.feel.json}") }
         for(c in world.cars)c.feel=if(c.human)server.feel else FeelProfiles.spike
         when(server.command.getAndSet(0)) { 1 -> if(phase=="lobby" || phase=="results")startRace(); 2 -> lobby() }
+        // Keep release/stale state current in menus without mislabelling it as simulation-age evidence.
+        if(phase=="countdown" || phase=="results")for(i in server.slots.indices)server.consume(i,server.nowMs(),inputs[i],false)
         if(actual>.1)server.metrics.discardedSimMs.add(((actual-.1)*1000).toLong(),now)
         if(phase=="countdown") { countdown-=elapsed; if(countdown<=0) { phase="race"; server.phase=phase; stateTime=0.0 } }
         if(phase=="lobby" || phase=="race") {
@@ -133,23 +136,28 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
                     val right=Gdx.input.isKeyPressed(Input.Keys.D)||Gdx.input.isKeyPressed(Input.Keys.RIGHT)
                     val gas=Gdx.input.isKeyPressed(Input.Keys.W)||Gdx.input.isKeyPressed(Input.Keys.UP)
                     val brake=Gdx.input.isKeyPressed(Input.Keys.S)||Gdx.input.isKeyPressed(Input.Keys.DOWN)
+                    inputs[0].fire=if(Gdx.input.isKeyPressed(Input.Keys.F))1.0 else 0.0
+                    inputs[0].mine=if(Gdx.input.isKeyPressed(Input.Keys.G))1.0 else 0.0
+                    inputs[0].weapon=if(Gdx.input.isKeyPressed(Input.Keys.E))1 else 0
                     inputs[0].handbrake=if(Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT))1.0 else 0.0
                     inputs[0].set((if(right)1.0 else 0.0)-(if(left)1.0 else 0.0),if(gas)1.0 else 0.0,if(brake)1.0 else 0.0)
                 }
                 val start=System.nanoTime(); world.step(inputs); server.metrics.simMs.add((System.nanoTime()-start)/1e6,server.nowMs())
                 accumulator-=Tuning.STEP_SECONDS; steps++
             }
-            if(phase=="lobby" && world.finished==6)world.reset()
+            if(phase=="lobby" && world.resolved==6)world.reset()
             if(phase=="race") {
                 var humans=0; var complete=0
-                for(c in world.cars)if(c.human) { humans++; if(c.finishSeconds>=0)complete++ }
-                if((humans>0 && complete==humans) || world.finished==6 || world.seconds>=180) { phase="results"; server.phase=phase; stateTime=0.0; rebuildUi() }
+                for(c in world.cars)if(c.human) { humans++; if(c.finishSeconds>=0 || world.combat.wrecked(c.id))complete++ }
+                if((humans>0 && complete==humans) || world.resolved==6 || world.seconds>=TrackRules["maxRaceSeconds"]) { phase="results"; server.phase=phase; stateTime=0.0; rebuildUi() }
             }
         }
         server.raceSeconds=world.seconds
         if(uiTime>=.1) {
             uiTime=0.0
-            for(i in 0..1) { val c=world.cars[i]; val s=server.slots[i]; s.speed=c.speedMps; s.lap=min(c.lap.laps+1,3); s.position=c.position; s.impact=c.impact; s.drifting=c.drifting; s.loadTransfer=c.loadTransfer; s.surfaceId=c.surface.id; s.x=c.x; s.y=c.y }
+            val combat=world.combat
+            server.combatSummaryJson="{\"living\":${world.cars.size-combat.wreckCount},\"finished\":${world.finished},\"shots\":${combat.shots.sum()},\"projectiles\":${combat.projectiles.count{it.active}},\"mines\":${combat.mines.count{it.active}},\"blasts\":${combat.blasts.count{it.remainingSeconds>0}},\"poolExhaustions\":${combat.poolExhaustions}}"
+            for(i in 0..1) { val c=world.cars[i]; val s=server.slots[i]; s.speed=c.speedMps; s.lap=min(c.lap.laps+1,3); s.position=c.position; s.impact=c.impact; s.drifting=c.drifting; s.loadTransfer=c.loadTransfer; s.surfaceId=c.surface.id; s.x=c.x; s.y=c.y; s.combatJson=combatJson(i) }
             rebuildUi()
         }
         view.apply(); ScreenUtils.clear(bg)
@@ -192,14 +200,16 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         batch.projectionMatrix=worldMatrix;batch.begin();scene.draw(batch);batch.end()
         Gdx.gl.glEnable(GL20.GL_BLEND);Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA,GL20.GL_ONE_MINUS_SRC_ALPHA)
         shape.projectionMatrix=worldMatrix;shape.begin(ShapeRenderer.ShapeType.Filled)
+        combatPainter.ground(shape,world)
         effects.draw(shape,world,dt)
         for(c in world.cars) {
             val prev=world.previousSnapshot;val current=world.snapshot
             val x=(prev.x(c.id)+(current.x(c.id)-prev.x(c.id))*alpha).toFloat();val y=(prev.y(c.id)+(current.y(c.id)-prev.y(c.id))*alpha).toFloat()
             val heading=prev.heading(c.id)+wrapAngle(current.heading(c.id)-prev.heading(c.id))*alpha
-            painter.draw(shape,c,x,y,heading,colors[c.id],c.impact>3 && server.frameNumber%6<3)
+            painter.draw(shape,c,x,y,heading,colors[c.id],world.combat.damageFlashSeconds[c.id]>0 || c.impact>3 && server.frameNumber%6<3,healthFraction=(world.combat.health(c.id)/CombatRules["maxHp"]).toFloat(),wrecked=world.combat.wrecked(c.id))
             if(c.human) { val marker=(c.spec.circleRadiusM+c.spec.circleOffsetM+1).toFloat();shape.color=colors[c.id];shape.triangle(x-0.7f,y+marker+1,x+0.7f,y+marker+1,x,y+marker) }
         }
+        combatPainter.air(shape,world)
         shape.end()
     }
     private fun drawOverlay() {
@@ -207,6 +217,12 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         shape.begin(ShapeRenderer.ShapeType.Filled)
         shape.color=bg; shape.rect(0f,637f,1280f,83f); shape.rect(0f,0f,1280f,66f)
         shape.color=accent; shape.rect(40f,650f,4f,36f)
+        if(phase=="race") {
+            val c=world.cars.firstOrNull { it.human }?:world.cars[0]
+            val hp=(world.combat.health(c.id)/CombatRules["maxHp"]).toFloat()
+            shape.color=road;shape.rect(590f,683f,130f,10f)
+            shape.setColor(1-hp,hp*.7f+.2f,.22f,1f);shape.rect(590f,683f,130f*hp,10f)
+        }
         if(phase=="lobby") {
             shape.color=bg; shape.rect(675f,305f,555f,290f); shape.rect(46f,89f,392f,530f)
             shape.setColor(.16f,.23f,.27f,1f); shape.rect(47f,90f,390f,2f)
@@ -263,7 +279,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         for(c in world.cars) {
             detail.setColor(colors[c.id]); uiBuilder.clear(); uiBuilder.append(c.position).append("  ").append(if(c.human)"PLAYER " else "RIVAL ").append(c.id+1)
             detail.addText(uiBuilder,55f+c.id*203,46f)
-            detail.setColor(muted); uiBuilder.clear(); uiBuilder.append("LAP ").append(min(3,c.lap.laps+1)).append(" / 3   ").append((c.speedMps*3.6).toInt()).append(" km/h")
+            detail.setColor(muted); uiBuilder.clear(); if(world.combat.wrecked(c.id))uiBuilder.append("WRECKED") else uiBuilder.append("HP ").append(world.combat.health(c.id).toInt()).append("   LAP ").append(min(3,c.lap.laps+1)).append(" / 3")
             detail.addText(uiBuilder,55f+c.id*203,27f)
         }
         when(phase) {
@@ -282,6 +298,11 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
             }
             "countdown" -> { headline.setColor(accent); headline.addText(digits[ceil(countdown).toInt().coerceIn(1,3)],624f,378f); detail.addText("HOLD GO",606f,317f) }
             "race" -> {
+                val driver=world.cars.firstOrNull { it.human }?:world.cars[0];val combat=world.combat;val weapon=combat.selectedWeapon[driver.id]
+                detail.setColor(if(combat.wrecked(driver.id))warning else muted)
+                detail.addText(if(combat.wrecked(driver.id))"WRECKED - SPECTATING" else "HULL "+combat.health(driver.id).toInt()+" / "+CombatRules["maxHp"].toInt(),590f,677f)
+                detail.addText(if(combat.armingSeconds>0)"ARMING "+ceil(combat.armingSeconds).toInt() else Weapons.all[weapon].id.uppercase()+"  "+combat.ammo(driver.id,weapon),743f,697f)
+                detail.addText("MINES  "+combat.ammo(driver.id,Weapons.MINE),743f,674f)
                 if(stateTime<1.2) { headline.setColor(accent); headline.addText("GO",597f,389f) }
                 var warned=false
                 for(s in server.slots)if(s.claimed && s.stale && !warned) { detail.setColor(warning); uiBuilder.clear(); uiBuilder.append("PLAYER ").append(s.id+1).append("  LINK QUIET - COASTING"); detail.addText(uiBuilder,465f,612f); warned=true }
@@ -297,12 +318,16 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
                     uiBuilder.append(rank+1).append("     ").append(if(c.human)"PLAYER " else "RIVAL ").append(c.id+1)
                     text.addText(uiBuilder,345f,461f-rank*42)
                     detail.setColor(Color.WHITE); uiBuilder.clear()
-                    if(c.finishSeconds>=0)uiBuilder.append((c.finishSeconds*10).toInt()/10).append('.').append((c.finishSeconds*10).toInt()%10).append(" seconds") else uiBuilder.append("LAP ").append(min(3,c.lap.laps+1)).append(" / 3 - unfinished")
+                    if(world.combat.wrecked(c.id))uiBuilder.append("WRECKED / ").append(world.combat.kills[c.id]).append(" kills") else if(c.finishKind==FinishKind.ELIMINATION)uiBuilder.append("LAST SURVIVOR") else if(c.finishSeconds>=0)uiBuilder.append((c.finishSeconds*10).toInt()/10).append('.').append((c.finishSeconds*10).toInt()%10).append(" seconds") else uiBuilder.append("LAP ").append(min(3,c.lap.laps+1)).append(" / 3 - unfinished")
                     detail.addText(uiBuilder,731f,458f-rank*42)
                 }
                 text.setColor(bg); text.addText("SELECT  /  REMATCH",527f,164f)
             }
         }
+    }
+    private fun combatJson(id: Int): String {
+        val c=world.combat;val weapon=c.selectedWeapon[id]
+        return "{\"armingSeconds\":${c.armingSeconds},\"hp\":${c.health(id)},\"maxHp\":${CombatRules["maxHp"]},\"wrecked\":${c.wrecked(id)},\"weapon\":$weapon,\"weaponName\":\"${Weapons.all[weapon].id}\",\"ammo\":${c.ammo(id,weapon)},\"mines\":${c.ammo(id,Weapons.MINE)},\"heavyAmmo\":${c.ammo(id,Weapons.HAMMER)},\"cooldownSeconds\":${c.cooldown(id,weapon)},\"mineCooldownSeconds\":${c.cooldown(id,Weapons.MINE)},\"damageEvents\":${c.damageEvents[id]},\"kills\":${c.kills[id]}}"
     }
     private fun updateQr() {
         if(server.pin==qrPin && server.address==qrAddress)return
