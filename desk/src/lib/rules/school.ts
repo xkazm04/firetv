@@ -10,7 +10,10 @@
  * decimals and percent (`convert`, the one shape with a store key of its own, `to`: the form asked for, whose value in any
  * other form is unsure, never wrong, and whose leak check knows which written forms of the value give it away); a percent
  * of an amount (`percent-of`, "Find 35% of 80.", an optional unit; an amount written as a percentage is unsure); percent
- * increase and decrease (`percent-change`, "Increase 60 by 15%.", the change applied to the whole, never reversed).
+ * increase and decrease (`percent-change`, "Increase 60 by 15%.", the change applied to the whole, never reversed). W7
+ * batch 3 adds the last four units, each its own shape with no new store key (`expr` and `unit` carry them): ratio and
+ * sharing (`ratio`: "Write 12:18 in its simplest form.", "Share 60 in the ratio 2:3.", "Fill in the missing number: 2:3 =
+ * ?:15."; the only shape whose answer may be a PAIR, read by its own strict reader, `readPair`).
  *
  * The stances this file holds:
  *   - Code decides right and wrong. The truth is recomputed from the spec every time with EXACT rational arithmetic
@@ -294,8 +297,8 @@ export function readNumber(answer: unknown, system: unknown): Reading | null {
 /**
  * A school practice item is a SPEC, never text a model wrote with an answer. Every shape keeps its question in `expr`
  * (the store keeps a school spec's `expr`, `form`, `unit`, `allowNegative` and `to` and nothing else, session/store
- * SCHOOL_SPEC_KEYS), so the W7 batch-1 shapes added no store key and batch 2 only `to`. Pending (W7 batch 3), each
- * its own member of this union: `ratio-share`, a unit rate, `area` and `mean`.
+ * SCHOOL_SPEC_KEYS), so the W7 batch-1 shapes added no store key, batch 2 only `to` and batch 3 none (each W7 batch-3
+ * unit is its own member of this union, below).
  *   - compute: a numeric question with no unknown, "Work out 3/4 + 1/6", "Work out 2/3 × 3/4". `form: "simplest"` asks
  *     for lowest terms, `form: "decimal"` for a decimal (the value must terminate); `unit` is the unit the answer is in;
  *     `allowNegative` lets the value be zero or below (a subtraction that crosses zero). Units: add and subtract
@@ -319,6 +322,11 @@ export function readNumber(answer: unknown, system: unknown): Reading | null {
  *     amount 1 to 1000 changed by a percent above 0 (at most 100 up, below 100 down), "Increase 60 by 15%.", "Decrease
  *     €80 by 25%."; `unit` as for an amount. The value is B × (100 ± p) / 100 exactly: the change applied to the whole,
  *     never a reverse percentage (finding the original), which is a later unit.
+ *   - ratio (W7 batch 3, "Ratio and sharing"), two-part ratios of whole numbers only: expr "12:18" (write it in its
+ *     simplest form: the answer is a RATIO, 2:3), "60 in 2:3" (share 60 in the ratio 2:3: the answer is a PAIR of amounts,
+ *     24 and 36, in the ratio's order; `unit` is the amount's, optional, as for a fraction of an amount) or "2:3 = ?:15" /
+ *     "2:3 = 10:?" (a missing term of an equal ratio: a whole number). A ratio to share by is in lowest terms, its two
+ *     numbers differ, and the amount splits into whole shares, neither of which the question prints.
  */
 export type ComputeSpec = { shape: "compute"; expr: string; form?: "simplest" | "decimal"; unit?: Unit; allowNegative?: true };
 export type FractionOfSpec = { shape: "fraction-of"; expr: string; unit?: Unit };
@@ -329,11 +337,14 @@ export type NumberFormAsked = "decimal" | "fraction" | "percent";
 export type ConvertSpec = { shape: "convert"; expr: string; to: NumberFormAsked };
 export type PercentOfSpec = { shape: "percent-of"; expr: string; unit?: Unit };
 export type PercentChangeSpec = { shape: "percent-change"; expr: string; unit?: Unit };
-export type SchoolSpec = ComputeSpec | FractionOfSpec | MissingSpec | SimplifySpec | ConvertSpec | PercentOfSpec | PercentChangeSpec;
+export type RatioSpec = { shape: "ratio"; expr: string; unit?: Unit };
+export type SchoolSpec = ComputeSpec | FractionOfSpec | MissingSpec | SimplifySpec | ConvertSpec | PercentOfSpec | PercentChangeSpec | RatioSpec;
 export type SchoolShape = SchoolSpec["shape"];
-export const SCHOOL_SHAPES: readonly SchoolShape[] = ["compute", "fraction-of", "missing", "simplify", "convert", "percent-of", "percent-change"];
+export const SCHOOL_SHAPES: readonly SchoolShape[] = ["compute", "fraction-of", "missing", "simplify", "convert", "percent-of", "percent-change", "ratio"];
 /** The shapes whose amount may carry a unit (the answer is in it too). */
 const AMOUNT_SHAPES: readonly SchoolShape[] = ["fraction-of", "percent-of", "percent-change"];
+/** Every shape that may carry a `unit` (W7 batch 3: a ratio's shared amount; each kind says whether it takes one). */
+const UNIT_SHAPES: readonly SchoolShape[] = [...AMOUNT_SHAPES, "ratio"];
 
 /** Bounds on a compute spec, each with its reason: a school question, not a calculator exercise. */
 const MAX_EXPR = 60;        // a line on a worksheet
@@ -475,6 +486,12 @@ const REJECT = {
   prints: "The question would print its own answer.",
   twoPlaces: "The answer would need more than two decimal places.",
   changeRange: "A change is above nothing, at most the whole amount up and less than the whole amount down.",
+  sameParts: "The two numbers of the ratio are the same: there is nothing to share out or simplify.",
+  ratioLowest: "The ratio is already in its simplest form: there is nothing to simplify.",
+  ratioNotLowest: "A ratio to share by is given in its simplest form.",
+  wholeShares: "The amount does not split into whole shares in this ratio.",
+  sameRatio: "The new ratio keeps the given number: there is nothing to work out.",
+  notWholeRatio: "No whole number makes the two ratios equal.",
 } as const;
 
 /**
@@ -488,9 +505,14 @@ type Kind =
   | { k: "simplify"; a: bigint; b: bigint }
   | { k: "convert"; from: NumberFormAsked; to: NumberFormAsked; given: Q; a?: bigint; b?: bigint; text: string }
   | { k: "pct-of"; p: Q; N: bigint; ptext: string }
-  | { k: "pct-change"; p: Q; base: bigint; up: boolean; ptext: string };
+  | { k: "pct-change"; p: Q; base: bigint; up: boolean; ptext: string }
+  // W7 batch 3: a ratio a:b to simplify, an amount T to share in a:b, or a:b = ?:known ('first' missing) / known:? ('second')
+  | { k: "ratio-simplify"; a: bigint; b: bigint }
+  | { k: "ratio-share"; T: bigint; a: bigint; b: bigint }
+  | { k: "ratio-missing"; a: bigint; b: bigint; known: bigint; slot: "first" | "second" };
 type Structure = { ok: true; spec: SchoolSpec; node: Node; kind: Kind } | { ok: false; why: string };
-type ReadOk = { ok: true; spec: SchoolSpec; node: Node; kind: Kind; truth: Q };
+/** `pair` (W7 batch 3, a ratio share): the two amounts in the ratio's order; `truth` is then the first of them. */
+type ReadOk = { ok: true; spec: SchoolSpec; node: Node; kind: Kind; truth: Q; pair?: [Q, Q] };
 type Read = ReadOk | { ok: false; why: string };
 
 /** A whole number as a worksheet prints it: 1 to 999 (a top, a bottom) or 1 to 9999 (an amount), no leading zero. */
@@ -505,6 +527,10 @@ const FORMS_ASKED: readonly NumberFormAsked[] = ["decimal", "fraction", "percent
 const PCT_SRC = String.raw`((?:0|[1-9]\d{0,2})(?:\.\d)?)`;
 const PCT_OF_RE = new RegExp(String.raw`^${PCT_SRC}% of (${W4})$`);
 const PCT_CHANGE_RE = new RegExp(String.raw`^(increase|decrease) (${W4}) by ${PCT_SRC}%$`);
+/** W7 batch 3: a ratio to simplify "12:18", an amount to share "60 in 2:3", a missing term "2:3 = ?:15" / "2:3 = 10:?". */
+const RATIO_SIMPLIFY_RE = new RegExp(String.raw`^(${W3}):(${W3})$`);
+const RATIO_SHARE_RE = new RegExp(String.raw`^(${W4}) in (${W3}):(${W3})$`);
+const RATIO_MISSING_RE = new RegExp(String.raw`^(${W3}):(${W3}) = (\?|${W3}):(\?|${W3})$`);
 const fracNode = (n: bigint, d: bigint): Node => ({ k: "frac", n, d });
 
 /** The spec's structure (printable), without its truth. The W7 shapes are read in their one printed spelling each. */
@@ -523,9 +549,29 @@ function structure(spec: unknown): Structure {
     return node ? { ok: true, spec: s as SchoolSpec, node, kind: { k: "compute" } } : { ok: false, why: REJECT.read };
   }
   // the W7 shapes take no form and no sign flag; only an amount (a fraction or a percent of it) takes a unit
-  if (s.form !== undefined || s.allowNegative !== undefined || (!AMOUNT_SHAPES.includes(shape as SchoolShape) && s.unit !== undefined)) return { ok: false, why: REJECT.key };
+  if (s.form !== undefined || s.allowNegative !== undefined || (!UNIT_SHAPES.includes(shape as SchoolShape) && s.unit !== undefined)) return { ok: false, why: REJECT.key };
   if (s.unit !== undefined && !(UNITS as readonly unknown[]).includes(s.unit)) return { ok: false, why: REJECT.unit };
   if (typeof s.expr !== "string" || s.expr.length > MAX_EXPR) return { ok: false, why: REJECT.read };
+  if (shape === "ratio") {
+    // W7 batch 3: only the amount a ratio shares takes a unit; a ratio to simplify and a missing term are numbers
+    const expr = s.expr;
+    let m = RATIO_SHARE_RE.exec(expr);
+    if (m) {
+      const [T, a, b] = [BigInt(m[1]), BigInt(m[2]), BigInt(m[3])];
+      return { ok: true, spec: s as SchoolSpec, node: fracNode(a, b), kind: { k: "ratio-share", T, a, b } };
+    }
+    if (s.unit !== undefined) return { ok: false, why: REJECT.key };
+    if ((m = RATIO_MISSING_RE.exec(expr))) {
+      if ((m[3] === "?") === (m[4] === "?")) return { ok: false, why: REJECT.read };
+      const [a, b] = [BigInt(m[1]), BigInt(m[2])], slot = m[3] === "?" ? "first" : "second";
+      return { ok: true, spec: s as SchoolSpec, node: fracNode(a, b), kind: { k: "ratio-missing", a, b, known: BigInt(slot === "first" ? m[4] : m[3]), slot } };
+    }
+    if ((m = RATIO_SIMPLIFY_RE.exec(expr))) {
+      const [a, b] = [BigInt(m[1]), BigInt(m[2])];
+      return { ok: true, spec: s as SchoolSpec, node: fracNode(a, b), kind: { k: "ratio-simplify", a, b } };
+    }
+    return { ok: false, why: REJECT.read };
+  }
   if (shape === "convert") {
     if (!(FORMS_ASKED as readonly unknown[]).includes(s.to)) return { ok: false, why: REJECT.form };
     const to = s.to as NumberFormAsked, expr = s.expr;
@@ -650,6 +696,35 @@ function readKind(st: Extract<Structure, { ok: true }>): Read {
     if (eq(truth, qi(K.base)) || eq(truth, K.p)) return { ok: false, why: REJECT.prints };
     return ok(truth);
   }
+  if (K.k === "ratio-simplify") {
+    // W7 batch 3: the same ratio in lowest terms; the truth's top and bottom ARE its two parts (2/3 for 2:3)
+    if (K.a > lim || K.b > lim) return { ok: false, why: REJECT.big };
+    if (K.a === K.b) return { ok: false, why: REJECT.sameParts };
+    if (bgcd(K.a, K.b) === ONE) return { ok: false, why: REJECT.ratioLowest };
+    return ok(mk(K.a, K.b)!);
+  }
+  if (K.k === "ratio-share") {
+    // W7 batch 3: T shared in a:b is T/(a+b) times each; whole shares only, neither printed by the question
+    if (K.T > lim || K.a > lim || K.b > lim) return { ok: false, why: REJECT.big };
+    if (K.a === K.b) return { ok: false, why: REJECT.sameParts };
+    if (bgcd(K.a, K.b) !== ONE) return { ok: false, why: REJECT.ratioNotLowest };
+    if (K.T % (K.a + K.b) !== Z) return { ok: false, why: REJECT.wholeShares };
+    const k = K.T / (K.a + K.b), s1 = qi(k * K.a), s2 = qi(k * K.b);
+    if ([K.T, K.a, K.b].some((x) => eq(qi(x), s1) || eq(qi(x), s2))) return { ok: false, why: REJECT.prints };
+    return { ok: true, spec: st.spec, node: st.node, kind: K, truth: s1, pair: [s1, s2] };
+  }
+  if (K.k === "ratio-missing") {
+    // W7 batch 3: a:b = ?:known is a × known / b; a:b = known:? is b × known / a - a whole number the question does not print
+    if (K.a > lim || K.b > lim || K.known > lim) return { ok: false, why: REJECT.big };
+    if (K.a === K.b) return { ok: false, why: REJECT.sameParts };
+    const [given, other] = K.slot === "first" ? [K.a, K.b] : [K.b, K.a];
+    if (K.known === other) return { ok: false, why: REJECT.sameRatio };
+    if ((given * K.known) % other !== Z) return { ok: false, why: REJECT.notWholeRatio };
+    const t = (given * K.known) / other;
+    if (t < ONE || t > lim) return { ok: false, why: REJECT.result };
+    if ([K.a, K.b, K.known].includes(t)) return { ok: false, why: REJECT.prints };
+    return ok(qi(t));
+  }
   return { ok: false, why: REJECT.shape };
 }
 
@@ -682,7 +757,7 @@ function read(spec: unknown): Read {
 }
 
 /** The unit a spec's answer is in, when it names one (compute and an amount's shapes take one). */
-const specUnit = (s: SchoolSpec): Unit | undefined => (s.shape === "compute" || AMOUNT_SHAPES.includes(s.shape) ? (s as { unit?: Unit }).unit : undefined);
+const specUnit = (s: SchoolSpec): Unit | undefined => (s.shape === "compute" || UNIT_SHAPES.includes(s.shape) ? (s as { unit?: Unit }).unit : undefined);
 
 /**
  * Is this spec a question the desk can print and judge? The expression reads (+ - × ÷, brackets, whole numbers,
@@ -692,7 +767,9 @@ const specUnit = (s: SchoolSpec): Unit | undefined => (s.shape === "compute" || 
  * a known form and unit; no answer field. The W7 shapes: `fraction-of` "a/b of N" with a proper fraction (bottom 2 to
  * 100) and a whole amount 1 to 1000, a unit only; `missing` "a/b = ?/d" or "a/b = c/?" whose missing number is whole
  * (a top at most 1000, a bottom 2 to 100) and not the given one's own; `simplify` "a/b", proper and not yet in lowest
- * terms; none of them takes a form or a sign flag.
+ * terms; none of them takes a form or a sign flag. W7 batch 3: `ratio` "12:18" not in lowest terms, "T in a:b" with a:b in
+ * lowest terms, a ≠ b, whole shares neither printed, or "a:b = ?:k" / "a:b = k:?" with a whole missing term the question
+ * does not print; numbers at most 1000.
  */
 export function wellFormed(spec: unknown): { ok: true } | { ok: false; why: string } {
   try {
@@ -805,6 +882,16 @@ export function question(spec: unknown): { plain: string; tex: string } | null {
       return { plain: `Fill in the missing number: ${K.a}/${K.b} = ${p}/${q}.`, tex: `\\text{Fill in the missing number: } \\frac{${K.a}}{${K.b}} = \\frac{${p}}{${q}}.` };
     }
     if (K.k === "simplify") return { plain: `Write ${K.a}/${K.b} in its simplest form.`, tex: `\\text{Write } \\frac{${K.a}}{${K.b}} \\text{ in its simplest form.}` };
+    // W7 batch 3: "Write 12:18 in its simplest form.", "Share €60 in the ratio 2:3.", "Fill in the missing number: 2:3 = ?:15."
+    if (K.k === "ratio-simplify") return { plain: `Write ${K.a}:${K.b} in its simplest form.`, tex: `\\text{Write } ${K.a}:${K.b} \\text{ in its simplest form.}` };
+    if (K.k === "ratio-share") {
+      const am = amountText(String(K.T), specUnit(st.spec));
+      return { plain: `Share ${am.plain} in the ratio ${K.a}:${K.b}.`, tex: `\\text{Share } ${am.tex} \\text{ in the ratio } ${K.a}:${K.b}.` };
+    }
+    if (K.k === "ratio-missing") {
+      const [p, q] = K.slot === "first" ? ["?", String(K.known)] : [String(K.known), "?"];
+      return { plain: `Fill in the missing number: ${K.a}:${K.b} = ${p}:${q}.`, tex: `\\text{Fill in the missing number: } ${K.a}:${K.b} = ${p}:${q}.` };
+    }
     if (K.k === "convert") {
       // W7 batch 2: "Write 3/8 as a decimal.", "Write 0.35 as a fraction in its simplest form.", "Write 35% as a decimal."
       const asked = CONVERT_ASK[K.to];
@@ -868,6 +955,12 @@ export const SCHOOL_SLIPS: readonly SchoolSlip[] = [
   { id: "change-only", name: "Found the change and stopped", says: "This is the change itself, the percentage of the amount. The question asks for the new amount: add the change on, or take it off.", points: "the last line" },
   { id: "change-wrong-way", name: "Went the wrong way", says: "The change was added where the amount goes down, or taken off where it goes up. Read the question again: an increase adds, a decrease takes away.", points: "the line where the change was added or taken off" },
   { id: "change-as-number", name: "The percent added as a plain number", says: "The percentage was added or taken off as a plain number, as if the amount were a hundred. Find that percentage of the amount itself first.", points: "the line where the percentage was added or taken off" },
+  // ratio and sharing (Family W7 batch 3)
+  { id: "ratio-split-each", name: "Divided by each number of the ratio", says: "The amount was divided by each number of the ratio in turn. Add the ratio's numbers first to find how many equal parts there are, then find the size of a single part.", points: "the division" },
+  { id: "ratio-as-amounts", name: "The ratio's numbers given as the amounts", says: "The numbers of the ratio were given as the answer. They say how many parts each side gets: find the size of a single part and multiply by them.", points: "the answer" },
+  { id: "ratio-swapped", name: "The ratio the wrong way round", says: "The ratio's two numbers were used the wrong way round. The first number of the ratio goes with the first amount, and the second with the second.", points: "the order in the answer" },
+  { id: "ratio-by-difference", name: "Divided by the difference", says: "The amount was divided by the difference between the ratio's numbers. The whole amount is all the parts together, so divide by their sum.", points: "the division" },
+  { id: "ratio-added-same", name: "Added instead of multiplied", says: "The same number was added to both sides of the ratio. Equal ratios come from multiplying or dividing both numbers by the same number.", points: "the line where the ratio changed" },
 ];
 
 /** The common factors of a and b above 1, smallest first. */
@@ -895,6 +988,8 @@ function commonFactors(a: bigint, b: bigint): bigint[] {
  *     ten percent and stopped (p not ten); (100 - p)% of N the part left;
  *   - B increased or decreased by p% (W7 batch 2): p% of B the change and stopped; B × (100 ∓ p)/100 the other way; B ± p
  *     the percent added or taken off as a plain number (the percent of a hundred, not of the amount);
+ *   - a missing ratio term a:b = ?:k (W7 batch 3): a + (k - b) the difference added; b × k / a the ratio the other way
+ *     round (whole only). A ratio to simplify and a share are judged by `checkRatio`, whose pairs carry their own slips;
  *   - decimals a ± b, a × b (W7 batch 2), P the working's places (the longer of the two for ±, their sum for ×): the
  *     numbers lined up by their last digits, (a·10^pa ± b·10^pb) / 10^P, when their places differ; the point put back
  *     by the wrong count, the value × 10^k for k = -1 and 1..P-1 (products only); the point left out, the value × 10^P.
@@ -945,6 +1040,15 @@ function slipCandidates(r: ReadOk): [string, Q][] {
     push("pct-divided", div(mul(N, qi(H)), K.p));
     if (!eq(K.p, qi(TEN))) push("pct-ten-stopped", mk(K.N, TEN));
     push("pct-rest", mul(sub(qi(H), K.p), mk(K.N, H)!));
+    return out;
+  }
+  if (K.k === "ratio-missing") {
+    // W7 batch 3, a:b = ?:known (t = a × known / b): the difference added, a + (known - b); the ratio the other way round,
+    // b × known / a. a:b = known:? likewise with a and b exchanged. A missing term must be a whole number above 0.
+    const [given, other] = K.slot === "first" ? [K.a, K.b] : [K.b, K.a];
+    const whole = (x: bigint) => (x > Z ? qi(x) : null);
+    push("ratio-added-same", whole(given + K.known - other));
+    if ((other * K.known) % given === Z) push("ratio-swapped", whole((other * K.known) / given));
     return out;
   }
   if (K.k === "pct-change") {
@@ -1031,7 +1135,122 @@ const WHY = {
   fraction: "The value is right; the question asks for it as a fraction.",
   noSign: "This reads as the percentage without its percent sign, and the desk does not guess.",
   amountAsPercent: "This is written as a percentage; the question asks for an amount, and the desk does not guess.",
+  ratioAsked: "This is one number; the question asks for a ratio.",
+  ratioForm: "These are two numbers, not written as a ratio; the question asks for a ratio.",
+  order: "These are the two amounts the other way round, and the desk does not guess which was meant to come first.",
+  oneShare: "This is one of the two amounts; the question asks for both.",
+  twoAsked: "This is one number; the question asks for two amounts, and the desk does not guess what was meant.",
+  givenRatio: "This is a ratio equal to the one given; the question asks for the missing number.",
+  notCompleting: "This ratio does not complete the one given, and the desk does not guess which number was meant.",
 } as const;
+
+/**
+ * Two amounts as a learner writes the answer to a ratio question (W7 batch 3): "24 and 36", "24 & 36", "24:36", "24 : 36",
+ * "24 to 36", each side ONE number by readNumber under the system (a unit or a currency sign on either side is kept on its
+ * reading). `sep` says how they were joined: ':' and 'to' write a ratio (its order is meant), 'and' lists two amounts.
+ * Strict: anything else - a comma between them (a decimal comma in cz and de), three numbers, words, a percent - is null.
+ */
+function readPair(answer: string, system: unknown): { a: NumberReading; b: NumberReading; sep: "and" | ":" } | null {
+  if (answer.length > MAX_ANSWER) return null;
+  let s = normalise(answer).replace(/^(?:answer ?[:=]|ans ?[:=]|=) ?/i, "");
+  if (/[^.]\.$/.test(s)) s = s.slice(0, -1).trimEnd();
+  let m = /^(.+?) (?:and|&) (.+)$/i.exec(s), sep: "and" | ":" = "and";
+  if (!m) { m = /^([^:]+?) ?: ?([^:]+)$/.exec(s) ?? /^(.+?) to (.+)$/i.exec(s); sep = ":"; }
+  if (!m) return null;
+  const a = readNumber(m[1], system), b = readNumber(m[2], system);
+  return a && b && a.kind === "number" && b.kind === "number" && a.form !== "percent" && b.form !== "percent" ? { a, b, sep } : null;
+}
+
+/** Is the written value v (a reading) c exactly, or a rounding of c that has no exact decimal to as many places? */
+function nearly(rd: NumberReading, c: Q): boolean {
+  const v = fromRat(rd.value);
+  if (eq(v, c)) return true;
+  if (rd.form !== "decimal") return false;
+  const k = placesOf(rd, v);
+  return k > 0 && !exactAt(c, k) && withinPlace(v, c, k);
+}
+
+/**
+ * The verdict on a ratio question (W7 batch 3), by kind; a percent, a unit the question does not carry, or two numbers the
+ * reader cannot read as a pair are unsure, as everywhere:
+ *   - simplify a:b (lowest p:q): a RATIO p':q' is right when it is p:q in whole numbers in lowest terms; an equal ratio not
+ *     in lowest terms (4:6, 12:18, 1:1.5) is UNSURE, never wrong (the form asks for more); q:p is wrong with ratio-swapped;
+ *     any other ratio wrong. Two numbers joined by 'and', or one number (2/3, 0.67), are unsure: not written as a ratio;
+ *   - share T in a:b (s1, s2): the two amounts in order (s1 and s2, s1:s2) are right; the other order is wrong with
+ *     ratio-swapped when written as a ratio (s2:s1), and UNSURE when listed with 'and' (the desk does not guess which was
+ *     meant first); a pair that is, in either order, what a known wrong method gives is wrong with its slip (T/a and T/b
+ *     split-each, a and b as-amounts, T/|a - b| times a and b by-difference); any other pair wrong. One number alone is
+ *     unsure: it may be one share, or a list the reader took as one number (24,36 is 24.36 in cz and de);
+ *   - a missing term: a whole number judged as a missing number is (right, a slip, or wrong); a ratio that completes the
+ *     given one is read as its missing term (10:15 for 2:3 = ?:15 is 10), one equal to the given ratio that does not
+ *     complete it is unsure, any other ratio unsure; a fraction completing it likewise (10/15 is 10).
+ */
+function checkRatio(r: ReadOk, writing: string, system: unknown): SchoolVerdict {
+  const K = r.kind, t = r.truth, unit = specUnit(r.spec);
+  const unitOk = (x: NumberReading) => !x.unit || x.unit === unit;
+  const unsure = (why: string, form?: Reading["form"]): SchoolVerdict => ({ verdict: "unsure", ...(form ? { form } : {}), why });
+  const right: SchoolVerdict = { verdict: "right", form: "ratio", why: WHY.right };
+  const wrong = (slip?: string, form: Reading["form"] = "ratio"): SchoolVerdict => (slip ? { verdict: "wrong", slip, form, why: WHY.slip } : { verdict: "wrong", form, why: WHY.wrong });
+  const pair = readPair(writing, system);
+  if (pair) {
+    if (!unitOk(pair.a) || !unitOk(pair.b)) return unsure(unit ? WHY.otherUnit : WHY.unit, "ratio");
+    const p = fromRat(pair.a.value), q = fromRat(pair.b.value);
+    if (K.k === "ratio-simplify") {
+      if (pair.sep === "and") return unsure(WHY.ratioForm, "ratio");
+      const [A, B] = [t.n, t.d];
+      if (p.n * B * q.d === q.n * A * p.d && q.n !== Z) {
+        const lowest = p.d === ONE && q.d === ONE && p.n > Z && q.n > Z && bgcd(p.n, q.n) === ONE;
+        return lowest ? right : unsure(WHY.simplest, "ratio");
+      }
+      if (p.n * A * q.d === q.n * B * p.d && p.n !== Z) return wrong("ratio-swapped");
+      return wrong();
+    }
+    if (K.k === "ratio-missing") {
+      if (pair.sep === "and") return unsure(WHY.ratioForm, "ratio");
+      const filled = K.slot === "first" ? (eq(q, qi(K.known)) ? p : null) : eq(p, qi(K.known)) ? q : null;
+      if (filled) return judgeMissingRatio(r, filled, "ratio");
+      if (q.n !== Z && eq(div(p, q)!, mk(K.a, K.b)!)) return unsure(WHY.givenRatio, "ratio");
+      return unsure(WHY.notCompleting, "ratio");
+    }
+    // a share: the two amounts in the ratio's order
+    const [s1, s2] = r.pair!;
+    if (eq(p, s1) && eq(q, s2)) return right;
+    if (eq(p, s2) && eq(q, s1)) return pair.sep === ":" ? wrong("ratio-swapped") : unsure(WHY.order, "ratio");
+    if (K.k === "ratio-share") {
+      const T = qi(K.T), a = qi(K.a), b = qi(K.b), d = qi(babs(K.a - K.b));
+      const slips: [string, Q, Q][] = [["ratio-split-each", div(T, a)!, div(T, b)!], ["ratio-as-amounts", a, b], ["ratio-by-difference", mul(div(T, d)!, a), mul(div(T, d)!, b)]];
+      for (const [id, x, y] of slips) if ((nearly(pair.a, x) && nearly(pair.b, y)) || (nearly(pair.a, y) && nearly(pair.b, x))) return wrong(id);
+    }
+    return wrong();
+  }
+  const reading = readNumber(writing, system);
+  if (!reading) return unsure(WHY.unreadable);
+  if (reading.kind === "ratio") return unsure(WHY.unreadable, "ratio");
+  const form = reading.form;
+  if (K.k === "ratio-simplify") return unsure(WHY.ratioAsked, form);
+  if (form === "percent") return unsure(WHY.amountAsPercent, form);
+  if (!unitOk(reading)) return unsure(unit ? WHY.otherUnit : WHY.unit, form);
+  const v = fromRat(reading.value);
+  // one number never answers a share, but it may be a list the reader took as one number (24,36 is 24.36 in cz): unsure
+  if (K.k === "ratio-share") return unsure(eq(v, r.pair![0]) || eq(v, r.pair![1]) ? WHY.oneShare : WHY.twoAsked, form);
+  if (K.k !== "ratio-missing") return unsure(WHY.badSpec, form);
+  // a fraction that completes the given ratio is read as its missing term, as a missing number's fraction is (check)
+  const w = form === "fraction" ? writtenFraction(writing) : null;
+  const slotted = w && K.slot === "first" && w[1] === K.known ? w[0] : w && K.slot === "second" && w[0] === K.known ? w[1] : null;
+  if (slotted !== null) {
+    if (!eq(qi(slotted), t) && eq(v, t)) return unsure(WHY.twoWays, form);
+    return judgeMissingRatio(r, qi(slotted), form);
+  }
+  if (eq(v, mk(K.a, K.b)!) && !eq(v, t)) return unsure(WHY.givenRatio, form);
+  return judgeMissingRatio(r, v, form);
+}
+
+/** A missing ratio term judged as a number: the truth is right, a slip's value is wrong with it, anything else wrong. */
+function judgeMissingRatio(r: ReadOk, v: Q, form: Reading["form"]): SchoolVerdict {
+  if (eq(v, r.truth)) return { verdict: "right", form, why: WHY.right };
+  const named = slipCandidates(r).filter(([, c]) => !eq(c, r.truth)).find(([, c]) => eq(c, v));
+  return named ? { verdict: "wrong", slip: named[0], form, why: WHY.slip } : { verdict: "wrong", form, why: WHY.wrong };
+}
 
 /** The top and bottom as written, for an answer that reads as a plain fraction ('9/12', 'x = 9/12', '9 / 12.'), or null. */
 function writtenFraction(answer: string): [bigint, bigint] | null {
@@ -1069,6 +1288,7 @@ const placesOf = (r: NumberReading, value: Q): number => {
  * for a whole number: its value in any form is right (9, 9.0, 18/2 for 3/4 = ?/12), and a fraction answer that
  * completes the given one is read as its missing part (9/12 is 9, 10/12 is 10: judged as 10); a fraction equal to the
  * given one that does not complete it (3/4, 6/8, 0.75) is UNSURE - the child wrote a fraction, not the number asked for.
+ * A `ratio` spec (W7 batch 3) is judged by `checkRatio`: its answer may be a ratio or a pair of amounts.
  * The `why` is a fixed sentence of the desk's, with no value in it.
  */
 export function check(spec: unknown, writing: unknown, system: unknown): SchoolVerdict {
@@ -1076,6 +1296,8 @@ export function check(spec: unknown, writing: unknown, system: unknown): SchoolV
     const r = read(spec);
     if (!r.ok) return { verdict: "unsure", why: WHY.badSpec };
     if (typeof writing !== "string" || !writing.trim()) return { verdict: "unsure", why: WHY.empty };
+    // W7 batch 3: a ratio question may be answered by a ratio or a pair, which only its own reader reads
+    if (r.kind.k === "ratio-simplify" || r.kind.k === "ratio-share" || r.kind.k === "ratio-missing") return checkRatio(r, writing, system);
     const reading = readNumber(writing, system);
     if (!reading) return { verdict: "unsure", why: WHY.unreadable };
     const form = reading.form;
@@ -1289,6 +1511,12 @@ interface LeakProfile {
   T: Q; targets: Q[]; lowestOnly: boolean; bare: Set<string>; restated: { p: Q; o: Op; q: Q; both: boolean }[]; written: RegExp[];
   /** A conversion (W7 batch 2): the form it is given in and the form it asks for, and, to a percentage, the percent's number (100T). */
   convert?: { from: NumberFormAsked; to: NumberFormAsked; hundred: Q };
+  /** A ratio share (W7 batch 3): the two amounts. A ratio in a hint gives the answer away only as these two, in either order. */
+  pair?: [Q, Q];
+  /** A ratio to simplify (W7 batch 3): a ratio in a hint that is not in lowest terms (6:9 for 12:18) is a step, not the answer. */
+  ratioLowest?: boolean;
+  /** Values beside T that an operation in the hint must not make (rule 6): a share's second amount. */
+  alsoT?: Q[];
 }
 
 function leakProfile(r: ReadOk): LeakProfile {
@@ -1296,6 +1524,22 @@ function leakProfile(r: ReadOk): LeakProfile {
   const whole = T.n / T.d, fracPart = T.n > T.d && T.d !== ONE ? mk(T.n - whole * T.d, T.d)! : null;
   const targets = fracPart ? [T, fracPart] : [T];
   const K = r.kind;
+  if (K.k === "ratio-simplify") {
+    // W7 batch 3: the value p/q of the lowest ratio in any form, the ratio p:q itself, and p and q alone (above 1): each is
+    // the answer; the given ratio or any equal one not in lowest terms (6:9, 12/18) is the question or a step on the way
+    const bare = new Set([T.n, T.d].filter((x) => x > ONE).map(String));
+    return { T, targets: [T], lowestOnly: true, ratioLowest: true, bare, restated: [], written: [] };
+  }
+  if (K.k === "ratio-share") {
+    // W7 batch 3: either amount alone, or both as a ratio; the size of a single part (T ÷ (a + b)) is a step and passes
+    const [s1, s2] = r.pair!;
+    return { T: s1, targets: [s1, s2], lowestOnly: false, bare: new Set(), restated: [], written: [], pair: [s1, s2], alsoT: [s2] };
+  }
+  if (K.k === "ratio-missing") {
+    // W7 batch 3: the missing term, and the completed ratio written out (10:15 for 2:3 = ?:15)
+    const [p, q] = K.slot === "first" ? [T.n, K.known] : [K.known, T.n];
+    return { T, targets: [T], lowestOnly: false, bare: new Set(), restated: [], written: [new RegExp(`(?<![\\d.,/:])${p}\\s*:\\s*${q}(?![\\d.,])`)] };
+  }
   if (K.k === "convert") {
     // W7 batch 2: the value in the form asked for is the answer, in the form given it is the question. Bare: to a fraction
     // its lowest bottom (and top above 1); to a percentage the percent's number (35); to a decimal from a fraction the
@@ -1400,6 +1644,9 @@ export function leaksSchool(spec: unknown, hint: unknown): boolean {
     const hit = (rd: Reading, piece: string): boolean => {
       if (rd.kind === "ratio") {
         const [p, q] = rd.parts.map(fromRat);
+        // W7 batch 3: a share's amounts as a ratio, either order; a ratio to simplify only in lowest terms
+        if (pr.pair) return (eq(p, pr.pair[0]) && eq(q, pr.pair[1])) || (eq(p, pr.pair[1]) && eq(q, pr.pair[0]));
+        if (pr.ratioLowest && !(p.d === ONE && q.d === ONE && p.n > Z && q.n > Z && bgcd(p.n, q.n) === ONE)) return false;
         const v = q.n === Z ? null : div(p, q);
         return !!v && targets.some((x) => eq(qabs(v), x));
       }
@@ -1460,6 +1707,8 @@ export function leaksSchool(spec: unknown, hint: unknown): boolean {
     const orient = (j: Joiner, x: Q, y: Q): [Q, Q, Op] => (j === "less" ? [y, x, "-"] : j === "into" ? [y, x, "÷"] : [x, y, j]);
     // the question restated, or its operands rewritten (9/12 + 2/12 for 3/4 + 1/6), or a division flipped: a step, not the answer
     const isRestated = (p: Q, o: Op, q: Q) => pr.restated.some((s) => s.o === o && ((eq(p, s.p) && eq(q, s.q)) || (s.both && eq(p, s.q) && eq(q, s.p))));
+    /** The answer an operation must not make: T, and (W7 batch 3) a share's second amount. */
+    const isT = (v: Q) => eq(v, T) || (pr.alsoT ?? []).some((x) => eq(v, x));
     for (let i = 0; i + 1 < runs.length; i++) {
       const j = joinAt(i);
       if (!j) continue;
@@ -1467,7 +1716,7 @@ export function leaksSchool(spec: unknown, hint: unknown): boolean {
         const [p, q, o] = orient(j, x, y);
         const v = apply(o, p, q);
         if (!v || isRestated(p, o, q)) continue;
-        if (eq(qabs(v), T) || (p.d === ONE && q.d === ONE && v.d === ONE && pr.bare.has(String(babs(v.n))))) return true;
+        if (isT(qabs(v)) || (p.d === ONE && q.d === ONE && v.d === ONE && pr.bare.has(String(babs(v.n))))) return true;
       }
       // three numbers chained by × and ÷: the whole working of a missing number or a fraction of an amount in one line
       // ("40 ÷ 5 × 3"), unless the chain is the question in other words ("3 lots of a fifth of 40" is 3/5 of 40)
@@ -1475,7 +1724,7 @@ export function leaksSchool(spec: unknown, hint: unknown): boolean {
       if ((j === "×" || j === "÷") && (k === "×" || k === "÷")) {
         for (const x of runs[i].values) for (const y of runs[i + 1].values) for (const z of runs[i + 2].values) {
           const xy = apply(j, x, y), yz = apply(k, y, z), v = xy && apply(k, xy, z);
-          if (!v || !eq(qabs(v), T)) continue;
+          if (!v || !isT(qabs(v))) continue;
           const words = (xy && isRestated(qabs(xy), k, z)) || (j === k && j === "×" && yz && isRestated(x, j, qabs(yz)));
           if (!words) return true;
         }
@@ -1565,6 +1814,8 @@ function fair(spec: SchoolSpec): boolean {
   if (!r.ok || !q) return false;
   const nums = (q.plain.match(/\d+/g) ?? []).map((x) => BigInt(x));
   if (r.truth.d === ONE && nums.includes(qabs(r.truth).n)) return false;
+  // a share (W7 batch 3) has two answers, and neither may be printed
+  if (r.pair && r.pair.some((x) => x.d === ONE && nums.includes(x.n))) return false;
   return !leaksSchool(spec, q.plain);
 }
 
@@ -1822,10 +2073,60 @@ export function genPercentChange(seed: unknown, tier: unknown): SchoolSpec | nul
   return tier === 1 ? { shape: "percent-change", expr: "increase 60 by 25%" } : { shape: "percent-change", expr: "increase 60 by 15%", unit: "€" };
 }
 
+// ------------------------------------------------------------------ the W7 batch 3 generators: ratio, rates, area, mean and range
+
+/** Two different whole numbers lo..hi with no common factor, as a ratio in lowest terms. */
+function ratioPairs(lo: number, hi: number): [number, number][] {
+  const out: [number, number][] = [];
+  for (let p = lo; p <= hi; p++) for (let q = lo; q <= hi; q++) if (p !== q && gcdN(p, q) === 1) out.push([p, q]);
+  return out;
+}
+/** The units a tier-2 share's amount may carry: money in most, then weights, lengths and capacities (as a fraction of an amount). */
+const SHARE_UNITS: readonly Unit[] = ["€", "£", "€", "£", "kg", "g", "m", "ml", "l", "min"];
+
+/**
+ * One "Ratio and sharing" item, from a seed and a tier that code computed:
+ *   - tier 1, equal ratios, turning with the seed: simplify a ratio p:q in lowest terms (1..9, the two different) scaled by
+ *     a common factor 2..9 ("Write 12:18 in its simplest form."), or fill in a missing term when p:q (2..9) is scaled UP by
+ *     2..6 ("2:3 = ?:15", "2:3 = 10:?"), the new numbers at most 60;
+ *   - tier 2, sharing: an amount shared in a two-part ratio a:b in lowest terms (2..9 each, different), the amount (a + b)
+ *     times 2..60, at most 500, whole shares; one in three with a unit, money in most ("Share €60 in the ratio 2:3.").
+ * A simplify item is drawn again when an answer part above 1 divides the scale factor (a hint may name "divide both by 3",
+ * a number of the answer); a missing term when it is the scale factor. Neither part of a share is 1 part, so the size of a
+ * single part - the legal first step - is never one of the answers. Nothing the question prints is an answer (`fair`).
+ * Pure and seeded; null for a bad seed or tier.
+ */
+export function genRatio(seed: unknown, tier: unknown): SchoolSpec | null {
+  const rnd = seeded(seed, tier, 0x5eed1508);
+  if (!rnd) return null;
+  function pick<T>(xs: readonly T[]): T { return xs[Math.floor(rnd!() * xs.length)]; }
+  const int = (lo: number, hi: number) => lo + Math.floor(rnd!() * (hi - lo + 1));
+  for (let t = 0; t < MAX_TRIES; t++) {
+    let spec: SchoolSpec;
+    if (tier === 1 && ((seed as number) + t) % 2 === 0) {
+      const [p, q] = pick(ratioPairs(1, 9)), k = int(2, 9);
+      if ((p > 1 && k % p === 0) || (q > 1 && k % q === 0)) continue;
+      spec = { shape: "ratio", expr: `${p * k}:${q * k}` };
+    } else if (tier === 1) {
+      const [p, q] = pick(ratioPairs(2, 9)), k = int(2, 6);
+      if (p * k > 60 || q * k > 60) continue;
+      const first = rnd() < 0.5, answer = first ? p * k : q * k;
+      if (answer === k) continue;
+      spec = { shape: "ratio", expr: first ? `${p}:${q} = ?:${q * k}` : `${p}:${q} = ${p * k}:?` };
+    } else {
+      const [a, b] = pick(ratioPairs(2, 9)), k = int(2, 60), T = k * (a + b);
+      if (T > 500) continue;
+      spec = rnd() < 1 / 3 ? { shape: "ratio", expr: `${T} in ${a}:${b}`, unit: pick(SHARE_UNITS) } : { shape: "ratio", expr: `${T} in ${a}:${b}` };
+    }
+    if (fair(spec)) return spec;
+  }
+  return tier === 1 ? { shape: "ratio", expr: "12:18" } : { shape: "ratio", expr: "60 in 2:3" };
+}
+
 /**
  * The units whose practice sets code writes, by syllabus topic id, each with its generator (Family W5b: add and
- * subtract fractions; W7 batch 1: equivalent fractions, a fraction of an amount, multiply and divide fractions). A
- * topic not here is written as it always was.
+ * subtract fractions; W7 batch 1: equivalent fractions, a fraction of an amount, multiply and divide fractions; W7 batch
+ * 2: decimals and percent; W7 batch 3: ratio and sharing). A topic not here is written as it always was.
  */
 export const SCHOOL_GENERATORS: Readonly<Record<string, (seed: number, tier: 1 | 2) => SchoolSpec | null>> = {
   "frac-equivalent": (seed, tier) => genEquivalent(seed, tier),
@@ -1836,6 +2137,7 @@ export const SCHOOL_GENERATORS: Readonly<Record<string, (seed: number, tier: 1 |
   "dec-convert": (seed, tier) => genConvert(seed, tier),
   "pct-of-amount": (seed, tier) => genPercentOf(seed, tier),
   "pct-change": (seed, tier) => genPercentChange(seed, tier),
+  "ratio-share": (seed, tier) => genRatio(seed, tier),
 };
 /** The generator for a topic id, or null: an own key only, so 'constructor' is not a unit. */
 export const generatorFor = (topicId: unknown) =>
@@ -1855,6 +2157,7 @@ export const SCHOOL_UNIT_SLIPS: Readonly<Record<string, readonly string[]>> = {
   "dec-convert": ["conv-flipped", "conv-not-scaled", "conv-wrong-way", "conv-ten-times", "conv-top-dot-bottom"],
   "pct-of-amount": ["pct-divided", "pct-times-whole", "pct-ten-stopped", "pct-rest"],
   "pct-change": ["change-only", "change-wrong-way", "change-as-number"],
+  "ratio-share": ["ratio-split-each", "ratio-as-amounts", "ratio-swapped", "ratio-by-difference", "ratio-added-same"],
 };
 
 /** The system the desk reads a learner's numbers by when their profile names none (tv/profileRows DEFAULT_SYSTEM is the same, tested). */
@@ -2081,6 +2384,44 @@ function readPercentChange(t0: string): SchoolSpec | null {
   return read(spec).ok ? spec : null;
 }
 
+/** A two-part ratio as a worksheet prints it: whole numbers up to three digits, a colon, spaces allowed around it. */
+const RATIO_SRC = String.raw`([1-9]\d{0,2})\s*:\s*([1-9]\d{0,2})`;
+/** A missing ratio term's placeholder: '?', a box or underscores, or a number. */
+const RGAP_SRC = String.raw`(\?|□|☐|▢|_+|[1-9]\d{0,2})`;
+
+/**
+ * A ratio task (W7 batch 3, "Ratio and sharing"), or null: 'Simplify 12:18' (optionally 'the ratio', 'fully', 'completely',
+ * 'to its simplest form', 'to lowest terms'), 'Write / Express 12:18 in its simplest form'; 'Share 60 in the ratio 2:3',
+ * 'Divide £60 in the ratio 2:3', 'Split 60 kg in the ratio 2 : 3' (the amount as `amountOf` reads it); '2:3 = ?:15' or
+ * '2:3 = 10:?' after an optional 'Fill in the missing number:', 'Complete:', 'Copy and complete'. A bare '12:18' is null (in
+ * cz and de ':' also divides), as are three-part ratios, decimals, who shares with whom (a word problem) and a spec
+ * wellFormed refuses (a ratio already in lowest terms, shares that are not whole, two gaps).
+ */
+function readRatio(t0: string): SchoolSpec | null {
+  const t = t0.replace(/[.!]$/, "").trim();
+  const LOW = String.raw`(?:its\s+)?(?:simplest form|lowest terms)`;
+  const simplify = [
+    new RegExp(String.raw`^(?:simplify|reduce)(?:\s+the\s+ratio)?\s*:?\s*${RATIO_SRC}(?:\s+(?:fully|completely|to\s+${LOW}))?$`, "i"),
+    new RegExp(String.raw`^(?:write|express|give|put)(?:\s+the\s+ratio)?\s+${RATIO_SRC}\s+in\s+${LOW}$`, "i"),
+  ];
+  let spec: SchoolSpec | null = null, m: RegExpExecArray | null = null;
+  for (const re of simplify) if ((m = re.exec(t))) { spec = { shape: "ratio", expr: `${m[1]}:${m[2]}` }; break; }
+  if (!spec && (m = new RegExp(String.raw`^(?:share|divide|split)\s+(.+?)\s+in\s+the\s+ratio\s+${RATIO_SRC}$`, "i").exec(t))) {
+    const got = amountOf(m[1].trim());
+    if (!got) return null;
+    spec = { shape: "ratio", expr: `${got.N} in ${m[2]}:${m[3]}`, ...(got.unit ? { unit: got.unit } : {}) };
+  }
+  if (!spec) {
+    const u = t.replace(/^(?:fill in the missing number|find the missing number|write the missing number|copy and complete|complete)\s*[:.]?\s*/i, "");
+    if ((m = new RegExp(String.raw`^${RATIO_SRC}\s*=\s*${RGAP_SRC}\s*:\s*${RGAP_SRC}$`).exec(u))) {
+      const gap = (x: string) => /^(?:\?|□|☐|▢|_+)$/.test(x);
+      if (gap(m[3]) === gap(m[4])) return null;
+      spec = { shape: "ratio", expr: `${m[1]}:${m[2]} = ${gap(m[3]) ? "?" : m[3]}:${gap(m[4]) ? "?" : m[4]}` };
+    }
+  }
+  return spec && read(spec).ok ? spec : null;
+}
+
 /**
  * A worksheet task of a school fractions unit, read back into the spec it asks, for the hint's leak check - or null.
  * Conservative: what it does not read with one meaning is null, and a null task gets no school leak check (the general
@@ -2104,7 +2445,8 @@ function readPercentChange(t0: string): SchoolSpec | null {
  *     *, 'plus', 'minus', 'times' after the same verbs, or 'Add A and B', 'Add B to A', 'Subtract B from A', 'Take B
  *     (away) from A', 'Multiply A by B', 'Find the product of A and B', 'Find the sum of A and B'; money with the same €
  *     or £ before both amounts of a sum or a difference, or before the amount of an amount times a whole count. Never a
- *     division, a decimal comma (a list too), a sign on one amount only or on a count, or two currencies.
+ *     division, a decimal comma (a list too), a sign on one amount only or on a count, or two currencies;
+ *   - ratio and sharing (W7 batch 3): `readRatio`'s phrasings (a bare 'a:b' is null: ':' also divides in cz and de).
  * Null for: whole numbers or mixed numbers as operands (a whole amount after 'of' excepted), a decimal beside a fraction, three or more
  * terms, any letter in the maths (an x), brackets, number words, an answer after '=', a bottom of 1 or 0, a leading
  * zero, 'the difference between' (its order is not said), a fraction of a fraction, a decimal or a thousands-separated
@@ -2117,7 +2459,8 @@ export function specFromQuestion(text: unknown): SchoolSpec | null {
   try {
     let t = normalise(text);
     t = t.replace(/^(?:\d{1,2}[.)]|\(\d{1,2}\)|[a-h]\)|\([a-h]\))\s+/i, "");
-    return readMissing(t) ?? readSimplify(t) ?? readOf(t) ?? readCombined(t) ?? readDecimal(t) ?? readConvert(t) ?? readPercentOf(t) ?? readPercentChange(t);
+    return readMissing(t) ?? readSimplify(t) ?? readOf(t) ?? readCombined(t) ?? readDecimal(t) ?? readConvert(t) ?? readPercentOf(t) ?? readPercentChange(t)
+      ?? readRatio(t);
   } catch {
     return null;
   }
@@ -2127,7 +2470,7 @@ export function specFromQuestion(text: unknown): SchoolSpec | null {
  * The unit a school spec belongs to, by topic id, or null: a sum or difference of two fractions is add and subtract
  * fractions, a product or quotient of two fractions multiply and divide fractions (W7), a fraction of an amount its own
  * unit, a missing number or a simplify equivalent fractions; two numbers with a decimal among them added, subtracted or
- * multiplied the decimals unit (W7 batch 2).
+ * multiplied the decimals unit (W7 batch 2); any `ratio` spec "Ratio and sharing" (W7 batch 3).
  */
 export function unitOf(spec: unknown): string | null {
   try {
@@ -2138,6 +2481,7 @@ export function unitOf(spec: unknown): string | null {
     if (r.kind.k === "convert") return "dec-convert";
     if (r.kind.k === "pct-of") return "pct-of-amount";
     if (r.kind.k === "pct-change") return "pct-change";
+    if (r.kind.k === "ratio-simplify" || r.kind.k === "ratio-share" || r.kind.k === "ratio-missing") return "ratio-share";
     const n = r.node;
     if (decimalPair(n)) return "dec-arith";
     if (n.k !== "op" || n.a.k !== "frac" || n.b.k !== "frac") return null;
@@ -2163,6 +2507,7 @@ export const SCHOOL_WITHHELD = {
   "pct-of-amount": "A percentage of an amount is that many hundredths of it. Find a single hundredth of the amount first and build the percentage up from it, or write the percentage as a decimal and multiply the amount by it. The answer is yours to work out.",
   "pct-change": "First find the percentage of the amount: that is the change. Then add it on for an increase, or take it off for a decrease. The answer is yours to work out.",
   "dec-arith": "To add or take away, write the numbers with their decimal points one under the other, filling empty places with zeros. To multiply, multiply as if there were no points, then give the answer as many digits after its point as the question's numbers have between them. The answer is yours to work out.",
+  "ratio-share": "To share in a ratio, add the ratio's numbers to find how many equal parts there are, divide the amount by that to find the size of a single part, then multiply by each number of the ratio. To simplify a ratio or find a missing number, multiply or divide both numbers by the same number. The answer is yours to work out.",
   any: "Go back to the last step you are sure of and take the next. The answer stays yours to find.",
 } as const;
 /** The withheld line for a school spec, chosen by its unit; the general line for any other. */

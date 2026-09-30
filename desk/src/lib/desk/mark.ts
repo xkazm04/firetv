@@ -128,7 +128,8 @@ export function schoolPrompt(practice: Practice): string {
     `- n: the item number.\n` +
     `- studentAnswer: the final answer the student wrote, copied exactly as written: a whole number, a fraction such as 5/12, ` +
     `a mixed number such as 1 5/12, a decimal with the comma or point they used, or a percentage with its % sign such as 37.5%, ` +
-    `with any currency sign or unit they wrote beside it (€7.15, 45 kg). Do not simplify, convert or correct it. ` +
+    `with any currency sign or unit they wrote beside it (€7.15, 45 kg); a ratio with its colon such as 2:3, or two amounts ` +
+    `as they wrote them such as 24 and 36. Do not simplify, convert or correct it. ` +
     `Empty string if they wrote no final answer.\n` +
     `- studentWorking: their working transcribed exactly as written, one step per line (a newline between steps), or an empty string if there is none.\n\n` +
     `Do not solve the questions and do not judge the answers - only read what is on the page. ` +

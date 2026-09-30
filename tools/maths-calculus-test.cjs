@@ -365,6 +365,35 @@ test('7c: the W7 batch-2 school corpus - every decimals and percent question the
  assert.equal(off.length,0,'a W7 batch-2 school question that does not set cleanly:\n'+off.join('\n'));
 });
 
+test('7d: the W7 batch-3 school corpus - every ratio, rate, area and mean or range question renders on the practice sheet with every number, ratio and unit kept; a long row is fitted, never under 40 px',()=>{
+ // ratio: 'Write 12:18 in its simplest form.', 'Share €60 in the ratio 2:3.', 'Fill in the missing number: 2:3 = ?:15.' - no
+ // fraction stacked, the ratio's colon kept between its numbers. A row wider than the paper at 52 px is not a break: the
+ // sheet fits it (MathsTV fitRows, tv/mathsRows fitRow) down in 2 px steps, and this batch holds it at 40 px or more.
+ const S=require(path.join(root,'src/lib/rules/school.ts'));
+ const GENS=[S.genRatio];
+ const off=[];let n=0,fitted=0,smallest=52;
+ for(const g of GENS)for(const tier of [1,2])for(let seed=0;seed<100;seed++){
+  const sp=g(seed,tier),q=S.question(sp);n++;
+  for(const [form,line,tex] of [['plain',q.plain,false],['tex',q.tex,true]]){
+   const st=renderStatus(line,'question',tex);
+   if(st==='degrades:too-wide'){
+    const px=Math.floor(52*CTX.question.w/listW(T.parseMath(line),52,'print'));
+    if(form==='plain'){fitted++;smallest=Math.min(smallest,px);}
+    if(px<40)off.push(`${sp.shape} ${tier}/${seed} ${form} ${line}: fits only at ${px} px`);
+   }else if(st!=='renders')off.push(`${sp.shape} ${tier}/${seed} ${form} ${line}: ${st}`);
+   let fr=0;T.walk(T.parseMath(line),(x)=>{if(x.t==='frac')fr++;});
+   if(fr!==0)off.push(`${sp.shape} ${tier}/${seed} ${form} ${line}: ${fr} stacked fractions`);
+   const flat=T.flatten(T.parseMath(line)),bare=flat.replace(/\s/g,'');
+   for(const d of sp.expr.match(/\d+(?:\.\d+)?/g))if(!flat.includes(d))off.push(`${line}: ${d} is lost (${flat})`);
+   for(const r of sp.expr.match(/\d+:\d+/g)??[])if(!bare.includes(r))off.push(`${line}: the ratio ${r} is lost (${flat})`);
+   if(sp.unit&&!/[€£]|kg|grams|km|metres|cm|litres|ml|minutes|dollars/.test(flat))off.push(`${line}: the unit ${sp.unit} is lost (${flat})`);
+  }
+ }
+ console.log(`# 7d: ${n} batch-3 questions, ${fitted} fitted below 52 px, the smallest at ${smallest} px`);
+ assert.equal(n,GENS.length*200);
+ assert.equal(off.length,0,'a W7 batch-3 school question that does not set cleanly:\n'+off.join('\n'));
+});
+
 after(()=>{
  // the baseline table: topic x example -> render (plain | tex), check
  const pad=(s,n)=>String(s).padEnd(n);

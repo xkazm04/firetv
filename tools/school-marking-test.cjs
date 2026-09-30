@@ -519,7 +519,8 @@ const W7_TASKS={
   // refused
   ['Simplify 3/4',null],['Simplify 18/12',null],['3/4 = ?/13',null],['3/4 = ?/?',null],['3/4 = 9/12',null],['? = 9/12',null],['?/4 = 9/12',null],
   ['3/4 = ?/12 = ?/16',null],['Simplify 18/24 + 1/2',null],['Simplify x/24',null],['Simplify 1 2/4',null],['Simplify 18/0',null],['Simplify 0.75',null],
-  ['Simplify 18:24',null],['Write 3/4 with a denominator of 10',null],['3/4 = ?/4',null],['Simplify 18/24 and 6/8',null],['Write 18/24 as a decimal',null],
+  // W7 batch 3: 'Simplify 18:24' (refused here in batch 1) reads as "Ratio and sharing" now; its row is in W7c 4
+  ['Write 3/4 with a denominator of 10',null],['3/4 = ?/4',null],['Simplify 18/24 and 6/8',null],['Write 18/24 as a decimal',null],
   ['Simplify 018/24',null],['Simplify the fraction',null],['3/4 = ? / 12 please',null],
  ],
  'frac-of-amount':[
@@ -820,3 +821,88 @@ test('W7b 9: an unsure decimals or percent item is explained in the school stanc
  await post('explain',{transcript:'seven point one five',n:2});
  const it=store.getSession().practice.items[2];assert.equal(it.verdict,'right');assert.equal(it.reply,M.RIGHT(3),'the leaking reply is not shown');
 });
+
+// ------------------------------------------------------------------ 9. Family W7 batch 3: ratio, rates, area, mean and range - read, withheld and marked
+const ra=(expr,unit)=>({shape:'ratio',expr,...(unit?{unit}:{})});
+/** [task text, the spec it reads as (null: refused)] per unit; each spec's value is worked in school-rules-test. */
+const B3_TASKS={
+ 'ratio-share':[
+  ['Simplify 12:18',ra('12:18')],['Simplify 12:18.',ra('12:18')],['Simplify the ratio 12:18',ra('12:18')],['Simplify 12 : 18',ra('12:18')],['Simplify 12:18 fully',ra('12:18')],
+  ['Simplify 12:18 to its simplest form',ra('12:18')],['Reduce 12:18 to lowest terms',ra('12:18')],['Write 12:18 in its simplest form',ra('12:18')],['Write the ratio 12:18 in its simplest form.',ra('12:18')],
+  ['Express 12:18 in its lowest terms',ra('12:18')],['Simplify 18:24',ra('18:24')],['(a) Simplify 15:25',ra('15:25')],['Share 60 in the ratio 2:3',ra('60 in 2:3')],['Share 60 in the ratio 2:3.',ra('60 in 2:3')],
+  ['Share £60 in the ratio 2:3',ra('60 in 2:3','£')],['Share €45 in the ratio 4:5',ra('45 in 4:5','€')],['Divide 60 in the ratio 2:3',ra('60 in 2:3')],['Split 70 kg in the ratio 2 : 5',ra('70 in 2:5','kg')],
+  ['Share 60 sweets in the ratio 2:3',ra('60 in 2:3')],['Fill in the missing number: 2:3 = ?:15',ra('2:3 = ?:15')],['2:3 = ?:15',ra('2:3 = ?:15')],['2 : 3 = □ : 15',ra('2:3 = ?:15')],
+  ['Complete: 4:5 = 12:?',ra('4:5 = 12:?')],['4:5 = 12:___',ra('4:5 = 12:?')],['3. 2:5 = 8:?',ra('2:5 = 8:?')],['Find the missing number: 2:3 = ?:15.',ra('2:3 = ?:15')],
+  // refused
+  ['12:18',null],['Simplify 2:3',null],['Simplify 12:18:24',null],['Simplify 1.2:1.8',null],['Share 60 in the ratio 2:3:5',null],['Share 61 in the ratio 2:3',null],['Share 60 in the ratio 3:3',null],
+  ['Share 60 in the ratio 4:6',null],['Tom and Sam share 60 sweets in the ratio 2:3. How many does Tom get?',null],['Share 60 between Tom and Sam in the ratio 2:3',null],['2:3 = ?:?',null],['2:3 = 10:15',null],
+  ['2:3 = ?:16',null],['Simplify 12:18 and 15:25',null],['Write 12:18 as a fraction',null],['Share 60 in the ratio 2 to 3',null],['Share 60 pounds in the ratio 2:3',null],['Divide 60 by the ratio 2:3',null],
+ ],
+};
+const B3GEN={'ratio-share':S.genRatio};
+for(const unit of Object.keys(B3_TASKS)){
+ const rows=B3_TASKS[unit];
+ test(`W7c 4-${unit}: specFromQuestion reads the unit's tasks conservatively - ${rows.length} phrasings, ${rows.filter((t)=>t[1]===null).length} of them refused`,()=>{
+  assert.ok(rows.length>=25&&rows.filter((t)=>t[1]===null).length>=10);
+  for(const [text,want] of rows){
+   const got=S.specFromQuestion(text);
+   if(want===null){assert.equal(got,null,`refused: ${JSON.stringify(text)}`);continue;}
+   assert.deepEqual(got,want,text);
+   assert.ok(S.wellFormed(got).ok);assert.equal(S.unitOf(got),unit,`${text} is a ${unit} task`);
+   assert.equal(C.specFromQuestion(text),null,`${text}: not a Calculus task`);
+  }
+  for(const tier of [1,2])for(let seed=0;seed<200;seed++){const sp=B3GEN[unit](seed,tier);assert.deepEqual(S.specFromQuestion(S.question(sp).plain),sp,`${unit} ${tier}/${seed}`);}
+ });
+ test(`W7c 5-${unit}: the withheld sentence names the unit's method, carries no number, and leaks nothing on any generated item`,()=>{
+  const line=S.SCHOOL_WITHHELD[unit];
+  assert.equal(typeof line,'string');assert.doesNotMatch(line,/\d/);assert.match(line,/The answer is yours to work out\.$/);
+  for(const other of Object.keys(S.SCHOOL_UNIT_SLIPS))if(other!==unit)assert.notEqual(S.SCHOOL_WITHHELD[other],line,'each unit has its own line');
+  for(const tier of [1,2])for(let seed=0;seed<200;seed++){const sp=B3GEN[unit](seed,tier);assert.equal(S.leaksSchool(sp,line),false,`${unit} ${tier}/${seed}`);assert.equal(S.withheldSchool(sp),line);}
+  for(const [,sp] of rows.filter((r)=>r[1]))assert.equal(S.withheldSchool(sp),line);
+ });
+}
+
+/** A full set per unit: right, each of its slips, unsure, blank. Expected verdicts worked by hand (school-rules-test comments). */
+const B3_PAGES={
+ 'ratio-share':[
+  {spec:ra('12:18'),a:'2:3',want:['right']},{spec:ra('60 in 2:3'),a:'30 and 20',want:['wrong','ratio-split-each']},{spec:ra('60 in 2:3'),a:'2 and 3',want:['wrong','ratio-as-amounts']},
+  {spec:ra('12:18'),a:'3:2',want:['wrong','ratio-swapped']},{spec:ra('60 in 2:3'),a:'120 and 180',want:['wrong','ratio-by-difference']},{spec:ra('2:3 = ?:15'),a:'14',want:['wrong','ratio-added-same']},
+  {spec:ra('12:18'),a:'4:6',want:['unsure']},{spec:ra('60 in 2:3'),a:'',want:['unsure']},{spec:ra('45 in 4:5','€'),a:'€20 and €25',want:['right']},{spec:ra('60 in 2:3'),a:'36 and 24',want:['unsure']},
+  {spec:ra('2:3 = ?:15'),a:'10:15',want:['right']},
+ ],
+};
+for(const unit of Object.keys(B3_PAGES)){
+ const page=B3_PAGES[unit];
+ test(`W7c 6-${unit}: a full set (right, every slip, unsure, blank) is marked by code the same from a read photo and from typed answers, and calls no model when typed`,async()=>{
+  const ids=[...new Set(page.filter((p)=>p.want[1]).map((p)=>p.want[1]))];
+  assert.deepEqual(ids.sort(),[...S.SCHOOL_UNIT_SLIPS[unit]].sort(),'the set shows every slip of the unit');
+  assert.ok(page.some((p)=>p.want[0]==='right')&&page.some((p)=>p.want[0]==='unsure')&&page.some((p)=>!p.a),'right, unsure and blank are on it');
+  assert.ok(page.length<=12,'a typed set carries at most twelve answers');
+  assert.deepEqual(M.slipsFor(unit).map((s)=>s.id),[...S.SCHOOL_UNIT_SLIPS[unit]],'slipsFor is the unit\'s closed list');
+  for(const s of M.slipsFor(unit)){assert.deepEqual(s.topics,[unit]);assert.doesNotMatch(s.says+s.name+s.points,/\d/,`${s.id}: no value on it`);}
+  const put=()=>store.dispatch({type:'practice.set',practice:{topic:unit,marked:false,items:page.map((p,i)=>({n:i+1,question:question(p.spec),spec:p.spec,tier:1}))}});
+  seat('uk');put();
+  stubVision(()=>({items:page.map((p,i)=>({n:i+1,studentAnswer:p.a,studentWorking:'',verdict:'right',solution:'1',slip:'ratio-swapped'}))}));
+  stubText(()=>{throw new Error('no text call while marking');});
+  assert.equal((await post('mark',PHOTO)).status,200);
+  assert.equal(seenVision.length,1);assert.equal(seenText.length,0);
+  const photo=verdicts(),photoSkill={...learners.getLearner(LEARNER).skills[unit]};
+  seat('uk');put();noModel();
+  const r=await post('mark',{answers:page.map((p)=>p.a)});
+  assert.equal(r.status,200);assert.equal(seenVision.length+seenText.length,0,'no model call');
+  assert.equal((await r.json()).provider,'code');
+  const typed=verdicts();
+  assert.deepEqual(typed,photo,'the same verdicts, slips and lines from a photo and from typing');
+  page.forEach((p,i)=>{
+   const [verdict,slip]=p.want,it=typed[i];
+   assert.equal(it.verdict,verdict,`#${i+1} ${JSON.stringify(p.a)} on ${p.spec.expr}`);assert.equal(it.slip,slip,`#${i+1}: the slip code detected`);
+   if(verdict==='right')assert.equal(it.said,M.RIGHT(i+1));else if(slip)assert.equal(it.said,S.SCHOOL_SLIPS.find((x)=>x.id===slip).says);else assert.equal(it.said,M.ASK(i+1));
+  });
+  const settledN=page.filter((p)=>p.want[0]!=='unsure').length,right=page.filter((p)=>p.want[0]==='right').length;
+  const sk=learners.getLearner(LEARNER).skills[unit];
+  assert.equal(sk.seen,settledN,'only settled items reach the record');assert.equal(sk.seen,photoSkill.seen);assert.equal(sk.right,right);
+  assert.equal(lastLine().detail,`${right} of ${page.length} right, ${page.length-settledN} not sure`);
+  store.getSession().practice.items.forEach((it,i)=>assert.deepEqual(it.spec,page[i].spec,'the spec survives marking'));
+ });
+}
+

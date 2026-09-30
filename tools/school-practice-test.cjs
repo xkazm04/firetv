@@ -407,3 +407,74 @@ test('W7b 5b: the batch-2 specs survive the store - practice.set, practice.marke
  }
 });
 
+
+// ------------------------------------------------------------------ Family W7 batch 3: ratio, rates, area, mean and range, written by code
+/** Each unit's tier, as its generator documents it (rules/school), read back from the spec alone. */
+const B3_TIER={
+ // tier 1: equal ratios (simplify, or a missing term); tier 2: sharing an amount
+ 'ratio-share':(sp)=>(/ in /.test(sp.expr)?2:1),
+};
+/** The printed question of each unit, and the keys its spec may carry. */
+const B3_SHAPE={
+ 'ratio-share':[/^(?:Write \d+:\d+ in its simplest form\.|Fill in the missing number: \d+:\d+ = (?:\?:\d+|\d+:\?)\.|Share (?:[€£]\d+|\d+(?: [a-z]+)?) in the ratio \d+:\d+\.)$/,['shape','expr','unit']],
+};
+for(const unit of Object.keys(B3_TIER)){
+ test(`W7c 2-${unit}: makeSchoolItems writes six distinct items by code - three tier 1, then three tier 2 - pure for a seed, with no engine call`,()=>{
+  noModel();
+  for(let seed=1;seed<=40;seed++){
+   const r=makeSchoolItems(unit,6,seed*7919);
+   assert.equal(seen.length,0,'no text engine call');
+   assert.equal(r.provider,'code');assert.equal(r.tries,0);assert.equal(r.items.length,6);
+   assert.deepEqual(r.items.map((i)=>i.tier),[1,1,1,2,2,2],'tier 1 first, then tier 2');
+   assert.equal(new Set(r.items.map((i)=>i.question.replace(/\s+/g,''))).size,6,'six distinct questions');
+   for(const it of r.items){
+    assert.ok(S.wellFormed(it.spec).ok,JSON.stringify(it.spec));assert.equal(S.unitOf(it.spec),unit);
+    assert.equal(it.question,S.question(it.spec).plain,'the question is printed by code from the spec');
+    assert.match(it.question,B3_SHAPE[unit][0]);
+    assert.equal(it.tier,B3_TIER[unit](it.spec),`${it.question}: the stored tier is the one its spec shows, computed by code`);
+    assert.equal(S.leaksSchool(it.spec,it.question),false,'the question does not state its own answer');
+    assert.ok(!('difficulty' in it)&&!('answer' in it),'no model difficulty, no answer');
+    assert.deepEqual(Object.keys(it.spec).filter((k)=>!B3_SHAPE[unit][1].includes(k)),[],'the spec carries only its own keys');
+   }
+   assert.deepEqual(makeSchoolItems(unit,6,seed*7919).items,r.items,'the same seed gives the same set');
+  }
+  const sets=new Set([1,1000,99999,123456789,4000000000].map((s)=>makeSchoolItems(unit,6,s).items.map((i)=>i.question).join('|')));
+  assert.equal(sets.size,5,'five seeds, five different sets');
+  assert.equal(makeSchoolItems(unit,6,0xffffffff).items.length,6);
+ });
+}
+
+/** The batch-3 specs a round trip carries, and the ones the store must drop (a key the shape does not take, a malformed one). */
+const B3_STORE={
+ 'ratio-share':{
+  keep:[{shape:'ratio',expr:'12:18'},{shape:'ratio',expr:'60 in 2:3'},{shape:'ratio',expr:'45 in 4:5',unit:'€'},{shape:'ratio',expr:'2:3 = ?:15'},{shape:'ratio',expr:'4:5 = 12:?'}],
+  answer:[{shape:'ratio',expr:'60 in 2:3',answer:'24 and 36',pair:[24,36]},{shape:'ratio',expr:'60 in 2:3'}],
+  drop:[{shape:'ratio',expr:'2:3'},{shape:'ratio',expr:'61 in 2:3'},{shape:'ratio',expr:'12:18',unit:'kg'},{shape:'ratio',expr:'12:18',form:'simplest'},{shape:'ratio',expr:'12:18',to:'decimal'},{shape:'ratio'}],
+ },
+};
+test('W7c 5b: the batch-3 specs survive the store - practice.set, practice.marked, practice.settle and a reload - add no store key, and a Calculus spec and the earlier specs are untouched',()=>{
+ seat();
+ const specs=[...Object.values(B3_STORE).flatMap((u)=>u.keep),{shape:'percent-change',expr:'decrease 80 by 25%',unit:'€'},{shape:'missing',expr:'3/4 = ?/12'},{shape:'compute',expr:'4.35 + 2.8'}];
+ const calc={shape:'critical-point',f:'x^2 - 4x + 1',on:[0,5]};
+ const N=specs.length;
+ const items=[...specs.map((spec,i)=>({n:i+1,question:S.question(spec).plain,spec,tier:1+(i%2)})),{n:N+1,question:'q',spec:calc}];
+ store.dispatch({type:'practice.set',practice:{topic:'ratio-share',marked:false,items}});
+ const got=()=>store.getSession().practice.items;
+ assert.deepEqual(got().slice(0,N).map((i)=>i.spec),specs,'practice.set keeps every key');
+ store.dispatch({type:'practice.marked',items:got().map((it)=>({...it,verdict:'unsure',said:'x'}))});
+ assert.deepEqual(got().slice(0,N).map((i)=>i.spec),specs,'practice.marked keeps them');
+ store.dispatch({type:'practice.settle',n:2,reply:'ok',verdict:'right',said:'Number 2 is right.'});
+ assert.deepEqual(got()[1].spec,specs[1]);
+ clearInterval(globalThis.__desk.ticker);delete globalThis.__desk;delete require.cache[storeFile];store=require(storeFile);
+ assert.deepEqual(store.getSession().practice.items.slice(0,N).map((i)=>i.spec),specs,'loaded from session.json and re-validated');
+ assert.deepEqual(store.getSession().practice.items[N].spec,calc,'the Calculus spec is untouched by the reload');
+ assert.deepEqual(store.getSession().practice.items.slice(0,N).map((i)=>i.tier),specs.map((_,i)=>1+(i%2)));
+ const put=(spec)=>{store.dispatch({type:'practice.set',practice:{topic:'ratio-share',marked:false,items:[{n:1,question:'q',spec,tier:1}]}});return store.getSession().practice.items[0];};
+ for(const {answer:[withAnswer,clean],drop} of Object.values(B3_STORE)){
+  assert.deepEqual(put(withAnswer).spec,clean,'an answer stops at the store');
+  for(const bad of drop){const it=put(bad);assert.equal(it.spec,undefined,JSON.stringify(bad));assert.equal(it.tier,undefined,'no spec, no tier');}
+ }
+ const src=fs.readFileSync(storeFile,'utf8');
+ assert.match(src,/const SCHOOL_SPEC_KEYS = \["expr", "form", "unit", "allowNegative", "to"\] as const;/,'W7 batch 3 adds no store key: expr and unit carry every new shape');
+ for(const sh of ['ratio']){assert.ok(S.SCHOOL_SHAPES.includes(sh));assert.ok(!C.CALC_SHAPES.includes(sh),`${sh} is not a Calculus shape`);assert.equal(C.wellFormed({shape:sh,expr:'12:18'}).ok,false);}
+});

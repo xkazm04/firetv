@@ -470,13 +470,15 @@ const MD_SPELLINGS=[
 const W7_SLIPS={};
 /** The W7 batch 2 units whose tables are at the end of this file (decimals and percent). */
 const B2_UNITS=['dec-arith','dec-convert','pct-of-amount','pct-change'];
+/** The W7 batch 3 units, after them (ratio, rates, area, mean and range). */
+const B3_UNITS=['ratio-share'];
 test(`W7 SPELLINGS equivalent fractions: ${EQ_SPELLINGS.length} written answers, zero false-right, zero false-wrong`,()=>{Object.assign(W7_SLIPS,spellings('EQ_SPELLINGS equivalent fractions',EQ_SPELLINGS,'frac-equivalent'));});
 test(`W7 SPELLINGS a fraction of an amount: ${OF_SPELLINGS.length} written answers, zero false-right, zero false-wrong`,()=>{Object.assign(W7_SLIPS,spellings('OF_SPELLINGS a fraction of an amount',OF_SPELLINGS,'frac-of-amount'));});
 test(`W7 SPELLINGS multiply and divide fractions: ${MD_SPELLINGS.length} written answers, zero false-right, zero false-wrong`,()=>{Object.assign(W7_SLIPS,spellings('MD_SPELLINGS multiply and divide fractions',MD_SPELLINGS,'frac-mul-div'));});
 test('W7 SLIPS: every slip on the closed list belongs to exactly one unit, carries no value, and every unit\'s list is detected',()=>{
  const units=Object.keys(S.SCHOOL_UNIT_SLIPS);
- // W7 batch 2 adds the decimals and percent units, each with its own closed list (tables at the end of this file)
- assert.deepEqual(units.sort(),['frac-add-sub','frac-equivalent','frac-mul-div','frac-of-amount',...B2_UNITS].sort());
+ // W7 batch 2 adds the decimals and percent units, batch 3 the last four, each with its own closed list (tables at the end of this file)
+ assert.deepEqual(units.sort(),['frac-add-sub','frac-equivalent','frac-mul-div','frac-of-amount',...B2_UNITS,...B3_UNITS].sort());
  const listed=units.flatMap((u)=>S.SCHOOL_UNIT_SLIPS[u]);
  assert.equal(new Set(listed).size,listed.length,'no slip id is on two units');
  assert.deepEqual([...listed].sort(),S.SCHOOL_SLIPS.map((s)=>s.id).sort(),'the closed list is exactly the units\' lists');
@@ -1108,6 +1110,222 @@ test('W7b PURITY: random strings through check and leaksSchool on every batch-2 
  let seed=4242;const rnd=()=>{seed=(seed*1103515245+12345)&0x7fffffff;return seed/0x7fffffff;};
  const alphabet=['0','1','3','5','7','.',',',' ','%','/','-','€','£','$','x','×','÷','=','of','by','point','hundredths','percent',' and ','p','kg'];
  const specs=[DA1,DA6,DA7,CV1,CV3,CV4,CV6,PO1,PO2,PO6,PC1,PC2,PC5];
+ for (let i=0;i<300;i++){
+  let s='';const len=Math.floor(rnd()*20);for(let k=0;k<len;k++)s+=alphabet[Math.floor(rnd()*alphabet.length)];
+  for (const sp of specs){
+   for (const sys of S.SCHOOL_SYSTEMS){const v=S.check(sp,s,sys);assert.ok(['right','wrong','unsure'].includes(v.verdict));assert.deepEqual(S.check(sp,s,sys),v);}
+   const l=S.leaksSchool(sp,s);assert.equal(typeof l,'boolean');assert.equal(S.leaksSchool(sp,s),l);
+  }
+  const got=S.specFromQuestion(s);assert.ok(got===null||S.wellFormed(got).ok);
+ }
+});
+
+// ================================================================== Family W7 batch 3: ratio, rates, area, mean and range
+// Each unit's own shape. As before, every expected verdict below was worked by hand from the mathematics first (the value
+// and each slip's value are in the comments), then run. The gates are the batch-1 gates: zero false-right, zero
+// false-wrong, every slip of the unit detected at least twice, every leak refused, no legit hint refused (the conflicts
+// the strict rule accepts are listed apart).
+
+// ------------------------------------------------------------------ ratio and sharing
+const ra=(expr,unit)=>({shape:'ratio',expr,...(unit?{unit}:{})});
+const RS1=ra('12:18');            // 2:3. the other way round 3:2
+const RS2=ra('15:25');            // 3:5. the other way round 5:3
+const RS3=ra('8:20');             // 2:5. the other way round 5:2
+const RS4=ra('14:35');            // 2:5 (the common factor 7)
+const RH1=ra('60 in 2:3');        // 5 parts of 12: 24 and 36. each 60/2, 60/3 = 30, 20; the ratio's numbers 2, 3; by the difference 60/1 = 60 a part: 120, 180
+const RH2=ra('45 in 4:5','€');    // 9 parts of 5: €20 and €25. each 45/4 = 11.25, 45/5 = 9; numbers 4, 5; by the difference 45/1: 180, 225
+const RH3=ra('70 in 2:5','kg');   // 7 parts of 10: 20 kg and 50 kg. each 35, 14; numbers 2, 5; by the difference 70/3 = 23.33..: 46.67, 116.67
+const RM1=ra('2:3 = ?:15');       // 2 × 15 / 3 = 10. added the difference 2 + (15 - 3) = 14; the other way 3 × 15 / 2 = 22.5 (not whole: none)
+const RM2=ra('4:5 = 12:?');       // 5 × 12 / 4 = 15. added the difference 5 + (12 - 4) = 13; the other way 4 × 12 / 5 = 9.6 (none)
+const RM3=ra('3:6 = ?:18');       // 3 × 18 / 6 = 9. added the difference 3 + (18 - 6) = 15; the other way 6 × 18 / 3 = 36
+const RM4=ra('2:5 = 8:?');        // 5 × 8 / 2 = 20. added the difference 5 + (8 - 2) = 11; the other way 2 × 8 / 5 = 3.2 (none)
+const B3_SPELLINGS={
+ 'ratio-share':[
+  // 12:18 in its simplest form = 2:3: a ratio in lowest terms is right; an equal ratio not in lowest terms is unsure
+  [RS1,'2:3','uk','right'],[RS1,'2 : 3','uk','right'],[RS1,'2 to 3','uk','right'],[RS1,'answer: 2:3','uk','right'],[RS1,'2:3.','uk','right'],[RS1,'2:3','cz','right'],
+  [RS1,'4:6','uk','unsure'],[RS1,'12:18','uk','unsure'],[RS1,'6:9','uk','unsure'],[RS1,'1:1.5','uk','unsure'],
+  [RS1,'2/3','uk','unsure'],[RS1,'0.67','uk','unsure'],[RS1,'2 and 3','uk','unsure'],[RS1,'','uk','unsure'],[RS1,'two to three','uk','unsure'],[RS1,'2:3 cm','uk','unsure'],[RS1,'2:3:4','uk','unsure'],
+  [RS1,'3:2','uk','wrong','ratio-swapped'],[RS1,'18:12','uk','wrong','ratio-swapped'],[RS1,'2:5','uk','wrong'],[RS1,'1:3','uk','wrong'],[RS1,'-2:3','uk','wrong'],
+  [RS2,'3:5','uk','right'],[RS2,'5:3','uk','wrong','ratio-swapped'],[RS2,'6:10','uk','unsure'],[RS2,'3:4','uk','wrong'],[RS2,'1:5','uk','wrong'],
+  [RS3,'2:5','uk','right'],[RS3,'2 : 5','de','right'],[RS3,'5:2','uk','wrong','ratio-swapped'],[RS3,'4:10','uk','unsure'],
+  // 60 shared in 2:3 = 24 and 36, in that order: the other order listed with 'and' is unsure, written as a ratio it is wrong
+  [RH1,'24 and 36','uk','right'],[RH1,'24:36','uk','right'],[RH1,'24 : 36','uk','right'],[RH1,'24 & 36','uk','right'],[RH1,'24 and 36.','uk','right'],[RH1,'24.0 and 36','uk','right'],
+  [RH1,'36 and 24','uk','unsure'],[RH1,'36:24','uk','wrong','ratio-swapped'],
+  [RH1,'30 and 20','uk','wrong','ratio-split-each'],[RH1,'20 and 30','uk','wrong','ratio-split-each'],[RH1,'2 and 3','uk','wrong','ratio-as-amounts'],[RH1,'2:3','uk','wrong','ratio-as-amounts'],
+  [RH1,'120 and 180','uk','wrong','ratio-by-difference'],[RH1,'12 and 48','uk','wrong'],[RH1,'25 and 35','uk','wrong'],
+  // one number never answers a share: unsure, whether it is a share, a single part, or a list read as one number (cz)
+  [RH1,'24','uk','unsure'],[RH1,'36','uk','unsure'],[RH1,'12','uk','unsure'],[RH1,'60','uk','unsure'],[RH1,'24, 36','uk','unsure'],[RH1,'24,36','cz','unsure'],
+  [RH1,'24 kg and 36 kg','uk','unsure'],[RH1,'€24 and €36','uk','unsure'],[RH1,'40% and 60%','uk','unsure'],[RH1,'twenty-four and thirty-six','uk','unsure'],
+  // €45 shared in 4:5 = €20 and €25: a missing sign is not held against it, another currency is unsure
+  [RH2,'€20 and €25','uk','right'],[RH2,'20 and 25','uk','right'],[RH2,'20 € and 25 €','de','right'],[RH2,'€20 and 25','uk','right'],[RH2,'£20 and £25','uk','unsure'],
+  [RH2,'25:20','uk','wrong','ratio-swapped'],[RH2,'11.25 and 9','uk','wrong','ratio-split-each'],[RH2,'11,25 and 9','cz','wrong','ratio-split-each'],[RH2,'4 and 5','uk','wrong','ratio-as-amounts'],
+  [RH2,'5 and 4','uk','wrong','ratio-as-amounts'],[RH2,'180 and 225','uk','wrong','ratio-by-difference'],[RH2,'20 and 26','uk','wrong'],
+  // 70 kg shared in 2:5 = 20 kg and 50 kg; a rounding of a slip's non-terminating amount names it
+  [RH3,'20 kg and 50 kg','uk','right'],[RH3,'20:50','uk','right'],[RH3,'50 and 20','uk','unsure'],[RH3,'20 g and 50 g','uk','unsure'],
+  [RH3,'35 and 14','uk','wrong','ratio-split-each'],[RH3,'46.67 and 116.67','uk','wrong','ratio-by-difference'],[RH3,'2:5','uk','wrong','ratio-as-amounts'],
+  // 2:3 = ?:15 -> 10: a ratio (or fraction) that completes the given one is read as its missing term
+  [RM1,'10','uk','right'],[RM1,'10.0','uk','right'],[RM1,'x = 10','uk','right'],[RM1,'10:15','uk','right'],[RM1,'10/15','uk','right'],[RM1,'20/2','uk','right'],
+  [RM1,'14','uk','wrong','ratio-added-same'],[RM1,'14:15','uk','wrong','ratio-added-same'],[RM1,'9','uk','wrong'],[RM1,'-10','uk','wrong'],
+  [RM1,'4:6','uk','unsure'],[RM1,'2:3','uk','unsure'],[RM1,'10:16','uk','unsure'],[RM1,'2/3','uk','unsure'],[RM1,'10 and 15','uk','unsure'],[RM1,'','uk','unsure'],
+  [RM1,'ten','uk','unsure'],[RM1,'10%','uk','unsure'],[RM1,'10 cm','uk','unsure'],
+  // 4:5 = 12:? -> 15
+  [RM2,'15','uk','right'],[RM2,'12:15','uk','right'],[RM2,'12/15','uk','right'],[RM2,'13','uk','wrong','ratio-added-same'],[RM2,'12:13','uk','wrong','ratio-added-same'],[RM2,'16','uk','wrong'],[RM2,'8:10','uk','unsure'],
+  // 3:6 = ?:18 -> 9
+  [RM3,'9','uk','right'],[RM3,'9:18','uk','right'],[RM3,'15','uk','wrong','ratio-added-same'],[RM3,'36','uk','wrong','ratio-swapped'],[RM3,'36:18','uk','wrong','ratio-swapped'],[RM3,'1:2','uk','unsure'],
+  // 2:5 = 8:? -> 20
+  [RM4,'20','uk','right'],[RM4,'8:20','uk','right'],[RM4,'11','uk','wrong','ratio-added-same'],[RM4,'8:11','uk','wrong','ratio-added-same'],[RM4,'21','uk','wrong'],
+ ],
+};
+const B3_LEAKS={
+ 'ratio-share':[
+  [RS1,'The answer is 2:3.'],[RS1,'It simplifies to 2 : 3.'],[RS1,'Two to three.'],[RS1,'Divide both by 6 to get 2 and 3.'],[RS1,'12 ÷ 6 = 2'],[RS1,'As a fraction that is 2/3.'],
+  [RS2,'You get 3:5.'],[RS2,'15 ÷ 5 = 3 and 25 ÷ 5 = 5'],[RS2,'It is 3 to 5.'],
+  [RH1,'The shares are 24 and 36.'],[RH1,'12 × 2 = 24'],[RH1,'60 ÷ 5 × 3'],[RH1,'Two parts make 24.'],[RH1,'It is 24:36.'],[RH1,'60 - 24 = 36'],[RH1,'thirty-six'],[RH1,'Twenty-four and thirty-six.'],
+  [RH2,'€20 and €25'],[RH2,'5 lots of 4 is 20.'],[RH2,'Each part is €5, so four parts is €20.'],
+  [RM1,'The missing number is 10.'],[RM1,'2:3 = 10:15'],[RM1,'Multiply 2 by 5.'],[RM1,'It is ten.'],[RM1,'15 ÷ 3 × 2'],
+ ],
+};
+const B3_LEGIT={
+ 'ratio-share':[
+  [RS1,'Find a number that goes into both 12 and 18.'],[RS1,'Divide both numbers by the same number.'],[RS1,'Both are even, so you can halve them first: 6:9.'],
+  [RS1,'The highest common factor of 12 and 18 is 6.'],[RS1,'Keep dividing until nothing but 1 goes into both.'],[RS1,'12:18 is the same as 6:9.'],[RS1,'Divide 12 and 18 by 6.'],
+  [RS4,'Both numbers are in the seven times table.'],[RS4,'Divide both by 7.'],[RS4,'What is the biggest number that goes into 14 and 35?'],[RS2,'What is the biggest number that goes into 15 and 25?'],
+  [RH1,'Add the parts of the ratio first.'],[RH1,'There are 2 + 3 = 5 parts.'],[RH1,'Divide 60 by 5 to find one part.'],[RH1,'One part is 12.'],[RH1,'Then multiply one part by each number of the ratio.'],
+  [RH1,'Your two answers should add up to 60.'],[RH1,'The first share is smaller than the second.'],[RH1,'Check the two amounts are in the ratio 2:3.'],
+  [RH2,'Add 4 and 5 to get 9 parts.'],[RH2,'45 ÷ 9 = 5'],[RH2,'Keep the euro sign in your answers.'],
+  [RM1,'What do you multiply 3 by to get 15?'],[RM1,'3 × 5 = 15'],[RM1,'Do the same to the 2.'],[RM1,'Multiply both numbers by the same number.'],
+  [RM2,'What was 4 multiplied by to make 12?'],[RM2,'4 × 3 = 12'],
+ ],
+};
+/**
+ * B3 CONFLICTS: legit hints the strict rule refuses, accepted and reported. A ratio's lowest parts leak alone (2 and 3
+ * for 12:18), so a step numbered with one of them is refused, as the fractions' simplify rule refuses "Step 4" for 3/4;
+ * and where the common factor is an answer part (15:25 is 3:5 by the factor 5), naming the factor is refused too. The
+ * generator never draws that case (an answer part above 1 never divides its scale factor).
+ */
+const B3_CONFLICTS=[
+ [RS1,'Step 2: divide both numbers by the same number.'],[RS2,'Both numbers are in the five times table.'],[RS2,'Divide both by 5.'],
+];
+
+/** The references: each unit's answer by hand, with this file's own gcd, never the module's evaluator. */
+const B3REF={
+ 'ratio-share':(s)=>{
+  if(s.shape!=='ratio')return null;
+  let m=/^(\d+):(\d+)$/.exec(s.expr);
+  if(m){const [a,b]=[+m[1],+m[2]],g=refGcd(a,b);return {kind:'simplify',a,b,g,p:a/g,q:b/g,truth:`${a/g}:${b/g}`,off:`${a/g+1}:${b/g}`,nums:[a,b]};}
+  m=/^(\d+) in (\d+):(\d+)$/.exec(s.expr);
+  if(m){const [T,a,b]=[+m[1],+m[2],+m[3]],k=T/(a+b);return {kind:'share',T,a,b,k,s1:k*a,s2:k*b,truth:`${k*a} and ${k*b}`,off:`${k*a+1} and ${k*b}`,nums:[T,a,b]};}
+  m=/^(\d+):(\d+) = (\?|\d+):(\?|\d+)$/.exec(s.expr);
+  if(m){const [a,b]=[+m[1],+m[2]],first=m[3]==='?',known=+(first?m[4]:m[3]),ans=first?a*known/b:b*known/a,factor=first?known/b:known/a;return {kind:'missing',a,b,known,first,ans,factor,truth:`${ans}`,off:`${ans+1}`,nums:[a,b,known]};}
+  return null;
+ },
+};
+const B3GEN={'ratio-share':S.genRatio};
+/** Each unit's tier, as school.ts documents it, asserted on the reference reading. */
+const B3_TIER={
+ 'ratio-share':(s,r,tier)=>{
+  if(tier===1){
+   assert.ok(r.kind==='simplify'||r.kind==='missing',`tier 1 is equal ratios: ${s.expr}`);assert.equal(s.unit,undefined);
+   if(r.kind==='simplify'){assert.ok(r.p<=9&&r.q<=9&&r.p!==r.q&&r.g>=2&&r.g<=9,s.expr);assert.ok((r.p===1||r.g%r.p!==0)&&(r.q===1||r.g%r.q!==0),`no answer part divides the factor: ${s.expr}`);}
+   else{assert.ok(Number.isInteger(r.factor)&&r.factor>=2&&r.factor<=6,`scaled up by 2..6: ${s.expr}`);assert.ok(r.a>=2&&r.b>=2&&r.a<=9&&r.b<=9&&refGcd(r.a,r.b)===1,s.expr);assert.notEqual(r.ans,r.factor);assert.ok(r.ans<=60&&r.known<=60);}
+  }else{
+   assert.equal(r.kind,'share',`tier 2 shares: ${s.expr}`);assert.ok(r.a>=2&&r.b>=2&&r.a<=9&&r.b<=9&&r.a!==r.b&&refGcd(r.a,r.b)===1,s.expr);
+   assert.ok(Number.isInteger(r.k)&&r.k>=2&&r.T<=500,s.expr);assert.ok(![r.T,r.a,r.b].includes(r.s1)&&![r.T,r.a,r.b].includes(r.s2),'no share is printed');
+   if(s.unit!==undefined)assert.ok(['€','£','kg','g','m','ml','l','min'].includes(s.unit),s.unit);
+  }
+  if(r.kind==='missing')assert.ok(!r.nums.includes(r.ans),'the question does not print its answer');
+ },
+};
+
+for (const unit of B3_UNITS){
+ test(`W7c SPELLINGS ${unit}: ${B3_SPELLINGS[unit].length} written answers, zero false-right, zero false-wrong`,()=>{spellings(`B3_SPELLINGS ${unit}`,B3_SPELLINGS[unit],unit);});
+ test(`W7c LEAKS ${unit}: ${B3_LEAKS[unit].length} hints that give the answer away are refused; ${B3_LEGIT[unit].length} legit hints pass`,()=>{
+  const leaks=B3_LEAKS[unit],legit=B3_LEGIT[unit];
+  const missed=leaks.filter(([s,h])=>!S.leaksSchool(s,h)).map(([s,h])=>`${JSON.stringify(s)} | ${h}`);
+  const flagged=legit.filter(([s,h])=>S.leaksSchool(s,h)).map(([s,h])=>`${JSON.stringify(s)} | ${h}`);
+  const specs=new Set([...leaks,...legit].map(([s])=>JSON.stringify(s)));
+  console.log(`# W7c LEAKS ${unit}: ${leaks.length} (missed ${missed.length}), LEGIT ${legit.length} (flagged ${flagged.length}), specs ${specs.size}`);
+  assert.deepEqual(missed,[],'every leaking hint is caught');
+  assert.deepEqual(flagged,[],'no legit hint is flagged');
+  assert.ok(leaks.length>=15&&legit.length>=20&&specs.size>=3);
+  for (const [s] of [...leaks,...legit]) assert.equal(S.unitOf(s),unit,`${JSON.stringify(s)} is a ${unit} spec`);
+ });
+ test(`W7c GENERATOR ${unit}: seeds 1..200 for tiers 1 and 2 give well-formed, distinct items of the documented tier, judged right by a reference`,()=>{
+  const g=B3GEN[unit],ref=B3REF[unit],counts={};
+  assert.equal(S.SCHOOL_GENERATORS[unit],S.generatorFor(unit));
+  for (const tier of [1,2]){
+   const seen=new Set();
+   for (let seed=1;seed<=200;seed++){
+    const s=g(seed,tier);
+    assert.ok(s,`seed ${seed} tier ${tier}`);assert.deepEqual(g(seed,tier),s,'same seed, same spec');
+    assert.deepEqual(S.generatorFor(unit)(seed,tier),s,'the registered generator is this one');
+    assert.deepEqual(S.wellFormed(s),{ok:true},JSON.stringify(s));assert.equal(S.unitOf(s),unit);
+    const r=ref(s);assert.ok(r,`the reference reads ${JSON.stringify(s)}`);
+    B3_TIER[unit](s,r,tier);
+    const q=S.question(s).plain;
+    for (const sys of S.SCHOOL_SYSTEMS){
+     assert.equal(S.check(s,r.truth,sys).verdict,'right',`${q} = ${r.truth} (${sys})`);
+     assert.equal(S.check(s,r.off,sys).verdict,'wrong',`${q} != ${r.off} (${sys})`);
+    }
+    assert.ok(S.leaksSchool(s,`The answer is ${r.truth}.`),`the answer leaks: ${q}`);
+    assert.ok(!S.leaksSchool(s,q),`the question does not: ${q}`);
+    assert.ok(!S.leaksSchool(s,S.withheldSchool(s)),'the withheld line leaks nothing');
+    assert.deepEqual(S.specFromQuestion(q),s,`${q} reads back to its spec`);
+    seen.add(JSON.stringify(s));
+   }
+   counts[tier]=seen.size;
+  }
+  console.log(`# W7c GENERATOR ${unit} distinct specs over seeds 1..200: tier 1 ${counts[1]}, tier 2 ${counts[2]}`);
+  assert.ok(counts[1]>=100&&counts[2]>=100,'seeds spread');
+  for (const bad of [-1,1.5,NaN,'1',null,undefined,2**32]) assert.equal(g(bad,1),null);
+  for (const bad of [0,3,'1',null,1.5]) assert.equal(g(1,bad),null);
+ });
+}
+test('W7c CONFLICTS: the strict leak rule refuses these legit hints, and that cost is accepted and reported',()=>{
+ for (const [s,h] of B3_CONFLICTS) assert.equal(S.leaksSchool(s,h),true,`${JSON.stringify(s)} | ${h}`);
+ console.log(`# W7c accepted conflicts ${B3_CONFLICTS.length}`);
+});
+
+/** Each unit's printed questions, and the specs wellFormed must refuse with the reason's words. */
+const B3_PRINTS={
+ 'ratio-share':[
+  [RS1,'Write 12:18 in its simplest form.'],[RH1,'Share 60 in the ratio 2:3.'],[RH2,'Share €45 in the ratio 4:5.'],[RH3,'Share 70 kg in the ratio 2:5.'],
+  [ra('60 in 2:3','m'),'Share 60 metres in the ratio 2:3.'],[ra('60 in 2:3','$'),'Share 60 dollars in the ratio 2:3.'],
+  [RM1,'Fill in the missing number: 2:3 = ?:15.'],[RM2,'Fill in the missing number: 4:5 = 12:?.'],
+ ],
+};
+const B3_BAD={
+ 'ratio-share':[
+  [ra('2:3'),'already in its simplest form'],[ra('12:12'),'the same'],[ra('0:18'),'cannot read'],[ra('12:18:24'),'cannot read'],[ra('1.2:1.8'),'cannot read'],[ra('12 : 18'),'cannot read'],
+  [ra('12:18','kg'),'does not take'],[ra('2:3 = ?:15','€'),'does not take'],[{...RS1,form:'simplest'},'does not take'],[{...RS1,answer:'2:3'},'no answer field'],
+  [ra('61 in 2:3'),'whole shares'],[ra('60 in 4:6'),'simplest form'],[ra('60 in 3:3'),'the same'],[ra('5 in 2:3'),'print its own answer'],[ra('2000 in 2:3'),'larger'],[ra('60 in 2:3:5'),'cannot read'],
+  [ra('2:3 = ?:16'),'No whole number'],[ra('2:3 = ?:3'),'keeps the given number'],[ra('2:3 = ?:?'),'cannot read'],[ra('2:3 = 10:15'),'cannot read'],[ra('2:4 = ?:8'),'print its own answer'],
+  [ra('60 in 2:3','parsec'),'unit is not'],
+ ],
+};
+for (const unit of B3_UNITS){
+ test(`W7c question and wellFormed ${unit}: each item prints plain text and TeX, never its answer, keeps every number through the typesetter, reads back to its spec; poor questions are refused with a reason`,()=>{
+  for (const [s,plain] of B3_PRINTS[unit]){
+   assert.deepEqual(S.wellFormed(s),{ok:true},JSON.stringify(s));
+   const q=S.question(s);
+   assert.equal(q.plain,plain);assert.ok(!S.leaksSchool(s,q.plain),`the question itself is not a leak: ${q.plain}`);
+   for (const line of [q.plain,q.tex]){
+    let fr=0;T.walk(T.parseMath(line),(x)=>{if(x.t==='frac')fr++;});
+    assert.equal(fr,0,`${line}: nothing is stacked`);
+    const flat=T.flatten(T.parseMath(line));
+    for (const d of s.expr.match(/\d+(?:\.\d+)?/g)) assert.ok(flat.includes(d),`${line} keeps ${d}: ${flat}`);
+    for (const r of s.expr.match(/\d+:\d+/g)??[]) assert.ok(flat.replace(/\s/g,'').includes(r),`${line} keeps the ratio ${r}: ${flat}`);
+   }
+   assert.deepEqual(S.specFromQuestion(q.plain),s,`${q.plain} reads back to its spec`);
+  }
+  for (const [s,why] of B3_BAD[unit]){const w=S.wellFormed(s);assert.equal(w.ok,false,JSON.stringify(s));assert.ok(w.why.includes(why),`${JSON.stringify(s)}: ${w.why}`);}
+ });
+}
+
+test('W7c PURITY: random strings through check and leaksSchool on every batch-3 spec never throw and give the same answer twice',()=>{
+ let seed=5151;const rnd=()=>{seed=(seed*1103515245+12345)&0x7fffffff;return seed/0x7fffffff;};
+ const alphabet=['0','1','2','3','4','6','9',':','.',',',' ','%','/','-','€','£','x','=','and','&','to','kg','cm','cm2','?','of',' by '];
+ const specs=Object.values(B3_SPELLINGS).flat().map((r)=>r[0]).filter((s,i,all)=>all.findIndex((x)=>JSON.stringify(x)===JSON.stringify(s))===i);
  for (let i=0;i<300;i++){
   let s='';const len=Math.floor(rnd()*20);for(let k=0;k<len;k++)s+=alphabet[Math.floor(rnd()*alphabet.length)];
   for (const sp of specs){
