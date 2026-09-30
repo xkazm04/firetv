@@ -8,6 +8,7 @@ import { analyseSentence } from "@/lib/desk/english";
 import { analyseEssay, reviseSentence } from "@/lib/desk/essay";
 import { refused, runJob } from "@/lib/desk/job";
 import { revise, rewriteState, type AnalysisType } from "@/lib/rules/essay";
+import { learnerAge } from "@/lib/rules/voice";
 
 export const dynamic = "force-dynamic";
 type Body = { kind: "english"; sentence: string } | { kind: "essay"; text: string; type: AnalysisType } | { kind: "rewrite"; n: number; text: string };
@@ -16,10 +17,12 @@ export async function POST(req: Request) {
   const body = (await req.json()) as Body;
   // a reading is somebody's: with no one at the desk there is no one to read it for
   const who = getSession().learner;
+  // the tutor's voice fits the seated profile's age (rules/voice); no age known speaks as it always has
+  const age = learnerAge(getSession());
   if (!who) return NextResponse.json({ error: NOBODY_AT_DESK }, { status: 409 });
   if (body.kind === "english") {
     const r = await runJob("analyse", async () => {
-      const a = await analyseSentence(body.sentence);
+      const a = await analyseSentence(body.sentence, age);
       dispatch({ type: "english.set", analysis: a });
       return a;
     }, { key: "english", start: "reading your sentence…", done: (a) => (a.card.conflict ? "the tense and the time word disagree" : "tense matches the time word") });
@@ -33,7 +36,7 @@ export async function POST(req: Request) {
     const ok = revise(a, n, typeof body.text === "string" ? body.text : "");
     if (!ok.ok) return NextResponse.json({ error: ok.error }, { status: 400 });
     const r = await runJob("analyse", async () => {
-      const next = await reviseSentence(a, n, body.text);
+      const next = await reviseSentence(a, n, body.text, age);
       // a paragraph read or a reset since the rewrite was asked leaves the desk as it is now
       if (getSession().essay === a) dispatch({ type: "essay.revised", analysis: next, n });
       return next;
@@ -45,7 +48,7 @@ export async function POST(req: Request) {
   }
   const r = await runJob("analyse", async () => {
     dispatch({ type: "essay.type", essayType: body.type });
-    const a = await analyseEssay(body.text, body.type, who.id);
+    const a = await analyseEssay(body.text, body.type, who.id, age);
     dispatch({ type: "essay.set", analysis: a });
     return a;
   }, { key: "essay", start: `reading your paragraph — ${body.type} lens…`, done: (a) => a.summary.slice(0, 120) });

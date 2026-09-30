@@ -20,6 +20,7 @@
 import { text } from "../engines/text";
 import { ASK, leaks, settle, settled, settleSpec, slipsFor, slipVocabulary, type Settled } from "../rules/maths";
 import { leaksCalc } from "../rules/calc";
+import { voiceOf, withManner } from "../rules/voice";
 import { topic } from "../library/syllabus";
 import { PATHS, topicIn } from "../library/paths";
 import { getLearner, recordAttempt } from "../session/learners";
@@ -31,6 +32,9 @@ const SCHEMA = {
   required: ["reply", "slip", "value"],
 };
 
+/** The withholding rule of every explanation reply: the school prompt and the Calculus prompt share it, in every voice. */
+export const EXPLAIN_WITHHOLD = "Socratic rules, absolute: never state the final answer, never give the completed line, never say whether they are right or wrong.";
+
 export async function explain(
   itemQuestion: string,
   transcript: string,
@@ -38,16 +42,19 @@ export async function explain(
   learnerId: string,
   /** The item is a Calculus one: the university stance, and the final answer as an expression or a number. */
   calc = false,
+  /** The seated profile's age. Only the school stance is age-voiced (rules/voice); without an age it is today's text. */
+  age?: number,
 ): Promise<{ reply: string; slip?: string; value: string; provider: string; ms: number }> {
   if (calc) return explainCalc(itemQuestion, transcript, topicId, learnerId);
   const t = topic(topicId);
   const memory = getLearner(learnerId).memory;
 
-  const system =
+  const system = withManner(
     `You are a maths tutor listening to a school student explain their own working out loud. ` +
-    `Socratic rules, absolute: never state the final answer, never give the completed line, never say whether they are right or wrong. ` +
+    `${EXPLAIN_WITHHOLD} ` +
     `Point at the step they should look at again, or at the step that was the good one. ` +
-    `One or two sentences. Plain text only — no LaTeX, no markdown; write x^2 as x². This will be read aloud.`;
+    `One or two sentences. Plain text only — no LaTeX, no markdown; write x^2 as x². This will be read aloud.`,
+    voiceOf("maths", age));
 
   const prompt =
     `Topic: ${t?.name ?? topicId}\n${t?.blurb ?? ""}\n\n` +
@@ -76,7 +83,7 @@ async function explainCalc(
 
   const system =
     `You are a calculus tutor listening to a first-year university student on the ${PATHS.calc1.name} course explain their own working out loud. ` +
-    `Socratic rules, absolute: never state the final answer, never give the completed line, never say whether they are right or wrong. ` +
+    `${EXPLAIN_WITHHOLD} ` +
     `Point at the step they should look at again, or at the step that was the good one. ` +
     `One or two sentences. Plain text only — no LaTeX, no markdown; write x^2 as x². This will be read aloud.`;
 
@@ -130,9 +137,11 @@ export async function explainItem(
   learnerId: string,
   /** Is this item still on the walk, as it was, and still unsure? Asked after the model answers - the set may have moved on. */
   stillUnsure: () => boolean,
+  /** The seated profile's age (the route reads it); optional, so a call without one speaks as it always has. */
+  age?: number,
 ): Promise<Explained> {
   const calc = !!item.spec;
-  const h = await explain(item.question, transcript, topicId, learnerId, calc);
+  const h = await explain(item.question, transcript, topicId, learnerId, calc, age);
   // a Calculus item settles by checkAnswer from its spec (null when unsure); a school item by substitution
   const verdict = !stillUnsure() ? null
     : calc ? settleSpec(item.n, item.spec, h.value, h.slip, topicId)
