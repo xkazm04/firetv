@@ -7,7 +7,7 @@
  */
 import type { PracticeItem, Session, Subject } from "@/lib/session/store";
 import { topicIn } from "@/lib/library/paths";
-import { lingaView, progressDots, type ArtKey, type Dot, type HomeState } from "@/lib/english/view";
+import { lingaView, type ArtKey, type HomeState } from "@/lib/english/view";
 import { BAND_NAME } from "@/lib/english/placement";
 import { ESSAY_TYPES } from "@/lib/library/lessons.data";
 import { onModules } from "@/tv/profileRows";
@@ -68,8 +68,8 @@ export interface LingaWaiting {
   /** the view's own title for home, the scene art behind the arch, and the name tag (who is behind the door) */
   title: string; art: ArtKey; partner: string;
   band: string | null; bandName: string | null;
-  /** marks under the card: a conversation's replies and the question waiting, the check's steps, or the plan's topics; null for none */
-  dots: Dot[] | null; midway: boolean;
+  /** the conversation or the check was left unfinished */
+  midway: boolean;
   line: string; empty: string | null;
 }
 export interface EssayWaiting {
@@ -79,8 +79,6 @@ export interface EssayWaiting {
   /** the paragraph on the desk as arrows, one a sentence; `against` where the reading found it faulty */
   rail: Array<{ n: number; against: boolean }> | null;
   read: number; secure: number;
-  /** the lens names still unread, as ghost plates when nothing is read */
-  ghosts: string[];
   line: string; empty: string | null;
 }
 export type Waiting = MathsWaiting | LingaWaiting | EssayWaiting;
@@ -130,8 +128,6 @@ export function lingaWaiting(s: Session): LingaWaiting {
   return {
     app: "english", kind, at: when, home, title: v.title, art: hero?.art ?? "check", partner: hero?.nameTag ?? "",
     band, bandName: band ? BAND_NAME[band] : null,
-    // mid-way: one mark per reply given, then the question waiting; otherwise the plan's topics or the check's steps
-    dots: home === "resume" && mine ? [...mine.turns.filter((x) => x.role === "learner").slice(-6).map((): Dot => "done"), "current"] : progressDots(at),
     midway: home === "resume" || home === "check-part-way",
     line: home === "no-placement" && !talked ? BLURB_ONE.english : v.baseCaption,
     empty: kind === "none" ? "Not started" : null,
@@ -149,11 +145,11 @@ export function essayWaiting(s: Session): EssayWaiting {
   const faulty = new Set(own?.verdicts.filter((v) => v.verdict === "faulty").map((v) => v.n) ?? []);
   const rail = own?.sentences.length ? own.sentences.map((x) => ({ n: x.n, against: faulty.has(x.n) })) : null;
   if (!last) return { app: "essay", kind: "none", at: null, lens: null, lensName: null, estimate: 0, rail: null, read: 0, secure: 0,
-    ghosts: ESSAY_TYPES.slice(0, 3).map((t) => t.name), line: BLURB_ONE.essay, empty: "Nothing read" };
+    line: BLURB_ONE.essay, empty: "Nothing read" };
   const lensName = last.name;
   const line = own?.summary ? firstSentence(own.summary) : entry ? `${entry.label} lens · ${entry.detail}.` : `${lensName} lens, last read.`;
   return { app: "essay", kind: "last", at: last.lastAt, lens: last.id, lensName, estimate: Math.max(0, Math.min(1, last.estimate)),
-    rail, read: totals.read, secure: totals.secure, ghosts: [], line, empty: null };
+    rail, read: totals.read, secure: totals.secure, line, empty: null };
 }
 
 /** What every app on this desk has waiting, left to right. */

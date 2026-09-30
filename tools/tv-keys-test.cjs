@@ -321,6 +321,11 @@ test('landing 2: the lamp rests on what was left - marked, then resume, then nex
  const r=deskWaiting(jakub);assert.deepEqual([r[0].kind,r[0].art,r[0].partner,r[0].midway],['resume','interview','Jordan · Interviewer',true],'the scene of the conversation left mid-way');
 });
 
+test('landing rows: a waiting field stays only when a theme reads it',()=>{
+ const src=fs.readFileSync(LROWS,'utf8').replace(/\/\*[\s\S]*?\*\//g,'').replace(/\/\/.*$/gm,'');
+ for(const name of ['dots','ghosts'])assert.doesNotMatch(src,new RegExp(`\\b${name}\\b`),`${name} is written on the waiting object and no theme reads it`);
+});
+
 test('landing 3: the D-pad moves the lamp between the objects, and Select opens what is lit',()=>{
  const {tvKey}=keys();
  const at=(focus,patch={})=>desk({focus,...patch});
