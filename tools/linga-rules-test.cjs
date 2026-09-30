@@ -31,9 +31,13 @@ test('age and adult confirmation are independent from English level',()=>{
  assert(eligibleScenes({type:'other'},prefs).some(s=>s.id==='date'));
  assert(!eligibleScenes({type:'elementary',age:8},prefs).some(s=>s.id==='interview'));
 });
-test('text, choices, assisted replies and uncertain observations cannot earn independent speaking',()=>{
- let learning=mergeEvidence(emptyEnglish(),[evidence({mode:'text'}),evidence({id:'e2',mode:'choice'}),evidence({id:'e3',supported:true}),evidence({id:'e4',supported:true})]);
- assert.equal(learning.achievements.request,'with-help');
+// Family W10 (owner decision D4) revised this row on purpose: typed replies now count toward "on your own" as spoken
+// ones do; choices, assisted replies and uncertain observations still never do. It pinned "speech only" before.
+test('choices, assisted replies and uncertain observations cannot earn "on your own"; a typed reply counts as a spoken one (D4)',()=>{
+ let learning=mergeEvidence(emptyEnglish(),[evidence({mode:'text'}),evidence({id:'e2',mode:'choice',supported:false}),evidence({id:'e3',supported:true}),evidence({id:'e4',supported:true})]);
+ assert.equal(learning.achievements.request,'with-help','one unsupported typed reply is not yet two');
+ assert.equal(mergeEvidence(emptyEnglish(),[evidence({mode:'text'}),evidence({id:'e2',mode:'text'})]).achievements.request,'independent','two unsupported typed replies are on your own');
+ assert.equal(mergeEvidence(emptyEnglish(),['c1','c2','c3'].map(id=>evidence({id,mode:'choice',supported:false}))).achievements.request,'not-tried','a picked phrase never counts, not even unsupported');
  const context={episodeId:'ep',turnId:'t',sceneId:'booking',at:1,mode:'speech',supported:false,text:'Could you help?',skills:['request']};
  assert.equal(validateObservations([{skill:'request',quote:'invented',success:true,confidence:'clear',note:'x'}],context).length,0);
  assert.equal(validateObservations([{skill:'request',quote:'Could you help?',success:true,confidence:'uncertain',note:'x'}],context).length,0);
@@ -54,7 +58,7 @@ test('duplicate turn commits once, failed reply is retryable, and English preser
  answer=async()=>({json:{reply:'Of course. What is your booking name?',observations:[{skill:'request',quote:'Could you help?',success:true,confidence:'clear',note:'Asked for help.'}]},provider:'test',ms:1});
  await command('turn',input);await command('turn',input);
  assert.equal(getSession().conversation.turns.length,3);assert.equal(getLearner('ema').english.evidence.length,1);
- assert.equal(getLearner('ema').english.achievements.request,'not-tried');
+ assert.equal(getLearner('ema').english.achievements.request,'with-help','a typed reply after a supported opening counts, as helped (D4; it read not-tried while only speech counted)');
  await command('finish');await command('finish',{commandId:'second-finish'}).catch(()=>{});
  assert.equal(getLearner('ema').english.sessions.length,1);
  dispatch({type:'reset'});dispatch({type:'learner.set',id:'ema'});assert.equal(getSession().englishLearning.evidence.length,1);assert.equal(getLearner('ema').skills['linear-one-step'].seen,1);

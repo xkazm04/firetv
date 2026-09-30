@@ -228,7 +228,11 @@ test('10: a round trip keeps the digest exactly; a learners.json written before 
  book['old-learner']=old;fs.writeFileSync(FILE,JSON.stringify(book));
  const l=learners.getLearner('old-learner');
  assert.deepEqual(l.digest,[],'no digest yet');
- const {digest:_d,...rest}=l;assert.deepEqual(rest,old,'every other field as it was');
+ // Linga W10 added record fields to english; an old file loads them empty, and every other field is as it was
+ const {digest:_d,...rest}=l,W10=['placements','certificates','seenIds'];
+ for(const k of W10)if(k in rest.english)assert.deepEqual(rest.english[k],[],`${k} loads empty on an old file`);
+ const english=Object.fromEntries(Object.entries(rest.english).filter(([k])=>!W10.includes(k)));
+ assert.deepEqual({...rest,english},old,'every other field as it was');
  // writing to the old learner keeps the file valid and the others intact
  learners.addDigest('old-learner',{at:1700000000004,kind:'essay',lens:'structure',sentences:2,faulty:0});
  const after=JSON.parse(fs.readFileSync(FILE,'utf8'));

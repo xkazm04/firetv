@@ -326,7 +326,7 @@ export function lingaView(s: Session, input: ViewInput = {}): LingaView {
     const skill = ENGLISH_SKILLS[chapter % 8], progress = l.achievements[skill.id] ?? "not-tried";
     const typed = l.evidence.filter(e => e.skill === skill.id && e.mode === "text").length;
     tag = `Chapter ${chapter % 8 + 1} of 8`; title = skill.name; caption = skill.goal;
-    hero = { kind: "track", kicker: `Speaking progress · ${PROGRESS_LABEL[progress]}`, title, progress, subtitle: typed > 0 ? `${typed} written practice observations · speaking assessed separately` : "", illustration: SKILL_ART[skill.id] };
+    hero = { kind: "track", kicker: `Your progress · ${PROGRESS_LABEL[progress]}`, title, progress, subtitle: typed > 0 ? `${typed} written practice observations · typed and spoken both count` : "", illustration: SKILL_ART[skill.id] };
     // Next first (the map opens on chapter 1, where Previous wraps to 8); each caption names the chapter it goes to, not its goal, which reads as this chapter's
     actions = [act("next-chapter", "Next chapter", `${ENGLISH_SKILLS[(chapter + 1) % 8].name}.`, { ui: { chapter: (chapter + 1) % 8 } }), act("previous-chapter", "Previous chapter", `${ENGLISH_SKILLS[(chapter + 7) % 8].name}.`, { ui: { chapter: (chapter + 7) % 8 } })];
   } else if (c && s.screen === "linga-moment" && c.moment) {
@@ -345,7 +345,7 @@ export function lingaView(s: Session, input: ViewInput = {}): LingaView {
     recap = { title: c.title, replies: attempts.length, spoken: spokenCount, moments: moments.map(({ kind, said, better, why }) => ({ kind, said, better, why })) };
     const counts = `${spokenCount} spoken · ${attempts.length - spokenCount} written replies${moments.length ? ` · ${moments.length} ${moments.length === 1 ? "moment" : "moments"} to keep` : ""}`;
     const rv = c.review;
-    caption = attempts.length ? `Next, try ${recommended.name.toLowerCase()}. Your notes and learning map are on the phone.` : "You explored the scene. Try a reply next time; no speaking progress was recorded.";
+    caption = attempts.length ? `Next, try ${recommended.name.toLowerCase()}. Your notes and learning map are on the phone.` : "You explored the scene. Try a reply next time; no progress was recorded.";
     if (rv?.used) {
       // What Linga taught in an earlier scene, beside the learner's own words tonight: the verdict is the picture.
       title = "It came back";
@@ -386,7 +386,7 @@ export function lingaView(s: Session, input: ViewInput = {}): LingaView {
     const close = { menu: false };
     actions = [
       act("menu-back", "Back to the scene", "Return to where you were.", { ui: close, focus: -1 }),
-      act("learning-map", "Learning map", "Explore the abilities you can practise and your speaking progress.", go("linga-map")),
+      act("learning-map", "Learning map", "Explore the abilities you can practise and your progress in each.", go("linga-map")),
       chooseSituation("Choose a new scene; your existing evidence stays saved."),
       act("my-level", "My level", l.placement ? `${level} · ${BAND_NAME[level]}. See it, find it again, or pick it yourself.` : "Find your level with three questions and a few short tasks.", l.placement ? go("linga-verdict") : { ...cmd("check-start"), ui: close }),
       act("my-topics", "My topics", "See the conversations in your plan, swap them or ask for new ones.", { ...cmd(l.plan ? "plan-open" : "plan-propose"), ui: close }),
@@ -515,7 +515,7 @@ export function viewText(v: LingaView): string {
     case "choices": out.push(h.kicker, h.prompt, ...h.options.map((x, i) => `  option ${i}: ${x}`)); break;
     case "topics": out.push(h.kicker, ...h.topics.map(t => `  [${t.id}] ${t.title} — ${t.skill}\n      why: ${t.why}`)); break;
     case "scene": out.push(h.kicker, ...(h.said ? [said(h.said, h.who || v.spoken.speaker)] : []), h.said ? `Goal: ${h.subtitle}` : `${h.title}${h.subtitle ? ` · ${h.subtitle}` : ""}`); break;
-    case "track": out.push(h.kicker, `Speaking progress: ${PROGRESS_LABEL[h.progress]}`, ...(h.subtitle ? [h.subtitle] : []), ...(h.sentence ? [`A sentence to take with you: "${h.sentence}"`] : [])); break;
+    case "track": out.push(h.kicker, `Progress: ${PROGRESS_LABEL[h.progress]}`, ...(h.subtitle ? [h.subtitle] : []), ...(h.sentence ? [`A sentence to take with you: "${h.sentence}"`] : [])); break;
     case "comparison": out.push(`${h.before.kicker}: "${h.before.quote}"`, `${h.after.kicker}: "${h.after.quote}"`, ...(h.note ? [h.note] : []), ...(h.data ? [h.data] : [])); break;
     case "menu": out.push(`${h.kicker} menu · ${h.title}`); break;
     case "plain": out.push(h.title); break;

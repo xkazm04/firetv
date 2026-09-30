@@ -1,5 +1,5 @@
 import { ENGLISH_SKILLS, PROGRESS_ORDER } from "./curriculum";
-import { cleanPlacement, cleanPlan, cleanTaught, isBand } from "./placement";
+import { cleanPlacement, cleanPlacements, cleanPlan, cleanTaught, isBand } from "./placement";
 import { emptyEnglish, type EnglishEvidence, type EnglishLearning, type EnglishPreferences, type Progress, type SkillId } from "./types";
 
 const obj = (v: unknown): Record<string, unknown> => v && typeof v === "object" && !Array.isArray(v) ? v as Record<string, unknown> : {};
@@ -20,17 +20,25 @@ export function cleanEnglish(value: unknown): EnglishLearning {
   result.evidence = Array.isArray(v.evidence) ? v.evidence.filter((e): e is EnglishEvidence => { const x=obj(e); return isSkill(x.skill) && typeof x.id === "string" && typeof x.episodeId === "string" && typeof x.turnId === "string" && typeof x.sceneId === "string" && typeof x.at === "number" && Number.isFinite(x.at) && ["speech","text","choice"].includes(String(x.mode)) && typeof x.supported === "boolean" && typeof x.success === "boolean" && typeof x.quote === "string" && typeof x.note === "string"; }).slice(-400) : [];
   for (const [key, val] of Object.entries(obj(v.achievements))) if (isSkill(key) && PROGRESS_ORDER.includes(val as Progress)) result.achievements[key] = val as Progress;
   result.placement = cleanPlacement(v.placement);
+  result.placements = cleanPlacements(v.placements);
   result.plan = cleanPlan(v.plan);
   result.taught = cleanTaught(v.taught);
   result.sessions = Array.isArray(v.sessions) ? v.sessions.filter((s): s is EnglishLearning["sessions"][number] => {const x=obj(s);return typeof x.id === "string" && typeof x.sceneId === "string" && typeof x.title === "string" && typeof x.at === "number" && typeof x.turns === "number";}).slice(-30) : [];
   return result;
 }
+/**
+ * The modes that count toward progress. Spoken and typed replies are both the learner's own words (owner decision D4,
+ * Family Phase 1: until then only speech counted, and a child who types could never reach "on your own"). The mode
+ * stays on every piece of evidence, so a certificate can say spoken or written. Picking a phrase ("choice") is
+ * recognition, never production: it never counts. A level-check task is never evidence at all (check.ts).
+ */
+export const COUNTING_MODES: ReadonlyArray<EnglishEvidence["mode"]> = ["speech", "text"];
 export function evidenceProgress(evidence: EnglishEvidence[], skill: SkillId): Progress {
-  const spoken = evidence.filter(e=>e.skill===skill && e.mode==="speech" && e.success);
-  const independent = spoken.filter(e=>!e.supported);
+  const own = evidence.filter(e=>e.skill===skill && COUNTING_MODES.includes(e.mode) && e.success);
+  const independent = own.filter(e=>!e.supported);
   if (independent.length >= 3 && new Set(independent.map(e=>e.episodeId)).size >= 2 && new Set(independent.map(e=>e.sceneId)).size >= 2) return "transfer";
   if (independent.length >= 2) return "independent";
-  return spoken.length ? "with-help" : "not-tried";
+  return own.length ? "with-help" : "not-tried";
 }
 export function mergeEvidence(learning: EnglishLearning, entries: EnglishEvidence[]): EnglishLearning {
   const ids=new Set(learning.evidence.map(e=>e.id));

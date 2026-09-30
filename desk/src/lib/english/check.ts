@@ -12,7 +12,7 @@ import { dispatch, getSession, type Profile, type Screen } from "../session/stor
 import { getLearner, saveEnglish } from "../session/learners";
 import { audienceAllowed, defaultPreferences, ENGLISH_SKILLS, isAdult } from "./curriculum";
 import { ConversationError } from "./errors";
-import { ABOUT_QUESTIONS, BAND_JUDGE, BAND_TUTOR, cleanTopic, firstQuestion, interestWords, isBand, kindFor, PLAN_MAX, PLAN_SIZE, startBand, staircase, TOPIC_ASK_MAX, touchesInterest, verdictFor } from "./placement";
+import { ABOUT_QUESTIONS, appendPlacement, BAND_JUDGE, BAND_TUTOR, cleanTopic, firstQuestion, interestWords, isBand, kindFor, PLAN_MAX, PLAN_SIZE, startBand, staircase, TOPIC_ASK_MAX, touchesInterest, verdictFor } from "./placement";
 import { BANDS, type Audience, type Band, type CheckTask, type EnglishLearning, type EvidenceMode, type LevelCheck, type Placement, type PlacementTask, type PlanTopic, type TaskKind } from "./types";
 
 // The right option of a "choose" task. Server memory only: the session reaches every screen.
@@ -119,7 +119,8 @@ async function advance(k: LevelCheck, ctx: Ctx, token: string): Promise<LevelChe
       return {
         apply: now => {
           const learning = getLearner(now.learnerId).english, prefs = learning.preferences ?? defaultPreferences(ctx.profile);
-          saveEnglish(now.learnerId, { ...learning, placement, preferences: { ...prefs, level: placement.band, goal: prefs.goal || now.goal, interest: prefs.interest || now.interest } });
+          // the live placement is overwritten as before; the check is also appended to the record of checks (W10)
+          saveEnglish(now.learnerId, { ...learning, placement, placements: appendPlacement(learning.placements, placement), preferences: { ...prefs, level: placement.band, goal: prefs.goal || now.goal, interest: prefs.interest || now.interest } });
           return { ...now, stage: "verdict", placement };
         }, provider: r.provider, ms: r.ms,
       };
@@ -203,7 +204,8 @@ export async function checkCommand(action: string, input: Record<string, unknown
     if (!isBand(input.band)) throw new ConversationError("Choose a level from A1 to C2.");
     const old = learning.placement;
     const placement: Placement = { at: Date.now(), band: input.band, selfBand: input.band, confidence: "low", source: "self", summary: "", focus: old?.focus ?? "", tasks: old?.tasks ?? [] };
-    saveEnglish(learnerId, { ...learning, placement, preferences: { ...prefs, level: input.band } });
+    // recorded as "self": kept in the record of checks, never certifying (cert.ts)
+    saveEnglish(learnerId, { ...learning, placement, placements: appendPlacement(learning.placements, placement), preferences: { ...prefs, level: input.band } });
     commit(null, "linga-verdict");
     return true;
   }

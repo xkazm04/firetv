@@ -34,6 +34,15 @@ export interface Placement {
   confidence: "low" | "medium" | "high"; source: "check" | "self";
   summary: string; focus: string; tasks: PlacementTask[];
 }
+/**
+ * One level check kept in the record of checks (Family W10): what it found and how, never its tasks or answers.
+ * A band picked by hand is kept too, with source "self": it is recorded, and it never certifies (cert.ts).
+ */
+export interface PlacementRecord {
+  at: number; band: Band; confidence: Placement["confidence"]; source: Placement["source"];
+  /** the check's one-sentence read, as the placement holds it; absent for a band picked by hand */
+  summary?: string;
+}
 /** A generated conversation topic: a scene contract the learner agreed to. */
 export interface PlanTopic {
   id: string; title: string; goal: string; why: string; skill: SkillId; audience: Audience;
@@ -61,6 +70,8 @@ export interface EnglishLearning {
   evidence: EnglishEvidence[]; achievements: Partial<Record<SkillId, Progress>>;
   sessions: Array<{ id: string; sceneId: string; title: string; at: number; turns: number }>;
   placement: Placement | null; plan: Plan | null; taught: Taught[];
+  /** every level check and hand-picked band, oldest first, append-only (placement.ts appendPlacement, capped) */
+  placements: PlacementRecord[];
 }
 export interface ConversationTurn { id: string; role: "partner" | "learner"; text: string; mode?: EvidenceMode; supported?: boolean; }
 export interface Coaching { before: string; after: string; note: string; }
@@ -111,4 +122,4 @@ export interface LevelCheck {
   pending: string | null; error: string; commands: string[]; audioNonce: number; startedAt: number;
   provider?: string; responseMs?: number;
 }
-export function emptyEnglish(): EnglishLearning { return { preferences: null, notes: [], evidence: [], achievements: {}, sessions: [], placement: null, plan: null, taught: [] }; }
+export function emptyEnglish(): EnglishLearning { return { preferences: null, notes: [], evidence: [], achievements: {}, sessions: [], placement: null, plan: null, taught: [], placements: [] }; }

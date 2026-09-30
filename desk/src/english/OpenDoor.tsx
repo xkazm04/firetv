@@ -76,11 +76,11 @@ export function BandSteps({ band }: { band: Band }) {
   </div>;
 }
 
-/** Speaking progress as stepping stones: four marks on a dashed path, the reached ones filled, the last one warm. */
+/** Progress as stepping stones: four marks on a dashed path, the reached ones filled, the last one warm. */
 export function Stones({ progress }: { progress: Progress }) {
   const at = PROGRESS_ORDER.indexOf(progress);
-  // the path measures speaking aloud only (rules/english counts spoken evidence): say so, or a typed conversation reads as "Not tried"
-  return <><div className="lo-stones-label">Speaking it aloud</div><div className="lo-stones linga-track" data-role="linga-track">
+  // the path counts the learner's own replies, spoken or typed (rules.ts COUNTING_MODES, owner decision D4); a phrase picked from two never counts
+  return <><div className="lo-stones-label">Saying or typing it</div><div className="lo-stones linga-track" data-role="linga-track">
     {PROGRESS_ORDER.map((id, i) => <div key={id} data-reached={i <= at} data-here={i === at}><i/>{PROGRESS_LABEL[id]}</div>)}
   </div></>;
 }

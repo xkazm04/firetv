@@ -7,7 +7,7 @@ import { checkCommand, isCheckAction } from "./check";
 import { audienceAllowed, defaultPreferences, eligibleScenes, ENGLISH_SCENES, ENGLISH_SKILLS, isAdult, recommendScene } from "./curriculum";
 import { ConversationError } from "./errors";
 import { climb, keepLadder, MEANING_MAX, SIMPLER_MAX, STARTER_MAX, supportedBy, validLadder } from "./help";
-import { BAND_NAME, BAND_TUTOR, easyBand, isBand, TAUGHT_CAP } from "./placement";
+import { appendPlacement, BAND_NAME, BAND_TUTOR, easyBand, isBand, TAUGHT_CAP } from "./placement";
 import { mergeEvidence, parsePreferences, validateObservations } from "./rules";
 import { bringBack, dueTaught, markReused, offer, reuseOf, reviewOf, usedLine } from "./review";
 import { accepts, isTurnAction, refusal } from "./turn";
@@ -105,7 +105,9 @@ export async function englishCommand(raw:unknown){
     if(!Array.isArray(input.notes)||input.notes.length>8||input.notes.some(n=>typeof n!=="string"||n.length>240))throw new ConversationError("Use up to eight short teaching notes, 240 characters each.");
     // A band set by hand is the learner's own call, and says so.
     const placement=learning.placement&&learning.placement.band!==preferences.level?{...learning.placement,band:preferences.level,source:"self" as const,confidence:"low" as const,summary:"",at:Date.now()}:learning.placement;
-    saveEnglish(learnerId,{...learning,preferences,placement,notes:input.notes.map((n:string)=>n.trim()).filter(Boolean)});
+    // a changed band is a hand-picked one: appended to the record of checks as "self" (W10), which never certifies
+    const placements=placement&&placement!==learning.placement?appendPlacement(learning.placements,placement):learning.placements;
+    saveEnglish(learnerId,{...learning,preferences,placement,placements,notes:input.notes.map((n:string)=>n.trim()).filter(Boolean)});
     // Settings apply to the next scene; a changed age entitlement ends an incompatible scene now.
     const current=s.conversation,scene=current&&sceneOf(current);
     dispatch({type:"linga.changed",...(current&&(!scene||!audienceAllowed(profile,preferences,scene.audience))?{conversation:null,screen:"linga" as Screen}:{})});

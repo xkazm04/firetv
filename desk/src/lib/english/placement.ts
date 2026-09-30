@@ -4,7 +4,7 @@
  * The tutor writes and judges each task; this file decides which band comes next and where the
  * learner stands. Same marks in, same band out.
  */
-import { BANDS, type Band, type EvidenceMode, type Placement, type PlacementTask, type Plan, type PlanTopic, type SkillId, type TaskKind, type TaskVerdict, type Taught } from "./types";
+import { BANDS, type Band, type EvidenceMode, type Placement, type PlacementRecord, type PlacementTask, type Plan, type PlanTopic, type SkillId, type TaskKind, type TaskVerdict, type Taught } from "./types";
 
 export const MAX_TASKS = 5;
 export const ABOUT_QUESTIONS = 3;
@@ -125,6 +125,38 @@ export function cleanPlacement(value: unknown): Placement | null {
   if (!text(p.summary, 400) || !text(p.focus, 400)) return null;
   const tasks = Array.isArray(p.tasks) ? p.tasks.map(cleanTask).filter((t): t is PlacementTask => !!t).slice(0, MAX_TASKS) : [];
   return { at: p.at, band: p.band, selfBand: isBand(p.selfBand) ? p.selfBand : null, confidence: p.confidence as Placement["confidence"], source: p.source as Placement["source"], summary: p.summary as string, focus: p.focus as string, tasks };
+}
+/**
+ * The record of level checks (Family W10). The live `placement` is still overwritten by each check (the screens and
+ * prompts read it); every check that completes, and every band picked by hand, is ALSO appended here as a small
+ * snapshot: date, band, confidence, source and the check's one-sentence read. No task, no answer. Append-only: a
+ * re-check never removes an earlier snapshot; past the cap the oldest drops.
+ */
+export const PLACEMENTS_CAP = 12;
+export const SUMMARY_MAX = 160;
+export function placementRecord(p: Pick<Placement, "at" | "band" | "confidence" | "source" | "summary">): PlacementRecord {
+  const summary = p.source === "check" ? p.summary.trim().slice(0, SUMMARY_MAX) : "";
+  return { at: p.at, band: p.band, confidence: p.confidence, source: p.source, ...(summary ? { summary } : {}) };
+}
+export function appendPlacement(list: PlacementRecord[] | undefined, p: Pick<Placement, "at" | "band" | "confidence" | "source" | "summary">): PlacementRecord[] {
+  return [...(list ?? []), placementRecord(p)].slice(-PLACEMENTS_CAP);
+}
+/**
+ * The record as it survives a trip to disk: a band from BANDS, a confidence and a source from their closed lists, a
+ * date that is a finite number (clamped at 0), a summary that is a string (trimmed and cut); anything else drops the
+ * entry. A learner file written before W10 has no record and loads with an empty one. Its current `placement`, even a
+ * check's, is NOT back-filled as a history entry: the record starts with the first check that completes after W10,
+ * so no snapshot is ever made up from a later overwrite.
+ */
+export function cleanPlacements(value: unknown): PlacementRecord[] {
+  if (!Array.isArray(value)) return [];
+  return value.flatMap(v => {
+    const p = obj(v);
+    if (!isBand(p.band) || typeof p.at !== "number" || !Number.isFinite(p.at) || !["low", "medium", "high"].includes(String(p.confidence)) || !["check", "self"].includes(String(p.source))) return [];
+    if (p.summary !== undefined && typeof p.summary !== "string") return [];
+    const summary = p.source === "check" && typeof p.summary === "string" ? p.summary.trim().slice(0, SUMMARY_MAX) : "";
+    return [{ at: Math.max(0, p.at), band: p.band, confidence: p.confidence as Placement["confidence"], source: p.source as Placement["source"], ...(summary ? { summary } : {}) }];
+  }).slice(-PLACEMENTS_CAP);
 }
 export function cleanTopic(value: unknown): PlanTopic | null {
   const t = obj(value), q = obj(t.quiz);
