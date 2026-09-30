@@ -7,3 +7,12 @@
 - 2026-09-30 W1: Java 22 StrictMath FdLibm sin/cos/pow allocate temporary arrays in some compiled paths. JFR pinned double-array allocations to these functions (274 MB / 10,000 baseline steps). Small-angle polynomial trig plus exp/log powers avoids that runtime dependency; accuracy checked over 20,001 angles and every preset checked for zero allocation after warmup. Do not weaken the allocation gate to hide the runtime cost.
 
 - 2026-09-30 W4: Chromium CDP `touchEnd` with a nonempty touchPoints list ends the listed contacts (the existing browser probe already relied on this). For independent-release checks send the contact being released, or an empty list to end all. Sending the remaining contacts creates a false latched-button finding. Confirmed by the Stick controller checks.
+
+
+## 2026-09-30 - Restart readiness is not a fixed delay
+
+W5's Stick save check force-stopped/relaunched Death Ride, then tried to read its pairing PIN after 2.6 seconds. The app restarted correctly but the listener's ready log had not appeared yet. Poll the new process's ready message with a bounded timeout before pairing; do not reuse a previous process's PIN. A successful `am start` is not proof that the HTTP/WebSocket listener is ready. Source: `tools/garage-check.mjs`, live AFTKM check.
+
+## 2026-09-30 - Touch-action on ancestors can disable a scrolling shop
+
+The driving page deliberately sets `touch-action: none`. Giving only an overflowing child `pan-y` does not restore native menu scrolling because the browser intersects ancestor policies. The garage switches the root/body to `pan-y` while open; driving controls retain their own `none`. Keep the shop's explicit close button reachable by scrolling on short landscape screens. Source: W5 controller integration.

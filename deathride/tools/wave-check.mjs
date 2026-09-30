@@ -15,7 +15,7 @@ try {
     await page.locator('#carChoice').selectOption(id);
     await page.waitForTimeout(250);
     assert.equal((await stats()).slots[0].car.id,id);
-    assert.equal(await page.locator('#carStats meter').count(),7);
+    assert.equal(await page.locator('#carStats meter').count(),Object.keys((await stats()).slots[0].car.stats).length);
   }
   checks.push('All five classes selected on paired phone; host agrees; seven stat bars');
   await page.screenshot({path:`evidence/phase1/w${wave}-controller.png`});

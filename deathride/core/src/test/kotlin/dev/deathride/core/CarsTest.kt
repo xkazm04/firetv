@@ -13,7 +13,7 @@ class CarsTest {
             val actual=mapOf("maxSpeedMps" to s.maxSpeedMps,"accelerationMps2" to s.accelerationMps2,
                 "lateralGripPerSecond" to s.lateralGripPerSecond,"maxLateralAccelerationMps2" to s.maxLateralAccelerationMps2,
                 "massKg" to s.massKg,"steeringRateRadPerSecond" to s.steeringRateRadPerSecond,"yawResponseSeconds" to s.yawResponseSeconds,
-                "armorReduction" to c.armorReduction,"weaponSlots" to c.weaponSlots.toDouble())
+                "armorReduction" to c.armorReduction,"weaponSlots" to c.weaponSlots.toDouble(),"brakeMps2" to s.brakeMps2)
             for(m in CarCatalog.mapping)assertEquals(m.base+m.perPoint*c.stats.getValue(m.stat),actual.getValue(m.parameter),1e-12)
         }
     }

@@ -1,0 +1,1095 @@
+{
+  "checks": [
+    "Phone purchase: six families; 160 - 120 = 40 CR; braking 6 > 7; duplicate old offer cannot charge again",
+    "TV remote LEFT/RIGHT changes garage car; UP/DOWN selects part; phone and TV use same profile",
+    "Actual Stick race ends, pays once, itemizes repair/insurance and retains positive cash"
+  ],
+  "before": {
+    "profile": "phone-cdc602f4c3217c8a0afc761657694089",
+    "credits": 160,
+    "car": {
+      "id": "Line",
+      "role": "Balanced racer",
+      "stats": {
+        "speed": 6,
+        "acceleration": 6,
+        "grip": 6,
+        "armor": 5,
+        "mass": 5,
+        "handling": 6,
+        "slots": 2,
+        "braking": 6
+      }
+    },
+    "races": 0,
+    "wins": 0,
+    "offers": [
+      {
+        "id": "engine",
+        "name": "Engine",
+        "description": "More straight-line speed and launch acceleration",
+        "tier": 0,
+        "nextTier": 1,
+        "maxTier": 3,
+        "price": 190,
+        "available": false,
+        "reason": "Earn more credits",
+        "before": [
+          6,
+          6,
+          6,
+          5,
+          5,
+          6,
+          2,
+          6
+        ],
+        "after": [
+          7,
+          7,
+          6,
+          5,
+          5,
+          6,
+          2,
+          6
+        ]
+      },
+      {
+        "id": "tires",
+        "name": "Tires",
+        "description": "More tire force and lateral grip",
+        "tier": 0,
+        "nextTier": 1,
+        "maxTier": 3,
+        "price": 160,
+        "available": true,
+        "reason": "Ready to install",
+        "before": [
+          6,
+          6,
+          6,
+          5,
+          5,
+          6,
+          2,
+          6
+        ],
+        "after": [
+          6,
+          6,
+          7,
+          5,
+          5,
+          6,
+          2,
+          6
+        ]
+      },
+      {
+        "id": "brakes",
+        "name": "Brakes",
+        "description": "Shorter stopping distance without changing steering",
+        "tier": 0,
+        "nextTier": 1,
+        "maxTier": 3,
+        "price": 120,
+        "available": true,
+        "reason": "Ready to install",
+        "before": [
+          6,
+          6,
+          6,
+          5,
+          5,
+          6,
+          2,
+          6
+        ],
+        "after": [
+          6,
+          6,
+          6,
+          5,
+          5,
+          6,
+          2,
+          7
+        ]
+      },
+      {
+        "id": "armor",
+        "name": "Armor",
+        "description": "More protection and mass at the cost of handling",
+        "tier": 0,
+        "nextTier": 1,
+        "maxTier": 3,
+        "price": 180,
+        "available": false,
+        "reason": "Earn more credits",
+        "before": [
+          6,
+          6,
+          6,
+          5,
+          5,
+          6,
+          2,
+          6
+        ],
+        "after": [
+          6,
+          6,
+          6,
+          7,
+          6,
+          5,
+          2,
+          6
+        ]
+      },
+      {
+        "id": "suspension",
+        "name": "Suspension",
+        "description": "More corner grip and faster steering response",
+        "tier": 0,
+        "nextTier": 1,
+        "maxTier": 3,
+        "price": 170,
+        "available": false,
+        "reason": "Earn more credits",
+        "before": [
+          6,
+          6,
+          6,
+          5,
+          5,
+          6,
+          2,
+          6
+        ],
+        "after": [
+          6,
+          6,
+          7,
+          5,
+          5,
+          7,
+          2,
+          6
+        ]
+      },
+      {
+        "id": "mounts",
+        "name": "Weapon mounts",
+        "description": "Unlock Hammer or carry more heavy ammunition",
+        "tier": 0,
+        "nextTier": 1,
+        "maxTier": 2,
+        "price": 240,
+        "available": false,
+        "reason": "Earn more credits",
+        "before": [
+          6,
+          6,
+          6,
+          5,
+          5,
+          6,
+          2,
+          6
+        ],
+        "after": [
+          6,
+          6,
+          6,
+          5,
+          5,
+          6,
+          3,
+          6
+        ]
+      }
+    ],
+    "message": "Parts stay with this car",
+    "saveStatus": "New profile",
+    "receipt": null
+  },
+  "bought": {
+    "profile": "phone-cdc602f4c3217c8a0afc761657694089",
+    "credits": 40,
+    "car": {
+      "id": "Line",
+      "role": "Balanced racer",
+      "stats": {
+        "speed": 6,
+        "acceleration": 6,
+        "grip": 6,
+        "armor": 5,
+        "mass": 5,
+        "handling": 6,
+        "slots": 2,
+        "braking": 7
+      }
+    },
+    "races": 0,
+    "wins": 0,
+    "offers": [
+      {
+        "id": "engine",
+        "name": "Engine",
+        "description": "More straight-line speed and launch acceleration",
+        "tier": 0,
+        "nextTier": 1,
+        "maxTier": 3,
+        "price": 190,
+        "available": false,
+        "reason": "Earn more credits",
+        "before": [
+          6,
+          6,
+          6,
+          5,
+          5,
+          6,
+          2,
+          7
+        ],
+        "after": [
+          7,
+          7,
+          6,
+          5,
+          5,
+          6,
+          2,
+          7
+        ]
+      },
+      {
+        "id": "tires",
+        "name": "Tires",
+        "description": "More tire force and lateral grip",
+        "tier": 0,
+        "nextTier": 1,
+        "maxTier": 3,
+        "price": 160,
+        "available": false,
+        "reason": "Earn more credits",
+        "before": [
+          6,
+          6,
+          6,
+          5,
+          5,
+          6,
+          2,
+          7
+        ],
+        "after": [
+          6,
+          6,
+          7,
+          5,
+          5,
+          6,
+          2,
+          7
+        ]
+      },
+      {
+        "id": "brakes",
+        "name": "Brakes",
+        "description": "Shorter stopping distance without changing steering",
+        "tier": 1,
+        "nextTier": 2,
+        "maxTier": 3,
+        "price": 222,
+        "available": false,
+        "reason": "Earn more credits",
+        "before": [
+          6,
+          6,
+          6,
+          5,
+          5,
+          6,
+          2,
+          7
+        ],
+        "after": [
+          6,
+          6,
+          6,
+          5,
+          5,
+          6,
+          2,
+          8
+        ]
+      },
+      {
+        "id": "armor",
+        "name": "Armor",
+        "description": "More protection and mass at the cost of handling",
+        "tier": 0,
+        "nextTier": 1,
+        "maxTier": 3,
+        "price": 180,
+        "available": false,
+        "reason": "Earn more credits",
+        "before": [
+          6,
+          6,
+          6,
+          5,
+          5,
+          6,
+          2,
+          7
+        ],
+        "after": [
+          6,
+          6,
+          6,
+          7,
+          6,
+          5,
+          2,
+          7
+        ]
+      },
+      {
+        "id": "suspension",
+        "name": "Suspension",
+        "description": "More corner grip and faster steering response",
+        "tier": 0,
+        "nextTier": 1,
+        "maxTier": 3,
+        "price": 170,
+        "available": false,
+        "reason": "Earn more credits",
+        "before": [
+          6,
+          6,
+          6,
+          5,
+          5,
+          6,
+          2,
+          7
+        ],
+        "after": [
+          6,
+          6,
+          7,
+          5,
+          5,
+          7,
+          2,
+          7
+        ]
+      },
+      {
+        "id": "mounts",
+        "name": "Weapon mounts",
+        "description": "Unlock Hammer or carry more heavy ammunition",
+        "tier": 0,
+        "nextTier": 1,
+        "maxTier": 2,
+        "price": 240,
+        "available": false,
+        "reason": "Earn more credits",
+        "before": [
+          6,
+          6,
+          6,
+          5,
+          5,
+          6,
+          2,
+          7
+        ],
+        "after": [
+          6,
+          6,
+          6,
+          5,
+          5,
+          6,
+          3,
+          7
+        ]
+      }
+    ],
+    "message": "Installed Brakes 1",
+    "saveStatus": "Saved",
+    "receipt": null
+  },
+  "result": {
+    "combatSummary": {
+      "living": 3,
+      "finished": 2,
+      "shots": 188,
+      "projectiles": 0,
+      "mines": 0,
+      "blasts": 0,
+      "poolExhaustions": 0
+    },
+    "track": {
+      "id": "foundry",
+      "name": "Foundry Ring",
+      "lesson": "Carry speed through the broad bends"
+    },
+    "surface": "Asphalt",
+    "feel": {
+      "id": "Balanced",
+      "deadZone": 0.03,
+      "exponent": 1,
+      "touchTravelPx": 115,
+      "touchTravelFraction": 0.28,
+      "steerRisePerSecond": 6,
+      "steerReturnPerSecond": 10,
+      "lowSpeedAuthority": 1.35,
+      "highSpeedAuthority": 1.05,
+      "speedBlendMps": 30,
+      "yawResponseScale": 0.75,
+      "stabilityScale": 1.1,
+      "throttleRisePerSecond": 3,
+      "throttleExponent": 1.15,
+      "brakeScale": 1,
+      "yawMinRadPerSecond": 0.4,
+      "yawMaxRadPerSecond": 2,
+      "turnInMaxSeconds": 0.8,
+      "recoveryMaxSeconds": 2.5
+    },
+    "units": "ms",
+    "uptimeMs": 208048.828012,
+    "phase": "results",
+    "raceSeconds": 180.00000000003539,
+    "paused": false,
+    "frameNumber": 12413,
+    "flashFrames": 0,
+    "heapUsedMB": 15.046958923339844,
+    "frameTimeMs": {
+      "lifetimeBinMs": 0.1,
+      "lifetimeCapMs": 5000,
+      "last10s": {
+        "p50": 16.879923,
+        "p95": 21.111385,
+        "max": 33.290693000000005,
+        "count": 600
+      },
+      "sinceStart": {
+        "p50": 16.7,
+        "p95": 20.8,
+        "max": 108.547769,
+        "count": 12413
+      }
+    },
+    "simStepMs": {
+      "lifetimeBinMs": 0.001,
+      "lifetimeCapMs": 50,
+      "last10s": {
+        "p50": 1.664,
+        "p95": 2.319307,
+        "max": 6.151769,
+        "count": 560
+      },
+      "sinceStart": {
+        "p50": 1.543,
+        "p95": 2.434,
+        "max": 17.965153,
+        "count": 11479
+      }
+    },
+    "discardedSimulationMs": {
+      "last10s": 0,
+      "sinceStart": 8
+    },
+    "quantiles": "last10s exact (4096 samples); sinceStart histogram (resolution/cap declared per metric); max exact",
+    "slots": [
+      {
+        "slot": 0,
+        "connected": true,
+        "reserved": true,
+        "clockSynced": true,
+        "inputAgeMs": {
+          "lifetimeBinMs": 0.1,
+          "lifetimeCapMs": 5000,
+          "last10s": {
+            "p50": 20.193312982126372,
+            "p95": 38.93046701789717,
+            "max": 51.878235994052375,
+            "count": 560
+          },
+          "sinceStart": {
+            "p50": 20.900000000000002,
+            "p95": 39.300000000000004,
+            "max": 56.891386994044296,
+            "count": 10807
+          }
+        },
+        "stale": {
+          "last10s": 0,
+          "sinceStart": 1
+        },
+        "dropped": {
+          "last10s": 0,
+          "sinceStart": 0
+        },
+        "outOfOrder": {
+          "last10s": 0,
+          "sinceStart": 0
+        },
+        "effectiveThrottle": 0,
+        "effectiveSteer": 0,
+        "effectiveFire": 0,
+        "effectiveMine": 0,
+        "layout": "Classic",
+        "mirrored": false,
+        "garage": {
+          "profile": "phone-cdc602f4c3217c8a0afc761657694089",
+          "credits": 175,
+          "car": {
+            "id": "Line",
+            "role": "Balanced racer",
+            "stats": {
+              "speed": 6,
+              "acceleration": 6,
+              "grip": 6,
+              "armor": 5,
+              "mass": 5,
+              "handling": 6,
+              "slots": 2,
+              "braking": 7
+            }
+          },
+          "races": 1,
+          "wins": 0,
+          "offers": [
+            {
+              "id": "engine",
+              "name": "Engine",
+              "description": "More straight-line speed and launch acceleration",
+              "tier": 0,
+              "nextTier": 1,
+              "maxTier": 3,
+              "price": 190,
+              "available": false,
+              "reason": "Earn more credits",
+              "before": [
+                6,
+                6,
+                6,
+                5,
+                5,
+                6,
+                2,
+                7
+              ],
+              "after": [
+                7,
+                7,
+                6,
+                5,
+                5,
+                6,
+                2,
+                7
+              ]
+            },
+            {
+              "id": "tires",
+              "name": "Tires",
+              "description": "More tire force and lateral grip",
+              "tier": 0,
+              "nextTier": 1,
+              "maxTier": 3,
+              "price": 160,
+              "available": true,
+              "reason": "Ready to install",
+              "before": [
+                6,
+                6,
+                6,
+                5,
+                5,
+                6,
+                2,
+                7
+              ],
+              "after": [
+                6,
+                6,
+                7,
+                5,
+                5,
+                6,
+                2,
+                7
+              ]
+            },
+            {
+              "id": "brakes",
+              "name": "Brakes",
+              "description": "Shorter stopping distance without changing steering",
+              "tier": 1,
+              "nextTier": 2,
+              "maxTier": 3,
+              "price": 222,
+              "available": false,
+              "reason": "Earn more credits",
+              "before": [
+                6,
+                6,
+                6,
+                5,
+                5,
+                6,
+                2,
+                7
+              ],
+              "after": [
+                6,
+                6,
+                6,
+                5,
+                5,
+                6,
+                2,
+                8
+              ]
+            },
+            {
+              "id": "armor",
+              "name": "Armor",
+              "description": "More protection and mass at the cost of handling",
+              "tier": 0,
+              "nextTier": 1,
+              "maxTier": 3,
+              "price": 180,
+              "available": false,
+              "reason": "Earn more credits",
+              "before": [
+                6,
+                6,
+                6,
+                5,
+                5,
+                6,
+                2,
+                7
+              ],
+              "after": [
+                6,
+                6,
+                6,
+                7,
+                6,
+                5,
+                2,
+                7
+              ]
+            },
+            {
+              "id": "suspension",
+              "name": "Suspension",
+              "description": "More corner grip and faster steering response",
+              "tier": 0,
+              "nextTier": 1,
+              "maxTier": 3,
+              "price": 170,
+              "available": true,
+              "reason": "Ready to install",
+              "before": [
+                6,
+                6,
+                6,
+                5,
+                5,
+                6,
+                2,
+                7
+              ],
+              "after": [
+                6,
+                6,
+                7,
+                5,
+                5,
+                7,
+                2,
+                7
+              ]
+            },
+            {
+              "id": "mounts",
+              "name": "Weapon mounts",
+              "description": "Unlock Hammer or carry more heavy ammunition",
+              "tier": 0,
+              "nextTier": 1,
+              "maxTier": 2,
+              "price": 240,
+              "available": false,
+              "reason": "Earn more credits",
+              "before": [
+                6,
+                6,
+                6,
+                5,
+                5,
+                6,
+                2,
+                7
+              ],
+              "after": [
+                6,
+                6,
+                6,
+                5,
+                5,
+                6,
+                3,
+                7
+              ]
+            }
+          ],
+          "message": "Pit service complete - ready to race",
+          "saveStatus": "Saved",
+          "receipt": {
+            "position": 3,
+            "kills": 0,
+            "gross": 155,
+            "repair": 20,
+            "insurance": 0,
+            "net": 135,
+            "banked": 135,
+            "balance": 175
+          }
+        },
+        "combat": {
+          "armingSeconds": 0,
+          "hp": 80.8,
+          "maxHp": 100,
+          "wrecked": false,
+          "weapon": 0,
+          "weaponName": "Rivet",
+          "ammo": 180,
+          "mines": 4,
+          "heavyAmmo": 5,
+          "cooldownSeconds": 0,
+          "mineCooldownSeconds": 0,
+          "damageEvents": 1,
+          "kills": 0
+        },
+        "drifting": false,
+        "loadTransfer": 0,
+        "surfaceId": "Kerb",
+        "car": {
+          "id": "Line",
+          "role": "Balanced racer",
+          "stats": {
+            "speed": 6,
+            "acceleration": 6,
+            "grip": 6,
+            "armor": 5,
+            "mass": 5,
+            "handling": 6,
+            "slots": 2,
+            "braking": 7
+          }
+        },
+        "speedMps": 1.1151620300176442e-23,
+        "xM": 9.222487703386136,
+        "yM": 35.726655089710306
+      },
+      {
+        "slot": 1,
+        "connected": false,
+        "reserved": false,
+        "clockSynced": false,
+        "inputAgeMs": {
+          "lifetimeBinMs": 0.1,
+          "lifetimeCapMs": 5000,
+          "last10s": {
+            "p50": 0,
+            "p95": 0,
+            "max": 0,
+            "count": 0
+          },
+          "sinceStart": {
+            "p50": 0,
+            "p95": 0,
+            "max": 0,
+            "count": 0
+          }
+        },
+        "stale": {
+          "last10s": 0,
+          "sinceStart": 0
+        },
+        "dropped": {
+          "last10s": 0,
+          "sinceStart": 0
+        },
+        "outOfOrder": {
+          "last10s": 0,
+          "sinceStart": 0
+        },
+        "effectiveThrottle": 0,
+        "effectiveSteer": 0,
+        "effectiveFire": 0,
+        "effectiveMine": 0,
+        "layout": "Classic",
+        "mirrored": false,
+        "garage": {
+          "profile": "couch-1",
+          "credits": 160,
+          "car": {
+            "id": "Line",
+            "role": "Balanced racer",
+            "stats": {
+              "speed": 6,
+              "acceleration": 6,
+              "grip": 6,
+              "armor": 5,
+              "mass": 5,
+              "handling": 6,
+              "slots": 2,
+              "braking": 6
+            }
+          },
+          "races": 0,
+          "wins": 0,
+          "offers": [
+            {
+              "id": "engine",
+              "name": "Engine",
+              "description": "More straight-line speed and launch acceleration",
+              "tier": 0,
+              "nextTier": 1,
+              "maxTier": 3,
+              "price": 190,
+              "available": false,
+              "reason": "Earn more credits",
+              "before": [
+                6,
+                6,
+                6,
+                5,
+                5,
+                6,
+                2,
+                6
+              ],
+              "after": [
+                7,
+                7,
+                6,
+                5,
+                5,
+                6,
+                2,
+                6
+              ]
+            },
+            {
+              "id": "tires",
+              "name": "Tires",
+              "description": "More tire force and lateral grip",
+              "tier": 0,
+              "nextTier": 1,
+              "maxTier": 3,
+              "price": 160,
+              "available": true,
+              "reason": "Ready to install",
+              "before": [
+                6,
+                6,
+                6,
+                5,
+                5,
+                6,
+                2,
+                6
+              ],
+              "after": [
+                6,
+                6,
+                7,
+                5,
+                5,
+                6,
+                2,
+                6
+              ]
+            },
+            {
+              "id": "brakes",
+              "name": "Brakes",
+              "description": "Shorter stopping distance without changing steering",
+              "tier": 0,
+              "nextTier": 1,
+              "maxTier": 3,
+              "price": 120,
+              "available": true,
+              "reason": "Ready to install",
+              "before": [
+                6,
+                6,
+                6,
+                5,
+                5,
+                6,
+                2,
+                6
+              ],
+              "after": [
+                6,
+                6,
+                6,
+                5,
+                5,
+                6,
+                2,
+                7
+              ]
+            },
+            {
+              "id": "armor",
+              "name": "Armor",
+              "description": "More protection and mass at the cost of handling",
+              "tier": 0,
+              "nextTier": 1,
+              "maxTier": 3,
+              "price": 180,
+              "available": false,
+              "reason": "Earn more credits",
+              "before": [
+                6,
+                6,
+                6,
+                5,
+                5,
+                6,
+                2,
+                6
+              ],
+              "after": [
+                6,
+                6,
+                6,
+                7,
+                6,
+                5,
+                2,
+                6
+              ]
+            },
+            {
+              "id": "suspension",
+              "name": "Suspension",
+              "description": "More corner grip and faster steering response",
+              "tier": 0,
+              "nextTier": 1,
+              "maxTier": 3,
+              "price": 170,
+              "available": false,
+              "reason": "Earn more credits",
+              "before": [
+                6,
+                6,
+                6,
+                5,
+                5,
+                6,
+                2,
+                6
+              ],
+              "after": [
+                6,
+                6,
+                7,
+                5,
+                5,
+                7,
+                2,
+                6
+              ]
+            },
+            {
+              "id": "mounts",
+              "name": "Weapon mounts",
+              "description": "Unlock Hammer or carry more heavy ammunition",
+              "tier": 0,
+              "nextTier": 1,
+              "maxTier": 2,
+              "price": 240,
+              "available": false,
+              "reason": "Earn more credits",
+              "before": [
+                6,
+                6,
+                6,
+                5,
+                5,
+                6,
+                2,
+                6
+              ],
+              "after": [
+                6,
+                6,
+                6,
+                5,
+                5,
+                6,
+                3,
+                6
+              ]
+            }
+          ],
+          "message": "Parts stay with this car",
+          "saveStatus": "New profile",
+          "receipt": null
+        },
+        "combat": {
+          "armingSeconds": 0,
+          "hp": 42.67051468476211,
+          "maxHp": 100,
+          "wrecked": false,
+          "weapon": 0,
+          "weaponName": "Rivet",
+          "ammo": 165,
+          "mines": 0,
+          "heavyAmmo": 1,
+          "cooldownSeconds": 0,
+          "mineCooldownSeconds": 0,
+          "damageEvents": 31,
+          "kills": 1
+        },
+        "drifting": false,
+        "loadTransfer": -0.0859085402167816,
+        "surfaceId": "Asphalt",
+        "car": {
+          "id": "Line",
+          "role": "Balanced racer",
+          "stats": {
+            "speed": 6,
+            "acceleration": 6,
+            "grip": 6,
+            "armor": 5,
+            "mass": 5,
+            "handling": 6,
+            "slots": 2,
+            "braking": 6
+          }
+        },
+        "speedMps": 31.134588833528046,
+        "xM": -9.051896478534859,
+        "yM": -49.96809860316075
+      }
+    ]
+  }
+}

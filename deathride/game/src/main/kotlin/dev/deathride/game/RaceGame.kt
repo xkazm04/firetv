@@ -65,6 +65,52 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
     private var resultCaptured=false
     private val uiBuilder=com.badlogic.gdx.utils.StringBuilder(512)
     private var rankOrder=IntArray(6)
+    private lateinit var profileStore: ProfileStore
+    private val profiles=Array(2){Profile("couch-$it")}
+    private val saveStatus=Array(2){"New profile"}
+    private val shopMessage=Array(2){"Parts stay with this car"}
+    private val persistence=BooleanArray(2){true}
+    private val raceTickets=LongArray(2)
+    private val raceProfiles=Array(2){""}
+    private var selectedPart=0
+
+    private fun loadProfile(i: Int) {
+        val loaded=runCatching{profileStore.load(server.slots[i].profileId)}
+        persistence[i]=loaded.isSuccess
+        profiles[i]=loaded.getOrNull()?.profile?:Profile(server.slots[i].profileId)
+        saveStatus[i]=loaded.getOrNull()?.status?:"Save damaged - persistence disabled"
+        selectedCars[i]=profiles[i].selectedCar;Garage.apply(profiles[i],world.cars[i]);publishGarage(i)
+    }
+    private fun editProfile(i: Int,edit: (Profile)->Unit): Boolean {
+        if(!persistence[i]) { shopMessage[i]="Save unavailable - changes disabled";publishGarage(i);return false }
+        val updated=profiles[i].copy()
+        if(runCatching{edit(updated)}.isFailure) { shopMessage[i]="Profile change unavailable";publishGarage(i);return false }
+        if(runCatching{profileStore.save(updated)}.isFailure) { saveStatus[i]="Save failed - change cancelled";publishGarage(i);return false }
+        profiles[i]=updated;saveStatus[i]="Saved";publishGarage(i);return true
+    }
+    private fun publishGarage(i: Int) {
+        server.slots[i].carJson=CarCatalog.all[profiles[i].selectedCar].json(profiles[i].bonuses())
+        server.slots[i].garageJson=Garage.json(profiles[i],shopMessage[i],saveStatus[i])
+    }
+    private fun buyPart(i: Int,part: Int,tier: Int,car: Int) {
+        if(phase!="garage")return
+        val offer=Garage.offer(profiles[i],part)
+        val rejection=when { car!=profiles[i].selectedCar->"Car changed - check the selected car";tier!=offer.tier->"Offer changed - check the installed tier";!offer.available->offer.reason;else->"" }
+        if(rejection.isNotEmpty()) { shopMessage[i]=rejection;publishGarage(i);return }
+        var message=""
+        if(editProfile(i){message=Garage.buy(it,part,tier,expectedCar=car)}) {
+            shopMessage[i]=message;Garage.apply(profiles[i],world.cars[i]);world.reset();publishGarage(i)
+        }
+    }
+    private fun openGarage() { if(phase=="lobby" || phase=="results") { phase="garage";server.phase=phase;accumulator=0.0;rebuildUi() } }
+    private fun finishRace() {
+        for(i in profiles.indices)if(raceTickets[i]>0 && raceProfiles[i]==profiles[i].id) {
+            val c=world.cars[i]
+            if(editProfile(i){Economy.settle(it,raceTickets[i],c.position,world.combat.kills[i],world.combat.health(i))})shopMessage[i]="Pit service complete - ready to race"
+            raceTickets[i]=0;publishGarage(i)
+        }
+        phase="results";server.phase=phase;stateTime=0.0;rebuildUi()
+    }
 
     override fun create() {
         shape=ShapeRenderer(10000); batch=SpriteBatch()
@@ -73,18 +119,20 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         small=fontFactory?.invoke(16)?:BitmapFont()
         text=GlyphLayer(font); headline=GlyphLayer(large); detail=GlyphLayer(small)
         server=RaceServer(assets,logger); for(i in world.cars.indices)CarCatalog.apply(world.cars[i],selectedCars[i]);world.reset(); server.start()
+        profileStore=ProfileStore(Gdx.files.local("profiles").file());for(i in profiles.indices)loadProfile(i);world.reset()
         scene=TrackScene(Courses.all[selectedTrack]);effects.clear()
         Gdx.input.setCatchKey(Input.Keys.BACK,true)
         Gdx.input.inputProcessor=object: InputAdapter() {
             override fun keyDown(keycode: Int): Boolean {
                 when(keycode) {
-                    Input.Keys.ENTER,Input.Keys.SPACE,Input.Keys.DPAD_CENTER,Input.Keys.BUTTON_A -> { if(phase=="lobby" || phase=="results")startRace(); return true }
+                    Input.Keys.ENTER,Input.Keys.SPACE,Input.Keys.DPAD_CENTER,Input.Keys.BUTTON_A -> { if(phase=="garage")buyPart(0,selectedPart,profiles[0].tier(selectedCars[0],selectedPart),selectedCars[0]) else if(phase=="lobby" || phase=="results")startRace(); return true }
                     Input.Keys.BACK,Input.Keys.ESCAPE,Input.Keys.BUTTON_B -> { if(phase!="lobby")lobby() else Gdx.app.exit(); return true }
-                    Input.Keys.LEFT -> { selectFeel(-1); return true }
-                    Input.Keys.RIGHT -> { selectFeel(1); return true }
+                    Input.Keys.LEFT -> { if(phase=="garage")server.slots[0].carRequest.set((selectedCars[0]-1).mod(CarCatalog.all.size)) else selectFeel(-1); return true }
+                    Input.Keys.RIGHT -> { if(phase=="garage")server.slots[0].carRequest.set((selectedCars[0]+1)%CarCatalog.all.size) else selectFeel(1); return true }
+                    Input.Keys.MEDIA_PLAY_PAUSE -> { openGarage();return true }
                     Input.Keys.MENU -> { if(phase=="lobby" || phase=="results")server.trackRequest.set((selectedTrack+1)%Courses.all.size); return true }
-                    Input.Keys.DOWN -> if(phase=="lobby" || phase=="results") { server.slots[0].carRequest.set((selectedCars[0]+1)%CarCatalog.all.size); return true }
-                    Input.Keys.UP -> if(phase=="lobby") { server.resetPairing(); keyboard=false; return true }
+                    Input.Keys.DOWN -> if(phase=="garage") { selectedPart=(selectedPart+1)%Parts.all.size;return true } else if(phase=="lobby" || phase=="results") { server.slots[0].carRequest.set((selectedCars[0]+1)%CarCatalog.all.size); return true }
+                    Input.Keys.UP -> if(phase=="garage") { selectedPart=(selectedPart-1).mod(Parts.all.size);return true } else if(phase=="lobby") { server.resetPairing(); keyboard=false; return true }
                 }
                 if(keycode==Input.Keys.W || keycode==Input.Keys.A || keycode==Input.Keys.D || keycode==Input.Keys.S)keyboard=true
                 return false
@@ -96,8 +144,14 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
     private fun selectFeel(direction: Int) {
         server.feelRequest.set((FeelProfiles.all.indexOf(server.feel)+direction).mod(FeelProfiles.all.size))
     }
-    private fun startRace() { world.reset(); effects.clear();phase="countdown"; countdown=3.0; accumulator=0.0; stateTime=0.0; server.phase=phase; logger("race countdown"); rebuildUi() }
-    private fun lobby() { phase="lobby"; world.reset();effects.clear(); stateTime=0.0; server.phase=phase; rebuildUi() }
+    private fun startRace() {
+        raceTickets.fill(0)
+        for(i in profiles.indices)if(server.slots[i].claimed || i==0 && keyboard) {
+            var ticket=0L;if(editProfile(i){ticket=Economy.start(it)}) { raceTickets[i]=ticket;raceProfiles[i]=profiles[i].id }
+        }
+        world.reset(); effects.clear();phase="countdown"; countdown=3.0; accumulator=0.0; stateTime=0.0; server.phase=phase; logger("race countdown"); rebuildUi()
+    }
+    private fun lobby() { raceTickets.fill(0);phase="lobby"; world.reset();effects.clear(); stateTime=0.0; server.phase=phase; rebuildUi() }
     override fun resize(width: Int,height: Int) { view.update(width,height,true) }
     override fun pause() { server.paused=true; server.suspendLink(); accumulator=0.0 }
     override fun resume() { if(::server.isInitialized) { server.paused=false; server.start() }; previousNanos=System.nanoTime(); accumulator=0.0 }
@@ -106,13 +160,18 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         val now=server.nowMs(); server.metrics.frameMs.add(actual*1000,now); server.frameNumber++
         val elapsed=actual.coerceIn(0.0,.1); stateTime+=elapsed; uiTime+=elapsed; smokeTime+=actual
         for(i in server.slots.indices) {
+            if(server.slots[i].profileId!=profiles[i].id && phase!="race" && phase!="countdown")loadProfile(i)
             val choice=server.slots[i].carRequest.getAndSet(-1)
-            if(choice>=0 && (phase=="lobby" || phase=="results")) { selectedCars[i]=choice; CarCatalog.apply(world.cars[i],choice);world.reset();effects.clear(); logger("car slot=$i ${CarCatalog.all[choice].id}") }
-            server.slots[i].carJson=CarCatalog.all[selectedCars[i]].json
+            if(choice>=0 && choice!=selectedCars[i] && (phase=="lobby" || phase=="results" || phase=="garage")) {
+                if(editProfile(i){it.selectedCar=choice}) { selectedCars[i]=choice;Garage.apply(profiles[i],world.cars[i]);world.reset();effects.clear() }
+            }
+            val purchase=server.slots[i].shopRequest.getAndSet(null)
+            if(purchase!=null && purchase.profileId==profiles[i].id)buyPart(i,purchase.part,purchase.tier,purchase.car)
         }
         val courseIndex=server.trackRequest.getAndSet(-1)
         if(courseIndex>=0 && (phase=="lobby" || phase=="results")) {
             selectedTrack=courseIndex;world=World(track=Track(course=Courses.all[courseIndex]),combatEnabled=true);for(i in world.cars.indices)CarCatalog.apply(world.cars[i],selectedCars[i]);world.reset()
+            for(i in profiles.indices)Garage.apply(profiles[i],world.cars[i]);world.reset()
             scene.dispose();scene=TrackScene(Courses.all[courseIndex]);effects.clear();server.trackJson=Courses.all[courseIndex].json;rebuildUi()
         }
         val surfaceIndex=server.surfaceRequest.getAndSet(-1)
@@ -120,9 +179,9 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         val feelIndex=server.feelRequest.getAndSet(-1)
         if(feelIndex>=0) { server.feel=FeelProfiles.all[feelIndex]; logger("feel ${server.feel.json}") }
         for(c in world.cars)c.feel=if(c.human)server.feel else FeelProfiles.spike
-        when(server.command.getAndSet(0)) { 1 -> if(phase=="lobby" || phase=="results")startRace(); 2 -> lobby() }
+        when(server.command.getAndSet(0)) { 1 -> if(phase=="lobby" || phase=="results")startRace(); 2 -> lobby();3 -> openGarage() }
         // Keep release/stale state current in menus without mislabelling it as simulation-age evidence.
-        if(phase=="countdown" || phase=="results")for(i in server.slots.indices)server.consume(i,server.nowMs(),inputs[i],false)
+        if(phase=="countdown" || phase=="results" || phase=="garage")for(i in server.slots.indices)server.consume(i,server.nowMs(),inputs[i],false)
         if(actual>.1)server.metrics.discardedSimMs.add(((actual-.1)*1000).toLong(),now)
         if(phase=="countdown") { countdown-=elapsed; if(countdown<=0) { phase="race"; server.phase=phase; stateTime=0.0 } }
         if(phase=="lobby" || phase=="race") {
@@ -149,7 +208,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
             if(phase=="race") {
                 var humans=0; var complete=0
                 for(c in world.cars)if(c.human) { humans++; if(c.finishSeconds>=0 || world.combat.wrecked(c.id))complete++ }
-                if((humans>0 && complete==humans) || world.resolved==6 || world.seconds>=TrackRules["maxRaceSeconds"]) { phase="results"; server.phase=phase; stateTime=0.0; rebuildUi() }
+                if((humans>0 && complete==humans) || world.resolved==6 || world.seconds>=TrackRules["maxRaceSeconds"])finishRace()
             }
         }
         server.raceSeconds=world.seconds
@@ -184,7 +243,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
     private fun drawWorld(dt: Double) {
         val course=Courses.all[selectedTrack]
         val alpha=(accumulator/Tuning.STEP_SECONDS).coerceIn(0.0,1.0)
-        val following=phase!="lobby" && phase!="results"
+        val following=phase=="race" || phase=="countdown"
         var pixelsPerM=min(1180.0/(course.maxX-course.minX),490.0/(course.maxY-course.minY))
         if(following) {
             var count=0;var x=0.0;var y=0.0;var speed=0.0;var minX=Double.POSITIVE_INFINITY;var maxX=Double.NEGATIVE_INFINITY;var minY=Double.POSITIVE_INFINITY;var maxY=Double.NEGATIVE_INFINITY
@@ -229,7 +288,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
             shape.color=accent; shape.rect(70f,116f,344f,44f)
             val selected=CarCatalog.all[selectedCars[0]]
             for(i in CarCatalog.statNames.indices) {
-                val value=selected.stats.getValue(CarCatalog.statNames[i])
+                val value=selected.stat(CarCatalog.statNames[i],profiles[0].bonuses())
                 for(bar in 0 until CarCatalog.statMax) {
                     shape.color=if(bar<value)accent else road
                     shape.rect(860f+bar*10,530f-i*25,7f,11f)
@@ -238,6 +297,17 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
             painter.draw(shape,world.cars[0],1100f,445f,PI*.5,colors[0],false,20f)
         }
         if(phase=="results") { shape.color=bg; shape.rect(300f,113f,680f,482f); shape.color=accent; shape.rect(330f,136f,620f,42f) }
+        if(phase=="garage") {
+            shape.color=bg;shape.rect(45f,90f,1190f,520f)
+            shape.color=road;shape.rect(65f,456f-selectedPart*52,470f,48f)
+            painter.draw(shape,world.cars[0],1090f,375f,PI*.5,colors[0],false,22f)
+            val offer=Garage.offer(profiles[0],selectedPart)
+            for(i in CarCatalog.statNames.indices)for(bar in 0 until CarCatalog.statMax) {
+                shape.color=if(bar<offer.before[i])accent else if(bar<offer.after[i])Color.valueOf("82D5A2") else road
+                if(offer.after[i]<offer.before[i] && bar>=offer.after[i] && bar<offer.before[i])shape.color=warning
+                shape.rect(810f+bar*12,477f-i*24,9f,10f)
+            }
+        }
         if(phase=="countdown") { shape.color=bg; shape.circle(640f,352f,66f,40); shape.color=accent; shape.rect(595f,277f,(max(0.0,countdown)%1*90).toFloat(),4f) }
         for(i in 0..5) { shape.color=colors[i]; shape.rect(44f+i*203,24f,4f,22f) }
         if(Presentation.FOLLOW_CAMERA && phase=="race")drawMinimap()
@@ -265,15 +335,15 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
             val car=CarCatalog.all[selectedCars[0]]
             text.addText(car.id+" / "+car.role,690f,575f)
             for(i in CarCatalog.statNames.indices) {
-                val stat=CarCatalog.statNames[i]; val value=car.stats.getValue(stat)
+                val stat=CarCatalog.statNames[i]; val value=car.stat(stat,profiles[0].bonuses())
                 uiBuilder.clear(); uiBuilder.append(stat).append("  ").append(value)
                 detail.addText(uiBuilder,695f,538f-i*25)
             }
-            detail.addText("DOWN: car     MENU: circuit",695f,333f)
+            detail.addText("DOWN: car   MENU: circuit   PLAY: garage",695f,320f)
             detail.addText(Courses.all[selectedTrack].lesson,460f,100f)
         }
         if(phase!="race")detail.addText(Presentation.CONCEPT+"  /  "+Presentation.TAGLINE,59f,655f)
-        if(phase!="race")detail.addText(Courses.all[selectedTrack].name+"   /   MENU: course    /    FEEL: "+server.feel.id+"  LEFT / RIGHT",59f,630f)
+        if(phase!="race")detail.addText(if(phase=="garage")"PARTS / PER CAR    -    GREEN: GAIN    AMBER: TRADE-OFF" else Courses.all[selectedTrack].name+"   /   MENU: course    /    FEEL: "+server.feel.id+"  LEFT / RIGHT",59f,630f)
         detail.addText("6 CARS    /    3 LAPS    /    "+Courses.all[selectedTrack].name.uppercase(),873f,682f)
         detail.addText(if(phase=="lobby")"A live race. A phone in your hand." else "BACK: Lobby    /    "+server.feel.id,873f,653f)
         for(c in world.cars) {
@@ -283,6 +353,22 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
             detail.addText(uiBuilder,55f+c.id*203,27f)
         }
         when(phase) {
+            "garage" -> {
+                val p=profiles[0];val offer=Garage.offer(p,selectedPart);val part=Parts.all[selectedPart]
+                headline.addText("THE GARAGE",70f,575f);text.setColor(accent);text.addText("${p.credits} CR",440f,566f)
+                text.setColor(Color.WHITE);text.addText(CarCatalog.all[p.selectedCar].id+"  /  PLAYER 1",665f,563f)
+                detail.addText("LEFT / RIGHT: car",665f,536f)
+                for(i in Parts.all.indices) {
+                    val item=Garage.offer(p,i);text.setColor(if(i==selectedPart)accent else Color.WHITE)
+                    text.addText(Parts.all[i].name+"  "+item.tier+" / "+Parts.all[i].maxTier,80f,488f-i*52)
+                    detail.addText(if(item.tier==Parts.all[i].maxTier)"MAX" else "${item.price} CR",425f,487f-i*52)
+                }
+                for(i in CarCatalog.statNames.indices)detail.addText(CarCatalog.statNames[i]+"  ${offer.before[i]} > ${offer.after[i]}",650f,487f-i*24)
+                detail.addText(part.description,650f,270f);text.setColor(if(offer.available)accent else warning)
+                text.addText(if(offer.available)"SELECT: INSTALL TIER ${offer.nextTier} / ${offer.price} CR" else offer.reason,650f,225f)
+                detail.addText(shopMessage[0]+" / "+saveStatus[0],650f,186f)
+                detail.addText("UP / DOWN: part    BACK: lobby    Phone garage belongs to its driver",75f,123f)
+            }
             "lobby" -> {
                 headline.addText(Presentation.CONCEPT,70f,586f)
                 text.addText("One scan. You're on the grid.",70f,523f)
@@ -322,6 +408,8 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
                     detail.addText(uiBuilder,731f,458f-rank*42)
                 }
                 text.setColor(bg); text.addText("SELECT  /  REMATCH",527f,164f)
+                val receipt=profiles[0].lastReceipt
+                if(receipt!=null)detail.addText("PRIZE ${receipt.gross} - PIT ${receipt.repair} = +${receipt.banked} CR   /   BANK ${profiles[0].credits}   /   PLAY: GARAGE",305f,99f)
             }
         }
     }

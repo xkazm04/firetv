@@ -16,11 +16,16 @@ import java.util.UUID
 import java.security.SecureRandom
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicInteger
+import java.util.concurrent.atomic.AtomicReference
 import kotlin.math.*
 
+data class ShopRequest(val profileId: String,val car: Int,val part: Int,val tier: Int)
 class Slot(val id: Int) {
     val input=InputMailbox()
     val carRequest=AtomicInteger(-1)
+    val shopRequest=AtomicReference<ShopRequest?>(null)
+    @Volatile var profileId="couch-$id"
+    @Volatile var garageJson="{}"
     @Volatile var carJson=CarCatalog.all[id].json
     @Volatile var token=""
     @Volatile var connected=false
@@ -73,16 +78,19 @@ class RaceServer(private val assets: (String)->String, private val log: (String)
     private val scope=CoroutineScope(SupervisorJob()+Dispatchers.IO+errors)
     fun nowMs()=(System.nanoTime()-origin)/1e6
     fun pairingUrl()="http://$address:$port/?pin=$pin"
-    @Synchronized private fun claim(token: String, providedPin: String): Slot? {
+    @Synchronized private fun claim(token: String, providedPin: String, profile: String): Slot? {
         val returning=slots.firstOrNull{it.token==token && token.isNotEmpty()}
         if(returning!=null) { returning.generation++; returning.connected=true; returning.clockSynced=false; returning.input.newConnection(); return returning }
         if(providedPin!=pin) return null
         val slot=slots.firstOrNull{!it.claimed} ?: return null
+        val id=if(validProfileId(profile))profile else "couch-${slot.id}"
+        if(slots.any{it.claimed && it.profileId==id})return null
+        slot.profileId=id
         slot.token=UUID.randomUUID().toString(); slot.connected=true; slot.generation++; slot.clockSynced=false; slot.input.newConnection()
         return slot
     }
     fun resetPairing() {
-        synchronized(this) { for(slot in slots) { slot.generation++; slot.connected=false; slot.token=""; slot.input.newConnection() }; pin=(1000+SecureRandom().nextInt(9000)).toString() }
+        synchronized(this) { for(slot in slots) { slot.generation++; slot.connected=false; slot.token=""; slot.profileId="couch-${slot.id}"; slot.shopRequest.set(null); slot.input.newConnection() }; pin=(1000+SecureRandom().nextInt(9000)).toString() }
     }
     fun start() {
         if(running || networkJob?.isActive==true)return
@@ -122,7 +130,7 @@ class RaceServer(private val assets: (String)->String, private val log: (String)
                 val frame=socket.incoming.receive() as? Frame.Text ?: error("Expected hello")
                 val msg=Json.parseToJsonElement(frame.readText()).jsonObject
                 if(msg.text("t")!="hello") error("Expected hello")
-                slot=claim(msg.text("token"),msg.text("pin"))
+                slot=claim(msg.text("token"),msg.text("pin"),msg.text("profile"))
             }
             val s=slot
             if(s==null) { socket.send("{\"t\":\"error\",\"message\":\"Check the PIN. Two cars may already be reserved; press UP on the TV lobby to reset pairing.\"}"); socket.close(CloseReason(CloseReason.Codes.VIOLATED_POLICY,"pairing")); return }
@@ -130,7 +138,7 @@ class RaceServer(private val assets: (String)->String, private val log: (String)
             socket.send("{\"t\":\"welcome\",\"slot\":${s.id},\"token\":\"${s.token}\",\"tvNow\":${nowMs()},\"phase\":\"$phase\"}")
             hudJob=socket.launch {
                 while(isActive && generation==s.generation) {
-                    socket.send("{\"t\":\"hud\",\"speed\":${s.speed},\"lap\":${s.lap},\"pos\":${s.position},\"combat\":${s.combatJson},\"track\":$trackJson,\"surface\":\"${surface.id}\",\"feel\":${feel.json},\"drifting\":${s.drifting},\"loadTransfer\":${s.loadTransfer},\"surfaceId\":\"${s.surfaceId}\",\"car\":${s.carJson},\"impact\":${s.impact},\"phase\":\"$phase\",\"stale\":${s.stale},\"paused\":$paused}")
+                    socket.send("{\"t\":\"hud\",\"speed\":${s.speed},\"lap\":${s.lap},\"pos\":${s.position},\"garage\":${s.garageJson},\"combat\":${s.combatJson},\"track\":$trackJson,\"surface\":\"${surface.id}\",\"feel\":${feel.json},\"drifting\":${s.drifting},\"loadTransfer\":${s.loadTransfer},\"surfaceId\":\"${s.surfaceId}\",\"car\":${s.carJson},\"impact\":${s.impact},\"phase\":\"$phase\",\"stale\":${s.stale},\"paused\":$paused}")
                     delay(100)
                 }
                 socket.close(CloseReason(CloseReason.Codes.NORMAL,"replaced"))
@@ -155,7 +163,13 @@ class RaceServer(private val assets: (String)->String, private val log: (String)
                     }
                     "track" -> { val index=Courses.all.indexOfFirst { it.id==msg.text("id") };if(index>=0 && (phase=="lobby" || phase=="results"))trackRequest.set(index) }
                     "surface" -> { val index=Surfaces.practice.indexOfFirst { it.id==msg.text("id") }; if(index>=0)surfaceRequest.set(index) }
-                    "car" -> { val index=CarCatalog.all.indexOfFirst { it.id==msg.text("id") }; if(index>=0 && (phase=="lobby" || phase=="results"))s.carRequest.set(index) }
+                    "car" -> { val index=CarCatalog.all.indexOfFirst { it.id==msg.text("id") }; if(index>=0 && (phase=="lobby" || phase=="results" || phase=="garage"))s.carRequest.set(index) }
+                    "garage" -> if(phase=="lobby" || phase=="results")command.compareAndSet(0,3)
+                    "buy" -> if(phase=="garage") {
+                        val part=Parts.all.indexOfFirst{it.id==msg.text("part")};val car=CarCatalog.all.indexOfFirst{it.id==msg.text("car")}
+                        val tier=msg["tier"]?.jsonPrimitive?.intOrNull
+                        if(part>=0 && car>=0 && tier!=null && tier>=0 && msg.text("profile")==s.profileId)s.shopRequest.compareAndSet(null,ShopRequest(s.profileId,car,part,tier))
+                    }
                     "feel" -> { val index=FeelProfiles.all.indexOfFirst { it.id==msg.text("id") }; if(index>=0)feelRequest.set(index) }
                     "layout" -> { val id=msg.text("id");if(id in ControllerLayouts.ids){s.layout=id;s.mirrored=msg["mirrored"]?.jsonPrimitive?.booleanOrNull?:false} }
                     "start" -> command.compareAndSet(0,1)
@@ -179,7 +193,7 @@ class RaceServer(private val assets: (String)->String, private val log: (String)
         sb.append("{\"combatSummary\":$combatSummaryJson,\"track\":$trackJson,\"surface\":\"${surface.id}\",\"feel\":${feel.json},\"units\":\"ms\",\"uptimeMs\":$now,\"phase\":\"$phase\",\"raceSeconds\":$raceSeconds,\"paused\":$paused,\"frameNumber\":$frameNumber,\"flashFrames\":$flashFrames,\"heapUsedMB\":${(runtime.totalMemory()-runtime.freeMemory())/1048576.0},\"frameTimeMs\":${metrics.frameMs.json(now)},\"simStepMs\":${metrics.simMs.json(now)},\"discardedSimulationMs\":${metrics.discardedSimMs.json(now)},\"quantiles\":\"last10s exact (4096 samples); sinceStart histogram (resolution/cap declared per metric); max exact\",\"slots\":[")
         for(i in slots.indices) {
             if(i>0)sb.append(','); val s=slots[i]
-            sb.append("{\"slot\":$i,\"connected\":${s.connected},\"reserved\":${s.claimed},\"clockSynced\":${s.clockSynced},\"inputAgeMs\":${metrics.inputAgeMs[i].json(now)},\"stale\":${metrics.stale[i].json(now)},\"dropped\":${metrics.dropped[i].json(now)},\"outOfOrder\":${metrics.outOfOrder[i].json(now)},\"effectiveThrottle\":${s.effectiveThrottle},\"effectiveSteer\":${s.effectiveSteer},\"effectiveFire\":${s.effectiveFire},\"effectiveMine\":${s.effectiveMine},\"layout\":\"${s.layout}\",\"mirrored\":${s.mirrored},\"combat\":${s.combatJson},\"drifting\":${s.drifting},\"loadTransfer\":${s.loadTransfer},\"surfaceId\":\"${s.surfaceId}\",\"car\":${s.carJson},\"speedMps\":${s.speed},\"xM\":${s.x},\"yM\":${s.y}}")
+            sb.append("{\"slot\":$i,\"connected\":${s.connected},\"reserved\":${s.claimed},\"clockSynced\":${s.clockSynced},\"inputAgeMs\":${metrics.inputAgeMs[i].json(now)},\"stale\":${metrics.stale[i].json(now)},\"dropped\":${metrics.dropped[i].json(now)},\"outOfOrder\":${metrics.outOfOrder[i].json(now)},\"effectiveThrottle\":${s.effectiveThrottle},\"effectiveSteer\":${s.effectiveSteer},\"effectiveFire\":${s.effectiveFire},\"effectiveMine\":${s.effectiveMine},\"layout\":\"${s.layout}\",\"mirrored\":${s.mirrored},\"garage\":${s.garageJson},\"combat\":${s.combatJson},\"drifting\":${s.drifting},\"loadTransfer\":${s.loadTransfer},\"surfaceId\":\"${s.surfaceId}\",\"car\":${s.carJson},\"speedMps\":${s.speed},\"xM\":${s.x},\"yM\":${s.y}}")
         }
         sb.append("]}"); return sb.toString()
     }

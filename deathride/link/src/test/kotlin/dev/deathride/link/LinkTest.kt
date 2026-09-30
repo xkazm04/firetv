@@ -46,6 +46,13 @@ class LinkTest {
             val bad=Listener(); val badWs=connect(bad); badWs.sendText("""{"t":"hello","pin":"invalid"}""",true).join(); assertEquals("error",bad.next("error")["t"]!!.jsonPrimitive.content); badWs.abort()
             val good=Listener(); val ws=connect(good); ws.sendText("""{"t":"hello","pin":"${host.pin}"}""",true).join()
             val welcome=good.next("welcome"); val token=welcome["token"]!!.jsonPrimitive.content; assertEquals(0,welcome["slot"]!!.jsonPrimitive.int)
+            fun barrier() { ws.sendText("""{"t":"ping","ts":123}""",true).join();good.next("pong") }
+            val buy="""{"t":"buy","profile":"couch-0","car":"Line","part":"brakes","tier":0}"""
+            host.phase="race";ws.sendText(buy,true).join();barrier();assertNull(host.slots[0].shopRequest.get())
+            host.phase="garage";ws.sendText(buy,true).join();ws.sendText(buy.replace("brakes","engine"),true).join();barrier()
+            val request=host.slots[0].shopRequest.getAndSet(null)!!;assertEquals("brakes",dev.deathride.core.Parts.all[request.part].id);assertEquals(0,request.tier)
+            ws.sendText(buy.replace("couch-0","another-profile"),true).join();barrier();assertNull(host.slots[0].shopRequest.get())
+            host.phase="lobby"
             ws.sendText("""{"t":"feel","id":"Loose"}""",true).join()
             repeat(100) { if(host.feelRequest.get()<0)Thread.sleep(10) }
             assertEquals(1,host.feelRequest.getAndSet(-1))
