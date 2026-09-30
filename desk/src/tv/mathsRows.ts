@@ -34,8 +34,9 @@ export function humanTopic(id: string): string { const w = id.replace(/[-_]+/g, 
 export function topicName(id: string): string { return topicIn(id)?.name ?? humanTopic(id); }
 
 /**
- * The first evening's words on a path: a school path starts from its first topic ("One-step equations"), a course
- * from its own name ("Calculus 1") - a course's first topic is not what the learner signed up for.
+ * The first evening's words on a path: the path's own name ('School maths', 'Calculus 1'), for the school path
+ * too. A course's first topic is not what the learner signed up for, and neither is the school path's
+ * (owner decision 2026-09-29).
  */
 export function pathFirst(path: MathPath): string {
   // the path's own name, for the school path too (owner decision 2026-09-29; since W5b 'School maths, from the first step')

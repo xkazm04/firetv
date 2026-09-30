@@ -455,6 +455,12 @@ test('path 4: Tonight\'s title counts the learner\'s path - "N of 22", every top
  assert.equal(secureTitle(7,22,pathFirst('calc1')),'7 of 22 topics secure');
  assert.equal(secureTitle(22,22,pathFirst('calc1')),'Every topic on the path is secure');
  assert.equal(pathFirst('school'),'School maths','the school path reads by its own name, not its first topic (owner decision 2026-09-29; renamed in W5b, D5)');
+ const rows=fs.readFileSync(path.join(root,'src/tv/mathsRows.ts'),'utf8');
+ const at=rows.indexOf('export function pathFirst');
+ assert.ok(at>0,'pathFirst is in tv/mathsRows.ts');
+ const said=rows.slice(Math.max(0,at-400),at);
+ assert.doesNotMatch(said,/One-step equations/,'pathFirst\'s comment no longer names the school path\'s first topic');
+ assert.match(said,/path's own name/,'the comment says what the function returns');
  const seven=Object.fromEntries(calcIds().slice(0,7).map(id=>[id,rec(id,0.9,true)]));
  const title=(s)=>{const p=pathSecure(s);return secureTitle(p.secure.length,p.topics.length,p.first);};
  assert.equal(title(onPath(CALC,{...seven,'linear-one-step':rec('linear-one-step',0.9,true)})),'7 of 22 topics secure','a school record is not one of the 22');
