@@ -417,3 +417,29 @@ test('S78: tonight\'s list is this learner\'s - the seated learner adds and tick
  const {view}=require(path.join(root,'src/lib/session/pairing.ts'));
  for(const role of ['tv','phone'])assert.ok(!JSON.stringify(view(jak,role)).includes('Unit 6'),role);
 });
+
+test('S78: a task id is unique across everything the desk holds - many adds in one tick, across a learner switch, never share one',()=>{
+ const {reduce}=store();
+ // the clock is pinned so every add lands in the same millisecond: the worst case for a "t"+Date.now() id
+ const real=Date.now,T=real.call(Date);Date.now=()=>T;
+ try{
+  let x=session({tasks:[]});
+  const add=(name)=>{x=reduce(x,{type:'task.add',name,sub:'maths',min:10});};
+  for(let i=0;i<5;i++)add('ema '+i);
+  x=reduce(x,{type:'learner.set',id:'jakub'});
+  for(let i=0;i<5;i++)add('jakub '+i);
+  x=reduce(x,{type:'learner.set',id:'ema'});
+  for(let i=0;i<5;i++)add('ema again '+i);
+  const held=[...x.tasks,...Object.values(x.away).flatMap((slot)=>slot.tasks)];
+  assert.equal(held.length,15,'every add landed on a list');
+  assert.equal(new Set(held.map((t)=>t.id)).size,15,'and none shares an id, in one list or across the two');
+  assert.ok(held.every((t)=>/^t\d+(-\d+)?$/.test(t.id)),'the id keeps its "t" and digits shape');
+  // a tick for Ema's task never lands on Jakub's
+  const jak=reduce(x,{type:'learner.set',id:'jakub'});
+  const ticked=reduce(jak,{type:'task.done',id:jak.away.ema.tasks[0].id,done:true});
+  assert.ok(ticked.tasks.every((t)=>!t.done),'a tick for an id on another learner\'s list changes nothing on his');
+  // a task the desk already holds (a saved session, or the clock stepping back) is never issued again
+  const y=reduce(session({tasks:[{id:'t'+T,sub:'maths',name:'old',min:5,done:false},{id:'t'+T+'-1',sub:'maths',name:'old2',min:5,done:false}]}),{type:'task.add',name:'new',sub:'maths',min:10});
+  assert.equal(new Set(y.tasks.map((t)=>t.id)).size,3,'a fresh id beside two held ones');
+ }finally{Date.now=real;}
+});

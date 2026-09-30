@@ -304,6 +304,25 @@ function toAway(s: Session, n: Session, owner: string, f: (x: MathsSlot) => Math
 }
 const awayWith = (s: Session, has: (x: MathsSlot) => boolean) => Object.keys(s.away ?? {}).find((k) => has(s.away![k]));
 
+/** The millisecond the last task id was made in, and how many were made in it: a strict order within one process. */
+let taskMs = -1, taskSeq = 0;
+/**
+ * A new task's id: "t" and the millisecond, with a "-k" suffix from the second one made in that millisecond, and a
+ * candidate no task on the desk holds - the seated learner's list and every learner's in `away` - is the only one taken.
+ * Nothing reads an id's parts (it is only compared), so the shape may carry the suffix.
+ */
+function newTaskId(s: Session): string {
+  const held = new Set<string>();
+  for (const t of s.tasks ?? []) held.add(t.id);
+  for (const slot of Object.values(s.away ?? {})) for (const t of slot.tasks ?? []) held.add(t.id);
+  for (;;) {
+    const now = Date.now();
+    if (now === taskMs) taskSeq++; else { taskMs = now; taskSeq = 0; }
+    const id = taskSeq ? `t${now}-${taskSeq}` : `t${now}`;
+    if (!held.has(id)) return id;
+  }
+}
+
 /**
  * Who each Math Buddy object belongs to, for a session saved before the stamps, from the desk's own record: a page, the
  * learner whose history has its "homework" line (the same title, written after it was snapped - api/read writes it as the
@@ -457,8 +476,9 @@ export function reduce(s: Session, e: Event): Session {
     case "essay.revised": n.essay = e.analysis; n.essayAt = e.analysis.sentences.some((x) => x.n === e.n) ? e.n : null; n.subject = "essay";
       n.focus = focusAfterRewrite(e.analysis, e.n, s.screen === "forensic" ? s.focus : 0); n.screen = "forensic"; break;
     case "essay.at": n.essayAt = e.n !== null && s.essay?.sentences.some((x) => x.n === e.n) ? e.n : null; break;
-    // an id no task on the list has, so two added in the same millisecond are ticked apart
-    case "task.add": { let id = "t" + Date.now(); for (let k = 1; s.tasks.some((t) => t.id === id); k++) id = `t${Date.now()}-${k}`;
+    // an id no task anywhere on the desk has (this learner's list, and every learner's in `away`), so a tick that names
+    // one learner's task can never land on another's - even two added in the same millisecond, across a learner switch
+    case "task.add": { const id = newTaskId(s);
       n.tasks = [...s.tasks, { id, sub: e.sub, name: e.name, min: e.min, done: false }]; break; }
     case "task.done": n.tasks = s.tasks.map((t) => (t.id === e.id ? { ...t, done: e.done } : t)); break;
     case "timer.start": n.timer = { ...s.timer, running: true }; if (!s.log.started) n.log = { ...s.log, started: Date.now() }; break;
