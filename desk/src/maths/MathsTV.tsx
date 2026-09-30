@@ -15,7 +15,7 @@ import { PATHS, expectedOn, learnerPath, topicIn, topicsOf, type PathTopic } fro
 import { LESSONS } from "@/lib/library/lessons.data";
 import { lessonStates } from "@/lib/library/watched";
 import { slip as slipById } from "@/lib/rules/maths";
-import { PAD, STRIP_AFTER, fitName, flagOnStage, flagX, needleX, rulerFrontier, rulerModel, schoolMarks, stripModel } from "@/tv/rulerRows";
+import { PAD, STRIP_AFTER, fitName, flagOnStage, flagX, needleX, rulerFrontier, rulerModel, schoolMarks, stripFlag, stripModel } from "@/tv/rulerRows";
 import { calendarWeeks, continueCard, explainLine, fitRow, humanTopic, inRunningText, markLine, mathPlaced, noLessonsLine, paperSquare, pathSecure, rowSquares, secureTitle, stateWord, topicName, topicStates, workWhat, SQUARE, type Continue, type JobLine } from "@/tv/mathsRows";
 import { running, practiceFailed, stopAt, tonightStops, calendarStops, unitStops, walkStops, HINT_STOPS, TONIGHT_MENU, type TonightStop } from "@/tv/keys";
 import { sheetTiles, sheetStops, tileOf } from "@/tv/sheetRows";
@@ -278,12 +278,12 @@ function Ruler({ s, big, focus, busy }: { s: Session; big?: boolean; focus?: num
   const exp = age === undefined ? null : expectedOn(path, sys, age);
   const marks = schoolMarks(exp, mathPlaced(s));
   const fx0 = exp === null || !marks.tick ? null : flagX(m, exp);
-  // on a panning ruler (seven school topics since W7) the tick is drawn only while it is on the stage, and its pill is
+  // on a panning ruler (the school path since W7: seven topics, eleven since batch 2) the tick is drawn only while it is on the stage, and its pill is
   // turned inward near the window's edges, so it is never cut in half by the window (tv/rulerRows flagOnStage)
   const onStage = fx0 === null ? null : flagOnStage(m, fx0);
   const fx = onStage === null || !onStage.seen ? null : fx0;
   const clampStrands = m.strands.length > 1;
-  // the focused name is fitted whole on the big ruler, panning or not (seven school topics since W7 make it pan)
+  // the focused name is fitted whole on the big ruler, panning or not (the school path pans since W7)
   const win = useNameFit(m.pan || !!big, `${path}|${focus}`);
   const body = (<>
     <div className="mb-rbody" />
@@ -324,7 +324,7 @@ function Ruler({ s, big, focus, busy }: { s: Session; big?: boolean; focus?: num
  * On the big (Topics) ruler, the focused topic's name is shown whole: the largest of 44 down to 34 px (tv/rulerRows.ts
  * `fitName`) at which it is in the lines its box allows (three on a panning ruler, two on one that does not) with no
  * word clipped, measured after layout and again when the faces arrive. Tonight's small ruler keeps its names as the
- * stylesheet sets them (seven school topics since W7: a long name ends in an ellipsis there). (Family W5b: the school
+ * stylesheet sets them (up to eight topics: a long name ends in an ellipsis there; the school path's eleven are the strand strip since W7 batch 2). (Family W5b: the school
  * path's fourth topic narrowed its slots to 419 px, where "Equations with brackets and x on both sides" no longer fits
  * two lines at 44 px; since W7 the school Topics ruler pans, and the focused slot is 640 px.)
  */
@@ -351,12 +351,19 @@ function useNameFit(on: boolean, dep: unknown) {
  * Tonight's ruler for a long path (more than STRIP_AFTER topics): one bar per strand, as wide as its share of the
  * topics, filled by its share of latched-secure topics (`topicStates`), the learner's needle at the frontier - on a
  * course the first topic not secure whose prerequisites are, on a school path the first not secure after the last
- * secure one (tv/rulerRows.ts `stripModel`). No topic names and no school year:
- * the path's topics are on Topics.
+ * secure one (tv/rulerRows.ts `stripModel`). No topic names and no school year per topic: the path's topics are on
+ * Topics. A school path draws the SCHOOL tick here too (Family W7 batch 2: eleven school topics make Tonight's ruler the
+ * strip, and owner decision D2 keeps the tick on the child's TV), after the topics a learner of that age is normally
+ * past (`stripFlag`, its pill turned inward at the ends); the gap line waits for a Math placement, as on the ruler.
  */
 function Strip({ s }: { s: Session }) {
   const path = learnerPath(s);
   const m = stripModel(topicsOf(path), topicStates(s), PATHS[path].school);
+  const me = s.profiles.find((p) => p.id === s.learner?.id);
+  const age = me && me.type !== "other" ? me.age : undefined;
+  const exp = age === undefined ? null : expectedOn(path, systemOf(me), age);
+  const marks = schoolMarks(exp, mathPlaced(s));
+  const flag = exp !== null && marks.tick ? stripFlag(m, exp) : null;
   return (
     <div className="mb-ruler strip" data-role="maths-ruler">
       <div className="mb-rbody" />
@@ -369,6 +376,8 @@ function Strip({ s }: { s: Session }) {
           <div className="mb-strand" style={{ maxWidth: g.labelW }}>{g.label}</div>
         </div>
       ))}
+      {flag && marks.gap && <div className="mb-gapline" style={{ left: Math.min(m.needle.x, flag.x), width: Math.abs(flag.x - m.needle.x) }} />}
+      {flag && <div className="mb-flag" data-end={flag.edge === "r" || undefined} data-start={flag.edge === "l" || undefined} style={{ left: flag.x }}><div className="nd" /><div className="mc">School</div></div>}
       <div className="mb-marker" data-start={m.needle.at === "start" || undefined} data-end={m.needle.at === "end" || undefined} style={{ left: m.needle.x }}><div className="halo" /><div className="nd" /><div className="mc">{s.learner?.name}</div></div>
     </div>
   );

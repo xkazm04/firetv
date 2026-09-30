@@ -2,8 +2,8 @@
 
 **Read from the code on 2026-09-29** (branch `perfect/2026-09-29-calculus` at `02da1c2`; the tests table also
 covers `a7ef54e`). A learner in Math Buddy is
-on one Math course, a **path**: the school path, **School maths** (four fractions units since Family W7 batch 1, then
-linear equations, with school-year bands), or Calculus 1 (a
+on one Math course, a **path**: the school path, **School maths** (four fractions units since Family W7 batch 1, linear
+equations, and the decimals and percent strand since W7 batch 2, with school-year bands), or Calculus 1 (a
 university first course, with no school year). This page says what a path is, why Calculus is one, how a Calculus
 item is decided in code, how the answer is withheld, and what it takes to add another path. Every number on it was
 measured from the code or a test run named beside it. To recheck a line, open the file it cites.
@@ -34,10 +34,10 @@ strand, a blurb, its prerequisites (earlier topics of the same path) and, on the
 
 | path | name | topics | `school` | built from |
 |---|---|---|---|---|
-| `school` | School maths | 7 in two strands (Fractions, Equations) | true | `SYLLABUS`: Equivalent fractions, A fraction of an amount (W7), Add and subtract fractions (W5b), Multiply and divide fractions (W7), then the three linear-equation topics, with their US/UK/CZ/DE years |
+| `school` | School maths | 11 in three strands, four bars (Fractions, Equations, Decimals and percent, Equations) | true | `SYLLABUS`: Equivalent fractions, A fraction of an amount (W7), Add and subtract fractions (W5b), Multiply and divide fractions (W7), One-step equations, Add, subtract and multiply decimals, Fractions, decimals and percent, A percent of an amount, Percent increase and decrease (W7 batch 2), then two-step equations and equations with brackets and x on both sides, with their US/UK/CZ/DE years |
 | `calc1` | Calculus 1 | 22 in six strands | false | `CALC1_SPINE`; no topic has a year |
 
-Topic ids are unique across both paths (`tools/maths-paths-test.cjs` test 1: 29 ids, none in two paths), so
+Topic ids are unique across both paths (`tools/maths-paths-test.cjs` test 1: 33 ids, none in two paths), so
 `topicIn(id)` finds a topic without knowing the path, and `pathOfTopic(id)` names the path it is on.
 
 **Where a learner's path lives.** `Profile.mathPath` in `store.ts`, optional. `pathOf(profile)` reads it: only the
@@ -93,7 +93,8 @@ linear equations, because it is met first.
 - **The engine.** `desk/src/lib/rules/school.ts` (W5a): exact rational arithmetic, a `compute` spec (`expr`, and
   optionally `form`, `unit`, `allowNegative`), `question(spec)` that prints it, `check(spec, writing, system)` that
   judges an answer, `leaksSchool(spec, line)`, and `gen(seed, tier)` for this unit. `SCHOOL_GENERATORS` names the
-  units code writes, by topic id: `frac-add-sub`, and since W7 batch 1 three more (section 2b).
+  units code writes, by topic id: `frac-add-sub`, since W7 batch 1 three more (section 2b) and since W7 batch 2 four
+  more (section 2c).
 - **The set, with no model call.** `makeItems` (`desk/src/lib/desk/items.ts`) sends a school topic that has a
   generator to `makeSchoolItems`: a fresh seed per set, three specs at tier 1 (bottoms the same, or one a multiple of
   the other) then three at tier 2 (neither divides the other), each kept only when it is well formed, prints, does
@@ -102,7 +103,7 @@ linear equations, because it is met first.
   is what `api/practice` answers. The tier is the one code asked for, never a model's `difficulty`. The linear topics
   keep their model route unchanged (`tools/school-practice-test.cjs` test 7).
 - **The spec through the store.** `specShown` in `store.ts` dispatches on `spec.shape`: a Calculus shape keeps
-  `SPEC_KEYS` as before; a school shape keeps `expr`, `form`, `unit` and `allowNegative` and must pass the school
+  `SPEC_KEYS` as before; a school shape keeps `expr`, `form`, `unit`, `allowNegative` and (W7 batch 2) `to` and must pass the school
   `wellFormed`, or the spec is dropped. A `tier` is kept only as 1 or 2, and only beside a spec. A school spec is
   refused by the Calculus `wellFormed` and the other way round, so the two engines never read each other's specs
   (`tools/school-practice-test.cjs` tests 5 and 6, including a reload from `session.json`).
@@ -166,6 +167,41 @@ explained by the W5 machinery above; no store key was added (every shape keeps i
   dollar amount as "60 dollars" (a plain '$' is a TeX delimiter to the typesetter), € and £ as a sign.
 - **Years** (from memory, a teacher checks): equivalent US 4, UK 5, CZ 5, DE 5; of an amount 5, 5, 5, 5; multiply and
   divide 6, 7, 6, 5. CZ and DE are pulled down to keep the list monotone (`syllabus.ts` comments).
+
+### 2c. The decimals and percent strand (Family W7 batch 2)
+
+The school path is eleven topics: the four fractions units, **One-step equations**, then **Add, subtract and multiply
+decimals**, **Fractions, decimals and percent**, **A percent of an amount**, **Percent increase and decrease**, then
+two-step equations and equations with brackets and x on both sides. The strand sits after one-step equations because
+that is the one place where no system's year goes down (the years below), so the Equations strand is two bars. The
+only store key added is `to` (a conversion's asked form).
+
+| unit (id) | shape (`rules/school.ts`) | generator | tier 1 | tier 2 | closed slips (`SCHOOL_UNIT_SLIPS`) |
+|---|---|---|---|---|---|
+| Add, subtract and multiply decimals (`dec-arith`) | `compute` with decimal operands; a € or £ `unit` printed before each amount ("Work out €4.35 + €2.80.", "£3.45 × 4") | `genDecimal` | add or subtract, mostly different places, one in three money | multiply by a one-place decimal, one in three money times a count 3..9 | `dec-lined-up`, `dec-point-product`, `dec-point-dropped` |
+| Fractions, decimals and percent (`dec-convert`) | `convert` expr "3/8", "0.35" or "35%", `to` decimal, fraction (lowest terms) or percent; terminating only | `genConvert` (the conversion turns with the seed) | bottoms that go into a hundred | eighths to eightieths, values between 1 and 3 | `conv-flipped`, `conv-not-scaled`, `conv-wrong-way`, `conv-ten-times`, `conv-top-dot-bottom` |
+| A percent of an amount (`pct-of-amount`) | `percent-of` "35% of 80", optional `unit` | `genPercentOf` | a friendly percent of a multiple of 20, no unit | any other percent (or a half percent), a unit | `pct-divided`, `pct-times-whole`, `pct-ten-stopped`, `pct-rest` |
+| Percent increase and decrease (`pct-change`) | `percent-change` "increase 60 by 15%", optional `unit`; never a reverse percentage | `genPercentChange` | a friendly percent, a whole answer | any other percent to 60 (or a half percent), a unit | `change-only`, `change-wrong-way`, `change-as-number` |
+
+- **Verdicts.** An equal value in any form is right, unless the spec asks for a form: a conversion's value in another
+  form is unsure (0.35 for "7/20 as a percentage", 35/100 for a simplified fraction), and so is the percentage's number
+  without its sign (35). An amount written as a percentage (28% or 2800% for 35% of 80) is unsure. Roundings are
+  unsure; a whole number is an exact claim (7 for 7.15, 70 for £70.20 are wrong).
+- **Leak check.** Decimals: the answer's digits with the point left out are the answer (715); money said aloud reads
+  as a decimal ("thirteen pounds eighty"). Conversions are form-aware: the value in the form given is the question,
+  in the form asked (or as a fraction over 10, 100 or 1000) the answer; "3 ÷ 8", "35 ÷ 100", "0.35 × 100" are the
+  method. Percent: "35% of 80", "0.35 × 80", "60 × 1.15" are the question; ten percent and the change are steps.
+- **Task reader.** "Work out 4.35 + 2.8", "£3.45 × 4", "Write 3/8 as a decimal", "What is 0.35 as a fraction?", "Find
+  35% of 80", "Increase 60 by 15%", "What is 60 increased by 15%?"; refused: decimal commas, division, reverse
+  percentages, word problems, non-terminating conversions.
+- **On the TV.** A decimal is one number to the typesetter; `%`, € and £ are set at the numeral size (52 px measured
+  on the practice sheet); a given fraction is stacked. "as a simplified fraction" is printed, since "as a fraction in
+  its simplest form" is wider than a printed row (the typeset ratchet, test 7c).
+- **Years** (from memory, a teacher checks): decimals US 6, UK 7, CZ 6, DE 6; conversion 6, 7, 7, 6; percent of an
+  amount 6, 7, 7, 6; percent change 7, 8, 7, 6. Moved to keep the list monotone: UK conversion and percent of an
+  amount (Year 6 in the national curriculum) pushed to Year 7 by one-step equations before them; DE conversion,
+  percent of an amount and percent change (Prozent usually Klasse 7) pulled to Klasse 6 by two-step equations after
+  them. A UK 12-year-old's SCHOOL tick stands after 10 of the 11 topics.
 
 ## 3. The spec model
 
@@ -346,7 +382,8 @@ because it is the fallback. No test pins this case.
 - **Topics.** The stops are the learner's path. "Teach me something" opens Topics at the **frontier**
   (`frontierOn`): on Calculus 1 the first topic not latched secure whose prerequisites all are (`nextOn`); on the
   school path the first topic not latched secure AFTER the last latched one, else the first (Family W5b), so the
-  fractions unit placed first does not send a learner who secured one-step equations back to the start. It opens on
+  fractions unit placed first does not send a learner who secured one-step equations back to the start (since W7
+  batch 2 their frontier is the decimals unit after it). It opens on
   the first stop when nothing is secure or nothing is left (`tools/maths-course-test.cjs` test 4: 0, 7 and 22 secure;
   `tools/school-ruler-test.cjs` test 1 for the school path).
 - **The needle and the SCHOOL tick.** The needle stands at the same frontier (`rulerFrontier`, `stripModel` in
@@ -356,7 +393,7 @@ because it is the fallback. No test pins this case.
   drawn; the code that draws it stays (`tools/school-ruler-test.cjs` tests 3 and 4 render MathsTV for all four
   systems).
 - **The panning ruler.** A path pans on Topics when one box per topic would give a slot under `MIN_SPAN` (288 px).
-  The school path's slot would be 239.4 px (seven topics since W7), so it pans too; Calculus 1's would be 76.2 px. The focused slot is `FOCUS_SPAN`,
+  The school path's slot would be 152.4 px (eleven topics since W7 batch 2), so it pans too; Calculus 1's would be 76.2 px. The focused slot is `FOCUS_SPAN`,
   640 px (a 628 px box), and every other slot is 288 px (a 276 px box). The track is 6,740 px, slid by
   clamp(focus centre - 864, 0, 5,012), measured at 0, 2,362 and 5,012 px for focus 0, 10 and 21. The focused name
   is fitted from 44 px down to a 34 px floor, whole, in at most three lines. An edge with more to show has a
@@ -365,7 +402,10 @@ because it is the fallback. No test pins this case.
   (`stripModel`), never narrower than 96 px. For Calculus 1 the bars are measured at 226, 225, 452, 301, 376 and
   96 px for its 3, 3, 6, 4, 5 and 1 topics. The last two labels clamp to "Applications of…" and "Ap…". The bars have
   no topic names and no year, and the needle is at the frontier. Tonight's title is "Calculus 1, from the first
-  step" with nothing secure, then "N of 22 topics secure".
+  step" with nothing secure, then "N of 22 topics secure". The school path (eleven topics since W7 batch 2) is a strip
+  too: four bars (Fractions 4, Equations 1, Decimals and percent 4, Equations 2; the one-topic bar's label clamps to
+  "Equati…"), with the SCHOOL tick on it (`stripFlag`, its pill turned inward at an end: D2 keeps the tick on the
+  child's TV) and no gap line.
 - **Names.** Every screen names a set by its path's name for it (`topicName`, which uses `topicIn`): the crumb and
   the sheet head on Practice, Sheet and Walk, "Six more on ..." on the Sheet, the Tonight card, and the history
   label. A course topic has no year, so no year word is drawn under it, and `expectedOn` is null, so there is no
@@ -384,7 +424,7 @@ provider registry, and data directories are disposable, under the OS temp dir.
 
 | file | what it pins |
 |---|---|
-| `tools/maths-paths-test.cjs` | 22 + 7 topics with unique ids; the school path is `SYLLABUS`; each path's prerequisites form a DAG; every Calculus topic has one of the nine shapes (the list is repeated in the test, the contract with `calc.ts`); the spine carries no examples or answers; `pathOf`, `topicIn`, `nextOn`, `expectedOn` (null on a course), `learnerPath`; client-safe imports |
+| `tools/maths-paths-test.cjs` | 22 + 11 topics with unique ids; the school path is `SYLLABUS`; each path's prerequisites form a DAG; every Calculus topic has one of the nine shapes (the list is repeated in the test, the contract with `calc.ts`); the spine carries no examples or answers; `pathOf`, `topicIn`, `nextOn`, `expectedOn` (null on a course), `learnerPath`; client-safe imports |
 | `tools/calc-expr-test.cjs` | the engine's reading rules; formula strings copied from the corpus (at least 80, asserted); at least 40 edge cases; the numerics' stated tolerances; time budgets |
 | `tools/calc-rules-test.cjs` | `checkAnswer` on every shape; the named tolerances; `wellFormed` and its reasons; `question()` typesets; `leaksCalc`; the slip vocabulary; a sweep of all 22 topics; no answer field; never throws (3,000 mutations) |
 | `tools/calc-hint-test.cjs` | `specFromQuestion` reads back every printed question, plus a table of page phrasings (some must stay null); the fixed sentences; hint re-ask and fallback; the stance by path; no lesson pick on calc1 |
@@ -392,13 +432,13 @@ provider registry, and data directories are disposable, under the OS temp dir.
 | `tools/calc-marking-test.cjs` | calc1 slip lists; marking by `checkAnswer` on each shape; the model's verdict is never read or used as a fallback; explanation settling and leak replacement; the evening note's topic name |
 | `tools/calc-course-test.cjs` | the whole course as one flow through the real routes (practice, mark, explain, hint). For each of the 22 topics: a code-printed set, a page marked by `checkAnswer` while the stub volunteers a false "right", an unsure item settled by explanation, a hint re-asked then withheld, and four evenings latching the topic secure, until Tonight says every topic is secure. After every step the TV, phone and guest views carry no answer, truth or `zero` key. The school path runs beside it, unchanged |
 | `tools/maths-course-test.cjs` | `mathPath` kept and junk dropped; `topic.open` focus; Topics walks the path; the frontier; Menu-edit; the Maths course row; set names on the landing and the phone |
-| `tools/maths-ruler-test.cjs` | the school ruler's formulas on Tonight (seven boxes) and its panning Topics ruler; the Calculus panning ruler; the strip |
+| `tools/maths-ruler-test.cjs` | the ruler model's formulas at the school path's eleven topics (four strands) and its panning Topics ruler; the Calculus panning ruler; the strip |
 | `tools/maths-tv-test.cjs` | topic states by path (a record off the path is ignored), `topicName`, the Tonight title by path; also the captions' prose, the paper's fit and the job lines |
-| `tools/maths-calculus-test.cjs` | the reader baseline over the corpus, a ratchet on declared statuses; test 7: every generated fractions question renders with two stacked fractions; test 7b: the W7 generators' questions render, fractions and the gap stacked, every number and unit kept |
-| `tools/school-rules-test.cjs` | the school number core (W5a): the reader, `check`, `leaksSchool`, the generator; W7: a spellings table per unit (101, 68, 84 rows), leak and legit tables per unit, the closed slip lists, each generator's seeds and tiers |
-| `tools/school-practice-test.cjs` | the seven-topic path; each unit's set by code with zero engine calls (`makeItems`, the route, `makeSchoolItems`); the new shapes through the store and a reload; a fractions set by code with zero engine calls, six distinct, tiers by code, the route's code/0, the spec through the store and a reload, a linear topic still calling once |
-| `tools/school-marking-test.cjs` | W7: each unit's task reader (47, 41, 34 phrasings), withheld line, a full set marked the same from a photo and from typing, the hint stance per unit; the unit's closed slip list; the shape dispatch; a stubbed sheet marked under uk, cz and us; `specFromQuestion` (53 phrasings); the two-strike hint fallback and the unit stance; the lesson skip; explanation settle and leak; the Calculus explain prompt byte for byte |
-| `tools/school-ruler-test.cjs` | the school frontier on the ruler, the strip and Topics (seven topics); Calculus unchanged; the SCHOOL tick drawn and no gap line in MathsTV for every system; `flagOnStage` (on the panning Topics ruler the tick is drawn only on the stage, its pill turned inward at an edge) |
+| `tools/maths-calculus-test.cjs` | the reader baseline over the corpus, a ratchet on declared statuses; test 7: every generated fractions question renders with two stacked fractions; test 7b: the W7 generators' questions render, fractions and the gap stacked, every number and unit kept; test 7c: the W7 batch-2 generators' questions render, every number, point, % and unit kept |
+| `tools/school-rules-test.cjs` | the school number core (W5a): the reader, `check`, `leaksSchool`, the generator; W7: a spellings table per unit (101, 68, 84 rows), leak and legit tables per unit, the closed slip lists, each generator's seeds and tiers; W7 batch 2 (W7b): the same per decimals and percent unit (99, 108, 87, 71 rows), wellFormed and question rows, purity |
+| `tools/school-practice-test.cjs` | the eleven-topic path (W7b 1: the four decimals and percent units, years and prerequisites); a set by code per batch-2 unit, the route's code/0, `to` through the store and a reload; each unit's set by code with zero engine calls (`makeItems`, the route, `makeSchoolItems`); the new shapes through the store and a reload; a fractions set by code with zero engine calls, six distinct, tiers by code, the route's code/0, the spec through the store and a reload, a linear topic still calling once |
+| `tools/school-marking-test.cjs` | W7b: each decimals and percent unit's task reader (46, 44, 40, 37 phrasings), withheld line, full set by photo and by typing, hint stance, an explained percent; W7: each unit's task reader (47, 41, 34 phrasings), withheld line, a full set marked the same from a photo and from typing, the hint stance per unit; the unit's closed slip list; the shape dispatch; a stubbed sheet marked under uk, cz and us; `specFromQuestion` (53 phrasings); the two-strike hint fallback and the unit stance; the lesson skip; explanation settle and leak; the Calculus explain prompt byte for byte |
+| `tools/school-ruler-test.cjs` | the school frontier on the ruler, the strip and Topics (eleven topics); the strand strip at eleven topics (four bars, shares, `stripAt`, `stripFlag`); Calculus unchanged; the SCHOOL tick drawn and no gap line in MathsTV for every system; `flagOnStage` (on the panning Topics ruler the tick is drawn only on the stage, its pill turned inward at an edge) |
 
 **The live probe** is not in `npm test`; the Director runs it against an isolated server:
 

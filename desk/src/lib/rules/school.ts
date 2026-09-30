@@ -293,9 +293,9 @@ export function readNumber(answer: unknown, system: unknown): Reading | null {
 
 /**
  * A school practice item is a SPEC, never text a model wrote with an answer. Every shape keeps its question in `expr`
- * (the store keeps a school spec's `expr`, `form`, `unit` and `allowNegative` and nothing else, session/store
- * SCHOOL_SPEC_KEYS), so the W7 shapes added no store key. Pending (W7 batches 2 and 3), each its own member of this
- * union: `percent` (a percent of an amount), `pct-change`, `ratio-share`, `area` and `mean`.
+ * (the store keeps a school spec's `expr`, `form`, `unit`, `allowNegative` and `to` and nothing else, session/store
+ * SCHOOL_SPEC_KEYS), so the W7 batch-1 shapes added no store key and batch 2 only `to`. Pending (W7 batch 3), each
+ * its own member of this union: `ratio-share`, a unit rate, `area` and `mean`.
  *   - compute: a numeric question with no unknown, "Work out 3/4 + 1/6", "Work out 2/3 × 3/4". `form: "simplest"` asks
  *     for lowest terms, `form: "decimal"` for a decimal (the value must terminate); `unit` is the unit the answer is in;
  *     `allowNegative` lets the value be zero or below (a subtraction that crosses zero). Units: add and subtract
@@ -939,8 +939,10 @@ function slipCandidates(r: ReadOk): [string, Q][] {
     // W7 batch 2, p% of N: N ÷ p and N ÷ (p/100) divided by it; p × N the percent as a whole number; N ÷ 10 ten percent
     // and stopped (when p is not ten); (100 - p)% of N the part left
     const H = BigInt(100), N = qi(K.N);
-    push("pct-divided", div(N, K.p)); push("pct-divided", div(mul(N, qi(H)), K.p));
+    // for 10% the percent as a whole number (10 × N) and N ÷ 10% are one value: it is named the whole-number slip, the likelier story
+    push("pct-divided", div(N, K.p));
     push("pct-times-whole", mul(K.p, N));
+    push("pct-divided", div(mul(N, qi(H)), K.p));
     if (!eq(K.p, qi(TEN))) push("pct-ten-stopped", mk(K.N, TEN));
     push("pct-rest", mul(sub(qi(H), K.p), mk(K.N, H)!));
     return out;
@@ -1730,7 +1732,8 @@ const CONVERSIONS: readonly [NumberFormAsked, NumberFormAsked][] = [["fraction",
 
 /**
  * One "Fractions, decimals and percent" item, from a seed and a tier that code computed; the conversion (one of six:
- * fraction to decimal or percent, decimal to fraction or percent, percent to decimal or fraction) by the seed:
+ * fraction to decimal or percent, decimal to fraction or percent, percent to decimal or fraction) turns with the seed,
+ * so a set's consecutive seeds ask different conversions:
  *   - tier 1: a proper fraction whose bottom goes into a hundred (2, 4, 5, 10, 20, 25, 50, 100): a decimal to at most
  *     two places, a whole percent - one step from hundredths (3/4, 0.35, 7/20 = 35%, 60%);
  *   - tier 2: eighths, sixteenths, fortieths and eightieths (3/8 = 0.375 = 37.5%, 1/16 = 0.0625), or, three in ten, a
@@ -1744,7 +1747,8 @@ export function genConvert(seed: unknown, tier: unknown): SchoolSpec | null {
   if (!rnd) return null;
   function pick<T>(xs: readonly T[]): T { return xs[Math.floor(rnd!() * xs.length)]; }
   for (let t = 0; t < MAX_TRIES; t++) {
-    const [from, to] = pick(CONVERSIONS);
+    // the conversion turns with the seed, so the consecutive seeds of one set ask different ones
+    const [from, to] = CONVERSIONS[((seed as number) + t) % CONVERSIONS.length];
     let a: number, b: number;
     if (tier === 1) { b = pick([2, 4, 5, 10, 20, 25, 50, 100]); a = pick(tops(b)); }
     else if (rnd() < 0.7) { b = pick([8, 16, 40, 80]); a = pick(tops(b)); }

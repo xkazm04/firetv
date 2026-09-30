@@ -231,7 +231,32 @@ export function stripModel(topics: Array<Pick<PathTopic, "id" | "strand" | "prer
   });
   const fi = school ? afterLastSecure(topics.map((t) => t.id), (id) => secure.has(id)) : topics.findIndex((t) => !secure.has(t.id) && t.prereq.every((p) => secure.has(p)));
   if (fi < 0 || fi >= topics.length) return { x0: PAD, width, segments, needle: { index: topics.length, x: PAD + width, at: "end" } };
-  const gi = groups.findIndex((g) => g.ids.includes(topics[fi].id)), g = segments[gi], j = groups[gi].ids.indexOf(topics[fi].id);
-  const x = g.x + (g.w * j) / g.count;
+  const x = stripAt({ x0: PAD, width, segments }, fi);
   return { x0: PAD, width, segments, needle: { index: fi, x, at: x <= PAD ? "start" : "mid" } };
+}
+
+/**
+ * Where the strip stands before topic `k` (0..N) of the path: inside the bar of the strand that holds topic k, one slot
+ * in for each topic of that strand before it (the needle's rule); the strip's end for k = N or past it. A strand that
+ * appears twice on the path (Equations since Family W7 batch 2: one-step before the decimals and percent strand, the
+ * other two after it) is two bars, and each bar counts only its own topics.
+ */
+export function stripAt(m: Pick<StripModel, "x0" | "width" | "segments">, k: number): number {
+  let before = 0;
+  for (const g of m.segments) {
+    if (k < before + g.count) return g.x + (g.w * Math.max(0, k - before)) / g.count;
+    before += g.count;
+  }
+  return m.x0 + m.width;
+}
+
+/**
+ * The SCHOOL tick on Tonight's strip (Family W7 batch 2: past eight topics the school path's Tonight ruler is the strip,
+ * and owner decision D2 keeps the tick on the child's TV): after `exp` topics (paths.ts `expectedOn`), clamped to the
+ * strip, and which way its pill turns - inward at either end, within FLAG_EDGE of it, so the ruler never cuts it.
+ */
+export function stripFlag(m: StripModel, exp: number): { x: number; edge: "l" | "r" | null } {
+  const N = m.segments.reduce((a, g) => a + g.count, 0), e = clamp(Math.round(exp), 0, N);
+  const x = stripAt(m, e);
+  return { x, edge: e >= N || x > TRACK - FLAG_EDGE ? "r" : e <= 0 || x < FLAG_EDGE ? "l" : null };
 }

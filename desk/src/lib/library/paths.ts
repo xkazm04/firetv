@@ -1,7 +1,8 @@
 /**
  * Math paths: a learner's Math course as a thing the desk can name. The 'school' path, "School maths", is the school
- * spine (SYLLABUS as it stands: four fractions units, then linear equations, with its school-year bands; Family W5b
- * extended it in place and renamed it, owner decision D5, and W7 batch 1 added three fractions units); the 'calc1' path is the Calculus 1 course (CALC1_SPINE), which
+ * spine (SYLLABUS as it stands: four fractions units, one-step equations, four decimals and percent units, then the other
+ * two linear-equation topics, eleven in all, with their school-year bands; Family W5b extended it in place and renamed it,
+ * owner decision D5, W7 batch 1 added three fractions units and W7 batch 2 the decimals and percent strand); the 'calc1' path is the Calculus 1 course (CALC1_SPINE), which
  * has no school year. Every screen and pipeline that needs "the" topic list asks here - for the learner's path - rather
  * than reading SYLLABUS directly.
  *
@@ -95,7 +96,8 @@ export function afterLastSecure(ids: readonly string[], isSecure: (id: string) =
  * The learner's frontier on a path - where the needle stands and where "Teach me something" opens Topics:
  *   - a school path: the first topic not secure AFTER the last secure one, else the first topic (Family W5b). A unit
  *     placed before topics a learner has already secured (fractions before linear equations) does not send them back
- *     to the start: with one-step equations secure the frontier is two-step equations, not the new first unit;
+ *     to the start: with one-step equations secure the frontier is the topic after it (since W7 batch 2 "Add, subtract
+ *     and multiply decimals", before that two-step equations), never the new first unit;
  *   - a course path (Calculus 1): the first topic not secure whose prerequisites all are (`nextOn`), as always.
  * Undefined when there is none left (the last topic of a school path is secure; everything is, on a course).
  */

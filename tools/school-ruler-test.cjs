@@ -1,7 +1,8 @@
 /**
  * The School maths ruler after Family W5b put "Add and subtract fractions" before the linear equations, and W7 batch 1
- * made the fractions strand four units (seven topics: Tonight's small ruler keeps one box per topic, the big Topics
- * ruler pans, since seven slots of 239 px are under its 288 px minimum):
+ * made the fractions strand four units (seven topics: the big Topics ruler pans, since seven slots of 239 px are under
+ * its 288 px minimum), and W7 batch 2 put the Decimals and percent strand after one-step equations (eleven topics, past
+ * STRIP_AFTER: Tonight draws the strand strip - four bars, Equations twice - with the needle and the SCHOOL tick on it):
  *   - the needle rule: on a school path the needle (and where "Teach me something" opens Topics) is the first topic not
  *     latched secure AFTER the last latched one, else the first topic - so a learner who secured one-step equations
  *     keeps their place on two-step equations instead of being sent back to the new first unit. One rule, in
@@ -40,7 +41,7 @@ const {createElement}=require(path.join(root,'node_modules/react'));
 
 const SCHOOL=P.topicsOf('school'),CALC=P.topicsOf('calc1');
 const ids=(ts)=>ts.map((t)=>t.id);
-const [E,O,F,MD,ONE,TWO,BOTH]=ids(SCHOOL);
+const [E,O,F,MD,ONE,DA,DC,PO,PC,TWO,BOTH]=ids(SCHOOL);
 /** A latched-secure record (the TV reads only `secure`, `estimate`, `slips`). */
 const rec=(topic,secure=true,estimate=secure?1:0.4)=>({topic,seen:6,right:5,estimate,secure,lastSeen:1,slips:[]});
 const skillsOf=(list)=>Object.fromEntries(list.map((id)=>[id,rec(id)]));
@@ -55,21 +56,24 @@ function seated({age=12,system='uk',type='elementary',mathPath}={}){
 
 // ------------------------------------------------------------------ 1. the needle rule
 test('1: the school frontier is the first topic not secure after the last secure one - the same on the ruler, the strip and Topics',()=>{
- // W7 batch 1: seven topics, the four fractions units first (pinned here and in maths-rules-test, maths-paths-test)
- assert.deepEqual(ids(SCHOOL),['frac-equivalent','frac-of-amount','frac-add-sub','frac-mul-div','linear-one-step','linear-two-step','linear-both-sides']);
+ // W7 batch 2: eleven topics - four fractions units, one-step equations, the four decimals and percent units, then the
+ // other two linear topics (pinned here and in maths-rules-test, maths-paths-test)
+ assert.deepEqual(ids(SCHOOL),['frac-equivalent','frac-of-amount','frac-add-sub','frac-mul-div','linear-one-step','dec-arith','dec-convert','pct-of-amount','pct-change','linear-two-step','linear-both-sides']);
  // [secure ids, frontierOn id (undefined: none left), the ruler's topic, Teach me something's focus]
  const CASES=[
   [[],E,0,0,'a fresh learner starts on equivalent fractions'],
-  [[ONE],TWO,5,5,'one-step equations secure: the needle stays on two-step equations, not back at fractions'],
+  [[ONE],DA,5,5,'one-step equations secure: the needle moves on to the decimals after it (W7 batch 2), not back to fractions'],
   [[F],MD,3,3,'only add and subtract fractions secure: on to multiply and divide'],
   [[E],O,1,1],
   [[E,O,F,MD],ONE,4,4,'every fractions unit secure: on to one-step equations'],
   [[O,MD],ONE,4,4,'a gap before the last secure fractions unit does not pull the needle back'],
-  [[ONE,TWO],BOTH,6,6],
-  [[E,O,F,MD,ONE,TWO],BOTH,6,6],
-  [[E,O,F,MD,ONE,TWO,BOTH],undefined,6,0,'everything secure: the needle at the end, Topics on the first stop'],
-  [[BOTH],undefined,6,0,'the last topic secure: nothing after it'],
-  [[F,TWO],BOTH,6,6,'a gap before the last secure topic does not pull the needle back'],
+  [[ONE,DA,DC],PO,7,7,'the conversion secure: on to a percent of an amount'],
+  [[PC],TWO,9,9,'percent change secure alone: on to two-step equations, the gaps before it left behind'],
+  [[ONE,TWO],BOTH,10,10,'a learner who had two-step equations before W7 batch 2 keeps their place after it'],
+  [[E,O,F,MD,ONE,TWO],BOTH,10,10],
+  [ids(SCHOOL),undefined,10,0,'everything secure: the needle at the end, Topics on the first stop'],
+  [[BOTH],undefined,10,0,'the last topic secure: nothing after it'],
+  [[F,TWO],BOTH,10,10,'a gap before the last secure topic does not pull the needle back'],
  ];
  for(const [secure,next,ruler,focus,why] of CASES){
   const label=why??JSON.stringify(secure);
@@ -117,32 +121,41 @@ test('3: schoolMarks - the tick with a school year, the gap line only with a pla
 function draw(s){const {MathsTV}=require(src('maths/MathsTV.tsx'));const q=console.error;console.error=()=>{};try{return renderToStaticMarkup(createElement(MathsTV,{s,busy:false}));}finally{console.error=q;}}
 const leftOf=(html,cls)=>{const m=new RegExp(`class="${cls}"[^>]*style="left:\\s*([\\d.]+)px`).exec(html);return m?Number(m[1]):null;};
 
-test('4: on the TV, for a 12-year-old in each school system: the SCHOOL tick is drawn, the gap line is not, the needle at the frontier (Tonight in boxes, Topics panning)',()=>{
- const span=(1728-52)/SCHOOL.length;
- // Topics pans with seven topics and opens at the frontier (two-step equations, stop 5, as Teach me something does):
- // the focused slot is FOCUS_SPAN wide, every other MIN_SPAN, from PAD; so slot 5 starts at 26 + 5 x 288 = 1466
- const panX=(i)=>26+i*RR.MIN_SPAN+(i>5?RR.FOCUS_SPAN-RR.MIN_SPAN:0);
- // the SCHOOL tick for a 12-year-old: us Grade 7, uk Year 8, cz 7. ročník reach two-step equations (6 topics); de Klasse 7 all 7
- const EXP={us:6,uk:6,cz:6,de:7};
+/** The strip's states as MathsTV hands them (only 'secure' is read). */
+const stripStates=(secure)=>Object.fromEntries(SCHOOL.map((t)=>[t.id,secure.includes(t.id)?'secure':'later']));
+
+test('4: on the TV, for a 12-year-old in each school system: the SCHOOL tick is drawn, the gap line is not, the needle at the frontier (Tonight the strand strip, Topics panning)',()=>{
+ // Topics pans with eleven topics and opens at the frontier (the decimals after one-step equations, stop 5, as Teach me
+ // something does): the focused slot is FOCUS_SPAN wide, every other MIN_SPAN, from PAD; so slot 5 starts at 26 + 5 x 288 = 1466
+ // the SCHOOL tick for a 12-year-old: us Grade 7, uk Year 8, cz 7. ročník are past 10 topics (all but the last); de Klasse 7 all 11
+ const EXP={us:10,uk:10,cz:10,de:11};
  for(const system of ['us','uk','cz','de']){
   const exp=P.expectedOn('school',system,12);assert.equal(exp,EXP[system],`${system}: a 12-year-old is past ${EXP[system]} topics`);
   for(const screen of ['tonight','topics']){
    const focus=screen==='topics'?5:0;
-   assert.equal(K.topicsFocus({profiles:[{id:'a'}],learner:{id:'a'},skills:skillsOf([ONE])}),5,'Topics opens on two-step equations');
+   assert.equal(K.topicsFocus({profiles:[{id:'a'}],learner:{id:'a'},skills:skillsOf([ONE])}),5,'Topics opens on the decimals after one-step equations');
    const s={...seated({system}),screen,focus,skills:skillsOf([ONE])};
    const html=draw(s);
    assert.match(html,/data-role="maths-ruler"/,`${system} ${screen}: the ruler`);
-   assert.match(html,/class="mb-flag"[^>]*>.*?<div class="mc">School<\/div>/,`${system} ${screen}: the SCHOOL tick is drawn`);
    assert.doesNotMatch(html,/mb-gapline/,`${system} ${screen}: no gap line (D2: no placement in Phase 1)`);
-   const m=RR.rulerModel(SCHOOL,{},screen==='topics'?5:undefined,screen==='topics');
-   assert.equal(m.pan,screen==='topics',`${screen}: ${screen==='topics'?'the big ruler pans':'one box per topic'}`);
-   assert.equal(leftOf(html,'mb-flag'),RR.flagX(m,exp),`${system} ${screen}: the tick after ${exp} topics`);
-   assert.equal(leftOf(html,'mb-flag'),screen==='topics'?(exp>=7?m.end:panX(exp)):26+exp*span);
-   // de's tick is at the very end of the track, near the window's right edge: its pill turns inward, never cut
-   if(screen==='topics')assert.equal(/class="mb-flag" data-end="true"/.test(html),system==='de',`${system}: the pill turned inward only at the window's edge`);
-   assert.equal(leftOf(html,'mb-marker'),screen==='topics'?1466:26+5*span,`${system} ${screen}: the needle at the start of two-step equations, not at fractions`);
-   if(screen==='topics')assert.match(html,/data-pan="true"/);else assert.doesNotMatch(html,/data-pan="true"/);
-   for(const t of SCHOOL)assert.ok(html.includes(t.name),`${t.name} is on the ruler`);
+   if(screen==='tonight'){
+    // eleven topics are past STRIP_AFTER: Tonight draws one bar per strand, the tick and the needle on it
+    assert.match(html,/class="mb-ruler strip"/,`${system}: Tonight's ruler is the strand strip`);assert.equal((html.match(/class="mb-seg"/g)||[]).length,4,'four bars');
+    const strip=RR.stripModel(SCHOOL,stripStates([ONE]),true),flag=RR.stripFlag(strip,exp);
+    assert.match(html,/class="mb-flag"[^>]*>.*?<div class="mc">School<\/div>/,`${system} tonight: the SCHOOL tick is drawn (D2)`);
+    assert.equal(leftOf(html,'mb-flag'),flag.x,`${system} tonight: the tick after ${exp} topics`);
+    assert.equal(/class="mb-flag" data-end="true"/.test(html),system==='de',`${system}: the pill turned inward only at the strip's end`);
+    assert.equal(leftOf(html,'mb-marker'),strip.needle.x,`${system} tonight: the needle at the decimals, not at fractions`);
+    assert.equal(strip.needle.index,5);assert.doesNotMatch(html,/data-pan="true"/);
+   }else{
+    const m=RR.rulerModel(SCHOOL,{},5,true);
+    assert.equal(m.pan,true,'the big ruler pans');assert.match(html,/data-pan="true"/);
+    // the tick is drawn only while it is on the stage: at stop 5 a 12-year-old's tick (after 10 or 11 topics) is past the window
+    const at=RR.flagX(m,exp),seen=RR.flagOnStage(m,at).seen;
+    assert.equal(/class="mb-flag"/.test(html),seen,`${system} topics: the tick drawn only on the stage`);assert.equal(seen,false);
+    assert.equal(leftOf(html,'mb-marker'),1466,`${system} topics: the needle at the start of the decimals, not at fractions`);
+    for(const t of SCHOOL)assert.ok(html.includes(t.name),`${t.name} is on the ruler`);
+   }
   }
  }
  // a fresh learner: the needle at the start of the ruler (equivalent fractions), the tick still drawn, no gap line
@@ -150,9 +163,9 @@ test('4: on the TV, for a 12-year-old in each school system: the SCHOOL tick is 
  assert.equal(leftOf(fresh,'mb-marker'),26);assert.doesNotMatch(fresh,/class="mb-flag"/,'the tick is past the window on the first stop (4a)');assert.doesNotMatch(fresh,/mb-gapline/);
  const freshTonight=draw({...seated({system:'uk'}),screen:'tonight',focus:0,skills:{}});
  assert.equal(leftOf(freshTonight,'mb-marker'),26);assert.match(freshTonight,/class="mb-flag"/,'Tonight draws the tick');assert.doesNotMatch(freshTonight,/mb-gapline/);
- // with add and subtract secure and multiply and divide in progress, the needle is part way through multiply and divide
+ // with add and subtract secure and multiply and divide in progress, the strip's needle stands at multiply and divide
  const inProgress=draw({...seated({system:'cz'}),screen:'tonight',focus:0,skills:{[F]:rec(F),[MD]:rec(MD,false,0.5)}});
- assert.equal(leftOf(inProgress,'mb-marker'),26+(3+0.5)*span);
+ assert.equal(leftOf(inProgress,'mb-marker'),RR.stripAt(RR.stripModel(SCHOOL,stripStates([F]),true),3));
  // "other" has no school year: no tick, no gap line (as before)
  const other=draw({...seated({type:'other',age:30}),screen:'topics',focus:0,skills:{}});
  assert.doesNotMatch(other,/class="mb-flag"/);assert.doesNotMatch(other,/mb-gapline/);
@@ -165,24 +178,52 @@ test('4a: flagOnStage - on a panning ruler the SCHOOL tick is drawn only while i
  const small=RR.rulerModel(SCHOOL,{},undefined,false);
  for(const x of [26,900,1702])assert.deepEqual(RR.flagOnStage(small,x),{seen:true,edge:null});
  const at0=RR.rulerModel(SCHOOL,{},0,true);assert.equal(at0.offset,0);
- assert.deepEqual(RR.flagOnStage(at0,RR.flagX(at0,6)),{seen:false,edge:null},'Topics on the first stop: a UK 12-year-old\'s tick (x 2106) is past the window, not drawn half');
+ assert.deepEqual(RR.flagOnStage(at0,RR.flagX(at0,10)),{seen:false,edge:null},'Topics on the first stop: a UK 12-year-old\'s tick (x 3258) is past the window, not drawn half');
  assert.deepEqual(RR.flagOnStage(at0,1700),{seen:true,edge:'r'});assert.deepEqual(RR.flagOnStage(at0,40),{seen:true,edge:'l'});assert.deepEqual(RR.flagOnStage(at0,864),{seen:true,edge:null});
  const html=draw({...seated({system:'uk'}),screen:'topics',focus:0,skills:{}});
  assert.doesNotMatch(html,/class="mb-flag"/,'no pill cut by the window');assert.match(html,/data-role="maths-more"/,'the chevron says there is more');
- const at6=draw({...seated({system:'uk'}),screen:'topics',focus:6,skills:{}});
- assert.match(at6,/class="mb-flag"[^>]*>.*?<div class="mc">School<\/div>/,'panned to the end, the tick is drawn');
+ const at10=draw({...seated({system:'uk'}),screen:'topics',focus:10,skills:{}});
+ assert.match(at10,/class="mb-flag"[^>]*>.*?<div class="mc">School<\/div>/,'panned to the end, the tick is drawn');
+ const m10=RR.rulerModel(SCHOOL,{},10,true);assert.equal(leftOf(at10,'mb-flag'),RR.flagX(m10,10),'before the last topic, both sides');
 });
 
-test('4b: the focused name is fitted whole on the big ruler whether it pans or not (seven school topics: the Topics ruler pans, the focused slot 640 px)',()=>{
+test('4b: the focused name is fitted whole on the big ruler whether it pans or not (eleven school topics: the Topics ruler pans, the focused slot 640 px)',()=>{
  const tv=fs.readFileSync(src('maths/MathsTV.tsx'),'utf8');
  assert.match(tv,/useNameFit\(m\.pan \|\| !!big,/,'the fit runs on the big ruler, panning or not');
  assert.match(tv,/ref=\{big \? win : undefined\}/,'the non-panning big ruler carries the fit');
- assert.ok((1728-52)/SCHOOL.length<RR.MIN_SPAN,'seven slots would be under the minimum, so the big ruler pans');
+ assert.ok((1728-52)/SCHOOL.length<RR.MIN_SPAN,'eleven slots would be under the minimum, so the big ruler pans');
  for(let f=0;f<SCHOOL.length;f++){const m=RR.rulerModel(SCHOOL,{},f,true);assert.equal(m.pan,true);assert.equal(m.topics[f].sw,RR.FOCUS_SPAN,`${SCHOOL[f].name}: the wide slot`);}
- assert.ok(SCHOOL.length<=RR.STRIP_AFTER,'Tonight still draws one box per topic (the strand strip takes over past 8)');
+ assert.ok(SCHOOL.length>RR.STRIP_AFTER,'W7 batch 2: past eight topics Tonight draws the strand strip, not a box per topic');
 });
 
-test('5: the first evening\'s title is the path\'s own name, and a learner with one-step equations secure counts one of seven',()=>{
+test('5: the first evening\'s title is the path\'s own name, and a learner with one-step equations secure counts one of eleven',()=>{
  assert.match(draw({...seated(),screen:'tonight',focus:0,skills:{}}),/School maths, from the first/);
- assert.match(draw({...seated(),screen:'tonight',focus:0,skills:skillsOf([ONE])}),/One of 7 topics/);
+ assert.match(draw({...seated(),screen:'tonight',focus:0,skills:skillsOf([ONE])}),/One of 11 topics/);
+});
+
+test('6: the strand strip at eleven topics - four bars (Equations twice), each inked by its share of secure topics, the needle at the frontier, the SCHOOL tick by stripFlag',()=>{
+ const S0=RR.stripModel(SCHOOL,stripStates([]),true);
+ assert.deepEqual(S0.segments.map((g)=>[g.name,g.count]),[['Fractions',4],['Equations',1],['Decimals and percent',4],['Equations',2]]);
+ // widths share the 1676 px by topic count, whole pixels, never under MIN_SEG, and they tile the strip
+ assert.equal(S0.segments.reduce((a,g)=>a+g.w,0),1728-52);
+ S0.segments.forEach((g,i)=>{assert.ok(g.w>=RR.MIN_SEG,`${g.name} at least ${RR.MIN_SEG} px`);assert.ok(Math.abs(g.w-1676*g.count/11)<=1,`${g.name} ${g.w} px for ${g.count} of 11`);if(i)assert.equal(g.x,S0.segments[i-1].x+S0.segments[i-1].w);});
+ for(const g of S0.segments){assert.equal(g.label,RR.clampLabel(g.name,g.labelW),`${g.name}: its label clamped to its bar`);assert.ok(g.label.length*RR.LABEL_CH<=g.labelW);}
+ assert.equal(S0.segments[2].label,'Decimals and percent','the new strand\'s name is whole');
+ // inked by share: fractions all secure and one-step; the conversion alone of the four; nothing after
+ const S1=RR.stripModel(SCHOOL,stripStates([E,O,F,MD,ONE,DC]),true);
+ assert.deepEqual(S1.segments.map((g)=>g.share),[1,1,0.25,0]);
+ assert.equal(S1.needle.index,7,'the frontier after the last secure (the conversion): a percent of an amount');
+ assert.equal(S1.needle.x,S1.segments[2].x+S1.segments[2].w*2/4,'two of four into the decimals and percent bar');
+ const S2=RR.stripModel(SCHOOL,stripStates(ids(SCHOOL)),true);assert.deepEqual([S2.needle.index,S2.needle.at,S2.needle.x],[11,'end',26+1676]);
+ const S3=RR.stripModel(SCHOOL,stripStates([ONE]),true);assert.equal(S3.needle.x,S3.segments[2].x,'one-step secure: the needle at the start of the decimals bar');
+ // stripAt: before topic k, in the bar that holds it; the end past the last
+ for(let k=0;k<=11;k++){const x=RR.stripAt(S0,k);if(k<11){const idx=[0,0,0,0,1,2,2,2,2,3,3][k],g=S0.segments[idx],before=[0,4,5,9][idx];assert.equal(x,g.x+g.w*(k-before)/g.count,`k ${k}`);}else assert.equal(x,26+1676);}
+ // the tick for a 12-year-old in each system; de's is at the end, its pill turned inward; none is cut at either end
+ for(const [sys,exp,edge] of [['us',10,null],['uk',10,null],['cz',10,null],['de',11,'r']]){
+  const f=RR.stripFlag(S0,P.expectedOn('school',sys,12));assert.equal(f.x,RR.stripAt(S0,exp),sys);assert.equal(f.edge,edge,`${sys}: the pill turned only at the end`);
+ }
+ assert.deepEqual(RR.stripFlag(S0,0),{x:26,edge:'l'},'a tick at the start turns right');assert.deepEqual(RR.stripFlag(S0,-1),{x:26,edge:'l'});assert.equal(RR.stripFlag(S0,99).edge,'r');
+ // the Calculus strip is unchanged by the refactor: the needle rule reads stripAt too
+ const C0=RR.stripModel(CALC,Object.fromEntries(CALC.map((t,i)=>[t.id,i<7?'secure':'later'])));
+ const d=C0.segments[2];assert.equal(C0.needle.x,d.x+d.w*1/6,'one sixth into Derivatives, as maths-ruler-test pins');
 });

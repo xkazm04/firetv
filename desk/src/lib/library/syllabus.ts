@@ -1,5 +1,5 @@
 /**
- * Our own topic spine for school maths: add and subtract fractions, then linear equations.
+ * Our own topic spine for school maths: fractions, linear equations, decimals and percent.
  *
  * The bands below (US grade, UK year, Czech ročník, German Klasse) are OUR OWN EDITORIAL
  * JUDGEMENT, informed by reading public curriculum outlines and then written from scratch.
@@ -20,6 +20,11 @@
  * going down (the comment on the unit says so): the linear topics' years are not moved. None has a
  * lessonId: the lesson library has no fractions lesson, so every screen that looks one up finds
  * none and says so (the existing "No lesson for this" state).
+ *
+ * W7 batch 2 adds the "Decimals and percent" strand (add, subtract and multiply decimals; fractions, decimals and
+ * percent; a percent of an amount; percent increase and decrease) after one-step equations: the eleven topics keep every
+ * system's years from going down, and where a system's usual year disagrees the comment on the unit says which way it
+ * was moved and why. None has a lessonId either.
  */
 import type { SchoolSystem } from "@/lib/session/store";
 
@@ -96,6 +101,65 @@ export const SYLLABUS: Topic[] = [
     year: { us: 6, uk: 7, cz: 6, de: 5 },
     prereq: [],
     lessonId: "jWpiMu5LNdg",
+  },
+  // W7 batch 2, "Decimals and percent": placed after one-step equations and before two-step equations, the one place
+  // where all four systems' years fit (one-step US 6 / UK 7 / CZ 6 / DE 5 before, two-step 7 / 8 / 7 / 6 after). Before
+  // one-step they would sit at DE Klasse 5, which no German percent unit is; after two-step at UK Year 8 or more, which
+  // is late for decimals. So the Equations strand is split: one-step, then this strand, then the other two.
+  {
+    id: "dec-arith",
+    name: "Add, subtract and multiply decimals",
+    strand: "Decimals and percent",
+    blurb: "Decimals are added and taken away with their points lined up, and multiplied as whole numbers before the point goes back in by counting the places.",
+    // from memory, unchecked: a maths teacher reads these four before release. US: adding and multiplying to hundredths is
+    // Grade 5, fluency with the column methods Grade 6 (kept at 6: one-step equations before it are US 6). UK: adding
+    // decimals is Year 5, a decimal times a decimal Year 7 (KS3); the unit multiplies, so Year 7 (also held by one-step at
+    // UK 7). CZ: desetinná čísla, 6. ročník. DE: Dezimalzahlen, Klasse 6 (Klasse 5 in some Länder).
+    bands: { us: "Grade 6", uk: "Year 7", cz: "6. ročník", de: "Klasse 6 (varies by Bundesland)" },
+    year: { us: 6, uk: 7, cz: 6, de: 6 },
+    prereq: [],
+  },
+  {
+    id: "dec-convert",
+    name: "Fractions, decimals and percent",
+    strand: "Decimals and percent",
+    blurb: "A fraction, a decimal and a percentage can name the same number, and you move between them by dividing the top by the bottom or by counting hundredths.",
+    // from memory, unchecked: a maths teacher reads these four before release. US Grade 6 (percent as a rate per hundred;
+    // terminating decimal expansions are Grade 7). UK: fraction, decimal and percentage equivalents are Year 6, but the
+    // unit sits after one-step equations at UK 7, so Year 7 (KS3 revisits them) - later than usual. CZ: zlomky and
+    // procenta, 7. ročník. DE: Dezimalbrüche are Klasse 6, Prozente usually Klasse 7; two-step equations after it are DE 6,
+    // so Klasse 6 - the percent half earlier than usual.
+    bands: { us: "Grade 6", uk: "Year 7", cz: "7. ročník", de: "Klasse 6 (varies by Bundesland)" },
+    year: { us: 6, uk: 7, cz: 7, de: 6 },
+    // writing over a hundred and simplifying is equivalent fractions
+    prereq: ["frac-equivalent"],
+  },
+  {
+    id: "pct-of-amount",
+    name: "A percent of an amount",
+    strand: "Decimals and percent",
+    blurb: "A percentage of an amount is that many hundredths of it, which you find by building up from ten percent or by multiplying by the percentage as a decimal.",
+    // from memory, unchecked: a maths teacher reads these four before release. US Grade 6 (percent of a quantity). UK: Year
+    // 6 in the national curriculum; after one-step equations at UK 7 it is Year 7 - later than usual. CZ: procenta, 7.
+    // ročník. DE: Prozentrechnung is usually Klasse 7; held by two-step equations at DE 6 after it, so Klasse 6 - a year
+    // earlier than usual.
+    bands: { us: "Grade 6", uk: "Year 7", cz: "7. ročník", de: "Klasse 6–7 (varies by Bundesland)" },
+    year: { us: 6, uk: 7, cz: 7, de: 6 },
+    // a percent is first a number of hundredths: the conversion comes first
+    prereq: ["dec-convert"],
+  },
+  {
+    id: "pct-change",
+    name: "Percent increase and decrease",
+    strand: "Decimals and percent",
+    blurb: "To increase or decrease an amount by a percentage you find that percentage of the amount and then add it on or take it off.",
+    // from memory, unchecked: a maths teacher reads these four before release. US Grade 7 (percent increase and decrease).
+    // UK Year 8 (some schemes teach it in Year 7). CZ: procenta, 7. ročník. DE: usually Klasse 7; held by two-step
+    // equations at DE 6 after it, so Klasse 6 - a year earlier than usual.
+    bands: { us: "Grade 7", uk: "Year 8", cz: "7. ročník", de: "Klasse 6–7 (varies by Bundesland)" },
+    year: { us: 7, uk: 8, cz: 7, de: 6 },
+    // the change is a percent of the amount
+    prereq: ["pct-of-amount"],
   },
   {
     id: "linear-two-step",

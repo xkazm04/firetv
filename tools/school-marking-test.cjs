@@ -777,5 +777,46 @@ for(const unit of Object.keys(B2_PAGES)){
   assert.equal(sk.seen,settledN,'only settled items reach the record');assert.equal(sk.seen,photoSkill.seen);assert.equal(sk.right,right);
   assert.equal(lastLine().detail,`${right} of ${page.length} right, ${page.length-settledN} not sure`);
   store.getSession().practice.items.forEach((it,i)=>assert.deepEqual(it.spec,page[i].spec,'the spec survives marking'));
+  assert.equal(lastLine().label,topicIn(unit).name,'the history line names the unit as the path does');
  });
 }
+
+test('W7b 8: a hint on each decimals and percent task names the unit in its stance, and a hint that gives the answer away twice becomes the unit\'s own fixed sentence',async()=>{
+ const CASES=[
+  ['dec-arith','Work out 4.35 + 2.8.','It comes to seven point one five.','Line up the decimal points first.'],
+  ['dec-arith','Work out £3.45 × 4.','345 × 4 = 1380, so £13.80.','Multiply the pounds and the pence separately.'],
+  ['dec-convert','Write 3/8 as a decimal.','3 ÷ 8 = 0.375','Divide the top by the bottom.'],
+  ['dec-convert','Write 0.35 as a simplified fraction.','It is seven twentieths.','Write 0.35 as hundredths first, then simplify.'],
+  ['pct-of-amount','Find 35% of 80.','10% is 8, so 35% is 28.','Find 10% of 80 first.'],
+  ['pct-change','Increase 60 by 15%.','15% of 60 is 9, and 60 + 9 = 69.','Find 15% of 60 first: that is the change.'],
+ ];
+ for(const [unit,task,leaky,clean] of CASES){
+  stubText(()=>({hint:leaky,what_to_try_next:'Write it down.'}));
+  let h=await H.hint('maths',task,{path:'school',age:12});
+  assert.equal(seenText.length,2,`${task}: asked, then asked again once`);
+  assert.equal(h.hint,S.SCHOOL_WITHHELD[unit],`${task}: the unit's own line`);assert.equal(h.next,'');
+  assert.match(seenText[0].system,new RegExp(`This sheet is the unit "${topicIn(unit).name}"; prefer the unit's methods over heavier ones\\.`),`${task}: the stance names the unit`);
+  assert.match(seenText[0].system,/a learner aged 11 to 13/,'the W2 young voice');
+  stubText(()=>({hint:clean,what_to_try_next:'Write your working under the question.'}));
+  h=await H.hint('maths',task,{path:'school',age:12});
+  assert.equal(seenText.length,1,`${task}: a legit hint passes on the first ask`);assert.equal(h.hint,clean);
+ }
+});
+
+test('W7b 9: an unsure decimals or percent item is explained in the school stance and settled by check from the value said, the percent sign kept',async()=>{
+ const items=[{spec:cv('7/20','percent'),a:'35'},{spec:po('35% of 80'),a:'28%'},{spec:cs('4.35 + 2.8'),a:'7.2'}];
+ seat('uk');store.dispatch({type:'practice.set',practice:{topic:'dec-convert',marked:false,items:items.map((p,i)=>({n:i+1,question:question(p.spec),spec:p.spec,tier:1}))}});noModel();
+ assert.equal((await post('mark',{answers:items.map((p)=>p.a)})).status,200);
+ assert.deepEqual(store.getSession().practice.items.map((i)=>i.verdict),['unsure','unsure','unsure']);
+ // "thirty-five percent" said aloud for "Write 7/20 as a percentage": the value is transcribed with its sign and settles right
+ stubText(()=>({reply:'Look at how you turned twentieths into hundredths.',value:'35%'}));
+ const r=await post('explain',{transcript:'I made it thirty-five percent',n:0});
+ assert.equal(r.status,200);assert.equal((await r.json()).settled,'right');
+ assert.match(seenText[0].prompt,/thirty-five percent is 35%/,'the explain prompt asks for a percentage with its sign');
+ assert.match(seenText[0].prompt,/^Topic: Fractions, decimals and percent\n/);
+ assert.equal(store.getSession().practice.items[0].verdict,'right');
+ // the reply is leak-checked against the item's own spec: one that says the answer is replaced by the item's line
+ stubText(()=>({reply:'Yes: 7.15 exactly.',value:'7.15'}));
+ await post('explain',{transcript:'seven point one five',n:2});
+ const it=store.getSession().practice.items[2];assert.equal(it.verdict,'right');assert.equal(it.reply,M.RIGHT(3),'the leaking reply is not shown');
+});

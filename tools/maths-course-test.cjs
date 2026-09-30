@@ -80,7 +80,7 @@ test('2: topic.open for calc1-chain on a calc1 learner focuses index 9; a school
 });
 
 // ---- the keys walk the learner's path ----
-test('3: Topics walks topicStops(s) - 22 on Calculus 1 (Right x21 reaches the last, Select opens it), 7 on the school path',()=>{
+test('3: Topics walks topicStops(s) - 22 on Calculus 1 (Right x21 reaches the last, Select opens it), 11 on the school path',()=>{
  const {tvKey,topicStops,TOPIC_STOPS}=keys();
  assert.equal(TOPIC_STOPS,SYLLABUS,'TOPIC_STOPS stays the school syllabus for the existing tests');
  let s=session(CALC_P,{screen:'topics',focus:0});
@@ -92,12 +92,13 @@ test('3: Topics walks topicStops(s) - 22 on Calculus 1 (Right x21 reaches the la
  assert.deepEqual(sel.events,[{type:'topic.open',topic:'calc1-area-average'}]);
  assert.deepEqual(sel.calls.map((c)=>c.body),[{topic:'calc1-area-average'}]);
  let sc=session(SCHOOL_P,{screen:'topics',focus:0});
- // W5b: 'Add and subtract fractions' joined the school path first; W7 batch 1 added three more fractions units: 7 stops
- assert.equal(topicStops(sc).length,7,'a school learner has 7 stops');
- for(let i=0;i<8;i++)sc={...sc,focus:focusAfter(sc,tvKey(sc,'right',LOCAL))};
- assert.equal(sc.focus,6);
- assert.deepEqual(tvKey(sc,'select',LOCAL).events,[{type:'topic.open',topic:SYLLABUS[6].id}]);
- assert.equal(topicStops(session({...SCHOOL_P,mathPath:undefined})).length,7,'no mathPath is the school path');
+ // W5b: 'Add and subtract fractions' joined the school path first; W7 batch 1 added three more fractions units; W7 batch 2
+ // the four decimals and percent units: 11 stops
+ assert.equal(topicStops(sc).length,11,'a school learner has 11 stops');
+ for(let i=0;i<12;i++)sc={...sc,focus:focusAfter(sc,tvKey(sc,'right',LOCAL))};
+ assert.equal(sc.focus,10);
+ assert.deepEqual(tvKey(sc,'select',LOCAL).events,[{type:'topic.open',topic:SYLLABUS[10].id}]);
+ assert.equal(topicStops(session({...SCHOOL_P,mathPath:undefined})).length,11,'no mathPath is the school path');
 });
 
 test('4: "Teach me something" opens Topics at the frontier - 0, 7 and 22 secure on Calculus 1; 0 with nothing secure on school',()=>{

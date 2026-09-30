@@ -821,6 +821,8 @@ const B2_SPELLINGS={
   // 5% of 20 = 1: 100% (equal in value) is unsure, never right
   [PO7,'1','uk','right'],[PO7,'1.0','uk','right'],[PO7,'100%','uk','unsure'],[PO7,'4','uk','wrong','pct-divided'],[PO7,'400','uk','wrong','pct-divided'],[PO7,'100','uk','wrong','pct-times-whole'],
   [PO7,'2','uk','wrong','pct-ten-stopped'],[PO7,'19','uk','wrong','pct-rest'],[PO7,'0.05','uk','wrong'],[PO7,'1.5','uk','wrong'],
+  // 10% of 60 = 6: 600 is both 10 × 60 and 60 ÷ 0.1 - named the whole-number slip (found by the live capture); 60 ÷ 10 is the answer itself
+  [po('10% of 60'),'6','uk','right'],[po('10% of 60'),'600','uk','wrong','pct-times-whole'],[po('10% of 60'),'54','uk','wrong','pct-rest'],
  ],
  'pct-change':[
   // 60 increased by 15% = 69: the new amount in any number form is right; an amount with a percent sign is unsure

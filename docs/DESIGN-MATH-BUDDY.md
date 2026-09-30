@@ -201,11 +201,12 @@ the desk cannot read with one meaning (`0,75` on a UK profile, a rounded decimal
   `paths.ts`: the needle's rule on the school path, the first topic not latched secure whose prerequisites all are on
   a course), and at the first stop when nothing is secure or nothing is left.
   Where each box, tick, strand label and needle goes is `rulerModel` in `desk/src/tv/rulerRows.ts`; the school path,
-  **School maths** (seven topics since Family W7 batch 1: Equivalent fractions, A fraction of an amount, Add and
-  subtract fractions, Multiply and divide fractions, then the three linear-equation topics, in two strands), keeps one
-  box per topic on Tonight's small ruler (239 px slots; a long name ends in an ellipsis after two lines) and **pans** on
-  the big Topics ruler, since a 239 px slot is under the 288 px minimum: the focused topic takes the 640 px slot and its
-  name is whole at 44 px (measured on every stop at 1920 x 1080 and 1280 x 720, `tools/school-units-live.cjs`). On a
+  **School maths** (eleven topics since Family W7 batch 2: the four fractions units, One-step equations, the four
+  decimals and percent units - Add, subtract and multiply decimals; Fractions, decimals and percent; A percent of an
+  amount; Percent increase and decrease - then the other two linear-equation topics: four bars, Equations twice), is
+  drawn on Tonight as the **strip** below, and **pans** on the big Topics ruler, since a 152 px slot is under the 288 px
+  minimum: the focused topic takes the 640 px slot and its name is whole at 44 px (measured on every stop at 1920 x 1080
+  and 1280 x 720, `tools/school-units2-live.cjs`). On a
   panning school ruler the SCHOOL tick is drawn only while it is on the stage, its pill turned inward within 90 px of
   the window's edge (`flagOnStage`), so the window never cuts it; opened at the frontier, a learner's tick is in view. A path too long for one box per topic on the big ruler (under 288 px a
   slot: Calculus 1's 22 topics in six strands) **pans under the lamp** like the paper: the track is wider than the
@@ -216,7 +217,9 @@ the desk cannot read with one meaning (`0,75` on a UK profile, a rounded decimal
   focused strand's full name is always in the lede's kicker). On Tonight a path of more than eight topics is drawn
   as a **strip** (`stripModel`): one bar per strand, as wide as its share of the topics and never under 96 px, inked
   by its share of latched-secure topics, the learner's needle at the frontier (on a course the first topic not secure
-  whose prerequisites are; on a school path the needle's rule above); no topic names, no year. `maths-ruler`; the chevrons are `maths-more`.
+  whose prerequisites are; on a school path the needle's rule above); no topic names, no year. On a school path the
+  strip carries the SCHOOL tick (`stripFlag`, Family W7 batch 2: D2 keeps the tick on the child's TV), its pill turned
+  inward at either end, and no gap line; the one-topic Equations bar's label clamps to "Equati…". `maths-ruler`; the chevrons are `maths-more`.
 - **The paper** - cream, 48 px squares, a sky margin rule at 96 px, the sheet title in Fraunces and the learner's
   name in the blue hand; it pans so the item in hand is under the lamp. A line too long for the paper - a long line
   of working, a long printed question - is fitted to it (`fitRow` in `desk/src/tv/mathsRows.ts`): it shrinks in
