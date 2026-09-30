@@ -784,3 +784,22 @@ test('the conversation route refuses a school situation for "other" and for an 1
  const last=getSession().conversation.turns.at(-1).id;
  await assert.rejects(command('turn',{text:'Could you say that again?',mode:'text',lastTurnId:last}),e=>e.status===403&&/no longer available/.test(e.message));
 });
+test('the speech routes answer a bad request with 400 and a failed engine with a sentence, never its raw error',async()=>{
+ const had=process.env.ELEVENLABS_API_KEY;process.env.ELEVENLABS_API_KEY||='test-key';
+ const reg=require(path.join(root,'src/lib/engines/registry.ts'));
+ const speak=require(path.join(root,'src/app/api/speak/route.ts'));
+ const listenRoute=require(path.join(root,'src/app/api/listen/route.ts'));
+ const leak='upstream said 401: invalid api key sk-live-SECRET';
+ reg.useProvider('speak',{name:'stub',run:async()=>{throw new Error(leak);}});
+ reg.useProvider('listen',{name:'stub',run:async()=>{throw new Error(leak);}});
+ const logged=[];const orig=console.error;console.error=(...a)=>logged.push(a.map(String).join(' '));
+ try{
+  const post=body=>speak.POST(new Request('http://desk/api/speak',{method:'POST',body,headers:{'Content-Type':'application/json'}}));
+  for(const body of ['hello','{}','{"text":5}','{"text":"   "}']){const r=await post(body);assert.equal(r.status,400,body);assert.equal((await r.text()).includes('sk-live'),false,body);}
+  let r=await post('{"text":"Which date?"}');assert.equal(r.status,502);const said=await r.text();assert.equal(said.includes('sk-live'),false,'speak leaks the engine error');assert.match(said,/could not say/i);
+  const form=new FormData();form.append('file',new Blob(['audio']),'a.webm');
+  r=await listenRoute.POST(new Request('http://desk/api/listen',{method:'POST',body:form}));assert.equal(r.status,502);const heard=await r.text();assert.equal(heard.includes('sk-live'),false,'listen leaks the engine error');assert.match(heard,/Speech-to-text failed/);
+  assert.equal(logged.length,2,'both engine failures are in the server log');
+  assert.equal(logged.every(line=>line.includes('sk-live-SECRET')),true);
+ }finally{console.error=orig;reg.resetProviders();if(had===undefined)delete process.env.ELEVENLABS_API_KEY;}
+});
