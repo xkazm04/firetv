@@ -116,6 +116,11 @@ test('4: the practice route reports code and zero tries for a school unit, and t
  assert.ok(!keysIn(store.getSession()).includes('answer'));
 });
 
+// ------------------------------------------------------------------ W7: each new unit's tier, read back from its spec
+/** Each unit's tier, as its generator documents it (rules/school), read back from the spec alone. */
+const W7_TIER={
+ 'frac-equivalent':(sp)=>{if(sp.shape==='simplify')return 2;const m=/^(\d+)\/(\d+) = (\?|\d+)\/(\?|\d+)$/.exec(sp.expr);const [a,b]=[+m[1],+m[2]];const known=+(m[3]==='?'?m[4]:m[3]);return (m[3]==='?'?known/b:known/a)>1?1:2;},
+};
 // ------------------------------------------------------------------ the spec through the store
 test('5: a school spec survives the store - practice.set, practice.marked, practice.settle and a reload from session.json',()=>{
  seat();
@@ -168,4 +173,70 @@ test('7: a linear topic still asks the engine as before - one call, its own prom
  assert.match(seen[0].prompt,/^Topic: One-step equations\n/);
  assert.match(seen[0].system,/Each question is a single equation in x\./);
  for(const it of r.items){assert.ok(!('spec' in it),'no spec');assert.ok(!('tier' in it),'no tier');}
+});
+
+// ------------------------------------------------------------------ Family W7 batch 1: three more units whose sets code writes
+const W7_SHAPE={'frac-equivalent':/^(?:Fill in the missing number: \d+\/\d+ = (?:\?\/\d+|\d+\/\?)\.|Write \d+\/\d+ in its simplest form\.)$/};
+for(const unit of Object.keys(W7_TIER)){
+ test(`W7 2-${unit}: makeSchoolItems writes six distinct items by code - three tier 1, then three tier 2 - pure for a seed, with no engine call`,()=>{
+  noModel();
+  for(let seed=1;seed<=40;seed++){
+   const r=makeSchoolItems(unit,6,seed*7919);
+   assert.equal(seen.length,0,'no text engine call');
+   assert.equal(r.provider,'code');assert.equal(r.tries,0);assert.equal(r.items.length,6);
+   assert.deepEqual(r.items.map((i)=>i.tier),[1,1,1,2,2,2],'tier 1 first, then tier 2');
+   assert.equal(new Set(r.items.map((i)=>i.question.replace(/\s+/g,''))).size,6,'six distinct questions');
+   for(const it of r.items){
+    assert.ok(S.wellFormed(it.spec).ok,JSON.stringify(it.spec));assert.equal(S.unitOf(it.spec),unit);
+    assert.equal(it.question,S.question(it.spec).plain,'the question is printed by code from the spec');
+    assert.match(it.question,W7_SHAPE[unit]);
+    assert.equal(it.tier,W7_TIER[unit](it.spec),`${it.spec.expr}: the stored tier is the one its spec shows, computed by code`);
+    assert.equal(S.leaksSchool(it.spec,it.question),false,'the question does not state its own answer');
+    assert.ok(!('difficulty' in it)&&!('answer' in it),'no model difficulty, no answer');
+    assert.deepEqual(Object.keys(it.spec).filter((k)=>!['shape','expr','unit'].includes(k)),[],'the spec carries its shape, expression and unit, nothing else');
+   }
+   assert.deepEqual(makeSchoolItems(unit,6,seed*7919).items,r.items,'the same seed gives the same set');
+  }
+  const sets=new Set([1,1000,99999,123456789,4000000000].map((s)=>makeSchoolItems(unit,6,s).items.map((i)=>i.question).join('|')));
+  assert.equal(sets.size,5,'five seeds, five different sets');
+  assert.equal(makeSchoolItems(unit,6,0xffffffff).items.length,6);
+  if(unit==='frac-equivalent'){
+   // a set on equivalent fractions asks both ways: a missing number, and (most sets) a simplify of its own
+   const withSimplify=[...Array(40).keys()].filter((k)=>makeSchoolItems(unit,6,k*104729).items.some((i)=>i.spec.shape==='simplify')).length;
+   assert.ok(withSimplify>=34,`a simplify item in ${withSimplify} of 40 sets`);
+  }
+ });
+}
+
+test('W7 5b: the new shapes survive the store - practice.set, practice.marked, practice.settle and a reload - and add no store key; a Calculus spec is untouched',()=>{
+ seat();
+ const specs=[{shape:'missing',expr:'3/4 = ?/12'},{shape:'missing',expr:'3/4 = 15/?'},{shape:'simplify',expr:'18/24'},{shape:'compute',expr:'5/6 - 1/4'},
+  {shape:'compute',expr:'3/4 + 1/2',unit:'m'},{shape:'compute',expr:'2/3 × 3/4'},{shape:'compute',expr:'3/4 ÷ 1/2',form:'simplest'}];
+ const calc={shape:'critical-point',f:'x^2 - 4x + 1',on:[0,5]};
+ const items=[...specs.map((spec,i)=>({n:i+1,question:S.question(spec).plain,spec,tier:1+(i%2)})),{n:8,question:'q',spec:calc}];
+ store.dispatch({type:'practice.set',practice:{topic:'frac-equivalent',marked:false,items}});
+ const got=()=>store.getSession().practice.items;
+ assert.deepEqual(got().slice(0,7).map((i)=>i.spec),specs,'practice.set keeps every school key of the new shapes');
+ assert.deepEqual(got()[7].spec,calc,'and a Calculus spec as it always was');
+ store.dispatch({type:'practice.marked',items:got().map((it)=>({...it,verdict:'unsure',said:'x'}))});
+ assert.deepEqual(got().slice(0,7).map((i)=>i.spec),specs,'practice.marked keeps them');
+ store.dispatch({type:'practice.settle',n:3,reply:'ok',verdict:'right',said:'Number 3 is right.'});
+ assert.deepEqual(got()[2].spec,specs[2]);
+ const saved=path.join(data,'session.json');
+ assert.ok(JSON.parse(fs.readFileSync(saved,'utf8')).practice.items.slice(0,7).every((it,i)=>JSON.stringify(it.spec)===JSON.stringify(specs[i])),'written to disk whole');
+ clearInterval(globalThis.__desk.ticker);delete globalThis.__desk;delete require.cache[storeFile];store=require(storeFile);
+ assert.deepEqual(store.getSession().practice.items.slice(0,7).map((i)=>i.spec),specs,'loaded from session.json and re-validated');
+ assert.deepEqual(store.getSession().practice.items[7].spec,calc,'the Calculus spec is untouched by the reload');
+ assert.deepEqual(store.getSession().practice.items.slice(0,7).map((i)=>i.tier),[1,2,1,2,1,2,1]);
+ // the store cleans each new shape by its own rules: an answer stops, a key the shape does not take drops the spec
+ const put=(spec)=>{store.dispatch({type:'practice.set',practice:{topic:'frac-equivalent',marked:false,items:[{n:1,question:'q',spec,tier:1}]}});return store.getSession().practice.items[0];};
+ assert.deepEqual(put({shape:'missing',expr:'3/4 = ?/12',answer:'9',truth:9}).spec,{shape:'missing',expr:'3/4 = ?/12'},'only the school keys pass');
+ assert.deepEqual(put({shape:'compute',expr:'3/4 + 1/2',unit:'m',solution:'5/4'}).spec,{shape:'compute',expr:'3/4 + 1/2',unit:'m'});
+ for(const bad of [{shape:'missing',expr:'3/4 = ?/13'},{shape:'missing',expr:'3/4 = ?/12',form:'simplest'},{shape:'simplify',expr:'3/4'},{shape:'simplify',expr:'18/24',unit:'kg'},
+  {shape:'fraction-of',expr:'5/3 of 40'},{shape:'fraction-of',expr:'3/5 of 40',unit:'parsec'},{shape:'fraction-of',expr:'3/5 of 40',allowNegative:true},{shape:'missing'}]){
+  const it=put(bad);assert.equal(it.spec,undefined,JSON.stringify(bad));assert.equal(it.tier,undefined,'no spec, no tier');
+ }
+ const src=fs.readFileSync(storeFile,'utf8');
+ assert.match(src,/const SCHOOL_SPEC_KEYS = \["expr", "form", "unit", "allowNegative"\] as const;/,'the W7 shapes need no new store key');
+ for(const sh of ['missing','simplify']){assert.ok(S.SCHOOL_SHAPES.includes(sh));assert.ok(!C.CALC_SHAPES.includes(sh),`${sh} is not a Calculus shape`);assert.equal(C.wellFormed({shape:sh,expr:'3/4'}).ok,false);}
 });

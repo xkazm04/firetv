@@ -221,7 +221,8 @@ test(`SPELLINGS: ${SPELLINGS.length} written answers, zero false-right, zero fal
  assert.equal(falseRight,0,miss.join('\n'));
  assert.equal(falseWrong,0,miss.join('\n'));
  assert.deepEqual(miss,[],'every row as decided, slips included');
- for (const s of S.SCHOOL_SLIPS) assert.ok((bySlip[s.id]||0)>=2,`slip ${s.id} detected at least twice`);
+ // each unit's own slips are counted in its own table (W7 units below); these are add and subtract fractions'
+ for (const id of S.SCHOOL_UNIT_SLIPS['frac-add-sub']) assert.ok((bySlip[id]||0)>=2,`slip ${id} detected at least twice`);
 });
 
 test('check: odd specs and answers are unsure, never a throw', () => {
@@ -346,5 +347,251 @@ test('PURITY: 300 random strings and odd values never throw; odd values give nul
   assert.equal(S.wellFormed(o).ok,false);assert.equal(S.question(o),null);
   if (!(Number.isInteger(o)&&o>=0)) assert.equal(S.gen(o,1),null); // 0 and 1 are seeds
   if (o!==1&&o!==2) assert.equal(S.gen(1,o),null); // 1 and 2 are tiers
+ }
+});
+
+// ================================================================== Family W7 batch 1: three more fractions units
+// "Equivalent fractions" (missing, simplify), "A fraction of an amount" (fraction-of), "Multiply and divide fractions"
+// (compute a/b × c/d, a/b ÷ c/d). As above: every expected verdict was worked by hand from the mathematics first (the
+// value and each slip's value are in the comments), and the gates are zero false-right, zero false-wrong, every slip
+// of the unit detected at least twice, every leak refused, no legit hint refused (conflicts listed apart).
+const ms=(expr)=>({shape:'missing',expr}),sm=(expr)=>({shape:'simplify',expr}),fo=(expr,unit)=>({shape:'fraction-of',expr,...(unit?{unit}:{})});
+
+/** One unit's spellings table through check: the W5a counts, and each of the unit's slips at least twice. */
+function spellings(label,rows,unit){
+ let falseRight=0,falseWrong=0,unsure=0;const miss=[],bySlip={};
+ for (const [spec,written,sys,want,slip] of rows){
+  const got=S.check(spec,written,sys);
+  if (got.verdict==='right'&&want!=='right'){falseRight++;miss.push(`FALSE-RIGHT ${spec.expr} | ${JSON.stringify(written)} ${sys}: want ${want}`);}
+  if (got.verdict==='wrong'&&want!=='wrong'){falseWrong++;miss.push(`FALSE-WRONG ${spec.expr} | ${JSON.stringify(written)} ${sys}: want ${want}`);}
+  if (got.verdict!==want&&got.verdict==='unsure') miss.push(`over-unsure ${spec.expr} | ${JSON.stringify(written)} ${sys}: want ${want}`);
+  if (got.verdict==='unsure') unsure++;
+  if (want==='wrong'&&got.verdict==='wrong'&&(got.slip??null)!==(slip??null)) miss.push(`slip ${spec.expr} | ${written}: want ${slip??'none'} got ${got.slip??'none'}`);
+  if (got.slip) bySlip[got.slip]=(bySlip[got.slip]||0)+1;
+  assert.equal(typeof got.why,'string');assert.ok(!/\d/.test(got.why),'a why carries no value');
+ }
+ console.log(`# ${label}: ${rows.length} rows, false-right ${falseRight}, false-wrong ${falseWrong}, unsure ${unsure} (${(100*unsure/rows.length).toFixed(1)}%), slips ${JSON.stringify(bySlip)}`);
+ assert.ok(rows.length>=40,`${label}: at least 40 rows`);
+ assert.equal(falseRight,0,miss.join('\n'));assert.equal(falseWrong,0,miss.join('\n'));
+ assert.deepEqual(miss,[],'every row as decided, slips included');
+ for (const id of S.SCHOOL_UNIT_SLIPS[unit]) assert.ok((bySlip[id]||0)>=2,`${label}: slip ${id} detected at least twice`);
+ for (const v of ['right','wrong','unsure']) assert.ok(rows.some((r)=>r[3]===v),`${label} has ${v} rows`);
+ return bySlip;
+}
+
+// ------------------------------------------------------------------ equivalent fractions
+const M1=ms('3/4 = ?/12');   // 3 x 12 / 4 = 9. added-same 3 + (12 - 4) = 11; one part 3; wrong factor 3 x 12 = 36, 3 x 4 / 12 = 1
+const M3=ms('3/4 = 15/?');   // 4 x 15 / 3 = 20. added-same 4 + (15 - 3) = 16; one part 4; wrong factor 4 x 15 = 60 (4 x 3 / 15 not whole)
+const M4=ms('12/16 = ?/4');  // 12 x 4 / 16 = 3. added-same 12 + 4 - 16 = 0 (none); one part 12; wrong factor 48 (both ways)
+const M5=ms('6/8 = ?/12');   // 6 x 12 / 8 = 9. added-same 6 + 4 = 10; one part 6; wrong factor 72, 6 x 8 / 12 = 4
+const M6=ms('10/15 = 2/?');  // 15 x 2 / 10 = 3. added-same 15 + (2 - 10) = 7; one part 15; wrong factor 30, 15 x 10 / 2 = 75
+const S1=sm('18/24');        // 3/4. common factors 2, 3, 6: one part 9/24, 18/12, 6/24, 18/8, 3/24, 18/4; wrong factor 9/8, 6/12 (a÷3, b÷2)
+const S2=sm('15/20');        // 3/4. common factor 5: one part 3/20, 15/4
+const S3=sm('8/12');         // 2/3. common factors 2, 4: one part 4/12, 8/6, 2/12, 8/3
+const EQ_SPELLINGS=[
+ // 3/4 = ?/12 -> 9; a fraction that completes the given one is read as its missing top (9/12 is 9, 11/12 is 11)
+ [M1,'9','uk','right'],[M1,'9.0','us','right'],[M1,'x = 9','uk','right'],[M1,'9/12','uk','right'],[M1,'18/2','uk','right'],[M1,'9,0','cz','right'],[M1,'= 9','de','right'],
+ [M1,'11','uk','wrong','added-same'],[M1,'11/12','uk','wrong','added-same'],[M1,'3','uk','wrong','one-part-only'],[M1,'3/12','uk','wrong','one-part-only'],
+ [M1,'36','uk','wrong','wrong-factor'],[M1,'1','uk','wrong','wrong-factor'],[M1,'8','uk','wrong'],[M1,'10/12','uk','wrong'],[M1,'-9','uk','wrong'],[M1,'8.9','uk','wrong'],[M1,'9/13','uk','wrong'],
+ [M1,'3/4','uk','unsure'],[M1,'6/8','uk','unsure'],[M1,'0.75','uk','unsure'],[M1,'75%','us','unsure'],[M1,'9 cm','uk','unsure'],[M1,'nine','uk','unsure'],[M1,'','uk','unsure'],
+ [M1,'9/12 = 3/4','uk','unsure'],[M1,'9:12','uk','unsure'],[M1,'9,0','us','unsure'],
+ // 3/4 = 15/? -> 20; 15/20 completes it (bottom 20)
+ [M3,'20','uk','right'],[M3,'15/20','uk','right'],[M3,'20.00','us','right'],[M3,'16','uk','wrong','added-same'],[M3,'15/16','uk','wrong','added-same'],
+ [M3,'4','uk','wrong','one-part-only'],[M3,'15/4','uk','wrong','one-part-only'],[M3,'60','uk','wrong','wrong-factor'],[M3,'12','uk','wrong'],[M3,'3/4','uk','unsure'],[M3,'0,75','de','unsure'],
+ // 12/16 = ?/4 -> 3; 3/4 completes it; 12/4 is 12 over 4 (one part) or the value 3 (right): not guessed
+ [M4,'3','uk','right'],[M4,'3/4','uk','right'],[M4,'12','uk','wrong','one-part-only'],[M4,'48','uk','wrong','wrong-factor'],[M4,'48/4','uk','wrong','wrong-factor'],
+ [M4,'0','uk','wrong'],[M4,'12/4','uk','unsure'],[M4,'0.75','uk','unsure'],
+ // 6/8 = ?/12 -> 9
+ [M5,'9','uk','right'],[M5,'9/12','uk','right'],[M5,'10','uk','wrong','added-same'],[M5,'6','uk','wrong','one-part-only'],[M5,'4','uk','wrong','wrong-factor'],[M5,'72','uk','wrong','wrong-factor'],
+ [M5,'8','uk','wrong'],[M5,'3/4','uk','unsure'],[M5,'6/8','uk','unsure'],
+ // 10/15 = 2/? -> 3; 2/3 completes it
+ [M6,'3','uk','right'],[M6,'2/3','uk','right'],[M6,'7','uk','wrong','added-same'],[M6,'15','uk','wrong','one-part-only'],[M6,'2/15','uk','wrong','one-part-only'],
+ [M6,'30','uk','wrong','wrong-factor'],[M6,'75','uk','wrong','wrong-factor'],[M6,'5','uk','wrong'],
+ // simplify 18/24 -> 3/4 in lowest terms; an equal value in another form is unsure (the form asks for more)
+ [S1,'3/4','uk','right'],[S1,'x = 3/4','us','right'],[S1,'3 / 4','uk','right'],[S1,'9/12','uk','unsure'],[S1,'6/8','uk','unsure'],[S1,'18/24','uk','unsure'],
+ [S1,'0.75','uk','unsure'],[S1,'75%','uk','unsure'],[S1,'0,75','cz','unsure'],[S1,'9/24','uk','wrong','one-part-only'],[S1,'18/12','uk','wrong','one-part-only'],
+ [S1,'3/24','uk','wrong','one-part-only'],[S1,'1 1/2','uk','wrong','one-part-only'],[S1,'6/12','uk','wrong','wrong-factor'],[S1,'9/8','uk','wrong','wrong-factor'],[S1,'1/2','uk','wrong','wrong-factor'],
+ [S1,'2/3','uk','wrong'],[S1,'4/5','uk','wrong'],[S1,'0.7','uk','unsure'],[S1,'0.8','uk','unsure'],[S1,'0.76','uk','wrong'],[S1,'3/4 cm','uk','unsure'],[S1,'three quarters','uk','unsure'],[S1,'','uk','unsure'],
+ [S2,'3/4','uk','right'],[S2,'3/20','uk','wrong','one-part-only'],[S2,'15/4','uk','wrong','one-part-only'],[S2,'3 3/4','uk','wrong','one-part-only'],[S2,'5/4','uk','wrong'],[S2,'12/16','uk','unsure'],
+ [S3,'2/3','uk','right'],[S3,'4/6','uk','unsure'],[S3,'4/12','uk','wrong','one-part-only'],[S3,'8/6','uk','wrong','one-part-only'],[S3,'0.67','uk','unsure'],[S3,'0.6667','uk','unsure'],[S3,'0.6','uk','unsure'],
+];
+
+
+const W7_SLIPS={};
+test(`W7 SPELLINGS equivalent fractions: ${EQ_SPELLINGS.length} written answers, zero false-right, zero false-wrong`,()=>{Object.assign(W7_SLIPS,spellings('EQ_SPELLINGS equivalent fractions',EQ_SPELLINGS,'frac-equivalent'));});
+test('W7 SLIPS: every slip on the closed list belongs to exactly one unit, carries no value, and every unit\'s list is detected',()=>{
+ const units=Object.keys(S.SCHOOL_UNIT_SLIPS);
+ assert.deepEqual(units.sort(),['frac-add-sub','frac-equivalent']);
+ const listed=units.flatMap((u)=>S.SCHOOL_UNIT_SLIPS[u]);
+ assert.equal(new Set(listed).size,listed.length,'no slip id is on two units');
+ assert.deepEqual([...listed].sort(),S.SCHOOL_SLIPS.map((s)=>s.id).sort(),'the closed list is exactly the units\' lists');
+ for (const s of S.SCHOOL_SLIPS){assert.doesNotMatch(s.name+s.says+s.points,/\d/,s.id);assert.match(s.says,/^[A-Z][^]*\.$/,s.id);}
+ for (const u of units){const order=S.SCHOOL_SLIPS.map((s)=>s.id).filter((id)=>S.SCHOOL_UNIT_SLIPS[u].includes(id));assert.deepEqual([...S.SCHOOL_UNIT_SLIPS[u]],order,`${u}: in SCHOOL_SLIPS order`);}
+});
+
+// ------------------------------------------------------------------ W7 wellFormed and question
+test('W7 wellFormed: each new shape reads only its one printed spelling and refuses what makes a poor question',()=>{
+ for (const s of [M1,M3,M4,M5,M6,S1,S2,S3]) assert.deepEqual(S.wellFormed(s),{ok:true},JSON.stringify(s));
+ const bad=[
+  [ms('3/4 = ?/13'),'No whole number'],[ms('3/4 = 10/?'),'No whole number'],[ms('3/4 = ?/4'),'nothing to work out'],[ms('3/4 = 3/?'),'nothing to work out'],
+  [ms('3/4 = ?/?'),'cannot read'],[ms('3/4 = 9/12'),'cannot read'],[ms('?/4 = 9/12'),'cannot read'],[ms('3/4=?/12'),'cannot read'],[ms('3/1 = ?/12'),'bottom is 1'],
+  [ms('3/4 = ?/400'),'bottom is 1, or larger'],[ms('1/2 = 60/?'),'bottom is 1, or larger'],[{...M1,form:'simplest'},'does not take'],[{...M1,unit:'kg'},'does not take'],[{...M1,answer:'9'},'no answer field'],
+  [sm('3/4'),'already in its simplest form'],[sm('24/18'),'not a proper fraction'],[sm('18/18'),'not a proper fraction'],[sm('18 /24'),'cannot read'],[sm('0/4'),'cannot read'],[sm('2/200'),'bottom is 1, or larger'],
+  [{...S1,allowNegative:true},'does not take'],[sm('18/24 + 1'),'cannot read'],
+  [cs('3/4 ÷ 0'),'divides by zero'],[{shape:'fraction',expr:'3/4'},'not one of'],
+ ];
+ for (const [s,why] of bad){const w=S.wellFormed(s);assert.equal(w.ok,false,JSON.stringify(s));assert.ok(w.why.includes(why),`${JSON.stringify(s)}: ${w.why}`);}
+});
+
+test('W7 question: each shape prints its question in plain text and TeX, never its answer, the TeX typesets, and it reads back to its spec',()=>{
+ const P=[
+  [M1,'Fill in the missing number: 3/4 = ?/12.',2],[M3,'Fill in the missing number: 3/4 = 15/?.',2],[S1,'Write 18/24 in its simplest form.',1],
+ ];
+ for (const [s,plain,fracs] of P){
+  const q=S.question(s);
+  assert.equal(q.plain,plain);
+  assert.ok(!S.leaksSchool(s,q.plain),`the question itself is not a leak: ${q.plain}`);
+  for (const line of [q.plain,q.tex]){
+   let fr=0;T.walk(T.parseMath(line),(n)=>{if(n.t==='frac')fr++;});
+   assert.equal(fr,fracs,`${line} stacks ${fracs} fraction(s), the gap too`);
+  }
+  assert.deepEqual(S.specFromQuestion(q.plain),s,`${q.plain} reads back to its spec`);
+ }
+ // the gap is stacked as a fraction part, legible where the number would stand
+ const gap=[];T.walk(T.parseMath(S.question(M1).plain),(n)=>{if(n.t==='frac')gap.push(n);});
+ assert.deepEqual(gap[1].num,[{t:'ord',v:'?'}]);assert.deepEqual(gap[1].den,[{t:'num',v:'12'}]);
+});
+
+// ------------------------------------------------------------------ W7 leak and legit tables
+const W7_LEAKS={
+ 'frac-equivalent':[
+  [M1,'The missing number is 9.'],[M1,'It is nine.'],[M1,'3/4 = 9/12'],[M1,'Nine twelfths.'],[M1,'Multiply 3 by 3.'],[M1,'3 x 3 = 9'],[M1,'12 ÷ 4 × 3'],
+  [M1,'Three times three.'],[M1,'The top becomes 9.'],[M1,'You get 9 over 12.'],[M1,'It is 36 ÷ 4.'],[M1,'The answer is 9.0'],[M1,'Write 9 on top.'],
+  [M3,'The bottom is 20.'],[M3,'Multiply 4 by 5.'],[M3,'15/20'],[M3,'It is 4 x 5.'],[M3,'Twenty.'],[M3,'fifteen twentieths'],
+  [S1,'It simplifies to 3/4.'],[S1,'Three quarters.'],[S1,'18 ÷ 6 = 3'],[S1,'The top is 3 and the bottom is 4.'],[S1,'That is 0.75.'],[S1,'75%'],
+  [S1,'Divide 24 by 6 to get 4.'],[S1,'three-quarters'],[S1,'3:4'],[S1,'It is the same as 3 over 4.'],
+  [S2,'Divide 15 by 5.'],[S2,'It is 3/4.'],[S2,'The answer is 0.75'],[S2,'You get three quarters'],
+  [M5,'6/8 = 9/12'],[M5,'The answer is nine'],[M5,'12 × 3 ÷ 4'],
+ ],
+};
+const W7_LEGIT={
+ 'frac-equivalent':[
+  [M1,'What do you multiply 4 by to get 12?'],[M1,'4 x 3 = 12, so the bottom was multiplied by 3.'],[M1,'Do the same to the top as you did to the bottom.'],[M1,'The bottom went from 4 to 12.'],
+  [M1,'Multiply the top by the same number.'],[M1,'4 goes into 12 three times.'],[M1,'12 is 4 times 3.'],[M1,'Equal fractions come from multiplying top and bottom by the same number.'],
+  [M1,'Check: the new fraction should still be three quarters.'],
+  [M3,'What was 3 multiplied by to make 15?'],[M3,'3 x 5 = 15'],[M3,'Do the same to the bottom.'],[M3,'The top was multiplied by 5.'],
+  [S1,'Find a number that goes into both 18 and 24.'],[S1,'Both are even, so you can start by halving.'],[S1,'Divide the top and the bottom by the same number.'],
+  [S1,'6 goes into both 18 and 24.'],[S1,'Try dividing both by 2 first: 9/12.'],[S1,'The highest common factor of 18 and 24 is 6.'],[S1,'9/12 can be simplified again.'],
+  [S1,'Keep going until nothing but 1 goes into both.'],[S1,'Divide both by 6.'],
+  [S2,'Both 15 and 20 are in the five times table.'],[S2,'Divide the top and the bottom by 5.'],[S2,'What is the biggest number that goes into 15 and 20?'],
+  [M5,'The bottom goes from 8 to 12, which is not a whole times bigger.'],[M5,'Simplify 6/8 first, then scale up.'],[M5,'6/8 is the same as 3/4.'],[M5,'Then multiply 3/4 by 3/3.'],
+ ],
+};
+/**
+ * W7 CONFLICTS: legit hints the strict rule refuses, accepted and reported. Simplify refuses a bare whole number equal
+ * to the answer's top or bottom, so for 18/24 (3/4) "divisible by 3" and "Step 4" are refused (the generator never
+ * draws such an item: its answer's top and bottom never divide the scale factor).
+ */
+const W7_CONFLICTS=[
+ [S1,'Both 18 and 24 are divisible by 3.'],[S1,'Step 4: check your answer.'],
+];
+
+for (const unit of ['frac-equivalent']){
+ test(`W7 LEAKS ${unit}: ${W7_LEAKS[unit].length} hints that give the answer away are refused; ${W7_LEGIT[unit].length} legit hints pass`,()=>{
+  const leaks=W7_LEAKS[unit],legit=W7_LEGIT[unit];
+  const missed=leaks.filter(([s,h])=>!S.leaksSchool(s,h)).map(([s,h])=>`${s.expr} | ${h}`);
+  const flagged=legit.filter(([s,h])=>S.leaksSchool(s,h)).map(([s,h])=>`${s.expr} | ${h}`);
+  const specs=new Set([...leaks,...legit].map(([s])=>JSON.stringify(s)));
+  console.log(`# W7 LEAKS ${unit}: ${leaks.length} (missed ${missed.length}), LEGIT ${legit.length} (flagged ${flagged.length}), specs ${specs.size}`);
+  assert.deepEqual(missed,[],'every leaking hint is caught');
+  assert.deepEqual(flagged,[],'no legit hint is flagged');
+  assert.ok(leaks.length>=15&&legit.length>=20&&specs.size>=3);
+  for (const [s] of [...leaks,...legit]) assert.equal(S.unitOf(s),unit,`${s.expr} is a ${unit} spec`);
+ });
+}
+test('W7 CONFLICTS: the strict leak rule refuses these legit hints, and that cost is accepted and reported',()=>{
+ for (const [s,h] of W7_CONFLICTS) assert.equal(S.leaksSchool(s,h),true,`${s.expr} | ${h}`);
+ console.log(`# W7 accepted conflicts ${W7_CONFLICTS.length}`);
+});
+
+// ------------------------------------------------------------------ W7 generators, against references written here
+/** The references: each unit's answer by hand, with this file's own gcd, never the module's evaluator. */
+const W7REF={
+ 'frac-equivalent':(s)=>{
+  let m=/^(\d+)\/(\d+) = (\?|\d+)\/(\?|\d+)$/.exec(s.expr);
+  if(s.shape==='missing'&&m){const [a,b]=[+m[1],+m[2]];const top=m[3]==='?';const known=+(top?m[4]:m[3]);const ans=top?a*known/b:b*known/a;const factor=top?known/b:known/a;return {kind:'missing',a,b,known,top,ans,factor,truth:`${ans}`,nums:[a,b,known]};}
+  m=/^(\d+)\/(\d+)$/.exec(s.expr);
+  if(s.shape==='simplify'&&m){const [a,b]=[+m[1],+m[2]],g=refGcd(a,b);return {kind:'simplify',a,b,g,p:a/g,q:b/g,truth:`${a/g}/${b/g}`,nums:[a,b]};}
+  return null;
+ },
+};
+const W7GEN={'frac-equivalent':S.genEquivalent};
+const W7_DISTINCT={};
+for (const unit of Object.keys(W7GEN)){
+ test(`W7 GENERATOR ${unit}: seeds 1..200 for tiers 1 and 2 give well-formed, distinct items of the documented tier, judged right by a reference`,()=>{
+  const g=W7GEN[unit],ref=W7REF[unit],counts={};
+  assert.equal(S.SCHOOL_GENERATORS[unit],S.generatorFor(unit));assert.equal(typeof S.generatorFor(unit),'function');
+  for (const tier of [1,2]){
+   const seen=new Set();let simplify=0;
+   for (let seed=1;seed<=200;seed++){
+    const s=g(seed,tier);
+    assert.ok(s,`seed ${seed} tier ${tier}`);assert.deepEqual(g(seed,tier),s,'same seed, same spec');
+    assert.deepEqual(S.generatorFor(unit)(seed,tier),s,'the registered generator is this one');
+    assert.deepEqual(S.wellFormed(s),{ok:true},JSON.stringify(s));
+    assert.equal(S.unitOf(s),unit);
+    const r=ref(s);assert.ok(r,`the reference reads ${JSON.stringify(s)}`);
+    const q=S.question(s).plain;
+    // the tier, as documented in school.ts
+    if (unit==='frac-equivalent'){
+     if (tier===1){assert.equal(r.kind,'missing');assert.ok(Number.isInteger(r.factor)&&r.factor>=2&&r.factor<=6,`scaled up by 2..6: ${s.expr}`);assert.ok(r.a>=2&&r.a<r.b&&r.b<=10&&refGcd(r.a,r.b)===1,s.expr);assert.ok(r.ans<=60&&r.known<=60,s.expr);}
+     else if (r.kind==='simplify'){simplify++;const k=r.g;assert.ok(r.q<=12&&r.b<=100,s.expr);assert.ok((r.p===1||k%r.p!==0)&&k%r.q!==0,`no answer number divides the factor: ${s.expr}`);}
+     else {assert.ok(r.factor<1,`scaled down: ${s.expr}`);assert.equal(r.known,r.top?r.b*r.factor:r.a*r.factor);}
+     if (r.kind==='missing'){assert.ok(Number.isInteger(r.ans)&&r.ans>=1,s.expr);assert.notEqual(r.ans,r.factor,'the answer is never the scale factor');assert.ok(!r.nums.includes(r.ans),`the question does not print its answer: ${q}`);}
+    }
+    if (unit==='frac-of-amount'){
+     assert.ok(r.a>=2&&r.a<r.b&&refGcd(r.a,r.b)===1&&r.N%r.b===0,s.expr);assert.ok(Number.isInteger(r.ans));assert.ok(!r.nums.includes(r.ans),`${q} does not print its answer`);
+     if (tier===1){assert.ok(r.b<=10&&r.N/r.b>=2&&r.N/r.b<=10,s.expr);assert.equal(s.unit,undefined,'no unit at tier 1');}
+     else {assert.ok(r.b<=12&&r.N/r.b>=3&&r.N/r.b<=25,s.expr);assert.ok(['kg','g','km','m','cm','l','ml','min','€','£','$'].includes(s.unit),`a unit at tier 2: ${s.unit}`);}
+    }
+    if (unit==='frac-mul-div'){
+     assert.equal(r.op,tier===1?'×':'÷',`tier ${tier} ${tier===1?'multiplies':'divides'}`);assert.ok(r.b<=10&&r.d<=10&&r.a<r.b&&r.c<r.d,s.expr);
+     assert.ok(r.den>1,`not a whole number: ${s.expr}`);
+     const same=(p,qq,x,y)=>p*y===qq*x;assert.ok(!same(r.n,r.den,r.a,r.b)&&!same(r.n,r.den,r.c,r.d)&&!same(r.n,r.den,r.d,r.c),`the answer is not an operand: ${s.expr}`);
+    }
+    for (const sys of S.SCHOOL_SYSTEMS){
+     assert.equal(S.check(s,r.truth,sys).verdict,'right',`${s.expr} = ${r.truth} (${sys})`);
+     const off=/\//.test(r.truth)?r.truth.replace(/^(\d+)/,(x)=>String(+x+1)):String(+r.truth+1);
+     assert.equal(S.check(s,off,sys).verdict,'wrong',`${s.expr} != ${off} (${sys})`);
+    }
+    assert.ok(S.leaksSchool(s,`The answer is ${r.truth}.`),`the answer leaks: ${s.expr}`);
+    assert.ok(!S.leaksSchool(s,q),`the question does not: ${q}`);
+    assert.ok(!S.leaksSchool(s,S.withheldSchool(s)),'the withheld line leaks nothing');
+    seen.add(JSON.stringify(s));
+   }
+   counts[tier]=seen.size;
+   if (unit==='frac-equivalent'&&tier===2) assert.ok(simplify>=100&&simplify<=160,`two in three tier-2 items simplify (${simplify} of 200)`);
+  }
+  W7_DISTINCT[unit]=counts;
+  console.log(`# W7 GENERATOR ${unit} distinct specs over seeds 1..200: tier 1 ${counts[1]}, tier 2 ${counts[2]}`);
+  assert.ok(counts[1]>=100&&counts[2]>=100,'seeds spread');
+  for (const bad of [-1,1.5,NaN,'1',null,undefined,2**32]) assert.equal(g(bad,1),null);
+  for (const bad of [0,3,'1',null,1.5]) assert.equal(g(1,bad),null);
+ });
+}
+
+test('W7 PURITY: random strings through check and leaksSchool on every new shape never throw and give the same answer twice',()=>{
+ let seed=777;const rnd=()=>{seed=(seed*1103515245+12345)&0x7fffffff;return seed/0x7fffffff;};
+ const alphabet=['0','1','2','3','4','9','/','.',',',' ','%',':','-','?','=','x','×','÷','of','kg','€','half',' and ','by','lots of'];
+ const specs=[M1,M3,S1];
+ for (let i=0;i<300;i++){
+  let s='';const len=Math.floor(rnd()*20);for(let k=0;k<len;k++)s+=alphabet[Math.floor(rnd()*alphabet.length)];
+  for (const sp of specs){
+   for (const sys of S.SCHOOL_SYSTEMS){const v=S.check(sp,s,sys);assert.ok(['right','wrong','unsure'].includes(v.verdict));assert.deepEqual(S.check(sp,s,sys),v);}
+   const l=S.leaksSchool(sp,s);assert.equal(typeof l,'boolean');assert.equal(S.leaksSchool(sp,s),l);
+  }
+  assert.ok(S.specFromQuestion(s)===null||S.wellFormed(S.specFromQuestion(s)).ok);
+ }
+ for (const o of [null,undefined,0,{},[],{shape:'missing'},{shape:'simplify',expr:42},{shape:'missing',expr:'3/4 = ?/12',unit:'kg'}]){
+  assert.equal(S.check(o,'9','uk').verdict,'unsure');assert.equal(S.leaksSchool(o,'9'),false);assert.equal(S.question(o),null);assert.equal(S.unitOf(o),null);
  }
 });

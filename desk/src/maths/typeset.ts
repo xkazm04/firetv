@@ -392,6 +392,8 @@ export function parsePlain(src: string): MNode[] {
 // ------------------------------------------------------------------ after reading: fractions, `*`, spaces
 
 const isOperand = (n: Raw | undefined): boolean => !!n && (n.t === "num" || n.t === "var" || n.t === "sym" || n.t === "frac" || n.t === "sqrt" || (n.t === "ord" && n.v === "" && !!n.sup));
+/** A worksheet's missing-number gap, '?', glued to a fraction's slash: '3/4 = ?/12' stacks the gap over 12 (school W7). */
+const isGap = (n: Raw | undefined): boolean => !!n && n.t === "ord" && n.v === "?" && !n.sup && !n.sub;
 
 /** The nodes of a bracket that ends at `end` (a close), or -1. */
 function openOf(list: Raw[], end: number): number {
@@ -422,16 +424,17 @@ function fractions(list: Raw[]): Raw[] {
     let a = k - 1;
     if (a < 0) continue;
     if (out[a].t === "close") { a = openOf(out, a); if (a < 0) continue; }
+    else if (isGap(out[a])) { /* the gap alone is the numerator */ }
     else if (!isOperand(out[a])) continue;
     // a function goes with its bracketed argument: sin(x)/x is (sin x) over x, never sin (x over x)
     const fnArg = (j: number) => out[j].t === "open" && out[j - 1].t === "fn";
-    while (a > 0 && (isOperand(out[a - 1]) || fnArg(a) || (out[a - 1].t === "close" && openOf(out, a - 1) >= 0))) a = out[a - 1].t === "close" ? openOf(out, a - 1) : a - 1;
-    // denominator: one number, or a run of letters, or one bracket, with its power
+    while (!isGap(out[a]) && a > 0 && (isOperand(out[a - 1]) || fnArg(a) || (out[a - 1].t === "close" && openOf(out, a - 1) >= 0))) a = out[a - 1].t === "close" ? openOf(out, a - 1) : a - 1;
+    // denominator: one number, or a run of letters, or one bracket, with its power (or a worksheet's gap)
     let b = k + 1;
     const first = out[b];
     if (!first) continue;
     if (first.t === "open") { b = closeOf(out, b); if (b < 0) continue; }
-    else if (first.t === "num" || first.t === "sym" || first.t === "sqrt") { /* one */ }
+    else if (first.t === "num" || first.t === "sym" || first.t === "sqrt" || isGap(first)) { /* one */ }
     else if (first.t === "var") { while (out[b + 1]?.t === "var" && !(out[b] as MNode).sup) b++; }
     else continue;
     const num = out.slice(a, k), den = out.slice(k + 1, b + 1);

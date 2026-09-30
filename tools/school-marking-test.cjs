@@ -184,7 +184,7 @@ const TASKS=[
  ['3/1 + 1/6',null],['03/4 + 1/6',null],['Differentiate x^2 + 1/2',null],['Solve for x:  3x − 7 = 11',null],['Work out 1/3 + 1/5. Give your answer as a decimal.',null],
  ['3/4 - 3/4',null],['1/2 + 1/2 + ',null],['Add 3/4',null],['1/2 + 1/4 = 3/4 ?',null],
 ];
-test('4: specFromQuestion reads a fractions task conservatively - '+TASKS.length+' phrasings, '+TASKS.filter((t)=>t[1]===null).length+' of them refused',()=>{
+test('4: specFromQuestion reads a fractions task conservatively - '+TASKS.length+' phrasings, '+TASKS.filter((t)=>t[1]===null).length+' of them refused (W7 units below)',()=>{
  assert.ok(TASKS.length>=25&&TASKS.filter((t)=>t[1]===null).length>=15);
  for(const [text,expr,form] of TASKS){
   const got=S.specFromQuestion(text);
@@ -500,3 +500,92 @@ test('15: an item with an answer and no located slip draws on the sheet and the 
   }
  }
 });
+
+// ------------------------------------------------------------------ 7. Family W7 batch 1: three more fractions units, read, withheld and marked
+const ms=(expr)=>({shape:'missing',expr}),sm=(expr)=>({shape:'simplify',expr}),fo=(expr,unit)=>({shape:'fraction-of',expr,...(unit?{unit}:{})});
+/** [task text, the spec it reads as (null: refused)] per unit; a spec's value is worked in school-rules-test. */
+const W7_TASKS={
+ 'frac-equivalent':[
+  ['Fill in the missing number: 3/4 = ?/12.',ms('3/4 = ?/12')],['3/4 = ?/12',ms('3/4 = ?/12')],['3/4 = □/12',ms('3/4 = ?/12')],['3/4 = __/12',ms('3/4 = ?/12')],
+  ['3/4 = ?/12.',ms('3/4 = ?/12')],['Complete: 3/4 = ?/12',ms('3/4 = ?/12')],['1. 3/4 = ?/12',ms('3/4 = ?/12')],['3/4 = 9/?',ms('3/4 = 9/?')],
+  ['Copy and complete 2/5 = ?/20',ms('2/5 = ?/20')],['Write 3/4 with a denominator of 12',ms('3/4 = ?/12')],['Write 3/4 as a fraction with denominator 12',ms('3/4 = ?/12')],
+  ['Write 3/4 as an equivalent fraction with a denominator of 12.',ms('3/4 = ?/12')],['Write 3/4 with a numerator of 9',ms('3/4 = 9/?')],['¾ = ?/12',ms('3/4 = ?/12')],
+  ['12/16 = ?/4',ms('12/16 = ?/4')],['Simplify 18/24',sm('18/24')],['Simplify 18/24 fully.',sm('18/24')],['Write 18/24 in its simplest form.',sm('18/24')],
+  ['Write 18/24 in simplest form',sm('18/24')],['Reduce 18/24 to lowest terms',sm('18/24')],['Reduce 18/24',sm('18/24')],['Cancel 18/24 down',sm('18/24')],
+  ['Express 18/24 in its lowest terms.',sm('18/24')],['Simplify: 18/24',sm('18/24')],['(c) Simplify 15/20',sm('15/20')],['Cancel 18/24',sm('18/24')],
+  // refused
+  ['Simplify 3/4',null],['Simplify 18/12',null],['3/4 = ?/13',null],['3/4 = ?/?',null],['3/4 = 9/12',null],['? = 9/12',null],['?/4 = 9/12',null],
+  ['3/4 = ?/12 = ?/16',null],['Simplify 18/24 + 1/2',null],['Simplify x/24',null],['Simplify 1 2/4',null],['Simplify 18/0',null],['Simplify 0.75',null],
+  ['Simplify 18:24',null],['Write 3/4 with a denominator of 10',null],['3/4 = ?/4',null],['Simplify 18/24 and 6/8',null],['Write 18/24 as a decimal',null],
+  ['Simplify 018/24',null],['Simplify the fraction',null],['3/4 = ? / 12 please',null],
+ ],
+};
+const W7GEN={'frac-equivalent':S.genEquivalent};
+for(const unit of Object.keys(W7_TASKS)){
+ const rows=W7_TASKS[unit];
+ test(`W7 4-${unit}: specFromQuestion reads the unit's tasks conservatively - ${rows.length} phrasings, ${rows.filter((t)=>t[1]===null).length} of them refused`,()=>{
+  assert.ok(rows.length>=25&&rows.filter((t)=>t[1]===null).length>=10);
+  for(const [text,want] of rows){
+   const got=S.specFromQuestion(text);
+   if(want===null){assert.equal(got,null,`refused: ${JSON.stringify(text)}`);continue;}
+   assert.deepEqual(got,want,text);
+   assert.ok(S.wellFormed(got).ok);assert.equal(S.unitOf(got),unit,`${text} is a ${unit} task`);
+   assert.equal(C.specFromQuestion(text),null,`${text}: not a Calculus task`);
+  }
+  // every question a set prints reads back to its own spec
+  for(const tier of [1,2])for(let seed=0;seed<200;seed++){const sp=W7GEN[unit](seed,tier);assert.deepEqual(S.specFromQuestion(S.question(sp).plain),sp,`${unit} ${tier}/${seed}`);}
+ });
+ test(`W7 5-${unit}: the withheld sentence names the unit's method, carries no number, and leaks nothing on any generated item`,()=>{
+  const line=S.SCHOOL_WITHHELD[unit];
+  assert.equal(typeof line,'string');assert.doesNotMatch(line,/\d/);assert.match(line,/The answer is yours to work out\.$/);
+  for(const other of Object.keys(S.SCHOOL_UNIT_SLIPS))if(other!==unit)assert.notEqual(S.SCHOOL_WITHHELD[other],line,'each unit has its own line');
+  for(const tier of [1,2])for(let seed=0;seed<200;seed++){const sp=W7GEN[unit](seed,tier);assert.equal(S.leaksSchool(sp,line),false,`${unit} ${tier}/${seed}`);assert.equal(S.withheldSchool(sp),line);}
+  for(const [,sp] of rows.filter((r)=>r[1]))assert.equal(S.withheldSchool(sp),line);
+ });
+}
+
+/** A full set per unit: right, each of its slips, unsure, blank. Expected verdicts worked by hand (school-rules-test comments). */
+const W7_PAGES={
+ 'frac-equivalent':[
+  {spec:ms('3/4 = ?/12'),a:'9',want:['right']},{spec:ms('3/4 = ?/12'),a:'11',want:['wrong','added-same']},{spec:ms('6/8 = ?/12'),a:'6',want:['wrong','one-part-only']},
+  {spec:ms('3/4 = ?/12'),a:'36',want:['wrong','wrong-factor']},{spec:sm('18/24'),a:'9/12',want:['unsure']},{spec:sm('18/24'),a:'',want:['unsure']},
+  {spec:sm('18/24'),a:'3/4',want:['right']},{spec:ms('3/4 = 15/?'),a:'15/20',want:['right']},{spec:ms('3/4 = ?/12'),a:'0.75',want:['unsure']},{spec:sm('15/20'),a:'3/20',want:['wrong','one-part-only']},
+ ],
+};
+for(const unit of Object.keys(W7_PAGES)){
+ const page=W7_PAGES[unit];
+ test(`W7 6-${unit}: a full set (right, every slip, unsure, blank) is marked by code the same from a read photo and from typed answers, and calls no model when typed`,async()=>{
+  const ids=[...new Set(page.filter((p)=>p.want[1]).map((p)=>p.want[1]))];
+  assert.deepEqual(ids.sort(),[...S.SCHOOL_UNIT_SLIPS[unit]].sort(),'the set shows every slip of the unit');
+  assert.ok(page.some((p)=>p.want[0]==='right')&&page.some((p)=>p.want[0]==='unsure')&&page.some((p)=>!p.a),'right, unsure and blank are on it');
+  assert.deepEqual(M.slipsFor(unit).map((s)=>s.id),[...S.SCHOOL_UNIT_SLIPS[unit]],'slipsFor is the unit\'s closed list');
+  const put=()=>store.dispatch({type:'practice.set',practice:{topic:unit,marked:false,items:page.map((p,i)=>({n:i+1,question:question(p.spec),spec:p.spec,tier:1}))}});
+  // the photo path: the vision reader stubbed to read exactly these strings (and to volunteer a verdict, a solution and a slip, never read)
+  seat('uk');put();
+  stubVision(()=>({items:page.map((p,i)=>({n:i+1,studentAnswer:p.a,studentWorking:'',verdict:'right',solution:'1',slip:'tops-and-bottoms'}))}));
+  stubText(()=>{throw new Error('no text call while marking');});
+  assert.equal((await post('mark',PHOTO)).status,200);
+  assert.equal(seenVision.length,1);assert.equal(seenText.length,0);
+  assert.match(seenVision[0].prompt,/school maths questions/);
+  const photo=verdicts(),photoSkill={...learners.getLearner(LEARNER).skills[unit]};
+  // the typed path: every engine that could read a photo made to throw
+  seat('uk');put();noModel();
+  const r=await post('mark',{answers:page.map((p)=>p.a)});
+  assert.equal(r.status,200);assert.equal(seenVision.length+seenText.length,0,'no model call');
+  const body=await r.json();assert.equal(body.provider,'code');
+  const typed=verdicts();
+  assert.deepEqual(typed,photo,'the same verdicts, slips and lines from a photo and from typing');
+  page.forEach((p,i)=>{
+   const [verdict,slip]=p.want,it=typed[i];
+   assert.equal(it.verdict,verdict,`#${i+1} ${JSON.stringify(p.a)} on ${p.spec.expr}`);assert.equal(it.slip,slip,`#${i+1}: the slip code detected`);
+   if(verdict==='right')assert.equal(it.said,M.RIGHT(i+1));else if(slip)assert.equal(it.said,S.SCHOOL_SLIPS.find((x)=>x.id===slip).says);else assert.equal(it.said,M.ASK(i+1));
+  });
+  const settledN=page.filter((p)=>p.want[0]!=='unsure').length,right=page.filter((p)=>p.want[0]==='right').length;
+  const sk=learners.getLearner(LEARNER).skills[unit];
+  assert.equal(sk.seen,settledN,'only settled items reach the record');assert.equal(sk.seen,photoSkill.seen);assert.equal(sk.right,right);
+  assert.deepEqual([...sk.slips].sort(),[...new Set(page.filter((p)=>p.want[1]).map((p)=>p.want[1]))].sort(),'the record keeps the slips code named');
+  assert.equal(lastLine().detail,`${right} of ${page.length} right, ${page.length-settledN} not sure`);
+  assert.equal(lastLine().label,topicIn(unit)?.name??unit,'the history line names the unit as the path does');
+  store.getSession().practice.items.forEach((it,i)=>assert.deepEqual(it.spec,page[i].spec,'the spec survives marking'));
+ });
+}
