@@ -30,15 +30,17 @@ const SPINE_KEYS=['blurb','id','name','prereq','sections','sessions','shapes','s
 /** Source with comments removed, so a word in a comment never passes or fails a scan. */
 const code=(file)=>fs.readFileSync(file,'utf8').replace(/\/\*[\s\S]*?\*\//g,'').replace(/(^|[^:])\/\/.*$/gm,'$1');
 
-test('1: 22 Calculus topics and 3 school topics, ids unique across paths and no id in two paths',()=>{
+test('1: 22 Calculus topics and 4 school topics, ids unique across paths and no id in two paths',()=>{
  assert.equal(CALC1_SPINE.length,22);
  assert.deepEqual(Object.keys(P.PATHS).sort(),['calc1','school']);
  assert.equal(P.PATHS.calc1.topics.length,22);
- assert.equal(P.PATHS.school.topics.length,3);
+ // W5b: 'Add and subtract fractions' joined the school path in place (owner decision D5), first on it
+ assert.equal(P.PATHS.school.topics.length,4);
+ assert.equal(P.PATHS.school.topics[0].id,'frac-add-sub');
  const ids=[...P.PATHS.school.topics,...P.PATHS.calc1.topics].map(t=>t.id);
- assert.equal(new Set(ids).size,25,'every topic id is unique across both paths');
+ assert.equal(new Set(ids).size,26,'every topic id is unique across both paths');
  for(const t of P.PATHS.school.topics)assert.ok(!P.PATHS.calc1.topics.some(c=>c.id===t.id),`${t.id} is in two paths`);
- assert.equal(P.PATHS.school.name,'Linear equations');assert.equal(P.PATHS.school.school,true);assert.equal(P.PATHS.school.id,'school');
+ assert.equal(P.PATHS.school.name,'School maths','renamed in W5b (owner decision D5)');assert.equal(P.PATHS.school.school,true);assert.equal(P.PATHS.school.id,'school');
  assert.equal(P.PATHS.calc1.name,'Calculus 1');assert.equal(P.PATHS.calc1.school,false);assert.equal(P.PATHS.calc1.id,'calc1');
  for(const p of Object.values(P.PATHS))assert.match(p.blurb,/^[A-Z][^.!?]*[.!?]$/,`${p.id}: the blurb is one sentence`);
 });
@@ -125,8 +127,10 @@ test('9: nextOn is the first topic not secure whose prereqs are all secure',()=>
  const onlyFunctions=P.PATHS.calc1.topics.find(t=>t.prereq.length===1&&t.prereq[0]==='calc1-functions');
  assert.equal(P.nextOn('calc1',['calc1-functions']).id,onlyFunctions.id);
  assert.equal(onlyFunctions.id,'calc1-trig');
- assert.equal(P.nextOn('school',[]).id,'linear-one-step');
- assert.equal(P.nextOn('school',['linear-one-step']).id,'linear-two-step');
+ // W5b: fractions come first and need nothing, so they are the first topic whose prereqs are met
+ assert.equal(P.nextOn('school',[]).id,'frac-add-sub');
+ assert.equal(P.nextOn('school',['frac-add-sub']).id,'linear-one-step');
+ assert.equal(P.nextOn('school',['frac-add-sub','linear-one-step']).id,'linear-two-step');
  assert.equal(P.nextOn('school',SYLLABUS.map(t=>t.id)),undefined,'nothing left');
  assert.equal(P.nextOn('calc1',CALC1_SPINE.map(t=>t.id)),undefined);
 });

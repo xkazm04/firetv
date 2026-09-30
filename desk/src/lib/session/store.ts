@@ -19,6 +19,7 @@ import { watchDue, type Watch } from "../library/watched";
 import type { RuleCard } from "../rules/english";
 import { restatedLine, slipsFor } from "../rules/maths";
 import { CALC_SHAPES, type CalcSpec } from "../rules/calc";
+import { SCHOOL_SHAPES, wellFormed as schoolWellFormed, type SchoolSpec } from "../rules/school";
 import type { Fix, Sentence, Was } from "../rules/essay";
 import type { Mode } from "../rules/mode";
 import { emptyEnglish, type Conversation, type EnglishLearning, type LevelCheck } from "../english/types";
@@ -90,10 +91,14 @@ export interface PracticeItem {
    */
   slipAt?: SlipAt;
   /**
-   * A Calculus item's spec (rules/calc.ts): its shape and the parameters its question prints, so marking can judge the
-   * learner's answer by recomputing the truth. It holds nothing the question does not already print - no result.
+   * A Calculus item's spec (rules/calc.ts), or a school item's (rules/school.ts, Family W5b): its shape and the parameters
+   * its question prints, so marking can judge the learner's answer by recomputing the truth. It holds nothing the
+   * question does not already print - no result. Which engine reads it is decided by `spec.shape` alone: a Calculus
+   * shape is never read by school code, a school shape never by Calculus code.
    */
-  spec?: CalcSpec;
+  spec?: CalcSpec | SchoolSpec;
+  /** A school item's tier (1 or 2), as the generator that wrote it was asked for: computed by code, never a model's number. */
+  tier?: 1 | 2;
 }
 /**
  * `nth`: which occurrence of `span` in the line is meant (0 = the first, as maths/typeset `spanStarts` counts
@@ -113,11 +118,23 @@ export interface Practice { topic: string; items: PracticeItem[]; pageId?: strin
 
 /** A spec's own parameters, by name: the ones its question prints. `zero` (the result, for a symmetry item) is not one. */
 const SPEC_KEYS = ["f", "at", "a", "b", "side", "on", "kind", "x0", "steps"] as const;
+/** A school spec's own parameters (rules/school.ts SchoolSpec): the expression, the form and unit asked for, the sign flag. */
+const SCHOOL_SPEC_KEYS = ["expr", "form", "unit", "allowNegative"] as const;
 const plainValue = (v: unknown) => typeof v === "string" || (typeof v === "number" && Number.isFinite(v));
-/** A spec as a screen may see it: a known shape and only its printed parameters - any other key (an answer) stops here. */
-function specShown(x: unknown): CalcSpec | undefined {
+/**
+ * A spec as a screen may see it: a known shape and only its printed parameters - any other key (an answer) stops here.
+ * Dispatched on `shape`: a Calculus shape keeps SPEC_KEYS, a school shape keeps SCHOOL_SPEC_KEYS and must still be
+ * well formed by rules/school (a spec that is not is dropped, so no school code ever reads one it cannot judge).
+ */
+function specShown(x: unknown): CalcSpec | SchoolSpec | undefined {
   const o = x as Record<string, unknown> | null;
-  if (!o || typeof o !== "object" || !(CALC_SHAPES as readonly unknown[]).includes(o.shape)) return undefined;
+  if (!o || typeof o !== "object") return undefined;
+  if ((SCHOOL_SHAPES as readonly unknown[]).includes(o.shape)) {
+    const out: Record<string, unknown> = { shape: o.shape };
+    for (const k of SCHOOL_SPEC_KEYS) if (o[k] !== undefined) out[k] = o[k];
+    return schoolWellFormed(out).ok ? (out as SchoolSpec) : undefined;
+  }
+  if (!(CALC_SHAPES as readonly unknown[]).includes(o.shape)) return undefined;
   const out: Record<string, unknown> = { shape: o.shape };
   for (const k of SPEC_KEYS) {
     const v = o[k];
@@ -127,7 +144,7 @@ function specShown(x: unknown): CalcSpec | undefined {
   return out as unknown as CalcSpec;
 }
 /** Only the fields a screen may see — an answer riding in on an event or an older session.json stops here. */
-function shown({ n, question, studentAnswer, studentWorking, verdict, slip, said, reply, slipAt, spec }: PracticeItem): PracticeItem {
+function shown({ n, question, studentAnswer, studentWorking, verdict, slip, said, reply, slipAt, spec, tier }: PracticeItem): PracticeItem {
   const item: PracticeItem = { n, question };
   if (studentAnswer !== undefined) item.studentAnswer = studentAnswer;
   if (studentWorking !== undefined) item.studentWorking = studentWorking;
@@ -139,6 +156,7 @@ function shown({ n, question, studentAnswer, studentWorking, verdict, slip, said
   if (at && verdict === "wrong") item.slipAt = at;
   const sp = specShown(spec);
   if (sp) item.spec = sp;
+  if (sp && (tier === 1 || tier === 2)) item.tier = tier;
   return item;
 }
 const shownPractice = (p: Practice | null | undefined): Practice | null => (p ? { ...p, items: (p.items ?? []).map(shown) } : null);

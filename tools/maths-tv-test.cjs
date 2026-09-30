@@ -298,8 +298,9 @@ test('data 1: a count above the word list is written in digits, never "undefined
 
 test('data 2: the first evening\'s title is the first topic on the path, from the syllabus',()=>{
  const {secureTitle}=R();const {SYLLABUS}=require(path.join(root,'src/lib/library/syllabus.ts'));
- // owner decision 2026-09-29: the school path's first evening reads 'Linear equations', the path's name, not its first topic
- assert.equal(secureTitle(0,SYLLABUS.length),'Linear equations, from the first step');
+ // owner decision 2026-09-29: the school path's first evening reads the path's name, not its first topic; W5b renamed the
+ // path 'School maths' (decision D5), so the title is 'School maths, from the first step'
+ assert.equal(secureTitle(0,SYLLABUS.length),'School maths, from the first step');
  assert.equal(secureTitle(0,5,'Limits'),'Limits, from the first step','whatever the first topic is');
 });
 
@@ -319,7 +320,7 @@ test('data 4: MathsTV keeps no hand list - no COUNT, no fixed weeks, no literal 
  const tv=tvSrc();
  assert.doesNotMatch(tv,/const COUNT\b/,'no COUNT word list');
  assert.doesNotMatch(tv,/\["Week 1",\s*0,\s*3\]/,'no fixed weeks');
- assert.doesNotMatch(tv,/Linear equations, from the first step/,'no literal title');
+ assert.doesNotMatch(tv,/(Linear equations|School maths), from the first step/,'no literal title');
  assert.match(fnBody(tv,'Calendar'),/calendarWeeks\(list\.length\)/,'the weeks are the lesson count\'s');
  assert.match(fnBody(tv,'Tonight'),/secureTitle\(/,'the title is secureTitle\'s');
 });
@@ -360,13 +361,13 @@ test('path 1: on the calc1 path the states are the Calculus topics - a latched c
 test('path 2: a record off the learner\'s path is ignored - calc1 on a school profile, school on a calc1 profile',()=>{
  const {topicStates}=R();
  const school=topicStates(onPath(SCHOOL,{'calc1-functions':rec('calc1-functions',0.9,true)}));
- assert.deepEqual(Object.keys(school),['linear-one-step','linear-two-step','linear-both-sides']);
- assert.equal(school['linear-one-step'],'next');assert.ok(!('calc1-functions' in school));
+ assert.deepEqual(Object.keys(school),['frac-add-sub','linear-one-step','linear-two-step','linear-both-sides'],'W5b: fractions first');
+ assert.equal(school['linear-one-step'],'next');assert.equal(school['frac-add-sub'],'next');assert.ok(!('calc1-functions' in school));
  const calc=topicStates(onPath(CALC,{'linear-one-step':rec('linear-one-step',0.9,true)}));
  assert.ok(!('linear-one-step' in calc));assert.equal(calc['calc1-functions'],'next');
  assert.ok(!Object.values(calc).includes('secure'),'nothing on the calc1 path is secure');
  // without profiles or a learner: the school path, as the ruler cases above call it
- assert.deepEqual(Object.keys(topicStates({skills:{},topic:null})),['linear-one-step','linear-two-step','linear-both-sides']);
+ assert.deepEqual(Object.keys(topicStates({skills:{},topic:null})),['frac-add-sub','linear-one-step','linear-two-step','linear-both-sides']);
 });
 
 test('path 3: a topic is named by its path (topicIn), humanised only when no path knows the id',()=>{
@@ -384,14 +385,14 @@ test('path 4: Tonight\'s title counts the learner\'s path - "N of 22", every top
  assert.equal(secureTitle(0,22,pathFirst('calc1')),'Calculus 1, from the first step');
  assert.equal(secureTitle(7,22,pathFirst('calc1')),'7 of 22 topics secure');
  assert.equal(secureTitle(22,22,pathFirst('calc1')),'Every topic on the path is secure');
- assert.equal(pathFirst('school'),'Linear equations','the school path reads by its own name, not its first topic (owner decision 2026-09-29)');
+ assert.equal(pathFirst('school'),'School maths','the school path reads by its own name, not its first topic (owner decision 2026-09-29; renamed in W5b, D5)');
  const seven=Object.fromEntries(calcIds().slice(0,7).map(id=>[id,rec(id,0.9,true)]));
  const title=(s)=>{const p=pathSecure(s);return secureTitle(p.secure.length,p.topics.length,p.first);};
  assert.equal(title(onPath(CALC,{...seven,'linear-one-step':rec('linear-one-step',0.9,true)})),'7 of 22 topics secure','a school record is not one of the 22');
  assert.equal(title(onPath(CALC,{})),'Calculus 1, from the first step');
- assert.equal(title(onPath(SCHOOL,seven)),'Linear equations, from the first step','calc1 records on a school profile count for nothing');
- assert.equal(title(onPath(SCHOOL,{'linear-one-step':rec('linear-one-step',0.9,true)})),'One of 3 topics secure');
- assert.equal(title({skills:{}}),'Linear equations, from the first step','no learner: the school path');
+ assert.equal(title(onPath(SCHOOL,seven)),'School maths, from the first step','calc1 records on a school profile count for nothing');
+ assert.equal(title(onPath(SCHOOL,{'linear-one-step':rec('linear-one-step',0.9,true)})),'One of 4 topics secure');
+ assert.equal(title({skills:{}}),'School maths, from the first step','no learner: the school path');
 });
 
 test('path 5: MathsTV names and counts through the path - no topicById, no SYLLABUS, and a year word only for a topic with a year',()=>{

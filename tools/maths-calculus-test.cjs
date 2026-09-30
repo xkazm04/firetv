@@ -297,6 +297,25 @@ test('6: the ratchet has teeth - a seeded break, degrade and check are each obse
  assert.equal(checkStatus({kind:'question',plain:'3x - 7 = 11',answer:'5'}),'none','an answer that does not hold is not checked');
 });
 
+test('7: the school corpus (Family W5b) - every fractions question the generator prints renders on the practice sheet, fractions stacked',()=>{
+ // desk/src/lib/rules/school.ts prints each question itself (plain and TeX); the practice sheet sets the plain form.
+ // Seeds 0..99 at both tiers: every form renders where a question sits (no drop, no raw TeX, inside its row), with
+ // both operands and nothing else stacked, so a fraction's numerals are set at the fraction-part size (max(.78em, 28px)).
+ const S=require(path.join(root,'src/lib/rules/school.ts'));
+ const off=[];let n=0;
+ for(const tier of [1,2])for(let seed=0;seed<100;seed++){
+  const q=S.question(S.gen(seed,tier));n++;
+  for(const [form,line,tex] of [['plain',q.plain,false],['tex',q.tex,true]]){
+   const st=renderStatus(line,'question',tex);
+   if(st!=='renders')off.push(`${tier}/${seed} ${form} ${line}: ${st}`);
+   let fr=0;T.walk(T.parseMath(line),(x)=>{if(x.t==='frac')fr++;});
+   if(fr!==2)off.push(`${tier}/${seed} ${form} ${line}: ${fr} stacked fractions`);
+  }
+ }
+ assert.equal(n,200);
+ assert.equal(off.length,0,'a school question that does not set cleanly:\n'+off.join('\n'));
+});
+
 after(()=>{
  // the baseline table: topic x example -> render (plain | tex), check
  const pad=(s,n)=>String(s).padEnd(n);

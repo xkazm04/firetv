@@ -1,7 +1,8 @@
 /**
  * School numbers, decided in code (Family Phase 1, W5a): the answer reader, the fractions checker, the hint leak
- * check and the first unit's generator. Offline core only: nothing here is wired to the store, items, marking, hints
- * or the TV yet (W5b does that after review).
+ * check and the first unit's generator. W5b wires them: the store keeps a school spec (session/store specShown, by
+ * shape), a set on a unit in SCHOOL_GENERATORS is written here with no model call (desk/items makeSchoolItems),
+ * marking judges it with `check`, and hints and explanations pass `leaksSchool`.
  *
  * The stances this file holds:
  *   - Code decides right and wrong. The truth is recomputed from the spec every time with EXACT rational arithmetic
@@ -896,7 +897,8 @@ export function gen(seed: unknown, tier: unknown): SchoolSpec | null {
   if (typeof seed !== "number" || !Number.isInteger(seed) || seed < 0 || seed > 0xffffffff) return null;
   if (tier !== 1 && tier !== 2) return null;
   const rnd = prng(seed * 2 + tier);
-  const pick = <T>(xs: T[]): T => xs[Math.floor(rnd() * xs.length)];
+  // a function, not a generic arrow: a suite that transpiles with JSX on would read `<T>(` as a tag (desk-pairing-test)
+  function pick<T>(xs: T[]): T { return xs[Math.floor(rnd() * xs.length)]; }
   for (let k = 0; k < MAX_TRIES; k++) {
     let [b, d] = pick(PAIRS[tier]);
     let a = pick(tops(b)), c = pick(tops(d));
@@ -914,3 +916,14 @@ export function gen(seed: unknown, tier: unknown): SchoolSpec | null {
   }
   return tier === 1 ? { shape: "compute", expr: "1/4 + 1/2" } : { shape: "compute", expr: "3/4 + 1/6" };
 }
+
+/**
+ * The units whose practice sets code writes, by syllabus topic id, each with its generator (Family W5b: add and
+ * subtract fractions only; W7 adds the other units). A topic not here is written as it always was.
+ */
+export const SCHOOL_GENERATORS: Readonly<Record<string, (seed: number, tier: 1 | 2) => SchoolSpec | null>> = {
+  "frac-add-sub": (seed, tier) => gen(seed, tier),
+};
+/** The generator for a topic id, or null: an own key only, so 'constructor' is not a unit. */
+export const generatorFor = (topicId: unknown) =>
+  typeof topicId === "string" && Object.prototype.hasOwnProperty.call(SCHOOL_GENERATORS, topicId) ? SCHOOL_GENERATORS[topicId] : null;

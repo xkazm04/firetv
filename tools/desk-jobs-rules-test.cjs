@@ -139,12 +139,13 @@ test('the TV reads the jobs: Select waits while a set or a hint is being made, a
  onPage();const s=store.getSession();
  assert.deepEqual(tvKey({...s,jobs:{hint:{id:'h',phase:'running',startedAt:0}}},'select',LOCAL).calls,[],'no second hint from the TV while one runs');
  assert.equal(tvKey(s,'select',LOCAL).calls.length,1);
- const topics={...s,screen:'topics',focus:1,topic:'linear-two-step'};
+ // the focus is the topic's place on the school path (W5b put 'Add and subtract fractions' first), not a fixed number
+ const topics={...s,screen:'topics',focus:require(src('lib/library/syllabus.ts')).SYLLABUS.findIndex((t)=>t.id==='linear-two-step'),topic:'linear-two-step'};
  assert.deepEqual(tvKey({...topics,jobs:{practice:{id:'p',phase:'running',startedAt:0,key:'linear-two-step'}}},'select',LOCAL).calls,[]);
  const failed={...topics,jobs:{practice:{id:'p',phase:'failed',startedAt:0,key:'linear-two-step',error:'The desk could not write this set. Try again.'}}};
  assert.equal(practiceFailed(failed,'linear-two-step'),'The desk could not write this set. Try again.');assert.equal(practiceFailed(failed,'linear-one-step'),null);
  assert.deepEqual(tvKey(failed,'select',LOCAL).calls.map(c=>c.body),[{topic:'linear-two-step'}],'Select on the failed topic asks again');
- store.dispatch({type:'topic.open',topic:'linear-two-step'});assert.equal(store.getSession().focus,1,'the open topic keeps the focus');
+ store.dispatch({type:'topic.open',topic:'linear-two-step'});assert.equal(store.getSession().focus,topics.focus,'the open topic keeps the focus');
 });
 
 // ---- retry in place (engines B): a failed run is asked again from what the desk holds ----

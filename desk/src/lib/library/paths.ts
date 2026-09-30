@@ -1,6 +1,7 @@
 /**
- * Math paths: a learner's Math course as a thing the desk can name. The 'school' path is the linear-equation spine
- * (SYLLABUS, unchanged, with its school-year bands); the 'calc1' path is the Calculus 1 course (CALC1_SPINE), which
+ * Math paths: a learner's Math course as a thing the desk can name. The 'school' path, "School maths", is the school
+ * spine (SYLLABUS as it stands: add and subtract fractions, then linear equations, with its school-year bands; Family
+ * W5b extended it in place and renamed it, owner decision D5); the 'calc1' path is the Calculus 1 course (CALC1_SPINE), which
  * has no school year. Every screen and pipeline that needs "the" topic list asks here - for the learner's path - rather
  * than reading SYLLABUS directly.
  *
@@ -38,8 +39,8 @@ export interface PathInfo {
 export const PATHS: Record<MathPath, PathInfo> = {
   school: {
     id: "school",
-    name: "Linear equations",
-    blurb: "School algebra's linear equations, from one step to brackets and x on both sides.",
+    name: "School maths",
+    blurb: "School maths from adding fractions to equations with brackets and x on both sides.",
     school: true,
     topics: SYLLABUS.map((t): PathTopic => ({
       id: t.id, name: t.name, strand: t.strand, blurb: t.blurb, prereq: t.prereq,

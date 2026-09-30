@@ -1,13 +1,20 @@
 /**
- * Our own topic spine for linear equations.
+ * Our own topic spine for school maths: add and subtract fractions, then linear equations.
  *
  * The bands below (US grade, UK year, Czech ročník, German Klasse) are OUR OWN EDITORIAL
  * JUDGEMENT, informed by reading public curriculum outlines and then written from scratch.
  * No curriculum text is copied into this repo, and none is quoted. Germany sets its
  * curriculum per Bundesland, so those bands are given as a range and say so.
  *
- * The three topics are deliberately the intersection: what the US, UK, Czech and German
- * systems all teach at roughly the same stage of school algebra. Nothing nation-specific.
+ * The topics are deliberately the intersection: what the US, UK, Czech and German systems all
+ * teach at roughly the same stage of school maths. Nothing nation-specific. The list is in the
+ * order a learner meets the topics, and each system's year never goes down along it
+ * (tools/maths-rules-test.cjs holds that): expectedIndex counts on it.
+ *
+ * "Add and subtract fractions" (Family W5b) comes first: it is met before linear equations. Its
+ * bands and years were written FROM MEMORY and are unchecked; a maths teacher reads them before
+ * release. It has no lessonId: the lesson library has no fractions lesson, so every screen that
+ * looks one up finds none and says so (the existing "No lesson for this" state).
  */
 import type { SchoolSystem } from "@/lib/session/store";
 
@@ -24,6 +31,16 @@ export interface Topic {
 }
 
 export const SYLLABUS: Topic[] = [
+  {
+    id: "frac-add-sub",
+    name: "Add and subtract fractions",
+    strand: "Fractions",
+    blurb: "Two fractions need the same bottom before they can be combined, so you rewrite each over a common one and then add or take away the tops.",
+    // from memory, unchecked: a maths teacher reads these four before release
+    bands: { us: "Grade 5", uk: "Year 6", cz: "5. ročník", de: "Klasse 5 (varies by Bundesland)" },
+    year: { us: 5, uk: 6, cz: 5, de: 5 },
+    prereq: [],
+  },
   {
     id: "linear-one-step",
     name: "One-step equations",

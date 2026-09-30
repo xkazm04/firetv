@@ -187,8 +187,9 @@ value is drawn as `x = <answer>`, but an item with a spec asks for no x, so a Ca
   screen). Every screen names a set by its path's name for it (`topicName`), never a spelled-out id. Teach me
   something opens Topics at the learner's **frontier**, the first topic not latched secure whose prerequisites all
   are (`topicsFocus` in `desk/src/tv/keys.ts`), and at the first stop when nothing or everything is secure.
-  Where each box, tick, strand label and needle goes is `rulerModel` in `desk/src/tv/rulerRows.ts`; the three-topic
-  school path is drawn exactly as before. A path too long for one box per topic on the big ruler (under 288 px a
+  Where each box, tick, strand label and needle goes is `rulerModel` in `desk/src/tv/rulerRows.ts`; the school path,
+  **School maths** (four topics since Family W5b: Add and subtract fractions, then the three linear-equation topics,
+  in two strands), keeps one box per topic, as before. A path too long for one box per topic on the big ruler (under 288 px a
   slot: Calculus 1's 22 topics in six strands) **pans under the lamp** like the paper: the track is wider than the
   stage and slides (the paper's .76 s pan) so the focused topic's centre sits under the lamp, clamped so neither end
   ever shows a gap; the focused topic takes a 640 px slot so its whole name is shown in at most three lines, fitted
@@ -229,7 +230,7 @@ value is drawn as `x = <answer>`, but an item with a spec asks for no x, so a Ca
 |---|---|
 | Tonight | top bar; the sheet on the desk + kicker, title, detail, OK Open (or the first-evening title and blank sheet); two doors; the caption; the ruler (a path of more than eight topics: the strand strip) |
 | Topics | "Pick a *topic*"; the strand and blurb (or Preparing / Not written); the ruler, larger, each topic on the learner's path a stop, the lamp opening on the frontier (a long path pans under the lamp, chevrons at the edges) |
-| Practice | the paper headed with the topic's name on its path, with the six questions in print (on Calculus 1, questions the desk printed itself from its specs: "Differentiate f(x) = ...", "Find lim_(x->0) ..."); the side: "Work these on *paper*" and the taped card |
+| Practice | the paper headed with the topic's name on its path, with the six questions in print (on Calculus 1, questions the desk printed itself from its specs: "Differentiate f(x) = ...", "Find lim_(x->0) ..."; on Add and subtract fractions, six the desk wrote itself with no model call, three gentler then three with unlike bottoms: "Work out 3/4 + 1/6.", the fractions stacked); the side: "Work these on *paper*" and the taped card |
 | Sheet | the tally; the marked set on the paper, each item folded to its question and the line the pen is on, the focused one lit with OK Open; the side: kind, slip name, taped card; pills Six more ("Six more on" the topic's name), Put the sheet away |
 | Walk | the same paper with one item open: every line of working, ticks, the mark, later lines faded; the side card; Back to the sheet on the last item |
 | Page | the snapped sheet as paper, its OCR'd problems in print, the one under the lamp lifted with OK Hint; the side: problem count, read time, the real photo with the band; Menu shows the photo whole |

@@ -1,5 +1,5 @@
 /**
- * Math Buddy's ruler, as numbers (desk/src/tv/rulerRows.ts): the three-topic school ruler is drawn exactly as it was,
+ * Math Buddy's ruler, as numbers (desk/src/tv/rulerRows.ts): the school ruler (four topics since W5b) keeps its formulas,
  * a long path (Calculus 1, 22 topics in six strands) pans under the lamp with the focused topic in view and its strand
  * labels clamped to their strands, and Tonight draws a long path as one bar per strand with the learner's needle at
  * the frontier. Run with npm test in desk/ (directly: node tools/maths-ruler-test.cjs). Pure: no store, no browser.
@@ -22,12 +22,13 @@ const firstSecure=(topics,n)=>Object.fromEntries(topics.map((t,i)=>[t.id,i<n?'se
 
 // ---------------------------------------------------------------- 1. the school ruler is drawn as it was
 
-test('ruler model 1: N = 3 (the school path) keeps today\'s formulas - span, boxes, ticks, strand label, needle, flag',()=>{
+test('ruler model 1: N = 4 (the school path since W5b) keeps today\'s formulas - span, boxes, ticks, strand labels, needle, flag',()=>{
  const {rulerModel,needleX,flagX,TRACK,PAD}=RR();
  assert.equal(TRACK,1728,'the ruler is the stage less its two 96 px safe margins');assert.equal(PAD,26,'26 px each end, the 52 px margins');
- const topics=school(),N=topics.length;assert.equal(N,3);
+ // W5b: 'Add and subtract fractions' joined the school path first, in its own strand: four topics, two strands
+ const topics=school(),N=topics.length;assert.equal(N,4);
  const span=(1728-26*2)/N;
- for(const big of [false,true])for(const focus of [undefined,0,1,2]){
+ for(const big of [false,true])for(const focus of [undefined,0,1,2,3]){
   const m=rulerModel(topics,firstSecure(topics,1),focus,big);
   assert.equal(m.span,span,'span = (1728 - 52) / N');
   assert.equal(m.trackWidth,1728);assert.equal(m.offset,0,'nothing to pan');assert.equal(m.pan,false);
@@ -38,10 +39,11 @@ test('ruler model 1: N = 3 (the school path) keeps today\'s formulas - span, box
    assert.equal(t.sx-1.5,26+i*span-1.5,`tick ${i}`);
   });
   assert.equal(m.end-1.5,26+N*span-1.5,'the end tick');
-  assert.equal(m.strands.length,1);
-  assert.deepEqual({name:m.strands[0].name,labelX:m.strands[0].labelX,label:m.strands[0].label},{name:'Equations',labelX:26+0*span+20,label:'Equations'},'the one strand label where it was, unclamped');
-  for(const [fr,fill] of [[0,0],[0,0.4],[1,0.7],[2,1]])assert.equal(needleX(m,fr,fill),26+(fr+fill)*span,`needle at ${fr}+${fill}`);
-  for(const exp of [-1,0,1,2,3,5])assert.equal(flagX(m,exp),26+Math.max(0,Math.min(N,exp))*span,`school tick at ${exp}`);
+  assert.equal(m.strands.length,2);
+  assert.deepEqual({name:m.strands[0].name,labelX:m.strands[0].labelX,label:m.strands[0].label},{name:'Fractions',labelX:26+0*span+20,label:'Fractions'},'the fractions strand over the first slot, unclamped');
+  assert.deepEqual({name:m.strands[1].name,labelX:m.strands[1].labelX,label:m.strands[1].label},{name:'Equations',labelX:26+1*span+20,label:'Equations'},'the equations strand from the second slot, unclamped');
+  for(const [fr,fill] of [[0,0],[0,0.4],[1,0.7],[2,1],[3,1]])assert.equal(needleX(m,fr,fill),26+(fr+fill)*span,`needle at ${fr}+${fill}`);
+  for(const exp of [-1,0,1,2,3,4,5])assert.equal(flagX(m,exp),26+Math.max(0,Math.min(N,exp))*span,`school tick at ${exp}`);
  }
  assert.equal(rulerModel(topics,{},0,true).topics[1].state,'later','a topic with no state is later');
  assert.equal(rulerModel(topics,firstSecure(topics,1),0,true).topics[0].state,'secure');

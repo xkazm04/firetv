@@ -11,6 +11,10 @@
  * topic's own list and its parameters - and never a question in words or its result. Code keeps a spec only when
  * rules/calc says it is well formed, prints the question from it, orders the set easy to hard, and carries the spec
  * on the item so marking can judge with no stored truth (makeCalcItems).
+ *
+ * A school unit with a generator (rules/school SCHOOL_GENERATORS; Family W5b: add and subtract fractions) takes a
+ * third road with NO model call at all: code draws the specs from a fresh seed, three at tier 1 and three at tier 2,
+ * prints each question itself and carries the spec and the tier on the item (makeSchoolItems, provider "code").
  */
 import { text } from "../engines/text";
 import { topic } from "../library/syllabus";
@@ -21,6 +25,7 @@ import type { PracticeItem } from "../session/store";
 import { pathOfTopic, topicIn } from "../library/paths";
 import { CALC1_SPINE } from "../library/calculus1.spine";
 import { CALC_SLIPS, leaksCalc, question as printed, wellFormed, type CalcShape, type CalcSpec } from "../rules/calc";
+import { generatorFor, leaksSchool, question as schoolQuestion, wellFormed as schoolWellFormed, type SchoolSpec } from "../rules/school";
 import type { JSONSchema } from "../engines/types";
 
 const SCHEMA = {
@@ -96,6 +101,7 @@ export async function makeItems(
   n = 6,
 ): Promise<{ items: PracticeItem[]; provider: string; ms: number; tries: number }> {
   if (pathOfTopic(topicId) === "calc1") return makeCalcItems(topicId, learnerId, n);
+  if (pathOfTopic(topicId) === "school" && generatorFor(topicId)) return makeSchoolItems(topicId, n);
   const me = getLearner(learnerId);
   const memory = me.memory;
   // the named mistakes this learner has made HERE: the set is written for them, not for the topic
@@ -277,4 +283,42 @@ async function makeCalcItems(topicId: string, learnerId: string, n: number): Pro
 
   const ordered = kept.slice().sort((a, b) => a.difficulty - b.difficulty || a.spec.f.length - b.spec.f.length);
   return { items: ordered.slice(0, n).map((k, ix) => ({ n: ix + 1, question: k.question, spec: k.spec })), provider, ms, tries };
+}
+
+// ------------------------------------------------------------------ school units: written by code, no model call
+
+/** The seeds one set may try per tier before it stops: far more than a unit's generator needs for three distinct items. */
+const SCHOOL_TRIES = 400;
+/** A fresh seed for a set: any whole number the generators take (0 .. 2^32 - 1). */
+const freshSeed = () => Math.floor(Math.random() * 0x100000000);
+
+/**
+ * A set on a school unit that has a generator, written by CODE with no model call: the first half (rounded up) at
+ * tier 1 and the rest at tier 2 - three and three for six - drawn from `seed` onward (a fresh seed per set unless
+ * one is given, which the tests do). A spec is kept only when rules/school says it is well formed, prints, does not
+ * state its own answer in its question (leaksSchool) and is not a question already kept, so the six are distinct.
+ * The tier is the one code asked the generator for, never a model's number. Each item is { n, question: the printed
+ * question, spec, tier }; provider "code", no tries (no engine call). Fewer than n only if a generator runs dry.
+ */
+export function makeSchoolItems(topicId: string, n = 6, seed: number = freshSeed()): { items: PracticeItem[]; provider: string; ms: number; tries: number } {
+  const t0 = Date.now();
+  const make = generatorFor(topicId);
+  const kept: { spec: SchoolSpec; question: string; tier: 1 | 2 }[] = [];
+  const seen = new Set<string>();
+  const first = Math.ceil(n / 2);
+  for (const [tier, want] of [[1, first], [2, n - first]] as const) {
+    let got = 0;
+    for (let k = 0; make && k < SCHOOL_TRIES && got < want; k++) {
+      const spec = make((seed + k) % 0x100000000, tier);
+      if (!spec || !schoolWellFormed(spec).ok) continue;
+      const q = schoolQuestion(spec);
+      if (!q || leaksSchool(spec, q.plain)) continue;
+      const key = sameKey(q.plain);
+      if (seen.has(key)) continue;
+      seen.add(key);
+      kept.push({ spec, question: q.plain, tier });
+      got++;
+    }
+  }
+  return { items: kept.slice(0, n).map((k, ix) => ({ n: ix + 1, question: k.question, spec: k.spec, tier: k.tier })), provider: "code", ms: Date.now() - t0, tries: 0 };
 }

@@ -80,7 +80,7 @@ test('2: topic.open for calc1-chain on a calc1 learner focuses index 9; a school
 });
 
 // ---- the keys walk the learner's path ----
-test('3: Topics walks topicStops(s) - 22 on Calculus 1 (Right x21 reaches the last, Select opens it), 3 on the school path',()=>{
+test('3: Topics walks topicStops(s) - 22 on Calculus 1 (Right x21 reaches the last, Select opens it), 4 on the school path',()=>{
  const {tvKey,topicStops,TOPIC_STOPS}=keys();
  assert.equal(TOPIC_STOPS,SYLLABUS,'TOPIC_STOPS stays the school syllabus for the existing tests');
  let s=session(CALC_P,{screen:'topics',focus:0});
@@ -92,11 +92,12 @@ test('3: Topics walks topicStops(s) - 22 on Calculus 1 (Right x21 reaches the la
  assert.deepEqual(sel.events,[{type:'topic.open',topic:'calc1-area-average'}]);
  assert.deepEqual(sel.calls.map((c)=>c.body),[{topic:'calc1-area-average'}]);
  let sc=session(SCHOOL_P,{screen:'topics',focus:0});
- assert.equal(topicStops(sc).length,3,'a school learner still has 3 stops');
+ // W5b: 'Add and subtract fractions' joined the school path first, so a school learner has 4 stops
+ assert.equal(topicStops(sc).length,4,'a school learner has 4 stops');
  for(let i=0;i<5;i++)sc={...sc,focus:focusAfter(sc,tvKey(sc,'right',LOCAL))};
- assert.equal(sc.focus,2);
- assert.deepEqual(tvKey(sc,'select',LOCAL).events,[{type:'topic.open',topic:SYLLABUS[2].id}]);
- assert.equal(topicStops(session({...SCHOOL_P,mathPath:undefined})).length,3,'no mathPath is the school path');
+ assert.equal(sc.focus,3);
+ assert.deepEqual(tvKey(sc,'select',LOCAL).events,[{type:'topic.open',topic:SYLLABUS[3].id}]);
+ assert.equal(topicStops(session({...SCHOOL_P,mathPath:undefined})).length,4,'no mathPath is the school path');
 });
 
 test('4: "Teach me something" opens Topics at the frontier - 0, 7 and 22 secure on Calculus 1; 0 with nothing secure on school',()=>{
@@ -132,7 +133,7 @@ test('6: the profile has a Maths course row only with Maths on - two cells, the 
  const on={id:'n',name:'',type:'high-school',age:16,system:'uk',modules:['maths']};
  const rows=profileRows(on),r=rows.findIndex((x)=>x.title==='Maths course');
  assert.ok(r>=0,'the row is there with Maths on');
- assert.deepEqual(rows[r].cells.map((c)=>[c.kind,c.label,c.blurb,c.path]),[['path','Linear equations',P.PATHS.school.blurb,'school'],['path','Calculus 1',P.PATHS.calc1.blurb,'calc1']]);
+ assert.deepEqual(rows[r].cells.map((c)=>[c.kind,c.label,c.blurb,c.path]),[['path','School maths',P.PATHS.school.blurb,'school'],['path','Calculus 1',P.PATHS.calc1.blurb,'calc1']]);
  assert.equal(profileRows({...on,modules:['english','essay']}).some((x)=>x.title==='Maths course'),false,'no row with Maths off');
  assert.equal(profileRows(null).some((x)=>x.title==='Maths course'),true,'a fresh draft has every module on, Maths too');
  const f=flat(rows,r,1),s=session(SCHOOL_P,{screen:'profile',draft:on,focus:f});

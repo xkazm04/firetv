@@ -2,7 +2,8 @@
 
 **Read from the code on 2026-09-29** (branch `perfect/2026-09-29-calculus` at `02da1c2`; the tests table also
 covers `a7ef54e`). A learner in Math Buddy is
-on one Math course, a **path**: the school path (linear equations, with school-year bands) or Calculus 1 (a
+on one Math course, a **path**: the school path, **School maths** (add and subtract fractions, then linear equations,
+with school-year bands), or Calculus 1 (a
 university first course, with no school year). This page says what a path is, why Calculus is one, how a Calculus
 item is decided in code, how the answer is withheld, and what it takes to add another path. Every number on it was
 measured from the code or a test run named beside it. To recheck a line, open the file it cites.
@@ -33,10 +34,10 @@ strand, a blurb, its prerequisites (earlier topics of the same path) and, on the
 
 | path | name | topics | `school` | built from |
 |---|---|---|---|---|
-| `school` | Linear equations | 3 | true | `SYLLABUS`, unchanged, with its US/UK/CZ/DE years |
+| `school` | School maths | 4 in two strands (Fractions, Equations) | true | `SYLLABUS`: Add and subtract fractions (since Family W5b), then the three linear-equation topics, with their US/UK/CZ/DE years |
 | `calc1` | Calculus 1 | 22 in six strands | false | `CALC1_SPINE`; no topic has a year |
 
-Topic ids are unique across both paths (`tools/maths-paths-test.cjs` test 1: 25 ids, none in two paths), so
+Topic ids are unique across both paths (`tools/maths-paths-test.cjs` test 1: 26 ids, none in two paths), so
 `topicIn(id)` finds a topic without knowing the path, and `pathOfTopic(id)` names the path it is on.
 
 **Where a learner's path lives.** `Profile.mathPath` in `store.ts`, optional. `pathOf(profile)` reads it: only the
@@ -46,7 +47,7 @@ never reaches a screen (`tools/maths-course-test.cjs` test 1). `learnerPath(sess
 the desk, or the school path when no one is seated.
 
 **How the D-pad chooses it.** The profile screen has a **Maths course** row (`profileRows`, `COURSES = ["school",
-"calc1"]`) while Maths is among the draft's interests. Its two cells are the paths' names, Linear equations and
+"calc1"]`) while Maths is among the draft's interests. Its two cells are the paths' names, School maths and
 Calculus 1. Select posts `profile.draft {mathPath}`, and Save keeps it. Menu on a learner copies `mathPath` into the
 draft with the other fields. Turning Maths off hides the row but leaves the draft's `mathPath` as it was.
 
@@ -64,15 +65,16 @@ handler walks `topicStops(s)`.
 
 ## 2. Why Calculus is a path, and what the school path keeps
 
-`SYLLABUS` is a school-year spine: three linear-equation topics, each with the year it is met in the US, UK, Czech
-and German systems. `expectedIndex(system, age)` counts the topics a learner of that age is normally past, and the
+`SYLLABUS` is a school-year spine: Add and subtract fractions, then three linear-equation topics, each with the year
+it is met in the US, UK, Czech and German systems (the fractions years, US 5, UK 6, CZ 5, DE 5, are from memory and
+unchecked; a maths teacher reads them). `expectedIndex(system, age)` counts the topics a learner of that age is normally past, and the
 ruler's SCHOOL tick and gap line stand there. Appended to that list, Calculus would count a 16-year-old as 22
 topics behind on a university course, and the Topics stop list would run to 25. So Calculus got its own list, and
 the desk asks for a list by path: `expectedOn(path, system, age)` is `expectedIndex` on the school path and `null`
 on a course, so a Calculus learner's ruler draws no year word, no SCHOOL tick and no gap line.
 
-The school path keeps everything it had. `SYLLABUS` is unchanged (`tools/maths-paths-test.cjs` test 2: same ids,
-order, names, prerequisites and years). The school path also keeps:
+The school path keeps everything it had. `PATHS.school` is `SYLLABUS` as it stands (`tools/maths-paths-test.cjs`
+test 2: same ids, order, names, prerequisites and years). Its linear-equation topics also keep:
 
 - its free-text practice, checked by substitution (`verify.ts`);
 - marking by substitution, with the pen located in the working (`locate`);
@@ -80,6 +82,34 @@ order, names, prerequisites and years). The school path also keeps:
 
 A school learner's Tonight and Topics markup was byte-identical before and after the ruler change (72 renders, as
 commit `84e5f76` records them).
+
+### 2a. School maths: a unit the desk writes itself (Family W5b)
+
+Family Phase 1 grows the school path in place (owner decision D5, `docs/FAMILY-PHASE-1-PLAN.md`) and renames it
+**School maths**. The first unit, **Add and subtract fractions** (`frac-add-sub`, strand Fractions, no prerequisites,
+no lesson: the lesson library has none, so a lesson lookup says "No lesson for this"), stands first, before the
+linear equations, because it is met first.
+
+- **The engine.** `desk/src/lib/rules/school.ts` (W5a): exact rational arithmetic, a `compute` spec (`expr`, and
+  optionally `form`, `unit`, `allowNegative`), `question(spec)` that prints it, `check(spec, writing, system)` that
+  judges an answer, `leaksSchool(spec, line)`, and `gen(seed, tier)` for this unit. `SCHOOL_GENERATORS` names the
+  units code writes, by topic id; only `frac-add-sub` today (W7 adds the other eleven).
+- **The set, with no model call.** `makeItems` (`desk/src/lib/desk/items.ts`) sends a school topic that has a
+  generator to `makeSchoolItems`: a fresh seed per set, three specs at tier 1 (bottoms the same, or one a multiple of
+  the other) then three at tier 2 (neither divides the other), each kept only when it is well formed, prints, does
+  not state its own answer in its question and is not already kept. The question is `question(spec).plain` ("Work
+  out 3/4 + 1/6."), the item carries its `spec` and its `tier`, and the run reports provider `code` and 0 tries, which
+  is what `api/practice` answers. The tier is the one code asked for, never a model's `difficulty`. The linear topics
+  keep their model route unchanged (`tools/school-practice-test.cjs` test 7).
+- **The spec through the store.** `specShown` in `store.ts` dispatches on `spec.shape`: a Calculus shape keeps
+  `SPEC_KEYS` as before; a school shape keeps `expr`, `form`, `unit` and `allowNegative` and must pass the school
+  `wellFormed`, or the spec is dropped. A `tier` is kept only as 1 or 2, and only beside a spec. A school spec is
+  refused by the Calculus `wellFormed` and the other way round, so the two engines never read each other's specs
+  (`tools/school-practice-test.cjs` tests 5 and 6, including a reload from `session.json`).
+- **On the TV.** The practice sheet sets the plain question: `3/4` with no space round the slash is a stacked
+  fraction (`fractions` in `typeset.ts`), both operands stacked, at the fraction-part size max(.78em, 28 px). The
+  typeset ratchet (`tools/maths-calculus-test.cjs` test 7) sets every question of seeds 0..99 at both tiers, plain
+  and TeX, and asserts each renders on the practice row with exactly two stacked fractions.
 
 ## 3. The spec model
 
@@ -253,15 +283,15 @@ because it is the fallback. No test pins this case.
 
 ## 7. The TV
 
-- **Profile.** The Maths course row appears after "Interested in" while Maths is on. Its cells are **Linear
-  equations** and **Calculus 1**, and the chosen cell is `pathOf(draft)`, so a new learner has Linear equations
+- **Profile.** The Maths course row appears after "Interested in" while Maths is on. Its cells are **School
+  maths** and **Calculus 1**, and the chosen cell is `pathOf(draft)`, so a new learner has School maths
   chosen. The one caption under the rows is the focused cell's label and its path's blurb, for example "Calculus 1"
   over "A university first course in calculus, from functions and limits through derivatives to integrals."
 - **Topics.** The stops are the learner's path. "Teach me something" opens Topics at the **frontier**: the first
   topic not latched secure whose prerequisites all are (`nextOn`). It opens on the first stop when nothing is
   secure or everything is (`tools/maths-course-test.cjs` test 4: 0, 7 and 22 secure).
 - **The panning ruler.** A path pans on Topics when one box per topic would give a slot under `MIN_SPAN` (288 px).
-  The school path's slot is 558.7 px; Calculus 1's would be 76.2 px, so it pans. The focused slot is `FOCUS_SPAN`,
+  The school path's slot is 419 px (four topics); Calculus 1's would be 76.2 px, so it pans. The focused slot is `FOCUS_SPAN`,
   640 px (a 628 px box), and every other slot is 288 px (a 276 px box). The track is 6,740 px, slid by
   clamp(focus centre - 864, 0, 5,012), measured at 0, 2,362 and 5,012 px for focus 0, 10 and 21. The focused name
   is fitted from 44 px down to a 34 px floor, whole, in at most three lines. An edge with more to show has a
@@ -289,7 +319,7 @@ provider registry, and data directories are disposable, under the OS temp dir.
 
 | file | what it pins |
 |---|---|
-| `tools/maths-paths-test.cjs` | 22 + 3 topics with unique ids; `SYLLABUS` unchanged; each path's prerequisites form a DAG; every Calculus topic has one of the nine shapes (the list is repeated in the test, the contract with `calc.ts`); the spine carries no examples or answers; `pathOf`, `topicIn`, `nextOn`, `expectedOn` (null on a course), `learnerPath`; client-safe imports |
+| `tools/maths-paths-test.cjs` | 22 + 4 topics with unique ids; the school path is `SYLLABUS`; each path's prerequisites form a DAG; every Calculus topic has one of the nine shapes (the list is repeated in the test, the contract with `calc.ts`); the spine carries no examples or answers; `pathOf`, `topicIn`, `nextOn`, `expectedOn` (null on a course), `learnerPath`; client-safe imports |
 | `tools/calc-expr-test.cjs` | the engine's reading rules; formula strings copied from the corpus (at least 80, asserted); at least 40 edge cases; the numerics' stated tolerances; time budgets |
 | `tools/calc-rules-test.cjs` | `checkAnswer` on every shape; the named tolerances; `wellFormed` and its reasons; `question()` typesets; `leaksCalc`; the slip vocabulary; a sweep of all 22 topics; no answer field; never throws (3,000 mutations) |
 | `tools/calc-hint-test.cjs` | `specFromQuestion` reads back every printed question, plus a table of page phrasings (some must stay null); the fixed sentences; hint re-ask and fallback; the stance by path; no lesson pick on calc1 |
