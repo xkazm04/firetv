@@ -322,7 +322,7 @@ test('7b: the W7 school corpus - every question the new generators print renders
  const S=require(path.join(root,'src/lib/rules/school.ts'));
  const want=(sp)=>sp.shape==='simplify'||sp.shape==='fraction-of'?1:2;
  const off=[];let n=0;
- for(const g of [S.genEquivalent])for(const tier of [1,2])for(let seed=0;seed<100;seed++){
+ for(const g of [S.genEquivalent,S.genOfAmount])for(const tier of [1,2])for(let seed=0;seed<100;seed++){
   const sp=g(seed,tier),q=S.question(sp);n++;
   for(const [form,line,tex] of [['plain',q.plain,false],['tex',q.tex,true]]){
    const st=renderStatus(line,'question',tex);
@@ -336,7 +336,7 @@ test('7b: the W7 school corpus - every question the new generators print renders
    if(sp.unit&&!/[€£]|kg|grams|km|metres|cm|litres|ml|minutes|dollars/.test(flat))off.push(`${line}: the unit ${sp.unit} is lost (${flat})`);
   }
  }
- assert.equal(n,200);
+ assert.equal(n,400);
  assert.equal(off.length,0,'a W7 school question that does not set cleanly:\n'+off.join('\n'));
 });
 

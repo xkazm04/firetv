@@ -2,9 +2,10 @@
  * School numbers, decided in code (Family Phase 1, W5a): the answer reader, the fractions checker, the hint leak
  * check and the units' generators. W5b wires them: the store keeps a school spec (session/store specShown, by
  * shape), a set on a unit in SCHOOL_GENERATORS is written here with no model call (desk/items makeSchoolItems),
- * marking judges it with `check`, and hints and explanations pass `leaksSchool`. W7 batch 1 adds a unit on the same
- * machinery: equivalent fractions (shapes `missing` and `simplify`), with its generator, closed slip list, task reader
- * and withheld line; the leak rule below gains a per-shape profile (`leakProfile`).
+ * marking judges it with `check`, and hints and explanations pass `leaksSchool`. W7 batch 1 adds units on the same
+ * machinery: equivalent fractions (shapes `missing` and `simplify`) and a fraction of an amount (`fraction-of`), each
+ * with its generator, closed slip list, task reader and withheld line; the leak rule below gains a per-shape profile
+ * (`leakProfile`).
  *
  * The stances this file holds:
  *   - Code decides right and wrong. The truth is recomputed from the spec every time with EXACT rational arithmetic
@@ -290,17 +291,20 @@ export function readNumber(answer: unknown, system: unknown): Reading | null {
  *     for lowest terms, `form: "decimal"` for a decimal (the value must terminate); `unit` is the unit the answer is in;
  *     `allowNegative` lets the value be zero or below (a subtraction that crosses zero). Unit: add and subtract
  *     fractions (a/b ± c/d).
+ *   - fraction-of (W7, "A fraction of an amount"): expr "a/b of N", a proper fraction of a whole amount, "Find 3/5 of
+ *     40 kg."; `unit` is the amount's unit (and the answer's). The value is a/b × N, exactly.
  *   - missing (W7, "Equivalent fractions"): expr "a/b = ?/d" or "a/b = c/?", one number missing on the right, "Fill in
  *     the missing number: 3/4 = ?/12."; the answer is the WHOLE number that makes the two fractions equal.
  *   - simplify (W7, "Equivalent fractions"): expr "a/b", a proper fraction not in lowest terms, "Write 18/24 in its
  *     simplest form."; the answer is the same value in lowest terms (an unreduced equal fraction is unsure, never wrong).
  */
 export type ComputeSpec = { shape: "compute"; expr: string; form?: "simplest" | "decimal"; unit?: Unit; allowNegative?: true };
+export type FractionOfSpec = { shape: "fraction-of"; expr: string; unit?: Unit };
 export type MissingSpec = { shape: "missing"; expr: string };
 export type SimplifySpec = { shape: "simplify"; expr: string };
-export type SchoolSpec = ComputeSpec | MissingSpec | SimplifySpec;
+export type SchoolSpec = ComputeSpec | FractionOfSpec | MissingSpec | SimplifySpec;
 export type SchoolShape = SchoolSpec["shape"];
-export const SCHOOL_SHAPES: readonly SchoolShape[] = ["compute", "missing", "simplify"];
+export const SCHOOL_SHAPES: readonly SchoolShape[] = ["compute", "fraction-of", "missing", "simplify"];
 
 /** Bounds on a compute spec, each with its reason: a school question, not a calculator exercise. */
 const MAX_EXPR = 60;        // a line on a worksheet
@@ -437,10 +441,12 @@ const REJECT = {
 } as const;
 
 /**
- * What a spec asks, beyond its expression tree: a plain computation, a missing number (a/b = ?/d or a/b = c/?: `known` is d or c, `slot` says which is missing), or a fraction to simplify.
+ * What a spec asks, beyond its expression tree: a plain computation, a fraction of an amount (a/b of N), a missing
+ * number (a/b = ?/d or a/b = c/?: `known` is d or c, `slot` says which is missing), or a fraction to simplify.
  */
 type Kind =
   | { k: "compute" }
+  | { k: "of"; a: bigint; b: bigint; N: bigint }
   | { k: "missing"; a: bigint; b: bigint; known: bigint; slot: "top" | "bottom" }
   | { k: "simplify"; a: bigint; b: bigint };
 type Structure = { ok: true; spec: SchoolSpec; node: Node; kind: Kind } | { ok: false; why: string };
@@ -449,6 +455,7 @@ type Read = ReadOk | { ok: false; why: string };
 
 /** A whole number as a worksheet prints it: 1 to 999 (a top, a bottom) or 1 to 9999 (an amount), no leading zero. */
 const W3 = String.raw`[1-9]\d{0,2}`, W4 = String.raw`[1-9]\d{0,3}`;
+const OF_RE = new RegExp(String.raw`^(${W3})\/(${W3}) of (${W4})$`);
 const MISSING_RE = new RegExp(String.raw`^(${W3})\/(${W3}) = (\?|${W3})\/(\?|${W3})$`);
 const SIMPLIFY_RE = new RegExp(String.raw`^(${W3})\/(${W3})$`);
 const fracNode = (n: bigint, d: bigint): Node => ({ k: "frac", n, d });
@@ -466,9 +473,17 @@ function structure(spec: unknown): Structure {
     const node = parseExpr(s.expr as string);
     return node ? { ok: true, spec: s as SchoolSpec, node, kind: { k: "compute" } } : { ok: false, why: REJECT.read };
   }
-  // the W7 shapes take no form, no unit and no sign flag
-  if (s.form !== undefined || s.allowNegative !== undefined || s.unit !== undefined) return { ok: false, why: REJECT.key };
+  // the W7 shapes take no form and no sign flag; only a fraction of an amount takes a unit
+  if (s.form !== undefined || s.allowNegative !== undefined || (shape !== "fraction-of" && s.unit !== undefined)) return { ok: false, why: REJECT.key };
+  if (s.unit !== undefined && !(UNITS as readonly unknown[]).includes(s.unit)) return { ok: false, why: REJECT.unit };
   if (typeof s.expr !== "string" || s.expr.length > MAX_EXPR) return { ok: false, why: REJECT.read };
+  if (shape === "fraction-of") {
+    const m = OF_RE.exec(s.expr);
+    if (!m) return { ok: false, why: REJECT.read };
+    const [a, b, N] = [BigInt(m[1]), BigInt(m[2]), BigInt(m[3])];
+    const node: Node = { k: "op", op: "×", a: fracNode(a, b), b: { k: "num", q: qi(N), s: m[3], whole: true } };
+    return { ok: true, spec: s as SchoolSpec, node, kind: { k: "of", a, b, N } };
+  }
   if (shape === "missing") {
     const m = MISSING_RE.exec(s.expr);
     if (!m || (m[3] === "?") === (m[4] === "?")) return { ok: false, why: REJECT.read };
@@ -482,11 +497,19 @@ function structure(spec: unknown): Structure {
   return { ok: true, spec: s as SchoolSpec, node: fracNode(a, b), kind: { k: "simplify", a, b } };
 }
 
-/** The truth of a W7 shape (missing, simplify) with its bounds, or why not. */
+/** The truth of a W7 shape (fraction-of, missing, simplify) with its bounds, or why not. */
 function readKind(st: Extract<Structure, { ok: true }>): Read {
   const K = st.kind, lim = BigInt(MAX_LITERAL), dlim = BigInt(MAX_DENOMINATOR);
   const bottomOk = (d: bigint) => d >= BigInt(2) && d <= dlim;
   const ok = (truth: Q): Read => ({ ok: true, spec: st.spec, node: st.node, kind: K, truth });
+  if (K.k === "of") {
+    if (!bottomOk(K.b)) return { ok: false, why: REJECT.denominator };
+    if (!(K.a < K.b)) return { ok: false, why: REJECT.proper };
+    if (K.N > lim) return { ok: false, why: REJECT.big };
+    const truth = mk(K.a * K.N, K.b)!;
+    if (truth.n > BigInt(MAX_RESULT) * truth.d || truth.d > BigInt(MAX_RESULT)) return { ok: false, why: REJECT.result };
+    return ok(truth);
+  }
   if (K.k === "missing") {
     if (!bottomOk(K.b)) return { ok: false, why: REJECT.denominator };
     if (K.a > lim || K.known > lim) return { ok: false, why: REJECT.big };
@@ -539,15 +562,16 @@ function read(spec: unknown): Read {
   return { ok: true, spec: s, node, kind: st.kind, truth };
 }
 
-/** The unit a spec's answer is in, when it names one (only compute takes one). */
-const specUnit = (s: SchoolSpec): Unit | undefined => (s.shape === "compute" ? s.unit : undefined);
+/** The unit a spec's answer is in, when it names one (compute and fraction-of take one). */
+const specUnit = (s: SchoolSpec): Unit | undefined => (s.shape === "compute" || s.shape === "fraction-of" ? s.unit : undefined);
 
 /**
  * Is this spec a question the desk can print and judge? The expression reads (+ - × ÷, brackets, whole numbers,
  * decimals to 3 places, fractions a/b), has one to four operations, every whole number and top is at most 1000,
  * every bottom from 2 to 100; nothing divides by zero; the value is at most 10000 in size with a bottom of at most
  * 10000 in lowest terms; it is above zero unless `allowNegative`; `form: "decimal"` only for a terminating value;
- * a known form and unit; no answer field. The W7 shapes: `missing` "a/b = ?/d" or "a/b = c/?" whose missing number is whole
+ * a known form and unit; no answer field. The W7 shapes: `fraction-of` "a/b of N" with a proper fraction (bottom 2 to
+ * 100) and a whole amount 1 to 1000, a unit only; `missing` "a/b = ?/d" or "a/b = c/?" whose missing number is whole
  * (a top at most 1000, a bottom 2 to 100) and not the given one's own; `simplify` "a/b", proper and not yet in lowest
  * terms; none of them takes a form or a sign flag.
  */
@@ -583,6 +607,12 @@ function texOf(n: Node): string {
   }
 }
 const UNIT_WORD: Record<Unit, string> = { cm: "cm", m: "m", km: "km", mm: "mm", cm2: "cm²", m2: "m²", kg: "kg", g: "g", l: "litres", ml: "ml", min: "minutes", h: "hours", s: "seconds", "€": "euros", $: "dollars", "£": "pounds" };
+/**
+ * An amount's unit as a fraction-of question prints it after the number: a one-letter unit as its word, because the
+ * typesetter sets a lone letter as a variable (40 m would read as 40 times m). € and £ are printed as a sign before
+ * the number instead (€60); a dollar amount as "60 dollars" (a plain '$' is a TeX math delimiter to the typesetter).
+ */
+const AMOUNT_WORD: Record<Unit, string> = { ...UNIT_WORD, m: "metres", g: "grams", l: "litres", h: "hours", s: "seconds" };
 
 /**
  * The question, printed by code from the spec, as plain text and the TeX the typesetter reads: 'Work out 3/4 + 1/6.'
@@ -595,6 +625,13 @@ export function question(spec: unknown): { plain: string; tex: string } | null {
     const st = structure(spec);
     if (!st.ok) return null;
     const K = st.kind;
+    if (K.k === "of") {
+      // € and £ as a sign before the amount; a dollar as the word, since the typesetter reads a plain '$' as TeX's math delimiter and drops it
+      const u = specUnit(st.spec), N = String(K.N), sign = u === "€" || u === "£";
+      const amount = !u ? N : sign ? `${u}${N}` : `${N} ${AMOUNT_WORD[u]}`;
+      const texAmount = !u ? N : sign ? `${u}${N}` : `${N} \\text{ ${AMOUNT_WORD[u]}}`;
+      return { plain: `Find ${K.a}/${K.b} of ${amount}.`, tex: `\\text{Find } \\frac{${K.a}}{${K.b}} \\text{ of } ${texAmount}.` };
+    }
     if (K.k === "missing") {
       const [p, q] = K.slot === "top" ? ["?", String(K.known)] : [String(K.known), "?"];
       return { plain: `Fill in the missing number: ${K.a}/${K.b} = ${p}/${q}.`, tex: `\\text{Fill in the missing number: } \\frac{${K.a}}{${K.b}} = \\frac{${p}}{${q}}.` };
@@ -625,6 +662,11 @@ export const SCHOOL_SLIPS: readonly SchoolSlip[] = [
   { id: "added-same", name: "Added the same number to top and bottom", says: "The same number was added to the top and the bottom. Equal fractions come from multiplying or dividing the top and the bottom by the same number.", points: "the line where the fraction changed" },
   { id: "one-part-only", name: "Only one part changed", says: "One part of the fraction was changed and the other was left as it was. Whatever the bottom is multiplied or divided by, the top is too.", points: "the part that was left as it was" },
   { id: "wrong-factor", name: "Scaled by the wrong number", says: "The top and the bottom were not scaled by the same number. Find what the bottom was multiplied or divided by, and do exactly that to the top.", points: "the number you multiplied or divided by" },
+  // a fraction of an amount (Family W7)
+  { id: "of-upside-down", name: "Divided by the top, multiplied by the bottom", says: "The amount was divided by the top and multiplied by the bottom. Divide by the bottom to find a single part, then multiply by the top.", points: "the division" },
+  { id: "of-one-part", name: "Stopped at a single part", says: "The amount was divided by the bottom, which gives a single part. The top says how many of those parts to take.", points: "the last line" },
+  { id: "of-not-divided", name: "Multiplied without dividing", says: "The amount was multiplied by the top but never divided by the bottom. A fraction of an amount is smaller than the amount.", points: "the multiplication" },
+  { id: "of-rest", name: "Found the part that is left", says: "This is the part left over, not the part asked for. The top says how many parts to take.", points: "the last line" },
 ];
 
 /** The common factors of a and b above 1, smallest first. */
@@ -637,6 +679,7 @@ function commonFactors(a: bigint, b: bigint): bigint[] {
 /**
  * The value each slip gives from the spec's own numbers, in SCHOOL_SLIPS order within its unit; exact, no guessing.
  *   - a/b ± c/d: the four add/sub slips (W5a);
+ *   - a/b of N: N÷a×b upside down; N÷b a single part; a×N not divided; (b−a)×N÷b the part left;
  *   - a/b = ?/d (m = ad/b): a + (d − b) the same added; a one part only; a×d and a×b÷d (the other way) the wrong
  *     factor. a/b = c/? (m = bc/a): b + (c − a); b; b×c and b×a÷c. A missing number must be a whole number above 0;
  *   - simplify a/b: (a÷g)/b and a/(b÷g) one part only, (a÷g)/(b÷h) with g ≠ h the wrong factor, over every common
@@ -646,6 +689,13 @@ function slipCandidates(r: ReadOk): [string, Q][] {
   const out: [string, Q][] = [];
   const push = (id: string, v: Q | null) => { if (v) out.push([id, v]); };
   const K = r.kind;
+  if (K.k === "of") {
+    push("of-upside-down", mk(K.N * K.b, K.a));
+    push("of-one-part", mk(K.N, K.b));
+    push("of-not-divided", qi(K.a * K.N));
+    push("of-rest", mk((K.b - K.a) * K.N, K.b));
+    return out;
+  }
   if (K.k === "missing") {
     const whole = (x: bigint) => (x > Z ? qi(x) : null);
     const [given, other, known] = K.slot === "top" ? [K.a, K.b, K.known] : [K.b, K.a, K.known];
@@ -737,7 +787,7 @@ const placesOf = (r: NumberReading, value: Q): number => {
  *     other than the question's (no conversion), or a spec the desk cannot work out. A missing unit on a question
  *     with one is not held against the value.
  * By shape (Family W7): a `simplify` spec asks for lowest terms exactly as `form: "simplest"` does (9/12 or 0.75 for
- * 18/24 is unsure, 3/4 right). A `missing` spec asks
+ * 18/24 is unsure, 3/4 right). A `fraction-of` spec is a compute a/b × N with the amount's unit. A `missing` spec asks
  * for a whole number: its value in any form is right (9, 9.0, 18/2 for 3/4 = ?/12), and a fraction answer that
  * completes the given one is read as its missing part (9/12 is 9, 10/12 is 10: judged as 10); a fraction equal to the
  * given one that does not complete it (3/4, 6/8, 0.75) is UNSURE - the child wrote a fraction, not the number asked for.
@@ -934,7 +984,8 @@ function leakText(line: string): string {
  * What a hint must not say for this spec (the rules in this file's header, by shape):
  *   - `targets`: the answer's value and, over one, its fractional part (rules 1-3, 5);
  *   - `lowestOnly` (simplify): an equal fraction NOT in lowest terms is a step (9/12 on the way from 18/24), not the answer;
- *   - `bare`: whole numbers that leak alone (rule 4): the answer's top over a working denominator for compute; the answer's top AND bottom for simplify; none for a missing number (its value is a target);
+ *   - `bare`: whole numbers that leak alone (rule 4): the answer's top over a working denominator for compute and
+ *     fraction-of; the answer's top AND bottom for simplify; none for a missing number (its value is a target);
  *   - `restated`: an operation that is the question itself or its operands rewritten (rule 6's exception); a division
  *     a/b ÷ c/d is also restated as a/b × d/c, the flip, which is a step;
  *   - `written`: a missing number's completed fraction (9/12 for 3/4 = ?/12), refused wherever it is written.
@@ -951,7 +1002,7 @@ function leakProfile(r: ReadOk): LeakProfile {
     return { T, targets: [T], lowestOnly: false, bare: new Set(), restated: [], written: [new RegExp(`(?<![\\d.,/])${p}\\s*/\\s*${q}(?!\\d)`)] };
   }
   if (K.k === "simplify") return { T, targets: [T], lowestOnly: true, bare: new Set([String(T.n), String(T.d)]), restated: [], written: [] };
-  // compute: the working denominators, and the answer's top over each (rule 4)
+  // compute and fraction-of: the working denominators, and the answer's top over each (rule 4)
   const dens = new Set<bigint>([T.d]);
   const restated: LeakProfile["restated"] = [];
   const n0 = r.node;
@@ -1204,12 +1255,38 @@ export function genEquivalent(seed: unknown, tier: unknown): SchoolSpec | null {
   return tier === 1 ? { shape: "missing", expr: "3/4 = ?/12" } : { shape: "simplify", expr: "15/20" };
 }
 
+/** The units a tier-2 fraction of an amount may carry: weights, lengths, capacities, a time and three currencies. */
+const OF_UNITS: readonly Unit[] = ["kg", "g", "km", "m", "cm", "l", "ml", "min", "€", "£", "$"];
+
+/**
+ * One "A fraction of an amount" item, from a seed and a tier that code computed:
+ *   - tier 1: a proper fraction a/b in lowest terms with a top of at least 2 and a bottom 3..10, of an amount that is
+ *     b times 2..10 (so a single part is a times-table fact), no unit: "Find 3/5 of 40.";
+ *   - tier 2: a bottom 3..12, an amount b times 3..25 (up to 300), with a unit from OF_UNITS: "Find 5/12 of 180 kg.".
+ * The answer is always a whole number. A top of 1 is never drawn (the first step, one part, would be the answer), nor
+ * an answer that is a number the question prints. Pure and seeded; null for a bad seed or tier.
+ */
+export function genOfAmount(seed: unknown, tier: unknown): SchoolSpec | null {
+  const rnd = seeded(seed, tier, 0x5eed0f02);
+  if (!rnd) return null;
+  function pick<T>(xs: T[]): T { return xs[Math.floor(rnd!() * xs.length)]; }
+  for (let t = 0; t < MAX_TRIES; t++) {
+    const [a, b] = pick(properLowest(3, tier === 1 ? 10 : 12, 2));
+    const m = tier === 1 ? 2 + Math.floor(rnd() * 9) : 3 + Math.floor(rnd() * 23);
+    const spec: SchoolSpec = tier === 1 ? { shape: "fraction-of", expr: `${a}/${b} of ${b * m}` } : { shape: "fraction-of", expr: `${a}/${b} of ${b * m}`, unit: pick([...OF_UNITS]) };
+    if (fair(spec)) return spec;
+  }
+  return tier === 1 ? { shape: "fraction-of", expr: "3/5 of 40" } : { shape: "fraction-of", expr: "3/4 of 60", unit: "kg" };
+}
+
 /**
  * The units whose practice sets code writes, by syllabus topic id, each with its generator (Family W5b: add and
- * subtract fractions; W7 batch 1: equivalent fractions). A topic not here is written as it always was.
+ * subtract fractions; W7 batch 1: equivalent fractions, a fraction of an amount). A topic not here is
+ * written as it always was.
  */
 export const SCHOOL_GENERATORS: Readonly<Record<string, (seed: number, tier: 1 | 2) => SchoolSpec | null>> = {
   "frac-equivalent": (seed, tier) => genEquivalent(seed, tier),
+  "frac-of-amount": (seed, tier) => genOfAmount(seed, tier),
   "frac-add-sub": (seed, tier) => gen(seed, tier),
 };
 /** The generator for a topic id, or null: an own key only, so 'constructor' is not a unit. */
@@ -1223,6 +1300,7 @@ export const isSchoolSpec = (spec: unknown): spec is SchoolSpec =>
 /** The slips each unit's items can show, by topic id: a closed list, in SCHOOL_SLIPS order, each detected by code (slipCandidates). */
 export const SCHOOL_UNIT_SLIPS: Readonly<Record<string, readonly string[]>> = {
   "frac-equivalent": ["added-same", "one-part-only", "wrong-factor"],
+  "frac-of-amount": ["of-upside-down", "of-one-part", "of-not-divided", "of-rest"],
   "frac-add-sub": ["tops-and-bottoms", "top-not-scaled", "tops-one-bottom", "wrong-direction"],
 };
 
@@ -1273,6 +1351,38 @@ function readCombined(t0: string): SchoolSpec | null {
   return null;
 }
 
+/** Words that are maths, not a count noun after an amount ('40 sweets' reads; '40 percent', '40 and 2' do not). */
+const NOT_A_NOUN = /^(?:percent|per|cent|pounds?|pence|of|and|or|plus|minus|times|divided|over|squared|cubed|more|less|then|point|halves|half|thirds?|quarters?|fifths?|sixths?|sevenths?|eighths?|ninths?|tenths?|twelfths?|hundredths?|lots|groups|parts?|x)$/i;
+
+/** An amount after 'of': a whole number, with a currency sign before it, a unit after it or one count noun after it; or null. */
+function amountOf(s: string): { N: string; unit?: Unit } | null {
+  const cur = /^([$£€])\s?([1-9]\d{0,3})$/.exec(s);
+  if (cur) return { N: cur[2], unit: cur[1] as Unit };
+  const m = /^([1-9]\d{0,3})(?:\s?(\S.*))?$/.exec(s);
+  if (!m) return null;
+  if (m[2] === undefined) return { N: m[1] };
+  const rest = m[2].trim(), low = rest.toLowerCase();
+  const u = UNIT_SPELLINGS.find(([sp]) => sp === low);
+  if (u) return { N: m[1], unit: u[1] };
+  // a count noun only after a space: '40 sweets', never '40sweets'
+  if (/^\s/.test(s.slice(m[1].length)) && /^[a-z]{3,15}$/i.test(rest) && !NOT_A_NOUN.test(rest)) return { N: m[1] };
+  return null;
+}
+
+/** 'Find 3/5 of 40 kg', '3/5 of 40', 'What is 3/4 of £60?', '3/5 x 40', '40 × 3/5' as a fraction of an amount; or null. */
+function readOf(t0: string): SchoolSpec | null {
+  const t = t0.replace(/[.?!]$/, "").trim().replace(new RegExp(String.raw`^${VERB_SRC}\s*:?\s+`, "i"), "");
+  let a: string, b: string, got: { N: string; unit?: Unit } | null;
+  let m = new RegExp(String.raw`^${FRAC_SRC}\s+of\s+(.+)$`, "i").exec(t);
+  if (m) { [a, b] = [m[1], m[2]]; got = amountOf(m[3].trim()); }
+  else if ((m = new RegExp(String.raw`^${FRAC_SRC}\s*(?:×|x|\*|times)\s*([1-9]\d{0,3})$`, "i").exec(t))) { [a, b] = [m[1], m[2]]; got = { N: m[3] }; }
+  else if ((m = new RegExp(String.raw`^([1-9]\d{0,3})\s*(?:×|x|\*|times)\s*${FRAC_SRC}$`, "i").exec(t))) { [a, b] = [m[2], m[3]]; got = { N: m[1] }; }
+  else return null;
+  if (!got) return null;
+  const spec: SchoolSpec = { shape: "fraction-of", expr: `${a}/${b} of ${got.N}`, ...(got.unit ? { unit: got.unit } : {}) };
+  return read(spec).ok ? spec : null;
+}
+
 /** A missing number's placeholder as a worksheet prints it: '?', a box, or a run of underscores. */
 const GAP_SRC = String.raw`(\?|□|☐|▢|_+|[1-9]\d{0,2})`;
 const isGap = (x: string) => /^(?:\?|□|☐|▢|_+)$/.test(x);
@@ -1321,14 +1431,17 @@ function readSimplify(t0: string): SchoolSpec | null {
  *   - after it: nothing, '=', '= ?', '= ___', a full stop or a question mark; then optionally one instruction
  *     the desk prints itself: 'Give your answer in its simplest form.' / 'in its lowest terms' / 'Simplify your
  *     answer.' (form simplest) or 'Give your answer as a decimal.' (form decimal);
+ *   - a fraction of an amount (W7): 'Find 3/5 of 40', '3/5 of 40', 'What is 3/4 of £60?', with a unit from the reader's
+ *     list ('40 kg', '60 minutes') or one count noun ('40 sweets'); '3/5 x 40' and '40 × 3/5' (a fraction times a whole);
  *   - a missing number (W7): 'a/b = ?/d' or 'a/b = c/?' with '?', a box or underscores for the gap, after an optional
  *     'Fill in the missing number:', 'Complete:', 'Copy and complete'; 'Write a/b with a denominator of d', 'Write a/b
  *     as a fraction with denominator d', 'Write a/b with a numerator of c';
  *   - simplify (W7): 'Simplify a/b' (optionally 'fully', 'completely', 'to its lowest terms'), 'Reduce a/b (to lowest
  *     terms)', 'Write / Express a/b in its simplest form / lowest terms', 'Cancel a/b (down)'.
- * Null for: whole numbers, decimals or mixed numbers as operands, three or more
+ * Null for: whole numbers, decimals or mixed numbers as operands (a whole amount after 'of' excepted), three or more
  * terms, any letter in the maths (an x), brackets, number words, an answer after '=', a bottom of 1 or 0, a leading
- * zero, 'the difference between' (its order is not said), two gaps or none, any other word, and a spec wellFormed refuses (a subtraction below zero, a simplify of a
+ * zero, 'the difference between' (its order is not said), a fraction of a fraction, a decimal or a thousands-separated
+ * amount, two gaps or none, any other word, and a spec wellFormed refuses (a subtraction below zero, a simplify of a
  * fraction already in lowest terms or not proper, a missing number that is not whole). The printed question of every
  * practice item (`question`) reads back to its own spec. Pure; never throws.
  */
@@ -1337,7 +1450,7 @@ export function specFromQuestion(text: unknown): SchoolSpec | null {
   try {
     let t = normalise(text);
     t = t.replace(/^(?:\d{1,2}[.)]|\(\d{1,2}\)|[a-h]\)|\([a-h]\))\s+/i, "");
-    return readMissing(t) ?? readSimplify(t) ?? readCombined(t);
+    return readMissing(t) ?? readSimplify(t) ?? readOf(t) ?? readCombined(t);
   } catch {
     return null;
   }
@@ -1345,12 +1458,13 @@ export function specFromQuestion(text: unknown): SchoolSpec | null {
 
 /**
  * The unit a school spec belongs to, by topic id, or null: a sum or difference of two fractions is add and subtract
- * fractions; a missing number or a simplify is equivalent fractions (W7).
+ * fractions, a fraction of an amount its own unit (W7), a missing number or a simplify equivalent fractions.
  */
 export function unitOf(spec: unknown): string | null {
   try {
     const r = read(spec);
     if (!r.ok) return null;
+    if (r.kind.k === "of") return "frac-of-amount";
     if (r.kind.k === "missing" || r.kind.k === "simplify") return "frac-equivalent";
     const n = r.node;
     if (n.k !== "op" || n.a.k !== "frac" || n.b.k !== "frac") return null;
@@ -1369,6 +1483,7 @@ export function unitOf(spec: unknown): string | null {
  */
 export const SCHOOL_WITHHELD = {
   "frac-equivalent": "Find what the bottom was multiplied or divided by to make the new bottom, and do exactly the same to the top. To simplify, divide the top and the bottom by the biggest number that goes into both. The answer is yours to work out.",
+  "frac-of-amount": "Divide the amount by the bottom number to find the size of a single part, then multiply by the top number to take that many parts. The answer is yours to work out.",
   "frac-add-sub": "Make the bottoms the same first: find a number both bottoms go into and rewrite each fraction over it. Then combine only the tops. The answer is yours to work out.",
   any: "Go back to the last step you are sure of and take the next. The answer stays yours to find.",
 } as const;

@@ -120,6 +120,7 @@ test('4: the practice route reports code and zero tries for a school unit, and t
 /** Each unit's tier, as its generator documents it (rules/school), read back from the spec alone. */
 const W7_TIER={
  'frac-equivalent':(sp)=>{if(sp.shape==='simplify')return 2;const m=/^(\d+)\/(\d+) = (\?|\d+)\/(\?|\d+)$/.exec(sp.expr);const [a,b]=[+m[1],+m[2]];const known=+(m[3]==='?'?m[4]:m[3]);return (m[3]==='?'?known/b:known/a)>1?1:2;},
+ 'frac-of-amount':(sp)=>(sp.unit===undefined?1:2),
 };
 // ------------------------------------------------------------------ the spec through the store
 test('5: a school spec survives the store - practice.set, practice.marked, practice.settle and a reload from session.json',()=>{
@@ -176,7 +177,7 @@ test('7: a linear topic still asks the engine as before - one call, its own prom
 });
 
 // ------------------------------------------------------------------ Family W7 batch 1: three more units whose sets code writes
-const W7_SHAPE={'frac-equivalent':/^(?:Fill in the missing number: \d+\/\d+ = (?:\?\/\d+|\d+\/\?)\.|Write \d+\/\d+ in its simplest form\.)$/};
+const W7_SHAPE={'frac-equivalent':/^(?:Fill in the missing number: \d+\/\d+ = (?:\?\/\d+|\d+\/\?)\.|Write \d+\/\d+ in its simplest form\.)$/,'frac-of-amount':/^Find \d+\/\d+ of (?:[€£$]\d+|\d+(?: [a-z]+)?)\.$/};
 for(const unit of Object.keys(W7_TIER)){
  test(`W7 2-${unit}: makeSchoolItems writes six distinct items by code - three tier 1, then three tier 2 - pure for a seed, with no engine call`,()=>{
   noModel();
@@ -210,8 +211,8 @@ for(const unit of Object.keys(W7_TIER)){
 
 test('W7 5b: the new shapes survive the store - practice.set, practice.marked, practice.settle and a reload - and add no store key; a Calculus spec is untouched',()=>{
  seat();
- const specs=[{shape:'missing',expr:'3/4 = ?/12'},{shape:'missing',expr:'3/4 = 15/?'},{shape:'simplify',expr:'18/24'},{shape:'compute',expr:'5/6 - 1/4'},
-  {shape:'compute',expr:'3/4 + 1/2',unit:'m'},{shape:'compute',expr:'2/3 × 3/4'},{shape:'compute',expr:'3/4 ÷ 1/2',form:'simplest'}];
+ const specs=[{shape:'missing',expr:'3/4 = ?/12'},{shape:'missing',expr:'3/4 = 15/?'},{shape:'simplify',expr:'18/24'},{shape:'fraction-of',expr:'3/5 of 40'},
+  {shape:'fraction-of',expr:'5/8 of 72',unit:'€'},{shape:'compute',expr:'2/3 × 3/4'},{shape:'compute',expr:'3/4 ÷ 1/2',form:'simplest'}];
  const calc={shape:'critical-point',f:'x^2 - 4x + 1',on:[0,5]};
  const items=[...specs.map((spec,i)=>({n:i+1,question:S.question(spec).plain,spec,tier:1+(i%2)})),{n:8,question:'q',spec:calc}];
  store.dispatch({type:'practice.set',practice:{topic:'frac-equivalent',marked:false,items}});
@@ -231,12 +232,12 @@ test('W7 5b: the new shapes survive the store - practice.set, practice.marked, p
  // the store cleans each new shape by its own rules: an answer stops, a key the shape does not take drops the spec
  const put=(spec)=>{store.dispatch({type:'practice.set',practice:{topic:'frac-equivalent',marked:false,items:[{n:1,question:'q',spec,tier:1}]}});return store.getSession().practice.items[0];};
  assert.deepEqual(put({shape:'missing',expr:'3/4 = ?/12',answer:'9',truth:9}).spec,{shape:'missing',expr:'3/4 = ?/12'},'only the school keys pass');
- assert.deepEqual(put({shape:'compute',expr:'3/4 + 1/2',unit:'m',solution:'5/4'}).spec,{shape:'compute',expr:'3/4 + 1/2',unit:'m'});
+ assert.deepEqual(put({shape:'fraction-of',expr:'3/5 of 40',unit:'kg',solution:'24'}).spec,{shape:'fraction-of',expr:'3/5 of 40',unit:'kg'});
  for(const bad of [{shape:'missing',expr:'3/4 = ?/13'},{shape:'missing',expr:'3/4 = ?/12',form:'simplest'},{shape:'simplify',expr:'3/4'},{shape:'simplify',expr:'18/24',unit:'kg'},
   {shape:'fraction-of',expr:'5/3 of 40'},{shape:'fraction-of',expr:'3/5 of 40',unit:'parsec'},{shape:'fraction-of',expr:'3/5 of 40',allowNegative:true},{shape:'missing'}]){
   const it=put(bad);assert.equal(it.spec,undefined,JSON.stringify(bad));assert.equal(it.tier,undefined,'no spec, no tier');
  }
  const src=fs.readFileSync(storeFile,'utf8');
  assert.match(src,/const SCHOOL_SPEC_KEYS = \["expr", "form", "unit", "allowNegative"\] as const;/,'the W7 shapes need no new store key');
- for(const sh of ['missing','simplify']){assert.ok(S.SCHOOL_SHAPES.includes(sh));assert.ok(!C.CALC_SHAPES.includes(sh),`${sh} is not a Calculus shape`);assert.equal(C.wellFormed({shape:sh,expr:'3/4'}).ok,false);}
+ for(const sh of ['missing','simplify','fraction-of']){assert.ok(S.SCHOOL_SHAPES.includes(sh));assert.ok(!C.CALC_SHAPES.includes(sh),`${sh} is not a Calculus shape`);assert.equal(C.wellFormed({shape:sh,expr:'3/4'}).ok,false);}
 });

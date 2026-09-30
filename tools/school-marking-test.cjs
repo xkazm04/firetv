@@ -519,8 +519,19 @@ const W7_TASKS={
   ['Simplify 18:24',null],['Write 3/4 with a denominator of 10',null],['3/4 = ?/4',null],['Simplify 18/24 and 6/8',null],['Write 18/24 as a decimal',null],
   ['Simplify 018/24',null],['Simplify the fraction',null],['3/4 = ? / 12 please',null],
  ],
+ 'frac-of-amount':[
+  ['Find 3/5 of 40.',fo('3/5 of 40')],['Find 3/5 of 40',fo('3/5 of 40')],['3/5 of 40',fo('3/5 of 40')],['What is 3/5 of 40?',fo('3/5 of 40')],['Work out 3/5 of 40',fo('3/5 of 40')],
+  ['Calculate 3/5 of 40',fo('3/5 of 40')],['Find 3/5 of 40 kg.',fo('3/5 of 40','kg')],['Find 3/4 of £60',fo('3/4 of 60','£')],['What is 3/4 of €60?',fo('3/4 of 60','€')],
+  ['Find 3/4 of 60 minutes',fo('3/4 of 60','min')],['Find 2/3 of 60 metres',fo('2/3 of 60','m')],['Find 3/5 of 40 sweets',fo('3/5 of 40')],['3/5 x 40',fo('3/5 of 40')],
+  ['3/5 × 40',fo('3/5 of 40')],['Work out 3/5 × 40',fo('3/5 of 40')],['40 × 3/5',fo('3/5 of 40')],['3/5 * 40',fo('3/5 of 40')],['2) Find 3/5 of 40',fo('3/5 of 40')],
+  ['Find 3/4 of 10',fo('3/4 of 10')],['Find 3/5 of 40 pupils.',fo('3/5 of 40')],['Find ⅗ of 40',fo('3/5 of 40')],['Find 5/8 of €72.',fo('5/8 of 72','€')],
+  // refused
+  ['Find 3/5 of 40 and 1/2 of 10',null],['Find 3/5 of x',null],['Find 3/5 of',null],['Find 5/3 of 40',null],['Find 3/0 of 40',null],['3/5 of 40 = 24',null],
+  ['Find three fifths of 40',null],['Find 60% of 40',null],['Find 0.6 of 40',null],['Find 3/5 of 40.5',null],['Find 3/5 of 1,000',null],['Find 3/5 of 40 percent',null],
+  ['Find 3/5 of 40 kg in grams',null],['Find 1/2 of 3/4',null],['Find 3/5 of 60p',null],['Find 3/5 of 40 pounds',null],['Find 3/5 of 40 x',null],['Find 3/5 of 040',null],['3/5 : 40',null],
+ ],
 };
-const W7GEN={'frac-equivalent':S.genEquivalent};
+const W7GEN={'frac-equivalent':S.genEquivalent,'frac-of-amount':S.genOfAmount};
 for(const unit of Object.keys(W7_TASKS)){
  const rows=W7_TASKS[unit];
  test(`W7 4-${unit}: specFromQuestion reads the unit's tasks conservatively - ${rows.length} phrasings, ${rows.filter((t)=>t[1]===null).length} of them refused`,()=>{
@@ -550,6 +561,11 @@ const W7_PAGES={
   {spec:ms('3/4 = ?/12'),a:'9',want:['right']},{spec:ms('3/4 = ?/12'),a:'11',want:['wrong','added-same']},{spec:ms('6/8 = ?/12'),a:'6',want:['wrong','one-part-only']},
   {spec:ms('3/4 = ?/12'),a:'36',want:['wrong','wrong-factor']},{spec:sm('18/24'),a:'9/12',want:['unsure']},{spec:sm('18/24'),a:'',want:['unsure']},
   {spec:sm('18/24'),a:'3/4',want:['right']},{spec:ms('3/4 = 15/?'),a:'15/20',want:['right']},{spec:ms('3/4 = ?/12'),a:'0.75',want:['unsure']},{spec:sm('15/20'),a:'3/20',want:['wrong','one-part-only']},
+ ],
+ 'frac-of-amount':[
+  {spec:fo('3/5 of 40'),a:'24',want:['right']},{spec:fo('3/5 of 40'),a:'66.67',want:['wrong','of-upside-down']},{spec:fo('3/5 of 40'),a:'8',want:['wrong','of-one-part']},
+  {spec:fo('3/5 of 40'),a:'120',want:['wrong','of-not-divided']},{spec:fo('3/5 of 40'),a:'16',want:['wrong','of-rest']},{spec:fo('3/4 of 60','kg'),a:'45 kg',want:['right']},
+  {spec:fo('3/4 of 60','kg'),a:'45 g',want:['unsure']},{spec:fo('5/8 of 72','€'),a:'',want:['unsure']},{spec:fo('5/8 of 72','€'),a:'€45',want:['right']},
  ],
 };
 for(const unit of Object.keys(W7_PAGES)){
