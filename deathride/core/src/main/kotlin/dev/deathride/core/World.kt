@@ -146,8 +146,6 @@ class LapCounter(private val lengthM: Double, private val startM: Double, privat
 }
 enum class AiMode { DRIVE, OVERTAKE, RECOVER }
 enum class FinishKind { NONE, LAPS, ELIMINATION }
-data class AiSkill(val reactionSteps: Int, val lookAheadSeconds: Double, val cornerMarginMps: Double, val laneErrorM: Double)
-val AI_SKILLS = arrayOf(AiSkill(8,.68,4.0,1.0), AiSkill(5,.60,2.0,.5), AiSkill(2,.52,0.0,.1))
 class Car(val id: Int, track: Track) {
     var x=0.0; var y=0.0; var vx=0.0; var vy=0.0; var heading=0.0; var yaw=0.0
     var previousX=0.0; var previousY=0.0; var previousHeading=0.0
@@ -163,6 +161,7 @@ class Car(val id: Int, track: Track) {
     var human=false; var finishSeconds=-1.0; var position=id+1; var impact=0.0
     var aiMode=AiMode.DRIVE; var aiDwell=0; var aiBlockedSteps=0; var aiLane=0.0
     var aiReason=0; var aiPerceivedGapM=1000.0
+    var aiSkill: AiSkill?=null;var aiStyle: Rival?=null;var aiCombatReason=0;var aiPickupTarget=-1;var aiNoisePhase=0.0
     val aiInput=InputFrame()
     val speedMps get()=sqrt(vx*vx+vy*vy)
 }
@@ -229,6 +228,7 @@ class World(val seed: Int=17, val spec: CarSpec=CarSpec(), val track: Track=Trac
     init { reset() }
     fun reset() {
         steps=0; seconds=0.0; finished=0
+        val seeded=if(cars.any{it.aiSkill!=null})java.util.Random(seed.toLong()) else null
         for(c in cars) {
             val grid=track.course?.grid?.get(c.id)
             val rowLength=if(c.carClass==null)7.0 else CarShapes.all.maxOf { it.lengthM }+TrackRules["gridClearanceM"]
@@ -240,7 +240,9 @@ class World(val seed: Int=17, val spec: CarSpec=CarSpec(), val track: Track=Trac
             c.previousX=c.x; c.previousY=c.y; c.previousHeading=c.heading; c.lap.reset(s)
             c.finishSeconds=-1.0;c.finishKind=FinishKind.NONE; c.position=c.id+1; c.impact=0.0; c.aiDwell=0; c.aiBlockedSteps=0; c.aiMode=AiMode.DRIVE
             c.aiLane=((c.id*7+seed)%5-2)*(if(c.carClass==null)1.7 else c.spec.circleRadiusM*2*TrackRules["aiLaneCarWidths"]); c.aiInput.set(0.0,0.0,0.0)
-            c.aiInput.fire=0.0;c.aiInput.mine=0.0;c.aiInput.weapon=0
+            c.aiNoisePhase=0.0
+            if(c.aiSkill!=null && seeded!=null) { c.aiLane+=(seeded.nextDouble()*2-1)*c.aiSkill!!.laneErrorM;c.aiNoisePhase=seeded.nextDouble()*2*PI }
+            c.aiInput.fire=0.0;c.aiInput.mine=0.0;c.aiInput.weapon=0;c.aiCombatReason=0;c.aiPickupTarget=-1
         }
         combat.reset()
         previousSnapshot.capture(cars); snapshot.capture(cars)
@@ -283,7 +285,7 @@ class World(val seed: Int=17, val spec: CarSpec=CarSpec(), val track: Track=Trac
         return a.lap.progressM>b.lap.progressM || a.lap.progressM==b.lap.progressM && a.id<b.id
     }
     private fun driveAi(c: Car) {
-        val skill=AI_SKILLS[(c.id+seed).mod(3)]
+        val skill=c.aiSkill?:AiSkills.legacy[(c.id+seed).mod(AiSkills.legacy.size)]
         c.aiDwell++
         if(c.speedMps<1.2) c.aiBlockedSteps++ else c.aiBlockedSteps=0
         if(steps%skill.reactionSteps!=c.id%skill.reactionSteps) return
@@ -298,14 +300,14 @@ class World(val seed: Int=17, val spec: CarSpec=CarSpec(), val track: Track=Trac
         }
         c.aiPerceivedGapM=gap
         if(c.aiBlockedSteps>150 && c.aiDwell>90) { c.aiMode=AiMode.RECOVER; c.aiDwell=0; c.aiReason=1 }
-        else if(gap<(c.spec.circleRadiusM+c.spec.circleOffsetM)*2*TrackRules["aiOvertakeCarLengths"] && c.aiDwell>90 && c.aiMode==AiMode.DRIVE) { c.aiMode=AiMode.OVERTAKE; c.aiDwell=0; c.aiReason=2 }
+        else if(gap<(c.spec.circleRadiusM+c.spec.circleOffsetM)*2*TrackRules["aiOvertakeCarLengths"]*(c.aiStyle?.passDistanceScale?:1.0) && c.aiDwell>90 && c.aiMode==AiMode.DRIVE) { c.aiMode=AiMode.OVERTAKE; c.aiDwell=0; c.aiReason=2 }
         else if(c.aiMode!=AiMode.DRIVE && c.aiDwell>180 && c.speedMps>5) { c.aiMode=AiMode.DRIVE; c.aiDwell=0; c.aiReason=3 }
         val passLane=c.spec.circleRadiusM*2*TrackRules["aiPassCarWidths"]
-        val intendedLane=if(c.aiMode==AiMode.OVERTAKE) if(c.aiLane<0) passLane else -passLane else c.aiLane
+        val intendedLane=if(c.aiMode==AiMode.OVERTAKE) if(c.aiLane<0) passLane else -passLane else c.aiLane+(c.aiStyle?.laneBiasM?:0.0)
         val noseLook=(c.spec.circleOffsetM+c.spec.circleRadiusM)*2*TrackRules["aiLookCarLengths"]
         val look=if(c.aiMode==AiMode.RECOVER) noseLook else noseLook+c.speedMps*skill.lookAheadSeconds
-        val lane=combat.avoidMine(c,s,intendedLane+(track.course?.laneAt(s+look)?:0.0)).coerceIn(-track.widthAt(s+look)*.55,track.widthAt(s+look)*.55)
-        track.sample(s+look, lane+sin(steps*.007+c.id)*skill.laneErrorM,point)
+        val lane=combat.avoidMine(c,s,combat.seekRepair(c,intendedLane+(track.course?.laneAt(s+look)?:0.0))).coerceIn(-track.widthAt(s+look)*.55,track.widthAt(s+look)*.55)
+        track.sample(s+look, lane+sin(steps*.007+c.id+c.aiNoisePhase)*skill.laneErrorM,point)
         val desired=atan2(point.y-c.y,point.x-c.x)
         val slip=if(c.speedMps>2.0) wrapAngle(atan2(c.vy,c.vx)-c.heading) else 0.0
         val error=wrapAngle(desired-c.heading-slip*.35)

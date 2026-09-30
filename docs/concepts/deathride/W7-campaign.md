@@ -1,0 +1,56 @@
+# W7 Career, rivals and declared difficulty - design first
+
+2026-09-30, after W5 `2a73abd`. Registry read: `skill-scaling-versus-power-scaling`, `progression-curve-shape-tests`, the earlier pacing-linter/type-object/state-machine and economy notes. The skill-scaling note requires behavioral differences and explicit ceilings; changing enemy HP or acceleration is not the selected solution. No game assets or external game files are used.
+
+## A finite season worth replaying
+
+Twelve ordered rounds form four three-race cups, visiting all five authored courses. Each cup accumulates the player's finish points toward bronze/silver/gold targets. These are personal cup targets, not a fictitious aggregate AI championship table. A completed season can start again with retained unlocks, parts and best trophies. The screen names the next circuit, teaching goal, cup score, next unlock, prize range and rival roster. The phone is the detailed companion; the TV uses large remote-friendly rows.
+
+Career progression is per profile. Player 1 hosts a career event; Player 2 is a guest who earns the normal cash/repair receipt and keeps their own garage but does not silently advance a different career. A player's next round advances after a completed lap, or a wreck/elimination after meaningful forward course progress. The qualifying progress fraction is data. Idle timeouts do not advance. BACK abandons without settling, as in W5. Cup bonuses pay once as part of the same idempotent receipt and atomic profile update.
+
+Needle and Line begin available for career; Trail, Bastion and Comet unlock through the ladder. Courses unlock before their first scheduled event. Practice retains access to all W6 cars/tracks for feel checks. The first tier of all six part families stays available; subsequent tiers unlock at authored milestones globally, so a practice purchase cannot bypass a career part gate. Previously installed W5 parts remain owned and functional. All prices still come from W5 data. New campaign bonus/points/unlock/difficulty tables own their values; no second reward or physics authority.
+
+TV UP opens the career from lobby/results; LEFT/RIGHT chooses a declared difficulty, SELECT starts the next round, PLAY/PAUSE opens the garage, BACK returns. MENU continues cycling the practice circuit in the lobby. REWIND replaces UP for resetting pairing, and both TV/phone instructions change together. Each phone keeps its stable profile ID. The controller gains a CAREER companion screen; only Player 1 changes the hosted tier or starts its event.
+
+## Rivals are profiles on the existing AI
+
+Five named drivers have distinct classes and data-defined passing distance, preferred lane, firing range, heavy-weapon preference and mine use. They share DRIVE/OVERTAKE/RECOVER, the same perception and the same car/weapon rules. Their names and styles appear before the start and on results. Opponents remain stock; player upgrades are visible advantages, not secretly matched with power boosts.
+
+Three career tiers: Rookie allows broad lines and conservative corner entry, uses forward weapons and leaves mines alone; Club adds rear-threat mines and hazard avoidance; Pro also diverts toward a visible repair pickup when damaged. Reaction delays and line errors differ, with a declared minimum reaction interval of at least 100 ms for campaign perception. These are design caps, not a claim to measured human reaction distribution. No catch-up, hidden speed, extra HP, damage scaling or omniscient through-wall shooting. Legacy practice behavior is preserved as data so W1-W6 evidence is not silently redefined.
+
+Behavioral tests must demonstrate the tier-specific choices in controlled situations, identical physical specs/HP/ammo across difficulty, deterministic replay and zero-allocation active campaign steps. A win-rate sweep checks whether the declared tiers actually change outcomes for a fixed reference driver; counterexamples must be reported rather than called difficulty by coefficient alone.
+
+## Pacing and save validation
+
+Version 2 saves add current round, highest cleared round, cup score, completed seasons, best trophies and selected tier. Version 1 W5 saves migrate without losing money, parts, selection or receipts. Invalid versions/ranges/checksums still fail safely. Career advance and cup bonus are inside the same saved transaction as the race receipt.
+
+Run 2,000 seeded economic careers per tier using a declared physical outcome library across all tracks, tiers and representative upgrade bands. The library runs the actual combat/vehicle simulation; career resampling approximates a driver and gear band, not human skill or every exact purchase combination. Report first earned upgrade, each car/track/part milestone, bankruptcy, censored careers and win rate by tier, and publish the sample count and assumptions. This is a pacing model, not a felt verdict. W8 separately runs the larger AI-vs-AI balance report.
+
+On Stick: visit the TV and phone career menus, verify tier/roster/lock agreement, buy an allowed part, drive a campaign event through a scripted LAN controller, get results/advancement, restart and recover the same career. Include a guest profile separation check and a rejected idle advancement. Full green core/link/APK tasks, OWNER-CHECKS and session/status entries precede the single W7 commit.
+
+
+## Implementation and pacing evidence
+
+Twelve rounds ship as Yard Cup, Iron Cup, Weather Cup and Death Ride Crown. Rook/Needle, Ox/Bastion, Mica/Trail, Vex/Comet and Relay/Line are data profiles on the existing AI. Campaign reaction intervals are 300/200/133.3 ms; legacy practice tiers are copied unchanged into `ai-skills.csv`. Specs, HP, ammo capacity and weapon damage are identical across difficulties. Rewards are 100/110/120% of the common prize formula. There is no catch-up. New connections wait for a menu; a valid existing seat token can reconnect during a race, preserving the current driver's car.
+
+Tracks unlock at cleared rounds 0/1/3/6/9; Trail/Bastion/Comet at 2/5/8. Most tier-two parts unlock at round 4, mounts tier two at 5, and tier three at 8. Existing W5 installed parts are retained. Practice keeps all car/course choices but shares the gated shop, so changing mode does not bypass a new part gate. Cups award 10/7/5/3/2/1 points by position and personal medal targets at 6/14/22 points over three rounds. Cup bonuses vary by cup and grade in data. Best medals and all unlocks survive a season restart. A wreck/elimination requires at least 20% forward lap progress to clear; surviving drivers need a completed lap. Normal cash settlement still applies to an idle timeout.
+
+The final physical library contains **360 actual six-car combat races with distinct final hashes**: 3 tiers x 5 courses x 3 representative Line upgrade bands x 8 seeds. The fixed reference driver uses Club decisions. All sampled races resolved before the 180 s ceiling; Rookie duration min/mean/max 66.27/96.36/122.38 s, Club 42.43/91.09/117.05 s, Pro 24.20/89.05/120.08 s. Mean wreck counts are 2.292/2.858/2.967. No one-shot kills in the library. `w7-physical.csv` records each seed and outcome.
+
+Pacing resamples that library through the real profile, shop, unlock and receipt rules for **2,000 seeded careers per tier** (6,000 careers / 72,000 modeled results). Reference-driver win rate is Rookie **72.68%**, Club **37.08%**, Pro **30.53%**. First earned part averages **1.2855 / 2.036 / 2.012 races**; this excludes the 160 CR starter grant that already buys a first-tier part. The reference driver buys sooner on Rookie; higher-tier prize multipliers do not erase the effect of worse finishes and damage in this sample. No bankruptcies or censored careers. Every library result qualified, so each modeled season took 12 races and unlocks arrived exactly on their authored round. This does **not** establish a human completion rate; the short eight-seed cells and representative gear bands are a substantial limitation. The model does not claim independent confidence intervals from the resampled 72,000 results.
+
+Tests cover actual mine/no-mine and repair-seeking decisions, stock power equality, ordered unlocks/cup payout, duplicate settlement, idle rejection, season retention, version-one migration, invalid-state rejection, deterministic replay and zero-allocation live campaign steps. Read-only `/routes` and pose telemetry support `tools/pilot.mjs`, a pursuit controller that sends ordinary input frames over LAN. It cannot teleport a car, alter HP, or hand a phone seat to host AI. Its choices are separate probe data, not changes to the approved feel profiles.
+
+
+### Seed-diversity review before final acceptance
+
+Review found that explicit campaign skills removed the old modulo-three skill variation, leaving only five initial lane patterns from the legacy seed formula. The initial eight-seed cells therefore repeated outcomes. Before accepting the final pacing report, added a seeded line offset and sinusoidal phase within the existing skill's authored lane-error bound, at reset only. Null-skill legacy practice is preserved exactly. Distinct final physical hashes are checked per cell; the library and pacing were rerun. The final numbers above use that correction. Preliminary reports are preserved as `w7-*-initial.csv`: they gave 57.93/49.14/35.05% win rates, showing how strongly the small sample depended on seed coverage. This adds no physics, HP or damage advantage and consumes no randomness during the step.
+
+
+## Final build and Stick checks
+
+`:core:test :link:test :app:assembleDebug` green: **51 core + 3 link tests**, including live campaign zero allocation. Final APK SHA-256: `FA7981127F43619EB07581966166106531A821560EC0FACB5A993B029338B838`; installed as `dev.deathride.tv` on AFTKM at 1080p. Final `tools/career-check.mjs` passed remote UP/tier selection, matching guest view of the host tier, native locked options, a brake purchase, two ordinary LAN controller streams through a weapon race, host advancement, guest separation and fresh-token process-restart recovery. The final race ended at **24.43 s** with **310 shots**, both scripted drivers wrecked; this exercises eligible wreck advancement, not a three-lap human finish. No browser script errors. Screenshots and full result/restore snapshots are in `w7-device.json` and `w7-*.png`.
+
+`career-idle-check.mjs` also rejected Comet for the initial event and ran a stationary 180 s timeout: cash settled but round one remained uncleared. That device check preceded only the final seed-diversity and presentation adjustments; the qualification predicate is unchanged. Its result is `w7-idle-device.json`. The initial browser option assertion used sheet visibility too early; the final harness waits for catalog binding and checks the native option flag, while the host gate is independently exercised. Diagnostic captures remain as `w7-failure-*.png`.
+
+Owner enjoyment, perceived rival identity, physical-phone comfort and human win rates remain **not measured**. This is still procedural prototype presentation with no audio. The curriculum and reward loop are connected and testable; G1 remains the owner's decision. W8 follows with the larger physical balance scenarios, a complete multi-race session, 15 real-minute Stick soak and thermal/performance report.

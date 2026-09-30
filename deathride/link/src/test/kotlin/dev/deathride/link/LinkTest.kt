@@ -53,6 +53,10 @@ class LinkTest {
             val request=host.slots[0].shopRequest.getAndSet(null)!!;assertEquals("brakes",dev.deathride.core.Parts.all[request.part].id);assertEquals(0,request.tier)
             ws.sendText(buy.replace("couch-0","another-profile"),true).join();barrier();assertNull(host.slots[0].shopRequest.get())
             host.phase="lobby"
+            host.phase="career";ws.sendText("""{"t":"difficulty","id":"Pro"}""",true).join();barrier();assertEquals(2,host.difficultyRequest.getAndSet(-1))
+            val guest=Listener();val guestWs=connect(guest);guestWs.sendText("""{"t":"hello","pin":"${host.pin}","profile":"guest-career"}""",true).join();guest.next("welcome")
+            guestWs.sendText("""{"t":"difficulty","id":"Club"}""",true).join();guestWs.sendText("""{"t":"careerStart"}""",true).join();guestWs.sendText("""{"t":"ping","ts":1}""",true).join();guest.next("pong")
+            assertEquals(-1,host.difficultyRequest.get());assertEquals(0,host.command.get());guestWs.abort();host.phase="lobby"
             ws.sendText("""{"t":"feel","id":"Loose"}""",true).join()
             repeat(100) { if(host.feelRequest.get()<0)Thread.sleep(10) }
             assertEquals(1,host.feelRequest.getAndSet(-1))

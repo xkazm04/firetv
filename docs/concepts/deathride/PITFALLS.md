@@ -16,3 +16,8 @@ W5's Stick save check force-stopped/relaunched Death Ride, then tried to read it
 ## 2026-09-30 - Touch-action on ancestors can disable a scrolling shop
 
 The driving page deliberately sets `touch-action: none`. Giving only an overflowing child `pan-y` does not restore native menu scrolling because the browser intersects ancestor policies. The garage switches the root/body to `pan-y` while open; driving controls retain their own `none`. Keep the shop's explicit close button reachable by scrolling on short landscape screens. Source: W5 controller integration.
+
+
+## 2026-09-30 - Career sheet visibility is earlier than catalog binding
+
+The first W7 browser assertion saw a generic option-enabled result before the failure screenshot showed the native disabled flag. The sheet can be made visible by the phase HUD before asynchronous catalog/profile binding is complete. Wait for the native option property as the readiness condition, and separately test that the TV rejects a locked-car start. No host gate bypass was found; a screenshot taken after an assertion is not proof of the DOM state at the assertion's instant. Source: W7 `career-check.mjs` and `career-idle-check.mjs` on AFTKM.

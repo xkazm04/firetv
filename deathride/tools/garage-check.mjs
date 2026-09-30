@@ -39,7 +39,7 @@ try {
  const restored=(await stats()).slots[0].garage;assert.equal(restored.profile,before.profile);assert.equal(restored.credits,paid.credits);assert.equal(restored.races,1);assert.equal(restored.offers.find(x=>x.id==='brakes').tier,1);
  await page.locator('#garageButton').tap();await pause(200);await page.screenshot({path:'evidence/phase1/w5-receipt.png'});assert.deepEqual(errors,[]);
  checks.push('App force-stop/relaunch and fresh seat token preserve the browser profile, bought part, receipt and cash');
- await page.locator('#closeGarage').tap();await context.close();adb('shell','input','keyevent','19');await pause(300);adb('shell','input','keyevent','85');await pause(300);
+ await page.locator('#closeGarage').tap();await context.close();adb('shell','input','keyevent','89');await pause(300);adb('shell','input','keyevent','85');await pause(300);
  const couchBefore=(await stats()).slots[0].garage;assert.equal(couchBefore.profile,'couch-0');assert.equal(couchBefore.credits,160);
  adb('shell','input','keyevent','20');adb('shell','input','keyevent','20');adb('shell','input','keyevent','23');await pause(300);
  const couchAfter=(await stats()).slots[0].garage;assert.equal(couchAfter.credits,40);assert.equal(couchAfter.offers.find(x=>x.id==='brakes').tier,1);

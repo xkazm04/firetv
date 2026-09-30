@@ -177,7 +177,7 @@ class Combat(private val world: World,val enabled: Boolean) {
     /** Called only on the driver's existing perception/reaction cadence. */
     fun think(c: Car) {
         if(!enabled || !canAct(c.id)){c.aiInput.fire=0.0;c.aiInput.mine=0.0;return}
-        var target=-1;var distance=Weapons.all[Weapons.RIVET].rangeM;var chaser=false
+        var target=-1;var distance=Weapons.all[Weapons.RIVET].rangeM*(c.aiStyle?.fireRangeScale?:1.0);var chaser=false
         val cx=cos(c.heading);val cy=sin(c.heading)
         for(o in world.cars)if(o!==c && canAct(o.id)) {
             val dx=o.x-c.x;val dy=o.y-c.y;val along=dx*cx+dy*cy;val side=abs(-dx*cy+dy*cx)
@@ -189,11 +189,26 @@ class Combat(private val world: World,val enabled: Boolean) {
         }
         lastTarget[c.id]=target
         c.aiInput.fire=if(target>=0)1.0 else 0.0
-        c.aiInput.mine=if(chaser)1.0 else 0.0
-        c.aiInput.weapon=if(target>=0 && distance>CombatRules["aiHeavyMinRangeM"] && ammo(c.id,Weapons.HAMMER)>0)Weapons.HAMMER else Weapons.RIVET
+        c.aiInput.mine=if(chaser && c.aiSkill?.mines!=false && c.aiStyle?.mines!=false)1.0 else 0.0
+        c.aiCombatReason=if(c.aiInput.mine>0)2 else if(target>=0)1 else 0
+        c.aiInput.weapon=if(target>=0 && distance>CombatRules["aiHeavyMinRangeM"]*(c.aiStyle?.heavyRangeScale?:1.0) && ammo(c.id,Weapons.HAMMER)>0)Weapons.HAMMER else Weapons.RIVET
+    }
+    fun seekRepair(c: Car,lane: Double): Double {
+        c.aiPickupTarget=-1
+        if(!enabled || c.aiSkill?.seekRepairs!=true || health(c.id)>CombatRules["maxHp"]*Career["repairSeekHpFraction"])return lane
+        var closest=Career["repairSeekDistanceM"];var chosen=lane
+        for(i in pickups.indices) {
+            val p=pickups[i];if(p.type.id!="repair" || p.cooldownSeconds>0)continue
+            val dx=p.x-c.x;val dy=p.y-c.y;val ahead=dx*cos(c.heading)+dy*sin(c.heading)
+            if(ahead>c.spec.circleOffsetM+c.spec.circleRadiusM && dx*dx+dy*dy<closest*closest) {
+                world.track.project(p.x,p.y,projection)
+                if(abs(projection.distance)<=world.track.widthAt(projection.s)*Career["repairSeekLaneLimitFraction"]) { closest=sqrt(dx*dx+dy*dy);chosen=projection.distance;c.aiPickupTarget=i }
+            }
+        }
+        return chosen
     }
     fun avoidMine(c: Car,s: Double,lane: Double): Double {
-        if(!enabled)return lane
+        if(!enabled || c.aiSkill?.avoidMines==false)return lane
         for(m in mines)if(m.active && m.ageSeconds>=Weapons.all[Weapons.MINE].armingSeconds) {
             val dx=m.x-c.x;val dy=m.y-c.y;val ahead=dx*cos(c.heading)+dy*sin(c.heading)
             if(ahead>0 && ahead<CombatRules["aiMineAvoidDistanceM"] && dx*dx+dy*dy<CombatRules["aiMineAvoidDistanceM"]*CombatRules["aiMineAvoidDistanceM"]) {

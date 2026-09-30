@@ -30,6 +30,12 @@ class Profile(val id: String) {
     var settledRace=0L;internal set
     var races=0;internal set
     var wins=0;internal set
+    var careerRound=0;internal set
+    var careerCleared=0;internal set
+    var careerPoints=0;internal set
+    var careerSeasons=0;internal set
+    var careerDifficulty=0
+    val careerTrophies=IntArray(Career.cups.size)
     val tiers=IntArray(CarCatalog.all.size*Parts.all.size)
     var lastReceipt: Receipt?=null;internal set
     init { require(validProfileId(id)) }
@@ -42,6 +48,7 @@ class Profile(val id: String) {
     fun copy(): Profile = Profile(id).also { p ->
         p.credits=credits;p.selectedCar=selectedCar;p.startedRaces=startedRaces;p.settledRace=settledRace;p.races=races;p.wins=wins
         tiers.copyInto(p.tiers);p.lastReceipt=lastReceipt
+        p.careerRound=careerRound;p.careerCleared=careerCleared;p.careerPoints=careerPoints;p.careerSeasons=careerSeasons;p.careerDifficulty=careerDifficulty;careerTrophies.copyInto(p.careerTrophies)
     }
 }
 fun validProfileId(id: String)=id.matches(Regex("[A-Za-z0-9_-]{1,64}"))
@@ -60,8 +67,9 @@ object Garage {
         val before=IntArray(old.size){car.stat(CarCatalog.statNames[it],old)};val after=IntArray(old.size){car.stat(CarCatalog.statNames[it],updated)}
         val price=part.price(tier+1,priceScale)
         val useful=before.indices.any { part.bonuses[it]>0 && after[it]>before[it] }
-        val reason=when { tier>=part.maxTier->"Maximum tier";!useful->"At class limit";profile.credits<price->"Earn more credits";else->"Ready to install" }
-        return Offer(partIndex,tier,min(tier+1,part.maxTier),price,tier<part.maxTier && useful && profile.credits>=price,reason,before,after)
+        val lock=Career.partLock(profile,partIndex,tier+1)
+        val reason=when { tier>=part.maxTier->"Maximum tier";!useful->"At class limit";lock.isNotEmpty()->lock;profile.credits<price->"Earn more credits";else->"Ready to install" }
+        return Offer(partIndex,tier,min(tier+1,part.maxTier),price,tier<part.maxTier && useful && lock.isEmpty() && profile.credits>=price,reason,before,after)
     }
     fun buy(profile: Profile,partIndex: Int,expectedTier: Int,priceScale: Double=1.0,expectedCar: Int=profile.selectedCar): String {
         if(profile.selectedCar!=expectedCar)return "Car changed - check the selected car"
@@ -84,11 +92,11 @@ object Economy {
         check(profile.startedRaces<EconomyRules["profileRaceLimit"].toLong())
         return ++profile.startedRaces
     }
-    fun settle(profile: Profile,ticket: Long,position: Int,kills: Int,hp: Double,rewardScale: Double=1.0,repairScale: Double=1.0): Receipt? {
+    fun settle(profile: Profile,ticket: Long,position: Int,kills: Int,hp: Double,rewardScale: Double=1.0,repairScale: Double=1.0,bonus: Int=0): Receipt? {
         require(position in 1..Tuning.CAR_COUNT && kills in 0 until Tuning.CAR_COUNT && hp.isFinite() && hp in 0.0..CombatRules["maxHp"])
-        require(rewardScale>0 && repairScale>=0)
+        require(rewardScale>0 && repairScale>=0 && bonus>=0)
         if(ticket<=profile.settledRace || ticket>profile.startedRaces)return null
-        val gross=floor((EconomyRules["participationCredits"]+EconomyRules.prizes[position-1]+min(kills,EconomyRules["paidWreckCap"].toInt())*EconomyRules["wreckBountyCredits"])*rewardScale).toInt()
+        val gross=floor((EconomyRules["participationCredits"]+EconomyRules.prizes[position-1]+min(kills,EconomyRules["paidWreckCap"].toInt())*EconomyRules["wreckBountyCredits"]+bonus)*rewardScale).toInt()
         val service=ceil((CombatRules["maxHp"]-hp)*EconomyRules["repairCreditsPerHp"]*repairScale).toInt()
         val paid=min(service,floor(gross*EconomyRules["maxRepairPrizeShare"]).toInt())
         val net=gross-paid;val banked=min(net,EconomyRules["creditCap"].toInt()-profile.credits)

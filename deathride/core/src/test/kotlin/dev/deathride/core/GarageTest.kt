@@ -75,7 +75,8 @@ class GarageTest {
         fun simulate(policy: String,reward: Double=1.0,repair: Double=1.0,price: Double=1.0,killChance: Double=model.getValue("killChance"),advantage: Double=model.getValue("upgradeFinishAdvantagePerTier")): Outcome {
             var cash=0.0;var tiers=0.0;var first=0.0;var net=0.0;var insurance=0;var bankrupt=0
             repeat(count) { seed ->
-                val random=Random(seed.toLong());val p=Profile("sim");var firstBought=0
+                // W5 isolates the fully open garage; W7 separately measures gated career pacing.
+                val random=Random(seed.toLong());val p=Profile("sim").apply{careerCleared=Career.events.size};var firstBought=0
                 // Starter grant can buy a part at race zero; measure first purchase funded after a result separately.
                 p.credits=0
                 for(race in 1..races) {
