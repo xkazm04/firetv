@@ -15,10 +15,12 @@ screen; the way in always looks the same.
 
 ## Principles
 
-1. **The picture carries the lesson.** Each of the eight drawn situations has its own illustrated place with its
-   partner facing the learner. A plan topic, and each of the three school situations (Say that again, please;
-   Our group project; The lost jacket), has no picture of its own yet and borrows the one that practises the
-   same skill (the rover, the planning room, the hotel desk). If an illustration looks generic, fix the illustration; don't add words.
+1. **The picture carries the lesson.** Each of the ten drawn situations has its own illustrated place with its
+   partner facing the learner. Two of the school situations have their own: Say that again, please is Ms Hale's
+   classroom (a chalkboard sentence that stops at "Turn to page", the page number a dashed rose gap), and The lost
+   jacket is Mr Ortiz's corridor (lockers, a lost-property shelf, a wall hook whose jacket is a dashed rose outline).
+   A plan topic, and the school situation Our group project, has no picture of its own yet and borrows the one that
+   practises the same skill (the planning room for the project). If an illustration looks generic, fix the illustration; don't add words.
 2. **One arch per screen, on the left.** The right side holds the words: overline, Georgia title, the rule, the
    caption, what the screen holds (a sentence card, choices, stepping stones), then the actions. When a screen
    needs the width (the level ladder, the row of topic doors, the menu), the arch gives way to that picture,
@@ -115,7 +117,8 @@ whatever should glow.
   Put what matters inside x 90–645, y 110–630, because the arch clips the top corners and the name tag covers
   the bottom-left.
 - **Tell the story with one prop.** The hotel's missing ledger line is a dashed rose outline, and the handover's
-  missing page uses the same outline. The rover's hiding place is a question over a boulder. The café has two
+  missing page uses the same outline; so do the classroom's blank on the chalkboard and the corridor's missing
+  jacket. The rover's hiding place is a question over a boulder. The café has two
   different drinks for two different tastes.
 - A **state** is 510 × 440: one big soft circle, one symbol (a door standing open, a path of doors, a corrected
   bubble, the star-burst) and a wine hill.
