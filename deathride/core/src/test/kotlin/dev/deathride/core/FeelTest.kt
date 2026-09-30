@@ -60,7 +60,7 @@ class FeelTest {
                 assertTrue(t.recovery in 0.0..p.values.number("recoveryMaxSeconds"),"${p.id} $speed $t")
             }
         }
-        File("../evidence/phase1/w1-steering-traces.csv").apply { parentFile.mkdirs(); writeText(output.toString()) }
+        File("build/reports/balance/w1-steering-traces.csv").apply { parentFile.mkdirs(); writeText(output.toString()) }
     }
     @Test fun shapingAndDeterminismAndImmediatePropulsionRelease() {
         for(p in FeelProfiles.all) {

@@ -39,8 +39,8 @@ saying exactly what the owner should try and what "good" and "bad" look like; (7
 | # | Id | Wave | Depends on | Status | Commit | Date |
 |---|---|---|---|---|---|---|
 | 1 | W1 | **Feel Lab**: research and calibration of steering, throttle and brake; live presets; telemetry | - | done; owner feel pending | aaa8546 | 2026-09-30 |
-| 2 | W2 | **Cars and stats**: car classes, the stat model, data-driven car specs | W1 | done; owner feel pending | W2: feat: add five data-driven car classes | 2026-09-30 |
-| 3 | W3 | **Advanced vehicle movement**: weight transfer, handbrake and drift, surfaces, mass-based collisions | W2 | not started | | |
+| 2 | W2 | **Cars and stats**: car classes, the stat model, data-driven car specs | W1 | done; owner feel pending | bd5eb67 | 2026-09-30 |
+| 3 | W3 | **Advanced vehicle movement**: weight transfer, handbrake and drift, surfaces, mass-based collisions | W2 | done; owner feel pending | W3: feat: add weight transfer and surface movement | 2026-09-30 |
 | 4 | W4 | **Weapons and damage**: weapon design and execution, HP, armor, wrecks, and **the controller layout rethink** | W3 | not started | | |
 | 5 | W5 | **Parts and shop**: parts design, economy, garage on TV and phone, save file | W4 | not started | | |
 | 6 | W6 | **Tracks**: track format, authoring, linter, a set of tracks that escalate | W3 | not started | | |
@@ -175,3 +175,7 @@ Design first: `deathride/W1-feel-research.md`. Added five data profiles, shared 
 ### W2 ? 2026-09-30
 
 Design first: `deathride/W2-cars-and-stats.md`. Added five car CSVs, one stat mapping table, per-car physical specs, remote/phone selection and matching bars. Preserved Spike baseline via `physics.csv`. Headless matrix: 270 finish observations (18/class/type), 120 paired races; Trail leads tight/mixed and Comet fast. Comet tuning corrected a first-run failure to express its straight-line role. `:core:test :link:test :app:assembleDebug`: green, 20 core + 3 link. Installed release id/label on AFTKM; `tools/wave-check.mjs ... 2` and remote DOWN passed; evidence and APK hash in design note. Owner feel, combat balance, optical latency not measured. Latest build installed. Next W3: surfaces, transfer, handbrake and mass collisions.
+
+### W3 ? 2026-09-30
+
+Design first: `deathride/W3-movement.md`. Added data surfaces/transfer, handbrake/drift hysteresis, kerb/verge penalty, unequal-mass impulses, bounded spin and ram input for W4. Fixed duplicate AI grip speed reduction found by ice completion test. 18 races/108 finishes over six surfaces: all finish within 180 s, deterministic replays; 10,000 advanced steps allocate zero bytes. `:core:test :link:test :app:assembleDebug`: green, 25 core + 3 link. On AFTKM, `tools/wave-check.mjs ... 3` confirms live surfaces and multi-touch drift; remote MENU selects Gravel. Latest release build installed. Owner feel, optical latency and physical-phone ergonomics not measured. Historical test reports now go to build/reports and are copied only into their own wave evidence. Next W4: weapons, one HP authority, wrecks, controller layouts.

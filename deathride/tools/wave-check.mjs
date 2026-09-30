@@ -20,6 +20,14 @@ try {
   checks.push('All five classes selected on paired phone; host agrees; seven stat bars');
   await page.screenshot({path:`evidence/phase1/w${wave}-controller.png`});
   await page.locator('#closeCar').tap();
+  if(Number(wave)>=3){
+    await page.locator('#settings').tap();
+    for(const id of ['Gravel','Oil','Ice','Asphalt']){
+      await page.locator('#surfaceChoice').selectOption(id);await page.waitForTimeout(250);
+      assert.equal((await stats()).surface,id);
+    }
+    await page.locator('#closeFeel').tap();checks.push('All four practice surfaces selected live');
+  }
   await page.locator('#race').tap(); await page.waitForTimeout(3300);
   assert.equal((await stats()).phase,'race');
   const cdp=await context.newCDPSession(page); const gas=await page.locator('#gas').boundingBox();
@@ -27,6 +35,16 @@ try {
   await page.waitForTimeout(1200);
   assert.ok((await stats()).slots[0].speedMps>1);
   await cdp.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});
+  if(Number(wave)>=3){
+    const drift=await page.locator('#drift').boundingBox();
+    const steer=await page.locator('#steer').boundingBox();
+    const points=[{x:gas.x+gas.width/2,y:gas.y+gas.height/2,id:10},{x:steer.x+steer.width/2,y:steer.y+steer.height/2,id:11},{x:drift.x+drift.width/2,y:drift.y+drift.height/2,id:12}];
+    await cdp.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:points});
+    points[1].x+=120;await cdp.send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:points});
+    await page.waitForTimeout(1300);assert.equal((await stats()).slots[0].drifting,true);
+    await cdp.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});
+    checks.push('Simultaneous throttle steer and handbrake enter drift on Stick');
+  }
   checks.push('Selected class starts race and responds to phone throttle');
   await page.locator('#leave').tap(); await page.waitForTimeout(200);
   assert.equal((await stats()).phase,'lobby'); assert.deepEqual(errors,[]);

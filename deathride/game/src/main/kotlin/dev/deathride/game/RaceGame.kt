@@ -83,6 +83,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
                     Input.Keys.BACK,Input.Keys.ESCAPE,Input.Keys.BUTTON_B -> { if(phase!="lobby")lobby() else Gdx.app.exit(); return true }
                     Input.Keys.LEFT -> { selectFeel(-1); return true }
                     Input.Keys.RIGHT -> { selectFeel(1); return true }
+                    Input.Keys.MENU -> { server.surfaceRequest.set((Surfaces.practice.indexOf(server.surface)+1)%Surfaces.practice.size); return true }
                     Input.Keys.DOWN -> if(phase=="lobby" || phase=="results") { server.slots[0].carRequest.set((selectedCars[0]+1)%CarCatalog.all.size); return true }
                     Input.Keys.UP -> if(phase=="lobby") { server.resetPairing(); keyboard=false; return true }
                 }
@@ -110,6 +111,8 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
             if(choice>=0 && (phase=="lobby" || phase=="results")) { selectedCars[i]=choice; CarCatalog.apply(world.cars[i],choice); logger("car slot=$i ${CarCatalog.all[choice].id}") }
             server.slots[i].carJson=CarCatalog.all[selectedCars[i]].json
         }
+        val surfaceIndex=server.surfaceRequest.getAndSet(-1)
+        if(surfaceIndex>=0) { server.surface=Surfaces.practice[surfaceIndex]; world.track.surface=server.surface; logger("surface ${server.surface.json}") }
         val feelIndex=server.feelRequest.getAndSet(-1)
         if(feelIndex>=0) { server.feel=FeelProfiles.all[feelIndex]; logger("feel ${server.feel.json}") }
         for(c in world.cars)c.feel=if(c.human)server.feel else FeelProfiles.spike
@@ -127,6 +130,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
                     val right=Gdx.input.isKeyPressed(Input.Keys.D)||Gdx.input.isKeyPressed(Input.Keys.RIGHT)
                     val gas=Gdx.input.isKeyPressed(Input.Keys.W)||Gdx.input.isKeyPressed(Input.Keys.UP)
                     val brake=Gdx.input.isKeyPressed(Input.Keys.S)||Gdx.input.isKeyPressed(Input.Keys.DOWN)
+                    inputs[0].handbrake=if(Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT))1.0 else 0.0
                     inputs[0].set((if(right)1.0 else 0.0)-(if(left)1.0 else 0.0),if(gas)1.0 else 0.0,if(brake)1.0 else 0.0)
                 }
                 val start=System.nanoTime(); world.step(inputs); server.metrics.simMs.add((System.nanoTime()-start)/1e6,server.nowMs())
@@ -142,7 +146,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         server.raceSeconds=world.seconds
         if(uiTime>=.1) {
             uiTime=0.0
-            for(i in 0..1) { val c=world.cars[i]; val s=server.slots[i]; s.speed=c.speedMps; s.lap=min(c.lap.laps+1,3); s.position=c.position; s.impact=c.impact; s.x=c.x; s.y=c.y }
+            for(i in 0..1) { val c=world.cars[i]; val s=server.slots[i]; s.speed=c.speedMps; s.lap=min(c.lap.laps+1,3); s.position=c.position; s.impact=c.impact; s.drifting=c.drifting; s.loadTransfer=c.loadTransfer; s.surfaceId=c.surface.id; s.x=c.x; s.y=c.y }
             rebuildUi()
         }
         view.apply(); ScreenUtils.clear(bg)
@@ -182,7 +186,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         shape.begin(ShapeRenderer.ShapeType.Filled)
         // Infield and track are original geometric placeholders, cached point arrays.
         shape.color=infield; shape.rect(-60f,-40f,120f,80f); shape.circle(-60f,0f,40f,64); shape.circle(60f,0f,40f,64)
-        shape.color=road
+        shape.color=if(server.surface===Surfaces.asphalt)road else curb
         for(i in 0 until 240) {
             val a=i*4; val b=(i+1)*4
             shape.triangle(trackPoints[a],trackPoints[a+1],trackPoints[a+2],trackPoints[a+3],trackPoints[b],trackPoints[b+1])
@@ -209,6 +213,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
             shape.setColor(.015f,.025f,.035f,1f); shape.rect(x-2.4f+.3f,y-1.2f-.3f,2.4f,1.2f,4.8f,2.4f,1f,1f,deg)
             shape.color=if(c.impact>3 && server.frameNumber%6<3)Color.WHITE else colors[c.id]
             shape.rect(x-2.25f,y-1.08f,2.25f,1.08f,4.5f,2.16f,1f,1f,deg)
+            if(c.drifting) { shape.color=warning; shape.circle(x,y,1.4f,10) }
             val noseX=x+cos(heading).toFloat()*1.05f; val noseY=y+sin(heading).toFloat()*1.05f
             shape.color=bg; shape.rect(noseX-.45f,noseY-.85f,.45f,.85f,.9f,1.7f,1f,1f,deg)
             shape.color=Color.WHITE; shape.circle(x-cos(heading).toFloat()*1.15f,y-sin(heading).toFloat()*1.15f,.27f,8)
@@ -259,7 +264,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
             detail.addText("DOWN: next car   /   phone: choose your car",695f,333f)
         }
         detail.addText(Presentation.CONCEPT+"  /  "+Presentation.TAGLINE,59f,661f)
-        detail.addText("FEEL: "+server.feel.id+"   LEFT / RIGHT TO CHANGE",59f,630f)
+        detail.addText("FEEL: "+server.feel.id+"   LEFT / RIGHT     "+server.surface.id+" / MENU",59f,630f)
         detail.addText("LOCAL CIRCUIT     /     6 CARS     /     3 LAPS",873f,682f)
         detail.addText(if(phase=="lobby")"A live race. A phone in your hand." else "BACK  Lobby       W A S D  Drive       ENTER  Race",873f,660f)
         for(c in world.cars) {

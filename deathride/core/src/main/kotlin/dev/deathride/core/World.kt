@@ -31,7 +31,7 @@ data class CarSpec(
     val circleRadiusM: Double = Physics.base.getValue("circleRadiusM"),
     val circleOffsetM: Double = Physics.base.getValue("circleOffsetM")
 )
-class InputFrame(var steer: Double = 0.0, var throttle: Double = 0.0, var brake: Double = 0.0) {
+class InputFrame(var steer: Double = 0.0, var throttle: Double = 0.0, var brake: Double = 0.0, var handbrake: Double = 0.0) {
     fun set(s: Double, a: Double, b: Double) { steer = s.coerceIn(-1.0,1.0); throttle = a.coerceIn(0.0,1.0); brake = b.coerceIn(0.0,1.0) }
 }
 /** Bounded latest-state mailbox. A late packet cannot restore throttle. */
@@ -42,33 +42,40 @@ class InputMailbox {
     private var steer = 0.0
     private var throttle = 0.0
     private var brake = 0.0
+    private var handbrake=0.0
     var dropped = 0L; private set
     var outOfOrder = 0L; private set
     var staleConsumed = 0L; private set
     var accepted = 0L; private set
     var ageMs = 0.0; private set
-    @Synchronized fun offer(q: Long, generatedMs: Double, nowMs: Double, s: Double, a: Double, b: Double): Boolean {
-        if (!generatedMs.isFinite() || !s.isFinite() || !a.isFinite() || !b.isFinite()) { dropped++; return false }
+    @Synchronized fun offer(q: Long, generatedMs: Double, nowMs: Double, s: Double, a: Double, b: Double, h: Double=0.0): Boolean {
+        if (!generatedMs.isFinite() || !s.isFinite() || !a.isFinite() || !b.isFinite() || !h.isFinite()) { dropped++; return false }
         if (q <= seq) { outOfOrder++; return false }
         if (seq >= 0 && q > seq + 1) dropped += q - seq - 1
         seq = q
         if (nowMs - generatedMs > Tuning.STALE_MS || generatedMs - nowMs > 100.0) { dropped++; return false }
         stampMs = generatedMs; receivedMs = nowMs
-        steer = s.coerceIn(-1.0,1.0); throttle = a.coerceIn(0.0,1.0); brake = b.coerceIn(0.0,1.0); accepted++
+        steer = s.coerceIn(-1.0,1.0); throttle = a.coerceIn(0.0,1.0); brake = b.coerceIn(0.0,1.0); handbrake=h.coerceIn(0.0,1.0); accepted++
         return true
     }
     @Synchronized fun consume(nowMs: Double, out: InputFrame): Boolean {
         ageMs = if (accepted == 0L) 0.0 else max(0.0, nowMs-stampMs)
         val stale = nowMs - receivedMs > Tuning.STALE_MS || ageMs > Tuning.STALE_MS
         out.set(steer, if (stale) 0.0 else throttle, if (stale) 0.0 else brake)
+        out.handbrake=if(stale)0.0 else handbrake
         if (stale) staleConsumed++
         return stale
     }
-    @Synchronized fun newConnection() { seq = -1; receivedMs = -1e12; throttle = 0.0; brake = 0.0 }
+    @Synchronized fun newConnection() { seq = -1; receivedMs = -1e12; throttle = 0.0; brake = 0.0; handbrake=0.0 }
 }
 class TrackPoint { var x = 0.0; var y = 0.0; var heading = 0.0; var curvature = 0.0 }
 class Projection { var s = 0.0; var distance = 0.0; var nx = 0.0; var ny = 1.0 }
-data class Track(val straightM: Double = 120.0, val radiusM: Double = 40.0, val halfWidthM: Double = 12.0) {
+data class Track(val straightM: Double = 120.0, val radiusM: Double = 40.0, val halfWidthM: Double = 12.0, var surface: Surface=Surfaces.asphalt) {
+    fun surfaceAt(s: Double, lateral: Double): Surface = when {
+        abs(lateral)>halfWidthM-Movement.vergeWidthM -> Surfaces.offtrack
+        abs(lateral)>halfWidthM-Movement.vergeWidthM-Movement.kerbWidthM -> Surfaces.kerb
+        else -> surface
+    }
     val lengthM = 2 * straightM + 2 * PI * radiusM
     val startM = straightM * 0.5
     fun sample(distanceM: Double, laneM: Double, out: TrackPoint) {
@@ -136,6 +143,8 @@ class Car(val id: Int, track: Track) {
     var x=0.0; var y=0.0; var vx=0.0; var vy=0.0; var heading=0.0; var yaw=0.0
     var previousX=0.0; var previousY=0.0; var previousHeading=0.0
     val lap=LapCounter(track.lengthM,track.startM)
+    var surface=Surfaces.asphalt
+    var loadTransfer=0.0; var drifting=false; var wallImpactMps=0.0
     var spec=CarSpec()
     var carClass: CarClass?=null
     var feel=FeelProfiles.spike
@@ -159,23 +168,32 @@ class SlipHandling : Handling {
         car.filteredThrottle=if(requested<car.filteredThrottle)requested else min(requested,car.filteredThrottle+profile.throttleRisePerSecond*dt)
         val throttle=if(input.brake>0.0)0.0 else car.filteredThrottle
         val brake=(input.brake*profile.brakeScale).coerceIn(0.0,1.0)
+        val advanced=car.carClass!=null
+        val hb=if(advanced)input.handbrake else 0.0
+        if(advanced)car.loadTransfer+=((brake*Movement.brakeTransfer-throttle*Movement.throttleTransfer)-car.loadTransfer)*(1-exp(-dt/Movement.transferResponseSeconds))
+        val yawScale=if(advanced)(1-throttle*Movement.throttleUndersteer)*(1+hb*Movement.handbrakeYawGain) else 1.0
         val slip=if(speed>1.0)wrapAngle(atan2(car.vy,car.vx)-car.heading) else 0.0
-        val desiredYaw=-car.filteredSteer*profile.authority(speed)*spec.steeringRateRadPerSecond*(speed+spec.launchSteeringMps*throttle)/(speed+7.0)+slip*spec.yawStabilityPerSecond*profile.stabilityScale*(1-brake*spec.brakeGripLoss)
+        val desiredYaw=-car.filteredSteer*yawScale*profile.authority(speed)*spec.steeringRateRadPerSecond*(speed+spec.launchSteeringMps*throttle)/(speed+7.0)+slip*spec.yawStabilityPerSecond*profile.stabilityScale*(1-brake*spec.brakeGripLoss)
         car.yaw+=(desiredYaw-car.yaw)*(1-exp(-dt/(spec.yawResponseSeconds*profile.yawResponseScale)))
         car.heading=wrapAngle(car.heading+car.yaw*dt)
         val cx=cos(car.heading); val cy=sin(car.heading)
         var forward=car.vx*cx+car.vy*cy
         var lateral=-car.vx*cy+car.vy*cx
-        val gripScale=1.0-brake*spec.brakeGripLoss
+        val gripScale=(1.0-brake*spec.brakeGripLoss)*(if(advanced)car.surface.gripScale*(1+car.loadTransfer*Movement.transferGripGain)*(1-hb*Movement.handbrakeGripLoss) else 1.0)
         val wanted=lateral*(1-exp(-spec.lateralGripPerSecond*gripScale*dt))
         val forceLimit=spec.maxLateralAccelerationMps2*gripScale*dt
         lateral-=wanted.coerceIn(-forceLimit,forceLimit)
         forward=(forward+(throttle*spec.accelerationMps2-brake*spec.brakeMps2)*dt).coerceAtLeast(0.0)
-        forward*=exp(-spec.rollingDragPerSecond*dt)
+        forward*=exp(-(spec.rollingDragPerSecond+(if(advanced)car.surface.dragPerSecond+hb*Movement.handbrakeDragPerSecond else 0.0))*dt)
         car.vx=cx*forward-cy*lateral; car.vy=cy*forward+cx*lateral
         val magnitude=car.speedMps
         if(magnitude>spec.maxSpeedMps) { car.vx*=spec.maxSpeedMps/magnitude; car.vy*=spec.maxSpeedMps/magnitude }
         car.x+=car.vx*dt; car.y+=car.vy*dt
+        if(advanced) {
+            val slipNow=abs(wrapAngle(atan2(car.vy,car.vx)-car.heading))
+            if(car.speedMps<Movement.driftMinSpeedMps || hb==0.0 && slipNow<Movement.driftExitRadians)car.drifting=false
+            else if(slipNow>Movement.driftEnterRadians)car.drifting=true
+        }
     }
 }
 
@@ -190,6 +208,7 @@ class World(val seed: Int=17, val spec: CarSpec=CarSpec(), val track: Track=Trac
     val cars=Array(Tuning.CAR_COUNT) { Car(it,track).also { c -> c.spec=spec } }
     val snapshot=Snapshot(); val previousSnapshot=Snapshot()
     private val projection=Projection(); private val point=TrackPoint()
+    val ramClosingMps=DoubleArray(Tuning.CAR_COUNT*Tuning.CAR_COUNT)
     val trace=IntArray(Tuning.CAR_COUNT*600)
     var steps=0; private set
     var seconds=0.0; private set
@@ -201,6 +220,7 @@ class World(val seed: Int=17, val spec: CarSpec=CarSpec(), val track: Track=Trac
             val s=track.startM-6.0-(c.id/2)*7.0
             track.sample(s, if(c.id%2==0) -3.2 else 3.2,point)
             c.x=point.x; c.y=point.y; c.heading=point.heading; c.vx=0.0; c.vy=0.0; c.yaw=0.0
+            c.loadTransfer=0.0; c.drifting=false; c.wallImpactMps=0.0
             c.filteredSteer=0.0; c.filteredThrottle=0.0
             c.previousX=c.x; c.previousY=c.y; c.previousHeading=c.heading; c.lap.reset(s)
             c.finishSeconds=-1.0; c.position=c.id+1; c.impact=0.0; c.aiDwell=0; c.aiBlockedSteps=0; c.aiMode=AiMode.DRIVE
@@ -210,9 +230,10 @@ class World(val seed: Int=17, val spec: CarSpec=CarSpec(), val track: Track=Trac
     }
     fun step(inputs: Array<InputFrame>, dt: Double=Tuning.STEP_SECONDS) {
         previousSnapshot.capture(cars)
-        steps++; seconds+=dt
+        steps++; seconds+=dt; ramClosingMps.fill(0.0)
         for(c in cars) {
             c.previousX=c.x; c.previousY=c.y; c.previousHeading=c.heading; c.impact*=.87
+            c.wallImpactMps=0.0; track.project(c.x,c.y,projection); c.surface=track.surfaceAt(projection.s,projection.distance)
             val input=if(c.human) inputs[c.id] else { driveAi(c); c.aiInput }
             handling.integrate(c,input,c.spec,dt)
             contain(c)
@@ -254,8 +275,9 @@ class World(val seed: Int=17, val spec: CarSpec=CarSpec(), val track: Track=Trac
         val slip=if(c.speedMps>2.0) wrapAngle(atan2(c.vy,c.vx)-c.heading) else 0.0
         val error=wrapAngle(desired-c.heading-slip*.35)
         val steer=(-error*2.3+c.yaw*.18).coerceIn(-1.0,1.0)
-        val target=if(c.carClass==null) { if(point.curvature>0) 23.0-skill.cornerMarginMps else 29.0 } else min(c.spec.maxSpeedMps*CarCatalog.aiCruiseFraction, if(point.curvature>0) sqrt(c.spec.maxLateralAccelerationMps2*CarCatalog.aiGripFraction/point.curvature)-skill.cornerMarginMps else c.spec.maxSpeedMps)
-        val cornerTarget=target*(1.0-min(.55,abs(error)*.4))
+        val target=if(c.carClass==null) { if(point.curvature>0) 23.0-skill.cornerMarginMps else 29.0 } else min(c.spec.maxSpeedMps*CarCatalog.aiCruiseFraction, if(point.curvature>0) sqrt(c.spec.maxLateralAccelerationMps2*track.surfaceAt(s+look,lane).gripScale*CarCatalog.aiGripFraction/point.curvature)-skill.cornerMarginMps else c.spec.maxSpeedMps)
+        val surfaceLimit=if(point.curvature>0)1.0 else sqrt(c.surface.gripScale).coerceIn(Movement.aiSurfaceMargin,1.0)
+        val cornerTarget=target*surfaceLimit*(1.0-min(.55,abs(error)*.4))
         val a=if(c.speedMps<cornerTarget) 1.0 else .12
         val b=if(c.speedMps>cornerTarget+2.0) .45 else 0.0
         c.aiInput.set(steer,a,b)
@@ -273,26 +295,36 @@ class World(val seed: Int=17, val spec: CarSpec=CarSpec(), val track: Track=Trac
                 val penetration=abs(projection.distance)-limit
                 c.x-=nx*penetration; c.y-=ny*penetration
                 val vn=c.vx*nx+c.vy*ny
-                if(vn>0) { c.vx-=(1+spec.restitution)*vn*nx; c.vy-=(1+spec.restitution)*vn*ny; c.impact=max(c.impact,vn) }
+                if(vn>0) { c.vx-=(1+spec.restitution)*vn*nx; c.vy-=(1+spec.restitution)*vn*ny; c.impact=max(c.impact,vn); c.wallImpactMps=max(c.wallImpactMps,vn); if(c.carClass!=null) { val tangent=c.vx*(-ny)+c.vy*nx; c.vx+=ny*tangent*Movement.wallTangentLoss; c.vy-=nx*tangent*Movement.wallTangentLoss } }
             }
         }
     }
     fun collide(a: Car,b: Car) {
-        val limit=2*spec.circleRadiusM
+        val sa=a.spec; val sb=b.spec; val limit=sa.circleRadiusM+sb.circleRadiusM
+        val invA=1/sa.massKg; val invB=1/sb.massKg; val invSum=invA+invB
         for(ea in -1..1 step 2) for(eb in -1..1 step 2) {
-            val dx=b.x+cos(b.heading)*spec.circleOffsetM*eb-a.x-cos(a.heading)*spec.circleOffsetM*ea
-            val dy=b.y+sin(b.heading)*spec.circleOffsetM*eb-a.y-sin(a.heading)*spec.circleOffsetM*ea
+            val ax=cos(a.heading)*sa.circleOffsetM*ea; val ay=sin(a.heading)*sa.circleOffsetM*ea
+            val bx=cos(b.heading)*sb.circleOffsetM*eb; val by=sin(b.heading)*sb.circleOffsetM*eb
+            val dx=b.x+bx-a.x-ax; val dy=b.y+by-a.y-ay
             val d2=dx*dx+dy*dy
             if(d2<limit*limit) {
                 val d=sqrt(d2).coerceAtLeast(.0001)
-                val nx=if(d2<.0000001) 1.0 else dx/d; val ny=if(d2<.0000001) 0.0 else dy/d
-                val push=(limit-d+.002)*.5
-                a.x-=nx*push; a.y-=ny*push; b.x+=nx*push; b.y+=ny*push
+                val nx=if(d2<.0000001)1.0 else dx/d; val ny=if(d2<.0000001)0.0 else dy/d
+                val push=limit-d+.002
+                a.x-=nx*push*invA/invSum; a.y-=ny*push*invA/invSum
+                b.x+=nx*push*invB/invSum; b.y+=ny*push*invB/invSum
                 val relative=(b.vx-a.vx)*nx+(b.vy-a.vy)*ny
                 if(relative<0) {
-                    val impulse=-(1+spec.restitution)*relative/(2/spec.massKg)
-                    a.vx-=impulse/spec.massKg*nx; a.vy-=impulse/spec.massKg*ny
-                    b.vx+=impulse/spec.massKg*nx; b.vy+=impulse/spec.massKg*ny
+                    val impulse=-(1+min(sa.restitution,sb.restitution))*relative/invSum
+                    a.vx-=impulse*invA*nx; a.vy-=impulse*invA*ny
+                    b.vx+=impulse*invB*nx; b.vy+=impulse*invB*ny
+                    if(a.carClass!=null || b.carClass!=null) {
+                        val spin=Movement.collisionSpinScale
+                        a.yaw=(a.yaw-(ax*ny-ay*nx)*impulse*invA*spin).coerceIn(-Movement.maxCollisionYawRadPerSecond,Movement.maxCollisionYawRadPerSecond)
+                        b.yaw=(b.yaw+(bx*ny-by*nx)*impulse*invB*spin).coerceIn(-Movement.maxCollisionYawRadPerSecond,Movement.maxCollisionYawRadPerSecond)
+                    }
+                    val pair=min(a.id,b.id)*Tuning.CAR_COUNT+max(a.id,b.id)
+                    ramClosingMps[pair]=max(ramClosingMps[pair],max(0.0,-relative-Movement.ramMinClosingMps))
                     a.impact=max(a.impact,-relative); b.impact=max(b.impact,-relative)
                 }
             }
@@ -300,7 +332,7 @@ class World(val seed: Int=17, val spec: CarSpec=CarSpec(), val track: Track=Trac
     }
     fun stateHash(): Long {
         var hash=1125899906842597L
-        for(c in cars) { hash=31*hash+c.x.toBits(); hash=31*hash+c.y.toBits(); hash=31*hash+c.vx.toBits(); hash=31*hash+c.vy.toBits(); hash=31*hash+c.heading.toBits(); hash=31*hash+c.lap.laps; hash=31*hash+c.aiMode.ordinal }
+        for(c in cars) { hash=31*hash+c.x.toBits(); hash=31*hash+c.y.toBits(); hash=31*hash+c.vx.toBits(); hash=31*hash+c.vy.toBits(); hash=31*hash+c.heading.toBits(); hash=31*hash+c.lap.laps; hash=31*hash+c.aiMode.ordinal; hash=31*hash+c.yaw.toBits(); hash=31*hash+c.loadTransfer.toBits(); hash=31*hash+c.filteredSteer.toBits(); hash=31*hash+c.filteredThrottle.toBits(); hash=31*hash+if(c.drifting)1 else 0 }
         return hash
     }
 }

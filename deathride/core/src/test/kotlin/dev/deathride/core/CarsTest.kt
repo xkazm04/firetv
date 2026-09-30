@@ -37,7 +37,7 @@ class CarsTest {
             }
             winners+=times.indices.minBy { times[it] }
         }
-        File("../evidence/phase1/w2-laps.csv").writeText(csv.toString())
+        File("build/reports/balance/w2-laps.csv").apply { parentFile.mkdirs(); writeText(csv.toString()) }
         assertTrue(winners.size>=2,"One class dominates every track type: $winners; $csv")
         val duels=StringBuilder("track,a,b,aWins,bWins,samples\n")
         for(t in tracks.indices) for(a in CarCatalog.all.indices) for(b in a+1 until CarCatalog.all.size) {
@@ -50,6 +50,6 @@ class CarsTest {
             }
             duels.append("${names[t]},${CarCatalog.all[a].id},${CarCatalog.all[b].id},$wins,${4-wins},4\n")
         }
-        File("../evidence/phase1/w2-duels.csv").writeText(duels.toString())
+        File("build/reports/balance/w2-duels.csv").apply { parentFile.mkdirs(); writeText(duels.toString()) }
     }
 }

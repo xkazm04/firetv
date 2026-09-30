@@ -21,3 +21,11 @@ Optical check: film phone and TV together at 240 fps for at least 30 FLASH TEST 
 In the lobby, DOWN cycles P1's car on the TV; each phone's CAR button selects its own car. Try Needle, Line, Bastion, Comet and Trail. Confirm the same name and seven stat bars on phone/TV. Good: selections survive a race/rematch and cannot change mid-race. Bad: the name changes while performance does not, or one phone changes the other car.
 
 Drive the same bend in Trail then Comet, and accelerate in Needle then Bastion. Good: Trail holds the corner; Comet gains speed on a clear straight; Needle launches quickly; Bastion feels slower. Bad: every class feels identical or one is better at everything. Armor and mounts are future combat capacity until W4, not a tested advantage yet. Report car + preset + maneuver; felt verdict **not measured**.
+
+## W3 ? Weight, drift and surfaces (2026-09-30)
+
+Use FEEL ? Practice surface or TV MENU to cycle Asphalt/Gravel/Oil/Ice. Try the same turn on each. Good: low grip needs earlier braking and longer recovery; the edge verge slows you before the wall. Bad: changing surface does nothing, cars jitter, or AI stays stuck for an entire race.
+
+Hold DRIFT while steering at speed, then release and countersteer. The phone says DRIFTING and the car gets a yellow marker. Good: held drift is recoverable; GO release still coasts and backgrounding the phone clears handbrake. Bad: a latched handbrake or uncontrolled spin after straightening. The temporary drift button is revised with combat in W4.
+
+Compare a glancing wall touch with a head-on impact, then bump Bastion with Needle. Good: glancing keeps forward motion; the light car is displaced more. Bad: wall glue, teleportation, interpenetration or a light car throwing the heavy one farther. Owner feel, especially ice difficulty, remains **not measured**.
