@@ -240,3 +240,8 @@ Consequences for the remaining waves:
    wheels, shading and shadow drawn in code, track edges, kerbs, surface textures made procedurally, skid marks, dust/smoke particles, a proper
    HUD. Everything stays generated in code (no downloaded assets), and the frame budget on the Stick stays inside the W1 figures.
 4. The remaining waves keep their cards. Report honestly where the result is still far below a real game; do not claim quality the owner has not seen.
+
+**Addendum, 2026-09-30 19:2x (owner):** cars should be about **50% larger** than they are now (length and width, in the scale contract and on screen).
+The purpose: the classes can then differ much more from the standard car (size, mass and silhouette spread wider), and cars cover far more of
+the track, so a race is full of vehicle contact. Re-derive track widths, corner radii, grid spacing, AI spacing and camera zoom against the larger
+cars; re-check collisions, the six-car finish-time tests and the Stick frame budget. Widen the class spread in the stat mapping, not just the drawing.
