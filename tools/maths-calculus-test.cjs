@@ -367,10 +367,11 @@ test('7c: the W7 batch-2 school corpus - every decimals and percent question the
 
 test('7d: the W7 batch-3 school corpus - every ratio, rate, area and mean or range question renders on the practice sheet with every number, ratio and unit kept; a long row is fitted, never under 40 px',()=>{
  // ratio: 'Write 12:18 in its simplest form.', 'Share €60 in the ratio 2:3.', 'Fill in the missing number: 2:3 = ?:15.' - no
- // fraction stacked, the ratio's colon kept between its numbers. A row wider than the paper at 52 px is not a break: the
+ // fraction stacked, the ratio's colon kept between its numbers; rates: '5 pens cost €3.50. What do 8 pens cost?', '240 km in
+ // 3 hours. How far in 5 hours?'. A row wider than the paper at 52 px is not a break: the
  // sheet fits it (MathsTV fitRows, tv/mathsRows fitRow) down in 2 px steps, and this batch holds it at 40 px or more.
  const S=require(path.join(root,'src/lib/rules/school.ts'));
- const GENS=[S.genRatio];
+ const GENS=[S.genRatio,S.genRate];
  const off=[];let n=0,fitted=0,smallest=52;
  for(const g of GENS)for(const tier of [1,2])for(let seed=0;seed<100;seed++){
   const sp=g(seed,tier),q=S.question(sp);n++;

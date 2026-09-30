@@ -823,7 +823,7 @@ test('W7b 9: an unsure decimals or percent item is explained in the school stanc
 });
 
 // ------------------------------------------------------------------ 9. Family W7 batch 3: ratio, rates, area, mean and range - read, withheld and marked
-const ra=(expr,unit)=>({shape:'ratio',expr,...(unit?{unit}:{})});
+const ra=(expr,unit)=>({shape:'ratio',expr,...(unit?{unit}:{})}),rt=(expr,unit)=>({shape:'rate',expr,unit});
 /** [task text, the spec it reads as (null: refused)] per unit; each spec's value is worked in school-rules-test. */
 const B3_TASKS={
  'ratio-share':[
@@ -838,8 +838,24 @@ const B3_TASKS={
   ['Share 60 in the ratio 4:6',null],['Tom and Sam share 60 sweets in the ratio 2:3. How many does Tom get?',null],['Share 60 between Tom and Sam in the ratio 2:3',null],['2:3 = ?:?',null],['2:3 = 10:15',null],
   ['2:3 = ?:16',null],['Simplify 12:18 and 15:25',null],['Write 12:18 as a fraction',null],['Share 60 in the ratio 2 to 3',null],['Share 60 pounds in the ratio 2:3',null],['Divide 60 by the ratio 2:3',null],
  ],
+ 'unit-rate':[
+  ['5 pens cost €3.50. What do 8 pens cost?',rt('5 pens cost 3.50, 8','€')],['5 pens cost €3.50. What do 8 pens cost',rt('5 pens cost 3.50, 8','€')],['5 pens cost €3.50. Find the cost of 8 pens.',rt('5 pens cost 3.50, 8','€')],
+  ['5 pens cost €3.50, find the cost of 8 pens',rt('5 pens cost 3.50, 8','€')],['If 5 pens cost €3.50, what do 8 pens cost?',rt('5 pens cost 3.50, 8','€')],['5 pens cost €3.50. How much do 8 pens cost?',rt('5 pens cost 3.50, 8','€')],
+  ['5 pens cost € 3.50. What do 8 pens cost?',rt('5 pens cost 3.50, 8','€')],['5 pens cost 3.50 euros. What do 8 pens cost?',rt('5 pens cost 3.50, 8','€')],['12 kg cost €30. What does 1 kg cost?',rt('12 kg cost 30, 1','€')],
+  ['12 kg cost 30 euro, what is the price of 1 kg?',rt('12 kg cost 30, 1','€')],['12 kg cost €30. Find the cost of 1 kg.',rt('12 kg cost 30, 1','€')],['4 books cost £18. What do 7 books cost?',rt('4 books cost 18, 7','£')],
+  ['(b) 4 books cost £18. What do 7 books cost?',rt('4 books cost 18, 7','£')],['3 pens cost £2.40. What does 1 pen cost?',rt('3 pens cost 2.40, 1','£')],['6 cups cost €9. What do 10 cups cost?',rt('6 cups cost 9, 10','€')],
+  ['240 km in 3 hours. How far in 5 hours?',rt('240 km in 3 h, 5','km')],['240 km takes 3 hours. How far in 5 hours?',rt('240 km in 3 h, 5','km')],['240 km in 3 hours at a steady speed. How far in 5 hours?',rt('240 km in 3 h, 5','km')],
+  ['240 km in 3 hours. How far in 5 hours at the same speed?',rt('240 km in 3 h, 5','km')],['150 km in 4 hours. How far in 1 hour?',rt('150 km in 4 h, 1','km')],['2. 90 km in 2 hours. How far in 7 hours?',rt('90 km in 2 h, 7','km')],
+  ['5 apples cost €2.50. What do 3 apples cost?',rt('5 apples cost 2.50, 3','€')],
+  // refused
+  ['A car travels 240 km in 3 hours. How far does it go in 5 hours?',null],['Sam buys 5 pens for €3.50. How much do 8 pens cost?',null],['5 pens cost €3.50. What do 8 pencils cost?',null],
+  ['5 pens cost 3.50. What do 8 pens cost?',null],['5 pens cost 3.50 pounds. What do 8 pens cost?',null],['5 pens cost €3.5. What do 8 pens cost?',null],['5 pens cost €3.50. What do 5 pens cost?',null],
+  ['1 pen costs €0.70. What do 8 pens cost?',null],['240 km in 3 hours. What is the speed?',null],['3 workers take 12 days. How long do 4 workers take?',null],['5 pens cost €3.50',null],
+  ['5 sweets cost €3.50. What do 8 sweets cost?',null],['5 pens cost €3.50. What do 8 pens and 2 books cost?',null],['3 pens cost €1. What does 1 pen cost?',null],['240 km in 3 hours. How far in 5 minutes?',null],
+  ['5 pens cost €3.50 and 3 books cost €6. What do 8 pens cost?',null],
+ ],
 };
-const B3GEN={'ratio-share':S.genRatio};
+const B3GEN={'ratio-share':S.genRatio,'unit-rate':S.genRate};
 for(const unit of Object.keys(B3_TASKS)){
  const rows=B3_TASKS[unit];
  test(`W7c 4-${unit}: specFromQuestion reads the unit's tasks conservatively - ${rows.length} phrasings, ${rows.filter((t)=>t[1]===null).length} of them refused`,()=>{
@@ -869,6 +885,12 @@ const B3_PAGES={
   {spec:ra('12:18'),a:'3:2',want:['wrong','ratio-swapped']},{spec:ra('60 in 2:3'),a:'120 and 180',want:['wrong','ratio-by-difference']},{spec:ra('2:3 = ?:15'),a:'14',want:['wrong','ratio-added-same']},
   {spec:ra('12:18'),a:'4:6',want:['unsure']},{spec:ra('60 in 2:3'),a:'',want:['unsure']},{spec:ra('45 in 4:5','€'),a:'€20 and €25',want:['right']},{spec:ra('60 in 2:3'),a:'36 and 24',want:['unsure']},
   {spec:ra('2:3 = ?:15'),a:'10:15',want:['right']},
+ ],
+ 'unit-rate':[
+  {spec:rt('5 pens cost 3.50, 8','€'),a:'€5.60',want:['right']},{spec:rt('5 pens cost 3.50, 8','€'),a:'11.43',want:['wrong','rate-wrong-way']},{spec:rt('5 pens cost 3.50, 8','€'),a:'140',want:['wrong','rate-multiplied']},
+  {spec:rt('5 pens cost 3.50, 8','€'),a:'2.19',want:['wrong','rate-other-quantity']},{spec:rt('240 km in 3 h, 5','km'),a:'400 km',want:['right']},{spec:rt('12 kg cost 30, 1','€'),a:'0.4',want:['wrong','rate-wrong-way']},
+  {spec:rt('5 pens cost 3.50, 8','€'),a:'£5.60',want:['unsure']},{spec:rt('240 km in 3 h, 5','km'),a:'',want:['unsure']},{spec:rt('5 pens cost 3.50, 8','€'),a:'560',want:['unsure']},
+  {spec:rt('240 km in 3 h, 5','km'),a:'3600',want:['wrong','rate-multiplied']},
  ],
 };
 for(const unit of Object.keys(B3_PAGES)){

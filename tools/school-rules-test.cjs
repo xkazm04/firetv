@@ -471,7 +471,7 @@ const W7_SLIPS={};
 /** The W7 batch 2 units whose tables are at the end of this file (decimals and percent). */
 const B2_UNITS=['dec-arith','dec-convert','pct-of-amount','pct-change'];
 /** The W7 batch 3 units, after them (ratio, rates, area, mean and range). */
-const B3_UNITS=['ratio-share'];
+const B3_UNITS=['ratio-share','unit-rate'];
 test(`W7 SPELLINGS equivalent fractions: ${EQ_SPELLINGS.length} written answers, zero false-right, zero false-wrong`,()=>{Object.assign(W7_SLIPS,spellings('EQ_SPELLINGS equivalent fractions',EQ_SPELLINGS,'frac-equivalent'));});
 test(`W7 SPELLINGS a fraction of an amount: ${OF_SPELLINGS.length} written answers, zero false-right, zero false-wrong`,()=>{Object.assign(W7_SLIPS,spellings('OF_SPELLINGS a fraction of an amount',OF_SPELLINGS,'frac-of-amount'));});
 test(`W7 SPELLINGS multiply and divide fractions: ${MD_SPELLINGS.length} written answers, zero false-right, zero false-wrong`,()=>{Object.assign(W7_SLIPS,spellings('MD_SPELLINGS multiply and divide fractions',MD_SPELLINGS,'frac-mul-div'));});
@@ -1139,6 +1139,16 @@ const RM1=ra('2:3 = ?:15');       // 2 × 15 / 3 = 10. added the difference 2 + 
 const RM2=ra('4:5 = 12:?');       // 5 × 12 / 4 = 15. added the difference 5 + (12 - 4) = 13; the other way 4 × 12 / 5 = 9.6 (none)
 const RM3=ra('3:6 = ?:18');       // 3 × 18 / 6 = 9. added the difference 3 + (18 - 6) = 15; the other way 6 × 18 / 3 = 36
 const RM4=ra('2:5 = 8:?');        // 5 × 8 / 2 = 20. added the difference 5 + (8 - 2) = 11; the other way 2 × 8 / 5 = 3.2 (none)
+
+// ------------------------------------------------------------------ unit rates and direct proportion
+const rt=(expr,unit)=>({shape:'rate',expr,unit});
+const RC1=rt('5 pens cost 3.50, 8','€');    // 70c a pen: €5.60. wrong way 5 ÷ 3.50 × 8 = 80/7 (11.43); multiplied 3.50 × 5 × 8 = 140; by the number asked 3.50 ÷ 8 × 5 = 2.1875
+const RC2=rt('12 kg cost 30, 1','€');       // €2.50 a kg. wrong way 12 ÷ 30 = 0.4; multiplied 30 × 12 = 360 (by the number asked is the same: not pushed)
+const RC3=rt('4 books cost 18, 7','£');     // £4.50 a book: £31.50. wrong way 4 ÷ 18 × 7 = 14/9 (1.56); multiplied 504; by the number asked 18 ÷ 7 × 4 = 72/7 (10.29)
+const RC4=rt('6 cups cost 9, 10','€');      // €1.50 a cup: €15. wrong way 6 ÷ 9 × 10 = 20/3 (6.67); multiplied 540; by the number asked 9 ÷ 10 × 6 = 5.4
+const RD1=rt('240 km in 3 h, 5','km');      // 80 km an hour: 400 km. wrong way 3 ÷ 240 × 5 = 1/16; multiplied 3600; by the number asked 240 ÷ 5 × 3 = 144
+const RD2=rt('150 km in 4 h, 1','km');      // 37.5 km. wrong way 4 ÷ 150 = 2/75 (0.027); multiplied 600
+const RD3=rt('90 km in 2 h, 7','km');       // 45 km an hour: 315 km. wrong way 2 ÷ 90 × 7 = 7/45 (0.16); multiplied 1260; by the number asked 90 ÷ 7 × 2 = 180/7 (25.71)
 const B3_SPELLINGS={
  'ratio-share':[
   // 12:18 in its simplest form = 2:3: a ratio in lowest terms is right; an equal ratio not in lowest terms is unsure
@@ -1175,6 +1185,32 @@ const B3_SPELLINGS={
   // 2:5 = 8:? -> 20
   [RM4,'20','uk','right'],[RM4,'8:20','uk','right'],[RM4,'11','uk','wrong','ratio-added-same'],[RM4,'8:11','uk','wrong','ratio-added-same'],[RM4,'21','uk','wrong'],
  ],
+ 'unit-rate':[
+  // 8 pens at 5 for €3.50 = €5.60: any written form of the value is right, a missing sign is not held against it
+  [RC1,'5.60','uk','right'],[RC1,'€5.60','uk','right'],[RC1,'5.6','uk','right'],[RC1,'€5.6','uk','right'],[RC1,'5,60 €','de','right'],[RC1,'5,6','cz','right'],[RC1,'5.60 euros','uk','right'],[RC1,'x = 5.60','uk','right'],
+  // another unit, a percent, the cents written bare (560 for €5.60: the answer in cents, or not - never guessed), words: unsure
+  [RC1,'£5.60','uk','unsure'],[RC1,'5.60 kg','uk','unsure'],[RC1,'5.60%','uk','unsure'],[RC1,'560','uk','unsure'],[RC1,'560p','uk','unsure'],[RC1,'five euros sixty','uk','unsure'],[RC1,'','uk','unsure'],
+  [RC1,'5.5','uk','wrong'],[RC1,'5.61','uk','wrong'],[RC1,'6','uk','wrong'],[RC1,'0.70','uk','wrong'],
+  [RC1,'11.43','uk','wrong','rate-wrong-way'],[RC1,'11.4','uk','wrong','rate-wrong-way'],[RC1,'140','uk','wrong','rate-multiplied'],[RC1,'€140','uk','wrong','rate-multiplied'],
+  [RC1,'2.19','uk','wrong','rate-other-quantity'],[RC1,'2.1875','uk','wrong','rate-other-quantity'],
+  // 1 kg at 12 for €30 = €2.50
+  [RC2,'2.50','uk','right'],[RC2,'€2.50','uk','right'],[RC2,'2.5','uk','right'],[RC2,'2,50','cz','right'],[RC2,'2,50','uk','unsure'],[RC2,'250','uk','unsure'],
+  [RC2,'0.4','uk','wrong','rate-wrong-way'],[RC2,'0.40','uk','wrong','rate-wrong-way'],[RC2,'360','uk','wrong','rate-multiplied'],[RC2,'2','uk','wrong'],[RC2,'3','uk','wrong'],[RC2,'2.6','uk','wrong'],
+  // 7 books at 4 for £18 = £31.50
+  [RC3,'£31.50','uk','right'],[RC3,'31.5','uk','right'],[RC3,'1.56','uk','wrong','rate-wrong-way'],[RC3,'504','uk','wrong','rate-multiplied'],[RC3,'10.29','uk','wrong','rate-other-quantity'],
+  [RC3,'£4.50','uk','wrong'],[RC3,'3150','uk','unsure'],[RC3,'€31.50','uk','unsure'],[RC3,'31','uk','wrong'],[RC3,'32','uk','wrong'],
+  // 10 cups at 6 for €9 = €15
+  [RC4,'15','uk','right'],[RC4,'€15.00','uk','right'],[RC4,'6.67','uk','wrong','rate-wrong-way'],[RC4,'540','uk','wrong','rate-multiplied'],[RC4,'5.4','uk','wrong','rate-other-quantity'],
+  [RC4,'1500','uk','unsure'],[RC4,'15%','uk','unsure'],[RC4,'1.5','uk','wrong'],
+  // 240 km in 3 hours, 5 hours = 400 km: another unit is unsure, never converted; a bare number that differs is wrong
+  [RD1,'400','uk','right'],[RD1,'400 km','uk','right'],[RD1,'400km','uk','right'],[RD1,'400 kilometres','uk','right'],[RD1,'400 m','uk','unsure'],[RD1,'400 km/h','uk','unsure'],
+  [RD1,'3600','uk','wrong','rate-multiplied'],[RD1,'144','uk','wrong','rate-other-quantity'],[RD1,'0.0625','uk','wrong','rate-wrong-way'],[RD1,'80','uk','wrong'],[RD1,'401','uk','wrong'],[RD1,'4000','uk','wrong'],
+  // 150 km in 4 hours, 1 hour = 37.5 km: a whole number is an exact claim
+  [RD2,'37.5','uk','right'],[RD2,'37.5 km','uk','right'],[RD2,'37,5 km','de','right'],[RD2,'75/2','uk','right'],[RD2,'37 1/2','uk','right'],[RD2,'38','uk','wrong'],[RD2,'37','uk','wrong'],
+  [RD2,'0.027','uk','wrong','rate-wrong-way'],[RD2,'600','uk','wrong','rate-multiplied'],[RD2,'375','uk','wrong'],
+  // 90 km in 2 hours, 7 hours = 315 km
+  [RD3,'315','uk','right'],[RD3,'1260','uk','wrong','rate-multiplied'],[RD3,'25.71','uk','wrong','rate-other-quantity'],[RD3,'0.16','uk','wrong','rate-wrong-way'],[RD3,'45','uk','wrong'],
+ ],
 };
 const B3_LEAKS={
  'ratio-share':[
@@ -1183,6 +1219,14 @@ const B3_LEAKS={
   [RH1,'The shares are 24 and 36.'],[RH1,'12 × 2 = 24'],[RH1,'60 ÷ 5 × 3'],[RH1,'Two parts make 24.'],[RH1,'It is 24:36.'],[RH1,'60 - 24 = 36'],[RH1,'thirty-six'],[RH1,'Twenty-four and thirty-six.'],
   [RH2,'€20 and €25'],[RH2,'5 lots of 4 is 20.'],[RH2,'Each part is €5, so four parts is €20.'],
   [RM1,'The missing number is 10.'],[RM1,'2:3 = 10:15'],[RM1,'Multiply 2 by 5.'],[RM1,'It is ten.'],[RM1,'15 ÷ 3 × 2'],
+ ],
+ 'unit-rate':[
+  [RC1,'The answer is €5.60.'],[RC1,'It costs 5.60.'],[RC1,'0.70 × 8 = 5.60'],[RC1,'70p × 8 = 560p'],[RC1,'Eight pens cost five euros sixty.'],[RC1,'3.50 ÷ 5 × 8'],[RC1,'About 5.6.'],
+  [RC1,'560 cents'],[RC1,'7 × 8 = 56'],
+  [RC2,'One kg costs €2.50.'],[RC2,'30 ÷ 12 = 2.5'],[RC2,'Two euros fifty.'],[RC2,'It is 2.50.'],
+  [RD1,'You go 400 km.'],[RD1,'80 × 5 = 400'],[RD1,'240 ÷ 3 × 5'],[RD1,'Four hundred kilometres.'],[RD1,'80 km each hour, so 400 km.'],
+  [RD2,'The speed is 37.5 km an hour.'],[RD2,'150 ÷ 4 = 37.5'],
+  [RC3,'£31.50'],[RC3,'4.50 × 7'],
  ],
 };
 const B3_LEGIT={
@@ -1196,6 +1240,14 @@ const B3_LEGIT={
   [RM1,'What do you multiply 3 by to get 15?'],[RM1,'3 × 5 = 15'],[RM1,'Do the same to the 2.'],[RM1,'Multiply both numbers by the same number.'],
   [RM2,'What was 4 multiplied by to make 12?'],[RM2,'4 × 3 = 12'],
  ],
+ 'unit-rate':[
+  [RC1,'Find the cost of one pen first.'],[RC1,'Divide €3.50 by 5.'],[RC1,'One pen costs 70p.'],[RC1,'One pen costs €0.70.'],[RC1,'Then multiply by 8.'],
+  [RC1,'Eight pens cost more than five pens.'],[RC1,'Your answer should be more than €3.50.'],[RC1,'Work in pence: €3.50 is 350p.'],[RC1,'Is the answer more or less than €3.50?'],
+  [RC2,'Divide 30 by 12.'],[RC2,'Divide the cost by the number of kilograms.'],[RC2,'The price of 1 kg is less than €30.'],
+  [RD1,'Find how far you go in one hour first.'],[RD1,'Divide 240 by 3.'],[RD1,'In one hour you go 80 km.'],[RD1,'Then multiply by 5.'],[RD1,'Five hours is longer than three hours, so you go further.'],
+  [RD2,'Divide 150 by 4.'],[RD2,'150 ÷ 4'],
+  [RC3,'Find the price of one book first.'],[RC3,'£18 ÷ 4 = £4.50'],[RC4,'Find the cost of one cup: divide €9 by 6.'],
+ ],
 };
 /**
  * B3 CONFLICTS: legit hints the strict rule refuses, accepted and reported. A ratio's lowest parts leak alone (2 and 3
@@ -1205,6 +1257,8 @@ const B3_LEGIT={
  */
 const B3_CONFLICTS=[
  [RS1,'Step 2: divide both numbers by the same number.'],[RS2,'Both numbers are in the five times table.'],[RS2,'Divide both by 5.'],
+ // a rate's answer in cents or pence is the answer too (560 for €5.60), so whole-number working that makes it is refused
+ [RC1,'Multiply 70 by 8, then write it in euros.'],
 ];
 
 /** The references: each unit's answer by hand, with this file's own gcd, never the module's evaluator. */
@@ -1219,8 +1273,19 @@ const B3REF={
   if(m){const [a,b]=[+m[1],+m[2]],first=m[3]==='?',known=+(first?m[4]:m[3]),ans=first?a*known/b:b*known/a,factor=first?known/b:known/a;return {kind:'missing',a,b,known,first,ans,factor,truth:`${ans}`,off:`${ans+1}`,nums:[a,b,known]};}
   return null;
  },
+ // a cost in whole cents, a distance in half kilometres: integers throughout
+ 'unit-rate':(s)=>{
+  if(s.shape!=='rate')return null;
+  let m=/^(\d+) ([a-z]+) cost (\d+)(?:\.(\d\d))?, (\d+)$/.exec(s.expr);
+  if(m){const q1=+m[1],cents=Number(m[3])*100+Number(m[4]??0),q2=+m[5],tc=cents*q2/q1;assert.ok(Number.isInteger(tc),`${s.expr}: to the cent`);
+   const money=(c)=>(c%100===0?String(c/100):(c/100).toFixed(2));return {measure:'cost',q1,q2,cents,each:cents/q1,truth:money(tc),off:money(tc+100),nums:[q1,q2]};}
+  m=/^(\d+) km in (\d+) h, (\d+)$/.exec(s.expr);
+  if(m){const D=+m[1],h1=+m[2],h2=+m[3],half=2*D*h2/h1;assert.ok(Number.isInteger(half),`${s.expr}: to the half km`);
+   const km=(h)=>(h%2===0?String(h/2):`${(h-1)/2}.5`);return {measure:'distance',D,h1,h2,speed2:2*D/h1,truth:km(half),off:km(half+2),nums:[D,h1,h2]};}
+  return null;
+ },
 };
-const B3GEN={'ratio-share':S.genRatio};
+const B3GEN={'ratio-share':S.genRatio,'unit-rate':S.genRate};
 /** Each unit's tier, as school.ts documents it, asserted on the reference reading. */
 const B3_TIER={
  'ratio-share':(s,r,tier)=>{
@@ -1234,6 +1299,18 @@ const B3_TIER={
    if(s.unit!==undefined)assert.ok(['€','£','kg','g','m','ml','l','min'].includes(s.unit),s.unit);
   }
   if(r.kind==='missing')assert.ok(!r.nums.includes(r.ans),'the question does not print its answer');
+ },
+ 'unit-rate':(s,r,tier)=>{
+  assert.notEqual(r.q1??r.h1,r.q2??r.h2,'the asked number is not the given one');assert.ok(!r.nums.includes(Number(r.truth)),'the question does not print its answer');
+  if(r.measure==='cost'){
+   assert.ok(['€','£'].includes(s.unit),`a cost in euros or pounds: ${s.unit}`);assert.ok(Number.isInteger(r.each),`${s.expr}: a price a pen to the cent`);
+   if(tier===1)assert.ok(r.each%100===0&&r.each>=200&&r.each<=1200&&r.q1>=2&&r.q1<=10&&r.q2<=12,`tier 1: a whole price for one: ${s.expr}`);
+   else assert.ok(r.each%100!==0&&r.each>=5&&r.each<=995&&r.q1>=2&&r.q1<=12&&r.q2<=15,`tier 2: a price for one that is not whole: ${s.expr}`);
+  }else{
+   assert.equal(s.unit,'km');
+   if(tier===1)assert.ok(r.speed2%10===0&&r.speed2>=40&&r.speed2<=180&&r.h1>=2&&r.h1<=5&&r.h2<=8,`tier 1: a whole speed, a multiple of 5: ${s.expr}`);
+   else assert.ok(r.speed2%2===1&&r.speed2>=41&&r.speed2<=191&&[2,4,6,8].includes(r.h1)&&r.h2<=9,`tier 2: a speed ending in a half: ${s.expr}`);
+  }
  },
 };
 
@@ -1293,6 +1370,10 @@ const B3_PRINTS={
   [ra('60 in 2:3','m'),'Share 60 metres in the ratio 2:3.'],[ra('60 in 2:3','$'),'Share 60 dollars in the ratio 2:3.'],
   [RM1,'Fill in the missing number: 2:3 = ?:15.'],[RM2,'Fill in the missing number: 4:5 = 12:?.'],
  ],
+ 'unit-rate':[
+  [RC1,'5 pens cost €3.50. What do 8 pens cost?'],[RC2,'12 kg cost €30. What does 1 kg cost?'],[RC3,'4 books cost £18. What do 7 books cost?'],
+  [RD1,'240 km in 3 hours. How far in 5 hours?'],[RD2,'150 km in 4 hours. How far in 1 hour?'],[rt('3 pens cost 2.40, 1','£'),'3 pens cost £2.40. What does 1 pen cost?'],
+ ],
 };
 const B3_BAD={
  'ratio-share':[
@@ -1301,6 +1382,12 @@ const B3_BAD={
   [ra('61 in 2:3'),'whole shares'],[ra('60 in 4:6'),'simplest form'],[ra('60 in 3:3'),'the same'],[ra('5 in 2:3'),'print its own answer'],[ra('2000 in 2:3'),'larger'],[ra('60 in 2:3:5'),'cannot read'],
   [ra('2:3 = ?:16'),'No whole number'],[ra('2:3 = ?:3'),'keeps the given number'],[ra('2:3 = ?:?'),'cannot read'],[ra('2:3 = 10:15'),'cannot read'],[ra('2:4 = ?:8'),'print its own answer'],
   [ra('60 in 2:3','parsec'),'unit is not'],
+ ],
+ 'unit-rate':[
+  [rt('1 pens cost 3.50, 8','€'),'already gives'],[rt('5 pens cost 3.50, 5','€'),'same number'],[rt('5 pens cost 3.50, 8','km'),'euros or pounds'],[rt('240 km in 3 h, 5','€'),'euros or pounds'],
+  [{shape:'rate',expr:'5 pens cost 3.50, 8'},'euros or pounds'],[rt('5 pens cost 3.5, 8','€'),'cannot read'],[rt('5 sweets cost 3.50, 8','€'),'cannot read'],[rt('3 pens cost 1, 1','€'),'two decimal places'],
+  [rt('4 pens cost 8, 2','€'),'print its own answer'],[rt('5 pens cost 0, 8','€'),'zero'],[rt('5 pens cost 2000, 8','€'),'larger'],[rt('240 km in 3 hours, 5','km'),'cannot read'],
+  [{...RC1,answer:'5.60'},'no answer field'],[{...RC1,form:'decimal'},'does not take'],[rt('5 pens cost 3.50, 8','parsec'),'unit is not'],
  ],
 };
 for (const unit of B3_UNITS){

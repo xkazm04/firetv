@@ -13,7 +13,9 @@
  * increase and decrease (`percent-change`, "Increase 60 by 15%.", the change applied to the whole, never reversed). W7
  * batch 3 adds the last four units, each its own shape with no new store key (`expr` and `unit` carry them): ratio and
  * sharing (`ratio`: "Write 12:18 in its simplest form.", "Share 60 in the ratio 2:3.", "Fill in the missing number: 2:3 =
- * ?:15."; the only shape whose answer may be a PAIR, read by its own strict reader, `readPair`).
+ * ?:15."; the only shape whose answer may be a PAIR, read by its own strict reader, `readPair`); unit rates and direct
+ * proportion (`rate`: "5 pens cost €3.50. What do 8 pens cost?", "240 km in 3 hours. How far in 5 hours?", a short
+ * statement and one question, never a story).
  *
  * The stances this file holds:
  *   - Code decides right and wrong. The truth is recomputed from the spec every time with EXACT rational arithmetic
@@ -327,6 +329,11 @@ export function readNumber(answer: unknown, system: unknown): Reading | null {
  *     24 and 36, in the ratio's order; `unit` is the amount's, optional, as for a fraction of an amount) or "2:3 = ?:15" /
  *     "2:3 = 10:?" (a missing term of an equal ratio: a whole number). A ratio to share by is in lowest terms, its two
  *     numbers differ, and the amount splits into whole shares, neither of which the question prints.
+ *   - rate (W7 batch 3, "Unit rates and direct proportion"): expr "5 pens cost 3.50, 8" (q1 items cost p; what q2 of them
+ *     cost; the item a noun from RATE_NOUNS, the price whole or to the penny, `unit` € or £) or "240 km in 3 h, 5" (a
+ *     distance in h1 hours; the distance in h2 hours at the same speed; `unit` km). q2 = 1 asks the value of a single one
+ *     (the unit rate itself). The value is p × q2 / q1 exactly, to at most two decimal places; q1 is at least 2 and q2 is
+ *     not q1 (else there is nothing to find).
  */
 export type ComputeSpec = { shape: "compute"; expr: string; form?: "simplest" | "decimal"; unit?: Unit; allowNegative?: true };
 export type FractionOfSpec = { shape: "fraction-of"; expr: string; unit?: Unit };
@@ -338,13 +345,19 @@ export type ConvertSpec = { shape: "convert"; expr: string; to: NumberFormAsked 
 export type PercentOfSpec = { shape: "percent-of"; expr: string; unit?: Unit };
 export type PercentChangeSpec = { shape: "percent-change"; expr: string; unit?: Unit };
 export type RatioSpec = { shape: "ratio"; expr: string; unit?: Unit };
-export type SchoolSpec = ComputeSpec | FractionOfSpec | MissingSpec | SimplifySpec | ConvertSpec | PercentOfSpec | PercentChangeSpec | RatioSpec;
+export type RateSpec = { shape: "rate"; expr: string; unit: Unit };
+export type SchoolSpec = ComputeSpec | FractionOfSpec | MissingSpec | SimplifySpec | ConvertSpec | PercentOfSpec | PercentChangeSpec | RatioSpec | RateSpec;
 export type SchoolShape = SchoolSpec["shape"];
-export const SCHOOL_SHAPES: readonly SchoolShape[] = ["compute", "fraction-of", "missing", "simplify", "convert", "percent-of", "percent-change", "ratio"];
+export const SCHOOL_SHAPES: readonly SchoolShape[] = ["compute", "fraction-of", "missing", "simplify", "convert", "percent-of", "percent-change", "ratio", "rate"];
 /** The shapes whose amount may carry a unit (the answer is in it too). */
 const AMOUNT_SHAPES: readonly SchoolShape[] = ["fraction-of", "percent-of", "percent-change"];
 /** Every shape that may carry a `unit` (W7 batch 3: a ratio's shared amount; each kind says whether it takes one). */
-const UNIT_SHAPES: readonly SchoolShape[] = [...AMOUNT_SHAPES, "ratio"];
+const UNIT_SHAPES: readonly SchoolShape[] = [...AMOUNT_SHAPES, "ratio", "rate"];
+/**
+ * The things a rate question may price (W7 batch 3), plural as the question prints them, with the singular for "What does
+ * 1 pen cost?". Closed, so a rate spec never carries free text; the generator draws only the short ones (a row's width).
+ */
+export const RATE_NOUNS: Readonly<Record<string, string>> = { pens: "pen", books: "book", cards: "card", eggs: "egg", cups: "cup", kg: "kg", pencils: "pencil", apples: "apple", tickets: "ticket", bottles: "bottle", stamps: "stamp", bags: "bag", litres: "litre", metres: "metre" };
 
 /** Bounds on a compute spec, each with its reason: a school question, not a calculator exercise. */
 const MAX_EXPR = 60;        // a line on a worksheet
@@ -492,6 +505,9 @@ const REJECT = {
   wholeShares: "The amount does not split into whole shares in this ratio.",
   sameRatio: "The new ratio keeps the given number: there is nothing to work out.",
   notWholeRatio: "No whole number makes the two ratios equal.",
+  rateOne: "The question already gives the value of a single one: there is nothing to find.",
+  sameRate: "The question asks about the same number it gives: there is nothing to work out.",
+  rateUnit: "A cost is in euros or pounds and a distance in km, and the spec names the one it is.",
 } as const;
 
 /**
@@ -509,7 +525,9 @@ type Kind =
   // W7 batch 3: a ratio a:b to simplify, an amount T to share in a:b, or a:b = ?:known ('first' missing) / known:? ('second')
   | { k: "ratio-simplify"; a: bigint; b: bigint }
   | { k: "ratio-share"; T: bigint; a: bigint; b: bigint }
-  | { k: "ratio-missing"; a: bigint; b: bigint; known: bigint; slot: "first" | "second" };
+  | { k: "ratio-missing"; a: bigint; b: bigint; known: bigint; slot: "first" | "second" }
+  // W7 batch 3: q1 items cost p (or p km in q1 hours); the cost (distance) of q2
+  | { k: "rate"; measure: "cost" | "distance"; q1: bigint; p: Q; ptext: string; q2: bigint; noun: string };
 type Structure = { ok: true; spec: SchoolSpec; node: Node; kind: Kind } | { ok: false; why: string };
 /** `pair` (W7 batch 3, a ratio share): the two amounts in the ratio's order; `truth` is then the first of them. */
 type ReadOk = { ok: true; spec: SchoolSpec; node: Node; kind: Kind; truth: Q; pair?: [Q, Q] };
@@ -531,6 +549,9 @@ const PCT_CHANGE_RE = new RegExp(String.raw`^(increase|decrease) (${W4}) by ${PC
 const RATIO_SIMPLIFY_RE = new RegExp(String.raw`^(${W3}):(${W3})$`);
 const RATIO_SHARE_RE = new RegExp(String.raw`^(${W4}) in (${W3}):(${W3})$`);
 const RATIO_MISSING_RE = new RegExp(String.raw`^(${W3}):(${W3}) = (\?|${W3}):(\?|${W3})$`);
+/** W7 batch 3: "5 pens cost 3.50, 8" (a price whole or to the penny) and "240 km in 3 h, 5". */
+const RATE_COST_RE = new RegExp(String.raw`^(${W3}) ([a-z]+) cost ((?:0|[1-9]\d{0,3})(?:\.\d\d)?), (${W3})$`);
+const RATE_DIST_RE = new RegExp(String.raw`^(${W4}) km in (${W3}) h, (${W3})$`);
 const fracNode = (n: bigint, d: bigint): Node => ({ k: "frac", n, d });
 
 /** The spec's structure (printable), without its truth. The W7 shapes are read in their one printed spelling each. */
@@ -569,6 +590,21 @@ function structure(spec: unknown): Structure {
     if ((m = RATIO_SIMPLIFY_RE.exec(expr))) {
       const [a, b] = [BigInt(m[1]), BigInt(m[2])];
       return { ok: true, spec: s as SchoolSpec, node: fracNode(a, b), kind: { k: "ratio-simplify", a, b } };
+    }
+    return { ok: false, why: REJECT.read };
+  }
+  if (shape === "rate") {
+    // W7 batch 3: the unit is the answer's own, so it is required; readKind checks it fits the measure
+    let m = RATE_COST_RE.exec(s.expr);
+    if (m) {
+      if (!Object.prototype.hasOwnProperty.call(RATE_NOUNS, m[2])) return { ok: false, why: REJECT.read };
+      const [w, f = ""] = m[3].split("."), p = mk(BigInt(w + f), pow10(f.length))!;
+      const node: Node = { k: "op", op: "÷", a: { k: "num", q: p, s: m[3], whole: !f }, b: { k: "num", q: qi(BigInt(m[1])), s: m[1], whole: true } };
+      return { ok: true, spec: s as SchoolSpec, node, kind: { k: "rate", measure: "cost", q1: BigInt(m[1]), p, ptext: m[3], q2: BigInt(m[4]), noun: m[2] } };
+    }
+    if ((m = RATE_DIST_RE.exec(s.expr))) {
+      const node: Node = { k: "op", op: "÷", a: { k: "num", q: qi(BigInt(m[1])), s: m[1], whole: true }, b: { k: "num", q: qi(BigInt(m[2])), s: m[2], whole: true } };
+      return { ok: true, spec: s as SchoolSpec, node, kind: { k: "rate", measure: "distance", q1: BigInt(m[2]), p: qi(BigInt(m[1])), ptext: m[1], q2: BigInt(m[3]), noun: "h" } };
     }
     return { ok: false, why: REJECT.read };
   }
@@ -725,6 +761,20 @@ function readKind(st: Extract<Structure, { ok: true }>): Read {
     if ([K.a, K.b, K.known].includes(t)) return { ok: false, why: REJECT.prints };
     return ok(qi(t));
   }
+  if (K.k === "rate") {
+    // W7 batch 3: q2 of them at p for q1 is p × q2 / q1; a cost in € or £, a distance in km; to the penny at most
+    const u = (st.spec as { unit?: Unit }).unit;
+    if (K.measure === "cost" ? u !== "€" && u !== "£" : u !== "km") return { ok: false, why: REJECT.rateUnit };
+    if (K.q1 < BigInt(2)) return { ok: false, why: REJECT.rateOne };
+    if (K.q2 === K.q1) return { ok: false, why: REJECT.sameRate };
+    if (K.q1 > lim || K.q2 > lim || K.p.n > lim * K.p.d) return { ok: false, why: REJECT.big };
+    if (K.p.n <= Z) return { ok: false, why: REJECT.negative };
+    const truth = mk(K.p.n * K.q2, K.p.d * K.q1)!;
+    if (!exactAt(truth, 2)) return { ok: false, why: REJECT.twoPlaces };
+    if (truth.n > BigInt(MAX_RESULT) * truth.d) return { ok: false, why: REJECT.result };
+    if ([qi(K.q1), qi(K.q2), K.p].some((x) => eq(x, truth))) return { ok: false, why: REJECT.prints };
+    return ok(truth);
+  }
   return { ok: false, why: REJECT.shape };
 }
 
@@ -769,7 +819,8 @@ const specUnit = (s: SchoolSpec): Unit | undefined => (s.shape === "compute" || 
  * (a top at most 1000, a bottom 2 to 100) and not the given one's own; `simplify` "a/b", proper and not yet in lowest
  * terms; none of them takes a form or a sign flag. W7 batch 3: `ratio` "12:18" not in lowest terms, "T in a:b" with a:b in
  * lowest terms, a ≠ b, whole shares neither printed, or "a:b = ?:k" / "a:b = k:?" with a whole missing term the question
- * does not print; numbers at most 1000.
+ * does not print; numbers at most 1000. `rate` "q1 noun cost p, q2" (€ or £) or "D km in h1 h, q2" (km): q1 at least 2,
+ * q2 not q1, a value to two places at most that the question does not print.
  */
 export function wellFormed(spec: unknown): { ok: true } | { ok: false; why: string } {
   try {
@@ -888,6 +939,18 @@ export function question(spec: unknown): { plain: string; tex: string } | null {
       const am = amountText(String(K.T), specUnit(st.spec));
       return { plain: `Share ${am.plain} in the ratio ${K.a}:${K.b}.`, tex: `\\text{Share } ${am.tex} \\text{ in the ratio } ${K.a}:${K.b}.` };
     }
+    if (K.k === "rate") {
+      // W7 batch 3: "5 pens cost €3.50. What do 8 pens cost?", "12 kg cost €30. What does 1 kg cost?", "240 km in 3 hours. How far in 5 hours?"
+      if (K.measure === "distance") {
+        const hrs = (n: bigint) => (n === ONE ? "hour" : "hours");
+        return { plain: `${K.ptext} km in ${K.q1} hours. How far in ${K.q2} ${hrs(K.q2)}?`, tex: `${K.ptext} \\text{ km in } ${K.q1} \\text{ hours. How far in } ${K.q2} \\text{ ${hrs(K.q2)}?}` };
+      }
+      const am = amountText(K.ptext, specUnit(st.spec)), one = K.q2 === ONE, item = one ? RATE_NOUNS[K.noun] : K.noun;
+      return {
+        plain: `${K.q1} ${K.noun} cost ${am.plain}. What ${one ? "does" : "do"} ${K.q2} ${item} cost?`,
+        tex: `${K.q1} \\text{ ${K.noun} cost } ${am.tex}. \\text{ What ${one ? "does" : "do"} } ${K.q2} \\text{ ${item} cost?}`,
+      };
+    }
     if (K.k === "ratio-missing") {
       const [p, q] = K.slot === "first" ? ["?", String(K.known)] : [String(K.known), "?"];
       return { plain: `Fill in the missing number: ${K.a}:${K.b} = ${p}:${q}.`, tex: `\\text{Fill in the missing number: } ${K.a}:${K.b} = ${p}:${q}.` };
@@ -961,6 +1024,10 @@ export const SCHOOL_SLIPS: readonly SchoolSlip[] = [
   { id: "ratio-swapped", name: "The ratio the wrong way round", says: "The ratio's two numbers were used the wrong way round. The first number of the ratio goes with the first amount, and the second with the second.", points: "the order in the answer" },
   { id: "ratio-by-difference", name: "Divided by the difference", says: "The amount was divided by the difference between the ratio's numbers. The whole amount is all the parts together, so divide by their sum.", points: "the division" },
   { id: "ratio-added-same", name: "Added instead of multiplied", says: "The same number was added to both sides of the ratio. Equal ratios come from multiplying or dividing both numbers by the same number.", points: "the line where the ratio changed" },
+  // unit rates and direct proportion (Family W7 batch 3)
+  { id: "rate-wrong-way", name: "Divided the wrong way round", says: "The division was done the wrong way round: it gives how many for each unit of money or distance, not the value of a single one. Divide the cost or the distance by how many there are.", points: "the division" },
+  { id: "rate-multiplied", name: "Multiplied instead of divided", says: "The two numbers in the first sentence were multiplied. The value of a single one comes from dividing by how many there are.", points: "the first line of working" },
+  { id: "rate-other-quantity", name: "Divided by the wrong number", says: "The cost or distance was divided by the number asked about instead of the number given. Divide by the number in the first sentence to find a single one, then multiply.", points: "the division" },
 ];
 
 /** The common factors of a and b above 1, smallest first. */
@@ -990,6 +1057,8 @@ function commonFactors(a: bigint, b: bigint): bigint[] {
  *     the percent added or taken off as a plain number (the percent of a hundred, not of the amount);
  *   - a missing ratio term a:b = ?:k (W7 batch 3): a + (k - b) the difference added; b × k / a the ratio the other way
  *     round (whole only). A ratio to simplify and a share are judged by `checkRatio`, whose pairs carry their own slips;
+ *   - q2 at p for q1 (W7 batch 3, a rate): q1 ÷ p × q2 the division the wrong way round; p × q1 × q2 multiplied instead of
+ *     divided; p ÷ q2 × q1 divided by the number asked about (q2 above 1);
  *   - decimals a ± b, a × b (W7 batch 2), P the working's places (the longer of the two for ±, their sum for ×): the
  *     numbers lined up by their last digits, (a·10^pa ± b·10^pb) / 10^P, when their places differ; the point put back
  *     by the wrong count, the value × 10^k for k = -1 and 1..P-1 (products only); the point left out, the value × 10^P.
@@ -1049,6 +1118,15 @@ function slipCandidates(r: ReadOk): [string, Q][] {
     const whole = (x: bigint) => (x > Z ? qi(x) : null);
     push("ratio-added-same", whole(given + K.known - other));
     if ((other * K.known) % given === Z) push("ratio-swapped", whole((other * K.known) / given));
+    return out;
+  }
+  if (K.k === "rate") {
+    // W7 batch 3, q1 at p, then q2: q1 ÷ p × q2 the division the wrong way round; p × q1 × q2 multiplied instead of divided;
+    // p ÷ q2 × q1 divided by the number asked about (for q2 = 1 that is p × q1, the multiplied slip, so it is not pushed)
+    const P = K.p, Q1 = qi(K.q1), Q2 = qi(K.q2);
+    push("rate-wrong-way", mul(div(Q1, P)!, Q2));
+    push("rate-multiplied", mul(mul(P, Q1), Q2));
+    if (K.q2 !== ONE) push("rate-other-quantity", mul(div(P, Q2)!, Q1));
     return out;
   }
   if (K.k === "pct-change") {
@@ -1140,6 +1218,7 @@ const WHY = {
   order: "These are the two amounts the other way round, and the desk does not guess which was meant to come first.",
   oneShare: "This is one of the two amounts; the question asks for both.",
   twoAsked: "This is one number; the question asks for two amounts, and the desk does not guess what was meant.",
+  pence: "This reads as the amount in cents or pence without its unit, and the desk does not guess.",
   givenRatio: "This is a ratio equal to the one given; the question asks for the missing number.",
   notCompleting: "This ratio does not complete the one given, and the desk does not guess which number was meant.",
 } as const;
@@ -1330,6 +1409,10 @@ export function check(spec: unknown, writing: unknown, system: unknown): SchoolV
     // W7 batch 2: an amount written with a percent sign - 28% for 35% of 80 = 28, or 2800% (equal in value, from 35 × 80) -
     // is the right number in the wrong form, or a slip: the desk does not guess, and never calls it right
     if ((K.k === "pct-of" || K.k === "pct-change") && form === "percent" && (eq(mul(v, qi(BigInt(100))), t) || eq(v, t))) return { verdict: "unsure", form, why: WHY.amountAsPercent };
+    // W7 batch 3: an amount of these units is never a percentage (unsure, the desk does not guess what was meant); a cost's
+    // value in cents or pence written bare (560 for €5.60) is the answer in another unit or a slip, and the desk does not guess
+    if (K.k === "rate" && form === "percent") return { verdict: "unsure", form, why: WHY.amountAsPercent };
+    if (K.k === "rate" && K.measure === "cost" && !reading.unit && !eq(v, t) && eq(v, mul(t, qi(BigInt(100))))) return { verdict: "unsure", form, why: WHY.pence };
     const simplest = K.k === "simplify" || (r.spec.shape === "compute" && r.spec.form === "simplest");
     const decimalAsked = r.spec.shape === "compute" && r.spec.form === "decimal";
     if (eq(v, t)) {
@@ -1534,6 +1617,16 @@ function leakProfile(r: ReadOk): LeakProfile {
     // W7 batch 3: either amount alone, or both as a ratio; the size of a single part (T ÷ (a + b)) is a step and passes
     const [s1, s2] = r.pair!;
     return { T: s1, targets: [s1, s2], lowestOnly: false, bare: new Set(), restated: [], written: [], pair: [s1, s2], alsoT: [s2] };
+  }
+  if (K.k === "rate") {
+    // W7 batch 3: the value in any form; its digits with the point left out (56 for 5.60) and a cost in cents or pence (560)
+    // are the answer too. The value of a single one is a step and passes; so does p ÷ q1 when a single one is what is asked
+    // (the question's own division, as "0.35 × 80" is a percent's) - its result is still refused
+    const bare = new Set<string>();
+    if (T.d !== ONE) bare.add(String(mul(T, qi(pow10(placesNeeded(T)))).n));
+    if (K.measure === "cost") { const c = mul(T, qi(BigInt(100))); if (c.d === ONE) bare.add(String(c.n)); }
+    const restated: LeakProfile["restated"] = K.q2 === ONE ? [{ p: K.p, o: "÷", q: qi(K.q1), both: false }] : [];
+    return { T, targets: [T], lowestOnly: false, bare, restated, written: [] };
   }
   if (K.k === "ratio-missing") {
     // W7 batch 3: the missing term, and the completed ratio written out (10:15 for 2:3 = ?:15)
@@ -2123,10 +2216,53 @@ export function genRatio(seed: unknown, tier: unknown): SchoolSpec | null {
   return tier === 1 ? { shape: "ratio", expr: "12:18" } : { shape: "ratio", expr: "60 in 2:3" };
 }
 
+/** The items a generated cost prices: the short ones, so a question stays one printed row. */
+const GEN_NOUNS: readonly string[] = ["pens", "books", "cards", "eggs", "cups", "kg"];
+
+/**
+ * One "Unit rates and direct proportion" item, from a seed and a tier that code computed; two in three a cost ("5 pens cost
+ * €3.50. What do 8 pens cost?") and one in three a distance at a steady speed ("240 km in 3 hours. How far in 5 hours?"),
+ * turning with the seed; one in three asks the value of a single one (the unit rate itself: "What does 1 kg cost?"):
+ *   - tier 1: the value of a single one is a WHOLE number: a price of €2..£12 an item for 2..10 items, or a speed of 20..90
+ *     km an hour (a multiple of 5) for 2..5 hours; the question asks about 1 or 2..12 items, 1..8 hours;
+ *   - tier 2: the value of a single one is NOT whole: a price in euros or pounds and cents or pence (€0.05..€9.95, never
+ *     whole) for 2..12 items, or a speed ending in a half (20.5..95.5 km an hour) for 2, 4, 6 or 8 hours; the question asks
+ *     about 1 or 2..15 items, 1..9 hours. The working carries decimals.
+ * The asked number is never the given one; an answer the question prints is drawn again (`fair`). Pure and seeded; null
+ * for a bad seed or tier.
+ */
+export function genRate(seed: unknown, tier: unknown): SchoolSpec | null {
+  const rnd = seeded(seed, tier, 0x5eed1609);
+  if (!rnd) return null;
+  function pick<T>(xs: readonly T[]): T { return xs[Math.floor(rnd!() * xs.length)]; }
+  const int = (lo: number, hi: number) => lo + Math.floor(rnd!() * (hi - lo + 1));
+  for (let t = 0; t < MAX_TRIES; t++) {
+    const distance = ((seed as number) + t) % 3 === 2, single = rnd() < 1 / 3;
+    let spec: SchoolSpec;
+    if (distance) {
+      // a speed in half kilometres an hour: whole at tier 1 (a multiple of 5), a half at tier 2
+      const half2 = tier === 1 ? 10 * int(4, 18) : 2 * int(20, 95) + 1, h1 = tier === 1 ? int(2, 5) : pick([2, 4, 6, 8]);
+      const h2 = single ? 1 : int(2, tier === 1 ? 8 : 9);
+      if (h2 === h1) continue;
+      spec = { shape: "rate", expr: `${(half2 * h1) / 2} km in ${h1} h, ${h2}`, unit: "km" };
+    } else {
+      // a price in cents or pence: a whole number of euros or pounds at tier 1, not at tier 2
+      const cents = tier === 1 ? 100 * int(2, 12) : int(5, 995), q1 = int(2, tier === 1 ? 10 : 12);
+      if (tier === 2 && cents % 100 === 0) continue;
+      const q2 = single ? 1 : int(2, tier === 1 ? 12 : 15);
+      if (q2 === q1) continue;
+      const total = cents * q1, price = total % 100 === 0 ? String(total / 100) : decimalText(total, 2);
+      spec = { shape: "rate", expr: `${q1} ${pick(GEN_NOUNS)} cost ${price}, ${q2}`, unit: pick(MONEY) };
+    }
+    if (fair(spec)) return spec;
+  }
+  return tier === 1 ? { shape: "rate", expr: "4 books cost 12, 7", unit: "€" } : { shape: "rate", expr: "5 pens cost 3.50, 8", unit: "€" };
+}
+
 /**
  * The units whose practice sets code writes, by syllabus topic id, each with its generator (Family W5b: add and
  * subtract fractions; W7 batch 1: equivalent fractions, a fraction of an amount, multiply and divide fractions; W7 batch
- * 2: decimals and percent; W7 batch 3: ratio and sharing). A topic not here is written as it always was.
+ * 2: decimals and percent; W7 batch 3: ratio and sharing, unit rates). A topic not here is written as it always was.
  */
 export const SCHOOL_GENERATORS: Readonly<Record<string, (seed: number, tier: 1 | 2) => SchoolSpec | null>> = {
   "frac-equivalent": (seed, tier) => genEquivalent(seed, tier),
@@ -2138,6 +2274,7 @@ export const SCHOOL_GENERATORS: Readonly<Record<string, (seed: number, tier: 1 |
   "pct-of-amount": (seed, tier) => genPercentOf(seed, tier),
   "pct-change": (seed, tier) => genPercentChange(seed, tier),
   "ratio-share": (seed, tier) => genRatio(seed, tier),
+  "unit-rate": (seed, tier) => genRate(seed, tier),
 };
 /** The generator for a topic id, or null: an own key only, so 'constructor' is not a unit. */
 export const generatorFor = (topicId: unknown) =>
@@ -2158,6 +2295,7 @@ export const SCHOOL_UNIT_SLIPS: Readonly<Record<string, readonly string[]>> = {
   "pct-of-amount": ["pct-divided", "pct-times-whole", "pct-ten-stopped", "pct-rest"],
   "pct-change": ["change-only", "change-wrong-way", "change-as-number"],
   "ratio-share": ["ratio-split-each", "ratio-as-amounts", "ratio-swapped", "ratio-by-difference", "ratio-added-same"],
+  "unit-rate": ["rate-wrong-way", "rate-multiplied", "rate-other-quantity"],
 };
 
 /** The system the desk reads a learner's numbers by when their profile names none (tv/profileRows DEFAULT_SYSTEM is the same, tested). */
@@ -2422,6 +2560,38 @@ function readRatio(t0: string): SchoolSpec | null {
   return spec && read(spec).ok ? spec : null;
 }
 
+/** A price in a rate task: '€3.50', '£3.50', '3.50 euros', '30 euro' (pounds is money or weight: never read). */
+const RATE_PRICE = String.raw`(?:([€£])\s?((?:0|[1-9]\d{0,3})(?:\.\d\d)?)|((?:0|[1-9]\d{0,3})(?:\.\d\d)?)\s?(?:euros?|€))`;
+/** How the question part of a cost asks it, the count and the item: 'What do 8 pens cost', 'Find the cost of 8 pens', 'What is the price of 1 kg'. */
+const RATE_ASK = String.raw`(?:what\s+(?:do|does)\s+([1-9]\d{0,2})\s+([a-z]+)\s+cost|how\s+much\s+(?:do|does)\s+([1-9]\d{0,2})\s+([a-z]+)\s+cost|(?:find|what\s+is)\s+the\s+(?:cost|price)\s+of\s+([1-9]\d{0,2})\s+([a-z]+))`;
+
+/**
+ * A unit-rate task (W7 batch 3, "Unit rates and direct proportion"), or null: a statement of what a number of items cost
+ * and ONE question about another number of the same items - '5 pens cost €3.50. What do 8 pens cost?', 'If 5 pens cost
+ * £3.50, find the cost of 8 pens', '12 kg cost 30 euro, what is the price of 1 kg?' - the item one of RATE_NOUNS, the
+ * same item (singular for one) in both; or a distance in hours and one question - '240 km in 3 hours. How far in 5 hours?',
+ * '240 km takes 3 hours. How far in 1 hour at the same speed?'. A story (who buys, who travels), another item, a price
+ * with no currency or in pounds, an inverse proportion, a speed asked for, and a spec wellFormed refuses are all null.
+ */
+function readRate(t0: string): SchoolSpec | null {
+  const t = t0.replace(/[.?!]$/, "").trim();
+  let m = new RegExp(String.raw`^(?:if\s+)?([1-9]\d{0,2})\s+([a-z]+)\s+cost\s+${RATE_PRICE}\s*[.,]\s*${RATE_ASK}$`, "i").exec(t);
+  if (m) {
+    const [q1, noun] = [m[1], m[2].toLowerCase()], unit = (m[3] ?? "€") as Unit, price = m[4] ?? m[5];
+    const q2 = m[6] ?? m[8] ?? m[10], item = (m[7] ?? m[9] ?? m[11]).toLowerCase();
+    if (!Object.prototype.hasOwnProperty.call(RATE_NOUNS, noun) || item !== (q2 === "1" ? RATE_NOUNS[noun] : noun)) return null;
+    const spec: SchoolSpec = { shape: "rate", expr: `${q1} ${noun} cost ${price}, ${q2}`, unit };
+    return read(spec).ok ? spec : null;
+  }
+  const SPEED = String.raw`(?:\s+at\s+(?:a\s+steady|the\s+same)\s+speed)?`;
+  m = new RegExp(String.raw`^([1-9]\d{0,3})\s*km\s+(?:in|takes)\s+([1-9]\d{0,2})\s+hours${SPEED}\s*[.,]\s*how\s+far\s+in\s+([1-9]\d{0,2})\s+hours?${SPEED}$`, "i").exec(t);
+  if (m) {
+    const spec: SchoolSpec = { shape: "rate", expr: `${m[1]} km in ${m[2]} h, ${m[3]}`, unit: "km" };
+    return read(spec).ok ? spec : null;
+  }
+  return null;
+}
+
 /**
  * A worksheet task of a school fractions unit, read back into the spec it asks, for the hint's leak check - or null.
  * Conservative: what it does not read with one meaning is null, and a null task gets no school leak check (the general
@@ -2446,7 +2616,8 @@ function readRatio(t0: string): SchoolSpec | null {
  *     (away) from A', 'Multiply A by B', 'Find the product of A and B', 'Find the sum of A and B'; money with the same €
  *     or £ before both amounts of a sum or a difference, or before the amount of an amount times a whole count. Never a
  *     division, a decimal comma (a list too), a sign on one amount only or on a count, or two currencies;
- *   - ratio and sharing (W7 batch 3): `readRatio`'s phrasings (a bare 'a:b' is null: ':' also divides in cz and de).
+ *   - ratio and sharing (W7 batch 3): `readRatio`'s phrasings (a bare 'a:b' is null: ':' also divides in cz and de);
+ *   - unit rates (W7 batch 3): `readRate`'s phrasings, a statement and one question, never a story.
  * Null for: whole numbers or mixed numbers as operands (a whole amount after 'of' excepted), a decimal beside a fraction, three or more
  * terms, any letter in the maths (an x), brackets, number words, an answer after '=', a bottom of 1 or 0, a leading
  * zero, 'the difference between' (its order is not said), a fraction of a fraction, a decimal or a thousands-separated
@@ -2460,7 +2631,7 @@ export function specFromQuestion(text: unknown): SchoolSpec | null {
     let t = normalise(text);
     t = t.replace(/^(?:\d{1,2}[.)]|\(\d{1,2}\)|[a-h]\)|\([a-h]\))\s+/i, "");
     return readMissing(t) ?? readSimplify(t) ?? readOf(t) ?? readCombined(t) ?? readDecimal(t) ?? readConvert(t) ?? readPercentOf(t) ?? readPercentChange(t)
-      ?? readRatio(t);
+      ?? readRatio(t) ?? readRate(t);
   } catch {
     return null;
   }
@@ -2470,7 +2641,8 @@ export function specFromQuestion(text: unknown): SchoolSpec | null {
  * The unit a school spec belongs to, by topic id, or null: a sum or difference of two fractions is add and subtract
  * fractions, a product or quotient of two fractions multiply and divide fractions (W7), a fraction of an amount its own
  * unit, a missing number or a simplify equivalent fractions; two numbers with a decimal among them added, subtracted or
- * multiplied the decimals unit (W7 batch 2); any `ratio` spec "Ratio and sharing" (W7 batch 3).
+ * multiplied the decimals unit (W7 batch 2); any `ratio` spec "Ratio and sharing", any `rate` spec "Unit rates and direct
+ * proportion" (W7 batch 3).
  */
 export function unitOf(spec: unknown): string | null {
   try {
@@ -2482,6 +2654,7 @@ export function unitOf(spec: unknown): string | null {
     if (r.kind.k === "pct-of") return "pct-of-amount";
     if (r.kind.k === "pct-change") return "pct-change";
     if (r.kind.k === "ratio-simplify" || r.kind.k === "ratio-share" || r.kind.k === "ratio-missing") return "ratio-share";
+    if (r.kind.k === "rate") return "unit-rate";
     const n = r.node;
     if (decimalPair(n)) return "dec-arith";
     if (n.k !== "op" || n.a.k !== "frac" || n.b.k !== "frac") return null;
@@ -2507,6 +2680,7 @@ export const SCHOOL_WITHHELD = {
   "pct-of-amount": "A percentage of an amount is that many hundredths of it. Find a single hundredth of the amount first and build the percentage up from it, or write the percentage as a decimal and multiply the amount by it. The answer is yours to work out.",
   "pct-change": "First find the percentage of the amount: that is the change. Then add it on for an increase, or take it off for a decrease. The answer is yours to work out.",
   "dec-arith": "To add or take away, write the numbers with their decimal points one under the other, filling empty places with zeros. To multiply, multiply as if there were no points, then give the answer as many digits after its point as the question's numbers have between them. The answer is yours to work out.",
+  "unit-rate": "Find the value of a single one first: divide the cost or the distance by how many there are in the first sentence. Then multiply by the number the question asks about. The answer is yours to work out.",
   "ratio-share": "To share in a ratio, add the ratio's numbers to find how many equal parts there are, divide the amount by that to find the size of a single part, then multiply by each number of the ratio. To simplify a ratio or find a missing number, multiply or divide both numbers by the same number. The answer is yours to work out.",
   any: "Go back to the last step you are sure of and take the next. The answer stays yours to find.",
 } as const;

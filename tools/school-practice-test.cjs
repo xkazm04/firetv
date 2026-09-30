@@ -413,10 +413,14 @@ test('W7b 5b: the batch-2 specs survive the store - practice.set, practice.marke
 const B3_TIER={
  // tier 1: equal ratios (simplify, or a missing term); tier 2: sharing an amount
  'ratio-share':(sp)=>(/ in /.test(sp.expr)?2:1),
+ // tier 1: the value of a single one is whole (a whole price an item, a speed a multiple of 5); tier 2: it is not
+ 'unit-rate':(sp)=>{const c=/^(\d+) [a-z]+ cost (\d+)(?:\.(\d\d))?, \d+$/.exec(sp.expr);if(c){const each=(Number(c[2])*100+Number(c[3]??0))/Number(c[1]);return each%100===0?1:2;}
+  const d=/^(\d+) km in (\d+) h, \d+$/.exec(sp.expr);return (2*Number(d[1])/Number(d[2]))%2===0?1:2;},
 };
 /** The printed question of each unit, and the keys its spec may carry. */
 const B3_SHAPE={
  'ratio-share':[/^(?:Write \d+:\d+ in its simplest form\.|Fill in the missing number: \d+:\d+ = (?:\?:\d+|\d+:\?)\.|Share (?:[€£]\d+|\d+(?: [a-z]+)?) in the ratio \d+:\d+\.)$/,['shape','expr','unit']],
+ 'unit-rate':[/^(?:\d+ (pens|books|cards|eggs|cups|kg) cost [€£]\d+(?:\.\d\d)?\. What (?:do \d+ \1|does 1 (?:pen|book|card|egg|cup|kg)) cost\?|\d+ km in \d+ hours\. How far in (?:1 hour|\d+ hours)\?)$/,['shape','expr','unit']],
 };
 for(const unit of Object.keys(B3_TIER)){
  test(`W7c 2-${unit}: makeSchoolItems writes six distinct items by code - three tier 1, then three tier 2 - pure for a seed, with no engine call`,()=>{
@@ -446,6 +450,11 @@ for(const unit of Object.keys(B3_TIER)){
 
 /** The batch-3 specs a round trip carries, and the ones the store must drop (a key the shape does not take, a malformed one). */
 const B3_STORE={
+ 'unit-rate':{
+  keep:[{shape:'rate',expr:'5 pens cost 3.50, 8',unit:'€'},{shape:'rate',expr:'12 kg cost 30, 1',unit:'£'},{shape:'rate',expr:'240 km in 3 h, 5',unit:'km'}],
+  answer:[{shape:'rate',expr:'5 pens cost 3.50, 8',unit:'€',answer:'5.60',value:5.6},{shape:'rate',expr:'5 pens cost 3.50, 8',unit:'€'}],
+  drop:[{shape:'rate',expr:'5 pens cost 3.50, 8'},{shape:'rate',expr:'5 pens cost 3.50, 5',unit:'€'},{shape:'rate',expr:'5 sweets cost 3.50, 8',unit:'€'},{shape:'rate',expr:'5 pens cost 3.50, 8',unit:'€',to:'decimal'},{shape:'rate',expr:'240 km in 3 h, 5',unit:'€'}],
+ },
  'ratio-share':{
   keep:[{shape:'ratio',expr:'12:18'},{shape:'ratio',expr:'60 in 2:3'},{shape:'ratio',expr:'45 in 4:5',unit:'€'},{shape:'ratio',expr:'2:3 = ?:15'},{shape:'ratio',expr:'4:5 = 12:?'}],
   answer:[{shape:'ratio',expr:'60 in 2:3',answer:'24 and 36',pair:[24,36]},{shape:'ratio',expr:'60 in 2:3'}],
@@ -476,5 +485,5 @@ test('W7c 5b: the batch-3 specs survive the store - practice.set, practice.marke
  }
  const src=fs.readFileSync(storeFile,'utf8');
  assert.match(src,/const SCHOOL_SPEC_KEYS = \["expr", "form", "unit", "allowNegative", "to"\] as const;/,'W7 batch 3 adds no store key: expr and unit carry every new shape');
- for(const sh of ['ratio']){assert.ok(S.SCHOOL_SHAPES.includes(sh));assert.ok(!C.CALC_SHAPES.includes(sh),`${sh} is not a Calculus shape`);assert.equal(C.wellFormed({shape:sh,expr:'12:18'}).ok,false);}
+ for(const sh of ['ratio','rate']){assert.ok(S.SCHOOL_SHAPES.includes(sh));assert.ok(!C.CALC_SHAPES.includes(sh),`${sh} is not a Calculus shape`);assert.equal(C.wellFormed({shape:sh,expr:'12:18'}).ok,false);}
 });
