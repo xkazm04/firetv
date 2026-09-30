@@ -1,6 +1,6 @@
 /**
  * The slip vocabulary for linear equations - and, through rules/calc CALC_SLIPS, for the calc1 topics, and through
- * rules/school SCHOOL_SLIPS, for the school units that have them (Family W5b and W7: the four fractions units and the four decimals and percent units) - decided in code.
+ * rules/school SCHOOL_SLIPS, for the school units that have them (Family W5b and W7: every school unit, fractions to mean and range) - decided in code.
  *
  * Same discipline as rules/english.ts: the table is the closed set the model is allowed to
  * choose from. It names a mistake and points at a line. It never carries the corrected line,

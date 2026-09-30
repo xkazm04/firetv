@@ -45,6 +45,16 @@ export const LABEL_CH = 16;
 export const STRIP_AFTER = 8;
 /** The narrowest bar a strand takes on Tonight's strip, so a one-topic strand is still a bar with a label. */
 export const MIN_SEG = 96;
+/** The most lines a strand's label takes on Tonight's strip (two fit under the groove, above the bar's foot). */
+export const STRIP_LINES = 2;
+/** The room a strip bar keeps beside its label: 18 px in from its start and 18 px clear before its end. */
+export const STRIP_INSET = 36;
+/**
+ * A strip label's width per character for WHOLE labels (Family W7 batch 3): the live capture measured "EQUATIONS" at 150 px,
+ * 16.7 px a character with the tracking after the last letter, over LABEL_CH's 16 - enough to cut a label that exactly
+ * fills its room. 17 keeps a whole label whole.
+ */
+export const STRIP_CH = 17;
 
 type RulerTopic = Pick<PathTopic, "id" | "strand">;
 
@@ -188,8 +198,31 @@ export function fitName(fits: (px: number) => boolean, sizes: readonly number[] 
   return sizes[sizes.length - 1];
 }
 
-/** One strand on Tonight's strip: how many topics, how many latched secure, and its bar and label. */
-export interface StripSegment { name: string; count: number; secure: number; share: number; x: number; w: number; labelX: number; labelW: number; label: string }
+/**
+ * A strand label in whole words, greedy, each line within `room` at `ch` a character, in at most `max` lines; null when a
+ * word alone is wider than the room or the words need more lines. Never cuts a word.
+ */
+export function wrapLabel(name: string, room: number, ch = LABEL_CH, max = STRIP_LINES): string[] | null {
+  const lines: string[] = [];
+  for (const word of name.split(/\s+/).filter(Boolean)) {
+    if (word.length * ch > room) return null;
+    const last = lines[lines.length - 1];
+    if (last !== undefined && (last.length + 1 + word.length) * ch <= room) lines[lines.length - 1] = `${last} ${word}`;
+    else lines.push(word);
+  }
+  return lines.length <= max ? lines : null;
+}
+
+/** The narrowest label room (px) in which `name` wraps whole into at most two lines: its best split's longer line, or its one word. */
+export function labelNeed(name: string, ch = LABEL_CH): number {
+  const words = name.split(/\s+/).filter(Boolean);
+  let best = name.length;
+  for (let i = 1; i < words.length; i++) best = Math.min(best, Math.max(words.slice(0, i).join(" ").length, words.slice(i).join(" ").length));
+  return best * ch;
+}
+
+/** One strand on Tonight's strip: how many topics, how many latched secure, and its bar and label (`lines`, top to bottom; `label` their words). */
+export interface StripSegment { name: string; count: number; secure: number; share: number; x: number; w: number; labelX: number; labelW: number; label: string; lines: string[] }
 export interface StripModel {
   x0: number;
   width: number;
@@ -200,7 +233,10 @@ export interface StripModel {
 
 /**
  * Tonight's ruler for a long path: one bar per strand across the ruler's 1676 px, as wide as its share of the topics
- * but never under MIN_SEG, each filled by its share of latched-secure topics, and the learner's needle at the frontier
+ * but never under MIN_SEG - nor under the room its label needs to stand whole in at most two lines (`labelNeed`, Family
+ * W7 batch 3: a one-topic "Equations" bar had read "Equati…"), whenever every strand's need fits the strip together (else
+ * MIN_SEG alone, and a label that does not fit is clamped with an ellipsis as before) - each filled by its share of
+ * latched-secure topics, and the learner's needle at the frontier
  * one slot in for each topic of its strand before it. The frontier is, on a course (`school` false), the first topic
  * not secure whose prerequisites all are; on a school path, the first topic not secure after the last secure one
  * (paths.ts `frontierOn`, the same rule as the ruler's `rulerFrontier`). Widths are whole pixels and sum to the strip.
@@ -209,13 +245,16 @@ export function stripModel(topics: Array<Pick<PathTopic, "id" | "strand" | "prer
   const width = TRACK - PAD * 2;
   const groups: Array<{ name: string; ids: string[] }> = [];
   topics.forEach((t, i) => { const last = groups[groups.length - 1]; if (last && topics[i - 1]?.strand === t.strand) last.ids.push(t.id); else groups.push({ name: t.strand, ids: [t.id] }); });
-  // proportional widths; a bar under the minimum is held at it and the rest share what is left, until none is under
+  // each bar's floor: MIN_SEG, or the room its label needs whole, when all of those fit the strip together
+  const needs = groups.map((g) => Math.max(MIN_SEG, Math.ceil(labelNeed(g.name, STRIP_CH)) + STRIP_INSET));
+  const floor = needs.reduce((a, b) => a + b, 0) <= width ? needs : groups.map(() => MIN_SEG);
+  // proportional widths; a bar under its floor is held at it and the rest share what is left, until none is under
   const fixed = new Set<number>();
   let w: number[] = [];
   for (let guard = 0; guard <= groups.length; guard++) {
-    const free = width - MIN_SEG * fixed.size, n = groups.reduce((a, g, i) => a + (fixed.has(i) ? 0 : g.ids.length), 0);
-    w = groups.map((g, i) => (fixed.has(i) ? MIN_SEG : (free * g.ids.length) / Math.max(1, n)));
-    const under = w.map((x, i) => i).filter((i) => !fixed.has(i) && w[i] < MIN_SEG);
+    const free = width - [...fixed].reduce((a, i) => a + floor[i], 0), n = groups.reduce((a, g, i) => a + (fixed.has(i) ? 0 : g.ids.length), 0);
+    w = groups.map((g, i) => (fixed.has(i) ? floor[i] : (free * g.ids.length) / Math.max(1, n)));
+    const under = w.map((x, i) => i).filter((i) => !fixed.has(i) && w[i] < floor[i]);
     if (!under.length) break;
     under.forEach((i) => fixed.add(i));
   }
@@ -226,8 +265,9 @@ export function stripModel(topics: Array<Pick<PathTopic, "id" | "strand" | "prer
   const secure = new Set(topics.filter((t) => states[t.id] === "secure").map((t) => t.id));
   const segments: StripSegment[] = groups.map((g, i) => {
     const x = bounds[i], sw = bounds[i + 1] - bounds[i], n = g.ids.filter((id) => secure.has(id)).length;
-    const labelX = x + 18, labelW = Math.max(0, sw - 36);
-    return { name: g.name, count: g.ids.length, secure: n, share: n / g.ids.length, x, w: sw, labelX, labelW, label: clampLabel(g.name, labelW) };
+    const labelX = x + 18, labelW = Math.max(0, sw - STRIP_INSET);
+    const lines = wrapLabel(g.name, labelW, STRIP_CH) ?? [clampLabel(g.name, labelW, STRIP_CH)];
+    return { name: g.name, count: g.ids.length, secure: n, share: n / g.ids.length, x, w: sw, labelX, labelW, label: lines.join(" "), lines };
   });
   const fi = school ? afterLastSecure(topics.map((t) => t.id), (id) => secure.has(id)) : topics.findIndex((t) => !secure.has(t.id) && t.prereq.every((p) => secure.has(p)));
   if (fi < 0 || fi >= topics.length) return { x0: PAD, width, segments, needle: { index: topics.length, x: PAD + width, at: "end" } };

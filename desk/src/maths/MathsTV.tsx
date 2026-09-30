@@ -278,7 +278,7 @@ function Ruler({ s, big, focus, busy }: { s: Session; big?: boolean; focus?: num
   const exp = age === undefined ? null : expectedOn(path, sys, age);
   const marks = schoolMarks(exp, mathPlaced(s));
   const fx0 = exp === null || !marks.tick ? null : flagX(m, exp);
-  // on a panning ruler (the school path since W7: seven topics, eleven since batch 2) the tick is drawn only while it is on the stage, and its pill is
+  // on a panning ruler (the school path since W7: seven topics, fifteen since batch 3) the tick is drawn only while it is on the stage, and its pill is
   // turned inward near the window's edges, so it is never cut in half by the window (tv/rulerRows flagOnStage)
   const onStage = fx0 === null ? null : flagOnStage(m, fx0);
   const fx = onStage === null || !onStage.seen ? null : fx0;
@@ -324,7 +324,7 @@ function Ruler({ s, big, focus, busy }: { s: Session; big?: boolean; focus?: num
  * On the big (Topics) ruler, the focused topic's name is shown whole: the largest of 44 down to 34 px (tv/rulerRows.ts
  * `fitName`) at which it is in the lines its box allows (three on a panning ruler, two on one that does not) with no
  * word clipped, measured after layout and again when the faces arrive. Tonight's small ruler keeps its names as the
- * stylesheet sets them (up to eight topics: a long name ends in an ellipsis there; the school path's eleven are the strand strip since W7 batch 2). (Family W5b: the school
+ * stylesheet sets them (up to eight topics: a long name ends in an ellipsis there; the school path's fifteen are the strand strip since W7 batch 2). (Family W5b: the school
  * path's fourth topic narrowed its slots to 419 px, where "Equations with brackets and x on both sides" no longer fits
  * two lines at 44 px; since W7 the school Topics ruler pans, and the focused slot is 640 px.)
  */
@@ -352,7 +352,7 @@ function useNameFit(on: boolean, dep: unknown) {
  * topics, filled by its share of latched-secure topics (`topicStates`), the learner's needle at the frontier - on a
  * course the first topic not secure whose prerequisites are, on a school path the first not secure after the last
  * secure one (tv/rulerRows.ts `stripModel`). No topic names and no school year per topic: the path's topics are on
- * Topics. A school path draws the SCHOOL tick here too (Family W7 batch 2: eleven school topics make Tonight's ruler the
+ * Topics. A school path draws the SCHOOL tick here too (Family W7 batch 2: eleven school topics, fifteen since batch 3, make Tonight's ruler the
  * strip, and owner decision D2 keeps the tick on the child's TV), after the topics a learner of that age is normally
  * past (`stripFlag`, its pill turned inward at the ends); the gap line waits for a Math placement, as on the ruler.
  */
@@ -368,12 +368,13 @@ function Strip({ s }: { s: Session }) {
     <div className="mb-ruler strip" data-role="maths-ruler">
       <div className="mb-rbody" />
       <div className="mb-major start" style={{ left: PAD - 2 }} />
-      {m.segments.map((g, i) => i > 0 && <div key={"m" + g.name} className="mb-major" style={{ left: g.x - 1.5 }} />)}
+      {/* keyed by place: a strand may appear twice on a path (Equations) */}
+      {m.segments.map((g, i) => i > 0 && <div key={`m${i}`} className="mb-major" style={{ left: g.x - 1.5 }} />)}
       <div className="mb-major" style={{ left: m.x0 + m.width - 1.5 }} />
-      {m.segments.map((g) => (
-        <div key={g.name} className="mb-seg" data-s={g.secure === g.count ? "secure" : g.secure ? "prog" : "unseen"} style={{ left: g.x + 6, width: g.w - 12 }}>
+      {m.segments.map((g, i) => (
+        <div key={`s${i}`} className="mb-seg" data-s={g.secure === g.count ? "secure" : g.secure ? "prog" : "unseen"} style={{ left: g.x + 6, width: g.w - 12 }}>
           <div className="mb-groove">{g.secure > 0 && <div className="fill" style={{ width: `${g.share * 100}%` }} />}</div>
-          <div className="mb-strand" style={{ maxWidth: g.labelW }}>{g.label}</div>
+          <div className="mb-strand" style={{ maxWidth: g.labelW }}>{g.lines.map((l, k) => <span key={k} className="ln">{l}</span>)}</div>
         </div>
       ))}
       {flag && marks.gap && <div className="mb-gapline" style={{ left: Math.min(m.needle.x, flag.x), width: Math.abs(flag.x - m.needle.x) }} />}

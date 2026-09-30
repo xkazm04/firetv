@@ -1,8 +1,9 @@
 /**
  * Math paths: a learner's Math course as a thing the desk can name. The 'school' path, "School maths", is the school
- * spine (SYLLABUS as it stands: four fractions units, one-step equations, four decimals and percent units, then the other
- * two linear-equation topics, eleven in all, with their school-year bands; Family W5b extended it in place and renamed it,
- * owner decision D5, W7 batch 1 added three fractions units and W7 batch 2 the decimals and percent strand); the 'calc1' path is the Calculus 1 course (CALC1_SPINE), which
+ * spine (SYLLABUS as it stands: four fractions units, one-step equations, four decimals and percent units, two ratio and
+ * rates units, two geometry and data units, then the other two linear-equation topics, fifteen in all, with their
+ * school-year bands; Family W5b extended it in place and renamed it, owner decision D5, W7 batch 1 added three fractions
+ * units, W7 batch 2 the decimals and percent strand and W7 batch 3 the last four); the 'calc1' path is the Calculus 1 course (CALC1_SPINE), which
  * has no school year. Every screen and pipeline that needs "the" topic list asks here - for the learner's path - rather
  * than reading SYLLABUS directly.
  *

@@ -22,17 +22,18 @@ const firstSecure=(topics,n)=>Object.fromEntries(topics.map((t,i)=>[t.id,i<n?'se
 
 // ---------------------------------------------------------------- 1. the school ruler is drawn as it was
 
-test('ruler model 1: N = 11 (the school path since W7 batch 2) - the small ruler keeps today\'s formulas; the big Topics ruler pans',()=>{
+test('ruler model 1: N = 15 (the school path since W7 batch 3) - the small ruler keeps today\'s formulas; the big Topics ruler pans',()=>{
  const {rulerModel,needleX,flagX,clampLabel,TRACK,PAD,MIN_SPAN,FOCUS_SPAN,STRIP_AFTER}=RR();
  assert.equal(TRACK,1728,'the ruler is the stage less its two 96 px safe margins');assert.equal(PAD,26,'26 px each end, the 52 px margins');
  // W5b put 'Add and subtract fractions' first in its own strand; W7 batch 1 made the Fractions strand four units; W7
- // batch 2 put the Decimals and percent strand after one-step equations: eleven topics, four strands (Equations twice).
- // (1728 - 52) / 11 = 152.4 px is under MIN_SPAN (288), so the big ruler pans as Calculus 1 does; past STRIP_AFTER (8)
+ // batch 2 put the Decimals and percent strand after one-step equations; W7 batch 3 put Ratio and rates and Geometry and
+ // data after it: fifteen topics, six strands (Equations twice).
+ // (1728 - 52) / 15 = 111.7 px is under MIN_SPAN (288), so the big ruler pans as Calculus 1 does; past STRIP_AFTER (8)
  // Tonight draws the strand strip, not the small ruler (tools/school-ruler-test.cjs draws it), so these formulas are the model's own
- const topics=school(),N=topics.length;assert.equal(N,11);assert.ok(N>STRIP_AFTER);
+ const topics=school(),N=topics.length;assert.equal(N,15);assert.ok(N>STRIP_AFTER);
  const span=(1728-26*2)/N;
- const STRANDS=['Fractions','Equations','Decimals and percent','Equations'],FROM=[0,4,5,9];
- assert.ok(span<MIN_SPAN,'eleven boxes are narrower than the big ruler\'s minimum slot');
+ const STRANDS=['Fractions','Equations','Decimals and percent','Ratio and rates','Geometry and data','Equations'],FROM=[0,4,5,9,11,13];
+ assert.ok(span<MIN_SPAN,'fifteen boxes are narrower than the big ruler\'s minimum slot');
  for(let focus=0;focus<N;focus++){
   const m=rulerModel(topics,firstSecure(topics,1),focus,true);
   assert.equal(m.pan,true,`focus ${focus}: the Topics ruler pans`);assert.equal(m.topics[focus].sw,FOCUS_SPAN,'the focused slot is the wide one');
@@ -42,7 +43,7 @@ test('ruler model 1: N = 11 (the school path since W7 batch 2) - the small ruler
   for(const g of m.strands)assert.equal(g.label,clampLabel(g.name,g.labelW),`${g.name}: its label fits its strand`);
   assert.equal(needleX(m,1,0.5),m.topics[1].sx+0.5*m.topics[1].sw,'the needle is part way through its slot');
  }
- for(const big of [false])for(const focus of [undefined,0,1,2,3,4,5,6,7,8,9,10]){
+ for(const big of [false])for(const focus of [undefined,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14]){
   const m=rulerModel(topics,firstSecure(topics,1),focus,big);
   assert.equal(m.span,span,'span = (1728 - 52) / N');
   assert.equal(m.trackWidth,1728);assert.equal(m.offset,0,'nothing to pan');assert.equal(m.pan,false);
@@ -56,8 +57,8 @@ test('ruler model 1: N = 11 (the school path since W7 batch 2) - the small ruler
   assert.deepEqual(m.strands.map((s)=>s.name),STRANDS);
   m.strands.forEach((g,i)=>{assert.equal(g.labelX,26+FROM[i]*span+20,`${g.name} starts at slot ${FROM[i]}`);assert.equal(g.label,clampLabel(g.name,g.labelW));});
   assert.equal(m.strands[0].label,'Fractions','the fractions strand over the first four slots, unclamped');
-  for(const [fr,fill] of [[0,0],[0,0.4],[1,0.7],[2,1],[3,1],[5,0.5],[6,1],[9,0.3],[10,1]])assert.equal(needleX(m,fr,fill),26+(fr+fill)*span,`needle at ${fr}+${fill}`);
-  for(const exp of [-1,0,1,2,3,4,5,6,7,8,9,10,11,12])assert.equal(flagX(m,exp),26+Math.max(0,Math.min(N,exp))*span,`school tick at ${exp}`);
+  for(const [fr,fill] of [[0,0],[0,0.4],[1,0.7],[2,1],[3,1],[5,0.5],[6,1],[9,0.3],[10,1],[12,0.5],[14,1]])assert.equal(needleX(m,fr,fill),26+(fr+fill)*span,`needle at ${fr}+${fill}`);
+  for(const exp of [-1,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16])assert.equal(flagX(m,exp),26+Math.max(0,Math.min(N,exp))*span,`school tick at ${exp}`);
  }
  assert.equal(rulerModel(topics,{},0,true).topics[1].state,'later','a topic with no state is later');
  assert.equal(rulerModel(topics,firstSecure(topics,1),0,true).topics[0].state,'secure');
@@ -135,9 +136,9 @@ test('ruler model 4: the focused name is fitted from 44 px down to 34 px in 2 px
 
 // ---------------------------------------------------------------- 3. Tonight: a long path is one bar per strand
 
-test('strip 1: segment widths follow the topic counts, none under 96 px, and sum to the strip',()=>{
- const {stripModel,STRIP_AFTER,MIN_SEG}=RR();
- assert.equal(STRIP_AFTER,8);assert.equal(MIN_SEG,96);
+test('strip 1: segment widths follow the topic counts, none under 96 px nor under the room its label needs whole in two lines, and sum to the strip',()=>{
+ const {stripModel,labelNeed,STRIP_AFTER,MIN_SEG,STRIP_LINES,STRIP_INSET,STRIP_CH}=RR();
+ assert.equal(STRIP_AFTER,8);assert.equal(MIN_SEG,96);assert.equal(STRIP_LINES,2);assert.equal(STRIP_INSET,36);assert.equal(STRIP_CH,17);
  const topics=calc(),m=stripModel(topics,{});
  assert.equal(m.width,1728-52);assert.equal(m.x0,26);
  assert.deepEqual(m.segments.map(g=>g.count),[3,3,6,4,5,1]);
@@ -147,7 +148,16 @@ test('strip 1: segment widths follow the topic counts, none under 96 px, and sum
  for(const g of m.segments){assert.ok(g.w>=96,`${g.name}: ${g.w} px`);assert.ok(Number.isInteger(g.w)&&Number.isInteger(g.x));}
  const [f,,d]=m.segments;
  assert.ok(Math.abs(d.w/f.w-2)<0.02,'six topics are twice three');
- for(const g of m.segments){assert.ok(g.label.length*16<=g.labelW,`${g.name} label fits`);assert.ok(g.labelX+g.labelW<=g.x+g.w);}
+ // Family W7 batch 3: every label stands whole, in at most two lines of whole words, each within its bar - the one-topic
+ // "Applications of integrals" bar, 96 px before, takes the room its two lines need (it read "Ap…")
+ for(const g of m.segments){
+  assert.ok(g.w>=Math.ceil(labelNeed(g.name,STRIP_CH))+36,`${g.name}: ${g.w} px holds its label`);
+  assert.equal(g.label,g.name,`${g.name}: whole`);assert.equal(g.lines.join(' '),g.name);assert.ok(g.lines.length<=2);
+  for(const l of g.lines)assert.ok(l.length*STRIP_CH<=g.labelW,`${g.name}: "${l}" fits ${g.labelW} px`);
+  assert.ok(g.labelX+g.labelW<=g.x+g.w);
+ }
+ assert.deepEqual(m.segments.at(-1).lines,['Applications','of integrals']);
+ assert.equal(labelNeed('Equations'),9*16);assert.equal(labelNeed('Geometry and data'),8*16,'GEOMETRY / AND DATA');assert.equal(labelNeed('Applications of derivatives'),14*16);
 });
 
 test('strip 2: each segment fills by its share of secure topics, and the needle stands at the frontier for 0, 7, 15 and 22 secure',()=>{

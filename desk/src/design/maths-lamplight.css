@@ -474,6 +474,8 @@
 .maths-tv .mb-seg .fill { background: linear-gradient(180deg, #3B4668, #1E2640); box-shadow: inset 0 1px 0 rgba(255, 255, 255, .25); }
 .maths-tv .mb-seg[data-s="unseen"] .mb-groove { background: transparent; box-shadow: none; border: 2px dashed rgba(58, 36, 14, .4); }
 .maths-tv .mb-seg .mb-strand { left: 12px; top: 104px; color: rgba(245, 238, 223, .72); }
+/* a strip label in its lines (tv/rulerRows wrapLabel: whole words, two lines at most, each within the bar) */
+.maths-tv .mb-seg .mb-strand .ln { display: block; line-height: 1.25; overflow: hidden; text-overflow: ellipsis; }
 .maths-tv .mb-marker[data-end="true"] .mc { transform: translateX(-100%) translateX(14px); }
 .maths-tv .mb-lede { position: absolute; left: 96px; top: 300px; width: 1500px; min-height: 180px; }
 .maths-tv .mb-lede .mb-kick { margin-bottom: 18px; }

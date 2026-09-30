@@ -17,7 +17,7 @@
  * text), rules/calc checkAnswer settles an unsure item from it (rules/maths settleSpec), and the reply is checked
  * with leaksCalc(spec, reply). Only a spec of a Calculus SHAPE is a Calculus item.
  *
- * A school item (a spec of a school shape, rules/school; Family W5b and W7: the four fractions units and the four decimals and percent units) takes the school
+ * A school item (a spec of a school shape, rules/school; Family W5b and W7: every school unit, fractions to mean and range) takes the school
  * stance with the learner's age voice, exactly the school system prompt; the model transcribes the answer they say as
  * figures (a fraction, a mixed number, a decimal), rules/school check settles an unsure item from it by the learner's
  * school system (rules/maths settleSpec), the slip is only the one code detects (the model is not asked for one, and a

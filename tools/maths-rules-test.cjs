@@ -183,9 +183,12 @@ test('the syllabus is a path: unique ids, prereqs that point back along it, less
  // W7 batch 1: three more fractions units, ordered so that no system's year goes down along the path: equivalent
  // fractions, a fraction of an amount, add and subtract, multiply and divide, then the three linear-equation topics
  // W7 batch 2: the "Decimals and percent" strand after one-step equations, the one place every system's years allow
- assert.deepEqual(ids,['frac-equivalent','frac-of-amount','frac-add-sub','frac-mul-div','linear-one-step','dec-arith','dec-convert','pct-of-amount','pct-change','linear-two-step','linear-both-sides']);assert.equal(new Set(ids).size,ids.length);
+ // W7 batch 3: "Ratio and rates" and "Geometry and data" after the percent units and before two-step equations, where every
+ // system's year is fixed (US 7, UK 8, CZ 7, DE 6): fifteen topics
+ assert.deepEqual(ids,['frac-equivalent','frac-of-amount','frac-add-sub','frac-mul-div','linear-one-step','dec-arith','dec-convert','pct-of-amount','pct-change','ratio-share','unit-rate','area','mean-range','linear-two-step','linear-both-sides']);assert.equal(new Set(ids).size,ids.length);
  for(const f of ['frac-equivalent','frac-of-amount','frac-add-sub','frac-mul-div'])assert.equal(topic(f).lessonId,undefined,`no fractions lesson in the library: ${f} names none`);
  for(const f of ['dec-arith','dec-convert','pct-of-amount','pct-change'])assert.equal(topic(f).lessonId,undefined,`no decimals or percent lesson in the library: ${f} names none`);
+ for(const f of ['ratio-share','unit-rate','area','mean-range'])assert.equal(topic(f).lessonId,undefined,`no ratio, area or statistics lesson in the library: ${f} names none`);
  const lessons=new Set(LESSONS.map(l=>l.id));
  SYLLABUS.forEach((t,ix)=>{
   for(const p of t.prereq)assert(ids.indexOf(p)>-1&&ids.indexOf(p)<ix,`${t.id} needs ${p}, which must come earlier`);
@@ -195,7 +198,7 @@ test('the syllabus is a path: unique ids, prereqs that point back along it, less
  assert.deepEqual(Object.keys(SYSTEM_START).sort(),['cz','de','uk','us']);
 });
 test('topic finds by exact id and says undefined for anything else',()=>{
- assert.equal(topic('linear-two-step'),SYLLABUS[9],'W7 batch 2: the four decimals and percent units stand before it');assert.equal(topic('linear-two-step').name,'Two-step equations');
+ assert.equal(topic('linear-two-step'),SYLLABUS[13],'W7 batch 3: the percent units, then ratio and rates and geometry and data, stand before it');assert.equal(topic('linear-two-step').name,'Two-step equations');
  assert.equal(topic('frac-add-sub'),SYLLABUS[2]);assert.equal(topic('frac-add-sub').name,'Add and subtract fractions');
  for(const id of ['','unknown','Linear-One-Step',' linear-one-step','linear',undefined,null])assert.equal(topic(id),undefined,String(id));
 });
@@ -208,6 +211,8 @@ test('nextTopic walks the path in order, ignores ids it does not know, and runs 
  // the conversion needs equivalent fractions, a percent of an amount the conversion, a percent change a percent of an amount
  const [E,O,F,MD]=['frac-equivalent','frac-of-amount','frac-add-sub','frac-mul-div'],FR=[E,O,F,MD];
  const [DA,DC,PO,PC]=['dec-arith','dec-convert','pct-of-amount','pct-change'],DP=[DA,DC,PO,PC],ONE='linear-one-step';
+ // W7 batch 3: ratio and sharing needs equivalent fractions, unit rates ratio and the decimals, area nothing, mean and range the decimals
+ const [RS,UR,AR,MR]=['ratio-share','unit-rate','area','mean-range'],B3=[RS,UR,AR,MR];
  assert.equal(next([]),E,'a learner with nothing secure starts at the start');
  assert.equal(next([E]),O);assert.equal(next([E,O]),F);assert.equal(next([E,O,F]),MD);
  assert.equal(next([O]),E,'a fraction of an amount secure alone: equivalent fractions is still the gap');
@@ -217,16 +222,20 @@ test('nextTopic walks the path in order, ignores ids it does not know, and runs 
  assert.equal(next([...FR,ONE,DA]),DC);assert.equal(next([...FR,ONE,DA,DC]),PO);assert.equal(next([...FR,ONE,DA,DC,PO]),PC);
  assert.equal(next([...FR,ONE,PO]),DA,'a percent of an amount secured alone leaves the decimals as the gap');
  assert.equal(next([...FR,ONE,DA,PO]),DC);
- assert.equal(next([...FR,ONE,...DP]),'linear-two-step');
- assert.equal(next([...FR,ONE,...DP,'linear-two-step']),'linear-both-sides');
- assert.equal(next([...FR,...DP,'linear-two-step',ONE]),'linear-both-sides','the order the ids are listed in does not matter');
- assert.equal(next([...FR,ONE,...DP,'linear-two-step','linear-both-sides']),undefined);
+ assert.equal(next([...FR,ONE,...DP]),RS,'W7 batch 3: after the percent units, ratio and sharing');
+ assert.equal(next([...FR,ONE,...DP,RS]),UR);assert.equal(next([...FR,ONE,...DP,RS,UR]),AR);assert.equal(next([...FR,ONE,...DP,RS,UR,AR]),MR);
+ assert.equal(next([...FR,ONE,PO,PC,RS]),DA,'unit rates wait for the decimals unit: the decimals are the gap');
+ assert.equal(next([...FR,ONE,...DP,...B3]),'linear-two-step');
+ assert.equal(next([...FR,ONE,...DP,...B3,'linear-two-step']),'linear-both-sides');
+ assert.equal(next([...FR,...DP,...B3,'linear-two-step',ONE]),'linear-both-sides','the order the ids are listed in does not matter');
+ assert.equal(next([...FR,ONE,...DP,...B3,'linear-two-step','linear-both-sides']),undefined);
+ assert.equal(next([...FR,ONE,...DP,'linear-two-step','linear-both-sides']),RS,'the batch-3 strands are a gap earlier on the path for a learner who had every other topic');
  assert.equal(next([...FR,ONE,'linear-two-step','linear-both-sides']),DA,'the new strand is a gap earlier on the path for a learner who had every linear topic');
  assert.equal(next(['unknown','','linear-two-step-x']),E,'unknown ids unlock nothing');
  assert.equal(next([...FR,'linear-two-step']),ONE,'a gap earlier on the path is filled first');
  assert.equal(next([ONE]),E,'the new first topic is a gap earlier on the path too');
  assert.equal(next([...FR,'linear-both-sides']),ONE);
- assert.equal(next([...FR,ONE,...DP,'linear-both-sides']),'linear-two-step','a topic secured out of order is skipped, not repeated');
+ assert.equal(next([...FR,ONE,...DP,...B3,'linear-both-sides']),'linear-two-step','a topic secured out of order is skipped, not repeated');
  assert.equal(next([...FR,ONE,ONE]),DA,'a repeated id counts once');
 });
 test("expectedIndex reads age against each system's own year: -1 before the path, never past its end",()=>{
@@ -235,13 +244,16 @@ test("expectedIndex reads age against each system's own year: -1 before the path
  // age - SYSTEM_START + 1 (us 6, uk 5, cz 6, de 6). So the first topic behind a learner comes at US 9 (Grade 4: one),
  // UK 9 (Year 5: two), CZ 10 (5. ročník: three) and DE 10 (Klasse 5: five - all four fractions units and one-step).
  // W7 batch 2 adds, after one-step, decimals 6/7/6/6, conversion 6/7/7/6, percent of an amount 6/7/7/6 and percent
- // change 7/8/7/6: the first-topic ages stay, and a 12-year-old is now past 10 of 11 topics in us, uk and cz, all 11 in de
+ // change 7/8/7/6: the first-topic ages stay, and a 12-year-old was past 10 of 11 topics in us, uk and cz, all 11 in de.
+ // W7 batch 3 adds ratio and sharing, unit rates, area, and mean and range at 7/8/7/6 each, between percent change and
+ // two-step equations: a 12-year-old is now past 14 of 15 topics in us, uk and cz, all 15 in de; an 11-year-old in de
+ // is past 14 (Klasse 6 reaches two-step equations)
  for(const [sys,first,n] of [['us',9,1],['uk',9,2],['cz',10,3],['de',10,5]]){
   assert.equal(expectedIndex(sys,first-1),-1,`${sys} age ${first-1}`);assert.equal(expectedIndex(sys,first),n,`${sys} age ${first}`);
  }
- assert.equal(expectedIndex('uk',11),8);assert.equal(expectedIndex('uk',12),10);assert.equal(expectedIndex('uk',13),11);
- assert.equal(expectedIndex('de',11),10);assert.equal(expectedIndex('de',12),11);
- assert.equal(expectedIndex('us',11),8);assert.equal(expectedIndex('us',13),11);assert.equal(expectedIndex('cz',12),10);assert.equal(expectedIndex('us',12),10);assert.equal(expectedIndex('cz',11),6);
+ assert.equal(expectedIndex('uk',11),8);assert.equal(expectedIndex('uk',12),14);assert.equal(expectedIndex('uk',13),15);
+ assert.equal(expectedIndex('de',11),14);assert.equal(expectedIndex('de',12),15);
+ assert.equal(expectedIndex('us',11),8);assert.equal(expectedIndex('us',13),15);assert.equal(expectedIndex('cz',12),14);assert.equal(expectedIndex('us',12),14);assert.equal(expectedIndex('cz',11),6);
  for(const sys of ['us','uk','cz','de'])for(const age of [0,5,SYSTEM_START[sys]])assert.equal(expectedIndex(sys,age),-1,`${sys} age ${age}`);
  for(const sys of ['us','uk','cz','de'])for(const age of [16,40,120])assert.equal(expectedIndex(sys,age),SYLLABUS.length,`${sys} age ${age}`);
  assert.notEqual(expectedIndex('uk',4),0,'nothing behind them is -1, never 0');

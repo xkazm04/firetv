@@ -2349,7 +2349,8 @@ export function genRatio(seed: unknown, tier: unknown): SchoolSpec | null {
   const int = (lo: number, hi: number) => lo + Math.floor(rnd!() * (hi - lo + 1));
   for (let t = 0; t < MAX_TRIES; t++) {
     let spec: SchoolSpec;
-    if (tier === 1 && ((seed as number) + t) % 2 === 0) {
+    // the kind turns with the seed alone, never with a retry, so a set's consecutive seeds keep their mix
+    if (tier === 1 && (seed as number) % 2 === 0) {
       const [p, q] = pick(ratioPairs(1, 9)), k = int(2, 9);
       if ((p > 1 && k % p === 0) || (q > 1 && k % q === 0)) continue;
       spec = { shape: "ratio", expr: `${p * k}:${q * k}` };
@@ -2390,7 +2391,7 @@ export function genRate(seed: unknown, tier: unknown): SchoolSpec | null {
   function pick<T>(xs: readonly T[]): T { return xs[Math.floor(rnd!() * xs.length)]; }
   const int = (lo: number, hi: number) => lo + Math.floor(rnd!() * (hi - lo + 1));
   for (let t = 0; t < MAX_TRIES; t++) {
-    const distance = ((seed as number) + t) % 3 === 2, single = rnd() < 1 / 3;
+    const distance = (seed as number) % 3 === 2, single = rnd() < 1 / 3; // by the seed alone, never a retry
     let spec: SchoolSpec;
     if (distance) {
       // a speed in half kilometres an hour: whole at tier 1 (a multiple of 5), a half at tier 2
@@ -2428,7 +2429,7 @@ export function genArea(seed: unknown, tier: unknown): SchoolSpec | null {
   if (!rnd) return null;
   const int = (lo: number, hi: number) => lo + Math.floor(rnd!() * (hi - lo + 1));
   for (let t = 0; t < MAX_TRIES; t++) {
-    const turn = ((seed as number) + t) % (tier === 1 ? 2 : 3), metres = rnd() < 0.25;
+    const turn = (seed as number) % (tier === 1 ? 2 : 3), metres = rnd() < 0.25; // by the seed alone, never a retry
     let spec: SchoolSpec;
     if (tier === 1 && turn === 0) spec = { shape: "area", expr: `rectangle ${int(2, 12)} by ${int(2, 12)}`, unit: metres ? "m2" : "cm2" };
     else if (tier === 1) {
@@ -2465,7 +2466,7 @@ export function genStat(seed: unknown, tier: unknown): SchoolSpec | null {
   if (!rnd) return null;
   const int = (lo: number, hi: number) => lo + Math.floor(rnd!() * (hi - lo + 1));
   for (let t = 0; t < MAX_TRIES; t++) {
-    const range = tier === 1 ? ((seed as number) + t) % 2 === 1 : ((seed as number) + t) % 3 === 2;
+    const range = tier === 1 ? (seed as number) % 2 === 1 : (seed as number) % 3 === 2; // by the seed alone, never a retry
     const n = tier === 1 ? int(4, 5) : range ? 6 : int(4, 6), [lo, hi] = tier === 1 ? [1, 20] : range ? [2, 99] : [2, 60];
     const xs = Array.from({ length: n }, () => int(lo, hi)), total = xs.reduce((a, b) => a + b, 0);
     if (!range && (tier === 1 ? total % n !== 0 : total % n === 0)) continue;

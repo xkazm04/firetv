@@ -966,6 +966,49 @@ for(const unit of Object.keys(B3_PAGES)){
   assert.equal(sk.seen,settledN,'only settled items reach the record');assert.equal(sk.seen,photoSkill.seen);assert.equal(sk.right,right);
   assert.equal(lastLine().detail,`${right} of ${page.length} right, ${page.length-settledN} not sure`);
   store.getSession().practice.items.forEach((it,i)=>assert.deepEqual(it.spec,page[i].spec,'the spec survives marking'));
+  assert.equal(lastLine().label,topicIn(unit).name,'the history line names the unit as the path does');
  });
 }
 
+
+test('W7c 8: a hint on each batch-3 task names the unit in its stance, and a hint that gives the answer away twice becomes the unit\'s own fixed sentence',async()=>{
+ const CASES=[
+  ['ratio-share','Share 60 in the ratio 2:3.','One part is 12, so the shares are 24 and 36.','Add the parts of the ratio first.'],
+  ['ratio-share','Write 12:18 in its simplest form.','Divide both by 6 to get 2:3.','Find a number that goes into both 12 and 18.'],
+  ['unit-rate','5 pens cost €3.50. What do 8 pens cost?','One pen is 70p, so 8 pens cost €5.60.','Find the cost of one pen first.'],
+  ['unit-rate','240 km in 3 hours. How far in 5 hours?','80 × 5 = 400 km.','Find how far you go in one hour first.'],
+  ['area','Find the area of a triangle, base 10 cm, height 6 cm.','Half of 60 is 30 cm2.','Multiply the base by the height, then halve it.'],
+  ['area','Find the total area of rectangles 8 cm by 3 cm and 4 cm by 2 cm.','24 + 8 = 32.','Find the area of each rectangle first.'],
+  ['mean-range','Work out the mean of 4, 7, 9 and 10.','30 ÷ 4 = 7.5','Add the numbers, then divide by how many there are.'],
+  ['mean-range','Find the range of 12, 5, 9, 20 and 7.','20 take away 5 is 15.','Find the largest and the smallest numbers.'],
+ ];
+ for(const [unit,task,leaky,clean] of CASES){
+  stubText(()=>({hint:leaky,what_to_try_next:'Write it down.'}));
+  let h=await H.hint('maths',task,{path:'school',age:12});
+  assert.equal(seenText.length,2,`${task}: asked, then asked again once`);
+  assert.equal(h.hint,S.SCHOOL_WITHHELD[unit],`${task}: the unit's own line`);assert.equal(h.next,'');
+  assert.match(seenText[0].system,new RegExp(`This sheet is the unit "${topicIn(unit).name}"; prefer the unit's methods over heavier ones\\.`),`${task}: the stance names the unit`);
+  assert.match(seenText[0].system,/a learner aged 11 to 13/,'the W2 young voice');
+  stubText(()=>({hint:clean,what_to_try_next:'Write your working under the question.'}));
+  h=await H.hint('maths',task,{path:'school',age:12});
+  assert.equal(seenText.length,1,`${task}: a legit hint passes on the first ask`);assert.equal(h.hint,clean);
+ }
+});
+
+test('W7c 9: an unsure ratio, area or mean item is explained in the school stance and settled by check from the value said - two amounts, a ratio, a square unit',async()=>{
+ const items=[{spec:ra('60 in 2:3'),a:'36 and 24'},{spec:ar('rectangle 7 by 4'),a:'28 cm'},{spec:st('mean 4, 7, 9, 10'),a:'7,5'}];
+ seat('uk');store.dispatch({type:'practice.set',practice:{topic:'ratio-share',marked:false,items:items.map((p,i)=>({n:i+1,question:question(p.spec),spec:p.spec,tier:1}))}});noModel();
+ assert.equal((await post('mark',{answers:items.map((p)=>p.a)})).status,200);
+ assert.deepEqual(store.getSession().practice.items.map((i)=>i.verdict),['unsure','unsure','unsure']);
+ // "twenty-four and thirty-six" said aloud: the value is transcribed as two amounts and settles right
+ stubText(()=>({reply:'Look at which share goes with the 2.',value:'24 and 36'}));
+ const r=await post('explain',{transcript:'the first one gets twenty-four and the other thirty-six',n:0});
+ assert.equal(r.status,200);assert.equal((await r.json()).settled,'right');
+ assert.match(seenText[0].prompt,/twenty-four and thirty-six is 24 and 36/,'the explain prompt asks for two amounts as said');
+ assert.match(seenText[0].prompt,/^Topic: Ratio and sharing\n/);
+ assert.equal(store.getSession().practice.items[0].verdict,'right');
+ // the area said with its square unit settles right; a reply that states the answer is replaced by the item's line
+ stubText(()=>({reply:'Yes, 28 square centimetres.',value:'28 cm2'}));
+ await post('explain',{transcript:'twenty-eight square centimetres',n:1});
+ const it=store.getSession().practice.items[1];assert.equal(it.verdict,'right');assert.equal(it.reply,M.RIGHT(2),'the leaking reply is not shown');
+});

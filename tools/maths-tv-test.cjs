@@ -361,13 +361,15 @@ test('path 1: on the calc1 path the states are the Calculus topics - a latched c
 test('path 2: a record off the learner\'s path is ignored - calc1 on a school profile, school on a calc1 profile',()=>{
  const {topicStates}=R();
  const school=topicStates(onPath(SCHOOL,{'calc1-functions':rec('calc1-functions',0.9,true)}));
- const SCHOOL_IDS=['frac-equivalent','frac-of-amount','frac-add-sub','frac-mul-div','linear-one-step','dec-arith','dec-convert','pct-of-amount','pct-change','linear-two-step','linear-both-sides'];
- assert.deepEqual(Object.keys(school),SCHOOL_IDS,'W5b: fractions first; W7: four fractions units; W7 batch 2: decimals and percent after one-step');
+ const SCHOOL_IDS=['frac-equivalent','frac-of-amount','frac-add-sub','frac-mul-div','linear-one-step','dec-arith','dec-convert','pct-of-amount','pct-change','ratio-share','unit-rate','area','mean-range','linear-two-step','linear-both-sides'];
+ assert.deepEqual(Object.keys(school),SCHOOL_IDS,'W5b: fractions first; W7: four fractions units; W7 batch 2: decimals and percent after one-step; W7 batch 3: ratio and rates, geometry and data');
  assert.equal(school['linear-one-step'],'next');assert.equal(school['frac-equivalent'],'next');assert.equal(school['frac-of-amount'],'next');
  // W7: add and subtract, and multiply and divide, need equivalent fractions first, so they wait
  assert.equal(school['frac-add-sub'],'later');assert.equal(school['frac-mul-div'],'later');assert.ok(!('calc1-functions' in school));
  // W7 batch 2: decimals need nothing on the path; the conversion needs equivalent fractions, each percent unit the one before
  assert.equal(school['dec-arith'],'next');assert.equal(school['dec-convert'],'later');assert.equal(school['pct-of-amount'],'later');assert.equal(school['pct-change'],'later');
+ // W7 batch 3: area needs nothing on the path; ratio needs equivalent fractions, unit rates ratio and the decimals, mean and range the decimals
+ assert.equal(school['area'],'next');assert.equal(school['ratio-share'],'later');assert.equal(school['unit-rate'],'later');assert.equal(school['mean-range'],'later');
  const calc=topicStates(onPath(CALC,{'linear-one-step':rec('linear-one-step',0.9,true)}));
  assert.ok(!('linear-one-step' in calc));assert.equal(calc['calc1-functions'],'next');
  assert.ok(!Object.values(calc).includes('secure'),'nothing on the calc1 path is secure');
@@ -396,7 +398,7 @@ test('path 4: Tonight\'s title counts the learner\'s path - "N of 22", every top
  assert.equal(title(onPath(CALC,{...seven,'linear-one-step':rec('linear-one-step',0.9,true)})),'7 of 22 topics secure','a school record is not one of the 22');
  assert.equal(title(onPath(CALC,{})),'Calculus 1, from the first step');
  assert.equal(title(onPath(SCHOOL,seven)),'School maths, from the first step','calc1 records on a school profile count for nothing');
- assert.equal(title(onPath(SCHOOL,{'linear-one-step':rec('linear-one-step',0.9,true)})),'One of 11 topics secure','W7 batch 2: the school path has eleven topics');
+ assert.equal(title(onPath(SCHOOL,{'linear-one-step':rec('linear-one-step',0.9,true)})),'One of 15 topics secure','W7 batch 3: the school path has fifteen topics');
  assert.equal(title({skills:{}}),'School maths, from the first step','no learner: the school path');
 });
 

@@ -1,5 +1,6 @@
 /**
- * Our own topic spine for school maths: fractions, linear equations, decimals and percent.
+ * Our own topic spine for school maths: fractions, linear equations, decimals and percent, ratio and rates, geometry and
+ * data.
  *
  * The bands below (US grade, UK year, Czech ročník, German Klasse) are OUR OWN EDITORIAL
  * JUDGEMENT, informed by reading public curriculum outlines and then written from scratch.
@@ -25,6 +26,13 @@
  * percent; a percent of an amount; percent increase and decrease) after one-step equations: the eleven topics keep every
  * system's years from going down, and where a system's usual year disagrees the comment on the unit says which way it
  * was moved and why. None has a lessonId either.
+ *
+ * W7 batch 3 adds the last four units as two strands, "Ratio and rates" (ratio and sharing; unit rates and direct
+ * proportion) and "Geometry and data" (area; mean and range), after percent increase and decrease and before two-step
+ * equations: fifteen topics. Between percent change (US 7 / UK 8 / CZ 7 / DE 6) and two-step equations (7 / 8 / 7 / 6)
+ * every system's year is fixed, so all four take US 7, UK 8, CZ 7, DE 6 - the one place where the strands stay whole
+ * bars (earlier, mean and range would come before the decimals it needs; after two-step equations the Equations strand
+ * would split again and no year would be earlier). Each unit's comment says where that is later or earlier than usual.
  */
 import type { SchoolSystem } from "@/lib/session/store";
 
@@ -81,7 +89,8 @@ export const SYLLABUS: Topic[] = [
     id: "frac-mul-div",
     name: "Multiply and divide fractions",
     strand: "Fractions",
-    blurb: "Fractions multiply top by top and bottom by bottom, and dividing by a fraction is multiplying by it turned upside down.",
+    // one sentence, one main clause (W7 batch 3: the old wording read as two sentences joined by "and")
+    blurb: "Fractions are multiplied top by top and bottom by bottom, which is also how you divide once the fraction you divide by is turned upside down.",
     // from memory, unchecked: a maths teacher reads these four before release. US Grade 6 (dividing a fraction by a
     // fraction; multiplying is Grade 5), UK Year 7 (Year 6 multiplies and divides by a whole number). CZ: násobení a
     // dělení zlomků is usually 7. ročník, and DE: Multiplizieren und Dividieren von Brüchen usually Klasse 6, but
@@ -160,6 +169,65 @@ export const SYLLABUS: Topic[] = [
     year: { us: 7, uk: 8, cz: 7, de: 6 },
     // the change is a percent of the amount
     prereq: ["pct-of-amount"],
+  },
+  // W7 batch 3, "Ratio and rates" and "Geometry and data": after the percent units, before two-step equations, where every
+  // system's year is fixed at US 7 / UK 8 / CZ 7 / DE 6 (the file header says why this is the one place for them)
+  {
+    id: "ratio-share",
+    name: "Ratio and sharing",
+    strand: "Ratio and rates",
+    blurb: "A ratio compares amounts in equal parts, which you simplify by dividing both numbers by the same number and share out by first finding the size of a single part.",
+    // from memory, unchecked: a maths teacher reads these four before release. US: ratio reasoning is Grade 6; held at 7 by
+    // percent change (US 7) before it - a year later than usual. UK: unequal sharing is met in Year 6, dividing in a ratio
+    // is KS3 (Year 7-8 schemes); held at 8 by percent change (UK 8). CZ: poměr, 7. ročník. DE: Verhältnisse and dividing in a
+    // ratio usually Klasse 7; two-step equations after it are DE 6, so Klasse 6 - a year earlier than usual.
+    bands: { us: "Grade 7", uk: "Year 8", cz: "7. ročník", de: "Klasse 6–7 (varies by Bundesland)" },
+    year: { us: 7, uk: 8, cz: 7, de: 6 },
+    // simplifying a ratio and scaling it are equivalent fractions' method
+    prereq: ["frac-equivalent"],
+  },
+  {
+    id: "unit-rate",
+    name: "Unit rates and direct proportion",
+    strand: "Ratio and rates",
+    blurb: "When two amounts grow in step, you find the value for a single one first and then multiply up to the number you need.",
+    // from memory, unchecked: a maths teacher reads these four before release. US: unit rates are Grade 6, proportional
+    // relationships Grade 7: Grade 7. UK: direct proportion and the unitary method, Year 8 (KS3). CZ: přímá úměrnost and
+    // trojčlenka, 7. ročník. DE: proportionale Zuordnungen and der Dreisatz usually Klasse 7; held by two-step equations at
+    // DE 6 after it, so Klasse 6 - a year earlier than usual.
+    bands: { us: "Grade 7", uk: "Year 8", cz: "7. ročník", de: "Klasse 6–7 (varies by Bundesland)" },
+    year: { us: 7, uk: 8, cz: 7, de: 6 },
+    // finding a single part is ratio's first step; a price to the cent divides a decimal
+    prereq: ["ratio-share", "dec-arith"],
+  },
+  {
+    id: "area",
+    name: "Area of rectangles, triangles and composite shapes",
+    strand: "Geometry and data",
+    blurb: "The area of a shape is the space inside it, found as length times width for a rectangle, half of base times height for a triangle and the sum of the parts for a shape made of rectangles.",
+    // from memory, unchecked: a maths teacher reads these four before release. US: triangles and composite figures are
+    // Grade 6 (rectangles earlier); held at 7 by percent change - a year later than usual. UK: the area of a triangle is
+    // Year 6 and rectilinear shapes Year 5-6; held at 8 by percent change (UK 8) - two years later than usual, though KS3
+    // revisits both. CZ: obsah trojúhelníku, 7. ročník. DE: the rectangle is Klasse 5, the triangle often Klasse 7; held
+    // at 6 by two-step equations - the triangle a year earlier than usual.
+    bands: { us: "Grade 7", uk: "Year 8", cz: "7. ročník", de: "Klasse 6 (varies by Bundesland)" },
+    year: { us: 7, uk: 8, cz: 7, de: 6 },
+    // whole and half sides only, so no decimals unit is needed
+    prereq: [],
+  },
+  {
+    id: "mean-range",
+    name: "Mean and range",
+    strand: "Geometry and data",
+    blurb: "A list of numbers is summed up by its mean, the total shared equally among them, and by its range, the gap from the smallest to the largest.",
+    // from memory, unchecked: a maths teacher reads these four before release. US: the mean and measures of spread are
+    // Grade 6; held at 7 by percent change - a year later than usual. UK: the mean is Year 6, the range KS3 (Year 7); held
+    // at 8 by percent change - later than usual. CZ: aritmetický průměr is met in 6. ročník with decimals; 7. ročník here,
+    // a year later. DE: Mittelwert and Spannweite Klasse 5-6: Klasse 6.
+    bands: { us: "Grade 7", uk: "Year 8", cz: "7. ročník", de: "Klasse 6 (varies by Bundesland)" },
+    year: { us: 7, uk: 8, cz: 7, de: 6 },
+    // a mean that is not whole is a decimal, added and divided
+    prereq: ["dec-arith"],
   },
   {
     id: "linear-two-step",

@@ -30,16 +30,17 @@ const SPINE_KEYS=['blurb','id','name','prereq','sections','sessions','shapes','s
 /** Source with comments removed, so a word in a comment never passes or fails a scan. */
 const code=(file)=>fs.readFileSync(file,'utf8').replace(/\/\*[\s\S]*?\*\//g,'').replace(/(^|[^:])\/\/.*$/gm,'$1');
 
-test('1: 22 Calculus topics and 11 school topics, ids unique across paths and no id in two paths',()=>{
+test('1: 22 Calculus topics and 15 school topics, ids unique across paths and no id in two paths',()=>{
  assert.equal(CALC1_SPINE.length,22);
  assert.deepEqual(Object.keys(P.PATHS).sort(),['calc1','school']);
  assert.equal(P.PATHS.calc1.topics.length,22);
  // W5b: 'Add and subtract fractions' joined the school path in place (owner decision D5); W7 batch 1 added three more
  // fractions units, equivalent fractions first (years never go down along the path)
- assert.equal(P.PATHS.school.topics.length,11,'W7 batch 2: the decimals and percent strand, four more');
+ // W7 batch 2 added the decimals and percent strand, W7 batch 3 ratio and rates and geometry and data: fifteen
+ assert.equal(P.PATHS.school.topics.length,15,'W7 batch 3: ratio and rates, geometry and data, four more');
  assert.equal(P.PATHS.school.topics[0].id,'frac-equivalent');
  const ids=[...P.PATHS.school.topics,...P.PATHS.calc1.topics].map(t=>t.id);
- assert.equal(new Set(ids).size,33,'every topic id is unique across both paths');
+ assert.equal(new Set(ids).size,37,'every topic id is unique across both paths');
  for(const t of P.PATHS.school.topics)assert.ok(!P.PATHS.calc1.topics.some(c=>c.id===t.id),`${t.id} is in two paths`);
  assert.equal(P.PATHS.school.name,'School maths','renamed in W5b (owner decision D5)');assert.equal(P.PATHS.school.school,true);assert.equal(P.PATHS.school.id,'school');
  assert.equal(P.PATHS.calc1.name,'Calculus 1');assert.equal(P.PATHS.calc1.school,false);assert.equal(P.PATHS.calc1.id,'calc1');
@@ -135,7 +136,14 @@ test('9: nextOn is the first topic not secure whose prereqs are all secure',()=>
  assert.equal(P.nextOn('school',['frac-equivalent','frac-of-amount','frac-add-sub','frac-mul-div']).id,'linear-one-step');
  // W7 batch 2: the decimals and percent strand comes after one-step equations
  assert.equal(P.nextOn('school',['frac-equivalent','frac-of-amount','frac-add-sub','frac-mul-div','linear-one-step']).id,'dec-arith');
- assert.equal(P.nextOn('school',['frac-equivalent','frac-of-amount','frac-add-sub','frac-mul-div','linear-one-step','dec-arith','dec-convert','pct-of-amount','pct-change']).id,'linear-two-step');
+ // W7 batch 3: ratio and rates, then geometry and data, come after the percent units and before two-step equations
+ const DP=['frac-equivalent','frac-of-amount','frac-add-sub','frac-mul-div','linear-one-step','dec-arith','dec-convert','pct-of-amount','pct-change'];
+ assert.equal(P.nextOn('school',DP).id,'ratio-share');
+ assert.equal(P.nextOn('school',[...DP,'ratio-share']).id,'unit-rate');
+ assert.equal(P.nextOn('school',[...DP,'ratio-share','unit-rate','area','mean-range']).id,'linear-two-step');
+ assert.equal(P.nextOn('school',['frac-equivalent','ratio-share']).id,'frac-of-amount','the first open topic, not the new strand');
+ assert.equal(P.nextOn('school',[...DP.filter((t)=>t!=='dec-arith'),'ratio-share']).id,'dec-arith','unit rates need the decimals unit too');
+ assert.equal(P.nextOn('school',[...DP.slice(0,5),'area']).id,'dec-arith','area needs nothing, and mean and range wait for the decimals unit');
  assert.equal(P.nextOn('school',['frac-equivalent','dec-arith']).id,'frac-of-amount');
  assert.equal(P.nextOn('school',['frac-equivalent','frac-of-amount','frac-add-sub','frac-mul-div','linear-one-step','dec-arith','pct-of-amount']).id,'dec-convert','a percent of an amount needs the conversion first');
  assert.equal(P.nextOn('school',SYLLABUS.map(t=>t.id)),undefined,'nothing left');

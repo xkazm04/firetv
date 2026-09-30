@@ -167,6 +167,28 @@ for(const unit of ['dec-arith','dec-convert','pct-of-amount','pct-change']){
  });
 }
 
+// W7 batch 3: before test 5 below, as batch 2's route tests are
+for(const unit of ['ratio-share','unit-rate','area','mean-range']){
+ test(`W7c 3-${unit}: makeItems and the practice route write the unit's set by code - provider code, zero tries, six items with specs and tiers - and the engine is never reached`,async()=>{
+  seat();noModel();
+  for(let k=0;k<10;k++){
+   const r=await makeItems(unit,LEARNER);
+   assert.equal(seen.length,0,'no text engine call');assert.equal(r.provider,'code');assert.equal(r.tries,0);
+   assert.equal(r.items.length,6);assert.deepEqual(r.items.map((i)=>i.tier),[1,1,1,2,2,2]);
+   assert.equal(new Set(r.items.map((i)=>i.question)).size,6);
+   for(const it of r.items){assert.equal(S.unitOf(it.spec),unit);assert.equal(it.tier,B3_TIER[unit](it.spec));}
+  }
+  const res=await post({topic:unit});
+  assert.equal(res.status,200);
+  const body=await res.json();
+  assert.deepEqual([body.items,body.provider,body.tries],[6,'code',0]);assert.equal(seen.length,0,'the engine was never reached');
+  const p=store.getSession().practice;
+  assert.equal(p.topic,unit);assert.equal(p.items.length,6);assert.equal(store.getSession().screen,'practice');
+  for(const it of p.items){assert.ok(S.wellFormed(it.spec).ok);assert.ok(it.tier===1||it.tier===2);assert.equal(S.unitOf(it.spec),unit);}
+  assert.ok(!keysIn(store.getSession()).includes('answer'));
+ });
+}
+
 // ------------------------------------------------------------------ the spec through the store
 test('5: a school spec survives the store - practice.set, practice.marked, practice.settle and a reload from session.json',()=>{
  seat();
@@ -289,8 +311,8 @@ test('W7 5b: the new shapes survive the store - practice.set, practice.marked, p
 });
 
 // ------------------------------------------------------------------ W7: the three units on the path, and the route that writes their sets
-test('W7 1: the school path has eleven topics since W7 batch 2 - four fractions units, one-step, the decimals and percent strand, the other two linear topics - each batch-1 unit with a generator, a one-sentence blurb, honest prerequisites and no lesson',()=>{
- assert.deepEqual(P.topicsOf('school').map((t)=>t.id),['frac-equivalent','frac-of-amount','frac-add-sub','frac-mul-div','linear-one-step','dec-arith','dec-convert','pct-of-amount','pct-change','linear-two-step','linear-both-sides']);
+test('W7 1: the school path has fifteen topics since W7 batch 3 - four fractions units, one-step, the decimals and percent strand, ratio and rates, geometry and data, the other two linear topics - each batch-1 unit with a generator, a one-sentence blurb, honest prerequisites and no lesson',()=>{
+ assert.deepEqual(P.topicsOf('school').map((t)=>t.id),['frac-equivalent','frac-of-amount','frac-add-sub','frac-mul-div','linear-one-step','dec-arith','dec-convert','pct-of-amount','pct-change','ratio-share','unit-rate','area','mean-range','linear-two-step','linear-both-sides']);
  const want={
   'frac-equivalent':['Equivalent fractions',[],{us:4,uk:5,cz:5,de:5}],
   'frac-of-amount':['A fraction of an amount',[],{us:5,uk:5,cz:5,de:5}],
@@ -360,7 +382,7 @@ test('W7b 1: the four decimals and percent units are on the school path after on
   'pct-change':['Percent increase and decrease',['pct-of-amount'],{us:7,uk:8,cz:7,de:6}],
  };
  const order=P.topicsOf('school').map((t)=>t.id);
- assert.deepEqual(order.slice(4,10),['linear-one-step','dec-arith','dec-convert','pct-of-amount','pct-change','linear-two-step'],'between one-step and two-step equations');
+ assert.deepEqual(order.slice(4,10),['linear-one-step','dec-arith','dec-convert','pct-of-amount','pct-change','ratio-share'],'after one-step equations, before the W7 batch-3 strands');
  for(const [id,[name,prereq,year]] of Object.entries(want)){
   const t=P.topicIn(id);
   assert.equal(t.name,name);assert.equal(t.strand,'Decimals and percent');assert.deepEqual(t.prereq,prereq,`${id}: prerequisites`);assert.deepEqual(t.year,year,`${id}: years (from memory, a teacher checks)`);
@@ -429,10 +451,20 @@ const B3_SHAPE={
  'area':[/^(?:Find the area of a rectangle \d+(?:\.5)? (?:cm|metres) by \d+(?:\.5)? (?:cm|metres)\.|Find the area of a triangle, base \d+ cm, height \d+ cm\.|Find the total area of rectangles \d+ cm by \d+ cm and \d+ cm by \d+ cm\.)$/,['shape','expr','unit']],
  'unit-rate':[/^(?:\d+ (pens|books|cards|eggs|cups|kg) cost [€£]\d+(?:\.\d\d)?\. What (?:do \d+ \1|does 1 (?:pen|book|card|egg|cup|kg)) cost\?|\d+ km in \d+ hours\. How far in (?:1 hour|\d+ hours)\?)$/,['shape','expr','unit']],
 };
+/** Each unit's kinds (the figure, the question asked): a set's tier-1 half mixes them, because the kind turns with the seed alone. */
+const B3_KIND={
+ 'ratio-share':(sp)=>(/ in /.test(sp.expr)?'share':/=/.test(sp.expr)?'missing':'simplify'),
+ 'unit-rate':(sp)=>(/ km /.test(sp.expr)?'distance':'cost'),
+ 'area':(sp)=>sp.expr.split(' ')[0],
+ 'mean-range':(sp)=>sp.expr.split(' ')[0],
+};
 for(const unit of Object.keys(B3_TIER)){
  test(`W7c 2-${unit}: makeSchoolItems writes six distinct items by code - three tier 1, then three tier 2 - pure for a seed, with no engine call`,()=>{
   noModel();
+  let mixed=0;
   for(let seed=1;seed<=40;seed++){
+   // the capture found a set of three rectangles (a retried draw turned the kind): the kind now turns with the seed alone
+   if(new Set(makeSchoolItems(unit,6,seed*7919).items.map((i)=>B3_KIND[unit](i.spec))).size>1)mixed++;
    const r=makeSchoolItems(unit,6,seed*7919);
    assert.equal(seen.length,0,'no text engine call');
    assert.equal(r.provider,'code');assert.equal(r.tries,0);assert.equal(r.items.length,6);
@@ -449,6 +481,7 @@ for(const unit of Object.keys(B3_TIER)){
    }
    assert.deepEqual(makeSchoolItems(unit,6,seed*7919).items,r.items,'the same seed gives the same set');
   }
+  assert.equal(mixed,40,`${unit}: every set mixes its kinds (${mixed} of 40)`);
   const sets=new Set([1,1000,99999,123456789,4000000000].map((s)=>makeSchoolItems(unit,6,s).items.map((i)=>i.question).join('|')));
   assert.equal(sets.size,5,'five seeds, five different sets');
   assert.equal(makeSchoolItems(unit,6,0xffffffff).items.length,6);
@@ -503,4 +536,34 @@ test('W7c 5b: the batch-3 specs survive the store - practice.set, practice.marke
  const src=fs.readFileSync(storeFile,'utf8');
  assert.match(src,/const SCHOOL_SPEC_KEYS = \["expr", "form", "unit", "allowNegative", "to"\] as const;/,'W7 batch 3 adds no store key: expr and unit carry every new shape');
  for(const sh of ['ratio','rate','area','stat']){assert.ok(S.SCHOOL_SHAPES.includes(sh));assert.ok(!C.CALC_SHAPES.includes(sh),`${sh} is not a Calculus shape`);assert.equal(C.wellFormed({shape:sh,expr:'12:18'}).ok,false);}
+});
+
+test('W7c 1: the four batch-3 units are on the school path after the percent units and before two-step equations - two strands, one-sentence blurbs, honest prerequisites, years that never go down, a generator and no lesson',()=>{
+ const want={
+  'ratio-share':['Ratio and sharing','Ratio and rates',['frac-equivalent']],
+  'unit-rate':['Unit rates and direct proportion','Ratio and rates',['ratio-share','dec-arith']],
+  'area':['Area of rectangles, triangles and composite shapes','Geometry and data',[]],
+  'mean-range':['Mean and range','Geometry and data',['dec-arith']],
+ };
+ const order=P.topicsOf('school').map((t)=>t.id);
+ assert.deepEqual(order.slice(8,14),['pct-change','ratio-share','unit-rate','area','mean-range','linear-two-step'],'after percent change, before two-step equations');
+ for(const [id,[name,strand,prereq]] of Object.entries(want)){
+  const t=P.topicIn(id);
+  assert.equal(t.name,name);assert.equal(t.strand,strand);assert.deepEqual(t.prereq,prereq,`${id}: prerequisites`);
+  // every system's year is fixed between percent change and two-step equations (from memory, a teacher checks)
+  assert.deepEqual(t.year,{us:7,uk:8,cz:7,de:6},`${id}: years`);
+  assert.ok(!('lessonId' in t),`${id}: the lesson library has no lesson for it`);
+  assert.match(t.blurb,/^[A-Z][^.!?]*[.!?]$/,`${id}: one sentence`);assert.doesNotMatch(t.blurb,/\d/,`${id}: no number in the blurb`);
+  assert.equal(P.pathOfTopic(id),'school');assert.equal(typeof S.generatorFor(id),'function');
+  const row=SYLLABUS.find((x)=>x.id===id);assert.ok(row.bands.us.startsWith('Grade ')&&row.bands.uk.startsWith('Year ')&&/ročník/.test(row.bands.cz)&&/^Klasse/.test(row.bands.de));
+  for(const p of prereq)assert.ok(order.indexOf(p)<order.indexOf(id),`${id} needs ${p}, which comes earlier`);
+ }
+ // the multiply-and-divide blurb is one sentence with one main clause (batch 1's read as two joined by "and")
+ assert.equal(P.topicIn('frac-mul-div').blurb,'Fractions are multiplied top by top and bottom by bottom, which is also how you divide once the fraction you divide by is turned upside down.');
+ for(const t of P.topicsOf('school'))assert.match(t.blurb,/^[A-Z][^.!?]*[.!?]$/,`${t.id}: one sentence`);
+ // the unit a reader says a spec belongs to is the topic on the path, so the hint's stance and the history line name it
+ for(const [spec,id] of [[{shape:'ratio',expr:'60 in 2:3'},'ratio-share'],[{shape:'rate',expr:'5 pens cost 3.50, 8',unit:'€'},'unit-rate'],[{shape:'area',expr:'rectangle 7 by 4',unit:'cm2'},'area'],[{shape:'stat',expr:'mean 4, 7, 9, 10'},'mean-range']])
+  assert.equal(P.topicIn(S.unitOf(spec)).id,id);
+ // every school unit has a generator now: the path's only topics left to the model are the three linear ones
+ assert.deepEqual(order.filter((id)=>!S.generatorFor(id)),['linear-one-step','linear-two-step','linear-both-sides']);
 });

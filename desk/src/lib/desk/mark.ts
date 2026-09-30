@@ -19,7 +19,7 @@
  * compared - ASK, and no attempt. The slip is code's own (sign, lost-constant) where it names one, else the model's
  * pick from the topic's vocabulary, only on a wrong item. A Calculus item has no pen position (locate reads linear lines).
  *
- * A school item (a `spec` of a school shape, rules/school; Family W5b and W7: the four fractions units and the four decimals and percent units) is marked by CODE
+ * A school item (a `spec` of a school shape, rules/school; Family W5b and W7: every school unit, fractions to mean and range) is marked by CODE
  * the same way, with its own reading prompt: the model is asked for the child's final answer and working exactly as
  * written - a fraction, a mixed number, a decimal with its comma or point - never an expression in x, never a verdict,
  * a solution or a slip. The verdict is rules/school check(spec, studentAnswer, system), `system` being the seated
