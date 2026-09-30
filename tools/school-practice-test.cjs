@@ -416,10 +416,13 @@ const B3_TIER={
  // tier 1: the value of a single one is whole (a whole price an item, a speed a multiple of 5); tier 2: it is not
  'unit-rate':(sp)=>{const c=/^(\d+) [a-z]+ cost (\d+)(?:\.(\d\d))?, \d+$/.exec(sp.expr);if(c){const each=(Number(c[2])*100+Number(c[3]??0))/Number(c[1]);return each%100===0?1:2;}
   const d=/^(\d+) km in (\d+) h, \d+$/.exec(sp.expr);return (2*Number(d[1])/Number(d[2]))%2===0?1:2;},
+ // tier 1: a rectangle with whole sides or a triangle with a whole area; tier 2: two rectangles, a half in the area or a side
+ 'area':(sp)=>{if(/^rectangles /.test(sp.expr)||/\.5/.test(sp.expr))return 2;const t=/^triangle base (\d+) height (\d+)$/.exec(sp.expr);return t&&(Number(t[1])*Number(t[2]))%2===1?2:1;},
 };
 /** The printed question of each unit, and the keys its spec may carry. */
 const B3_SHAPE={
  'ratio-share':[/^(?:Write \d+:\d+ in its simplest form\.|Fill in the missing number: \d+:\d+ = (?:\?:\d+|\d+:\?)\.|Share (?:[€£]\d+|\d+(?: [a-z]+)?) in the ratio \d+:\d+\.)$/,['shape','expr','unit']],
+ 'area':[/^(?:Find the area of a rectangle \d+(?:\.5)? (?:cm|metres) by \d+(?:\.5)? (?:cm|metres)\.|Find the area of a triangle, base \d+ cm, height \d+ cm\.|Find the total area of rectangles \d+ cm by \d+ cm and \d+ cm by \d+ cm\.)$/,['shape','expr','unit']],
  'unit-rate':[/^(?:\d+ (pens|books|cards|eggs|cups|kg) cost [€£]\d+(?:\.\d\d)?\. What (?:do \d+ \1|does 1 (?:pen|book|card|egg|cup|kg)) cost\?|\d+ km in \d+ hours\. How far in (?:1 hour|\d+ hours)\?)$/,['shape','expr','unit']],
 };
 for(const unit of Object.keys(B3_TIER)){
@@ -450,6 +453,11 @@ for(const unit of Object.keys(B3_TIER)){
 
 /** The batch-3 specs a round trip carries, and the ones the store must drop (a key the shape does not take, a malformed one). */
 const B3_STORE={
+ 'area':{
+  keep:[{shape:'area',expr:'rectangle 7 by 4',unit:'cm2'},{shape:'area',expr:'rectangle 12 by 9',unit:'m2'},{shape:'area',expr:'triangle base 5 height 3',unit:'cm2'},{shape:'area',expr:'rectangles 8 by 3 and 4 by 2',unit:'cm2'}],
+  answer:[{shape:'area',expr:'rectangle 7 by 4',unit:'cm2',answer:'28',value:28},{shape:'area',expr:'rectangle 7 by 4',unit:'cm2'}],
+  drop:[{shape:'area',expr:'rectangle 7 by 4'},{shape:'area',expr:'rectangle 7 by 4',unit:'cm'},{shape:'area',expr:'square 5',unit:'cm2'},{shape:'area',expr:'rectangle 7 by 4',unit:'cm2',to:'decimal'},{shape:'area',expr:'rectangle 0 by 4',unit:'cm2'}],
+ },
  'unit-rate':{
   keep:[{shape:'rate',expr:'5 pens cost 3.50, 8',unit:'€'},{shape:'rate',expr:'12 kg cost 30, 1',unit:'£'},{shape:'rate',expr:'240 km in 3 h, 5',unit:'km'}],
   answer:[{shape:'rate',expr:'5 pens cost 3.50, 8',unit:'€',answer:'5.60',value:5.6},{shape:'rate',expr:'5 pens cost 3.50, 8',unit:'€'}],
@@ -485,5 +493,5 @@ test('W7c 5b: the batch-3 specs survive the store - practice.set, practice.marke
  }
  const src=fs.readFileSync(storeFile,'utf8');
  assert.match(src,/const SCHOOL_SPEC_KEYS = \["expr", "form", "unit", "allowNegative", "to"\] as const;/,'W7 batch 3 adds no store key: expr and unit carry every new shape');
- for(const sh of ['ratio','rate']){assert.ok(S.SCHOOL_SHAPES.includes(sh));assert.ok(!C.CALC_SHAPES.includes(sh),`${sh} is not a Calculus shape`);assert.equal(C.wellFormed({shape:sh,expr:'12:18'}).ok,false);}
+ for(const sh of ['ratio','rate','area']){assert.ok(S.SCHOOL_SHAPES.includes(sh));assert.ok(!C.CALC_SHAPES.includes(sh),`${sh} is not a Calculus shape`);assert.equal(C.wellFormed({shape:sh,expr:'12:18'}).ok,false);}
 });

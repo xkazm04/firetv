@@ -823,7 +823,7 @@ test('W7b 9: an unsure decimals or percent item is explained in the school stanc
 });
 
 // ------------------------------------------------------------------ 9. Family W7 batch 3: ratio, rates, area, mean and range - read, withheld and marked
-const ra=(expr,unit)=>({shape:'ratio',expr,...(unit?{unit}:{})}),rt=(expr,unit)=>({shape:'rate',expr,unit});
+const ra=(expr,unit)=>({shape:'ratio',expr,...(unit?{unit}:{})}),rt=(expr,unit)=>({shape:'rate',expr,unit}),ar=(expr,unit='cm2')=>({shape:'area',expr,unit});
 /** [task text, the spec it reads as (null: refused)] per unit; each spec's value is worked in school-rules-test. */
 const B3_TASKS={
  'ratio-share':[
@@ -854,8 +854,24 @@ const B3_TASKS={
   ['5 sweets cost €3.50. What do 8 sweets cost?',null],['5 pens cost €3.50. What do 8 pens and 2 books cost?',null],['3 pens cost €1. What does 1 pen cost?',null],['240 km in 3 hours. How far in 5 minutes?',null],
   ['5 pens cost €3.50 and 3 books cost €6. What do 8 pens cost?',null],
  ],
+ 'area':[
+  ['Find the area of a rectangle 7 cm by 4 cm',ar('rectangle 7 by 4')],['Find the area of a rectangle 7 cm by 4 cm.',ar('rectangle 7 by 4')],['Work out the area of a rectangle 7 cm by 4 cm',ar('rectangle 7 by 4')],
+  ['What is the area of a rectangle 7 cm by 4 cm?',ar('rectangle 7 by 4')],['Calculate the area of a rectangle measuring 7 cm by 4 cm',ar('rectangle 7 by 4')],['Find the area of a 7 cm by 4 cm rectangle',ar('rectangle 7 by 4')],
+  ['Find the area of a rectangle with length 7 cm and width 4 cm',ar('rectangle 7 by 4')],['Find the area of a rectangle 7cm by 4cm',ar('rectangle 7 by 4')],['Find the area of a rectangle 12 m by 9 m',ar('rectangle 12 by 9','m2')],
+  ['Find the area of a rectangle 12 metres by 9 metres',ar('rectangle 12 by 9','m2')],['Find the area of a rectangle 7.5 cm by 4 cm',ar('rectangle 7.5 by 4')],['Find the area of a triangle, base 10 cm, height 6 cm',ar('triangle base 10 height 6')],
+  ['Find the area of a triangle with base 10 cm and height 6 cm',ar('triangle base 10 height 6')],['Find the area of a triangle base 10 cm height 6 cm',ar('triangle base 10 height 6')],
+  ['Find the area of a triangle, base 5 cm, height 3 cm.',ar('triangle base 5 height 3')],['Find the total area of rectangles 8 cm by 3 cm and 4 cm by 2 cm',ar('rectangles 8 by 3 and 4 by 2')],
+  ['(c) Find the area of a rectangle 7 cm by 4 cm',ar('rectangle 7 by 4')],['Find the area of a rectangle 7 centimetres by 4 centimetres',ar('rectangle 7 by 4')],
+  ['Work out the total area of rectangles 6 cm by 5 cm and 9 cm by 7 cm.',ar('rectangles 6 by 5 and 9 by 7')],['find the area of a rectangle 7 cm by 4 cm',ar('rectangle 7 by 4')],
+  ['What is the area of a triangle with base 9 cm and height 7 cm?',ar('triangle base 9 height 7')],['Find the area of an 8 cm by 3 cm rectangle',ar('rectangle 8 by 3')],
+  // refused
+  ['Find the area of a rectangle 7 by 4',null],['Find the area of a rectangle 7 cm by 40 mm',null],['Find the area of a rectangle 7 m by 40 cm',null],['Find the perimeter of a rectangle 7 cm by 4 cm',null],
+  ['Find the area of a square with side 5 cm',null],['Find the area of a circle with radius 3 cm',null],['Find the area of a parallelogram, base 10 cm, height 6 cm',null],['Find the volume of a cuboid 7 cm by 4 cm by 2 cm',null],
+  ['A garden is 7 m by 4 m. Find its area.',null],['Find the area of a rectangle 7.25 cm by 4 cm',null],['Find the area of a rectangle 0 cm by 4 cm',null],['Find the area of a triangle, base 10 cm, height 6 cm, side 8 cm',null],
+  ['Find the area of rectangles 8 cm by 3 cm and 4 cm by 2 cm',null],['Find the area of a rectangle 7 cm by 4 cm and a triangle, base 10 cm, height 6 cm',null],['Find the area of a rectangle 7 inches by 4 inches',null],
+ ],
 };
-const B3GEN={'ratio-share':S.genRatio,'unit-rate':S.genRate};
+const B3GEN={'ratio-share':S.genRatio,'unit-rate':S.genRate,'area':S.genArea};
 for(const unit of Object.keys(B3_TASKS)){
  const rows=B3_TASKS[unit];
  test(`W7c 4-${unit}: specFromQuestion reads the unit's tasks conservatively - ${rows.length} phrasings, ${rows.filter((t)=>t[1]===null).length} of them refused`,()=>{
@@ -891,6 +907,12 @@ const B3_PAGES={
   {spec:rt('5 pens cost 3.50, 8','€'),a:'2.19',want:['wrong','rate-other-quantity']},{spec:rt('240 km in 3 h, 5','km'),a:'400 km',want:['right']},{spec:rt('12 kg cost 30, 1','€'),a:'0.4',want:['wrong','rate-wrong-way']},
   {spec:rt('5 pens cost 3.50, 8','€'),a:'£5.60',want:['unsure']},{spec:rt('240 km in 3 h, 5','km'),a:'',want:['unsure']},{spec:rt('5 pens cost 3.50, 8','€'),a:'560',want:['unsure']},
   {spec:rt('240 km in 3 h, 5','km'),a:'3600',want:['wrong','rate-multiplied']},
+ ],
+ 'area':[
+  {spec:ar('rectangle 7 by 4'),a:'28 cm2',want:['right']},{spec:ar('rectangle 7 by 4'),a:'22',want:['wrong','area-added-sides']},{spec:ar('triangle base 10 height 6'),a:'60',want:['wrong','area-no-half']},
+  {spec:ar('rectangles 8 by 3 and 4 by 2'),a:'24',want:['wrong','area-one-part']},{spec:ar('triangle base 5 height 3'),a:'7.5',want:['right']},{spec:ar('rectangle 7 by 4'),a:'28 cm',want:['unsure']},
+  {spec:ar('rectangles 8 by 3 and 4 by 2'),a:'',want:['unsure']},{spec:ar('rectangle 12 by 9','m2'),a:'108 m²',want:['right']},{spec:ar('rectangle 7 by 4'),a:'28 m2',want:['unsure']},
+  {spec:ar('triangle base 10 height 6'),a:'16',want:['wrong','area-added-sides']},
  ],
 };
 for(const unit of Object.keys(B3_PAGES)){

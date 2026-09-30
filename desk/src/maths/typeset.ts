@@ -357,7 +357,15 @@ export function parsePlain(src: string): MNode[] {
       i++;
       if (t.k === "ws") { out.push({ t: "ws", n: t.n }); continue; }
       if (t.k === "num") { out.push({ t: "num", v: t.v }); continue; }
-      if (t.k === "let") { letters(out, t.v); continue; }
+      if (t.k === "let") {
+        // a square or cube unit typed flat after an amount (school W7 batch 3: "28 cm2", "12 m2", "8 cm3" as a phone keyboard
+        // writes it) is the unit with its power, never the unit beside a number 2
+        const nx = peek(), before = [...out].reverse().find((x) => x.t !== "ws"), after = T[i + 1];
+        if (/^(?:cm|mm|km|m)$/.test(t.v) && nx?.k === "num" && /^[23]$/.test(nx.v) && before?.t === "num" && !(after && (after.k === "num" || after.k === "let"))) {
+          out.push({ t: "text", v: t.v, sup: [{ t: "num", v: nx.v }] }); i++; continue;
+        }
+        letters(out, t.v); continue;
+      }
       if (t.k === "sup" || t.k === "sub") { attach(out, t.k, tidy(parsePlain(t.v))); continue; }
       const c = t.v;
       if (c === "^") { attach(out, "sup", script()); continue; }

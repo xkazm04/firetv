@@ -471,7 +471,7 @@ const W7_SLIPS={};
 /** The W7 batch 2 units whose tables are at the end of this file (decimals and percent). */
 const B2_UNITS=['dec-arith','dec-convert','pct-of-amount','pct-change'];
 /** The W7 batch 3 units, after them (ratio, rates, area, mean and range). */
-const B3_UNITS=['ratio-share','unit-rate'];
+const B3_UNITS=['ratio-share','unit-rate','area'];
 test(`W7 SPELLINGS equivalent fractions: ${EQ_SPELLINGS.length} written answers, zero false-right, zero false-wrong`,()=>{Object.assign(W7_SLIPS,spellings('EQ_SPELLINGS equivalent fractions',EQ_SPELLINGS,'frac-equivalent'));});
 test(`W7 SPELLINGS a fraction of an amount: ${OF_SPELLINGS.length} written answers, zero false-right, zero false-wrong`,()=>{Object.assign(W7_SLIPS,spellings('OF_SPELLINGS a fraction of an amount',OF_SPELLINGS,'frac-of-amount'));});
 test(`W7 SPELLINGS multiply and divide fractions: ${MD_SPELLINGS.length} written answers, zero false-right, zero false-wrong`,()=>{Object.assign(W7_SLIPS,spellings('MD_SPELLINGS multiply and divide fractions',MD_SPELLINGS,'frac-mul-div'));});
@@ -1149,6 +1149,17 @@ const RC4=rt('6 cups cost 9, 10','€');      // €1.50 a cup: €15. wrong way
 const RD1=rt('240 km in 3 h, 5','km');      // 80 km an hour: 400 km. wrong way 3 ÷ 240 × 5 = 1/16; multiplied 3600; by the number asked 240 ÷ 5 × 3 = 144
 const RD2=rt('150 km in 4 h, 1','km');      // 37.5 km. wrong way 4 ÷ 150 = 2/75 (0.027); multiplied 600
 const RD3=rt('90 km in 2 h, 7','km');       // 45 km an hour: 315 km. wrong way 2 ÷ 90 × 7 = 7/45 (0.16); multiplied 1260; by the number asked 90 ÷ 7 × 2 = 180/7 (25.71)
+
+// ------------------------------------------------------------------ area of rectangles, triangles and composite shapes
+const ar=(expr,unit='cm2')=>({shape:'area',expr,unit});
+const AR1=ar('rectangle 7 by 4');                // 28 cm2. the lengths added 11, the perimeter 22
+const AR2=ar('rectangle 12 by 9','m2');          // 108 m2. added 21, perimeter 42
+const AR3=ar('rectangle 7.5 by 4');              // 30 cm2. added 11.5, perimeter 23
+const AT1=ar('triangle base 10 height 6');       // 30 cm2. added 16; not halved 60
+const AT2=ar('triangle base 5 height 3');        // 7.5 cm2. added 8; not halved 15
+const AT3=ar('triangle base 9 height 7');        // 31.5 cm2. added 16; not halved 63
+const AC1=ar('rectangles 8 by 3 and 4 by 2');    // 24 + 8 = 32 cm2. the four sides added 17, the two perimeters 34; one rectangle 24 or 8
+const AC2=ar('rectangles 6 by 5 and 9 by 7');    // 30 + 63 = 93 cm2. added 27, perimeters 54; one rectangle 30 or 63
 const B3_SPELLINGS={
  'ratio-share':[
   // 12:18 in its simplest form = 2:3: a ratio in lowest terms is right; an equal ratio not in lowest terms is unsure
@@ -1211,6 +1222,31 @@ const B3_SPELLINGS={
   // 90 km in 2 hours, 7 hours = 315 km
   [RD3,'315','uk','right'],[RD3,'1260','uk','wrong','rate-multiplied'],[RD3,'25.71','uk','wrong','rate-other-quantity'],[RD3,'0.16','uk','wrong','rate-wrong-way'],[RD3,'45','uk','wrong'],
  ],
+ 'area':[
+  // 7 cm by 4 cm = 28 cm2: the number alone or with its square unit is right; a length unit (28 cm) or another square unit
+  // is unsure, never wrong - the desk does not teach units by marking them wrong; a bare number that differs is wrong
+  [AR1,'28','uk','right'],[AR1,'28 cm2','uk','right'],[AR1,'28cm2','uk','right'],[AR1,'28 cm^2','uk','right'],[AR1,'28 cm²','uk','right'],[AR1,'28 square centimetres','uk','right'],[AR1,'x = 28','uk','right'],[AR1,'28.0','uk','right'],
+  [AR1,'28 cm','uk','unsure'],[AR1,'28 m2','uk','unsure'],[AR1,'28 m','uk','unsure'],[AR1,'0.28 m2','uk','unsure'],[AR1,'28%','uk','unsure'],[AR1,'twenty-eight','uk','unsure'],[AR1,'','uk','unsure'],
+  [AR1,'28 cm3','uk','unsure'],[AR1,'28 square cm','uk','unsure'],[AR1,'22 cm','uk','unsure'],
+  [AR1,'11','uk','wrong','area-added-sides'],[AR1,'22','uk','wrong','area-added-sides'],[AR1,'14','uk','wrong'],[AR1,'27','uk','wrong'],[AR1,'29','uk','wrong'],
+  // 12 m by 9 m = 108 m2
+  [AR2,'108','uk','right'],[AR2,'108 m2','uk','right'],[AR2,'108 m²','uk','right'],[AR2,'108 square metres','uk','right'],[AR2,'108 cm2','uk','unsure'],[AR2,'42 m','uk','unsure'],
+  [AR2,'21','uk','wrong','area-added-sides'],[AR2,'42','uk','wrong','area-added-sides'],[AR2,'54','uk','wrong'],
+  // 7.5 cm by 4 cm = 30 cm2
+  [AR3,'30','uk','right'],[AR3,'30 cm2','uk','right'],[AR3,'11.5','uk','wrong','area-added-sides'],[AR3,'23','uk','wrong','area-added-sides'],[AR3,'28','uk','wrong'],[AR3,'32','uk','wrong'],
+  // a triangle, base 10 cm, height 6 cm = 30 cm2
+  [AT1,'30','uk','right'],[AT1,'30 cm2','uk','right'],[AT1,'60','uk','wrong','area-no-half'],[AT1,'60 cm2','uk','wrong','area-no-half'],[AT1,'16','uk','wrong','area-added-sides'],[AT1,'15','uk','wrong'],[AT1,'30 cm','uk','unsure'],
+  // base 5 cm, height 3 cm = 7.5 cm2: a whole number is an exact claim (8 is wrong, and it is what the lengths added give)
+  [AT2,'7.5','uk','right'],[AT2,'7.5 cm2','uk','right'],[AT2,'7,5','cz','right'],[AT2,'15/2','uk','right'],[AT2,'7 1/2','uk','right'],[AT2,'7,5','uk','unsure'],
+  [AT2,'15','uk','wrong','area-no-half'],[AT2,'8','uk','wrong','area-added-sides'],[AT2,'7','uk','wrong'],[AT2,'7.4','uk','wrong'],
+  // base 9 cm, height 7 cm = 31.5 cm2
+  [AT3,'31.5','uk','right'],[AT3,'63','uk','wrong','area-no-half'],[AT3,'16','uk','wrong','area-added-sides'],[AT3,'31','uk','wrong'],[AT3,'32','uk','wrong'],[AT3,'31.5 m2','uk','unsure'],
+  // rectangles 8 cm by 3 cm and 4 cm by 2 cm = 32 cm2
+  [AC1,'32','uk','right'],[AC1,'32 cm2','uk','right'],[AC1,'24','uk','wrong','area-one-part'],[AC1,'8','uk','wrong','area-one-part'],[AC1,'17','uk','wrong','area-added-sides'],[AC1,'34','uk','wrong','area-added-sides'],
+  [AC1,'16','uk','wrong'],[AC1,'192','uk','wrong'],[AC1,'32 cm','uk','unsure'],
+  // rectangles 6 cm by 5 cm and 9 cm by 7 cm = 93 cm2
+  [AC2,'93','uk','right'],[AC2,'93 cm²','uk','right'],[AC2,'30','uk','wrong','area-one-part'],[AC2,'63','uk','wrong','area-one-part'],[AC2,'27','uk','wrong','area-added-sides'],[AC2,'54','uk','wrong','area-added-sides'],[AC2,'33','uk','wrong'],
+ ],
 };
 const B3_LEAKS={
  'ratio-share':[
@@ -1227,6 +1263,13 @@ const B3_LEAKS={
   [RD1,'You go 400 km.'],[RD1,'80 × 5 = 400'],[RD1,'240 ÷ 3 × 5'],[RD1,'Four hundred kilometres.'],[RD1,'80 km each hour, so 400 km.'],
   [RD2,'The speed is 37.5 km an hour.'],[RD2,'150 ÷ 4 = 37.5'],
   [RC3,'£31.50'],[RC3,'4.50 × 7'],
+ ],
+ 'area':[
+  [AR1,'The area is 28 cm2.'],[AR1,'It is 28.'],[AR1,'Twenty-eight square centimetres.'],[AR1,'7 × 4 = 28'],[AR1,'You get 28 cm².'],
+  [AT1,'The area is 30.'],[AT1,'10 × 6 ÷ 2'],[AT1,'60 ÷ 2 = 30'],[AT1,'Half of 60 is 30.'],[AT1,'Half of 60.'],
+  [AT2,'It is 7.5.'],[AT2,'Seven and a half.'],[AT2,'15 ÷ 2'],
+  [AC1,'24 + 8 = 32'],[AC1,'24 + 8'],[AC1,'The total is 32 cm2.'],[AC1,'Thirty-two.'],
+  [AR3,'7.5 × 4 = 30'],
  ],
 };
 const B3_LEGIT={
@@ -1247,6 +1290,14 @@ const B3_LEGIT={
   [RD1,'Find how far you go in one hour first.'],[RD1,'Divide 240 by 3.'],[RD1,'In one hour you go 80 km.'],[RD1,'Then multiply by 5.'],[RD1,'Five hours is longer than three hours, so you go further.'],
   [RD2,'Divide 150 by 4.'],[RD2,'150 ÷ 4'],
   [RC3,'Find the price of one book first.'],[RC3,'£18 ÷ 4 = £4.50'],[RC4,'Find the cost of one cup: divide €9 by 6.'],
+ ],
+ 'area':[
+  [AR1,'Multiply the length by the width.'],[AR1,'Area is length times width.'],[AR1,'Multiply 7 by 4.'],[AR1,'7 × 4'],[AR1,'Adding 7 and 4 gives the distance round, not the area.'],
+  [AR1,'Count the squares: 7 rows of 4.'],[AR1,'Your answer is in cm2.'],[AR1,'Your answer is in square centimetres.'],
+  [AT1,'Multiply the base by the height, then halve it.'],[AT1,'10 × 6 = 60'],[AT1,'A triangle is half of a rectangle.'],[AT1,'The height is 6 cm.'],[AT1,'Halve 60.'],
+  [AT2,'Multiply 5 by 3 and then halve.'],[AT2,'Half of an odd number ends in .5.'],
+  [AC1,'Find the area of each rectangle first.'],[AC1,'8 × 3 = 24'],[AC1,'4 × 2 = 8'],[AC1,'Then add the two areas.'],[AC1,'The first rectangle is 24 cm2.'],
+  [AR2,'Multiply 12 by 9.'],[AR2,'Your answer is in square metres.'],[AR3,'Multiply 7.5 by 4.'],[AR3,'7 × 4 = 28 and half of 4 is 2.'],
  ],
 };
 /**
@@ -1284,8 +1335,20 @@ const B3REF={
    const km=(h)=>(h%2===0?String(h/2):`${(h-1)/2}.5`);return {measure:'distance',D,h1,h2,speed2:2*D/h1,truth:km(half),off:km(half+2),nums:[D,h1,h2]};}
   return null;
  },
+ // sides in halves, the area in eighths: integers throughout
+ 'area':(s)=>{
+  if(s.shape!=='area')return null;
+  const h=(x)=>Math.round(Number(x)*2),eighths=(e)=>{const v=e/8;return Number.isInteger(v)?String(v):String(v).replace(/0+$/,'');};
+  let m=/^rectangle (\d+(?:\.5)?) by (\d+(?:\.5)?)$/.exec(s.expr);
+  if(m){const e=2*h(m[1])*h(m[2]);return {fig:'rectangle',sides:[+m[1],+m[2]],truth:eighths(e),off:eighths(e+8),nums:[+m[1],+m[2]]};}
+  m=/^triangle base (\d+(?:\.5)?) height (\d+(?:\.5)?)$/.exec(s.expr);
+  if(m){const e=h(m[1])*h(m[2]);return {fig:'triangle',sides:[+m[1],+m[2]],truth:eighths(e),off:eighths(e+8),nums:[+m[1],+m[2]]};}
+  m=/^rectangles (\d+) by (\d+) and (\d+) by (\d+)$/.exec(s.expr);
+  if(m){const [a,b,c,d]=m.slice(1).map(Number),e=8*(a*b+c*d);return {fig:'composite',sides:[a,b,c,d],truth:eighths(e),off:eighths(e+8),nums:[a,b,c,d]};}
+  return null;
+ },
 };
-const B3GEN={'ratio-share':S.genRatio,'unit-rate':S.genRate};
+const B3GEN={'ratio-share':S.genRatio,'unit-rate':S.genRate,'area':S.genArea};
 /** Each unit's tier, as school.ts documents it, asserted on the reference reading. */
 const B3_TIER={
  'ratio-share':(s,r,tier)=>{
@@ -1311,6 +1374,16 @@ const B3_TIER={
    if(tier===1)assert.ok(r.speed2%10===0&&r.speed2>=40&&r.speed2<=180&&r.h1>=2&&r.h1<=5&&r.h2<=8,`tier 1: a whole speed, a multiple of 5: ${s.expr}`);
    else assert.ok(r.speed2%2===1&&r.speed2>=41&&r.speed2<=191&&[2,4,6,8].includes(r.h1)&&r.h2<=9,`tier 2: a speed ending in a half: ${s.expr}`);
   }
+ },
+ 'area':(s,r,tier)=>{
+  const [a,b,c,d]=r.sides,whole=(x)=>Number.isInteger(x);
+  assert.ok(!r.nums.includes(Number(r.truth)),'the question does not print its answer');
+  if(tier===1){
+   if(r.fig==='rectangle')assert.ok(whole(a)&&whole(b)&&a>=2&&a<=12&&b>=2&&b<=12&&['cm2','m2'].includes(s.unit),`tier 1 rectangle: ${s.expr}`);
+   else assert.ok(r.fig==='triangle'&&whole(a)&&whole(b)&&a>=2&&a<=16&&b>=2&&b<=12&&(a*b)%2===0&&s.unit==='cm2',`tier 1 triangle, a whole area: ${s.expr}`);
+  }else if(r.fig==='composite')assert.ok([a,b,c,d].every((x)=>whole(x)&&x>=2&&x<=9)&&a*b!==c*d&&s.unit==='cm2',`tier 2 two rectangles: ${s.expr}`);
+  else if(r.fig==='triangle')assert.ok(whole(a)&&whole(b)&&a>=3&&a<=15&&b>=3&&b<=11&&(a*b)%2===1&&s.unit==='cm2',`tier 2 triangle, a half: ${s.expr}`);
+  else assert.ok(!whole(a)&&a>=2.5&&a<=11.5&&whole(b)&&b%2===0&&b>=2&&b<=12&&['cm2','m2'].includes(s.unit),`tier 2 rectangle, a half side: ${s.expr}`);
  },
 };
 
@@ -1374,6 +1447,10 @@ const B3_PRINTS={
   [RC1,'5 pens cost €3.50. What do 8 pens cost?'],[RC2,'12 kg cost €30. What does 1 kg cost?'],[RC3,'4 books cost £18. What do 7 books cost?'],
   [RD1,'240 km in 3 hours. How far in 5 hours?'],[RD2,'150 km in 4 hours. How far in 1 hour?'],[rt('3 pens cost 2.40, 1','£'),'3 pens cost £2.40. What does 1 pen cost?'],
  ],
+ 'area':[
+  [AR1,'Find the area of a rectangle 7 cm by 4 cm.'],[AR2,'Find the area of a rectangle 12 metres by 9 metres.'],[AR3,'Find the area of a rectangle 7.5 cm by 4 cm.'],
+  [AT1,'Find the area of a triangle, base 10 cm, height 6 cm.'],[AC1,'Find the total area of rectangles 8 cm by 3 cm and 4 cm by 2 cm.'],
+ ],
 };
 const B3_BAD={
  'ratio-share':[
@@ -1388,6 +1465,11 @@ const B3_BAD={
   [{shape:'rate',expr:'5 pens cost 3.50, 8'},'euros or pounds'],[rt('5 pens cost 3.5, 8','€'),'cannot read'],[rt('5 sweets cost 3.50, 8','€'),'cannot read'],[rt('3 pens cost 1, 1','€'),'two decimal places'],
   [rt('4 pens cost 8, 2','€'),'print its own answer'],[rt('5 pens cost 0, 8','€'),'zero'],[rt('5 pens cost 2000, 8','€'),'larger'],[rt('240 km in 3 hours, 5','km'),'cannot read'],
   [{...RC1,answer:'5.60'},'no answer field'],[{...RC1,form:'decimal'},'does not take'],[rt('5 pens cost 3.50, 8','parsec'),'unit is not'],
+ ],
+ 'area':[
+  [ar('rectangle 7 by 4','cm'),'square unit'],[{shape:'area',expr:'rectangle 7 by 4'},'square unit'],[ar('rectangle 0 by 4'),'zero'],[ar('rectangle 7.25 by 4'),'cannot read'],[ar('square 5'),'cannot read'],
+  [ar('triangle 10 by 6'),'cannot read'],[ar('rectangle 999 by 999'),'larger'],[ar('rectangle 2000 by 4'),'cannot read'],[ar('triangle base 2.5 height 3.5'),'two decimal places'],
+  [{...AR1,answer:28},'no answer field'],[{...AR1,form:'decimal'},'does not take'],[ar('rectangle 7 by 4','parsec'),'unit is not'],[ar('rectangles 8 by 3'),'cannot read'],
  ],
 };
 for (const unit of B3_UNITS){
@@ -1421,4 +1503,10 @@ test('W7c PURITY: random strings through check and leaksSchool on every batch-3 
   }
   const got=S.specFromQuestion(s);assert.ok(got===null||S.wellFormed(got).ok);
  }
+});
+
+test('W7c typeset: a square unit typed flat after an amount prints with its power - 28 cm2 and 12 m2 as cm² and m², never beside a number 2',()=>{
+ const sq=(line)=>{const out=[];T.walk(T.parseMath(line),(x)=>{if(x.t==='text'&&x.sup)out.push(`${x.v}^${T.flatten(x.sup)}`);});return out;};
+ for (const [line,want] of [['28 cm2',['cm^2']],['12 m2',['m^2']],['7.5 cm2',['cm^2']],['28 cm^2',['cm^2']],['28 cm²',['cm^2']],['8 cm3',['cm^3']],['28 cm2.',['cm^2']],['x = 28 cm2',['cm^2']]]) assert.deepEqual(sq(line),want,line);
+ for (const line of ['cm2','2 cm23','3 m 2','28 cm 2','28 cm25']) assert.deepEqual(sq(line),[],line);
 });
