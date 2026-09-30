@@ -530,7 +530,8 @@ const W7_TASKS={
   ['Find 3/4 of 10',fo('3/4 of 10')],['Find 3/5 of 40 pupils.',fo('3/5 of 40')],['Find ⅗ of 40',fo('3/5 of 40')],['Find 5/8 of €72.',fo('5/8 of 72','€')],
   // refused
   ['Find 3/5 of 40 and 1/2 of 10',null],['Find 3/5 of x',null],['Find 3/5 of',null],['Find 5/3 of 40',null],['Find 3/0 of 40',null],['3/5 of 40 = 24',null],
-  ['Find three fifths of 40',null],['Find 60% of 40',null],['Find 0.6 of 40',null],['Find 3/5 of 40.5',null],['Find 3/5 of 1,000',null],['Find 3/5 of 40 percent',null],
+  // W7 batch 2: 'Find 60% of 40' (refused here in batch 1) reads as "A percent of an amount" now; its row is in W7b 4
+  ['Find three fifths of 40',null],['Find 0.6 of 40',null],['Find 3/5 of 40.5',null],['Find 3/5 of 1,000',null],['Find 3/5 of 40 percent',null],
   ['Find 3/5 of 40 kg in grams',null],['Find 1/2 of 3/4',null],['Find 3/5 of 60p',null],['Find 3/5 of 40 pounds',null],['Find 3/5 of 40 x',null],['Find 3/5 of 040',null],['3/5 : 40',null],
  ],
  'frac-mul-div':[
@@ -645,7 +646,7 @@ test('W7 8: a hint on each new unit\'s task names the unit in its stance, and a 
 });
 
 // ------------------------------------------------------------------ 8. Family W7 batch 2: decimals and percent, read, withheld and marked
-const cv=(expr,to)=>({shape:'convert',expr,to});
+const cv=(expr,to)=>({shape:'convert',expr,to}),po=(expr,unit)=>({shape:'percent-of',expr,...(unit?{unit}:{})});
 /** [task text, the spec it reads as (null: refused)] per unit; each spec's value is worked in school-rules-test. */
 const B2_TASKS={
  'dec-arith':[
@@ -674,8 +675,19 @@ const B2_TASKS={
   ['Write 0,35 as a fraction',null],['Write 35% as a decimal please',null],['Write 3/8 as a ratio',null],['A shop takes 35% off. Write this as a decimal.',null],['Write x/8 as a decimal',null],
   ['Write 0.3535 as a fraction',null],['What percentage is 7 out of 20?',null],['Write 12.25% as a fraction',null],
  ],
+ 'pct-of-amount':[
+  ['Find 35% of 80',po('35% of 80')],['Find 35% of 80.',po('35% of 80')],['What is 35% of 80?',po('35% of 80')],['Work out 35% of 80',po('35% of 80')],['Calculate 35% of 80',po('35% of 80')],
+  ['35% of 80',po('35% of 80')],['Find 35 % of 80',po('35% of 80')],['Find 35 percent of 80',po('35% of 80')],['Find 35 per cent of 80',po('35% of 80')],['Find 15% of €60',po('15% of 60','€')],
+  ['What is 15% of £60?',po('15% of 60','£')],['Find 12% of 250 kg',po('12% of 250','kg')],['Find 12.5% of 40 kg',po('12.5% of 40','kg')],['Find 35% of 80 sweets',po('35% of 80')],
+  ['Find 20% of 60 minutes',po('20% of 60','min')],['(c) Find 35% of 80',po('35% of 80')],['Find 35% of 80 metres',po('35% of 80','m')],['Find 5% of 20',po('5% of 20')],['Find 60% of 40',po('60% of 40')],
+  ['find 35% of 80',po('35% of 80')],['Find 99% of €170',po('99% of 170','€')],['Calculate: 30% of 140',po('30% of 140')],['Find 35% of 7',po('35% of 7')],
+  // refused
+  ['Find 35% of 80 and 20% of 60',null],['What percentage of 80 is 28?',null],['Find 100% of 80',null],['Find 0% of 80',null],['Find 35% of 80.5',null],['Find 35% of 3/4',null],
+  ['A jacket costs 80 euro. It goes down by 25%. What is the new price?',null],['Find 35% of 80 = 28',null],['Find 35%',null],['Find 35% of x',null],['Find 35% of 1,000',null],
+  ['Find 35% of 80 pounds',null],['Find 150% of 80',null],['Find 35.25% of 80',null],['Find 12.5% of 7',null],['Find 20% of 100',null],['80 is 35% of what?',null],
+ ],
 };
-const B2GEN={'dec-arith':S.genDecimal,'dec-convert':S.genConvert};
+const B2GEN={'dec-arith':S.genDecimal,'dec-convert':S.genConvert,'pct-of-amount':S.genPercentOf};
 for(const unit of Object.keys(B2_TASKS)){
  const rows=B2_TASKS[unit];
  test(`W7b 4-${unit}: specFromQuestion reads the unit's tasks conservatively - ${rows.length} phrasings, ${rows.filter((t)=>t[1]===null).length} of them refused`,()=>{
@@ -709,6 +721,11 @@ const B2_PAGES={
   {spec:cv('3/8','decimal'),a:'0.375',want:['right']},{spec:cv('3/8','decimal'),a:'2.67',want:['wrong','conv-flipped']},{spec:cv('7/20','percent'),a:'0.35%',want:['wrong','conv-not-scaled']},
   {spec:cv('35%','decimal'),a:'3500',want:['wrong','conv-wrong-way']},{spec:cv('35%','decimal'),a:'3.5',want:['wrong','conv-ten-times']},{spec:cv('7/20','decimal'),a:'7.2',want:['wrong','conv-top-dot-bottom']},
   {spec:cv('7/20','percent'),a:'35',want:['unsure']},{spec:cv('0.35','fraction'),a:'',want:['unsure']},{spec:cv('0.35','fraction'),a:'7/20',want:['right']},{spec:cv('0.6','percent'),a:'60%',want:['right']},
+ ],
+ 'pct-of-amount':[
+  {spec:po('35% of 80'),a:'28',want:['right']},{spec:po('35% of 80'),a:'2.29',want:['wrong','pct-divided']},{spec:po('35% of 80'),a:'2800',want:['wrong','pct-times-whole']},
+  {spec:po('35% of 80'),a:'8',want:['wrong','pct-ten-stopped']},{spec:po('35% of 80'),a:'52',want:['wrong','pct-rest']},{spec:po('15% of 60','€'),a:'€9',want:['right']},
+  {spec:po('35% of 80'),a:'28%',want:['unsure']},{spec:po('12.5% of 40','kg'),a:'',want:['unsure']},{spec:po('12.5% of 40','kg'),a:'5000 g',want:['unsure']},
  ],
 };
 for(const unit of Object.keys(B2_PAGES)){

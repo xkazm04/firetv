@@ -293,11 +293,14 @@ const B2_TIER={
  'dec-convert':(sp)=>{const f=/^(\d+)\/(\d+)$/.exec(sp.expr),d=/^(\d+)\.(\d+)$/.exec(sp.expr),p=/^(\d+)(?:\.(\d))?%$/.exec(sp.expr);
   let n,den;if(f){n=+f[1];den=+f[2];}else if(d){n=Number(d[1]+d[2]);den=10**d[2].length;}else{n=Number(p[1]+(p[2]??''));den=100*10**(p[2]??'').length;}
   const g=(a,b)=>(b?g(b,a%b):a),k=g(n,den);n/=k;den/=k;return 100%den===0&&n<den?1:2;},
+ // tier 1 carries no unit, tier 2 always one
+ 'pct-of-amount':(sp)=>(sp.unit===undefined?1:2),
 };
 /** The printed question of each unit, and the keys its spec may carry. */
 const B2_SHAPE={
  'dec-arith':[/^Work out (?:[€£]?\d+\.\d+ [-+] [€£]?\d+\.\d+|[€£]?\d+(?:\.\d+)? × \d+(?:\.\d+)?)\.$/,['shape','expr','unit']],
  'dec-convert':[/^Write (?:\d+\/\d+|\d+\.\d+|\d+(?:\.\d)?%) as (?:a decimal|a percentage|a simplified fraction)\.$/,['shape','expr','to']],
+ 'pct-of-amount':[/^Find \d+(?:\.5)?% of (?:[€£]\d+|\d+(?: [a-z]+)?)\.$/,['shape','expr','unit']],
 };
 for(const unit of Object.keys(B2_TIER)){
  test(`W7b 2-${unit}: makeSchoolItems writes six distinct items by code - three tier 1, then three tier 2 - pure for a seed, with no engine call`,()=>{
@@ -329,6 +332,7 @@ test('W7b 5b: the batch-2 specs survive the store - practice.set, practice.marke
  seat();
  const specs=[{shape:'compute',expr:'4.35 + 2.8'},{shape:'compute',expr:'4.35 + 2.80',unit:'€'},{shape:'compute',expr:'3.45 × 4',unit:'£'},{shape:'compute',expr:'3.6 × 0.4'},
   {shape:'convert',expr:'3/8',to:'decimal'},{shape:'convert',expr:'0.35',to:'fraction'},{shape:'convert',expr:'12.5%',to:'fraction'},{shape:'convert',expr:'7/20',to:'percent'},
+  {shape:'percent-of',expr:'35% of 80'},{shape:'percent-of',expr:'15% of 60',unit:'€'},{shape:'percent-of',expr:'12.5% of 40',unit:'kg'},
   {shape:'missing',expr:'3/4 = ?/12'},{shape:'fraction-of',expr:'5/8 of 72',unit:'€'}];
  const calc={shape:'critical-point',f:'x^2 - 4x + 1',on:[0,5]};
  const N=specs.length;
@@ -348,7 +352,8 @@ test('W7b 5b: the batch-2 specs survive the store - practice.set, practice.marke
  assert.deepEqual(put({shape:'compute',expr:'4.35 + 2.8',answer:'7.15',value:7.15}).spec,{shape:'compute',expr:'4.35 + 2.8'},'an answer stops at the store');
  assert.deepEqual(put({shape:'convert',expr:'3/8',to:'decimal',answer:'0.375'}).spec,{shape:'convert',expr:'3/8',to:'decimal'},'a conversion keeps `to`, and only its keys');
  for(const bad of [{shape:'compute',expr:'4.3567 + 1'},{shape:'compute',expr:'2.25 - 7.5'},{shape:'compute',expr:'4.35 + 2.8',unit:'CZK'},
-  {shape:'convert',expr:'1/3',to:'decimal'},{shape:'convert',expr:'0.35',to:'decimal'},{shape:'convert',expr:'3/8',to:'ratio'},{shape:'convert',expr:'3/8'},{shape:'compute',expr:'3/4 + 1/6',to:'decimal'}]){
+  {shape:'convert',expr:'1/3',to:'decimal'},{shape:'convert',expr:'0.35',to:'decimal'},{shape:'convert',expr:'3/8',to:'ratio'},{shape:'convert',expr:'3/8'},{shape:'compute',expr:'3/4 + 1/6',to:'decimal'},
+  {shape:'percent-of',expr:'100% of 80'},{shape:'percent-of',expr:'35% of 80',unit:'parsec'},{shape:'percent-of',expr:'35% of 80',to:'decimal'},{shape:'percent-of',expr:'12.5% of 7'}]){
   const it=put(bad);assert.equal(it.spec,undefined,JSON.stringify(bad));assert.equal(it.tier,undefined,'no spec, no tier');
  }
 });

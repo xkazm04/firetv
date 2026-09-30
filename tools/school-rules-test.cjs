@@ -469,7 +469,7 @@ const MD_SPELLINGS=[
 
 const W7_SLIPS={};
 /** The W7 batch 2 units whose tables are at the end of this file (decimals and percent). */
-const B2_UNITS=['dec-arith','dec-convert'];
+const B2_UNITS=['dec-arith','dec-convert','pct-of-amount'];
 test(`W7 SPELLINGS equivalent fractions: ${EQ_SPELLINGS.length} written answers, zero false-right, zero false-wrong`,()=>{Object.assign(W7_SLIPS,spellings('EQ_SPELLINGS equivalent fractions',EQ_SPELLINGS,'frac-equivalent'));});
 test(`W7 SPELLINGS a fraction of an amount: ${OF_SPELLINGS.length} written answers, zero false-right, zero false-wrong`,()=>{Object.assign(W7_SLIPS,spellings('OF_SPELLINGS a fraction of an amount',OF_SPELLINGS,'frac-of-amount'));});
 test(`W7 SPELLINGS multiply and divide fractions: ${MD_SPELLINGS.length} written answers, zero false-right, zero false-wrong`,()=>{Object.assign(W7_SLIPS,spellings('MD_SPELLINGS multiply and divide fractions',MD_SPELLINGS,'frac-mul-div'));});
@@ -716,6 +716,16 @@ const CV6=cv('35%','decimal');     // 0.35. unscaled 35; wrong way 3500; ten tim
 const CV7=cv('35%','fraction');    // 7/20. upside down 20/7 (100/35); unscaled 35 (35/1); ten times 7/2, 7/200
 const CV8=cv('12.5%','fraction');  // 1/8. upside down 8; unscaled 12.5 = 25/2; ten times 5/4, 1/80
 const CV9=cv('5/4','percent');     // 125%. upside down 4/5 (80%); unscaled 1.25%; wrong way 0.0125%; ten times 12.5%, 1250%
+
+// ------------------------------------------------------------------ a percent of an amount
+const po=(expr,unit)=>({shape:'percent-of',expr,...(unit?{unit}:{})});
+const PO1=po('35% of 80');          // 28. divided 80 ÷ 35 = 2.2857.., 80 ÷ 0.35 = 228.57..; as a whole 35 × 80 = 2800; ten percent 8; the rest 52
+const PO2=po('15% of 60','€');      // €9. divided 4, 400; as a whole 900; ten percent 6; the rest 51
+const PO3=po('12.5% of 40','kg');   // 5 kg. divided 3.2, 320; as a whole 500; ten percent 4; the rest 35
+const PO4=po('30% of 140');         // 42. divided 4.666.., 466.66..; as a whole 4200; ten percent 14; the rest 98
+const PO5=po('75% of 60');          // 45. divided 0.8, 80; as a whole 4500; ten percent 6; the rest 15
+const PO6=po('54% of 130','£');     // £70.20. divided 2.4074.., 240.7407..; as a whole 7020; ten percent 13; the rest 59.8
+const PO7=po('5% of 20');           // 1. divided 4, 400; as a whole 100; ten percent 2; the rest 19
 const B2_SPELLINGS={
  'dec-arith':[
   // 4.35 + 2.8 = 7.15: an equal value in any form is right; a rounding is unsure; a whole number is an exact claim
@@ -779,6 +789,29 @@ const B2_SPELLINGS={
   [CV9,'125%','uk','right'],[CV9,'1.25','uk','unsure'],[CV9,'125','uk','unsure'],[CV9,'1 1/4','uk','unsure'],
   [CV9,'1.25%','uk','wrong','conv-not-scaled'],[CV9,'12.5%','uk','wrong','conv-ten-times'],[CV9,'1250%','uk','wrong','conv-ten-times'],[CV9,'80%','uk','wrong','conv-flipped'],[CV9,'0.0125%','uk','wrong','conv-wrong-way'],
  ],
+ 'pct-of-amount':[
+  // 35% of 80 = 28: an amount with a percent sign is unsure (28%, and 2800% - equal in value, never right)
+  [PO1,'28','uk','right'],[PO1,'28.0','uk','right'],[PO1,'28.00','us','right'],[PO1,'x = 28','uk','right'],[PO1,'28%','uk','unsure'],[PO1,'2800%','uk','unsure'],[PO1,'28 kg','uk','unsure'],
+  [PO1,'twenty-eight','uk','unsure'],[PO1,'','uk','unsure'],[PO1,'28:1','uk','unsure'],
+  [PO1,'2.29','uk','wrong','pct-divided'],[PO1,'2.286','uk','wrong','pct-divided'],[PO1,'228.57','uk','wrong','pct-divided'],[PO1,'16/7','uk','wrong','pct-divided'],[PO1,'2800','uk','wrong','pct-times-whole'],
+  [PO1,'8','uk','wrong','pct-ten-stopped'],[PO1,'52','uk','wrong','pct-rest'],[PO1,'27','uk','wrong'],[PO1,'28.5','uk','wrong'],[PO1,'-28','uk','wrong'],[PO1,'0.28','uk','wrong'],[PO1,'45','uk','wrong'],
+  // 15% of €60 = €9
+  [PO2,'€9','uk','right'],[PO2,'9','uk','right'],[PO2,'9 €','de','right'],[PO2,'€9.00','uk','right'],[PO2,'9 euros','uk','right'],[PO2,'£9','uk','unsure'],[PO2,'9%','uk','unsure'],
+  [PO2,'€4','uk','wrong','pct-divided'],[PO2,'400','uk','wrong','pct-divided'],[PO2,'€900','uk','wrong','pct-times-whole'],[PO2,'€6','uk','wrong','pct-ten-stopped'],[PO2,'€51','uk','wrong','pct-rest'],[PO2,'€10','uk','wrong'],[PO2,'€45','uk','wrong'],
+  // 12.5% of 40 kg = 5 kg: another unit is unsure, never converted
+  [PO3,'5 kg','uk','right'],[PO3,'5','uk','right'],[PO3,'5 kilograms','uk','right'],[PO3,'5,0 kg','cz','right'],[PO3,'5000 g','uk','unsure'],
+  [PO3,'3.2 kg','uk','wrong','pct-divided'],[PO3,'320','uk','wrong','pct-divided'],[PO3,'500 kg','uk','wrong','pct-times-whole'],[PO3,'4 kg','uk','wrong','pct-ten-stopped'],[PO3,'35 kg','uk','wrong','pct-rest'],[PO3,'5.5','uk','wrong'],
+  // 30% of 140 = 42
+  [PO4,'42','uk','right'],[PO4,'42%','uk','unsure'],[PO4,'4.67','uk','wrong','pct-divided'],[PO4,'466.67','uk','wrong','pct-divided'],[PO4,'4200','uk','wrong','pct-times-whole'],[PO4,'14','uk','wrong','pct-ten-stopped'],[PO4,'98','uk','wrong','pct-rest'],[PO4,'43','uk','wrong'],
+  // 75% of 60 = 45
+  [PO5,'45','uk','right'],[PO5,'0.8','uk','wrong','pct-divided'],[PO5,'80','uk','wrong','pct-divided'],[PO5,'4500','uk','wrong','pct-times-whole'],[PO5,'6','uk','wrong','pct-ten-stopped'],[PO5,'15','uk','wrong','pct-rest'],[PO5,'44','uk','wrong'],
+  // 54% of £130 = £70.20: a whole number is an exact claim (70 is wrong), a comma is a decimal only in cz and de
+  [PO6,'£70.20','uk','right'],[PO6,'70.2','uk','right'],[PO6,'£70.2','uk','right'],[PO6,'70,2','cz','right'],[PO6,'70,2','uk','unsure'],[PO6,'70','uk','wrong'],[PO6,'70.3','uk','wrong'],
+  [PO6,'£59.80','uk','wrong','pct-rest'],[PO6,'£13','uk','wrong','pct-ten-stopped'],[PO6,'7020','uk','wrong','pct-times-whole'],[PO6,'2.41','uk','wrong','pct-divided'],[PO6,'240.74','uk','wrong','pct-divided'],
+  // 5% of 20 = 1: 100% (equal in value) is unsure, never right
+  [PO7,'1','uk','right'],[PO7,'1.0','uk','right'],[PO7,'100%','uk','unsure'],[PO7,'4','uk','wrong','pct-divided'],[PO7,'400','uk','wrong','pct-divided'],[PO7,'100','uk','wrong','pct-times-whole'],
+  [PO7,'2','uk','wrong','pct-ten-stopped'],[PO7,'19','uk','wrong','pct-rest'],[PO7,'0.05','uk','wrong'],[PO7,'1.5','uk','wrong'],
+ ],
 };
 const B2_LEAKS={
  'dec-arith':[
@@ -796,6 +829,13 @@ const B2_LEAKS={
   [CV4,'It is 7/20.'],[CV4,'seven twentieths'],[CV4,'The bottom is 20.'],[CV4,'The top is 7 and the bottom is 20.'],[CV4,'35 ÷ 5 = 7'],[CV4,'7:20'],
   [CV6,'It is 0.35.'],[CV6,'Thirty-five hundredths.'],[CV6,'35 ÷ 100 = 0.35'],[CV6,'0,35'],
   [CV5,'That is 60%.'],[CV5,'sixty percent'],[CV5,'60'],
+ ],
+ 'pct-of-amount':[
+  [PO1,'The answer is 28.'],[PO1,'twenty-eight'],[PO1,'8 × 3.5'],[PO1,'35 × 80 = 2800'],[PO1,'80 ÷ 100 × 35'],[PO1,'24 + 4'],[PO1,'It comes to 28.0.'],
+  [PO1,'Thirty percent is 24 and five percent is 4, so 28.'],[PO1,'35 lots of 0.8'],[PO1,'0.8 × 35'],
+  [PO2,'It is €9.'],[PO2,'nine euros'],[PO2,'6 + 3 = 9'],[PO2,'0.15 × 60 = 9'],
+  [PO6,'£70.20'],[PO6,'seventy pounds twenty'],[PO6,'It is about 70.2.'],[PO6,'1.3 × 54'],
+  [PO3,'5 kg'],[PO3,'40 ÷ 8'],[PO3,'Five kilograms.'],
  ],
 };
 const B2_LEGIT={
@@ -815,6 +855,13 @@ const B2_LEGIT={
   [CV6,'Divide 35 by 100.'],[CV6,'Move the point two places to the left.'],[CV6,'A percentage is out of a hundred.'],
   [CV5,'Multiply 0.6 by 100.'],[CV5,'How many hundredths make 0.6?'],[CV7,'Write 35% as a fraction over 100 first.'],[CV7,'35% is 0.35.'],[CV7,'Then simplify.'],
  ],
+ 'pct-of-amount':[
+  [PO1,'Find 10% first.'],[PO1,'10% of 80 is 8.'],[PO1,'5% is half of 10%.'],[PO1,'30% is three lots of 10%.'],[PO1,'Now work out 35% of 80.'],[PO1,'Write 35% as 0.35 and multiply by 80.'],
+  [PO1,'0.35 × 80'],[PO1,'Find 1% of 80 by dividing by 100.'],[PO1,'Your answer should be less than 40, since 35% is less than half.'],[PO1,'Split 35% into 30% and 5%.'],[PO1,'A percentage means out of a hundred.'],
+  [PO2,'10% of €60 is €6.'],[PO2,'5% is half of that.'],[PO2,'Keep the euro sign in your answer.'],[PO2,'Find 10% and 5%, then add them.'],
+  [PO3,'12.5% is an eighth.'],[PO3,'Find a quarter first, then halve it.'],[PO3,'Your answer is in kilograms.'],
+  [PO6,'Find 50% and 4% of £130.'],[PO6,'1% of £130 is £1.30.'],[PO6,'Your answer will be a bit more than half of £130.'],
+ ],
 };
 /**
  * B2 CONFLICTS: legit hints the strict rule refuses, accepted and reported. A decimal's answer written without its point
@@ -825,6 +872,8 @@ const B2_CONFLICTS=[
  [DA4,'Multiply 36 by 4 first.'],[DA9,'7 × 3 is a times-table fact.'],
  // a conversion to a decimal or a percentage refuses a fraction over 10, 100 or 1000: it is the answer spelled as hundredths
  [CV6,'35% means 35 out of 100.'],[CV5,'0.6 is six tenths.'],
+ // a percent of an amount refuses the percent times the amount as whole numbers: 2800 is 28 with the point left out
+ [PO1,'Multiply 35 by 80, then divide by 100.'],
 ];
 
 /** The references: each unit's answer by hand in whole hundredths or thousandths, never the module's evaluator. */
@@ -850,8 +899,16 @@ const B2REF={
   const off=s.to==='decimal'?dec(n+d,d):s.to==='percent'?`${dec(100*(n+d),d)}%`:`${n+d}/${d}`;
   return {n,d,from,to:s.to,places,truth,off};
  },
+ 'pct-of-amount':(s)=>{
+  const m=/^(\d+(?:\.5)?)% of (\d+)$/.exec(s.expr);if(!m||s.shape!=='percent-of')return null;
+  const tenths=Math.round(Number(m[1])*10),N=Number(m[2]);
+  // p% of N in hundredths: p × N, or (tenths of a percent) × N ÷ 10
+  const h=tenths*N/10;assert.ok(Number.isInteger(h),`${s.expr}: at most two places`);
+  const fmt=(x)=>{const t=(x/100).toFixed(2);return t.replace(/\.?0+$/,'');};
+  return {p:Number(m[1]),half:/\.5$/.test(m[1]),N,truth:fmt(h),off:fmt(h+100)};
+ },
 };
-const B2GEN={'dec-arith':S.genDecimal,'dec-convert':S.genConvert};
+const B2GEN={'dec-arith':S.genDecimal,'dec-convert':S.genConvert,'pct-of-amount':S.genPercentOf};
 /** Each unit's tier, as school.ts documents it, asserted on the reference reading. */
 const B2_TIER={
  'dec-arith':(s,r,tier)=>{
@@ -870,6 +927,12 @@ const B2_TIER={
   if(r.from==='percent')assert.ok(r.places<=1&&!/\.0%$/.test(s.expr),s.expr);
   if(tier===1)assert.ok(100%r.d===0&&r.n<r.d,`tier 1: a bottom that goes into a hundred, below one: ${s.expr}`);
   else assert.ok(([8,16,40,80].includes(r.d)&&r.n<r.d)||(r.n>r.d&&r.n<3*r.d&&[2,4,5,8,10,20].includes(r.d)),`tier 2: eighths to eightieths, or between 1 and 3: ${s.expr}`);
+ },
+ 'pct-of-amount':(s,r,tier)=>{
+  const FRIENDLY=[5,10,20,25,30,40,50,60,70,75,80,90];
+  if(tier===1){assert.ok(FRIENDLY.includes(r.p)&&r.N%20===0&&r.N<=400&&s.unit===undefined,`tier 1: a friendly percent of a multiple of 20, no unit: ${s.expr}`);assert.ok(Number.isInteger(Number(r.truth)),'a whole answer');}
+  else{assert.ok(r.half?r.p<40&&r.N%20===0:!FRIENDLY.includes(r.p)&&r.p<100&&r.N%10===0,`tier 2: ${s.expr}`);assert.ok(r.N<=500&&s.unit!==undefined,`tier 2 carries a unit: ${JSON.stringify(s)}`);assert.ok(!/\.\d\d/.test(r.truth),'at most one place');}
+  assert.notEqual(Number(r.truth),r.N);assert.notEqual(Number(r.truth),r.p);
  },
 };
 
@@ -930,6 +993,7 @@ test('W7b question: each new item prints plain text and TeX, never its answer, k
   // a dollar is never printed as '$' (TeX's delimiter): a money sum in dollars names its unit after it
   [cs('4.35 + 2.80',{unit:'$'}),'Work out 4.35 + 2.80. Give your answer in dollars.'],
   [CV1,'Write 3/8 as a decimal.'],[CV3,'Write 7/20 as a percentage.'],[CV4,'Write 0.35 as a simplified fraction.'],[CV6,'Write 35% as a decimal.'],[CV8,'Write 12.5% as a simplified fraction.'],
+  [PO1,'Find 35% of 80.'],[PO2,'Find 15% of €60.'],[PO3,'Find 12.5% of 40 kg.'],[po('20% of 60','$'),'Find 20% of 60 dollars.'],[po('25% of 80','m'),'Find 25% of 80 metres.'],
  ];
  for (const [s,plain] of P){
   const q=S.question(s);
@@ -937,18 +1001,19 @@ test('W7b question: each new item prints plain text and TeX, never its answer, k
   for (const line of [q.plain,q.tex]){
    let fr=0;T.walk(T.parseMath(line),(x)=>{if(x.t==='frac')fr++;});
    assert.equal(fr,/\//.test(s.expr)?1:0,`${line}: a given fraction is stacked, nothing else`);
-   if (/%/.test(s.expr)) assert.ok(T.flatten(T.parseMath(line)).includes(s.expr),`${line} keeps ${s.expr}`);
    const flat=T.flatten(T.parseMath(line));
+   if (/%/.test(s.expr)) assert.ok(flat.includes(/[\d.]+%/.exec(s.expr)[0]),`${line} keeps ${s.expr}: ${flat}`);
    for (const d of s.expr.match(/\d+(?:\.\d+)?/g)) assert.ok(flat.includes(d),`${line} keeps ${d}: ${flat}`);
-   if (s.unit==='€'||s.unit==='£') assert.equal(flat.split(s.unit).length-1,s.expr.includes('×')?1:2,`${line}: the sign before each amount`);
+   if (s.shape==='compute'&&(s.unit==='€'||s.unit==='£')) assert.equal(flat.split(s.unit).length-1,s.expr.includes('×')?1:2,`${line}: the sign before each amount`);
+   if (s.unit&&s.shape!=='compute') assert.match(flat,/[€£]|kg|metres|dollars/,`${line}: the unit is kept`);
   }
  }
  assert.deepEqual(S.specFromQuestion('Work out €4.35 + €2.80.'),DA6);assert.deepEqual(S.specFromQuestion('Work out £3.45 × 4.'),DA7);
- for (const s of [CV1,CV3,CV4,CV6,CV8]) assert.deepEqual(S.specFromQuestion(S.question(s).plain),s);
+ for (const s of [CV1,CV3,CV4,CV6,CV8,PO1,PO2,PO3]) assert.deepEqual(S.specFromQuestion(S.question(s).plain),s);
  assert.equal(S.question(cs('4.35 + 2.80',{unit:'€',form:'decimal'})).plain,'Work out 4.35 + 2.80. Give your answer as a decimal.','a form asked keeps the old wording');
 });
 
-test('W7b wellFormed: a conversion takes one number in one printed form and another form asked, terminating, never whole; `to` belongs to it alone',()=>{
+test('W7b wellFormed: each batch-2 shape reads only its one printed spelling and refuses what makes a poor question; `to` belongs to a conversion alone',()=>{
  for (const s of [CV1,CV2,CV3,CV4,CV5,CV6,CV7,CV8,CV9]) assert.deepEqual(S.wellFormed(s),{ok:true},JSON.stringify(s));
  const bad=[
   [cv('1/3','decimal'),'no exact decimal'],[cv('2/3','percent'),'no exact decimal'],[cv('0.35','decimal'),'already in the form'],[cv('35%','percent'),'already in the form'],[cv('3/8','fraction'),'already in the form'],
@@ -956,14 +1021,19 @@ test('W7b wellFormed: a conversion takes one number in one printed form and anot
   [cv('3/8','ratio'),'form is not'],[cv('3/8'),'form is not'],[cv('0,35','fraction'),'cannot read'],[cv('12.25%','fraction'),'cannot read'],[cv('0.3535','fraction'),'cannot read'],[cv('x/8','decimal'),'cannot read'],
   [cv('35/2','decimal'),'larger'],[{...CV1,unit:'kg'},'does not take'],[{...CV1,form:'decimal'},'does not take'],[{...CV1,answer:'0.375'},'no answer field'],
   [cs('3/4 + 1/6',{to:'decimal'}),'does not take'],[{shape:'missing',expr:'3/4 = ?/12',to:'decimal'},'does not take'],
+  // a percent of an amount: above nothing and below the whole, a whole amount to 1000, an answer to two places that the question does not print
+  [po('100% of 80'),'above nothing'],[po('0% of 80'),'above nothing'],[po('150% of 80'),'above nothing'],[po('35% of 0'),'cannot read'],[po('35% of 2000'),'larger'],
+  [po('12.5% of 7'),'two decimal places'],[po('20% of 100'),'print its own answer'],[po('12.0% of 80'),'does not end in a zero'],[po('35.25% of 80'),'cannot read'],[po('35 % of 80'),'cannot read'],
+  [{...PO1,to:'decimal'},'does not take'],[{...PO1,form:'decimal'},'does not take'],[po('35% of 80','inch'),'unit is not'],[{...PO1,answer:28},'no answer field'],
  ];
+ for (const s of [PO1,PO2,PO3,PO4,PO5,PO6,PO7]) assert.deepEqual(S.wellFormed(s),{ok:true},JSON.stringify(s));
  for (const [s,why] of bad){const w=S.wellFormed(s);assert.equal(w.ok,false,JSON.stringify(s));assert.ok(w.why.includes(why),`${JSON.stringify(s)}: ${w.why}`);}
 });
 
 test('W7b PURITY: random strings through check and leaksSchool on every batch-2 spec never throw and give the same answer twice',()=>{
  let seed=4242;const rnd=()=>{seed=(seed*1103515245+12345)&0x7fffffff;return seed/0x7fffffff;};
  const alphabet=['0','1','3','5','7','.',',',' ','%','/','-','€','£','$','x','×','÷','=','of','by','point','hundredths','percent',' and ','p','kg'];
- const specs=[DA1,DA6,DA7,CV1,CV3,CV4,CV6];
+ const specs=[DA1,DA6,DA7,CV1,CV3,CV4,CV6,PO1,PO2,PO6];
  for (let i=0;i<300;i++){
   let s='';const len=Math.floor(rnd()*20);for(let k=0;k<len;k++)s+=alphabet[Math.floor(rnd()*alphabet.length)];
   for (const sp of specs){

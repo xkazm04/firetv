@@ -8,7 +8,8 @@
  * withheld line; the leak rule below gains a per-shape profile (`leakProfile`). W7 batch 2 adds the decimals and percent
  * strand: add, subtract and multiply decimals (`compute` with decimal operands, money with a € or £ sign); fractions,
  * decimals and percent (`convert`, the one shape with a store key of its own, `to`: the form asked for, whose value in any
- * other form is unsure, never wrong, and whose leak check knows which written forms of the value give it away).
+ * other form is unsure, never wrong, and whose leak check knows which written forms of the value give it away); a percent
+ * of an amount (`percent-of`, "Find 35% of 80.", an optional unit; an amount written as a percentage is unsure).
  *
  * The stances this file holds:
  *   - Code decides right and wrong. The truth is recomputed from the spec every time with EXACT rational arithmetic
@@ -310,6 +311,9 @@ export function readNumber(answer: unknown, system: unknown): Reading | null {
  *     or a percent "35%", and `to` the form asked for: "decimal", "fraction" (in its simplest form) or "percent" - never
  *     the form it is given in. Terminating values only (a fraction's bottom made of 2s and 5s), never a whole number.
  *     `to` is the one store key W7 batch 2 adds.
+ *   - percent-of (W7 batch 2, "A percent of an amount"): expr "p% of N", a percent above 0 and below 100 (at most one
+ *     decimal place) of a whole amount 1 to 1000, "Find 35% of 80.", "Find 15% of €60."; `unit` is the amount's unit
+ *     (and the answer's). The value is p × N / 100 exactly, to at most two decimal places.
  */
 export type ComputeSpec = { shape: "compute"; expr: string; form?: "simplest" | "decimal"; unit?: Unit; allowNegative?: true };
 export type FractionOfSpec = { shape: "fraction-of"; expr: string; unit?: Unit };
@@ -318,9 +322,12 @@ export type SimplifySpec = { shape: "simplify"; expr: string };
 /** The forms a conversion asks for (W7 batch 2). */
 export type NumberFormAsked = "decimal" | "fraction" | "percent";
 export type ConvertSpec = { shape: "convert"; expr: string; to: NumberFormAsked };
-export type SchoolSpec = ComputeSpec | FractionOfSpec | MissingSpec | SimplifySpec | ConvertSpec;
+export type PercentOfSpec = { shape: "percent-of"; expr: string; unit?: Unit };
+export type SchoolSpec = ComputeSpec | FractionOfSpec | MissingSpec | SimplifySpec | ConvertSpec | PercentOfSpec;
 export type SchoolShape = SchoolSpec["shape"];
-export const SCHOOL_SHAPES: readonly SchoolShape[] = ["compute", "fraction-of", "missing", "simplify", "convert"];
+export const SCHOOL_SHAPES: readonly SchoolShape[] = ["compute", "fraction-of", "missing", "simplify", "convert", "percent-of"];
+/** The shapes whose amount may carry a unit (the answer is in it too). */
+const AMOUNT_SHAPES: readonly SchoolShape[] = ["fraction-of", "percent-of"];
 
 /** Bounds on a compute spec, each with its reason: a school question, not a calculator exercise. */
 const MAX_EXPR = 60;        // a line on a worksheet
@@ -457,7 +464,10 @@ const REJECT = {
   sameForm: "The number is already in the form asked for: there is nothing to convert.",
   notLowest: "A fraction to convert is given in its simplest form.",
   whole: "The value is a whole number: there is nothing to convert.",
-  trailing: "A decimal to convert does not end in a zero.",
+  trailing: "A decimal a question prints does not end in a zero.",
+  percentRange: "A percent of an amount is above nothing and below the whole amount.",
+  prints: "The question would print its own answer.",
+  twoPlaces: "The answer would need more than two decimal places.",
 } as const;
 
 /**
@@ -469,7 +479,8 @@ type Kind =
   | { k: "of"; a: bigint; b: bigint; N: bigint }
   | { k: "missing"; a: bigint; b: bigint; known: bigint; slot: "top" | "bottom" }
   | { k: "simplify"; a: bigint; b: bigint }
-  | { k: "convert"; from: NumberFormAsked; to: NumberFormAsked; given: Q; a?: bigint; b?: bigint; text: string };
+  | { k: "convert"; from: NumberFormAsked; to: NumberFormAsked; given: Q; a?: bigint; b?: bigint; text: string }
+  | { k: "pct-of"; p: Q; N: bigint; ptext: string };
 type Structure = { ok: true; spec: SchoolSpec; node: Node; kind: Kind } | { ok: false; why: string };
 type ReadOk = { ok: true; spec: SchoolSpec; node: Node; kind: Kind; truth: Q };
 type Read = ReadOk | { ok: false; why: string };
@@ -482,6 +493,9 @@ const SIMPLIFY_RE = new RegExp(String.raw`^(${W3})\/(${W3})$`);
 /** A decimal to convert, "0.35" (a whole part 0..999, one to three places), and a percent, "35%", "12.5%" (at most one place). */
 const DECIMAL_RE = /^(0|[1-9]\d{0,2})\.(\d{1,3})$/, PERCENT_RE = /^(0|[1-9]\d{0,2})(?:\.(\d))?%$/;
 const FORMS_ASKED: readonly NumberFormAsked[] = ["decimal", "fraction", "percent"];
+/** A percent as a question prints it (up to three whole digits, at most one place), and "p% of N" with a whole amount. */
+const PCT_SRC = String.raw`((?:0|[1-9]\d{0,2})(?:\.\d)?)`;
+const PCT_OF_RE = new RegExp(String.raw`^${PCT_SRC}% of (${W4})$`);
 const fracNode = (n: bigint, d: bigint): Node => ({ k: "frac", n, d });
 
 /** The spec's structure (printable), without its truth. The W7 shapes are read in their one printed spelling each. */
@@ -499,8 +513,8 @@ function structure(spec: unknown): Structure {
     const node = parseExpr(s.expr as string);
     return node ? { ok: true, spec: s as SchoolSpec, node, kind: { k: "compute" } } : { ok: false, why: REJECT.read };
   }
-  // the W7 shapes take no form and no sign flag; only a fraction of an amount takes a unit
-  if (s.form !== undefined || s.allowNegative !== undefined || (shape !== "fraction-of" && s.unit !== undefined)) return { ok: false, why: REJECT.key };
+  // the W7 shapes take no form and no sign flag; only an amount (a fraction or a percent of it) takes a unit
+  if (s.form !== undefined || s.allowNegative !== undefined || (!AMOUNT_SHAPES.includes(shape as SchoolShape) && s.unit !== undefined)) return { ok: false, why: REJECT.key };
   if (s.unit !== undefined && !(UNITS as readonly unknown[]).includes(s.unit)) return { ok: false, why: REJECT.unit };
   if (typeof s.expr !== "string" || s.expr.length > MAX_EXPR) return { ok: false, why: REJECT.read };
   if (shape === "convert") {
@@ -520,6 +534,13 @@ function structure(spec: unknown): Structure {
       return { ok: true, spec: s as SchoolSpec, node: { k: "num", q, s: expr.slice(0, -1), whole: !f }, kind: { k: "convert", from: "percent", to, given: q, text: expr } };
     }
     return { ok: false, why: REJECT.read };
+  }
+  if (shape === "percent-of") {
+    const m = PCT_OF_RE.exec(s.expr);
+    if (!m) return { ok: false, why: REJECT.read };
+    const [w, f = ""] = m[1].split("."), p = mk(BigInt(w + f), pow10(f.length))!, N = BigInt(m[2]);
+    const node: Node = { k: "op", op: "×", a: { k: "num", q: div(p, qi(BigInt(100)))!, s: m[1], whole: !f }, b: { k: "num", q: qi(N), s: m[2], whole: true } };
+    return { ok: true, spec: s as SchoolSpec, node, kind: { k: "pct-of", p, N, ptext: m[1] } };
   }
   if (shape === "fraction-of") {
     const m = OF_RE.exec(s.expr);
@@ -590,6 +611,16 @@ function readKind(st: Extract<Structure, { ok: true }>): Read {
     if (!terminating(v)) return { ok: false, why: REJECT.notDecimal };
     return ok(v);
   }
+  if (K.k === "pct-of") {
+    // W7 batch 2: p% of N = p × N / 100, a money-sized answer, never a number the question prints
+    if (K.ptext.endsWith(".0")) return { ok: false, why: REJECT.trailing };
+    if (K.p.n <= Z || K.p.n >= BigInt(100) * K.p.d) return { ok: false, why: REJECT.percentRange };
+    if (K.N > lim) return { ok: false, why: REJECT.big };
+    const truth = mk(K.p.n * K.N, K.p.d * BigInt(100))!;
+    if (!exactAt(truth, 2)) return { ok: false, why: REJECT.twoPlaces };
+    if (eq(truth, qi(K.N)) || eq(truth, K.p)) return { ok: false, why: REJECT.prints };
+    return ok(truth);
+  }
   return { ok: false, why: REJECT.shape };
 }
 
@@ -621,8 +652,8 @@ function read(spec: unknown): Read {
   return { ok: true, spec: s, node, kind: st.kind, truth };
 }
 
-/** The unit a spec's answer is in, when it names one (compute and fraction-of take one). */
-const specUnit = (s: SchoolSpec): Unit | undefined => (s.shape === "compute" || s.shape === "fraction-of" ? s.unit : undefined);
+/** The unit a spec's answer is in, when it names one (compute and an amount's shapes take one). */
+const specUnit = (s: SchoolSpec): Unit | undefined => (s.shape === "compute" || s.shape === "fraction-of" || s.shape === "percent-of" ? s.unit : undefined);
 
 /**
  * Is this spec a question the desk can print and judge? The expression reads (+ - × ÷, brackets, whole numbers,
@@ -674,6 +705,16 @@ const UNIT_WORD: Record<Unit, string> = { cm: "cm", m: "m", km: "km", mm: "mm", 
 const AMOUNT_WORD: Record<Unit, string> = { ...UNIT_WORD, m: "metres", g: "grams", l: "litres", h: "hours", s: "seconds" };
 
 /**
+ * An amount as a question prints it: € and £ as a sign before the number (€60); any other unit as its word after it (60
+ * kg, 60 metres), a dollar as "60 dollars" since the typesetter reads a plain '$' as TeX's math delimiter and drops it.
+ */
+function amountText(N: string, u: Unit | undefined): { plain: string; tex: string } {
+  if (!u) return { plain: N, tex: N };
+  if (u === "€" || u === "£") return { plain: `${u}${N}`, tex: `${u}${N}` };
+  return { plain: `${N} ${AMOUNT_WORD[u]}`, tex: `${N} \\text{ ${AMOUNT_WORD[u]}}` };
+}
+
+/**
  * How a conversion question names the form it asks for (W7 batch 2): "percentage" as a UK sheet says it (the reader takes
  * "percent" too), and "a simplified fraction", which fits one printed row where "a fraction in its simplest form" does not.
  */
@@ -717,11 +758,13 @@ export function question(spec: unknown): { plain: string; tex: string } | null {
     if (!st.ok) return null;
     const K = st.kind;
     if (K.k === "of") {
-      // € and £ as a sign before the amount; a dollar as the word, since the typesetter reads a plain '$' as TeX's math delimiter and drops it
-      const u = specUnit(st.spec), N = String(K.N), sign = u === "€" || u === "£";
-      const amount = !u ? N : sign ? `${u}${N}` : `${N} ${AMOUNT_WORD[u]}`;
-      const texAmount = !u ? N : sign ? `${u}${N}` : `${N} \\text{ ${AMOUNT_WORD[u]}}`;
-      return { plain: `Find ${K.a}/${K.b} of ${amount}.`, tex: `\\text{Find } \\frac{${K.a}}{${K.b}} \\text{ of } ${texAmount}.` };
+      const am = amountText(String(K.N), specUnit(st.spec));
+      return { plain: `Find ${K.a}/${K.b} of ${am.plain}.`, tex: `\\text{Find } \\frac{${K.a}}{${K.b}} \\text{ of } ${am.tex}.` };
+    }
+    if (K.k === "pct-of") {
+      // W7 batch 2: "Find 35% of 80.", "Find 15% of €60.", "Find 12% of 250 kg."
+      const am = amountText(String(K.N), specUnit(st.spec));
+      return { plain: `Find ${K.ptext}% of ${am.plain}.`, tex: `\\text{Find } ${K.ptext}\\% \\text{ of } ${am.tex}.` };
     }
     if (K.k === "missing") {
       const [p, q] = K.slot === "top" ? ["?", String(K.known)] : [String(K.known), "?"];
@@ -782,6 +825,11 @@ export const SCHOOL_SLIPS: readonly SchoolSlip[] = [
   { id: "conv-wrong-way", name: "The point moved the wrong way", says: "The point moved two places, but the wrong way. A decimal written as a percent gets bigger; a percent written as a decimal gets smaller.", points: "the decimal point" },
   { id: "conv-ten-times", name: "Ten times too big or too small", says: "The answer is ten times too big or too small: the point moved one place too few or too many, or the bottom has one zero too many or too few. Count the places again.", points: "the decimal point or the bottom" },
   { id: "conv-top-dot-bottom", name: "The top and bottom written as a decimal", says: "The top and the bottom were written either side of a point. A fraction is the top divided by the bottom: that division gives the decimal.", points: "the answer" },
+  // a percent of an amount (Family W7 batch 2)
+  { id: "pct-divided", name: "Divided by the percent", says: "The amount was divided by the percentage. A percentage of an amount is that many hundredths of it: find one hundredth of the amount, then take that many.", points: "the division" },
+  { id: "pct-times-whole", name: "The percent used as a whole number", says: "The amount was multiplied by the percentage as if it were a whole number, so the answer is far bigger than the amount. A percentage is a number of hundredths, so divide by a hundred as well.", points: "the multiplication" },
+  { id: "pct-ten-stopped", name: "Found ten percent and stopped", says: "This is ten percent of the amount, the first step. Build the percentage asked for from it.", points: "the last line" },
+  { id: "pct-rest", name: "Found the part that is left", says: "This is the part of the amount that is left over, not the percentage asked for. Take the percentage itself of the amount.", points: "the last line" },
 ];
 
 /** The common factors of a and b above 1, smallest first. */
@@ -805,6 +853,8 @@ function commonFactors(a: bigint, b: bigint): bigint[] {
  *     to a percent (the sign put on unscaled, 0.35%; the point moved the wrong way, 0.0035%), 100T and, to a decimal,
  *     10^4 T from a percent (the sign taken off unscaled, 35; the wrong way, 3500); 10T and T/10 ten times out (3.5%,
  *     35/10); from a fraction to a decimal, the top and bottom either side of a point (7/20 as 7.20);
+ *   - p% of N (W7 batch 2): N ÷ p and N ÷ (p/100) divided by the percent; p × N the percent as a whole number; N ÷ 10
+ *     ten percent and stopped (p not ten); (100 - p)% of N the part left;
  *   - decimals a ± b, a × b (W7 batch 2), P the working's places (the longer of the two for ±, their sum for ×): the
  *     numbers lined up by their last digits, (a·10^pa ± b·10^pb) / 10^P, when their places differ; the point put back
  *     by the wrong count, the value × 10^k for k = -1 and 1..P-1 (products only); the point left out, the value × 10^P.
@@ -843,6 +893,16 @@ function slipCandidates(r: ReadOk): [string, Q][] {
     if (K.from === "percent") { push("conv-not-scaled", mul(T, H)); if (K.to === "decimal") push("conv-wrong-way", mul(T, T4)); }
     push("conv-ten-times", mul(T, TT)); push("conv-ten-times", div(T, TT));
     if (K.from === "fraction" && K.to === "decimal") { const b = K.b!, L = pow10(String(b).length); push("conv-top-dot-bottom", mk(K.a! * L + b, L)); }
+    return out;
+  }
+  if (K.k === "pct-of") {
+    // W7 batch 2, p% of N: N ÷ p and N ÷ (p/100) divided by it; p × N the percent as a whole number; N ÷ 10 ten percent
+    // and stopped (when p is not ten); (100 - p)% of N the part left
+    const H = BigInt(100), N = qi(K.N);
+    push("pct-divided", div(N, K.p)); push("pct-divided", div(mul(N, qi(H)), K.p));
+    push("pct-times-whole", mul(K.p, N));
+    if (!eq(K.p, qi(TEN))) push("pct-ten-stopped", mk(K.N, TEN));
+    push("pct-rest", mul(sub(qi(H), K.p), mk(K.N, H)!));
     return out;
   }
   const node = r.node;
@@ -920,6 +980,7 @@ const WHY = {
   percent: "The value is right; the question asks for it as a percentage.",
   fraction: "The value is right; the question asks for it as a fraction.",
   noSign: "This reads as the percentage without its percent sign, and the desk does not guess.",
+  amountAsPercent: "This is written as a percentage; the question asks for an amount, and the desk does not guess.",
 } as const;
 
 /** The top and bottom as written, for an answer that reads as a plain fraction ('9/12', 'x = 9/12', '9 / 12.'), or null. */
@@ -994,6 +1055,9 @@ export function check(spec: unknown, writing: unknown, system: unknown): SchoolV
       }
       if (K.to === "percent" && (form === "integer" || form === "decimal") && eq(v, mul(t, qi(BigInt(100))))) return { verdict: "unsure", form, why: WHY.noSign };
     }
+    // W7 batch 2: an amount written with a percent sign - 28% for 35% of 80 = 28, or 2800% (equal in value, from 35 × 80) -
+    // is the right number in the wrong form, or a slip: the desk does not guess, and never calls it right
+    if (K.k === "pct-of" && form === "percent" && (eq(mul(v, qi(BigInt(100))), t) || eq(v, t))) return { verdict: "unsure", form, why: WHY.amountAsPercent };
     const simplest = K.k === "simplify" || (r.spec.shape === "compute" && r.spec.form === "simplest");
     const decimalAsked = r.spec.shape === "compute" && r.spec.form === "decimal";
     if (eq(v, t)) {
@@ -1195,6 +1259,13 @@ function leakProfile(r: ReadOk): LeakProfile {
     if (K.from === "percent") restated.push({ p: hundred, o: "÷", q: H, both: false });
     if (K.to === "percent") restated.push({ p: T, o: "×", q: H, both: true });
     return { T, targets: [T], lowestOnly: false, bare, restated, written: [], convert: { from: K.from, to: K.to, hundred } };
+  }
+  if (K.k === "pct-of") {
+    // W7 batch 2: p% of N restated as p/100 × N or "p% of N" is the question; its working p × N (2800 for 35% of 80) is
+    // the answer's digits; ten percent (8) or any other first step is no leak
+    const H = qi(BigInt(100)), bare = new Set<string>(), h = mul(T, H);
+    if (h.d === ONE) bare.add(String(h.n));
+    return { T, targets: [T], lowestOnly: false, bare, restated: [{ p: div(K.p, H)!, o: "×", q: qi(K.N), both: true }], written: [] };
   }
   if (K.k === "missing") {
     const [p, q] = K.slot === "top" ? [T.n, K.known] : [K.known, T.n];
@@ -1632,6 +1703,37 @@ export function genConvert(seed: unknown, tier: unknown): SchoolSpec | null {
   return tier === 1 ? { shape: "convert", expr: "3/4", to: "decimal" } : { shape: "convert", expr: "3/8", to: "percent" };
 }
 
+/** The percents built in one or two moves from ten percent, a half or a quarter (tier 1 of the percent units). */
+const FRIENDLY_PERCENTS: readonly number[] = [5, 10, 20, 25, 30, 40, 50, 60, 70, 75, 80, 90];
+/** The units a tier-2 percent item's amount may carry: money in six of ten, then weights, lengths and capacities. */
+const PERCENT_UNITS: readonly Unit[] = ["€", "£", "€", "£", "€", "£", "kg", "m", "l", "$"];
+
+/**
+ * One "A percent of an amount" item, from a seed and a tier that code computed:
+ *   - tier 1: a friendly percent (5, 10, 20, 25, 30, 40, 50, 60, 70, 75, 80, 90: from ten percent, a half or a quarter)
+ *     of a multiple of 20 up to 400, so the answer is whole, no unit: "Find 30% of 140.";
+ *   - tier 2: any other whole percent 1..99, or one in five a half percent 0.5..39.5, of a multiple of 10 up to 500 (of 20
+ *     for a half percent), so the answer has at most one decimal place, with a unit - money in most: "Find 35% of €80.".
+ * An answer that is a number the question prints is drawn again. Pure and seeded; null for a bad seed or tier.
+ */
+export function genPercentOf(seed: unknown, tier: unknown): SchoolSpec | null {
+  const rnd = seeded(seed, tier, 0x5eed1306);
+  if (!rnd) return null;
+  function pick<T>(xs: readonly T[]): T { return xs[Math.floor(rnd!() * xs.length)]; }
+  const int = (lo: number, hi: number) => lo + Math.floor(rnd!() * (hi - lo + 1));
+  for (let t = 0; t < MAX_TRIES; t++) {
+    let spec: SchoolSpec;
+    if (tier === 1) spec = { shape: "percent-of", expr: `${pick(FRIENDLY_PERCENTS)}% of ${20 * int(1, 20)}` };
+    else {
+      const half = rnd() < 0.2, whole = int(1, 99);
+      if (!half && FRIENDLY_PERCENTS.includes(whole)) continue;
+      spec = half ? { shape: "percent-of", expr: `${int(0, 39)}.5% of ${20 * int(1, 25)}`, unit: pick(PERCENT_UNITS) } : { shape: "percent-of", expr: `${whole}% of ${10 * int(1, 50)}`, unit: pick(PERCENT_UNITS) };
+    }
+    if (fair(spec)) return spec;
+  }
+  return tier === 1 ? { shape: "percent-of", expr: "25% of 80" } : { shape: "percent-of", expr: "35% of 80", unit: "€" };
+}
+
 /**
  * The units whose practice sets code writes, by syllabus topic id, each with its generator (Family W5b: add and
  * subtract fractions; W7 batch 1: equivalent fractions, a fraction of an amount, multiply and divide fractions). A
@@ -1644,6 +1746,7 @@ export const SCHOOL_GENERATORS: Readonly<Record<string, (seed: number, tier: 1 |
   "frac-mul-div": (seed, tier) => genMulDiv(seed, tier),
   "dec-arith": (seed, tier) => genDecimal(seed, tier),
   "dec-convert": (seed, tier) => genConvert(seed, tier),
+  "pct-of-amount": (seed, tier) => genPercentOf(seed, tier),
 };
 /** The generator for a topic id, or null: an own key only, so 'constructor' is not a unit. */
 export const generatorFor = (topicId: unknown) =>
@@ -1661,6 +1764,7 @@ export const SCHOOL_UNIT_SLIPS: Readonly<Record<string, readonly string[]>> = {
   "frac-mul-div": ["added-not-multiplied", "kept-second", "flipped-first", "bottoms-added"],
   "dec-arith": ["dec-lined-up", "dec-point-product", "dec-point-dropped"],
   "dec-convert": ["conv-flipped", "conv-not-scaled", "conv-wrong-way", "conv-ten-times", "conv-top-dot-bottom"],
+  "pct-of-amount": ["pct-divided", "pct-times-whole", "pct-ten-stopped", "pct-rest"],
 };
 
 /** The system the desk reads a learner's numbers by when their profile names none (tv/profileRows DEFAULT_SYSTEM is the same, tested). */
@@ -1853,6 +1957,20 @@ function readConvert(t0: string): SchoolSpec | null {
 }
 
 /**
+ * A percent of an amount (W7 batch 2): 'Find 35% of 80', 'What is 15% of €60?', '12% of 250 kg', 'Find 35 percent of 80
+ * sweets', after the same verbs as a fraction of an amount; the amount as `amountOf` reads it; or null.
+ */
+function readPercentOf(t0: string): SchoolSpec | null {
+  const t = t0.replace(/[.?!]$/, "").trim().replace(new RegExp(String.raw`^${VERB_SRC}\s*:?\s+`, "i"), "");
+  const m = new RegExp(String.raw`^${PCT_SRC}\s?(?:%|percent|per cent)\s+of\s+(.+)$`, "i").exec(t);
+  if (!m) return null;
+  const got = amountOf(m[2].trim());
+  if (!got) return null;
+  const spec: SchoolSpec = { shape: "percent-of", expr: `${m[1]}% of ${got.N}`, ...(got.unit ? { unit: got.unit } : {}) };
+  return read(spec).ok ? spec : null;
+}
+
+/**
  * A worksheet task of a school fractions unit, read back into the spec it asks, for the hint's leak check - or null.
  * Conservative: what it does not read with one meaning is null, and a null task gets no school leak check (the general
  * rule still runs), exactly as an unread Calculus task does. After an item label ('1.', '2)', '(b)', 'c)') it reads:
@@ -1888,7 +2006,7 @@ export function specFromQuestion(text: unknown): SchoolSpec | null {
   try {
     let t = normalise(text);
     t = t.replace(/^(?:\d{1,2}[.)]|\(\d{1,2}\)|[a-h]\)|\([a-h]\))\s+/i, "");
-    return readMissing(t) ?? readSimplify(t) ?? readOf(t) ?? readCombined(t) ?? readDecimal(t) ?? readConvert(t);
+    return readMissing(t) ?? readSimplify(t) ?? readOf(t) ?? readCombined(t) ?? readDecimal(t) ?? readConvert(t) ?? readPercentOf(t);
   } catch {
     return null;
   }
@@ -1907,6 +2025,7 @@ export function unitOf(spec: unknown): string | null {
     if (r.kind.k === "of") return "frac-of-amount";
     if (r.kind.k === "missing" || r.kind.k === "simplify") return "frac-equivalent";
     if (r.kind.k === "convert") return "dec-convert";
+    if (r.kind.k === "pct-of") return "pct-of-amount";
     const n = r.node;
     if (decimalPair(n)) return "dec-arith";
     if (n.k !== "op" || n.a.k !== "frac" || n.b.k !== "frac") return null;
@@ -1929,6 +2048,7 @@ export const SCHOOL_WITHHELD = {
   "frac-add-sub": "Make the bottoms the same first: find a number both bottoms go into and rewrite each fraction over it. Then combine only the tops. The answer is yours to work out.",
   "frac-mul-div": "To multiply, multiply the tops together and the bottoms together. To divide, turn the fraction you divide by upside down and multiply instead. Simplify at the end. The answer is yours to work out.",
   "dec-convert": "A fraction is its top divided by its bottom, so dividing gives the decimal. A percentage counts hundredths, so a decimal is written as a percentage by finding how many hundredths it makes, and a percentage as a decimal the other way. To make a fraction, write the decimal as tenths, hundredths or thousandths and simplify. The answer is yours to work out.",
+  "pct-of-amount": "A percentage of an amount is that many hundredths of it. Find a single hundredth of the amount first and build the percentage up from it, or write the percentage as a decimal and multiply the amount by it. The answer is yours to work out.",
   "dec-arith": "To add or take away, write the numbers with their decimal points one under the other, filling empty places with zeros. To multiply, multiply as if there were no points, then give the answer as many digits after its point as the question's numbers have between them. The answer is yours to work out.",
   any: "Go back to the last step you are sure of and take the next. The answer stays yours to find.",
 } as const;
