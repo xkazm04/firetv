@@ -803,3 +803,16 @@ test('the speech routes answer a bad request with 400 and a failed engine with a
   assert.equal(logged.every(line=>line.includes('sk-live-SECRET')),true);
  }finally{console.error=orig;reg.resetProviders();if(had===undefined)delete process.env.ELEVENLABS_API_KEY;}
 });
+test('the reply box stays closed until the scene is ready',()=>{
+ require.extensions['.tsx']=(mod,file)=>mod._compile(ts.transpileModule(fs.readFileSync(file,'utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022,esModuleInterop:true,jsx:ts.JsxEmit.ReactJSX}}).outputText,file);
+ const React=require(path.join(root,'node_modules/react'));
+ const {renderToStaticMarkup}=require(path.join(root,'node_modules/react-dom/server'));
+ const {ReplyBox}=require(path.join(root,'src/english/ReplyBox.tsx'));
+ const html=ready=>renderToStaticMarkup(React.createElement(ReplyBox,{ready,busy:false,onSend:async()=>true}));
+ const field=h=>{const i=h.indexOf('<textarea');return h.slice(i,h.indexOf('>',i)+1);};
+ const closed=html(false),open=html(true);
+ assert.match(field(closed),/disabled/,'an unprepared scene still takes a typed reply');
+ assert.doesNotMatch(field(open),/disabled/);
+ assert.match(closed,/Not yet/);
+ assert.equal(open.includes('Not yet'),false);
+});
