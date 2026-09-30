@@ -44,7 +44,7 @@ saying exactly what the owner should try and what "good" and "bad" look like; (7
 | 4 | W4 | **Weapons and damage**: weapon design and execution, HP, armor, wrecks, and **the controller layout rethink** | W3 | design note drafted (uncommitted by the run, committed by host), not implemented | | |
 | 4b | C1 | **Calibration round (added by host)**: the owner rates W1-W3 by hand on the Stick; one default preset and tightened bands follow | W3 + owner | **closed 2026-09-30: owner approved the five presets as they are, no calibration**; feel is fine-tuned after tracks, car sizing and the other mechanics exist | | |
 | 5 | W5 | **Parts and shop**: parts design, economy, garage on TV and phone, save file | W4 | not started | | |
-| 6 | W6 | **Tracks**: track format, authoring, linter, a set of tracks that escalate | W3 | not started | | |
+| 6 | W6 | **Tracks**: track format, authoring, linter, a set of tracks that escalate | W3 | done; owner quality/feel pending | W6 commit (recorded by next wave) | 2026-09-30 |
 | 7 | W7 | **Campaign**: ladder, rivals, difficulty, progression, pacing simulation | W5, W6 | not started | | |
 | 8 | W8 | **Integration and Gate G1**: balance report, Stick performance with everything on, soak, owner checklist | W7 | not started | | |
 
@@ -245,3 +245,8 @@ Consequences for the remaining waves:
 The purpose: the classes can then differ much more from the standard car (size, mass and silhouette spread wider), and cars cover far more of
 the track, so a race is full of vehicle contact. Re-derive track widths, corner radii, grid spacing, AI spacing and camera zoom against the larger
 cars; re-check collisions, the six-car finish-time tests and the Stick frame budget. Widen the class spread in the stat mapping, not just the drawing.
+
+
+### W6, 2026-09-30 (resumed interrupted wave; section g order)
+
+Design updated before implementation in `docs/concepts/deathride/W6-tracks.md`. Retained existing track/scenery work; applied roughly 50% larger physical/display cars, wider mass spread, three-circle contacts, re-derived grid/AI clearance, five linted courses, procedural road/car detail, skids/dust, preview and HUD. Fixed restart preflight TIME_WAIT false-busy. `:core:test :link:test :app:assembleDebug`: green (32 core, 3 link). Twenty deterministic six-car races / 120 finishers, 67.45-115.57 simulated seconds; zero steady-step allocation. AFTKM 1080p on 2442 MHz Wi-Fi: all five phone course choices and remote MENU verified; final 60 s two-controller load at 30.013 Hz, 1814 frames/slot. Final 10 s frame p50/p95/max 16.76/21.25/26.56 ms (n=600), worst six-window p95 21.42 ms. Input ages P1 47.13/69.17/77.30 ms and P2 20.28/42.82/52.21 ms (n=601 each), offset-estimated, not optical. Evidence and APK hash in W6 note; latest release build installed. Owner quality/feel and optical latency not measured; this is still far below finished-game presentation. OWNER-CHECKS updated. Next W4, then W5/W7/W8.

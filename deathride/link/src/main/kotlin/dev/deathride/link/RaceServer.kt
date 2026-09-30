@@ -45,6 +45,8 @@ class RaceServer(private val assets: (String)->String, private val log: (String)
     val slots=Array(2){Slot(it)}
     val command=AtomicInteger(0) // 1=start/rematch, 2=lobby
     val flash=AtomicBoolean(false)
+    val trackRequest=AtomicInteger(-1)
+    @Volatile var trackJson=Courses.all[0].json
     val surfaceRequest=AtomicInteger(-1)
     @Volatile var surface=Surfaces.asphalt
     val feelRequest=AtomicInteger(-1)
@@ -82,7 +84,7 @@ class RaceServer(private val assets: (String)->String, private val log: (String)
         val manifest=assets("manifest.webmanifest")
         networkJob=scope.launch {
             repeat(10) {
-                val free=runCatching { ServerSocket().use { socket -> socket.reuseAddress=false; socket.bind(InetSocketAddress("0.0.0.0",port)) }; true }.getOrDefault(false)
+                val free=runCatching { ServerSocket().use { socket -> socket.reuseAddress=true; socket.bind(InetSocketAddress("0.0.0.0",port)) }; true }.getOrDefault(false)
                 if(!free) { serverStatus="Port 8765 busy; retry ${it+1}/10"; delay(300); return@repeat }
                 val candidate=embeddedServer(CIO, host="0.0.0.0",port=port,parentCoroutineContext=errors) {
                     install(WebSockets) { maxFrameSize=2048; masking=false }
@@ -90,7 +92,7 @@ class RaceServer(private val assets: (String)->String, private val log: (String)
                         get("/") { call.response.header("Cache-Control","no-store"); call.respondText(html,ContentType.Text.Html) }
                         get("/manifest.webmanifest") { call.respondText(manifest,ContentType.Application.Json) }
                         get("/stats") { call.response.header("Cache-Control","no-store"); call.respondText(statsJson(),ContentType.Application.Json) }
-                        get("/catalog") { call.respondText("{\"feelProfiles\":${FeelProfiles.json},\"cars\":${CarCatalog.json},\"statMax\":${CarCatalog.statMax},\"surfaces\":${Surfaces.json}}",ContentType.Application.Json) }
+                        get("/catalog") { call.respondText("{\"feelProfiles\":${FeelProfiles.json},\"cars\":${CarCatalog.json},\"statMax\":${CarCatalog.statMax},\"tracks\":${Courses.json},\"surfaces\":${Surfaces.json}}",ContentType.Application.Json) }
                         get("/health") { call.respondText("{\"ok\":true,\"phase\":\"$phase\",\"slots\":${slots.count{it.connected}}}",ContentType.Application.Json) }
                         webSocket("/ws") { handle(this) }
                     }
@@ -122,7 +124,7 @@ class RaceServer(private val assets: (String)->String, private val log: (String)
             socket.send("{\"t\":\"welcome\",\"slot\":${s.id},\"token\":\"${s.token}\",\"tvNow\":${nowMs()},\"phase\":\"$phase\"}")
             hudJob=socket.launch {
                 while(isActive && generation==s.generation) {
-                    socket.send("{\"t\":\"hud\",\"speed\":${s.speed},\"lap\":${s.lap},\"pos\":${s.position},\"hp\":100,\"surface\":\"${surface.id}\",\"feel\":${feel.json},\"drifting\":${s.drifting},\"loadTransfer\":${s.loadTransfer},\"surfaceId\":\"${s.surfaceId}\",\"car\":${s.carJson},\"impact\":${s.impact},\"phase\":\"$phase\",\"stale\":${s.stale},\"paused\":$paused}")
+                    socket.send("{\"t\":\"hud\",\"speed\":${s.speed},\"lap\":${s.lap},\"pos\":${s.position},\"hp\":100,\"track\":$trackJson,\"surface\":\"${surface.id}\",\"feel\":${feel.json},\"drifting\":${s.drifting},\"loadTransfer\":${s.loadTransfer},\"surfaceId\":\"${s.surfaceId}\",\"car\":${s.carJson},\"impact\":${s.impact},\"phase\":\"$phase\",\"stale\":${s.stale},\"paused\":$paused}")
                     delay(100)
                 }
                 socket.close(CloseReason(CloseReason.Codes.NORMAL,"replaced"))
@@ -144,6 +146,7 @@ class RaceServer(private val assets: (String)->String, private val log: (String)
                         if(accepted && msg["f"]?.jsonPrimitive?.intOrNull==1) flash.set(true)
                         socket.send("{\"t\":\"ack\",\"q\":$q,\"tvNow\":$now,\"accepted\":$accepted}")
                     }
+                    "track" -> { val index=Courses.all.indexOfFirst { it.id==msg.text("id") };if(index>=0 && (phase=="lobby" || phase=="results"))trackRequest.set(index) }
                     "surface" -> { val index=Surfaces.practice.indexOfFirst { it.id==msg.text("id") }; if(index>=0)surfaceRequest.set(index) }
                     "car" -> { val index=CarCatalog.all.indexOfFirst { it.id==msg.text("id") }; if(index>=0 && (phase=="lobby" || phase=="results"))s.carRequest.set(index) }
                     "feel" -> { val index=FeelProfiles.all.indexOfFirst { it.id==msg.text("id") }; if(index>=0)feelRequest.set(index) }
@@ -165,7 +168,7 @@ class RaceServer(private val assets: (String)->String, private val log: (String)
     fun statsJson(): String {
         val now=nowMs(); val runtime=Runtime.getRuntime()
         val sb=StringBuilder(3000)
-        sb.append("{\"surface\":\"${surface.id}\",\"feel\":${feel.json},\"units\":\"ms\",\"uptimeMs\":$now,\"phase\":\"$phase\",\"raceSeconds\":$raceSeconds,\"paused\":$paused,\"frameNumber\":$frameNumber,\"flashFrames\":$flashFrames,\"heapUsedMB\":${(runtime.totalMemory()-runtime.freeMemory())/1048576.0},\"frameTimeMs\":${metrics.frameMs.json(now)},\"simStepMs\":${metrics.simMs.json(now)},\"discardedSimulationMs\":${metrics.discardedSimMs.json(now)},\"quantiles\":\"last10s exact (4096 samples); sinceStart histogram (resolution/cap declared per metric); max exact\",\"slots\":[")
+        sb.append("{\"track\":$trackJson,\"surface\":\"${surface.id}\",\"feel\":${feel.json},\"units\":\"ms\",\"uptimeMs\":$now,\"phase\":\"$phase\",\"raceSeconds\":$raceSeconds,\"paused\":$paused,\"frameNumber\":$frameNumber,\"flashFrames\":$flashFrames,\"heapUsedMB\":${(runtime.totalMemory()-runtime.freeMemory())/1048576.0},\"frameTimeMs\":${metrics.frameMs.json(now)},\"simStepMs\":${metrics.simMs.json(now)},\"discardedSimulationMs\":${metrics.discardedSimMs.json(now)},\"quantiles\":\"last10s exact (4096 samples); sinceStart histogram (resolution/cap declared per metric); max exact\",\"slots\":[")
         for(i in slots.indices) {
             if(i>0)sb.append(','); val s=slots[i]
             sb.append("{\"slot\":$i,\"connected\":${s.connected},\"reserved\":${s.claimed},\"clockSynced\":${s.clockSynced},\"inputAgeMs\":${metrics.inputAgeMs[i].json(now)},\"stale\":${metrics.stale[i].json(now)},\"dropped\":${metrics.dropped[i].json(now)},\"outOfOrder\":${metrics.outOfOrder[i].json(now)},\"effectiveThrottle\":${s.effectiveThrottle},\"effectiveSteer\":${s.effectiveSteer},\"drifting\":${s.drifting},\"loadTransfer\":${s.loadTransfer},\"surfaceId\":\"${s.surfaceId}\",\"car\":${s.carJson},\"speedMps\":${s.speed},\"xM\":${s.x},\"yM\":${s.y}}")

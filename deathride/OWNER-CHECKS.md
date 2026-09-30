@@ -29,3 +29,13 @@ Use FEEL ? Practice surface or TV MENU to cycle Asphalt/Gravel/Oil/Ice. Try the 
 Hold DRIFT while steering at speed, then release and countersteer. The phone says DRIFTING and the car gets a yellow marker. Good: held drift is recoverable; GO release still coasts and backgrounding the phone clears handbrake. Bad: a latched handbrake or uncontrolled spin after straightening. The temporary drift button is revised with combat in W4.
 
 Compare a glancing wall touch with a head-on impact, then bump Bastion with Needle. Good: glancing keeps forward motion; the light car is displaced more. Bad: wall glue, teleportation, interpenetration or a light car throwing the heavy one farther. Owner feel, especially ice difficulty, remains **not measured**.
+
+## W6 - Tracks, larger cars and a readable world (2026-09-30)
+
+The five presets are approved as they stand; no calibration was performed. MENU now cycles **circuits**, replacing its old surface shortcut. Practice surfaces remain in the phone settings. Selecting another circuit restores its authored surface zones.
+
+From the normal sofa position, compare Needle and Bastion in the lobby preview, then drive Foundry Ring. Cars are roughly 50% longer and wider than the interrupted W6 version, including their contact shapes. Good: the nose, tires and class silhouette remain legible at speed; Bastion occupies appreciably more road and pushes a light car aside. Bad: tiny cars, ambiguous heading, overlapping bodies, flickering walls, or a camera that hides the next bend. Two separated phones intentionally widen the shared camera; use the minimap to keep circuit context.
+
+Use CAR > Circuit on the phone (or MENU on the remote) for all five courses. Foundry teaches broad bends; Switchback an eastern hairpin; Redline long fast approaches; Runoff changes asphalt/gravel/ice; Crucible asks for close positioning. Good: distinct layouts, visible surface changes, sequential laps, clean grid starts, and six AIs completing the course. Bad: a missed gate counting a lap, a car permanently stuck, or surfaces that cannot be read. The dark oil spots are live hazards; pickup sites become usable in W4.
+
+Brake into a bend and hold DRIFT: tire marks and dust should show where grip went. Check the large position/lap/speed HUD and the minimap. Good: useful motion cues without covering the road. Bad: clutter, hard-to-read text, or sustained slowdown. Automated Stick checks and screenshots exist; sofa readability, enjoyment and physical-phone feel are **not measured** by them. The visuals are still procedural placeholder work, far from a finished game's variety, animation, lighting and sound.

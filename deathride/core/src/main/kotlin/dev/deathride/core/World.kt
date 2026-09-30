@@ -70,15 +70,18 @@ class InputMailbox {
 }
 class TrackPoint { var x = 0.0; var y = 0.0; var heading = 0.0; var curvature = 0.0 }
 class Projection { var s = 0.0; var distance = 0.0; var nx = 0.0; var ny = 1.0 }
-data class Track(val straightM: Double = 120.0, val radiusM: Double = 40.0, val halfWidthM: Double = 12.0, var surface: Surface=Surfaces.asphalt) {
+data class Track(val straightM: Double = 120.0, val radiusM: Double = 40.0, val halfWidthM: Double = 12.0, var surface: Surface=Surfaces.asphalt, val course: Course?=null) {
+    var surfaceOverride=false
+    fun widthAt(s: Double)=course?.widthAt(s)?:halfWidthM
     fun surfaceAt(s: Double, lateral: Double): Surface = when {
-        abs(lateral)>halfWidthM-Movement.vergeWidthM -> Surfaces.offtrack
-        abs(lateral)>halfWidthM-Movement.vergeWidthM-Movement.kerbWidthM -> Surfaces.kerb
-        else -> surface
+        abs(lateral)>widthAt(s)-Movement.vergeWidthM -> Surfaces.offtrack
+        abs(lateral)>widthAt(s)-Movement.vergeWidthM-Movement.kerbWidthM -> Surfaces.kerb
+        else -> if(surfaceOverride || course==null)surface else course.surfaceAt(s,lateral)
     }
-    val lengthM = 2 * straightM + 2 * PI * radiusM
-    val startM = straightM * 0.5
+    val lengthM = course?.lengthM ?: (2 * straightM + 2 * PI * radiusM)
+    val startM = course?.let { it.startFraction*it.lengthM } ?: (straightM * 0.5)
     fun sample(distanceM: Double, laneM: Double, out: TrackPoint) {
+        if(course!=null) { course.sample(distanceM,laneM,out);return }
         var s = ((distanceM % lengthM) + lengthM) % lengthM
         val h = straightM * .5
         when {
@@ -95,6 +98,7 @@ data class Track(val straightM: Double = 120.0, val radiusM: Double = 40.0, val 
         }
     }
     fun project(x: Double, y: Double, out: Projection) {
+        if(course!=null) { course.project(x,y,out);return }
         val h=straightM*.5
         if (x in -h..h) {
             out.nx=0.0; out.ny=if (y>=0) 1.0 else -1.0
@@ -112,7 +116,7 @@ data class Track(val straightM: Double = 120.0, val radiusM: Double = 40.0, val 
         }
     }
 }
-class LapCounter(private val lengthM: Double, private val startM: Double) {
+class LapCounter(private val lengthM: Double, private val startM: Double, private val gates: DoubleArray=doubleArrayOf(0.0,.25,.5,.75)) {
     var laps=0; private set
     var nextGate=0; private set
     var progressM=0.0; private set
@@ -125,11 +129,11 @@ class LapCounter(private val lengthM: Double, private val startM: Double) {
         if(d < -lengthM*.5) d+=lengthM
         if(d > lengthM*.5) d-=lengthM
         if(d > 0.0 && d < lengthM*.125) {
-            val gate=nextGate*lengthM*.25
+            val gate=gates[nextGate]*lengthM
             val crossed=if(nextGate==0) p<previous else previous<gate && p>=gate
             if(crossed) {
                 if(nextGate==0 && progressM>lengthM*.5) laps++
-                nextGate=(nextGate+1)%4
+                nextGate=(nextGate+1)%gates.size
             }
             progressM+=d
         } else if(d<=0.0 && d > -lengthM*.125) progressM+=d
@@ -142,7 +146,7 @@ val AI_SKILLS = arrayOf(AiSkill(8,.68,4.0,1.0), AiSkill(5,.60,2.0,.5), AiSkill(2
 class Car(val id: Int, track: Track) {
     var x=0.0; var y=0.0; var vx=0.0; var vy=0.0; var heading=0.0; var yaw=0.0
     var previousX=0.0; var previousY=0.0; var previousHeading=0.0
-    val lap=LapCounter(track.lengthM,track.startM)
+    val lap=LapCounter(track.lengthM,track.startM,track.course?.checkpoints?:doubleArrayOf(0.0,.25,.5,.75))
     var surface=Surfaces.asphalt
     var loadTransfer=0.0; var drifting=false; var wallImpactMps=0.0
     var spec=CarSpec()
@@ -217,14 +221,16 @@ class World(val seed: Int=17, val spec: CarSpec=CarSpec(), val track: Track=Trac
     fun reset() {
         steps=0; seconds=0.0; finished=0
         for(c in cars) {
-            val s=track.startM-6.0-(c.id/2)*7.0
-            track.sample(s, if(c.id%2==0) -3.2 else 3.2,point)
+            val grid=track.course?.grid?.get(c.id)
+            val rowLength=if(c.carClass==null)7.0 else CarShapes.all.maxOf { it.lengthM }+TrackRules["gridClearanceM"]
+            val s=if(grid==null)track.startM-rowLength-(c.id/2)*rowLength else track.startM+grid.fraction*track.lengthM
+            track.sample(s, grid?.laneM ?: if(c.id%2==0) -3.2 else 3.2,point)
             c.x=point.x; c.y=point.y; c.heading=point.heading; c.vx=0.0; c.vy=0.0; c.yaw=0.0
             c.loadTransfer=0.0; c.drifting=false; c.wallImpactMps=0.0
             c.filteredSteer=0.0; c.filteredThrottle=0.0
             c.previousX=c.x; c.previousY=c.y; c.previousHeading=c.heading; c.lap.reset(s)
             c.finishSeconds=-1.0; c.position=c.id+1; c.impact=0.0; c.aiDwell=0; c.aiBlockedSteps=0; c.aiMode=AiMode.DRIVE
-            c.aiLane=((c.id*7+seed)%5-2)*1.7; c.aiInput.set(0.0,0.0,0.0)
+            c.aiLane=((c.id*7+seed)%5-2)*(if(c.carClass==null)1.7 else c.spec.circleRadiusM*2*TrackRules["aiLaneCarWidths"]); c.aiInput.set(0.0,0.0,0.0)
         }
         previousSnapshot.capture(cars); snapshot.capture(cars)
     }
@@ -262,14 +268,17 @@ class World(val seed: Int=17, val spec: CarSpec=CarSpec(), val track: Track=Trac
         for(o in cars) if(o!==c) {
             val dx=o.x-c.x; val dy=o.y-c.y
             val along=dx*cos(c.heading)+dy*sin(c.heading)
-            if(along>0 && abs(-dx*sin(c.heading)+dy*cos(c.heading))<3.5) gap=min(gap,along)
+            if(along>0 && abs(-dx*sin(c.heading)+dy*cos(c.heading))<c.spec.circleRadiusM+o.spec.circleRadiusM+TrackRules["aiLateralClearanceM"]) gap=min(gap,along)
         }
         c.aiPerceivedGapM=gap
         if(c.aiBlockedSteps>150 && c.aiDwell>90) { c.aiMode=AiMode.RECOVER; c.aiDwell=0; c.aiReason=1 }
-        else if(gap<14 && c.aiDwell>90 && c.aiMode==AiMode.DRIVE) { c.aiMode=AiMode.OVERTAKE; c.aiDwell=0; c.aiReason=2 }
+        else if(gap<(c.spec.circleRadiusM+c.spec.circleOffsetM)*2*TrackRules["aiOvertakeCarLengths"] && c.aiDwell>90 && c.aiMode==AiMode.DRIVE) { c.aiMode=AiMode.OVERTAKE; c.aiDwell=0; c.aiReason=2 }
         else if(c.aiMode!=AiMode.DRIVE && c.aiDwell>180 && c.speedMps>5) { c.aiMode=AiMode.DRIVE; c.aiDwell=0; c.aiReason=3 }
-        val lane=if(c.aiMode==AiMode.OVERTAKE) if(c.aiLane<0) 5.0 else -5.0 else c.aiLane
-        val look=if(c.aiMode==AiMode.RECOVER) 7.0 else 9.0+c.speedMps*skill.lookAheadSeconds
+        val passLane=c.spec.circleRadiusM*2*TrackRules["aiPassCarWidths"]
+        val intendedLane=if(c.aiMode==AiMode.OVERTAKE) if(c.aiLane<0) passLane else -passLane else c.aiLane
+        val noseLook=(c.spec.circleOffsetM+c.spec.circleRadiusM)*2*TrackRules["aiLookCarLengths"]
+        val look=if(c.aiMode==AiMode.RECOVER) noseLook else noseLook+c.speedMps*skill.lookAheadSeconds
+        val lane=(intendedLane+(track.course?.laneAt(s+look)?:0.0)).coerceIn(-track.widthAt(s+look)*.55,track.widthAt(s+look)*.55)
         track.sample(s+look, lane+sin(steps*.007+c.id)*skill.laneErrorM,point)
         val desired=atan2(point.y-c.y,point.x-c.x)
         val slip=if(c.speedMps>2.0) wrapAngle(atan2(c.vy,c.vx)-c.heading) else 0.0
@@ -288,7 +297,7 @@ class World(val seed: Int=17, val spec: CarSpec=CarSpec(), val track: Track=Trac
         for(end in -1..1 step 2) {
             val ox=cos(c.heading)*spec.circleOffsetM*end; val oy=sin(c.heading)*spec.circleOffsetM*end
             track.project(c.x+ox,c.y+oy,projection)
-            val limit=track.halfWidthM-radius
+            val limit=track.widthAt(projection.s)-radius
             if(abs(projection.distance)>limit) {
                 val sign=if(projection.distance>0) 1.0 else -1.0
                 val nx=projection.nx*sign; val ny=projection.ny*sign
@@ -302,7 +311,8 @@ class World(val seed: Int=17, val spec: CarSpec=CarSpec(), val track: Track=Trac
     fun collide(a: Car,b: Car) {
         val sa=a.spec; val sb=b.spec; val limit=sa.circleRadiusM+sb.circleRadiusM
         val invA=1/sa.massKg; val invB=1/sb.massKg; val invSum=invA+invB
-        for(ea in -1..1 step 2) for(eb in -1..1 step 2) {
+        // A middle circle closes the side-contact gap on the longer W6 silhouettes.
+        for(ea in -1..1) for(eb in -1..1) {
             val ax=cos(a.heading)*sa.circleOffsetM*ea; val ay=sin(a.heading)*sa.circleOffsetM*ea
             val bx=cos(b.heading)*sb.circleOffsetM*eb; val by=sin(b.heading)*sb.circleOffsetM*eb
             val dx=b.x+bx-a.x-ax; val dy=b.y+by-a.y-ay

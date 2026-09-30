@@ -1,4 +1,4 @@
-# Death Ride ? Slipstream
+# Death Ride - Slipstream
 
 A standalone Kotlin/libGDX Fire TV spike. See `../index.html` for the evidence and verdict. The application owns the entire race; phones send only absolute input states. There are always six cars, at most two phone drivers, and three laps. There is no combat, audio, garage or downloaded game art.
 
@@ -17,7 +17,7 @@ From this directory in PowerShell:
 
 The default properties are `dev.deathride.tv` and `Death Ride`. Both override properties are optional. Output: `app/build/outputs/apk/debug/app-debug.apk`. The host's equivalent cmd.exe contract is `gradlew.bat :app:assembleDebug -PappId=<id> -PappLabel="<label>"`. Quote the entire `-P...` argument in PowerShell, especially IDs with periods and labels with spaces.
 
-Transfer `../deathride.apk` to the Stick using your existing Wi-Fi file-transfer/sideload tool. Open the APK with its package installer, permit installation for that tool if requested, and launch it from Apps. No device installation was performed during development. No device bridge or emulator was used.
+The current Phase 1 build is installed and checked on the reference AFTKM through adb using the default release identity `dev.deathride.tv` / `Death Ride`. Install `app/build/outputs/apk/debug/app-debug.apk` with `adb -s <stick-ip>:5555 install -r`, then launch `dev.deathride.tv/.MainActivity`. The older spike APK at the repository root is historical.
 
 ## Drive
 
@@ -70,7 +70,9 @@ Simulation runs at 60 Hz with no unseeded randomness or wall clock. Draws interp
 
 W1: LEFT/RIGHT selects the live feel preset; the phone FEEL sheet shares the same catalog. `core/src/main/resources/data/feel.csv` owns all feel parameters and acceptance bands. `/catalog` serves them and `/stats` includes the selected profile. `:core:test --tests "*FeelTest*"` emits the 60 steering traces. See `OWNER-CHECKS.md` for the optical recipe and preset exercises.
 
-Change `CarSpec` (SI units) and `AI_SKILLS` in `core/.../World.kt`. The three AI tiers share engine power and differ in reaction steps, line error, corner margin and look-ahead. DRIVE/OVERTAKE/RECOVER use perceived gaps or a sustained low speed, plus dwell/hysteresis. `World.trace` retains 600 steps per car as `mode*10 + reason` (1 blocked, 2 perceived car ahead, 3 dwell/recovery complete). No catch-up boost or teleport exists. Full game timing is fixed at 60 Hz; the 30/60 Hz test checks isolated handling, not equivalence of reaction-step-based AI and contact iterations.
+Car classes, stat mappings, physical silhouettes, surfaces, tracks and presentation budgets live in `core/src/main/resources/data`. `AI_SKILLS` in `core/.../World.kt` currently defines three reaction/line tiers; AI following distance derives from car dimensions and track rules. DRIVE/OVERTAKE/RECOVER use perceived gaps or sustained low speed, plus dwell/hysteresis. `World.trace` retains 600 steps per car as `mode*10 + reason` (1 blocked, 2 perceived car ahead, 3 dwell/recovery complete). No catch-up boost or teleport exists. Full game timing is fixed at 60 Hz; the 30/60 Hz test checks isolated handling, not equivalence of reaction-step-based AI and contact iterations.
+
+W6: MENU cycles five authored circuits in the lobby/results; CAR > Circuit selects them on the phone. The car size contract includes physical contact capsules, mass spread, grid and AI spacing. Track scenery, car silhouettes, skids, particles and system-font atlases are synthesized in code, without game art files. `:core:test --tests '*TracksTest*'` runs the geometry/pacing linter, six-car races, replay and allocation checks. `tools/track-check.mjs <url> <pin>` checks course selection and driving on the Stick using an emulated touch browser. `CHROME_EXECUTABLE` may point to the installed Chrome if Playwright's bundled browser is unavailable.
 
 Slipstream integrates yaw inertia and tire-force saturation, with brake-induced grip loss and a restoring yaw term. AI perceives its own slip and damps yaw. The camera follows with velocity look-ahead and speed zoom; two phone drivers widen the shared view, and a minimap preserves circuit context.
 

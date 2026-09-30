@@ -16,7 +16,8 @@ class CarClass(val values: Map<String,String>) {
             val index=CarCatalog.statNames.indexOf(m.stat)
             return m.base+m.perPoint*(stats.getValue(m.stat)+(bonuses?.get(index)?:0)).coerceIn(CarCatalog.statMin,CarCatalog.statMax)
         }
-        return CarSpec(maxSpeedMps=physical("maxSpeedMps"),accelerationMps2=physical("accelerationMps2"),
+        val shape=CarShapes.forId(id)
+        return CarSpec(circleRadiusM=shape.widthM*.5,circleOffsetM=(shape.lengthM-shape.widthM)*.5,maxSpeedMps=physical("maxSpeedMps"),accelerationMps2=physical("accelerationMps2"),
             lateralGripPerSecond=physical("lateralGripPerSecond"),maxLateralAccelerationMps2=physical("maxLateralAccelerationMps2"),
             massKg=physical("massKg"),steeringRateRadPerSecond=physical("steeringRateRadPerSecond"),yawResponseSeconds=physical("yawResponseSeconds"))
     }

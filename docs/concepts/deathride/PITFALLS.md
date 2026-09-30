@@ -1,4 +1,7 @@
 # Death Ride pitfalls
 
+- 2026-09-30 W6: Immediately restarting the Stick app after a two-socket probe left the port preflight reporting busy although no server listened. The preflight disabled address reuse, so recently closed TCP connections could block startup through TIME_WAIT. Set reuse before binding, as the listener does; an actually listening server still fails the occupied-port test. Observed via refused HTTP plus `Port 8765 unavailable` after reinstall/restart.
+- 2026-09-30 W6: A static track framebuffer must extend beyond the circuit's geometry bounds by the follow camera's visible margin. Otherwise a hard rectangular terrain edge enters the driving view. Keep this margin in presentation data and inspect a corner on the Stick, not only a full-course screenshot.
+
 - 2026-09-30 W1: `adb am start` can report success while the Stick display is asleep and libGDX has not opened its listener. Send WAKEUP (224), confirm `dumpsys power` Awake/ON, then launch. Keep-screen-on prevents sleeping after the activity is active; it does not wake an already sleeping device.
 - 2026-09-30 W1: Java 22 StrictMath FdLibm sin/cos/pow allocate temporary arrays in some compiled paths. JFR pinned double-array allocations to these functions (274 MB / 10,000 baseline steps). Small-angle polynomial trig plus exp/log powers avoids that runtime dependency; accuracy checked over 20,001 angles and every preset checked for zero allocation after warmup. Do not weaken the allocation gate to hide the runtime cost.
