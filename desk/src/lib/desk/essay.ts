@@ -7,6 +7,7 @@ import { text } from "../engines/text";
 import { ANALYSIS_TYPES, cleanFix, paragraphStats, revise, splitSentences, taught, type AnalysisType } from "../rules/essay";
 import { playFor } from "../library/lessons.data";
 import { addHistory, recordWriting } from "../session/learners";
+import { voiceOf, withManner } from "../rules/voice";
 import type { EssayAnalysis, Verdict } from "../session/store";
 
 /**
@@ -25,19 +26,29 @@ const SCHEMA = {
   required: ["verdicts", "summary"],
 };
 
-export async function analyseEssay(raw: string, type: AnalysisType, learnerId: string): Promise<EssayAnalysis> {
+/**
+ * The withholding rules of an essay reading, in every voice: a reading comments, it never writes the sentence for the
+ * learner, and a fix is a slotted template with none of their words. Both reading prompts below share these.
+ */
+export const NEVER_REWRITE = "Never rewrite their sentences for them.";
+export const PATTERN_RULE =
+  "A pattern is a template, never their sentence rewritten: none of their words, at least one [slot], at most ten words outside the slots. No fix on strong or neutral verdicts.";
+
+/** `age` is the seated profile's; without one the reading speaks as it always has (rules/voice, the teen band). */
+export async function analyseEssay(raw: string, type: AnalysisType, learnerId: string, age?: number): Promise<EssayAnalysis> {
   const sentences = splitSentences(raw);
   const stats = paragraphStats(sentences);
   const lens = ANALYSIS_TYPES.find((t) => t.id === type) ?? ANALYSIS_TYPES[0];
+  const voice = voiceOf("essay", age);
   const numbered = sentences.map((s) => `${s.n}. ${s.text}  [${s.words} words, first-pass role: ${s.role}]`).join("\n");
   const { json, provider } = await text<{ verdicts: EssayAnalysis["verdicts"]; summary: string }>({
-    system: `You are a writing tutor for a 15-year-old. Lens for this reading: ${lens.name} — ${lens.lens} ` +
+    system: withManner(`You are a writing tutor for ${voice.who}. Lens for this reading: ${lens.name} — ${lens.lens} ` +
       `Give one verdict per sentence, by its number: 'strong' for something done well, 'faulty' for a real problem, 'neutral' otherwise. ` +
-      `Each note is one short sentence a student can act on, no praise-padding. Never rewrite their sentences for them. ` +
+      `Each note is one short sentence a student can act on, no praise-padding. ${NEVER_REWRITE} ` +
       `For a 'faulty' verdict only, add a fix: 'move' names the technique in 2 to 6 words (for example "Concede, then turn it back"), ` +
       `and 'pattern' is a sentence frame with the content left as bracketed slots for the student to fill (for example "Although [the other side], [why your claim still holds]."). ` +
-      `A pattern is a template, never their sentence rewritten: none of their words, at least one [slot], at most ten words outside the slots. No fix on strong or neutral verdicts. ` +
-      `Then one summary sentence. Plain text, to be read aloud.`,
+      `${PATTERN_RULE} ` +
+      `Then one summary sentence. Plain text, to be read aloud.`, voice),
     prompt: `The student's paragraph, sentence by sentence:\n${numbered}\n\nCounts: ${stats.sentences} sentences, ${stats.claims} first-pass claims, ${stats.evidence} evidence, ${stats.connectors} connectors, average ${stats.avgWords} words.`,
     schema: SCHEMA, model: "best",
   });
@@ -79,7 +90,8 @@ const KINDS = new Set(["strong", "faulty", "neutral"]);
  * by code, not asked again. The new verdict remembers the sentence it replaced (`was`, from the first reading).
  * Nothing is written to the learner record: the paragraph was read once, and a rewrite is not another reading.
  */
-export async function reviseSentence(reading: EssayAnalysis, n: number, rewrite: string): Promise<EssayAnalysis> {
+export async function reviseSentence(reading: EssayAnalysis, n: number, rewrite: string, age?: number): Promise<EssayAnalysis> {
+  const voice = voiceOf("essay", age);
   const r = revise(reading, n, rewrite);
   if (!r.ok) throw new Error(r.error);
   const next = r.reading;
@@ -89,12 +101,12 @@ export async function reviseSentence(reading: EssayAnalysis, n: number, rewrite:
   const move = taught(before, { move: play.move, pattern: play.pattern })?.fix;
   const numbered = next.sentences.map((s) => `${s.n}. ${s.text}  [${s.words} words, first-pass role: ${s.role}]`).join("\n");
   const { json, provider } = await text<{ verdicts: Verdict[] }>({
-    system: `You are a writing tutor for a 15-year-old. Lens for this reading: ${lens.name} — ${lens.lens} ` +
+    system: withManner(`You are a writing tutor for ${voice.who}. Lens for this reading: ${lens.name} — ${lens.lens} ` +
       `The student has rewritten one sentence of their paragraph, sentence ${n}. Judge sentence ${n} alone, in the context of the paragraph, and give exactly one verdict, for sentence ${n}: ` +
       `'strong' if it now does its job, 'faulty' if the problem is still there, 'neutral' otherwise. Do not judge the other sentences. ` +
-      `The note is one short sentence a student can act on, no praise-padding. Never rewrite their sentences for them. ` +
+      `The note is one short sentence a student can act on, no praise-padding. ${NEVER_REWRITE} ` +
       `For a 'faulty' verdict only, add a fix: 'move' names the technique in 2 to 6 words, and 'pattern' is a sentence frame with the content left as bracketed slots. ` +
-      `A pattern is a template, never their sentence rewritten: none of their words, at least one [slot], at most ten words outside the slots. No fix on strong or neutral verdicts. Plain text, to be read aloud.`,
+      `${PATTERN_RULE} Plain text, to be read aloud.`, voice),
     prompt: `The student's paragraph, sentence by sentence, with sentence ${n} as rewritten:\n${numbered}\n\n` +
       `Before the rewrite, sentence ${n} read: "${old.text}"` + (before ? ` (${before.verdict}: ${before.note})` : "") + `.\n` +
       (move ? `The move they were asked to make: ${move.move} (pattern: ${move.pattern}).\n` : "") +

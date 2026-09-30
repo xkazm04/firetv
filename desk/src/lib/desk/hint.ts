@@ -17,6 +17,7 @@ import { cardText, type RuleCard } from "../rules/english";
 import { leaks, withheldLine } from "../rules/maths";
 import { leaksCalc, specFromQuestion, withheldCalc, type CalcSpec } from "../rules/calc";
 import type { MathPath } from "../library/paths";
+import { voiceOf, withManner, type Voice } from "../rules/voice";
 import type { Subject } from "../session/store";
 
 const SCHEMA = {
@@ -29,17 +30,21 @@ const SCHEMA = {
 };
 type Said = { hint: string; what_to_try_next: string };
 
-const STANCE: Record<Subject, string> = {
-  maths: "a maths tutor for a 15-year-old. This sheet is a factoring and linear-equations unit; prefer the unit's methods over heavier ones.",
-  english: "an English tutor for a Czech teenager learning English; explain in plain English, examples in English",
-  essay: "a writing tutor for a 15-year-old",
+/** Who the tutor is for, by subject: the words naming the learner come from the voice (rules/voice), the rest is the same at every age. */
+const STANCE: Record<Subject, (v: Voice) => string> = {
+  maths: (v) => `a maths tutor for ${v.who}. This sheet is a factoring and linear-equations unit; prefer the unit's methods over heavier ones.`,
+  english: (v) => `an English tutor for ${v.who} learning English; explain in plain English, examples in English`,
+  essay: (v) => `a writing tutor for ${v.who}`,
 };
+/** The withholding rule of every hint, in every voice and on every path. */
+export const HINT_WITHHOLD =
+  "Socratic rules, absolute: never state the final answer, never write the completed solution, never fill in a blank, never state a verb form or an ending.";
 /** The maths stance on the Calculus 1 path: a university course, its methods and its notation. */
 const CALC_STANCE =
   "a maths tutor for a first-year university student in Calculus I. Use the course's methods and notation - limits, " +
   "the derivative rules, antiderivatives and the Fundamental Theorem - and name the rule that applies";
 
-const stanceOf = (subject: Subject, path?: MathPath) => (subject === "maths" && path === "calc1" ? CALC_STANCE : STANCE[subject]);
+const stanceOf = (subject: Subject, voice: Voice, path?: MathPath) => (subject === "maths" && path === "calc1" ? CALC_STANCE : STANCE[subject](voice));
 
 /** Does this line give the item's answer away: the one leak rule, and the shape's own check when the item reads as a Calculus spec. */
 const leaksLine = (problem: string, spec: CalcSpec | null, line: string) => leaks(problem, line) || (spec !== null && leaksCalc(spec, line));
@@ -50,10 +55,12 @@ function leakedIn(problem: string, spec: CalcSpec | null, said: Said): string | 
   return inHint && inNext ? "the hint and what to try next" : inHint ? "the hint" : inNext ? "what to try next" : null;
 }
 
-export async function hint(subject: Subject, problem: string, opts: { previous?: string; askedQ?: string; rule?: RuleCard; path?: MathPath }) {
-  const system =
-    `You are ${stanceOf(subject, opts.path)}. Socratic rules, absolute: never state the final answer, never write the completed solution, ` +
-    `never fill in a blank, never state a verb form or an ending. Point at the method, the next step, or the mistake to avoid. ` +
+export async function hint(subject: Subject, problem: string, opts: { previous?: string; askedQ?: string; rule?: RuleCard; path?: MathPath; age?: number }) {
+  // The voice names the learner and adds one manner paragraph; the rules below are shared by every band. A Calculus
+  // learner is spoken to as the course's student whatever their age, so that path takes the teen voice (today's text).
+  const voice = voiceOf(subject, subject === "maths" && opts.path === "calc1" ? undefined : opts.age);
+  const system = withManner(
+    `You are ${stanceOf(subject, voice, opts.path)}. ${HINT_WITHHOLD} Point at the method, the next step, or the mistake to avoid. ` +
     `Two or three sentences at most. Plain text only — no LaTeX, no markdown; write x^2 as x². This will be read aloud.\n\n` +
     `Who reads it: the learner, on the TV and aloud - both the hint and what_to_try_next. Speak to them as "you". ` +
     `Never refer to the learner in the third person and never write instructions for a teacher, parent or tutor. ` +
@@ -64,7 +71,8 @@ export async function hint(subject: Subject, problem: string, opts: { previous?:
     `say "subtract 5"; it says where to write their answer. ` +
     `You have not seen their work and they have not answered you: do not open with praise, agreement or a verdict ` +
     `(no "Perfect", "Great", "Right", "Good"); start with the maths.` +
-    (opts.rule ? `\n\nThe grammar that applies has been worked out already. Use it and do not contradict it:\n${cardText(opts.rule)}` : "");
+    (opts.rule ? `\n\nThe grammar that applies has been worked out already. Use it and do not contradict it:\n${cardText(opts.rule)}` : ""),
+    voice);
   const stage = opts.previous
     ? `The learner already had this hint and pressed "still stuck":\n«${opts.previous}»\nGive the NEXT hint. It must go ONE STEP FURTHER than the previous one — do not repeat it — and still stop short of the answer.`
     : `Give the FIRST hint: the smallest push that gets the learner moving.`;

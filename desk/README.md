@@ -76,6 +76,13 @@ it does not test microphone hardware. Other engine caches keep their existing lo
 (the vision model is 17 GB and loads on first use, ~45 s once), a hint 2–8 s, a lesson pick a few
 seconds plus a one-time ~1 min to embed the transcripts (cached in `data/embeddings.json`).
 
+**Age-fit voice** (`src/lib/rules/voice.ts`, Family mode W2). The text engine's tutor prompts (maths hints and
+explanations, essay readings, the English caption) speak in one of two voices by the seated profile's age, which
+`api/hint`, `api/explain` and `api/analyse` read from the session. A learner of 14 or over, or with no age, gets the
+prompt that shipped before, byte for byte; a known age of 13 or under gets short sentences and everyday words, wrapped
+around the same rules (the withholding clauses are shared constants, never copied). The young voice is validated for
+ages 11-13 only, and a Calculus learner is not age-voiced. Tone is not test-decidable: a person reads it (`tools/voice-rules-test.cjs`).
+
 ## Where things are
 
 ```

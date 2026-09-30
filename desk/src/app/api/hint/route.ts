@@ -1,7 +1,8 @@
 /**
  * A hint for the focused item (or the item the phone circled), then the lesson pick behind it. The learner's Math
  * path is read here and handed to hint(); on the Calculus path a maths item has no lesson library to pick from, so
- * the lesson job ends as 'no lesson' without asking the picker (which would offer a school algebra video).
+ * the lesson job ends as 'no lesson' without asking the picker (which would offer a school algebra video). The seated
+ * profile's age is read here too, for the tutor's voice (rules/voice).
  */
 import { NextResponse } from "next/server";
 import { dispatch, getSession, NOBODY_AT_DESK } from "@/lib/session/store";
@@ -10,6 +11,7 @@ import { pickLesson } from "@/lib/desk/pick";
 import { BUSY, refused, runJob } from "@/lib/desk/job";
 import { resolveEnglish } from "@/lib/rules/english";
 import { learnerPath } from "@/lib/library/paths";
+import { learnerAge } from "@/lib/rules/voice";
 
 export const dynamic = "force-dynamic";
 export async function POST(req: Request) {
@@ -23,11 +25,11 @@ export async function POST(req: Request) {
   if (getSession().jobs?.hint?.phase === "running") return refused({ status: 409, error: BUSY });
   if (typeof body.itemIx === "number") dispatch({ type: "item", itemIx: body.itemIx });
 
-  const path = learnerPath(s);
+  const path = learnerPath(s), age = learnerAge(s);
   const prev = s.hint;
   if (body.stage === 2 && prev && prev.key === item.key) {
     const r = await runJob("hint", async () => {
-      const h2 = await hint(page.subject, item.text, { previous: [prev.hint1?.hint, prev.hint1?.next].filter(Boolean).join(" "), askedQ: prev.askedQ, rule: prev.rule, path });
+      const h2 = await hint(page.subject, item.text, { previous: [prev.hint1?.hint, prev.hint1?.next].filter(Boolean).join(" "), askedQ: prev.askedQ, rule: prev.rule, path, age });
       dispatch({ type: "hint.set", hint: { ...prev, stage: 2, hint2: { hint: h2.hint, next: h2.next }, ms: h2.ms, owner: prev.owner ?? who.id } });
       dispatch({ type: "hint.stage", stage: 2, owner: prev.owner ?? who.id });
       return h2;
@@ -36,7 +38,7 @@ export async function POST(req: Request) {
   }
   const rule = page.subject === "english" ? resolveEnglish(item.text) : undefined;
   const r = await runJob("hint", async () => {
-    const h1 = await hint(page.subject, item.text, { askedQ: body.askedQ, rule, path });
+    const h1 = await hint(page.subject, item.text, { askedQ: body.askedQ, rule, path, age });
     dispatch({ type: "hint.set", hint: { key: item.key, problem: item.text, stage: 1, hint1: { hint: h1.hint, next: h1.next }, hint2: null, askedQ: body.askedQ ?? "", rule, provider: h1.provider, ms: h1.ms, owner: who.id } });
     return h1;
   }, { key: item.key, input: { itemIx, askedQ: body.askedQ ?? "" }, start: "thinking about a hint…", done: (h1) => `hint in ${(h1.ms / 1000).toFixed(1)} s · finding the lesson…` });

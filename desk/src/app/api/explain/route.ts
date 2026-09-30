@@ -7,6 +7,7 @@ import { NextResponse } from "next/server";
 import { dispatch, getSession, NOBODY_AT_DESK } from "@/lib/session/store";
 import { explainItem } from "@/lib/desk/explain";
 import { refused, runJob } from "@/lib/desk/job";
+import { learnerAge } from "@/lib/rules/voice";
 
 export const dynamic = "force-dynamic";
 export async function POST(req: Request) {
@@ -24,7 +25,7 @@ export async function POST(req: Request) {
     return !!now && now.owner === practice.owner && now.topic === practice.topic && it?.question === item.question ? it : undefined;
   };
   const r = await runJob("explain", async () => {
-    const x = await explainItem(item, transcript ?? "", practice.topic, who.id, () => same()?.verdict === "unsure");
+    const x = await explainItem(item, transcript ?? "", practice.topic, who.id, () => same()?.verdict === "unsure", learnerAge(s));
     // an unsure item settles; a wrong one only takes the slip the explanation named (the reducer keeps its verdict and pen)
     if (same()) dispatch({ type: "practice.settle", n: item.n, reply: x.reply, ...(x.settled ?? x.renamed ?? {}) });
     return x;
