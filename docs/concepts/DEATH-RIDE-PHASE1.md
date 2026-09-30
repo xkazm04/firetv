@@ -41,8 +41,8 @@ saying exactly what the owner should try and what "good" and "bad" look like; (7
 | 1 | W1 | **Feel Lab**: research and calibration of steering, throttle and brake; live presets; telemetry | - | done; owner feel pending | aaa8546 | 2026-09-30 |
 | 2 | W2 | **Cars and stats**: car classes, the stat model, data-driven car specs | W1 | done; owner feel pending | bd5eb67 | 2026-09-30 |
 | 3 | W3 | **Advanced vehicle movement**: weight transfer, handbrake and drift, surfaces, mass-based collisions | W2 | done; owner feel pending | 2e238cb | 2026-09-30 |
-| 4 | W4 | **Weapons and damage**: weapon design and execution, HP, armor, wrecks, and **the controller layout rethink** | W3, C1 | design note drafted (uncommitted by the run, committed by host), not implemented | | |
-| 4b | C1 | **Calibration round (added by host)**: the owner rates W1-W3 by hand on the Stick; one default preset and tightened bands follow | W3 + owner | waiting for the owner | | |
+| 4 | W4 | **Weapons and damage**: weapon design and execution, HP, armor, wrecks, and **the controller layout rethink** | W3 | design note drafted (uncommitted by the run, committed by host), not implemented | | |
+| 4b | C1 | **Calibration round (added by host)**: the owner rates W1-W3 by hand on the Stick; one default preset and tightened bands follow | W3 + owner | **closed 2026-09-30: owner approved the five presets as they are, no calibration**; feel is fine-tuned after tracks, car sizing and the other mechanics exist | | |
 | 5 | W5 | **Parts and shop**: parts design, economy, garage on TV and phone, save file | W4 | not started | | |
 | 6 | W6 | **Tracks**: track format, authoring, linter, a set of tracks that escalate | W3 | not started | | |
 | 7 | W7 | **Campaign**: ladder, rivals, difficulty, progression, pacing simulation | W5, W6 | not started | | |
@@ -223,3 +223,20 @@ Not re-checked by the host: the Stick evidence (browser-check, probe, wave-check
    Hammer (slow heavy projectile), Mine (rear drop with an arming delay), and three layouts to try (Classic, Cruise, Split) with a
    left-handed mirror. Its layout choice depends on how steering ends up feeling, which is why C1 comes first.
 4. W5 to W8 unchanged, in order. At this pace they could be one or two runs, with the owner check between W5 and W6.
+
+## g. Owner direction, 2026-09-30 (after W1-W3)
+
+> "The game is nowhere near real videogame quality even on scale of the 1996 original ... once we resolve tracks, cars and their sizing and other
+> mentioned mechanics we can finetune the user feel. We are still operating on game quality of game boy devices and lot of work is ahead."
+
+Consequences for the remaining waves:
+
+1. **Presets approved as is.** No calibration round. Do not retune feel except where a new mechanic forces it.
+2. **New order: W6 (tracks) first, then W4, W5, W7, W8.** W6 depends only on W3. Tracks, car size and world scale are what the owner sees first.
+3. **W6 gains a scale-and-sizing pass** as its first deliverable: a written scale contract (metres per pixel, car length and width per class, track
+   width in car-widths, camera zoom range so a car is large enough to read on a TV from a sofa, minimap), applied to every car and track. Cars
+   must be drawn far bigger and more readable than the current tiny rectangles; track width, corner radii and lengths are designed against car size.
+   Also raise the placeholder presentation toward a real top-down look within the no-art rule: car silhouettes per class with distinct shapes,
+   wheels, shading and shadow drawn in code, track edges, kerbs, surface textures made procedurally, skid marks, dust/smoke particles, a proper
+   HUD. Everything stays generated in code (no downloaded assets), and the frame budget on the Stick stays inside the W1 figures.
+4. The remaining waves keep their cards. Report honestly where the result is still far below a real game; do not claim quality the owner has not seen.
