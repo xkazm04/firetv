@@ -99,6 +99,11 @@ export interface PracticeItem {
   spec?: CalcSpec | SchoolSpec;
   /** A school item's tier (1 or 2), as the generator that wrote it was asked for: computed by code, never a model's number. */
   tier?: 1 | 2;
+  /**
+   * Set by code when the set was asked for as "a step up" (Family W8, rules/stretch): marking records this item's attempt
+   * on the step-up record only (lib/session/learners.ts `stretch`), never on the usual one. Absent is a usual item.
+   */
+  stretch?: true;
 }
 /**
  * `nth`: which occurrence of `span` in the line is meant (0 = the first, as maths/typeset `spanStarts` counts
@@ -114,7 +119,8 @@ const slipAtOf = (x: unknown): SlipAt | undefined => {
   if (Number.isInteger(o.nth) && o.nth! >= 0) at.nth = o.nth;
   return at;
 };
-export interface Practice { topic: string; items: PracticeItem[]; pageId?: string; marked: boolean; owner?: string; }
+/** `stretch`: the set was asked for as "a step up" (Family W8); every item carries the same flag. Absent is a usual set. */
+export interface Practice { topic: string; items: PracticeItem[]; pageId?: string; marked: boolean; owner?: string; stretch?: true; }
 
 /** A spec's own parameters, by name: the ones its question prints. `zero` (the result, for a symmetry item) is not one. */
 const SPEC_KEYS = ["f", "at", "a", "b", "side", "on", "kind", "x0", "steps"] as const;
@@ -147,7 +153,7 @@ function specShown(x: unknown): CalcSpec | SchoolSpec | undefined {
   return out as unknown as CalcSpec;
 }
 /** Only the fields a screen may see — an answer riding in on an event or an older session.json stops here. */
-function shown({ n, question, studentAnswer, studentWorking, verdict, slip, said, reply, slipAt, spec, tier }: PracticeItem): PracticeItem {
+function shown({ n, question, studentAnswer, studentWorking, verdict, slip, said, reply, slipAt, spec, tier, stretch }: PracticeItem): PracticeItem {
   const item: PracticeItem = { n, question };
   if (studentAnswer !== undefined) item.studentAnswer = studentAnswer;
   if (studentWorking !== undefined) item.studentWorking = studentWorking;
@@ -160,9 +166,16 @@ function shown({ n, question, studentAnswer, studentWorking, verdict, slip, said
   const sp = specShown(spec);
   if (sp) item.spec = sp;
   if (sp && (tier === 1 || tier === 2)) item.tier = tier;
+  // the step-up flag is code's own and only ever true: anything else on an event or an older file is a usual item
+  if (stretch === true) item.stretch = true;
   return item;
 }
-const shownPractice = (p: Practice | null | undefined): Practice | null => (p ? { ...p, items: (p.items ?? []).map(shown) } : null);
+/** A set as a screen may see it: its items `shown`, and the step-up flag kept only when it is true. */
+const shownPractice = (p: Practice | null | undefined): Practice | null => {
+  if (!p) return null;
+  const { stretch, ...rest } = p;
+  return { ...rest, items: (p.items ?? []).map(shown), ...(stretch === true ? { stretch: true as const } : {}) };
+};
 /**
  * The homework pipelines (lib/desk/job.ts runs each one). One record per kind: the latest run of that kind,
  * so a screen can tell "under way" from "done" from "failed" without inferring it from a scatter of flags.

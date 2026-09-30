@@ -241,6 +241,38 @@ every new shape. Every question is a short imperative or a one-line statement, n
   for all four (Grade 6), UK two later for area and the mean (Year 6), DE one earlier for ratio, unit rates and a
   triangle's area (Klasse 7), CZ one later for the mean. A UK 12-year-old's SCHOOL tick stands after 14 of the 15.
 
+### 2e. How hard a set is: the baseline mix and "a step up" (Family W8)
+
+A school set's difficulty is its **mix** of tier-1 and tier-2 items, set by CODE (`desk/src/lib/rules/stretch.ts`), never
+by a model's `difficulty`. The learner's school year is `schoolYear(system, age)` (`library/syllabus.ts`, age -
+`SYSTEM_START` + 1, the rule behind the SCHOOL tick: a UK 12-year-old is in Year 8); the unit's year is its syllabus year
+in the learner's system. The age is read only for a learner at school (type "other" has none, as for the tick).
+
+| rung | tier 1 | tier 2 | when |
+|---|---|---|---|
+| easier | 4 | 2 | the baseline when the unit is ahead of the learner (their year < the unit's year) |
+| standard | 3 | 3 | the baseline at or past the unit's year, and whenever the year is unknown (no age, not at school, an unknown system): every set before W8 |
+| harder | 2 | 4 | a step up from standard |
+
+**A step up** (`stepUpMix`) is the next rung above the learner's baseline: easier becomes standard, standard becomes
+harder. So a step-up set is strictly harder than the baseline set for the same learner on the same unit (more tier-2
+items) with the same content and six distinct questions (`tools/school-stretch-test.cjs` test 2, every unit with a
+generator, ages 10-14 and none, all four systems). `POST /api/practice` takes `{ topic, stretch: true }` and reads the
+seated profile's age and system. On a topic with no generator (the three linear topics, Calculus 1) the model road
+has no tiers, so a step-up set is asked for exactly as a usual one; only its record differs.
+
+**The step-up record.** Every item of a step-up set, and the set, carry `stretch: true` beside the code-set `tier`
+(`PracticeItem.stretch`, `Practice.stretch`; the store keeps it only as `true`). Marking - a photo, typed answers, or an
+explanation that settles an unsure item - records such an attempt on `SkillRecord.stretch` (`lib/session/learners.ts`
+`recordAttempt(id, topic, right, slip, { stretch, tier })`): its own `seen`, `right`, `estimate`, `secure` and
+`lastSeen`, moved by the same `step` (30% toward the outcome, secure latched at 0.85 with four seen, never unset). A
+step-up attempt never moves the usual record (a slip at step-up cannot lower or unset it, and is not added to the usual
+slips), and a usual attempt never moves the step-up record. A step-up attempt on a topic with no record makes a usual
+record with nothing seen, which every screen reads as not started. `cleanSkills` keeps the field (whole counts,
+`right` at most `seen`, the estimate in 0..1, `secure` only when `true`) and drops junk; an older learners.json loads
+unchanged. The history line and the recap are the same as for a usual set ("5 of 6 right", never a point). The TV
+draws a latched step-up record as a second ink line (`docs/DESIGN-MATH-BUDDY.md`), never as a number.
+
 ## 3. The spec model
 
 A Calculus practice item is a **spec**: one of nine shapes and its parameters, never free text with a stated
@@ -480,6 +512,7 @@ provider registry, and data directories are disposable, under the OS temp dir.
 | `tools/school-rules-test.cjs` | the school number core (W5a): the reader, `check`, `leaksSchool`, the generator; W7: a spellings table per unit (101, 68, 84 rows), leak and legit tables per unit, the closed slip lists, each generator's seeds and tiers; W7 batch 2 (W7b): the same per decimals and percent unit (99, 108, 87, 71 rows), wellFormed and question rows, purity; W7 batch 3 (W7c): the same per ratio, rate, area and mean unit (112, 82, 77, 69 rows), the typeset squared unit |
 | `tools/school-practice-test.cjs` | the fifteen-topic path (W7c 1: the four batch-3 units, years, prerequisites, every school unit with a generator; W7c 2, 3, 5b per unit, a set's kinds mixed); W7b 1: the four decimals and percent units, years and prerequisites); a set by code per batch-2 unit, the route's code/0, `to` through the store and a reload; each unit's set by code with zero engine calls (`makeItems`, the route, `makeSchoolItems`); the new shapes through the store and a reload; a fractions set by code with zero engine calls, six distinct, tiers by code, the route's code/0, the spec through the store and a reload, a linear topic still calling once |
 | `tools/school-marking-test.cjs` | W7c: each batch-3 unit's task reader (44, 38, 37, 35 phrasings), withheld line, full set by photo and by typing, hint stance, an explained share and area; W7b: each decimals and percent unit's task reader (46, 44, 40, 37 phrasings), withheld line, full set by photo and by typing, hint stance, an explained percent; W7: each unit's task reader (47, 41, 34 phrasings), withheld line, a full set marked the same from a photo and from typing, the hint stance per unit; the unit's closed slip list; the shape dispatch; a stubbed sheet marked under uk, cz and us; `specFromQuestion` (53 phrasings); the two-strike hint fallback and the unit stance; the lesson skip; explanation settle and leak; the Calculus explain prompt byte for byte |
+| `tools/school-stretch-test.cjs` | the step-up (W8): the baseline mix table over every unit, ages 10-14 and none, all four systems; a step up strictly harder for every unit (six distinct, zero engine calls); the practice route's `stretch` and its retry; the model road unchanged for a step up; the two records never crossed (byte-identical usual record), the step-up latch, junk and an old file; typed, photo and explanation paths recording on the step-up record; the same history line and recap; no `difficulty` read |
 | `tools/school-ruler-test.cjs` | the school frontier on the ruler, the strip and Topics (fifteen topics); the strand strip at fifteen topics (six bars, every label whole, shares, `stripAt`, `stripFlag`); Calculus unchanged; the SCHOOL tick drawn and no gap line in MathsTV for every system; `flagOnStage` (on the panning Topics ruler the tick is drawn only on the stage, its pill turned inward at an edge) |
 
 **The live probe** is not in `npm test`; the Director runs it against an isolated server:

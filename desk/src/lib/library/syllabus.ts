@@ -264,11 +264,19 @@ export function nextTopic(secure: string[]): Topic | undefined {
 export const SYSTEM_START: Record<SchoolSystem, number> = { us: 6, uk: 5, cz: 6, de: 6 };
 
 /**
+ * The school year a learner of that age is in, in that system's own numbering (a UK 12-year-old is in Year 8, a US one in
+ * Grade 7): age - SYSTEM_START + 1. Our own reading, like SYSTEM_START; it ignores the birthday cut-off.
+ */
+export function schoolYear(system: SchoolSystem, age: number): number {
+  return age - SYSTEM_START[system] + 1;
+}
+
+/**
  * How many topics on this path a learner of that age is normally already past.
  * -1 when none of them is: there is nothing behind them yet.
  */
 export function expectedIndex(system: SchoolSystem, age: number): number {
-  const yr = age - SYSTEM_START[system] + 1;
+  const yr = schoolYear(system, age);
   const n = SYLLABUS.filter((t) => t.year[system] <= yr).length;
   return n === 0 ? -1 : n;
 }

@@ -26,6 +26,9 @@
  * learner's school system (the route reads it; UK when none): unsure asks and records nothing. The slip is the one
  * code detects from the spec's operands, from the unit's closed list. Still one vision call per sheet.
  *
+ * An item of a set asked for as "a step up" (`stretch`, Family W8) is marked exactly as any other; only its attempt goes to
+ * the learner's step-up record instead of the usual one (land -> recordAttempt). The history line is the same line.
+ *
  * Nothing here ever puts the answer on screen, and no `said` line carries a value.
  */
 import { vision } from "../engines/vision";
@@ -174,7 +177,7 @@ export async function markSet(
   for (const m of json?.items ?? []) if (m && typeof m.n === "number") byN.set(m.n, m);
 
   let unsure = 0;
-  const attempts: { right: boolean; slip?: string }[] = [];
+  const attempts: Attempt[] = [];
   const items: PracticeItem[] = practice.items.map((item) => {
     const m = byN.get(item.n);
     const studentAnswer = clean(m?.studentAnswer);
@@ -199,7 +202,7 @@ export async function markSet(
     // never a value.
     const { verdict, slip, said } = settled(item.n, student, m?.slip, practice.topic);
 
-    attempts.push({ right: verdict === "right", slip });
+    attempts.push({ right: verdict === "right", slip, ...setOf(item) });
     // 8 - where the working broke: rules/maths locates it from the learner's own lines and a root found in code
     const slipAt = verdict === "wrong" ? locate(item.question, workingLines({ ...item, studentWorking, studentAnswer })) : undefined;
     return { ...item, studentAnswer, studentWorking, verdict, slip, said, ...(slipAt ? { slipAt } : {}) };
@@ -222,7 +225,7 @@ async function markCalc(
   for (const m of json?.items ?? []) if (m && typeof m.n === "number") byN.set(m.n, m);
 
   let unsure = 0;
-  const attempts: { right: boolean; slip?: string }[] = [];
+  const attempts: Attempt[] = [];
   const items: PracticeItem[] = practice.items.map((item) => {
     const m = byN.get(item.n);
     // only what is written on the page is read: never a verdict, never a solution
@@ -234,7 +237,7 @@ async function markCalc(
       unsure++;
       return { ...item, studentAnswer, studentWorking, verdict: "unsure" as const, said: ASK(item.n) };
     }
-    attempts.push({ right: s.verdict === "right", slip: s.slip });
+    attempts.push({ right: s.verdict === "right", slip: s.slip, ...setOf(item) });
     // no pen position on a Calculus item: the Walk falls back to the answer line
     return { ...item, studentAnswer, studentWorking, verdict: s.verdict, slip: s.slip, said: s.said };
   });
@@ -256,7 +259,7 @@ async function markSchool(
   for (const m of json?.items ?? []) if (m && typeof m.n === "number") byN.set(m.n, m);
 
   let unsure = 0;
-  const attempts: { right: boolean; slip?: string }[] = [];
+  const attempts: Attempt[] = [];
   const items: PracticeItem[] = practice.items.map((item) => {
     const m = byN.get(item.n);
     // only the answer string it transcribed reaches the check: never a verdict, a solution or a slip the model adds
@@ -267,7 +270,7 @@ async function markSchool(
       unsure++;
       return { ...item, studentAnswer, studentWorking, verdict: "unsure" as const, said: ASK(item.n) };
     }
-    attempts.push({ right: s.verdict === "right", slip: s.slip });
+    attempts.push({ right: s.verdict === "right", slip: s.slip, ...setOf(item) });
     return { ...item, studentAnswer, studentWorking, verdict: s.verdict, slip: s.slip, said: s.said };
   });
 
@@ -301,7 +304,7 @@ export function markTyped(
   system: SchoolSystem = DEFAULT_SCHOOL_SYSTEM,
 ): { items: PracticeItem[]; provider: string; ms: number; unsure: number; landed: boolean } {
   let unsure = 0;
-  const attempts: { right: boolean; slip?: string }[] = [];
+  const attempts: Attempt[] = [];
   const items: PracticeItem[] = practice.items.map((item, i) => {
     // what was typed, on one line: a stray newline or run of spaces is the keyboard's, not the child's
     const studentAnswer = typeof answers[i] === "string" ? oneLine(answers[i]) : "";
@@ -310,7 +313,7 @@ export function markTyped(
       unsure++;
       return { ...item, studentAnswer, studentWorking: "", verdict: "unsure" as const, said: ASK(item.n) };
     }
-    attempts.push({ right: s.verdict === "right", slip: s.slip });
+    attempts.push({ right: s.verdict === "right", slip: s.slip, ...setOf(item) });
     return { ...item, studentAnswer, studentWorking: "", verdict: s.verdict, slip: s.slip, said: s.said };
   });
   return land(practice, learnerId, stillSame, items, attempts, { provider: "code", ms: 0, unsure });
@@ -329,20 +332,28 @@ function typedSettle(item: PracticeItem, answer: string, topic: string, system: 
   return rest;
 }
 
+/** One settled item's attempt, and how its item was set: a step-up item (Family W8) and its code-set tier. */
+interface Attempt { right: boolean; slip?: string; stretch?: boolean; tier?: 1 | 2 }
+/** How an item was set, as its attempt carries it: the step-up flag and the tier, both code's own (absent is a usual item). */
+const setOf = (item: PracticeItem): { stretch?: boolean; tier?: 1 | 2 } => ({
+  ...(item.stretch === true ? { stretch: true } : {}), ...(item.tier === 1 || item.tier === 2 ? { tier: item.tier } : {}),
+});
+
 /** Record a marked set once, and only while it is still the set on the desk. */
 function land(
   practice: Practice,
   learnerId: string,
   stillSame: () => boolean,
   items: PracticeItem[],
-  attempts: { right: boolean; slip?: string }[],
+  attempts: Attempt[],
   run: { provider: string; ms: number; unsure: number },
 ): { items: PracticeItem[]; provider: string; ms: number; unsure: number; landed: boolean } {
   // 9 - the desk has moved on while the model read the page: the verdicts are not this set's to record
   if (!stillSame()) return { items, ...run, landed: false };
 
   // only settled items reach the record, each once, and only for the set still on the desk
-  for (const a of attempts) recordAttempt(learnerId, practice.topic, a.right, a.slip);
+  // a step-up item's attempt goes to the step-up record only (learners.ts recordAttempt, Family W8)
+  for (const a of attempts) recordAttempt(learnerId, practice.topic, a.right, a.slip, { stretch: a.stretch, tier: a.tier });
   // what happened, in one line the home screen can read back: never invented, always these counts
   // (rules/maths; a later settle restates the same line from the same verdicts - session/store). The label is the
   // topic's name on whichever path it belongs to (topicIn), as session/store's restate reads it.

@@ -13,8 +13,15 @@
  * on the item so marking can judge with no stored truth (makeCalcItems).
  *
  * A school unit with a generator (rules/school SCHOOL_GENERATORS; Family W5b and W7: every school unit, fractions to mean and range) takes a
- * third road with NO model call at all: code draws the specs from a fresh seed, three at tier 1 and three at tier 2,
- * prints each question itself and carries the spec and the tier on the item (makeSchoolItems, provider "code").
+ * third road with NO model call at all: code draws the specs from a fresh seed, at the mix of tier-1 and tier-2 items
+ * rules/stretch sets for the learner (Family W8: three and three at the standard baseline, four and two when the unit is
+ * ahead of the learner's school year, one rung harder for "a step up"), prints each question itself and carries the spec
+ * and the tier on the item (makeSchoolItems, provider "code").
+ *
+ * A set asked for as "a step up" (`stretch`, Family W8) carries `stretch: true` on every item, whichever road wrote it,
+ * so marking records its attempts on the step-up record only (lib/session/learners.ts). On a topic with no generator
+ * (the three linear topics, Calculus 1) the step up changes nothing about how the set is written: the model road has no
+ * tiers, so the set is asked for exactly as usual and only its record differs.
  */
 import { text } from "../engines/text";
 import { topic } from "../library/syllabus";
@@ -27,6 +34,7 @@ import { CALC1_SPINE } from "../library/calculus1.spine";
 import { CALC_SLIPS, leaksCalc, question as printed, wellFormed, type CalcShape, type CalcSpec } from "../rules/calc";
 import { generatorFor, leaksSchool, question as schoolQuestion, wellFormed as schoolWellFormed, type SchoolSpec } from "../rules/school";
 import type { JSONSchema } from "../engines/types";
+import { setMix, tierCounts, type Mix, type MixFor } from "../rules/stretch";
 
 const SCHEMA = {
   type: "object",
@@ -95,13 +103,30 @@ function keep(cands: Candidate[] | undefined, have: PracticeItem[]): Candidate[]
   return out;
 }
 
+/**
+ * What a set is asked for with, beside its topic: whether it is "a step up" (Family W8), and the learner's age and school
+ * system as the seated profile gives them (the practice route reads them), from which rules/stretch sets a school unit's
+ * mix. All optional: a call without them writes the standard set, as every set was written before W8.
+ */
+export interface SetAsk extends MixFor { stretch?: boolean }
+
 export async function makeItems(
   topicId: string,
   learnerId: string,
   n = 6,
+  opts: SetAsk = {},
 ): Promise<{ items: PracticeItem[]; provider: string; ms: number; tries: number }> {
-  if (pathOfTopic(topicId) === "calc1") return makeCalcItems(topicId, learnerId, n);
-  if (pathOfTopic(topicId) === "school" && generatorFor(topicId)) return makeSchoolItems(topicId, n);
+  const stretch = opts.stretch === true;
+  // a step up on a road with no tiers is asked for as usual and only marked as a step up (see the file header)
+  const flag = (r: { items: PracticeItem[]; provider: string; ms: number; tries: number }) =>
+    stretch ? { ...r, items: r.items.map((it) => ({ ...it, stretch: true as const })) } : r;
+  if (pathOfTopic(topicId) === "calc1") return flag(await makeCalcItems(topicId, learnerId, n));
+  if (pathOfTopic(topicId) === "school" && generatorFor(topicId)) return makeSchoolItems(topicId, n, undefined, setMix(topicId, opts, stretch), stretch);
+  return flag(await makeLinearItems(topicId, learnerId, n));
+}
+
+/** A linear-equation set, written by the model and kept only where substitution proves its stated answer. */
+async function makeLinearItems(topicId: string, learnerId: string, n: number): Promise<{ items: PracticeItem[]; provider: string; ms: number; tries: number }> {
   const me = getLearner(learnerId);
   const memory = me.memory;
   // the named mistakes this learner has made HERE: the set is written for them, not for the topic
@@ -293,20 +318,22 @@ const SCHOOL_TRIES = 400;
 const freshSeed = () => Math.floor(Math.random() * 0x100000000);
 
 /**
- * A set on a school unit that has a generator, written by CODE with no model call: the first half (rounded up) at
- * tier 1 and the rest at tier 2 - three and three for six - drawn from `seed` onward (a fresh seed per set unless
- * one is given, which the tests do). A spec is kept only when rules/school says it is well formed, prints, does not
- * state its own answer in its question (leaksSchool) and is not a question already kept, so the six are distinct.
- * The tier is the one code asked the generator for, never a model's number. Each item is { n, question: the printed
- * question, spec, tier }; provider "code", no tries (no engine call). Fewer than n only if a generator runs dry.
+ * A set on a school unit that has a generator, written by CODE with no model call: `mix` (rules/stretch, "standard" by
+ * default: the first half rounded up at tier 1 and the rest at tier 2, three and three for six; "easier" four and two;
+ * "harder" two and four) drawn from `seed` onward (a fresh seed per set unless one is given, which the tests do). A spec
+ * is kept only when rules/school says it is well formed, prints, does not state its own answer in its question
+ * (leaksSchool) and is not a question already kept, so the six are distinct. The tier is the one code asked the
+ * generator for, never a model's number. Each item is { n, question: the printed question, spec, tier }, and
+ * `stretch: true` beside the tier when the set is a step up; provider "code", no tries (no engine call). Fewer than n
+ * only if a generator runs dry.
  */
-export function makeSchoolItems(topicId: string, n = 6, seed: number = freshSeed()): { items: PracticeItem[]; provider: string; ms: number; tries: number } {
+export function makeSchoolItems(topicId: string, n = 6, seed: number = freshSeed(), mix: Mix = "standard", stretch = false): { items: PracticeItem[]; provider: string; ms: number; tries: number } {
   const t0 = Date.now();
   const make = generatorFor(topicId);
   const kept: { spec: SchoolSpec; question: string; tier: 1 | 2 }[] = [];
   const seen = new Set<string>();
-  const first = Math.ceil(n / 2);
-  for (const [tier, want] of [[1, first], [2, n - first]] as const) {
+  const { tier1, tier2 } = tierCounts(mix, n);
+  for (const [tier, want] of [[1, tier1], [2, tier2]] as const) {
     let got = 0;
     for (let k = 0; make && k < SCHOOL_TRIES && got < want; k++) {
       const spec = make((seed + k) % 0x100000000, tier);
@@ -320,5 +347,5 @@ export function makeSchoolItems(topicId: string, n = 6, seed: number = freshSeed
       got++;
     }
   }
-  return { items: kept.slice(0, n).map((k, ix) => ({ n: ix + 1, question: k.question, spec: k.spec, tier: k.tier })), provider: "code", ms: Date.now() - t0, tries: 0 };
+  return { items: kept.slice(0, n).map((k, ix) => ({ n: ix + 1, question: k.question, spec: k.spec, tier: k.tier, ...(stretch ? { stretch: true as const } : {}) })), provider: "code", ms: Date.now() - t0, tries: 0 };
 }

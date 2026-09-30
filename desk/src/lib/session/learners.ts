@@ -16,6 +16,22 @@ export interface SkillRecord {
   secure: boolean;          // once true, NEVER set false again
   lastSeen: number;         // ms epoch
   slips: string[];          // slip ids seen for this learner+topic, deduped, newest last
+  /**
+   * The step-up record (Family W8): moved ONLY by attempts on items of a set asked for as "a step up" (rules/stretch), by
+   * the same rule as the record above - the estimate 30% of the way toward each outcome, secure latched at 0.85 with four
+   * seen and never unset. The fields above are never moved by a step-up attempt, and this one never by a usual attempt,
+   * so a slip at step-up can never unset or lower the usual record. Absent until the first step-up attempt; a
+   * learners.json written before W8 loads without it. The TV draws it as a second ink line, never as a number.
+   */
+  stretch?: StretchRecord;
+}
+
+/** The step-up record's own counts, estimate and latch (SkillRecord.stretch). */
+export interface StretchRecord {
+  seen: number; right: number;
+  estimate: number;         // 0..1
+  secure: boolean;          // once true, NEVER set false again
+  lastSeen: number;         // ms epoch
 }
 
 /** One thing that actually happened at the desk, so it can say where you left off. */
@@ -105,11 +121,33 @@ function writeLearner(id: string, l: Learner): void {
 
 function blank(id: string): Learner { return { id, english: emptyEnglish(), skills: {}, writing: {}, memory: [], history: [] }; }
 
+/** A finite whole number of at least 0, else 0. */
+const count = (v: unknown) => { const n = Number(v); return Number.isFinite(n) && n > 0 ? Math.floor(n) : 0; };
+
+/**
+ * The step-up record as the desk trusts it (Family W8): an object on disk becomes { seen, right, estimate, secure,
+ * lastSeen } - counts whole and not negative, `right` never more than `seen`, the estimate clamped to 0..1, secure only
+ * when it is `true` - and anything else (junk, an array, a number) is no step-up record at all.
+ */
+function cleanStretch(raw: unknown): StretchRecord | undefined {
+  if (!raw || typeof raw !== "object" || Array.isArray(raw)) return undefined;
+  const r = raw as Partial<Record<keyof StretchRecord, unknown>>;
+  const seen = count(r.seen), est = Number(r.estimate);
+  return {
+    seen, right: Math.min(seen, count(r.right)),
+    estimate: Number.isFinite(est) ? Math.min(1, Math.max(0, est)) : 0,
+    secure: r.secure === true,
+    lastSeen: count(r.lastSeen),
+  };
+}
+
 function cleanSkills(raw: unknown): Record<string, SkillRecord> {
   const skills: Record<string, SkillRecord> = {};
   const src = (raw && typeof raw === "object" && !Array.isArray(raw) ? raw : {}) as Record<string, Partial<SkillRecord>>;
   for (const k of Object.keys(src)) {
     const r = src[k] ?? {};
+    // the whitelist: a field not named here is dropped on read (the step-up record is named since Family W8)
+    const stretch = cleanStretch(r.stretch);
     skills[k] = {
       topic: typeof r.topic === "string" ? r.topic : k,
       seen: Number(r.seen) || 0,
@@ -118,6 +156,7 @@ function cleanSkills(raw: unknown): Record<string, SkillRecord> {
       secure: r.secure === true,
       lastSeen: Number(r.lastSeen) || 0,
       slips: Array.isArray(r.slips) ? r.slips.filter((s): s is string => typeof s === "string") : [],
+      ...(stretch ? { stretch } : {}),
     };
   }
   return skills;
@@ -175,15 +214,34 @@ export function saveEnglish(id: string, english: EnglishLearning): void {
 }
 
 /**
+ * How an attempt was set (Family W8): `stretch` when its item came from a set asked for as "a step up", and the item's
+ * `tier` as code set it. The record is chosen by `stretch` alone - a step-up set holds tier-1 items too, and each of its
+ * attempts counts toward the step-up record - so the tier is carried for the caller's sake and never read as a lever.
+ */
+export interface AttemptSet { stretch?: boolean; tier?: 1 | 2 }
+
+/**
  * One attempt at one topic. The estimate moves 30% of the way toward the outcome (1 right,
  * 0 wrong); secure latches on at 0.85 with at least four attempts seen and is never unset.
+ * An attempt on a step-up item (`set.stretch`, Family W8) moves the step-up record (`SkillRecord.stretch`) by the same
+ * rule and leaves every other field exactly as it was: it cannot raise, lower or unset the usual record. A usual
+ * attempt leaves the step-up record exactly as it was. A slip seen at step-up is not added to the usual slips.
  */
-export function recordAttempt(id: string, topic: string, right: boolean, slip?: string): SkillRecord {
+export function recordAttempt(id: string, topic: string, right: boolean, slip?: string, set: AttemptSet = {}): SkillRecord {
   const l = getLearner(id);
-  const rec = step(l.skills[topic], topic, right, slip);
+  const before = l.skills[topic];
+  const rec = set.stretch === true ? stretchStep(before, topic, right) : step(before, topic, right, slip);
   l.skills[topic] = rec;
   saveLearner(l);
   return rec;
+}
+
+/** A step-up attempt: the step-up record moved by `step`'s own rule; the usual fields as they were (zero when there were none). */
+function stretchStep(before: SkillRecord | undefined, topic: string, right: boolean): SkillRecord {
+  const base: SkillRecord = before ?? { topic, seen: 0, right: 0, estimate: 0, secure: false, lastSeen: 0, slips: [] };
+  const was = base.stretch;
+  const moved = step(was ? { topic, ...was, slips: [] } : undefined, topic, right);
+  return { ...base, stretch: { seen: moved.seen, right: moved.right, estimate: moved.estimate, secure: moved.secure, lastSeen: moved.lastSeen } };
 }
 
 /**
@@ -210,6 +268,8 @@ function step(before: SkillRecord | undefined, topic: string, right: boolean, sl
     // latched: once secure, always secure
     secure: prev.secure || (estimate >= SECURE_AT && seen >= SECURE_SEEN),
     lastSeen: Date.now(), slips,
+    // a usual attempt carries the step-up record over untouched (Family W8)
+    ...(prev.stretch ? { stretch: prev.stretch } : {}),
   };
 }
 

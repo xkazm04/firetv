@@ -199,7 +199,8 @@ export async function explainItem(
   const verdict = !stillUnsure() ? null
     : calc || school ? settleSpec(item.n, item.spec, h.value, h.slip, topicId, system)
     : settle(item, h.value, h.slip, topicId);
-  if (verdict) recordAttempt(learnerId, topicId, verdict.verdict === "right", verdict.slip);
+  // a step-up item (Family W8) settles onto the step-up record only, as marking does
+  if (verdict) recordAttempt(learnerId, topicId, verdict.verdict === "right", verdict.slip, { stretch: item.stretch === true, tier: item.tier });
   // an item already wrong: the slip the conversation found replaces the marker's, when the rulebook has it (no verdict,
   // no record) - never on a school item, whose slip only code detects
   const named = !verdict && !school && item.verdict === "wrong" && h.slip ? settled(item.n, false, h.slip, topicId) : null;
