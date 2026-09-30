@@ -83,6 +83,12 @@ prompt that shipped before, byte for byte; a known age of 13 or under gets short
 around the same rules (the withholding clauses are shared constants, never copied). The young voice is validated for
 ages 11-13 only, and a Calculus learner is not age-voiced. Tone is not test-decidable: a person reads it (`tools/voice-rules-test.cjs`).
 
+**Mode** (`src/lib/rules/mode.ts`, Family mode W4). A profile is in `family` or `adult` mode, and the mode is derived: `modeOf(profile, prefs?)` says
+"adult" exactly when the learner is 18 or over (or type "other" with the adult box ticked) and "family" in every other case. `Profile.mode` is optional
+and normally unset, which means "derived"; only an explicit "family" is honoured, at any age. Adult mode is not reachable yet: no screen sets the
+field, a `profile.draft` patch cannot set "adult", and a stored "adult" is ignored until the Adult build adds its gate. Nothing a learner sees
+changes: `audienceAllowed` is untouched (`tools/mode-rules-test.cjs`).
+
 ## Where things are
 
 ```

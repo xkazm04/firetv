@@ -239,7 +239,7 @@ const KEYMAP: Partial<Record<Screen, Handler>> = {
     // Back returns to the screen that opened the switcher; a stale back (a profile, the pair screen) is the desk
     if (k === "back") { if (s.back === "tonight") o.nav("tonight"); else o.nav("landing", landingFocus(s, "place")); }
     if (k === "select") { if (at && at !== "add") o.ev({ type: "learner.set", id: at.id }); else { o.ev({ type: "profile.draft", patch: {} }); o.nav("profile"); } }
-    if (k === "menu" && at && at !== "add") { o.ev({ type: "profile.draft", patch: { id: at.id, name: at.name, type: at.type, age: at.age, system: at.system, modules: at.modules, mathPath: at.mathPath } }); o.nav("profile"); }
+    if (k === "menu" && at && at !== "add") { o.ev({ type: "profile.draft", patch: { id: at.id, name: at.name, type: at.type, age: at.age, system: at.system, modules: at.modules, mathPath: at.mathPath, mode: at.mode } }); o.nav("profile"); }
   },
   profile: (s, k, _, o) => {
     // rows of picks (type, age when a school type, school system, interests, the Maths course when Maths is on, actions); Up/Down keep the column

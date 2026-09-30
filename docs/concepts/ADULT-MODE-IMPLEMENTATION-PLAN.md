@@ -27,7 +27,7 @@ relative, not measured; nothing here is L (anything L was split).
 | 4 | A4 | Essay: style meter and the twin probe (riskiest test) | M | - | not started | | | |
 | 5 | C1 | Linga: Take Two | M | A2 | not started | | | |
 | 6 | B1 | Math: the chain checker and the 100-chain fixture | S | - | not started | | | |
-| 7 | A5 | Platform: the mode switch and the Adult gate | M | A1, O1 | not started | | | |
+| 7 | A5 | Platform: the mode switch and the Adult gate | M | A1, O1 | not started; `Profile.mode`, `modeOf` and its sanitising are on main from Family W4, A5 adds only the gate and the switch | | | |
 | 8 | A6 | Platform: learner text store, delete, curtain, phone file | M | A5 | not started | | | |
 | 9 | D1 | Essay: the reading core keeps paragraphs | M | - | not started | | | |
 | 10 | D2 | Essay: the Workroom, a whole piece | M | A6, D1 | not started | | | |
@@ -156,10 +156,11 @@ and not re-verified.
 
 ## d. Prerequisites and the seam
 
-- **Profile.mode lives in Family W4**, on branch `family-phase-1`, not merged, and not built yet (that branch has W1
-  only, 6901cf9). Its spec after owner decision D1: `Profile.mode?: "family" | "adult"`, `modeOf(p)` in
+- **Profile.mode lives in Family W4 and is now on main** (built 2026-09-30 as the seam only, under D1; see the session log).
+  It holds: `Profile.mode?: "family" | "adult"` and `modeChecked` in `store.ts` (junk dropped on load; a `profile.draft` patch may set only "family"), `modeOf(p, prefs?)` and `isAdult` in `lib/rules/mode.ts`, `mode` in the `tv/keys.ts` edit copy list, and `tools/mode-rules-test.cjs`. `modeOf` does NOT honour a stored "adult" yet, and `audienceAllowed` is not re-expressed through it. Its spec after owner decision D1 was: `Profile.mode?: "family" | "adult"`, `modeOf(p)` in
   `lib/rules/mode.ts`, a `profile.draft` patch cannot set mode, the edit copy list at `tv/keys.ts:242` keeps it, age
   default (Family under 18, and for "other" until confirmed), no parent code.
+- **W4 is merged now, so A1 imports the existing `modeOf` and does not create `lib/rules/mode.ts` (line 189 below is superseded); the paragraph that follows applies only if that changes.**
 - **If W4 is not merged when Adult starts**: A1 creates only the read, `lib/rules/mode.ts` `modeOf(p, prefs)`, with
   W4's names and W4's age default and no stored field. Every adult door reads it. A5 then either adopts merged W4 or
   builds W4's stored field exactly as specified above, so the second branch to merge meets a trivial conflict. Record
@@ -186,7 +187,7 @@ screen doc (`docs/STUDY-DESK-SCREENS.md` and the module's `docs/DESIGN-*.md`) up
 **A1. Linga: pitch a scene, played now** (M)
 - Goal: an adult types or says a premise (400 chars) and plays it at once, gated by the stricter of a keyword list and the model's label.
 - Why now: the owner's "no hard-coded topics" in its smallest true form; closes finding 4 for every age.
-- Files: new `lib/rules/mode.ts` (`modeOf`, section d); new pure `lib/english/gate.ts` (`audienceOf(text, label)`: keyword lists per audience plus a never-list; the stricter wins); `lib/english/check.ts` (apply `audienceOf` in `pick`, `:157-163`); `lib/english/conversation.ts` (action `pitch`: one shaping call as `propose` with `asked`, then `start` on it); `types.ts`/`rules.ts` (`EnglishLearning.pitches`, capped 12, added to the `cleanEnglish` whitelist `rules.ts:16-26`); `curriculum.ts` `eligibleScenes` includes pitches; `lib/english/view.ts`, `english/LingaTV.tsx`, phone Linga panel ("Pitch a scene", mic where available).
+- Files: `lib/rules/mode.ts` already exists from Family W4 (`modeOf`, section d); new pure `lib/english/gate.ts` (`audienceOf(text, label)`: keyword lists per audience plus a never-list; the stricter wins); `lib/english/check.ts` (apply `audienceOf` in `pick`, `:157-163`); `lib/english/conversation.ts` (action `pitch`: one shaping call as `propose` with `asked`, then `start` on it); `types.ts`/`rules.ts` (`EnglishLearning.pitches`, capped 12, added to the `cleanEnglish` whitelist `rules.ts:16-26`); `curriculum.ts` `eligibleScenes` includes pitches; `lib/english/view.ts`, `english/LingaTV.tsx`, phone Linga panel ("Pitch a scene", mic where available).
 - Kind: pure (gate, mode) + one model call + UI.
 - Tests: new `tools/adult-rules-test.cjs` (`modeOf` table; `audienceOf` table of at least 60 pitches, including the probe's romance-as-`all`, which must come out `adult`); rows in `tools/linga-rules-test.cjs` (a pitch for a 13-year-old never yields `adult`; the pitch action with a stubbed engine starts a scene; the never-list refuses).
 - Accept: gate; TV capture of `linga-scenes` with a pitched card and phone capture (390 px) of the pitch field.
@@ -254,7 +255,7 @@ screen doc (`docs/STUDY-DESK-SCREENS.md` and the module's `docs/DESIGN-*.md`) up
 
 **A5. Platform: the mode switch and the Adult gate** (M)
 - Goal: a profile can be switched to Adult where O1 allows, and back to Family always; every adult door reads `modeOf`.
-- Files: adopt merged Family W4, or build its stored field (section d): `store.ts` (`Profile.mode`, patch drops mode as `pathChecked` drops a bad path, `:34-37`), `tv/keys.ts:242` copy list, `tv/profileRows.ts` (a Mode row; Adult shows only when allowed, else "Adult is for 18 and over"), `curriculum.ts` audience matrix by mode.
+- Files: Family W4 already landed the field (`store.ts` `Profile.mode` and `modeChecked`, `tv/keys.ts` copy list, `lib/rules/mode.ts`); A5 adds only: the gate (O1), honouring a stored "adult" in `modeOf` and letting a `profile.draft` patch set it once the gate allows, `tv/profileRows.ts` (a Mode row; Adult shows only when allowed, else "Adult is for 18 and over"), `curriculum.ts` audience matrix by mode.
 - Tests: `tools/adult-rules-test.cjs` rows (switch allowed or refused by the O1 table; an edit-save keeps mode; reset returns the age default, Family c.4).
 - Accept: gate; TV capture of the profile screen in both states.
 - Done: [ ] gate [ ] capture [ ] log says "adopted W4" or "built W4 spec".
@@ -512,3 +513,9 @@ Surprises: the essay text stays on the session after a learner change (probe, `s
 labelled `all` passes today's topic validator (probe); the proxy passes only the first 10 MB of any `/api` body; "holds"
 is a model reading, so the twin's lock needs detectors; Family W4 (Profile.mode) is not built yet on `family-phase-1`.
 Next: A1. Owner: answer O1-O8 (defaults stand if not), run the A4 probe when A4 lands.
+
+### 2026-09-30 · Family W4 (the seam only) · main (commit in the log of the Family plan)
+Gate: `cd desk && npm test` green before and after (exit 0, 532 tests before; 540 after with the new `tools/mode-rules-test.cjs`).
+Captures: none (no screen changed; owner decision D1 dropped the parent code, the Mode row and the Parent-tab confirm from Phase 1).
+Surprises: `Profile.mode`, `modeOf(p, prefs?)`, `isAdult` (moved to `lib/rules/mode.ts`, re-exported from `curriculum.ts`) and `modeChecked` (junk dropped on load and from a draft patch; a patch may set only "family") are now on main. `modeOf` does NOT honour a stored "adult" and `audienceAllowed` is unchanged and not re-expressed through it (parity pinned over 240 combinations). An edit-save of a profile with a stored "adult" returns it to unset, because the patch may not set adult.
+Next: A5 adds only the gate (O1), honouring "adult" in `modeOf`, letting the patch set it when the gate allows, the Mode row and the audience matrix by mode. Log there "adopted W4".

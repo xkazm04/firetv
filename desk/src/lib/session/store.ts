@@ -20,6 +20,7 @@ import type { RuleCard } from "../rules/english";
 import { restatedLine, slipsFor } from "../rules/maths";
 import { CALC_SHAPES, type CalcSpec } from "../rules/calc";
 import type { Fix, Sentence, Was } from "../rules/essay";
+import type { Mode } from "../rules/mode";
 import { emptyEnglish, type Conversation, type EnglishLearning, type LevelCheck } from "../english/types";
 
 export type Subject = "maths" | "english" | "essay";
@@ -29,11 +30,26 @@ export type StudentType = "elementary" | "high-school" | "other";
 /** The school system a learner's progress is read against. One per profile; the desk defaults to UK. */
 export type SchoolSystem = "us" | "uk" | "cz" | "de";
 /** `mathPath`: the Math course the learner is on (library/paths.ts) - absent is the school path. */
-export interface Profile { id: string; name: string; type: StudentType; age?: number; system?: SchoolSystem; modules: Subject[]; mathPath?: MathPath; }
+/**
+ * `mode`: the explicit family/adult choice (rules/mode.ts, Family W4). Optional and usually absent: unset means the mode
+ * is derived (modeOf). Phase 1 honours only "family"; a stored "adult" is kept on disk but modeOf ignores it until the
+ * Adult build (slice A5) adds its gate.
+ */
+export interface Profile { id: string; name: string; type: StudentType; age?: number; system?: SchoolSystem; modules: Subject[]; mathPath?: MathPath; mode?: Mode; }
 /** Only 'school' and 'calc1' are paths: any other mathPath (a draft patch, an older or hand-edited session.json) is dropped. */
 function pathChecked<T extends { mathPath?: unknown }>(p: T): T {
   if (p.mathPath === undefined || p.mathPath === "school" || p.mathPath === "calc1") return p;
   const q = { ...p }; delete q.mathPath; return q;
+}
+/**
+ * Only "family" and "adult" are modes: any other `mode` (junk in a draft patch, a hand-edited session.json) is dropped, so the
+ * profile is back to the derived default. `allowAdult` is false for a profile.draft patch: nothing may set Adult in Phase 1
+ * (no screen reaches it, and the parent gate is built with the Adult build), so a patch may set only "family". session.json
+ * load passes true: a stored "adult" is kept as data, and modeOf does not honour it.
+ */
+export function modeChecked<T extends { mode?: unknown }>(p: T, allowAdult = true): T {
+  if (p.mode === undefined || p.mode === "family" || (allowAdult && p.mode === "adult")) return p;
+  const q = { ...p }; delete q.mode; return q;
 }
 /**
  * A practice topic's name as the desk writes it, on whichever path it belongs to: topicIn(id)?.name ?? id. For every
@@ -371,7 +387,7 @@ export function reduce(s: Session, e: Event): Session {
     case "focus": n.focus = e.focus; break;
     // a learner chosen or saved goes to the desk, not to one app: the lamp rests on what that learner left, among their own apps
     case "learner.set": { const p = s.profiles.find((x) => x.id === e.id); if (!p) break; if (p.id !== s.learner?.id) { n.conversation = null; n.check = null; n.english = null; } seat(s, n, p.id); n.learner = { id: p.id, name: p.name }; n.screen = "landing"; n.focus = LANDING_REST; break; }
-    case "profile.draft": { const d: Profile = pathChecked({ ...(s.draft ?? { id: "p" + Date.now(), name: "", type: "high-school" as StudentType, modules: ["maths", "english", "essay"] as Subject[] }), ...e.patch });
+    case "profile.draft": { const d: Profile = pathChecked({ ...(s.draft ?? { id: "p" + Date.now(), name: "", type: "high-school" as StudentType, modules: ["maths", "english", "essay"] as Subject[] }), ...modeChecked(e.patch, false) });
       const r = AGE_RANGE[d.type]; if (!r || (d.age !== undefined && (d.age < r[0] || d.age > r[1]))) delete d.age; n.draft = d; break; }
     case "profile.save": { const d = s.draft; if (!d || !d.name.trim()) break; const has = s.profiles.some((p) => p.id === d.id);
       n.profiles = has ? s.profiles.map((p) => (p.id === d.id ? d : p)) : [...s.profiles, d];
@@ -488,7 +504,7 @@ function logWatched(w: Watch): void {
 type Sub = (s: Session) => void;
 interface Store { session: Session; subs: Set<Sub>; ticker: NodeJS.Timeout | null; }
 const g = globalThis as unknown as { __desk?: Store };
-function load(): Session { try { if (existsSync(FILE)) { const j = JSON.parse(readFileSync(FILE, "utf8")); if (Array.isArray(j?.profiles) && (j?.learner === null || j?.learner?.id) && j.profiles.every((p: Profile) => p.type in AGE_RANGE)) return settleOwners({ ...fresh(), ...j, profiles: j.profiles.map(pathChecked), practice: shownPractice(j.practice), away: awayShown(j.away), jobs: settled(j.jobs), watch: null, phoneUrl: phoneUrl(), reading: false, englishLearning: j.learner ? getLearner(j.learner.id).english : emptyEnglish(), conversation: j.conversation ? { moment: null, moments: [], ...j.conversation, pending: null, capture: false, paused: true } : null, check: j.check ? { ...j.check, pending: null } : null }, (id) => getLearner(id).history); } } catch {} return fresh(); }
+function load(): Session { try { if (existsSync(FILE)) { const j = JSON.parse(readFileSync(FILE, "utf8")); if (Array.isArray(j?.profiles) && (j?.learner === null || j?.learner?.id) && j.profiles.every((p: Profile) => p.type in AGE_RANGE)) return settleOwners({ ...fresh(), ...j, profiles: j.profiles.map((p: Profile) => modeChecked(pathChecked(p))), practice: shownPractice(j.practice), away: awayShown(j.away), jobs: settled(j.jobs), watch: null, phoneUrl: phoneUrl(), reading: false, englishLearning: j.learner ? getLearner(j.learner.id).english : emptyEnglish(), conversation: j.conversation ? { moment: null, moments: [], ...j.conversation, pending: null, capture: false, paused: true } : null, check: j.check ? { ...j.check, pending: null } : null }, (id) => getLearner(id).history); } } catch {} return fresh(); }
 /** The away learners' work as saved: an answer that reached the file stops here too, and a read under way ended with the desk. */
 function awayShown(a: unknown): Record<string, MathsSlot> | undefined {
   if (!a || typeof a !== "object") return undefined;

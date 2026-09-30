@@ -1,4 +1,5 @@
 import type { Profile } from "../session/store";
+import { isAdult } from "../rules/mode";
 import type { Audience, EnglishLearning, EnglishPreferences, EnglishScene, Progress, SkillId } from "./types";
 export type { EnglishScene } from "./types";
 
@@ -50,9 +51,8 @@ export const ENGLISH_SCENES: EnglishScene[] = [
 export function defaultPreferences(p?: Profile): EnglishPreferences {
   return { level: "A1", interest: "", goal: "", creativity: p?.type === "elementary" ? "playful" : "familiar", challenge: "supportive", correction: "as-needed", adultConfirmed: false };
 }
-export function isAdult(p: Profile | undefined, prefs: EnglishPreferences): boolean {
-  return p?.age !== undefined ? p.age >= 18 : p?.type === "other" && prefs.adultConfirmed;
-}
+// isAdult lives in rules/mode.ts (Family W4, so modeOf can sit beside it without a cycle); every existing import keeps working.
+export { isAdult };
 /**
  * Age gates content; English level never does. School situations are for a learner under 18 (or, with no age, an
  * elementary or high-school profile), never for "other" and never for an adult, so an adult is not offered a classroom.
