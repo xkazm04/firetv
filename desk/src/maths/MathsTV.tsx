@@ -15,7 +15,7 @@ import { PATHS, expectedOn, learnerPath, topicIn, topicsOf, type PathTopic } fro
 import { LESSONS } from "@/lib/library/lessons.data";
 import { lessonStates } from "@/lib/library/watched";
 import { slip as slipById } from "@/lib/rules/maths";
-import { PAD, STRIP_AFTER, fitName, flagX, needleX, rulerFrontier, rulerModel, schoolMarks, stripModel } from "@/tv/rulerRows";
+import { PAD, STRIP_AFTER, fitName, flagOnStage, flagX, needleX, rulerFrontier, rulerModel, schoolMarks, stripModel } from "@/tv/rulerRows";
 import { calendarWeeks, continueCard, explainLine, fitRow, humanTopic, inRunningText, markLine, mathPlaced, noLessonsLine, paperSquare, pathSecure, rowSquares, secureTitle, stateWord, topicName, topicStates, workWhat, SQUARE, type Continue, type JobLine } from "@/tv/mathsRows";
 import { running, practiceFailed, stopAt, tonightStops, calendarStops, unitStops, walkStops, HINT_STOPS, TONIGHT_MENU, type TonightStop } from "@/tv/keys";
 import { sheetTiles, sheetStops, tileOf } from "@/tv/sheetRows";
@@ -277,9 +277,13 @@ function Ruler({ s, big, focus, busy }: { s: Session; big?: boolean; focus?: num
   // school path the tick is drawn and the gap line waits for a Math placement (D2), which Phase 1 does not have
   const exp = age === undefined ? null : expectedOn(path, sys, age);
   const marks = schoolMarks(exp, mathPlaced(s));
-  const fx = exp === null || !marks.tick ? null : flagX(m, exp);
+  const fx0 = exp === null || !marks.tick ? null : flagX(m, exp);
+  // on a panning ruler (seven school topics since W7) the tick is drawn only while it is on the stage, and its pill is
+  // turned inward near the window's edges, so it is never cut in half by the window (tv/rulerRows flagOnStage)
+  const onStage = fx0 === null ? null : flagOnStage(m, fx0);
+  const fx = onStage === null || !onStage.seen ? null : fx0;
   const clampStrands = m.strands.length > 1;
-  // the focused name is fitted whole on the big ruler, panning or not (four school topics make 419 px slots)
+  // the focused name is fitted whole on the big ruler, panning or not (seven school topics since W7 make it pan)
   const win = useNameFit(m.pan || !!big, `${path}|${focus}`);
   const body = (<>
     <div className="mb-rbody" />
@@ -301,7 +305,7 @@ function Ruler({ s, big, focus, busy }: { s: Session; big?: boolean; focus?: num
       );
     })}
     {fx !== null && marks.gap && <div className="mb-gapline" style={{ left: Math.min(mx, fx), width: Math.abs(fx - mx) }} />}
-    {fx !== null && <div className="mb-flag" data-end={exp !== null && exp >= N || undefined} data-start={exp !== null && exp <= 0 || undefined} style={{ left: fx }}><div className="nd" /><div className="mc">School</div></div>}
+    {fx !== null && <div className="mb-flag" data-end={(exp !== null && exp >= N) || onStage?.edge === "r" || undefined} data-start={(exp !== null && exp <= 0) || onStage?.edge === "l" || undefined} style={{ left: fx }}><div className="nd" /><div className="mc">School</div></div>}
     <div className="mb-marker" data-start={!has || undefined} style={{ left: mx }}><div className="halo" /><div className="nd" /><div className="mc">{s.learner?.name}</div></div>
   </>);
   if (!m.pan) return <div className={`mb-ruler${big ? " big" : ""}`} ref={big ? win : undefined} data-role="maths-ruler" data-active={focus !== undefined || undefined}>{body}</div>;
@@ -320,8 +324,9 @@ function Ruler({ s, big, focus, busy }: { s: Session; big?: boolean; focus?: num
  * On the big (Topics) ruler, the focused topic's name is shown whole: the largest of 44 down to 34 px (tv/rulerRows.ts
  * `fitName`) at which it is in the lines its box allows (three on a panning ruler, two on one that does not) with no
  * word clipped, measured after layout and again when the faces arrive. Tonight's small ruler keeps its names as the
- * stylesheet sets them. (Family W5b: the school path's fourth topic narrowed its slots to 419 px, where "Equations
- * with brackets and x on both sides" no longer fits two lines at 44 px.)
+ * stylesheet sets them (seven school topics since W7: a long name ends in an ellipsis there). (Family W5b: the school
+ * path's fourth topic narrowed its slots to 419 px, where "Equations with brackets and x on both sides" no longer fits
+ * two lines at 44 px; since W7 the school Topics ruler pans, and the focused slot is 640 px.)
  */
 function useNameFit(on: boolean, dep: unknown) {
   const ref = useRef<HTMLDivElement>(null);

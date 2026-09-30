@@ -179,9 +179,11 @@ test('an answer arriving on an event, or from a desk saved before this change, i
 // ---- the topic spine every maths screen and the practice set read from ----
 test('the syllabus is a path: unique ids, prereqs that point back along it, lessons that exist',()=>{
  const ids=SYLLABUS.map(t=>t.id);
- // W5b: 'Add and subtract fractions' is met before linear equations, so it comes first (years from memory, a teacher checks)
- assert.deepEqual(ids,['frac-add-sub','linear-one-step','linear-two-step','linear-both-sides']);assert.equal(new Set(ids).size,ids.length);
- assert.equal(topic('frac-add-sub').lessonId,undefined,'no fractions lesson in the library: the topic names none');
+ // W5b: 'Add and subtract fractions' is met before linear equations, so it comes first (years from memory, a teacher checks).
+ // W7 batch 1: three more fractions units, ordered so that no system's year goes down along the path: equivalent
+ // fractions, a fraction of an amount, add and subtract, multiply and divide, then the three linear-equation topics
+ assert.deepEqual(ids,['frac-equivalent','frac-of-amount','frac-add-sub','frac-mul-div','linear-one-step','linear-two-step','linear-both-sides']);assert.equal(new Set(ids).size,ids.length);
+ for(const f of ['frac-equivalent','frac-of-amount','frac-add-sub','frac-mul-div'])assert.equal(topic(f).lessonId,undefined,`no fractions lesson in the library: ${f} names none`);
  const lessons=new Set(LESSONS.map(l=>l.id));
  SYLLABUS.forEach((t,ix)=>{
   for(const p of t.prereq)assert(ids.indexOf(p)>-1&&ids.indexOf(p)<ix,`${t.id} needs ${p}, which must come earlier`);
@@ -191,37 +193,43 @@ test('the syllabus is a path: unique ids, prereqs that point back along it, less
  assert.deepEqual(Object.keys(SYSTEM_START).sort(),['cz','de','uk','us']);
 });
 test('topic finds by exact id and says undefined for anything else',()=>{
- assert.equal(topic('linear-two-step'),SYLLABUS[2]);assert.equal(topic('linear-two-step').name,'Two-step equations');
- assert.equal(topic('frac-add-sub'),SYLLABUS[0]);assert.equal(topic('frac-add-sub').name,'Add and subtract fractions');
+ assert.equal(topic('linear-two-step'),SYLLABUS[5]);assert.equal(topic('linear-two-step').name,'Two-step equations');
+ assert.equal(topic('frac-add-sub'),SYLLABUS[2]);assert.equal(topic('frac-add-sub').name,'Add and subtract fractions');
  for(const id of ['','unknown','Linear-One-Step',' linear-one-step','linear',undefined,null])assert.equal(topic(id),undefined,String(id));
 });
 test('nextTopic walks the path in order, ignores ids it does not know, and runs out when all is secure',()=>{
  const next=(secure)=>nextTopic(secure)?.id;
- // W5b: fractions come first and need nothing, so a list without them is a gap earlier on the path (nextTopic is the
- // prerequisite walk; the ruler's needle and Topics' first focus use the frontier rule in library/paths.ts instead)
- const F='frac-add-sub';
- assert.equal(next([]),F,'a learner with nothing secure starts at the start');
- assert.equal(next([F]),'linear-one-step');
- assert.equal(next([F,'linear-one-step']),'linear-two-step');
- assert.equal(next([F,'linear-one-step','linear-two-step']),'linear-both-sides');
- assert.equal(next([F,'linear-two-step','linear-one-step']),'linear-both-sides','the order the ids are listed in does not matter');
- assert.equal(next([F,'linear-one-step','linear-two-step','linear-both-sides']),undefined);
- assert.equal(next(['unknown','','linear-two-step-x']),F,'unknown ids unlock nothing');
- assert.equal(next([F,'linear-two-step']),'linear-one-step','a gap earlier on the path is filled first');
- assert.equal(next(['linear-one-step']),F,'the new first topic is a gap earlier on the path too');
- assert.equal(next([F,'linear-both-sides']),'linear-one-step');
- assert.equal(next([F,'linear-one-step','linear-both-sides']),'linear-two-step','a topic secured out of order is skipped, not repeated');
- assert.equal(next([F,'linear-one-step','linear-one-step']),'linear-two-step','a repeated id counts once');
+ // W5b: fractions come first, so a list without them is a gap earlier on the path (nextTopic is the prerequisite walk;
+ // the ruler's needle and Topics' first focus use the frontier rule in library/paths.ts instead). W7: four fractions
+ // units; add and subtract, and multiply and divide, each need equivalent fractions; a fraction of an amount needs none
+ const [E,O,F,MD]=['frac-equivalent','frac-of-amount','frac-add-sub','frac-mul-div'],FR=[E,O,F,MD];
+ assert.equal(next([]),E,'a learner with nothing secure starts at the start');
+ assert.equal(next([E]),O);assert.equal(next([E,O]),F);assert.equal(next([E,O,F]),MD);
+ assert.equal(next([O]),E,'a fraction of an amount secure alone: equivalent fractions is still the gap');
+ assert.equal(next([O,'linear-one-step']),E);
+ assert.equal(next([...FR]),'linear-one-step');
+ assert.equal(next([...FR,'linear-one-step']),'linear-two-step');
+ assert.equal(next([...FR,'linear-one-step','linear-two-step']),'linear-both-sides');
+ assert.equal(next([...FR,'linear-two-step','linear-one-step']),'linear-both-sides','the order the ids are listed in does not matter');
+ assert.equal(next([...FR,'linear-one-step','linear-two-step','linear-both-sides']),undefined);
+ assert.equal(next(['unknown','','linear-two-step-x']),E,'unknown ids unlock nothing');
+ assert.equal(next([...FR,'linear-two-step']),'linear-one-step','a gap earlier on the path is filled first');
+ assert.equal(next(['linear-one-step']),E,'the new first topic is a gap earlier on the path too');
+ assert.equal(next([...FR,'linear-both-sides']),'linear-one-step');
+ assert.equal(next([...FR,'linear-one-step','linear-both-sides']),'linear-two-step','a topic secured out of order is skipped, not repeated');
+ assert.equal(next([...FR,'linear-one-step','linear-one-step']),'linear-two-step','a repeated id counts once');
 });
 test("expectedIndex reads age against each system's own year: -1 before the path, never past its end",()=>{
- // W5b: fractions (US 5, UK 6, CZ 5, DE 5) come before one-step equations, so every system has a topic behind a
- // 10-year-old; in DE both fractions and one-step equations are Klasse 5, so a 10-year-old there is past two
- for(const [sys,first,n] of [['us',10,1],['uk',10,1],['cz',10,1],['de',10,2]]){
+ // W7 batch 1: the path's years per system (us/uk/cz/de) are equivalent 4/5/5/5, of an amount 5/5/5/5, add and subtract
+ // 5/6/5/5, multiply and divide 6/7/6/5, one-step 6/7/6/5, two-step 7/8/7/6, both sides 8/9/8/7; the school year is
+ // age - SYSTEM_START + 1 (us 6, uk 5, cz 6, de 6). So the first topic behind a learner comes at US 9 (Grade 4: one),
+ // UK 9 (Year 5: two), CZ 10 (5. ročník: three) and DE 10 (Klasse 5: five - all four fractions units and one-step)
+ for(const [sys,first,n] of [['us',9,1],['uk',9,2],['cz',10,3],['de',10,5]]){
   assert.equal(expectedIndex(sys,first-1),-1,`${sys} age ${first-1}`);assert.equal(expectedIndex(sys,first),n,`${sys} age ${first}`);
  }
- assert.equal(expectedIndex('uk',11),2);assert.equal(expectedIndex('uk',12),3);assert.equal(expectedIndex('uk',13),4);
- assert.equal(expectedIndex('de',11),3);assert.equal(expectedIndex('de',12),4);
- assert.equal(expectedIndex('us',13),4);assert.equal(expectedIndex('cz',12),3);
+ assert.equal(expectedIndex('uk',11),5);assert.equal(expectedIndex('uk',12),6);assert.equal(expectedIndex('uk',13),7);
+ assert.equal(expectedIndex('de',11),6);assert.equal(expectedIndex('de',12),7);
+ assert.equal(expectedIndex('us',13),7);assert.equal(expectedIndex('cz',12),6);assert.equal(expectedIndex('us',12),6);assert.equal(expectedIndex('cz',11),5);
  for(const sys of ['us','uk','cz','de'])for(const age of [0,5,SYSTEM_START[sys]])assert.equal(expectedIndex(sys,age),-1,`${sys} age ${age}`);
  for(const sys of ['us','uk','cz','de'])for(const age of [16,40,120])assert.equal(expectedIndex(sys,age),SYLLABUS.length,`${sys} age ${age}`);
  assert.notEqual(expectedIndex('uk',4),0,'nothing behind them is -1, never 0');

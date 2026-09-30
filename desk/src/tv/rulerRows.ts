@@ -163,6 +163,22 @@ export function flagX(m: RulerModel, exp: number): number {
   return t ? t.sx + (e - i) * t.sw : m.end;
 }
 
+/** How far in from the ruler window's edge the SCHOOL pill must stand to be shown centred on its tick (its half-width, rounded up). */
+export const FLAG_EDGE = 90;
+
+/**
+ * Whether the SCHOOL tick at track position `x` is on the stage, and which way its pill turns: on a ruler that does not
+ * pan it is always seen and never turned; on a panning ruler (seven school topics since Family W7) it is seen only
+ * while x is inside the window (offset .. offset + 1728), and within FLAG_EDGE of the window's right edge its pill sits
+ * to the left of the tick ('r'), within FLAG_EDGE of the left edge to the right ('l'), so the window never cuts it.
+ */
+export function flagOnStage(m: RulerModel, x: number): { seen: boolean; edge: "l" | "r" | null } {
+  if (!m.pan) return { seen: true, edge: null };
+  const at = x - m.offset;
+  if (at < 0 || at > TRACK) return { seen: false, edge: null };
+  return { seen: true, edge: at > TRACK - FLAG_EDGE ? "r" : at < FLAG_EDGE ? "l" : null };
+}
+
 /**
  * The focused name's size on a panning ruler: the first of NAME_SIZES at which `fits(px)` (the name whole, in at most
  * three lines, no word clipped - measured in the browser), else the 34 px floor. Never under the floor.

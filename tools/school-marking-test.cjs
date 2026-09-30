@@ -622,3 +622,23 @@ for(const unit of Object.keys(W7_PAGES)){
   store.getSession().practice.items.forEach((it,i)=>assert.deepEqual(it.spec,page[i].spec,'the spec survives marking'));
  });
 }
+
+test('W7 8: a hint on each new unit\'s task names the unit in its stance, and a hint that gives the answer away twice becomes the unit\'s own fixed sentence',async()=>{
+ const CASES=[
+  ['frac-equivalent','Fill in the missing number: 3/4 = ?/12.','Multiply 3 by 3 to get 9.','What was 4 multiplied by to make 12?'],
+  ['frac-equivalent','Simplify 18/24','It is three quarters.','Which numbers go into both 18 and 24?'],
+  ['frac-of-amount','Find 3/5 of 40 kg.','8 x 3 = 24, so 24 kg.','Divide 40 by 5 first.'],
+  ['frac-mul-div','Work out 3/4 ÷ 1/2.','It comes to one and a half.','Turn the fraction you divide by upside down, then multiply 3/4 by 2/1.'],
+ ];
+ for(const [unit,task,leaky,clean] of CASES){
+  stubText(()=>({hint:leaky,what_to_try_next:'Write it down.'}));
+  let h=await H.hint('maths',task,{path:'school',age:12});
+  assert.equal(seenText.length,2,`${task}: asked, then asked again once`);
+  assert.equal(h.hint,S.SCHOOL_WITHHELD[unit],`${task}: the unit's own line`);assert.equal(h.next,'');
+  assert.match(seenText[0].system,new RegExp(`This sheet is the unit "${topicIn(unit).name}"; prefer the unit's methods over heavier ones\.`),`${task}: the stance names the unit`);
+  assert.match(seenText[0].system,/a learner aged 11 to 13/,'the W2 young voice');
+  stubText(()=>({hint:clean,what_to_try_next:'Write your working under the question.'}));
+  h=await H.hint('maths',task,{path:'school',age:12});
+  assert.equal(seenText.length,1,`${task}: a legit hint passes on the first ask`);assert.equal(h.hint,clean);
+ }
+});

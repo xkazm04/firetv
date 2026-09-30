@@ -52,12 +52,13 @@ const tierOf=(spec)=>{const [b,d]=bottoms(spec);return b%d===0||d%b===0?1:2;};
 const keysIn=(o)=>o&&typeof o==='object'?Object.entries(o).flatMap(([k,v])=>[k,...keysIn(v)]):[];
 
 // ------------------------------------------------------------------ the path: the unit is on it, with no lesson
-test('1: "Add and subtract fractions" is the first topic of the school path "School maths", with a generator and no lesson',()=>{
+test('1: "Add and subtract fractions" is on the school path "School maths" (third since W7, after equivalent fractions and a fraction of an amount), with a generator and no lesson',()=>{
  assert.equal(P.PATHS.school.name,'School maths');
- assert.equal(SYLLABUS[0].id,UNIT);assert.equal(P.topicsOf('school')[0].id,UNIT);
+ // W7 batch 1 put equivalent fractions and a fraction of an amount before it (years never go down along the path)
+ assert.equal(SYLLABUS[2].id,UNIT);assert.equal(P.topicsOf('school')[2].id,UNIT);
  assert.equal(P.pathOfTopic(UNIT),'school');
  const t=P.topicIn(UNIT);
- assert.equal(t.name,'Add and subtract fractions');assert.equal(t.strand,'Fractions');assert.deepEqual(t.prereq,[]);
+ assert.equal(t.name,'Add and subtract fractions');assert.equal(t.strand,'Fractions');assert.deepEqual(t.prereq,['frac-equivalent'],'W7: rewriting over a common bottom is equivalent fractions');
  assert.ok(!('lessonId' in t),'the lesson library has no fractions lesson, so the topic names none');
  assert.match(t.blurb,/^[A-Z][^.!?]*[.!?]$/,'one sentence');
  assert.deepEqual(t.year,{us:5,uk:6,cz:5,de:5});
@@ -116,13 +117,34 @@ test('4: the practice route reports code and zero tries for a school unit, and t
  assert.ok(!keysIn(store.getSession()).includes('answer'));
 });
 
-// ------------------------------------------------------------------ W7: each new unit's tier, read back from its spec
+// ------------------------------------------------------------------ W7: the route writes each new unit's set by code
 /** Each unit's tier, as its generator documents it (rules/school), read back from the spec alone. */
 const W7_TIER={
  'frac-equivalent':(sp)=>{if(sp.shape==='simplify')return 2;const m=/^(\d+)\/(\d+) = (\?|\d+)\/(\?|\d+)$/.exec(sp.expr);const [a,b]=[+m[1],+m[2]];const known=+(m[3]==='?'?m[4]:m[3]);return (m[3]==='?'?known/b:known/a)>1?1:2;},
  'frac-of-amount':(sp)=>(sp.unit===undefined?1:2),
  'frac-mul-div':(sp)=>(/×/.test(sp.expr)?1:2),
 };
+for(const unit of ['frac-equivalent','frac-of-amount','frac-mul-div']){
+ test(`W7 3-${unit}: makeItems and the practice route write the unit's set by code - provider code, zero tries, six items with specs and tiers - and the engine is never reached`,async()=>{
+  seat();noModel();
+  for(let k=0;k<10;k++){
+   const r=await makeItems(unit,LEARNER);
+   assert.equal(seen.length,0,'no text engine call');assert.equal(r.provider,'code');assert.equal(r.tries,0);
+   assert.equal(r.items.length,6);assert.deepEqual(r.items.map((i)=>i.tier),[1,1,1,2,2,2]);
+   assert.equal(new Set(r.items.map((i)=>i.question)).size,6);
+   for(const it of r.items){assert.equal(S.unitOf(it.spec),unit);assert.equal(it.tier,W7_TIER[unit](it.spec));}
+  }
+  const res=await post({topic:unit});
+  assert.equal(res.status,200);
+  const body=await res.json();
+  assert.deepEqual([body.items,body.provider,body.tries],[6,'code',0]);assert.equal(seen.length,0,'the engine was never reached');
+  const p=store.getSession().practice;
+  assert.equal(p.topic,unit);assert.equal(p.items.length,6);assert.equal(store.getSession().screen,'practice');
+  for(const it of p.items){assert.ok(S.wellFormed(it.spec).ok);assert.ok(it.tier===1||it.tier===2);assert.equal(S.unitOf(it.spec),unit);}
+  assert.ok(!keysIn(store.getSession()).includes('answer'));
+ });
+}
+
 // ------------------------------------------------------------------ the spec through the store
 test('5: a school spec survives the store - practice.set, practice.marked, practice.settle and a reload from session.json',()=>{
  seat();
@@ -242,3 +264,23 @@ test('W7 5b: the new shapes survive the store - practice.set, practice.marked, p
  assert.match(src,/const SCHOOL_SPEC_KEYS = \["expr", "form", "unit", "allowNegative"\] as const;/,'the W7 shapes need no new store key');
  for(const sh of ['missing','simplify','fraction-of']){assert.ok(S.SCHOOL_SHAPES.includes(sh));assert.ok(!C.CALC_SHAPES.includes(sh),`${sh} is not a Calculus shape`);assert.equal(C.wellFormed({shape:sh,expr:'3/4'}).ok,false);}
 });
+
+// ------------------------------------------------------------------ W7: the three units on the path, and the route that writes their sets
+test('W7 1: the school path has seven topics - four fractions units, then the three linear-equation topics - each new unit with a generator, a one-sentence blurb, honest prerequisites and no lesson',()=>{
+ assert.deepEqual(P.topicsOf('school').map((t)=>t.id),['frac-equivalent','frac-of-amount','frac-add-sub','frac-mul-div','linear-one-step','linear-two-step','linear-both-sides']);
+ const want={
+  'frac-equivalent':['Equivalent fractions',[],{us:4,uk:5,cz:5,de:5}],
+  'frac-of-amount':['A fraction of an amount',[],{us:5,uk:5,cz:5,de:5}],
+  'frac-mul-div':['Multiply and divide fractions',['frac-equivalent'],{us:6,uk:7,cz:6,de:5}],
+ };
+ for(const [id,[name,prereq,year]] of Object.entries(want)){
+  const t=P.topicIn(id);
+  assert.equal(t.name,name);assert.equal(t.strand,'Fractions');assert.deepEqual(t.prereq,prereq,`${id}: prerequisites`);assert.deepEqual(t.year,year,`${id}: years (from memory, a teacher checks)`);
+  assert.ok(!('lessonId' in t),`${id}: the lesson library has no fractions lesson`);
+  assert.match(t.blurb,/^[A-Z][^.!?]*[.!?]$/,`${id}: one sentence`);assert.doesNotMatch(t.blurb,/\d/,`${id}: no number in the blurb`);
+  assert.equal(P.pathOfTopic(id),'school');assert.equal(typeof S.generatorFor(id),'function');
+  assert.equal(SYLLABUS.find((x)=>x.id===id).bands.us.startsWith('Grade '),true);
+ }
+ assert.equal(P.PATHS.school.blurb,'School maths from equivalent fractions to equations with brackets and x on both sides.');
+});
+

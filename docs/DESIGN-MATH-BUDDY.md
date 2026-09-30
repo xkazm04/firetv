@@ -201,10 +201,13 @@ the desk cannot read with one meaning (`0,75` on a UK profile, a rounded decimal
   `paths.ts`: the needle's rule on the school path, the first topic not latched secure whose prerequisites all are on
   a course), and at the first stop when nothing is secure or nothing is left.
   Where each box, tick, strand label and needle goes is `rulerModel` in `desk/src/tv/rulerRows.ts`; the school path,
-  **School maths** (four topics since Family W5b: Add and subtract fractions, then the three linear-equation topics,
-  in two strands), keeps one box per topic, as before: 419 px slots, where the focused name is fitted whole in two
-  lines from 44 down to 34 px (`fitName`; "Equations with brackets and x on both sides" sets at 40 px) and the others
-  keep 44 px, two lines, clamped. A path too long for one box per topic on the big ruler (under 288 px a
+  **School maths** (seven topics since Family W7 batch 1: Equivalent fractions, A fraction of an amount, Add and
+  subtract fractions, Multiply and divide fractions, then the three linear-equation topics, in two strands), keeps one
+  box per topic on Tonight's small ruler (239 px slots; a long name ends in an ellipsis after two lines) and **pans** on
+  the big Topics ruler, since a 239 px slot is under the 288 px minimum: the focused topic takes the 640 px slot and its
+  name is whole at 44 px (measured on every stop at 1920 x 1080 and 1280 x 720, `tools/school-units-live.cjs`). On a
+  panning school ruler the SCHOOL tick is drawn only while it is on the stage, its pill turned inward within 90 px of
+  the window's edge (`flagOnStage`), so the window never cuts it; opened at the frontier, a learner's tick is in view. A path too long for one box per topic on the big ruler (under 288 px a
   slot: Calculus 1's 22 topics in six strands) **pans under the lamp** like the paper: the track is wider than the
   stage and slides (the paper's .76 s pan) so the focused topic's centre sits under the lamp, clamped so neither end
   ever shows a gap; the focused topic takes a 640 px slot so its whole name is shown in at most three lines, fitted
@@ -245,7 +248,7 @@ the desk cannot read with one meaning (`0,75` on a UK profile, a rounded decimal
 |---|---|
 | Tonight | top bar; the sheet on the desk + kicker, title, detail, OK Open (or the first-evening title and blank sheet); two doors; the caption; the ruler (a path of more than eight topics: the strand strip) |
 | Topics | "Pick a *topic*"; the strand and blurb (or Preparing / Not written); the ruler, larger, each topic on the learner's path a stop, the lamp opening on the frontier (a long path pans under the lamp, chevrons at the edges) |
-| Practice | the paper headed with the topic's name on its path, with the six questions in print (on Calculus 1, questions the desk printed itself from its specs: "Differentiate f(x) = ...", "Find lim_(x->0) ..."; on Add and subtract fractions, six the desk wrote itself with no model call, three gentler then three with unlike bottoms: "Work out 3/4 + 1/6.", the fractions stacked); the side: "Work these on *paper*" and the taped card |
+| Practice | the paper headed with the topic's name on its path, with the six questions in print (on Calculus 1, questions the desk printed itself from its specs: "Differentiate f(x) = ...", "Find lim_(x->0) ..."; on a school unit, six the desk wrote itself with no model call, three at tier 1 then three at tier 2: "Work out 3/4 + 1/6.", "Fill in the missing number: 3/4 = ?/12." with the gap '?' stacked over 12 at the fraction size, "Write 18/24 in its simplest form.", "Find 3/5 of 40 kg.", "Work out 3/4 ÷ 1/2.", the fractions stacked); the side: "Work these on *paper*" and the taped card |
 | Sheet | the tally; the marked set on the paper, each item folded to its question and the line the pen is on, the focused one lit with OK Open; the side: kind, slip name, taped card; pills Six more ("Six more on" the topic's name), Put the sheet away |
 | Walk | the same paper with one item open: every line of working, ticks, the mark, later lines faded; the side card; Back to the sheet on the last item |
 | Page | the snapped sheet as paper, its OCR'd problems in print, the one under the lamp lifted with OK Hint; the side: problem count, read time, the real photo with the band; Menu shows the photo whole |

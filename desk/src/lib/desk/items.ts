@@ -12,7 +12,7 @@
  * rules/calc says it is well formed, prints the question from it, orders the set easy to hard, and carries the spec
  * on the item so marking can judge with no stored truth (makeCalcItems).
  *
- * A school unit with a generator (rules/school SCHOOL_GENERATORS; Family W5b: add and subtract fractions) takes a
+ * A school unit with a generator (rules/school SCHOOL_GENERATORS; Family W5b and W7: the four fractions units) takes a
  * third road with NO model call at all: code draws the specs from a fresh seed, three at tier 1 and three at tier 2,
  * prints each question itself and carries the spec and the tier on the item (makeSchoolItems, provider "code").
  */

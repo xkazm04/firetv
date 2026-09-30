@@ -11,10 +11,15 @@
  * order a learner meets the topics, and each system's year never goes down along it
  * (tools/maths-rules-test.cjs holds that): expectedIndex counts on it.
  *
- * "Add and subtract fractions" (Family W5b) comes first: it is met before linear equations. Its
- * bands and years were written FROM MEMORY and are unchecked; a maths teacher reads them before
- * release. It has no lessonId: the lesson library has no fractions lesson, so every screen that
- * looks one up finds none and says so (the existing "No lesson for this" state).
+ * The fractions units come first: they are met before linear equations. "Add and subtract
+ * fractions" came with Family W5b; "Equivalent fractions", "A fraction of an amount" and "Multiply
+ * and divide fractions" with W7 batch 1, in the order equivalent, of an amount, add and subtract,
+ * multiply and divide. Their bands and years were written FROM MEMORY and are unchecked; a maths
+ * teacher reads them before release. Where a system's usual year for a unit would sit after the
+ * year of a topic below it, the unit takes the earliest defensible year that keeps the list from
+ * going down (the comment on the unit says so): the linear topics' years are not moved. None has a
+ * lessonId: the lesson library has no fractions lesson, so every screen that looks one up finds
+ * none and says so (the existing "No lesson for this" state).
  */
 import type { SchoolSystem } from "@/lib/session/store";
 
@@ -32,6 +37,31 @@ export interface Topic {
 
 export const SYLLABUS: Topic[] = [
   {
+    id: "frac-equivalent",
+    name: "Equivalent fractions",
+    strand: "Fractions",
+    blurb: "Multiplying or dividing the top and the bottom by the same number gives an equal fraction, which is how you fill in a missing number or simplify to lowest terms.",
+    // from memory, unchecked: a maths teacher reads these four before release. US Grade 4 (equivalence), UK Year 5
+    // (simplifying by common factors is often Year 6 there). CZ and DE: rozšiřování a krácení / Erweitern und Kürzen is
+    // often taught a year later (6. ročník, Klasse 6), but add and subtract fractions sits at CZ 5 and DE 5 after it,
+    // so the earliest defensible year that keeps the list from going down is used: CZ 5, DE 5.
+    bands: { us: "Grade 4", uk: "Year 5", cz: "5. ročník", de: "Klasse 5 (varies by Bundesland)" },
+    year: { us: 4, uk: 5, cz: 5, de: 5 },
+    prereq: [],
+  },
+  {
+    id: "frac-of-amount",
+    name: "A fraction of an amount",
+    strand: "Fractions",
+    blurb: "To find a fraction of an amount you divide by the bottom to get a single part, then multiply by the top to take that many parts.",
+    // from memory, unchecked: a maths teacher reads these four before release. US Grade 5 (a fraction times a whole
+    // number), UK Year 5 (often met in Year 4 as fractions of a quantity; Year 5 keeps it after equivalent fractions),
+    // CZ 5. ročník (zlomek z čísla), DE Klasse 5 (Bruchteile von Größen, often Klasse 6; kept at 5 like the unit before).
+    bands: { us: "Grade 5", uk: "Year 5", cz: "5. ročník", de: "Klasse 5 (varies by Bundesland)" },
+    year: { us: 5, uk: 5, cz: 5, de: 5 },
+    prereq: [],
+  },
+  {
     id: "frac-add-sub",
     name: "Add and subtract fractions",
     strand: "Fractions",
@@ -39,7 +69,23 @@ export const SYLLABUS: Topic[] = [
     // from memory, unchecked: a maths teacher reads these four before release
     bands: { us: "Grade 5", uk: "Year 6", cz: "5. ročník", de: "Klasse 5 (varies by Bundesland)" },
     year: { us: 5, uk: 6, cz: 5, de: 5 },
-    prereq: [],
+    // W7: rewriting over a common bottom IS equivalent fractions
+    prereq: ["frac-equivalent"],
+  },
+  {
+    id: "frac-mul-div",
+    name: "Multiply and divide fractions",
+    strand: "Fractions",
+    blurb: "Fractions multiply top by top and bottom by bottom, and dividing by a fraction is multiplying by it turned upside down.",
+    // from memory, unchecked: a maths teacher reads these four before release. US Grade 6 (dividing a fraction by a
+    // fraction; multiplying is Grade 5), UK Year 7 (Year 6 multiplies and divides by a whole number). CZ: násobení a
+    // dělení zlomků is usually 7. ročník, and DE: Multiplizieren und Dividieren von Brüchen usually Klasse 6, but
+    // one-step equations stay at CZ 6 and DE 5 after it, so the earliest defensible year that keeps the list from
+    // going down is used: CZ 6, DE 5.
+    bands: { us: "Grade 6", uk: "Year 7", cz: "6. ročník", de: "Klasse 5–6 (varies by Bundesland)" },
+    year: { us: 6, uk: 7, cz: 6, de: 5 },
+    // simplifying a product needs equal fractions; adding them first is not needed
+    prereq: ["frac-equivalent"],
   },
   {
     id: "linear-one-step",

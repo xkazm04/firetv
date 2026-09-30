@@ -1,5 +1,7 @@
 /**
- * The School maths ruler after Family W5b put "Add and subtract fractions" before the linear equations:
+ * The School maths ruler after Family W5b put "Add and subtract fractions" before the linear equations, and W7 batch 1
+ * made the fractions strand four units (seven topics: Tonight's small ruler keeps one box per topic, the big Topics
+ * ruler pans, since seven slots of 239 px are under its 288 px minimum):
  *   - the needle rule: on a school path the needle (and where "Teach me something" opens Topics) is the first topic not
  *     latched secure AFTER the last latched one, else the first topic - so a learner who secured one-step equations
  *     keeps their place on two-step equations instead of being sent back to the new first unit. One rule, in
@@ -38,7 +40,7 @@ const {createElement}=require(path.join(root,'node_modules/react'));
 
 const SCHOOL=P.topicsOf('school'),CALC=P.topicsOf('calc1');
 const ids=(ts)=>ts.map((t)=>t.id);
-const [F,ONE,TWO,BOTH]=ids(SCHOOL);
+const [E,O,F,MD,ONE,TWO,BOTH]=ids(SCHOOL);
 /** A latched-secure record (the TV reads only `secure`, `estimate`, `slips`). */
 const rec=(topic,secure=true,estimate=secure?1:0.4)=>({topic,seen:6,right:5,estimate,secure,lastSeen:1,slips:[]});
 const skillsOf=(list)=>Object.fromEntries(list.map((id)=>[id,rec(id)]));
@@ -53,18 +55,21 @@ function seated({age=12,system='uk',type='elementary',mathPath}={}){
 
 // ------------------------------------------------------------------ 1. the needle rule
 test('1: the school frontier is the first topic not secure after the last secure one - the same on the ruler, the strip and Topics',()=>{
- assert.deepEqual(ids(SCHOOL),['frac-add-sub','linear-one-step','linear-two-step','linear-both-sides']);
+ // W7 batch 1: seven topics, the four fractions units first (pinned here and in maths-rules-test, maths-paths-test)
+ assert.deepEqual(ids(SCHOOL),['frac-equivalent','frac-of-amount','frac-add-sub','frac-mul-div','linear-one-step','linear-two-step','linear-both-sides']);
  // [secure ids, frontierOn id (undefined: none left), the ruler's topic, Teach me something's focus]
  const CASES=[
-  [[],F,0,0,'a fresh learner starts on fractions'],
-  [[ONE],TWO,2,2,'one-step equations secure: the needle stays on two-step equations, not back at fractions'],
-  [[F],ONE,1,1,'only fractions secure: on to one-step equations'],
-  [[F,ONE],TWO,2,2],
-  [[ONE,TWO],BOTH,3,3],
-  [[F,ONE,TWO],BOTH,3,3],
-  [[F,ONE,TWO,BOTH],undefined,3,0,'everything secure: the needle at the end, Topics on the first stop'],
-  [[BOTH],undefined,3,0,'the last topic secure: nothing after it'],
-  [[F,TWO],BOTH,3,3,'a gap before the last secure topic does not pull the needle back'],
+  [[],E,0,0,'a fresh learner starts on equivalent fractions'],
+  [[ONE],TWO,5,5,'one-step equations secure: the needle stays on two-step equations, not back at fractions'],
+  [[F],MD,3,3,'only add and subtract fractions secure: on to multiply and divide'],
+  [[E],O,1,1],
+  [[E,O,F,MD],ONE,4,4,'every fractions unit secure: on to one-step equations'],
+  [[O,MD],ONE,4,4,'a gap before the last secure fractions unit does not pull the needle back'],
+  [[ONE,TWO],BOTH,6,6],
+  [[E,O,F,MD,ONE,TWO],BOTH,6,6],
+  [[E,O,F,MD,ONE,TWO,BOTH],undefined,6,0,'everything secure: the needle at the end, Topics on the first stop'],
+  [[BOTH],undefined,6,0,'the last topic secure: nothing after it'],
+  [[F,TWO],BOTH,6,6,'a gap before the last secure topic does not pull the needle back'],
  ];
  for(const [secure,next,ruler,focus,why] of CASES){
   const label=why??JSON.stringify(secure);
@@ -112,27 +117,42 @@ test('3: schoolMarks - the tick with a school year, the gap line only with a pla
 function draw(s){const {MathsTV}=require(src('maths/MathsTV.tsx'));const q=console.error;console.error=()=>{};try{return renderToStaticMarkup(createElement(MathsTV,{s,busy:false}));}finally{console.error=q;}}
 const leftOf=(html,cls)=>{const m=new RegExp(`class="${cls}"[^>]*style="left:\\s*([\\d.]+)px`).exec(html);return m?Number(m[1]):null;};
 
-test('4: on the TV, for a 12-year-old in each school system: the SCHOOL tick is drawn, the gap line is not, the needle at the frontier',()=>{
+test('4: on the TV, for a 12-year-old in each school system: the SCHOOL tick is drawn, the gap line is not, the needle at the frontier (Tonight in boxes, Topics panning)',()=>{
  const span=(1728-52)/SCHOOL.length;
+ // Topics pans with seven topics and opens at the frontier (two-step equations, stop 5, as Teach me something does):
+ // the focused slot is FOCUS_SPAN wide, every other MIN_SPAN, from PAD; so slot 5 starts at 26 + 5 x 288 = 1466
+ const panX=(i)=>26+i*RR.MIN_SPAN+(i>5?RR.FOCUS_SPAN-RR.MIN_SPAN:0);
+ // the SCHOOL tick for a 12-year-old: us Grade 7, uk Year 8, cz 7. ročník reach two-step equations (6 topics); de Klasse 7 all 7
+ const EXP={us:6,uk:6,cz:6,de:7};
  for(const system of ['us','uk','cz','de']){
+  const exp=P.expectedOn('school',system,12);assert.equal(exp,EXP[system],`${system}: a 12-year-old is past ${EXP[system]} topics`);
   for(const screen of ['tonight','topics']){
-   const s={...seated({system}),screen,focus:0,skills:skillsOf([ONE])};
+   const focus=screen==='topics'?5:0;
+   assert.equal(K.topicsFocus({profiles:[{id:'a'}],learner:{id:'a'},skills:skillsOf([ONE])}),5,'Topics opens on two-step equations');
+   const s={...seated({system}),screen,focus,skills:skillsOf([ONE])};
    const html=draw(s);
    assert.match(html,/data-role="maths-ruler"/,`${system} ${screen}: the ruler`);
    assert.match(html,/class="mb-flag"[^>]*>.*?<div class="mc">School<\/div>/,`${system} ${screen}: the SCHOOL tick is drawn`);
    assert.doesNotMatch(html,/mb-gapline/,`${system} ${screen}: no gap line (D2: no placement in Phase 1)`);
-   const exp=P.expectedOn('school',system,12);
-   assert.equal(leftOf(html,'mb-flag'),26+Math.max(0,Math.min(SCHOOL.length,exp))*span,`${system}: the tick after ${exp} topics`);
-   assert.equal(leftOf(html,'mb-marker'),26+2*span,`${system} ${screen}: the needle at the start of two-step equations, not at fractions`);
+   const m=RR.rulerModel(SCHOOL,{},screen==='topics'?5:undefined,screen==='topics');
+   assert.equal(m.pan,screen==='topics',`${screen}: ${screen==='topics'?'the big ruler pans':'one box per topic'}`);
+   assert.equal(leftOf(html,'mb-flag'),RR.flagX(m,exp),`${system} ${screen}: the tick after ${exp} topics`);
+   assert.equal(leftOf(html,'mb-flag'),screen==='topics'?(exp>=7?m.end:panX(exp)):26+exp*span);
+   // de's tick is at the very end of the track, near the window's right edge: its pill turns inward, never cut
+   if(screen==='topics')assert.equal(/class="mb-flag" data-end="true"/.test(html),system==='de',`${system}: the pill turned inward only at the window's edge`);
+   assert.equal(leftOf(html,'mb-marker'),screen==='topics'?1466:26+5*span,`${system} ${screen}: the needle at the start of two-step equations, not at fractions`);
+   if(screen==='topics')assert.match(html,/data-pan="true"/);else assert.doesNotMatch(html,/data-pan="true"/);
    for(const t of SCHOOL)assert.ok(html.includes(t.name),`${t.name} is on the ruler`);
   }
  }
- // a fresh learner: the needle at the start of the ruler (fractions), the tick still drawn, no gap line
+ // a fresh learner: the needle at the start of the ruler (equivalent fractions), the tick still drawn, no gap line
  const fresh=draw({...seated({system:'uk'}),screen:'topics',focus:0,skills:{}});
- assert.equal(leftOf(fresh,'mb-marker'),26);assert.match(fresh,/class="mb-flag"/);assert.doesNotMatch(fresh,/mb-gapline/);
- // with fractions secure and one-step equations in progress, the needle is part way through one-step equations
- const inProgress=draw({...seated({system:'cz'}),screen:'tonight',focus:0,skills:{[F]:rec(F),[ONE]:rec(ONE,false,0.5)}});
- assert.equal(leftOf(inProgress,'mb-marker'),26+(1+0.5)*span);
+ assert.equal(leftOf(fresh,'mb-marker'),26);assert.doesNotMatch(fresh,/class="mb-flag"/,'the tick is past the window on the first stop (4a)');assert.doesNotMatch(fresh,/mb-gapline/);
+ const freshTonight=draw({...seated({system:'uk'}),screen:'tonight',focus:0,skills:{}});
+ assert.equal(leftOf(freshTonight,'mb-marker'),26);assert.match(freshTonight,/class="mb-flag"/,'Tonight draws the tick');assert.doesNotMatch(freshTonight,/mb-gapline/);
+ // with add and subtract secure and multiply and divide in progress, the needle is part way through multiply and divide
+ const inProgress=draw({...seated({system:'cz'}),screen:'tonight',focus:0,skills:{[F]:rec(F),[MD]:rec(MD,false,0.5)}});
+ assert.equal(leftOf(inProgress,'mb-marker'),26+(3+0.5)*span);
  // "other" has no school year: no tick, no gap line (as before)
  const other=draw({...seated({type:'other',age:30}),screen:'topics',focus:0,skills:{}});
  assert.doesNotMatch(other,/class="mb-flag"/);assert.doesNotMatch(other,/mb-gapline/);
@@ -141,14 +161,28 @@ test('4: on the TV, for a 12-year-old in each school system: the SCHOOL tick is 
  assert.doesNotMatch(calc,/class="mb-flag"/);assert.doesNotMatch(calc,/mb-gapline/);assert.match(calc,/data-pan="true"/);
 });
 
-test('4b: the focused name is fitted whole on the big ruler whether it pans or not (the fourth school topic in a 419 px slot)',()=>{
+test('4a: flagOnStage - on a panning ruler the SCHOOL tick is drawn only while it is on the stage, its pill turned inward near an edge; a ruler that does not pan draws it always',()=>{
+ const small=RR.rulerModel(SCHOOL,{},undefined,false);
+ for(const x of [26,900,1702])assert.deepEqual(RR.flagOnStage(small,x),{seen:true,edge:null});
+ const at0=RR.rulerModel(SCHOOL,{},0,true);assert.equal(at0.offset,0);
+ assert.deepEqual(RR.flagOnStage(at0,RR.flagX(at0,6)),{seen:false,edge:null},'Topics on the first stop: a UK 12-year-old\'s tick (x 2106) is past the window, not drawn half');
+ assert.deepEqual(RR.flagOnStage(at0,1700),{seen:true,edge:'r'});assert.deepEqual(RR.flagOnStage(at0,40),{seen:true,edge:'l'});assert.deepEqual(RR.flagOnStage(at0,864),{seen:true,edge:null});
+ const html=draw({...seated({system:'uk'}),screen:'topics',focus:0,skills:{}});
+ assert.doesNotMatch(html,/class="mb-flag"/,'no pill cut by the window');assert.match(html,/data-role="maths-more"/,'the chevron says there is more');
+ const at6=draw({...seated({system:'uk'}),screen:'topics',focus:6,skills:{}});
+ assert.match(at6,/class="mb-flag"[^>]*>.*?<div class="mc">School<\/div>/,'panned to the end, the tick is drawn');
+});
+
+test('4b: the focused name is fitted whole on the big ruler whether it pans or not (seven school topics: the Topics ruler pans, the focused slot 640 px)',()=>{
  const tv=fs.readFileSync(src('maths/MathsTV.tsx'),'utf8');
  assert.match(tv,/useNameFit\(m\.pan \|\| !!big,/,'the fit runs on the big ruler, panning or not');
  assert.match(tv,/ref=\{big \? win : undefined\}/,'the non-panning big ruler carries the fit');
- assert.equal((1728-52)/SCHOOL.length,419);
+ assert.ok((1728-52)/SCHOOL.length<RR.MIN_SPAN,'seven slots would be under the minimum, so the big ruler pans');
+ for(let f=0;f<SCHOOL.length;f++){const m=RR.rulerModel(SCHOOL,{},f,true);assert.equal(m.pan,true);assert.equal(m.topics[f].sw,RR.FOCUS_SPAN,`${SCHOOL[f].name}: the wide slot`);}
+ assert.ok(SCHOOL.length<=RR.STRIP_AFTER,'Tonight still draws one box per topic (the strand strip takes over past 8)');
 });
 
-test('5: the first evening\'s title is the path\'s own name, and a learner with one-step equations secure counts one of four',()=>{
+test('5: the first evening\'s title is the path\'s own name, and a learner with one-step equations secure counts one of seven',()=>{
  assert.match(draw({...seated(),screen:'tonight',focus:0,skills:{}}),/School maths, from the first/);
- assert.match(draw({...seated(),screen:'tonight',focus:0,skills:skillsOf([ONE])}),/One of 4 topics/);
+ assert.match(draw({...seated(),screen:'tonight',focus:0,skills:skillsOf([ONE])}),/One of 7 topics/);
 });
