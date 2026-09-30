@@ -108,7 +108,8 @@ export async function explainSchool(
     (memory.length ? `What the desk has learned about this student:\n${memory.map((m) => `- ${m}`).join("\n")}\n\n` : "") +
     `Reply to them in one or two sentences that point at the step, not the answer.\n\n` +
     `value: the final answer the student says they got, written in figures as they said it: a whole number, a fraction, ` +
-    `a mixed number or a decimal (eleven twelfths is 11/12, one and five twelfths is 1 5/12, nought point five is 0.5). ` +
+    `a mixed number, a decimal or a percentage (eleven twelfths is 11/12, one and five twelfths is 1 5/12, nought point five is 0.5, ` +
+    `thirty-five percent is 35%), with a currency sign if they said one (seven euros fifteen is €7.15). ` +
     `Their answer, not yours — do not work it out and do not simplify it. An empty string if they did not say one.`;
   const { json, provider, ms } = await text<{ reply: string; value: string }>({ system: schoolSystem(age), prompt, schema: SCHOOL_SCHEMA, model: "best" });
   return {

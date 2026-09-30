@@ -645,6 +645,7 @@ test('W7 8: a hint on each new unit\'s task names the unit in its stance, and a 
 });
 
 // ------------------------------------------------------------------ 8. Family W7 batch 2: decimals and percent, read, withheld and marked
+const cv=(expr,to)=>({shape:'convert',expr,to});
 /** [task text, the spec it reads as (null: refused)] per unit; each spec's value is worked in school-rules-test. */
 const B2_TASKS={
  'dec-arith':[
@@ -659,8 +660,22 @@ const B2_TASKS={
   ['€4.35 + £2.80',null],['2.25 - 7.5',null],['4.3567 + 1',null],['Work out 4.35 + 2.8 please',null],['Add 4.35',null],['A pen costs £1.35. How much do 4 pens cost?',null],
   ['4.35 + x',null],['3.6 : 0.4',null],['£3.45 × 4.5',null],['1.5.2 + 3',null],['4.35 + 2.8. Give your answer as a fraction.',null],['Work out 04.35 + 2.8',null],
  ],
+ 'dec-convert':[
+  ['Write 3/8 as a decimal',cv('3/8','decimal')],['Write 3/8 as a decimal.',cv('3/8','decimal')],['Convert 3/8 to a decimal',cv('3/8','decimal')],['Change 3/8 into a decimal',cv('3/8','decimal')],
+  ['Express 3/8 as a decimal',cv('3/8','decimal')],['What is 3/8 as a decimal?',cv('3/8','decimal')],['Write 7/20 as a percentage',cv('7/20','percent')],['Write 7/20 as a percent',cv('7/20','percent')],
+  ['Convert 7/20 to a percentage.',cv('7/20','percent')],['Write 0.35 as a fraction',cv('0.35','fraction')],['Write 0.35 as a fraction in its simplest form.',cv('0.35','fraction')],
+  ['What is 0.35 as a fraction?',cv('0.35','fraction')],['Write 0.35 as a fraction in lowest terms',cv('0.35','fraction')],['Express 0.6 as a percentage',cv('0.6','percent')],['Write 0.6 as a percent',cv('0.6','percent')],
+  ['Change 35% into a decimal',cv('35%','decimal')],['Write 35% as a decimal',cv('35%','decimal')],['Write 35 % as a decimal',cv('35%','decimal')],['Write 35 percent as a fraction',cv('35%','fraction')],
+  ['Write 12.5% as a fraction in its simplest form',cv('12.5%','fraction')],['Write 0.35 as a simplified fraction.',cv('0.35','fraction')],['(a) Write 3/8 as a decimal',cv('3/8','decimal')],['Write ⅜ as a decimal',cv('3/8','decimal')],['Turn 5/4 into a percentage',cv('5/4','percent')],
+  ['Write 0.125 as a fraction',cv('0.125','fraction')],['Write 3 / 8 as a decimal',cv('3/8','decimal')],
+  // refused
+  ['Write 1/3 as a decimal',null],['Write 2/3 as a percentage',null],['Write 0.35 as a decimal',null],['Write 6/8 as a decimal',null],['Write 3/8 as a decimal to 2 decimal places',null],
+  ['Write 3/8 as a decimal in its simplest form',null],['Write 0.50 as a fraction',null],['Write 100% as a decimal',null],['Write 0.35 as a fraction and a percentage',null],['Write 3 as a percentage',null],
+  ['Write 0,35 as a fraction',null],['Write 35% as a decimal please',null],['Write 3/8 as a ratio',null],['A shop takes 35% off. Write this as a decimal.',null],['Write x/8 as a decimal',null],
+  ['Write 0.3535 as a fraction',null],['What percentage is 7 out of 20?',null],['Write 12.25% as a fraction',null],
+ ],
 };
-const B2GEN={'dec-arith':S.genDecimal};
+const B2GEN={'dec-arith':S.genDecimal,'dec-convert':S.genConvert};
 for(const unit of Object.keys(B2_TASKS)){
  const rows=B2_TASKS[unit];
  test(`W7b 4-${unit}: specFromQuestion reads the unit's tasks conservatively - ${rows.length} phrasings, ${rows.filter((t)=>t[1]===null).length} of them refused`,()=>{
@@ -689,6 +704,11 @@ const B2_PAGES={
   {spec:cs('4.35 + 2.8'),a:'7.15',want:['right']},{spec:cs('4.35 + 2.8'),a:'4.63',want:['wrong','dec-lined-up']},{spec:cs('3.6 × 0.4'),a:'14.4',want:['wrong','dec-point-product']},
   {spec:cs('3.6 × 0.4'),a:'144',want:['wrong','dec-point-dropped']},{spec:cs('4.35 + 2.80',{unit:'€'}),a:'€7.15',want:['right']},{spec:cs('3.45 × 4',{unit:'£'}),a:'£13.8',want:['right']},
   {spec:cs('4.35 + 2.8'),a:'7.2',want:['unsure']},{spec:cs('3.6 × 0.4'),a:'',want:['unsure']},{spec:cs('3.45 × 4',{unit:'£'}),a:'€13.80',want:['unsure']},
+ ],
+ 'dec-convert':[
+  {spec:cv('3/8','decimal'),a:'0.375',want:['right']},{spec:cv('3/8','decimal'),a:'2.67',want:['wrong','conv-flipped']},{spec:cv('7/20','percent'),a:'0.35%',want:['wrong','conv-not-scaled']},
+  {spec:cv('35%','decimal'),a:'3500',want:['wrong','conv-wrong-way']},{spec:cv('35%','decimal'),a:'3.5',want:['wrong','conv-ten-times']},{spec:cv('7/20','decimal'),a:'7.2',want:['wrong','conv-top-dot-bottom']},
+  {spec:cv('7/20','percent'),a:'35',want:['unsure']},{spec:cv('0.35','fraction'),a:'',want:['unsure']},{spec:cv('0.35','fraction'),a:'7/20',want:['right']},{spec:cv('0.6','percent'),a:'60%',want:['right']},
  ],
 };
 for(const unit of Object.keys(B2_PAGES)){

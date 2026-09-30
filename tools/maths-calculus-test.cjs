@@ -343,7 +343,8 @@ test('7b: the W7 school corpus - every question the three new generators print r
 test('7c: the W7 batch-2 school corpus - every decimals and percent question the new generators print renders on the practice sheet, every number, point, percent sign and unit kept',()=>{
  // decimals: 'Work out 4.35 + 2.8.', 'Work out €4.35 + €2.80.', 'Work out £3.45 × 4.' (no fraction stacked; a decimal is one number, its point kept)
  const S=require(path.join(root,'src/lib/rules/school.ts'));
- const GENS=[[S.genDecimal,()=>0]];
+ // conversions: 'Write 3/8 as a decimal.' stacks the given fraction; 'Write 35% as a simplified fraction.' stacks none
+ const GENS=[[S.genDecimal,()=>0],[S.genConvert,(sp)=>(/\//.test(sp.expr)?1:0)]];
  const off=[];let n=0;
  for(const [g,fracs] of GENS)for(const tier of [1,2])for(let seed=0;seed<100;seed++){
   const sp=g(seed,tier),q=S.question(sp);n++;

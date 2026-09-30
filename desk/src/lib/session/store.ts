@@ -118,8 +118,11 @@ export interface Practice { topic: string; items: PracticeItem[]; pageId?: strin
 
 /** A spec's own parameters, by name: the ones its question prints. `zero` (the result, for a symmetry item) is not one. */
 const SPEC_KEYS = ["f", "at", "a", "b", "side", "on", "kind", "x0", "steps"] as const;
-/** A school spec's own parameters (rules/school.ts SchoolSpec): the expression, the form and unit asked for, the sign flag. */
-const SCHOOL_SPEC_KEYS = ["expr", "form", "unit", "allowNegative"] as const;
+/**
+ * A school spec's own parameters (rules/school.ts SchoolSpec): the expression, the form and unit asked for, the sign flag,
+ * and the form a conversion asks for (`to`, Family W7 batch 2: "Write 3/8 as a decimal").
+ */
+const SCHOOL_SPEC_KEYS = ["expr", "form", "unit", "allowNegative", "to"] as const;
 const plainValue = (v: unknown) => typeof v === "string" || (typeof v === "number" && Number.isFinite(v));
 /**
  * A spec as a screen may see it: a known shape and only its printed parameters - any other key (an answer) stops here.

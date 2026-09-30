@@ -261,7 +261,8 @@ test('W7 5b: the new shapes survive the store - practice.set, practice.marked, p
   const it=put(bad);assert.equal(it.spec,undefined,JSON.stringify(bad));assert.equal(it.tier,undefined,'no spec, no tier');
  }
  const src=fs.readFileSync(storeFile,'utf8');
- assert.match(src,/const SCHOOL_SPEC_KEYS = \["expr", "form", "unit", "allowNegative"\] as const;/,'the W7 shapes need no new store key');
+ // the W7 batch-1 shapes needed no new store key; W7 batch 2 adds exactly one, `to` (a conversion's asked form: W7b 5b below)
+ assert.match(src,/const SCHOOL_SPEC_KEYS = \["expr", "form", "unit", "allowNegative", "to"\] as const;/,'W7 batch 2 adds only `to`');
  for(const sh of ['missing','simplify','fraction-of']){assert.ok(S.SCHOOL_SHAPES.includes(sh));assert.ok(!C.CALC_SHAPES.includes(sh),`${sh} is not a Calculus shape`);assert.equal(C.wellFormed({shape:sh,expr:'3/4'}).ok,false);}
 });
 
@@ -288,10 +289,15 @@ test('W7 1: the school path has seven topics - four fractions units, then the th
 /** Each unit's tier, as its generator documents it (rules/school), read back from the spec alone. */
 const B2_TIER={
  'dec-arith':(sp)=>(/×/.test(sp.expr)?2:1),
+ // tier 1: a value below one whose lowest bottom goes into a hundred; tier 2 anything else (eighths .. eightieths, or over one)
+ 'dec-convert':(sp)=>{const f=/^(\d+)\/(\d+)$/.exec(sp.expr),d=/^(\d+)\.(\d+)$/.exec(sp.expr),p=/^(\d+)(?:\.(\d))?%$/.exec(sp.expr);
+  let n,den;if(f){n=+f[1];den=+f[2];}else if(d){n=Number(d[1]+d[2]);den=10**d[2].length;}else{n=Number(p[1]+(p[2]??''));den=100*10**(p[2]??'').length;}
+  const g=(a,b)=>(b?g(b,a%b):a),k=g(n,den);n/=k;den/=k;return 100%den===0&&n<den?1:2;},
 };
 /** The printed question of each unit, and the keys its spec may carry. */
 const B2_SHAPE={
  'dec-arith':[/^Work out (?:[€£]?\d+\.\d+ [-+] [€£]?\d+\.\d+|[€£]?\d+(?:\.\d+)? × \d+(?:\.\d+)?)\.$/,['shape','expr','unit']],
+ 'dec-convert':[/^Write (?:\d+\/\d+|\d+\.\d+|\d+(?:\.\d)?%) as (?:a decimal|a percentage|a simplified fraction)\.$/,['shape','expr','to']],
 };
 for(const unit of Object.keys(B2_TIER)){
  test(`W7b 2-${unit}: makeSchoolItems writes six distinct items by code - three tier 1, then three tier 2 - pure for a seed, with no engine call`,()=>{
@@ -322,6 +328,7 @@ for(const unit of Object.keys(B2_TIER)){
 test('W7b 5b: the batch-2 specs survive the store - practice.set, practice.marked, practice.settle and a reload - and a Calculus spec and the batch-1 specs are untouched',()=>{
  seat();
  const specs=[{shape:'compute',expr:'4.35 + 2.8'},{shape:'compute',expr:'4.35 + 2.80',unit:'€'},{shape:'compute',expr:'3.45 × 4',unit:'£'},{shape:'compute',expr:'3.6 × 0.4'},
+  {shape:'convert',expr:'3/8',to:'decimal'},{shape:'convert',expr:'0.35',to:'fraction'},{shape:'convert',expr:'12.5%',to:'fraction'},{shape:'convert',expr:'7/20',to:'percent'},
   {shape:'missing',expr:'3/4 = ?/12'},{shape:'fraction-of',expr:'5/8 of 72',unit:'€'}];
  const calc={shape:'critical-point',f:'x^2 - 4x + 1',on:[0,5]};
  const N=specs.length;
@@ -339,7 +346,9 @@ test('W7b 5b: the batch-2 specs survive the store - practice.set, practice.marke
  assert.deepEqual(store.getSession().practice.items.slice(0,N).map((i)=>i.tier),specs.map((_,i)=>1+(i%2)));
  const put=(spec)=>{store.dispatch({type:'practice.set',practice:{topic:'dec-arith',marked:false,items:[{n:1,question:'q',spec,tier:1}]}});return store.getSession().practice.items[0];};
  assert.deepEqual(put({shape:'compute',expr:'4.35 + 2.8',answer:'7.15',value:7.15}).spec,{shape:'compute',expr:'4.35 + 2.8'},'an answer stops at the store');
- for(const bad of [{shape:'compute',expr:'4.3567 + 1'},{shape:'compute',expr:'2.25 - 7.5'},{shape:'compute',expr:'4.35 + 2.8',unit:'CZK'}]){
+ assert.deepEqual(put({shape:'convert',expr:'3/8',to:'decimal',answer:'0.375'}).spec,{shape:'convert',expr:'3/8',to:'decimal'},'a conversion keeps `to`, and only its keys');
+ for(const bad of [{shape:'compute',expr:'4.3567 + 1'},{shape:'compute',expr:'2.25 - 7.5'},{shape:'compute',expr:'4.35 + 2.8',unit:'CZK'},
+  {shape:'convert',expr:'1/3',to:'decimal'},{shape:'convert',expr:'0.35',to:'decimal'},{shape:'convert',expr:'3/8',to:'ratio'},{shape:'convert',expr:'3/8'},{shape:'compute',expr:'3/4 + 1/6',to:'decimal'}]){
   const it=put(bad);assert.equal(it.spec,undefined,JSON.stringify(bad));assert.equal(it.tier,undefined,'no spec, no tier');
  }
 });
