@@ -100,6 +100,10 @@ Both faces come through `next/font/google` (`desk/src/essay/fonts.ts`), self-hos
   (POST /api/analyse kind `rewrite`). The desk re-judges that one sentence in its paragraph, through the
   same lens, against the move the page taught; every other verdict is kept. The page stays on the
   sentence, and a rewrite is not another paragraph read: no writing episode, no lens attempt.
+- The paragraph comes in as text, never as a photo of handwriting: a `.txt` or `.md` file the learner sends, or a message typed,
+  pasted or dictated on the phone. A text with several paragraphs is split on blank lines and read one paragraph at a time; the phone
+  steps through them with Next (`paragraphsOf`, `rules/essay`). The reading core takes one paragraph, so one paragraph in reads
+  exactly as it always did; reading a whole piece is later work.
 - A strong sentence shows its job in the giant type and "Nothing to fix"; a neutral one is quiet.
 - A faulty sentence without its own fix takes its lens's playbook lesson as the move - never an empty slot.
 

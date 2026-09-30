@@ -555,3 +555,120 @@ test('rewrite case 7: rewriteState reads the verdict, and the TV inks the move f
  const derived=tv.match(/const (\w+) = [^;]*rewriteStatus\(/);
  if(derived)for(const x of inked)assert.doesNotMatch(x,new RegExp(`\\b${derived[1]}\\b`),'the lit phone chip and the ink are two things');
 });
+
+// ---- W3: text in, one paragraph at a time (paragraphsOf, the file check, the length cap) ----
+const {paragraphsOf,essayFileProblem,essayTooLong,ESSAY_FILE_MAX_BYTES,ESSAY_PARAGRAPH_MAX_CHARS}=require(path.join(root,'src/lib/rules/essay.ts'));
+const P1='Many students are tired. Sleep is important. Schools start early. This is bad.';
+const P2='Homework takes hours. Research found that teenagers sleep less. Therefore it should shrink.';
+const P3='In conclusion, the school day should start later.';
+
+test('paragraphsOf: one paragraph in is one paragraph out, and it reads exactly as before',()=>{
+ assert.deepEqual(paragraphsOf(P1),[P1]);
+ // the same reading input as today: the sentences of the paragraph are the sentences of the text as it was sent
+ for(const p of [P1,P2,THREE,'No full stop here','Dr. Smith agreed. "Now," he said.','  padded   with   spaces.  '])
+  assert.deepEqual(splitSentences(paragraphsOf(p)[0]),splitSentences(p),JSON.stringify(p));
+ // a single paragraph broken over lines reads the same too
+ const wrapped='The school day starts too early.\nResearch found that teenagers\nfall asleep later.\nTherefore the start should move.';
+ assert.deepEqual(splitSentences(paragraphsOf(wrapped)[0]),splitSentences(wrapped));
+ assert.equal(paragraphsOf(wrapped).length,1,'a text with no blank line is one paragraph');
+});
+test('paragraphsOf: blank lines split, in order; two and three paragraphs',()=>{
+ assert.deepEqual(paragraphsOf(P1+'\n\n'+P2),[P1,P2]);
+ assert.deepEqual(paragraphsOf([P1,P2,P3].join('\n\n')),[P1,P2,P3]);
+ assert.deepEqual(paragraphsOf([P1,P2,P3].join('\n\n\n\n\n')),[P1,P2,P3],'a long run of blank lines is one break');
+});
+test('paragraphsOf: CRLF, lone CR, and lines that hold only spaces or tabs are blank lines',()=>{
+ assert.deepEqual(paragraphsOf(P1+'\r\n\r\n'+P2+'\r\n\r\n'+P3),[P1,P2,P3]);
+ assert.deepEqual(paragraphsOf(P1+'\r\r'+P2),[P1,P2]);
+ assert.deepEqual(paragraphsOf(P1+'\n   \n'+P2),[P1,P2]);
+ assert.deepEqual(paragraphsOf(P1+'\n \t \n\t\n'+P2),[P1,P2]);
+ assert.deepEqual(paragraphsOf(P1+'\r\n  \r\n'+P2),[P1,P2]);
+ assert.deepEqual(paragraphsOf(P1+'\n'+String.fromCharCode(0x2028)+'\n'+P2),[P1,P2],'a Unicode line separator is a line break');
+});
+test('paragraphsOf: leading and trailing blanks go; empty and whitespace-only text is no paragraphs',()=>{
+ assert.deepEqual(paragraphsOf('\n\n  \n'+P1+'\n\n\n'),[P1]);
+ assert.deepEqual(paragraphsOf('   '+P1+'   '),[P1]);
+ for(const e of ['','   ','\n','\n\n\n','\r\n \r\n',' \t \n \t '])assert.deepEqual(paragraphsOf(e),[],JSON.stringify(e));
+});
+test('paragraphsOf: never throws; a non-string gives []',()=>{
+ for(const v of [undefined,null,0,42,NaN,true,{},[],['a'],()=>1,Symbol('x'),{toString:()=>'x'}])assert.deepEqual(paragraphsOf(v),[],String(typeof v));
+ assert.doesNotThrow(()=>paragraphsOf(String.fromCharCode(0)+'\ud800 lone surrogate \n\n '+String.fromCharCode(0xfffd)));
+});
+test('paragraphsOf: inner line breaks become single spaces',()=>{
+ assert.deepEqual(paragraphsOf('One line.\nTwo lines.\r\nThree lines.'),['One line. Two lines. Three lines.']);
+ assert.deepEqual(paragraphsOf('First part\n   continues here.\n\nSecond.'),['First part continues here.','Second.']);
+ for(const p of paragraphsOf(P1+'\n'+P2+'\n\n'+P3))assert.doesNotMatch(p,/[\r\n]/);
+});
+test('paragraphsOf: a very long single paragraph stays one',()=>{
+ const long=(P1+' ').repeat(400).trim();
+ assert.ok(long.length>ESSAY_PARAGRAPH_MAX_CHARS);
+ assert.deepEqual(paragraphsOf(long),[long],'the splitter never cuts a paragraph by length; the cap is the route\'s job');
+ assert.equal(paragraphsOf('word '.repeat(50000)).length,1);
+});
+test('paragraphsOf: a markdown heading is its own item; that is the whole rule for titles',()=>{
+ assert.deepEqual(paragraphsOf('# Later school starts\n\n'+P1),['# Later school starts',P1],'a title, a blank line, a paragraph');
+ assert.deepEqual(paragraphsOf('## Why\n'+P1+'\n\n'+P2),['## Why',P1,P2],'a heading never fuses with the lines under it');
+ assert.deepEqual(paragraphsOf(P1+'\n### Next part\n'+P2),[P1,'### Next part',P2],'nor with the lines above it');
+ assert.deepEqual(paragraphsOf('Later school starts\n\n'+P1),['Later school starts',P1],'a title-only first line before a blank line is an item of its own');
+ assert.deepEqual(paragraphsOf('#hashtag is not a heading. It is one paragraph.'),['#hashtag is not a heading. It is one paragraph.']);
+});
+
+test('essayFileProblem: .txt and .md are fine; a .docx, a .jpg and other types are refused in one plain sentence',()=>{
+ for(const f of [{name:'essay.txt',type:'text/plain',size:900},{name:'Essay.TXT',type:'text/plain',size:900},{name:'draft.md',type:'text/markdown',size:900},
+  {name:'draft.md',type:'',size:900},{name:'draft.md',type:'application/octet-stream',size:900},{name:'a.md',type:'text/x-markdown',size:1}])
+  assert.equal(essayFileProblem(f),null,JSON.stringify(f));
+ const refused=[
+  {name:'essay.docx',type:'application/vnd.openxmlformats-officedocument.wordprocessingml.document',size:900},
+  {name:'essay.docx',type:'',size:900},{name:'page.jpg',type:'image/jpeg',size:900},{name:'page.png',type:'image/png',size:900},
+  {name:'essay.pdf',type:'application/pdf',size:900},{name:'essay',type:'text/plain',size:900},{name:'essay.txt.exe',type:'text/plain',size:900},
+  {name:'essay.txt',type:'image/jpeg',size:900},{name:'essay.md',type:'application/pdf',size:900},{name:'',type:'',size:900}];
+ for(const f of refused){const m=essayFileProblem(f);assert.equal(typeof m,'string',JSON.stringify(f));assert.match(m,/\.txt and \.md/);assert.doesNotMatch(m,/—|–/,'no dashes in copy');}
+});
+test('essayFileProblem: a file over the limit, an empty file and a size that is not a number are refused',()=>{
+ assert.equal(ESSAY_FILE_MAX_BYTES,100*1024);
+ assert.equal(essayFileProblem({name:'a.txt',type:'text/plain',size:ESSAY_FILE_MAX_BYTES}),null,'exactly at the limit is fine');
+ assert.match(essayFileProblem({name:'a.txt',type:'text/plain',size:ESSAY_FILE_MAX_BYTES+1}),/too big/);
+ assert.match(essayFileProblem({name:'a.md',type:'text/markdown',size:5*1024*1024}),/too big/);
+ assert.match(essayFileProblem({name:'a.txt',type:'text/plain',size:0}),/empty/);
+ for(const size of [undefined,null,'900',NaN,-1,Infinity])assert.equal(typeof essayFileProblem({name:'a.txt',type:'text/plain',size}),'string',String(size));
+ assert.doesNotThrow(()=>essayFileProblem(undefined));assert.doesNotThrow(()=>essayFileProblem(null));assert.doesNotThrow(()=>essayFileProblem({}));
+});
+test('essayFileProblem: the text itself is checked once it is read: NUL bytes, a run of replacement marks, nothing but blanks',()=>{
+ const ok={name:'a.txt',type:'text/plain',size:900};
+ assert.equal(essayFileProblem(ok,P1+'\n\n'+P2),null);
+ assert.equal(essayFileProblem(ok,'Café and naïve, a smart “quote”.'),null,'ordinary non-ASCII text is fine');
+ assert.match(essayFileProblem(ok,'PK'+String.fromCharCode(3,4,0)+'binary'),/plain text/,'a NUL byte');
+ assert.match(essayFileProblem(ok,'x'+String.fromCharCode(0xfffd).repeat(8)+'y'),/plain text/,'a binary file decoded as text is mostly replacement marks');
+ assert.equal(essayFileProblem(ok,'One stray mark '+String.fromCharCode(0xfffd)+' in a real essay.'),null,'one bad character does not refuse a real essay');
+ assert.match(essayFileProblem(ok,'   \n\n  \t '),/empty/);
+ assert.match(essayFileProblem(ok,''),/empty/);
+});
+
+test('essayTooLong: a paragraph over the cap is refused with a sentence that says split it; at the cap it passes',()=>{
+ assert.equal(ESSAY_PARAGRAPH_MAX_CHARS,4000);
+ assert.equal(essayTooLong('a'.repeat(ESSAY_PARAGRAPH_MAX_CHARS)),null);
+ assert.equal(essayTooLong(P1),null);
+ assert.equal(essayTooLong(''),null);
+ const m=essayTooLong('a'.repeat(ESSAY_PARAGRAPH_MAX_CHARS+1));
+ assert.equal(typeof m,'string');assert.match(m,/Split it/);assert.match(m,/4000/);assert.doesNotMatch(m,/—|–/);
+ for(const v of [undefined,null,5,{},[]])assert.equal(essayTooLong(v),null,'not text: not this check\'s business');
+});
+test('the analyse route asks essayTooLong before it starts a run, on the essay branch only, and refuses with a 400',()=>{
+ const src=fs.readFileSync(path.join(root,'src/app/api/analyse/route.ts'),'utf8');
+ const at=src.indexOf('essayTooLong(body.text)');
+ assert.ok(at>0,'the route checks the cap');
+ assert.ok(at>src.indexOf('body.kind === "rewrite"'),'after the english and rewrite branches, so those are not capped');
+ assert.ok(at<src.indexOf('runJob("analyse", async () => {\n    dispatch({ type: "essay.type"'),'before the essay run starts');
+ assert.match(src.slice(at,at+200),/status: 400/);
+});
+test('the phone page: no essay in the capture picker, no essay sample, the file picker takes .txt and .md, and it uses the pure rules',()=>{
+ const src=fs.readFileSync(path.join(root,'src/app/phone/page.tsx'),'utf8');
+ const capture=src.slice(src.indexOf('{screen === "capture" && ('),src.indexOf('{screen === "practice" && s'));
+ assert.ok(capture.length>2000,'the capture panel was found');
+ assert.doesNotMatch(capture,/Essay Master/,'the capture panel offers no Essay Master');
+ assert.doesNotMatch(capture,/value="essay"/);
+ assert.doesNotMatch(src.slice(0,src.indexOf('/** The TV\'s screens')),/id: "essay"/,'no essay page among the samples');
+ assert.match(src,/type="file" accept="\.txt,\.md,/);
+ assert.match(src,/essayFileProblem\(f\)/);assert.match(src,/paragraphsOf\(/);assert.match(src,/essayTooLong\(/);
+ assert.doesNotMatch(src,/FormData|\/api\/upload/,'a picked file is read in the browser, never uploaded');
+});

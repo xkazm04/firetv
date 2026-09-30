@@ -27,7 +27,8 @@ function cueFor(s: Seen): Cue | null {
     case "joined": return { panel: "joined", key: sc };
     case "profile": return { panel: "profile", key: sc };
     // "Waiting for the Math Buddy page. Snap it on the phone"
-    case "tonight": return s.awaiting ? { panel: "capture", key: `tonight:${s.awaiting}` } : null;
+    // (an essay is never snapped: Essay Master takes text, so a wait for an essay page sends the phone to the Essay panel)
+    case "tonight": return s.awaiting ? { panel: s.awaiting === "essay" ? "paste" : "capture", key: `tonight:${s.awaiting}` } : null;
     // "snap the whole sheet with the phone"
     case "practice": return { panel: "practice", key: sc };
     // "Tell the desk on the phone how you got there": the marked set and its walk are one hand-off
@@ -35,7 +36,7 @@ function cueFor(s: Seen): Cue | null {
     // "The desk could not read this page. Snap it again on the phone"
     case "page": {
       const p = s.pages[s.pageIx], read = s.jobs?.read;
-      return p && read?.phase === "failed" && read.key === p.id ? { panel: "capture", key: `page:unread:${p.id}` } : null;
+      return p && read?.phase === "failed" && read.key === p.id ? { panel: p.subject === "essay" ? "paste" : "capture", key: `page:unread:${p.id}` } : null;
     }
     // "Paste, type or dictate one paragraph on the phone" / "Rewrite on my phone"
     case "essaytype": case "forensic": return { panel: "paste", key: sc };
