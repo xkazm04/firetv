@@ -47,6 +47,12 @@ class Budget:
             usage = self._load()
             if usage['stop']:
                 raise RuntimeError('SPEND_STOP: ' + str(usage['stop']))
+            history=self.art/'history.jsonl'
+            slot=re.sub(r'-v\d+$','',asset)
+            used=sum(e.get('event')=='reserved' and re.sub(r'-v\d+$','',e.get('asset',''))==slot
+                     for e in (json.loads(line) for line in history.read_text(encoding='utf-8').splitlines())) if history.exists() else 0
+            if used>=self.policy.get('max_attempts_per_asset',3):
+                raise RuntimeError('ASSET_ATTEMPT_CAP across revisions: '+slot)
             week = datetime.now(timezone.utc).strftime('%G-W%V')
             bucket = usage['weeks'].setdefault(week, {'images_reserved': 0, 'videos_reserved': 0})
             if bucket['images_reserved'] >= self.policy['weekly_image_cap']:
@@ -99,6 +105,8 @@ def generate(row, style, budget, refine=False):
         return old[-1]
     if refine and (not rejection or not old or old[-1]['status'] != 'generated'):
         raise ValueError('refinement requires a generated image and recorded content rejection; never retry transport errors')
+    if refine and rejection.get('image_sha256')!=old[-1].get('sha256'):
+        raise ValueError('refinement rejection must name the exact latest image hash')
     if len(old)>=budget.policy['max_attempts_per_asset']:
         raise ValueError('attempt cap reached')
     if refine:

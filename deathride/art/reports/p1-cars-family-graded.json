@@ -1,0 +1,1127 @@
+[
+  {
+    "id": "p1-car-needle-v1",
+    "class": "Needle",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\p1-car-needle-v1\\attempt-02\\1.jpg",
+    "source_sha256": "d37ae0e2bf6e297c56cfacb97d85d61963c025b0449f892a5c09a4b5025f25b3",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "2a3210b187c7bd6b73ae8f9eb383d787c1e098657bec78e5b6b32111ef8c39f3",
+    "brief": {
+      "id": "p1-car-needle-v1",
+      "class": "Needle",
+      "prompt_action": "One narrow yellow dune buggy, exposed four black tyres, slender open roll cage without an occupant, short tapering nose on the RIGHT and engine at LEFT. The whole vehicle fits with generous clear margin.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "",
+      "batch": "p1-cars",
+      "approval": "pending"
+    },
+    "verdict": "owner-review",
+    "codes": [
+      "VLM_LOW_CONFIDENCE"
+    ],
+    "metrics": {
+      "foreground_fraction": 0.2982940673828125,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        84,
+        257,
+        944,
+        762
+      ],
+      "margin_fraction": 0.078125,
+      "aspect": 1.702970297029703,
+      "expected_aspect": 2.1999999999999997,
+      "aspect_relative_error": 0.22592259225922584,
+      "principal_axis_degrees": 0.0027709004665176086,
+      "estimated_key_rgb": [
+        245.0,
+        27.0,
+        146.0
+      ],
+      "magenta_key": true,
+      "components": 1,
+      "palette_mean_delta_e": 4.79262860346717,
+      "palette_p90_delta_e": 9.007090115374382
+    },
+    "placement": {
+      "source_bounds_px": [
+        84,
+        257,
+        944,
+        762
+      ],
+      "source_pivot_px": [
+        514.0,
+        509.5
+      ],
+      "pivot_px": [
+        128.0,
+        63.5
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        158,
+        93
+      ],
+      "scale": 0.18372093023255814,
+      "world_length_m": 6.6,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p1-cars\\p1-car-needle-v1.png",
+    "sha256": "e6cd44a3023ec63818231dd8dfb038187b945e369b60b15755ff9ad4c2287b1a",
+    "grades": [
+      {
+        "asset": "p1-car-needle-v1",
+        "model": "mimo-9b:q8-64k",
+        "model_digest": "35fc231b70167b8c3d1e3a9ebd54610f5359ad1d7aff0d18e7d082d47b78024b",
+        "input_hash": "50cdb23367edda3608e54b5d68235b3fbf7f49fc571de30454e6c16c6bdf56aa",
+        "image_hashes": [
+          "d37ae0e2bf6e297c56cfacb97d85d61963c025b0449f892a5c09a4b5025f25b3",
+          "2b86b5b326c2217e979ac486fa4e5624778378f4d10030bba49e932ae737d004"
+        ],
+        "prompt": "Image 1 is the target Needle car. Image 2 is the other class family reference. Answer only what is visible. Does target keep charcoal rubber, blue-black glass, cool metal and its body accent in the same roles? Is its mechanical silhouette recognizably distinct from the OTHER classes in the family? Ignore labels. Palette and silhouette only; do not grade taste. Use uncertain if comparison cannot be made.",
+        "schema": {
+          "type": "object",
+          "properties": {
+            "palette_matches": {
+              "type": "string",
+              "enum": [
+                "yes",
+                "no",
+                "not_applicable",
+                "uncertain"
+              ]
+            },
+            "silhouette_distinct": {
+              "type": "string",
+              "enum": [
+                "yes",
+                "no",
+                "not_applicable",
+                "uncertain"
+              ]
+            },
+            "confidence": {
+              "type": "number",
+              "enum": [
+                0.0,
+                0.25,
+                0.5,
+                0.75,
+                1.0
+              ],
+              "description": "Fraction, NOT percent: 1.0 certain, 0.75 some doubt, 0.5 uncertain, 0.25 poor evidence, 0 no evidence."
+            },
+            "description": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "palette_matches",
+            "silhouette_distinct",
+            "confidence",
+            "description"
+          ]
+        },
+        "at": "2026-10-01T08:44:49.254458+00:00",
+        "scope": "family",
+        "raw_content": "{\n  \"confidence\": 0.75,\n  \"description\": \"Target keeps charcoal rubber tires, blue-black glass, cool metal and yellow body accent in the same roles. Mechanical silhouette is recognizably distinct from the other classes in the family.\",\n  \"palette_matches\": \"yes\",\n  \"silhouette_distinct\": \"yes\"\n}",
+        "status": "graded",
+        "answers": {
+          "confidence": 0.75,
+          "description": "Target keeps charcoal rubber tires, blue-black glass, cool metal and yellow body accent in the same roles. Mechanical silhouette is recognizably distinct from the other classes in the family.",
+          "palette_matches": "yes",
+          "silhouette_distinct": "yes"
+        },
+        "eval_count": 88,
+        "done_reason": "stop",
+        "elapsed_seconds": 5.485
+      },
+      {
+        "asset": "p1-car-needle-v1",
+        "model": "qwen3.8:27b-64k",
+        "model_digest": "12af24e3ee72bf54bca064a972bf767938a96149d671eaa64c9506c7ea54c08c",
+        "input_hash": "68671db003f5ca3bb265717cacade9604b84b2cea1c900c4ffa136e24a2ebb4e",
+        "image_hashes": [
+          "d37ae0e2bf6e297c56cfacb97d85d61963c025b0449f892a5c09a4b5025f25b3",
+          "2b86b5b326c2217e979ac486fa4e5624778378f4d10030bba49e932ae737d004"
+        ],
+        "prompt": "Image 1 is the target Needle car. Image 2 is the other class family reference. Answer only what is visible. Does target keep charcoal rubber, blue-black glass, cool metal and its body accent in the same roles? Is its mechanical silhouette recognizably distinct from the OTHER classes in the family? Ignore labels. Palette and silhouette only; do not grade taste. Use uncertain if comparison cannot be made.",
+        "schema": {
+          "type": "object",
+          "properties": {
+            "palette_matches": {
+              "type": "string",
+              "enum": [
+                "yes",
+                "no",
+                "not_applicable",
+                "uncertain"
+              ]
+            },
+            "silhouette_distinct": {
+              "type": "string",
+              "enum": [
+                "yes",
+                "no",
+                "not_applicable",
+                "uncertain"
+              ]
+            },
+            "confidence": {
+              "type": "number",
+              "enum": [
+                0.0,
+                0.25,
+                0.5,
+                0.75,
+                1.0
+              ],
+              "description": "Fraction, NOT percent: 1.0 certain, 0.75 some doubt, 0.5 uncertain, 0.25 poor evidence, 0 no evidence."
+            },
+            "description": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "palette_matches",
+            "silhouette_distinct",
+            "confidence",
+            "description"
+          ]
+        },
+        "at": "2026-10-01T08:45:03.566879+00:00",
+        "scope": "family",
+        "raw_content": "{\"palette_matches\": \"yes\", \"silhouette_distinct\": \"yes\", \"confidence\": 0.75, \"description\": \"The target vehicle maintains a consistent material palette, featuring charcoal rubber tires, blue-black glass, and cool metal accents on the exposed engine and roll cage. Its silhouette is distinct within the family, characterized by an open-top, mid-engine layout with a prominent rear-mounted engine bay and a low-profile chassis, which differentiates it from the other vehicles shown.\"}",
+        "status": "graded",
+        "answers": {
+          "palette_matches": "yes",
+          "silhouette_distinct": "yes",
+          "confidence": 0.75,
+          "description": "The target vehicle maintains a consistent material palette, featuring charcoal rubber tires, blue-black glass, and cool metal accents on the exposed engine and roll cage. Its silhouette is distinct within the family, characterized by an open-top, mid-engine layout with a prominent rear-mounted engine bay and a low-profile chassis, which differentiates it from the other vehicles shown."
+        },
+        "eval_count": 106,
+        "done_reason": "stop",
+        "elapsed_seconds": 8.5
+      }
+    ],
+    "semantic_verdict": "owner-review",
+    "calibration": "human-labelled set pending; diagnostic only; graders share Qwen architecture"
+  },
+  {
+    "id": "p1-car-line-v2",
+    "class": "Line",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\p1-car-line-v2\\attempt-01\\1.jpg",
+    "source_sha256": "2daa7280ce25768c9993fd4da9c2cba340d3424ae43467054cb4785082230aea",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "2a3210b187c7bd6b73ae8f9eb383d787c1e098657bec78e5b6b32111ef8c39f3",
+    "brief": {
+      "id": "p1-car-line-v2",
+      "class": "Line",
+      "prompt_action": "One compact red coupe, ivory central racing stripe without symbols, rounded nose on the RIGHT, broad dark windshield, black wheels and small rear spoiler at LEFT. The whole vehicle fits with generous clear margin.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "",
+      "batch": "p1-cars",
+      "approval": "pending"
+    },
+    "verdict": "owner-review",
+    "codes": [
+      "VLM_LOW_CONFIDENCE"
+    ],
+    "metrics": {
+      "foreground_fraction": 0.23682022094726562,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        91,
+        338,
+        935,
+        685
+      ],
+      "margin_fraction": 0.0869140625,
+      "aspect": 2.4322766570605188,
+      "expected_aspect": 2.08,
+      "aspect_relative_error": 0.16936377743294173,
+      "principal_axis_degrees": 0.021321083314613447,
+      "estimated_key_rgb": [
+        239.0,
+        239.0,
+        239.0
+      ],
+      "magenta_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 5.587571702289897,
+      "palette_p90_delta_e": 8.299504729506282
+    },
+    "placement": {
+      "source_bounds_px": [
+        91,
+        338,
+        935,
+        685
+      ],
+      "source_pivot_px": [
+        513.0,
+        511.5
+      ],
+      "pivot_px": [
+        127.5,
+        63.5
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        187,
+        77
+      ],
+      "scale": 0.22156398104265404,
+      "world_length_m": 7.8,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p1-cars\\p1-car-line-v2.png",
+    "sha256": "12837ebd4e53f8139b1e06643ec4b7d2853fb160ee785190f35d7aeb56512be0",
+    "grades": [
+      {
+        "asset": "p1-car-line-v2",
+        "model": "mimo-9b:q8-64k",
+        "model_digest": "35fc231b70167b8c3d1e3a9ebd54610f5359ad1d7aff0d18e7d082d47b78024b",
+        "input_hash": "4053d310f9ff04c7f8af5a2caf69a8cb15542a1507937fbfebff2200a9603059",
+        "image_hashes": [
+          "2daa7280ce25768c9993fd4da9c2cba340d3424ae43467054cb4785082230aea",
+          "2b86b5b326c2217e979ac486fa4e5624778378f4d10030bba49e932ae737d004"
+        ],
+        "prompt": "Image 1 is the target Line car. Image 2 is the other class family reference. Answer only what is visible. Does target keep charcoal rubber, blue-black glass, cool metal and its body accent in the same roles? Is its mechanical silhouette recognizably distinct from the OTHER classes in the family? Ignore labels. Palette and silhouette only; do not grade taste. Use uncertain if comparison cannot be made.",
+        "schema": {
+          "type": "object",
+          "properties": {
+            "palette_matches": {
+              "type": "string",
+              "enum": [
+                "yes",
+                "no",
+                "not_applicable",
+                "uncertain"
+              ]
+            },
+            "silhouette_distinct": {
+              "type": "string",
+              "enum": [
+                "yes",
+                "no",
+                "not_applicable",
+                "uncertain"
+              ]
+            },
+            "confidence": {
+              "type": "number",
+              "enum": [
+                0.0,
+                0.25,
+                0.5,
+                0.75,
+                1.0
+              ],
+              "description": "Fraction, NOT percent: 1.0 certain, 0.75 some doubt, 0.5 uncertain, 0.25 poor evidence, 0 no evidence."
+            },
+            "description": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "palette_matches",
+            "silhouette_distinct",
+            "confidence",
+            "description"
+          ]
+        },
+        "at": "2026-10-01T08:44:54.737958+00:00",
+        "scope": "family",
+        "raw_content": "{\n  \"confidence\": 0.75,\n  \"description\": \"Target keeps charcoal rubber, blue-black glass, cool metal and its body accent in the same roles. Its mechanical silhouette is recognizably distinct from the OTHER classes in the family.\",\n  \"palette_matches\": \"yes\",\n  \"silhouette_distinct\": \"yes\"\n}",
+        "status": "graded",
+        "answers": {
+          "confidence": 0.75,
+          "description": "Target keeps charcoal rubber, blue-black glass, cool metal and its body accent in the same roles. Its mechanical silhouette is recognizably distinct from the OTHER classes in the family.",
+          "palette_matches": "yes",
+          "silhouette_distinct": "yes"
+        },
+        "eval_count": 85,
+        "done_reason": "stop",
+        "elapsed_seconds": 2.0
+      },
+      {
+        "asset": "p1-car-line-v2",
+        "model": "qwen3.8:27b-64k",
+        "model_digest": "12af24e3ee72bf54bca064a972bf767938a96149d671eaa64c9506c7ea54c08c",
+        "input_hash": "de3eed8956c0127a87c4ffa646fdc61dcd6ff37ee1e9636463b34b580cda3e70",
+        "image_hashes": [
+          "2daa7280ce25768c9993fd4da9c2cba340d3424ae43467054cb4785082230aea",
+          "2b86b5b326c2217e979ac486fa4e5624778378f4d10030bba49e932ae737d004"
+        ],
+        "prompt": "Image 1 is the target Line car. Image 2 is the other class family reference. Answer only what is visible. Does target keep charcoal rubber, blue-black glass, cool metal and its body accent in the same roles? Is its mechanical silhouette recognizably distinct from the OTHER classes in the family? Ignore labels. Palette and silhouette only; do not grade taste. Use uncertain if comparison cannot be made.",
+        "schema": {
+          "type": "object",
+          "properties": {
+            "palette_matches": {
+              "type": "string",
+              "enum": [
+                "yes",
+                "no",
+                "not_applicable",
+                "uncertain"
+              ]
+            },
+            "silhouette_distinct": {
+              "type": "string",
+              "enum": [
+                "yes",
+                "no",
+                "not_applicable",
+                "uncertain"
+              ]
+            },
+            "confidence": {
+              "type": "number",
+              "enum": [
+                0.0,
+                0.25,
+                0.5,
+                0.75,
+                1.0
+              ],
+              "description": "Fraction, NOT percent: 1.0 certain, 0.75 some doubt, 0.5 uncertain, 0.25 poor evidence, 0 no evidence."
+            },
+            "description": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "palette_matches",
+            "silhouette_distinct",
+            "confidence",
+            "description"
+          ]
+        },
+        "at": "2026-10-01T08:45:12.063833+00:00",
+        "scope": "family",
+        "raw_content": "{\"palette_matches\": \"yes\", \"silhouette_distinct\": \"yes\", \"confidence\": 0.75, \"description\": \"The target vehicle maintains a consistent color scheme with charcoal rubber tires, blue-black glass, and a red body with a prominent white stripe. Its silhouette, characterized by a long hood, a rear spoiler, and a specific roofline, is distinct from the other vehicles shown in the reference image, which have different body shapes and proportions.\"}",
+        "status": "graded",
+        "answers": {
+          "palette_matches": "yes",
+          "silhouette_distinct": "yes",
+          "confidence": 0.75,
+          "description": "The target vehicle maintains a consistent color scheme with charcoal rubber tires, blue-black glass, and a red body with a prominent white stripe. Its silhouette, characterized by a long hood, a rear spoiler, and a specific roofline, is distinct from the other vehicles shown in the reference image, which have different body shapes and proportions."
+        },
+        "eval_count": 99,
+        "done_reason": "stop",
+        "elapsed_seconds": 3.015
+      }
+    ],
+    "semantic_verdict": "owner-review",
+    "calibration": "human-labelled set pending; diagnostic only; graders share Qwen architecture"
+  },
+  {
+    "id": "p1-car-bastion-v2",
+    "class": "Bastion",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\p1-car-bastion-v2\\attempt-01\\1.jpg",
+    "source_sha256": "9eed2bcbcb89d2464309fdaa276480b5c99b1c986d8cbfba84f77fb9e9e964df",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "2a3210b187c7bd6b73ae8f9eb383d787c1e098657bec78e5b6b32111ef8c39f3",
+    "brief": {
+      "id": "p1-car-bastion-v2",
+      "class": "Bastion",
+      "prompt_action": "One broad olive armored wagon, blunt nose on the RIGHT, thick squared fenders, riveted roof plates, heavy black tyres, short roof-mounted mechanical gun facing right. The entire vehicle including tyres fits with generous clear margin.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "",
+      "batch": "p1-cars",
+      "approval": "pending"
+    },
+    "verdict": "owner-review",
+    "codes": [
+      "VLM_LOW_CONFIDENCE"
+    ],
+    "metrics": {
+      "foreground_fraction": 0.38039684295654297,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        46,
+        232,
+        983,
+        760
+      ],
+      "margin_fraction": 0.0400390625,
+      "aspect": 1.7746212121212122,
+      "expected_aspect": 2.0,
+      "aspect_relative_error": 0.11268939393939392,
+      "principal_axis_degrees": 0.21253194279221657,
+      "estimated_key_rgb": [
+        240.0,
+        229.0,
+        246.0
+      ],
+      "magenta_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 3.7569137032472586,
+      "palette_p90_delta_e": 7.48357406240614
+    },
+    "placement": {
+      "source_bounds_px": [
+        46,
+        232,
+        983,
+        760
+      ],
+      "source_pivot_px": [
+        514.5,
+        496.0
+      ],
+      "pivot_px": [
+        127.5,
+        128.0
+      ],
+      "cell_px": [
+        256,
+        256
+      ],
+      "subject_px": [
+        223,
+        126
+      ],
+      "scale": 0.23799359658484526,
+      "world_length_m": 9.3,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p1-cars\\p1-car-bastion-v2.png",
+    "sha256": "833e6a17b99645233ca2f9801666b1df69112fb19c49f05fb16ed3c1853a574c",
+    "grades": [
+      {
+        "asset": "p1-car-bastion-v2",
+        "model": "mimo-9b:q8-64k",
+        "model_digest": "35fc231b70167b8c3d1e3a9ebd54610f5359ad1d7aff0d18e7d082d47b78024b",
+        "input_hash": "5790477e2b650616740005ecbd83040cb25358355dc00f99501a8d2b1106bd45",
+        "image_hashes": [
+          "9eed2bcbcb89d2464309fdaa276480b5c99b1c986d8cbfba84f77fb9e9e964df",
+          "2b86b5b326c2217e979ac486fa4e5624778378f4d10030bba49e932ae737d004"
+        ],
+        "prompt": "Image 1 is the target Bastion car. Image 2 is the other class family reference. Answer only what is visible. Does target keep charcoal rubber, blue-black glass, cool metal and its body accent in the same roles? Is its mechanical silhouette recognizably distinct from the OTHER classes in the family? Ignore labels. Palette and silhouette only; do not grade taste. Use uncertain if comparison cannot be made.",
+        "schema": {
+          "type": "object",
+          "properties": {
+            "palette_matches": {
+              "type": "string",
+              "enum": [
+                "yes",
+                "no",
+                "not_applicable",
+                "uncertain"
+              ]
+            },
+            "silhouette_distinct": {
+              "type": "string",
+              "enum": [
+                "yes",
+                "no",
+                "not_applicable",
+                "uncertain"
+              ]
+            },
+            "confidence": {
+              "type": "number",
+              "enum": [
+                0.0,
+                0.25,
+                0.5,
+                0.75,
+                1.0
+              ],
+              "description": "Fraction, NOT percent: 1.0 certain, 0.75 some doubt, 0.5 uncertain, 0.25 poor evidence, 0 no evidence."
+            },
+            "description": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "palette_matches",
+            "silhouette_distinct",
+            "confidence",
+            "description"
+          ]
+        },
+        "at": "2026-10-01T08:44:56.741967+00:00",
+        "scope": "family",
+        "raw_content": "{\n  \"confidence\": 0.75,\n  \"description\": \"Image 1 shows a top-down view of a heavily armored vehicle with a large olive-green body, dark charcoal tires, blue-black windows, and grey metal details. The body has a boxy, angular shape with a central turret and a long barrel extending to the right. The vehicle appears to be a military-style tank or armored vehicle with a distinct silhouette compared to the other cars in Image 2, which are more compact and rounded.\",\n  \"palette_matches\": \"yes\",\n  \"silhouette_distinct\": \"yes\"\n}",
+        "status": "graded",
+        "answers": {
+          "confidence": 0.75,
+          "description": "Image 1 shows a top-down view of a heavily armored vehicle with a large olive-green body, dark charcoal tires, blue-black windows, and grey metal details. The body has a boxy, angular shape with a central turret and a long barrel extending to the right. The vehicle appears to be a military-style tank or armored vehicle with a distinct silhouette compared to the other cars in Image 2, which are more compact and rounded.",
+          "palette_matches": "yes",
+          "silhouette_distinct": "yes"
+        },
+        "eval_count": 133,
+        "done_reason": "stop",
+        "elapsed_seconds": 2.672
+      },
+      {
+        "asset": "p1-car-bastion-v2",
+        "model": "qwen3.8:27b-64k",
+        "model_digest": "12af24e3ee72bf54bca064a972bf767938a96149d671eaa64c9506c7ea54c08c",
+        "input_hash": "317a14a3eaff3f19d11ff8d9f02f0df652b21a57275dcb1f1a7a75a35dc83005",
+        "image_hashes": [
+          "9eed2bcbcb89d2464309fdaa276480b5c99b1c986d8cbfba84f77fb9e9e964df",
+          "2b86b5b326c2217e979ac486fa4e5624778378f4d10030bba49e932ae737d004"
+        ],
+        "prompt": "Image 1 is the target Bastion car. Image 2 is the other class family reference. Answer only what is visible. Does target keep charcoal rubber, blue-black glass, cool metal and its body accent in the same roles? Is its mechanical silhouette recognizably distinct from the OTHER classes in the family? Ignore labels. Palette and silhouette only; do not grade taste. Use uncertain if comparison cannot be made.",
+        "schema": {
+          "type": "object",
+          "properties": {
+            "palette_matches": {
+              "type": "string",
+              "enum": [
+                "yes",
+                "no",
+                "not_applicable",
+                "uncertain"
+              ]
+            },
+            "silhouette_distinct": {
+              "type": "string",
+              "enum": [
+                "yes",
+                "no",
+                "not_applicable",
+                "uncertain"
+              ]
+            },
+            "confidence": {
+              "type": "number",
+              "enum": [
+                0.0,
+                0.25,
+                0.5,
+                0.75,
+                1.0
+              ],
+              "description": "Fraction, NOT percent: 1.0 certain, 0.75 some doubt, 0.5 uncertain, 0.25 poor evidence, 0 no evidence."
+            },
+            "description": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "palette_matches",
+            "silhouette_distinct",
+            "confidence",
+            "description"
+          ]
+        },
+        "at": "2026-10-01T08:45:15.079872+00:00",
+        "scope": "family",
+        "raw_content": "{\n  \"palette_matches\": \"yes\",\n  \"silhouette_distinct\": \"yes\",\n  \"confidence\": 0.75,\n  \"description\": \"The target vehicle maintains the family's core palette, utilizing charcoal rubber for its tires, blue-black for its glass panels, and cool metal for its turret and mechanical components. Its body accent is a distinct olive green. The silhouette is clearly distinct from the other vehicles in the reference image, which are all standard passenger cars. The target is a heavily armored, boxy military vehicle with a prominent turret, giving it a unique and recognizable profile within the group.\"\n}",
+        "status": "graded",
+        "answers": {
+          "palette_matches": "yes",
+          "silhouette_distinct": "yes",
+          "confidence": 0.75,
+          "description": "The target vehicle maintains the family's core palette, utilizing charcoal rubber for its tires, blue-black for its glass panels, and cool metal for its turret and mechanical components. Its body accent is a distinct olive green. The silhouette is clearly distinct from the other vehicles in the reference image, which are all standard passenger cars. The target is a heavily armored, boxy military vehicle with a prominent turret, giving it a unique and recognizable profile within the group."
+        },
+        "eval_count": 135,
+        "done_reason": "stop",
+        "elapsed_seconds": 3.516
+      }
+    ],
+    "semantic_verdict": "owner-review",
+    "calibration": "human-labelled set pending; diagnostic only; graders share Qwen architecture"
+  },
+  {
+    "id": "p1-car-comet-v2",
+    "class": "Comet",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\p1-car-comet-v2\\attempt-01\\1.jpg",
+    "source_sha256": "3b6396ae04aadb7c58eaeaaaaed76606a5999ef7aa04885da077837425860bb5",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "2a3210b187c7bd6b73ae8f9eb383d787c1e098657bec78e5b6b32111ef8c39f3",
+    "brief": {
+      "id": "p1-car-comet-v2",
+      "class": "Comet",
+      "prompt_action": "One long orange wedge racer, pointed triangular nose on the RIGHT, rear wing at LEFT, long black canopy, narrow wheels. Wing is completely blank. The whole vehicle fits with generous clear margin.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "",
+      "batch": "p1-cars",
+      "approval": "pending"
+    },
+    "verdict": "owner-review",
+    "codes": [
+      "VLM_LOW_CONFIDENCE"
+    ],
+    "metrics": {
+      "foreground_fraction": 0.27024269104003906,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        68,
+        316,
+        957,
+        706
+      ],
+      "margin_fraction": 0.0654296875,
+      "aspect": 2.2794871794871794,
+      "expected_aspect": 2.5714285714285716,
+      "aspect_relative_error": 0.11353276353276365,
+      "principal_axis_degrees": 0.040016381137247294,
+      "estimated_key_rgb": [
+        239.0,
+        238.0,
+        243.0
+      ],
+      "magenta_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 9.406092164382457,
+      "palette_p90_delta_e": 15.810192072557884
+    },
+    "placement": {
+      "source_bounds_px": [
+        68,
+        316,
+        957,
+        706
+      ],
+      "source_pivot_px": [
+        512.5,
+        511.0
+      ],
+      "pivot_px": [
+        128.0,
+        63.5
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        216,
+        95
+      ],
+      "scale": 0.24296962879640044,
+      "world_length_m": 9.0,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p1-cars\\p1-car-comet-v2.png",
+    "sha256": "59919b30566f7122de29a63e94fe71296f0aa625a8775e262ee4f20d7670ca9e",
+    "grades": [
+      {
+        "asset": "p1-car-comet-v2",
+        "model": "mimo-9b:q8-64k",
+        "model_digest": "35fc231b70167b8c3d1e3a9ebd54610f5359ad1d7aff0d18e7d082d47b78024b",
+        "input_hash": "3b90724be5d4aed7109a73982bdc347e913f229f427e166327ca1731c5b9430c",
+        "image_hashes": [
+          "3b6396ae04aadb7c58eaeaaaaed76606a5999ef7aa04885da077837425860bb5",
+          "2b86b5b326c2217e979ac486fa4e5624778378f4d10030bba49e932ae737d004"
+        ],
+        "prompt": "Image 1 is the target Comet car. Image 2 is the other class family reference. Answer only what is visible. Does target keep charcoal rubber, blue-black glass, cool metal and its body accent in the same roles? Is its mechanical silhouette recognizably distinct from the OTHER classes in the family? Ignore labels. Palette and silhouette only; do not grade taste. Use uncertain if comparison cannot be made.",
+        "schema": {
+          "type": "object",
+          "properties": {
+            "palette_matches": {
+              "type": "string",
+              "enum": [
+                "yes",
+                "no",
+                "not_applicable",
+                "uncertain"
+              ]
+            },
+            "silhouette_distinct": {
+              "type": "string",
+              "enum": [
+                "yes",
+                "no",
+                "not_applicable",
+                "uncertain"
+              ]
+            },
+            "confidence": {
+              "type": "number",
+              "enum": [
+                0.0,
+                0.25,
+                0.5,
+                0.75,
+                1.0
+              ],
+              "description": "Fraction, NOT percent: 1.0 certain, 0.75 some doubt, 0.5 uncertain, 0.25 poor evidence, 0 no evidence."
+            },
+            "description": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "palette_matches",
+            "silhouette_distinct",
+            "confidence",
+            "description"
+          ]
+        },
+        "at": "2026-10-01T08:44:59.422756+00:00",
+        "scope": "family",
+        "raw_content": "{\n  \"confidence\": 0.75,\n  \"description\": \"Target keeps charcoal rubber tires, blue-black glass, cool metal trim, and orange body accent in the same roles as the reference family. Its mechanical silhouette is recognizably distinct from the other classes in the family.\",\n  \"palette_matches\": \"yes\",\n  \"silhouette_distinct\": \"yes\"\n}",
+        "status": "graded",
+        "answers": {
+          "confidence": 0.75,
+          "description": "Target keeps charcoal rubber tires, blue-black glass, cool metal trim, and orange body accent in the same roles as the reference family. Its mechanical silhouette is recognizably distinct from the other classes in the family.",
+          "palette_matches": "yes",
+          "silhouette_distinct": "yes"
+        },
+        "eval_count": 89,
+        "done_reason": "stop",
+        "elapsed_seconds": 2.063
+      },
+      {
+        "asset": "p1-car-comet-v2",
+        "model": "qwen3.8:27b-64k",
+        "model_digest": "12af24e3ee72bf54bca064a972bf767938a96149d671eaa64c9506c7ea54c08c",
+        "input_hash": "11bd248b2bce0a24849b8124a6e153fa7aa0c71913951d64db6bfd3d1f82c6ad",
+        "image_hashes": [
+          "3b6396ae04aadb7c58eaeaaaaed76606a5999ef7aa04885da077837425860bb5",
+          "2b86b5b326c2217e979ac486fa4e5624778378f4d10030bba49e932ae737d004"
+        ],
+        "prompt": "Image 1 is the target Comet car. Image 2 is the other class family reference. Answer only what is visible. Does target keep charcoal rubber, blue-black glass, cool metal and its body accent in the same roles? Is its mechanical silhouette recognizably distinct from the OTHER classes in the family? Ignore labels. Palette and silhouette only; do not grade taste. Use uncertain if comparison cannot be made.",
+        "schema": {
+          "type": "object",
+          "properties": {
+            "palette_matches": {
+              "type": "string",
+              "enum": [
+                "yes",
+                "no",
+                "not_applicable",
+                "uncertain"
+              ]
+            },
+            "silhouette_distinct": {
+              "type": "string",
+              "enum": [
+                "yes",
+                "no",
+                "not_applicable",
+                "uncertain"
+              ]
+            },
+            "confidence": {
+              "type": "number",
+              "enum": [
+                0.0,
+                0.25,
+                0.5,
+                0.75,
+                1.0
+              ],
+              "description": "Fraction, NOT percent: 1.0 certain, 0.75 some doubt, 0.5 uncertain, 0.25 poor evidence, 0 no evidence."
+            },
+            "description": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "palette_matches",
+            "silhouette_distinct",
+            "confidence",
+            "description"
+          ]
+        },
+        "at": "2026-10-01T08:45:18.599940+00:00",
+        "scope": "family",
+        "raw_content": "{\"palette_matches\": \"yes\", \"silhouette_distinct\": \"yes\", \"confidence\": 0.75, \"description\": \"The target vehicle features a vibrant orange body with a large, dark charcoal rear wing and matching dark tires. The glass elements, including the windshield and side windows, are a deep blue-black, while the headlights are a pale cream color. The silhouette is defined by its wide, low stance and the prominent, blocky rear wing, which distinguishes it from the other vehicles in the reference image that lack such a large rear appendage or have different body proportions.\"}",
+        "status": "graded",
+        "answers": {
+          "palette_matches": "yes",
+          "silhouette_distinct": "yes",
+          "confidence": 0.75,
+          "description": "The target vehicle features a vibrant orange body with a large, dark charcoal rear wing and matching dark tires. The glass elements, including the windshield and side windows, are a deep blue-black, while the headlights are a pale cream color. The silhouette is defined by its wide, low stance and the prominent, blocky rear wing, which distinguishes it from the other vehicles in the reference image that lack such a large rear appendage or have different body proportions."
+        },
+        "eval_count": 125,
+        "done_reason": "stop",
+        "elapsed_seconds": 3.468
+      }
+    ],
+    "semantic_verdict": "owner-review",
+    "calibration": "human-labelled set pending; diagnostic only; graders share Qwen architecture"
+  },
+  {
+    "id": "p1-car-trail-v2",
+    "class": "Trail",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\p1-car-trail-v2\\attempt-01\\1.jpg",
+    "source_sha256": "5a7d05da705d4cbd70c2efd008d61a8130bba0e7c2009ed5643b77623dacdd64",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "2a3210b187c7bd6b73ae8f9eb383d787c1e098657bec78e5b6b32111ef8c39f3",
+    "brief": {
+      "id": "p1-car-trail-v2",
+      "class": "Trail",
+      "prompt_action": "One short blue rally hatchback, stubby nose on the RIGHT, compact rectangular roof, wide wheel arches and blank small spoiler at LEFT. Roof-only plan view with no side doors or front grille visible. The whole vehicle fits with generous clear margin.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "",
+      "batch": "p1-cars",
+      "approval": "pending"
+    },
+    "verdict": "owner-review",
+    "codes": [
+      "VLM_LOW_CONFIDENCE"
+    ],
+    "metrics": {
+      "foreground_fraction": 0.33696842193603516,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        64,
+        277,
+        962,
+        737
+      ],
+      "margin_fraction": 0.060546875,
+      "aspect": 1.9521739130434783,
+      "expected_aspect": 1.7692307692307694,
+      "aspect_relative_error": 0.10340264650283548,
+      "principal_axis_degrees": 0.350134503665671,
+      "estimated_key_rgb": [
+        239.0,
+        239.0,
+        239.0
+      ],
+      "magenta_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 7.743018473028055,
+      "palette_p90_delta_e": 10.433907516312992
+    },
+    "placement": {
+      "source_bounds_px": [
+        64,
+        277,
+        962,
+        737
+      ],
+      "source_pivot_px": [
+        513.0,
+        507.0
+      ],
+      "pivot_px": [
+        128.0,
+        63.5
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        166,
+        85
+      ],
+      "scale": 0.18485523385300667,
+      "world_length_m": 6.9,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p1-cars\\p1-car-trail-v2.png",
+    "sha256": "5b2b38bbe2249e92e1e26af021f8436dc530f83161e2603722b0d2af40a8b388",
+    "grades": [
+      {
+        "asset": "p1-car-trail-v2",
+        "model": "mimo-9b:q8-64k",
+        "model_digest": "35fc231b70167b8c3d1e3a9ebd54610f5359ad1d7aff0d18e7d082d47b78024b",
+        "input_hash": "c8af675223fc6432f75bed8e2ba3eed2838b2d046479df5ab66d50119eaf405c",
+        "image_hashes": [
+          "5a7d05da705d4cbd70c2efd008d61a8130bba0e7c2009ed5643b77623dacdd64",
+          "2b86b5b326c2217e979ac486fa4e5624778378f4d10030bba49e932ae737d004"
+        ],
+        "prompt": "Image 1 is the target Trail car. Image 2 is the other class family reference. Answer only what is visible. Does target keep charcoal rubber, blue-black glass, cool metal and its body accent in the same roles? Is its mechanical silhouette recognizably distinct from the OTHER classes in the family? Ignore labels. Palette and silhouette only; do not grade taste. Use uncertain if comparison cannot be made.",
+        "schema": {
+          "type": "object",
+          "properties": {
+            "palette_matches": {
+              "type": "string",
+              "enum": [
+                "yes",
+                "no",
+                "not_applicable",
+                "uncertain"
+              ]
+            },
+            "silhouette_distinct": {
+              "type": "string",
+              "enum": [
+                "yes",
+                "no",
+                "not_applicable",
+                "uncertain"
+              ]
+            },
+            "confidence": {
+              "type": "number",
+              "enum": [
+                0.0,
+                0.25,
+                0.5,
+                0.75,
+                1.0
+              ],
+              "description": "Fraction, NOT percent: 1.0 certain, 0.75 some doubt, 0.5 uncertain, 0.25 poor evidence, 0 no evidence."
+            },
+            "description": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "palette_matches",
+            "silhouette_distinct",
+            "confidence",
+            "description"
+          ]
+        },
+        "at": "2026-10-01T08:45:01.487540+00:00",
+        "scope": "family",
+        "raw_content": "{\n  \"confidence\": 0.75,\n  \"description\": \"The target keeps charcoal rubber tires, blue-black glass, cool blue metal, and a cream body accent in the same roles as the reference family. Its mechanical silhouette is recognizably distinct from the other classes in the family.\",\n  \"palette_matches\": \"yes\",\n  \"silhouette_distinct\": \"yes\"\n}",
+        "status": "graded",
+        "answers": {
+          "confidence": 0.75,
+          "description": "The target keeps charcoal rubber tires, blue-black glass, cool blue metal, and a cream body accent in the same roles as the reference family. Its mechanical silhouette is recognizably distinct from the other classes in the family.",
+          "palette_matches": "yes",
+          "silhouette_distinct": "yes"
+        },
+        "eval_count": 93,
+        "done_reason": "stop",
+        "elapsed_seconds": 2.078
+      },
+      {
+        "asset": "p1-car-trail-v2",
+        "model": "qwen3.8:27b-64k",
+        "model_digest": "12af24e3ee72bf54bca064a972bf767938a96149d671eaa64c9506c7ea54c08c",
+        "input_hash": "0834ec418d4a7d3826bb4f61f25b2d5f0408e59779ad68c8dc8d28a8c86d1814",
+        "image_hashes": [
+          "5a7d05da705d4cbd70c2efd008d61a8130bba0e7c2009ed5643b77623dacdd64",
+          "2b86b5b326c2217e979ac486fa4e5624778378f4d10030bba49e932ae737d004"
+        ],
+        "prompt": "Image 1 is the target Trail car. Image 2 is the other class family reference. Answer only what is visible. Does target keep charcoal rubber, blue-black glass, cool metal and its body accent in the same roles? Is its mechanical silhouette recognizably distinct from the OTHER classes in the family? Ignore labels. Palette and silhouette only; do not grade taste. Use uncertain if comparison cannot be made.",
+        "schema": {
+          "type": "object",
+          "properties": {
+            "palette_matches": {
+              "type": "string",
+              "enum": [
+                "yes",
+                "no",
+                "not_applicable",
+                "uncertain"
+              ]
+            },
+            "silhouette_distinct": {
+              "type": "string",
+              "enum": [
+                "yes",
+                "no",
+                "not_applicable",
+                "uncertain"
+              ]
+            },
+            "confidence": {
+              "type": "number",
+              "enum": [
+                0.0,
+                0.25,
+                0.5,
+                0.75,
+                1.0
+              ],
+              "description": "Fraction, NOT percent: 1.0 certain, 0.75 some doubt, 0.5 uncertain, 0.25 poor evidence, 0 no evidence."
+            },
+            "description": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "palette_matches",
+            "silhouette_distinct",
+            "confidence",
+            "description"
+          ]
+        },
+        "at": "2026-10-01T08:45:22.082019+00:00",
+        "scope": "family",
+        "raw_content": "{\"palette_matches\": \"yes\", \"silhouette_distinct\": \"yes\", \"confidence\": 0.75, \"description\": \"The target vehicle maintains a consistent color scheme with charcoal rubber tires, blue-black glass, and a cool blue metallic body. Its silhouette is a standard sedan or hatchback profile, which is visually distinct from the other vehicles in the reference image, such as the yellow sports car, the red race car, the green military-style truck, and the orange SUV.\"}",
+        "status": "graded",
+        "answers": {
+          "palette_matches": "yes",
+          "silhouette_distinct": "yes",
+          "confidence": 0.75,
+          "description": "The target vehicle maintains a consistent color scheme with charcoal rubber tires, blue-black glass, and a cool blue metallic body. Its silhouette is a standard sedan or hatchback profile, which is visually distinct from the other vehicles in the reference image, such as the yellow sports car, the red race car, the green military-style truck, and the orange SUV."
+        },
+        "eval_count": 104,
+        "done_reason": "stop",
+        "elapsed_seconds": 3.125
+      }
+    ],
+    "semantic_verdict": "owner-review",
+    "calibration": "human-labelled set pending; diagnostic only; graders share Qwen architecture"
+  }
+]

@@ -18,3 +18,15 @@ The final command regenerates all ten current P1 assets (`briefs/p1-current.csv`
 `GROK_MAX_PARALLEL_IMAGES` bounds workers (default and ceiling four); each dispatch reserves one image under a filesystem lock. `usage.json` is the weekly conservative reservation counter. `history.jsonl` holds every dispatch/result, full prompts, hashes and origin. Interrupted reservations remain spent. Never remove a stop latch or increase `budget.json` automatically. A stale lock requires inspection of its recorded process ID before recovery. No videos are allowed.
 
 Raw images, CLI transcripts, processed candidates and PNG owner contact sheets are local, git-ignored products. Versioned briefs and compact evidence permit reconstruction. Only accepted atlas pages plus sidecars belong in `deathride/assets`; a review candidate must not be renamed accepted. Runtime integration belongs to I1 and retains the procedural fallback.
+
+For the supported local Python dependency set, use `deathride/.art-venv/Scripts/python.exe` (create with `python -m venv deathride/.art-venv`, then install the requirements). P2 commands:
+
+```
+python deathride/tools/art/process.py
+python deathride/tools/art/calibrate.py
+python deathride/tools/art/grade.py --input deathride/art/calibration/diagnostic-input.json --batch calibration
+python deathride/tools/art/calibrate.py --report
+python deathride/tools/art/report.py --batch p1-cars --semantic-batch calibration --family-batch p1-cars
+```
+
+Use the environment's Python in place of `python`. Grading uses both local models sequentially and caches exact image/prompt/schema/model-digest inputs. See `ACCEPTANCE.md` for the measured diagnostic failures and pending human calibration. `report.py` refuses stale pixel-gate reports. The driver enforces the attempt cap across revision IDs as well as within one ID.

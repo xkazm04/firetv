@@ -1,0 +1,68 @@
+{
+  "asset": "p1-car-needle-v1",
+  "model": "qwen3.8:27b-64k",
+  "model_digest": "12af24e3ee72bf54bca064a972bf767938a96149d671eaa64c9506c7ea54c08c",
+  "input_hash": "68671db003f5ca3bb265717cacade9604b84b2cea1c900c4ffa136e24a2ebb4e",
+  "image_hashes": [
+    "d37ae0e2bf6e297c56cfacb97d85d61963c025b0449f892a5c09a4b5025f25b3",
+    "2b86b5b326c2217e979ac486fa4e5624778378f4d10030bba49e932ae737d004"
+  ],
+  "prompt": "Image 1 is the target Needle car. Image 2 is the other class family reference. Answer only what is visible. Does target keep charcoal rubber, blue-black glass, cool metal and its body accent in the same roles? Is its mechanical silhouette recognizably distinct from the OTHER classes in the family? Ignore labels. Palette and silhouette only; do not grade taste. Use uncertain if comparison cannot be made.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "palette_matches": {
+        "type": "string",
+        "enum": [
+          "yes",
+          "no",
+          "not_applicable",
+          "uncertain"
+        ]
+      },
+      "silhouette_distinct": {
+        "type": "string",
+        "enum": [
+          "yes",
+          "no",
+          "not_applicable",
+          "uncertain"
+        ]
+      },
+      "confidence": {
+        "type": "number",
+        "enum": [
+          0.0,
+          0.25,
+          0.5,
+          0.75,
+          1.0
+        ],
+        "description": "Fraction, NOT percent: 1.0 certain, 0.75 some doubt, 0.5 uncertain, 0.25 poor evidence, 0 no evidence."
+      },
+      "description": {
+        "type": "string"
+      }
+    },
+    "additionalProperties": false,
+    "required": [
+      "palette_matches",
+      "silhouette_distinct",
+      "confidence",
+      "description"
+    ]
+  },
+  "at": "2026-10-01T08:45:03.566879+00:00",
+  "scope": "family",
+  "raw_content": "{\"palette_matches\": \"yes\", \"silhouette_distinct\": \"yes\", \"confidence\": 0.75, \"description\": \"The target vehicle maintains a consistent material palette, featuring charcoal rubber tires, blue-black glass, and cool metal accents on the exposed engine and roll cage. Its silhouette is distinct within the family, characterized by an open-top, mid-engine layout with a prominent rear-mounted engine bay and a low-profile chassis, which differentiates it from the other vehicles shown.\"}",
+  "status": "graded",
+  "answers": {
+    "palette_matches": "yes",
+    "silhouette_distinct": "yes",
+    "confidence": 0.75,
+    "description": "The target vehicle maintains a consistent material palette, featuring charcoal rubber tires, blue-black glass, and cool metal accents on the exposed engine and roll cage. Its silhouette is distinct within the family, characterized by an open-top, mid-engine layout with a prominent rear-mounted engine bay and a low-profile chassis, which differentiates it from the other vehicles shown."
+  },
+  "eval_count": 106,
+  "done_reason": "stop",
+  "elapsed_seconds": 8.5
+}

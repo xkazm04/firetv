@@ -1,0 +1,229 @@
+{
+  "basis": "28 natural images + 2 declared mutations; manual executing-agent labels frozen before grading; four semantic fields per image; not human calibration",
+  "trusted_for_acceptance": false,
+  "human_false_accept": "not measured",
+  "human_false_reject": "not measured",
+  "models": {
+    "mimo-9b": {
+      "counts": {
+        "images": 30,
+        "scored_fields": 120,
+        "false_accept": 5,
+        "false_reject": 9,
+        "uncertain": 0,
+        "defective_fields": 8,
+        "clean_fields": 112,
+        "ungraded_images": 0,
+        "false_accept_rate": 0.625,
+        "false_reject_rate": 0.08035714285714286
+      },
+      "errors": [
+        {
+          "id": "test-car-comet",
+          "field": "forbidden_details",
+          "expected": true,
+          "actual": false,
+          "error": "false_accept"
+        },
+        {
+          "id": "test-scene-mock",
+          "field": "true_top_down",
+          "expected": "not_applicable",
+          "actual": "no",
+          "error": "false_reject"
+        },
+        {
+          "id": "p1-car-bastion-v2",
+          "field": "true_top_down",
+          "expected": "yes",
+          "actual": "no",
+          "error": "false_reject"
+        },
+        {
+          "id": "p1-car-comet-v2",
+          "field": "true_top_down",
+          "expected": "yes",
+          "actual": "no",
+          "error": "false_reject"
+        },
+        {
+          "id": "p1-tile-gravel-v1",
+          "field": "true_top_down",
+          "expected": "not_applicable",
+          "actual": "yes",
+          "error": "false_reject"
+        },
+        {
+          "id": "p1-tile-ice-v1",
+          "field": "true_top_down",
+          "expected": "not_applicable",
+          "actual": "yes",
+          "error": "false_reject"
+        },
+        {
+          "id": "p1-tile-ice-v1",
+          "field": "subject_matches",
+          "expected": "no",
+          "actual": "yes",
+          "error": "false_accept"
+        },
+        {
+          "id": "p1-tile-oil-v1",
+          "field": "true_top_down",
+          "expected": "not_applicable",
+          "actual": "yes",
+          "error": "false_reject"
+        },
+        {
+          "id": "p1-tile-oil-v1",
+          "field": "subject_matches",
+          "expected": "no",
+          "actual": "yes",
+          "error": "false_accept"
+        },
+        {
+          "id": "old-p1-tile-asphalt-v1",
+          "field": "true_top_down",
+          "expected": "not_applicable",
+          "actual": "yes",
+          "error": "false_reject"
+        },
+        {
+          "id": "old-p1-tile-asphalt-v1",
+          "field": "subject_matches",
+          "expected": "no",
+          "actual": "yes",
+          "error": "false_accept"
+        },
+        {
+          "id": "mutant-line-text",
+          "field": "heading_right",
+          "expected": "yes",
+          "actual": "no",
+          "error": "false_reject"
+        },
+        {
+          "id": "mutant-line-text",
+          "field": "subject_matches",
+          "expected": "yes",
+          "actual": "no",
+          "error": "false_reject"
+        },
+        {
+          "id": "mutant-line-vertical",
+          "field": "heading_right",
+          "expected": "no",
+          "actual": "yes",
+          "error": "false_accept"
+        }
+      ]
+    },
+    "qwen3.8": {
+      "counts": {
+        "images": 30,
+        "scored_fields": 120,
+        "false_accept": 1,
+        "false_reject": 12,
+        "uncertain": 5,
+        "defective_fields": 8,
+        "clean_fields": 112,
+        "ungraded_images": 0,
+        "false_accept_rate": 0.125,
+        "false_reject_rate": 0.10714285714285714
+      },
+      "errors": [
+        {
+          "id": "test-car-bastion",
+          "field": "true_top_down",
+          "expected": "yes",
+          "actual": "not_applicable",
+          "error": "false_reject"
+        },
+        {
+          "id": "test-car-bastion",
+          "field": "heading_right",
+          "expected": "yes",
+          "actual": "not_applicable",
+          "error": "false_reject"
+        },
+        {
+          "id": "test-car-trail",
+          "field": "subject_matches",
+          "expected": "yes",
+          "actual": "no",
+          "error": "false_reject"
+        },
+        {
+          "id": "test-scene-mock",
+          "field": "forbidden_details",
+          "expected": false,
+          "actual": true,
+          "error": "false_reject"
+        },
+        {
+          "id": "test-scene-mock",
+          "field": "true_top_down",
+          "expected": "not_applicable",
+          "actual": "no",
+          "error": "false_reject"
+        },
+        {
+          "id": "test-scene-mock",
+          "field": "heading_right",
+          "expected": "not_applicable",
+          "actual": "no",
+          "error": "false_reject"
+        },
+        {
+          "id": "p1-car-bastion-v2",
+          "field": "true_top_down",
+          "expected": "yes",
+          "actual": "not_applicable",
+          "error": "false_reject"
+        },
+        {
+          "id": "p1-car-bastion-v2",
+          "field": "heading_right",
+          "expected": "yes",
+          "actual": "not_applicable",
+          "error": "false_reject"
+        },
+        {
+          "id": "p1-tile-oil-v1",
+          "field": "true_top_down",
+          "expected": "not_applicable",
+          "actual": "yes",
+          "error": "false_reject"
+        },
+        {
+          "id": "p1-tile-oil-v1",
+          "field": "heading_right",
+          "expected": "not_applicable",
+          "actual": "no",
+          "error": "false_reject"
+        },
+        {
+          "id": "p1-tile-kerb-v1",
+          "field": "subject_matches",
+          "expected": "yes",
+          "actual": "no",
+          "error": "false_reject"
+        },
+        {
+          "id": "mutant-line-text",
+          "field": "forbidden_details",
+          "expected": true,
+          "actual": false,
+          "error": "false_accept"
+        },
+        {
+          "id": "mutant-line-vertical",
+          "field": "subject_matches",
+          "expected": "yes",
+          "actual": "no",
+          "error": "false_reject"
+        }
+      ]
+    }
+  }
+}

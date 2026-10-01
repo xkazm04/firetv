@@ -1,0 +1,23 @@
+{
+  "version": 1,
+  "measured_remedies": {
+    "border-key-and-despill": {
+      "classes": [
+        "BACKGROUND_PRESENT"
+      ],
+      "evidence": "p1-cars deterministic reports: output alpha border empty, raw keys measured; foreground retained"
+    }
+  },
+  "exploratory_remedies": {
+    "empty-material-action-rewrite": {
+      "classes": [
+        "WRONG_SUBJECT",
+        "TILE_REPETITION",
+        "TILE_SEAM_MEAN",
+        "TILE_SEAM_PEAK"
+      ],
+      "basis": "one proof before siblings; recovery probability not yet measured; bounded diagnostic sample"
+    }
+  },
+  "unaddressed_policy": "Unknown class never automatically rerolls. Hold for review. No accepted or rejected image used as a reference without an explicit reference gate."
+}

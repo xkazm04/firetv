@@ -56,7 +56,9 @@ def file_lock(path, timeout=20):
             os.write(fd, str(os.getpid()).encode())
             os.close(fd)
             break
-        except FileExistsError:
+        except (FileExistsError, PermissionError):
+            # Windows can report a delete-pending exclusive lock as EACCES.
+            # The same bounded wait applies; this never steals another PID's lock.
             if time.monotonic() > end:
                 raise RuntimeError(f'lock held: {path}; inspect its PID before manual recovery')
             time.sleep(.05)
@@ -88,9 +90,12 @@ def compile_prompt(row, style, rejection=None):
 
 def make_contact_sheet(items, output, title):
     from PIL import Image, ImageDraw, ImageFont
+    import textwrap
     font_path = Path('C:/Windows/Fonts/consola.ttf')
     font = ImageFont.truetype(str(font_path), 14) if font_path.exists() else ImageFont.load_default()
-    cols, cw, ch = 4, 310, 265
+    lines=[textwrap.wrap(', '.join(i.get('codes',[])),width=37) for i in items]
+    cols, cw = 4, 310
+    ch=265+14*max((max(0,len(v)-2) for v in lines),default=0)
     sheet = Image.new('RGB', (cols*cw, 55 + max(1, (len(items)+cols-1)//cols)*ch), '#20242B')
     d = ImageDraw.Draw(sheet)
     d.text((15, 15), title, fill='white', font=font)
@@ -102,8 +107,7 @@ def make_contact_sheet(items, output, title):
             sheet.paste(im, (x+(cw-im.width)//2, y+(195-im.height)//2), im)
         d.text((x+8, y+200), item['id'][:38], fill='white', font=font)
         d.text((x+8, y+218), item.get('verdict', 'ungraded')[:38], fill='#F0CB58', font=font)
-        codes = ','.join(item.get('codes', []))
-        for j in range(0, min(len(codes), 76), 38):
-            d.text((x+8, y+236+j//38*14), codes[j:j+38], fill='#E99B91', font=font)
+        for j,line in enumerate(lines[i]):
+            d.text((x+8, y+236+j*14), line, fill='#E99B91', font=font)
     Path(output).parent.mkdir(parents=True, exist_ok=True)
     sheet.save(output)

@@ -29,6 +29,15 @@ class GenerationContracts(unittest.TestCase):
                 Budget(root).reserve('another',1)
             self.assertEqual(Budget(root).summary()['images_reserved'],0)
 
+    def test_revision_cannot_bypass_asset_attempt_cap(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root=Path(directory);write_json(root/'budget.json',{'weekly_image_cap':20,'max_attempts_per_asset':3})
+            budget=Budget(root)
+            for n in range(1,4):budget.reserve('asset-v'+str(n),1)
+            with self.assertRaisesRegex(RuntimeError,'ASSET_ATTEMPT_CAP'):
+                budget.reserve('asset-v4',1)
+            self.assertEqual(budget.summary()['images_reserved'],3)
+
     def test_quota_messages(self):
         for message in ['HTTP 429', 'Rate limit exceeded', 'quota has been exhausted', 'Too many requests', 'usage limit reached']:
             self.assertIsNotNone(QUOTA.search(message),message)

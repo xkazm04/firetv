@@ -1,0 +1,646 @@
+[
+  {
+    "id": "test-car-bastion",
+    "class": "Bastion",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv\\.contest\\art-test\\cars\\car_bastion.png",
+    "source_sha256": "dd567efbceec4c0b26691597ac23285848272253fecf7c30ad3fd95aef171404",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "test-car-bastion",
+      "class": "Bastion",
+      "kind": "car",
+      "prompt_action": "One overhead right-facing Bastion car",
+      "background_key": "#FF00FF"
+    },
+    "verdict": "reject",
+    "codes": [
+      "CROPPED_OR_MARGIN"
+    ],
+    "metrics": {
+      "foreground_fraction": 0.48169803619384766,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        24,
+        222,
+        1008,
+        802
+      ],
+      "margin_fraction": 0.015625,
+      "aspect": 1.696551724137931,
+      "expected_aspect": 2.0,
+      "aspect_relative_error": 0.15172413793103445,
+      "principal_axis_degrees": 0.07785256983684387,
+      "estimated_key_rgb": [
+        247.0,
+        94.0,
+        175.0
+      ],
+      "magenta_key": true,
+      "components": 1,
+      "palette_mean_delta_e": 7.133981395109696,
+      "palette_p90_delta_e": 11.395167641388625
+    },
+    "placement": {
+      "source_bounds_px": [
+        24,
+        222,
+        1008,
+        802
+      ],
+      "source_pivot_px": [
+        516.0,
+        512.0
+      ],
+      "pivot_px": [
+        127.5,
+        127.5
+      ],
+      "cell_px": [
+        256,
+        256
+      ],
+      "subject_px": [
+        223,
+        131
+      ],
+      "scale": 0.2266260162601626,
+      "world_length_m": 9.3,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\owner-tests\\test-car-bastion.png",
+    "sha256": "1e6ea30b434fcdcc30b21a7257c6d6844306cf6bd33e5ac82cfd6fd15ebcb235"
+  },
+  {
+    "id": "test-car-comet",
+    "class": "Comet",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv\\.contest\\art-test\\cars\\car_comet.png",
+    "source_sha256": "82c349382e9fd1b1496078fd2a8f1ce3653c9085810d55c4193cb7fbc36077c6",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "test-car-comet",
+      "class": "Comet",
+      "kind": "car",
+      "prompt_action": "One overhead right-facing Comet car",
+      "background_key": "#FF00FF"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "metrics": {
+      "foreground_fraction": 0.2819795608520508,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        59,
+        310,
+        991,
+        707
+      ],
+      "margin_fraction": 0.0322265625,
+      "aspect": 2.347607052896725,
+      "expected_aspect": 2.5714285714285716,
+      "aspect_relative_error": 0.08704170165127356,
+      "principal_axis_degrees": 0.20411024471078795,
+      "estimated_key_rgb": [
+        229.0,
+        39.0,
+        230.0
+      ],
+      "magenta_key": true,
+      "components": 1,
+      "palette_mean_delta_e": 9.82247985758413,
+      "palette_p90_delta_e": 19.03956854096133
+    },
+    "placement": {
+      "source_bounds_px": [
+        59,
+        310,
+        991,
+        707
+      ],
+      "source_pivot_px": [
+        525.0,
+        508.5
+      ],
+      "pivot_px": [
+        128.0,
+        64.0
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        216,
+        92
+      ],
+      "scale": 0.2317596566523605,
+      "world_length_m": 9.0,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\owner-tests\\test-car-comet.png",
+    "sha256": "1ba5df7dcdc3c7ad83eec316da4d305757aaf79f07bb2969da6d302d168f0043"
+  },
+  {
+    "id": "test-car-line",
+    "class": "Line",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv\\.contest\\art-test\\cars\\car_line.png",
+    "source_sha256": "9ef64eae55a3a5f380ddd69da1a8a249feb2131cfa6d27a3b8386ffd6c608fe8",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "test-car-line",
+      "class": "Line",
+      "kind": "car",
+      "prompt_action": "One overhead right-facing Line car",
+      "background_key": "#FF00FF"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "metrics": {
+      "foreground_fraction": 0.3238706588745117,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        60,
+        293,
+        975,
+        728
+      ],
+      "margin_fraction": 0.0478515625,
+      "aspect": 2.103448275862069,
+      "expected_aspect": 2.08,
+      "aspect_relative_error": 0.011273209549071517,
+      "principal_axis_degrees": 0.0479689265593092,
+      "estimated_key_rgb": [
+        244.0,
+        25.0,
+        237.0
+      ],
+      "magenta_key": true,
+      "components": 1,
+      "palette_mean_delta_e": 7.3992095923337935,
+      "palette_p90_delta_e": 12.395460324847766
+    },
+    "placement": {
+      "source_bounds_px": [
+        60,
+        293,
+        975,
+        728
+      ],
+      "source_pivot_px": [
+        517.5,
+        510.5
+      ],
+      "pivot_px": [
+        127.5,
+        63.5
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        187,
+        89
+      ],
+      "scale": 0.20437158469945355,
+      "world_length_m": 7.8,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\owner-tests\\test-car-line.png",
+    "sha256": "c788601771bb25d0f866e50ea36345372827e71beeff6a7acf8c2fc6775b4fd0"
+  },
+  {
+    "id": "test-car-needle",
+    "class": "Needle",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv\\.contest\\art-test\\cars\\car_needle.png",
+    "source_sha256": "dcb9c8979c0101c325131b2de53a985978bbb878285154527761aea006a8fa94",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "test-car-needle",
+      "class": "Needle",
+      "kind": "car",
+      "prompt_action": "One overhead right-facing Needle car",
+      "background_key": "#FF00FF"
+    },
+    "verdict": "reject",
+    "codes": [
+      "ASPECT_BAND"
+    ],
+    "metrics": {
+      "foreground_fraction": 0.24503612518310547,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        125,
+        257,
+        912,
+        750
+      ],
+      "margin_fraction": 0.109375,
+      "aspect": 1.5963488843813387,
+      "expected_aspect": 2.1999999999999997,
+      "aspect_relative_error": 0.2743868707357551,
+      "principal_axis_degrees": 0.4268028778960518,
+      "estimated_key_rgb": [
+        240.0,
+        49.0,
+        249.0
+      ],
+      "magenta_key": true,
+      "components": 1,
+      "palette_mean_delta_e": 6.33585818316478,
+      "palette_p90_delta_e": 9.4160902274211
+    },
+    "placement": {
+      "source_bounds_px": [
+        125,
+        257,
+        912,
+        750
+      ],
+      "source_pivot_px": [
+        518.5,
+        503.5
+      ],
+      "pivot_px": [
+        128.0,
+        63.5
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        158,
+        99
+      ],
+      "scale": 0.20076238881829733,
+      "world_length_m": 6.6,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\owner-tests\\test-car-needle.png",
+    "sha256": "8969408d81c752b9c591aac06de16fbb8825907518b50f1fd0f6f1d83ecdfd4d"
+  },
+  {
+    "id": "test-car-trail",
+    "class": "Trail",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv\\.contest\\art-test\\cars\\car_trail.png",
+    "source_sha256": "05bc558ec3134b3d737a9064b416647366eb6b44d6ee409de1ced96e3a94f6d2",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "test-car-trail",
+      "class": "Trail",
+      "kind": "car",
+      "prompt_action": "One overhead right-facing Trail car",
+      "background_key": "#FF00FF"
+    },
+    "verdict": "reject",
+    "codes": [
+      "AXIS_NOT_X"
+    ],
+    "metrics": {
+      "foreground_fraction": 0.3618907928466797,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        57,
+        168,
+        982,
+        828
+      ],
+      "margin_fraction": 0.041015625,
+      "aspect": 1.4015151515151516,
+      "expected_aspect": 1.7692307692307694,
+      "aspect_relative_error": 0.20783926218708826,
+      "principal_axis_degrees": 21.740724206123232,
+      "estimated_key_rgb": [
+        243.0,
+        70.0,
+        216.0
+      ],
+      "magenta_key": true,
+      "components": 1,
+      "palette_mean_delta_e": 8.176508689629918,
+      "palette_p90_delta_e": 14.10106995973525
+    },
+    "placement": {
+      "source_bounds_px": [
+        57,
+        168,
+        982,
+        828
+      ],
+      "source_pivot_px": [
+        519.5,
+        498.0
+      ],
+      "pivot_px": [
+        128.0,
+        64.0
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        166,
+        118
+      ],
+      "scale": 0.17945945945945946,
+      "world_length_m": 6.9,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\owner-tests\\test-car-trail.png",
+    "sha256": "c46f10457302b9b708ea8da045bac7c3e4aed19b245b7e6ea6e2ccaa2fec56fc"
+  },
+  {
+    "id": "test-tile-asphalt",
+    "class": "asphalt",
+    "kind": "tile",
+    "source": "C:\\Users\\kazda\\kiro\\firetv\\.contest\\art-test\\tiles\\tile_asphalt.png",
+    "source_sha256": "ffd3d580de21eb853da64ba0568f8f5d42e8dc3979a61aecaa0108eb8ee6121d",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "test-tile-asphalt",
+      "class": "asphalt",
+      "kind": "tile",
+      "prompt_action": "Full-bleed asphalt ground material without vehicles",
+      "background_key": "none"
+    },
+    "verdict": "reject",
+    "codes": [
+      "TILE_REPETITION"
+    ],
+    "raw_metrics": {
+      "edge_x_mean": 0.056442759395424834,
+      "edge_y_mean": 0.0766110089869281,
+      "edge_x_peak": 0.5019607843137255,
+      "edge_y_peak": 0.6196078431372548,
+      "autocorrelation_peak": 0.9560017512751549,
+      "autocorrelation_shift_px": [
+        0,
+        64
+      ],
+      "basis": "decoded straight RGB / 255; autocorrelation circular luminance at 128px; excludes nearby shifts"
+    },
+    "raw_codes": [
+      "TILE_SEAM_PEAK",
+      "TILE_REPETITION"
+    ],
+    "metrics": {
+      "edge_x_mean": 0.039261642156862744,
+      "edge_y_mean": 0.052951388888888895,
+      "edge_x_peak": 0.30980392156862746,
+      "edge_y_peak": 0.3686274509803922,
+      "autocorrelation_peak": 0.9556873215484107,
+      "autocorrelation_shift_px": [
+        0,
+        64
+      ],
+      "basis": "decoded straight RGB / 255; autocorrelation circular luminance at 128px; excludes nearby shifts"
+    },
+    "repeat_path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\owner-tests\\test-tile-asphalt-repeat.png",
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\owner-tests\\test-tile-asphalt.png",
+    "sha256": "9259975b646828142e816782b5d48b485ecce0012680e7679a219c7c06d1a81c"
+  },
+  {
+    "id": "test-tile-gravel",
+    "class": "gravel",
+    "kind": "tile",
+    "source": "C:\\Users\\kazda\\kiro\\firetv\\.contest\\art-test\\tiles\\tile_gravel.png",
+    "source_sha256": "dbc3c5305d9ffff084d05e3a290fa5d226ff125a3ecbeae38c631e3eb69f8882",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "test-tile-gravel",
+      "class": "gravel",
+      "kind": "tile",
+      "prompt_action": "Full-bleed gravel ground material without vehicles",
+      "background_key": "none"
+    },
+    "verdict": "reject",
+    "codes": [
+      "TILE_REPETITION"
+    ],
+    "raw_metrics": {
+      "edge_x_mean": 0.07031505310457516,
+      "edge_y_mean": 0.10437091503267974,
+      "edge_x_peak": 0.4666666666666666,
+      "edge_y_peak": 0.5529411764705883,
+      "autocorrelation_peak": 0.9252153553317684,
+      "autocorrelation_shift_px": [
+        64,
+        0
+      ],
+      "basis": "decoded straight RGB / 255; autocorrelation circular luminance at 128px; excludes nearby shifts"
+    },
+    "raw_codes": [
+      "TILE_SEAM_MEAN",
+      "TILE_SEAM_PEAK",
+      "TILE_REPETITION"
+    ],
+    "metrics": {
+      "edge_x_mean": 0.047972834967320264,
+      "edge_y_mean": 0.05725081699346405,
+      "edge_x_peak": 0.2823529411764706,
+      "edge_y_peak": 0.28235294117647064,
+      "autocorrelation_peak": 0.9309651893897328,
+      "autocorrelation_shift_px": [
+        64,
+        0
+      ],
+      "basis": "decoded straight RGB / 255; autocorrelation circular luminance at 128px; excludes nearby shifts"
+    },
+    "repeat_path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\owner-tests\\test-tile-gravel-repeat.png",
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\owner-tests\\test-tile-gravel.png",
+    "sha256": "b26d1dfe41f3ba8f3f2602d9ebcd35f8b1ed38fec6e1f149dedcb0c6c1c975af"
+  },
+  {
+    "id": "test-tile-ice",
+    "class": "ice",
+    "kind": "tile",
+    "source": "C:\\Users\\kazda\\kiro\\firetv\\.contest\\art-test\\tiles\\tile_ice.png",
+    "source_sha256": "de55e413d1b33fdbaae5c6454fb6a521eb63364e6fc9e26a632b194c48151e61",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "test-tile-ice",
+      "class": "ice",
+      "kind": "tile",
+      "prompt_action": "Full-bleed ice ground material without vehicles",
+      "background_key": "none"
+    },
+    "verdict": "reject",
+    "codes": [
+      "TILE_SEAM_PEAK"
+    ],
+    "raw_metrics": {
+      "edge_x_mean": 0.05720358455882354,
+      "edge_y_mean": 0.05676955678104575,
+      "edge_x_peak": 0.7686274509803922,
+      "edge_y_peak": 0.5764705882352941,
+      "autocorrelation_peak": 0.10739439709967476,
+      "autocorrelation_shift_px": [
+        9,
+        22
+      ],
+      "basis": "decoded straight RGB / 255; autocorrelation circular luminance at 128px; excludes nearby shifts"
+    },
+    "raw_codes": [
+      "TILE_SEAM_PEAK"
+    ],
+    "metrics": {
+      "edge_x_mean": 0.040400326797385616,
+      "edge_y_mean": 0.03580984477124183,
+      "edge_x_peak": 0.44705882352941173,
+      "edge_y_peak": 0.2666666666666666,
+      "autocorrelation_peak": 0.10103496248468218,
+      "autocorrelation_shift_px": [
+        9,
+        22
+      ],
+      "basis": "decoded straight RGB / 255; autocorrelation circular luminance at 128px; excludes nearby shifts"
+    },
+    "repeat_path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\owner-tests\\test-tile-ice-repeat.png",
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\owner-tests\\test-tile-ice.png",
+    "sha256": "b09a8424f2bd288366a432ed6425cd0246f8d3cd8f8f785fdc9e2b4b7f3defb4"
+  },
+  {
+    "id": "test-tile-kerb",
+    "class": "kerb",
+    "kind": "tile",
+    "source": "C:\\Users\\kazda\\kiro\\firetv\\.contest\\art-test\\tiles\\tile_kerb.png",
+    "source_sha256": "0a4a04ad9cc5d358fd289019948c10560438c5fc77d6ad9127f24cea8e8b297a",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "test-tile-kerb",
+      "class": "kerb",
+      "kind": "tile",
+      "prompt_action": "Full-bleed kerb ground material without vehicles",
+      "background_key": "none"
+    },
+    "verdict": "reject",
+    "codes": [
+      "TILE_SEAM_MEAN",
+      "TILE_SEAM_PEAK"
+    ],
+    "raw_metrics": {
+      "edge_x_mean": 0.05651296977124184,
+      "edge_y_mean": 0.07645909926470588,
+      "edge_x_peak": 0.596078431372549,
+      "edge_y_peak": 0.2823529411764706,
+      "autocorrelation_peak": 0.9892246152182362,
+      "autocorrelation_shift_px": [
+        16,
+        0
+      ],
+      "basis": "decoded straight RGB / 255; autocorrelation circular luminance at 128px; excludes nearby shifts"
+    },
+    "raw_codes": [
+      "TILE_SEAM_PEAK"
+    ],
+    "metrics": {
+      "edge_x_mean": 0.03740298202614379,
+      "edge_y_mean": 0.2145578022875817,
+      "edge_x_peak": 0.3372549019607843,
+      "edge_y_peak": 0.403921568627451,
+      "autocorrelation_peak": 0.9887100283961693,
+      "autocorrelation_shift_px": [
+        16,
+        0
+      ],
+      "basis": "decoded straight RGB / 255; autocorrelation circular luminance at 128px; excludes nearby shifts"
+    },
+    "repeat_path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\owner-tests\\test-tile-kerb-repeat.png",
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\owner-tests\\test-tile-kerb.png",
+    "sha256": "d12a92d3e9d158339b9d1d21a6722679f3d888d9d18c5facb1fe4e55136513e4"
+  },
+  {
+    "id": "test-tile-oil",
+    "class": "oil",
+    "kind": "tile",
+    "source": "C:\\Users\\kazda\\kiro\\firetv\\.contest\\art-test\\tiles\\tile_oil.png",
+    "source_sha256": "fb50887bd8357e77fb2bff39bb698c9d0d6384f9388545a3bab3eb4b51b5495d",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "test-tile-oil",
+      "class": "oil",
+      "kind": "tile",
+      "prompt_action": "Full-bleed oil ground material without vehicles",
+      "background_key": "none"
+    },
+    "verdict": "reject",
+    "codes": [
+      "TILE_SEAM_MEAN",
+      "TILE_SEAM_PEAK",
+      "TILE_REPETITION"
+    ],
+    "raw_metrics": {
+      "edge_x_mean": 0.09663628472222223,
+      "edge_y_mean": 0.1506421058006536,
+      "edge_x_peak": 0.6745098039215686,
+      "edge_y_peak": 0.7411764705882353,
+      "autocorrelation_peak": 0.42014395470145566,
+      "autocorrelation_shift_px": [
+        112,
+        13
+      ],
+      "basis": "decoded straight RGB / 255; autocorrelation circular luminance at 128px; excludes nearby shifts"
+    },
+    "raw_codes": [
+      "TILE_SEAM_MEAN",
+      "TILE_SEAM_PEAK",
+      "TILE_REPETITION"
+    ],
+    "metrics": {
+      "edge_x_mean": 0.08702001633986928,
+      "edge_y_mean": 0.1393331290849673,
+      "edge_x_peak": 0.6313725490196078,
+      "edge_y_peak": 0.6627450980392157,
+      "autocorrelation_peak": 0.41248154769037687,
+      "autocorrelation_shift_px": [
+        112,
+        13
+      ],
+      "basis": "decoded straight RGB / 255; autocorrelation circular luminance at 128px; excludes nearby shifts"
+    },
+    "repeat_path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\owner-tests\\test-tile-oil-repeat.png",
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\owner-tests\\test-tile-oil.png",
+    "sha256": "23242f286083c1a496e6a9ace2dc0ef8490325156a43df4b4020e91aae2a4e6b"
+  }
+]
