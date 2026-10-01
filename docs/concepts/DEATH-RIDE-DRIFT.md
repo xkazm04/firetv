@@ -52,6 +52,6 @@ status rows in this file, a session log. Never push, never ask a question.
 
 | Id | Wave | Status |
 |---|---|---|
-| D1 | Research, scale law, design note | not started |
+| D1 | Research, scale law, design note | complete — [research and scale law](deathride/D1-drift-research.md); baseline full suite and added hysteresis test green |
 | D2 | Drift model in core, data-driven, class-scaled | not started |
 | D3 | Drift Lab, calibration screen, Stick check, owner checks | not started |
