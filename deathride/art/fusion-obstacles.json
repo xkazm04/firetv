@@ -1,0 +1,220 @@
+{
+  "schema": 1,
+  "units": "metres; art proposal only, core hook must validate tuning",
+  "transform": "rotate local footprint by prop heading then translate by world centre; shadow is never collision",
+  "effect_classes": {
+    "none": "visual decoration only",
+    "drag": "inside footprint: proposed multiplicative speed/traction resistance",
+    "solid": "colliding footprint; later core resolves contact"
+  },
+  "default_decoration": {
+    "effect_class": "none",
+    "collision_footprint": null
+  },
+  "obstacles": {
+    "brush": {
+      "asset_id": "v4-fusion-props-brush-v1",
+      "logical_name": "props/brush",
+      "effect_class": "drag",
+      "collision_footprint": {
+        "shape": "ellipse",
+        "space": "local-metres",
+        "centre": [
+          0,
+          0
+        ],
+        "radii": [
+          1.9,
+          1.4
+        ]
+      },
+      "visual_extent_m": [
+        3.8,
+        2.8
+      ],
+      "height_m": 0.5,
+      "shadow": {
+        "renderer_generated": true,
+        "offset_per_height": [
+          0.3,
+          -0.22
+        ],
+        "opacity": 0.26
+      },
+      "core_hook_status": "metadata-only; not wired to physics",
+      "drag_multiplier": 0.68,
+      "placement": "seeded off racing line; later core validates passable width",
+      "owner_approved": false
+    },
+    "rock-field": {
+      "asset_id": "v4-fusion-props-rock-field-v1",
+      "logical_name": "props/rock-field",
+      "effect_class": "solid",
+      "collision_footprint": {
+        "shape": "ellipse",
+        "space": "local-metres",
+        "centre": [
+          0,
+          0
+        ],
+        "radii": [
+          2.25,
+          1.55
+        ]
+      },
+      "visual_extent_m": [
+        4.5,
+        3.1
+      ],
+      "height_m": 1.1,
+      "shadow": {
+        "renderer_generated": true,
+        "offset_per_height": [
+          0.3,
+          -0.22
+        ],
+        "opacity": 0.26
+      },
+      "core_hook_status": "metadata-only; not wired to physics",
+      "drag_multiplier": null,
+      "placement": "seeded off racing line; later core validates passable width",
+      "owner_approved": false
+    },
+    "soft-dune": {
+      "asset_id": "v4-fusion-props-soft-dune-v1",
+      "logical_name": "props/soft-dune",
+      "effect_class": "drag",
+      "collision_footprint": {
+        "shape": "ellipse",
+        "space": "local-metres",
+        "centre": [
+          0,
+          0
+        ],
+        "radii": [
+          2.9,
+          1.6
+        ]
+      },
+      "visual_extent_m": [
+        5.8,
+        3.2
+      ],
+      "height_m": 0.4,
+      "shadow": {
+        "renderer_generated": true,
+        "offset_per_height": [
+          0.3,
+          -0.22
+        ],
+        "opacity": 0.26
+      },
+      "core_hook_status": "metadata-only; not wired to physics",
+      "drag_multiplier": 0.68,
+      "placement": "seeded off racing line; later core validates passable width",
+      "owner_approved": false
+    },
+    "dead-tree": {
+      "asset_id": "v4-fusion-props-dead-tree-v1",
+      "logical_name": "props/dead-tree",
+      "effect_class": "solid",
+      "collision_footprint": {
+        "shape": "ellipse",
+        "space": "local-metres",
+        "centre": [
+          0,
+          0
+        ],
+        "radii": [
+          1.1,
+          0.85
+        ]
+      },
+      "visual_extent_m": [
+        3.19,
+        2.72
+      ],
+      "height_m": 5.4,
+      "shadow": {
+        "renderer_generated": true,
+        "offset_per_height": [
+          0.3,
+          -0.22
+        ],
+        "opacity": 0.26
+      },
+      "core_hook_status": "metadata-only; not wired to physics",
+      "drag_multiplier": null,
+      "placement": "seeded off racing line; later core validates passable width",
+      "owner_approved": false
+    },
+    "rock-spire": {
+      "asset_id": "v4-fusion-props-rock-spire-v1",
+      "logical_name": "props/rock-spire",
+      "effect_class": "solid",
+      "collision_footprint": {
+        "shape": "ellipse",
+        "space": "local-metres",
+        "centre": [
+          0,
+          0
+        ],
+        "radii": [
+          1.25,
+          0.9
+        ]
+      },
+      "visual_extent_m": [
+        3.625,
+        2.8800000000000003
+      ],
+      "height_m": 6.2,
+      "shadow": {
+        "renderer_generated": true,
+        "offset_per_height": [
+          0.3,
+          -0.22
+        ],
+        "opacity": 0.26
+      },
+      "core_hook_status": "metadata-only; not wired to physics",
+      "drag_multiplier": null,
+      "placement": "seeded off racing line; later core validates passable width",
+      "owner_approved": false
+    },
+    "tyres-scattered": {
+      "asset_id": "v4-fusion-props-tyres-scattered-v1",
+      "logical_name": "props/tyres-scattered",
+      "effect_class": "drag",
+      "collision_footprint": {
+        "shape": "ellipse",
+        "space": "local-metres",
+        "centre": [
+          0,
+          0
+        ],
+        "radii": [
+          1.6,
+          1.25
+        ]
+      },
+      "visual_extent_m": [
+        3.2,
+        2.5
+      ],
+      "height_m": 0.7,
+      "shadow": {
+        "renderer_generated": true,
+        "offset_per_height": [
+          0.3,
+          -0.22
+        ],
+        "opacity": 0.26
+      },
+      "core_hook_status": "metadata-only; not wired to physics",
+      "drag_multiplier": 0.68,
+      "placement": "seeded off racing line; later core validates passable width",
+      "owner_approved": false
+    }
+  }
+}

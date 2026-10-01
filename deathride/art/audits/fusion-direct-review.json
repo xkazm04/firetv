@@ -149,5 +149,817 @@
     "note": "Corrected complete older face, tall black collar and broad layered shoulder mantle. Severe silver crest and restrained expression distinguish the boss without a copied costume.",
     "verdict": "owner-review",
     "codes": []
+  },
+  "v4-fusion-surfaces-asphalt-worn-v1": {
+    "source_sha256": "1257b92fd385d085df450780efa323dfe035e80f97382768026b86554793df6a",
+    "export_sha256": "c97c0bf50f438de1937618282ba676ae0c70fa996f1b75b6345cdb868d026c82",
+    "at": "2026-10-01T21:22:05.698400+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "Quiet charcoal material with sparse ivory/rust wear; no bolted plate or painted border.",
+    "verdict": "owner-review",
+    "codes": [],
+    "basis": "direct inspection of exact exported family boards and effect frames; source/derivative provenance retained; diagnostic model disagreements do not grant owner taste approval"
+  },
+  "v4-fusion-surfaces-asphalt-heavy-v1": {
+    "source_sha256": "c0c0f142e68151d327a161b25674f4456787cd927947763ab1d36033b6fbf985",
+    "export_sha256": "845eab47a1bfa71a1ef67b35f436de48c92b69a01726b6934e14ffb16e78afff",
+    "at": "2026-10-01T21:22:05.698400+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "Dark aggregate field, finer and denser than worn asphalt.",
+    "verdict": "owner-review",
+    "codes": [],
+    "basis": "direct inspection of exact exported family boards and effect frames; source/derivative provenance retained; diagnostic model disagreements do not grant owner taste approval"
+  },
+  "v4-fusion-surfaces-concrete-v1": {
+    "source_sha256": "a9ddba8ab650c7bdda0006835ce250194905262a03c427d244d64073c828a66a",
+    "export_sha256": "462c79ac455e24088f9b2b4735bc8c48dc4fb4560e2ff23391ae3736663ba911",
+    "at": "2026-10-01T21:22:05.698400+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "Bone-grey slab grain with fine scratches; no artificial perimeter.",
+    "verdict": "owner-review",
+    "codes": [],
+    "basis": "direct inspection of exact exported family boards and effect frames; source/derivative provenance retained; diagnostic model disagreements do not grant owner taste approval"
+  },
+  "v4-fusion-surfaces-metal-v1": {
+    "source_sha256": "8ad3a22e735bcb82ded4b1726f4749be2c3566f56b2eeb1e83fdda727727727d",
+    "export_sha256": "048bf65fdd4f0fec9e2fe95b2778532888eb3bea5aabf5cf86cc1cf3aff40548",
+    "at": "2026-10-01T21:22:05.698400+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "Original retained for audit; use inspected derivative v4-fusion-surfaces-metal-crop768-v1. Fixed centre crop removes the generated metal frame. Fine grey scratches remain; no rivets or border.",
+    "verdict": "reject",
+    "codes": [
+      "SUPERSEDED_SOURCE_REQUIRES_REPAIR"
+    ],
+    "basis": "direct inspection of exact exported family boards and effect frames; source/derivative provenance retained; diagnostic model disagreements do not grant owner taste approval"
+  },
+  "v4-fusion-surfaces-asphalt-clean-v1": {
+    "source_sha256": "dacd4c9a4ad9185f8e7046f989ca4eceb729607c059ca98be645bb61e94f8177",
+    "export_sha256": "98dbdde5402e066b49af5a9704d31b985da7987b9c5a5bc1612646dea5630aeb",
+    "at": "2026-10-01T21:22:05.698400+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "Original retained for audit; use inspected derivative v4-fusion-surfaces-asphalt-clean-crop768-v1. Fixed centre crop removes dark perimeter; sparse aggregate remains.",
+    "verdict": "reject",
+    "codes": [
+      "SUPERSEDED_SOURCE_REQUIRES_REPAIR"
+    ],
+    "basis": "direct inspection of exact exported family boards and effect frames; source/derivative provenance retained; diagnostic model disagreements do not grant owner taste approval"
+  },
+  "v4-fusion-surfaces-ice-v1": {
+    "source_sha256": "f3405e3c8a3117bcc0d7891d2bbbba3ff07fae1e78d016456b62223ae25681db",
+    "export_sha256": "20f9675772a1d1e01af254c1f345977fdb69426fd3b1ceccf19898154fe01050",
+    "at": "2026-10-01T21:22:05.698400+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "Original retained for audit; use inspected derivative v4-fusion-surfaces-ice-crop768-v1. Fixed centre crop removes framed perimeter; quiet pale granular surface.",
+    "verdict": "reject",
+    "codes": [
+      "SUPERSEDED_SOURCE_REQUIRES_REPAIR"
+    ],
+    "basis": "direct inspection of exact exported family boards and effect frames; source/derivative provenance retained; diagnostic model disagreements do not grant owner taste approval"
+  },
+  "v4-fusion-surfaces-oil-v1": {
+    "source_sha256": "b1f89850f0bf08eee8774cf3a707da77bb949f480db859a782a137fae586ea92",
+    "export_sha256": "7569f3871a32d20be84c2e3cf1a7316ab2f2d8043b1fbf8991b07044c50fe309",
+    "at": "2026-10-01T21:22:05.698400+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "Irregular dark/rust oil marks; no raised panel, text or machine object.",
+    "verdict": "owner-review",
+    "codes": [],
+    "basis": "direct inspection of exact exported family boards and effect frames; source/derivative provenance retained; diagnostic model disagreements do not grant owner taste approval"
+  },
+  "v4-fusion-surfaces-kerb-v1": {
+    "source_sha256": "4690d0023a67e9323859e19bc0fdb009d0be58074af370749a20296b42f12b3a",
+    "export_sha256": "c890c349f062f7da6e4d500b55765f7c30328a29fbf35cd16ece0e6d9e1d4166",
+    "at": "2026-10-01T21:22:05.698400+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "Scattered worn red/bone paint on grey material; no continuous outlined stripe.",
+    "verdict": "owner-review",
+    "codes": [],
+    "basis": "direct inspection of exact exported family boards and effect frames; source/derivative provenance retained; diagnostic model disagreements do not grant owner taste approval"
+  },
+  "v4-fusion-ground-grass-v1": {
+    "source_sha256": "3d87df197a88bf726a467191978051ac9668b43c49e529e2cd36ddc781d38876",
+    "export_sha256": "22a9cb593ca96c18f468a01794ce0b49ad781cf7f57ec03fa8ef99bb14b0c743",
+    "at": "2026-10-01T21:22:05.698400+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "Quiet ochre grass field, sparse fine blades, no central object.",
+    "verdict": "owner-review",
+    "codes": [],
+    "basis": "direct inspection of exact exported family boards and effect frames; source/derivative provenance retained; diagnostic model disagreements do not grant owner taste approval"
+  },
+  "v4-fusion-ground-dirt-v1": {
+    "source_sha256": "b8b0788822e9074f8aca7b6cc1a546d58648d4823cef619d477485fd4514585d",
+    "export_sha256": "1f8d60285693b40dc939ed8eed5d0d0e0382630420a2789a25e653e4e31df3c1",
+    "at": "2026-10-01T21:22:05.698400+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "Muted earth grain; anonymous low-contrast field.",
+    "verdict": "owner-review",
+    "codes": [],
+    "basis": "direct inspection of exact exported family boards and effect frames; source/derivative provenance retained; diagnostic model disagreements do not grant owner taste approval"
+  },
+  "v4-fusion-ground-gravel-v1": {
+    "source_sha256": "61137ebbcd3271ee00bb9574e1ca5ef5596f89debf8d739d719bfe97fb831249",
+    "export_sha256": "4ea2c2ad80248eac6d619a330fb5c96f6077efccb7420d103f7389e6caf6b4d4",
+    "at": "2026-10-01T21:22:05.698400+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "Original retained for audit; use inspected derivative v4-fusion-ground-gravel-v1-wrap-v1. Dense small dark pebbles; eight-pixel wrap repair removes the seam. Busier than dirt; use for distinct gravel patches.",
+    "verdict": "reject",
+    "codes": [
+      "SUPERSEDED_SOURCE_REQUIRES_REPAIR"
+    ],
+    "basis": "direct inspection of exact exported family boards and effect frames; source/derivative provenance retained; diagnostic model disagreements do not grant owner taste approval"
+  },
+  "v4-fusion-barriers-concrete-straight-v1": {
+    "source_sha256": "98d11b33b597eb3283a8a73e3584e5f0a08c6ad37484ad50d6645838885782a6",
+    "export_sha256": "f4e6dcb3248a83f7c0d0719ba7986d614c31de36616d2b22a8632d441050e809",
+    "at": "2026-10-01T21:22:05.698400+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "Chipped pale rectangular barrier top; dark wear at corners.",
+    "verdict": "owner-review",
+    "codes": [],
+    "basis": "direct inspection of exact exported family boards and effect frames; source/derivative provenance retained; diagnostic model disagreements do not grant owner taste approval"
+  },
+  "v4-fusion-barriers-concrete-corner-v1": {
+    "source_sha256": "204ffd45d2b3e7b3cd846c82bf3ef0f0406f38c652ddd421e0bfeb39bf913e73",
+    "export_sha256": "74e93e411e69ff5b5b9149fab690716074c2dd41ade927077e5dce49ae45605f",
+    "at": "2026-10-01T21:22:05.698400+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "A single continuous L-shaped chipped slab; clear inner turn.",
+    "verdict": "owner-review",
+    "codes": [],
+    "basis": "direct inspection of exact exported family boards and effect frames; source/derivative provenance retained; diagnostic model disagreements do not grant owner taste approval"
+  },
+  "v4-fusion-barriers-metal-straight-v1": {
+    "source_sha256": "65afed33c48b7230f378b46c79109dd0d439548f5e1b808d452d0a11aee35911",
+    "export_sha256": "942b80eb0a3a8de58befc7f9b19917b8c6f8fe1ac5ee2939ab149198ac2d9bf2",
+    "at": "2026-10-01T21:22:05.698400+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "Three parallel ochre/rust rails, open gaps remain transparent.",
+    "verdict": "owner-review",
+    "codes": [],
+    "basis": "direct inspection of exact exported family boards and effect frames; source/derivative provenance retained; diagnostic model disagreements do not grant owner taste approval"
+  },
+  "v4-fusion-barriers-metal-corner-v1": {
+    "source_sha256": "13143a39e2135fd4ce5636c9430568fd3647cd7662e9b07a2390f936ccdfd3f7",
+    "export_sha256": "51e9b8b57e1dd27db60594a25186f9965f215ff25a71484463247d6d0b51af3d",
+    "at": "2026-10-01T21:22:05.698400+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "Three rails turn through a right angle; open interior.",
+    "verdict": "owner-review",
+    "codes": [],
+    "basis": "direct inspection of exact exported family boards and effect frames; source/derivative provenance retained; diagnostic model disagreements do not grant owner taste approval"
+  },
+  "v4-fusion-barriers-hazard-straight-v1": {
+    "source_sha256": "3ba58990c14dae949d3b575612ff9e62a537686a967a9608433218ccca04a727",
+    "export_sha256": "99b98135291f9ff217ea6ca03b98b4ef9aa3bbfe9bc451a0f87a841798e781ca",
+    "at": "2026-10-01T21:22:05.698400+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "Broken ochre and soot diagonal hazard paint; physical rectangular top.",
+    "verdict": "owner-review",
+    "codes": [],
+    "basis": "direct inspection of exact exported family boards and effect frames; source/derivative provenance retained; diagnostic model disagreements do not grant owner taste approval"
+  },
+  "v4-fusion-barriers-hazard-corner-v1": {
+    "source_sha256": "eeae030119ec640a0071af6d156f8043907f76c64015e8612af17a3ecee890b5",
+    "export_sha256": "43b1e0f4b49accfb5bd31561ecd776c62732e05aebe8e76e269c753d9929c80c",
+    "at": "2026-10-01T21:22:05.698400+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "Corrected C shape is now a continuous L; two legs and an open inner corner.",
+    "verdict": "owner-review",
+    "codes": [],
+    "basis": "direct inspection of exact exported family boards and effect frames; source/derivative provenance retained; diagnostic model disagreements do not grant owner taste approval"
+  },
+  "v4-fusion-props-tyres-v1": {
+    "source_sha256": "5cddfe16609effdf683fd9fbf5a7d71ce8ce4e4ba61484d7fb54056ce240fba9",
+    "export_sha256": "3636245bd0f1147420e0891fbf207240d82c6f45e2b1c6f277a61cf8466bbafb",
+    "at": "2026-10-01T21:22:05.698400+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "One stacked tyre crown; broad dark tread and open centre.",
+    "verdict": "owner-review",
+    "codes": [],
+    "basis": "direct inspection of exact exported family boards and effect frames; source/derivative provenance retained; diagnostic model disagreements do not grant owner taste approval"
+  },
+  "v4-fusion-props-crate-v1": {
+    "source_sha256": "5ab7c87cb3c696bff261256f5f016899e16c2820244731b5ba903c05188c30a3",
+    "export_sha256": "6add3b10aeda0733b505145ee86d4f443707e2d5209487595bb5c07dcd1752c6",
+    "at": "2026-10-01T21:22:05.698400+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "Top-down cross-braced timber crate; readable square silhouette.",
+    "verdict": "owner-review",
+    "codes": [],
+    "basis": "direct inspection of exact exported family boards and effect frames; source/derivative provenance retained; diagnostic model disagreements do not grant owner taste approval"
+  },
+  "v4-fusion-props-cone-v1": {
+    "source_sha256": "e851babb7aae72817de69dc2afd23a0494540361a6d48044c8281704d44cf289",
+    "export_sha256": "6c43fb1fb7405fa5be5be6b01a00455e4e2601e649649cdfe429e07aa3e5da4d",
+    "at": "2026-10-01T21:22:05.698400+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "Concentric cone crown on a square base; overhead shape.",
+    "verdict": "owner-review",
+    "codes": [],
+    "basis": "direct inspection of exact exported family boards and effect frames; source/derivative provenance retained; diagnostic model disagreements do not grant owner taste approval"
+  },
+  "v4-fusion-props-sign-v1": {
+    "source_sha256": "d4fc8f3c23648f186d30def0fe89b53cbce84eb09c5af2ac23d05c7441fd6ee7",
+    "export_sha256": "cf92049cfc0721974b06a3ea10f6bce638ea8ea512cc77f329f30e73531947d9",
+    "at": "2026-10-01T21:22:05.698400+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "Corrected single right arrow on rust sign; no generated writing.",
+    "verdict": "owner-review",
+    "codes": [],
+    "basis": "direct inspection of exact exported family boards and effect frames; source/derivative provenance retained; diagnostic model disagreements do not grant owner taste approval"
+  },
+  "v4-fusion-props-drum-v1": {
+    "source_sha256": "29a8637ddbd621469d1c023ced58776b10a06ea6d3367cbebbe389495c48442b",
+    "export_sha256": "a067a69bc76cf1357e35f9aac06639e24e9e1bfb763a83a1ac1c6eba71351585",
+    "at": "2026-10-01T21:22:05.698400+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "Ochre circular lid with two bungs; neutral light.",
+    "verdict": "owner-review",
+    "codes": [],
+    "basis": "direct inspection of exact exported family boards and effect frames; source/derivative provenance retained; diagnostic model disagreements do not grant owner taste approval"
+  },
+  "v4-fusion-props-tyres-scattered-v1": {
+    "source_sha256": "47b472eccbd045b815225ded1bd53e0d91d86d29cf99df5f085e03333197ecc8",
+    "export_sha256": "3bd9084f6c1040357829cda5d5c91e390e48fd53fe9931434f712af4a63d478a",
+    "at": "2026-10-01T21:22:05.698400+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "Three separate tread rings in triangular cluster; drag footprint supplied.",
+    "verdict": "owner-review",
+    "codes": [],
+    "basis": "direct inspection of exact exported family boards and effect frames; source/derivative provenance retained; diagnostic model disagreements do not grant owner taste approval"
+  },
+  "v4-fusion-props-crate-metal-v1": {
+    "source_sha256": "0b188fb712c78dbcce5363b7a3ce2d5fc33f839de2310fd146c202cc3ecbf891",
+    "export_sha256": "6287249d9e4288aa2e8f2756c32418a53a4673f27f0a12bd20eb4daf6b2be722",
+    "at": "2026-10-01T21:22:05.698400+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "Rust orange welded square crate with pale corner plates.",
+    "verdict": "owner-review",
+    "codes": [],
+    "basis": "direct inspection of exact exported family boards and effect frames; source/derivative provenance retained; diagnostic model disagreements do not grant owner taste approval"
+  },
+  "v4-fusion-props-drum-red-v1": {
+    "source_sha256": "3d9e98e52a63915d5016f3c69b594e553b4a2b93f58a9dafaa40cd61426ffe9f",
+    "export_sha256": "1dfdf72e75f1fcf2291e7eb5fb1ed119bfc89d0931449a636ed0afd2881aa9a9",
+    "at": "2026-10-01T21:22:05.698400+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "Corrected circular red lid with bone band and two bungs; no barrel side wall.",
+    "verdict": "owner-review",
+    "codes": [],
+    "basis": "direct inspection of exact exported family boards and effect frames; source/derivative provenance retained; diagnostic model disagreements do not grant owner taste approval"
+  },
+  "v4-fusion-props-brush-v1": {
+    "source_sha256": "67e1d36169825c7722877bde3212719ec2c5b541e27aeea44279812a1b378f85",
+    "export_sha256": "d68dc4dbc51f95dea348c6dd1bc316c53518b4920a4b48070b831f8fccfca3b9",
+    "at": "2026-10-01T21:22:05.698400+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "Low radial thorn and dry leaf cluster. Drag footprint deliberately separate from art alpha.",
+    "verdict": "owner-review",
+    "codes": [],
+    "basis": "direct inspection of exact exported family boards and effect frames; source/derivative provenance retained; diagnostic model disagreements do not grant owner taste approval"
+  },
+  "v4-fusion-props-rock-field-v1": {
+    "source_sha256": "2c608cfabe69d9a671314e3bae44fba2a3d6b5599ccdae5eacf87c173594408b",
+    "export_sha256": "34567fa461b99ea13fbbc0892cd32d1d785402fffdcd53217d9faa171dc181ce",
+    "at": "2026-10-01T21:22:05.698400+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "Corrected four angular overhead stones, shared low cluster; solid footprint supplied.",
+    "verdict": "owner-review",
+    "codes": [],
+    "basis": "direct inspection of exact exported family boards and effect frames; source/derivative provenance retained; diagnostic model disagreements do not grant owner taste approval"
+  },
+  "v4-fusion-props-soft-dune-v1": {
+    "source_sha256": "4316a54a769f724483fdd99868db686f45750620e2790ca13f9b2be501eb2202",
+    "export_sha256": "7507d605839ac0973ebdcd0bfb410b817eecb837162abc035708b0260dd26a42",
+    "at": "2026-10-01T21:22:05.698400+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "Original retained for audit; use inspected derivative v4-fusion-props-soft-dune-v1-despill-v1. Low crescent sand shape. Visible magenta fringe repainted from adjacent clean sand colours; original rejected. Drag footprint supplied.",
+    "verdict": "reject",
+    "codes": [
+      "SUPERSEDED_SOURCE_REQUIRES_REPAIR"
+    ],
+    "basis": "direct inspection of exact exported family boards and effect frames; source/derivative provenance retained; diagnostic model disagreements do not grant owner taste approval"
+  },
+  "v4-fusion-props-dead-tree-v1": {
+    "source_sha256": "328c40a6efee02bb80a2ad495280aa5bf25e98f235d6ae697f458be42c7a5740",
+    "export_sha256": "65800b86db8ca5f80da472f14093ffbcce25be605d3491bf433134fbcd94beb5",
+    "at": "2026-10-01T21:22:05.698400+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "Corrected radial branch crown and central cut/bark core; height and renderer shadow supplied.",
+    "verdict": "owner-review",
+    "codes": [],
+    "basis": "direct inspection of exact exported family boards and effect frames; source/derivative provenance retained; diagnostic model disagreements do not grant owner taste approval"
+  },
+  "v4-fusion-props-rock-spire-v1": {
+    "source_sha256": "c17fe832f9e30442f7b3429c32abeedd00f9786b096a7fc434ed92d09ab54d3d",
+    "export_sha256": "04147c3109630babc6382b564985855832710f3df4b514875f8260099bc2ce55",
+    "at": "2026-10-01T21:22:05.698400+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "Original retained for audit; use inspected derivative v4-fusion-props-rock-spire-v1-despill-v1. Tapered angular overhead rock crown with pale caps. Visible magenta fringe repainted from adjacent rock; original rejected. Tall solid footprint supplied.",
+    "verdict": "reject",
+    "codes": [
+      "SUPERSEDED_SOURCE_REQUIRES_REPAIR"
+    ],
+    "basis": "direct inspection of exact exported family boards and effect frames; source/derivative provenance retained; diagnostic model disagreements do not grant owner taste approval"
+  },
+  "v4-fusion-pickups-ammo-v1": {
+    "source_sha256": "178340a54b50c132d7f7cd58d6faca2725f822a4cd150c3d3105a82dede939e0",
+    "export_sha256": "1993f7d7adaeb9e0b3aa5a60ba45b582284087b9eb61971980909b261cb180c5",
+    "at": "2026-10-01T21:22:05.698400+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "Three pale cartridges on compact ochre box; readable pickup emblem.",
+    "verdict": "owner-review",
+    "codes": [],
+    "basis": "direct inspection of exact exported family boards and effect frames; source/derivative provenance retained; diagnostic model disagreements do not grant owner taste approval"
+  },
+  "v4-fusion-pickups-repair-v1": {
+    "source_sha256": "fa4ae9e0d47633695702899a92f9e6caa9f5528622c7cb20044eb126614d04c3",
+    "export_sha256": "fa2ea288e90172f9334398ad2a382c0a855a33d85e8340283792fee104ae15d8",
+    "at": "2026-10-01T21:22:05.698400+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "Large pale spanner with small rust tool case; readable repair silhouette.",
+    "verdict": "owner-review",
+    "codes": [],
+    "basis": "direct inspection of exact exported family boards and effect frames; source/derivative provenance retained; diagnostic model disagreements do not grant owner taste approval"
+  },
+  "v4-fusion-pickups-cash-v1": {
+    "source_sha256": "963a47820849d2e2b8b7950bfc097026a6f989923cd3a7e6c016e8d83ebab1e0",
+    "export_sha256": "dbfc9f7ee36cc51c376da36590d9484641990919485b367e8752a05a0431cc01",
+    "at": "2026-10-01T21:22:05.698400+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "Bent pale stack with ochre band; no numerals or currency logo.",
+    "verdict": "owner-review",
+    "codes": [],
+    "basis": "direct inspection of exact exported family boards and effect frames; source/derivative provenance retained; diagnostic model disagreements do not grant owner taste approval"
+  },
+  "v4-fusion-pickups-mine-v1": {
+    "source_sha256": "fddeb25e8feec859f1b212e72329302ab7ef4e89215e07e1d52153f0e0512cb6",
+    "export_sha256": "77570c7bef4245711c5546f151f9dfa968422c79b4683dff4b94e695c354caa6",
+    "at": "2026-10-01T21:22:05.698400+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "Dark circular mine crown, radial tabs and central generic warning symbol.",
+    "verdict": "owner-review",
+    "codes": [],
+    "basis": "direct inspection of exact exported family boards and effect frames; source/derivative provenance retained; diagnostic model disagreements do not grant owner taste approval"
+  },
+  "v4-fusion-pickups-turbo-v1": {
+    "source_sha256": "1c3e3dc2d44d6dd1fb65a3cc555e6e1ee13270d18d0da48a3e4cde9045a83fc2",
+    "export_sha256": "2b194c1b156d42b1b896cef502e117a70c0e0334b3890cd81702216d44df8a2a",
+    "at": "2026-10-01T21:22:05.698400+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "Rust bottle with pale lightning mark; recognizable boost pickup.",
+    "verdict": "owner-review",
+    "codes": [],
+    "basis": "direct inspection of exact exported family boards and effect frames; source/derivative provenance retained; diagnostic model disagreements do not grant owner taste approval"
+  },
+  "v4-fusion-decals-skid-v1": {
+    "source_sha256": "762396a2ad88d390c1fd7bc2ea9973b76529b52ad800ee7880e81f701d03997c",
+    "export_sha256": "b22fbc92898df14f99f9d9ffa71295a24f16f7c082608bf0170e209d1ea3e807",
+    "at": "2026-10-01T21:22:05.698400+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "Broken parallel rubber streaks with small warm paint fragments; no enclosing physical plate.",
+    "verdict": "owner-review",
+    "codes": [],
+    "basis": "direct inspection of exact exported family boards and effect frames; source/derivative provenance retained; diagnostic model disagreements do not grant owner taste approval"
+  },
+  "v4-fusion-decals-oil-v1": {
+    "source_sha256": "6ca0d41b54d4545cb4e250cd833acf735ddc4749d0b4255ea7071fb2570630e5",
+    "export_sha256": "8cc622ffb53a7df5ab47a5e7b4785396955355fbec1385bbde791b76bd51eda0",
+    "at": "2026-10-01T21:22:05.698400+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "Irregular dark/rust oil marks; no raised panel, text or machine object.",
+    "verdict": "owner-review",
+    "codes": [],
+    "basis": "direct inspection of exact exported family boards and effect frames; source/derivative provenance retained; diagnostic model disagreements do not grant owner taste approval"
+  },
+  "v4-fusion-decals-scorch-v2": {
+    "source_sha256": "0572ba909522bd98861fa4f6a37bb036d382c7d18415271a8417b399aa9c5c78",
+    "export_sha256": "37ae330f29b2a782fd9555391c58c6e81085cf89378e6a4284f880e6a18cb977",
+    "at": "2026-10-01T21:22:05.698400+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "Corrected white-key source yields dark central blast and pale scraped rays; no pink halo.",
+    "verdict": "owner-review",
+    "codes": [],
+    "basis": "direct inspection of exact exported family boards and effect frames; source/derivative provenance retained; diagnostic model disagreements do not grant owner taste approval"
+  },
+  "v4-fusion-decals-cracks-v1": {
+    "source_sha256": "e732fbc7b1c06ba3dcdc436003a01872a87fe6e25980e79b1f4c97e6ba006ba9",
+    "export_sha256": "fa8da70a57dd94ca367b862040dcbb7fa315b6b7fc086e3cdf8ed0e6fbc00ff1",
+    "at": "2026-10-01T21:22:05.698400+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "Thin broken branching cracks on transparency; no concrete panel.",
+    "verdict": "owner-review",
+    "codes": [],
+    "basis": "direct inspection of exact exported family boards and effect frames; source/derivative provenance retained; diagnostic model disagreements do not grant owner taste approval"
+  },
+  "v4-fusion-decals-impact-v1": {
+    "source_sha256": "7c42a85c9b7460e8a4d37f56670cc6c14b702226ea1f45f2b73c3b2f3a6b40dd",
+    "export_sha256": "5cf957e4daa3827064f90e1aef468984b4c1de3d497e0ca8628ced5f5aea780d",
+    "at": "2026-10-01T21:22:05.698400+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "Radial pale/rust chips around dark hole; graphic impact decal.",
+    "verdict": "owner-review",
+    "codes": [],
+    "basis": "direct inspection of exact exported family boards and effect frames; source/derivative provenance retained; diagnostic model disagreements do not grant owner taste approval"
+  },
+  "v4-fusion-landmarks-gantry-v1": {
+    "source_sha256": "d39d251087876a91f5eb647c524c86cfdd8c00a697a0c82c719bdc56194395f1",
+    "export_sha256": "c57da722667c06b5ce53bffbcaabf87891301232effb090735f70ea2da394714",
+    "at": "2026-10-01T21:22:05.698400+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "Simple pale beam and ochre end blocks; large readable track landmark.",
+    "verdict": "owner-review",
+    "codes": [],
+    "basis": "direct inspection of exact exported family boards and effect frames; source/derivative provenance retained; diagnostic model disagreements do not grant owner taste approval"
+  },
+  "v4-fusion-landmarks-split-marker-v1": {
+    "source_sha256": "9e815396310a3dbb32cdd79b0586cbfd2b9c5c1f2feb34b4eef9503686951266",
+    "export_sha256": "a7a7fafac36884f4fbdeba24f7591115c7e80ccd18dc211c73ace54ad99ea779",
+    "at": "2026-10-01T21:22:05.698400+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "Opposing pale chevrons on two rust panels with generic warning triangle.",
+    "verdict": "owner-review",
+    "codes": [],
+    "basis": "direct inspection of exact exported family boards and effect frames; source/derivative provenance retained; diagnostic model disagreements do not grant owner taste approval"
+  },
+  "v4-fusion-landmarks-stone-stack-v1": {
+    "source_sha256": "78da6361e5828aeb9286e2252d5ff0cbb055046648c094260b6e279d0657bd75",
+    "export_sha256": "d2ca7d6ae8c84a621e831659396c97096a58084ef49f1956df26b136ed19f6fd",
+    "at": "2026-10-01T21:22:05.698400+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "Angular grey overhead boulder pile, small ochre paint fragments.",
+    "verdict": "owner-review",
+    "codes": [],
+    "basis": "direct inspection of exact exported family boards and effect frames; source/derivative provenance retained; diagnostic model disagreements do not grant owner taste approval"
+  },
+  "v4-fusion-landmarks-sun-sign-v1": {
+    "source_sha256": "401871f0172b4025ce0e41739d770fee3a48c27abc692abcaffd2da541f74096",
+    "export_sha256": "a7a3a4ccb8b7ca84e4bfd923d15ca6ed5d8ce7db956eaadcf1fad7be4b22cc89",
+    "at": "2026-10-01T21:22:05.698400+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "Ochre square sign with rust sun pictogram; no text.",
+    "verdict": "owner-review",
+    "codes": [],
+    "basis": "direct inspection of exact exported family boards and effect frames; source/derivative provenance retained; diagnostic model disagreements do not grant owner taste approval"
+  },
+  "v4-fusion-landmarks-sluice-v1": {
+    "source_sha256": "2e595de46990d9f62c98d01c4eb1e3a5bb5dd1bbd4ef0216b67dda2260e240b0",
+    "export_sha256": "a3ecb9abcf8024dac8077e882057882f2702cac76d689ad3a9c5355995f5debb",
+    "at": "2026-10-01T21:22:05.698400+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "Three dark horizontal bars in rust square frame; open gaps.",
+    "verdict": "owner-review",
+    "codes": [],
+    "basis": "direct inspection of exact exported family boards and effect frames; source/derivative provenance retained; diagnostic model disagreements do not grant owner taste approval"
+  },
+  "v4-fusion-landmarks-snow-pole-v1": {
+    "source_sha256": "fe5945178bac71c51db3b8b6c0c42dba084df793eaa0dd2fff3ce13756db2675",
+    "export_sha256": "ef36a31717227c00cf7034bfd15f14b532a58410b6663890dacb1bc9743895eb",
+    "at": "2026-10-01T21:22:05.698400+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "Narrow red/bone striped pole with ochre triangular flag.",
+    "verdict": "owner-review",
+    "codes": [],
+    "basis": "direct inspection of exact exported family boards and effect frames; source/derivative provenance retained; diagnostic model disagreements do not grant owner taste approval"
+  },
+  "v4-fusion-effects-muzzle-v1": {
+    "source_sha256": "f55abe1d1871381f9c30ca7dc87e8b6c374f8fcdd9aec7addad1e8dbeb737387",
+    "export_sha256": "c42cdc03742aa891d1e38ab63f0563e50d56acdcb4b813dd52669ae326ddddc9",
+    "at": "2026-10-01T21:22:05.698400+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "Original retained for audit; use inspected derivative v4-fusion-effects-muzzle-layout-v1. All six complete flash shapes preserved and repositioned to regular cells with one shared scale. Actual exports have clear gutters and distinct ignition/peak/decay.",
+    "verdict": "reject",
+    "codes": [
+      "SUPERSEDED_SOURCE_REQUIRES_REPAIR"
+    ],
+    "basis": "direct inspection of exact exported family boards and effect frames; source/derivative provenance retained; diagnostic model disagreements do not grant owner taste approval"
+  },
+  "v4-fusion-effects-explosion-v1": {
+    "source_sha256": "0efd5598a44aebb0b3a15e693b68e54ca8bdf7feb99b2aac708753c26cfb7651",
+    "export_sha256": "421943459ed041daaa1ce4e92ac5b7932e47fc05763829ffc78eee25269caf5a",
+    "at": "2026-10-01T21:22:05.698400+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "Original retained for audit; use inspected derivative v4-fusion-effects-explosion-layout-v1. Source six phases were two across by three down; complete shapes rearranged three across by two down. Actual exported phases retain ignition, burst, fireball and dissipating debris.",
+    "verdict": "reject",
+    "codes": [
+      "SUPERSEDED_SOURCE_REQUIRES_REPAIR"
+    ],
+    "basis": "direct inspection of exact exported family boards and effect frames; source/derivative provenance retained; diagnostic model disagreements do not grant owner taste approval"
+  },
+  "v4-fusion-effects-smoke-v2": {
+    "source_sha256": "235d7db69f8ac2656a3c6fee7f0ab6631f61af040224deb37a9a2fb420d0213a",
+    "export_sha256": "586b02a2b3f01a64a720bd7ef2892536dc451783769886db925f0e6d6702dc0c",
+    "at": "2026-10-01T21:22:05.698400+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "Original retained for audit; use inspected derivative v4-fusion-effects-smoke-v2-layout-v1. Six complete smoke components regrouped into fixed cells. Pale billows and pointed drift fragments read clearly; strong stylization remains an owner taste question.",
+    "verdict": "reject",
+    "codes": [
+      "SUPERSEDED_SOURCE_REQUIRES_REPAIR"
+    ],
+    "basis": "direct inspection of exact exported family boards and effect frames; source/derivative provenance retained; diagnostic model disagreements do not grant owner taste approval"
+  },
+  "v4-fusion-effects-sparks-v2": {
+    "source_sha256": "8faeeff1fc144949a22668c33fc8ada12b56b0fe6f973e476003cf18b95e4580",
+    "export_sha256": "97352e9254fb700cd06a626638662687dd1bdfce6a39d03a9c54aea45465d790",
+    "at": "2026-10-01T21:22:05.698400+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "Original retained for audit; use inspected derivative v4-fusion-effects-sparks-v2-layout-v1. Six hard-edged spark sprays; no residual smoke clouds. Whole components assigned to phase centres with one common scale; actual exports inspected.",
+    "verdict": "reject",
+    "codes": [
+      "SUPERSEDED_SOURCE_REQUIRES_REPAIR"
+    ],
+    "basis": "direct inspection of exact exported family boards and effect frames; source/derivative provenance retained; diagnostic model disagreements do not grant owner taste approval"
+  },
+  "v4-fusion-effects-fire-v2": {
+    "source_sha256": "45914e1743f1c93b094432096c25d1969ba90083d41511b496fff04fc4f8e5a5",
+    "export_sha256": "24d8b3c9ee9fb95fa55504005c6b80a94e4a80405354fe93bc3e9d3ad33671aa",
+    "at": "2026-10-01T21:22:05.698400+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "Original retained for audit; use inspected derivative v4-fusion-effects-fire-repaint-v1. Offline repaint of previously valid original overhead fire phases after three rejected generated attempts. Five fusion palette roles and sparse hatching; original alpha and pivots preserved. No fourth generation and no claim of a newly generated source.",
+    "verdict": "reject",
+    "codes": [
+      "SUPERSEDED_SOURCE_REQUIRES_REPAIR"
+    ],
+    "basis": "direct inspection of exact exported family boards and effect frames; source/derivative provenance retained; diagnostic model disagreements do not grant owner taste approval"
+  },
+  "v4-fusion-hud-frames-frame-health-v2": {
+    "source_sha256": "dbd17e3c3a86fa8839b6874fbe15e301e89e1936f81cd5f5be0767dc0acc1343",
+    "export_sha256": "2f33009a68a5a436d8c899f0f69b8ee50eba700e4146af054b5bff256ca9aaef",
+    "at": "2026-10-01T21:22:05.698400+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "Corrected empty health frame: pale chipped border with rust end cap; removed aircraft graphic. Transparent interior confirmed.",
+    "verdict": "owner-review",
+    "codes": [],
+    "basis": "direct inspection of exact exported family boards and effect frames; source/derivative provenance retained; diagnostic model disagreements do not grant owner taste approval"
+  },
+  "v4-fusion-hud-frames-frame-turbo-v2": {
+    "source_sha256": "c3b55f1d336f4f794d21abecc4cd0207959a26451ba3a50d31d42ffb76ad3acc",
+    "export_sha256": "11fd075bf379a9bbfcbb9b71f932af4d38322655acf39f07df82e6db8da7fde2",
+    "at": "2026-10-01T21:22:05.698400+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "Corrected empty turbo frame: pale border with orange end cap; removed aircraft graphic. Transparent interior confirmed.",
+    "verdict": "owner-review",
+    "codes": [],
+    "basis": "direct inspection of exact exported family boards and effect frames; source/derivative provenance retained; diagnostic model disagreements do not grant owner taste approval"
+  },
+  "v4-fusion-hud-frames-frame-panel-v2": {
+    "source_sha256": "f0dcdc91aa4f2e181e34c35bbf371b84d2eaa8aca08a57488b4aad933e6991f9",
+    "export_sha256": "b4cb026a383871bf577ff473ac15296a1063bc40afa1de2382fef2ef16e81b33",
+    "at": "2026-10-01T21:22:05.698400+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "Corrected empty square panel: soot frame, small ochre hazard marks; removed aircraft graphic. Transparent interior confirmed.",
+    "verdict": "owner-review",
+    "codes": [],
+    "basis": "direct inspection of exact exported family boards and effect frames; source/derivative provenance retained; diagnostic model disagreements do not grant owner taste approval"
+  },
+  "v4-fusion-hud-icons-icon-armour-v1": {
+    "source_sha256": "a7f02c292c22b6a1721b7ca85fc582c94b1fd48e2ad2f76d921f21df44e07a56",
+    "export_sha256": "4169612baabec49c0e936fa460dd1b47cc30424e3e4442ab3955d3b5a82d28b5",
+    "at": "2026-10-01T21:22:05.698400+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "Pale shield with ochre centre, small generic warning pictogram.",
+    "verdict": "owner-review",
+    "codes": [],
+    "basis": "direct inspection of exact exported family boards and effect frames; source/derivative provenance retained; diagnostic model disagreements do not grant owner taste approval"
+  },
+  "v4-fusion-hud-icons-icon-engine-v1": {
+    "source_sha256": "265315b7025f5f5c95372358b00eb561cf634241a13f9c06167439e6cab38d0f",
+    "export_sha256": "690eb8d72e5c9b3c0a83b366db0f2d60fb61aef333d544bfbfe9c369486e34fa",
+    "at": "2026-10-01T21:22:05.698400+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "Four rust pistons on pale block; distinct engine silhouette.",
+    "verdict": "owner-review",
+    "codes": [],
+    "basis": "direct inspection of exact exported family boards and effect frames; source/derivative provenance retained; diagnostic model disagreements do not grant owner taste approval"
+  },
+  "v4-fusion-hud-icons-icon-handling-v1": {
+    "source_sha256": "6fd93b437562563fb22ec309624db576454eefd113cfbb087cbe1abc22281399",
+    "export_sha256": "e7e36465f9315133db94ce849771e9dc49e20f32ea24021c45528a059e85136c",
+    "at": "2026-10-01T21:22:05.698400+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "Pale three-spoke steering wheel with dark hub.",
+    "verdict": "owner-review",
+    "codes": [],
+    "basis": "direct inspection of exact exported family boards and effect frames; source/derivative provenance retained; diagnostic model disagreements do not grant owner taste approval"
+  },
+  "v4-fusion-hud-icons-icon-light-gun-v1": {
+    "source_sha256": "540cfbf1a9ea1d27dd9b5e607c40d45870f8caeb57eebea706f88a7e36c237b4",
+    "export_sha256": "f158f98d7f9b19d838f73875470e09bb5dbee675fe4d3b3c212c22835ec41c98",
+    "at": "2026-10-01T21:22:05.698400+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "Twin narrow barrels on ochre mounting plate.",
+    "verdict": "owner-review",
+    "codes": [],
+    "basis": "direct inspection of exact exported family boards and effect frames; source/derivative provenance retained; diagnostic model disagreements do not grant owner taste approval"
+  },
+  "v4-fusion-hud-icons-icon-heavy-gun-v1": {
+    "source_sha256": "7b9042065b80df1e8eaf19d0fe9d5a78de4b9e9bc431c91e1bacb3b8d0f25910",
+    "export_sha256": "4ab9fdc04782eafdac906348d5a8e69ecb7a3111b1211998c2ee165781eff6d2",
+    "at": "2026-10-01T21:22:05.698400+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "Single wide dark barrel on chunky rust mounting plate.",
+    "verdict": "owner-review",
+    "codes": [],
+    "basis": "direct inspection of exact exported family boards and effect frames; source/derivative provenance retained; diagnostic model disagreements do not grant owner taste approval"
+  },
+  "v4-fusion-hud-icons-icon-fuel-v1": {
+    "source_sha256": "a41c50d8619de84b45a3c5ed075c1d273b3ad98e8a92dd546d14be66f387901b",
+    "export_sha256": "5de7e749632726c41bc8ea81aa4979653d87cad0881a1517b5a8bd7a2a83b075",
+    "at": "2026-10-01T21:22:05.698400+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "Red fuel can with pale drop symbol, no lettering.",
+    "verdict": "owner-review",
+    "codes": [],
+    "basis": "direct inspection of exact exported family boards and effect frames; source/derivative provenance retained; diagnostic model disagreements do not grant owner taste approval"
+  },
+  "v4-fusion-hud-icons-scatter-v1": {
+    "source_sha256": "08917069822d2c5c063b84f6b11dd988a02766098ededcf5f4b12a9e2604377a",
+    "export_sha256": "4a377f5320be1923f487e3ecd00ea68fcd9702625da304f06184f289465a8e34",
+    "at": "2026-10-01T21:22:05.698400+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "Short pale muzzle and several projectile dots; compact spread-weapon emblem.",
+    "verdict": "owner-review",
+    "codes": [],
+    "basis": "direct inspection of exact exported family boards and effect frames; source/derivative provenance retained; diagnostic model disagreements do not grant owner taste approval"
+  },
+  "v4-fusion-hud-icons-spikes-v1": {
+    "source_sha256": "983e75bdc6714128bf44b773ca809b8588c262e34381ec65de11a0e76ce5e8cf",
+    "export_sha256": "de1ca1466850da666dcab2c72333b2da5cb87f356e0ecdca4824baeb7a8e3b6b",
+    "at": "2026-10-01T21:22:05.698400+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "Pale triangular spike on rust plate; bold directional silhouette.",
+    "verdict": "owner-review",
+    "codes": [],
+    "basis": "direct inspection of exact exported family boards and effect frames; source/derivative provenance retained; diagnostic model disagreements do not grant owner taste approval"
+  },
+  "v4-fusion-hud-icons-sabotage-v1": {
+    "source_sha256": "04db9b667961ce0b7a0fe2064d17d85d4dfaf13f96dc1f594cd87ecf95ee9a74",
+    "export_sha256": "8d0772008bbaa83fe42b1246672c444afb4792326b7818c1740278cef052557e",
+    "at": "2026-10-01T21:22:05.698400+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "Open ammo crate with two curved pale arrows; readable swap/sabotage concept.",
+    "verdict": "owner-review",
+    "codes": [],
+    "basis": "direct inspection of exact exported family boards and effect frames; source/derivative provenance retained; diagnostic model disagreements do not grant owner taste approval"
+  },
+  "v4-fusion-backdrops-industrial-v1": {
+    "source_sha256": "b95702f620af2e932bf32a3c8f34cc060459ae145b2051d8743665b51ad5bf83",
+    "export_sha256": "7b6fdbad858478c9cb667de32933e207d84d403df2ab7666035c9528a64e2aec",
+    "at": "2026-10-01T21:22:05.698400+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "Peripheral pipes and slabs frame a quiet dark centre; overhead, no horizon.",
+    "verdict": "owner-review",
+    "codes": [],
+    "basis": "direct inspection of exact exported family boards and effect frames; source/derivative provenance retained; diagnostic model disagreements do not grant owner taste approval"
+  },
+  "v4-fusion-backdrops-quarry-v1": {
+    "source_sha256": "edb632b00e9d48b5589b7dd8ff4c1193391547a97e81913b42a3126dbe7348b3",
+    "export_sha256": "cc24adebe61794c33a00959aebc66e642690c947437461ec2b4f618a7bd1b34a",
+    "at": "2026-10-01T21:22:05.698400+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "Angular ochre/rust rocks around a quiet grey centre; overhead quarry bowl.",
+    "verdict": "owner-review",
+    "codes": [],
+    "basis": "direct inspection of exact exported family boards and effect frames; source/derivative provenance retained; diagnostic model disagreements do not grant owner taste approval"
+  },
+  "v4-fusion-backdrops-desert-v1": {
+    "source_sha256": "6045776e903c168c31562a49355556d584f5c01d5ee3261b95cb6de834a0fff2",
+    "export_sha256": "435db62cade82a661ca3f4a80080d98be8986d7bceee9dff7ac20cbc7d5dbe23",
+    "at": "2026-10-01T21:22:05.698400+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "Corrected overhead ochre expanse with sparse peripheral rock/brush; central wrecks removed.",
+    "verdict": "owner-review",
+    "codes": [],
+    "basis": "direct inspection of exact exported family boards and effect frames; source/derivative provenance retained; diagnostic model disagreements do not grant owner taste approval"
+  },
+  "v4-fusion-backdrops-wetland-v1": {
+    "source_sha256": "143b8d4daaf30ffdc94e2aaf55b045267145c26a2239a15519f51e069396613e",
+    "export_sha256": "dcd3a0dc2ea7a41e3f2a81d2943033ec85512ffdf9aed99bbece0536602d1bf5",
+    "at": "2026-10-01T21:22:05.698400+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "Dark soil/water flow through ochre reeds and a peripheral grate; centre reasonably quiet.",
+    "verdict": "owner-review",
+    "codes": [],
+    "basis": "direct inspection of exact exported family boards and effect frames; source/derivative provenance retained; diagnostic model disagreements do not grant owner taste approval"
+  },
+  "v4-fusion-backdrops-alpine-v1": {
+    "source_sha256": "73b93905a344623bd0008040fb67aea07290bdcc16c25a9f2ee597d8b7e6201b",
+    "export_sha256": "dde9a11e7320ab178dda0a61944c00f8bc4bcfccd5d5aeb77178f54bcd3aea17",
+    "at": "2026-10-01T21:22:05.698400+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "Pale peripheral boulders and small ochre roof, quiet dark centre; no horizon.",
+    "verdict": "owner-review",
+    "codes": [],
+    "basis": "direct inspection of exact exported family boards and effect frames; source/derivative provenance retained; diagnostic model disagreements do not grant owner taste approval"
+  },
+  "v4-fusion-effects-muzzle-layout-v1": {
+    "source_sha256": "c8e2be9357c41f0414ef1cb3c9ae46b40ce374889d0095ac0f5c0219da63c465",
+    "export_sha256": "7779e6c368ecb341b2ccf13aa27e64df22d0d496a7b79d74f0c1455503558d95",
+    "at": "2026-10-01T21:22:05.698400+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "All six complete flash shapes preserved and repositioned to regular cells with one shared scale. Actual exports have clear gutters and distinct ignition/peak/decay.",
+    "verdict": "owner-review",
+    "codes": [],
+    "basis": "direct inspection of exact exported family boards and effect frames; source/derivative provenance retained; diagnostic model disagreements do not grant owner taste approval"
+  },
+  "v4-fusion-surfaces-metal-crop768-v1": {
+    "source_sha256": "b36b74c983befea8093e512f176f44f4d10eaca2f724a0207e0211ae7980e782",
+    "export_sha256": "0bfed30b6576db58728d7994cbe1e600b28ca7ed89ea124684062d5690a89dc2",
+    "at": "2026-10-01T21:22:05.698400+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "Fixed centre crop removes the generated metal frame. Fine grey scratches remain; no rivets or border.",
+    "verdict": "owner-review",
+    "codes": [],
+    "basis": "direct inspection of exact exported family boards and effect frames; source/derivative provenance retained; diagnostic model disagreements do not grant owner taste approval"
+  },
+  "v4-fusion-surfaces-ice-crop768-v1": {
+    "source_sha256": "41fb648bc2d4a22ba1c659803f425cf5ec37a3e1656c1a996bccc329adf96981",
+    "export_sha256": "cb4bc0511c512e4268da7f194d4b2a24b5c025c7522de5d2c7d2bd6821059a96",
+    "at": "2026-10-01T21:22:05.698400+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "Fixed centre crop removes framed perimeter; quiet pale granular surface.",
+    "verdict": "owner-review",
+    "codes": [],
+    "basis": "direct inspection of exact exported family boards and effect frames; source/derivative provenance retained; diagnostic model disagreements do not grant owner taste approval"
+  },
+  "v4-fusion-surfaces-asphalt-clean-crop768-v1": {
+    "source_sha256": "f816f7a2dd1210ac57d6d938eea7ba99ef38fa60a34ed4d2f0b8422fd65fbcf3",
+    "export_sha256": "c7614be2e8b4cde0847f19686b606fd0b3d3f72b6af45f894ad8578f2cb94178",
+    "at": "2026-10-01T21:22:05.698400+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "Fixed centre crop removes dark perimeter; sparse aggregate remains.",
+    "verdict": "owner-review",
+    "codes": [],
+    "basis": "direct inspection of exact exported family boards and effect frames; source/derivative provenance retained; diagnostic model disagreements do not grant owner taste approval"
+  },
+  "v4-fusion-ground-gravel-v1-wrap-v1": {
+    "source_sha256": "d9540f8f0edcbda0aab615ba8a22d69565772d0379f09ce439f20c08e19b5c5d",
+    "export_sha256": "d9540f8f0edcbda0aab615ba8a22d69565772d0379f09ce439f20c08e19b5c5d",
+    "at": "2026-10-01T21:22:05.698400+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "Dense small dark pebbles; eight-pixel wrap repair removes the seam. Busier than dirt; use for distinct gravel patches.",
+    "verdict": "owner-review",
+    "codes": [],
+    "basis": "direct inspection of exact exported family boards and effect frames; source/derivative provenance retained; diagnostic model disagreements do not grant owner taste approval"
+  },
+  "v4-fusion-effects-explosion-layout-v1": {
+    "source_sha256": "117a7fc8e8e1850679d7eceaed910e463829320a87ad6a216a2db6c5ce4c3698",
+    "export_sha256": "48e28335ac52fef181dfbef78b5087a6df76cddd8b621bd86598f55780d0183c",
+    "at": "2026-10-01T21:22:05.698400+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "Source six phases were two across by three down; complete shapes rearranged three across by two down. Actual exported phases retain ignition, burst, fireball and dissipating debris.",
+    "verdict": "owner-review",
+    "codes": [],
+    "basis": "direct inspection of exact exported family boards and effect frames; source/derivative provenance retained; diagnostic model disagreements do not grant owner taste approval"
+  },
+  "v4-fusion-effects-smoke-v2-layout-v1": {
+    "source_sha256": "9b443ed20d8a96157003d529e756abaf96863b95e4c80e04f75725cadffaad60",
+    "export_sha256": "30db3a56e75f52717d7606996fbdf3e7d62b3b8af84cc369889d612e81bee85d",
+    "at": "2026-10-01T21:22:05.698400+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "Six complete smoke components regrouped into fixed cells. Pale billows and pointed drift fragments read clearly; strong stylization remains an owner taste question.",
+    "verdict": "owner-review",
+    "codes": [],
+    "basis": "direct inspection of exact exported family boards and effect frames; source/derivative provenance retained; diagnostic model disagreements do not grant owner taste approval"
+  },
+  "v4-fusion-effects-sparks-v2-layout-v1": {
+    "source_sha256": "acd83500df1218a4c79502e3d1c2a79e32c53d32e8e89b1f8919cd9d86aee94d",
+    "export_sha256": "3f9e6848e06e33f9fd6233ba8c76d7cb054b84dd8d933f4131e5669ce3551975",
+    "at": "2026-10-01T21:22:05.698400+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "Six hard-edged spark sprays; no residual smoke clouds. Whole components assigned to phase centres with one common scale; actual exports inspected.",
+    "verdict": "owner-review",
+    "codes": [],
+    "basis": "direct inspection of exact exported family boards and effect frames; source/derivative provenance retained; diagnostic model disagreements do not grant owner taste approval"
+  },
+  "v4-fusion-effects-fire-repaint-v1": {
+    "source_sha256": "c79c0ea17fd02b48d179507c3651c2139eebf984f925157df0dabcd967776f1b",
+    "export_sha256": "d4f175426e0e6bf4ed1851f22f83c865bdef64c7fd54d23a23a656617759276f",
+    "at": "2026-10-01T21:22:05.698400+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "Offline repaint of previously valid original overhead fire phases after three rejected generated attempts. Five fusion palette roles and sparse hatching; original alpha and pivots preserved. No fourth generation and no claim of a newly generated source.",
+    "verdict": "owner-review",
+    "codes": [],
+    "basis": "direct inspection of exact exported family boards and effect frames; source/derivative provenance retained; diagnostic model disagreements do not grant owner taste approval"
+  },
+  "v4-fusion-props-soft-dune-v1-despill-v1": {
+    "source_sha256": "959eb3dedeb1fd60e11c5bf949072bb43c34f6a234d229b102732008b56ff209",
+    "export_sha256": "41f4601b6b3cfb06b50af24bdc7fc83b39f11bf91a85f932d4211de09d94c315",
+    "at": "2026-10-01T21:22:05.698400+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "Low crescent sand shape. Visible magenta fringe repainted from adjacent clean sand colours; original rejected. Drag footprint supplied.",
+    "verdict": "owner-review",
+    "codes": [],
+    "basis": "direct inspection of exact exported family boards and effect frames; source/derivative provenance retained; diagnostic model disagreements do not grant owner taste approval"
+  },
+  "v4-fusion-props-rock-spire-v1-despill-v1": {
+    "source_sha256": "603dcb49f74c884814290537615690413617ae4512b52fa6da0d3c60625de722",
+    "export_sha256": "c2f567e82c2bbc307a45654611cb2f6fcfe14fad61078de331485c64a0c03e71",
+    "at": "2026-10-01T21:22:05.698400+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "Tapered angular overhead rock crown with pale caps. Visible magenta fringe repainted from adjacent rock; original rejected. Tall solid footprint supplied.",
+    "verdict": "owner-review",
+    "codes": [],
+    "basis": "direct inspection of exact exported family boards and effect frames; source/derivative provenance retained; diagnostic model disagreements do not grant owner taste approval"
   }
 }

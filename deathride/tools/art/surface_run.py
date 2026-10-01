@@ -12,7 +12,7 @@ from datetime import datetime, timezone
 from common import ART, ROOT, file_lock, now, sha, write_json, read_json
 
 PACKAGE='dev.deathride.artlab'
-MODES=['baseline','painted','macro','decals','ribbon','edges','grade-dust','depth','wear','poster-grain','contrast','combined','ribbon-control','lean-stack','efficient-stack','cached-stack']
+MODES=['baseline','painted','macro','decals','ribbon','edges','grade-dust','depth','wear','poster-grain','contrast','combined','ribbon-control','lean-stack','efficient-stack','cached-stack','fusion-control','fusion-natural']
 LAB=ROOT/'tools/art/surface-lab'
 
 def desktop(modes,styles,run):
@@ -29,7 +29,7 @@ def desktop(modes,styles,run):
             source=LAB/'desktop/artlab-output'/name
             if not (source/'result.json').exists():raise RuntimeError('no complete render result: '+name)
             shutil.copytree(source,folder)
-            result=read_json(folder/'result.json');result['binary_sha256']=binaries;result['input_manifest_sha256']=sha(ART/'surface-lab/inputs.json');write_json(folder/'result.json',result);print(name,'p50',result['p50_ms'],'bytes',result['rgba_bytes'],flush=True)
+            result=read_json(folder/'result.json');result['binary_sha256']=binaries;result['input_manifest_sha256']=sha(ART/('surface-lab/fusion-resident-inputs.json' if mode>=16 else 'surface-lab/inputs.json'));write_json(folder/'result.json',result);print(name,'p50',result['p50_ms'],'bytes',result['rgba_bytes'],flush=True)
 
 def device(device,modes,styles,run,window_file='DEVICE-WINDOW.txt'):
     if not re.fullmatch(r'DEVICE-WINDOW(?:-\d+)?\.txt',window_file):raise ValueError('invalid window marker filename')
@@ -99,7 +99,7 @@ def device(device,modes,styles,run,window_file='DEVICE-WINDOW.txt'):
                     # PSS is sampled during timed rendering, before PNG capture allocation.
                     (folder/'meminfo.txt').write_text(mem or 'not measured',encoding='utf-8')
                     result=read_json(folder/'result.json');match=re.search(r'TOTAL PSS:\s*(\d+)',mem or '') or re.search(r'^\s*TOTAL\s+(\d+)',mem or '',re.M)
-                    result['pss_kib']=int(match.group(1)) if match else None;result['pss_basis']='single dumpsys during timed render, before screenshot encoding';result['apk_sha256']=apk_hash;result['input_manifest_sha256']=sha(ART/'surface-lab/inputs.json')
+                    result['pss_kib']=int(match.group(1)) if match else None;result['pss_basis']='single dumpsys during timed render, before screenshot encoding';result['apk_sha256']=apk_hash;result['input_manifest_sha256']=sha(ART/('surface-lab/fusion-resident-inputs.json' if mode>=16 else 'surface-lab/inputs.json'))
                     write_json(folder/'result.json',result);evidence['runs'].append({'name':name,'result_sha256':sha(folder/'result.json'),'screenshot_sha256':sha(folder/'scene.png')})
                     write_json(dest/(run+'-session.json'),evidence);print(name,'p50',result['p50_ms'],'PSS',result['pss_kib'],flush=True)
             evidence['status']='complete'

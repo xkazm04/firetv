@@ -11,7 +11,7 @@ import java.util.*;
 
 /** Faithful 2D rendering experiment. No game services, saves, ports or simulation. */
 public final class SurfaceLab extends ApplicationAdapter {
-    public static final String[] MODES={"baseline","painted","macro","decals","ribbon","edges","grade-dust","depth","wear","poster-grain","contrast","combined","ribbon-control","lean-stack","efficient-stack","cached-stack"};
+    public static final String[] MODES={"baseline","painted","macro","decals","ribbon","edges","grade-dust","depth","wear","poster-grain","contrast","combined","ribbon-control","lean-stack","efficient-stack","cached-stack","fusion-control","fusion-natural"};
     private static final int W=1920,H=1080,SAMPLES=900,WARM=240;
     private int style;
     private final boolean automatic;
@@ -28,6 +28,7 @@ public final class SurfaceLab extends ApplicationAdapter {
     private final Matrix4 projection=new Matrix4().setToOrtho2D(0,0,W,H);
     private SpriteBatch batch;
     private Texture ground,dirt,car,atlas,macro;
+    private FusionCourse fusion;
     private TextureRegion[] decals;
     private TextureRegion prop,barrier,dust,white,shadow;
     private FrameBuffer ribbon,wear;
@@ -53,6 +54,7 @@ public final class SurfaceLab extends ApplicationAdapter {
     private boolean on(int feature) { return mode==feature || mode==11 && feature!=4 || mode==12 && (feature==3||feature==5) || mode>=13 && (feature==2||feature==3||feature==5||feature==6||feature==10); }
     @Override public void create() {
         bakeMs=0;cachedGround=null;cachedEdges=null;
+        if(mode>=16){fusion=new FusionCourse(mode==17);bytes=fusion.bytes;bakeMs=fusion.buildMs;Gdx.app.log("ArtLab","READY "+MODES[mode]+" style="+style+" bytes="+bytes);return;}
         batch=new SpriteBatch(3000);batch.setProjectionMatrix(projection);
         ground=texture(mode==0?"baseline.png":"ground-"+style+".png",true);
         dirt=texture("dirt.png",true);car=texture("car.png",false);atlas=texture("details.png",false);
@@ -146,6 +148,7 @@ public final class SurfaceLab extends ApplicationAdapter {
         batch.setColor(Color.WHITE);end();wear.end();fill=beforeFill+(fill-beforeFill)*(512.0*512/(W*H));batch.setBlendFunction(GL20.GL_SRC_ALPHA,GL20.GL_ONE_MINUS_SRC_ALPHA);
     }
     private void scene(double time) {
+        if(fusion!=null){fusion.render(time);draws=fusion.draws;fill=fusion.fill;return;}
         updateWear(time);Gdx.gl.glViewport(0,0,Gdx.graphics.getBackBufferWidth(),Gdx.graphics.getBackBufferHeight());ScreenUtils.clear(.1f,.08f,.06f,1);
         float panX=(float)Math.sin(time*.2)*25,panY=(float)Math.cos(time*.2)*10;
         projection.setToOrtho2D(panX,panY,W,H);
@@ -194,7 +197,8 @@ public final class SurfaceLab extends ApplicationAdapter {
             put(out,"mode",MODES[mode]);put(out,"style",style);put(out,"samples",n);put(out,"warmup_frames",WARM);put(out,"rgba_bytes",bytes);put(out,"draw_calls",measuredDraws);put(out,"submitted_pixel_area_ratio",measuredFill/(W*H));put(out,"width",Gdx.graphics.getBackBufferWidth());put(out,"height",Gdx.graphics.getBackBufferHeight());
             put(out,"p50_ms",percentile(intervals,.5));put(out,"p95_ms",percentile(intervals,.95));put(out,"max_ms",percentile(intervals,1));put(out,"cpu_p50_ms",percentile(cpu,.5));put(out,"completion_p50_ms",percentile(completion,.5));put(out,"completion_p95_ms",percentile(completion,.95));
             put(out,"draw_calls_max",percentile(drawSamples,1));put(out,"draw_calls_basis","mean of all timed frames including wear updates; SpriteBatch flushes");put(out,"bake_completion_ms",bakeMs);put(out,"fill_basis","submitted quad/road pixel area, including overlap and clipping; proxy, not measured GPU fragments");
-            put(out,"cpu_geometry_bytes",cachedGround==null?0:(cachedGround.length+cachedEdges.length)*4);
+            put(out,"cpu_geometry_bytes",fusion!=null?fusion.cpuBytes:cachedGround==null?0:(cachedGround.length+cachedEdges.length)*4);
+            if(fusion!=null)put(out,"fusion_residency_basis",fusion.fullBundle?"full packed bundle plus two allocated car pages; one theme resident":"fixture-only; not full bundle");
             put(out,"renderer",Gdx.gl.glGetString(GL20.GL_RENDERER));put(out,"timing_basis","start-to-start frame intervals; glFinish each frame; completion is CPU+GPU wall time, NOT a GPU timer");put(out,"scope","isolated libGDX rendering mock; no gameplay or soak");
             out.addChild("intervals_ms",array(intervals));out.addChild("cpu_ms",array(cpu));out.addChild("completion_ms",array(completion));
             String json=out.prettyPrint(JsonWriter.OutputType.json,120);dir.child("result.json").writeString(json,false,"UTF-8");Gdx.app.log("ArtLab","RESULT "+dir.path()+" p50="+percentile(intervals,.5)+" bytes="+bytes);finished=true;
@@ -207,7 +211,7 @@ public final class SurfaceLab extends ApplicationAdapter {
     private static double percentile(double[] v,double f){double[] a=v.clone();Arrays.sort(a);return a[Math.min(a.length-1,(int)(f*a.length))];}
     private static double mean(double[] v){double sum=0;for(double n:v)sum+=n;return sum/v.length;}
     @Override public void resize(int w,int h){Gdx.gl.glViewport(0,0,w,h);}
-    @Override public void dispose(){for(Texture t:owned)t.dispose();if(ribbon!=null)ribbon.dispose();if(wear!=null)wear.dispose();surface.dispose();batch.dispose();}
+    @Override public void dispose(){if(fusion!=null){fusion.dispose();fusion=null;return;}for(Texture t:owned)t.dispose();if(ribbon!=null)ribbon.dispose();if(wear!=null)wear.dispose();surface.dispose();batch.dispose();}
     private static final String VERT="attribute vec4 a_position; attribute vec4 a_color; attribute vec2 a_texCoord0; uniform mat4 u_projTrans; varying vec4 v_color; varying vec2 v_texCoords; void main(){v_color=a_color;v_color.a=v_color.a*(255.0/254.0);v_texCoords=a_texCoord0;gl_Position=u_projTrans*a_position;}";
     private static final String FRAG="#ifdef GL_ES\nprecision mediump float;\n#endif\nvarying vec4 v_color; varying vec2 v_texCoords; uniform sampler2D u_texture; uniform sampler2D u_macro; uniform float u_macroOn,u_grade,u_poster,u_contrast; void main(){vec4 c=texture2D(u_texture,v_texCoords)*v_color; if(u_macroOn>0.5)c.rgb*=mix(0.72,1.18,texture2D(u_macro,v_texCoords*0.25).r); if(u_grade>0.5)c.rgb=c.rgb*vec3(1.08,0.98,0.84)+vec3(0.015,0.005,0.0); if(u_poster>0.5){float grain=fract(sin(dot(floor(gl_FragCoord.xy/3.0),vec2(12.9898,78.233)))*43758.5453);c.rgb=floor(c.rgb*6.0+grain*0.22)/6.0;}if(u_contrast>0.5){float l=dot(c.rgb,vec3(0.299,0.587,0.114));c.rgb=mix(vec3(l),c.rgb,0.45)*0.68+vec3(0.045);}gl_FragColor=c;}";
 }

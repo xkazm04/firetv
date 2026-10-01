@@ -1,0 +1,1224 @@
+[
+  {
+    "id": "v4-fusion-props-tyres-v1",
+    "class": "tyres",
+    "kind": "sprite",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v4-fusion-props-tyres-v1\\attempt-01\\1.jpg",
+    "source_sha256": "5cddfe16609effdf683fd9fbf5a7d71ce8ce4e4ba61484d7fb54056ce240fba9",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v4-fusion-props-tyres-v1",
+      "class": "tyres",
+      "prompt_action": "One compact stack of three charcoal racing tyres. True overhead plan view: circular opening in the centre and nested circular top rings, no visible vertical stack walls. One SMALL isolated complete asset, floating in a large empty magenta field. All pixels within the middle HALF of the canvas; extremely generous empty margin on ALL four sides. Strong shape at 96 pixels, HUD at 32 pixels. Flat neutral material shading, no cast shadow, scene, car or lettering. Strict directly overhead plan view; no visible front or side wall.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "sprite",
+      "reference": "",
+      "batch": "v4-fusion-props",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "128",
+      "style_file": "style-fusion.json",
+      "wave": "V4",
+      "asset_family": "props",
+      "surface_stack": "seeded-decals-tall-props-baked-natural-bands",
+      "logical_name": "props/tyres"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "metrics": {
+      "foreground_fraction": 0.3813486099243164,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        195,
+        107,
+        834,
+        916
+      ],
+      "margin_fraction": 0.1044921875,
+      "aspect": 0.7898640296662547,
+      "estimated_key_rgb": [
+        196.0,
+        52.0,
+        121.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 5.204241706567829,
+      "palette_p90_delta_e": 8.815883675196497
+    },
+    "placement": {
+      "source_bounds_px": [
+        195,
+        107,
+        834,
+        916
+      ],
+      "source_pivot_px": [
+        514.5,
+        511.5
+      ],
+      "pivot_px": [
+        63.5,
+        64.0
+      ],
+      "cell_px": [
+        128,
+        128
+      ],
+      "subject_px": [
+        95,
+        120
+      ],
+      "scale": 0.14833127317676142,
+      "world_length_m": null,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 128
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v4-fusion-props\\v4-fusion-props-tyres-v1.png",
+    "sha256": "3636245bd0f1147420e0891fbf207240d82c6f45e2b1c6f277a61cf8466bbafb"
+  },
+  {
+    "id": "v4-fusion-props-crate-v1",
+    "class": "crate",
+    "kind": "sprite",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v4-fusion-props-crate-v1\\attempt-01\\1.jpg",
+    "source_sha256": "5ab7c87cb3c696bff261256f5f016899e16c2820244731b5ba903c05188c30a3",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v4-fusion-props-crate-v1",
+      "class": "crate",
+      "prompt_action": "One closed square shipping crate top, weathered ivory wooden slats and dark metal corner brackets in a clear X-brace arrangement, no stencil or symbols. One SMALL isolated complete asset, floating in a large empty magenta field. All pixels within the middle HALF of the canvas; extremely generous empty margin on ALL four sides. Strong shape at 96 pixels, HUD at 32 pixels. Flat neutral material shading, no cast shadow, scene, car or lettering. Strict directly overhead plan view; no visible front or side wall.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "sprite",
+      "reference": "",
+      "batch": "v4-fusion-props",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "128",
+      "style_file": "style-fusion.json",
+      "wave": "V4",
+      "asset_family": "props",
+      "surface_stack": "seeded-decals-tall-props-baked-natural-bands",
+      "logical_name": "props/crate"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "metrics": {
+      "foreground_fraction": 0.6084127426147461,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        107,
+        101,
+        928,
+        916
+      ],
+      "margin_fraction": 0.09375,
+      "aspect": 1.007361963190184,
+      "estimated_key_rgb": [
+        242.0,
+        66.0,
+        182.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 6.130996571129808,
+      "palette_p90_delta_e": 11.070589137346301
+    },
+    "placement": {
+      "source_bounds_px": [
+        107,
+        101,
+        928,
+        916
+      ],
+      "source_pivot_px": [
+        517.5,
+        508.5
+      ],
+      "pivot_px": [
+        64.0,
+        63.5
+      ],
+      "cell_px": [
+        128,
+        128
+      ],
+      "subject_px": [
+        120,
+        119
+      ],
+      "scale": 0.146163215590743,
+      "world_length_m": null,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 128
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v4-fusion-props\\v4-fusion-props-crate-v1.png",
+    "sha256": "6add3b10aeda0733b505145ee86d4f443707e2d5209487595bb5c07dcd1752c6"
+  },
+  {
+    "id": "v4-fusion-props-cone-v1",
+    "class": "cone",
+    "kind": "sprite",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v4-fusion-props-cone-v1\\attempt-01\\1.jpg",
+    "source_sha256": "e851babb7aae72817de69dc2afd23a0494540361a6d48044c8281704d44cf289",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v4-fusion-props-cone-v1",
+      "class": "cone",
+      "prompt_action": "One rust-orange traffic cone seen directly from above: small round rust-orange tip at the centre of an rust-orange and ivory ring, on a square charcoal base, no side profile. One SMALL isolated complete asset, floating in a large empty magenta field. All pixels within the middle HALF of the canvas; extremely generous empty margin on ALL four sides. Strong shape at 96 pixels, HUD at 32 pixels. Flat neutral material shading, no cast shadow, scene, car or lettering. Strict directly overhead plan view; no visible front or side wall.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "sprite",
+      "reference": "",
+      "batch": "v4-fusion-props",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "128",
+      "style_file": "style-fusion.json",
+      "wave": "V4",
+      "asset_family": "props",
+      "surface_stack": "seeded-decals-tall-props-baked-natural-bands",
+      "logical_name": "props/cone"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "metrics": {
+      "foreground_fraction": 0.3546466827392578,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        203,
+        204,
+        822,
+        820
+      ],
+      "margin_fraction": 0.197265625,
+      "aspect": 1.00487012987013,
+      "estimated_key_rgb": [
+        205.0,
+        74.0,
+        194.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 6.8384755061072555,
+      "palette_p90_delta_e": 10.259341431273967
+    },
+    "placement": {
+      "source_bounds_px": [
+        203,
+        204,
+        822,
+        820
+      ],
+      "source_pivot_px": [
+        512.5,
+        512.0
+      ],
+      "pivot_px": [
+        64.0,
+        63.5
+      ],
+      "cell_px": [
+        128,
+        128
+      ],
+      "subject_px": [
+        120,
+        119
+      ],
+      "scale": 0.1938610662358643,
+      "world_length_m": null,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 128
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v4-fusion-props\\v4-fusion-props-cone-v1.png",
+    "sha256": "6c43fb1fb7405fa5be5be6b01a00455e4e2601e649649cdfe429e07aa3e5da4d"
+  },
+  {
+    "id": "v4-fusion-props-sign-v1",
+    "class": "sign",
+    "kind": "sprite",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v4-fusion-props-sign-v1\\attempt-02\\1.jpg",
+    "source_sha256": "d4fc8f3c23648f186d30def0fe89b53cbce84eb09c5af2ac23d05c7441fd6ee7",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v4-fusion-props-sign-v1",
+      "class": "sign",
+      "prompt_action": "One flat rectangular roadside sign board, face visible as a readable icon: a simple bold right arrow in bleached bone on soot, no letters or numerals, short grey support extending down. One SMALL isolated complete asset, floating in a large empty magenta field. All pixels within the middle HALF of the canvas; extremely generous empty margin on ALL four sides. Strong shape at 96 pixels, HUD at 32 pixels. Flat neutral material shading, no cast shadow, scene, car or lettering. Strict directly overhead plan view; no visible front or side wall.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "sprite",
+      "reference": "",
+      "batch": "v4-fusion-props",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "128",
+      "style_file": "style-fusion.json",
+      "wave": "V4",
+      "asset_family": "props",
+      "surface_stack": "seeded-decals-tall-props-baked-natural-bands",
+      "logical_name": "props/sign"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "metrics": {
+      "foreground_fraction": 0.18529891967773438,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        237,
+        267,
+        794,
+        807
+      ],
+      "margin_fraction": 0.2119140625,
+      "aspect": 1.0314814814814814,
+      "estimated_key_rgb": [
+        204.0,
+        55.0,
+        145.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 5.61485776239252,
+      "palette_p90_delta_e": 9.73224872222282
+    },
+    "placement": {
+      "source_bounds_px": [
+        237,
+        267,
+        794,
+        807
+      ],
+      "source_pivot_px": [
+        515.5,
+        537.0
+      ],
+      "pivot_px": [
+        64.0,
+        64.0
+      ],
+      "cell_px": [
+        128,
+        128
+      ],
+      "subject_px": [
+        120,
+        116
+      ],
+      "scale": 0.21543985637342908,
+      "world_length_m": null,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 128
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v4-fusion-props\\v4-fusion-props-sign-v1.png",
+    "sha256": "cf92049cfc0721974b06a3ea10f6bce638ea8ea512cc77f329f30e73531947d9"
+  },
+  {
+    "id": "v4-fusion-props-drum-v1",
+    "class": "drum",
+    "kind": "sprite",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v4-fusion-props-drum-v1\\attempt-01\\1.jpg",
+    "source_sha256": "29a8637ddbd621469d1c023ced58776b10a06ea6d3367cbebbe389495c48442b",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v4-fusion-props-drum-v1",
+      "class": "drum",
+      "prompt_action": "One sealed oil drum seen directly from above: round dirty ochre lid with concentric rim and two small circular caps, no side wall or label. One SMALL isolated complete asset, floating in a large empty magenta field. All pixels within the middle HALF of the canvas; extremely generous empty margin on ALL four sides. Strong shape at 96 pixels, HUD at 32 pixels. Flat neutral material shading, no cast shadow, scene, car or lettering. Strict directly overhead plan view; no visible front or side wall.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "sprite",
+      "reference": "",
+      "batch": "v4-fusion-props",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "128",
+      "style_file": "style-fusion.json",
+      "wave": "V4",
+      "asset_family": "props",
+      "surface_stack": "seeded-decals-tall-props-baked-natural-bands",
+      "logical_name": "props/drum"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "metrics": {
+      "foreground_fraction": 0.2552223205566406,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        218,
+        222,
+        807,
+        802
+      ],
+      "margin_fraction": 0.2119140625,
+      "aspect": 1.0155172413793103,
+      "estimated_key_rgb": [
+        226.0,
+        42.0,
+        113.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 5.628712515694365,
+      "palette_p90_delta_e": 9.085860811496207
+    },
+    "placement": {
+      "source_bounds_px": [
+        218,
+        222,
+        807,
+        802
+      ],
+      "source_pivot_px": [
+        512.5,
+        512.0
+      ],
+      "pivot_px": [
+        64.0,
+        64.0
+      ],
+      "cell_px": [
+        128,
+        128
+      ],
+      "subject_px": [
+        120,
+        118
+      ],
+      "scale": 0.2037351443123939,
+      "world_length_m": null,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 128
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v4-fusion-props\\v4-fusion-props-drum-v1.png",
+    "sha256": "a067a69bc76cf1357e35f9aac06639e24e9e1bfb763a83a1ac1c6eba71351585"
+  },
+  {
+    "id": "v4-fusion-props-tyres-scattered-v1",
+    "class": "tyres-scattered",
+    "kind": "sprite",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v4-fusion-props-tyres-scattered-v1\\attempt-01\\1.jpg",
+    "source_sha256": "47b472eccbd045b815225ded1bd53e0d91d86d29cf99df5f085e03333197ecc8",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v4-fusion-props-tyres-scattered-v1",
+      "class": "tyres-scattered",
+      "prompt_action": "A compact triangular arrangement of three separate charcoal tyres seen directly overhead, all complete circular rings with dark centres, no shadow. One SMALL isolated complete asset, floating in a large empty magenta field. All pixels within the middle HALF of the canvas; extremely generous empty margin on ALL four sides. Strong shape at 96 pixels, HUD at 32 pixels. Flat neutral material shading, no cast shadow, scene, car or lettering. Strict directly overhead plan view; no visible front or side wall.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "sprite",
+      "reference": "",
+      "batch": "v4-fusion-props",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "128",
+      "style_file": "style-fusion.json",
+      "wave": "V4",
+      "asset_family": "props",
+      "surface_stack": "seeded-decals-tall-props-baked-natural-bands",
+      "logical_name": "props/tyres-scattered"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "metrics": {
+      "foreground_fraction": 0.3250160217285156,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        119,
+        128,
+        920,
+        869
+      ],
+      "margin_fraction": 0.1015625,
+      "aspect": 1.0809716599190284,
+      "estimated_key_rgb": [
+        241.0,
+        43.0,
+        220.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 5.217136894101521,
+      "palette_p90_delta_e": 9.586517415732827
+    },
+    "placement": {
+      "source_bounds_px": [
+        119,
+        128,
+        920,
+        869
+      ],
+      "source_pivot_px": [
+        519.5,
+        498.5
+      ],
+      "pivot_px": [
+        64.0,
+        63.5
+      ],
+      "cell_px": [
+        128,
+        128
+      ],
+      "subject_px": [
+        120,
+        111
+      ],
+      "scale": 0.149812734082397,
+      "world_length_m": null,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 128
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v4-fusion-props\\v4-fusion-props-tyres-scattered-v1.png",
+    "sha256": "3bd9084f6c1040357829cda5d5c91e390e48fd53fe9931434f712af4a63d478a"
+  },
+  {
+    "id": "v4-fusion-props-crate-metal-v1",
+    "class": "crate-metal",
+    "kind": "sprite",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v4-fusion-props-crate-metal-v1\\attempt-01\\1.jpg",
+    "source_sha256": "0b188fb712c78dbcce5363b7a3ce2d5fc33f839de2310fd146c202cc3ecbf891",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v4-fusion-props-crate-metal-v1",
+      "class": "crate-metal",
+      "prompt_action": "One closed square rust steel storage box top, two grey straps across the lid and small metal corner pads, no markings. One SMALL isolated complete asset, floating in a large empty magenta field. All pixels within the middle HALF of the canvas; extremely generous empty margin on ALL four sides. Strong shape at 96 pixels, HUD at 32 pixels. Flat neutral material shading, no cast shadow, scene, car or lettering. Strict directly overhead plan view; no visible front or side wall.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "sprite",
+      "reference": "",
+      "batch": "v4-fusion-props",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "128",
+      "style_file": "style-fusion.json",
+      "wave": "V4",
+      "asset_family": "props",
+      "surface_stack": "seeded-decals-tall-props-baked-natural-bands",
+      "logical_name": "props/crate-metal"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "metrics": {
+      "foreground_fraction": 0.33310985565185547,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        203,
+        219,
+        837,
+        802
+      ],
+      "margin_fraction": 0.1826171875,
+      "aspect": 1.0874785591766725,
+      "estimated_key_rgb": [
+        235.0,
+        60.0,
+        167.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 9.489085228102482,
+      "palette_p90_delta_e": 13.937871118393579
+    },
+    "placement": {
+      "source_bounds_px": [
+        203,
+        219,
+        837,
+        802
+      ],
+      "source_pivot_px": [
+        520.0,
+        510.5
+      ],
+      "pivot_px": [
+        64.0,
+        64.0
+      ],
+      "cell_px": [
+        128,
+        128
+      ],
+      "subject_px": [
+        120,
+        110
+      ],
+      "scale": 0.1892744479495268,
+      "world_length_m": null,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 128
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v4-fusion-props\\v4-fusion-props-crate-metal-v1.png",
+    "sha256": "6287249d9e4288aa2e8f2756c32418a53a4673f27f0a12bd20eb4daf6b2be722"
+  },
+  {
+    "id": "v4-fusion-props-drum-red-v1",
+    "class": "drum-red",
+    "kind": "sprite",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v4-fusion-props-drum-red-v1\\attempt-02\\1.jpg",
+    "source_sha256": "3d9e98e52a63915d5016f3c69b594e553b4a2b93f58a9dafaa40cd61426ffe9f",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v4-fusion-props-drum-red-v1",
+      "class": "drum-red",
+      "prompt_action": "One sealed dried-red metal drum seen directly overhead, circular dried-red lid with an ivory band across it and two small caps, no label. One SMALL isolated complete asset, floating in a large empty magenta field. All pixels within the middle HALF of the canvas; extremely generous empty margin on ALL four sides. Strong shape at 96 pixels, HUD at 32 pixels. Flat neutral material shading, no cast shadow, scene, car or lettering. Strict directly overhead plan view; no visible front or side wall.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "sprite",
+      "reference": "",
+      "batch": "v4-fusion-props",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "128",
+      "style_file": "style-fusion.json",
+      "wave": "V4",
+      "asset_family": "props",
+      "surface_stack": "seeded-decals-tall-props-baked-natural-bands",
+      "logical_name": "props/drum-red"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "metrics": {
+      "foreground_fraction": 0.4069709777832031,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        135,
+        132,
+        893,
+        884
+      ],
+      "margin_fraction": 0.1279296875,
+      "aspect": 1.0079787234042554,
+      "estimated_key_rgb": [
+        246.0,
+        38.0,
+        228.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 8.249830255338948,
+      "palette_p90_delta_e": 11.82774291972408
+    },
+    "placement": {
+      "source_bounds_px": [
+        135,
+        132,
+        893,
+        884
+      ],
+      "source_pivot_px": [
+        514.0,
+        508.0
+      ],
+      "pivot_px": [
+        64.0,
+        63.5
+      ],
+      "cell_px": [
+        128,
+        128
+      ],
+      "subject_px": [
+        120,
+        119
+      ],
+      "scale": 0.158311345646438,
+      "world_length_m": null,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 128
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v4-fusion-props\\v4-fusion-props-drum-red-v1.png",
+    "sha256": "1dfdf72e75f1fcf2291e7eb5fb1ed119bfc89d0931449a636ed0afd2881aa9a9"
+  },
+  {
+    "id": "v4-fusion-props-brush-v1",
+    "class": "brush",
+    "kind": "sprite",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v4-fusion-props-brush-v1\\attempt-01\\1.jpg",
+    "source_sha256": "67e1d36169825c7722877bde3212719ec2c5b541e27aeea44279812a1b378f85",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v4-fusion-props-brush-v1",
+      "class": "brush",
+      "prompt_action": "One low tangled oval clump of dry thorn brush seen directly overhead, sparse ochre twigs around a dense soot and rust root core, large transparent gaps between branches, no soil patch. One SMALL isolated complete asset, floating in a large empty magenta field. All pixels within the middle HALF of the canvas; extremely generous empty margin on ALL four sides. Strong shape at 96 pixels, HUD at 32 pixels. Flat neutral material shading, no cast shadow, scene, car or lettering. Strict directly overhead plan view; no visible front or side wall.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "sprite",
+      "reference": "",
+      "batch": "v4-fusion-props",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "128",
+      "style_file": "style-fusion.json",
+      "wave": "V4",
+      "asset_family": "props",
+      "surface_stack": "seeded-decals-tall-props-baked-natural-bands",
+      "logical_name": "props/brush"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "metrics": {
+      "foreground_fraction": 0.14974498748779297,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        164,
+        276,
+        860,
+        749
+      ],
+      "margin_fraction": 0.16015625,
+      "aspect": 1.4714587737843552,
+      "estimated_key_rgb": [
+        232.0,
+        102.0,
+        205.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 6.030530784328382,
+      "palette_p90_delta_e": 10.972894529886593
+    },
+    "placement": {
+      "source_bounds_px": [
+        164,
+        276,
+        860,
+        749
+      ],
+      "source_pivot_px": [
+        512.0,
+        512.5
+      ],
+      "pivot_px": [
+        64.0,
+        64.0
+      ],
+      "cell_px": [
+        128,
+        128
+      ],
+      "subject_px": [
+        120,
+        82
+      ],
+      "scale": 0.1724137931034483,
+      "world_length_m": null,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 128
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v4-fusion-props\\v4-fusion-props-brush-v1.png",
+    "sha256": "d68dc4dbc51f95dea348c6dd1bc316c53518b4920a4b48070b831f8fccfca3b9"
+  },
+  {
+    "id": "v4-fusion-props-rock-field-v1",
+    "class": "rock-field",
+    "kind": "sprite",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v4-fusion-props-rock-field-v1\\attempt-02\\1.jpg",
+    "source_sha256": "2c608cfabe69d9a671314e3bae44fba2a3d6b5599ccdae5eacf87c173594408b",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v4-fusion-props-rock-field-v1",
+      "class": "rock-field",
+      "prompt_action": "One compact irregular group of four angular rust and bone boulders seen directly overhead, distinct flat top facets, dark narrow crevices, no ground patch. One SMALL isolated complete asset, floating in a large empty magenta field. All pixels within the middle HALF of the canvas; extremely generous empty margin on ALL four sides. Strong shape at 96 pixels, HUD at 32 pixels. Flat neutral material shading, no cast shadow, scene, car or lettering. Strict directly overhead plan view; no visible front or side wall.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "sprite",
+      "reference": "",
+      "batch": "v4-fusion-props",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "128",
+      "style_file": "style-fusion.json",
+      "wave": "V4",
+      "asset_family": "props",
+      "surface_stack": "seeded-decals-tall-props-baked-natural-bands",
+      "logical_name": "props/rock-field"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "metrics": {
+      "foreground_fraction": 0.23221206665039062,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        188,
+        254,
+        839,
+        790
+      ],
+      "margin_fraction": 0.1806640625,
+      "aspect": 1.2145522388059702,
+      "estimated_key_rgb": [
+        187.0,
+        49.0,
+        109.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 7.983109457826351,
+      "palette_p90_delta_e": 12.175300853271223
+    },
+    "placement": {
+      "source_bounds_px": [
+        188,
+        254,
+        839,
+        790
+      ],
+      "source_pivot_px": [
+        513.5,
+        522.0
+      ],
+      "pivot_px": [
+        64.0,
+        63.5
+      ],
+      "cell_px": [
+        128,
+        128
+      ],
+      "subject_px": [
+        120,
+        99
+      ],
+      "scale": 0.18433179723502305,
+      "world_length_m": null,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 128
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v4-fusion-props\\v4-fusion-props-rock-field-v1.png",
+    "sha256": "34567fa461b99ea13fbbc0892cd32d1d785402fffdcd53217d9faa171dc181ce"
+  },
+  {
+    "id": "v4-fusion-props-soft-dune-v1",
+    "class": "soft-dune",
+    "kind": "sprite",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v4-fusion-props-soft-dune-v1\\attempt-02\\1.jpg",
+    "source_sha256": "4316a54a769f724483fdd99868db686f45750620e2790ca13f9b2be501eb2202",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v4-fusion-props-soft-dune-v1",
+      "class": "soft-dune",
+      "prompt_action": "One small isolated low crescent of loose ochre sand, sparse scuffed grain and broken soft feathered perimeter; overhead material patch, no drawn outline, no horizon or lighting gradient. One SMALL isolated complete asset, floating in a large empty magenta field. All pixels within the middle HALF of the canvas; extremely generous empty margin on ALL four sides. Strong shape at 96 pixels, HUD at 32 pixels. Flat neutral material shading, no cast shadow, scene, car or lettering. Strict directly overhead plan view; no visible front or side wall.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "sprite",
+      "reference": "",
+      "batch": "v4-fusion-props",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "128",
+      "style_file": "style-fusion.json",
+      "wave": "V4",
+      "asset_family": "props",
+      "surface_stack": "seeded-decals-tall-props-baked-natural-bands",
+      "logical_name": "props/soft-dune"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "metrics": {
+      "foreground_fraction": 0.16607666015625,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        191,
+        290,
+        861,
+        747
+      ],
+      "margin_fraction": 0.1591796875,
+      "aspect": 1.4660831509846828,
+      "estimated_key_rgb": [
+        186.0,
+        60.0,
+        118.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 13,
+      "palette_mean_delta_e": 8.988137452214662,
+      "palette_p90_delta_e": 14.105182168062957
+    },
+    "placement": {
+      "source_bounds_px": [
+        191,
+        290,
+        861,
+        747
+      ],
+      "source_pivot_px": [
+        526.0,
+        518.5
+      ],
+      "pivot_px": [
+        64.0,
+        64.0
+      ],
+      "cell_px": [
+        128,
+        128
+      ],
+      "subject_px": [
+        120,
+        82
+      ],
+      "scale": 0.1791044776119403,
+      "world_length_m": null,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 128
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v4-fusion-props\\v4-fusion-props-soft-dune-v1.png",
+    "sha256": "7507d605839ac0973ebdcd0bfb410b817eecb837162abc035708b0260dd26a42"
+  },
+  {
+    "id": "v4-fusion-props-dead-tree-v1",
+    "class": "dead-tree",
+    "kind": "sprite",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v4-fusion-props-dead-tree-v1\\attempt-02\\1.jpg",
+    "source_sha256": "328c40a6efee02bb80a2ad495280aa5bf25e98f235d6ae697f458be42c7a5740",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v4-fusion-props-dead-tree-v1",
+      "class": "dead-tree",
+      "prompt_action": "One tall dead tree cluster seen directly overhead: central thick splintered soot trunk crown, three crooked bone-brown branch forks spreading to uneven bare ends, large open gaps. Top-plan crown, no side elevation, ground or cast shadow. One SMALL isolated complete asset, floating in a large empty magenta field. All pixels within the middle HALF of the canvas; extremely generous empty margin on ALL four sides. Strong shape at 96 pixels, HUD at 32 pixels. Flat neutral material shading, no cast shadow, scene, car or lettering. Strict directly overhead plan view; no visible front or side wall.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "sprite",
+      "reference": "",
+      "batch": "v4-fusion-props",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "128",
+      "style_file": "style-fusion.json",
+      "wave": "V4",
+      "asset_family": "props",
+      "surface_stack": "seeded-decals-tall-props-baked-natural-bands",
+      "logical_name": "props/dead-tree"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "metrics": {
+      "foreground_fraction": 0.17786312103271484,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        195,
+        180,
+        861,
+        815
+      ],
+      "margin_fraction": 0.1591796875,
+      "aspect": 1.0488188976377952,
+      "estimated_key_rgb": [
+        188.0,
+        37.0,
+        108.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 7.025657151403393,
+      "palette_p90_delta_e": 12.073555213553771
+    },
+    "placement": {
+      "source_bounds_px": [
+        195,
+        180,
+        861,
+        815
+      ],
+      "source_pivot_px": [
+        528.0,
+        497.5
+      ],
+      "pivot_px": [
+        64.0,
+        64.0
+      ],
+      "cell_px": [
+        128,
+        128
+      ],
+      "subject_px": [
+        120,
+        114
+      ],
+      "scale": 0.18018018018018017,
+      "world_length_m": null,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 128
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v4-fusion-props\\v4-fusion-props-dead-tree-v1.png",
+    "sha256": "65800b86db8ca5f80da472f14093ffbcce25be605d3491bf433134fbcd94beb5"
+  },
+  {
+    "id": "v4-fusion-props-rock-spire-v1",
+    "class": "rock-spire",
+    "kind": "sprite",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v4-fusion-props-rock-spire-v1\\attempt-02\\1.jpg",
+    "source_sha256": "c17fe832f9e30442f7b3429c32abeedd00f9786b096a7fc434ed92d09ab54d3d",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v4-fusion-props-rock-spire-v1",
+      "class": "rock-spire",
+      "prompt_action": "One tall narrow angular rock spire seen directly overhead: jagged rust-brown crown with three bone chipped facet tips, asymmetrical compact footprint. Flat top-plan facets, no side elevation or cast shadow. One SMALL isolated complete asset, floating in a large empty magenta field. All pixels within the middle HALF of the canvas; extremely generous empty margin on ALL four sides. Strong shape at 96 pixels, HUD at 32 pixels. Flat neutral material shading, no cast shadow, scene, car or lettering. Strict directly overhead plan view; no visible front or side wall.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "sprite",
+      "reference": "",
+      "batch": "v4-fusion-props",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "128",
+      "style_file": "style-fusion.json",
+      "wave": "V4",
+      "asset_family": "props",
+      "surface_stack": "seeded-decals-tall-props-baked-natural-bands",
+      "logical_name": "props/rock-spire"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "metrics": {
+      "foreground_fraction": 0.2754364013671875,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        193,
+        213,
+        850,
+        845
+      ],
+      "margin_fraction": 0.169921875,
+      "aspect": 1.0395569620253164,
+      "estimated_key_rgb": [
+        182.0,
+        42.0,
+        100.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 14,
+      "palette_mean_delta_e": 7.33679997635424,
+      "palette_p90_delta_e": 10.585061598675091
+    },
+    "placement": {
+      "source_bounds_px": [
+        193,
+        213,
+        850,
+        845
+      ],
+      "source_pivot_px": [
+        521.5,
+        529.0
+      ],
+      "pivot_px": [
+        64.0,
+        63.5
+      ],
+      "cell_px": [
+        128,
+        128
+      ],
+      "subject_px": [
+        120,
+        115
+      ],
+      "scale": 0.182648401826484,
+      "world_length_m": null,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 128
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v4-fusion-props\\v4-fusion-props-rock-spire-v1.png",
+    "sha256": "04147c3109630babc6382b564985855832710f3df4b514875f8260099bc2ce55"
+  }
+]

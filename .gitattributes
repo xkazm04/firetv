@@ -14,3 +14,10 @@ gradlew text eol=lf
 # Art provenance records hash exact bytes, including their original line endings.
 # Preserve those bytes across checkout; CRLF at line ends is intentional evidence.
 deathride/art/** -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+deathride/tools/art/surface-lab/** -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+deathride/tools/art/surface_run.py -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+deathride/tools/art/fusion*.py -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+deathride/assets/phase2-fusion/** -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+# Raw ADB readbacks retain device CR characters and aligned trailing columns.
+deathride/art/surface-lab/device/**/*.txt -whitespace
+deathride/art/surface-lab/device/*.txt -whitespace

@@ -3,7 +3,7 @@ configurations { nativeJars }
 android {
     namespace 'dev.deathride.artlab'
     compileSdk 36
-    defaultConfig { applicationId 'dev.deathride.artlab'; minSdk 28; targetSdk 34; versionCode 3; versionName 'v3-3'; ndk { abiFilters 'armeabi-v7a' } }
+    defaultConfig { applicationId 'dev.deathride.artlab'; minSdk 28; targetSdk 34; versionCode 4; versionName 'v4-fusion'; ndk { abiFilters 'armeabi-v7a' } }
     compileOptions { sourceCompatibility JavaVersion.VERSION_17; targetCompatibility JavaVersion.VERSION_17 }
     sourceSets.main.assets.srcDir '../assets'
     sourceSets.main.jniLibs.srcDir layout.buildDirectory.dir('generated/natives')

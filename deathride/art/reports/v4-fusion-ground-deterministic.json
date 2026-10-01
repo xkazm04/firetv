@@ -1,0 +1,203 @@
+[
+  {
+    "id": "v4-fusion-ground-grass-v1",
+    "class": "grass",
+    "kind": "tile",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v4-fusion-ground-grass-v1\\attempt-02\\1.jpg",
+    "source_sha256": "3d87df197a88bf726a467191978051ac9668b43c49e529e2cd36ddc781d38876",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v4-fusion-ground-grass-v1",
+      "class": "grass",
+      "prompt_action": "Entire image is ONLY one empty anonymous painted material field. Muted dirty ochre short grass seen directly from above, fine individual blades of varied directions, even tiny-scale stochastic distribution. Fine understated dry-brush grain, quiet large values, no dramatic cracks, lighting gradient, focal motif, frame or border. Single unrepeated stochastic field, seamless edges; never repeated quadrants or mirrored halves. No road line, car, prop, object, lettering, ink perimeter or scene.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "none",
+      "count": "1",
+      "status": "ready",
+      "kind": "tile",
+      "reference": "",
+      "batch": "v4-fusion-ground",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V4",
+      "asset_family": "ground",
+      "surface_stack": "seeded-decals-tall-props-baked-natural-bands",
+      "logical_name": "tiles/grass"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "raw_metrics": {
+      "edge_x_mean": 0.012904667075163393,
+      "edge_y_mean": 0.014737796160130712,
+      "edge_x_peak": 0.28235294117647064,
+      "edge_y_peak": 0.3019607843137255,
+      "autocorrelation_peak": 0.03785251620066795,
+      "autocorrelation_shift_px": [
+        62,
+        41
+      ],
+      "basis": "decoded straight RGB / 255; autocorrelation circular luminance at 128px; excludes nearby shifts"
+    },
+    "raw_codes": [],
+    "metrics": {
+      "edge_x_mean": 0.009706903594771239,
+      "edge_y_mean": 0.010191993464052279,
+      "edge_x_peak": 0.09411764705882353,
+      "edge_y_peak": 0.14509803921568631,
+      "autocorrelation_peak": 0.03428738157296388,
+      "autocorrelation_shift_px": [
+        105,
+        71
+      ],
+      "basis": "decoded straight RGB / 255; autocorrelation circular luminance at 128px; excludes nearby shifts"
+    },
+    "repeat_path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v4-fusion-ground\\v4-fusion-ground-grass-v1-repeat.png",
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v4-fusion-ground\\v4-fusion-ground-grass-v1.png",
+    "sha256": "22a9cb593ca96c18f468a01794ce0b49ad781cf7f57ec03fa8ef99bb14b0c743"
+  },
+  {
+    "id": "v4-fusion-ground-dirt-v1",
+    "class": "dirt",
+    "kind": "tile",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v4-fusion-ground-dirt-v1\\attempt-02\\1.jpg",
+    "source_sha256": "b8b0788822e9074f8aca7b6cc1a546d58648d4823cef619d477485fd4514585d",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v4-fusion-ground-dirt-v1",
+      "class": "dirt",
+      "prompt_action": "Entire image is ONLY one empty anonymous painted material field. Warm brown packed dirt with fine ochre and grey particles, evenly scattered tiny grit, no wheel tracks or footprints. Fine understated dry-brush grain, quiet large values, no dramatic cracks, lighting gradient, focal motif, frame or border. Single unrepeated stochastic field, seamless edges; never repeated quadrants or mirrored halves. No road line, car, prop, object, lettering, ink perimeter or scene.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "none",
+      "count": "1",
+      "status": "ready",
+      "kind": "tile",
+      "reference": "",
+      "batch": "v4-fusion-ground",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V4",
+      "asset_family": "ground",
+      "surface_stack": "seeded-decals-tall-props-baked-natural-bands",
+      "logical_name": "tiles/dirt"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "raw_metrics": {
+      "edge_x_mean": 0.014912683823529409,
+      "edge_y_mean": 0.01522160947712418,
+      "edge_x_peak": 0.0862745098039216,
+      "edge_y_peak": 0.09019607843137256,
+      "autocorrelation_peak": 0.1911972218973299,
+      "autocorrelation_shift_px": [
+        16,
+        2
+      ],
+      "basis": "decoded straight RGB / 255; autocorrelation circular luminance at 128px; excludes nearby shifts"
+    },
+    "raw_codes": [],
+    "metrics": {
+      "edge_x_mean": 0.01089154411764706,
+      "edge_y_mean": 0.010493259803921568,
+      "edge_x_peak": 0.047058823529411764,
+      "edge_y_peak": 0.0431372549019608,
+      "autocorrelation_peak": 0.1802071298017907,
+      "autocorrelation_shift_px": [
+        16,
+        2
+      ],
+      "basis": "decoded straight RGB / 255; autocorrelation circular luminance at 128px; excludes nearby shifts"
+    },
+    "repeat_path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v4-fusion-ground\\v4-fusion-ground-dirt-v1-repeat.png",
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v4-fusion-ground\\v4-fusion-ground-dirt-v1.png",
+    "sha256": "1f8d60285693b40dc939ed8eed5d0d0e0382630420a2789a25e653e4e31df3c1"
+  },
+  {
+    "id": "v4-fusion-ground-gravel-v1",
+    "class": "gravel",
+    "kind": "tile",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v4-fusion-ground-gravel-v1\\attempt-02\\1.jpg",
+    "source_sha256": "61137ebbcd3271ee00bb9574e1ca5ef5596f89debf8d739d719bfe97fb831249",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v4-fusion-ground-gravel-v1",
+      "class": "gravel",
+      "prompt_action": "Entire image is ONLY one empty anonymous painted material field. Fine packed small irregular ochre and soot stones, dense anonymous even distribution; no large rocks. Fine understated dry-brush grain, quiet large values, no dramatic cracks, lighting gradient, focal motif, frame or border. Single unrepeated stochastic field, seamless edges; never repeated quadrants or mirrored halves. No road line, car, prop, object, lettering, ink perimeter or scene.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "none",
+      "count": "1",
+      "status": "ready",
+      "kind": "tile",
+      "reference": "",
+      "batch": "v4-fusion-ground",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V4",
+      "asset_family": "ground",
+      "surface_stack": "seeded-decals-tall-props-baked-natural-bands",
+      "logical_name": "tiles/gravel"
+    },
+    "verdict": "reject",
+    "codes": [
+      "TILE_SEAM_MEAN",
+      "TILE_SEAM_PEAK"
+    ],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "raw_metrics": {
+      "edge_x_mean": 0.12321665645424836,
+      "edge_y_mean": 0.13841784109477123,
+      "edge_x_peak": 0.6941176470588235,
+      "edge_y_peak": 0.7137254901960783,
+      "autocorrelation_peak": 0.038418357504852126,
+      "autocorrelation_shift_px": [
+        3,
+        72
+      ],
+      "basis": "decoded straight RGB / 255; autocorrelation circular luminance at 128px; excludes nearby shifts"
+    },
+    "raw_codes": [
+      "TILE_SEAM_MEAN",
+      "TILE_SEAM_PEAK"
+    ],
+    "metrics": {
+      "edge_x_mean": 0.11848447712418302,
+      "edge_y_mean": 0.12999897875816993,
+      "edge_x_peak": 0.5882352941176471,
+      "edge_y_peak": 0.7019607843137255,
+      "autocorrelation_peak": 0.03606607812188149,
+      "autocorrelation_shift_px": [
+        3,
+        72
+      ],
+      "basis": "decoded straight RGB / 255; autocorrelation circular luminance at 128px; excludes nearby shifts"
+    },
+    "repeat_path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v4-fusion-ground\\v4-fusion-ground-gravel-v1-repeat.png",
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v4-fusion-ground\\v4-fusion-ground-gravel-v1.png",
+    "sha256": "4ea2c2ad80248eac6d619a330fb5c96f6077efccb7420d103f7389e6caf6b4d4"
+  }
+]

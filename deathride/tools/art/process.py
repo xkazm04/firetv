@@ -194,7 +194,7 @@ def process_one(row,path,output_dir):
         a=np.asarray(out)[:,:,3]
         if a[0].any() or a[-1].any() or a[:,0].any() or a[:,-1].any(): record['codes'].append('ALPHA_BORDER')
     target=output_dir/(row['id']+'.png');out.save(target)
-    if row['class'].startswith('frame-') and row['batch']=='p4-hud':
+    if row['class'].startswith('frame-') and row['batch'] in ('p4-hud','v4-fusion-hud-frames'):
         solid=np.asarray(out)[:,:,3]>10
         holes=ndimage.binary_fill_holes(solid)&~solid;labels,count=ndimage.label(holes)
         if count:

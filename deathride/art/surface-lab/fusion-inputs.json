@@ -1,0 +1,249 @@
+{
+  "schema": 1,
+  "seed": 713,
+  "scope": "fusion isolated lab; same inputs for control and natural-edge variant; owner review pending",
+  "ribbon": {
+    "size": [
+      512,
+      256
+    ],
+    "rgba_bytes": 524288,
+    "recipe": "periodic material encroachment + sparse rubber and worn paint; baked once offline per material/seed; cached course UVs close at lap seam",
+    "generator_sha256": "d49f5512256ed2c4c581ecf932f36a9de0937f5efd1f3055793c30113099bbe3",
+    "per_frame_generation": false
+  },
+  "records": [
+    {
+      "logical_name": "tiles/asphalt-worn",
+      "id": "v4-fusion-surfaces-asphalt-worn-v1",
+      "source_sha256": "1257b92fd385d085df450780efa323dfe035e80f97382768026b86554793df6a",
+      "export_sha256": "c97c0bf50f438de1937618282ba676ae0c70fa996f1b75b6345cdb868d026c82",
+      "codes": []
+    },
+    {
+      "logical_name": "tiles/dirt",
+      "id": "v4-fusion-ground-dirt-v1",
+      "source_sha256": "b8b0788822e9074f8aca7b6cc1a546d58648d4823cef619d477485fd4514585d",
+      "export_sha256": "1f8d60285693b40dc939ed8eed5d0d0e0382630420a2789a25e653e4e31df3c1",
+      "codes": []
+    },
+    {
+      "logical_name": "decals/skid",
+      "id": "v4-fusion-decals-skid-v1",
+      "source_sha256": "762396a2ad88d390c1fd7bc2ea9973b76529b52ad800ee7880e81f701d03997c",
+      "export_sha256": "b22fbc92898df14f99f9d9ffa71295a24f16f7c082608bf0170e209d1ea3e807",
+      "codes": []
+    },
+    {
+      "logical_name": "decals/oil",
+      "id": "v4-fusion-decals-oil-v1",
+      "source_sha256": "6ca0d41b54d4545cb4e250cd833acf735ddc4749d0b4255ea7071fb2570630e5",
+      "export_sha256": "8cc622ffb53a7df5ab47a5e7b4785396955355fbec1385bbde791b76bd51eda0",
+      "codes": []
+    },
+    {
+      "logical_name": "decals/scorch",
+      "id": "v4-fusion-decals-scorch-v2",
+      "source_sha256": "0572ba909522bd98861fa4f6a37bb036d382c7d18415271a8417b399aa9c5c78",
+      "export_sha256": "37ae330f29b2a782fd9555391c58c6e81085cf89378e6a4284f880e6a18cb977",
+      "codes": []
+    },
+    {
+      "logical_name": "decals/cracks",
+      "id": "v4-fusion-decals-cracks-v1",
+      "source_sha256": "e732fbc7b1c06ba3dcdc436003a01872a87fe6e25980e79b1f4c97e6ba006ba9",
+      "export_sha256": "fa8da70a57dd94ca367b862040dcbb7fa315b6b7fc086e3cdf8ed0e6fbc00ff1",
+      "codes": []
+    },
+    {
+      "logical_name": "decals/impact",
+      "id": "v4-fusion-decals-impact-v1",
+      "source_sha256": "7c42a85c9b7460e8a4d37f56670cc6c14b702226ea1f45f2b73c3b2f3a6b40dd",
+      "export_sha256": "5cf957e4daa3827064f90e1aef468984b4c1de3d497e0ca8628ced5f5aea780d",
+      "codes": []
+    },
+    {
+      "logical_name": "props/brush",
+      "id": "v4-fusion-props-brush-v1",
+      "source_sha256": "67e1d36169825c7722877bde3212719ec2c5b541e27aeea44279812a1b378f85",
+      "export_sha256": "d68dc4dbc51f95dea348c6dd1bc316c53518b4920a4b48070b831f8fccfca3b9",
+      "codes": []
+    },
+    {
+      "logical_name": "props/rock-field",
+      "id": "v4-fusion-props-rock-field-v1",
+      "source_sha256": "2c608cfabe69d9a671314e3bae44fba2a3d6b5599ccdae5eacf87c173594408b",
+      "export_sha256": "34567fa461b99ea13fbbc0892cd32d1d785402fffdcd53217d9faa171dc181ce",
+      "codes": []
+    },
+    {
+      "logical_name": "props/soft-dune",
+      "id": "v4-fusion-props-soft-dune-v1-despill-v1",
+      "source_sha256": "959eb3dedeb1fd60e11c5bf949072bb43c34f6a234d229b102732008b56ff209",
+      "export_sha256": "41f4601b6b3cfb06b50af24bdc7fc83b39f11bf91a85f932d4211de09d94c315",
+      "codes": []
+    },
+    {
+      "logical_name": "props/dead-tree",
+      "id": "v4-fusion-props-dead-tree-v1",
+      "source_sha256": "328c40a6efee02bb80a2ad495280aa5bf25e98f235d6ae697f458be42c7a5740",
+      "export_sha256": "65800b86db8ca5f80da472f14093ffbcce25be605d3491bf433134fbcd94beb5",
+      "codes": []
+    },
+    {
+      "logical_name": "props/rock-spire",
+      "id": "v4-fusion-props-rock-spire-v1-despill-v1",
+      "source_sha256": "603dcb49f74c884814290537615690413617ae4512b52fa6da0d3c60625de722",
+      "export_sha256": "c2f567e82c2bbc307a45654611cb2f6fcfe14fad61078de331485c64a0c03e71",
+      "codes": []
+    },
+    {
+      "logical_name": "barriers/concrete-straight",
+      "id": "v4-fusion-barriers-concrete-straight-v1",
+      "source_sha256": "98d11b33b597eb3283a8a73e3584e5f0a08c6ad37484ad50d6645838885782a6",
+      "export_sha256": "f4e6dcb3248a83f7c0d0719ba7986d614c31de36616d2b22a8632d441050e809",
+      "codes": []
+    }
+  ],
+  "details": [
+    {
+      "cell": 0,
+      "logical_name": "decals/skid"
+    },
+    {
+      "cell": 1,
+      "logical_name": "decals/oil"
+    },
+    {
+      "cell": 2,
+      "logical_name": "decals/scorch"
+    },
+    {
+      "cell": 3,
+      "logical_name": "decals/cracks"
+    },
+    {
+      "cell": 4,
+      "logical_name": "decals/impact"
+    },
+    {
+      "cell": 5,
+      "logical_name": "props/brush"
+    },
+    {
+      "cell": 6,
+      "logical_name": "props/rock-field"
+    },
+    {
+      "cell": 7,
+      "logical_name": "props/soft-dune"
+    },
+    {
+      "cell": 8,
+      "logical_name": "props/dead-tree"
+    },
+    {
+      "cell": 9,
+      "logical_name": "props/rock-spire"
+    },
+    {
+      "cell": 10,
+      "logical_name": "barriers/concrete-straight"
+    }
+  ],
+  "cars": [
+    {
+      "cell": 0,
+      "id": "v2-fusion-cars-bastion-v1",
+      "export_sha256": "d6026c87ed11cc1d1b582bbc9655a2402900a4ce25378ff0e9853848e2695cd9"
+    },
+    {
+      "cell": 1,
+      "id": "v2-fusion-cars-needle-v1",
+      "export_sha256": "86870319c59dca8af5918936e69b576ecb8efcfe08fbdf51e749e26b6cc6105a"
+    },
+    {
+      "cell": 2,
+      "id": "v2-fusion-cars-line-v1",
+      "export_sha256": "71ca02befbd6153d935de530464ce1156517f6a972a24342f674b07b221ca9fb"
+    },
+    {
+      "cell": 3,
+      "id": "v2-fusion-cars-trail-v1",
+      "export_sha256": "51db34ce414146a4b73f9ecd555457715db1b1978a368c134e9578f28d9ca841"
+    },
+    {
+      "cell": 4,
+      "id": "v2-fusion-cars-flint-v1",
+      "export_sha256": "470653f26aa4f20f2fbe2444a258cfe948575cbb89cf63e50fdce295bdd01dc3"
+    },
+    {
+      "cell": 5,
+      "id": "v2-fusion-cars-vandal-v1",
+      "export_sha256": "260736abe446429a32576adfea3d70856a27fa9ee8ad3ca01bb293c2b909154b"
+    },
+    {
+      "cell": 6,
+      "id": "v2-fusion-cars-bulwark-v1",
+      "export_sha256": "8aa57e9aaf0b3affda9b8cedf6bf126d83b3ea8a27d4d437b16c40101a3d96cc"
+    }
+  ],
+  "excluded_cars": [
+    {
+      "id": "v2-fusion-cars-comet-v1",
+      "codes": [
+        "CROPPED_OR_MARGIN",
+        "ASPECT_BAND"
+      ]
+    },
+    {
+      "id": "v2-fusion-cars-quill-v1",
+      "codes": [
+        "CROPPED_OR_MARGIN"
+      ]
+    },
+    {
+      "id": "v2-fusion-cars-kestrel-v1",
+      "codes": [
+        "CROPPED_OR_MARGIN"
+      ]
+    }
+  ],
+  "files": {
+    "cars.png": {
+      "sha256": "0b67a54ba5ed5b22bfbbefe75ac465ac82e721fe118cb73d0185871955e7501f",
+      "size": [
+        1024,
+        1024
+      ]
+    },
+    "details.png": {
+      "sha256": "662d8f768420a4818739dc2e4cdaf1aecb90ece2518cd83d02676fb9f5b80f29",
+      "size": [
+        512,
+        512
+      ]
+    },
+    "dirt.png": {
+      "sha256": "1f8d60285693b40dc939ed8eed5d0d0e0382630420a2789a25e653e4e31df3c1",
+      "size": [
+        256,
+        256
+      ]
+    },
+    "ground.png": {
+      "sha256": "c97c0bf50f438de1937618282ba676ae0c70fa996f1b75b6345cdb868d026c82",
+      "size": [
+        256,
+        256
+      ]
+    },
+    "ribbon.png": {
+      "sha256": "e4f5673d88f4828a38a28b8edc76580dcb087e125612aa1e7815aca220ded816",
+      "size": [
+        512,
+        256
+      ]
+    }
+  }
+}
