@@ -53,3 +53,19 @@ Owner finding: tiles and surfaces lower the perceived quality of the whole scree
 
 Spend rules: the local Grok guard is raised for this work (see `deathride/art/budget.json`); keep the first-call proof and stop-latch behaviours, log every call, and report spent versus remaining at the end of each wave. Videos stay out.
 The owner's approval of V2 is the file the pipeline checks before generating the 40 car damage states and 30 liveries, which then happen in the v2 style, not v1.
+
+## e. Addendum, 2026-10-01 (owner): show a choice of style directions
+
+V1 and V2 change: instead of committing to one look, produce **four to five genuinely different raw-wasteland style directions** and let the owner choose (or fuse). Each direction is a named style card
+(`style-<slug>.json` plus a short rationale) and a **proof set** rendered identically across directions: one heavy car, one light car, one rival portrait, one ground patch, one barrier/prop, one HUD icon, one effect.
+Directions must differ in more than palette: line quality, shading language, detail density, proportion exaggeration, mood. Suggested spread (rename freely, keep them distinct):
+
+1. **Rust-and-ink brutal**: heavy rough brush outlines, flat painted fills, scratch hatching, maximum silhouette exaggeration.
+2. **Sun-bleached poster**: screen-print look, limited 5-6 colour palette, halftone grit, bold graphic shapes, high contrast.
+3. **Comic grindhouse**: thick inked comic lines, spatter, speed streaks, saturated hot accents on a dirty base.
+4. **Scrapyard collage**: cut-out, patched, mismatched textured panels, visible tape, rivets and stencil marks, a hand-assembled look.
+5. **Nightmare pulp**: dark, smoky, high-contrast chiaroscuro-in-flat-colour with toxic accents (optional fifth, drop it if it repeats another).
+
+Rules: same neutral-light and top-down contracts in every direction; the same prompt skeleton with only the style block changing, so the comparison is fair; run the existing gates on every proof asset;
+spend about 70 images on the proof sets (7 assets x 5 directions x about 2 attempts), then **stop and present** one contact sheet per direction plus one combined board. V2 (the full ten cars and six portraits) is then done **only in the owner-chosen direction**;
+if no choice has been recorded in `deathride/art/OWNER-CHOICE.md` when V1 finishes, finish V1 and V3 (the surface lab can use two or three directions' ground proofs as inputs, since the tile trick research is style-agnostic) and then stop, logging that V2/V4 wait for the choice.
