@@ -5,12 +5,15 @@ import com.badlogic.gdx.graphics.*
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.math.Matrix4
 import com.badlogic.gdx.utils.ScreenUtils
+import com.badlogic.gdx.utils.JsonReader
+import com.badlogic.gdx.utils.JsonWriter
 import dev.deathride.game.AtlasArt
 import java.io.File
 
 /** Real GL upload, draw and isolated failure injection. Never mutates the accepted bundle. */
 class AtlasAudit: ApplicationAdapter() {
     override fun create() {
+        val prefix=System.getenv("DEATHRIDE_ATLAS_AUDIT_PREFIX")?:"i1-atlas-gl"
         val a=AtlasArt();check(a.failures==0 && a.regionCount==78);check(a.textureBytes==11272192L)
         val batch=SpriteBatch();batch.projectionMatrix=Matrix4().setToOrtho2D(0f,0f,1280f,720f)
         ScreenUtils.clear(.1f,.1f,.1f,1f);batch.begin()
@@ -20,7 +23,7 @@ class AtlasAudit: ApplicationAdapter() {
         val pix=Pixmap.createFromFrameBuffer(0,0,1280,720);var vivid=0
         for(y in 0 until pix.height)for(x in 0 until pix.width){val c=pix.getPixel(x,y);if((c ushr 24)>70)vivid++}
         check(vivid>10000){"uploaded atlas did not draw visible content: $vivid"}
-        val output=Gdx.files.local("evidence/phase2/i1-atlas-gl.png");output.parent().mkdirs();PixmapIO.writePNG(output,pix);pix.dispose()
+        val output=Gdx.files.local("evidence/phase2/$prefix.png");output.parent().mkdirs();PixmapIO.writePNG(output,pix);pix.dispose()
         a.selectBackdrop("backdrops/industrial");check(a.textureBytes==15466496L)
         a.selectBackdrop("backdrops/alpine");check(a.textureBytes==15466496L)
         a.selectBackdrop(null);check(a.textureBytes==11272192L)
@@ -33,8 +36,25 @@ class AtlasAudit: ApplicationAdapter() {
         Gdx.files.internal("phase2-v1/world.atlas").copyTo(root.child("world.atlas"))
         root.child("ui.atlas").writeString("broken atlas",false)
         val broken=AtlasArt(root);check(broken.regionCount==0 && broken.failures>=2);check(!broken.available("pickups/repair"));broken.dispose()
+        val denied=AtlasArt(Gdx.files.internal("phase2-v1"),0)
+        check(denied.textureBytes==0L && denied.regionCount==0 && denied.failures>0)
+        check(!denied.available("pickups/repair"));denied.dispose()
+        // A valid page with invalid entry metadata must fall back only for that entry.
+        File("assets/phase2-v1").copyRecursively(temp,overwrite=true)
+        val catalog=JsonReader().parse(root.child("catalog.json"))
+        val healthId=catalog.get("assets").first{it.getString("logical_name")=="hud/frame-health"}.getString("asset_id")
+        val muzzle=catalog.get("assets").first{it.getString("logical_name")=="effects/muzzle"}
+        for(key in listOf("frames","durations_ms")){muzzle.remove(key);muzzle.addChild(key,JsonReader().parse("[]"))}
+        root.child("catalog.json").writeString(catalog.toJson(JsonWriter.OutputType.json),false)
+        val metadata=JsonReader().parse(root.child("ui.json"))
+        val health=metadata.get("regions").first{it.getString("id")==healthId}
+        health.remove("hud_interior_px");health.addChild("hud_interior_px",JsonReader().parse("[0,0,0,1]"))
+        root.child("ui.json").writeString(metadata.toJson(JsonWriter.OutputType.json),false)
+        val invalid=AtlasArt(root)
+        check(!invalid.available("hud/frame-health") && !invalid.available("effects/muzzle"))
+        check(invalid.failures>=2 && invalid.available("pickups/repair"));invalid.dispose()
         batch.dispose()
-        File("evidence/phase2/i1-atlas-gl.json").writeText("""{"regions":78,"residentBytes":11272192,"oneBackdropBytes":4194304,"visiblePixels":$vivid,"missingCatalogFallback":true,"failedPagesFallback":true,"carApprovalFallback":true,"heading":"runtime rotation; production cars unavailable"}""")
+        File("evidence/phase2/$prefix.json").writeText("""{"regions":78,"residentBytes":11272192,"oneBackdropBytes":4194304,"visiblePixels":$vivid,"missingCatalogFallback":true,"failedPagesFallback":true,"carApprovalFallback":true,"budgetFallback":true,"invalidMetadataFallback":true,"heading":"runtime rotation; production cars unavailable"}""")
         Gdx.app.log("DeathRide","atlas GL audit passed visiblePixels=$vivid");Gdx.app.exit()
     }
 }

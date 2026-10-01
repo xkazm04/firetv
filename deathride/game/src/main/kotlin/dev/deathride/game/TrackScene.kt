@@ -32,7 +32,7 @@ class SceneryCanvas {
     }
     fun dispose() { sprites.dispose();renderer.dispose();buffer.dispose() }
 }
-/** Deterministic static geometry is generated in bounded render-thread slices, with no image assets. */
+/** Static geometry and asset placement are generated in bounded render-thread slices. */
 class TrackScene(private val course: Course,private val canvas: SceneryCanvas,private val art: AtlasArt) {
     private val region=TextureRegion(canvas.buffer.colorBufferTexture).apply { flip(false,true);texture.setFilter(Texture.TextureFilter.Linear,Texture.TextureFilter.Linear) }
     var ready=false;private set
@@ -72,13 +72,14 @@ class TrackScene(private val course: Course,private val canvas: SceneryCanvas,pr
         val r=canvas.renderer;val point=TrackPoint();val q=TrackPoint();val rand=java.util.Random(VisualTuning["scenerySeed"].toLong())
         val desert=course.theme=="desert";val wet=course.theme=="wetland"
         ScreenUtils.clear(if(desert).29f else .13f,if(desert).25f else .19f,if(wet).20f else .15f,1f)
-        // Ground grain, stones and scrub: seeded decoration, never simulation randomness.
-        repeat(VisualTuning["groundGrainCount"].toInt()) {
+        val groundTile=art.tile(if(desert)"tiles/dirt" else if(course.theme=="alpine")"tiles/ice" else "tiles/grass")
+        // Opaque material art already supplies grain. Retain procedural specks only for fallback.
+        if(groundTile==null)repeat(VisualTuning["groundGrainCount"].toInt()) {
             val x=left+rand.nextFloat()*width;val y=bottom+rand.nextFloat()*height;val v=rand.nextFloat()*.055f
             r.setColor((if(desert).32f else .15f)+v,(if(desert).28f else .21f)+v,(if(wet).23f else .17f)+v,1f)
             r.rect(x,y,.25f+rand.nextFloat()*1.4f,.15f+rand.nextFloat()*.8f);yield(Unit)
         }
-        canvas.tile(art.tile(if(desert)"tiles/dirt" else if(course.theme=="alpine")"tiles/ice" else "tiles/grass"),left,bottom,left+width,bottom,left+width,bottom+height,left,bottom+height)
+        canvas.tile(groundTile,left,bottom,left+width,bottom,left+width,bottom+height,left,bottom+height)
         // Outer shoulders underneath a continuous asphalt ribbon.
         suspend fun SequenceScope<Unit>.ribbon(extra: Double,layer: Int) {
             for(i in 0 until samples) {
@@ -99,10 +100,10 @@ class TrackScene(private val course: Course,private val canvas: SceneryCanvas,pr
                 course.sample(next,-wn,point);val cx=point.x.toFloat();val cy=point.y.toFloat()
                 course.sample(next,wn,point);val dx=point.x.toFloat();val dy=point.y.toFloat()
                 r.triangle(ax,ay,bx,by,cx,cy);r.triangle(ax,ay,cx,cy,dx,dy)
-                if(layer==2)canvas.tile(art.tile(when(surf){"Gravel"->"tiles/gravel";"Ice"->"tiles/ice";"Oil"->"tiles/oil";else->"tiles/asphalt-worn"}),ax,ay,bx,by,cx,cy,dx,dy)
                 yield(Unit)
             }
         }
+        // Road material art is drawn live; do not bake hundreds of duplicate texture passes.
         ribbon(2.2,0);ribbon(1.1,1);ribbon(0.0,2)
         // Draw the actual authored shortcut bands: art never defines collision or changes the route.
         for(f in course.features)if(f.kind=="shortcut") {
@@ -116,10 +117,12 @@ class TrackScene(private val course: Course,private val canvas: SceneryCanvas,pr
                 r.setColor(.43f,.36f,.25f,1f);r.triangle(ax,ay,bx,by,cx,cy);r.triangle(ax,ay,cx,cy,dx,dy)
                 val white=Color.WHITE_FLOAT_BITS
                 shortcuts.add(floatArrayOf(ax,ay,white,ax/8,-ay/8,bx,by,white,bx/8,-by/8,cx,cy,white,cx/8,-cy/8,dx,dy,white,dx/8,-dy/8))
-                canvas.tile(art.tile("tiles/gravel"),ax,ay,bx,by,cx,cy,dx,dy);yield(Unit)
+                // The cached live quad supplies material art; these triangles are its fallback.
+                yield(Unit)
             }
         }
-        repeat(VisualTuning["roadGrainCount"].toInt()) {
+        val missingRoadArt=course.surfaces.any{art.tile(when(it.id){"Gravel"->"tiles/gravel";"Ice"->"tiles/ice";"Oil"->"tiles/oil";else->"tiles/asphalt-worn"})==null}
+        if(missingRoadArt)repeat(VisualTuning["roadGrainCount"].toInt()) {
             val s=rand.nextDouble()*course.lengthM;val lateral=(rand.nextDouble()*2-1)*(course.widthAt(s)-.7)
             course.sample(s,lateral,point);val v=.24f+rand.nextFloat()*.065f
             when(course.surfaces[course.index(s)].id) {
@@ -193,6 +196,7 @@ class TrackScene(private val course: Course,private val canvas: SceneryCanvas,pr
                     r.setColor(.22f,.27f,.25f,1f);for(j in 1..5)r.rect(x+j*1.25f,y+.3f,.15f,4.2f)
                 }
             }
+            yield(Unit)
         }
         yield(Unit)
         // Repeated grandstand steps and service bays give the start area an authored landmark.
@@ -251,9 +255,9 @@ class MotionEffects {
     private var skidNext=0;private var dustNext=0;private var skidClock=0.0;private var dustClock=0.0
     private val lastX=DoubleArray(6);private val lastY=DoubleArray(6)
     fun clear() { skids.fill(0f);dust.fill(0f);lastX.fill(Double.NaN);lastY.fill(Double.NaN) }
-    fun draw(r: ShapeRenderer,world: World,dt: Double) {
+    fun draw(r: ShapeRenderer,world: World,dt: Double,skidsEnabled: Boolean=true) {
         skidClock+=dt;dustClock+=dt
-        val mark=skidClock>=VisualTuning["skidIntervalSeconds"];val puff=dustClock>=VisualTuning["particleIntervalSeconds"]
+        val mark=skidsEnabled && skidClock>=VisualTuning["skidIntervalSeconds"];val puff=dustClock>=VisualTuning["particleIntervalSeconds"]
         if(mark)skidClock=0.0;if(puff)dustClock=0.0
         for(c in world.cars) {
             if(mark) {
@@ -270,7 +274,7 @@ class MotionEffects {
                 dust[n]=(c.x-cos(c.heading)*c.spec.circleOffsetM).toFloat();dust[n+1]=(c.y-sin(c.heading)*c.spec.circleOffsetM).toFloat();dust[n+2]=VisualTuning["particleLifeSeconds"].toFloat();dust[n+3]=if(c.surface.id=="Gravel" || c.surface===Surfaces.offtrack)1f else 0f;dust[n+4]=c.id.toFloat()
             }
         }
-        for(n in skids.indices step 6)if(skids[n+4]>0) { skids[n+4]-=dt.toFloat();r.setColor(.04f,.045f,.045f,.40f*(skids[n+4]/VisualTuning["skidLifeSeconds"]).toFloat());r.rectLine(skids[n],skids[n+1],skids[n+2],skids[n+3],.30f) }
+        if(skidsEnabled)for(n in skids.indices step 6)if(skids[n+4]>0) { skids[n+4]-=dt.toFloat();r.setColor(.04f,.045f,.045f,.40f*(skids[n+4]/VisualTuning["skidLifeSeconds"]).toFloat());r.rectLine(skids[n],skids[n+1],skids[n+2],skids[n+3],.30f) }
         for(n in dust.indices step 5)if(dust[n+2]>0) {
             dust[n+2]-=dt.toFloat();val age=1f-(dust[n+2]/VisualTuning["particleLifeSeconds"]).toFloat()
             r.setColor(if(dust[n+3]>0).65f else .75f,if(dust[n+3]>0).54f else .78f,if(dust[n+3]>0).37f else .79f,(1-age)*.30f)

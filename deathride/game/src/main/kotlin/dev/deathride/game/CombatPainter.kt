@@ -38,7 +38,10 @@ class CombatPainter {
             if(!armed)ring(r,x,y,(mine.radiusM*(m.ageSeconds/mine.armingSeconds)).toFloat(),.12f)
         }
     }
-    fun air(r: ShapeRenderer,w: World) {
+    fun air(r: ShapeRenderer,w: World,art: AtlasArt?=null) {
+        val spriteSmoke=art?.available("effects/smoke")==true
+        val spriteBlast=art?.available("effects/explosion")==true
+        val spriteMuzzle=art?.available("effects/muzzle")==true
         val combat=w.combat
         for(p in combat.projectiles)if(p.active) {
             val x=p.x.toFloat();val y=p.y.toFloat();val dx=(p.vx/Weapons.all[1].speedMps).toFloat();val dy=(p.vy/Weapons.all[1].speedMps).toFloat()
@@ -50,18 +53,18 @@ class CombatPainter {
             val alpha=(combat.traceSeconds[i]/Weapons.all[0].traceSeconds).toFloat()
             r.setColor(1f,.78f,.36f,alpha*.85f)
             r.rectLine(combat.traceX[i].toFloat(),combat.traceY[i].toFloat(),combat.traceEndX[i].toFloat(),combat.traceEndY[i].toFloat(),.12f)
-            r.circle(combat.traceX[i].toFloat(),combat.traceY[i].toFloat(),.55f*alpha,8)
+            if(!spriteMuzzle)r.circle(combat.traceX[i].toFloat(),combat.traceY[i].toFloat(),.55f*alpha,8)
         }
         for(b in combat.blasts)if(b.remainingSeconds>0) {
             val life=Weapons.all[2].traceSeconds;val age=(1-b.remainingSeconds/life).toFloat();val radius=b.radiusM.toFloat()
-            r.setColor(1f,.36f,.08f,(1-age)*.5f);r.circle(b.x.toFloat(),b.y.toFloat(),radius*(.3f+age*.7f),24)
+            if(!spriteBlast){r.setColor(1f,.36f,.08f,(1-age)*.5f);r.circle(b.x.toFloat(),b.y.toFloat(),radius*(.3f+age*.7f),24)}
             r.setColor(1f,.84f,.38f,(1-age)*.8f);ring(r,b.x.toFloat(),b.y.toFloat(),radius*(.2f+age),.25f)
-            for(i in 0..11){val a=i*PI/6;val distance=radius*age;r.rectLine((b.x+cos(a)*distance).toFloat(),(b.y+sin(a)*distance).toFloat(),(b.x+cos(a)*(distance+1)).toFloat(),(b.y+sin(a)*(distance+1)).toFloat(),.14f)}
+            if(!spriteBlast)for(i in 0..11){val a=i*PI/6;val distance=radius*age;r.rectLine((b.x+cos(a)*distance).toFloat(),(b.y+sin(a)*distance).toFloat(),(b.x+cos(a)*(distance+1)).toFloat(),(b.y+sin(a)*(distance+1)).toFloat(),.14f)}
         }
         for(c in w.cars) {
             if(!c.entered)continue
             val hp=(combat.health(c.id)/combat.maxHealth(c.id)).toFloat();val x=c.x.toFloat();val y=c.y.toFloat()
-            if(hp<CombatRules["smokeHpFraction"])for(i in 0..3) {
+            if(!spriteSmoke && hp<CombatRules["smokeHpFraction"])for(i in 0..3) {
                 val age=((w.seconds*.8+i*.25)%1).toFloat()
                 r.setColor(.11f,.13f,.14f,(1-age)*.38f)
                 r.circle(x+age*2+sin(w.seconds+i).toFloat()*.4f,y+age*3,.4f+age*1.7f,10)

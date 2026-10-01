@@ -3,31 +3,33 @@ package dev.deathride.game
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import dev.deathride.core.Snapshot
+import dev.deathride.core.CombatRules
 import kotlin.math.*
 
 /** Fixed visual pools, fed only by the read-only simulation snapshot. */
 class AtlasEffects(private val art: AtlasArt) {
     private val keys=arrayOf("effects/muzzle","effects/explosion","effects/sparks","effects/smoke","effects/fire","decals/skid","decals/scorch")
-    private val pool=FloatArray(96*7)
+    private val capacity=64
+    private val pool=FloatArray(capacity*7)
     private val trace=DoubleArray(6);private val flash=DoubleArray(6);private val smoke=DoubleArray(6)
     private val wreck=BooleanArray(6);private var blasts=IntArray(0)
     private var next=0;private var skidClock=0.0
     fun clear() { pool.fill(0f);trace.fill(0.0);flash.fill(0.0);smoke.fill(0.0);wreck.fill(false);blasts.fill(0);next=0;skidClock=0.0 }
     private fun emit(kind: Int,x: Double,y: Double,size: Double,heading: Double=0.0,life: Double=art.duration(keys[kind])) {
         if(!art.available(keys[kind]) || life<=0)return
-        val n=next*7;next=(next+1)%96
+        val n=next*7;next=(next+1)%capacity
         pool[n]=kind.toFloat();pool[n+1]=x.toFloat();pool[n+2]=y.toFloat();pool[n+3]=size.toFloat();pool[n+4]=(heading*180/PI).toFloat();pool[n+5]=0f;pool[n+6]=life.toFloat()
     }
     fun update(s: Snapshot,dt: Double) {
         if(blasts.size!=s.blastCount)blasts=IntArray(s.blastCount) // course transition only
         for(n in pool.indices step 7)if(pool[n+6]>0){pool[n+5]+=dt.toFloat();if(pool[n+5]>=pool[n+6])pool[n+6]=0f}
-        skidClock+=dt;val skid=skidClock>=.10;if(skid)skidClock=0.0
+        skidClock+=dt;val skid=skidClock>=.15;if(skid)skidClock=0.0
         for(i in 0..5)if(s.entered(i)) {
             if(s.traceSeconds(i)>trace[i])emit(0,s.traceX(i),s.traceY(i),3.0,s.heading(i))
             if(s.flash(i)>flash[i])emit(2,s.x(i),s.y(i),4.0,s.heading(i))
             if(s.wrecked(i) && !wreck[i])emit(6,s.x(i),s.y(i),9.0,life=20.0)
             smoke[i]+=dt
-            if(s.healthFraction(i)<.35 && smoke[i]>=.4){smoke[i]=0.0;emit(3,s.x(i),s.y(i),5.0)}
+            if(s.healthFraction(i)<CombatRules["smokeHpFraction"] && smoke[i]>=.4){smoke[i]=0.0;emit(3,s.x(i),s.y(i),5.0)}
             if(skid && s.drifting(i) && s.speed(i)>5)emit(5,s.x(i),s.y(i),3.0,s.heading(i),8.0)
             trace[i]=s.traceSeconds(i);flash[i]=s.flash(i);wreck[i]=s.wrecked(i)
         }

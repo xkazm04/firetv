@@ -50,3 +50,7 @@ deathride/art/.run.lock
 deathride/.art-venv/
 deathride/tools/art/stick-probe/src/main/assets/
 deathride/art/reports/p4-draft-location.json
+
+# I2 raw observations are archived byte-for-byte as deterministic gzip.
+/deathride/evidence/phase2/i2-soak.json
+/deathride/evidence/phase2/i2-*/i2-soak.json

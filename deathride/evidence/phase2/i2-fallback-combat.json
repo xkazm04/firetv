@@ -1,0 +1,36 @@
+{
+  "phase": "race",
+  "raceSeconds": 16.850000000000325,
+  "art": {
+    "regions": 0,
+    "textureBytes": 0,
+    "sceneryBytes": 16777216,
+    "fontBytes": 11534336,
+    "qrBytes": 230400,
+    "ownedTextureBytes": 28541952,
+    "artBudgetBytes": 33554432,
+    "ownedBudgetBytes": 54525952,
+    "budgetOk": true,
+    "failures": 1,
+    "draws": 0,
+    "carStrategy": "runtime rotation; procedural for unapproved/missing states"
+  },
+  "combat": {
+    "damageScale": 1.0,
+    "shotsByWeapon": [
+      0,
+      8,
+      19,
+      36
+    ],
+    "active": 4,
+    "living": 4,
+    "finished": 0,
+    "shots": 63,
+    "projectiles": 0,
+    "mines": 17,
+    "blasts": 0,
+    "poolExhaustions": 0
+  },
+  "limit": "Desktop GL fallback with AI cars; not a Stick or human play test"
+}

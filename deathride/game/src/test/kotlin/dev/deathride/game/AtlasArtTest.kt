@@ -6,8 +6,27 @@ import com.badlogic.gdx.files.FileHandle
 import com.badlogic.gdx.graphics.g2d.TextureAtlas
 import com.badlogic.gdx.utils.JsonReader
 import java.io.File
+import java.io.ByteArrayInputStream
+import java.io.ByteArrayOutputStream
+import java.io.DataOutputStream
+import java.io.EOFException
 
 class AtlasArtTest {
+    @Test fun oversizedOrMalformedPngIsRejectedBeforePixelDecoding() {
+        fun header(width: Int,height: Int): ByteArray {
+            val bytes=ByteArrayOutputStream()
+            DataOutputStream(bytes).use{it.write(byteArrayOf(-119,80,78,71,13,10,26,10));it.writeInt(13);it.writeInt(0x49484452);it.writeInt(width);it.writeInt(height)}
+            return bytes.toByteArray()
+        }
+        // These contain no pixel data: allocation decisions require just the fixed 24-byte header.
+        assertEquals(4*TextureBudget.MIB,TextureBudget.pngBytes(ByteArrayInputStream(header(1024,1024)),1024))
+        for((width,height) in listOf(8192 to 8192,1025 to 1,1 to 1025,0 to 1,1 to -1))
+            assertThrows(IllegalArgumentException::class.java){TextureBudget.pngBytes(ByteArrayInputStream(header(width,height)),1024)}
+        assertThrows(IllegalArgumentException::class.java){TextureBudget.pngBytes(ByteArrayInputStream(header(256,257)),256)}
+        val invalid=header(1,1).also{it[0]=0}
+        assertThrows(IllegalArgumentException::class.java){TextureBudget.pngBytes(ByteArrayInputStream(invalid),1024)}
+        assertThrows(EOFException::class.java){TextureBudget.pngBytes(ByteArrayInputStream(byteArrayOf(1,2,3)),1024)}
+    }
     @Test fun animationUsesEveryAuthoredDurationAndStopsOrLoopsAtTheBoundary() {
         val d=intArrayOf(35,45,45,40,40,45)
         assertEquals(listOf(0,1,2,3,4,5),listOf(.0,.036,.081,.126,.166,.206).map{AtlasArt.frameAt(d,false,it)})

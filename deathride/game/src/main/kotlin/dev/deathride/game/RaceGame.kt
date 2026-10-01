@@ -19,6 +19,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
     private lateinit var font: BitmapFont
     private lateinit var large: BitmapFont
     private lateinit var small: BitmapFont
+    private var fontTextureBytes=0L
     private lateinit var text: GlyphLayer
     private lateinit var headline: GlyphLayer
     private lateinit var detail: GlyphLayer
@@ -156,10 +157,11 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         font=fontFactory?.invoke(20)?:BitmapFont()
         large=fontFactory?.invoke(44)?:BitmapFont()
         small=fontFactory?.invoke(16)?:BitmapFont()
+        fontTextureBytes=listOf(font,large,small).flatMap{it.regions.map{r->r.texture}}.distinct().sumOf{it.width.toLong()*it.height*4}
         text=GlyphLayer(font); headline=GlyphLayer(large); detail=GlyphLayer(small)
         server=RaceServer(assets,logger); for(i in world.cars.indices)CarCatalog.apply(world.cars[i],selectedCars[i]);world.reset(); server.start()
         profileStore=ProfileStore(Gdx.files.local("profiles").file());for(i in profiles.indices)loadProfile(i);world.reset()
-        art=AtlasArt(Gdx.files.internal(if(proceduralOnly)"absent-art-audit" else "phase2-v1"));atlasEffects=AtlasEffects(art);sceneryCanvas=SceneryCanvas();scene=TrackScene(Courses.all[selectedTrack],sceneryCanvas,art);effects.clear()
+        sceneryCanvas=SceneryCanvas();art=AtlasArt(Gdx.files.internal(if(proceduralOnly)"absent-art-audit" else "phase2-v1"),TextureBudget.remainingArt(fontTextureBytes,sceneryCanvas.textureSize.toLong()*sceneryCanvas.textureSize*4));atlasEffects=AtlasEffects(art);scene=TrackScene(Courses.all[selectedTrack],sceneryCanvas,art);effects.clear()
         Gdx.input.setCatchKey(Input.Keys.BACK,true)
         Gdx.input.inputProcessor=object: InputAdapter() {
             override fun keyDown(keycode: Int): Boolean {
@@ -268,7 +270,9 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         server.raceSeconds=world.seconds;server.raceLaps=world.raceLaps
         if(uiTime>=.1) {
             uiTime=0.0
-            server.artJson="{\"regions\":${art.regionCount},\"textureBytes\":${art.textureBytes},\"sceneryBytes\":${sceneryCanvas.textureSize.toLong()*sceneryCanvas.textureSize*4},\"failures\":${art.failures},\"draws\":${art.draws},\"carStrategy\":\"runtime rotation; procedural for unapproved/missing states\"}"
+            val sceneryBytes=sceneryCanvas.textureSize.toLong()*sceneryCanvas.textureSize*4
+            val qrBytes=qr?.let{it.width.toLong()*it.height*4}?:0L
+            server.artJson="{\"regions\":${art.regionCount},\"textureBytes\":${art.textureBytes},\"sceneryBytes\":$sceneryBytes,\"fontBytes\":$fontTextureBytes,\"qrBytes\":$qrBytes,\"ownedTextureBytes\":${art.textureBytes+sceneryBytes+fontTextureBytes+qrBytes},\"artBudgetBytes\":${TextureBudget.ART},\"ownedBudgetBytes\":${TextureBudget.TOTAL},\"budgetOk\":${TextureBudget.fits(art.textureBytes,fontTextureBytes,sceneryBytes,qrBytes)},\"failures\":${art.failures},\"draws\":${art.draws},\"carStrategy\":\"runtime rotation; procedural for unapproved/missing states\"}"
             val combat=world.combat
             server.trafficJson=world.cars.filter{it.entered}.joinToString(",","[","]"){c->"{\"id\":${c.id},\"name\":\"${driverName(c)}\",\"car\":\"${c.carClass?.id}\",\"human\":${c.human},\"x\":${c.x},\"y\":${c.y},\"heading\":${c.heading},\"radius\":${c.spec.circleRadiusM},\"hp\":${combat.health(c.id)},\"wrecked\":${combat.wrecked(c.id)},\"finished\":${c.finishSeconds>=0},\"finishKind\":\"${c.finishKind}\",\"laps\":${c.lap.laps},\"position\":${c.position},\"repairPickups\":${combat.repairPickupsTaken[c.id]}}"}
             server.pickupsJson=combat.pickups.joinToString(",","[","]"){p->"{\"kind\":\"${p.type.id}\",\"x\":${p.x},\"y\":${p.y},\"cooldown\":${p.cooldownSeconds}}"}
@@ -321,7 +325,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         shape.projectionMatrix=worldMatrix;shape.begin(ShapeRenderer.ShapeType.Filled)
         scene.drawRoadMarks(shape)
         combatPainter.ground(shape,world)
-        effects.draw(shape,world,dt)
+        effects.draw(shape,world,dt,!art.available("decals/skid"))
         shape.end();batch.begin();atlasEffects.ground(batch,world.snapshot);batch.end();shape.begin(ShapeRenderer.ShapeType.Filled)
         for(c in world.cars) {
             if(!c.entered)continue
@@ -331,7 +335,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
             if(art.carKey(c.carClass?.id?:"Line",current.healthFraction(c.id).toFloat(),current.wrecked(c.id))==null)painter.draw(shape,c,x,y,heading,colors[c.id],world.combat.damageFlashSeconds[c.id]>0 || c.impact>3 && server.frameNumber%6<3,healthFraction=current.healthFraction(c.id).toFloat(),wrecked=world.combat.wrecked(c.id))
             if(c.human) { val marker=(c.spec.circleRadiusM+c.spec.circleOffsetM+1).toFloat();shape.color=colors[c.id];shape.triangle(x-0.7f,y+marker+1,x+0.7f,y+marker+1,x,y+marker) }
         }
-        combatPainter.air(shape,world)
+        combatPainter.air(shape,world,art)
         shape.end()
         batch.begin()
         for(c in world.cars)if(c.entered) {
@@ -447,11 +451,13 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         if(phase!="race")detail.addText(when(phase){"garage"->"PARTS / PER CAR    -    GREEN: GAIN    AMBER: TRADE-OFF";"career"->"THE ASH CIRCUIT / FIVE ACTS / THIRTY-FIVE EVENTS";else->Courses.all[selectedTrack].name+"   /   MENU: course    /    FEEL: "+server.feel.id+"  LEFT / RIGHT"},59f,630f)
         detail.addText("${world.entrantCount} CARS    /    ${world.raceLaps} LAPS    /    "+Courses.all[selectedTrack].name.uppercase(),873f,682f)
         detail.addText(if(phase=="lobby")"A live race. A phone in your hand." else "BACK: Lobby    /    "+server.feel.id,873f,653f)
-        if(phase=="race" || phase=="countdown" || phase=="results")for(c in world.cars)if(c.entered) {
+        if(phase=="race" || phase=="countdown" || phase=="results") {
+          for(c in world.cars)if(c.entered) {
             detail.setColor(colors[c.id]); uiBuilder.clear(); uiBuilder.append(c.position).append("  ").append(driverName(c))
             detail.addText(uiBuilder,55f+c.id*203,46f)
             detail.setColor(muted); uiBuilder.clear(); if(world.combat.wrecked(c.id))uiBuilder.append("WRECKED") else uiBuilder.append("HP ").append(world.combat.health(c.id).toInt()).append("   LAP ").append(min(world.raceLaps,c.lap.laps+1)).append(" / ").append(world.raceLaps)
             detail.addText(uiBuilder,55f+c.id*203,27f)
+          }
         }
         else {
             detail.setColor(accent);detail.addText("PLAYER 1   /   ${CarCatalog.all[profiles[0].selectedCar].id}   /   ${profiles[0].credits} CR",55f,42f)

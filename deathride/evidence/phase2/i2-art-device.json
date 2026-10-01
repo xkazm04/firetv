@@ -1,0 +1,3314 @@
+{
+  "device": "AFTKM",
+  "utc": "2026-10-01T15:50:10.711Z",
+  "checks": [
+    "All ten car classes selected through the paired controller; host stats match each ID",
+    "25 authored tracks selected and prepared on the Stick",
+    "New Quill completed a real device race result at 14.53 s with 96 weapon shots; automated LAN pursuit inputs, not human play"
+  ],
+  "errors": [],
+  "selections": [
+    {
+      "id": "Needle",
+      "role": "Light sports",
+      "tier": "rookie",
+      "priceCredits": 367,
+      "ammoScale": 1,
+      "powerRating": 317.896209861,
+      "weakStats": [
+        "speed",
+        "armor",
+        "mass"
+      ],
+      "stats": {
+        "speed": 4,
+        "acceleration": 7,
+        "grip": 5,
+        "armor": 1,
+        "mass": 1,
+        "handling": 8,
+        "slots": 1,
+        "braking": 9
+      }
+    },
+    {
+      "id": "Line",
+      "role": "Durable road coupe",
+      "tier": "rookie",
+      "priceCredits": 346,
+      "ammoScale": 1,
+      "powerRating": 329.65746231400004,
+      "weakStats": [
+        "acceleration",
+        "handling",
+        "braking"
+      ],
+      "stats": {
+        "speed": 6,
+        "acceleration": 4,
+        "grip": 4,
+        "armor": 4,
+        "mass": 4,
+        "handling": 4,
+        "slots": 2,
+        "braking": 4
+      }
+    },
+    {
+      "id": "Bastion",
+      "role": "Heavy highway bruiser",
+      "tier": "club",
+      "priceCredits": 1119,
+      "ammoScale": 1,
+      "powerRating": 451.659209473,
+      "weakStats": [
+        "acceleration",
+        "grip",
+        "handling",
+        "braking"
+      ],
+      "stats": {
+        "speed": 9,
+        "acceleration": 3,
+        "grip": 5,
+        "armor": 10,
+        "mass": 10,
+        "handling": 3,
+        "slots": 3,
+        "braking": 3
+      }
+    },
+    {
+      "id": "Comet",
+      "role": "Top-speed racer",
+      "tier": "pro",
+      "priceCredits": 1858,
+      "ammoScale": 1,
+      "powerRating": 505.04504984299996,
+      "weakStats": [
+        "acceleration",
+        "grip",
+        "armor",
+        "handling",
+        "braking"
+      ],
+      "stats": {
+        "speed": 10,
+        "acceleration": 7,
+        "grip": 5,
+        "armor": 3,
+        "mass": 4,
+        "handling": 5,
+        "slots": 2,
+        "braking": 6
+      }
+    },
+    {
+      "id": "Trail",
+      "role": "Grip rally",
+      "tier": "club",
+      "priceCredits": 1112,
+      "ammoScale": 1,
+      "powerRating": 425.35084930599993,
+      "weakStats": [
+        "speed",
+        "armor",
+        "mass"
+      ],
+      "stats": {
+        "speed": 5,
+        "acceleration": 6,
+        "grip": 10,
+        "armor": 3,
+        "mass": 3,
+        "handling": 7,
+        "slots": 2,
+        "braking": 7
+      }
+    },
+    {
+      "id": "Flint",
+      "role": "Agile brawler",
+      "tier": "pro",
+      "priceCredits": 1928,
+      "ammoScale": 1.15,
+      "powerRating": 475.62495013999995,
+      "weakStats": [
+        "speed"
+      ],
+      "stats": {
+        "speed": 6,
+        "acceleration": 9,
+        "grip": 8,
+        "armor": 6,
+        "mass": 5,
+        "handling": 8,
+        "slots": 2,
+        "braking": 8
+      }
+    },
+    {
+      "id": "Quill",
+      "role": "Light technical specialist",
+      "tier": "elite",
+      "priceCredits": 2866,
+      "ammoScale": 0.85,
+      "powerRating": 523.314433578,
+      "weakStats": [
+        "speed",
+        "armor",
+        "mass"
+      ],
+      "stats": {
+        "speed": 7,
+        "acceleration": 10,
+        "grip": 9,
+        "armor": 3,
+        "mass": 2,
+        "handling": 10,
+        "slots": 2,
+        "braking": 10
+      }
+    },
+    {
+      "id": "Vandal",
+      "role": "Fast gunship",
+      "tier": "elite",
+      "priceCredits": 2857,
+      "ammoScale": 1.2,
+      "powerRating": 549.7518748899998,
+      "weakStats": [
+        "acceleration",
+        "grip",
+        "handling",
+        "braking"
+      ],
+      "stats": {
+        "speed": 10,
+        "acceleration": 6,
+        "grip": 7,
+        "armor": 8,
+        "mass": 8,
+        "handling": 6,
+        "slots": 3,
+        "braking": 5
+      }
+    },
+    {
+      "id": "Kestrel",
+      "role": "Champion light sports",
+      "tier": "champion",
+      "priceCredits": 4037,
+      "ammoScale": 0.9,
+      "powerRating": 577.309367368,
+      "weakStats": [
+        "speed",
+        "armor",
+        "mass"
+      ],
+      "stats": {
+        "speed": 8,
+        "acceleration": 10,
+        "grip": 10,
+        "armor": 4,
+        "mass": 3,
+        "handling": 10,
+        "slots": 3,
+        "braking": 10
+      }
+    },
+    {
+      "id": "Bulwark",
+      "role": "Champion heavy bruiser",
+      "tier": "champion",
+      "priceCredits": 4023,
+      "ammoScale": 1.35,
+      "powerRating": 602.9232118000001,
+      "weakStats": [
+        "grip",
+        "handling",
+        "braking"
+      ],
+      "stats": {
+        "speed": 10,
+        "acceleration": 9,
+        "grip": 7,
+        "armor": 10,
+        "mass": 10,
+        "handling": 7,
+        "slots": 3,
+        "braking": 6
+      }
+    }
+  ],
+  "courses": [
+    {
+      "id": "foundry",
+      "ready": true,
+      "elapsedMs": 207.69130000000223
+    },
+    {
+      "id": "switchback",
+      "ready": true,
+      "elapsedMs": 1642.3977999999988
+    },
+    {
+      "id": "redline",
+      "ready": true,
+      "elapsedMs": 1353.2426000000014
+    },
+    {
+      "id": "runoff",
+      "ready": true,
+      "elapsedMs": 1176.2200999999986
+    },
+    {
+      "id": "crucible",
+      "ready": true,
+      "elapsedMs": 1178.7720000000008
+    },
+    {
+      "id": "slagway",
+      "ready": true,
+      "elapsedMs": 1186.6765999999989
+    },
+    {
+      "id": "railcut",
+      "ready": true,
+      "elapsedMs": 1167.0089999999982
+    },
+    {
+      "id": "furnace",
+      "ready": true,
+      "elapsedMs": 1189.7222000000002
+    },
+    {
+      "id": "crown",
+      "ready": true,
+      "elapsedMs": 1192.2636999999995
+    },
+    {
+      "id": "scree",
+      "ready": true,
+      "elapsedMs": 1175.5061999999998
+    },
+    {
+      "id": "ballast",
+      "ready": true,
+      "elapsedMs": 1178.8053
+    },
+    {
+      "id": "cutface",
+      "ready": true,
+      "elapsedMs": 1180.3525999999983
+    },
+    {
+      "id": "haulroad",
+      "ready": true,
+      "elapsedMs": 1171.3727000000035
+    },
+    {
+      "id": "saltline",
+      "ready": true,
+      "elapsedMs": 1200.9048000000003
+    },
+    {
+      "id": "dustwake",
+      "ready": true,
+      "elapsedMs": 1157.1396000000022
+    },
+    {
+      "id": "mirage",
+      "ready": true,
+      "elapsedMs": 1193.428399999997
+    },
+    {
+      "id": "sunspike",
+      "ready": true,
+      "elapsedMs": 1173.885199999997
+    },
+    {
+      "id": "sluice",
+      "ready": true,
+      "elapsedMs": 1185.0028999999995
+    },
+    {
+      "id": "reedcut",
+      "ready": true,
+      "elapsedMs": 1180.5471000000034
+    },
+    {
+      "id": "spillway",
+      "ready": true,
+      "elapsedMs": 1174.2617000000027
+    },
+    {
+      "id": "lowwater",
+      "ready": true,
+      "elapsedMs": 1183.583900000005
+    },
+    {
+      "id": "ridge",
+      "ready": true,
+      "elapsedMs": 1173.7114999999976
+    },
+    {
+      "id": "frostline",
+      "ready": true,
+      "elapsedMs": 1185.9974999999977
+    },
+    {
+      "id": "highpass",
+      "ready": true,
+      "elapsedMs": 1182.7050999999992
+    },
+    {
+      "id": "summit",
+      "ready": true,
+      "elapsedMs": 1193.6664000000019
+    }
+  ],
+  "result": {
+    "art": {
+      "regions": 78,
+      "textureBytes": 11272192,
+      "sceneryBytes": 16777216,
+      "fontBytes": 11534336,
+      "qrBytes": 230400,
+      "ownedTextureBytes": 39814144,
+      "artBudgetBytes": 33554432,
+      "ownedBudgetBytes": 54525952,
+      "budgetOk": true,
+      "failures": 0,
+      "draws": 27398,
+      "carStrategy": "runtime rotation; procedural for unapproved/missing states"
+    },
+    "traffic": [
+      {
+        "id": 0,
+        "name": "PLAYER 1",
+        "car": "Quill",
+        "human": true,
+        "x": 65.97828300913515,
+        "y": -49.26540024965297,
+        "heading": 2.829445333333711,
+        "radius": 1.6,
+        "hp": 0,
+        "wrecked": true,
+        "finished": false,
+        "finishKind": "NONE",
+        "laps": 0,
+        "position": 4,
+        "repairPickups": 0
+      },
+      {
+        "id": 1,
+        "name": "RIVAL 2",
+        "car": "Line",
+        "human": false,
+        "x": 28.48501508468399,
+        "y": -44.16853377093469,
+        "heading": 2.7341640485643057,
+        "radius": 1.875,
+        "hp": 54.07260375109802,
+        "wrecked": false,
+        "finished": false,
+        "finishKind": "NONE",
+        "laps": 0,
+        "position": 2,
+        "repairPickups": 0
+      },
+      {
+        "id": 2,
+        "name": "RIVAL 3",
+        "car": "Bastion",
+        "human": false,
+        "x": 93.87898183994677,
+        "y": -28.147066542394047,
+        "heading": -2.3923721683136985,
+        "radius": 2.325,
+        "hp": 37.21438168531999,
+        "wrecked": false,
+        "finished": false,
+        "finishKind": "NONE",
+        "laps": 0,
+        "position": 3,
+        "repairPickups": 0
+      },
+      {
+        "id": 3,
+        "name": "RIVAL 4",
+        "car": "Comet",
+        "human": false,
+        "x": 60.96912149339288,
+        "y": -48.963315274980246,
+        "heading": -1.9040565895526695,
+        "radius": 1.75,
+        "hp": 0,
+        "wrecked": true,
+        "finished": false,
+        "finishKind": "NONE",
+        "laps": 0,
+        "position": 5,
+        "repairPickups": 0
+      },
+      {
+        "id": 4,
+        "name": "RIVAL 5",
+        "car": "Trail",
+        "human": false,
+        "x": 107.19233034556007,
+        "y": 4.911829516394475,
+        "heading": 1.363859786141381,
+        "radius": 1.95,
+        "hp": 0,
+        "wrecked": true,
+        "finished": false,
+        "finishKind": "NONE",
+        "laps": 0,
+        "position": 6,
+        "repairPickups": 0
+      },
+      {
+        "id": 5,
+        "name": "RIVAL 6",
+        "car": "Flint",
+        "human": false,
+        "x": -1.2078892016072273,
+        "y": -48.51037743061126,
+        "heading": 2.901564734205354,
+        "radius": 2.05,
+        "hp": 38.49317897353063,
+        "wrecked": false,
+        "finished": false,
+        "finishKind": "NONE",
+        "laps": 0,
+        "position": 1,
+        "repairPickups": 0
+      }
+    ],
+    "pickups": [
+      {
+        "kind": "ammo",
+        "x": 108.97302524270917,
+        "y": -0.780336381695821,
+        "cooldown": 6.083333333333142
+      },
+      {
+        "kind": "repair",
+        "x": -56.017559073530705,
+        "y": -47.954550023817376,
+        "cooldown": 0
+      },
+      {
+        "kind": "cash",
+        "x": 15.21398163043114,
+        "y": -48.15726906924466,
+        "cooldown": 24.26666666666671
+      }
+    ],
+    "combatSummary": {
+      "damageScale": 1,
+      "shotsByWeapon": [
+        53,
+        7,
+        15,
+        21
+      ],
+      "active": 3,
+      "living": 3,
+      "finished": 0,
+      "shots": 96,
+      "projectiles": 0,
+      "mines": 9,
+      "blasts": 1,
+      "poolExhaustions": 0
+    },
+    "track": {
+      "id": "foundry",
+      "name": "Foundry Ring",
+      "lesson": "Carry speed through the broad bends",
+      "theme": "industrial",
+      "competitiveCars": [
+        "Needle",
+        "Line",
+        "Bastion",
+        "Comet",
+        "Trail",
+        "Flint",
+        "Quill",
+        "Vandal",
+        "Kestrel",
+        "Bulwark"
+      ],
+      "features": []
+    },
+    "surface": "Asphalt",
+    "feel": {
+      "id": "Balanced",
+      "deadZone": 0.03,
+      "exponent": 1,
+      "touchTravelPx": 115,
+      "touchTravelFraction": 0.28,
+      "steerRisePerSecond": 6,
+      "steerReturnPerSecond": 10,
+      "lowSpeedAuthority": 1.35,
+      "highSpeedAuthority": 1.05,
+      "speedBlendMps": 30,
+      "yawResponseScale": 0.75,
+      "stabilityScale": 1.1,
+      "throttleRisePerSecond": 3,
+      "throttleExponent": 1.15,
+      "brakeScale": 1,
+      "yawMinRadPerSecond": 0.4,
+      "yawMaxRadPerSecond": 2,
+      "turnInMaxSeconds": 0.8,
+      "recoveryMaxSeconds": 2.5
+    },
+    "units": "ms",
+    "uptimeMs": 52763.762388,
+    "phase": "results",
+    "raceLaps": 3,
+    "raceMode": "practice",
+    "raceSeconds": 14.533333333333635,
+    "sceneryReady": true,
+    "paused": false,
+    "frameNumber": 2907,
+    "flashFrames": 0,
+    "heapUsedMB": 23.060714721679688,
+    "frameTimeMs": {
+      "lifetimeBinMs": 0.1,
+      "lifetimeCapMs": 5000,
+      "last10s": {
+        "p50": 16.562231,
+        "p95": 21.652154,
+        "max": 75.821231,
+        "count": 596
+      },
+      "sinceStart": {
+        "p50": 16.6,
+        "p95": 21.700000000000003,
+        "max": 245.218769,
+        "count": 2907
+      }
+    },
+    "simStepMs": {
+      "lifetimeBinMs": 0.001,
+      "lifetimeCapMs": 50,
+      "last10s": {
+        "p50": 1.101308,
+        "p95": 1.848769,
+        "max": 4.835538,
+        "count": 589
+      },
+      "sinceStart": {
+        "p50": 1.121,
+        "p95": 2.64,
+        "max": 20.640616,
+        "count": 1416
+      }
+    },
+    "discardedSimulationMs": {
+      "last10s": 0,
+      "sinceStart": 447
+    },
+    "quantiles": "last10s exact (4096 samples); sinceStart histogram (resolution/cap declared per metric); max exact",
+    "slots": [
+      {
+        "slot": 0,
+        "connected": true,
+        "reserved": true,
+        "clockSynced": true,
+        "inputAgeMs": {
+          "lifetimeBinMs": 0.1,
+          "lifetimeCapMs": 5000,
+          "last10s": {
+            "p50": 20.177076999258134,
+            "p95": 39.363308000371035,
+            "max": 52.253691998135764,
+            "count": 589
+          },
+          "sinceStart": {
+            "p50": 20.8,
+            "p95": 39.1,
+            "max": 52.836231002234854,
+            "count": 1416
+          }
+        },
+        "stale": {
+          "last10s": 0,
+          "sinceStart": 0
+        },
+        "dropped": {
+          "last10s": 0,
+          "sinceStart": 0
+        },
+        "outOfOrder": {
+          "last10s": 0,
+          "sinceStart": 0
+        },
+        "effectiveThrottle": 1,
+        "effectiveSteer": -0.2616429101515188,
+        "effectiveFire": 1,
+        "effectiveMine": 1,
+        "layout": "Classic",
+        "mirrored": false,
+        "hostCareer": {
+          "laps": 18,
+          "story": {
+            "id": "scrap-1",
+            "title": "Ash on the key",
+            "backdrop": "ash-scrap",
+            "lines": [
+              "Your sibling left a burnt garage.",
+              "Marrow kept the debt alive.",
+              "Rook says the Yards will finish what the fire began."
+            ]
+          },
+          "rivals": [
+            {
+              "id": "rook",
+              "name": "Rook",
+              "car": "Needle",
+              "powerRating": 317.896209861,
+              "credits": 190,
+              "debt": 0,
+              "parts": 0,
+              "grudge": false,
+              "relationship": "neutral",
+              "portrait": "rival-rook",
+              "biography": "A local who learned to collect debts before he learned to forgive them",
+              "taunt": "The Yards keep what they break"
+            },
+            {
+              "id": "ox",
+              "name": "Ox",
+              "car": "Line",
+              "powerRating": 329.65746231400004,
+              "credits": 190,
+              "debt": 0,
+              "parts": 0,
+              "grudge": false,
+              "relationship": "neutral",
+              "portrait": "rival-ox",
+              "biography": "A foundry foreman racing to keep his crew out of Marrow accounts",
+              "taunt": "Leave room for the weight"
+            },
+            {
+              "id": "mica",
+              "name": "Mica",
+              "car": "Needle",
+              "powerRating": 317.896209861,
+              "credits": 190,
+              "debt": 0,
+              "parts": 0,
+              "grudge": false,
+              "relationship": "neutral",
+              "portrait": "rival-mica",
+              "biography": "A patient mountain driver protecting the witness who copied the books",
+              "taunt": "The road gives every warning"
+            },
+            {
+              "id": "vex",
+              "name": "Vex",
+              "car": "Line",
+              "powerRating": 329.65746231400004,
+              "credits": 190,
+              "debt": 0,
+              "parts": 0,
+              "grudge": false,
+              "relationship": "neutral",
+              "portrait": "rival-vex",
+              "biography": "A speed obsessive who kept the only unedited recording of the missing lap",
+              "taunt": "Try staying in the mirror"
+            },
+            {
+              "id": "relay",
+              "name": "Relay",
+              "car": "Line",
+              "powerRating": 329.65746231400004,
+              "credits": 190,
+              "debt": 0,
+              "parts": 0,
+              "grudge": false,
+              "relationship": "neutral",
+              "portrait": "rival-relay",
+              "biography": "A courier whose quiet deliveries moved evidence between the towns",
+              "taunt": "Read the receipt before you sign"
+            }
+          ],
+          "fieldPowerRating": 324.9529613328,
+          "duel": false,
+          "maximumPlayerTier": 0,
+          "ownedCars": [
+            "Line"
+          ],
+          "round": 1,
+          "roundCount": 35,
+          "cleared": 0,
+          "season": 1,
+          "event": "Ash on the key",
+          "course": {
+            "id": "foundry",
+            "name": "Foundry Ring",
+            "lesson": "Carry speed through the broad bends",
+            "theme": "industrial",
+            "competitiveCars": [
+              "Needle",
+              "Line",
+              "Bastion",
+              "Comet",
+              "Trail",
+              "Flint",
+              "Quill",
+              "Vandal",
+              "Kestrel",
+              "Bulwark"
+            ],
+            "features": []
+          },
+          "cup": "Scrap League",
+          "points": 0,
+          "bestTrophy": "No medal",
+          "targets": [
+            14,
+            32,
+            49
+          ],
+          "bonuses": [
+            260,
+            420,
+            600
+          ],
+          "trophies": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "difficulty": {
+            "id": "Rookie",
+            "name": "Rookie",
+            "description": "Patient lines and forward weapons - no rival mines",
+            "rewardScale": 1
+          },
+          "unlocks": [
+            {
+              "kind": "car",
+              "id": "Needle",
+              "name": "Needle",
+              "afterRounds": 0,
+              "unlocked": true
+            },
+            {
+              "kind": "car",
+              "id": "Line",
+              "name": "Line",
+              "afterRounds": 0,
+              "unlocked": true
+            },
+            {
+              "kind": "car",
+              "id": "Bastion",
+              "name": "Bastion",
+              "afterRounds": 7,
+              "unlocked": false
+            },
+            {
+              "kind": "car",
+              "id": "Comet",
+              "name": "Comet",
+              "afterRounds": 14,
+              "unlocked": false
+            },
+            {
+              "kind": "car",
+              "id": "Trail",
+              "name": "Trail",
+              "afterRounds": 7,
+              "unlocked": false
+            },
+            {
+              "kind": "car",
+              "id": "Flint",
+              "name": "Flint",
+              "afterRounds": 14,
+              "unlocked": false
+            },
+            {
+              "kind": "car",
+              "id": "Quill",
+              "name": "Quill",
+              "afterRounds": 21,
+              "unlocked": false
+            },
+            {
+              "kind": "car",
+              "id": "Vandal",
+              "name": "Vandal",
+              "afterRounds": 21,
+              "unlocked": false
+            },
+            {
+              "kind": "car",
+              "id": "Kestrel",
+              "name": "Kestrel",
+              "afterRounds": 28,
+              "unlocked": false
+            },
+            {
+              "kind": "car",
+              "id": "Bulwark",
+              "name": "Bulwark",
+              "afterRounds": 28,
+              "unlocked": false
+            },
+            {
+              "kind": "track",
+              "id": "foundry",
+              "name": "Foundry Ring",
+              "afterRounds": 0,
+              "unlocked": true
+            },
+            {
+              "kind": "track",
+              "id": "switchback",
+              "name": "Switchback",
+              "afterRounds": 4,
+              "unlocked": false
+            },
+            {
+              "kind": "track",
+              "id": "redline",
+              "name": "Redline",
+              "afterRounds": 12,
+              "unlocked": false
+            },
+            {
+              "kind": "track",
+              "id": "runoff",
+              "name": "Runoff",
+              "afterRounds": 24,
+              "unlocked": false
+            },
+            {
+              "kind": "track",
+              "id": "crucible",
+              "name": "Crucible",
+              "afterRounds": 26,
+              "unlocked": false
+            },
+            {
+              "kind": "track",
+              "id": "slagway",
+              "name": "Slagway",
+              "afterRounds": 1,
+              "unlocked": false
+            },
+            {
+              "kind": "track",
+              "id": "railcut",
+              "name": "Rail Cut",
+              "afterRounds": 7,
+              "unlocked": false
+            },
+            {
+              "kind": "track",
+              "id": "furnace",
+              "name": "Furnace Mile",
+              "afterRounds": 28,
+              "unlocked": false
+            },
+            {
+              "kind": "track",
+              "id": "crown",
+              "name": "Crown Speedway",
+              "afterRounds": 29,
+              "unlocked": false
+            },
+            {
+              "kind": "track",
+              "id": "scree",
+              "name": "Scree Run",
+              "afterRounds": 2,
+              "unlocked": false
+            },
+            {
+              "kind": "track",
+              "id": "ballast",
+              "name": "Ballast Bend",
+              "afterRounds": 8,
+              "unlocked": false
+            },
+            {
+              "kind": "track",
+              "id": "cutface",
+              "name": "Cut Face",
+              "afterRounds": 16,
+              "unlocked": false
+            },
+            {
+              "kind": "track",
+              "id": "haulroad",
+              "name": "Haul Road",
+              "afterRounds": 31,
+              "unlocked": false
+            },
+            {
+              "kind": "track",
+              "id": "saltline",
+              "name": "Salt Line",
+              "afterRounds": 14,
+              "unlocked": false
+            },
+            {
+              "kind": "track",
+              "id": "dustwake",
+              "name": "Dust Wake",
+              "afterRounds": 15,
+              "unlocked": false
+            },
+            {
+              "kind": "track",
+              "id": "mirage",
+              "name": "Mirage Loop",
+              "afterRounds": 17,
+              "unlocked": false
+            },
+            {
+              "kind": "track",
+              "id": "sunspike",
+              "name": "Sunspike",
+              "afterRounds": 32,
+              "unlocked": false
+            },
+            {
+              "kind": "track",
+              "id": "sluice",
+              "name": "Sluice Gate",
+              "afterRounds": 3,
+              "unlocked": false
+            },
+            {
+              "kind": "track",
+              "id": "reedcut",
+              "name": "Reed Cut",
+              "afterRounds": 9,
+              "unlocked": false
+            },
+            {
+              "kind": "track",
+              "id": "spillway",
+              "name": "Spillway",
+              "afterRounds": 25,
+              "unlocked": false
+            },
+            {
+              "kind": "track",
+              "id": "lowwater",
+              "name": "Low Water",
+              "afterRounds": 30,
+              "unlocked": false
+            },
+            {
+              "kind": "track",
+              "id": "ridge",
+              "name": "Ridge Wire",
+              "afterRounds": 10,
+              "unlocked": false
+            },
+            {
+              "kind": "track",
+              "id": "frostline",
+              "name": "Frost Line",
+              "afterRounds": 21,
+              "unlocked": false
+            },
+            {
+              "kind": "track",
+              "id": "highpass",
+              "name": "High Pass",
+              "afterRounds": 22,
+              "unlocked": false
+            },
+            {
+              "kind": "track",
+              "id": "summit",
+              "name": "Summit Return",
+              "afterRounds": 23,
+              "unlocked": false
+            }
+          ],
+          "partUnlocks": [
+            {
+              "name": "Engine 2",
+              "afterRounds": 4,
+              "unlocked": false
+            },
+            {
+              "name": "Engine 3",
+              "afterRounds": 8,
+              "unlocked": false
+            },
+            {
+              "name": "Tires 2",
+              "afterRounds": 4,
+              "unlocked": false
+            },
+            {
+              "name": "Tires 3",
+              "afterRounds": 8,
+              "unlocked": false
+            },
+            {
+              "name": "Brakes 2",
+              "afterRounds": 4,
+              "unlocked": false
+            },
+            {
+              "name": "Brakes 3",
+              "afterRounds": 8,
+              "unlocked": false
+            },
+            {
+              "name": "Armor 2",
+              "afterRounds": 4,
+              "unlocked": false
+            },
+            {
+              "name": "Armor 3",
+              "afterRounds": 8,
+              "unlocked": false
+            },
+            {
+              "name": "Suspension 2",
+              "afterRounds": 4,
+              "unlocked": false
+            },
+            {
+              "name": "Suspension 3",
+              "afterRounds": 8,
+              "unlocked": false
+            },
+            {
+              "name": "Weapon mounts 2",
+              "afterRounds": 5,
+              "unlocked": false
+            }
+          ],
+          "message": "Player 1 hosts. Player 2 is a guest."
+        },
+        "career": {
+          "laps": 18,
+          "story": {
+            "id": "scrap-1",
+            "title": "Ash on the key",
+            "backdrop": "ash-scrap",
+            "lines": [
+              "Your sibling left a burnt garage.",
+              "Marrow kept the debt alive.",
+              "Rook says the Yards will finish what the fire began."
+            ]
+          },
+          "rivals": [
+            {
+              "id": "rook",
+              "name": "Rook",
+              "car": "Needle",
+              "powerRating": 317.896209861,
+              "credits": 190,
+              "debt": 0,
+              "parts": 0,
+              "grudge": false,
+              "relationship": "neutral",
+              "portrait": "rival-rook",
+              "biography": "A local who learned to collect debts before he learned to forgive them",
+              "taunt": "The Yards keep what they break"
+            },
+            {
+              "id": "ox",
+              "name": "Ox",
+              "car": "Line",
+              "powerRating": 329.65746231400004,
+              "credits": 190,
+              "debt": 0,
+              "parts": 0,
+              "grudge": false,
+              "relationship": "neutral",
+              "portrait": "rival-ox",
+              "biography": "A foundry foreman racing to keep his crew out of Marrow accounts",
+              "taunt": "Leave room for the weight"
+            },
+            {
+              "id": "mica",
+              "name": "Mica",
+              "car": "Needle",
+              "powerRating": 317.896209861,
+              "credits": 190,
+              "debt": 0,
+              "parts": 0,
+              "grudge": false,
+              "relationship": "neutral",
+              "portrait": "rival-mica",
+              "biography": "A patient mountain driver protecting the witness who copied the books",
+              "taunt": "The road gives every warning"
+            },
+            {
+              "id": "vex",
+              "name": "Vex",
+              "car": "Line",
+              "powerRating": 329.65746231400004,
+              "credits": 190,
+              "debt": 0,
+              "parts": 0,
+              "grudge": false,
+              "relationship": "neutral",
+              "portrait": "rival-vex",
+              "biography": "A speed obsessive who kept the only unedited recording of the missing lap",
+              "taunt": "Try staying in the mirror"
+            },
+            {
+              "id": "relay",
+              "name": "Relay",
+              "car": "Line",
+              "powerRating": 329.65746231400004,
+              "credits": 190,
+              "debt": 0,
+              "parts": 0,
+              "grudge": false,
+              "relationship": "neutral",
+              "portrait": "rival-relay",
+              "biography": "A courier whose quiet deliveries moved evidence between the towns",
+              "taunt": "Read the receipt before you sign"
+            }
+          ],
+          "fieldPowerRating": 324.9529613328,
+          "duel": false,
+          "maximumPlayerTier": 0,
+          "ownedCars": [
+            "Line"
+          ],
+          "round": 1,
+          "roundCount": 35,
+          "cleared": 0,
+          "season": 1,
+          "event": "Ash on the key",
+          "course": {
+            "id": "foundry",
+            "name": "Foundry Ring",
+            "lesson": "Carry speed through the broad bends",
+            "theme": "industrial",
+            "competitiveCars": [
+              "Needle",
+              "Line",
+              "Bastion",
+              "Comet",
+              "Trail",
+              "Flint",
+              "Quill",
+              "Vandal",
+              "Kestrel",
+              "Bulwark"
+            ],
+            "features": []
+          },
+          "cup": "Scrap League",
+          "points": 0,
+          "bestTrophy": "No medal",
+          "targets": [
+            14,
+            32,
+            49
+          ],
+          "bonuses": [
+            260,
+            420,
+            600
+          ],
+          "trophies": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "difficulty": {
+            "id": "Rookie",
+            "name": "Rookie",
+            "description": "Patient lines and forward weapons - no rival mines",
+            "rewardScale": 1
+          },
+          "unlocks": [
+            {
+              "kind": "car",
+              "id": "Needle",
+              "name": "Needle",
+              "afterRounds": 0,
+              "unlocked": true
+            },
+            {
+              "kind": "car",
+              "id": "Line",
+              "name": "Line",
+              "afterRounds": 0,
+              "unlocked": true
+            },
+            {
+              "kind": "car",
+              "id": "Bastion",
+              "name": "Bastion",
+              "afterRounds": 7,
+              "unlocked": false
+            },
+            {
+              "kind": "car",
+              "id": "Comet",
+              "name": "Comet",
+              "afterRounds": 14,
+              "unlocked": false
+            },
+            {
+              "kind": "car",
+              "id": "Trail",
+              "name": "Trail",
+              "afterRounds": 7,
+              "unlocked": false
+            },
+            {
+              "kind": "car",
+              "id": "Flint",
+              "name": "Flint",
+              "afterRounds": 14,
+              "unlocked": false
+            },
+            {
+              "kind": "car",
+              "id": "Quill",
+              "name": "Quill",
+              "afterRounds": 21,
+              "unlocked": false
+            },
+            {
+              "kind": "car",
+              "id": "Vandal",
+              "name": "Vandal",
+              "afterRounds": 21,
+              "unlocked": false
+            },
+            {
+              "kind": "car",
+              "id": "Kestrel",
+              "name": "Kestrel",
+              "afterRounds": 28,
+              "unlocked": false
+            },
+            {
+              "kind": "car",
+              "id": "Bulwark",
+              "name": "Bulwark",
+              "afterRounds": 28,
+              "unlocked": false
+            },
+            {
+              "kind": "track",
+              "id": "foundry",
+              "name": "Foundry Ring",
+              "afterRounds": 0,
+              "unlocked": true
+            },
+            {
+              "kind": "track",
+              "id": "switchback",
+              "name": "Switchback",
+              "afterRounds": 4,
+              "unlocked": false
+            },
+            {
+              "kind": "track",
+              "id": "redline",
+              "name": "Redline",
+              "afterRounds": 12,
+              "unlocked": false
+            },
+            {
+              "kind": "track",
+              "id": "runoff",
+              "name": "Runoff",
+              "afterRounds": 24,
+              "unlocked": false
+            },
+            {
+              "kind": "track",
+              "id": "crucible",
+              "name": "Crucible",
+              "afterRounds": 26,
+              "unlocked": false
+            },
+            {
+              "kind": "track",
+              "id": "slagway",
+              "name": "Slagway",
+              "afterRounds": 1,
+              "unlocked": false
+            },
+            {
+              "kind": "track",
+              "id": "railcut",
+              "name": "Rail Cut",
+              "afterRounds": 7,
+              "unlocked": false
+            },
+            {
+              "kind": "track",
+              "id": "furnace",
+              "name": "Furnace Mile",
+              "afterRounds": 28,
+              "unlocked": false
+            },
+            {
+              "kind": "track",
+              "id": "crown",
+              "name": "Crown Speedway",
+              "afterRounds": 29,
+              "unlocked": false
+            },
+            {
+              "kind": "track",
+              "id": "scree",
+              "name": "Scree Run",
+              "afterRounds": 2,
+              "unlocked": false
+            },
+            {
+              "kind": "track",
+              "id": "ballast",
+              "name": "Ballast Bend",
+              "afterRounds": 8,
+              "unlocked": false
+            },
+            {
+              "kind": "track",
+              "id": "cutface",
+              "name": "Cut Face",
+              "afterRounds": 16,
+              "unlocked": false
+            },
+            {
+              "kind": "track",
+              "id": "haulroad",
+              "name": "Haul Road",
+              "afterRounds": 31,
+              "unlocked": false
+            },
+            {
+              "kind": "track",
+              "id": "saltline",
+              "name": "Salt Line",
+              "afterRounds": 14,
+              "unlocked": false
+            },
+            {
+              "kind": "track",
+              "id": "dustwake",
+              "name": "Dust Wake",
+              "afterRounds": 15,
+              "unlocked": false
+            },
+            {
+              "kind": "track",
+              "id": "mirage",
+              "name": "Mirage Loop",
+              "afterRounds": 17,
+              "unlocked": false
+            },
+            {
+              "kind": "track",
+              "id": "sunspike",
+              "name": "Sunspike",
+              "afterRounds": 32,
+              "unlocked": false
+            },
+            {
+              "kind": "track",
+              "id": "sluice",
+              "name": "Sluice Gate",
+              "afterRounds": 3,
+              "unlocked": false
+            },
+            {
+              "kind": "track",
+              "id": "reedcut",
+              "name": "Reed Cut",
+              "afterRounds": 9,
+              "unlocked": false
+            },
+            {
+              "kind": "track",
+              "id": "spillway",
+              "name": "Spillway",
+              "afterRounds": 25,
+              "unlocked": false
+            },
+            {
+              "kind": "track",
+              "id": "lowwater",
+              "name": "Low Water",
+              "afterRounds": 30,
+              "unlocked": false
+            },
+            {
+              "kind": "track",
+              "id": "ridge",
+              "name": "Ridge Wire",
+              "afterRounds": 10,
+              "unlocked": false
+            },
+            {
+              "kind": "track",
+              "id": "frostline",
+              "name": "Frost Line",
+              "afterRounds": 21,
+              "unlocked": false
+            },
+            {
+              "kind": "track",
+              "id": "highpass",
+              "name": "High Pass",
+              "afterRounds": 22,
+              "unlocked": false
+            },
+            {
+              "kind": "track",
+              "id": "summit",
+              "name": "Summit Return",
+              "afterRounds": 23,
+              "unlocked": false
+            }
+          ],
+          "partUnlocks": [
+            {
+              "name": "Engine 2",
+              "afterRounds": 4,
+              "unlocked": false
+            },
+            {
+              "name": "Engine 3",
+              "afterRounds": 8,
+              "unlocked": false
+            },
+            {
+              "name": "Tires 2",
+              "afterRounds": 4,
+              "unlocked": false
+            },
+            {
+              "name": "Tires 3",
+              "afterRounds": 8,
+              "unlocked": false
+            },
+            {
+              "name": "Brakes 2",
+              "afterRounds": 4,
+              "unlocked": false
+            },
+            {
+              "name": "Brakes 3",
+              "afterRounds": 8,
+              "unlocked": false
+            },
+            {
+              "name": "Armor 2",
+              "afterRounds": 4,
+              "unlocked": false
+            },
+            {
+              "name": "Armor 3",
+              "afterRounds": 8,
+              "unlocked": false
+            },
+            {
+              "name": "Suspension 2",
+              "afterRounds": 4,
+              "unlocked": false
+            },
+            {
+              "name": "Suspension 3",
+              "afterRounds": 8,
+              "unlocked": false
+            },
+            {
+              "name": "Weapon mounts 2",
+              "afterRounds": 5,
+              "unlocked": false
+            }
+          ],
+          "message": "Player 1 hosts. Player 2 is a guest."
+        },
+        "garage": {
+          "profile": "phone-b8649647a15c6e5a0ad59e3310156725",
+          "credits": 48,
+          "car": {
+            "id": "Quill",
+            "role": "Light technical specialist",
+            "tier": "elite",
+            "priceCredits": 2866,
+            "ammoScale": 0.85,
+            "powerRating": 523.314433578,
+            "weakStats": [
+              "speed",
+              "armor",
+              "mass"
+            ],
+            "stats": {
+              "speed": 7,
+              "acceleration": 10,
+              "grip": 9,
+              "armor": 3,
+              "mass": 2,
+              "handling": 10,
+              "slots": 2,
+              "braking": 10
+            }
+          },
+          "races": 1,
+          "wins": 0,
+          "offers": [
+            {
+              "id": "engine",
+              "name": "Engine",
+              "description": "More straight-line speed and launch acceleration",
+              "tier": 0,
+              "nextTier": 1,
+              "maxTier": 3,
+              "price": 190,
+              "available": false,
+              "reason": "Earn more credits",
+              "before": [
+                7,
+                10,
+                9,
+                3,
+                2,
+                10,
+                2,
+                10
+              ],
+              "after": [
+                8,
+                10,
+                9,
+                3,
+                2,
+                10,
+                2,
+                10
+              ]
+            },
+            {
+              "id": "tires",
+              "name": "Tires",
+              "description": "More tire force and lateral grip",
+              "tier": 0,
+              "nextTier": 1,
+              "maxTier": 3,
+              "price": 160,
+              "available": false,
+              "reason": "Earn more credits",
+              "before": [
+                7,
+                10,
+                9,
+                3,
+                2,
+                10,
+                2,
+                10
+              ],
+              "after": [
+                7,
+                10,
+                10,
+                3,
+                2,
+                10,
+                2,
+                10
+              ]
+            },
+            {
+              "id": "brakes",
+              "name": "Brakes",
+              "description": "Shorter stopping distance without changing steering",
+              "tier": 0,
+              "nextTier": 1,
+              "maxTier": 3,
+              "price": 120,
+              "available": false,
+              "reason": "At class limit",
+              "before": [
+                7,
+                10,
+                9,
+                3,
+                2,
+                10,
+                2,
+                10
+              ],
+              "after": [
+                7,
+                10,
+                9,
+                3,
+                2,
+                10,
+                2,
+                10
+              ]
+            },
+            {
+              "id": "armor",
+              "name": "Armor",
+              "description": "More protection and mass at the cost of handling",
+              "tier": 0,
+              "nextTier": 1,
+              "maxTier": 3,
+              "price": 180,
+              "available": false,
+              "reason": "Earn more credits",
+              "before": [
+                7,
+                10,
+                9,
+                3,
+                2,
+                10,
+                2,
+                10
+              ],
+              "after": [
+                7,
+                10,
+                9,
+                5,
+                3,
+                9,
+                2,
+                10
+              ]
+            },
+            {
+              "id": "suspension",
+              "name": "Suspension",
+              "description": "More corner grip and faster steering response",
+              "tier": 0,
+              "nextTier": 1,
+              "maxTier": 3,
+              "price": 170,
+              "available": false,
+              "reason": "Earn more credits",
+              "before": [
+                7,
+                10,
+                9,
+                3,
+                2,
+                10,
+                2,
+                10
+              ],
+              "after": [
+                7,
+                10,
+                10,
+                3,
+                2,
+                10,
+                2,
+                10
+              ]
+            },
+            {
+              "id": "mounts",
+              "name": "Weapon mounts",
+              "description": "Unlock Hammer or carry more heavy ammunition",
+              "tier": 0,
+              "nextTier": 1,
+              "maxTier": 2,
+              "price": 240,
+              "available": false,
+              "reason": "Earn more credits",
+              "before": [
+                7,
+                10,
+                9,
+                3,
+                2,
+                10,
+                2,
+                10
+              ],
+              "after": [
+                7,
+                10,
+                9,
+                3,
+                2,
+                10,
+                3,
+                10
+              ]
+            }
+          ],
+          "market": {
+            "revision": 2,
+            "loanPrincipal": 300,
+            "loanTotal": 330,
+            "repairStep": 20,
+            "debt": 109,
+            "debtPaid": 11,
+            "bonus": 0,
+            "tradeValue": 0,
+            "condition": 100,
+            "manualService": false,
+            "utilitySlots": 3,
+            "cars": [
+              {
+                "id": "Needle",
+                "owned": false,
+                "price": 367,
+                "unlocked": true,
+                "powerRating": 317.896209861
+              },
+              {
+                "id": "Line",
+                "owned": true,
+                "price": 346,
+                "unlocked": true,
+                "powerRating": 329.65746231400004
+              },
+              {
+                "id": "Bastion",
+                "owned": false,
+                "price": 1119,
+                "unlocked": false,
+                "powerRating": 451.659209473
+              },
+              {
+                "id": "Comet",
+                "owned": false,
+                "price": 1858,
+                "unlocked": false,
+                "powerRating": 505.04504984299996
+              },
+              {
+                "id": "Trail",
+                "owned": false,
+                "price": 1112,
+                "unlocked": false,
+                "powerRating": 425.35084930599993
+              },
+              {
+                "id": "Flint",
+                "owned": false,
+                "price": 1928,
+                "unlocked": false,
+                "powerRating": 475.62495013999995
+              },
+              {
+                "id": "Quill",
+                "owned": false,
+                "price": 2866,
+                "unlocked": false,
+                "powerRating": 523.314433578
+              },
+              {
+                "id": "Vandal",
+                "owned": false,
+                "price": 2857,
+                "unlocked": false,
+                "powerRating": 549.7518748899998
+              },
+              {
+                "id": "Kestrel",
+                "owned": false,
+                "price": 4037,
+                "unlocked": false,
+                "powerRating": 577.309367368
+              },
+              {
+                "id": "Bulwark",
+                "owned": false,
+                "price": 4023,
+                "unlocked": false,
+                "powerRating": 602.9232118000001
+              }
+            ],
+            "items": [
+              {
+                "id": "spikes",
+                "name": "Contact spikes",
+                "price": 45,
+                "packed": false,
+                "description": "One race of stronger contact damage with the normal ram cooldown"
+              },
+              {
+                "id": "turbo",
+                "name": "Turbo reserve",
+                "price": 55,
+                "packed": false,
+                "description": "Four seconds of extra engine force on clear straights above launch speed"
+              },
+              {
+                "id": "fuel",
+                "name": "Hot fuel",
+                "price": 35,
+                "packed": false,
+                "description": "Thirty seconds of extra engine force without raising the speed cap"
+              },
+              {
+                "id": "sabotage",
+                "name": "Ammo switch",
+                "price": 60,
+                "packed": false,
+                "description": "Declared before the start: the first opposing driver loses a share of ammunition"
+              }
+            ],
+            "contracts": [
+              {
+                "id": "delivery",
+                "name": "Sealed gearbox",
+                "description": "Finish Foundry Ring with the sealed shipment",
+                "reward": 70,
+                "active": false
+              },
+              {
+                "id": "grudge",
+                "name": "Rook must retire",
+                "description": "Finish a race result in which Rook is wrecked",
+                "reward": 90,
+                "active": false
+              },
+              {
+                "id": "clean",
+                "name": "Untouched cargo",
+                "description": "Win a race without taking damage",
+                "reward": 65,
+                "active": false
+              }
+            ]
+          },
+          "message": "Pit service complete - ready to race",
+          "saveStatus": "Saved",
+          "receipt": {
+            "position": 4,
+            "kills": 0,
+            "gross": 135,
+            "repair": 76,
+            "insurance": 0,
+            "net": 59,
+            "banked": 48,
+            "balance": 48
+          }
+        },
+        "combat": {
+          "spectating": false,
+          "armingSeconds": 0,
+          "hp": 0,
+          "maxHp": 76,
+          "wrecked": true,
+          "weapon": 0,
+          "weaponName": "Rivet",
+          "ammo": 100,
+          "mines": 0,
+          "heavyAmmo": 4,
+          "scatterAmmo": 10,
+          "cash": 0,
+          "sabotageTarget": -1,
+          "cooldownSeconds": 0.08333333333333337,
+          "mineCooldownSeconds": 0,
+          "damageEvents": 11,
+          "kills": 0
+        },
+        "drifting": false,
+        "loadTransfer": -0.1199999254632472,
+        "surfaceId": "Asphalt",
+        "car": {
+          "id": "Quill",
+          "role": "Light technical specialist",
+          "tier": "elite",
+          "priceCredits": 2866,
+          "ammoScale": 0.85,
+          "powerRating": 523.314433578,
+          "weakStats": [
+            "speed",
+            "armor",
+            "mass"
+          ],
+          "stats": {
+            "speed": 7,
+            "acceleration": 10,
+            "grip": 9,
+            "armor": 3,
+            "mass": 2,
+            "handling": 10,
+            "slots": 2,
+            "braking": 10
+          }
+        },
+        "lap": 1,
+        "position": 4,
+        "speedMps": 4.225953470708837,
+        "xM": 65.97828300913515,
+        "yM": -49.26540024965297,
+        "heading": 2.829445333333711,
+        "yaw": -0.14236894562059849,
+        "progressM": 245.10847085901798
+      },
+      {
+        "slot": 1,
+        "connected": false,
+        "reserved": false,
+        "clockSynced": false,
+        "inputAgeMs": {
+          "lifetimeBinMs": 0.1,
+          "lifetimeCapMs": 5000,
+          "last10s": {
+            "p50": 0,
+            "p95": 0,
+            "max": 0,
+            "count": 0
+          },
+          "sinceStart": {
+            "p50": 0,
+            "p95": 0,
+            "max": 0,
+            "count": 0
+          }
+        },
+        "stale": {
+          "last10s": 0,
+          "sinceStart": 0
+        },
+        "dropped": {
+          "last10s": 0,
+          "sinceStart": 0
+        },
+        "outOfOrder": {
+          "last10s": 0,
+          "sinceStart": 0
+        },
+        "effectiveThrottle": 0,
+        "effectiveSteer": 0,
+        "effectiveFire": 0,
+        "effectiveMine": 0,
+        "layout": "Classic",
+        "mirrored": false,
+        "hostCareer": {
+          "laps": 18,
+          "story": {
+            "id": "scrap-1",
+            "title": "Ash on the key",
+            "backdrop": "ash-scrap",
+            "lines": [
+              "Your sibling left a burnt garage.",
+              "Marrow kept the debt alive.",
+              "Rook says the Yards will finish what the fire began."
+            ]
+          },
+          "rivals": [
+            {
+              "id": "rook",
+              "name": "Rook",
+              "car": "Needle",
+              "powerRating": 317.896209861,
+              "credits": 190,
+              "debt": 0,
+              "parts": 0,
+              "grudge": false,
+              "relationship": "neutral",
+              "portrait": "rival-rook",
+              "biography": "A local who learned to collect debts before he learned to forgive them",
+              "taunt": "The Yards keep what they break"
+            },
+            {
+              "id": "ox",
+              "name": "Ox",
+              "car": "Line",
+              "powerRating": 329.65746231400004,
+              "credits": 190,
+              "debt": 0,
+              "parts": 0,
+              "grudge": false,
+              "relationship": "neutral",
+              "portrait": "rival-ox",
+              "biography": "A foundry foreman racing to keep his crew out of Marrow accounts",
+              "taunt": "Leave room for the weight"
+            },
+            {
+              "id": "mica",
+              "name": "Mica",
+              "car": "Needle",
+              "powerRating": 317.896209861,
+              "credits": 190,
+              "debt": 0,
+              "parts": 0,
+              "grudge": false,
+              "relationship": "neutral",
+              "portrait": "rival-mica",
+              "biography": "A patient mountain driver protecting the witness who copied the books",
+              "taunt": "The road gives every warning"
+            },
+            {
+              "id": "vex",
+              "name": "Vex",
+              "car": "Line",
+              "powerRating": 329.65746231400004,
+              "credits": 190,
+              "debt": 0,
+              "parts": 0,
+              "grudge": false,
+              "relationship": "neutral",
+              "portrait": "rival-vex",
+              "biography": "A speed obsessive who kept the only unedited recording of the missing lap",
+              "taunt": "Try staying in the mirror"
+            },
+            {
+              "id": "relay",
+              "name": "Relay",
+              "car": "Line",
+              "powerRating": 329.65746231400004,
+              "credits": 190,
+              "debt": 0,
+              "parts": 0,
+              "grudge": false,
+              "relationship": "neutral",
+              "portrait": "rival-relay",
+              "biography": "A courier whose quiet deliveries moved evidence between the towns",
+              "taunt": "Read the receipt before you sign"
+            }
+          ],
+          "fieldPowerRating": 324.9529613328,
+          "duel": false,
+          "maximumPlayerTier": 0,
+          "ownedCars": [
+            "Line"
+          ],
+          "round": 1,
+          "roundCount": 35,
+          "cleared": 0,
+          "season": 1,
+          "event": "Ash on the key",
+          "course": {
+            "id": "foundry",
+            "name": "Foundry Ring",
+            "lesson": "Carry speed through the broad bends",
+            "theme": "industrial",
+            "competitiveCars": [
+              "Needle",
+              "Line",
+              "Bastion",
+              "Comet",
+              "Trail",
+              "Flint",
+              "Quill",
+              "Vandal",
+              "Kestrel",
+              "Bulwark"
+            ],
+            "features": []
+          },
+          "cup": "Scrap League",
+          "points": 0,
+          "bestTrophy": "No medal",
+          "targets": [
+            14,
+            32,
+            49
+          ],
+          "bonuses": [
+            260,
+            420,
+            600
+          ],
+          "trophies": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "difficulty": {
+            "id": "Rookie",
+            "name": "Rookie",
+            "description": "Patient lines and forward weapons - no rival mines",
+            "rewardScale": 1
+          },
+          "unlocks": [
+            {
+              "kind": "car",
+              "id": "Needle",
+              "name": "Needle",
+              "afterRounds": 0,
+              "unlocked": true
+            },
+            {
+              "kind": "car",
+              "id": "Line",
+              "name": "Line",
+              "afterRounds": 0,
+              "unlocked": true
+            },
+            {
+              "kind": "car",
+              "id": "Bastion",
+              "name": "Bastion",
+              "afterRounds": 7,
+              "unlocked": false
+            },
+            {
+              "kind": "car",
+              "id": "Comet",
+              "name": "Comet",
+              "afterRounds": 14,
+              "unlocked": false
+            },
+            {
+              "kind": "car",
+              "id": "Trail",
+              "name": "Trail",
+              "afterRounds": 7,
+              "unlocked": false
+            },
+            {
+              "kind": "car",
+              "id": "Flint",
+              "name": "Flint",
+              "afterRounds": 14,
+              "unlocked": false
+            },
+            {
+              "kind": "car",
+              "id": "Quill",
+              "name": "Quill",
+              "afterRounds": 21,
+              "unlocked": false
+            },
+            {
+              "kind": "car",
+              "id": "Vandal",
+              "name": "Vandal",
+              "afterRounds": 21,
+              "unlocked": false
+            },
+            {
+              "kind": "car",
+              "id": "Kestrel",
+              "name": "Kestrel",
+              "afterRounds": 28,
+              "unlocked": false
+            },
+            {
+              "kind": "car",
+              "id": "Bulwark",
+              "name": "Bulwark",
+              "afterRounds": 28,
+              "unlocked": false
+            },
+            {
+              "kind": "track",
+              "id": "foundry",
+              "name": "Foundry Ring",
+              "afterRounds": 0,
+              "unlocked": true
+            },
+            {
+              "kind": "track",
+              "id": "switchback",
+              "name": "Switchback",
+              "afterRounds": 4,
+              "unlocked": false
+            },
+            {
+              "kind": "track",
+              "id": "redline",
+              "name": "Redline",
+              "afterRounds": 12,
+              "unlocked": false
+            },
+            {
+              "kind": "track",
+              "id": "runoff",
+              "name": "Runoff",
+              "afterRounds": 24,
+              "unlocked": false
+            },
+            {
+              "kind": "track",
+              "id": "crucible",
+              "name": "Crucible",
+              "afterRounds": 26,
+              "unlocked": false
+            },
+            {
+              "kind": "track",
+              "id": "slagway",
+              "name": "Slagway",
+              "afterRounds": 1,
+              "unlocked": false
+            },
+            {
+              "kind": "track",
+              "id": "railcut",
+              "name": "Rail Cut",
+              "afterRounds": 7,
+              "unlocked": false
+            },
+            {
+              "kind": "track",
+              "id": "furnace",
+              "name": "Furnace Mile",
+              "afterRounds": 28,
+              "unlocked": false
+            },
+            {
+              "kind": "track",
+              "id": "crown",
+              "name": "Crown Speedway",
+              "afterRounds": 29,
+              "unlocked": false
+            },
+            {
+              "kind": "track",
+              "id": "scree",
+              "name": "Scree Run",
+              "afterRounds": 2,
+              "unlocked": false
+            },
+            {
+              "kind": "track",
+              "id": "ballast",
+              "name": "Ballast Bend",
+              "afterRounds": 8,
+              "unlocked": false
+            },
+            {
+              "kind": "track",
+              "id": "cutface",
+              "name": "Cut Face",
+              "afterRounds": 16,
+              "unlocked": false
+            },
+            {
+              "kind": "track",
+              "id": "haulroad",
+              "name": "Haul Road",
+              "afterRounds": 31,
+              "unlocked": false
+            },
+            {
+              "kind": "track",
+              "id": "saltline",
+              "name": "Salt Line",
+              "afterRounds": 14,
+              "unlocked": false
+            },
+            {
+              "kind": "track",
+              "id": "dustwake",
+              "name": "Dust Wake",
+              "afterRounds": 15,
+              "unlocked": false
+            },
+            {
+              "kind": "track",
+              "id": "mirage",
+              "name": "Mirage Loop",
+              "afterRounds": 17,
+              "unlocked": false
+            },
+            {
+              "kind": "track",
+              "id": "sunspike",
+              "name": "Sunspike",
+              "afterRounds": 32,
+              "unlocked": false
+            },
+            {
+              "kind": "track",
+              "id": "sluice",
+              "name": "Sluice Gate",
+              "afterRounds": 3,
+              "unlocked": false
+            },
+            {
+              "kind": "track",
+              "id": "reedcut",
+              "name": "Reed Cut",
+              "afterRounds": 9,
+              "unlocked": false
+            },
+            {
+              "kind": "track",
+              "id": "spillway",
+              "name": "Spillway",
+              "afterRounds": 25,
+              "unlocked": false
+            },
+            {
+              "kind": "track",
+              "id": "lowwater",
+              "name": "Low Water",
+              "afterRounds": 30,
+              "unlocked": false
+            },
+            {
+              "kind": "track",
+              "id": "ridge",
+              "name": "Ridge Wire",
+              "afterRounds": 10,
+              "unlocked": false
+            },
+            {
+              "kind": "track",
+              "id": "frostline",
+              "name": "Frost Line",
+              "afterRounds": 21,
+              "unlocked": false
+            },
+            {
+              "kind": "track",
+              "id": "highpass",
+              "name": "High Pass",
+              "afterRounds": 22,
+              "unlocked": false
+            },
+            {
+              "kind": "track",
+              "id": "summit",
+              "name": "Summit Return",
+              "afterRounds": 23,
+              "unlocked": false
+            }
+          ],
+          "partUnlocks": [
+            {
+              "name": "Engine 2",
+              "afterRounds": 4,
+              "unlocked": false
+            },
+            {
+              "name": "Engine 3",
+              "afterRounds": 8,
+              "unlocked": false
+            },
+            {
+              "name": "Tires 2",
+              "afterRounds": 4,
+              "unlocked": false
+            },
+            {
+              "name": "Tires 3",
+              "afterRounds": 8,
+              "unlocked": false
+            },
+            {
+              "name": "Brakes 2",
+              "afterRounds": 4,
+              "unlocked": false
+            },
+            {
+              "name": "Brakes 3",
+              "afterRounds": 8,
+              "unlocked": false
+            },
+            {
+              "name": "Armor 2",
+              "afterRounds": 4,
+              "unlocked": false
+            },
+            {
+              "name": "Armor 3",
+              "afterRounds": 8,
+              "unlocked": false
+            },
+            {
+              "name": "Suspension 2",
+              "afterRounds": 4,
+              "unlocked": false
+            },
+            {
+              "name": "Suspension 3",
+              "afterRounds": 8,
+              "unlocked": false
+            },
+            {
+              "name": "Weapon mounts 2",
+              "afterRounds": 5,
+              "unlocked": false
+            }
+          ],
+          "message": "Player 1 hosts. Player 2 is a guest."
+        },
+        "career": {
+          "laps": 18,
+          "story": {
+            "id": "scrap-1",
+            "title": "Ash on the key",
+            "backdrop": "ash-scrap",
+            "lines": [
+              "Your sibling left a burnt garage.",
+              "Marrow kept the debt alive.",
+              "Rook says the Yards will finish what the fire began."
+            ]
+          },
+          "rivals": [
+            {
+              "id": "rook",
+              "name": "Rook",
+              "car": "Needle",
+              "powerRating": 317.896209861,
+              "credits": 190,
+              "debt": 0,
+              "parts": 0,
+              "grudge": false,
+              "relationship": "neutral",
+              "portrait": "rival-rook",
+              "biography": "A local who learned to collect debts before he learned to forgive them",
+              "taunt": "The Yards keep what they break"
+            },
+            {
+              "id": "ox",
+              "name": "Ox",
+              "car": "Line",
+              "powerRating": 329.65746231400004,
+              "credits": 190,
+              "debt": 0,
+              "parts": 0,
+              "grudge": false,
+              "relationship": "neutral",
+              "portrait": "rival-ox",
+              "biography": "A foundry foreman racing to keep his crew out of Marrow accounts",
+              "taunt": "Leave room for the weight"
+            },
+            {
+              "id": "mica",
+              "name": "Mica",
+              "car": "Needle",
+              "powerRating": 317.896209861,
+              "credits": 190,
+              "debt": 0,
+              "parts": 0,
+              "grudge": false,
+              "relationship": "neutral",
+              "portrait": "rival-mica",
+              "biography": "A patient mountain driver protecting the witness who copied the books",
+              "taunt": "The road gives every warning"
+            },
+            {
+              "id": "vex",
+              "name": "Vex",
+              "car": "Line",
+              "powerRating": 329.65746231400004,
+              "credits": 190,
+              "debt": 0,
+              "parts": 0,
+              "grudge": false,
+              "relationship": "neutral",
+              "portrait": "rival-vex",
+              "biography": "A speed obsessive who kept the only unedited recording of the missing lap",
+              "taunt": "Try staying in the mirror"
+            },
+            {
+              "id": "relay",
+              "name": "Relay",
+              "car": "Line",
+              "powerRating": 329.65746231400004,
+              "credits": 190,
+              "debt": 0,
+              "parts": 0,
+              "grudge": false,
+              "relationship": "neutral",
+              "portrait": "rival-relay",
+              "biography": "A courier whose quiet deliveries moved evidence between the towns",
+              "taunt": "Read the receipt before you sign"
+            }
+          ],
+          "fieldPowerRating": 324.9529613328,
+          "duel": false,
+          "maximumPlayerTier": 0,
+          "ownedCars": [
+            "Line"
+          ],
+          "round": 1,
+          "roundCount": 35,
+          "cleared": 0,
+          "season": 1,
+          "event": "Ash on the key",
+          "course": {
+            "id": "foundry",
+            "name": "Foundry Ring",
+            "lesson": "Carry speed through the broad bends",
+            "theme": "industrial",
+            "competitiveCars": [
+              "Needle",
+              "Line",
+              "Bastion",
+              "Comet",
+              "Trail",
+              "Flint",
+              "Quill",
+              "Vandal",
+              "Kestrel",
+              "Bulwark"
+            ],
+            "features": []
+          },
+          "cup": "Scrap League",
+          "points": 0,
+          "bestTrophy": "No medal",
+          "targets": [
+            14,
+            32,
+            49
+          ],
+          "bonuses": [
+            260,
+            420,
+            600
+          ],
+          "trophies": [
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "difficulty": {
+            "id": "Rookie",
+            "name": "Rookie",
+            "description": "Patient lines and forward weapons - no rival mines",
+            "rewardScale": 1
+          },
+          "unlocks": [
+            {
+              "kind": "car",
+              "id": "Needle",
+              "name": "Needle",
+              "afterRounds": 0,
+              "unlocked": true
+            },
+            {
+              "kind": "car",
+              "id": "Line",
+              "name": "Line",
+              "afterRounds": 0,
+              "unlocked": true
+            },
+            {
+              "kind": "car",
+              "id": "Bastion",
+              "name": "Bastion",
+              "afterRounds": 7,
+              "unlocked": false
+            },
+            {
+              "kind": "car",
+              "id": "Comet",
+              "name": "Comet",
+              "afterRounds": 14,
+              "unlocked": false
+            },
+            {
+              "kind": "car",
+              "id": "Trail",
+              "name": "Trail",
+              "afterRounds": 7,
+              "unlocked": false
+            },
+            {
+              "kind": "car",
+              "id": "Flint",
+              "name": "Flint",
+              "afterRounds": 14,
+              "unlocked": false
+            },
+            {
+              "kind": "car",
+              "id": "Quill",
+              "name": "Quill",
+              "afterRounds": 21,
+              "unlocked": false
+            },
+            {
+              "kind": "car",
+              "id": "Vandal",
+              "name": "Vandal",
+              "afterRounds": 21,
+              "unlocked": false
+            },
+            {
+              "kind": "car",
+              "id": "Kestrel",
+              "name": "Kestrel",
+              "afterRounds": 28,
+              "unlocked": false
+            },
+            {
+              "kind": "car",
+              "id": "Bulwark",
+              "name": "Bulwark",
+              "afterRounds": 28,
+              "unlocked": false
+            },
+            {
+              "kind": "track",
+              "id": "foundry",
+              "name": "Foundry Ring",
+              "afterRounds": 0,
+              "unlocked": true
+            },
+            {
+              "kind": "track",
+              "id": "switchback",
+              "name": "Switchback",
+              "afterRounds": 4,
+              "unlocked": false
+            },
+            {
+              "kind": "track",
+              "id": "redline",
+              "name": "Redline",
+              "afterRounds": 12,
+              "unlocked": false
+            },
+            {
+              "kind": "track",
+              "id": "runoff",
+              "name": "Runoff",
+              "afterRounds": 24,
+              "unlocked": false
+            },
+            {
+              "kind": "track",
+              "id": "crucible",
+              "name": "Crucible",
+              "afterRounds": 26,
+              "unlocked": false
+            },
+            {
+              "kind": "track",
+              "id": "slagway",
+              "name": "Slagway",
+              "afterRounds": 1,
+              "unlocked": false
+            },
+            {
+              "kind": "track",
+              "id": "railcut",
+              "name": "Rail Cut",
+              "afterRounds": 7,
+              "unlocked": false
+            },
+            {
+              "kind": "track",
+              "id": "furnace",
+              "name": "Furnace Mile",
+              "afterRounds": 28,
+              "unlocked": false
+            },
+            {
+              "kind": "track",
+              "id": "crown",
+              "name": "Crown Speedway",
+              "afterRounds": 29,
+              "unlocked": false
+            },
+            {
+              "kind": "track",
+              "id": "scree",
+              "name": "Scree Run",
+              "afterRounds": 2,
+              "unlocked": false
+            },
+            {
+              "kind": "track",
+              "id": "ballast",
+              "name": "Ballast Bend",
+              "afterRounds": 8,
+              "unlocked": false
+            },
+            {
+              "kind": "track",
+              "id": "cutface",
+              "name": "Cut Face",
+              "afterRounds": 16,
+              "unlocked": false
+            },
+            {
+              "kind": "track",
+              "id": "haulroad",
+              "name": "Haul Road",
+              "afterRounds": 31,
+              "unlocked": false
+            },
+            {
+              "kind": "track",
+              "id": "saltline",
+              "name": "Salt Line",
+              "afterRounds": 14,
+              "unlocked": false
+            },
+            {
+              "kind": "track",
+              "id": "dustwake",
+              "name": "Dust Wake",
+              "afterRounds": 15,
+              "unlocked": false
+            },
+            {
+              "kind": "track",
+              "id": "mirage",
+              "name": "Mirage Loop",
+              "afterRounds": 17,
+              "unlocked": false
+            },
+            {
+              "kind": "track",
+              "id": "sunspike",
+              "name": "Sunspike",
+              "afterRounds": 32,
+              "unlocked": false
+            },
+            {
+              "kind": "track",
+              "id": "sluice",
+              "name": "Sluice Gate",
+              "afterRounds": 3,
+              "unlocked": false
+            },
+            {
+              "kind": "track",
+              "id": "reedcut",
+              "name": "Reed Cut",
+              "afterRounds": 9,
+              "unlocked": false
+            },
+            {
+              "kind": "track",
+              "id": "spillway",
+              "name": "Spillway",
+              "afterRounds": 25,
+              "unlocked": false
+            },
+            {
+              "kind": "track",
+              "id": "lowwater",
+              "name": "Low Water",
+              "afterRounds": 30,
+              "unlocked": false
+            },
+            {
+              "kind": "track",
+              "id": "ridge",
+              "name": "Ridge Wire",
+              "afterRounds": 10,
+              "unlocked": false
+            },
+            {
+              "kind": "track",
+              "id": "frostline",
+              "name": "Frost Line",
+              "afterRounds": 21,
+              "unlocked": false
+            },
+            {
+              "kind": "track",
+              "id": "highpass",
+              "name": "High Pass",
+              "afterRounds": 22,
+              "unlocked": false
+            },
+            {
+              "kind": "track",
+              "id": "summit",
+              "name": "Summit Return",
+              "afterRounds": 23,
+              "unlocked": false
+            }
+          ],
+          "partUnlocks": [
+            {
+              "name": "Engine 2",
+              "afterRounds": 4,
+              "unlocked": false
+            },
+            {
+              "name": "Engine 3",
+              "afterRounds": 8,
+              "unlocked": false
+            },
+            {
+              "name": "Tires 2",
+              "afterRounds": 4,
+              "unlocked": false
+            },
+            {
+              "name": "Tires 3",
+              "afterRounds": 8,
+              "unlocked": false
+            },
+            {
+              "name": "Brakes 2",
+              "afterRounds": 4,
+              "unlocked": false
+            },
+            {
+              "name": "Brakes 3",
+              "afterRounds": 8,
+              "unlocked": false
+            },
+            {
+              "name": "Armor 2",
+              "afterRounds": 4,
+              "unlocked": false
+            },
+            {
+              "name": "Armor 3",
+              "afterRounds": 8,
+              "unlocked": false
+            },
+            {
+              "name": "Suspension 2",
+              "afterRounds": 4,
+              "unlocked": false
+            },
+            {
+              "name": "Suspension 3",
+              "afterRounds": 8,
+              "unlocked": false
+            },
+            {
+              "name": "Weapon mounts 2",
+              "afterRounds": 5,
+              "unlocked": false
+            }
+          ],
+          "message": "Player 1 hosts. Player 2 is a guest."
+        },
+        "garage": {
+          "profile": "couch-1",
+          "credits": 0,
+          "car": {
+            "id": "Line",
+            "role": "Durable road coupe",
+            "tier": "rookie",
+            "priceCredits": 346,
+            "ammoScale": 1,
+            "powerRating": 329.65746231400004,
+            "weakStats": [
+              "acceleration",
+              "handling",
+              "braking"
+            ],
+            "stats": {
+              "speed": 6,
+              "acceleration": 4,
+              "grip": 4,
+              "armor": 4,
+              "mass": 4,
+              "handling": 4,
+              "slots": 2,
+              "braking": 4
+            }
+          },
+          "races": 0,
+          "wins": 0,
+          "offers": [
+            {
+              "id": "engine",
+              "name": "Engine",
+              "description": "More straight-line speed and launch acceleration",
+              "tier": 0,
+              "nextTier": 1,
+              "maxTier": 3,
+              "price": 190,
+              "available": false,
+              "reason": "Earn more credits",
+              "before": [
+                6,
+                4,
+                4,
+                4,
+                4,
+                4,
+                2,
+                4
+              ],
+              "after": [
+                7,
+                5,
+                4,
+                4,
+                4,
+                4,
+                2,
+                4
+              ]
+            },
+            {
+              "id": "tires",
+              "name": "Tires",
+              "description": "More tire force and lateral grip",
+              "tier": 0,
+              "nextTier": 1,
+              "maxTier": 3,
+              "price": 160,
+              "available": false,
+              "reason": "Earn more credits",
+              "before": [
+                6,
+                4,
+                4,
+                4,
+                4,
+                4,
+                2,
+                4
+              ],
+              "after": [
+                6,
+                4,
+                5,
+                4,
+                4,
+                4,
+                2,
+                4
+              ]
+            },
+            {
+              "id": "brakes",
+              "name": "Brakes",
+              "description": "Shorter stopping distance without changing steering",
+              "tier": 0,
+              "nextTier": 1,
+              "maxTier": 3,
+              "price": 120,
+              "available": false,
+              "reason": "Earn more credits",
+              "before": [
+                6,
+                4,
+                4,
+                4,
+                4,
+                4,
+                2,
+                4
+              ],
+              "after": [
+                6,
+                4,
+                4,
+                4,
+                4,
+                4,
+                2,
+                5
+              ]
+            },
+            {
+              "id": "armor",
+              "name": "Armor",
+              "description": "More protection and mass at the cost of handling",
+              "tier": 0,
+              "nextTier": 1,
+              "maxTier": 3,
+              "price": 180,
+              "available": false,
+              "reason": "Earn more credits",
+              "before": [
+                6,
+                4,
+                4,
+                4,
+                4,
+                4,
+                2,
+                4
+              ],
+              "after": [
+                6,
+                4,
+                4,
+                6,
+                5,
+                3,
+                2,
+                4
+              ]
+            },
+            {
+              "id": "suspension",
+              "name": "Suspension",
+              "description": "More corner grip and faster steering response",
+              "tier": 0,
+              "nextTier": 1,
+              "maxTier": 3,
+              "price": 170,
+              "available": false,
+              "reason": "Earn more credits",
+              "before": [
+                6,
+                4,
+                4,
+                4,
+                4,
+                4,
+                2,
+                4
+              ],
+              "after": [
+                6,
+                4,
+                5,
+                4,
+                4,
+                5,
+                2,
+                4
+              ]
+            },
+            {
+              "id": "mounts",
+              "name": "Weapon mounts",
+              "description": "Unlock Hammer or carry more heavy ammunition",
+              "tier": 0,
+              "nextTier": 1,
+              "maxTier": 2,
+              "price": 240,
+              "available": false,
+              "reason": "Earn more credits",
+              "before": [
+                6,
+                4,
+                4,
+                4,
+                4,
+                4,
+                2,
+                4
+              ],
+              "after": [
+                6,
+                4,
+                4,
+                4,
+                4,
+                4,
+                3,
+                4
+              ]
+            }
+          ],
+          "market": {
+            "revision": 0,
+            "loanPrincipal": 300,
+            "loanTotal": 330,
+            "repairStep": 20,
+            "debt": 120,
+            "debtPaid": 0,
+            "bonus": 0,
+            "tradeValue": 190,
+            "condition": 100,
+            "manualService": false,
+            "utilitySlots": 1,
+            "cars": [
+              {
+                "id": "Needle",
+                "owned": false,
+                "price": 367,
+                "unlocked": true,
+                "powerRating": 317.896209861
+              },
+              {
+                "id": "Line",
+                "owned": true,
+                "price": 346,
+                "unlocked": true,
+                "powerRating": 329.65746231400004
+              },
+              {
+                "id": "Bastion",
+                "owned": false,
+                "price": 1119,
+                "unlocked": false,
+                "powerRating": 451.659209473
+              },
+              {
+                "id": "Comet",
+                "owned": false,
+                "price": 1858,
+                "unlocked": false,
+                "powerRating": 505.04504984299996
+              },
+              {
+                "id": "Trail",
+                "owned": false,
+                "price": 1112,
+                "unlocked": false,
+                "powerRating": 425.35084930599993
+              },
+              {
+                "id": "Flint",
+                "owned": false,
+                "price": 1928,
+                "unlocked": false,
+                "powerRating": 475.62495013999995
+              },
+              {
+                "id": "Quill",
+                "owned": false,
+                "price": 2866,
+                "unlocked": false,
+                "powerRating": 523.314433578
+              },
+              {
+                "id": "Vandal",
+                "owned": false,
+                "price": 2857,
+                "unlocked": false,
+                "powerRating": 549.7518748899998
+              },
+              {
+                "id": "Kestrel",
+                "owned": false,
+                "price": 4037,
+                "unlocked": false,
+                "powerRating": 577.309367368
+              },
+              {
+                "id": "Bulwark",
+                "owned": false,
+                "price": 4023,
+                "unlocked": false,
+                "powerRating": 602.9232118000001
+              }
+            ],
+            "items": [
+              {
+                "id": "spikes",
+                "name": "Contact spikes",
+                "price": 45,
+                "packed": false,
+                "description": "One race of stronger contact damage with the normal ram cooldown"
+              },
+              {
+                "id": "turbo",
+                "name": "Turbo reserve",
+                "price": 55,
+                "packed": false,
+                "description": "Four seconds of extra engine force on clear straights above launch speed"
+              },
+              {
+                "id": "fuel",
+                "name": "Hot fuel",
+                "price": 35,
+                "packed": false,
+                "description": "Thirty seconds of extra engine force without raising the speed cap"
+              },
+              {
+                "id": "sabotage",
+                "name": "Ammo switch",
+                "price": 60,
+                "packed": false,
+                "description": "Declared before the start: the first opposing driver loses a share of ammunition"
+              }
+            ],
+            "contracts": [
+              {
+                "id": "delivery",
+                "name": "Sealed gearbox",
+                "description": "Finish Foundry Ring with the sealed shipment",
+                "reward": 70,
+                "active": false
+              },
+              {
+                "id": "grudge",
+                "name": "Rook must retire",
+                "description": "Finish a race result in which Rook is wrecked",
+                "reward": 90,
+                "active": false
+              },
+              {
+                "id": "clean",
+                "name": "Untouched cargo",
+                "description": "Win a race without taking damage",
+                "reward": 65,
+                "active": false
+              }
+            ]
+          },
+          "message": "Parts stay with this car",
+          "saveStatus": "New profile",
+          "receipt": null
+        },
+        "combat": {
+          "spectating": false,
+          "armingSeconds": 0,
+          "hp": 54.07260375109802,
+          "maxHp": 100,
+          "wrecked": false,
+          "weapon": 0,
+          "weaponName": "Rivet",
+          "ammo": 180,
+          "mines": 0,
+          "heavyAmmo": 5,
+          "scatterAmmo": 8,
+          "cash": 0,
+          "sabotageTarget": -1,
+          "cooldownSeconds": 0,
+          "mineCooldownSeconds": 0.4500000000000038,
+          "damageEvents": 10,
+          "kills": 0
+        },
+        "drifting": false,
+        "loadTransfer": -0.11999973510507744,
+        "surfaceId": "Asphalt",
+        "car": {
+          "id": "Line",
+          "role": "Durable road coupe",
+          "tier": "rookie",
+          "priceCredits": 346,
+          "ammoScale": 1,
+          "powerRating": 329.65746231400004,
+          "weakStats": [
+            "acceleration",
+            "handling",
+            "braking"
+          ],
+          "stats": {
+            "speed": 6,
+            "acceleration": 4,
+            "grip": 4,
+            "armor": 4,
+            "mass": 4,
+            "handling": 4,
+            "slots": 2,
+            "braking": 4
+          }
+        },
+        "lap": 1,
+        "position": 2,
+        "speedMps": 19.993346533923436,
+        "xM": 28.48501508468399,
+        "yM": -44.16853377093469,
+        "heading": 2.7341640485643057,
+        "yaw": 0.3746900086756975,
+        "progressM": 282.16168893710653
+      }
+    ]
+  }
+}

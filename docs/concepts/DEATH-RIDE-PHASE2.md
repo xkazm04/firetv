@@ -126,7 +126,7 @@ A career ladder of many more events, named rival drivers with personalities as d
 | Integration | I1 | Atlas renderer with procedural fallback | P3, P4, C2 | wired / GL and Stick checked; car families await approval | integration-i1-20261001 | 2026-10-01 |
 | Integration | V1 | Reachable verge and complete linter mutants | I1 | verified on all ten sizes / green | integration-v1-20261001 | 2026-10-01 |
 | Integration | IP | Endurance career and legal promotion fields | V1, C4 | measured mean 5.85-6.54 h; boss/tail/first-purchase limits retained | integration-ip-20261001 | 2026-10-01 |
-| Integration | I2 | Stick texture and frame budget | I1 | not started | | |
+| Integration | I2 | Stick texture and frame budget | I1 | 15-minute load/memory/median passed; tail/transition misses retained | integration-i2-20261001 | 2026-10-01 |
 | Integration | I3 | Gate G2 report, owner session | I2, C4 | not started | | |
 
 ## g. Session log
@@ -198,3 +198,11 @@ Green `:core:test :link:test :game:test :app:assembleDebug`: **89 core / 3 link 
 Stick opening: two completed 18-lap races at **466.92 / 587.87 s**, one payout each and nested save recovery. Exact IP release finale: an isolated funded **24-lap duel, 873.38 s, second place**, correctly remains round 35; P2 spectator keeps cash/debt/item/race count. Interrupted foreground attempts stay in evidence. The IP live shot exposed an inactive-slot HUD footer overlap queued for I2. Evidence: `deathride/evidence/phase2/ip-*`, including compressed raw rows, plots, source/APK hashes and failed/successful logs.
 
 Not measured: human endurance comfort, story/tension, owner quality/feel. Late boss dips, first-purchase timing, trade/field discontinuities and retry tails remain documented. Grok spend **0**, still 130/180 with **50 left**, zero videos. No push. Next: final I2 guarded-loader/HUD checks and full Stick budget soak, then I3/G2 handoff.
+
+### I2 - 2026-10-01
+
+[Design, budgets and all retained runs](deathride/I2-stick-budget.md). Declared 32 MiB art / 4 MiB page / 52 MiB owned textures and 192 MiB PSS; loader checks PNG dimensions/residency before decode and rejects malformed region/animation metadata per entry. Cut hidden scenery grain, duplicate road passes and duplicate procedural effects; cosmetic pool 96 to 64. Corrected inactive-duel-slot footer overlap. Procedural fallback and combat cues remain.
+
+Green `:core:test :link:test :game:test :app:assembleDebug`: **89 core / 3 link / 3 renderer**. Final all-ten-car/all-25-course/story/Home-resume checks, two-entrant HUD and real-GL failure injections pass. Scanned AFTKM at 10.0.0.139; installed APK hash matches the measured release. Final **900.024 s** load completed 11 races/five themes, accepted 27,001 inputs per seat at 30.0003 Hz, with zero rejections/host stalls. PSS **107.018-115.502 MiB**, warm median change **-0.155 MiB**, linear trend **+0.04993 MiB/min**. Owned textures **37.970 MiB**. Active p50 **16.574-16.812 ms**; p95 **21.644 ms** and max **34.920 ms** still miss declared tail comparisons. Initial/preparation peak **241.275 ms**, discarded simulation **741 ms** and three initial stale consume samples per seat remain visible. Previous failed load/rejection runs remain archived. Evidence: `deathride/evidence/phase2/i2-*` and `i2/manifest.json`.
+
+No sustained median/residency failure remains; tail stalls, future approved car pages, cold/contended/other-device behavior, optical latency and owner feel remain unqualified. Grok spend **0 images / 0 videos**; none of integration's initial 50-image allocation used. Parallel art spending/cap changes are separately scoped in G2, not adopted as authorization. No push. Next: I3 source-bound owner handoff.

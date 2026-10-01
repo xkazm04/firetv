@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="dev.deathride.link.LinkTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2026-10-01T13:21:16.657Z" hostname="KAZIHO" time="4.538">
+  <properties/>
+  <testcase name="badPinMalformedInputAndLifecycleAreContained()" classname="dev.deathride.link.LinkTest" time="1.119"/>
+  <testcase name="statsWindowAndLifetimeHaveIndependentCounts()" classname="dev.deathride.link.LinkTest" time="0.001"/>
+  <testcase name="occupiedPortReportsFailureWithoutKillingTheHost()" classname="dev.deathride.link.LinkTest" time="3.416"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[SLF4J: Failed to load class "org.slf4j.impl.StaticLoggerBinder".
+SLF4J: Defaulting to no-operation (NOP) logger implementation
+SLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder for further details.
+]]></system-err>
+</testsuite>

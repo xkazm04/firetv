@@ -9,7 +9,7 @@ import com.badlogic.gdx.utils.JsonValue
 import dev.deathride.core.*
 
 /** Presentation-only assets. A broken page or entry cannot disable the procedural renderer. */
-class AtlasArt(private val root: FileHandle = Gdx.files.internal("phase2-v1")) {
+class AtlasArt(private val root: FileHandle = Gdx.files.internal("phase2-v1"),private val residentLimit: Long=TextureBudget.ART) {
     data class Region(val image: TextureRegion, val pivotX: Float, val pivotY: Float, val interior: IntArray?,val bodyBounds: IntArray?=null)
     data class Entry(val id: String, val group: String, val frames: Array<String>, val durations: IntArray,
                      val loop: Boolean, val approved: Boolean)
@@ -32,7 +32,7 @@ class AtlasArt(private val root: FileHandle = Gdx.files.internal("phase2-v1")) {
                 try {
                     val id=v.getString("asset_id");val frames=v.get("frames")?.asStringArray()?:arrayOf(id)
                     val durations=v.get("durations_ms")?.asIntArray()?:intArrayOf(1)
-                    require(frames.size==durations.size && durations.all{it>0})
+                    require(frames.isNotEmpty() && frames.size==durations.size && durations.all{it>0} && durations.sumOf{it.toLong()}<=Int.MAX_VALUE)
                     val e=Entry(id,v.getString("group"),frames,durations,v.getBoolean("loop",false),v.getBoolean("owner_approved",false))
                     entries[v.getString("logical_name")]=e;entries[id]=e
                 } catch(e: Exception){failed("catalog entry",e)}
@@ -43,19 +43,18 @@ class AtlasArt(private val root: FileHandle = Gdx.files.internal("phase2-v1")) {
             // Optional future bundle contract: approval is attached to shipped car entries, never inferred from a candidate file.
             if(entries.values.any{it.group=="cars" && it.approved})loadAtlas("cars")
             for(e in entries.values.distinctBy{it.id})if(e.group=="tile")try {
-                val t=loadTexture(e.id+".png",256);t.setWrap(Texture.TextureWrap.Repeat,Texture.TextureWrap.Repeat)
+                val t=loadTexture(e.id+".png",TextureBudget.TILE_EDGE);t.setWrap(Texture.TextureWrap.Repeat,Texture.TextureWrap.Repeat)
                 tiles[e.id]=t
             } catch(x: Exception){failed(e.id,x)}
         } catch(e: Exception){failed("catalog",e)}
         Gdx.app.log("DeathRide","art ready regions=$regionCount bytes=$textureBytes failures=$failures heading=runtime-rotation")
     }
     private fun loadTexture(file: String,limit: Int): Texture {
-        val p=Pixmap(root.child(file))
-        try {
-            require(p.width<=limit && p.height<=limit){"texture exceeds $limit page budget"}
-            val t=Texture(root.child(file));t.setFilter(Texture.TextureFilter.Linear,Texture.TextureFilter.Linear)
-            textureBytes+=p.width.toLong()*p.height*4;return t
-        } finally { p.dispose() }
+        val source=root.child(file)
+        val bytes=source.read().use{TextureBudget.pngBytes(it,limit)}
+        require(textureBytes+bytes<=minOf(TextureBudget.ART,residentLimit)){"resident texture budget"}
+        val t=Texture(source);t.setFilter(Texture.TextureFilter.Linear,Texture.TextureFilter.Linear)
+        textureBytes+=bytes;return t
     }
     private fun loadAtlas(group: String) {
         val loaded=ArrayList<Texture>()
@@ -64,8 +63,8 @@ class AtlasArt(private val root: FileHandle = Gdx.files.internal("phase2-v1")) {
             val data=TextureAtlas.TextureAtlasData(root.child("$group.atlas"),root,false)
             require(data.pages.size<=if(group=="cars")2 else 1){"atlas page budget"}
             for(page in data.pages) {
-                require(page.width<=1024 && page.height<=1024 && !page.useMipMaps)
-                val t=loadTexture(page.textureFile.name(),1024);loaded.add(t);bytes+=t.width.toLong()*t.height*4;page.texture=t
+                require(page.width<=TextureBudget.ART_PAGE_EDGE && page.height<=TextureBudget.ART_PAGE_EDGE && !page.useMipMaps)
+                val t=loadTexture(page.textureFile.name(),TextureBudget.ART_PAGE_EDGE);loaded.add(t);bytes+=t.width.toLong()*t.height*4;page.texture=t
             }
             val atlas=TextureAtlas(data)
             val metadata=JsonReader().parse(root.child("$group.json"))
@@ -76,9 +75,12 @@ class AtlasArt(private val root: FileHandle = Gdx.files.internal("phase2-v1")) {
                 require(!r.rotate && r.regionWidth==v.getInt("width") && r.regionHeight==v.getInt("height"))
                 require(p[0] in 0f..r.regionWidth.toFloat() && p[1] in 0f..r.regionHeight.toFloat())
                 val interior=v.get("hud_interior_px")?.takeUnless{it.isNull}?.asIntArray()
+                fun validBounds(b: IntArray)=b.size==4 && b[0]>=0 && b[1]>=0 && b[2]>b[0] && b[3]>b[1] && b[2]<=r.regionWidth && b[3]<=r.regionHeight
+                if(interior!=null)require(validBounds(interior)){"invalid HUD interior"}
                 // Metadata uses top-left image coordinates; libGDX world/UI uses bottom-left.
                 val body=v.get("body_bounds_px")?.takeUnless{it.isNull}?.asIntArray()
-                if(group=="cars")require(body!=null && body.size==4 && body[2]>body[0] && body[3]>body[1]){"cars require measured body_bounds_px"}
+                if(body!=null)require(validBounds(body)){"invalid body bounds"}
+                if(group=="cars")require(body!=null){"cars require measured body_bounds_px"}
                 accepted[id]=Region(r,p[0],r.regionHeight-p[1],interior,body)
             } catch(e: Exception){failed("$group region",e)}
             atlases.add(atlas);regions.putAll(accepted)
@@ -115,7 +117,7 @@ class AtlasArt(private val root: FileHandle = Gdx.files.internal("phase2-v1")) {
     fun selectBackdrop(key: String?) {
         val next=key?:"";if(next==backdropKey)return
         backdrop?.let{textureBytes-=it.width.toLong()*it.height*4;it.dispose()};backdrop=null;backdropKey=next
-        if(next.isNotEmpty())try { val id=entries[next]?.id?:return;backdrop=loadTexture("$id.png",1024) } catch(e: Exception){failed(next,e)}
+        if(next.isNotEmpty())try { val id=entries[next]?.id?:return;backdrop=loadTexture("$id.png",TextureBudget.ART_PAGE_EDGE) } catch(e: Exception){failed(next,e)}
     }
     fun drawBackdrop(batch: Batch,x: Float,y: Float,width: Float,height: Float) { backdrop?.let{batch.setColor(.24f,.24f,.24f,1f);batch.draw(it,x,y,width,height);batch.color=Color.WHITE} }
     fun dispose() { atlases.forEach{it.dispose()};tiles.values.forEach{it.dispose()};backdrop?.dispose() }
