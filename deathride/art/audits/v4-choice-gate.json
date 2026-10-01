@@ -1,0 +1,272 @@
+{
+  "at": "2026-10-01T16:28:58.559893+00:00",
+  "status": "waiting-not-produced",
+  "owner_choice_exists": false,
+  "scope": "Read-only gate checks for six world families across five style cards; no generation, reservation, selection or approval writes.",
+  "surface_stack": "ribbon-control is an audit input and owner option, not an owner selection.",
+  "jobs": [
+    {
+      "id": "v4-audit-rust-ink-ground",
+      "wave": "V4",
+      "kind": "ground",
+      "style_file": "style-rust-ink.json",
+      "surface_stack": "ribbon-control",
+      "result": "OWNER_CHOICE_REQUIRED: OWNER-CHOICE.md absent"
+    },
+    {
+      "id": "v4-audit-rust-ink-barrier",
+      "wave": "V4",
+      "kind": "barrier",
+      "style_file": "style-rust-ink.json",
+      "surface_stack": "ribbon-control",
+      "result": "OWNER_CHOICE_REQUIRED: OWNER-CHOICE.md absent"
+    },
+    {
+      "id": "v4-audit-rust-ink-prop",
+      "wave": "V4",
+      "kind": "prop",
+      "style_file": "style-rust-ink.json",
+      "surface_stack": "ribbon-control",
+      "result": "OWNER_CHOICE_REQUIRED: OWNER-CHOICE.md absent"
+    },
+    {
+      "id": "v4-audit-rust-ink-pickup",
+      "wave": "V4",
+      "kind": "pickup",
+      "style_file": "style-rust-ink.json",
+      "surface_stack": "ribbon-control",
+      "result": "OWNER_CHOICE_REQUIRED: OWNER-CHOICE.md absent"
+    },
+    {
+      "id": "v4-audit-rust-ink-decal",
+      "wave": "V4",
+      "kind": "decal",
+      "style_file": "style-rust-ink.json",
+      "surface_stack": "ribbon-control",
+      "result": "OWNER_CHOICE_REQUIRED: OWNER-CHOICE.md absent"
+    },
+    {
+      "id": "v4-audit-rust-ink-effect",
+      "wave": "V4",
+      "kind": "effect",
+      "style_file": "style-rust-ink.json",
+      "surface_stack": "ribbon-control",
+      "result": "OWNER_CHOICE_REQUIRED: OWNER-CHOICE.md absent"
+    },
+    {
+      "id": "v4-audit-bleached-poster-ground",
+      "wave": "V4",
+      "kind": "ground",
+      "style_file": "style-bleached-poster.json",
+      "surface_stack": "ribbon-control",
+      "result": "OWNER_CHOICE_REQUIRED: OWNER-CHOICE.md absent"
+    },
+    {
+      "id": "v4-audit-bleached-poster-barrier",
+      "wave": "V4",
+      "kind": "barrier",
+      "style_file": "style-bleached-poster.json",
+      "surface_stack": "ribbon-control",
+      "result": "OWNER_CHOICE_REQUIRED: OWNER-CHOICE.md absent"
+    },
+    {
+      "id": "v4-audit-bleached-poster-prop",
+      "wave": "V4",
+      "kind": "prop",
+      "style_file": "style-bleached-poster.json",
+      "surface_stack": "ribbon-control",
+      "result": "OWNER_CHOICE_REQUIRED: OWNER-CHOICE.md absent"
+    },
+    {
+      "id": "v4-audit-bleached-poster-pickup",
+      "wave": "V4",
+      "kind": "pickup",
+      "style_file": "style-bleached-poster.json",
+      "surface_stack": "ribbon-control",
+      "result": "OWNER_CHOICE_REQUIRED: OWNER-CHOICE.md absent"
+    },
+    {
+      "id": "v4-audit-bleached-poster-decal",
+      "wave": "V4",
+      "kind": "decal",
+      "style_file": "style-bleached-poster.json",
+      "surface_stack": "ribbon-control",
+      "result": "OWNER_CHOICE_REQUIRED: OWNER-CHOICE.md absent"
+    },
+    {
+      "id": "v4-audit-bleached-poster-effect",
+      "wave": "V4",
+      "kind": "effect",
+      "style_file": "style-bleached-poster.json",
+      "surface_stack": "ribbon-control",
+      "result": "OWNER_CHOICE_REQUIRED: OWNER-CHOICE.md absent"
+    },
+    {
+      "id": "v4-audit-hot-ink-ground",
+      "wave": "V4",
+      "kind": "ground",
+      "style_file": "style-hot-ink.json",
+      "surface_stack": "ribbon-control",
+      "result": "OWNER_CHOICE_REQUIRED: OWNER-CHOICE.md absent"
+    },
+    {
+      "id": "v4-audit-hot-ink-barrier",
+      "wave": "V4",
+      "kind": "barrier",
+      "style_file": "style-hot-ink.json",
+      "surface_stack": "ribbon-control",
+      "result": "OWNER_CHOICE_REQUIRED: OWNER-CHOICE.md absent"
+    },
+    {
+      "id": "v4-audit-hot-ink-prop",
+      "wave": "V4",
+      "kind": "prop",
+      "style_file": "style-hot-ink.json",
+      "surface_stack": "ribbon-control",
+      "result": "OWNER_CHOICE_REQUIRED: OWNER-CHOICE.md absent"
+    },
+    {
+      "id": "v4-audit-hot-ink-pickup",
+      "wave": "V4",
+      "kind": "pickup",
+      "style_file": "style-hot-ink.json",
+      "surface_stack": "ribbon-control",
+      "result": "OWNER_CHOICE_REQUIRED: OWNER-CHOICE.md absent"
+    },
+    {
+      "id": "v4-audit-hot-ink-decal",
+      "wave": "V4",
+      "kind": "decal",
+      "style_file": "style-hot-ink.json",
+      "surface_stack": "ribbon-control",
+      "result": "OWNER_CHOICE_REQUIRED: OWNER-CHOICE.md absent"
+    },
+    {
+      "id": "v4-audit-hot-ink-effect",
+      "wave": "V4",
+      "kind": "effect",
+      "style_file": "style-hot-ink.json",
+      "surface_stack": "ribbon-control",
+      "result": "OWNER_CHOICE_REQUIRED: OWNER-CHOICE.md absent"
+    },
+    {
+      "id": "v4-audit-scrap-collage-ground",
+      "wave": "V4",
+      "kind": "ground",
+      "style_file": "style-scrap-collage.json",
+      "surface_stack": "ribbon-control",
+      "result": "OWNER_CHOICE_REQUIRED: OWNER-CHOICE.md absent"
+    },
+    {
+      "id": "v4-audit-scrap-collage-barrier",
+      "wave": "V4",
+      "kind": "barrier",
+      "style_file": "style-scrap-collage.json",
+      "surface_stack": "ribbon-control",
+      "result": "OWNER_CHOICE_REQUIRED: OWNER-CHOICE.md absent"
+    },
+    {
+      "id": "v4-audit-scrap-collage-prop",
+      "wave": "V4",
+      "kind": "prop",
+      "style_file": "style-scrap-collage.json",
+      "surface_stack": "ribbon-control",
+      "result": "OWNER_CHOICE_REQUIRED: OWNER-CHOICE.md absent"
+    },
+    {
+      "id": "v4-audit-scrap-collage-pickup",
+      "wave": "V4",
+      "kind": "pickup",
+      "style_file": "style-scrap-collage.json",
+      "surface_stack": "ribbon-control",
+      "result": "OWNER_CHOICE_REQUIRED: OWNER-CHOICE.md absent"
+    },
+    {
+      "id": "v4-audit-scrap-collage-decal",
+      "wave": "V4",
+      "kind": "decal",
+      "style_file": "style-scrap-collage.json",
+      "surface_stack": "ribbon-control",
+      "result": "OWNER_CHOICE_REQUIRED: OWNER-CHOICE.md absent"
+    },
+    {
+      "id": "v4-audit-scrap-collage-effect",
+      "wave": "V4",
+      "kind": "effect",
+      "style_file": "style-scrap-collage.json",
+      "surface_stack": "ribbon-control",
+      "result": "OWNER_CHOICE_REQUIRED: OWNER-CHOICE.md absent"
+    },
+    {
+      "id": "v4-audit-soot-pulp-ground",
+      "wave": "V4",
+      "kind": "ground",
+      "style_file": "style-soot-pulp.json",
+      "surface_stack": "ribbon-control",
+      "result": "OWNER_CHOICE_REQUIRED: OWNER-CHOICE.md absent"
+    },
+    {
+      "id": "v4-audit-soot-pulp-barrier",
+      "wave": "V4",
+      "kind": "barrier",
+      "style_file": "style-soot-pulp.json",
+      "surface_stack": "ribbon-control",
+      "result": "OWNER_CHOICE_REQUIRED: OWNER-CHOICE.md absent"
+    },
+    {
+      "id": "v4-audit-soot-pulp-prop",
+      "wave": "V4",
+      "kind": "prop",
+      "style_file": "style-soot-pulp.json",
+      "surface_stack": "ribbon-control",
+      "result": "OWNER_CHOICE_REQUIRED: OWNER-CHOICE.md absent"
+    },
+    {
+      "id": "v4-audit-soot-pulp-pickup",
+      "wave": "V4",
+      "kind": "pickup",
+      "style_file": "style-soot-pulp.json",
+      "surface_stack": "ribbon-control",
+      "result": "OWNER_CHOICE_REQUIRED: OWNER-CHOICE.md absent"
+    },
+    {
+      "id": "v4-audit-soot-pulp-decal",
+      "wave": "V4",
+      "kind": "decal",
+      "style_file": "style-soot-pulp.json",
+      "surface_stack": "ribbon-control",
+      "result": "OWNER_CHOICE_REQUIRED: OWNER-CHOICE.md absent"
+    },
+    {
+      "id": "v4-audit-soot-pulp-effect",
+      "wave": "V4",
+      "kind": "effect",
+      "style_file": "style-soot-pulp.json",
+      "surface_stack": "ribbon-control",
+      "result": "OWNER_CHOICE_REQUIRED: OWNER-CHOICE.md absent"
+    }
+  ],
+  "before": {
+    "usage.json": "cd272e61fc4807b44bb1a24cf7caca98fcf926036afd618ec9f7d18f8b630293",
+    "history.jsonl": "bd42855676a5447007ce7011f8842c91b0cdfe5aa1cda7167b8aee2a55305f3b",
+    "selections.json": "1b85dc0073bd9adb7d49ce8b1a50ca7c472f3aa486296a6f1dae8770eb4f8231",
+    "reference-approvals.json": "4a0a0b9dd820c8ad8d5487e9c69d5ae99757ede707d6371b6f454ec75fb9240a",
+    "production-manifest.json": "e47a14a0eed43afe96c289aa5a1ebb5edcc1a03bd638914c94462e015892dc16"
+  },
+  "after": {
+    "usage.json": "cd272e61fc4807b44bb1a24cf7caca98fcf926036afd618ec9f7d18f8b630293",
+    "history.jsonl": "bd42855676a5447007ce7011f8842c91b0cdfe5aa1cda7167b8aee2a55305f3b",
+    "selections.json": "1b85dc0073bd9adb7d49ce8b1a50ca7c472f3aa486296a6f1dae8770eb4f8231",
+    "reference-approvals.json": "4a0a0b9dd820c8ad8d5487e9c69d5ae99757ede707d6371b6f454ec75fb9240a",
+    "production-manifest.json": "e47a14a0eed43afe96c289aa5a1ebb5edcc1a03bd638914c94462e015892dc16"
+  },
+  "unchanged": true,
+  "spend": {
+    "week": "2026-W40",
+    "images_reserved": 198,
+    "remaining": 152,
+    "videos": 0,
+    "stop": null
+  },
+  "wave_images": 0
+}
