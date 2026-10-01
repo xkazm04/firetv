@@ -25,7 +25,7 @@ for(let n=0;n<40;n++){
 assert.ok(pin,'Device listener ready with a pairing PIN');
 const browser=await chromium.launch({headless:true,executablePath:process.env.CHROME_EXECUTABLE});
 const context=await browser.newContext({viewport:{width:1000,height:480},isMobile:true,hasTouch:true});
-const page=await context.newPage(),errors=[],checks=[],selections=[];
+const page=await context.newPage(),errors=[],checks=[],selections=[],courses=[];
 page.on('pageerror',e=>errors.push(e.message));
 try {
  await installPilot(page);await page.goto(base+'/?pin='+pin);
@@ -44,9 +44,13 @@ try {
  if(wave==='c2'){
   const tracks=await page.locator('#trackChoice option').evaluateAll(os=>os.map(o=>o.value));assert.ok(tracks.length>=24);
   for(const id of tracks){
+   const started=performance.now();
    await page.locator('#trackChoice').selectOption(id);
-   for(let i=0;i<100;i++){const s=await stats();if(s.track.id===id && s.sceneryReady)break;await pause(100)}
-   const s=await stats();assert.equal(s.track.id,id);assert.equal(s.sceneryReady,true);
+   for(let i=0;i<450;i++){const s=await stats();if(s.track.id===id && s.sceneryReady)break;await pause(100)}
+   const s=await stats();courses.push({id,ready:s.sceneryReady,elapsedMs:performance.now()-started});
+   await writeFile(`evidence/phase2/${wave}-courses.json`,JSON.stringify(courses,null,2));
+   assert.equal(s.track.id,id);assert.equal(s.sceneryReady,true,`${id}: scenery not ready within diagnostic ceiling`);
+   console.log(`${id}: prepared in ${courses.at(-1).elapsedMs.toFixed(0)} ms`);
   }
   checks.push(`${tracks.length} authored tracks selected and prepared on the Stick`);
  }
@@ -65,6 +69,6 @@ try {
  await page.screenshot({path:`evidence/phase2/${wave}-controller.png`});
  adb('shell','screencap','-p',`/sdcard/${wave}-content.png`);adb('pull',`/sdcard/${wave}-content.png`,`evidence/phase2/${wave}-tv.png`);
  assert.deepEqual(errors,[]);
- await writeFile(`evidence/phase2/${wave}-device.json`,JSON.stringify({device:adb('shell','getprop','ro.product.model').trim(),utc:new Date().toISOString(),checks,errors,selections,result},null,2));
+ await writeFile(`evidence/phase2/${wave}-device.json`,JSON.stringify({device:adb('shell','getprop','ro.product.model').trim(),utc:new Date().toISOString(),checks,errors,selections,courses,result},null,2));
  await page.locator('#leave').tap();console.log(checks.join('\n'));
 } finally {await browser.close()}

@@ -306,7 +306,7 @@ class World(val seed: Int=17, val spec: CarSpec=CarSpec(), val track: Track=Trac
         val intendedLane=if(c.aiMode==AiMode.OVERTAKE) if(c.aiLane<0) passLane else -passLane else c.aiLane+(c.aiStyle?.laneBiasM?:0.0)
         val noseLook=(c.spec.circleOffsetM+c.spec.circleRadiusM)*2*TrackRules["aiLookCarLengths"]
         val look=if(c.aiMode==AiMode.RECOVER) noseLook else noseLook+c.speedMps*skill.lookAheadSeconds
-        val lane=combat.avoidMine(c,s,combat.seekRepair(c,intendedLane+(track.course?.laneAt(s+look)?:0.0))).coerceIn(-track.widthAt(s+look)*.55,track.widthAt(s+look)*.55)
+        val lane=combat.avoidMine(c,s,combat.seekRepair(c,intendedLane+(track.course?.laneAt(s+look,c.carClass?.stat("grip")?:0)?:0.0))).coerceIn(-track.widthAt(s+look)*.55,track.widthAt(s+look)*.55)
         track.sample(s+look, lane+sin(steps*.007+c.id+c.aiNoisePhase)*skill.laneErrorM,point)
         val desired=atan2(point.y-c.y,point.x-c.x)
         val slip=if(c.speedMps>2.0) wrapAngle(atan2(c.vy,c.vx)-c.heading) else 0.0

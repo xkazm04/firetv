@@ -26,7 +26,7 @@ data class TrackNode(val x: Double,val y: Double,val width: Double,val surface: 
 
 /** Immutable load-time spline bake. No list traversal, temporary points or allocation in sample/project. */
 class Course(val id: String,val name: String,val lesson: String,val startFraction: Double,val theme: String,
-             val nodes: List<TrackNode>,val spots: List<TrackSpot>) {
+             val nodes: List<TrackNode>,val spots: List<TrackSpot>,val features: List<TrackFeature> = TrackContent.features[id]?:emptyList()) {
     private val oil=Surfaces.practice.first { it.id=="Oil" }
     private val subdivisions=TrackRules["samplesPerSpan"].toInt()
     val count=(nodes.size-1)*subdivisions
@@ -40,7 +40,8 @@ class Course(val id: String,val name: String,val lesson: String,val startFractio
     val grid=spots.filter { it.kind=="grid" }
     private val cell=TrackRules["projectionCellM"]
     private val columns: Int; private val rows: Int; private val candidates: Array<IntArray>
-    val json="{\"id\":\"$id\",\"name\":\"$name\",\"lesson\":\"$lesson\"}"
+    val pool=TrackContent.pools[id]?:TrackPool(0,4)
+    val json get()="{\"id\":\"$id\",\"name\":\"$name\",\"lesson\":\"$lesson\",\"theme\":\"$theme\",\"competitiveCars\":[${pool.eligible().joinToString(","){"\"${CarCatalog.all[it].id}\""}}],\"features\":[${features.joinToString(","){"{\"kind\":\"${it.kind}\",\"start\":${it.start},\"end\":${it.end},\"laneM\":${it.laneM},\"landmark\":\"${it.landmark}\"}"}}]}"
     init {
         require(nodes.size>=5 && nodes.first()==nodes.last()) { "$id: centerline must explicitly close" }
         val n=nodes.size-1
@@ -82,9 +83,16 @@ class Course(val id: String,val name: String,val lesson: String,val startFractio
         return low
     }
     fun widthAt(s: Double): Double { val i=index(s);val t=(phase(s)-arc[i])/(arc[i+1]-arc[i]);return width[i]+(width[i+1]-width[i])*t }
-    fun laneAt(s: Double)=lane[index(s)]
+    fun laneAt(s: Double,grip: Int=0): Double {
+        if(grip>=TrackContent["shortcutGripStat"]) {
+            val fraction=phase(s)/lengthM
+            for(i in features.indices) { val f=features[i];if(f.kind=="shortcut" && f.contains(fraction))return f.laneM }
+        }
+        return lane[index(s)]
+    }
     fun surfaceAt(s: Double,lateral: Double): Surface {
         val f=phase(s)/lengthM
+        for(i in features.indices) { val feature=features[i];if(feature.kind=="shortcut" && feature.contains(f) && abs(lateral-feature.laneM)<feature.widthM*.5)return feature.surface }
         for(i in spots.indices) { val spot=spots[i];if(spot.kind=="hazard") {
             val sf=phase((startFraction+spot.fraction)*lengthM)/lengthM
             val gap=abs(f-sf)*lengthM
@@ -118,7 +126,7 @@ object Courses {
 
 object TrackLinter {
     fun errors(c: Course): List<String> {
-        val errors=ArrayList<String>();val widest=CarShapes.all.maxOf { it.widthM };val longest=CarShapes.all.maxOf { it.lengthM }
+        val errors=ArrayList<String>();errors.addAll(TrackContent.errors(c));val widest=CarShapes.all.maxOf { it.widthM };val longest=CarShapes.all.maxOf { it.lengthM }
         if(c.width.min()*2<widest*TrackRules["minWidthCarWidths"])errors.add("${c.id}: road narrower than minimum car widths")
         if(c.curvature.max()*longest*TrackRules["minRadiusCarLengths"]>1)errors.add("${c.id}: corner radius too tight")
         if(c.checkpoints.size<4 || c.checkpoints.first()!=0.0 || c.checkpoints.toList().zipWithNext().any { it.first>=it.second } || c.checkpoints.last()>=1)errors.add("${c.id}: checkpoint order")
@@ -162,4 +170,3 @@ object TrackLinter {
         return min(min(point(ax,ay,cx,cy,cdx,cdy),point(bx,by,cx,cy,cdx,cdy)),min(point(cx,cy,ax,ay,abx,aby),point(dx,dy,ax,ay,abx,aby)))
     }
 }
-

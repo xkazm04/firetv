@@ -26,8 +26,8 @@ class TracksTest {
         assertTrue(TrackLinter.errors(Course(c.id,c.name,c.lesson,c.startFraction,c.theme,c.nodes,duplicate)).any { it.contains("grid cars overlap") })
     }
     @Test fun allAuthoredContentPassesGeometryAndPacingLint() {
-        assertEquals(5,Courses.all.size)
-        for(c in Courses.all)assertEquals(emptyList<String>(),TrackLinter.errors(c),c.id)
+        assertTrue(Courses.all.size>=TrackContent["minimumCourses"])
+        assertEquals(emptyList<String>(),Courses.all.flatMap{TrackLinter.errors(it)})
         for(car in CarCatalog.all) { val shape=CarShapes.forId(car.id);val spec=car.spec();assertEquals(shape.widthM,spec.circleRadiusM*2);assertEquals(shape.lengthM,(spec.circleOffsetM+spec.circleRadiusM)*2) }
     }
     @Test fun linterRejectsNarrowReorderedAndCrossingCourses() {

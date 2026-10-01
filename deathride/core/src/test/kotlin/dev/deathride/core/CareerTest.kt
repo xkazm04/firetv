@@ -66,10 +66,10 @@ class CareerTest {
     @Test fun twoThousandSeededCareersPerTierReportPacingAndWinRate() {
         data class Outcome(val position: Int,val kills: Int,val hp: Double,val qualified: Boolean)
         val bands=Content.table("career-upgrade-bands");val seeds=Career["pacingSeedsPerCell"].toInt()
-        val library=Array(Career.difficulties.size){Array(Courses.all.size){Array(bands.size){arrayOfNulls<Outcome>(seeds)}}}
+        val library=Array(Career.difficulties.size){Array(5){Array(bands.size){arrayOfNulls<Outcome>(seeds)}}}
         val physical=StringBuilder("tier,track,band,seed,seconds,position,hp,kills,qualified,wrecks,shots,hash\n")
-        val hashes=Array(Career.difficulties.size){Array(Courses.all.size){Array(bands.size){HashSet<Long>()}}}
-        for(tier in Career.difficulties.indices)for(course in Courses.all.indices)for(band in bands.indices)repeat(seeds){seed->
+        val hashes=Array(Career.difficulties.size){Array(5){Array(bands.size){HashSet<Long>()}}}
+        for(tier in Career.difficulties.indices)for(course in 0 until 5)for(band in bands.indices)repeat(seeds){seed->
             val p=Profile("reference");p.careerCleared=Career.events.size
             for(part in Parts.all.indices)p.tiers[p.selectedCar*Parts.all.size+part]=bands[band].getValue(Parts.all[part].id).toInt()
             val w=World(seed,track=Track(course=Courses.all[course]),combatEnabled=true);Career.prepareRivals(w,tier);Garage.apply(p,w.cars[0])

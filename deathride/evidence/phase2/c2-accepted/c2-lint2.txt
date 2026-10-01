@@ -1,0 +1,36 @@
+> Task :core:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :core:compileKotlin UP-TO-DATE
+> Task :core:compileJava NO-SOURCE
+> Task :core:processResources
+> Task :core:classes
+> Task :core:jar
+> Task :core:compileTestKotlin UP-TO-DATE
+> Task :core:compileTestJava NO-SOURCE
+> Task :core:processTestResources NO-SOURCE
+> Task :core:testClasses UP-TO-DATE
+
+> Task :core:test FAILED
+
+TracksTest > allAuthoredContentPassesGeometryAndPacingLint() FAILED
+    org.opentest4j.AssertionFailedError at TracksTest.kt:30
+.\deathride\gradlew.bat :
+At line:2 char:42
++ ... -tracks.py; .\deathride\gradlew.bat -p deathride :core:test --tests ' ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+
+1 test completed, 1 failed
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':core:test'.
+> There were failing tests. See the report at:
+file:///C:/Users/kazda/kiro/firetv-deathride-content/deathride/core/build/reports/tests/test/index.html
+
+* Try:
+> Run with --scan to get full insights.
+
+BUILD FAILED in 2s
+5 actionable tasks: 3 executed, 2 up-to-date

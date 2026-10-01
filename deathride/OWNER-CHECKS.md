@@ -92,3 +92,9 @@ Practice exposes all ten retained class IDs. Compare Needle/Line, Trail/Bastion,
 Compare the two Club cars in a tight course and on a straight. Let a heavy car hit the light one, then return to clean air. Good: mass matters in contact and the lighter car wins through lines. Bad: an armored car is effectively immortal or a small car wins every shove. PR and the tier-relative weak-stat list are supplied by the shared core in catalog/garage JSON; warning-color presentation is for renderer integration, not claimed in this content wave.
 
 Headless fixed-step races establish numerical trade-offs only. Sofa readability, human skill advantage, physical-phone comfort, optical latency and whether the choice is enjoyable remain **not measured** until an owner session. C3 owns the early-wreck combat pass; C4 owns the replacement of the old twelve-event career.
+
+## C2 - Twenty-five circuits and risky inside lines (2026-10-01)
+
+In practice, select Slagway, Scree Run, Salt Line, Sluice Gate and Ridge Wire to sample the five themes. Try the gravel inside line on the first broad bend, then the ordinary line. Good: the shorter route asks for earlier braking and careful throttle, while the clear straight gives the faster class room to recover. Bad: the shortcut is compulsory or its surface cannot be read. Practice permits every class; competitive tier pools are core data for C4's career fields.
+
+Compare the original five circuits against their familiar versions: their stored geometry is unchanged. New palette, prop and landmark keys are an art/integration contract; no landmark artwork is claimed here. Geometry and warning-distance lints cannot establish that a person sees the choice in time. Theme distinction, landmark recognition, shortcut readability and whether the twenty added layouts feel sufficiently different are **not measured** until the owner drives them. Automated Stick selection and scenery preparation establish availability only.
