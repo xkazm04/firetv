@@ -115,7 +115,7 @@ A career ladder of many more events, named rival drivers with personalities as d
 
 | Stream | Id | Wave | Depends on | Status | Commit | Date |
 |---|---|---|---|---|---|---|
-| Art | P1 | Style bible, briefs, generation driver, budget guard | - | not started | | |
+| Art | P1 | Style bible, briefs, generation driver, budget guard | - | complete; ten raw candidates, not accepted | art-p1-20261001 | 2026-10-01 |
 | Art | P2 | Post-processing, deterministic gates, local VLM grader, contact sheets | P1 | not started | | |
 | Art | P3 | Car family: reference sheets, states, liveries, heading strategy | P2, C1 | not started | | |
 | Art | P4 | World kit: tiles, barriers, props, pickups, decals, effects, HUD, portraits | P2 | not started | | |
@@ -130,3 +130,7 @@ A career ladder of many more events, named rival drivers with personalities as d
 ## g. Session log
 
 (each run appends: wave, date, what changed, commands with results, what is `not measured`, spend of the Grok budget, next wave)
+
+### P1, 2026-10-01 (restart of interrupted art work)
+
+Design first in `deathride/P1-style-and-pipeline.md`. Preserved the inherited style, budget and eight charges; audited four interrupted jobs and issued new revision IDs. Explicit Grok session binding verifies the exact prompt and one image call, live quota observation latches stop, and resume refuses to spend on uncertain or corrupted prior outputs. `python deathride/tools/art/gen.py` now materializes all five cars and five tiles from `p1-current.csv`; a second run added zero reservations. Seven Python contract tests pass. `:core:test :link:test :app:assembleDebug`: BUILD SUCCESSFUL (47 up-to-date tasks). Car and tile raw contact sheets are in `deathride/art/contact-sheets/`. Eight new calls this wave; weekly ledger 16/180 images, 164 remaining, zero videos, no quota error. Car key colours and tile subject intrusion are visible defects for P2, not acceptance. Device and owner quality not measured. Next P2.

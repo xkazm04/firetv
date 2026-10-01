@@ -10,10 +10,28 @@ import shutil
 import subprocess
 import sys
 import time
+import uuid
 from datetime import datetime, timezone
 from common import ART, ROOT, append_json, briefs, compile_prompt, digest, file_lock, make_contact_sheet, now, read_json, sha, write_json
 
 QUOTA = re.compile(r'(?i)(rate.?limit(?:ed| exceeded| reached)|quota.{0,50}(exceed|exhaust|reach)|too many requests|\b429\b|usage limit.{0,40}(exceed|reach)|insufficient.{0,15}credits)')
+
+def session_evidence(session_id):
+    """Read only our explicit session. Never ingest a neighbouring job's output."""
+    matches = list((Path.home()/'.grok/sessions').glob('*/'+session_id+'/chat_history.jsonl'))
+    calls, results, files = [], [], []
+    for path in matches:
+        for line in path.read_text(encoding='utf-8').splitlines():
+            try: event=json.loads(line)
+            except json.JSONDecodeError: continue  # last line may still be being written
+            for call in event.get('tool_calls',[]):
+                if call.get('name') in ['image_gen','image_edit']:
+                    args=call['arguments']
+                    calls.append({'name':call['name'],'arguments':json.loads(args) if isinstance(args,str) else args})
+            if event.get('type')=='tool_result':
+                results.append(event.get('content',''))
+        files += [p for p in (path.parent/'images').glob('*') if p.suffix.lower() in ['.png','.jpg','.jpeg','.webp']]
+    return calls, results, files
 
 class Budget:
     def __init__(self, art=ART):
@@ -76,6 +94,8 @@ def generate(row, style, budget, refine=False):
             return previous
     # A failed/uncertain call is never silently rerun on resume. A new revision needs a new id.
     if old and not refine:
+        if old[-1]['status']=='generated':
+            return {**old[-1],'status':'artifact-invalid','error':'Existing image missing or hash mismatch; recover it or mint a new revision, no automatic spend.'}
         return old[-1]
     if refine and (not rejection or not old or old[-1]['status'] != 'generated'):
         raise ValueError('refinement requires a generated image and recorded content rejection; never retry transport errors')
@@ -90,10 +110,16 @@ def generate(row, style, budget, refine=False):
         ref = Path(reference)
         if not ref.is_absolute(): ref = ROOT/ref
         if not ref.is_file(): raise ValueError('reference missing before spend: '+str(ref))
+    exe = shutil.which('grok')
+    if not exe: raise RuntimeError('grok CLI unavailable before spend')
     folder = ART / 'raw' / row['id'] / f'attempt-{attempt:02}'
-    folder.mkdir(parents=True, exist_ok=False)
     sidecar = {'asset':row['id'],'origin':'grok-cli','model':'grok-4.7','seed':None,'timestamp':now(),'attempt':attempt,'prompt':prompt,'brief':row,'input_hash':signature,'status':'reserved','image':None}
-    budget.reserve(row['id'], attempt)
+    if folder.exists(): raise RuntimeError('existing attempt folder requires inspection: '+str(folder))
+    try: budget.reserve(row['id'], attempt)
+    except RuntimeError as exc:
+        return {**sidecar,'status':'spend-blocked','error':str(exc)}
+    folder.mkdir(parents=True, exist_ok=False)
+    sidecar['session_id']=str(uuid.uuid4())
     write_json(folder/'sidecar.json', sidecar)
     if reference:
         sidecar['reference_sha256'] = sha(ref)
@@ -104,53 +130,46 @@ def generate(row, style, budget, refine=False):
         instruction += 'Use this image as the identity reference/edit target: ' + str(ref.resolve()) + '\n'
     instruction += '\nIMAGE PROMPT:\n' + prompt
     (folder/'request.txt').write_text(instruction, encoding='utf-8')
-    exe = shutil.which('grok')
-    if not exe:
-        raise RuntimeError('grok CLI unavailable')
-    command = [exe,'-m','grok-4.7','--effort','low','--always-approve','--permission-mode','bypassPermissions','--no-subagents','--disable-web-search','--tools',tool,'--max-turns','2','--prompt-file',str((folder/'request.txt').resolve()),'--output-format','json']
+    command = [exe,'-m','grok-4.7','--effort','low','--always-approve','--permission-mode','bypassPermissions','--no-subagents','--disable-web-search','--tools',tool,'--max-turns','2','--session-id',sidecar['session_id'],'--prompt-file',str((folder/'request.txt').resolve()),'--output-format','streaming-json']
     started = time.monotonic()
     try:
-        result = subprocess.run(command,cwd=folder,capture_output=True,timeout=600,encoding='utf-8',errors='replace')
-        output = result.stdout + '\n' + result.stderr
-        (folder/'cli-output.txt').write_text(output,encoding='utf-8')
+        log=folder/'cli-output.txt'
+        with log.open('w',encoding='utf-8') as out:
+            process=subprocess.Popen(command,cwd=folder,stdout=out,stderr=subprocess.STDOUT)
+            while process.poll() is None:
+                output=log.read_text(encoding='utf-8',errors='replace')
+                _, results, _=session_evidence(sidecar['session_id'])
+                quota=QUOTA.search(output+'\n'+'\n'.join(map(str,results)))
+                if quota: budget.stop(row['id']+': '+quota.group(0))
+                if time.monotonic()-started>600:
+                    subprocess.run(['taskkill','/PID',str(process.pid),'/T','/F'],capture_output=True)
+                    process.wait(timeout=20)
+                    raise subprocess.TimeoutExpired(command,600)
+                time.sleep(.5)
+        output=log.read_text(encoding='utf-8',errors='replace')
+        calls, tool_results, returned_files=session_evidence(sidecar['session_id'])
+        output+='\n'+'\n'.join(map(str,tool_results))
+        sidecar['image_tool_calls']=calls
+        sidecar['prompt_verbatim_verified']=len(calls)==1 and calls[0]['arguments'].get('prompt')==prompt
+        if len(calls)>1: budget.stop(row['id']+': CLI violated one-image contract; extra spend requires accounting audit')
         quota = QUOTA.search(output)
         if quota:
             budget.stop(row['id'] + ': ' + quota.group(0))
             sidecar['status'] = 'quota-stopped'
         else:
-            files = sorted(p for p in folder.rglob('*') if p.suffix.lower() in ['.png','.jpg','.jpeg','.webp'])
-            # Image tools may save outside cwd. Ingest only an existing absolute image path explicitly returned by the CLI.
-            if not files:
-                paths = re.findall(r'[A-Za-z]:[\\/][^\n\r"<>]*?\.(?:png|jpg|jpeg|webp)', output)
-                for name in paths:
-                    p = Path(name.replace('\\\\','\\'))
-                    if p.is_file():
-                        target = folder/p.name
-                        shutil.copy2(p,target)
-                        files.append(target)
-                        transcript=p.parent.parent/'chat_history.jsonl'
-                        if transcript.exists():
-                            calls=[]
-                            for line in transcript.read_text(encoding='utf-8').splitlines():
-                                event=json.loads(line)
-                                for call in event.get('tool_calls',[]):
-                                    if call.get('name') in ['image_gen','image_edit']:
-                                        arguments=call['arguments']
-                                        calls.append({'name':call['name'],'arguments':json.loads(arguments) if isinstance(arguments,str) else arguments})
-                            sidecar['image_tool_calls']=calls
-                            sidecar['prompt_verbatim_verified']=len(calls)==1 and calls[0]['arguments'].get('prompt')==prompt
-                            if len(calls)>1:
-                                # A provider's extra output is an accounting incident, not free art.
-                                for extra in range(len(calls)-1): budget.reserve(row['id']+'-unexpected-extra',attempt)
-                                budget.stop(row['id']+': CLI violated one-image contract')
-            if len(files) == 1:
+            files=[]
+            for source in returned_files:
+                target=folder/source.name
+                shutil.copy2(source,target)
+                files.append(target)
+            if len(files) == 1 and sidecar['prompt_verbatim_verified']:
                 from PIL import Image
                 with Image.open(files[0]) as image:
                     image.verify()
                 sidecar.update(status='generated',image=str(files[0].resolve()),sha256=sha(files[0]))
             else:
-                sidecar.update(status='generation-error', error=f'exit={result.returncode}; decoded image file count={len(files)}')
-        sidecar['returncode'] = result.returncode
+                sidecar.update(status='generation-error', error=f'exit={process.returncode}; decoded image file count={len(files)}; verbatim={sidecar['prompt_verbatim_verified']}')
+        sidecar['returncode'] = process.returncode
     except subprocess.TimeoutExpired:
         sidecar.update(status='timeout-unknown-spend',error='600 second CLI timeout; no automatic retry')
         budget.stop(row['id'] + ': uncertain timed-out CLI; inspect before further spend')
@@ -174,7 +193,7 @@ def proof_valid(batch, rows, style):
 
 def main():
     p=argparse.ArgumentParser(description=__doc__)
-    p.add_argument('--briefs',default=str(ART/'briefs/p1.csv'))
+    p.add_argument('--briefs',default=str(ART/'briefs/p1-current.csv'))
     p.add_argument('--batch')
     p.add_argument('--mode',choices=['proof','run','approve-proof','reject-proof','dry-run'],default='run')
     p.add_argument('--review-note')
