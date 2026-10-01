@@ -1,0 +1,9 @@
+{
+  "schema": 1,
+  "weekly_image_cap": 180,
+  "weekly_video_cap": 0,
+  "expected_session_images": [80, 140],
+  "max_attempts_per_asset": 3,
+  "prior_account_usage": "unknown; owner-approved art-test predates this ledger",
+  "policy": "Only the owner may raise caps. First quota/rate-limit error latches stop; no automatic retry. Reservations with unknown outcome count as spent."
+}
