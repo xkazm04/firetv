@@ -15,10 +15,34 @@ try {
     const families=await page.locator('#family option').evaluateAll(os=>os.map(o=>o.value));
     for(const family of families){await page.selectOption('#family',family);const bad=await page.locator('article:visible').evaluateAll((xs,f)=>xs.some(x=>f!=='all'&&x.dataset.family!==f),family);if(bad)throw Error('family filter failed');}
     await page.selectOption('#family','all');
+    if(await page.locator('article:visible').count()!==84)throw Error('expected 84 current candidates');
+    await page.check('#originals');
+    if(await page.locator('article:visible').count()!==95)throw Error('expected 95 candidates with repaired originals');
+    await page.selectOption('#family','cars');
+    if(await page.locator('article:visible .reject').count()!==3)throw Error('three car rejections must stay visible');
+    await page.selectOption('#family','all');await page.uncheck('#originals');
     const overflow=await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth);
     if(errors.length||overflow)throw Error(JSON.stringify({errors,overflow,width}));
+    await page.evaluate(()=>scrollTo(0,0));
     await page.screenshot({path:report+`/fusion-browser-${width}.png`,fullPage:false});
-    results.push({width,height,families,images:await page.locator('img').count(),errors,overflow});await page.close();
+    const anchors=await page.locator('a[href]').evaluateAll(xs=>xs.map(x=>x.href));
+    for(const href of anchors){const url=new URL(href);url.hash='';if(url.protocol==='file:')await fs.access(fileURLToPath(url));}
+    results.push({page:'fusion',width,height,families,images:await page.locator('img').count(),links:anchors.length,errors,overflow});await page.close();
+    const surface=await browser.newPage({viewport:{width,height}}),surfaceErrors=[];
+    surface.on('pageerror',e=>surfaceErrors.push(String(e)));
+    await surface.goto(new URL('../../art/surface-lab/fusion-review.html',import.meta.url).href);
+    await surface.waitForFunction(()=>[...document.images].every(i=>i.complete&&i.naturalWidth===1920));
+    for(const value of [0,25,75,100]){
+      await surface.locator('#wipe').fill(String(value));await surface.locator('#wipe').dispatchEvent('input');
+      const clip=await surface.locator('#right').evaluate(e=>e.style.clipPath);
+      if(!clip.includes(value+'%'))throw Error('comparison slider failed: '+clip);
+    }
+    await surface.locator('#wipe').fill('50');await surface.locator('#wipe').dispatchEvent('input');
+    const surfaceOverflow=await surface.evaluate(()=>document.documentElement.scrollWidth>innerWidth);
+    if(surfaceErrors.length||surfaceOverflow)throw Error('surface layout failed');
+    for(const href of await surface.locator('a[href]').evaluateAll(xs=>xs.map(x=>x.href))){const url=new URL(href);url.hash='';if(url.protocol==='file:')await fs.access(fileURLToPath(url));}
+    await surface.screenshot({path:report+`/fusion-surface-browser-${width}.png`,fullPage:false});
+    results.push({page:'surface',width,height,slider:true,images:2,errors:surfaceErrors,overflow:surfaceOverflow});await surface.close();
   }
   await fs.writeFile(report+'/fusion-browser.json',JSON.stringify({status:'pass',results},null,2)+'\n');console.log(JSON.stringify(results));
 }finally{await browser.close();}

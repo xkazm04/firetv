@@ -72,6 +72,8 @@ if no choice has been recorded in `deathride/art/OWNER-CHOICE.md` when V1 finish
 
 ## f. Execution status
 
+V1 and V3 retain their historical checkpoint wording; the recorded owner choice and current fusion outcome are in F1, V2, V4 and R2.
+
 | Id | Status | Evidence / next gate | Commit label | Date |
 |---|---|---|---|---|
 | F1 | Owner fusion compiled by family; bridge and hash-bound prose decision implemented | `deathride/V2-part2-fusion.md`; 35 pipeline tests pass; new reference approval remains closed | art-fusion-contract-20261001 | 2026-10-01 |
@@ -79,6 +81,7 @@ if no choice has been recorded in `deathride/art/OWNER-CHOICE.md` when V1 finish
 | V2 | Fusion ten-car/six-rival roster delivered; 13 pixel passes, three capped car rejects; owner approval pending | `art/review/fusion/index.html`; 34 attempts / 68 local observations; seventy derived jobs blocked | art-fusion-roster-20261001 | 2026-10-01 |
 | V3 | Research and sixteen-mode surface lab delivered; 44 clean Stick runs; simple live edges/decals option, graded stacks held | `deathride/art/surface-lab/review.html`; same-binary A/B cost lines; owner stack choice still pending | art-v3-surface-lab-20261001 | 2026-10-01 |
 | V4 | Fusion world kit packed and measured; owner review pending | `deathride/V4-part2-fusion-world.md`; 74 assets / 178 regions; 31.25 MiB (+0.50 ribbon); four isolated Stick runs 16.69/17.89 ms | art-fusion-world-20261001 | 2026-10-01 |
+| R2 | Portable fusion owner review complete; stopped at exact-reference approval | `deathride/V2-part2-owner-review.md`; desktop/mobile, 270 pixel/hash checks; 338/350 reserved; three car rejects retained | art-fusion-review-20261001 | 2026-10-01 |
 
 ## g. Session log
 
@@ -123,3 +126,9 @@ Portable sources and review page, explicit direct notes, exact-reference approva
 Design/outcome in `deathride/V4-part2-fusion-world.md`. Generated 68 world slots with 106 reservations and reused six new rivals. Eleven explicitly provenanced derivatives repair borders, seams, key fringes and effect layouts; fire is an offline fusion repaint of prior valid phases after three rejected generated attempts. All attempts, derivatives and actual effect exports have both local observations; combined execution total is 312. Packed 74 assets / 178 regions into four atlas pages, plus eleven tiles and five one-resident backdrops. Six obstacle definitions provide collision footprints/effect classes for a later core hook; no physics integration claimed.
 
 Validated hashes, atlas bounds/gutters, content aliases, animations, obstacle metadata and 31.25 MiB residency, including the added 0.50 MiB baked ribbon. The libGDX reader and 35 pipeline tests pass; standalone Android/desktop builds pass. Four same-APK Stick runs allocate the full kit and both car pages. Natural/control average p50/p95: 16.69/17.89 versus 16.70/18.11 ms. Cached course vertices are 28,800 CPU bytes; no per-frame band reconstruction. Isolated instrumentation is not an integrated soak. Both lab-only device sessions preserve the integration installation and restore its prior activity. Historical V3 evidence is archived and separately validated. Weekly 338/350 reserved, session 140, 12 remain, videos zero, stop clear. Car approvals and seventy derived jobs remain held. Local commit only; final review next.
+
+### Part 2 / R2, 2026-10-01 - owner review and approval stop
+
+Design/outcome in `deathride/V2-part2-owner-review.md`. Current review entry now opens the fusion: ten car comparisons, six rivals, 96px silhouettes, 68 world slots, optional eleven repaired originals, actual animation frames, selected obstacle metadata and full-residency Stick A/B. Earlier V1, five-direction and V3 reviews remain linked. Four desktop/mobile views pass images, 203 owner-page links, family/original filters, the three visible car holds, slider behavior and layout. Portable audit passes 270 source/export/frame hashes over 288 files, checks all 74 bundle selections and matches exact approval candidates without ignored raw sources.
+
+Stop with Comet, Quill and Kestrel still rejected and all ten approvals false. The exact-reference approval format/template is delivered; no 40 damage states or 30 liveries generated. Later collision hooking, integrated soak and owner taste remain pending. Weekly 338/350 reservations, 140 new this execution, 12 remain, zero videos, stop clear. Four local part commits, no push. Final owner entry: `deathride/art/review.html`.
