@@ -1,0 +1,37 @@
+{
+  "schema": 1,
+  "version": "wasteland-rust-ink-v2",
+  "style_block": "Original digital hand-drawn 2D wasteland combat-game art. Wear belongs on every manufactured surface: dents, rust bloom, chipped paint, soot and dirt in seams; no factory-new finish. Shared material palette: soot black, sun-baked ochre, rust orange, dried-blood red and bleached bone; one toxic hazard-yellow accent. Detail clusters at silhouette anchors, never uniform noise. Neutral flat even diffuse light, symmetric material shading, no directional illumination and no baked cast shadow. Heavy rough dry-brush outlines with uneven broken edges; flat opaque painted fills, scratch hatching, only two value steps. Maximum broad-versus-narrow silhouette exaggeration, chunky angular appendages, clustered rivets and bare expanses. Aggressive blunt workshop menace.",
+  "camera": "True orthographic top-down: camera directly above, roof planes only, no visible front or side body faces. Cars point right, toward screen +x.",
+  "negative": "No franchise references, existing fictional characters or copied vehicles, brands, logos, text, letters, numbers, watermark, clean primaries, factory-new surfaces, photorealism, 3D render, perspective, cast shadows or cropped subject. No occupants inside vehicles. No decorative ground behind isolated subjects.",
+  "background_key": "#FF00FF",
+  "pixels_per_metre": 24,
+  "gutter_px": 4,
+  "mipmaps": false,
+  "filter": "Linear",
+  "accents": {},
+  "palette": [
+    "#171513",
+    "#39302A",
+    "#A37738",
+    "#B4512D",
+    "#6C2427",
+    "#DDD0A6",
+    "#B4A044"
+  ],
+  "source_shapes": "core/src/main/resources/data/car-shapes.csv",
+  "source_presentation": "core/src/main/resources/data/presentation.csv",
+  "texture_budget": {
+    "page_px": 1024,
+    "page_rgba_mib": 4,
+    "scene_mib": 32,
+    "cars_pages": 2,
+    "world_pages": 3,
+    "ui_pages": 1,
+    "theme_pages_resident": 1
+  },
+  "status": "awaiting-owner-choice",
+  "owner_choice_file": "OWNER-CHOICE.md",
+  "name": "Rust and Ink",
+  "rationale": "Strongest silhouette and simplest moving read; scratches may disappear at sofa scale."
+}

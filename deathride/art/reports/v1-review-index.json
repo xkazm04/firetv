@@ -1,0 +1,450 @@
+{
+  "at": "2026-10-01T14:11:19.525934+00:00",
+  "owner_accepted": false,
+  "count": 35,
+  "attempts": 68,
+  "spend": {
+    "week": "2026-W40",
+    "images_reserved": 198,
+    "remaining": 152,
+    "videos": 0,
+    "stop": null
+  },
+  "proofs": [
+    {
+      "id": "v1-rust-ink-heavy-v1",
+      "source_sha256": "cbbfcde4fbcb8a04fc77c2ced93ae1bdd3cea97b1ea123e1edda16185810ffde",
+      "verdict": "owner-review",
+      "codes": [
+        "HUMAN_CALIBRATION_PENDING",
+        "VLM_DISAGREEMENT",
+        "VLM_LOW_CONFIDENCE",
+        "VLM_UNCERTAIN"
+      ]
+    },
+    {
+      "id": "v1-rust-ink-light-v1",
+      "source_sha256": "a13bf3741ea02b96766497f288c67b1e46e26c2c26f4a5e245b29f84a779b905",
+      "verdict": "owner-review",
+      "codes": [
+        "HUMAN_CALIBRATION_PENDING",
+        "VLM_DISAGREEMENT",
+        "VLM_LOW_CONFIDENCE",
+        "VLM_UNCERTAIN"
+      ]
+    },
+    {
+      "id": "v1-rust-ink-portrait-v1",
+      "source_sha256": "f523035a34878660d73e2d1b4578203aeef8c721adca49b3320aa04b91cc3c67",
+      "verdict": "owner-review",
+      "codes": [
+        "HUMAN_CALIBRATION_PENDING",
+        "OWNER_ACCEPTANCE_PENDING"
+      ]
+    },
+    {
+      "id": "v1-rust-ink-ground-v1",
+      "source_sha256": "9becb6cd788d1628151a3db14b2a2cf5d2ab1e005abc901bd8046483aa34f7b2",
+      "verdict": "owner-review",
+      "codes": [
+        "HUMAN_CALIBRATION_PENDING",
+        "VLM_DISAGREEMENT"
+      ]
+    },
+    {
+      "id": "v1-rust-ink-barrier-v1",
+      "source_sha256": "3b3375ae6f25609c58f8cf4cd4b2a222a526c401fad990b17967c9c3ae4b8407",
+      "verdict": "owner-review",
+      "codes": [
+        "HUMAN_CALIBRATION_PENDING",
+        "VLM_DISAGREEMENT",
+        "VLM_LOW_CONFIDENCE"
+      ]
+    },
+    {
+      "id": "v1-rust-ink-icon-v1",
+      "source_sha256": "5bdbb3d0bcea5fc1804e320148e291cae833d7c7167d967bd782ecefe1d6ab15",
+      "verdict": "owner-review",
+      "codes": [
+        "HUMAN_CALIBRATION_PENDING",
+        "VLM_DISAGREEMENT",
+        "VLM_LOW_CONFIDENCE"
+      ]
+    },
+    {
+      "id": "v1-rust-ink-effect-v1",
+      "source_sha256": "892722d5fdca422ef643c1321a5a73f25322eca519bda7c73a6404ff4a1fb762",
+      "verdict": "owner-review",
+      "codes": [
+        "HUMAN_CALIBRATION_PENDING",
+        "VLM_DISAGREEMENT",
+        "VLM_LOW_CONFIDENCE"
+      ]
+    },
+    {
+      "id": "v1-bleached-poster-heavy-v1",
+      "source_sha256": "6e44fc366f0ab3cc6cb3464bd1f5c4d8c509d4a92c71604d4b8bdee2de108a5e",
+      "verdict": "owner-review",
+      "codes": [
+        "HUMAN_CALIBRATION_PENDING",
+        "VLM_LOW_CONFIDENCE"
+      ]
+    },
+    {
+      "id": "v1-bleached-poster-light-v1",
+      "source_sha256": "47c4056a3a0a4fc3ecd56e4f9bc0a4d487824a09ed8be396c8dcfa74578b89df",
+      "verdict": "owner-review",
+      "codes": [
+        "HUMAN_CALIBRATION_PENDING",
+        "VLM_LOW_CONFIDENCE"
+      ]
+    },
+    {
+      "id": "v1-bleached-poster-portrait-v1",
+      "source_sha256": "e26db6a7294cb606cbf2c617693558f38da9e874a33404fea438eb44405cd69a",
+      "verdict": "owner-review",
+      "codes": [
+        "HUMAN_CALIBRATION_PENDING",
+        "OWNER_ACCEPTANCE_PENDING"
+      ]
+    },
+    {
+      "id": "v1-bleached-poster-ground-v1",
+      "source_sha256": "6b04b29f505fed2b221d438679c3445e16816a62941dc9dd4b67eea27488909c",
+      "verdict": "reject",
+      "codes": [
+        "HUMAN_CALIBRATION_PENDING",
+        "TILE_SEAM_PEAK",
+        "VLM_LOW_CONFIDENCE"
+      ]
+    },
+    {
+      "id": "v1-bleached-poster-barrier-v1",
+      "source_sha256": "83e43769b4b6a2a024b295228d1c17762b75a54a68c7e4c4c34cb6cf098e59ee",
+      "verdict": "owner-review",
+      "codes": [
+        "HUMAN_CALIBRATION_PENDING",
+        "VLM_DISAGREEMENT",
+        "VLM_LOW_CONFIDENCE"
+      ]
+    },
+    {
+      "id": "v1-bleached-poster-icon-v1",
+      "source_sha256": "286407821be3e5a6a5deae522e130f507ef32f237053c4ae31e5068690d4b642",
+      "verdict": "owner-review",
+      "codes": [
+        "HUMAN_CALIBRATION_PENDING",
+        "VLM_LOW_CONFIDENCE"
+      ]
+    },
+    {
+      "id": "v1-bleached-poster-effect-v1",
+      "source_sha256": "cd9a86458d2fc8226cc1f2b003e0158268b948cbfacac3dd7133ab81a416238c",
+      "verdict": "owner-review",
+      "codes": [
+        "HUMAN_CALIBRATION_PENDING",
+        "VLM_DISAGREEMENT",
+        "VLM_LOW_CONFIDENCE"
+      ]
+    },
+    {
+      "id": "v1-hot-ink-heavy-v1",
+      "source_sha256": "ceb7b0815915a81850afa1c3bd72021b61fb056c4297dc3a117cc2eb455e77a0",
+      "verdict": "reject",
+      "codes": [
+        "CROPPED_OR_MARGIN",
+        "HUMAN_CALIBRATION_PENDING",
+        "VLM_LOW_CONFIDENCE"
+      ]
+    },
+    {
+      "id": "v1-hot-ink-light-v1",
+      "source_sha256": "13435ab0cdfd6eb6e9cdaeaca90470720c7bc53227a6e8d309a66b5054054309",
+      "verdict": "owner-review",
+      "codes": [
+        "HUMAN_CALIBRATION_PENDING",
+        "VLM_DISAGREEMENT",
+        "VLM_LOW_CONFIDENCE",
+        "VLM_UNCERTAIN"
+      ]
+    },
+    {
+      "id": "v1-hot-ink-portrait-v1",
+      "source_sha256": "ca552c8b8b8f53be1514630db62f58fc390a1331b843e56ee0c6272feae163be",
+      "verdict": "owner-review",
+      "codes": [
+        "HUMAN_CALIBRATION_PENDING",
+        "VLM_LOW_CONFIDENCE"
+      ]
+    },
+    {
+      "id": "v1-hot-ink-ground-v1",
+      "source_sha256": "32788a6545b6b20fe8a1825b1f73aadedf89b48f773646e3644f65a85330ddd6",
+      "verdict": "reject",
+      "codes": [
+        "HUMAN_CALIBRATION_PENDING",
+        "TILE_SEAM_MEAN",
+        "VISIBLE_TILE_BORDER",
+        "VLM_DISAGREEMENT",
+        "VLM_LOW_CONFIDENCE",
+        "VLM_UNCERTAIN"
+      ]
+    },
+    {
+      "id": "v1-hot-ink-barrier-v1",
+      "source_sha256": "73c61ea010919c191610a4af816541acdb3c687d3e100268adfa9e36385d6962",
+      "verdict": "owner-review",
+      "codes": [
+        "HUMAN_CALIBRATION_PENDING",
+        "VLM_DISAGREEMENT",
+        "VLM_LOW_CONFIDENCE"
+      ]
+    },
+    {
+      "id": "v1-hot-ink-icon-v1",
+      "source_sha256": "86bc10f3f8c6b9ad97c255fe2bb6e34d0541abead5ffc54999460e0bf3e46ba9",
+      "verdict": "owner-review",
+      "codes": [
+        "HUMAN_CALIBRATION_PENDING",
+        "VLM_DISAGREEMENT",
+        "VLM_LOW_CONFIDENCE"
+      ]
+    },
+    {
+      "id": "v1-hot-ink-effect-v1",
+      "source_sha256": "3c271b8a1bacabcb2f8686d765f4ceab1c0fe7cd09cdd8b04a5248478e9efbe6",
+      "verdict": "owner-review",
+      "codes": [
+        "HUMAN_CALIBRATION_PENDING",
+        "VLM_LOW_CONFIDENCE"
+      ]
+    },
+    {
+      "id": "v1-scrap-collage-heavy-v1",
+      "source_sha256": "cc30eaf91e53accb66a0c644939c4f193f05f16af77c76f185a260405341b1be",
+      "verdict": "owner-review",
+      "codes": [
+        "HUMAN_CALIBRATION_PENDING",
+        "VLM_LOW_CONFIDENCE"
+      ]
+    },
+    {
+      "id": "v1-scrap-collage-light-v1",
+      "source_sha256": "35d25a52911f8585f7a86e2369cdae67aa5acc40de1d6a72115687f01b4ebafe",
+      "verdict": "reject",
+      "codes": [
+        "CROPPED_OR_MARGIN",
+        "HUMAN_CALIBRATION_PENDING",
+        "VLM_DISAGREEMENT",
+        "VLM_LOW_CONFIDENCE",
+        "VLM_UNCERTAIN"
+      ]
+    },
+    {
+      "id": "v1-scrap-collage-portrait-v1",
+      "source_sha256": "b1f25518666ac5a18ae90a97e99a99ff6417534880e4fcf294dc4b33cee3360f",
+      "verdict": "owner-review",
+      "codes": [
+        "HUMAN_CALIBRATION_PENDING",
+        "OWNER_ACCEPTANCE_PENDING"
+      ]
+    },
+    {
+      "id": "v1-scrap-collage-ground-v1",
+      "source_sha256": "abefe3c57d80aed0dd88e7580993a528675d78ae96760b1e35d253b88ef0b98d",
+      "verdict": "reject",
+      "codes": [
+        "HUMAN_CALIBRATION_PENDING",
+        "VISIBLE_TILE_BORDER",
+        "VLM_DISAGREEMENT",
+        "VLM_LOW_CONFIDENCE",
+        "WRONG_SURFACE_MOTIFS"
+      ]
+    },
+    {
+      "id": "v1-scrap-collage-barrier-v1",
+      "source_sha256": "28b0a4f67bfc5a71d6dc22dfd7727c01590ffdbab9a852a2556eecb05230948a",
+      "verdict": "owner-review",
+      "codes": [
+        "HUMAN_CALIBRATION_PENDING",
+        "VLM_DISAGREEMENT",
+        "VLM_LOW_CONFIDENCE"
+      ]
+    },
+    {
+      "id": "v1-scrap-collage-icon-v1",
+      "source_sha256": "8b4b94dce6bb5a879a4c1a538c2477649ab3a25c55c549bdf2bf08f533136b41",
+      "verdict": "owner-review",
+      "codes": [
+        "HUMAN_CALIBRATION_PENDING",
+        "VLM_LOW_CONFIDENCE"
+      ]
+    },
+    {
+      "id": "v1-scrap-collage-effect-v1",
+      "source_sha256": "90c3be9668e87b0ba490b7aa48d929ec745fec72f8abefd2fbb74cb8b9565fde",
+      "verdict": "owner-review",
+      "codes": [
+        "HUMAN_CALIBRATION_PENDING",
+        "VLM_LOW_CONFIDENCE"
+      ]
+    },
+    {
+      "id": "v1-soot-pulp-heavy-v1",
+      "source_sha256": "5d78edd891b2dc6187fe51dfa994c444c95d292e3667e471ee38781ed0cf4ad8",
+      "verdict": "owner-review",
+      "codes": [
+        "HUMAN_CALIBRATION_PENDING",
+        "VLM_LOW_CONFIDENCE"
+      ]
+    },
+    {
+      "id": "v1-soot-pulp-light-v1",
+      "source_sha256": "f609a0e2bee1f211f457ffb8865bbd63d573f191b55d6bb8043b6ad3b6b721c7",
+      "verdict": "reject",
+      "codes": [
+        "CROPPED_OR_MARGIN",
+        "HUMAN_CALIBRATION_PENDING",
+        "VLM_DISAGREEMENT",
+        "VLM_LOW_CONFIDENCE",
+        "VLM_UNCERTAIN"
+      ]
+    },
+    {
+      "id": "v1-soot-pulp-portrait-v1",
+      "source_sha256": "4ba329826b3587b4989cf3674d6991ed4d984fe668b8f7a2c5e86cc9108f907b",
+      "verdict": "owner-review",
+      "codes": [
+        "HUMAN_CALIBRATION_PENDING",
+        "OWNER_ACCEPTANCE_PENDING"
+      ]
+    },
+    {
+      "id": "v1-soot-pulp-ground-v1",
+      "source_sha256": "51ffc7c33669aa977df40a5d4190762dab18a313a75b19bbc896c157e4f89476",
+      "verdict": "reject",
+      "codes": [
+        "HUMAN_CALIBRATION_PENDING",
+        "TILE_SEAM_MEAN",
+        "TILE_SEAM_PEAK",
+        "VISIBLE_REPEAT_MOTIF",
+        "VLM_DISAGREEMENT",
+        "VLM_LOW_CONFIDENCE"
+      ]
+    },
+    {
+      "id": "v1-soot-pulp-barrier-v1",
+      "source_sha256": "f9767719f8b09f47ffee2150714965d11cc71784ae401431d68eff683013ff79",
+      "verdict": "owner-review",
+      "codes": [
+        "HUMAN_CALIBRATION_PENDING",
+        "VLM_DISAGREEMENT",
+        "VLM_LOW_CONFIDENCE"
+      ]
+    },
+    {
+      "id": "v1-soot-pulp-icon-v1",
+      "source_sha256": "3e22f50fdefe85f5b092986bada414585fc3bfbb3f20784aedefe2f9468e232f",
+      "verdict": "owner-review",
+      "codes": [
+        "HUMAN_CALIBRATION_PENDING",
+        "VLM_LOW_CONFIDENCE"
+      ]
+    },
+    {
+      "id": "v1-soot-pulp-effect-v1",
+      "source_sha256": "931332224464415ec9ce0ea2f01cd06aaef46cd5b62e13796711540efc95cd09",
+      "verdict": "owner-review",
+      "codes": [
+        "HUMAN_CALIBRATION_PENDING",
+        "VLM_LOW_CONFIDENCE"
+      ]
+    }
+  ],
+  "files": {
+    "all-attempts.png": "bcfe936fcfe6db22033b3bc65ecccc7e2930ec1d9315cc1db51330b7d5b6e430",
+    "bleached-poster-vs-v1.png": "c0b8c7de1b85001b833a5935017f890387d6c8f7e452f10a8ad1d93bba56a008",
+    "bleached-poster.png": "4679fd5e10c220a92dc74845c350f0caf227749f5acde1eac0fef3504907d009",
+    "combined.png": "3d470deeac9d26a98d0dde6774365b00ad9e5667092ffb7734026901e4f08204",
+    "hot-ink-vs-v1.png": "f5a1f242bc0ca442d803500b056d81dbf65654b53ebd1db13bed19f3482910de",
+    "hot-ink.png": "b7f830283bf2ffa9d10ef5395527393dc9b543eeb29677f88a98cca15485f078",
+    "index.html": "b87d1853895cf5a17228ef51c8e651498deb8bc35c02efe9824855f6b69fa72f",
+    "readability.png": "dc4affc65ef027fa338ddce9e1d0d27f42f30f05e924e16a8c3bd4541b0aae67",
+    "rust-ink-vs-v1.png": "c9ec6004bcec3db01403ebddbc1c219871fdfe8c9bc872624614c9ab26c84703",
+    "rust-ink.png": "d0e4bfcd4870a860b85b9e2218ed28e625295f8e19292e22199435e5b464ff67",
+    "scrap-collage-vs-v1.png": "8c9fc61908b43a7ee02de9390714170941c42e9d05ca8fb6d1dd3de9e3bd83cf",
+    "scrap-collage.png": "43242f81cc8c37a53be2f6477656806a3c743ce8125979f30f462ce42a36db3b",
+    "soot-pulp-vs-v1.png": "674a142f554199815c9817914e5d3999eb360088ba29a758946a9ba976f6ab4b",
+    "soot-pulp.png": "48ba40eadebdbb4208724a2997bd8807fb183c63f81c192d0a8d35d36c0c4482",
+    "v1-bleached-poster-barrier-v1-source.jpg": "0321ab14bee08b765d4db7ebaf4bac87ff60f73bd675ab6972657568f955f375",
+    "v1-bleached-poster-barrier-v1.png": "97b8f2990fc5cc53fbe41ad3144610bc2c86304520519127126702cd13d80c21",
+    "v1-bleached-poster-effect-v1-source.jpg": "9837c2f996b4deba5ef3d27840c575efe1b377a44fbaa95d25e6a3235f42a270",
+    "v1-bleached-poster-effect-v1.png": "c8c5520343b09d23040811f9d9a3bcc7336fefe8d329196ba9b0c6e894ecc6bd",
+    "v1-bleached-poster-ground-v1-source.jpg": "42800eedd5c90335a5cdf4aabbb5c0ec70ef64f7732d322b0e675f607d07f323",
+    "v1-bleached-poster-ground-v1.png": "ca2fd7051105e974f00eb58ff104a956135ea7056b5ee07eed5925c4904a0f8b",
+    "v1-bleached-poster-heavy-v1-source.jpg": "87819e74b01ed06b11f5ce5991a50e6af4e23b8ce9bf0808294dbdc5046be9bf",
+    "v1-bleached-poster-heavy-v1.png": "2aaf60f3852daa1d78eb74c33cddbebe294ab70fbec0aa31694a241ced902282",
+    "v1-bleached-poster-icon-v1-source.jpg": "390fd25759c6787bcd58cd3e1214c3249a4da6f0579ed923b77e94dbe973d863",
+    "v1-bleached-poster-icon-v1.png": "116f2fba122259ce9eb62002dd431bd4459a1332624010585e1451f760e5d1bc",
+    "v1-bleached-poster-light-v1-source.jpg": "e0f653edd45d414c81213f0e337135c418a5ad788ee79a3cbcfe894a7ba58098",
+    "v1-bleached-poster-light-v1.png": "a1c9f4c6a3ad8084f7265e6ec0c4b595dec2e13b84eae7300580822b58aa0bfa",
+    "v1-bleached-poster-portrait-v1-source.jpg": "c32470a83f07d13ec1bb154ca5becd21505b873b4d0c5e2e52aa2e1874d6b718",
+    "v1-bleached-poster-portrait-v1.png": "1a9c079bc0f56c0324f8cf1808bb34f4096c402c04195d4719b2faae8c662aa6",
+    "v1-hot-ink-barrier-v1-source.jpg": "ea27c6a1549d0c809bc741fbe5c60d5055d36a4dec48d58eec1e2a80ed5265d6",
+    "v1-hot-ink-barrier-v1.png": "a39f5d3021364923c75af1e5358b4cce4c2aec36671ced27901158eeb0c7f17d",
+    "v1-hot-ink-effect-v1-source.jpg": "ed6b1595fa6108d79770ea55b72515584092ebd872183e6680e282e6eb7f7032",
+    "v1-hot-ink-effect-v1.png": "8bac169fd95101d58341b7fc5941bb57f40aba66885f0b21eb8729bb70b2da61",
+    "v1-hot-ink-ground-v1-source.jpg": "8ad2e119d33c28d43b657d748a50f576aed8b59cb286b7a07565a3dc3736841e",
+    "v1-hot-ink-ground-v1.png": "986c11210888398f3d5669263ad690f023af6771cc6cdb29d2c8d07d96d7dfa6",
+    "v1-hot-ink-heavy-v1-source.jpg": "9b2584011a3d04deb89d61acc87409433666a0d8e166aebb0899a30f7d83d224",
+    "v1-hot-ink-heavy-v1.png": "b8de5a4d876a09050deef661bb715c92f08473bfd690c204494bfc450c0d8348",
+    "v1-hot-ink-icon-v1-source.jpg": "8e21f6bdb18bd6378a1f1cef915fc6920d76b11713c127189cf453de20d3520a",
+    "v1-hot-ink-icon-v1.png": "a418ea84bc79bca26e9fa49604f7e69f73986ab2dcbdd45c897bc5f0044991ba",
+    "v1-hot-ink-light-v1-source.jpg": "70ca656c3bebb0f16ce70cd8940925402142d95e6608dee88ab9274caf479e02",
+    "v1-hot-ink-light-v1.png": "20eaf68a1c044b3d6b226fdd5eb50943b5f97b035ecd5902ac4ec6248f9fe588",
+    "v1-hot-ink-portrait-v1-source.jpg": "326bf3323bff3acdea2d4a6d1c5e940f1fa603f2737cdc431ab71e2dc3995497",
+    "v1-hot-ink-portrait-v1.png": "083d1e15fa6c2c1adeb768632fe2957b25cf1956d4132e3b4d47edd5eb66d6e8",
+    "v1-rust-ink-barrier-v1-source.jpg": "ca3e0c390892775c86f378700fdd66a07a9412a21fb278713555586f168fa092",
+    "v1-rust-ink-barrier-v1.png": "9d57dbb87d429da433e4937b6d6d04d2a1b2a2ee1c8e2346aabf554652867fb3",
+    "v1-rust-ink-effect-v1-source.jpg": "465f9f375641fc625553d7147dfc013d845d63358aba7a4f5e646b7e384f35b8",
+    "v1-rust-ink-effect-v1.png": "d15a258483805e87331a35491b5e6fbc2a7da101ce5d496011594257ba64efdc",
+    "v1-rust-ink-ground-v1-source.jpg": "56f431730a5092a2448f669f4f7523ef52e36a31643f5b12dddacce8379ddb4e",
+    "v1-rust-ink-ground-v1.png": "18e403681873b7a8eacbfedb51d4ea4522430ead69ff754fb68e171b4f879831",
+    "v1-rust-ink-heavy-v1-source.jpg": "a292ae696835eea444ab51c53e2dacabf012cc2780a9d5387303cb9601eced1e",
+    "v1-rust-ink-heavy-v1.png": "36a9b57c5bbcb4562286f2b4b730fb374b0dcf295dc668a4cc4a9079412a5267",
+    "v1-rust-ink-icon-v1-source.jpg": "855727e2b4814047df6a0f1f81d087f0a74efdc093fbb1180812214b0d3026a3",
+    "v1-rust-ink-icon-v1.png": "14b484f935398ca079df12737c4b8e36fe2f075a874a4d856c24c065afae943e",
+    "v1-rust-ink-light-v1-source.jpg": "cdfd3c21bc12db1e6637741c86b749c1c13a509463f55779693dd6e848bbbece",
+    "v1-rust-ink-light-v1.png": "208dd8dfd2b700e1138951d82865775866652dfc1cfa4f34d6c47e94aba9cd4a",
+    "v1-rust-ink-portrait-v1-source.jpg": "68de3542d932f0a4b9e3d02366a09676606d5e84e0b09689538bc0f1cd46ddc3",
+    "v1-rust-ink-portrait-v1.png": "f5ac5a55e3a13a06bbe0f5fe120e2184a1e4ec7860a56f4a4ee85cc58394e71b",
+    "v1-scrap-collage-barrier-v1-source.jpg": "cc05964461fa786288f794fa9ad25b6d88422e9b40d0e6a65d2b815012c70a90",
+    "v1-scrap-collage-barrier-v1.png": "51b6fcfeaab2651c66f50837dd0d5a40e6c7f3a2aa61c64c117aa21c93cdbf6b",
+    "v1-scrap-collage-effect-v1-source.jpg": "5147c9668f564144b51b77df2e3aa843612f7db8f13473f976d949585f36bc59",
+    "v1-scrap-collage-effect-v1.png": "90768fbbbbdc991b183176a50e04325ec9038bead52c8aa28d024b6aff7c21f8",
+    "v1-scrap-collage-ground-v1-source.jpg": "60acd5c1becced78e04b3fab8a61b00cc44342bde409e21beccc569a24419228",
+    "v1-scrap-collage-ground-v1.png": "69ed0a5103834a6cf2bea6cb63764b455df1dbcf08b1916c0b2989b6a23bfa75",
+    "v1-scrap-collage-heavy-v1-source.jpg": "d52aa28d2dfcdff23714cccf8aa637e38294054ac4a0192cd8443b956887a15a",
+    "v1-scrap-collage-heavy-v1.png": "422b4d4d26f783aa3f096d859f2d741ef65cc8b35454435a117b7cd109e104b1",
+    "v1-scrap-collage-icon-v1-source.jpg": "413b4ed793844e1c01eea7214a0be9d04e2f553ded17ccb0bb1f3caa9a9956ee",
+    "v1-scrap-collage-icon-v1.png": "db39f0f0d7463ed2dea8de538ef3c26824e00e95dc1783aa02e59276614c8f02",
+    "v1-scrap-collage-light-v1-source.jpg": "10520a191b65d5b362aed5abfedcb151d2b663e4a6dc5ee256030d821ca39846",
+    "v1-scrap-collage-light-v1.png": "eb72f79e5586cb7a1c77b7c70900a37fd8c9a0c7a0e833e3aaf2160309fa361b",
+    "v1-scrap-collage-portrait-v1-source.jpg": "7aa6d1dee9c3c9dcec4c7f69a9ebf98f0e46090dfd3c5e07cdf3d72f452a1cba",
+    "v1-scrap-collage-portrait-v1.png": "0634f7b6f50e8675efd57ef9cb6770eeb7cad0134329dd03f5198557ad205236",
+    "v1-soot-pulp-barrier-v1-source.jpg": "b87b569fe7144c590d41dff6dba60edf5922fbb987d95f1465f890395083aeba",
+    "v1-soot-pulp-barrier-v1.png": "3ffa8e2ec0aedc49d52cbc5e78b5d339ae2e173d33dd8363ffc2f6e0e3bacbc8",
+    "v1-soot-pulp-effect-v1-source.jpg": "1dd212bb0859b9adbe234b5904bf4ce905a977f832f47bc2d476e618b62e6e4c",
+    "v1-soot-pulp-effect-v1.png": "369bd8124d2036e87093df92e553aa584513505421f7a37672affe70989d8100",
+    "v1-soot-pulp-ground-v1-source.jpg": "c47781d52e2bb71f70f278a84a6a7bf19305029781cdc11bf13cc63735955bf9",
+    "v1-soot-pulp-ground-v1.png": "4578be59d9190f7ae240c0ebbe3d7c0a29cf2a947b2b1d1cd5b7d81a25bb242f",
+    "v1-soot-pulp-heavy-v1-source.jpg": "541cff86d7e159b7dcc2fa35b9fbab053db8c812a05386c2f20dd6886b4072b9",
+    "v1-soot-pulp-heavy-v1.png": "5c3694de7ee333a15bb64056f0776fbdb9fa22fee2d840989a9faee4918d7117",
+    "v1-soot-pulp-icon-v1-source.jpg": "a72867f4a716f7506d22f611cb4c052a172a67a64085e13b1dd5d1dd42bd1a39",
+    "v1-soot-pulp-icon-v1.png": "d5bf68be318eba4b57d6bd1b14512e64d96b24319fdd0c94832ae8d494628b5f",
+    "v1-soot-pulp-light-v1-source.jpg": "f36326ac3f5adad21d7a3916544e37bfe5ef0e528cbf43d568285ce68affd703",
+    "v1-soot-pulp-light-v1.png": "7c602e5dbcc89e4815b24afd401866a49be110b43e6f533edc64f126024665ac",
+    "v1-soot-pulp-portrait-v1-source.jpg": "66819c8007b59699d3e831f5def3055ee0e64c7891df7de60ee32e90f6ab9700",
+    "v1-soot-pulp-portrait-v1.png": "79badd18e7b005a5921ee8e35571c9abccffa8cb626a663b9fbda0e7d71dc154"
+  }
+}

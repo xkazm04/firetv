@@ -45,6 +45,14 @@ def briefs(path):
             raise ValueError('video is outside this phase')
     return rows
 
+def style_for(row, art=ART):
+    """Explicit proof contracts; historical briefs keep their immutable v1 style."""
+    name = row.get('style_file') or ('style-v1.json' if (art/'style-v1.json').exists() else 'style.json')
+    path = (art/name).resolve()
+    if path.parent != art.resolve() or not path.name.startswith('style'):
+        raise ValueError('style file must be a direct art/style*.json child')
+    return read_json(path)
+
 @contextmanager
 def file_lock(path, timeout=20):
     path = Path(path)

@@ -1,13 +1,25 @@
-# Death Ride art contract
+﻿# Death Ride art direction v2: owner choice pending
 
-The exact `style_block` in `style.json` is compiled verbatim at the start of every image prompt, including edits. The action block owns the subject and its state. There is no short-form style prompt.
+The digital hand-drawn contract remains. The mood is raw, improvised and sun-scorched: welded scrap, rust bloom, patched armour, chipped panels, soot and dirt in seams. Every manufactured asset carries wear. No clean primaries or factory-new finish. Designs are original; prompts never name existing franchises, characters, vehicles, brands or logos.
 
-The owner's 2026-10-01 test art establishes the inked, cel-painted mechanical direction. Reference files remain in the read-only source folder; `references.json` records their hashes, roles and limitations. They are not evidence that all source sprites meet production gates. The angled Trail and scene demonstrate finish only; Bastion demonstrates armor language despite clipping. Text on Comet and gradients/shadows on backgrounds are defects to exclude.
+`style.json` defines the shared v2 constraints, **not an approved direction**. Five `style-<slug>.json` cards offer different line, shading, density, proportions and mood:
 
-Cars: orthographic overhead, front toward screen +x, neutral diffuse light, no cast shadow. Hood, roof, wheels and windshield must explain heading without numbers or logos. Outline scales down to approximately one physical pixel at the smallest intended view. Each class keeps its accent on body panels; rubber, glass, metal and outline keep shared roles.
+| Direction | Drawing language | Main tradeoff |
+|---|---|---|
+| Rust and Ink | ragged dry brush, flat fill, scratch hatching, broad fortress and narrow skeleton | small scratches may disappear |
+| Bleached Poster | six ink screen print, carved negative space, hard shapes, sparse halftone | can become an emblem instead of a car |
+| Hot Ink | tapered comic contours, cel shadows, spatter, forward wedges | detached marks and visual noise |
+| Scrap Collage | torn panels, dark seams, coarse fibres, tape and rivets | detail density at small scale |
+| Soot Pulp | pooled black masses, bone cutouts, sparse scratches, skeletal voids | dark sprites need value separation |
 
-Scale comes from `core/src/main/resources/data/car-shapes.csv`, with camera density from `presentation.csv`. W6's final addendum governs: retain enlarged cars and camera. The pipeline's `pixels_per_metre` is texture authoring density, not camera zoom. Crop/normalize preserves the measured silhouette aspect; an out-of-band aspect fails rather than being stretched into compliance. An art-derived body-bounds centre maps to the simulation body centre. Damage variants inherit the reference coordinate system, never a newly trimmed origin.
+Each direction gets exactly the same seven action briefs: heavy, light, rival portrait, ground, barrier, repair HUD icon and a still spark effect. Only the style block differs. Corrections append explicit measured rejection evidence and remain in history. These are style explorations, not production damage states or liveries. The first heavy is checked before siblings. The complete style block is compiled verbatim first in every generation/edit, followed by action, camera and exclusions.
 
-Tile surfaces occupy their whole image and wrap on both axes. They receive separate repeat-addressed pages, not sprite-atlas gutters. Kerb stripes are intentional repetition; anonymous surface materials are checked for conspicuous motifs. Isolated sprites use a magenta key, despilled RGB, transparent margins and extruded colour under transparent pixels. Atlas sampling is bilinear without mipmaps; runtime integration must preserve this contract or rebuild gutters.
+Cars remain true orthographic overhead, front toward screen +x, neutral diffuse light and no baked cast shadow. Roof, wheels, windshield and ram explain heading without text. Each class must read at 96 px: heavy broad and fortified, light narrow and skeletal, racer thrusting and asymmetric, gunship turret-laden. Cluster detail at ram, weapons and cage. Exaggeration stays inside authoritative metre/aspect bands; never stretch a sprite to pass. Damage will eventually use crumpling, missing panels and burnt readable husks, only after exact owner reference approval.
 
-Machine gates can reject or route to review. They cannot certify taste. Owner reference approval, on-Stick appearance and the final quality verdict remain separate recorded states.
+Palette roles are sun-baked ochre, rust orange, dried-blood red, bleached bone and soot black with one hazard-yellow accent in this fair comparison. Neutral light applies even to the dark pulp card: value contrast comes from paint, not a directional lamp. Final faction accents wait for owner selection.
+
+`style_for` resolves each proof's versioned style file for generation and grading. Legacy briefs resolve immutable `style-v1.json`; `STYLE-v1.md` and `review-v1.html` preserve comparison context. Historical gate numbers and the delivered `phase2-v1` bundle remain unchanged. Scale authority is captured C1/W6 geometry; 24 authoring pixels/metre is not camera density. Sprites keep art-derived pivots, aspect, transparent margins and RGB extrusion. Tiles repeat on separate 256-square pages, with seam/repetition checks and real 2x2 previews. Sampling stays linear, no mipmaps.
+
+`OWNER-CHOICE.md` is owner-authored, never generated by the agent. The production gate reads line fields: `owner_choice: approved`, `style_file: style-<slug>.json`, `style_sha256: <exact file hash>` and `owner_evidence: <owner decision record>`. V4 additionally requires `surface_stack: <chosen stack ID>` matching its briefs. A fused style needs its own reviewed versioned card. This choice does not grant reference approval: `reference-approvals.json` separately blocks all 40 damage states and 30 liveries until exact source bytes are approved.
+
+Machine gates reject or route; they cannot certify taste, human calibration, Stick feel or G2. Proofs remain review material and never silently enter production atlases. The weekly cap comes only from `budget.json`; every paid call reserves first, logs exact prompt/session/tool provenance, respects the three-attempt ceiling and stops on the first real quota/rate-limit signal. Unknown spend stays charged.

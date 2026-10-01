@@ -69,3 +69,22 @@ Directions must differ in more than palette: line quality, shading language, det
 Rules: same neutral-light and top-down contracts in every direction; the same prompt skeleton with only the style block changing, so the comparison is fair; run the existing gates on every proof asset;
 spend about 70 images on the proof sets (7 assets x 5 directions x about 2 attempts), then **stop and present** one contact sheet per direction plus one combined board. V2 (the full ten cars and six portraits) is then done **only in the owner-chosen direction**;
 if no choice has been recorded in `deathride/art/OWNER-CHOICE.md` when V1 finishes, finish V1 and V3 (the surface lab can use two or three directions' ground proofs as inputs, since the tile trick research is style-agnostic) and then stop, logging that V2/V4 wait for the choice.
+
+## f. Execution status
+
+| Id | Status | Evidence / next gate | Commit label | Date |
+|---|---|---|---|---|
+| V1 | Five style directions and 35 comparable proof slots delivered; 68 generated attempts, no owner acceptance | `deathride/art/review.html`; exact choice file absent | art-v1-choice-20261001 | 2026-10-01 |
+| V2 | Waiting for owner choice; zero full-roster or derived-state generation | `deathride/art/OWNER-CHOICE.md`, then exact-reference approval | pending | 2026-10-01 |
+| V3 | In progress: research and isolated libGDX lab; Stick integration race currently active | Separate package `dev.deathride.artlab`; no replacement of integration app | pending | 2026-10-01 |
+| V4 | Waiting for owner style and surface-stack choice; no kit regeneration | Choice plus validated atlas residency and Stick evidence | pending | 2026-10-01 |
+
+## g. Session log
+
+### V1, 2026-10-01 — five-way choice
+
+Read owner direction and addendum first; restart tree was clean, with 130 inherited reservations and no partial V1 pixels. Design first in `deathride/V1-style-choice.md`. Preserved v1 style and review, authored five versioned cards, and generated identical seven-subject proof sets through the existing Grok guard. Per-row style resolution keeps historical briefs on their immutable v1 contract. New V2/V4 production jobs fail closed without an exact owner choice; source-reference approval remains independent.
+
+68 paid images produced 35 current proof slots plus retained corrections. Every attempt has deterministic gates and two actual local-model observations (136 observations); direct export review caught a lost pale spark centre and wrong wrench geometry, then checked their corrected pixels. Three-attempt ceilings were respected. Rejected margins, surface borders and repeated motifs remain visible; neither model agreement nor source repairs grant owner acceptance. Contact boards compare all five directions, every direction against v1, actual 96px cars/32px icons, and all attempts. `deathride/art/review/v2/index.html` and its review-sized images are portable committed artifacts; raw generations remain ignored.
+
+33 Python pipeline tests pass; `:core:test :link:test :app:assembleDebug` is green. Existing bundle validation still passes 69 assets/172 regions with unchanged declared 30.75 MiB residency. Local graders remain diagnostic, with human calibration pending. No V2 roster, damage states, liveries or V4 assets were generated. Spend this wave 68 images; weekly 198/350 reserved, 152 remaining, zero videos, no actual quota/rate-limit error, stop latch clear. Owner choice, taste, production integration and on-Stick appearance of the style proofs are not measured. Proceed to V3 under the addendum; V2/V4 wait without a question.

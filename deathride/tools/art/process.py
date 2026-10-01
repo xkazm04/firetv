@@ -7,7 +7,7 @@ from pathlib import Path
 import numpy as np
 from PIL import Image
 from scipy import ndimage
-from common import ART, ROOT, briefs, make_contact_sheet, read_json, sha, write_json, digest
+from common import ART, ROOT, briefs, make_contact_sheet, read_json, sha, write_json, digest, style_for
 from gen import candidates
 
 def policy(): return read_json(ART/'gates.json')
@@ -143,8 +143,10 @@ def shapes():
     with (ROOT/read_json(ART/'style.json')['source_shapes']).open() as f: return {r['id']:r for r in csv.DictReader(f)}
 
 def process_one(row,path,output_dir):
-    cfg=policy();style=read_json(ART/'style.json');output_dir=Path(output_dir);output_dir.mkdir(parents=True,exist_ok=True)
+    cfg=policy();style=style_for(row);output_dir=Path(output_dir);output_dir.mkdir(parents=True,exist_ok=True)
     record={'id':row['id'],'class':row['class'],'kind':row['kind'],'source':str(Path(path).resolve()),'source_sha256':sha(path),'gate_version':cfg['version'],'gates_hash':digest(cfg),'brief':row,'verdict':'owner-review','codes':[]}
+    record['style_hash']=digest(style)
+    record['style_version']=style['version']
     record['processor_sources']={'process.py':sha(Path(__file__))}
     if row['kind']=='sheet':record['processor_sources']['animation.py']=sha(Path(__file__).with_name('animation.py'))
     with Image.open(path) as source:

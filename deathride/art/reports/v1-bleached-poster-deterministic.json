@@ -1,0 +1,627 @@
+[
+  {
+    "id": "v1-bleached-poster-heavy-v1",
+    "class": "Bastion",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v1-bleached-poster-heavy-v1\\attempt-02\\1.jpg",
+    "source_sha256": "6e44fc366f0ab3cc6cb3464bd1f5c4d8c509d4a92c71604d4b8bdee2de108a5e",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v1-bleached-poster-heavy-v1",
+      "class": "Bastion",
+      "prompt_action": "One single original heavy combat wagon: a broad spiked fortress with four oversized exposed tyres, a blunt welded ram at the RIGHT nose, a short roof cannon pointing RIGHT, bolted roof plates and tyre-stack rear bumper at LEFT. Length twice width. Visible dents, chipped mismatched panels and rust, intact reference configuration. Strict overhead roof-plane view, horizontal axis, complete vehicle within the middle three quarters of the canvas, generous empty margin. No occupant or exposed driver.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "",
+      "batch": "v1-bleached-poster",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "128",
+      "style_file": "style-bleached-poster.json",
+      "wave": "V1",
+      "proof_role": "heavy"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "5927977a570bdec3762f1327b17924eb9203d85beafe97731ebaf5d2c5f197a6",
+    "style_version": "wasteland-bleached-poster-v2",
+    "processor_sources": {
+      "process.py": "baeb3c75341198559ebbbf8175e2effc5b3b5193b96f22afa7da9eeb41992936"
+    },
+    "metrics": {
+      "foreground_fraction": 0.3223896026611328,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        59,
+        251,
+        968,
+        773
+      ],
+      "margin_fraction": 0.0546875,
+      "aspect": 1.7413793103448276,
+      "expected_aspect": 2.0,
+      "aspect_relative_error": 0.1293103448275862,
+      "principal_axis_degrees": 0.07234078541674947,
+      "estimated_key_rgb": [
+        235.0,
+        239.0,
+        248.0
+      ],
+      "magenta_key": false,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 8.067797739920959,
+      "palette_p90_delta_e": 11.973251248849573
+    },
+    "placement": {
+      "source_bounds_px": [
+        59,
+        251,
+        968,
+        773
+      ],
+      "source_pivot_px": [
+        513.5,
+        512.0
+      ],
+      "pivot_px": [
+        127.5,
+        128.0
+      ],
+      "cell_px": [
+        256,
+        256
+      ],
+      "subject_px": [
+        223,
+        128
+      ],
+      "scale": 0.24532453245324531,
+      "world_length_m": 9.3,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 128
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v1-bleached-poster\\v1-bleached-poster-heavy-v1.png",
+    "sha256": "27898d8f09851503a371c72e060c7551de9224a3a461fb5bb257a557681e4288"
+  },
+  {
+    "id": "v1-bleached-poster-light-v1",
+    "class": "Needle",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v1-bleached-poster-light-v1\\attempt-03\\1.jpg",
+    "source_sha256": "47c4056a3a0a4fc3ecd56e4f9bc0a4d487824a09ed8be396c8dcfa74578b89df",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v1-bleached-poster-light-v1",
+      "class": "Needle",
+      "prompt_action": "One single original light combat buggy: a very narrow stripped rat-rod with four exposed skinny wheels, empty skeletal cage, exposed engine at LEFT rear and a tapered forked ram at RIGHT nose. Length just over twice width. Patched panels, dents and soot, intact reference configuration. Strict overhead roof-plane view, horizontal axis, complete vehicle within the middle three quarters of the canvas, generous empty margin. No occupant or exposed driver.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "",
+      "batch": "v1-bleached-poster",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "128",
+      "style_file": "style-bleached-poster.json",
+      "wave": "V1",
+      "proof_role": "light"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "5927977a570bdec3762f1327b17924eb9203d85beafe97731ebaf5d2c5f197a6",
+    "style_version": "wasteland-bleached-poster-v2",
+    "processor_sources": {
+      "process.py": "baeb3c75341198559ebbbf8175e2effc5b3b5193b96f22afa7da9eeb41992936"
+    },
+    "metrics": {
+      "foreground_fraction": 0.20244407653808594,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        84,
+        309,
+        987,
+        713
+      ],
+      "margin_fraction": 0.0361328125,
+      "aspect": 2.235148514851485,
+      "expected_aspect": 2.1999999999999997,
+      "aspect_relative_error": 0.015976597659766112,
+      "principal_axis_degrees": 0.0786396559125248,
+      "estimated_key_rgb": [
+        231.0,
+        116.0,
+        171.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 8.028338807203935,
+      "palette_p90_delta_e": 13.29198713616371
+    },
+    "placement": {
+      "source_bounds_px": [
+        84,
+        309,
+        987,
+        713
+      ],
+      "source_pivot_px": [
+        535.5,
+        511.0
+      ],
+      "pivot_px": [
+        128.0,
+        63.5
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        158,
+        71
+      ],
+      "scale": 0.17497231450719822,
+      "world_length_m": 6.6,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 128
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v1-bleached-poster\\v1-bleached-poster-light-v1.png",
+    "sha256": "307120a13ee5437a29cbca576a86f2c0e2fb9758b75b3137af2b6e8b77518c16"
+  },
+  {
+    "id": "v1-bleached-poster-portrait-v1",
+    "class": "rook",
+    "kind": "portrait",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v1-bleached-poster-portrait-v1\\attempt-01\\1.jpg",
+    "source_sha256": "e26db6a7294cb606cbf2c617693558f38da9e874a33404fea438eb44405cd69a",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v1-bleached-poster-portrait-v1",
+      "class": "rook",
+      "prompt_action": "One isolated original fictional adult rival portrait, chest-up facing the viewer: gaunt weathered scavenger with angular cheekbones, a healed cheek scar, broken-lens goggles on the forehead, uneven cropped hair, dust scarf and one welded shoulder plate. Bitter calculating expression. The entire head and shoulder silhouette fits inside the middle three quarters with generous margin. Flat neutral even light; this is a portrait, not a person inside a vehicle.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "portrait",
+      "reference": "",
+      "batch": "v1-bleached-poster",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "256",
+      "style_file": "style-bleached-poster.json",
+      "wave": "V1",
+      "proof_role": "portrait"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "5927977a570bdec3762f1327b17924eb9203d85beafe97731ebaf5d2c5f197a6",
+    "style_version": "wasteland-bleached-poster-v2",
+    "processor_sources": {
+      "process.py": "baeb3c75341198559ebbbf8175e2effc5b3b5193b96f22afa7da9eeb41992936"
+    },
+    "metrics": {
+      "foreground_fraction": 0.4292325973510742,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        85,
+        76,
+        959,
+        960
+      ],
+      "margin_fraction": 0.0625,
+      "aspect": 0.9886877828054299,
+      "estimated_key_rgb": [
+        242.0,
+        205.0,
+        248.0
+      ],
+      "magenta_key": false,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 6.969022959947136,
+      "palette_p90_delta_e": 12.262995290906096
+    },
+    "placement": {
+      "source_bounds_px": [
+        85,
+        76,
+        959,
+        960
+      ],
+      "source_pivot_px": [
+        522.0,
+        518.0
+      ],
+      "pivot_px": [
+        127.5,
+        128.0
+      ],
+      "cell_px": [
+        256,
+        256
+      ],
+      "subject_px": [
+        245,
+        248
+      ],
+      "scale": 0.28054298642533937,
+      "world_length_m": null,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v1-bleached-poster\\v1-bleached-poster-portrait-v1.png",
+    "sha256": "e5456f7fed98b362d140c93330cc6d3370ffc99ad1f40278e52dd1a60b4eae8e"
+  },
+  {
+    "id": "v1-bleached-poster-ground-v1",
+    "class": "asphalt-worn",
+    "kind": "tile",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v1-bleached-poster-ground-v1\\attempt-03\\1.jpg",
+    "source_sha256": "6b04b29f505fed2b221d438679c3445e16816a62941dc9dd4b67eea27488909c",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v1-bleached-poster-ground-v1",
+      "class": "asphalt-worn",
+      "prompt_action": "Entire image is ONLY an empty worn asphalt material patch viewed directly overhead. Anonymous fine cracks, tiny abrasion strokes and grit; low contrast middle-dark values, uniform density and even light. One unrepeated stochastic field fills every edge and continues seamlessly across all boundaries. No repeated quadrants, mirrored halves, large cracks, identifiable motifs, objects, road markings, cars, border or grid.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "none",
+      "count": "1",
+      "status": "ready",
+      "kind": "tile",
+      "reference": "",
+      "batch": "v1-bleached-poster",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "256",
+      "style_file": "style-bleached-poster.json",
+      "wave": "V1",
+      "proof_role": "ground"
+    },
+    "verdict": "reject",
+    "codes": [
+      "TILE_SEAM_PEAK"
+    ],
+    "style_hash": "5927977a570bdec3762f1327b17924eb9203d85beafe97731ebaf5d2c5f197a6",
+    "style_version": "wasteland-bleached-poster-v2",
+    "processor_sources": {
+      "process.py": "baeb3c75341198559ebbbf8175e2effc5b3b5193b96f22afa7da9eeb41992936"
+    },
+    "raw_metrics": {
+      "edge_x_mean": 0.06634497549019608,
+      "edge_y_mean": 0.07842626633986928,
+      "edge_x_peak": 0.6862745098039216,
+      "edge_y_peak": 0.8392156862745098,
+      "autocorrelation_peak": 0.06346406995145164,
+      "autocorrelation_shift_px": [
+        15,
+        28
+      ],
+      "basis": "decoded straight RGB / 255; autocorrelation circular luminance at 128px; excludes nearby shifts"
+    },
+    "raw_codes": [
+      "TILE_SEAM_PEAK"
+    ],
+    "metrics": {
+      "edge_x_mean": 0.06450674019607842,
+      "edge_y_mean": 0.06775428921568627,
+      "edge_x_peak": 0.6,
+      "edge_y_peak": 0.588235294117647,
+      "autocorrelation_peak": 0.06119550728792561,
+      "autocorrelation_shift_px": [
+        113,
+        100
+      ],
+      "basis": "decoded straight RGB / 255; autocorrelation circular luminance at 128px; excludes nearby shifts"
+    },
+    "repeat_path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v1-bleached-poster\\v1-bleached-poster-ground-v1-repeat.png",
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v1-bleached-poster\\v1-bleached-poster-ground-v1.png",
+    "sha256": "d217213b6868a4b3974b83d41854c0493a6b06b4140275fa004d57d85656ed30"
+  },
+  {
+    "id": "v1-bleached-poster-barrier-v1",
+    "class": "concrete",
+    "kind": "prop",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v1-bleached-poster-barrier-v1\\attempt-01\\1.jpg",
+    "source_sha256": "83e43769b4b6a2a024b295228d1c17762b75a54a68c7e4c4c34cb6cf098e59ee",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v1-bleached-poster-barrier-v1",
+      "class": "concrete",
+      "prompt_action": "One isolated original road barricade viewed strictly from above: a horizontal battered concrete block with bolted scrap end caps and a few blank hazard-yellow diagonal paint bands worn away. Chips, rust fasteners and patched top surface, no readable symbols. Top plane only, entire silhouette in the middle three quarters with generous margin; no ground or cast shadow.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "prop",
+      "reference": "",
+      "batch": "v1-bleached-poster",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "128",
+      "style_file": "style-bleached-poster.json",
+      "wave": "V1",
+      "proof_role": "barrier"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "5927977a570bdec3762f1327b17924eb9203d85beafe97731ebaf5d2c5f197a6",
+    "style_version": "wasteland-bleached-poster-v2",
+    "processor_sources": {
+      "process.py": "baeb3c75341198559ebbbf8175e2effc5b3b5193b96f22afa7da9eeb41992936"
+    },
+    "metrics": {
+      "foreground_fraction": 0.33023643493652344,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        57,
+        306,
+        974,
+        719
+      ],
+      "margin_fraction": 0.048828125,
+      "aspect": 2.2203389830508473,
+      "estimated_key_rgb": [
+        248.0,
+        248.0,
+        248.0
+      ],
+      "magenta_key": false,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 8.262079964690576,
+      "palette_p90_delta_e": 14.722658561077441
+    },
+    "placement": {
+      "source_bounds_px": [
+        57,
+        306,
+        974,
+        719
+      ],
+      "source_pivot_px": [
+        515.5,
+        512.5
+      ],
+      "pivot_px": [
+        64.0,
+        32.0
+      ],
+      "cell_px": [
+        128,
+        64
+      ],
+      "subject_px": [
+        120,
+        54
+      ],
+      "scale": 0.13086150490730644,
+      "world_length_m": null,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 128
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v1-bleached-poster\\v1-bleached-poster-barrier-v1.png",
+    "sha256": "56130c39e34d4b80b48e0b0eaf5bb0ef9a37066cb04aa1f53a016868b1619da8"
+  },
+  {
+    "id": "v1-bleached-poster-icon-v1",
+    "class": "repair",
+    "kind": "icon",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v1-bleached-poster-icon-v1\\attempt-02\\1.jpg",
+    "source_sha256": "286407821be3e5a6a5deae522e130f507ef32f237053c4ae31e5068690d4b642",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v1-bleached-poster-icon-v1",
+      "class": "repair",
+      "prompt_action": "One isolated repair HUD icon: a single battered open-ended wrench with a wide recognisable jaw and taped grip, chipped bone metal and one small hazard-yellow patch. Diagonal simple silhouette legible at 32 pixels, sparse large marks, no badge, circular backing, lettering or additional objects. Entire wrench in the middle three quarters with generous margin.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "icon",
+      "reference": "",
+      "batch": "v1-bleached-poster",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "128",
+      "style_file": "style-bleached-poster.json",
+      "wave": "V1",
+      "proof_role": "icon"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "5927977a570bdec3762f1327b17924eb9203d85beafe97731ebaf5d2c5f197a6",
+    "style_version": "wasteland-bleached-poster-v2",
+    "processor_sources": {
+      "process.py": "baeb3c75341198559ebbbf8175e2effc5b3b5193b96f22afa7da9eeb41992936"
+    },
+    "metrics": {
+      "foreground_fraction": 0.13741683959960938,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        157,
+        161,
+        879,
+        876
+      ],
+      "margin_fraction": 0.1416015625,
+      "aspect": 1.0097902097902098,
+      "estimated_key_rgb": [
+        246.0,
+        247.0,
+        247.0
+      ],
+      "magenta_key": false,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 8.338035495539081,
+      "palette_p90_delta_e": 12.733430941044631
+    },
+    "placement": {
+      "source_bounds_px": [
+        157,
+        161,
+        879,
+        876
+      ],
+      "source_pivot_px": [
+        518.0,
+        518.5
+      ],
+      "pivot_px": [
+        64.0,
+        63.5
+      ],
+      "cell_px": [
+        128,
+        128
+      ],
+      "subject_px": [
+        120,
+        119
+      ],
+      "scale": 0.16620498614958448,
+      "world_length_m": null,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 128
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v1-bleached-poster\\v1-bleached-poster-icon-v1.png",
+    "sha256": "1038f3fc3a2c64a58b936f8ef5bcce3928da6ecab9e51f5fc41a631c1d74b135"
+  },
+  {
+    "id": "v1-bleached-poster-effect-v1",
+    "class": "spark-burst",
+    "kind": "effect",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v1-bleached-poster-effect-v1\\attempt-02\\1.jpg",
+    "source_sha256": "cd9a86458d2fc8226cc1f2b003e0158268b948cbfacac3dd7133ab81a416238c",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v1-bleached-poster-effect-v1",
+      "class": "spark-burst",
+      "prompt_action": "One isolated compact impact spark burst, a single still effect sprite: a central pale bone star with seven uneven short hot ochre and rust-orange tapered sparks radiating outwards. Strong central mass, crisp opaque painted sparks, no smoke, glow gradient, sheet, grid, object, lettering or background scene. Everything in the middle three quarters with generous margin.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "effect",
+      "reference": "",
+      "batch": "v1-bleached-poster",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "128",
+      "style_file": "style-bleached-poster.json",
+      "wave": "V1",
+      "proof_role": "effect"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "5927977a570bdec3762f1327b17924eb9203d85beafe97731ebaf5d2c5f197a6",
+    "style_version": "wasteland-bleached-poster-v2",
+    "processor_sources": {
+      "process.py": "baeb3c75341198559ebbbf8175e2effc5b3b5193b96f22afa7da9eeb41992936"
+    },
+    "metrics": {
+      "foreground_fraction": 0.1041555404663086,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        188,
+        208,
+        870,
+        820
+      ],
+      "margin_fraction": 0.150390625,
+      "aspect": 1.1143790849673203,
+      "estimated_key_rgb": [
+        224.0,
+        65.0,
+        150.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 17,
+      "palette_mean_delta_e": 8.86867884632408,
+      "palette_p90_delta_e": 14.375633326496459
+    },
+    "placement": {
+      "source_bounds_px": [
+        188,
+        208,
+        870,
+        820
+      ],
+      "source_pivot_px": [
+        529.0,
+        514.0
+      ],
+      "pivot_px": [
+        64.0,
+        64.0
+      ],
+      "cell_px": [
+        128,
+        128
+      ],
+      "subject_px": [
+        120,
+        108
+      ],
+      "scale": 0.17595307917888564,
+      "world_length_m": null,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 128
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v1-bleached-poster\\v1-bleached-poster-effect-v1.png",
+    "sha256": "1cdb87f0b59ce1ab50e466379c676822c5cf71764b1f9bc756751e91fece0bea"
+  }
+]

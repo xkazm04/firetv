@@ -23,3 +23,5 @@ deathride/.art-venv/Scripts/python.exe deathride/tools/art/validate_bundle.py
 ```
 
 Generation history, briefs, exact rejection evidence, reports and owner contact sheets live under `deathride/art/`. Grok's logged `grok-4.7` is the CLI orchestration model; the underlying image engine and seed were not disclosed. No reproducible pixel seed is claimed. Raw outputs are local ignored artifacts; regeneration consumes account quota and can yield different pixels. Accepted bundle versions are immutable.
+
+V2 direction exploration (V1 wave) is review-only: `review.html` opens five seven-subject style boards and v1/v2 comparisons. `review-v1.html` preserves this bundle's historical review. The five style cards and 68-attempt evidence do not replace any delivered atlas. OWNER-CHOICE.md is absent, so full-roster V2 and world-kit V4 generation are gated; reference approval still independently blocks damage states and liveries. New weekly cap 350; current reservations 198, remaining 152, zero videos. Surface-lab evidence will have its own application and cost report, not a claim that this bundle is integrated or owner-approved.
