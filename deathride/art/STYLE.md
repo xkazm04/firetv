@@ -1,4 +1,11 @@
-﻿# Death Ride art direction v2: owner choice pending
+# Death Ride art direction v2: family fusion selected
+
+## Part 2 executable choice
+
+The owner chose the family fusion in `OWNER-CHOICE.md`. `style-fusion.json` and `FUSION-BRIDGE.md` implement it; `owner-choice-binding.json` binds the unchanged owner prose and exact fusion bytes. Each prompt resolves one parent direction plus the same bridge verbatim. Cars/ground/surfaces use Rust and Ink; portraits/barriers use Soot Pulp; icons/effects use Hot Ink. Host assignments: props/landmarks/decals use Rust and Ink, backdrops use Soot Pulp, pickups/HUD frames use Hot Ink. Source cards remain immutable. Bleached Poster and Scrap Collage remain historical comparisons only.
+
+The selected stack is `seeded-decals-tall-props-baked-natural-bands`: deterministic marks, sparse tall silhouettes with separate renderer shadows, and irregular material edges baked once per course. No drawn road outlines. Natural obstacles carry footprint and drag/solid/none metadata for a later core hook; this art run does not alter physics. The exact-reference approval gate still blocks all damage states and liveries. The following choice-stage text describes the preserved earlier experiment, not a remaining prerequisite.
+
 
 The digital hand-drawn contract remains. The mood is raw, improvised and sun-scorched: welded scrap, rust bloom, patched armour, chipped panels, soot and dirt in seams. Every manufactured asset carries wear. No clean primaries or factory-new finish. Designs are original; prompts never name existing franchises, characters, vehicles, brands or logos.
 

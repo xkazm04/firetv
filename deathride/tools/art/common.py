@@ -51,7 +51,20 @@ def style_for(row, art=ART):
     path = (art/name).resolve()
     if path.parent != art.resolve() or not path.name.startswith('style'):
         raise ValueError('style file must be a direct art/style*.json child')
-    return read_json(path)
+    style = read_json(path)
+    if style.get('family_directions'):
+        family = row.get('asset_family')
+        direction = style['family_directions'].get(family)
+        if not direction:
+            raise ValueError('FUSION_FAMILY_REQUIRED: ' + str(family))
+        parent = art / direction['style_file']
+        if parent.parent != art or sha(parent) != direction['sha256']:
+            raise ValueError('FUSION_PARENT_CHANGED: ' + family)
+        source = read_json(parent)
+        # Exactly one complete direction, followed by the same bridge verbatim.
+        style = {**style, 'style_block': source['style_block'] + '\n' + style['bridge_block'],
+                 'resolved_direction': direction['style_file']}
+    return style
 
 @contextmanager
 def file_lock(path, timeout=20):

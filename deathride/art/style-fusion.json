@@ -1,0 +1,105 @@
+{
+  "schema": 1,
+  "version": "wasteland-family-fusion-v2",
+  "style_block": "FUSION BRIDGE: Anchor all families to soot #171513, dark earth #39302A, ochre #A37738, rust #B4512D, dried red #6C2427, bone #DDD0A6 and sparse hazard yellow #B4A044. Neutral flat diffuse light only; value changes are pigment and material, never a directional lamp; no baked cast shadow. At a 96-pixel subject read, broken outer contours occupy 1 to 2 pixels, interior marks at most 1 pixel; retain large quiet planes. Cluster heavy wear at joints and impact anchors: chipped paint, soot, exposed metal and rust; natural materials use sparse abrasion and dry broken texture. Ground, surface and decal boundaries have no continuous ink outline: use irregular dirt encroachment, worn rubber and fragmentary worn paint. Original designs only.",
+  "camera": "True orthographic top-down: camera directly above, roof planes only, no visible front or side body faces. Cars point right, toward screen +x.",
+  "negative": "No franchise references, existing fictional characters or copied vehicles, brands, logos, text, letters, numbers, watermark, clean primaries, factory-new surfaces, photorealism, 3D render, perspective, cast shadows or cropped subject. No occupants inside vehicles. No decorative ground behind isolated subjects.",
+  "background_key": "#FF00FF",
+  "pixels_per_metre": 24,
+  "gutter_px": 4,
+  "mipmaps": false,
+  "filter": "Linear",
+  "accents": {},
+  "palette": [
+    "#171513",
+    "#39302A",
+    "#A37738",
+    "#B4512D",
+    "#6C2427",
+    "#DDD0A6",
+    "#B4A044"
+  ],
+  "source_shapes": "core/src/main/resources/data/car-shapes.csv",
+  "source_presentation": "core/src/main/resources/data/presentation.csv",
+  "texture_budget": {
+    "page_px": 1024,
+    "page_rgba_mib": 4,
+    "scene_mib": 32,
+    "cars_pages": 2,
+    "world_pages": 3,
+    "ui_pages": 1,
+    "theme_pages_resident": 1
+  },
+  "status": "owner-chosen-families; references-pending",
+  "owner_choice_file": "OWNER-CHOICE.md",
+  "name": "Death Ride family fusion",
+  "rationale": "Owner family assignments plus explicitly recorded nearest-family host assignments.",
+  "bridge_block": "FUSION BRIDGE: Anchor all families to soot #171513, dark earth #39302A, ochre #A37738, rust #B4512D, dried red #6C2427, bone #DDD0A6 and sparse hazard yellow #B4A044. Neutral flat diffuse light only; value changes are pigment and material, never a directional lamp; no baked cast shadow. At a 96-pixel subject read, broken outer contours occupy 1 to 2 pixels, interior marks at most 1 pixel; retain large quiet planes. Cluster heavy wear at joints and impact anchors: chipped paint, soot, exposed metal and rust; natural materials use sparse abrasion and dry broken texture. Ground, surface and decal boundaries have no continuous ink outline: use irregular dirt encroachment, worn rubber and fragmentary worn paint. Original designs only.",
+  "family_directions": {
+    "cars": {
+      "style_file": "style-rust-ink.json",
+      "sha256": "3828ffccfaa95d1b1dd7f8b69045b72f243eb2364e08af7ab0948767ea861a28",
+      "assignment": "owner"
+    },
+    "ground": {
+      "style_file": "style-rust-ink.json",
+      "sha256": "3828ffccfaa95d1b1dd7f8b69045b72f243eb2364e08af7ab0948767ea861a28",
+      "assignment": "owner"
+    },
+    "surfaces": {
+      "style_file": "style-rust-ink.json",
+      "sha256": "3828ffccfaa95d1b1dd7f8b69045b72f243eb2364e08af7ab0948767ea861a28",
+      "assignment": "owner"
+    },
+    "props": {
+      "style_file": "style-rust-ink.json",
+      "sha256": "3828ffccfaa95d1b1dd7f8b69045b72f243eb2364e08af7ab0948767ea861a28",
+      "assignment": "host-nearest-family"
+    },
+    "landmarks": {
+      "style_file": "style-rust-ink.json",
+      "sha256": "3828ffccfaa95d1b1dd7f8b69045b72f243eb2364e08af7ab0948767ea861a28",
+      "assignment": "host-nearest-family"
+    },
+    "decals": {
+      "style_file": "style-rust-ink.json",
+      "sha256": "3828ffccfaa95d1b1dd7f8b69045b72f243eb2364e08af7ab0948767ea861a28",
+      "assignment": "host-nearest-family"
+    },
+    "portraits": {
+      "style_file": "style-soot-pulp.json",
+      "sha256": "7051c3bdce33d6482162013e472dd3a1fbe53f03361e400cb85f64a88f545654",
+      "assignment": "owner"
+    },
+    "barriers": {
+      "style_file": "style-soot-pulp.json",
+      "sha256": "7051c3bdce33d6482162013e472dd3a1fbe53f03361e400cb85f64a88f545654",
+      "assignment": "owner"
+    },
+    "backdrops": {
+      "style_file": "style-soot-pulp.json",
+      "sha256": "7051c3bdce33d6482162013e472dd3a1fbe53f03361e400cb85f64a88f545654",
+      "assignment": "host-nearest-family"
+    },
+    "pickups": {
+      "style_file": "style-hot-ink.json",
+      "sha256": "56b58265e9ebff73fd6aae37d1b9c43b5b0c9233fc14e9bbe1674aafff500d8c",
+      "assignment": "host-nearest-family"
+    },
+    "effects": {
+      "style_file": "style-hot-ink.json",
+      "sha256": "56b58265e9ebff73fd6aae37d1b9c43b5b0c9233fc14e9bbe1674aafff500d8c",
+      "assignment": "owner"
+    },
+    "hud-icons": {
+      "style_file": "style-hot-ink.json",
+      "sha256": "56b58265e9ebff73fd6aae37d1b9c43b5b0c9233fc14e9bbe1674aafff500d8c",
+      "assignment": "owner"
+    },
+    "hud-frames": {
+      "style_file": "style-hot-ink.json",
+      "sha256": "56b58265e9ebff73fd6aae37d1b9c43b5b0c9233fc14e9bbe1674aafff500d8c",
+      "assignment": "host-nearest-family"
+    }
+  }
+}

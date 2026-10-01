@@ -7,6 +7,31 @@ from gen import Budget, generate
 from style_choice import require_choice
 
 class StyleChoiceContracts(unittest.TestCase):
+    def test_fusion_one_direction_and_bridge_per_family(self):
+        fusion=__import__('common').read_json(ART/'style-fusion.json')
+        for family, direction in fusion['family_directions'].items():
+            row={'id':'v4-test-v1','wave':'V4','style_file':'style-fusion.json','asset_family':family,
+                 'surface_stack':'seeded-decals-tall-props-baked-natural-bands'}
+            require_choice(row)
+            style=style_for(row)
+            parent=__import__('common').read_json(ART/direction['style_file'])
+            self.assertEqual(style['style_block'],parent['style_block']+'\n'+fusion['bridge_block'])
+        with self.assertRaisesRegex(ValueError,'FUSION_FAMILY_REQUIRED'):
+            style_for({'style_file':'style-fusion.json','asset_family':'unknown'})
+
+    def test_fusion_parent_mutation_and_owner_mutation_fail_closed(self):
+        import shutil
+        with tempfile.TemporaryDirectory() as d:
+            art=Path(d)
+            for name in ('OWNER-CHOICE.md','owner-choice-binding.json','style-fusion.json','style-rust-ink.json'):
+                shutil.copyfile(ART/name,art/name)
+            row={'id':'v2-test-v1','wave':'V2','style_file':'style-fusion.json','asset_family':'cars'}
+            require_choice(row,art)
+            (art/'style-rust-ink.json').write_text('{}')
+            with self.assertRaisesRegex(ValueError,'FUSION_PARENT_CHANGED'): style_for(row,art)
+            (art/'OWNER-CHOICE.md').write_text('changed')
+            with self.assertRaisesRegex(ValueError,'OWNER_CHOICE_REQUIRED'): require_choice(row,art)
+
     def test_five_identical_seven_subject_sets_and_style_only_prompt_change(self):
         rows=briefs(ART/'briefs/v1-directions.csv')
         self.assertEqual(len(rows),35)

@@ -7,6 +7,18 @@ def require_choice(row, art=ART):
     if not path.is_file(): raise ValueError('OWNER_CHOICE_REQUIRED: OWNER-CHOICE.md absent')
     text=path.read_text(encoding='utf-8')
     fields=dict(re.findall(r'^([a-z_][a-z0-9_]*):[ \t]*(\S.*?)[ \t]*$',text,re.M))
+    if row.get('style_file') == 'style-fusion.json':
+        # Owner chose families in prose before a fusion file existed. The host
+        # compilation binds that unchanged decision to exact executable bytes.
+        binding_path=art/'owner-choice-binding.json'
+        if not binding_path.is_file(): raise ValueError('OWNER_CHOICE_REQUIRED: fusion binding absent')
+        binding=read_json(binding_path)
+        if binding.get('owner_choice_sha256')!=sha(path):
+            raise ValueError('OWNER_CHOICE_REQUIRED: owner evidence changed')
+        expected=('Soot Pulp - portrait, barrier','Rust and Ink - cars, ground and surfaces','Hot Ink - icon, effect')
+        if any(value not in text for value in expected):
+            raise ValueError('OWNER_CHOICE_REQUIRED: fusion decision not present')
+        fields=binding
     if fields.get('owner_choice')!='approved' or not fields.get('owner_evidence'):
         raise ValueError('OWNER_CHOICE_REQUIRED: explicit approved choice and owner evidence required')
     style_path=art/row.get('style_file','')
