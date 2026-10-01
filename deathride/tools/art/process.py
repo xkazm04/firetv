@@ -128,6 +128,9 @@ def normalize(image,style,shape=None,cell_limit=128):
     return Image.fromarray(rgba),{'source_bounds_px':list(box),'source_pivot_px':[(box[0]+box[2])/2,(box[1]+box[3])/2],'pivot_px':pivot,'cell_px':list(cell),'subject_px':list(size),'scale':scale,'world_length_m':float(shape['lengthM']) if shape else None,'gutter_px':gutter,'filter':style['filter'],'mipmaps':style['mipmaps']}
 
 def shapes():
+    if (ART/'contracts/c1-source.json').exists():
+        from family import check_scale_contract
+        return check_scale_contract()
     with (ROOT/read_json(ART/'style.json')['source_shapes']).open() as f: return {r['id']:r for r in csv.DictReader(f)}
 
 def process_one(row,path,output_dir):

@@ -1,0 +1,68 @@
+{
+  "asset": "p3-ref-kestrel-v1",
+  "model": "mimo-9b:q8-64k",
+  "model_digest": "35fc231b70167b8c3d1e3a9ebd54610f5359ad1d7aff0d18e7d082d47b78024b",
+  "input_hash": "8d27ffc44dc8ea4464f0683889660bb15e1f8b449c7be78ecc1bb7b01653eac7",
+  "image_hashes": [
+    "11045626b6d39cb0b07b98caca58fe723a7f4673eafeb54509c356d089b93568",
+    "44ae5165a1cfe7881c9113539383f542b4c6278312c0ca3e6d9344a8028b5eff"
+  ],
+  "prompt": "Image 1 is the target Kestrel car. Image 2 is the other class family reference. Answer only what is visible. Does target keep charcoal rubber, blue-black glass, cool metal and its body accent in the same roles? Is its mechanical silhouette recognizably distinct from the OTHER classes in the family? Ignore labels. Palette and silhouette only; do not grade taste. Use uncertain if comparison cannot be made.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "palette_matches": {
+        "type": "string",
+        "enum": [
+          "yes",
+          "no",
+          "not_applicable",
+          "uncertain"
+        ]
+      },
+      "silhouette_distinct": {
+        "type": "string",
+        "enum": [
+          "yes",
+          "no",
+          "not_applicable",
+          "uncertain"
+        ]
+      },
+      "confidence": {
+        "type": "number",
+        "enum": [
+          0.0,
+          0.25,
+          0.5,
+          0.75,
+          1.0
+        ],
+        "description": "Fraction, NOT percent: 1.0 certain, 0.75 some doubt, 0.5 uncertain, 0.25 poor evidence, 0 no evidence."
+      },
+      "description": {
+        "type": "string"
+      }
+    },
+    "additionalProperties": false,
+    "required": [
+      "palette_matches",
+      "silhouette_distinct",
+      "confidence",
+      "description"
+    ]
+  },
+  "at": "2026-10-01T09:06:58.375897+00:00",
+  "scope": "family",
+  "raw_content": "{\n  \"confidence\": 0.75,\n  \"description\": \"Target keeps charcoal rubber tires, blue-black glass, cool blue metal body, and a pale cool-metal body accent stripe in the same roles. Its mechanical silhouette is recognizably distinct from the other classes in the family.\",\n  \"palette_matches\": \"yes\",\n  \"silhouette_distinct\": \"yes\"\n}",
+  "status": "graded",
+  "answers": {
+    "confidence": 0.75,
+    "description": "Target keeps charcoal rubber tires, blue-black glass, cool blue metal body, and a pale cool-metal body accent stripe in the same roles. Its mechanical silhouette is recognizably distinct from the other classes in the family.",
+    "palette_matches": "yes",
+    "silhouette_distinct": "yes"
+  },
+  "eval_count": 91,
+  "done_reason": "stop",
+  "elapsed_seconds": 2.266
+}

@@ -87,7 +87,19 @@ def candidates(row):
     folder = ART / 'raw' / row['id']
     return sorted(folder.glob('attempt-*/sidecar.json')) if folder.exists() else []
 
+def reference_gate(row,art=ART):
+    requirement=row.get('requires_approval','')
+    if not requirement:return
+    path=Path(art)/'reference-approvals.json'
+    if not path.exists():raise ValueError('OWNER_REFERENCE_APPROVAL_REQUIRED: '+requirement)
+    record=read_json(path)['references'].get(requirement,{})
+    ref=Path(row.get('reference',''))
+    if not ref.is_absolute():ref=ROOT/ref
+    if not record.get('owner_approved') or not record.get('owner_evidence') or not ref.is_file() or sha(ref)!=record.get('source_sha256'):
+        raise ValueError('OWNER_REFERENCE_APPROVAL_REQUIRED: '+requirement)
+
 def generate(row, style, budget, refine=False):
+    reference_gate(row)
     old = [read_json(p) for p in candidates(row)]
     prompt = compile_prompt(row, style)
     signature = digest({'row':row, 'style':style})

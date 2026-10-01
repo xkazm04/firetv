@@ -19,9 +19,13 @@ def combine(batch,semantic_batch,family_batch=None):
     result=[]
     for item in items:
         if item.get('gates_hash')!=digest(cfg):raise ValueError('pixel report stale; rerun process.py: '+item['id'])
-        grades=[m.get(item['id'],{}) for m in readings]
+        # Regenerating an ID must not reuse observations of its previous pixels.
+        def current(m):
+            record=m.get(item['id'],{})
+            return record if record.get('image_hashes',[None])[0]==item['source_sha256'] else {}
+        grades=[current(m) for m in readings]
         verdict,codes=decide(grades,item['kind'],cfg['vlm_confidence_min'])
-        family_grades=[m.get(item['id'],{}) for m in family]
+        family_grades=[current(m) for m in family]
         if family_grades and item['kind']=='car':
             fv,fc=decide(family_grades,item['kind'],cfg['vlm_confidence_min'])
             codes+=fc

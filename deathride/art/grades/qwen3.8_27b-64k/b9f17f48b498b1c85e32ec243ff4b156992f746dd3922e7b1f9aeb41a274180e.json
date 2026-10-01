@@ -1,0 +1,68 @@
+{
+  "asset": "p3-ref-line-v1",
+  "model": "qwen3.8:27b-64k",
+  "model_digest": "12af24e3ee72bf54bca064a972bf767938a96149d671eaa64c9506c7ea54c08c",
+  "input_hash": "b9f17f48b498b1c85e32ec243ff4b156992f746dd3922e7b1f9aeb41a274180e",
+  "image_hashes": [
+    "b0ee6f908cc5e573caf21e8be7fb28dc0f45e2cec1de0eb472b07b927b7c11d0",
+    "44ae5165a1cfe7881c9113539383f542b4c6278312c0ca3e6d9344a8028b5eff"
+  ],
+  "prompt": "Image 1 is the target Line car. Image 2 is the other class family reference. Answer only what is visible. Does target keep charcoal rubber, blue-black glass, cool metal and its body accent in the same roles? Is its mechanical silhouette recognizably distinct from the OTHER classes in the family? Ignore labels. Palette and silhouette only; do not grade taste. Use uncertain if comparison cannot be made.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "palette_matches": {
+        "type": "string",
+        "enum": [
+          "yes",
+          "no",
+          "not_applicable",
+          "uncertain"
+        ]
+      },
+      "silhouette_distinct": {
+        "type": "string",
+        "enum": [
+          "yes",
+          "no",
+          "not_applicable",
+          "uncertain"
+        ]
+      },
+      "confidence": {
+        "type": "number",
+        "enum": [
+          0.0,
+          0.25,
+          0.5,
+          0.75,
+          1.0
+        ],
+        "description": "Fraction, NOT percent: 1.0 certain, 0.75 some doubt, 0.5 uncertain, 0.25 poor evidence, 0 no evidence."
+      },
+      "description": {
+        "type": "string"
+      }
+    },
+    "additionalProperties": false,
+    "required": [
+      "palette_matches",
+      "silhouette_distinct",
+      "confidence",
+      "description"
+    ]
+  },
+  "at": "2026-10-01T09:07:12.748118+00:00",
+  "scope": "family",
+  "raw_content": "{\"palette_matches\": \"yes\", \"silhouette_distinct\": \"yes\", \"confidence\": 0.75, \"description\": \"The target vehicle maintains a consistent color role mapping with its reference, featuring a dominant red body, a central cream-colored stripe, and dark blue-black glass. Its silhouette is a distinct, rounded fastback or coupe shape, which is clearly different from the other vehicles in the family, such as the boxy truck, the angular fighter jet, and the low-profile race car.\"}",
+  "status": "graded",
+  "answers": {
+    "palette_matches": "yes",
+    "silhouette_distinct": "yes",
+    "confidence": 0.75,
+    "description": "The target vehicle maintains a consistent color role mapping with its reference, featuring a dominant red body, a central cream-colored stripe, and dark blue-black glass. Its silhouette is a distinct, rounded fastback or coupe shape, which is clearly different from the other vehicles in the family, such as the boxy truck, the angular fighter jet, and the low-profile race car."
+  },
+  "eval_count": 108,
+  "done_reason": "stop",
+  "elapsed_seconds": 3.344
+}
