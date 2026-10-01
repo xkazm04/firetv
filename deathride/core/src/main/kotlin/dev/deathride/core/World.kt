@@ -77,9 +77,10 @@ class Projection { var s = 0.0; var distance = 0.0; var nx = 0.0; var ny = 1.0 }
 data class Track(val straightM: Double = 120.0, val radiusM: Double = 40.0, val halfWidthM: Double = 12.0, var surface: Surface=Surfaces.asphalt, val course: Course?=null) {
     var surfaceOverride=false
     fun widthAt(s: Double)=course?.widthAt(s)?:halfWidthM
-    fun surfaceAt(s: Double, lateral: Double): Surface = when {
-        abs(lateral)>widthAt(s)-Movement.vergeWidthM -> Surfaces.offtrack
-        abs(lateral)>widthAt(s)-Movement.vergeWidthM-Movement.kerbWidthM -> Surfaces.kerb
+    /** Edge materials touch the car's lateral contact footprint; authored interior bands use its centre. */
+    fun surfaceAt(s: Double, lateral: Double, contactRadiusM: Double=0.0): Surface = when {
+        abs(lateral)+contactRadiusM>widthAt(s)-Movement.vergeWidthM -> Surfaces.offtrack
+        abs(lateral)+contactRadiusM>widthAt(s)-Movement.vergeWidthM-Movement.kerbWidthM -> Surfaces.kerb
         else -> if(surfaceOverride || course==null)surface else course.surfaceAt(s,lateral)
     }
     val lengthM = course?.lengthM ?: (2 * straightM + 2 * PI * radiusM)
@@ -285,7 +286,7 @@ class World(val seed: Int=17, val spec: CarSpec=CarSpec(), val track: Track=Trac
         for(c in cars) {
             if(!c.entered)continue
             c.previousX=c.x; c.previousY=c.y; c.previousHeading=c.heading; c.impact*=.87
-            c.wallImpactMps=0.0; track.project(c.x,c.y,projection); c.surface=track.surfaceAt(projection.s,projection.distance)
+            c.wallImpactMps=0.0; track.project(c.x,c.y,projection); c.surface=track.surfaceAt(projection.s,projection.distance,if(c.carClass==null)0.0 else c.spec.circleRadiusM)
             if(combat.wrecked(c.id)) {
                 val drag=exp(-CombatRules["wreckDragPerSecond"]*dt);c.vx*=drag;c.vy*=drag;c.yaw*=drag
                 c.x+=c.vx*dt;c.y+=c.vy*dt;c.heading=wrapAngle(c.heading+c.yaw*dt)
@@ -354,7 +355,7 @@ class World(val seed: Int=17, val spec: CarSpec=CarSpec(), val track: Track=Trac
         val slip=if(c.speedMps>2.0) wrapAngle(atan2(c.vy,c.vx)-c.heading) else 0.0
         val error=wrapAngle(desired-c.heading-slip*.35)
         val steer=(-error*2.3+c.yaw*.18).coerceIn(-1.0,1.0)
-        val target=if(c.carClass==null) { if(point.curvature>0) 23.0-skill.cornerMarginMps else 29.0 } else min(c.spec.maxSpeedMps*CarCatalog.aiCruiseFraction, if(point.curvature>0) sqrt(c.spec.maxLateralAccelerationMps2*track.surfaceAt(s+look,lane).gripScale*CarCatalog.aiGripFraction/point.curvature)-skill.cornerMarginMps else c.spec.maxSpeedMps)
+        val target=if(c.carClass==null) { if(point.curvature>0) 23.0-skill.cornerMarginMps else 29.0 } else min(c.spec.maxSpeedMps*CarCatalog.aiCruiseFraction, if(point.curvature>0) sqrt(c.spec.maxLateralAccelerationMps2*track.surfaceAt(s+look,lane,c.spec.circleRadiusM).gripScale*CarCatalog.aiGripFraction/point.curvature)-skill.cornerMarginMps else c.spec.maxSpeedMps)
         val surfaceLimit=if(point.curvature>0)1.0 else sqrt(c.surface.gripScale).coerceIn(Movement.aiSurfaceMargin,1.0)
         val cornerTarget=target*surfaceLimit*(1.0-min(.55,abs(error)*.4))
         val a=if(c.speedMps<cornerTarget) 1.0 else .12

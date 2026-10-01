@@ -5,6 +5,23 @@ import org.junit.jupiter.api.Assertions.*
 import java.io.File
 
 class TrackContentTest {
+    @Test fun remainingFeatureVocabularyLengthGridAndRecoveryRulesHaveMutants() {
+        val c=Courses.all[5];val f=c.features.single{it.kind=="shortcut"}
+        fun copy(id: String=c.id,theme: String=c.theme,nodes: List<TrackNode> = c.nodes,spots: List<TrackSpot> = c.spots,features: List<TrackFeature> = listOf(f))=Course(id,c.name,c.lesson,c.startFraction,theme,nodes,spots,features)
+        assertEquals(emptyList<String>(),TrackContent.errors(c))
+        val middle=(f.start+f.end)*.5;val relative=(middle-c.startFraction+1)%1
+        val mutants=listOf(
+            "unknown theme" to copy(theme="void"),
+            "surface outside theme vocabulary" to copy(nodes=c.nodes.map{it.copy(surface=Surfaces.practice.first{s->s.id=="Ice"})}),
+            "invalid competitive pool" to copy(id="missing-pool"),
+            "unknown feature" to copy(features=listOf(f.copy(kind="teleport"))),
+            "feature surface outside theme" to copy(features=listOf(f.copy(surface=Surfaces.practice.first{it.id=="Ice"}))),
+            "feature too short" to copy(features=listOf(f.copy(end=f.start+.00001))),
+            "feature covers grid" to copy(spots=c.spots+TrackSpot("grid",relative,f.laneM)),
+            "hazard denies feature recovery" to copy(spots=c.spots+TrackSpot("hazard",relative,f.laneM)),
+            "features lack recovery gap" to copy(features=listOf(f,f)))
+        for((rule,mutant) in mutants)assertTrue(TrackContent.errors(mutant).any{it.contains(rule)},"mutant must kill $rule")
+    }
     @Test fun storedPlansThemesAndPoolsAreCompleteAndDistinct() {
         assertTrue(Courses.all.size>=24);assertTrue(TrackContent.themes.size>=4)
         assertEquals(Courses.all.size,Courses.all.map{it.id}.toSet().size)

@@ -124,6 +124,7 @@ A career ladder of many more events, named rival drivers with personalities as d
 | Content | C3 | Combat and economy depth | C1 | implemented / core and Stick checked; human fairness not measured | e1640f0 | 2026-10-01 |
 | Content | C4 | Career v2 and rivals | C2, C3 | implemented / core and Stick checked; duration and boss pacing targets remain open | this commit (C4) | 2026-10-01 |
 | Integration | I1 | Atlas renderer with procedural fallback | P3, P4, C2 | wired / GL and Stick checked; car families await approval | integration-i1-20261001 | 2026-10-01 |
+| Integration | V1 | Reachable verge and complete linter mutants | I1 | verified on all ten sizes / green | integration-v1-20261001 | 2026-10-01 |
 | Integration | I2 | Stick texture and frame budget | I1 | not started | | |
 | Integration | I3 | Gate G2 report, owner session | I2, C4 | not started | | |
 
@@ -180,3 +181,9 @@ Not measured/remaining: owner approval of ten exact car references before 40 sta
 `:core:test :link:test :game:test :app:assembleDebug` green: **84 core / 3 link / 2 renderer tests**. Actual GL upload/draw and missing-catalog/failed-page injection pass; no-art desktop smoke reaches a race. /24 scan found AFTKM at 10.0.0.139; final installed APK selected all ten cars and all 25 courses, captured real art during normal LAN driving, showed story/portraits and recovered from Home/resume. Fixed the discovered new-track/old-ready telemetry race. The final practice probe reached a result at 17.18 seconds with 118 shots; short practice wrecks remain visible and are not fairness evidence. Evidence/manifest/logs: `deathride/evidence/phase2/i1-*`.
 
 Not measured: approved car art behavior, owner quality/feel, full-game sustained memory/frame budget (I2), revised C4 endurance/boss pacing. New Grok spend **0**; historical 130/180, **50 remain**, zero videos. No push. Next: forge verge/lint correction, physical career pacing, final I2 soak and I3 owner report.
+
+### V1 ? 2026-10-01
+
+[Design and result](deathride/V1-verge-and-lint.md). Reproduced the unreachable centre-only verge on all ten roster cars, both sides; saved the failing regression and before/after rows. Surface detection and AI look-ahead now use the outer lateral collision radius for kerb/verge, retaining centre queries for authored interior materials. Walls, widths and car geometry are unchanged. Added the six missing base linter mutants plus nine feature/content mutants.
+
+`:core:test :link:test :game:test :app:assembleDebug` green: **87 core / 3 link / 2 renderer**. All 20 edge cases now experience Offtrack drag, with reachable kerb and unchanged asphalt centre; deterministic replay and zero-allocation tests pass. Evidence: `deathride/evidence/phase2/v1/`. Old physical outcome hashes are superseded for current-runtime claims; IP will rebuild its library. Owner handling/fairness remains not measured. Grok spend **0**, still 130/180 with **50 left**. No push. Next: IP career format, legal boss fields and measured pacing.

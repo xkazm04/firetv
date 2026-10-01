@@ -6,6 +6,20 @@ import java.io.File
 import kotlin.math.*
 
 class TracksTest {
+    @Test fun remainingSixGeometryAndPacingRulesRejectTheirNamedMutants() {
+        val c=Courses.all[0]
+        fun copy(nodes: List<TrackNode> = c.nodes,spots: List<TrackSpot> = c.spots)=Course(c.id,c.name,c.lesson,c.startFraction,c.theme,nodes,spots)
+        assertEquals(emptyList<String>(),TrackLinter.errors(c))
+        val circle=(0..16).map{i->val a=-(i%16)*2*PI/16;TrackNode(60*cos(a),60*sin(a),12.0,Surfaces.asphalt,0.0)}
+        val mutants=listOf(
+            "corner radius too tight" to copy(nodes=c.nodes.map{it.copy(x=it.x*.2,y=it.y*.2)}),
+            "six grid positions" to copy(spots=c.spots.filterIndexed{i,_->i!=c.spots.indexOfFirst{it.kind=="grid"}}),
+            "unknown spot" to copy(spots=c.spots+TrackSpot("teleport",.3,0.0)),
+            "spot outside road" to copy(spots=c.spots+TrackSpot("ammo",.3,100.0)),
+            "spot fraction" to copy(spots=c.spots+TrackSpot("ammo",1.2,0.0)),
+            "straight fraction" to copy(nodes=circle))
+        for((rule,mutant) in mutants)assertTrue(TrackLinter.errors(mutant).any{it.contains(rule)},"mutant must kill $rule")
+    }
     @Test fun longCarHasContactThroughItsMiddle() {
         val w=World();val a=w.cars[0];val b=w.cars[1]
         CarCatalog.apply(a,CarCatalog.all.indexOfFirst { it.id=="Comet" })
