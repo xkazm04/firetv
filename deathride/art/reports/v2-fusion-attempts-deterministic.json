@@ -1,0 +1,3348 @@
+[
+  {
+    "id": "v2-fusion-cars-bastion-v1-a1",
+    "class": "Bastion",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v2-fusion-cars-bastion-v1\\attempt-01\\1.jpg",
+    "source_sha256": "ae0c7e4cd1f9d53c1823755954b7b600e1c8505fc3b4383bfe424495573e6f0f",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-fusion-cars-bastion-v1-a1",
+      "class": "Bastion",
+      "prompt_action": "A heavy four-wheel spiked fortress: hugely swollen squared wheel guards, four enormous exposed tyres, broad slab roof with a short roof cannon aimed RIGHT, blunt full-width welded ram at RIGHT, stacked scrap armour and triangular shoulder teeth. Compressed cabin swallowed by armour. Soot, ochre and rust, bone chipped plate edges. The strongest broad solid mass of the roster. Total silhouette length-to-width ratio 2.0:1, including wheels and appendages. One intact identity reference only, no damage-state variation. Strict overhead roof planes only; NO visible front grille, side doors or vertical walls. Horizontal main axis and nose RIGHT. Keep ALL pixels inside the central 66 percent of the square, at least 17 percent empty margin on each side.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "",
+      "batch": "v2-fusion-cars",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "cars",
+      "surface_stack": ""
+    },
+    "verdict": "reject",
+    "codes": [
+      "CROPPED_OR_MARGIN",
+      "ASPECT_BAND"
+    ],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "metrics": {
+      "foreground_fraction": 0.4025278091430664,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        62,
+        191,
+        995,
+        832
+      ],
+      "margin_fraction": 0.0283203125,
+      "aspect": 1.4555382215288613,
+      "expected_aspect": 2.0,
+      "aspect_relative_error": 0.2722308892355694,
+      "principal_axis_degrees": 0.07390279426315466,
+      "estimated_key_rgb": [
+        245.0,
+        166.0,
+        224.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 6.162442889914903,
+      "palette_p90_delta_e": 10.647970769114975
+    },
+    "placement": {
+      "source_bounds_px": [
+        62,
+        191,
+        995,
+        832
+      ],
+      "source_pivot_px": [
+        528.5,
+        511.5
+      ],
+      "pivot_px": [
+        127.5,
+        127.5
+      ],
+      "cell_px": [
+        256,
+        256
+      ],
+      "subject_px": [
+        223,
+        153
+      ],
+      "scale": 0.2390139335476956,
+      "world_length_m": 9.3,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v2-fusion-attempts\\v2-fusion-cars-bastion-v1-a1.png",
+    "sha256": "1284427615c848a691b05d006a118100841bdf8a5024ae2ad17519adb2d8ac6c",
+    "parent_id": "v2-fusion-cars-bastion-v1",
+    "attempt": 1
+  },
+  {
+    "id": "v2-fusion-cars-bastion-v1-a2",
+    "class": "Bastion",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v2-fusion-cars-bastion-v1\\attempt-02\\1.jpg",
+    "source_sha256": "484fc67333cc8e15a0a381e05631b29ed75aa5f9936f2ee95b155b79f1837f5f",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-fusion-cars-bastion-v1-a2",
+      "class": "Bastion",
+      "prompt_action": "A heavy four-wheel spiked fortress: hugely swollen squared wheel guards, four enormous exposed tyres, broad slab roof with a short roof cannon aimed RIGHT, blunt full-width welded ram at RIGHT, stacked scrap armour and triangular shoulder teeth. Compressed cabin swallowed by armour. Soot, ochre and rust, bone chipped plate edges. The strongest broad solid mass of the roster. Total silhouette length-to-width ratio 2.0:1, including wheels and appendages. One intact identity reference only, no damage-state variation. Strict overhead roof planes only; NO visible front grille, side doors or vertical walls. Horizontal main axis and nose RIGHT. Keep ALL pixels inside the central 66 percent of the square, at least 17 percent empty margin on each side.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "",
+      "batch": "v2-fusion-cars",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "cars",
+      "surface_stack": ""
+    },
+    "verdict": "reject",
+    "codes": [
+      "CROPPED_OR_MARGIN"
+    ],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "metrics": {
+      "foreground_fraction": 0.4075899124145508,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        37,
+        232,
+        1005,
+        792
+      ],
+      "margin_fraction": 0.0185546875,
+      "aspect": 1.7285714285714286,
+      "expected_aspect": 2.0,
+      "aspect_relative_error": 0.13571428571428568,
+      "principal_axis_degrees": 0.05310845779587718,
+      "estimated_key_rgb": [
+        247.5,
+        216.0,
+        246.0
+      ],
+      "magenta_key": false,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 5.731082620556563,
+      "palette_p90_delta_e": 11.273582432518815
+    },
+    "placement": {
+      "source_bounds_px": [
+        37,
+        232,
+        1005,
+        792
+      ],
+      "source_pivot_px": [
+        521.0,
+        512.0
+      ],
+      "pivot_px": [
+        127.5,
+        127.5
+      ],
+      "cell_px": [
+        256,
+        256
+      ],
+      "subject_px": [
+        223,
+        129
+      ],
+      "scale": 0.2303719008264463,
+      "world_length_m": 9.3,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v2-fusion-attempts\\v2-fusion-cars-bastion-v1-a2.png",
+    "sha256": "a41bac1f69d003d8efc8b3ed5ba52e69a408acb242be6a38d7f3f67dd2a45b20",
+    "parent_id": "v2-fusion-cars-bastion-v1",
+    "attempt": 2
+  },
+  {
+    "id": "v2-fusion-cars-bastion-v1-a3",
+    "class": "Bastion",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v2-fusion-cars-bastion-v1\\attempt-03\\1.jpg",
+    "source_sha256": "d2e297baf254c4c4d6dafab99d2ac3bbbc1266eb18c1038d09788569b41c7b2d",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-fusion-cars-bastion-v1-a3",
+      "class": "Bastion",
+      "prompt_action": "A heavy four-wheel spiked fortress: hugely swollen squared wheel guards, four enormous exposed tyres, broad slab roof with a short roof cannon aimed RIGHT, blunt full-width welded ram at RIGHT, stacked scrap armour and triangular shoulder teeth. Compressed cabin swallowed by armour. Soot, ochre and rust, bone chipped plate edges. The strongest broad solid mass of the roster. Total silhouette length-to-width ratio 2.0:1, including wheels and appendages. One intact identity reference only, no damage-state variation. Strict overhead roof planes only; NO visible front grille, side doors or vertical walls. Horizontal main axis and nose RIGHT. Keep ALL pixels inside the central 66 percent of the square, at least 17 percent empty margin on each side.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "",
+      "batch": "v2-fusion-cars",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "cars",
+      "surface_stack": ""
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "metrics": {
+      "foreground_fraction": 0.28395938873291016,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        114,
+        271,
+        911,
+        751
+      ],
+      "margin_fraction": 0.1103515625,
+      "aspect": 1.6604166666666667,
+      "expected_aspect": 2.0,
+      "aspect_relative_error": 0.16979166666666667,
+      "principal_axis_degrees": 0.09161170940462031,
+      "estimated_key_rgb": [
+        246.0,
+        27.0,
+        151.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 6.765759905353745,
+      "palette_p90_delta_e": 13.070855294712395
+    },
+    "placement": {
+      "source_bounds_px": [
+        114,
+        271,
+        911,
+        751
+      ],
+      "source_pivot_px": [
+        512.5,
+        511.0
+      ],
+      "pivot_px": [
+        127.5,
+        128.0
+      ],
+      "cell_px": [
+        256,
+        256
+      ],
+      "subject_px": [
+        223,
+        134
+      ],
+      "scale": 0.2797992471769134,
+      "world_length_m": 9.3,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v2-fusion-attempts\\v2-fusion-cars-bastion-v1-a3.png",
+    "sha256": "d6026c87ed11cc1d1b582bbc9655a2402900a4ce25378ff0e9853848e2695cd9",
+    "parent_id": "v2-fusion-cars-bastion-v1",
+    "attempt": 3
+  },
+  {
+    "id": "v2-fusion-cars-needle-v1-a1",
+    "class": "Needle",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v2-fusion-cars-needle-v1\\attempt-01\\1.jpg",
+    "source_sha256": "7c86809777cc4f9810598e3db8cf9d3f159ce13455c159799c159f1bddd206a1",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-fusion-cars-needle-v1-a1",
+      "class": "Needle",
+      "prompt_action": "A very light skeletal rat-rod buggy: pencil-thin EMPTY cage, four exposed skinny wheels on long visible outriggers, tiny rust nose ending in a forked ram at RIGHT, exposed engine at LEFT rear. Large magenta negative-space gaps between the central chassis and wheel pods. Bare tubular spars, only two small ochre patched panels. No broad continuous body shell; fragile and stripped to the bones. Total silhouette length-to-width ratio 2.2:1, including wheels and appendages. One intact identity reference only, no damage-state variation. Strict overhead roof planes only; NO visible front grille, side doors or vertical walls. Horizontal main axis and nose RIGHT. Keep ALL pixels inside the central 66 percent of the square, at least 17 percent empty margin on each side.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "",
+      "batch": "v2-fusion-cars",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "cars",
+      "surface_stack": ""
+    },
+    "verdict": "reject",
+    "codes": [
+      "CROPPED_OR_MARGIN",
+      "ASPECT_BAND"
+    ],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "metrics": {
+      "foreground_fraction": 0.3722963333129883,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        41,
+        177,
+        1001,
+        845
+      ],
+      "margin_fraction": 0.0224609375,
+      "aspect": 1.437125748502994,
+      "expected_aspect": 2.1999999999999997,
+      "aspect_relative_error": 0.34676102340772996,
+      "principal_axis_degrees": 0.08019948337741349,
+      "estimated_key_rgb": [
+        190.0,
+        152.0,
+        175.0
+      ],
+      "magenta_key": false,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 11.538254900539624,
+      "palette_p90_delta_e": 31.39398529984037
+    },
+    "placement": {
+      "source_bounds_px": [
+        41,
+        177,
+        1001,
+        845
+      ],
+      "source_pivot_px": [
+        521.0,
+        511.0
+      ],
+      "pivot_px": [
+        128.0,
+        64.0
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        158,
+        110
+      ],
+      "scale": 0.16458333333333333,
+      "world_length_m": 6.6,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v2-fusion-attempts\\v2-fusion-cars-needle-v1-a1.png",
+    "sha256": "233985073b75e0edfdc82e2d543ea399d34fe1200da2d4b9cfae28f19e3d7767",
+    "parent_id": "v2-fusion-cars-needle-v1",
+    "attempt": 1
+  },
+  {
+    "id": "v2-fusion-cars-needle-v1-a2",
+    "class": "Needle",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v2-fusion-cars-needle-v1\\attempt-02\\1.jpg",
+    "source_sha256": "e06d788e5aff2ac8ba53c813d41ae82d25bc9bbd06e87c135fed875707463de9",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-fusion-cars-needle-v1-a2",
+      "class": "Needle",
+      "prompt_action": "A very light skeletal rat-rod buggy: pencil-thin EMPTY cage, four exposed skinny wheels on long visible outriggers, tiny rust nose ending in a forked ram at RIGHT, exposed engine at LEFT rear. Large magenta negative-space gaps between the central chassis and wheel pods. Bare tubular spars, only two small ochre patched panels. No broad continuous body shell; fragile and stripped to the bones. Total silhouette length-to-width ratio 2.2:1, including wheels and appendages. One intact identity reference only, no damage-state variation. Strict overhead roof planes only; NO visible front grille, side doors or vertical walls. Horizontal main axis and nose RIGHT. Keep ALL pixels inside the central 66 percent of the square, at least 17 percent empty margin on each side.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "",
+      "batch": "v2-fusion-cars",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "cars",
+      "surface_stack": ""
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "metrics": {
+      "foreground_fraction": 0.17940425872802734,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        92,
+        276,
+        980,
+        749
+      ],
+      "margin_fraction": 0.04296875,
+      "aspect": 1.8773784355179703,
+      "expected_aspect": 2.1999999999999997,
+      "aspect_relative_error": 0.14664616567364974,
+      "principal_axis_degrees": 0.09331422657280224,
+      "estimated_key_rgb": [
+        241.0,
+        43.0,
+        166.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 5.796837057652908,
+      "palette_p90_delta_e": 10.936772998967337
+    },
+    "placement": {
+      "source_bounds_px": [
+        92,
+        276,
+        980,
+        749
+      ],
+      "source_pivot_px": [
+        536.0,
+        512.5
+      ],
+      "pivot_px": [
+        128.0,
+        64.0
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        158,
+        84
+      ],
+      "scale": 0.17792792792792791,
+      "world_length_m": 6.6,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v2-fusion-attempts\\v2-fusion-cars-needle-v1-a2.png",
+    "sha256": "86870319c59dca8af5918936e69b576ecb8efcfe08fbdf51e749e26b6cc6105a",
+    "parent_id": "v2-fusion-cars-needle-v1",
+    "attempt": 2
+  },
+  {
+    "id": "v2-fusion-cars-line-v1-a1",
+    "class": "Line",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v2-fusion-cars-line-v1\\attempt-01\\1.jpg",
+    "source_sha256": "74b42e2a4a9bf0380845ebd28c120be3e505ad49c3fd37fa2b50f19d049c2d78",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-fusion-cars-line-v1-a1",
+      "class": "Line",
+      "prompt_action": "A scavenged compact coupe with a rounded RIGHT nose, broad dark windshield, patched dried-red hood, one off-centre chipped bone stripe, welded door shields and a short bent flat rear spoiler at LEFT. A wedge of rough welded plates reinforces the nose. Recognisable low coupe roof, four inset wheels. Total silhouette length-to-width ratio 2.08:1, including wheels and appendages. One intact identity reference only, no damage-state variation. Strict overhead roof planes only; NO visible front grille, side doors or vertical walls. Horizontal main axis and nose RIGHT. Keep ALL pixels inside the central 66 percent of the square, at least 17 percent empty margin on each side.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "",
+      "batch": "v2-fusion-cars",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "cars",
+      "surface_stack": ""
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "metrics": {
+      "foreground_fraction": 0.3473854064941406,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        72,
+        266,
+        972,
+        758
+      ],
+      "margin_fraction": 0.05078125,
+      "aspect": 1.829268292682927,
+      "expected_aspect": 2.08,
+      "aspect_relative_error": 0.12054409005628519,
+      "principal_axis_degrees": 0.08325575477994887,
+      "estimated_key_rgb": [
+        244.0,
+        244.0,
+        244.0
+      ],
+      "magenta_key": false,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 5.790337684392077,
+      "palette_p90_delta_e": 9.417241265320325
+    },
+    "placement": {
+      "source_bounds_px": [
+        72,
+        266,
+        972,
+        758
+      ],
+      "source_pivot_px": [
+        522.0,
+        512.0
+      ],
+      "pivot_px": [
+        127.5,
+        64.0
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        187,
+        102
+      ],
+      "scale": 0.20777777777777778,
+      "world_length_m": 7.8,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v2-fusion-attempts\\v2-fusion-cars-line-v1-a1.png",
+    "sha256": "58542b801a01185e467931ed2c25fc6db1574942e256e19e0c5f4c62bae5af9c",
+    "parent_id": "v2-fusion-cars-line-v1",
+    "attempt": 1
+  },
+  {
+    "id": "v2-fusion-cars-line-v1-a2",
+    "class": "Line",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v2-fusion-cars-line-v1\\attempt-02\\1.jpg",
+    "source_sha256": "bbbe7fea32ba7ce10e1e333f92cbc9cd7233f2e6e49e11ee0a3baf28a933ae68",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-fusion-cars-line-v1-a2",
+      "class": "Line",
+      "prompt_action": "A scavenged compact coupe with a rounded RIGHT nose, broad dark windshield, patched dried-red hood, one off-centre chipped bone stripe, welded door shields and a short bent flat rear spoiler at LEFT. A wedge of rough welded plates reinforces the nose. Recognisable low coupe roof, four inset wheels. Total silhouette length-to-width ratio 2.08:1, including wheels and appendages. One intact identity reference only, no damage-state variation. Strict overhead roof planes only; NO visible front grille, side doors or vertical walls. Horizontal main axis and nose RIGHT. Keep ALL pixels inside the central 66 percent of the square, at least 17 percent empty margin on each side.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "",
+      "batch": "v2-fusion-cars",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "cars",
+      "surface_stack": ""
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "metrics": {
+      "foreground_fraction": 0.33908939361572266,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        57,
+        270,
+        986,
+        752
+      ],
+      "margin_fraction": 0.037109375,
+      "aspect": 1.9273858921161826,
+      "expected_aspect": 2.08,
+      "aspect_relative_error": 0.07337216725183526,
+      "principal_axis_degrees": 0.03861254153237385,
+      "estimated_key_rgb": [
+        245.0,
+        16.0,
+        187.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 4.888371241774218,
+      "palette_p90_delta_e": 8.77462733277823
+    },
+    "placement": {
+      "source_bounds_px": [
+        57,
+        270,
+        986,
+        752
+      ],
+      "source_pivot_px": [
+        521.5,
+        511.0
+      ],
+      "pivot_px": [
+        127.5,
+        63.5
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        187,
+        97
+      ],
+      "scale": 0.20129171151776104,
+      "world_length_m": 7.8,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v2-fusion-attempts\\v2-fusion-cars-line-v1-a2.png",
+    "sha256": "71ca02befbd6153d935de530464ce1156517f6a972a24342f674b07b221ca9fb",
+    "parent_id": "v2-fusion-cars-line-v1",
+    "attempt": 2
+  },
+  {
+    "id": "v2-fusion-cars-comet-v1-a1",
+    "class": "Comet",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v2-fusion-cars-comet-v1\\attempt-01\\1.jpg",
+    "source_sha256": "29880a9eaa98d6be28d23f48e98e7ef2a144141552828753e2ed3828c8399ed8",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-fusion-cars-comet-v1-a1",
+      "class": "Comet",
+      "prompt_action": "A lopsided dragster: long tapered rust-orange triangular nose at RIGHT, narrow dark teardrop canopy offset slightly upward, one oversize exposed exhaust on the opposite flank, wide patched split wing at LEFT. Long forward thrust, four exposed wheels, small triangular ram fork, interrupted bone stripes. Preserve a single continuous chassis. Total silhouette length-to-width ratio 2.57:1, including wheels and appendages. One intact identity reference only, no damage-state variation. Strict overhead roof planes only; NO visible front grille, side doors or vertical walls. Horizontal main axis and nose RIGHT. Keep ALL pixels inside the central 66 percent of the square, at least 17 percent empty margin on each side.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "",
+      "batch": "v2-fusion-cars",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "cars",
+      "surface_stack": ""
+    },
+    "verdict": "reject",
+    "codes": [
+      "CROPPED_OR_MARGIN",
+      "ASPECT_BAND"
+    ],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "metrics": {
+      "foreground_fraction": 0.2209033966064453,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        28,
+        249,
+        1019,
+        775
+      ],
+      "margin_fraction": 0.0048828125,
+      "aspect": 1.8840304182509506,
+      "expected_aspect": 2.5714285714285716,
+      "aspect_relative_error": 0.2673215040135193,
+      "principal_axis_degrees": 0.3782566396531953,
+      "estimated_key_rgb": [
+        251.0,
+        251.0,
+        251.0
+      ],
+      "magenta_key": false,
+      "mixed_border_key": false,
+      "components": 2,
+      "palette_mean_delta_e": 6.7043407866092295,
+      "palette_p90_delta_e": 10.75098064469516
+    },
+    "placement": {
+      "source_bounds_px": [
+        28,
+        249,
+        1019,
+        775
+      ],
+      "source_pivot_px": [
+        523.5,
+        512.0
+      ],
+      "pivot_px": [
+        128.0,
+        63.5
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        216,
+        115
+      ],
+      "scale": 0.21796165489404642,
+      "world_length_m": 9.0,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v2-fusion-attempts\\v2-fusion-cars-comet-v1-a1.png",
+    "sha256": "cae52b5817773b17c652631815bee9fefbdde2cb0d803dd059fa868d4c676283",
+    "parent_id": "v2-fusion-cars-comet-v1",
+    "attempt": 1
+  },
+  {
+    "id": "v2-fusion-cars-comet-v1-a2",
+    "class": "Comet",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v2-fusion-cars-comet-v1\\attempt-02\\1.jpg",
+    "source_sha256": "9d6022c9a3b2a2b5887c4ac13d82b5bf4feb9832adc3b2678675e3bba0771b19",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-fusion-cars-comet-v1-a2",
+      "class": "Comet",
+      "prompt_action": "A lopsided dragster: long tapered rust-orange triangular nose at RIGHT, narrow dark teardrop canopy offset slightly upward, one oversize exposed exhaust on the opposite flank, wide patched split wing at LEFT. Long forward thrust, four exposed wheels, small triangular ram fork, interrupted bone stripes. Preserve a single continuous chassis. Total silhouette length-to-width ratio 2.57:1, including wheels and appendages. One intact identity reference only, no damage-state variation. Strict overhead roof planes only; NO visible front grille, side doors or vertical walls. Horizontal main axis and nose RIGHT. Keep ALL pixels inside the central 66 percent of the square, at least 17 percent empty margin on each side.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "",
+      "batch": "v2-fusion-cars",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "cars",
+      "surface_stack": ""
+    },
+    "verdict": "reject",
+    "codes": [
+      "CROPPED_OR_MARGIN"
+    ],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "metrics": {
+      "foreground_fraction": 0.19372272491455078,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        38,
+        260,
+        1012,
+        695
+      ],
+      "margin_fraction": 0.01171875,
+      "aspect": 2.239080459770115,
+      "expected_aspect": 2.5714285714285716,
+      "aspect_relative_error": 0.12924648786717763,
+      "principal_axis_degrees": 0.47479750773908763,
+      "estimated_key_rgb": [
+        239.0,
+        50.0,
+        193.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 5.860361126229977,
+      "palette_p90_delta_e": 10.737017880224387
+    },
+    "placement": {
+      "source_bounds_px": [
+        38,
+        260,
+        1012,
+        695
+      ],
+      "source_pivot_px": [
+        525.0,
+        477.5
+      ],
+      "pivot_px": [
+        128.0,
+        64.0
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        216,
+        96
+      ],
+      "scale": 0.22176591375770022,
+      "world_length_m": 9.0,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v2-fusion-attempts\\v2-fusion-cars-comet-v1-a2.png",
+    "sha256": "716d5c8e7eabdbbbf021d2e086254cb5c82778f780345f202d414af3adc7b616",
+    "parent_id": "v2-fusion-cars-comet-v1",
+    "attempt": 2
+  },
+  {
+    "id": "v2-fusion-cars-comet-v1-a3",
+    "class": "Comet",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v2-fusion-cars-comet-v1\\attempt-03\\1.jpg",
+    "source_sha256": "42791856f218da677bc40304e34538011c7270eb2d9497ae6f0a747cf15bc0a7",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-fusion-cars-comet-v1-a3",
+      "class": "Comet",
+      "prompt_action": "A lopsided dragster: long tapered rust-orange triangular nose at RIGHT, narrow dark teardrop canopy offset slightly upward, one oversize exposed exhaust on the opposite flank, wide patched split wing at LEFT. Long forward thrust, four exposed wheels, small triangular ram fork, interrupted bone stripes. Preserve a single continuous chassis. Total silhouette length-to-width ratio 2.57:1, including wheels and appendages. One intact identity reference only, no damage-state variation. Strict overhead roof planes only; NO visible front grille, side doors or vertical walls. Horizontal main axis and nose RIGHT. Keep ALL pixels inside the central 66 percent of the square, at least 17 percent empty margin on each side.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "",
+      "batch": "v2-fusion-cars",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "cars",
+      "surface_stack": ""
+    },
+    "verdict": "reject",
+    "codes": [
+      "CROPPED_OR_MARGIN",
+      "ASPECT_BAND"
+    ],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "metrics": {
+      "foreground_fraction": 0.25556278228759766,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        53,
+        222,
+        1002,
+        801
+      ],
+      "margin_fraction": 0.021484375,
+      "aspect": 1.6390328151986182,
+      "expected_aspect": 2.5714285714285716,
+      "aspect_relative_error": 0.36259834964498183,
+      "principal_axis_degrees": 0.4650913829010613,
+      "estimated_key_rgb": [
+        224.0,
+        25.0,
+        195.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 5.636380351213267,
+      "palette_p90_delta_e": 9.600673920455034
+    },
+    "placement": {
+      "source_bounds_px": [
+        53,
+        222,
+        1002,
+        801
+      ],
+      "source_pivot_px": [
+        527.5,
+        511.5
+      ],
+      "pivot_px": [
+        128.0,
+        128.0
+      ],
+      "cell_px": [
+        256,
+        256
+      ],
+      "subject_px": [
+        216,
+        132
+      ],
+      "scale": 0.22760800842992623,
+      "world_length_m": 9.0,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v2-fusion-attempts\\v2-fusion-cars-comet-v1-a3.png",
+    "sha256": "5f69c62ea3c8bda8f360b3c6ae3812dd0fdfe9b95b691c19ebf588201af88dc2",
+    "parent_id": "v2-fusion-cars-comet-v1",
+    "attempt": 3
+  },
+  {
+    "id": "v2-fusion-cars-trail-v1-a1",
+    "class": "Trail",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v2-fusion-cars-trail-v1\\attempt-01\\1.jpg",
+    "source_sha256": "51105ea898d7883be84a2622884d1ce88c4a2e94165b848efda51b8bd354dead",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-fusion-cars-trail-v1-a1",
+      "class": "Trail",
+      "prompt_action": "A squat grip-specialist rally hatchback: short boxy ochre roof, broad round exposed wheel arches, stubby RIGHT nose, four aggressively treaded tyres, empty roof-rack brace, small flat broken spoiler at LEFT. Chipped bone fender patches, torn rubber flaps and dusty rust underpanels. Compact wide agile stance, no mounted gun. Total silhouette length-to-width ratio 1.77:1, including wheels and appendages. One intact identity reference only, no damage-state variation. Strict overhead roof planes only; NO visible front grille, side doors or vertical walls. Horizontal main axis and nose RIGHT. Keep ALL pixels inside the central 66 percent of the square, at least 17 percent empty margin on each side.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "",
+      "batch": "v2-fusion-cars",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "cars",
+      "surface_stack": ""
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "metrics": {
+      "foreground_fraction": 0.3443412780761719,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        89,
+        244,
+        958,
+        785
+      ],
+      "margin_fraction": 0.064453125,
+      "aspect": 1.6062846580406653,
+      "expected_aspect": 1.7692307692307694,
+      "aspect_relative_error": 0.0920999758900588,
+      "principal_axis_degrees": 4.29685496278814,
+      "estimated_key_rgb": [
+        216.0,
+        75.0,
+        173.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 5.119979574413326,
+      "palette_p90_delta_e": 8.9424532661529
+    },
+    "placement": {
+      "source_bounds_px": [
+        89,
+        244,
+        958,
+        785
+      ],
+      "source_pivot_px": [
+        523.5,
+        514.5
+      ],
+      "pivot_px": [
+        128.0,
+        63.5
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        166,
+        103
+      ],
+      "scale": 0.19102416570771003,
+      "world_length_m": 6.9,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v2-fusion-attempts\\v2-fusion-cars-trail-v1-a1.png",
+    "sha256": "169fc37d7a0ba029e205a510f9524426329b9e877a613743638d48674414d680",
+    "parent_id": "v2-fusion-cars-trail-v1",
+    "attempt": 1
+  },
+  {
+    "id": "v2-fusion-cars-trail-v1-a2",
+    "class": "Trail",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v2-fusion-cars-trail-v1\\attempt-02\\1.jpg",
+    "source_sha256": "920a5e898d6921489bc4ac1eb5e421124d71be50959476aec7a29031f2606275",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-fusion-cars-trail-v1-a2",
+      "class": "Trail",
+      "prompt_action": "A squat grip-specialist rally hatchback: short boxy ochre roof, broad round exposed wheel arches, stubby RIGHT nose, four aggressively treaded tyres, empty roof-rack brace, small flat broken spoiler at LEFT. Chipped bone fender patches, torn rubber flaps and dusty rust underpanels. Compact wide agile stance, no mounted gun. Total silhouette length-to-width ratio 1.77:1, including wheels and appendages. One intact identity reference only, no damage-state variation. Strict overhead roof planes only; NO visible front grille, side doors or vertical walls. Horizontal main axis and nose RIGHT. Keep ALL pixels inside the central 66 percent of the square, at least 17 percent empty margin on each side.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "",
+      "batch": "v2-fusion-cars",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "cars",
+      "surface_stack": ""
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "metrics": {
+      "foreground_fraction": 0.40302276611328125,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        61,
+        231,
+        980,
+        788
+      ],
+      "margin_fraction": 0.04296875,
+      "aspect": 1.6499102333931777,
+      "expected_aspect": 1.7692307692307694,
+      "aspect_relative_error": 0.06744204199516057,
+      "principal_axis_degrees": 0.003193707868267898,
+      "estimated_key_rgb": [
+        242.0,
+        26.0,
+        169.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 5.681072729239436,
+      "palette_p90_delta_e": 9.959981356236483
+    },
+    "placement": {
+      "source_bounds_px": [
+        61,
+        231,
+        980,
+        788
+      ],
+      "source_pivot_px": [
+        520.5,
+        509.5
+      ],
+      "pivot_px": [
+        128.0,
+        63.5
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        166,
+        101
+      ],
+      "scale": 0.18063112078346028,
+      "world_length_m": 6.9,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v2-fusion-attempts\\v2-fusion-cars-trail-v1-a2.png",
+    "sha256": "51db34ce414146a4b73f9ecd555457715db1b1978a368c134e9578f28d9ca841",
+    "parent_id": "v2-fusion-cars-trail-v1",
+    "attempt": 2
+  },
+  {
+    "id": "v2-fusion-cars-flint-v1-a1",
+    "class": "Flint",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v2-fusion-cars-flint-v1\\attempt-01\\1.jpg",
+    "source_sha256": "a3c7fe38cd4e30c8b8274d36b2dd5d0b448f557eefac17ebe0b57110089d1478",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-fusion-cars-flint-v1-a1",
+      "class": "Flint",
+      "prompt_action": "A blunt ram pickup: giant shovel-like welded wedge bumper at RIGHT, short rust forward cab, open EMPTY rectangular scrap cargo bed at LEFT, four oversized squared tyres. A battered bone cross-brace lies flat in the bed. Very squat blocky footprint and broad rightward ram, no occupants. Total silhouette length-to-width ratio 1.73:1, including wheels and appendages. One intact identity reference only, no damage-state variation. Strict overhead roof planes only; NO visible front grille, side doors or vertical walls. Horizontal main axis and nose RIGHT. Keep ALL pixels inside the central 66 percent of the square, at least 17 percent empty margin on each side.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "",
+      "batch": "v2-fusion-cars",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "cars",
+      "surface_stack": ""
+    },
+    "verdict": "reject",
+    "codes": [
+      "CROPPED_OR_MARGIN"
+    ],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "metrics": {
+      "foreground_fraction": 0.36093807220458984,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        49,
+        252,
+        1012,
+        772
+      ],
+      "margin_fraction": 0.01171875,
+      "aspect": 1.851923076923077,
+      "expected_aspect": 1.7317073170731707,
+      "aspect_relative_error": 0.06942036836403043,
+      "principal_axis_degrees": 0.23275599979719422,
+      "estimated_key_rgb": [
+        231.0,
+        231.0,
+        231.0
+      ],
+      "magenta_key": false,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 5.513258258193071,
+      "palette_p90_delta_e": 10.454461060769638
+    },
+    "placement": {
+      "source_bounds_px": [
+        49,
+        252,
+        1012,
+        772
+      ],
+      "source_pivot_px": [
+        530.5,
+        512.0
+      ],
+      "pivot_px": [
+        128.0,
+        64.0
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        170,
+        92
+      ],
+      "scale": 0.17653167185877466,
+      "world_length_m": 7.1,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v2-fusion-attempts\\v2-fusion-cars-flint-v1-a1.png",
+    "sha256": "3a0acc1a5a55e801e85ba6e78345e5ed85c8fbf115c4961cc18b13aa4857671e",
+    "parent_id": "v2-fusion-cars-flint-v1",
+    "attempt": 1
+  },
+  {
+    "id": "v2-fusion-cars-flint-v1-a2",
+    "class": "Flint",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v2-fusion-cars-flint-v1\\attempt-02\\1.jpg",
+    "source_sha256": "d8ca5ade69b9a9ceff6a6f9bc3f7118841af5d17ff1bdf62136a347dffaa4fa8",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-fusion-cars-flint-v1-a2",
+      "class": "Flint",
+      "prompt_action": "A blunt ram pickup: giant shovel-like welded wedge bumper at RIGHT, short rust forward cab, open EMPTY rectangular scrap cargo bed at LEFT, four oversized squared tyres. A battered bone cross-brace lies flat in the bed. Very squat blocky footprint and broad rightward ram, no occupants. Total silhouette length-to-width ratio 1.73:1, including wheels and appendages. One intact identity reference only, no damage-state variation. Strict overhead roof planes only; NO visible front grille, side doors or vertical walls. Horizontal main axis and nose RIGHT. Keep ALL pixels inside the central 66 percent of the square, at least 17 percent empty margin on each side.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "",
+      "batch": "v2-fusion-cars",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "cars",
+      "surface_stack": ""
+    },
+    "verdict": "reject",
+    "codes": [
+      "CROPPED_OR_MARGIN"
+    ],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "metrics": {
+      "foreground_fraction": 0.29001903533935547,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        83,
+        288,
+        1001,
+        735
+      ],
+      "margin_fraction": 0.0224609375,
+      "aspect": 2.053691275167785,
+      "expected_aspect": 1.7317073170731707,
+      "aspect_relative_error": 0.18593439833632663,
+      "principal_axis_degrees": 0.01982605961288269,
+      "estimated_key_rgb": [
+        241.0,
+        34.0,
+        181.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 5.471740416021003,
+      "palette_p90_delta_e": 9.640290295943476
+    },
+    "placement": {
+      "source_bounds_px": [
+        83,
+        288,
+        1001,
+        735
+      ],
+      "source_pivot_px": [
+        542.0,
+        511.5
+      ],
+      "pivot_px": [
+        128.0,
+        63.5
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        170,
+        83
+      ],
+      "scale": 0.18518518518518517,
+      "world_length_m": 7.1,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v2-fusion-attempts\\v2-fusion-cars-flint-v1-a2.png",
+    "sha256": "e575d584739aca0d33a4bec947792ccb08040eb990b640ac5fa897f017cb8b2d",
+    "parent_id": "v2-fusion-cars-flint-v1",
+    "attempt": 2
+  },
+  {
+    "id": "v2-fusion-cars-flint-v1-a3",
+    "class": "Flint",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v2-fusion-cars-flint-v1\\attempt-03\\1.jpg",
+    "source_sha256": "aa4331cbe06cb472925ede07b70250fa566ce513a9097d15877015a6cc06fad0",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-fusion-cars-flint-v1-a3",
+      "class": "Flint",
+      "prompt_action": "A blunt ram pickup: giant shovel-like welded wedge bumper at RIGHT, short rust forward cab, open EMPTY rectangular scrap cargo bed at LEFT, four oversized squared tyres. A battered bone cross-brace lies flat in the bed. Very squat blocky footprint and broad rightward ram, no occupants. Total silhouette length-to-width ratio 1.73:1, including wheels and appendages. One intact identity reference only, no damage-state variation. Strict overhead roof planes only; NO visible front grille, side doors or vertical walls. Horizontal main axis and nose RIGHT. Keep ALL pixels inside the central 66 percent of the square, at least 17 percent empty margin on each side.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "",
+      "batch": "v2-fusion-cars",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "cars",
+      "surface_stack": ""
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "metrics": {
+      "foreground_fraction": 0.3379554748535156,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        67,
+        258,
+        992,
+        758
+      ],
+      "margin_fraction": 0.03125,
+      "aspect": 1.85,
+      "expected_aspect": 1.7317073170731707,
+      "aspect_relative_error": 0.0683098591549296,
+      "principal_axis_degrees": 0.19945866074626337,
+      "estimated_key_rgb": [
+        247.0,
+        52.0,
+        184.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 6.160180511887986,
+      "palette_p90_delta_e": 9.754765306647057
+    },
+    "placement": {
+      "source_bounds_px": [
+        67,
+        258,
+        992,
+        758
+      ],
+      "source_pivot_px": [
+        529.5,
+        508.0
+      ],
+      "pivot_px": [
+        128.0,
+        64.0
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        170,
+        92
+      ],
+      "scale": 0.1837837837837838,
+      "world_length_m": 7.1,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v2-fusion-attempts\\v2-fusion-cars-flint-v1-a3.png",
+    "sha256": "470653f26aa4f20f2fbe2444a258cfe948575cbb89cf63e50fdce295bdd01dc3",
+    "parent_id": "v2-fusion-cars-flint-v1",
+    "attempt": 3
+  },
+  {
+    "id": "v2-fusion-cars-quill-v1-a1",
+    "class": "Quill",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v2-fusion-cars-quill-v1\\attempt-01\\1.jpg",
+    "source_sha256": "e16cf725ffe20720d3c1534ff03187600e4d4022b7c0c3e07119df68fa7970ff",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-fusion-cars-quill-v1-a1",
+      "class": "Quill",
+      "prompt_action": "A light mechanical spider: pinched pencil-thin empty central cockpit, four detached-looking slim wheel pods visibly joined by exposed tubular arms, twin bare rear booms at LEFT, one needle-like RIGHT nose. Bone and soot metal with two small rust plates. Large open gaps and spindly limbs, more negative space than bodywork, no full-width hood. Total silhouette length-to-width ratio 2.09:1, including wheels and appendages. One intact identity reference only, no damage-state variation. Strict overhead roof planes only; NO visible front grille, side doors or vertical walls. Horizontal main axis and nose RIGHT. Keep ALL pixels inside the central 66 percent of the square, at least 17 percent empty margin on each side.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "",
+      "batch": "v2-fusion-cars",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "cars",
+      "surface_stack": ""
+    },
+    "verdict": "reject",
+    "codes": [
+      "CROPPED_OR_MARGIN",
+      "ASPECT_BAND"
+    ],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "metrics": {
+      "foreground_fraction": 0.18373489379882812,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        25,
+        186,
+        1012,
+        832
+      ],
+      "margin_fraction": 0.01171875,
+      "aspect": 1.5278637770897834,
+      "expected_aspect": 2.09375,
+      "aspect_relative_error": 0.2702740169123423,
+      "principal_axis_degrees": 0.8506285842127023,
+      "estimated_key_rgb": [
+        248.0,
+        248.0,
+        248.0
+      ],
+      "magenta_key": false,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 6.739456711529507,
+      "palette_p90_delta_e": 11.57575377234991
+    },
+    "placement": {
+      "source_bounds_px": [
+        25,
+        186,
+        1012,
+        832
+      ],
+      "source_pivot_px": [
+        518.5,
+        509.0
+      ],
+      "pivot_px": [
+        127.5,
+        63.5
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        161,
+        105
+      ],
+      "scale": 0.16312056737588654,
+      "world_length_m": 6.7,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v2-fusion-attempts\\v2-fusion-cars-quill-v1-a1.png",
+    "sha256": "e58ceefe1a2c5dba75201490c6890ce8cb881d5951f457daba22569405a47ee1",
+    "parent_id": "v2-fusion-cars-quill-v1",
+    "attempt": 1
+  },
+  {
+    "id": "v2-fusion-cars-quill-v1-a2",
+    "class": "Quill",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v2-fusion-cars-quill-v1\\attempt-02\\1.jpg",
+    "source_sha256": "4fd510e172d49d2302bea2fa60703a9bff033a652f3e63cfce0968b9bbe91c03",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-fusion-cars-quill-v1-a2",
+      "class": "Quill",
+      "prompt_action": "A light mechanical spider: pinched pencil-thin empty central cockpit, four detached-looking slim wheel pods visibly joined by exposed tubular arms, twin bare rear booms at LEFT, one needle-like RIGHT nose. Bone and soot metal with two small rust plates. Large open gaps and spindly limbs, more negative space than bodywork, no full-width hood. Total silhouette length-to-width ratio 2.09:1, including wheels and appendages. One intact identity reference only, no damage-state variation. Strict overhead roof planes only; NO visible front grille, side doors or vertical walls. Horizontal main axis and nose RIGHT. Keep ALL pixels inside the central 66 percent of the square, at least 17 percent empty margin on each side.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "",
+      "batch": "v2-fusion-cars",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "cars",
+      "surface_stack": ""
+    },
+    "verdict": "reject",
+    "codes": [
+      "ASPECT_BAND"
+    ],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "metrics": {
+      "foreground_fraction": 0.1613302230834961,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        58,
+        126,
+        992,
+        892
+      ],
+      "margin_fraction": 0.03125,
+      "aspect": 1.2193211488250653,
+      "expected_aspect": 2.09375,
+      "aspect_relative_error": 0.41763766026265536,
+      "principal_axis_degrees": 0.009756056490308465,
+      "estimated_key_rgb": [
+        231.0,
+        39.0,
+        153.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 5.174661429266687,
+      "palette_p90_delta_e": 9.549615141989033
+    },
+    "placement": {
+      "source_bounds_px": [
+        58,
+        126,
+        992,
+        892
+      ],
+      "source_pivot_px": [
+        525.0,
+        509.0
+      ],
+      "pivot_px": [
+        127.5,
+        128.0
+      ],
+      "cell_px": [
+        256,
+        256
+      ],
+      "subject_px": [
+        161,
+        132
+      ],
+      "scale": 0.17237687366167023,
+      "world_length_m": 6.7,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v2-fusion-attempts\\v2-fusion-cars-quill-v1-a2.png",
+    "sha256": "1b5b73dd758e5da0d55d35e05a3a63d5a23660a95aa208f827cf669bc148c42f",
+    "parent_id": "v2-fusion-cars-quill-v1",
+    "attempt": 2
+  },
+  {
+    "id": "v2-fusion-cars-quill-v1-a3",
+    "class": "Quill",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v2-fusion-cars-quill-v1\\attempt-03\\1.jpg",
+    "source_sha256": "e70dc698e31b1d03d97608477321242e678bb1fda19372dbc228d9683d3f452d",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-fusion-cars-quill-v1-a3",
+      "class": "Quill",
+      "prompt_action": "A light mechanical spider: pinched pencil-thin empty central cockpit, four detached-looking slim wheel pods visibly joined by exposed tubular arms, twin bare rear booms at LEFT, one needle-like RIGHT nose. Bone and soot metal with two small rust plates. Large open gaps and spindly limbs, more negative space than bodywork, no full-width hood. Total silhouette length-to-width ratio 2.09:1, including wheels and appendages. One intact identity reference only, no damage-state variation. Strict overhead roof planes only; NO visible front grille, side doors or vertical walls. Horizontal main axis and nose RIGHT. Keep ALL pixels inside the central 66 percent of the square, at least 17 percent empty margin on each side.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "",
+      "batch": "v2-fusion-cars",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "cars",
+      "surface_stack": ""
+    },
+    "verdict": "reject",
+    "codes": [
+      "CROPPED_OR_MARGIN"
+    ],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "metrics": {
+      "foreground_fraction": 0.16026020050048828,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        38,
+        318,
+        1008,
+        703
+      ],
+      "margin_fraction": 0.015625,
+      "aspect": 2.5194805194805197,
+      "expected_aspect": 2.09375,
+      "aspect_relative_error": 0.2033339794533826,
+      "principal_axis_degrees": 0.018068560944347434,
+      "estimated_key_rgb": [
+        244.0,
+        81.0,
+        214.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 5.625390619728061,
+      "palette_p90_delta_e": 10.199571986828818
+    },
+    "placement": {
+      "source_bounds_px": [
+        38,
+        318,
+        1008,
+        703
+      ],
+      "source_pivot_px": [
+        523.0,
+        510.5
+      ],
+      "pivot_px": [
+        127.5,
+        64.0
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        161,
+        64
+      ],
+      "scale": 0.16597938144329896,
+      "world_length_m": 6.7,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v2-fusion-attempts\\v2-fusion-cars-quill-v1-a3.png",
+    "sha256": "c13da647d895fc72724a19dc5deee1e7f574d42ca681ce12abd950827206765c",
+    "parent_id": "v2-fusion-cars-quill-v1",
+    "attempt": 3
+  },
+  {
+    "id": "v2-fusion-cars-vandal-v1-a1",
+    "class": "Vandal",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v2-fusion-cars-vandal-v1\\attempt-01\\1.jpg",
+    "source_sha256": "9505d3fd68d7a55168798ca5dd2c84fbb31b7706be1a3a0736264b879540a188",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-fusion-cars-vandal-v1-a1",
+      "class": "Vandal",
+      "prompt_action": "An aggressive interceptor sedan: long chamfered dried-red hood at RIGHT, squared soot cabin, two blank chipped bone diagonal shoulder patches, short unequal fins at LEFT, four mostly enclosed wheels. Asymmetric welded door armour and a low serrated right-facing ram; broad prow, low compact rear. Total silhouette length-to-width ratio 2.05:1, including wheels and appendages. One intact identity reference only, no damage-state variation. Strict overhead roof planes only; NO visible front grille, side doors or vertical walls. Horizontal main axis and nose RIGHT. Keep ALL pixels inside the central 66 percent of the square, at least 17 percent empty margin on each side.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "",
+      "batch": "v2-fusion-cars",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "cars",
+      "surface_stack": ""
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "metrics": {
+      "foreground_fraction": 0.3552570343017578,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        34,
+        269,
+        993,
+        758
+      ],
+      "margin_fraction": 0.0302734375,
+      "aspect": 1.9611451942740286,
+      "expected_aspect": 2.05,
+      "aspect_relative_error": 0.04334380767120549,
+      "principal_axis_degrees": 0.018117459448680606,
+      "estimated_key_rgb": [
+        223.0,
+        223.0,
+        223.0
+      ],
+      "magenta_key": false,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 5.823998020542358,
+      "palette_p90_delta_e": 9.54527788493061
+    },
+    "placement": {
+      "source_bounds_px": [
+        34,
+        269,
+        993,
+        758
+      ],
+      "source_pivot_px": [
+        513.5,
+        513.5
+      ],
+      "pivot_px": [
+        127.5,
+        64.0
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        197,
+        100
+      ],
+      "scale": 0.205422314911366,
+      "world_length_m": 8.2,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v2-fusion-attempts\\v2-fusion-cars-vandal-v1-a1.png",
+    "sha256": "2af5d8c5b1fd1b0ef35351bae86cad266e72eb8a1fd1bcc3fe3b8c7c8ec77ca6",
+    "parent_id": "v2-fusion-cars-vandal-v1",
+    "attempt": 1
+  },
+  {
+    "id": "v2-fusion-cars-vandal-v1-a2",
+    "class": "Vandal",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v2-fusion-cars-vandal-v1\\attempt-02\\1.jpg",
+    "source_sha256": "a671a83642e093157fe189271d70b2b03765e454a919d0dfe18a84351b90ae9c",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-fusion-cars-vandal-v1-a2",
+      "class": "Vandal",
+      "prompt_action": "An aggressive interceptor sedan: long chamfered dried-red hood at RIGHT, squared soot cabin, two blank chipped bone diagonal shoulder patches, short unequal fins at LEFT, four mostly enclosed wheels. Asymmetric welded door armour and a low serrated right-facing ram; broad prow, low compact rear. Total silhouette length-to-width ratio 2.05:1, including wheels and appendages. One intact identity reference only, no damage-state variation. Strict overhead roof planes only; NO visible front grille, side doors or vertical walls. Horizontal main axis and nose RIGHT. Keep ALL pixels inside the central 66 percent of the square, at least 17 percent empty margin on each side.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "",
+      "batch": "v2-fusion-cars",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "cars",
+      "surface_stack": ""
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "metrics": {
+      "foreground_fraction": 0.2823801040649414,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        50,
+        307,
+        975,
+        712
+      ],
+      "margin_fraction": 0.0478515625,
+      "aspect": 2.2839506172839505,
+      "expected_aspect": 2.05,
+      "aspect_relative_error": 0.11412225233363449,
+      "principal_axis_degrees": 0.01511954924513411,
+      "estimated_key_rgb": [
+        232.0,
+        40.0,
+        152.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 7.356971119570479,
+      "palette_p90_delta_e": 18.23782868535223
+    },
+    "placement": {
+      "source_bounds_px": [
+        50,
+        307,
+        975,
+        712
+      ],
+      "source_pivot_px": [
+        512.5,
+        509.5
+      ],
+      "pivot_px": [
+        127.5,
+        64.0
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        197,
+        86
+      ],
+      "scale": 0.21297297297297296,
+      "world_length_m": 8.2,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v2-fusion-attempts\\v2-fusion-cars-vandal-v1-a2.png",
+    "sha256": "260736abe446429a32576adfea3d70856a27fa9ee8ad3ca01bb293c2b909154b",
+    "parent_id": "v2-fusion-cars-vandal-v1",
+    "attempt": 2
+  },
+  {
+    "id": "v2-fusion-cars-kestrel-v1-a1",
+    "class": "Kestrel",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v2-fusion-cars-kestrel-v1\\attempt-01\\1.jpg",
+    "source_sha256": "f2dbdb242ffc5440d0c91f0dd45d3503cb3851c66dcf50e1b760c9d593e8fbfc",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-fusion-cars-kestrel-v1-a1",
+      "class": "Kestrel",
+      "prompt_action": "A very long spear-like sprint chassis: slender bone spear nose points RIGHT, very narrow dark capsule cockpit, tiny tucked wheel pods, two swept rust rear fins and exposed engine at LEFT. Sparse wrapped exhaust tubes and chipped panels, length dominates width, no large ram or turret. Total silhouette length-to-width ratio 2.77:1, including wheels and appendages. One intact identity reference only, no damage-state variation. Strict overhead roof planes only; NO visible front grille, side doors or vertical walls. Horizontal main axis and nose RIGHT. Keep ALL pixels inside the central 66 percent of the square, at least 17 percent empty margin on each side.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "",
+      "batch": "v2-fusion-cars",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "cars",
+      "surface_stack": ""
+    },
+    "verdict": "reject",
+    "codes": [
+      "CROPPED_OR_MARGIN"
+    ],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "metrics": {
+      "foreground_fraction": 0.14696407318115234,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        32,
+        359,
+        1019,
+        661
+      ],
+      "margin_fraction": 0.0048828125,
+      "aspect": 3.2682119205298013,
+      "expected_aspect": 2.772727272727273,
+      "aspect_relative_error": 0.17869938117468243,
+      "principal_axis_degrees": 0.027943147260689912,
+      "estimated_key_rgb": [
+        248.0,
+        242.0,
+        249.0
+      ],
+      "magenta_key": false,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 5.712447438066588,
+      "palette_p90_delta_e": 10.696096829566981
+    },
+    "placement": {
+      "source_bounds_px": [
+        32,
+        359,
+        1019,
+        661
+      ],
+      "source_pivot_px": [
+        525.5,
+        510.0
+      ],
+      "pivot_px": [
+        128.0,
+        63.5
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        220,
+        67
+      ],
+      "scale": 0.22289766970618036,
+      "world_length_m": 9.15,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v2-fusion-attempts\\v2-fusion-cars-kestrel-v1-a1.png",
+    "sha256": "8a6c047a57f0b9c218079a387f47ea45e85469b3bc19c2a1765c6287b46441a3",
+    "parent_id": "v2-fusion-cars-kestrel-v1",
+    "attempt": 1
+  },
+  {
+    "id": "v2-fusion-cars-kestrel-v1-a2",
+    "class": "Kestrel",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v2-fusion-cars-kestrel-v1\\attempt-02\\1.jpg",
+    "source_sha256": "6c4117ce7164b9b11756b3bacc51888fc2cd29f152f4ffa07097f41eb4734af0",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-fusion-cars-kestrel-v1-a2",
+      "class": "Kestrel",
+      "prompt_action": "A very long spear-like sprint chassis: slender bone spear nose points RIGHT, very narrow dark capsule cockpit, tiny tucked wheel pods, two swept rust rear fins and exposed engine at LEFT. Sparse wrapped exhaust tubes and chipped panels, length dominates width, no large ram or turret. Total silhouette length-to-width ratio 2.77:1, including wheels and appendages. One intact identity reference only, no damage-state variation. Strict overhead roof planes only; NO visible front grille, side doors or vertical walls. Horizontal main axis and nose RIGHT. Keep ALL pixels inside the central 66 percent of the square, at least 17 percent empty margin on each side.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "",
+      "batch": "v2-fusion-cars",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "cars",
+      "surface_stack": ""
+    },
+    "verdict": "reject",
+    "codes": [
+      "CROPPED_OR_MARGIN"
+    ],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "metrics": {
+      "foreground_fraction": 0.1452188491821289,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        58,
+        329,
+        996,
+        690
+      ],
+      "margin_fraction": 0.02734375,
+      "aspect": 2.598337950138504,
+      "expected_aspect": 2.772727272727273,
+      "aspect_relative_error": 0.06289450978611333,
+      "principal_axis_degrees": 0.06629250373841938,
+      "estimated_key_rgb": [
+        236.0,
+        60.0,
+        174.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 7.694352427445043,
+      "palette_p90_delta_e": 12.5476933785311
+    },
+    "placement": {
+      "source_bounds_px": [
+        58,
+        329,
+        996,
+        690
+      ],
+      "source_pivot_px": [
+        527.0,
+        509.5
+      ],
+      "pivot_px": [
+        128.0,
+        63.5
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        220,
+        85
+      ],
+      "scale": 0.2345415778251599,
+      "world_length_m": 9.15,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v2-fusion-attempts\\v2-fusion-cars-kestrel-v1-a2.png",
+    "sha256": "eab4bf8806a0771df2a98e0626acca40602aff1417523e12bc73ada302dd18ff",
+    "parent_id": "v2-fusion-cars-kestrel-v1",
+    "attempt": 2
+  },
+  {
+    "id": "v2-fusion-cars-kestrel-v1-a3",
+    "class": "Kestrel",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v2-fusion-cars-kestrel-v1\\attempt-03\\1.jpg",
+    "source_sha256": "c660f4cc3695a4c8e3a5556724e4588fff1a2d5e8972ba437a667679462d41d1",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-fusion-cars-kestrel-v1-a3",
+      "class": "Kestrel",
+      "prompt_action": "A very long spear-like sprint chassis: slender bone spear nose points RIGHT, very narrow dark capsule cockpit, tiny tucked wheel pods, two swept rust rear fins and exposed engine at LEFT. Sparse wrapped exhaust tubes and chipped panels, length dominates width, no large ram or turret. Total silhouette length-to-width ratio 2.77:1, including wheels and appendages. One intact identity reference only, no damage-state variation. Strict overhead roof planes only; NO visible front grille, side doors or vertical walls. Horizontal main axis and nose RIGHT. Keep ALL pixels inside the central 66 percent of the square, at least 17 percent empty margin on each side.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "",
+      "batch": "v2-fusion-cars",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "cars",
+      "surface_stack": ""
+    },
+    "verdict": "reject",
+    "codes": [
+      "CROPPED_OR_MARGIN"
+    ],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "metrics": {
+      "foreground_fraction": 0.15763568878173828,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        71,
+        355,
+        1000,
+        667
+      ],
+      "margin_fraction": 0.0234375,
+      "aspect": 2.9775641025641026,
+      "expected_aspect": 2.772727272727273,
+      "aspect_relative_error": 0.07387557797393862,
+      "principal_axis_degrees": 0.008113145249925532,
+      "estimated_key_rgb": [
+        210.0,
+        60.0,
+        184.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 7.062896125113686,
+      "palette_p90_delta_e": 12.043798628253041
+    },
+    "placement": {
+      "source_bounds_px": [
+        71,
+        355,
+        1000,
+        667
+      ],
+      "source_pivot_px": [
+        535.5,
+        511.0
+      ],
+      "pivot_px": [
+        128.0,
+        64.0
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        220,
+        74
+      ],
+      "scale": 0.23681377825618946,
+      "world_length_m": 9.15,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v2-fusion-attempts\\v2-fusion-cars-kestrel-v1-a3.png",
+    "sha256": "b731339b377c9e8fb912a77a3fc3836aab46d445e6cf6009f89d1c72f4c7a165",
+    "parent_id": "v2-fusion-cars-kestrel-v1",
+    "attempt": 3
+  },
+  {
+    "id": "v2-fusion-cars-bulwark-v1-a1",
+    "class": "Bulwark",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v2-fusion-cars-bulwark-v1\\attempt-01\\1.jpg",
+    "source_sha256": "d3bd4e5197c39ba202c04f8148b087c9ad471abf209ae40cbed7e8c10d4abb4d",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-fusion-cars-bulwark-v1-a1",
+      "class": "Bulwark",
+      "prompt_action": "An enormous six-wheel armoured endurance carrier: three pairs of massive tyres, full-width squared ram at RIGHT, three parallel bone roof ribs separated by soot channels, two squat roof gun mounts pointing RIGHT, short engine deck at LEFT. Layered rust plate skirts, toothed corner shields. A broad nearly solid battle-wagon mass with very little empty space. Total silhouette length-to-width ratio 2.02:1, including wheels and appendages. One intact identity reference only, no damage-state variation. Strict overhead roof planes only; NO visible front grille, side doors or vertical walls. Horizontal main axis and nose RIGHT. Keep ALL pixels inside the central 66 percent of the square, at least 17 percent empty margin on each side.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "",
+      "batch": "v2-fusion-cars",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "cars",
+      "surface_stack": ""
+    },
+    "verdict": "reject",
+    "codes": [
+      "CROPPED_OR_MARGIN"
+    ],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "metrics": {
+      "foreground_fraction": 0.4369926452636719,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        28,
+        238,
+        1001,
+        787
+      ],
+      "margin_fraction": 0.0224609375,
+      "aspect": 1.7723132969034607,
+      "expected_aspect": 2.0217391304347827,
+      "aspect_relative_error": 0.12337191766065392,
+      "principal_axis_degrees": 0.10226686646236695,
+      "estimated_key_rgb": [
+        208.0,
+        199.0,
+        182.0
+      ],
+      "magenta_key": false,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 5.9551683587963105,
+      "palette_p90_delta_e": 10.95759223154445
+    },
+    "placement": {
+      "source_bounds_px": [
+        28,
+        238,
+        1001,
+        787
+      ],
+      "source_pivot_px": [
+        514.5,
+        512.5
+      ],
+      "pivot_px": [
+        127.5,
+        128.0
+      ],
+      "cell_px": [
+        256,
+        256
+      ],
+      "subject_px": [
+        223,
+        126
+      ],
+      "scale": 0.22918807810894143,
+      "world_length_m": 9.3,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v2-fusion-attempts\\v2-fusion-cars-bulwark-v1-a1.png",
+    "sha256": "e53e031fd720c186f2ccde35114207c6e4bd6e7f4689c0e6f73ea86ccb12fa81",
+    "parent_id": "v2-fusion-cars-bulwark-v1",
+    "attempt": 1
+  },
+  {
+    "id": "v2-fusion-cars-bulwark-v1-a2",
+    "class": "Bulwark",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v2-fusion-cars-bulwark-v1\\attempt-02\\1.jpg",
+    "source_sha256": "59f406468e6050fe009745870bd20462b9d4ec37813523f1c5764c6f31c4439e",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-fusion-cars-bulwark-v1-a2",
+      "class": "Bulwark",
+      "prompt_action": "An enormous six-wheel armoured endurance carrier: three pairs of massive tyres, full-width squared ram at RIGHT, three parallel bone roof ribs separated by soot channels, two squat roof gun mounts pointing RIGHT, short engine deck at LEFT. Layered rust plate skirts, toothed corner shields. A broad nearly solid battle-wagon mass with very little empty space. Total silhouette length-to-width ratio 2.02:1, including wheels and appendages. One intact identity reference only, no damage-state variation. Strict overhead roof planes only; NO visible front grille, side doors or vertical walls. Horizontal main axis and nose RIGHT. Keep ALL pixels inside the central 66 percent of the square, at least 17 percent empty margin on each side.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "",
+      "batch": "v2-fusion-cars",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "cars",
+      "surface_stack": ""
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "metrics": {
+      "foreground_fraction": 0.3906850814819336,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        63,
+        239,
+        984,
+        784
+      ],
+      "margin_fraction": 0.0390625,
+      "aspect": 1.689908256880734,
+      "expected_aspect": 2.0217391304347827,
+      "aspect_relative_error": 0.16413139982243274,
+      "principal_axis_degrees": 0.0227556225920833,
+      "estimated_key_rgb": [
+        236.0,
+        61.0,
+        176.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 7.956129449859982,
+      "palette_p90_delta_e": 11.891920471430518
+    },
+    "placement": {
+      "source_bounds_px": [
+        63,
+        239,
+        984,
+        784
+      ],
+      "source_pivot_px": [
+        523.5,
+        511.5
+      ],
+      "pivot_px": [
+        127.5,
+        128.0
+      ],
+      "cell_px": [
+        256,
+        256
+      ],
+      "subject_px": [
+        223,
+        132
+      ],
+      "scale": 0.24212812160694897,
+      "world_length_m": 9.3,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v2-fusion-attempts\\v2-fusion-cars-bulwark-v1-a2.png",
+    "sha256": "8aa57e9aaf0b3affda9b8cedf6bf126d83b3ea8a27d4d437b16c40101a3d96cc",
+    "parent_id": "v2-fusion-cars-bulwark-v1",
+    "attempt": 2
+  },
+  {
+    "id": "v2-fusion-portraits-rook-v1-a1",
+    "class": "rook",
+    "kind": "portrait",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v2-fusion-portraits-rook-v1\\attempt-01\\1.jpg",
+    "source_sha256": "6d677bffc78b07d94b52790bdc04074d6538a965d92394459923a06ffdf6f6fc",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-fusion-portraits-rook-v1-a1",
+      "class": "rook",
+      "prompt_action": "Original adult male bitter scavenger, medium-brown skin, gaunt angular cheeks, healed cheek scar, one broken goggle lens on the forehead, uneven close-cropped hair, dust scarf, single oversized jagged welded shoulder plate. Calculating sour expression and a narrow hunched silhouette. One head-and-shoulders bust, facing viewer. Entire hair and shoulders in the central 66 percent of the square; generous empty margin. Symmetric flat material shading, no directional facial lamp. No weapon, car, lettering, real person resemblance or background scene.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "portrait",
+      "reference": "",
+      "batch": "v2-fusion-portraits",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "portraits",
+      "surface_stack": ""
+    },
+    "verdict": "reject",
+    "codes": [
+      "CROPPED_OR_MARGIN"
+    ],
+    "style_hash": "7aeb93313c54a865416d647db0f437f9d29148fe8dd251b0e0681c8acbfeb71b",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "metrics": {
+      "foreground_fraction": 0.5256242752075195,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        80,
+        94,
+        1014,
+        1024
+      ],
+      "margin_fraction": 0.0,
+      "aspect": 1.0043010752688173,
+      "estimated_key_rgb": [
+        235.0,
+        235.0,
+        235.0
+      ],
+      "magenta_key": false,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 6.047108418915679,
+      "palette_p90_delta_e": 11.642144840212183
+    },
+    "placement": {
+      "source_bounds_px": [
+        80,
+        94,
+        1014,
+        1024
+      ],
+      "source_pivot_px": [
+        547.0,
+        559.0
+      ],
+      "pivot_px": [
+        128.0,
+        127.5
+      ],
+      "cell_px": [
+        256,
+        256
+      ],
+      "subject_px": [
+        248,
+        247
+      ],
+      "scale": 0.26552462526766596,
+      "world_length_m": null,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v2-fusion-attempts\\v2-fusion-portraits-rook-v1-a1.png",
+    "sha256": "26eccaf8dcda8d1413302105cac8ff57a9ed25ead8b4a469b50736ba67c444c9",
+    "parent_id": "v2-fusion-portraits-rook-v1",
+    "attempt": 1
+  },
+  {
+    "id": "v2-fusion-portraits-rook-v1-a2",
+    "class": "rook",
+    "kind": "portrait",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v2-fusion-portraits-rook-v1\\attempt-02\\1.jpg",
+    "source_sha256": "b491e401e9fbf8193acd4eeae75407d7647d5391ad55f4cef209a7a628951a3d",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-fusion-portraits-rook-v1-a2",
+      "class": "rook",
+      "prompt_action": "Original adult male bitter scavenger, medium-brown skin, gaunt angular cheeks, healed cheek scar, one broken goggle lens on the forehead, uneven close-cropped hair, dust scarf, single oversized jagged welded shoulder plate. Calculating sour expression and a narrow hunched silhouette. One head-and-shoulders bust, facing viewer. Entire hair and shoulders in the central 66 percent of the square; generous empty margin. Symmetric flat material shading, no directional facial lamp. No weapon, car, lettering, real person resemblance or background scene.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "portrait",
+      "reference": "",
+      "batch": "v2-fusion-portraits",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "portraits",
+      "surface_stack": ""
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "7aeb93313c54a865416d647db0f437f9d29148fe8dd251b0e0681c8acbfeb71b",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "metrics": {
+      "foreground_fraction": 0.33112144470214844,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        165,
+        112,
+        899,
+        904
+      ],
+      "margin_fraction": 0.109375,
+      "aspect": 0.9267676767676768,
+      "estimated_key_rgb": [
+        236.0,
+        92.0,
+        224.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 6.180977951581086,
+      "palette_p90_delta_e": 11.270185931722818
+    },
+    "placement": {
+      "source_bounds_px": [
+        165,
+        112,
+        899,
+        904
+      ],
+      "source_pivot_px": [
+        532.0,
+        508.0
+      ],
+      "pivot_px": [
+        128.0,
+        128.0
+      ],
+      "cell_px": [
+        256,
+        256
+      ],
+      "subject_px": [
+        230,
+        248
+      ],
+      "scale": 0.31313131313131315,
+      "world_length_m": null,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v2-fusion-attempts\\v2-fusion-portraits-rook-v1-a2.png",
+    "sha256": "75bc390f3f9a36ccf08fdec2a11c2cc39f96552b1242bdc4af3e596f6984a67a",
+    "parent_id": "v2-fusion-portraits-rook-v1",
+    "attempt": 2
+  },
+  {
+    "id": "v2-fusion-portraits-ox-v1-a1",
+    "class": "ox",
+    "kind": "portrait",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v2-fusion-portraits-ox-v1\\attempt-01\\1.jpg",
+    "source_sha256": "90eed57a771aa23277c970f2d48023a6179c8dc390e4b848ee24ffa482859bfb",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-fusion-portraits-ox-v1-a1",
+      "class": "ox",
+      "prompt_action": "Original adult female heavy hauler, pale weathered skin, broad square face and neck, short silver bristle hair, dark eyebrow scar, enormous unequal slab shoulder armour and a patched soot work vest. Calm implacable stare, low wide fortress silhouette; chipped bone collar bolts. One head-and-shoulders bust, facing viewer. Entire hair and shoulders in the central 66 percent of the square; generous empty margin. Symmetric flat material shading, no directional facial lamp. No weapon, car, lettering, real person resemblance or background scene.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "portrait",
+      "reference": "",
+      "batch": "v2-fusion-portraits",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "portraits",
+      "surface_stack": ""
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "7aeb93313c54a865416d647db0f437f9d29148fe8dd251b0e0681c8acbfeb71b",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "metrics": {
+      "foreground_fraction": 0.37069034576416016,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        75,
+        181,
+        962,
+        884
+      ],
+      "margin_fraction": 0.060546875,
+      "aspect": 1.2617354196301565,
+      "estimated_key_rgb": [
+        227.0,
+        227.0,
+        227.0
+      ],
+      "magenta_key": false,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 6.746269048934694,
+      "palette_p90_delta_e": 13.872671170177604
+    },
+    "placement": {
+      "source_bounds_px": [
+        75,
+        181,
+        962,
+        884
+      ],
+      "source_pivot_px": [
+        518.5,
+        532.5
+      ],
+      "pivot_px": [
+        128.0,
+        127.5
+      ],
+      "cell_px": [
+        256,
+        256
+      ],
+      "subject_px": [
+        248,
+        197
+      ],
+      "scale": 0.27959413754227735,
+      "world_length_m": null,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v2-fusion-attempts\\v2-fusion-portraits-ox-v1-a1.png",
+    "sha256": "9dbcc54d409bf3d7d17942516e96416f0ed7cb9dcad92bdc8b5377c6a97608b4",
+    "parent_id": "v2-fusion-portraits-ox-v1",
+    "attempt": 1
+  },
+  {
+    "id": "v2-fusion-portraits-vex-v1-a1",
+    "class": "vex",
+    "kind": "portrait",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v2-fusion-portraits-vex-v1\\attempt-01\\1.jpg",
+    "source_sha256": "a0cb3a032af1e83e417759a977b09382222b5ae7e674ca7d87e6d6d8b3b26607",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-fusion-portraits-vex-v1-a1",
+      "class": "vex",
+      "prompt_action": "Original adult male speed addict, light-brown skin, swept-back ragged tall crest of dark hair, small moustache, chipped racing goggles hanging at the neck, rust-orange patched sleeveless suit, narrow sharp shoulders. Wild clenched grin, asymmetrical scarf ends and restless pointed silhouette. One head-and-shoulders bust, facing viewer. Entire hair and shoulders in the central 66 percent of the square; generous empty margin. Symmetric flat material shading, no directional facial lamp. No weapon, car, lettering, real person resemblance or background scene.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "portrait",
+      "reference": "",
+      "batch": "v2-fusion-portraits",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "portraits",
+      "surface_stack": ""
+    },
+    "verdict": "reject",
+    "codes": [
+      "CROPPED_OR_MARGIN"
+    ],
+    "style_hash": "7aeb93313c54a865416d647db0f437f9d29148fe8dd251b0e0681c8acbfeb71b",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "metrics": {
+      "foreground_fraction": 0.4375467300415039,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        93,
+        50,
+        937,
+        1024
+      ],
+      "margin_fraction": 0.0,
+      "aspect": 0.86652977412731,
+      "estimated_key_rgb": [
+        227.0,
+        227.0,
+        227.0
+      ],
+      "magenta_key": false,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 7.133843043268574,
+      "palette_p90_delta_e": 12.705485940805787
+    },
+    "placement": {
+      "source_bounds_px": [
+        93,
+        50,
+        937,
+        1024
+      ],
+      "source_pivot_px": [
+        515.0,
+        537.0
+      ],
+      "pivot_px": [
+        127.5,
+        128.0
+      ],
+      "cell_px": [
+        256,
+        256
+      ],
+      "subject_px": [
+        215,
+        248
+      ],
+      "scale": 0.2546201232032854,
+      "world_length_m": null,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v2-fusion-attempts\\v2-fusion-portraits-vex-v1-a1.png",
+    "sha256": "eb183590092ec6a43dc92389c2ea1e56521524bbe1bb870477ca21da3c26320a",
+    "parent_id": "v2-fusion-portraits-vex-v1",
+    "attempt": 1
+  },
+  {
+    "id": "v2-fusion-portraits-vex-v1-a2",
+    "class": "vex",
+    "kind": "portrait",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v2-fusion-portraits-vex-v1\\attempt-02\\1.jpg",
+    "source_sha256": "212484a7338ccaa6f420db397c7da46ff72ebb5ccaa0b2ec1765586737c5b88b",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-fusion-portraits-vex-v1-a2",
+      "class": "vex",
+      "prompt_action": "Original adult male speed addict, light-brown skin, swept-back ragged tall crest of dark hair, small moustache, chipped racing goggles hanging at the neck, rust-orange patched sleeveless suit, narrow sharp shoulders. Wild clenched grin, asymmetrical scarf ends and restless pointed silhouette. One head-and-shoulders bust, facing viewer. Entire hair and shoulders in the central 66 percent of the square; generous empty margin. Symmetric flat material shading, no directional facial lamp. No weapon, car, lettering, real person resemblance or background scene.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "portrait",
+      "reference": "",
+      "batch": "v2-fusion-portraits",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "portraits",
+      "surface_stack": ""
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "7aeb93313c54a865416d647db0f437f9d29148fe8dd251b0e0681c8acbfeb71b",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "metrics": {
+      "foreground_fraction": 0.3515644073486328,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        178,
+        117,
+        867,
+        908
+      ],
+      "margin_fraction": 0.11328125,
+      "aspect": 0.8710493046776233,
+      "estimated_key_rgb": [
+        239.0,
+        21.0,
+        197.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 5.4973030628647965,
+      "palette_p90_delta_e": 10.714289118109225
+    },
+    "placement": {
+      "source_bounds_px": [
+        178,
+        117,
+        867,
+        908
+      ],
+      "source_pivot_px": [
+        522.5,
+        512.5
+      ],
+      "pivot_px": [
+        128.0,
+        128.0
+      ],
+      "cell_px": [
+        256,
+        256
+      ],
+      "subject_px": [
+        216,
+        248
+      ],
+      "scale": 0.31352718078381797,
+      "world_length_m": null,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v2-fusion-attempts\\v2-fusion-portraits-vex-v1-a2.png",
+    "sha256": "c738dbf34b2041a0341ed8e01511343e6ae23ec15ab3e0f449e60dc44749c5f7",
+    "parent_id": "v2-fusion-portraits-vex-v1",
+    "attempt": 2
+  },
+  {
+    "id": "v2-fusion-portraits-mica-v1-a1",
+    "class": "mica",
+    "kind": "portrait",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v2-fusion-portraits-mica-v1\\attempt-01\\1.jpg",
+    "source_sha256": "8bf05b77a0445b76b80ee564fa4afe96f0496dbf1836f346dbc20e62be6c252e",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-fusion-portraits-mica-v1-a1",
+      "class": "mica",
+      "prompt_action": "Original adult female grip artist, dark skin, short coiled hair under a dirty bone head wrap, patient focused eyes, two short soot cheek-paint dashes, cropped patched ochre jacket, tyre-rubber shoulder guards. Balanced compact silhouette, rust ear protector, deliberate controlled expression. One head-and-shoulders bust, facing viewer. Entire hair and shoulders in the central 66 percent of the square; generous empty margin. Symmetric flat material shading, no directional facial lamp. No weapon, car, lettering, real person resemblance or background scene.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "portrait",
+      "reference": "",
+      "batch": "v2-fusion-portraits",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "portraits",
+      "surface_stack": ""
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "7aeb93313c54a865416d647db0f437f9d29148fe8dd251b0e0681c8acbfeb71b",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "metrics": {
+      "foreground_fraction": 0.3802461624145508,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        119,
+        79,
+        911,
+        965
+      ],
+      "margin_fraction": 0.0576171875,
+      "aspect": 0.8939051918735892,
+      "estimated_key_rgb": [
+        224.0,
+        224.0,
+        224.0
+      ],
+      "magenta_key": false,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 6.734068769562446,
+      "palette_p90_delta_e": 11.404199319585572
+    },
+    "placement": {
+      "source_bounds_px": [
+        119,
+        79,
+        911,
+        965
+      ],
+      "source_pivot_px": [
+        515.0,
+        522.0
+      ],
+      "pivot_px": [
+        128.0,
+        128.0
+      ],
+      "cell_px": [
+        256,
+        256
+      ],
+      "subject_px": [
+        222,
+        248
+      ],
+      "scale": 0.2799097065462754,
+      "world_length_m": null,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v2-fusion-attempts\\v2-fusion-portraits-mica-v1-a1.png",
+    "sha256": "498672f81171df8232ce67a8205a3d88e62599fe08b031fbbea1a77ce0c52809",
+    "parent_id": "v2-fusion-portraits-mica-v1",
+    "attempt": 1
+  },
+  {
+    "id": "v2-fusion-portraits-relay-v1-a1",
+    "class": "relay",
+    "kind": "portrait",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v2-fusion-portraits-relay-v1\\attempt-01\\1.jpg",
+    "source_sha256": "6409720aafe6b754547b9ed45a5b2c4d714d588390551b85dbbdd0314d3e202b",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-fusion-portraits-relay-v1-a1",
+      "class": "relay",
+      "prompt_action": "Original adult androgynous racer, fair weathered skin, short asymmetrical dark undercut, repaired ear defenders with a short broken aerial, dried-red and bone patched high-neck jacket, one thin scrap shoulder fin. Thoughtful alert expression, distinctive slanted silhouette, no letters or display screens. One head-and-shoulders bust, facing viewer. Entire hair and shoulders in the central 66 percent of the square; generous empty margin. Symmetric flat material shading, no directional facial lamp. No weapon, car, lettering, real person resemblance or background scene.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "portrait",
+      "reference": "",
+      "batch": "v2-fusion-portraits",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "portraits",
+      "surface_stack": ""
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "7aeb93313c54a865416d647db0f437f9d29148fe8dd251b0e0681c8acbfeb71b",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "metrics": {
+      "foreground_fraction": 0.3669090270996094,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        69,
+        89,
+        956,
+        934
+      ],
+      "margin_fraction": 0.06640625,
+      "aspect": 1.0497041420118343,
+      "estimated_key_rgb": [
+        240.0,
+        240.0,
+        240.0
+      ],
+      "magenta_key": false,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 6.010030282932387,
+      "palette_p90_delta_e": 13.395745656622855
+    },
+    "placement": {
+      "source_bounds_px": [
+        69,
+        89,
+        956,
+        934
+      ],
+      "source_pivot_px": [
+        512.5,
+        511.5
+      ],
+      "pivot_px": [
+        128.0,
+        128.0
+      ],
+      "cell_px": [
+        256,
+        256
+      ],
+      "subject_px": [
+        248,
+        236
+      ],
+      "scale": 0.27959413754227735,
+      "world_length_m": null,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v2-fusion-attempts\\v2-fusion-portraits-relay-v1-a1.png",
+    "sha256": "c4db2e1bbcaf12cbe74928e9d730022d39faacd31124cf9dc4b25b53ce3204b8",
+    "parent_id": "v2-fusion-portraits-relay-v1",
+    "attempt": 1
+  },
+  {
+    "id": "v2-fusion-portraits-marrow-v1-a1",
+    "class": "marrow",
+    "kind": "portrait",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v2-fusion-portraits-marrow-v1\\attempt-01\\1.jpg",
+    "source_sha256": "a89ceacce080598d459e0427bb0b56b88a90f2e7019150e6854519edef66285d",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-fusion-portraits-marrow-v1-a1",
+      "class": "marrow",
+      "prompt_action": "Original older adult league boss, olive weathered skin, angular face, deeply lined mouth, silver hair swept into a severe short crest, high soot-black jagged collar and layered rust metal shoulder mantle. Stern hostile composure, imposing wide triangular silhouette, bone scarf and one old healed temple scar; no crown or insignia. One head-and-shoulders bust, facing viewer. Entire hair and shoulders in the central 66 percent of the square; generous empty margin. Symmetric flat material shading, no directional facial lamp. No weapon, car, lettering, real person resemblance or background scene.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "portrait",
+      "reference": "",
+      "batch": "v2-fusion-portraits",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "portraits",
+      "surface_stack": ""
+    },
+    "verdict": "reject",
+    "codes": [
+      "CROPPED_OR_MARGIN"
+    ],
+    "style_hash": "7aeb93313c54a865416d647db0f437f9d29148fe8dd251b0e0681c8acbfeb71b",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "metrics": {
+      "foreground_fraction": 0.40296077728271484,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        23,
+        121,
+        1009,
+        945
+      ],
+      "margin_fraction": 0.0146484375,
+      "aspect": 1.1966019417475728,
+      "estimated_key_rgb": [
+        222.0,
+        191.0,
+        249.0
+      ],
+      "magenta_key": false,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 5.961179681393041,
+      "palette_p90_delta_e": 11.029853872291264
+    },
+    "placement": {
+      "source_bounds_px": [
+        23,
+        121,
+        1009,
+        945
+      ],
+      "source_pivot_px": [
+        516.0,
+        533.0
+      ],
+      "pivot_px": [
+        128.0,
+        127.5
+      ],
+      "cell_px": [
+        256,
+        256
+      ],
+      "subject_px": [
+        248,
+        207
+      ],
+      "scale": 0.2515212981744422,
+      "world_length_m": null,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v2-fusion-attempts\\v2-fusion-portraits-marrow-v1-a1.png",
+    "sha256": "475ce4fa7421ddf0fbb255613b4d8a6385c05eda0c9dda099c3f60c73050beaa",
+    "parent_id": "v2-fusion-portraits-marrow-v1",
+    "attempt": 1
+  },
+  {
+    "id": "v2-fusion-portraits-marrow-v1-a2",
+    "class": "marrow",
+    "kind": "portrait",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v2-fusion-portraits-marrow-v1\\attempt-02\\1.jpg",
+    "source_sha256": "4c6f10f94631619e7edfd8d71f6aeb9ce19a8e24a5b5bbea3f77fc0388ffebe8",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-fusion-portraits-marrow-v1-a2",
+      "class": "marrow",
+      "prompt_action": "Original older adult league boss, olive weathered skin, angular face, deeply lined mouth, silver hair swept into a severe short crest, high soot-black jagged collar and layered rust metal shoulder mantle. Stern hostile composure, imposing wide triangular silhouette, bone scarf and one old healed temple scar; no crown or insignia. One head-and-shoulders bust, facing viewer. Entire hair and shoulders in the central 66 percent of the square; generous empty margin. Symmetric flat material shading, no directional facial lamp. No weapon, car, lettering, real person resemblance or background scene.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "portrait",
+      "reference": "",
+      "batch": "v2-fusion-portraits",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "portraits",
+      "surface_stack": ""
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "7aeb93313c54a865416d647db0f437f9d29148fe8dd251b0e0681c8acbfeb71b",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "metrics": {
+      "foreground_fraction": 0.2759590148925781,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        119,
+        133,
+        910,
+        922
+      ],
+      "margin_fraction": 0.099609375,
+      "aspect": 1.002534854245881,
+      "estimated_key_rgb": [
+        199.0,
+        54.0,
+        160.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 6.429975720362787,
+      "palette_p90_delta_e": 10.997873341095183
+    },
+    "placement": {
+      "source_bounds_px": [
+        119,
+        133,
+        910,
+        922
+      ],
+      "source_pivot_px": [
+        514.5,
+        527.5
+      ],
+      "pivot_px": [
+        128.0,
+        127.5
+      ],
+      "cell_px": [
+        256,
+        256
+      ],
+      "subject_px": [
+        248,
+        247
+      ],
+      "scale": 0.31352718078381797,
+      "world_length_m": null,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v2-fusion-attempts\\v2-fusion-portraits-marrow-v1-a2.png",
+    "sha256": "f171b2379f83b80f5a5a21bb38ae64d7256f15656bb4754539c6cd0e0bf0e409",
+    "parent_id": "v2-fusion-portraits-marrow-v1",
+    "attempt": 2
+  }
+]

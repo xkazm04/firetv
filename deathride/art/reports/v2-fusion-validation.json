@@ -1,0 +1,36 @@
+{
+  "at": "2026-10-01T20:55:19.556873+00:00",
+  "status": "pass-with-three-art-rejections",
+  "references": 10,
+  "portraits": 6,
+  "attempts": 34,
+  "local_observations": 68,
+  "pixel_passes": 13,
+  "pixel_rejects": [
+    {
+      "id": "v2-fusion-cars-comet-v1",
+      "codes": [
+        "CROPPED_OR_MARGIN",
+        "ASPECT_BAND"
+      ]
+    },
+    {
+      "id": "v2-fusion-cars-quill-v1",
+      "codes": [
+        "CROPPED_OR_MARGIN"
+      ]
+    },
+    {
+      "id": "v2-fusion-cars-kestrel-v1",
+      "codes": [
+        "CROPPED_OR_MARGIN"
+      ]
+    }
+  ],
+  "derived_jobs_blocked": 70,
+  "owner_approved": 0,
+  "pipeline_tests": 35,
+  "prompt_whitespace_recoveries": 9,
+  "recoveries_new_spend": 0,
+  "scope": "source/export hashes, schema-valid local observations and closed derived gate; not owner taste acceptance"
+}

@@ -76,7 +76,7 @@ if no choice has been recorded in `deathride/art/OWNER-CHOICE.md` when V1 finish
 |---|---|---|---|---|
 | F1 | Owner fusion compiled by family; bridge and hash-bound prose decision implemented | `deathride/V2-part2-fusion.md`; 35 pipeline tests pass; new reference approval remains closed | art-fusion-contract-20261001 | 2026-10-01 |
 | V1 | Five style directions and 35 comparable proof slots delivered; 68 generated attempts, no owner acceptance | `deathride/art/review.html`; exact choice file absent | art-v1-choice-20261001 | 2026-10-01 |
-| V2 | Waiting for owner choice; sixteen planned jobs verified blocked before spend; zero full-roster or derived-state generation | `deathride/V2-chosen-roster.md`; choice then exact-reference approval | art-v2-owner-gate-20261001 | 2026-10-01 |
+| V2 | Fusion ten-car/six-rival roster delivered; 13 pixel passes, three capped car rejects; owner approval pending | `art/review/fusion/index.html`; 34 attempts / 68 local observations; seventy derived jobs blocked | art-fusion-roster-20261001 | 2026-10-01 |
 | V3 | Research and sixteen-mode surface lab delivered; 44 clean Stick runs; simple live edges/decals option, graded stacks held | `deathride/art/surface-lab/review.html`; same-binary A/B cost lines; owner stack choice still pending | art-v3-surface-lab-20261001 | 2026-10-01 |
 | V4 | Deferred handoff complete; thirty planned family/style gate checks blocked before spend; no kit regeneration | `deathride/V4-world-kit.md`; owner style/stack choice, then atlas and integrated Stick validation | art-v4-owner-gate-20261001 | 2026-10-01 |
 
@@ -111,3 +111,9 @@ The live edge/decal surface option remains available for owner review at 16.68/1
 ### Part 2 / F1, 2026-10-01 - executable owner fusion
 
 Read the owner choice first and retained its exact bytes. Design in `deathride/V2-part2-fusion.md`. Added a family-resolved fusion style with exact parent hashes and one shared bridge, plus a host compilation binding the existing prose decision to the executable style and chosen surface stack. Unknown families and changed evidence/parents fail closed. The existing single-direction and reference approval paths remain intact; 35 pipeline tests pass. No paid calls: weekly 198/350, 152 available, zero videos, stop clear. Commit is local only.
+
+### Part 2 / V2, 2026-10-01 - generated fusion roster
+
+Design and outcome in `deathride/V2-part2-roster.md`. Generated ten C1-bound references and six rival portraits in the owner fusion, with 34 reservations and 68 current local observations. Strong broad heavies and open light frames are shown at 96px alongside all v1/v2 pairs. Seven cars and six portraits pass pixel gates; Comet, Quill and Kestrel retain margin/aspect failures at the three-attempt ceiling. They stay rejected, with no fourth attempt or disguised padding. Nine terminal-space-only CLI mismatches were audited and recovered from existing output without new spend; the original exact-comparison flags remain false and visible.
+
+Portable sources and review page, explicit direct notes, exact-reference approval template and seventy refusal-before-reservation checks are delivered. No owner approval, car damage state or livery was generated. Browser checks pass desktop/mobile, 35 pipeline tests pass, and required core/link/APK build is green. V2 spend 34; the atomic shared ledger checkpoint also includes concurrent V4 reservations, with zero videos and stop clear. Local commit only; continue the world kit and Stick measurement.
