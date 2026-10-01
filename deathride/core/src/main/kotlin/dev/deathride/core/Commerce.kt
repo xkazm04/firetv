@@ -94,7 +94,7 @@ object Market {
         if(p.contract>=0) {
             val c=Contracts.all[p.contract]
             val success=(c.course=="any" || c.course==course) && when(c.kind){"deliver"->finished;"target"->targetWrecked;else->clean && finished && position==1}
-            if(success){bonus+=c.reward;p.contractWins++;p.contract=-1}
+            if(success){bonus+=c.reward;p.contractWins++;p.contract=-1;if(p.withRivals)p.grudges[Career.rivals.indexOfFirst{it.id==if(c.kind=="target")"rook" else "relay"}]=if(c.kind=="target")1 else -1}
         }
         p.lastBonus=bonus;return bonus
     }

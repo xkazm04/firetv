@@ -28,7 +28,7 @@ class CommerceTest {
         assertEquals("Earn more credits",Market.transact(broke,"trade","Needle",0));assertEquals(saved,ProfileCodec.encode(broke))
     }
     @Test fun loanRepaymentInsuranceAndManualRepairCannotCreateADeadEnd() {
-        val p=Profile("borrower");p.credits=0
+        val p=Profile("borrower");p.credits=0;p.debt=0
         assertTrue(Market.transact(p,"loan","",0).startsWith("Loan received"));assertEquals(300,p.credits);assertEquals(330,p.debt)
         assertTrue(Market.transact(p,"loan","",0).startsWith("Offer changed"));assertEquals(330,p.debt)
         p.credits=0;val oldDebt=p.debt;val r=Economy.settle(p,Economy.start(p),6,0,0.0)!!
@@ -60,7 +60,7 @@ class CommerceTest {
     }
     @Test fun versionTwoMigratesOwnershipPartsAndConditionWithoutAddingDebt() {
         val p=Profile("legacy-market");p.credits=1500;p.selectedCar=4;p.careerCleared=6;Garage.buy(p,0,0)
-        val body=ProfileCodec.encode(p).substringBefore("checksum=").replace("DEATHRIDE_PROFILE 3","DEATHRIDE_PROFILE 2").lines().filterNot{it.startsWith("market=") || it.startsWith("owned=") || it.startsWith("condition=")}.joinToString("\n")
+        val body=ProfileCodec.encode(p).substringBefore("checksum=").replace("DEATHRIDE_PROFILE 4","DEATHRIDE_PROFILE 2").lines().filterNot{it.startsWith("market=") || it.startsWith("owned=") || it.startsWith("condition=") || it.startsWith("ash=") || it.startsWith("grudges=") || it.startsWith("rivals=")}.joinToString("\n").replace("trophies=0,0,0,0,0","trophies=0,0,0,0")
         val old=body+"checksum="+CRC32().apply{update(body.toByteArray())}.value.toString(16)+"\n"
         val migrated=ProfileCodec.decode(old,p.id)
         assertEquals(p.credits,migrated.credits);assertArrayEquals(p.tiers,migrated.tiers);assertTrue(migrated.owned[4]);assertTrue(migrated.condition.all{it==100});assertEquals(0,migrated.debt)
@@ -71,7 +71,7 @@ class CommerceTest {
         for((name,reward,repair) in listOf(Triple("baseline",1.0,1.0),Triple("reward-low",.8,1.0),Triple("reward-high",1.2,1.0),Triple("repair-low",1.0,.7),Triple("repair-high",1.0,1.3),Triple("last-wreck",1.0,1.0),Triple("borrower",1.0,1.0))) {
             var firstPart=0L;var firstCar=0L;var minimum=Int.MAX_VALUE;var bankrupt=0;var debtPaid=0L
             repeat(2000){seed->
-                val random=java.util.Random(seed.toLong());val p=Profile("economic-model");p.credits=0;p.careerCleared=Career.events.size
+                val random=java.util.Random(seed.toLong());val p=Profile("economic-model");p.credits=0;p.debt=0;p.careerCleared=Career.events.size
                 if(name=="borrower")Market.transact(p,"loan","",p.marketRevision)
                 var boughtPart=0;var boughtCar=0
                 for(race in 1..24) {

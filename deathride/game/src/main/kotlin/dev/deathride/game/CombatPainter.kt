@@ -59,6 +59,7 @@ class CombatPainter {
             for(i in 0..11){val a=i*PI/6;val distance=radius*age;r.rectLine((b.x+cos(a)*distance).toFloat(),(b.y+sin(a)*distance).toFloat(),(b.x+cos(a)*(distance+1)).toFloat(),(b.y+sin(a)*(distance+1)).toFloat(),.14f)}
         }
         for(c in w.cars) {
+            if(!c.entered)continue
             val hp=(combat.health(c.id)/CombatRules["maxHp"]).toFloat();val x=c.x.toFloat();val y=c.y.toFloat()
             if(hp<CombatRules["smokeHpFraction"])for(i in 0..3) {
                 val age=((w.seconds*.8+i*.25)%1).toFloat()

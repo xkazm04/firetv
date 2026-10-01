@@ -36,3 +36,14 @@ tasks.register<JavaExec>("combatDepthReport") {
     jvmArgs("-Djava.util.concurrent.ForkJoinPool.common.parallelism=4")
     args(providers.gradleProperty("combatSamples").getOrElse("2000"))
 }
+
+tasks.register<JavaExec>("careerV2Report") {
+    group="verification"
+    dependsOn(tasks.testClasses)
+    classpath=sourceSets.test.get().runtimeClasspath
+    mainClass.set("dev.deathride.core.CareerV2ReportKt")
+    maxHeapSize="1g"
+    jvmArgs("-Djava.util.concurrent.ForkJoinPool.common.parallelism=4")
+    args(providers.gradleProperty("ashSeeds").getOrElse("8"),providers.gradleProperty("ashCareers").getOrElse("2000"))
+    providers.gradleProperty("ashReuse").orNull?.let { args("reuse") }
+}

@@ -147,6 +147,7 @@ class LapCounter(private val lengthM: Double, private val startM: Double, privat
 enum class AiMode { DRIVE, OVERTAKE, RECOVER }
 enum class FinishKind { NONE, LAPS, ELIMINATION }
 class Car(val id: Int, track: Track) {
+    var entered=true;var rivalIndex=-1
     var x=0.0; var y=0.0; var vx=0.0; var vy=0.0; var heading=0.0; var yaw=0.0
     var previousX=0.0; var previousY=0.0; var previousHeading=0.0
     val lap=LapCounter(track.lengthM,track.startM,track.course?.checkpoints?:doubleArrayOf(0.0,.25,.5,.75))
@@ -227,6 +228,7 @@ class World(val seed: Int=17, val spec: CarSpec=CarSpec(), val track: Track=Trac
     var steps=0; private set
     var seconds=0.0; private set
     var finished=0; private set
+    val entrantCount get()=cars.count{it.entered}
     val resolved get()=finished+combat.wreckCount
     init { reset() }
     fun reset() {
@@ -256,6 +258,7 @@ class World(val seed: Int=17, val spec: CarSpec=CarSpec(), val track: Track=Trac
         previousSnapshot.capture(cars)
         steps++; seconds+=dt; ramClosingMps.fill(0.0)
         for(c in cars) {
+            if(!c.entered)continue
             c.previousX=c.x; c.previousY=c.y; c.previousHeading=c.heading; c.impact*=.87
             c.wallImpactMps=0.0; track.project(c.x,c.y,projection); c.surface=track.surfaceAt(projection.s,projection.distance)
             if(combat.wrecked(c.id)) {
@@ -276,17 +279,18 @@ class World(val seed: Int=17, val spec: CarSpec=CarSpec(), val track: Track=Trac
             contain(c)
             trace[((steps%600)*6)+c.id]=c.aiMode.ordinal*10+c.aiReason
         }
-        repeat(3) { for(i in 0 until cars.size) for(j in i+1 until cars.size) collide(cars[i],cars[j]); for(c in cars) contain(c) }
+        repeat(3) { for(i in 0 until cars.size) for(j in i+1 until cars.size) collide(cars[i],cars[j]); for(c in cars)if(c.entered)contain(c) }
         combat.step(inputs,dt)
         for(c in cars) {
-            if(combat.wrecked(c.id))continue
+            if(!c.entered || combat.wrecked(c.id))continue
             track.project(c.x,c.y,projection); c.lap.update(projection.s)
             if(c.lap.laps>=Tuning.RACE_LAPS && c.finishSeconds<0) { c.finishSeconds=seconds;c.finishKind=FinishKind.LAPS; finished++ }
         }
-        if(combat.enabled && combat.wreckCount==cars.size-1)for(c in cars)if(!combat.wrecked(c.id) && c.finishSeconds<0) { c.finishSeconds=seconds;c.finishKind=FinishKind.ELIMINATION;finished++ }
+        if(combat.enabled && combat.wreckCount==entrantCount-1)for(c in cars)if(c.entered && !combat.wrecked(c.id) && c.finishSeconds<0) { c.finishSeconds=seconds;c.finishKind=FinishKind.ELIMINATION;finished++ }
         for(c in cars) {
+            if(!c.entered){c.position=0;continue}
             c.position=1
-            for(o in cars) if(o!==c && ahead(o,c)) c.position++
+            for(o in cars) if(o.entered && o!==c && ahead(o,c)) c.position++
         }
         snapshot.capture(cars)
     }
@@ -306,7 +310,7 @@ class World(val seed: Int=17, val spec: CarSpec=CarSpec(), val track: Track=Trac
         track.project(c.x,c.y,projection)
         val s=projection.s
         var gap=1000.0
-        for(o in cars) if(o!==c && !combat.wrecked(o.id)) {
+        for(o in cars) if(o.entered && o!==c && !combat.wrecked(o.id)) {
             val dx=o.x-c.x; val dy=o.y-c.y
             val along=dx*cos(c.heading)+dy*sin(c.heading)
             if(along>0 && abs(-dx*sin(c.heading)+dy*cos(c.heading))<c.spec.circleRadiusM+o.spec.circleRadiusM+TrackRules["aiLateralClearanceM"]) gap=min(gap,along)
@@ -350,6 +354,7 @@ class World(val seed: Int=17, val spec: CarSpec=CarSpec(), val track: Track=Trac
         }
     }
     fun collide(a: Car,b: Car) {
+        if(!a.entered || !b.entered)return
         val sa=a.spec; val sb=b.spec; val limit=sa.circleRadiusM+sb.circleRadiusM
         val invA=1/sa.massKg; val invB=1/sb.massKg; val invSum=invA+invB
         // A middle circle closes the side-contact gap on the longer W6 silhouettes.
@@ -384,7 +389,7 @@ class World(val seed: Int=17, val spec: CarSpec=CarSpec(), val track: Track=Trac
     fun stateHash(): Long {
         var hash=1125899906842597L
         for(c in cars) { hash=31*hash+c.x.toBits(); hash=31*hash+c.y.toBits(); hash=31*hash+c.vx.toBits(); hash=31*hash+c.vy.toBits(); hash=31*hash+c.heading.toBits(); hash=31*hash+c.lap.laps; hash=31*hash+c.aiMode.ordinal; hash=31*hash+c.yaw.toBits(); hash=31*hash+c.loadTransfer.toBits(); hash=31*hash+c.filteredSteer.toBits(); hash=31*hash+c.filteredThrottle.toBits(); hash=31*hash+if(c.drifting)1 else 0 }
-        for(c in cars){hash=31*hash+c.turboRemaining.toBits();hash=31*hash+c.fuelRemaining.toBits();hash=31*hash+c.utilityMask}
+        for(c in cars){hash=31*hash+if(c.entered)1 else 0;hash=31*hash+c.turboRemaining.toBits();hash=31*hash+c.fuelRemaining.toBits();hash=31*hash+c.utilityMask}
         return if(combat.enabled)combat.appendHash(hash) else hash
     }
 }

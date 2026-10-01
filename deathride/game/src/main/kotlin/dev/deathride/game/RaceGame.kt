@@ -78,7 +78,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
     private var raceRound=0
     private var raceDifficulty=0
     private val careerMessage=Array(2){"Player 1 hosts. Player 2 is a guest."}
-    private val rivalPreviews=Array(Career.rivals.size){i->Car(i,Track()).also{CarCatalog.apply(it,Career.rivals[i].carIndex)}}
+    private val rivalPreviews=Array(Tuning.CAR_COUNT-1){i->Car(i,Track()).also{CarCatalog.apply(it,Career.rivals[i].carIndex)}}
 
     private fun loadProfile(i: Int) {
         val loaded=runCatching{profileStore.load(server.slots[i].profileId)}
@@ -117,27 +117,29 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
             selectedCars[i]=profiles[i].selectedCar;shopMessage[i]=message;Garage.apply(profiles[i],world.cars[i]);world.reset();publishGarage(i)
         }
     }
-    private fun openCareer() { if(phase=="lobby" || phase=="results") { phase="career";server.phase=phase;accumulator=0.0;rebuildUi() } }
+    private fun openCareer() { if(phase=="lobby" || phase=="results") { if(!editProfile(0){RivalEconomy.prepare(it)})return;phase="career";server.phase=phase;accumulator=0.0;for((slot,index) in RivalEconomy.cast(profiles[0].careerRound).withIndex())Garage.apply(profiles[0].rivalProfiles[index],rivalPreviews[slot]);rebuildUi() } }
     private fun selectDifficulty(direction: Int) { server.difficultyRequest.set((profiles[0].careerDifficulty+direction).mod(Career.difficulties.size)) }
     private fun configureWorld(courseIndex: Int,career: Boolean,seed: Int=17) {
         val changed=selectedTrack!=courseIndex;selectedTrack=courseIndex
         world=World(seed,track=Track(course=Courses.all[courseIndex]),combatEnabled=true)
         for(i in world.cars.indices)CarCatalog.apply(world.cars[i],selectedCars[i])
-        if(career)Career.prepareRivals(world,raceDifficulty)
+        if(career)Career.prepareRivals(world,raceDifficulty,profiles[0],server.slots[1].claimed)
         if(career)Encounters.apply(world,listOf("scrap","foundry","salt","switchback","crown")[Career.events[raceRound].cupIndex])
-        for(i in profiles.indices)if(i==0 || !career || server.slots[i].claimed)Garage.apply(profiles[i],world.cars[i])
-        for(i in profiles.indices)world.cars[i].human=server.slots[i].claimed || i==0 && keyboard
+        for(i in profiles.indices)if(activeSeat(i) && (i==0 || !career || server.slots[i].claimed)){Garage.apply(profiles[i],world.cars[i]);world.cars[i].rivalIndex=-1;world.cars[i].aiStyle=null}
+        for(i in profiles.indices)world.cars[i].human=activeSeat(i) && (server.slots[i].claimed || i==0 && keyboard)
         world.reset();effects.clear();server.trackJson=Courses.all[courseIndex].json;server.surface=Surfaces.asphalt
         if(changed)scene=TrackScene(Courses.all[courseIndex],sceneryCanvas)
     }
-    private fun driverName(c: Car)=if(c.human)"PLAYER ${c.id+1}" else if(campaignRace && c.id>0)Career.rivals[c.id-1].name.uppercase() else "RIVAL ${c.id+1}"
+    private fun activeSeat(i: Int)=!(campaignRace && Career.events[raceRound].duel && i==1)
+    private fun driverName(c: Car)=if(c.human)"PLAYER ${c.id+1}" else c.aiStyle?.name?.uppercase()?:"RIVAL ${c.id+1}"
     private fun finishRace() {
         for(i in profiles.indices)if(raceTickets[i]>0 && raceProfiles[i]==profiles[i].id) {
             val c=world.cars[i]
             var message=""
             if(editProfile(i){
+                if(campaignRace && i==0)RivalEconomy.settle(it,raceTickets[i],world,raceRound)
                 if(campaignRace && i==0)message=Career.settle(it,raceTickets[i],raceRound,raceDifficulty,c.position,world.combat.kills[i],world.combat.health(i),Career.qualifies(c,world),world.combat.cashCollected[i],world.cars.any{r->r.aiStyle?.id=="rook" && world.combat.wrecked(r.id)},world.combat.damageTaken[i]==0.0,c.finishSeconds>=0)?.message?:"Result already saved"
-                else Economy.settle(it,raceTickets[i],c.position,world.combat.kills[i],world.combat.health(i),cash=world.combat.cashCollected[i],course=Courses.all[selectedTrack].id,targetWrecked=world.cars.any{r->r.aiStyle?.id=="rook" && world.combat.wrecked(r.id)},clean=world.combat.damageTaken[i]==0.0,finished=c.finishSeconds>=0)
+                else Economy.settle(it,raceTickets[i],c.position,world.combat.kills[i],world.combat.health(i),rewardScale=if(campaignRace)CareerCurve.all[raceRound].rewardScale else 1.0,cash=world.combat.cashCollected[i],course=Courses.all[selectedTrack].id,targetWrecked=world.cars.any{r->r.aiStyle?.id=="rook" && world.combat.wrecked(r.id)},clean=world.combat.damageTaken[i]==0.0,finished=c.finishSeconds>=0)
             }) { shopMessage[i]="Pit service complete - ready to race";if(message.isNotEmpty())careerMessage[i]=message }
             raceTickets[i]=0;publishGarage(i)
         }
@@ -179,11 +181,17 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
     }
     private fun startRace(career: Boolean=false) {
         if(career && !server.slots[0].claimed && !keyboard) { careerMessage[0]="Pair Player 1 before starting a career race";publishGarage(0);return }
+        if(career && CarCatalog.all[selectedCars[0]].tierRank>Career.events[profiles[0].careerRound].cupIndex) { careerMessage[0]="Choose a car in this division or a lower tier";publishGarage(0);return }
         if(career && !profiles[0].owned[selectedCars[0]]) { careerMessage[0]="Buy this car in the garage or choose an owned car";publishGarage(0);return }
         if(career && !Career.unlocked(profiles[0],"car",CarCatalog.all[selectedCars[0]].id)) { careerMessage[0]="Car locked for career - choose Line or an unlocked car";publishGarage(0);return }
+        if(career && !Career.events[profiles[0].careerRound].duel && server.slots[1].claimed &&
+            (!profiles[1].owned[selectedCars[1]] || CarCatalog.all[selectedCars[1]].tierRank>Career.events[profiles[0].careerRound].cupIndex)) {
+            careerMessage[0]="Player 2: choose an owned car in this division or a lower tier";publishGarage(0);return
+        }
+        if(career && !editProfile(0){RivalEconomy.prepare(it)})return
         campaignRace=career;server.raceMode=if(career)"career" else "practice";raceRound=profiles[0].careerRound;raceDifficulty=profiles[0].careerDifficulty
         raceTickets.fill(0)
-        for(i in profiles.indices)if(server.slots[i].claimed || i==0 && keyboard) {
+        for(i in profiles.indices)if(activeSeat(i) && (server.slots[i].claimed || i==0 && keyboard)) {
             var ticket=0L;if(editProfile(i){ticket=Economy.start(it)}) { raceTickets[i]=ticket;raceProfiles[i]=profiles[i].id }
         }
         configureWorld(if(career)Career.events[raceRound].courseIndex else selectedTrack,career,(profiles[0].startedRaces+raceRound).toInt())
@@ -229,7 +237,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
             accumulator+=elapsed
             var steps=0
             while(accumulator>=Tuning.STEP_SECONDS && steps<6) {
-                for(i in 0..1) { world.cars[i].human=server.slots[i].claimed; world.cars[i].feel=if(world.cars[i].human)server.feel else FeelProfiles.spike; server.consume(i,server.nowMs(),inputs[i]) }
+                for(i in 0..1) { world.cars[i].human=activeSeat(i) && server.slots[i].claimed; world.cars[i].feel=if(world.cars[i].human)server.feel else FeelProfiles.spike; server.consume(i,server.nowMs(),inputs[i]) }
                 if(keyboard && !server.slots[0].claimed) {
                     world.cars[0].human=true
                     val left=Gdx.input.isKeyPressed(Input.Keys.A)||Gdx.input.isKeyPressed(Input.Keys.LEFT)
@@ -245,20 +253,20 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
                 val start=System.nanoTime(); world.step(inputs); server.metrics.simMs.add((System.nanoTime()-start)/1e6,server.nowMs())
                 accumulator-=Tuning.STEP_SECONDS; steps++
             }
-            if(phase=="lobby" && world.resolved==6)world.reset()
+            if(phase=="lobby" && world.resolved==world.entrantCount)world.reset()
             if(phase=="race") {
                 var humans=0; var complete=0
                 for(c in world.cars)if(c.human) { humans++; if(c.finishSeconds>=0 || world.combat.wrecked(c.id))complete++ }
-                if((humans>0 && complete==humans) || world.resolved==6 || world.seconds>=TrackRules["maxRaceSeconds"])finishRace()
+                if((humans>0 && complete==humans) || world.resolved==world.entrantCount || world.seconds>=TrackRules["maxRaceSeconds"])finishRace()
             }
         }
         server.raceSeconds=world.seconds
         if(uiTime>=.1) {
             uiTime=0.0
             val combat=world.combat
-            server.trafficJson=world.cars.joinToString(",","[","]"){c->"{\"id\":${c.id},\"name\":\"${driverName(c)}\",\"car\":\"${c.carClass?.id}\",\"human\":${c.human},\"x\":${c.x},\"y\":${c.y},\"heading\":${c.heading},\"radius\":${c.spec.circleRadiusM},\"hp\":${combat.health(c.id)},\"wrecked\":${combat.wrecked(c.id)},\"finished\":${c.finishSeconds>=0},\"finishKind\":\"${c.finishKind}\",\"laps\":${c.lap.laps},\"position\":${c.position},\"repairPickups\":${combat.repairPickupsTaken[c.id]}}"}
+            server.trafficJson=world.cars.filter{it.entered}.joinToString(",","[","]"){c->"{\"id\":${c.id},\"name\":\"${driverName(c)}\",\"car\":\"${c.carClass?.id}\",\"human\":${c.human},\"x\":${c.x},\"y\":${c.y},\"heading\":${c.heading},\"radius\":${c.spec.circleRadiusM},\"hp\":${combat.health(c.id)},\"wrecked\":${combat.wrecked(c.id)},\"finished\":${c.finishSeconds>=0},\"finishKind\":\"${c.finishKind}\",\"laps\":${c.lap.laps},\"position\":${c.position},\"repairPickups\":${combat.repairPickupsTaken[c.id]}}"}
             server.pickupsJson=combat.pickups.joinToString(",","[","]"){p->"{\"kind\":\"${p.type.id}\",\"x\":${p.x},\"y\":${p.y},\"cooldown\":${p.cooldownSeconds}}"}
-            server.combatSummaryJson="{\"damageScale\":${world.damageScale},\"shotsByWeapon\":[${combat.shots.joinToString(",")}],\"active\":${world.cars.size-world.resolved},\"living\":${world.cars.size-combat.wreckCount},\"finished\":${world.finished},\"shots\":${combat.shots.sum()},\"projectiles\":${combat.projectiles.count{it.active}},\"mines\":${combat.mines.count{it.active}},\"blasts\":${combat.blasts.count{it.remainingSeconds>0}},\"poolExhaustions\":${combat.poolExhaustions}}"
+            server.combatSummaryJson="{\"damageScale\":${world.damageScale},\"shotsByWeapon\":[${combat.shots.joinToString(",")}],\"active\":${world.entrantCount-world.resolved},\"living\":${world.entrantCount-combat.wreckCount},\"finished\":${world.finished},\"shots\":${combat.shots.sum()},\"projectiles\":${combat.projectiles.count{it.active}},\"mines\":${combat.mines.count{it.active}},\"blasts\":${combat.blasts.count{it.remainingSeconds>0}},\"poolExhaustions\":${combat.poolExhaustions}}"
             for(i in 0..1) { val c=world.cars[i]; val s=server.slots[i]; s.speed=c.speedMps; s.lap=min(c.lap.laps+1,3); s.position=c.position; s.impact=c.impact; s.drifting=c.drifting; s.loadTransfer=c.loadTransfer; s.surfaceId=c.surface.id; s.x=c.x; s.y=c.y;s.heading=c.heading;s.yaw=c.yaw;s.progressM=c.lap.progressM; s.combatJson=combatJson(i) }
             rebuildUi()
         }
@@ -307,6 +315,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         combatPainter.ground(shape,world)
         effects.draw(shape,world,dt)
         for(c in world.cars) {
+            if(!c.entered)continue
             val prev=world.previousSnapshot;val current=world.snapshot
             val x=(prev.x(c.id)+(current.x(c.id)-prev.x(c.id))*alpha).toFloat();val y=(prev.y(c.id)+(current.y(c.id)-prev.y(c.id))*alpha).toFloat()
             val heading=prev.heading(c.id)+wrapAngle(current.heading(c.id)-prev.heading(c.id))*alpha
@@ -357,9 +366,9 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
             shape.color=bg;shape.rect(45f,90f,1190f,520f)
             shape.color=road;shape.rect(785f,178f,420f,400f)
             val p=profiles[0]
-            for(i in Career.events.indices) { shape.color=if(i<p.careerCleared)accent else road;shape.rect(75f+i*55,398f,47f,7f);if(i==p.careerRound){shape.color=Color.WHITE;shape.rect(75f+i*55,388f,47f,3f)} }
+            val eventWidth=660f/Career.events.size;for(i in Career.events.indices) { shape.color=if(i<p.careerCleared)accent else road;shape.rect(75f+i*eventWidth,380f,eventWidth-2,7f);if(i==p.careerRound){shape.color=Color.WHITE;shape.rect(75f+i*eventWidth,370f,eventWidth-2,3f)} }
             for(i in Career.difficulties.indices) { shape.color=if(i==p.careerDifficulty)accent else road;shape.rect(75f+i*218,230f,207f,46f) }
-            for(i in rivalPreviews.indices)painter.draw(shape,rivalPreviews[i],1155f,523f-i*68,PI*.5,colors[i+1],false,4.4f)
+            for(i in RivalEconomy.cast(profiles[0].careerRound).indices)painter.draw(shape,rivalPreviews[i],1155f,523f-i*68,PI*.5,colors[i+1],false,4.4f)
             shape.color=accent;shape.rect(75f,139f,643f,48f)
         }
         if(phase=="countdown" && scene.ready) { shape.color=bg; shape.circle(640f,352f,66f,40); shape.color=accent; shape.rect(595f,277f,(max(0.0,countdown)%1*90).toFloat(),4f) }
@@ -377,14 +386,14 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         shape.setColor(.035f,.055f,.065f,.9f);shape.rect(1055f,462f,190f,136f)
         shape.setColor(.37f,.43f,.43f,1f)
         for(i in 0 until scene.samples)shape.rectLine(ox+scene.center[i*2]*scale,oy+scene.center[i*2+1]*scale,ox+scene.center[(i+1)*2]*scale,oy+scene.center[(i+1)*2+1]*scale,3f)
-        for(car in world.cars) { shape.color=colors[car.id];shape.circle(ox+car.x.toFloat()*scale,oy+car.y.toFloat()*scale,if(car.human)4f else 2.5f,10) }
+        for(car in world.cars)if(car.entered) { shape.color=colors[car.id];shape.circle(ox+car.x.toFloat()*scale,oy+car.y.toFloat()*scale,if(car.human)4f else 2.5f,10) }
     }
     private fun rebuildUi() {
         if(!::text.isInitialized)return
         text.clear(); headline.clear(); detail.clear()
         text.setColor(Color.WHITE); headline.setColor(Color.WHITE); detail.setColor(muted)
         if(phase!="race")text.addText("DEATH RIDE",59f,685f)
-        else { val c=activeDriver();headline.setColor(colors[c.id]);uiBuilder.clear();uiBuilder.append(c.position).append(" / 6");headline.addText(uiBuilder,59f,691f);text.addText("LAP "+min(3,c.lap.laps+1)+" / 3",260f,686f);text.addText((c.speedMps*3.6).toInt().toString()+" km/h",400f,686f) }
+        else { val c=activeDriver();headline.setColor(colors[c.id]);uiBuilder.clear();uiBuilder.append(c.position).append(" / ").append(world.entrantCount);headline.addText(uiBuilder,59f,691f);text.addText("LAP "+min(3,c.lap.laps+1)+" / 3",260f,686f);text.addText((c.speedMps*3.6).toInt().toString()+" km/h",400f,686f) }
         if(phase=="lobby") {
             val car=CarCatalog.all[selectedCars[0]]
             text.addText(car.id+" / "+car.role,690f,575f)
@@ -397,10 +406,10 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
             detail.addText(Courses.all[selectedTrack].lesson,460f,100f)
         }
         if(phase!="race")detail.addText(Presentation.CONCEPT+"  /  "+Presentation.TAGLINE,59f,655f)
-        if(phase!="race")detail.addText(when(phase){"garage"->"PARTS / PER CAR    -    GREEN: GAIN    AMBER: TRADE-OFF";"career"->"CAREER / FOUR CUPS / TWELVE ROUNDS";else->Courses.all[selectedTrack].name+"   /   MENU: course    /    FEEL: "+server.feel.id+"  LEFT / RIGHT"},59f,630f)
-        detail.addText("6 CARS    /    3 LAPS    /    "+Courses.all[selectedTrack].name.uppercase(),873f,682f)
+        if(phase!="race")detail.addText(when(phase){"garage"->"PARTS / PER CAR    -    GREEN: GAIN    AMBER: TRADE-OFF";"career"->"THE ASH CIRCUIT / FIVE ACTS / THIRTY-FIVE EVENTS";else->Courses.all[selectedTrack].name+"   /   MENU: course    /    FEEL: "+server.feel.id+"  LEFT / RIGHT"},59f,630f)
+        detail.addText("${world.entrantCount} CARS    /    3 LAPS    /    "+Courses.all[selectedTrack].name.uppercase(),873f,682f)
         detail.addText(if(phase=="lobby")"A live race. A phone in your hand." else "BACK: Lobby    /    "+server.feel.id,873f,653f)
-        if(phase=="race" || phase=="countdown" || phase=="results")for(c in world.cars) {
+        if(phase=="race" || phase=="countdown" || phase=="results")for(c in world.cars)if(c.entered) {
             detail.setColor(colors[c.id]); uiBuilder.clear(); uiBuilder.append(c.position).append("  ").append(driverName(c))
             detail.addText(uiBuilder,55f+c.id*203,46f)
             detail.setColor(muted); uiBuilder.clear(); if(world.combat.wrecked(c.id))uiBuilder.append("WRECKED") else uiBuilder.append("HP ").append(world.combat.health(c.id).toInt()).append("   LAP ").append(min(3,c.lap.laps+1)).append(" / 3")
@@ -418,10 +427,8 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
                 detail.setColor(accent);detail.addText("SEASON ${p.careerSeasons+1}    /    ROUND ${p.careerRound+1} OF ${Career.events.size}",75f,573f)
                 headline.addText(event.name.uppercase(),75f,540f)
                 text.addText(cup.name+" / "+Courses.all[event.courseIndex].name+" / BEST: "+Career.gradeName(p.careerTrophies[event.cupIndex]),75f,472f)
-                detail.setColor(muted);detail.addText(Courses.all[event.courseIndex].lesson,75f,440f)
-                val lowPrize=((EconomyRules["participationCredits"]+EconomyRules.prizes.min())*tier.rewardScale).toInt()
-                val highPrize=((EconomyRules["participationCredits"]+EconomyRules.prizes.max()+EconomyRules["paidWreckCap"]*EconomyRules["wreckBountyCredits"])*tier.rewardScale).toInt()
-                detail.addText("PRIZE $lowPrize-$highPrize CR / PIT SERVICE DEDUCTED / CUP BONUS ON FINAL",75f,419f)
+                detail.setColor(muted)
+                for((line,words) in event.story.lines.withIndex())detail.addText(words,75f,440f-line*16)
                 text.addText("CUP SCORE  ${p.careerPoints}",75f,364f)
                 detail.addText("BRONZE ${cup.targets[1]}    SILVER ${cup.targets[2]}    GOLD ${cup.targets[3]}",350f,360f)
                 val next=Career.unlocks.filter{it.afterRounds>p.careerCleared}.minByOrNull{it.afterRounds}
@@ -431,9 +438,9 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
                 detail.setColor(muted);detail.addText(tier.description,75f,213f)
                 text.setColor(bg);text.addText("SELECT  /  RACE NEXT ROUND",232f,170f)
                 detail.setColor(warning);detail.addText(careerMessage[0],75f,115f)
-                detail.setColor(accent);detail.addText("THE RIVALS / STOCK CARS",810f,563f)
-                for(i in Career.rivals.indices) { val rival=Career.rivals[i];text.setColor(colors[i+1]);text.addText(rival.name+" / "+CarCatalog.all[rival.carIndex].id,810f,533f-i*68);detail.setColor(muted);detail.addText(rival.style,810f,507f-i*68) }
-                detail.setColor(muted);detail.addText("Player 2 replaces Rook and earns cash.\nCareer progress belongs to Player 1.",805f,157f)
+                detail.setColor(accent);detail.addText("THE RIVALS / THEIR GARAGES",810f,563f)
+                for((i,index) in RivalEconomy.cast(p.careerRound).withIndex()) { val rival=Career.rivals[index];val garage=p.rivalProfiles[index];text.setColor(colors[i+1]);text.addText(rival.name+" / "+CarCatalog.all[garage.selectedCar].id,810f,533f-i*68);detail.setColor(muted);detail.addText("PR "+PowerRating.of(CarCatalog.all[garage.selectedCar],garage.bonuses()).toInt()+" / "+garage.credits+" CR"+(if(p.grudges[index]>0)" / GRUDGE" else ""),810f,507f-i*68) }
+                detail.setColor(muted);detail.addText(if(event.duel)"FINAL DUEL / Player 2 spectates.\nBeat Marrow to finish the season." else "Player 2 replaces a regular rival.\nCareer progress belongs to Player 1.",805f,157f)
             }
             "garage" -> {
                 val p=profiles[0];val offer=Garage.offer(p,selectedPart);val part=Parts.all[selectedPart]
@@ -469,7 +476,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
             "race" -> {
                 val driver=activeDriver();val combat=world.combat;val weapon=combat.selectedWeapon[driver.id]
                 detail.setColor(if(combat.wrecked(driver.id))warning else muted)
-                detail.addText(if(combat.wrecked(driver.id))"WRECKED - SPECTATING" else "HULL "+combat.health(driver.id).toInt()+" / "+CombatRules["maxHp"].toInt(),590f,677f)
+                detail.addText(if(combat.wrecked(driver.id))"WRECKED - SPECTATING" else "HULL "+combat.health(driver.id).toInt()+" / "+combat.maxHealth(driver.id).toInt(),590f,677f)
                 detail.addText(if(combat.armingSeconds>0)"ARMING "+ceil(combat.armingSeconds).toInt() else Weapons.all[weapon].id.uppercase()+"  "+combat.ammo(driver.id,weapon),743f,697f)
                 detail.addText("MINES  "+combat.ammo(driver.id,Weapons.MINE),743f,674f)
                 if(stateTime<1.2) { headline.setColor(accent); headline.addText("GO",597f,389f) }
@@ -480,9 +487,9 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
             }
             "results" -> {
                 headline.addText("THE FINISH",330f,558f)
-                detail.addText("THREE LAPS. SIX CARS. ONE MORE?",332f,503f)
-                for(c in world.cars)rankOrder[c.position-1]=c.id
-                for(rank in 0..5) {
+                detail.addText(if(world.entrantCount==2)"THE CROWN / TWO DRIVERS" else "THREE LAPS. SIX CARS. ONE MORE?",332f,503f)
+                for(c in world.cars)if(c.entered)rankOrder[c.position-1]=c.id
+                for(rank in 0 until world.entrantCount) {
                     val c=world.cars[rankOrder[rank]]; text.setColor(colors[c.id]); uiBuilder.clear()
                     uiBuilder.append(rank+1).append("     ").append(driverName(c))
                     text.addText(uiBuilder,345f,461f-rank*42)
@@ -499,7 +506,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
     }
     private fun combatJson(id: Int): String {
         val c=world.combat;val weapon=c.selectedWeapon[id]
-        return "{\"armingSeconds\":${c.armingSeconds},\"hp\":${c.health(id)},\"maxHp\":${c.maxHealth(id)},\"wrecked\":${c.wrecked(id)},\"weapon\":$weapon,\"weaponName\":\"${Weapons.all[weapon].id}\",\"ammo\":${c.ammo(id,weapon)},\"mines\":${c.ammo(id,Weapons.MINE)},\"heavyAmmo\":${c.ammo(id,Weapons.HAMMER)},\"scatterAmmo\":${c.ammo(id,Weapons.SCATTER)},\"cash\":${c.cashCollected[id]},\"sabotageTarget\":${c.sabotageTarget[id]},\"cooldownSeconds\":${c.cooldown(id,weapon)},\"mineCooldownSeconds\":${c.cooldown(id,Weapons.MINE)},\"damageEvents\":${c.damageEvents[id]},\"kills\":${c.kills[id]}}"
+        return "{\"spectating\":${!activeSeat(id)},\"armingSeconds\":${c.armingSeconds},\"hp\":${c.health(id)},\"maxHp\":${c.maxHealth(id)},\"wrecked\":${c.wrecked(id)},\"weapon\":$weapon,\"weaponName\":\"${Weapons.all[weapon].id}\",\"ammo\":${c.ammo(id,weapon)},\"mines\":${c.ammo(id,Weapons.MINE)},\"heavyAmmo\":${c.ammo(id,Weapons.HAMMER)},\"scatterAmmo\":${c.ammo(id,Weapons.SCATTER)},\"cash\":${c.cashCollected[id]},\"sabotageTarget\":${c.sabotageTarget[id]},\"cooldownSeconds\":${c.cooldown(id,weapon)},\"mineCooldownSeconds\":${c.cooldown(id,Weapons.MINE)},\"damageEvents\":${c.damageEvents[id]},\"kills\":${c.kills[id]}}"
     }
     private fun updateQr() {
         if(server.pin==qrPin && server.address==qrAddress)return

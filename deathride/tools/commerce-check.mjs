@@ -23,9 +23,9 @@ try{
  const pin=await restart();await installPilot(page);await page.goto(base+'/?pin='+pin);await page.waitForFunction(()=>document.getElementById('player').textContent==='PLAYER 1');
  const catalog=await(await fetch(base+'/catalog')).json();assert.equal(catalog.weapons.length,4);
  await page.locator('#garageButton').tap();await until(s=>s.phase==='garage','garage');
- const before=await stats();assert.equal(before.slots[0].garage.credits,0);
+ const before=await stats();assert.equal(before.slots[0].garage.credits,0);const loanDebt=before.slots[0].garage.market.debt+330;
  const act=async(action,id='')=>{await page.locator(`[data-market="${action}"][data-item="${id}"]`).tap();await pause(250)};
- await act('loan');await until(s=>s.slots[0].garage.market.debt===330,'loan');
+ await act('loan');await until(s=>s.slots[0].garage.market.debt===loanDebt,'loan');
  await act('item','turbo');await until(s=>s.slots[0].garage.market.items.find(x=>x.id==='turbo').packed,'packed turbo');
  await act('contract','delivery');await until(s=>s.slots[0].garage.market.contracts.find(x=>x.id==='delivery').active,'contract');
  await act('service','manual');await until(s=>s.slots[0].garage.market.manualService,'manual service');
@@ -37,7 +37,7 @@ try{
   while(performance.now()-began<220000){result=await stats();await page.evaluate(command=>{window.__pilot=command},{...pilot.command(result,0),weapon:3});if(result.phase==='results')break;await pause(100)}
   await page.evaluate(()=>{window.__pilot=null});assert.equal(result.phase,'results');races.push(result);return result;
  }
- const result=await drive(false);assert.ok(result.combatSummary.shotsByWeapon[3]>0);assert.ok(result.slots[0].garage.market.debt<330);
+ const result=await drive(false);assert.ok(result.combatSummary.shotsByWeapon[3]>0);assert.ok(result.slots[0].garage.market.debt<loanDebt);
  assert.equal(result.slots[0].garage.market.items.find(x=>x.id==='turbo').packed,false);
  checks.push('Actual device race fired Scatter; result consumed the reserve and repaid debt without a duplicate settlement');
  await page.locator('#garageButton').tap();await until(s=>s.phase==='garage','results garage');

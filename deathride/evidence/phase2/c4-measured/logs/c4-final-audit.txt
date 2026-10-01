@@ -1,0 +1,131 @@
+{
+  "physicalRaces": 20160,
+  "sampledCareers": 6000,
+  "sampledRaceOutcomes": 211507,
+  "settings": [
+    {
+      "difficulty": "Rookie",
+      "careers": "2000",
+      "completed": "2000",
+      "meanRaces": "35.0",
+      "meanHours": "0.8295006782407044",
+      "firstUpgrade": "1.7505",
+      "club": "7.0",
+      "pro": "14.0",
+      "elite": "21.0",
+      "champion": "28.0",
+      "bankruptcies": "0",
+      "earlyRate": "0.0",
+      "maxRatioGap": "0.04868701232575612",
+      "followingTierIntervals": [
+        7.0,
+        7.0,
+        7.0
+      ],
+      "firstUpgradeTarget": false,
+      "clubTarget": true,
+      "followingTiersTarget": true,
+      "durationTarget": false,
+      "earlyTarget": true
+    },
+    {
+      "difficulty": "Club",
+      "careers": "2000",
+      "completed": "2000",
+      "meanRaces": "35.1335",
+      "meanHours": "0.8421528495370021",
+      "firstUpgrade": "2.0",
+      "club": "7.262",
+      "pro": "14.0",
+      "elite": "21.0",
+      "champion": "28.0",
+      "bankruptcies": "0",
+      "earlyRate": "0.0",
+      "maxRatioGap": "0.04868701232575612",
+      "followingTierIntervals": [
+        6.738,
+        7.0,
+        7.0
+      ],
+      "firstUpgradeTarget": true,
+      "clubTarget": true,
+      "followingTiersTarget": false,
+      "durationTarget": false,
+      "earlyTarget": true
+    },
+    {
+      "difficulty": "Pro",
+      "careers": "2000",
+      "completed": "2000",
+      "meanRaces": "35.62",
+      "meanHours": "0.8611306828703349",
+      "firstUpgrade": "2.0",
+      "club": "8.3395",
+      "pro": "14.413",
+      "elite": "21.0455",
+      "champion": "28.0055",
+      "bankruptcies": "0",
+      "earlyRate": "0.0",
+      "maxRatioGap": "0.04868701232575612",
+      "followingTierIntervals": [
+        6.073500000000001,
+        6.6325,
+        6.960000000000001
+      ],
+      "firstUpgradeTarget": true,
+      "clubTarget": true,
+      "followingTiersTarget": false,
+      "durationTarget": false,
+      "earlyTarget": true
+    }
+  ],
+  "targetFindings": [
+    "Rookie: firstUpgradeTarget missed",
+    "Rookie: durationTarget missed",
+    "Club: followingTiersTarget missed",
+    "Club: durationTarget missed",
+    "Pro: followingTiersTarget missed",
+    "Pro: durationTarget missed",
+    "Club event 7: measured PR ratio 0.9200 outside proposed [0.85, 0.9]",
+    "Club event 14: measured PR ratio 0.9381 outside proposed [0.85, 0.9]",
+    "Club event 21: measured PR ratio 0.9018 outside proposed [0.85, 0.9]",
+    "Club event 28: measured PR ratio 0.9482 outside proposed [0.85, 0.9]"
+  ],
+  "tierJoins": [
+    {
+      "event": 8,
+      "playerPrChange": 0.01675243278613814,
+      "fieldPrChange": -0.0297703729241926,
+      "nextCarRaces": 3.919315637623986
+    },
+    {
+      "event": 15,
+      "playerPrChange": 0.025103877986543788,
+      "fieldPrChange": -0.09212739957903116,
+      "nextCarRaces": 2.5760817377899197
+    },
+    {
+      "event": 22,
+      "playerPrChange": 0.07831444588493341,
+      "fieldPrChange": -0.0908912563669797,
+      "nextCarRaces": 0.0017832079539867422
+    },
+    {
+      "event": 29,
+      "playerPrChange": 0.08637741593528614,
+      "fieldPrChange": -0.07739029612125148,
+      "nextCarRaces": 0.0
+    }
+  ],
+  "racesOutsideRatioEnvelope": 1494,
+  "largestRatioGap": 0.04868701232575612,
+  "ratioGapP95": 0.03395468356445108,
+  "limits": [
+    "Club-skill AI lead is a driving proxy; no human feel claim.",
+    "Nearest PR-ratio upgrade band; eight seeds per physical cell; Monte Carlo resamples those outcomes.",
+    "One evolving reference rival economy supplies physical fields; career rival economies settle actual sampled results, so field configurations differ.",
+    "Four legal spending caps compared, not proof of globally optimal play.",
+    "Hours measure active racing only; menus, reading and human retries are not invented.",
+    "First-visit curves; milestone means omit unreached milestones, with completion counts reported."
+  ]
+}

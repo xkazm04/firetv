@@ -23,7 +23,7 @@ data class Receipt(val race: Long,val position: Int,val kills: Int,val gross: In
     fun encode()="$race,$position,$kills,$gross,$repair,$insurance,$net,$banked,$balance"
     val json get()="{\"position\":$position,\"kills\":$kills,\"gross\":$gross,\"repair\":$repair,\"insurance\":$insurance,\"net\":$net,\"banked\":$banked,\"balance\":$balance}"
 }
-class Profile(val id: String) {
+class Profile(val id: String,val withRivals: Boolean=true) {
     var credits=EconomyRules["startingCredits"].toInt();internal set
     var selectedCar=EconomyRules["startingCarIndex"].toInt()
     var startedRaces=0L;internal set
@@ -41,7 +41,7 @@ class Profile(val id: String) {
     val condition=IntArray(CarCatalog.all.size){100}
     var inventory=0;internal set
     var raceItems=0;internal set
-    var debt=0;internal set
+    var debt=if(withRivals)AshRules["startingDebt"].toInt() else 0;internal set
     var winStreak=0;internal set
     var contract=-1;internal set
     var contractWins=0;internal set
@@ -49,6 +49,11 @@ class Profile(val id: String) {
     var lastDebtPayment=0;internal set
     var manualService=false;internal set
     var marketRevision=0L;internal set
+    var legacyCarryPoints=0;internal set
+    var rivalPreparedSerial=-1;internal set
+    var rivalSettledTicket=0L;internal set
+    val rivalProfiles=if(withRivals)RivalEconomy.initialProfiles() else emptyArray()
+    val grudges=IntArray(rivalProfiles.size)
     var lastReceipt: Receipt?=null;internal set
     init { require(validProfileId(id)) }
     fun tier(car: Int,part: Int)=tiers[car*Parts.all.size+part]
@@ -57,11 +62,13 @@ class Profile(val id: String) {
         for(p in Parts.all.indices)for(s in result.indices)result[s]+=Parts.all[p].bonuses[s]*tier(car,p)
         return result
     }
-    fun copy(): Profile = Profile(id).also { p ->
+    fun copy(): Profile = Profile(id,withRivals).also { p ->
         p.credits=credits;p.selectedCar=selectedCar;p.startedRaces=startedRaces;p.settledRace=settledRace;p.races=races;p.wins=wins
         tiers.copyInto(p.tiers);p.lastReceipt=lastReceipt
         owned.copyInto(p.owned);condition.copyInto(p.condition);p.inventory=inventory;p.raceItems=raceItems;p.debt=debt;p.winStreak=winStreak;p.contract=contract;p.contractWins=contractWins
         p.lastBonus=lastBonus;p.lastDebtPayment=lastDebtPayment;p.manualService=manualService;p.marketRevision=marketRevision
+        p.legacyCarryPoints=legacyCarryPoints;p.rivalPreparedSerial=rivalPreparedSerial;p.rivalSettledTicket=rivalSettledTicket;grudges.copyInto(p.grudges)
+        for(i in rivalProfiles.indices)p.rivalProfiles[i]=rivalProfiles[i].copy()
         p.careerRound=careerRound;p.careerCleared=careerCleared;p.careerPoints=careerPoints;p.careerSeasons=careerSeasons;p.careerDifficulty=careerDifficulty;careerTrophies.copyInto(p.careerTrophies)
     }
 }
@@ -119,7 +126,7 @@ object Economy {
         require(rewardScale.isFinite() && repairScale.isFinite() && rewardScale>0 && repairScale>=0 && bonus>=0 && cash in 0..MarketRules["raceCashCap"].toInt())
         if(ticket<=profile.settledRace || ticket>profile.startedRaces)return null
         val extra=Market.resultBonus(profile,position,kills,clean,finished,course,targetWrecked)
-        val gross=floor((EconomyRules["participationCredits"]+EconomyRules.prizes[position-1]+min(kills,EconomyRules["paidWreckCap"].toInt())*EconomyRules["wreckBountyCredits"]+bonus+extra)*rewardScale).toInt()+cash
+        val gross=floor((EconomyRules["participationCredits"]+EconomyRules.prizes[position-1]+min(kills,EconomyRules["paidWreckCap"].toInt())*EconomyRules["wreckBountyCredits"])*rewardScale).toInt()+bonus+extra+cash
         val maximum=CombatRules["maxHp"]*CarLoadouts.forCar(CarCatalog.all[profile.selectedCar]).hullScale
         val service=if(profile.manualService)0 else ceil(max(0.0,maximum-hp)*EconomyRules["repairCreditsPerHp"]*repairScale).toInt()
         val paid=min(service,floor(gross*EconomyRules["maxRepairPrizeShare"]).toInt())

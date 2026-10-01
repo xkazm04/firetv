@@ -1,0 +1,78 @@
+> Task :core:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :core:compileKotlin UP-TO-DATE
+> Task :core:compileJava NO-SOURCE
+> Task :core:processResources UP-TO-DATE
+> Task :core:classes UP-TO-DATE
+> Task :core:jar UP-TO-DATE
+> Task :core:processTestResources UP-TO-DATE
+> Task :core:compileTestKotlin
+> Task :core:compileTestJava NO-SOURCE
+> Task :core:testClasses UP-TO-DATE
+
+> Task :core:careerV2Report
+Physical event 1/35: 24 races, field PR 367.6553649458, reference Line position 5
+Physical event 2/35: 24 races, field PR 367.6754045138, reference Line position 5
+Physical event 3/35: 24 races, field PR 372.5821715153999, reference Line position 6
+Physical event 4/35: 24 races, field PR 378.964711793, reference Line position 4
+Physical event 5/35: 24 races, field PR 385.8108054814, reference Line position 5
+Physical event 6/35: 24 races, field PR 396.27345833540005, reference Line position 6
+Physical event 7/35: 24 races, field PR 455.17986765040007, reference Line position 6
+Physical event 8/35: 48 races, field PR 472.50421931260007, reference Line position 4
+Physical event 9/35: 48 races, field PR 476.86868490020004, reference Line position 6
+Physical event 10/35: 48 races, field PR 481.2531900558, reference Line position 6
+Physical event 11/35: 48 races, field PR 481.6802938346, reference Line position 6
+Physical event 12/35: 48 races, field PR 486.74606555580004, reference Line position 5
+Physical event 13/35: 48 races, field PR 499.35024879080004, reference Line position 6
+Physical event 14/35: 48 races, field PR 571.729867447, reference Line position 6
+Physical event 15/35: 72 races, field PR 526.3218141582, reference Line position 6
+Physical event 16/35: 72 races, field PR 529.551348681, reference Line position 6
+Physical event 17/35: 72 races, field PR 532.8410019078, reference Line position 6
+Physical event 18/35: 72 races, field PR 540.9773034322001, reference Line position 6
+Physical event 19/35: 72 races, field PR 556.9068886874, reference Line position 6
+Physical event 20/35: 72 races, field PR 563.2444387102001, reference Line position 6
+Physical event 21/35: 72 races, field PR 626.5127111306, reference Comet position 6
+Physical event 22/35: 96 races, field PR 566.2053375196, reference Comet position 6
+Physical event 23/35: 96 races, field PR 568.1833065516, reference Comet position 5
+Physical event 24/35: 96 races, field PR 576.4273375472001, reference Comet position 6
+Physical event 25/35: 96 races, field PR 593.471104869, reference Comet position 6
+Physical event 26/35: 96 races, field PR 598.9130865834001, reference Comet position 6
+Physical event 27/35: 96 races, field PR 615.1338289839999, reference Comet position 6
+Physical event 28/35: 96 races, field PR 649.1099058231999, reference Comet position 6
+Physical event 29/35: 120 races, field PR 594.354906506, reference Comet position 6
+Physical event 30/35: 120 races, field PR 594.455104346, reference Comet position 6
+Physical event 31/35: 120 races, field PR 613.4938220124, reference Comet position 6
+Physical event 32/35: 120 races, field PR 617.130420746, reference Comet position 6
+Physical event 33/35: 120 races, field PR 621.8292073924, reference Comet position 6
+Physical event 34/35: 120 races, field PR 631.4932763465999, reference Comet position 6
+Physical event 35/35: 120 races, field PR 616.8287596060002, reference Comet position 2
+.\deathride\gradlew.bat : Exception in thread "main" java.util.NoSuchElementException: Key maxCareerRaces is missing
+in the map.
+At line:8 char:1
++ .\deathride\gradlew.bat -p deathride :core:careerV2Report -PashSeeds= ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (Exception in th...ing in the map.:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+
+	at kotlin.collections.MapsKt__MapWithDefaultKt.getOrImplicitDefaultNullable(MapWithDefault.kt:24)
+	at kotlin.collections.MapsKt__MapsKt.getValue(Maps.kt:369)
+	at dev.deathride.core.AshRules.get(AshCircuit.kt:7)
+	at dev.deathride.core.CareerV2ReportKt.main$run(CareerV2Report.kt:54)
+	at dev.deathride.core.CareerV2ReportKt.main$run$default(CareerV2Report.kt:52)
+	at dev.deathride.core.CareerV2ReportKt.main(CareerV2Report.kt:71)
+
+> Task :core:careerV2Report FAILED
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':core:careerV2Report'.
+> Process 'command 'C:\Program Files\Zulu\zulu-22\bin\java.exe'' finished with non-zero exit value 1
+
+* Try:
+> Run with --stacktrace option to get the stack trace.
+> Run with --info or --debug option to get more log output.
+> Run with --scan to get full insights.
+> Get more help at https://help.gradle.org.
+
+BUILD FAILED in 3m 21s
+6 actionable tasks: 2 executed, 4 up-to-date

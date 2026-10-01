@@ -15,7 +15,8 @@ class Difficulty(row: Map<String,String>) {
     init { require(rewardScale>=1.0) }
     val json="{\"id\":\"$id\",\"name\":\"$name\",\"description\":\"$description\",\"rewardScale\":$rewardScale}"
 }
-class Rival(row: Map<String,String>) {
+class Rival(val values: Map<String,String>) {
+    private val row=values
     val id=row.getValue("id");val name=row.getValue("name");val carIndex=CarCatalog.all.indexOfFirst{it.id==row.getValue("car")}
     val style=row.getValue("style");val laneBiasM=row.number("laneBiasM");val passDistanceScale=row.number("passDistanceScale")
     val fireRangeScale=row.number("fireRangeScale");val heavyRangeScale=row.number("heavyRangeScale");val mines=row.number("mines")!=0.0
@@ -32,6 +33,7 @@ class Cup(row: Map<String,String>) {
 class CareerEvent(row: Map<String,String>) {
     val id=row.getValue("id");val name=row.getValue("name")
     val cupIndex=Career.cups.indexOfFirst{it.id==row.getValue("cup")};val courseIndex=Courses.all.indexOfFirst{it.id==row.getValue("course")}
+    val story=AshStory.cards.getValue(row.getValue("story"));val boss=row.number("boss")!=0.0;val duel=row.number("duel")!=0.0
     init { require(cupIndex>=0 && courseIndex>=0) }
 }
 data class Unlock(val kind: String,val id: String,val afterRounds: Int,val name: String)
@@ -49,7 +51,7 @@ object Career {
     val partUnlocks=Content.table("part-unlocks").map{PartUnlock(Parts.all.indexOfFirst{p->p.id==it.getValue("id")},it.number("tier").toInt(),it.number("afterRounds").toInt())}
     init {
         require(difficulties.all{it.skill.reactionSteps*Tuning.STEP_SECONDS>=get("minimumReactionSeconds")})
-        require(rivals.size==Tuning.CAR_COUNT-1 && events.size>0 && points.size==Tuning.CAR_COUNT)
+        require(rivals.size>=Tuning.CAR_COUNT-1 && events.size>0 && points.size==Tuning.CAR_COUNT)
         require(events.map{it.id}.distinct().size==events.size && events.map{it.cupIndex}==events.map{it.cupIndex}.sorted())
         require(unlocks.all{it.kind in setOf("car","track") && it.afterRounds in 0..events.size})
         require(partUnlocks.all{it.part>=0 && it.tier in 2..Parts.all[it.part].maxTier && it.afterRounds in 0..events.size})
@@ -59,7 +61,7 @@ object Career {
         for(i in cups.indices)require(cups[i].targets.last()<=events.count{it.cupIndex==i}*points.max())
         for((i,e) in events.withIndex())require(unlocks.single{it.kind=="track" && it.id==Courses.all[e.courseIndex].id}.afterRounds<=i)
     }
-    fun unlocked(p: Profile,kind: String,id: String)=p.careerCleared>=unlocks.single{it.kind==kind && it.id==id}.afterRounds
+    fun unlocked(p: Profile,kind: String,id: String)=(kind=="car" && p.owned[CarCatalog.all.indexOfFirst{it.id==id}]) || p.careerCleared>=unlocks.single{it.kind==kind && it.id==id}.afterRounds
     fun maximumPartTier(p: Profile,part: Int)=max(1,partUnlocks.filter{it.part==part && it.afterRounds<=p.careerCleared}.maxOfOrNull{it.tier}?:1)
     fun partLock(p: Profile,part: Int,tier: Int): String {
         val gate=partUnlocks.firstOrNull{it.part==part && it.tier==tier}?:return ""
@@ -71,13 +73,14 @@ object Career {
         require(difficulty in difficulties.indices && position in 1..Tuning.CAR_COUNT && kills in 0 until Tuning.CAR_COUNT && hp.isFinite() && hp in 0.0..CombatRules["maxHp"])
         if(ticket<=p.settledRace || ticket>p.startedRaces)return null
         val result=advance(p,expectedRound,position,qualified)
-        check(Economy.settle(p,ticket,position,kills,hp,rewardScale=difficulties[difficulty].rewardScale,bonus=result.bonus,cash=cash,course=Courses.all[events[expectedRound].courseIndex].id,targetWrecked=targetWrecked,clean=clean,finished=finished)!=null)
+        check(Economy.settle(p,ticket,position,kills,hp,rewardScale=CareerCurve.all[expectedRound].rewardScale,bonus=result.bonus,cash=cash,course=Courses.all[events[expectedRound].courseIndex].id,targetWrecked=targetWrecked,clean=clean,finished=finished)!=null)
         return result
     }
     internal fun advance(p: Profile,expectedRound: Int,position: Int,qualified: Boolean): CareerResult {
         require(position in 1..Tuning.CAR_COUNT)
         if(expectedRound!=p.careerRound)return CareerResult(false,0,0,"Career round changed - result not advanced")
         if(!qualified)return CareerResult(false,0,0,"Complete a lap or make progress before a wreck")
+        if(events[p.careerRound].duel && position!=1)return CareerResult(false,0,0,"Marrow holds the Crown - repair and retry")
         val event=events[p.careerRound];p.careerPoints+=points[position-1]
         p.careerCleared=max(p.careerCleared,p.careerRound+1)
         val cupEnds=p.careerRound==events.lastIndex || events[p.careerRound+1].cupIndex!=event.cupIndex
@@ -85,14 +88,22 @@ object Career {
         if(cupEnds) {
             val cup=cups[event.cupIndex];grade=cup.grade(p.careerPoints);bonus=cup.bonuses[grade]
             p.careerTrophies[event.cupIndex]=max(p.careerTrophies[event.cupIndex],grade)
-            message="${cup.name}: ${gradeName(grade)} - bonus $bonus CR";p.careerPoints=0
+            message="${cup.name}: ${gradeName(grade)} - bonus $bonus CR";p.careerPoints=0;p.legacyCarryPoints=0
         }
         p.careerRound++
-        if(p.careerRound==events.size){p.careerRound=0;p.careerSeasons++;message="Season complete - parts and trophies retained"}
+        if(p.careerRound==events.size){
+            p.careerRound=0;p.careerSeasons++
+            // A repeat season must not force the player to sell the Champion garage to enter Scrap.
+            if(p.owned.indices.none{p.owned[it] && CarCatalog.all[it].tierRank==0}) {
+                val starter=EconomyRules["startingCarIndex"].toInt();p.owned[starter]=true;p.condition[starter]=100
+            }
+            message="Season complete - garage retained; entry car ready"
+        }
         return CareerResult(true,grade,bonus,message)
     }
     fun gradeName(grade: Int)=arrayOf("No medal","Bronze","Silver","Gold")[grade]
-    fun prepareRivals(world: World,difficulty: Int) {
+    fun prepareRivals(world: World,difficulty: Int,profile: Profile?=null,guest: Boolean=false) {
+        if(profile!=null){RivalEconomy.apply(profile,world,difficulty,guest=guest);return}
         for(i in 1 until world.cars.size) {
             val c=world.cars[i];val rival=rivals[i-1];CarCatalog.apply(c,rival.carIndex);c.aiSkill=difficulties[difficulty].skill;c.aiStyle=rival
         }
@@ -101,7 +112,10 @@ object Career {
         val e=events[p.careerRound];val cup=cups[e.cupIndex];val course=Courses.all[e.courseIndex]
         val locks=unlocks.joinToString(",","[","]"){"{\"kind\":\"${it.kind}\",\"id\":\"${it.id}\",\"name\":\"${it.name}\",\"afterRounds\":${it.afterRounds},\"unlocked\":${p.careerCleared>=it.afterRounds}}"}
         val parts=partUnlocks.joinToString(",","[","]"){"{\"name\":\"${Parts.all[it.part].name} ${it.tier}\",\"afterRounds\":${it.afterRounds},\"unlocked\":${p.careerCleared>=it.afterRounds}}"}
-        return "{\"ownedCars\":[${p.owned.indices.filter{p.owned[it]}.joinToString(","){"\"${CarCatalog.all[it].id}\""}}],\"round\":${p.careerRound+1},\"roundCount\":${events.size},\"cleared\":${p.careerCleared},\"season\":${p.careerSeasons+1},\"event\":\"${e.name}\",\"course\":${course.json},\"cup\":\"${cup.name}\",\"points\":${p.careerPoints},\"bestTrophy\":\"${gradeName(p.careerTrophies[e.cupIndex])}\",\"targets\":[${cup.targets.drop(1).joinToString(",")}],\"bonuses\":[${cup.bonuses.drop(1).joinToString(",")}],\"trophies\":[${p.careerTrophies.joinToString(",")}],\"difficulty\":${difficulties[p.careerDifficulty].json},\"unlocks\":$locks,\"partUnlocks\":$parts,\"message\":\"$message\"}"
+        val story=e.story.json
+        val roster=if(p.withRivals)RivalEconomy.json(p) else "[]"
+        val field=if(p.withRivals)RivalEconomy.fieldRating(p) else 0.0
+        return "{\"story\":$story,\"rivals\":$roster,\"fieldPowerRating\":$field,\"duel\":${e.duel},\"maximumPlayerTier\":${e.cupIndex},\"ownedCars\":[${p.owned.indices.filter{p.owned[it]}.joinToString(","){"\"${CarCatalog.all[it].id}\""}}],\"round\":${p.careerRound+1},\"roundCount\":${events.size},\"cleared\":${p.careerCleared},\"season\":${p.careerSeasons+1},\"event\":\"${e.name}\",\"course\":${course.json},\"cup\":\"${cup.name}\",\"points\":${p.careerPoints},\"bestTrophy\":\"${gradeName(p.careerTrophies[e.cupIndex])}\",\"targets\":[${cup.targets.drop(1).joinToString(",")}],\"bonuses\":[${cup.bonuses.drop(1).joinToString(",")}],\"trophies\":[${p.careerTrophies.joinToString(",")}],\"difficulty\":${difficulties[p.careerDifficulty].json},\"unlocks\":$locks,\"partUnlocks\":$parts,\"message\":\"$message\"}"
     }
     val catalogJson get()="{\"difficulties\":[${difficulties.joinToString(","){it.json}}],\"rivals\":[${rivals.joinToString(","){it.json}}]}"
 }

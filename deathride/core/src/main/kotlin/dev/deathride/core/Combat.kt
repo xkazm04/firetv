@@ -57,6 +57,7 @@ class Combat(private val world: World,val enabled: Boolean) {
     val damageDealt=DoubleArray(Tuning.CAR_COUNT)
     val damageTaken=DoubleArray(Tuning.CAR_COUNT)
     val damageFlashSeconds=DoubleArray(Tuning.CAR_COUNT)
+    val wreckSource=IntArray(Tuning.CAR_COUNT){-1}
     val wreckSeconds=DoubleArray(Tuning.CAR_COUNT){-1.0}
     val firstDamageSeconds=DoubleArray(Tuning.CAR_COUNT){-1.0}
     val cashCollected=IntArray(Tuning.CAR_COUNT)
@@ -74,7 +75,7 @@ class Combat(private val world: World,val enabled: Boolean) {
     var poolExhaustions=0;private set
     var oneShotKills=0;private set
     val armingSeconds get()=max(0.0,CombatRules["startProtectionSeconds"]-world.seconds)
-    val wreckCount get(): Int { var count=0;for(i in states.indices)if(states[i]==LifeState.WRECKED)count++;return count }
+    val wreckCount get(): Int { var count=0;for(i in states.indices)if(world.cars[i].entered && states[i]==LifeState.WRECKED)count++;return count }
     init {
         val point=TrackPoint()
         val sites=world.track.course?.spots?.filter { it.kind=="ammo" || it.kind=="repair" || it.kind=="cash" }
@@ -92,12 +93,12 @@ class Combat(private val world: World,val enabled: Boolean) {
         return floor(Weapons.all[weapon].ammo*(world.cars[id].carClass?.ammoScale?:1.0)).toInt()+if(weapon==Weapons.HAMMER)max(0,world.cars[id].weaponSlots-2)*CombatRules["heavyExtraAmmoPerSlot"].toInt() else 0
     }
     fun reset() {
-        for(i in hp.indices)hp[i]=maxHealth(i)*world.cars[i].startingCondition;states.fill(LifeState.ACTIVE);cooldowns.fill(0.0);ramCooldown.fill(0.0);wallCooldown.fill(0.0)
-        selectedWeapon.fill(0);kills.fill(0);damageEvents.fill(0);damageDealt.fill(0.0);damageTaken.fill(0.0);damageFlashSeconds.fill(0.0);wreckSeconds.fill(-1.0)
+        for(i in hp.indices)hp[i]=if(world.cars[i].entered)maxHealth(i)*world.cars[i].startingCondition else 0.0;states.fill(LifeState.ACTIVE);cooldowns.fill(0.0);ramCooldown.fill(0.0);wallCooldown.fill(0.0)
+        wreckSource.fill(-1);selectedWeapon.fill(0);kills.fill(0);damageEvents.fill(0);damageDealt.fill(0.0);damageTaken.fill(0.0);damageFlashSeconds.fill(0.0);wreckSeconds.fill(-1.0)
         cashCollected.fill(0);sabotageTarget.fill(-1);firstDamageSeconds.fill(-1.0);repairPickupsTaken.fill(0);ammoPickupsTaken.fill(0)
         shots.fill(0);hits.fill(0);deaths.fill(0);traceSeconds.fill(0.0);lastTarget.fill(-1);activation=0;poolExhaustions=0;oneShotKills=0
         for(i in world.cars.indices)for(w in Weapons.all.indices)ammunition[i*Weapons.all.size+w]=capacity(i,w)
-        for(c in world.cars)if(c.utilityMask and (1 shl Consumables.SABOTAGE)!=0) {
+        for(c in world.cars)if(c.entered && c.utilityMask and (1 shl Consumables.SABOTAGE)!=0) {
             val target=if(c.id==0)1 else 0;sabotageTarget[c.id]=target
             for(w in Weapons.all.indices){val n=target*Weapons.all.size+w;ammunition[n]=floor(ammunition[n]*(1-Consumables.all[Consumables.SABOTAGE].magnitude)).toInt()}
         }
@@ -106,7 +107,7 @@ class Combat(private val world: World,val enabled: Boolean) {
         for(b in blasts){b.remainingSeconds=0.0;b.hitMask=0}
         for(p in pickups)p.cooldownSeconds=0.0
     }
-    fun canAct(id: Int)=!wrecked(id) && world.cars[id].finishSeconds<0
+    fun canAct(id: Int)=world.cars[id].entered && !wrecked(id) && world.cars[id].finishSeconds<0
     internal fun damage(id: Int,raw: Double,source: Int,kind: DamageKind) {
         if(!enabled || !canAct(id) || raw<=0 || armingSeconds>0)return
         val dealt=min(hp[id],raw*world.damageScale*(1-world.cars[id].armorReduction))
@@ -116,7 +117,7 @@ class Combat(private val world: World,val enabled: Boolean) {
         damageFlashSeconds[id]=CombatRules["damageFlashSeconds"]
         if(source>=0 && source!=id)damageDealt[source]+=dealt
         if(hp[id]<=0) {
-            states[id]=LifeState.WRECKED;wreckSeconds[id]=world.seconds;deaths[kind.ordinal]++
+            states[id]=LifeState.WRECKED;wreckSource[id]=source;wreckSeconds[id]=world.seconds;deaths[kind.ordinal]++
             if(full)oneShotKills++
             if(source>=0 && source!=id)kills[source]++
             val c=world.cars[id];c.aiInput.fire=0.0;c.aiInput.mine=0.0;c.filteredThrottle=0.0;c.drifting=false;lastTarget[id]=-1
@@ -301,6 +302,7 @@ class Combat(private val world: World,val enabled: Boolean) {
         for(c in ramCooldown)h=31*h+c.toBits()
         for(c in wallCooldown)h=31*h+c.toBits()
         for(c in cashCollected)h=31*h+c
+        for(c in wreckSource)h=31*h+c
         return h
     }
 }

@@ -1,0 +1,19 @@
+> Task :core:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :core:processResources
+> Task :core:processTestResources UP-TO-DATE
+> Task :core:compileKotlin
+> Task :core:compileJava NO-SOURCE
+> Task :core:classes
+> Task :core:jar
+
+> Task :core:compileTestKotlin
+w: file:///C:/Users/kazda/kiro/firetv-deathride-content/deathride/core/src/test/kotlin/dev/deathride/core/CareerV2Test.kt:86:84 'val id: Long' is deprecated. Deprecated in Java.
+
+> Task :core:compileTestJava NO-SOURCE
+> Task :core:testClasses UP-TO-DATE
+
+> Task :core:careerV2Report
+Ash Circuit: 2520 physical races; 300 seeded careers; policy 4; completed 300; see measured targets in summary.csv
+
+BUILD SUCCESSFUL in 4s
+6 actionable tasks: 5 executed, 1 up-to-date
