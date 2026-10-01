@@ -33,7 +33,7 @@ object ProfileCodec {
         p.startedRaces=fields.getValue("started").toLong();p.settledRace=fields.getValue("settled").toLong()
         require(p.startedRaces in 0..EconomyRules["profileRaceLimit"].toLong() && p.settledRace in 0..p.startedRaces)
         p.races=fields.getValue("races").toInt();p.wins=fields.getValue("wins").toInt();require(p.races.toLong() in 0..p.settledRace && p.wins in 0..p.races)
-        val tiers=fields.getValue("tiers").split(',').map{it.toInt()};require(tiers.size==p.tiers.size)
+        val tiers=fields.getValue("tiers").split(',').map{it.toInt()};require(tiers.size==p.tiers.size || tiers.size==5*Parts.all.size) // Phase 1 positional prefix is append-only.
         for(i in tiers.indices){require(tiers[i] in 0..Parts.all[i%Parts.all.size].maxTier);p.tiers[i]=tiers[i]}
         if(!legacy) {
             val c=fields.getValue("career").split(',').map{it.toInt()};require(c.size==5)

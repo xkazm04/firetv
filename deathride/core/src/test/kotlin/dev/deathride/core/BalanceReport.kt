@@ -43,7 +43,7 @@ class BalanceSmokeTest {
         val heavy=CarCatalog.all.indexOfFirst{it.id=="Bastion"};val armor=Parts.all.indexOfFirst{it.id=="armor"}
         assertEquals(0,completedGarage(heavy).tier(heavy,armor),"already capped armor must not impose an unbuyable handling penalty")
         val cast=(0 until Courses.all.size*Career.rivals.size).map { seed->val w=mixed.world(seed);w.track.course!!.id to w.cars[0].carClass!!.id }.toSet()
-        assertEquals(Courses.all.size*CarCatalog.all.size,cast.size,"mixed preset must cross every lead class with every course")
+        assertEquals(Courses.all.size*Career.rivals.map{it.carIndex}.distinct().size,cast.size,"Phase 1 preset must cross every declared rival chassis with every course")
         for(scenario in BalanceScenarios.all)repeat(BalanceRules["smokeSeedsPerScenario"].toInt()){seed->
             val w=scenario.world(seed);val replay=scenario.world(seed)
             while(w.resolved<Tuning.CAR_COUNT && w.seconds<TrackRules["maxRaceSeconds"]){w.step(inputs);replay.step(inputs)}

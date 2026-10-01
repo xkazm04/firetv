@@ -86,7 +86,7 @@ class Combat(private val world: World,val enabled: Boolean) {
     fun cooldown(id: Int,weapon: Int)=cooldowns[id*Weapons.all.size+weapon]
     fun capacity(id: Int,weapon: Int): Int {
         if(weapon==Weapons.HAMMER && world.cars[id].weaponSlots<2)return 0
-        return Weapons.all[weapon].ammo+if(weapon==Weapons.HAMMER)max(0,world.cars[id].weaponSlots-2)*CombatRules["heavyExtraAmmoPerSlot"].toInt() else 0
+        return floor(Weapons.all[weapon].ammo*(world.cars[id].carClass?.ammoScale?:1.0)).toInt()+if(weapon==Weapons.HAMMER)max(0,world.cars[id].weaponSlots-2)*CombatRules["heavyExtraAmmoPerSlot"].toInt() else 0
     }
     fun reset() {
         hp.fill(CombatRules["maxHp"]);states.fill(LifeState.ACTIVE);cooldowns.fill(0.0);ramCooldown.fill(0.0);wallCooldown.fill(0.0)

@@ -55,7 +55,7 @@ object Career {
         require(partUnlocks.all{it.part>=0 && it.tier in 2..Parts.all[it.part].maxTier && it.afterRounds in 0..events.size})
         require(partUnlocks.map{it.part to it.tier}.distinct().size==partUnlocks.size)
         require(partUnlocks.map{it.part to it.tier}.toSet()==Parts.all.indices.flatMap{p->(2..Parts.all[p].maxTier).map{p to it}}.toSet())
-        require(rivals.map{it.carIndex}.toSet()==CarCatalog.all.indices.toSet())
+        require(rivals.all{it.carIndex in CarCatalog.all.indices})
         for(i in cups.indices)require(cups[i].targets.last()<=events.count{it.cupIndex==i}*points.max())
         for((i,e) in events.withIndex())require(unlocks.single{it.kind=="track" && it.id==Courses.all[e.courseIndex].id}.afterRounds<=i)
     }

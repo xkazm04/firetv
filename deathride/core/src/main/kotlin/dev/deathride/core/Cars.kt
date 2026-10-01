@@ -5,6 +5,10 @@ data class StatMapping(val parameter: String,val stat: String,val base: Double,v
 class CarClass(val values: Map<String,String>) {
     val id=values.getValue("id")
     val role=values.getValue("role")
+    val tier=values.getValue("tier")
+    val ammoScale=values.getValue("ammoScale").toDouble()
+    val tierRank=RosterRules.tiers.getValue(tier).first
+    val priceCredits get()=RosterRules.tiers.getValue(tier).second+stats.entries.sumOf { it.value*RosterRules.value.getValue(it.key) }
     val stats=CarCatalog.statNames.associateWith { values.getValue(it).toInt() }
     fun derive(name: String,bonuses: IntArray?=null): Double {
         val m=CarCatalog.mapping.first { it.parameter==name }
@@ -22,9 +26,9 @@ class CarClass(val values: Map<String,String>) {
     }
     val armorReduction=derive("armorReduction")
     val weaponSlots=derive("weaponSlots").toInt()
-    val json="{\"id\":\"$id\",\"role\":\"$role\",\"stats\":"+stats.entries.joinToString(",","{","}") { "\"${it.key}\":${it.value}" }+"}"
-    fun json(bonuses: IntArray)="{\"id\":\"$id\",\"role\":\"$role\",\"stats\":"+CarCatalog.statNames.joinToString(",","{","}") { "\"$it\":${stat(it,bonuses)}" }+"}"
-    init { require(stats.values.all { it in CarCatalog.statMin..CarCatalog.statMax }); require(weaponSlots in 1..CarCatalog.slotsMax) }
+    val json="{\"id\":\"$id\",\"role\":\"$role\",\"tier\":\"$tier\",\"priceCredits\":$priceCredits,\"ammoScale\":$ammoScale,\"stats\":"+stats.entries.joinToString(",","{","}") { "\"${it.key}\":${it.value}" }+"}"
+    fun json(bonuses: IntArray)="{\"id\":\"$id\",\"role\":\"$role\",\"tier\":\"$tier\",\"priceCredits\":$priceCredits,\"ammoScale\":$ammoScale,\"stats\":"+CarCatalog.statNames.joinToString(",","{","}") { "\"$it\":${stat(it,bonuses)}" }+"}"
+    init { require(ammoScale.isFinite() && ammoScale in 0.5..2.0); require(stats.values.all { it in CarCatalog.statMin..CarCatalog.statMax }); require(weaponSlots in 1..CarCatalog.slotsMax) }
 }
 object CarCatalog {
     val statNames=listOf("speed","acceleration","grip","armor","mass","handling","slots","braking")
@@ -32,7 +36,24 @@ object CarCatalog {
     val statMin=rules.getValue("statMin").toInt(); val statMax=rules.getValue("statMax").toInt(); val slotsMax=rules.getValue("slotsMax").toInt()
     val aiCruiseFraction=rules.getValue("aiCruiseFraction"); val aiGripFraction=rules.getValue("aiGripFraction")
     val mapping=Content.table("stat-mapping").map { StatMapping(it.getValue("parameter"),it.getValue("stat"),it.number("base"),it.number("perPoint")) }
-    val all=Content.table("cars").map { CarClass(Content.table("cars/"+it.getValue("id")).single()) }
+    val all=Content.table("cars").map { CarClass(Content.table("cars/"+it.getValue("id")).single()+it) }
     val json=all.joinToString(",","[","]") { it.json }
     fun apply(car: Car,index: Int,bonuses: IntArray?=null) { val type=all[index]; car.carClass=type; car.spec=type.spec(bonuses);car.armorReduction=type.derive("armorReduction",bonuses);car.weaponSlots=type.derive("weaponSlots",bonuses).toInt() }
+}
+
+/** Load-time audit data; deliberately never consulted by the fixed simulation step. */
+object RosterRules {
+    val tiers=Content.table("roster-tiers").associate { it.getValue("id") to (it.number("rank").toInt() to it.number("baseCredits").toInt()) }
+    val value=Content.table("roster-value").associate { it.getValue("stat") to it.number("creditsPerPoint").toInt() }
+    private val rules=Content.table("roster-rules").associate { it.getValue("key") to it.number("value") }
+    operator fun get(key: String)=rules.getValue(key)
+    fun peerFindings(car: CarClass,catalog: List<CarClass> = CarCatalog.all): List<String> {
+        val peers=catalog.filter { it.id!=car.id && it.tier==car.tier }
+        if(peers.size<get("minimumPeers"))return listOf("${car.id}: not enough peers to judge")
+        return CarCatalog.statNames.mapNotNull { stat ->
+            val mean=peers.map { it.stats.getValue(stat) }.average()
+            val ratio=car.stats.getValue(stat)/mean
+            if(ratio<=get("peerLowRatio") || ratio>=get("peerHighRatio"))"${car.id}: verify $stat ratio $ratio against ${peers.size} ${car.tier} peers" else null
+        }
+    }
 }

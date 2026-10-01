@@ -5,8 +5,8 @@ import org.junit.jupiter.api.Assertions.*
 import java.io.File
 
 class CarsTest {
-    @Test fun catalogHasFiveClassesAndEveryMappingIsConsumed() {
-        assertEquals(5,CarCatalog.all.size)
+    @Test fun catalogHasTenClassesAndEveryMappingIsConsumed() {
+        assertEquals(10,CarCatalog.all.size)
         assertEquals(CarCatalog.statNames.toSet(),CarCatalog.mapping.map { it.stat }.toSet())
         for(c in CarCatalog.all) {
             val s=c.spec()
