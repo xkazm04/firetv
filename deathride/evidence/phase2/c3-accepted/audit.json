@@ -1,0 +1,43 @@
+{
+  "actualRaces": 8000,
+  "reference": "Lead entrant uses Club AI decisions under the same physical rules; this is a proxy for a reasonable driver, not a human sample",
+  "scenarios": [
+    {
+      "scenario": "scrap-rookie",
+      "races": 2000,
+      "earlyWrecks": 0,
+      "earlyRate": 0.0,
+      "leadFinishes": 2000,
+      "meanSeconds": 79.70418333333002
+    },
+    {
+      "scenario": "scrap-club",
+      "races": 2000,
+      "earlyWrecks": 0,
+      "earlyRate": 0.0,
+      "leadFinishes": 2000,
+      "meanSeconds": 94.58099999999598
+    },
+    {
+      "scenario": "foundry-club",
+      "races": 2000,
+      "earlyWrecks": 0,
+      "earlyRate": 0.0,
+      "leadFinishes": 2000,
+      "meanSeconds": 86.88324166666278
+    },
+    {
+      "scenario": "crown-pro",
+      "races": 2000,
+      "earlyWrecks": 0,
+      "earlyRate": 0.0,
+      "leadFinishes": 1846,
+      "meanSeconds": 102.88583333332892
+    }
+  ],
+  "limitations": [
+    "Four stock-field scenarios, not every course/loadout",
+    "First-lap wreck counts are finite seeded-sample evidence",
+    "Owner fairness and feel not measured"
+  ]
+}

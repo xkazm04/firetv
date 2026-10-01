@@ -120,8 +120,8 @@ A career ladder of many more events, named rival drivers with personalities as d
 | Art | P3 | Car family: reference sheets, states, liveries, heading strategy | P2, C1 | not started | | |
 | Art | P4 | World kit: tiles, barriers, props, pickups, decals, effects, HUD, portraits | P2 | not started | | |
 | Content | C1 | Roster v2 (10 cars / five paired tiers) | - | core validated; Stick checked; owner feel not measured | fd6b51a | 2026-10-01 |
-| Content | C2 | Tracks v2 (25 courses / five themes) | - | core validated; Stick checked; owner readability not measured | this commit (C2) | 2026-10-01 |
-| Content | C3 | Combat and economy depth | C1 | not started | | |
+| Content | C2 | Tracks v2 (25 courses / five themes) | - | core validated; Stick checked; owner readability not measured | f922aa1 | 2026-10-01 |
+| Content | C3 | Combat and economy depth | C1 | implemented / core and Stick checked; human fairness not measured | this commit (C3) | 2026-10-01 |
 | Content | C4 | Career v2 and rivals | C2, C3 | not started | | |
 | Integration | I1 | Atlas renderer with procedural fallback | P3, P4, C2 | not started | | |
 | Integration | I2 | Stick texture and frame budget | I1 | not started | | |
@@ -142,3 +142,11 @@ Validation: `:core:test :link:test :app:assembleDebug` green (57 core / 3 link);
 Added twenty stored plans to the five retained circuits, five-theme metadata, competitive tier pools, real gravel inside-line shortcuts, clear acceleration sections, and feature/pacing lint. No drawing/art changes. `:core:test :link:test :app:assembleDebug` green (62 core / 3 link). Headless: 200 competitive and 100 unrestricted six-car races across all 25 courses; all finish, replay matches, zero warmed step allocations. Reproducible stored-plan hashes and results are in `deathride/evidence/phase2/c2-accepted/`; [design](deathride/C2-tracks-v2.md).
 
 Scanned /24; AFTKM reachable at 10.0.0.139. Installed APK and selected/prepared all 25 circuits, then drove Quill to results. Initial High Pass readiness timeout is retained; repeat maximum course-selection/preparation observation 1.70 s. Owner readability/variety/feel and new landmark artwork: **not measured**. Grok calls/spend: **0**. Next: C3 combat/economy.
+
+### C3 ? 2026-10-01
+
+Added Scatter, four one-race utilities, class hull/utility budgets, cash pickups, ownership/trade, bounded fixed-fee debt, incremental manual repair alongside default insurance, optional contracts and bounded bonuses. Version 3 save migration preserves existing progress. Minimal host/controller command bindings expose the core features; no rendering art or asset changes. [Design and limits](deathride/C3-combat-economy.md).
+
+Validation: 74 core / 3 link tests and APK green. Four ? 2,000 actual six-car scenarios: zero lead early wrecks / zero unresolved / zero one-shot kills; Crown has 154 later lead wrecks. Independent raw-row audit and four final-runtime replays pass. Economic sweep: 2,000 paths per scenario; baseline engine 2.007 / Club 8.6695 races under its explicit synthetic income assumptions, with physical career pacing deferred to C4. Evidence under `deathride/evidence/phase2/c3-accepted/`.
+
+Scanned /24, installed on AFTKM 10.0.0.139, passed paired garage transactions, Scatter use, manual repair/trade, restart recovery and a protected Scrap career race. Human fairness/feel, physical-phone reach and new item artwork: **not measured**. Unrestricted practice retains its harsher combat. Grok calls/spend: **0**. Next: C4.

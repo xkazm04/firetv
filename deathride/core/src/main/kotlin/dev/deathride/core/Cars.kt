@@ -38,7 +38,7 @@ object CarCatalog {
     val mapping=Content.table("stat-mapping").map { StatMapping(it.getValue("parameter"),it.getValue("stat"),it.number("base"),it.number("perPoint")) }
     val all=Content.table("cars").map { CarClass(Content.table("cars/"+it.getValue("id")).single()+it) }
     val json=all.joinToString(",","[","]") { it.json }
-    fun apply(car: Car,index: Int,bonuses: IntArray?=null) { val type=all[index]; car.carClass=type; car.spec=type.spec(bonuses);car.armorReduction=type.derive("armorReduction",bonuses);car.weaponSlots=type.derive("weaponSlots",bonuses).toInt() }
+    fun apply(car: Car,index: Int,bonuses: IntArray?=null) { val type=all[index]; car.carClass=type; car.spec=type.spec(bonuses);car.maxHp=CombatRules["maxHp"]*CarLoadouts.forCar(type).hullScale;car.startingCondition=1.0;car.utilityMask=0;car.armorReduction=type.derive("armorReduction",bonuses);car.weaponSlots=type.derive("weaponSlots",bonuses).toInt() }
 }
 
 /** Load-time audit data; deliberately never consulted by the fixed simulation step. */

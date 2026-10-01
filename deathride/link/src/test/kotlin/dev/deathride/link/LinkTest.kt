@@ -52,6 +52,11 @@ class LinkTest {
             host.phase="garage";ws.sendText(buy,true).join();ws.sendText(buy.replace("brakes","engine"),true).join();barrier()
             val request=host.slots[0].shopRequest.getAndSet(null)!!;assertEquals("brakes",dev.deathride.core.Parts.all[request.part].id);assertEquals(0,request.tier)
             ws.sendText(buy.replace("couch-0","another-profile"),true).join();barrier();assertNull(host.slots[0].shopRequest.get())
+            val market="""{"t":"market","profile":"couch-0","car":"Line","action":"item","id":"turbo","revision":0}"""
+            ws.sendText(market,true).join();ws.sendText(market.replace("turbo","fuel"),true).join();barrier()
+            assertEquals("turbo",host.slots[0].marketRequest.getAndSet(null)!!.id)
+            ws.sendText(market.replace("couch-0","another-profile"),true).join();barrier();assertNull(host.slots[0].marketRequest.get())
+            host.phase="race";ws.sendText(market,true).join();barrier();assertNull(host.slots[0].marketRequest.get())
             host.phase="lobby"
             host.phase="career";ws.sendText("""{"t":"difficulty","id":"Pro"}""",true).join();barrier();assertEquals(2,host.difficultyRequest.getAndSet(-1))
             val guest=Listener();val guestWs=connect(guest);guestWs.sendText("""{"t":"hello","pin":"${host.pin}","profile":"guest-career"}""",true).join();guest.next("welcome")

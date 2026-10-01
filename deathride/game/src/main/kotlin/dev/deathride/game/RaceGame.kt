@@ -110,6 +110,13 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         }
     }
     private fun openGarage() { if(phase=="lobby" || phase=="results" || phase=="career") { phase="garage";server.phase=phase;accumulator=0.0;rebuildUi() } }
+    private fun buyMarket(i: Int,request: dev.deathride.link.MarketRequest) {
+        if(phase!="garage" || request.car!=profiles[i].selectedCar)return
+        var message=""
+        if(editProfile(i){message=Market.transact(it,request.action,request.id,request.revision)}) {
+            selectedCars[i]=profiles[i].selectedCar;shopMessage[i]=message;Garage.apply(profiles[i],world.cars[i]);world.reset();publishGarage(i)
+        }
+    }
     private fun openCareer() { if(phase=="lobby" || phase=="results") { phase="career";server.phase=phase;accumulator=0.0;rebuildUi() } }
     private fun selectDifficulty(direction: Int) { server.difficultyRequest.set((profiles[0].careerDifficulty+direction).mod(Career.difficulties.size)) }
     private fun configureWorld(courseIndex: Int,career: Boolean,seed: Int=17) {
@@ -117,6 +124,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         world=World(seed,track=Track(course=Courses.all[courseIndex]),combatEnabled=true)
         for(i in world.cars.indices)CarCatalog.apply(world.cars[i],selectedCars[i])
         if(career)Career.prepareRivals(world,raceDifficulty)
+        if(career)Encounters.apply(world,listOf("scrap","foundry","salt","switchback","crown")[Career.events[raceRound].cupIndex])
         for(i in profiles.indices)if(i==0 || !career || server.slots[i].claimed)Garage.apply(profiles[i],world.cars[i])
         for(i in profiles.indices)world.cars[i].human=server.slots[i].claimed || i==0 && keyboard
         world.reset();effects.clear();server.trackJson=Courses.all[courseIndex].json;server.surface=Surfaces.asphalt
@@ -128,8 +136,8 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
             val c=world.cars[i]
             var message=""
             if(editProfile(i){
-                if(campaignRace && i==0)message=Career.settle(it,raceTickets[i],raceRound,raceDifficulty,c.position,world.combat.kills[i],world.combat.health(i),Career.qualifies(c,world))?.message?:"Result already saved"
-                else Economy.settle(it,raceTickets[i],c.position,world.combat.kills[i],world.combat.health(i))
+                if(campaignRace && i==0)message=Career.settle(it,raceTickets[i],raceRound,raceDifficulty,c.position,world.combat.kills[i],world.combat.health(i),Career.qualifies(c,world),world.combat.cashCollected[i],world.cars.any{r->r.aiStyle?.id=="rook" && world.combat.wrecked(r.id)},world.combat.damageTaken[i]==0.0,c.finishSeconds>=0)?.message?:"Result already saved"
+                else Economy.settle(it,raceTickets[i],c.position,world.combat.kills[i],world.combat.health(i),cash=world.combat.cashCollected[i],course=Courses.all[selectedTrack].id,targetWrecked=world.cars.any{r->r.aiStyle?.id=="rook" && world.combat.wrecked(r.id)},clean=world.combat.damageTaken[i]==0.0,finished=c.finishSeconds>=0)
             }) { shopMessage[i]="Pit service complete - ready to race";if(message.isNotEmpty())careerMessage[i]=message }
             raceTickets[i]=0;publishGarage(i)
         }
@@ -171,6 +179,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
     }
     private fun startRace(career: Boolean=false) {
         if(career && !server.slots[0].claimed && !keyboard) { careerMessage[0]="Pair Player 1 before starting a career race";publishGarage(0);return }
+        if(career && !profiles[0].owned[selectedCars[0]]) { careerMessage[0]="Buy this car in the garage or choose an owned car";publishGarage(0);return }
         if(career && !Career.unlocked(profiles[0],"car",CarCatalog.all[selectedCars[0]].id)) { careerMessage[0]="Car locked for career - choose Line or an unlocked car";publishGarage(0);return }
         campaignRace=career;server.raceMode=if(career)"career" else "practice";raceRound=profiles[0].careerRound;raceDifficulty=profiles[0].careerDifficulty
         raceTickets.fill(0)
@@ -196,6 +205,8 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
             }
             val purchase=server.slots[i].shopRequest.getAndSet(null)
             if(purchase!=null && purchase.profileId==profiles[i].id)buyPart(i,purchase.part,purchase.tier,purchase.car)
+            val market=server.slots[i].marketRequest.getAndSet(null)
+            if(market!=null && market.profileId==profiles[i].id)buyMarket(i,market)
         }
         val courseIndex=server.trackRequest.getAndSet(-1)
         if(courseIndex>=0 && (phase=="lobby" || phase=="results")) {
@@ -247,7 +258,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
             val combat=world.combat
             server.trafficJson=world.cars.joinToString(",","[","]"){c->"{\"id\":${c.id},\"name\":\"${driverName(c)}\",\"car\":\"${c.carClass?.id}\",\"human\":${c.human},\"x\":${c.x},\"y\":${c.y},\"heading\":${c.heading},\"radius\":${c.spec.circleRadiusM},\"hp\":${combat.health(c.id)},\"wrecked\":${combat.wrecked(c.id)},\"finished\":${c.finishSeconds>=0},\"finishKind\":\"${c.finishKind}\",\"laps\":${c.lap.laps},\"position\":${c.position},\"repairPickups\":${combat.repairPickupsTaken[c.id]}}"}
             server.pickupsJson=combat.pickups.joinToString(",","[","]"){p->"{\"kind\":\"${p.type.id}\",\"x\":${p.x},\"y\":${p.y},\"cooldown\":${p.cooldownSeconds}}"}
-            server.combatSummaryJson="{\"active\":${world.cars.size-world.resolved},\"living\":${world.cars.size-combat.wreckCount},\"finished\":${world.finished},\"shots\":${combat.shots.sum()},\"projectiles\":${combat.projectiles.count{it.active}},\"mines\":${combat.mines.count{it.active}},\"blasts\":${combat.blasts.count{it.remainingSeconds>0}},\"poolExhaustions\":${combat.poolExhaustions}}"
+            server.combatSummaryJson="{\"damageScale\":${world.damageScale},\"shotsByWeapon\":[${combat.shots.joinToString(",")}],\"active\":${world.cars.size-world.resolved},\"living\":${world.cars.size-combat.wreckCount},\"finished\":${world.finished},\"shots\":${combat.shots.sum()},\"projectiles\":${combat.projectiles.count{it.active}},\"mines\":${combat.mines.count{it.active}},\"blasts\":${combat.blasts.count{it.remainingSeconds>0}},\"poolExhaustions\":${combat.poolExhaustions}}"
             for(i in 0..1) { val c=world.cars[i]; val s=server.slots[i]; s.speed=c.speedMps; s.lap=min(c.lap.laps+1,3); s.position=c.position; s.impact=c.impact; s.drifting=c.drifting; s.loadTransfer=c.loadTransfer; s.surfaceId=c.surface.id; s.x=c.x; s.y=c.y;s.heading=c.heading;s.yaw=c.yaw;s.progressM=c.lap.progressM; s.combatJson=combatJson(i) }
             rebuildUi()
         }
@@ -488,7 +499,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
     }
     private fun combatJson(id: Int): String {
         val c=world.combat;val weapon=c.selectedWeapon[id]
-        return "{\"armingSeconds\":${c.armingSeconds},\"hp\":${c.health(id)},\"maxHp\":${CombatRules["maxHp"]},\"wrecked\":${c.wrecked(id)},\"weapon\":$weapon,\"weaponName\":\"${Weapons.all[weapon].id}\",\"ammo\":${c.ammo(id,weapon)},\"mines\":${c.ammo(id,Weapons.MINE)},\"heavyAmmo\":${c.ammo(id,Weapons.HAMMER)},\"cooldownSeconds\":${c.cooldown(id,weapon)},\"mineCooldownSeconds\":${c.cooldown(id,Weapons.MINE)},\"damageEvents\":${c.damageEvents[id]},\"kills\":${c.kills[id]}}"
+        return "{\"armingSeconds\":${c.armingSeconds},\"hp\":${c.health(id)},\"maxHp\":${c.maxHealth(id)},\"wrecked\":${c.wrecked(id)},\"weapon\":$weapon,\"weaponName\":\"${Weapons.all[weapon].id}\",\"ammo\":${c.ammo(id,weapon)},\"mines\":${c.ammo(id,Weapons.MINE)},\"heavyAmmo\":${c.ammo(id,Weapons.HAMMER)},\"scatterAmmo\":${c.ammo(id,Weapons.SCATTER)},\"cash\":${c.cashCollected[id]},\"sabotageTarget\":${c.sabotageTarget[id]},\"cooldownSeconds\":${c.cooldown(id,weapon)},\"mineCooldownSeconds\":${c.cooldown(id,Weapons.MINE)},\"damageEvents\":${c.damageEvents[id]},\"kills\":${c.kills[id]}}"
     }
     private fun updateQr() {
         if(server.pin==qrPin && server.address==qrAddress)return

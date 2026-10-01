@@ -31,7 +31,7 @@ class CareerTest {
         val p=Profile("migration");p.credits=1234;Garage.buy(p,2,0)
         fun sign(body: String)=body+"checksum="+CRC32().apply{update(body.toByteArray(Charsets.UTF_8))}.value.toString(16)+"\n"
         val body=ProfileCodec.encode(p).substringBefore("checksum=")
-        val old=sign(body.replace("DEATHRIDE_PROFILE 2","DEATHRIDE_PROFILE 1").lines().filterNot{it.startsWith("career=") || it.startsWith("trophies=")}.joinToString("\n"))
+        val old=sign(body.replace("DEATHRIDE_PROFILE 3","DEATHRIDE_PROFILE 1").lines().filterNot{it.startsWith("career=") || it.startsWith("trophies=") || it.startsWith("market=") || it.startsWith("owned=") || it.startsWith("condition=")}.joinToString("\n"))
         val migrated=ProfileCodec.decode(old,p.id);assertEquals(p.credits,migrated.credits);assertArrayEquals(p.tiers,migrated.tiers);assertEquals(0,migrated.careerRound)
         assertThrows(IllegalArgumentException::class.java){ProfileCodec.decode(sign(body.replace("career=0,0,0,0,0","career=1,0,50,0,9")),p.id)}
     }
@@ -52,7 +52,7 @@ class CareerTest {
         c.aiSkill=Career.difficulties[2].skill;world.combat.seekRepair(c,0.0);assertTrue(c.aiPickupTarget>=0)
         pickup.cooldownSeconds=1.0;world.combat.seekRepair(c,0.0);assertEquals(-1,c.aiPickupTarget)
         assertEquals(spec,c.spec);assertEquals(ammo,world.combat.ammo(1,Weapons.MINE));assertTrue(hp<=CombatRules["maxHp"])
-        for(tier in Career.difficulties.indices){val w=World(combatEnabled=true);Career.prepareRivals(w,tier);w.reset();for(i in 1..5){assertEquals(CarCatalog.all[Career.rivals[i-1].carIndex].spec(),w.cars[i].spec);assertEquals(CombatRules["maxHp"],w.combat.health(i))}}
+        for(tier in Career.difficulties.indices){val w=World(combatEnabled=true);Career.prepareRivals(w,tier);w.reset();for(i in 1..5){assertEquals(CarCatalog.all[Career.rivals[i-1].carIndex].spec(),w.cars[i].spec);assertEquals(w.combat.maxHealth(i),w.combat.health(i))}}
     }
     @Test fun campaignCombatReplaysAndAllocatesNothing() {
         fun make()=World(71,track=Track(course=Courses.all[3]),combatEnabled=true).also {w->CarCatalog.apply(w.cars[0],1);Career.prepareRivals(w,2);w.reset()}

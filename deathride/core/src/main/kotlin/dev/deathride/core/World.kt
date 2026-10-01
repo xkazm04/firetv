@@ -51,7 +51,7 @@ class InputMailbox {
     var accepted = 0L; private set
     var ageMs = 0.0; private set
     @Synchronized fun offer(q: Long, generatedMs: Double, nowMs: Double, s: Double, a: Double, b: Double, h: Double=0.0, fire: Double=0.0,mine: Double=0.0,weapon: Int=0): Boolean {
-        if (!generatedMs.isFinite() || !s.isFinite() || !a.isFinite() || !b.isFinite() || !h.isFinite() || !fire.isFinite() || !mine.isFinite() || weapon !in 0..1) { dropped++; return false }
+        if (!generatedMs.isFinite() || !s.isFinite() || !a.isFinite() || !b.isFinite() || !h.isFinite() || !fire.isFinite() || !mine.isFinite() || weapon !in 0..1 && weapon!=3) { dropped++; return false }
         if (q <= seq) { outOfOrder++; return false }
         if (seq >= 0 && q > seq + 1) dropped += q - seq - 1
         seq = q
@@ -155,6 +155,8 @@ class Car(val id: Int, track: Track) {
     var spec=CarSpec()
     var carClass: CarClass?=null
     var armorReduction=0.0;var weaponSlots=1;var weaponDamageScale=1.0
+    var maxHp=CombatRules["maxHp"];var startingCondition=1.0;var utilityMask=0
+    var turboRemaining=0.0;var fuelRemaining=0.0;var engineScale=1.0
     var finishKind=FinishKind.NONE
     var feel=FeelProfiles.spike
     var filteredSteer=0.0; var filteredThrottle=0.0
@@ -193,7 +195,7 @@ class SlipHandling : Handling {
         val wanted=lateral*(1-exp(-spec.lateralGripPerSecond*gripScale*dt))
         val forceLimit=spec.maxLateralAccelerationMps2*gripScale*dt
         lateral-=wanted.coerceIn(-forceLimit,forceLimit)
-        forward=(forward+(throttle*spec.accelerationMps2-brake*spec.brakeMps2)*dt).coerceAtLeast(0.0)
+        forward=(forward+(throttle*spec.accelerationMps2*car.engineScale-brake*spec.brakeMps2)*dt).coerceAtLeast(0.0)
         forward*=exp(-(spec.rollingDragPerSecond+(if(advanced)car.surface.dragPerSecond+hb*Movement.handbrakeDragPerSecond else 0.0))*dt)
         car.vx=cx*forward-cy*lateral; car.vy=cy*forward+cx*lateral
         val magnitude=car.speedMps
@@ -215,6 +217,7 @@ class Snapshot {
     fun x(i: Int)=state[i*4]; fun y(i: Int)=state[i*4+1]; fun heading(i: Int)=state[i*4+2]; fun speed(i: Int)=state[i*4+3]
 }
 class World(val seed: Int=17, val spec: CarSpec=CarSpec(), val track: Track=Track(), val handling: Handling=SlipHandling(),combatEnabled: Boolean=false) {
+    var damageScale=1.0
     val cars=Array(Tuning.CAR_COUNT) { Car(it,track).also { c -> c.spec=spec } }
     val combat=Combat(this,combatEnabled)
     val snapshot=Snapshot(); val previousSnapshot=Snapshot()
@@ -243,6 +246,8 @@ class World(val seed: Int=17, val spec: CarSpec=CarSpec(), val track: Track=Trac
             c.aiNoisePhase=0.0
             if(c.aiSkill!=null && seeded!=null) { c.aiLane+=(seeded.nextDouble()*2-1)*c.aiSkill!!.laneErrorM;c.aiNoisePhase=seeded.nextDouble()*2*PI }
             c.aiInput.fire=0.0;c.aiInput.mine=0.0;c.aiInput.weapon=0;c.aiCombatReason=0;c.aiPickupTarget=-1
+            c.turboRemaining=if(c.utilityMask and (1 shl Consumables.TURBO)!=0)Consumables.all[Consumables.TURBO].duration else 0.0
+            c.fuelRemaining=if(c.utilityMask and (1 shl Consumables.FUEL)!=0)Consumables.all[Consumables.FUEL].duration else 0.0;c.engineScale=1.0
         }
         combat.reset()
         previousSnapshot.capture(cars); snapshot.capture(cars)
@@ -258,6 +263,14 @@ class World(val seed: Int=17, val spec: CarSpec=CarSpec(), val track: Track=Trac
                 c.x+=c.vx*dt;c.y+=c.vy*dt;c.heading=wrapAngle(c.heading+c.yaw*dt)
             } else {
                 val input=if(c.human) inputs[c.id] else { driveAi(c); c.aiInput }
+                c.engineScale=1.0
+                if(input.throttle>Consumables.triggerThrottle && input.brake==0.0) {
+                    if(c.fuelRemaining>0){c.engineScale*=Consumables.all[Consumables.FUEL].magnitude;c.fuelRemaining=max(0.0,c.fuelRemaining-dt)}
+                    if(c.turboRemaining>0 && c.speedMps>Consumables.turboMinimumSpeedMps) {
+                        track.project(c.x,c.y,projection);track.sample(projection.s,0.0,point)
+                        if(point.curvature<TrackContent["maximumAccelerationCurvature"]){c.engineScale*=Consumables.all[Consumables.TURBO].magnitude;c.turboRemaining=max(0.0,c.turboRemaining-dt)}
+                    }
+                }
                 handling.integrate(c,input,c.spec,dt)
             }
             contain(c)
@@ -371,6 +384,7 @@ class World(val seed: Int=17, val spec: CarSpec=CarSpec(), val track: Track=Trac
     fun stateHash(): Long {
         var hash=1125899906842597L
         for(c in cars) { hash=31*hash+c.x.toBits(); hash=31*hash+c.y.toBits(); hash=31*hash+c.vx.toBits(); hash=31*hash+c.vy.toBits(); hash=31*hash+c.heading.toBits(); hash=31*hash+c.lap.laps; hash=31*hash+c.aiMode.ordinal; hash=31*hash+c.yaw.toBits(); hash=31*hash+c.loadTransfer.toBits(); hash=31*hash+c.filteredSteer.toBits(); hash=31*hash+c.filteredThrottle.toBits(); hash=31*hash+if(c.drifting)1 else 0 }
+        for(c in cars){hash=31*hash+c.turboRemaining.toBits();hash=31*hash+c.fuelRemaining.toBits();hash=31*hash+c.utilityMask}
         return if(combat.enabled)combat.appendHash(hash) else hash
     }
 }

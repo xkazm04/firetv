@@ -9,23 +9,24 @@ import java.util.zip.CRC32
 
 /** Versioned human-readable save. No wall clock/randomness; never called from World.step. */
 object ProfileCodec {
-    private const val HEADER="DEATHRIDE_PROFILE 2"
+    private const val HEADER="DEATHRIDE_PROFILE 3"
     private fun checksum(body: String)=CRC32().apply { update(body.toByteArray(Charsets.UTF_8)) }.value.toString(16)
     fun encode(p: Profile): String {
-        val body="$HEADER\nid=${p.id}\ncredits=${p.credits}\ncar=${CarCatalog.all[p.selectedCar].id}\nstarted=${p.startedRaces}\nsettled=${p.settledRace}\nraces=${p.races}\nwins=${p.wins}\ntiers=${p.tiers.joinToString(",")}\nreceipt=${p.lastReceipt?.encode()?:"none"}\ncareer=${p.careerRound},${p.careerCleared},${p.careerPoints},${p.careerSeasons},${p.careerDifficulty}\ntrophies=${p.careerTrophies.joinToString(",")}\n"
+        val body="$HEADER\nid=${p.id}\ncredits=${p.credits}\ncar=${CarCatalog.all[p.selectedCar].id}\nstarted=${p.startedRaces}\nsettled=${p.settledRace}\nraces=${p.races}\nwins=${p.wins}\ntiers=${p.tiers.joinToString(",")}\nreceipt=${p.lastReceipt?.encode()?:"none"}\ncareer=${p.careerRound},${p.careerCleared},${p.careerPoints},${p.careerSeasons},${p.careerDifficulty}\ntrophies=${p.careerTrophies.joinToString(",")}\nowned=${p.owned.joinToString(","){if(it)"1" else "0"}}\ncondition=${p.condition.joinToString(",")}\nmarket=${p.inventory},${p.raceItems},${p.debt},${p.winStreak},${p.contract},${p.contractWins},${p.lastBonus},${p.lastDebtPayment},${if(p.manualService)1 else 0},${p.marketRevision}\n"
         return body+"checksum=${checksum(body)}\n"
     }
     fun decode(text: String,expectedId: String): Profile {
         require(validProfileId(expectedId) && text.toByteArray(Charsets.UTF_8).size<=EconomyRules["saveMaxBytes"])
         val legacy=text.startsWith("DEATHRIDE_PROFILE 1\n")
-        require((legacy || text.startsWith(HEADER+"\n")) && text.endsWith("\n")) { "Unsupported or truncated save" }
+        val versionTwo=text.startsWith("DEATHRIDE_PROFILE 2\n")
+        require((legacy || versionTwo || text.startsWith(HEADER+"\n")) && text.endsWith("\n")) { "Unsupported or truncated save" }
         val split=text.lastIndexOf("checksum=");require(split>0)
         val body=text.substring(0,split);require(text.substring(split).trim()=="checksum=${checksum(body)}") { "Save checksum mismatch" }
         val rows=body.lines().drop(1).filter{it.isNotBlank()}.map { it.split('=',limit=2).also { cells->require(cells.size==2) } }
         require(rows.map{it[0]}.distinct().size==rows.size)
         val fields=rows.associate { it[0] to it[1] }
         val keys=setOf("id","credits","car","started","settled","races","wins","tiers","receipt")
-        require(fields.keys==if(legacy)keys else keys+setOf("career","trophies"))
+        require(fields.keys==if(legacy)keys else if(versionTwo)keys+setOf("career","trophies") else keys+setOf("career","trophies","owned","condition","market"))
         require(fields.getValue("id")==expectedId)
         val p=Profile(expectedId)
         p.credits=fields.getValue("credits").toInt();require(p.credits in 0..EconomyRules["creditCap"].toInt())
@@ -45,6 +46,19 @@ object ProfileCodec {
             require(p.careerPoints in 0..priorRounds*Career.points.max())
             val trophies=fields.getValue("trophies").split(',').map{it.toInt()};require(trophies.size==p.careerTrophies.size && trophies.all{it in 0..3})
             for(i in trophies.indices)p.careerTrophies[i]=trophies[i]
+        }
+        if(legacy || versionTwo) {
+            for(i in p.owned.indices)p.owned[i]=i==p.selectedCar || Career.unlocked(p,"car",CarCatalog.all[i].id) || Parts.all.indices.any{p.tier(i,it)>0}
+        } else {
+            val owned=fields.getValue("owned").split(',').map{it.toInt()};require(owned.size==p.owned.size && owned.all{it in 0..1} && owned.any{it==1})
+            val condition=fields.getValue("condition").split(',').map{it.toInt()};require(condition.size==p.condition.size && condition.all{it in 0..100})
+            for(i in owned.indices){p.owned[i]=owned[i]==1;p.condition[i]=condition[i]}
+            val m=fields.getValue("market").split(',').map{it.toLong()};require(m.size==10)
+            require(m[0] in 0..15 && m[1] in 0..15 && Integer.bitCount(m[0].toInt())<=3 && Integer.bitCount(m[1].toInt())<=3 && m[2] in 0..MarketRules["debtCap"].toLong())
+            require(m[3] in 0..p.races.toLong() && m[4] in -1 until Contracts.all.size.toLong() && m[5] in 0..p.races.toLong())
+            require(m[6] in 0..EconomyRules["creditCap"].toLong() && m[7] in 0..MarketRules["debtCap"].toLong() && m[8] in 0..1 && m[9] in 0 until Long.MAX_VALUE)
+            p.inventory=m[0].toInt();p.raceItems=m[1].toInt();p.debt=m[2].toInt();p.winStreak=m[3].toInt();p.contract=m[4].toInt();p.contractWins=m[5].toInt()
+            p.lastBonus=m[6].toInt();p.lastDebtPayment=m[7].toInt();p.manualService=m[8]==1L;p.marketRevision=m[9]
         }
         if(fields.getValue("receipt")!="none") {
             val r=fields.getValue("receipt").split(',');require(r.size==9)

@@ -26,3 +26,13 @@ tasks.register("reportClasspath") {
     dependsOn(tasks.testClasses)
     doLast { layout.buildDirectory.file("report-classpath.txt").get().asFile.writeText(sourceSets.test.get().runtimeClasspath.asPath) }
 }
+
+tasks.register<JavaExec>("combatDepthReport") {
+    group="verification"
+    dependsOn(tasks.testClasses)
+    classpath=sourceSets.test.get().runtimeClasspath
+    mainClass.set("dev.deathride.core.CombatDepthReportKt")
+    maxHeapSize="1g"
+    jvmArgs("-Djava.util.concurrent.ForkJoinPool.common.parallelism=4")
+    args(providers.gradleProperty("combatSamples").getOrElse("2000"))
+}

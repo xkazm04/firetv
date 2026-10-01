@@ -37,6 +37,18 @@ class Profile(val id: String) {
     var careerDifficulty=0
     val careerTrophies=IntArray(Career.cups.size)
     val tiers=IntArray(CarCatalog.all.size*Parts.all.size)
+    val owned=BooleanArray(CarCatalog.all.size){it==selectedCar}
+    val condition=IntArray(CarCatalog.all.size){100}
+    var inventory=0;internal set
+    var raceItems=0;internal set
+    var debt=0;internal set
+    var winStreak=0;internal set
+    var contract=-1;internal set
+    var contractWins=0;internal set
+    var lastBonus=0;internal set
+    var lastDebtPayment=0;internal set
+    var manualService=false;internal set
+    var marketRevision=0L;internal set
     var lastReceipt: Receipt?=null;internal set
     init { require(validProfileId(id)) }
     fun tier(car: Int,part: Int)=tiers[car*Parts.all.size+part]
@@ -48,6 +60,8 @@ class Profile(val id: String) {
     fun copy(): Profile = Profile(id).also { p ->
         p.credits=credits;p.selectedCar=selectedCar;p.startedRaces=startedRaces;p.settledRace=settledRace;p.races=races;p.wins=wins
         tiers.copyInto(p.tiers);p.lastReceipt=lastReceipt
+        owned.copyInto(p.owned);condition.copyInto(p.condition);p.inventory=inventory;p.raceItems=raceItems;p.debt=debt;p.winStreak=winStreak;p.contract=contract;p.contractWins=contractWins
+        p.lastBonus=lastBonus;p.lastDebtPayment=lastDebtPayment;p.manualService=manualService;p.marketRevision=marketRevision
         p.careerRound=careerRound;p.careerCleared=careerCleared;p.careerPoints=careerPoints;p.careerSeasons=careerSeasons;p.careerDifficulty=careerDifficulty;careerTrophies.copyInto(p.careerTrophies)
     }
 }
@@ -76,30 +90,44 @@ object Garage {
         val offer=offer(profile,partIndex,priceScale)
         if(offer.tier!=expectedTier)return "Offer changed - check the installed tier"
         if(!offer.available)return offer.reason
-        profile.credits-=offer.price;profile.tiers[profile.selectedCar*Parts.all.size+partIndex]++
+        profile.marketRevision++;profile.credits-=offer.price;profile.tiers[profile.selectedCar*Parts.all.size+partIndex]++
         return "Installed ${Parts.all[partIndex].name} ${offer.nextTier}"
     }
-    fun apply(profile: Profile,car: Car,carIndex: Int=profile.selectedCar)=CarCatalog.apply(car,carIndex,profile.bonuses(carIndex))
+    fun apply(profile: Profile,car: Car,carIndex: Int=profile.selectedCar) {
+        CarCatalog.apply(car,carIndex,profile.bonuses(carIndex))
+        car.startingCondition=profile.condition[carIndex]/100.0
+        car.utilityMask=if(profile.startedRaces>profile.settledRace)profile.raceItems else 0
+    }
     fun json(profile: Profile,message: String,saveStatus: String): String {
         val offers=Parts.all.indices.joinToString(",","[","]"){offer(profile,it).json}
         val stats=CarCatalog.all[profile.selectedCar].json(profile.bonuses())
         // Messages are owned fixed strings; profile IDs are restricted at the boundary.
-        return "{\"profile\":\"${profile.id}\",\"credits\":${profile.credits},\"car\":$stats,\"races\":${profile.races},\"wins\":${profile.wins},\"offers\":$offers,\"message\":\"$message\",\"saveStatus\":\"$saveStatus\",\"receipt\":${profile.lastReceipt?.json?:"null"}}"
+        return "{\"profile\":\"${profile.id}\",\"credits\":${profile.credits},\"car\":$stats,\"races\":${profile.races},\"wins\":${profile.wins},\"offers\":$offers,\"market\":${Market.json(profile)},\"message\":\"$message\",\"saveStatus\":\"$saveStatus\",\"receipt\":${profile.lastReceipt?.json?:"null"}}"
     }
 }
 object Economy {
     fun start(profile: Profile): Long {
         check(profile.startedRaces<EconomyRules["profileRaceLimit"].toLong())
+        profile.raceItems=0
+        var slots=CarLoadouts.forCar(CarCatalog.all[profile.selectedCar]).utilitySlots
+        for(i in Consumables.all.indices)if(slots>0 && profile.inventory and (1 shl i)!=0){profile.raceItems=profile.raceItems or (1 shl i);profile.inventory=profile.inventory and (1 shl i).inv();slots--}
+        profile.marketRevision++
         return ++profile.startedRaces
     }
-    fun settle(profile: Profile,ticket: Long,position: Int,kills: Int,hp: Double,rewardScale: Double=1.0,repairScale: Double=1.0,bonus: Int=0): Receipt? {
+    fun settle(profile: Profile,ticket: Long,position: Int,kills: Int,hp: Double,rewardScale: Double=1.0,repairScale: Double=1.0,bonus: Int=0,cash: Int=0,course: String="",targetWrecked: Boolean=false,clean: Boolean=hp>=CombatRules["maxHp"],finished: Boolean=hp>0): Receipt? {
         require(position in 1..Tuning.CAR_COUNT && kills in 0 until Tuning.CAR_COUNT && hp.isFinite() && hp in 0.0..CombatRules["maxHp"])
-        require(rewardScale>0 && repairScale>=0 && bonus>=0)
+        require(rewardScale.isFinite() && repairScale.isFinite() && rewardScale>0 && repairScale>=0 && bonus>=0 && cash in 0..MarketRules["raceCashCap"].toInt())
         if(ticket<=profile.settledRace || ticket>profile.startedRaces)return null
-        val gross=floor((EconomyRules["participationCredits"]+EconomyRules.prizes[position-1]+min(kills,EconomyRules["paidWreckCap"].toInt())*EconomyRules["wreckBountyCredits"]+bonus)*rewardScale).toInt()
-        val service=ceil((CombatRules["maxHp"]-hp)*EconomyRules["repairCreditsPerHp"]*repairScale).toInt()
+        val extra=Market.resultBonus(profile,position,kills,clean,finished,course,targetWrecked)
+        val gross=floor((EconomyRules["participationCredits"]+EconomyRules.prizes[position-1]+min(kills,EconomyRules["paidWreckCap"].toInt())*EconomyRules["wreckBountyCredits"]+bonus+extra)*rewardScale).toInt()+cash
+        val maximum=CombatRules["maxHp"]*CarLoadouts.forCar(CarCatalog.all[profile.selectedCar]).hullScale
+        val service=if(profile.manualService)0 else ceil(max(0.0,maximum-hp)*EconomyRules["repairCreditsPerHp"]*repairScale).toInt()
         val paid=min(service,floor(gross*EconomyRules["maxRepairPrizeShare"]).toInt())
-        val net=gross-paid;val banked=min(net,EconomyRules["creditCap"].toInt()-profile.credits)
+        val net=gross-paid
+        val debtPaid=min(profile.debt,min(floor(net*MarketRules["repaymentShare"]).toInt(),max(0,net-MarketRules["minimumTakeHome"].toInt())))
+        val banked=min(net-debtPaid,EconomyRules["creditCap"].toInt()-profile.credits)
+        profile.debt-=debtPaid;profile.lastDebtPayment=debtPaid;profile.marketRevision++;profile.raceItems=0
+        profile.condition[profile.selectedCar]=if(profile.manualService)max(MarketRules["roadworthyPercent"].toInt(),floor(hp/maximum*100).toInt().coerceIn(0,100)) else 100
         profile.credits+=banked;profile.settledRace=ticket;profile.races++;if(position==1)profile.wins++
         return Receipt(ticket,position,kills,gross,paid,service-paid,net,banked,profile.credits).also { profile.lastReceipt=it }
     }

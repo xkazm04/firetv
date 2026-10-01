@@ -133,7 +133,7 @@ object TrackLinter {
         if(c.grid.size!=Tuning.CAR_COUNT)errors.add("${c.id}: six grid positions required")
         val p=TrackPoint();val q=TrackPoint()
         for((a,spot) in c.spots.withIndex()) {
-            if(spot.kind !in setOf("checkpoint","grid","ammo","repair","hazard"))errors.add("${c.id}: unknown spot")
+            if(spot.kind !in setOf("checkpoint","grid","ammo","repair","hazard","cash"))errors.add("${c.id}: unknown spot")
             val s=(c.startFraction+spot.fraction)*c.lengthM
             if(abs(spot.laneM)+widest*.5>c.widthAt(s)-Movement.vergeWidthM)errors.add("${c.id}: spot outside road")
             if(spot.kind!="grid" && spot.fraction !in 0.0..<1.0)errors.add("${c.id}: spot fraction")

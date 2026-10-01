@@ -90,7 +90,7 @@ def main():
   # Grid positions measured in meters so longer circuits do not stretch the grid.
   spots=[['checkpoint',f,0] for f in [0,.2,.45,.7,.88]]
   spots += [['grid',round(-back/length,8),lane] for back in [12,28,44] for lane in [-3.5,3.5]]
-  spots += [['ammo',.36,-3],['repair',.67,3],['hazard',.79,4]]
+  spots += [['ammo',.36,-3],['repair',.67,3],['hazard',.79,4],['cash',.54,3]]
   write(f'tracks/{id}-spots.csv','kind,fraction,laneM',spots)
   catalog.append([id,name,'Use the clear straight and weigh the gravel inside line',.10,theme]);pools.append([id,low,high])
  write('tracks.csv','id,name,lesson,startFraction,theme',catalog)

@@ -20,10 +20,12 @@ import java.util.concurrent.atomic.AtomicReference
 import kotlin.math.*
 
 data class ShopRequest(val profileId: String,val car: Int,val part: Int,val tier: Int)
+data class MarketRequest(val profileId: String,val car: Int,val action: String,val id: String,val revision: Long)
 class Slot(val id: Int) {
     val input=InputMailbox()
     val carRequest=AtomicInteger(-1)
     val shopRequest=AtomicReference<ShopRequest?>(null)
+    val marketRequest=AtomicReference<MarketRequest?>(null)
     @Volatile var profileId="couch-$id"
     @Volatile var garageJson="{}"
     @Volatile var careerJson="{}"
@@ -101,7 +103,7 @@ class RaceServer(private val assets: (String)->String, private val log: (String)
         return slot
     }
     fun resetPairing() {
-        synchronized(this) { for(slot in slots) { slot.generation++; slot.connected=false; slot.token=""; slot.profileId="couch-${slot.id}"; slot.shopRequest.set(null); slot.input.newConnection() }; pin=(1000+SecureRandom().nextInt(9000)).toString() };log("pairing ${pairingUrl()}")
+        synchronized(this) { for(slot in slots) { slot.generation++; slot.connected=false; slot.token=""; slot.profileId="couch-${slot.id}"; slot.shopRequest.set(null);slot.marketRequest.set(null); slot.input.newConnection() }; pin=(1000+SecureRandom().nextInt(9000)).toString() };log("pairing ${pairingUrl()}")
     }
     fun start() {
         if(running || networkJob?.isActive==true)return
@@ -184,6 +186,12 @@ class RaceServer(private val assets: (String)->String, private val log: (String)
                         val part=Parts.all.indexOfFirst{it.id==msg.text("part")};val car=CarCatalog.all.indexOfFirst{it.id==msg.text("car")}
                         val tier=msg["tier"]?.jsonPrimitive?.intOrNull
                         if(part>=0 && car>=0 && tier!=null && tier>=0 && msg.text("profile")==s.profileId)s.shopRequest.compareAndSet(null,ShopRequest(s.profileId,car,part,tier))
+                    }
+                    "market" -> if(phase=="garage") {
+                        val action=msg.text("action");val id=msg.text("id");val revision=msg["revision"]?.jsonPrimitive?.longOrNull
+                        val car=CarCatalog.all.indexOfFirst{it.id==msg.text("car")}
+                        if(action in setOf("buy","trade","item","loan","repay","repair","service","contract") && id.length<=64 && revision!=null && revision>=0 && car>=0 && msg.text("profile")==s.profileId)
+                            s.marketRequest.compareAndSet(null,MarketRequest(s.profileId,car,action,id,revision))
                     }
                     "feel" -> { val index=FeelProfiles.all.indexOfFirst { it.id==msg.text("id") }; if(index>=0)feelRequest.set(index) }
                     "layout" -> { val id=msg.text("id");if(id in ControllerLayouts.ids){s.layout=id;s.mirrored=msg["mirrored"]?.jsonPrimitive?.booleanOrNull?:false} }
