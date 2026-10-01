@@ -16,11 +16,8 @@ class CareerV2Test {
         assertEquals(Career.rivals.map{it.id}.toSet(),AshStory.rivals.keys)
         assertEquals(Career.rivals.map{it.id},RivalEconomy.plans.map{it.id})
         assertTrue(Career.difficulties.all{it.rewardScale==1.0})
-        for(row in Content.table("career-curve")) {
-            assertTrue(row.number("measuredPlayerPR")>0 && row.number("measuredFieldPR")>0)
-            assertEquals(row.number("measuredPlayerPR")/row.number("measuredFieldPR"),row.number("measuredRatio"),.002,"Mean of ratios may differ slightly from ratio of means")
-            assertTrue(row.number("measuredIncome")>=0 && row.number("measuredRatioGap") in 0.0..0.05)
-        }
+        assertTrue(Career.events.all{it.laps in 3..30})
+        assertTrue(CareerCurve.all.all{it.fieldTier in it.act..minOf(4,it.act+1)})
         for((index,e) in Career.events.withIndex()){assertEquals(e.cupIndex,CareerCurve.all[index].act);assertTrue(Courses.all[e.courseIndex].pool.minTier<=e.cupIndex && Courses.all[e.courseIndex].pool.maxTier>=e.cupIndex)}
     }
     @Test fun nominalLedgerUsesRealShopsAndFixedFieldSchedule() {
@@ -107,7 +104,7 @@ class CareerV2Test {
         assertEquals(leadAmmo,w.combat.ammo(0,Weapons.RIVET),"Inactive slots cannot use a sabotage reserve")
         for(i in 2..5){assertFalse(w.combat.canAct(i));assertFalse(w.combat.fire(i,0))}
         val x=w.cars[0].x;w.cars[2].x=x;w.cars[2].y=w.cars[0].y;w.collide(w.cars[0],w.cars[2]);assertEquals(x,w.cars[0].x)
-        val inputs=Array(6){InputFrame()};while(w.resolved<2 && w.seconds<180)w.step(inputs)
+        val inputs=Array(6){InputFrame()};while(w.resolved<2 && w.seconds<w.raceLimitSeconds)w.step(inputs)
         assertEquals(2,w.resolved);assertTrue(w.cars.filter{it.entered}.map{it.position}.toSet()==setOf(1,2));assertTrue(w.cars.drop(2).all{it.position==0})
         p.selectedCar=9;p.owned.fill(false);p.owned[9]=true
         assertFalse(Career.settle(p,Economy.start(p),34,1,2,0,0.0,true)!!.advanced);assertEquals(34,p.careerRound)
@@ -147,7 +144,7 @@ class CareerV2Test {
         for((slot,index) in RivalEconomy.cast(0).withIndex()) {
             val c=b.cars[slot+1];Garage.apply(p.rivalProfiles[index],c);c.aiSkill=Career.difficulties[1].skill;c.aiStyle=RivalEconomy.style(p,index);c.rivalIndex=index
         }
-        Encounters.apply(b,"scrap");a.reset();b.reset();val inputs=Array(6){InputFrame()}
+        b.raceLaps=Career.events[0].laps;Encounters.apply(b,"scrap");a.reset();b.reset();val inputs=Array(6){InputFrame()}
         repeat(1200){a.step(inputs);b.step(inputs)};assertEquals(a.stateHash(),b.stateHash())
     }
 }

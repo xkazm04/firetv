@@ -262,10 +262,10 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
             if(phase=="race") {
                 var humans=0; var complete=0
                 for(c in world.cars)if(c.human) { humans++; if(c.finishSeconds>=0 || world.combat.wrecked(c.id))complete++ }
-                if((humans>0 && complete==humans) || world.resolved==world.entrantCount || world.seconds>=TrackRules["maxRaceSeconds"])finishRace()
+                if((humans>0 && complete==humans) || world.resolved==world.entrantCount || world.seconds>=world.raceLimitSeconds)finishRace()
             }
         }
-        server.raceSeconds=world.seconds
+        server.raceSeconds=world.seconds;server.raceLaps=world.raceLaps
         if(uiTime>=.1) {
             uiTime=0.0
             server.artJson="{\"regions\":${art.regionCount},\"textureBytes\":${art.textureBytes},\"sceneryBytes\":${sceneryCanvas.textureSize.toLong()*sceneryCanvas.textureSize*4},\"failures\":${art.failures},\"draws\":${art.draws},\"carStrategy\":\"runtime rotation; procedural for unapproved/missing states\"}"
@@ -273,7 +273,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
             server.trafficJson=world.cars.filter{it.entered}.joinToString(",","[","]"){c->"{\"id\":${c.id},\"name\":\"${driverName(c)}\",\"car\":\"${c.carClass?.id}\",\"human\":${c.human},\"x\":${c.x},\"y\":${c.y},\"heading\":${c.heading},\"radius\":${c.spec.circleRadiusM},\"hp\":${combat.health(c.id)},\"wrecked\":${combat.wrecked(c.id)},\"finished\":${c.finishSeconds>=0},\"finishKind\":\"${c.finishKind}\",\"laps\":${c.lap.laps},\"position\":${c.position},\"repairPickups\":${combat.repairPickupsTaken[c.id]}}"}
             server.pickupsJson=combat.pickups.joinToString(",","[","]"){p->"{\"kind\":\"${p.type.id}\",\"x\":${p.x},\"y\":${p.y},\"cooldown\":${p.cooldownSeconds}}"}
             server.combatSummaryJson="{\"damageScale\":${world.damageScale},\"shotsByWeapon\":[${combat.shots.joinToString(",")}],\"active\":${world.entrantCount-world.resolved},\"living\":${world.entrantCount-combat.wreckCount},\"finished\":${world.finished},\"shots\":${combat.shots.sum()},\"projectiles\":${combat.projectiles.count{it.active}},\"mines\":${combat.mines.count{it.active}},\"blasts\":${combat.blasts.count{it.remainingSeconds>0}},\"poolExhaustions\":${combat.poolExhaustions}}"
-            for(i in 0..1) { val c=world.cars[i]; val s=server.slots[i]; s.speed=c.speedMps; s.lap=min(c.lap.laps+1,3); s.position=c.position; s.impact=c.impact; s.drifting=c.drifting; s.loadTransfer=c.loadTransfer; s.surfaceId=c.surface.id; s.x=c.x; s.y=c.y;s.heading=c.heading;s.yaw=c.yaw;s.progressM=c.lap.progressM; s.combatJson=combatJson(i) }
+            for(i in 0..1) { val c=world.cars[i]; val s=server.slots[i]; s.speed=c.speedMps; s.lap=min(c.lap.laps+1,world.raceLaps); s.position=c.position; s.impact=c.impact; s.drifting=c.drifting; s.loadTransfer=c.loadTransfer; s.surfaceId=c.surface.id; s.x=c.x; s.y=c.y;s.heading=c.heading;s.yaw=c.yaw;s.progressM=c.lap.progressM; s.combatJson=combatJson(i) }
             rebuildUi()
         }
         view.apply(); ScreenUtils.clear(bg)
@@ -431,7 +431,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         text.clear(); headline.clear(); detail.clear()
         text.setColor(Color.WHITE); headline.setColor(Color.WHITE); detail.setColor(muted)
         if(phase!="race")text.addText("DEATH RIDE",59f,685f)
-        else { val c=activeDriver();headline.setColor(colors[c.id]);uiBuilder.clear();uiBuilder.append(c.position).append(" / ").append(world.entrantCount);headline.addText(uiBuilder,59f,691f);text.addText("LAP "+min(3,c.lap.laps+1)+" / 3",260f,686f);text.addText((c.speedMps*3.6).toInt().toString()+" km/h",400f,686f) }
+        else { val c=activeDriver();headline.setColor(colors[c.id]);uiBuilder.clear();uiBuilder.append(c.position).append(" / ").append(world.entrantCount);headline.addText(uiBuilder,59f,691f);text.addText("LAP "+min(world.raceLaps,c.lap.laps+1)+" / "+world.raceLaps,260f,686f);text.addText((c.speedMps*3.6).toInt().toString()+" km/h",400f,686f) }
         if(phase=="lobby") {
             val car=CarCatalog.all[selectedCars[0]]
             text.addText(car.id+" / "+car.role,690f,575f)
@@ -445,12 +445,12 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         }
         if(phase!="race")detail.addText(Presentation.CONCEPT+"  /  "+Presentation.TAGLINE,59f,655f)
         if(phase!="race")detail.addText(when(phase){"garage"->"PARTS / PER CAR    -    GREEN: GAIN    AMBER: TRADE-OFF";"career"->"THE ASH CIRCUIT / FIVE ACTS / THIRTY-FIVE EVENTS";else->Courses.all[selectedTrack].name+"   /   MENU: course    /    FEEL: "+server.feel.id+"  LEFT / RIGHT"},59f,630f)
-        detail.addText("${world.entrantCount} CARS    /    3 LAPS    /    "+Courses.all[selectedTrack].name.uppercase(),873f,682f)
+        detail.addText("${world.entrantCount} CARS    /    ${world.raceLaps} LAPS    /    "+Courses.all[selectedTrack].name.uppercase(),873f,682f)
         detail.addText(if(phase=="lobby")"A live race. A phone in your hand." else "BACK: Lobby    /    "+server.feel.id,873f,653f)
         if(phase=="race" || phase=="countdown" || phase=="results")for(c in world.cars)if(c.entered) {
             detail.setColor(colors[c.id]); uiBuilder.clear(); uiBuilder.append(c.position).append("  ").append(driverName(c))
             detail.addText(uiBuilder,55f+c.id*203,46f)
-            detail.setColor(muted); uiBuilder.clear(); if(world.combat.wrecked(c.id))uiBuilder.append("WRECKED") else uiBuilder.append("HP ").append(world.combat.health(c.id).toInt()).append("   LAP ").append(min(3,c.lap.laps+1)).append(" / 3")
+            detail.setColor(muted); uiBuilder.clear(); if(world.combat.wrecked(c.id))uiBuilder.append("WRECKED") else uiBuilder.append("HP ").append(world.combat.health(c.id).toInt()).append("   LAP ").append(min(world.raceLaps,c.lap.laps+1)).append(" / ").append(world.raceLaps)
             detail.addText(uiBuilder,55f+c.id*203,27f)
         }
         else {
@@ -464,7 +464,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
                 val p=profiles[0];val event=Career.events[p.careerRound];val cup=Career.cups[event.cupIndex];val tier=Career.difficulties[p.careerDifficulty]
                 detail.setColor(accent);detail.addText("SEASON ${p.careerSeasons+1}    /    ROUND ${p.careerRound+1} OF ${Career.events.size}",75f,573f)
                 headline.addText(event.name.uppercase(),75f,540f)
-                text.addText(cup.name+" / "+Courses.all[event.courseIndex].name+" / BEST: "+Career.gradeName(p.careerTrophies[event.cupIndex]),75f,472f)
+                text.addText(cup.name+" / "+event.laps+" LAPS / BEST: "+Career.gradeName(p.careerTrophies[event.cupIndex]),75f,472f)
                 detail.setColor(muted)
                 for((line,words) in event.story.lines.withIndex())detail.addText(words,75f,440f-line*16)
                 text.addText("CUP SCORE  ${p.careerPoints}",75f,364f)
@@ -525,14 +525,14 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
             }
             "results" -> {
                 headline.addText("THE FINISH",330f,558f)
-                detail.addText(if(world.entrantCount==2)"THE CROWN / TWO DRIVERS" else "THREE LAPS. SIX CARS. ONE MORE?",332f,503f)
+                detail.addText(if(world.entrantCount==2)"THE CROWN / TWO DRIVERS" else "${world.raceLaps} LAPS. SIX CARS. ONE MORE?",332f,503f)
                 for(c in world.cars)if(c.entered)rankOrder[c.position-1]=c.id
                 for(rank in 0 until world.entrantCount) {
                     val c=world.cars[rankOrder[rank]]; text.setColor(colors[c.id]); uiBuilder.clear()
                     uiBuilder.append(rank+1).append("     ").append(driverName(c))
                     text.addText(uiBuilder,345f,461f-rank*42)
                     detail.setColor(Color.WHITE); uiBuilder.clear()
-                    if(world.combat.wrecked(c.id))uiBuilder.append("WRECKED / ").append(world.combat.kills[c.id]).append(" kills") else if(c.finishKind==FinishKind.ELIMINATION)uiBuilder.append("LAST SURVIVOR") else if(c.finishSeconds>=0)uiBuilder.append((c.finishSeconds*10).toInt()/10).append('.').append((c.finishSeconds*10).toInt()%10).append(" seconds") else uiBuilder.append("LAP ").append(min(3,c.lap.laps+1)).append(" / 3 - unfinished")
+                    if(world.combat.wrecked(c.id))uiBuilder.append("WRECKED / ").append(world.combat.kills[c.id]).append(" kills") else if(c.finishKind==FinishKind.ELIMINATION)uiBuilder.append("LAST SURVIVOR") else if(c.finishSeconds>=0)uiBuilder.append((c.finishSeconds*10).toInt()/10).append('.').append((c.finishSeconds*10).toInt()%10).append(" seconds") else uiBuilder.append("LAP ").append(min(world.raceLaps,c.lap.laps+1)).append(" / ").append(world.raceLaps).append(" - unfinished")
                     detail.addText(uiBuilder,731f,458f-rank*42)
                 }
                 text.setColor(bg); text.addText(if(campaignRace)"SELECT  /  NEXT ROUND" else "SELECT  /  REMATCH",490f,164f)

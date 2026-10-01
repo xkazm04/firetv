@@ -18,7 +18,7 @@ private data class AshOutcome(val round:Int,val difficulty:Int,val car:Int,val b
 /** Physical library, then seeded legal-shop careers; no synthetic finishing-position dice. */
 fun main(args:Array<String>) {
     val seeds=args.getOrNull(0)?.toInt()?:8;val careers=args.getOrNull(1)?.toInt()?:2000
-    val directory=File("build/reports/ash-circuit/$seeds").apply{mkdirs()};val libraryFile=File(directory,"physical.csv")
+    val directory=File(System.getProperty("ashReportRoot","build/reports/ash-circuit"),seeds.toString()).apply{mkdirs()};val libraryFile=File(directory,"physical.csv")
     val bands=listOf(0,1,2,4,8,Parts.all.sumOf{it.maxTier});val policies=listOf(1,2,3,4,6,8,Parts.all.sumOf{it.maxTier});val library=mutableListOf<AshOutcome>()
     if(args.getOrNull(2)=="reuse") libraryFile.readLines().drop(1).filter{it.isNotBlank()}.forEach{library+=AshOutcome.parse(it)}
     else {
@@ -37,7 +37,7 @@ fun main(args:Array<String>) {
                 val lead=Profile("physical-lead",false).also{p->p.credits=8000;p.careerCleared=round;p.selectedCar=car;p.owned.fill(false);p.owned[car]=true;CareerSpending.upgrade(p,band)}
                 fun make()=World(seed,track=Track(course=course),combatEnabled=true).also{w->RivalEconomy.apply(canonical,w,difficulty,round);Garage.apply(lead,w.cars[0]);w.cars[0].aiSkill=Career.difficulties[1].skill;w.reset()}
                 val inputs=Array(6){InputFrame()};val w=make()
-                while(w.cars[0].finishSeconds<0 && !w.combat.wrecked(0) && w.seconds<180)w.step(inputs)
+                while(w.cars[0].finishSeconds<0 && !w.combat.wrecked(0) && w.seconds<w.raceLimitSeconds)w.step(inputs)
                 if(sample==0){val replay=make();repeat(w.steps){replay.step(inputs)};check(replay.stateHash()==w.stateHash())}
                 val c=w.cars[0];check(c.finishSeconds>=0 || w.combat.wrecked(0)){"Unresolved lead: $round / $car / $band"}
                 results[index]=AshOutcome(round,difficulty,car,band,seed,PowerRating.of(CarCatalog.all[car],lead.bonuses()),fieldPR,c.position,w.combat.kills[0],w.combat.health(0),w.combat.cashCollected[0],w.combat.damageTaken[0]==0.0,c.finishSeconds>=0,Career.qualifies(c,w),w.combat.wrecked(0)&&c.lap.laps==0,w.seconds,w.stateHash(),w.cars.filter{it.entered&&it.rivalIndex>=0}.map{r->RivalResult(r.rivalIndex,r.position,w.combat.kills[r.id],w.combat.health(r.id),w.combat.cashCollected[r.id],w.combat.damageTaken[r.id]==0.0,r.finishSeconds>=0,w.combat.wreckSource[r.id]==0)})

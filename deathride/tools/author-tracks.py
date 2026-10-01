@@ -22,7 +22,7 @@ PLANS=[
  ('spillway','Spillway','wetland',155,62,16,-8,2,3),
  ('lowwater','Low Water','wetland',130,70,-14,12,3,4),
  ('ridge','Ridge Wire','alpine',80,50,-12,6,1,2),
- ('frostline','Frost Line','alpine',120,60,16,-12,2,3),
+ ('frostline','Frost Line','alpine',120,60,16,-12,2,4),
  ('highpass','High Pass','alpine',150,54,-14,-10,3,4),
  ('summit','Summit Return','alpine',105,72,12,6,3,4),
 ]

@@ -10,10 +10,10 @@ def write(name,header,rows):
 
 ACTS=[
  ('scrap','Scrap League','The Yards','rook',['foundry','slagway','scree','sluice','switchback','foundry','slagway'],[367,370,374,380,390,405,505],1.6,0),
- ('foundry','Foundry Cup','Foundry row','ox',['railcut','ballast','reedcut','ridge','switchback','redline','foundry'],[475,480,485,490,500,515,620],2.2,350),
- ('salt','Salt Flats Series','The flats and the quarry','vex',['saltline','dustwake','cutface','mirage','redline','ballast','mirage'],[525,530,535,545,555,575,655],2.9,500),
- ('switchback','Switchback Circuit','The mountain road','mica',['frostline','highpass','summit','runoff','spillway','crucible','frostline'],[570,575,585,595,610,625,705],3.1,650),
- ('crown','The Crown','Marrow speedway','marrow',['furnace','crown','lowwater','haulroad','sunspike','summit','crown'],[590,600,610,620,630,640,635],3.3,800),
+ ('foundry','Foundry Cup','Foundry row','ox',['railcut','ballast','reedcut','ridge','switchback','redline','foundry'],[505,520,535,550,570,590,620],2.2,350),
+ ('salt','Salt Flats Series','The flats and the quarry','vex',['saltline','dustwake','cutface','mirage','redline','ballast','mirage'],[620,625,630,635,640,645,655],2.9,500),
+ ('switchback','Switchback Circuit','The mountain road','mica',['frostline','highpass','summit','runoff','spillway','crucible','frostline'],[655,660,665,670,680,690,705],3.1,650),
+ ('crown','The Crown','Marrow speedway','marrow',['furnace','crown','lowwater','haulroad','sunspike','summit','crown'],[705,705,705,705,705,705,635],3.3,800),
 ]
 STORY=[
  [
@@ -68,22 +68,23 @@ def main():
     curve_path=D/'career-curve.csv'
     previous=list(csv.DictReader(curve_path.open(encoding='utf-8'))) if curve_path.exists() else []
     if not (D/'legacy-campaign.csv').exists():(D/'legacy-campaign.csv').write_bytes((D/'campaign.csv').read_bytes())
+    previous_events=list(csv.reader((D/'campaign.csv').open(encoding='utf-8')))[1:]
     events=[];cards=[];curve=[];cups=[]
     for act,(id,name,place,boss,courses,targets,reward,grant) in enumerate(ACTS):
         cups.append([id,name,14,32,49,260+act*60,420+act*80,600+act*120])
         for j,course in enumerate(courses):
             k=act*7+j+1;event=f'{id}-{j+1}';title,*lines=STORY[act][j]
-            events.append([event,title,id,course,event,int(j==6),int(k==35)])
+            events.append([event,title,id,course,event,int(j==6),int(k==35),18 if act==0 else 21 if act==1 else 24])
             cards.append([event,title,f'ash-{id}',*lines])
             ratio=.89 if j==0 or j==6 else [.89,.95,.98,1.0,.98,.96,.89][j]
             if k==35:ratio=1.05
-            curve.append([event,k,act,targets[j],ratio,reward,grant if j==0 else 900+act*200 if j==6 else 40])
-    write('campaign.csv','id,name,cup,course,story,boss,duel',events)
+            curve.append([event,k,act,targets[j],ratio,reward,grant if j==0 else 900+act*200 if j==6 else 40,min(4,act+1) if j==6 else act])
+    write('campaign.csv','id,name,cup,course,story,boss,duel,laps',events)
     write('championships.csv','id,name,bronzePoints,silverPoints,goldPoints,bronzeBonus,silverBonus,goldBonus',cups)
     write('story-cards.csv','id,title,backdropKey,line1,line2,line3',cards)
-    header='event,number,act,fieldTarget,ratioTarget,rewardScale,rivalGrant'
+    header='event,number,act,fieldTarget,ratioTarget,rewardScale,rivalGrant,fieldTier'
     extras=[key for key in previous[0] if key not in header.split(',')] if previous else []
-    if len(previous)==len(curve) and all(all(old[key]==str(value) for key,value in zip(header.split(','),row)) for old,row in zip(previous,curve)):
+    if previous_events==[[str(v) for v in row] for row in events] and len(previous)==len(curve) and all(all(old[key]==str(value) for key,value in zip(header.split(','),row)) for old,row in zip(previous,curve)):
         for row,old in zip(curve,previous):row.extend(old[key] for key in extras)
         if extras:header+=','+','.join(extras)
     write('career-curve.csv',header,curve)

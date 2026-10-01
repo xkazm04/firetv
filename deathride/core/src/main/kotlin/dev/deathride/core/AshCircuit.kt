@@ -13,9 +13,9 @@ object AshStory {
     val cards=Content.table("story-cards").associate{it.getValue("id") to StoryCard(it.getValue("id"),it.getValue("title"),it.getValue("backdropKey"),(1..3).map{i->it.getValue("line$i")})}
     val rivals=Content.table("rival-stories").associateBy{it.getValue("id")}
 }
-data class CurvePoint(val event: String,val number: Int,val act: Int,val fieldTarget: Double,val ratioTarget: Double,val rewardScale: Double,val rivalGrant: Int)
+data class CurvePoint(val event: String,val number: Int,val act: Int,val fieldTarget: Double,val ratioTarget: Double,val rewardScale: Double,val rivalGrant: Int,val fieldTier: Int=act)
 object CareerCurve {
-    val all=Content.table("career-curve").map{CurvePoint(it.getValue("event"),it.number("number").toInt(),it.number("act").toInt(),it.number("fieldTarget"),it.number("ratioTarget"),it.number("rewardScale"),it.number("rivalGrant").toInt())}
+    val all=Content.table("career-curve").map{CurvePoint(it.getValue("event"),it.number("number").toInt(),it.number("act").toInt(),it.number("fieldTarget"),it.number("ratioTarget"),it.number("rewardScale"),it.number("rivalGrant").toInt(),it.number("fieldTier").toInt())}
 }
 class RivalPlan(row: Map<String,String>) {
     val id=row.getValue("id");val cars=listOf("rookie","club","pro","elite","champion").map{tier->CarCatalog.all.indexOfFirst{it.id==row.getValue(tier)}}
@@ -38,7 +38,7 @@ object RivalEconomy {
     }
     /** Actual shared shop transactions; no car stat writes or player-power input. */
     fun shop(p: Profile,plan: RivalPlan,point: CurvePoint,course: Course) {
-        val wanted=plan.cars[point.act]
+        val wanted=plan.cars[point.fieldTier]
         if(p.selectedCar!=wanted) {
             var attempts=0
             while(p.credits+Market.tradeValue(p)<CarCatalog.all[wanted].priceCredits && attempts++<4) {
@@ -66,15 +66,16 @@ object RivalEconomy {
         require(p.withRivals)
         val point=CareerCurve.all[round];val course=Courses.all[Career.events[round].courseIndex]
         val serial=p.careerSeasons*Career.events.size+round
-        if(p.rivalPreparedSerial==serial)return
+        val newEvent=p.rivalPreparedSerial!=serial
         val active=cast(round).toSet()
         for(i in plans.indices) {
             val npc=p.rivalProfiles[i];val plan=plans[i]
-            npc.careerRound=round;npc.careerCleared=max(npc.careerCleared,round)
-            npc.credits=min(EconomyRules["creditCap"].toInt(),npc.credits+point.rivalGrant)
+            // Promotion opponents have already earned the next licence; the same shop unlock rules apply.
+            npc.careerRound=round;npc.careerCleared=max(npc.careerCleared,max(round,point.fieldTier*7))
+            if(newEvent)npc.credits=min(EconomyRules["creditCap"].toInt(),npc.credits+point.rivalGrant)
             if(i !in active)continue
             // New divisions and bosses always have a shopping window; other windows are driver data.
-            if(npc.selectedCar!=plan.cars[point.act] || round%7==0 || Career.events[round].boss || (round+plan.offset)%plan.every==0)shop(npc,plan,point,course)
+            if(npc.selectedCar!=plan.cars[point.fieldTier] || round%7==0 || Career.events[round].boss || (round+plan.offset)%plan.every==0)shop(npc,plan,point,course)
         }
         p.rivalPreparedSerial=serial
     }
@@ -84,6 +85,7 @@ object RivalEconomy {
         return Rival(base.values+mapOf("passDistanceScale" to (base.passDistanceScale*AshRules["grudgePassScale"]).toString(),"fireRangeScale" to min(1.0,base.fireRangeScale+AshRules["grudgeFireRangeBonus"]).toString()))
     }
     fun apply(p: Profile,world: World,difficulty: Int,round: Int=p.careerRound,guest: Boolean=false) {
+        world.raceLaps=Career.events[round].laps
         prepare(p,round);val cast=cast(round)
         for(c in world.cars){c.entered=c.id<=cast.size;c.rivalIndex=-1}
         val guestRacing=guest && !Career.events[round].duel

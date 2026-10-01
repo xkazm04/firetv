@@ -44,6 +44,16 @@ tasks.register<JavaExec>("careerV2Report") {
     mainClass.set("dev.deathride.core.CareerV2ReportKt")
     maxHeapSize="1g"
     jvmArgs("-Djava.util.concurrent.ForkJoinPool.common.parallelism=4")
+    jvmArgs("-DashReportRoot="+providers.gradleProperty("ashReportRoot").getOrElse("build/reports/ash-circuit"))
     args(providers.gradleProperty("ashSeeds").getOrElse("8"),providers.gradleProperty("ashCareers").getOrElse("2000"))
     providers.gradleProperty("ashReuse").orNull?.let { args("reuse") }
+}
+tasks.register<JavaExec>("endurancePilot") {
+    group="verification"
+    dependsOn(tasks.testClasses)
+    classpath=sourceSets.test.get().runtimeClasspath
+    mainClass.set("dev.deathride.core.EndurancePilotKt")
+    maxHeapSize="1g"
+    jvmArgs("-Djava.util.concurrent.ForkJoinPool.common.parallelism=4")
+    args(providers.gradleProperty("enduranceSamples").getOrElse("2"))
 }

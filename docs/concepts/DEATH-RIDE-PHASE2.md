@@ -125,6 +125,7 @@ A career ladder of many more events, named rival drivers with personalities as d
 | Content | C4 | Career v2 and rivals | C2, C3 | implemented / core and Stick checked; duration and boss pacing targets remain open | this commit (C4) | 2026-10-01 |
 | Integration | I1 | Atlas renderer with procedural fallback | P3, P4, C2 | wired / GL and Stick checked; car families await approval | integration-i1-20261001 | 2026-10-01 |
 | Integration | V1 | Reachable verge and complete linter mutants | I1 | verified on all ten sizes / green | integration-v1-20261001 | 2026-10-01 |
+| Integration | IP | Endurance career and legal promotion fields | V1, C4 | measured mean 5.85-6.54 h; boss/tail/first-purchase limits retained | integration-ip-20261001 | 2026-10-01 |
 | Integration | I2 | Stick texture and frame budget | I1 | not started | | |
 | Integration | I3 | Gate G2 report, owner session | I2, C4 | not started | | |
 
@@ -174,7 +175,7 @@ Immutable `deathride/assets/phase2-v1` contains four libGDX atlas pages with 172
 `python -m unittest discover -s deathride/tools/art -p test_*.py`: 30 pass. Standalone bundle validation passes hashes, visible pixels, packing, content aliases, frame metadata, autotiles and residency. The actual libGDX 1.13.5 parser reads all four atlases/172 regions. `:core:test :link:test :app:assembleDebug`: BUILD SUCCESSFUL, 47 up-to-date tasks. P4 spent 93 image reservations; weekly total 130/180, 50 remain, zero videos. This execution added 122 reservations to eight inherited charges; 126 outputs succeeded and four inherited interruptions remain conservatively spent. One false stop matched output_tokens=429; exact successful-session evidence recovered the existing image with zero new calls, and contextual/nested error tests now distinguish real quota status from usage numbers. No actual quota error was observed.
 Not measured/remaining: owner approval of ten exact car references before 40 state and 30 livery jobs; human-labelled grader calibration; committed C4 reconciliation; I1 renderer/fallback integration; I2 full-game texture/frame budget and Stick soak; G2 owner quality/feel. The remaining 50-image capacity is reported, not consumed on arbitrary variants or across the owner reference gate. No push. Next handoff is I1 plus those explicit outstanding gates.
 
-### I1 ? 2026-10-01
+### I1 - 2026-10-01
 
 [Design and limits](deathride/I1-atlas-renderer.md). Packaged the immutable world/UI atlas kit, repeating tiles, cached road geometry, barriers/props/decals, bounded catalog-timed effects, hull-relative HUD, rival portraits and one story backdrop. Added fixed read-only combat snapshot fields. Missing/failed pages retain procedural drawing; all ten car references remain unapproved, so production car states/liveries are absent and procedural cars remain. Runtime car rotation/pivots, state lookup and optional panel tints are wired for approved future assets. The old 36 MiB scenery target is now 16 MiB; live road quads preserve texture detail.
 
@@ -182,8 +183,18 @@ Not measured/remaining: owner approval of ten exact car references before 40 sta
 
 Not measured: approved car art behavior, owner quality/feel, full-game sustained memory/frame budget (I2), revised C4 endurance/boss pacing. New Grok spend **0**; historical 130/180, **50 remain**, zero videos. No push. Next: forge verge/lint correction, physical career pacing, final I2 soak and I3 owner report.
 
-### V1 ? 2026-10-01
+### V1 - 2026-10-01
 
 [Design and result](deathride/V1-verge-and-lint.md). Reproduced the unreachable centre-only verge on all ten roster cars, both sides; saved the failing regression and before/after rows. Surface detection and AI look-ahead now use the outer lateral collision radius for kerb/verge, retaining centre queries for authored interior materials. Walls, widths and car geometry are unchanged. Added the six missing base linter mutants plus nine feature/content mutants.
 
 `:core:test :link:test :game:test :app:assembleDebug` green: **87 core / 3 link / 2 renderer**. All 20 edge cases now experience Offtrack drag, with reachable kerb and unchanged asphalt centre; deterministic replay and zero-allocation tests pass. Evidence: `deathride/evidence/phase2/v1/`. Old physical outcome hashes are superseded for current-runtime claims; IP will rebuild its library. Owner handling/fairness remains not measured. Grok spend **0**, still 130/180 with **50 left**. No push. Next: IP career format, legal boss fields and measured pacing.
+
+### IP - 2026-10-01
+
+[Design, actual curves and limits](deathride/IP-career-pacing.md). Career now uses 18/21/24 laps with matching TV/phone finish and timeout rules; practice stays at three. Promotion opponents buy the next division through the common shop one event early and retain purchases across the join. No HP, damage, reward, repair or player-dependent power change. Removed stale measured columns from runtime curve data; authoring tools reproduce the new format.
+
+Green `:core:test :link:test :game:test :app:assembleDebug`: **89 core / 3 link / 2 renderer**. The current library has **15,120 physical races**, **3,780 first-seed replays**, four independent seeds per cell and six upgrade bands. All **6,000 sampled careers** complete; the independent audit checks **215,895 settlements**. Mean active hours **5.850 / 6.102 / 6.535** now meet the mean duration target, with zero sampled bankruptcy or lap-one player wreck. Eighty-five samples exceed eight hours, including an 11.697-hour Pro tail. First purchases are early in Rookie/Club; following-tier intervals meet seven-to-nine races. Boss ratios **0.9279 / 0.9428 / 0.9311 / 0.9625** still miss the proposed band. Field joins improve to approximately **0% / +2.0% / +0.6% / -0.4%**, but the player still drops 4.93% at the Pro join and the upper field plateaus. Hard PR ceilings and nearest-band error are retained, not hidden.
+
+Stick opening: two completed 18-lap races at **466.92 / 587.87 s**, one payout each and nested save recovery. Exact IP release finale: an isolated funded **24-lap duel, 873.38 s, second place**, correctly remains round 35; P2 spectator keeps cash/debt/item/race count. Interrupted foreground attempts stay in evidence. The IP live shot exposed an inactive-slot HUD footer overlap queued for I2. Evidence: `deathride/evidence/phase2/ip-*`, including compressed raw rows, plots, source/APK hashes and failed/successful logs.
+
+Not measured: human endurance comfort, story/tension, owner quality/feel. Late boss dips, first-purchase timing, trade/field discontinuities and retry tails remain documented. Grok spend **0**, still 130/180 with **50 left**, zero videos. No push. Next: final I2 guarded-loader/HUD checks and full Stick budget soak, then I3/G2 handoff.

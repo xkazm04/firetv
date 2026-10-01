@@ -244,6 +244,8 @@ class Snapshot(private val combat: Combat?=null) {
     fun blastRadius(i: Int)=blastState[i*5+3];fun blastActivation(i: Int)=blastState[i*5+4].toInt()
 }
 class World(val seed: Int=17, val spec: CarSpec=CarSpec(), val track: Track=Track(), val handling: Handling=SlipHandling(),combatEnabled: Boolean=false) {
+    var raceLaps=Tuning.RACE_LAPS; internal set
+    val raceLimitSeconds get()=TrackRules["maxRaceSeconds"]*raceLaps/Tuning.RACE_LAPS
     var damageScale=1.0
     val cars=Array(Tuning.CAR_COUNT) { Car(it,track).also { c -> c.spec=spec } }
     val combat=Combat(this,combatEnabled)
@@ -310,7 +312,7 @@ class World(val seed: Int=17, val spec: CarSpec=CarSpec(), val track: Track=Trac
         for(c in cars) {
             if(!c.entered || combat.wrecked(c.id))continue
             track.project(c.x,c.y,projection); c.lap.update(projection.s)
-            if(c.lap.laps>=Tuning.RACE_LAPS && c.finishSeconds<0) { c.finishSeconds=seconds;c.finishKind=FinishKind.LAPS; finished++ }
+            if(c.lap.laps>=raceLaps && c.finishSeconds<0) { c.finishSeconds=seconds;c.finishKind=FinishKind.LAPS; finished++ }
         }
         if(combat.enabled && combat.wreckCount==entrantCount-1)for(c in cars)if(c.entered && !combat.wrecked(c.id) && c.finishSeconds<0) { c.finishSeconds=seconds;c.finishKind=FinishKind.ELIMINATION;finished++ }
         for(c in cars) {
@@ -413,7 +415,7 @@ class World(val seed: Int=17, val spec: CarSpec=CarSpec(), val track: Track=Trac
         }
     }
     fun stateHash(): Long {
-        var hash=1125899906842597L
+        var hash=1125899906842597L*31+raceLaps
         for(c in cars) { hash=31*hash+c.x.toBits(); hash=31*hash+c.y.toBits(); hash=31*hash+c.vx.toBits(); hash=31*hash+c.vy.toBits(); hash=31*hash+c.heading.toBits(); hash=31*hash+c.lap.laps; hash=31*hash+c.aiMode.ordinal; hash=31*hash+c.yaw.toBits(); hash=31*hash+c.loadTransfer.toBits(); hash=31*hash+c.filteredSteer.toBits(); hash=31*hash+c.filteredThrottle.toBits(); hash=31*hash+if(c.drifting)1 else 0 }
         for(c in cars){hash=31*hash+if(c.entered)1 else 0;hash=31*hash+c.turboRemaining.toBits();hash=31*hash+c.fuelRemaining.toBits();hash=31*hash+c.utilityMask}
         return if(combat.enabled)combat.appendHash(hash) else hash

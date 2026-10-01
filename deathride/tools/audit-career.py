@@ -20,7 +20,9 @@ assert bands in ({0,1,2,4},{0,1,2,4,8,17})
 assert len(physical)==35*6*3*len(bands)*seeds
 keys={(int(r['round']),int(r['difficulty']),int(r['car']),int(r['band']),int(r['seed'])) for r in physical}
 assert len(keys)==len(physical)
-assert all(0<float(r['seconds'])<=180.02 and 0<=float(r['hp'])<=100 and 1<=int(r['position'])<=6 for r in physical)
+campaign=list(csv.DictReader((root/'core/src/main/resources/data/campaign.csv').open(encoding='utf-8')))
+base_limit=float(next(r['value'] for r in csv.DictReader((root/'core/src/main/resources/data/track-rules.csv').open(encoding='utf-8')) if r['key']=='maxRaceSeconds'))
+assert all(0<float(r['seconds'])<=base_limit*int(campaign[int(r['round'])]['laps'])/3+.02 and 0<=float(r['hp'])<=100 and 1<=int(r['position'])<=6 for r in physical)
 assert all(r['finished']=='true' or float(r['hp'])==0 for r in physical)
 assert all(len(r['rivals'].split(';'))==(1 if int(r['round'])==34 else 5) for r in physical)
 physical_lookup={(int(r['round']),int(r['difficulty']),int(r['seed'])):r for r in physical}
@@ -115,7 +117,7 @@ for event in [1,7,14,21,28,35]:
     ratio=club[event-1]['ratio'];low,high=(1,1.1) if event==35 else (.85,.9)
     if not low<=ratio<=high:findings.append(f"Club event {event}: measured PR ratio {ratio:.4f} outside proposed [{low}, {high}]")
 report={'physicalRaces':len(physical),'replayedCells':len(groups),'monetarySettlementsIndependentlyRecomputed':len(timeline),'milestoneComparisonDecimalPlaces':2,'sampledCareers':len(careers),'sampledRaceOutcomes':len(timeline),'settings':settings,'targetFindings':findings,'tierJoins':joins,'racesOutsideRatioEnvelope':outside,'walletCapDiscardedCredits':sum(int(r['unbankedAtCap']) for r in timeline),'largestRatioGap':max(float(r['ratioGap']) for r in timeline),'ratioGapP95':sorted(float(r['ratioGap']) for r in timeline)[int(.95*len(timeline))],
- 'limits':['Club-skill AI lead is a driving proxy; no human feel claim.','Nearest PR-ratio upgrade band; eight seeds per physical cell; Monte Carlo resamples those outcomes.','One evolving reference rival economy supplies physical fields; career rival economies settle actual sampled results, so field configurations differ.','Seven legal spending caps compared, not proof of globally optimal play.','Baseline omits optional player loans, contracts, reserves and manual repairs; C3 tests cover those separately.','Hours measure active racing only; menus, reading and human retries are not invented.','First-visit curves; milestone means omit unreached milestones, with completion counts reported.']}
+ 'limits':['Club-skill AI lead is a driving proxy; no human feel claim.',f'Nearest PR-ratio upgrade band; {seeds} seeds per physical cell; Monte Carlo resamples those outcomes.','One evolving reference rival economy supplies physical fields; career rival economies settle actual sampled results, so field configurations differ.','Seven legal spending caps compared, not proof of globally optimal play.','Baseline omits optional player loans, contracts, reserves and manual repairs; C3 tests cover those separately.','Hours measure active racing only; menus, reading and human retries are not invented.','First-visit curves; milestone means omit unreached milestones, with completion counts reported.']}
 (directory/'audit.json').write_text(json.dumps(report,indent=2)+'\n',encoding='utf-8')
 if '--stamp' in sys.argv:
     assert seeds==8 and all(int(s['careers'])>=2000 for s in summary)
