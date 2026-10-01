@@ -20,6 +20,18 @@ class DriftParameters private constructor(private val values: DoubleArray) {
     }
     fun value(index: Int)=values[index]
     fun copy()=DriftParameters(values.copyOf())
+    /** CSV import is atomic and validates relationships after all values are present. */
+    fun setAll(overrides: Map<String,Double>) {
+        val candidate=values.copyOf()
+        for((key,value) in overrides) {
+            val i=indices.getValue(key)
+            require(value.isFinite() && value in rows[i].number("min")..rows[i].number("max"))
+            candidate[i]=value
+        }
+        require(candidate[indices.getValue("physicalBlendStartRadians")]<candidate[indices.getValue("physicalBlendEndRadians")])
+        require(candidate[indices.getValue("assistFadeStartRadians")]<candidate[indices.getValue("spinSlipRadians")])
+        candidate.copyInto(values)
+    }
     companion object {
         val rows=Content.table("drift")
         val indices=rows.mapIndexed { index,row -> row.getValue("key") to index }.toMap()
@@ -35,11 +47,12 @@ data class DriftGeometry(val wheelbaseM: Double,val trackM: Double,val cgHeightM
     val frontArmM get()=wheelbaseM*(1-frontLoadFraction)
     val rearArmM get()=wheelbaseM*frontLoadFraction
     companion object {
+        val fields=Content.table("drift-geometry-fields")
         private val rows=Content.table("drift-geometry").associateBy { it.getValue("id") }
-        fun forClass(id: String): DriftGeometry {
-            val r=rows.getValue(id);val shape=CarShapes.forId(id)
-            require(r.number("wheelbaseFraction") in .4..0.9 && r.number("trackFraction") in .5..1.0)
-            require(r.number("frontLoadFraction") in .3..0.7 && r.number("cgHeightM") in .1..2.0 && r.number("inertiaScale") in .5..2.0)
+        fun forClass(id: String)=fromRow(rows.getValue(id))
+        fun fromRow(r: Map<String,String>): DriftGeometry {
+            val shape=CarShapes.forId(r.getValue("id"))
+            for(field in fields)require(r.number(field.getValue("key")) in field.number("min")..field.number("max")) { "Invalid geometry ${field.getValue("key")}" }
             return DriftGeometry(shape.lengthM*r.number("wheelbaseFraction"),shape.widthM*r.number("trackFraction"),r.number("cgHeightM"),r.number("frontLoadFraction"),r.number("inertiaScale"))
         }
     }
@@ -54,6 +67,7 @@ object DriftDynamics {
     }
     fun gripScale(spec: CarSpec,p: DriftParameters): Double = power(p["referenceMassKg"]*spec.widthM/(p["referenceWidthM"]*spec.massKg),p["loadSensitivity"])
     fun lateralLimit(spec: CarSpec,surface: Surface,p: DriftParameters=DriftParameters.defaults)=spec.maxLateralAccelerationMps2*surface.gripScale*gripScale(spec,p)
+    fun steeringGeometryScale(spec: CarSpec,p: DriftParameters)=spec.driftGeometry?.let{p["referenceWheelbaseM"]/it.wheelbaseM}?:1.0
     private fun blend(value: Double,start: Double,end: Double): Double {
         val t=((value-start)/(end-start).coerceAtLeast(1e-6)).coerceIn(0.0,1.0)
         return t*t*(3-2*t)
@@ -73,11 +87,11 @@ object DriftDynamics {
         val sideTransfer=(abs(c.lateralAcceleration)*g.cgHeightM/(p["gravityMps2"]*g.trackM)).coerceIn(0.0,.5)
         val capacity=spec.massKg*lateralLimit(spec,c.surface,p)*(1-sideTransfer*p["lateralTransferLoss"])
         val capF=capacity*frontShare;val capR=capacity*(1-frontShare)
-        val speedFactor=(speed+spec.launchSteeringMps*throttle)/(speed+7.0)
+        val speedFactor=(speed+spec.launchSteeringMps*throttle)/(speed+p["steeringSpeedOffsetMps"])
         val counter=c.filteredSteer*beta<0
         val assist=1-blend(abs(beta),p["assistFadeStartRadians"],p["spinSlipRadians"])
         val counterGain=if(counter)p["countersteerGain"]*min(1.0,speed/p["countersteerFullSpeedMps"])*min(1.0,abs(beta)/p["assistFadeStartRadians"])*assist else 0.0
-        val steerYaw=-c.filteredSteer*c.feel.authority(speed)*spec.steeringRateRadPerSecond*speedFactor*(1+counterGain)*(1-throttle*Movement.throttleUndersteer)
+        val steerYaw=-c.filteredSteer*c.feel.authority(speed)*spec.steeringRateRadPerSecond*steeringGeometryScale(spec,p)*speedFactor*(1+counterGain)*(1-throttle*Movement.throttleUndersteer)
         val steerAngle=atan2(steerYaw*g.wheelbaseM,max(speed,p["lowSpeedMps"]))
         val wheelCos=cos(steerAngle);val wheelSin=sin(steerAngle)
         val vf=(lateral+g.frontArmM*c.yaw)*wheelCos-forward*wheelSin
@@ -105,10 +119,24 @@ object DriftDynamics {
         val physicalYaw=(g.frontArmM*(fyF*wheelCos+fxF*wheelSin)-g.rearArmM*fyR)/spec.yawInertiaKgM2*p["yawTorqueScale"]
         val yawLength=spec.yawInertiaKgM2/(spec.massKg*g.wheelbaseM)
         val response=spec.yawResponseSeconds*c.feel.yawResponseScale*yawLength/p["referenceYawLengthM"]
-        val stableYaw=steerYaw+beta*spec.yawStabilityPerSecond*c.feel.stabilityScale*assist
+        // Preserve the approved grip response: W3's steady yaw solves
+        // yaw = command - yaw*stability/lateralDamping. A bicycle has a different
+        // neutral body-slip angle, so restoring raw beta would amplify grip turns.
+        val stability=spec.yawStabilityPerSecond*c.feel.stabilityScale
+        val physicalBlend=max(blend(abs(beta),p["physicalBlendStartRadians"],p["physicalBlendEndRadians"]),hb*p["handbrakePhysicalBlend"])
+        // This reference calibrates asphalt grip driving only. Surface loss already lives in
+        // axle capacities; applying it again here would cripple low-grip wall recovery.
+        val gripWeight=(1-max(hb,blend(abs(beta),p["physicalBlendStartRadians"],p["physicalBlendEndRadians"])))*blend(speed,p["lowSpeedMps"],Movement.driftMinSpeedMps)
+        val referenceGrip=max(1e-6,spec.lateralGripPerSecond)
+        val referenceYaw=steerYaw/(1+stability/referenceGrip*gripWeight)
+        val rearCurveCapacity=remainingR*(1-hb*(1-p["handbrakeRearGrip"]))
+        val rearDemand=spec.massKg*speed*referenceYaw*g.frontArmM/g.wheelbaseM
+        val rearRatio=if(rearCurveCapacity>0)(abs(rearDemand)/rearCurveCapacity).coerceIn(0.0,1.0) else 0.0
+        val neutralRearSlip=-sign(rearDemand)*p["peakSlipRadians"]*(1-sqrt(1-rearRatio))
+        val neutralBeta=(atan2(g.rearArmM*referenceYaw,max(speed,p["lowSpeedMps"]))+neutralRearSlip).coerceIn(-Movement.driftEnterRadians,Movement.driftEnterRadians)
+        val stableYaw=referenceYaw+(beta-neutralBeta*gripWeight)*stability*assist
         val torqueLimit=(g.frontArmM*(remainingF*wheelCos+abs(fxF*wheelSin))+g.rearArmM*remainingR)/spec.yawInertiaKgM2
         val servo=((stableYaw-c.yaw)*(1-exp(-dt/response))/dt).coerceIn(-torqueLimit,torqueLimit)
-        val physicalBlend=max(blend(abs(beta),p["physicalBlendStartRadians"],p["physicalBlendEndRadians"]),hb*p["handbrakePhysicalBlend"])
         c.yaw+=(servo*(1-physicalBlend)+physicalYaw*physicalBlend)*dt
         c.heading=wrapAngle(c.heading+c.yaw*dt)
         var nextForward=forward+bodyFx/spec.massKg*dt

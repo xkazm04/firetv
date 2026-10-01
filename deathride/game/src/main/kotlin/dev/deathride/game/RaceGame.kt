@@ -13,7 +13,7 @@ import dev.deathride.core.*
 import dev.deathride.link.RaceServer
 import kotlin.math.*
 
-class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smoke: Boolean=false, val runSeconds: Double=0.0, val soak: Boolean=false, val keyboardCheck: Boolean=false, val fontFactory: ((Int)->BitmapFont)?=null, val proceduralOnly: Boolean=false) : ApplicationAdapter() {
+class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smoke: Boolean=false, val runSeconds: Double=0.0, val soak: Boolean=false, val keyboardCheck: Boolean=false, val fontFactory: ((Int)->BitmapFont)?=null, val proceduralOnly: Boolean=false, val serverPort: Int=8765) : ApplicationAdapter() {
     private lateinit var shape: ShapeRenderer
     private lateinit var batch: SpriteBatch
     private lateinit var font: BitmapFont
@@ -157,7 +157,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         large=fontFactory?.invoke(44)?:BitmapFont()
         small=fontFactory?.invoke(16)?:BitmapFont()
         text=GlyphLayer(font); headline=GlyphLayer(large); detail=GlyphLayer(small)
-        server=RaceServer(assets,logger); for(i in world.cars.indices)CarCatalog.apply(world.cars[i],selectedCars[i]);world.reset(); server.start()
+        server=RaceServer(assets,logger,port=serverPort); for(i in world.cars.indices)CarCatalog.apply(world.cars[i],selectedCars[i]);world.reset(); server.start()
         profileStore=ProfileStore(Gdx.files.local("profiles").file());for(i in profiles.indices)loadProfile(i);world.reset()
         art=AtlasArt(Gdx.files.internal(if(proceduralOnly)"absent-art-audit" else "phase2-v1"));atlasEffects=AtlasEffects(art);sceneryCanvas=SceneryCanvas();scene=TrackScene(Courses.all[selectedTrack],sceneryCanvas,art);effects.clear()
         Gdx.input.setCatchKey(Input.Keys.BACK,true)
@@ -268,7 +268,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         server.raceSeconds=world.seconds
         if(uiTime>=.1) {
             uiTime=0.0
-            server.artJson="{\"regions\":${art.regionCount},\"textureBytes\":${art.textureBytes},\"sceneryBytes\":${sceneryCanvas.textureSize.toLong()*sceneryCanvas.textureSize*4},\"failures\":${art.failures},\"draws\":${art.draws},\"carStrategy\":\"runtime rotation; procedural for unapproved/missing states\"}"
+            server.artJson="{\"regions\":${art.regionCount},\"textureBytes\":${art.textureBytes},\"sceneryBytes\":${sceneryCanvas.textureSize.toLong()*sceneryCanvas.textureSize*4},\"failures\":${art.failures},\"draws\":${art.draws},\"driftSmokeEmitted\":${atlasEffects.driftSmokeEmitted},\"driftSkidsEmitted\":${atlasEffects.driftSkidsEmitted},\"activeEffects\":${atlasEffects.activeCount},\"carStrategy\":\"runtime rotation; procedural for unapproved/missing states\"}"
             val combat=world.combat
             server.trafficJson=world.cars.filter{it.entered}.joinToString(",","[","]"){c->"{\"id\":${c.id},\"name\":\"${driverName(c)}\",\"car\":\"${c.carClass?.id}\",\"human\":${c.human},\"x\":${c.x},\"y\":${c.y},\"heading\":${c.heading},\"radius\":${c.spec.circleRadiusM},\"hp\":${combat.health(c.id)},\"wrecked\":${combat.wrecked(c.id)},\"finished\":${c.finishSeconds>=0},\"finishKind\":\"${c.finishKind}\",\"laps\":${c.lap.laps},\"position\":${c.position},\"repairPickups\":${combat.repairPickupsTaken[c.id]}}"}
             server.pickupsJson=combat.pickups.joinToString(",","[","]"){p->"{\"kind\":\"${p.type.id}\",\"x\":${p.x},\"y\":${p.y},\"cooldown\":${p.cooldownSeconds}}"}

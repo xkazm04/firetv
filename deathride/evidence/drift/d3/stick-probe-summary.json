@@ -1,0 +1,162 @@
+{
+  "source": "stick-probe.json.gz",
+  "basis": "Ordinary scripted controller inputs; two LAN clients, four normal AIs; all shipped effects enabled. Not human feel or optical latency.",
+  "device": "Amazon Fire TV Stick AFTKM; Android 11; dev.deathride.driftlab; 10.0.0.139; LAN Wi-Fi",
+  "sampleCaution": "Overlapping ten-second rolling windows; counts are not summed as independent frames. Startup/course transitions excluded from row maxima but retained in raw evidence and lifetime metrics.",
+  "rows": [
+    {
+      "classes": [
+        "Needle",
+        "Line"
+      ],
+      "fullRaceRollingWindows": 20,
+      "worstFrameP95Ms": 20.861462,
+      "worstFrameMaxMs": 29.263616,
+      "worstSimP95Ms": 2.479692,
+      "worstSimMaxMs": 7.284,
+      "smokeEmitted": 54,
+      "skidsEmitted": 111,
+      "peakActiveEffects": 52,
+      "peakUnresolvedCars": 5,
+      "lastWindowFrame": {
+        "p50": 16.729999999999997,
+        "p95": 20.671692,
+        "max": 29.249306999999998,
+        "count": 599
+      }
+    },
+    {
+      "classes": [
+        "Bastion",
+        "Comet"
+      ],
+      "fullRaceRollingWindows": 21,
+      "worstFrameP95Ms": 20.416462,
+      "worstFrameMaxMs": 27.423385000000003,
+      "worstSimP95Ms": 2.289462,
+      "worstSimMaxMs": 5.26377,
+      "smokeEmitted": 98,
+      "skidsEmitted": 205,
+      "peakActiveEffects": 56,
+      "peakUnresolvedCars": 6,
+      "lastWindowFrame": {
+        "p50": 16.752615,
+        "p95": 20.217385,
+        "max": 24.410461,
+        "count": 599
+      }
+    },
+    {
+      "classes": [
+        "Trail",
+        "Flint"
+      ],
+      "fullRaceRollingWindows": 21,
+      "worstFrameP95Ms": 20.496154,
+      "worstFrameMaxMs": 28.329385,
+      "worstSimP95Ms": 2.408,
+      "worstSimMaxMs": 5.398462,
+      "smokeEmitted": 82,
+      "skidsEmitted": 173,
+      "peakActiveEffects": 57,
+      "peakUnresolvedCars": 6,
+      "lastWindowFrame": {
+        "p50": 16.704076,
+        "p95": 20.081307,
+        "max": 26.963154,
+        "count": 599
+      }
+    },
+    {
+      "classes": [
+        "Quill",
+        "Vandal"
+      ],
+      "fullRaceRollingWindows": 10,
+      "worstFrameP95Ms": 20.798923000000002,
+      "worstFrameMaxMs": 25.563616,
+      "worstSimP95Ms": 2.388462,
+      "worstSimMaxMs": 4.665461,
+      "smokeEmitted": 61,
+      "skidsEmitted": 117,
+      "peakActiveEffects": 49,
+      "peakUnresolvedCars": 5,
+      "lastWindowFrame": {
+        "p50": 16.729154,
+        "p95": 20.798923000000002,
+        "max": 25.563616,
+        "count": 599
+      }
+    },
+    {
+      "classes": [
+        "Kestrel",
+        "Bulwark"
+      ],
+      "fullRaceRollingWindows": 20,
+      "worstFrameP95Ms": 20.370308,
+      "worstFrameMaxMs": 26.481077,
+      "worstSimP95Ms": 2.339462,
+      "worstSimMaxMs": 4.986308,
+      "smokeEmitted": 79,
+      "skidsEmitted": 154,
+      "peakActiveEffects": 47,
+      "peakUnresolvedCars": 6,
+      "lastWindowFrame": {
+        "p50": 16.754461,
+        "p95": 20.078077,
+        "max": 26.481077,
+        "count": 599
+      }
+    }
+  ],
+  "strictFrameTarget": {
+    "p95Ms": 16.7,
+    "maxMs": 33,
+    "passed": false
+  },
+  "lastLifetimeFrame": {
+    "p50": 16.7,
+    "p95": 20.1,
+    "max": 243.36907699999998,
+    "count": 14703
+  },
+  "clients": [
+    {
+      "slot": 0,
+      "sent": 4769,
+      "accepted": 4769,
+      "rejected": 0,
+      "rttMs": {
+        "count": 4769,
+        "p50": 14.27610000000277,
+        "p95": 64.22060000000056,
+        "max": 103.14110000000073
+      },
+      "hudSamples": 1563,
+      "driftHudSamples": 163,
+      "spinHudSamples": 61,
+      "peakQuality": 0.572262428294468,
+      "peakSlip": 3.141133545359382,
+      "pulses": 16
+    },
+    {
+      "slot": 1,
+      "sent": 4769,
+      "accepted": 4769,
+      "rejected": 0,
+      "rttMs": {
+        "count": 4769,
+        "p50": 14.478300000002491,
+        "p95": 64.5630000000001,
+        "max": 103.10689999999886
+      },
+      "hudSamples": 1563,
+      "driftHudSamples": 202,
+      "spinHudSamples": 24,
+      "peakQuality": 0.5120105307463163,
+      "peakSlip": 2.3035449471825418,
+      "pulses": 17
+    }
+  ]
+}

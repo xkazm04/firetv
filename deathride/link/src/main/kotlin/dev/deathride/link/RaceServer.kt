@@ -80,7 +80,7 @@ class RaceServer(private val assets: (String)->String, private val log: (String)
     @Volatile var pickupsJson="[]"
     @Volatile var frameNumber=0L
     @Volatile var flashFrames=0L
-    @Volatile var serverStatus="Opening port 8765..."
+    @Volatile var serverStatus="Opening port $port..."
     @Volatile var running=false
     @Volatile var paused=false
     @Volatile var sceneryReady=false
@@ -116,7 +116,7 @@ class RaceServer(private val assets: (String)->String, private val log: (String)
         networkJob=scope.launch {
             repeat(10) {
                 val free=runCatching { ServerSocket().use { socket -> socket.reuseAddress=true; socket.bind(InetSocketAddress("0.0.0.0",port)) }; true }.getOrDefault(false)
-                if(!free) { serverStatus="Port 8765 busy; retry ${it+1}/10"; delay(300); return@repeat }
+                if(!free) { serverStatus="Port $port busy; retry ${it+1}/10"; delay(300); return@repeat }
                 val candidate=embeddedServer(CIO, host="0.0.0.0",port=port,parentCoroutineContext=errors) {
                     install(WebSockets) { maxFrameSize=2048; masking=false }
                     routing {
@@ -136,7 +136,7 @@ class RaceServer(private val assets: (String)->String, private val log: (String)
                 }
                 runCatching { candidate.stop(0,0) }; delay(300)
             }
-            serverStatus="Port 8765 unavailable. Close the other race app, then reopen."
+            serverStatus="Port $port unavailable. Close the other race app, then reopen."
             log(serverStatus)
         }
     }

@@ -385,7 +385,7 @@ class World(val seed: Int=17, val spec: CarSpec=CarSpec(), val track: Track=Trac
         if(c.spec.driftGeometry!=null) {
             // Request only the acceleration left by the same friction circle used by handling.
             val limit=DriftDynamics.lateralLimit(c.spec,c.surface,driftRules)
-            val demand=abs(steer)*c.spec.steeringRateRadPerSecond*c.feel.authority(c.speedMps)*c.speedMps
+            val demand=abs(steer)*c.spec.steeringRateRadPerSecond*DriftDynamics.steeringGeometryScale(c.spec,driftRules)*c.feel.authority(c.speedMps)*c.speedMps
             val fraction=(demand/limit).coerceIn(0.0,1.0)
             a=min(a,limit*sqrt(1-fraction*fraction)/c.spec.accelerationMps2)
         }

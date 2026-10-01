@@ -6,6 +6,7 @@ android {
     defaultConfig {
         applicationId = providers.gradleProperty("appId").getOrElse("dev.deathride.tv")
         resValue("string", "app_name", providers.gradleProperty("appLabel").getOrElse("Death Ride"))
+        resValue("integer", "race_port", providers.gradleProperty("racePort").getOrElse("8765"))
         minSdk = 28; targetSdk = 34; versionCode = 1; versionName = "0.1-spike"
         ndk { abiFilters += listOf("arm64-v8a", "armeabi-v7a", "x86_64") }
     }

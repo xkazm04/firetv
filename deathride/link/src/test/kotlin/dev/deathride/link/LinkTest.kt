@@ -13,10 +13,12 @@ import kotlinx.serialization.json.*
 
 class LinkTest {
     @Test fun occupiedPortReportsFailureWithoutKillingTheHost() {
-        java.net.ServerSocket(18765).use {
-            val host=RaceServer({ "{}" },{},port=18765)
+        java.net.ServerSocket(0).use { occupied ->
+            val host=RaceServer({ "{}" },{},port=occupied.localPort)
             try {
-                host.start(); Thread.sleep(3400)
+                host.start()
+                val deadline=System.nanoTime()+TimeUnit.SECONDS.toNanos(15)
+                while(!host.serverStatus.contains("unavailable") && System.nanoTime()<deadline)Thread.sleep(20)
                 assertFalse(host.running)
                 assertTrue(host.serverStatus.contains("unavailable"),host.serverStatus)
             } finally { host.stop() }
@@ -31,19 +33,20 @@ class LinkTest {
         assertEquals(12.0,j["sinceStart"]!!.jsonObject["p50"]!!.jsonPrimitive.double)
     }
     @Test fun badPinMalformedInputAndLifecycleAreContained() {
-        val host=RaceServer({ if(it.endsWith("html"))"<html>controller</html>" else "{}" },{},port=18765)
+        val port=java.net.ServerSocket(0).use{it.localPort}
+        val host=RaceServer({ if(it.endsWith("html"))"<html>controller</html>" else "{}" },{},port=port)
         val http=HttpClient.newHttpClient()
-        fun waitReady() { repeat(100) { if(host.running)return; Thread.sleep(20) }; fail<Unit>("server did not start") }
+        fun waitReady() { repeat(500) { if(host.running)return; Thread.sleep(20) }; fail<Unit>("server did not start: ${host.serverStatus}") }
         class Listener: WebSocket.Listener {
             val messages=LinkedBlockingQueue<String>()
             override fun onOpen(ws: WebSocket) { ws.request(1) }
             override fun onText(ws: WebSocket,data: CharSequence,last: Boolean): CompletionStage<*>? { messages.offer(data.toString()); ws.request(1); return null }
             fun next(type: String): JsonObject { repeat(30) { val data=messages.poll(1,TimeUnit.SECONDS) ?: error("no $type"); val j=Json.parseToJsonElement(data).jsonObject; if(j["t"]!!.jsonPrimitive.content==type)return j }; error("no $type") }
         }
-        fun connect(listener: Listener)=http.newWebSocketBuilder().buildAsync(URI("ws://127.0.0.1:18765/ws"),listener).join()
+        fun connect(listener: Listener)=http.newWebSocketBuilder().buildAsync(URI("ws://127.0.0.1:$port/ws"),listener).join()
         try {
             host.start(); waitReady()
-            val catalog=http.send(HttpRequest.newBuilder(URI("http://127.0.0.1:18765/catalog")).build(),HttpResponse.BodyHandlers.ofString())
+            val catalog=http.send(HttpRequest.newBuilder(URI("http://127.0.0.1:$port/catalog")).build(),HttpResponse.BodyHandlers.ofString())
             val feedback=Json.parseToJsonElement(catalog.body()).jsonObject["driftFeedback"]!!.jsonObject
             assertEquals(dev.deathride.core.VisualTuning["driftHapticQuality"],feedback["quality"]!!.jsonPrimitive.double)
             host.slots[0].driftQuality=.5;host.slots[0].slipRadians=.4;host.slots[0].spunOut=true
@@ -77,7 +80,7 @@ class LinkTest {
             ws.sendText("""{"t":"i","q":0,"ts":0,"s":-1,"a":1,"b":0,"f":0}""",true).join(); assertFalse(good.next("ack")["accepted"]!!.jsonPrimitive.boolean)
             host.suspendLink(); assertFalse(host.running); host.start(); waitReady()
             val returned=Listener(); val again=connect(returned); again.sendText("""{"t":"hello","token":"$token"}""",true).join(); assertEquals(0,returned.next("welcome")["slot"]!!.jsonPrimitive.int)
-            val response=http.send(HttpRequest.newBuilder(URI("http://127.0.0.1:18765/stats")).build(),HttpResponse.BodyHandlers.ofString())
+            val response=http.send(HttpRequest.newBuilder(URI("http://127.0.0.1:$port/stats")).build(),HttpResponse.BodyHandlers.ofString())
             assertEquals(200,response.statusCode()); assertTrue(Json.parseToJsonElement(response.body()).jsonObject["slots"]!!.jsonArray[0].jsonObject["connected"]!!.jsonPrimitive.boolean)
             val drift=Json.parseToJsonElement(response.body()).jsonObject["slots"]!!.jsonArray[0].jsonObject
             assertEquals(.5,drift["driftQuality"]!!.jsonPrimitive.double);assertEquals(.4,drift["slipRadians"]!!.jsonPrimitive.double);assertTrue(drift["spunOut"]!!.jsonPrimitive.boolean)

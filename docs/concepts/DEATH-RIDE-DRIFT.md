@@ -54,4 +54,4 @@ status rows in this file, a session log. Never push, never ask a question.
 |---|---|---|
 | D1 | Research, scale law, design note | complete — [research and scale law](deathride/D1-drift-research.md); baseline full suite and added hysteresis test green |
 | D2 | Drift model in core, data-driven, class-scaled | complete — [model and findings](deathride/D2-drift-model.md); full tests and isolated APK green; broad calibration follows in D3 |
-| D3 | Drift Lab, calibration screen, Stick check, owner checks | not started |
+| D3 | Drift Lab, calibration screen, Stick check, owner checks | in progress — headless sweeps and desktop calibration |
