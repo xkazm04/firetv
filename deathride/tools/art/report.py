@@ -18,6 +18,8 @@ def combine(batch,semantic_batch,family_batch=None):
             family.append({g['asset']:g for g in read_json(path)} if path.exists() else {})
     result=[]
     for item in items:
+        if not item.get('source'):
+            result.append(item);continue
         if item.get('gates_hash')!=digest(cfg):raise ValueError('pixel report stale; rerun process.py: '+item['id'])
         # Regenerating an ID must not reuse observations of its previous pixels.
         def current(m):
@@ -30,7 +32,10 @@ def combine(batch,semantic_batch,family_batch=None):
             fv,fc=decide(family_grades,item['kind'],cfg['vlm_confidence_min'])
             codes+=fc
             if fv=='reject':verdict='reject'
-        final={**item,'grades':grades,'family_grades':family_grades,'codes':sorted(set(item['codes']+codes+['HUMAN_CALIBRATION_PENDING'])),'verdict':'reject' if item['codes'] or verdict=='reject' else 'owner-review'}
+        manual_path=ART/'manual-reviews.json'
+        manual=read_json(manual_path).get(item['id'],{}) if manual_path.exists() else {}
+        if manual.get('source_sha256')!=item['source_sha256']:manual={}
+        final={**item,'grades':grades,'family_grades':family_grades,'manual_review':manual,'codes':sorted(set(item['codes']+codes+manual.get('codes',[])+['HUMAN_CALIBRATION_PENDING'])),'verdict':'reject' if item['codes'] or verdict=='reject' or manual.get('verdict')=='reject' else 'owner-review'}
         result.append(final)
     write_json(ART/'reports'/(batch+'-acceptance.json'),result)
     make_contact_sheet(result,ART/'contact-sheets'/(batch+'-owner.png'),batch+' | owner review queue; machine agreement is not acceptance')

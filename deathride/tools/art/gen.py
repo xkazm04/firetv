@@ -3,6 +3,7 @@ from __future__ import annotations
 import argparse
 import concurrent.futures
 import json
+import math
 import os
 from pathlib import Path
 import re
@@ -14,7 +15,35 @@ import uuid
 from datetime import datetime, timezone
 from common import ART, ROOT, append_json, briefs, compile_prompt, digest, file_lock, make_contact_sheet, now, read_json, sha, write_json
 
-QUOTA = re.compile(r'(?i)(rate.?limit(?:ed| exceeded| reached)|quota.{0,50}(exceed|exhaust|reach)|too many requests|\b429\b|usage limit.{0,40}(exceed|reach)|insufficient.{0,15}credits)')
+# A bare number can be a token count or a dimension. Require error context for 429.
+QUOTA = re.compile(r'(?i)(rate.?limit(?:ed| exceeded| reached)|quota.{0,50}(exceed|exhaust|reach)|too many requests|\b(?:HTTP(?:/\d(?:\.\d)?)?\s*|status(?:_code| code)?[\"\s:=]*|error[\"\s:=]*)429\b|\b429\s+(?:too many|rate limit)|usage limit.{0,40}(exceed|reach)|insufficient.{0,15}credits)')
+
+def quota_evidence(output):
+    match=QUOTA.search(output)
+    if match:return match.group(0)
+    def inspect(value,error_context=False):
+        if isinstance(value,dict):
+            context=error_context or value.get('type')=='error'
+            for key,item in value.items():
+                name=key.lower()
+                if item==429 and (name in ('status','status_code','statuscode','http_status') or (context and name=='code')):return 'structured HTTP status 429'
+                found=inspect(item,context or name in ('error','errors','exception'))
+                if found:return found
+        elif isinstance(value,list):
+            for item in value:
+                found=inspect(item,error_context)
+                if found:return found
+        elif isinstance(value,str):
+            if error_context and value.strip()=='429':return 'structured error 429'
+            if value.startswith('{'):
+                try:return inspect(json.loads(value),error_context)
+                except json.JSONDecodeError:pass
+        return None
+    for line in output.splitlines():
+        try:found=inspect(json.loads(line))
+        except json.JSONDecodeError:continue
+        if found:return found
+    return None
 
 def session_evidence(session_id):
     """Read only our explicit session. Never ingest a neighbouring job's output."""
@@ -144,8 +173,10 @@ def generate(row, style, budget, refine=False):
     if reference:
         sidecar['reference_sha256'] = sha(ref)
     tool = 'image_edit' if reference else 'image_gen'
+    width,height=map(int,row['size'].split('x'));divisor=math.gcd(width,height)
+    aspect=f'{width//divisor}:{height//divisor}'
     instruction = ('Call ' + tool + ' exactly ONCE to produce one image. Use the following image prompt verbatim, without paraphrasing. '
-        'Use aspect_ratio 1:1. Do not call other tools, generate variants, or use video. After the tool returns, finish with its saved file path.\n')
+        'Use aspect_ratio '+aspect+'. Do not call other tools, generate variants, or use video. After the tool returns, finish with its saved file path.\n')
     if reference:
         instruction += 'Use this image as the identity reference/edit target: ' + str(ref.resolve()) + '\n'
     instruction += '\nIMAGE PROMPT:\n' + prompt
@@ -159,8 +190,8 @@ def generate(row, style, budget, refine=False):
             while process.poll() is None:
                 output=log.read_text(encoding='utf-8',errors='replace')
                 _, results, _=session_evidence(sidecar['session_id'])
-                quota=QUOTA.search(output+'\n'+'\n'.join(map(str,results)))
-                if quota: budget.stop(row['id']+': '+quota.group(0))
+                quota=quota_evidence(output+'\n'+'\n'.join(map(str,results)))
+                if quota: budget.stop(row['id']+': '+quota)
                 if time.monotonic()-started>600:
                     subprocess.run(['taskkill','/PID',str(process.pid),'/T','/F'],capture_output=True)
                     process.wait(timeout=20)
@@ -172,9 +203,9 @@ def generate(row, style, budget, refine=False):
         sidecar['image_tool_calls']=calls
         sidecar['prompt_verbatim_verified']=len(calls)==1 and calls[0]['arguments'].get('prompt')==prompt
         if len(calls)>1: budget.stop(row['id']+': CLI violated one-image contract; extra spend requires accounting audit')
-        quota = QUOTA.search(output)
+        quota = quota_evidence(output)
         if quota:
-            budget.stop(row['id'] + ': ' + quota.group(0))
+            budget.stop(row['id'] + ': ' + quota)
             sidecar['status'] = 'quota-stopped'
         else:
             files=[]

@@ -1,0 +1,1129 @@
+{
+  "at": "2026-10-01T10:21:40.688356+00:00",
+  "week": "2026-W40",
+  "weekly_reservations": 130,
+  "new_this_execution": 122,
+  "inherited_reservations": 8,
+  "p4_reservations": 93,
+  "remaining": 50,
+  "videos": 0,
+  "stop": null,
+  "sidecar_statuses": {
+    "interrupted-unknown-spend": 4,
+    "generated": 126
+  },
+  "verified_tool_calls": {
+    "image_gen": 117,
+    "image_edit": 5
+  },
+  "tool_count_note": "Four inherited successful images predate exact-session tool inspection; image tools are verified for all new generated results. One false quota token-count incident was recovered without another call.",
+  "actual_quota_error_observed": false,
+  "false_quota_audit": "audits/p4-false-quota.json",
+  "generation_records": [
+    {
+      "id": "p1-car-bastion-v1",
+      "attempt": 1,
+      "status": "interrupted-unknown-spend",
+      "sha256": null,
+      "session_id": null,
+      "batch": "p1-cars"
+    },
+    {
+      "id": "p1-car-bastion-v2",
+      "attempt": 1,
+      "status": "generated",
+      "sha256": "9eed2bcbcb89d2464309fdaa276480b5c99b1c986d8cbfba84f77fb9e9e964df",
+      "session_id": "5392076d-58a4-4d8b-bd60-b686992b4ca9",
+      "batch": "p1-cars"
+    },
+    {
+      "id": "p1-car-comet-v1",
+      "attempt": 1,
+      "status": "interrupted-unknown-spend",
+      "sha256": null,
+      "session_id": null,
+      "batch": "p1-cars"
+    },
+    {
+      "id": "p1-car-comet-v2",
+      "attempt": 1,
+      "status": "generated",
+      "sha256": "3b6396ae04aadb7c58eaeaaaaed76606a5999ef7aa04885da077837425860bb5",
+      "session_id": "435b1274-73ed-4b28-8b3b-64c14dff40ce",
+      "batch": "p1-cars"
+    },
+    {
+      "id": "p1-car-line-v1",
+      "attempt": 1,
+      "status": "interrupted-unknown-spend",
+      "sha256": null,
+      "session_id": null,
+      "batch": "p1-cars"
+    },
+    {
+      "id": "p1-car-line-v2",
+      "attempt": 1,
+      "status": "generated",
+      "sha256": "2daa7280ce25768c9993fd4da9c2cba340d3424ae43467054cb4785082230aea",
+      "session_id": "c20ab278-78c4-4036-b2a5-d16352a9a7fb",
+      "batch": "p1-cars"
+    },
+    {
+      "id": "p1-car-needle-v1",
+      "attempt": 1,
+      "status": "generated",
+      "sha256": "e3952fe1d39edf7526b8672f9151b8533b7a23b83f5e4d649aebbfba76037d4f",
+      "session_id": null,
+      "batch": "p1-cars"
+    },
+    {
+      "id": "p1-car-needle-v1",
+      "attempt": 2,
+      "status": "generated",
+      "sha256": "d37ae0e2bf6e297c56cfacb97d85d61963c025b0449f892a5c09a4b5025f25b3",
+      "session_id": null,
+      "batch": "p1-cars"
+    },
+    {
+      "id": "p1-car-trail-v1",
+      "attempt": 1,
+      "status": "interrupted-unknown-spend",
+      "sha256": null,
+      "session_id": null,
+      "batch": "p1-cars"
+    },
+    {
+      "id": "p1-car-trail-v2",
+      "attempt": 1,
+      "status": "generated",
+      "sha256": "5a7d05da705d4cbd70c2efd008d61a8130bba0e7c2009ed5643b77623dacdd64",
+      "session_id": "21ca30b3-93a1-49fc-9f94-15b488a056b7",
+      "batch": "p1-cars"
+    },
+    {
+      "id": "p1-tile-asphalt-v1",
+      "attempt": 1,
+      "status": "generated",
+      "sha256": "bf4c2e84c6b6e7e7ba485268476f936cde0cd417cf15f473c207dd26a69de9fe",
+      "session_id": null,
+      "batch": "p1-tiles"
+    },
+    {
+      "id": "p1-tile-asphalt-v1",
+      "attempt": 2,
+      "status": "generated",
+      "sha256": "53b74f0242eb998a09dcbef1cb569f9f40ee523fa846ab8636f0e5a60db26089",
+      "session_id": null,
+      "batch": "p1-tiles"
+    },
+    {
+      "id": "p1-tile-asphalt-v1",
+      "attempt": 3,
+      "status": "generated",
+      "sha256": "0fc22fa151cf856d1ad3e64f70dfe14be1e519d808fbd148fb117cf260279edf",
+      "session_id": "6f73afac-55a8-48e3-ad6f-94ed306e690a",
+      "batch": "p1-tiles"
+    },
+    {
+      "id": "p1-tile-gravel-v1",
+      "attempt": 1,
+      "status": "generated",
+      "sha256": "273f0ccc4c4269a19b9ff35cc7a33826bfbdf525db03c50ef54c2613f99c660c",
+      "session_id": "9ff9b961-25d3-4a31-b2af-0a9f40a638d7",
+      "batch": "p1-tiles"
+    },
+    {
+      "id": "p1-tile-gravel-v2",
+      "attempt": 1,
+      "status": "generated",
+      "sha256": "078823d582b681c242eaf398d5a829a29bf0c70b98a5e9b18fd92f9fc93a06df",
+      "session_id": "406cd71d-50f0-466a-8773-f131500acc17",
+      "batch": "p2-materials"
+    },
+    {
+      "id": "p1-tile-gravel-v3",
+      "attempt": 1,
+      "status": "generated",
+      "sha256": "91a6ce4954fa1a9bed8efed6cd0d6f1dd15a0e5cdcfa963fa5337b2039f75796",
+      "session_id": "3674f0ec-819c-404a-9fbf-74bfa7896f76",
+      "batch": "p2-materials-final"
+    },
+    {
+      "id": "p1-tile-ice-v1",
+      "attempt": 1,
+      "status": "generated",
+      "sha256": "13b31dd1caa9b8c6baa6bbe60a593fb2809a9f5a4326e1340ea35ea233992fa1",
+      "session_id": "f53237d1-a68c-4160-a5cc-d084abc9854a",
+      "batch": "p1-tiles"
+    },
+    {
+      "id": "p1-tile-ice-v2",
+      "attempt": 1,
+      "status": "generated",
+      "sha256": "cabd195877732a4672b79aa3f951536dd202a10332e0238c1edae674df93404f",
+      "session_id": "0faab212-05af-4176-9509-cac4c80879db",
+      "batch": "p2-materials"
+    },
+    {
+      "id": "p1-tile-ice-v3",
+      "attempt": 1,
+      "status": "generated",
+      "sha256": "bac14c2eead09d6099c3ae8e30b48fc83c7a5ba8e4d40a2f8aa6b0c5d48e7125",
+      "session_id": "469fbeb7-abed-4c04-a801-a0a71a56aa05",
+      "batch": "p4-ice-final"
+    },
+    {
+      "id": "p1-tile-kerb-v1",
+      "attempt": 1,
+      "status": "generated",
+      "sha256": "578638d4a348b2e5cdb8e29eb0f2f5ebf835badfe0918505b9445820a22fd3f1",
+      "session_id": "5ed0c760-fde5-4bff-a597-cab2d4f1f11f",
+      "batch": "p1-tiles"
+    },
+    {
+      "id": "p1-tile-kerb-v2",
+      "attempt": 1,
+      "status": "generated",
+      "sha256": "fdc51429b7485a090c43ef0ca33b20c653097a67b47ebef9d5fb2dc62220aef5",
+      "session_id": "0ebd6432-02b8-469b-875b-b6aea87077eb",
+      "batch": "p2-materials"
+    },
+    {
+      "id": "p1-tile-oil-v1",
+      "attempt": 1,
+      "status": "generated",
+      "sha256": "f191bfc605818bef032371ed6d7a7b0a3156ca9578f26619d7a80758d06c991d",
+      "session_id": "0ae1c774-4912-43ad-bea5-086baeb8f63b",
+      "batch": "p1-tiles"
+    },
+    {
+      "id": "p1-tile-oil-v2",
+      "attempt": 1,
+      "status": "generated",
+      "sha256": "67eebbd325659f4c2a302db79e074f2ab1438bf9f5abc3c50f432cdb2abe480e",
+      "session_id": "be1864ab-e3ca-4978-a91a-c0257cb76ec5",
+      "batch": "p2-materials"
+    },
+    {
+      "id": "p1-tile-oil-v3",
+      "attempt": 1,
+      "status": "generated",
+      "sha256": "739b04619911bf78e795d34de20e2fefb6856199cbe04836126c6d0dbea3475c",
+      "session_id": "17320ac0-e28e-40c0-ab80-ae16b6a2776f",
+      "batch": "p2-oil-final"
+    },
+    {
+      "id": "p3-generated-headings-v1",
+      "attempt": 1,
+      "status": "generated",
+      "sha256": "b5e0efeb99d2631d6460c1d161ccfdda0686753a493d1349ff44ec7fc0ce448b",
+      "session_id": "bc296d75-2fe6-4b93-ab01-8199d02d5da0",
+      "batch": "p3-generated-headings"
+    },
+    {
+      "id": "p3-method-conditioned-v1",
+      "attempt": 1,
+      "status": "generated",
+      "sha256": "45133cba17e94cfd2447c35aa0cba3daa3b3ea2f2c815b56afcbf643c57628ce",
+      "session_id": "28ccf1a3-d2b4-45a5-8385-d3c0843f7147",
+      "batch": "p3-method-conditioned"
+    },
+    {
+      "id": "p3-method-control-v1",
+      "attempt": 1,
+      "status": "generated",
+      "sha256": "499442be0c551fafdf09b024ac173fe9501b35b75d5619410617881ae3644719",
+      "session_id": "d26269a2-e2c2-4124-8254-29a725f9cc97",
+      "batch": "p3-method-control"
+    },
+    {
+      "id": "p3-ref-bastion-v1",
+      "attempt": 1,
+      "status": "generated",
+      "sha256": "e6dcb2828d638376aa183146eb4db5580f2bb436b7aa91d38f09981710896b58",
+      "session_id": "eed553c9-0a3c-41b0-9665-43e626713a9f",
+      "batch": "p3-references"
+    },
+    {
+      "id": "p3-ref-bulwark-v1",
+      "attempt": 1,
+      "status": "generated",
+      "sha256": "156fd98f289347e66d4c2fccdbaf9afc2556472eae266a91c843e88ecd48e2f6",
+      "session_id": "03ccf473-737d-46af-818b-a9da25c81156",
+      "batch": "p3-references"
+    },
+    {
+      "id": "p3-ref-comet-v1",
+      "attempt": 1,
+      "status": "generated",
+      "sha256": "2aee691f15a9dbec7f64b453f826567c79ae50b625a860a973856a9ba11e2e51",
+      "session_id": "d62d171b-b7f4-481d-906c-54b13cb275c3",
+      "batch": "p3-references"
+    },
+    {
+      "id": "p3-ref-flint-v1",
+      "attempt": 1,
+      "status": "generated",
+      "sha256": "ebef65e6a44e4a76f1180510bb004260bafbf544125d283548aed80eec2131b9",
+      "session_id": "c6373b04-3b21-4d99-bb12-8d0ec097d63b",
+      "batch": "p3-references"
+    },
+    {
+      "id": "p3-ref-kestrel-v1",
+      "attempt": 1,
+      "status": "generated",
+      "sha256": "6789a0f0fe35b7bf1066120478b4f16ca9a5264f9b4d9f5e3c4fce3022b3a796",
+      "session_id": "a9c9ff06-db26-4e5d-a392-3a91ffee05c8",
+      "batch": "p3-references"
+    },
+    {
+      "id": "p3-ref-kestrel-v1",
+      "attempt": 2,
+      "status": "generated",
+      "sha256": "11045626b6d39cb0b07b98caca58fe723a7f4673eafeb54509c356d089b93568",
+      "session_id": "36635bc3-05c0-487c-90a7-eb6d40b17310",
+      "batch": "p3-references"
+    },
+    {
+      "id": "p3-ref-line-v1",
+      "attempt": 1,
+      "status": "generated",
+      "sha256": "b0ee6f908cc5e573caf21e8be7fb28dc0f45e2cec1de0eb472b07b927b7c11d0",
+      "session_id": "e260c9ba-8edb-4a71-b712-077273e9a712",
+      "batch": "p3-references"
+    },
+    {
+      "id": "p3-ref-needle-v1",
+      "attempt": 1,
+      "status": "generated",
+      "sha256": "e0e1e56d6602e65b2a8efc8d47c7bd45975d536ac64e77761c20c04335284728",
+      "session_id": "e836f8da-fe3f-416b-832e-dfe33be8680d",
+      "batch": "p3-references"
+    },
+    {
+      "id": "p3-ref-needle-v1",
+      "attempt": 2,
+      "status": "generated",
+      "sha256": "cf77fc14308d1c6d69949279b44061d520e08d63f0bb55d51edffd76bb9df728",
+      "session_id": "5ca179ed-313a-47b3-ade9-b5c22361bfc9",
+      "batch": "p3-references"
+    },
+    {
+      "id": "p3-ref-quill-v1",
+      "attempt": 1,
+      "status": "generated",
+      "sha256": "c9cf8126fc57a686602bc7e7fa3f4c1e867c41b297a9ad9c9111dc723858b2b7",
+      "session_id": "97472f4c-e10a-4b69-aa63-a4d12356a958",
+      "batch": "p3-references"
+    },
+    {
+      "id": "p3-ref-trail-v1",
+      "attempt": 1,
+      "status": "generated",
+      "sha256": "61c6474a61f3f80a05d290b9688d4a8209e1d0bd0be0e8f305e5a2fa3f9d0219",
+      "session_id": "ed86a876-f266-40aa-880b-42e41e65a11a",
+      "batch": "p3-references"
+    },
+    {
+      "id": "p3-ref-vandal-v1",
+      "attempt": 1,
+      "status": "generated",
+      "sha256": "046df107f9e4661a1f0a8903e828eeb95bf1ea44abb304f11da2c6e859e756c7",
+      "session_id": "3a75fbd7-9c97-40ed-8156-10711f88089e",
+      "batch": "p3-references"
+    },
+    {
+      "id": "p4-backdrops-alpine-v1",
+      "attempt": 1,
+      "status": "generated",
+      "sha256": "bb729fd4262ff726ffd49f9306b88ba0971d86a9f8fb83bba1f99d79ea9d634b",
+      "session_id": "41266b29-f527-4ee1-9c93-7fbe38104fa3",
+      "batch": "p4-backdrops"
+    },
+    {
+      "id": "p4-backdrops-desert-v1",
+      "attempt": 1,
+      "status": "generated",
+      "sha256": "cf43ff929a0682f3d20daad8af90be604fc7cdf194d64d90ecbe49966d5282e7",
+      "session_id": "b5f9682d-d7fa-4529-a824-6f125cfe2cb9",
+      "batch": "p4-backdrops"
+    },
+    {
+      "id": "p4-backdrops-industrial-v1",
+      "attempt": 1,
+      "status": "generated",
+      "sha256": "6c2242cf16e26a17ed2154af8a3a5c338156628608b0bd2673fd849944335017",
+      "session_id": "e9dc505e-eaf9-44ff-ab2e-97e2cc178531",
+      "batch": "p4-backdrops"
+    },
+    {
+      "id": "p4-backdrops-industrial-v1",
+      "attempt": 2,
+      "status": "generated",
+      "sha256": "ff09a9804a81adb0f606ccfb38d039b36730f17b5277d8355b3c12165654eec0",
+      "session_id": "ffcda649-c38f-4be9-960b-7d63f94450ef",
+      "batch": "p4-backdrops"
+    },
+    {
+      "id": "p4-backdrops-quarry-v1",
+      "attempt": 1,
+      "status": "generated",
+      "sha256": "0cee7e004f5c5439c5ed856dc533174109594e1b888471b64fa50a8eb414ecb0",
+      "session_id": "d12bd6e1-c7dc-4c42-b886-70dc41f49584",
+      "batch": "p4-backdrops"
+    },
+    {
+      "id": "p4-backdrops-wetland-v1",
+      "attempt": 1,
+      "status": "generated",
+      "sha256": "73a6d8b58738d8a47d940a2cccf93976bbe50970d81bc0814b195c5dd5838a35",
+      "session_id": "4516e104-9059-4f70-a894-db99f38e79ed",
+      "batch": "p4-backdrops"
+    },
+    {
+      "id": "p4-barriers-concrete-corner-v1",
+      "attempt": 1,
+      "status": "generated",
+      "sha256": "935be500e61587dd8dd5bf9cbb90c58372bda34e7dd9a88bc09e3cc6f53b1b69",
+      "session_id": "695fcd94-5959-4a9d-8ed0-d9be48c106b7",
+      "batch": "p4-barriers"
+    },
+    {
+      "id": "p4-barriers-concrete-straight-v1",
+      "attempt": 1,
+      "status": "generated",
+      "sha256": "79f4096096438ac6421e673a54634153edc5ee6b8a3dba5884d20bdaea5fd32f",
+      "session_id": "c2f515c7-1f32-428b-ac2b-d16a178a51e2",
+      "batch": "p4-barriers"
+    },
+    {
+      "id": "p4-barriers-concrete-straight-v1",
+      "attempt": 2,
+      "status": "generated",
+      "sha256": "a5a4cee936893d580eff152f687be107d843d87b0d48223f81b5152fb88e7d5e",
+      "session_id": "aeed78a0-80e0-48ff-b92e-02c670cb8ecd",
+      "batch": "p4-barriers"
+    },
+    {
+      "id": "p4-barriers-hazard-corner-v1",
+      "attempt": 1,
+      "status": "generated",
+      "sha256": "5d1d98cffbbd3bd28447d1509f2c5c682b2fc807d336a77e7bfa042d7d25dcc9",
+      "session_id": "ec6c13d7-5a40-45e1-96dc-373b25ba61da",
+      "batch": "p4-barriers"
+    },
+    {
+      "id": "p4-barriers-hazard-corner-v1",
+      "attempt": 2,
+      "status": "generated",
+      "sha256": "b43ad9432624f7e4338a64d74970480003eeb51d831c68c791660cf1d25e94ed",
+      "session_id": "95cbde29-e37b-43b9-810e-ffaaa5103c51",
+      "batch": "p4-barriers"
+    },
+    {
+      "id": "p4-barriers-hazard-straight-v1",
+      "attempt": 1,
+      "status": "generated",
+      "sha256": "055042c53ea52e6fba70fe831979aa761de7d7dab25cb451709a879109905142",
+      "session_id": "41ffa64e-a6a6-4824-b613-f70422e60d3d",
+      "batch": "p4-barriers"
+    },
+    {
+      "id": "p4-barriers-metal-corner-v1",
+      "attempt": 1,
+      "status": "generated",
+      "sha256": "03551bd49c09ebb92135127b8be87db463bd64e40f558f9d3f8283526cce103c",
+      "session_id": "f69ec8cf-f15e-4352-b565-986fcda22371",
+      "batch": "p4-barriers"
+    },
+    {
+      "id": "p4-barriers-metal-corner-v1",
+      "attempt": 2,
+      "status": "generated",
+      "sha256": "c697d715ff022d52692db1fe324dd6f4527c1e8c8fef64933b0b102dc79643ad",
+      "session_id": "eaca52c9-22ac-40bc-8fdb-ef19a9fb5a6f",
+      "batch": "p4-barriers"
+    },
+    {
+      "id": "p4-barriers-metal-corner-v2",
+      "attempt": 1,
+      "status": "generated",
+      "sha256": "efef7984e8f0f0a7d37022b50ba59d1f4aacc8fd63841eb42324c5a55cdd48ad",
+      "session_id": "911e39c4-191e-4fc5-9799-15aed645969c",
+      "batch": "p4-barriers"
+    },
+    {
+      "id": "p4-barriers-metal-straight-v1",
+      "attempt": 1,
+      "status": "generated",
+      "sha256": "b8f9ad1e333874acc505bd6630c57a8c5a4b3fb186b216bd6fa2aaee38406d43",
+      "session_id": "6b7bfcb4-4ee0-4c1c-8a1c-93ecd78c4c67",
+      "batch": "p4-barriers"
+    },
+    {
+      "id": "p4-combat-icons-sabotage-v1",
+      "attempt": 1,
+      "status": "generated",
+      "sha256": "e702000774eb85d769d78fd3be2d422d034f714134844fbbca6c1c529fec9ad5",
+      "session_id": "e4cecc82-2ed2-4696-ab26-077c5cfa4744",
+      "batch": "p4-combat-icons"
+    },
+    {
+      "id": "p4-combat-icons-scatter-v1",
+      "attempt": 1,
+      "status": "generated",
+      "sha256": "e4381d675c8ed6f7fab9f2d2a272064c30bacdf85405f1166eae205861924d49",
+      "session_id": "f681e971-785f-4d4c-8450-fa2dd5a33903",
+      "batch": "p4-combat-icons"
+    },
+    {
+      "id": "p4-combat-icons-spikes-v1",
+      "attempt": 1,
+      "status": "generated",
+      "sha256": "17a38d682e24d14b533ddc792bc7201162a2643daf924bdd567ac49ec29e5935",
+      "session_id": "ad5de4f3-b935-4ea2-82cb-92c1f11573dc",
+      "batch": "p4-combat-icons"
+    },
+    {
+      "id": "p4-decals-cracks-v1",
+      "attempt": 1,
+      "status": "generated",
+      "sha256": "82311db1c156e522ad9a4d0b2c8799dac69e9e16614dca24565ed4f39285f21e",
+      "session_id": "92e45401-eab8-4303-942f-b8dd2455b797",
+      "batch": "p4-decals"
+    },
+    {
+      "id": "p4-decals-cracks-v1",
+      "attempt": 2,
+      "status": "generated",
+      "sha256": "94c29849993362a58ba7d89c25842149826edf4d4010d477d0b75300a298f838",
+      "session_id": "0cae56ee-c20d-4378-b33c-a664d0227291",
+      "batch": "p4-decals"
+    },
+    {
+      "id": "p4-decals-cracks-v2",
+      "attempt": 1,
+      "status": "generated",
+      "sha256": "f07a32d00cbe6f39908e1ddfdfcc43721c00b9f0cc7c8bc8ff2fa4aaf7802834",
+      "session_id": "70065a5b-3314-421f-b5d0-950a8e5ac1e5",
+      "batch": "p4-decals"
+    },
+    {
+      "id": "p4-decals-impact-v1",
+      "attempt": 1,
+      "status": "generated",
+      "sha256": "5b8fb8b17e468b4fab4b4bd7089fb0b2e0cdc83c876ec388e57c70884deda8aa",
+      "session_id": "7c1a0f17-2c6e-4234-9293-8d38a12c1109",
+      "batch": "p4-decals"
+    },
+    {
+      "id": "p4-decals-impact-v1",
+      "attempt": 2,
+      "status": "generated",
+      "sha256": "72809b72b0e4c427a2dd3a26431f39303d7857251f812d3c9319547aea2a5ac4",
+      "session_id": "d8fce200-93ec-4ed9-af96-54b82ed228bf",
+      "batch": "p4-decals"
+    },
+    {
+      "id": "p4-decals-oil-v1",
+      "attempt": 1,
+      "status": "generated",
+      "sha256": "b4a1edbcc27d8a308959cbf39f87ceba4befd5fa9c421afa7e7ffe17afd4c73c",
+      "session_id": "b61d3b53-dd58-41bd-85dd-1bdc5d9c15a1",
+      "batch": "p4-decals"
+    },
+    {
+      "id": "p4-decals-scorch-v1",
+      "attempt": 1,
+      "status": "generated",
+      "sha256": "43737c9c0e55c905ab10be0c303f0dd8e4b8049866c7acf762a1bcce8797bffb",
+      "session_id": "dd26243f-d50b-4074-99e3-7dab5a7ed15e",
+      "batch": "p4-decals"
+    },
+    {
+      "id": "p4-decals-skid-v1",
+      "attempt": 1,
+      "status": "generated",
+      "sha256": "d18b28ec3f22a32a724043eeb60e30cc9f0137b750e061eebadfa1691eff0f74",
+      "session_id": "21674fc2-4a7f-44fe-80b7-02801cbcbfc4",
+      "batch": "p4-decals"
+    },
+    {
+      "id": "p4-decals-skid-v1",
+      "attempt": 2,
+      "status": "generated",
+      "sha256": "8801331db959b0ca45d8bc7ed2795457f1f7a669ab5f97fc6bf0d0676f352122",
+      "session_id": "f1a37781-db57-412e-85a8-827fd7d7dca5",
+      "batch": "p4-decals"
+    },
+    {
+      "id": "p4-effects-explosion-v1",
+      "attempt": 1,
+      "status": "generated",
+      "sha256": "5134f4293792c335856a7eda6229d97b0b83d824180cb72d196c781a8c698d9c",
+      "session_id": "aea3866c-5e56-4ec5-bae1-8f1a54ef4cf3",
+      "batch": "p4-effects"
+    },
+    {
+      "id": "p4-effects-explosion-v1",
+      "attempt": 2,
+      "status": "generated",
+      "sha256": "90248893828ba312f5310356b7b19dc450fd12bd22668af6a1719b6f96ac2b5e",
+      "session_id": "93137037-e747-4449-a5a6-255eca477c5d",
+      "batch": "p4-effects"
+    },
+    {
+      "id": "p4-effects-explosion-v2",
+      "attempt": 1,
+      "status": "generated",
+      "sha256": "a99b015554806bb7ac3254f6fa2aea5527916f9c188ab2a8e78a448edbf832c7",
+      "session_id": "3094c441-ae03-4d61-9b1e-1683036cb16b",
+      "batch": "p4-effects"
+    },
+    {
+      "id": "p4-effects-fire-v1",
+      "attempt": 1,
+      "status": "generated",
+      "sha256": "86b1a803a59b3f6314a37f124106dcd1b4f4d47f2d19880d25cd5d93ead649fc",
+      "session_id": "ea578831-9006-4ea4-8ada-33c0b98735ed",
+      "batch": "p4-effects"
+    },
+    {
+      "id": "p4-effects-fire-v1",
+      "attempt": 2,
+      "status": "generated",
+      "sha256": "001b84a4b9d3b7b6837370d90d091107d605f79fa668229e4ac79500a0560e03",
+      "session_id": "a55bf071-7e0e-432f-82c2-5d5c1ab99b09",
+      "batch": "p4-effects"
+    },
+    {
+      "id": "p4-effects-muzzle-v1",
+      "attempt": 1,
+      "status": "generated",
+      "sha256": "48a770e0a4b1329bce2125dd92c9d48d7531d2b536298e27758b780d3c1b2d6c",
+      "session_id": "e5eebec1-d991-4051-810f-f1f2e3bd985e",
+      "batch": "p4-effects"
+    },
+    {
+      "id": "p4-effects-muzzle-v1",
+      "attempt": 2,
+      "status": "generated",
+      "sha256": "abaa6550636deba05ec14e2e00603e08bd69ee43f3ff4629f7d16ee1583f48ca",
+      "session_id": "7089f232-1fcc-440d-99cc-52a3f2928214",
+      "batch": "p4-effects"
+    },
+    {
+      "id": "p4-effects-muzzle-v1",
+      "attempt": 3,
+      "status": "generated",
+      "sha256": "c9237537b3bfb7d3bb231014c654c91b3c3602b1b159e969bb398db1928911b7",
+      "session_id": "047c32a3-7317-43f8-8c3d-17e675a5b56c",
+      "batch": "p4-effects"
+    },
+    {
+      "id": "p4-effects-smoke-v1",
+      "attempt": 1,
+      "status": "generated",
+      "sha256": "c15939f08f39f0a9b1dc139bda4dc3bb8d5b228a8e4c4129a1e0127e0e619662",
+      "session_id": "7d34f6bd-41c8-4e39-8275-3129408b2e6d",
+      "batch": "p4-effects"
+    },
+    {
+      "id": "p4-effects-smoke-v1",
+      "attempt": 2,
+      "status": "generated",
+      "sha256": "2e8dbe8edaca68749d38ed3506c98e5cb515e6b56b6d80202b3df8c6e82a2b4d",
+      "session_id": "9c77b125-385b-489e-920f-2eaafff42630",
+      "batch": "p4-effects"
+    },
+    {
+      "id": "p4-effects-sparks-v1",
+      "attempt": 1,
+      "status": "generated",
+      "sha256": "1444a208e3246890c93332c1b7c3f92325355ac7251ea727122d3c309f7d5a88",
+      "session_id": "f8a8a605-737b-463c-903f-da4f91ab52e2",
+      "batch": "p4-effects"
+    },
+    {
+      "id": "p4-hud-frame-health-v1",
+      "attempt": 1,
+      "status": "generated",
+      "sha256": "7b4038a64b00975f68c93bfc9a4f1f29175e7608260125ca4df243ac615dcdba",
+      "session_id": "a1899fd2-53df-4a1b-89e3-cc5a687d24cb",
+      "batch": "p4-hud"
+    },
+    {
+      "id": "p4-hud-frame-panel-v1",
+      "attempt": 1,
+      "status": "generated",
+      "sha256": "110469ec855e0fdf2436d902e10f3325faec94a0579eda507efc7506b7d0c876",
+      "session_id": "eb1297db-49a7-4786-b34d-3fb0af5c1782",
+      "batch": "p4-hud"
+    },
+    {
+      "id": "p4-hud-frame-turbo-v1",
+      "attempt": 1,
+      "status": "generated",
+      "sha256": "e0d2da710ab50001a22e1aa18b97f1f04f448a084582b6d99d289b161b354895",
+      "session_id": "76abf9f7-9500-4bf8-a4a5-d46944fbc100",
+      "batch": "p4-hud"
+    },
+    {
+      "id": "p4-hud-icon-armour-v1",
+      "attempt": 1,
+      "status": "generated",
+      "sha256": "ccbc33f69fe5abe14f974e2ef0bc658d8c88b09cd49a5b802c9d1856b376f198",
+      "session_id": "3f055250-c485-4466-b1ad-fd0b88bf3bfc",
+      "batch": "p4-hud"
+    },
+    {
+      "id": "p4-hud-icon-engine-v1",
+      "attempt": 1,
+      "status": "generated",
+      "sha256": "674f8052d2951f48dec3972e2ea8faccf353e81a4e0cba049b773ffec2f43d1d",
+      "session_id": "d25bbaba-b559-439f-80a4-ecccb575ba5b",
+      "batch": "p4-hud"
+    },
+    {
+      "id": "p4-hud-icon-fuel-v1",
+      "attempt": 1,
+      "status": "generated",
+      "sha256": "e8b3db8f6ffeddb27052db61ad6ab4568f36efe8b05c9bf23f6f593133544a1c",
+      "session_id": "0ae4c2e1-9fdb-4c13-b278-69c12c790349",
+      "batch": "p4-hud"
+    },
+    {
+      "id": "p4-hud-icon-handling-v1",
+      "attempt": 1,
+      "status": "generated",
+      "sha256": "8986498b8058ce359ed083f5542ad8d8cb08d00dbac93c9096625127721dd470",
+      "session_id": "95ea77a8-f4e5-4a76-88a7-cd9daec817b4",
+      "batch": "p4-hud"
+    },
+    {
+      "id": "p4-hud-icon-heavy-gun-v1",
+      "attempt": 1,
+      "status": "generated",
+      "sha256": "ca73589080849e02c8529faccbbc724724355bdc1f097f69b21247eb965a4727",
+      "session_id": "d608d0ea-7186-4676-9476-ae400a3da99b",
+      "batch": "p4-hud"
+    },
+    {
+      "id": "p4-hud-icon-light-gun-v1",
+      "attempt": 1,
+      "status": "generated",
+      "sha256": "1fabf469b18f1d4a5f6c6632cdaa26dceb6147df60ac443c0256dda0a275d3d7",
+      "session_id": "9b4bf37c-df5e-4c4c-92f5-a94e6f6136ef",
+      "batch": "p4-hud"
+    },
+    {
+      "id": "p4-landmarks-gantry-v1",
+      "attempt": 1,
+      "status": "generated",
+      "sha256": "3cf570caa0f5c32906216220e1b2115202310a41d8895cd44260b6b8eb7eca35",
+      "session_id": "8c71c977-bf89-4fa0-80a2-e9666022d643",
+      "batch": "p4-landmarks"
+    },
+    {
+      "id": "p4-landmarks-gantry-v1",
+      "attempt": 2,
+      "status": "generated",
+      "sha256": "46d4bfa1c6d03492e3de9ca8370f9183e827d334e55453839b794351f912bf55",
+      "session_id": "b26f3bff-607b-4020-961c-ff3461e7a599",
+      "batch": "p4-landmarks"
+    },
+    {
+      "id": "p4-landmarks-sluice-v1",
+      "attempt": 1,
+      "status": "generated",
+      "sha256": "665defaeb49ccb43c740a4cddfed79c682d66922a3af386429b31422050cee68",
+      "session_id": "2f6709be-b038-4481-a25b-5fa6f1dd0963",
+      "batch": "p4-landmarks"
+    },
+    {
+      "id": "p4-landmarks-sluice-v1",
+      "attempt": 2,
+      "status": "generated",
+      "sha256": "799d6f280ed13862610b275c3fbf6dbd21fca246dcf6dfe5b4883da6c6299404",
+      "session_id": "dd9531f9-2f53-4b2b-b0de-fb0dae49d85b",
+      "batch": "p4-landmarks"
+    },
+    {
+      "id": "p4-landmarks-snow-pole-v1",
+      "attempt": 1,
+      "status": "generated",
+      "sha256": "246e8a237e864ecb9512c10d8b7c2fdf75cb52766aa3987d0b64cc4fac4480af",
+      "session_id": "05060b56-f019-4b87-a01a-8e68709df591",
+      "batch": "p4-landmarks"
+    },
+    {
+      "id": "p4-landmarks-split-marker-v1",
+      "attempt": 1,
+      "status": "generated",
+      "sha256": "2cdc3d0f79711a9b499c8a6ce72b6725f32caf4f911be190576be37c4a02f2d6",
+      "session_id": "ff6e1741-d250-416c-9437-d3cd1b2ce894",
+      "batch": "p4-landmarks"
+    },
+    {
+      "id": "p4-landmarks-stone-stack-v1",
+      "attempt": 1,
+      "status": "generated",
+      "sha256": "7157d647ace58b43ed5db368e931b5be3e67d4f9c15db9765ca1aa56fd9c1717",
+      "session_id": "1a30606f-d389-444f-8f40-f74d4e7ecb4a",
+      "batch": "p4-landmarks"
+    },
+    {
+      "id": "p4-landmarks-sun-sign-v1",
+      "attempt": 1,
+      "status": "generated",
+      "sha256": "15b6762d3b640c8c711c6f585d12682b26bbd7118ee2124ae6491aa9944b5a00",
+      "session_id": "db1444fa-cd75-4b37-b21f-89314bd4ee80",
+      "batch": "p4-landmarks"
+    },
+    {
+      "id": "p4-pickups-ammo-v1",
+      "attempt": 1,
+      "status": "generated",
+      "sha256": "4762d208bf56bbb96b4f4914fe3ae9f3f12866edf67bf9c215094f79d12fee73",
+      "session_id": "8ee0ab9b-80ed-42d1-824c-4a9cba6fcfd3",
+      "batch": "p4-pickups"
+    },
+    {
+      "id": "p4-pickups-ammo-v1",
+      "attempt": 2,
+      "status": "generated",
+      "sha256": "deda09b89aaa6e857193623f13e08c7f4f61f905a85ad019103626b771a656f2",
+      "session_id": "3902393a-44e7-4f15-9912-ae40e7efa736",
+      "batch": "p4-pickups"
+    },
+    {
+      "id": "p4-pickups-ammo-v2",
+      "attempt": 1,
+      "status": "generated",
+      "sha256": "00014e33758064f030de17eecbdad65b443e516b6bb313988ac23a0204329c12",
+      "session_id": "607b6af6-9c92-4576-a6b7-8856f1c4d65f",
+      "batch": "p4-pickups"
+    },
+    {
+      "id": "p4-pickups-cash-v1",
+      "attempt": 1,
+      "status": "generated",
+      "sha256": "2b1f2f62cdfad67394998514c4428a1609ea33ddaac00ac8de643764bf6dfbbb",
+      "session_id": "917b1056-ecfe-444a-8466-30fe77640e75",
+      "batch": "p4-pickups"
+    },
+    {
+      "id": "p4-pickups-mine-v1",
+      "attempt": 1,
+      "status": "generated",
+      "sha256": "22797393c6130e01063303eebc285834b1da2a769907cc904a8631e03cf49b0e",
+      "session_id": "0503f9c4-9c9e-4f92-a9e3-cb2a18f59ada",
+      "batch": "p4-pickups"
+    },
+    {
+      "id": "p4-pickups-repair-v1",
+      "attempt": 1,
+      "status": "generated",
+      "sha256": "1c2766ee544adf707a9d47ed4683ff4d61daf01115f6d2bc78fdd48ee0c08410",
+      "session_id": "aec65892-de9b-4904-b3fb-6b858a4044cc",
+      "batch": "p4-pickups"
+    },
+    {
+      "id": "p4-pickups-turbo-v1",
+      "attempt": 1,
+      "status": "generated",
+      "sha256": "1570277eff15b9380dd0bc8a227e9ed549fb79e3f308aa7656f8056eff9ef552",
+      "session_id": "28c13a00-9847-454b-8504-4bbaaca30e99",
+      "batch": "p4-pickups"
+    },
+    {
+      "id": "p4-pickups-turbo-v1",
+      "attempt": 2,
+      "status": "generated",
+      "sha256": "191fdf566b95e2747be7e148f81cd0d688c98c892eb2fc90ac4e31e34752f8df",
+      "session_id": "07e0cadd-16e2-4eda-8358-16687c993413",
+      "batch": "p4-pickups"
+    },
+    {
+      "id": "p4-pickups-turbo-v2",
+      "attempt": 1,
+      "status": "generated",
+      "sha256": "dfbf388984e0b96f286bb6dcf057d4e34dc9c77feb049975156fe51cc3753a35",
+      "session_id": "07c9f978-471b-4c4b-ad69-ecca4bbda3b3",
+      "batch": "p4-pickups"
+    },
+    {
+      "id": "p4-portraits-marrow-v1",
+      "attempt": 1,
+      "status": "generated",
+      "sha256": "f687a40094116f69ed9741639e8b30bd58cb6a90b9343fc21ce4e17f8824585c",
+      "session_id": "45763e8d-13c4-4e1e-b8e8-b78f1fc04ee8",
+      "batch": "p4-c4-preview"
+    },
+    {
+      "id": "p4-portraits-marrow-v1",
+      "attempt": 2,
+      "status": "generated",
+      "sha256": "02b0a7bf76079bccf4ff639b1b0cf76e5b0ef630db7a48279b29a513ee95290f",
+      "session_id": "5f90bbb3-e40a-469a-95ba-0cd2e717ca57",
+      "batch": "p4-c4-preview"
+    },
+    {
+      "id": "p4-portraits-mica-v1",
+      "attempt": 1,
+      "status": "generated",
+      "sha256": "fcfe0814026d0be13f478df8850dc74a8080cfc51c084867ebd03d4671e6e0c4",
+      "session_id": "6593ce56-9752-4164-b94e-cb3177e6f6e8",
+      "batch": "p4-portraits"
+    },
+    {
+      "id": "p4-portraits-ox-v1",
+      "attempt": 1,
+      "status": "generated",
+      "sha256": "442eddcb0e74d5183854fa89ec72184307c993d49c5e99f366cc3fd459804976",
+      "session_id": "e500f6c5-b31d-4ded-b3e7-3e7eab5bdf61",
+      "batch": "p4-portraits"
+    },
+    {
+      "id": "p4-portraits-relay-v1",
+      "attempt": 1,
+      "status": "generated",
+      "sha256": "21519d3b71849a5c65e63fc3731155530cfa30123bde7a05d10c87bc2f8554cc",
+      "session_id": "63bd49fc-715a-4580-88ce-4384fcf7ccc4",
+      "batch": "p4-portraits"
+    },
+    {
+      "id": "p4-portraits-rook-v1",
+      "attempt": 1,
+      "status": "generated",
+      "sha256": "72e1e08273e1be30ef2b4b7d7336463b9557b4591a485eb6dc5db1114d47012f",
+      "session_id": "de285c82-08a5-4c9b-97da-0eb646cc7053",
+      "batch": "p4-portraits"
+    },
+    {
+      "id": "p4-portraits-rook-v1",
+      "attempt": 2,
+      "status": "generated",
+      "sha256": "f2866f91f192b27f2398654b70968f409664e57eed3457e6abfd4c2c33b2f120",
+      "session_id": "cf83f840-0497-4ab7-9424-5408a560c1c6",
+      "batch": "p4-portraits"
+    },
+    {
+      "id": "p4-portraits-vex-v1",
+      "attempt": 1,
+      "status": "generated",
+      "sha256": "a132375826747671d7a4c5a59472004a63f8f7492e8dcdb4bd30f225d2cd21ab",
+      "session_id": "58d061be-30a2-4207-80af-30567b857348",
+      "batch": "p4-portraits"
+    },
+    {
+      "id": "p4-portraits-vex-v1",
+      "attempt": 2,
+      "status": "generated",
+      "sha256": "9411df07e6d5f91040720b1a7894d86576a3d7a5ac07b9a969d01c60b3ecc42d",
+      "session_id": "ae63ca80-9dc6-4ca4-924a-de0a70ae8e81",
+      "batch": "p4-portraits"
+    },
+    {
+      "id": "p4-props-cone-v1",
+      "attempt": 1,
+      "status": "generated",
+      "sha256": "254845f9cabffb819b0f787b465fab9b8633f87f5cad9f42580dd26401125ff2",
+      "session_id": "98495caf-b0ce-4fa2-9ec7-476ee7717eca",
+      "batch": "p4-props"
+    },
+    {
+      "id": "p4-props-cone-v1",
+      "attempt": 2,
+      "status": "generated",
+      "sha256": "d7b289c6b51c0ce954a1293d71ff343f533619579745ef023c5e22f2af3fac85",
+      "session_id": "8aaf9110-7984-4879-88f7-da77474f8376",
+      "batch": "p4-props"
+    },
+    {
+      "id": "p4-props-crate-metal-v1",
+      "attempt": 1,
+      "status": "generated",
+      "sha256": "2f6ecd1edbe9fdb7841475970c5f3da13684c1dc45dd77edfce6fa6cfebe5a73",
+      "session_id": "8f5ead46-1317-4ccb-9904-0f1fe4b8d99b",
+      "batch": "p4-props"
+    },
+    {
+      "id": "p4-props-crate-v1",
+      "attempt": 1,
+      "status": "generated",
+      "sha256": "3c653fb0754bb49412696d2449e3927f7b50333e032d5bc2d20f2f5e2e06e288",
+      "session_id": "3b648679-b723-49ec-82e3-977746df8741",
+      "batch": "p4-props"
+    },
+    {
+      "id": "p4-props-drum-red-v1",
+      "attempt": 1,
+      "status": "generated",
+      "sha256": "f8b11005bc7779f1f5f1404faebdaed0d841992af038f80557e440641af9581c",
+      "session_id": "18ab4ed5-7a8c-4f06-b8c7-3ce91449527f",
+      "batch": "p4-props"
+    },
+    {
+      "id": "p4-props-drum-v1",
+      "attempt": 1,
+      "status": "generated",
+      "sha256": "878edf356770284a3b1f1ac28659db38de1e33f7e33842d0e4ba86337171b181",
+      "session_id": "17fc7132-a92c-44a2-be90-61191f065df0",
+      "batch": "p4-props"
+    },
+    {
+      "id": "p4-props-sign-v1",
+      "attempt": 1,
+      "status": "generated",
+      "sha256": "72a1c05c9d930884360f435d092f44cdc0620375c524e52f9d6af0e1d54f9df8",
+      "session_id": "8e60ade1-58ee-4bca-9ab7-129529dfdc71",
+      "batch": "p4-props"
+    },
+    {
+      "id": "p4-props-tyres-scattered-v1",
+      "attempt": 1,
+      "status": "generated",
+      "sha256": "9fa9f4d296546791297ef8312ec05e595f10e6dd251678a2abb98eb622344ba4",
+      "session_id": "85a0eff4-c969-4426-aca3-eb13464212cb",
+      "batch": "p4-props"
+    },
+    {
+      "id": "p4-props-tyres-scattered-v1",
+      "attempt": 2,
+      "status": "generated",
+      "sha256": "e930b0ad5fd82e390104bbe88ed05b57f0ed5ae607e180f92edb79c867f70e1e",
+      "session_id": "a5587926-9923-4930-87fd-40f41b5d4ccb",
+      "batch": "p4-props"
+    },
+    {
+      "id": "p4-props-tyres-v1",
+      "attempt": 1,
+      "status": "generated",
+      "sha256": "cc7dad1c1a22c23d76553c499937a03bafba328139575ac71e26c5fe6562e4ea",
+      "session_id": "805b927b-e9db-40d9-b19c-e702f9bffe0c",
+      "batch": "p4-props"
+    },
+    {
+      "id": "p4-props-tyres-v1",
+      "attempt": 2,
+      "status": "generated",
+      "sha256": "6fef5477e96ab95cd4e6ddec869bf96c0cfb032d03cf5814c692eef142a01e52",
+      "session_id": "88738ca9-a7d9-44b0-9c67-9fab6534a126",
+      "batch": "p4-props"
+    },
+    {
+      "id": "p4-tiles-asphalt-heavy-v1",
+      "attempt": 1,
+      "status": "generated",
+      "sha256": "ffe4f4b8ce01ab3f512a591de2d4a548474a0d19a1f8e9364bd1f7f2b069d346",
+      "session_id": "0b093dda-1ef8-40b1-98b6-77b005c42cf8",
+      "batch": "p4-tiles"
+    },
+    {
+      "id": "p4-tiles-asphalt-worn-v1",
+      "attempt": 1,
+      "status": "generated",
+      "sha256": "79ea1aa29bafef44335ef74d1131197287e3f48ed6c0e588251a57d28ff1fdc1",
+      "session_id": "68cd3c3a-f99b-4d0e-8173-a56ec2eebc76",
+      "batch": "p4-tiles"
+    },
+    {
+      "id": "p4-tiles-concrete-v1",
+      "attempt": 1,
+      "status": "generated",
+      "sha256": "63d36c6970d1cb545fd55630d4d1469a4bf6ffaee44fae142e87d4040a338ecc",
+      "session_id": "3e3a3fc4-f245-4e0f-a48b-990bbec64a44",
+      "batch": "p4-tiles"
+    },
+    {
+      "id": "p4-tiles-dirt-v1",
+      "attempt": 1,
+      "status": "generated",
+      "sha256": "eff913d3f1a82b84d1534d18f0a04577ece09dbc487df10c68f7dae18beb7ea4",
+      "session_id": "6980c8fc-ec44-4e51-832c-c7eac4b2a07d",
+      "batch": "p4-tiles"
+    },
+    {
+      "id": "p4-tiles-grass-v1",
+      "attempt": 1,
+      "status": "generated",
+      "sha256": "13d3019bbe17fbf5adf990240bbf309fd193dd6627c082333bfd91595946cc09",
+      "session_id": "2c965ae0-b368-467a-9c1b-3fe37bfae7ec",
+      "batch": "p4-tiles"
+    },
+    {
+      "id": "p4-tiles-metal-v1",
+      "attempt": 1,
+      "status": "generated",
+      "sha256": "a4d8d3ae1fb790b8c50d2dea1596caed4ebc2b950630423a09d2ca9ee8bab505",
+      "session_id": "e1fe8997-cb26-4cdd-a29a-6d42d9803fe7",
+      "batch": "p4-tiles"
+    }
+  ],
+  "selection_counts": {
+    "technical-accepted": 69,
+    "superseded-by-measured-wrap": 2,
+    "rejected-visual": 2
+  },
+  "bundle_validation": {
+    "status": "pass",
+    "atlas_groups": [
+      "autotile-barrier",
+      "autotile-track-edge",
+      "ui",
+      "world"
+    ],
+    "regions": 172,
+    "logical_assets": 69,
+    "tile_pages": 11,
+    "theme_pages": 5,
+    "content_coverage": {
+      "rivals": 5,
+      "track-themes": 5,
+      "weapons": 4,
+      "consumables": 4,
+      "provisional_rivals": 1
+    },
+    "resident_mib_with_car_reserve": 30.75,
+    "scope": "PNG, hash, packing, content ID coverage, 47-case art, 256-mask resolver, six-frame durations and declared residency; no renderer/gameplay/owner claim"
+  },
+  "content_captured_commit": "e1640f0331a426489dad56a2a51f6b4eacf566e4",
+  "content_latest_commit_at_audit": "e1640f0331a426489dad56a2a51f6b4eacf566e4",
+  "content_hash_comparisons": {
+    "rivals": {
+      "captured_sha256": "7d88adab42262bb1ca7b333af496e50db823a43baf3bbf58a6629e2382a0c3fe",
+      "current_sha256": "7d88adab42262bb1ca7b333af496e50db823a43baf3bbf58a6629e2382a0c3fe",
+      "unchanged": true
+    },
+    "tracks": {
+      "captured_sha256": "51128ada6e73c6b97dde98276dde75ce86511f5510a337d6b10ede0c8891575c",
+      "current_sha256": "51128ada6e73c6b97dde98276dde75ce86511f5510a337d6b10ede0c8891575c",
+      "unchanged": true
+    },
+    "track-themes": {
+      "captured_sha256": "22b6d0d281c94685d49028f4fb0d8027c1ddea3f99c44f94770461f6c479f2e9",
+      "current_sha256": "22b6d0d281c94685d49028f4fb0d8027c1ddea3f99c44f94770461f6c479f2e9",
+      "unchanged": true
+    },
+    "weapons": {
+      "captured_sha256": "77405ce9bde4d8bf6d3f82442c9c91eec952728189a635d06ecf3ba448139a80",
+      "current_sha256": "77405ce9bde4d8bf6d3f82442c9c91eec952728189a635d06ecf3ba448139a80",
+      "unchanged": true
+    },
+    "consumables": {
+      "captured_sha256": "1e071069715ecd61063ec5d14df06454369e5bdffeed4479b298b655edd3d1be",
+      "current_sha256": "1e071069715ecd61063ec5d14df06454369e5bdffeed4479b298b655edd3d1be",
+      "unchanged": true
+    }
+  },
+  "open_gates": [
+    "Owner approval of ten exact car references before 40 state and 30 livery jobs",
+    "Human-labelled calibration of the 30-image diagnostic",
+    "Reconcile provisional Marrow portrait with committed C4 IDs",
+    "I1 asset loading, renderer integration, fallback and retirement of old oversized scenery target",
+    "I2 full-game texture/frame budget and Stick soak",
+    "G2 owner quality and feel"
+  ],
+  "no_push": true
+}

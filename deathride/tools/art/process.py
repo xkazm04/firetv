@@ -19,9 +19,18 @@ def key_image(image, cfg=None):
     border=np.concatenate((rgb[0],rgb[-1],rgb[:,0],rgb[:,-1]))
     key=np.median(border,axis=0)
     magenta=(min(key[0],key[2])-key[1])>cfg['magenta_chroma_min']
+    chroma=np.minimum(rgb[:,:,0],rgb[:,:,2])-rgb[:,:,1]
+    dominant_magenta=(chroma>cfg['magenta_chroma_min'])&(rgb[:,:,0]>90)&(rgb[:,:,2]>65)
+    # Sheets sometimes have white exterior gutters around magenta cells. Detect the
+    # large key field independently, preserving enclosed ivory effect highlights.
+    mixed_key=not magenta and dominant_magenta.mean()>.1
+    magenta=magenta or mixed_key
     if magenta:
-        chroma=np.minimum(rgb[:,:,0],rgb[:,:,2])-rgb[:,:,1]
-        bg=(chroma>cfg['magenta_chroma_min'])&(rgb[:,:,0]>90)&(rgb[:,:,2]>65)
+        bg=dominant_magenta
+        if mixed_key:
+            near=np.linalg.norm(rgb-key,axis=2)<cfg['neutral_key_distance']
+            seed=np.zeros(near.shape,bool);seed[[0,-1],:]=near[[0,-1],:];seed[:,[0,-1]]=near[:,[0,-1]]
+            bg|=ndimage.binary_propagation(seed,mask=near)
     else:
         near=np.linalg.norm(rgb-key,axis=2)<cfg['neutral_key_distance']
         seed=np.zeros(near.shape,bool)
@@ -42,7 +51,7 @@ def key_image(image, cfg=None):
         if magenta:
             contaminated=fringe&((rgb[:,:,0]+rgb[:,:,2])/2-rgb[:,:,1]>25)
             rgba[contaminated,:3]=rgba[indices[0][contaminated],indices[1][contaminated],:3]
-    return Image.fromarray(rgba), {'estimated_key_rgb':key.tolist(),'magenta_key':bool(magenta),'components':int(sum(keep))}
+    return Image.fromarray(rgba), {'estimated_key_rgb':key.tolist(),'magenta_key':bool(magenta),'mixed_border_key':bool(mixed_key),'components':int(sum(keep))}
 
 def sprite_metrics(image, shape=None, cfg=None):
     cfg=cfg or policy(); alpha=np.asarray(image.convert('RGBA'))[:,:,3]>0
@@ -136,10 +145,24 @@ def shapes():
 def process_one(row,path,output_dir):
     cfg=policy();style=read_json(ART/'style.json');output_dir=Path(output_dir);output_dir.mkdir(parents=True,exist_ok=True)
     record={'id':row['id'],'class':row['class'],'kind':row['kind'],'source':str(Path(path).resolve()),'source_sha256':sha(path),'gate_version':cfg['version'],'gates_hash':digest(cfg),'brief':row,'verdict':'owner-review','codes':[]}
+    record['processor_sources']={'process.py':sha(Path(__file__))}
+    if row['kind']=='sheet':record['processor_sources']['animation.py']=sha(Path(__file__).with_name('animation.py'))
     with Image.open(path) as source:
         source=source.copy()
     size_codes=['SOURCE_SIZE_BAND'] if min(source.size)<cfg['source_min_edge_px'] or max(source.size)>cfg['source_max_edge_px'] else []
-    if row['kind']=='tile':
+    if row['kind']=='backdrop':
+        out=source.convert('RGBA').resize((1024,1024),Image.Resampling.LANCZOS)
+        record['metrics']={'source_size_px':list(source.size),'export_size_px':list(out.size)}
+    elif row['kind']=='sheet' and (ART/'animation.json').exists() and row['class'] in read_json(ART/'animation.json').get('effects',{}):
+        from animation import split_sheet,remove_cell_backgrounds
+        keyed,keydata=key_image(source,cfg)
+        spec=read_json(ART/'animation.json')['effects'][row['class']]
+        keyed,keydata['secondary_cell_keys_rgb']=remove_cell_backgrounds(source,keyed,spec)
+        record['frames'],record['codes']=split_sheet(keyed,spec,output_dir,row['id'])
+        record['metrics']={**keydata,'frame_count':len(record['frames']),'source_size_px':list(source.size)}
+        record['animation']=spec
+        out=keyed.resize((512,512),Image.Resampling.LANCZOS)
+    elif row['kind']=='tile':
         record['raw_metrics']=tile_metrics(source,cfg)
         record['raw_codes']=tile_codes(record['raw_metrics'],row['class'],cfg)
         out=source.convert('RGBA').resize((cfg['tile_size_px'],)*2,Image.Resampling.LANCZOS)
@@ -161,11 +184,21 @@ def process_one(row,path,output_dir):
         record['metrics']=metrics;record['codes']+=codes
         if metrics.get('palette_p90_delta_e') is not None and metrics['palette_p90_delta_e']>cfg['palette_p90_delta_e']: record['codes'].append('PALETTE_DRIFT')
         if keyed.getbbox():
-            out,record['placement']=normalize(keyed,style,shape,int(row.get('cell_limit') or 128))
+            limit=int(row.get('cell_limit') or 128)
+            if (ART/'export.json').exists():limit=read_json(ART/'export.json')['cell_limit_by_id'].get(row['id'],limit)
+            out,record['placement']=normalize(keyed,style,shape,limit)
+            record['placement']['export_cell_limit_px']=limit
         else: out=keyed
         a=np.asarray(out)[:,:,3]
         if a[0].any() or a[-1].any() or a[:,0].any() or a[:,-1].any(): record['codes'].append('ALPHA_BORDER')
     target=output_dir/(row['id']+'.png');out.save(target)
+    if row['class'].startswith('frame-') and row['batch']=='p4-hud':
+        solid=np.asarray(out)[:,:,3]>10
+        holes=ndimage.binary_fill_holes(solid)&~solid;labels,count=ndimage.label(holes)
+        if count:
+            sizes=np.bincount(labels.ravel());sizes[0]=0;ys,xs=np.where(labels==sizes.argmax())
+            record['hud_interior_px']=[int(xs.min()),int(ys.min()),int(xs.max()+1),int(ys.max()+1)]
+        else:record['codes'].append('HUD_INTERIOR_NOT_TRANSPARENT')
     record['codes']+=size_codes
     record['path']=str(target.resolve());record['sha256']=sha(target)
     if record['codes']: record['verdict']='reject'
@@ -177,10 +210,10 @@ def run(rows,batch):
     for row in rows:
         found=candidates(row)
         if not found:
-            reports.append({'id':row['id'],'verdict':'unmeasured','codes':['SOURCE_MISSING']});continue
+            reports.append({'id':row['id'],'class':row['class'],'kind':row['kind'],'brief':row,'source':None,'verdict':'unmeasured','codes':['SOURCE_MISSING']});continue
         result=read_json(found[-1])
         if result['status']!='generated' or not Path(result['image']).is_file() or sha(result['image'])!=result['sha256']:
-            reports.append({'id':row['id'],'verdict':'unmeasured','codes':['SOURCE_INVALID']});continue
+            reports.append({'id':row['id'],'class':row['class'],'kind':row['kind'],'brief':row,'source':None,'verdict':'unmeasured','codes':['SOURCE_INVALID']});continue
         reports.append(process_one(row,result['image'],ART/'processed'/batch))
     write_json(ART/'reports'/(batch+'-deterministic.json'),reports)
     make_contact_sheet(reports,ART/'contact-sheets'/(batch+'-gates.png'),batch+' | deterministic gates; owner review pending')

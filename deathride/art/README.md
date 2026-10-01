@@ -30,3 +30,15 @@ python deathride/tools/art/report.py --batch p1-cars --semantic-batch calibratio
 ```
 
 Use the environment's Python in place of `python`. Grading uses both local models sequentially and caches exact image/prompt/schema/model-digest inputs. See `ACCEPTANCE.md` for the measured diagnostic failures and pending human calibration. `report.py` refuses stale pixel-gate reports. The driver enforces the attempt cap across revision IDs as well as within one ID.
+
+P4 delivery: open `review.html` for owner sheets, actual material repeats, per-class references and effect previews. Read `DELIVERY.md` for the catalog, alpha/pivot convention, content aliases and integration limits. `selections.json` is executing-agent technical selection only; all owner approvals remain false. `reports/p4-delivery-audit.json` reconciles every reservation and final source hash. Accepted bundle `deathride/assets/phase2-v1` is immutable and contains enough data for validation without ignored raw images.
+
+```
+python deathride/tools/art/validate_bundle.py
+python deathride/tools/art/review_index.py
+python deathride/tools/art/audit_delivery.py
+```
+
+For a replacement bundle, rebuild current candidates through `process.py`, `p4_catalog.py` and `grade.py --input deathride/art/reports/p4-world-candidates-deterministic.json --batch p4-world-final`, inspect source and actual exported pixels, then update hash-bound selections. Local remedies have separate recipes (`wrap_tiles.py`, `recover_gravel.py`, `recover_ice.py`); effect extraction is in `animation.py`. `atlas.py --draft` builds and validates a temporary bundle, while `atlas.py` refuses to overwrite an existing accepted version. Mint a new bundle version for changes. One-time `p4_*repairs.py`, `p4_final_additions.py` and `recover_false_quota.py` scripts are preserved history, not resume commands.
+
+The original `grok-4.7` metadata names the CLI orchestration model, not a disclosed image-engine version. Seeds are unknown. The single false stop caused by a token count of 429 is audited separately; actual HTTP/status/error 429 and quota messages still latch the first-error stop. No actual quota error occurred in this execution.

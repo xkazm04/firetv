@@ -1,0 +1,163 @@
+[
+  {
+    "id": "p1-tile-ice-v2",
+    "class": "ice",
+    "kind": "tile",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\p1-tile-ice-v2\\attempt-01\\1.jpg",
+    "source_sha256": "cabd195877732a4672b79aa3f951536dd202a10332e0238c1edae674df93404f",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "p1-tile-ice-v2",
+      "class": "ice",
+      "prompt_action": "The complete image is ONLY an EMPTY material swatch: Pale cold blue ice, fine uniform granular frost with faint dispersed micro scratches; no long cracks or unique bright shapes. Seamless full-bleed surface, pattern continues across all four edges, even lighting. Fill the entire square edge-to-edge with this anonymous ground texture. No vehicle, car, buggy, wheels, object, icon, border, frame, grid or scene anywhere. The deliverable is a flat surface material, not a racing scene.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "none",
+      "count": "1",
+      "status": "ready",
+      "kind": "tile",
+      "reference": "",
+      "batch": "p2-materials",
+      "approval": "pending"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "raw_metrics": {
+      "edge_x_mean": 0.02344388276143791,
+      "edge_y_mean": 0.02467447916666667,
+      "edge_x_peak": 0.11764705882352944,
+      "edge_y_peak": 0.11764705882352944,
+      "autocorrelation_peak": 0.19431287615715237,
+      "autocorrelation_shift_px": [
+        107,
+        0
+      ],
+      "basis": "decoded straight RGB / 255; autocorrelation circular luminance at 128px; excludes nearby shifts"
+    },
+    "raw_codes": [],
+    "metrics": {
+      "edge_x_mean": 0.019955065359477126,
+      "edge_y_mean": 0.02042483660130719,
+      "edge_x_peak": 0.0862745098039216,
+      "edge_y_peak": 0.10588235294117654,
+      "autocorrelation_peak": 0.18001504762611611,
+      "autocorrelation_shift_px": [
+        21,
+        0
+      ],
+      "basis": "decoded straight RGB / 255; autocorrelation circular luminance at 128px; excludes nearby shifts"
+    },
+    "repeat_path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p2-materials\\p1-tile-ice-v2-repeat.png",
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p2-materials\\p1-tile-ice-v2.png",
+    "sha256": "99b0bf82099e4a125c444f5ecb2888f2831a083bdc96c1fd31875b7e2b2b1ef8"
+  },
+  {
+    "id": "p1-tile-kerb-v2",
+    "class": "kerb",
+    "kind": "tile",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\p1-tile-kerb-v2\\attempt-01\\1.jpg",
+    "source_sha256": "fdc51429b7485a090c43ef0ca33b20c653097a67b47ebef9d5fb2dc62220aef5",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "p1-tile-kerb-v2",
+      "class": "kerb",
+      "prompt_action": "The complete image is ONLY an EMPTY material swatch: Red and ivory kerb bands of equal width, straight and parallel, crossing the entire surface without gaps; an even repeat period and consistent flat wear. Seamless full-bleed surface, pattern continues across all four edges, even lighting. Fill the entire square edge-to-edge with this anonymous ground texture. No vehicle, car, buggy, wheels, object, icon, border, frame, grid or scene anywhere. The deliverable is a flat surface material, not a racing scene.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "none",
+      "count": "1",
+      "status": "ready",
+      "kind": "tile",
+      "reference": "",
+      "batch": "p2-materials",
+      "approval": "pending"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "raw_metrics": {
+      "edge_x_mean": 0.05265139910130719,
+      "edge_y_mean": 0.011259191176470583,
+      "edge_x_peak": 0.6352941176470588,
+      "edge_y_peak": 0.5333333333333333,
+      "autocorrelation_peak": 0.9964631583693052,
+      "autocorrelation_shift_px": [
+        16,
+        0
+      ],
+      "basis": "decoded straight RGB / 255; autocorrelation circular luminance at 128px; excludes nearby shifts"
+    },
+    "raw_codes": [
+      "TILE_SEAM_PEAK"
+    ],
+    "metrics": {
+      "edge_x_mean": 0.03393586601307189,
+      "edge_y_mean": 0.007965686274509796,
+      "edge_x_peak": 0.3490196078431372,
+      "edge_y_peak": 0.12941176470588237,
+      "autocorrelation_peak": 0.9966815190647025,
+      "autocorrelation_shift_px": [
+        16,
+        0
+      ],
+      "basis": "decoded straight RGB / 255; autocorrelation circular luminance at 128px; excludes nearby shifts"
+    },
+    "repeat_path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p2-materials\\p1-tile-kerb-v2-repeat.png",
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p2-materials\\p1-tile-kerb-v2.png",
+    "sha256": "eb40593504deea457371b696cf9affa0ea4e4d4a1eb93a5237d95a5a6176d867"
+  },
+  {
+    "id": "p1-tile-oil-v3",
+    "class": "oil",
+    "kind": "tile",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\p1-tile-oil-v3\\attempt-01\\1.jpg",
+    "source_sha256": "739b04619911bf78e795d34de20e2fefb6856199cbe04836126c6d0dbea3475c",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "p1-tile-oil-v3",
+      "class": "oil",
+      "prompt_action": "The complete image is ONLY an EMPTY material swatch: Charcoal road with a uniform fine dark oily sheen, extremely subtle blue-green tint across the entire surface, no puddle, no rainbow streaks or large motifs. Seamless full-bleed surface, pattern continues across all four edges, even lighting. Fill the entire square edge-to-edge with this anonymous ground texture. No vehicle, car, buggy, wheels, object, icon, border, frame, grid or scene anywhere. The deliverable is a flat surface material, not a racing scene. Show a SINGLE unrepeated tile, NOT a 2x2 demonstration, NOT repeated quadrants, NOT mirrored halves. Every part of the image has different small stochastic grain; no patch of the image is copied elsewhere inside the square. Very low contrast fine particles, no outlines around large stones, no large stains or cracks.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "none",
+      "count": "1",
+      "status": "ready",
+      "kind": "tile",
+      "reference": "",
+      "batch": "p2-oil-final",
+      "approval": "pending"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "raw_metrics": {
+      "edge_x_mean": 0.009982638888888888,
+      "edge_y_mean": 0.009960937500000001,
+      "edge_x_peak": 0.05098039215686276,
+      "edge_y_peak": 0.04313725490196077,
+      "autocorrelation_peak": 0.05538866117155087,
+      "autocorrelation_shift_px": [
+        112,
+        3
+      ],
+      "basis": "decoded straight RGB / 255; autocorrelation circular luminance at 128px; excludes nearby shifts"
+    },
+    "raw_codes": [],
+    "metrics": {
+      "edge_x_mean": 0.0054738562091503256,
+      "edge_y_mean": 0.006801470588235295,
+      "edge_x_peak": 0.023529411764705882,
+      "edge_y_peak": 0.027450980392156876,
+      "autocorrelation_peak": 0.06462179002312696,
+      "autocorrelation_shift_px": [
+        112,
+        3
+      ],
+      "basis": "decoded straight RGB / 255; autocorrelation circular luminance at 128px; excludes nearby shifts"
+    },
+    "repeat_path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p2-oil-final\\p1-tile-oil-v3-repeat.png",
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p2-oil-final\\p1-tile-oil-v3.png",
+    "sha256": "f0f3e483c0b7d729a4d190ae1ee4e20de8f93756d3149d68383990f9ffb10d4d"
+  }
+]

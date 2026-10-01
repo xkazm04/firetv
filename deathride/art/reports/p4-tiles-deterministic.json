@@ -1,0 +1,356 @@
+[
+  {
+    "id": "p4-tiles-asphalt-worn-v1",
+    "class": "asphalt-worn",
+    "kind": "tile",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\p4-tiles-asphalt-worn-v1\\attempt-01\\1.jpg",
+    "source_sha256": "79ea1aa29bafef44335ef74d1131197287e3f48ed6c0e588251a57d28ff1fdc1",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "p4-tiles-asphalt-worn-v1",
+      "class": "asphalt-worn",
+      "prompt_action": "The entire image is ONLY an EMPTY anonymous ground-material swatch. Dark charcoal asphalt with slightly lighter fine aggregate and small scattered abrasion scuffs, medium wear, no large cracks. Seamless edge-to-edge material with even illumination. Show one unrepeated stochastic field, no repeated quadrants or mirrored halves. Very low-contrast small-scale details; no large motifs. No car, vehicle, wheel, object, scene, border, grid, lettering or road markings.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "none",
+      "count": "1",
+      "status": "ready",
+      "kind": "tile",
+      "reference": "",
+      "batch": "p4-tiles",
+      "approval": "pending",
+      "cell_limit": "256"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "processor_sources": {
+      "process.py": "84557be6e7a26896f77ad8d9f094dd64a220f032994237961b50a2c510036c58"
+    },
+    "raw_metrics": {
+      "edge_x_mean": 0.017530892565359477,
+      "edge_y_mean": 0.023576644199346405,
+      "edge_x_peak": 0.4470588235294118,
+      "edge_y_peak": 0.5803921568627451,
+      "autocorrelation_peak": 0.09149346787867987,
+      "autocorrelation_shift_px": [
+        106,
+        29
+      ],
+      "basis": "decoded straight RGB / 255; autocorrelation circular luminance at 128px; excludes nearby shifts"
+    },
+    "raw_codes": [
+      "TILE_SEAM_PEAK"
+    ],
+    "metrics": {
+      "edge_x_mean": 0.014440359477124182,
+      "edge_y_mean": 0.01551266339869281,
+      "edge_x_peak": 0.17254901960784313,
+      "edge_y_peak": 0.19215686274509802,
+      "autocorrelation_peak": 0.08652687653124551,
+      "autocorrelation_shift_px": [
+        106,
+        29
+      ],
+      "basis": "decoded straight RGB / 255; autocorrelation circular luminance at 128px; excludes nearby shifts"
+    },
+    "repeat_path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p4-tiles\\p4-tiles-asphalt-worn-v1-repeat.png",
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p4-tiles\\p4-tiles-asphalt-worn-v1.png",
+    "sha256": "ea4fe4991958ffad97a6ee6d6a814feb747e79d0992654b365f079ed237862b7"
+  },
+  {
+    "id": "p4-tiles-asphalt-heavy-v1",
+    "class": "asphalt-heavy",
+    "kind": "tile",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\p4-tiles-asphalt-heavy-v1\\attempt-01\\1.jpg",
+    "source_sha256": "ffe4f4b8ce01ab3f512a591de2d4a548474a0d19a1f8e9364bd1f7f2b069d346",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "p4-tiles-asphalt-heavy-v1",
+      "class": "asphalt-heavy",
+      "prompt_action": "The entire image is ONLY an EMPTY anonymous ground-material swatch. Worn grey asphalt with dense fine pitting and very short randomly distributed hairline cracks, high wear but no long continuous cracks or patches. Seamless edge-to-edge material with even illumination. Show one unrepeated stochastic field, no repeated quadrants or mirrored halves. Very low-contrast small-scale details; no large motifs. No car, vehicle, wheel, object, scene, border, grid, lettering or road markings.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "none",
+      "count": "1",
+      "status": "ready",
+      "kind": "tile",
+      "reference": "",
+      "batch": "p4-tiles",
+      "approval": "pending",
+      "cell_limit": "256"
+    },
+    "verdict": "reject",
+    "codes": [
+      "TILE_SEAM_PEAK"
+    ],
+    "processor_sources": {
+      "process.py": "84557be6e7a26896f77ad8d9f094dd64a220f032994237961b50a2c510036c58"
+    },
+    "raw_metrics": {
+      "edge_x_mean": 0.01236723856209151,
+      "edge_y_mean": 0.01929891748366014,
+      "edge_x_peak": 0.38823529411764707,
+      "edge_y_peak": 0.41568627450980394,
+      "autocorrelation_peak": 0.045448236917412434,
+      "autocorrelation_shift_px": [
+        82,
+        20
+      ],
+      "basis": "decoded straight RGB / 255; autocorrelation circular luminance at 128px; excludes nearby shifts"
+    },
+    "raw_codes": [
+      "TILE_SEAM_PEAK"
+    ],
+    "metrics": {
+      "edge_x_mean": 0.010641339869281055,
+      "edge_y_mean": 0.01718239379084968,
+      "edge_x_peak": 0.23921568627450981,
+      "edge_y_peak": 0.41568627450980394,
+      "autocorrelation_peak": 0.042925767228523815,
+      "autocorrelation_shift_px": [
+        82,
+        20
+      ],
+      "basis": "decoded straight RGB / 255; autocorrelation circular luminance at 128px; excludes nearby shifts"
+    },
+    "repeat_path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p4-tiles\\p4-tiles-asphalt-heavy-v1-repeat.png",
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p4-tiles\\p4-tiles-asphalt-heavy-v1.png",
+    "sha256": "401fc2069f0ba228f6ac5f453f333a995b013317e1e27020867feb741f2bc329"
+  },
+  {
+    "id": "p4-tiles-grass-v1",
+    "class": "grass",
+    "kind": "tile",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\p4-tiles-grass-v1\\attempt-01\\1.jpg",
+    "source_sha256": "13d3019bbe17fbf5adf990240bbf309fd193dd6627c082333bfd91595946cc09",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "p4-tiles-grass-v1",
+      "class": "grass",
+      "prompt_action": "The entire image is ONLY an EMPTY anonymous ground-material swatch. Muted olive short grass seen directly from above, fine individual blades of varied directions, even tiny-scale stochastic distribution. Seamless edge-to-edge material with even illumination. Show one unrepeated stochastic field, no repeated quadrants or mirrored halves. Very low-contrast small-scale details; no large motifs. No car, vehicle, wheel, object, scene, border, grid, lettering or road markings.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "none",
+      "count": "1",
+      "status": "ready",
+      "kind": "tile",
+      "reference": "",
+      "batch": "p4-tiles",
+      "approval": "pending",
+      "cell_limit": "256"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "processor_sources": {
+      "process.py": "84557be6e7a26896f77ad8d9f094dd64a220f032994237961b50a2c510036c58"
+    },
+    "raw_metrics": {
+      "edge_x_mean": 0.03585963031045752,
+      "edge_y_mean": 0.039130157271241826,
+      "edge_x_peak": 0.4156862745098039,
+      "edge_y_peak": 0.4235294117647059,
+      "autocorrelation_peak": 0.05595516701590983,
+      "autocorrelation_shift_px": [
+        127,
+        107
+      ],
+      "basis": "decoded straight RGB / 255; autocorrelation circular luminance at 128px; excludes nearby shifts"
+    },
+    "raw_codes": [
+      "TILE_SEAM_PEAK"
+    ],
+    "metrics": {
+      "edge_x_mean": 0.02777777777777778,
+      "edge_y_mean": 0.034140114379084964,
+      "edge_x_peak": 0.16470588235294115,
+      "edge_y_peak": 0.27450980392156865,
+      "autocorrelation_peak": 0.05279939154272463,
+      "autocorrelation_shift_px": [
+        127,
+        107
+      ],
+      "basis": "decoded straight RGB / 255; autocorrelation circular luminance at 128px; excludes nearby shifts"
+    },
+    "repeat_path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p4-tiles\\p4-tiles-grass-v1-repeat.png",
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p4-tiles\\p4-tiles-grass-v1.png",
+    "sha256": "03ee68b447a7093a205dca1cfe08ea1e8c978b3661445de7958d9b25c0dace0a"
+  },
+  {
+    "id": "p4-tiles-dirt-v1",
+    "class": "dirt",
+    "kind": "tile",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\p4-tiles-dirt-v1\\attempt-01\\1.jpg",
+    "source_sha256": "eff913d3f1a82b84d1534d18f0a04577ece09dbc487df10c68f7dae18beb7ea4",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "p4-tiles-dirt-v1",
+      "class": "dirt",
+      "prompt_action": "The entire image is ONLY an EMPTY anonymous ground-material swatch. Warm brown packed dirt with fine ochre and grey particles, evenly scattered tiny grit, no wheel tracks or footprints. Seamless edge-to-edge material with even illumination. Show one unrepeated stochastic field, no repeated quadrants or mirrored halves. Very low-contrast small-scale details; no large motifs. No car, vehicle, wheel, object, scene, border, grid, lettering or road markings.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "none",
+      "count": "1",
+      "status": "ready",
+      "kind": "tile",
+      "reference": "",
+      "batch": "p4-tiles",
+      "approval": "pending",
+      "cell_limit": "256"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "processor_sources": {
+      "process.py": "84557be6e7a26896f77ad8d9f094dd64a220f032994237961b50a2c510036c58"
+    },
+    "raw_metrics": {
+      "edge_x_mean": 0.016181576797385622,
+      "edge_y_mean": 0.015604575163398693,
+      "edge_x_peak": 0.36078431372549014,
+      "edge_y_peak": 0.30588235294117644,
+      "autocorrelation_peak": 0.03944707919717058,
+      "autocorrelation_shift_px": [
+        120,
+        88
+      ],
+      "basis": "decoded straight RGB / 255; autocorrelation circular luminance at 128px; excludes nearby shifts"
+    },
+    "raw_codes": [],
+    "metrics": {
+      "edge_x_mean": 0.011667687908496737,
+      "edge_y_mean": 0.01555861928104575,
+      "edge_x_peak": 0.1411764705882353,
+      "edge_y_peak": 0.2666666666666666,
+      "autocorrelation_peak": 0.036712785863545136,
+      "autocorrelation_shift_px": [
+        36,
+        62
+      ],
+      "basis": "decoded straight RGB / 255; autocorrelation circular luminance at 128px; excludes nearby shifts"
+    },
+    "repeat_path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p4-tiles\\p4-tiles-dirt-v1-repeat.png",
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p4-tiles\\p4-tiles-dirt-v1.png",
+    "sha256": "334704ec6ea986c0ba3f8f0348d86da7d83b6a46ef4984edb394b5124717a6f9"
+  },
+  {
+    "id": "p4-tiles-concrete-v1",
+    "class": "concrete",
+    "kind": "tile",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\p4-tiles-concrete-v1\\attempt-01\\1.jpg",
+    "source_sha256": "63d36c6970d1cb545fd55630d4d1469a4bf6ffaee44fae142e87d4040a338ecc",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "p4-tiles-concrete-v1",
+      "class": "concrete",
+      "prompt_action": "The entire image is ONLY an EMPTY anonymous ground-material swatch. Cool light-grey concrete, fine random pores and tiny chips, no slab seams or large cracks. Seamless edge-to-edge material with even illumination. Show one unrepeated stochastic field, no repeated quadrants or mirrored halves. Very low-contrast small-scale details; no large motifs. No car, vehicle, wheel, object, scene, border, grid, lettering or road markings.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "none",
+      "count": "1",
+      "status": "ready",
+      "kind": "tile",
+      "reference": "",
+      "batch": "p4-tiles",
+      "approval": "pending",
+      "cell_limit": "256"
+    },
+    "verdict": "reject",
+    "codes": [
+      "TILE_SEAM_PEAK"
+    ],
+    "processor_sources": {
+      "process.py": "84557be6e7a26896f77ad8d9f094dd64a220f032994237961b50a2c510036c58"
+    },
+    "raw_metrics": {
+      "edge_x_mean": 0.025624234068627447,
+      "edge_y_mean": 0.022698376225490192,
+      "edge_x_peak": 0.6235294117647059,
+      "edge_y_peak": 0.6470588235294118,
+      "autocorrelation_peak": 0.10276111482734045,
+      "autocorrelation_shift_px": [
+        52,
+        12
+      ],
+      "basis": "decoded straight RGB / 255; autocorrelation circular luminance at 128px; excludes nearby shifts"
+    },
+    "raw_codes": [
+      "TILE_SEAM_PEAK"
+    ],
+    "metrics": {
+      "edge_x_mean": 0.018203635620915027,
+      "edge_y_mean": 0.026919934640522867,
+      "edge_x_peak": 0.17254901960784308,
+      "edge_y_peak": 0.5058823529411764,
+      "autocorrelation_peak": 0.09753860885721248,
+      "autocorrelation_shift_px": [
+        52,
+        12
+      ],
+      "basis": "decoded straight RGB / 255; autocorrelation circular luminance at 128px; excludes nearby shifts"
+    },
+    "repeat_path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p4-tiles\\p4-tiles-concrete-v1-repeat.png",
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p4-tiles\\p4-tiles-concrete-v1.png",
+    "sha256": "422790f3c4bef757c3baa77db9d0c656b8730644971cef85e7941784f004374f"
+  },
+  {
+    "id": "p4-tiles-metal-v1",
+    "class": "metal",
+    "kind": "tile",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\p4-tiles-metal-v1\\attempt-01\\1.jpg",
+    "source_sha256": "a4d8d3ae1fb790b8c50d2dea1596caed4ebc2b950630423a09d2ca9ee8bab505",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "p4-tiles-metal-v1",
+      "class": "metal",
+      "prompt_action": "The entire image is ONLY an EMPTY anonymous ground-material swatch. Cool grey matte industrial steel surface with sparse irregular fine scratches and subtle grain, no rivet grid, checker pattern or large panels. Seamless edge-to-edge material with even illumination. Show one unrepeated stochastic field, no repeated quadrants or mirrored halves. Very low-contrast small-scale details; no large motifs. No car, vehicle, wheel, object, scene, border, grid, lettering or road markings.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "none",
+      "count": "1",
+      "status": "ready",
+      "kind": "tile",
+      "reference": "",
+      "batch": "p4-tiles",
+      "approval": "pending",
+      "cell_limit": "256"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "processor_sources": {
+      "process.py": "84557be6e7a26896f77ad8d9f094dd64a220f032994237961b50a2c510036c58"
+    },
+    "raw_metrics": {
+      "edge_x_mean": 0.01380335988562093,
+      "edge_y_mean": 0.01195363562091504,
+      "edge_x_peak": 0.22352941176470592,
+      "edge_y_peak": 0.27843137254901956,
+      "autocorrelation_peak": 0.06526022335695757,
+      "autocorrelation_shift_px": [
+        0,
+        19
+      ],
+      "basis": "decoded straight RGB / 255; autocorrelation circular luminance at 128px; excludes nearby shifts"
+    },
+    "raw_codes": [],
+    "metrics": {
+      "edge_x_mean": 0.010896650326797397,
+      "edge_y_mean": 0.010059232026143798,
+      "edge_x_peak": 0.06666666666666676,
+      "edge_y_peak": 0.058823529411764774,
+      "autocorrelation_peak": 0.061388635137147554,
+      "autocorrelation_shift_px": [
+        0,
+        63
+      ],
+      "basis": "decoded straight RGB / 255; autocorrelation circular luminance at 128px; excludes nearby shifts"
+    },
+    "repeat_path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p4-tiles\\p4-tiles-metal-v1-repeat.png",
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p4-tiles\\p4-tiles-metal-v1.png",
+    "sha256": "8c600f1b6858086de558d7f17cbe14cbffd29cf137260c0b4c7d738678cf06fb"
+  }
+]

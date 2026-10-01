@@ -6,6 +6,31 @@
         "BACKGROUND_PRESENT"
       ],
       "evidence": "p1-cars deterministic reports: output alpha border empty, raw keys measured; foreground retained"
+    },
+    "narrow-band-wrap": {
+      "classes": [
+        "TILE_SEAM_PEAK"
+      ],
+      "evidence": "P4 heavy asphalt/concrete before/after metrics; interior byte-identical; eight-pixel band"
+    },
+    "unique-material-period": {
+      "classes": [
+        "TILE_REPETITION"
+      ],
+      "evidence": "P4 gravel fixed 1024/512/256 trials; selected 512 source pixels; no new generation"
+    },
+    "centre-crop-edge-lighting": {
+      "classes": [
+        "VISIBLE_JOIN"
+      ],
+      "evidence": "P4 ice fixed 768/512/256 centre trials; selected 768 after direct 2x2 review; unchanged numeric gates"
+    },
+    "sheet-secondary-key-panels": {
+      "classes": [
+        "FRAME_KEY_RESIDUE",
+        "FRAME_BOUNDARY"
+      ],
+      "evidence": "Actual exported smoke/fire frames, preserved ivory/grey tests, two-model export observations"
     }
   },
   "exploratory_remedies": {
@@ -19,5 +44,5 @@
       "basis": "one proof before siblings; recovery probability not yet measured; bounded diagnostic sample"
     }
   },
-  "unaddressed_policy": "Unknown class never automatically rerolls. Hold for review. No accepted or rejected image used as a reference without an explicit reference gate."
+  "unaddressed_policy": "Unknown defects do not auto-reroll. Explicitly diagnosed content edits remain bounded to three attempts. P3 derived identity states/liveries additionally require the exact owner-approved reference gate."
 }

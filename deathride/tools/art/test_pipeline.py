@@ -4,7 +4,7 @@ import unittest
 from unittest.mock import patch
 from pathlib import Path
 from common import ART, briefs, compile_prompt, read_json, write_json, digest, sha
-from gen import Budget, QUOTA, fingerprint, generate
+from gen import Budget, QUOTA, fingerprint, generate,quota_evidence
 
 class GenerationContracts(unittest.TestCase):
     def test_budget_is_atomic_under_concurrent_dispatch(self):
@@ -42,6 +42,11 @@ class GenerationContracts(unittest.TestCase):
         for message in ['HTTP 429', 'Rate limit exceeded', 'quota has been exhausted', 'Too many requests', 'usage limit reached']:
             self.assertIsNotNone(QUOTA.search(message),message)
         self.assertIsNone(QUOTA.search('generated image successfully'))
+        self.assertIsNone(QUOTA.search('{"type":"usage","usage":{"output_tokens":429}}'))
+        self.assertIsNotNone(QUOTA.search('{"status_code":429,"message":"request rejected"}'))
+        self.assertIsNone(quota_evidence('{"type":"usage","usage":{"output_tokens":429}}'))
+        self.assertEqual(quota_evidence('{"error":{"code":429}}'),'structured HTTP status 429')
+        self.assertEqual(quota_evidence('{"type":"error","code":429}'),'structured HTTP status 429')
 
     def test_ten_original_briefs_and_exact_style_prefix(self):
         rows=briefs(ART/'briefs/p1.csv')

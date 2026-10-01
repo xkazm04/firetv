@@ -1,0 +1,36 @@
+{
+  "commit": "e1640f0331a426489dad56a2a51f6b4eacf566e4",
+  "captured_at": "2026-10-01T09:56:30.476753+00:00",
+  "sources": {
+    "rivals": {
+      "path": "deathride/core/src/main/resources/data/rivals.csv",
+      "sha256": "7d88adab42262bb1ca7b333af496e50db823a43baf3bbf58a6629e2382a0c3fe"
+    },
+    "tracks": {
+      "path": "deathride/core/src/main/resources/data/tracks.csv",
+      "sha256": "51128ada6e73c6b97dde98276dde75ce86511f5510a337d6b10ede0c8891575c"
+    },
+    "track-themes": {
+      "path": "deathride/core/src/main/resources/data/track-themes.csv",
+      "sha256": "22b6d0d281c94685d49028f4fb0d8027c1ddea3f99c44f94770461f6c479f2e9"
+    },
+    "weapons": {
+      "path": "deathride/core/src/main/resources/data/weapons.csv",
+      "sha256": "77405ce9bde4d8bf6d3f82442c9c91eec952728189a635d06ecf3ba448139a80"
+    },
+    "consumables": {
+      "path": "deathride/core/src/main/resources/data/consumables.csv",
+      "sha256": "1e071069715ecd61063ec5d14df06454369e5bdffeed4479b298b655edd3d1be"
+    }
+  },
+  "scope": "Committed Content handoff; future C2/C4 additions must be reconciled at integration.",
+  "rival_count": 5,
+  "track_count": 25,
+  "themes": [
+    "industrial",
+    "quarry",
+    "desert",
+    "wetland",
+    "alpine"
+  ]
+}

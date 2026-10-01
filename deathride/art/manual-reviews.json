@@ -1,0 +1,20 @@
+{
+  "p1-tile-ice-v2": {
+    "source_sha256": "cabd195877732a4672b79aa3f951536dd202a10332e0238c1edae674df93404f",
+    "verdict": "reject",
+    "codes": [
+      "VISIBLE_JOIN"
+    ],
+    "note": "VISIBLE_JOIN: actual 2x2 export has a faint bright cross at the repeat boundaries despite passing the provisional numeric seam gate. Reject for final delivery; final allowed attempt requests uniform frost without broad bands or border lighting.",
+    "reviewer": "executing-agent direct source/export inspection"
+  },
+  "p1-tile-ice-v3": {
+    "source_sha256": "bac14c2eead09d6099c3ae8e30b48fc83c7a5ba8e4d40a2f8aa6b0c5d48e7125",
+    "verdict": "reject",
+    "codes": [
+      "FORBIDDEN_LARGE_CRACKS"
+    ],
+    "note": "FORBIDDEN_LARGE_CRACKS: final permitted image ignores uniform fine-frost brief and introduces conspicuous long crack motifs. Numeric edge gate alone is insufficient. Rejected; three attempts exhausted.",
+    "reviewer": "executing-agent direct source/export inspection"
+  }
+}

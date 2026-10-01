@@ -30,7 +30,8 @@ def post(route,body,timeout=240):
 def encode(path):
     # Preserve 1024px source detail; bound only larger sheet inputs.
     with Image.open(path) as im:
-        im=im.convert('RGB');im.thumbnail((1280,1280))
+        rgba=im.convert('RGBA');backing=Image.new('RGBA',rgba.size,'#70747A');backing.alpha_composite(rgba)
+        im=backing.convert('RGB');im.thumbnail((1280,1280))
         out=io.BytesIO();im.save(out,format='PNG')
     return base64.b64encode(out.getvalue()).decode()
 
@@ -41,7 +42,7 @@ def prompt_for(item):
         'For a car, true_top_down=yes requires roof planes only with no visible vertical side doors or front grille; heading_right=yes means its NOSE faces screen right. '
         'For all non-car assets use not_applicable for true_top_down and heading_right. subject_matches=yes requires exactly the requested subject; a vehicle on a ground-material tile is no. '
         'neutral_lighting=yes means no cast ground shadow and no obvious one-sided illumination; symmetric cel material shading is allowed. Use uncertain when evidence is insufficient. '
-        'Confidence is one of 0, 0.25, 0.5, 0.75, 1 (a fraction, never a percentage). It describes observations, not artistic quality. Brief kind: '+kind+'. Exact action brief: '+row['prompt_action'])
+        'Confidence is one of 0, 0.25, 0.5, 0.75, 1 (a fraction, never a percentage). It describes observations, not artistic quality. Brief kind: '+kind+'. Exact action brief: '+row['prompt_action']+('\nReview context: '+item['review_context'] if item.get('review_context') else ''))
 
 def validate(value,schema):
     if not isinstance(value,dict) or set(value)!=set(schema['required']): return False
@@ -57,7 +58,13 @@ def ask(item,model,model_digest,family=None):
     schema=FAMILY_SCHEMA if family else SCHEMA
     prompt=prompt_for(item) if not family else ('Image 1 is the target '+item['class']+' car. Image 2 is the other class family reference. Answer only what is visible. Does target keep charcoal rubber, blue-black glass, cool metal and its body accent in the same roles? Is its mechanical silhouette recognizably distinct from the OTHER classes in the family? Ignore labels. Palette and silhouette only; do not grade taste. Use uncertain if comparison cannot be made.')
     paths=[item['source']]+([family] if family else [])
-    key=digest({'images':[sha(p) for p in paths],'model':model,'model_digest':model_digest,'prompt':prompt,'schema':schema})
+    cache_input={'images':[sha(p) for p in paths],'model':model,'model_digest':model_digest,'prompt':prompt,'schema':schema}
+    # Opaque inputs encode identically to the original policy; transparent RGB must
+    # never become visible evidence just because PNG alpha was discarded.
+    for path in paths:
+        with Image.open(path) as im:
+            if im.convert('RGBA').getchannel('A').getextrema()[0]<255:cache_input['encoding']='alpha-over-70747a-v1'
+    key=digest(cache_input)
     cache=ART/'grades'/model.replace(':','_')/(key+'.json')
     if cache.exists():return read_json(cache)
     started=time.monotonic()
