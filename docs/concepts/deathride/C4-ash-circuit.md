@@ -79,3 +79,7 @@ The /24 scan found AFTKM at `10.0.0.139:5555`. Automated browser controllers sen
 - An ordinary guest was blocked from an unowned above-division car, then entered with Line. Two input streams finished, Rook remained on the grid, the guest received the same division prize scale and consumed its packed item, while its own career stayed at event one. The original slot replacement had removed Rook; the corrected mapping drops the last regular rival and preserves each named boss. The earlier capture is retained as calibration evidence.
 
 These checks establish content, persistence and flow on the Stick. They are not a fresh thermal soak, optical-latency measurement, physical-phone ergonomics study or owner playtest. Story quality, sofa reading comfort, perceived boss difficulty and whether this progression is worth playing remain **not measured**. P4 portrait/backdrop/landmark keys are an integration contract; no rendering art or art-directory files were changed.
+
+## Integration follow-up (2026-10-01)
+
+The three-lap measurements above remain historical evidence. Integration corrected the unreachable verge, introduced 18/21/24-lap career formats and moved legal promotion-field purchases one event earlier. [IP](IP-career-pacing.md) records the experiment and the upper-roster PR ceiling audit; [G2](G2-REPORT.md) binds the replacement physical/career measurements, actual Stick endurance checks and remaining targets. Old C4 hashes and durations are not current-runtime claims. No owner feel verdict is implied by the follow-up.

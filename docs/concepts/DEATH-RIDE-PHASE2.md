@@ -127,7 +127,7 @@ A career ladder of many more events, named rival drivers with personalities as d
 | Integration | V1 | Reachable verge and complete linter mutants | I1 | verified on all ten sizes / green | integration-v1-20261001 | 2026-10-01 |
 | Integration | IP | Endurance career and legal promotion fields | V1, C4 | measured mean 5.85-6.54 h; boss/tail/first-purchase limits retained | integration-ip-20261001 | 2026-10-01 |
 | Integration | I2 | Stick texture and frame budget | I1 | 15-minute load/memory/median passed; tail/transition misses retained | integration-i2-20261001 | 2026-10-01 |
-| Integration | I3 | Gate G2 report, owner session | I2, C4 | not started | | |
+| Integration | I3 | Gate G2 report, owner session | I2, C4 | evidence/report complete; G2 owner quality/feel pending | integration-i3-20261001 | 2026-10-01 |
 
 ## g. Session log
 
@@ -206,3 +206,11 @@ Not measured: human endurance comfort, story/tension, owner quality/feel. Late b
 Green `:core:test :link:test :game:test :app:assembleDebug`: **89 core / 3 link / 3 renderer**. Final all-ten-car/all-25-course/story/Home-resume checks, two-entrant HUD and real-GL failure injections pass. Scanned AFTKM at 10.0.0.139; installed APK hash matches the measured release. Final **900.024 s** load completed 11 races/five themes, accepted 27,001 inputs per seat at 30.0003 Hz, with zero rejections/host stalls. PSS **107.018-115.502 MiB**, warm median change **-0.155 MiB**, linear trend **+0.04993 MiB/min**. Owned textures **37.970 MiB**. Active p50 **16.574-16.812 ms**; p95 **21.644 ms** and max **34.920 ms** still miss declared tail comparisons. Initial/preparation peak **241.275 ms**, discarded simulation **741 ms** and three initial stale consume samples per seat remain visible. Previous failed load/rejection runs remain archived. Evidence: `deathride/evidence/phase2/i2-*` and `i2/manifest.json`.
 
 No sustained median/residency failure remains; tail stalls, future approved car pages, cold/contended/other-device behavior, optical latency and owner feel remain unqualified. Grok spend **0 images / 0 videos**; none of integration's initial 50-image allocation used. Parallel art spending/cap changes are separately scoped in G2, not adopted as authorization. No push. Next: I3 source-bound owner handoff.
+
+### I3 - 2026-10-01
+
+[Design and closure](deathride/I3-owner-handoff.md). Wrote [G2-REPORT](deathride/G2-REPORT.md) with a truth tier per claim, current source/APK/evidence bindings and a concrete owner checklist. Updated README/OWNER-CHECKS and linked the historical C4 pacing report to its measured successor. Car rotation/states/tints remain wired-only pending exact approved assets; owner quality/feel is not assigned by automation. All duration, boss/first-purchase/transition/retry limitations and frame-tail misses stay visible.
+
+Final `:core:test :link:test :game:test :app:assembleDebug`: **BUILD SUCCESSFUL**, **89 core / 3 link / 3 renderer tests**; **30 art-tool tests** also pass. Final build, measured soak APK and installed `base.apk` share SHA-256 `871346fef88691cdea96dfbdb6fab33496076cd40f2509051b29b8ba2d0150d0`. I3 manifest binds four prior wave commits and the final reports. All report links and current I2 source/evidence hashes were checked. Earlier failed observations remain retained; no earned full-career device or human fairness claim.
+
+Grok integration spend **0 images / 0 videos**, none of its initial 50-image allocation used. Timestamped local ledger snapshot records integration 130/180 and concurrent art 198/350 separately; the latter cap was not adopted by this run. Owner references, G2 felt, human-labelled grader calibration, audio, physical-phone/optical and wider hardware/network qualification remain pending. Device returned to lobby before the coordinated final art-lab window. Five local integration waves complete; **never pushed**. Next work belongs to the recorded owner/content/art/performance checklist, not an automatic G2 pass.
