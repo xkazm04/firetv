@@ -43,6 +43,10 @@ class LinkTest {
         fun connect(listener: Listener)=http.newWebSocketBuilder().buildAsync(URI("ws://127.0.0.1:18765/ws"),listener).join()
         try {
             host.start(); waitReady()
+            val catalog=http.send(HttpRequest.newBuilder(URI("http://127.0.0.1:18765/catalog")).build(),HttpResponse.BodyHandlers.ofString())
+            val feedback=Json.parseToJsonElement(catalog.body()).jsonObject["driftFeedback"]!!.jsonObject
+            assertEquals(dev.deathride.core.VisualTuning["driftHapticQuality"],feedback["quality"]!!.jsonPrimitive.double)
+            host.slots[0].driftQuality=.5;host.slots[0].slipRadians=.4;host.slots[0].spunOut=true
             val bad=Listener(); val badWs=connect(bad); badWs.sendText("""{"t":"hello","pin":"invalid"}""",true).join(); assertEquals("error",bad.next("error")["t"]!!.jsonPrimitive.content); badWs.abort()
             val good=Listener(); val ws=connect(good); ws.sendText("""{"t":"hello","pin":"${host.pin}"}""",true).join()
             val welcome=good.next("welcome"); val token=welcome["token"]!!.jsonPrimitive.content; assertEquals(0,welcome["slot"]!!.jsonPrimitive.int)
@@ -75,6 +79,8 @@ class LinkTest {
             val returned=Listener(); val again=connect(returned); again.sendText("""{"t":"hello","token":"$token"}""",true).join(); assertEquals(0,returned.next("welcome")["slot"]!!.jsonPrimitive.int)
             val response=http.send(HttpRequest.newBuilder(URI("http://127.0.0.1:18765/stats")).build(),HttpResponse.BodyHandlers.ofString())
             assertEquals(200,response.statusCode()); assertTrue(Json.parseToJsonElement(response.body()).jsonObject["slots"]!!.jsonArray[0].jsonObject["connected"]!!.jsonPrimitive.boolean)
+            val drift=Json.parseToJsonElement(response.body()).jsonObject["slots"]!!.jsonArray[0].jsonObject
+            assertEquals(.5,drift["driftQuality"]!!.jsonPrimitive.double);assertEquals(.4,drift["slipRadians"]!!.jsonPrimitive.double);assertTrue(drift["spunOut"]!!.jsonPrimitive.boolean)
             again.abort(); ws.abort()
         } finally { host.stop() }
     }

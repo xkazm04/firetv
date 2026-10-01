@@ -14,60 +14,76 @@ https://d.android.com/r/tools/api-level-support
 To suppress this warning, add/update
     android.suppressUnsupportedCompileSdk=36
 to this project's gradle.properties.
-> Task :link:checkKotlinGradlePluginConfigurationErrors SKIPPED
 > Task :game:checkKotlinGradlePluginConfigurationErrors SKIPPED
 > Task :core:checkKotlinGradlePluginConfigurationErrors SKIPPED
-> Task :game:processResources NO-SOURCE
+> Task :link:checkKotlinGradlePluginConfigurationErrors SKIPPED
 > Task :link:processResources NO-SOURCE
+> Task :game:processResources NO-SOURCE
 > Task :link:processTestResources NO-SOURCE
-> Task :app:extractNatives
-> Task :app:preBuild
-> Task :app:preDebugBuild
+> Task :app:extractNatives UP-TO-DATE
+> Task :app:preBuild UP-TO-DATE
+> Task :app:preDebugBuild UP-TO-DATE
 > Task :app:mergeDebugNativeDebugMetadata NO-SOURCE
 > Task :app:checkKotlinGradlePluginConfigurationErrors SKIPPED
-> Task :core:compileKotlin FROM-CACHE
+> Task :core:compileKotlin UP-TO-DATE
 > Task :core:compileJava NO-SOURCE
-> Task :app:checkDebugAarMetadata
-> Task :app:generateDebugResValues
-> Task :app:mapDebugSourceSetPaths
-> Task :app:generateDebugResources FROM-CACHE
-> Task :core:processResources
-> Task :core:classes
-> Task :core:jar
-> Task :core:compileTestKotlin FROM-CACHE
+> Task :core:processResources UP-TO-DATE
+> Task :core:classes UP-TO-DATE
+> Task :core:jar UP-TO-DATE
+> Task :core:compileTestKotlin UP-TO-DATE
 > Task :core:compileTestJava NO-SOURCE
-> Task :core:processTestResources
-> Task :core:testClasses
-> Task :link:compileKotlin FROM-CACHE
-> Task :link:compileJava NO-SOURCE
-> Task :link:classes UP-TO-DATE
-> Task :link:jar
-> Task :link:compileTestKotlin FROM-CACHE
-> Task :link:compileTestJava NO-SOURCE
-> Task :link:testClasses UP-TO-DATE
-> Task :game:compileKotlin FROM-CACHE
-> Task :game:compileJava NO-SOURCE
-> Task :game:classes UP-TO-DATE
-> Task :game:jar
-> Task :app:packageDebugResources
-> Task :app:createDebugCompatibleScreenManifests
-> Task :app:extractDeepLinksDebug FROM-CACHE
-> Task :app:parseDebugLocalResources
-> Task :app:processDebugMainManifest
-> Task :app:processDebugManifest
-> Task :app:javaPreCompileDebug FROM-CACHE
-> Task :app:mergeDebugResources
-> Task :app:mergeDebugShaders
+> Task :core:processTestResources UP-TO-DATE
+> Task :core:testClasses UP-TO-DATE
+> Task :app:checkDebugAarMetadata UP-TO-DATE
+> Task :app:generateDebugResValues UP-TO-DATE
+> Task :app:mapDebugSourceSetPaths UP-TO-DATE
+> Task :app:generateDebugResources UP-TO-DATE
+> Task :app:mergeDebugResources UP-TO-DATE
+> Task :app:packageDebugResources UP-TO-DATE
+> Task :app:parseDebugLocalResources UP-TO-DATE
+> Task :app:createDebugCompatibleScreenManifests UP-TO-DATE
+> Task :app:extractDeepLinksDebug UP-TO-DATE
+> Task :app:processDebugMainManifest UP-TO-DATE
+> Task :app:processDebugManifest UP-TO-DATE
+> Task :app:processDebugManifestForPackage UP-TO-DATE
+> Task :app:processDebugResources UP-TO-DATE
+> Task :app:javaPreCompileDebug UP-TO-DATE
+> Task :app:mergeDebugShaders UP-TO-DATE
 > Task :app:compileDebugShaders NO-SOURCE
 > Task :app:generateDebugAssets UP-TO-DATE
-> Task :app:mergeDebugAssets
-> Task :app:compressDebugAssets FROM-CACHE
-> Task :app:desugarDebugFileDependencies FROM-CACHE
-> Task :app:mergeDebugJniLibFolders
-> Task :app:checkDebugDuplicateClasses
-> Task :app:mergeDebugNativeLibs
-> Task :app:validateSigningDebug
-> Task :app:mergeExtDexDebug FROM-CACHE
+> Task :app:mergeDebugAssets UP-TO-DATE
+> Task :app:compressDebugAssets UP-TO-DATE
+> Task :app:desugarDebugFileDependencies UP-TO-DATE
+> Task :app:checkDebugDuplicateClasses UP-TO-DATE
+> Task :app:mergeExtDexDebug UP-TO-DATE
+> Task :app:mergeDebugJniLibFolders UP-TO-DATE
+> Task :app:validateSigningDebug UP-TO-DATE
+> Task :app:writeDebugAppMetadata UP-TO-DATE
+> Task :app:writeDebugSigningConfigVersions UP-TO-DATE
+> Task :link:compileKotlin
+> Task :link:compileJava NO-SOURCE
+> Task :link:classes UP-TO-DATE
+> Task :link:jar UP-TO-DATE
+> Task :link:compileTestKotlin
+> Task :link:compileTestJava NO-SOURCE
+> Task :link:testClasses UP-TO-DATE
+> Task :game:compileKotlin
+> Task :game:compileJava NO-SOURCE
+> Task :game:classes UP-TO-DATE
+> Task :game:jar UP-TO-DATE
+> Task :app:mergeDebugNativeLibs UP-TO-DATE
+> Task :app:stripDebugDebugSymbols UP-TO-DATE
+> Task :app:compileDebugKotlin
+> Task :app:compileDebugJavaWithJavac NO-SOURCE
+> Task :app:dexBuilderDebug UP-TO-DATE
+> Task :app:mergeDebugGlobalSynthetics UP-TO-DATE
+> Task :app:processDebugJavaRes UP-TO-DATE
+> Task :app:mergeProjectDexDebug UP-TO-DATE
+> Task :app:mergeLibDexDebug
+> Task :app:mergeDebugJavaResource
+> Task :app:packageDebug
+> Task :app:createDebugApkListingFileRedirect UP-TO-DATE
+> Task :app:assembleDebug
 
 > Task :link:test
 
@@ -76,34 +92,9 @@ LinkTest > badPinMalformedInputAndLifecycleAreContained() STANDARD_ERROR
     SLF4J: Defaulting to no-operation (NOP) logger implementation
     SLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder for further details.
 
-> Task :app:mergeLibDexDebug FROM-CACHE
-> Task :app:writeDebugAppMetadata
-> Task :app:writeDebugSigningConfigVersions
-
-> Task :app:stripDebugDebugSymbols
-Unable to strip the following libraries, packaging them as they are: libgdx.so.
-
-> Task :app:processDebugManifestForPackage
-> Task :app:processDebugResources
-> Task :app:compileDebugKotlin FROM-CACHE
-> Task :app:compileDebugJavaWithJavac NO-SOURCE
-> Task :app:dexBuilderDebug FROM-CACHE
-> Task :app:mergeDebugGlobalSynthetics FROM-CACHE
-> Task :app:processDebugJavaRes
-> Task :app:mergeProjectDexDebug FROM-CACHE
-> Task :app:mergeDebugJavaResource
-
-> Task :link:test
-
 LinkTest > badPinMalformedInputAndLifecycleAreContained() PASSED
 
 LinkTest > statsWindowAndLifetimeHaveIndependentCounts() PASSED
-
-> Task :app:packageDebug
-> Task :app:createDebugApkListingFileRedirect
-> Task :app:assembleDebug
-
-> Task :link:test
 
 LinkTest > occupiedPortReportsFailureWithoutKillingTheHost() PASSED
 
@@ -185,6 +176,71 @@ CommerceTest > contractsBonusesCashAndResultsPayOnlyOnce() PASSED
 
 CommerceTest > loanRepaymentInsuranceAndManualRepairCannotCreateADeadEnd() PASSED
 
+DriftModelTest > unpoweredSlideDissipatesEnergyAndHeavierLoadRetainsMoreMomentum() STANDARD_OUT
+    Same geometry and input; mass-only slide 0.5s: 17.19839661099138 vs 17.53606696054499 m/s
+
+DriftModelTest > unpoweredSlideDissipatesEnergyAndHeavierLoadRetainsMoreMomentum() PASSED
+
+DriftModelTest > scaledGeometryAndUpgradedMassChangeInertiaWithoutDuplicateShapeNumbers() PASSED
+
+DriftModelTest > aSpinIsReportedUntilSettledAndResetClearsIt() PASSED
+
+DriftModelTest > reverseMomentumIsNotDeletedAndBrakingDoesNotCreateReverse() PASSED
+
+DriftModelTest > qualityUsesRetentionDurationAndSmoothnessAndSnapshotIsCoherent() PASSED
+
+DriftModelTest > entryAndCatchWitnessesForEveryClass() STANDARD_OUT
+    class,scenario,peakSlipDeg,retainedAtRelease,recoverySeconds,spins,exitSpeedMps
+    Needle,0,14.783160399387315,0.9108177277114798,0.31666666666666665,0,13.809893946381992
+    Needle,1,29.276984742503938,0.7851454530226891,0.5833333333333334,0,13.026304729940994
+    Needle,2,180.0,0.7851454530226891,3.05,1,6.45736917765548
+    Needle,3,29.233293165067945,0.7851454530226891,0.48333333333333334,0,12.838529964825412
+    Line,0,7.266707411628029,0.8987865343525133,0.16666666666666666,0,11.230844594159093
+    Line,1,20.779923988332875,0.7509716587299035,0.4166666666666667,0,10.414029276791279
+    Line,2,34.86716299748517,0.7509716587299035,1.3833333333333333,0,8.08580811262727
+    Line,3,20.76807959313781,0.7509716587299035,0.3333333333333333,0,10.35671043296232
+    Bastion,0,4.532002058533358,0.8772097813028126,0.15,0,10.314464610971354
+    Bastion,1,16.171250703985233,0.7101073955762164,0.3,0,9.381957228888709
+    Bastion,2,22.354793216963476,0.7101073955762164,1.15,0,7.190863281027279
+    Bastion,3,16.1545069794768,0.7101073955762164,0.26666666666666666,0,9.36109554644353
+    Comet,0,8.727242712709655,0.9339036924914965,0.2,0,13.973149457428844
+    Comet,1,23.31336903142274,0.7864720967463422,0.48333333333333334,0,13.175764946417875
+    Comet,2,123.5299775036038,0.7864720967463422,2.0666666666666664,1,8.06175617176374
+    Comet,3,23.31336903142274,0.7864720967463422,0.35,0,13.0690446121669
+    Trail,0,2.4186407745264416,0.9222810800567571,0.18333333333333332,0,13.150055541071467
+    Trail,1,19.150616318291025,0.6802487022394953,0.21666666666666667,0,11.756435464906506
+    Trail,2,21.18481946235028,0.6802487022394953,1.1666666666666667,0,9.286004785895008
+    Trail,3,19.150616318291025,0.6802487022394953,0.18333333333333332,0,11.771980120842201
+    Flint,0,10.660077067878404,0.953865703261543,0.2,0,15.764037075551716
+    Flint,1,25.69517330461431,0.7930718431053877,0.4666666666666667,0,14.827147676231554
+    Flint,2,180.0,0.7930718431053877,2.1333333333333333,1,9.04842851926485
+    Flint,3,25.69517330461431,0.7930718431053877,0.35,0,14.722763703133865
+    Quill,0,11.830781469666782,0.9406379642616195,0.18333333333333332,0,16.549209401755284
+    Quill,1,28.943015393225046,0.7800828044637108,0.48333333333333334,0,15.539721584851563
+    Quill,2,180.0,0.7800828044637108,2.35,1,9.531047799474859
+    Quill,3,28.943015393225046,0.7800828044637108,0.36666666666666664,0,15.391906991978475
+    Vandal,0,8.34265166390283,0.8990460401673331,0.18333333333333332,0,12.936517378336882
+    Vandal,1,22.35298139694481,0.7347364787971219,0.45,0,12.031894920640577
+    Vandal,2,72.75779049235395,0.7347364787971219,1.4833333333333334,0,8.223778937503141
+    Vandal,3,22.35298139694481,0.7347364787971219,0.31666666666666665,0,11.9557788626604
+    Kestrel,0,9.817724556475238,0.8620017940362469,0.15,0,16.17459667474151
+    Kestrel,1,28.345087147368282,0.6813162031948585,0.6666666666666666,0,15.289942118528208
+    Kestrel,2,125.03974199575303,0.6813162031948585,1.7166666666666666,1,10.688849043627298
+    Kestrel,3,28.345087147368282,0.6813162031948585,0.3,0,14.991848910620131
+    Bulwark,0,12.63092635895931,0.9423950207384695,0.25,0,15.695906019986802
+    Bulwark,1,24.630688575147047,0.7934965490633722,0.6166666666666667,0,14.88861569192266
+    Bulwark,2,155.98240034248462,0.7934965490633722,2.033333333333333,1,9.262211229511632
+    Bulwark,3,24.580616701199563,0.7934965490633722,0.4,0,14.735768022415273
+
+
+DriftModelTest > entryAndCatchWitnessesForEveryClass() PASSED
+
+DriftModelTest > axleCirclesAndContinuousCurveHaveRealConsumers() PASSED
+
+DriftModelTest > activeDriftAndSpinAllocateZeroAndReplay() PASSED
+
+DriftTest > hysteresisRetainsBothHistoriesInsideTheBand() PASSED
+
 DriftTest > brakingUnloadsLateralGrip() PASSED
 
 DriftTest > countersteeringCatchesTheSlide() STANDARD_OUT
@@ -229,7 +285,7 @@ RenderSnapshotTest > readOnlyCombatSnapshotUsesActualHullAndRetainsPreviousState
 RosterV2Test > fiveCarSavesKeepEveryOwnedPartAndReceipt() PASSED
 
 RosterV2Test > stockCourseMatrixCompletesAndReplays() STANDARD_OUT
-    C1 fastest classes across courses: [Kestrel, Bulwark]; within tiers: {rookie=[Needle, Line], club=[Trail], pro=[Flint, Comet], elite=[Quill, Vandal], champion=[Kestrel, Bulwark]}
+    C1 fastest classes across courses: [Kestrel, Quill]; within tiers: {rookie=[Needle, Line], club=[Trail], pro=[Flint, Comet], elite=[Quill, Vandal], champion=[Kestrel]}
 
 RosterV2Test > stockCourseMatrixCompletesAndReplays() PASSED
 
@@ -302,5 +358,5 @@ WorldTest > twentySeededSixCarRacesComplete() STANDARD_OUT
 
 WorldTest > twentySeededSixCarRacesComplete() PASSED
 
-BUILD SUCCESSFUL in 4m 4s
-48 actionable tasks: 32 executed, 16 from cache
+BUILD SUCCESSFUL in 5m 20s
+48 actionable tasks: 9 executed, 39 up-to-date

@@ -22,7 +22,7 @@ class CarClass(val values: Map<String,String>) {
         val shape=CarShapes.forId(id)
         return CarSpec(circleRadiusM=shape.widthM*.5,circleOffsetM=(shape.lengthM-shape.widthM)*.5,maxSpeedMps=physical("maxSpeedMps"),accelerationMps2=physical("accelerationMps2"),
             lateralGripPerSecond=physical("lateralGripPerSecond"),maxLateralAccelerationMps2=physical("maxLateralAccelerationMps2"),
-            massKg=physical("massKg"),steeringRateRadPerSecond=physical("steeringRateRadPerSecond"),yawResponseSeconds=physical("yawResponseSeconds"),brakeMps2=physical("brakeMps2"))
+            massKg=physical("massKg"),steeringRateRadPerSecond=physical("steeringRateRadPerSecond"),yawResponseSeconds=physical("yawResponseSeconds"),brakeMps2=physical("brakeMps2"),driftGeometry=DriftGeometry.forClass(id))
     }
     val armorReduction=derive("armorReduction")
     val weaponSlots=derive("weaponSlots").toInt()
