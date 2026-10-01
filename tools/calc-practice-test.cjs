@@ -215,7 +215,7 @@ test('7: the route accepts a calc1 id and refuses one on neither path; a school 
  seat();
  stub({specs:nine(FIX[0])});
  const bad=await post({topic:'nope'});
- assert.equal(bad.status,400);assert.deepEqual(await bad.json(),{error:'no such topic'});
+ assert.equal(bad.status,400);assert.deepEqual(await bad.json(),{error:'That topic is not one this desk writes a set for.'});
  assert.equal(seen.length,0,'no engine call');assert.equal(store.getSession().jobs.practice,undefined,'no job was started');
  assert.equal((await post({topic:'calc1-functions'})).status,200,'a calc1 id is a topic');
  const STATED=[{question:'2x+3=11',answer:'4'},{question:'x-5=2',answer:'7'},{question:'3x=18',answer:'6'},{question:'x+1=10',answer:'9'},{question:'5x=35',answer:'7'},{question:'x/2=4',answer:'8'}];

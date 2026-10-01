@@ -364,12 +364,29 @@ test('empty case 3: an unknown topic is refused 400 before any job starts; a mal
  onPage();
  let asked=0;stubText({items:()=>{asked++;return {items:STATED};}});
  const r=await post('practice',{topic:'no-such-topic'});
- assert.equal(r.status,400);assert.match((await r.json()).error,/no such topic/);
+ assert.equal(r.status,400);assert.match((await r.json()).error,/not one this desk writes/);
  assert.equal(asked,0);assert.equal(store.getSession().jobs.practice,undefined,'no job was started');
  const raw=(name,body)=>route(name).POST(new Request(`http://desk/api/${name}`,{method:'POST',body}));
  const m=await raw('mark','{not json').catch((e)=>e);
  assert(m instanceof Response,`the mark route answered instead of throwing (${m})`);assert.equal(m.status,400);deskWorded((await m.json()).error);
  const p=await raw('practice','{not json').catch((e)=>e);assert(p instanceof Response);assert.equal(p.status,400);
+});
+test('an early refusal is a sentence, the shorthand the phone would show is gone',async()=>{
+ const sentence=(line)=>/^[A-Z].*[.]$/.test(line);
+ const seat=()=>{store.dispatch({type:'reset'});store.dispatch({type:'profile.draft',patch:{id:'jobs-scratch',name:'Scratch',type:'other'}});store.dispatch({type:'profile.save'});};
+ const say=async(name,body)=>{const r=await post(name,body);assert.equal(r.status,400,name);const {error}=await r.json();assert.equal(sentence(error),true,error);return error;};
+ seat();
+ assert.equal(await say('hint',{}), 'Photograph a page first.');
+ assert.equal(await say('read',{}), 'Photograph a page first.');
+ assert.equal(await say('practice',{}), 'Choose a topic first.');
+ assert.equal(await say('practice',{topic:'nope'}), 'That topic is not one this desk writes a set for.');
+ assert.equal(await say('explain',{n:0}), 'Start a practice set first.');
+ assert.equal(await say('mark',{answers:['4']}), 'Start a practice set first.');
+ onPage();
+ store.dispatch({type:'page.reading',page:{...PAGE,id:'empty'}});store.dispatch({type:'page.read',id:'empty',items:[],readMs:1,provider:'test'});
+ assert.equal(await say('hint',{}), 'That item is not on the page.');
+ store.dispatch({type:'practice.set',practice:{topic:'linear-one-step',items:[{n:1,question:'2x=4',key:'k'}],marked:false,owner:'jobs-scratch'}});
+ assert.equal(await say('explain',{n:5}), 'That item is not on the desk any more.');
 });
 
 // ---- mark-lands-once-on-its-set: a mark lands only on the set it marked, and only once ----

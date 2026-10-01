@@ -16,7 +16,7 @@ export async function POST(req: Request) {
   const held = body.id ? getSession().pages.find((p) => p.id === body.id) : undefined;
   if (body.id && !held) return NextResponse.json({ error: "That page is no longer on the desk." }, { status: 409 });
   const { img: image, subject, title, w, h } = held ?? { img: body.image ?? "", subject: body.subject ?? "maths", title: body.title ?? "Page", w: body.w ?? 0, h: body.h ?? 0 };
-  if (!image) return NextResponse.json({ error: "no page" }, { status: 400 });
+  if (!image) return NextResponse.json({ error: "Photograph a page first." }, { status: 400 });
   const id = held?.id ?? `${subject}-${Date.now()}`;
   // the page is the learner's who snapped it: stamped now, and its history line goes to them even if the desk changes hands mid-read
   const owner = held?.owner ?? getSession().learner?.id;

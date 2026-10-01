@@ -16,9 +16,9 @@ export async function POST(req: Request) {
   const s = getSession(), who = s.learner;
   if (!who) return NextResponse.json({ error: NOBODY_AT_DESK }, { status: 409 });
   const practice = s.practice;
-  if (!practice) return NextResponse.json({ error: "no practice set" }, { status: 400 });
+  if (!practice) return NextResponse.json({ error: "Start a practice set first." }, { status: 400 });
   const item = practice.items[typeof n === "number" ? n : s.walkIx];
-  if (!item) return NextResponse.json({ error: "no item" }, { status: 400 });
+  if (!item) return NextResponse.json({ error: "That item is not on the desk any more." }, { status: 400 });
   // after the model answers, the walk may have moved on: settle only the same item, on the same set, still unsure
   const same = () => {
     const now = getSession().practice;

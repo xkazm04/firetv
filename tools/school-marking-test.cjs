@@ -379,7 +379,7 @@ test('10: POST /api/mark takes a photo XOR typed answers - a table of what is re
  // a set already marked is refused before anything; and no set at all is a plain 400
  const again=await raw({answers:typedOf()});assert.equal(again.status,409);assert.match((await again.json()).error,/already marked/);
  store.dispatch({type:'practice.clear'});
- const none=await raw({answers:typedOf()});assert.equal(none.status,400);assert.match((await none.json()).error,/no practice set/);
+ const none=await raw({answers:typedOf()});assert.equal(none.status,400);assert.match((await none.json()).error,/Start a practice set/);
  // valid: 200, the counts code decided, "code" as the provider, no time spent, no model
  seat('uk');setOn();noModel();
  const good=await raw({answers:typedOf()});assert.equal(good.status,200);

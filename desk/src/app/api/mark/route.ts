@@ -40,7 +40,7 @@ export async function POST(req: Request) {
   const s = getSession(), who = s.learner;
   if (!who) return NextResponse.json({ error: NOBODY_AT_DESK }, { status: 409 });
   const practice = s.practice;
-  if (!practice) return NextResponse.json({ error: "no practice set" }, { status: 400 });
+  if (!practice) return NextResponse.json({ error: "Start a practice set first." }, { status: 400 });
   // marked once: a second mark would record every attempt and the history line again
   if (practice.marked) return NextResponse.json({ error: ALREADY_MARKED }, { status: 409 });
   // typed answers: one string per question, capped, checked before any job starts (a refusal never truncates)

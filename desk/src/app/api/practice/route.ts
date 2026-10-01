@@ -17,9 +17,9 @@ export async function POST(req: Request) {
   const body = (await req.json().catch(() => null)) as { topic?: unknown; stretch?: unknown } | null;
   const topic = body && typeof body === "object" ? body.topic : undefined;
   const stretch = !!body && typeof body === "object" && (body.stretch === true || body.stretch === 1);
-  if (!topic || typeof topic !== "string") return NextResponse.json({ error: "no topic" }, { status: 400 });
+  if (!topic || typeof topic !== "string") return NextResponse.json({ error: "Choose a topic first." }, { status: 400 });
   // a topic on neither Math path (library/paths.ts) is not a set the desk can write: refused before any job starts
-  if (!topicIn(topic)) return NextResponse.json({ error: "no such topic" }, { status: 400 });
+  if (!topicIn(topic)) return NextResponse.json({ error: "That topic is not one this desk writes a set for." }, { status: 400 });
   const learner = getSession().learner?.id;
   if (!learner) return NextResponse.json({ error: NOBODY_AT_DESK }, { status: 409 });
   // the seated profile's school year sets the mix: an age only for a learner at school (as the SCHOOL tick reads it)

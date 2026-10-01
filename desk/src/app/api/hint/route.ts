@@ -21,9 +21,9 @@ export async function POST(req: Request) {
   const body = (await req.json().catch(() => ({}))) as { askedQ?: string; stage?: 1 | 2; itemIx?: number };
   const s = getSession(), who = s.learner;
   if (!who) return NextResponse.json({ error: NOBODY_AT_DESK }, { status: 409 });
-  const page = s.pages[s.pageIx]; if (!page) return NextResponse.json({ error: "no page" }, { status: 400 });
+  const page = s.pages[s.pageIx]; if (!page) return NextResponse.json({ error: "Photograph a page first." }, { status: 400 });
   const itemIx = typeof body.itemIx === "number" ? body.itemIx : s.itemIx;
-  const item = page.items[itemIx]; if (!item) return NextResponse.json({ error: "no item" }, { status: 400 });
+  const item = page.items[itemIx]; if (!item) return NextResponse.json({ error: "That item is not on the page." }, { status: 400 });
   // one hint at a time: each is a model call and counts in the log
   if (getSession().jobs?.hint?.phase === "running") return refused({ status: 409, error: BUSY });
   if (typeof body.itemIx === "number") dispatch({ type: "item", itemIx: body.itemIx });
