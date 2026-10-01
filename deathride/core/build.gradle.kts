@@ -12,3 +12,17 @@ tasks.register<JavaExec>("balanceReport") {
     maxHeapSize="1g"
     providers.gradleProperty("balanceScenario").orNull?.let { args(it) }
 }
+tasks.register<JavaExec>("rosterReport") {
+    group="verification"
+    dependsOn(tasks.testClasses)
+    classpath=sourceSets.test.get().runtimeClasspath
+    mainClass.set("dev.deathride.core.RosterReportKt")
+    maxHeapSize="1g"
+    jvmArgs("-Djava.util.concurrent.ForkJoinPool.common.parallelism="+providers.gradleProperty("rosterParallel").getOrElse("4"))
+    args(providers.gradleProperty("rosterSamples").getOrElse("2000"))
+    providers.gradleProperty("rosterTier").orNull?.let { args(it) }
+}
+tasks.register("reportClasspath") {
+    dependsOn(tasks.testClasses)
+    doLast { layout.buildDirectory.file("report-classpath.txt").get().asFile.writeText(sourceSets.test.get().runtimeClasspath.asPath) }
+}

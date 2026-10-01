@@ -26,8 +26,8 @@ class CarClass(val values: Map<String,String>) {
     }
     val armorReduction=derive("armorReduction")
     val weaponSlots=derive("weaponSlots").toInt()
-    val json="{\"id\":\"$id\",\"role\":\"$role\",\"tier\":\"$tier\",\"priceCredits\":$priceCredits,\"ammoScale\":$ammoScale,\"stats\":"+stats.entries.joinToString(",","{","}") { "\"${it.key}\":${it.value}" }+"}"
-    fun json(bonuses: IntArray)="{\"id\":\"$id\",\"role\":\"$role\",\"tier\":\"$tier\",\"priceCredits\":$priceCredits,\"ammoScale\":$ammoScale,\"stats\":"+CarCatalog.statNames.joinToString(",","{","}") { "\"$it\":${stat(it,bonuses)}" }+"}"
+    val json get()="{\"id\":\"$id\",\"role\":\"$role\",\"tier\":\"$tier\",\"priceCredits\":$priceCredits,\"ammoScale\":$ammoScale,\"powerRating\":${PowerRating.of(this)},\"weakStats\":${PowerRating.weakStatsJson(this)},\"stats\":"+stats.entries.joinToString(",","{","}") { "\"${it.key}\":${it.value}" }+"}"
+    fun json(bonuses: IntArray)="{\"id\":\"$id\",\"role\":\"$role\",\"tier\":\"$tier\",\"priceCredits\":$priceCredits,\"ammoScale\":$ammoScale,\"powerRating\":${PowerRating.of(this,bonuses)},\"weakStats\":${PowerRating.weakStatsJson(this,bonuses)},\"stats\":"+CarCatalog.statNames.joinToString(",","{","}") { "\"$it\":${stat(it,bonuses)}" }+"}"
     init { require(ammoScale.isFinite() && ammoScale in 0.5..2.0); require(stats.values.all { it in CarCatalog.statMin..CarCatalog.statMax }); require(weaponSlots in 1..CarCatalog.slotsMax) }
 }
 object CarCatalog {

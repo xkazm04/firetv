@@ -1,0 +1,107 @@
+{
+  "races": 40000,
+  "entriesPerRace": 6,
+  "basis": "five tiers; three equal-skill course types and one Champion-agile/Rookie-fast technical scenario per tier",
+  "calibration": {
+    "basis": "equal Rookie skills; mean three-lap seconds over technical/long-straight/gravel fixtures; inverse time target; constrained to authored tier PR budget",
+    "objective": 0.00022226213613899052
+  },
+  "cars": [
+    {
+      "car": "Needle",
+      "tier": "rookie",
+      "powerRating": 321.74739037899997,
+      "budget": 324.555,
+      "mixedMeanSeconds": 119.44473888891578,
+      "inverseTimeRatioToTier": 0.9918579658074721,
+      "ratingRatioToTier": 0.991349356438816
+    },
+    {
+      "car": "Line",
+      "tier": "rookie",
+      "powerRating": 327.895237754,
+      "budget": 324.555,
+      "mixedMeanSeconds": 117.49969259261354,
+      "inverseTimeRatioToTier": 1.0082768144042977,
+      "ratingRatioToTier": 1.010291746403537
+    },
+    {
+      "car": "Bastion",
+      "tier": "club",
+      "powerRating": 442.254968551,
+      "budget": 438.505,
+      "mixedMeanSeconds": 107.63979259260607,
+      "inverseTimeRatioToTier": 1.0076694538891895,
+      "ratingRatioToTier": 1.0085517121834415
+    },
+    {
+      "car": "Comet",
+      "tier": "pro",
+      "powerRating": 505.043554494,
+      "budget": 490.335,
+      "mixedMeanSeconds": 97.8609842592687,
+      "inverseTimeRatioToTier": 1.0368214026354128,
+      "ratingRatioToTier": 1.0299969500321209
+    },
+    {
+      "car": "Trail",
+      "tier": "club",
+      "powerRating": 435.343005694,
+      "budget": 438.505,
+      "mixedMeanSeconds": 109.29086944446787,
+      "inverseTimeRatioToTier": 0.9924464099322554,
+      "ratingRatioToTier": 0.9927891487987595
+    },
+    {
+      "car": "Flint",
+      "tier": "pro",
+      "powerRating": 475.6264455,
+      "budget": 490.335,
+      "mixedMeanSeconds": 105.06774166668536,
+      "inverseTimeRatioToTier": 0.9657042337967099,
+      "ratingRatioToTier": 0.9700030499556426
+    },
+    {
+      "car": "Quill",
+      "tier": "elite",
+      "powerRating": 532.172817788,
+      "budget": 539.02,
+      "mixedMeanSeconds": 98.16389537038613,
+      "inverseTimeRatioToTier": 0.9827283418781757,
+      "ratingRatioToTier": 0.9872969793106007
+    },
+    {
+      "car": "Vandal",
+      "tier": "elite",
+      "powerRating": 544.098226957,
+      "budget": 539.02,
+      "mixedMeanSeconds": 94.77298888889845,
+      "inverseTimeRatioToTier": 1.0178896250991027,
+      "ratingRatioToTier": 1.0094212217672813
+    },
+    {
+      "car": "Kestrel",
+      "tier": "champion",
+      "powerRating": 585.891972651,
+      "budget": 587.94,
+      "mixedMeanSeconds": 94.21906666667957,
+      "inverseTimeRatioToTier": 0.996882133198789,
+      "ratingRatioToTier": 0.9965166048423306
+    },
+    {
+      "car": "Bulwark",
+      "tier": "champion",
+      "powerRating": 594.315007327,
+      "budget": 587.94,
+      "mixedMeanSeconds": 93.63154166667732,
+      "inverseTimeRatioToTier": 1.0031374309850296,
+      "ratingRatioToTier": 1.010842955619621
+    }
+  ],
+  "limitations": [
+    "Not combat strength; C3 owns encounter evidence",
+    "Synthetic long-straight fixture exceeds the playable 180-second host ceiling",
+    "PR is an approximation; residuals are reported rather than hidden",
+    "Owner feel not measured"
+  ]
+}

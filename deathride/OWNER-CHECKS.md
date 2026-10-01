@@ -84,3 +84,11 @@ Use two phones, then let one driver wreck. The camera and main HP/lap display no
 Try Classic/Cruise/Split and mirror on actual phones from the sofa. Good: independent releases, comfortable reach and eyes staying on the road. Bad: looking down repeatedly, accidental attacks or a cramped thumb. The automated touch browser is not a physical-phone comfort test. Use the W1 optical recipe for 30 filmed taps; network age is not optical latency. iOS, contended Wi-Fi and physical-phone haptics remain not measured.
 
 Record a G1 verdict with concrete reasons: **worth an art pass / mechanics and presentation need another pass first**. The larger cars, authored courses, procedural cues and full progression loop exist and have run on the Stick. Finished-game quality, fun and perceived fairness have not been certified.
+
+## C1 - Five paired tiers and explicit trade-offs (2026-10-01)
+
+Practice exposes all ten retained class IDs. Compare Needle/Line, Trail/Bastion, Comet/Flint, Quill/Vandal and Kestrel/Bulwark. The five approved feel presets are unchanged. Good: the agile car launches and turns sooner; the fast or heavy peer needs early braking but gains on a long clear straight. Bad: the heavy car also turns best, the light car wins by top speed, or a strength has no visible cost. Bastion now has real straight-line speed and engine force; the old W2 description calling it universally slow is historical.
+
+Compare the two Club cars in a tight course and on a straight. Let a heavy car hit the light one, then return to clean air. Good: mass matters in contact and the lighter car wins through lines. Bad: an armored car is effectively immortal or a small car wins every shove. PR and the tier-relative weak-stat list are supplied by the shared core in catalog/garage JSON; warning-color presentation is for renderer integration, not claimed in this content wave.
+
+Headless fixed-step races establish numerical trade-offs only. Sofa readability, human skill advantage, physical-phone comfort, optical latency and whether the choice is enjoyable remain **not measured** until an owner session. C3 owns the early-wreck combat pass; C4 owns the replacement of the old twelve-event career.

@@ -119,7 +119,7 @@ A career ladder of many more events, named rival drivers with personalities as d
 | Art | P2 | Post-processing, deterministic gates, local VLM grader, contact sheets | P1 | not started | | |
 | Art | P3 | Car family: reference sheets, states, liveries, heading strategy | P2, C1 | not started | | |
 | Art | P4 | World kit: tiles, barriers, props, pickups, decals, effects, HUD, portraits | P2 | not started | | |
-| Content | C1 | Roster v2 (8-10 cars, tiers) | - | not started | | |
+| Content | C1 | Roster v2 (10 cars / five paired tiers) | - | core validated; Stick checked; owner feel not measured | this commit (C1) | 2026-10-01 |
 | Content | C2 | Tracks v2 (24+, themes, linter) | - | not started | | |
 | Content | C3 | Combat and economy depth | C1 | not started | | |
 | Content | C4 | Career v2 and rivals | C2, C3 | not started | | |
@@ -130,3 +130,9 @@ A career ladder of many more events, named rival drivers with personalities as d
 ## g. Session log
 
 (each run appends: wave, date, what changed, commands with results, what is `not measured`, spend of the Grok budget, next wave)
+
+### C1 restart ? 2026-10-01
+
+Reviewed and retained the interrupted WIP: ten IDs/shapes, migration, device harness and prior evidence. Applied the progression override: five paired tiers, shared derived-stat PR with calibrated data weights, explicit strength/weakness lint, and Champion decision skill. Corrected an uninformative entry-share instrument and retained rejected tuning evidence. Accepted 40,000 actual fixed-step races (2,000 per tier/scenario), independent raw-row audit, replay hashes, and serial/parallel equivalence. Maximum mixed class winner share 51.7875%; all tier budgets within 3%. See [C1 design and limitations](deathride/C1-roster-v2.md) and `deathride/evidence/phase2/c1-accepted/`.
+
+Validation: `:core:test :link:test :app:assembleDebug` green (57 core / 3 link); `:core:rosterReport -ProsterSamples=1` matches twenty accepted first-seed rows; `python tools/audit-roster.py --calibrate` independently validates all 40,000 raw records. `/24` scan found AFTKM at 10.0.0.139. Installed APK; `content-check.mjs ... c1-restart` selected all ten classes and drove Quill to results at 35.10 seconds with 368 shots. This short wreck-prone combat result is not a fairness pass; C3 owns that work. Human feel, warning-color rendering, optical latency and physical-phone comfort: **not measured**. Grok calls/spend this restart: **0**; historical spend untouched. Next: C2 tracks.
