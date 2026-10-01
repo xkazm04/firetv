@@ -1,0 +1,9 @@
+node : /sdcard/i1-content.png: 1 file pulled, 0 skipped. 2.6 MB/s (1772174 bytes in 0.639s)
+At line:3 char:1
++ node tools/content-check.mjs http://10.0.0.139:8765 i1 *> i1-device.t ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (/sdcard/i1-cont...ytes in 0.639s):String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+
+All ten car classes selected through the paired controller; host stats match each ID
+New Quill completed a real device race result at 11.18 s with 79 weapon shots; automated LAN pursuit inputs, not human play

@@ -9,3 +9,5 @@ dependencies {
 }
 application { mainClass.set("dev.deathride.desktop.LauncherKt") }
 tasks.named<JavaExec>("run") { workingDir = rootProject.projectDir }
+
+sourceSets.main { resources.srcDir(rootProject.file("assets")) }

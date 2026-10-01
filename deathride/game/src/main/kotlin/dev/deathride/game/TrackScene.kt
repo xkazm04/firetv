@@ -14,10 +14,26 @@ class SceneryCanvas {
     val textureSize=VisualTuning["sceneryTextureSize"].toInt()
     val buffer=FrameBuffer(Pixmap.Format.RGBA8888,textureSize,textureSize,false)
     val renderer=ShapeRenderer(24000)
-    fun dispose() { renderer.dispose();buffer.dispose() }
+    val sprites=PolygonSpriteBatch()
+    private val vertices=FloatArray(20)
+    private val indices=shortArrayOf(0,1,2,2,3,0)
+    fun tile(texture: Texture?,ax: Float,ay: Float,bx: Float,by: Float,cx: Float,cy: Float,dx: Float,dy: Float) {
+        if(texture==null)return
+        renderer.end();sprites.projectionMatrix=renderer.projectionMatrix;sprites.begin()
+        val color=Color.WHITE_FLOAT_BITS
+        fun vertex(n: Int,x: Float,y: Float){vertices[n]=x;vertices[n+1]=y;vertices[n+2]=color;vertices[n+3]=x/8f;vertices[n+4]=-y/8f}
+        vertex(0,ax,ay);vertex(5,bx,by);vertex(10,cx,cy);vertex(15,dx,dy)
+        sprites.draw(texture,vertices,0,20,indices,0,6);sprites.end();renderer.begin(ShapeRenderer.ShapeType.Filled)
+    }
+    fun sprite(art: AtlasArt,key: String,x: Float,y: Float,w: Float,h: Float,degrees: Float=0f) {
+        if(!art.available(key))return
+        renderer.end();sprites.projectionMatrix=renderer.projectionMatrix;sprites.begin()
+        art.draw(sprites,key,x,y,w,h,degrees);sprites.end();renderer.begin(ShapeRenderer.ShapeType.Filled)
+    }
+    fun dispose() { sprites.dispose();renderer.dispose();buffer.dispose() }
 }
 /** Deterministic static geometry is generated in bounded render-thread slices, with no image assets. */
-class TrackScene(private val course: Course,private val canvas: SceneryCanvas) {
+class TrackScene(private val course: Course,private val canvas: SceneryCanvas,private val art: AtlasArt) {
     private val region=TextureRegion(canvas.buffer.colorBufferTexture).apply { flip(false,true);texture.setFilter(Texture.TextureFilter.Linear,Texture.TextureFilter.Linear) }
     var ready=false;private set
     private var buildFrames=0
@@ -29,6 +45,29 @@ class TrackScene(private val course: Course,private val canvas: SceneryCanvas) {
     val center=FloatArray((VisualTuning["roadSamples"].toInt()+1)*2)
     val samples=VisualTuning["roadSamples"].toInt()
     private val projectionMatrix=Matrix4().setToOrtho2D(left,bottom,width,height)
+    // Repeat-addressed road stays sharp at the following camera's density. The low-resolution
+    // scenery target is only a static background/fallback, never the source of road texel density.
+    private val liveRoad=buildMap<Texture,FloatArray> {
+        val grouped=LinkedHashMap<Texture,ArrayList<Float>>()
+        val p=TrackPoint()
+        fun quad(texture: Texture?,a: Double,b: Double,loA: Double,hiA: Double,loB: Double,hiB: Double) {
+            if(texture==null)return
+            val vertices=grouped.getOrPut(texture){ArrayList()}
+            fun vertex(s: Double,lane: Double){course.sample(s,lane,p);vertices.add(p.x.toFloat());vertices.add(p.y.toFloat());vertices.add(Color.WHITE_FLOAT_BITS);vertices.add(p.x.toFloat()/8f);vertices.add(-p.y.toFloat()/8f)}
+            vertex(a,loA);vertex(b,loB);vertex(b,hiB);vertex(a,hiA)
+        }
+        for(i in 0 until samples) {
+            val a=course.lengthM*i/samples;val b=course.lengthM*(i+1)/samples
+            val key=when(course.surfaces[course.index(a)].id){"Gravel"->"tiles/gravel";"Ice"->"tiles/ice";"Oil"->"tiles/oil";else->"tiles/asphalt-worn"}
+            quad(art.tile(key),a,b,-course.widthAt(a),course.widthAt(a),-course.widthAt(b),course.widthAt(b))
+        }
+        // Preserve compositing order: shortcuts are separate from the base surface batches.
+        for((t,v) in grouped)put(t,v.toFloatArray())
+    }
+    private val marks=ArrayList<FloatArray>()
+    private val oils=ArrayList<FloatArray>()
+    private val shortcuts=ArrayList<FloatArray>()
+    private fun mark(ax: Float,ay: Float,bx: Float,by: Float,width: Float,r: Float,g: Float,b: Float) { marks.add(floatArrayOf(ax,ay,bx,by,width,r,g,b)) }
     private val baking=sequence {
         val r=canvas.renderer;val point=TrackPoint();val q=TrackPoint();val rand=java.util.Random(VisualTuning["scenerySeed"].toLong())
         val desert=course.theme=="desert";val wet=course.theme=="wetland"
@@ -39,6 +78,7 @@ class TrackScene(private val course: Course,private val canvas: SceneryCanvas) {
             r.setColor((if(desert).32f else .15f)+v,(if(desert).28f else .21f)+v,(if(wet).23f else .17f)+v,1f)
             r.rect(x,y,.25f+rand.nextFloat()*1.4f,.15f+rand.nextFloat()*.8f);yield(Unit)
         }
+        canvas.tile(art.tile(if(desert)"tiles/dirt" else if(course.theme=="alpine")"tiles/ice" else "tiles/grass"),left,bottom,left+width,bottom,left+width,bottom+height,left,bottom+height)
         // Outer shoulders underneath a continuous asphalt ribbon.
         suspend fun SequenceScope<Unit>.ribbon(extra: Double,layer: Int) {
             for(i in 0 until samples) {
@@ -58,10 +98,27 @@ class TrackScene(private val course: Course,private val canvas: SceneryCanvas) {
                 course.sample(s,-w,point);val bx=point.x.toFloat();val by=point.y.toFloat()
                 course.sample(next,-wn,point);val cx=point.x.toFloat();val cy=point.y.toFloat()
                 course.sample(next,wn,point);val dx=point.x.toFloat();val dy=point.y.toFloat()
-                r.triangle(ax,ay,bx,by,cx,cy);r.triangle(ax,ay,cx,cy,dx,dy);yield(Unit)
+                r.triangle(ax,ay,bx,by,cx,cy);r.triangle(ax,ay,cx,cy,dx,dy)
+                if(layer==2)canvas.tile(art.tile(when(surf){"Gravel"->"tiles/gravel";"Ice"->"tiles/ice";"Oil"->"tiles/oil";else->"tiles/asphalt-worn"}),ax,ay,bx,by,cx,cy,dx,dy)
+                yield(Unit)
             }
         }
         ribbon(2.2,0);ribbon(1.1,1);ribbon(0.0,2)
+        // Draw the actual authored shortcut bands: art never defines collision or changes the route.
+        for(f in course.features)if(f.kind=="shortcut") {
+            val count=ceil((f.end-f.start)*samples).toInt().coerceAtLeast(1)
+            for(i in 0 until count) {
+                val a=(f.start+(f.end-f.start)*i/count)*course.lengthM;val b=(f.start+(f.end-f.start)*(i+1)/count)*course.lengthM
+                course.sample(a,f.laneM-f.widthM*.5,point);val ax=point.x.toFloat();val ay=point.y.toFloat()
+                course.sample(b,f.laneM-f.widthM*.5,point);val bx=point.x.toFloat();val by=point.y.toFloat()
+                course.sample(b,f.laneM+f.widthM*.5,point);val cx=point.x.toFloat();val cy=point.y.toFloat()
+                course.sample(a,f.laneM+f.widthM*.5,point);val dx=point.x.toFloat();val dy=point.y.toFloat()
+                r.setColor(.43f,.36f,.25f,1f);r.triangle(ax,ay,bx,by,cx,cy);r.triangle(ax,ay,cx,cy,dx,dy)
+                val white=Color.WHITE_FLOAT_BITS
+                shortcuts.add(floatArrayOf(ax,ay,white,ax/8,-ay/8,bx,by,white,bx/8,-by/8,cx,cy,white,cx/8,-cy/8,dx,dy,white,dx/8,-dy/8))
+                canvas.tile(art.tile("tiles/gravel"),ax,ay,bx,by,cx,cy,dx,dy);yield(Unit)
+            }
+        }
         repeat(VisualTuning["roadGrainCount"].toInt()) {
             val s=rand.nextDouble()*course.lengthM;val lateral=(rand.nextDouble()*2-1)*(course.widthAt(s)-.7)
             course.sample(s,lateral,point);val v=.24f+rand.nextFloat()*.065f
@@ -81,11 +138,13 @@ class TrackScene(private val course: Course,private val canvas: SceneryCanvas) {
                 course.sample(s,side*(w-Movement.vergeWidthM),point);course.sample(next,side*(wn-Movement.vergeWidthM),q)
                 if(i%4<2)r.setColor(.87f,.80f,.65f,1f) else r.setColor(.63f,.20f,.13f,1f)
                 r.rectLine(point.x.toFloat(),point.y.toFloat(),q.x.toFloat(),q.y.toFloat(),Movement.kerbWidthM.toFloat())
+                mark(point.x.toFloat(),point.y.toFloat(),q.x.toFloat(),q.y.toFloat(),Movement.kerbWidthM.toFloat(),r.color.r,r.color.g,r.color.b)
                 course.sample(s,side*(w+.5),point);course.sample(next,side*(wn+.5),q)
                 r.setColor(.50f,.55f,.52f,1f);r.rectLine(point.x.toFloat(),point.y.toFloat(),q.x.toFloat(),q.y.toFloat(),.32f)
+                if(i%3==0)canvas.sprite(art,if(course.theme=="industrial")"barriers/metal-straight" else "barriers/concrete-straight",point.x.toFloat(),point.y.toFloat(),5f,1.8f,(point.heading*180/PI).toFloat())
                 if(i%6==0) { r.setColor(.15f,.18f,.17f,1f);r.circle(point.x.toFloat()+.3f,point.y.toFloat()-.3f,.65f,8);r.setColor(.45f,.49f,.45f,1f);r.circle(point.x.toFloat(),point.y.toFloat(),.48f,8) }
             }
-            if(i%9<3) { course.sample(s,0.0,point);course.sample(next,0.0,q);r.setColor(.46f,.48f,.43f,1f);r.rectLine(point.x.toFloat(),point.y.toFloat(),q.x.toFloat(),q.y.toFloat(),.16f) };yield(Unit)
+            if(i%9<3) { course.sample(s,0.0,point);course.sample(next,0.0,q);r.setColor(.46f,.48f,.43f,1f);r.rectLine(point.x.toFloat(),point.y.toFloat(),q.x.toFloat(),q.y.toFloat(),.16f);mark(point.x.toFloat(),point.y.toFloat(),q.x.toFloat(),q.y.toFloat(),.16f,.46f,.48f,.43f) };yield(Unit)
         }
         yield(Unit)
         val start=course.startFraction*course.lengthM
@@ -97,6 +156,7 @@ class TrackScene(private val course: Course,private val canvas: SceneryCanvas) {
                 course.sample(start+row*.9,lane,point);course.sample(start+row*.9,min(w,lane+.9),q)
                 val v=if((checker+row)%2==0).87f else .10f;r.setColor(v,v,v,1f)
                 r.rectLine(point.x.toFloat(),point.y.toFloat(),q.x.toFloat(),q.y.toFloat(),.9f)
+                mark(point.x.toFloat(),point.y.toFloat(),q.x.toFloat(),q.y.toFloat(),.9f,v,v,v)
             };lane+=.9;checker++;yield(Unit)
         }
         for(spot in course.spots) {
@@ -105,9 +165,16 @@ class TrackScene(private val course: Course,private val canvas: SceneryCanvas) {
                 val gl=CarShapes.all.maxOf { it.lengthM }*.5;val gw=(CarShapes.all.maxOf { it.widthM }+TrackRules["gridClearanceM"])*.5
                 course.sample(s-gl,spot.laneM-gw,q);val ax=q.x.toFloat();val ay=q.y.toFloat()
                 course.sample(s+gl,spot.laneM-gw,q);r.setColor(.68f,.68f,.58f,1f);r.rectLine(ax,ay,q.x.toFloat(),q.y.toFloat(),.18f)
+                mark(ax,ay,q.x.toFloat(),q.y.toFloat(),.18f,.68f,.68f,.58f)
                 course.sample(s-gl,spot.laneM+gw,q);r.rectLine(ax,ay,q.x.toFloat(),q.y.toFloat(),.18f)
+                mark(ax,ay,q.x.toFloat(),q.y.toFloat(),.18f,.68f,.68f,.58f)
             }
             if(spot.kind=="hazard") { r.setColor(.08f,.12f,.14f,1f);r.ellipse(point.x.toFloat()-3,point.y.toFloat()-1.8f,6f,3.6f,24);r.setColor(.15f,.22f,.25f,1f);r.ellipse(point.x.toFloat()-1.8f,point.y.toFloat()-.7f,3.4f,1.4f,18) }
+            if(spot.kind=="hazard") { oils.add(floatArrayOf(point.x.toFloat(),point.y.toFloat(),(point.heading*180/PI).toFloat()));canvas.sprite(art,"decals/oil",point.x.toFloat(),point.y.toFloat(),6f,3.6f,(point.heading*180/PI).toFloat()) }
+        }
+        for(f in course.features) {
+            course.sample(f.start*course.lengthM-f.warningM,course.widthAt(f.start*course.lengthM)+5,point)
+            canvas.sprite(art,f.landmark,point.x.toFloat(),point.y.toFloat(),8f,8f);yield(Unit)
         }
         yield(Unit)
         // Recognizable infield landmarks, placed only well clear of the road.
@@ -116,10 +183,15 @@ class TrackScene(private val course: Course,private val canvas: SceneryCanvas) {
             val x=left+rand.nextFloat()*width;val y=bottom+rand.nextFloat()*height
             course.project(x.toDouble(),y.toDouble(),projection)
             if(abs(projection.distance)>course.widthAt(projection.s)+12) {
-                r.setColor(.075f,.10f,.10f,1f);r.rect(x+1,y-1,8f,5f)
-                r.setColor(.32f,.36f,.34f,1f);r.rect(x,y,8f,5f)
-                r.setColor(.43f,.47f,.43f,1f);r.rect(x+.3f,y+3.8f,7.4f,.8f)
-                r.setColor(.22f,.27f,.25f,1f);for(j in 1..5)r.rect(x+j*1.25f,y+.3f,.15f,4.2f)
+                val props=arrayOf("props/tyres","props/crate","props/drum","props/cone","props/crate-metal","props/drum-red")
+                val key=props[it%props.size]
+                if(art.available(key))canvas.sprite(art,key,x+4,y+2.5f,8f,6f)
+                else {
+                    r.setColor(.075f,.10f,.10f,1f);r.rect(x+1,y-1,8f,5f)
+                    r.setColor(.32f,.36f,.34f,1f);r.rect(x,y,8f,5f)
+                    r.setColor(.43f,.47f,.43f,1f);r.rect(x+.3f,y+3.8f,7.4f,.8f)
+                    r.setColor(.22f,.27f,.25f,1f);for(j in 1..5)r.rect(x+j*1.25f,y+.3f,.15f,4.2f)
+                }
             }
         }
         yield(Unit)
@@ -140,6 +212,8 @@ class TrackScene(private val course: Course,private val canvas: SceneryCanvas) {
                 r.setColor(.70f,.68f,.47f,1f)
                 r.rectLine((px-cx*1.3-cy).toFloat(),(py-cy*1.3+cx).toFloat(),px.toFloat(),py.toFloat(),.18f)
                 r.rectLine((px-cx*1.3+cy).toFloat(),(py-cy*1.3-cx).toFloat(),px.toFloat(),py.toFloat(),.18f)
+                mark((px-cx*1.3-cy).toFloat(),(py-cy*1.3+cx).toFloat(),px.toFloat(),py.toFloat(),.18f,.70f,.68f,.47f)
+                mark((px-cx*1.3+cy).toFloat(),(py-cy*1.3-cx).toFloat(),px.toFloat(),py.toFloat(),.18f,.70f,.68f,.47f)
             }
         }
     }.iterator()
@@ -155,7 +229,18 @@ class TrackScene(private val course: Course,private val canvas: SceneryCanvas) {
         r.end();canvas.buffer.end();buildFrames++;val sliceMs=(System.nanoTime()-started)/1e6;buildCpuMs+=sliceMs;buildMaxMs=max(buildMaxMs,sliceMs)
         if(ready)Gdx.app.log("DeathRide","sceneryBake ${course.id} slicedFrames=$buildFrames totalCpuMs=$buildCpuMs maxSliceMs=$buildMaxMs")
     }
-    fun draw(batch: SpriteBatch) { batch.draw(region,left,bottom,width,height) }
+    fun draw(batch: SpriteBatch) {
+        batch.draw(region,left,bottom,width,height)
+        for((texture,vertices) in liveRoad)batch.draw(texture,vertices,0,vertices.size)
+        art.tile("tiles/gravel")?.let{t->for(v in shortcuts)batch.draw(t,v,0,v.size)}
+        for(p in oils)art.draw(batch,"decals/oil",p[0],p[1],6f,3.6f,p[2])
+    }
+    fun drawRoadMarks(r: ShapeRenderer) {
+        if(liveRoad.isEmpty())return
+        if(art.tile("tiles/gravel")==null)for(v in shortcuts){r.setColor(.43f,.36f,.25f,1f);r.triangle(v[0],v[1],v[5],v[6],v[10],v[11]);r.triangle(v[0],v[1],v[10],v[11],v[15],v[16])}
+        for(p in marks){r.setColor(p[5],p[6],p[7],1f);r.rectLine(p[0],p[1],p[2],p[3],p[4])}
+        for(p in oils)if(!art.available("decals/oil")){r.setColor(.08f,.12f,.14f,1f);r.ellipse(p[0]-3,p[1]-1.8f,6f,3.6f,24)}
+    }
 
 }
 

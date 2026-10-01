@@ -5,4 +5,7 @@ dependencies {
     api(project(":core")); api(project(":link"))
     api("com.badlogicgames.gdx:gdx:1.13.5")
     implementation("com.google.zxing:core:3.5.3")
+    testImplementation("org.junit.jupiter:junit-jupiter:5.10.2")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
+tasks.test { useJUnitPlatform() }

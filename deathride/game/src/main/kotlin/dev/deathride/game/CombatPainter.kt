@@ -60,7 +60,7 @@ class CombatPainter {
         }
         for(c in w.cars) {
             if(!c.entered)continue
-            val hp=(combat.health(c.id)/CombatRules["maxHp"]).toFloat();val x=c.x.toFloat();val y=c.y.toFloat()
+            val hp=(combat.health(c.id)/combat.maxHealth(c.id)).toFloat();val x=c.x.toFloat();val y=c.y.toFloat()
             if(hp<CombatRules["smokeHpFraction"])for(i in 0..3) {
                 val age=((w.seconds*.8+i*.25)%1).toFloat()
                 r.setColor(.11f,.13f,.14f,(1-age)*.38f)

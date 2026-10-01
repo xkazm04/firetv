@@ -212,16 +212,41 @@ class SlipHandling : Handling {
 
 fun wrapAngle(value: Double): Double { var a=value; while(a>PI) a-=2*PI; while(a < -PI) a+=2*PI; return a }
 /** Reused snapshot storage. Only read methods are exposed to the renderer. */
-class Snapshot {
+class Snapshot(private val combat: Combat?=null) {
     private val state=DoubleArray(Tuning.CAR_COUNT*4)
-    internal fun capture(cars: Array<Car>) { for(i in cars.indices) { val c=cars[i]; val n=i*4; state[n]=c.x; state[n+1]=c.y; state[n+2]=c.heading; state[n+3]=c.speedMps } }
+    private val condition=DoubleArray(Tuning.CAR_COUNT*8)
+    private val pickupState=DoubleArray((combat?.pickups?.size?:0)*4)
+    private val blastState=DoubleArray((combat?.blasts?.size?:0)*5)
+    val pickupCount get()=pickupState.size/4
+    val blastCount get()=blastState.size/5
+    internal fun capture(cars: Array<Car>) {
+        for(i in cars.indices) {
+            val c=cars[i];val n=i*4;state[n]=c.x;state[n+1]=c.y;state[n+2]=c.heading;state[n+3]=c.speedMps
+            val b=i*8;condition[b]=(combat?.health(i)?:c.maxHp)/c.maxHp;condition[b+1]=if(combat?.wrecked(i)==true)1.0 else 0.0
+            condition[b+2]=combat?.damageFlashSeconds?.get(i)?:0.0;condition[b+3]=combat?.traceSeconds?.get(i)?:0.0
+            condition[b+4]=combat?.traceX?.get(i)?:c.x;condition[b+5]=combat?.traceY?.get(i)?:c.y
+            condition[b+6]=if(c.entered)1.0 else 0.0;condition[b+7]=if(c.drifting)1.0 else 0.0
+        }
+        if(combat!=null) {
+            for(i in combat.pickups.indices){val p=combat.pickups[i];val n=i*4;pickupState[n]=p.x;pickupState[n+1]=p.y;pickupState[n+2]=p.cooldownSeconds;pickupState[n+3]=p.type.radiusM}
+            for(i in combat.blasts.indices){val p=combat.blasts[i];val n=i*5;blastState[n]=p.x;blastState[n+1]=p.y;blastState[n+2]=p.remainingSeconds;blastState[n+3]=p.radiusM;blastState[n+4]=p.activation.toDouble()}
+        }
+    }
     fun x(i: Int)=state[i*4]; fun y(i: Int)=state[i*4+1]; fun heading(i: Int)=state[i*4+2]; fun speed(i: Int)=state[i*4+3]
+    fun healthFraction(i: Int)=condition[i*8];fun wrecked(i: Int)=condition[i*8+1]>0
+    fun flash(i: Int)=condition[i*8+2];fun traceSeconds(i: Int)=condition[i*8+3]
+    fun traceX(i: Int)=condition[i*8+4];fun traceY(i: Int)=condition[i*8+5]
+    fun entered(i: Int)=condition[i*8+6]>0;fun drifting(i: Int)=condition[i*8+7]>0
+    fun pickupX(i: Int)=pickupState[i*4];fun pickupY(i: Int)=pickupState[i*4+1];fun pickupReady(i: Int)=pickupState[i*4+2]<=0
+    fun pickupRadius(i: Int)=pickupState[i*4+3];fun pickupId(i: Int)=combat!!.pickups[i].type.id
+    fun blastX(i: Int)=blastState[i*5];fun blastY(i: Int)=blastState[i*5+1];fun blastRemaining(i: Int)=blastState[i*5+2]
+    fun blastRadius(i: Int)=blastState[i*5+3];fun blastActivation(i: Int)=blastState[i*5+4].toInt()
 }
 class World(val seed: Int=17, val spec: CarSpec=CarSpec(), val track: Track=Track(), val handling: Handling=SlipHandling(),combatEnabled: Boolean=false) {
     var damageScale=1.0
     val cars=Array(Tuning.CAR_COUNT) { Car(it,track).also { c -> c.spec=spec } }
     val combat=Combat(this,combatEnabled)
-    val snapshot=Snapshot(); val previousSnapshot=Snapshot()
+    val snapshot=Snapshot(combat); val previousSnapshot=Snapshot(combat)
     private val projection=Projection(); private val point=TrackPoint()
     val ramClosingMps=DoubleArray(Tuning.CAR_COUNT*Tuning.CAR_COUNT)
     val trace=IntArray(Tuning.CAR_COUNT*600)
