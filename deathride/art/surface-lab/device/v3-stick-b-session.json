@@ -1,0 +1,18 @@
+{
+  "started_at": "2026-10-01T14:36:35.482845+00:00",
+  "device": "10.0.0.139:5555",
+  "model": "AFTKM",
+  "prior_activity": "dev.deathride.tv/.MainActivity",
+  "apk_sha256": "88d0ee77237d1b36bb4d36d2a2c86f1ec166f8048491a2d654e5481a56e35422",
+  "package": "dev.deathride.artlab",
+  "preflight_integration_phase": "lobby",
+  "runs": [],
+  "requested_runs": 14,
+  "status": "interrupted",
+  "runner_sha256": "d555f784bcdf0dcebbc160571c8dcaedf26c414e4d0aca5eb57d8974555cbeb4",
+  "coordination": "shared git-common-dir lease; refuse active race; abort if foreground changes; install only artlab",
+  "error": "STICK_BUSY: lab lost foreground; discard interrupted timing",
+  "finished_at": "2026-10-01T14:36:58.333679+00:00",
+  "restored_prior_activity": false,
+  "integration_installation_unchanged": true
+}

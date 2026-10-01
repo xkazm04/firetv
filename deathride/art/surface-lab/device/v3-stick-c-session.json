@@ -1,0 +1,88 @@
+{
+  "started_at": "2026-10-01T14:54:24.501951+00:00",
+  "device": "10.0.0.139:5555",
+  "model": "AFTKM",
+  "prior_activity": "dev.deathride.tv/.MainActivity",
+  "apk_sha256": "88d0ee77237d1b36bb4d36d2a2c86f1ec166f8048491a2d654e5481a56e35422",
+  "package": "dev.deathride.artlab",
+  "preflight_integration_phase": "lobby",
+  "runs": [
+    {
+      "name": "v3-stick-c-0-baseline",
+      "result_sha256": "407602aafee70275341d778f8b48f1c37c28554639dc928b73c9dce9eac37c82",
+      "screenshot_sha256": "952d855d7572d7beaf7edfb44b93cfbc41abf415f7d791c811c6a18eddb23699"
+    },
+    {
+      "name": "v3-stick-c-0-painted",
+      "result_sha256": "7650e612b18043692fba4485f9861d5d7585d9aaabda1029966cb16220fe4284",
+      "screenshot_sha256": "ccd42428349463ae4cacf0297b27369203b2b3c48c83ef6700b954cf4a6e3965"
+    },
+    {
+      "name": "v3-stick-c-0-macro",
+      "result_sha256": "aa6ede7b4ab42a212d0198a056a7c31dc214e229bd1d19301d74b02457fc1341",
+      "screenshot_sha256": "31f27c19a119fefd597adb82506bf2fd7d4b17385f3079d02088591e55b01c08"
+    },
+    {
+      "name": "v3-stick-c-0-decals",
+      "result_sha256": "e594b920f677e2e1435597efc294755fb6a1556569c70cf5db42c7686cd494ca",
+      "screenshot_sha256": "7ae789ee77aefd921742c51a84ae9888ff9b20abcc051c2758baf9297fc19a39"
+    },
+    {
+      "name": "v3-stick-c-0-ribbon",
+      "result_sha256": "b0826435894c139ce7dea62c7379b77d8f2948a4b453bda1b1a586f54b93891f",
+      "screenshot_sha256": "5601ce0b7b473f20103fc8432e71c44bf2777b45e56ce2ac56d6d11272e3c7cf"
+    },
+    {
+      "name": "v3-stick-c-0-edges",
+      "result_sha256": "b3848852d84b3699e3c36293eefca97f88ea930dac4dcf7b6c9c043ffe9d8f55",
+      "screenshot_sha256": "fa0c45a08773f2fcb7172f9c705c9580b74acf3677f03af914018c54f599b606"
+    },
+    {
+      "name": "v3-stick-c-0-grade-dust",
+      "result_sha256": "8e01a650c0571fb408f1a794ce3b5672bfe887dd0f33505ec687a8529f848590",
+      "screenshot_sha256": "d9d19d9d8ab23e6b8bbe41ce44fc9b6a55c021b69a9d3a5370eadc5909879947"
+    },
+    {
+      "name": "v3-stick-c-0-depth",
+      "result_sha256": "e9f76bad284718e2e077903050be72042016a94ba41a90da3a5878be693bf70b",
+      "screenshot_sha256": "de71a6483e1306f70d21aaf81ec62d781a928031a0d45cedbb3a0aefbc770b39"
+    },
+    {
+      "name": "v3-stick-c-0-wear",
+      "result_sha256": "a0b76768af8b9f2def510f376195470768341d1be643ce821e7b3cf0e6a1179d",
+      "screenshot_sha256": "050d0cbe5a828eddd1dc60191235f1959b1fb9ca973ea5103df854ce5cad734c"
+    },
+    {
+      "name": "v3-stick-c-0-poster-grain",
+      "result_sha256": "76fe11a9207e6918688057abecb5cfde3ddf37251f7f67d317237175ce2f64d7",
+      "screenshot_sha256": "a41766abd461d3d764cd8bd42ccba70ff0723f683aaa1facaf12019149a3c572"
+    },
+    {
+      "name": "v3-stick-c-0-contrast",
+      "result_sha256": "b77bb4df7ceaab69b8e1589e593fbdded119c3e8e8f94c5fad5a691211b01d14",
+      "screenshot_sha256": "d86544711f9110bb484c93e07bb3729ae7a8f5bb5c135b092a6f41fbbc0626b7"
+    },
+    {
+      "name": "v3-stick-c-0-combined",
+      "result_sha256": "94d625481b0aa49562fbeb7450a904b4144a3c3f16c54fb497b6ff3b0e89dbb4",
+      "screenshot_sha256": "1009f6b5dc556856a3edc9a31348e25a39ad39faa051dce34d445c76720a8da6"
+    },
+    {
+      "name": "v3-stick-c-0-ribbon-control",
+      "result_sha256": "178d906c395c819d6aed955dc853def7703e534e58877a0e411616dcc8b26c80",
+      "screenshot_sha256": "610257c8e8e007d2b339c64bb96ebd7e84092da52eabcf044150b3ae2b1697bc"
+    },
+    {
+      "name": "v3-stick-c-0-lean-stack",
+      "result_sha256": "743b121c6690701552427dce7e00cda196dbc4205895b1cf961d0a77791e52a8",
+      "screenshot_sha256": "a6d29b4d73159dda36965b8dcfd5c480b59ba2b96a5dbbc1c8992db625401874"
+    }
+  ],
+  "requested_runs": 14,
+  "status": "complete",
+  "runner_sha256": "d46e38ba29be705b29499c2267fa28cc3ec8c0776cb231f8519caf4e67d12eda",
+  "coordination": "shared git-common-dir lease; refuse active race; abort if foreground changes; install only artlab",
+  "finished_at": "2026-10-01T15:01:14.554627+00:00",
+  "restored_prior_activity": true,
+  "integration_installation_unchanged": true
+}

@@ -1,0 +1,40 @@
+ART DIRECTION V2 device coordination — 2026-10-01 16:38 Europe/Prague
+
+The owner explicitly asked the art run to coordinate with this integration run.
+The art worktree is C:/Users/kazda/kiro/firetv-deathride-art, branch deathride/art.
+Its separate APK is dev.deathride.artlab. It never installs, clears or stops dev.deathride.tv.
+
+The lab needs approximately 18 minutes of quiet foreground access to 10.0.0.139:5555
+after your current integration lifecycle/device checks. Its first diagnostic pass
+aborted at 16:33:41 on lost foreground; a second aborted at 16:36:58. Completed
+measurements from interrupted sessions are excluded from final cost claims.
+
+The art runner is yielding while your device checks continue. To signal a quiet
+window after those checks, create this file in the art worktree:
+  deathride/art/surface-lab/DEVICE-WINDOW.txt
+with the line:
+  integration_device_window: available
+Optionally include an expiry time. Leave the integration app at lobby/results.
+The lab will restore the prior activity when done, stop only its own package,
+and write DEVICE-RELEASED.txt beside the window file. If you need the Stick
+sooner, taking foreground makes the lab abort and release immediately.
+
+No integration code or evidence has been changed by the art run. This temporary
+coordination note is not an integration deliverable; leave it uncommitted.
+
+Follow-up, 17:07: the clean pass found the restrained surface stack slightly
+over the 16.7 ms target. A cheaper geometry/particle revision is being prepared.
+The original C/D/E sequence will still write DEVICE-RELEASED.txt when finished.
+An additional five-minute quiet window after that sequence will let the art run
+measure the revision against its controls twice. Signal it with
+  deathride/art/surface-lab/DEVICE-WINDOW-2.txt
+in the art worktree, using the same available line and an expires_utc timestamp.
+The follow-up writes DEVICE-RELEASED-2.txt. It will not start before the initial
+sequence completes, and it retains the same foreground/active-race safeguards.
+
+Final follow-up, 17:27: narrower bands reduced coverage but increased CPU work.
+The final test caches the exact same vertices; it should preserve pixels while
+removing repeated geometry construction. A final five-minute quiet window,
+signalled by DEVICE-WINDOW-3.txt with the same available/expiry fields, permits
+two matched A/B repetitions. It writes DEVICE-RELEASED-3.txt and ends device work.
+The earlier release markers still end their respective windows normally.

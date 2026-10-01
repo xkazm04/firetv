@@ -1,0 +1,33 @@
+{
+  "started_at": "2026-10-01T15:24:25.780765+00:00",
+  "device": "10.0.0.139:5555",
+  "model": "AFTKM",
+  "prior_activity": "com.amazon.tv.launcher/.ui.HomeActivity_vNext",
+  "apk_sha256": "2aeceddaee56445f7daa268e3f002c51524f15655108d05f1974701b273b7338",
+  "package": "dev.deathride.artlab",
+  "preflight_integration_phase": null,
+  "runs": [
+    {
+      "name": "v3-stick-g-0-efficient-stack",
+      "result_sha256": "5d1507ffd21af5f43adbde0b76070a1940a55f42f909b3194f1ed4734ff51653",
+      "screenshot_sha256": "ccdcc912d58ea2c05ae1b2d8afceb738019327c207c7508e7ce523c8d2f82d0c"
+    },
+    {
+      "name": "v3-stick-g-0-lean-stack",
+      "result_sha256": "3973be42fdb392a7a0b038e8547600b703d3247e9c855fc18261a1832c9d07b3",
+      "screenshot_sha256": "a6d29b4d73159dda36965b8dcfd5c480b59ba2b96a5dbbc1c8992db625401874"
+    },
+    {
+      "name": "v3-stick-g-0-painted",
+      "result_sha256": "b0409646c7b4ef0c11f8016b384376c1491b2e3690cbaaa55f7dd49051a0c759",
+      "screenshot_sha256": "ccd42428349463ae4cacf0297b27369203b2b3c48c83ef6700b954cf4a6e3965"
+    }
+  ],
+  "requested_runs": 3,
+  "status": "complete",
+  "runner_sha256": "633494e5099331fcc7536805619562d8dca7ddb9ed086ba13419d6cea60f0014",
+  "coordination": "shared git-common-dir lease; refuse active race; abort if foreground changes; install only artlab",
+  "finished_at": "2026-10-01T15:25:48.627599+00:00",
+  "restored_prior_activity": true,
+  "integration_installation_unchanged": true
+}
