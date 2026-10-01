@@ -1,0 +1,81 @@
+[
+  {
+    "id": "p4-ice-centre-768-v1",
+    "class": "ice",
+    "kind": "tile",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p4-ice-recovery\\ice-centre-768.png",
+    "source_sha256": "a91b40bb56ab0a3599d120229a42460de0bf2a0ab46543ef3a14d2c7e21e0770",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "p1-tile-ice-v2",
+      "class": "ice",
+      "prompt_action": "The complete image is ONLY an EMPTY material swatch: Pale cold blue ice, fine uniform granular frost with faint dispersed micro scratches; no long cracks or unique bright shapes. Seamless full-bleed surface, pattern continues across all four edges, even lighting. Fill the entire square edge-to-edge with this anonymous ground texture. No vehicle, car, buggy, wheels, object, icon, border, frame, grid or scene anywhere. The deliverable is a flat surface material, not a racing scene.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "none",
+      "count": "1",
+      "status": "ready",
+      "kind": "tile",
+      "reference": "",
+      "batch": "p2-materials",
+      "approval": "pending"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "raw_metrics": {
+      "edge_x_mean": 0.02344388276143791,
+      "edge_y_mean": 0.02467447916666667,
+      "edge_x_peak": 0.11764705882352944,
+      "edge_y_peak": 0.11764705882352944,
+      "autocorrelation_peak": 0.19431287615715237,
+      "autocorrelation_shift_px": [
+        107,
+        0
+      ],
+      "basis": "decoded straight RGB / 255; autocorrelation circular luminance at 128px; excludes nearby shifts"
+    },
+    "raw_codes": [],
+    "metrics": {
+      "edge_x_mean": 0.0,
+      "edge_y_mean": 0.0,
+      "edge_x_peak": 0.0,
+      "edge_y_peak": 0.0,
+      "autocorrelation_peak": 0.10868072430059067,
+      "autocorrelation_shift_px": [
+        124,
+        16
+      ],
+      "basis": "decoded straight RGB / 255; autocorrelation circular luminance at 128px; excludes nearby shifts"
+    },
+    "repeat_path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p4-ice-recovery\\ice-centre-768-repeat.png",
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p4-ice-recovery\\ice-centre-768.png",
+    "sha256": "a91b40bb56ab0a3599d120229a42460de0bf2a0ab46543ef3a14d2c7e21e0770",
+    "derivation": {
+      "recipe": "fixed-centre-crop-v1 + opposite-edge-blend-v1",
+      "parent_id": "p1-tile-ice-v2",
+      "parent_raw_sha256": "cabd195877732a4672b79aa3f951536dd202a10332e0238c1edae674df93404f",
+      "crop_px": [
+        128,
+        128,
+        896,
+        896
+      ],
+      "band_px": 8,
+      "before_metrics": {
+        "edge_x_mean": 0.015854779411764715,
+        "edge_y_mean": 0.013914419934640527,
+        "edge_x_peak": 0.10196078431372546,
+        "edge_y_peak": 0.06666666666666665,
+        "autocorrelation_peak": 0.10279964689174761,
+        "autocorrelation_shift_px": [
+          127,
+          17
+        ],
+        "basis": "decoded straight RGB / 255; autocorrelation circular luminance at 128px; excludes nearby shifts"
+      },
+      "new_grok_calls": 0,
+      "selection": "Directly inspected all three 2x2 repeats. The 768px centre crop removes the broad bright cross while preserving the finest original frost grain; 512/256 alternatives retained but not selected."
+    }
+  }
+]

@@ -1,0 +1,283 @@
+[
+  {
+    "id": "p1-tile-asphalt-v1",
+    "class": "asphalt",
+    "kind": "tile",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\p1-tile-asphalt-v1\\attempt-02\\1.jpg",
+    "source_sha256": "53b74f0242eb998a09dcbef1cb569f9f40ee523fa846ab8636f0e5a60db26089",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "p1-tile-asphalt-v1",
+      "class": "asphalt",
+      "prompt_action": "Dark charcoal asphalt, fine anonymous aggregate uniformly scattered, barely visible tiny wear, no large cracks, no recognizable motifs or patches. Seamless full-bleed surface, pattern continues across all four edges, even lighting.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "none",
+      "count": "1",
+      "status": "ready",
+      "kind": "tile",
+      "reference": "",
+      "batch": "p1-tiles",
+      "approval": "pending"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "raw_metrics": {
+      "edge_x_mean": 0.014012714460784314,
+      "edge_y_mean": 0.013421670751633986,
+      "edge_x_peak": 0.16470588235294117,
+      "edge_y_peak": 0.1019607843137255,
+      "autocorrelation_peak": 0.04102549539330067,
+      "autocorrelation_shift_px": [
+        2,
+        60
+      ],
+      "basis": "decoded straight RGB / 255; autocorrelation circular luminance at 128px; excludes nearby shifts"
+    },
+    "raw_codes": [],
+    "metrics": {
+      "edge_x_mean": 0.008343545751633987,
+      "edge_y_mean": 0.010380923202614379,
+      "edge_x_peak": 0.0392156862745098,
+      "edge_y_peak": 0.054901960784313725,
+      "autocorrelation_peak": 0.039875228278821125,
+      "autocorrelation_shift_px": [
+        126,
+        21
+      ],
+      "basis": "decoded straight RGB / 255; autocorrelation circular luminance at 128px; excludes nearby shifts"
+    },
+    "repeat_path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p1-tiles\\p1-tile-asphalt-v1-repeat.png",
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p1-tiles\\p1-tile-asphalt-v1.png",
+    "sha256": "7352d424de566c58291165db4c1825c0a572ff22b0db2bf30dcfe38141874474"
+  },
+  {
+    "id": "p1-tile-gravel-v1",
+    "class": "gravel",
+    "kind": "tile",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\p1-tile-gravel-v1\\attempt-01\\1.jpg",
+    "source_sha256": "273f0ccc4c4269a19b9ff35cc7a33826bfbdf525db03c50ef54c2613f99c660c",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "p1-tile-gravel-v1",
+      "class": "gravel",
+      "prompt_action": "Warm grey and muted ochre small gravel, even stochastic stone distribution with no large clusters. Seamless full-bleed surface, pattern continues across all four edges, even lighting.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "none",
+      "count": "1",
+      "status": "ready",
+      "kind": "tile",
+      "reference": "",
+      "batch": "p1-tiles",
+      "approval": "pending"
+    },
+    "verdict": "reject",
+    "codes": [
+      "TILE_REPETITION"
+    ],
+    "raw_metrics": {
+      "edge_x_mean": 0.05365732230392156,
+      "edge_y_mean": 0.05295394199346406,
+      "edge_x_peak": 0.2941176470588235,
+      "edge_y_peak": 0.34901960784313724,
+      "autocorrelation_peak": 0.4596818112950185,
+      "autocorrelation_shift_px": [
+        127,
+        16
+      ],
+      "basis": "decoded straight RGB / 255; autocorrelation circular luminance at 128px; excludes nearby shifts"
+    },
+    "raw_codes": [
+      "TILE_REPETITION"
+    ],
+    "metrics": {
+      "edge_x_mean": 0.03504391339869281,
+      "edge_y_mean": 0.03235804738562092,
+      "edge_x_peak": 0.1725490196078432,
+      "edge_y_peak": 0.17647058823529416,
+      "autocorrelation_peak": 0.4567462497972807,
+      "autocorrelation_shift_px": [
+        127,
+        16
+      ],
+      "basis": "decoded straight RGB / 255; autocorrelation circular luminance at 128px; excludes nearby shifts"
+    },
+    "repeat_path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p1-tiles\\p1-tile-gravel-v1-repeat.png",
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p1-tiles\\p1-tile-gravel-v1.png",
+    "sha256": "ceab2f13cd8f13326677450dbc89c450b8143eed8e78ce51336915df47215ee3"
+  },
+  {
+    "id": "p1-tile-ice-v1",
+    "class": "ice",
+    "kind": "tile",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\p1-tile-ice-v1\\attempt-01\\1.jpg",
+    "source_sha256": "13b31dd1caa9b8c6baa6bbe60a593fb2809a9f5a4326e1340ea35ea233992fa1",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "p1-tile-ice-v1",
+      "class": "ice",
+      "prompt_action": "Pale cold blue ice, fine uniform granular frost with faint dispersed micro scratches; no long cracks or unique bright shapes. Seamless full-bleed surface, pattern continues across all four edges, even lighting.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "none",
+      "count": "1",
+      "status": "ready",
+      "kind": "tile",
+      "reference": "",
+      "batch": "p1-tiles",
+      "approval": "pending"
+    },
+    "verdict": "reject",
+    "codes": [
+      "TILE_REPETITION"
+    ],
+    "raw_metrics": {
+      "edge_x_mean": 0.01930274714052287,
+      "edge_y_mean": 0.015843290441176466,
+      "edge_x_peak": 0.11372549019607847,
+      "edge_y_peak": 0.08235294117647063,
+      "autocorrelation_peak": 0.46465043260389916,
+      "autocorrelation_shift_px": [
+        0,
+        16
+      ],
+      "basis": "decoded straight RGB / 255; autocorrelation circular luminance at 128px; excludes nearby shifts"
+    },
+    "raw_codes": [
+      "TILE_REPETITION"
+    ],
+    "metrics": {
+      "edge_x_mean": 0.015854779411764698,
+      "edge_y_mean": 0.012964665032679732,
+      "edge_x_peak": 0.0862745098039216,
+      "edge_y_peak": 0.0745098039215687,
+      "autocorrelation_peak": 0.4620416987495139,
+      "autocorrelation_shift_px": [
+        0,
+        16
+      ],
+      "basis": "decoded straight RGB / 255; autocorrelation circular luminance at 128px; excludes nearby shifts"
+    },
+    "repeat_path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p1-tiles\\p1-tile-ice-v1-repeat.png",
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p1-tiles\\p1-tile-ice-v1.png",
+    "sha256": "a1de2dda1c53c5eb047085982993246a5af4e880d551abcf9b39204e284ca296"
+  },
+  {
+    "id": "p1-tile-oil-v1",
+    "class": "oil",
+    "kind": "tile",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\p1-tile-oil-v1\\attempt-01\\1.jpg",
+    "source_sha256": "f191bfc605818bef032371ed6d7a7b0a3156ca9578f26619d7a80758d06c991d",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "p1-tile-oil-v1",
+      "class": "oil",
+      "prompt_action": "Charcoal road with a uniform fine dark oily sheen, extremely subtle blue-green tint across the entire surface, no puddle, no rainbow streaks or large motifs. Seamless full-bleed surface, pattern continues across all four edges, even lighting.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "none",
+      "count": "1",
+      "status": "ready",
+      "kind": "tile",
+      "reference": "",
+      "batch": "p1-tiles",
+      "approval": "pending"
+    },
+    "verdict": "reject",
+    "codes": [
+      "TILE_REPETITION"
+    ],
+    "raw_metrics": {
+      "edge_x_mean": 0.014104626225490196,
+      "edge_y_mean": 0.015372242647058824,
+      "edge_x_peak": 0.06274509803921569,
+      "edge_y_peak": 0.07058823529411766,
+      "autocorrelation_peak": 0.3613536453742699,
+      "autocorrelation_shift_px": [
+        127,
+        56
+      ],
+      "basis": "decoded straight RGB / 255; autocorrelation circular luminance at 128px; excludes nearby shifts"
+    },
+    "raw_codes": [
+      "TILE_REPETITION"
+    ],
+    "metrics": {
+      "edge_x_mean": 0.009553717320261439,
+      "edge_y_mean": 0.010748570261437907,
+      "edge_x_peak": 0.0431372549019608,
+      "edge_y_peak": 0.043137254901960784,
+      "autocorrelation_peak": 0.3532044768821074,
+      "autocorrelation_shift_px": [
+        127,
+        56
+      ],
+      "basis": "decoded straight RGB / 255; autocorrelation circular luminance at 128px; excludes nearby shifts"
+    },
+    "repeat_path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p1-tiles\\p1-tile-oil-v1-repeat.png",
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p1-tiles\\p1-tile-oil-v1.png",
+    "sha256": "8819a628e5e61ab66138d5dee3ee5ca0ad17885668e43562a584fbbfc728a8c1"
+  },
+  {
+    "id": "p1-tile-kerb-v1",
+    "class": "kerb",
+    "kind": "tile",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\p1-tile-kerb-v1\\attempt-01\\1.jpg",
+    "source_sha256": "578638d4a348b2e5cdb8e29eb0f2f5ebf835badfe0918505b9445820a22fd3f1",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "p1-tile-kerb-v1",
+      "class": "kerb",
+      "prompt_action": "Red and ivory kerb bands of equal width, straight and parallel, crossing the entire surface without gaps; an even repeat period and consistent flat wear. Seamless full-bleed surface, pattern continues across all four edges, even lighting.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "none",
+      "count": "1",
+      "status": "ready",
+      "kind": "tile",
+      "reference": "",
+      "batch": "p1-tiles",
+      "approval": "pending"
+    },
+    "verdict": "reject",
+    "codes": [
+      "TILE_SEAM_PEAK"
+    ],
+    "raw_metrics": {
+      "edge_x_mean": 0.06097834967320261,
+      "edge_y_mean": 0.04716222426470588,
+      "edge_x_peak": 0.6980392156862746,
+      "edge_y_peak": 0.5333333333333333,
+      "autocorrelation_peak": 0.8626685367973529,
+      "autocorrelation_shift_px": [
+        62,
+        0
+      ],
+      "basis": "decoded straight RGB / 255; autocorrelation circular luminance at 128px; excludes nearby shifts"
+    },
+    "raw_codes": [
+      "TILE_SEAM_PEAK"
+    ],
+    "metrics": {
+      "edge_x_mean": 0.04800857843137255,
+      "edge_y_mean": 0.02707312091503268,
+      "edge_x_peak": 0.4,
+      "edge_y_peak": 0.4901960784313726,
+      "autocorrelation_peak": 0.8636189892304911,
+      "autocorrelation_shift_px": [
+        61,
+        0
+      ],
+      "basis": "decoded straight RGB / 255; autocorrelation circular luminance at 128px; excludes nearby shifts"
+    },
+    "repeat_path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p1-tiles\\p1-tile-kerb-v1-repeat.png",
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p1-tiles\\p1-tile-kerb-v1.png",
+    "sha256": "79e5aefeb22be680435fc91039113106c6c5886d16b3d191875b85679c0b9cc3"
+  }
+]

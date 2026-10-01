@@ -1,0 +1,61 @@
+[
+  {
+    "id": "p1-tile-gravel-v3",
+    "class": "gravel",
+    "kind": "tile",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\p1-tile-gravel-v3\\attempt-01\\1.jpg",
+    "source_sha256": "91a6ce4954fa1a9bed8efed6cd0d6f1dd15a0e5cdcfa963fa5337b2039f75796",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "p1-tile-gravel-v3",
+      "class": "gravel",
+      "prompt_action": "The complete image is ONLY an EMPTY material swatch: Warm grey and muted ochre small gravel, even stochastic stone distribution with no large clusters. Seamless full-bleed surface, pattern continues across all four edges, even lighting. Fill the entire square edge-to-edge with this anonymous ground texture. No vehicle, car, buggy, wheels, object, icon, border, frame, grid or scene anywhere. The deliverable is a flat surface material, not a racing scene. Show a SINGLE unrepeated tile, NOT a 2x2 demonstration, NOT repeated quadrants, NOT mirrored halves. Every part of the image has different small stochastic grain; no patch of the image is copied elsewhere inside the square. Very low contrast fine particles, no outlines around large stones, no large stains or cracks.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "none",
+      "count": "1",
+      "status": "ready",
+      "kind": "tile",
+      "reference": "",
+      "batch": "p2-materials-final",
+      "approval": "pending"
+    },
+    "verdict": "reject",
+    "codes": [
+      "TILE_REPETITION"
+    ],
+    "raw_metrics": {
+      "edge_x_mean": 0.10461218341503269,
+      "edge_y_mean": 0.09772263071895425,
+      "edge_x_peak": 0.5568627450980392,
+      "edge_y_peak": 0.5647058823529412,
+      "autocorrelation_peak": 0.8934354865712426,
+      "autocorrelation_shift_px": [
+        64,
+        0
+      ],
+      "basis": "decoded straight RGB / 255; autocorrelation circular luminance at 128px; excludes nearby shifts"
+    },
+    "raw_codes": [
+      "TILE_SEAM_MEAN",
+      "TILE_SEAM_PEAK",
+      "TILE_REPETITION"
+    ],
+    "metrics": {
+      "edge_x_mean": 0.07527573529411764,
+      "edge_y_mean": 0.06391441993464052,
+      "edge_x_peak": 0.32941176470588235,
+      "edge_y_peak": 0.2745098039215686,
+      "autocorrelation_peak": 0.9012767705706494,
+      "autocorrelation_shift_px": [
+        64,
+        0
+      ],
+      "basis": "decoded straight RGB / 255; autocorrelation circular luminance at 128px; excludes nearby shifts"
+    },
+    "repeat_path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p2-materials-final\\p1-tile-gravel-v3-repeat.png",
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p2-materials-final\\p1-tile-gravel-v3.png",
+    "sha256": "e6166f1161d685a295bfb84861cf1544a13f7c997d78f28b8f8277bc32458887"
+  }
+]

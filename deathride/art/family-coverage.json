@@ -1,0 +1,41 @@
+{
+  "classes": [
+    "Needle",
+    "Line",
+    "Bastion",
+    "Comet",
+    "Trail",
+    "Flint",
+    "Quill",
+    "Vandal",
+    "Kestrel",
+    "Bulwark"
+  ],
+  "reference_briefs": 10,
+  "state_briefs": 40,
+  "livery_briefs": 30,
+  "states": [
+    "clean",
+    "damaged-1",
+    "damaged-2",
+    "wreck"
+  ],
+  "liveries": [
+    "ivory",
+    "red",
+    "blue"
+  ],
+  "owner_reference_approvals": 0,
+  "derived_generation": "blocked pending exact owner reference approval",
+  "c1": {
+    "commit": "09d849da04c66e18f26cc4581f1ff3abd6bd65df",
+    "branch": "deathride/content",
+    "path": "deathride/core/src/main/resources/data/car-shapes.csv",
+    "sha256": "e2b41bc6ad41f87fe1276e86794b05782bef040ce5dbafcac5bd43d54e125f5a",
+    "captured_at": "2026-10-01T08:53:16.799013+00:00",
+    "policy": "Read-only snapshot of C1 authority; reject mismatches after integration, never edit these numbers in ART."
+  },
+  "reference_candidates": 10,
+  "pixel_gate_pass": 10,
+  "derived_images_generated": 0
+}

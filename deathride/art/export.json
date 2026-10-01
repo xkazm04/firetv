@@ -1,0 +1,11 @@
+{
+  "schema": 1,
+  "purpose": "Export resolution only; this file never changes generation prompts, world dimensions, collision geometry or W6 camera density.",
+  "cell_limit_by_id": {
+    "p4-landmarks-gantry-v1": 512,
+    "p4-hud-frame-health-v1": 256,
+    "p4-hud-frame-turbo-v1": 256,
+    "p4-hud-frame-panel-v1": 256
+  },
+  "reason": "Keep a wide gantry and stretched HUD borders readable at television display sizes. Smaller isolated props remain 128-pixel cells; portraits remain 256. Final atlas and resident-memory gates still apply."
+}

@@ -1,0 +1,125 @@
+{
+  "source_sha256": "b5e0efeb99d2631d6460c1d161ccfdda0686753a493d1349ff44ec7fc0ce448b",
+  "frame_count": 16,
+  "frames": [
+    {
+      "row": 0,
+      "col": 0,
+      "unsigned_axis_degrees": 0.11908552507897115,
+      "expected_unsigned_axis_degrees": 0.0,
+      "axis_error_degrees": 0.11908552507897115
+    },
+    {
+      "row": 0,
+      "col": 1,
+      "unsigned_axis_degrees": 0.09913842879109916,
+      "expected_unsigned_axis_degrees": 22.5,
+      "axis_error_degrees": 22.4008615712089
+    },
+    {
+      "row": 0,
+      "col": 2,
+      "unsigned_axis_degrees": 0.16559159203405496,
+      "expected_unsigned_axis_degrees": 45.0,
+      "axis_error_degrees": 44.834408407965945
+    },
+    {
+      "row": 0,
+      "col": 3,
+      "unsigned_axis_degrees": 0.13924419579147052,
+      "expected_unsigned_axis_degrees": 67.5,
+      "axis_error_degrees": 67.36075580420852
+    },
+    {
+      "row": 1,
+      "col": 0,
+      "unsigned_axis_degrees": 0.024265417373719195,
+      "expected_unsigned_axis_degrees": 90.0,
+      "axis_error_degrees": 89.97573458262629
+    },
+    {
+      "row": 1,
+      "col": 1,
+      "unsigned_axis_degrees": 0.030927208746767278,
+      "expected_unsigned_axis_degrees": 67.5,
+      "axis_error_degrees": 67.46907279125324
+    },
+    {
+      "row": 1,
+      "col": 2,
+      "unsigned_axis_degrees": 0.054044336589299594,
+      "expected_unsigned_axis_degrees": 45.0,
+      "axis_error_degrees": 44.9459556634107
+    },
+    {
+      "row": 1,
+      "col": 3,
+      "unsigned_axis_degrees": 0.012257547320435895,
+      "expected_unsigned_axis_degrees": 22.5,
+      "axis_error_degrees": 22.487742452679566
+    },
+    {
+      "row": 2,
+      "col": 0,
+      "unsigned_axis_degrees": 0.008269189528015369,
+      "expected_unsigned_axis_degrees": 0.0,
+      "axis_error_degrees": 0.008269189528015369
+    },
+    {
+      "row": 2,
+      "col": 1,
+      "unsigned_axis_degrees": 0.04543496008283834,
+      "expected_unsigned_axis_degrees": 22.5,
+      "axis_error_degrees": 22.45456503991716
+    },
+    {
+      "row": 2,
+      "col": 2,
+      "unsigned_axis_degrees": 0.05757776342821942,
+      "expected_unsigned_axis_degrees": 45.0,
+      "axis_error_degrees": 44.94242223657178
+    },
+    {
+      "row": 2,
+      "col": 3,
+      "unsigned_axis_degrees": 0.020995043089128827,
+      "expected_unsigned_axis_degrees": 67.5,
+      "axis_error_degrees": 67.47900495691087
+    },
+    {
+      "row": 3,
+      "col": 0,
+      "unsigned_axis_degrees": 0.04837601531913186,
+      "expected_unsigned_axis_degrees": 90.0,
+      "axis_error_degrees": 89.95162398468086
+    },
+    {
+      "row": 3,
+      "col": 1,
+      "unsigned_axis_degrees": 0.03034933780120939,
+      "expected_unsigned_axis_degrees": 67.5,
+      "axis_error_degrees": 67.46965066219879
+    },
+    {
+      "row": 3,
+      "col": 2,
+      "unsigned_axis_degrees": 0.039409557353704744,
+      "expected_unsigned_axis_degrees": 45.0,
+      "axis_error_degrees": 44.96059044264629
+    },
+    {
+      "row": 3,
+      "col": 3,
+      "unsigned_axis_degrees": 0.007599549289858557,
+      "expected_unsigned_axis_degrees": 22.5,
+      "axis_error_degrees": 22.492400450710143
+    }
+  ],
+  "codes": [
+    "DRAWN_GRID",
+    "HEADING_SEQUENCE"
+  ],
+  "verdict": "reject",
+  "device": "not measured; rejected source representation",
+  "note": "Unsigned PCA measures axis only, never front versus rear. Long drawn grid removed for diagnostic component counting, not accepted asset repair."
+}

@@ -1,0 +1,362 @@
+[
+  {
+    "id": "test-car-bastion",
+    "source_sha256": "dd567efbceec4c0b26691597ac23285848272253fecf7c30ad3fd95aef171404",
+    "expected": {
+      "forbidden_details": false,
+      "true_top_down": "yes",
+      "heading_right": "yes",
+      "subject_matches": "yes"
+    },
+    "label_author": "executing-agent visual inspection and declared mutations; NOT human/owner labels",
+    "neutral_lighting": "unlabelled: ambiguous shading; not included in error-rate denominator"
+  },
+  {
+    "id": "test-car-comet",
+    "source_sha256": "82c349382e9fd1b1496078fd2a8f1ce3653c9085810d55c4193cb7fbc36077c6",
+    "expected": {
+      "forbidden_details": true,
+      "true_top_down": "yes",
+      "heading_right": "yes",
+      "subject_matches": "yes"
+    },
+    "label_author": "executing-agent visual inspection and declared mutations; NOT human/owner labels",
+    "neutral_lighting": "unlabelled: ambiguous shading; not included in error-rate denominator"
+  },
+  {
+    "id": "test-car-line",
+    "source_sha256": "9ef64eae55a3a5f380ddd69da1a8a249feb2131cfa6d27a3b8386ffd6c608fe8",
+    "expected": {
+      "forbidden_details": false,
+      "true_top_down": "yes",
+      "heading_right": "yes",
+      "subject_matches": "yes"
+    },
+    "label_author": "executing-agent visual inspection and declared mutations; NOT human/owner labels",
+    "neutral_lighting": "unlabelled: ambiguous shading; not included in error-rate denominator"
+  },
+  {
+    "id": "test-car-needle",
+    "source_sha256": "dcb9c8979c0101c325131b2de53a985978bbb878285154527761aea006a8fa94",
+    "expected": {
+      "forbidden_details": false,
+      "true_top_down": "yes",
+      "heading_right": "yes",
+      "subject_matches": "yes"
+    },
+    "label_author": "executing-agent visual inspection and declared mutations; NOT human/owner labels",
+    "neutral_lighting": "unlabelled: ambiguous shading; not included in error-rate denominator"
+  },
+  {
+    "id": "test-car-trail",
+    "source_sha256": "05bc558ec3134b3d737a9064b416647366eb6b44d6ee409de1ced96e3a94f6d2",
+    "expected": {
+      "forbidden_details": false,
+      "true_top_down": "no",
+      "heading_right": "yes",
+      "subject_matches": "yes"
+    },
+    "label_author": "executing-agent visual inspection and declared mutations; NOT human/owner labels",
+    "neutral_lighting": "unlabelled: ambiguous shading; not included in error-rate denominator"
+  },
+  {
+    "id": "test-scene-mock",
+    "source_sha256": "221144f194a7577161c81ce1e83382fda7fe2c771ce30c7a1d5f1fb88f38e2e4",
+    "expected": {
+      "forbidden_details": false,
+      "true_top_down": "not_applicable",
+      "heading_right": "not_applicable",
+      "subject_matches": "yes"
+    },
+    "label_author": "executing-agent visual inspection and declared mutations; NOT human/owner labels",
+    "neutral_lighting": "unlabelled: ambiguous shading; not included in error-rate denominator"
+  },
+  {
+    "id": "test-tile-asphalt",
+    "source_sha256": "ffd3d580de21eb853da64ba0568f8f5d42e8dc3979a61aecaa0108eb8ee6121d",
+    "expected": {
+      "forbidden_details": false,
+      "true_top_down": "not_applicable",
+      "heading_right": "not_applicable",
+      "subject_matches": "yes"
+    },
+    "label_author": "executing-agent visual inspection and declared mutations; NOT human/owner labels",
+    "neutral_lighting": "unlabelled: ambiguous shading; not included in error-rate denominator"
+  },
+  {
+    "id": "test-tile-gravel",
+    "source_sha256": "dbc3c5305d9ffff084d05e3a290fa5d226ff125a3ecbeae38c631e3eb69f8882",
+    "expected": {
+      "forbidden_details": false,
+      "true_top_down": "not_applicable",
+      "heading_right": "not_applicable",
+      "subject_matches": "yes"
+    },
+    "label_author": "executing-agent visual inspection and declared mutations; NOT human/owner labels",
+    "neutral_lighting": "unlabelled: ambiguous shading; not included in error-rate denominator"
+  },
+  {
+    "id": "test-tile-ice",
+    "source_sha256": "de55e413d1b33fdbaae5c6454fb6a521eb63364e6fc9e26a632b194c48151e61",
+    "expected": {
+      "forbidden_details": false,
+      "true_top_down": "not_applicable",
+      "heading_right": "not_applicable",
+      "subject_matches": "yes"
+    },
+    "label_author": "executing-agent visual inspection and declared mutations; NOT human/owner labels",
+    "neutral_lighting": "unlabelled: ambiguous shading; not included in error-rate denominator"
+  },
+  {
+    "id": "test-tile-kerb",
+    "source_sha256": "0a4a04ad9cc5d358fd289019948c10560438c5fc77d6ad9127f24cea8e8b297a",
+    "expected": {
+      "forbidden_details": false,
+      "true_top_down": "not_applicable",
+      "heading_right": "not_applicable",
+      "subject_matches": "yes"
+    },
+    "label_author": "executing-agent visual inspection and declared mutations; NOT human/owner labels",
+    "neutral_lighting": "unlabelled: ambiguous shading; not included in error-rate denominator"
+  },
+  {
+    "id": "test-tile-oil",
+    "source_sha256": "fb50887bd8357e77fb2bff39bb698c9d0d6384f9388545a3bab3eb4b51b5495d",
+    "expected": {
+      "forbidden_details": false,
+      "true_top_down": "not_applicable",
+      "heading_right": "not_applicable",
+      "subject_matches": "yes"
+    },
+    "label_author": "executing-agent visual inspection and declared mutations; NOT human/owner labels",
+    "neutral_lighting": "unlabelled: ambiguous shading; not included in error-rate denominator"
+  },
+  {
+    "id": "test-icon-ammo",
+    "source_sha256": "5a9359627dd629a76c82e36e38c3cc488b153ea3c4e687acc63f4acd4e71485e",
+    "expected": {
+      "forbidden_details": false,
+      "true_top_down": "not_applicable",
+      "heading_right": "not_applicable",
+      "subject_matches": "yes"
+    },
+    "label_author": "executing-agent visual inspection and declared mutations; NOT human/owner labels",
+    "neutral_lighting": "unlabelled: ambiguous shading; not included in error-rate denominator"
+  },
+  {
+    "id": "test-icon-hammer",
+    "source_sha256": "e3ca3342a825cf9505c033703ce0b16e35ce4a103b54a424b9302b81d0389a47",
+    "expected": {
+      "forbidden_details": false,
+      "true_top_down": "not_applicable",
+      "heading_right": "not_applicable",
+      "subject_matches": "yes"
+    },
+    "label_author": "executing-agent visual inspection and declared mutations; NOT human/owner labels",
+    "neutral_lighting": "unlabelled: ambiguous shading; not included in error-rate denominator"
+  },
+  {
+    "id": "test-icon-mine",
+    "source_sha256": "b82a306b63210a10e6ca69ca303dada9362655d018c3e5012e5dd3b0ceed2c95",
+    "expected": {
+      "forbidden_details": false,
+      "true_top_down": "not_applicable",
+      "heading_right": "not_applicable",
+      "subject_matches": "yes"
+    },
+    "label_author": "executing-agent visual inspection and declared mutations; NOT human/owner labels",
+    "neutral_lighting": "unlabelled: ambiguous shading; not included in error-rate denominator"
+  },
+  {
+    "id": "test-icon-repair",
+    "source_sha256": "81141694a6d4824db56fecc6479b4dfe85578f5ef5d4d232a32a9e52ec682f24",
+    "expected": {
+      "forbidden_details": false,
+      "true_top_down": "not_applicable",
+      "heading_right": "not_applicable",
+      "subject_matches": "yes"
+    },
+    "label_author": "executing-agent visual inspection and declared mutations; NOT human/owner labels",
+    "neutral_lighting": "unlabelled: ambiguous shading; not included in error-rate denominator"
+  },
+  {
+    "id": "test-icon-rivet",
+    "source_sha256": "690cf60569f3b4cd4a8a51d4b9a3594b0adb8ecaecf44baee27e1d0c63878fe1",
+    "expected": {
+      "forbidden_details": false,
+      "true_top_down": "not_applicable",
+      "heading_right": "not_applicable",
+      "subject_matches": "yes"
+    },
+    "label_author": "executing-agent visual inspection and declared mutations; NOT human/owner labels",
+    "neutral_lighting": "unlabelled: ambiguous shading; not included in error-rate denominator"
+  },
+  {
+    "id": "p1-car-needle-v1",
+    "source_sha256": "d37ae0e2bf6e297c56cfacb97d85d61963c025b0449f892a5c09a4b5025f25b3",
+    "expected": {
+      "forbidden_details": false,
+      "true_top_down": "yes",
+      "heading_right": "yes",
+      "subject_matches": "yes"
+    },
+    "label_author": "executing-agent visual inspection and declared mutations; NOT human/owner labels",
+    "neutral_lighting": "unlabelled: ambiguous shading; not included in error-rate denominator"
+  },
+  {
+    "id": "p1-car-line-v2",
+    "source_sha256": "2daa7280ce25768c9993fd4da9c2cba340d3424ae43467054cb4785082230aea",
+    "expected": {
+      "forbidden_details": false,
+      "true_top_down": "yes",
+      "heading_right": "yes",
+      "subject_matches": "yes"
+    },
+    "label_author": "executing-agent visual inspection and declared mutations; NOT human/owner labels",
+    "neutral_lighting": "unlabelled: ambiguous shading; not included in error-rate denominator"
+  },
+  {
+    "id": "p1-car-bastion-v2",
+    "source_sha256": "9eed2bcbcb89d2464309fdaa276480b5c99b1c986d8cbfba84f77fb9e9e964df",
+    "expected": {
+      "forbidden_details": false,
+      "true_top_down": "yes",
+      "heading_right": "yes",
+      "subject_matches": "yes"
+    },
+    "label_author": "executing-agent visual inspection and declared mutations; NOT human/owner labels",
+    "neutral_lighting": "unlabelled: ambiguous shading; not included in error-rate denominator"
+  },
+  {
+    "id": "p1-car-comet-v2",
+    "source_sha256": "3b6396ae04aadb7c58eaeaaaaed76606a5999ef7aa04885da077837425860bb5",
+    "expected": {
+      "forbidden_details": false,
+      "true_top_down": "yes",
+      "heading_right": "yes",
+      "subject_matches": "yes"
+    },
+    "label_author": "executing-agent visual inspection and declared mutations; NOT human/owner labels",
+    "neutral_lighting": "unlabelled: ambiguous shading; not included in error-rate denominator"
+  },
+  {
+    "id": "p1-car-trail-v2",
+    "source_sha256": "5a7d05da705d4cbd70c2efd008d61a8130bba0e7c2009ed5643b77623dacdd64",
+    "expected": {
+      "forbidden_details": false,
+      "true_top_down": "yes",
+      "heading_right": "yes",
+      "subject_matches": "yes"
+    },
+    "label_author": "executing-agent visual inspection and declared mutations; NOT human/owner labels",
+    "neutral_lighting": "unlabelled: ambiguous shading; not included in error-rate denominator"
+  },
+  {
+    "id": "p1-tile-asphalt-v1",
+    "source_sha256": "53b74f0242eb998a09dcbef1cb569f9f40ee523fa846ab8636f0e5a60db26089",
+    "expected": {
+      "forbidden_details": false,
+      "true_top_down": "not_applicable",
+      "heading_right": "not_applicable",
+      "subject_matches": "yes"
+    },
+    "label_author": "executing-agent visual inspection and declared mutations; NOT human/owner labels",
+    "neutral_lighting": "unlabelled: ambiguous shading; not included in error-rate denominator"
+  },
+  {
+    "id": "p1-tile-gravel-v1",
+    "source_sha256": "273f0ccc4c4269a19b9ff35cc7a33826bfbdf525db03c50ef54c2613f99c660c",
+    "expected": {
+      "forbidden_details": false,
+      "true_top_down": "not_applicable",
+      "heading_right": "not_applicable",
+      "subject_matches": "no"
+    },
+    "label_author": "executing-agent visual inspection and declared mutations; NOT human/owner labels",
+    "neutral_lighting": "unlabelled: ambiguous shading; not included in error-rate denominator"
+  },
+  {
+    "id": "p1-tile-ice-v1",
+    "source_sha256": "13b31dd1caa9b8c6baa6bbe60a593fb2809a9f5a4326e1340ea35ea233992fa1",
+    "expected": {
+      "forbidden_details": false,
+      "true_top_down": "not_applicable",
+      "heading_right": "not_applicable",
+      "subject_matches": "no"
+    },
+    "label_author": "executing-agent visual inspection and declared mutations; NOT human/owner labels",
+    "neutral_lighting": "unlabelled: ambiguous shading; not included in error-rate denominator"
+  },
+  {
+    "id": "p1-tile-oil-v1",
+    "source_sha256": "f191bfc605818bef032371ed6d7a7b0a3156ca9578f26619d7a80758d06c991d",
+    "expected": {
+      "forbidden_details": false,
+      "true_top_down": "not_applicable",
+      "heading_right": "not_applicable",
+      "subject_matches": "no"
+    },
+    "label_author": "executing-agent visual inspection and declared mutations; NOT human/owner labels",
+    "neutral_lighting": "unlabelled: ambiguous shading; not included in error-rate denominator"
+  },
+  {
+    "id": "p1-tile-kerb-v1",
+    "source_sha256": "578638d4a348b2e5cdb8e29eb0f2f5ebf835badfe0918505b9445820a22fd3f1",
+    "expected": {
+      "forbidden_details": false,
+      "true_top_down": "not_applicable",
+      "heading_right": "not_applicable",
+      "subject_matches": "yes"
+    },
+    "label_author": "executing-agent visual inspection and declared mutations; NOT human/owner labels",
+    "neutral_lighting": "unlabelled: ambiguous shading; not included in error-rate denominator"
+  },
+  {
+    "id": "old-p1-car-needle-v1",
+    "source_sha256": "e3952fe1d39edf7526b8672f9151b8533b7a23b83f5e4d649aebbfba76037d4f",
+    "expected": {
+      "forbidden_details": false,
+      "true_top_down": "yes",
+      "heading_right": "yes",
+      "subject_matches": "yes"
+    },
+    "label_author": "executing-agent visual inspection and declared mutations; NOT human/owner labels",
+    "neutral_lighting": "unlabelled: ambiguous shading; not included in error-rate denominator"
+  },
+  {
+    "id": "old-p1-tile-asphalt-v1",
+    "source_sha256": "bf4c2e84c6b6e7e7ba485268476f936cde0cd417cf15f473c207dd26a69de9fe",
+    "expected": {
+      "forbidden_details": false,
+      "true_top_down": "not_applicable",
+      "heading_right": "not_applicable",
+      "subject_matches": "no"
+    },
+    "label_author": "executing-agent visual inspection and declared mutations; NOT human/owner labels",
+    "neutral_lighting": "unlabelled: ambiguous shading; not included in error-rate denominator"
+  },
+  {
+    "id": "mutant-line-text",
+    "source_sha256": "d404bf47a1065896312a526a7798b66a3537bef5a36bfd3556300794a9bd6ac0",
+    "expected": {
+      "forbidden_details": true,
+      "true_top_down": "yes",
+      "heading_right": "yes",
+      "subject_matches": "yes"
+    },
+    "label_author": "executing-agent visual inspection and declared mutations; NOT human/owner labels",
+    "neutral_lighting": "unlabelled: ambiguous shading; not included in error-rate denominator"
+  },
+  {
+    "id": "mutant-line-vertical",
+    "source_sha256": "efbf53e4822e70bf7492b874d52d8c85948061031b717ec4ddb625613500eedf",
+    "expected": {
+      "forbidden_details": false,
+      "true_top_down": "yes",
+      "heading_right": "no",
+      "subject_matches": "yes"
+    },
+    "label_author": "executing-agent visual inspection and declared mutations; NOT human/owner labels",
+    "neutral_lighting": "unlabelled: ambiguous shading; not included in error-rate denominator"
+  }
+]

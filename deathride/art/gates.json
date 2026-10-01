@@ -1,0 +1,31 @@
+{
+  "version": "acceptance-v1",
+  "calibration_status": "provisional; five historical tile samples, executing-agent diagnostic labels, human calibration pending",
+  "source_margin_fraction": 0.03,
+  "minimum_foreground_fraction": 0.005,
+  "source_min_edge_px": 512,
+  "source_max_edge_px": 2048,
+  "maximum_foreground_fraction": 0.90,
+  "car_aspect_relative_error": 0.23,
+  "principal_axis_max_degrees": 10,
+  "neutral_key_distance": 36,
+  "magenta_chroma_min": 38,
+  "component_min_fraction": 0.00008,
+  "palette_p90_delta_e": 32,
+  "tile_edge_mean_max": 0.08,
+  "tile_edge_peak_max": 0.40,
+  "tile_autocorrelation_max": 0.35,
+  "tile_autocorrelation_min_shift_fraction": 0.125,
+  "tile_size_px": 256,
+  "vlm_confidence_min": 0.85,
+  "rationale": {
+    "source_margin_fraction": "Provisional 3 percent: historical Bastion has only 16/1024 px right margin versus the 31 px floor; original Comet has 33 px. Reject the known insufficient-frame sample before trimming.",
+    "car_aspect_relative_error": "Provisional tolerance around W6 length/width; includes wheel silhouettes but refuses gross distortion. Never stretch to pass.",
+    "principal_axis_max_degrees": "Horizontal major-axis gate only. Nose direction and camera projection are semantic questions.",
+    "tile_edge_mean_max": "Registry conservative provisional 8 percent per-channel full-range MAD. Source and final are both recorded; only exported shipping pixels gate acceptance, separately per axis.",
+    "tile_edge_peak_max": "Provisional full-range peak delta, fitted to five agent-inspected 2x2 shipping-size previews: visible ice discontinuity 0.447 versus no clear seam on asphalt 0.369. Human and held-out calibration pending.",
+    "tile_autocorrelation_max": "Provisional 0.35: historical asphalt measures 0.956 and oil 0.412 versus anonymous P1 asphalt 0.040. Nontrivial circular shifts on a 128-square luminance sample; fitted diagnostic separation, not held-out human calibration.",
+    "palette_p90_delta_e": "CIE Lab nearest role colour with derived material shades; diagnostic coarse mismatch gate, not an indexed-colour promise.",
+    "vlm_confidence_min": "Low confidence routes to review. High confidence never authorizes acceptance, especially before human calibration."
+  }
+}

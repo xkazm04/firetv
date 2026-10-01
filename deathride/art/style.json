@@ -1,0 +1,42 @@
+{
+  "schema": 1,
+  "version": "ink-metal-v1",
+  "style_block": "Inked cel-painted 2D combat-racing game art. Crisp near-black (#171B20) contours, chunky readable mechanical shapes, restrained paint chips, matte two-tone material shading. Rubber is charcoal (#252930), glass is blue-black (#273C48), bare metal is cool grey (#89949B), highlights are warm ivory (#E8DFC8); the assigned subject accent belongs only to painted panels. Neutral even diffuse illumination, symmetric highlights, no directional cast shadow. Clean graphic silhouette, consistent bold contour and sparse interior strokes; no photorealism, no 3D render finish.",
+  "camera": "True orthographic top-down: camera directly above, roof planes only, no visible front or side body faces. Cars point right, toward screen +x.",
+  "negative": "No driver, no people inside vehicles, no text, no letters, no numbers, no logos, no watermark, no perspective, no cast shadows, no cropped subject, no decorative ground.",
+  "background_key": "#FF00FF",
+  "pixels_per_metre": 24,
+  "gutter_px": 4,
+  "mipmaps": false,
+  "filter": "Linear",
+  "accents": {
+    "Needle": "#E5BD24",
+    "Line": "#CC342F",
+    "Bastion": "#657249",
+    "Comet": "#EE851E",
+    "Trail": "#3982B3"
+  },
+  "palette": [
+    "#171B20",
+    "#252930",
+    "#273C48",
+    "#89949B",
+    "#E8DFC8",
+    "#E5BD24",
+    "#CC342F",
+    "#657249",
+    "#EE851E",
+    "#3982B3"
+  ],
+  "source_shapes": "core/src/main/resources/data/car-shapes.csv",
+  "source_presentation": "core/src/main/resources/data/presentation.csv",
+  "texture_budget": {
+    "page_px": 1024,
+    "page_rgba_mib": 4,
+    "scene_mib": 32,
+    "cars_pages": 2,
+    "world_pages": 3,
+    "ui_pages": 1,
+    "theme_pages_resident": 1
+  }
+}

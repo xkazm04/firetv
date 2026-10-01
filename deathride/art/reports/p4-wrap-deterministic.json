@@ -1,0 +1,162 @@
+[
+  {
+    "id": "p4-tiles-asphalt-heavy-v1-wrap-v1",
+    "class": "asphalt-heavy",
+    "kind": "tile",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p4-wrap\\p4-tiles-asphalt-heavy-v1-wrap-v1.png",
+    "source_sha256": "3d9acc7efc957d706b2df2105f16c9eb3d7944220d9398343cb750d7bc0bed05",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "p4-tiles-asphalt-heavy-v1",
+      "class": "asphalt-heavy",
+      "prompt_action": "The entire image is ONLY an EMPTY anonymous ground-material swatch. Worn grey asphalt with dense fine pitting and very short randomly distributed hairline cracks, high wear but no long continuous cracks or patches. Seamless edge-to-edge material with even illumination. Show one unrepeated stochastic field, no repeated quadrants or mirrored halves. Very low-contrast small-scale details; no large motifs. No car, vehicle, wheel, object, scene, border, grid, lettering or road markings.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "none",
+      "count": "1",
+      "status": "ready",
+      "kind": "tile",
+      "reference": "",
+      "batch": "p4-tiles",
+      "approval": "pending",
+      "cell_limit": "256"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "raw_metrics": {
+      "edge_x_mean": 0.01236723856209151,
+      "edge_y_mean": 0.01929891748366014,
+      "edge_x_peak": 0.38823529411764707,
+      "edge_y_peak": 0.41568627450980394,
+      "autocorrelation_peak": 0.045448236917412434,
+      "autocorrelation_shift_px": [
+        82,
+        20
+      ],
+      "basis": "decoded straight RGB / 255; autocorrelation circular luminance at 128px; excludes nearby shifts"
+    },
+    "raw_codes": [
+      "TILE_SEAM_PEAK"
+    ],
+    "metrics": {
+      "edge_x_mean": 0.0,
+      "edge_y_mean": 0.0,
+      "edge_x_peak": 0.0,
+      "edge_y_peak": 0.0,
+      "autocorrelation_peak": 0.043168597996944925,
+      "autocorrelation_shift_px": [
+        82,
+        20
+      ],
+      "basis": "decoded straight RGB / 255; autocorrelation circular luminance at 128px; excludes nearby shifts"
+    },
+    "repeat_path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p4-wrap\\p4-tiles-asphalt-heavy-v1-wrap-v1-repeat.png",
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p4-wrap\\p4-tiles-asphalt-heavy-v1-wrap-v1.png",
+    "sha256": "3d9acc7efc957d706b2df2105f16c9eb3d7944220d9398343cb750d7bc0bed05",
+    "derivation": {
+      "recipe": "opposite-edge-blend-v1",
+      "band_px": 8,
+      "parent_id": "p4-tiles-asphalt-heavy-v1",
+      "parent_sha256": "401fc2069f0ba228f6ac5f453f333a995b013317e1e27020867feb741f2bc329",
+      "parent_raw_sha256": "ffe4f4b8ce01ab3f512a591de2d4a548474a0d19a1f8e9364bd1f7f2b069d346",
+      "before_metrics": {
+        "edge_x_mean": 0.010641339869281055,
+        "edge_y_mean": 0.01718239379084968,
+        "edge_x_peak": 0.23921568627450981,
+        "edge_y_peak": 0.41568627450980394,
+        "autocorrelation_peak": 0.042925767228523815,
+        "autocorrelation_shift_px": [
+          82,
+          20
+        ],
+        "basis": "decoded straight RGB / 255; autocorrelation circular luminance at 128px; excludes nearby shifts"
+      },
+      "before_codes": [
+        "TILE_SEAM_PEAK"
+      ],
+      "changed_pixel_fraction": 0.0413665771484375,
+      "interior_preserved": true
+    }
+  },
+  {
+    "id": "p4-tiles-concrete-v1-wrap-v1",
+    "class": "concrete",
+    "kind": "tile",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p4-wrap\\p4-tiles-concrete-v1-wrap-v1.png",
+    "source_sha256": "738b2d7c01870702281e10aede158efb37e09be42fa2d2ee584a4e6d11a7e190",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "p4-tiles-concrete-v1",
+      "class": "concrete",
+      "prompt_action": "The entire image is ONLY an EMPTY anonymous ground-material swatch. Cool light-grey concrete, fine random pores and tiny chips, no slab seams or large cracks. Seamless edge-to-edge material with even illumination. Show one unrepeated stochastic field, no repeated quadrants or mirrored halves. Very low-contrast small-scale details; no large motifs. No car, vehicle, wheel, object, scene, border, grid, lettering or road markings.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "none",
+      "count": "1",
+      "status": "ready",
+      "kind": "tile",
+      "reference": "",
+      "batch": "p4-tiles",
+      "approval": "pending",
+      "cell_limit": "256"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "raw_metrics": {
+      "edge_x_mean": 0.025624234068627447,
+      "edge_y_mean": 0.022698376225490192,
+      "edge_x_peak": 0.6235294117647059,
+      "edge_y_peak": 0.6470588235294118,
+      "autocorrelation_peak": 0.10276111482734045,
+      "autocorrelation_shift_px": [
+        52,
+        12
+      ],
+      "basis": "decoded straight RGB / 255; autocorrelation circular luminance at 128px; excludes nearby shifts"
+    },
+    "raw_codes": [
+      "TILE_SEAM_PEAK"
+    ],
+    "metrics": {
+      "edge_x_mean": 0.0,
+      "edge_y_mean": 0.0,
+      "edge_x_peak": 0.0,
+      "edge_y_peak": 0.0,
+      "autocorrelation_peak": 0.10068984958040711,
+      "autocorrelation_shift_px": [
+        52,
+        12
+      ],
+      "basis": "decoded straight RGB / 255; autocorrelation circular luminance at 128px; excludes nearby shifts"
+    },
+    "repeat_path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p4-wrap\\p4-tiles-concrete-v1-wrap-v1-repeat.png",
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p4-wrap\\p4-tiles-concrete-v1-wrap-v1.png",
+    "sha256": "738b2d7c01870702281e10aede158efb37e09be42fa2d2ee584a4e6d11a7e190",
+    "derivation": {
+      "recipe": "opposite-edge-blend-v1",
+      "band_px": 8,
+      "parent_id": "p4-tiles-concrete-v1",
+      "parent_sha256": "422790f3c4bef757c3baa77db9d0c656b8730644971cef85e7941784f004374f",
+      "parent_raw_sha256": "63d36c6970d1cb545fd55630d4d1469a4bf6ffaee44fae142e87d4040a338ecc",
+      "before_metrics": {
+        "edge_x_mean": 0.018203635620915027,
+        "edge_y_mean": 0.026919934640522867,
+        "edge_x_peak": 0.17254901960784308,
+        "edge_y_peak": 0.5058823529411764,
+        "autocorrelation_peak": 0.09753860885721248,
+        "autocorrelation_shift_px": [
+          52,
+          12
+        ],
+        "basis": "decoded straight RGB / 255; autocorrelation circular luminance at 128px; excludes nearby shifts"
+      },
+      "before_codes": [
+        "TILE_SEAM_PEAK"
+      ],
+      "changed_pixel_fraction": 0.0808868408203125,
+      "interior_preserved": true
+    }
+  }
+]

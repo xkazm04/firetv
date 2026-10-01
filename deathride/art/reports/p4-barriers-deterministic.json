@@ -1,0 +1,518 @@
+[
+  {
+    "id": "p4-barriers-concrete-straight-v1",
+    "class": "concrete-straight",
+    "kind": "sprite",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\p4-barriers-concrete-straight-v1\\attempt-02\\1.jpg",
+    "source_sha256": "a5a4cee936893d580eff152f687be107d843d87b0d48223f81b5152fb88e7d5e",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "p4-barriers-concrete-straight-v1",
+      "class": "concrete-straight",
+      "prompt_action": "One straight horizontal concrete safety wall module, rectangular grey top plane with tiny worn chips; same width throughout, squared flush ends. One isolated asset only, centred with at least twelve percent clear margin. Crisp bold shapes readable at 96 pixels. Strict flat orthographic plan view, neutral light, no cast shadow, no vehicle, no scene.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "sprite",
+      "reference": "",
+      "batch": "p4-barriers",
+      "approval": "pending",
+      "cell_limit": "128"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "processor_sources": {
+      "process.py": "84557be6e7a26896f77ad8d9f094dd64a220f032994237961b50a2c510036c58"
+    },
+    "metrics": {
+      "foreground_fraction": 0.2004718780517578,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        51,
+        398,
+        973,
+        626
+      ],
+      "margin_fraction": 0.0498046875,
+      "aspect": 4.043859649122807,
+      "estimated_key_rgb": [
+        210.0,
+        70.0,
+        141.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 4.874140678692761,
+      "palette_p90_delta_e": 5.172807335877863
+    },
+    "placement": {
+      "source_bounds_px": [
+        51,
+        398,
+        973,
+        626
+      ],
+      "source_pivot_px": [
+        512.0,
+        512.0
+      ],
+      "pivot_px": [
+        64.0,
+        32.0
+      ],
+      "cell_px": [
+        128,
+        64
+      ],
+      "subject_px": [
+        120,
+        30
+      ],
+      "scale": 0.1301518438177874,
+      "world_length_m": null,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 128
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p4-barriers\\p4-barriers-concrete-straight-v1.png",
+    "sha256": "e6f3caab9f039d210aa36bb9207915534b3c4aeb6760838c9824c36022471368"
+  },
+  {
+    "id": "p4-barriers-concrete-corner-v1",
+    "class": "concrete-corner",
+    "kind": "sprite",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\p4-barriers-concrete-corner-v1\\attempt-01\\1.jpg",
+    "source_sha256": "935be500e61587dd8dd5bf9cbb90c58372bda34e7dd9a88bc09e3cc6f53b1b69",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "p4-barriers-concrete-corner-v1",
+      "class": "concrete-corner",
+      "prompt_action": "One L-shaped concrete safety wall corner, two equal arms of the same width, a clean square ninety-degree bend, squared flush ends. One isolated asset only, centred with at least twelve percent clear margin. Crisp bold shapes readable at 96 pixels. Strict flat orthographic plan view, neutral light, no cast shadow, no vehicle, no scene. Only the narrow TOP surface seen exactly from above; no vertical front face, side wall or upright. Flat plan-view diagram of the material geometry.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "sprite",
+      "reference": "",
+      "batch": "p4-barriers",
+      "approval": "pending",
+      "cell_limit": "128"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "processor_sources": {
+      "process.py": "84557be6e7a26896f77ad8d9f094dd64a220f032994237961b50a2c510036c58"
+    },
+    "metrics": {
+      "foreground_fraction": 0.4428224563598633,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        118,
+        98,
+        926,
+        925
+      ],
+      "margin_fraction": 0.095703125,
+      "aspect": 0.9770253929866989,
+      "estimated_key_rgb": [
+        242.0,
+        242.0,
+        242.0
+      ],
+      "magenta_key": false,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 6.2174275688224006,
+      "palette_p90_delta_e": 8.021940255210227
+    },
+    "placement": {
+      "source_bounds_px": [
+        118,
+        98,
+        926,
+        925
+      ],
+      "source_pivot_px": [
+        522.0,
+        511.5
+      ],
+      "pivot_px": [
+        63.5,
+        64.0
+      ],
+      "cell_px": [
+        128,
+        128
+      ],
+      "subject_px": [
+        117,
+        120
+      ],
+      "scale": 0.14510278113663846,
+      "world_length_m": null,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 128
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p4-barriers\\p4-barriers-concrete-corner-v1.png",
+    "sha256": "4712ff8a0e1bccfa891ee4930afec6e3f7dfac72d839676627530e964e6a3d20"
+  },
+  {
+    "id": "p4-barriers-metal-straight-v1",
+    "class": "metal-straight",
+    "kind": "sprite",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\p4-barriers-metal-straight-v1\\attempt-01\\1.jpg",
+    "source_sha256": "b8f9ad1e333874acc505bd6630c57a8c5a4b3fb186b216bd6fa2aaee38406d43",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "p4-barriers-metal-straight-v1",
+      "class": "metal-straight",
+      "prompt_action": "One straight horizontal steel guardrail module, a flat grey rectangular top with two thin lengthwise ribs and tiny bolt heads, squared flush ends. One isolated asset only, centred with at least twelve percent clear margin. Crisp bold shapes readable at 96 pixels. Strict flat orthographic plan view, neutral light, no cast shadow, no vehicle, no scene. Only the narrow TOP surface seen exactly from above; no vertical front face, side wall or upright. Flat plan-view diagram of the material geometry.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "sprite",
+      "reference": "",
+      "batch": "p4-barriers",
+      "approval": "pending",
+      "cell_limit": "128"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "processor_sources": {
+      "process.py": "84557be6e7a26896f77ad8d9f094dd64a220f032994237961b50a2c510036c58"
+    },
+    "metrics": {
+      "foreground_fraction": 0.18513870239257812,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        61,
+        403,
+        963,
+        621
+      ],
+      "margin_fraction": 0.0595703125,
+      "aspect": 4.137614678899083,
+      "estimated_key_rgb": [
+        218.0,
+        218.0,
+        218.0
+      ],
+      "magenta_key": false,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 5.27734895495016,
+      "palette_p90_delta_e": 6.918971444976033
+    },
+    "placement": {
+      "source_bounds_px": [
+        61,
+        403,
+        963,
+        621
+      ],
+      "source_pivot_px": [
+        512.0,
+        512.0
+      ],
+      "pivot_px": [
+        64.0,
+        31.5
+      ],
+      "cell_px": [
+        128,
+        64
+      ],
+      "subject_px": [
+        120,
+        29
+      ],
+      "scale": 0.13303769401330376,
+      "world_length_m": null,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 128
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p4-barriers\\p4-barriers-metal-straight-v1.png",
+    "sha256": "cb495e6e513e8a1e2fd50e73e6db2a3cb59d42ef288209197e207a02c9b5f2b8"
+  },
+  {
+    "id": "p4-barriers-metal-corner-v2",
+    "class": "metal-corner",
+    "kind": "sprite",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\p4-barriers-metal-corner-v2\\attempt-01\\1.jpg",
+    "source_sha256": "efef7984e8f0f0a7d37022b50ba59d1f4aacc8fd63841eb42324c5a55cdd48ad",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "p4-barriers-metal-corner-v2",
+      "class": "metal-corner",
+      "prompt_action": "Use this exact flat L-shaped corner silhouette and overhead camera as the geometry anchor. Replace only the concrete material inside the L with a plain cool-grey STEEL top surface and two thin flat longitudinal rib marks. Keep two equal-width arms, ninety-degree bend, square ends, framing and complete margin. One perfectly flat top plane, no bevel, thickness, visible side wall, perspective, hazard stripes or shadow. Solid pure magenta background.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "sprite",
+      "reference": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\p4-barriers-concrete-corner-v1\\attempt-01\\1.jpg",
+      "batch": "p4-barriers",
+      "approval": "pending",
+      "cell_limit": "128"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "processor_sources": {
+      "process.py": "84557be6e7a26896f77ad8d9f094dd64a220f032994237961b50a2c510036c58"
+    },
+    "metrics": {
+      "foreground_fraction": 0.43964290618896484,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        119,
+        99,
+        925,
+        924
+      ],
+      "margin_fraction": 0.0966796875,
+      "aspect": 0.9769696969696969,
+      "estimated_key_rgb": [
+        234.0,
+        7.0,
+        179.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 4.164952919000013,
+      "palette_p90_delta_e": 5.158424393596005
+    },
+    "placement": {
+      "source_bounds_px": [
+        119,
+        99,
+        925,
+        924
+      ],
+      "source_pivot_px": [
+        522.0,
+        511.5
+      ],
+      "pivot_px": [
+        63.5,
+        64.0
+      ],
+      "cell_px": [
+        128,
+        128
+      ],
+      "subject_px": [
+        117,
+        120
+      ],
+      "scale": 0.14545454545454545,
+      "world_length_m": null,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 128
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p4-barriers\\p4-barriers-metal-corner-v2.png",
+    "sha256": "520be538f70e1847803282c815e9e69e2c55410f0bfe12afd598b396b4ef3bdd"
+  },
+  {
+    "id": "p4-barriers-hazard-straight-v1",
+    "class": "hazard-straight",
+    "kind": "sprite",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\p4-barriers-hazard-straight-v1\\attempt-01\\1.jpg",
+    "source_sha256": "055042c53ea52e6fba70fe831979aa761de7d7dab25cb451709a879109905142",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "p4-barriers-hazard-straight-v1",
+      "class": "hazard-straight",
+      "prompt_action": "One horizontal rectangular crash barrier top, alternating muted yellow and charcoal diagonal hazard bands, straight square ends, subtle edge chips. One isolated asset only, centred with at least twelve percent clear margin. Crisp bold shapes readable at 96 pixels. Strict flat orthographic plan view, neutral light, no cast shadow, no vehicle, no scene. Only the narrow TOP surface seen exactly from above; no vertical front face, side wall or upright. Flat plan-view diagram of the material geometry.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "sprite",
+      "reference": "",
+      "batch": "p4-barriers",
+      "approval": "pending",
+      "cell_limit": "128"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "processor_sources": {
+      "process.py": "84557be6e7a26896f77ad8d9f094dd64a220f032994237961b50a2c510036c58"
+    },
+    "metrics": {
+      "foreground_fraction": 0.16979408264160156,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        58,
+        413,
+        966,
+        611
+      ],
+      "margin_fraction": 0.056640625,
+      "aspect": 4.585858585858586,
+      "estimated_key_rgb": [
+        246.0,
+        247.0,
+        246.0
+      ],
+      "magenta_key": false,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 11.748732753493195,
+      "palette_p90_delta_e": 22.258073093599762
+    },
+    "placement": {
+      "source_bounds_px": [
+        58,
+        413,
+        966,
+        611
+      ],
+      "source_pivot_px": [
+        512.0,
+        512.0
+      ],
+      "pivot_px": [
+        64.0,
+        32.0
+      ],
+      "cell_px": [
+        128,
+        64
+      ],
+      "subject_px": [
+        120,
+        26
+      ],
+      "scale": 0.13215859030837004,
+      "world_length_m": null,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 128
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p4-barriers\\p4-barriers-hazard-straight-v1.png",
+    "sha256": "e7e8ffca8aeb5d7ca8d6e4564db2601d9776a5a25761ca86951954ac0f2a87b1"
+  },
+  {
+    "id": "p4-barriers-hazard-corner-v1",
+    "class": "hazard-corner",
+    "kind": "sprite",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\p4-barriers-hazard-corner-v1\\attempt-02\\1.jpg",
+    "source_sha256": "b43ad9432624f7e4338a64d74970480003eeb51d831c68c791660cf1d25e94ed",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "p4-barriers-hazard-corner-v1",
+      "class": "hazard-corner",
+      "prompt_action": "One L-shaped crash barrier top, equal-width arms and clean square bend, alternating muted yellow and charcoal diagonal hazard bands, square ends. One isolated asset only, centred with at least twelve percent clear margin. Crisp bold shapes readable at 96 pixels. Strict flat orthographic plan view, neutral light, no cast shadow, no vehicle, no scene. Only the narrow TOP surface seen exactly from above; no vertical front face, side wall or upright. Flat plan-view diagram of the material geometry.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "sprite",
+      "reference": "",
+      "batch": "p4-barriers",
+      "approval": "pending",
+      "cell_limit": "128"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "processor_sources": {
+      "process.py": "84557be6e7a26896f77ad8d9f094dd64a220f032994237961b50a2c510036c58"
+    },
+    "metrics": {
+      "foreground_fraction": 0.2870349884033203,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        189,
+        129,
+        895,
+        872
+      ],
+      "margin_fraction": 0.1259765625,
+      "aspect": 0.9502018842530283,
+      "estimated_key_rgb": [
+        239.0,
+        239.0,
+        239.0
+      ],
+      "magenta_key": false,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 10.999976832741147,
+      "palette_p90_delta_e": 18.56554574848186
+    },
+    "placement": {
+      "source_bounds_px": [
+        189,
+        129,
+        895,
+        872
+      ],
+      "source_pivot_px": [
+        542.0,
+        500.5
+      ],
+      "pivot_px": [
+        64.0,
+        64.0
+      ],
+      "cell_px": [
+        128,
+        128
+      ],
+      "subject_px": [
+        114,
+        120
+      ],
+      "scale": 0.16150740242261102,
+      "world_length_m": null,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 128
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p4-barriers\\p4-barriers-hazard-corner-v1.png",
+    "sha256": "1ff24f6eb1b8bd3f7ae648b92979c07045beef4340bbf38178889b153431756e"
+  }
+]

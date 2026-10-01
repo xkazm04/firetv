@@ -1,0 +1,25 @@
+# Phase 2 ART handoff
+
+`phase2-v1` contains 69 technically selected source assets: 11 ground materials, 6 barriers, 8 props, 5 pickups, 5 decals, 5 six-frame effects, 9 HUD assets, 6 rival portraits, 5 static theme backdrops, 6 landmarks and 3 combat icons. Two additional 47-case autotile families bring the four libGDX atlases to 172 regions. Every technical selection has a source hash, export hash, two local-model observations and a concrete executing-agent review note. Owner quality approval remains pending.
+
+Read `catalog.json` by logical name or the captured Content aliases, then resolve the asset/frame IDs in the corresponding `.atlas`. JSON atlas metadata supplies cell bounds, pivot and measured HUD interior. `group` identifies texture storage, not gameplay behavior: pickups deliberately share the UI/icon page to avoid another world page. Use `durations_ms` and `loop` from the catalog; all effects have six independently generated phases. Do not independently trim frames or substitute a guessed frame duration. Muzzle emission-point placement and animation feel need integrated review.
+
+Pages are straight RGBA8888, linear filtered, no mipmaps. Transparent padding contains extruded RGB; a viewer that discards alpha will show meaningless colour streaks. Composite over a background to inspect the visible art. Use SRC_ALPHA / ONE_MINUS_SRC_ALPHA blending. Atlas regions include their transparent cell/padding; pivots are in those same pixel coordinates. Runtime flips/rotations must preserve the pivot. HUD interiors are measured openings, not a ready-made NinePatch definition.
+
+Ground textures are individual 256-square PNGs with Repeat on both axes. Keep them outside clamped atlases. Both edge-difference and repetition gates were measured on the final pixels; heavy asphalt/concrete have logged eight-pixel boundary repairs, and gravel uses a measured unique source period after its generation cap was exhausted. Keep `tiles/kerb` oriented intentionally; repetition is expected for its bands.
+
+Autotile masks use N, NE, E, SE, S, SW, W, NW bits, with diagonals suppressed unless both adjacent cardinals exist. Each rules file resolves all 256 inputs to exactly 47 physical regions. The barrier's full-surround mask 255 is deliberately empty. These are visual topology masks, not track collision polygons or a replacement for W6 track geometry.
+
+Residency is **30.75 MiB**: four 1024-square atlas pages (16 MiB), eleven ground textures (2.75 MiB), at most one 1024-square backdrop (4 MiB), and two reserved car pages (8 MiB). All five backdrops must not remain resident together. This is declared ART texture storage, not measured total game memory. The existing 3072-square scenery render target alone is 36 MiB RGBA; I1 must replace/retire it or provide another measured residency plan. Fonts, render targets, driver overhead and the full scene need I2 measurement; only 1.25 MiB remains below the declared 32 MiB art cap.
+
+This ART branch does not wire the assets into the APK. I1 must add the asset source directory, loader and fallback behavior. Preserve procedural fallback for absent/unapproved car families, missing IDs or load failures. Ten new car references and 70 state/livery briefs exist in the art workspace; no derived car state/livery is generated or shipped because the plan requires explicit owner approval of each reference first. W6 metres and camera density remain authoritative; authored pixel sizes never retune physics, track width or car dimensions. The isolated Stick heading experiment favors runtime sprite rotation; it is not a full-game performance or quality result.
+
+The catalog embeds the exact committed Content IDs reviewed by this bundle. Marrow's sixth portrait is additionally sourced from the hash-recorded uncommitted C4 preview and marked provisional until reconciliation; `rival-marrow` is already mapped. Reconcile any later C4 roster changes against that snapshot before integration. The frozen 30-image grader diagnostic uses agent labels; human calibration and G2 approval are still pending. Models route/reject, never grant acceptance. Review notes preserve variations and model disagreements. The final ice selection is a measured centre crop of the earlier frost source; two visually rejected whole-image exports remain flagged even though their provisional numeric edge checks passed.
+
+From the repository root, validate without ignored raw images:
+
+```
+deathride/.art-venv/Scripts/python.exe deathride/tools/art/validate_bundle.py
+```
+
+Generation history, briefs, exact rejection evidence, reports and owner contact sheets live under `deathride/art/`. Grok's logged `grok-4.7` is the CLI orchestration model; the underlying image engine and seed were not disclosed. No reproducible pixel seed is claimed. Raw outputs are local ignored artifacts; regeneration consumes account quota and can yield different pixels. Accepted bundle versions are immutable.

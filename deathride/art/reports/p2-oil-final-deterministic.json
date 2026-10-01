@@ -1,0 +1,55 @@
+[
+  {
+    "id": "p1-tile-oil-v3",
+    "class": "oil",
+    "kind": "tile",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\p1-tile-oil-v3\\attempt-01\\1.jpg",
+    "source_sha256": "739b04619911bf78e795d34de20e2fefb6856199cbe04836126c6d0dbea3475c",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "p1-tile-oil-v3",
+      "class": "oil",
+      "prompt_action": "The complete image is ONLY an EMPTY material swatch: Charcoal road with a uniform fine dark oily sheen, extremely subtle blue-green tint across the entire surface, no puddle, no rainbow streaks or large motifs. Seamless full-bleed surface, pattern continues across all four edges, even lighting. Fill the entire square edge-to-edge with this anonymous ground texture. No vehicle, car, buggy, wheels, object, icon, border, frame, grid or scene anywhere. The deliverable is a flat surface material, not a racing scene. Show a SINGLE unrepeated tile, NOT a 2x2 demonstration, NOT repeated quadrants, NOT mirrored halves. Every part of the image has different small stochastic grain; no patch of the image is copied elsewhere inside the square. Very low contrast fine particles, no outlines around large stones, no large stains or cracks.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "none",
+      "count": "1",
+      "status": "ready",
+      "kind": "tile",
+      "reference": "",
+      "batch": "p2-oil-final",
+      "approval": "pending"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "raw_metrics": {
+      "edge_x_mean": 0.009982638888888888,
+      "edge_y_mean": 0.009960937500000001,
+      "edge_x_peak": 0.05098039215686276,
+      "edge_y_peak": 0.04313725490196077,
+      "autocorrelation_peak": 0.05538866117155087,
+      "autocorrelation_shift_px": [
+        112,
+        3
+      ],
+      "basis": "decoded straight RGB / 255; autocorrelation circular luminance at 128px; excludes nearby shifts"
+    },
+    "raw_codes": [],
+    "metrics": {
+      "edge_x_mean": 0.0054738562091503256,
+      "edge_y_mean": 0.006801470588235295,
+      "edge_x_peak": 0.023529411764705882,
+      "edge_y_peak": 0.027450980392156876,
+      "autocorrelation_peak": 0.06462179002312696,
+      "autocorrelation_shift_px": [
+        112,
+        3
+      ],
+      "basis": "decoded straight RGB / 255; autocorrelation circular luminance at 128px; excludes nearby shifts"
+    },
+    "repeat_path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p2-oil-final\\p1-tile-oil-v3-repeat.png",
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p2-oil-final\\p1-tile-oil-v3.png",
+    "sha256": "f0f3e483c0b7d729a4d190ae1ee4e20de8f93756d3149d68383990f9ffb10d4d"
+  }
+]

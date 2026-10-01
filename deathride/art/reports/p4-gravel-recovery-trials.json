@@ -1,0 +1,112 @@
+[
+  {
+    "id": "gravel-period-1024",
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p4-gravel-recovery\\gravel-period-1024.png",
+    "source_crop_px": [
+      0,
+      0,
+      1024,
+      1024
+    ],
+    "before_metrics": {
+      "edge_x_mean": 0.07527573529411764,
+      "edge_y_mean": 0.06391441993464052,
+      "edge_x_peak": 0.32941176470588235,
+      "edge_y_peak": 0.2745098039215686,
+      "autocorrelation_peak": 0.9012767705706494,
+      "autocorrelation_shift_px": [
+        64,
+        0
+      ],
+      "basis": "decoded straight RGB / 255; autocorrelation circular luminance at 128px; excludes nearby shifts"
+    },
+    "metrics": {
+      "edge_x_mean": 0.0,
+      "edge_y_mean": 0.0,
+      "edge_x_peak": 0.0,
+      "edge_y_peak": 0.0,
+      "autocorrelation_peak": 0.8951312396076762,
+      "autocorrelation_shift_px": [
+        64,
+        0
+      ],
+      "basis": "decoded straight RGB / 255; autocorrelation circular luminance at 128px; excludes nearby shifts"
+    },
+    "codes": [
+      "TILE_REPETITION"
+    ],
+    "verdict": "reject"
+  },
+  {
+    "id": "gravel-period-512",
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p4-gravel-recovery\\gravel-period-512.png",
+    "source_crop_px": [
+      0,
+      0,
+      512,
+      512
+    ],
+    "before_metrics": {
+      "edge_x_mean": 0.09535845588235294,
+      "edge_y_mean": 0.0865655637254902,
+      "edge_x_peak": 0.3568627450980392,
+      "edge_y_peak": 0.4274509803921569,
+      "autocorrelation_peak": 0.03286721602079732,
+      "autocorrelation_shift_px": [
+        112,
+        48
+      ],
+      "basis": "decoded straight RGB / 255; autocorrelation circular luminance at 128px; excludes nearby shifts"
+    },
+    "metrics": {
+      "edge_x_mean": 0.0,
+      "edge_y_mean": 0.0,
+      "edge_x_peak": 0.0,
+      "edge_y_peak": 0.0,
+      "autocorrelation_peak": 0.03090630358430619,
+      "autocorrelation_shift_px": [
+        112,
+        48
+      ],
+      "basis": "decoded straight RGB / 255; autocorrelation circular luminance at 128px; excludes nearby shifts"
+    },
+    "codes": [],
+    "verdict": "candidate"
+  },
+  {
+    "id": "gravel-period-256",
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p4-gravel-recovery\\gravel-period-256.png",
+    "source_crop_px": [
+      0,
+      0,
+      256,
+      256
+    ],
+    "before_metrics": {
+      "edge_x_mean": 0.11339869281045752,
+      "edge_y_mean": 0.12751225490196078,
+      "edge_x_peak": 0.5725490196078431,
+      "edge_y_peak": 0.5803921568627451,
+      "autocorrelation_peak": 0.03563593476204189,
+      "autocorrelation_shift_px": [
+        46,
+        44
+      ],
+      "basis": "decoded straight RGB / 255; autocorrelation circular luminance at 128px; excludes nearby shifts"
+    },
+    "metrics": {
+      "edge_x_mean": 0.0,
+      "edge_y_mean": 0.0,
+      "edge_x_peak": 0.0,
+      "edge_y_peak": 0.0,
+      "autocorrelation_peak": 0.03711669584108488,
+      "autocorrelation_shift_px": [
+        71,
+        12
+      ],
+      "basis": "decoded straight RGB / 255; autocorrelation circular luminance at 128px; excludes nearby shifts"
+    },
+    "codes": [],
+    "verdict": "candidate"
+  }
+]
