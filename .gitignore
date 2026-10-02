@@ -68,3 +68,9 @@ deathride/art/reports/p4-draft-location.json
 # I2 raw observations are archived byte-for-byte as deterministic gzip.
 /deathride/evidence/phase2/i2-soak.json
 /deathride/evidence/phase2/i2-*/i2-soak.json
+
+# Q4 device rolling observations are archived byte-for-byte as deterministic gzip.
+/deathride/evidence/campaign/q4/boss/result.json
+/deathride/evidence/campaign/q4/boss-fast/result.json
+/deathride/evidence/campaign/q4/finale/result.json
+/deathride/evidence/campaign/q4/finale-retry/result.json

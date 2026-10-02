@@ -193,3 +193,20 @@ Open the garage and scroll its phone shop; then inspect the career story, diffic
 On a physical phone, try Classic, Cruise and Split, then mirror each. Steer while pressing and releasing fire, mine, swap, drift and ability; open settings during a hold and leave/rejoin the page. Good: independent fingers, reachable controls and immediate release. Bad: a stuck hold, accidental action or the fourth pedal row being uncomfortable. Browser touch tests and 44 px target checks establish bounds and event behavior, not thumb comfort or optical latency.
 
 The 0.5 m mine remains provisional, with 24 damage and 1.4 s arming. Check that its small ring can be seen and that a body must overlap it to trigger. Record the car, course, viewing distance/phone, state and concrete defect. The final measured gates and remaining limits are in `docs/concepts/deathride/H3-hud-report.md`; no human fairness, readability, comfort or fun verdict has been supplied. Sound remains absent. The cars retain their procedural presentation until their separate exact-source approval gate is met.
+
+
+## Q4 - Ash Circuit campaign (2026-10-03)
+
+Open **Death Ride Campaign**, application `dev.deathride.campaign`, and pair with its TV QR (port 8770). This build is separate from the existing TV application. A normal browser profile starts an earned career. The automated `campaign-stick-boss` and `campaign-stick-finale` profiles are funded diagnostic setups and do not represent completed progression.
+
+Read the early debt cards, each boss card and the final seized-car card from the sofa. Check that Marrow's claim, the diversion exposed by Ox, and the Mechanic's nervous help are understandable without a report. The shop should explain the next useful action and show league debt separately from an optional loan. Voice is not implemented yet.
+
+Beat a division boss and inspect the money/car/part choice. Check the actual amounts, whether the car adds a useful alternative and whether an unavailable part clearly explains why. Select once, return to the menu and restart: the ally and reward should stay saved without paying twice. The next-tier licence is available at the boss qualifier, while the ally and progression still require a win. A loss pays its insured receipt but leaves that boss pending. Judge whether the choices and required retries are worthwhile; their market values intentionally differ.
+
+At the finale, confirm the named car is seized and its ownership/parts are preserved as collateral. The supplied basic rig should show an automatic mine dispatcher, its tell, cooldown and energy. There is no lap victory; the last car running wins. Try a loss and a retry without buying repairs. P2 should clearly spectate. After a survivor victory, check the returned car and cancelled league claim. The automated Stick runs observed two losses and retries, not this victory branch.
+
+Report story clarity, reward usefulness, mine readability and whether fighting Marrow is fair and enjoyable. None is certified by automation. The measured p95 frame target still fails; note visible hitches without assuming the near-60 Hz median proves smoothness. Physical-phone reach and optical input latency remain unmeasured.
+
+Device gallery: file:///C:/Users/kazda/kiro/firetv-deathride-camp/deathride/evidence/campaign/q4/index.html
+
+Balance plots and honest censoring: file:///C:/Users/kazda/kiro/firetv-deathride-camp/deathride/evidence/campaign/q3/index.html
