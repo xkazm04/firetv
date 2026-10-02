@@ -32,6 +32,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
     private val effects=MotionEffects()
     private val painter=CarPainter()
     private val combatPainter=CombatPainter()
+    private val abilityPainter=AbilityPainter()
     private var selectedTrack=0
     private val selectedCars=IntArray(6){it%CarCatalog.all.size}
     private val inputs=Array(6){InputFrame()}
@@ -253,6 +254,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
                     val brake=Gdx.input.isKeyPressed(Input.Keys.S)||Gdx.input.isKeyPressed(Input.Keys.DOWN)
                     inputs[0].fire=if(Gdx.input.isKeyPressed(Input.Keys.F))1.0 else 0.0
                     inputs[0].mine=if(Gdx.input.isKeyPressed(Input.Keys.G))1.0 else 0.0
+                    inputs[0].ability=if(Gdx.input.isKeyPressed(Input.Keys.Q))1.0 else 0.0
                     inputs[0].weapon=if(Gdx.input.isKeyPressed(Input.Keys.E))1 else 0
                     inputs[0].handbrake=if(Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT))1.0 else 0.0
                     inputs[0].set((if(right)1.0 else 0.0)-(if(left)1.0 else 0.0),if(gas)1.0 else 0.0,if(brake)1.0 else 0.0)
@@ -274,9 +276,9 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
             val qrBytes=qr?.let{it.width.toLong()*it.height*4}?:0L
             server.artJson="{\"regions\":${art.regionCount},\"textureBytes\":${art.textureBytes},\"sceneryBytes\":$sceneryBytes,\"fontBytes\":$fontTextureBytes,\"qrBytes\":$qrBytes,\"ownedTextureBytes\":${art.textureBytes+sceneryBytes+fontTextureBytes+qrBytes},\"artBudgetBytes\":${TextureBudget.ART},\"ownedBudgetBytes\":${TextureBudget.TOTAL},\"budgetOk\":${TextureBudget.fits(art.textureBytes,fontTextureBytes,sceneryBytes,qrBytes)},\"failures\":${art.failures},\"draws\":${art.draws},\"driftSmokeEmitted\":${atlasEffects.driftSmokeEmitted},\"driftSkidsEmitted\":${atlasEffects.driftSkidsEmitted},\"activeEffects\":${atlasEffects.activeCount},\"carStrategy\":\"runtime rotation; procedural for unapproved/missing states\"}"
             val combat=world.combat
-            server.trafficJson=world.cars.filter{it.entered}.joinToString(",","[","]"){c->"{\"id\":${c.id},\"name\":\"${driverName(c)}\",\"car\":\"${c.carClass?.id}\",\"human\":${c.human},\"x\":${c.x},\"y\":${c.y},\"heading\":${c.heading},\"radius\":${c.spec.circleRadiusM},\"hp\":${combat.health(c.id)},\"wrecked\":${combat.wrecked(c.id)},\"finished\":${c.finishSeconds>=0},\"finishKind\":\"${c.finishKind}\",\"laps\":${c.lap.laps},\"position\":${c.position},\"repairPickups\":${combat.repairPickupsTaken[c.id]}}"}
+            server.trafficJson=world.cars.filter{it.entered}.joinToString(",","[","]"){c->"{\"id\":${c.id},\"name\":\"${driverName(c)}\",\"car\":\"${c.carClass?.id}\",\"human\":${c.human},\"x\":${c.x},\"y\":${c.y},\"heading\":${c.heading},\"radius\":${c.spec.circleRadiusM},\"ability\":${world.abilities.json(c.id)},\"hp\":${combat.health(c.id)},\"wrecked\":${combat.wrecked(c.id)},\"finished\":${c.finishSeconds>=0},\"finishKind\":\"${c.finishKind}\",\"laps\":${c.lap.laps},\"position\":${c.position},\"repairPickups\":${combat.repairPickupsTaken[c.id]}}"}
             server.pickupsJson=combat.pickups.joinToString(",","[","]"){p->"{\"kind\":\"${p.type.id}\",\"x\":${p.x},\"y\":${p.y},\"cooldown\":${p.cooldownSeconds}}"}
-            server.combatSummaryJson="{\"damageScale\":${world.damageScale},\"shotsByWeapon\":[${combat.shots.joinToString(",")}],\"active\":${world.entrantCount-world.resolved},\"living\":${world.entrantCount-combat.wreckCount},\"finished\":${world.finished},\"shots\":${combat.shots.sum()},\"projectiles\":${combat.projectiles.count{it.active}},\"mines\":${combat.mines.count{it.active}},\"blasts\":${combat.blasts.count{it.remainingSeconds>0}},\"poolExhaustions\":${combat.poolExhaustions}}"
+            server.combatSummaryJson="{\"damageScale\":${world.damageScale},\"shotsByWeapon\":[${combat.shots.joinToString(",")}],\"active\":${world.entrantCount-world.resolved},\"living\":${world.entrantCount-combat.wreckCount},\"finished\":${world.finished},\"shots\":${combat.shots.sum()},\"projectiles\":${combat.projectiles.count{it.active}},\"mines\":${combat.mines.count{it.active}},\"blasts\":${combat.blasts.count{it.remainingSeconds>0}},\"poolExhaustions\":${combat.poolExhaustions},\"abilityDamage\":${combat.abilityDamage.sum()},\"abilityUses\":${world.cars.sumOf{it.ability.activation}}}"
             for(i in 0..1) { val c=world.cars[i]; val s=server.slots[i]; s.speed=c.speedMps; s.lap=min(c.lap.laps+1,world.raceLaps); s.position=c.position; s.impact=c.impact; s.drifting=c.drifting; s.driftQuality=c.driftQuality;s.slipRadians=c.slipRadians;s.spunOut=c.spunOut; s.loadTransfer=c.loadTransfer; s.surfaceId=c.surface.id; s.x=c.x; s.y=c.y;s.heading=c.heading;s.yaw=c.yaw;s.progressM=c.lap.progressM; s.combatJson=combatJson(i) }
             rebuildUi()
         }
@@ -336,6 +338,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
             if(c.human) { val marker=(c.spec.circleRadiusM+c.spec.circleOffsetM+1).toFloat();shape.color=colors[c.id];shape.triangle(x-0.7f,y+marker+1,x+0.7f,y+marker+1,x,y+marker) }
         }
         combatPainter.air(shape,world,art)
+        abilityPainter.draw(shape,world.snapshot)
         shape.end()
         batch.begin()
         for(c in world.cars)if(c.entered) {
@@ -346,7 +349,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
             val spec=CarShapes.forId(c.carClass?.id?:"Line")
             art.car(batch,key,x,y,spec.lengthM.toFloat(),spec.widthM.toFloat(),heading,colors[c.id],s.flash(c.id)>0)
         }
-        atlasEffects.air(batch,world.snapshot,world.seconds);batch.end()
+        atlasEffects.air(batch,world.snapshot,world.seconds);abilityPainter.art(batch,world.snapshot,art);batch.end()
     }
     private fun drawOverlay() {
         shape.projectionMatrix=view.camera.combined
@@ -523,6 +526,12 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
                 detail.addText(if(combat.wrecked(driver.id))"WRECKED - SPECTATING" else "HULL "+combat.health(driver.id).toInt()+" / "+combat.maxHealth(driver.id).toInt(),590f,677f)
                 detail.addText(if(combat.armingSeconds>0)"ARMING "+ceil(combat.armingSeconds).toInt() else Weapons.all[weapon].id.uppercase()+"  "+combat.ammo(driver.id,weapon),771f,697f)
                 detail.addText("MINES  "+combat.ammo(driver.id,Weapons.MINE),771f,674f)
+                val ability=driver.ability;val definition=ability.definition
+                if(definition!=null) {
+                    val state=if(combat.armingSeconds>0)"ARMING" else if(ability.committed)ability.phase.name else if(ability.cooldownSeconds>0)"COOL "+ceil(ability.cooldownSeconds).toInt()+"s" else if(ability.energy<definition.energyCost)"LOW ENERGY" else "READY"
+                    detail.setColor(accent);detail.addText(definition.name+" / "+state,965f,697f)
+                    detail.setColor(muted);detail.addText("ENERGY "+ability.energy.toInt()+" / "+definition.energyCapacity.toInt(),965f,674f)
+                }
                 if(stateTime<1.2) { headline.setColor(accent); headline.addText("GO",597f,389f) }
                 var warned=false
                 for(s in server.slots)if(s.claimed && s.stale && !warned) { detail.setColor(warning); uiBuilder.clear(); uiBuilder.append("PLAYER ").append(s.id+1).append("  LINK QUIET - COASTING"); detail.addText(uiBuilder,465f,612f); warned=true }
@@ -550,7 +559,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
     }
     private fun combatJson(id: Int): String {
         val c=world.combat;val weapon=c.selectedWeapon[id]
-        return "{\"spectating\":${!activeSeat(id)},\"armingSeconds\":${c.armingSeconds},\"hp\":${c.health(id)},\"maxHp\":${c.maxHealth(id)},\"wrecked\":${c.wrecked(id)},\"weapon\":$weapon,\"weaponName\":\"${Weapons.all[weapon].id}\",\"ammo\":${c.ammo(id,weapon)},\"mines\":${c.ammo(id,Weapons.MINE)},\"heavyAmmo\":${c.ammo(id,Weapons.HAMMER)},\"scatterAmmo\":${c.ammo(id,Weapons.SCATTER)},\"cash\":${c.cashCollected[id]},\"sabotageTarget\":${c.sabotageTarget[id]},\"cooldownSeconds\":${c.cooldown(id,weapon)},\"mineCooldownSeconds\":${c.cooldown(id,Weapons.MINE)},\"damageEvents\":${c.damageEvents[id]},\"kills\":${c.kills[id]}}"
+        return "{\"spectating\":${!activeSeat(id)},\"ability\":${world.abilities.json(id)},\"armingSeconds\":${c.armingSeconds},\"hp\":${c.health(id)},\"maxHp\":${c.maxHealth(id)},\"wrecked\":${c.wrecked(id)},\"weapon\":$weapon,\"weaponName\":\"${Weapons.all[weapon].id}\",\"ammo\":${c.ammo(id,weapon)},\"mines\":${c.ammo(id,Weapons.MINE)},\"heavyAmmo\":${c.ammo(id,Weapons.HAMMER)},\"scatterAmmo\":${c.ammo(id,Weapons.SCATTER)},\"cash\":${c.cashCollected[id]},\"sabotageTarget\":${c.sabotageTarget[id]},\"cooldownSeconds\":${c.cooldown(id,weapon)},\"mineCooldownSeconds\":${c.cooldown(id,Weapons.MINE)},\"damageEvents\":${c.damageEvents[id]},\"kills\":${c.kills[id]}}"
     }
     private fun updateQr() {
         if(server.pin==qrPin && server.address==qrAddress)return

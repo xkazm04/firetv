@@ -54,6 +54,7 @@ class Slot(val id: Int) {
     @Volatile var effectiveSteer=0.0
     @Volatile var effectiveFire=0.0
     @Volatile var effectiveMine=0.0
+    @Volatile var effectiveAbility=0.0
     @Volatile var combatJson="{}"
     @Volatile var layout="Classic"
     @Volatile var mirrored=false
@@ -124,7 +125,7 @@ class RaceServer(private val assets: (String)->String, private val log: (String)
                         get("/") { call.response.header("Cache-Control","no-store"); call.respondText(html,ContentType.Text.Html) }
                         get("/manifest.webmanifest") { call.respondText(manifest,ContentType.Application.Json) }
                         get("/stats") { call.response.header("Cache-Control","no-store"); call.respondText(statsJson(),ContentType.Application.Json) }
-                        get("/catalog") { call.respondText("{\"feelProfiles\":${FeelProfiles.json},\"driftFeedback\":{\"quality\":${VisualTuning["driftHapticQuality"]},\"milliseconds\":${VisualTuning["driftHapticMilliseconds"]},\"cooldownMilliseconds\":${VisualTuning["driftHapticCooldownMilliseconds"]}},\"cars\":${CarCatalog.json},\"statMax\":${CarCatalog.statMax},\"tracks\":${Courses.json},\"surfaces\":${Surfaces.json},\"weapons\":${Weapons.json},\"layouts\":${ControllerLayouts.json},\"career\":${Career.catalogJson}}",ContentType.Application.Json) }
+                        get("/catalog") { call.respondText("{\"feelProfiles\":${FeelProfiles.json},\"driftFeedback\":{\"quality\":${VisualTuning["driftHapticQuality"]},\"milliseconds\":${VisualTuning["driftHapticMilliseconds"]},\"cooldownMilliseconds\":${VisualTuning["driftHapticCooldownMilliseconds"]}},\"cars\":${CarCatalog.json},\"statMax\":${CarCatalog.statMax},\"tracks\":${Courses.json},\"surfaces\":${Surfaces.json},\"weapons\":${Weapons.json},\"abilities\":${AbilityCatalog.json},\"layouts\":${ControllerLayouts.json},\"career\":${Career.catalogJson}}",ContentType.Application.Json) }
                         get("/health") { call.respondText("{\"ok\":true,\"phase\":\"$phase\",\"raceLaps\":$raceLaps,\"raceMode\":\"$raceMode\",\"slots\":${slots.count{it.connected}}}",ContentType.Application.Json) }
                         get("/routes") { call.respondText(routesJson,ContentType.Application.Json) }
                         webSocket("/ws") { handle(this) }
@@ -175,7 +176,7 @@ class RaceServer(private val assets: (String)->String, private val log: (String)
                         val previousDropped=s.input.dropped; val previousOrder=s.input.outOfOrder
                         val timestamp=if(calibrated) msg.number("ts")+offset else now
                         val accepted=s.input.offer(q,timestamp,now,msg.number("s"),msg.number("a"),msg.number("b"),msg["h"]?.jsonPrimitive?.doubleOrNull?:0.0,
-                            msg["fire"]?.jsonPrimitive?.doubleOrNull?:0.0,msg["mine"]?.jsonPrimitive?.doubleOrNull?:0.0,msg["weapon"]?.jsonPrimitive?.intOrNull?:0)
+                            msg["fire"]?.jsonPrimitive?.doubleOrNull?:0.0,msg["mine"]?.jsonPrimitive?.doubleOrNull?:0.0,msg["weapon"]?.jsonPrimitive?.intOrNull?:0,msg["ability"]?.jsonPrimitive?.doubleOrNull?:0.0)
                         metrics.dropped[s.id].add(s.input.dropped-previousDropped,now); metrics.outOfOrder[s.id].add(s.input.outOfOrder-previousOrder,now)
                         if(accepted && msg["f"]?.jsonPrimitive?.intOrNull==1) flash.set(true)
                         socket.send("{\"t\":\"ack\",\"q\":$q,\"tvNow\":$now,\"accepted\":$accepted}")
@@ -209,7 +210,7 @@ class RaceServer(private val assets: (String)->String, private val log: (String)
     }
     fun consume(id: Int, now: Double, out: InputFrame,recordSimulationAge: Boolean=true) {
         val slot=slots[id]
-        val stale=slot.input.consume(now,out); slot.stale=stale; slot.effectiveThrottle=out.throttle; slot.effectiveSteer=out.steer;slot.effectiveFire=out.fire;slot.effectiveMine=out.mine
+        val stale=slot.input.consume(now,out); slot.stale=stale; slot.effectiveThrottle=out.throttle; slot.effectiveSteer=out.steer;slot.effectiveFire=out.fire;slot.effectiveMine=out.mine;slot.effectiveAbility=out.ability
         if(slot.claimed && recordSimulationAge) {
             if(slot.input.accepted>0) metrics.inputAgeMs[id].add(slot.input.ageMs,now)
             if(stale)metrics.stale[id].add(1,now)
@@ -226,7 +227,7 @@ class RaceServer(private val assets: (String)->String, private val log: (String)
         sb.append("{\"art\":$artJson,\"traffic\":$trafficJson,\"pickups\":$pickupsJson,\"combatSummary\":$combatSummaryJson,\"track\":$trackJson,\"surface\":\"${surface.id}\",\"feel\":${feel.json},\"units\":\"ms\",\"uptimeMs\":$now,\"phase\":\"$phase\",\"raceLaps\":$raceLaps,\"raceMode\":\"$raceMode\",\"raceSeconds\":$raceSeconds,\"sceneryReady\":$sceneryReady,\"paused\":$paused,\"frameNumber\":$frameNumber,\"flashFrames\":$flashFrames,\"heapUsedMB\":${(runtime.totalMemory()-runtime.freeMemory())/1048576.0},\"frameTimeMs\":${metrics.frameMs.json(now)},\"simStepMs\":${metrics.simMs.json(now)},\"discardedSimulationMs\":${metrics.discardedSimMs.json(now)},\"quantiles\":\"last10s exact (4096 samples); sinceStart histogram (resolution/cap declared per metric); max exact\",\"slots\":[")
         for(i in slots.indices) {
             if(i>0)sb.append(','); val s=slots[i]
-            sb.append("{\"slot\":$i,\"connected\":${s.connected},\"reserved\":${s.claimed},\"clockSynced\":${s.clockSynced},\"inputAgeMs\":${metrics.inputAgeMs[i].json(now)},\"stale\":${metrics.stale[i].json(now)},\"dropped\":${metrics.dropped[i].json(now)},\"outOfOrder\":${metrics.outOfOrder[i].json(now)},\"effectiveThrottle\":${s.effectiveThrottle},\"effectiveSteer\":${s.effectiveSteer},\"effectiveFire\":${s.effectiveFire},\"effectiveMine\":${s.effectiveMine},\"layout\":\"${s.layout}\",\"mirrored\":${s.mirrored},\"hostCareer\":$hostCareerJson,\"career\":${s.careerJson},\"garage\":${s.garageJson},\"combat\":${s.combatJson},\"drifting\":${s.drifting},\"driftQuality\":${s.driftQuality},\"slipRadians\":${s.slipRadians},\"spunOut\":${s.spunOut},\"loadTransfer\":${s.loadTransfer},\"surfaceId\":\"${s.surfaceId}\",\"car\":${s.carJson},\"lap\":${s.lap},\"position\":${s.position},\"speedMps\":${s.speed},\"xM\":${s.x},\"yM\":${s.y},\"heading\":${s.heading},\"yaw\":${s.yaw},\"progressM\":${s.progressM}}")
+            sb.append("{\"slot\":$i,\"connected\":${s.connected},\"reserved\":${s.claimed},\"clockSynced\":${s.clockSynced},\"inputAgeMs\":${metrics.inputAgeMs[i].json(now)},\"stale\":${metrics.stale[i].json(now)},\"dropped\":${metrics.dropped[i].json(now)},\"outOfOrder\":${metrics.outOfOrder[i].json(now)},\"effectiveThrottle\":${s.effectiveThrottle},\"effectiveSteer\":${s.effectiveSteer},\"effectiveFire\":${s.effectiveFire},\"effectiveMine\":${s.effectiveMine},\"effectiveAbility\":${s.effectiveAbility},\"layout\":\"${s.layout}\",\"mirrored\":${s.mirrored},\"hostCareer\":$hostCareerJson,\"career\":${s.careerJson},\"garage\":${s.garageJson},\"combat\":${s.combatJson},\"drifting\":${s.drifting},\"driftQuality\":${s.driftQuality},\"slipRadians\":${s.slipRadians},\"spunOut\":${s.spunOut},\"loadTransfer\":${s.loadTransfer},\"surfaceId\":\"${s.surfaceId}\",\"car\":${s.carJson},\"lap\":${s.lap},\"position\":${s.position},\"speedMps\":${s.speed},\"xM\":${s.x},\"yM\":${s.y},\"heading\":${s.heading},\"yaw\":${s.yaw},\"progressM\":${s.progressM}}")
         }
         sb.append("]}"); return sb.toString()
     }

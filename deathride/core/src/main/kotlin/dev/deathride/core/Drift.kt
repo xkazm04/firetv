@@ -85,13 +85,13 @@ object DriftDynamics {
         c.loadTransfer+=(transferTarget-c.loadTransfer)*(1-exp(-dt/Movement.transferResponseSeconds))
         val frontShare=(g.frontLoadFraction+c.loadTransfer).coerceIn(p["minimumAxleLoad"],1-p["minimumAxleLoad"])
         val sideTransfer=(abs(c.lateralAcceleration)*g.cgHeightM/(p["gravityMps2"]*g.trackM)).coerceIn(0.0,.5)
-        val capacity=spec.massKg*lateralLimit(spec,c.surface,p)*(1-sideTransfer*p["lateralTransferLoss"])
+        val capacity=spec.massKg*lateralLimit(spec,c.surface,p)*c.abilityGripScale*(1-sideTransfer*p["lateralTransferLoss"])
         val capF=capacity*frontShare;val capR=capacity*(1-frontShare)
         val speedFactor=(speed+spec.launchSteeringMps*throttle)/(speed+p["steeringSpeedOffsetMps"])
         val counter=c.filteredSteer*beta<0
         val assist=1-blend(abs(beta),p["assistFadeStartRadians"],p["spinSlipRadians"])
         val counterGain=if(counter)p["countersteerGain"]*min(1.0,speed/p["countersteerFullSpeedMps"])*min(1.0,abs(beta)/p["assistFadeStartRadians"])*assist else 0.0
-        val steerYaw=-c.filteredSteer*c.feel.authority(speed)*spec.steeringRateRadPerSecond*steeringGeometryScale(spec,p)*speedFactor*(1+counterGain)*(1-throttle*Movement.throttleUndersteer)
+        val steerYaw=-c.filteredSteer*c.feel.authority(speed)*spec.steeringRateRadPerSecond*c.abilitySteerScale*steeringGeometryScale(spec,p)*speedFactor*(1+counterGain)*(1-throttle*Movement.throttleUndersteer)
         val steerAngle=atan2(steerYaw*g.wheelbaseM,max(speed,p["lowSpeedMps"]))
         val wheelCos=cos(steerAngle);val wheelSin=sin(steerAngle)
         val vf=(lateral+g.frontArmM*c.yaw)*wheelCos-forward*wheelSin
@@ -147,7 +147,8 @@ object DriftDynamics {
         val drag=exp(-(spec.rollingDragPerSecond*(1-slide*(1-p["slideDragScale"]))+c.surface.dragPerSecond)*dt)
         c.vx=(cx*nextForward-cy*nextLateral)*drag;c.vy=(cy*nextForward+cx*nextLateral)*drag
         val magnitude=c.speedMps
-        if(magnitude>spec.maxSpeedMps){c.vx*=spec.maxSpeedMps/magnitude;c.vy*=spec.maxSpeedMps/magnitude}
+        val speedCap=spec.maxSpeedMps*c.abilitySpeedScale
+        if(magnitude>speedCap){c.vx*=speedCap/magnitude;c.vy*=speedCap/magnitude}
         c.longitudinalAcceleration=(c.vx*cx+c.vy*cy-forward)/dt
         c.x+=c.vx*dt;c.y+=c.vy*dt
         updateSignals(c,input,dt,p)

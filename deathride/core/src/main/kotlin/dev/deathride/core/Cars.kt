@@ -4,6 +4,7 @@ object Physics { val base=Content.table("physics").associate { it.getValue("key"
 data class StatMapping(val parameter: String,val stat: String,val base: Double,val perPoint: Double)
 class CarClass(val values: Map<String,String>) {
     val id=values.getValue("id")
+    val ability=AbilityCatalog.byCar.getValue(id)
     val role=values.getValue("role")
     val tier=values.getValue("tier")
     val ammoScale=values.getValue("ammoScale").toDouble()
@@ -26,8 +27,8 @@ class CarClass(val values: Map<String,String>) {
     }
     val armorReduction=derive("armorReduction")
     val weaponSlots=derive("weaponSlots").toInt()
-    val json get()="{\"id\":\"$id\",\"role\":\"$role\",\"tier\":\"$tier\",\"priceCredits\":$priceCredits,\"ammoScale\":$ammoScale,\"powerRating\":${PowerRating.of(this)},\"weakStats\":${PowerRating.weakStatsJson(this)},\"stats\":"+stats.entries.joinToString(",","{","}") { "\"${it.key}\":${it.value}" }+"}"
-    fun json(bonuses: IntArray)="{\"id\":\"$id\",\"role\":\"$role\",\"tier\":\"$tier\",\"priceCredits\":$priceCredits,\"ammoScale\":$ammoScale,\"powerRating\":${PowerRating.of(this,bonuses)},\"weakStats\":${PowerRating.weakStatsJson(this,bonuses)},\"stats\":"+CarCatalog.statNames.joinToString(",","{","}") { "\"$it\":${stat(it,bonuses)}" }+"}"
+    val json get()="{\"id\":\"$id\",\"role\":\"$role\",\"ability\":${ability.json},\"tier\":\"$tier\",\"priceCredits\":$priceCredits,\"ammoScale\":$ammoScale,\"powerRating\":${PowerRating.of(this)},\"weakStats\":${PowerRating.weakStatsJson(this)},\"stats\":"+stats.entries.joinToString(",","{","}") { "\"${it.key}\":${it.value}" }+"}"
+    fun json(bonuses: IntArray)="{\"id\":\"$id\",\"role\":\"$role\",\"ability\":${ability.json},\"tier\":\"$tier\",\"priceCredits\":$priceCredits,\"ammoScale\":$ammoScale,\"powerRating\":${PowerRating.of(this,bonuses)},\"weakStats\":${PowerRating.weakStatsJson(this,bonuses)},\"stats\":"+CarCatalog.statNames.joinToString(",","{","}") { "\"$it\":${stat(it,bonuses)}" }+"}"
     init { require(ammoScale.isFinite() && ammoScale in 0.5..2.0); require(stats.values.all { it in CarCatalog.statMin..CarCatalog.statMax }); require(weaponSlots in 1..CarCatalog.slotsMax) }
 }
 object CarCatalog {
@@ -38,7 +39,7 @@ object CarCatalog {
     val mapping=Content.table("stat-mapping").map { StatMapping(it.getValue("parameter"),it.getValue("stat"),it.number("base"),it.number("perPoint")) }
     val all=Content.table("cars").map { CarClass(Content.table("cars/"+it.getValue("id")).single()+it) }
     val json=all.joinToString(",","[","]") { it.json }
-    fun apply(car: Car,index: Int,bonuses: IntArray?=null) { val type=all[index]; car.carClass=type; car.spec=type.spec(bonuses);car.maxHp=CombatRules["maxHp"]*CarLoadouts.forCar(type).hullScale;car.startingCondition=1.0;car.utilityMask=0;car.armorReduction=type.derive("armorReduction",bonuses);car.weaponSlots=type.derive("weaponSlots",bonuses).toInt() }
+    fun apply(car: Car,index: Int,bonuses: IntArray?=null) { val type=all[index]; car.carClass=type; car.ability.definition=type.ability;car.spec=type.spec(bonuses);car.maxHp=CombatRules["maxHp"]*CarLoadouts.forCar(type).hullScale;car.startingCondition=1.0;car.utilityMask=0;car.armorReduction=type.derive("armorReduction",bonuses);car.weaponSlots=type.derive("weaponSlots",bonuses).toInt() }
 }
 
 /** Load-time audit data; deliberately never consulted by the fixed simulation step. */

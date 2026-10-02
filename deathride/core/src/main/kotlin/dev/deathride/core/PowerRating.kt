@@ -13,7 +13,7 @@ object PowerRating {
         require(weights.isNotEmpty() && weights.map { it.parameter }.distinct().size == weights.size)
         require(weights.all { it.unit != 0.0 && it.weight > 0 && it.weight.isFinite() })
     }
-    fun of(car: CarClass, bonuses: IntArray? = null): Double = weights.sumOf {
+    fun of(car: CarClass, bonuses: IntArray? = null): Double = car.ability.prAdjustment + weights.sumOf {
         (car.derive(it.parameter, bonuses) - it.origin) / it.unit * it.weight
     }
     fun identity(car: CarClass, catalog: List<CarClass> = CarCatalog.all, bonuses: IntArray? = null): Pair<List<String>, List<String>> {

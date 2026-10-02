@@ -37,7 +37,7 @@ data class CarSpec(
     val yawInertiaKgM2 get()=(driftGeometry?.inertiaScale?:1.0)*massKg*(lengthM*lengthM+widthM*widthM)/12
 }
 class InputFrame(var steer: Double = 0.0, var throttle: Double = 0.0, var brake: Double = 0.0, var handbrake: Double = 0.0) {
-    var fire=0.0;var mine=0.0;var weapon=0
+    var fire=0.0;var mine=0.0;var weapon=0;var ability=0.0
     fun set(s: Double, a: Double, b: Double) { steer = s.coerceIn(-1.0,1.0); throttle = a.coerceIn(0.0,1.0); brake = b.coerceIn(0.0,1.0) }
 }
 /** Bounded latest-state mailbox. A late packet cannot restore throttle. */
@@ -49,21 +49,21 @@ class InputMailbox {
     private var throttle = 0.0
     private var brake = 0.0
     private var handbrake=0.0
-    private var fire=0.0;private var mine=0.0;private var weapon=0
+    private var fire=0.0;private var mine=0.0;private var weapon=0;private var ability=0.0
     var dropped = 0L; private set
     var outOfOrder = 0L; private set
     var staleConsumed = 0L; private set
     var accepted = 0L; private set
     var ageMs = 0.0; private set
-    @Synchronized fun offer(q: Long, generatedMs: Double, nowMs: Double, s: Double, a: Double, b: Double, h: Double=0.0, fire: Double=0.0,mine: Double=0.0,weapon: Int=0): Boolean {
-        if (!generatedMs.isFinite() || !s.isFinite() || !a.isFinite() || !b.isFinite() || !h.isFinite() || !fire.isFinite() || !mine.isFinite() || weapon !in 0..1 && weapon!=3) { dropped++; return false }
+    @Synchronized fun offer(q: Long, generatedMs: Double, nowMs: Double, s: Double, a: Double, b: Double, h: Double=0.0, fire: Double=0.0,mine: Double=0.0,weapon: Int=0,ability: Double=0.0): Boolean {
+        if (!generatedMs.isFinite() || !s.isFinite() || !a.isFinite() || !b.isFinite() || !h.isFinite() || !fire.isFinite() || !mine.isFinite() || !ability.isFinite() || weapon !in 0..1 && weapon!=3) { dropped++; return false }
         if (q <= seq) { outOfOrder++; return false }
         if (seq >= 0 && q > seq + 1) dropped += q - seq - 1
         seq = q
         if (nowMs - generatedMs > Tuning.STALE_MS || generatedMs - nowMs > 100.0) { dropped++; return false }
         stampMs = generatedMs; receivedMs = nowMs
         steer = s.coerceIn(-1.0,1.0); throttle = a.coerceIn(0.0,1.0); brake = b.coerceIn(0.0,1.0); handbrake=h.coerceIn(0.0,1.0); accepted++
-        this.fire=fire.coerceIn(0.0,1.0);this.mine=mine.coerceIn(0.0,1.0);this.weapon=weapon
+        this.fire=fire.coerceIn(0.0,1.0);this.mine=mine.coerceIn(0.0,1.0);this.weapon=weapon;this.ability=ability.coerceIn(0.0,1.0)
         return true
     }
     @Synchronized fun consume(nowMs: Double, out: InputFrame): Boolean {
@@ -71,11 +71,11 @@ class InputMailbox {
         val stale = nowMs - receivedMs > Tuning.STALE_MS || ageMs > Tuning.STALE_MS
         out.set(steer, if (stale) 0.0 else throttle, if (stale) 0.0 else brake)
         out.handbrake=if(stale)0.0 else handbrake
-        out.fire=if(stale)0.0 else fire;out.mine=if(stale)0.0 else mine;out.weapon=weapon
+        out.fire=if(stale)0.0 else fire;out.mine=if(stale)0.0 else mine;out.weapon=weapon;out.ability=if(stale)0.0 else ability
         if (stale) staleConsumed++
         return stale
     }
-    @Synchronized fun newConnection() { seq = -1; receivedMs = -1e12; throttle = 0.0; brake = 0.0; handbrake=0.0;fire=0.0;mine=0.0 }
+    @Synchronized fun newConnection() { seq = -1; receivedMs = -1e12; throttle = 0.0; brake = 0.0; handbrake=0.0;fire=0.0;mine=0.0;ability=0.0 }
 }
 class TrackPoint { var x = 0.0; var y = 0.0; var heading = 0.0; var curvature = 0.0 }
 class Projection { var s = 0.0; var distance = 0.0; var nx = 0.0; var ny = 1.0 }
@@ -169,6 +169,8 @@ class Car(val id: Int, track: Track) {
     var armorReduction=0.0;var weaponSlots=1;var weaponDamageScale=1.0
     var maxHp=CombatRules["maxHp"];var startingCondition=1.0;var utilityMask=0
     var turboRemaining=0.0;var fuelRemaining=0.0;var engineScale=1.0
+    val ability=AbilityState()
+    var abilitySpeedScale=1.0;var abilityGripScale=1.0;var abilitySteerScale=1.0;var abilityDamageReduction=0.0
     var finishKind=FinishKind.NONE
     var feel=FeelProfiles.spike
     var filteredSteer=0.0; var filteredThrottle=0.0
@@ -201,13 +203,13 @@ class SlipHandling(val driftParameters: DriftParameters=DriftParameters.defaults
         if(advanced)car.loadTransfer+=((brake*Movement.brakeTransfer-throttle*Movement.throttleTransfer)-car.loadTransfer)*(1-exp(-dt/Movement.transferResponseSeconds))
         val yawScale=if(advanced)(1-throttle*Movement.throttleUndersteer)*(1+hb*Movement.handbrakeYawGain) else 1.0
         val slip=if(speed>1.0)wrapAngle(atan2(car.vy,car.vx)-car.heading) else 0.0
-        val desiredYaw=-car.filteredSteer*yawScale*profile.authority(speed)*spec.steeringRateRadPerSecond*(speed+spec.launchSteeringMps*throttle)/(speed+7.0)+slip*spec.yawStabilityPerSecond*profile.stabilityScale*(1-brake*spec.brakeGripLoss)
+        val desiredYaw=-car.filteredSteer*yawScale*profile.authority(speed)*spec.steeringRateRadPerSecond*car.abilitySteerScale*(speed+spec.launchSteeringMps*throttle)/(speed+7.0)+slip*spec.yawStabilityPerSecond*profile.stabilityScale*(1-brake*spec.brakeGripLoss)
         car.yaw+=(desiredYaw-car.yaw)*(1-exp(-dt/(spec.yawResponseSeconds*profile.yawResponseScale)))
         car.heading=wrapAngle(car.heading+car.yaw*dt)
         val cx=cos(car.heading); val cy=sin(car.heading)
         var forward=car.vx*cx+car.vy*cy
         var lateral=-car.vx*cy+car.vy*cx
-        val gripScale=(1.0-brake*spec.brakeGripLoss)*(if(advanced)car.surface.gripScale*(1+car.loadTransfer*Movement.transferGripGain)*(1-hb*Movement.handbrakeGripLoss) else 1.0)
+        val gripScale=car.abilityGripScale*(1.0-brake*spec.brakeGripLoss)*(if(advanced)car.surface.gripScale*(1+car.loadTransfer*Movement.transferGripGain)*(1-hb*Movement.handbrakeGripLoss) else 1.0)
         val wanted=lateral*(1-exp(-spec.lateralGripPerSecond*gripScale*dt))
         val forceLimit=spec.maxLateralAccelerationMps2*gripScale*dt
         lateral-=wanted.coerceIn(-forceLimit,forceLimit)
@@ -215,7 +217,8 @@ class SlipHandling(val driftParameters: DriftParameters=DriftParameters.defaults
         forward*=exp(-(spec.rollingDragPerSecond+(if(advanced)car.surface.dragPerSecond+hb*Movement.handbrakeDragPerSecond else 0.0))*dt)
         car.vx=cx*forward-cy*lateral; car.vy=cy*forward+cx*lateral
         val magnitude=car.speedMps
-        if(magnitude>spec.maxSpeedMps) { car.vx*=spec.maxSpeedMps/magnitude; car.vy*=spec.maxSpeedMps/magnitude }
+        val speedCap=spec.maxSpeedMps*car.abilitySpeedScale
+        if(magnitude>speedCap) { car.vx*=speedCap/magnitude; car.vy*=speedCap/magnitude }
         car.x+=car.vx*dt; car.y+=car.vy*dt
         if(advanced) {
             val slipNow=abs(wrapAngle(atan2(car.vy,car.vx)-car.heading))
@@ -231,6 +234,8 @@ class Snapshot(private val combat: Combat?=null) {
     private val state=DoubleArray(Tuning.CAR_COUNT*4)
     private val condition=DoubleArray(Tuning.CAR_COUNT*8)
     private val drift=DoubleArray(Tuning.CAR_COUNT*4)
+    private val abilityState=DoubleArray(Tuning.CAR_COUNT*12)
+    private val abilityDefinitions=arrayOfNulls<AbilityDefinition>(Tuning.CAR_COUNT)
     private val pickupState=DoubleArray((combat?.pickups?.size?:0)*4)
     private val blastState=DoubleArray((combat?.blasts?.size?:0)*5)
     val pickupCount get()=pickupState.size/4
@@ -243,6 +248,10 @@ class Snapshot(private val combat: Combat?=null) {
             condition[b+4]=combat?.traceX?.get(i)?:c.x;condition[b+5]=combat?.traceY?.get(i)?:c.y
             condition[b+6]=if(c.entered)1.0 else 0.0;condition[b+7]=if(c.drifting)1.0 else 0.0
             drift[n]=c.slipRadians;drift[n+1]=c.driftQuality;drift[n+2]=c.driftSpeedRetained;drift[n+3]=if(c.spunOut)1.0 else 0.0
+            val a=c.ability;val an=i*12;abilityDefinitions[i]=a.definition
+            abilityState[an]=a.phase.ordinal.toDouble();abilityState[an+1]=a.remainingSeconds;abilityState[an+2]=a.energy;abilityState[an+3]=a.cooldownSeconds
+            abilityState[an+4]=a.activation.toDouble();abilityState[an+5]=a.x;abilityState[an+6]=a.y;abilityState[an+7]=a.endX;abilityState[an+8]=a.endY
+            abilityState[an+9]=c.spec.circleOffsetM+c.spec.circleRadiusM;abilityState[an+10]=c.spec.circleRadiusM;abilityState[an+11]=a.slowSeconds
         }
         if(combat!=null) {
             for(i in combat.pickups.indices){val p=combat.pickups[i];val n=i*4;pickupState[n]=p.x;pickupState[n+1]=p.y;pickupState[n+2]=p.cooldownSeconds;pickupState[n+3]=p.type.radiusM}
@@ -250,6 +259,15 @@ class Snapshot(private val combat: Combat?=null) {
         }
     }
     fun x(i: Int)=state[i*4]; fun y(i: Int)=state[i*4+1]; fun heading(i: Int)=state[i*4+2]; fun speed(i: Int)=state[i*4+3]
+    fun abilityDefinition(i: Int)=abilityDefinitions[i]
+    fun abilityPhase(i: Int)=AbilityPhase.entries[abilityState[i*12].toInt()]
+    fun abilityRemainingSeconds(i: Int)=abilityState[i*12+1]
+    fun abilityEnergy(i: Int)=abilityState[i*12+2]
+    fun abilityCooldownSeconds(i: Int)=abilityState[i*12+3]
+    fun abilityActivation(i: Int)=abilityState[i*12+4].toInt()
+    fun abilityX(i: Int)=abilityState[i*12+5];fun abilityY(i: Int)=abilityState[i*12+6]
+    fun abilityEndX(i: Int)=abilityState[i*12+7];fun abilityEndY(i: Int)=abilityState[i*12+8]
+    fun noseM(i: Int)=abilityState[i*12+9];fun radiusM(i: Int)=abilityState[i*12+10];fun shockSeconds(i: Int)=abilityState[i*12+11]
     fun healthFraction(i: Int)=condition[i*8];fun wrecked(i: Int)=condition[i*8+1]>0
     fun flash(i: Int)=condition[i*8+2];fun traceSeconds(i: Int)=condition[i*8+3]
     fun traceX(i: Int)=condition[i*8+4];fun traceY(i: Int)=condition[i*8+5]
@@ -260,13 +278,14 @@ class Snapshot(private val combat: Combat?=null) {
     fun blastX(i: Int)=blastState[i*5];fun blastY(i: Int)=blastState[i*5+1];fun blastRemaining(i: Int)=blastState[i*5+2]
     fun blastRadius(i: Int)=blastState[i*5+3];fun blastActivation(i: Int)=blastState[i*5+4].toInt()
 }
-class World(val seed: Int=17, val spec: CarSpec=CarSpec(), val track: Track=Track(), val handling: Handling=SlipHandling(),combatEnabled: Boolean=false) {
+class World(val seed: Int=17, val spec: CarSpec=CarSpec(), val track: Track=Track(), val handling: Handling=SlipHandling(),combatEnabled: Boolean=false,abilitiesEnabled: Boolean=combatEnabled) {
     var raceLaps=Tuning.RACE_LAPS; internal set
     val raceLimitSeconds get()=TrackRules["maxRaceSeconds"]*raceLaps/Tuning.RACE_LAPS
     private val driftRules=(handling as? SlipHandling)?.driftParameters?:DriftParameters.defaults
     var damageScale=1.0
     val cars=Array(Tuning.CAR_COUNT) { Car(it,track).also { c -> c.spec=spec } }
     val combat=Combat(this,combatEnabled)
+    val abilities=Abilities(this,abilitiesEnabled)
     val snapshot=Snapshot(combat); val previousSnapshot=Snapshot(combat)
     private val projection=Projection(); private val point=TrackPoint()
     val ramClosingMps=DoubleArray(Tuning.CAR_COUNT*Tuning.CAR_COUNT)
@@ -294,7 +313,8 @@ class World(val seed: Int=17, val spec: CarSpec=CarSpec(), val track: Track=Trac
             c.aiLane=((c.id*7+seed)%5-2)*(if(c.carClass==null)1.7 else c.spec.circleRadiusM*2*TrackRules["aiLaneCarWidths"]); c.aiInput.set(0.0,0.0,0.0)
             c.aiNoisePhase=0.0
             if(c.aiSkill!=null && seeded!=null) { c.aiLane+=(seeded.nextDouble()*2-1)*c.aiSkill!!.laneErrorM;c.aiNoisePhase=seeded.nextDouble()*2*PI }
-            c.aiInput.fire=0.0;c.aiInput.mine=0.0;c.aiInput.weapon=0;c.aiCombatReason=0;c.aiPickupTarget=-1
+            c.aiInput.fire=0.0;c.aiInput.mine=0.0;c.aiInput.weapon=0;c.aiInput.ability=0.0;c.aiCombatReason=0;c.aiPickupTarget=-1
+            c.ability.reset();abilities.cancel(c)
             c.turboRemaining=if(c.utilityMask and (1 shl Consumables.TURBO)!=0)Consumables.all[Consumables.TURBO].duration else 0.0
             c.fuelRemaining=if(c.utilityMask and (1 shl Consumables.FUEL)!=0)Consumables.all[Consumables.FUEL].duration else 0.0;c.engineScale=1.0
         }
@@ -314,6 +334,7 @@ class World(val seed: Int=17, val spec: CarSpec=CarSpec(), val track: Track=Trac
             } else {
                 val input=if(c.human) inputs[c.id] else { driveAi(c); c.aiInput }
                 c.engineScale=1.0
+                abilities.begin(c,input,dt)
                 if(input.throttle>Consumables.triggerThrottle && input.brake==0.0) {
                     if(c.fuelRemaining>0){c.engineScale*=Consumables.all[Consumables.FUEL].magnitude;c.fuelRemaining=max(0.0,c.fuelRemaining-dt)}
                     if(c.turboRemaining>0 && c.speedMps>Consumables.turboMinimumSpeedMps) {
@@ -328,6 +349,7 @@ class World(val seed: Int=17, val spec: CarSpec=CarSpec(), val track: Track=Trac
         }
         repeat(3) { for(i in 0 until cars.size) for(j in i+1 until cars.size) collide(cars[i],cars[j]); for(c in cars)if(c.entered)contain(c) }
         combat.step(inputs,dt)
+        abilities.resolve()
         for(c in cars) {
             if(!c.entered || combat.wrecked(c.id))continue
             // Contacts may change velocity after handling. Refresh presentation/spin state without
@@ -335,7 +357,7 @@ class World(val seed: Int=17, val spec: CarSpec=CarSpec(), val track: Track=Trac
             if(handling is SlipHandling && c.spec.driftGeometry!=null)
                 DriftDynamics.updateSignals(c,if(c.human)inputs[c.id] else c.aiInput,0.0,handling.driftParameters)
             track.project(c.x,c.y,projection); c.lap.update(projection.s)
-            if(c.lap.laps>=raceLaps && c.finishSeconds<0) { c.finishSeconds=seconds;c.finishKind=FinishKind.LAPS; finished++ }
+            if(c.lap.laps>=raceLaps && c.finishSeconds<0) { c.finishSeconds=seconds;c.finishKind=FinishKind.LAPS; finished++;abilities.cancel(c) }
         }
         if(combat.enabled && combat.wreckCount==entrantCount-1)for(c in cars)if(c.entered && !combat.wrecked(c.id) && c.finishSeconds<0) { c.finishSeconds=seconds;c.finishKind=FinishKind.ELIMINATION;finished++ }
         for(c in cars) {
@@ -358,6 +380,7 @@ class World(val seed: Int=17, val spec: CarSpec=CarSpec(), val track: Track=Trac
         if(c.speedMps<1.2) c.aiBlockedSteps++ else c.aiBlockedSteps=0
         if(steps%skill.reactionSteps!=c.id%skill.reactionSteps) return
         combat.think(c)
+        abilities.think(c)
         track.project(c.x,c.y,projection)
         val s=projection.s
         var gap=1000.0
@@ -380,16 +403,16 @@ class World(val seed: Int=17, val spec: CarSpec=CarSpec(), val track: Track=Trac
         val slip=if(c.speedMps>2.0) wrapAngle(atan2(c.vy,c.vx)-c.heading) else 0.0
         val error=wrapAngle(desired-c.heading-slip*.35)
         val steer=(-error*2.3+c.yaw*.18).coerceIn(-1.0,1.0)
-        val target=if(c.carClass==null) { if(point.curvature>0) 23.0-skill.cornerMarginMps else 29.0 } else min(c.spec.maxSpeedMps*CarCatalog.aiCruiseFraction, if(point.curvature>0) sqrt(DriftDynamics.lateralLimit(c.spec,track.surfaceAt(s+look,lane,c.spec.circleRadiusM),driftRules)*CarCatalog.aiGripFraction/point.curvature)-skill.cornerMarginMps else c.spec.maxSpeedMps)
+        val target=if(c.carClass==null) { if(point.curvature>0) 23.0-skill.cornerMarginMps else 29.0 } else min(c.spec.maxSpeedMps*c.abilitySpeedScale*CarCatalog.aiCruiseFraction, if(point.curvature>0) sqrt(DriftDynamics.lateralLimit(c.spec,track.surfaceAt(s+look,lane,c.spec.circleRadiusM),driftRules)*c.abilityGripScale*CarCatalog.aiGripFraction/point.curvature)-skill.cornerMarginMps else c.spec.maxSpeedMps*c.abilitySpeedScale)
         val surfaceLimit=if(point.curvature>0)1.0 else sqrt(c.surface.gripScale).coerceIn(Movement.aiSurfaceMargin,1.0)
         val cornerTarget=target*surfaceLimit*(1.0-min(.55,abs(error)*.4))
         var a=if(c.speedMps<cornerTarget) 1.0 else .12
         if(c.spec.driftGeometry!=null) {
             // Request only the acceleration left by the same friction circle used by handling.
-            val limit=DriftDynamics.lateralLimit(c.spec,c.surface,driftRules)
-            val demand=abs(steer)*c.spec.steeringRateRadPerSecond*DriftDynamics.steeringGeometryScale(c.spec,driftRules)*c.feel.authority(c.speedMps)*c.speedMps
+            val limit=DriftDynamics.lateralLimit(c.spec,c.surface,driftRules)*c.abilityGripScale
+            val demand=abs(steer)*c.spec.steeringRateRadPerSecond*c.abilitySteerScale*DriftDynamics.steeringGeometryScale(c.spec,driftRules)*c.feel.authority(c.speedMps)*c.speedMps
             val fraction=(demand/limit).coerceIn(0.0,1.0)
-            a=min(a,limit*sqrt(1-fraction*fraction)/c.spec.accelerationMps2)
+            a=min(a,limit*sqrt(1-fraction*fraction)/(c.spec.accelerationMps2*c.engineScale))
         }
         val b=if(c.speedMps>cornerTarget+2.0) .45 else 0.0
         // Grip-driving AI. A slide is caught with inputs through the identical axle solver.
@@ -458,6 +481,7 @@ class World(val seed: Int=17, val spec: CarSpec=CarSpec(), val track: Track=Trac
             hash=31*hash+c.countersteerSmoothness.toBits();hash=31*hash+c.previousDriftSteer.toBits()
         }
         for(c in cars){hash=31*hash+if(c.entered)1 else 0;hash=31*hash+c.turboRemaining.toBits();hash=31*hash+c.fuelRemaining.toBits();hash=31*hash+c.utilityMask}
+        hash=abilities.appendHash(hash)
         return if(combat.enabled)combat.appendHash(hash) else hash
     }
 }
