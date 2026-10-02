@@ -98,6 +98,8 @@ object ProfileCodec {
             require(receipt.gross-receipt.repair==receipt.net && receipt.banked<=receipt.net)
         }
         if(legacy || versionTwo || versionThree || versionFour)Campaign.migrate(p) else p.campaign.decode(fields.getValue("campaign"))
+        if(p.campaign.finale==1)require(Career.events[p.careerRound].elimination && p.selectedCar==p.campaign.seizedCar && p.owned[p.selectedCar])
+        if(p.campaign.finale==2)require(p.careerSeasons>0)
         return p
     }
 }

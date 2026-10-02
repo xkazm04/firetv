@@ -87,6 +87,7 @@ object RivalEconomy {
     }
     fun apply(p: Profile,world: World,difficulty: Int,round: Int=p.careerRound,guest: Boolean=false) {
         world.raceLaps=Career.events[round].laps
+        world.eventType=Career.events[round].type
         prepare(p,round);val cast=cast(round)
         for(c in world.cars){c.entered=c.id<=cast.size;c.rivalIndex=-1}
         val guestRacing=guest && !Career.events[round].duel
@@ -95,6 +96,10 @@ object RivalEconomy {
             val c=world.cars[slot+if(guestRacing)2 else 1];Garage.apply(p.rivalProfiles[index],c);c.aiSkill=Career.difficulties[difficulty].skill;c.aiStyle=style(p,index);c.rivalIndex=index;c.human=false
         }
         Encounters.apply(world,Career.cups[Career.events[round].cupIndex].id)
+        if(Career.events[round].elimination) {
+            world.cars[1].aiStyle=DeathDuel.boss
+            Encounters.apply(world,"death-duel")
+        }
     }
     fun settle(p: Profile,ticket: Long,world: World,round: Int) {
         val results=world.cars.filter{it.entered && it.rivalIndex>=0}.map{c->RivalResult(c.rivalIndex,c.position,world.combat.kills[c.id],world.combat.health(c.id),world.combat.cashCollected[c.id],world.combat.damageTaken[c.id]==0.0,c.finishSeconds>=0,world.combat.wreckSource[c.id]==0)}

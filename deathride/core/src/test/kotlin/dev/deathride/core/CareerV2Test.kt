@@ -16,7 +16,7 @@ class CareerV2Test {
         assertEquals(Career.rivals.map{it.id}.toSet(),AshStory.rivals.keys)
         assertEquals(Career.rivals.map{it.id},RivalEconomy.plans.map{it.id})
         assertTrue(Career.difficulties.all{it.rewardScale==1.0})
-        assertTrue(Career.events.all{it.laps in 3..30})
+        assertTrue(Career.events.all{if(it.elimination)it.laps==0 else it.laps in 3..30})
         assertTrue(CareerCurve.all.all{it.fieldTier in it.act..minOf(4,it.act+1)})
         for((index,e) in Career.events.withIndex()){assertEquals(e.cupIndex,CareerCurve.all[index].act);assertTrue(Courses.all[e.courseIndex].pool.minTier<=e.cupIndex && Courses.all[e.courseIndex].pool.maxTier>=e.cupIndex)}
     }
@@ -105,7 +105,7 @@ class CareerV2Test {
         for(i in 2..5){assertFalse(w.combat.canAct(i));assertFalse(w.combat.fire(i,0))}
         val x=w.cars[0].x;w.cars[2].x=x;w.cars[2].y=w.cars[0].y;w.collide(w.cars[0],w.cars[2]);assertEquals(x,w.cars[0].x)
         val inputs=Array(6){InputFrame()};while(w.resolved<2 && w.seconds<w.raceLimitSeconds)w.step(inputs)
-        assertEquals(2,w.resolved);assertTrue(w.cars.filter{it.entered}.map{it.position}.toSet()==setOf(1,2));assertTrue(w.cars.drop(2).all{it.position==0})
+        assertTrue(w.resolved==2 || w.duelDraw);assertTrue(w.cars.filter{it.entered}.map{it.position}.toSet()==setOf(1,2));assertTrue(w.cars.drop(2).all{it.position==0})
         p.selectedCar=9;p.owned.fill(false);p.owned[9]=true
         assertFalse(Career.settle(p,Economy.start(p),34,1,2,0,0.0,true)!!.advanced);assertEquals(34,p.careerRound)
         assertTrue(Career.settle(p,Economy.start(p),34,1,1,0,50.0,true)!!.advanced);assertEquals(1,p.careerSeasons)
