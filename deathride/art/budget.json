@@ -1,10 +1,14 @@
 {
   "schema": 1,
-  "weekly_image_cap": 350,
+  "weekly_image_cap": 550,
   "weekly_video_cap": 0,
-  "expected_session_images": [150, 220],
+  "expected_session_images": [
+    150,
+    220
+  ],
   "max_attempts_per_asset": 3,
   "prior_account_usage": "unknown; owner-approved art-test predates this ledger",
   "owner_raise": "2026-10-01 owner asked for mass Grok use after the weekly reset and for the v2 art direction; cap raised 180 to 350 by the host on that instruction",
-  "policy": "Only the owner may raise caps. First quota/rate-limit error latches stop; no automatic retry. Reservations with unknown outcome count as spent."
+  "policy": "Only the owner may raise caps. First quota/rate-limit error latches stop; no automatic retry. Reservations with unknown outcome count as spent.",
+  "owner_raise_2": "2026-10-02 host raised 350 to 550 to cover the four car reworks and the derived damage states and liveries for the six approved cars; the owner asked for mass use of Grok"
 }
