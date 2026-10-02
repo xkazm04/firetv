@@ -142,6 +142,22 @@ class AbilitiesTest {
         repeat(120){tick(shock)};assertEquals(1.0,target.engineScale);assertEquals(0.0,target.ability.slowSeconds)
     }
 
+    @Test fun continuouslyRequestedPlateBraceCannotMakeTheHeavyUntouchable() {
+        val w=fixture("Bulwark");frames[0].ability=1.0
+        val began=w.seconds;var next=w.seconds
+        while(!w.combat.wrecked(0) && w.seconds-began<RosterRules["maximumHeavyKillSeconds"]) {
+            if(w.seconds>=next) {
+                w.combat.damage(0,Weapons.all[Weapons.RIVET].damage,1,DamageKind.RIVET)
+                next+=Weapons.all[Weapons.RIVET].cooldownSeconds
+            }
+            w.step(frames)
+        }
+        frames[0].ability=0.0
+        assertTrue(w.cars[0].ability.activation>0)
+        assertTrue(w.combat.wrecked(0),"Held guard still loses to the declared continuous Rivet envelope")
+        assertEquals(0,w.combat.oneShotKills)
+    }
+
     @Test fun wreckFinishAndAbsentCarsCannotEmitAQueuedAbility() {
         for(state in listOf("wreck","finish","absent")) {
             val w=fixture("Flint");start(w);val hp=w.combat.health(1)
@@ -173,6 +189,10 @@ class AbilitiesTest {
         while(c.ability.phase==AbilityPhase.WINDUP)tick(w)
         w.previousSnapshot.capture(w.cars);tick(w);w.snapshot.capture(w.cars)
         assertEquals(end,w.snapshot.abilityEndX(0));assertEquals(c.ability.definition,w.snapshot.abilityDefinition(0))
+        val vandal=fixture("Vandal");val trickster=vandal.cars[0]
+        trickster.aiSkill=AiSkills.all.first{it.id=="Rookie"};assertFalse(trickster.aiSkill!!.mines)
+        trickster.vx=10.0;pose(vandal.cars[1],trickster.x-12,trickster.y)
+        vandal.abilities.think(trickster);assertEquals(1.0,trickster.aiInput.ability,"Signature use is distinct from the mine weapon skill flag")
     }
 
     @Test fun allSignaturesReplayAndAllocateZeroBytesWhileActivating() {

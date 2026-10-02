@@ -1,0 +1,40 @@
+{
+  "races": 800,
+  "cells": 4,
+  "findings": [
+    "elite: dominant class"
+  ],
+  "tiers": {
+    "elite": {
+      "on": {
+        "winnerShares": {
+          "Quill": 0.555,
+          "Vandal": 0.445
+        },
+        "courseMeans": {
+          "technical": {
+            "Quill": 38.369249999999106,
+            "Vandal": 45.27369444444316
+          },
+          "straight": {
+            "Quill": 203.62833333338227,
+            "Vandal": 188.70080555559787
+          },
+          "loose": {
+            "Quill": 65.40361111110869,
+            "Vandal": 72.4167222222194
+          }
+        },
+        "margins": {
+          "skillSeconds": 11.778749999999334,
+          "straightDeficitSeconds": 14.927527777784405,
+          "hairpinDeficitSeconds": 6.904444444444053
+        },
+        "alarms": [
+          "dominant class"
+        ],
+        "minimumCellSamples": 200
+      }
+    }
+  }
+}

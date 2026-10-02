@@ -55,4 +55,4 @@ Original work only. Build green at every commit (`:core:test :link:test :app:ass
 | A0 | Merge drift into this branch | complete — seven conflicts reconciled; 105 core / 3 link / 3 renderer; APK green |
 | A1 | Ability design note | complete — sourced ten-class design and CSV; authored cost/escape checks; build green |
 | A2 | Abilities in core, controller and AI | complete — 116 core / 3 link / 3 renderer; zero allocation; six controller layout/mirror checks; APK green |
-| A3 | Balance report, Stick check, owner checks | not started |
+| A3 | Balance report, Stick check, owner checks | complete - 66,000 races pass; 120 core / 3 link / 3 renderer and APK green; Stick frame/input gaps logged; owner feel pending |

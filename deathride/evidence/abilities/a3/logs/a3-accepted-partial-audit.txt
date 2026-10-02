@@ -1,0 +1,70 @@
+{
+  "races": 13000,
+  "cells": 11,
+  "findings": [
+    "rookie: dominant class"
+  ],
+  "tiers": {
+    "rookie": {
+      "off": {
+        "winnerShares": {
+          "Needle": 0.8275,
+          "Line": 0.1725
+        },
+        "courseMeans": {
+          "technical": {
+            "Needle": 43.81338888888769,
+            "Line": 49.38208333333181
+          },
+          "straight": {
+            "Needle": 238.3911944445263,
+            "Line": 236.57619444452484
+          },
+          "loose": {
+            "Needle": 75.70069444444144,
+            "Line": 81.70377777777442
+          }
+        },
+        "margins": {
+          "skillSeconds": 11.43363888888824,
+          "straightDeficitSeconds": 1.8150000000014472,
+          "hairpinDeficitSeconds": 5.568694444444127
+        },
+        "alarms": [
+          "dominant class",
+          "straightDeficitSeconds below declared minimum"
+        ],
+        "minimumCellSamples": 200
+      },
+      "on": {
+        "winnerShares": {
+          "Needle": 0.8150000000000001,
+          "Line": 0.185
+        },
+        "courseMeans": {
+          "technical": {
+            "Needle": 43.59587222222103,
+            "Line": 48.94041944444295
+          },
+          "straight": {
+            "Needle": 239.10622222230464,
+            "Line": 236.8548777778584
+          },
+          "loose": {
+            "Needle": 76.31793055555251,
+            "Line": 80.15629999999673
+          }
+        },
+        "margins": {
+          "skillSeconds": 10.828836111110498,
+          "straightDeficitSeconds": 2.2513444444462323,
+          "hairpinDeficitSeconds": 5.3445472222219195
+        },
+        "alarms": [
+          "dominant class"
+        ],
+        "minimumCellSamples": 2000
+      }
+    }
+  }
+}

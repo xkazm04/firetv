@@ -278,7 +278,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
             val combat=world.combat
             server.trafficJson=world.cars.filter{it.entered}.joinToString(",","[","]"){c->"{\"id\":${c.id},\"name\":\"${driverName(c)}\",\"car\":\"${c.carClass?.id}\",\"human\":${c.human},\"x\":${c.x},\"y\":${c.y},\"heading\":${c.heading},\"radius\":${c.spec.circleRadiusM},\"ability\":${world.abilities.json(c.id)},\"hp\":${combat.health(c.id)},\"wrecked\":${combat.wrecked(c.id)},\"finished\":${c.finishSeconds>=0},\"finishKind\":\"${c.finishKind}\",\"laps\":${c.lap.laps},\"position\":${c.position},\"repairPickups\":${combat.repairPickupsTaken[c.id]}}"}
             server.pickupsJson=combat.pickups.joinToString(",","[","]"){p->"{\"kind\":\"${p.type.id}\",\"x\":${p.x},\"y\":${p.y},\"cooldown\":${p.cooldownSeconds}}"}
-            server.combatSummaryJson="{\"damageScale\":${world.damageScale},\"shotsByWeapon\":[${combat.shots.joinToString(",")}],\"active\":${world.entrantCount-world.resolved},\"living\":${world.entrantCount-combat.wreckCount},\"finished\":${world.finished},\"shots\":${combat.shots.sum()},\"projectiles\":${combat.projectiles.count{it.active}},\"mines\":${combat.mines.count{it.active}},\"blasts\":${combat.blasts.count{it.remainingSeconds>0}},\"poolExhaustions\":${combat.poolExhaustions},\"abilityDamage\":${combat.abilityDamage.sum()},\"abilityUses\":${world.cars.sumOf{it.ability.activation}}}"
+            server.combatSummaryJson="{\"mineBlastRadiusM\":${Weapons.all[Weapons.MINE].radiusM},\"mineTriggerRadiusM\":${combat.mineTriggerRadiusM},\"damageScale\":${world.damageScale},\"shotsByWeapon\":[${combat.shots.joinToString(",")}],\"active\":${world.entrantCount-world.resolved},\"living\":${world.entrantCount-combat.wreckCount},\"finished\":${world.finished},\"shots\":${combat.shots.sum()},\"projectiles\":${combat.projectiles.count{it.active}},\"mines\":${combat.mines.count{it.active}},\"blasts\":${combat.blasts.count{it.remainingSeconds>0}},\"poolExhaustions\":${combat.poolExhaustions},\"abilityDamage\":${combat.abilityDamage.sum()},\"abilityUses\":${world.cars.sumOf{it.ability.activation}}}"
             for(i in 0..1) { val c=world.cars[i]; val s=server.slots[i]; s.speed=c.speedMps; s.lap=min(c.lap.laps+1,world.raceLaps); s.position=c.position; s.impact=c.impact; s.drifting=c.drifting; s.driftQuality=c.driftQuality;s.slipRadians=c.slipRadians;s.spunOut=c.spunOut; s.loadTransfer=c.loadTransfer; s.surfaceId=c.surface.id; s.x=c.x; s.y=c.y;s.heading=c.heading;s.yaw=c.yaw;s.progressM=c.lap.progressM; s.combatJson=combatJson(i) }
             rebuildUi()
         }
@@ -452,7 +452,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         }
         if(phase!="race")detail.addText(Presentation.CONCEPT+"  /  "+Presentation.TAGLINE,59f,655f)
         if(phase!="race")detail.addText(when(phase){"garage"->"PARTS / PER CAR    -    GREEN: GAIN    AMBER: TRADE-OFF";"career"->"THE ASH CIRCUIT / FIVE ACTS / THIRTY-FIVE EVENTS";else->Courses.all[selectedTrack].name+"   /   MENU: course    /    FEEL: "+server.feel.id+"  LEFT / RIGHT"},59f,630f)
-        detail.addText("${world.entrantCount} CARS    /    ${world.raceLaps} LAPS    /    "+Courses.all[selectedTrack].name.uppercase(),873f,682f)
+        if(phase!="race")detail.addText("${world.entrantCount} CARS    /    ${world.raceLaps} LAPS    /    "+Courses.all[selectedTrack].name.uppercase(),873f,682f)
         detail.addText(if(phase=="lobby")"A live race. A phone in your hand." else "BACK: Lobby    /    "+server.feel.id,873f,653f)
         if(phase=="race" || phase=="countdown" || phase=="results") {
           for(c in world.cars)if(c.entered) {
@@ -536,7 +536,8 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
                 var warned=false
                 for(s in server.slots)if(s.claimed && s.stale && !warned) { detail.setColor(warning); uiBuilder.clear(); uiBuilder.append("PLAYER ").append(s.id+1).append("  LINK QUIET - COASTING"); detail.addText(uiBuilder,465f,612f); warned=true }
                 detail.setColor(muted); uiBuilder.clear(); uiBuilder.append(driverName(driver)).append("   /   ").append((world.seconds).toInt()).append(" s   /   ").append(world.finished).append(" finished")
-                detail.addText(uiBuilder,572f,97f)
+                uiBuilder.append("   /   ").append(Courses.all[selectedTrack].name)
+                detail.addText(uiBuilder,430f,97f)
             }
             "results" -> {
                 headline.addText("THE FINISH",330f,558f)
@@ -563,7 +564,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
     }
     private fun updateQr() {
         if(server.pin==qrPin && server.address==qrAddress)return
-        qrPin=server.pin; qrAddress=server.address; val url=server.pairingUrl(); addressLabel="http://${server.address}:8765"
+        qrPin=server.pin; qrAddress=server.address; val url=server.pairingUrl(); addressLabel="http://${server.address}:${server.port}"
         qrUrl=url; qr?.dispose()
         val matrix=QRCodeWriter().encode(url,BarcodeFormat.QR_CODE,240,240,mapOf(EncodeHintType.MARGIN to 3))
         val pix=Pixmap(240,240,Pixmap.Format.RGBA8888)

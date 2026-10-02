@@ -310,7 +310,7 @@ class World(val seed: Int=17, val spec: CarSpec=CarSpec(), val track: Track=Trac
             c.filteredSteer=0.0; c.filteredThrottle=0.0
             c.previousX=c.x; c.previousY=c.y; c.previousHeading=c.heading; c.lap.reset(s)
             c.finishSeconds=-1.0;c.finishKind=FinishKind.NONE; c.position=c.id+1; c.impact=0.0; c.aiDwell=0; c.aiBlockedSteps=0; c.aiMode=AiMode.DRIVE
-            c.aiLane=((c.id*7+seed)%5-2)*(if(c.carClass==null)1.7 else c.spec.circleRadiusM*2*TrackRules["aiLaneCarWidths"]); c.aiInput.set(0.0,0.0,0.0)
+            c.aiLane=((c.id*7L+seed).mod(5L)-2)*(if(c.carClass==null)1.7 else c.spec.circleRadiusM*2*TrackRules["aiLaneCarWidths"]); c.aiInput.set(0.0,0.0,0.0)
             c.aiNoisePhase=0.0
             if(c.aiSkill!=null && seeded!=null) { c.aiLane+=(seeded.nextDouble()*2-1)*c.aiSkill!!.laneErrorM;c.aiNoisePhase=seeded.nextDouble()*2*PI }
             c.aiInput.fire=0.0;c.aiInput.mine=0.0;c.aiInput.weapon=0;c.aiInput.ability=0.0;c.aiCombatReason=0;c.aiPickupTarget=-1
@@ -394,7 +394,7 @@ class World(val seed: Int=17, val spec: CarSpec=CarSpec(), val track: Track=Trac
         else if(gap<(c.spec.circleRadiusM+c.spec.circleOffsetM)*2*TrackRules["aiOvertakeCarLengths"]*(c.aiStyle?.passDistanceScale?:1.0) && c.aiDwell>90 && c.aiMode==AiMode.DRIVE) { c.aiMode=AiMode.OVERTAKE; c.aiDwell=0; c.aiReason=2 }
         else if(c.aiMode!=AiMode.DRIVE && c.aiDwell>180 && c.speedMps>5) { c.aiMode=AiMode.DRIVE; c.aiDwell=0; c.aiReason=3 }
         val passLane=c.spec.circleRadiusM*2*TrackRules["aiPassCarWidths"]
-        val intendedLane=if(c.aiMode==AiMode.OVERTAKE) if(c.aiLane<0) passLane else -passLane else c.aiLane+(c.aiStyle?.laneBiasM?:0.0)
+        val intendedLane=if(c.aiMode==AiMode.RECOVER) 0.0 else if(c.aiMode==AiMode.OVERTAKE) if(c.aiLane<0) passLane else -passLane else c.aiLane+(c.aiStyle?.laneBiasM?:0.0)
         val noseLook=(c.spec.circleOffsetM+c.spec.circleRadiusM)*2*TrackRules["aiLookCarLengths"]
         val look=if(c.aiMode==AiMode.RECOVER) noseLook else noseLook+c.speedMps*skill.lookAheadSeconds
         val lane=combat.avoidMine(c,s,combat.seekRepair(c,intendedLane+(track.course?.laneAt(s+look,c.carClass?.stat("grip")?:0)?:0.0))).coerceIn(-track.widthAt(s+look)*.55,track.widthAt(s+look)*.55)

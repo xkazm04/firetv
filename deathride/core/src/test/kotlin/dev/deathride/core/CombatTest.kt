@@ -60,6 +60,26 @@ class CombatTest {
         c.reset();assertTrue(c.fire(0,Weapons.MINE));assertEquals(0.0,c.mines.first { it.active }.ageSeconds)
         assertTrue(c.blasts.all { it.hitMask==0 && it.remainingSeconds==0.0 })
     }
+    @Test fun smallMineTriggersOnlyAtItsDamageBoundaryAndAiUsesThatRadius() {
+        val w=arena();val combat=w.combat;val weapon=Weapons.all[Weapons.MINE]
+        assertEquals(.5,weapon.radiusM);assertEquals(.5,combat.mineTriggerRadiusM)
+        assertTrue(combat.fire(0,Weapons.MINE));val mine=combat.mines.first { it.active }
+        val target=w.cars[1];val full=combat.health(1)
+        target.x=mine.x;target.y=mine.y+target.spec.circleRadiusM+.75
+        repeat(ceil(weapon.armingSeconds/Tuning.STEP_SECONDS).toInt()+1){combat.step(neutral,Tuning.STEP_SECONDS)}
+        assertTrue(mine.active,"The former 1.6 m trigger must not spend a mine outside its 0.5 m blast")
+        assertEquals(full,combat.health(1))
+        target.x=mine.x-10;target.y=mine.y
+        val projection=Projection();w.track.project(mine.x,mine.y,projection)
+        val lane=projection.distance
+        assertEquals(lane-(weapon.radiusM+target.spec.circleRadiusM+CombatRules["aiMineAvoidMarginM"]),combat.avoidMine(target,projection.s,lane),1e-9)
+        target.x=mine.x;target.y=mine.y+target.spec.circleRadiusM+.49
+        combat.step(neutral,Tuning.STEP_SECONDS)
+        assertFalse(mine.active);assertEquals(full-weapon.damage*(1-target.armorReduction),combat.health(1),1e-9)
+        assertEquals(.5,combat.blasts.first { it.remainingSeconds>0 }.radiusM)
+        repeat(30){combat.step(neutral,Tuning.STEP_SECONDS)}
+        assertEquals(1,combat.damageEvents[1]);assertEquals(0,combat.oneShotKills)
+    }
     @Test fun pickupsRespectCapsRespawnAndUnavailableMounts() {
         val w=arena();val c=w.combat;CarCatalog.apply(w.cars[0],0);c.reset()
         assertEquals(0,c.ammo(0,Weapons.HAMMER));assertFalse(c.fire(0,Weapons.HAMMER))

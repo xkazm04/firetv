@@ -1,0 +1,22 @@
+> Task :core:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :core:processResources UP-TO-DATE
+> Task :core:processTestResources UP-TO-DATE
+> Task :core:compileKotlin
+> Task :core:compileJava NO-SOURCE
+> Task :core:classes UP-TO-DATE
+> Task :core:jar
+
+> Task :core:compileTestKotlin
+w: file:///C:/Users/kazda/kiro/firetv-deathride-abil/deathride/core/src/test/kotlin/dev/deathride/core/AbilitiesTest.kt:184:84 'val id: Long' is deprecated. Deprecated in Java.
+
+> Task :core:compileTestJava NO-SOURCE
+> Task :core:testClasses UP-TO-DATE
+
+> Task :core:abilityReport
+roster-elite-equal-technical-on: 200 races in 3.8476056s
+roster-elite-equal-straight-on: 200 races in 11.2981186s
+roster-elite-equal-loose-on: 200 races in 4.2866945s
+roster-elite-skill-technical-on: 200 races in 3.0277024s
+
+BUILD SUCCESSFUL in 24s
+6 actionable tasks: 4 executed, 2 up-to-date

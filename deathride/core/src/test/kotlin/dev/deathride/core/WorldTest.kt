@@ -5,6 +5,31 @@ import kotlin.math.*
 
 class WorldTest {
     private fun inputs()=Array(6){InputFrame()}
+    @Test fun eliteMineEncounterRecoversWithoutStrandingTheRemainingCars() {
+        val track=Track(45.0,20.0,10.0)
+        val w=World(-1935872170,track=track,combatEnabled=true)
+        for(c in w.cars) {
+            val name=if(c.id%2==0)"Vandal" else "Quill"
+            CarCatalog.apply(c,CarCatalog.all.indexOfFirst{it.id==name})
+            c.aiSkill=AiSkills.all.single{it.id==if(name=="Quill")"Champion" else "Rookie"}
+        }
+        Encounters.apply(w,Career.cups[3].id);w.reset();val input=inputs();var recovering=false
+        repeat(18000) {
+            if(w.resolved<6)w.step(input)
+            if(w.cars.any{it.aiMode==AiMode.RECOVER})recovering=true
+        }
+        assertTrue(recovering);assertEquals(6,w.resolved)
+        println("Recovered all six entrants in ${w.seconds} simulated seconds")
+    }
+    @Test fun signedSeedsUseTheSameBoundedLaneCycleWithoutIntegerOverflow() {
+        val lanes=setOf(-3.4,-1.7,0.0,1.7,3.4)
+        for(seed in listOf(Int.MIN_VALUE,-17,-1,0,1,Int.MAX_VALUE)) {
+            val world=World(seed)
+            assertEquals(lanes,world.cars.take(5).map{it.aiLane}.toSet(),"Every seed visits the five intended lanes")
+            val sameRemainder=World(seed.mod(5))
+            for(i in world.cars.indices)assertEquals(sameRemainder.cars[i].aiLane,world.cars[i].aiLane,0.0,"Seed sign must not push the whole field to one verge")
+        }
+    }
     @Test fun deterministicSixtySeconds() {
         val a=World(82); val b=World(82); val input=inputs(); a.cars[0].human=true; b.cars[0].human=true
         repeat(3600) { input[0].set(sin(it*.01)*.5,.8,if(it%600>500) .2 else 0.0); a.step(input); b.step(input); assertEquals(a.stateHash(),b.stateHash()) }

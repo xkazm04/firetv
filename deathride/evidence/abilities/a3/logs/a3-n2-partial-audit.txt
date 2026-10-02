@@ -1,0 +1,153 @@
+{
+  "races": 40400,
+  "cells": 58,
+  "findings": [],
+  "tiers": {
+    "rookie": {
+      "off": {
+        "winnerShares": {
+          "Needle": 0.48624999999999996,
+          "Line": 0.51375
+        },
+        "courseMeans": {
+          "technical": {
+            "Needle": 43.744527777776575,
+            "Line": 49.460833333331806
+          },
+          "straight": {
+            "Needle": 242.18155555564041,
+            "Line": 227.06286111118396
+          },
+          "loose": {
+            "Needle": 75.86177777777476,
+            "Line": 81.8238055555522
+          }
+        },
+        "margins": {
+          "skillSeconds": 11.492722222221566,
+          "straightDeficitSeconds": 15.118694444456452,
+          "hairpinDeficitSeconds": 5.7163055555552305
+        },
+        "alarms": [],
+        "minimumCellSamples": 200,
+        "mixedAbilityDamageShare": 0.0
+      },
+      "on": {
+        "winnerShares": {
+          "Needle": 0.472375,
+          "Line": 0.527625
+        },
+        "courseMeans": {
+          "technical": {
+            "Needle": 43.652861111109914,
+            "Line": 48.92914444444295
+          },
+          "straight": {
+            "Needle": 242.360300000085,
+            "Line": 225.51580555562717
+          },
+          "loose": {
+            "Needle": 76.26061666666362,
+            "Line": 80.20450555555229
+          }
+        },
+        "margins": {
+          "skillSeconds": 10.884258333332717,
+          "straightDeficitSeconds": 16.844494444457837,
+          "hairpinDeficitSeconds": 5.2762833333330335
+        },
+        "alarms": [],
+        "minimumCellSamples": 2000,
+        "mixedAbilityDamageShare": 0.0
+      }
+    },
+    "club": {
+      "off": {
+        "winnerShares": {
+          "Bastion": 0.4875,
+          "Trail": 0.5125
+        },
+        "courseMeans": {
+          "technical": {
+            "Bastion": 57.14436111110915,
+            "Trail": 39.8497777777768
+          },
+          "straight": {
+            "Bastion": 208.24716666672452,
+            "Trail": 228.6865555556297
+          },
+          "loose": {
+            "Bastion": 87.74102777777408,
+            "Trail": 63.77055555555322
+          }
+        },
+        "margins": {
+          "skillSeconds": 21.94730555555431,
+          "straightDeficitSeconds": 20.43938888890517,
+          "hairpinDeficitSeconds": 17.294583333332348
+        },
+        "alarms": [],
+        "minimumCellSamples": 200,
+        "mixedAbilityDamageShare": 0.0
+      },
+      "on": {
+        "winnerShares": {
+          "Bastion": 0.48825,
+          "Trail": 0.51175
+        },
+        "courseMeans": {
+          "technical": {
+            "Bastion": 57.250499999998034,
+            "Trail": 39.73624166666569
+          },
+          "straight": {
+            "Bastion": 208.49316388894695,
+            "Trail": 228.74136388896278
+          },
+          "loose": {
+            "Bastion": 87.6582249999963,
+            "Trail": 62.49301388888662
+          }
+        },
+        "margins": {
+          "skillSeconds": 22.484433333332056,
+          "straightDeficitSeconds": 20.248200000015828,
+          "hairpinDeficitSeconds": 17.514258333332343
+        },
+        "alarms": [],
+        "minimumCellSamples": 2000,
+        "mixedAbilityDamageShare": 0.01080204138403927
+      }
+    },
+    "pro": {
+      "off": {
+        "winnerShares": {
+          "Comet": 0.5025,
+          "Flint": 0.4975
+        },
+        "courseMeans": {
+          "technical": {
+            "Comet": 49.63277777777624,
+            "Flint": 40.238555555554555
+          },
+          "straight": {
+            "Comet": 189.41713888893156,
+            "Flint": 214.7791388889515
+          },
+          "loose": {
+            "Comet": 78.20391666666352,
+            "Flint": 67.25105555555302
+          }
+        },
+        "margins": {
+          "skillSeconds": 15.00416666666581,
+          "straightDeficitSeconds": 25.362000000019947,
+          "hairpinDeficitSeconds": 9.394222222221686
+        },
+        "alarms": [],
+        "minimumCellSamples": 200,
+        "mixedAbilityDamageShare": 0.0
+      }
+    }
+  }
+}

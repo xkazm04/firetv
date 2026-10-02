@@ -171,7 +171,7 @@ class Abilities(private val world: World,var enabled: Boolean) {
             AbilityKind.GRIP->c.surface.gripScale<Surfaces.asphalt.gripScale && abs(point.curvature)>0 && c.speedMps>=d.aiMinSpeedMps
             AbilityKind.LANCE,AbilityKind.HARPOON->front && straight
             AbilityKind.SPIKES->(front || rear) && c.speedMps>=d.aiMinSpeedMps
-            AbilityKind.PATCH->rear && c.speedMps>=d.aiMinSpeedMps && c.aiSkill?.mines!=false
+            AbilityKind.PATCH->rear && c.speedMps>=d.aiMinSpeedMps
             AbilityKind.GUARD->near && (rear || world.combat.health(c.id)<world.combat.maxHealth(c.id))
         }
         c.aiInput.ability=if(use)1.0 else 0.0

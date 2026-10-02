@@ -1,0 +1,637 @@
+{
+  "cells": {
+    "roster-rookie-equal-loose-off": {
+      "races": 100,
+      "distinctHashes": 100,
+      "ratesValid": true,
+      "unresolved": 0,
+      "oneShots": 0,
+      "earlyWrecks": 0,
+      "unsettledLeadOutcomes": 0,
+      "earlyRate": 0.0,
+      "firstWreckSeconds": {
+        "observed": 0,
+        "min": null,
+        "p05": null,
+        "p50": null,
+        "p95": null,
+        "max": null
+      },
+      "noWreckCensored": 100,
+      "abilityDamage": 0.0,
+      "totalDamage": 8332.75584045864,
+      "abilityDamageShare": 0.0,
+      "classes": {
+        "Line": {
+          "wins": 48,
+          "entries": 300,
+          "uses": 0,
+          "zeroUseEntries": 300,
+          "activeSeconds": 23424.149999999063,
+          "abilityDamage": 0.0,
+          "meanPenalizedSeconds": 78.08049999999686,
+          "finishedEntries": 300,
+          "meanFinishedSeconds": 78.08049999999686,
+          "winnerShare": 0.48,
+          "winnerShare95CI": [
+            0.38464384320080547,
+            0.5768359490982345
+          ],
+          "usesPerActiveMinute": 0.0
+        },
+        "Needle": {
+          "wins": 52,
+          "entries": 300,
+          "uses": 0,
+          "zeroUseEntries": 300,
+          "activeSeconds": 22343.183333332458,
+          "abilityDamage": 0.0,
+          "meanPenalizedSeconds": 74.47727777777483,
+          "finishedEntries": 300,
+          "meanFinishedSeconds": 74.47727777777483,
+          "winnerShare": 0.52,
+          "winnerShare95CI": [
+            0.4231640509017654,
+            0.6153561567991945
+          ],
+          "usesPerActiveMinute": 0.0
+        }
+      },
+      "gridWinnerCounts": {
+        "0": {
+          "Line": 48,
+          "Needle": 2
+        },
+        "1": {
+          "Needle": 50
+        }
+      }
+    },
+    "roster-rookie-equal-loose-on": {
+      "races": 500,
+      "distinctHashes": 500,
+      "ratesValid": true,
+      "unresolved": 0,
+      "oneShots": 0,
+      "earlyWrecks": 0,
+      "unsettledLeadOutcomes": 0,
+      "earlyRate": 0.0,
+      "firstWreckSeconds": {
+        "observed": 0,
+        "min": null,
+        "p05": null,
+        "p50": null,
+        "p95": null,
+        "max": null
+      },
+      "noWreckCensored": 500,
+      "abilityDamage": 0.0,
+      "totalDamage": 38247.62112946279,
+      "abilityDamageShare": 0.0,
+      "classes": {
+        "Line": {
+          "wins": 247,
+          "entries": 1500,
+          "uses": 9442,
+          "zeroUseEntries": 0,
+          "activeSeconds": 115635.14999999548,
+          "abilityDamage": 0.0,
+          "meanPenalizedSeconds": 77.09009999999691,
+          "finishedEntries": 1500,
+          "meanFinishedSeconds": 77.09009999999691,
+          "winnerShare": 0.494,
+          "winnerShare95CI": [
+            0.4503893365060508,
+            0.5377021589163201
+          ],
+          "usesPerActiveMinute": 4.899202361911772
+        },
+        "Needle": {
+          "wins": 253,
+          "entries": 1500,
+          "uses": 9548,
+          "zeroUseEntries": 0,
+          "activeSeconds": 110733.96666666269,
+          "abilityDamage": 0.0,
+          "meanPenalizedSeconds": 73.82264444444154,
+          "finishedEntries": 1500,
+          "meanFinishedSeconds": 73.82264444444154,
+          "winnerShare": 0.506,
+          "winnerShare95CI": [
+            0.46229784108368,
+            0.5496106634939493
+          ],
+          "usesPerActiveMinute": 5.173480344332955
+        }
+      },
+      "gridWinnerCounts": {
+        "0": {
+          "Line": 247,
+          "Needle": 3
+        },
+        "1": {
+          "Needle": 250
+        }
+      }
+    },
+    "roster-rookie-equal-straight-off": {
+      "races": 100,
+      "distinctHashes": 100,
+      "ratesValid": true,
+      "unresolved": 0,
+      "oneShots": 0,
+      "earlyWrecks": 0,
+      "unsettledLeadOutcomes": 0,
+      "earlyRate": 0.0,
+      "firstWreckSeconds": {
+        "observed": 0,
+        "min": null,
+        "p05": null,
+        "p50": null,
+        "p95": null,
+        "max": null
+      },
+      "noWreckCensored": 100,
+      "abilityDamage": 0.0,
+      "totalDamage": 11736.030919845516,
+      "abilityDamageShare": 0.0,
+      "classes": {
+        "Line": {
+          "wins": 91,
+          "entries": 300,
+          "uses": 0,
+          "zeroUseEntries": 300,
+          "activeSeconds": 67776.68333335491,
+          "abilityDamage": 0.0,
+          "meanPenalizedSeconds": 225.9222777778497,
+          "finishedEntries": 300,
+          "meanFinishedSeconds": 225.9222777778497,
+          "winnerShare": 0.91,
+          "winnerShare95CI": [
+            0.8377362530335634,
+            0.9519280048361151
+          ],
+          "usesPerActiveMinute": 0.0
+        },
+        "Needle": {
+          "wins": 9,
+          "entries": 300,
+          "uses": 0,
+          "zeroUseEntries": 300,
+          "activeSeconds": 69611.53333335635,
+          "abilityDamage": 0.0,
+          "meanPenalizedSeconds": 232.03844444452125,
+          "finishedEntries": 300,
+          "meanFinishedSeconds": 232.03844444452125,
+          "winnerShare": 0.09,
+          "winnerShare95CI": [
+            0.04807199516388488,
+            0.16226374696643667
+          ],
+          "usesPerActiveMinute": 0.0
+        }
+      },
+      "gridWinnerCounts": {
+        "0": {
+          "Line": 50
+        },
+        "1": {
+          "Needle": 9,
+          "Line": 41
+        }
+      }
+    },
+    "roster-rookie-equal-straight-on": {
+      "races": 500,
+      "distinctHashes": 500,
+      "ratesValid": true,
+      "unresolved": 0,
+      "oneShots": 0,
+      "earlyWrecks": 0,
+      "unsettledLeadOutcomes": 0,
+      "earlyRate": 0.0,
+      "firstWreckSeconds": {
+        "observed": 0,
+        "min": null,
+        "p05": null,
+        "p50": null,
+        "p95": null,
+        "max": null
+      },
+      "noWreckCensored": 500,
+      "abilityDamage": 0.0,
+      "totalDamage": 57521.698403902876,
+      "abilityDamageShare": 0.0,
+      "classes": {
+        "Line": {
+          "wins": 456,
+          "entries": 1500,
+          "uses": 35586,
+          "zeroUseEntries": 0,
+          "activeSeconds": 337561.33333344077,
+          "abilityDamage": 0.0,
+          "meanPenalizedSeconds": 225.04088888896013,
+          "finishedEntries": 1500,
+          "meanFinishedSeconds": 225.04088888896013,
+          "winnerShare": 0.912,
+          "winnerShare95CI": [
+            0.8839229514479334,
+            0.9337943628826022
+          ],
+          "usesPerActiveMinute": 6.325250522372192
+        },
+        "Needle": {
+          "wins": 44,
+          "entries": 1500,
+          "uses": 47237,
+          "zeroUseEntries": 0,
+          "activeSeconds": 347261.98333344795,
+          "abilityDamage": 0.0,
+          "meanPenalizedSeconds": 231.50798888896526,
+          "finishedEntries": 1500,
+          "meanFinishedSeconds": 231.50798888896526,
+          "winnerShare": 0.088,
+          "winnerShare95CI": [
+            0.06620563711739778,
+            0.11607704855206659
+          ],
+          "usesPerActiveMinute": 8.161618996682758
+        }
+      },
+      "gridWinnerCounts": {
+        "0": {
+          "Line": 248,
+          "Needle": 2
+        },
+        "1": {
+          "Line": 208,
+          "Needle": 42
+        }
+      }
+    },
+    "roster-rookie-equal-technical-off": {
+      "races": 100,
+      "distinctHashes": 100,
+      "ratesValid": true,
+      "unresolved": 0,
+      "oneShots": 0,
+      "earlyWrecks": 0,
+      "unsettledLeadOutcomes": 0,
+      "earlyRate": 0.0,
+      "firstWreckSeconds": {
+        "observed": 0,
+        "min": null,
+        "p05": null,
+        "p50": null,
+        "p95": null,
+        "max": null
+      },
+      "noWreckCensored": 100,
+      "abilityDamage": 0.0,
+      "totalDamage": 7849.445336305938,
+      "abilityDamageShare": 0.0,
+      "classes": {
+        "Needle": {
+          "wins": 87,
+          "entries": 300,
+          "uses": 0,
+          "zeroUseEntries": 300,
+          "activeSeconds": 13603.583333332948,
+          "abilityDamage": 0.0,
+          "meanPenalizedSeconds": 45.34527777777649,
+          "finishedEntries": 300,
+          "meanFinishedSeconds": 45.34527777777649,
+          "winnerShare": 0.87,
+          "winnerShare95CI": [
+            0.7901947810519012,
+            0.9224290614158575
+          ],
+          "usesPerActiveMinute": 0.0
+        },
+        "Line": {
+          "wins": 13,
+          "entries": 300,
+          "uses": 0,
+          "zeroUseEntries": 300,
+          "activeSeconds": 15386.883333332851,
+          "abilityDamage": 0.0,
+          "meanPenalizedSeconds": 51.28961111110948,
+          "finishedEntries": 300,
+          "meanFinishedSeconds": 51.28961111110948,
+          "winnerShare": 0.13,
+          "winnerShare95CI": [
+            0.07757093858414264,
+            0.20980521894809878
+          ],
+          "usesPerActiveMinute": 0.0
+        }
+      },
+      "gridWinnerCounts": {
+        "0": {
+          "Needle": 42,
+          "Line": 8
+        },
+        "1": {
+          "Needle": 45,
+          "Line": 5
+        }
+      }
+    },
+    "roster-rookie-equal-technical-on": {
+      "races": 500,
+      "distinctHashes": 500,
+      "ratesValid": true,
+      "unresolved": 0,
+      "oneShots": 0,
+      "earlyWrecks": 0,
+      "unsettledLeadOutcomes": 0,
+      "earlyRate": 0.0,
+      "firstWreckSeconds": {
+        "observed": 0,
+        "min": null,
+        "p05": null,
+        "p50": null,
+        "p95": null,
+        "max": null
+      },
+      "noWreckCensored": 500,
+      "abilityDamage": 0.0,
+      "totalDamage": 35705.07534324199,
+      "abilityDamageShare": 0.0,
+      "classes": {
+        "Needle": {
+          "wins": 439,
+          "entries": 1500,
+          "uses": 7334,
+          "zeroUseEntries": 0,
+          "activeSeconds": 67084.26666666483,
+          "abilityDamage": 0.0,
+          "meanPenalizedSeconds": 44.72284444444319,
+          "finishedEntries": 1500,
+          "meanFinishedSeconds": 44.72284444444319,
+          "winnerShare": 0.878,
+          "winnerShare95CI": [
+            0.8463946427702861,
+            0.9038411456203509
+          ],
+          "usesPerActiveMinute": 6.559511221707405
+        },
+        "Line": {
+          "wins": 61,
+          "entries": 1500,
+          "uses": 5876,
+          "zeroUseEntries": 0,
+          "activeSeconds": 75751.51666666429,
+          "abilityDamage": 0.0,
+          "meanPenalizedSeconds": 50.50101111110953,
+          "finishedEntries": 1500,
+          "meanFinishedSeconds": 50.50101111110953,
+          "winnerShare": 0.122,
+          "winnerShare95CI": [
+            0.0961588543796491,
+            0.15360535722971383
+          ],
+          "usesPerActiveMinute": 4.654164240056065
+        }
+      },
+      "gridWinnerCounts": {
+        "0": {
+          "Needle": 214,
+          "Line": 36
+        },
+        "1": {
+          "Needle": 225,
+          "Line": 25
+        }
+      }
+    },
+    "roster-rookie-skill-technical-off": {
+      "races": 100,
+      "distinctHashes": 100,
+      "ratesValid": true,
+      "unresolved": 0,
+      "oneShots": 0,
+      "earlyWrecks": 0,
+      "unsettledLeadOutcomes": 0,
+      "earlyRate": 0.0,
+      "firstWreckSeconds": {
+        "observed": 0,
+        "min": null,
+        "p05": null,
+        "p50": null,
+        "p95": null,
+        "max": null
+      },
+      "noWreckCensored": 100,
+      "abilityDamage": 0.0,
+      "totalDamage": 8495.830710913206,
+      "abilityDamageShare": 0.0,
+      "classes": {
+        "Needle": {
+          "wins": 100,
+          "entries": 300,
+          "uses": 0,
+          "zeroUseEntries": 300,
+          "activeSeconds": 11749.549999999725,
+          "abilityDamage": 0.0,
+          "meanPenalizedSeconds": 39.165166666665726,
+          "finishedEntries": 300,
+          "meanFinishedSeconds": 39.165166666665726,
+          "winnerShare": 1.0,
+          "winnerShare95CI": [
+            0.9630051925239981,
+            0.9999999999999999
+          ],
+          "usesPerActiveMinute": 0.0
+        },
+        "Line": {
+          "wins": 0,
+          "entries": 300,
+          "uses": 0,
+          "zeroUseEntries": 300,
+          "activeSeconds": 15241.549999999517,
+          "abilityDamage": 0.0,
+          "meanPenalizedSeconds": 50.805166666665066,
+          "finishedEntries": 300,
+          "meanFinishedSeconds": 50.805166666665066,
+          "winnerShare": 0.0,
+          "winnerShare95CI": [
+            0.0,
+            0.03699480747600191
+          ],
+          "usesPerActiveMinute": 0.0
+        }
+      },
+      "gridWinnerCounts": {
+        "0": {
+          "Needle": 50
+        },
+        "1": {
+          "Needle": 50
+        }
+      }
+    },
+    "roster-rookie-skill-technical-on": {
+      "races": 500,
+      "distinctHashes": 500,
+      "ratesValid": true,
+      "unresolved": 0,
+      "oneShots": 0,
+      "earlyWrecks": 0,
+      "unsettledLeadOutcomes": 0,
+      "earlyRate": 0.0,
+      "firstWreckSeconds": {
+        "observed": 0,
+        "min": null,
+        "p05": null,
+        "p50": null,
+        "p95": null,
+        "max": null
+      },
+      "noWreckCensored": 500,
+      "abilityDamage": 0.0,
+      "totalDamage": 39009.56715657542,
+      "abilityDamageShare": 0.0,
+      "classes": {
+        "Needle": {
+          "wins": 500,
+          "entries": 1500,
+          "uses": 6191,
+          "zeroUseEntries": 0,
+          "activeSeconds": 58452.48333333189,
+          "abilityDamage": 0.0,
+          "meanPenalizedSeconds": 38.968322222221296,
+          "finishedEntries": 1500,
+          "meanFinishedSeconds": 38.968322222221296,
+          "winnerShare": 1.0,
+          "winnerShare95CI": [
+            0.9923753814690964,
+            0.9999999999999999
+          ],
+          "usesPerActiveMinute": 6.354905366153691
+        },
+        "Line": {
+          "wins": 0,
+          "entries": 1500,
+          "uses": 5943,
+          "zeroUseEntries": 0,
+          "activeSeconds": 75644.1833333309,
+          "abilityDamage": 0.0,
+          "meanPenalizedSeconds": 50.42945555555397,
+          "finishedEntries": 1500,
+          "meanFinishedSeconds": 50.42945555555397,
+          "winnerShare": 0.0,
+          "winnerShare95CI": [
+            0.0,
+            0.007624618530903363
+          ],
+          "usesPerActiveMinute": 4.71391168873762
+        }
+      },
+      "gridWinnerCounts": {
+        "0": {
+          "Needle": 250
+        },
+        "1": {
+          "Needle": 250
+        }
+      }
+    }
+  },
+  "tiers": {
+    "rookie": {
+      "off": {
+        "winnerShares": {
+          "Needle": 0.3925,
+          "Line": 0.6075
+        },
+        "courseMeans": {
+          "technical": {
+            "Needle": 45.34527777777649,
+            "Line": 51.28961111110948
+          },
+          "straight": {
+            "Needle": 232.03844444452125,
+            "Line": 225.9222777778497
+          },
+          "loose": {
+            "Needle": 74.47727777777483,
+            "Line": 78.08049999999686
+          }
+        },
+        "margins": {
+          "skillSeconds": 11.63999999999934,
+          "straightDeficitSeconds": 6.116166666671546,
+          "hairpinDeficitSeconds": 5.944333333332992
+        },
+        "alarms": [
+          "dominant class"
+        ],
+        "minimumCellSamples": 100
+      },
+      "on": {
+        "winnerShares": {
+          "Needle": 0.39,
+          "Line": 0.61
+        },
+        "courseMeans": {
+          "technical": {
+            "Needle": 44.72284444444319,
+            "Line": 50.50101111110953
+          },
+          "straight": {
+            "Needle": 231.50798888896526,
+            "Line": 225.04088888896013
+          },
+          "loose": {
+            "Needle": 73.82264444444154,
+            "Line": 77.09009999999691
+          }
+        },
+        "margins": {
+          "skillSeconds": 11.461133333332675,
+          "straightDeficitSeconds": 6.467100000005132,
+          "hairpinDeficitSeconds": 5.778166666666337
+        },
+        "alarms": [
+          "dominant class"
+        ],
+        "minimumCellSamples": 500
+      }
+    }
+  },
+  "early": {},
+  "rotation": {},
+  "classUsage": {
+    "Needle": {
+      "entries": 4500,
+      "uses": 64119,
+      "zeroUseEntries": 0,
+      "activeSeconds": 525080.2166667781,
+      "abilityDamage": 0.0,
+      "usesPerActiveMinute": 7.3267662309232255,
+      "zeroUseFraction": 0.0
+    },
+    "Line": {
+      "entries": 4500,
+      "uses": 50904,
+      "zeroUseEntries": 0,
+      "activeSeconds": 528948.0000001027,
+      "abilityDamage": 0.0,
+      "usesPerActiveMinute": 5.774178180084634,
+      "zeroUseFraction": 0.0
+    }
+  },
+  "racesAudited": 2400,
+  "findings": [
+    "rookie: dominant class"
+  ],
+  "limits": [
+    "AI proxy, not human fairness or feel",
+    "winner share denominator is races, not entries",
+    "penalized means use the declared roster time limit for wrecked/unresolved entries; finished means are separate",
+    "early first-wreck observations use the canonical C3 horizon (180 seconds); no-wreck cases are right-censored, never assigned a fake first-wreck time",
+    "early observations can stop once both lead lap-one fate and first wreck are final; no winner share is inferred from these rows",
+    "baseline and rotation sample counts are separate; a pilot is not acceptance"
+  ]
+}

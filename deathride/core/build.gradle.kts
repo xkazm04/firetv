@@ -67,3 +67,14 @@ tasks.register<JavaExec>("endurancePilot") {
     jvmArgs("-Djava.util.concurrent.ForkJoinPool.common.parallelism=4")
     args(providers.gradleProperty("enduranceSamples").getOrElse("2"))
 }
+
+tasks.register<JavaExec>("abilityReport") {
+    group="verification"
+    dependsOn(tasks.testClasses)
+    classpath=sourceSets.test.get().runtimeClasspath
+    mainClass.set("dev.deathride.core.AbilityReportKt")
+    maxHeapSize="1g"
+    jvmArgs("-Djava.util.concurrent.ForkJoinPool.common.parallelism="+providers.gradleProperty("abilityParallel").getOrElse("4"))
+    args(providers.gradleProperty("abilitySamples").getOrElse("2000"),providers.gradleProperty("abilityBaselineSamples").getOrElse("200"),providers.gradleProperty("abilityPart").getOrElse("roster"),providers.gradleProperty("abilityTag").getOrElse("accepted"),providers.gradleProperty("abilityTier").getOrElse("all"))
+    args(providers.gradleProperty("abilitySeedNamespace").getOrElse("abilities"))
+}

@@ -25,17 +25,18 @@ class CombatPainter {
             else for(i in -1..1)r.rect(x+i*.55f-.12f,y-.7f,.24f,1.4f)
         }
         val mine=Weapons.all[Weapons.MINE]
+        val mineRadius=mine.radiusM.toFloat();val bodyScale=min(1f,mineRadius/1.3f)
         for(m in combat.mines)if(m.active) {
             val x=m.x.toFloat();val y=m.y.toFloat();val armed=m.ageSeconds>=mine.armingSeconds
             val pulse=(.5+.5*sin(w.seconds*12)).toFloat()
             if(armed)r.setColor(1f,.30f,.13f,.18f) else r.setColor(1f,.74f,.26f,.12f)
             r.circle(x,y,mine.radiusM.toFloat(),24)
             if(armed)r.setColor(1f,.37f,.18f,.7f) else r.setColor(1f,.78f,.30f,.35f+pulse*.35f)
-            ring(r,x,y,mine.radiusM.toFloat(),.16f)
-            r.setColor(.04f,.045f,.045f,1f);r.circle(x+.15f,y-.2f,1.05f,10)
-            r.setColor(.40f,.43f,.37f,1f);r.circle(x,y,.85f,10)
-            r.setColor(1f,if(armed).16f else .72f,.06f,1f);r.circle(x,y,.18f+pulse*.12f,8)
-            if(!armed)ring(r,x,y,(mine.radiusM*(m.ageSeconds/mine.armingSeconds)).toFloat(),.12f)
+            ring(r,x,y,mineRadius,min(.16f,mineRadius*.15f))
+            r.setColor(.04f,.045f,.045f,1f);r.circle(x+.15f*bodyScale,y-.2f*bodyScale,1.05f*bodyScale,10)
+            r.setColor(.40f,.43f,.37f,1f);r.circle(x,y,.85f*bodyScale,10)
+            r.setColor(1f,if(armed).16f else .72f,.06f,1f);r.circle(x,y,(.18f+pulse*.12f)*bodyScale,8)
+            if(!armed)ring(r,x,y,(mine.radiusM*(m.ageSeconds/mine.armingSeconds)).toFloat(),min(.12f,mineRadius*.15f))
         }
     }
     fun air(r: ShapeRenderer,w: World,art: AtlasArt?=null) {
@@ -58,8 +59,8 @@ class CombatPainter {
         for(b in combat.blasts)if(b.remainingSeconds>0) {
             val life=Weapons.all[2].traceSeconds;val age=(1-b.remainingSeconds/life).toFloat();val radius=b.radiusM.toFloat()
             if(!spriteBlast){r.setColor(1f,.36f,.08f,(1-age)*.5f);r.circle(b.x.toFloat(),b.y.toFloat(),radius*(.3f+age*.7f),24)}
-            r.setColor(1f,.84f,.38f,(1-age)*.8f);ring(r,b.x.toFloat(),b.y.toFloat(),radius*(.2f+age),.25f)
-            if(!spriteBlast)for(i in 0..11){val a=i*PI/6;val distance=radius*age;r.rectLine((b.x+cos(a)*distance).toFloat(),(b.y+sin(a)*distance).toFloat(),(b.x+cos(a)*(distance+1)).toFloat(),(b.y+sin(a)*(distance+1)).toFloat(),.14f)}
+            r.setColor(1f,.84f,.38f,(1-age)*.8f);ring(r,b.x.toFloat(),b.y.toFloat(),radius*(.2f+age*.8f),min(.25f,radius*.15f))
+            if(!spriteBlast)for(i in 0..11){val a=i*PI/6;val distance=radius*age*.7f;val end=distance+radius*.3f;r.rectLine((b.x+cos(a)*distance).toFloat(),(b.y+sin(a)*distance).toFloat(),(b.x+cos(a)*end).toFloat(),(b.y+sin(a)*end).toFloat(),min(.14f,radius*.15f))}
         }
         for(c in w.cars) {
             if(!c.entered)continue

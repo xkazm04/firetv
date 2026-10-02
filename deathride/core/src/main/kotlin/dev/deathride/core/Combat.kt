@@ -17,7 +17,7 @@ class Weapon(row: Map<String,String>) {
     val rangeM=row.number("rangeM");val speedMps=row.number("speedMps");val radiusM=row.number("radiusM")
     val armingSeconds=row.number("armingSeconds");val lifeSeconds=row.number("lifeSeconds");val traceSeconds=row.number("traceSeconds")
     init { require(kind in setOf("ray","projectile","mine","spread"));require(damage>0 && cooldownSeconds>0 && ammo>0 && radiusM>0 && lifeSeconds>0) }
-    val json="{\"id\":\"$id\",\"damage\":$damage,\"cooldownSeconds\":$cooldownSeconds,\"ammo\":$ammo}"
+    val json="{\"id\":\"$id\",\"damage\":$damage,\"cooldownSeconds\":$cooldownSeconds,\"ammo\":$ammo,\"radiusM\":$radiusM,\"armingSeconds\":$armingSeconds}"
 }
 object Weapons {
     const val RIVET=0;const val HAMMER=1;const val MINE=2;const val SCATTER=3
@@ -44,6 +44,8 @@ class Pickup(val type: PickupType,val x: Double,val y: Double) { var cooldownSec
 
 /** Sole health/state writer. Absolute input, deterministic pool order, no step allocations. */
 class Combat(private val world: World,val enabled: Boolean) {
+    // A trigger must overlap the damaging volume, including the target's body circles.
+    val mineTriggerRadiusM=min(CombatRules["mineTriggerRadiusM"],Weapons.all[Weapons.MINE].radiusM)
     private val hp=DoubleArray(Tuning.CAR_COUNT)
     private val states=Array(Tuning.CAR_COUNT){LifeState.ACTIVE}
     private val ammunition=IntArray(Tuning.CAR_COUNT*Weapons.all.size)
@@ -287,7 +289,7 @@ class Combat(private val world: World,val enabled: Boolean) {
         for(m in mines)if(m.active) {
             m.ageSeconds+=dt
             if(m.ageSeconds>=mine.lifeSeconds){m.active=false;continue}
-            if(m.ageSeconds>=mine.armingSeconds)for(c in world.cars)if(canAct(c.id) && inRadius(c,m.x,m.y,CombatRules["mineTriggerRadiusM"])) { explode(m);break }
+            if(m.ageSeconds>=mine.armingSeconds)for(c in world.cars)if(canAct(c.id) && inRadius(c,m.x,m.y,mineTriggerRadiusM)) { explode(m);break }
         }
         for(p in pickups) {
             p.cooldownSeconds=max(0.0,p.cooldownSeconds-dt)
