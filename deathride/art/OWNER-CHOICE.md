@@ -42,3 +42,9 @@ Host reading (not the owner's words):
 - **Quill**: now a medium-weight contact fighter. More massive build with bone-like spikes around the body, especially front and rear, for close-contact damage.
 - **Kestrel**: electricity. An over-energised engine, the front spike becomes an electric harpoon; the car should read as able to have a turbo, long-range or contact weapon.
 - Gameplay hint for the content side (not an art task): Quill's spikes and Kestrel's harpoon suggest ability data later (contact-damage bonus; a ranged tether or shock weapon). Art only needs the silhouettes and attachment points to make them plausible.
+
+## D. Fusion review approved (owner, 2026-10-02)
+
+> Fusion report looks nice, I approve this direction of art
+
+The fusion direction (sections A and B) is confirmed after seeing the fusion review. This approves the **direction**, not individual assets: the four reworked cars (Needle, Comet, Quill, Kestrel) remain unapproved until their exact references are approved, per `V2-REFERENCE-APPROVAL.md`.
