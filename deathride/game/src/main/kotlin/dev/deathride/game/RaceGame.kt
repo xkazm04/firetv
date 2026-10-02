@@ -11,6 +11,7 @@ import com.google.zxing.*
 import com.google.zxing.qrcode.QRCodeWriter
 import dev.deathride.core.*
 import dev.deathride.link.RaceServer
+import dev.deathride.game.audio.*
 import kotlin.math.*
 
 class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smoke: Boolean=false, val runSeconds: Double=0.0, val soak: Boolean=false, val keyboardCheck: Boolean=false, val fontFactory: ((Int)->BitmapFont)?=null, val proceduralOnly: Boolean=false, val serverPort: Int=8765) : ApplicationAdapter() {
@@ -24,6 +25,10 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
     private lateinit var headline: GlyphLayer
     private lateinit var detail: GlyphLayer
     private lateinit var server: RaceServer
+    private lateinit var audio: CueService
+    private lateinit var raceAudio: RaceAudioDirector
+    private lateinit var captions: GlyphLayer
+    private var drawnCaption=""
     private var world=World(track=Track(course=Courses.all[0]),combatEnabled=true)
     private lateinit var sceneryCanvas: SceneryCanvas
     private lateinit var scene: TrackScene
@@ -58,6 +63,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
     private var accumulator=0.0
     private var previousNanos=0L
     private var phase="lobby"
+        set(value) { if(field!=value){field=value;if(::raceAudio.isInitialized)raceAudio.sceneChanged(value)} }
     private var countdown=3.0
     private var stateTime=0.0
     private var uiTime=0.0
@@ -108,21 +114,26 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         if(phase!="garage")return
         val offer=Garage.offer(profiles[i],part)
         val rejection=when { car!=profiles[i].selectedCar->"Car changed - check the selected car";tier!=offer.tier->"Offer changed - check the installed tier";!offer.available->offer.reason;else->"" }
-        if(rejection.isNotEmpty()) { shopMessage[i]=rejection;publishGarage(i);return }
+        if(rejection.isNotEmpty()) { shopMessage[i]=rejection;publishGarage(i);if(::audio.isInitialized)audio.play("ui.denied");return }
         var message=""
         if(editProfile(i){message=Garage.buy(it,part,tier,expectedCar=car)}) {
             shopMessage[i]=message;Garage.apply(profiles[i],world.cars[i]);world.reset();publishGarage(i)
+            if(::audio.isInitialized)audio.play(if(message.startsWith("Installed"))"ui.purchase" else "ui.denied")
         }
     }
-    private fun openGarage() { if(phase=="lobby" || phase=="results" || phase=="career") { phase="garage";server.phase=phase;accumulator=0.0;rebuildUi() } }
+    private fun openGarage() { if(phase=="lobby" || phase=="results" || phase=="career") { phase="garage";server.phase=phase;accumulator=0.0;audio.narrate("voice.mechanic.welcome");rebuildUi() } }
     private fun buyMarket(i: Int,request: dev.deathride.link.MarketRequest) {
         if(phase!="garage" || request.car!=profiles[i].selectedCar)return
+        val revision=profiles[i].marketRevision
         var message=""
         if(editProfile(i){message=Market.transact(it,request.action,request.id,request.revision)}) {
             selectedCars[i]=profiles[i].selectedCar;shopMessage[i]=message;Garage.apply(profiles[i],world.cars[i]);world.reset();publishGarage(i)
+            val purchased=profiles[i].marketRevision!=revision
+            audio.play(if(purchased)"ui.purchase" else "ui.denied")
+            if(purchased && request.action=="repair")audio.narrate("voice.mechanic.repair")
         }
     }
-    private fun openCareer() { if(phase=="lobby" || phase=="results") { if(!editProfile(0){RivalEconomy.prepare(it)})return;phase="career";server.phase=phase;accumulator=0.0;for((slot,index) in RivalEconomy.cast(profiles[0].careerRound).withIndex())Garage.apply(profiles[0].rivalProfiles[index],rivalPreviews[slot]);rebuildUi() } }
+    private fun openCareer() { if(phase=="lobby" || phase=="results") { if(!editProfile(0){RivalEconomy.prepare(it)})return;phase="career";server.phase=phase;accumulator=0.0;for((slot,index) in RivalEconomy.cast(profiles[0].careerRound).withIndex())Garage.apply(profiles[0].rivalProfiles[index],rivalPreviews[slot]);if(profiles[0].careerRound==0)audio.narrate("voice.announcer.debt") else if(Career.events[profiles[0].careerRound].boss && !Career.events[profiles[0].careerRound].duel)audio.narrate("voice.announcer.boss");rebuildUi() } }
     private fun selectDifficulty(direction: Int) { server.difficultyRequest.set((profiles[0].careerDifficulty+direction).mod(Career.difficulties.size)) }
     private fun configureWorld(courseIndex: Int,career: Boolean,seed: Int=17) {
         val changed=selectedTrack!=courseIndex;selectedTrack=courseIndex
@@ -135,6 +146,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         for(i in profiles.indices)if(activeSeat(i) && (i==0 || !career || server.slots[i].claimed)){Garage.apply(profiles[i],world.cars[i]);world.cars[i].rivalIndex=-1;world.cars[i].aiStyle=null}
         for(i in profiles.indices)world.cars[i].human=activeSeat(i) && (server.slots[i].claimed || i==0 && keyboard)
         world.reset();effects.clear();if(::atlasEffects.isInitialized)atlasEffects.clear();server.trackJson=Courses.all[courseIndex].json;server.surface=Surfaces.asphalt
+        if(::raceAudio.isInitialized)raceAudio.bind(world)
         if(changed)scene=TrackScene(Courses.all[courseIndex],sceneryCanvas,art)
     }
     private fun activeSeat(i: Int)=!(campaignRace && Career.events[raceRound].duel && i==1)
@@ -150,7 +162,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
             }) { shopMessage[i]="Pit service complete - ready to race";if(message.isNotEmpty())careerMessage[i]=message }
             raceTickets[i]=0;publishGarage(i)
         }
-        phase="results";server.phase=phase;stateTime=0.0;rebuildUi()
+        phase="results";server.phase=phase;stateTime=0.0;raceAudio.results(world);rebuildUi()
     }
 
     override fun create() {
@@ -160,12 +172,26 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         small=fontFactory?.invoke(HudTheme.BODY)?:BitmapFont().apply { data.setScale(1.6f) }
         fontTextureBytes=listOf(font,large,small).flatMap{it.regions.map{r->r.texture}}.distinct().sumOf{it.width.toLong()*it.height*4}
         text=GlyphLayer(font); headline=GlyphLayer(large); detail=GlyphLayer(small)
+        captions=GlyphLayer(small)
+        val cueManifest=runCatching{CueManifest.parse(Gdx.files.internal("audio/cues.json").readString("UTF-8"))}.getOrElse{logger("audio manifest unavailable; silent fallback");CueManifest.silent()}
+        audio=CueService(cueManifest,GdxAudioBackend(cueManifest.decodedBudgetBytes));audio.preload()
+        if(Gdx.app.getPreferences("deathride-audio").getBoolean("muted",false))audio.setGain("master",0f)
+        raceAudio=RaceAudioDirector(audio);raceAudio.bind(world)
         server=RaceServer(assets,logger,port=serverPort); for(i in world.cars.indices)CarCatalog.apply(world.cars[i],selectedCars[i]);world.reset(); server.start()
         profileStore=ProfileStore(Gdx.files.local("profiles").file());for(i in profiles.indices)loadProfile(i);world.reset()
         sceneryCanvas=SceneryCanvas();art=AtlasArt(Gdx.files.internal(if(proceduralOnly)"absent-art-audit" else "phase2-states"),TextureBudget.remainingArt(fontTextureBytes,sceneryCanvas.textureSize.toLong()*sceneryCanvas.textureSize*4));atlasEffects=AtlasEffects(art);scene=TrackScene(Courses.all[selectedTrack],sceneryCanvas,art);effects.clear()
         Gdx.input.setCatchKey(Input.Keys.BACK,true)
         Gdx.input.inputProcessor=object: InputAdapter() {
             override fun keyDown(keycode: Int): Boolean {
+                if(keycode==Input.Keys.M || keycode==Input.Keys.BUTTON_Y){
+                    val muted=audio.gain("master")>0f
+                    audio.setGain("master",if(muted)0f else cueManifest.buses["master"]?:.8f)
+                    Gdx.app.getPreferences("deathride-audio").putBoolean("muted",muted).flush();rebuildUi();return true
+                }
+                if(keycode==Input.Keys.N || keycode==Input.Keys.BUTTON_X){audio.skipNarration();return true}
+                if(phase!="race" && phase!="countdown")when(keycode){
+                    Input.Keys.LEFT,Input.Keys.RIGHT,Input.Keys.UP,Input.Keys.DOWN,Input.Keys.MENU->audio.play("ui.focus")
+                }
                 when(keycode) {
                     Input.Keys.ENTER,Input.Keys.SPACE,Input.Keys.DPAD_CENTER,Input.Keys.BUTTON_A -> { if(phase=="garage")buyPart(0,selectedPart,profiles[0].tier(selectedCars[0],selectedPart),selectedCars[0]) else if(phase=="career")startRace(true) else if(phase=="results" && campaignRace)openCareer() else if(phase=="lobby" || phase=="results")startRace(); return true }
                     Input.Keys.BACK,Input.Keys.ESCAPE,Input.Keys.BUTTON_B -> { if(phase!="lobby")lobby() else Gdx.app.exit(); return true }
@@ -204,11 +230,12 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         }
         configureWorld(if(career)Career.events[raceRound].courseIndex else selectedTrack,career,(profiles[0].startedRaces+raceRound).toInt())
         world.reset(); effects.clear();if(::atlasEffects.isInitialized)atlasEffects.clear();phase="countdown"; countdown=3.0; accumulator=0.0; stateTime=0.0; server.phase=phase; logger("race countdown mode=${server.raceMode}"); rebuildUi()
+        audio.play("ui.confirm")
     }
-    private fun lobby() { raceTickets.fill(0);phase="lobby";campaignRace=false;server.raceMode="practice";configureWorld(selectedTrack,false);stateTime=0.0;server.phase=phase;rebuildUi() }
+    private fun lobby() { raceTickets.fill(0);phase="lobby";campaignRace=false;server.raceMode="practice";configureWorld(selectedTrack,false);stateTime=0.0;server.phase=phase;audio.play("ui.back");rebuildUi() }
     override fun resize(width: Int,height: Int) { view.update(width,height,true) }
-    override fun pause() { server.paused=true; server.suspendLink(); accumulator=0.0 }
-    override fun resume() { if(::scene.isInitialized)scene=TrackScene(Courses.all[selectedTrack],sceneryCanvas,art);if(::server.isInitialized) { server.paused=false; server.start() }; previousNanos=System.nanoTime(); accumulator=0.0 }
+    override fun pause() { if(::raceAudio.isInitialized)raceAudio.pause();server.paused=true; server.suspendLink(); accumulator=0.0 }
+    override fun resume() { if(::raceAudio.isInitialized)raceAudio.resume();if(::scene.isInitialized)scene=TrackScene(Courses.all[selectedTrack],sceneryCanvas,art);if(::server.isInitialized) { server.paused=false; server.start() }; previousNanos=System.nanoTime(); accumulator=0.0 }
     override fun render() {
         val nanos=System.nanoTime(); val actual=(nanos-previousNanos)/1e9; previousNanos=nanos
         val now=server.nowMs(); server.metrics.frameMs.add(actual*1000,now); server.frameNumber++
@@ -269,9 +296,11 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
                 if((humans>0 && complete==humans) || world.resolved==world.entrantCount || world.seconds>=world.raceLimitSeconds)finishRace()
             }
         }
+        raceAudio.update(world,phase,scene.ready,countdown,actual.coerceAtLeast(0.0))
         server.raceSeconds=world.seconds;server.raceLaps=world.raceLaps
         if(uiTime>=.1) {
             uiTime=0.0
+            server.audioJson=audio.statsJson()
             val sceneryBytes=sceneryCanvas.textureSize.toLong()*sceneryCanvas.textureSize*4
             val qrBytes=qr?.let{it.width.toLong()*it.height*4}?:0L
             server.artJson="{\"regions\":${art.regionCount},\"textureBytes\":${art.textureBytes},\"sceneryBytes\":$sceneryBytes,\"fontBytes\":$fontTextureBytes,\"qrBytes\":$qrBytes,\"ownedTextureBytes\":${art.textureBytes+sceneryBytes+fontTextureBytes+qrBytes},\"artBudgetBytes\":${TextureBudget.ART},\"ownedBudgetBytes\":${TextureBudget.TOTAL},\"budgetOk\":${TextureBudget.fits(art.textureBytes,fontTextureBytes,sceneryBytes,qrBytes)},\"failures\":${art.failures},\"draws\":${art.draws},\"driftSmokeEmitted\":${atlasEffects.driftSmokeEmitted},\"driftSkidsEmitted\":${atlasEffects.driftSkidsEmitted},\"activeEffects\":${atlasEffects.activeCount},\"carStrategy\":\"runtime rotation; procedural for unapproved/missing states\"}"
@@ -285,6 +314,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         view.apply(); ScreenUtils.clear(bg)
         if(scene.ready)drawWorld(elapsed)
         drawOverlay()
+        drawCaption()
         // Flash is a display event, consumed once after all other drawing.
         if(server.flash.getAndSet(false)) { Gdx.gl.glClearColor(1f,1f,1f,1f); Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT); server.flashFrames++ }
         if(soak && phase=="results" && !resultCaptured) { capture("results.png"); resultCaptured=true; logger("six-car race reached results at ${world.seconds} seconds") }
@@ -476,7 +506,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         } else {
             label("P1 ${CarCatalog.all[profiles[0].selectedCar].id} / ${profiles[0].credits} CR",42f,55f,accent)
             label(if(server.slots[1].claimed)"P2 ${CarCatalog.all[profiles[1].selectedCar].id} / ${profiles[1].credits} CR" else "SECOND DRIVER / SCAN TO JOIN",455f,55f)
-            label("PROGRESS SAVES",1010f,55f)
+            label(if(audio.gain("master")==0f)"M / Y: SOUND OFF" else "M / Y: SOUND ON",995f,55f)
         }
         when(phase) {
             "lobby" -> {
@@ -574,6 +604,14 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         }
     }
     private fun combatWrecked(c: Car)=world.combat.wrecked(c.id)
+    private fun drawCaption(){
+        val value=audio.caption
+        if(value!=drawnCaption){captions.clear();captions.setColor(HudTheme.bone);captions.wrapped(value,190f,177f,900f,26f);captions.addText("N / X: SKIP VOICE",190f,117f);drawnCaption=value}
+        if(value.isEmpty())return
+        shape.projectionMatrix=view.camera.combined;shape.begin(ShapeRenderer.ShapeType.Filled)
+        shape.color=HudTheme.soot;shape.rect(175f,98f,930f,105f);shape.end()
+        batch.projectionMatrix=view.camera.combined;batch.begin();captions.draw(batch);batch.end()
+    }
     private fun combatJson(id: Int): String {
         val c=world.combat;val weapon=c.selectedWeapon[id]
         return "{\"spectating\":${!activeSeat(id)},\"ability\":${world.abilities.json(id)},\"armingSeconds\":${c.armingSeconds},\"hp\":${c.health(id)},\"maxHp\":${c.maxHealth(id)},\"wrecked\":${c.wrecked(id)},\"weapon\":$weapon,\"weaponName\":\"${Weapons.all[weapon].id}\",\"ammo\":${c.ammo(id,weapon)},\"mines\":${c.ammo(id,Weapons.MINE)},\"heavyAmmo\":${c.ammo(id,Weapons.HAMMER)},\"scatterAmmo\":${c.ammo(id,Weapons.SCATTER)},\"cash\":${c.cashCollected[id]},\"sabotageTarget\":${c.sabotageTarget[id]},\"cooldownSeconds\":${c.cooldown(id,weapon)},\"mineCooldownSeconds\":${c.cooldown(id,Weapons.MINE)},\"damageEvents\":${c.damageEvents[id]},\"kills\":${c.kills[id]}}"
@@ -587,5 +625,5 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         for(y in 0 until 240)for(x in 0 until 240)pix.drawPixel(x,y,if(matrix[x,y])0x0b141eff else 0xffffffff.toInt())
         qr=Texture(pix); pix.dispose()
     }
-    override fun dispose() { server.stop(); art.dispose();sceneryCanvas.dispose();qr?.dispose(); shape.dispose(); batch.dispose(); font.dispose(); large.dispose(); small.dispose() }
+    override fun dispose() { if(::audio.isInitialized){logger("audio final "+audio.statsJson());audio.dispose()};server.stop(); art.dispose();sceneryCanvas.dispose();qr?.dispose(); shape.dispose(); batch.dispose(); font.dispose(); large.dispose(); small.dispose() }
 }

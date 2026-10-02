@@ -23,11 +23,14 @@ object CarShapes {
 }
 data class TrackSpot(val kind: String,val fraction: Double,val laneM: Double)
 data class TrackNode(val x: Double,val y: Double,val width: Double,val surface: Surface,val lane: Double)
+enum class BoundaryMaterial { METAL, CONCRETE }
 
 /** Immutable load-time spline bake. No list traversal, temporary points or allocation in sample/project. */
 class Course(val id: String,val name: String,val lesson: String,val startFraction: Double,val theme: String,
              val nodes: List<TrackNode>,val spots: List<TrackSpot>,val features: List<TrackFeature> = TrackContent.features[id]?:emptyList()) {
     private val oil=Surfaces.practice.first { it.id=="Oil" }
+    /** Shared by the rendered boundary and its contact presentation. */
+    val boundaryMaterial=if(theme=="industrial")BoundaryMaterial.METAL else BoundaryMaterial.CONCRETE
     private val subdivisions=TrackRules["samplesPerSpan"].toInt()
     val count=(nodes.size-1)*subdivisions
     val x=DoubleArray(count+1); val y=DoubleArray(count+1); val width=DoubleArray(count+1)

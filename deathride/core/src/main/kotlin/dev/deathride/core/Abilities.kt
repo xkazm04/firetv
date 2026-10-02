@@ -99,6 +99,7 @@ class Abilities(private val world: World,var enabled: Boolean) {
         val offset=if(d.kind==AbilityKind.PATCH)-nose-CombatRules["dropClearanceM"] else nose
         s.x=c.x+cos(c.heading)*offset;s.y=c.y+sin(c.heading)*offset
         s.endX=s.x+cos(c.heading)*d.rangeM;s.endY=s.y+sin(c.heading)*d.rangeM
+        world.presentationEvents.emit(PresentationKind.ABILITY,c.id,detail=s.activation,x=s.x,y=s.y,seconds=world.seconds)
         if(d.ray) {
             val fraction=world.combat.roadFraction(s.x,s.y,s.endX,s.endY,c.spec.circleRadiusM)
             s.endX=s.x+(s.endX-s.x)*fraction;s.endY=s.y+(s.endY-s.y)*fraction

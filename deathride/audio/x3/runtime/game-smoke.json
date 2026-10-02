@@ -1,0 +1,9 @@
+{
+  "command": "gradlew.bat :desktop:run --args=\"--hidden --soak --duration=15 --port=8779\" --console=plain",
+  "result": "pass",
+  "evidenceBasis": "Observed full-game console final audio telemetry; no owner listening",
+  "audio": {"activeAtDispose": 0, "highWater": 7, "cap": 8, "played": 53, "suppressed": 72, "stolen": 2, "missing": 1, "decodedBytes": 3970682},
+  "missingReason": "music.hunt is intentionally absent until full-song selection",
+  "humanSeats": 0,
+  "notMeasured": ["physical Stick", "human listening", "TV speakers", "native PSS", "phone vibration"]
+}

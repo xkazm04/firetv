@@ -144,7 +144,7 @@ class TrackScene(private val course: Course,private val canvas: SceneryCanvas,pr
                 mark(point.x.toFloat(),point.y.toFloat(),q.x.toFloat(),q.y.toFloat(),Movement.kerbWidthM.toFloat(),r.color.r,r.color.g,r.color.b)
                 course.sample(s,side*(w+.5),point);course.sample(next,side*(wn+.5),q)
                 r.setColor(.50f,.55f,.52f,1f);r.rectLine(point.x.toFloat(),point.y.toFloat(),q.x.toFloat(),q.y.toFloat(),.32f)
-                if(i%3==0)canvas.sprite(art,if(course.theme=="industrial")"barriers/metal-straight" else "barriers/concrete-straight",point.x.toFloat(),point.y.toFloat(),5f,1.8f,(point.heading*180/PI).toFloat())
+                if(i%3==0)canvas.sprite(art,if(course.boundaryMaterial==BoundaryMaterial.METAL)"barriers/metal-straight" else "barriers/concrete-straight",point.x.toFloat(),point.y.toFloat(),5f,1.8f,(point.heading*180/PI).toFloat())
                 if(i%6==0) { r.setColor(.15f,.18f,.17f,1f);r.circle(point.x.toFloat()+.3f,point.y.toFloat()-.3f,.65f,8);r.setColor(.45f,.49f,.45f,1f);r.circle(point.x.toFloat(),point.y.toFloat(),.48f,8) }
             }
             if(i%9<3) { course.sample(s,0.0,point);course.sample(next,0.0,q);r.setColor(.46f,.48f,.43f,1f);r.rectLine(point.x.toFloat(),point.y.toFloat(),q.x.toFloat(),q.y.toFloat(),.16f);mark(point.x.toFloat(),point.y.toFloat(),q.x.toFloat(),q.y.toFloat(),.16f,.46f,.48f,.43f) };yield(Unit)

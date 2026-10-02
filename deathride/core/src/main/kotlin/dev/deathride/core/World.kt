@@ -284,6 +284,7 @@ class World(val seed: Int=17, val spec: CarSpec=CarSpec(), val track: Track=Trac
     private val driftRules=(handling as? SlipHandling)?.driftParameters?:DriftParameters.defaults
     var damageScale=1.0
     val cars=Array(Tuning.CAR_COUNT) { Car(it,track).also { c -> c.spec=spec } }
+    val presentationEvents=PresentationEvents()
     val combat=Combat(this,combatEnabled)
     val abilities=Abilities(this,abilitiesEnabled)
     val snapshot=Snapshot(combat); val previousSnapshot=Snapshot(combat)
@@ -297,7 +298,7 @@ class World(val seed: Int=17, val spec: CarSpec=CarSpec(), val track: Track=Trac
     val resolved get()=finished+combat.wreckCount
     init { reset() }
     fun reset() {
-        steps=0; seconds=0.0; finished=0
+        steps=0; seconds=0.0; finished=0;presentationEvents.clear()
         val seeded=if(cars.any{it.aiSkill!=null})java.util.Random(seed.toLong()) else null
         for(c in cars) {
             val grid=track.course?.grid?.get(c.id)
@@ -348,6 +349,13 @@ class World(val seed: Int=17, val spec: CarSpec=CarSpec(), val track: Track=Trac
             trace[((steps%600)*6)+c.id]=c.aiMode.ordinal*10+c.aiReason
         }
         repeat(3) { for(i in 0 until cars.size) for(j in i+1 until cars.size) collide(cars[i],cars[j]); for(c in cars)if(c.entered)contain(c) }
+        // Emit at most one contact per pair/material after all solver iterations.
+        for(c in cars)if(c.entered && c.wallImpactMps>1.0)
+            presentationEvents.emit(if(track.course?.boundaryMaterial==BoundaryMaterial.METAL)PresentationKind.BARRIER_CONTACT else PresentationKind.WALL_CONTACT,
+                c.id,x=c.x,y=c.y,strength=c.wallImpactMps,seconds=seconds)
+        for(i in cars.indices)for(j in i+1 until cars.size)if(ramClosingMps[i*Tuning.CAR_COUNT+j]>0)
+            presentationEvents.emit(PresentationKind.CAR_CONTACT,i,j,x=(cars[i].x+cars[j].x)*.5,y=(cars[i].y+cars[j].y)*.5,
+                strength=ramClosingMps[i*Tuning.CAR_COUNT+j],seconds=seconds)
         combat.step(inputs,dt)
         abilities.resolve()
         for(c in cars) {

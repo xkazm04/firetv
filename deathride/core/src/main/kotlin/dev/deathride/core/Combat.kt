@@ -119,12 +119,15 @@ class Combat(private val world: World,val enabled: Boolean) {
         if(dealt>0 && firstDamageSeconds[id]<0)firstDamageSeconds[id]=world.seconds
         val full=hp[id]>=maxHealth(id)
         hp[id]=max(0.0,hp[id]-dealt);damageTaken[id]+=dealt;damageEvents[id]++;hits[kind.ordinal]++
+        if(dealt>0 && kind!=DamageKind.RAM && kind!=DamageKind.WALL && kind!=DamageKind.MINE)
+            world.presentationEvents.emit(PresentationKind.HIT,source,id,kind.ordinal,world.cars[id].x,world.cars[id].y,dealt,world.seconds)
         damageByKind[kind.ordinal]+=dealt
         if(kind==DamageKind.ABILITY && source>=0){abilityDamage[source]+=dealt;abilityHits[source]++}
         damageFlashSeconds[id]=CombatRules["damageFlashSeconds"]
         if(source>=0 && source!=id)damageDealt[source]+=dealt
         if(hp[id]<=0) {
             states[id]=LifeState.WRECKED;wreckSource[id]=source;wreckSeconds[id]=world.seconds;deaths[kind.ordinal]++
+            world.presentationEvents.emit(PresentationKind.WRECK,id,source,x=world.cars[id].x,y=world.cars[id].y,seconds=world.seconds)
             if(full)oneShotKills++
             if(source>=0 && source!=id)kills[source]++
             val c=world.cars[id];c.aiInput.fire=0.0;c.aiInput.mine=0.0;c.aiInput.ability=0.0;c.filteredThrottle=0.0;c.drifting=false;DriftDynamics.reset(c);world.abilities.cancel(c);lastTarget[id]=-1
@@ -191,10 +194,13 @@ class Combat(private val world: World,val enabled: Boolean) {
                 if(ray==rays/2){traceX[id]=x;traceY[id]=y;traceEndX[id]=x+(ex-x)*time;traceEndY[id]=y+(ey-y)*time;traceSeconds[id]=w.lifeSeconds}
             }
         }
-        ammunition[n]--;cooldowns[n]=w.cooldownSeconds;shots[weapon]++;return true
+        ammunition[n]--;cooldowns[n]=w.cooldownSeconds;shots[weapon]++
+        world.presentationEvents.emit(PresentationKind.FIRE,id,detail=weapon,x=c.x,y=c.y,seconds=world.seconds)
+        return true
     }
     private fun explode(m: Mine) {
         m.active=false
+        world.presentationEvents.emit(PresentationKind.MINE_BLAST,m.owner,detail=m.activation,x=m.x,y=m.y,seconds=world.seconds)
         val w=Weapons.all[Weapons.MINE]
         var visual: Blast?=null;for(b in blasts)if(b.remainingSeconds<=0){visual=b;break}
         if(visual==null)poolExhaustions++ else {
@@ -287,7 +293,10 @@ class Combat(private val world: World,val enabled: Boolean) {
         }
         val mine=Weapons.all[Weapons.MINE]
         for(m in mines)if(m.active) {
+            val wasArmed=m.ageSeconds>=mine.armingSeconds
             m.ageSeconds+=dt
+            if(!wasArmed && m.ageSeconds>=mine.armingSeconds)
+                world.presentationEvents.emit(PresentationKind.MINE_ARM,m.owner,detail=m.activation,x=m.x,y=m.y,seconds=world.seconds)
             if(m.ageSeconds>=mine.lifeSeconds){m.active=false;continue}
             if(m.ageSeconds>=mine.armingSeconds)for(c in world.cars)if(canAct(c.id) && inRadius(c,m.x,m.y,mineTriggerRadiusM)) { explode(m);break }
         }
@@ -304,6 +313,7 @@ class Combat(private val world: World,val enabled: Boolean) {
                     for(w in Weapons.all.indices) { val n=c.id*Weapons.all.size+w;ammunition[n]=min(capacity(c.id,w),ammunition[n]+if(w==Weapons.RIVET)p.type.amount.toInt() else 1) }
                     ammoPickupsTaken[c.id]++
                 }
+                world.presentationEvents.emit(PresentationKind.PICKUP,c.id,detail=when(p.type.id){"repair"->1;"cash"->2;else->0},x=p.x,y=p.y,seconds=world.seconds)
                 p.cooldownSeconds=p.type.respawnSeconds;break
             }
         }

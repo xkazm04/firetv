@@ -1,0 +1,63 @@
+{
+  "at": "2026-10-02T22:29:17.034780+00:00",
+  "command": [
+    "cmd.exe",
+    "/d",
+    "/c",
+    "C:\\Users\\kazda\\kiro\\firetv-deathride-audiox\\deathride\\gradlew.bat",
+    ":core:test",
+    ":link:test",
+    ":game:test",
+    ":app:assembleDebug",
+    "--console=plain"
+  ],
+  "result": "pass",
+  "tests": {
+    "core": {
+      "tests": 124,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "link": {
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "game": {
+      "tests": 17,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "apk": "app\\build\\outputs\\apk\\debug\\app-debug.apk",
+  "apkBytes": 67108941,
+  "apkSha256": "6f27bc8d713e427ef9509d1d596b9205d19e3a3135705210d5672e6d2588fcef",
+  "installedAudioFiles": 52,
+  "decodedAudioBytes": 3970682,
+  "nativeHost": {
+    "result": "pass",
+    "backend": "LWJGL3/OpenAL native host",
+    "audio": {
+      "active": 0,
+      "highWater": 8,
+      "cap": 8,
+      "played": 10,
+      "suppressed": 2,
+      "stolen": 1,
+      "missing": 0,
+      "decodedBytes": 3970682,
+      "decodedBudgetBytes": 6291456
+    },
+    "notMeasured": [
+      "physical Fire TV",
+      "speaker masking",
+      "human listening",
+      "native PSS"
+    ]
+  },
+  "physicalStick": "not measured: adb devices has no attached device",
+  "phoneHaptics": "controller vibration code unchanged; audio service has no haptic API"
+}

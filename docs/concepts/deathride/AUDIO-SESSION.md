@@ -54,3 +54,17 @@ Read the X1–X3 plan first, Garden VR audio references and registry subjects re
 Completed four equal eight-sample proof kits (32 takes), three account voice candidates on the same 132-character line, offline audition page, measurements, original/normalized/three-cycle playback, spend labels and choices template/draft export. Design note: [X2-audio-audition.md](X2-audio-audition.md). Initial dry-run 7,728; pre-generation balance 42,681. One overlong SFX prompt returned HTTP 400; stopped and checked read-only provider analytics, retained the full 100-credit reservation, shortened all SFX briefs and repeated the offline estimate before proceeding. No automatic POST retry. Final conservative charge 7,828/9,000; 888 provider-header credits confirmed for 28 effects/voice takes, four music charges unconfirmed and conservatively reserved. Later credits command: 38,145 remaining, reserve 8,000, reset 2026-10-04T19:31:41Z. Shared balance decrease 4,536 is explicitly not an exact project invoice.
 
 All files decode; 2 original and 6 normalized takes pass full declared screens. All four music seams fail; every engine is 2.25 s and fails requested-duration tolerance; other silence/level failures remain visible. No seam repair or hidden reroll. Eight guard tests, four signal fixtures, 72 browser media starts, eight dark/light layouts, controls/draft export and artifact/key-leak audit pass. Browser runner used installed Chrome after the pinned Playwright browser binary was absent. Required core/link/APK gate stays green (1 s, up-to-date). No in-game, perceptual or Stick acceptance claimed. Optional lobby/fifth direction omitted to preserve the conservative equal-kit allowance. Stopped at page; X3 gate absent. One X2 commit, never pushed.
+
+## X3.5 — 2026-10-02
+
+Installed the manifest-driven libGDX cue service, eight-voice allocator including
+streams, bus gains/ducking, priority/cooldown rules, local engines and movement,
+actual simulation event cues, narration captions/mute/skip and bounded native
+cache. Presentation events leave simulation hashes unchanged; phone vibration is
+untouched. New campaign-only beats remain prepared until the campaign implements
+them. Design: [X3-5-runtime.md](X3-5-runtime.md). Final required core/link/game/APK
+gate passes: 124 + 3 + 17 tests, zero failures/skips; packaged clip hashes match,
+no audition content ships. Native OpenAL exercised eight simultaneous voices and
+resource disposal; full game smoke reached a six-car race. Decoded clips 3,970,682
+bytes; actual Stick PSS/listening unmeasured (no device). No spend, 6,400/9,000
+conservative run charge. One commit; never push.
