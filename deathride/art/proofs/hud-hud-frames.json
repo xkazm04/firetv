@@ -1,0 +1,10 @@
+{
+  "batch": "hud-hud-frames",
+  "input_hash": "906d7986928389c0c2eb1ea42dac3119b1214b127a05c777b0a6a9958208360d",
+  "image": "C:\\Users\\kazda\\kiro\\firetv-deathride-hud\\deathride\\art\\raw\\v4-hud-instrument-v1\\attempt-02\\1.jpg",
+  "sha256": "a9e5bc58c80e05d48d815727e00036f2646cc16e025966cf644b57bcde8db250",
+  "verdict": "batch-direction-checked",
+  "reviewer": "executing-agent; NOT owner acceptance",
+  "note": "Corrected source has 13.4 percent margin, passes pixel gates, quiet transparent rectangular opening, no text. Compact frame aspect remains 1.5 instead of 4; use measured fixed-corner NinePatch to supply the intended wide layout without stretching the corner art. Two local observations in hud-current. Bone and rust edges match the fusion review; technical direction only, owner taste pending.",
+  "at": "2026-10-02T15:54:50.065976+00:00"
+}

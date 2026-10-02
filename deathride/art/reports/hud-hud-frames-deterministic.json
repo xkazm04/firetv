@@ -1,0 +1,378 @@
+[
+  {
+    "id": "v4-hud-instrument-v1",
+    "class": "frame-instrument",
+    "kind": "hud",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-hud\\deathride\\art\\raw\\v4-hud-instrument-v1\\attempt-02\\1.jpg",
+    "source_sha256": "a9e5bc58c80e05d48d815727e00036f2646cc16e025966cf644b57bcde8db250",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v4-hud-instrument-v1",
+      "class": "frame-instrument",
+      "prompt_action": "A wide low rectangular hollow instrument frame, 4:1 outer width to height, a thin battered bone steel border with two rust-orange corner plates. Huge completely empty magenta rectangular opening, straight horizontal and vertical inner edges. Flat front view UI frame. No symbols, ticks or text. Single isolated subject centred within the middle 75 percent of the canvas. At least 12 percent empty magenta margin on every side. No surrounding scene. Clear silhouette at 96 pixels.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "hud",
+      "reference": "",
+      "batch": "hud-hud-frames",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V4",
+      "asset_family": "hud-frames",
+      "surface_stack": "seeded-decals-tall-props-baked-natural-bands",
+      "logical_name": "hud/frame-instrument"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "25185fedcf1a78d6917c3f83ca440ce061b429a4596981ff0fd8f5de0028c780",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "ae6dcf5b8aa0a7ff8723976ca3b0969af0fca0c9f46ffbfe8b8c1eee8d11857a"
+    },
+    "metrics": {
+      "foreground_fraction": 0.1665821075439453,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        146,
+        271,
+        887,
+        752
+      ],
+      "margin_fraction": 0.1337890625,
+      "aspect": 1.5405405405405406,
+      "estimated_key_rgb": [
+        194.0,
+        61.0,
+        163.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 8.983454909541006,
+      "palette_p90_delta_e": 13.237317356460897
+    },
+    "placement": {
+      "source_bounds_px": [
+        146,
+        271,
+        887,
+        752
+      ],
+      "source_pivot_px": [
+        516.5,
+        511.5
+      ],
+      "pivot_px": [
+        128.0,
+        127.5
+      ],
+      "cell_px": [
+        256,
+        256
+      ],
+      "subject_px": [
+        248,
+        161
+      ],
+      "scale": 0.33468286099865047,
+      "world_length_m": null,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-hud\\deathride\\art\\processed\\hud-hud-frames\\v4-hud-instrument-v1.png",
+    "sha256": "55a2497b1f33880b0f0b954806b9edc70be9544bbd4c07e28073c4067cac4af7"
+  },
+  {
+    "id": "v4-hud-meter-v1",
+    "class": "frame-meter",
+    "kind": "hud",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-hud\\deathride\\art\\raw\\v4-hud-meter-v1\\attempt-01\\1.jpg",
+    "source_sha256": "fa5b371fc733b6df73a4e59c421bb81e8aa5dfea8b2759afc2ed45dbefe0926a",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v4-hud-meter-v1",
+      "class": "frame-meter",
+      "prompt_action": "A wide horizontal hollow energy gauge frame, 6:1 outer width to height. Thin bone-metal rim, a single ochre end cap, very large completely empty magenta opening with straight rectangular inner edges. No filled bar, ticks, numbers or symbols. Flat front view UI frame. Single isolated subject centred within the middle 75 percent of the canvas. At least 12 percent empty magenta margin on every side. No surrounding scene. Clear silhouette at 96 pixels.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "hud",
+      "reference": "",
+      "batch": "hud-hud-frames",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V4",
+      "asset_family": "hud-frames",
+      "surface_stack": "seeded-decals-tall-props-baked-natural-bands",
+      "logical_name": "hud/frame-meter"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "25185fedcf1a78d6917c3f83ca440ce061b429a4596981ff0fd8f5de0028c780",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "ae6dcf5b8aa0a7ff8723976ca3b0969af0fca0c9f46ffbfe8b8c1eee8d11857a"
+    },
+    "metrics": {
+      "foreground_fraction": 0.14263439178466797,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        79,
+        286,
+        952,
+        725
+      ],
+      "margin_fraction": 0.0703125,
+      "aspect": 1.9886104783599088,
+      "estimated_key_rgb": [
+        241.0,
+        78.0,
+        157.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 2,
+      "palette_mean_delta_e": 8.214542156208914,
+      "palette_p90_delta_e": 12.486703750041915
+    },
+    "placement": {
+      "source_bounds_px": [
+        79,
+        286,
+        952,
+        725
+      ],
+      "source_pivot_px": [
+        515.5,
+        505.5
+      ],
+      "pivot_px": [
+        128.0,
+        127.5
+      ],
+      "cell_px": [
+        256,
+        256
+      ],
+      "subject_px": [
+        248,
+        125
+      ],
+      "scale": 0.284077892325315,
+      "world_length_m": null,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-hud\\deathride\\art\\processed\\hud-hud-frames\\v4-hud-meter-v1.png",
+    "sha256": "0951f93eb1e2408f5be6833eef893952d34bc494427d71893244dfb83a9b88c8"
+  },
+  {
+    "id": "v4-hud-button-v1",
+    "class": "frame-button",
+    "kind": "hud",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-hud\\deathride\\art\\raw\\v4-hud-button-v1\\attempt-01\\1.jpg",
+    "source_sha256": "76bfb41a7c26e05b391d351fd0a2cfa695733a7bbb7d19dffbc280ad2f2b887a",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v4-hud-button-v1",
+      "class": "frame-button",
+      "prompt_action": "A square hollow button frame with clipped battered corners, bone metal with a rust-orange lower edge, large completely empty magenta rectangular opening and straight inner edges. Quiet border, no symbol, no text. Flat front view. Single isolated subject centred within the middle 75 percent of the canvas. At least 12 percent empty magenta margin on every side. No surrounding scene. Clear silhouette at 96 pixels.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "hud",
+      "reference": "",
+      "batch": "hud-hud-frames",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V4",
+      "asset_family": "hud-frames",
+      "surface_stack": "seeded-decals-tall-props-baked-natural-bands",
+      "logical_name": "hud/frame-button"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "25185fedcf1a78d6917c3f83ca440ce061b429a4596981ff0fd8f5de0028c780",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "ae6dcf5b8aa0a7ff8723976ca3b0969af0fca0c9f46ffbfe8b8c1eee8d11857a"
+    },
+    "metrics": {
+      "foreground_fraction": 0.3007516860961914,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        137,
+        133,
+        894,
+        881
+      ],
+      "margin_fraction": 0.126953125,
+      "aspect": 1.0120320855614973,
+      "estimated_key_rgb": [
+        210.0,
+        73.0,
+        165.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 8.75434041148702,
+      "palette_p90_delta_e": 15.17084009488218
+    },
+    "placement": {
+      "source_bounds_px": [
+        137,
+        133,
+        894,
+        881
+      ],
+      "source_pivot_px": [
+        515.5,
+        507.0
+      ],
+      "pivot_px": [
+        128.0,
+        127.5
+      ],
+      "cell_px": [
+        256,
+        256
+      ],
+      "subject_px": [
+        248,
+        245
+      ],
+      "scale": 0.3276089828269485,
+      "world_length_m": null,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-hud\\deathride\\art\\processed\\hud-hud-frames\\v4-hud-button-v1.png",
+    "sha256": "356143094e937ad2a28c8fe54dd6446f9c1ce79624da4a891db92f5f9c06b39a"
+  },
+  {
+    "id": "v4-hud-dial-v1",
+    "class": "frame-dial",
+    "kind": "hud",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-hud\\deathride\\art\\raw\\v4-hud-dial-v1\\attempt-01\\1.jpg",
+    "source_sha256": "e2629cab8b9c9530a48777ba082d2dc67d7f13e58269ce8139433d85a42e2691",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v4-hud-dial-v1",
+      "class": "frame-dial",
+      "prompt_action": "A square hollow instrument bezel with clipped corners, broad thin chipped bone metal rim, tiny hazard-yellow corner plates, very large empty magenta rectangular centre. No ticks, marks, symbols or text. Flat front view. Single isolated subject centred within the middle 75 percent of the canvas. At least 12 percent empty magenta margin on every side. No surrounding scene. Clear silhouette at 96 pixels.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "hud",
+      "reference": "",
+      "batch": "hud-hud-frames",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V4",
+      "asset_family": "hud-frames",
+      "surface_stack": "seeded-decals-tall-props-baked-natural-bands",
+      "logical_name": "hud/frame-dial"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "25185fedcf1a78d6917c3f83ca440ce061b429a4596981ff0fd8f5de0028c780",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "ae6dcf5b8aa0a7ff8723976ca3b0969af0fca0c9f46ffbfe8b8c1eee8d11857a"
+    },
+    "metrics": {
+      "foreground_fraction": 0.25484275817871094,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        141,
+        143,
+        885,
+        882
+      ],
+      "margin_fraction": 0.1357421875,
+      "aspect": 1.006765899864682,
+      "estimated_key_rgb": [
+        225.0,
+        30.0,
+        134.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 7.0147604143817475,
+      "palette_p90_delta_e": 11.432536394480973
+    },
+    "placement": {
+      "source_bounds_px": [
+        141,
+        143,
+        885,
+        882
+      ],
+      "source_pivot_px": [
+        513.0,
+        512.5
+      ],
+      "pivot_px": [
+        128.0,
+        128.0
+      ],
+      "cell_px": [
+        256,
+        256
+      ],
+      "subject_px": [
+        248,
+        246
+      ],
+      "scale": 0.3333333333333333,
+      "world_length_m": null,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-hud\\deathride\\art\\processed\\hud-hud-frames\\v4-hud-dial-v1.png",
+    "sha256": "fe17c0b0d89fff7aa59c3bbc251bb178c3d98d5051a9242209f836dd1cf7dfed"
+  }
+]

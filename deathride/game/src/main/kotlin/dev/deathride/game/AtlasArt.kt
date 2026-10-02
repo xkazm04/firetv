@@ -17,6 +17,7 @@ class AtlasArt(private val root: FileHandle = Gdx.files.internal("phase2-v1"),pr
     private val regions=HashMap<String,Region>()
     private val atlases=ArrayList<TextureAtlas>()
     private val tiles=HashMap<String,Texture>()
+    private val patches=HashMap<String,NinePatch>()
     private var backdrop: Texture?=null
     private var backdropKey=""
     private val carKeys=CarCatalog.all.associate { it.id to arrayOf("clean","damaged-1","damaged-2","wreck").map{s->"cars/${it.id.lowercase()}/$s"}.toTypedArray() }
@@ -93,6 +94,21 @@ class AtlasArt(private val root: FileHandle = Gdx.files.internal("phase2-v1"),pr
     }
     fun available(key: String)=entries[key]?.let{e->e.frames.all{regions.containsKey(it)}}?:regions.containsKey(key)
     fun duration(key: String)=(entries[key]?.durations?.sum()?:0)/1000.0
+    /** Fixed corner widths from the measured transparent opening; labels live above this layer. */
+    fun frame(batch: Batch,key: String,x: Float,y: Float,width: Float,height: Float): Boolean {
+        val r=region(key)?:return false
+        val bounds=r.interior?:return false
+        val patch=patches.getOrPut(key) {
+            NinePatch(r.image,bounds[0],r.image.regionWidth-bounds[2],bounds[1],r.image.regionHeight-bounds[3]).apply {
+                // Authoring cells include transparent margins. Bound corners so thin meters
+                // never acquire a negative stretchable centre or cover adjacent text.
+                val scale=if(r.image.regionWidth>=256).12f else .5f
+                scale(scale,scale)
+            }
+        }
+        if(width<patch.leftWidth+patch.rightWidth || height<patch.topHeight+patch.bottomHeight)return false
+        patch.draw(batch,x,y,width,height);draws++;return true
+    }
     fun tile(key: String)=tiles[entries[key]?.id?:key]
     fun draw(batch: Batch,key: String,x: Float,y: Float,width: Float,height: Float,degrees: Float=0f,seconds: Double=0.0): Boolean {
         val r=region(key,seconds)?:return false

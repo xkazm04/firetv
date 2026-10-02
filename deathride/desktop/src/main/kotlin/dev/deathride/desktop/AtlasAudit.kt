@@ -14,12 +14,20 @@ import java.io.File
 class AtlasAudit: ApplicationAdapter() {
     override fun create() {
         val prefix=System.getenv("DEATHRIDE_ATLAS_AUDIT_PREFIX")?:"i1-atlas-gl"
-        val a=AtlasArt();check(a.failures==0 && a.regionCount==78);check(a.textureBytes==11272192L)
+        val bundle=System.getenv("DEATHRIDE_ATLAS_BUNDLE")?:"phase2-v1"
+        val expectedRegions=if(bundle=="phase2-hud")98 else 78
+        val a=AtlasArt(Gdx.files.internal(bundle));check(a.failures==0 && a.regionCount==expectedRegions);check(a.textureBytes==11272192L)
         val batch=SpriteBatch();batch.projectionMatrix=Matrix4().setToOrtho2D(0f,0f,1280f,720f)
         ScreenUtils.clear(.1f,.1f,.1f,1f);batch.begin()
         for(i in 0..5)check(a.draw(batch,"effects/explosion",120f+i*180,420f,160f,160f,seconds=listOf(.0,.05,.11,.18,.25,.35)[i]))
         check(a.draw(batch,"rival-marrow",180f,160f,180f,180f));check(a.draw(batch,"pickups/repair",450f,160f,100f,100f))
-        check(!a.draw(batch,"missing",0f,0f,1f,1f));batch.end()
+        check(!a.draw(batch,"missing",0f,0f,1f,1f))
+        if(bundle=="phase2-hud") {
+            check(a.frame(batch,"hud/frame-instrument",25f,20f,400f,90f))
+            check(a.frame(batch,"hud/frame-meter",450f,40f,200f,28f))
+            for((i,d) in dev.deathride.core.AbilityCatalog.all.withIndex())check(a.draw(batch,"hud/ability-"+d.id,70f+i*120,630f,96f,96f))
+        }
+        batch.end()
         val pix=Pixmap.createFromFrameBuffer(0,0,1280,720);var vivid=0
         for(y in 0 until pix.height)for(x in 0 until pix.width){val c=pix.getPixel(x,y);if((c ushr 24)>70)vivid++}
         check(vivid>10000){"uploaded atlas did not draw visible content: $vivid"}
@@ -28,19 +36,20 @@ class AtlasAudit: ApplicationAdapter() {
         a.selectBackdrop("backdrops/alpine");check(a.textureBytes==15466496L)
         a.selectBackdrop(null);check(a.textureBytes==11272192L)
         check(a.carKey("Line",1f,false)==null);a.dispose()
+        File("build").mkdirs()
         val temp=java.nio.file.Files.createTempDirectory(File("build").toPath(),"atlas-failure-audit-").toFile()
         val root=Gdx.files.absolute(temp.absolutePath)
         val absent=AtlasArt(root);check(absent.regionCount==0 && absent.failures==1);absent.dispose()
         // Only copy metadata; both page loads fail and individual tiles fail independently.
-        Gdx.files.internal("phase2-v1/catalog.json").copyTo(root.child("catalog.json"))
-        Gdx.files.internal("phase2-v1/world.atlas").copyTo(root.child("world.atlas"))
+        Gdx.files.internal("$bundle/catalog.json").copyTo(root.child("catalog.json"))
+        Gdx.files.internal("$bundle/world.atlas").copyTo(root.child("world.atlas"))
         root.child("ui.atlas").writeString("broken atlas",false)
         val broken=AtlasArt(root);check(broken.regionCount==0 && broken.failures>=2);check(!broken.available("pickups/repair"));broken.dispose()
-        val denied=AtlasArt(Gdx.files.internal("phase2-v1"),0)
+        val denied=AtlasArt(Gdx.files.internal(bundle),0)
         check(denied.textureBytes==0L && denied.regionCount==0 && denied.failures>0)
         check(!denied.available("pickups/repair"));denied.dispose()
         // A valid page with invalid entry metadata must fall back only for that entry.
-        File("assets/phase2-v1").copyRecursively(temp,overwrite=true)
+        File("assets/$bundle").copyRecursively(temp,overwrite=true)
         val catalog=JsonReader().parse(root.child("catalog.json"))
         val healthId=catalog.get("assets").first{it.getString("logical_name")=="hud/frame-health"}.getString("asset_id")
         val muzzle=catalog.get("assets").first{it.getString("logical_name")=="effects/muzzle"}
@@ -54,7 +63,7 @@ class AtlasAudit: ApplicationAdapter() {
         check(!invalid.available("hud/frame-health") && !invalid.available("effects/muzzle"))
         check(invalid.failures>=2 && invalid.available("pickups/repair"));invalid.dispose()
         batch.dispose()
-        File("evidence/phase2/$prefix.json").writeText("""{"regions":78,"residentBytes":11272192,"oneBackdropBytes":4194304,"visiblePixels":$vivid,"missingCatalogFallback":true,"failedPagesFallback":true,"carApprovalFallback":true,"budgetFallback":true,"invalidMetadataFallback":true,"heading":"runtime rotation; production cars unavailable"}""")
+        File("evidence/phase2/$prefix.json").writeText("""{"regions":$expectedRegions,"residentBytes":11272192,"oneBackdropBytes":4194304,"visiblePixels":$vivid,"missingCatalogFallback":true,"failedPagesFallback":true,"carApprovalFallback":true,"budgetFallback":true,"invalidMetadataFallback":true,"heading":"runtime rotation; production cars unavailable"}""")
         Gdx.app.log("DeathRide","atlas GL audit passed visiblePixels=$vivid");Gdx.app.exit()
     }
 }

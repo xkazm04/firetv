@@ -123,7 +123,8 @@ class RaceServer(private val assets: (String)->String, private val log: (String)
                     install(WebSockets) { maxFrameSize=2048; masking=false }
                     routing {
                         get("/") { call.response.header("Cache-Control","no-store"); call.respondText(html,ContentType.Text.Html) }
-                        get("/manifest.webmanifest") { call.respondText(manifest,ContentType.Application.Json) }
+                        get("/hud.css") { call.respondText(assets("hud.css"),ContentType.Text.CSS) }
+                get("/manifest.webmanifest") { call.respondText(manifest,ContentType.Application.Json) }
                         get("/stats") { call.response.header("Cache-Control","no-store"); call.respondText(statsJson(),ContentType.Application.Json) }
                         get("/catalog") { call.respondText("{\"feelProfiles\":${FeelProfiles.json},\"driftFeedback\":{\"quality\":${VisualTuning["driftHapticQuality"]},\"milliseconds\":${VisualTuning["driftHapticMilliseconds"]},\"cooldownMilliseconds\":${VisualTuning["driftHapticCooldownMilliseconds"]}},\"cars\":${CarCatalog.json},\"statMax\":${CarCatalog.statMax},\"tracks\":${Courses.json},\"surfaces\":${Surfaces.json},\"weapons\":${Weapons.json},\"abilities\":${AbilityCatalog.json},\"layouts\":${ControllerLayouts.json},\"career\":${Career.catalogJson}}",ContentType.Application.Json) }
                         get("/health") { call.respondText("{\"ok\":true,\"phase\":\"$phase\",\"raceLaps\":$raceLaps,\"raceMode\":\"$raceMode\",\"slots\":${slots.count{it.connected}}}",ContentType.Application.Json) }

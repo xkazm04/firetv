@@ -1,0 +1,1044 @@
+[
+  {
+    "id": "v4-hud-instrument-v1",
+    "class": "frame-instrument",
+    "kind": "hud",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-hud\\deathride\\art\\raw\\v4-hud-instrument-v1\\attempt-02\\1.jpg",
+    "source_sha256": "a9e5bc58c80e05d48d815727e00036f2646cc16e025966cf644b57bcde8db250",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v4-hud-instrument-v1",
+      "class": "frame-instrument",
+      "prompt_action": "A wide low rectangular hollow instrument frame, 4:1 outer width to height, a thin battered bone steel border with two rust-orange corner plates. Huge completely empty magenta rectangular opening, straight horizontal and vertical inner edges. Flat front view UI frame. No symbols, ticks or text. Single isolated subject centred within the middle 75 percent of the canvas. At least 12 percent empty magenta margin on every side. No surrounding scene. Clear silhouette at 96 pixels.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "hud",
+      "reference": "",
+      "batch": "hud-hud-frames",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V4",
+      "asset_family": "hud-frames",
+      "surface_stack": "seeded-decals-tall-props-baked-natural-bands",
+      "logical_name": "hud/frame-instrument"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "25185fedcf1a78d6917c3f83ca440ce061b429a4596981ff0fd8f5de0028c780",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "ae6dcf5b8aa0a7ff8723976ca3b0969af0fca0c9f46ffbfe8b8c1eee8d11857a"
+    },
+    "metrics": {
+      "foreground_fraction": 0.1665821075439453,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        146,
+        271,
+        887,
+        752
+      ],
+      "margin_fraction": 0.1337890625,
+      "aspect": 1.5405405405405406,
+      "estimated_key_rgb": [
+        194.0,
+        61.0,
+        163.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 8.983454909541006,
+      "palette_p90_delta_e": 13.237317356460897
+    },
+    "placement": {
+      "source_bounds_px": [
+        146,
+        271,
+        887,
+        752
+      ],
+      "source_pivot_px": [
+        516.5,
+        511.5
+      ],
+      "pivot_px": [
+        128.0,
+        127.5
+      ],
+      "cell_px": [
+        256,
+        256
+      ],
+      "subject_px": [
+        248,
+        161
+      ],
+      "scale": 0.33468286099865047,
+      "world_length_m": null,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-hud\\deathride\\art\\processed\\hud-hud-frames\\v4-hud-instrument-v1.png",
+    "sha256": "55a2497b1f33880b0f0b954806b9edc70be9544bbd4c07e28073c4067cac4af7"
+  },
+  {
+    "id": "v4-hud-steel-flick-v1",
+    "class": "steel-flick",
+    "kind": "icon",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-hud\\deathride\\art\\raw\\v4-hud-steel-flick-v1\\attempt-01\\1.jpg",
+    "source_sha256": "1efd8d9ce4b20edf20bf698a75d7f4a02d70af5dae5df054f4f73376ecb89c8c",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v4-hud-steel-flick-v1",
+      "class": "steel-flick",
+      "prompt_action": "One compact silver steel arrowhead with two short attached rear speed fins. A narrow quick evasive dash symbol, large clean negative gaps. Single isolated subject centred within the middle 75 percent of the canvas. At least 12 percent empty magenta margin on every side. No surrounding scene. Clear silhouette at 96 pixels.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "icon",
+      "reference": "",
+      "batch": "hud-hud-icons",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "128",
+      "style_file": "style-fusion.json",
+      "wave": "V4",
+      "asset_family": "hud-icons",
+      "surface_stack": "seeded-decals-tall-props-baked-natural-bands",
+      "logical_name": "hud/ability-steel-flick"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "25185fedcf1a78d6917c3f83ca440ce061b429a4596981ff0fd8f5de0028c780",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "ae6dcf5b8aa0a7ff8723976ca3b0969af0fca0c9f46ffbfe8b8c1eee8d11857a"
+    },
+    "metrics": {
+      "foreground_fraction": 0.1965465545654297,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        82,
+        245,
+        949,
+        780
+      ],
+      "margin_fraction": 0.0732421875,
+      "aspect": 1.6205607476635513,
+      "estimated_key_rgb": [
+        231.0,
+        95.0,
+        165.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 10.920358196724628,
+      "palette_p90_delta_e": 18.685916338995764
+    },
+    "placement": {
+      "source_bounds_px": [
+        82,
+        245,
+        949,
+        780
+      ],
+      "source_pivot_px": [
+        515.5,
+        512.5
+      ],
+      "pivot_px": [
+        64.0,
+        64.0
+      ],
+      "cell_px": [
+        128,
+        128
+      ],
+      "subject_px": [
+        120,
+        74
+      ],
+      "scale": 0.1384083044982699,
+      "world_length_m": null,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 128
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-hud\\deathride\\art\\processed\\hud-hud-icons\\v4-hud-steel-flick-v1.png",
+    "sha256": "654bc8b91150075c2480f089aae75a4ae181e77ffa5b4a9566148a869c5b8e52"
+  },
+  {
+    "id": "v4-hud-flywheel-v1",
+    "class": "flywheel",
+    "kind": "icon",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-hud\\deathride\\art\\raw\\v4-hud-flywheel-v1\\attempt-01\\1.jpg",
+    "source_sha256": "1bdb52bff1dc954de60b05cddceb9d5d92a0affecf5a75374a5924489d26b842",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v4-hud-flywheel-v1",
+      "class": "flywheel",
+      "prompt_action": "One chunky circular mechanical flywheel with three broad spokes and an attached curved forward arrow. Bone and ochre, large clean gaps. Single isolated subject centred within the middle 75 percent of the canvas. At least 12 percent empty magenta margin on every side. No surrounding scene. Clear silhouette at 96 pixels.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "icon",
+      "reference": "",
+      "batch": "hud-hud-icons",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "128",
+      "style_file": "style-fusion.json",
+      "wave": "V4",
+      "asset_family": "hud-icons",
+      "surface_stack": "seeded-decals-tall-props-baked-natural-bands",
+      "logical_name": "hud/ability-flywheel"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "25185fedcf1a78d6917c3f83ca440ce061b429a4596981ff0fd8f5de0028c780",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "ae6dcf5b8aa0a7ff8723976ca3b0969af0fca0c9f46ffbfe8b8c1eee8d11857a"
+    },
+    "metrics": {
+      "foreground_fraction": 0.3679533004760742,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        108,
+        94,
+        973,
+        915
+      ],
+      "margin_fraction": 0.0498046875,
+      "aspect": 1.053593179049939,
+      "estimated_key_rgb": [
+        241.0,
+        109.0,
+        228.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 6.267346241956629,
+      "palette_p90_delta_e": 10.709328941609117
+    },
+    "placement": {
+      "source_bounds_px": [
+        108,
+        94,
+        973,
+        915
+      ],
+      "source_pivot_px": [
+        540.5,
+        504.5
+      ],
+      "pivot_px": [
+        64.0,
+        64.0
+      ],
+      "cell_px": [
+        128,
+        128
+      ],
+      "subject_px": [
+        120,
+        114
+      ],
+      "scale": 0.13872832369942195,
+      "world_length_m": null,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 128
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-hud\\deathride\\art\\processed\\hud-hud-icons\\v4-hud-flywheel-v1.png",
+    "sha256": "4f1bca4d69cebfe66d5e3b3c0317e65c8155bee503f9e836c312122e2242fee9"
+  },
+  {
+    "id": "v4-hud-shoulder-v1",
+    "class": "shoulder",
+    "kind": "icon",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-hud\\deathride\\art\\raw\\v4-hud-shoulder-v1\\attempt-01\\1.jpg",
+    "source_sha256": "ca0b57de4de2d7f19b9735739be5a6e0eb1c256af147e45e838592dee7623d99",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v4-hud-shoulder-v1",
+      "class": "shoulder",
+      "prompt_action": "One broad heavy plated wedge-shaped battering ram pointing right, reinforced by two shoulder braces. Bone leading edge, rust body. Single isolated subject centred within the middle 75 percent of the canvas. At least 12 percent empty magenta margin on every side. No surrounding scene. Clear silhouette at 96 pixels.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "icon",
+      "reference": "",
+      "batch": "hud-hud-icons",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "128",
+      "style_file": "style-fusion.json",
+      "wave": "V4",
+      "asset_family": "hud-icons",
+      "surface_stack": "seeded-decals-tall-props-baked-natural-bands",
+      "logical_name": "hud/ability-shoulder"
+    },
+    "verdict": "reject",
+    "codes": [
+      "CROPPED_OR_MARGIN"
+    ],
+    "style_hash": "25185fedcf1a78d6917c3f83ca440ce061b429a4596981ff0fd8f5de0028c780",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "ae6dcf5b8aa0a7ff8723976ca3b0969af0fca0c9f46ffbfe8b8c1eee8d11857a"
+    },
+    "metrics": {
+      "foreground_fraction": 0.28089141845703125,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        60,
+        187,
+        1009,
+        814
+      ],
+      "margin_fraction": 0.0146484375,
+      "aspect": 1.5135566188197767,
+      "estimated_key_rgb": [
+        221.0,
+        103.0,
+        182.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 2,
+      "palette_mean_delta_e": 6.804839918612247,
+      "palette_p90_delta_e": 9.970883387239201
+    },
+    "placement": {
+      "source_bounds_px": [
+        60,
+        187,
+        1009,
+        814
+      ],
+      "source_pivot_px": [
+        534.5,
+        500.5
+      ],
+      "pivot_px": [
+        64.0,
+        63.5
+      ],
+      "cell_px": [
+        128,
+        128
+      ],
+      "subject_px": [
+        120,
+        79
+      ],
+      "scale": 0.12644889357218125,
+      "world_length_m": null,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 128
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-hud\\deathride\\art\\processed\\hud-hud-icons\\v4-hud-shoulder-v1.png",
+    "sha256": "4cf25209b31944945fb9b2b6fd2b227dbbfeb3b3aa586ae5dc1c2b142fc3a5ec"
+  },
+  {
+    "id": "v4-hud-turbine-v1",
+    "class": "turbine",
+    "kind": "icon",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-hud\\deathride\\art\\raw\\v4-hud-turbine-v1\\attempt-01\\1.jpg",
+    "source_sha256": "08d5ee3460ab7c1a7b58c620d79da08d4fb1a133abb4b4964ca921328042b9ac",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v4-hud-turbine-v1",
+      "class": "turbine",
+      "prompt_action": "Two massive parallel air turbine housings with bold intake fan blades and short attached rear exhaust streaks. Rust and bone, a compact turbo icon. Single isolated subject centred within the middle 75 percent of the canvas. At least 12 percent empty magenta margin on every side. No surrounding scene. Clear silhouette at 96 pixels.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "icon",
+      "reference": "",
+      "batch": "hud-hud-icons",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "128",
+      "style_file": "style-fusion.json",
+      "wave": "V4",
+      "asset_family": "hud-icons",
+      "surface_stack": "seeded-decals-tall-props-baked-natural-bands",
+      "logical_name": "hud/ability-turbine"
+    },
+    "verdict": "reject",
+    "codes": [
+      "CROPPED_OR_MARGIN"
+    ],
+    "style_hash": "25185fedcf1a78d6917c3f83ca440ce061b429a4596981ff0fd8f5de0028c780",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "ae6dcf5b8aa0a7ff8723976ca3b0969af0fca0c9f46ffbfe8b8c1eee8d11857a"
+    },
+    "metrics": {
+      "foreground_fraction": 0.35075855255126953,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        75,
+        218,
+        1012,
+        791
+      ],
+      "margin_fraction": 0.01171875,
+      "aspect": 1.6352530541012216,
+      "estimated_key_rgb": [
+        236.0,
+        107.0,
+        182.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 6.222088464352905,
+      "palette_p90_delta_e": 11.927762849583372
+    },
+    "placement": {
+      "source_bounds_px": [
+        75,
+        218,
+        1012,
+        791
+      ],
+      "source_pivot_px": [
+        543.5,
+        504.5
+      ],
+      "pivot_px": [
+        64.0,
+        63.5
+      ],
+      "cell_px": [
+        128,
+        128
+      ],
+      "subject_px": [
+        120,
+        73
+      ],
+      "scale": 0.128068303094984,
+      "world_length_m": null,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 128
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-hud\\deathride\\art\\processed\\hud-hud-icons\\v4-hud-turbine-v1.png",
+    "sha256": "6d3743353f9a85f6e477dd04cf3d54519c6df20144ccb37aa144058f7484cb9d"
+  },
+  {
+    "id": "v4-hud-ground-bite-v1",
+    "class": "ground-bite",
+    "kind": "icon",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-hud\\deathride\\art\\raw\\v4-hud-ground-bite-v1\\attempt-01\\1.jpg",
+    "source_sha256": "6385ea6257c3339f1ec2eb53415d2a5dd262d5f097f7558e2ebac1ad8b4fa813",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v4-hud-ground-bite-v1",
+      "class": "ground-bite",
+      "prompt_action": "One chunky treaded tyre gripping three small attached angular earth teeth. Bone tread on soot, ochre earth. A traction symbol. Single isolated subject centred within the middle 75 percent of the canvas. At least 12 percent empty magenta margin on every side. No surrounding scene. Clear silhouette at 96 pixels.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "icon",
+      "reference": "",
+      "batch": "hud-hud-icons",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "128",
+      "style_file": "style-fusion.json",
+      "wave": "V4",
+      "asset_family": "hud-icons",
+      "surface_stack": "seeded-decals-tall-props-baked-natural-bands",
+      "logical_name": "hud/ability-ground-bite"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "25185fedcf1a78d6917c3f83ca440ce061b429a4596981ff0fd8f5de0028c780",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "ae6dcf5b8aa0a7ff8723976ca3b0969af0fca0c9f46ffbfe8b8c1eee8d11857a"
+    },
+    "metrics": {
+      "foreground_fraction": 0.41470909118652344,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        162,
+        116,
+        884,
+        926
+      ],
+      "margin_fraction": 0.095703125,
+      "aspect": 0.891358024691358,
+      "estimated_key_rgb": [
+        232.0,
+        93.0,
+        243.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 5.5015795376572845,
+      "palette_p90_delta_e": 10.754985933246582
+    },
+    "placement": {
+      "source_bounds_px": [
+        162,
+        116,
+        884,
+        926
+      ],
+      "source_pivot_px": [
+        523.0,
+        521.0
+      ],
+      "pivot_px": [
+        63.5,
+        64.0
+      ],
+      "cell_px": [
+        128,
+        128
+      ],
+      "subject_px": [
+        107,
+        120
+      ],
+      "scale": 0.14814814814814814,
+      "world_length_m": null,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 128
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-hud\\deathride\\art\\processed\\hud-hud-icons\\v4-hud-ground-bite-v1.png",
+    "sha256": "7ed2fe19757cfbc1956130c164209a32f8c22d7f12982a3436dd79499ed9d45a"
+  },
+  {
+    "id": "v4-hud-punch-lance-v1",
+    "class": "punch-lance",
+    "kind": "icon",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-hud\\deathride\\art\\raw\\v4-hud-punch-lance-v1\\attempt-01\\1.jpg",
+    "source_sha256": "dc32f8e7a2bb9f29e208ae82a4d161554e42cb00e8ce5ade42da22a716bc71c9",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v4-hud-punch-lance-v1",
+      "class": "punch-lance",
+      "prompt_action": "One straight mechanical lance barrel pointing right, with a long narrow bone spear tip. Heavy rust-orange breech, a ranged piercing shot symbol. Single isolated subject centred within the middle 75 percent of the canvas. At least 12 percent empty magenta margin on every side. No surrounding scene. Clear silhouette at 96 pixels.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "icon",
+      "reference": "",
+      "batch": "hud-hud-icons",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "128",
+      "style_file": "style-fusion.json",
+      "wave": "V4",
+      "asset_family": "hud-icons",
+      "surface_stack": "seeded-decals-tall-props-baked-natural-bands",
+      "logical_name": "hud/ability-punch-lance"
+    },
+    "verdict": "reject",
+    "codes": [
+      "CROPPED_OR_MARGIN"
+    ],
+    "style_hash": "25185fedcf1a78d6917c3f83ca440ce061b429a4596981ff0fd8f5de0028c780",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "ae6dcf5b8aa0a7ff8723976ca3b0969af0fca0c9f46ffbfe8b8c1eee8d11857a"
+    },
+    "metrics": {
+      "foreground_fraction": 0.11672496795654297,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        48,
+        320,
+        1004,
+        695
+      ],
+      "margin_fraction": 0.01953125,
+      "aspect": 2.5493333333333332,
+      "estimated_key_rgb": [
+        215.0,
+        63.0,
+        199.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 6.5112661496310436,
+      "palette_p90_delta_e": 10.347653369102995
+    },
+    "placement": {
+      "source_bounds_px": [
+        48,
+        320,
+        1004,
+        695
+      ],
+      "source_pivot_px": [
+        526.0,
+        507.5
+      ],
+      "pivot_px": [
+        64.0,
+        31.5
+      ],
+      "cell_px": [
+        128,
+        64
+      ],
+      "subject_px": [
+        120,
+        47
+      ],
+      "scale": 0.12552301255230125,
+      "world_length_m": null,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 128
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-hud\\deathride\\art\\processed\\hud-hud-icons\\v4-hud-punch-lance-v1.png",
+    "sha256": "06a69311a7aece7c9fa72208bde7eb2d266f803ca3698f37d3043d8dab590b7b"
+  },
+  {
+    "id": "v4-hud-bone-rack-v1",
+    "class": "bone-rack",
+    "kind": "icon",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-hud\\deathride\\art\\raw\\v4-hud-bone-rack-v1\\attempt-01\\1.jpg",
+    "source_sha256": "c724999d270ce3f9d9c4eb4d023d0c4ea424f6acb33dee0b0f06e4971280531f",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v4-hud-bone-rack-v1",
+      "class": "bone-rack",
+      "prompt_action": "One compact central armoured plate with three large artificial ivory weapon spikes projecting left and three projecting right. Front and rear contact weapon symbol, no gore. Single isolated subject centred within the middle 75 percent of the canvas. At least 12 percent empty magenta margin on every side. No surrounding scene. Clear silhouette at 96 pixels.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "icon",
+      "reference": "",
+      "batch": "hud-hud-icons",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "128",
+      "style_file": "style-fusion.json",
+      "wave": "V4",
+      "asset_family": "hud-icons",
+      "surface_stack": "seeded-decals-tall-props-baked-natural-bands",
+      "logical_name": "hud/ability-bone-rack"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "25185fedcf1a78d6917c3f83ca440ce061b429a4596981ff0fd8f5de0028c780",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "ae6dcf5b8aa0a7ff8723976ca3b0969af0fca0c9f46ffbfe8b8c1eee8d11857a"
+    },
+    "metrics": {
+      "foreground_fraction": 0.2762470245361328,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        44,
+        191,
+        925,
+        827
+      ],
+      "margin_fraction": 0.04296875,
+      "aspect": 1.3852201257861636,
+      "estimated_key_rgb": [
+        241.0,
+        88.0,
+        226.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 13,
+      "palette_mean_delta_e": 5.992662286393991,
+      "palette_p90_delta_e": 11.75902617021967
+    },
+    "placement": {
+      "source_bounds_px": [
+        44,
+        191,
+        925,
+        827
+      ],
+      "source_pivot_px": [
+        484.5,
+        509.0
+      ],
+      "pivot_px": [
+        64.0,
+        63.5
+      ],
+      "cell_px": [
+        128,
+        128
+      ],
+      "subject_px": [
+        120,
+        87
+      ],
+      "scale": 0.1362088535754824,
+      "world_length_m": null,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 128
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-hud\\deathride\\art\\processed\\hud-hud-icons\\v4-hud-bone-rack-v1.png",
+    "sha256": "3dffb847e1c7320aaccb2f73daa4e07593d86bfb0fc3468b8fc0aa79f75eb19c"
+  },
+  {
+    "id": "v4-hud-scrambler-v1",
+    "class": "scrambler",
+    "kind": "icon",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-hud\\deathride\\art\\raw\\v4-hud-scrambler-v1\\attempt-01\\1.jpg",
+    "source_sha256": "640f2cb59f0fd8e2ef50f7f864f5beaaf467ff836ea253d19aa0f8768794e11b",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v4-hud-scrambler-v1",
+      "class": "scrambler",
+      "prompt_action": "One squat interference transmitter puck with two attached zigzag antenna arms, rust-orange casing and bone circuitry shapes. No loose marks, no letters. Single isolated subject centred within the middle 75 percent of the canvas. At least 12 percent empty magenta margin on every side. No surrounding scene. Clear silhouette at 96 pixels.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "icon",
+      "reference": "",
+      "batch": "hud-hud-icons",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "128",
+      "style_file": "style-fusion.json",
+      "wave": "V4",
+      "asset_family": "hud-icons",
+      "surface_stack": "seeded-decals-tall-props-baked-natural-bands",
+      "logical_name": "hud/ability-scrambler"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "25185fedcf1a78d6917c3f83ca440ce061b429a4596981ff0fd8f5de0028c780",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "ae6dcf5b8aa0a7ff8723976ca3b0969af0fca0c9f46ffbfe8b8c1eee8d11857a"
+    },
+    "metrics": {
+      "foreground_fraction": 0.2939596176147461,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        67,
+        119,
+        955,
+        873
+      ],
+      "margin_fraction": 0.0654296875,
+      "aspect": 1.1777188328912467,
+      "estimated_key_rgb": [
+        196.0,
+        85.0,
+        162.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 4,
+      "palette_mean_delta_e": 7.228487315780664,
+      "palette_p90_delta_e": 10.799450904066164
+    },
+    "placement": {
+      "source_bounds_px": [
+        67,
+        119,
+        955,
+        873
+      ],
+      "source_pivot_px": [
+        511.0,
+        496.0
+      ],
+      "pivot_px": [
+        64.0,
+        64.0
+      ],
+      "cell_px": [
+        128,
+        128
+      ],
+      "subject_px": [
+        120,
+        102
+      ],
+      "scale": 0.13513513513513514,
+      "world_length_m": null,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 128
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-hud\\deathride\\art\\processed\\hud-hud-icons\\v4-hud-scrambler-v1.png",
+    "sha256": "c2e4b87e60aa9ba0342ad092cb2be11b84384ebb327a42c828c661a171df2da5"
+  },
+  {
+    "id": "v4-hud-arc-harpoon-v1",
+    "class": "arc-harpoon",
+    "kind": "icon",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-hud\\deathride\\art\\raw\\v4-hud-arc-harpoon-v1\\attempt-01\\1.jpg",
+    "source_sha256": "d5180443b3b97a6b87a3ea52ec4ec85e8be8a7cc9e90156b68a373166fc993a4",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v4-hud-arc-harpoon-v1",
+      "class": "arc-harpoon",
+      "prompt_action": "One electric harpoon pointing right: large barbed bone spearhead, short rust rail and a visible coiled insulated tether. One pale zigzag arc contained inside the coil. Single isolated subject centred within the middle 75 percent of the canvas. At least 12 percent empty magenta margin on every side. No surrounding scene. Clear silhouette at 96 pixels.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "icon",
+      "reference": "",
+      "batch": "hud-hud-icons",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "128",
+      "style_file": "style-fusion.json",
+      "wave": "V4",
+      "asset_family": "hud-icons",
+      "surface_stack": "seeded-decals-tall-props-baked-natural-bands",
+      "logical_name": "hud/ability-arc-harpoon"
+    },
+    "verdict": "reject",
+    "codes": [
+      "CROPPED_OR_MARGIN"
+    ],
+    "style_hash": "25185fedcf1a78d6917c3f83ca440ce061b429a4596981ff0fd8f5de0028c780",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "ae6dcf5b8aa0a7ff8723976ca3b0969af0fca0c9f46ffbfe8b8c1eee8d11857a"
+    },
+    "metrics": {
+      "foreground_fraction": 0.16324329376220703,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        56,
+        276,
+        1001,
+        736
+      ],
+      "margin_fraction": 0.0224609375,
+      "aspect": 2.0543478260869565,
+      "estimated_key_rgb": [
+        207.0,
+        63.0,
+        172.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 6.929483339034344,
+      "palette_p90_delta_e": 11.801537793618342
+    },
+    "placement": {
+      "source_bounds_px": [
+        56,
+        276,
+        1001,
+        736
+      ],
+      "source_pivot_px": [
+        528.5,
+        506.0
+      ],
+      "pivot_px": [
+        64.0,
+        64.0
+      ],
+      "cell_px": [
+        128,
+        128
+      ],
+      "subject_px": [
+        120,
+        58
+      ],
+      "scale": 0.12698412698412698,
+      "world_length_m": null,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 128
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-hud\\deathride\\art\\processed\\hud-hud-icons\\v4-hud-arc-harpoon-v1.png",
+    "sha256": "01fbf8faec82d952a476e0b46e587cbccb517578600d7234b47a22a7eb75b2bc"
+  },
+  {
+    "id": "v4-hud-plate-brace-v1",
+    "class": "plate-brace",
+    "kind": "icon",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-hud\\deathride\\art\\raw\\v4-hud-plate-brace-v1\\attempt-01\\1.jpg",
+    "source_sha256": "af4d6b33941ec8d6c44ce867f23ceec7faa8dfdf7e7ef9a29c1a55b9e06b39b6",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v4-hud-plate-brace-v1",
+      "class": "plate-brace",
+      "prompt_action": "One broad heavy defensive shield assembled from three overlapping bone armour plates, dark seams and rust rivets. Bold compact silhouette. Single isolated subject centred within the middle 75 percent of the canvas. At least 12 percent empty magenta margin on every side. No surrounding scene. Clear silhouette at 96 pixels.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "icon",
+      "reference": "",
+      "batch": "hud-hud-icons",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "128",
+      "style_file": "style-fusion.json",
+      "wave": "V4",
+      "asset_family": "hud-icons",
+      "surface_stack": "seeded-decals-tall-props-baked-natural-bands",
+      "logical_name": "hud/ability-plate-brace"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "25185fedcf1a78d6917c3f83ca440ce061b429a4596981ff0fd8f5de0028c780",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "ae6dcf5b8aa0a7ff8723976ca3b0969af0fca0c9f46ffbfe8b8c1eee8d11857a"
+    },
+    "metrics": {
+      "foreground_fraction": 0.352264404296875,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        203,
+        115,
+        835,
+        912
+      ],
+      "margin_fraction": 0.109375,
+      "aspect": 0.7929736511919699,
+      "estimated_key_rgb": [
+        220.0,
+        105.0,
+        206.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 8.950203969713938,
+      "palette_p90_delta_e": 14.030253363895877
+    },
+    "placement": {
+      "source_bounds_px": [
+        203,
+        115,
+        835,
+        912
+      ],
+      "source_pivot_px": [
+        519.0,
+        513.5
+      ],
+      "pivot_px": [
+        63.5,
+        64.0
+      ],
+      "cell_px": [
+        128,
+        128
+      ],
+      "subject_px": [
+        95,
+        120
+      ],
+      "scale": 0.15056461731493098,
+      "world_length_m": null,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 128
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-hud\\deathride\\art\\processed\\hud-hud-icons\\v4-hud-plate-brace-v1.png",
+    "sha256": "c27d1b0224624e9f5ef844d8d1e934c5116aae859f7d6310e5f9f1399c70551f"
+  }
+]

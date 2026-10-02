@@ -38,12 +38,12 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
     private val inputs=Array(6){InputFrame()}
     private val view=FitViewport(1280f,720f)
     private val worldMatrix=Matrix4()
-    private val accent=Color(Presentation.ACCENT)
+    private val accent=HudTheme.ochre
     private val colors=arrayOf(Color(Presentation.ACCENT),Color.valueOf("6ECFFF"),Color.valueOf("EC916E"),Color.valueOf("B0A0E8"),Color.valueOf("F0D583"),Color.valueOf("A1B4C3"))
-    private val road=Color.valueOf("243442")
+    private val road=HudTheme.earth
     private val infield=Color.valueOf("101F29")
     private val curb=Color.valueOf("60757B")
-    private val bg=Color.valueOf("0B141E")
+    private val bg=HudTheme.soot
     private val trackPoints=FloatArray(241*4)
     private val center=FloatArray(241*2)
     private var qr: Texture?=null
@@ -51,7 +51,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
     private var qrPin=""
     private var qrAddress=""
     private var addressLabel=""
-    private val muted=Color.valueOf("A9BDC6")
+    private val muted=HudTheme.muted
     private val warning=Color.valueOf("F0D583")
     private val digits=Array(10){it.toString()}
     private val weakStats=BooleanArray(CarCatalog.statNames.size)
@@ -155,14 +155,14 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
 
     override fun create() {
         shape=ShapeRenderer(10000); batch=SpriteBatch()
-        font=fontFactory?.invoke(20)?:BitmapFont()
-        large=fontFactory?.invoke(44)?:BitmapFont()
-        small=fontFactory?.invoke(16)?:BitmapFont()
+        font=fontFactory?.invoke(HudTheme.BODY)?:BitmapFont().apply { data.setScale(1.6f) }
+        large=HandCutFont.create(HudTheme.TITLE)
+        small=fontFactory?.invoke(HudTheme.BODY)?:BitmapFont().apply { data.setScale(1.6f) }
         fontTextureBytes=listOf(font,large,small).flatMap{it.regions.map{r->r.texture}}.distinct().sumOf{it.width.toLong()*it.height*4}
         text=GlyphLayer(font); headline=GlyphLayer(large); detail=GlyphLayer(small)
         server=RaceServer(assets,logger,port=serverPort); for(i in world.cars.indices)CarCatalog.apply(world.cars[i],selectedCars[i]);world.reset(); server.start()
         profileStore=ProfileStore(Gdx.files.local("profiles").file());for(i in profiles.indices)loadProfile(i);world.reset()
-        sceneryCanvas=SceneryCanvas();art=AtlasArt(Gdx.files.internal(if(proceduralOnly)"absent-art-audit" else "phase2-v1"),TextureBudget.remainingArt(fontTextureBytes,sceneryCanvas.textureSize.toLong()*sceneryCanvas.textureSize*4));atlasEffects=AtlasEffects(art);scene=TrackScene(Courses.all[selectedTrack],sceneryCanvas,art);effects.clear()
+        sceneryCanvas=SceneryCanvas();art=AtlasArt(Gdx.files.internal(if(proceduralOnly)"absent-art-audit" else "phase2-hud"),TextureBudget.remainingArt(fontTextureBytes,sceneryCanvas.textureSize.toLong()*sceneryCanvas.textureSize*4));atlasEffects=AtlasEffects(art);scene=TrackScene(Courses.all[selectedTrack],sceneryCanvas,art);effects.clear()
         Gdx.input.setCatchKey(Input.Keys.BACK,true)
         Gdx.input.inputProcessor=object: InputAdapter() {
             override fun keyDown(keycode: Int): Boolean {
@@ -354,210 +354,219 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
     private fun drawOverlay() {
         shape.projectionMatrix=view.camera.combined
         shape.begin(ShapeRenderer.ShapeType.Filled)
-        shape.color=bg; shape.rect(0f,637f,1280f,83f); shape.rect(0f,0f,1280f,66f)
-        shape.color=accent; shape.rect(40f,650f,4f,36f)
-        if(phase=="race") {
-            val c=activeDriver()
-            val hp=world.snapshot.healthFraction(c.id).toFloat()
-            shape.color=road;shape.rect(590f,683f,130f,10f)
-            shape.setColor(1-hp,hp*.7f+.2f,.22f,1f);shape.rect(590f,683f,130f*hp,10f)
+        fun panel(x: Float,y: Float,w: Float,h: Float) {
+            shape.color=bg;shape.rect(x,y,w,h)
+            shape.color=road;shape.rect(x,y,w,3f);shape.rect(x,y+h-3,w,3f)
+            shape.color=accent;shape.rect(x,y+h-22,4f,20f)
         }
-        if(phase=="lobby") {
-            shape.color=bg; shape.rect(675f,305f,555f,290f); shape.rect(46f,89f,392f,530f)
-            shape.setColor(.16f,.23f,.27f,1f); shape.rect(47f,90f,390f,2f)
-            shape.color=accent; shape.rect(70f,116f,344f,44f)
-            val selected=CarCatalog.all[selectedCars[0]]
-            for(i in CarCatalog.statNames.indices) {
-                val value=selected.stat(CarCatalog.statNames[i],profiles[0].bonuses())
-                for(bar in 0 until CarCatalog.statMax) {
-                    shape.color=if(bar<value)if(weakStats[i])warning else accent else road
-                    shape.rect(860f+bar*10,530f-i*25,7f,11f)
+        fun bar(x: Float,y: Float,w: Float,value: Float,color: Color) {
+            shape.color=road;shape.rect(x,y,w,16f);shape.color=color;shape.rect(x,y,w*value,16f)
+        }
+        val racing=phase=="race"
+        panel(0f,if(racing)554f else 614f,1280f,if(racing)166f else 106f)
+        panel(0f,0f,1280f,80f)
+        if(racing) {
+            val c=activeDriver();val combat=world.combat;val a=c.ability;val d=a.definition
+            bar(553f,648f,180f,world.snapshot.healthFraction(c.id).toFloat(),if(combat.health(c.id)<combat.maxHealth(c.id)*.35)warning else accent)
+            bar(553f,589f,180f,c.armorReduction.toFloat(),HudTheme.bone)
+            if(d!=null) {
+                bar(1038f,590f,182f,HudTheme.fraction(a.energy,d.energyCapacity),accent)
+                bar(1038f,567f,182f,1f-HudTheme.fraction(a.cooldownSeconds,d.cooldownSeconds),HudTheme.bone)
+            }
+            panel(345f,82f,690f,35f)
+            if(server.slots.any{it.claimed && it.stale})panel(345f,500f,690f,40f)
+        }
+        when(phase) {
+            "lobby" -> {
+                panel(44f,96f,390f,506f);panel(455f,96f,781f,506f)
+                shape.color=accent;shape.rect(65f,129f,345f,42f)
+                val car=CarCatalog.all[selectedCars[0]]
+                for(i in CarCatalog.statNames.indices) {
+                    val value=car.stat(CarCatalog.statNames[i],profiles[0].bonuses())
+                    val x=if(i<4)475f else 815f;val y=416f-(i%4)*55
+                    bar(x,y,210f,value.toFloat()/CarCatalog.statMax,if(weakStats[i])warning else accent)
                 }
+                painter.draw(shape,world.cars[0],1120f,541f,0.0,colors[0],false,10f)
             }
-            painter.draw(shape,world.cars[0],1100f,445f,PI*.5,colors[0],false,20f)
-        }
-        if(phase=="results") { shape.color=bg; shape.rect(300f,113f,680f,482f); shape.color=accent; shape.rect(330f,136f,620f,42f) }
-        if(phase=="garage") {
-            shape.color=bg;shape.rect(45f,90f,1190f,520f)
-            shape.color=road;shape.rect(65f,456f-selectedPart*52,470f,48f)
-            painter.draw(shape,world.cars[0],1090f,375f,PI*.5,colors[0],false,22f)
-            val offer=Garage.offer(profiles[0],selectedPart)
-            for(i in CarCatalog.statNames.indices)for(bar in 0 until CarCatalog.statMax) {
-                shape.color=if(bar<offer.before[i])accent else if(bar<offer.after[i])Color.valueOf("82D5A2") else road
-                if(offer.after[i]<offer.before[i] && bar>=offer.after[i] && bar<offer.before[i])shape.color=warning
-                shape.rect(810f+bar*12,477f-i*24,9f,10f)
+            "garage" -> {
+                panel(44f,96f,1192f,506f)
+                shape.color=road;shape.rect(65f,457f-selectedPart*52,505f,48f)
+                val offer=Garage.offer(profiles[0],selectedPart)
+                for(i in CarCatalog.statNames.indices)bar(927f,468f-i*26,260f,offer.before[i].toFloat()/CarCatalog.statMax,accent)
+                shape.color=accent;shape.rect(626f,202f,575f,48f)
             }
+            "career" -> {
+                panel(44f,96f,729f,506f);panel(788f,96f,448f,506f)
+                for(i in Career.difficulties.indices) {shape.color=if(i==profiles[0].careerDifficulty)accent else road;shape.rect(66f+i*229,230f,216f,42f)}
+                bar(66f,356f,677f,HudTheme.fraction(profiles[0].careerCleared.toDouble(),Career.events.size.toDouble()),accent)
+                shape.color=accent;shape.rect(66f,137f,677f,44f)
+            }
+            "results" -> {panel(260f,96f,760f,506f);shape.color=accent;shape.rect(286f,128f,708f,44f)}
+            "countdown" -> if(scene.ready)panel(542f,268f,196f,172f)
         }
-        if(phase=="career") {
-            shape.color=bg;shape.rect(45f,90f,1190f,520f)
-            shape.color=road;shape.rect(785f,178f,420f,400f)
-            val p=profiles[0]
-            val eventWidth=660f/Career.events.size;for(i in Career.events.indices) { shape.color=if(i<p.careerCleared)accent else road;shape.rect(75f+i*eventWidth,380f,eventWidth-2,7f);if(i==p.careerRound){shape.color=Color.WHITE;shape.rect(75f+i*eventWidth,370f,eventWidth-2,3f)} }
-            for(i in Career.difficulties.indices) { shape.color=if(i==p.careerDifficulty)accent else road;shape.rect(75f+i*218,230f,207f,46f) }
-            for(i in RivalEconomy.cast(profiles[0].careerRound).indices)painter.draw(shape,rivalPreviews[i],1155f,523f-i*68,PI*.5,colors[i+1],false,4.4f)
-            shape.color=accent;shape.rect(75f,139f,643f,48f)
-        }
-        if(phase=="countdown" && scene.ready) { shape.color=bg; shape.circle(640f,352f,66f,40); shape.color=accent; shape.rect(595f,277f,(max(0.0,countdown)%1*90).toFloat(),4f) }
-        if(phase=="race" || phase=="countdown" || phase=="results")for(i in 0..5) { shape.color=colors[i]; shape.rect(44f+i*203,24f,4f,22f) }
-        if(Presentation.FOLLOW_CAMERA && phase=="race" && scene.ready)drawMinimap()
+        if(phase=="race" || phase=="countdown" || phase=="results")for(c in world.cars)if(c.entered) {shape.color=colors[c.id];shape.rect(20f+c.id*210,21f,4f,43f)}
+        if(Presentation.FOLLOW_CAMERA && racing && scene.ready)drawMinimap()
         shape.end()
-        batch.projectionMatrix=view.camera.combined; batch.begin()
-        if(phase=="career") {
-            val event=Career.events[profiles[0].careerRound]
-            art.drawBackdrop(batch,55f,395f,715f,170f)
-            for((i,index) in RivalEconomy.cast(profiles[0].careerRound).withIndex())art.draw(batch,"rival-"+Career.rivals[index].id,1180f,520f-i*68,52f,52f)
-        }
-        if(phase=="race") {
-            val r=art.region("hud/frame-health");val interior=r?.interior
-            if(r!=null && interior!=null && interior.size==4) {
-                val sx=130f/(interior[2]-interior[0]);val sy=10f/(interior[3]-interior[1])
-                val w=r.image.regionWidth*sx;val h=r.image.regionHeight*sy
-                art.draw(batch,"hud/frame-health",590f-interior[0]*sx+r.pivotX*sx,683f-(r.image.regionHeight-interior[3])*sy+r.pivotY*sy,w,h)
+        batch.projectionMatrix=view.camera.combined;batch.begin();batch.color=Color.WHITE
+        fun frame(x: Float,y: Float,w: Float,h: Float,key: String="hud/frame-instrument") {art.frame(batch,key,x,y,w,h)}
+        when(phase) {
+            "lobby" -> {frame(44f,96f,390f,506f,"hud/frame-panel");frame(455f,96f,781f,506f,"hud/frame-panel");frame(60f,124f,355f,52f,"hud/frame-button")}
+            "garage" -> {frame(44f,96f,1192f,506f,"hud/frame-panel");frame(61f,453f-selectedPart*52,513f,56f);frame(621f,197f,585f,58f,"hud/frame-button");for(i in 0..5)art.draw(batch,arrayOf("hud/icon-engine","hud/icon-handling","hud/icon-armour","hud/icon-engine","hud/icon-handling","hud/icon-armour")[i],548f,480f-i*52,32f,32f)}
+            "career" -> {
+                frame(44f,96f,729f,506f,"hud/frame-panel");frame(788f,96f,448f,506f,"hud/frame-panel")
+                // Quiet opaque story text area remains separate from the low-contrast illustration.
+                art.drawBackdrop(batch,65f,486f,678f,82f)
+                for((i,index) in RivalEconomy.cast(profiles[0].careerRound).withIndex())art.draw(batch,"rival-"+Career.rivals[index].id,1174f,513f-i*72,60f,60f)
+                frame(61f,132f,687f,54f,"hud/frame-button")
             }
-            art.draw(batch,Weapons.all[world.combat.selectedWeapon[activeDriver().id]].id,753f,693f,20f,20f)
-            art.draw(batch,"pickups/mine",753f,668f,20f,20f)
+            "results" -> {frame(260f,96f,760f,506f,"hud/frame-panel");frame(281f,123f,718f,54f,"hud/frame-button")}
+            "countdown" -> if(scene.ready)frame(542f,268f,196f,172f,"hud/frame-dial")
+            "race" -> {
+                frame(24f,562f,156f,146f);frame(184f,562f,160f,146f);frame(348f,562f,185f,146f)
+                frame(539f,562f,208f,146f);frame(752f,562f,238f,146f);frame(994f,562f,250f,146f)
+                val c=activeDriver();val a=c.ability
+                art.draw(batch,Weapons.all[world.combat.selectedWeapon[c.id]].id,777f,680f,32f,32f)
+                art.draw(batch,"pickups/mine",777f,636f,32f,32f)
+                a.definition?.let{art.draw(batch,"hud/ability-"+it.id,1017f,644f,32f,32f)}
+                art.frame(batch,"hud/frame-meter",548f,643f,190f,26f)
+                art.frame(batch,"hud/frame-meter",1033f,585f,192f,26f)
+                if(Presentation.FOLLOW_CAMERA && scene.ready)frame(1044f,394f,200f,150f,"hud/frame-dial")
+            }
         }
-        if(phase=="garage")for(i in 0..5)art.draw(batch,arrayOf("hud/icon-engine","hud/icon-handling","hud/icon-armour","hud/icon-engine","hud/icon-handling","hud/icon-armour")[i],550f,480f-i*52,28f,28f)
-        if(phase=="lobby" && qr!=null)batch.draw(qr,70f,239f,160f,160f)
-        text.draw(batch); headline.draw(batch); detail.draw(batch)
-        batch.end()
+        if(phase=="lobby" && qr!=null)batch.draw(qr,67f,265f,164f,164f)
+        text.draw(batch);headline.draw(batch);detail.draw(batch);batch.end()
     }
     private fun drawMinimap() {
         val c=Courses.all[selectedTrack];val scale=min(166/(c.maxX-c.minX),112/(c.maxY-c.minY)).toFloat()
-        val ox=1150f-((c.minX+c.maxX)*.5).toFloat()*scale;val oy=530f-((c.minY+c.maxY)*.5).toFloat()*scale
-        shape.setColor(.035f,.055f,.065f,.9f);shape.rect(1055f,462f,190f,136f)
-        shape.setColor(.37f,.43f,.43f,1f)
+        val ox=1144f-((c.minX+c.maxX)*.5).toFloat()*scale;val oy=469f-((c.minY+c.maxY)*.5).toFloat()*scale
+        shape.color=bg;shape.rect(1044f,394f,200f,150f)
+        shape.color=muted
         for(i in 0 until scene.samples)shape.rectLine(ox+scene.center[i*2]*scale,oy+scene.center[i*2+1]*scale,ox+scene.center[(i+1)*2]*scale,oy+scene.center[(i+1)*2+1]*scale,3f)
-        for(car in world.cars)if(car.entered) { shape.color=colors[car.id];shape.circle(ox+car.x.toFloat()*scale,oy+car.y.toFloat()*scale,if(car.human)4f else 2.5f,10) }
+        for(car in world.cars)if(car.entered) {shape.color=colors[car.id];val x=ox+car.x.toFloat()*scale;val y=oy+car.y.toFloat()*scale;if(car.human)shape.rect(x-5,y-5,10f,10f) else shape.circle(x,y,3f,10)}
     }
     private fun rebuildUi() {
         if(!::text.isInitialized)return
         if(::art.isInitialized)art.selectBackdrop(if(phase=="career")ArtBindings.stories[Career.events[profiles[0].careerRound].story.backdrop] else null)
         val weak=PowerRating.identity(CarCatalog.all[selectedCars[0]],bonuses=profiles[0].bonuses()).second
         for(i in weakStats.indices)weakStats[i]=CarCatalog.statNames[i] in weak
-        text.clear(); headline.clear(); detail.clear()
-        text.setColor(Color.WHITE); headline.setColor(Color.WHITE); detail.setColor(muted)
-        if(phase!="race")text.addText("DEATH RIDE",59f,685f)
-        else { val c=activeDriver();headline.setColor(colors[c.id]);uiBuilder.clear();uiBuilder.append(c.position).append(" / ").append(world.entrantCount);headline.addText(uiBuilder,59f,691f);text.addText("LAP "+min(world.raceLaps,c.lap.laps+1)+" / "+world.raceLaps,260f,686f);text.addText((c.speedMps*3.6).toInt().toString()+" km/h",400f,686f) }
-        if(phase=="lobby") {
-            val car=CarCatalog.all[selectedCars[0]]
-            text.addText(car.id+" / "+car.role,690f,575f)
-            for(i in CarCatalog.statNames.indices) {
-                val stat=CarCatalog.statNames[i]; val value=car.stat(stat,profiles[0].bonuses())
-                uiBuilder.clear(); uiBuilder.append(stat).append("  ").append(value)
-                detail.addText(uiBuilder,695f,538f-i*25)
-            }
-            detail.addText("DOWN: car   MENU: circuit   PLAY: garage",695f,320f)
-            detail.addText(Courses.all[selectedTrack].lesson,460f,100f)
+        text.clear();headline.clear();detail.clear()
+        text.setColor(HudTheme.bone);headline.setColor(HudTheme.bone);detail.setColor(muted)
+        fun label(value: String,x: Float,y: Float,color: Color=muted) {detail.setColor(color);detail.addText(value,x,y)}
+        fun title(value: String,x: Float,y: Float) {headline.addText(value.uppercase(),x,y)}
+        if(phase!="race") {
+            title("DEATH RIDE",42f,699f)
+            label(when(phase){"career"->"THE ASH CIRCUIT";"garage"->"PARTS / PER CAR";"results"->"RACE RESULTS";else->"${Courses.all[selectedTrack].name} / ${world.raceLaps} LAPS"},42f,644f)
+            label("BACK: LOBBY   /   ${server.feel.id}",810f,691f)
+            label("TWO PHONES. ONE CIRCUIT.",810f,654f)
         }
-        if(phase!="race")detail.addText(Presentation.CONCEPT+"  /  "+Presentation.TAGLINE,59f,655f)
-        if(phase!="race")detail.addText(when(phase){"garage"->"PARTS / PER CAR    -    GREEN: GAIN    AMBER: TRADE-OFF";"career"->"THE ASH CIRCUIT / FIVE ACTS / THIRTY-FIVE EVENTS";else->Courses.all[selectedTrack].name+"   /   MENU: course    /    FEEL: "+server.feel.id+"  LEFT / RIGHT"},59f,630f)
-        if(phase!="race")detail.addText("${world.entrantCount} CARS    /    ${world.raceLaps} LAPS    /    "+Courses.all[selectedTrack].name.uppercase(),873f,682f)
-        detail.addText(if(phase=="lobby")"A live race. A phone in your hand." else "BACK: Lobby    /    "+server.feel.id,873f,653f)
         if(phase=="race" || phase=="countdown" || phase=="results") {
-          for(c in world.cars)if(c.entered) {
-            detail.setColor(colors[c.id]); uiBuilder.clear(); uiBuilder.append(c.position).append("  ").append(driverName(c))
-            detail.addText(uiBuilder,55f+c.id*203,46f)
-            detail.setColor(muted); uiBuilder.clear(); if(world.combat.wrecked(c.id))uiBuilder.append("WRECKED") else uiBuilder.append("HP ").append(world.combat.health(c.id).toInt()).append("   LAP ").append(min(world.raceLaps,c.lap.laps+1)).append(" / ").append(world.raceLaps)
-            detail.addText(uiBuilder,55f+c.id*203,27f)
-          }
+            for(c in world.cars)if(c.entered) {
+                val x=30f+c.id*210
+                label("${c.position}. "+(if(c.human)"PLAYER ${c.id+1}" else "RIVAL ${c.id+1}"),x,66f,colors[c.id])
+                label(if(world.combat.wrecked(c.id))"WRECKED" else "HP ${world.combat.health(c.id).toInt()}  L${min(world.raceLaps,c.lap.laps+1)}/${world.raceLaps}",x,39f)
+            }
+        } else {
+            label("P1 ${CarCatalog.all[profiles[0].selectedCar].id} / ${profiles[0].credits} CR",42f,55f,accent)
+            label(if(server.slots[1].claimed)"P2 ${CarCatalog.all[profiles[1].selectedCar].id} / ${profiles[1].credits} CR" else "SECOND DRIVER / SCAN TO JOIN",455f,55f)
+            label("PROGRESS SAVES",1010f,55f)
         }
-        else {
-            detail.setColor(accent);detail.addText("PLAYER 1   /   ${CarCatalog.all[profiles[0].selectedCar].id}   /   ${profiles[0].credits} CR",55f,42f)
-            detail.setColor(muted);detail.addText(if(server.slots[1].claimed)"PLAYER 2   /   ${CarCatalog.all[profiles[1].selectedCar].id}   /   ${profiles[1].credits} CR" else "SECOND DRIVER   /   SCAN TO JOIN",520f,42f)
-            detail.addText("PROGRESS SAVES AUTOMATICALLY",970f,42f)
-        }
-        if(!scene.ready) { detail.setColor(accent);detail.addText("PREPARING "+Courses.all[selectedTrack].name.uppercase(),465f,75f) }
+        if(!scene.ready)label("PREPARING ${Courses.all[selectedTrack].name.uppercase()}",440f,575f,accent)
         when(phase) {
-            "career" -> {
-                val p=profiles[0];val event=Career.events[p.careerRound];val cup=Career.cups[event.cupIndex];val tier=Career.difficulties[p.careerDifficulty]
-                detail.setColor(accent);detail.addText("SEASON ${p.careerSeasons+1}    /    ROUND ${p.careerRound+1} OF ${Career.events.size}",75f,573f)
-                headline.addText(event.name.uppercase(),75f,540f)
-                text.addText(cup.name+" / "+event.laps+" LAPS / BEST: "+Career.gradeName(p.careerTrophies[event.cupIndex]),75f,472f)
-                detail.setColor(muted)
-                for((line,words) in event.story.lines.withIndex())detail.addText(words,75f,440f-line*16)
-                text.addText("CUP SCORE  ${p.careerPoints}",75f,364f)
-                detail.addText("BRONZE ${cup.targets[1]}    SILVER ${cup.targets[2]}    GOLD ${cup.targets[3]}",350f,360f)
-                val next=Career.unlocks.filter{it.afterRounds>p.careerCleared}.minByOrNull{it.afterRounds}
-                detail.setColor(accent);detail.addText(if(next!=null)"NEXT: ${next.name} after round ${next.afterRounds}" else "ALL CARS AND COURSES UNLOCKED",75f,325f)
-                detail.setColor(muted);detail.addText("${CarCatalog.all[selectedCars[0]].id} / ${p.credits} CR    PLAY: garage    LEFT / RIGHT: difficulty",75f,300f)
-                for(i in Career.difficulties.indices) { text.setColor(if(i==p.careerDifficulty)bg else Color.WHITE);text.addText(Career.difficulties[i].name.uppercase(),99f+i*218,260f) }
-                detail.setColor(muted);detail.addText(tier.description,75f,213f)
-                text.setColor(bg);text.addText("SELECT  /  RACE NEXT ROUND",232f,170f)
-                detail.setColor(warning);detail.addText(careerMessage[0],75f,115f)
-                detail.setColor(accent);detail.addText("THE RIVALS / THEIR GARAGES",810f,563f)
-                for((i,index) in RivalEconomy.cast(p.careerRound).withIndex()) { val rival=Career.rivals[index];val garage=p.rivalProfiles[index];text.setColor(colors[i+1]);text.addText(rival.name+" / "+CarCatalog.all[garage.selectedCar].id,810f,533f-i*68);detail.setColor(muted);detail.addText("PR "+PowerRating.of(CarCatalog.all[garage.selectedCar],garage.bonuses()).toInt()+" / "+garage.credits+" CR"+(if(p.grudges[index]>0)" / GRUDGE" else ""),810f,507f-i*68) }
-                detail.setColor(muted);detail.addText(if(event.duel)"FINAL DUEL / Player 2 spectates.\nBeat Marrow to finish the season." else "Player 2 replaces a regular rival.\nCareer progress belongs to Player 1.",805f,157f)
+            "lobby" -> {
+                val car=CarCatalog.all[selectedCars[0]]
+                title("PAIR + DRIVE",66f,578f)
+                detail.wrapped("1  Same Wi-Fi as this TV\n2  Scan the code with your phone\n3  Hold GO. Find the first corner.",67f,517f,342f,27f)
+                updateQr();label("PIN ${server.pin}",250f,420f,accent)
+                detail.wrapped("No app to install. Two phone seats. Your car stays yours.",250f,379f,160f,27f)
+                label(addressLabel,67f,246f)
+                label(if(server.running)"${server.slots.count{it.connected}} / 2 PHONES CONNECTED" else server.serverStatus,67f,211f,accent)
+                label("SELECT / PRACTICE",109f,160f,bg)
+                label("UP Career / PLAY Garage",67f,128f)
+                title(car.id,477f,578f);detail.wrapped(car.role,477f,528f,536f)
+                for(i in CarCatalog.statNames.indices) {
+                    val stat=CarCatalog.statNames[i];val value=car.stat(stat,profiles[0].bonuses())
+                    label("$stat  $value / ${CarCatalog.statMax}",if(i<4)475f else 815f,463f-(i%4)*55,if(weakStats[i])warning else muted)
+                }
+                val ability=AbilityCatalog.byCar[car.id]
+                if(ability!=null)label("SIGNATURE / ${ability.name}",477f,236f,accent)
+                detail.setColor(muted);detail.wrapped(Courses.all[selectedTrack].lesson,477f,204f,730f,25f)
+                label("DOWN Car / MENU Circuit / LEFT-RIGHT Feel",477f,133f)
             }
             "garage" -> {
                 val p=profiles[0];val offer=Garage.offer(p,selectedPart);val part=Parts.all[selectedPart]
-                headline.addText("THE GARAGE",70f,575f);text.setColor(accent);text.addText("${p.credits} CR",440f,566f)
-                text.setColor(Color.WHITE);text.addText(CarCatalog.all[p.selectedCar].id+"  /  PLAYER 1",665f,563f)
-                detail.addText("LEFT / RIGHT: car",665f,536f)
+                title("THE GARAGE",67f,577f);label("${p.credits} CR",429f,566f,accent)
+                label(CarCatalog.all[p.selectedCar].id+" / PLAYER 1",631f,568f,HudTheme.bone)
+                label("LEFT / RIGHT: CAR",631f,537f)
                 for(i in Parts.all.indices) {
-                    val item=Garage.offer(p,i);text.setColor(if(i==selectedPart)accent else Color.WHITE)
-                    text.addText(Parts.all[i].name+"  "+item.tier+" / "+Parts.all[i].maxTier,80f,488f-i*52)
-                    detail.addText(if(item.tier==Parts.all[i].maxTier)"MAX" else "${item.price} CR",425f,487f-i*52)
+                    val item=Garage.offer(p,i)
+                    label(Parts.all[i].name+" ${item.tier}/${Parts.all[i].maxTier}",78f,492f-i*52,if(i==selectedPart)accent else HudTheme.bone)
+                    label(if(item.tier==Parts.all[i].maxTier)"MAX" else "${item.price} CR",418f,492f-i*52)
                 }
-                for(i in CarCatalog.statNames.indices)detail.addText(CarCatalog.statNames[i]+"  ${offer.before[i]} > ${offer.after[i]}",650f,487f-i*24)
-                detail.addText(part.description,650f,270f);text.setColor(if(offer.available)accent else warning)
-                text.addText(if(offer.available)"SELECT: INSTALL TIER ${offer.nextTier} / ${offer.price} CR" else offer.reason,650f,225f)
-                detail.addText(shopMessage[0]+" / "+saveStatus[0],650f,186f)
-                detail.addText("UP / DOWN: part    BACK: lobby    Phone garage belongs to its driver",75f,123f)
+                for(i in CarCatalog.statNames.indices)label(CarCatalog.statNames[i]+" ${offer.before[i]} > ${offer.after[i]}",631f,492f-i*26)
+                detail.setColor(muted);detail.wrapped(part.description,631f,276f,560f,25f)
+                label(if(offer.available)"SELECT: TIER ${offer.nextTier} / ${offer.price} CR" else offer.reason,642f,235f,bg)
+                detail.setColor(muted);detail.wrapped(shopMessage[0]+" / "+saveStatus[0],631f,186f,554f,25f)
+                label("UP / DOWN: PART    BACK: LOBBY",68f,120f)
             }
-            "lobby" -> {
-                headline.addText(Presentation.CONCEPT,70f,586f)
-                text.addText("One scan. You're on the grid.",70f,523f)
-                detail.addText("1  Same Wi-Fi as this screen\n2  Scan with your phone's camera\n3  Hold GO. Find the first corner.",70f,488f)
-                updateQr()
-                text.setColor(accent); text.addText("PAIR + DRIVE",251f,384f); text.setColor(Color.WHITE)
-                detail.addText("No app to install.\nTwo phone seats.\nYour car stays yours.",251f,350f)
-                uiBuilder.clear(); uiBuilder.append("PIN  ").append(server.pin); text.addText(uiBuilder,251f,276f)
-                detail.addText(addressLabel,70f,215f)
-                uiBuilder.clear(); if(server.running)uiBuilder.append(server.slots.count{it.connected}).append(" / 2 PHONES CONNECTED") else uiBuilder.append(server.serverStatus); detail.addText(uiBuilder,70f,188f)
-                text.setColor(bg); text.addText("SELECT  /  PRACTICE",109f,145f); text.setColor(Color.WHITE)
-                detail.addText("UP Career   PLAY Garage   BACK Exit",70f,106f)
-                detail.addText("REWIND: reset pairing",460f,80f)
+            "career" -> {
+                val p=profiles[0];val event=Career.events[p.careerRound];val cup=Career.cups[event.cupIndex];val tier=Career.difficulties[p.careerDifficulty]
+                label("SEASON ${p.careerSeasons+1} / ROUND ${p.careerRound+1} OF ${Career.events.size}",66f,577f,accent)
+                title(event.name,66f,541f)
+                label(cup.name+" / ${event.laps} LAPS / "+Career.gradeName(p.careerTrophies[event.cupIndex]),66f,488f,HudTheme.bone)
+                detail.setColor(HudTheme.bone);detail.wrapped(event.story.lines.joinToString(" "),66f,453f,677f,25f)
+                label("SCORE ${p.careerPoints} / TARGETS ${cup.targets[1]} - ${cup.targets[2]} - ${cup.targets[3]}",66f,343f)
+                val next=Career.unlocks.filter{it.afterRounds>p.careerCleared}.minByOrNull{it.afterRounds}
+                label(if(next!=null)"NEXT ${next.name} / ROUND ${next.afterRounds}" else "ALL CARS AND COURSES UNLOCKED",66f,312f,accent)
+                for(i in Career.difficulties.indices)label(Career.difficulties[i].name.uppercase(),83f+i*229,260f,if(i==p.careerDifficulty)bg else HudTheme.bone)
+                detail.setColor(muted);detail.wrapped(tier.description,66f,219f,677f,25f)
+                label("SELECT / RACE NEXT ROUND",220f,169f,bg)
+                label("PLAY Garage / LEFT-RIGHT Difficulty",66f,119f)
+                label("RIVALS / THEIR GARAGES",808f,577f,accent)
+                for((i,index) in RivalEconomy.cast(p.careerRound).withIndex()) {
+                    val rival=Career.rivals[index];val g=p.rivalProfiles[index]
+                    label(rival.name+" / "+CarCatalog.all[g.selectedCar].id,808f,540f-i*72,colors[i+1])
+                    label("PR ${PowerRating.of(CarCatalog.all[g.selectedCar],g.bonuses()).toInt()} / ${g.credits} CR"+(if(p.grudges[index]>0)" / GRUDGE" else ""),808f,514f-i*72)
+                }
+                detail.setColor(muted);detail.wrapped(if(event.duel)"FINAL DUEL. P2 spectates. Beat Marrow to finish." else "P2 replaces a regular rival. P1 owns career progress.",808f,158f,400f,25f)
             }
-            "countdown" -> if(scene.ready) { headline.setColor(accent); headline.addText(digits[ceil(countdown).toInt().coerceIn(1,3)],624f,378f); detail.addText("HOLD GO",606f,317f) }
+            "countdown" -> if(scene.ready) {title(digits[ceil(countdown).toInt().coerceIn(1,3)],626f,396f);label("HOLD GO",593f,319f,accent)}
             "race" -> {
-                val driver=activeDriver();val combat=world.combat;val weapon=combat.selectedWeapon[driver.id]
-                detail.setColor(if(combat.wrecked(driver.id))warning else muted)
-                detail.addText(if(combat.wrecked(driver.id))"WRECKED - SPECTATING" else "HULL "+combat.health(driver.id).toInt()+" / "+combat.maxHealth(driver.id).toInt(),590f,677f)
-                detail.addText(if(combat.armingSeconds>0)"ARMING "+ceil(combat.armingSeconds).toInt() else Weapons.all[weapon].id.uppercase()+"  "+combat.ammo(driver.id,weapon),771f,697f)
-                detail.addText("MINES  "+combat.ammo(driver.id,Weapons.MINE),771f,674f)
-                val ability=driver.ability;val definition=ability.definition
-                if(definition!=null) {
-                    val state=if(combat.armingSeconds>0)"ARMING" else if(ability.committed)ability.phase.name else if(ability.cooldownSeconds>0)"COOL "+ceil(ability.cooldownSeconds).toInt()+"s" else if(ability.energy<definition.energyCost)"LOW ENERGY" else "READY"
-                    detail.setColor(accent);detail.addText(definition.name+" / "+state,965f,697f)
-                    detail.setColor(muted);detail.addText("ENERGY "+ability.energy.toInt()+" / "+definition.energyCapacity.toInt(),965f,674f)
+                val c=activeDriver();val combat=world.combat;val weapon=combat.selectedWeapon[c.id];val a=c.ability;val d=a.definition
+                label("POSITION",40f,695f);title("${c.position}/${world.entrantCount}",48f,663f)
+                label("LAP",204f,695f);title("${min(world.raceLaps,c.lap.laps+1)}/${world.raceLaps}",200f,663f)
+                label("KM/H",370f,695f);title((c.speedMps*3.6).toInt().toString(),372f,663f)
+                label("HULL ${combat.health(c.id).toInt()}/${combat.maxHealth(c.id).toInt()}",553f,695f,HudTheme.bone)
+                label("ARMOUR ${(c.armorReduction*100).toInt()}%",553f,636f)
+                label("${Weapons.all[weapon].id.uppercase()} ${combat.ammo(c.id,weapon)}",800f,695f,HudTheme.bone)
+                label(if(combat.armingSeconds>0)"ARMING ${ceil(combat.armingSeconds).toInt()}s" else if(combat.cooldown(c.id,weapon)>0)"COOL ${ceil(combat.cooldown(c.id,weapon)).toInt()}s" else "READY",800f,669f)
+                label("MINE ${combat.ammo(c.id,Weapons.MINE)}",800f,638f,HudTheme.bone)
+                label(if(combat.cooldown(c.id,Weapons.MINE)>0)"COOL ${ceil(combat.cooldown(c.id,Weapons.MINE)).toInt()}s" else "READY",800f,615f)
+                if(d!=null) {
+                    label(d.name.uppercase(),1008f,697f,HudTheme.bone)
+                    label(HudTheme.abilityState(a,combat.armingSeconds),1038f,671f,accent)
+                    label("ENERGY ${a.energy.toInt()}",1038f,636f)
                 }
-                if(stateTime<1.2) { headline.setColor(accent); headline.addText("GO",597f,389f) }
-                var warned=false
-                for(s in server.slots)if(s.claimed && s.stale && !warned) { detail.setColor(warning); uiBuilder.clear(); uiBuilder.append("PLAYER ").append(s.id+1).append("  LINK QUIET - COASTING"); detail.addText(uiBuilder,465f,612f); warned=true }
-                detail.setColor(muted); uiBuilder.clear(); uiBuilder.append(driverName(driver)).append("   /   ").append((world.seconds).toInt()).append(" s   /   ").append(world.finished).append(" finished")
-                uiBuilder.append("   /   ").append(Courses.all[selectedTrack].name)
-                detail.addText(uiBuilder,430f,97f)
+                if(stateTime<1.2)title("GO",599f,390f)
+                for(slot in server.slots)if(slot.claimed && slot.stale) {label("PLAYER ${slot.id+1} / LINK QUIET / COASTING",365f,529f,warning);break}
+                label(if(combat.wrecked(c.id))"WRECKED / SPECTATING" else "${driverName(c)} / ${world.seconds.toInt()}s / ${Courses.all[selectedTrack].name}",363f,109f)
             }
             "results" -> {
-                headline.addText("THE FINISH",330f,558f)
-                detail.addText(if(world.entrantCount==2)"THE CROWN / TWO DRIVERS" else "${world.raceLaps} LAPS. SIX CARS. ONE MORE?",332f,503f)
+                title("THE FINISH",286f,575f)
+                label(if(world.entrantCount==2)"THE CROWN / TWO DRIVERS" else "${world.raceLaps} LAPS / SIX CARS",288f,518f)
                 for(c in world.cars)if(c.entered)rankOrder[c.position-1]=c.id
                 for(rank in 0 until world.entrantCount) {
-                    val c=world.cars[rankOrder[rank]]; text.setColor(colors[c.id]); uiBuilder.clear()
-                    uiBuilder.append(rank+1).append("     ").append(driverName(c))
-                    text.addText(uiBuilder,345f,461f-rank*42)
-                    detail.setColor(Color.WHITE); uiBuilder.clear()
-                    if(world.combat.wrecked(c.id))uiBuilder.append("WRECKED / ").append(world.combat.kills[c.id]).append(" kills") else if(c.finishKind==FinishKind.ELIMINATION)uiBuilder.append("LAST SURVIVOR") else if(c.finishSeconds>=0)uiBuilder.append((c.finishSeconds*10).toInt()/10).append('.').append((c.finishSeconds*10).toInt()%10).append(" seconds") else uiBuilder.append("LAP ").append(min(world.raceLaps,c.lap.laps+1)).append(" / ").append(world.raceLaps).append(" - unfinished")
-                    detail.addText(uiBuilder,731f,458f-rank*42)
+                    val c=world.cars[rankOrder[rank]]
+                    label("${rank+1} / ${driverName(c)}",291f,479f-rank*40,colors[c.id])
+                    label(when {combatWrecked(c)->"WRECKED / ${world.combat.kills[c.id]} KILLS";c.finishKind==FinishKind.ELIMINATION->"LAST SURVIVOR";c.finishSeconds>=0->"${(c.finishSeconds*10).toInt()/10.0}s";else->"LAP ${c.lap.laps+1}/${world.raceLaps}"},737f,479f-rank*40)
                 }
-                text.setColor(bg); text.addText(if(campaignRace)"SELECT  /  NEXT ROUND" else "SELECT  /  REMATCH",490f,164f)
                 val receipt=profiles[0].lastReceipt
-                if(receipt!=null)detail.addText("PRIZE ${receipt.gross} - PIT ${receipt.repair} = +${receipt.banked} CR   /   BANK ${profiles[0].credits}   /   PLAY: GARAGE",305f,99f)
-                if(campaignRace) { detail.setColor(accent);detail.addText(careerMessage[0],330f,586f) }
+                if(receipt!=null)label("PRIZE ${receipt.gross} - PIT ${receipt.repair} = +${receipt.banked} CR / BANK ${profiles[0].credits}",291f,220f,accent)
+                if(campaignRace) {detail.setColor(muted);detail.wrapped(careerMessage[0],291f,194f,705f,25f)}
+                label(if(campaignRace)"SELECT / NEXT ROUND" else "SELECT / REMATCH",495f,160f,bg)
             }
         }
     }
+    private fun combatWrecked(c: Car)=world.combat.wrecked(c.id)
     private fun combatJson(id: Int): String {
         val c=world.combat;val weapon=c.selectedWeapon[id]
         return "{\"spectating\":${!activeSeat(id)},\"ability\":${world.abilities.json(id)},\"armingSeconds\":${c.armingSeconds},\"hp\":${c.health(id)},\"maxHp\":${c.maxHealth(id)},\"wrecked\":${c.wrecked(id)},\"weapon\":$weapon,\"weaponName\":\"${Weapons.all[weapon].id}\",\"ammo\":${c.ammo(id,weapon)},\"mines\":${c.ammo(id,Weapons.MINE)},\"heavyAmmo\":${c.ammo(id,Weapons.HAMMER)},\"scatterAmmo\":${c.ammo(id,Weapons.SCATTER)},\"cash\":${c.cashCollected[id]},\"sabotageTarget\":${c.sabotageTarget[id]},\"cooldownSeconds\":${c.cooldown(id,weapon)},\"mineCooldownSeconds\":${c.cooldown(id,Weapons.MINE)},\"damageEvents\":${c.damageEvents[id]},\"kills\":${c.kills[id]}}"

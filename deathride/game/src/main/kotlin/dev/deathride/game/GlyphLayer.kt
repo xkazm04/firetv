@@ -4,13 +4,32 @@ import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.BitmapFont
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 
-/** Fixed-capacity glyph quads. Rebuilding a HUD never allocates layouts, runs, or strings. */
+/** Fixed-capacity glyph quads. Word wrapping allocates only during the throttled UI rebuild. */
 class GlyphLayer(private val font: BitmapFont) {
     private val vertices=FloatArray(40000)
     private var count=0
     private var color=Color.WHITE.toFloatBits()
     fun clear() { count=0 }
     fun setColor(value: Color) { color=value.toFloatBits() }
+    fun width(text: CharSequence): Float {
+        var width=0f
+        for(ch in text)width+=(font.data.getGlyph(ch)?.xadvance?:0)*font.data.scaleX
+        return width
+    }
+    /** Wrap at word boundaries; never reduce the sofa-readable font size to fit. */
+    fun wrapped(value: String,x: Float,y: Float,maxWidth: Float,lineHeight: Float=25f): Float {
+        var baseline=y
+        for(paragraph in value.split('\n')) {
+            var line=""
+            for(word in paragraph.split(' ')) {
+                val next=if(line.isEmpty())word else "$line $word"
+                if(line.isNotEmpty() && width(next)>maxWidth) { addText(line,x,baseline);baseline-=lineHeight;line=word }
+                else line=next
+            }
+            addText(line,x,baseline);baseline-=lineHeight
+        }
+        return baseline
+    }
     fun addText(text: CharSequence, originX: Float, originY: Float) {
         var x=originX; var y=originY+font.data.ascent
         var previous: BitmapFont.Glyph?=null

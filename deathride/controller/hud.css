@@ -1,0 +1,27 @@
+/* Fusion palette and component skin. Event handlers and pointer geometry live in index.html. */
+:root{--bg:#171513;--panel:#29231e;--line:#84724e;--ink:#ddd0a6;--muted:#c3b898;--accent:#b4a044;--danger:#e6a277}
+html,body{background:var(--bg);color:var(--ink)}
+button,select,.steer,.offer,.card{border-radius:3px;border:2px solid var(--line);box-shadow:inset 0 0 0 2px #171513}
+button{min-width:44px;min-height:44px;background:var(--panel);font-weight:750}
+button:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
+header{border-bottom:3px solid #b4512d}.brand{color:var(--ink);letter-spacing:.08em}
+.app{grid-template-rows:54px minmax(0,1fr) 50px;gap:7px}
+.steer{background:#29231e;border-width:3px;border-color:#ddd0a6 #84724e #b4512d}
+.steer:before{content:"";position:absolute;inset:6px;pointer-events:none;background:linear-gradient(135deg,#b4512d 0 8px,transparent 9px) top left/45px 28px no-repeat,linear-gradient(315deg,#b4a044 0 6px,transparent 7px) bottom right/36px 24px no-repeat}
+.rail{background:#84724e}.rail:after{background:#ddd0a6}.thumb{background:#39302a;border:3px solid #ddd0a6;border-radius:8px;box-shadow:0 0 0 6px #171513}.thumb:after{background:#b4a044;border-radius:2px}.direction{color:#ddd0a6}
+.pedals{gap:7px;grid-template-rows:minmax(44px,1.3fr) minmax(44px,1fr) minmax(44px,.8fr) minmax(44px,.9fr)}
+.pedal{border-radius:3px;border-width:3px;font-size:19px;min-height:44px}.pedal span{font-size:11px;letter-spacing:.03em}
+.gas,#race{background:#b4a044;color:#171513;border-color:#ddd0a6 #84724e #84724e}
+.fire{background:#6c2427;border-color:#ddd0a6 #b4512d #b4512d;color:#ddd0a6}
+.brake{background:#39302a;color:#e6a277;border-color:#b4512d}.mine{background:#39302a;color:#ddd0a6;border-color:#a37738}
+.utility{background:#29231e;color:#ddd0a6}.ability{background:#29231e;color:#ddd0a6;border-color:#84724e;font-size:15px}
+.ability.ready{border-color:#ddd0a6}.ability.unavailable{opacity:1;color:#c3b898;border-style:dashed}
+.held,.gas.held,.fire.held,.brake.held{background:#ddd0a6;color:#171513;filter:none;border-color:#b4a044;box-shadow:inset 0 0 0 3px #171513}
+meter{accent-color:#b4a044}meter::-webkit-meter-bar{background:#39302a;border:1px solid #84724e;border-radius:0}meter::-webkit-meter-optimum-value{background:#b4a044}
+footer{padding-bottom:3px;gap:5px}footer button{height:44px;min-height:44px;font-size:11px;padding:0 9px}footer #linkInfo{display:none}
+.modal{background:#171513}.card{background:#29231e;border:3px solid #84724e;padding:18px;box-shadow:inset 0 0 0 4px #171513;border-top-color:#ddd0a6;border-bottom-color:#b4512d}
+.card h1,.careerCard h2{color:#ddd0a6;font-weight:900;letter-spacing:.04em}.card p{color:#c3b898;font-size:14px;line-height:1.4}.card button{background:#b4a044;color:#171513;min-height:44px}.card input,select{background:#171513;color:#ddd0a6;border-color:#84724e;min-height:44px;border-radius:2px}
+.offer{background:#171513;border-color:#84724e}.offer p{font-size:13px}.offer button:disabled{background:#39302a;color:#c3b898}.offer .delta{color:#ddd0a6}.careerCard li{font-size:14px;border-color:#84724e}.careerFine{font-size:13px}#storyCard{border-left:4px solid #b4512d;padding:3px 12px;background:#171513}
+.status{color:#c3b898}.dot{width:9px;height:9px;background:#b4512d;border:1px solid #ddd0a6}.online .dot{background:#b4a044}.lost .status{color:#e6a277}body.lost .steer{border-color:#b4512d}.lost .thumb{border-style:dashed}
+@media(max-height:380px){.app{grid-template-rows:44px minmax(0,1fr) 46px;gap:4px}.pedals{gap:4px}.pedal{font-size:16px}.pedal span{font-size:10px}.ability{font-size:14px}.label{top:8px}.steer .hint{bottom:9px}.card{max-height:98dvh}}
+@media(max-width:780px){.app{padding:0 8px}main{gap:9px}.brand{font-size:10px}.telemetry{font-size:12px}.combatHud{font-size:11px;gap:4px}.combatHud meter{width:36px}.status{font-size:11px}footer button{padding:0 7px}.careerColumns{gap:14px}.card{padding:12px}}

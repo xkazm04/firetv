@@ -1,7 +1,8 @@
 import {chromium} from 'playwright';
 import assert from 'node:assert/strict';
-import {writeFile} from 'node:fs/promises';
+import {writeFile,mkdir} from 'node:fs/promises';
 const [base,pin]=process.argv.slice(2);
+const output=process.env.COMBAT_OUTPUT||'evidence/phase1';await mkdir(output,{recursive:true});
 const browser=await chromium.launch({headless:true,executablePath:process.env.CHROME_EXECUTABLE});
 const context=await browser.newContext({viewport:{width:896,height:414},isMobile:true,hasTouch:true});
 const page=await context.newPage(),errors=[],checks=[];
@@ -18,7 +19,9 @@ try {
   await page.locator('#settings').tap();await page.locator('#layoutChoice').selectOption(layout);await page.locator('#closeFeel').tap();
   await page.locator('#race').tap();await pause(3300);assert.equal((await stats()).phase,'race');
   while((await stats()).slots[0].combat.armingSeconds>0)await pause(100);
-  if((await stats()).slots[0].combat.weaponName==='Hammer'){await page.locator('#swap').tap();await pause(180)}
+  // C3 added Scatter. Each layout starts at an observed Rivet, not the old two-gun assumption.
+  for(let n=0;n<3 && (await stats()).slots[0].combat.weaponName!=='Rivet';n++){await page.locator('#swap').tap();await pause(180)}
+  assert.equal((await stats()).slots[0].combat.weaponName,'Rivet');
   const steering=await point('steer',1),fire=await point('fire',2),mine=await point('mine',3);
   const before=(await stats()).slots[0].combat.ammo;
   await touch('touchStart',[steering,fire]);steering.x+=60;if(layout==='Split')steering.y-=75;
@@ -34,7 +37,9 @@ try {
   await page.locator('#swap').tap();await pause(150);assert.equal((await stats()).slots[0].combat.weaponName,'Hammer');
   const heavy=(await stats()).slots[0].combat.ammo;await touch('touchStart',[await point('fire',4)]);await pause(200);await touch('touchEnd',[]);await pause(120);
   assert.ok((await stats()).slots[0].combat.ammo<heavy);
-  await page.screenshot({path:`evidence/phase1/w4-${layout.toLowerCase()}.png`});
+  await page.locator('#swap').tap();await pause(180);assert.equal((await stats()).slots[0].combat.weaponName,'Scatter');
+  await page.locator('#swap').tap();await pause(180);assert.equal((await stats()).slots[0].combat.weaponName,'Rivet');
+  await page.screenshot({path:`${output}/w4-${layout.toLowerCase()}.png`});
   checks.push(layout+': independent steer/fire/mine pointers; ammo; release; heavy swap; expected throttle');
   await page.locator('#leave').tap();await pause(150);
  }
@@ -45,5 +50,5 @@ try {
  await page.locator('#race').tap();await pause(3300);while((await stats()).slots[0].combat.armingSeconds>0)await pause(100);await touch('touchStart',[await point('fire',5)]);await pause(160);
  await context.close();await pause(450);const final=await stats();assert.equal(final.slots[0].effectiveFire,0);assert.equal(final.slots[0].effectiveMine,0);
  checks.push('Disconnected phone clears attack holds on Stick');assert.deepEqual(errors,[]);
- await writeFile('evidence/phase1/w4-device.json',JSON.stringify({device:'AFTKM 1080p; desktop Chrome CDP touch over LAN, not physical phone',checks,errors,stats:final},null,2));console.log(checks.join('\n'));
+ await writeFile(output+'/w4-device.json',JSON.stringify({device:base,checks,errors,stats:final,limits:'Real Chrome CDP touch; device identity comes from the run manifest, not this test.'},null,2));console.log(checks.join('\n'));
 }finally{await browser.close()}

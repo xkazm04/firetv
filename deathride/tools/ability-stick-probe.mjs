@@ -14,7 +14,7 @@ const minesEnabled=process.env.PROBE_MINES==='1';
 const hostPriority=process.env.PROBE_PRIORITY||'Normal';
 assert.ok(['Normal','AboveNormal'].includes(hostPriority));
 if(hostPriority==='AboveNormal')setPriority(0,osConstants.priority.PRIORITY_ABOVE_NORMAL);
-assert.equal(new URL(base).port,'8767');assert.ok(duration>=60&&duration<=1800);
+assert.equal(new URL(base).port,process.env.DEATHRIDE_TEST_STREAM==='hud'?'8768':'8767');assert.ok(duration>=60&&duration<=1800);
 const device=process.env.PROBE_DEVICE||new URL(base).hostname+':5555',run=promisify(execFile);
 const pause=ms=>new Promise(r=>setTimeout(r,ms)),clients=[];
 const get=async path=>{const r=await fetch(base+path,{signal:AbortSignal.timeout(5000)});assert.ok(r.ok);return r.json()};
@@ -22,7 +22,7 @@ async function runAdb(args,options){try{return await run('adb',['-s',device,...a
 const adb=async(...a)=>(await runAdb(a,{encoding:'utf8',windowsHide:true,timeout:20000,maxBuffer:2e6})).stdout;
 const result={startedUtc:new Date().toISOString(),base,device,durationRequestedSeconds:duration,screenshotsEnabled,minesEnabled,nodeVersion:process.version,hostPriority,hostPriorityValue:getPriority(0),windowRetention:'Direct metrics and car/input state; repeated slot garage/career payloads omitted. Full catalog and round-end state retained.',rounds:[],windows:[],memory:[],screenshots:[],pumpStalls:[],rejections:[],classUses:{},classActiveHudSamples:{},limits:'Scripted LAN inputs; no human feel, physical-phone ergonomics or optical latency claim. Rolling frame windows overlap and are not summed.'};
 let pumping=false,timer,started=0,nextWindow=0,nextMemory=0,nextPing=30,memoryPending=null;
-async function memory(second){const [text,thermal]=await Promise.all([adb('shell','dumpsys','meminfo','--local','dev.deathride.abilities'),adb('shell','dumpsys','thermalservice')]);result.memory.push({second,hostMemory:process.memoryUsage(),pssKb:Number(text.match(/TOTAL PSS:\s+(\d+)/)?.[1]??text.match(/TOTAL\s+(\d+)/)?.[1]??-1),thermalStatus:Number(thermal.match(/Thermal Status: (\d+)/)?.[1]??-1),text,thermal});console.log(JSON.stringify({second:Math.round(second),accepted:clients.map(c=>c.accepted),rejected:clients.map(c=>c.rejected),hostPumpStalls:result.pumpStalls.length}))}
+async function memory(second){const [text,thermal]=await Promise.all([adb('shell','dumpsys','meminfo','--local',process.env.DEATHRIDE_TEST_STREAM==='hud'?'dev.deathride.hud':'dev.deathride.abilities'),adb('shell','dumpsys','thermalservice')]);result.memory.push({second,hostMemory:process.memoryUsage(),pssKb:Number(text.match(/TOTAL PSS:\s+(\d+)/)?.[1]??text.match(/TOTAL\s+(\d+)/)?.[1]??-1),thermalStatus:Number(thermal.match(/Thermal Status: (\d+)/)?.[1]??-1),text,thermal});console.log(JSON.stringify({second:Math.round(second),accepted:clients.map(c=>c.accepted),rejected:clients.map(c=>c.rejected),hostPumpStalls:result.pumpStalls.length}))}
 async function waitFor(fn,label){const end=performance.now()+15000;while(performance.now()<end){const s=await get('/stats');if(fn(s))return s;await pause(100)}throw Error('Timed out: '+label)}
 async function join(){
  const c={ws:new WebSocket(base.replace('http','ws')+'/ws'),slot:-1,q:0,bestRtt:Infinity,pending:new Map(),accepted:0,rejected:0,sent:0,command:{s:0,a:0,b:0,h:0,fire:0,mine:0,weapon:0,ability:0}};clients.push(c);

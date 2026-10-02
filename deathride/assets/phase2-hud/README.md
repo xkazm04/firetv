@@ -1,0 +1,1 @@
+Fusion HUD edition. See deathride/art/review/hud/index.html and docs/concepts/deathride/H2-hud-implementation.md. One repacked UI page; immutable fusion world copied without changes. Technical selection does not grant owner taste approval.
