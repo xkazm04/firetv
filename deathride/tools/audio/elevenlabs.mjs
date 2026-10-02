@@ -67,6 +67,7 @@ export function request(a) {
     seconds = number(a.seconds ?? 2, 'seconds', 0.5, 30);
     body = { text: need(a, 'text'), duration_seconds: seconds, prompt_influence: number(a.influence ?? 0.5, 'influence', 0, 1),
       model_id: 'eleven_text_to_sound_v2', loop: a.loop === true };
+    if (body.text.length > 450) throw new Error('SFX prompt exceeds provider 450-character limit');
     estimate = Math.max(100, Math.ceil(seconds * 40)); endpoint = '/v1/sound-generation';
   } else if (kind === 'music') {
     seconds = number(a.seconds ?? 20, 'seconds', 3, 180);
@@ -88,7 +89,7 @@ export function sessionUsage(entries, session) {
   const calls = new Map();
   for (const row of entries.filter(e => e.session === session)) calls.set(row.id, row);
   return { spent: [...calls.values()].reduce((sum, row) => sum + row.budgetCharge, 0),
-    pending: [...calls.values()].filter(row => row.status !== 'complete').map(row => row.id) };
+    pending: [...calls.values()].filter(row => !['complete', 'abandoned-reserved'].includes(row.status)).map(row => row.id) };
 }
 export function checkBudget({ estimate, remaining, reserve, spent, cap, pending = [] }) {
   if (pending.length) throw new Error('Unresolved generation in session; stop and reconcile billing before any further call');
@@ -148,23 +149,30 @@ export async function main(argv = process.argv.slice(2)) {
     const response = await fetch(API + spec.endpoint + `?output_format=${FORMAT}`, {
       method: 'POST', headers: { 'xi-api-key': key(), 'content-type': 'application/json', accept: 'audio/mpeg' },
       body: JSON.stringify(spec.body), signal: AbortSignal.timeout(240000) });
-    if (!response.ok) throw new Error(`Generation failed (HTTP ${response.status}); reservation retained; response body withheld`);
+    if (!response.ok) {
+      let code = null;
+      try { const detail = (await response.json()).detail; if (typeof detail?.status === 'string' && /^[a-z_]{1,80}$/.test(detail.status)) code = detail.status; } catch {}
+      append({ ...entry, httpStatus: response.status, providerErrorCode: code });
+      throw new Error(`Generation failed (HTTP ${response.status}${code ? ', ' + code : ''}); reservation retained; response body withheld`);
+    }
+    const costHeader = response.headers.get('character-cost');
+    const providerCredits = costHeader !== null && /^\d+(\.\d+)?$/.test(costHeader) ? Number(costHeader) : null;
     const bytes = Buffer.from(await response.arrayBuffer());
     if (!bytes.length) throw new Error('Empty response; reservation retained');
     fs.mkdirSync(path.dirname(output), { recursive: true });
     fs.writeFileSync(output, bytes, { flag: 'wx' });
     // Save provenance even if the subsequent account lookup fails.
-    const saved = { ...entry, status: 'saved-billing-pending', bytes: bytes.length, sha256: createHash('sha256').update(bytes).digest('hex') };
+    const saved = { ...entry, status: 'saved-billing-pending', bytes: bytes.length, providerCredits, sha256: createHash('sha256').update(bytes).digest('hex') };
     atomicJson(output + '.json', saved);
     const after = await credits();
     if (after.resetsAt !== before.resetsAt || after.remaining > before.remaining) throw new Error('Billing window changed; saved take remains pending reconciliation');
     const observed = before.remaining - after.remaining;
     const done = { ...saved, status: 'complete', completedAt: after.at, creditsAfter: after.remaining,
-      observedAccountDelta: observed, spendBasis: 'Account balance delta during request; concurrent project activity may be included.',
-      budgetCharge: Math.max(spec.estimate, observed), sessionBudgetUsed: usage.spent + Math.max(spec.estimate, observed) };
+      observedAccountDelta: observed, spendBasis: providerCredits === null ? 'Account delta may include concurrent use or omit delayed billing; conservative estimate retained.' : 'Provider character-cost response header; account delta separately reported.',
+      budgetCharge: Math.max(spec.estimate, providerCredits ?? observed), sessionBudgetUsed: usage.spent + Math.max(spec.estimate, providerCredits ?? observed) };
     atomicJson(output + '.json', done); append(done);
     console.log(JSON.stringify({ ok: true, out: done.out, bytes: done.bytes, estimatedCredits: spec.estimate, observedAccountDelta: observed,
-      budgetCharge: done.budgetCharge, sessionBudgetUsed: done.sessionBudgetUsed, remaining: after.remaining, generatedAt: entry.ts }));
+      providerCredits, budgetCharge: done.budgetCharge, sessionBudgetUsed: done.sessionBudgetUsed, remaining: after.remaining, generatedAt: entry.ts }));
     if (done.sessionBudgetUsed > cap || after.remaining < RESERVE) throw new Error('Observed billing exceeded a guard; stop immediately and reconcile (no further calls)');
   } finally { fs.closeSync(fd); fs.unlinkSync(lock); }
 }

@@ -1,0 +1,29 @@
+{
+  "id": "c54c4afd-680f-49ce-aba0-4714eeb75bab",
+  "ts": "2026-10-02T19:14:18.968Z",
+  "session": "x2-2026-10-02",
+  "status": "complete",
+  "kind": "music",
+  "out": "audio/audition/raw/dust-race.mp3",
+  "seconds": 20,
+  "request": {
+    "prompt": "Original instrumental combat-racing music. Sparse huge skin war drums with dry attacks, low toms and rim knocks, distant tape-echo baritone guitar fragments, dust-dry bass, broad empty space between hits. An exposed outdoor wasteland, raw analog grain, tense forward motion without a busy rock arrangement. Exactly 96 BPM, 4/4, eight bars, 20 seconds. A steady main-intensity racing loop already in motion at the beginning. The eighth bar must lead directly into bar one with matching harmony and energy. No intro, no ending cadence, no fade in or fade out, no vocals, no speech, no sound effects. Compose original material; do not quote any existing recording or melody.",
+    "music_length_ms": 20000,
+    "force_instrumental": true
+  },
+  "endpoint": "/v1/music",
+  "format": "mp3_44100_128",
+  "estimatedCredits": 1200,
+  "budgetCharge": 1200,
+  "creditsBefore": 42061,
+  "accountTier": "starter",
+  "reserve": 8000,
+  "sessionCap": 9000,
+  "bytes": 321037,
+  "sha256": "c17696db0d75f282f6ca06167f853554b34ef89916794cf3d53fc3fe242a2e7d",
+  "completedAt": "2026-10-02T19:14:26.161Z",
+  "creditsAfter": 42061,
+  "observedAccountDelta": 0,
+  "spendBasis": "Account balance delta during request; concurrent project activity may be included.",
+  "sessionBudgetUsed": 1200
+}

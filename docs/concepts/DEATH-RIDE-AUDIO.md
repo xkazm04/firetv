@@ -45,5 +45,5 @@ Original work only. The ElevenLabs key never enters the repo or the logs. One de
 | Id | Wave | Status |
 |---|---|---|
 | X1 | Port the tool, audio brief | complete — [brief/design](DEATH-RIDE-AUDIO-BRIEF.md), guarded port, six guard tests and required build pass; zero generation spend |
-| X2 | Audition page with proof kits, spend report, choices template | not started |
+| X2 | Audition page with proof kits, spend report, choices template | complete — [audition](../../deathride/audio/audition/index.html), [design/results](deathride/X2-audio-audition.md); 4 equal kits / 32 takes, failures visible, conservative charge 7,828/9,000; stopped at page |
 | X3 | After the owner's pick | gated |

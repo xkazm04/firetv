@@ -1,0 +1,32 @@
+{
+  "id": "7f691f58-bc3b-4edf-af9f-172dd6b54014",
+  "ts": "2026-10-02T19:27:08.807Z",
+  "session": "x2-2026-10-02",
+  "status": "complete",
+  "kind": "sfx",
+  "out": "audio/audition/raw/noir-crunch.mp3",
+  "seconds": 1.5,
+  "request": {
+    "text": "One car-to-car side collision. Sharp steel contact, short buckling grind, debris settling. No engine bed or tyre squeal. Timbre: a deep restrained chassis groan with one sharp panel crease. Intimate damped metal, low gritty resonance, restrained high end, tiny dry reflection. 1.5 seconds. Original isolated effect; no music, no voice.",
+    "duration_seconds": 1.5,
+    "prompt_influence": 0.7,
+    "model_id": "eleven_text_to_sound_v2",
+    "loop": false
+  },
+  "endpoint": "/v1/sound-generation",
+  "format": "mp3_44100_128",
+  "estimatedCredits": 100,
+  "budgetCharge": 100,
+  "creditsBefore": 38375,
+  "accountTier": "starter",
+  "reserve": 8000,
+  "sessionCap": 9000,
+  "bytes": 24703,
+  "providerCredits": 15,
+  "sha256": "c2fc6e56fac7ee7d87f6dbd7b96ecaf631f927f78b853f35ee63b5601b5e5d36",
+  "completedAt": "2026-10-02T19:27:13.851Z",
+  "creditsAfter": 38375,
+  "observedAccountDelta": 0,
+  "spendBasis": "Provider character-cost response header; account delta separately reported.",
+  "sessionBudgetUsed": 7496
+}

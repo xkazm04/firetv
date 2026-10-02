@@ -1,0 +1,32 @@
+{
+  "id": "79a89b1f-2f24-4d83-8016-7a066beb0815",
+  "ts": "2026-10-02T19:27:21.618Z",
+  "session": "x2-2026-10-02",
+  "status": "complete",
+  "kind": "sfx",
+  "out": "audio/audition/raw/noir-pickup.mp3",
+  "seconds": 1,
+  "request": {
+    "text": "One tactile collection confirmation. Crisp small latch attack, short satisfying body, quickly decaying tail. No coins or bleep. Timbre: a small cold steel catch closing with one low hollow resonance. Intimate damped metal, low gritty resonance, restrained high end, tiny dry reflection. 1 seconds. Original isolated effect; no music, no voice.",
+    "duration_seconds": 1,
+    "prompt_influence": 0.7,
+    "model_id": "eleven_text_to_sound_v2",
+    "loop": false
+  },
+  "endpoint": "/v1/sound-generation",
+  "format": "mp3_44100_128",
+  "estimatedCredits": 100,
+  "budgetCharge": 100,
+  "creditsBefore": 38305,
+  "accountTier": "starter",
+  "reserve": 8000,
+  "sessionCap": 9000,
+  "bytes": 17180,
+  "providerCredits": 10,
+  "sha256": "17eb0f89dca478cf58594bd03cb6a0f52eebff595792ce291bdd11517b751752",
+  "completedAt": "2026-10-02T19:27:26.767Z",
+  "creditsAfter": 38305,
+  "observedAccountDelta": 0,
+  "spendBasis": "Provider character-cost response header; account delta separately reported.",
+  "sessionBudgetUsed": 7596
+}

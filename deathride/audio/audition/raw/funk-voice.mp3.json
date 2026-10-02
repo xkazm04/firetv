@@ -1,0 +1,35 @@
+{
+  "id": "6c000f43-be5c-42df-8385-4c9cecb535fa",
+  "ts": "2026-10-02T19:26:04.671Z",
+  "session": "x2-2026-10-02",
+  "status": "complete",
+  "kind": "tts",
+  "out": "audio/audition/raw/funk-voice.mp3",
+  "seconds": null,
+  "request": {
+    "text": "The road keeps no promises. Hold your line, save your steel, and watch the smoke. Out here, the last engine running tells the story.",
+    "model_id": "eleven_multilingual_v2",
+    "voice_settings": {
+      "stability": 0.55,
+      "similarity_boost": 0.75,
+      "style": 0.3,
+      "use_speaker_boost": true
+    }
+  },
+  "endpoint": "/v1/text-to-speech/pNInz6obpgDQGcFmaJgB",
+  "format": "mp3_44100_128",
+  "estimatedCredits": 132,
+  "budgetCharge": 132,
+  "creditsBefore": 39142,
+  "accountTier": "starter",
+  "reserve": 8000,
+  "sessionCap": 9000,
+  "bytes": 141314,
+  "providerCredits": 132,
+  "sha256": "93cbcbbaae403e36ea2ecb071e7adacb4983ea4e5f5ced332fdf81a94c7d9de4",
+  "completedAt": "2026-10-02T19:26:07.824Z",
+  "creditsAfter": 39142,
+  "observedAccountDelta": 0,
+  "spendBasis": "Provider character-cost response header; account delta separately reported.",
+  "sessionBudgetUsed": 5896
+}

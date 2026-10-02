@@ -1,0 +1,881 @@
+{
+  "at": "2026-10-02T19:35:44.328825+00:00",
+  "result": "pass",
+  "credentialLeakFound": false,
+  "generatedTakes": 32,
+  "directions": 4,
+  "voiceCandidates": 3,
+  "budgetCharge": 7828,
+  "files": [
+    {
+      "path": "audio/audition/acceptance.json",
+      "bytes": 165713,
+      "sha256": "026242393fd44f6602145315656097cc71db818c7d76a435fd495e5b3632c399"
+    },
+    {
+      "path": "audio/audition/credits-after.json",
+      "bytes": 159,
+      "sha256": "c0f21182d4ad7da3e4adceb3cb1edaf3ecb4a896174f24683ab53d27724978d9"
+    },
+    {
+      "path": "audio/audition/credits-before.json",
+      "bytes": 159,
+      "sha256": "18f743e13e3f547ffa68b8a264cf31a4ad2ae8fd65a12973aa6dbcc941fbfaca"
+    },
+    {
+      "path": "audio/audition/credits-final.json",
+      "bytes": 159,
+      "sha256": "9354a563003a51a3d37e24ff6a19b09de06359cae2284c12edbdacb01042833b"
+    },
+    {
+      "path": "audio/audition/dry-run-initial.json",
+      "bytes": 14252,
+      "sha256": "ef0236a5fd9702cf875d03183d4fd5703080eca149a1e55fd099777d152c0c1e"
+    },
+    {
+      "path": "audio/audition/dry-run.json",
+      "bytes": 14252,
+      "sha256": "f531e371c7cdca1803da2e6e43b8f96160e396e48449a362c4221c6603493040"
+    },
+    {
+      "path": "audio/audition/evidence/browser-check.json",
+      "bytes": 11617,
+      "sha256": "68b6fa25b1c52188a4812f83d8156fa342bdf4452fadd23da6255446088e7b78"
+    },
+    {
+      "path": "audio/audition/evidence/dark-1440.png",
+      "bytes": 103881,
+      "sha256": "4963045a89e5e61ef02794c1f95b925c32032fcc56e6f1f6ede89c454c0e173a"
+    },
+    {
+      "path": "audio/audition/evidence/dark-390.png",
+      "bytes": 55557,
+      "sha256": "94a828a8b05697501ff2e34c47b3d544eed36a2de04e0ae4603126051031f552"
+    },
+    {
+      "path": "audio/audition/evidence/light-1440.png",
+      "bytes": 103575,
+      "sha256": "87ea1aec1cfbc4041c1b33a148e82e09e488e46d3fdb9918498593a359bdd152"
+    },
+    {
+      "path": "audio/audition/evidence/light-390.png",
+      "bytes": 55700,
+      "sha256": "2206e5c9ea1e812f3a6b41c034ceaa4c38f658fecc61e5ff70ad95b30cf973c0"
+    },
+    {
+      "path": "audio/audition/index.html",
+      "bytes": 216632,
+      "sha256": "66ad391e3c7f6ac52675e8516730ef88249e6cec158a13a84513a3734166a9bf"
+    },
+    {
+      "path": "audio/audition/matched/diesel-confirm.mp3",
+      "bytes": 17179,
+      "sha256": "f4433929fbe3332fcdfa2dd57d2284a7a8dbc68e4e44e6080b0791894f6474df"
+    },
+    {
+      "path": "audio/audition/matched/diesel-crunch.mp3",
+      "bytes": 24702,
+      "sha256": "bf40e46732f3c8b85ed156d33fc5e6056eb508b48162a86c81480ab63a2cf699"
+    },
+    {
+      "path": "audio/audition/matched/diesel-engine.mp3",
+      "bytes": 37241,
+      "sha256": "46985880ba942eb427c3813997837933b3a2ce999036d0bca9c5d112143b2589"
+    },
+    {
+      "path": "audio/audition/matched/diesel-mine.mp3",
+      "bytes": 33061,
+      "sha256": "9d76ef2ec54da70ced3a3a5d60de5f9f1a7fac5276b0819c51375b158cdf2c6f"
+    },
+    {
+      "path": "audio/audition/matched/diesel-pickup.mp3",
+      "bytes": 17179,
+      "sha256": "497ea02228bbf44866011b6aeb3495241803c5ef0700a4c30d35b37a9df00788"
+    },
+    {
+      "path": "audio/audition/matched/diesel-race.mp3",
+      "bytes": 321871,
+      "sha256": "a2fc2a661942df05445826baa854b22461fa993b9ce659078038cd4bdb026038"
+    },
+    {
+      "path": "audio/audition/matched/diesel-rivet.mp3",
+      "bytes": 24702,
+      "sha256": "9a3977cb9bbc6b3f5b61f76dd32574674d3def9404461edbc6c5e8a92b3e4432"
+    },
+    {
+      "path": "audio/audition/matched/diesel-voice.mp3",
+      "bytes": 152598,
+      "sha256": "e667759e9ecb14d334011cb54310d20a64863b3906641713e7818aa1642cbacd"
+    },
+    {
+      "path": "audio/audition/matched/dust-confirm.mp3",
+      "bytes": 17179,
+      "sha256": "85dffe38325a8e648a8466211d6627fc321553aef20599a058c83397f88d2a0f"
+    },
+    {
+      "path": "audio/audition/matched/dust-crunch.mp3",
+      "bytes": 24702,
+      "sha256": "0ca68d4f78d4c94d23468354d3070cb386bf00409109b2ace2a197022b54b646"
+    },
+    {
+      "path": "audio/audition/matched/dust-engine.mp3",
+      "bytes": 37241,
+      "sha256": "4a77bb5d0d8b213679ef63c1aed3f51c756f90c4bd6cfa851bf956dad8c46e8a"
+    },
+    {
+      "path": "audio/audition/matched/dust-mine.mp3",
+      "bytes": 33061,
+      "sha256": "03d63e7fdb4a1d0a75837cbe61400577151e7b103c778bbf6ca080fe48a002c8"
+    },
+    {
+      "path": "audio/audition/matched/dust-pickup.mp3",
+      "bytes": 17179,
+      "sha256": "1aaf7abbc5403af2518a409d6e88a49f85b14f6dac52e0e903ab875f5ba8a774"
+    },
+    {
+      "path": "audio/audition/matched/dust-race.mp3",
+      "bytes": 321871,
+      "sha256": "45e05eae4ee7a06ec60102877efebf7597a2e90c2f8c60586079bba19cb05a0b"
+    },
+    {
+      "path": "audio/audition/matched/dust-rivet.mp3",
+      "bytes": 24702,
+      "sha256": "bc9db62d0d1525a0145392c3befad0e184fbd1c19251414e704348bb8864c9fa"
+    },
+    {
+      "path": "audio/audition/matched/dust-voice.mp3",
+      "bytes": 157195,
+      "sha256": "75a5175f4a2bebf6a00f41a268025c3339235fba9bcb16ca3b076986da8f8223"
+    },
+    {
+      "path": "audio/audition/matched/funk-confirm.mp3",
+      "bytes": 17179,
+      "sha256": "bbdf55b3f318cdcd458a2f777878bad3dc536d3c480b8f244fb950476f99ab71"
+    },
+    {
+      "path": "audio/audition/matched/funk-crunch.mp3",
+      "bytes": 24702,
+      "sha256": "39b17a6e4bcd5d8bc8fa5c9474f34c5db27629830dfd24fc59fe43c7d6e37aa7"
+    },
+    {
+      "path": "audio/audition/matched/funk-engine.mp3",
+      "bytes": 37241,
+      "sha256": "7664bf800c19c7a07942e7fee51acae5b5cccad919cd0db970704ca208190ad1"
+    },
+    {
+      "path": "audio/audition/matched/funk-mine.mp3",
+      "bytes": 33061,
+      "sha256": "57c1d1463e7f555a59ec66b6e03bc83e078b12ceb18eeb4e7ef1368b4ec679a0"
+    },
+    {
+      "path": "audio/audition/matched/funk-pickup.mp3",
+      "bytes": 17179,
+      "sha256": "58e61f5d236828d6d28fd06def1e778cfd31edaf0cd4e99c632c3f42ec0f0a96"
+    },
+    {
+      "path": "audio/audition/matched/funk-race.mp3",
+      "bytes": 321871,
+      "sha256": "5c84f0ff308caf900f4c1a11e34eb56d0f833740cf669a80f540ba9b2131426d"
+    },
+    {
+      "path": "audio/audition/matched/funk-rivet.mp3",
+      "bytes": 24702,
+      "sha256": "77d093be38374721eeef71a9d5cb2f527dcc7e7b4c22b18390e6829225e5114d"
+    },
+    {
+      "path": "audio/audition/matched/funk-voice.mp3",
+      "bytes": 141313,
+      "sha256": "2f194836884bbe62bcd1db79cdf330ecf0fe699a842f6e758e0d39c8e8b2c34a"
+    },
+    {
+      "path": "audio/audition/matched/noir-confirm.mp3",
+      "bytes": 17179,
+      "sha256": "46d4b0e8c45d341ab6f251fb7670d36a12fb231191699a41c71b56d616795010"
+    },
+    {
+      "path": "audio/audition/matched/noir-crunch.mp3",
+      "bytes": 24702,
+      "sha256": "217f6271ffb53bc0d6f4ada40c0de6ff5dbd1c21fc4ae64ff249d13060a6a2bd"
+    },
+    {
+      "path": "audio/audition/matched/noir-engine.mp3",
+      "bytes": 37241,
+      "sha256": "d6c60fc52410dc080e04d7a46682cc28c7c3c0ca981f51693a8e8fa600975932"
+    },
+    {
+      "path": "audio/audition/matched/noir-mine.mp3",
+      "bytes": 33061,
+      "sha256": "ac64c2bc641e3e0fce8e4261b86ec5afb5eff7aa51fa61393b254a45d87f2b12"
+    },
+    {
+      "path": "audio/audition/matched/noir-pickup.mp3",
+      "bytes": 17179,
+      "sha256": "66175c1a17400c3d8bf7a464bc45100b89fcff18bb3862bc549635ddfabcac92"
+    },
+    {
+      "path": "audio/audition/matched/noir-race.mp3",
+      "bytes": 321035,
+      "sha256": "ecf986b6d45802badd1fbc001edd61c1556458f3ae01c516a3a3e4f226e28fc6"
+    },
+    {
+      "path": "audio/audition/matched/noir-rivet.mp3",
+      "bytes": 24702,
+      "sha256": "b405ce19423595a38978ad7e693bc7493c9b54a7eb76af8f8c815808c16954ce"
+    },
+    {
+      "path": "audio/audition/matched/noir-voice.mp3",
+      "bytes": 153434,
+      "sha256": "4b890ea32742363f5f50aa8c56da1f61a1f998fd1639b3122d6ab310e2d2bea5"
+    },
+    {
+      "path": "audio/audition/measurements/diesel-confirm.json",
+      "bytes": 4012,
+      "sha256": "e2a037c4f85d2cfef49be59219afb40413460428a0f8f3e338e3581962f3bc89"
+    },
+    {
+      "path": "audio/audition/measurements/diesel-crunch.json",
+      "bytes": 4004,
+      "sha256": "9003e6359e6182cb2f7a3d5c3a038906e47f8750f848e8a9649def32cb632d03"
+    },
+    {
+      "path": "audio/audition/measurements/diesel-engine.json",
+      "bytes": 5760,
+      "sha256": "fe112cd5d001c2cbfece49f457384526888de1bc3266d06d8255949e236e400d"
+    },
+    {
+      "path": "audio/audition/measurements/diesel-mine.json",
+      "bytes": 4202,
+      "sha256": "8e03cfeb1ce015b0beb89f103783e3719c783cebb18b6b80ebcf4e2c55342e29"
+    },
+    {
+      "path": "audio/audition/measurements/diesel-pickup.json",
+      "bytes": 3985,
+      "sha256": "08104a89c5d141270f5a595d3f53ff98ca94f5578b9d1d405b657d66c783ffab"
+    },
+    {
+      "path": "audio/audition/measurements/diesel-race.json",
+      "bytes": 5789,
+      "sha256": "0925485b231fa4676404ed7688a319a90ae4b44b065d9b1589111331ff92b435"
+    },
+    {
+      "path": "audio/audition/measurements/diesel-rivet.json",
+      "bytes": 4034,
+      "sha256": "0a3ccc9f9fbac76867919c9b4747b0d5537b06ec1bfb1df302b75bb8d71a5a40"
+    },
+    {
+      "path": "audio/audition/measurements/diesel-voice.json",
+      "bytes": 4680,
+      "sha256": "81c44eca69a512640bad313062d676ff55bded7228d8fae3b86d1c9511ca146e"
+    },
+    {
+      "path": "audio/audition/measurements/dust-confirm.json",
+      "bytes": 3963,
+      "sha256": "03eefb119fed1872167d472459304eba84534008d9c8ebbbf7b903e91cf08863"
+    },
+    {
+      "path": "audio/audition/measurements/dust-crunch.json",
+      "bytes": 4001,
+      "sha256": "d3d4a22bf242efaaaf019052ec12b9fb9309d453fe4352cfb2fdc779efc8f4ef"
+    },
+    {
+      "path": "audio/audition/measurements/dust-engine.json",
+      "bytes": 5697,
+      "sha256": "fbc0fb637007f1ed307bb03e7c8f7490a6a1221a41f8983c36adb86c2af189dd"
+    },
+    {
+      "path": "audio/audition/measurements/dust-mine.json",
+      "bytes": 4117,
+      "sha256": "3c695a1dfc3c0e0c734b4bd18654a2b9a2289edd96d609f1c5c418cfdf169961"
+    },
+    {
+      "path": "audio/audition/measurements/dust-pickup.json",
+      "bytes": 4070,
+      "sha256": "014847c73d4ef23c2f20aec7536033795b66bd25df3be01b85daef7c94189e5d"
+    },
+    {
+      "path": "audio/audition/measurements/dust-race.json",
+      "bytes": 5780,
+      "sha256": "1db110425b5cc667027f0b3267782a2565d6f782459694480faddec6ec5c8039"
+    },
+    {
+      "path": "audio/audition/measurements/dust-rivet.json",
+      "bytes": 4025,
+      "sha256": "77c4d3d538aa04f648ddd31517c3fe9483a441825b43f8bcb457e77dc05b1a90"
+    },
+    {
+      "path": "audio/audition/measurements/dust-voice.json",
+      "bytes": 4279,
+      "sha256": "446a5b1fb0353420cab47e7eabe197100156902c6286f9c6a66514acd89269d5"
+    },
+    {
+      "path": "audio/audition/measurements/funk-confirm.json",
+      "bytes": 4017,
+      "sha256": "9bdfdc6127ee002c947bd30d78e86694c4d8fcd2f21bcfb347e36c18da70384d"
+    },
+    {
+      "path": "audio/audition/measurements/funk-crunch.json",
+      "bytes": 4035,
+      "sha256": "713e82e74b567c4ca7e4219f33dd5e7eff16c83fe52c16d3394473d8992c3b02"
+    },
+    {
+      "path": "audio/audition/measurements/funk-engine.json",
+      "bytes": 5739,
+      "sha256": "7f14ca9e99befb978d883e3728dc7bbc91dafeb13041cc931ee2263f684336fd"
+    },
+    {
+      "path": "audio/audition/measurements/funk-mine.json",
+      "bytes": 4008,
+      "sha256": "06b69f353d6af95c5b036404895969679a3e3269a0af95ba031481a275dd52c0"
+    },
+    {
+      "path": "audio/audition/measurements/funk-pickup.json",
+      "bytes": 4152,
+      "sha256": "aa582de32cbf02a5bcc171825e85efa4ad52bb74a077f03434d6ab2f36a4a51e"
+    },
+    {
+      "path": "audio/audition/measurements/funk-race.json",
+      "bytes": 5761,
+      "sha256": "e475bbc4140c623380e04fc66f95099b64bfefdbaa80875364d03e27c28ef00c"
+    },
+    {
+      "path": "audio/audition/measurements/funk-rivet.json",
+      "bytes": 4029,
+      "sha256": "13aa6fb0f693a5a21e333486cd34b1b7a8c8f7bfac865fb39a60c922e884cd94"
+    },
+    {
+      "path": "audio/audition/measurements/funk-voice.json",
+      "bytes": 4369,
+      "sha256": "b3ed73b6da81dbdee5a3b491eba3b1e2262bc35d1116890645121557a2277f2f"
+    },
+    {
+      "path": "audio/audition/measurements/noir-confirm.json",
+      "bytes": 4019,
+      "sha256": "6eac3ee48235fab4fea843a2ce466e95a97670f7273321acfc4f2d579cabe257"
+    },
+    {
+      "path": "audio/audition/measurements/noir-crunch.json",
+      "bytes": 3986,
+      "sha256": "c2a0254879a50cd31869d32255321c27cd90b4ea8b1b119e7c3bf0311f24fe84"
+    },
+    {
+      "path": "audio/audition/measurements/noir-engine.json",
+      "bytes": 5687,
+      "sha256": "8949d79e6a90949bb60104568a1ee0505b8d1a827569e32a84f53eb1c929ce93"
+    },
+    {
+      "path": "audio/audition/measurements/noir-mine.json",
+      "bytes": 3954,
+      "sha256": "412df346c466e9b13957176c8d5cf0e58cb273ad77b806c6093c4266533962cf"
+    },
+    {
+      "path": "audio/audition/measurements/noir-pickup.json",
+      "bytes": 3957,
+      "sha256": "41b132efdab53f4d688b17b475742e5c313d23aeb4a6134fa03269ca30a25fae"
+    },
+    {
+      "path": "audio/audition/measurements/noir-race.json",
+      "bytes": 5666,
+      "sha256": "13eebcf9a5573917f196620acbe69fefd08f3668e1d514999cb6a4a0e5357829"
+    },
+    {
+      "path": "audio/audition/measurements/noir-rivet.json",
+      "bytes": 4031,
+      "sha256": "f04e76f3dec17a20a5b629273a0d940282f2b2072e1e6e2c379d9997e4e5d6e7"
+    },
+    {
+      "path": "audio/audition/measurements/noir-voice.json",
+      "bytes": 4281,
+      "sha256": "d8a39bfb0586732849b394158bdf7ee8d7e4f3f42dfb88741e1df6a314a814ba"
+    },
+    {
+      "path": "audio/audition/plan-initial.json",
+      "bytes": 29612,
+      "sha256": "a17c1f883516c9c2802bb6ed7eddb55181c73d04d497a8e5a2932cea17179e74"
+    },
+    {
+      "path": "audio/audition/plan.json",
+      "bytes": 24203,
+      "sha256": "36e90a96e3fd85ee433cb025855f75967e5e8a627cf8b564094f02f3cd3dba9d"
+    },
+    {
+      "path": "audio/audition/raw/diesel-confirm.mp3",
+      "bytes": 17180,
+      "sha256": "fffa76c05e7671403b5b4307347fd44e65823b8d07fcd605962b7a683a35baff"
+    },
+    {
+      "path": "audio/audition/raw/diesel-confirm.mp3.json",
+      "bytes": 1270,
+      "sha256": "0ab65f12e92935875a6abd9277d4053e453cfac825cf72fc88b7ac5a550ee3f3"
+    },
+    {
+      "path": "audio/audition/raw/diesel-crunch.mp3",
+      "bytes": 24703,
+      "sha256": "079259644686812dbcd23a95661149a3c82c8c524144d8867e40369b43357d1e"
+    },
+    {
+      "path": "audio/audition/raw/diesel-crunch.mp3.json",
+      "bytes": 1257,
+      "sha256": "e126a33fa726da3bf1bd0c8ccfa80320708e775233a75e0ca0ad4cfbd2a38e8c"
+    },
+    {
+      "path": "audio/audition/raw/diesel-engine.mp3",
+      "bytes": 37242,
+      "sha256": "24684e887b38a0365ac8f114e50ca36eac3dfb369e6a1ee382ef7350a07de29d"
+    },
+    {
+      "path": "audio/audition/raw/diesel-engine.mp3.json",
+      "bytes": 1264,
+      "sha256": "ce102360a32b831849127f2f374bda07eacd8dd30e76f0a999d4ea5af3b9d8df"
+    },
+    {
+      "path": "audio/audition/raw/diesel-mine.mp3",
+      "bytes": 33062,
+      "sha256": "d9985229e76de33430f560edef43e9d03bbe04995b465b9423a5cb70a18ac887"
+    },
+    {
+      "path": "audio/audition/raw/diesel-mine.mp3.json",
+      "bytes": 1282,
+      "sha256": "c99e7253f3669a6f0324f68f3fb518b4757807eb42484d7b04e1f168100ff31c"
+    },
+    {
+      "path": "audio/audition/raw/diesel-pickup.mp3",
+      "bytes": 17180,
+      "sha256": "742cf74417fc4166b9b2688d5e0d8b4183e509c8da27c559f3c9a5a9cbc1ed18"
+    },
+    {
+      "path": "audio/audition/raw/diesel-pickup.mp3.json",
+      "bytes": 1276,
+      "sha256": "b55d4314e92e3e41db110722414c37773994b54d7afffc9081ce04a093aab60b"
+    },
+    {
+      "path": "audio/audition/raw/diesel-race.mp3",
+      "bytes": 321037,
+      "sha256": "145204ad38a9718aac560abc5cb0c98356251f2f929958fdf6c51d93c8ef054b"
+    },
+    {
+      "path": "audio/audition/raw/diesel-race.mp3.json",
+      "bytes": 1584,
+      "sha256": "a102afe2ca5a543a2dd439b67704622ea2030215a4a86cf16c172fe13970e71d"
+    },
+    {
+      "path": "audio/audition/raw/diesel-rivet.mp3",
+      "bytes": 24703,
+      "sha256": "26063c8f24d809569a25a3a77afdd6114d4f198a43c52f876820a92d21097768"
+    },
+    {
+      "path": "audio/audition/raw/diesel-rivet.mp3.json",
+      "bytes": 1267,
+      "sha256": "6db5f99c03df1d38a14aa4d755b9b4cc81184f21e84d21f51070786be8edb20c"
+    },
+    {
+      "path": "audio/audition/raw/diesel-voice.mp3",
+      "bytes": 152599,
+      "sha256": "a9378ea8fdc035bc4c13294db16d39138ac8f9fb9bc7b0da0d9862a7f6c73a8b"
+    },
+    {
+      "path": "audio/audition/raw/diesel-voice.mp3.json",
+      "bytes": 1153,
+      "sha256": "f6c1e8be93527b706c3259941d594f31f262d60b867de68a8db5b2f889b1846f"
+    },
+    {
+      "path": "audio/audition/raw/dust-confirm.mp3",
+      "bytes": 17180,
+      "sha256": "46f64aa230336ce1927ca9042b314d6e125e13825e797e833158c316e171f055"
+    },
+    {
+      "path": "audio/audition/raw/dust-confirm.mp3.json",
+      "bytes": 1270,
+      "sha256": "f61525d9bdf54d779eb0286cb5e58e60648f1240bfa87d11cf4b3c407d35e5cf"
+    },
+    {
+      "path": "audio/audition/raw/dust-crunch.mp3",
+      "bytes": 24703,
+      "sha256": "3b9bc23bc97a56c9b01651663e0169d7443caedc1d149a2ec1fbcb607cb5e9c3"
+    },
+    {
+      "path": "audio/audition/raw/dust-crunch.mp3.json",
+      "bytes": 1254,
+      "sha256": "a153b01008ac6a1aec40f6df319ef3462c8f087dbcc6da60bba130ee0111d30b"
+    },
+    {
+      "path": "audio/audition/raw/dust-engine.mp3",
+      "bytes": 37242,
+      "sha256": "e3320c0ac2ace1819438cf960d339aaaf8bd9eb8862251b920883ba64edd3971"
+    },
+    {
+      "path": "audio/audition/raw/dust-engine.mp3.json",
+      "bytes": 1253,
+      "sha256": "bcc164fbb49b16b22179645673951549766c161007f22e3ef9e421c94372277f"
+    },
+    {
+      "path": "audio/audition/raw/dust-mine.mp3",
+      "bytes": 33062,
+      "sha256": "82eea26c4f803f7b32621b4869ab71e01ba8ca6edd98d431ed2c217be536b832"
+    },
+    {
+      "path": "audio/audition/raw/dust-mine.mp3.json",
+      "bytes": 1277,
+      "sha256": "8cf1d9276edafbc77998c2668a35a53d23fa09d873b95b6e9766371f489c0c1f"
+    },
+    {
+      "path": "audio/audition/raw/dust-pickup.mp3",
+      "bytes": 17180,
+      "sha256": "b7d169a1039aadd4616553220630f937634576e0276d1f32652be53ed48b42b6"
+    },
+    {
+      "path": "audio/audition/raw/dust-pickup.mp3.json",
+      "bytes": 1275,
+      "sha256": "aac363b0eb2fdf4efbedb9121a5e7242f22dc855cfe13b3f0663f7fbcf417fdf"
+    },
+    {
+      "path": "audio/audition/raw/dust-race.mp3",
+      "bytes": 321037,
+      "sha256": "c17696db0d75f282f6ca06167f853554b34ef89916794cf3d53fc3fe242a2e7d"
+    },
+    {
+      "path": "audio/audition/raw/dust-race.mp3.json",
+      "bytes": 1524,
+      "sha256": "2107a0bbb4d0a3bdcf9916535817b1baf47a3f5d651dac33bb3747220ced5df0"
+    },
+    {
+      "path": "audio/audition/raw/dust-rivet.mp3",
+      "bytes": 24703,
+      "sha256": "1caaa82b9a2958a5c390058c8ba3b117b3acbba2deb4612635346fbc47c96a3d"
+    },
+    {
+      "path": "audio/audition/raw/dust-rivet.mp3.json",
+      "bytes": 1250,
+      "sha256": "22d77951bbf86c63b78744c66e98159b5e8d325083462750cc985463f8addf54"
+    },
+    {
+      "path": "audio/audition/raw/dust-voice.mp3",
+      "bytes": 157196,
+      "sha256": "9fbd41b9d5a824cd987cd28a2b6971fdfb938cfbc8181e831eb249b9f31f029c"
+    },
+    {
+      "path": "audio/audition/raw/dust-voice.mp3.json",
+      "bytes": 1151,
+      "sha256": "89f44c4e6b319c6d95d2fd4b101da5ca6c4d95c91bd80ff9088d977f92279886"
+    },
+    {
+      "path": "audio/audition/raw/funk-confirm.mp3",
+      "bytes": 17180,
+      "sha256": "5188fffe7d53a6cac1ccf7d8dd18b726044952116a20a6f2d0b8ac38c041902f"
+    },
+    {
+      "path": "audio/audition/raw/funk-confirm.mp3.json",
+      "bytes": 1274,
+      "sha256": "35dbd324636901e1974eb9e8270554ea062b7bce9bb23c9c012a07906a58aabc"
+    },
+    {
+      "path": "audio/audition/raw/funk-crunch.mp3",
+      "bytes": 24703,
+      "sha256": "f674570a7a6100c9cd444cdbeec436c40910fc1233fa6e3fcc8090aec7d53f68"
+    },
+    {
+      "path": "audio/audition/raw/funk-crunch.mp3.json",
+      "bytes": 1282,
+      "sha256": "2ebc32eb439b3804cd2a03b29f2a6c2762fd7f2a61473e417be6faf82ff98606"
+    },
+    {
+      "path": "audio/audition/raw/funk-engine.mp3",
+      "bytes": 37242,
+      "sha256": "5fe2a93f7e60804e4c133c91b2c88188c667a1170b55060e8143ee2b463b0427"
+    },
+    {
+      "path": "audio/audition/raw/funk-engine.mp3.json",
+      "bytes": 1258,
+      "sha256": "28ee3584edf034da75dd30fbb72a713462f01544cb68b7a0752fc3d74ce3f9a2"
+    },
+    {
+      "path": "audio/audition/raw/funk-mine.mp3",
+      "bytes": 33062,
+      "sha256": "0c51426cc29825ba8caca5dd221bc210d10179bc026954f83bbc62d6777c93a6"
+    },
+    {
+      "path": "audio/audition/raw/funk-mine.mp3.json",
+      "bytes": 1290,
+      "sha256": "fc6199efc69ccd67f4504f3e024251687c6c1bf8fac361a86948bec6d9aff21d"
+    },
+    {
+      "path": "audio/audition/raw/funk-pickup.mp3",
+      "bytes": 17180,
+      "sha256": "9d493a6e0ecdb2eda2ac557bfa6ce824a2d8618a7d89c349ffbfd50bd219059d"
+    },
+    {
+      "path": "audio/audition/raw/funk-pickup.mp3.json",
+      "bytes": 1282,
+      "sha256": "07def5c7c03af50de36519a82da9da5f7854abb49d10a0116e24a0bb6ae1a2d4"
+    },
+    {
+      "path": "audio/audition/raw/funk-race.mp3",
+      "bytes": 321037,
+      "sha256": "5d673e2cacfda8b2d9311e22b6abaa13ad66e8929b02feefbfbaf6d3b405bdc9"
+    },
+    {
+      "path": "audio/audition/raw/funk-race.mp3.json",
+      "bytes": 1562,
+      "sha256": "34dc78b20bc51cc4a7291c15b40be6e81b34bdb415a985c6ad701e1748b4b4b2"
+    },
+    {
+      "path": "audio/audition/raw/funk-rivet.mp3",
+      "bytes": 24703,
+      "sha256": "63949996118ada0c56c2b1d4d6581e73cc133ef084162a985696879efde9c05e"
+    },
+    {
+      "path": "audio/audition/raw/funk-rivet.mp3.json",
+      "bytes": 1274,
+      "sha256": "c3d0e1c4508c07ef510b68328aa735a80f3ffbdb7cfb3654907901b3115b3f02"
+    },
+    {
+      "path": "audio/audition/raw/funk-voice.mp3",
+      "bytes": 141314,
+      "sha256": "93cbcbbaae403e36ea2ecb071e7adacb4983ea4e5f5ced332fdf81a94c7d9de4"
+    },
+    {
+      "path": "audio/audition/raw/funk-voice.mp3.json",
+      "bytes": 1151,
+      "sha256": "d89c64b3b507cfbe2598dbced21523e78878db14b58268e4de368e99d26cbab5"
+    },
+    {
+      "path": "audio/audition/raw/noir-confirm.mp3",
+      "bytes": 17180,
+      "sha256": "81e699d6f8446c734f716cb6dd1ce9cead2952963e4a390201f7aaea3b56921e"
+    },
+    {
+      "path": "audio/audition/raw/noir-confirm.mp3.json",
+      "bytes": 1269,
+      "sha256": "0daa12ff16523d18e95c068f8f86844e266d2f84094994de6db7a75906665260"
+    },
+    {
+      "path": "audio/audition/raw/noir-crunch.mp3",
+      "bytes": 24703,
+      "sha256": "c2fc6e56fac7ee7d87f6dbd7b96ecaf631f927f78b853f35ee63b5601b5e5d36"
+    },
+    {
+      "path": "audio/audition/raw/noir-crunch.mp3.json",
+      "bytes": 1271,
+      "sha256": "3bcce64161e2859ad4e949ffcbca555f3939b822b63eed50638049ee118a9743"
+    },
+    {
+      "path": "audio/audition/raw/noir-engine.mp3",
+      "bytes": 37242,
+      "sha256": "5d6df7b26f22c55829d51408ea84f5c21f5a31aca5d21dd7872f221b31763e5f"
+    },
+    {
+      "path": "audio/audition/raw/noir-engine.mp3.json",
+      "bytes": 1267,
+      "sha256": "d2724fe687bbdf222274f842f9301437d465f6d39248401a2b8f1e40e09bf779"
+    },
+    {
+      "path": "audio/audition/raw/noir-mine.mp3",
+      "bytes": 33062,
+      "sha256": "6d652fe63d97e6a63bdb37bd630aa26eb23d6cffbb604397fb11934521b52e8c"
+    },
+    {
+      "path": "audio/audition/raw/noir-mine.mp3.json",
+      "bytes": 1285,
+      "sha256": "e56cd8b845af5645223fdf2ac8e4188359572ae652606610d0ae3443c88d632d"
+    },
+    {
+      "path": "audio/audition/raw/noir-pickup.mp3",
+      "bytes": 17180,
+      "sha256": "17eb0f89dca478cf58594bd03cb6a0f52eebff595792ce291bdd11517b751752"
+    },
+    {
+      "path": "audio/audition/raw/noir-pickup.mp3.json",
+      "bytes": 1275,
+      "sha256": "f29a0b71c5387d22feb03d30b2d95e11f70e3d649e78b80c4aaf6bb403bcd0f2"
+    },
+    {
+      "path": "audio/audition/raw/noir-race.mp3",
+      "bytes": 320201,
+      "sha256": "9816fcc11e648568a1588f2299de8f1af7e39b30a703f618eaff97bf3d63f382"
+    },
+    {
+      "path": "audio/audition/raw/noir-race.mp3.json",
+      "bytes": 1554,
+      "sha256": "df499232d6a6599d5ca2c31f90999e640951e8234a20808de09b88ed8c70ecfa"
+    },
+    {
+      "path": "audio/audition/raw/noir-rivet.mp3",
+      "bytes": 24703,
+      "sha256": "1cb99485ec29f1e524af89259ac94286f138526f523d00d2f35428eed4485017"
+    },
+    {
+      "path": "audio/audition/raw/noir-rivet.mp3.json",
+      "bytes": 1265,
+      "sha256": "2ca86a3dac4bd31aca4c98c6e192c88636999f56213e4ac7b4c3e9e827a81837"
+    },
+    {
+      "path": "audio/audition/raw/noir-voice.mp3",
+      "bytes": 153435,
+      "sha256": "04102e39a020f0d107a3f3c6d4de3dbe85d5e8323147d32747d9d0e0d0cfc1eb"
+    },
+    {
+      "path": "audio/audition/raw/noir-voice.mp3.json",
+      "bytes": 1151,
+      "sha256": "6d5214f121cf61e31300b005fe5c19ea0cd269f2096dfda152b64e43bb825615"
+    },
+    {
+      "path": "audio/audition/rejected-attempt.json",
+      "bytes": 1591,
+      "sha256": "3812c3865c7760d02ad34146ea750ac1ca6b08e3df98f681a7d4a9330f5c48a2"
+    },
+    {
+      "path": "audio/audition/repeats/diesel-engine-three-cycles.ogg",
+      "bytes": 98028,
+      "sha256": "8550cc556749a2e12eaa1388d66f7ab19deb7569afe81468077b3b3e5fc8b18e"
+    },
+    {
+      "path": "audio/audition/repeats/diesel-race-three-cycles.ogg",
+      "bytes": 1254314,
+      "sha256": "e730575423aa559a5fb2c9da4f162599b6f0315db8f21d1f7c9d1aa5a20624df"
+    },
+    {
+      "path": "audio/audition/repeats/dust-engine-three-cycles.ogg",
+      "bytes": 118211,
+      "sha256": "a0573ec8a19ca5dc10007dbfeddba713405d1841d37fc15654b3ef150cefc778"
+    },
+    {
+      "path": "audio/audition/repeats/dust-race-three-cycles.ogg",
+      "bytes": 1175988,
+      "sha256": "f5f29aef1c1ad20e2a822ff6854ed66ea6aaa04e94439690ca116527306ceaa7"
+    },
+    {
+      "path": "audio/audition/repeats/funk-engine-three-cycles.ogg",
+      "bytes": 151386,
+      "sha256": "f8b1aa88f2fb9f1c720c4d4539c4306cc2de435a71fb2c6484209e455a5e0ac1"
+    },
+    {
+      "path": "audio/audition/repeats/funk-race-three-cycles.ogg",
+      "bytes": 875932,
+      "sha256": "83bb012b6ffd647323587e74f30efc28fd04802363b1e70257be2c2fa531f6d5"
+    },
+    {
+      "path": "audio/audition/repeats/noir-engine-three-cycles.ogg",
+      "bytes": 76454,
+      "sha256": "de89778522a120ae08a75ce76b8e52bb44dfd203173dcd06fc5d7aae0f9e0e78"
+    },
+    {
+      "path": "audio/audition/repeats/noir-race-three-cycles.ogg",
+      "bytes": 1055527,
+      "sha256": "e64d4f1bdd96a76f77c96364e30137339f76c1818e09cafa39f79ab009fbe4ec"
+    },
+    {
+      "path": "audio/audition/request-audit.json",
+      "bytes": 2246,
+      "sha256": "b2245009a7187b07572cc9f8fff15fe34c808fa2fcb2f53deb36c4be04346bf1"
+    },
+    {
+      "path": "audio/audition/spend-report.json",
+      "bytes": 1272,
+      "sha256": "009a8f1fddf9ab23753eaf8d62dbf88f59c588499117e5668382f80296c3d430"
+    },
+    {
+      "path": "audio/audition/voice-candidates.json",
+      "bytes": 1632,
+      "sha256": "fb5d8a428bdf04b393a13defd455f8c8bf1cc5fcf8f1e12f2f2658a765092b67"
+    },
+    {
+      "path": "audio/CHOICES-TEMPLATE.md",
+      "bytes": 3012,
+      "sha256": "d91cfb0099dccfff422c6ff47a8a185676e1a85435e463744d91135a00c8f07d"
+    },
+    {
+      "path": "tools/audio/.gitignore",
+      "bytes": 23,
+      "sha256": "1877994471b53c06103ebc869e736f9e4fceec87b5dcf6512de9199addbfe57e"
+    },
+    {
+      "path": "tools/audio/audit-artifacts.py",
+      "bytes": 4136,
+      "sha256": "0107c50e0d13c560992cad51ae09e21e5ff354d8734f5853c0d10111cd96f147"
+    },
+    {
+      "path": "tools/audio/audition-plan.mjs",
+      "bytes": 8392,
+      "sha256": "1cd53ba13273cf560393819e3681e34e905460d25add464585792388fd904189"
+    },
+    {
+      "path": "tools/audio/build-audition.py",
+      "bytes": 23929,
+      "sha256": "1567fe1dbb63b16d44d58165f57116dbb27c5575268450e7480a83eb3aca9311"
+    },
+    {
+      "path": "tools/audio/check-audition.mjs",
+      "bytes": 5519,
+      "sha256": "720593d4e19fb88cbb2595f68a1cc0884181a4af6dc361d2567daa86121b2016"
+    },
+    {
+      "path": "tools/audio/elevenlabs.mjs",
+      "bytes": 12883,
+      "sha256": "e1cc1c6fefa9001fd651e544f1d80865572925b28f16489b589961997e5d1094"
+    },
+    {
+      "path": "tools/audio/elevenlabs.test.mjs",
+      "bytes": 6146,
+      "sha256": "0cc03d0847cf7fb132a343d6d8b494e035b86b57e4ac3f94a95e3592e4b8ed7b"
+    },
+    {
+      "path": "tools/audio/ledger.jsonl",
+      "bytes": 66559,
+      "sha256": "2df515f33068986e81dd848a939d9d54f52edb9875a3f3db4bca56627cb000c5"
+    },
+    {
+      "path": "tools/audio/measure-audition.py",
+      "bytes": 11772,
+      "sha256": "e7d0328457983890114cbe92d6b67b656d5dd5049dad52dd91541aa4dd2a6397"
+    },
+    {
+      "path": "tools/audio/README.md",
+      "bytes": 4717,
+      "sha256": "7268d2368ec8d3cd7b8b6f3bea3f59b15f053c2998c09b1b8c788026a1c317b0"
+    },
+    {
+      "path": "tools/audio/reconcile-rejected.mjs",
+      "bytes": 1729,
+      "sha256": "c4be8156a4d78bab7c10f0e02246ca7a2aaa269a64675f71fef6262984cd5cbc"
+    },
+    {
+      "path": "tools/audio/request-audit.mjs",
+      "bytes": 1505,
+      "sha256": "89b28bb8a0ca214c746b55eb20b2d26cdef18cb2c208cc01c36b51a7a7471188"
+    },
+    {
+      "path": "tools/audio/run-audition.mjs",
+      "bytes": 3315,
+      "sha256": "d384721818f3a266c90b13adfbd435b66b238bd79dec51f5fc0d8085dbdfcccc"
+    },
+    {
+      "path": "tools/audio/session-x2-2026-10-02.json",
+      "bytes": 177,
+      "sha256": "cb7a9e93f45ba33469daa31cca1ce6c7b7c459ae9509dc36dcf4a6fc38b19937"
+    },
+    {
+      "path": "tools/audio/test-measure.py",
+      "bytes": 1756,
+      "sha256": "bb5150544deea3580c813412314957dfba3616f946b17cd815b222d7c8f94455"
+    },
+    {
+      "path": "../docs/concepts/DEATH-RIDE-AUDIO-BRIEF.md",
+      "bytes": 23213,
+      "sha256": "6aa848858d8f5f6c4167daedb730dbf941fbd4ac1423018f68f7275f96d6df0d"
+    },
+    {
+      "path": "../docs/concepts/deathride/AUDIO-SESSION.md",
+      "bytes": 2747,
+      "sha256": "79ae6cc05e665f55011c69f4a2106fc2947ec8c4c5e64cf4a09565b38c2121e9"
+    },
+    {
+      "path": "../docs/concepts/deathride/X2-audio-audition.md",
+      "bytes": 10970,
+      "sha256": "c86c402bb62bf49fb3351f98afd6282bbe06cd0c3b73d3a20bf015aae4cb2e09"
+    },
+    {
+      "path": "../docs/concepts/DEATH-RIDE-AUDIO.md",
+      "bytes": 7345,
+      "sha256": "182d70acedde4a7c67a22f1ca4a86f1ef8110d4ad84c4d68d93030fd31f55efb"
+    }
+  ]
+}

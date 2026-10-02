@@ -1,0 +1,146 @@
+{
+  "id": "noir-pickup",
+  "measuredAt": "2026-10-02T19:28:47.951956+00:00",
+  "generationSidecar": "raw/noir-pickup.mp3.json",
+  "raw": {
+    "file": "raw/noir-pickup.mp3",
+    "sha256": "17eb0f89dca478cf58594bd03cb6a0f52eebff595792ce291bdd11517b751752",
+    "bytes": 17180,
+    "status": "pass",
+    "failures": [],
+    "checks": {
+      "decode": true,
+      "duration": true,
+      "loudness": true,
+      "truePeak": true,
+      "silence": true,
+      "clipping": true
+    },
+    "durationSeconds": 1.0,
+    "durationWindowSeconds": [
+      0.85,
+      1.15
+    ],
+    "sampleRate": 44100,
+    "channels": 2,
+    "decodedFrames": 44100,
+    "containerDurationSeconds": 1.044898,
+    "integratedLufs": -18.25,
+    "truePeakDbtp": -2.87,
+    "loudnessRangeLu": 0.0,
+    "loudnormAnalysis": {
+      "input_i": "-18.25",
+      "input_tp": "-2.87",
+      "input_lra": "0.00",
+      "input_thresh": "-36.66",
+      "output_i": "-19.95",
+      "output_tp": "-4.62",
+      "output_lra": "0.00",
+      "output_thresh": "-38.37",
+      "normalization_type": "linear",
+      "target_offset": "-0.05"
+    },
+    "loudnessTargetLufs": -20,
+    "loudnessToleranceLu": 2,
+    "samplePeakDbfs": -3.1369627789820003,
+    "fullScaleSampleCount": 0,
+    "clippingScreenThreshold": 0.999,
+    "silence": {
+      "thresholdDbfs": -50,
+      "minimumIntervalSeconds": 0.1,
+      "intervalsFrames": [
+        [
+          32151,
+          44100
+        ]
+      ],
+      "fraction": 0.27095238095238094,
+      "longestInteriorSeconds": 0
+    },
+    "loopSeam": {
+      "status": "not applicable",
+      "reason": "one-shot"
+    },
+    "loopBoundary": null
+  },
+  "matched": {
+    "file": "matched/noir-pickup.mp3",
+    "sha256": "66175c1a17400c3d8bf7a464bc45100b89fcff18bb3862bc549635ddfabcac92",
+    "bytes": 17179,
+    "status": "fail",
+    "failures": [
+      "silence"
+    ],
+    "checks": {
+      "decode": true,
+      "duration": true,
+      "loudness": true,
+      "truePeak": true,
+      "silence": false,
+      "clipping": true
+    },
+    "durationSeconds": 1.0,
+    "durationWindowSeconds": [
+      0.85,
+      1.15
+    ],
+    "sampleRate": 44100,
+    "channels": 2,
+    "decodedFrames": 44100,
+    "containerDurationSeconds": 1.044898,
+    "integratedLufs": -20.35,
+    "truePeakDbtp": -3.77,
+    "loudnessRangeLu": 0.0,
+    "loudnormAnalysis": {
+      "input_i": "-20.35",
+      "input_tp": "-3.77",
+      "input_lra": "0.00",
+      "input_thresh": "-38.77",
+      "output_i": "-20.05",
+      "output_tp": "-3.42",
+      "output_lra": "0.00",
+      "output_thresh": "-38.47",
+      "normalization_type": "linear",
+      "target_offset": "0.05"
+    },
+    "loudnessTargetLufs": -20,
+    "loudnessToleranceLu": 2,
+    "samplePeakDbfs": -4.28031381516977,
+    "fullScaleSampleCount": 0,
+    "clippingScreenThreshold": 0.999,
+    "silence": {
+      "thresholdDbfs": -50,
+      "minimumIntervalSeconds": 0.1,
+      "intervalsFrames": [
+        [
+          26621,
+          44100
+        ]
+      ],
+      "fraction": 0.39634920634920634,
+      "longestInteriorSeconds": 0
+    },
+    "loopSeam": {
+      "status": "not applicable",
+      "reason": "one-shot"
+    },
+    "loopBoundary": null
+  },
+  "processing": {
+    "operation": "two-pass ffmpeg loudnorm and MP3 re-encode; dynamic limiting when linear gain cannot meet target; no trim, EQ or seam repair",
+    "normalizationType": "linear",
+    "ffmpegFilter": "loudnorm=I=-20:TP=-2:LRA=11:measured_I=-18.25:measured_TP=-2.87:measured_LRA=0.00:measured_thresh=-36.66:offset=-0.05:linear=true:print_format=json",
+    "credits": 0,
+    "sourceSha256": "17eb0f89dca478cf58594bd03cb6a0f52eebff595792ce291bdd11517b751752",
+    "targetReached": true,
+    "peakHeadroomDbtp": -2
+  },
+  "status": "fail",
+  "notMeasured": [
+    "in-game playback/masking/latency",
+    "Stick memory and voice budget",
+    "human conformance and preference",
+    "long-race fatigue",
+    "musical tempo/key/downbeat and semantic fidelity"
+  ]
+}

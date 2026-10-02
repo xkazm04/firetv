@@ -1,0 +1,32 @@
+{
+  "id": "d484dac1-8366-4b85-8168-b2027d7a021c",
+  "ts": "2026-10-02T19:24:16.672Z",
+  "session": "x2-2026-10-02",
+  "status": "complete",
+  "kind": "sfx",
+  "out": "audio/audition/raw/diesel-confirm.mp3",
+  "seconds": 1,
+  "request": {
+    "text": "One physical menu confirm. Immediate quiet click-clunk, tiny mechanical body, short dry release to silence. No beep or chime. Timbre: a massive industrial toggle closing with a hard spring snap. Close foundry steel, blunt low-mid weight, analog grit, short concrete reflection. 1 seconds. Original isolated effect; no music, no voice.",
+    "duration_seconds": 1,
+    "prompt_influence": 0.7,
+    "model_id": "eleven_text_to_sound_v2",
+    "loop": false
+  },
+  "endpoint": "/v1/sound-generation",
+  "format": "mp3_44100_128",
+  "estimatedCredits": 100,
+  "budgetCharge": 100,
+  "creditsBefore": 39992,
+  "accountTier": "starter",
+  "reserve": 8000,
+  "sessionCap": 9000,
+  "bytes": 17180,
+  "providerCredits": 10,
+  "sha256": "fffa76c05e7671403b5b4307347fd44e65823b8d07fcd605962b7a683a35baff",
+  "completedAt": "2026-10-02T19:24:21.964Z",
+  "creditsAfter": 39929,
+  "observedAccountDelta": 63,
+  "spendBasis": "Provider character-cost response header; account delta separately reported.",
+  "sessionBudgetUsed": 3832
+}

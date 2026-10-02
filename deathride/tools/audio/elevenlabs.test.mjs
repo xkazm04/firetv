@@ -13,6 +13,7 @@ test('invalid costs and unsafe parameters fail before generation', () => {
   assert.throws(() => request({ _: ['music'], prompt: 'original', out: 'x.mp3', seconds: 181 }));
   assert.equal(request({ _: ['sfx'], text: 'metal', out: 'x.mp3', seconds: 1 }).estimate, 100);
   assert.equal(request({ _: ['music'], prompt: 'original', out: 'x.mp3', seconds: 20 }).estimate, 1200);
+  assert.throws(() => request({ _: ['sfx'], text: 'x'.repeat(451), out: 'x.mp3', seconds: 1 }), /450/);
 });
 test('cap and reserve boundaries, pending reservations and duplicate ledger rows', () => {
   const base = { estimate: 100, remaining: 8100, reserve: 8000, spent: 8900, cap: 9000 };
@@ -41,9 +42,9 @@ function fixture(t) {
     globalThis.fetch=async (url,init)=>{
       fs.appendFileSync('requests.txt',init.method==='POST'?'POST\\n':'GET\\n');
       if(init.method==='POST') {
-        used+=100;
+        used+=Number(process.env.MOCK_DELTA||100);
         if(process.env.MOCK_FAIL) return new Response('secret provider body',{status:500});
-        return new Response(new Uint8Array([73,68,51,1,2,3]));
+        return new Response(new Uint8Array([73,68,51,1,2,3]),{headers:process.env.MOCK_COST?{'character-cost':process.env.MOCK_COST}:{}});
       }
       return Response.json({tier:'test',character_count:used,character_limit:20000,next_character_count_reset_unix:1791142301});
     };`);
@@ -83,4 +84,16 @@ test('generation lock rejects parallel writers before any network request', t =>
   fs.writeFileSync(path.join(root, 'tools/audio/.generation.lock'), 'another process');
   assert.match(run(['--out', 'audio/one.mp3']).stderr, /lock exists/);
   assert.equal(fs.existsSync(path.join(root, 'requests.txt')), false);
+});
+test('provider billing header separates own cost from concurrent account activity', t => {
+  const { root, run } = fixture(t);
+  assert.equal(run(['--out', 'audio/one.mp3'], { MOCK_COST: '20', MOCK_DELTA: '500' }).status, 0);
+  const row = JSON.parse(fs.readFileSync(path.join(root, 'audio/one.mp3.json')));
+  assert.equal(row.providerCredits, 20); assert.equal(row.observedAccountDelta, 500);
+  assert.equal(row.budgetCharge, 100);
+});
+test('abandoned HTTP rejection still consumes its full reserved budget', () => {
+  const usage = sessionUsage([{ session: 'a', id: 'rejected', status: 'abandoned-reserved', budgetCharge: 100 }], 'a');
+  assert.deepEqual(usage, { spent: 100, pending: [] });
+  assert.throws(() => checkBudget({ estimate: 100, remaining: 20000, reserve: 8000, spent: usage.spent, cap: 150 }), /cap/);
 });
