@@ -31,10 +31,14 @@ Text and static HTML only; no changes to game code or data in this run (a later 
 | Id | Wave | Status |
 |---|---|---|
 | K1 | Four directions, design note | complete — 2026-10-02; [K1 note](deathride/K1-campaign-directions.md); design intent, owner choice pending |
-| K2 | Triage page, comparison matrix, choices template | not started |
+| K2 | Triage page, comparison matrix, choices template | complete — 2026-10-02; [offline page](../../deathride/campaign/directions/index.html), [choices template](../../deathride/campaign/CHOICES-TEMPLATE.md), [K2 note](deathride/K2-triage-page.md); owner choice pending |
 
 ## Session log
 
 ### K1 — 2026-10-02
 
 Read progression, C4, W7, G2, fusion owner choice/review and current career, roster, ability, weapon, surface and track data. Wrote [four comparable directions](deathride/K1-campaign-directions.md): Ash Circuit, Last Passage, Dead Air Championship and The Common Road. Each includes structure/counts, progression, five rivals plus a final antagonist, mechanic/cost mapping, three three-line cards, three taunts, risks and model changes. Distinguished signature cars from actual tier purchases, three AI settings from five licence tiers, proposed PR dips from G2's misses, and closed circuits from physical convoy/map systems. Read the cast/contract consumers to identify hard-coded Ash identities; alternatives include their generalization cost. Checked local source links and content counts; no game tests or new play evidence were needed for this text-only part. Game code/data/assets unchanged, zero Grok/ElevenLabs spend, no push. K2 page/template remains next; owner direction and all proposed feel remain unmeasured.
+
+### K2 — 2026-10-02
+
+Wrote [K2 design/verification note](deathride/K2-triage-page.md), [static triage page](../../deathride/campaign/directions/index.html) and [choices template](../../deathride/campaign/CHOICES-TEMPLATE.md). Four complete direction articles, six-criterion matrix, four structure SVGs and four explicitly unmeasured PR SVGs; six existing fusion portraits are referenced only for the Ash cast. Native offline HTML contains all content; inline CSS supports dark/light/mobile/print and inline JS only switches theme. Thirteen browser configurations pass: five widths (320–1440 px) in both themes, two no-JS configurations and denied-storage fallback/keyboard/print. Fixed narrow-grid overflow; source disclosure also fits at 320/390/1440. Local links, images, labels, counts and navigation pass with zero page errors/HTTP requests. Inspected desktop/mobile, matrix and diagram captures; temporary evidence stays outside the repository. All deliverables remain design intent, with G2's missed boss targets disclosed. Game code/data/assets unchanged, no gameplay build or new play evidence, zero Grok/ElevenLabs spend, no push. No K1/K2 work remains; owner choice, implementation, pacing and feel validation are future work.
