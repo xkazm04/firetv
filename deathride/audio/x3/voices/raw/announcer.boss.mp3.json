@@ -1,0 +1,35 @@
+{
+  "id": "e6d9a880-17d5-4081-9541-97a177d1f48e",
+  "ts": "2026-10-02T21:52:09.530Z",
+  "session": "x3-2026-10-02",
+  "status": "complete",
+  "kind": "tts",
+  "out": "audio/x3/voices/raw/announcer.boss.mp3",
+  "seconds": null,
+  "request": {
+    "text": "Beat the division boss. Give them a reason to stand beside you.",
+    "model_id": "eleven_multilingual_v2",
+    "voice_settings": {
+      "stability": 0.55,
+      "similarity_boost": 0.75,
+      "style": 0.3,
+      "use_speaker_boost": true
+    }
+  },
+  "endpoint": "/v1/text-to-speech/N2lVS1w4EtoT3dr4eOWO",
+  "format": "mp3_44100_128",
+  "estimatedCredits": 63,
+  "budgetCharge": 63,
+  "creditsBefore": 23873,
+  "accountTier": "starter",
+  "reserve": 8000,
+  "sessionCap": 9000,
+  "bytes": 66499,
+  "providerCredits": 63,
+  "sha256": "50f2c7e237c9b4a4de3925fd4a1ee408e1e56d3c0c1b63726fcd3a56654578a8",
+  "completedAt": "2026-10-02T21:52:12.180Z",
+  "creditsAfter": 23873,
+  "observedAccountDelta": 0,
+  "spendBasis": "Provider character-cost response header; account delta separately reported.",
+  "sessionBudgetUsed": 5582
+}

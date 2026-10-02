@@ -1,5 +1,16 @@
 # Audio execution session
 
+## X3.4 — 2026-10-02
+
+Text-first original campaign script, six Callum announcer and eight Harry Mechanic
+lines. Design: [X3-4-campaign-voices.md](X3-4-campaign-voices.md). Board:
+file:///C:/Users/kazda/kiro/firetv-deathride-audiox/deathride/audio/x3/voices/index.html
+13/14 signal passes; Mechanic seizure has 55.52% silence, stays failed and uninstalled
+with a caption/silent fallback. Speech fidelity/identity/delivery unmeasured. Future
+owner-story states explicitly gated from the inherited campaign's lap-based duel.
+Charge +960, session 6,400/9,000; headers total 1,759. Shared credits 23,873 -> 23,040
+immediately after. 28 media/eight layouts and artifact/key audit pass. One commit.
+
 ## X3.3 — 2026-10-02
 
 Two short engine character variants per class, 20 total. Design:

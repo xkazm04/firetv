@@ -215,6 +215,10 @@ def main():
                 entry['repeat']=dict(file=repeat.as_posix(),sha256=meters.sha(repeat),cycles=3,humanListen='not measured')
             if row['cue'] and wave!='engines':
                 cue=catalogue[row['cue']]
+                if row['category']=='tts':
+                    cue.update(caption=row['prompt'],storyBeat=row['beat'],voiceId=row['voiceId'],
+                               delivery='noir announcer' if row['id'].startswith('announcer') else 'nervous helpful Mechanic',
+                               textFidelity='not measured',identityAndDelivery='owner listening pending')
                 if entry['status']=='pass':
                     dest=Path('assets/audio/clips')/(row['cue']+'.wav')
                     dest.parent.mkdir(exist_ok=True,parents=True)

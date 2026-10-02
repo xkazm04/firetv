@@ -1,0 +1,2283 @@
+{
+  "protocol": "deathride-x3-screen-v1",
+  "wave": "voices",
+  "at": "2026-10-02T21:56:45.567861+00:00",
+  "sampleRate": 22050,
+  "ffmpegVersion": "ffmpeg version 2025-02-17-git-b92577405b-essentials_build-www.gyan.dev Copyright (c) 2000-2025 the FFmpeg developers",
+  "notes": "Original failures retained. Edited duration based on reproducible trim recipe; thresholds fixed in bible before edits. Short-clip meter padding disclosed.",
+  "samples": [
+    {
+      "id": "announcer.debt",
+      "cue": "voice.announcer.debt",
+      "category": "tts",
+      "loop": false,
+      "measuredAt": "2026-10-02T21:56:35.350475+00:00",
+      "ownerStatus": "listening pending",
+      "notMeasured": [
+        "semantic fidelity",
+        "owner preference",
+        "in-game masking/latency",
+        "physical Stick playback/memory"
+      ],
+      "provenance": {
+        "sidecar": "audio\\x3\\voices\\raw\\announcer.debt.mp3.json",
+        "sourceSha256": "de403b7568cf2de1d6ebe8cdd58770a9e098b2519126d17ad3bd45b4350b8142",
+        "generatedAt": "2026-10-02T21:52:04.591Z",
+        "request": {
+          "text": "Your engine is collateral. Every race buys another day. Marrow keeps the books.",
+          "model_id": "eleven_multilingual_v2",
+          "voice_settings": {
+            "stability": 0.55,
+            "similarity_boost": 0.75,
+            "style": 0.3,
+            "use_speaker_boost": true
+          }
+        },
+        "budgetCharge": 79,
+        "providerCredits": 79,
+        "session": "x3-2026-10-02",
+        "reused": false
+      },
+      "raw": {
+        "file": "audio/x3/voices/raw/announcer.debt.mp3",
+        "sha256": "de403b7568cf2de1d6ebe8cdd58770a9e098b2519126d17ad3bd45b4350b8142",
+        "bytes": 94084,
+        "status": "fail",
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": false,
+          "truePeak": true,
+          "silence": true,
+          "clipping": true
+        },
+        "failures": [
+          "loudness"
+        ],
+        "durationSeconds": 5.804988662131519,
+        "durationWindowSeconds": [
+          1,
+          20
+        ],
+        "sampleRate": 44100,
+        "channels": 1,
+        "decodedFrames": 256000,
+        "decodedBytes": 512000,
+        "integratedLufs": -23.21,
+        "truePeakDbtp": -3.82,
+        "loudnessRangeLu": 1.9,
+        "loudnessTargetLufs": -18,
+        "loudnessToleranceLu": 1,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 0,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [
+            [
+              166823,
+              178098
+            ],
+            [
+              242952,
+              256000
+            ]
+          ],
+          "fraction": 0.09501171875,
+          "longestInteriorSeconds": 0.2556689342403628
+        },
+        "loopSeam": {
+          "status": "not applicable",
+          "reason": "one-shot or full song"
+        },
+        "loopBoundary": null
+      },
+      "edit": {
+        "operation": "mono resample, -45 dBFS edge trim with 10 ms margin, 3 ms edge fades; preserve zero tails (no whole-file DC subtraction)",
+        "startFrame": 1427,
+        "endFrameExclusive": 121506,
+        "rate": 22050,
+        "rivetFirstOnsetOnly": false
+      },
+      "normalization": {
+        "operation": "measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling",
+        "softLimited": true,
+        "additionalCrestCompressionPasses": 0,
+        "gain": 1.1721953655481303,
+        "credits": 0
+      },
+      "edited": {
+        "file": "audio/x3/voices/edited/announcer.debt.wav",
+        "sha256": "e79d56839bca8a70c5e6b05ff728646dae6b53285d3d9a445b9305f693585928",
+        "bytes": 240236,
+        "status": "pass",
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": true,
+          "truePeak": true,
+          "silence": true,
+          "clipping": true
+        },
+        "failures": [],
+        "durationSeconds": 5.445759637188209,
+        "durationWindowSeconds": [
+          5.443759637188209,
+          5.447759637188208
+        ],
+        "sampleRate": 22050,
+        "channels": 1,
+        "decodedFrames": 120079,
+        "decodedBytes": 240158,
+        "integratedLufs": -18.01,
+        "truePeakDbtp": -4.65,
+        "loudnessRangeLu": 0.9,
+        "loudnessTargetLufs": -18,
+        "loudnessToleranceLu": 1,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 0,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [
+            [
+              82211,
+              87569
+            ]
+          ],
+          "fraction": 0.04462062475536938,
+          "longestInteriorSeconds": 0.24299319727891155
+        },
+        "loopSeam": {
+          "status": "not applicable",
+          "reason": "one-shot or full song"
+        },
+        "loopBoundary": null
+      },
+      "status": "pass",
+      "sourceDefects": [
+        "loudness"
+      ]
+    },
+    {
+      "id": "announcer.boss",
+      "cue": "voice.announcer.boss",
+      "category": "tts",
+      "loop": false,
+      "measuredAt": "2026-10-02T21:56:36.292066+00:00",
+      "ownerStatus": "listening pending",
+      "notMeasured": [
+        "semantic fidelity",
+        "owner preference",
+        "in-game masking/latency",
+        "physical Stick playback/memory"
+      ],
+      "provenance": {
+        "sidecar": "audio\\x3\\voices\\raw\\announcer.boss.mp3.json",
+        "sourceSha256": "50f2c7e237c9b4a4de3925fd4a1ee408e1e56d3c0c1b63726fcd3a56654578a8",
+        "generatedAt": "2026-10-02T21:52:09.530Z",
+        "request": {
+          "text": "Beat the division boss. Give them a reason to stand beside you.",
+          "model_id": "eleven_multilingual_v2",
+          "voice_settings": {
+            "stability": 0.55,
+            "similarity_boost": 0.75,
+            "style": 0.3,
+            "use_speaker_boost": true
+          }
+        },
+        "budgetCharge": 63,
+        "providerCredits": 63,
+        "session": "x3-2026-10-02",
+        "reused": false
+      },
+      "raw": {
+        "file": "audio/x3/voices/raw/announcer.boss.mp3",
+        "sha256": "50f2c7e237c9b4a4de3925fd4a1ee408e1e56d3c0c1b63726fcd3a56654578a8",
+        "bytes": 66499,
+        "status": "fail",
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": false,
+          "truePeak": true,
+          "silence": true,
+          "clipping": true
+        },
+        "failures": [
+          "loudness"
+        ],
+        "durationSeconds": 4.08671201814059,
+        "durationWindowSeconds": [
+          1,
+          20
+        ],
+        "sampleRate": 44100,
+        "channels": 1,
+        "decodedFrames": 180224,
+        "decodedBytes": 360448,
+        "integratedLufs": -25.74,
+        "truePeakDbtp": -6.1,
+        "loudnessRangeLu": 1.2,
+        "loudnessTargetLufs": -18,
+        "loudnessToleranceLu": 1,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 0,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [
+            [
+              0,
+              4626
+            ],
+            [
+              63946,
+              73029
+            ],
+            [
+              165957,
+              180224
+            ]
+          ],
+          "fraction": 0.15522904829545456,
+          "longestInteriorSeconds": 0.20596371882086167
+        },
+        "loopSeam": {
+          "status": "not applicable",
+          "reason": "one-shot or full song"
+        },
+        "loopBoundary": null
+      },
+      "edit": {
+        "operation": "mono resample, -45 dBFS edge trim with 10 ms margin, 3 ms edge fades; preserve zero tails (no whole-file DC subtraction)",
+        "startFrame": 2126,
+        "endFrameExclusive": 83041,
+        "rate": 22050,
+        "rivetFirstOnsetOnly": false
+      },
+      "normalization": {
+        "operation": "measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling",
+        "softLimited": true,
+        "additionalCrestCompressionPasses": 0,
+        "gain": 1.1627865510033546,
+        "credits": 0
+      },
+      "edited": {
+        "file": "audio/x3/voices/edited/announcer.boss.wav",
+        "sha256": "b9ed0cb04a81816f7d53deee11b85ffda4a6b6f972f8cb7d5204a1088ca9a6ac",
+        "bytes": 161908,
+        "status": "pass",
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": true,
+          "truePeak": true,
+          "silence": true,
+          "clipping": true
+        },
+        "failures": [],
+        "durationSeconds": 3.6696145124716555,
+        "durationWindowSeconds": [
+          3.6676145124716557,
+          3.6716145124716553
+        ],
+        "sampleRate": 22050,
+        "channels": 1,
+        "decodedFrames": 80915,
+        "decodedBytes": 161830,
+        "integratedLufs": -17.99,
+        "truePeakDbtp": -4.82,
+        "loudnessRangeLu": 0.9,
+        "loudnessTargetLufs": -18,
+        "loudnessToleranceLu": 1,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 0,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [
+            [
+              30121,
+              34331
+            ]
+          ],
+          "fraction": 0.05202990792807267,
+          "longestInteriorSeconds": 0.1909297052154195
+        },
+        "loopSeam": {
+          "status": "not applicable",
+          "reason": "one-shot or full song"
+        },
+        "loopBoundary": null
+      },
+      "status": "pass",
+      "sourceDefects": [
+        "loudness"
+      ]
+    },
+    {
+      "id": "announcer.ally",
+      "cue": "voice.announcer.ally",
+      "category": "tts",
+      "loop": false,
+      "measuredAt": "2026-10-02T21:56:37.039290+00:00",
+      "ownerStatus": "listening pending",
+      "notMeasured": [
+        "semantic fidelity",
+        "owner preference",
+        "in-game masking/latency",
+        "physical Stick playback/memory"
+      ],
+      "provenance": {
+        "sidecar": "audio\\x3\\voices\\raw\\announcer.ally.mp3.json",
+        "sourceSha256": "a5603b556fc1888cfd7b1b8fb27d7c11d81b99064d072e1b41ef575d166db507",
+        "generatedAt": "2026-10-02T21:52:13.946Z",
+        "request": {
+          "text": "A beaten rival. A new ally. Their backing keeps you on the road.",
+          "model_id": "eleven_multilingual_v2",
+          "voice_settings": {
+            "stability": 0.55,
+            "similarity_boost": 0.75,
+            "style": 0.3,
+            "use_speaker_boost": true
+          }
+        },
+        "budgetCharge": 64,
+        "providerCredits": 64,
+        "session": "x3-2026-10-02",
+        "reused": false
+      },
+      "raw": {
+        "file": "audio/x3/voices/raw/announcer.ally.mp3",
+        "sha256": "a5603b556fc1888cfd7b1b8fb27d7c11d81b99064d072e1b41ef575d166db507",
+        "bytes": 81964,
+        "status": "fail",
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": false,
+          "truePeak": true,
+          "silence": true,
+          "clipping": true
+        },
+        "failures": [
+          "loudness"
+        ],
+        "durationSeconds": 5.061950113378685,
+        "durationWindowSeconds": [
+          1,
+          20
+        ],
+        "sampleRate": 44100,
+        "channels": 1,
+        "decodedFrames": 223232,
+        "decodedBytes": 446464,
+        "integratedLufs": -22.74,
+        "truePeakDbtp": -3.96,
+        "loudnessRangeLu": 1.9,
+        "loudnessTargetLufs": -18,
+        "loudnessToleranceLu": 1,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 0,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [
+            [
+              47169,
+              65290
+            ],
+            [
+              103995,
+              128036
+            ],
+            [
+              208658,
+              223232
+            ]
+          ],
+          "fraction": 0.25415711009174313,
+          "longestInteriorSeconds": 0.5451473922902494
+        },
+        "loopSeam": {
+          "status": "not applicable",
+          "reason": "one-shot or full song"
+        },
+        "loopBoundary": null
+      },
+      "edit": {
+        "operation": "mono resample, -45 dBFS edge trim with 10 ms margin, 3 ms edge fades; preserve zero tails (no whole-file DC subtraction)",
+        "startFrame": 1203,
+        "endFrameExclusive": 104275,
+        "rate": 22050,
+        "rivetFirstOnsetOnly": false
+      },
+      "normalization": {
+        "operation": "measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling",
+        "softLimited": true,
+        "additionalCrestCompressionPasses": 0,
+        "gain": 1.1789625232437853,
+        "credits": 0
+      },
+      "edited": {
+        "file": "audio/x3/voices/edited/announcer.ally.wav",
+        "sha256": "13897356bd2edc5a6698c409dcbef6ba9641cb02395ce88ce5b37c1d08feaa21",
+        "bytes": 206222,
+        "status": "pass",
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": true,
+          "truePeak": true,
+          "silence": true,
+          "clipping": true
+        },
+        "failures": [],
+        "durationSeconds": 4.674467120181406,
+        "durationWindowSeconds": [
+          4.672467120181406,
+          4.676467120181406
+        ],
+        "sampleRate": 22050,
+        "channels": 1,
+        "decodedFrames": 103072,
+        "decodedBytes": 206144,
+        "integratedLufs": -18.0,
+        "truePeakDbtp": -4.8,
+        "loudnessRangeLu": 1.2,
+        "loudnessTargetLufs": -18,
+        "loudnessToleranceLu": 1,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 0,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [
+            [
+              22554,
+              31413
+            ],
+            [
+              50918,
+              62800
+            ]
+          ],
+          "fraction": 0.20122826761875193,
+          "longestInteriorSeconds": 0.5388662131519274
+        },
+        "loopSeam": {
+          "status": "not applicable",
+          "reason": "one-shot or full song"
+        },
+        "loopBoundary": null
+      },
+      "status": "pass",
+      "sourceDefects": [
+        "loudness"
+      ]
+    },
+    {
+      "id": "announcer.seizure",
+      "cue": "voice.announcer.seizure",
+      "category": "tts",
+      "loop": false,
+      "measuredAt": "2026-10-02T21:56:37.815552+00:00",
+      "ownerStatus": "listening pending",
+      "notMeasured": [
+        "semantic fidelity",
+        "owner preference",
+        "in-game masking/latency",
+        "physical Stick playback/memory"
+      ],
+      "provenance": {
+        "sidecar": "audio\\x3\\voices\\raw\\announcer.seizure.mp3.json",
+        "sourceSha256": "da8dc9d98d0028ffb8516bb30509b2c39f5318bdae057641c28f159311c1ee92",
+        "generatedAt": "2026-10-02T21:52:25.376Z",
+        "request": {
+          "text": "Marrow has taken your car. The debt was never meant to end.",
+          "model_id": "eleven_multilingual_v2",
+          "voice_settings": {
+            "stability": 0.55,
+            "similarity_boost": 0.75,
+            "style": 0.3,
+            "use_speaker_boost": true
+          }
+        },
+        "budgetCharge": 59,
+        "providerCredits": 59,
+        "session": "x3-2026-10-02",
+        "reused": false
+      },
+      "raw": {
+        "file": "audio/x3/voices/raw/announcer.seizure.mp3",
+        "sha256": "da8dc9d98d0028ffb8516bb30509b2c39f5318bdae057641c28f159311c1ee92",
+        "bytes": 66499,
+        "status": "fail",
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": false,
+          "truePeak": true,
+          "silence": true,
+          "clipping": true
+        },
+        "failures": [
+          "loudness"
+        ],
+        "durationSeconds": 4.08671201814059,
+        "durationWindowSeconds": [
+          1,
+          20
+        ],
+        "sampleRate": 44100,
+        "channels": 1,
+        "decodedFrames": 180224,
+        "decodedBytes": 360448,
+        "integratedLufs": -24.56,
+        "truePeakDbtp": -5.21,
+        "loudnessRangeLu": 1.7,
+        "loudnessTargetLufs": -18,
+        "loudnessToleranceLu": 1,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 0,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [
+            [
+              80266,
+              85321
+            ],
+            [
+              168434,
+              177034
+            ]
+          ],
+          "fraction": 0.07576682350852272,
+          "longestInteriorSeconds": 0.19501133786848074
+        },
+        "loopSeam": {
+          "status": "not applicable",
+          "reason": "one-shot or full song"
+        },
+        "loopBoundary": null
+      },
+      "edit": {
+        "operation": "mono resample, -45 dBFS edge trim with 10 ms margin, 3 ms edge fades; preserve zero tails (no whole-file DC subtraction)",
+        "startFrame": 933,
+        "endFrameExclusive": 84404,
+        "rate": 22050,
+        "rivetFirstOnsetOnly": false
+      },
+      "normalization": {
+        "operation": "measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling",
+        "softLimited": true,
+        "additionalCrestCompressionPasses": 0,
+        "gain": 1.1789625232437853,
+        "credits": 0
+      },
+      "edited": {
+        "file": "audio/x3/voices/edited/announcer.seizure.wav",
+        "sha256": "f8921b9a4f69435d1d1be64b5cfe3767cfa0c2267c43843f7e1324b439607eb5",
+        "bytes": 167020,
+        "status": "pass",
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": true,
+          "truePeak": true,
+          "silence": true,
+          "clipping": true
+        },
+        "failures": [],
+        "durationSeconds": 3.7855328798185943,
+        "durationWindowSeconds": [
+          3.7835328798185945,
+          3.787532879818594
+        ],
+        "sampleRate": 22050,
+        "channels": 1,
+        "decodedFrames": 83471,
+        "decodedBytes": 166942,
+        "integratedLufs": -17.98,
+        "truePeakDbtp": -4.66,
+        "loudnessRangeLu": 0.9,
+        "loudnessTargetLufs": -18,
+        "loudnessToleranceLu": 1,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 0,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [],
+          "fraction": 0.0,
+          "longestInteriorSeconds": 0
+        },
+        "loopSeam": {
+          "status": "not applicable",
+          "reason": "one-shot or full song"
+        },
+        "loopBoundary": null
+      },
+      "status": "pass",
+      "sourceDefects": [
+        "loudness"
+      ]
+    },
+    {
+      "id": "announcer.duel",
+      "cue": "voice.announcer.duel",
+      "category": "tts",
+      "loop": false,
+      "measuredAt": "2026-10-02T21:56:38.492881+00:00",
+      "ownerStatus": "listening pending",
+      "notMeasured": [
+        "semantic fidelity",
+        "owner preference",
+        "in-game masking/latency",
+        "physical Stick playback/memory"
+      ],
+      "provenance": {
+        "sidecar": "audio\\x3\\voices\\raw\\announcer.duel.mp3.json",
+        "sourceSha256": "ad44ca2bdbab504b51cae134ca5f7d8194639ab0bc153b97a819f9075910926c",
+        "generatedAt": "2026-10-02T21:52:30.760Z",
+        "request": {
+          "text": "No laps. No points. The last car running ends this.",
+          "model_id": "eleven_multilingual_v2",
+          "voice_settings": {
+            "stability": 0.55,
+            "similarity_boost": 0.75,
+            "style": 0.3,
+            "use_speaker_boost": true
+          }
+        },
+        "budgetCharge": 51,
+        "providerCredits": 51,
+        "session": "x3-2026-10-02",
+        "reused": false
+      },
+      "raw": {
+        "file": "audio/x3/voices/raw/announcer.duel.mp3",
+        "sha256": "ad44ca2bdbab504b51cae134ca5f7d8194639ab0bc153b97a819f9075910926c",
+        "bytes": 67753,
+        "status": "fail",
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": false,
+          "truePeak": true,
+          "silence": true,
+          "clipping": true
+        },
+        "failures": [
+          "loudness"
+        ],
+        "durationSeconds": 4.179591836734694,
+        "durationWindowSeconds": [
+          1,
+          20
+        ],
+        "sampleRate": 44100,
+        "channels": 1,
+        "decodedFrames": 184320,
+        "decodedBytes": 368640,
+        "integratedLufs": -23.63,
+        "truePeakDbtp": -3.85,
+        "loudnessRangeLu": 2.2,
+        "loudnessTargetLufs": -18,
+        "loudnessToleranceLu": 1,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 0,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [
+            [
+              72061,
+              85827
+            ],
+            [
+              172825,
+              184320
+            ]
+          ],
+          "fraction": 0.13704969618055557,
+          "longestInteriorSeconds": 0.31215419501133784
+        },
+        "loopSeam": {
+          "status": "not applicable",
+          "reason": "one-shot or full song"
+        },
+        "loopBoundary": null
+      },
+      "edit": {
+        "operation": "mono resample, -45 dBFS edge trim with 10 ms margin, 3 ms edge fades; preserve zero tails (no whole-file DC subtraction)",
+        "startFrame": 921,
+        "endFrameExclusive": 86471,
+        "rate": 22050,
+        "rivetFirstOnsetOnly": false
+      },
+      "normalization": {
+        "operation": "measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling",
+        "softLimited": true,
+        "additionalCrestCompressionPasses": 0,
+        "gain": 1.2022644346174132,
+        "credits": 0
+      },
+      "edited": {
+        "file": "audio/x3/voices/edited/announcer.duel.wav",
+        "sha256": "c53454a068397b2f99146640e6bfc187f40fbe9ed5e3eeadd80ac12881ebf8d8",
+        "bytes": 171178,
+        "status": "pass",
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": true,
+          "truePeak": true,
+          "silence": true,
+          "clipping": true
+        },
+        "failures": [],
+        "durationSeconds": 3.879818594104308,
+        "durationWindowSeconds": [
+          3.8778185941043084,
+          3.881818594104308
+        ],
+        "sampleRate": 22050,
+        "channels": 1,
+        "decodedFrames": 85550,
+        "decodedBytes": 171100,
+        "integratedLufs": -18.0,
+        "truePeakDbtp": -4.57,
+        "loudnessRangeLu": 1.3,
+        "loudnessTargetLufs": -18,
+        "loudnessToleranceLu": 1,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 0,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [
+            [
+              35473,
+              41878
+            ]
+          ],
+          "fraction": 0.07486849795441262,
+          "longestInteriorSeconds": 0.2904761904761905
+        },
+        "loopSeam": {
+          "status": "not applicable",
+          "reason": "one-shot or full song"
+        },
+        "loopBoundary": null
+      },
+      "status": "pass",
+      "sourceDefects": [
+        "loudness"
+      ]
+    },
+    {
+      "id": "announcer.freedom",
+      "cue": "voice.announcer.freedom",
+      "category": "tts",
+      "loop": false,
+      "measuredAt": "2026-10-02T21:56:39.214343+00:00",
+      "ownerStatus": "listening pending",
+      "notMeasured": [
+        "semantic fidelity",
+        "owner preference",
+        "in-game masking/latency",
+        "physical Stick playback/memory"
+      ],
+      "provenance": {
+        "sidecar": "audio\\x3\\voices\\raw\\announcer.freedom.mp3.json",
+        "sourceSha256": "20ccf78d61c6243090529117490f603ea19b7e09d208a4cb7a31853969feefc5",
+        "generatedAt": "2026-10-02T21:52:34.637Z",
+        "request": {
+          "text": "The ledger is closed. This road belongs to the living.",
+          "model_id": "eleven_multilingual_v2",
+          "voice_settings": {
+            "stability": 0.55,
+            "similarity_boost": 0.75,
+            "style": 0.3,
+            "use_speaker_boost": true
+          }
+        },
+        "budgetCharge": 54,
+        "providerCredits": 54,
+        "session": "x3-2026-10-02",
+        "reused": false
+      },
+      "raw": {
+        "file": "audio/x3/voices/raw/announcer.freedom.mp3",
+        "sha256": "20ccf78d61c6243090529117490f603ea19b7e09d208a4cb7a31853969feefc5",
+        "bytes": 60648,
+        "status": "fail",
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": false,
+          "truePeak": true,
+          "silence": true,
+          "clipping": true
+        },
+        "failures": [
+          "loudness"
+        ],
+        "durationSeconds": 3.7151927437641725,
+        "durationWindowSeconds": [
+          1,
+          20
+        ],
+        "sampleRate": 44100,
+        "channels": 1,
+        "decodedFrames": 163840,
+        "decodedBytes": 327680,
+        "integratedLufs": -23.58,
+        "truePeakDbtp": -5.56,
+        "loudnessRangeLu": 1.7,
+        "loudnessTargetLufs": -18,
+        "loudnessToleranceLu": 1,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 0,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [
+            [
+              61468,
+              74328
+            ],
+            [
+              148751,
+              163840
+            ]
+          ],
+          "fraction": 0.170587158203125,
+          "longestInteriorSeconds": 0.291609977324263
+        },
+        "loopSeam": {
+          "status": "not applicable",
+          "reason": "one-shot or full song"
+        },
+        "loopBoundary": null
+      },
+      "edit": {
+        "operation": "mono resample, -45 dBFS edge trim with 10 ms margin, 3 ms edge fades; preserve zero tails (no whole-file DC subtraction)",
+        "startFrame": 1787,
+        "endFrameExclusive": 74176,
+        "rate": 22050,
+        "rivetFirstOnsetOnly": false
+      },
+      "normalization": {
+        "operation": "measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling",
+        "softLimited": true,
+        "additionalCrestCompressionPasses": 0,
+        "gain": 1.1415633046188454,
+        "credits": 0
+      },
+      "edited": {
+        "file": "audio/x3/voices/edited/announcer.freedom.wav",
+        "sha256": "b4767c9c67a8bff83249dd4b8b967dd69a0faf73e25d68687bde107c9b57fad4",
+        "bytes": 144856,
+        "status": "pass",
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": true,
+          "truePeak": true,
+          "silence": true,
+          "clipping": true
+        },
+        "failures": [],
+        "durationSeconds": 3.2829478458049888,
+        "durationWindowSeconds": [
+          3.280947845804989,
+          3.2849478458049886
+        ],
+        "sampleRate": 22050,
+        "channels": 1,
+        "decodedFrames": 72389,
+        "decodedBytes": 144778,
+        "integratedLufs": -18.01,
+        "truePeakDbtp": -5.29,
+        "loudnessRangeLu": 1.0,
+        "loudnessTargetLufs": -18,
+        "loudnessToleranceLu": 1,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 0,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [
+            [
+              29073,
+              35370
+            ]
+          ],
+          "fraction": 0.08698835458426003,
+          "longestInteriorSeconds": 0.285578231292517
+        },
+        "loopSeam": {
+          "status": "not applicable",
+          "reason": "one-shot or full song"
+        },
+        "loopBoundary": null
+      },
+      "status": "pass",
+      "sourceDefects": [
+        "loudness"
+      ]
+    },
+    {
+      "id": "mechanic.welcome",
+      "cue": "voice.mechanic.welcome",
+      "category": "tts",
+      "loop": false,
+      "measuredAt": "2026-10-02T21:56:39.862570+00:00",
+      "ownerStatus": "listening pending",
+      "notMeasured": [
+        "semantic fidelity",
+        "owner preference",
+        "in-game masking/latency",
+        "physical Stick playback/memory"
+      ],
+      "provenance": {
+        "sidecar": "audio\\x3\\voices\\raw\\mechanic.welcome.mp3.json",
+        "sourceSha256": "5a921b8d02c4429870e0f536fc8efe4b754af700f40f2b11fa4b3c5c842baf52",
+        "generatedAt": "2026-10-02T21:52:38.341Z",
+        "request": {
+          "text": "You made it. Good. Let me check that engine before Marrow sends you out again.",
+          "model_id": "eleven_multilingual_v2",
+          "voice_settings": {
+            "stability": 0.45,
+            "similarity_boost": 0.75,
+            "style": 0.25,
+            "use_speaker_boost": true
+          }
+        },
+        "budgetCharge": 78,
+        "providerCredits": 78,
+        "session": "x3-2026-10-02",
+        "reused": false
+      },
+      "raw": {
+        "file": "audio/x3/voices/raw/mechanic.welcome.mp3",
+        "sha256": "5a921b8d02c4429870e0f536fc8efe4b754af700f40f2b11fa4b3c5c842baf52",
+        "bytes": 94084,
+        "status": "fail",
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": false,
+          "truePeak": true,
+          "silence": true,
+          "clipping": true
+        },
+        "failures": [
+          "loudness"
+        ],
+        "durationSeconds": 5.804988662131519,
+        "durationWindowSeconds": [
+          1,
+          20
+        ],
+        "sampleRate": 44100,
+        "channels": 1,
+        "decodedFrames": 256000,
+        "decodedBytes": 512000,
+        "integratedLufs": -22.75,
+        "truePeakDbtp": -8.11,
+        "loudnessRangeLu": 2.2,
+        "loudnessTargetLufs": -18,
+        "loudnessToleranceLu": 1,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 0,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [
+            [
+              28903,
+              70863
+            ],
+            [
+              86428,
+              125406
+            ],
+            [
+              241935,
+              256000
+            ]
+          ],
+          "fraction": 0.37110546875,
+          "longestInteriorSeconds": 0.9514739229024943
+        },
+        "loopSeam": {
+          "status": "not applicable",
+          "reason": "one-shot or full song"
+        },
+        "loopBoundary": null
+      },
+      "edit": {
+        "operation": "mono resample, -45 dBFS edge trim with 10 ms margin, 3 ms edge fades; preserve zero tails (no whole-file DC subtraction)",
+        "startFrame": 669,
+        "endFrameExclusive": 121026,
+        "rate": 22050,
+        "rivetFirstOnsetOnly": false
+      },
+      "normalization": {
+        "operation": "measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling",
+        "softLimited": false,
+        "additionalCrestCompressionPasses": 0,
+        "gain": 1.692388244436418,
+        "credits": 0
+      },
+      "edited": {
+        "file": "audio/x3/voices/edited/mechanic.welcome.wav",
+        "sha256": "ac8993094d46f1a3d2cb0dedfafe7c499f45982942dbb16487df9db96b1c8fcf",
+        "bytes": 240792,
+        "status": "pass",
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": true,
+          "truePeak": true,
+          "silence": true,
+          "clipping": true
+        },
+        "failures": [],
+        "durationSeconds": 5.4583673469387755,
+        "durationWindowSeconds": [
+          5.456367346938776,
+          5.460367346938775
+        ],
+        "sampleRate": 22050,
+        "channels": 1,
+        "decodedFrames": 120357,
+        "decodedBytes": 240714,
+        "integratedLufs": -18.0,
+        "truePeakDbtp": -3.54,
+        "loudnessRangeLu": 2.3,
+        "loudnessTargetLufs": -18,
+        "loudnessToleranceLu": 1,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 0,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [
+            [
+              13933,
+              34740
+            ],
+            [
+              42674,
+              62015
+            ]
+          ],
+          "fraction": 0.33357428317422333,
+          "longestInteriorSeconds": 0.9436281179138322
+        },
+        "loopSeam": {
+          "status": "not applicable",
+          "reason": "one-shot or full song"
+        },
+        "loopBoundary": null
+      },
+      "status": "pass",
+      "sourceDefects": [
+        "loudness"
+      ]
+    },
+    {
+      "id": "mechanic.repair",
+      "cue": "voice.mechanic.repair",
+      "category": "tts",
+      "loop": false,
+      "measuredAt": "2026-10-02T21:56:40.505843+00:00",
+      "ownerStatus": "listening pending",
+      "notMeasured": [
+        "semantic fidelity",
+        "owner preference",
+        "in-game masking/latency",
+        "physical Stick playback/memory"
+      ],
+      "provenance": {
+        "sidecar": "audio\\x3\\voices\\raw\\mechanic.repair.mp3.json",
+        "sourceSha256": "573f0cd8926d50182207b10c1be85a9fb4b7037dd0d436fcd15561c59282f3e9",
+        "generatedAt": "2026-10-02T21:52:42.206Z",
+        "request": {
+          "text": "Easy. I can hold this together. Just bring it back in one piece, all right?",
+          "model_id": "eleven_multilingual_v2",
+          "voice_settings": {
+            "stability": 0.45,
+            "similarity_boost": 0.75,
+            "style": 0.25,
+            "use_speaker_boost": true
+          }
+        },
+        "budgetCharge": 75,
+        "providerCredits": 75,
+        "session": "x3-2026-10-02",
+        "reused": false
+      },
+      "raw": {
+        "file": "audio/x3/voices/raw/mechanic.repair.mp3",
+        "sha256": "573f0cd8926d50182207b10c1be85a9fb4b7037dd0d436fcd15561c59282f3e9",
+        "bytes": 84471,
+        "status": "fail",
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": false,
+          "truePeak": true,
+          "silence": true,
+          "clipping": true
+        },
+        "failures": [
+          "loudness"
+        ],
+        "durationSeconds": 5.201269841269841,
+        "durationWindowSeconds": [
+          1,
+          20
+        ],
+        "sampleRate": 44100,
+        "channels": 1,
+        "decodedFrames": 229376,
+        "decodedBytes": 458752,
+        "integratedLufs": -24.66,
+        "truePeakDbtp": -8.98,
+        "loudnessRangeLu": 0.4,
+        "loudnessTargetLufs": -18,
+        "loudnessToleranceLu": 1,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 0,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [
+            [
+              19671,
+              33942
+            ],
+            [
+              78929,
+              116341
+            ],
+            [
+              182309,
+              189816
+            ],
+            [
+              213711,
+              229376
+            ]
+          ],
+          "fraction": 0.32634190150669645,
+          "longestInteriorSeconds": 0.848344671201814
+        },
+        "loopSeam": {
+          "status": "not applicable",
+          "reason": "one-shot or full song"
+        },
+        "loopBoundary": null
+      },
+      "edit": {
+        "operation": "mono resample, -45 dBFS edge trim with 10 ms margin, 3 ms edge fades; preserve zero tails (no whole-file DC subtraction)",
+        "startFrame": 1052,
+        "endFrameExclusive": 106965,
+        "rate": 22050,
+        "rivetFirstOnsetOnly": false
+      },
+      "normalization": {
+        "operation": "measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling",
+        "softLimited": false,
+        "additionalCrestCompressionPasses": 0,
+        "gain": 2.160230034774743,
+        "credits": 0
+      },
+      "edited": {
+        "file": "audio/x3/voices/edited/mechanic.repair.wav",
+        "sha256": "a283889a8c33c7688f9b1eae07a6ad380e296506915c59a87aa2def22cfb08ee",
+        "bytes": 211904,
+        "status": "pass",
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": true,
+          "truePeak": true,
+          "silence": true,
+          "clipping": true
+        },
+        "failures": [],
+        "durationSeconds": 4.803310657596372,
+        "durationWindowSeconds": [
+          4.801310657596372,
+          4.8053106575963715
+        ],
+        "sampleRate": 22050,
+        "channels": 1,
+        "decodedFrames": 105913,
+        "decodedBytes": 211826,
+        "integratedLufs": -18.0,
+        "truePeakDbtp": -2.31,
+        "loudnessRangeLu": 1.6,
+        "loudnessTargetLufs": -18,
+        "loudnessToleranceLu": 1,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 0,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [
+            [
+              8972,
+              15881
+            ],
+            [
+              38571,
+              57092
+            ],
+            [
+              90279,
+              93854
+            ]
+          ],
+          "fraction": 0.2738568447688197,
+          "longestInteriorSeconds": 0.8399546485260772
+        },
+        "loopSeam": {
+          "status": "not applicable",
+          "reason": "one-shot or full song"
+        },
+        "loopBoundary": null
+      },
+      "status": "pass",
+      "sourceDefects": [
+        "loudness"
+      ]
+    },
+    {
+      "id": "mechanic.books",
+      "cue": "voice.mechanic.books",
+      "category": "tts",
+      "loop": false,
+      "measuredAt": "2026-10-02T21:56:41.154531+00:00",
+      "ownerStatus": "listening pending",
+      "notMeasured": [
+        "semantic fidelity",
+        "owner preference",
+        "in-game masking/latency",
+        "physical Stick playback/memory"
+      ],
+      "provenance": {
+        "sidecar": "audio\\x3\\voices\\raw\\mechanic.books.mp3.json",
+        "sourceSha256": "7eadfd94dceaf8bf4016f19d60e2f1e442f785595461b99cb64eafb194c5239a",
+        "generatedAt": "2026-10-02T21:52:54.430Z",
+        "request": {
+          "text": "I checked the receipts. You keep winning, but his numbers never let you go.",
+          "model_id": "eleven_multilingual_v2",
+          "voice_settings": {
+            "stability": 0.45,
+            "similarity_boost": 0.75,
+            "style": 0.25,
+            "use_speaker_boost": true
+          }
+        },
+        "budgetCharge": 75,
+        "providerCredits": 75,
+        "session": "x3-2026-10-02",
+        "reused": false
+      },
+      "raw": {
+        "file": "audio/x3/voices/raw/mechanic.books.mp3",
+        "sha256": "7eadfd94dceaf8bf4016f19d60e2f1e442f785595461b99cb64eafb194c5239a",
+        "bytes": 76948,
+        "status": "fail",
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": false,
+          "truePeak": true,
+          "silence": true,
+          "clipping": true
+        },
+        "failures": [
+          "loudness"
+        ],
+        "durationSeconds": 4.73687074829932,
+        "durationWindowSeconds": [
+          1,
+          20
+        ],
+        "sampleRate": 44100,
+        "channels": 1,
+        "decodedFrames": 208896,
+        "decodedBytes": 417792,
+        "integratedLufs": -23.75,
+        "truePeakDbtp": -7.66,
+        "loudnessRangeLu": 1.2,
+        "loudnessTargetLufs": -18,
+        "loudnessToleranceLu": 1,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 0,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [
+            [
+              47468,
+              78222
+            ],
+            [
+              109510,
+              133536
+            ],
+            [
+              194332,
+              208896
+            ]
+          ],
+          "fraction": 0.3319546568627451,
+          "longestInteriorSeconds": 0.6973696145124717
+        },
+        "loopSeam": {
+          "status": "not applicable",
+          "reason": "one-shot or full song"
+        },
+        "loopBoundary": null
+      },
+      "edit": {
+        "operation": "mono resample, -45 dBFS edge trim with 10 ms margin, 3 ms edge fades; preserve zero tails (no whole-file DC subtraction)",
+        "startFrame": 1356,
+        "endFrameExclusive": 97275,
+        "rate": 22050,
+        "rivetFirstOnsetOnly": false
+      },
+      "normalization": {
+        "operation": "measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling",
+        "softLimited": true,
+        "additionalCrestCompressionPasses": 0,
+        "gain": 1.1521260598258072,
+        "credits": 0
+      },
+      "edited": {
+        "file": "audio/x3/voices/edited/mechanic.books.wav",
+        "sha256": "6e71a932309584f109f2cd83507804d3c5dd27e096cc70cbc348c887fb76e491",
+        "bytes": 191916,
+        "status": "pass",
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": true,
+          "truePeak": true,
+          "silence": true,
+          "clipping": true
+        },
+        "failures": [],
+        "durationSeconds": 4.3500680272108845,
+        "durationWindowSeconds": [
+          4.348068027210885,
+          4.352068027210884
+        ],
+        "sampleRate": 22050,
+        "channels": 1,
+        "decodedFrames": 95919,
+        "decodedBytes": 191838,
+        "integratedLufs": -17.99,
+        "truePeakDbtp": -5.5,
+        "loudnessRangeLu": 1.2,
+        "loudnessTargetLufs": -18,
+        "loudnessToleranceLu": 1,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 0,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [
+            [
+              22532,
+              37435
+            ],
+            [
+              53535,
+              65397
+            ]
+          ],
+          "fraction": 0.2790375212418812,
+          "longestInteriorSeconds": 0.6758730158730158
+        },
+        "loopSeam": {
+          "status": "not applicable",
+          "reason": "one-shot or full song"
+        },
+        "loopBoundary": null
+      },
+      "status": "pass",
+      "sourceDefects": [
+        "loudness"
+      ]
+    },
+    {
+      "id": "mechanic.ally",
+      "cue": "voice.mechanic.ally",
+      "category": "tts",
+      "loop": false,
+      "measuredAt": "2026-10-02T21:56:41.885089+00:00",
+      "ownerStatus": "listening pending",
+      "notMeasured": [
+        "semantic fidelity",
+        "owner preference",
+        "in-game masking/latency",
+        "physical Stick playback/memory"
+      ],
+      "provenance": {
+        "sidecar": "audio\\x3\\voices\\raw\\mechanic.ally.mp3.json",
+        "sourceSha256": "2bf3deba31fc1e11cf4b7f67f22f22189812547dba92b70ec0f2630ae4c71806",
+        "generatedAt": "2026-10-02T21:53:07.789Z",
+        "request": {
+          "text": "That boss is backing you now. Money, a car, parts. We finally have some help.",
+          "model_id": "eleven_multilingual_v2",
+          "voice_settings": {
+            "stability": 0.45,
+            "similarity_boost": 0.75,
+            "style": 0.25,
+            "use_speaker_boost": true
+          }
+        },
+        "budgetCharge": 77,
+        "providerCredits": 77,
+        "session": "x3-2026-10-02",
+        "reused": false
+      },
+      "raw": {
+        "file": "audio/x3/voices/raw/mechanic.ally.mp3",
+        "sha256": "2bf3deba31fc1e11cf4b7f67f22f22189812547dba92b70ec0f2630ae4c71806",
+        "bytes": 94502,
+        "status": "fail",
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": false,
+          "truePeak": true,
+          "silence": true,
+          "clipping": true
+        },
+        "failures": [
+          "loudness"
+        ],
+        "durationSeconds": 5.851428571428571,
+        "durationWindowSeconds": [
+          1,
+          20
+        ],
+        "sampleRate": 44100,
+        "channels": 1,
+        "decodedFrames": 258048,
+        "decodedBytes": 516096,
+        "integratedLufs": -24.08,
+        "truePeakDbtp": -8.45,
+        "loudnessRangeLu": 2.6,
+        "loudnessTargetLufs": -18,
+        "loudnessToleranceLu": 1,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 0,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [
+            [
+              68821,
+              80594
+            ],
+            [
+              95659,
+              104333
+            ],
+            [
+              126190,
+              137127
+            ],
+            [
+              158119,
+              192966
+            ],
+            [
+              246149,
+              258048
+            ]
+          ],
+          "fraction": 0.3027731274801587,
+          "longestInteriorSeconds": 0.7901814058956916
+        },
+        "loopSeam": {
+          "status": "not applicable",
+          "reason": "one-shot or full song"
+        },
+        "loopBoundary": null
+      },
+      "edit": {
+        "operation": "mono resample, -45 dBFS edge trim with 10 ms margin, 3 ms edge fades; preserve zero tails (no whole-file DC subtraction)",
+        "startFrame": 1833,
+        "endFrameExclusive": 122951,
+        "rate": 22050,
+        "rivetFirstOnsetOnly": false
+      },
+      "normalization": {
+        "operation": "measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling",
+        "softLimited": false,
+        "additionalCrestCompressionPasses": 0,
+        "gain": 2.0253496068249714,
+        "credits": 0
+      },
+      "edited": {
+        "file": "audio/x3/voices/edited/mechanic.ally.wav",
+        "sha256": "aa77035b55ba1692be76d5ca3ded87cef733b554b0c3d4d00156c422792e0ef6",
+        "bytes": 242314,
+        "status": "pass",
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": true,
+          "truePeak": true,
+          "silence": true,
+          "clipping": true
+        },
+        "failures": [],
+        "durationSeconds": 5.492879818594104,
+        "durationWindowSeconds": [
+          5.490879818594104,
+          5.494879818594104
+        ],
+        "sampleRate": 22050,
+        "channels": 1,
+        "decodedFrames": 121118,
+        "decodedBytes": 242236,
+        "integratedLufs": -18.01,
+        "truePeakDbtp": -2.33,
+        "loudnessRangeLu": 2.0,
+        "loudnessTargetLufs": -18,
+        "loudnessToleranceLu": 1,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 0,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [
+            [
+              32876,
+              38407
+            ],
+            [
+              46152,
+              50273
+            ],
+            [
+              61435,
+              66639
+            ],
+            [
+              77340,
+              94636
+            ]
+          ],
+          "fraction": 0.26546012979078254,
+          "longestInteriorSeconds": 0.7843990929705216
+        },
+        "loopSeam": {
+          "status": "not applicable",
+          "reason": "one-shot or full song"
+        },
+        "loopBoundary": null
+      },
+      "status": "pass",
+      "sourceDefects": [
+        "loudness"
+      ]
+    },
+    {
+      "id": "mechanic.seizure",
+      "cue": "voice.mechanic.seizure",
+      "category": "tts",
+      "loop": false,
+      "measuredAt": "2026-10-02T21:56:42.547009+00:00",
+      "ownerStatus": "listening pending",
+      "notMeasured": [
+        "semantic fidelity",
+        "owner preference",
+        "in-game masking/latency",
+        "physical Stick playback/memory"
+      ],
+      "provenance": {
+        "sidecar": "audio\\x3\\voices\\raw\\mechanic.seizure.mp3.json",
+        "sourceSha256": "498f4e38be24a2798cdf963da1536469d3829dc9f6f77d02444cdf74d5528be3",
+        "generatedAt": "2026-10-02T21:53:17.977Z",
+        "request": {
+          "text": "He took your car? Right. Right... I thought he might. Come round the back.",
+          "model_id": "eleven_multilingual_v2",
+          "voice_settings": {
+            "stability": 0.45,
+            "similarity_boost": 0.75,
+            "style": 0.25,
+            "use_speaker_boost": true
+          }
+        },
+        "budgetCharge": 74,
+        "providerCredits": 74,
+        "session": "x3-2026-10-02",
+        "reused": false
+      },
+      "raw": {
+        "file": "audio/x3/voices/raw/mechanic.seizure.mp3",
+        "sha256": "498f4e38be24a2798cdf963da1536469d3829dc9f6f77d02444cdf74d5528be3",
+        "bytes": 119998,
+        "status": "fail",
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": false,
+          "truePeak": true,
+          "silence": false,
+          "clipping": true
+        },
+        "failures": [
+          "loudness",
+          "silence"
+        ],
+        "durationSeconds": 7.430385487528345,
+        "durationWindowSeconds": [
+          1,
+          20
+        ],
+        "sampleRate": 44100,
+        "channels": 1,
+        "decodedFrames": 327680,
+        "decodedBytes": 655360,
+        "integratedLufs": -24.67,
+        "truePeakDbtp": -8.01,
+        "loudnessRangeLu": 2.9,
+        "loudnessTargetLufs": -18,
+        "loudnessToleranceLu": 1,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 0,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [
+            [
+              39863,
+              82158
+            ],
+            [
+              97970,
+              146026
+            ],
+            [
+              160633,
+              201448
+            ],
+            [
+              232081,
+              275917
+            ],
+            [
+              314473,
+              327680
+            ]
+          ],
+          "fraction": 0.5743682861328125,
+          "longestInteriorSeconds": 1.089705215419501
+        },
+        "loopSeam": {
+          "status": "not applicable",
+          "reason": "one-shot or full song"
+        },
+        "loopBoundary": null
+      },
+      "edit": {
+        "operation": "mono resample, -45 dBFS edge trim with 10 ms margin, 3 ms edge fades; preserve zero tails (no whole-file DC subtraction)",
+        "startFrame": 1766,
+        "endFrameExclusive": 157154,
+        "rate": 22050,
+        "rivetFirstOnsetOnly": false
+      },
+      "normalization": {
+        "operation": "measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling",
+        "softLimited": true,
+        "additionalCrestCompressionPasses": 0,
+        "gain": 1.1428783347897717,
+        "credits": 0
+      },
+      "edited": {
+        "file": "audio/x3/voices/edited/mechanic.seizure.wav",
+        "sha256": "bd4c63d0b1e7cc1a9e33ad45f2b98d65d1c5e77e53e31e7981fac760d5deaff4",
+        "bytes": 310854,
+        "status": "fail",
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": true,
+          "truePeak": true,
+          "silence": false,
+          "clipping": true
+        },
+        "failures": [
+          "silence"
+        ],
+        "durationSeconds": 7.047074829931973,
+        "durationWindowSeconds": [
+          7.045074829931973,
+          7.049074829931973
+        ],
+        "sampleRate": 22050,
+        "channels": 1,
+        "decodedFrames": 155388,
+        "decodedBytes": 310776,
+        "integratedLufs": -18.0,
+        "truePeakDbtp": -5.44,
+        "loudnessRangeLu": 3.0,
+        "loudnessTargetLufs": -18,
+        "loudnessToleranceLu": 1,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 0,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [
+            [
+              18401,
+              39269
+            ],
+            [
+              47553,
+              71219
+            ],
+            [
+              78863,
+              98929
+            ],
+            [
+              114403,
+              136081
+            ]
+          ],
+          "fraction": 0.5552423610574819,
+          "longestInteriorSeconds": 1.0732879818594103
+        },
+        "loopSeam": {
+          "status": "not applicable",
+          "reason": "one-shot or full song"
+        },
+        "loopBoundary": null
+      },
+      "status": "fail",
+      "sourceDefects": [
+        "loudness",
+        "silence"
+      ]
+    },
+    {
+      "id": "mechanic.rig",
+      "cue": "voice.mechanic.rig",
+      "category": "tts",
+      "loop": false,
+      "measuredAt": "2026-10-02T21:56:43.439523+00:00",
+      "ownerStatus": "listening pending",
+      "notMeasured": [
+        "semantic fidelity",
+        "owner preference",
+        "in-game masking/latency",
+        "physical Stick playback/memory"
+      ],
+      "provenance": {
+        "sidecar": "audio\\x3\\voices\\raw\\mechanic.rig.mp3.json",
+        "sourceSha256": "e9c51570b40484fc807f4c62d064fb49753867d0107f58f9b2fd5aced1431cf9",
+        "generatedAt": "2026-10-02T21:53:30.491Z",
+        "request": {
+          "text": "It is basic. I know. But I fitted a mine dispatcher. Keep moving and let him follow.",
+          "model_id": "eleven_multilingual_v2",
+          "voice_settings": {
+            "stability": 0.45,
+            "similarity_boost": 0.75,
+            "style": 0.25,
+            "use_speaker_boost": true
+          }
+        },
+        "budgetCharge": 84,
+        "providerCredits": 84,
+        "session": "x3-2026-10-02",
+        "reused": false
+      },
+      "raw": {
+        "file": "audio/x3/voices/raw/mechanic.rig.mp3",
+        "sha256": "e9c51570b40484fc807f4c62d064fb49753867d0107f58f9b2fd5aced1431cf9",
+        "bytes": 94084,
+        "status": "fail",
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": false,
+          "truePeak": true,
+          "silence": true,
+          "clipping": true
+        },
+        "failures": [
+          "loudness"
+        ],
+        "durationSeconds": 5.804988662131519,
+        "durationWindowSeconds": [
+          1,
+          20
+        ],
+        "sampleRate": 44100,
+        "channels": 1,
+        "decodedFrames": 256000,
+        "decodedBytes": 512000,
+        "integratedLufs": -23.37,
+        "truePeakDbtp": -5.34,
+        "loudnessRangeLu": 1.1,
+        "loudnessTargetLufs": -18,
+        "loudnessToleranceLu": 1,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 0,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [
+            [
+              35056,
+              46278
+            ],
+            [
+              64313,
+              79331
+            ],
+            [
+              138452,
+              175345
+            ],
+            [
+              199878,
+              206994
+            ],
+            [
+              242242,
+              256000
+            ]
+          ],
+          "fraction": 0.32815234375,
+          "longestInteriorSeconds": 0.8365759637188208
+        },
+        "loopSeam": {
+          "status": "not applicable",
+          "reason": "one-shot or full song"
+        },
+        "loopBoundary": null
+      },
+      "edit": {
+        "operation": "mono resample, -45 dBFS edge trim with 10 ms margin, 3 ms edge fades; preserve zero tails (no whole-file DC subtraction)",
+        "startFrame": 1182,
+        "endFrameExclusive": 121007,
+        "rate": 22050,
+        "rivetFirstOnsetOnly": false
+      },
+      "normalization": {
+        "operation": "measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling",
+        "softLimited": true,
+        "additionalCrestCompressionPasses": 0,
+        "gain": 1.1363182976673103,
+        "credits": 0
+      },
+      "edited": {
+        "file": "audio/x3/voices/edited/mechanic.rig.wav",
+        "sha256": "3a2022b8453794541478a2bb1e39c1b0752c09d2cad63031fd4bf85ffdc8b856",
+        "bytes": 239728,
+        "status": "pass",
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": true,
+          "truePeak": true,
+          "silence": true,
+          "clipping": true
+        },
+        "failures": [],
+        "durationSeconds": 5.434240362811791,
+        "durationWindowSeconds": [
+          5.4322403628117915,
+          5.436240362811791
+        ],
+        "sampleRate": 22050,
+        "channels": 1,
+        "decodedFrames": 119825,
+        "decodedBytes": 239650,
+        "integratedLufs": -17.99,
+        "truePeakDbtp": -5.22,
+        "loudnessRangeLu": 0.9,
+        "loudnessTargetLufs": -18,
+        "loudnessToleranceLu": 1,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 0,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [
+            [
+              16475,
+              21927
+            ],
+            [
+              31149,
+              38473
+            ],
+            [
+              68294,
+              86469
+            ],
+            [
+              98870,
+              102224
+            ]
+          ],
+          "fraction": 0.2862925099102858,
+          "longestInteriorSeconds": 0.8242630385487528
+        },
+        "loopSeam": {
+          "status": "not applicable",
+          "reason": "one-shot or full song"
+        },
+        "loopBoundary": null
+      },
+      "status": "pass",
+      "sourceDefects": [
+        "loudness"
+      ]
+    },
+    {
+      "id": "mechanic.duel",
+      "cue": "voice.mechanic.duel",
+      "category": "tts",
+      "loop": false,
+      "measuredAt": "2026-10-02T21:56:44.289852+00:00",
+      "ownerStatus": "listening pending",
+      "notMeasured": [
+        "semantic fidelity",
+        "owner preference",
+        "in-game masking/latency",
+        "physical Stick playback/memory"
+      ],
+      "provenance": {
+        "sidecar": "audio\\x3\\voices\\raw\\mechanic.duel.mp3.json",
+        "sourceSha256": "f8d4d74ce8afd5907a54348872462cdf2afa30c2d722c5c7e19d74bed37b031c",
+        "generatedAt": "2026-10-02T21:53:42.961Z",
+        "request": {
+          "text": "No finish line this time. You come back. Marrow does not.",
+          "model_id": "eleven_multilingual_v2",
+          "voice_settings": {
+            "stability": 0.45,
+            "similarity_boost": 0.75,
+            "style": 0.25,
+            "use_speaker_boost": true
+          }
+        },
+        "budgetCharge": 57,
+        "providerCredits": 57,
+        "session": "x3-2026-10-02",
+        "reused": false
+      },
+      "raw": {
+        "file": "audio/x3/voices/raw/mechanic.duel.mp3",
+        "sha256": "f8d4d74ce8afd5907a54348872462cdf2afa30c2d722c5c7e19d74bed37b031c",
+        "bytes": 65663,
+        "status": "fail",
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": false,
+          "truePeak": true,
+          "silence": true,
+          "clipping": true
+        },
+        "failures": [
+          "loudness"
+        ],
+        "durationSeconds": 4.040272108843538,
+        "durationWindowSeconds": [
+          1,
+          20
+        ],
+        "sampleRate": 44100,
+        "channels": 1,
+        "decodedFrames": 178176,
+        "decodedBytes": 356352,
+        "integratedLufs": -24.17,
+        "truePeakDbtp": -9.12,
+        "loudnessRangeLu": 0.6,
+        "loudnessTargetLufs": -18,
+        "loudnessToleranceLu": 1,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 0,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [
+            [
+              61800,
+              80604
+            ],
+            [
+              112266,
+              124460
+            ],
+            [
+              164303,
+              178176
+            ]
+          ],
+          "fraction": 0.25183526400862066,
+          "longestInteriorSeconds": 0.42639455782312924
+        },
+        "loopSeam": {
+          "status": "not applicable",
+          "reason": "one-shot or full song"
+        },
+        "loopBoundary": null
+      },
+      "edit": {
+        "operation": "mono resample, -45 dBFS edge trim with 10 ms margin, 3 ms edge fades; preserve zero tails (no whole-file DC subtraction)",
+        "startFrame": 449,
+        "endFrameExclusive": 82274,
+        "rate": 22050,
+        "rivetFirstOnsetOnly": false
+      },
+      "normalization": {
+        "operation": "measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling",
+        "softLimited": false,
+        "additionalCrestCompressionPasses": 0,
+        "gain": 1.9929665061647177,
+        "credits": 0
+      },
+      "edited": {
+        "file": "audio/x3/voices/edited/mechanic.duel.wav",
+        "sha256": "50e4e69dffa89f23e3b9f72a20ceaf9ed0bb78c88744ee2eaa165c8a32f8445a",
+        "bytes": 163728,
+        "status": "pass",
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": true,
+          "truePeak": true,
+          "silence": true,
+          "clipping": true
+        },
+        "failures": [],
+        "durationSeconds": 3.7108843537414966,
+        "durationWindowSeconds": [
+          3.708884353741497,
+          3.7128843537414964
+        ],
+        "sampleRate": 22050,
+        "channels": 1,
+        "decodedFrames": 81825,
+        "decodedBytes": 163650,
+        "integratedLufs": -18.0,
+        "truePeakDbtp": -3.14,
+        "loudnessRangeLu": 0.3,
+        "loudnessTargetLufs": -18,
+        "loudnessToleranceLu": 1,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 0,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [
+            [
+              30717,
+              39846
+            ],
+            [
+              55800,
+              61753
+            ]
+          ],
+          "fraction": 0.18432019553926063,
+          "longestInteriorSeconds": 0.41401360544217686
+        },
+        "loopSeam": {
+          "status": "not applicable",
+          "reason": "one-shot or full song"
+        },
+        "loopBoundary": null
+      },
+      "status": "pass",
+      "sourceDefects": [
+        "loudness"
+      ]
+    },
+    {
+      "id": "mechanic.after",
+      "cue": "voice.mechanic.after",
+      "category": "tts",
+      "loop": false,
+      "measuredAt": "2026-10-02T21:56:44.842695+00:00",
+      "ownerStatus": "listening pending",
+      "notMeasured": [
+        "semantic fidelity",
+        "owner preference",
+        "in-game masking/latency",
+        "physical Stick playback/memory"
+      ],
+      "provenance": {
+        "sidecar": "audio\\x3\\voices\\raw\\mechanic.after.mp3.json",
+        "sourceSha256": "d5303383054a92e34cc435dd91d2c9889bc6ff8a7407a5488a7ec35293deb03c",
+        "generatedAt": "2026-10-02T21:53:53.136Z",
+        "request": {
+          "text": "You are back. I kept listening for the engine. Thought I had lost you.",
+          "model_id": "eleven_multilingual_v2",
+          "voice_settings": {
+            "stability": 0.45,
+            "similarity_boost": 0.75,
+            "style": 0.25,
+            "use_speaker_boost": true
+          }
+        },
+        "budgetCharge": 70,
+        "providerCredits": 70,
+        "session": "x3-2026-10-02",
+        "reused": false
+      },
+      "raw": {
+        "file": "audio/x3/voices/raw/mechanic.after.mp3",
+        "sha256": "d5303383054a92e34cc435dd91d2c9889bc6ff8a7407a5488a7ec35293deb03c",
+        "bytes": 72351,
+        "status": "fail",
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": false,
+          "truePeak": true,
+          "silence": true,
+          "clipping": true
+        },
+        "failures": [
+          "loudness"
+        ],
+        "durationSeconds": 4.458231292517007,
+        "durationWindowSeconds": [
+          1,
+          20
+        ],
+        "sampleRate": 44100,
+        "channels": 1,
+        "decodedFrames": 196608,
+        "decodedBytes": 393216,
+        "integratedLufs": -24.1,
+        "truePeakDbtp": -7.03,
+        "loudnessRangeLu": 0.9,
+        "loudnessTargetLufs": -18,
+        "loudnessToleranceLu": 1,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 0,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [
+            [
+              30928,
+              43846
+            ],
+            [
+              100829,
+              135188
+            ],
+            [
+              184000,
+              196608
+            ]
+          ],
+          "fraction": 0.3045908610026042,
+          "longestInteriorSeconds": 0.7791156462585034
+        },
+        "loopSeam": {
+          "status": "not applicable",
+          "reason": "one-shot or full song"
+        },
+        "loopBoundary": null
+      },
+      "edit": {
+        "operation": "mono resample, -45 dBFS edge trim with 10 ms margin, 3 ms edge fades; preserve zero tails (no whole-file DC subtraction)",
+        "startFrame": 1164,
+        "endFrameExclusive": 91971,
+        "rate": 22050,
+        "rivetFirstOnsetOnly": false
+      },
+      "normalization": {
+        "operation": "measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling",
+        "softLimited": true,
+        "additionalCrestCompressionPasses": 0,
+        "gain": 1.1246049739669264,
+        "credits": 0
+      },
+      "edited": {
+        "file": "audio/x3/voices/edited/mechanic.after.wav",
+        "sha256": "97afd59ad5d763e5a2c8d7881885091f5e1740e728f267d328d9890cb9b198a0",
+        "bytes": 181692,
+        "status": "pass",
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": true,
+          "truePeak": true,
+          "silence": true,
+          "clipping": true
+        },
+        "failures": [],
+        "durationSeconds": 4.118231292517007,
+        "durationWindowSeconds": [
+          4.116231292517007,
+          4.120231292517007
+        ],
+        "sampleRate": 22050,
+        "channels": 1,
+        "decodedFrames": 90807,
+        "decodedBytes": 181614,
+        "integratedLufs": -18.01,
+        "truePeakDbtp": -5.56,
+        "loudnessRangeLu": 0.3,
+        "loudnessTargetLufs": -18,
+        "loudnessToleranceLu": 1,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 0,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [
+            [
+              14554,
+              20744
+            ],
+            [
+              49513,
+              66277
+            ]
+          ],
+          "fraction": 0.25277786954750187,
+          "longestInteriorSeconds": 0.7602721088435375
+        },
+        "loopSeam": {
+          "status": "not applicable",
+          "reason": "one-shot or full song"
+        },
+        "loopBoundary": null
+      },
+      "status": "pass",
+      "sourceDefects": [
+        "loudness"
+      ]
+    }
+  ]
+}

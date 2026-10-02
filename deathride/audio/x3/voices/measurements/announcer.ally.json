@@ -1,0 +1,161 @@
+{
+  "id": "announcer.ally",
+  "cue": "voice.announcer.ally",
+  "category": "tts",
+  "loop": false,
+  "measuredAt": "2026-10-02T21:56:37.039290+00:00",
+  "ownerStatus": "listening pending",
+  "notMeasured": [
+    "semantic fidelity",
+    "owner preference",
+    "in-game masking/latency",
+    "physical Stick playback/memory"
+  ],
+  "provenance": {
+    "sidecar": "audio\\x3\\voices\\raw\\announcer.ally.mp3.json",
+    "sourceSha256": "a5603b556fc1888cfd7b1b8fb27d7c11d81b99064d072e1b41ef575d166db507",
+    "generatedAt": "2026-10-02T21:52:13.946Z",
+    "request": {
+      "text": "A beaten rival. A new ally. Their backing keeps you on the road.",
+      "model_id": "eleven_multilingual_v2",
+      "voice_settings": {
+        "stability": 0.55,
+        "similarity_boost": 0.75,
+        "style": 0.3,
+        "use_speaker_boost": true
+      }
+    },
+    "budgetCharge": 64,
+    "providerCredits": 64,
+    "session": "x3-2026-10-02",
+    "reused": false
+  },
+  "raw": {
+    "file": "audio/x3/voices/raw/announcer.ally.mp3",
+    "sha256": "a5603b556fc1888cfd7b1b8fb27d7c11d81b99064d072e1b41ef575d166db507",
+    "bytes": 81964,
+    "status": "fail",
+    "checks": {
+      "decode": true,
+      "duration": true,
+      "loudness": false,
+      "truePeak": true,
+      "silence": true,
+      "clipping": true
+    },
+    "failures": [
+      "loudness"
+    ],
+    "durationSeconds": 5.061950113378685,
+    "durationWindowSeconds": [
+      1,
+      20
+    ],
+    "sampleRate": 44100,
+    "channels": 1,
+    "decodedFrames": 223232,
+    "decodedBytes": 446464,
+    "integratedLufs": -22.74,
+    "truePeakDbtp": -3.96,
+    "loudnessRangeLu": 1.9,
+    "loudnessTargetLufs": -18,
+    "loudnessToleranceLu": 1,
+    "meterPaddingFrames": 0,
+    "fullScaleSampleCount": 0,
+    "silence": {
+      "thresholdDbfs": -50,
+      "minimumIntervalSeconds": 0.1,
+      "intervalsFrames": [
+        [
+          47169,
+          65290
+        ],
+        [
+          103995,
+          128036
+        ],
+        [
+          208658,
+          223232
+        ]
+      ],
+      "fraction": 0.25415711009174313,
+      "longestInteriorSeconds": 0.5451473922902494
+    },
+    "loopSeam": {
+      "status": "not applicable",
+      "reason": "one-shot or full song"
+    },
+    "loopBoundary": null
+  },
+  "edit": {
+    "operation": "mono resample, -45 dBFS edge trim with 10 ms margin, 3 ms edge fades; preserve zero tails (no whole-file DC subtraction)",
+    "startFrame": 1203,
+    "endFrameExclusive": 104275,
+    "rate": 22050,
+    "rivetFirstOnsetOnly": false
+  },
+  "normalization": {
+    "operation": "measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling",
+    "softLimited": true,
+    "additionalCrestCompressionPasses": 0,
+    "gain": 1.1789625232437853,
+    "credits": 0
+  },
+  "edited": {
+    "file": "audio/x3/voices/edited/announcer.ally.wav",
+    "sha256": "13897356bd2edc5a6698c409dcbef6ba9641cb02395ce88ce5b37c1d08feaa21",
+    "bytes": 206222,
+    "status": "pass",
+    "checks": {
+      "decode": true,
+      "duration": true,
+      "loudness": true,
+      "truePeak": true,
+      "silence": true,
+      "clipping": true
+    },
+    "failures": [],
+    "durationSeconds": 4.674467120181406,
+    "durationWindowSeconds": [
+      4.672467120181406,
+      4.676467120181406
+    ],
+    "sampleRate": 22050,
+    "channels": 1,
+    "decodedFrames": 103072,
+    "decodedBytes": 206144,
+    "integratedLufs": -18.0,
+    "truePeakDbtp": -4.8,
+    "loudnessRangeLu": 1.2,
+    "loudnessTargetLufs": -18,
+    "loudnessToleranceLu": 1,
+    "meterPaddingFrames": 0,
+    "fullScaleSampleCount": 0,
+    "silence": {
+      "thresholdDbfs": -50,
+      "minimumIntervalSeconds": 0.1,
+      "intervalsFrames": [
+        [
+          22554,
+          31413
+        ],
+        [
+          50918,
+          62800
+        ]
+      ],
+      "fraction": 0.20122826761875193,
+      "longestInteriorSeconds": 0.5388662131519274
+    },
+    "loopSeam": {
+      "status": "not applicable",
+      "reason": "one-shot or full song"
+    },
+    "loopBoundary": null
+  },
+  "status": "pass",
+  "sourceDefects": [
+    "loudness"
+  ]
+}

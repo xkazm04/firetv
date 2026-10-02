@@ -1,0 +1,157 @@
+{
+  "id": "announcer.boss",
+  "cue": "voice.announcer.boss",
+  "category": "tts",
+  "loop": false,
+  "measuredAt": "2026-10-02T21:56:36.292066+00:00",
+  "ownerStatus": "listening pending",
+  "notMeasured": [
+    "semantic fidelity",
+    "owner preference",
+    "in-game masking/latency",
+    "physical Stick playback/memory"
+  ],
+  "provenance": {
+    "sidecar": "audio\\x3\\voices\\raw\\announcer.boss.mp3.json",
+    "sourceSha256": "50f2c7e237c9b4a4de3925fd4a1ee408e1e56d3c0c1b63726fcd3a56654578a8",
+    "generatedAt": "2026-10-02T21:52:09.530Z",
+    "request": {
+      "text": "Beat the division boss. Give them a reason to stand beside you.",
+      "model_id": "eleven_multilingual_v2",
+      "voice_settings": {
+        "stability": 0.55,
+        "similarity_boost": 0.75,
+        "style": 0.3,
+        "use_speaker_boost": true
+      }
+    },
+    "budgetCharge": 63,
+    "providerCredits": 63,
+    "session": "x3-2026-10-02",
+    "reused": false
+  },
+  "raw": {
+    "file": "audio/x3/voices/raw/announcer.boss.mp3",
+    "sha256": "50f2c7e237c9b4a4de3925fd4a1ee408e1e56d3c0c1b63726fcd3a56654578a8",
+    "bytes": 66499,
+    "status": "fail",
+    "checks": {
+      "decode": true,
+      "duration": true,
+      "loudness": false,
+      "truePeak": true,
+      "silence": true,
+      "clipping": true
+    },
+    "failures": [
+      "loudness"
+    ],
+    "durationSeconds": 4.08671201814059,
+    "durationWindowSeconds": [
+      1,
+      20
+    ],
+    "sampleRate": 44100,
+    "channels": 1,
+    "decodedFrames": 180224,
+    "decodedBytes": 360448,
+    "integratedLufs": -25.74,
+    "truePeakDbtp": -6.1,
+    "loudnessRangeLu": 1.2,
+    "loudnessTargetLufs": -18,
+    "loudnessToleranceLu": 1,
+    "meterPaddingFrames": 0,
+    "fullScaleSampleCount": 0,
+    "silence": {
+      "thresholdDbfs": -50,
+      "minimumIntervalSeconds": 0.1,
+      "intervalsFrames": [
+        [
+          0,
+          4626
+        ],
+        [
+          63946,
+          73029
+        ],
+        [
+          165957,
+          180224
+        ]
+      ],
+      "fraction": 0.15522904829545456,
+      "longestInteriorSeconds": 0.20596371882086167
+    },
+    "loopSeam": {
+      "status": "not applicable",
+      "reason": "one-shot or full song"
+    },
+    "loopBoundary": null
+  },
+  "edit": {
+    "operation": "mono resample, -45 dBFS edge trim with 10 ms margin, 3 ms edge fades; preserve zero tails (no whole-file DC subtraction)",
+    "startFrame": 2126,
+    "endFrameExclusive": 83041,
+    "rate": 22050,
+    "rivetFirstOnsetOnly": false
+  },
+  "normalization": {
+    "operation": "measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling",
+    "softLimited": true,
+    "additionalCrestCompressionPasses": 0,
+    "gain": 1.1627865510033546,
+    "credits": 0
+  },
+  "edited": {
+    "file": "audio/x3/voices/edited/announcer.boss.wav",
+    "sha256": "b9ed0cb04a81816f7d53deee11b85ffda4a6b6f972f8cb7d5204a1088ca9a6ac",
+    "bytes": 161908,
+    "status": "pass",
+    "checks": {
+      "decode": true,
+      "duration": true,
+      "loudness": true,
+      "truePeak": true,
+      "silence": true,
+      "clipping": true
+    },
+    "failures": [],
+    "durationSeconds": 3.6696145124716555,
+    "durationWindowSeconds": [
+      3.6676145124716557,
+      3.6716145124716553
+    ],
+    "sampleRate": 22050,
+    "channels": 1,
+    "decodedFrames": 80915,
+    "decodedBytes": 161830,
+    "integratedLufs": -17.99,
+    "truePeakDbtp": -4.82,
+    "loudnessRangeLu": 0.9,
+    "loudnessTargetLufs": -18,
+    "loudnessToleranceLu": 1,
+    "meterPaddingFrames": 0,
+    "fullScaleSampleCount": 0,
+    "silence": {
+      "thresholdDbfs": -50,
+      "minimumIntervalSeconds": 0.1,
+      "intervalsFrames": [
+        [
+          30121,
+          34331
+        ]
+      ],
+      "fraction": 0.05202990792807267,
+      "longestInteriorSeconds": 0.1909297052154195
+    },
+    "loopSeam": {
+      "status": "not applicable",
+      "reason": "one-shot or full song"
+    },
+    "loopBoundary": null
+  },
+  "status": "pass",
+  "sourceDefects": [
+    "loudness"
+  ]
+}

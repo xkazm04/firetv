@@ -1,0 +1,161 @@
+{
+  "id": "mechanic.books",
+  "cue": "voice.mechanic.books",
+  "category": "tts",
+  "loop": false,
+  "measuredAt": "2026-10-02T21:56:41.154531+00:00",
+  "ownerStatus": "listening pending",
+  "notMeasured": [
+    "semantic fidelity",
+    "owner preference",
+    "in-game masking/latency",
+    "physical Stick playback/memory"
+  ],
+  "provenance": {
+    "sidecar": "audio\\x3\\voices\\raw\\mechanic.books.mp3.json",
+    "sourceSha256": "7eadfd94dceaf8bf4016f19d60e2f1e442f785595461b99cb64eafb194c5239a",
+    "generatedAt": "2026-10-02T21:52:54.430Z",
+    "request": {
+      "text": "I checked the receipts. You keep winning, but his numbers never let you go.",
+      "model_id": "eleven_multilingual_v2",
+      "voice_settings": {
+        "stability": 0.45,
+        "similarity_boost": 0.75,
+        "style": 0.25,
+        "use_speaker_boost": true
+      }
+    },
+    "budgetCharge": 75,
+    "providerCredits": 75,
+    "session": "x3-2026-10-02",
+    "reused": false
+  },
+  "raw": {
+    "file": "audio/x3/voices/raw/mechanic.books.mp3",
+    "sha256": "7eadfd94dceaf8bf4016f19d60e2f1e442f785595461b99cb64eafb194c5239a",
+    "bytes": 76948,
+    "status": "fail",
+    "checks": {
+      "decode": true,
+      "duration": true,
+      "loudness": false,
+      "truePeak": true,
+      "silence": true,
+      "clipping": true
+    },
+    "failures": [
+      "loudness"
+    ],
+    "durationSeconds": 4.73687074829932,
+    "durationWindowSeconds": [
+      1,
+      20
+    ],
+    "sampleRate": 44100,
+    "channels": 1,
+    "decodedFrames": 208896,
+    "decodedBytes": 417792,
+    "integratedLufs": -23.75,
+    "truePeakDbtp": -7.66,
+    "loudnessRangeLu": 1.2,
+    "loudnessTargetLufs": -18,
+    "loudnessToleranceLu": 1,
+    "meterPaddingFrames": 0,
+    "fullScaleSampleCount": 0,
+    "silence": {
+      "thresholdDbfs": -50,
+      "minimumIntervalSeconds": 0.1,
+      "intervalsFrames": [
+        [
+          47468,
+          78222
+        ],
+        [
+          109510,
+          133536
+        ],
+        [
+          194332,
+          208896
+        ]
+      ],
+      "fraction": 0.3319546568627451,
+      "longestInteriorSeconds": 0.6973696145124717
+    },
+    "loopSeam": {
+      "status": "not applicable",
+      "reason": "one-shot or full song"
+    },
+    "loopBoundary": null
+  },
+  "edit": {
+    "operation": "mono resample, -45 dBFS edge trim with 10 ms margin, 3 ms edge fades; preserve zero tails (no whole-file DC subtraction)",
+    "startFrame": 1356,
+    "endFrameExclusive": 97275,
+    "rate": 22050,
+    "rivetFirstOnsetOnly": false
+  },
+  "normalization": {
+    "operation": "measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling",
+    "softLimited": true,
+    "additionalCrestCompressionPasses": 0,
+    "gain": 1.1521260598258072,
+    "credits": 0
+  },
+  "edited": {
+    "file": "audio/x3/voices/edited/mechanic.books.wav",
+    "sha256": "6e71a932309584f109f2cd83507804d3c5dd27e096cc70cbc348c887fb76e491",
+    "bytes": 191916,
+    "status": "pass",
+    "checks": {
+      "decode": true,
+      "duration": true,
+      "loudness": true,
+      "truePeak": true,
+      "silence": true,
+      "clipping": true
+    },
+    "failures": [],
+    "durationSeconds": 4.3500680272108845,
+    "durationWindowSeconds": [
+      4.348068027210885,
+      4.352068027210884
+    ],
+    "sampleRate": 22050,
+    "channels": 1,
+    "decodedFrames": 95919,
+    "decodedBytes": 191838,
+    "integratedLufs": -17.99,
+    "truePeakDbtp": -5.5,
+    "loudnessRangeLu": 1.2,
+    "loudnessTargetLufs": -18,
+    "loudnessToleranceLu": 1,
+    "meterPaddingFrames": 0,
+    "fullScaleSampleCount": 0,
+    "silence": {
+      "thresholdDbfs": -50,
+      "minimumIntervalSeconds": 0.1,
+      "intervalsFrames": [
+        [
+          22532,
+          37435
+        ],
+        [
+          53535,
+          65397
+        ]
+      ],
+      "fraction": 0.2790375212418812,
+      "longestInteriorSeconds": 0.6758730158730158
+    },
+    "loopSeam": {
+      "status": "not applicable",
+      "reason": "one-shot or full song"
+    },
+    "loopBoundary": null
+  },
+  "status": "pass",
+  "sourceDefects": [
+    "loudness"
+  ]
+}

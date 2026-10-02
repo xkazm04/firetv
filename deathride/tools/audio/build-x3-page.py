@@ -21,13 +21,18 @@ def relative(path):
 def escape(x): return html.escape(str(x))
 
 
+def group_for(spec):
+    if spec['category']=='tts': return spec['id'].split('.')[0]
+    return spec.get('car') or (spec.get('cue') or spec['id']).split('.')[0]
+
+
 cards=[]
 for row in report['samples']:
     spec=specs[row['id']]
     raw=row.get('raw',{})
     edited=row.get('edited',{})
     provenance=row.get('provenance',{})
-    group=spec.get('car') or (spec.get('cue') or spec['id']).split('.')[0]
+    group=group_for(spec)
     players=''
     for label,item in [('Edited comparison',edited),('Original',raw),('Three cycles',row.get('repeat',{}))]:
         if item.get('file'):
@@ -46,7 +51,7 @@ for row in report['samples']:
 <p>{escape(spec.get('beat') or ('Two short character takes; no production selection' if wave=='engines' else 'Owner listening pending'))}</p>
 {players}<details><summary>Prompt, cost, provenance and measurements</summary><pre>{escape(json.dumps(details,indent=2))}</pre></details>
 <label>Your listening note<textarea data-note="{escape(row['id'])}" placeholder="Preference, audible issue, device used"></textarea></label></article>''')
-groups=sorted({specs[r['id']].get('car') or (specs[r['id']].get('cue') or r['id']).split('.')[0] for r in report['samples']})
+groups=sorted({group_for(specs[r['id']]) for r in report['samples']})
 options='<option value="all">All groups</option>'+''.join(f'<option>{escape(g)}</option>' for g in groups)
 intro={'effects':'Chosen sources and new effects. Crunch has no winner: compare crunch-base with crunch-retry. Repairing meters does not repair an artistic mismatch.',
        'engines':'Ten classes, two 2-second character proofs each. No per-car production assets selected or installed. Listen for identity first; repeated-loop fatigue remains unmeasured.',

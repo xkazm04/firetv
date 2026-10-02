@@ -1,0 +1,35 @@
+{
+  "id": "75c5be65-6bff-4244-9c52-f7fe84f81c68",
+  "ts": "2026-10-02T21:52:25.376Z",
+  "session": "x3-2026-10-02",
+  "status": "complete",
+  "kind": "tts",
+  "out": "audio/x3/voices/raw/announcer.seizure.mp3",
+  "seconds": null,
+  "request": {
+    "text": "Marrow has taken your car. The debt was never meant to end.",
+    "model_id": "eleven_multilingual_v2",
+    "voice_settings": {
+      "stability": 0.55,
+      "similarity_boost": 0.75,
+      "style": 0.3,
+      "use_speaker_boost": true
+    }
+  },
+  "endpoint": "/v1/text-to-speech/N2lVS1w4EtoT3dr4eOWO",
+  "format": "mp3_44100_128",
+  "estimatedCredits": 59,
+  "budgetCharge": 59,
+  "creditsBefore": 23873,
+  "accountTier": "starter",
+  "reserve": 8000,
+  "sessionCap": 9000,
+  "bytes": 66499,
+  "providerCredits": 59,
+  "sha256": "da8dc9d98d0028ffb8516bb30509b2c39f5318bdae057641c28f159311c1ee92",
+  "completedAt": "2026-10-02T21:52:29.274Z",
+  "creditsAfter": 23873,
+  "observedAccountDelta": 0,
+  "spendBasis": "Provider character-cost response header; account delta separately reported.",
+  "sessionBudgetUsed": 5705
+}
