@@ -1,0 +1,200 @@
+{
+  "id": "ability-turbine",
+  "cue": "ability.turbine",
+  "category": "sfx",
+  "loop": false,
+  "measuredAt": "2026-10-02T21:43:44.446914+00:00",
+  "ownerStatus": "listening pending",
+  "notMeasured": [
+    "semantic fidelity",
+    "owner preference",
+    "in-game masking/latency",
+    "physical Stick playback/memory"
+  ],
+  "provenance": {
+    "sidecar": "audio\\x3\\effects\\raw\\ability-turbine.mp3.json",
+    "sourceSha256": "f226b192b547532972b75a5e37fa7429b99f5eb9ed812549e9e1d246e775a98d",
+    "generatedAt": "2026-10-02T21:38:29.602Z",
+    "request": {
+      "text": "Small crude turbine spools sharply: narrow air whine rises over dirty bearings, short pressure release. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.",
+      "duration_seconds": 1,
+      "prompt_influence": 0.7,
+      "model_id": "eleven_text_to_sound_v2",
+      "loop": false
+    },
+    "budgetCharge": 100,
+    "providerCredits": 10,
+    "session": "x3-2026-10-02",
+    "reused": false
+  },
+  "raw": {
+    "file": "audio/x3/effects/raw/ability-turbine.mp3",
+    "sha256": "f226b192b547532972b75a5e37fa7429b99f5eb9ed812549e9e1d246e775a98d",
+    "bytes": 17180,
+    "status": "fail",
+    "checks": {
+      "decode": true,
+      "duration": true,
+      "loudness": false,
+      "truePeak": false,
+      "silence": true,
+      "clipping": false
+    },
+    "failures": [
+      "loudness",
+      "truePeak",
+      "clipping"
+    ],
+    "durationSeconds": 1.0,
+    "durationWindowSeconds": [
+      0.85,
+      1.15
+    ],
+    "sampleRate": 44100,
+    "channels": 2,
+    "decodedFrames": 44100,
+    "decodedBytes": 176400,
+    "integratedLufs": -4.44,
+    "truePeakDbtp": 2.03,
+    "loudnessRangeLu": 0.0,
+    "loudnessTargetLufs": -20,
+    "loudnessToleranceLu": 2,
+    "meterPaddingFrames": 0,
+    "fullScaleSampleCount": 94,
+    "silence": {
+      "thresholdDbfs": -50,
+      "minimumIntervalSeconds": 0.1,
+      "intervalsFrames": [],
+      "fraction": 0.0,
+      "longestInteriorSeconds": 0
+    },
+    "loopSeam": {
+      "status": "not applicable",
+      "reason": "one-shot or full song"
+    },
+    "loopBoundary": null
+  },
+  "edit": {
+    "operation": "mono resample, -45 dBFS edge trim with 10 ms margin, 3 ms edge fades; preserve zero tails (no whole-file DC subtraction)",
+    "startFrame": 0,
+    "endFrameExclusive": 22050,
+    "rate": 22050,
+    "rivetFirstOnsetOnly": false
+  },
+  "normalization": {
+    "operation": "measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling",
+    "softLimited": false,
+    "additionalCrestCompressionPasses": 0,
+    "gain": 0.17823787674480895,
+    "credits": 0
+  },
+  "tailCleanup": {
+    "before": {
+      "file": "audio/x3/effects/edited/ability-turbine.wav",
+      "sha256": "184df743476642c9a3aeca7bba963a5ac83d5011952e68d29ff34a6c6a056ef1",
+      "bytes": 44178,
+      "status": "pass",
+      "checks": {
+        "decode": true,
+        "duration": true,
+        "loudness": true,
+        "truePeak": true,
+        "silence": true,
+        "clipping": true
+      },
+      "failures": [],
+      "durationSeconds": 1.0,
+      "durationWindowSeconds": [
+        0,
+        180
+      ],
+      "sampleRate": 22050,
+      "channels": 1,
+      "decodedFrames": 22050,
+      "decodedBytes": 44100,
+      "integratedLufs": -20.0,
+      "truePeakDbtp": -12.62,
+      "loudnessRangeLu": 0.0,
+      "loudnessTargetLufs": -20,
+      "loudnessToleranceLu": 2,
+      "meterPaddingFrames": 0,
+      "fullScaleSampleCount": 0,
+      "silence": {
+        "thresholdDbfs": -50,
+        "minimumIntervalSeconds": 0.1,
+        "intervalsFrames": [
+          [
+            19804,
+            22050
+          ]
+        ],
+        "fraction": 0.101859410430839,
+        "longestInteriorSeconds": 0
+      },
+      "loopSeam": {
+        "status": "not applicable",
+        "reason": "one-shot or full song"
+      },
+      "loopBoundary": null
+    },
+    "startFrame": 0,
+    "endFrameExclusive": 20024,
+    "operation": "trim measured edge silence and <=25 ms codec residue; retain 10 ms margin",
+    "normalization": {
+      "operation": "measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling",
+      "softLimited": false,
+      "additionalCrestCompressionPasses": 0,
+      "gain": 0.9386420366721352,
+      "credits": 0
+    }
+  },
+  "edited": {
+    "file": "audio/x3/effects/edited/ability-turbine.wav",
+    "sha256": "75e9aca11d2731a0734b5b663d2c9541e14fc06aac80b9384bd5868efbf5f142",
+    "bytes": 40126,
+    "status": "pass",
+    "checks": {
+      "decode": true,
+      "duration": true,
+      "loudness": true,
+      "truePeak": true,
+      "silence": true,
+      "clipping": true
+    },
+    "failures": [],
+    "durationSeconds": 0.9081179138321995,
+    "durationWindowSeconds": [
+      0.9061179138321995,
+      0.9101179138321995
+    ],
+    "sampleRate": 22050,
+    "channels": 1,
+    "decodedFrames": 20024,
+    "decodedBytes": 40048,
+    "integratedLufs": -19.99,
+    "truePeakDbtp": -13.17,
+    "loudnessRangeLu": 0.0,
+    "loudnessTargetLufs": -20,
+    "loudnessToleranceLu": 2,
+    "meterPaddingFrames": 0,
+    "fullScaleSampleCount": 0,
+    "silence": {
+      "thresholdDbfs": -50,
+      "minimumIntervalSeconds": 0.1,
+      "intervalsFrames": [],
+      "fraction": 0.0,
+      "longestInteriorSeconds": 0
+    },
+    "loopSeam": {
+      "status": "not applicable",
+      "reason": "one-shot or full song"
+    },
+    "loopBoundary": null
+  },
+  "status": "pass",
+  "sourceDefects": [
+    "loudness",
+    "truePeak",
+    "clipping"
+  ]
+}

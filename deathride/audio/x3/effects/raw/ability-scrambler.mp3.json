@@ -1,0 +1,32 @@
+{
+  "id": "f79c8a46-5755-4dc1-8e0e-7efae0ce74a7",
+  "ts": "2026-10-02T21:39:14.172Z",
+  "session": "x3-2026-10-02",
+  "status": "complete",
+  "kind": "sfx",
+  "out": "audio/x3/effects/raw/ability-scrambler.mp3",
+  "seconds": 1,
+  "request": {
+    "text": "Crude electrical canister activates: initial metal tumble, gritty irregular electrical sputter, brief tearing static and stop. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.",
+    "duration_seconds": 1,
+    "prompt_influence": 0.7,
+    "model_id": "eleven_text_to_sound_v2",
+    "loop": false
+  },
+  "endpoint": "/v1/sound-generation",
+  "format": "mp3_44100_128",
+  "estimatedCredits": 100,
+  "budgetCharge": 100,
+  "creditsBefore": 24343,
+  "accountTier": "starter",
+  "reserve": 8000,
+  "sessionCap": 9000,
+  "bytes": 17180,
+  "providerCredits": 10,
+  "sha256": "4da8615a915308c5a377ca48d1b635741e54718ed9d01ea3b69d0418c037532f",
+  "completedAt": "2026-10-02T21:39:23.711Z",
+  "creditsAfter": 24293,
+  "observedAccountDelta": 50,
+  "spendBasis": "Provider character-cost response header; account delta separately reported.",
+  "sessionBudgetUsed": 3240
+}

@@ -1,0 +1,32 @@
+{
+  "id": "f11d9a77-a3ef-46d6-a4dd-8978d65bd2f5",
+  "ts": "2026-10-02T21:37:17.200Z",
+  "session": "x3-2026-10-02",
+  "status": "complete",
+  "kind": "sfx",
+  "out": "audio/x3/effects/raw/ui-back.mp3",
+  "seconds": 0.5,
+  "request": {
+    "text": "One worn latch opens: dry soft double click, a little spring retracts, intimate short release. Dry intimate worn mechanisms, felt-damped steel, restrained dark resonance. Original isolated effect; no beep, music or voice.",
+    "duration_seconds": 0.5,
+    "prompt_influence": 0.7,
+    "model_id": "eleven_text_to_sound_v2",
+    "loop": false
+  },
+  "endpoint": "/v1/sound-generation",
+  "format": "mp3_44100_128",
+  "estimatedCredits": 100,
+  "budgetCharge": 100,
+  "creditsBefore": 24473,
+  "accountTier": "starter",
+  "reserve": 8000,
+  "sessionCap": 9000,
+  "bytes": 8821,
+  "providerCredits": 5,
+  "sha256": "ac2dda86e915003d0665929a784c4ad97972870296d3e379575a825f4b375b1d",
+  "completedAt": "2026-10-02T21:37:21.830Z",
+  "creditsAfter": 24385,
+  "observedAccountDelta": 88,
+  "spendBasis": "Provider character-cost response header; account delta separately reported.",
+  "sessionBudgetUsed": 2240
+}

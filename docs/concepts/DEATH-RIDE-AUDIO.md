@@ -48,7 +48,7 @@ Original work only. The ElevenLabs key never enters the repo or the logs. One de
 | X2 | Audition page with proof kits, spend report, choices template | complete — [audition](../../deathride/audio/audition/index.html), [design/results](deathride/X2-audio-audition.md); 4 equal kits / 32 takes, failures visible, conservative charge 7,828/9,000; stopped at page |
 | X3 | After the owner's pick | authorized by OWNER-AUDIO-CHOICE.md; executing six waves |
 | X3.1 | Bible, cue data, seam repair plan | complete — [design](deathride/X3-1-audio-contract.md); 62 cue contracts, zero spend |
-| X3.2 | Effects and deterministic acceptance | pending |
+| X3.2 | Effects and deterministic acceptance | complete — [design](deathride/X3-2-effects.md); 34 new + 6 reused, 40 final signal passes, first failures retained; charge 3,440 |
 | X3.3 | Ten-class engine triage | pending; proof clips only |
 | X3.4 | Announcer and Mechanic lines | pending |
 | X3.5 | Runtime cue service and build | pending |

@@ -1,0 +1,367 @@
+{
+  "session": "x3-2026-10-02",
+  "wave": "effects",
+  "samples": [
+    {
+      "id": "engine-base",
+      "cue": "engine.base",
+      "source": "diesel-engine",
+      "seconds": 2,
+      "loop": true,
+      "category": "sfx",
+      "kind": "reuse"
+    },
+    {
+      "id": "rivet-base",
+      "cue": "weapon.rivet.fire",
+      "source": "diesel-rivet",
+      "seconds": 1.5,
+      "loop": false,
+      "category": "sfx",
+      "kind": "reuse"
+    },
+    {
+      "id": "mine-base",
+      "cue": "weapon.mine.blast",
+      "source": "diesel-mine",
+      "seconds": 2,
+      "loop": false,
+      "category": "sfx",
+      "kind": "reuse"
+    },
+    {
+      "id": "crunch-base",
+      "cue": null,
+      "source": "diesel-crunch",
+      "seconds": 1.5,
+      "loop": false,
+      "category": "sfx",
+      "kind": "reuse"
+    },
+    {
+      "id": "pickup-base",
+      "cue": "pickup.cash",
+      "source": "dust-pickup",
+      "seconds": 1,
+      "loop": false,
+      "category": "sfx",
+      "kind": "reuse"
+    },
+    {
+      "id": "confirm-base",
+      "cue": "ui.confirm",
+      "source": "noir-confirm",
+      "seconds": 1,
+      "loop": false,
+      "category": "sfx",
+      "kind": "reuse"
+    },
+    {
+      "id": "tyre",
+      "cue": "movement.tyre",
+      "category": "sfx",
+      "seconds": 2,
+      "loop": true,
+      "prompt": "Tyres rolling over rough asphalt. Immediate steady rubber grain and road hiss; constant body, no acceleration or distinct bumps. Seamless repeating bed. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.",
+      "kind": "sfx"
+    },
+    {
+      "id": "skid",
+      "cue": "movement.skid",
+      "category": "sfx",
+      "seconds": 2,
+      "loop": true,
+      "prompt": "Loaded tyres scrubbing sideways. Immediate rough rubber rasp, low strained body, constant skid friction. No impact, engine or changing speed. Seamless repeating bed. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.",
+      "kind": "sfx"
+    },
+    {
+      "id": "drift",
+      "cue": "movement.drift",
+      "category": "sfx",
+      "seconds": 2,
+      "loop": true,
+      "prompt": "Controlled hard drift on dry asphalt. Constant singing rubber edge over gritty low scrub, steady load, no impact or end release. Seamless repeating bed. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.",
+      "kind": "sfx"
+    },
+    {
+      "id": "crunch-retry",
+      "cue": "collision.car",
+      "category": "sfx",
+      "seconds": 1.5,
+      "loop": false,
+      "prompt": "Heavy car side impact: instantaneous thick steel buckle, deep chassis crush, torn panels grinding for half a second, short falling debris. Weighty metal collision, no glass shower, explosion or engine. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.",
+      "kind": "sfx"
+    },
+    {
+      "id": "wall",
+      "cue": "collision.wall",
+      "category": "sfx",
+      "seconds": 1.5,
+      "loop": false,
+      "prompt": "Car chassis hits a concrete retaining wall. Hard dull crack, steel dragging on abrasive concrete, crushed grit falls and dies quickly. No explosion. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.",
+      "kind": "sfx"
+    },
+    {
+      "id": "barrier",
+      "cue": "collision.barrier",
+      "category": "sfx",
+      "seconds": 1.5,
+      "loop": false,
+      "prompt": "Car strikes a loose steel road barrier. Immediate hollow rail bang, bolts rattling in a short cascading decay, final metal tick. No explosion. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.",
+      "kind": "sfx"
+    },
+    {
+      "id": "rivet-hit",
+      "cue": "weapon.rivet.hit",
+      "category": "sfx",
+      "seconds": 0.5,
+      "loop": false,
+      "prompt": "Single rivet strikes armoured steel: sharp small metal puncture, compact dull body and tiny falling fragment. Fast dry decay. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.",
+      "kind": "sfx"
+    },
+    {
+      "id": "hammer-fire",
+      "cue": "weapon.hammer.fire",
+      "category": "sfx",
+      "seconds": 1,
+      "loop": false,
+      "prompt": "Heavy vehicle cannon launch: sharp bolt release, deep pneumatic thump, short barrel ring and fast dry stop. One launch only. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.",
+      "kind": "sfx"
+    },
+    {
+      "id": "hammer-hit",
+      "cue": "weapon.hammer.hit",
+      "category": "sfx",
+      "seconds": 2,
+      "loop": false,
+      "prompt": "Heavy shell strikes road metal: immediate hard crack, compressed low blast, heavy fragments tumble briefly and stop. One impact, no rolling fireball. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.",
+      "kind": "sfx"
+    },
+    {
+      "id": "mine-drop",
+      "cue": "weapon.mine.drop",
+      "category": "sfx",
+      "seconds": 0.7,
+      "loop": false,
+      "prompt": "Road mine drops from a crude rack: latch snaps, heavy steel disk thumps onto asphalt, brief rattling settle. No blast. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.",
+      "kind": "sfx"
+    },
+    {
+      "id": "mine-arm",
+      "cue": "weapon.mine.arm",
+      "category": "sfx",
+      "seconds": 0.6,
+      "loop": false,
+      "prompt": "A road mine arms: spring winds tightly then a distinct short steel catch seats. Compact tense ratchet, dry stop. No electronic beep or explosion. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.",
+      "kind": "sfx"
+    },
+    {
+      "id": "scatter",
+      "cue": "weapon.scatter.fire",
+      "category": "sfx",
+      "seconds": 0.8,
+      "loop": false,
+      "prompt": "One vehicle scatter cannon discharge: abrupt broad gravelly slap, three nearly simultaneous metal cracks, short mechanical cycling, dry release. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.",
+      "kind": "sfx"
+    },
+    {
+      "id": "pickup-ammo",
+      "cue": "pickup.ammo",
+      "category": "sfx",
+      "seconds": 0.6,
+      "loop": "",
+      "prompt": "One ammunition collection: crisp rack latch, a short dry stack of steel cartridges seating, quick tactile stop. Dry exposed scrap metal and dusty mechanical foley, light space. Original isolated effect; no coin, beep, music or voice.",
+      "kind": "sfx"
+    },
+    {
+      "id": "pickup-repair",
+      "cue": "pickup.repair",
+      "category": "sfx",
+      "seconds": 0.7,
+      "loop": false,
+      "prompt": "One repair collection: crisp clamp bite, short satisfying ratchet tightening a plate, dry release. Dry exposed scrap metal and dusty mechanical foley, light space. Original isolated effect; no coin, beep, music or voice.",
+      "kind": "sfx"
+    },
+    {
+      "id": "wreck",
+      "cue": "race.wreck",
+      "category": "sfx",
+      "seconds": 2,
+      "loop": false,
+      "prompt": "Vehicle wreck: violent steel tearing at onset, deep collapsing chassis and engine choke, short debris falling to a dead stop. No voices or long fire. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.",
+      "kind": "sfx"
+    },
+    {
+      "id": "countdown",
+      "cue": "race.countdown",
+      "category": "sfx",
+      "seconds": 0.5,
+      "loop": false,
+      "prompt": "One firm start marshal mechanism knock: solid iron hammer hits a damped steel plate, weighty compact knock with tiny decay. Only one hit. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.",
+      "kind": "sfx"
+    },
+    {
+      "id": "start",
+      "cue": "race.start",
+      "category": "sfx",
+      "seconds": 1,
+      "loop": false,
+      "prompt": "Race gate releases: abrupt spring-loaded steel crack, compressed air punch, fast rising mechanical rush and dry stop. One clear starting signal. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.",
+      "kind": "sfx"
+    },
+    {
+      "id": "lap",
+      "cue": "race.lap",
+      "category": "sfx",
+      "seconds": 0.8,
+      "loop": false,
+      "prompt": "Lap completed signal: two quick dry steel ratchet knocks, second slightly brighter, a compact resonant plate tail. Physical and readable, no beep. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.",
+      "kind": "sfx"
+    },
+    {
+      "id": "victory",
+      "cue": "race.victory",
+      "category": "sfx",
+      "seconds": 3,
+      "loop": false,
+      "prompt": "Short victory punctuation made of junkyard percussion: low drum strike, rising three metal hits, strong final anvil accent, brief ringing resolution. Three seconds, original nonmelodic sting. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.",
+      "kind": "sfx"
+    },
+    {
+      "id": "defeat",
+      "cue": "race.defeat",
+      "category": "sfx",
+      "seconds": 3,
+      "loop": false,
+      "prompt": "Short defeat punctuation: a tired low drum, two sagging resonant steel knocks, an exhausted spring unwinding, damped final stop. Three seconds, original nonmelodic sting. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.",
+      "kind": "sfx"
+    },
+    {
+      "id": "ui-focus",
+      "cue": "ui.focus",
+      "category": "sfx",
+      "seconds": 0.5,
+      "loop": false,
+      "prompt": "One small worn switch tooth catches: quiet precise click, tiny damped body and immediate release. Dry intimate worn mechanisms, felt-damped steel, restrained dark resonance. Original isolated effect; no beep, music or voice.",
+      "kind": "sfx"
+    },
+    {
+      "id": "ui-back",
+      "cue": "ui.back",
+      "category": "sfx",
+      "seconds": 0.5,
+      "loop": false,
+      "prompt": "One worn latch opens: dry soft double click, a little spring retracts, intimate short release. Dry intimate worn mechanisms, felt-damped steel, restrained dark resonance. Original isolated effect; no beep, music or voice.",
+      "kind": "sfx"
+    },
+    {
+      "id": "ui-denied",
+      "cue": "ui.denied",
+      "category": "sfx",
+      "seconds": 0.5,
+      "loop": false,
+      "prompt": "One jammed latch refuses to close: dry compact knock, brief strained spring rasp, dull stop. Dry intimate worn mechanisms, felt-damped steel, restrained dark resonance. Original isolated effect; no beep, music or voice.",
+      "kind": "sfx"
+    },
+    {
+      "id": "ui-purchase",
+      "cue": "ui.purchase",
+      "category": "sfx",
+      "seconds": 0.7,
+      "loop": false,
+      "prompt": "One shop purchase receipt mechanism: heavy dry stamp, short ratchet seating, quiet final steel click. Satisfying tactile stop. Dry intimate worn mechanisms, felt-damped steel, restrained dark resonance. Original isolated effect; no beep, music or voice.",
+      "kind": "sfx"
+    },
+    {
+      "id": "ability-steel-flick",
+      "cue": "ability.steel-flick",
+      "category": "sfx",
+      "seconds": 1,
+      "loop": false,
+      "prompt": "Tensioned leaf spring draws and snaps forward into a short exhaust rip. Fast rising mechanical warning, dry release. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.",
+      "kind": "sfx"
+    },
+    {
+      "id": "ability-flywheel",
+      "cue": "ability.flywheel",
+      "category": "sfx",
+      "seconds": 1,
+      "loop": false,
+      "prompt": "Clutch catches into a rising flywheel whirr, thick spinning iron briefly strains and releases. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.",
+      "kind": "sfx"
+    },
+    {
+      "id": "ability-shoulder",
+      "cue": "ability.shoulder",
+      "category": "sfx",
+      "seconds": 1,
+      "loop": false,
+      "prompt": "Armoured ram plates draw tight, thick steel preload groans then one hard latch seats. Heavy forward-charge warning, no impact. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.",
+      "kind": "sfx"
+    },
+    {
+      "id": "ability-turbine",
+      "cue": "ability.turbine",
+      "category": "sfx",
+      "seconds": 1,
+      "loop": false,
+      "prompt": "Small crude turbine spools sharply: narrow air whine rises over dirty bearings, short pressure release. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.",
+      "kind": "sfx"
+    },
+    {
+      "id": "ability-ground-bite",
+      "cue": "ability.ground-bite",
+      "category": "sfx",
+      "seconds": 1,
+      "loop": false,
+      "prompt": "Driven treads bite into loose grit: sharp rubber catch, dense short gravel grind, dry grip release. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.",
+      "kind": "sfx"
+    },
+    {
+      "id": "ability-punch-lance",
+      "cue": "ability.punch-lance",
+      "category": "sfx",
+      "seconds": 1,
+      "loop": false,
+      "prompt": "Tensioned steel lance charges: three tightening ratchet teeth accelerate, a heavy bolt snaps and rings briefly. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.",
+      "kind": "sfx"
+    },
+    {
+      "id": "ability-bone-rack",
+      "cue": "ability.bone-rack",
+      "category": "sfx",
+      "seconds": 1,
+      "loop": false,
+      "prompt": "Steel spike rack extends: loaded rails scrape, loose spikes chatter, final hard lock. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.",
+      "kind": "sfx"
+    },
+    {
+      "id": "ability-scrambler",
+      "cue": "ability.scrambler",
+      "category": "sfx",
+      "seconds": 1,
+      "loop": false,
+      "prompt": "Crude electrical canister activates: initial metal tumble, gritty irregular electrical sputter, brief tearing static and stop. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.",
+      "kind": "sfx"
+    },
+    {
+      "id": "ability-arc-harpoon",
+      "cue": "ability.arc-harpoon",
+      "category": "sfx",
+      "seconds": 1,
+      "loop": false,
+      "prompt": "Tensioned cable spool winds hard: ratchet strain, sharp cable zip and a short rough electrical arc crack. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.",
+      "kind": "sfx"
+    },
+    {
+      "id": "ability-plate-brace",
+      "cue": "ability.plate-brace",
+      "category": "sfx",
+      "seconds": 1,
+      "loop": false,
+      "prompt": "Armour braces lock: two thick steel clamps slam together, deep short chassis strain, tight latch stop. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.",
+      "kind": "sfx"
+    }
+  ],
+  "generationEstimate": 3440
+}

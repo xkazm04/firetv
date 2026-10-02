@@ -1,0 +1,205 @@
+{
+  "id": "countdown",
+  "cue": "race.countdown",
+  "category": "sfx",
+  "loop": false,
+  "measuredAt": "2026-10-02T21:43:38.550059+00:00",
+  "ownerStatus": "listening pending",
+  "notMeasured": [
+    "semantic fidelity",
+    "owner preference",
+    "in-game masking/latency",
+    "physical Stick playback/memory"
+  ],
+  "provenance": {
+    "sidecar": "audio\\x3\\effects\\raw\\countdown.mp3.json",
+    "sourceSha256": "ad3e24e8d3687b268a157c815c139036cb889822c823543d778b5860e46e9d60",
+    "generatedAt": "2026-10-02T21:36:04.300Z",
+    "request": {
+      "text": "One firm start marshal mechanism knock: solid iron hammer hits a damped steel plate, weighty compact knock with tiny decay. Only one hit. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.",
+      "duration_seconds": 0.5,
+      "prompt_influence": 0.7,
+      "model_id": "eleven_text_to_sound_v2",
+      "loop": false
+    },
+    "budgetCharge": 100,
+    "providerCredits": 5,
+    "session": "x3-2026-10-02",
+    "reused": false
+  },
+  "raw": {
+    "file": "audio/x3/effects/raw/countdown.mp3",
+    "sha256": "ad3e24e8d3687b268a157c815c139036cb889822c823543d778b5860e46e9d60",
+    "bytes": 8821,
+    "status": "fail",
+    "checks": {
+      "decode": true,
+      "duration": true,
+      "loudness": false,
+      "truePeak": false,
+      "silence": true,
+      "clipping": false
+    },
+    "failures": [
+      "loudness",
+      "truePeak",
+      "clipping"
+    ],
+    "durationSeconds": 0.48,
+    "durationWindowSeconds": [
+      0.35,
+      0.65
+    ],
+    "sampleRate": 44100,
+    "channels": 2,
+    "decodedFrames": 21168,
+    "decodedBytes": 84672,
+    "integratedLufs": -13.75,
+    "truePeakDbtp": 0.56,
+    "loudnessRangeLu": 0.0,
+    "loudnessTargetLufs": -20,
+    "loudnessToleranceLu": 2,
+    "meterPaddingFrames": 0,
+    "fullScaleSampleCount": 7,
+    "silence": {
+      "thresholdDbfs": -50,
+      "minimumIntervalSeconds": 0.1,
+      "intervalsFrames": [
+        [
+          14310,
+          20953
+        ]
+      ],
+      "fraction": 0.31382275132275134,
+      "longestInteriorSeconds": 0
+    },
+    "loopSeam": {
+      "status": "not applicable",
+      "reason": "one-shot or full song"
+    },
+    "loopBoundary": null
+  },
+  "edit": {
+    "operation": "mono resample, -45 dBFS edge trim with 10 ms margin, 3 ms edge fades; preserve zero tails (no whole-file DC subtraction)",
+    "startFrame": 0,
+    "endFrameExclusive": 10584,
+    "rate": 22050,
+    "rivetFirstOnsetOnly": false
+  },
+  "normalization": {
+    "operation": "measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling",
+    "softLimited": false,
+    "additionalCrestCompressionPasses": 0,
+    "gain": 0.627335695984038,
+    "credits": 0
+  },
+  "tailCleanup": {
+    "before": {
+      "file": "audio/x3/effects/edited/countdown.wav",
+      "sha256": "4f84390ebda342ce3ce1736af0a47df4f8e9b2bb34b562f72cc9bae255c2aeec",
+      "bytes": 21246,
+      "status": "pass",
+      "checks": {
+        "decode": true,
+        "duration": true,
+        "loudness": true,
+        "truePeak": true,
+        "silence": true,
+        "clipping": true
+      },
+      "failures": [],
+      "durationSeconds": 0.48,
+      "durationWindowSeconds": [
+        0,
+        180
+      ],
+      "sampleRate": 22050,
+      "channels": 1,
+      "decodedFrames": 10584,
+      "decodedBytes": 21168,
+      "integratedLufs": -19.95,
+      "truePeakDbtp": -3.38,
+      "loudnessRangeLu": 0.0,
+      "loudnessTargetLufs": -20,
+      "loudnessToleranceLu": 2,
+      "meterPaddingFrames": 0,
+      "fullScaleSampleCount": 0,
+      "silence": {
+        "thresholdDbfs": -50,
+        "minimumIntervalSeconds": 0.1,
+        "intervalsFrames": [
+          [
+            6911,
+            10487
+          ]
+        ],
+        "fraction": 0.3378684807256236,
+        "longestInteriorSeconds": 0
+      },
+      "loopSeam": {
+        "status": "not applicable",
+        "reason": "one-shot or full song"
+      },
+      "loopBoundary": null
+    },
+    "startFrame": 0,
+    "endFrameExclusive": 7131,
+    "operation": "trim measured edge silence and <=25 ms codec residue; retain 10 ms margin",
+    "normalization": {
+      "operation": "measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling",
+      "softLimited": false,
+      "additionalCrestCompressionPasses": 0,
+      "gain": 1.0057730630017383,
+      "credits": 0
+    }
+  },
+  "edited": {
+    "file": "audio/x3/effects/edited/countdown.wav",
+    "sha256": "e5e9b61db1ea3e16f57a68c1bae9edbf27dc835081bbabb4994789d6fa6ff471",
+    "bytes": 14340,
+    "status": "pass",
+    "checks": {
+      "decode": true,
+      "duration": true,
+      "loudness": true,
+      "truePeak": true,
+      "silence": true,
+      "clipping": true
+    },
+    "failures": [],
+    "durationSeconds": 0.3234013605442177,
+    "durationWindowSeconds": [
+      0.3214013605442177,
+      0.3254013605442177
+    ],
+    "sampleRate": 22050,
+    "channels": 1,
+    "decodedFrames": 7131,
+    "decodedBytes": 14262,
+    "integratedLufs": -19.95,
+    "truePeakDbtp": -3.33,
+    "loudnessRangeLu": 0.0,
+    "loudnessTargetLufs": -20,
+    "loudnessToleranceLu": 2,
+    "meterPaddingFrames": 1689,
+    "fullScaleSampleCount": 0,
+    "silence": {
+      "thresholdDbfs": -50,
+      "minimumIntervalSeconds": 0.1,
+      "intervalsFrames": [],
+      "fraction": 0.0,
+      "longestInteriorSeconds": 0
+    },
+    "loopSeam": {
+      "status": "not applicable",
+      "reason": "one-shot or full song"
+    },
+    "loopBoundary": null
+  },
+  "status": "pass",
+  "sourceDefects": [
+    "loudness",
+    "truePeak",
+    "clipping"
+  ]
+}

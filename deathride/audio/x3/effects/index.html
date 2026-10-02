@@ -1,0 +1,3762 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Death Ride X3 — effects audition</title><style>
+:root{color-scheme:dark;--bg:#161513;--panel:#24221e;--ink:#eee7d8;--edge:#817253}body.light{color-scheme:light;--bg:#eee9dd;--panel:#fffaf0;--ink:#27221d;--edge:#766444}*{box-sizing:border-box}body{background:var(--bg);color:var(--ink);font:16px/1.5 system-ui;margin:0 auto;padding:24px;max-width:1500px}h1{font-size:clamp(28px,5vw,48px);margin-bottom:8px}header{max-width:1000px}button,select{font:inherit;padding:8px;background:var(--panel);color:var(--ink);border:1px solid var(--edge);border-radius:4px}nav{display:flex;gap:8px;flex-wrap:wrap;margin:20px 0}main{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,360px),1fr));gap:20px}article{min-width:0;background:var(--panel);padding:18px;border:1px solid var(--edge);border-radius:5px}h2{overflow-wrap:anywhere}audio{display:block;width:100%;margin:6px 0 16px}pre{white-space:pre-wrap;overflow-wrap:anywhere;font-size:12px}textarea{display:block;width:100%;min-height:70px;font:inherit}.badge{font-weight:700}.fail,.missing{color:#ef997f}.pass{color:#83b99c}body.light .pass{color:#275e37}body.light .fail{color:#9c331d}.hidden{display:none}a{color:inherit}
+</style><header><h1>Death Ride / effects</h1><p>Chosen sources and new effects. Crunch has no winner: compare crunch-base with crunch-retry. Repairing meters does not repair an artistic mismatch.</p><p>This wave estimate 3440 credits; session conservative total 3440/9,000. Account before 24672, after 24293; reserve 8,000. Shared balances include other projects and delayed billing.</p><p>No in-game or physical Stick acceptance. One player at a time. Local edits cost zero credits. Original and edited failures remain visible.</p></header>
+<nav><select id="filter" aria-label="Group"><option value="all">All groups</option><option>ability</option><option>collision</option><option>crunch-base</option><option>engine</option><option>movement</option><option>pickup</option><option>race</option><option>ui</option><option>weapon</option></select><button id="stop">Stop all</button><button id="theme">Light / dark</button><button id="export">Export notes</button></nav>
+<p id="count"></p><main><article data-group="engine" data-id="engine-base">
+<h2>engine-base</h2><p class="badge pass">PASS — signal screen only</p>
+<p>2.000 s / -20.0 LUFS / -7.98 dBTP</p><p>Original failures: duration, loudness, truePeak, loopSeam<br>Edited failures: none</p>
+<p>Owner listening pending</p>
+<label>Edited comparison<audio controls preload="none" src="edited/engine-base.wav"></audio></label><label>Original<audio controls preload="none" src="../../audition/raw/diesel-engine.mp3"></audio></label><label>Three cycles<audio controls preload="none" src="repeats/engine-base-three-cycles.ogg"></audio></label><details><summary>First local attempt — pass: no meter failures</summary><audio controls preload="none" src="first-pass/edited/engine-base.wav"></audio><p>-19.99 LUFS; -7.58 dBTP</p></details><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
+  &quot;promptOrText&quot;: &quot;Battered road coupe at steady low revs. Constant body, seamlessly repeating; no ignition, acceleration, fade or backfire. Timbre: heavy uneven diesel piston knocks and vibrating steel casing. Close foundry steel, blunt low-mid weight, analog grit, short concrete reflection. 2 seconds. Original isolated effect; no music, no voice.&quot;,
+  &quot;beat&quot;: null,
+  &quot;provenance&quot;: {
+    &quot;sidecar&quot;: &quot;audio\\audition\\raw\\diesel-engine.mp3.json&quot;,
+    &quot;sourceSha256&quot;: &quot;24684e887b38a0365ac8f114e50ca36eac3dfb369e6a1ee382ef7350a07de29d&quot;,
+    &quot;generatedAt&quot;: &quot;2026-10-02T19:22:56.188Z&quot;,
+    &quot;request&quot;: {
+      &quot;text&quot;: &quot;Battered road coupe at steady low revs. Constant body, seamlessly repeating; no ignition, acceleration, fade or backfire. Timbre: heavy uneven diesel piston knocks and vibrating steel casing. Close foundry steel, blunt low-mid weight, analog grit, short concrete reflection. 2 seconds. Original isolated effect; no music, no voice.&quot;,
+      &quot;duration_seconds&quot;: 2,
+      &quot;prompt_influence&quot;: 0.7,
+      &quot;model_id&quot;: &quot;eleven_text_to_sound_v2&quot;,
+      &quot;loop&quot;: true
+    },
+    &quot;budgetCharge&quot;: 100,
+    &quot;providerCredits&quot;: 20,
+    &quot;session&quot;: &quot;x2-2026-10-02&quot;,
+    &quot;reused&quot;: true
+  },
+  &quot;edit&quot;: {
+    &quot;operation&quot;: &quot;mono resample, DC removal, 125 ms complementary overlap, measured interior rotation&quot;,
+    &quot;sourceStartFrame&quot;: 1378,
+    &quot;loopFrames&quot;: 44100,
+    &quot;overlapFrames&quot;: 2756,
+    &quot;rate&quot;: 22050,
+    &quot;rotationFrames&quot;: 27159,
+    &quot;rotationPolicy&quot;: &quot;48 interior candidates, minimum derivative/RMS/spectrum mismatch; no samples replaced&quot;,
+    &quot;blurRisk&quot;: &quot;Crossfade can blur motor pulses; repeated human listening pending&quot;
+  },
+  &quot;normalization&quot;: {
+    &quot;operation&quot;: &quot;measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling&quot;,
+    &quot;softLimited&quot;: false,
+    &quot;additionalCrestCompressionPasses&quot;: 0,
+    &quot;gain&quot;: 0.39129112712685293,
+    &quot;credits&quot;: 0
+  },
+  &quot;tailCleanup&quot;: null,
+  &quot;rawFailures&quot;: [
+    &quot;duration&quot;,
+    &quot;loudness&quot;,
+    &quot;truePeak&quot;,
+    &quot;loopSeam&quot;
+  ],
+  &quot;editedChecks&quot;: {
+    &quot;decode&quot;: true,
+    &quot;duration&quot;: true,
+    &quot;loudness&quot;: true,
+    &quot;truePeak&quot;: true,
+    &quot;silence&quot;: true,
+    &quot;clipping&quot;: true,
+    &quot;loopSeam&quot;: true
+  },
+  &quot;silence&quot;: {
+    &quot;thresholdDbfs&quot;: -50,
+    &quot;minimumIntervalSeconds&quot;: 0.1,
+    &quot;intervalsFrames&quot;: [],
+    &quot;fraction&quot;: 0.0,
+    &quot;longestInteriorSeconds&quot;: 0
+  },
+  &quot;loop&quot;: {
+    &quot;status&quot;: &quot;pass&quot;,
+    &quot;sampleJumpFullScale&quot;: 0.0,
+    &quot;boundaryRmsStepDb&quot;: 0.02779058178378131,
+    &quot;spectralCosine&quot;: 0.9980004424918891,
+    &quot;windowSeconds&quot;: 0.05,
+    &quot;repeatedJoinJumps&quot;: [
+      0.0,
+      0.0
+    ],
+    &quot;cycles&quot;: 3,
+    &quot;limits&quot;: {
+      &quot;sampleJumpMax&quot;: 0.02,
+      &quot;rmsStepMaxDb&quot;: 3,
+      &quot;spectralCosineMin&quot;: 0.8
+    },
+    &quot;musicalContinuity&quot;: &quot;not measured&quot;,
+    &quot;humanRepeatedListen&quot;: &quot;not measured&quot;
+  },
+  &quot;sourceDefects&quot;: [
+    &quot;duration&quot;,
+    &quot;loudness&quot;,
+    &quot;truePeak&quot;,
+    &quot;loopSeam&quot;
+  ],
+  &quot;notMeasured&quot;: [
+    &quot;semantic fidelity&quot;,
+    &quot;owner preference&quot;,
+    &quot;in-game masking/latency&quot;,
+    &quot;physical Stick playback/memory&quot;
+  ],
+  &quot;error&quot;: null
+}</pre></details>
+<label>Your listening note<textarea data-note="engine-base" placeholder="Preference, audible issue, device used"></textarea></label></article><article data-group="weapon" data-id="rivet-base">
+<h2>rivet-base</h2><p class="badge pass">PASS — signal screen only</p>
+<p>0.180 s / -19.95 LUFS / -7.03 dBTP</p><p>Original failures: loudness, truePeak, silence, clipping<br>Edited failures: none</p>
+<p>Owner listening pending</p>
+<label>Edited comparison<audio controls preload="none" src="edited/rivet-base.wav"></audio></label><label>Original<audio controls preload="none" src="../../audition/raw/diesel-rivet.mp3"></audio></label><details><summary>First local attempt — pass: no meter failures</summary><audio controls preload="none" src="first-pass/edited/rivet-base.wav"></audio><p>-19.95 LUFS; -7.04 dBTP</p></details><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
+  &quot;promptOrText&quot;: &quot;One crude vehicle rivet-gun burst. Immediate attack, three cracks in 0.6 s, short metal body, decay to silence; no reload. Timbre: a hard pneumatic rivet mechanism and rattling steel bolt. Close foundry steel, blunt low-mid weight, analog grit, short concrete reflection. 1.5 seconds. Original isolated effect; no music, no voice.&quot;,
+  &quot;beat&quot;: null,
+  &quot;provenance&quot;: {
+    &quot;sidecar&quot;: &quot;audio\\audition\\raw\\diesel-rivet.mp3.json&quot;,
+    &quot;sourceSha256&quot;: &quot;26063c8f24d809569a25a3a77afdd6114d4f198a43c52f876820a92d21097768&quot;,
+    &quot;generatedAt&quot;: &quot;2026-10-02T19:23:07.917Z&quot;,
+    &quot;request&quot;: {
+      &quot;text&quot;: &quot;One crude vehicle rivet-gun burst. Immediate attack, three cracks in 0.6 s, short metal body, decay to silence; no reload. Timbre: a hard pneumatic rivet mechanism and rattling steel bolt. Close foundry steel, blunt low-mid weight, analog grit, short concrete reflection. 1.5 seconds. Original isolated effect; no music, no voice.&quot;,
+      &quot;duration_seconds&quot;: 1.5,
+      &quot;prompt_influence&quot;: 0.7,
+      &quot;model_id&quot;: &quot;eleven_text_to_sound_v2&quot;,
+      &quot;loop&quot;: false
+    },
+    &quot;budgetCharge&quot;: 100,
+    &quot;providerCredits&quot;: 15,
+    &quot;session&quot;: &quot;x2-2026-10-02&quot;,
+    &quot;reused&quot;: true
+  },
+  &quot;edit&quot;: {
+    &quot;operation&quot;: &quot;mono resample, -45 dBFS edge trim with 10 ms margin, 3 ms edge fades; preserve zero tails (no whole-file DC subtraction)&quot;,
+    &quot;startFrame&quot;: 0,
+    &quot;endFrameExclusive&quot;: 3969,
+    &quot;rate&quot;: 22050,
+    &quot;rivetFirstOnsetOnly&quot;: true
+  },
+  &quot;normalization&quot;: {
+    &quot;operation&quot;: &quot;measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling&quot;,
+    &quot;softLimited&quot;: false,
+    &quot;additionalCrestCompressionPasses&quot;: 0,
+    &quot;gain&quot;: 0.3568617492834812,
+    &quot;credits&quot;: 0
+  },
+  &quot;tailCleanup&quot;: null,
+  &quot;rawFailures&quot;: [
+    &quot;loudness&quot;,
+    &quot;truePeak&quot;,
+    &quot;silence&quot;,
+    &quot;clipping&quot;
+  ],
+  &quot;editedChecks&quot;: {
+    &quot;decode&quot;: true,
+    &quot;duration&quot;: true,
+    &quot;loudness&quot;: true,
+    &quot;truePeak&quot;: true,
+    &quot;silence&quot;: true,
+    &quot;clipping&quot;: true
+  },
+  &quot;silence&quot;: {
+    &quot;thresholdDbfs&quot;: -50,
+    &quot;minimumIntervalSeconds&quot;: 0.1,
+    &quot;intervalsFrames&quot;: [],
+    &quot;fraction&quot;: 0.0,
+    &quot;longestInteriorSeconds&quot;: 0
+  },
+  &quot;loop&quot;: {
+    &quot;status&quot;: &quot;not applicable&quot;,
+    &quot;reason&quot;: &quot;one-shot or full song&quot;
+  },
+  &quot;sourceDefects&quot;: [
+    &quot;loudness&quot;,
+    &quot;truePeak&quot;,
+    &quot;silence&quot;,
+    &quot;clipping&quot;
+  ],
+  &quot;notMeasured&quot;: [
+    &quot;semantic fidelity&quot;,
+    &quot;owner preference&quot;,
+    &quot;in-game masking/latency&quot;,
+    &quot;physical Stick playback/memory&quot;
+  ],
+  &quot;error&quot;: null
+}</pre></details>
+<label>Your listening note<textarea data-note="rivet-base" placeholder="Preference, audible issue, device used"></textarea></label></article><article data-group="weapon" data-id="mine-base">
+<h2>mine-base</h2><p class="badge pass">PASS — signal screen only</p>
+<p>0.784 s / -20.01 LUFS / -5.16 dBTP</p><p>Original failures: loudness, truePeak, silence, clipping<br>Edited failures: none</p>
+<p>Owner listening pending</p>
+<label>Edited comparison<audio controls preload="none" src="edited/mine-base.wav"></audio></label><label>Original<audio controls preload="none" src="../../audition/raw/diesel-mine.mp3"></audio></label><details><summary>First local attempt — pass: no meter failures</summary><audio controls preload="none" src="first-pass/edited/mine-base.wav"></audio><p>-20.01 LUFS; -5.17 dBTP</p></details><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
+  &quot;promptOrText&quot;: &quot;One compact road-mine blast. Hard attack, short low concussive body, torn metal and grit rapidly decaying. Close, no sustained fireball. Timbre: a compressed concussive steel drum thud with torn plate debris. Close foundry steel, blunt low-mid weight, analog grit, short concrete reflection. 2 seconds. Original isolated effect; no music, no voice.&quot;,
+  &quot;beat&quot;: null,
+  &quot;provenance&quot;: {
+    &quot;sidecar&quot;: &quot;audio\\audition\\raw\\diesel-mine.mp3.json&quot;,
+    &quot;sourceSha256&quot;: &quot;d9985229e76de33430f560edef43e9d03bbe04995b465b9423a5cb70a18ac887&quot;,
+    &quot;generatedAt&quot;: &quot;2026-10-02T19:23:25.843Z&quot;,
+    &quot;request&quot;: {
+      &quot;text&quot;: &quot;One compact road-mine blast. Hard attack, short low concussive body, torn metal and grit rapidly decaying. Close, no sustained fireball. Timbre: a compressed concussive steel drum thud with torn plate debris. Close foundry steel, blunt low-mid weight, analog grit, short concrete reflection. 2 seconds. Original isolated effect; no music, no voice.&quot;,
+      &quot;duration_seconds&quot;: 2,
+      &quot;prompt_influence&quot;: 0.7,
+      &quot;model_id&quot;: &quot;eleven_text_to_sound_v2&quot;,
+      &quot;loop&quot;: false
+    },
+    &quot;budgetCharge&quot;: 100,
+    &quot;providerCredits&quot;: 20,
+    &quot;session&quot;: &quot;x2-2026-10-02&quot;,
+    &quot;reused&quot;: true
+  },
+  &quot;edit&quot;: {
+    &quot;operation&quot;: &quot;mono resample, -45 dBFS edge trim with 10 ms margin, 3 ms edge fades; preserve zero tails (no whole-file DC subtraction)&quot;,
+    &quot;startFrame&quot;: 3320,
+    &quot;endFrameExclusive&quot;: 22871,
+    &quot;rate&quot;: 22050,
+    &quot;rivetFirstOnsetOnly&quot;: false
+  },
+  &quot;normalization&quot;: {
+    &quot;operation&quot;: &quot;measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling&quot;,
+    &quot;softLimited&quot;: false,
+    &quot;additionalCrestCompressionPasses&quot;: 0,
+    &quot;gain&quot;: 0.5134521775029667,
+    &quot;credits&quot;: 0
+  },
+  &quot;tailCleanup&quot;: {
+    &quot;before&quot;: {
+      &quot;file&quot;: &quot;audio/x3/effects/edited/mine-base.wav&quot;,
+      &quot;sha256&quot;: &quot;880c222c96d445b4740d68a046919c59e50742d6c9fd9cec34aedb0289992d20&quot;,
+      &quot;bytes&quot;: 39180,
+      &quot;status&quot;: &quot;pass&quot;,
+      &quot;checks&quot;: {
+        &quot;decode&quot;: true,
+        &quot;duration&quot;: true,
+        &quot;loudness&quot;: true,
+        &quot;truePeak&quot;: true,
+        &quot;silence&quot;: true,
+        &quot;clipping&quot;: true
+      },
+      &quot;failures&quot;: [],
+      &quot;durationSeconds&quot;: 0.8866666666666667,
+      &quot;durationWindowSeconds&quot;: [
+        0,
+        180
+      ],
+      &quot;sampleRate&quot;: 22050,
+      &quot;channels&quot;: 1,
+      &quot;decodedFrames&quot;: 19551,
+      &quot;decodedBytes&quot;: 39102,
+      &quot;integratedLufs&quot;: -20.01,
+      &quot;truePeakDbtp&quot;: -5.17,
+      &quot;loudnessRangeLu&quot;: 0.0,
+      &quot;loudnessTargetLufs&quot;: -20,
+      &quot;loudnessToleranceLu&quot;: 2,
+      &quot;meterPaddingFrames&quot;: 0,
+      &quot;fullScaleSampleCount&quot;: 0,
+      &quot;silence&quot;: {
+        &quot;thresholdDbfs&quot;: -50,
+        &quot;minimumIntervalSeconds&quot;: 0.1,
+        &quot;intervalsFrames&quot;: [
+          [
+            17074,
+            19551
+          ]
+        ],
+        &quot;fraction&quot;: 0.1266942867372513,
+        &quot;longestInteriorSeconds&quot;: 0
+      },
+      &quot;loopSeam&quot;: {
+        &quot;status&quot;: &quot;not applicable&quot;,
+        &quot;reason&quot;: &quot;one-shot or full song&quot;
+      },
+      &quot;loopBoundary&quot;: null
+    },
+    &quot;startFrame&quot;: 0,
+    &quot;endFrameExclusive&quot;: 17294,
+    &quot;operation&quot;: &quot;trim measured edge silence and &lt;=25 ms codec residue; retain 10 ms margin&quot;,
+    &quot;normalization&quot;: {
+      &quot;operation&quot;: &quot;measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling&quot;,
+      &quot;softLimited&quot;: false,
+      &quot;additionalCrestCompressionPasses&quot;: 0,
+      &quot;gain&quot;: 1.0011519555381692,
+      &quot;credits&quot;: 0
+    }
+  },
+  &quot;rawFailures&quot;: [
+    &quot;loudness&quot;,
+    &quot;truePeak&quot;,
+    &quot;silence&quot;,
+    &quot;clipping&quot;
+  ],
+  &quot;editedChecks&quot;: {
+    &quot;decode&quot;: true,
+    &quot;duration&quot;: true,
+    &quot;loudness&quot;: true,
+    &quot;truePeak&quot;: true,
+    &quot;silence&quot;: true,
+    &quot;clipping&quot;: true
+  },
+  &quot;silence&quot;: {
+    &quot;thresholdDbfs&quot;: -50,
+    &quot;minimumIntervalSeconds&quot;: 0.1,
+    &quot;intervalsFrames&quot;: [],
+    &quot;fraction&quot;: 0.0,
+    &quot;longestInteriorSeconds&quot;: 0
+  },
+  &quot;loop&quot;: {
+    &quot;status&quot;: &quot;not applicable&quot;,
+    &quot;reason&quot;: &quot;one-shot or full song&quot;
+  },
+  &quot;sourceDefects&quot;: [
+    &quot;loudness&quot;,
+    &quot;truePeak&quot;,
+    &quot;silence&quot;,
+    &quot;clipping&quot;
+  ],
+  &quot;notMeasured&quot;: [
+    &quot;semantic fidelity&quot;,
+    &quot;owner preference&quot;,
+    &quot;in-game masking/latency&quot;,
+    &quot;physical Stick playback/memory&quot;
+  ],
+  &quot;error&quot;: null
+}</pre></details>
+<label>Your listening note<textarea data-note="mine-base" placeholder="Preference, audible issue, device used"></textarea></label></article><article data-group="crunch-base" data-id="crunch-base">
+<h2>crunch-base</h2><p class="badge pass">PASS — signal screen only</p>
+<p>0.568 s / -19.99 LUFS / -4.96 dBTP</p><p>Original failures: loudness, silence<br>Edited failures: none</p>
+<p>Owner listening pending</p>
+<label>Edited comparison<audio controls preload="none" src="edited/crunch-base.wav"></audio></label><label>Original<audio controls preload="none" src="../../audition/raw/diesel-crunch.mp3"></audio></label><details><summary>First local attempt — pass: no meter failures</summary><audio controls preload="none" src="first-pass/edited/crunch-base.wav"></audio><p>-19.99 LUFS; -4.96 dBTP</p></details><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
+  &quot;promptOrText&quot;: &quot;One car-to-car side collision. Sharp steel contact, short buckling grind, debris settling. No engine bed or tyre squeal. Timbre: a dense chassis crush and wrenching heavy steel. Close foundry steel, blunt low-mid weight, analog grit, short concrete reflection. 1.5 seconds. Original isolated effect; no music, no voice.&quot;,
+  &quot;beat&quot;: null,
+  &quot;provenance&quot;: {
+    &quot;sidecar&quot;: &quot;audio\\audition\\raw\\diesel-crunch.mp3.json&quot;,
+    &quot;sourceSha256&quot;: &quot;079259644686812dbcd23a95661149a3c82c8c524144d8867e40369b43357d1e&quot;,
+    &quot;generatedAt&quot;: &quot;2026-10-02T19:23:52.563Z&quot;,
+    &quot;request&quot;: {
+      &quot;text&quot;: &quot;One car-to-car side collision. Sharp steel contact, short buckling grind, debris settling. No engine bed or tyre squeal. Timbre: a dense chassis crush and wrenching heavy steel. Close foundry steel, blunt low-mid weight, analog grit, short concrete reflection. 1.5 seconds. Original isolated effect; no music, no voice.&quot;,
+      &quot;duration_seconds&quot;: 1.5,
+      &quot;prompt_influence&quot;: 0.7,
+      &quot;model_id&quot;: &quot;eleven_text_to_sound_v2&quot;,
+      &quot;loop&quot;: false
+    },
+    &quot;budgetCharge&quot;: 100,
+    &quot;providerCredits&quot;: 15,
+    &quot;session&quot;: &quot;x2-2026-10-02&quot;,
+    &quot;reused&quot;: true
+  },
+  &quot;edit&quot;: {
+    &quot;operation&quot;: &quot;mono resample, -45 dBFS edge trim with 10 ms margin, 3 ms edge fades; preserve zero tails (no whole-file DC subtraction)&quot;,
+    &quot;startFrame&quot;: 0,
+    &quot;endFrameExclusive&quot;: 12517,
+    &quot;rate&quot;: 22050,
+    &quot;rivetFirstOnsetOnly&quot;: false
+  },
+  &quot;normalization&quot;: {
+    &quot;operation&quot;: &quot;measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling&quot;,
+    &quot;softLimited&quot;: false,
+    &quot;additionalCrestCompressionPasses&quot;: 0,
+    &quot;gain&quot;: 0.6088355457613952,
+    &quot;credits&quot;: 0
+  },
+  &quot;tailCleanup&quot;: null,
+  &quot;rawFailures&quot;: [
+    &quot;loudness&quot;,
+    &quot;silence&quot;
+  ],
+  &quot;editedChecks&quot;: {
+    &quot;decode&quot;: true,
+    &quot;duration&quot;: true,
+    &quot;loudness&quot;: true,
+    &quot;truePeak&quot;: true,
+    &quot;silence&quot;: true,
+    &quot;clipping&quot;: true
+  },
+  &quot;silence&quot;: {
+    &quot;thresholdDbfs&quot;: -50,
+    &quot;minimumIntervalSeconds&quot;: 0.1,
+    &quot;intervalsFrames&quot;: [],
+    &quot;fraction&quot;: 0.0,
+    &quot;longestInteriorSeconds&quot;: 0
+  },
+  &quot;loop&quot;: {
+    &quot;status&quot;: &quot;not applicable&quot;,
+    &quot;reason&quot;: &quot;one-shot or full song&quot;
+  },
+  &quot;sourceDefects&quot;: [
+    &quot;loudness&quot;,
+    &quot;silence&quot;
+  ],
+  &quot;notMeasured&quot;: [
+    &quot;semantic fidelity&quot;,
+    &quot;owner preference&quot;,
+    &quot;in-game masking/latency&quot;,
+    &quot;physical Stick playback/memory&quot;
+  ],
+  &quot;error&quot;: null
+}</pre></details>
+<label>Your listening note<textarea data-note="crunch-base" placeholder="Preference, audible issue, device used"></textarea></label></article><article data-group="pickup" data-id="pickup-base">
+<h2>pickup-base</h2><p class="badge pass">PASS — signal screen only</p>
+<p>0.751 s / -20.32 LUFS / -2.0 dBTP</p><p>Original failures: loudness, truePeak<br>Edited failures: none</p>
+<p>Owner listening pending</p>
+<label>Edited comparison<audio controls preload="none" src="edited/pickup-base.wav"></audio></label><label>Original<audio controls preload="none" src="../../audition/raw/dust-pickup.mp3"></audio></label><details><summary>First local attempt — pass: no meter failures</summary><audio controls preload="none" src="first-pass/edited/pickup-base.wav"></audio><p>-20.27 LUFS; -2.0 dBTP</p></details><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
+  &quot;promptOrText&quot;: &quot;One tactile collection confirmation. Crisp small latch attack, short satisfying body, quickly decaying tail. No coins or bleep. Timbre: a scavenged ammunition tin latch and a brief loose metal jingle. Dust-dry outdoor metal and leather, exposed close attack, short air tail, tape grain. 1 seconds. Original isolated effect; no music, no voice.&quot;,
+  &quot;beat&quot;: null,
+  &quot;provenance&quot;: {
+    &quot;sidecar&quot;: &quot;audio\\audition\\raw\\dust-pickup.mp3.json&quot;,
+    &quot;sourceSha256&quot;: &quot;b7d169a1039aadd4616553220630f937634576e0276d1f32652be53ed48b42b6&quot;,
+    &quot;generatedAt&quot;: &quot;2026-10-02T19:22:02.487Z&quot;,
+    &quot;request&quot;: {
+      &quot;text&quot;: &quot;One tactile collection confirmation. Crisp small latch attack, short satisfying body, quickly decaying tail. No coins or bleep. Timbre: a scavenged ammunition tin latch and a brief loose metal jingle. Dust-dry outdoor metal and leather, exposed close attack, short air tail, tape grain. 1 seconds. Original isolated effect; no music, no voice.&quot;,
+      &quot;duration_seconds&quot;: 1,
+      &quot;prompt_influence&quot;: 0.7,
+      &quot;model_id&quot;: &quot;eleven_text_to_sound_v2&quot;,
+      &quot;loop&quot;: false
+    },
+    &quot;budgetCharge&quot;: 100,
+    &quot;providerCredits&quot;: 10,
+    &quot;session&quot;: &quot;x2-2026-10-02&quot;,
+    &quot;reused&quot;: true
+  },
+  &quot;edit&quot;: {
+    &quot;operation&quot;: &quot;mono resample, -45 dBFS edge trim with 10 ms margin, 3 ms edge fades; preserve zero tails (no whole-file DC subtraction)&quot;,
+    &quot;startFrame&quot;: 0,
+    &quot;endFrameExclusive&quot;: 16564,
+    &quot;rate&quot;: 22050,
+    &quot;rivetFirstOnsetOnly&quot;: false
+  },
+  &quot;normalization&quot;: {
+    &quot;operation&quot;: &quot;measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling&quot;,
+    &quot;softLimited&quot;: false,
+    &quot;additionalCrestCompressionPasses&quot;: 0,
+    &quot;gain&quot;: 0.6180164001384159,
+    &quot;credits&quot;: 0
+  },
+  &quot;tailCleanup&quot;: null,
+  &quot;rawFailures&quot;: [
+    &quot;loudness&quot;,
+    &quot;truePeak&quot;
+  ],
+  &quot;editedChecks&quot;: {
+    &quot;decode&quot;: true,
+    &quot;duration&quot;: true,
+    &quot;loudness&quot;: true,
+    &quot;truePeak&quot;: true,
+    &quot;silence&quot;: true,
+    &quot;clipping&quot;: true
+  },
+  &quot;silence&quot;: {
+    &quot;thresholdDbfs&quot;: -50,
+    &quot;minimumIntervalSeconds&quot;: 0.1,
+    &quot;intervalsFrames&quot;: [],
+    &quot;fraction&quot;: 0.0,
+    &quot;longestInteriorSeconds&quot;: 0
+  },
+  &quot;loop&quot;: {
+    &quot;status&quot;: &quot;not applicable&quot;,
+    &quot;reason&quot;: &quot;one-shot or full song&quot;
+  },
+  &quot;sourceDefects&quot;: [
+    &quot;loudness&quot;,
+    &quot;truePeak&quot;
+  ],
+  &quot;notMeasured&quot;: [
+    &quot;semantic fidelity&quot;,
+    &quot;owner preference&quot;,
+    &quot;in-game masking/latency&quot;,
+    &quot;physical Stick playback/memory&quot;
+  ],
+  &quot;error&quot;: null
+}</pre></details>
+<label>Your listening note<textarea data-note="pickup-base" placeholder="Preference, audible issue, device used"></textarea></label></article><article data-group="ui" data-id="confirm-base">
+<h2>confirm-base</h2><p class="badge pass">PASS — signal screen only</p>
+<p>0.644 s / -20.01 LUFS / -2.51 dBTP</p><p>Original failures: loudness, silence<br>Edited failures: none</p>
+<p>Owner listening pending</p>
+<label>Edited comparison<audio controls preload="none" src="edited/confirm-base.wav"></audio></label><label>Original<audio controls preload="none" src="../../audition/raw/noir-confirm.mp3"></audio></label><details><summary>First local attempt — fail: loudness</summary><audio controls preload="none" src="first-pass/edited/confirm-base.wav"></audio><p>-22.75 LUFS; -2.0 dBTP</p></details><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
+  &quot;promptOrText&quot;: &quot;One physical menu confirm. Immediate quiet click-clunk, tiny mechanical body, short dry release to silence. No beep or chime. Timbre: a dry worn ratchet tooth seating into a felt-damped latch. Intimate damped metal, low gritty resonance, restrained high end, tiny dry reflection. 1 seconds. Original isolated effect; no music, no voice.&quot;,
+  &quot;beat&quot;: null,
+  &quot;provenance&quot;: {
+    &quot;sidecar&quot;: &quot;audio\\audition\\raw\\noir-confirm.mp3.json&quot;,
+    &quot;sourceSha256&quot;: &quot;81e699d6f8446c734f716cb6dd1ce9cead2952963e4a390201f7aaea3b56921e&quot;,
+    &quot;generatedAt&quot;: &quot;2026-10-02T19:27:35.418Z&quot;,
+    &quot;request&quot;: {
+      &quot;text&quot;: &quot;One physical menu confirm. Immediate quiet click-clunk, tiny mechanical body, short dry release to silence. No beep or chime. Timbre: a dry worn ratchet tooth seating into a felt-damped latch. Intimate damped metal, low gritty resonance, restrained high end, tiny dry reflection. 1 seconds. Original isolated effect; no music, no voice.&quot;,
+      &quot;duration_seconds&quot;: 1,
+      &quot;prompt_influence&quot;: 0.7,
+      &quot;model_id&quot;: &quot;eleven_text_to_sound_v2&quot;,
+      &quot;loop&quot;: false
+    },
+    &quot;budgetCharge&quot;: 100,
+    &quot;providerCredits&quot;: 10,
+    &quot;session&quot;: &quot;x2-2026-10-02&quot;,
+    &quot;reused&quot;: true
+  },
+  &quot;edit&quot;: {
+    &quot;operation&quot;: &quot;mono resample, -45 dBFS edge trim with 10 ms margin, 3 ms edge fades; preserve zero tails (no whole-file DC subtraction)&quot;,
+    &quot;startFrame&quot;: 0,
+    &quot;endFrameExclusive&quot;: 14201,
+    &quot;rate&quot;: 22050,
+    &quot;rivetFirstOnsetOnly&quot;: false
+  },
+  &quot;normalization&quot;: {
+    &quot;operation&quot;: &quot;measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling&quot;,
+    &quot;softLimited&quot;: true,
+    &quot;additionalCrestCompressionPasses&quot;: 1,
+    &quot;gain&quot;: 0.9429746114598995,
+    &quot;credits&quot;: 0
+  },
+  &quot;tailCleanup&quot;: null,
+  &quot;rawFailures&quot;: [
+    &quot;loudness&quot;,
+    &quot;silence&quot;
+  ],
+  &quot;editedChecks&quot;: {
+    &quot;decode&quot;: true,
+    &quot;duration&quot;: true,
+    &quot;loudness&quot;: true,
+    &quot;truePeak&quot;: true,
+    &quot;silence&quot;: true,
+    &quot;clipping&quot;: true
+  },
+  &quot;silence&quot;: {
+    &quot;thresholdDbfs&quot;: -50,
+    &quot;minimumIntervalSeconds&quot;: 0.1,
+    &quot;intervalsFrames&quot;: [],
+    &quot;fraction&quot;: 0.0,
+    &quot;longestInteriorSeconds&quot;: 0
+  },
+  &quot;loop&quot;: {
+    &quot;status&quot;: &quot;not applicable&quot;,
+    &quot;reason&quot;: &quot;one-shot or full song&quot;
+  },
+  &quot;sourceDefects&quot;: [
+    &quot;loudness&quot;,
+    &quot;silence&quot;
+  ],
+  &quot;notMeasured&quot;: [
+    &quot;semantic fidelity&quot;,
+    &quot;owner preference&quot;,
+    &quot;in-game masking/latency&quot;,
+    &quot;physical Stick playback/memory&quot;
+  ],
+  &quot;error&quot;: null
+}</pre></details>
+<label>Your listening note<textarea data-note="confirm-base" placeholder="Preference, audible issue, device used"></textarea></label></article><article data-group="movement" data-id="tyre">
+<h2>tyre</h2><p class="badge pass">PASS — signal screen only</p>
+<p>2.000 s / -20.01 LUFS / -8.01 dBTP</p><p>Original failures: duration, loudness, truePeak, clipping, loopSeam<br>Edited failures: none</p>
+<p>Owner listening pending</p>
+<label>Edited comparison<audio controls preload="none" src="edited/tyre.wav"></audio></label><label>Original<audio controls preload="none" src="raw/tyre.mp3"></audio></label><label>Three cycles<audio controls preload="none" src="repeats/tyre-three-cycles.ogg"></audio></label><details><summary>First local attempt — pass: no meter failures</summary><audio controls preload="none" src="first-pass/edited/tyre.wav"></audio><p>-19.99 LUFS; -7.87 dBTP</p></details><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
+  &quot;promptOrText&quot;: &quot;Tyres rolling over rough asphalt. Immediate steady rubber grain and road hiss; constant body, no acceleration or distinct bumps. Seamless repeating bed. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.&quot;,
+  &quot;beat&quot;: null,
+  &quot;provenance&quot;: {
+    &quot;sidecar&quot;: &quot;audio\\x3\\effects\\raw\\tyre.mp3.json&quot;,
+    &quot;sourceSha256&quot;: &quot;dd7cca4d058444b3a7a8019d25a1990d6f72269a9c1b996627350a9772d40550&quot;,
+    &quot;generatedAt&quot;: &quot;2026-10-02T21:33:51.732Z&quot;,
+    &quot;request&quot;: {
+      &quot;text&quot;: &quot;Tyres rolling over rough asphalt. Immediate steady rubber grain and road hiss; constant body, no acceleration or distinct bumps. Seamless repeating bed. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.&quot;,
+      &quot;duration_seconds&quot;: 2,
+      &quot;prompt_influence&quot;: 0.7,
+      &quot;model_id&quot;: &quot;eleven_text_to_sound_v2&quot;,
+      &quot;loop&quot;: true
+    },
+    &quot;budgetCharge&quot;: 100,
+    &quot;providerCredits&quot;: 20,
+    &quot;session&quot;: &quot;x3-2026-10-02&quot;,
+    &quot;reused&quot;: false
+  },
+  &quot;edit&quot;: {
+    &quot;operation&quot;: &quot;mono resample, DC removal, 125 ms complementary overlap, measured interior rotation&quot;,
+    &quot;sourceStartFrame&quot;: 1378,
+    &quot;loopFrames&quot;: 44100,
+    &quot;overlapFrames&quot;: 2756,
+    &quot;rate&quot;: 22050,
+    &quot;rotationFrames&quot;: 16855,
+    &quot;rotationPolicy&quot;: &quot;48 interior candidates, minimum derivative/RMS/spectrum mismatch; no samples replaced&quot;,
+    &quot;blurRisk&quot;: &quot;Crossfade can blur motor pulses; repeated human listening pending&quot;
+  },
+  &quot;normalization&quot;: {
+    &quot;operation&quot;: &quot;measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling&quot;,
+    &quot;softLimited&quot;: false,
+    &quot;additionalCrestCompressionPasses&quot;: 0,
+    &quot;gain&quot;: 0.36057864302164244,
+    &quot;credits&quot;: 0
+  },
+  &quot;tailCleanup&quot;: null,
+  &quot;rawFailures&quot;: [
+    &quot;duration&quot;,
+    &quot;loudness&quot;,
+    &quot;truePeak&quot;,
+    &quot;clipping&quot;,
+    &quot;loopSeam&quot;
+  ],
+  &quot;editedChecks&quot;: {
+    &quot;decode&quot;: true,
+    &quot;duration&quot;: true,
+    &quot;loudness&quot;: true,
+    &quot;truePeak&quot;: true,
+    &quot;silence&quot;: true,
+    &quot;clipping&quot;: true,
+    &quot;loopSeam&quot;: true
+  },
+  &quot;silence&quot;: {
+    &quot;thresholdDbfs&quot;: -50,
+    &quot;minimumIntervalSeconds&quot;: 0.1,
+    &quot;intervalsFrames&quot;: [],
+    &quot;fraction&quot;: 0.0,
+    &quot;longestInteriorSeconds&quot;: 0
+  },
+  &quot;loop&quot;: {
+    &quot;status&quot;: &quot;pass&quot;,
+    &quot;sampleJumpFullScale&quot;: 0.000152587890625,
+    &quot;boundaryRmsStepDb&quot;: 0.030376671687477368,
+    &quot;spectralCosine&quot;: 0.9989344300686921,
+    &quot;windowSeconds&quot;: 0.05,
+    &quot;repeatedJoinJumps&quot;: [
+      0.000152587890625,
+      0.000152587890625
+    ],
+    &quot;cycles&quot;: 3,
+    &quot;limits&quot;: {
+      &quot;sampleJumpMax&quot;: 0.02,
+      &quot;rmsStepMaxDb&quot;: 3,
+      &quot;spectralCosineMin&quot;: 0.8
+    },
+    &quot;musicalContinuity&quot;: &quot;not measured&quot;,
+    &quot;humanRepeatedListen&quot;: &quot;not measured&quot;
+  },
+  &quot;sourceDefects&quot;: [
+    &quot;duration&quot;,
+    &quot;loudness&quot;,
+    &quot;truePeak&quot;,
+    &quot;clipping&quot;,
+    &quot;loopSeam&quot;
+  ],
+  &quot;notMeasured&quot;: [
+    &quot;semantic fidelity&quot;,
+    &quot;owner preference&quot;,
+    &quot;in-game masking/latency&quot;,
+    &quot;physical Stick playback/memory&quot;
+  ],
+  &quot;error&quot;: null
+}</pre></details>
+<label>Your listening note<textarea data-note="tyre" placeholder="Preference, audible issue, device used"></textarea></label></article><article data-group="movement" data-id="skid">
+<h2>skid</h2><p class="badge pass">PASS — signal screen only</p>
+<p>2.000 s / -20.01 LUFS / -6.7 dBTP</p><p>Original failures: duration, loudness, truePeak, clipping, loopSeam<br>Edited failures: none</p>
+<p>Owner listening pending</p>
+<label>Edited comparison<audio controls preload="none" src="edited/skid.wav"></audio></label><label>Original<audio controls preload="none" src="raw/skid.mp3"></audio></label><label>Three cycles<audio controls preload="none" src="repeats/skid-three-cycles.ogg"></audio></label><details><summary>First local attempt — fail: loopSeam</summary><audio controls preload="none" src="first-pass/edited/skid.wav"></audio><p>-20.01 LUFS; -7.12 dBTP</p></details><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
+  &quot;promptOrText&quot;: &quot;Loaded tyres scrubbing sideways. Immediate rough rubber rasp, low strained body, constant skid friction. No impact, engine or changing speed. Seamless repeating bed. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.&quot;,
+  &quot;beat&quot;: null,
+  &quot;provenance&quot;: {
+    &quot;sidecar&quot;: &quot;audio\\x3\\effects\\raw\\skid.mp3.json&quot;,
+    &quot;sourceSha256&quot;: &quot;ad9bbbc4ea485b8070369f03e00c76f81d39482317411a23a5b345333b5d09cf&quot;,
+    &quot;generatedAt&quot;: &quot;2026-10-02T21:33:57.078Z&quot;,
+    &quot;request&quot;: {
+      &quot;text&quot;: &quot;Loaded tyres scrubbing sideways. Immediate rough rubber rasp, low strained body, constant skid friction. No impact, engine or changing speed. Seamless repeating bed. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.&quot;,
+      &quot;duration_seconds&quot;: 2,
+      &quot;prompt_influence&quot;: 0.7,
+      &quot;model_id&quot;: &quot;eleven_text_to_sound_v2&quot;,
+      &quot;loop&quot;: true
+    },
+    &quot;budgetCharge&quot;: 100,
+    &quot;providerCredits&quot;: 20,
+    &quot;session&quot;: &quot;x3-2026-10-02&quot;,
+    &quot;reused&quot;: false
+  },
+  &quot;edit&quot;: {
+    &quot;operation&quot;: &quot;mono resample, DC removal, 125 ms complementary overlap, measured interior rotation&quot;,
+    &quot;sourceStartFrame&quot;: 1378,
+    &quot;loopFrames&quot;: 44100,
+    &quot;overlapFrames&quot;: 2756,
+    &quot;rate&quot;: 22050,
+    &quot;rotationFrames&quot;: 11245,
+    &quot;rotationPolicy&quot;: &quot;48 interior candidates, minimum derivative/RMS/spectrum mismatch; no samples replaced&quot;,
+    &quot;blurRisk&quot;: &quot;Crossfade can blur motor pulses; repeated human listening pending&quot;
+  },
+  &quot;normalization&quot;: {
+    &quot;operation&quot;: &quot;measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling&quot;,
+    &quot;softLimited&quot;: false,
+    &quot;additionalCrestCompressionPasses&quot;: 0,
+    &quot;gain&quot;: 0.4013284982627412,
+    &quot;credits&quot;: 0
+  },
+  &quot;tailCleanup&quot;: null,
+  &quot;rawFailures&quot;: [
+    &quot;duration&quot;,
+    &quot;loudness&quot;,
+    &quot;truePeak&quot;,
+    &quot;clipping&quot;,
+    &quot;loopSeam&quot;
+  ],
+  &quot;editedChecks&quot;: {
+    &quot;decode&quot;: true,
+    &quot;duration&quot;: true,
+    &quot;loudness&quot;: true,
+    &quot;truePeak&quot;: true,
+    &quot;silence&quot;: true,
+    &quot;clipping&quot;: true,
+    &quot;loopSeam&quot;: true
+  },
+  &quot;silence&quot;: {
+    &quot;thresholdDbfs&quot;: -50,
+    &quot;minimumIntervalSeconds&quot;: 0.1,
+    &quot;intervalsFrames&quot;: [],
+    &quot;fraction&quot;: 0.0,
+    &quot;longestInteriorSeconds&quot;: 0
+  },
+  &quot;loop&quot;: {
+    &quot;status&quot;: &quot;pass&quot;,
+    &quot;sampleJumpFullScale&quot;: 0.000213623046875,
+    &quot;boundaryRmsStepDb&quot;: 0.16539897084378422,
+    &quot;spectralCosine&quot;: 0.9859736411591978,
+    &quot;windowSeconds&quot;: 0.05,
+    &quot;repeatedJoinJumps&quot;: [
+      0.000213623046875,
+      0.000213623046875
+    ],
+    &quot;cycles&quot;: 3,
+    &quot;limits&quot;: {
+      &quot;sampleJumpMax&quot;: 0.02,
+      &quot;rmsStepMaxDb&quot;: 3,
+      &quot;spectralCosineMin&quot;: 0.8
+    },
+    &quot;musicalContinuity&quot;: &quot;not measured&quot;,
+    &quot;humanRepeatedListen&quot;: &quot;not measured&quot;
+  },
+  &quot;sourceDefects&quot;: [
+    &quot;duration&quot;,
+    &quot;loudness&quot;,
+    &quot;truePeak&quot;,
+    &quot;clipping&quot;,
+    &quot;loopSeam&quot;
+  ],
+  &quot;notMeasured&quot;: [
+    &quot;semantic fidelity&quot;,
+    &quot;owner preference&quot;,
+    &quot;in-game masking/latency&quot;,
+    &quot;physical Stick playback/memory&quot;
+  ],
+  &quot;error&quot;: null
+}</pre></details>
+<label>Your listening note<textarea data-note="skid" placeholder="Preference, audible issue, device used"></textarea></label></article><article data-group="movement" data-id="drift">
+<h2>drift</h2><p class="badge pass">PASS — signal screen only</p>
+<p>2.000 s / -20.01 LUFS / -7.75 dBTP</p><p>Original failures: duration, loudness, truePeak, clipping<br>Edited failures: none</p>
+<p>Owner listening pending</p>
+<label>Edited comparison<audio controls preload="none" src="edited/drift.wav"></audio></label><label>Original<audio controls preload="none" src="raw/drift.mp3"></audio></label><label>Three cycles<audio controls preload="none" src="repeats/drift-three-cycles.ogg"></audio></label><details><summary>First local attempt — fail: loopSeam</summary><audio controls preload="none" src="first-pass/edited/drift.wav"></audio><p>-20.0 LUFS; -7.68 dBTP</p></details><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
+  &quot;promptOrText&quot;: &quot;Controlled hard drift on dry asphalt. Constant singing rubber edge over gritty low scrub, steady load, no impact or end release. Seamless repeating bed. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.&quot;,
+  &quot;beat&quot;: null,
+  &quot;provenance&quot;: {
+    &quot;sidecar&quot;: &quot;audio\\x3\\effects\\raw\\drift.mp3.json&quot;,
+    &quot;sourceSha256&quot;: &quot;eaa6f99589c9b01ca321bb65d3e151ae7e140955d2f76bf01ed2b4bca081920a&quot;,
+    &quot;generatedAt&quot;: &quot;2026-10-02T21:34:02.367Z&quot;,
+    &quot;request&quot;: {
+      &quot;text&quot;: &quot;Controlled hard drift on dry asphalt. Constant singing rubber edge over gritty low scrub, steady load, no impact or end release. Seamless repeating bed. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.&quot;,
+      &quot;duration_seconds&quot;: 2,
+      &quot;prompt_influence&quot;: 0.7,
+      &quot;model_id&quot;: &quot;eleven_text_to_sound_v2&quot;,
+      &quot;loop&quot;: true
+    },
+    &quot;budgetCharge&quot;: 100,
+    &quot;providerCredits&quot;: 20,
+    &quot;session&quot;: &quot;x3-2026-10-02&quot;,
+    &quot;reused&quot;: false
+  },
+  &quot;edit&quot;: {
+    &quot;operation&quot;: &quot;mono resample, DC removal, 125 ms complementary overlap, measured interior rotation&quot;,
+    &quot;sourceStartFrame&quot;: 1378,
+    &quot;loopFrames&quot;: 44100,
+    &quot;overlapFrames&quot;: 2756,
+    &quot;rate&quot;: 22050,
+    &quot;rotationFrames&quot;: 29098,
+    &quot;rotationPolicy&quot;: &quot;48 interior candidates, minimum derivative/RMS/spectrum mismatch; no samples replaced&quot;,
+    &quot;blurRisk&quot;: &quot;Crossfade can blur motor pulses; repeated human listening pending&quot;
+  },
+  &quot;normalization&quot;: {
+    &quot;operation&quot;: &quot;measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling&quot;,
+    &quot;softLimited&quot;: false,
+    &quot;additionalCrestCompressionPasses&quot;: 0,
+    &quot;gain&quot;: 0.3560409900359572,
+    &quot;credits&quot;: 0
+  },
+  &quot;tailCleanup&quot;: null,
+  &quot;rawFailures&quot;: [
+    &quot;duration&quot;,
+    &quot;loudness&quot;,
+    &quot;truePeak&quot;,
+    &quot;clipping&quot;
+  ],
+  &quot;editedChecks&quot;: {
+    &quot;decode&quot;: true,
+    &quot;duration&quot;: true,
+    &quot;loudness&quot;: true,
+    &quot;truePeak&quot;: true,
+    &quot;silence&quot;: true,
+    &quot;clipping&quot;: true,
+    &quot;loopSeam&quot;: true
+  },
+  &quot;silence&quot;: {
+    &quot;thresholdDbfs&quot;: -50,
+    &quot;minimumIntervalSeconds&quot;: 0.1,
+    &quot;intervalsFrames&quot;: [],
+    &quot;fraction&quot;: 0.0,
+    &quot;longestInteriorSeconds&quot;: 0
+  },
+  &quot;loop&quot;: {
+    &quot;status&quot;: &quot;pass&quot;,
+    &quot;sampleJumpFullScale&quot;: 6.103515625e-05,
+    &quot;boundaryRmsStepDb&quot;: 0.5022129265941698,
+    &quot;spectralCosine&quot;: 0.9992086464610985,
+    &quot;windowSeconds&quot;: 0.05,
+    &quot;repeatedJoinJumps&quot;: [
+      6.103515625e-05,
+      6.103515625e-05
+    ],
+    &quot;cycles&quot;: 3,
+    &quot;limits&quot;: {
+      &quot;sampleJumpMax&quot;: 0.02,
+      &quot;rmsStepMaxDb&quot;: 3,
+      &quot;spectralCosineMin&quot;: 0.8
+    },
+    &quot;musicalContinuity&quot;: &quot;not measured&quot;,
+    &quot;humanRepeatedListen&quot;: &quot;not measured&quot;
+  },
+  &quot;sourceDefects&quot;: [
+    &quot;duration&quot;,
+    &quot;loudness&quot;,
+    &quot;truePeak&quot;,
+    &quot;clipping&quot;
+  ],
+  &quot;notMeasured&quot;: [
+    &quot;semantic fidelity&quot;,
+    &quot;owner preference&quot;,
+    &quot;in-game masking/latency&quot;,
+    &quot;physical Stick playback/memory&quot;
+  ],
+  &quot;error&quot;: null
+}</pre></details>
+<label>Your listening note<textarea data-note="drift" placeholder="Preference, audible issue, device used"></textarea></label></article><article data-group="collision" data-id="crunch-retry">
+<h2>crunch-retry</h2><p class="badge pass">PASS — signal screen only</p>
+<p>0.772 s / -19.95 LUFS / -5.93 dBTP</p><p>Original failures: loudness, truePeak, silence, clipping<br>Edited failures: none</p>
+<p>Owner listening pending</p>
+<label>Edited comparison<audio controls preload="none" src="edited/crunch-retry.wav"></audio></label><label>Original<audio controls preload="none" src="raw/crunch-retry.mp3"></audio></label><details><summary>First local attempt — pass: no meter failures</summary><audio controls preload="none" src="first-pass/edited/crunch-retry.wav"></audio><p>-19.95 LUFS; -5.93 dBTP</p></details><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
+  &quot;promptOrText&quot;: &quot;Heavy car side impact: instantaneous thick steel buckle, deep chassis crush, torn panels grinding for half a second, short falling debris. Weighty metal collision, no glass shower, explosion or engine. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.&quot;,
+  &quot;beat&quot;: null,
+  &quot;provenance&quot;: {
+    &quot;sidecar&quot;: &quot;audio\\x3\\effects\\raw\\crunch-retry.mp3.json&quot;,
+    &quot;sourceSha256&quot;: &quot;03a1451bf4568708f147b3fc45097d7164a8886c00cde4cf8efe173a53375aff&quot;,
+    &quot;generatedAt&quot;: &quot;2026-10-02T21:34:07.679Z&quot;,
+    &quot;request&quot;: {
+      &quot;text&quot;: &quot;Heavy car side impact: instantaneous thick steel buckle, deep chassis crush, torn panels grinding for half a second, short falling debris. Weighty metal collision, no glass shower, explosion or engine. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.&quot;,
+      &quot;duration_seconds&quot;: 1.5,
+      &quot;prompt_influence&quot;: 0.7,
+      &quot;model_id&quot;: &quot;eleven_text_to_sound_v2&quot;,
+      &quot;loop&quot;: false
+    },
+    &quot;budgetCharge&quot;: 100,
+    &quot;providerCredits&quot;: 15,
+    &quot;session&quot;: &quot;x3-2026-10-02&quot;,
+    &quot;reused&quot;: false
+  },
+  &quot;edit&quot;: {
+    &quot;operation&quot;: &quot;mono resample, -45 dBFS edge trim with 10 ms margin, 3 ms edge fades; preserve zero tails (no whole-file DC subtraction)&quot;,
+    &quot;startFrame&quot;: 0,
+    &quot;endFrameExclusive&quot;: 17014,
+    &quot;rate&quot;: 22050,
+    &quot;rivetFirstOnsetOnly&quot;: false
+  },
+  &quot;normalization&quot;: {
+    &quot;operation&quot;: &quot;measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling&quot;,
+    &quot;softLimited&quot;: false,
+    &quot;additionalCrestCompressionPasses&quot;: 0,
+    &quot;gain&quot;: 0.39582206483572246,
+    &quot;credits&quot;: 0
+  },
+  &quot;tailCleanup&quot;: null,
+  &quot;rawFailures&quot;: [
+    &quot;loudness&quot;,
+    &quot;truePeak&quot;,
+    &quot;silence&quot;,
+    &quot;clipping&quot;
+  ],
+  &quot;editedChecks&quot;: {
+    &quot;decode&quot;: true,
+    &quot;duration&quot;: true,
+    &quot;loudness&quot;: true,
+    &quot;truePeak&quot;: true,
+    &quot;silence&quot;: true,
+    &quot;clipping&quot;: true
+  },
+  &quot;silence&quot;: {
+    &quot;thresholdDbfs&quot;: -50,
+    &quot;minimumIntervalSeconds&quot;: 0.1,
+    &quot;intervalsFrames&quot;: [],
+    &quot;fraction&quot;: 0.0,
+    &quot;longestInteriorSeconds&quot;: 0
+  },
+  &quot;loop&quot;: {
+    &quot;status&quot;: &quot;not applicable&quot;,
+    &quot;reason&quot;: &quot;one-shot or full song&quot;
+  },
+  &quot;sourceDefects&quot;: [
+    &quot;loudness&quot;,
+    &quot;truePeak&quot;,
+    &quot;silence&quot;,
+    &quot;clipping&quot;
+  ],
+  &quot;notMeasured&quot;: [
+    &quot;semantic fidelity&quot;,
+    &quot;owner preference&quot;,
+    &quot;in-game masking/latency&quot;,
+    &quot;physical Stick playback/memory&quot;
+  ],
+  &quot;error&quot;: null
+}</pre></details>
+<label>Your listening note<textarea data-note="crunch-retry" placeholder="Preference, audible issue, device used"></textarea></label></article><article data-group="collision" data-id="wall">
+<h2>wall</h2><p class="badge pass">PASS — signal screen only</p>
+<p>0.691 s / -19.99 LUFS / -3.69 dBTP</p><p>Original failures: loudness, truePeak, silence<br>Edited failures: none</p>
+<p>Owner listening pending</p>
+<label>Edited comparison<audio controls preload="none" src="edited/wall.wav"></audio></label><label>Original<audio controls preload="none" src="raw/wall.mp3"></audio></label><details><summary>First local attempt — pass: no meter failures</summary><audio controls preload="none" src="first-pass/edited/wall.wav"></audio><p>-19.99 LUFS; -3.69 dBTP</p></details><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
+  &quot;promptOrText&quot;: &quot;Car chassis hits a concrete retaining wall. Hard dull crack, steel dragging on abrasive concrete, crushed grit falls and dies quickly. No explosion. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.&quot;,
+  &quot;beat&quot;: null,
+  &quot;provenance&quot;: {
+    &quot;sidecar&quot;: &quot;audio\\x3\\effects\\raw\\wall.mp3.json&quot;,
+    &quot;sourceSha256&quot;: &quot;5111f5f82b162a8f1734704ce8adeb1fcb351e7bd0a44141d5d62577111e375c&quot;,
+    &quot;generatedAt&quot;: &quot;2026-10-02T21:34:11.931Z&quot;,
+    &quot;request&quot;: {
+      &quot;text&quot;: &quot;Car chassis hits a concrete retaining wall. Hard dull crack, steel dragging on abrasive concrete, crushed grit falls and dies quickly. No explosion. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.&quot;,
+      &quot;duration_seconds&quot;: 1.5,
+      &quot;prompt_influence&quot;: 0.7,
+      &quot;model_id&quot;: &quot;eleven_text_to_sound_v2&quot;,
+      &quot;loop&quot;: false
+    },
+    &quot;budgetCharge&quot;: 100,
+    &quot;providerCredits&quot;: 15,
+    &quot;session&quot;: &quot;x3-2026-10-02&quot;,
+    &quot;reused&quot;: false
+  },
+  &quot;edit&quot;: {
+    &quot;operation&quot;: &quot;mono resample, -45 dBFS edge trim with 10 ms margin, 3 ms edge fades; preserve zero tails (no whole-file DC subtraction)&quot;,
+    &quot;startFrame&quot;: 0,
+    &quot;endFrameExclusive&quot;: 15227,
+    &quot;rate&quot;: 22050,
+    &quot;rivetFirstOnsetOnly&quot;: false
+  },
+  &quot;normalization&quot;: {
+    &quot;operation&quot;: &quot;measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling&quot;,
+    &quot;softLimited&quot;: false,
+    &quot;additionalCrestCompressionPasses&quot;: 0,
+    &quot;gain&quot;: 0.6102390566446633,
+    &quot;credits&quot;: 0
+  },
+  &quot;tailCleanup&quot;: null,
+  &quot;rawFailures&quot;: [
+    &quot;loudness&quot;,
+    &quot;truePeak&quot;,
+    &quot;silence&quot;
+  ],
+  &quot;editedChecks&quot;: {
+    &quot;decode&quot;: true,
+    &quot;duration&quot;: true,
+    &quot;loudness&quot;: true,
+    &quot;truePeak&quot;: true,
+    &quot;silence&quot;: true,
+    &quot;clipping&quot;: true
+  },
+  &quot;silence&quot;: {
+    &quot;thresholdDbfs&quot;: -50,
+    &quot;minimumIntervalSeconds&quot;: 0.1,
+    &quot;intervalsFrames&quot;: [],
+    &quot;fraction&quot;: 0.0,
+    &quot;longestInteriorSeconds&quot;: 0
+  },
+  &quot;loop&quot;: {
+    &quot;status&quot;: &quot;not applicable&quot;,
+    &quot;reason&quot;: &quot;one-shot or full song&quot;
+  },
+  &quot;sourceDefects&quot;: [
+    &quot;loudness&quot;,
+    &quot;truePeak&quot;,
+    &quot;silence&quot;
+  ],
+  &quot;notMeasured&quot;: [
+    &quot;semantic fidelity&quot;,
+    &quot;owner preference&quot;,
+    &quot;in-game masking/latency&quot;,
+    &quot;physical Stick playback/memory&quot;
+  ],
+  &quot;error&quot;: null
+}</pre></details>
+<label>Your listening note<textarea data-note="wall" placeholder="Preference, audible issue, device used"></textarea></label></article><article data-group="collision" data-id="barrier">
+<h2>barrier</h2><p class="badge pass">PASS — signal screen only</p>
+<p>1.153 s / -20.0 LUFS / -3.95 dBTP</p><p>Original failures: loudness, truePeak, silence, clipping<br>Edited failures: none</p>
+<p>Owner listening pending</p>
+<label>Edited comparison<audio controls preload="none" src="edited/barrier.wav"></audio></label><label>Original<audio controls preload="none" src="raw/barrier.mp3"></audio></label><details><summary>First local attempt — pass: no meter failures</summary><audio controls preload="none" src="first-pass/edited/barrier.wav"></audio><p>-20.0 LUFS; -3.95 dBTP</p></details><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
+  &quot;promptOrText&quot;: &quot;Car strikes a loose steel road barrier. Immediate hollow rail bang, bolts rattling in a short cascading decay, final metal tick. No explosion. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.&quot;,
+  &quot;beat&quot;: null,
+  &quot;provenance&quot;: {
+    &quot;sidecar&quot;: &quot;audio\\x3\\effects\\raw\\barrier.mp3.json&quot;,
+    &quot;sourceSha256&quot;: &quot;5bc6ab83670a045c185af5054779924bdda09ceb3a58b2194a8f8d6fa4905330&quot;,
+    &quot;generatedAt&quot;: &quot;2026-10-02T21:34:16.078Z&quot;,
+    &quot;request&quot;: {
+      &quot;text&quot;: &quot;Car strikes a loose steel road barrier. Immediate hollow rail bang, bolts rattling in a short cascading decay, final metal tick. No explosion. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.&quot;,
+      &quot;duration_seconds&quot;: 1.5,
+      &quot;prompt_influence&quot;: 0.7,
+      &quot;model_id&quot;: &quot;eleven_text_to_sound_v2&quot;,
+      &quot;loop&quot;: false
+    },
+    &quot;budgetCharge&quot;: 100,
+    &quot;providerCredits&quot;: 15,
+    &quot;session&quot;: &quot;x3-2026-10-02&quot;,
+    &quot;reused&quot;: false
+  },
+  &quot;edit&quot;: {
+    &quot;operation&quot;: &quot;mono resample, -45 dBFS edge trim with 10 ms margin, 3 ms edge fades; preserve zero tails (no whole-file DC subtraction)&quot;,
+    &quot;startFrame&quot;: 0,
+    &quot;endFrameExclusive&quot;: 32634,
+    &quot;rate&quot;: 22050,
+    &quot;rivetFirstOnsetOnly&quot;: false
+  },
+  &quot;normalization&quot;: {
+    &quot;operation&quot;: &quot;measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling&quot;,
+    &quot;softLimited&quot;: true,
+    &quot;additionalCrestCompressionPasses&quot;: 0,
+    &quot;gain&quot;: 1.333521432163324,
+    &quot;credits&quot;: 0
+  },
+  &quot;tailCleanup&quot;: {
+    &quot;before&quot;: {
+      &quot;file&quot;: &quot;audio/x3/effects/edited/barrier.wav&quot;,
+      &quot;sha256&quot;: &quot;59653d8cd83edbb4095db529d1d62ab7f4cdadeeddb61b77f309bfaca0efd110&quot;,
+      &quot;bytes&quot;: 65346,
+      &quot;status&quot;: &quot;pass&quot;,
+      &quot;checks&quot;: {
+        &quot;decode&quot;: true,
+        &quot;duration&quot;: true,
+        &quot;loudness&quot;: true,
+        &quot;truePeak&quot;: true,
+        &quot;silence&quot;: true,
+        &quot;clipping&quot;: true
+      },
+      &quot;failures&quot;: [],
+      &quot;durationSeconds&quot;: 1.48,
+      &quot;durationWindowSeconds&quot;: [
+        0,
+        180
+      ],
+      &quot;sampleRate&quot;: 22050,
+      &quot;channels&quot;: 1,
+      &quot;decodedFrames&quot;: 32634,
+      &quot;decodedBytes&quot;: 65268,
+      &quot;integratedLufs&quot;: -20.0,
+      &quot;truePeakDbtp&quot;: -3.95,
+      &quot;loudnessRangeLu&quot;: 0.0,
+      &quot;loudnessTargetLufs&quot;: -20,
+      &quot;loudnessToleranceLu&quot;: 2,
+      &quot;meterPaddingFrames&quot;: 0,
+      &quot;fullScaleSampleCount&quot;: 0,
+      &quot;silence&quot;: {
+        &quot;thresholdDbfs&quot;: -50,
+        &quot;minimumIntervalSeconds&quot;: 0.1,
+        &quot;intervalsFrames&quot;: [
+          [
+            21632,
+            25173
+          ],
+          [
+            25202,
+            32560
+          ]
+        ],
+        &quot;fraction&quot;: 0.333976833976834,
+        &quot;longestInteriorSeconds&quot;: 0.16058956916099773
+      },
+      &quot;loopSeam&quot;: {
+        &quot;status&quot;: &quot;not applicable&quot;,
+        &quot;reason&quot;: &quot;one-shot or full song&quot;
+      },
+      &quot;loopBoundary&quot;: null
+    },
+    &quot;startFrame&quot;: 0,
+    &quot;endFrameExclusive&quot;: 25422,
+    &quot;operation&quot;: &quot;trim measured edge silence and &lt;=25 ms codec residue; retain 10 ms margin&quot;,
+    &quot;normalization&quot;: {
+      &quot;operation&quot;: &quot;measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling&quot;,
+      &quot;softLimited&quot;: false,
+      &quot;additionalCrestCompressionPasses&quot;: 0,
+      &quot;gain&quot;: 1.0,
+      &quot;credits&quot;: 0
+    }
+  },
+  &quot;rawFailures&quot;: [
+    &quot;loudness&quot;,
+    &quot;truePeak&quot;,
+    &quot;silence&quot;,
+    &quot;clipping&quot;
+  ],
+  &quot;editedChecks&quot;: {
+    &quot;decode&quot;: true,
+    &quot;duration&quot;: true,
+    &quot;loudness&quot;: true,
+    &quot;truePeak&quot;: true,
+    &quot;silence&quot;: true,
+    &quot;clipping&quot;: true
+  },
+  &quot;silence&quot;: {
+    &quot;thresholdDbfs&quot;: -50,
+    &quot;minimumIntervalSeconds&quot;: 0.1,
+    &quot;intervalsFrames&quot;: [
+      [
+        21632,
+        25173
+      ]
+    ],
+    &quot;fraction&quot;: 0.13928880497207144,
+    &quot;longestInteriorSeconds&quot;: 0
+  },
+  &quot;loop&quot;: {
+    &quot;status&quot;: &quot;not applicable&quot;,
+    &quot;reason&quot;: &quot;one-shot or full song&quot;
+  },
+  &quot;sourceDefects&quot;: [
+    &quot;loudness&quot;,
+    &quot;truePeak&quot;,
+    &quot;silence&quot;,
+    &quot;clipping&quot;
+  ],
+  &quot;notMeasured&quot;: [
+    &quot;semantic fidelity&quot;,
+    &quot;owner preference&quot;,
+    &quot;in-game masking/latency&quot;,
+    &quot;physical Stick playback/memory&quot;
+  ],
+  &quot;error&quot;: null
+}</pre></details>
+<label>Your listening note<textarea data-note="barrier" placeholder="Preference, audible issue, device used"></textarea></label></article><article data-group="weapon" data-id="rivet-hit">
+<h2>rivet-hit</h2><p class="badge pass">PASS — signal screen only</p>
+<p>0.149 s / -20.35 LUFS / -2.0 dBTP</p><p>Original failures: loudness, truePeak, silence<br>Edited failures: none</p>
+<p>Owner listening pending</p>
+<label>Edited comparison<audio controls preload="none" src="edited/rivet-hit.wav"></audio></label><label>Original<audio controls preload="none" src="raw/rivet-hit.mp3"></audio></label><details><summary>First local attempt — fail: silence</summary><audio controls preload="none" src="first-pass/edited/rivet-hit.wav"></audio><p>-20.35 LUFS; -2.0 dBTP</p></details><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
+  &quot;promptOrText&quot;: &quot;Single rivet strikes armoured steel: sharp small metal puncture, compact dull body and tiny falling fragment. Fast dry decay. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.&quot;,
+  &quot;beat&quot;: null,
+  &quot;provenance&quot;: {
+    &quot;sidecar&quot;: &quot;audio\\x3\\effects\\raw\\rivet-hit.mp3.json&quot;,
+    &quot;sourceSha256&quot;: &quot;1841ac9a90cf462d53729157e9419e31617624433151325a7147c724183d4854&quot;,
+    &quot;generatedAt&quot;: &quot;2026-10-02T21:34:20.559Z&quot;,
+    &quot;request&quot;: {
+      &quot;text&quot;: &quot;Single rivet strikes armoured steel: sharp small metal puncture, compact dull body and tiny falling fragment. Fast dry decay. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.&quot;,
+      &quot;duration_seconds&quot;: 0.5,
+      &quot;prompt_influence&quot;: 0.7,
+      &quot;model_id&quot;: &quot;eleven_text_to_sound_v2&quot;,
+      &quot;loop&quot;: false
+    },
+    &quot;budgetCharge&quot;: 100,
+    &quot;providerCredits&quot;: 5,
+    &quot;session&quot;: &quot;x3-2026-10-02&quot;,
+    &quot;reused&quot;: false
+  },
+  &quot;edit&quot;: {
+    &quot;operation&quot;: &quot;mono resample, -45 dBFS edge trim with 10 ms margin, 3 ms edge fades; preserve zero tails (no whole-file DC subtraction)&quot;,
+    &quot;startFrame&quot;: 0,
+    &quot;endFrameExclusive&quot;: 10584,
+    &quot;rate&quot;: 22050,
+    &quot;rivetFirstOnsetOnly&quot;: false
+  },
+  &quot;normalization&quot;: {
+    &quot;operation&quot;: &quot;measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling&quot;,
+    &quot;softLimited&quot;: false,
+    &quot;additionalCrestCompressionPasses&quot;: 0,
+    &quot;gain&quot;: 0.6675749009643063,
+    &quot;credits&quot;: 0
+  },
+  &quot;tailCleanup&quot;: {
+    &quot;before&quot;: {
+      &quot;file&quot;: &quot;audio/x3/effects/edited/rivet-hit.wav&quot;,
+      &quot;sha256&quot;: &quot;4a6809238abfcd087b61c07a0e33e2d03d8e77c0c7d1f90f2d3c066cdc966fd2&quot;,
+      &quot;bytes&quot;: 21246,
+      &quot;status&quot;: &quot;fail&quot;,
+      &quot;checks&quot;: {
+        &quot;decode&quot;: true,
+        &quot;duration&quot;: true,
+        &quot;loudness&quot;: true,
+        &quot;truePeak&quot;: true,
+        &quot;silence&quot;: false,
+        &quot;clipping&quot;: true
+      },
+      &quot;failures&quot;: [
+        &quot;silence&quot;
+      ],
+      &quot;durationSeconds&quot;: 0.48,
+      &quot;durationWindowSeconds&quot;: [
+        0,
+        180
+      ],
+      &quot;sampleRate&quot;: 22050,
+      &quot;channels&quot;: 1,
+      &quot;decodedFrames&quot;: 10584,
+      &quot;decodedBytes&quot;: 21168,
+      &quot;integratedLufs&quot;: -20.35,
+      &quot;truePeakDbtp&quot;: -2.0,
+      &quot;loudnessRangeLu&quot;: 0.0,
+      &quot;loudnessTargetLufs&quot;: -20,
+      &quot;loudnessToleranceLu&quot;: 2,
+      &quot;meterPaddingFrames&quot;: 0,
+      &quot;fullScaleSampleCount&quot;: 0,
+      &quot;silence&quot;: {
+        &quot;thresholdDbfs&quot;: -50,
+        &quot;minimumIntervalSeconds&quot;: 0.1,
+        &quot;intervalsFrames&quot;: [
+          [
+            3072,
+            10584
+          ]
+        ],
+        &quot;fraction&quot;: 0.7097505668934241,
+        &quot;longestInteriorSeconds&quot;: 0
+      },
+      &quot;loopSeam&quot;: {
+        &quot;status&quot;: &quot;not applicable&quot;,
+        &quot;reason&quot;: &quot;one-shot or full song&quot;
+      },
+      &quot;loopBoundary&quot;: null
+    },
+    &quot;startFrame&quot;: 0,
+    &quot;endFrameExclusive&quot;: 3292,
+    &quot;operation&quot;: &quot;trim measured edge silence and &lt;=25 ms codec residue; retain 10 ms margin&quot;,
+    &quot;normalization&quot;: {
+      &quot;operation&quot;: &quot;measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling&quot;,
+      &quot;softLimited&quot;: false,
+      &quot;additionalCrestCompressionPasses&quot;: 0,
+      &quot;gain&quot;: 1.0,
+      &quot;credits&quot;: 0
+    }
+  },
+  &quot;rawFailures&quot;: [
+    &quot;loudness&quot;,
+    &quot;truePeak&quot;,
+    &quot;silence&quot;
+  ],
+  &quot;editedChecks&quot;: {
+    &quot;decode&quot;: true,
+    &quot;duration&quot;: true,
+    &quot;loudness&quot;: true,
+    &quot;truePeak&quot;: true,
+    &quot;silence&quot;: true,
+    &quot;clipping&quot;: true
+  },
+  &quot;silence&quot;: {
+    &quot;thresholdDbfs&quot;: -50,
+    &quot;minimumIntervalSeconds&quot;: 0.1,
+    &quot;intervalsFrames&quot;: [],
+    &quot;fraction&quot;: 0.0,
+    &quot;longestInteriorSeconds&quot;: 0
+  },
+  &quot;loop&quot;: {
+    &quot;status&quot;: &quot;not applicable&quot;,
+    &quot;reason&quot;: &quot;one-shot or full song&quot;
+  },
+  &quot;sourceDefects&quot;: [
+    &quot;loudness&quot;,
+    &quot;truePeak&quot;,
+    &quot;silence&quot;
+  ],
+  &quot;notMeasured&quot;: [
+    &quot;semantic fidelity&quot;,
+    &quot;owner preference&quot;,
+    &quot;in-game masking/latency&quot;,
+    &quot;physical Stick playback/memory&quot;
+  ],
+  &quot;error&quot;: null
+}</pre></details>
+<label>Your listening note<textarea data-note="rivet-hit" placeholder="Preference, audible issue, device used"></textarea></label></article><article data-group="weapon" data-id="hammer-fire">
+<h2>hammer-fire</h2><p class="badge pass">PASS — signal screen only</p>
+<p>0.735 s / -19.97 LUFS / -2.97 dBTP</p><p>Original failures: truePeak<br>Edited failures: none</p>
+<p>Owner listening pending</p>
+<label>Edited comparison<audio controls preload="none" src="edited/hammer-fire.wav"></audio></label><label>Original<audio controls preload="none" src="raw/hammer-fire.mp3"></audio></label><details><summary>First local attempt — pass: no meter failures</summary><audio controls preload="none" src="first-pass/edited/hammer-fire.wav"></audio><p>-20.05 LUFS; -3.02 dBTP</p></details><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
+  &quot;promptOrText&quot;: &quot;Heavy vehicle cannon launch: sharp bolt release, deep pneumatic thump, short barrel ring and fast dry stop. One launch only. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.&quot;,
+  &quot;beat&quot;: null,
+  &quot;provenance&quot;: {
+    &quot;sidecar&quot;: &quot;audio\\x3\\effects\\raw\\hammer-fire.mp3.json&quot;,
+    &quot;sourceSha256&quot;: &quot;0e70f61d2492a404b2e2aabbf933375188694f0b70ffd68983b77aa5980308cd&quot;,
+    &quot;generatedAt&quot;: &quot;2026-10-02T21:34:26.819Z&quot;,
+    &quot;request&quot;: {
+      &quot;text&quot;: &quot;Heavy vehicle cannon launch: sharp bolt release, deep pneumatic thump, short barrel ring and fast dry stop. One launch only. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.&quot;,
+      &quot;duration_seconds&quot;: 1,
+      &quot;prompt_influence&quot;: 0.7,
+      &quot;model_id&quot;: &quot;eleven_text_to_sound_v2&quot;,
+      &quot;loop&quot;: false
+    },
+    &quot;budgetCharge&quot;: 100,
+    &quot;providerCredits&quot;: 10,
+    &quot;session&quot;: &quot;x3-2026-10-02&quot;,
+    &quot;reused&quot;: false
+  },
+  &quot;edit&quot;: {
+    &quot;operation&quot;: &quot;mono resample, -45 dBFS edge trim with 10 ms margin, 3 ms edge fades; preserve zero tails (no whole-file DC subtraction)&quot;,
+    &quot;startFrame&quot;: 0,
+    &quot;endFrameExclusive&quot;: 22050,
+    &quot;rate&quot;: 22050,
+    &quot;rivetFirstOnsetOnly&quot;: false
+  },
+  &quot;normalization&quot;: {
+    &quot;operation&quot;: &quot;measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling&quot;,
+    &quot;softLimited&quot;: true,
+    &quot;additionalCrestCompressionPasses&quot;: 0,
+    &quot;gain&quot;: 1.4571357047304205,
+    &quot;credits&quot;: 0
+  },
+  &quot;tailCleanup&quot;: {
+    &quot;before&quot;: {
+      &quot;file&quot;: &quot;audio/x3/effects/edited/hammer-fire.wav&quot;,
+      &quot;sha256&quot;: &quot;d3cd7e4a55674a6ad84b67234e71a1b57cb02577e80390a89e330a942ee119eb&quot;,
+      &quot;bytes&quot;: 44178,
+      &quot;status&quot;: &quot;pass&quot;,
+      &quot;checks&quot;: {
+        &quot;decode&quot;: true,
+        &quot;duration&quot;: true,
+        &quot;loudness&quot;: true,
+        &quot;truePeak&quot;: true,
+        &quot;silence&quot;: true,
+        &quot;clipping&quot;: true
+      },
+      &quot;failures&quot;: [],
+      &quot;durationSeconds&quot;: 1.0,
+      &quot;durationWindowSeconds&quot;: [
+        0,
+        180
+      ],
+      &quot;sampleRate&quot;: 22050,
+      &quot;channels&quot;: 1,
+      &quot;decodedFrames&quot;: 22050,
+      &quot;decodedBytes&quot;: 44100,
+      &quot;integratedLufs&quot;: -20.05,
+      &quot;truePeakDbtp&quot;: -3.02,
+      &quot;loudnessRangeLu&quot;: 0.0,
+      &quot;loudnessTargetLufs&quot;: -20,
+      &quot;loudnessToleranceLu&quot;: 2,
+      &quot;meterPaddingFrames&quot;: 0,
+      &quot;fullScaleSampleCount&quot;: 0,
+      &quot;silence&quot;: {
+        &quot;thresholdDbfs&quot;: -50,
+        &quot;minimumIntervalSeconds&quot;: 0.1,
+        &quot;intervalsFrames&quot;: [
+          [
+            15990,
+            22050
+          ]
+        ],
+        &quot;fraction&quot;: 0.2748299319727891,
+        &quot;longestInteriorSeconds&quot;: 0
+      },
+      &quot;loopSeam&quot;: {
+        &quot;status&quot;: &quot;not applicable&quot;,
+        &quot;reason&quot;: &quot;one-shot or full song&quot;
+      },
+      &quot;loopBoundary&quot;: null
+    },
+    &quot;startFrame&quot;: 0,
+    &quot;endFrameExclusive&quot;: 16210,
+    &quot;operation&quot;: &quot;trim measured edge silence and &lt;=25 ms codec residue; retain 10 ms margin&quot;,
+    &quot;normalization&quot;: {
+      &quot;operation&quot;: &quot;measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling&quot;,
+      &quot;softLimited&quot;: false,
+      &quot;additionalCrestCompressionPasses&quot;: 0,
+      &quot;gain&quot;: 1.0057730630017383,
+      &quot;credits&quot;: 0
+    }
+  },
+  &quot;rawFailures&quot;: [
+    &quot;truePeak&quot;
+  ],
+  &quot;editedChecks&quot;: {
+    &quot;decode&quot;: true,
+    &quot;duration&quot;: true,
+    &quot;loudness&quot;: true,
+    &quot;truePeak&quot;: true,
+    &quot;silence&quot;: true,
+    &quot;clipping&quot;: true
+  },
+  &quot;silence&quot;: {
+    &quot;thresholdDbfs&quot;: -50,
+    &quot;minimumIntervalSeconds&quot;: 0.1,
+    &quot;intervalsFrames&quot;: [],
+    &quot;fraction&quot;: 0.0,
+    &quot;longestInteriorSeconds&quot;: 0
+  },
+  &quot;loop&quot;: {
+    &quot;status&quot;: &quot;not applicable&quot;,
+    &quot;reason&quot;: &quot;one-shot or full song&quot;
+  },
+  &quot;sourceDefects&quot;: [
+    &quot;truePeak&quot;
+  ],
+  &quot;notMeasured&quot;: [
+    &quot;semantic fidelity&quot;,
+    &quot;owner preference&quot;,
+    &quot;in-game masking/latency&quot;,
+    &quot;physical Stick playback/memory&quot;
+  ],
+  &quot;error&quot;: null
+}</pre></details>
+<label>Your listening note<textarea data-note="hammer-fire" placeholder="Preference, audible issue, device used"></textarea></label></article><article data-group="weapon" data-id="hammer-hit">
+<h2>hammer-hit</h2><p class="badge pass">PASS — signal screen only</p>
+<p>0.866 s / -20.0 LUFS / -5.07 dBTP</p><p>Original failures: loudness, truePeak, silence, clipping<br>Edited failures: none</p>
+<p>Owner listening pending</p>
+<label>Edited comparison<audio controls preload="none" src="edited/hammer-hit.wav"></audio></label><label>Original<audio controls preload="none" src="raw/hammer-hit.mp3"></audio></label><details><summary>First local attempt — pass: no meter failures</summary><audio controls preload="none" src="first-pass/edited/hammer-hit.wav"></audio><p>-20.0 LUFS; -3.37 dBTP</p></details><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
+  &quot;promptOrText&quot;: &quot;Heavy shell strikes road metal: immediate hard crack, compressed low blast, heavy fragments tumble briefly and stop. One impact, no rolling fireball. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.&quot;,
+  &quot;beat&quot;: null,
+  &quot;provenance&quot;: {
+    &quot;sidecar&quot;: &quot;audio\\x3\\effects\\raw\\hammer-hit.mp3.json&quot;,
+    &quot;sourceSha256&quot;: &quot;c2ccf3cdb878f1326a59e53e08c08ba8b086e2c2b1c1e02d9e954c2216148f18&quot;,
+    &quot;generatedAt&quot;: &quot;2026-10-02T21:34:39.780Z&quot;,
+    &quot;request&quot;: {
+      &quot;text&quot;: &quot;Heavy shell strikes road metal: immediate hard crack, compressed low blast, heavy fragments tumble briefly and stop. One impact, no rolling fireball. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.&quot;,
+      &quot;duration_seconds&quot;: 2,
+      &quot;prompt_influence&quot;: 0.7,
+      &quot;model_id&quot;: &quot;eleven_text_to_sound_v2&quot;,
+      &quot;loop&quot;: false
+    },
+    &quot;budgetCharge&quot;: 100,
+    &quot;providerCredits&quot;: 20,
+    &quot;session&quot;: &quot;x3-2026-10-02&quot;,
+    &quot;reused&quot;: false
+  },
+  &quot;edit&quot;: {
+    &quot;operation&quot;: &quot;mono resample, -45 dBFS edge trim with 10 ms margin, 3 ms edge fades; preserve zero tails (no whole-file DC subtraction)&quot;,
+    &quot;startFrame&quot;: 0,
+    &quot;endFrameExclusive&quot;: 22903,
+    &quot;rate&quot;: 22050,
+    &quot;rivetFirstOnsetOnly&quot;: false
+  },
+  &quot;normalization&quot;: {
+    &quot;operation&quot;: &quot;measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling&quot;,
+    &quot;softLimited&quot;: false,
+    &quot;additionalCrestCompressionPasses&quot;: 0,
+    &quot;gain&quot;: 0.588843655355589,
+    &quot;credits&quot;: 0
+  },
+  &quot;tailCleanup&quot;: {
+    &quot;before&quot;: {
+      &quot;file&quot;: &quot;audio/x3/effects/edited/hammer-hit.wav&quot;,
+      &quot;sha256&quot;: &quot;adf808d130bcef9e877f0d914bb827925e157f4ee22584df6361d84f6837e115&quot;,
+      &quot;bytes&quot;: 45884,
+      &quot;status&quot;: &quot;pass&quot;,
+      &quot;checks&quot;: {
+        &quot;decode&quot;: true,
+        &quot;duration&quot;: true,
+        &quot;loudness&quot;: true,
+        &quot;truePeak&quot;: true,
+        &quot;silence&quot;: true,
+        &quot;clipping&quot;: true
+      },
+      &quot;failures&quot;: [],
+      &quot;durationSeconds&quot;: 1.0386848072562358,
+      &quot;durationWindowSeconds&quot;: [
+        0,
+        180
+      ],
+      &quot;sampleRate&quot;: 22050,
+      &quot;channels&quot;: 1,
+      &quot;decodedFrames&quot;: 22903,
+      &quot;decodedBytes&quot;: 45806,
+      &quot;integratedLufs&quot;: -20.0,
+      &quot;truePeakDbtp&quot;: -3.37,
+      &quot;loudnessRangeLu&quot;: 0.0,
+      &quot;loudnessTargetLufs&quot;: -20,
+      &quot;loudnessToleranceLu&quot;: 2,
+      &quot;meterPaddingFrames&quot;: 0,
+      &quot;fullScaleSampleCount&quot;: 0,
+      &quot;silence&quot;: {
+        &quot;thresholdDbfs&quot;: -50,
+        &quot;minimumIntervalSeconds&quot;: 0.1,
+        &quot;intervalsFrames&quot;: [
+          [
+            18871,
+            22610
+          ]
+        ],
+        &quot;fraction&quot;: 0.16325372221979653,
+        &quot;longestInteriorSeconds&quot;: 0
+      },
+      &quot;loopSeam&quot;: {
+        &quot;status&quot;: &quot;not applicable&quot;,
+        &quot;reason&quot;: &quot;one-shot or full song&quot;
+      },
+      &quot;loopBoundary&quot;: null
+    },
+    &quot;startFrame&quot;: 0,
+    &quot;endFrameExclusive&quot;: 19091,
+    &quot;operation&quot;: &quot;trim measured edge silence and &lt;=25 ms codec residue; retain 10 ms margin&quot;,
+    &quot;normalization&quot;: {
+      &quot;operation&quot;: &quot;measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling&quot;,
+      &quot;softLimited&quot;: false,
+      &quot;additionalCrestCompressionPasses&quot;: 0,
+      &quot;gain&quot;: 0.8222426499470712,
+      &quot;credits&quot;: 0
+    }
+  },
+  &quot;rawFailures&quot;: [
+    &quot;loudness&quot;,
+    &quot;truePeak&quot;,
+    &quot;silence&quot;,
+    &quot;clipping&quot;
+  ],
+  &quot;editedChecks&quot;: {
+    &quot;decode&quot;: true,
+    &quot;duration&quot;: true,
+    &quot;loudness&quot;: true,
+    &quot;truePeak&quot;: true,
+    &quot;silence&quot;: true,
+    &quot;clipping&quot;: true
+  },
+  &quot;silence&quot;: {
+    &quot;thresholdDbfs&quot;: -50,
+    &quot;minimumIntervalSeconds&quot;: 0.1,
+    &quot;intervalsFrames&quot;: [],
+    &quot;fraction&quot;: 0.0,
+    &quot;longestInteriorSeconds&quot;: 0
+  },
+  &quot;loop&quot;: {
+    &quot;status&quot;: &quot;not applicable&quot;,
+    &quot;reason&quot;: &quot;one-shot or full song&quot;
+  },
+  &quot;sourceDefects&quot;: [
+    &quot;loudness&quot;,
+    &quot;truePeak&quot;,
+    &quot;silence&quot;,
+    &quot;clipping&quot;
+  ],
+  &quot;notMeasured&quot;: [
+    &quot;semantic fidelity&quot;,
+    &quot;owner preference&quot;,
+    &quot;in-game masking/latency&quot;,
+    &quot;physical Stick playback/memory&quot;
+  ],
+  &quot;error&quot;: null
+}</pre></details>
+<label>Your listening note<textarea data-note="hammer-hit" placeholder="Preference, audible issue, device used"></textarea></label></article><article data-group="weapon" data-id="mine-drop">
+<h2>mine-drop</h2><p class="badge pass">PASS — signal screen only</p>
+<p>0.477 s / -19.95 LUFS / -4.05 dBTP</p><p>Original failures: loudness, truePeak, clipping<br>Edited failures: none</p>
+<p>Owner listening pending</p>
+<label>Edited comparison<audio controls preload="none" src="edited/mine-drop.wav"></audio></label><label>Original<audio controls preload="none" src="raw/mine-drop.mp3"></audio></label><details><summary>First local attempt — pass: no meter failures</summary><audio controls preload="none" src="first-pass/edited/mine-drop.wav"></audio><p>-20.53 LUFS; -2.0 dBTP</p></details><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
+  &quot;promptOrText&quot;: &quot;Road mine drops from a crude rack: latch snaps, heavy steel disk thumps onto asphalt, brief rattling settle. No blast. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.&quot;,
+  &quot;beat&quot;: null,
+  &quot;provenance&quot;: {
+    &quot;sidecar&quot;: &quot;audio\\x3\\effects\\raw\\mine-drop.mp3.json&quot;,
+    &quot;sourceSha256&quot;: &quot;731e66204c987bf4b867d0e3df1f7f621470a7eb42b2a6dd60692da444e19769&quot;,
+    &quot;generatedAt&quot;: &quot;2026-10-02T21:34:52.563Z&quot;,
+    &quot;request&quot;: {
+      &quot;text&quot;: &quot;Road mine drops from a crude rack: latch snaps, heavy steel disk thumps onto asphalt, brief rattling settle. No blast. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.&quot;,
+      &quot;duration_seconds&quot;: 0.7,
+      &quot;prompt_influence&quot;: 0.7,
+      &quot;model_id&quot;: &quot;eleven_text_to_sound_v2&quot;,
+      &quot;loop&quot;: false
+    },
+    &quot;budgetCharge&quot;: 100,
+    &quot;providerCredits&quot;: 7,
+    &quot;session&quot;: &quot;x3-2026-10-02&quot;,
+    &quot;reused&quot;: false
+  },
+  &quot;edit&quot;: {
+    &quot;operation&quot;: &quot;mono resample, -45 dBFS edge trim with 10 ms margin, 3 ms edge fades; preserve zero tails (no whole-file DC subtraction)&quot;,
+    &quot;startFrame&quot;: 0,
+    &quot;endFrameExclusive&quot;: 15000,
+    &quot;rate&quot;: 22050,
+    &quot;rivetFirstOnsetOnly&quot;: false
+  },
+  &quot;normalization&quot;: {
+    &quot;operation&quot;: &quot;measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling&quot;,
+    &quot;softLimited&quot;: false,
+    &quot;additionalCrestCompressionPasses&quot;: 0,
+    &quot;gain&quot;: 0.7336687144183595,
+    &quot;credits&quot;: 0
+  },
+  &quot;tailCleanup&quot;: {
+    &quot;before&quot;: {
+      &quot;file&quot;: &quot;audio/x3/effects/edited/mine-drop.wav&quot;,
+      &quot;sha256&quot;: &quot;264751485a1835c6a9235b0267696538f51a548bc3f6ea3a6080cd4c4601e8bb&quot;,
+      &quot;bytes&quot;: 30078,
+      &quot;status&quot;: &quot;pass&quot;,
+      &quot;checks&quot;: {
+        &quot;decode&quot;: true,
+        &quot;duration&quot;: true,
+        &quot;loudness&quot;: true,
+        &quot;truePeak&quot;: true,
+        &quot;silence&quot;: true,
+        &quot;clipping&quot;: true
+      },
+      &quot;failures&quot;: [],
+      &quot;durationSeconds&quot;: 0.6802721088435374,
+      &quot;durationWindowSeconds&quot;: [
+        0,
+        180
+      ],
+      &quot;sampleRate&quot;: 22050,
+      &quot;channels&quot;: 1,
+      &quot;decodedFrames&quot;: 15000,
+      &quot;decodedBytes&quot;: 30000,
+      &quot;integratedLufs&quot;: -20.62,
+      &quot;truePeakDbtp&quot;: -2.0,
+      &quot;loudnessRangeLu&quot;: 0.0,
+      &quot;loudnessTargetLufs&quot;: -20,
+      &quot;loudnessToleranceLu&quot;: 2,
+      &quot;meterPaddingFrames&quot;: 0,
+      &quot;fullScaleSampleCount&quot;: 0,
+      &quot;silence&quot;: {
+        &quot;thresholdDbfs&quot;: -50,
+        &quot;minimumIntervalSeconds&quot;: 0.1,
+        &quot;intervalsFrames&quot;: [
+          [
+            10301,
+            14909
+          ]
+        ],
+        &quot;fraction&quot;: 0.3072,
+        &quot;longestInteriorSeconds&quot;: 0
+      },
+      &quot;loopSeam&quot;: {
+        &quot;status&quot;: &quot;not applicable&quot;,
+        &quot;reason&quot;: &quot;one-shot or full song&quot;
+      },
+      &quot;loopBoundary&quot;: null
+    },
+    &quot;startFrame&quot;: 0,
+    &quot;endFrameExclusive&quot;: 10521,
+    &quot;operation&quot;: &quot;trim measured edge silence and &lt;=25 ms codec residue; retain 10 ms margin&quot;,
+    &quot;normalization&quot;: {
+      &quot;operation&quot;: &quot;measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling&quot;,
+      &quot;softLimited&quot;: false,
+      &quot;additionalCrestCompressionPasses&quot;: 0,
+      &quot;gain&quot;: 0.7897688493998856,
+      &quot;credits&quot;: 0
+    }
+  },
+  &quot;rawFailures&quot;: [
+    &quot;loudness&quot;,
+    &quot;truePeak&quot;,
+    &quot;clipping&quot;
+  ],
+  &quot;editedChecks&quot;: {
+    &quot;decode&quot;: true,
+    &quot;duration&quot;: true,
+    &quot;loudness&quot;: true,
+    &quot;truePeak&quot;: true,
+    &quot;silence&quot;: true,
+    &quot;clipping&quot;: true
+  },
+  &quot;silence&quot;: {
+    &quot;thresholdDbfs&quot;: -50,
+    &quot;minimumIntervalSeconds&quot;: 0.1,
+    &quot;intervalsFrames&quot;: [],
+    &quot;fraction&quot;: 0.0,
+    &quot;longestInteriorSeconds&quot;: 0
+  },
+  &quot;loop&quot;: {
+    &quot;status&quot;: &quot;not applicable&quot;,
+    &quot;reason&quot;: &quot;one-shot or full song&quot;
+  },
+  &quot;sourceDefects&quot;: [
+    &quot;loudness&quot;,
+    &quot;truePeak&quot;,
+    &quot;clipping&quot;
+  ],
+  &quot;notMeasured&quot;: [
+    &quot;semantic fidelity&quot;,
+    &quot;owner preference&quot;,
+    &quot;in-game masking/latency&quot;,
+    &quot;physical Stick playback/memory&quot;
+  ],
+  &quot;error&quot;: null
+}</pre></details>
+<label>Your listening note<textarea data-note="mine-drop" placeholder="Preference, audible issue, device used"></textarea></label></article><article data-group="weapon" data-id="mine-arm">
+<h2>mine-arm</h2><p class="badge pass">PASS — signal screen only</p>
+<p>0.444 s / -20.05 LUFS / -5.32 dBTP</p><p>Original failures: loudness, truePeak, clipping<br>Edited failures: none</p>
+<p>Owner listening pending</p>
+<label>Edited comparison<audio controls preload="none" src="edited/mine-arm.wav"></audio></label><label>Original<audio controls preload="none" src="raw/mine-arm.mp3"></audio></label><details><summary>First local attempt — pass: no meter failures</summary><audio controls preload="none" src="first-pass/edited/mine-arm.wav"></audio><p>-20.05 LUFS; -5.31 dBTP</p></details><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
+  &quot;promptOrText&quot;: &quot;A road mine arms: spring winds tightly then a distinct short steel catch seats. Compact tense ratchet, dry stop. No electronic beep or explosion. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.&quot;,
+  &quot;beat&quot;: null,
+  &quot;provenance&quot;: {
+    &quot;sidecar&quot;: &quot;audio\\x3\\effects\\raw\\mine-arm.mp3.json&quot;,
+    &quot;sourceSha256&quot;: &quot;988e90f950b13600fd5d6942cee4ba03ec92ae83be2845161b079bf36a2ee3a5&quot;,
+    &quot;generatedAt&quot;: &quot;2026-10-02T21:35:05.211Z&quot;,
+    &quot;request&quot;: {
+      &quot;text&quot;: &quot;A road mine arms: spring winds tightly then a distinct short steel catch seats. Compact tense ratchet, dry stop. No electronic beep or explosion. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.&quot;,
+      &quot;duration_seconds&quot;: 0.6,
+      &quot;prompt_influence&quot;: 0.7,
+      &quot;model_id&quot;: &quot;eleven_text_to_sound_v2&quot;,
+      &quot;loop&quot;: false
+    },
+    &quot;budgetCharge&quot;: 100,
+    &quot;providerCredits&quot;: 6,
+    &quot;session&quot;: &quot;x3-2026-10-02&quot;,
+    &quot;reused&quot;: false
+  },
+  &quot;edit&quot;: {
+    &quot;operation&quot;: &quot;mono resample, -45 dBFS edge trim with 10 ms margin, 3 ms edge fades; preserve zero tails (no whole-file DC subtraction)&quot;,
+    &quot;startFrame&quot;: 0,
+    &quot;endFrameExclusive&quot;: 9793,
+    &quot;rate&quot;: 22050,
+    &quot;rivetFirstOnsetOnly&quot;: false
+  },
+  &quot;normalization&quot;: {
+    &quot;operation&quot;: &quot;measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling&quot;,
+    &quot;softLimited&quot;: false,
+    &quot;additionalCrestCompressionPasses&quot;: 0,
+    &quot;gain&quot;: 0.5278372067815768,
+    &quot;credits&quot;: 0
+  },
+  &quot;tailCleanup&quot;: null,
+  &quot;rawFailures&quot;: [
+    &quot;loudness&quot;,
+    &quot;truePeak&quot;,
+    &quot;clipping&quot;
+  ],
+  &quot;editedChecks&quot;: {
+    &quot;decode&quot;: true,
+    &quot;duration&quot;: true,
+    &quot;loudness&quot;: true,
+    &quot;truePeak&quot;: true,
+    &quot;silence&quot;: true,
+    &quot;clipping&quot;: true
+  },
+  &quot;silence&quot;: {
+    &quot;thresholdDbfs&quot;: -50,
+    &quot;minimumIntervalSeconds&quot;: 0.1,
+    &quot;intervalsFrames&quot;: [],
+    &quot;fraction&quot;: 0.0,
+    &quot;longestInteriorSeconds&quot;: 0
+  },
+  &quot;loop&quot;: {
+    &quot;status&quot;: &quot;not applicable&quot;,
+    &quot;reason&quot;: &quot;one-shot or full song&quot;
+  },
+  &quot;sourceDefects&quot;: [
+    &quot;loudness&quot;,
+    &quot;truePeak&quot;,
+    &quot;clipping&quot;
+  ],
+  &quot;notMeasured&quot;: [
+    &quot;semantic fidelity&quot;,
+    &quot;owner preference&quot;,
+    &quot;in-game masking/latency&quot;,
+    &quot;physical Stick playback/memory&quot;
+  ],
+  &quot;error&quot;: null
+}</pre></details>
+<label>Your listening note<textarea data-note="mine-arm" placeholder="Preference, audible issue, device used"></textarea></label></article><article data-group="weapon" data-id="scatter">
+<h2>scatter</h2><p class="badge pass">PASS — signal screen only</p>
+<p>0.470 s / -19.95 LUFS / -7.05 dBTP</p><p>Original failures: loudness, truePeak, silence, clipping<br>Edited failures: none</p>
+<p>Owner listening pending</p>
+<label>Edited comparison<audio controls preload="none" src="edited/scatter.wav"></audio></label><label>Original<audio controls preload="none" src="raw/scatter.mp3"></audio></label><details><summary>First local attempt — fail: silence</summary><audio controls preload="none" src="first-pass/edited/scatter.wav"></audio><p>-20.0 LUFS; -4.9 dBTP</p></details><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
+  &quot;promptOrText&quot;: &quot;One vehicle scatter cannon discharge: abrupt broad gravelly slap, three nearly simultaneous metal cracks, short mechanical cycling, dry release. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.&quot;,
+  &quot;beat&quot;: null,
+  &quot;provenance&quot;: {
+    &quot;sidecar&quot;: &quot;audio\\x3\\effects\\raw\\scatter.mp3.json&quot;,
+    &quot;sourceSha256&quot;: &quot;09847c2da7f8c69048769ecd573f1ca1b56ba36c2ffa27f112ef0f066b884bfd&quot;,
+    &quot;generatedAt&quot;: &quot;2026-10-02T21:35:15.914Z&quot;,
+    &quot;request&quot;: {
+      &quot;text&quot;: &quot;One vehicle scatter cannon discharge: abrupt broad gravelly slap, three nearly simultaneous metal cracks, short mechanical cycling, dry release. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.&quot;,
+      &quot;duration_seconds&quot;: 0.8,
+      &quot;prompt_influence&quot;: 0.7,
+      &quot;model_id&quot;: &quot;eleven_text_to_sound_v2&quot;,
+      &quot;loop&quot;: false
+    },
+    &quot;budgetCharge&quot;: 100,
+    &quot;providerCredits&quot;: 8,
+    &quot;session&quot;: &quot;x3-2026-10-02&quot;,
+    &quot;reused&quot;: false
+  },
+  &quot;edit&quot;: {
+    &quot;operation&quot;: &quot;mono resample, -45 dBFS edge trim with 10 ms margin, 3 ms edge fades; preserve zero tails (no whole-file DC subtraction)&quot;,
+    &quot;startFrame&quot;: 0,
+    &quot;endFrameExclusive&quot;: 17640,
+    &quot;rate&quot;: 22050,
+    &quot;rivetFirstOnsetOnly&quot;: false
+  },
+  &quot;normalization&quot;: {
+    &quot;operation&quot;: &quot;measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling&quot;,
+    &quot;softLimited&quot;: false,
+    &quot;additionalCrestCompressionPasses&quot;: 0,
+    &quot;gain&quot;: 0.5064073495238509,
+    &quot;credits&quot;: 0
+  },
+  &quot;tailCleanup&quot;: {
+    &quot;before&quot;: {
+      &quot;file&quot;: &quot;audio/x3/effects/edited/scatter.wav&quot;,
+      &quot;sha256&quot;: &quot;3d6be4950893c597f1dbbfc48fe402b22b17d34340ee4f5ea52f1c486e336c52&quot;,
+      &quot;bytes&quot;: 35358,
+      &quot;status&quot;: &quot;fail&quot;,
+      &quot;checks&quot;: {
+        &quot;decode&quot;: true,
+        &quot;duration&quot;: true,
+        &quot;loudness&quot;: true,
+        &quot;truePeak&quot;: true,
+        &quot;silence&quot;: false,
+        &quot;clipping&quot;: true
+      },
+      &quot;failures&quot;: [
+        &quot;silence&quot;
+      ],
+      &quot;durationSeconds&quot;: 0.8,
+      &quot;durationWindowSeconds&quot;: [
+        0,
+        180
+      ],
+      &quot;sampleRate&quot;: 22050,
+      &quot;channels&quot;: 1,
+      &quot;decodedFrames&quot;: 17640,
+      &quot;decodedBytes&quot;: 35280,
+      &quot;integratedLufs&quot;: -20.0,
+      &quot;truePeakDbtp&quot;: -4.9,
+      &quot;loudnessRangeLu&quot;: 0.0,
+      &quot;loudnessTargetLufs&quot;: -20,
+      &quot;loudnessToleranceLu&quot;: 2,
+      &quot;meterPaddingFrames&quot;: 0,
+      &quot;fullScaleSampleCount&quot;: 0,
+      &quot;silence&quot;: {
+        &quot;thresholdDbfs&quot;: -50,
+        &quot;minimumIntervalSeconds&quot;: 0.1,
+        &quot;intervalsFrames&quot;: [
+          [
+            10143,
+            17597
+          ]
+        ],
+        &quot;fraction&quot;: 0.422562358276644,
+        &quot;longestInteriorSeconds&quot;: 0
+      },
+      &quot;loopSeam&quot;: {
+        &quot;status&quot;: &quot;not applicable&quot;,
+        &quot;reason&quot;: &quot;one-shot or full song&quot;
+      },
+      &quot;loopBoundary&quot;: null
+    },
+    &quot;startFrame&quot;: 0,
+    &quot;endFrameExclusive&quot;: 10363,
+    &quot;operation&quot;: &quot;trim measured edge silence and &lt;=25 ms codec residue; retain 10 ms margin&quot;,
+    &quot;normalization&quot;: {
+      &quot;operation&quot;: &quot;measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling&quot;,
+      &quot;softLimited&quot;: false,
+      &quot;additionalCrestCompressionPasses&quot;: 0,
+      &quot;gain&quot;: 0.780728440137907,
+      &quot;credits&quot;: 0
+    }
+  },
+  &quot;rawFailures&quot;: [
+    &quot;loudness&quot;,
+    &quot;truePeak&quot;,
+    &quot;silence&quot;,
+    &quot;clipping&quot;
+  ],
+  &quot;editedChecks&quot;: {
+    &quot;decode&quot;: true,
+    &quot;duration&quot;: true,
+    &quot;loudness&quot;: true,
+    &quot;truePeak&quot;: true,
+    &quot;silence&quot;: true,
+    &quot;clipping&quot;: true
+  },
+  &quot;silence&quot;: {
+    &quot;thresholdDbfs&quot;: -50,
+    &quot;minimumIntervalSeconds&quot;: 0.1,
+    &quot;intervalsFrames&quot;: [],
+    &quot;fraction&quot;: 0.0,
+    &quot;longestInteriorSeconds&quot;: 0
+  },
+  &quot;loop&quot;: {
+    &quot;status&quot;: &quot;not applicable&quot;,
+    &quot;reason&quot;: &quot;one-shot or full song&quot;
+  },
+  &quot;sourceDefects&quot;: [
+    &quot;loudness&quot;,
+    &quot;truePeak&quot;,
+    &quot;silence&quot;,
+    &quot;clipping&quot;
+  ],
+  &quot;notMeasured&quot;: [
+    &quot;semantic fidelity&quot;,
+    &quot;owner preference&quot;,
+    &quot;in-game masking/latency&quot;,
+    &quot;physical Stick playback/memory&quot;
+  ],
+  &quot;error&quot;: null
+}</pre></details>
+<label>Your listening note<textarea data-note="scatter" placeholder="Preference, audible issue, device used"></textarea></label></article><article data-group="pickup" data-id="pickup-ammo">
+<h2>pickup-ammo</h2><p class="badge pass">PASS — signal screen only</p>
+<p>0.361 s / -19.95 LUFS / -2.07 dBTP</p><p>Original failures: loudness, truePeak, silence, clipping<br>Edited failures: none</p>
+<p>Owner listening pending</p>
+<label>Edited comparison<audio controls preload="none" src="edited/pickup-ammo.wav"></audio></label><label>Original<audio controls preload="none" src="raw/pickup-ammo.mp3"></audio></label><details><summary>First local attempt — pass: no meter failures</summary><audio controls preload="none" src="first-pass/edited/pickup-ammo.wav"></audio><p>-19.95 LUFS; -2.07 dBTP</p></details><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
+  &quot;promptOrText&quot;: &quot;One ammunition collection: crisp rack latch, a short dry stack of steel cartridges seating, quick tactile stop. Dry exposed scrap metal and dusty mechanical foley, light space. Original isolated effect; no coin, beep, music or voice.&quot;,
+  &quot;beat&quot;: null,
+  &quot;provenance&quot;: {
+    &quot;sidecar&quot;: &quot;audio\\x3\\effects\\raw\\pickup-ammo.mp3.json&quot;,
+    &quot;sourceSha256&quot;: &quot;e67c714ca3a1b9037176db728cd4acf8887059b101ed6f0205909c2591387236&quot;,
+    &quot;generatedAt&quot;: &quot;2026-10-02T21:35:28.920Z&quot;,
+    &quot;request&quot;: {
+      &quot;text&quot;: &quot;One ammunition collection: crisp rack latch, a short dry stack of steel cartridges seating, quick tactile stop. Dry exposed scrap metal and dusty mechanical foley, light space. Original isolated effect; no coin, beep, music or voice.&quot;,
+      &quot;duration_seconds&quot;: 0.6,
+      &quot;prompt_influence&quot;: 0.7,
+      &quot;model_id&quot;: &quot;eleven_text_to_sound_v2&quot;,
+      &quot;loop&quot;: false
+    },
+    &quot;budgetCharge&quot;: 100,
+    &quot;providerCredits&quot;: 6,
+    &quot;session&quot;: &quot;x3-2026-10-02&quot;,
+    &quot;reused&quot;: false
+  },
+  &quot;edit&quot;: {
+    &quot;operation&quot;: &quot;mono resample, -45 dBFS edge trim with 10 ms margin, 3 ms edge fades; preserve zero tails (no whole-file DC subtraction)&quot;,
+    &quot;startFrame&quot;: 0,
+    &quot;endFrameExclusive&quot;: 7951,
+    &quot;rate&quot;: 22050,
+    &quot;rivetFirstOnsetOnly&quot;: false
+  },
+  &quot;normalization&quot;: {
+    &quot;operation&quot;: &quot;measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling&quot;,
+    &quot;softLimited&quot;: false,
+    &quot;additionalCrestCompressionPasses&quot;: 0,
+    &quot;gain&quot;: 0.6645076729077795,
+    &quot;credits&quot;: 0
+  },
+  &quot;tailCleanup&quot;: null,
+  &quot;rawFailures&quot;: [
+    &quot;loudness&quot;,
+    &quot;truePeak&quot;,
+    &quot;silence&quot;,
+    &quot;clipping&quot;
+  ],
+  &quot;editedChecks&quot;: {
+    &quot;decode&quot;: true,
+    &quot;duration&quot;: true,
+    &quot;loudness&quot;: true,
+    &quot;truePeak&quot;: true,
+    &quot;silence&quot;: true,
+    &quot;clipping&quot;: true
+  },
+  &quot;silence&quot;: {
+    &quot;thresholdDbfs&quot;: -50,
+    &quot;minimumIntervalSeconds&quot;: 0.1,
+    &quot;intervalsFrames&quot;: [],
+    &quot;fraction&quot;: 0.0,
+    &quot;longestInteriorSeconds&quot;: 0
+  },
+  &quot;loop&quot;: {
+    &quot;status&quot;: &quot;not applicable&quot;,
+    &quot;reason&quot;: &quot;one-shot or full song&quot;
+  },
+  &quot;sourceDefects&quot;: [
+    &quot;loudness&quot;,
+    &quot;truePeak&quot;,
+    &quot;silence&quot;,
+    &quot;clipping&quot;
+  ],
+  &quot;notMeasured&quot;: [
+    &quot;semantic fidelity&quot;,
+    &quot;owner preference&quot;,
+    &quot;in-game masking/latency&quot;,
+    &quot;physical Stick playback/memory&quot;
+  ],
+  &quot;error&quot;: null
+}</pre></details>
+<label>Your listening note<textarea data-note="pickup-ammo" placeholder="Preference, audible issue, device used"></textarea></label></article><article data-group="pickup" data-id="pickup-repair">
+<h2>pickup-repair</h2><p class="badge pass">PASS — signal screen only</p>
+<p>0.536 s / -20.0 LUFS / -2.7 dBTP</p><p>Original failures: loudness, truePeak<br>Edited failures: none</p>
+<p>Owner listening pending</p>
+<label>Edited comparison<audio controls preload="none" src="edited/pickup-repair.wav"></audio></label><label>Original<audio controls preload="none" src="raw/pickup-repair.mp3"></audio></label><details><summary>First local attempt — pass: no meter failures</summary><audio controls preload="none" src="first-pass/edited/pickup-repair.wav"></audio><p>-20.0 LUFS; -2.7 dBTP</p></details><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
+  &quot;promptOrText&quot;: &quot;One repair collection: crisp clamp bite, short satisfying ratchet tightening a plate, dry release. Dry exposed scrap metal and dusty mechanical foley, light space. Original isolated effect; no coin, beep, music or voice.&quot;,
+  &quot;beat&quot;: null,
+  &quot;provenance&quot;: {
+    &quot;sidecar&quot;: &quot;audio\\x3\\effects\\raw\\pickup-repair.mp3.json&quot;,
+    &quot;sourceSha256&quot;: &quot;9f1330313af206f5d02a8c99f136c2a57a753f8397fd8624bdc8ac9e2433099d&quot;,
+    &quot;generatedAt&quot;: &quot;2026-10-02T21:35:40.545Z&quot;,
+    &quot;request&quot;: {
+      &quot;text&quot;: &quot;One repair collection: crisp clamp bite, short satisfying ratchet tightening a plate, dry release. Dry exposed scrap metal and dusty mechanical foley, light space. Original isolated effect; no coin, beep, music or voice.&quot;,
+      &quot;duration_seconds&quot;: 0.7,
+      &quot;prompt_influence&quot;: 0.7,
+      &quot;model_id&quot;: &quot;eleven_text_to_sound_v2&quot;,
+      &quot;loop&quot;: false
+    },
+    &quot;budgetCharge&quot;: 100,
+    &quot;providerCredits&quot;: 7,
+    &quot;session&quot;: &quot;x3-2026-10-02&quot;,
+    &quot;reused&quot;: false
+  },
+  &quot;edit&quot;: {
+    &quot;operation&quot;: &quot;mono resample, -45 dBFS edge trim with 10 ms margin, 3 ms edge fades; preserve zero tails (no whole-file DC subtraction)&quot;,
+    &quot;startFrame&quot;: 0,
+    &quot;endFrameExclusive&quot;: 11824,
+    &quot;rate&quot;: 22050,
+    &quot;rivetFirstOnsetOnly&quot;: false
+  },
+  &quot;normalization&quot;: {
+    &quot;operation&quot;: &quot;measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling&quot;,
+    &quot;softLimited&quot;: false,
+    &quot;additionalCrestCompressionPasses&quot;: 0,
+    &quot;gain&quot;: 0.6760829753919819,
+    &quot;credits&quot;: 0
+  },
+  &quot;tailCleanup&quot;: null,
+  &quot;rawFailures&quot;: [
+    &quot;loudness&quot;,
+    &quot;truePeak&quot;
+  ],
+  &quot;editedChecks&quot;: {
+    &quot;decode&quot;: true,
+    &quot;duration&quot;: true,
+    &quot;loudness&quot;: true,
+    &quot;truePeak&quot;: true,
+    &quot;silence&quot;: true,
+    &quot;clipping&quot;: true
+  },
+  &quot;silence&quot;: {
+    &quot;thresholdDbfs&quot;: -50,
+    &quot;minimumIntervalSeconds&quot;: 0.1,
+    &quot;intervalsFrames&quot;: [],
+    &quot;fraction&quot;: 0.0,
+    &quot;longestInteriorSeconds&quot;: 0
+  },
+  &quot;loop&quot;: {
+    &quot;status&quot;: &quot;not applicable&quot;,
+    &quot;reason&quot;: &quot;one-shot or full song&quot;
+  },
+  &quot;sourceDefects&quot;: [
+    &quot;loudness&quot;,
+    &quot;truePeak&quot;
+  ],
+  &quot;notMeasured&quot;: [
+    &quot;semantic fidelity&quot;,
+    &quot;owner preference&quot;,
+    &quot;in-game masking/latency&quot;,
+    &quot;physical Stick playback/memory&quot;
+  ],
+  &quot;error&quot;: null
+}</pre></details>
+<label>Your listening note<textarea data-note="pickup-repair" placeholder="Preference, audible issue, device used"></textarea></label></article><article data-group="race" data-id="wreck">
+<h2>wreck</h2><p class="badge pass">PASS — signal screen only</p>
+<p>1.778 s / -19.99 LUFS / -5.42 dBTP</p><p>Original failures: truePeak<br>Edited failures: none</p>
+<p>Owner listening pending</p>
+<label>Edited comparison<audio controls preload="none" src="edited/wreck.wav"></audio></label><label>Original<audio controls preload="none" src="raw/wreck.mp3"></audio></label><details><summary>First local attempt — pass: no meter failures</summary><audio controls preload="none" src="first-pass/edited/wreck.wav"></audio><p>-19.99 LUFS; -5.42 dBTP</p></details><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
+  &quot;promptOrText&quot;: &quot;Vehicle wreck: violent steel tearing at onset, deep collapsing chassis and engine choke, short debris falling to a dead stop. No voices or long fire. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.&quot;,
+  &quot;beat&quot;: null,
+  &quot;provenance&quot;: {
+    &quot;sidecar&quot;: &quot;audio\\x3\\effects\\raw\\wreck.mp3.json&quot;,
+    &quot;sourceSha256&quot;: &quot;4f8d87ebad5b1659bf043ab22d17fcb2102bae9d50e101275c8947b28b988177&quot;,
+    &quot;generatedAt&quot;: &quot;2026-10-02T21:35:53.289Z&quot;,
+    &quot;request&quot;: {
+      &quot;text&quot;: &quot;Vehicle wreck: violent steel tearing at onset, deep collapsing chassis and engine choke, short debris falling to a dead stop. No voices or long fire. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.&quot;,
+      &quot;duration_seconds&quot;: 2,
+      &quot;prompt_influence&quot;: 0.7,
+      &quot;model_id&quot;: &quot;eleven_text_to_sound_v2&quot;,
+      &quot;loop&quot;: false
+    },
+    &quot;budgetCharge&quot;: 100,
+    &quot;providerCredits&quot;: 20,
+    &quot;session&quot;: &quot;x3-2026-10-02&quot;,
+    &quot;reused&quot;: false
+  },
+  &quot;edit&quot;: {
+    &quot;operation&quot;: &quot;mono resample, -45 dBFS edge trim with 10 ms margin, 3 ms edge fades; preserve zero tails (no whole-file DC subtraction)&quot;,
+    &quot;startFrame&quot;: 0,
+    &quot;endFrameExclusive&quot;: 39208,
+    &quot;rate&quot;: 22050,
+    &quot;rivetFirstOnsetOnly&quot;: false
+  },
+  &quot;normalization&quot;: {
+    &quot;operation&quot;: &quot;measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling&quot;,
+    &quot;softLimited&quot;: true,
+    &quot;additionalCrestCompressionPasses&quot;: 0,
+    &quot;gain&quot;: 1.1415633046188454,
+    &quot;credits&quot;: 0
+  },
+  &quot;tailCleanup&quot;: null,
+  &quot;rawFailures&quot;: [
+    &quot;truePeak&quot;
+  ],
+  &quot;editedChecks&quot;: {
+    &quot;decode&quot;: true,
+    &quot;duration&quot;: true,
+    &quot;loudness&quot;: true,
+    &quot;truePeak&quot;: true,
+    &quot;silence&quot;: true,
+    &quot;clipping&quot;: true
+  },
+  &quot;silence&quot;: {
+    &quot;thresholdDbfs&quot;: -50,
+    &quot;minimumIntervalSeconds&quot;: 0.1,
+    &quot;intervalsFrames&quot;: [],
+    &quot;fraction&quot;: 0.0,
+    &quot;longestInteriorSeconds&quot;: 0
+  },
+  &quot;loop&quot;: {
+    &quot;status&quot;: &quot;not applicable&quot;,
+    &quot;reason&quot;: &quot;one-shot or full song&quot;
+  },
+  &quot;sourceDefects&quot;: [
+    &quot;truePeak&quot;
+  ],
+  &quot;notMeasured&quot;: [
+    &quot;semantic fidelity&quot;,
+    &quot;owner preference&quot;,
+    &quot;in-game masking/latency&quot;,
+    &quot;physical Stick playback/memory&quot;
+  ],
+  &quot;error&quot;: null
+}</pre></details>
+<label>Your listening note<textarea data-note="wreck" placeholder="Preference, audible issue, device used"></textarea></label></article><article data-group="race" data-id="countdown">
+<h2>countdown</h2><p class="badge pass">PASS — signal screen only</p>
+<p>0.323 s / -19.95 LUFS / -3.33 dBTP</p><p>Original failures: loudness, truePeak, clipping<br>Edited failures: none</p>
+<p>Owner listening pending</p>
+<label>Edited comparison<audio controls preload="none" src="edited/countdown.wav"></audio></label><label>Original<audio controls preload="none" src="raw/countdown.mp3"></audio></label><details><summary>First local attempt — pass: no meter failures</summary><audio controls preload="none" src="first-pass/edited/countdown.wav"></audio><p>-19.95 LUFS; -3.38 dBTP</p></details><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
+  &quot;promptOrText&quot;: &quot;One firm start marshal mechanism knock: solid iron hammer hits a damped steel plate, weighty compact knock with tiny decay. Only one hit. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.&quot;,
+  &quot;beat&quot;: null,
+  &quot;provenance&quot;: {
+    &quot;sidecar&quot;: &quot;audio\\x3\\effects\\raw\\countdown.mp3.json&quot;,
+    &quot;sourceSha256&quot;: &quot;ad3e24e8d3687b268a157c815c139036cb889822c823543d778b5860e46e9d60&quot;,
+    &quot;generatedAt&quot;: &quot;2026-10-02T21:36:04.300Z&quot;,
+    &quot;request&quot;: {
+      &quot;text&quot;: &quot;One firm start marshal mechanism knock: solid iron hammer hits a damped steel plate, weighty compact knock with tiny decay. Only one hit. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.&quot;,
+      &quot;duration_seconds&quot;: 0.5,
+      &quot;prompt_influence&quot;: 0.7,
+      &quot;model_id&quot;: &quot;eleven_text_to_sound_v2&quot;,
+      &quot;loop&quot;: false
+    },
+    &quot;budgetCharge&quot;: 100,
+    &quot;providerCredits&quot;: 5,
+    &quot;session&quot;: &quot;x3-2026-10-02&quot;,
+    &quot;reused&quot;: false
+  },
+  &quot;edit&quot;: {
+    &quot;operation&quot;: &quot;mono resample, -45 dBFS edge trim with 10 ms margin, 3 ms edge fades; preserve zero tails (no whole-file DC subtraction)&quot;,
+    &quot;startFrame&quot;: 0,
+    &quot;endFrameExclusive&quot;: 10584,
+    &quot;rate&quot;: 22050,
+    &quot;rivetFirstOnsetOnly&quot;: false
+  },
+  &quot;normalization&quot;: {
+    &quot;operation&quot;: &quot;measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling&quot;,
+    &quot;softLimited&quot;: false,
+    &quot;additionalCrestCompressionPasses&quot;: 0,
+    &quot;gain&quot;: 0.627335695984038,
+    &quot;credits&quot;: 0
+  },
+  &quot;tailCleanup&quot;: {
+    &quot;before&quot;: {
+      &quot;file&quot;: &quot;audio/x3/effects/edited/countdown.wav&quot;,
+      &quot;sha256&quot;: &quot;4f84390ebda342ce3ce1736af0a47df4f8e9b2bb34b562f72cc9bae255c2aeec&quot;,
+      &quot;bytes&quot;: 21246,
+      &quot;status&quot;: &quot;pass&quot;,
+      &quot;checks&quot;: {
+        &quot;decode&quot;: true,
+        &quot;duration&quot;: true,
+        &quot;loudness&quot;: true,
+        &quot;truePeak&quot;: true,
+        &quot;silence&quot;: true,
+        &quot;clipping&quot;: true
+      },
+      &quot;failures&quot;: [],
+      &quot;durationSeconds&quot;: 0.48,
+      &quot;durationWindowSeconds&quot;: [
+        0,
+        180
+      ],
+      &quot;sampleRate&quot;: 22050,
+      &quot;channels&quot;: 1,
+      &quot;decodedFrames&quot;: 10584,
+      &quot;decodedBytes&quot;: 21168,
+      &quot;integratedLufs&quot;: -19.95,
+      &quot;truePeakDbtp&quot;: -3.38,
+      &quot;loudnessRangeLu&quot;: 0.0,
+      &quot;loudnessTargetLufs&quot;: -20,
+      &quot;loudnessToleranceLu&quot;: 2,
+      &quot;meterPaddingFrames&quot;: 0,
+      &quot;fullScaleSampleCount&quot;: 0,
+      &quot;silence&quot;: {
+        &quot;thresholdDbfs&quot;: -50,
+        &quot;minimumIntervalSeconds&quot;: 0.1,
+        &quot;intervalsFrames&quot;: [
+          [
+            6911,
+            10487
+          ]
+        ],
+        &quot;fraction&quot;: 0.3378684807256236,
+        &quot;longestInteriorSeconds&quot;: 0
+      },
+      &quot;loopSeam&quot;: {
+        &quot;status&quot;: &quot;not applicable&quot;,
+        &quot;reason&quot;: &quot;one-shot or full song&quot;
+      },
+      &quot;loopBoundary&quot;: null
+    },
+    &quot;startFrame&quot;: 0,
+    &quot;endFrameExclusive&quot;: 7131,
+    &quot;operation&quot;: &quot;trim measured edge silence and &lt;=25 ms codec residue; retain 10 ms margin&quot;,
+    &quot;normalization&quot;: {
+      &quot;operation&quot;: &quot;measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling&quot;,
+      &quot;softLimited&quot;: false,
+      &quot;additionalCrestCompressionPasses&quot;: 0,
+      &quot;gain&quot;: 1.0057730630017383,
+      &quot;credits&quot;: 0
+    }
+  },
+  &quot;rawFailures&quot;: [
+    &quot;loudness&quot;,
+    &quot;truePeak&quot;,
+    &quot;clipping&quot;
+  ],
+  &quot;editedChecks&quot;: {
+    &quot;decode&quot;: true,
+    &quot;duration&quot;: true,
+    &quot;loudness&quot;: true,
+    &quot;truePeak&quot;: true,
+    &quot;silence&quot;: true,
+    &quot;clipping&quot;: true
+  },
+  &quot;silence&quot;: {
+    &quot;thresholdDbfs&quot;: -50,
+    &quot;minimumIntervalSeconds&quot;: 0.1,
+    &quot;intervalsFrames&quot;: [],
+    &quot;fraction&quot;: 0.0,
+    &quot;longestInteriorSeconds&quot;: 0
+  },
+  &quot;loop&quot;: {
+    &quot;status&quot;: &quot;not applicable&quot;,
+    &quot;reason&quot;: &quot;one-shot or full song&quot;
+  },
+  &quot;sourceDefects&quot;: [
+    &quot;loudness&quot;,
+    &quot;truePeak&quot;,
+    &quot;clipping&quot;
+  ],
+  &quot;notMeasured&quot;: [
+    &quot;semantic fidelity&quot;,
+    &quot;owner preference&quot;,
+    &quot;in-game masking/latency&quot;,
+    &quot;physical Stick playback/memory&quot;
+  ],
+  &quot;error&quot;: null
+}</pre></details>
+<label>Your listening note<textarea data-note="countdown" placeholder="Preference, audible issue, device used"></textarea></label></article><article data-group="race" data-id="start">
+<h2>start</h2><p class="badge pass">PASS — signal screen only</p>
+<p>0.607 s / -19.95 LUFS / -2.86 dBTP</p><p>Original failures: loudness, truePeak, clipping<br>Edited failures: none</p>
+<p>Owner listening pending</p>
+<label>Edited comparison<audio controls preload="none" src="edited/start.wav"></audio></label><label>Original<audio controls preload="none" src="raw/start.mp3"></audio></label><details><summary>First local attempt — pass: no meter failures</summary><audio controls preload="none" src="first-pass/edited/start.wav"></audio><p>-19.95 LUFS; -2.86 dBTP</p></details><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
+  &quot;promptOrText&quot;: &quot;Race gate releases: abrupt spring-loaded steel crack, compressed air punch, fast rising mechanical rush and dry stop. One clear starting signal. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.&quot;,
+  &quot;beat&quot;: null,
+  &quot;provenance&quot;: {
+    &quot;sidecar&quot;: &quot;audio\\x3\\effects\\raw\\start.mp3.json&quot;,
+    &quot;sourceSha256&quot;: &quot;37877203532cb0d42cfdc1d30ae0398b9d0af643b30a6bb7e51f9251499cc057&quot;,
+    &quot;generatedAt&quot;: &quot;2026-10-02T21:36:18.304Z&quot;,
+    &quot;request&quot;: {
+      &quot;text&quot;: &quot;Race gate releases: abrupt spring-loaded steel crack, compressed air punch, fast rising mechanical rush and dry stop. One clear starting signal. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.&quot;,
+      &quot;duration_seconds&quot;: 1,
+      &quot;prompt_influence&quot;: 0.7,
+      &quot;model_id&quot;: &quot;eleven_text_to_sound_v2&quot;,
+      &quot;loop&quot;: false
+    },
+    &quot;budgetCharge&quot;: 100,
+    &quot;providerCredits&quot;: 10,
+    &quot;session&quot;: &quot;x3-2026-10-02&quot;,
+    &quot;reused&quot;: false
+  },
+  &quot;edit&quot;: {
+    &quot;operation&quot;: &quot;mono resample, -45 dBFS edge trim with 10 ms margin, 3 ms edge fades; preserve zero tails (no whole-file DC subtraction)&quot;,
+    &quot;startFrame&quot;: 0,
+    &quot;endFrameExclusive&quot;: 13386,
+    &quot;rate&quot;: 22050,
+    &quot;rivetFirstOnsetOnly&quot;: false
+  },
+  &quot;normalization&quot;: {
+    &quot;operation&quot;: &quot;measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling&quot;,
+    &quot;softLimited&quot;: false,
+    &quot;additionalCrestCompressionPasses&quot;: 0,
+    &quot;gain&quot;: 0.571478636671867,
+    &quot;credits&quot;: 0
+  },
+  &quot;tailCleanup&quot;: null,
+  &quot;rawFailures&quot;: [
+    &quot;loudness&quot;,
+    &quot;truePeak&quot;,
+    &quot;clipping&quot;
+  ],
+  &quot;editedChecks&quot;: {
+    &quot;decode&quot;: true,
+    &quot;duration&quot;: true,
+    &quot;loudness&quot;: true,
+    &quot;truePeak&quot;: true,
+    &quot;silence&quot;: true,
+    &quot;clipping&quot;: true
+  },
+  &quot;silence&quot;: {
+    &quot;thresholdDbfs&quot;: -50,
+    &quot;minimumIntervalSeconds&quot;: 0.1,
+    &quot;intervalsFrames&quot;: [],
+    &quot;fraction&quot;: 0.0,
+    &quot;longestInteriorSeconds&quot;: 0
+  },
+  &quot;loop&quot;: {
+    &quot;status&quot;: &quot;not applicable&quot;,
+    &quot;reason&quot;: &quot;one-shot or full song&quot;
+  },
+  &quot;sourceDefects&quot;: [
+    &quot;loudness&quot;,
+    &quot;truePeak&quot;,
+    &quot;clipping&quot;
+  ],
+  &quot;notMeasured&quot;: [
+    &quot;semantic fidelity&quot;,
+    &quot;owner preference&quot;,
+    &quot;in-game masking/latency&quot;,
+    &quot;physical Stick playback/memory&quot;
+  ],
+  &quot;error&quot;: null
+}</pre></details>
+<label>Your listening note<textarea data-note="start" placeholder="Preference, audible issue, device used"></textarea></label></article><article data-group="race" data-id="lap">
+<h2>lap</h2><p class="badge pass">PASS — signal screen only</p>
+<p>0.474 s / -19.95 LUFS / -3.15 dBTP</p><p>Original failures: loudness, truePeak, silence<br>Edited failures: none</p>
+<p>Owner listening pending</p>
+<label>Edited comparison<audio controls preload="none" src="edited/lap.wav"></audio></label><label>Original<audio controls preload="none" src="raw/lap.mp3"></audio></label><details><summary>First local attempt — fail: silence</summary><audio controls preload="none" src="first-pass/edited/lap.wav"></audio><p>-20.8 LUFS; -2.0 dBTP</p></details><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
+  &quot;promptOrText&quot;: &quot;Lap completed signal: two quick dry steel ratchet knocks, second slightly brighter, a compact resonant plate tail. Physical and readable, no beep. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.&quot;,
+  &quot;beat&quot;: null,
+  &quot;provenance&quot;: {
+    &quot;sidecar&quot;: &quot;audio\\x3\\effects\\raw\\lap.mp3.json&quot;,
+    &quot;sourceSha256&quot;: &quot;d033c7054da7c8466eb67c391b6cfbd53347aa3b13a7652e0b34c0a1b0910100&quot;,
+    &quot;generatedAt&quot;: &quot;2026-10-02T21:36:29.549Z&quot;,
+    &quot;request&quot;: {
+      &quot;text&quot;: &quot;Lap completed signal: two quick dry steel ratchet knocks, second slightly brighter, a compact resonant plate tail. Physical and readable, no beep. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.&quot;,
+      &quot;duration_seconds&quot;: 0.8,
+      &quot;prompt_influence&quot;: 0.7,
+      &quot;model_id&quot;: &quot;eleven_text_to_sound_v2&quot;,
+      &quot;loop&quot;: false
+    },
+    &quot;budgetCharge&quot;: 100,
+    &quot;providerCredits&quot;: 8,
+    &quot;session&quot;: &quot;x3-2026-10-02&quot;,
+    &quot;reused&quot;: false
+  },
+  &quot;edit&quot;: {
+    &quot;operation&quot;: &quot;mono resample, -45 dBFS edge trim with 10 ms margin, 3 ms edge fades; preserve zero tails (no whole-file DC subtraction)&quot;,
+    &quot;startFrame&quot;: 0,
+    &quot;endFrameExclusive&quot;: 17640,
+    &quot;rate&quot;: 22050,
+    &quot;rivetFirstOnsetOnly&quot;: false
+  },
+  &quot;normalization&quot;: {
+    &quot;operation&quot;: &quot;measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling&quot;,
+    &quot;softLimited&quot;: false,
+    &quot;additionalCrestCompressionPasses&quot;: 0,
+    &quot;gain&quot;: 0.6799860450033223,
+    &quot;credits&quot;: 0
+  },
+  &quot;tailCleanup&quot;: {
+    &quot;before&quot;: {
+      &quot;file&quot;: &quot;audio/x3/effects/edited/lap.wav&quot;,
+      &quot;sha256&quot;: &quot;8c719c25148e4bb38b81f7f7537003090e6b91e01b9cc6cbdb051136c0a7c10a&quot;,
+      &quot;bytes&quot;: 35358,
+      &quot;status&quot;: &quot;fail&quot;,
+      &quot;checks&quot;: {
+        &quot;decode&quot;: true,
+        &quot;duration&quot;: true,
+        &quot;loudness&quot;: true,
+        &quot;truePeak&quot;: true,
+        &quot;silence&quot;: false,
+        &quot;clipping&quot;: true
+      },
+      &quot;failures&quot;: [
+        &quot;silence&quot;
+      ],
+      &quot;durationSeconds&quot;: 0.8,
+      &quot;durationWindowSeconds&quot;: [
+        0,
+        180
+      ],
+      &quot;sampleRate&quot;: 22050,
+      &quot;channels&quot;: 1,
+      &quot;decodedFrames&quot;: 17640,
+      &quot;decodedBytes&quot;: 35280,
+      &quot;integratedLufs&quot;: -20.8,
+      &quot;truePeakDbtp&quot;: -2.0,
+      &quot;loudnessRangeLu&quot;: 0.0,
+      &quot;loudnessTargetLufs&quot;: -20,
+      &quot;loudnessToleranceLu&quot;: 2,
+      &quot;meterPaddingFrames&quot;: 0,
+      &quot;fullScaleSampleCount&quot;: 0,
+      &quot;silence&quot;: {
+        &quot;thresholdDbfs&quot;: -50,
+        &quot;minimumIntervalSeconds&quot;: 0.1,
+        &quot;intervalsFrames&quot;: [
+          [
+            10242,
+            17640
+          ]
+        ],
+        &quot;fraction&quot;: 0.4193877551020408,
+        &quot;longestInteriorSeconds&quot;: 0
+      },
+      &quot;loopSeam&quot;: {
+        &quot;status&quot;: &quot;not applicable&quot;,
+        &quot;reason&quot;: &quot;one-shot or full song&quot;
+      },
+      &quot;loopBoundary&quot;: null
+    },
+    &quot;startFrame&quot;: 0,
+    &quot;endFrameExclusive&quot;: 10462,
+    &quot;operation&quot;: &quot;trim measured edge silence and &lt;=25 ms codec residue; retain 10 ms margin&quot;,
+    &quot;normalization&quot;: {
+      &quot;operation&quot;: &quot;measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling&quot;,
+      &quot;softLimited&quot;: false,
+      &quot;additionalCrestCompressionPasses&quot;: 0,
+      &quot;gain&quot;: 0.8759917176331173,
+      &quot;credits&quot;: 0
+    }
+  },
+  &quot;rawFailures&quot;: [
+    &quot;loudness&quot;,
+    &quot;truePeak&quot;,
+    &quot;silence&quot;
+  ],
+  &quot;editedChecks&quot;: {
+    &quot;decode&quot;: true,
+    &quot;duration&quot;: true,
+    &quot;loudness&quot;: true,
+    &quot;truePeak&quot;: true,
+    &quot;silence&quot;: true,
+    &quot;clipping&quot;: true
+  },
+  &quot;silence&quot;: {
+    &quot;thresholdDbfs&quot;: -50,
+    &quot;minimumIntervalSeconds&quot;: 0.1,
+    &quot;intervalsFrames&quot;: [],
+    &quot;fraction&quot;: 0.0,
+    &quot;longestInteriorSeconds&quot;: 0
+  },
+  &quot;loop&quot;: {
+    &quot;status&quot;: &quot;not applicable&quot;,
+    &quot;reason&quot;: &quot;one-shot or full song&quot;
+  },
+  &quot;sourceDefects&quot;: [
+    &quot;loudness&quot;,
+    &quot;truePeak&quot;,
+    &quot;silence&quot;
+  ],
+  &quot;notMeasured&quot;: [
+    &quot;semantic fidelity&quot;,
+    &quot;owner preference&quot;,
+    &quot;in-game masking/latency&quot;,
+    &quot;physical Stick playback/memory&quot;
+  ],
+  &quot;error&quot;: null
+}</pre></details>
+<label>Your listening note<textarea data-note="lap" placeholder="Preference, audible issue, device used"></textarea></label></article><article data-group="race" data-id="victory">
+<h2>victory</h2><p class="badge pass">PASS — signal screen only</p>
+<p>2.079 s / -20.24 LUFS / -2.0 dBTP</p><p>Original failures: truePeak<br>Edited failures: none</p>
+<p>Owner listening pending</p>
+<label>Edited comparison<audio controls preload="none" src="edited/victory.wav"></audio></label><label>Original<audio controls preload="none" src="raw/victory.mp3"></audio></label><details><summary>First local attempt — pass: no meter failures</summary><audio controls preload="none" src="first-pass/edited/victory.wav"></audio><p>-20.24 LUFS; -2.0 dBTP</p></details><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
+  &quot;promptOrText&quot;: &quot;Short victory punctuation made of junkyard percussion: low drum strike, rising three metal hits, strong final anvil accent, brief ringing resolution. Three seconds, original nonmelodic sting. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.&quot;,
+  &quot;beat&quot;: null,
+  &quot;provenance&quot;: {
+    &quot;sidecar&quot;: &quot;audio\\x3\\effects\\raw\\victory.mp3.json&quot;,
+    &quot;sourceSha256&quot;: &quot;fed49fc4dd0f4a79bab5b03e35d67346c554a83de723a02d7e8cbb33f825bce9&quot;,
+    &quot;generatedAt&quot;: &quot;2026-10-02T21:36:38.503Z&quot;,
+    &quot;request&quot;: {
+      &quot;text&quot;: &quot;Short victory punctuation made of junkyard percussion: low drum strike, rising three metal hits, strong final anvil accent, brief ringing resolution. Three seconds, original nonmelodic sting. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.&quot;,
+      &quot;duration_seconds&quot;: 3,
+      &quot;prompt_influence&quot;: 0.7,
+      &quot;model_id&quot;: &quot;eleven_text_to_sound_v2&quot;,
+      &quot;loop&quot;: false
+    },
+    &quot;budgetCharge&quot;: 120,
+    &quot;providerCredits&quot;: 30,
+    &quot;session&quot;: &quot;x3-2026-10-02&quot;,
+    &quot;reused&quot;: false
+  },
+  &quot;edit&quot;: {
+    &quot;operation&quot;: &quot;mono resample, -45 dBFS edge trim with 10 ms margin, 3 ms edge fades; preserve zero tails (no whole-file DC subtraction)&quot;,
+    &quot;startFrame&quot;: 0,
+    &quot;endFrameExclusive&quot;: 45849,
+    &quot;rate&quot;: 22050,
+    &quot;rivetFirstOnsetOnly&quot;: false
+  },
+  &quot;normalization&quot;: {
+    &quot;operation&quot;: &quot;measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling&quot;,
+    &quot;softLimited&quot;: false,
+    &quot;additionalCrestCompressionPasses&quot;: 0,
+    &quot;gain&quot;: 0.7709034690644301,
+    &quot;credits&quot;: 0
+  },
+  &quot;tailCleanup&quot;: null,
+  &quot;rawFailures&quot;: [
+    &quot;truePeak&quot;
+  ],
+  &quot;editedChecks&quot;: {
+    &quot;decode&quot;: true,
+    &quot;duration&quot;: true,
+    &quot;loudness&quot;: true,
+    &quot;truePeak&quot;: true,
+    &quot;silence&quot;: true,
+    &quot;clipping&quot;: true
+  },
+  &quot;silence&quot;: {
+    &quot;thresholdDbfs&quot;: -50,
+    &quot;minimumIntervalSeconds&quot;: 0.1,
+    &quot;intervalsFrames&quot;: [],
+    &quot;fraction&quot;: 0.0,
+    &quot;longestInteriorSeconds&quot;: 0
+  },
+  &quot;loop&quot;: {
+    &quot;status&quot;: &quot;not applicable&quot;,
+    &quot;reason&quot;: &quot;one-shot or full song&quot;
+  },
+  &quot;sourceDefects&quot;: [
+    &quot;truePeak&quot;
+  ],
+  &quot;notMeasured&quot;: [
+    &quot;semantic fidelity&quot;,
+    &quot;owner preference&quot;,
+    &quot;in-game masking/latency&quot;,
+    &quot;physical Stick playback/memory&quot;
+  ],
+  &quot;error&quot;: null
+}</pre></details>
+<label>Your listening note<textarea data-note="victory" placeholder="Preference, audible issue, device used"></textarea></label></article><article data-group="race" data-id="defeat">
+<h2>defeat</h2><p class="badge pass">PASS — signal screen only</p>
+<p>2.219 s / -20.01 LUFS / -5.54 dBTP</p><p>Original failures: loudness, truePeak, clipping<br>Edited failures: none</p>
+<p>Owner listening pending</p>
+<label>Edited comparison<audio controls preload="none" src="edited/defeat.wav"></audio></label><label>Original<audio controls preload="none" src="raw/defeat.mp3"></audio></label><details><summary>First local attempt — pass: no meter failures</summary><audio controls preload="none" src="first-pass/edited/defeat.wav"></audio><p>-20.04 LUFS; -3.82 dBTP</p></details><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
+  &quot;promptOrText&quot;: &quot;Short defeat punctuation: a tired low drum, two sagging resonant steel knocks, an exhausted spring unwinding, damped final stop. Three seconds, original nonmelodic sting. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.&quot;,
+  &quot;beat&quot;: null,
+  &quot;provenance&quot;: {
+    &quot;sidecar&quot;: &quot;audio\\x3\\effects\\raw\\defeat.mp3.json&quot;,
+    &quot;sourceSha256&quot;: &quot;e4111a012be16812b7a6c47c04a2a1382e864ee57ab3b95cf8b9f755ece7ac24&quot;,
+    &quot;generatedAt&quot;: &quot;2026-10-02T21:36:51.624Z&quot;,
+    &quot;request&quot;: {
+      &quot;text&quot;: &quot;Short defeat punctuation: a tired low drum, two sagging resonant steel knocks, an exhausted spring unwinding, damped final stop. Three seconds, original nonmelodic sting. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.&quot;,
+      &quot;duration_seconds&quot;: 3,
+      &quot;prompt_influence&quot;: 0.7,
+      &quot;model_id&quot;: &quot;eleven_text_to_sound_v2&quot;,
+      &quot;loop&quot;: false
+    },
+    &quot;budgetCharge&quot;: 120,
+    &quot;providerCredits&quot;: 30,
+    &quot;session&quot;: &quot;x3-2026-10-02&quot;,
+    &quot;reused&quot;: false
+  },
+  &quot;edit&quot;: {
+    &quot;operation&quot;: &quot;mono resample, -45 dBFS edge trim with 10 ms margin, 3 ms edge fades; preserve zero tails (no whole-file DC subtraction)&quot;,
+    &quot;startFrame&quot;: 0,
+    &quot;endFrameExclusive&quot;: 66150,
+    &quot;rate&quot;: 22050,
+    &quot;rivetFirstOnsetOnly&quot;: false
+  },
+  &quot;normalization&quot;: {
+    &quot;operation&quot;: &quot;measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling&quot;,
+    &quot;softLimited&quot;: true,
+    &quot;additionalCrestCompressionPasses&quot;: 0,
+    &quot;gain&quot;: 1.345860354055948,
+    &quot;credits&quot;: 0
+  },
+  &quot;tailCleanup&quot;: {
+    &quot;before&quot;: {
+      &quot;file&quot;: &quot;audio/x3/effects/edited/defeat.wav&quot;,
+      &quot;sha256&quot;: &quot;84d9cd618fc7886b262bfb7f17246fb1d9b62af120ab6fe7f5294b1797be803e&quot;,
+      &quot;bytes&quot;: 132378,
+      &quot;status&quot;: &quot;pass&quot;,
+      &quot;checks&quot;: {
+        &quot;decode&quot;: true,
+        &quot;duration&quot;: true,
+        &quot;loudness&quot;: true,
+        &quot;truePeak&quot;: true,
+        &quot;silence&quot;: true,
+        &quot;clipping&quot;: true
+      },
+      &quot;failures&quot;: [],
+      &quot;durationSeconds&quot;: 3.0,
+      &quot;durationWindowSeconds&quot;: [
+        0,
+        180
+      ],
+      &quot;sampleRate&quot;: 22050,
+      &quot;channels&quot;: 1,
+      &quot;decodedFrames&quot;: 66150,
+      &quot;decodedBytes&quot;: 132300,
+      &quot;integratedLufs&quot;: -20.04,
+      &quot;truePeakDbtp&quot;: -3.82,
+      &quot;loudnessRangeLu&quot;: 5.6,
+      &quot;loudnessTargetLufs&quot;: -20,
+      &quot;loudnessToleranceLu&quot;: 2,
+      &quot;meterPaddingFrames&quot;: 0,
+      &quot;fullScaleSampleCount&quot;: 0,
+      &quot;silence&quot;: {
+        &quot;thresholdDbfs&quot;: -50,
+        &quot;minimumIntervalSeconds&quot;: 0.1,
+        &quot;intervalsFrames&quot;: [
+          [
+            48717,
+            66063
+          ]
+        ],
+        &quot;fraction&quot;: 0.26222222222222225,
+        &quot;longestInteriorSeconds&quot;: 0
+      },
+      &quot;loopSeam&quot;: {
+        &quot;status&quot;: &quot;not applicable&quot;,
+        &quot;reason&quot;: &quot;one-shot or full song&quot;
+      },
+      &quot;loopBoundary&quot;: null
+    },
+    &quot;startFrame&quot;: 0,
+    &quot;endFrameExclusive&quot;: 48937,
+    &quot;operation&quot;: &quot;trim measured edge silence and &lt;=25 ms codec residue; retain 10 ms margin&quot;,
+    &quot;normalization&quot;: {
+      &quot;operation&quot;: &quot;measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling&quot;,
+      &quot;softLimited&quot;: false,
+      &quot;additionalCrestCompressionPasses&quot;: 0,
+      &quot;gain&quot;: 0.8203515443298184,
+      &quot;credits&quot;: 0
+    }
+  },
+  &quot;rawFailures&quot;: [
+    &quot;loudness&quot;,
+    &quot;truePeak&quot;,
+    &quot;clipping&quot;
+  ],
+  &quot;editedChecks&quot;: {
+    &quot;decode&quot;: true,
+    &quot;duration&quot;: true,
+    &quot;loudness&quot;: true,
+    &quot;truePeak&quot;: true,
+    &quot;silence&quot;: true,
+    &quot;clipping&quot;: true
+  },
+  &quot;silence&quot;: {
+    &quot;thresholdDbfs&quot;: -50,
+    &quot;minimumIntervalSeconds&quot;: 0.1,
+    &quot;intervalsFrames&quot;: [
+      [
+        46010,
+        48937
+      ]
+    ],
+    &quot;fraction&quot;: 0.0598115944990498,
+    &quot;longestInteriorSeconds&quot;: 0
+  },
+  &quot;loop&quot;: {
+    &quot;status&quot;: &quot;not applicable&quot;,
+    &quot;reason&quot;: &quot;one-shot or full song&quot;
+  },
+  &quot;sourceDefects&quot;: [
+    &quot;loudness&quot;,
+    &quot;truePeak&quot;,
+    &quot;clipping&quot;
+  ],
+  &quot;notMeasured&quot;: [
+    &quot;semantic fidelity&quot;,
+    &quot;owner preference&quot;,
+    &quot;in-game masking/latency&quot;,
+    &quot;physical Stick playback/memory&quot;
+  ],
+  &quot;error&quot;: null
+}</pre></details>
+<label>Your listening note<textarea data-note="defeat" placeholder="Preference, audible issue, device used"></textarea></label></article><article data-group="ui" data-id="ui-focus">
+<h2>ui-focus</h2><p class="badge pass">PASS — signal screen only</p>
+<p>0.069 s / -21.75 LUFS / -2.0 dBTP</p><p>Original failures: loudness, truePeak, silence<br>Edited failures: none</p>
+<p>Owner listening pending</p>
+<label>Edited comparison<audio controls preload="none" src="edited/ui-focus.wav"></audio></label><label>Original<audio controls preload="none" src="raw/ui-focus.mp3"></audio></label><details><summary>First local attempt — fail: loudness</summary><audio controls preload="none" src="first-pass/edited/ui-focus.wav"></audio><p>-23.85 LUFS; -2.0 dBTP</p></details><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
+  &quot;promptOrText&quot;: &quot;One small worn switch tooth catches: quiet precise click, tiny damped body and immediate release. Dry intimate worn mechanisms, felt-damped steel, restrained dark resonance. Original isolated effect; no beep, music or voice.&quot;,
+  &quot;beat&quot;: null,
+  &quot;provenance&quot;: {
+    &quot;sidecar&quot;: &quot;audio\\x3\\effects\\raw\\ui-focus.mp3.json&quot;,
+    &quot;sourceSha256&quot;: &quot;306cc8c1f9c65f253e7e9b275f4fe5f713b6d631dca74ea9bc702d49bbfd8e28&quot;,
+    &quot;generatedAt&quot;: &quot;2026-10-02T21:37:04.514Z&quot;,
+    &quot;request&quot;: {
+      &quot;text&quot;: &quot;One small worn switch tooth catches: quiet precise click, tiny damped body and immediate release. Dry intimate worn mechanisms, felt-damped steel, restrained dark resonance. Original isolated effect; no beep, music or voice.&quot;,
+      &quot;duration_seconds&quot;: 0.5,
+      &quot;prompt_influence&quot;: 0.7,
+      &quot;model_id&quot;: &quot;eleven_text_to_sound_v2&quot;,
+      &quot;loop&quot;: false
+    },
+    &quot;budgetCharge&quot;: 100,
+    &quot;providerCredits&quot;: 5,
+    &quot;session&quot;: &quot;x3-2026-10-02&quot;,
+    &quot;reused&quot;: false
+  },
+  &quot;edit&quot;: {
+    &quot;operation&quot;: &quot;mono resample, -45 dBFS edge trim with 10 ms margin, 3 ms edge fades; preserve zero tails (no whole-file DC subtraction)&quot;,
+    &quot;startFrame&quot;: 0,
+    &quot;endFrameExclusive&quot;: 1513,
+    &quot;rate&quot;: 22050,
+    &quot;rivetFirstOnsetOnly&quot;: false
+  },
+  &quot;normalization&quot;: {
+    &quot;operation&quot;: &quot;measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling&quot;,
+    &quot;softLimited&quot;: true,
+    &quot;additionalCrestCompressionPasses&quot;: 1,
+    &quot;gain&quot;: 1.0268334316680865,
+    &quot;credits&quot;: 0
+  },
+  &quot;tailCleanup&quot;: null,
+  &quot;rawFailures&quot;: [
+    &quot;loudness&quot;,
+    &quot;truePeak&quot;,
+    &quot;silence&quot;
+  ],
+  &quot;editedChecks&quot;: {
+    &quot;decode&quot;: true,
+    &quot;duration&quot;: true,
+    &quot;loudness&quot;: true,
+    &quot;truePeak&quot;: true,
+    &quot;silence&quot;: true,
+    &quot;clipping&quot;: true
+  },
+  &quot;silence&quot;: {
+    &quot;thresholdDbfs&quot;: -50,
+    &quot;minimumIntervalSeconds&quot;: 0.1,
+    &quot;intervalsFrames&quot;: [],
+    &quot;fraction&quot;: 0.0,
+    &quot;longestInteriorSeconds&quot;: 0
+  },
+  &quot;loop&quot;: {
+    &quot;status&quot;: &quot;not applicable&quot;,
+    &quot;reason&quot;: &quot;one-shot or full song&quot;
+  },
+  &quot;sourceDefects&quot;: [
+    &quot;loudness&quot;,
+    &quot;truePeak&quot;,
+    &quot;silence&quot;
+  ],
+  &quot;notMeasured&quot;: [
+    &quot;semantic fidelity&quot;,
+    &quot;owner preference&quot;,
+    &quot;in-game masking/latency&quot;,
+    &quot;physical Stick playback/memory&quot;
+  ],
+  &quot;error&quot;: null
+}</pre></details>
+<label>Your listening note<textarea data-note="ui-focus" placeholder="Preference, audible issue, device used"></textarea></label></article><article data-group="ui" data-id="ui-back">
+<h2>ui-back</h2><p class="badge pass">PASS — signal screen only</p>
+<p>0.262 s / -21.85 LUFS / -2.0 dBTP</p><p>Original failures: truePeak, silence<br>Edited failures: none</p>
+<p>Owner listening pending</p>
+<label>Edited comparison<audio controls preload="none" src="edited/ui-back.wav"></audio></label><label>Original<audio controls preload="none" src="raw/ui-back.mp3"></audio></label><details><summary>First local attempt — pass: no meter failures</summary><audio controls preload="none" src="first-pass/edited/ui-back.wav"></audio><p>-21.85 LUFS; -2.0 dBTP</p></details><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
+  &quot;promptOrText&quot;: &quot;One worn latch opens: dry soft double click, a little spring retracts, intimate short release. Dry intimate worn mechanisms, felt-damped steel, restrained dark resonance. Original isolated effect; no beep, music or voice.&quot;,
+  &quot;beat&quot;: null,
+  &quot;provenance&quot;: {
+    &quot;sidecar&quot;: &quot;audio\\x3\\effects\\raw\\ui-back.mp3.json&quot;,
+    &quot;sourceSha256&quot;: &quot;ac2dda86e915003d0665929a784c4ad97972870296d3e379575a825f4b375b1d&quot;,
+    &quot;generatedAt&quot;: &quot;2026-10-02T21:37:17.200Z&quot;,
+    &quot;request&quot;: {
+      &quot;text&quot;: &quot;One worn latch opens: dry soft double click, a little spring retracts, intimate short release. Dry intimate worn mechanisms, felt-damped steel, restrained dark resonance. Original isolated effect; no beep, music or voice.&quot;,
+      &quot;duration_seconds&quot;: 0.5,
+      &quot;prompt_influence&quot;: 0.7,
+      &quot;model_id&quot;: &quot;eleven_text_to_sound_v2&quot;,
+      &quot;loop&quot;: false
+    },
+    &quot;budgetCharge&quot;: 100,
+    &quot;providerCredits&quot;: 5,
+    &quot;session&quot;: &quot;x3-2026-10-02&quot;,
+    &quot;reused&quot;: false
+  },
+  &quot;edit&quot;: {
+    &quot;operation&quot;: &quot;mono resample, -45 dBFS edge trim with 10 ms margin, 3 ms edge fades; preserve zero tails (no whole-file DC subtraction)&quot;,
+    &quot;startFrame&quot;: 0,
+    &quot;endFrameExclusive&quot;: 5781,
+    &quot;rate&quot;: 22050,
+    &quot;rivetFirstOnsetOnly&quot;: false
+  },
+  &quot;normalization&quot;: {
+    &quot;operation&quot;: &quot;measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling&quot;,
+    &quot;softLimited&quot;: true,
+    &quot;additionalCrestCompressionPasses&quot;: 0,
+    &quot;gain&quot;: 1.144194879816986,
+    &quot;credits&quot;: 0
+  },
+  &quot;tailCleanup&quot;: null,
+  &quot;rawFailures&quot;: [
+    &quot;truePeak&quot;,
+    &quot;silence&quot;
+  ],
+  &quot;editedChecks&quot;: {
+    &quot;decode&quot;: true,
+    &quot;duration&quot;: true,
+    &quot;loudness&quot;: true,
+    &quot;truePeak&quot;: true,
+    &quot;silence&quot;: true,
+    &quot;clipping&quot;: true
+  },
+  &quot;silence&quot;: {
+    &quot;thresholdDbfs&quot;: -50,
+    &quot;minimumIntervalSeconds&quot;: 0.1,
+    &quot;intervalsFrames&quot;: [],
+    &quot;fraction&quot;: 0.0,
+    &quot;longestInteriorSeconds&quot;: 0
+  },
+  &quot;loop&quot;: {
+    &quot;status&quot;: &quot;not applicable&quot;,
+    &quot;reason&quot;: &quot;one-shot or full song&quot;
+  },
+  &quot;sourceDefects&quot;: [
+    &quot;truePeak&quot;,
+    &quot;silence&quot;
+  ],
+  &quot;notMeasured&quot;: [
+    &quot;semantic fidelity&quot;,
+    &quot;owner preference&quot;,
+    &quot;in-game masking/latency&quot;,
+    &quot;physical Stick playback/memory&quot;
+  ],
+  &quot;error&quot;: null
+}</pre></details>
+<label>Your listening note<textarea data-note="ui-back" placeholder="Preference, audible issue, device used"></textarea></label></article><article data-group="ui" data-id="ui-denied">
+<h2>ui-denied</h2><p class="badge pass">PASS — signal screen only</p>
+<p>0.135 s / -20.15 LUFS / -2.0 dBTP</p><p>Original failures: loudness, silence<br>Edited failures: none</p>
+<p>Owner listening pending</p>
+<label>Edited comparison<audio controls preload="none" src="edited/ui-denied.wav"></audio></label><label>Original<audio controls preload="none" src="raw/ui-denied.mp3"></audio></label><details><summary>First local attempt — fail: loudness</summary><audio controls preload="none" src="first-pass/edited/ui-denied.wav"></audio><p>-23.25 LUFS; -2.0 dBTP</p></details><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
+  &quot;promptOrText&quot;: &quot;One jammed latch refuses to close: dry compact knock, brief strained spring rasp, dull stop. Dry intimate worn mechanisms, felt-damped steel, restrained dark resonance. Original isolated effect; no beep, music or voice.&quot;,
+  &quot;beat&quot;: null,
+  &quot;provenance&quot;: {
+    &quot;sidecar&quot;: &quot;audio\\x3\\effects\\raw\\ui-denied.mp3.json&quot;,
+    &quot;sourceSha256&quot;: &quot;237721667332173a0ce8ee448a39a211473c96f51a734193bb65ba2431fcd466&quot;,
+    &quot;generatedAt&quot;: &quot;2026-10-02T21:37:29.600Z&quot;,
+    &quot;request&quot;: {
+      &quot;text&quot;: &quot;One jammed latch refuses to close: dry compact knock, brief strained spring rasp, dull stop. Dry intimate worn mechanisms, felt-damped steel, restrained dark resonance. Original isolated effect; no beep, music or voice.&quot;,
+      &quot;duration_seconds&quot;: 0.5,
+      &quot;prompt_influence&quot;: 0.7,
+      &quot;model_id&quot;: &quot;eleven_text_to_sound_v2&quot;,
+      &quot;loop&quot;: false
+    },
+    &quot;budgetCharge&quot;: 100,
+    &quot;providerCredits&quot;: 5,
+    &quot;session&quot;: &quot;x3-2026-10-02&quot;,
+    &quot;reused&quot;: false
+  },
+  &quot;edit&quot;: {
+    &quot;operation&quot;: &quot;mono resample, -45 dBFS edge trim with 10 ms margin, 3 ms edge fades; preserve zero tails (no whole-file DC subtraction)&quot;,
+    &quot;startFrame&quot;: 0,
+    &quot;endFrameExclusive&quot;: 2986,
+    &quot;rate&quot;: 22050,
+    &quot;rivetFirstOnsetOnly&quot;: false
+  },
+  &quot;normalization&quot;: {
+    &quot;operation&quot;: &quot;measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling&quot;,
+    &quot;softLimited&quot;: true,
+    &quot;additionalCrestCompressionPasses&quot;: 1,
+    &quot;gain&quot;: 0.9429746114598995,
+    &quot;credits&quot;: 0
+  },
+  &quot;tailCleanup&quot;: null,
+  &quot;rawFailures&quot;: [
+    &quot;loudness&quot;,
+    &quot;silence&quot;
+  ],
+  &quot;editedChecks&quot;: {
+    &quot;decode&quot;: true,
+    &quot;duration&quot;: true,
+    &quot;loudness&quot;: true,
+    &quot;truePeak&quot;: true,
+    &quot;silence&quot;: true,
+    &quot;clipping&quot;: true
+  },
+  &quot;silence&quot;: {
+    &quot;thresholdDbfs&quot;: -50,
+    &quot;minimumIntervalSeconds&quot;: 0.1,
+    &quot;intervalsFrames&quot;: [],
+    &quot;fraction&quot;: 0.0,
+    &quot;longestInteriorSeconds&quot;: 0
+  },
+  &quot;loop&quot;: {
+    &quot;status&quot;: &quot;not applicable&quot;,
+    &quot;reason&quot;: &quot;one-shot or full song&quot;
+  },
+  &quot;sourceDefects&quot;: [
+    &quot;loudness&quot;,
+    &quot;silence&quot;
+  ],
+  &quot;notMeasured&quot;: [
+    &quot;semantic fidelity&quot;,
+    &quot;owner preference&quot;,
+    &quot;in-game masking/latency&quot;,
+    &quot;physical Stick playback/memory&quot;
+  ],
+  &quot;error&quot;: null
+}</pre></details>
+<label>Your listening note<textarea data-note="ui-denied" placeholder="Preference, audible issue, device used"></textarea></label></article><article data-group="ui" data-id="ui-purchase">
+<h2>ui-purchase</h2><p class="badge pass">PASS — signal screen only</p>
+<p>0.216 s / -20.25 LUFS / -2.0 dBTP</p><p>Original failures: silence<br>Edited failures: none</p>
+<p>Owner listening pending</p>
+<label>Edited comparison<audio controls preload="none" src="edited/ui-purchase.wav"></audio></label><label>Original<audio controls preload="none" src="raw/ui-purchase.mp3"></audio></label><details><summary>First local attempt — pass: no meter failures</summary><audio controls preload="none" src="first-pass/edited/ui-purchase.wav"></audio><p>-20.25 LUFS; -2.0 dBTP</p></details><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
+  &quot;promptOrText&quot;: &quot;One shop purchase receipt mechanism: heavy dry stamp, short ratchet seating, quiet final steel click. Satisfying tactile stop. Dry intimate worn mechanisms, felt-damped steel, restrained dark resonance. Original isolated effect; no beep, music or voice.&quot;,
+  &quot;beat&quot;: null,
+  &quot;provenance&quot;: {
+    &quot;sidecar&quot;: &quot;audio\\x3\\effects\\raw\\ui-purchase.mp3.json&quot;,
+    &quot;sourceSha256&quot;: &quot;fb81cef07b86d5f7c143251682fc1cacbcdbeed25f0c6d03c5594b8925795c42&quot;,
+    &quot;generatedAt&quot;: &quot;2026-10-02T21:37:42.202Z&quot;,
+    &quot;request&quot;: {
+      &quot;text&quot;: &quot;One shop purchase receipt mechanism: heavy dry stamp, short ratchet seating, quiet final steel click. Satisfying tactile stop. Dry intimate worn mechanisms, felt-damped steel, restrained dark resonance. Original isolated effect; no beep, music or voice.&quot;,
+      &quot;duration_seconds&quot;: 0.7,
+      &quot;prompt_influence&quot;: 0.7,
+      &quot;model_id&quot;: &quot;eleven_text_to_sound_v2&quot;,
+      &quot;loop&quot;: false
+    },
+    &quot;budgetCharge&quot;: 100,
+    &quot;providerCredits&quot;: 7,
+    &quot;session&quot;: &quot;x3-2026-10-02&quot;,
+    &quot;reused&quot;: false
+  },
+  &quot;edit&quot;: {
+    &quot;operation&quot;: &quot;mono resample, -45 dBFS edge trim with 10 ms margin, 3 ms edge fades; preserve zero tails (no whole-file DC subtraction)&quot;,
+    &quot;startFrame&quot;: 0,
+    &quot;endFrameExclusive&quot;: 4762,
+    &quot;rate&quot;: 22050,
+    &quot;rivetFirstOnsetOnly&quot;: false
+  },
+  &quot;normalization&quot;: {
+    &quot;operation&quot;: &quot;measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling&quot;,
+    &quot;softLimited&quot;: true,
+    &quot;additionalCrestCompressionPasses&quot;: 0,
+    &quot;gain&quot;: 1.2516992730317251,
+    &quot;credits&quot;: 0
+  },
+  &quot;tailCleanup&quot;: null,
+  &quot;rawFailures&quot;: [
+    &quot;silence&quot;
+  ],
+  &quot;editedChecks&quot;: {
+    &quot;decode&quot;: true,
+    &quot;duration&quot;: true,
+    &quot;loudness&quot;: true,
+    &quot;truePeak&quot;: true,
+    &quot;silence&quot;: true,
+    &quot;clipping&quot;: true
+  },
+  &quot;silence&quot;: {
+    &quot;thresholdDbfs&quot;: -50,
+    &quot;minimumIntervalSeconds&quot;: 0.1,
+    &quot;intervalsFrames&quot;: [],
+    &quot;fraction&quot;: 0.0,
+    &quot;longestInteriorSeconds&quot;: 0
+  },
+  &quot;loop&quot;: {
+    &quot;status&quot;: &quot;not applicable&quot;,
+    &quot;reason&quot;: &quot;one-shot or full song&quot;
+  },
+  &quot;sourceDefects&quot;: [
+    &quot;silence&quot;
+  ],
+  &quot;notMeasured&quot;: [
+    &quot;semantic fidelity&quot;,
+    &quot;owner preference&quot;,
+    &quot;in-game masking/latency&quot;,
+    &quot;physical Stick playback/memory&quot;
+  ],
+  &quot;error&quot;: null
+}</pre></details>
+<label>Your listening note<textarea data-note="ui-purchase" placeholder="Preference, audible issue, device used"></textarea></label></article><article data-group="ability" data-id="ability-steel-flick">
+<h2>ability-steel-flick</h2><p class="badge pass">PASS — signal screen only</p>
+<p>0.683 s / -20.01 LUFS / -2.38 dBTP</p><p>Original failures: loudness<br>Edited failures: none</p>
+<p>Owner listening pending</p>
+<label>Edited comparison<audio controls preload="none" src="edited/ability-steel-flick.wav"></audio></label><label>Original<audio controls preload="none" src="raw/ability-steel-flick.mp3"></audio></label><details><summary>First local attempt — pass: no meter failures</summary><audio controls preload="none" src="first-pass/edited/ability-steel-flick.wav"></audio><p>-20.18 LUFS; -2.0 dBTP</p></details><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
+  &quot;promptOrText&quot;: &quot;Tensioned leaf spring draws and snaps forward into a short exhaust rip. Fast rising mechanical warning, dry release. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.&quot;,
+  &quot;beat&quot;: null,
+  &quot;provenance&quot;: {
+    &quot;sidecar&quot;: &quot;audio\\x3\\effects\\raw\\ability-steel-flick.mp3.json&quot;,
+    &quot;sourceSha256&quot;: &quot;95e59e9f32e3791fb96b8c19c95631cbb0f38c9fff51debf71f3b7ad0b232896&quot;,
+    &quot;generatedAt&quot;: &quot;2026-10-02T21:37:52.713Z&quot;,
+    &quot;request&quot;: {
+      &quot;text&quot;: &quot;Tensioned leaf spring draws and snaps forward into a short exhaust rip. Fast rising mechanical warning, dry release. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.&quot;,
+      &quot;duration_seconds&quot;: 1,
+      &quot;prompt_influence&quot;: 0.7,
+      &quot;model_id&quot;: &quot;eleven_text_to_sound_v2&quot;,
+      &quot;loop&quot;: false
+    },
+    &quot;budgetCharge&quot;: 100,
+    &quot;providerCredits&quot;: 10,
+    &quot;session&quot;: &quot;x3-2026-10-02&quot;,
+    &quot;reused&quot;: false
+  },
+  &quot;edit&quot;: {
+    &quot;operation&quot;: &quot;mono resample, -45 dBFS edge trim with 10 ms margin, 3 ms edge fades; preserve zero tails (no whole-file DC subtraction)&quot;,
+    &quot;startFrame&quot;: 0,
+    &quot;endFrameExclusive&quot;: 15053,
+    &quot;rate&quot;: 22050,
+    &quot;rivetFirstOnsetOnly&quot;: false
+  },
+  &quot;normalization&quot;: {
+    &quot;operation&quot;: &quot;measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling&quot;,
+    &quot;softLimited&quot;: true,
+    &quot;additionalCrestCompressionPasses&quot;: 0,
+    &quot;gain&quot;: 1.1844043669971662,
+    &quot;credits&quot;: 0
+  },
+  &quot;tailCleanup&quot;: null,
+  &quot;rawFailures&quot;: [
+    &quot;loudness&quot;
+  ],
+  &quot;editedChecks&quot;: {
+    &quot;decode&quot;: true,
+    &quot;duration&quot;: true,
+    &quot;loudness&quot;: true,
+    &quot;truePeak&quot;: true,
+    &quot;silence&quot;: true,
+    &quot;clipping&quot;: true
+  },
+  &quot;silence&quot;: {
+    &quot;thresholdDbfs&quot;: -50,
+    &quot;minimumIntervalSeconds&quot;: 0.1,
+    &quot;intervalsFrames&quot;: [],
+    &quot;fraction&quot;: 0.0,
+    &quot;longestInteriorSeconds&quot;: 0
+  },
+  &quot;loop&quot;: {
+    &quot;status&quot;: &quot;not applicable&quot;,
+    &quot;reason&quot;: &quot;one-shot or full song&quot;
+  },
+  &quot;sourceDefects&quot;: [
+    &quot;loudness&quot;
+  ],
+  &quot;notMeasured&quot;: [
+    &quot;semantic fidelity&quot;,
+    &quot;owner preference&quot;,
+    &quot;in-game masking/latency&quot;,
+    &quot;physical Stick playback/memory&quot;
+  ],
+  &quot;error&quot;: null
+}</pre></details>
+<label>Your listening note<textarea data-note="ability-steel-flick" placeholder="Preference, audible issue, device used"></textarea></label></article><article data-group="ability" data-id="ability-flywheel">
+<h2>ability-flywheel</h2><p class="badge pass">PASS — signal screen only</p>
+<p>0.609 s / -19.99 LUFS / -5.84 dBTP</p><p>Original failures: loudness, truePeak, silence, clipping<br>Edited failures: none</p>
+<p>Owner listening pending</p>
+<label>Edited comparison<audio controls preload="none" src="edited/ability-flywheel.wav"></audio></label><label>Original<audio controls preload="none" src="raw/ability-flywheel.mp3"></audio></label><details><summary>First local attempt — pass: no meter failures</summary><audio controls preload="none" src="first-pass/edited/ability-flywheel.wav"></audio><p>-19.99 LUFS; -5.83 dBTP</p></details><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
+  &quot;promptOrText&quot;: &quot;Clutch catches into a rising flywheel whirr, thick spinning iron briefly strains and releases. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.&quot;,
+  &quot;beat&quot;: null,
+  &quot;provenance&quot;: {
+    &quot;sidecar&quot;: &quot;audio\\x3\\effects\\raw\\ability-flywheel.mp3.json&quot;,
+    &quot;sourceSha256&quot;: &quot;0a7951b8efb7b4641602032338772346ddaf3659ca7b0df28cbdeac001210a99&quot;,
+    &quot;generatedAt&quot;: &quot;2026-10-02T21:38:05.612Z&quot;,
+    &quot;request&quot;: {
+      &quot;text&quot;: &quot;Clutch catches into a rising flywheel whirr, thick spinning iron briefly strains and releases. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.&quot;,
+      &quot;duration_seconds&quot;: 1,
+      &quot;prompt_influence&quot;: 0.7,
+      &quot;model_id&quot;: &quot;eleven_text_to_sound_v2&quot;,
+      &quot;loop&quot;: false
+    },
+    &quot;budgetCharge&quot;: 100,
+    &quot;providerCredits&quot;: 10,
+    &quot;session&quot;: &quot;x3-2026-10-02&quot;,
+    &quot;reused&quot;: false
+  },
+  &quot;edit&quot;: {
+    &quot;operation&quot;: &quot;mono resample, -45 dBFS edge trim with 10 ms margin, 3 ms edge fades; preserve zero tails (no whole-file DC subtraction)&quot;,
+    &quot;startFrame&quot;: 0,
+    &quot;endFrameExclusive&quot;: 13433,
+    &quot;rate&quot;: 22050,
+    &quot;rivetFirstOnsetOnly&quot;: false
+  },
+  &quot;normalization&quot;: {
+    &quot;operation&quot;: &quot;measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling&quot;,
+    &quot;softLimited&quot;: false,
+    &quot;additionalCrestCompressionPasses&quot;: 0,
+    &quot;gain&quot;: 0.48640720569146156,
+    &quot;credits&quot;: 0
+  },
+  &quot;tailCleanup&quot;: null,
+  &quot;rawFailures&quot;: [
+    &quot;loudness&quot;,
+    &quot;truePeak&quot;,
+    &quot;silence&quot;,
+    &quot;clipping&quot;
+  ],
+  &quot;editedChecks&quot;: {
+    &quot;decode&quot;: true,
+    &quot;duration&quot;: true,
+    &quot;loudness&quot;: true,
+    &quot;truePeak&quot;: true,
+    &quot;silence&quot;: true,
+    &quot;clipping&quot;: true
+  },
+  &quot;silence&quot;: {
+    &quot;thresholdDbfs&quot;: -50,
+    &quot;minimumIntervalSeconds&quot;: 0.1,
+    &quot;intervalsFrames&quot;: [],
+    &quot;fraction&quot;: 0.0,
+    &quot;longestInteriorSeconds&quot;: 0
+  },
+  &quot;loop&quot;: {
+    &quot;status&quot;: &quot;not applicable&quot;,
+    &quot;reason&quot;: &quot;one-shot or full song&quot;
+  },
+  &quot;sourceDefects&quot;: [
+    &quot;loudness&quot;,
+    &quot;truePeak&quot;,
+    &quot;silence&quot;,
+    &quot;clipping&quot;
+  ],
+  &quot;notMeasured&quot;: [
+    &quot;semantic fidelity&quot;,
+    &quot;owner preference&quot;,
+    &quot;in-game masking/latency&quot;,
+    &quot;physical Stick playback/memory&quot;
+  ],
+  &quot;error&quot;: null
+}</pre></details>
+<label>Your listening note<textarea data-note="ability-flywheel" placeholder="Preference, audible issue, device used"></textarea></label></article><article data-group="ability" data-id="ability-shoulder">
+<h2>ability-shoulder</h2><p class="badge pass">PASS — signal screen only</p>
+<p>0.658 s / -19.99 LUFS / -10.0 dBTP</p><p>Original failures: loudness, truePeak, clipping<br>Edited failures: none</p>
+<p>Owner listening pending</p>
+<label>Edited comparison<audio controls preload="none" src="edited/ability-shoulder.wav"></audio></label><label>Original<audio controls preload="none" src="raw/ability-shoulder.mp3"></audio></label><details><summary>First local attempt — pass: no meter failures</summary><audio controls preload="none" src="first-pass/edited/ability-shoulder.wav"></audio><p>-19.99 LUFS; -10.0 dBTP</p></details><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
+  &quot;promptOrText&quot;: &quot;Armoured ram plates draw tight, thick steel preload groans then one hard latch seats. Heavy forward-charge warning, no impact. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.&quot;,
+  &quot;beat&quot;: null,
+  &quot;provenance&quot;: {
+    &quot;sidecar&quot;: &quot;audio\\x3\\effects\\raw\\ability-shoulder.mp3.json&quot;,
+    &quot;sourceSha256&quot;: &quot;73fd743ed66fdbf3f573f45114463100452fc159a63bc887755d82128ac2f1c2&quot;,
+    &quot;generatedAt&quot;: &quot;2026-10-02T21:38:16.008Z&quot;,
+    &quot;request&quot;: {
+      &quot;text&quot;: &quot;Armoured ram plates draw tight, thick steel preload groans then one hard latch seats. Heavy forward-charge warning, no impact. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.&quot;,
+      &quot;duration_seconds&quot;: 1,
+      &quot;prompt_influence&quot;: 0.7,
+      &quot;model_id&quot;: &quot;eleven_text_to_sound_v2&quot;,
+      &quot;loop&quot;: false
+    },
+    &quot;budgetCharge&quot;: 100,
+    &quot;providerCredits&quot;: 10,
+    &quot;session&quot;: &quot;x3-2026-10-02&quot;,
+    &quot;reused&quot;: false
+  },
+  &quot;edit&quot;: {
+    &quot;operation&quot;: &quot;mono resample, -45 dBFS edge trim with 10 ms margin, 3 ms edge fades; preserve zero tails (no whole-file DC subtraction)&quot;,
+    &quot;startFrame&quot;: 0,
+    &quot;endFrameExclusive&quot;: 14505,
+    &quot;rate&quot;: 22050,
+    &quot;rivetFirstOnsetOnly&quot;: false
+  },
+  &quot;normalization&quot;: {
+    &quot;operation&quot;: &quot;measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling&quot;,
+    &quot;softLimited&quot;: false,
+    &quot;additionalCrestCompressionPasses&quot;: 0,
+    &quot;gain&quot;: 0.25556419010641385,
+    &quot;credits&quot;: 0
+  },
+  &quot;tailCleanup&quot;: null,
+  &quot;rawFailures&quot;: [
+    &quot;loudness&quot;,
+    &quot;truePeak&quot;,
+    &quot;clipping&quot;
+  ],
+  &quot;editedChecks&quot;: {
+    &quot;decode&quot;: true,
+    &quot;duration&quot;: true,
+    &quot;loudness&quot;: true,
+    &quot;truePeak&quot;: true,
+    &quot;silence&quot;: true,
+    &quot;clipping&quot;: true
+  },
+  &quot;silence&quot;: {
+    &quot;thresholdDbfs&quot;: -50,
+    &quot;minimumIntervalSeconds&quot;: 0.1,
+    &quot;intervalsFrames&quot;: [],
+    &quot;fraction&quot;: 0.0,
+    &quot;longestInteriorSeconds&quot;: 0
+  },
+  &quot;loop&quot;: {
+    &quot;status&quot;: &quot;not applicable&quot;,
+    &quot;reason&quot;: &quot;one-shot or full song&quot;
+  },
+  &quot;sourceDefects&quot;: [
+    &quot;loudness&quot;,
+    &quot;truePeak&quot;,
+    &quot;clipping&quot;
+  ],
+  &quot;notMeasured&quot;: [
+    &quot;semantic fidelity&quot;,
+    &quot;owner preference&quot;,
+    &quot;in-game masking/latency&quot;,
+    &quot;physical Stick playback/memory&quot;
+  ],
+  &quot;error&quot;: null
+}</pre></details>
+<label>Your listening note<textarea data-note="ability-shoulder" placeholder="Preference, audible issue, device used"></textarea></label></article><article data-group="ability" data-id="ability-turbine">
+<h2>ability-turbine</h2><p class="badge pass">PASS — signal screen only</p>
+<p>0.908 s / -19.99 LUFS / -13.17 dBTP</p><p>Original failures: loudness, truePeak, clipping<br>Edited failures: none</p>
+<p>Owner listening pending</p>
+<label>Edited comparison<audio controls preload="none" src="edited/ability-turbine.wav"></audio></label><label>Original<audio controls preload="none" src="raw/ability-turbine.mp3"></audio></label><details><summary>First local attempt — pass: no meter failures</summary><audio controls preload="none" src="first-pass/edited/ability-turbine.wav"></audio><p>-20.0 LUFS; -12.63 dBTP</p></details><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
+  &quot;promptOrText&quot;: &quot;Small crude turbine spools sharply: narrow air whine rises over dirty bearings, short pressure release. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.&quot;,
+  &quot;beat&quot;: null,
+  &quot;provenance&quot;: {
+    &quot;sidecar&quot;: &quot;audio\\x3\\effects\\raw\\ability-turbine.mp3.json&quot;,
+    &quot;sourceSha256&quot;: &quot;f226b192b547532972b75a5e37fa7429b99f5eb9ed812549e9e1d246e775a98d&quot;,
+    &quot;generatedAt&quot;: &quot;2026-10-02T21:38:29.602Z&quot;,
+    &quot;request&quot;: {
+      &quot;text&quot;: &quot;Small crude turbine spools sharply: narrow air whine rises over dirty bearings, short pressure release. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.&quot;,
+      &quot;duration_seconds&quot;: 1,
+      &quot;prompt_influence&quot;: 0.7,
+      &quot;model_id&quot;: &quot;eleven_text_to_sound_v2&quot;,
+      &quot;loop&quot;: false
+    },
+    &quot;budgetCharge&quot;: 100,
+    &quot;providerCredits&quot;: 10,
+    &quot;session&quot;: &quot;x3-2026-10-02&quot;,
+    &quot;reused&quot;: false
+  },
+  &quot;edit&quot;: {
+    &quot;operation&quot;: &quot;mono resample, -45 dBFS edge trim with 10 ms margin, 3 ms edge fades; preserve zero tails (no whole-file DC subtraction)&quot;,
+    &quot;startFrame&quot;: 0,
+    &quot;endFrameExclusive&quot;: 22050,
+    &quot;rate&quot;: 22050,
+    &quot;rivetFirstOnsetOnly&quot;: false
+  },
+  &quot;normalization&quot;: {
+    &quot;operation&quot;: &quot;measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling&quot;,
+    &quot;softLimited&quot;: false,
+    &quot;additionalCrestCompressionPasses&quot;: 0,
+    &quot;gain&quot;: 0.17823787674480895,
+    &quot;credits&quot;: 0
+  },
+  &quot;tailCleanup&quot;: {
+    &quot;before&quot;: {
+      &quot;file&quot;: &quot;audio/x3/effects/edited/ability-turbine.wav&quot;,
+      &quot;sha256&quot;: &quot;184df743476642c9a3aeca7bba963a5ac83d5011952e68d29ff34a6c6a056ef1&quot;,
+      &quot;bytes&quot;: 44178,
+      &quot;status&quot;: &quot;pass&quot;,
+      &quot;checks&quot;: {
+        &quot;decode&quot;: true,
+        &quot;duration&quot;: true,
+        &quot;loudness&quot;: true,
+        &quot;truePeak&quot;: true,
+        &quot;silence&quot;: true,
+        &quot;clipping&quot;: true
+      },
+      &quot;failures&quot;: [],
+      &quot;durationSeconds&quot;: 1.0,
+      &quot;durationWindowSeconds&quot;: [
+        0,
+        180
+      ],
+      &quot;sampleRate&quot;: 22050,
+      &quot;channels&quot;: 1,
+      &quot;decodedFrames&quot;: 22050,
+      &quot;decodedBytes&quot;: 44100,
+      &quot;integratedLufs&quot;: -20.0,
+      &quot;truePeakDbtp&quot;: -12.62,
+      &quot;loudnessRangeLu&quot;: 0.0,
+      &quot;loudnessTargetLufs&quot;: -20,
+      &quot;loudnessToleranceLu&quot;: 2,
+      &quot;meterPaddingFrames&quot;: 0,
+      &quot;fullScaleSampleCount&quot;: 0,
+      &quot;silence&quot;: {
+        &quot;thresholdDbfs&quot;: -50,
+        &quot;minimumIntervalSeconds&quot;: 0.1,
+        &quot;intervalsFrames&quot;: [
+          [
+            19804,
+            22050
+          ]
+        ],
+        &quot;fraction&quot;: 0.101859410430839,
+        &quot;longestInteriorSeconds&quot;: 0
+      },
+      &quot;loopSeam&quot;: {
+        &quot;status&quot;: &quot;not applicable&quot;,
+        &quot;reason&quot;: &quot;one-shot or full song&quot;
+      },
+      &quot;loopBoundary&quot;: null
+    },
+    &quot;startFrame&quot;: 0,
+    &quot;endFrameExclusive&quot;: 20024,
+    &quot;operation&quot;: &quot;trim measured edge silence and &lt;=25 ms codec residue; retain 10 ms margin&quot;,
+    &quot;normalization&quot;: {
+      &quot;operation&quot;: &quot;measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling&quot;,
+      &quot;softLimited&quot;: false,
+      &quot;additionalCrestCompressionPasses&quot;: 0,
+      &quot;gain&quot;: 0.9386420366721352,
+      &quot;credits&quot;: 0
+    }
+  },
+  &quot;rawFailures&quot;: [
+    &quot;loudness&quot;,
+    &quot;truePeak&quot;,
+    &quot;clipping&quot;
+  ],
+  &quot;editedChecks&quot;: {
+    &quot;decode&quot;: true,
+    &quot;duration&quot;: true,
+    &quot;loudness&quot;: true,
+    &quot;truePeak&quot;: true,
+    &quot;silence&quot;: true,
+    &quot;clipping&quot;: true
+  },
+  &quot;silence&quot;: {
+    &quot;thresholdDbfs&quot;: -50,
+    &quot;minimumIntervalSeconds&quot;: 0.1,
+    &quot;intervalsFrames&quot;: [],
+    &quot;fraction&quot;: 0.0,
+    &quot;longestInteriorSeconds&quot;: 0
+  },
+  &quot;loop&quot;: {
+    &quot;status&quot;: &quot;not applicable&quot;,
+    &quot;reason&quot;: &quot;one-shot or full song&quot;
+  },
+  &quot;sourceDefects&quot;: [
+    &quot;loudness&quot;,
+    &quot;truePeak&quot;,
+    &quot;clipping&quot;
+  ],
+  &quot;notMeasured&quot;: [
+    &quot;semantic fidelity&quot;,
+    &quot;owner preference&quot;,
+    &quot;in-game masking/latency&quot;,
+    &quot;physical Stick playback/memory&quot;
+  ],
+  &quot;error&quot;: null
+}</pre></details>
+<label>Your listening note<textarea data-note="ability-turbine" placeholder="Preference, audible issue, device used"></textarea></label></article><article data-group="ability" data-id="ability-ground-bite">
+<h2>ability-ground-bite</h2><p class="badge pass">PASS — signal screen only</p>
+<p>0.426 s / -21.05 LUFS / -2.0 dBTP</p><p>Original failures: loudness, truePeak, silence, clipping<br>Edited failures: none</p>
+<p>Owner listening pending</p>
+<label>Edited comparison<audio controls preload="none" src="edited/ability-ground-bite.wav"></audio></label><label>Original<audio controls preload="none" src="raw/ability-ground-bite.mp3"></audio></label><details><summary>First local attempt — pass: no meter failures</summary><audio controls preload="none" src="first-pass/edited/ability-ground-bite.wav"></audio><p>-21.05 LUFS; -2.0 dBTP</p></details><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
+  &quot;promptOrText&quot;: &quot;Driven treads bite into loose grit: sharp rubber catch, dense short gravel grind, dry grip release. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.&quot;,
+  &quot;beat&quot;: null,
+  &quot;provenance&quot;: {
+    &quot;sidecar&quot;: &quot;audio\\x3\\effects\\raw\\ability-ground-bite.mp3.json&quot;,
+    &quot;sourceSha256&quot;: &quot;fff8b2f8a7a1652126f243d87e304f61b3231a6a4a15bdc0a821a93ccb886133&quot;,
+    &quot;generatedAt&quot;: &quot;2026-10-02T21:38:40.284Z&quot;,
+    &quot;request&quot;: {
+      &quot;text&quot;: &quot;Driven treads bite into loose grit: sharp rubber catch, dense short gravel grind, dry grip release. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.&quot;,
+      &quot;duration_seconds&quot;: 1,
+      &quot;prompt_influence&quot;: 0.7,
+      &quot;model_id&quot;: &quot;eleven_text_to_sound_v2&quot;,
+      &quot;loop&quot;: false
+    },
+    &quot;budgetCharge&quot;: 100,
+    &quot;providerCredits&quot;: 10,
+    &quot;session&quot;: &quot;x3-2026-10-02&quot;,
+    &quot;reused&quot;: false
+  },
+  &quot;edit&quot;: {
+    &quot;operation&quot;: &quot;mono resample, -45 dBFS edge trim with 10 ms margin, 3 ms edge fades; preserve zero tails (no whole-file DC subtraction)&quot;,
+    &quot;startFrame&quot;: 0,
+    &quot;endFrameExclusive&quot;: 9385,
+    &quot;rate&quot;: 22050,
+    &quot;rivetFirstOnsetOnly&quot;: false
+  },
+  &quot;normalization&quot;: {
+    &quot;operation&quot;: &quot;measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling&quot;,
+    &quot;softLimited&quot;: false,
+    &quot;additionalCrestCompressionPasses&quot;: 0,
+    &quot;gain&quot;: 0.6753050539950787,
+    &quot;credits&quot;: 0
+  },
+  &quot;tailCleanup&quot;: null,
+  &quot;rawFailures&quot;: [
+    &quot;loudness&quot;,
+    &quot;truePeak&quot;,
+    &quot;silence&quot;,
+    &quot;clipping&quot;
+  ],
+  &quot;editedChecks&quot;: {
+    &quot;decode&quot;: true,
+    &quot;duration&quot;: true,
+    &quot;loudness&quot;: true,
+    &quot;truePeak&quot;: true,
+    &quot;silence&quot;: true,
+    &quot;clipping&quot;: true
+  },
+  &quot;silence&quot;: {
+    &quot;thresholdDbfs&quot;: -50,
+    &quot;minimumIntervalSeconds&quot;: 0.1,
+    &quot;intervalsFrames&quot;: [],
+    &quot;fraction&quot;: 0.0,
+    &quot;longestInteriorSeconds&quot;: 0
+  },
+  &quot;loop&quot;: {
+    &quot;status&quot;: &quot;not applicable&quot;,
+    &quot;reason&quot;: &quot;one-shot or full song&quot;
+  },
+  &quot;sourceDefects&quot;: [
+    &quot;loudness&quot;,
+    &quot;truePeak&quot;,
+    &quot;silence&quot;,
+    &quot;clipping&quot;
+  ],
+  &quot;notMeasured&quot;: [
+    &quot;semantic fidelity&quot;,
+    &quot;owner preference&quot;,
+    &quot;in-game masking/latency&quot;,
+    &quot;physical Stick playback/memory&quot;
+  ],
+  &quot;error&quot;: null
+}</pre></details>
+<label>Your listening note<textarea data-note="ability-ground-bite" placeholder="Preference, audible issue, device used"></textarea></label></article><article data-group="ability" data-id="ability-punch-lance">
+<h2>ability-punch-lance</h2><p class="badge pass">PASS — signal screen only</p>
+<p>0.855 s / -20.0 LUFS / -2.78 dBTP</p><p>Original failures: loudness, truePeak, clipping<br>Edited failures: none</p>
+<p>Owner listening pending</p>
+<label>Edited comparison<audio controls preload="none" src="edited/ability-punch-lance.wav"></audio></label><label>Original<audio controls preload="none" src="raw/ability-punch-lance.mp3"></audio></label><details><summary>First local attempt — pass: no meter failures</summary><audio controls preload="none" src="first-pass/edited/ability-punch-lance.wav"></audio><p>-20.0 LUFS; -2.78 dBTP</p></details><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
+  &quot;promptOrText&quot;: &quot;Tensioned steel lance charges: three tightening ratchet teeth accelerate, a heavy bolt snaps and rings briefly. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.&quot;,
+  &quot;beat&quot;: null,
+  &quot;provenance&quot;: {
+    &quot;sidecar&quot;: &quot;audio\\x3\\effects\\raw\\ability-punch-lance.mp3.json&quot;,
+    &quot;sourceSha256&quot;: &quot;d8403d0b41b169254150260f909a78a31f3d598558f919db98d3192f2209be5a&quot;,
+    &quot;generatedAt&quot;: &quot;2026-10-02T21:38:53.431Z&quot;,
+    &quot;request&quot;: {
+      &quot;text&quot;: &quot;Tensioned steel lance charges: three tightening ratchet teeth accelerate, a heavy bolt snaps and rings briefly. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.&quot;,
+      &quot;duration_seconds&quot;: 1,
+      &quot;prompt_influence&quot;: 0.7,
+      &quot;model_id&quot;: &quot;eleven_text_to_sound_v2&quot;,
+      &quot;loop&quot;: false
+    },
+    &quot;budgetCharge&quot;: 100,
+    &quot;providerCredits&quot;: 10,
+    &quot;session&quot;: &quot;x3-2026-10-02&quot;,
+    &quot;reused&quot;: false
+  },
+  &quot;edit&quot;: {
+    &quot;operation&quot;: &quot;mono resample, -45 dBFS edge trim with 10 ms margin, 3 ms edge fades; preserve zero tails (no whole-file DC subtraction)&quot;,
+    &quot;startFrame&quot;: 0,
+    &quot;endFrameExclusive&quot;: 18842,
+    &quot;rate&quot;: 22050,
+    &quot;rivetFirstOnsetOnly&quot;: false
+  },
+  &quot;normalization&quot;: {
+    &quot;operation&quot;: &quot;measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling&quot;,
+    &quot;softLimited&quot;: false,
+    &quot;additionalCrestCompressionPasses&quot;: 0,
+    &quot;gain&quot;: 0.5895219770654915,
+    &quot;credits&quot;: 0
+  },
+  &quot;tailCleanup&quot;: null,
+  &quot;rawFailures&quot;: [
+    &quot;loudness&quot;,
+    &quot;truePeak&quot;,
+    &quot;clipping&quot;
+  ],
+  &quot;editedChecks&quot;: {
+    &quot;decode&quot;: true,
+    &quot;duration&quot;: true,
+    &quot;loudness&quot;: true,
+    &quot;truePeak&quot;: true,
+    &quot;silence&quot;: true,
+    &quot;clipping&quot;: true
+  },
+  &quot;silence&quot;: {
+    &quot;thresholdDbfs&quot;: -50,
+    &quot;minimumIntervalSeconds&quot;: 0.1,
+    &quot;intervalsFrames&quot;: [],
+    &quot;fraction&quot;: 0.0,
+    &quot;longestInteriorSeconds&quot;: 0
+  },
+  &quot;loop&quot;: {
+    &quot;status&quot;: &quot;not applicable&quot;,
+    &quot;reason&quot;: &quot;one-shot or full song&quot;
+  },
+  &quot;sourceDefects&quot;: [
+    &quot;loudness&quot;,
+    &quot;truePeak&quot;,
+    &quot;clipping&quot;
+  ],
+  &quot;notMeasured&quot;: [
+    &quot;semantic fidelity&quot;,
+    &quot;owner preference&quot;,
+    &quot;in-game masking/latency&quot;,
+    &quot;physical Stick playback/memory&quot;
+  ],
+  &quot;error&quot;: null
+}</pre></details>
+<label>Your listening note<textarea data-note="ability-punch-lance" placeholder="Preference, audible issue, device used"></textarea></label></article><article data-group="ability" data-id="ability-bone-rack">
+<h2>ability-bone-rack</h2><p class="badge pass">PASS — signal screen only</p>
+<p>0.604 s / -20.0 LUFS / -10.3 dBTP</p><p>Original failures: loudness, truePeak, silence, clipping<br>Edited failures: none</p>
+<p>Owner listening pending</p>
+<label>Edited comparison<audio controls preload="none" src="edited/ability-bone-rack.wav"></audio></label><label>Original<audio controls preload="none" src="raw/ability-bone-rack.mp3"></audio></label><details><summary>First local attempt — pass: no meter failures</summary><audio controls preload="none" src="first-pass/edited/ability-bone-rack.wav"></audio><p>-20.0 LUFS; -10.3 dBTP</p></details><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
+  &quot;promptOrText&quot;: &quot;Steel spike rack extends: loaded rails scrape, loose spikes chatter, final hard lock. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.&quot;,
+  &quot;beat&quot;: null,
+  &quot;provenance&quot;: {
+    &quot;sidecar&quot;: &quot;audio\\x3\\effects\\raw\\ability-bone-rack.mp3.json&quot;,
+    &quot;sourceSha256&quot;: &quot;e1eb1d88b0225ca4a32aca3491a340527eed37051fcdb82807e41fe5da1b3e7d&quot;,
+    &quot;generatedAt&quot;: &quot;2026-10-02T21:39:04.263Z&quot;,
+    &quot;request&quot;: {
+      &quot;text&quot;: &quot;Steel spike rack extends: loaded rails scrape, loose spikes chatter, final hard lock. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.&quot;,
+      &quot;duration_seconds&quot;: 1,
+      &quot;prompt_influence&quot;: 0.7,
+      &quot;model_id&quot;: &quot;eleven_text_to_sound_v2&quot;,
+      &quot;loop&quot;: false
+    },
+    &quot;budgetCharge&quot;: 100,
+    &quot;providerCredits&quot;: 10,
+    &quot;session&quot;: &quot;x3-2026-10-02&quot;,
+    &quot;reused&quot;: false
+  },
+  &quot;edit&quot;: {
+    &quot;operation&quot;: &quot;mono resample, -45 dBFS edge trim with 10 ms margin, 3 ms edge fades; preserve zero tails (no whole-file DC subtraction)&quot;,
+    &quot;startFrame&quot;: 0,
+    &quot;endFrameExclusive&quot;: 13323,
+    &quot;rate&quot;: 22050,
+    &quot;rivetFirstOnsetOnly&quot;: false
+  },
+  &quot;normalization&quot;: {
+    &quot;operation&quot;: &quot;measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling&quot;,
+    &quot;softLimited&quot;: false,
+    &quot;additionalCrestCompressionPasses&quot;: 0,
+    &quot;gain&quot;: 0.2786121168629771,
+    &quot;credits&quot;: 0
+  },
+  &quot;tailCleanup&quot;: null,
+  &quot;rawFailures&quot;: [
+    &quot;loudness&quot;,
+    &quot;truePeak&quot;,
+    &quot;silence&quot;,
+    &quot;clipping&quot;
+  ],
+  &quot;editedChecks&quot;: {
+    &quot;decode&quot;: true,
+    &quot;duration&quot;: true,
+    &quot;loudness&quot;: true,
+    &quot;truePeak&quot;: true,
+    &quot;silence&quot;: true,
+    &quot;clipping&quot;: true
+  },
+  &quot;silence&quot;: {
+    &quot;thresholdDbfs&quot;: -50,
+    &quot;minimumIntervalSeconds&quot;: 0.1,
+    &quot;intervalsFrames&quot;: [],
+    &quot;fraction&quot;: 0.0,
+    &quot;longestInteriorSeconds&quot;: 0
+  },
+  &quot;loop&quot;: {
+    &quot;status&quot;: &quot;not applicable&quot;,
+    &quot;reason&quot;: &quot;one-shot or full song&quot;
+  },
+  &quot;sourceDefects&quot;: [
+    &quot;loudness&quot;,
+    &quot;truePeak&quot;,
+    &quot;silence&quot;,
+    &quot;clipping&quot;
+  ],
+  &quot;notMeasured&quot;: [
+    &quot;semantic fidelity&quot;,
+    &quot;owner preference&quot;,
+    &quot;in-game masking/latency&quot;,
+    &quot;physical Stick playback/memory&quot;
+  ],
+  &quot;error&quot;: null
+}</pre></details>
+<label>Your listening note<textarea data-note="ability-bone-rack" placeholder="Preference, audible issue, device used"></textarea></label></article><article data-group="ability" data-id="ability-scrambler">
+<h2>ability-scrambler</h2><p class="badge pass">PASS — signal screen only</p>
+<p>0.804 s / -19.99 LUFS / -2.98 dBTP</p><p>Original failures: loudness, truePeak, clipping<br>Edited failures: none</p>
+<p>Owner listening pending</p>
+<label>Edited comparison<audio controls preload="none" src="edited/ability-scrambler.wav"></audio></label><label>Original<audio controls preload="none" src="raw/ability-scrambler.mp3"></audio></label><details><summary>First local attempt — pass: no meter failures</summary><audio controls preload="none" src="first-pass/edited/ability-scrambler.wav"></audio><p>-19.99 LUFS; -2.98 dBTP</p></details><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
+  &quot;promptOrText&quot;: &quot;Crude electrical canister activates: initial metal tumble, gritty irregular electrical sputter, brief tearing static and stop. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.&quot;,
+  &quot;beat&quot;: null,
+  &quot;provenance&quot;: {
+    &quot;sidecar&quot;: &quot;audio\\x3\\effects\\raw\\ability-scrambler.mp3.json&quot;,
+    &quot;sourceSha256&quot;: &quot;4da8615a915308c5a377ca48d1b635741e54718ed9d01ea3b69d0418c037532f&quot;,
+    &quot;generatedAt&quot;: &quot;2026-10-02T21:39:14.172Z&quot;,
+    &quot;request&quot;: {
+      &quot;text&quot;: &quot;Crude electrical canister activates: initial metal tumble, gritty irregular electrical sputter, brief tearing static and stop. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.&quot;,
+      &quot;duration_seconds&quot;: 1,
+      &quot;prompt_influence&quot;: 0.7,
+      &quot;model_id&quot;: &quot;eleven_text_to_sound_v2&quot;,
+      &quot;loop&quot;: false
+    },
+    &quot;budgetCharge&quot;: 100,
+    &quot;providerCredits&quot;: 10,
+    &quot;session&quot;: &quot;x3-2026-10-02&quot;,
+    &quot;reused&quot;: false
+  },
+  &quot;edit&quot;: {
+    &quot;operation&quot;: &quot;mono resample, -45 dBFS edge trim with 10 ms margin, 3 ms edge fades; preserve zero tails (no whole-file DC subtraction)&quot;,
+    &quot;startFrame&quot;: 408,
+    &quot;endFrameExclusive&quot;: 18137,
+    &quot;rate&quot;: 22050,
+    &quot;rivetFirstOnsetOnly&quot;: false
+  },
+  &quot;normalization&quot;: {
+    &quot;operation&quot;: &quot;measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling&quot;,
+    &quot;softLimited&quot;: false,
+    &quot;additionalCrestCompressionPasses&quot;: 0,
+    &quot;gain&quot;: 0.5552646171195635,
+    &quot;credits&quot;: 0
+  },
+  &quot;tailCleanup&quot;: null,
+  &quot;rawFailures&quot;: [
+    &quot;loudness&quot;,
+    &quot;truePeak&quot;,
+    &quot;clipping&quot;
+  ],
+  &quot;editedChecks&quot;: {
+    &quot;decode&quot;: true,
+    &quot;duration&quot;: true,
+    &quot;loudness&quot;: true,
+    &quot;truePeak&quot;: true,
+    &quot;silence&quot;: true,
+    &quot;clipping&quot;: true
+  },
+  &quot;silence&quot;: {
+    &quot;thresholdDbfs&quot;: -50,
+    &quot;minimumIntervalSeconds&quot;: 0.1,
+    &quot;intervalsFrames&quot;: [],
+    &quot;fraction&quot;: 0.0,
+    &quot;longestInteriorSeconds&quot;: 0
+  },
+  &quot;loop&quot;: {
+    &quot;status&quot;: &quot;not applicable&quot;,
+    &quot;reason&quot;: &quot;one-shot or full song&quot;
+  },
+  &quot;sourceDefects&quot;: [
+    &quot;loudness&quot;,
+    &quot;truePeak&quot;,
+    &quot;clipping&quot;
+  ],
+  &quot;notMeasured&quot;: [
+    &quot;semantic fidelity&quot;,
+    &quot;owner preference&quot;,
+    &quot;in-game masking/latency&quot;,
+    &quot;physical Stick playback/memory&quot;
+  ],
+  &quot;error&quot;: null
+}</pre></details>
+<label>Your listening note<textarea data-note="ability-scrambler" placeholder="Preference, audible issue, device used"></textarea></label></article><article data-group="ability" data-id="ability-arc-harpoon">
+<h2>ability-arc-harpoon</h2><p class="badge pass">PASS — signal screen only</p>
+<p>0.742 s / -20.01 LUFS / -3.52 dBTP</p><p>Original failures: loudness, truePeak, clipping<br>Edited failures: none</p>
+<p>Owner listening pending</p>
+<label>Edited comparison<audio controls preload="none" src="edited/ability-arc-harpoon.wav"></audio></label><label>Original<audio controls preload="none" src="raw/ability-arc-harpoon.mp3"></audio></label><details><summary>First local attempt — pass: no meter failures</summary><audio controls preload="none" src="first-pass/edited/ability-arc-harpoon.wav"></audio><p>-20.01 LUFS; -3.51 dBTP</p></details><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
+  &quot;promptOrText&quot;: &quot;Tensioned cable spool winds hard: ratchet strain, sharp cable zip and a short rough electrical arc crack. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.&quot;,
+  &quot;beat&quot;: null,
+  &quot;provenance&quot;: {
+    &quot;sidecar&quot;: &quot;audio\\x3\\effects\\raw\\ability-arc-harpoon.mp3.json&quot;,
+    &quot;sourceSha256&quot;: &quot;66b974706a5a4a31b2e686cd01694e28e9a5e3fbfcacef1a9858b4ee3c4a1042&quot;,
+    &quot;generatedAt&quot;: &quot;2026-10-02T21:39:27.685Z&quot;,
+    &quot;request&quot;: {
+      &quot;text&quot;: &quot;Tensioned cable spool winds hard: ratchet strain, sharp cable zip and a short rough electrical arc crack. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.&quot;,
+      &quot;duration_seconds&quot;: 1,
+      &quot;prompt_influence&quot;: 0.7,
+      &quot;model_id&quot;: &quot;eleven_text_to_sound_v2&quot;,
+      &quot;loop&quot;: false
+    },
+    &quot;budgetCharge&quot;: 100,
+    &quot;providerCredits&quot;: 10,
+    &quot;session&quot;: &quot;x3-2026-10-02&quot;,
+    &quot;reused&quot;: false
+  },
+  &quot;edit&quot;: {
+    &quot;operation&quot;: &quot;mono resample, -45 dBFS edge trim with 10 ms margin, 3 ms edge fades; preserve zero tails (no whole-file DC subtraction)&quot;,
+    &quot;startFrame&quot;: 0,
+    &quot;endFrameExclusive&quot;: 16360,
+    &quot;rate&quot;: 22050,
+    &quot;rivetFirstOnsetOnly&quot;: false
+  },
+  &quot;normalization&quot;: {
+    &quot;operation&quot;: &quot;measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling&quot;,
+    &quot;softLimited&quot;: false,
+    &quot;additionalCrestCompressionPasses&quot;: 0,
+    &quot;gain&quot;: 0.5841172070928304,
+    &quot;credits&quot;: 0
+  },
+  &quot;tailCleanup&quot;: null,
+  &quot;rawFailures&quot;: [
+    &quot;loudness&quot;,
+    &quot;truePeak&quot;,
+    &quot;clipping&quot;
+  ],
+  &quot;editedChecks&quot;: {
+    &quot;decode&quot;: true,
+    &quot;duration&quot;: true,
+    &quot;loudness&quot;: true,
+    &quot;truePeak&quot;: true,
+    &quot;silence&quot;: true,
+    &quot;clipping&quot;: true
+  },
+  &quot;silence&quot;: {
+    &quot;thresholdDbfs&quot;: -50,
+    &quot;minimumIntervalSeconds&quot;: 0.1,
+    &quot;intervalsFrames&quot;: [],
+    &quot;fraction&quot;: 0.0,
+    &quot;longestInteriorSeconds&quot;: 0
+  },
+  &quot;loop&quot;: {
+    &quot;status&quot;: &quot;not applicable&quot;,
+    &quot;reason&quot;: &quot;one-shot or full song&quot;
+  },
+  &quot;sourceDefects&quot;: [
+    &quot;loudness&quot;,
+    &quot;truePeak&quot;,
+    &quot;clipping&quot;
+  ],
+  &quot;notMeasured&quot;: [
+    &quot;semantic fidelity&quot;,
+    &quot;owner preference&quot;,
+    &quot;in-game masking/latency&quot;,
+    &quot;physical Stick playback/memory&quot;
+  ],
+  &quot;error&quot;: null
+}</pre></details>
+<label>Your listening note<textarea data-note="ability-arc-harpoon" placeholder="Preference, audible issue, device used"></textarea></label></article><article data-group="ability" data-id="ability-plate-brace">
+<h2>ability-plate-brace</h2><p class="badge pass">PASS — signal screen only</p>
+<p>0.467 s / -19.95 LUFS / -4.75 dBTP</p><p>Original failures: loudness, truePeak, silence, clipping<br>Edited failures: none</p>
+<p>Owner listening pending</p>
+<label>Edited comparison<audio controls preload="none" src="edited/ability-plate-brace.wav"></audio></label><label>Original<audio controls preload="none" src="raw/ability-plate-brace.mp3"></audio></label><details><summary>First local attempt — pass: no meter failures</summary><audio controls preload="none" src="first-pass/edited/ability-plate-brace.wav"></audio><p>-19.95 LUFS; -4.75 dBTP</p></details><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
+  &quot;promptOrText&quot;: &quot;Armour braces lock: two thick steel clamps slam together, deep short chassis strain, tight latch stop. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.&quot;,
+  &quot;beat&quot;: null,
+  &quot;provenance&quot;: {
+    &quot;sidecar&quot;: &quot;audio\\x3\\effects\\raw\\ability-plate-brace.mp3.json&quot;,
+    &quot;sourceSha256&quot;: &quot;764a0fee7f1a70f62e4d8ae038d9d8d78c05404e1c00629ecb2d594fa19ff07a&quot;,
+    &quot;generatedAt&quot;: &quot;2026-10-02T21:39:41.088Z&quot;,
+    &quot;request&quot;: {
+      &quot;text&quot;: &quot;Armour braces lock: two thick steel clamps slam together, deep short chassis strain, tight latch stop. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.&quot;,
+      &quot;duration_seconds&quot;: 1,
+      &quot;prompt_influence&quot;: 0.7,
+      &quot;model_id&quot;: &quot;eleven_text_to_sound_v2&quot;,
+      &quot;loop&quot;: false
+    },
+    &quot;budgetCharge&quot;: 100,
+    &quot;providerCredits&quot;: 10,
+    &quot;session&quot;: &quot;x3-2026-10-02&quot;,
+    &quot;reused&quot;: false
+  },
+  &quot;edit&quot;: {
+    &quot;operation&quot;: &quot;mono resample, -45 dBFS edge trim with 10 ms margin, 3 ms edge fades; preserve zero tails (no whole-file DC subtraction)&quot;,
+    &quot;startFrame&quot;: 0,
+    &quot;endFrameExclusive&quot;: 10296,
+    &quot;rate&quot;: 22050,
+    &quot;rivetFirstOnsetOnly&quot;: false
+  },
+  &quot;normalization&quot;: {
+    &quot;operation&quot;: &quot;measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling&quot;,
+    &quot;softLimited&quot;: false,
+    &quot;additionalCrestCompressionPasses&quot;: 0,
+    &quot;gain&quot;: 0.46505037616660627,
+    &quot;credits&quot;: 0
+  },
+  &quot;tailCleanup&quot;: null,
+  &quot;rawFailures&quot;: [
+    &quot;loudness&quot;,
+    &quot;truePeak&quot;,
+    &quot;silence&quot;,
+    &quot;clipping&quot;
+  ],
+  &quot;editedChecks&quot;: {
+    &quot;decode&quot;: true,
+    &quot;duration&quot;: true,
+    &quot;loudness&quot;: true,
+    &quot;truePeak&quot;: true,
+    &quot;silence&quot;: true,
+    &quot;clipping&quot;: true
+  },
+  &quot;silence&quot;: {
+    &quot;thresholdDbfs&quot;: -50,
+    &quot;minimumIntervalSeconds&quot;: 0.1,
+    &quot;intervalsFrames&quot;: [],
+    &quot;fraction&quot;: 0.0,
+    &quot;longestInteriorSeconds&quot;: 0
+  },
+  &quot;loop&quot;: {
+    &quot;status&quot;: &quot;not applicable&quot;,
+    &quot;reason&quot;: &quot;one-shot or full song&quot;
+  },
+  &quot;sourceDefects&quot;: [
+    &quot;loudness&quot;,
+    &quot;truePeak&quot;,
+    &quot;silence&quot;,
+    &quot;clipping&quot;
+  ],
+  &quot;notMeasured&quot;: [
+    &quot;semantic fidelity&quot;,
+    &quot;owner preference&quot;,
+    &quot;in-game masking/latency&quot;,
+    &quot;physical Stick playback/memory&quot;
+  ],
+  &quot;error&quot;: null
+}</pre></details>
+<label>Your listening note<textarea data-note="ability-plate-brace" placeholder="Preference, audible issue, device used"></textarea></label></article></main><script>
+const $=id=>document.getElementById(id),players=[...document.querySelectorAll('audio')],cards=[...document.querySelectorAll('article')];
+function stop(){players.forEach(p=>{p.pause();p.currentTime=0})} $('stop').onclick=stop;
+players.forEach(p=>p.addEventListener('play',()=>players.forEach(q=>{if(p!==q)q.pause()})));
+function filter(){stop();let n=0;cards.forEach(c=>{let show=$('filter').value==='all'||c.dataset.group===$('filter').value;c.classList.toggle('hidden',!show);if(show)n++});$('count').textContent=n+' candidates shown'}$('filter').onchange=filter;filter();
+const key='deathride-x3-effects';let notes={};try{notes=JSON.parse(localStorage.getItem(key)||'{}');document.body.classList.toggle('light',localStorage.getItem('deathride-x3-theme')==='light')}catch{}
+$('theme').onclick=()=>{document.body.classList.toggle('light');try{localStorage.setItem('deathride-x3-theme',document.body.classList.contains('light')?'light':'dark')}catch{}};
+document.querySelectorAll('[data-note]').forEach(n=>{n.value=notes[n.dataset.note]||'';n.oninput=()=>{notes[n.dataset.note]=n.value;try{localStorage.setItem(key,JSON.stringify(notes))}catch{}}});
+$('export').onclick=()=>{let a=document.createElement('a'),u=URL.createObjectURL(new Blob([JSON.stringify({wave:'effects',at:new Date().toISOString(),notes},null,2)],{type:'application/json'}));a.href=u;a.download='x3-effects-listening-notes.json';a.click();setTimeout(()=>URL.revokeObjectURL(u),1000)};
+</script></html>

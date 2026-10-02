@@ -1,5 +1,18 @@
 # Audio execution session
 
+## X3.2 — 2026-10-02
+
+Generated 34 guarded effects and edited six chosen X2 sources. Design:
+[X3-2-effects.md](X3-2-effects.md). Board:
+file:///C:/Users/kazda/kiro/firetv-deathride-audiox/deathride/audio/x3/effects/index.html
+40 final deterministic passes, eight first-edit failures retained for review. Chosen
+diesel engine now has measured two-second boundaries; no musical loop is promoted.
+Crunch retry is provisional, no owner winner declared. 39 unique runtime clips,
+four declared aliases, 1,408,202 decoded bytes. Charge 3,440/9,000; header-confirmed
+399; shared balance 24,672 -> 24,293 (immediate). Eight guard/four meter tests,
+124 browser media starts/eight layouts, provenance and secret audit pass. No
+perceptual/Stick claim. One wave commit, no push.
+
 ## X3.1 — 2026-10-02
 
 Owner-authorized X3 on `deathride/audio-x3`. Read owner audio gate first, supporting

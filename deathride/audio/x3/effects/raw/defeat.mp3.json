@@ -1,0 +1,32 @@
+{
+  "id": "7e0ece79-9132-41f1-92b5-4d329e877400",
+  "ts": "2026-10-02T21:36:51.624Z",
+  "session": "x3-2026-10-02",
+  "status": "complete",
+  "kind": "sfx",
+  "out": "audio/x3/effects/raw/defeat.mp3",
+  "seconds": 3,
+  "request": {
+    "text": "Short defeat punctuation: a tired low drum, two sagging resonant steel knocks, an exhausted spring unwinding, damped final stop. Three seconds, original nonmelodic sting. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.",
+    "duration_seconds": 3,
+    "prompt_influence": 0.7,
+    "model_id": "eleven_text_to_sound_v2",
+    "loop": false
+  },
+  "endpoint": "/v1/sound-generation",
+  "format": "mp3_44100_128",
+  "estimatedCredits": 120,
+  "budgetCharge": 120,
+  "creditsBefore": 24473,
+  "accountTier": "starter",
+  "reserve": 8000,
+  "sessionCap": 9000,
+  "bytes": 48945,
+  "providerCredits": 30,
+  "sha256": "e4111a012be16812b7a6c47c04a2a1382e864ee57ab3b95cf8b9f755ece7ac24",
+  "completedAt": "2026-10-02T21:36:56.862Z",
+  "creditsAfter": 24473,
+  "observedAccountDelta": 0,
+  "spendBasis": "Provider character-cost response header; account delta separately reported.",
+  "sessionBudgetUsed": 2040
+}

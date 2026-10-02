@@ -1,0 +1,32 @@
+{
+  "id": "e0fd2bb9-8ab0-4652-8475-55b8c0494140",
+  "ts": "2026-10-02T21:39:27.685Z",
+  "session": "x3-2026-10-02",
+  "status": "complete",
+  "kind": "sfx",
+  "out": "audio/x3/effects/raw/ability-arc-harpoon.mp3",
+  "seconds": 1,
+  "request": {
+    "text": "Tensioned cable spool winds hard: ratchet strain, sharp cable zip and a short rough electrical arc crack. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.",
+    "duration_seconds": 1,
+    "prompt_influence": 0.7,
+    "model_id": "eleven_text_to_sound_v2",
+    "loop": false
+  },
+  "endpoint": "/v1/sound-generation",
+  "format": "mp3_44100_128",
+  "estimatedCredits": 100,
+  "budgetCharge": 100,
+  "creditsBefore": 24293,
+  "accountTier": "starter",
+  "reserve": 8000,
+  "sessionCap": 9000,
+  "bytes": 17180,
+  "providerCredits": 10,
+  "sha256": "66b974706a5a4a31b2e686cd01694e28e9a5e3fbfcacef1a9858b4ee3c4a1042",
+  "completedAt": "2026-10-02T21:39:33.131Z",
+  "creditsAfter": 24293,
+  "observedAccountDelta": 0,
+  "spendBasis": "Provider character-cost response header; account delta separately reported.",
+  "sessionBudgetUsed": 3340
+}

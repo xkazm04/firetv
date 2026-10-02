@@ -1,0 +1,201 @@
+{
+  "id": "skid",
+  "cue": "movement.skid",
+  "category": "sfx",
+  "loop": true,
+  "measuredAt": "2026-10-02T21:43:31.827814+00:00",
+  "ownerStatus": "listening pending",
+  "notMeasured": [
+    "semantic fidelity",
+    "owner preference",
+    "in-game masking/latency",
+    "physical Stick playback/memory"
+  ],
+  "provenance": {
+    "sidecar": "audio\\x3\\effects\\raw\\skid.mp3.json",
+    "sourceSha256": "ad9bbbc4ea485b8070369f03e00c76f81d39482317411a23a5b345333b5d09cf",
+    "generatedAt": "2026-10-02T21:33:57.078Z",
+    "request": {
+      "text": "Loaded tyres scrubbing sideways. Immediate rough rubber rasp, low strained body, constant skid friction. No impact, engine or changing speed. Seamless repeating bed. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.",
+      "duration_seconds": 2,
+      "prompt_influence": 0.7,
+      "model_id": "eleven_text_to_sound_v2",
+      "loop": true
+    },
+    "budgetCharge": 100,
+    "providerCredits": 20,
+    "session": "x3-2026-10-02",
+    "reused": false
+  },
+  "raw": {
+    "file": "audio/x3/effects/raw/skid.mp3",
+    "sha256": "ad9bbbc4ea485b8070369f03e00c76f81d39482317411a23a5b345333b5d09cf",
+    "bytes": 37242,
+    "status": "fail",
+    "checks": {
+      "decode": true,
+      "duration": false,
+      "loudness": false,
+      "truePeak": false,
+      "silence": true,
+      "clipping": false,
+      "loopSeam": false
+    },
+    "failures": [
+      "duration",
+      "loudness",
+      "truePeak",
+      "clipping",
+      "loopSeam"
+    ],
+    "durationSeconds": 2.25,
+    "durationWindowSeconds": [
+      1.85,
+      2.15
+    ],
+    "sampleRate": 44100,
+    "channels": 2,
+    "decodedFrames": 99225,
+    "decodedBytes": 396900,
+    "integratedLufs": -11.33,
+    "truePeakDbtp": 0.4,
+    "loudnessRangeLu": 0.0,
+    "loudnessTargetLufs": -20,
+    "loudnessToleranceLu": 2,
+    "meterPaddingFrames": 0,
+    "fullScaleSampleCount": 17,
+    "silence": {
+      "thresholdDbfs": -50,
+      "minimumIntervalSeconds": 0.1,
+      "intervalsFrames": [],
+      "fraction": 0.0,
+      "longestInteriorSeconds": 0
+    },
+    "loopSeam": {
+      "status": "fail",
+      "sampleJumpFullScale": 0.02934299409389496,
+      "boundaryRmsStepDb": 3.142500837934225,
+      "spectralCosine": 0.9654070078384802,
+      "windowSeconds": 0.05,
+      "repeatedJoinJumps": [
+        0.02934299409389496,
+        0.02934299409389496
+      ],
+      "cycles": 3,
+      "limits": {
+        "sampleJumpMax": 0.02,
+        "rmsStepMaxDb": 3,
+        "spectralCosineMin": 0.8
+      },
+      "musicalContinuity": "not measured",
+      "humanRepeatedListen": "not measured"
+    },
+    "loopBoundary": {
+      "sampleRate": 44100,
+      "channels": 2,
+      "totalFrames": 99225,
+      "startFrame": 0,
+      "endFrameExclusive": 99225,
+      "preRollFrames": 0,
+      "tailPolicy": "baked overlap; plain full-span repeat"
+    }
+  },
+  "edit": {
+    "operation": "mono resample, DC removal, 125 ms complementary overlap, measured interior rotation",
+    "sourceStartFrame": 1378,
+    "loopFrames": 44100,
+    "overlapFrames": 2756,
+    "rate": 22050,
+    "rotationFrames": 11245,
+    "rotationPolicy": "48 interior candidates, minimum derivative/RMS/spectrum mismatch; no samples replaced",
+    "blurRisk": "Crossfade can blur motor pulses; repeated human listening pending"
+  },
+  "normalization": {
+    "operation": "measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling",
+    "softLimited": false,
+    "additionalCrestCompressionPasses": 0,
+    "gain": 0.4013284982627412,
+    "credits": 0
+  },
+  "edited": {
+    "file": "audio/x3/effects/edited/skid.wav",
+    "sha256": "76220880d3140b8166fbaac14c6f55be90c037b75b40989822141b3b6efafb6e",
+    "bytes": 88278,
+    "status": "pass",
+    "checks": {
+      "decode": true,
+      "duration": true,
+      "loudness": true,
+      "truePeak": true,
+      "silence": true,
+      "clipping": true,
+      "loopSeam": true
+    },
+    "failures": [],
+    "durationSeconds": 2.0,
+    "durationWindowSeconds": [
+      1.998,
+      2.002
+    ],
+    "sampleRate": 22050,
+    "channels": 1,
+    "decodedFrames": 44100,
+    "decodedBytes": 88200,
+    "integratedLufs": -20.01,
+    "truePeakDbtp": -6.7,
+    "loudnessRangeLu": 0.0,
+    "loudnessTargetLufs": -20,
+    "loudnessToleranceLu": 2,
+    "meterPaddingFrames": 0,
+    "fullScaleSampleCount": 0,
+    "silence": {
+      "thresholdDbfs": -50,
+      "minimumIntervalSeconds": 0.1,
+      "intervalsFrames": [],
+      "fraction": 0.0,
+      "longestInteriorSeconds": 0
+    },
+    "loopSeam": {
+      "status": "pass",
+      "sampleJumpFullScale": 0.000213623046875,
+      "boundaryRmsStepDb": 0.16539897084378422,
+      "spectralCosine": 0.9859736411591978,
+      "windowSeconds": 0.05,
+      "repeatedJoinJumps": [
+        0.000213623046875,
+        0.000213623046875
+      ],
+      "cycles": 3,
+      "limits": {
+        "sampleJumpMax": 0.02,
+        "rmsStepMaxDb": 3,
+        "spectralCosineMin": 0.8
+      },
+      "musicalContinuity": "not measured",
+      "humanRepeatedListen": "not measured"
+    },
+    "loopBoundary": {
+      "sampleRate": 22050,
+      "channels": 1,
+      "totalFrames": 44100,
+      "startFrame": 0,
+      "endFrameExclusive": 44100,
+      "preRollFrames": 0,
+      "tailPolicy": "baked overlap; plain full-span repeat"
+    }
+  },
+  "status": "pass",
+  "sourceDefects": [
+    "duration",
+    "loudness",
+    "truePeak",
+    "clipping",
+    "loopSeam"
+  ],
+  "repeat": {
+    "file": "audio/x3/effects/repeats/skid-three-cycles.ogg",
+    "sha256": "c82afa677ef4027507bfa88b6e50112dc80c092814610a6ed9b7194d655f3326",
+    "cycles": 3,
+    "humanListen": "not measured"
+  }
+}

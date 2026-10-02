@@ -1,0 +1,146 @@
+{
+  "id": "ability-ground-bite",
+  "cue": "ability.ground-bite",
+  "category": "sfx",
+  "loop": false,
+  "measuredAt": "2026-10-02T21:40:48.327809+00:00",
+  "ownerStatus": "listening pending",
+  "notMeasured": [
+    "semantic fidelity",
+    "owner preference",
+    "in-game masking/latency",
+    "physical Stick playback/memory"
+  ],
+  "provenance": {
+    "sidecar": "audio\\x3\\effects\\raw\\ability-ground-bite.mp3.json",
+    "sourceSha256": "fff8b2f8a7a1652126f243d87e304f61b3231a6a4a15bdc0a821a93ccb886133",
+    "generatedAt": "2026-10-02T21:38:40.284Z",
+    "request": {
+      "text": "Driven treads bite into loose grit: sharp rubber catch, dense short gravel grind, dry grip release. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.",
+      "duration_seconds": 1,
+      "prompt_influence": 0.7,
+      "model_id": "eleven_text_to_sound_v2",
+      "loop": false
+    },
+    "budgetCharge": 100,
+    "providerCredits": 10,
+    "session": "x3-2026-10-02",
+    "reused": false
+  },
+  "raw": {
+    "file": "audio/x3/effects/raw/ability-ground-bite.mp3",
+    "sha256": "fff8b2f8a7a1652126f243d87e304f61b3231a6a4a15bdc0a821a93ccb886133",
+    "bytes": 17180,
+    "status": "fail",
+    "checks": {
+      "decode": true,
+      "duration": true,
+      "loudness": false,
+      "truePeak": false,
+      "silence": false,
+      "clipping": false
+    },
+    "failures": [
+      "loudness",
+      "truePeak",
+      "silence",
+      "clipping"
+    ],
+    "durationSeconds": 1.0,
+    "durationWindowSeconds": [
+      0.85,
+      1.15
+    ],
+    "sampleRate": 44100,
+    "channels": 2,
+    "decodedFrames": 44100,
+    "decodedBytes": 176400,
+    "integratedLufs": -16.65,
+    "truePeakDbtp": 0.07,
+    "loudnessRangeLu": 0.0,
+    "loudnessTargetLufs": -20,
+    "loudnessToleranceLu": 2,
+    "meterPaddingFrames": 0,
+    "fullScaleSampleCount": 1,
+    "silence": {
+      "thresholdDbfs": -50,
+      "minimumIntervalSeconds": 0.1,
+      "intervalsFrames": [
+        [
+          18330,
+          44100
+        ]
+      ],
+      "fraction": 0.5843537414965987,
+      "longestInteriorSeconds": 0
+    },
+    "loopSeam": {
+      "status": "not applicable",
+      "reason": "one-shot or full song"
+    },
+    "loopBoundary": null
+  },
+  "edit": {
+    "operation": "mono resample, DC removal, -45 dBFS edge trim with 10 ms margin, 3 ms edge fades",
+    "startFrame": 0,
+    "endFrameExclusive": 9385,
+    "rate": 22050,
+    "rivetFirstOnsetOnly": false
+  },
+  "normalization": {
+    "operation": "measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling",
+    "softLimited": false,
+    "gain": 0.6753050539950787,
+    "credits": 0
+  },
+  "edited": {
+    "file": "audio/x3/effects/first-pass/edited/ability-ground-bite.wav",
+    "sha256": "208e571c164b007c44a95444da36759e07a57b418f5e284beee7de2a4720e6a7",
+    "bytes": 18848,
+    "status": "pass",
+    "checks": {
+      "decode": true,
+      "duration": true,
+      "loudness": true,
+      "truePeak": true,
+      "silence": true,
+      "clipping": true
+    },
+    "failures": [],
+    "durationSeconds": 0.4256235827664399,
+    "durationWindowSeconds": [
+      0.4236235827664399,
+      0.4276235827664399
+    ],
+    "sampleRate": 22050,
+    "channels": 1,
+    "decodedFrames": 9385,
+    "decodedBytes": 18770,
+    "integratedLufs": -21.05,
+    "truePeakDbtp": -2.0,
+    "loudnessRangeLu": 0.0,
+    "loudnessTargetLufs": -20,
+    "loudnessToleranceLu": 2,
+    "meterPaddingFrames": 0,
+    "fullScaleSampleCount": 0,
+    "silence": {
+      "thresholdDbfs": -50,
+      "minimumIntervalSeconds": 0.1,
+      "intervalsFrames": [],
+      "fraction": 0.0,
+      "longestInteriorSeconds": 0
+    },
+    "loopSeam": {
+      "status": "not applicable",
+      "reason": "one-shot or full song"
+    },
+    "loopBoundary": null
+  },
+  "status": "pass",
+  "sourceDefects": [
+    "loudness",
+    "truePeak",
+    "silence",
+    "clipping"
+  ]
+}

@@ -1,0 +1,144 @@
+{
+  "id": "ability-scrambler",
+  "cue": "ability.scrambler",
+  "category": "sfx",
+  "loop": false,
+  "measuredAt": "2026-10-02T21:40:49.088917+00:00",
+  "ownerStatus": "listening pending",
+  "notMeasured": [
+    "semantic fidelity",
+    "owner preference",
+    "in-game masking/latency",
+    "physical Stick playback/memory"
+  ],
+  "provenance": {
+    "sidecar": "audio\\x3\\effects\\raw\\ability-scrambler.mp3.json",
+    "sourceSha256": "4da8615a915308c5a377ca48d1b635741e54718ed9d01ea3b69d0418c037532f",
+    "generatedAt": "2026-10-02T21:39:14.172Z",
+    "request": {
+      "text": "Crude electrical canister activates: initial metal tumble, gritty irregular electrical sputter, brief tearing static and stop. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.",
+      "duration_seconds": 1,
+      "prompt_influence": 0.7,
+      "model_id": "eleven_text_to_sound_v2",
+      "loop": false
+    },
+    "budgetCharge": 100,
+    "providerCredits": 10,
+    "session": "x3-2026-10-02",
+    "reused": false
+  },
+  "raw": {
+    "file": "audio/x3/effects/raw/ability-scrambler.mp3",
+    "sha256": "4da8615a915308c5a377ca48d1b635741e54718ed9d01ea3b69d0418c037532f",
+    "bytes": 17180,
+    "status": "fail",
+    "checks": {
+      "decode": true,
+      "duration": true,
+      "loudness": false,
+      "truePeak": false,
+      "silence": true,
+      "clipping": false
+    },
+    "failures": [
+      "loudness",
+      "truePeak",
+      "clipping"
+    ],
+    "durationSeconds": 1.0,
+    "durationWindowSeconds": [
+      0.85,
+      1.15
+    ],
+    "sampleRate": 44100,
+    "channels": 2,
+    "decodedFrames": 44100,
+    "decodedBytes": 176400,
+    "integratedLufs": -13.93,
+    "truePeakDbtp": 1.19,
+    "loudnessRangeLu": 0.0,
+    "loudnessTargetLufs": -20,
+    "loudnessToleranceLu": 2,
+    "meterPaddingFrames": 0,
+    "fullScaleSampleCount": 9,
+    "silence": {
+      "thresholdDbfs": -50,
+      "minimumIntervalSeconds": 0.1,
+      "intervalsFrames": [
+        [
+          36181,
+          44100
+        ]
+      ],
+      "fraction": 0.17956916099773243,
+      "longestInteriorSeconds": 0
+    },
+    "loopSeam": {
+      "status": "not applicable",
+      "reason": "one-shot or full song"
+    },
+    "loopBoundary": null
+  },
+  "edit": {
+    "operation": "mono resample, DC removal, -45 dBFS edge trim with 10 ms margin, 3 ms edge fades",
+    "startFrame": 408,
+    "endFrameExclusive": 18137,
+    "rate": 22050,
+    "rivetFirstOnsetOnly": false
+  },
+  "normalization": {
+    "operation": "measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling",
+    "softLimited": false,
+    "gain": 0.5552646171195635,
+    "credits": 0
+  },
+  "edited": {
+    "file": "audio/x3/effects/first-pass/edited/ability-scrambler.wav",
+    "sha256": "6fae6901bd6d5b8342fbfa3873c753ad307900112c6422c328b3ace285ee0490",
+    "bytes": 35536,
+    "status": "pass",
+    "checks": {
+      "decode": true,
+      "duration": true,
+      "loudness": true,
+      "truePeak": true,
+      "silence": true,
+      "clipping": true
+    },
+    "failures": [],
+    "durationSeconds": 0.8040362811791383,
+    "durationWindowSeconds": [
+      0.8020362811791383,
+      0.8060362811791383
+    ],
+    "sampleRate": 22050,
+    "channels": 1,
+    "decodedFrames": 17729,
+    "decodedBytes": 35458,
+    "integratedLufs": -19.99,
+    "truePeakDbtp": -2.98,
+    "loudnessRangeLu": 0.0,
+    "loudnessTargetLufs": -20,
+    "loudnessToleranceLu": 2,
+    "meterPaddingFrames": 0,
+    "fullScaleSampleCount": 0,
+    "silence": {
+      "thresholdDbfs": -50,
+      "minimumIntervalSeconds": 0.1,
+      "intervalsFrames": [],
+      "fraction": 0.0,
+      "longestInteriorSeconds": 0
+    },
+    "loopSeam": {
+      "status": "not applicable",
+      "reason": "one-shot or full song"
+    },
+    "loopBoundary": null
+  },
+  "status": "pass",
+  "sourceDefects": [
+    "loudness",
+    "truePeak",
+    "clipping"
+  ]
+}

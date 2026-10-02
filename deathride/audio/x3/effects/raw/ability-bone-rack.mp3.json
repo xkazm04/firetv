@@ -1,0 +1,32 @@
+{
+  "id": "c35e6cbf-42a0-4b22-a263-fad0993a50b4",
+  "ts": "2026-10-02T21:39:04.263Z",
+  "session": "x3-2026-10-02",
+  "status": "complete",
+  "kind": "sfx",
+  "out": "audio/x3/effects/raw/ability-bone-rack.mp3",
+  "seconds": 1,
+  "request": {
+    "text": "Steel spike rack extends: loaded rails scrape, loose spikes chatter, final hard lock. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.",
+    "duration_seconds": 1,
+    "prompt_influence": 0.7,
+    "model_id": "eleven_text_to_sound_v2",
+    "loop": false
+  },
+  "endpoint": "/v1/sound-generation",
+  "format": "mp3_44100_128",
+  "estimatedCredits": 100,
+  "budgetCharge": 100,
+  "creditsBefore": 24343,
+  "accountTier": "starter",
+  "reserve": 8000,
+  "sessionCap": 9000,
+  "bytes": 17180,
+  "providerCredits": 10,
+  "sha256": "e1eb1d88b0225ca4a32aca3491a340527eed37051fcdb82807e41fe5da1b3e7d",
+  "completedAt": "2026-10-02T21:39:10.699Z",
+  "creditsAfter": 24343,
+  "observedAccountDelta": 0,
+  "spendBasis": "Provider character-cost response header; account delta separately reported.",
+  "sessionBudgetUsed": 3140
+}

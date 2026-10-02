@@ -1,0 +1,146 @@
+{
+  "id": "pickup-ammo",
+  "cue": "pickup.ammo",
+  "category": "sfx",
+  "loop": false,
+  "measuredAt": "2026-10-02T21:40:41.706580+00:00",
+  "ownerStatus": "listening pending",
+  "notMeasured": [
+    "semantic fidelity",
+    "owner preference",
+    "in-game masking/latency",
+    "physical Stick playback/memory"
+  ],
+  "provenance": {
+    "sidecar": "audio\\x3\\effects\\raw\\pickup-ammo.mp3.json",
+    "sourceSha256": "e67c714ca3a1b9037176db728cd4acf8887059b101ed6f0205909c2591387236",
+    "generatedAt": "2026-10-02T21:35:28.920Z",
+    "request": {
+      "text": "One ammunition collection: crisp rack latch, a short dry stack of steel cartridges seating, quick tactile stop. Dry exposed scrap metal and dusty mechanical foley, light space. Original isolated effect; no coin, beep, music or voice.",
+      "duration_seconds": 0.6,
+      "prompt_influence": 0.7,
+      "model_id": "eleven_text_to_sound_v2",
+      "loop": false
+    },
+    "budgetCharge": 100,
+    "providerCredits": 6,
+    "session": "x3-2026-10-02",
+    "reused": false
+  },
+  "raw": {
+    "file": "audio/x3/effects/raw/pickup-ammo.mp3",
+    "sha256": "e67c714ca3a1b9037176db728cd4acf8887059b101ed6f0205909c2591387236",
+    "bytes": 10493,
+    "status": "fail",
+    "checks": {
+      "decode": true,
+      "duration": true,
+      "loudness": false,
+      "truePeak": false,
+      "silence": false,
+      "clipping": false
+    },
+    "failures": [
+      "loudness",
+      "truePeak",
+      "silence",
+      "clipping"
+    ],
+    "durationSeconds": 0.6,
+    "durationWindowSeconds": [
+      0.44999999999999996,
+      0.75
+    ],
+    "sampleRate": 44100,
+    "channels": 2,
+    "decodedFrames": 26460,
+    "decodedBytes": 105840,
+    "integratedLufs": -15.65,
+    "truePeakDbtp": 0.56,
+    "loudnessRangeLu": 0.0,
+    "loudnessTargetLufs": -20,
+    "loudnessToleranceLu": 2,
+    "meterPaddingFrames": 0,
+    "fullScaleSampleCount": 3,
+    "silence": {
+      "thresholdDbfs": -50,
+      "minimumIntervalSeconds": 0.1,
+      "intervalsFrames": [
+        [
+          16238,
+          26460
+        ]
+      ],
+      "fraction": 0.38631897203325777,
+      "longestInteriorSeconds": 0
+    },
+    "loopSeam": {
+      "status": "not applicable",
+      "reason": "one-shot or full song"
+    },
+    "loopBoundary": null
+  },
+  "edit": {
+    "operation": "mono resample, DC removal, -45 dBFS edge trim with 10 ms margin, 3 ms edge fades",
+    "startFrame": 0,
+    "endFrameExclusive": 7962,
+    "rate": 22050,
+    "rivetFirstOnsetOnly": false
+  },
+  "normalization": {
+    "operation": "measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling",
+    "softLimited": false,
+    "gain": 0.6645076729077795,
+    "credits": 0
+  },
+  "edited": {
+    "file": "audio/x3/effects/first-pass/edited/pickup-ammo.wav",
+    "sha256": "a3847a4bced27f57d4ee3e7b1b81f0a9ae5cf3c6c33820478ead736501cb6e83",
+    "bytes": 16002,
+    "status": "pass",
+    "checks": {
+      "decode": true,
+      "duration": true,
+      "loudness": true,
+      "truePeak": true,
+      "silence": true,
+      "clipping": true
+    },
+    "failures": [],
+    "durationSeconds": 0.36108843537414964,
+    "durationWindowSeconds": [
+      0.35908843537414964,
+      0.36308843537414964
+    ],
+    "sampleRate": 22050,
+    "channels": 1,
+    "decodedFrames": 7962,
+    "decodedBytes": 15924,
+    "integratedLufs": -19.95,
+    "truePeakDbtp": -2.07,
+    "loudnessRangeLu": 0.0,
+    "loudnessTargetLufs": -20,
+    "loudnessToleranceLu": 2,
+    "meterPaddingFrames": 858,
+    "fullScaleSampleCount": 0,
+    "silence": {
+      "thresholdDbfs": -50,
+      "minimumIntervalSeconds": 0.1,
+      "intervalsFrames": [],
+      "fraction": 0.0,
+      "longestInteriorSeconds": 0
+    },
+    "loopSeam": {
+      "status": "not applicable",
+      "reason": "one-shot or full song"
+    },
+    "loopBoundary": null
+  },
+  "status": "pass",
+  "sourceDefects": [
+    "loudness",
+    "truePeak",
+    "silence",
+    "clipping"
+  ]
+}

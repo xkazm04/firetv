@@ -1,0 +1,32 @@
+{
+  "id": "dc6ae76e-eb63-4715-b111-659df09f5c94",
+  "ts": "2026-10-02T21:36:04.300Z",
+  "session": "x3-2026-10-02",
+  "status": "complete",
+  "kind": "sfx",
+  "out": "audio/x3/effects/raw/countdown.mp3",
+  "seconds": 0.5,
+  "request": {
+    "text": "One firm start marshal mechanism knock: solid iron hammer hits a damped steel plate, weighty compact knock with tiny decay. Only one hit. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.",
+    "duration_seconds": 0.5,
+    "prompt_influence": 0.7,
+    "model_id": "eleven_text_to_sound_v2",
+    "loop": false
+  },
+  "endpoint": "/v1/sound-generation",
+  "format": "mp3_44100_128",
+  "estimatedCredits": 100,
+  "budgetCharge": 100,
+  "creditsBefore": 24505,
+  "accountTier": "starter",
+  "reserve": 8000,
+  "sessionCap": 9000,
+  "bytes": 8821,
+  "providerCredits": 5,
+  "sha256": "ad3e24e8d3687b268a157c815c139036cb889822c823543d778b5860e46e9d60",
+  "completedAt": "2026-10-02T21:36:09.656Z",
+  "creditsAfter": 24505,
+  "observedAccountDelta": 0,
+  "spendBasis": "Provider character-cost response header; account delta separately reported.",
+  "sessionBudgetUsed": 1600
+}

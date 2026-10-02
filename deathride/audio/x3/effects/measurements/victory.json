@@ -1,0 +1,145 @@
+{
+  "id": "victory",
+  "cue": "race.victory",
+  "category": "sfx",
+  "loop": false,
+  "measuredAt": "2026-10-02T21:43:39.958426+00:00",
+  "ownerStatus": "listening pending",
+  "notMeasured": [
+    "semantic fidelity",
+    "owner preference",
+    "in-game masking/latency",
+    "physical Stick playback/memory"
+  ],
+  "provenance": {
+    "sidecar": "audio\\x3\\effects\\raw\\victory.mp3.json",
+    "sourceSha256": "fed49fc4dd0f4a79bab5b03e35d67346c554a83de723a02d7e8cbb33f825bce9",
+    "generatedAt": "2026-10-02T21:36:38.503Z",
+    "request": {
+      "text": "Short victory punctuation made of junkyard percussion: low drum strike, rising three metal hits, strong final anvil accent, brief ringing resolution. Three seconds, original nonmelodic sting. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.",
+      "duration_seconds": 3,
+      "prompt_influence": 0.7,
+      "model_id": "eleven_text_to_sound_v2",
+      "loop": false
+    },
+    "budgetCharge": 120,
+    "providerCredits": 30,
+    "session": "x3-2026-10-02",
+    "reused": false
+  },
+  "raw": {
+    "file": "audio/x3/effects/raw/victory.mp3",
+    "sha256": "fed49fc4dd0f4a79bab5b03e35d67346c554a83de723a02d7e8cbb33f825bce9",
+    "bytes": 48945,
+    "status": "fail",
+    "checks": {
+      "decode": true,
+      "duration": true,
+      "loudness": true,
+      "truePeak": false,
+      "silence": true,
+      "clipping": true
+    },
+    "failures": [
+      "truePeak"
+    ],
+    "durationSeconds": 3.0,
+    "durationWindowSeconds": [
+      2.85,
+      3.15
+    ],
+    "sampleRate": 44100,
+    "channels": 2,
+    "decodedFrames": 132300,
+    "decodedBytes": 529200,
+    "integratedLufs": -18.52,
+    "truePeakDbtp": -0.27,
+    "loudnessRangeLu": 3.1,
+    "loudnessTargetLufs": -20,
+    "loudnessToleranceLu": 2,
+    "meterPaddingFrames": 0,
+    "fullScaleSampleCount": 0,
+    "silence": {
+      "thresholdDbfs": -50,
+      "minimumIntervalSeconds": 0.1,
+      "intervalsFrames": [
+        [
+          101794,
+          106520
+        ],
+        [
+          106549,
+          132295
+        ]
+      ],
+      "fraction": 0.23032501889644746,
+      "longestInteriorSeconds": 0.1071655328798186
+    },
+    "loopSeam": {
+      "status": "not applicable",
+      "reason": "one-shot or full song"
+    },
+    "loopBoundary": null
+  },
+  "edit": {
+    "operation": "mono resample, -45 dBFS edge trim with 10 ms margin, 3 ms edge fades; preserve zero tails (no whole-file DC subtraction)",
+    "startFrame": 0,
+    "endFrameExclusive": 45849,
+    "rate": 22050,
+    "rivetFirstOnsetOnly": false
+  },
+  "normalization": {
+    "operation": "measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling",
+    "softLimited": false,
+    "additionalCrestCompressionPasses": 0,
+    "gain": 0.7709034690644301,
+    "credits": 0
+  },
+  "edited": {
+    "file": "audio/x3/effects/edited/victory.wav",
+    "sha256": "b2bb7beadcc71986f8bc09adc1d924e2be2fd42134ccffc81e944c8ef6764be3",
+    "bytes": 91776,
+    "status": "pass",
+    "checks": {
+      "decode": true,
+      "duration": true,
+      "loudness": true,
+      "truePeak": true,
+      "silence": true,
+      "clipping": true
+    },
+    "failures": [],
+    "durationSeconds": 2.0793197278911566,
+    "durationWindowSeconds": [
+      2.077319727891157,
+      2.0813197278911564
+    ],
+    "sampleRate": 22050,
+    "channels": 1,
+    "decodedFrames": 45849,
+    "decodedBytes": 91698,
+    "integratedLufs": -20.24,
+    "truePeakDbtp": -2.0,
+    "loudnessRangeLu": 0.0,
+    "loudnessTargetLufs": -20,
+    "loudnessToleranceLu": 2,
+    "meterPaddingFrames": 0,
+    "fullScaleSampleCount": 0,
+    "silence": {
+      "thresholdDbfs": -50,
+      "minimumIntervalSeconds": 0.1,
+      "intervalsFrames": [],
+      "fraction": 0.0,
+      "longestInteriorSeconds": 0
+    },
+    "loopSeam": {
+      "status": "not applicable",
+      "reason": "one-shot or full song"
+    },
+    "loopBoundary": null
+  },
+  "status": "pass",
+  "sourceDefects": [
+    "truePeak"
+  ]
+}

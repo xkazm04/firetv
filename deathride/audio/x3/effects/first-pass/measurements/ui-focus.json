@@ -1,0 +1,146 @@
+{
+  "id": "ui-focus",
+  "cue": "ui.focus",
+  "category": "sfx",
+  "loop": false,
+  "measuredAt": "2026-10-02T21:40:44.762104+00:00",
+  "ownerStatus": "listening pending",
+  "notMeasured": [
+    "semantic fidelity",
+    "owner preference",
+    "in-game masking/latency",
+    "physical Stick playback/memory"
+  ],
+  "provenance": {
+    "sidecar": "audio\\x3\\effects\\raw\\ui-focus.mp3.json",
+    "sourceSha256": "306cc8c1f9c65f253e7e9b275f4fe5f713b6d631dca74ea9bc702d49bbfd8e28",
+    "generatedAt": "2026-10-02T21:37:04.514Z",
+    "request": {
+      "text": "One small worn switch tooth catches: quiet precise click, tiny damped body and immediate release. Dry intimate worn mechanisms, felt-damped steel, restrained dark resonance. Original isolated effect; no beep, music or voice.",
+      "duration_seconds": 0.5,
+      "prompt_influence": 0.7,
+      "model_id": "eleven_text_to_sound_v2",
+      "loop": false
+    },
+    "budgetCharge": 100,
+    "providerCredits": 5,
+    "session": "x3-2026-10-02",
+    "reused": false
+  },
+  "raw": {
+    "file": "audio/x3/effects/raw/ui-focus.mp3",
+    "sha256": "306cc8c1f9c65f253e7e9b275f4fe5f713b6d631dca74ea9bc702d49bbfd8e28",
+    "bytes": 8821,
+    "status": "fail",
+    "checks": {
+      "decode": true,
+      "duration": true,
+      "loudness": false,
+      "truePeak": false,
+      "silence": false,
+      "clipping": true
+    },
+    "failures": [
+      "loudness",
+      "truePeak",
+      "silence"
+    ],
+    "durationSeconds": 0.48,
+    "durationWindowSeconds": [
+      0.35,
+      0.65
+    ],
+    "sampleRate": 44100,
+    "channels": 2,
+    "decodedFrames": 21168,
+    "decodedBytes": 84672,
+    "integratedLufs": -22.05,
+    "truePeakDbtp": -0.06,
+    "loudnessRangeLu": 0.0,
+    "loudnessTargetLufs": -20,
+    "loudnessToleranceLu": 2,
+    "meterPaddingFrames": 0,
+    "fullScaleSampleCount": 0,
+    "silence": {
+      "thresholdDbfs": -50,
+      "minimumIntervalSeconds": 0.1,
+      "intervalsFrames": [
+        [
+          2594,
+          21168
+        ]
+      ],
+      "fraction": 0.8774565381708239,
+      "longestInteriorSeconds": 0
+    },
+    "loopSeam": {
+      "status": "not applicable",
+      "reason": "one-shot or full song"
+    },
+    "loopBoundary": null
+  },
+  "edit": {
+    "operation": "mono resample, DC removal, -45 dBFS edge trim with 10 ms margin, 3 ms edge fades",
+    "startFrame": 0,
+    "endFrameExclusive": 1513,
+    "rate": 22050,
+    "rivetFirstOnsetOnly": false
+  },
+  "normalization": {
+    "operation": "measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling",
+    "softLimited": true,
+    "gain": 1.0256519262514077,
+    "credits": 0
+  },
+  "edited": {
+    "file": "audio/x3/effects/first-pass/edited/ui-focus.wav",
+    "sha256": "a31cffa12a6295222f843b8b346b754458c57acacbceda0a3867fc8c38241bac",
+    "bytes": 3104,
+    "status": "fail",
+    "checks": {
+      "decode": true,
+      "duration": true,
+      "loudness": false,
+      "truePeak": true,
+      "silence": true,
+      "clipping": true
+    },
+    "failures": [
+      "loudness"
+    ],
+    "durationSeconds": 0.06861678004535147,
+    "durationWindowSeconds": [
+      0.06661678004535147,
+      0.07061678004535148
+    ],
+    "sampleRate": 22050,
+    "channels": 1,
+    "decodedFrames": 1513,
+    "decodedBytes": 3026,
+    "integratedLufs": -23.85,
+    "truePeakDbtp": -2.0,
+    "loudnessRangeLu": 0.0,
+    "loudnessTargetLufs": -20,
+    "loudnessToleranceLu": 2,
+    "meterPaddingFrames": 7307,
+    "fullScaleSampleCount": 0,
+    "silence": {
+      "thresholdDbfs": -50,
+      "minimumIntervalSeconds": 0.1,
+      "intervalsFrames": [],
+      "fraction": 0.0,
+      "longestInteriorSeconds": 0
+    },
+    "loopSeam": {
+      "status": "not applicable",
+      "reason": "one-shot or full song"
+    },
+    "loopBoundary": null
+  },
+  "status": "fail",
+  "sourceDefects": [
+    "loudness",
+    "truePeak",
+    "silence"
+  ]
+}

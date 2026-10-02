@@ -1,0 +1,32 @@
+{
+  "id": "70d7d2da-df56-433f-8672-22c630ff7379",
+  "ts": "2026-10-02T21:37:04.514Z",
+  "session": "x3-2026-10-02",
+  "status": "complete",
+  "kind": "sfx",
+  "out": "audio/x3/effects/raw/ui-focus.mp3",
+  "seconds": 0.5,
+  "request": {
+    "text": "One small worn switch tooth catches: quiet precise click, tiny damped body and immediate release. Dry intimate worn mechanisms, felt-damped steel, restrained dark resonance. Original isolated effect; no beep, music or voice.",
+    "duration_seconds": 0.5,
+    "prompt_influence": 0.7,
+    "model_id": "eleven_text_to_sound_v2",
+    "loop": false
+  },
+  "endpoint": "/v1/sound-generation",
+  "format": "mp3_44100_128",
+  "estimatedCredits": 100,
+  "budgetCharge": 100,
+  "creditsBefore": 24473,
+  "accountTier": "starter",
+  "reserve": 8000,
+  "sessionCap": 9000,
+  "bytes": 8821,
+  "providerCredits": 5,
+  "sha256": "306cc8c1f9c65f253e7e9b275f4fe5f713b6d631dca74ea9bc702d49bbfd8e28",
+  "completedAt": "2026-10-02T21:37:09.460Z",
+  "creditsAfter": 24473,
+  "observedAccountDelta": 0,
+  "spendBasis": "Provider character-cost response header; account delta separately reported.",
+  "sessionBudgetUsed": 2140
+}

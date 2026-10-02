@@ -1,0 +1,145 @@
+{
+  "id": "ability-arc-harpoon",
+  "cue": "ability.arc-harpoon",
+  "category": "sfx",
+  "loop": false,
+  "measuredAt": "2026-10-02T21:43:46.551305+00:00",
+  "ownerStatus": "listening pending",
+  "notMeasured": [
+    "semantic fidelity",
+    "owner preference",
+    "in-game masking/latency",
+    "physical Stick playback/memory"
+  ],
+  "provenance": {
+    "sidecar": "audio\\x3\\effects\\raw\\ability-arc-harpoon.mp3.json",
+    "sourceSha256": "66b974706a5a4a31b2e686cd01694e28e9a5e3fbfcacef1a9858b4ee3c4a1042",
+    "generatedAt": "2026-10-02T21:39:27.685Z",
+    "request": {
+      "text": "Tensioned cable spool winds hard: ratchet strain, sharp cable zip and a short rough electrical arc crack. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.",
+      "duration_seconds": 1,
+      "prompt_influence": 0.7,
+      "model_id": "eleven_text_to_sound_v2",
+      "loop": false
+    },
+    "budgetCharge": 100,
+    "providerCredits": 10,
+    "session": "x3-2026-10-02",
+    "reused": false
+  },
+  "raw": {
+    "file": "audio/x3/effects/raw/ability-arc-harpoon.mp3",
+    "sha256": "66b974706a5a4a31b2e686cd01694e28e9a5e3fbfcacef1a9858b4ee3c4a1042",
+    "bytes": 17180,
+    "status": "fail",
+    "checks": {
+      "decode": true,
+      "duration": true,
+      "loudness": false,
+      "truePeak": false,
+      "silence": true,
+      "clipping": false
+    },
+    "failures": [
+      "loudness",
+      "truePeak",
+      "clipping"
+    ],
+    "durationSeconds": 1.0,
+    "durationWindowSeconds": [
+      0.85,
+      1.15
+    ],
+    "sampleRate": 44100,
+    "channels": 2,
+    "decodedFrames": 44100,
+    "decodedBytes": 176400,
+    "integratedLufs": -15.64,
+    "truePeakDbtp": 0.15,
+    "loudnessRangeLu": 0.0,
+    "loudnessTargetLufs": -20,
+    "loudnessToleranceLu": 2,
+    "meterPaddingFrames": 0,
+    "fullScaleSampleCount": 2,
+    "silence": {
+      "thresholdDbfs": -50,
+      "minimumIntervalSeconds": 0.1,
+      "intervalsFrames": [
+        [
+          32423,
+          43989
+        ]
+      ],
+      "fraction": 0.2622675736961451,
+      "longestInteriorSeconds": 0
+    },
+    "loopSeam": {
+      "status": "not applicable",
+      "reason": "one-shot or full song"
+    },
+    "loopBoundary": null
+  },
+  "edit": {
+    "operation": "mono resample, -45 dBFS edge trim with 10 ms margin, 3 ms edge fades; preserve zero tails (no whole-file DC subtraction)",
+    "startFrame": 0,
+    "endFrameExclusive": 16360,
+    "rate": 22050,
+    "rivetFirstOnsetOnly": false
+  },
+  "normalization": {
+    "operation": "measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling",
+    "softLimited": false,
+    "additionalCrestCompressionPasses": 0,
+    "gain": 0.5841172070928304,
+    "credits": 0
+  },
+  "edited": {
+    "file": "audio/x3/effects/edited/ability-arc-harpoon.wav",
+    "sha256": "54d0cba0cc35e9f4d71e7a135d8d865a140d3720254980322f3f6885df1d699a",
+    "bytes": 32798,
+    "status": "pass",
+    "checks": {
+      "decode": true,
+      "duration": true,
+      "loudness": true,
+      "truePeak": true,
+      "silence": true,
+      "clipping": true
+    },
+    "failures": [],
+    "durationSeconds": 0.7419501133786848,
+    "durationWindowSeconds": [
+      0.7399501133786848,
+      0.7439501133786848
+    ],
+    "sampleRate": 22050,
+    "channels": 1,
+    "decodedFrames": 16360,
+    "decodedBytes": 32720,
+    "integratedLufs": -20.01,
+    "truePeakDbtp": -3.52,
+    "loudnessRangeLu": 0.0,
+    "loudnessTargetLufs": -20,
+    "loudnessToleranceLu": 2,
+    "meterPaddingFrames": 0,
+    "fullScaleSampleCount": 0,
+    "silence": {
+      "thresholdDbfs": -50,
+      "minimumIntervalSeconds": 0.1,
+      "intervalsFrames": [],
+      "fraction": 0.0,
+      "longestInteriorSeconds": 0
+    },
+    "loopSeam": {
+      "status": "not applicable",
+      "reason": "one-shot or full song"
+    },
+    "loopBoundary": null
+  },
+  "status": "pass",
+  "sourceDefects": [
+    "loudness",
+    "truePeak",
+    "clipping"
+  ]
+}
