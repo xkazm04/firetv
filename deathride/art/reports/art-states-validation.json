@@ -1,0 +1,40 @@
+{
+  "at": "2026-10-02T19:45:43.598117+00:00",
+  "status": "pass",
+  "portable_hash_checks": 482,
+  "new_current_frames": 28,
+  "new_derived_attempts": 48,
+  "reference_baselines": 1,
+  "packed_frames": 70,
+  "bundle": {
+    "status": "pass",
+    "atlas_groups": [
+      "autotile-barrier",
+      "autotile-track-edge",
+      "cars",
+      "ui",
+      "world"
+    ],
+    "regions": 262,
+    "logical_assets": 158,
+    "tile_pages": 11,
+    "theme_pages": 5,
+    "content_coverage": {
+      "rivals": 5,
+      "track-themes": 5,
+      "weapons": 4,
+      "consumables": 4,
+      "provisional_rivals": 1
+    },
+    "resident_mib_with_car_reserve": 31.25,
+    "scope": "PNG, hash, packing, content ID coverage, 47-case art, 256-mask resolver, six-frame durations and declared residency; no renderer/gameplay/owner claim"
+  },
+  "budget": {
+    "week": "2026-W40",
+    "images_reserved": 482,
+    "remaining": 68,
+    "videos": 0,
+    "stop": null
+  },
+  "scope": "Exact owner sources, two semantic and paired local observations, proof-before-siblings, bounded calls, portable pixels, lossless packing, complete registered families and declared residency. No human calibration or device-performance claim."
+}

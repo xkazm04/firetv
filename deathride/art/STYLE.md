@@ -2,6 +2,8 @@
 
 ## Part 2 executable choice
 
+Current approval update, 2026-10-02: OWNER-CHOICE.md section E and the canonical ledger now approve the four reworked exact references, completing all ten car reference approvals. ART STATES derives their families using the unchanged fusion style bytes. Historical checkpoint statements below about blocked references describe earlier stages.
+
 The owner chose the family fusion in `OWNER-CHOICE.md`. `style-fusion.json` and `FUSION-BRIDGE.md` implement it; `owner-choice-binding.json` binds the unchanged owner prose and exact fusion bytes. Each prompt resolves one parent direction plus the same bridge verbatim. Cars/ground/surfaces use Rust and Ink; portraits/barriers use Soot Pulp; icons/effects use Hot Ink. Host assignments: props/landmarks/decals use Rust and Ink, backdrops use Soot Pulp, pickups/HUD frames use Hot Ink. Source cards remain immutable. Bleached Poster and Scrap Collage remain historical comparisons only.
 
 The selected stack is `seeded-decals-tall-props-baked-natural-bands`: deterministic marks, sparse tall silhouettes with separate renderer shadows, and irregular material edges baked once per course. No drawn road outlines. Natural obstacles carry footprint and drag/solid/none metadata for a later core hook; this art run does not alter physics. Part 3 records exact owner reference approvals for Line, Bastion, Trail, Flint, Vandal and Bulwark from the 2026-10-02 Section C review. Only their source-bound damage/livery jobs may pass the reference gate; Needle, Comet, Quill and Kestrel remain blocked pending approval of their reworks. The following choice-stage text describes the preserved earlier experiment, not a remaining prerequisite.

@@ -1,0 +1,213 @@
+{
+  "schema": 1,
+  "bundle": "phase2-states",
+  "published_at": "2026-10-02T19:38:01.892125+00:00",
+  "truth": "Owner-approved exact car references with technically selected derived frames; derivative owner review pending.",
+  "pages": [
+    {
+      "file": "world-0.png",
+      "sha256": "76d659798513e6df3c1c9585556fcf1fac1f5b3da360b738707818e621416c24",
+      "width": 1024,
+      "height": 1024,
+      "rgba_bytes": 4194304
+    },
+    {
+      "file": "autotile-track-edge-0.png",
+      "sha256": "983384e90640093d6032ba722794c0c53c3d26e1df4084a0c8aa6b646a6eab8e",
+      "width": 1024,
+      "height": 1024,
+      "rgba_bytes": 4194304
+    },
+    {
+      "file": "autotile-barrier-0.png",
+      "sha256": "d6be1c88abf74e4796acb8ffcfc4fec16331657753f672dee7277ae90e7dd54f",
+      "width": 1024,
+      "height": 1024,
+      "rgba_bytes": 4194304
+    },
+    {
+      "file": "ui-0.png",
+      "sha256": "1557b15cc865e9b7db8bb7229eebde5735d5677fee9a8af763baaf0b44911c61",
+      "width": 1024,
+      "height": 1024,
+      "rgba_bytes": 4194304
+    },
+    {
+      "file": "cars-0.png",
+      "sha256": "99ad8e7ab089a8cf7ff7b3aa53bdcd64e3d37ed25b7e82676b976945f8097d14",
+      "width": 1024,
+      "height": 1024,
+      "rgba_bytes": 4194304
+    },
+    {
+      "file": "cars-1.png",
+      "sha256": "aed1579f3c173ec605a329d9354ea522887aa7eee0715a4d086562d1adf61e94",
+      "width": 1024,
+      "height": 1024,
+      "rgba_bytes": 4194304
+    }
+  ],
+  "tiles": [
+    {
+      "file": "v4-fusion-surfaces-asphalt-worn-v1.png",
+      "id": "v4-fusion-surfaces-asphalt-worn-v1",
+      "sha256": "c97c0bf50f438de1937618282ba676ae0c70fa996f1b75b6345cdb868d026c82",
+      "width": 256,
+      "height": 256,
+      "rgba_bytes": 262144,
+      "wrap": "Repeat"
+    },
+    {
+      "file": "v4-fusion-surfaces-asphalt-heavy-v1.png",
+      "id": "v4-fusion-surfaces-asphalt-heavy-v1",
+      "sha256": "845eab47a1bfa71a1ef67b35f436de48c92b69a01726b6934e14ffb16e78afff",
+      "width": 256,
+      "height": 256,
+      "rgba_bytes": 262144,
+      "wrap": "Repeat"
+    },
+    {
+      "file": "v4-fusion-surfaces-concrete-v1.png",
+      "id": "v4-fusion-surfaces-concrete-v1",
+      "sha256": "462c79ac455e24088f9b2b4735bc8c48dc4fb4560e2ff23391ae3736663ba911",
+      "width": 256,
+      "height": 256,
+      "rgba_bytes": 262144,
+      "wrap": "Repeat"
+    },
+    {
+      "file": "v4-fusion-surfaces-metal-crop768-v1.png",
+      "id": "v4-fusion-surfaces-metal-crop768-v1",
+      "sha256": "0bfed30b6576db58728d7994cbe1e600b28ca7ed89ea124684062d5690a89dc2",
+      "width": 256,
+      "height": 256,
+      "rgba_bytes": 262144,
+      "wrap": "Repeat"
+    },
+    {
+      "file": "v4-fusion-surfaces-asphalt-clean-crop768-v1.png",
+      "id": "v4-fusion-surfaces-asphalt-clean-crop768-v1",
+      "sha256": "c7614be2e8b4cde0847f19686b606fd0b3d3f72b6af45f894ad8578f2cb94178",
+      "width": 256,
+      "height": 256,
+      "rgba_bytes": 262144,
+      "wrap": "Repeat"
+    },
+    {
+      "file": "v4-fusion-surfaces-ice-crop768-v1.png",
+      "id": "v4-fusion-surfaces-ice-crop768-v1",
+      "sha256": "cb4bc0511c512e4268da7f194d4b2a24b5c025c7522de5d2c7d2bd6821059a96",
+      "width": 256,
+      "height": 256,
+      "rgba_bytes": 262144,
+      "wrap": "Repeat"
+    },
+    {
+      "file": "v4-fusion-surfaces-oil-v1.png",
+      "id": "v4-fusion-surfaces-oil-v1",
+      "sha256": "7569f3871a32d20be84c2e3cf1a7316ab2f2d8043b1fbf8991b07044c50fe309",
+      "width": 256,
+      "height": 256,
+      "rgba_bytes": 262144,
+      "wrap": "Repeat"
+    },
+    {
+      "file": "v4-fusion-surfaces-kerb-v1.png",
+      "id": "v4-fusion-surfaces-kerb-v1",
+      "sha256": "c890c349f062f7da6e4d500b55765f7c30328a29fbf35cd16ece0e6d9e1d4166",
+      "width": 256,
+      "height": 256,
+      "rgba_bytes": 262144,
+      "wrap": "Repeat"
+    },
+    {
+      "file": "v4-fusion-ground-grass-v1.png",
+      "id": "v4-fusion-ground-grass-v1",
+      "sha256": "22a9cb593ca96c18f468a01794ce0b49ad781cf7f57ec03fa8ef99bb14b0c743",
+      "width": 256,
+      "height": 256,
+      "rgba_bytes": 262144,
+      "wrap": "Repeat"
+    },
+    {
+      "file": "v4-fusion-ground-dirt-v1.png",
+      "id": "v4-fusion-ground-dirt-v1",
+      "sha256": "1f8d60285693b40dc939ed8eed5d0d0e0382630420a2789a25e653e4e31df3c1",
+      "width": 256,
+      "height": 256,
+      "rgba_bytes": 262144,
+      "wrap": "Repeat"
+    },
+    {
+      "file": "v4-fusion-ground-gravel-v1-wrap-v1.png",
+      "id": "v4-fusion-ground-gravel-v1-wrap-v1",
+      "sha256": "d9540f8f0edcbda0aab615ba8a22d69565772d0379f09ce439f20c08e19b5c5d",
+      "width": 256,
+      "height": 256,
+      "rgba_bytes": 262144,
+      "wrap": "Repeat"
+    }
+  ],
+  "themes": [
+    {
+      "file": "v4-fusion-backdrops-industrial-v1.png",
+      "id": "v4-fusion-backdrops-industrial-v1",
+      "sha256": "7b6fdbad858478c9cb667de32933e207d84d403df2ab7666035c9528a64e2aec",
+      "width": 1024,
+      "height": 1024,
+      "rgba_bytes": 4194304,
+      "wrap": "ClampToEdge"
+    },
+    {
+      "file": "v4-fusion-backdrops-quarry-v1.png",
+      "id": "v4-fusion-backdrops-quarry-v1",
+      "sha256": "cc24adebe61794c33a00959aebc66e642690c947437461ec2b4f618a7bd1b34a",
+      "width": 1024,
+      "height": 1024,
+      "rgba_bytes": 4194304,
+      "wrap": "ClampToEdge"
+    },
+    {
+      "file": "v4-fusion-backdrops-desert-v1.png",
+      "id": "v4-fusion-backdrops-desert-v1",
+      "sha256": "435db62cade82a661ca3f4a80080d98be8986d7bceee9dff7ac20cbc7d5dbe23",
+      "width": 1024,
+      "height": 1024,
+      "rgba_bytes": 4194304,
+      "wrap": "ClampToEdge"
+    },
+    {
+      "file": "v4-fusion-backdrops-wetland-v1.png",
+      "id": "v4-fusion-backdrops-wetland-v1",
+      "sha256": "dcd3a0dc2ea7a41e3f2a81d2943033ec85512ffdf9aed99bbece0536602d1bf5",
+      "width": 1024,
+      "height": 1024,
+      "rgba_bytes": 4194304,
+      "wrap": "ClampToEdge"
+    },
+    {
+      "file": "v4-fusion-backdrops-alpine-v1.png",
+      "id": "v4-fusion-backdrops-alpine-v1",
+      "sha256": "dde9a11e7320ab178dda0a61944c00f8bc4bcfccd5d5aeb77178f54bcd3aea17",
+      "width": 1024,
+      "height": 1024,
+      "rgba_bytes": 4194304,
+      "wrap": "ClampToEdge"
+    }
+  ],
+  "ribbons": [
+    {
+      "file": "course-ribbon.png",
+      "sha256": "e4f5673d88f4828a38a28b8edc76580dcb087e125612aa1e7815aca220ded816",
+      "width": 512,
+      "height": 256,
+      "rgba_bytes": 524288,
+      "wrap": "Repeat longitudinal / ClampToEdge transverse",
+      "recipe_manifest_sha256": "fb05f2f00c6b928fd27880d1a78c7f7de0c07ee72b6b9555bbcbd2ee0295b2e2"
+    }
+  ],
+  "cars_reserved_rgba_bytes": 0,
+  "resident_rgba_bytes_with_reserved_cars": 32768000,
+  "resident_policy": "All world/UI/autotile/material/ribbon pages + one backdrop + two car pages; car reserve consumed, never double counted. Game scenery/fonts excluded.",
+  "cpu_course_vertex_bytes": 28800
+}

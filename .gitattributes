@@ -20,6 +20,7 @@ deathride/tools/art/fusion*.py -text whitespace=blank-at-eol,blank-at-eof,space-
 deathride/tools/art/part3*.py -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
 deathride/assets/phase2-fusion/** -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
 deathride/assets/phase2-hud/** -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+deathride/assets/phase2-states/** -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
 deathride/evidence/hud/h3/** -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
 # Raw ADB readbacks retain device CR characters and aligned trailing columns.
 deathride/art/surface-lab/device/**/*.txt -whitespace

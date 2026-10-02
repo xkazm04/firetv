@@ -1,5 +1,11 @@
 # Phase 2 ART handoff
 
+Current ART STATES delivery: **`assets/phase2-states`**, preserving the active fusion HUD/world kit and adding seventy car frames on two pages. All ten exact car references are owner approved; derived frames are technical selections. The four new families have sixteen state slots and twelve liveries. Needle intact explicitly reuses the approved reference after three rejected no-op edits. [Current owner review](review/fusion/index.html) retains all attempts, native-size frames, paired identity observations and the matched control.
+
+Full declared residency stays **31.25 MiB**, consuming the existing 8 MiB car reserve. Runtime world/UI/cars/tiles use 18.75 MiB plus at most one 4 MiB backdrop. The renderer selects healthy liveries by stable seat index; damage takes priority, with procedural fallback for missing/invalid art. Forty-three art tests, required core/link/APK checks, game tests, portable bundle validation, desktop/mobile review and real desktop GL upload/draw/failure injection pass. No new Stick-performance or human-calibration claim. Spend: **49 new reservations, weekly 482/550, 68 remaining**, no quota signal. Detailed design/outcome: `docs/concepts/deathride/ART-STATES.md` from the repository root.
+
+## Historical fusion delivery
+
 Current fusion delivery: `assets/phase2-fusion`, [owner review](review/fusion/index.html), [measured Stick comparison](surface-lab/fusion-review.html). The owner family choice is bound in `style-fusion.json`; the earlier V1/V3 paragraphs below are historical evidence.
 
 Fusion contains 74 logical assets / 178 regions, four atlas pages, eleven tiles, five backdrops (one resident), six obstacle metadata definitions and a 512x256 baked natural-edge ribbon. Total declared and allocated art residency is 31.25 MiB including the 8 MiB car reserve, versus prior 30.75 MiB; added ribbon costs 0.50 MiB. New props and renderer shadow occupy spare existing cells. `art/fusion-obstacles-selected.json` binds footprint/effect-class metadata to actual selected IDs for a later core hook. The game scenery FBO remains separate.

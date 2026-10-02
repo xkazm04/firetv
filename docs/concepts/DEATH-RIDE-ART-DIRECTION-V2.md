@@ -76,6 +76,7 @@ V1 and V3 retain their historical checkpoint wording; the recorded owner choice 
 
 | Id | Status | Evidence / next gate | Commit label | Date |
 |---|---|---|---|---|
+| STATES | Four newly approved families delivered; 28 current slots, all 70 car frames packed and wired with fallback | `deathride/ART-STATES.md`; Needle intact is exact reference reuse after capped edits; 49 new images, 482/550 reserved; 43 art tests, core/link/game/APK, browser, portable and real GL checks pass; 31.25 MiB declared residency | art-states-20261002 | 2026-10-02 |
 | F1 | Owner fusion compiled by family; bridge and hash-bound prose decision implemented | `deathride/V2-part2-fusion.md`; 35 pipeline tests pass; new reference approval remains closed | art-fusion-contract-20261001 | 2026-10-01 |
 | V1 | Five style directions and 35 comparable proof slots delivered; 68 generated attempts, no owner acceptance | `deathride/art/review.html`; exact choice file absent | art-v1-choice-20261001 | 2026-10-01 |
 | V2 | Fusion ten-car/six-rival roster delivered; 13 pixel passes, three capped car rejects; owner approval pending | `art/review/fusion/index.html`; 34 attempts / 68 local observations; seventy derived jobs blocked | art-fusion-roster-20261001 | 2026-10-01 |
@@ -86,6 +87,18 @@ V1 and V3 retain their historical checkpoint wording; the recorded owner choice 
 | V2-P4 | Four reworked candidates pass unchanged gates; Comet turbine rear and Kestrel single harpoon repaired; all await owner approval | `deathride/V2-part4-cars.md`; 10 new images, 28 new local observations, native 96px before/after; 42 tests and 552 portable hash checks pass; 28 derived jobs blocked; shared ledger 433/550 | art-v2-part4-cars-20261002 | 2026-10-02 |
 
 ## g. Session log
+
+### ART STATES, 2026-10-02 — approved rework families and runtime delivery
+
+Recreated `deathride/.art-venv`, installed the pinned art requirements and passed the initial 42 tests before generation. Read OWNER-CHOICE A-E, exact approvals, fusion style/bridge, acceptance/budget and the existing pipeline. All 28 approved-reference jobs ran through the sequential guarded driver with proof-before-sibling inspection. Forty-eight derivative calls include bounded corrections; one further image is the identical-prompt Comet control. Needle intact failed three no-op edits, so its exact approved source is the explicitly recorded unchanged baseline. No fourth retry, quota recovery, threshold change or fabricated approval occurred.
+
+Twenty-eight current frames pass pixel gates, both semantic and paired identity observations, and approved pivot/cell registration. All rejected attempts remain portable. The control fails margin/aspect and shows silhouette overlap 0.545944 versus 0.988512 with conditioning; one diagnostic pair only. Quill ochre's modest colour distinction remains noted for the owner.
+
+Packed all seventy car frames, including the six prior families without regenerating them, into two pages by cropping shared transparent margins without rescaling pixels. New `phase2-states` preserves the active fusion HUD/world kit; total declared residency remains 31.25 MiB. Connected healthy liveries and damage states to the existing renderer, kept procedural fallback and preserved art aspect. Reference approval and technical selection remain distinct from derivative owner acceptance.
+
+Validation: 43 Python tests; 120 core, 3 link and 8 game tests; `:app:assembleDebug`; 482 portable hash checks plus approval/proof/spend/registration/lossless packing checks; desktop/mobile review with 57 images, 58 links and 28 native reads. Hidden desktop GL loads 168 runtime regions at 18.75 MiB, draws all seventy frames and passes missing-page, budget and invalid-car-region fallback checks. No new device soak or human calibration. Review and detailed outcome: `deathride/art/review/fusion/index.html` and `deathride/ART-STATES.md`.
+
+Spend **49 new image reservations, weekly 482/550, 68 remaining**, zero videos, stop latch clear. Full prompts/tool provenance and corrections retained. One local commit `art-states-20261002`, no push.
 
 ### V1, 2026-10-01 — five-way choice
 

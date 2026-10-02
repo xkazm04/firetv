@@ -1,5 +1,7 @@
 # Reproducible art workspace
 
+Current ART STATES entry is `review/fusion/index.html`; runtime bundle is `assets/phase2-states`. The four approved rework families add 28 current slots, including exact-reference reuse for Needle intact after capped no-op edits. `tools/art/states_pipeline.py measure` rebuilds all attempt measurements and the documented baseline; `register` restores approved pivots/cells. Grade attempt reports with `grade.py` and `part3_identity.py`, retain hash-bound direct notes, then publish with `states_review.py`. `states_bundle.py` refuses to overwrite an existing version. `fusion_portable_validate.py` and `fusion_browser.mjs` dispatch to the current validation. Targeted paid corrections use `states_refine.py` with explicit audited notes; already attempted notes do not spend again. Do not rerun generation to reproduce the committed bundle. All prompts and actual guarded Grok calls are retained in briefs/history and `audits/art-states-generation.json`.
+
 Run commands from the repository root. Install `deathride/tools/art/requirements.txt` in a dedicated Python environment if the installed packages differ. Generation uses the logged-in Grok CLI, and image grading uses local Ollama only.
 
 ```

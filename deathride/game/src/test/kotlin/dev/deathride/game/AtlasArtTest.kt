@@ -12,6 +12,31 @@ import java.io.DataOutputStream
 import java.io.EOFException
 
 class AtlasArtTest {
+    @Test fun damageSelectionHasStableBoundariesAndWreckTakesPriority() {
+        assertEquals(listOf(0,0,1,1,2,3),listOf(1f,.67f,.669f,.34f,.339f,1f).mapIndexed{i,hp->AtlasArt.carState(hp,i==5)})
+    }
+    @Test fun shippedCarFamiliesHaveSevenRegisteredRegionsAndReferenceApproval() {
+        val root=FileHandle(File("../assets/phase2-states"));val catalog=JsonReader().parse(root.child("catalog.json"))
+        val cars=catalog.get("assets").filter{it.getString("group")=="cars"}
+        val data=TextureAtlas.TextureAtlasData(root.child("cars.atlas"),root,false)
+        assertTrue(data.pages.size in 1..2)
+        val regions=data.regions.associateBy{it.name}
+        assertEquals(70,cars.size);assertEquals(70,regions.size)
+        val metadata=JsonReader().parse(root.child("cars.json")).get("regions").associateBy{it.getString("id")}
+        for(cls in dev.deathride.core.CarCatalog.all) {
+            val family=cars.filter{it.getString("car_class")==cls.id}
+            assertEquals(7,family.size,cls.id)
+            val placements=family.map {
+                assertFalse(it.getBoolean("owner_approved"));assertTrue(it.getBoolean("reference_approved"));assertTrue(it.getBoolean("technical_accepted"))
+                assertEquals(64,it.getString("reference_source_sha256").length)
+                val id=it.getString("asset_id");assertTrue(regions.containsKey(id))
+                val m=metadata.getValue(id)
+                assertEquals(regions.getValue(id).width,m.getInt("width"));assertEquals(regions.getValue(id).height,m.getInt("height"))
+                m.get("pivot_px").asFloatArray().toList() to m.get("body_bounds_px").asIntArray().toList()
+            }
+            assertEquals(1,placements.distinct().size,cls.id)
+        }
+    }
     @Test fun oversizedOrMalformedPngIsRejectedBeforePixelDecoding() {
         fun header(width: Int,height: Int): ByteArray {
             val bytes=ByteArrayOutputStream()

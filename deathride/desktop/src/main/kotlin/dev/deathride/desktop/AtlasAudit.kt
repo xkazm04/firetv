@@ -20,8 +20,10 @@ class AtlasAudit: ApplicationAdapter() {
     override fun create() {
         val prefix=System.getenv("DEATHRIDE_ATLAS_AUDIT_PREFIX")?:"i1-atlas-gl"
         val bundle=System.getenv("DEATHRIDE_ATLAS_BUNDLE")?:"phase2-v1"
-        val expectedRegions=if(bundle=="phase2-hud")98 else 78
-        val a=AtlasArt(Gdx.files.internal(bundle));check(a.failures==0 && a.regionCount==expectedRegions);check(a.textureBytes==11272192L)
+        val hasCars=bundle=="phase2-states"
+        val expectedRegions=if(hasCars)168 else if(bundle=="phase2-hud")98 else 78
+        val residentBytes=11272192L+if(hasCars)8388608L else 0L
+        val a=AtlasArt(Gdx.files.internal(bundle));check(a.failures==0 && a.regionCount==expectedRegions);check(a.textureBytes==residentBytes)
         val batch=SpriteBatch();batch.projectionMatrix=Matrix4().setToOrtho2D(0f,0f,1280f,720f)
         ScreenUtils.clear(.1f,.1f,.1f,1f);batch.begin()
         for(i in 0..5)check(a.draw(batch,"effects/explosion",120f+i*180,420f,160f,160f,seconds=listOf(.0,.05,.11,.18,.25,.35)[i]))
@@ -33,6 +35,16 @@ class AtlasAudit: ApplicationAdapter() {
             for((i,d) in dev.deathride.core.AbilityCatalog.all.withIndex())check(a.draw(batch,"hud/ability-"+d.id,70f+i*120,630f,96f,96f))
         }
         batch.end()
+        if(hasCars) {
+            ScreenUtils.clear(.1f,.1f,.1f,1f);batch.begin()
+            for((row,car) in dev.deathride.core.CarCatalog.all.withIndex())for(col in 0..6) {
+                val hp=when(col){1->.5f;2->.2f;else->1f}
+                val key=a.carKey(car.id,hp,col==3,if(col>=4)col-3 else 0)?:error("missing ${car.id} frame $col")
+                a.car(batch,key,95f+col*180,675f-row*67,155f,57f,0.0,Color.WHITE,false)
+            }
+            batch.end()
+            check(a.carKey("missing",1f,false)==null)
+        }
         if(bundle=="phase2-hud") {
             // Use actual glyph advances and the production wrapper, including the longest authored copy.
             val bodyFont=nativeFont(HudTheme.BODY);val titleFont=HandCutFont.create(HudTheme.TITLE)
@@ -54,10 +66,10 @@ class AtlasAudit: ApplicationAdapter() {
         for(y in 0 until pix.height)for(x in 0 until pix.width){val c=pix.getPixel(x,y);if((c ushr 24)>70)vivid++}
         check(vivid>10000){"uploaded atlas did not draw visible content: $vivid"}
         val output=Gdx.files.local("evidence/phase2/$prefix.png");output.parent().mkdirs();PixmapIO.writePNG(output,pix);pix.dispose()
-        a.selectBackdrop("backdrops/industrial");check(a.textureBytes==15466496L)
-        a.selectBackdrop("backdrops/alpine");check(a.textureBytes==15466496L)
-        a.selectBackdrop(null);check(a.textureBytes==11272192L)
-        check(a.carKey("Line",1f,false)==null);a.dispose()
+        a.selectBackdrop("backdrops/industrial");check(a.textureBytes==residentBytes+4194304L)
+        a.selectBackdrop("backdrops/alpine");check(a.textureBytes==residentBytes+4194304L)
+        a.selectBackdrop(null);check(a.textureBytes==residentBytes)
+        check((a.carKey("Line",1f,false)!=null)==hasCars);a.dispose()
         File("build").mkdirs()
         val temp=java.nio.file.Files.createTempDirectory(File("build").toPath(),"atlas-failure-audit-").toFile()
         val root=Gdx.files.absolute(temp.absolutePath)
@@ -81,11 +93,20 @@ class AtlasAudit: ApplicationAdapter() {
         val health=metadata.get("regions").first{it.getString("id")==healthId}
         health.remove("hud_interior_px");health.addChild("hud_interior_px",JsonReader().parse("[0,0,0,1]"))
         root.child("ui.json").writeString(metadata.toJson(JsonWriter.OutputType.json),false)
+        if(hasCars) {
+            val carMeta=JsonReader().parse(root.child("cars.json"))
+            val id=catalog.get("assets").first{it.getString("logical_name")=="cars/needle/clean"}.getString("asset_id")
+            val car=carMeta.get("regions").first{it.getString("id")==id}
+            car.remove("body_bounds_px");car.addChild("body_bounds_px",JsonReader().parse("[0,0,0,1]"))
+            root.child("cars.json").writeString(carMeta.toJson(JsonWriter.OutputType.json),false)
+        }
         val invalid=AtlasArt(root)
         check(!invalid.available("hud/frame-health") && !invalid.available("effects/muzzle"))
-        check(invalid.failures>=2 && invalid.available("pickups/repair"));invalid.dispose()
+        check(invalid.failures>=2 && invalid.available("pickups/repair"))
+        if(hasCars)check(invalid.carKey("Needle",1f,false)==null && invalid.carKey("Needle",.5f,false)!=null)
+        invalid.dispose()
         batch.dispose()
-        File("evidence/phase2/$prefix.json").writeText("""{"regions":$expectedRegions,"residentBytes":11272192,"oneBackdropBytes":4194304,"visiblePixels":$vivid,"missingCatalogFallback":true,"failedPagesFallback":true,"carApprovalFallback":true,"budgetFallback":true,"invalidMetadataFallback":true,"heading":"runtime rotation; production cars unavailable"}""")
+        File("evidence/phase2/$prefix.json").writeText("""{"regions":$expectedRegions,"residentBytes":$residentBytes,"oneBackdropBytes":4194304,"visiblePixels":$vivid,"missingCatalogFallback":true,"failedPagesFallback":true,"carApprovalFallback":true,"budgetFallback":true,"invalidMetadataFallback":true,"carFramesDrawn":${if(hasCars)70 else 0},"heading":"runtime rotation; desktop GL audit, not device performance"}""")
         Gdx.app.log("DeathRide","atlas GL audit passed visiblePixels=$vivid");Gdx.app.exit()
     }
 }

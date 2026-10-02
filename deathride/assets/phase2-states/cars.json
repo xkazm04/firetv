@@ -1,0 +1,2127 @@
+{
+  "schema": 1,
+  "group": "cars",
+  "pages": [
+    {
+      "file": "cars-0.png",
+      "sha256": "99ad8e7ab089a8cf7ff7b3aa53bdcd64e3d37ed25b7e82676b976945f8097d14",
+      "width": 1024,
+      "height": 1024,
+      "rgba_bytes": 4194304
+    },
+    {
+      "file": "cars-1.png",
+      "sha256": "aed1579f3c173ec605a329d9354ea522887aa7eee0715a4d086562d1adf61e94",
+      "width": 1024,
+      "height": 1024,
+      "rgba_bytes": 4194304
+    }
+  ],
+  "regions": [
+    {
+      "id": "v2-part3-bastion-livery-bone-v1",
+      "asset_id": "v2-part3-bastion-livery-bone-v1",
+      "sha256": "6109880ef2b95807ccd852d2e2dfd6c13b7420c8ad43e409415f6b2ff508c270",
+      "content_sha256": "83cf020eda3834648d45c4e901174b0d517ebbc00875cfb16121bc7097ead75a",
+      "width": 232,
+      "height": 152,
+      "frame_index": null,
+      "pivot_px": [
+        115.5,
+        76.0
+      ],
+      "region_in_cell": [
+        0,
+        0,
+        232,
+        152
+      ],
+      "hud_interior_px": null,
+      "page": 0,
+      "x": 0,
+      "y": 0,
+      "body_bounds_px": [
+        4,
+        9,
+        227,
+        143
+      ],
+      "registered_source_export": "art/review/fusion/pixels/v2-part3-bastion-livery-bone-v1.png"
+    },
+    {
+      "id": "v2-part3-bastion-livery-ochre-v1",
+      "asset_id": "v2-part3-bastion-livery-ochre-v1",
+      "sha256": "a477c06f5e68d6fada627c29ee8eb0c7788a693eb1ab57d7d57e07bd489c9807",
+      "content_sha256": "a606724fdcc9ecd7155aef19bd0e369180d56f90289682eb86e394c1312227be",
+      "width": 232,
+      "height": 152,
+      "frame_index": null,
+      "pivot_px": [
+        115.5,
+        76.0
+      ],
+      "region_in_cell": [
+        0,
+        0,
+        232,
+        152
+      ],
+      "hud_interior_px": null,
+      "page": 0,
+      "x": 232,
+      "y": 0,
+      "body_bounds_px": [
+        4,
+        9,
+        227,
+        143
+      ],
+      "registered_source_export": "art/review/fusion/pixels/v2-part3-bastion-livery-ochre-v1.png"
+    },
+    {
+      "id": "v2-part3-bastion-livery-red-v1",
+      "asset_id": "v2-part3-bastion-livery-red-v1",
+      "sha256": "d85ee68038612dd6e820e67e72bcfc56e55eef8f6a21cf0cf70ee9cf98888558",
+      "content_sha256": "a2a00c868826ae5ebb0d46c9662da955f9904f9d3b63edd4cd4824172032b072",
+      "width": 232,
+      "height": 152,
+      "frame_index": null,
+      "pivot_px": [
+        115.5,
+        76.0
+      ],
+      "region_in_cell": [
+        0,
+        0,
+        232,
+        152
+      ],
+      "hud_interior_px": null,
+      "page": 0,
+      "x": 464,
+      "y": 0,
+      "body_bounds_px": [
+        4,
+        9,
+        227,
+        143
+      ],
+      "registered_source_export": "art/review/fusion/pixels/v2-part3-bastion-livery-red-v1.png"
+    },
+    {
+      "id": "v2-part3-bastion-state-damaged-1-v1",
+      "asset_id": "v2-part3-bastion-state-damaged-1-v1",
+      "sha256": "6c04cb295b29ac304e106a35fbadee7da0a66cf6b447c966b8cb710bc4ce2b04",
+      "content_sha256": "79f4f6a6bdc5c5896ab13b4fcfe1fa6333e91ae9ff003236bd1f5452c9416924",
+      "width": 232,
+      "height": 152,
+      "frame_index": null,
+      "pivot_px": [
+        115.5,
+        76.0
+      ],
+      "region_in_cell": [
+        0,
+        0,
+        232,
+        152
+      ],
+      "hud_interior_px": null,
+      "page": 0,
+      "x": 696,
+      "y": 0,
+      "body_bounds_px": [
+        4,
+        9,
+        227,
+        143
+      ],
+      "registered_source_export": "art/review/fusion/pixels/v2-part3-bastion-state-damaged-1-v1.png"
+    },
+    {
+      "id": "v2-part3-bastion-state-damaged-2-v1",
+      "asset_id": "v2-part3-bastion-state-damaged-2-v1",
+      "sha256": "16267817a3c1a31464f05fe7738d325ae0fd03d393bc79f839450349c84f8063",
+      "content_sha256": "f799cda17e9b309dedc574b0a5a422bbd1941f2ce79d167dad60d16df55ac43c",
+      "width": 232,
+      "height": 152,
+      "frame_index": null,
+      "pivot_px": [
+        115.5,
+        76.0
+      ],
+      "region_in_cell": [
+        0,
+        0,
+        232,
+        152
+      ],
+      "hud_interior_px": null,
+      "page": 0,
+      "x": 0,
+      "y": 152,
+      "body_bounds_px": [
+        4,
+        9,
+        227,
+        143
+      ],
+      "registered_source_export": "art/review/fusion/pixels/v2-part3-bastion-state-damaged-2-v1.png"
+    },
+    {
+      "id": "v2-part3-bastion-state-intact-v2",
+      "asset_id": "v2-part3-bastion-state-intact-v2",
+      "sha256": "58962194852ffcc170bf82a69c6b39a3f5a54da5054795cdb178b261eb59b918",
+      "content_sha256": "48133ac043485dd5c2cf97d28f90a2aa75ece5fedba35fe3b99aecbb5cc588b3",
+      "width": 232,
+      "height": 152,
+      "frame_index": null,
+      "pivot_px": [
+        115.5,
+        76.0
+      ],
+      "region_in_cell": [
+        0,
+        0,
+        232,
+        152
+      ],
+      "hud_interior_px": null,
+      "page": 0,
+      "x": 232,
+      "y": 152,
+      "body_bounds_px": [
+        4,
+        9,
+        227,
+        143
+      ],
+      "registered_source_export": "art/review/fusion/pixels/v2-part3-bastion-state-intact-v2.png"
+    },
+    {
+      "id": "v2-part3-bastion-state-wreck-v1",
+      "asset_id": "v2-part3-bastion-state-wreck-v1",
+      "sha256": "3b377b08a841fea00ae2fd383c1d9699dc2df09110a647be0a5c891465997354",
+      "content_sha256": "ee236ea7c8d7a88a26ec4059592bc2999e6d88d1de94a345c5cbf6bb4eaa5fdc",
+      "width": 232,
+      "height": 152,
+      "frame_index": null,
+      "pivot_px": [
+        115.5,
+        76.0
+      ],
+      "region_in_cell": [
+        0,
+        0,
+        232,
+        152
+      ],
+      "hud_interior_px": null,
+      "page": 0,
+      "x": 464,
+      "y": 152,
+      "body_bounds_px": [
+        4,
+        9,
+        227,
+        143
+      ],
+      "registered_source_export": "art/review/fusion/pixels/v2-part3-bastion-state-wreck-v1.png"
+    },
+    {
+      "id": "v2-part3-bulwark-livery-bone-v1",
+      "asset_id": "v2-part3-bulwark-livery-bone-v1",
+      "sha256": "26dfcc4555876cfc15dfe9a569b7fbe65d66c325ec46bebaeaba7caf5eeb95bf",
+      "content_sha256": "53ccd2187dc36c334cdf850056a0d4b6571b96def0796741db013e43aff444a6",
+      "width": 232,
+      "height": 140,
+      "frame_index": null,
+      "pivot_px": [
+        115.5,
+        70.0
+      ],
+      "region_in_cell": [
+        0,
+        0,
+        232,
+        140
+      ],
+      "hud_interior_px": null,
+      "page": 0,
+      "x": 696,
+      "y": 152,
+      "body_bounds_px": [
+        4,
+        4,
+        227,
+        136
+      ],
+      "registered_source_export": "art/review/fusion/pixels/v2-part3-bulwark-livery-bone-v1.png"
+    },
+    {
+      "id": "v2-part3-bulwark-livery-ochre-v1",
+      "asset_id": "v2-part3-bulwark-livery-ochre-v1",
+      "sha256": "94a83557bfe3febdd57e6280f1c1b0e47b5430d0b17ccb9ccc722598527a922d",
+      "content_sha256": "e4b514d79b623427ffbcfbdd3eb80d1a648f4e319c58bf04df1fb5f5f73108ac",
+      "width": 232,
+      "height": 140,
+      "frame_index": null,
+      "pivot_px": [
+        115.5,
+        70.0
+      ],
+      "region_in_cell": [
+        0,
+        0,
+        232,
+        140
+      ],
+      "hud_interior_px": null,
+      "page": 0,
+      "x": 696,
+      "y": 292,
+      "body_bounds_px": [
+        4,
+        4,
+        227,
+        136
+      ],
+      "registered_source_export": "art/review/fusion/pixels/v2-part3-bulwark-livery-ochre-v1.png"
+    },
+    {
+      "id": "v2-part3-bulwark-livery-red-v1",
+      "asset_id": "v2-part3-bulwark-livery-red-v1",
+      "sha256": "ca7376d7fd34c6e7421a98110b951a7b96680af21406ca484f958ae4cece7071",
+      "content_sha256": "f352a2523bff4b44000410eda59d5637b749830e280b741fca57686ca1662099",
+      "width": 232,
+      "height": 140,
+      "frame_index": null,
+      "pivot_px": [
+        115.5,
+        70.0
+      ],
+      "region_in_cell": [
+        0,
+        0,
+        232,
+        140
+      ],
+      "hud_interior_px": null,
+      "page": 0,
+      "x": 0,
+      "y": 304,
+      "body_bounds_px": [
+        4,
+        4,
+        227,
+        136
+      ],
+      "registered_source_export": "art/review/fusion/pixels/v2-part3-bulwark-livery-red-v1.png"
+    },
+    {
+      "id": "v2-part3-bulwark-state-damaged-1-v1",
+      "asset_id": "v2-part3-bulwark-state-damaged-1-v1",
+      "sha256": "31523c51abb7dd1df9f1789c7fda9b30279c8e56d01f70385fe4f0d7728590d3",
+      "content_sha256": "5a3a301b52d46cfc8728a371696a3cdfecb28d425bc081aec1fded2e15e44633",
+      "width": 232,
+      "height": 140,
+      "frame_index": null,
+      "pivot_px": [
+        115.5,
+        70.0
+      ],
+      "region_in_cell": [
+        0,
+        0,
+        232,
+        140
+      ],
+      "hud_interior_px": null,
+      "page": 0,
+      "x": 232,
+      "y": 304,
+      "body_bounds_px": [
+        4,
+        4,
+        227,
+        136
+      ],
+      "registered_source_export": "art/review/fusion/pixels/v2-part3-bulwark-state-damaged-1-v1.png"
+    },
+    {
+      "id": "v2-part3-bulwark-state-damaged-2-v1",
+      "asset_id": "v2-part3-bulwark-state-damaged-2-v1",
+      "sha256": "1c30ea4b36eb6b99a8bbbe05768512da2d74390641c0b4219b05e2c7fdba54e4",
+      "content_sha256": "f08a607567d5db5068d60c98178ce40c2b18b76b55a338951e39728e771c5e03",
+      "width": 232,
+      "height": 140,
+      "frame_index": null,
+      "pivot_px": [
+        115.5,
+        70.0
+      ],
+      "region_in_cell": [
+        0,
+        0,
+        232,
+        140
+      ],
+      "hud_interior_px": null,
+      "page": 0,
+      "x": 464,
+      "y": 304,
+      "body_bounds_px": [
+        4,
+        4,
+        227,
+        136
+      ],
+      "registered_source_export": "art/review/fusion/pixels/v2-part3-bulwark-state-damaged-2-v1.png"
+    },
+    {
+      "id": "v2-part3-bulwark-state-intact-v2",
+      "asset_id": "v2-part3-bulwark-state-intact-v2",
+      "sha256": "4e57ff24ef92954120f1ce64983bb8e0eb79e7569d942e328321fac4841e2f96",
+      "content_sha256": "d8a4e06638d731fe6f84b4bb0cc12ee992bd3a6812e1ae0286b5a2c712d3ba86",
+      "width": 232,
+      "height": 140,
+      "frame_index": null,
+      "pivot_px": [
+        115.5,
+        70.0
+      ],
+      "region_in_cell": [
+        0,
+        0,
+        232,
+        140
+      ],
+      "hud_interior_px": null,
+      "page": 0,
+      "x": 696,
+      "y": 432,
+      "body_bounds_px": [
+        4,
+        4,
+        227,
+        136
+      ],
+      "registered_source_export": "art/review/fusion/pixels/v2-part3-bulwark-state-intact-v2.png"
+    },
+    {
+      "id": "v2-part3-bulwark-state-wreck-v1",
+      "asset_id": "v2-part3-bulwark-state-wreck-v1",
+      "sha256": "cec544906de90892558d4f6138da20213c07334d0c3fe3ac43f52521396ce377",
+      "content_sha256": "2a88384869efde822bdfda31e11f20bd4f813637d1daa115375d8fa54cba72dc",
+      "width": 232,
+      "height": 140,
+      "frame_index": null,
+      "pivot_px": [
+        115.5,
+        70.0
+      ],
+      "region_in_cell": [
+        0,
+        0,
+        232,
+        140
+      ],
+      "hud_interior_px": null,
+      "page": 0,
+      "x": 0,
+      "y": 444,
+      "body_bounds_px": [
+        4,
+        4,
+        227,
+        136
+      ],
+      "registered_source_export": "art/review/fusion/pixels/v2-part3-bulwark-state-wreck-v1.png"
+    },
+    {
+      "id": "v2-part3-trail-livery-bone-v1",
+      "asset_id": "v2-part3-trail-livery-bone-v1",
+      "sha256": "a67562e03b180df1b574a60d62b6d6ca506db1fe2a6aa2b7bb31037208fa27f7",
+      "content_sha256": "85ea8d0d8e72a7c7a509ad1471177d581bcb42f3ea65949e76241649334f9d7d",
+      "width": 176,
+      "height": 112,
+      "frame_index": null,
+      "pivot_px": [
+        87.0,
+        54.5
+      ],
+      "region_in_cell": [
+        0,
+        0,
+        176,
+        112
+      ],
+      "hud_interior_px": null,
+      "page": 0,
+      "x": 232,
+      "y": 444,
+      "body_bounds_px": [
+        4,
+        4,
+        170,
+        105
+      ],
+      "registered_source_export": "art/review/fusion/pixels/v2-part3-trail-livery-bone-v1.png"
+    },
+    {
+      "id": "v2-part3-trail-livery-ochre-v1",
+      "asset_id": "v2-part3-trail-livery-ochre-v1",
+      "sha256": "27462a023aa712cfc4aaf348bf7e3fbd76def8c83d075384f16b057fc94a0df1",
+      "content_sha256": "d51d8e523d171897e43a67c2e5c5f74bb605d904addbecfcfda4a8a5064e8381",
+      "width": 176,
+      "height": 112,
+      "frame_index": null,
+      "pivot_px": [
+        87.0,
+        54.5
+      ],
+      "region_in_cell": [
+        0,
+        0,
+        176,
+        112
+      ],
+      "hud_interior_px": null,
+      "page": 0,
+      "x": 408,
+      "y": 444,
+      "body_bounds_px": [
+        4,
+        4,
+        170,
+        105
+      ],
+      "registered_source_export": "art/review/fusion/pixels/v2-part3-trail-livery-ochre-v1.png"
+    },
+    {
+      "id": "v2-part3-trail-livery-red-v1",
+      "asset_id": "v2-part3-trail-livery-red-v1",
+      "sha256": "ca8a5a0ad275d9fda8f7a2bb0ac55592eb43924c50e50870728eaf4e16836050",
+      "content_sha256": "0a593b218e251771c57db64bccdca66add09ee11abce01fa6f763ff7d63f2b00",
+      "width": 176,
+      "height": 112,
+      "frame_index": null,
+      "pivot_px": [
+        87.0,
+        54.5
+      ],
+      "region_in_cell": [
+        0,
+        0,
+        176,
+        112
+      ],
+      "hud_interior_px": null,
+      "page": 0,
+      "x": 232,
+      "y": 556,
+      "body_bounds_px": [
+        4,
+        4,
+        170,
+        105
+      ],
+      "registered_source_export": "art/review/fusion/pixels/v2-part3-trail-livery-red-v1.png"
+    },
+    {
+      "id": "v2-part3-trail-state-damaged-1-v1",
+      "asset_id": "v2-part3-trail-state-damaged-1-v1",
+      "sha256": "f4bed83691b54fce0a6fafb9063e106d3e8e8e7899e055d1704d3acf5d7839e1",
+      "content_sha256": "42219a61f2ad6bbb2450d02db9fc8438ebf6963cf090a73966f15226243498b6",
+      "width": 176,
+      "height": 112,
+      "frame_index": null,
+      "pivot_px": [
+        87.0,
+        54.5
+      ],
+      "region_in_cell": [
+        0,
+        0,
+        176,
+        112
+      ],
+      "hud_interior_px": null,
+      "page": 0,
+      "x": 408,
+      "y": 556,
+      "body_bounds_px": [
+        4,
+        4,
+        170,
+        105
+      ],
+      "registered_source_export": "art/review/fusion/pixels/v2-part3-trail-state-damaged-1-v1.png"
+    },
+    {
+      "id": "v2-part3-trail-state-damaged-2-v1",
+      "asset_id": "v2-part3-trail-state-damaged-2-v1",
+      "sha256": "6872126a8f10d258bd58a3fd0d13df06fb3c99393a19eac99bfaa4d7ad56193e",
+      "content_sha256": "8cf1f614f939251d57cd5897e52923dc961d73009ae377ffc97565c8e1d8f806",
+      "width": 176,
+      "height": 112,
+      "frame_index": null,
+      "pivot_px": [
+        87.0,
+        54.5
+      ],
+      "region_in_cell": [
+        0,
+        0,
+        176,
+        112
+      ],
+      "hud_interior_px": null,
+      "page": 0,
+      "x": 584,
+      "y": 572,
+      "body_bounds_px": [
+        4,
+        4,
+        170,
+        105
+      ],
+      "registered_source_export": "art/review/fusion/pixels/v2-part3-trail-state-damaged-2-v1.png"
+    },
+    {
+      "id": "v2-part3-trail-state-intact-v2",
+      "asset_id": "v2-part3-trail-state-intact-v2",
+      "sha256": "d06427acb7286c146db46a67e23776c1f88035eb455da07966dd6709d6bad174",
+      "content_sha256": "26864352d4581af463c480cf63b168ad4ae23cdc9f0c5bffd043d995088bfb39",
+      "width": 176,
+      "height": 112,
+      "frame_index": null,
+      "pivot_px": [
+        87.0,
+        54.5
+      ],
+      "region_in_cell": [
+        0,
+        0,
+        176,
+        112
+      ],
+      "hud_interior_px": null,
+      "page": 0,
+      "x": 760,
+      "y": 572,
+      "body_bounds_px": [
+        4,
+        4,
+        170,
+        105
+      ],
+      "registered_source_export": "art/review/fusion/pixels/v2-part3-trail-state-intact-v2.png"
+    },
+    {
+      "id": "v2-part3-trail-state-wreck-v1",
+      "asset_id": "v2-part3-trail-state-wreck-v1",
+      "sha256": "3e813fb5008bd97e9ae793a8674ac130c79d634307a92d3670b12acdd23484a5",
+      "content_sha256": "b69f0526393ae513a097c73b12c87ab9114f879116f7637bcc558b4c24f85040",
+      "width": 176,
+      "height": 112,
+      "frame_index": null,
+      "pivot_px": [
+        87.0,
+        54.5
+      ],
+      "region_in_cell": [
+        0,
+        0,
+        176,
+        112
+      ],
+      "hud_interior_px": null,
+      "page": 0,
+      "x": 0,
+      "y": 584,
+      "body_bounds_px": [
+        4,
+        4,
+        170,
+        105
+      ],
+      "registered_source_export": "art/review/fusion/pixels/v2-part3-trail-state-wreck-v1.png"
+    },
+    {
+      "id": "v2-part4-comet-livery-bone-v1",
+      "asset_id": "v2-part4-comet-livery-bone-v1",
+      "sha256": "a3a9e2da308fe4066a5d8ce857420b8b36c62a5ff5b70f7a75be426a998f18af",
+      "content_sha256": "18512dcb82794f0a00255bdce3f4a4ef4224a4e9380e4479f0911c513147351b",
+      "width": 224,
+      "height": 108,
+      "frame_index": null,
+      "pivot_px": [
+        112.0,
+        53.0
+      ],
+      "region_in_cell": [
+        0,
+        0,
+        224,
+        108
+      ],
+      "hud_interior_px": null,
+      "page": 0,
+      "x": 176,
+      "y": 668,
+      "body_bounds_px": [
+        4,
+        4,
+        220,
+        102
+      ],
+      "registered_source_export": "art/review/fusion/pixels/v2-part4-comet-livery-bone-v1.png"
+    },
+    {
+      "id": "v2-part4-comet-livery-ochre-v1-a2",
+      "asset_id": "v2-part4-comet-livery-ochre-v1-a2",
+      "sha256": "7b77023a5d6012afe6a135f57d0beb91dd13338237db1c4842c893549311bad2",
+      "content_sha256": "ce581a7818b91517bb4874e123b38b3e77558575b11a08f5f3a3e89b43a54b31",
+      "width": 224,
+      "height": 108,
+      "frame_index": null,
+      "pivot_px": [
+        112.0,
+        53.0
+      ],
+      "region_in_cell": [
+        0,
+        0,
+        224,
+        108
+      ],
+      "hud_interior_px": null,
+      "page": 0,
+      "x": 400,
+      "y": 684,
+      "body_bounds_px": [
+        4,
+        4,
+        220,
+        102
+      ],
+      "registered_source_export": "art/review/fusion/pixels/v2-part4-comet-livery-ochre-v1-a2.png"
+    },
+    {
+      "id": "v2-part4-comet-livery-red-v1",
+      "asset_id": "v2-part4-comet-livery-red-v1",
+      "sha256": "81459a9e7b552ac542684ff45ae5c21aaf0d640089285e7f48f07e619936fdf0",
+      "content_sha256": "6db7eab74c2f51a6422cfa2048395c86dc29bad705717b090f31f920d3646421",
+      "width": 224,
+      "height": 108,
+      "frame_index": null,
+      "pivot_px": [
+        112.0,
+        53.0
+      ],
+      "region_in_cell": [
+        0,
+        0,
+        224,
+        108
+      ],
+      "hud_interior_px": null,
+      "page": 0,
+      "x": 624,
+      "y": 684,
+      "body_bounds_px": [
+        4,
+        4,
+        220,
+        102
+      ],
+      "registered_source_export": "art/review/fusion/pixels/v2-part4-comet-livery-red-v1.png"
+    },
+    {
+      "id": "v2-part4-comet-state-damaged-1-v1",
+      "asset_id": "v2-part4-comet-state-damaged-1-v1",
+      "sha256": "91547a2af780afa02457e29add0a6bff89a71c22fdbdbc2e7383bffe455d0e9e",
+      "content_sha256": "5f3a8faf3efbf387a5556b74bd88d4679d29bbc977c0723cc0214e23dbcc522c",
+      "width": 224,
+      "height": 108,
+      "frame_index": null,
+      "pivot_px": [
+        112.0,
+        53.0
+      ],
+      "region_in_cell": [
+        0,
+        0,
+        224,
+        108
+      ],
+      "hud_interior_px": null,
+      "page": 0,
+      "x": 0,
+      "y": 776,
+      "body_bounds_px": [
+        4,
+        4,
+        220,
+        102
+      ],
+      "registered_source_export": "art/review/fusion/pixels/v2-part4-comet-state-damaged-1-v1.png"
+    },
+    {
+      "id": "v2-part4-comet-state-damaged-2-v1",
+      "asset_id": "v2-part4-comet-state-damaged-2-v1",
+      "sha256": "b795aa89354cec851079958087499bcf9ecf1d476c80c57a488454e49d3d47df",
+      "content_sha256": "aab923710dc97dfe41c5ef0b43d0e25b361e1a0c6258f10793c8bea108763fbf",
+      "width": 224,
+      "height": 108,
+      "frame_index": null,
+      "pivot_px": [
+        112.0,
+        53.0
+      ],
+      "region_in_cell": [
+        0,
+        0,
+        224,
+        108
+      ],
+      "hud_interior_px": null,
+      "page": 0,
+      "x": 224,
+      "y": 792,
+      "body_bounds_px": [
+        4,
+        4,
+        220,
+        102
+      ],
+      "registered_source_export": "art/review/fusion/pixels/v2-part4-comet-state-damaged-2-v1.png"
+    },
+    {
+      "id": "v2-part4-comet-state-intact-v1",
+      "asset_id": "v2-part4-comet-state-intact-v1",
+      "sha256": "46fb13ff8d97acc5278f9f2b1f694fedfc81f016eb8c6335328377c7e97f4bd0",
+      "content_sha256": "8d9af1d80469ebd4ccb66c801826dfe0a79fa4c648829c87c076c61f8938242d",
+      "width": 224,
+      "height": 108,
+      "frame_index": null,
+      "pivot_px": [
+        112.0,
+        53.0
+      ],
+      "region_in_cell": [
+        0,
+        0,
+        224,
+        108
+      ],
+      "hud_interior_px": null,
+      "page": 0,
+      "x": 448,
+      "y": 792,
+      "body_bounds_px": [
+        4,
+        4,
+        220,
+        102
+      ],
+      "registered_source_export": "art/review/fusion/pixels/v2-part4-comet-state-intact-v1.png"
+    },
+    {
+      "id": "v2-part4-comet-state-wreck-v1-a2",
+      "asset_id": "v2-part4-comet-state-wreck-v1-a2",
+      "sha256": "b48a3e1966b216867e6eb72fa2fbf8587d8dd8696ab0bcc68e43063eb70d9e0b",
+      "content_sha256": "115ed502fb875b06950be1ea71139d0f28c71607a4404dee5561e969fcb61b06",
+      "width": 224,
+      "height": 108,
+      "frame_index": null,
+      "pivot_px": [
+        112.0,
+        53.0
+      ],
+      "region_in_cell": [
+        0,
+        0,
+        224,
+        108
+      ],
+      "hud_interior_px": null,
+      "page": 0,
+      "x": 672,
+      "y": 792,
+      "body_bounds_px": [
+        4,
+        4,
+        220,
+        102
+      ],
+      "registered_source_export": "art/review/fusion/pixels/v2-part4-comet-state-wreck-v1-a2.png"
+    },
+    {
+      "id": "v2-part3-line-livery-bone-v1",
+      "asset_id": "v2-part3-line-livery-bone-v1",
+      "sha256": "9b18894079ad3a762a84ad9139b6746feef29d2150b555bf2cb5530f5da8aff3",
+      "content_sha256": "d343dcf7be5c284ac79d3b1ad95898bae4659dbe9f6bcc45d527c2eddf0b0a58",
+      "width": 196,
+      "height": 108,
+      "frame_index": null,
+      "pivot_px": [
+        97.5,
+        52.5
+      ],
+      "region_in_cell": [
+        0,
+        0,
+        196,
+        108
+      ],
+      "hud_interior_px": null,
+      "page": 0,
+      "x": 0,
+      "y": 884,
+      "body_bounds_px": [
+        4,
+        4,
+        191,
+        101
+      ],
+      "registered_source_export": "art/review/fusion/pixels/v2-part3-line-livery-bone-v1.png"
+    },
+    {
+      "id": "v2-part3-line-livery-ochre-v1",
+      "asset_id": "v2-part3-line-livery-ochre-v1",
+      "sha256": "4f0af961d0ac8d6fa2d959c0aa249a2680300c8281ef1245913a2fd8d38785ae",
+      "content_sha256": "be9782859a8fa6a98df53a9f783c9e8471c9ca8f45e284383eea02d103a4ec2a",
+      "width": 196,
+      "height": 108,
+      "frame_index": null,
+      "pivot_px": [
+        97.5,
+        52.5
+      ],
+      "region_in_cell": [
+        0,
+        0,
+        196,
+        108
+      ],
+      "hud_interior_px": null,
+      "page": 0,
+      "x": 196,
+      "y": 900,
+      "body_bounds_px": [
+        4,
+        4,
+        191,
+        101
+      ],
+      "registered_source_export": "art/review/fusion/pixels/v2-part3-line-livery-ochre-v1.png"
+    },
+    {
+      "id": "v2-part3-line-livery-red-v1",
+      "asset_id": "v2-part3-line-livery-red-v1",
+      "sha256": "89f42d222fd18558c10fe0f81514f05111186d435bc3462ec1721ba81e53a809",
+      "content_sha256": "42831e4563af528c1da775235bfc10117295764734daefe22413ebfe7041aed5",
+      "width": 196,
+      "height": 108,
+      "frame_index": null,
+      "pivot_px": [
+        97.5,
+        52.5
+      ],
+      "region_in_cell": [
+        0,
+        0,
+        196,
+        108
+      ],
+      "hud_interior_px": null,
+      "page": 0,
+      "x": 392,
+      "y": 900,
+      "body_bounds_px": [
+        4,
+        4,
+        191,
+        101
+      ],
+      "registered_source_export": "art/review/fusion/pixels/v2-part3-line-livery-red-v1.png"
+    },
+    {
+      "id": "v2-part3-line-state-damaged-1-v1",
+      "asset_id": "v2-part3-line-state-damaged-1-v1",
+      "sha256": "d8f97d6294dd83df12e3e208b6cd1a3e4fde7669eb296e6fbb83a18b79b9581d",
+      "content_sha256": "61b716a2cb5f354cbfeab8ea910864a14999d23445618edcc42c85340cf6ca23",
+      "width": 196,
+      "height": 108,
+      "frame_index": null,
+      "pivot_px": [
+        97.5,
+        52.5
+      ],
+      "region_in_cell": [
+        0,
+        0,
+        196,
+        108
+      ],
+      "hud_interior_px": null,
+      "page": 0,
+      "x": 588,
+      "y": 900,
+      "body_bounds_px": [
+        4,
+        4,
+        191,
+        101
+      ],
+      "registered_source_export": "art/review/fusion/pixels/v2-part3-line-state-damaged-1-v1.png"
+    },
+    {
+      "id": "v2-part3-line-state-damaged-2-v1",
+      "asset_id": "v2-part3-line-state-damaged-2-v1",
+      "sha256": "a85a7c826e58d17a9cd3d1a5ea1112cf2f2f7dac13726ad590f2c0119a8d1408",
+      "content_sha256": "843018e5e98c70b4ceeb98c4d96584b6a83b691f68641f35ad2f24603d09434c",
+      "width": 196,
+      "height": 108,
+      "frame_index": null,
+      "pivot_px": [
+        97.5,
+        52.5
+      ],
+      "region_in_cell": [
+        0,
+        0,
+        196,
+        108
+      ],
+      "hud_interior_px": null,
+      "page": 0,
+      "x": 784,
+      "y": 900,
+      "body_bounds_px": [
+        4,
+        4,
+        191,
+        101
+      ],
+      "registered_source_export": "art/review/fusion/pixels/v2-part3-line-state-damaged-2-v1.png"
+    },
+    {
+      "id": "v2-part3-line-state-intact-v2",
+      "asset_id": "v2-part3-line-state-intact-v2",
+      "sha256": "e6ba923b25e6c55a64af41c1995c49b3fe7450ca908e45f9f1861dabf0e5f466",
+      "content_sha256": "41a37df1359ddc38c7a4182678dc31cec0db389d33b42d4d0f7fe406605027b0",
+      "width": 196,
+      "height": 108,
+      "frame_index": null,
+      "pivot_px": [
+        97.5,
+        52.5
+      ],
+      "region_in_cell": [
+        0,
+        0,
+        196,
+        108
+      ],
+      "hud_interior_px": null,
+      "page": 1,
+      "x": 0,
+      "y": 0,
+      "body_bounds_px": [
+        4,
+        4,
+        191,
+        101
+      ],
+      "registered_source_export": "art/review/fusion/pixels/v2-part3-line-state-intact-v2.png"
+    },
+    {
+      "id": "v2-part3-line-state-wreck-v1",
+      "asset_id": "v2-part3-line-state-wreck-v1",
+      "sha256": "8d5df49a2c383a828e8671f6572b3524ced5fcb4abae3a90739b2516bf94bf65",
+      "content_sha256": "42d09a0fbafe9727c9ad8aa6fa78ded72e249aa518d69b0943ecdc941a2eacec",
+      "width": 196,
+      "height": 108,
+      "frame_index": null,
+      "pivot_px": [
+        97.5,
+        52.5
+      ],
+      "region_in_cell": [
+        0,
+        0,
+        196,
+        108
+      ],
+      "hud_interior_px": null,
+      "page": 1,
+      "x": 196,
+      "y": 0,
+      "body_bounds_px": [
+        4,
+        4,
+        191,
+        101
+      ],
+      "registered_source_export": "art/review/fusion/pixels/v2-part3-line-state-wreck-v1.png"
+    },
+    {
+      "id": "v2-part4-kestrel-livery-bone-v1",
+      "asset_id": "v2-part4-kestrel-livery-bone-v1",
+      "sha256": "f4c1dcb47428d0231dc7171e46771b9b23993a0651fdfbd9613f742a02f35426",
+      "content_sha256": "5c0f66916042ae7fbab5bf453008092ae51068a6ca2fc2e3ce13ea57d672eab3",
+      "width": 228,
+      "height": 100,
+      "frame_index": null,
+      "pivot_px": [
+        114.0,
+        48.5
+      ],
+      "region_in_cell": [
+        0,
+        0,
+        228,
+        100
+      ],
+      "hud_interior_px": null,
+      "page": 1,
+      "x": 392,
+      "y": 0,
+      "body_bounds_px": [
+        4,
+        4,
+        224,
+        93
+      ],
+      "registered_source_export": "art/review/fusion/pixels/v2-part4-kestrel-livery-bone-v1.png"
+    },
+    {
+      "id": "v2-part4-kestrel-livery-ochre-v1-a2",
+      "asset_id": "v2-part4-kestrel-livery-ochre-v1-a2",
+      "sha256": "d39c463339e94f9acdec6717d80853639e8a7e2ff92f2d466eea6a6e3e49592a",
+      "content_sha256": "5c9db994ae215fb992fc6e552cf2a9e10c7f75e5733e9f930334a91364a01a76",
+      "width": 228,
+      "height": 100,
+      "frame_index": null,
+      "pivot_px": [
+        114.0,
+        48.5
+      ],
+      "region_in_cell": [
+        0,
+        0,
+        228,
+        100
+      ],
+      "hud_interior_px": null,
+      "page": 1,
+      "x": 620,
+      "y": 0,
+      "body_bounds_px": [
+        4,
+        4,
+        224,
+        93
+      ],
+      "registered_source_export": "art/review/fusion/pixels/v2-part4-kestrel-livery-ochre-v1-a2.png"
+    },
+    {
+      "id": "v2-part4-kestrel-livery-red-v1",
+      "asset_id": "v2-part4-kestrel-livery-red-v1",
+      "sha256": "eba0e92f4ef44cb8a0ced51b248e2b4c6658ded84713623c6cda33dd6adf7771",
+      "content_sha256": "e536c91277e9e72bfdfed54ed950bad59ecc022b9f629d25dc5c8943d565b54b",
+      "width": 228,
+      "height": 100,
+      "frame_index": null,
+      "pivot_px": [
+        114.0,
+        48.5
+      ],
+      "region_in_cell": [
+        0,
+        0,
+        228,
+        100
+      ],
+      "hud_interior_px": null,
+      "page": 1,
+      "x": 392,
+      "y": 100,
+      "body_bounds_px": [
+        4,
+        4,
+        224,
+        93
+      ],
+      "registered_source_export": "art/review/fusion/pixels/v2-part4-kestrel-livery-red-v1.png"
+    },
+    {
+      "id": "v2-part4-kestrel-state-damaged-1-v1-a3",
+      "asset_id": "v2-part4-kestrel-state-damaged-1-v1-a3",
+      "sha256": "bd919890edf4725e68b79c11f0971861b6b8e9e3f1f3488cfe42ca8874312244",
+      "content_sha256": "01266b4e43c9520c11756ac25e795b282d843601bb325c9a1451c73f2bc3bfa6",
+      "width": 228,
+      "height": 100,
+      "frame_index": null,
+      "pivot_px": [
+        114.0,
+        48.5
+      ],
+      "region_in_cell": [
+        0,
+        0,
+        228,
+        100
+      ],
+      "hud_interior_px": null,
+      "page": 1,
+      "x": 620,
+      "y": 100,
+      "body_bounds_px": [
+        4,
+        4,
+        224,
+        93
+      ],
+      "registered_source_export": "art/review/fusion/pixels/v2-part4-kestrel-state-damaged-1-v1-a3.png"
+    },
+    {
+      "id": "v2-part4-kestrel-state-damaged-2-v1-a3",
+      "asset_id": "v2-part4-kestrel-state-damaged-2-v1-a3",
+      "sha256": "ad2f8893a9b45ee00b719b0a611b686c77c306c7e7dd8f805a5777cd0c90d383",
+      "content_sha256": "4a661592fe2b89a09dcfc8db7fff7e83d709f8774fcc99846d6972840fa427a0",
+      "width": 228,
+      "height": 100,
+      "frame_index": null,
+      "pivot_px": [
+        114.0,
+        48.5
+      ],
+      "region_in_cell": [
+        0,
+        0,
+        228,
+        100
+      ],
+      "hud_interior_px": null,
+      "page": 1,
+      "x": 0,
+      "y": 108,
+      "body_bounds_px": [
+        4,
+        4,
+        224,
+        93
+      ],
+      "registered_source_export": "art/review/fusion/pixels/v2-part4-kestrel-state-damaged-2-v1-a3.png"
+    },
+    {
+      "id": "v2-part4-kestrel-state-intact-v1-a2",
+      "asset_id": "v2-part4-kestrel-state-intact-v1-a2",
+      "sha256": "896b35f6572508012f1ad6fe1ed3e74b3aff32bc26dc75dbebd2f6bc2f8c655b",
+      "content_sha256": "8f5b2b0c18f44652753e6864faf0405724f4548dce5708ac21f282c9d3771458",
+      "width": 228,
+      "height": 100,
+      "frame_index": null,
+      "pivot_px": [
+        114.0,
+        48.5
+      ],
+      "region_in_cell": [
+        0,
+        0,
+        228,
+        100
+      ],
+      "hud_interior_px": null,
+      "page": 1,
+      "x": 228,
+      "y": 200,
+      "body_bounds_px": [
+        4,
+        4,
+        224,
+        93
+      ],
+      "registered_source_export": "art/review/fusion/pixels/v2-part4-kestrel-state-intact-v1-a2.png"
+    },
+    {
+      "id": "v2-part4-kestrel-state-wreck-v1-a2",
+      "asset_id": "v2-part4-kestrel-state-wreck-v1-a2",
+      "sha256": "fc570884dcb2e61ede5ea67bbdea875aff299d546a9196047972c10dcaf6df02",
+      "content_sha256": "453204499dd1e3d8927556de8364f42097b4f4a1426cd0097d0ced24caed3f89",
+      "width": 228,
+      "height": 100,
+      "frame_index": null,
+      "pivot_px": [
+        114.0,
+        48.5
+      ],
+      "region_in_cell": [
+        0,
+        0,
+        228,
+        100
+      ],
+      "hud_interior_px": null,
+      "page": 1,
+      "x": 456,
+      "y": 200,
+      "body_bounds_px": [
+        4,
+        4,
+        224,
+        93
+      ],
+      "registered_source_export": "art/review/fusion/pixels/v2-part4-kestrel-state-wreck-v1-a2.png"
+    },
+    {
+      "id": "v2-part3-flint-livery-bone-v2",
+      "asset_id": "v2-part3-flint-livery-bone-v2",
+      "sha256": "19ed2b56dd14699a84f70865388844b6174e1036ee1f9cf7e367d8d49b7211d1",
+      "content_sha256": "a3c2b8b39a73033f7cf9fa95e4265348480b8264683b63be77b1f4ab6f8e5045",
+      "width": 180,
+      "height": 100,
+      "frame_index": null,
+      "pivot_px": [
+        89.0,
+        50.0
+      ],
+      "region_in_cell": [
+        0,
+        0,
+        180,
+        100
+      ],
+      "hud_interior_px": null,
+      "page": 1,
+      "x": 684,
+      "y": 200,
+      "body_bounds_px": [
+        4,
+        4,
+        174,
+        96
+      ],
+      "registered_source_export": "art/review/fusion/pixels/v2-part3-flint-livery-bone-v2.png"
+    },
+    {
+      "id": "v2-part3-flint-livery-ochre-v1",
+      "asset_id": "v2-part3-flint-livery-ochre-v1",
+      "sha256": "9fbf0600d03757f1b767bada3934df3ee76899bfba0caf4b11a363290236b27a",
+      "content_sha256": "59406a5dd2f0403900c5580ef3350bc05f6046773f1de2d39323f2625886637c",
+      "width": 180,
+      "height": 100,
+      "frame_index": null,
+      "pivot_px": [
+        89.0,
+        50.0
+      ],
+      "region_in_cell": [
+        0,
+        0,
+        180,
+        100
+      ],
+      "hud_interior_px": null,
+      "page": 1,
+      "x": 0,
+      "y": 208,
+      "body_bounds_px": [
+        4,
+        4,
+        174,
+        96
+      ],
+      "registered_source_export": "art/review/fusion/pixels/v2-part3-flint-livery-ochre-v1.png"
+    },
+    {
+      "id": "v2-part3-flint-livery-red-v1",
+      "asset_id": "v2-part3-flint-livery-red-v1",
+      "sha256": "4f7ef7ec4b7ec7c4e70b94acda5e837a2d27e2ff55047ad8590cad055ba3e2ac",
+      "content_sha256": "9792b647cd948f993e14583260e9881f5f3429463c0a7ec99ebe4dd2c0215c44",
+      "width": 180,
+      "height": 100,
+      "frame_index": null,
+      "pivot_px": [
+        89.0,
+        50.0
+      ],
+      "region_in_cell": [
+        0,
+        0,
+        180,
+        100
+      ],
+      "hud_interior_px": null,
+      "page": 1,
+      "x": 180,
+      "y": 300,
+      "body_bounds_px": [
+        4,
+        4,
+        174,
+        96
+      ],
+      "registered_source_export": "art/review/fusion/pixels/v2-part3-flint-livery-red-v1.png"
+    },
+    {
+      "id": "v2-part3-flint-state-damaged-1-v1",
+      "asset_id": "v2-part3-flint-state-damaged-1-v1",
+      "sha256": "20f7251632f125eb130777b8e8a24082a1c1643b9f1e23776e0fec668bc4f58c",
+      "content_sha256": "ccf948119d2d42352d97f40932bab5168e905ee064c6f14952ed047901caf8bf",
+      "width": 180,
+      "height": 100,
+      "frame_index": null,
+      "pivot_px": [
+        89.0,
+        50.0
+      ],
+      "region_in_cell": [
+        0,
+        0,
+        180,
+        100
+      ],
+      "hud_interior_px": null,
+      "page": 1,
+      "x": 360,
+      "y": 300,
+      "body_bounds_px": [
+        4,
+        4,
+        174,
+        96
+      ],
+      "registered_source_export": "art/review/fusion/pixels/v2-part3-flint-state-damaged-1-v1.png"
+    },
+    {
+      "id": "v2-part3-flint-state-damaged-2-v1",
+      "asset_id": "v2-part3-flint-state-damaged-2-v1",
+      "sha256": "41d2f398047f2593e999a55acd74405e4f9485a0c148f8f6904d8c29c09fe900",
+      "content_sha256": "a51e6dbea2e58d7df51c342014265032f46cacba586f0e00460cc08046fe6833",
+      "width": 180,
+      "height": 100,
+      "frame_index": null,
+      "pivot_px": [
+        89.0,
+        50.0
+      ],
+      "region_in_cell": [
+        0,
+        0,
+        180,
+        100
+      ],
+      "hud_interior_px": null,
+      "page": 1,
+      "x": 540,
+      "y": 300,
+      "body_bounds_px": [
+        4,
+        4,
+        174,
+        96
+      ],
+      "registered_source_export": "art/review/fusion/pixels/v2-part3-flint-state-damaged-2-v1.png"
+    },
+    {
+      "id": "v2-part3-flint-state-intact-v3",
+      "asset_id": "v2-part3-flint-state-intact-v3",
+      "sha256": "129ff9bcd422d17c0dcb473540e5e760782d893ae4d5cc2250249b52709607a2",
+      "content_sha256": "b369fd2deb6bc73ee01c1ccdbf6935318982f27e736bdae29ca44ff88e248fc7",
+      "width": 180,
+      "height": 100,
+      "frame_index": null,
+      "pivot_px": [
+        89.0,
+        50.0
+      ],
+      "region_in_cell": [
+        0,
+        0,
+        180,
+        100
+      ],
+      "hud_interior_px": null,
+      "page": 1,
+      "x": 720,
+      "y": 300,
+      "body_bounds_px": [
+        4,
+        4,
+        174,
+        96
+      ],
+      "registered_source_export": "art/review/fusion/pixels/v2-part3-flint-state-intact-v3.png"
+    },
+    {
+      "id": "v2-part3-flint-state-wreck-v1",
+      "asset_id": "v2-part3-flint-state-wreck-v1",
+      "sha256": "adf73b4bf0b84652db24082b5d20c680a0192bd092f20e2669b8e4d6e92bc893",
+      "content_sha256": "ca5641a886318fba153d9c77307f44fe508d1a8b2fbed1c62944de4182b51c71",
+      "width": 180,
+      "height": 100,
+      "frame_index": null,
+      "pivot_px": [
+        89.0,
+        50.0
+      ],
+      "region_in_cell": [
+        0,
+        0,
+        180,
+        100
+      ],
+      "hud_interior_px": null,
+      "page": 1,
+      "x": 0,
+      "y": 308,
+      "body_bounds_px": [
+        4,
+        4,
+        174,
+        96
+      ],
+      "registered_source_export": "art/review/fusion/pixels/v2-part3-flint-state-wreck-v1.png"
+    },
+    {
+      "id": "v2-part3-vandal-livery-bone-v1",
+      "asset_id": "v2-part3-vandal-livery-bone-v1",
+      "sha256": "4cd411133208a9cdc9ec92f553ac1667dd24ade199669a4e1422ed789c5b20fa",
+      "content_sha256": "66c8203e06aeeb1fdcaee67eab0c54565dfc0dd7f565018f5cc83a98913a4f1e",
+      "width": 208,
+      "height": 96,
+      "frame_index": null,
+      "pivot_px": [
+        102.5,
+        47.0
+      ],
+      "region_in_cell": [
+        0,
+        0,
+        208,
+        96
+      ],
+      "hud_interior_px": null,
+      "page": 1,
+      "x": 180,
+      "y": 400,
+      "body_bounds_px": [
+        4,
+        4,
+        201,
+        90
+      ],
+      "registered_source_export": "art/review/fusion/pixels/v2-part3-vandal-livery-bone-v1.png"
+    },
+    {
+      "id": "v2-part3-vandal-livery-ochre-v1",
+      "asset_id": "v2-part3-vandal-livery-ochre-v1",
+      "sha256": "a2e67dbbbae03140b2af14ad74f3e49cc8bc1320091c214e637d2514a4f828c6",
+      "content_sha256": "aaf156965232d45ad9cf4a38be1695153e93be8feb0e40a5b94c843317a3a53f",
+      "width": 208,
+      "height": 96,
+      "frame_index": null,
+      "pivot_px": [
+        102.5,
+        47.0
+      ],
+      "region_in_cell": [
+        0,
+        0,
+        208,
+        96
+      ],
+      "hud_interior_px": null,
+      "page": 1,
+      "x": 388,
+      "y": 400,
+      "body_bounds_px": [
+        4,
+        4,
+        201,
+        90
+      ],
+      "registered_source_export": "art/review/fusion/pixels/v2-part3-vandal-livery-ochre-v1.png"
+    },
+    {
+      "id": "v2-part3-vandal-livery-red-v1",
+      "asset_id": "v2-part3-vandal-livery-red-v1",
+      "sha256": "a355873e2419f80f4b698b1351cc69c82b0f51cbc81d4d0a15c959b27907d7fa",
+      "content_sha256": "e1f0c80ce4f8ffee79415eec65f71c118860b6933bbf3dde7c46a14e9dbc6bfd",
+      "width": 208,
+      "height": 96,
+      "frame_index": null,
+      "pivot_px": [
+        102.5,
+        47.0
+      ],
+      "region_in_cell": [
+        0,
+        0,
+        208,
+        96
+      ],
+      "hud_interior_px": null,
+      "page": 1,
+      "x": 596,
+      "y": 400,
+      "body_bounds_px": [
+        4,
+        4,
+        201,
+        90
+      ],
+      "registered_source_export": "art/review/fusion/pixels/v2-part3-vandal-livery-red-v1.png"
+    },
+    {
+      "id": "v2-part3-vandal-state-damaged-1-v1",
+      "asset_id": "v2-part3-vandal-state-damaged-1-v1",
+      "sha256": "e060b67ddadd1b01a195063fd79d674a445db5ea16c06261e9ae1e1c75620e93",
+      "content_sha256": "6c8de6f22fa6ab42aa10be687a592b079381c0413c09a92c48242c03ca23ca90",
+      "width": 208,
+      "height": 96,
+      "frame_index": null,
+      "pivot_px": [
+        102.5,
+        47.0
+      ],
+      "region_in_cell": [
+        0,
+        0,
+        208,
+        96
+      ],
+      "hud_interior_px": null,
+      "page": 1,
+      "x": 804,
+      "y": 400,
+      "body_bounds_px": [
+        4,
+        4,
+        201,
+        90
+      ],
+      "registered_source_export": "art/review/fusion/pixels/v2-part3-vandal-state-damaged-1-v1.png"
+    },
+    {
+      "id": "v2-part3-vandal-state-damaged-2-v1",
+      "asset_id": "v2-part3-vandal-state-damaged-2-v1",
+      "sha256": "db814d7bfdeb74f69ab2e05165dbc95f74da80e68d8c5d863c0632c58f045f0a",
+      "content_sha256": "b391173076b103e87cac57f741f5cf1cd87f2ff04f736959b112cd6d572127ef",
+      "width": 208,
+      "height": 96,
+      "frame_index": null,
+      "pivot_px": [
+        102.5,
+        47.0
+      ],
+      "region_in_cell": [
+        0,
+        0,
+        208,
+        96
+      ],
+      "hud_interior_px": null,
+      "page": 1,
+      "x": 0,
+      "y": 496,
+      "body_bounds_px": [
+        4,
+        4,
+        201,
+        90
+      ],
+      "registered_source_export": "art/review/fusion/pixels/v2-part3-vandal-state-damaged-2-v1.png"
+    },
+    {
+      "id": "v2-part3-vandal-state-intact-v2",
+      "asset_id": "v2-part3-vandal-state-intact-v2",
+      "sha256": "dbf0d20a0b12fa0fd3e0e2e1729754e08e8fb9975e8e1e3f3e72b52b355a8f97",
+      "content_sha256": "72e050abb4f9e6cf06528bdbc7565503cffb1c6258c563ea51b065f3ae76d6d2",
+      "width": 208,
+      "height": 96,
+      "frame_index": null,
+      "pivot_px": [
+        102.5,
+        47.0
+      ],
+      "region_in_cell": [
+        0,
+        0,
+        208,
+        96
+      ],
+      "hud_interior_px": null,
+      "page": 1,
+      "x": 208,
+      "y": 496,
+      "body_bounds_px": [
+        4,
+        4,
+        201,
+        90
+      ],
+      "registered_source_export": "art/review/fusion/pixels/v2-part3-vandal-state-intact-v2.png"
+    },
+    {
+      "id": "v2-part3-vandal-state-wreck-v1",
+      "asset_id": "v2-part3-vandal-state-wreck-v1",
+      "sha256": "0c50eef3f6a4f43ab5ae91c5b8ad6a1f6386d04686346ff3693e87626b6e3fca",
+      "content_sha256": "9663489e04780f22b882819a2388c2f33ff40a7586529bb847293cd0a21398c0",
+      "width": 208,
+      "height": 96,
+      "frame_index": null,
+      "pivot_px": [
+        102.5,
+        47.0
+      ],
+      "region_in_cell": [
+        0,
+        0,
+        208,
+        96
+      ],
+      "hud_interior_px": null,
+      "page": 1,
+      "x": 416,
+      "y": 496,
+      "body_bounds_px": [
+        4,
+        4,
+        201,
+        90
+      ],
+      "registered_source_export": "art/review/fusion/pixels/v2-part3-vandal-state-wreck-v1.png"
+    },
+    {
+      "id": "v2-part4-quill-livery-bone-v1",
+      "asset_id": "v2-part4-quill-livery-bone-v1",
+      "sha256": "6a920b55995fc65d904eb1be62bc7daa7891faa560310ad03915e8c521853343",
+      "content_sha256": "d4279120c942b36fbae865f289e837264aa7777c645aa8625f17bb1475e3d035",
+      "width": 172,
+      "height": 92,
+      "frame_index": null,
+      "pivot_px": [
+        84.5,
+        45.5
+      ],
+      "region_in_cell": [
+        0,
+        0,
+        172,
+        92
+      ],
+      "hud_interior_px": null,
+      "page": 0,
+      "x": 848,
+      "y": 684,
+      "body_bounds_px": [
+        4,
+        4,
+        165,
+        87
+      ],
+      "registered_source_export": "art/review/fusion/pixels/v2-part4-quill-livery-bone-v1.png"
+    },
+    {
+      "id": "v2-part4-quill-livery-ochre-v1-a3",
+      "asset_id": "v2-part4-quill-livery-ochre-v1-a3",
+      "sha256": "e2df1578de0958c06135d55aafa7c73e2bace486b4d83cb8b0bd9999750558d4",
+      "content_sha256": "54f9193e5e4b7fd8eeb04a7d815c3305239367f980fdf74c406163a541e1cc83",
+      "width": 172,
+      "height": 92,
+      "frame_index": null,
+      "pivot_px": [
+        84.5,
+        45.5
+      ],
+      "region_in_cell": [
+        0,
+        0,
+        172,
+        92
+      ],
+      "hud_interior_px": null,
+      "page": 1,
+      "x": 848,
+      "y": 0,
+      "body_bounds_px": [
+        4,
+        4,
+        165,
+        87
+      ],
+      "registered_source_export": "art/review/fusion/pixels/v2-part4-quill-livery-ochre-v1-a3.png"
+    },
+    {
+      "id": "v2-part4-quill-livery-red-v1",
+      "asset_id": "v2-part4-quill-livery-red-v1",
+      "sha256": "8c1611f104a346985a16954dbc2126a788d9e62dd2b797fd8b5a6c69b5c91091",
+      "content_sha256": "735b27ee17791f1588d71b1c238a91024df7313d3bf1a3e85fac8c554ea05239",
+      "width": 172,
+      "height": 92,
+      "frame_index": null,
+      "pivot_px": [
+        84.5,
+        45.5
+      ],
+      "region_in_cell": [
+        0,
+        0,
+        172,
+        92
+      ],
+      "hud_interior_px": null,
+      "page": 1,
+      "x": 848,
+      "y": 92,
+      "body_bounds_px": [
+        4,
+        4,
+        165,
+        87
+      ],
+      "registered_source_export": "art/review/fusion/pixels/v2-part4-quill-livery-red-v1.png"
+    },
+    {
+      "id": "v2-part4-quill-state-damaged-1-v1",
+      "asset_id": "v2-part4-quill-state-damaged-1-v1",
+      "sha256": "6503900b496ae44e0850640ea27b6103d4eb1a237d0286fa3fca09a98452b75c",
+      "content_sha256": "7956d9dc6b066c6b07b2a21ae7f142e3476791cf7c80d96ab3868f8b99a68a8b",
+      "width": 172,
+      "height": 92,
+      "frame_index": null,
+      "pivot_px": [
+        84.5,
+        45.5
+      ],
+      "region_in_cell": [
+        0,
+        0,
+        172,
+        92
+      ],
+      "hud_interior_px": null,
+      "page": 1,
+      "x": 624,
+      "y": 496,
+      "body_bounds_px": [
+        4,
+        4,
+        165,
+        87
+      ],
+      "registered_source_export": "art/review/fusion/pixels/v2-part4-quill-state-damaged-1-v1.png"
+    },
+    {
+      "id": "v2-part4-quill-state-damaged-2-v1",
+      "asset_id": "v2-part4-quill-state-damaged-2-v1",
+      "sha256": "6fa6ed3c81edd5af3e465446014d10fb52b6a97baa9c872a88c0ac8535c3e564",
+      "content_sha256": "9b8d4a8610e287d3425a8e9fb91331bd6cc50ad85ec2b19bb70142645572f36f",
+      "width": 172,
+      "height": 92,
+      "frame_index": null,
+      "pivot_px": [
+        84.5,
+        45.5
+      ],
+      "region_in_cell": [
+        0,
+        0,
+        172,
+        92
+      ],
+      "hud_interior_px": null,
+      "page": 1,
+      "x": 796,
+      "y": 496,
+      "body_bounds_px": [
+        4,
+        4,
+        165,
+        87
+      ],
+      "registered_source_export": "art/review/fusion/pixels/v2-part4-quill-state-damaged-2-v1.png"
+    },
+    {
+      "id": "v2-part4-quill-state-intact-v1",
+      "asset_id": "v2-part4-quill-state-intact-v1",
+      "sha256": "f8729371f4ad6ee975e17177ce7e59b49ad8a6e3fcc449b6bd46300968a38785",
+      "content_sha256": "56fc1a066d44a5612ad0d50189e388f86c325dee5b7faf0c69c18e7c929ea6a3",
+      "width": 172,
+      "height": 92,
+      "frame_index": null,
+      "pivot_px": [
+        84.5,
+        45.5
+      ],
+      "region_in_cell": [
+        0,
+        0,
+        172,
+        92
+      ],
+      "hud_interior_px": null,
+      "page": 1,
+      "x": 624,
+      "y": 588,
+      "body_bounds_px": [
+        4,
+        4,
+        165,
+        87
+      ],
+      "registered_source_export": "art/review/fusion/pixels/v2-part4-quill-state-intact-v1.png"
+    },
+    {
+      "id": "v2-part4-quill-state-wreck-v1",
+      "asset_id": "v2-part4-quill-state-wreck-v1",
+      "sha256": "5b163ea37b1249246a809ed35b12069512284f952c5cab153eac225a2c3a2959",
+      "content_sha256": "9172dec3528f6b3b5d3796baf7746be64aa9b54da134d2fa0ed1bada8878f87f",
+      "width": 172,
+      "height": 92,
+      "frame_index": null,
+      "pivot_px": [
+        84.5,
+        45.5
+      ],
+      "region_in_cell": [
+        0,
+        0,
+        172,
+        92
+      ],
+      "hud_interior_px": null,
+      "page": 1,
+      "x": 796,
+      "y": 588,
+      "body_bounds_px": [
+        4,
+        4,
+        165,
+        87
+      ],
+      "registered_source_export": "art/review/fusion/pixels/v2-part4-quill-state-wreck-v1.png"
+    },
+    {
+      "id": "v2-part4-needle-livery-bone-v1-a3",
+      "asset_id": "v2-part4-needle-livery-bone-v1-a3",
+      "sha256": "f7336282d11e741d2c9b7f584b88526cbcbc2525ba4d8ccf61995a843ae44b51",
+      "content_sha256": "e9a63e5617042029de2fc71a46dec34d4bbbe842a7429545aa5039c3e29d788a",
+      "width": 168,
+      "height": 92,
+      "frame_index": null,
+      "pivot_px": [
+        83.0,
+        46.0
+      ],
+      "region_in_cell": [
+        0,
+        0,
+        168,
+        92
+      ],
+      "hud_interior_px": null,
+      "page": 1,
+      "x": 0,
+      "y": 592,
+      "body_bounds_px": [
+        4,
+        4,
+        162,
+        88
+      ],
+      "registered_source_export": "art/review/fusion/pixels/v2-part4-needle-livery-bone-v1-a3.png"
+    },
+    {
+      "id": "v2-part4-needle-livery-ochre-v1-a2",
+      "asset_id": "v2-part4-needle-livery-ochre-v1-a2",
+      "sha256": "9744cb10fa5d2c8a63cb484e8fe5f640d859d9ffe70f2a78eb2949d72645da76",
+      "content_sha256": "1c87bba0227430de3fc73a0a9fe8791a674618634e7fcf27f2a367cea144cbb4",
+      "width": 168,
+      "height": 92,
+      "frame_index": null,
+      "pivot_px": [
+        83.0,
+        46.0
+      ],
+      "region_in_cell": [
+        0,
+        0,
+        168,
+        92
+      ],
+      "hud_interior_px": null,
+      "page": 1,
+      "x": 168,
+      "y": 592,
+      "body_bounds_px": [
+        4,
+        4,
+        162,
+        88
+      ],
+      "registered_source_export": "art/review/fusion/pixels/v2-part4-needle-livery-ochre-v1-a2.png"
+    },
+    {
+      "id": "v2-part4-needle-livery-red-v1-a2",
+      "asset_id": "v2-part4-needle-livery-red-v1-a2",
+      "sha256": "a6fd7a8e69309ed61512a7fc6ba5d3e8cd7287b4d8d3171f15062ed99e8a232e",
+      "content_sha256": "a4db3bd68b27f98e6fe8fcbf23fb0c563708742695c7ba5c20666dffb5bb3851",
+      "width": 168,
+      "height": 92,
+      "frame_index": null,
+      "pivot_px": [
+        83.0,
+        46.0
+      ],
+      "region_in_cell": [
+        0,
+        0,
+        168,
+        92
+      ],
+      "hud_interior_px": null,
+      "page": 1,
+      "x": 336,
+      "y": 592,
+      "body_bounds_px": [
+        4,
+        4,
+        162,
+        88
+      ],
+      "registered_source_export": "art/review/fusion/pixels/v2-part4-needle-livery-red-v1-a2.png"
+    },
+    {
+      "id": "v2-part4-needle-state-damaged-1-v1-a2",
+      "asset_id": "v2-part4-needle-state-damaged-1-v1-a2",
+      "sha256": "4da01ce7835701bab02b5588beb4a49d863ae214eaecc2ad2388a56235073aaf",
+      "content_sha256": "0254ebd65c184b2114b5499e26f57973e535cc6be720238d63c778dfcd503352",
+      "width": 168,
+      "height": 92,
+      "frame_index": null,
+      "pivot_px": [
+        83.0,
+        46.0
+      ],
+      "region_in_cell": [
+        0,
+        0,
+        168,
+        92
+      ],
+      "hud_interior_px": null,
+      "page": 1,
+      "x": 504,
+      "y": 680,
+      "body_bounds_px": [
+        4,
+        4,
+        162,
+        88
+      ],
+      "registered_source_export": "art/review/fusion/pixels/v2-part4-needle-state-damaged-1-v1-a2.png"
+    },
+    {
+      "id": "v2-part4-needle-state-damaged-2-v1-a3",
+      "asset_id": "v2-part4-needle-state-damaged-2-v1-a3",
+      "sha256": "86a8dbec7c0b22c10dce0f8468cdaed2ca88c9aa1aa7e4620322045671531cef",
+      "content_sha256": "c36968dcfe20431334f987100a9894906ade0e302118bd5b6620778b0c7eb338",
+      "width": 168,
+      "height": 92,
+      "frame_index": null,
+      "pivot_px": [
+        83.0,
+        46.0
+      ],
+      "region_in_cell": [
+        0,
+        0,
+        168,
+        92
+      ],
+      "hud_interior_px": null,
+      "page": 1,
+      "x": 672,
+      "y": 680,
+      "body_bounds_px": [
+        4,
+        4,
+        162,
+        88
+      ],
+      "registered_source_export": "art/review/fusion/pixels/v2-part4-needle-state-damaged-2-v1-a3.png"
+    },
+    {
+      "id": "v2-part4-needle-state-intact-reference",
+      "asset_id": "v2-part4-needle-state-intact-reference",
+      "sha256": "48414fdfb3165c765b0cce6e1b4df994fd9b86efd393c9f8451496150360ecbd",
+      "content_sha256": "88f8869de4e48af1885bb4d5be60b078da7d6649484343dd9e98de25e1967ed8",
+      "width": 168,
+      "height": 92,
+      "frame_index": null,
+      "pivot_px": [
+        83.0,
+        46.0
+      ],
+      "region_in_cell": [
+        0,
+        0,
+        168,
+        92
+      ],
+      "hud_interior_px": null,
+      "page": 1,
+      "x": 840,
+      "y": 680,
+      "body_bounds_px": [
+        4,
+        4,
+        162,
+        88
+      ],
+      "registered_source_export": "art/review/fusion/pixels/v2-part4-needle-state-intact-reference.png"
+    },
+    {
+      "id": "v2-part4-needle-state-wreck-v1",
+      "asset_id": "v2-part4-needle-state-wreck-v1",
+      "sha256": "3c536ccb060afc5d7c8e5ea46de1c321e441d5c62bffb1fe17142b423d8cf691",
+      "content_sha256": "c4475f583a944a272bb3e088f99cdf0924b365bd1305097063a37c9f73667038",
+      "width": 168,
+      "height": 92,
+      "frame_index": null,
+      "pivot_px": [
+        83.0,
+        46.0
+      ],
+      "region_in_cell": [
+        0,
+        0,
+        168,
+        92
+      ],
+      "hud_interior_px": null,
+      "page": 1,
+      "x": 0,
+      "y": 684,
+      "body_bounds_px": [
+        4,
+        4,
+        162,
+        88
+      ],
+      "registered_source_export": "art/review/fusion/pixels/v2-part4-needle-state-wreck-v1.png"
+    }
+  ],
+  "filter": "Linear",
+  "mipmaps": false,
+  "alpha": "straight RGBA; libGDX SRC_ALPHA, ONE_MINUS_SRC_ALPHA",
+  "owner_quality": "pending G2",
+  "recipe": "descending-height-first-free-cell-v1"
+}

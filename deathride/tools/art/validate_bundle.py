@@ -22,7 +22,7 @@ def validate_coverage(catalog,region_ids):
         for row in contracts[group]:
             if mappings.get(row['id']) not in ids:raise ValueError('MISSING_COMBAT_ICON: '+row['id'])
     for asset in assets:
-        expected=asset.get('frames',[asset['asset_id']]) if asset['group'] in ('world','ui') else []
+        expected=asset.get('frames',[asset['asset_id']]) if asset['group'] in ('world','ui','cars') else []
         if any(i not in region_ids for i in expected):raise ValueError('MISSING_CATALOG_REGION')
     return {**{name:len(rows) for name,rows in contracts.items()},'provisional_rivals':1 if catalog.get('provisional_c4') else 0}
 
@@ -33,6 +33,7 @@ def validate(folder, report=None):
         if sha(path)!=page['sha256']:raise ValueError('PAGE_HASH_CHANGED')
         with Image.open(path) as im:
             if list(im.size)!=[page['width'],page['height']] or im.mode!='RGBA':raise ValueError('PAGE_FORMAT')
+            if page['rgba_bytes']!=im.width*im.height*4:raise ValueError('PAGE_BYTE_COUNT')
     for file in sorted(folder.glob('*.atlas')):
         data=read_json(file.with_suffix('.json'));validate_layout(data['regions']);groups.append(data['group'])
         for region in data['regions']:
@@ -41,6 +42,10 @@ def validate(folder, report=None):
             page=Image.open(folder/data['pages'][region['page']]['file'])
             cell=page.crop((region['x'],region['y'],region['x']+region['width'],region['y']+region['height']))
             if content_hash(cell)!=region['content_sha256']:raise ValueError('ATLAS_CONTENT_CHANGED: '+region['id'])
+            if data['group']=='cars':
+                bounds=region.get('body_bounds_px');pivot=region.get('pivot_px',[])
+                if not bounds or len(bounds)!=4 or not (0<=bounds[0]<bounds[2]<=cell.width and 0<=bounds[1]<bounds[3]<=cell.height):raise ValueError('CAR_BODY_BOUNDS')
+                if len(pivot)!=2 or not (0<=pivot[0]<=cell.width and 0<=pivot[1]<=cell.height):raise ValueError('CAR_PIVOT')
             count+=1
         if data['group'].startswith('autotile-'):
             masks={int(r['id'].rsplit('-',1)[1]) for r in data['regions']}
@@ -54,6 +59,18 @@ def validate(folder, report=None):
     for item in catalog['assets']:
         if 'frames' in item and (len(item['frames'])!=6 or len(item['durations_ms'])!=6 or any(d<=0 for d in item['durations_ms'])):raise ValueError('ANIMATION_INCOMPLETE')
     coverage=validate_coverage(catalog,region_ids)
+    cars=[r for r in catalog['assets'] if r['group']=='cars']
+    if cars:
+        if sum(p['file'].startswith('cars-') for p in manifest['pages'])>2:raise ValueError('CAR_PAGE_BUDGET')
+        for car in cars:
+            if not car.get('reference_approved') or not car.get('reference_source_sha256') or not car.get('technical_accepted'):raise ValueError('CAR_REFERENCE_SELECTION')
+        car_meta=read_json(folder/'cars.json')['regions']
+        by_id={r['id']:r for r in car_meta}
+        for cls in {r['car_class'] for r in cars}:
+            family=[r for r in cars if r['car_class']==cls]
+            expected={'clean','damaged-1','damaged-2','wreck','livery-bone','livery-red','livery-ochre'}
+            if {r['logical_name'].rsplit('/',1)[1] for r in family}!=expected:raise ValueError('CAR_FAMILY_INCOMPLETE')
+            if len({(tuple(by_id[r['asset_id']]['pivot_px']),tuple(by_id[r['asset_id']]['body_bounds_px']),by_id[r['asset_id']]['width'],by_id[r['asset_id']]['height']) for r in family})!=1:raise ValueError('CAR_REGISTRATION')
     if catalog.get('natural_obstacles'):
         ids={r['asset_id'] for r in catalog['assets']}
         for item in catalog['natural_obstacles']['obstacles'].values():

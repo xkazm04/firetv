@@ -12,7 +12,7 @@ import dev.deathride.core.*
 class AtlasArt(private val root: FileHandle = Gdx.files.internal("phase2-v1"),private val residentLimit: Long=TextureBudget.ART) {
     data class Region(val image: TextureRegion, val pivotX: Float, val pivotY: Float, val interior: IntArray?,val bodyBounds: IntArray?=null)
     data class Entry(val id: String, val group: String, val frames: Array<String>, val durations: IntArray,
-                     val loop: Boolean, val approved: Boolean)
+                     val loop: Boolean, val approved: Boolean, val referenceSelected: Boolean=false)
     private val entries=HashMap<String,Entry>()
     private val regions=HashMap<String,Region>()
     private val atlases=ArrayList<TextureAtlas>()
@@ -21,6 +21,7 @@ class AtlasArt(private val root: FileHandle = Gdx.files.internal("phase2-v1"),pr
     private var backdrop: Texture?=null
     private var backdropKey=""
     private val carKeys=CarCatalog.all.associate { it.id to arrayOf("clean","damaged-1","damaged-2","wreck").map{s->"cars/${it.id.lowercase()}/$s"}.toTypedArray() }
+    private val liveryKeys=CarCatalog.all.associate { it.id to arrayOf("clean","livery-bone","livery-red","livery-ochre").map{s->"cars/${it.id.lowercase()}/$s"}.toTypedArray() }
     var textureBytes=0L; private set
     var failures=0; private set
     var draws=0L; private set
@@ -34,15 +35,16 @@ class AtlasArt(private val root: FileHandle = Gdx.files.internal("phase2-v1"),pr
                     val id=v.getString("asset_id");val frames=v.get("frames")?.asStringArray()?:arrayOf(id)
                     val durations=v.get("durations_ms")?.asIntArray()?:intArrayOf(1)
                     require(frames.isNotEmpty() && frames.size==durations.size && durations.all{it>0} && durations.sumOf{it.toLong()}<=Int.MAX_VALUE)
-                    val e=Entry(id,v.getString("group"),frames,durations,v.getBoolean("loop",false),v.getBoolean("owner_approved",false))
+                    val e=Entry(id,v.getString("group"),frames,durations,v.getBoolean("loop",false),v.getBoolean("owner_approved",false),
+                        v.getBoolean("reference_approved",false) && v.getBoolean("technical_accepted",false) && v.getString("reference_source_sha256","").length==64)
                     entries[v.getString("logical_name")]=e;entries[id]=e
                 } catch(e: Exception){failed("catalog entry",e)}
             }
             fun aliases(v: JsonValue?) { if(v==null)return;for(a in v)if(a.isString)entries[a.asString()]?.let{entries[a.name]=it} else aliases(a) }
             aliases(catalog.get("content_portrait_aliases"));aliases(catalog.get("content_landmark_aliases"));aliases(catalog.get("content_combat_aliases"))
             loadAtlas("world");loadAtlas("ui")
-            // Optional future bundle contract: approval is attached to shipped car entries, never inferred from a candidate file.
-            if(entries.values.any{it.group=="cars" && it.approved})loadAtlas("cars")
+            // Exact references are owner approved; derived frames carry separate technical selection.
+            if(entries.values.any{it.group=="cars" && (it.approved || it.referenceSelected)})loadAtlas("cars")
             for(e in entries.values.distinctBy{it.id})if(e.group=="tile")try {
                 val t=loadTexture(e.id+".png",TextureBudget.TILE_EDGE);t.setWrap(Texture.TextureWrap.Repeat,Texture.TextureWrap.Repeat)
                 tiles[e.id]=t
@@ -116,14 +118,15 @@ class AtlasArt(private val root: FileHandle = Gdx.files.internal("phase2-v1"),pr
         batch.draw(r.image,x-r.pivotX*sx,y-r.pivotY*sy,r.pivotX*sx,r.pivotY*sy,width,height,1f,1f,degrees)
         draws++;return true
     }
-    fun carKey(id: String,hp: Float,wreck: Boolean): String? {
-        val state=if(wreck)3 else if(hp<.34f)2 else if(hp<.67f)1 else 0
-        val key=carKeys[id]?.get(state)?:return null
-        return key.takeIf{entries[it]?.approved==true && available(it)}
+    fun carKey(id: String,hp: Float,wreck: Boolean,livery: Int=0): String? {
+        val state=carState(hp,wreck)
+        val key=if(state==0)liveryKeys[id]?.get(Math.floorMod(livery,4)) else carKeys[id]?.get(state)
+        return key?.takeIf{entries[it]?.let{e->e.approved || e.referenceSelected}==true && available(it)}
     }
     fun car(batch: Batch,key: String,x: Float,y: Float,length: Float,width: Float,heading: Double,tint: Color,flash: Boolean) {
         val r=region(key)?:return;val body=r.bodyBounds?:return
-        val cellLength=length*r.image.regionWidth/(body[2]-body[0]);val cellWidth=width*r.image.regionHeight/(body[3]-body[1])
+        val scale=minOf(length/(body[2]-body[0]),width/(body[3]-body[1]))
+        val cellLength=scale*r.image.regionWidth;val cellWidth=scale*r.image.regionHeight
         batch.color=Color.WHITE
         draw(batch,key,x,y,cellLength,cellWidth,(heading*180/Math.PI).toFloat())
         // Only a separately authored body-panel mask is tinted: rubber/glass/outline keep their roles.
@@ -138,6 +141,7 @@ class AtlasArt(private val root: FileHandle = Gdx.files.internal("phase2-v1"),pr
     fun drawBackdrop(batch: Batch,x: Float,y: Float,width: Float,height: Float) { backdrop?.let{batch.setColor(.24f,.24f,.24f,1f);batch.draw(it,x,y,width,height);batch.color=Color.WHITE} }
     fun dispose() { atlases.forEach{it.dispose()};tiles.values.forEach{it.dispose()};backdrop?.dispose() }
     companion object {
+        fun carState(hp: Float,wreck: Boolean)=if(wreck)3 else if(hp<.34f)2 else if(hp<.67f)1 else 0
         /** Catalog frame boundaries, including non-looping end: no guessed or retimed frames. */
         fun frameAt(durations: IntArray,loop: Boolean,seconds: Double): Int {
             if(!seconds.isFinite() || seconds<0 || durations.isEmpty())return -1

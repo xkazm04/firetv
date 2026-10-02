@@ -3,6 +3,7 @@ import fs from 'node:fs/promises';
 const {chromium}=await import(pathToFileURL(process.argv[2]).href);
 const report=fileURLToPath(new URL('../../art/reports/',import.meta.url));
 const review=JSON.parse(await fs.readFile(new URL('../../art/review/fusion/review.json',import.meta.url),'utf8'));
+if(review.part===5){await import('./states_browser.mjs');process.exit(0);}
 const expectedCurrent=review.records.filter(r=>!r.superseded).length;
 const expectedAll=review.records.length;
 const expectedAllCarRejects=review.records.filter(r=>r.family==='cars'&&r.verdict==='reject').length;

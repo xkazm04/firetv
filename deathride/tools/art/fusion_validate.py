@@ -8,6 +8,9 @@ from validate_bundle import validate
 
 def main():
     review_path=ART/'review/fusion/review.json'
+    if review_path.exists() and read_json(review_path).get('part')==5:
+        from states_validate import validate as validate_states
+        return validate_states()
     if review_path.exists() and read_json(review_path).get('part')==4:
         from part4_validate import validate as validate_part4
         return validate_part4()

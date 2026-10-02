@@ -1,5 +1,9 @@
 # Owner approval format for the new car references
 
+## Current approval — 2026-10-02, ART STATES
+
+OWNER-CHOICE.md section E and the canonical ledger approve the exact Needle v1, Comet v7, Quill v2 and Kestrel v9 sources listed below. Their 28 state/livery jobs are now authorized. The historical Part 4 handoff remains below with its checkpoint wording. Reference approval does not transfer between versions or grant owner acceptance to generated derivatives; see the current review for technical selections and retained failures.
+
 ## Part 4 current handoff — 2026-10-02
 
 Review [the current four candidates and native 96px silhouettes](review/fusion/index.html). All four pass unchanged pixel gates and remain owner-unapproved. Exact canonical entries are:

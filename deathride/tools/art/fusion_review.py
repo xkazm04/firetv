@@ -74,6 +74,9 @@ def boards(roster,world):
         make_contact_sheet([r for r in world if r['brief']['asset_family']==family],OUT/('world-'+family+'.png'),family+' | fusion, owner review pending')
 
 def main():
+    if (OUT/'review.json').exists() and read_json(OUT/'review.json').get('part')==5:
+        from states_review import publish
+        return publish()
     if (OUT/'review.json').exists() and read_json(OUT/'review.json').get('part')==4:
         from part4_review import publish
         return publish()

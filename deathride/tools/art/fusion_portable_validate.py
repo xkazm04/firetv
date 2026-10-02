@@ -4,6 +4,9 @@ from validate_bundle import validate
 
 def main():
     folder=ART/'review/fusion';review=read_json(folder/'review.json');rows=review['records']
+    if review.get('part')==5:
+        from states_validate import validate as validate_states
+        return validate_states()
     if review.get('part')==4:
         from part4_validate import validate as validate_part4
         return validate_part4()
