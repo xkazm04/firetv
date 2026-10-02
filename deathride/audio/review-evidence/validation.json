@@ -1,0 +1,38 @@
+{
+  "result": "pass",
+  "reports": 5,
+  "sampleCards": 109,
+  "categorySelectors": 50,
+  "mediaLoadsAndStarts": 287,
+  "lightDarkLayouts": 40,
+  "combinedIndexWidths": [
+    320,
+    390,
+    768,
+    1440
+  ],
+  "tests": {
+    "core": {
+      "tests": 124,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "link": {
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "game": {
+      "tests": 17,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "buildCommand": ":core:test :link:test :game:test :app:assembleDebug",
+  "java": "Zulu 22.0.1",
+  "audioGenerated": 0,
+  "creditsSpent": 0
+}

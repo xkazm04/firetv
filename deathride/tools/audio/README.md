@@ -25,12 +25,40 @@ Reproduce the offline page from the committed inputs (no generation):
 
 ```powershell
 python tools/audio/test-measure.py
-python tools/audio/measure-audition.py
 python tools/audio/build-audition.py
 node tools/audio/check-audition.mjs
 ```
 
-Measurement requires ffmpeg/ffprobe and NumPy; browser verification uses the existing `tools/package.json` Playwright dependency and installed Chrome. Measurements keep every original and all failures. Comparison copies use two-pass normalization, with dynamic limiting disclosed; repeat previews contain three unchanged decoded cycles. `run-audition.mjs` defaults to an offline plan/dry-run and accepts `--credits-final` for a read-only balance snapshot. `--generate` is the spending action; **the X2 run is finished, so do not invoke it as part of offline reproduction**.
+Measurement requires ffmpeg/ffprobe and NumPy; browser verification uses Python Playwright and installed Chrome. Measurements keep every original and all failures. Comparison copies use two-pass normalization, with dynamic limiting disclosed; repeat previews contain three unchanged decoded cycles. `run-audition.mjs` defaults to an offline plan/dry-run and accepts `--credits-final` for a read-only balance snapshot. `--generate` is the spending action; **the X2 run is finished, so do not invoke it as part of offline reproduction**.
+
+## Owner review format (X2 and X3)
+
+From `deathride/`, rebuild all five reports and their combined index using existing
+evidence only. These builders do not render, measure, normalize or generate audio:
+
+```powershell
+python tools/audio/build-audition.py
+python tools/audio/build-x3-page.py effects
+python tools/audio/build-x3-page.py engines
+python tools/audio/build-x3-page.py voices
+python tools/audio/build-x3-music-page.py
+python tools/audio/build-review-index.py
+python tools/audio/check-review.py
+```
+
+The browser runner uses Python Playwright and installed Chrome. The existing Node
+check commands forward to that runner; an optional report name (`x2`, `effects`,
+`engines`, `voices`, `music`) limits the check. Evidence goes to
+`audio/review-evidence/`; test decisions use disposable browser contexts.
+
+`report_format.py` supplies the shared controls/export shell; `audio/report.js`
+binds `article.card` metadata to per-sample Keep/Maybe/Reject and notes, plus
+independent category winners. Each report has its own `deathride.audio.*` storage
+key. Earlier local notes are imported without inferred picks. Copy Markdown fills
+a visible textarea even when the clipboard is unavailable, ready to paste into
+`audio/OWNER-AUDIO-CHOICE.md`. It never modifies that gate automatically. Shared
+`report.css` handles System/Light/Dark themes and mobile layout. Playback-only
+attenuation targets −26 LUFS with a −3 dBTP ceiling; it never boosts quiet files.
 
 API references checked 2026-10-02: [SFX request, loop and credit header](https://elevenlabs.io/docs/api-reference/text-to-sound-effects/convert), [SFX prompt limit](https://help.elevenlabs.io/hc/en-us/articles/25735182995985-What-is-Sound-Effects), [request analytics](https://elevenlabs.io/docs/api-reference/analytics/workspace/requests). The conservative music estimate comes from the authorized plan and Garden VR tool; headers, balances and unresolved attribution are all reported separately.
 

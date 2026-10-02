@@ -1,13 +1,19 @@
-<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Death Ride X3 — voices audition</title><style>
-:root{color-scheme:dark;--bg:#161513;--panel:#24221e;--ink:#eee7d8;--edge:#817253}body.light{color-scheme:light;--bg:#eee9dd;--panel:#fffaf0;--ink:#27221d;--edge:#766444}*{box-sizing:border-box}body{background:var(--bg);color:var(--ink);font:16px/1.5 system-ui;margin:0 auto;padding:24px;max-width:1500px}h1{font-size:clamp(28px,5vw,48px);margin-bottom:8px}header{max-width:1000px}button,select{font:inherit;padding:8px;background:var(--panel);color:var(--ink);border:1px solid var(--edge);border-radius:4px}nav{display:flex;gap:8px;flex-wrap:wrap;margin:20px 0}main{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,360px),1fr));gap:20px}article{min-width:0;background:var(--panel);padding:18px;border:1px solid var(--edge);border-radius:5px}h2{overflow-wrap:anywhere}audio{display:block;width:100%;margin:6px 0 16px}pre{white-space:pre-wrap;overflow-wrap:anywhere;font-size:12px}textarea{display:block;width:100%;min-height:70px;font:inherit}.badge{font-weight:700}.fail,.missing{color:#ef997f}.pass{color:#83b99c}body.light .pass{color:#275e37}body.light .fail{color:#9c331d}.hidden{display:none}a{color:inherit}
-</style><header><h1>Death Ride / voices</h1><p>Announcer: Callum, noir read. Mechanic: Harry, helpful and nervous. Original lines adapted from the campaign owner choice. Check every word, Marrow pronunciation, identity and delivery; no ASR or listening verdict is claimed.</p><p>This wave estimate 960 credits; session conservative total 6400/9,000. Account before 23873, after 23040; reserve 8,000. Shared balances include other projects and delayed billing.</p><p>No in-game or physical Stick acceptance. One player at a time. Local edits cost zero credits. Original and edited failures remain visible.</p></header>
-<nav><select id="filter" aria-label="Group"><option value="all">All groups</option><option>announcer</option><option>mechanic</option></select><button id="stop">Stop all</button><button id="theme">Light / dark</button><button id="export">Export notes</button></nav>
-<p id="count"></p><main><article data-group="announcer" data-id="announcer.debt">
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Death Ride X3 — voices audition</title><link rel="stylesheet" href="../../report.css"></head><body data-round="deathride.audio.x3.voices" data-page-title="X3 voices" data-legacy-key="deathride-x3-voices"><main>
+<header><h1>Death Ride / voices</h1><p>Announcer: Callum, noir read. Mechanic: Harry, helpful and nervous. Original lines adapted from the campaign owner choice. Check every word, Marrow pronunciation, identity and delivery; no ASR or listening verdict is claimed.</p><p>This wave estimate 960 credits; session conservative total 6400/9,000. Account before 23873, after 23040; reserve 8,000. Shared balances include other projects and delayed billing.</p><p>No in-game or physical Stick acceptance. One player at a time. Local edits cost zero credits. Original and edited failures remain visible.</p></header>
+<nav class="report-toolbar" aria-label="Review controls">
+<a href="../../index.html">All audio reports</a>
+<label>Theme <select id="theme"><option value="system">System</option><option value="light">Light</option><option value="dark">Dark</option></select></label>
+<label><input id="matched" type="checkbox" checked> Matched playback level</label>
+<a href="#category-choices">Choose category winners</a><a href="#review-export">Copy decisions</a></nav>
+<p class="muted">Matching targets −26 LUFS with playback attenuation only and a −3 dBTP ceiling; quieter or peak-limited clips can remain below target. Short-cue matching is approximate. Files and acceptance results stay unchanged. Compare within a category at one listening volume. One player at a time; repeat controls support seam listening.</p>
+<p id="status" class="status" role="status" aria-live="polite"></p>
+<nav class="report-toolbar"><label>Group <select id="filter" aria-label="Group"><option value="all">All groups</option><option>announcer</option><option>mechanic</option></select></label><button id="stop">Stop all</button></nav>
+<p id="count"></p><div class="cards"><article class="card" data-group="announcer" data-id="announcer.debt" data-direction="announcer.debt" data-label="Announcer / announcer.debt" data-samples="announcer.debt" data-categories="[&quot;Announcer&quot;, &quot;Announcer / debt line&quot;]">
 <h2>announcer.debt</h2><p class="badge pass">PASS — signal screen only</p>
 <p>5.446 s / -18.01 LUFS / -4.65 dBTP</p><p>Original failures: loudness<br>Edited failures: none</p>
 <p>campaign opening: survival debt</p>
-<label>Edited comparison<audio controls preload="none" src="edited/announcer.debt.wav"></audio></label><label>Original<audio controls preload="none" src="raw/announcer.debt.mp3"></audio></label><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
+<label>Edited comparison<audio controls preload="none" src="edited/announcer.debt.wav" data-version="Edited comparison" data-gain="-7.99"></audio></label><label>Original<audio controls preload="none" src="raw/announcer.debt.mp3" data-version="Original" data-gain="-2.79"></audio></label><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
   &quot;promptOrText&quot;: &quot;Your engine is collateral. Every race buys another day. Marrow keeps the books.&quot;,
   &quot;beat&quot;: &quot;campaign opening: survival debt&quot;,
   &quot;provenance&quot;: {
@@ -82,11 +88,11 @@
   ],
   &quot;error&quot;: null
 }</pre></details>
-<label>Your listening note<textarea data-note="announcer.debt" placeholder="Preference, audible issue, device used"></textarea></label></article><article data-group="announcer" data-id="announcer.boss">
+</article><article class="card" data-group="announcer" data-id="announcer.boss" data-direction="announcer.boss" data-label="Announcer / announcer.boss" data-samples="announcer.boss" data-categories="[&quot;Announcer&quot;, &quot;Announcer / boss line&quot;]">
 <h2>announcer.boss</h2><p class="badge pass">PASS — signal screen only</p>
 <p>3.670 s / -17.99 LUFS / -4.82 dBTP</p><p>Original failures: loudness<br>Edited failures: none</p>
 <p>boss briefing</p>
-<label>Edited comparison<audio controls preload="none" src="edited/announcer.boss.wav"></audio></label><label>Original<audio controls preload="none" src="raw/announcer.boss.mp3"></audio></label><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
+<label>Edited comparison<audio controls preload="none" src="edited/announcer.boss.wav" data-version="Edited comparison" data-gain="-8.01"></audio></label><label>Original<audio controls preload="none" src="raw/announcer.boss.mp3" data-version="Original" data-gain="-0.26"></audio></label><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
   &quot;promptOrText&quot;: &quot;Beat the division boss. Give them a reason to stand beside you.&quot;,
   &quot;beat&quot;: &quot;boss briefing&quot;,
   &quot;provenance&quot;: {
@@ -161,11 +167,11 @@
   ],
   &quot;error&quot;: null
 }</pre></details>
-<label>Your listening note<textarea data-note="announcer.boss" placeholder="Preference, audible issue, device used"></textarea></label></article><article data-group="announcer" data-id="announcer.ally">
+</article><article class="card" data-group="announcer" data-id="announcer.ally" data-direction="announcer.ally" data-label="Announcer / announcer.ally" data-samples="announcer.ally" data-categories="[&quot;Announcer&quot;, &quot;Announcer / ally line&quot;]">
 <h2>announcer.ally</h2><p class="badge pass">PASS — signal screen only</p>
 <p>4.674 s / -18.0 LUFS / -4.8 dBTP</p><p>Original failures: loudness<br>Edited failures: none</p>
 <p>boss turns ally; payout type undecided</p>
-<label>Edited comparison<audio controls preload="none" src="edited/announcer.ally.wav"></audio></label><label>Original<audio controls preload="none" src="raw/announcer.ally.mp3"></audio></label><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
+<label>Edited comparison<audio controls preload="none" src="edited/announcer.ally.wav" data-version="Edited comparison" data-gain="-8.00"></audio></label><label>Original<audio controls preload="none" src="raw/announcer.ally.mp3" data-version="Original" data-gain="-3.26"></audio></label><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
   &quot;promptOrText&quot;: &quot;A beaten rival. A new ally. Their backing keeps you on the road.&quot;,
   &quot;beat&quot;: &quot;boss turns ally; payout type undecided&quot;,
   &quot;provenance&quot;: {
@@ -244,11 +250,11 @@
   ],
   &quot;error&quot;: null
 }</pre></details>
-<label>Your listening note<textarea data-note="announcer.ally" placeholder="Preference, audible issue, device used"></textarea></label></article><article data-group="announcer" data-id="announcer.seizure">
+</article><article class="card" data-group="announcer" data-id="announcer.seizure" data-direction="announcer.seizure" data-label="Announcer / announcer.seizure" data-samples="announcer.seizure" data-categories="[&quot;Announcer&quot;, &quot;Announcer / seizure line&quot;]">
 <h2>announcer.seizure</h2><p class="badge pass">PASS — signal screen only</p>
 <p>3.786 s / -17.98 LUFS / -4.66 dBTP</p><p>Original failures: loudness<br>Edited failures: none</p>
 <p>car seizure</p>
-<label>Edited comparison<audio controls preload="none" src="edited/announcer.seizure.wav"></audio></label><label>Original<audio controls preload="none" src="raw/announcer.seizure.mp3"></audio></label><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
+<label>Edited comparison<audio controls preload="none" src="edited/announcer.seizure.wav" data-version="Edited comparison" data-gain="-8.02"></audio></label><label>Original<audio controls preload="none" src="raw/announcer.seizure.mp3" data-version="Original" data-gain="-1.44"></audio></label><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
   &quot;promptOrText&quot;: &quot;Marrow has taken your car. The debt was never meant to end.&quot;,
   &quot;beat&quot;: &quot;car seizure&quot;,
   &quot;provenance&quot;: {
@@ -318,11 +324,11 @@
   ],
   &quot;error&quot;: null
 }</pre></details>
-<label>Your listening note<textarea data-note="announcer.seizure" placeholder="Preference, audible issue, device used"></textarea></label></article><article data-group="announcer" data-id="announcer.duel">
+</article><article class="card" data-group="announcer" data-id="announcer.duel" data-direction="announcer.duel" data-label="Announcer / announcer.duel" data-samples="announcer.duel" data-categories="[&quot;Announcer&quot;, &quot;Announcer / duel line&quot;]">
 <h2>announcer.duel</h2><p class="badge pass">PASS — signal screen only</p>
 <p>3.880 s / -18.0 LUFS / -4.57 dBTP</p><p>Original failures: loudness<br>Edited failures: none</p>
 <p>death duel rules</p>
-<label>Edited comparison<audio controls preload="none" src="edited/announcer.duel.wav"></audio></label><label>Original<audio controls preload="none" src="raw/announcer.duel.mp3"></audio></label><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
+<label>Edited comparison<audio controls preload="none" src="edited/announcer.duel.wav" data-version="Edited comparison" data-gain="-8.00"></audio></label><label>Original<audio controls preload="none" src="raw/announcer.duel.mp3" data-version="Original" data-gain="-2.37"></audio></label><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
   &quot;promptOrText&quot;: &quot;No laps. No points. The last car running ends this.&quot;,
   &quot;beat&quot;: &quot;death duel rules&quot;,
   &quot;provenance&quot;: {
@@ -397,11 +403,11 @@
   ],
   &quot;error&quot;: null
 }</pre></details>
-<label>Your listening note<textarea data-note="announcer.duel" placeholder="Preference, audible issue, device used"></textarea></label></article><article data-group="announcer" data-id="announcer.freedom">
+</article><article class="card" data-group="announcer" data-id="announcer.freedom" data-direction="announcer.freedom" data-label="Announcer / announcer.freedom" data-samples="announcer.freedom" data-categories="[&quot;Announcer&quot;, &quot;Announcer / freedom line&quot;]">
 <h2>announcer.freedom</h2><p class="badge pass">PASS — signal screen only</p>
 <p>3.283 s / -18.01 LUFS / -5.29 dBTP</p><p>Original failures: loudness<br>Edited failures: none</p>
 <p>final victory</p>
-<label>Edited comparison<audio controls preload="none" src="edited/announcer.freedom.wav"></audio></label><label>Original<audio controls preload="none" src="raw/announcer.freedom.mp3"></audio></label><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
+<label>Edited comparison<audio controls preload="none" src="edited/announcer.freedom.wav" data-version="Edited comparison" data-gain="-7.99"></audio></label><label>Original<audio controls preload="none" src="raw/announcer.freedom.mp3" data-version="Original" data-gain="-2.42"></audio></label><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
   &quot;promptOrText&quot;: &quot;The ledger is closed. This road belongs to the living.&quot;,
   &quot;beat&quot;: &quot;final victory&quot;,
   &quot;provenance&quot;: {
@@ -476,11 +482,11 @@
   ],
   &quot;error&quot;: null
 }</pre></details>
-<label>Your listening note<textarea data-note="announcer.freedom" placeholder="Preference, audible issue, device used"></textarea></label></article><article data-group="mechanic" data-id="mechanic.welcome">
+</article><article class="card" data-group="mechanic" data-id="mechanic.welcome" data-direction="mechanic.welcome" data-label="Mechanic / mechanic.welcome" data-samples="mechanic.welcome" data-categories="[&quot;Mechanic&quot;, &quot;Mechanic / welcome line&quot;]">
 <h2>mechanic.welcome</h2><p class="badge pass">PASS — signal screen only</p>
 <p>5.458 s / -18.0 LUFS / -3.54 dBTP</p><p>Original failures: loudness<br>Edited failures: none</p>
 <p>shop introduction</p>
-<label>Edited comparison<audio controls preload="none" src="edited/mechanic.welcome.wav"></audio></label><label>Original<audio controls preload="none" src="raw/mechanic.welcome.mp3"></audio></label><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
+<label>Edited comparison<audio controls preload="none" src="edited/mechanic.welcome.wav" data-version="Edited comparison" data-gain="-8.00"></audio></label><label>Original<audio controls preload="none" src="raw/mechanic.welcome.mp3" data-version="Original" data-gain="-3.25"></audio></label><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
   &quot;promptOrText&quot;: &quot;You made it. Good. Let me check that engine before Marrow sends you out again.&quot;,
   &quot;beat&quot;: &quot;shop introduction&quot;,
   &quot;provenance&quot;: {
@@ -559,11 +565,11 @@
   ],
   &quot;error&quot;: null
 }</pre></details>
-<label>Your listening note<textarea data-note="mechanic.welcome" placeholder="Preference, audible issue, device used"></textarea></label></article><article data-group="mechanic" data-id="mechanic.repair">
+</article><article class="card" data-group="mechanic" data-id="mechanic.repair" data-direction="mechanic.repair" data-label="Mechanic / mechanic.repair" data-samples="mechanic.repair" data-categories="[&quot;Mechanic&quot;, &quot;Mechanic / repair line&quot;]">
 <h2>mechanic.repair</h2><p class="badge pass">PASS — signal screen only</p>
 <p>4.803 s / -18.0 LUFS / -2.31 dBTP</p><p>Original failures: loudness<br>Edited failures: none</p>
 <p>shop repair</p>
-<label>Edited comparison<audio controls preload="none" src="edited/mechanic.repair.wav"></audio></label><label>Original<audio controls preload="none" src="raw/mechanic.repair.mp3"></audio></label><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
+<label>Edited comparison<audio controls preload="none" src="edited/mechanic.repair.wav" data-version="Edited comparison" data-gain="-8.00"></audio></label><label>Original<audio controls preload="none" src="raw/mechanic.repair.mp3" data-version="Original" data-gain="-1.34"></audio></label><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
   &quot;promptOrText&quot;: &quot;Easy. I can hold this together. Just bring it back in one piece, all right?&quot;,
   &quot;beat&quot;: &quot;shop repair&quot;,
   &quot;provenance&quot;: {
@@ -646,11 +652,11 @@
   ],
   &quot;error&quot;: null
 }</pre></details>
-<label>Your listening note<textarea data-note="mechanic.repair" placeholder="Preference, audible issue, device used"></textarea></label></article><article data-group="mechanic" data-id="mechanic.books">
+</article><article class="card" data-group="mechanic" data-id="mechanic.books" data-direction="mechanic.books" data-label="Mechanic / mechanic.books" data-samples="mechanic.books" data-categories="[&quot;Mechanic&quot;, &quot;Mechanic / books line&quot;]">
 <h2>mechanic.books</h2><p class="badge pass">PASS — signal screen only</p>
 <p>4.350 s / -17.99 LUFS / -5.5 dBTP</p><p>Original failures: loudness<br>Edited failures: none</p>
 <p>debt twist; no unsupported money destination</p>
-<label>Edited comparison<audio controls preload="none" src="edited/mechanic.books.wav"></audio></label><label>Original<audio controls preload="none" src="raw/mechanic.books.mp3"></audio></label><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
+<label>Edited comparison<audio controls preload="none" src="edited/mechanic.books.wav" data-version="Edited comparison" data-gain="-8.01"></audio></label><label>Original<audio controls preload="none" src="raw/mechanic.books.mp3" data-version="Original" data-gain="-2.25"></audio></label><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
   &quot;promptOrText&quot;: &quot;I checked the receipts. You keep winning, but his numbers never let you go.&quot;,
   &quot;beat&quot;: &quot;debt twist; no unsupported money destination&quot;,
   &quot;provenance&quot;: {
@@ -729,11 +735,11 @@
   ],
   &quot;error&quot;: null
 }</pre></details>
-<label>Your listening note<textarea data-note="mechanic.books" placeholder="Preference, audible issue, device used"></textarea></label></article><article data-group="mechanic" data-id="mechanic.ally">
+</article><article class="card" data-group="mechanic" data-id="mechanic.ally" data-direction="mechanic.ally" data-label="Mechanic / mechanic.ally" data-samples="mechanic.ally" data-categories="[&quot;Mechanic&quot;, &quot;Mechanic / ally line&quot;]">
 <h2>mechanic.ally</h2><p class="badge pass">PASS — signal screen only</p>
 <p>5.493 s / -18.01 LUFS / -2.33 dBTP</p><p>Original failures: loudness<br>Edited failures: none</p>
 <p>ally reward types; no choice mechanic assumed</p>
-<label>Edited comparison<audio controls preload="none" src="edited/mechanic.ally.wav"></audio></label><label>Original<audio controls preload="none" src="raw/mechanic.ally.mp3"></audio></label><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
+<label>Edited comparison<audio controls preload="none" src="edited/mechanic.ally.wav" data-version="Edited comparison" data-gain="-7.99"></audio></label><label>Original<audio controls preload="none" src="raw/mechanic.ally.mp3" data-version="Original" data-gain="-1.92"></audio></label><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
   &quot;promptOrText&quot;: &quot;That boss is backing you now. Money, a car, parts. We finally have some help.&quot;,
   &quot;beat&quot;: &quot;ally reward types; no choice mechanic assumed&quot;,
   &quot;provenance&quot;: {
@@ -820,11 +826,11 @@
   ],
   &quot;error&quot;: null
 }</pre></details>
-<label>Your listening note<textarea data-note="mechanic.ally" placeholder="Preference, audible issue, device used"></textarea></label></article><article data-group="mechanic" data-id="mechanic.seizure">
+</article><article class="card" data-group="mechanic" data-id="mechanic.seizure" data-direction="mechanic.seizure" data-label="Mechanic / mechanic.seizure" data-samples="mechanic.seizure" data-categories="[&quot;Mechanic&quot;, &quot;Mechanic / seizure line&quot;]">
 <h2>mechanic.seizure</h2><p class="badge fail">FAIL — signal screen only</p>
 <p>7.047 s / -18.0 LUFS / -5.44 dBTP</p><p>Original failures: loudness, silence<br>Edited failures: silence</p>
 <p>seizure response</p>
-<label>Edited comparison<audio controls preload="none" src="edited/mechanic.seizure.wav"></audio></label><label>Original<audio controls preload="none" src="raw/mechanic.seizure.mp3"></audio></label><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
+<label>Edited comparison<audio controls preload="none" src="edited/mechanic.seizure.wav" data-version="Edited comparison" data-gain="-8.00"></audio></label><label>Original<audio controls preload="none" src="raw/mechanic.seizure.mp3" data-version="Original" data-gain="-1.33"></audio></label><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
   &quot;promptOrText&quot;: &quot;He took your car? Right. Right... I thought he might. Come round the back.&quot;,
   &quot;beat&quot;: &quot;seizure response&quot;,
   &quot;provenance&quot;: {
@@ -913,11 +919,11 @@
   ],
   &quot;error&quot;: null
 }</pre></details>
-<label>Your listening note<textarea data-note="mechanic.seizure" placeholder="Preference, audible issue, device used"></textarea></label></article><article data-group="mechanic" data-id="mechanic.rig">
+</article><article class="card" data-group="mechanic" data-id="mechanic.rig" data-direction="mechanic.rig" data-label="Mechanic / mechanic.rig" data-samples="mechanic.rig" data-categories="[&quot;Mechanic&quot;, &quot;Mechanic / rig line&quot;]">
 <h2>mechanic.rig</h2><p class="badge pass">PASS — signal screen only</p>
 <p>5.434 s / -17.99 LUFS / -5.22 dBTP</p><p>Original failures: loudness<br>Edited failures: none</p>
 <p>secret basic car and mine rig</p>
-<label>Edited comparison<audio controls preload="none" src="edited/mechanic.rig.wav"></audio></label><label>Original<audio controls preload="none" src="raw/mechanic.rig.mp3"></audio></label><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
+<label>Edited comparison<audio controls preload="none" src="edited/mechanic.rig.wav" data-version="Edited comparison" data-gain="-8.01"></audio></label><label>Original<audio controls preload="none" src="raw/mechanic.rig.mp3" data-version="Original" data-gain="-2.63"></audio></label><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
   &quot;promptOrText&quot;: &quot;It is basic. I know. But I fitted a mine dispatcher. Keep moving and let him follow.&quot;,
   &quot;beat&quot;: &quot;secret basic car and mine rig&quot;,
   &quot;provenance&quot;: {
@@ -1004,11 +1010,11 @@
   ],
   &quot;error&quot;: null
 }</pre></details>
-<label>Your listening note<textarea data-note="mechanic.rig" placeholder="Preference, audible issue, device used"></textarea></label></article><article data-group="mechanic" data-id="mechanic.duel">
+</article><article class="card" data-group="mechanic" data-id="mechanic.duel" data-direction="mechanic.duel" data-label="Mechanic / mechanic.duel" data-samples="mechanic.duel" data-categories="[&quot;Mechanic&quot;, &quot;Mechanic / duel line&quot;]">
 <h2>mechanic.duel</h2><p class="badge pass">PASS — signal screen only</p>
 <p>3.711 s / -18.0 LUFS / -3.14 dBTP</p><p>Original failures: loudness<br>Edited failures: none</p>
 <p>duel setup</p>
-<label>Edited comparison<audio controls preload="none" src="edited/mechanic.duel.wav"></audio></label><label>Original<audio controls preload="none" src="raw/mechanic.duel.mp3"></audio></label><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
+<label>Edited comparison<audio controls preload="none" src="edited/mechanic.duel.wav" data-version="Edited comparison" data-gain="-8.00"></audio></label><label>Original<audio controls preload="none" src="raw/mechanic.duel.mp3" data-version="Original" data-gain="-1.83"></audio></label><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
   &quot;promptOrText&quot;: &quot;No finish line this time. You come back. Marrow does not.&quot;,
   &quot;beat&quot;: &quot;duel setup&quot;,
   &quot;provenance&quot;: {
@@ -1087,11 +1093,11 @@
   ],
   &quot;error&quot;: null
 }</pre></details>
-<label>Your listening note<textarea data-note="mechanic.duel" placeholder="Preference, audible issue, device used"></textarea></label></article><article data-group="mechanic" data-id="mechanic.after">
+</article><article class="card" data-group="mechanic" data-id="mechanic.after" data-direction="mechanic.after" data-label="Mechanic / mechanic.after" data-samples="mechanic.after" data-categories="[&quot;Mechanic&quot;, &quot;Mechanic / after line&quot;]">
 <h2>mechanic.after</h2><p class="badge pass">PASS — signal screen only</p>
 <p>4.118 s / -18.01 LUFS / -5.56 dBTP</p><p>Original failures: loudness<br>Edited failures: none</p>
 <p>aftermath without promising seized car return</p>
-<label>Edited comparison<audio controls preload="none" src="edited/mechanic.after.wav"></audio></label><label>Original<audio controls preload="none" src="raw/mechanic.after.mp3"></audio></label><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
+<label>Edited comparison<audio controls preload="none" src="edited/mechanic.after.wav" data-version="Edited comparison" data-gain="-7.99"></audio></label><label>Original<audio controls preload="none" src="raw/mechanic.after.mp3" data-version="Original" data-gain="-1.90"></audio></label><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
   &quot;promptOrText&quot;: &quot;You are back. I kept listening for the engine. Thought I had lost you.&quot;,
   &quot;beat&quot;: &quot;aftermath without promising seized car return&quot;,
   &quot;provenance&quot;: {
@@ -1170,13 +1176,14 @@
   ],
   &quot;error&quot;: null
 }</pre></details>
-<label>Your listening note<textarea data-note="mechanic.after" placeholder="Preference, audible issue, device used"></textarea></label></article></main><script>
+</article></div><section id="category-choices" class="review-section"><h2>Choose category winners</h2>
+<p>Pick a winner, no winner, or a mix with sample IDs in the note. These choices are separate from each sample’s Keep / Maybe / Reject judgement. Families can contain different cues or lines; a family winner is a preferred reference, not a replacement for every cue.</p>
+<div id="winner-fields" class="winner-grid"></div></section>
+<section id="review-export" class="review-section export"><h2>Take your choices with you</h2>
+<p>Paste the Markdown below into <a href="../../OWNER-AUDIO-CHOICE.md">deathride/audio/OWNER-AUDIO-CHOICE.md</a>. This page never edits that file or grants production acceptance. Export before moving folders or changing browsers.</p>
+<div class="report-toolbar"><button id="copy" type="button">Copy Markdown</button><button id="refresh-export" type="button">Preview Markdown</button></div>
+<label for="export">Markdown export — also available for manual copy</label><textarea id="export" readonly></textarea></section></main><script>
 const $=id=>document.getElementById(id),players=[...document.querySelectorAll('audio')],cards=[...document.querySelectorAll('article')];
 function stop(){players.forEach(p=>{p.pause();p.currentTime=0})} $('stop').onclick=stop;
-players.forEach(p=>p.addEventListener('play',()=>players.forEach(q=>{if(p!==q)q.pause()})));
 function filter(){stop();let n=0;cards.forEach(c=>{let show=$('filter').value==='all'||c.dataset.group===$('filter').value;c.classList.toggle('hidden',!show);if(show)n++});$('count').textContent=n+' candidates shown'}$('filter').onchange=filter;filter();
-const key='deathride-x3-voices';let notes={};try{notes=JSON.parse(localStorage.getItem(key)||'{}');document.body.classList.toggle('light',localStorage.getItem('deathride-x3-theme')==='light')}catch{}
-$('theme').onclick=()=>{document.body.classList.toggle('light');try{localStorage.setItem('deathride-x3-theme',document.body.classList.contains('light')?'light':'dark')}catch{}};
-document.querySelectorAll('[data-note]').forEach(n=>{n.value=notes[n.dataset.note]||'';n.oninput=()=>{notes[n.dataset.note]=n.value;try{localStorage.setItem(key,JSON.stringify(notes))}catch{}}});
-$('export').onclick=()=>{let a=document.createElement('a'),u=URL.createObjectURL(new Blob([JSON.stringify({wave:'voices',at:new Date().toISOString(),notes},null,2)],{type:'application/json'}));a.href=u;a.download='x3-voices-listening-notes.json';a.click();setTimeout(()=>URL.revokeObjectURL(u),1000)};
-</script></html>
+</script><script src="../../report.js"></script></body></html>

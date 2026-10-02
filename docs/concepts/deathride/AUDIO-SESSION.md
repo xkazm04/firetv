@@ -1,5 +1,22 @@
 # Audio execution session
 
+## Audio review format — 2026-10-03
+
+Applied the Mage Arena card/radio/note/export pattern to all five existing X2/X3
+reports, with shared offline JS/CSS and a combined index. Design:
+[AUDIO-REVIEW-FORMAT.md](AUDIO-REVIEW-FORMAT.md). 109 sample judgements and 50
+independent category selectors; per-page storage keys, legacy note preservation,
+theme selection, matched playback, repeat and paste-ready Markdown for the owner
+choice file. No inferred owner decisions. Existing audio, spend/acceptance data,
+provenance and game/runtime code unchanged; zero generation or credits. All six
+HTML files regenerate byte-for-byte. Real Chrome/file browser checks pass: 287
+media loads/starts, 40 light/dark layouts without overflow, persistence, export,
+storage/clipboard fallbacks, actual repeat boundaries and music chapter seeking.
+Required core/link/game tests and APK pass on Java 22 (144 tests); the initial
+Java 17 attempt failed on an existing newer test API. Both Mage Arena rounds and
+shared files were read without writing to that project. One local commit;
+never push. Owner listening and physical Stick acceptance remain open.
+
 ## X3.4 — 2026-10-02
 
 Text-first original campaign script, six Callum announcer and eight Harry Mechanic

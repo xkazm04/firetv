@@ -1,13 +1,19 @@
-<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Death Ride X3 — effects audition</title><style>
-:root{color-scheme:dark;--bg:#161513;--panel:#24221e;--ink:#eee7d8;--edge:#817253}body.light{color-scheme:light;--bg:#eee9dd;--panel:#fffaf0;--ink:#27221d;--edge:#766444}*{box-sizing:border-box}body{background:var(--bg);color:var(--ink);font:16px/1.5 system-ui;margin:0 auto;padding:24px;max-width:1500px}h1{font-size:clamp(28px,5vw,48px);margin-bottom:8px}header{max-width:1000px}button,select{font:inherit;padding:8px;background:var(--panel);color:var(--ink);border:1px solid var(--edge);border-radius:4px}nav{display:flex;gap:8px;flex-wrap:wrap;margin:20px 0}main{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,360px),1fr));gap:20px}article{min-width:0;background:var(--panel);padding:18px;border:1px solid var(--edge);border-radius:5px}h2{overflow-wrap:anywhere}audio{display:block;width:100%;margin:6px 0 16px}pre{white-space:pre-wrap;overflow-wrap:anywhere;font-size:12px}textarea{display:block;width:100%;min-height:70px;font:inherit}.badge{font-weight:700}.fail,.missing{color:#ef997f}.pass{color:#83b99c}body.light .pass{color:#275e37}body.light .fail{color:#9c331d}.hidden{display:none}a{color:inherit}
-</style><header><h1>Death Ride / effects</h1><p>Chosen sources and new effects. Crunch has no winner: compare crunch-base with crunch-retry. Repairing meters does not repair an artistic mismatch.</p><p>This wave estimate 3440 credits; session conservative total 3440/9,000. Account before 24672, after 24293; reserve 8,000. Shared balances include other projects and delayed billing.</p><p>No in-game or physical Stick acceptance. One player at a time. Local edits cost zero credits. Original and edited failures remain visible.</p></header>
-<nav><select id="filter" aria-label="Group"><option value="all">All groups</option><option>ability</option><option>collision</option><option>crunch-base</option><option>engine</option><option>movement</option><option>pickup</option><option>race</option><option>ui</option><option>weapon</option></select><button id="stop">Stop all</button><button id="theme">Light / dark</button><button id="export">Export notes</button></nav>
-<p id="count"></p><main><article data-group="engine" data-id="engine-base">
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Death Ride X3 — effects audition</title><link rel="stylesheet" href="../../report.css"></head><body data-round="deathride.audio.x3.effects" data-page-title="X3 effects" data-legacy-key="deathride-x3-effects"><main>
+<header><h1>Death Ride / effects</h1><p>Chosen sources and new effects. Crunch has no winner: compare crunch-base with crunch-retry. Repairing meters does not repair an artistic mismatch.</p><p>This wave estimate 3440 credits; session conservative total 3440/9,000. Account before 24672, after 24293; reserve 8,000. Shared balances include other projects and delayed billing.</p><p>No in-game or physical Stick acceptance. One player at a time. Local edits cost zero credits. Original and edited failures remain visible.</p></header>
+<nav class="report-toolbar" aria-label="Review controls">
+<a href="../../index.html">All audio reports</a>
+<label>Theme <select id="theme"><option value="system">System</option><option value="light">Light</option><option value="dark">Dark</option></select></label>
+<label><input id="matched" type="checkbox" checked> Matched playback level</label>
+<a href="#category-choices">Choose category winners</a><a href="#review-export">Copy decisions</a></nav>
+<p class="muted">Matching targets −26 LUFS with playback attenuation only and a −3 dBTP ceiling; quieter or peak-limited clips can remain below target. Short-cue matching is approximate. Files and acceptance results stay unchanged. Compare within a category at one listening volume. One player at a time; repeat controls support seam listening.</p>
+<p id="status" class="status" role="status" aria-live="polite"></p>
+<nav class="report-toolbar"><label>Group <select id="filter" aria-label="Group"><option value="all">All groups</option><option>ability</option><option>collision</option><option>crunch-base</option><option>engine</option><option>movement</option><option>pickup</option><option>race</option><option>ui</option><option>weapon</option></select></label><button id="stop">Stop all</button></nav>
+<p id="count"></p><div class="cards"><article class="card" data-group="engine" data-id="engine-base" data-direction="engine-base" data-label="Engine / engine-base" data-samples="engine-base" data-categories="[&quot;Engine&quot;]">
 <h2>engine-base</h2><p class="badge pass">PASS — signal screen only</p>
 <p>2.000 s / -20.0 LUFS / -7.98 dBTP</p><p>Original failures: duration, loudness, truePeak, loopSeam<br>Edited failures: none</p>
 <p>Owner listening pending</p>
-<label>Edited comparison<audio controls preload="none" src="edited/engine-base.wav"></audio></label><label>Original<audio controls preload="none" src="../../audition/raw/diesel-engine.mp3"></audio></label><label>Three cycles<audio controls preload="none" src="repeats/engine-base-three-cycles.ogg"></audio></label><details><summary>First local attempt — pass: no meter failures</summary><audio controls preload="none" src="first-pass/edited/engine-base.wav"></audio><p>-19.99 LUFS; -7.58 dBTP</p></details><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
+<label>Edited comparison<audio controls preload="none" src="edited/engine-base.wav" data-version="Edited comparison" data-gain="-6.00"></audio></label><label>Original<audio controls preload="none" src="../../audition/raw/diesel-engine.mp3" data-version="Original" data-gain="-15.05"></audio></label><label>Three cycles<audio controls preload="none" src="repeats/engine-base-three-cycles.ogg" data-version="Three cycles" data-gain="-6.00"></audio></label><details><summary>First local attempt — pass: no meter failures</summary><audio controls preload="none" src="first-pass/edited/engine-base.wav" data-version="First local attempt" data-gain="-6.01"></audio><p>-19.99 LUFS; -7.58 dBTP</p></details><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
   &quot;promptOrText&quot;: &quot;Battered road coupe at steady low revs. Constant body, seamlessly repeating; no ignition, acceleration, fade or backfire. Timbre: heavy uneven diesel piston knocks and vibrating steel casing. Close foundry steel, blunt low-mid weight, analog grit, short concrete reflection. 2 seconds. Original isolated effect; no music, no voice.&quot;,
   &quot;beat&quot;: null,
   &quot;provenance&quot;: {
@@ -99,11 +105,11 @@
   ],
   &quot;error&quot;: null
 }</pre></details>
-<label>Your listening note<textarea data-note="engine-base" placeholder="Preference, audible issue, device used"></textarea></label></article><article data-group="weapon" data-id="rivet-base">
+</article><article class="card" data-group="weapon" data-id="rivet-base" data-direction="rivet-base" data-label="Rivet / rivet-base" data-samples="rivet-base" data-categories="[&quot;Rivet&quot;, &quot;Weapons family&quot;]">
 <h2>rivet-base</h2><p class="badge pass">PASS — signal screen only</p>
 <p>0.180 s / -19.95 LUFS / -7.03 dBTP</p><p>Original failures: loudness, truePeak, silence, clipping<br>Edited failures: none</p>
 <p>Owner listening pending</p>
-<label>Edited comparison<audio controls preload="none" src="edited/rivet-base.wav"></audio></label><label>Original<audio controls preload="none" src="../../audition/raw/diesel-rivet.mp3"></audio></label><details><summary>First local attempt — pass: no meter failures</summary><audio controls preload="none" src="first-pass/edited/rivet-base.wav"></audio><p>-19.95 LUFS; -7.04 dBTP</p></details><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
+<label>Edited comparison<audio controls preload="none" src="edited/rivet-base.wav" data-version="Edited comparison" data-gain="-6.05"></audio></label><label>Original<audio controls preload="none" src="../../audition/raw/diesel-rivet.mp3" data-version="Original" data-gain="-17.89"></audio></label><details><summary>First local attempt — pass: no meter failures</summary><audio controls preload="none" src="first-pass/edited/rivet-base.wav" data-version="First local attempt" data-gain="-6.05"></audio><p>-19.95 LUFS; -7.04 dBTP</p></details><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
   &quot;promptOrText&quot;: &quot;One crude vehicle rivet-gun burst. Immediate attack, three cracks in 0.6 s, short metal body, decay to silence; no reload. Timbre: a hard pneumatic rivet mechanism and rattling steel bolt. Close foundry steel, blunt low-mid weight, analog grit, short concrete reflection. 1.5 seconds. Original isolated effect; no music, no voice.&quot;,
   &quot;beat&quot;: null,
   &quot;provenance&quot;: {
@@ -176,11 +182,11 @@
   ],
   &quot;error&quot;: null
 }</pre></details>
-<label>Your listening note<textarea data-note="rivet-base" placeholder="Preference, audible issue, device used"></textarea></label></article><article data-group="weapon" data-id="mine-base">
+</article><article class="card" data-group="weapon" data-id="mine-base" data-direction="mine-base" data-label="Mine blast / mine-base" data-samples="mine-base" data-categories="[&quot;Mine blast&quot;, &quot;Mine&quot;, &quot;Weapons family&quot;]">
 <h2>mine-base</h2><p class="badge pass">PASS — signal screen only</p>
 <p>0.784 s / -20.01 LUFS / -5.16 dBTP</p><p>Original failures: loudness, truePeak, silence, clipping<br>Edited failures: none</p>
 <p>Owner listening pending</p>
-<label>Edited comparison<audio controls preload="none" src="edited/mine-base.wav"></audio></label><label>Original<audio controls preload="none" src="../../audition/raw/diesel-mine.mp3"></audio></label><details><summary>First local attempt — pass: no meter failures</summary><audio controls preload="none" src="first-pass/edited/mine-base.wav"></audio><p>-20.01 LUFS; -5.17 dBTP</p></details><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
+<label>Edited comparison<audio controls preload="none" src="edited/mine-base.wav" data-version="Edited comparison" data-gain="-5.99"></audio></label><label>Original<audio controls preload="none" src="../../audition/raw/diesel-mine.mp3" data-version="Original" data-gain="-13.06"></audio></label><details><summary>First local attempt — pass: no meter failures</summary><audio controls preload="none" src="first-pass/edited/mine-base.wav" data-version="First local attempt" data-gain="-5.99"></audio><p>-20.01 LUFS; -5.17 dBTP</p></details><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
   &quot;promptOrText&quot;: &quot;One compact road-mine blast. Hard attack, short low concussive body, torn metal and grit rapidly decaying. Close, no sustained fireball. Timbre: a compressed concussive steel drum thud with torn plate debris. Close foundry steel, blunt low-mid weight, analog grit, short concrete reflection. 2 seconds. Original isolated effect; no music, no voice.&quot;,
   &quot;beat&quot;: null,
   &quot;provenance&quot;: {
@@ -312,11 +318,11 @@
   ],
   &quot;error&quot;: null
 }</pre></details>
-<label>Your listening note<textarea data-note="mine-base" placeholder="Preference, audible issue, device used"></textarea></label></article><article data-group="crunch-base" data-id="crunch-base">
+</article><article class="card" data-group="crunch-base" data-id="crunch-base" data-direction="crunch-base" data-label="Crunch / crunch-base" data-samples="crunch-base" data-categories="[&quot;Crunch&quot;]">
 <h2>crunch-base</h2><p class="badge pass">PASS — signal screen only</p>
 <p>0.568 s / -19.99 LUFS / -4.96 dBTP</p><p>Original failures: loudness, silence<br>Edited failures: none</p>
 <p>Owner listening pending</p>
-<label>Edited comparison<audio controls preload="none" src="edited/crunch-base.wav"></audio></label><label>Original<audio controls preload="none" src="../../audition/raw/diesel-crunch.mp3"></audio></label><details><summary>First local attempt — pass: no meter failures</summary><audio controls preload="none" src="first-pass/edited/crunch-base.wav"></audio><p>-19.99 LUFS; -4.96 dBTP</p></details><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
+<label>Edited comparison<audio controls preload="none" src="edited/crunch-base.wav" data-version="Edited comparison" data-gain="-6.01"></audio></label><label>Original<audio controls preload="none" src="../../audition/raw/diesel-crunch.mp3" data-version="Original" data-gain="-10.41"></audio></label><details><summary>First local attempt — pass: no meter failures</summary><audio controls preload="none" src="first-pass/edited/crunch-base.wav" data-version="First local attempt" data-gain="-6.01"></audio><p>-19.99 LUFS; -4.96 dBTP</p></details><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
   &quot;promptOrText&quot;: &quot;One car-to-car side collision. Sharp steel contact, short buckling grind, debris settling. No engine bed or tyre squeal. Timbre: a dense chassis crush and wrenching heavy steel. Close foundry steel, blunt low-mid weight, analog grit, short concrete reflection. 1.5 seconds. Original isolated effect; no music, no voice.&quot;,
   &quot;beat&quot;: null,
   &quot;provenance&quot;: {
@@ -385,11 +391,11 @@
   ],
   &quot;error&quot;: null
 }</pre></details>
-<label>Your listening note<textarea data-note="crunch-base" placeholder="Preference, audible issue, device used"></textarea></label></article><article data-group="pickup" data-id="pickup-base">
+</article><article class="card" data-group="pickup" data-id="pickup-base" data-direction="pickup-base" data-label="Pickup / pickup-base" data-samples="pickup-base" data-categories="[&quot;Pickup&quot;]">
 <h2>pickup-base</h2><p class="badge pass">PASS — signal screen only</p>
 <p>0.751 s / -20.32 LUFS / -2.0 dBTP</p><p>Original failures: loudness, truePeak<br>Edited failures: none</p>
 <p>Owner listening pending</p>
-<label>Edited comparison<audio controls preload="none" src="edited/pickup-base.wav"></audio></label><label>Original<audio controls preload="none" src="../../audition/raw/dust-pickup.mp3"></audio></label><details><summary>First local attempt — pass: no meter failures</summary><audio controls preload="none" src="first-pass/edited/pickup-base.wav"></audio><p>-20.27 LUFS; -2.0 dBTP</p></details><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
+<label>Edited comparison<audio controls preload="none" src="edited/pickup-base.wav" data-version="Edited comparison" data-gain="-5.68"></audio></label><label>Original<audio controls preload="none" src="../../audition/raw/dust-pickup.mp3" data-version="Original" data-gain="-11.78"></audio></label><details><summary>First local attempt — pass: no meter failures</summary><audio controls preload="none" src="first-pass/edited/pickup-base.wav" data-version="First local attempt" data-gain="-5.73"></audio><p>-20.27 LUFS; -2.0 dBTP</p></details><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
   &quot;promptOrText&quot;: &quot;One tactile collection confirmation. Crisp small latch attack, short satisfying body, quickly decaying tail. No coins or bleep. Timbre: a scavenged ammunition tin latch and a brief loose metal jingle. Dust-dry outdoor metal and leather, exposed close attack, short air tail, tape grain. 1 seconds. Original isolated effect; no music, no voice.&quot;,
   &quot;beat&quot;: null,
   &quot;provenance&quot;: {
@@ -458,11 +464,11 @@
   ],
   &quot;error&quot;: null
 }</pre></details>
-<label>Your listening note<textarea data-note="pickup-base" placeholder="Preference, audible issue, device used"></textarea></label></article><article data-group="ui" data-id="confirm-base">
+</article><article class="card" data-group="ui" data-id="confirm-base" data-direction="confirm-base" data-label="UI / confirm-base" data-samples="confirm-base" data-categories="[&quot;UI&quot;]">
 <h2>confirm-base</h2><p class="badge pass">PASS — signal screen only</p>
 <p>0.644 s / -20.01 LUFS / -2.51 dBTP</p><p>Original failures: loudness, silence<br>Edited failures: none</p>
 <p>Owner listening pending</p>
-<label>Edited comparison<audio controls preload="none" src="edited/confirm-base.wav"></audio></label><label>Original<audio controls preload="none" src="../../audition/raw/noir-confirm.mp3"></audio></label><details><summary>First local attempt — fail: loudness</summary><audio controls preload="none" src="first-pass/edited/confirm-base.wav"></audio><p>-22.75 LUFS; -2.0 dBTP</p></details><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
+<label>Edited comparison<audio controls preload="none" src="edited/confirm-base.wav" data-version="Edited comparison" data-gain="-5.99"></audio></label><label>Original<audio controls preload="none" src="../../audition/raw/noir-confirm.mp3" data-version="Original" data-gain="-1.05"></audio></label><details><summary>First local attempt — fail: loudness</summary><audio controls preload="none" src="first-pass/edited/confirm-base.wav" data-version="First local attempt" data-gain="-3.25"></audio><p>-22.75 LUFS; -2.0 dBTP</p></details><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
   &quot;promptOrText&quot;: &quot;One physical menu confirm. Immediate quiet click-clunk, tiny mechanical body, short dry release to silence. No beep or chime. Timbre: a dry worn ratchet tooth seating into a felt-damped latch. Intimate damped metal, low gritty resonance, restrained high end, tiny dry reflection. 1 seconds. Original isolated effect; no music, no voice.&quot;,
   &quot;beat&quot;: null,
   &quot;provenance&quot;: {
@@ -531,11 +537,11 @@
   ],
   &quot;error&quot;: null
 }</pre></details>
-<label>Your listening note<textarea data-note="confirm-base" placeholder="Preference, audible issue, device used"></textarea></label></article><article data-group="movement" data-id="tyre">
+</article><article class="card" data-group="movement" data-id="tyre" data-direction="tyre" data-label="Movement family / tyre" data-samples="tyre" data-categories="[&quot;Movement family&quot;]">
 <h2>tyre</h2><p class="badge pass">PASS — signal screen only</p>
 <p>2.000 s / -20.01 LUFS / -8.01 dBTP</p><p>Original failures: duration, loudness, truePeak, clipping, loopSeam<br>Edited failures: none</p>
 <p>Owner listening pending</p>
-<label>Edited comparison<audio controls preload="none" src="edited/tyre.wav"></audio></label><label>Original<audio controls preload="none" src="raw/tyre.mp3"></audio></label><label>Three cycles<audio controls preload="none" src="repeats/tyre-three-cycles.ogg"></audio></label><details><summary>First local attempt — pass: no meter failures</summary><audio controls preload="none" src="first-pass/edited/tyre.wav"></audio><p>-19.99 LUFS; -7.87 dBTP</p></details><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
+<label>Edited comparison<audio controls preload="none" src="edited/tyre.wav" data-version="Edited comparison" data-gain="-5.99"></audio></label><label>Original<audio controls preload="none" src="raw/tyre.mp3" data-version="Original" data-gain="-17.03"></audio></label><label>Three cycles<audio controls preload="none" src="repeats/tyre-three-cycles.ogg" data-version="Three cycles" data-gain="-5.99"></audio></label><details><summary>First local attempt — pass: no meter failures</summary><audio controls preload="none" src="first-pass/edited/tyre.wav" data-version="First local attempt" data-gain="-6.01"></audio><p>-19.99 LUFS; -7.87 dBTP</p></details><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
   &quot;promptOrText&quot;: &quot;Tyres rolling over rough asphalt. Immediate steady rubber grain and road hiss; constant body, no acceleration or distinct bumps. Seamless repeating bed. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.&quot;,
   &quot;beat&quot;: null,
   &quot;provenance&quot;: {
@@ -629,11 +635,11 @@
   ],
   &quot;error&quot;: null
 }</pre></details>
-<label>Your listening note<textarea data-note="tyre" placeholder="Preference, audible issue, device used"></textarea></label></article><article data-group="movement" data-id="skid">
+</article><article class="card" data-group="movement" data-id="skid" data-direction="skid" data-label="Movement family / skid" data-samples="skid" data-categories="[&quot;Movement family&quot;]">
 <h2>skid</h2><p class="badge pass">PASS — signal screen only</p>
 <p>2.000 s / -20.01 LUFS / -6.7 dBTP</p><p>Original failures: duration, loudness, truePeak, clipping, loopSeam<br>Edited failures: none</p>
 <p>Owner listening pending</p>
-<label>Edited comparison<audio controls preload="none" src="edited/skid.wav"></audio></label><label>Original<audio controls preload="none" src="raw/skid.mp3"></audio></label><label>Three cycles<audio controls preload="none" src="repeats/skid-three-cycles.ogg"></audio></label><details><summary>First local attempt — fail: loopSeam</summary><audio controls preload="none" src="first-pass/edited/skid.wav"></audio><p>-20.01 LUFS; -7.12 dBTP</p></details><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
+<label>Edited comparison<audio controls preload="none" src="edited/skid.wav" data-version="Edited comparison" data-gain="-5.99"></audio></label><label>Original<audio controls preload="none" src="raw/skid.mp3" data-version="Original" data-gain="-14.67"></audio></label><label>Three cycles<audio controls preload="none" src="repeats/skid-three-cycles.ogg" data-version="Three cycles" data-gain="-5.99"></audio></label><details><summary>First local attempt — fail: loopSeam</summary><audio controls preload="none" src="first-pass/edited/skid.wav" data-version="First local attempt" data-gain="-5.99"></audio><p>-20.01 LUFS; -7.12 dBTP</p></details><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
   &quot;promptOrText&quot;: &quot;Loaded tyres scrubbing sideways. Immediate rough rubber rasp, low strained body, constant skid friction. No impact, engine or changing speed. Seamless repeating bed. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.&quot;,
   &quot;beat&quot;: null,
   &quot;provenance&quot;: {
@@ -727,11 +733,11 @@
   ],
   &quot;error&quot;: null
 }</pre></details>
-<label>Your listening note<textarea data-note="skid" placeholder="Preference, audible issue, device used"></textarea></label></article><article data-group="movement" data-id="drift">
+</article><article class="card" data-group="movement" data-id="drift" data-direction="drift" data-label="Movement family / drift" data-samples="drift" data-categories="[&quot;Movement family&quot;]">
 <h2>drift</h2><p class="badge pass">PASS — signal screen only</p>
 <p>2.000 s / -20.01 LUFS / -7.75 dBTP</p><p>Original failures: duration, loudness, truePeak, clipping<br>Edited failures: none</p>
 <p>Owner listening pending</p>
-<label>Edited comparison<audio controls preload="none" src="edited/drift.wav"></audio></label><label>Original<audio controls preload="none" src="raw/drift.mp3"></audio></label><label>Three cycles<audio controls preload="none" src="repeats/drift-three-cycles.ogg"></audio></label><details><summary>First local attempt — fail: loopSeam</summary><audio controls preload="none" src="first-pass/edited/drift.wav"></audio><p>-20.0 LUFS; -7.68 dBTP</p></details><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
+<label>Edited comparison<audio controls preload="none" src="edited/drift.wav" data-version="Edited comparison" data-gain="-5.99"></audio></label><label>Original<audio controls preload="none" src="raw/drift.mp3" data-version="Original" data-gain="-15.58"></audio></label><label>Three cycles<audio controls preload="none" src="repeats/drift-three-cycles.ogg" data-version="Three cycles" data-gain="-5.99"></audio></label><details><summary>First local attempt — fail: loopSeam</summary><audio controls preload="none" src="first-pass/edited/drift.wav" data-version="First local attempt" data-gain="-6.00"></audio><p>-20.0 LUFS; -7.68 dBTP</p></details><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
   &quot;promptOrText&quot;: &quot;Controlled hard drift on dry asphalt. Constant singing rubber edge over gritty low scrub, steady load, no impact or end release. Seamless repeating bed. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.&quot;,
   &quot;beat&quot;: null,
   &quot;provenance&quot;: {
@@ -823,11 +829,11 @@
   ],
   &quot;error&quot;: null
 }</pre></details>
-<label>Your listening note<textarea data-note="drift" placeholder="Preference, audible issue, device used"></textarea></label></article><article data-group="collision" data-id="crunch-retry">
+</article><article class="card" data-group="collision" data-id="crunch-retry" data-direction="crunch-retry" data-label="Crunch / crunch-retry" data-samples="crunch-retry" data-categories="[&quot;Crunch&quot;]">
 <h2>crunch-retry</h2><p class="badge pass">PASS — signal screen only</p>
 <p>0.772 s / -19.95 LUFS / -5.93 dBTP</p><p>Original failures: loudness, truePeak, silence, clipping<br>Edited failures: none</p>
 <p>Owner listening pending</p>
-<label>Edited comparison<audio controls preload="none" src="edited/crunch-retry.wav"></audio></label><label>Original<audio controls preload="none" src="raw/crunch-retry.mp3"></audio></label><details><summary>First local attempt — pass: no meter failures</summary><audio controls preload="none" src="first-pass/edited/crunch-retry.wav"></audio><p>-19.95 LUFS; -5.93 dBTP</p></details><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
+<label>Edited comparison<audio controls preload="none" src="edited/crunch-retry.wav" data-version="Edited comparison" data-gain="-6.05"></audio></label><label>Original<audio controls preload="none" src="raw/crunch-retry.mp3" data-version="Original" data-gain="-12.90"></audio></label><details><summary>First local attempt — pass: no meter failures</summary><audio controls preload="none" src="first-pass/edited/crunch-retry.wav" data-version="First local attempt" data-gain="-6.05"></audio><p>-19.95 LUFS; -5.93 dBTP</p></details><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
   &quot;promptOrText&quot;: &quot;Heavy car side impact: instantaneous thick steel buckle, deep chassis crush, torn panels grinding for half a second, short falling debris. Weighty metal collision, no glass shower, explosion or engine. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.&quot;,
   &quot;beat&quot;: null,
   &quot;provenance&quot;: {
@@ -900,11 +906,11 @@
   ],
   &quot;error&quot;: null
 }</pre></details>
-<label>Your listening note<textarea data-note="crunch-retry" placeholder="Preference, audible issue, device used"></textarea></label></article><article data-group="collision" data-id="wall">
+</article><article class="card" data-group="collision" data-id="wall" data-direction="wall" data-label="Collision family / wall" data-samples="wall" data-categories="[&quot;Collision family&quot;]">
 <h2>wall</h2><p class="badge pass">PASS — signal screen only</p>
 <p>0.691 s / -19.99 LUFS / -3.69 dBTP</p><p>Original failures: loudness, truePeak, silence<br>Edited failures: none</p>
 <p>Owner listening pending</p>
-<label>Edited comparison<audio controls preload="none" src="edited/wall.wav"></audio></label><label>Original<audio controls preload="none" src="raw/wall.mp3"></audio></label><details><summary>First local attempt — pass: no meter failures</summary><audio controls preload="none" src="first-pass/edited/wall.wav"></audio><p>-19.99 LUFS; -3.69 dBTP</p></details><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
+<label>Edited comparison<audio controls preload="none" src="edited/wall.wav" data-version="Edited comparison" data-gain="-6.01"></audio></label><label>Original<audio controls preload="none" src="raw/wall.mp3" data-version="Original" data-gain="-8.93"></audio></label><details><summary>First local attempt — pass: no meter failures</summary><audio controls preload="none" src="first-pass/edited/wall.wav" data-version="First local attempt" data-gain="-6.01"></audio><p>-19.99 LUFS; -3.69 dBTP</p></details><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
   &quot;promptOrText&quot;: &quot;Car chassis hits a concrete retaining wall. Hard dull crack, steel dragging on abrasive concrete, crushed grit falls and dies quickly. No explosion. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.&quot;,
   &quot;beat&quot;: null,
   &quot;provenance&quot;: {
@@ -975,11 +981,11 @@
   ],
   &quot;error&quot;: null
 }</pre></details>
-<label>Your listening note<textarea data-note="wall" placeholder="Preference, audible issue, device used"></textarea></label></article><article data-group="collision" data-id="barrier">
+</article><article class="card" data-group="collision" data-id="barrier" data-direction="barrier" data-label="Collision family / barrier" data-samples="barrier" data-categories="[&quot;Collision family&quot;]">
 <h2>barrier</h2><p class="badge pass">PASS — signal screen only</p>
 <p>1.153 s / -20.0 LUFS / -3.95 dBTP</p><p>Original failures: loudness, truePeak, silence, clipping<br>Edited failures: none</p>
 <p>Owner listening pending</p>
-<label>Edited comparison<audio controls preload="none" src="edited/barrier.wav"></audio></label><label>Original<audio controls preload="none" src="raw/barrier.mp3"></audio></label><details><summary>First local attempt — pass: no meter failures</summary><audio controls preload="none" src="first-pass/edited/barrier.wav"></audio><p>-20.0 LUFS; -3.95 dBTP</p></details><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
+<label>Edited comparison<audio controls preload="none" src="edited/barrier.wav" data-version="Edited comparison" data-gain="-6.00"></audio></label><label>Original<audio controls preload="none" src="raw/barrier.mp3" data-version="Original" data-gain="-10.59"></audio></label><details><summary>First local attempt — pass: no meter failures</summary><audio controls preload="none" src="first-pass/edited/barrier.wav" data-version="First local attempt" data-gain="-6.00"></audio><p>-20.0 LUFS; -3.95 dBTP</p></details><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
   &quot;promptOrText&quot;: &quot;Car strikes a loose steel road barrier. Immediate hollow rail bang, bolts rattling in a short cascading decay, final metal tick. No explosion. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.&quot;,
   &quot;beat&quot;: null,
   &quot;provenance&quot;: {
@@ -1120,11 +1126,11 @@
   ],
   &quot;error&quot;: null
 }</pre></details>
-<label>Your listening note<textarea data-note="barrier" placeholder="Preference, audible issue, device used"></textarea></label></article><article data-group="weapon" data-id="rivet-hit">
+</article><article class="card" data-group="weapon" data-id="rivet-hit" data-direction="rivet-hit" data-label="Rivet / rivet-hit" data-samples="rivet-hit" data-categories="[&quot;Rivet&quot;, &quot;Weapons family&quot;]">
 <h2>rivet-hit</h2><p class="badge pass">PASS — signal screen only</p>
 <p>0.149 s / -20.35 LUFS / -2.0 dBTP</p><p>Original failures: loudness, truePeak, silence<br>Edited failures: none</p>
 <p>Owner listening pending</p>
-<label>Edited comparison<audio controls preload="none" src="edited/rivet-hit.wav"></audio></label><label>Original<audio controls preload="none" src="raw/rivet-hit.mp3"></audio></label><details><summary>First local attempt — fail: silence</summary><audio controls preload="none" src="first-pass/edited/rivet-hit.wav"></audio><p>-20.35 LUFS; -2.0 dBTP</p></details><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
+<label>Edited comparison<audio controls preload="none" src="edited/rivet-hit.wav" data-version="Edited comparison" data-gain="-5.65"></audio></label><label>Original<audio controls preload="none" src="raw/rivet-hit.mp3" data-version="Original" data-gain="-9.65"></audio></label><details><summary>First local attempt — fail: silence</summary><audio controls preload="none" src="first-pass/edited/rivet-hit.wav" data-version="First local attempt" data-gain="-5.65"></audio><p>-20.35 LUFS; -2.0 dBTP</p></details><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
   &quot;promptOrText&quot;: &quot;Single rivet strikes armoured steel: sharp small metal puncture, compact dull body and tiny falling fragment. Fast dry decay. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.&quot;,
   &quot;beat&quot;: null,
   &quot;provenance&quot;: {
@@ -1256,11 +1262,11 @@
   ],
   &quot;error&quot;: null
 }</pre></details>
-<label>Your listening note<textarea data-note="rivet-hit" placeholder="Preference, audible issue, device used"></textarea></label></article><article data-group="weapon" data-id="hammer-fire">
+</article><article class="card" data-group="weapon" data-id="hammer-fire" data-direction="hammer-fire" data-label="Hammer / hammer-fire" data-samples="hammer-fire" data-categories="[&quot;Hammer&quot;, &quot;Weapons family&quot;]">
 <h2>hammer-fire</h2><p class="badge pass">PASS — signal screen only</p>
 <p>0.735 s / -19.97 LUFS / -2.97 dBTP</p><p>Original failures: truePeak<br>Edited failures: none</p>
 <p>Owner listening pending</p>
-<label>Edited comparison<audio controls preload="none" src="edited/hammer-fire.wav"></audio></label><label>Original<audio controls preload="none" src="raw/hammer-fire.mp3"></audio></label><details><summary>First local attempt — pass: no meter failures</summary><audio controls preload="none" src="first-pass/edited/hammer-fire.wav"></audio><p>-20.05 LUFS; -3.02 dBTP</p></details><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
+<label>Edited comparison<audio controls preload="none" src="edited/hammer-fire.wav" data-version="Edited comparison" data-gain="-6.03"></audio></label><label>Original<audio controls preload="none" src="raw/hammer-fire.mp3" data-version="Original" data-gain="-7.51"></audio></label><details><summary>First local attempt — pass: no meter failures</summary><audio controls preload="none" src="first-pass/edited/hammer-fire.wav" data-version="First local attempt" data-gain="-5.95"></audio><p>-20.05 LUFS; -3.02 dBTP</p></details><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
   &quot;promptOrText&quot;: &quot;Heavy vehicle cannon launch: sharp bolt release, deep pneumatic thump, short barrel ring and fast dry stop. One launch only. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.&quot;,
   &quot;beat&quot;: null,
   &quot;provenance&quot;: {
@@ -1386,11 +1392,11 @@
   ],
   &quot;error&quot;: null
 }</pre></details>
-<label>Your listening note<textarea data-note="hammer-fire" placeholder="Preference, audible issue, device used"></textarea></label></article><article data-group="weapon" data-id="hammer-hit">
+</article><article class="card" data-group="weapon" data-id="hammer-hit" data-direction="hammer-hit" data-label="Hammer / hammer-hit" data-samples="hammer-hit" data-categories="[&quot;Hammer&quot;, &quot;Weapons family&quot;]">
 <h2>hammer-hit</h2><p class="badge pass">PASS — signal screen only</p>
 <p>0.866 s / -20.0 LUFS / -5.07 dBTP</p><p>Original failures: loudness, truePeak, silence, clipping<br>Edited failures: none</p>
 <p>Owner listening pending</p>
-<label>Edited comparison<audio controls preload="none" src="edited/hammer-hit.wav"></audio></label><label>Original<audio controls preload="none" src="raw/hammer-hit.mp3"></audio></label><details><summary>First local attempt — pass: no meter failures</summary><audio controls preload="none" src="first-pass/edited/hammer-hit.wav"></audio><p>-20.0 LUFS; -3.37 dBTP</p></details><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
+<label>Edited comparison<audio controls preload="none" src="edited/hammer-hit.wav" data-version="Edited comparison" data-gain="-6.00"></audio></label><label>Original<audio controls preload="none" src="raw/hammer-hit.mp3" data-version="Original" data-gain="-12.63"></audio></label><details><summary>First local attempt — pass: no meter failures</summary><audio controls preload="none" src="first-pass/edited/hammer-hit.wav" data-version="First local attempt" data-gain="-6.00"></audio><p>-20.0 LUFS; -3.37 dBTP</p></details><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
   &quot;promptOrText&quot;: &quot;Heavy shell strikes road metal: immediate hard crack, compressed low blast, heavy fragments tumble briefly and stop. One impact, no rolling fireball. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.&quot;,
   &quot;beat&quot;: null,
   &quot;provenance&quot;: {
@@ -1522,11 +1528,11 @@
   ],
   &quot;error&quot;: null
 }</pre></details>
-<label>Your listening note<textarea data-note="hammer-hit" placeholder="Preference, audible issue, device used"></textarea></label></article><article data-group="weapon" data-id="mine-drop">
+</article><article class="card" data-group="weapon" data-id="mine-drop" data-direction="mine-drop" data-label="Mine / mine-drop" data-samples="mine-drop" data-categories="[&quot;Mine&quot;, &quot;Weapons family&quot;]">
 <h2>mine-drop</h2><p class="badge pass">PASS — signal screen only</p>
 <p>0.477 s / -19.95 LUFS / -4.05 dBTP</p><p>Original failures: loudness, truePeak, clipping<br>Edited failures: none</p>
 <p>Owner listening pending</p>
-<label>Edited comparison<audio controls preload="none" src="edited/mine-drop.wav"></audio></label><label>Original<audio controls preload="none" src="raw/mine-drop.mp3"></audio></label><details><summary>First local attempt — pass: no meter failures</summary><audio controls preload="none" src="first-pass/edited/mine-drop.wav"></audio><p>-20.53 LUFS; -2.0 dBTP</p></details><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
+<label>Edited comparison<audio controls preload="none" src="edited/mine-drop.wav" data-version="Edited comparison" data-gain="-6.05"></audio></label><label>Original<audio controls preload="none" src="raw/mine-drop.mp3" data-version="Original" data-gain="-9.03"></audio></label><details><summary>First local attempt — pass: no meter failures</summary><audio controls preload="none" src="first-pass/edited/mine-drop.wav" data-version="First local attempt" data-gain="-5.47"></audio><p>-20.53 LUFS; -2.0 dBTP</p></details><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
   &quot;promptOrText&quot;: &quot;Road mine drops from a crude rack: latch snaps, heavy steel disk thumps onto asphalt, brief rattling settle. No blast. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.&quot;,
   &quot;beat&quot;: null,
   &quot;provenance&quot;: {
@@ -1656,11 +1662,11 @@
   ],
   &quot;error&quot;: null
 }</pre></details>
-<label>Your listening note<textarea data-note="mine-drop" placeholder="Preference, audible issue, device used"></textarea></label></article><article data-group="weapon" data-id="mine-arm">
+</article><article class="card" data-group="weapon" data-id="mine-arm" data-direction="mine-arm" data-label="Mine / mine-arm" data-samples="mine-arm" data-categories="[&quot;Mine&quot;, &quot;Weapons family&quot;]">
 <h2>mine-arm</h2><p class="badge pass">PASS — signal screen only</p>
 <p>0.444 s / -20.05 LUFS / -5.32 dBTP</p><p>Original failures: loudness, truePeak, clipping<br>Edited failures: none</p>
 <p>Owner listening pending</p>
-<label>Edited comparison<audio controls preload="none" src="edited/mine-arm.wav"></audio></label><label>Original<audio controls preload="none" src="raw/mine-arm.mp3"></audio></label><details><summary>First local attempt — pass: no meter failures</summary><audio controls preload="none" src="first-pass/edited/mine-arm.wav"></audio><p>-20.05 LUFS; -5.31 dBTP</p></details><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
+<label>Edited comparison<audio controls preload="none" src="edited/mine-arm.wav" data-version="Edited comparison" data-gain="-5.95"></audio></label><label>Original<audio controls preload="none" src="raw/mine-arm.mp3" data-version="Original" data-gain="-11.78"></audio></label><details><summary>First local attempt — pass: no meter failures</summary><audio controls preload="none" src="first-pass/edited/mine-arm.wav" data-version="First local attempt" data-gain="-5.95"></audio><p>-20.05 LUFS; -5.31 dBTP</p></details><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
   &quot;promptOrText&quot;: &quot;A road mine arms: spring winds tightly then a distinct short steel catch seats. Compact tense ratchet, dry stop. No electronic beep or explosion. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.&quot;,
   &quot;beat&quot;: null,
   &quot;provenance&quot;: {
@@ -1731,11 +1737,11 @@
   ],
   &quot;error&quot;: null
 }</pre></details>
-<label>Your listening note<textarea data-note="mine-arm" placeholder="Preference, audible issue, device used"></textarea></label></article><article data-group="weapon" data-id="scatter">
+</article><article class="card" data-group="weapon" data-id="scatter" data-direction="scatter" data-label="Scatter / scatter" data-samples="scatter" data-categories="[&quot;Scatter&quot;, &quot;Weapons family&quot;]">
 <h2>scatter</h2><p class="badge pass">PASS — signal screen only</p>
 <p>0.470 s / -19.95 LUFS / -7.05 dBTP</p><p>Original failures: loudness, truePeak, silence, clipping<br>Edited failures: none</p>
 <p>Owner listening pending</p>
-<label>Edited comparison<audio controls preload="none" src="edited/scatter.wav"></audio></label><label>Original<audio controls preload="none" src="raw/scatter.mp3"></audio></label><details><summary>First local attempt — fail: silence</summary><audio controls preload="none" src="first-pass/edited/scatter.wav"></audio><p>-20.0 LUFS; -4.9 dBTP</p></details><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
+<label>Edited comparison<audio controls preload="none" src="edited/scatter.wav" data-version="Edited comparison" data-gain="-6.05"></audio></label><label>Original<audio controls preload="none" src="raw/scatter.mp3" data-version="Original" data-gain="-13.68"></audio></label><details><summary>First local attempt — fail: silence</summary><audio controls preload="none" src="first-pass/edited/scatter.wav" data-version="First local attempt" data-gain="-6.00"></audio><p>-20.0 LUFS; -4.9 dBTP</p></details><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
   &quot;promptOrText&quot;: &quot;One vehicle scatter cannon discharge: abrupt broad gravelly slap, three nearly simultaneous metal cracks, short mechanical cycling, dry release. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.&quot;,
   &quot;beat&quot;: null,
   &quot;provenance&quot;: {
@@ -1869,11 +1875,11 @@
   ],
   &quot;error&quot;: null
 }</pre></details>
-<label>Your listening note<textarea data-note="scatter" placeholder="Preference, audible issue, device used"></textarea></label></article><article data-group="pickup" data-id="pickup-ammo">
+</article><article class="card" data-group="pickup" data-id="pickup-ammo" data-direction="pickup-ammo" data-label="Pickup / pickup-ammo" data-samples="pickup-ammo" data-categories="[&quot;Pickup&quot;]">
 <h2>pickup-ammo</h2><p class="badge pass">PASS — signal screen only</p>
 <p>0.361 s / -19.95 LUFS / -2.07 dBTP</p><p>Original failures: loudness, truePeak, silence, clipping<br>Edited failures: none</p>
 <p>Owner listening pending</p>
-<label>Edited comparison<audio controls preload="none" src="edited/pickup-ammo.wav"></audio></label><label>Original<audio controls preload="none" src="raw/pickup-ammo.mp3"></audio></label><details><summary>First local attempt — pass: no meter failures</summary><audio controls preload="none" src="first-pass/edited/pickup-ammo.wav"></audio><p>-19.95 LUFS; -2.07 dBTP</p></details><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
+<label>Edited comparison<audio controls preload="none" src="edited/pickup-ammo.wav" data-version="Edited comparison" data-gain="-6.05"></audio></label><label>Original<audio controls preload="none" src="raw/pickup-ammo.mp3" data-version="Original" data-gain="-10.35"></audio></label><details><summary>First local attempt — pass: no meter failures</summary><audio controls preload="none" src="first-pass/edited/pickup-ammo.wav" data-version="First local attempt" data-gain="-6.05"></audio><p>-19.95 LUFS; -2.07 dBTP</p></details><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
   &quot;promptOrText&quot;: &quot;One ammunition collection: crisp rack latch, a short dry stack of steel cartridges seating, quick tactile stop. Dry exposed scrap metal and dusty mechanical foley, light space. Original isolated effect; no coin, beep, music or voice.&quot;,
   &quot;beat&quot;: null,
   &quot;provenance&quot;: {
@@ -1946,11 +1952,11 @@
   ],
   &quot;error&quot;: null
 }</pre></details>
-<label>Your listening note<textarea data-note="pickup-ammo" placeholder="Preference, audible issue, device used"></textarea></label></article><article data-group="pickup" data-id="pickup-repair">
+</article><article class="card" data-group="pickup" data-id="pickup-repair" data-direction="pickup-repair" data-label="Pickup / pickup-repair" data-samples="pickup-repair" data-categories="[&quot;Pickup&quot;]">
 <h2>pickup-repair</h2><p class="badge pass">PASS — signal screen only</p>
 <p>0.536 s / -20.0 LUFS / -2.7 dBTP</p><p>Original failures: loudness, truePeak<br>Edited failures: none</p>
 <p>Owner listening pending</p>
-<label>Edited comparison<audio controls preload="none" src="edited/pickup-repair.wav"></audio></label><label>Original<audio controls preload="none" src="raw/pickup-repair.mp3"></audio></label><details><summary>First local attempt — pass: no meter failures</summary><audio controls preload="none" src="first-pass/edited/pickup-repair.wav"></audio><p>-20.0 LUFS; -2.7 dBTP</p></details><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
+<label>Edited comparison<audio controls preload="none" src="edited/pickup-repair.wav" data-version="Edited comparison" data-gain="-6.00"></audio></label><label>Original<audio controls preload="none" src="raw/pickup-repair.mp3" data-version="Original" data-gain="-10.12"></audio></label><details><summary>First local attempt — pass: no meter failures</summary><audio controls preload="none" src="first-pass/edited/pickup-repair.wav" data-version="First local attempt" data-gain="-6.00"></audio><p>-20.0 LUFS; -2.7 dBTP</p></details><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
   &quot;promptOrText&quot;: &quot;One repair collection: crisp clamp bite, short satisfying ratchet tightening a plate, dry release. Dry exposed scrap metal and dusty mechanical foley, light space. Original isolated effect; no coin, beep, music or voice.&quot;,
   &quot;beat&quot;: null,
   &quot;provenance&quot;: {
@@ -2019,11 +2025,11 @@
   ],
   &quot;error&quot;: null
 }</pre></details>
-<label>Your listening note<textarea data-note="pickup-repair" placeholder="Preference, audible issue, device used"></textarea></label></article><article data-group="race" data-id="wreck">
+</article><article class="card" data-group="race" data-id="wreck" data-direction="wreck" data-label="Race events family / wreck" data-samples="wreck" data-categories="[&quot;Race events family&quot;]">
 <h2>wreck</h2><p class="badge pass">PASS — signal screen only</p>
 <p>1.778 s / -19.99 LUFS / -5.42 dBTP</p><p>Original failures: truePeak<br>Edited failures: none</p>
 <p>Owner listening pending</p>
-<label>Edited comparison<audio controls preload="none" src="edited/wreck.wav"></audio></label><label>Original<audio controls preload="none" src="raw/wreck.mp3"></audio></label><details><summary>First local attempt — pass: no meter failures</summary><audio controls preload="none" src="first-pass/edited/wreck.wav"></audio><p>-19.99 LUFS; -5.42 dBTP</p></details><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
+<label>Edited comparison<audio controls preload="none" src="edited/wreck.wav" data-version="Edited comparison" data-gain="-6.01"></audio></label><label>Original<audio controls preload="none" src="raw/wreck.mp3" data-version="Original" data-gain="-7.97"></audio></label><details><summary>First local attempt — pass: no meter failures</summary><audio controls preload="none" src="first-pass/edited/wreck.wav" data-version="First local attempt" data-gain="-6.01"></audio><p>-19.99 LUFS; -5.42 dBTP</p></details><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
   &quot;promptOrText&quot;: &quot;Vehicle wreck: violent steel tearing at onset, deep collapsing chassis and engine choke, short debris falling to a dead stop. No voices or long fire. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.&quot;,
   &quot;beat&quot;: null,
   &quot;provenance&quot;: {
@@ -2090,11 +2096,11 @@
   ],
   &quot;error&quot;: null
 }</pre></details>
-<label>Your listening note<textarea data-note="wreck" placeholder="Preference, audible issue, device used"></textarea></label></article><article data-group="race" data-id="countdown">
+</article><article class="card" data-group="race" data-id="countdown" data-direction="countdown" data-label="Race events family / countdown" data-samples="countdown" data-categories="[&quot;Race events family&quot;]">
 <h2>countdown</h2><p class="badge pass">PASS — signal screen only</p>
 <p>0.323 s / -19.95 LUFS / -3.33 dBTP</p><p>Original failures: loudness, truePeak, clipping<br>Edited failures: none</p>
 <p>Owner listening pending</p>
-<label>Edited comparison<audio controls preload="none" src="edited/countdown.wav"></audio></label><label>Original<audio controls preload="none" src="raw/countdown.mp3"></audio></label><details><summary>First local attempt — pass: no meter failures</summary><audio controls preload="none" src="first-pass/edited/countdown.wav"></audio><p>-19.95 LUFS; -3.38 dBTP</p></details><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
+<label>Edited comparison<audio controls preload="none" src="edited/countdown.wav" data-version="Edited comparison" data-gain="-6.05"></audio></label><label>Original<audio controls preload="none" src="raw/countdown.mp3" data-version="Original" data-gain="-12.25"></audio></label><details><summary>First local attempt — pass: no meter failures</summary><audio controls preload="none" src="first-pass/edited/countdown.wav" data-version="First local attempt" data-gain="-6.05"></audio><p>-19.95 LUFS; -3.38 dBTP</p></details><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
   &quot;promptOrText&quot;: &quot;One firm start marshal mechanism knock: solid iron hammer hits a damped steel plate, weighty compact knock with tiny decay. Only one hit. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.&quot;,
   &quot;beat&quot;: null,
   &quot;provenance&quot;: {
@@ -2224,11 +2230,11 @@
   ],
   &quot;error&quot;: null
 }</pre></details>
-<label>Your listening note<textarea data-note="countdown" placeholder="Preference, audible issue, device used"></textarea></label></article><article data-group="race" data-id="start">
+</article><article class="card" data-group="race" data-id="start" data-direction="start" data-label="Race events family / start" data-samples="start" data-categories="[&quot;Race events family&quot;]">
 <h2>start</h2><p class="badge pass">PASS — signal screen only</p>
 <p>0.607 s / -19.95 LUFS / -2.86 dBTP</p><p>Original failures: loudness, truePeak, clipping<br>Edited failures: none</p>
 <p>Owner listening pending</p>
-<label>Edited comparison<audio controls preload="none" src="edited/start.wav"></audio></label><label>Original<audio controls preload="none" src="raw/start.mp3"></audio></label><details><summary>First local attempt — pass: no meter failures</summary><audio controls preload="none" src="first-pass/edited/start.wav"></audio><p>-19.95 LUFS; -2.86 dBTP</p></details><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
+<label>Edited comparison<audio controls preload="none" src="edited/start.wav" data-version="Edited comparison" data-gain="-6.05"></audio></label><label>Original<audio controls preload="none" src="raw/start.mp3" data-version="Original" data-gain="-11.48"></audio></label><details><summary>First local attempt — pass: no meter failures</summary><audio controls preload="none" src="first-pass/edited/start.wav" data-version="First local attempt" data-gain="-6.05"></audio><p>-19.95 LUFS; -2.86 dBTP</p></details><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
   &quot;promptOrText&quot;: &quot;Race gate releases: abrupt spring-loaded steel crack, compressed air punch, fast rising mechanical rush and dry stop. One clear starting signal. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.&quot;,
   &quot;beat&quot;: null,
   &quot;provenance&quot;: {
@@ -2299,11 +2305,11 @@
   ],
   &quot;error&quot;: null
 }</pre></details>
-<label>Your listening note<textarea data-note="start" placeholder="Preference, audible issue, device used"></textarea></label></article><article data-group="race" data-id="lap">
+</article><article class="card" data-group="race" data-id="lap" data-direction="lap" data-label="Race events family / lap" data-samples="lap" data-categories="[&quot;Race events family&quot;]">
 <h2>lap</h2><p class="badge pass">PASS — signal screen only</p>
 <p>0.474 s / -19.95 LUFS / -3.15 dBTP</p><p>Original failures: loudness, truePeak, silence<br>Edited failures: none</p>
 <p>Owner listening pending</p>
-<label>Edited comparison<audio controls preload="none" src="edited/lap.wav"></audio></label><label>Original<audio controls preload="none" src="raw/lap.mp3"></audio></label><details><summary>First local attempt — fail: silence</summary><audio controls preload="none" src="first-pass/edited/lap.wav"></audio><p>-20.8 LUFS; -2.0 dBTP</p></details><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
+<label>Edited comparison<audio controls preload="none" src="edited/lap.wav" data-version="Edited comparison" data-gain="-6.05"></audio></label><label>Original<audio controls preload="none" src="raw/lap.mp3" data-version="Original" data-gain="-10.14"></audio></label><details><summary>First local attempt — fail: silence</summary><audio controls preload="none" src="first-pass/edited/lap.wav" data-version="First local attempt" data-gain="-5.20"></audio><p>-20.8 LUFS; -2.0 dBTP</p></details><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
   &quot;promptOrText&quot;: &quot;Lap completed signal: two quick dry steel ratchet knocks, second slightly brighter, a compact resonant plate tail. Physical and readable, no beep. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.&quot;,
   &quot;beat&quot;: null,
   &quot;provenance&quot;: {
@@ -2435,11 +2441,11 @@
   ],
   &quot;error&quot;: null
 }</pre></details>
-<label>Your listening note<textarea data-note="lap" placeholder="Preference, audible issue, device used"></textarea></label></article><article data-group="race" data-id="victory">
+</article><article class="card" data-group="race" data-id="victory" data-direction="victory" data-label="Race events family / victory" data-samples="victory" data-categories="[&quot;Race events family&quot;]">
 <h2>victory</h2><p class="badge pass">PASS — signal screen only</p>
 <p>2.079 s / -20.24 LUFS / -2.0 dBTP</p><p>Original failures: truePeak<br>Edited failures: none</p>
 <p>Owner listening pending</p>
-<label>Edited comparison<audio controls preload="none" src="edited/victory.wav"></audio></label><label>Original<audio controls preload="none" src="raw/victory.mp3"></audio></label><details><summary>First local attempt — pass: no meter failures</summary><audio controls preload="none" src="first-pass/edited/victory.wav"></audio><p>-20.24 LUFS; -2.0 dBTP</p></details><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
+<label>Edited comparison<audio controls preload="none" src="edited/victory.wav" data-version="Edited comparison" data-gain="-5.76"></audio></label><label>Original<audio controls preload="none" src="raw/victory.mp3" data-version="Original" data-gain="-7.48"></audio></label><details><summary>First local attempt — pass: no meter failures</summary><audio controls preload="none" src="first-pass/edited/victory.wav" data-version="First local attempt" data-gain="-5.76"></audio><p>-20.24 LUFS; -2.0 dBTP</p></details><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
   &quot;promptOrText&quot;: &quot;Short victory punctuation made of junkyard percussion: low drum strike, rising three metal hits, strong final anvil accent, brief ringing resolution. Three seconds, original nonmelodic sting. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.&quot;,
   &quot;beat&quot;: null,
   &quot;provenance&quot;: {
@@ -2506,11 +2512,11 @@
   ],
   &quot;error&quot;: null
 }</pre></details>
-<label>Your listening note<textarea data-note="victory" placeholder="Preference, audible issue, device used"></textarea></label></article><article data-group="race" data-id="defeat">
+</article><article class="card" data-group="race" data-id="defeat" data-direction="defeat" data-label="Race events family / defeat" data-samples="defeat" data-categories="[&quot;Race events family&quot;]">
 <h2>defeat</h2><p class="badge pass">PASS — signal screen only</p>
 <p>2.219 s / -20.01 LUFS / -5.54 dBTP</p><p>Original failures: loudness, truePeak, clipping<br>Edited failures: none</p>
 <p>Owner listening pending</p>
-<label>Edited comparison<audio controls preload="none" src="edited/defeat.wav"></audio></label><label>Original<audio controls preload="none" src="raw/defeat.mp3"></audio></label><details><summary>First local attempt — pass: no meter failures</summary><audio controls preload="none" src="first-pass/edited/defeat.wav"></audio><p>-20.04 LUFS; -3.82 dBTP</p></details><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
+<label>Edited comparison<audio controls preload="none" src="edited/defeat.wav" data-version="Edited comparison" data-gain="-5.99"></audio></label><label>Original<audio controls preload="none" src="raw/defeat.mp3" data-version="Original" data-gain="-8.04"></audio></label><details><summary>First local attempt — pass: no meter failures</summary><audio controls preload="none" src="first-pass/edited/defeat.wav" data-version="First local attempt" data-gain="-5.96"></audio><p>-20.04 LUFS; -3.82 dBTP</p></details><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
   &quot;promptOrText&quot;: &quot;Short defeat punctuation: a tired low drum, two sagging resonant steel knocks, an exhausted spring unwinding, damped final stop. Three seconds, original nonmelodic sting. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.&quot;,
   &quot;beat&quot;: null,
   &quot;provenance&quot;: {
@@ -2645,11 +2651,11 @@
   ],
   &quot;error&quot;: null
 }</pre></details>
-<label>Your listening note<textarea data-note="defeat" placeholder="Preference, audible issue, device used"></textarea></label></article><article data-group="ui" data-id="ui-focus">
+</article><article class="card" data-group="ui" data-id="ui-focus" data-direction="ui-focus" data-label="UI / ui-focus" data-samples="ui-focus" data-categories="[&quot;UI&quot;]">
 <h2>ui-focus</h2><p class="badge pass">PASS — signal screen only</p>
 <p>0.069 s / -21.75 LUFS / -2.0 dBTP</p><p>Original failures: loudness, truePeak, silence<br>Edited failures: none</p>
 <p>Owner listening pending</p>
-<label>Edited comparison<audio controls preload="none" src="edited/ui-focus.wav"></audio></label><label>Original<audio controls preload="none" src="raw/ui-focus.mp3"></audio></label><details><summary>First local attempt — fail: loudness</summary><audio controls preload="none" src="first-pass/edited/ui-focus.wav"></audio><p>-23.85 LUFS; -2.0 dBTP</p></details><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
+<label>Edited comparison<audio controls preload="none" src="edited/ui-focus.wav" data-version="Edited comparison" data-gain="-4.25"></audio></label><label>Original<audio controls preload="none" src="raw/ui-focus.mp3" data-version="Original" data-gain="-3.95"></audio></label><details><summary>First local attempt — fail: loudness</summary><audio controls preload="none" src="first-pass/edited/ui-focus.wav" data-version="First local attempt" data-gain="-2.15"></audio><p>-23.85 LUFS; -2.0 dBTP</p></details><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
   &quot;promptOrText&quot;: &quot;One small worn switch tooth catches: quiet precise click, tiny damped body and immediate release. Dry intimate worn mechanisms, felt-damped steel, restrained dark resonance. Original isolated effect; no beep, music or voice.&quot;,
   &quot;beat&quot;: null,
   &quot;provenance&quot;: {
@@ -2720,11 +2726,11 @@
   ],
   &quot;error&quot;: null
 }</pre></details>
-<label>Your listening note<textarea data-note="ui-focus" placeholder="Preference, audible issue, device used"></textarea></label></article><article data-group="ui" data-id="ui-back">
+</article><article class="card" data-group="ui" data-id="ui-back" data-direction="ui-back" data-label="UI / ui-back" data-samples="ui-back" data-categories="[&quot;UI&quot;]">
 <h2>ui-back</h2><p class="badge pass">PASS — signal screen only</p>
 <p>0.262 s / -21.85 LUFS / -2.0 dBTP</p><p>Original failures: truePeak, silence<br>Edited failures: none</p>
 <p>Owner listening pending</p>
-<label>Edited comparison<audio controls preload="none" src="edited/ui-back.wav"></audio></label><label>Original<audio controls preload="none" src="raw/ui-back.mp3"></audio></label><details><summary>First local attempt — pass: no meter failures</summary><audio controls preload="none" src="first-pass/edited/ui-back.wav"></audio><p>-21.85 LUFS; -2.0 dBTP</p></details><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
+<label>Edited comparison<audio controls preload="none" src="edited/ui-back.wav" data-version="Edited comparison" data-gain="-4.15"></audio></label><label>Original<audio controls preload="none" src="raw/ui-back.mp3" data-version="Original" data-gain="-4.95"></audio></label><details><summary>First local attempt — pass: no meter failures</summary><audio controls preload="none" src="first-pass/edited/ui-back.wav" data-version="First local attempt" data-gain="-4.15"></audio><p>-21.85 LUFS; -2.0 dBTP</p></details><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
   &quot;promptOrText&quot;: &quot;One worn latch opens: dry soft double click, a little spring retracts, intimate short release. Dry intimate worn mechanisms, felt-damped steel, restrained dark resonance. Original isolated effect; no beep, music or voice.&quot;,
   &quot;beat&quot;: null,
   &quot;provenance&quot;: {
@@ -2793,11 +2799,11 @@
   ],
   &quot;error&quot;: null
 }</pre></details>
-<label>Your listening note<textarea data-note="ui-back" placeholder="Preference, audible issue, device used"></textarea></label></article><article data-group="ui" data-id="ui-denied">
+</article><article class="card" data-group="ui" data-id="ui-denied" data-direction="ui-denied" data-label="UI / ui-denied" data-samples="ui-denied" data-categories="[&quot;UI&quot;]">
 <h2>ui-denied</h2><p class="badge pass">PASS — signal screen only</p>
 <p>0.135 s / -20.15 LUFS / -2.0 dBTP</p><p>Original failures: loudness, silence<br>Edited failures: none</p>
 <p>Owner listening pending</p>
-<label>Edited comparison<audio controls preload="none" src="edited/ui-denied.wav"></audio></label><label>Original<audio controls preload="none" src="raw/ui-denied.mp3"></audio></label><details><summary>First local attempt — fail: loudness</summary><audio controls preload="none" src="first-pass/edited/ui-denied.wav"></audio><p>-23.25 LUFS; -2.0 dBTP</p></details><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
+<label>Edited comparison<audio controls preload="none" src="edited/ui-denied.wav" data-version="Edited comparison" data-gain="-5.85"></audio></label><label>Original<audio controls preload="none" src="raw/ui-denied.mp3" data-version="Original" data-gain="-2.05"></audio></label><details><summary>First local attempt — fail: loudness</summary><audio controls preload="none" src="first-pass/edited/ui-denied.wav" data-version="First local attempt" data-gain="-2.75"></audio><p>-23.25 LUFS; -2.0 dBTP</p></details><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
   &quot;promptOrText&quot;: &quot;One jammed latch refuses to close: dry compact knock, brief strained spring rasp, dull stop. Dry intimate worn mechanisms, felt-damped steel, restrained dark resonance. Original isolated effect; no beep, music or voice.&quot;,
   &quot;beat&quot;: null,
   &quot;provenance&quot;: {
@@ -2866,11 +2872,11 @@
   ],
   &quot;error&quot;: null
 }</pre></details>
-<label>Your listening note<textarea data-note="ui-denied" placeholder="Preference, audible issue, device used"></textarea></label></article><article data-group="ui" data-id="ui-purchase">
+</article><article class="card" data-group="ui" data-id="ui-purchase" data-direction="ui-purchase" data-label="UI / ui-purchase" data-samples="ui-purchase" data-categories="[&quot;UI&quot;]">
 <h2>ui-purchase</h2><p class="badge pass">PASS — signal screen only</p>
 <p>0.216 s / -20.25 LUFS / -2.0 dBTP</p><p>Original failures: silence<br>Edited failures: none</p>
 <p>Owner listening pending</p>
-<label>Edited comparison<audio controls preload="none" src="edited/ui-purchase.wav"></audio></label><label>Original<audio controls preload="none" src="raw/ui-purchase.mp3"></audio></label><details><summary>First local attempt — pass: no meter failures</summary><audio controls preload="none" src="first-pass/edited/ui-purchase.wav"></audio><p>-20.25 LUFS; -2.0 dBTP</p></details><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
+<label>Edited comparison<audio controls preload="none" src="edited/ui-purchase.wav" data-version="Edited comparison" data-gain="-5.75"></audio></label><label>Original<audio controls preload="none" src="raw/ui-purchase.mp3" data-version="Original" data-gain="-4.91"></audio></label><details><summary>First local attempt — pass: no meter failures</summary><audio controls preload="none" src="first-pass/edited/ui-purchase.wav" data-version="First local attempt" data-gain="-5.75"></audio><p>-20.25 LUFS; -2.0 dBTP</p></details><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
   &quot;promptOrText&quot;: &quot;One shop purchase receipt mechanism: heavy dry stamp, short ratchet seating, quiet final steel click. Satisfying tactile stop. Dry intimate worn mechanisms, felt-damped steel, restrained dark resonance. Original isolated effect; no beep, music or voice.&quot;,
   &quot;beat&quot;: null,
   &quot;provenance&quot;: {
@@ -2937,11 +2943,11 @@
   ],
   &quot;error&quot;: null
 }</pre></details>
-<label>Your listening note<textarea data-note="ui-purchase" placeholder="Preference, audible issue, device used"></textarea></label></article><article data-group="ability" data-id="ability-steel-flick">
+</article><article class="card" data-group="ability" data-id="ability-steel-flick" data-direction="ability-steel-flick" data-label="Ability tells family / ability-steel-flick" data-samples="ability-steel-flick" data-categories="[&quot;Ability tells family&quot;]">
 <h2>ability-steel-flick</h2><p class="badge pass">PASS — signal screen only</p>
 <p>0.683 s / -20.01 LUFS / -2.38 dBTP</p><p>Original failures: loudness<br>Edited failures: none</p>
 <p>Owner listening pending</p>
-<label>Edited comparison<audio controls preload="none" src="edited/ability-steel-flick.wav"></audio></label><label>Original<audio controls preload="none" src="raw/ability-steel-flick.mp3"></audio></label><details><summary>First local attempt — pass: no meter failures</summary><audio controls preload="none" src="first-pass/edited/ability-steel-flick.wav"></audio><p>-20.18 LUFS; -2.0 dBTP</p></details><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
+<label>Edited comparison<audio controls preload="none" src="edited/ability-steel-flick.wav" data-version="Edited comparison" data-gain="-5.99"></audio></label><label>Original<audio controls preload="none" src="raw/ability-steel-flick.mp3" data-version="Original" data-gain="-0.88"></audio></label><details><summary>First local attempt — pass: no meter failures</summary><audio controls preload="none" src="first-pass/edited/ability-steel-flick.wav" data-version="First local attempt" data-gain="-5.82"></audio><p>-20.18 LUFS; -2.0 dBTP</p></details><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
   &quot;promptOrText&quot;: &quot;Tensioned leaf spring draws and snaps forward into a short exhaust rip. Fast rising mechanical warning, dry release. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.&quot;,
   &quot;beat&quot;: null,
   &quot;provenance&quot;: {
@@ -3008,11 +3014,11 @@
   ],
   &quot;error&quot;: null
 }</pre></details>
-<label>Your listening note<textarea data-note="ability-steel-flick" placeholder="Preference, audible issue, device used"></textarea></label></article><article data-group="ability" data-id="ability-flywheel">
+</article><article class="card" data-group="ability" data-id="ability-flywheel" data-direction="ability-flywheel" data-label="Ability tells family / ability-flywheel" data-samples="ability-flywheel" data-categories="[&quot;Ability tells family&quot;]">
 <h2>ability-flywheel</h2><p class="badge pass">PASS — signal screen only</p>
 <p>0.609 s / -19.99 LUFS / -5.84 dBTP</p><p>Original failures: loudness, truePeak, silence, clipping<br>Edited failures: none</p>
 <p>Owner listening pending</p>
-<label>Edited comparison<audio controls preload="none" src="edited/ability-flywheel.wav"></audio></label><label>Original<audio controls preload="none" src="raw/ability-flywheel.mp3"></audio></label><details><summary>First local attempt — pass: no meter failures</summary><audio controls preload="none" src="first-pass/edited/ability-flywheel.wav"></audio><p>-19.99 LUFS; -5.83 dBTP</p></details><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
+<label>Edited comparison<audio controls preload="none" src="edited/ability-flywheel.wav" data-version="Edited comparison" data-gain="-6.01"></audio></label><label>Original<audio controls preload="none" src="raw/ability-flywheel.mp3" data-version="Original" data-gain="-16.81"></audio></label><details><summary>First local attempt — pass: no meter failures</summary><audio controls preload="none" src="first-pass/edited/ability-flywheel.wav" data-version="First local attempt" data-gain="-6.01"></audio><p>-19.99 LUFS; -5.83 dBTP</p></details><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
   &quot;promptOrText&quot;: &quot;Clutch catches into a rising flywheel whirr, thick spinning iron briefly strains and releases. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.&quot;,
   &quot;beat&quot;: null,
   &quot;provenance&quot;: {
@@ -3085,11 +3091,11 @@
   ],
   &quot;error&quot;: null
 }</pre></details>
-<label>Your listening note<textarea data-note="ability-flywheel" placeholder="Preference, audible issue, device used"></textarea></label></article><article data-group="ability" data-id="ability-shoulder">
+</article><article class="card" data-group="ability" data-id="ability-shoulder" data-direction="ability-shoulder" data-label="Ability tells family / ability-shoulder" data-samples="ability-shoulder" data-categories="[&quot;Ability tells family&quot;]">
 <h2>ability-shoulder</h2><p class="badge pass">PASS — signal screen only</p>
 <p>0.658 s / -19.99 LUFS / -10.0 dBTP</p><p>Original failures: loudness, truePeak, clipping<br>Edited failures: none</p>
 <p>Owner listening pending</p>
-<label>Edited comparison<audio controls preload="none" src="edited/ability-shoulder.wav"></audio></label><label>Original<audio controls preload="none" src="raw/ability-shoulder.mp3"></audio></label><details><summary>First local attempt — pass: no meter failures</summary><audio controls preload="none" src="first-pass/edited/ability-shoulder.wav"></audio><p>-19.99 LUFS; -10.0 dBTP</p></details><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
+<label>Edited comparison<audio controls preload="none" src="edited/ability-shoulder.wav" data-version="Edited comparison" data-gain="-6.01"></audio></label><label>Original<audio controls preload="none" src="raw/ability-shoulder.mp3" data-version="Original" data-gain="-17.76"></audio></label><details><summary>First local attempt — pass: no meter failures</summary><audio controls preload="none" src="first-pass/edited/ability-shoulder.wav" data-version="First local attempt" data-gain="-6.01"></audio><p>-19.99 LUFS; -10.0 dBTP</p></details><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
   &quot;promptOrText&quot;: &quot;Armoured ram plates draw tight, thick steel preload groans then one hard latch seats. Heavy forward-charge warning, no impact. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.&quot;,
   &quot;beat&quot;: null,
   &quot;provenance&quot;: {
@@ -3160,11 +3166,11 @@
   ],
   &quot;error&quot;: null
 }</pre></details>
-<label>Your listening note<textarea data-note="ability-shoulder" placeholder="Preference, audible issue, device used"></textarea></label></article><article data-group="ability" data-id="ability-turbine">
+</article><article class="card" data-group="ability" data-id="ability-turbine" data-direction="ability-turbine" data-label="Ability tells family / ability-turbine" data-samples="ability-turbine" data-categories="[&quot;Ability tells family&quot;]">
 <h2>ability-turbine</h2><p class="badge pass">PASS — signal screen only</p>
 <p>0.908 s / -19.99 LUFS / -13.17 dBTP</p><p>Original failures: loudness, truePeak, clipping<br>Edited failures: none</p>
 <p>Owner listening pending</p>
-<label>Edited comparison<audio controls preload="none" src="edited/ability-turbine.wav"></audio></label><label>Original<audio controls preload="none" src="raw/ability-turbine.mp3"></audio></label><details><summary>First local attempt — pass: no meter failures</summary><audio controls preload="none" src="first-pass/edited/ability-turbine.wav"></audio><p>-20.0 LUFS; -12.63 dBTP</p></details><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
+<label>Edited comparison<audio controls preload="none" src="edited/ability-turbine.wav" data-version="Edited comparison" data-gain="-6.01"></audio></label><label>Original<audio controls preload="none" src="raw/ability-turbine.mp3" data-version="Original" data-gain="-21.56"></audio></label><details><summary>First local attempt — pass: no meter failures</summary><audio controls preload="none" src="first-pass/edited/ability-turbine.wav" data-version="First local attempt" data-gain="-6.00"></audio><p>-20.0 LUFS; -12.63 dBTP</p></details><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
   &quot;promptOrText&quot;: &quot;Small crude turbine spools sharply: narrow air whine rises over dirty bearings, short pressure release. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.&quot;,
   &quot;beat&quot;: null,
   &quot;provenance&quot;: {
@@ -3294,11 +3300,11 @@
   ],
   &quot;error&quot;: null
 }</pre></details>
-<label>Your listening note<textarea data-note="ability-turbine" placeholder="Preference, audible issue, device used"></textarea></label></article><article data-group="ability" data-id="ability-ground-bite">
+</article><article class="card" data-group="ability" data-id="ability-ground-bite" data-direction="ability-ground-bite" data-label="Ability tells family / ability-ground-bite" data-samples="ability-ground-bite" data-categories="[&quot;Ability tells family&quot;]">
 <h2>ability-ground-bite</h2><p class="badge pass">PASS — signal screen only</p>
 <p>0.426 s / -21.05 LUFS / -2.0 dBTP</p><p>Original failures: loudness, truePeak, silence, clipping<br>Edited failures: none</p>
 <p>Owner listening pending</p>
-<label>Edited comparison<audio controls preload="none" src="edited/ability-ground-bite.wav"></audio></label><label>Original<audio controls preload="none" src="raw/ability-ground-bite.mp3"></audio></label><details><summary>First local attempt — pass: no meter failures</summary><audio controls preload="none" src="first-pass/edited/ability-ground-bite.wav"></audio><p>-21.05 LUFS; -2.0 dBTP</p></details><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
+<label>Edited comparison<audio controls preload="none" src="edited/ability-ground-bite.wav" data-version="Edited comparison" data-gain="-4.95"></audio></label><label>Original<audio controls preload="none" src="raw/ability-ground-bite.mp3" data-version="Original" data-gain="-9.35"></audio></label><details><summary>First local attempt — pass: no meter failures</summary><audio controls preload="none" src="first-pass/edited/ability-ground-bite.wav" data-version="First local attempt" data-gain="-4.95"></audio><p>-21.05 LUFS; -2.0 dBTP</p></details><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
   &quot;promptOrText&quot;: &quot;Driven treads bite into loose grit: sharp rubber catch, dense short gravel grind, dry grip release. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.&quot;,
   &quot;beat&quot;: null,
   &quot;provenance&quot;: {
@@ -3371,11 +3377,11 @@
   ],
   &quot;error&quot;: null
 }</pre></details>
-<label>Your listening note<textarea data-note="ability-ground-bite" placeholder="Preference, audible issue, device used"></textarea></label></article><article data-group="ability" data-id="ability-punch-lance">
+</article><article class="card" data-group="ability" data-id="ability-punch-lance" data-direction="ability-punch-lance" data-label="Ability tells family / ability-punch-lance" data-samples="ability-punch-lance" data-categories="[&quot;Ability tells family&quot;]">
 <h2>ability-punch-lance</h2><p class="badge pass">PASS — signal screen only</p>
 <p>0.855 s / -20.0 LUFS / -2.78 dBTP</p><p>Original failures: loudness, truePeak, clipping<br>Edited failures: none</p>
 <p>Owner listening pending</p>
-<label>Edited comparison<audio controls preload="none" src="edited/ability-punch-lance.wav"></audio></label><label>Original<audio controls preload="none" src="raw/ability-punch-lance.mp3"></audio></label><details><summary>First local attempt — pass: no meter failures</summary><audio controls preload="none" src="first-pass/edited/ability-punch-lance.wav"></audio><p>-20.0 LUFS; -2.78 dBTP</p></details><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
+<label>Edited comparison<audio controls preload="none" src="edited/ability-punch-lance.wav" data-version="Edited comparison" data-gain="-6.00"></audio></label><label>Original<audio controls preload="none" src="raw/ability-punch-lance.mp3" data-version="Original" data-gain="-11.19"></audio></label><details><summary>First local attempt — pass: no meter failures</summary><audio controls preload="none" src="first-pass/edited/ability-punch-lance.wav" data-version="First local attempt" data-gain="-6.00"></audio><p>-20.0 LUFS; -2.78 dBTP</p></details><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
   &quot;promptOrText&quot;: &quot;Tensioned steel lance charges: three tightening ratchet teeth accelerate, a heavy bolt snaps and rings briefly. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.&quot;,
   &quot;beat&quot;: null,
   &quot;provenance&quot;: {
@@ -3446,11 +3452,11 @@
   ],
   &quot;error&quot;: null
 }</pre></details>
-<label>Your listening note<textarea data-note="ability-punch-lance" placeholder="Preference, audible issue, device used"></textarea></label></article><article data-group="ability" data-id="ability-bone-rack">
+</article><article class="card" data-group="ability" data-id="ability-bone-rack" data-direction="ability-bone-rack" data-label="Ability tells family / ability-bone-rack" data-samples="ability-bone-rack" data-categories="[&quot;Ability tells family&quot;]">
 <h2>ability-bone-rack</h2><p class="badge pass">PASS — signal screen only</p>
 <p>0.604 s / -20.0 LUFS / -10.3 dBTP</p><p>Original failures: loudness, truePeak, silence, clipping<br>Edited failures: none</p>
 <p>Owner listening pending</p>
-<label>Edited comparison<audio controls preload="none" src="edited/ability-bone-rack.wav"></audio></label><label>Original<audio controls preload="none" src="raw/ability-bone-rack.mp3"></audio></label><details><summary>First local attempt — pass: no meter failures</summary><audio controls preload="none" src="first-pass/edited/ability-bone-rack.wav"></audio><p>-20.0 LUFS; -10.3 dBTP</p></details><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
+<label>Edited comparison<audio controls preload="none" src="edited/ability-bone-rack.wav" data-version="Edited comparison" data-gain="-6.00"></audio></label><label>Original<audio controls preload="none" src="raw/ability-bone-rack.mp3" data-version="Original" data-gain="-18.30"></audio></label><details><summary>First local attempt — pass: no meter failures</summary><audio controls preload="none" src="first-pass/edited/ability-bone-rack.wav" data-version="First local attempt" data-gain="-6.00"></audio><p>-20.0 LUFS; -10.3 dBTP</p></details><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
   &quot;promptOrText&quot;: &quot;Steel spike rack extends: loaded rails scrape, loose spikes chatter, final hard lock. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.&quot;,
   &quot;beat&quot;: null,
   &quot;provenance&quot;: {
@@ -3523,11 +3529,11 @@
   ],
   &quot;error&quot;: null
 }</pre></details>
-<label>Your listening note<textarea data-note="ability-bone-rack" placeholder="Preference, audible issue, device used"></textarea></label></article><article data-group="ability" data-id="ability-scrambler">
+</article><article class="card" data-group="ability" data-id="ability-scrambler" data-direction="ability-scrambler" data-label="Ability tells family / ability-scrambler" data-samples="ability-scrambler" data-categories="[&quot;Ability tells family&quot;]">
 <h2>ability-scrambler</h2><p class="badge pass">PASS — signal screen only</p>
 <p>0.804 s / -19.99 LUFS / -2.98 dBTP</p><p>Original failures: loudness, truePeak, clipping<br>Edited failures: none</p>
 <p>Owner listening pending</p>
-<label>Edited comparison<audio controls preload="none" src="edited/ability-scrambler.wav"></audio></label><label>Original<audio controls preload="none" src="raw/ability-scrambler.mp3"></audio></label><details><summary>First local attempt — pass: no meter failures</summary><audio controls preload="none" src="first-pass/edited/ability-scrambler.wav"></audio><p>-19.99 LUFS; -2.98 dBTP</p></details><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
+<label>Edited comparison<audio controls preload="none" src="edited/ability-scrambler.wav" data-version="Edited comparison" data-gain="-6.01"></audio></label><label>Original<audio controls preload="none" src="raw/ability-scrambler.mp3" data-version="Original" data-gain="-12.07"></audio></label><details><summary>First local attempt — pass: no meter failures</summary><audio controls preload="none" src="first-pass/edited/ability-scrambler.wav" data-version="First local attempt" data-gain="-6.01"></audio><p>-19.99 LUFS; -2.98 dBTP</p></details><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
   &quot;promptOrText&quot;: &quot;Crude electrical canister activates: initial metal tumble, gritty irregular electrical sputter, brief tearing static and stop. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.&quot;,
   &quot;beat&quot;: null,
   &quot;provenance&quot;: {
@@ -3598,11 +3604,11 @@
   ],
   &quot;error&quot;: null
 }</pre></details>
-<label>Your listening note<textarea data-note="ability-scrambler" placeholder="Preference, audible issue, device used"></textarea></label></article><article data-group="ability" data-id="ability-arc-harpoon">
+</article><article class="card" data-group="ability" data-id="ability-arc-harpoon" data-direction="ability-arc-harpoon" data-label="Ability tells family / ability-arc-harpoon" data-samples="ability-arc-harpoon" data-categories="[&quot;Ability tells family&quot;]">
 <h2>ability-arc-harpoon</h2><p class="badge pass">PASS — signal screen only</p>
 <p>0.742 s / -20.01 LUFS / -3.52 dBTP</p><p>Original failures: loudness, truePeak, clipping<br>Edited failures: none</p>
 <p>Owner listening pending</p>
-<label>Edited comparison<audio controls preload="none" src="edited/ability-arc-harpoon.wav"></audio></label><label>Original<audio controls preload="none" src="raw/ability-arc-harpoon.mp3"></audio></label><details><summary>First local attempt — pass: no meter failures</summary><audio controls preload="none" src="first-pass/edited/ability-arc-harpoon.wav"></audio><p>-20.01 LUFS; -3.51 dBTP</p></details><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
+<label>Edited comparison<audio controls preload="none" src="edited/ability-arc-harpoon.wav" data-version="Edited comparison" data-gain="-5.99"></audio></label><label>Original<audio controls preload="none" src="raw/ability-arc-harpoon.mp3" data-version="Original" data-gain="-10.36"></audio></label><details><summary>First local attempt — pass: no meter failures</summary><audio controls preload="none" src="first-pass/edited/ability-arc-harpoon.wav" data-version="First local attempt" data-gain="-5.99"></audio><p>-20.01 LUFS; -3.51 dBTP</p></details><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
   &quot;promptOrText&quot;: &quot;Tensioned cable spool winds hard: ratchet strain, sharp cable zip and a short rough electrical arc crack. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.&quot;,
   &quot;beat&quot;: null,
   &quot;provenance&quot;: {
@@ -3673,11 +3679,11 @@
   ],
   &quot;error&quot;: null
 }</pre></details>
-<label>Your listening note<textarea data-note="ability-arc-harpoon" placeholder="Preference, audible issue, device used"></textarea></label></article><article data-group="ability" data-id="ability-plate-brace">
+</article><article class="card" data-group="ability" data-id="ability-plate-brace" data-direction="ability-plate-brace" data-label="Ability tells family / ability-plate-brace" data-samples="ability-plate-brace" data-categories="[&quot;Ability tells family&quot;]">
 <h2>ability-plate-brace</h2><p class="badge pass">PASS — signal screen only</p>
 <p>0.467 s / -19.95 LUFS / -4.75 dBTP</p><p>Original failures: loudness, truePeak, silence, clipping<br>Edited failures: none</p>
 <p>Owner listening pending</p>
-<label>Edited comparison<audio controls preload="none" src="edited/ability-plate-brace.wav"></audio></label><label>Original<audio controls preload="none" src="raw/ability-plate-brace.mp3"></audio></label><details><summary>First local attempt — pass: no meter failures</summary><audio controls preload="none" src="first-pass/edited/ability-plate-brace.wav"></audio><p>-19.95 LUFS; -4.75 dBTP</p></details><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
+<label>Edited comparison<audio controls preload="none" src="edited/ability-plate-brace.wav" data-version="Edited comparison" data-gain="-6.05"></audio></label><label>Original<audio controls preload="none" src="raw/ability-plate-brace.mp3" data-version="Original" data-gain="-12.91"></audio></label><details><summary>First local attempt — pass: no meter failures</summary><audio controls preload="none" src="first-pass/edited/ability-plate-brace.wav" data-version="First local attempt" data-gain="-6.05"></audio><p>-19.95 LUFS; -4.75 dBTP</p></details><details><summary>Prompt, cost, provenance and measurements</summary><pre>{
   &quot;promptOrText&quot;: &quot;Armour braces lock: two thick steel clamps slam together, deep short chassis strain, tight latch stop. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.&quot;,
   &quot;beat&quot;: null,
   &quot;provenance&quot;: {
@@ -3750,13 +3756,14 @@
   ],
   &quot;error&quot;: null
 }</pre></details>
-<label>Your listening note<textarea data-note="ability-plate-brace" placeholder="Preference, audible issue, device used"></textarea></label></article></main><script>
+</article></div><section id="category-choices" class="review-section"><h2>Choose category winners</h2>
+<p>Pick a winner, no winner, or a mix with sample IDs in the note. These choices are separate from each sample’s Keep / Maybe / Reject judgement. Families can contain different cues or lines; a family winner is a preferred reference, not a replacement for every cue.</p>
+<div id="winner-fields" class="winner-grid"></div></section>
+<section id="review-export" class="review-section export"><h2>Take your choices with you</h2>
+<p>Paste the Markdown below into <a href="../../OWNER-AUDIO-CHOICE.md">deathride/audio/OWNER-AUDIO-CHOICE.md</a>. This page never edits that file or grants production acceptance. Export before moving folders or changing browsers.</p>
+<div class="report-toolbar"><button id="copy" type="button">Copy Markdown</button><button id="refresh-export" type="button">Preview Markdown</button></div>
+<label for="export">Markdown export — also available for manual copy</label><textarea id="export" readonly></textarea></section></main><script>
 const $=id=>document.getElementById(id),players=[...document.querySelectorAll('audio')],cards=[...document.querySelectorAll('article')];
 function stop(){players.forEach(p=>{p.pause();p.currentTime=0})} $('stop').onclick=stop;
-players.forEach(p=>p.addEventListener('play',()=>players.forEach(q=>{if(p!==q)q.pause()})));
 function filter(){stop();let n=0;cards.forEach(c=>{let show=$('filter').value==='all'||c.dataset.group===$('filter').value;c.classList.toggle('hidden',!show);if(show)n++});$('count').textContent=n+' candidates shown'}$('filter').onchange=filter;filter();
-const key='deathride-x3-effects';let notes={};try{notes=JSON.parse(localStorage.getItem(key)||'{}');document.body.classList.toggle('light',localStorage.getItem('deathride-x3-theme')==='light')}catch{}
-$('theme').onclick=()=>{document.body.classList.toggle('light');try{localStorage.setItem('deathride-x3-theme',document.body.classList.contains('light')?'light':'dark')}catch{}};
-document.querySelectorAll('[data-note]').forEach(n=>{n.value=notes[n.dataset.note]||'';n.oninput=()=>{notes[n.dataset.note]=n.value;try{localStorage.setItem(key,JSON.stringify(notes))}catch{}}});
-$('export').onclick=()=>{let a=document.createElement('a'),u=URL.createObjectURL(new Blob([JSON.stringify({wave:'effects',at:new Date().toISOString(),notes},null,2)],{type:'application/json'}));a.href=u;a.download='x3-effects-listening-notes.json';a.click();setTimeout(()=>URL.revokeObjectURL(u),1000)};
-</script></html>
+</script><script src="../../report.js"></script></body></html>
