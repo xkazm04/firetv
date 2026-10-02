@@ -1,36 +1,36 @@
-id,name,cup,course,story,boss,duel,laps,type
-scrap-1,Ash on the key,scrap,foundry,scrap-1,0,0,18,LAPS
-scrap-2,The first invoice,scrap,slagway,scrap-2,0,0,18,LAPS
-scrap-3,Loose ground,scrap,scree,scrap-3,0,0,18,LAPS
-scrap-4,A sealed box,scrap,sluice,scrap-4,0,0,18,LAPS
-scrap-5,A local debt,scrap,switchback,scrap-5,0,0,18,LAPS
-scrap-6,Numbers under soot,scrap,foundry,scrap-6,0,0,18,LAPS
-scrap-7,Rook at the gate,scrap,slagway,scrap-7,1,0,18,LAPS
-foundry-1,Foundry row,foundry,railcut,foundry-1,0,0,21,LAPS
-foundry-2,Easy money,foundry,ballast,foundry-2,0,0,21,LAPS
-foundry-3,Weight of a promise,foundry,reedcut,foundry-3,0,0,21,LAPS
-foundry-4,A second name,foundry,ridge,foundry-4,0,0,21,LAPS
-foundry-5,The crew account,foundry,switchback,foundry-5,0,0,21,LAPS
-foundry-6,Borrowed steel,foundry,redline,foundry-6,0,0,21,LAPS
-foundry-7,Ox holds the line,foundry,foundry,foundry-7,1,0,21,LAPS
-salt-1,White horizon,salt,saltline,salt-1,0,0,24,LAPS
-salt-2,A dry footprint,salt,dustwake,salt-2,0,0,24,LAPS
-salt-3,Switch in the crate,salt,cutface,salt-3,0,0,24,LAPS
-salt-4,Vex runs ahead,salt,mirage,salt-4,0,0,24,LAPS
-salt-5,The missing lap,salt,redline,salt-5,0,0,24,LAPS
-salt-6,Relay at dusk,salt,ballast,salt-6,0,0,24,LAPS
-salt-7,Vex opens the throttle,salt,mirage,salt-7,1,0,24,LAPS
-switchback-1,The mountain road,switchback,frostline,switchback-1,0,0,24,LAPS
-switchback-2,The books,switchback,highpass,switchback-2,0,0,24,LAPS
-switchback-3,A voice on the line,switchback,summit,switchback-3,0,0,24,LAPS
-switchback-4,Water over ink,switchback,runoff,switchback-4,0,0,24,LAPS
-switchback-5,A remembered wreck,switchback,spillway,switchback-5,0,0,24,LAPS
-switchback-6,No private deal,switchback,crucible,switchback-6,0,0,24,LAPS
-switchback-7,Mica tests the line,switchback,frostline,switchback-7,1,0,24,LAPS
-crown-1,Inside the gates,crown,furnace,crown-1,0,0,24,LAPS
-crown-2,The house cars,crown,crown,crown-2,0,0,24,LAPS
-crown-3,A public account,crown,lowwater,crown-3,0,0,24,LAPS
-crown-4,The last shipment,crown,haulroad,crown-4,0,0,24,LAPS
-crown-5,Vex returns,crown,sunspike,crown-5,0,0,24,LAPS
-crown-6,Before the Crown,crown,summit,crown-6,0,0,24,LAPS
-crown-7,Marrow on his road,crown,crown,crown-7,1,1,0,ELIMINATION
+id,name,cup,course,story,boss,duel,laps,type,playerTier
+scrap-1,Ash on the key,scrap,foundry,scrap-1,0,0,18,LAPS,0
+scrap-2,The first invoice,scrap,slagway,scrap-2,0,0,18,LAPS,0
+scrap-3,Loose ground,scrap,scree,scrap-3,0,0,18,LAPS,0
+scrap-4,A sealed box,scrap,sluice,scrap-4,0,0,18,LAPS,0
+scrap-5,A local debt,scrap,switchback,scrap-5,0,0,18,LAPS,0
+scrap-6,Numbers under soot,scrap,foundry,scrap-6,0,0,18,LAPS,0
+scrap-7,Rook at the gate,scrap,slagway,scrap-7,1,0,18,LAPS,1
+foundry-1,Foundry row,foundry,railcut,foundry-1,0,0,21,LAPS,1
+foundry-2,Easy money,foundry,ballast,foundry-2,0,0,21,LAPS,1
+foundry-3,Weight of a promise,foundry,reedcut,foundry-3,0,0,21,LAPS,1
+foundry-4,A second name,foundry,ridge,foundry-4,0,0,21,LAPS,1
+foundry-5,The crew account,foundry,switchback,foundry-5,0,0,21,LAPS,1
+foundry-6,Borrowed steel,foundry,redline,foundry-6,0,0,21,LAPS,1
+foundry-7,Ox holds the line,foundry,foundry,foundry-7,1,0,21,LAPS,2
+salt-1,White horizon,salt,saltline,salt-1,0,0,24,LAPS,2
+salt-2,A dry footprint,salt,dustwake,salt-2,0,0,24,LAPS,2
+salt-3,Switch in the crate,salt,cutface,salt-3,0,0,24,LAPS,2
+salt-4,Vex runs ahead,salt,mirage,salt-4,0,0,24,LAPS,2
+salt-5,The missing lap,salt,redline,salt-5,0,0,24,LAPS,2
+salt-6,Relay at dusk,salt,ballast,salt-6,0,0,24,LAPS,2
+salt-7,Vex opens the throttle,salt,mirage,salt-7,1,0,24,LAPS,3
+switchback-1,The mountain road,switchback,frostline,switchback-1,0,0,24,LAPS,3
+switchback-2,The books,switchback,highpass,switchback-2,0,0,24,LAPS,3
+switchback-3,A voice on the line,switchback,summit,switchback-3,0,0,24,LAPS,3
+switchback-4,Water over ink,switchback,runoff,switchback-4,0,0,24,LAPS,3
+switchback-5,A remembered wreck,switchback,spillway,switchback-5,0,0,24,LAPS,3
+switchback-6,No private deal,switchback,crucible,switchback-6,0,0,24,LAPS,3
+switchback-7,Mica tests the line,switchback,frostline,switchback-7,1,0,24,LAPS,4
+crown-1,Inside the gates,crown,furnace,crown-1,0,0,24,LAPS,4
+crown-2,The house cars,crown,crown,crown-2,0,0,24,LAPS,4
+crown-3,A public account,crown,lowwater,crown-3,0,0,24,LAPS,4
+crown-4,The last shipment,crown,haulroad,crown-4,0,0,24,LAPS,4
+crown-5,Vex returns,crown,sunspike,crown-5,0,0,24,LAPS,4
+crown-6,Before the Crown,crown,summit,crown-6,0,0,24,LAPS,4
+crown-7,Marrow on his road,crown,crown,crown-7,1,1,0,ELIMINATION,4

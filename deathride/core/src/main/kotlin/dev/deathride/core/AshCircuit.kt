@@ -127,7 +127,7 @@ object RivalEconomy {
 /** Explicit policy family for reports, not a claim of globally optimal human play. */
 object CareerSpending {
     fun spend(p: Profile,partLimit: Int=2): Int {
-        val act=min(4,p.careerCleared/7);var purchases=0
+        val act=Career.events[p.careerRound].playerTier;var purchases=0
         val current=CarCatalog.all[p.selectedCar]
         if(current.tierRank<act) {
             val nextTier=min(act,current.tierRank+1)

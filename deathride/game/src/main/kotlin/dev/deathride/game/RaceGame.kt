@@ -196,11 +196,11 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
     private fun startRace(career: Boolean=false) {
         val finale=career && Career.events[profiles[0].careerRound].elimination
         if(career && !server.slots[0].claimed && !keyboard) { careerMessage[0]="Pair Player 1 before starting a career race";publishGarage(0);return }
-        if(career && !finale && CarCatalog.all[selectedCars[0]].tierRank>Career.events[profiles[0].careerRound].cupIndex) { careerMessage[0]="Choose a car in this division or a lower tier";publishGarage(0);return }
+        if(career && !finale && CarCatalog.all[selectedCars[0]].tierRank>Career.events[profiles[0].careerRound].playerTier) { careerMessage[0]="Choose a car in this division or a lower tier";publishGarage(0);return }
         if(career && !finale && !profiles[0].owned[selectedCars[0]]) { careerMessage[0]="Buy this car in the garage or choose an owned car";publishGarage(0);return }
         if(career && !finale && !Career.unlocked(profiles[0],"car",CarCatalog.all[selectedCars[0]].id)) { careerMessage[0]="Car locked for career - choose Line or an unlocked car";publishGarage(0);return }
         if(career && !Career.events[profiles[0].careerRound].duel && server.slots[1].claimed &&
-            (!profiles[1].owned[selectedCars[1]] || CarCatalog.all[selectedCars[1]].tierRank>Career.events[profiles[0].careerRound].cupIndex)) {
+            (!profiles[1].owned[selectedCars[1]] || CarCatalog.all[selectedCars[1]].tierRank>Career.events[profiles[0].careerRound].playerTier)) {
             careerMessage[0]="Player 2: choose an owned car in this division or a lower tier";publishGarage(0);return
         }
         if(career && !editProfile(0){RivalEconomy.prepare(it);DeathDuel.seize(it)})return
@@ -479,7 +479,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         if(phase=="race" || phase=="countdown" || phase=="results") {
             for(c in world.cars)if(c.entered) {
                 val x=30f+c.id*210
-                label("${c.position}. "+(if(c.human)"PLAYER ${c.id+1}" else "RIVAL ${c.id+1}"),x,66f,colors[c.id])
+                label("${c.position}. "+driverName(c),x,66f,colors[c.id])
                 label(if(world.combat.wrecked(c.id))"WRECKED" else if(world.eventType==EventType.ELIMINATION)"HP ${world.combat.health(c.id).toInt()} / DUEL" else "HP ${world.combat.health(c.id).toInt()}  L${min(world.raceLaps,c.lap.laps+1)}/${world.raceLaps}",x,39f)
             }
         } else {
@@ -524,7 +524,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
                 detail.setColor(muted);detail.wrapped(shopMessage[0]+" / "+saveStatus[0],631f,186f,554f,25f)
                 label("THE MECHANIC",68f,201f,accent)
                 detail.setColor(muted);detail.wrapped(Campaign.mechanicLine(p),68f,175f,500f,24f)
-                label("LEAGUE ${p.campaign.debt} / LOANS ${p.debt} CR",68f,113f)
+                label("LEAGUE ${p.campaign.debt} / LOANS ${p.debt} CR",68f,127f)
             }
             "career" -> {
                 val p=profiles[0];val event=Career.events[p.careerRound];val cup=Career.cups[event.cupIndex];val tier=Career.difficulties[p.careerDifficulty]
@@ -541,12 +541,12 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
                     val choice=Campaign.choices[selectedReward];val rejection=Campaign.reason(p,pending,choice)
                     detail.setColor(muted);detail.wrapped(Campaign.allies[pending].id.uppercase()+": "+Campaign.label(p,pending,choice)+(if(rejection.isEmpty())"" else " / $rejection"),66f,219f,677f,25f)
                     label("SELECT CLAIM / DOWN RACE",162f,169f,bg)
-                    label("LEFT-RIGHT Reward / PLAY Garage",66f,119f)
+                    label("LEFT-RIGHT Reward / PLAY Garage",66f,127f)
                 } else {
                     for(i in Career.difficulties.indices)label(Career.difficulties[i].name.uppercase(),83f+i*229,260f,if(i==p.careerDifficulty)bg else HudTheme.bone)
                     detail.setColor(muted);detail.wrapped(tier.description,66f,219f,677f,25f)
                     label("SELECT / RACE NEXT ROUND",220f,169f,bg)
-                    label("PLAY Garage / LEFT-RIGHT Difficulty",66f,119f)
+                    label("PLAY Garage / LEFT-RIGHT Difficulty",66f,127f)
                 }
                 label("RIVALS / THEIR GARAGES",808f,577f,accent)
                 for((i,index) in RivalEconomy.cast(p.careerRound).withIndex()) {
@@ -587,7 +587,10 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
                     label(when {combatWrecked(c)->"WRECKED / ${world.combat.kills[c.id]} KILLS";c.finishKind==FinishKind.ELIMINATION->"LAST SURVIVOR";c.finishSeconds>=0->"${(c.finishSeconds*10).toInt()/10.0}s";else->if(world.eventType==EventType.ELIMINATION)"UNRESOLVED / RETRY" else "LAP ${c.lap.laps+1}/${world.raceLaps}"},737f,479f-rank*40)
                 }
                 val receipt=profiles[0].lastReceipt
-                if(receipt!=null)label("PRIZE ${receipt.gross} / PIT ${receipt.repair} / BANKED +${receipt.banked} / BANK ${profiles[0].credits} CR",291f,220f,accent)
+                if(receipt!=null) {
+                    label("PRIZE ${receipt.gross} / PIT ${receipt.repair} / DEBT + CAP ${receipt.net-receipt.banked}",291f,245f,accent)
+                    label("BANKED +${receipt.banked} CR / BALANCE ${profiles[0].credits} CR",291f,220f,accent)
+                }
                 if(campaignRace && raceRound==Career.events.lastIndex && profiles[0].campaign.finale==2) {
                     val card=AshStory.cards.getValue("campaign-victory")
                     label(card.title.uppercase(),291f,365f,accent);detail.setColor(HudTheme.bone);detail.wrapped(card.lines.joinToString(" "),291f,328f,705f,25f)

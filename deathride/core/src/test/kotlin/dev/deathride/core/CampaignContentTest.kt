@@ -4,6 +4,18 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Assertions.*
 
 class CampaignContentTest {
+    @Test fun qualifierLicencesOpenBeforeTheBossWithoutGivingAwayTheCar() {
+        for(round in listOf(6,13,20,27)) {
+            val e=Career.events[round];val p=Profile("qualifier-$round");p.careerRound=round;p.careerCleared=round;p.credits=8000
+            p.selectedCar=CarCatalog.all.indices.first{CarCatalog.all[it].tierRank==e.cupIndex};p.owned[p.selectedCar]=true
+            assertEquals(e.cupIndex+1,e.playerTier)
+            val next=CarCatalog.all.indices.first{CarCatalog.all[it].tierRank==e.playerTier}
+            p.careerCleared=round-1;assertFalse(Career.unlocked(p,"car",CarCatalog.all[next].id))
+            p.careerCleared=round;assertTrue(Career.unlocked(p,"car",CarCatalog.all[next].id));assertFalse(p.owned[next])
+            CareerSpending.spend(p,0);assertEquals(e.playerTier,CarCatalog.all[p.selectedCar].tierRank);assertTrue(p.credits<8000)
+            assertEquals(round,p.careerRound);assertEquals(0,p.campaign.rewards[round/7])
+        }
+    }
     @Test fun plotDataCoversEveryEventAndOnlyLegalPromotionAssets() {
         val beats=Content.table("campaign-beats")
         assertEquals(Career.events.map{it.id},beats.map{it.getValue("event")})

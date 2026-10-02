@@ -39,5 +39,5 @@ Original work only (nothing from the arcade game or the Death Rally titles; no f
 | Q0 | Plot, debt and ally model, finale rules (design note, data) | complete ? Q0 note, 35 beats, rules, four promotion choices; green build and four browser suites |
 | Q1 | Debt, ally promotion, the Mechanic, cards and menus | complete ? v5 ledger/migration, rewards and TV/phone menus; build, five browser suites and GL text checks green |
 | Q2 | Death duel and the Mechanic's rig | complete - elimination, saved seizure/restitution, automatic dispatcher and visible-target boss; required build and six browser suites green |
-| Q3 | Balance simulation and fairness | not started |
+| Q3 | Balance simulation and fairness | complete - qualifier licence correction; 11,520 physical races, 3,072 duels and two 2,000-ledger policy cohorts; late PR dips and censored careers explicitly open; required build and six browsers green |
 | Q4 | Stick check, owner checks, report | not started |

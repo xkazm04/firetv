@@ -415,6 +415,9 @@ class World(val seed: Int=17, val spec: CarSpec=CarSpec(), val track: Track=Trac
                     nearest=distance;c.aiDuelTarget=o.id
                     track.project(o.x,o.y,duelProjection);lane=duelProjection.distance
                     c.aiDuelWait=dx*cos(c.heading)+dy*sin(c.heading)<0
+                    // Leave a passing lane while waiting for the visible car behind.
+                    // Matching its lane here merely parks a shield in front of its guns.
+                    if(c.aiDuelWait)lane=if(lane>=0)-DeathDuel.waitLaneM else DeathDuel.waitLaneM
                 }
             }
         }

@@ -1,0 +1,138 @@
+{
+  "fixture": "Explicit core-generated promotion fixture; actual phone transactions; not an earned browser career",
+  "checks": [
+    "Mechanic and ledger",
+    "guest cannot claim host reward",
+    "cash promotion",
+    "car promotion",
+    "legal part promotion",
+    "ledger conservation",
+    "reload retains claimed and pending choices"
+  ],
+  "campaign": {
+    "profile": "campaign-probe-q1",
+    "car": "Line",
+    "revision": 59,
+    "debt": 0,
+    "initial": 1200,
+    "interest": 84,
+    "paid": 1352,
+    "diverted": 331,
+    "recovered": 263,
+    "voided": 0,
+    "lastPayment": 0,
+    "lastCredited": 0,
+    "lastDiverted": 0,
+    "lastInterest": 0,
+    "exposed": true,
+    "loanDebt": 0,
+    "allies": [
+      {
+        "id": "rook",
+        "state": 2,
+        "line": "I collected for him. Now I will carry your name.",
+        "offers": [
+          {
+            "id": "rook:money",
+            "label": "300 CR (up to 300)",
+            "available": false,
+            "reason": "Reward already claimed or not earned"
+          },
+          {
+            "id": "rook:car",
+            "label": "Stock Trail / value 1112 CR",
+            "available": false,
+            "reason": "Reward already claimed or not earned"
+          },
+          {
+            "id": "rook:part",
+            "label": "Tires 1 on Line",
+            "available": false,
+            "reason": "Reward already claimed or not earned"
+          }
+        ]
+      },
+      {
+        "id": "ox",
+        "state": 3,
+        "line": "The missing wages bought his fleet. My crew backs your climb.",
+        "offers": [
+          {
+            "id": "ox:money",
+            "label": "500 CR (up to 500)",
+            "available": false,
+            "reason": "Reward already claimed or not earned"
+          },
+          {
+            "id": "ox:car",
+            "label": "Stock Flint / value 1928 CR",
+            "available": false,
+            "reason": "Reward already claimed or not earned"
+          },
+          {
+            "id": "ox:part",
+            "label": "Armor 1 on Line",
+            "available": false,
+            "reason": "Reward already claimed or not earned"
+          }
+        ]
+      },
+      {
+        "id": "vex",
+        "state": 4,
+        "line": "I can sell a fast car. I cannot sell you out.",
+        "offers": [
+          {
+            "id": "vex:money",
+            "label": "700 CR (up to 700)",
+            "available": false,
+            "reason": "Reward already claimed or not earned"
+          },
+          {
+            "id": "vex:car",
+            "label": "Stock Quill / value 2850 CR",
+            "available": false,
+            "reason": "Reward already claimed or not earned"
+          },
+          {
+            "id": "vex:part",
+            "label": "Engine 2 on Line",
+            "available": false,
+            "reason": "Reward already claimed or not earned"
+          }
+        ]
+      },
+      {
+        "id": "mica",
+        "state": 1,
+        "line": "Every crew has the books. Take our names to the Crown.",
+        "offers": [
+          {
+            "id": "mica:money",
+            "label": "900 CR (up to 900)",
+            "available": true,
+            "reason": ""
+          },
+          {
+            "id": "mica:car",
+            "label": "Stock Kestrel / value 4037 CR",
+            "available": true,
+            "reason": ""
+          },
+          {
+            "id": "mica:part",
+            "label": "Suspension 1 on Line",
+            "available": true,
+            "reason": ""
+          }
+        ]
+      }
+    ],
+    "mechanic": "He can take a car. He cannot take what we built together.",
+    "tutorial": "The final fight has no lap victory. Keep moving until Marrow is wrecked.",
+    "hub": "The Crown pits",
+    "finale": 0,
+    "seizedCar": ""
+  },
+  "errors": []
+}

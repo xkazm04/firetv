@@ -6,6 +6,7 @@ object DeathDuel {
     val boss=Rival(Content.table("duel-boss").single())
     val perceptionM=CampaignRules["bossPerceptionM"]
     val chaseFraction=CampaignRules["bossWaitSpeedFraction"]
+    val waitLaneM=CampaignRules["bossWaitLaneM"]
     fun applyRig(car: Car) {
         CarCatalog.apply(car,rigIndex)
         car.ability.definition=AbilityCatalog.dispatcher
