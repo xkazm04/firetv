@@ -1,0 +1,149 @@
+{
+  "id": "diesel-confirm",
+  "measuredAt": "2026-10-02T19:28:28.394384+00:00",
+  "generationSidecar": "raw/diesel-confirm.mp3.json",
+  "raw": {
+    "file": "raw/diesel-confirm.mp3",
+    "sha256": "fffa76c05e7671403b5b4307347fd44e65823b8d07fcd605962b7a683a35baff",
+    "bytes": 17180,
+    "status": "fail",
+    "failures": [
+      "loudness",
+      "silence"
+    ],
+    "checks": {
+      "decode": true,
+      "duration": true,
+      "loudness": false,
+      "truePeak": true,
+      "silence": false,
+      "clipping": true
+    },
+    "durationSeconds": 1.0,
+    "durationWindowSeconds": [
+      0.85,
+      1.15
+    ],
+    "sampleRate": 44100,
+    "channels": 2,
+    "decodedFrames": 44100,
+    "containerDurationSeconds": 1.044898,
+    "integratedLufs": -31.92,
+    "truePeakDbtp": -10.05,
+    "loudnessRangeLu": 0.0,
+    "loudnormAnalysis": {
+      "input_i": "-31.92",
+      "input_tp": "-10.05",
+      "input_lra": "0.00",
+      "input_thresh": "-47.31",
+      "output_i": "-23.92",
+      "output_tp": "-2.00",
+      "output_lra": "0.00",
+      "output_thresh": "-39.31",
+      "normalization_type": "linear",
+      "target_offset": "3.92"
+    },
+    "loudnessTargetLufs": -20,
+    "loudnessToleranceLu": 2,
+    "samplePeakDbfs": -10.086698015500835,
+    "fullScaleSampleCount": 0,
+    "clippingScreenThreshold": 0.999,
+    "silence": {
+      "thresholdDbfs": -50,
+      "minimumIntervalSeconds": 0.1,
+      "intervalsFrames": [
+        [
+          22099,
+          44067
+        ]
+      ],
+      "fraction": 0.498140589569161,
+      "longestInteriorSeconds": 0
+    },
+    "loopSeam": {
+      "status": "not applicable",
+      "reason": "one-shot"
+    },
+    "loopBoundary": null
+  },
+  "matched": {
+    "file": "matched/diesel-confirm.mp3",
+    "sha256": "f4433929fbe3332fcdfa2dd57d2284a7a8dbc68e4e44e6080b0791894f6474df",
+    "bytes": 17179,
+    "status": "fail",
+    "failures": [
+      "loudness"
+    ],
+    "checks": {
+      "decode": true,
+      "duration": true,
+      "loudness": false,
+      "truePeak": true,
+      "silence": true,
+      "clipping": true
+    },
+    "durationSeconds": 1.0,
+    "durationWindowSeconds": [
+      0.85,
+      1.15
+    ],
+    "sampleRate": 44100,
+    "channels": 2,
+    "decodedFrames": 44100,
+    "containerDurationSeconds": 1.044898,
+    "integratedLufs": -24.22,
+    "truePeakDbtp": -1.47,
+    "loudnessRangeLu": 0.0,
+    "loudnormAnalysis": {
+      "input_i": "-24.22",
+      "input_tp": "-1.47",
+      "input_lra": "0.00",
+      "input_thresh": "-39.61",
+      "output_i": "-24.72",
+      "output_tp": "-2.00",
+      "output_lra": "0.00",
+      "output_thresh": "-40.11",
+      "normalization_type": "linear",
+      "target_offset": "4.72"
+    },
+    "loudnessTargetLufs": -20,
+    "loudnessToleranceLu": 2,
+    "samplePeakDbfs": -1.5398291896658347,
+    "fullScaleSampleCount": 0,
+    "clippingScreenThreshold": 0.999,
+    "silence": {
+      "thresholdDbfs": -50,
+      "minimumIntervalSeconds": 0.1,
+      "intervalsFrames": [
+        [
+          32128,
+          43960
+        ]
+      ],
+      "fraction": 0.2682993197278912,
+      "longestInteriorSeconds": 0
+    },
+    "loopSeam": {
+      "status": "not applicable",
+      "reason": "one-shot"
+    },
+    "loopBoundary": null
+  },
+  "processing": {
+    "operation": "two-pass ffmpeg loudnorm and MP3 re-encode; dynamic limiting when linear gain cannot meet target; no trim, EQ or seam repair",
+    "normalizationType": "linear",
+    "ffmpegFilter": "loudnorm=I=-20:TP=-2:LRA=11:measured_I=-31.92:measured_TP=-10.05:measured_LRA=0.00:measured_thresh=-47.31:offset=3.92:linear=true:print_format=json",
+    "credits": 0,
+    "sourceSha256": "fffa76c05e7671403b5b4307347fd44e65823b8d07fcd605962b7a683a35baff",
+    "targetReached": false,
+    "peakHeadroomDbtp": -2
+  },
+  "status": "fail",
+  "notMeasured": [
+    "in-game playback/masking/latency",
+    "Stick memory and voice budget",
+    "human conformance and preference",
+    "long-race fatigue",
+    "musical tempo/key/downbeat and semantic fidelity"
+  ]
+}

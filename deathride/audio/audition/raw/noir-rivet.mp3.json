@@ -1,0 +1,32 @@
+{
+  "id": "d678096e-67d6-4be1-87db-a30852c5f514",
+  "ts": "2026-10-02T19:26:41.781Z",
+  "session": "x2-2026-10-02",
+  "status": "complete",
+  "kind": "sfx",
+  "out": "audio/audition/raw/noir-rivet.mp3",
+  "seconds": 1.5,
+  "request": {
+    "text": "One crude vehicle rivet-gun burst. Immediate attack, three cracks in 0.6 s, short metal body, decay to silence; no reload. Timbre: a tight damped bolt crack and dark hollow shell tick. Intimate damped metal, low gritty resonance, restrained high end, tiny dry reflection. 1.5 seconds. Original isolated effect; no music, no voice.",
+    "duration_seconds": 1.5,
+    "prompt_influence": 0.7,
+    "model_id": "eleven_text_to_sound_v2",
+    "loop": false
+  },
+  "endpoint": "/v1/sound-generation",
+  "format": "mp3_44100_128",
+  "estimatedCredits": 100,
+  "budgetCharge": 100,
+  "creditsBefore": 38375,
+  "accountTier": "starter",
+  "reserve": 8000,
+  "sessionCap": 9000,
+  "bytes": 24703,
+  "providerCredits": 15,
+  "sha256": "1cb99485ec29f1e524af89259ac94286f138526f523d00d2f35428eed4485017",
+  "completedAt": "2026-10-02T19:26:45.576Z",
+  "creditsAfter": 38375,
+  "observedAccountDelta": 0,
+  "spendBasis": "Provider character-cost response header; account delta separately reported.",
+  "sessionBudgetUsed": 7296
+}

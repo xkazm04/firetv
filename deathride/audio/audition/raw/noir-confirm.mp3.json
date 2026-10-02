@@ -1,0 +1,32 @@
+{
+  "id": "dffa6381-0669-4899-8cec-316aa72bde35",
+  "ts": "2026-10-02T19:27:35.418Z",
+  "session": "x2-2026-10-02",
+  "status": "complete",
+  "kind": "sfx",
+  "out": "audio/audition/raw/noir-confirm.mp3",
+  "seconds": 1,
+  "request": {
+    "text": "One physical menu confirm. Immediate quiet click-clunk, tiny mechanical body, short dry release to silence. No beep or chime. Timbre: a dry worn ratchet tooth seating into a felt-damped latch. Intimate damped metal, low gritty resonance, restrained high end, tiny dry reflection. 1 seconds. Original isolated effect; no music, no voice.",
+    "duration_seconds": 1,
+    "prompt_influence": 0.7,
+    "model_id": "eleven_text_to_sound_v2",
+    "loop": false
+  },
+  "endpoint": "/v1/sound-generation",
+  "format": "mp3_44100_128",
+  "estimatedCredits": 100,
+  "budgetCharge": 100,
+  "creditsBefore": 38305,
+  "accountTier": "starter",
+  "reserve": 8000,
+  "sessionCap": 9000,
+  "bytes": 17180,
+  "providerCredits": 10,
+  "sha256": "81e699d6f8446c734f716cb6dd1ce9cead2952963e4a390201f7aaea3b56921e",
+  "completedAt": "2026-10-02T19:27:38.344Z",
+  "creditsAfter": 38305,
+  "observedAccountDelta": 0,
+  "spendBasis": "Provider character-cost response header; account delta separately reported.",
+  "sessionBudgetUsed": 7696
+}

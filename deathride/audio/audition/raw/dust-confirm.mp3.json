@@ -1,0 +1,32 @@
+{
+  "id": "c3150ca9-3cce-4147-b65e-28638a515ffe",
+  "ts": "2026-10-02T19:22:20.228Z",
+  "session": "x2-2026-10-02",
+  "status": "complete",
+  "kind": "sfx",
+  "out": "audio/audition/raw/dust-confirm.mp3",
+  "seconds": 1,
+  "request": {
+    "text": "One physical menu confirm. Immediate quiet click-clunk, tiny mechanical body, short dry release to silence. No beep or chime. Timbre: a heavy weathered lever locking into a leather-damped notch. Dust-dry outdoor metal and leather, exposed close attack, short air tail, tape grain. 1 seconds. Original isolated effect; no music, no voice.",
+    "duration_seconds": 1,
+    "prompt_influence": 0.7,
+    "model_id": "eleven_text_to_sound_v2",
+    "loop": false
+  },
+  "endpoint": "/v1/sound-generation",
+  "format": "mp3_44100_128",
+  "estimatedCredits": 100,
+  "budgetCharge": 100,
+  "creditsBefore": 40769,
+  "accountTier": "starter",
+  "reserve": 8000,
+  "sessionCap": 9000,
+  "bytes": 17180,
+  "providerCredits": 10,
+  "sha256": "46f64aa230336ce1927ca9042b314d6e125e13825e797e833158c316e171f055",
+  "completedAt": "2026-10-02T19:22:29.806Z",
+  "creditsAfter": 40769,
+  "observedAccountDelta": 0,
+  "spendBasis": "Provider character-cost response header; account delta separately reported.",
+  "sessionBudgetUsed": 1900
+}

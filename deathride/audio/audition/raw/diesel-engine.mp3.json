@@ -1,0 +1,32 @@
+{
+  "id": "2bf2dc8d-0b48-44ea-b6e3-bd07edced552",
+  "ts": "2026-10-02T19:22:56.188Z",
+  "session": "x2-2026-10-02",
+  "status": "complete",
+  "kind": "sfx",
+  "out": "audio/audition/raw/diesel-engine.mp3",
+  "seconds": 2,
+  "request": {
+    "text": "Battered road coupe at steady low revs. Constant body, seamlessly repeating; no ignition, acceleration, fade or backfire. Timbre: heavy uneven diesel piston knocks and vibrating steel casing. Close foundry steel, blunt low-mid weight, analog grit, short concrete reflection. 2 seconds. Original isolated effect; no music, no voice.",
+    "duration_seconds": 2,
+    "prompt_influence": 0.7,
+    "model_id": "eleven_text_to_sound_v2",
+    "loop": true
+  },
+  "endpoint": "/v1/sound-generation",
+  "format": "mp3_44100_128",
+  "estimatedCredits": 100,
+  "budgetCharge": 100,
+  "creditsBefore": 40769,
+  "accountTier": "starter",
+  "reserve": 8000,
+  "sessionCap": 9000,
+  "bytes": 37242,
+  "providerCredits": 20,
+  "sha256": "24684e887b38a0365ac8f114e50ca36eac3dfb369e6a1ee382ef7350a07de29d",
+  "completedAt": "2026-10-02T19:23:03.234Z",
+  "creditsAfter": 40769,
+  "observedAccountDelta": 0,
+  "spendBasis": "Provider character-cost response header; account delta separately reported.",
+  "sessionBudgetUsed": 3332
+}

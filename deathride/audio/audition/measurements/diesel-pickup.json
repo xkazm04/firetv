@@ -1,0 +1,148 @@
+{
+  "id": "diesel-pickup",
+  "measuredAt": "2026-10-02T19:28:28.123266+00:00",
+  "generationSidecar": "raw/diesel-pickup.mp3.json",
+  "raw": {
+    "file": "raw/diesel-pickup.mp3",
+    "sha256": "742cf74417fc4166b9b2688d5e0d8b4183e509c8da27c559f3c9a5a9cbc1ed18",
+    "bytes": 17180,
+    "status": "fail",
+    "failures": [
+      "silence"
+    ],
+    "checks": {
+      "decode": true,
+      "duration": true,
+      "loudness": true,
+      "truePeak": true,
+      "silence": false,
+      "clipping": true
+    },
+    "durationSeconds": 1.0,
+    "durationWindowSeconds": [
+      0.85,
+      1.15
+    ],
+    "sampleRate": 44100,
+    "channels": 2,
+    "decodedFrames": 44100,
+    "containerDurationSeconds": 1.044898,
+    "integratedLufs": -19.43,
+    "truePeakDbtp": -2.09,
+    "loudnessRangeLu": 0.0,
+    "loudnormAnalysis": {
+      "input_i": "-19.43",
+      "input_tp": "-2.09",
+      "input_lra": "0.00",
+      "input_thresh": "-33.40",
+      "output_i": "-19.94",
+      "output_tp": "-2.66",
+      "output_lra": "0.00",
+      "output_thresh": "-33.91",
+      "normalization_type": "linear",
+      "target_offset": "-0.06"
+    },
+    "loudnessTargetLufs": -20,
+    "loudnessToleranceLu": 2,
+    "samplePeakDbfs": -2.076968209223152,
+    "fullScaleSampleCount": 0,
+    "clippingScreenThreshold": 0.999,
+    "silence": {
+      "thresholdDbfs": -50,
+      "minimumIntervalSeconds": 0.1,
+      "intervalsFrames": [
+        [
+          17140,
+          44100
+        ]
+      ],
+      "fraction": 0.6113378684807256,
+      "longestInteriorSeconds": 0
+    },
+    "loopSeam": {
+      "status": "not applicable",
+      "reason": "one-shot"
+    },
+    "loopBoundary": null
+  },
+  "matched": {
+    "file": "matched/diesel-pickup.mp3",
+    "sha256": "497ea02228bbf44866011b6aeb3495241803c5ef0700a4c30d35b37a9df00788",
+    "bytes": 17179,
+    "status": "fail",
+    "failures": [
+      "silence"
+    ],
+    "checks": {
+      "decode": true,
+      "duration": true,
+      "loudness": true,
+      "truePeak": true,
+      "silence": false,
+      "clipping": true
+    },
+    "durationSeconds": 1.0,
+    "durationWindowSeconds": [
+      0.85,
+      1.15
+    ],
+    "sampleRate": 44100,
+    "channels": 2,
+    "decodedFrames": 44100,
+    "containerDurationSeconds": 1.044898,
+    "integratedLufs": -20.72,
+    "truePeakDbtp": -3.35,
+    "loudnessRangeLu": 0.0,
+    "loudnormAnalysis": {
+      "input_i": "-20.72",
+      "input_tp": "-3.35",
+      "input_lra": "0.00",
+      "input_thresh": "-34.69",
+      "output_i": "-20.02",
+      "output_tp": "-2.63",
+      "output_lra": "0.00",
+      "output_thresh": "-33.99",
+      "normalization_type": "linear",
+      "target_offset": "0.02"
+    },
+    "loudnessTargetLufs": -20,
+    "loudnessToleranceLu": 2,
+    "samplePeakDbfs": -3.337678207844832,
+    "fullScaleSampleCount": 0,
+    "clippingScreenThreshold": 0.999,
+    "silence": {
+      "thresholdDbfs": -50,
+      "minimumIntervalSeconds": 0.1,
+      "intervalsFrames": [
+        [
+          17094,
+          44100
+        ]
+      ],
+      "fraction": 0.6123809523809524,
+      "longestInteriorSeconds": 0
+    },
+    "loopSeam": {
+      "status": "not applicable",
+      "reason": "one-shot"
+    },
+    "loopBoundary": null
+  },
+  "processing": {
+    "operation": "two-pass ffmpeg loudnorm and MP3 re-encode; dynamic limiting when linear gain cannot meet target; no trim, EQ or seam repair",
+    "normalizationType": "linear",
+    "ffmpegFilter": "loudnorm=I=-20:TP=-2:LRA=11:measured_I=-19.43:measured_TP=-2.09:measured_LRA=0.00:measured_thresh=-33.40:offset=-0.06:linear=true:print_format=json",
+    "credits": 0,
+    "sourceSha256": "742cf74417fc4166b9b2688d5e0d8b4183e509c8da27c559f3c9a5a9cbc1ed18",
+    "targetReached": true,
+    "peakHeadroomDbtp": -2
+  },
+  "status": "fail",
+  "notMeasured": [
+    "in-game playback/masking/latency",
+    "Stick memory and voice budget",
+    "human conformance and preference",
+    "long-race fatigue",
+    "musical tempo/key/downbeat and semantic fidelity"
+  ]
+}

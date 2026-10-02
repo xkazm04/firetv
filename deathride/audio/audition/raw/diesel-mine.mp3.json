@@ -1,0 +1,32 @@
+{
+  "id": "ced5a180-e257-4ee0-bea5-d32173f3d82c",
+  "ts": "2026-10-02T19:23:25.843Z",
+  "session": "x2-2026-10-02",
+  "status": "complete",
+  "kind": "sfx",
+  "out": "audio/audition/raw/diesel-mine.mp3",
+  "seconds": 2,
+  "request": {
+    "text": "One compact road-mine blast. Hard attack, short low concussive body, torn metal and grit rapidly decaying. Close, no sustained fireball. Timbre: a compressed concussive steel drum thud with torn plate debris. Close foundry steel, blunt low-mid weight, analog grit, short concrete reflection. 2 seconds. Original isolated effect; no music, no voice.",
+    "duration_seconds": 2,
+    "prompt_influence": 0.7,
+    "model_id": "eleven_text_to_sound_v2",
+    "loop": false
+  },
+  "endpoint": "/v1/sound-generation",
+  "format": "mp3_44100_128",
+  "estimatedCredits": 100,
+  "budgetCharge": 100,
+  "creditsBefore": 40124,
+  "accountTier": "starter",
+  "reserve": 8000,
+  "sessionCap": 9000,
+  "bytes": 33062,
+  "providerCredits": 20,
+  "sha256": "d9985229e76de33430f560edef43e9d03bbe04995b465b9423a5cb70a18ac887",
+  "completedAt": "2026-10-02T19:23:44.460Z",
+  "creditsAfter": 39992,
+  "observedAccountDelta": 132,
+  "spendBasis": "Provider character-cost response header; account delta separately reported.",
+  "sessionBudgetUsed": 3532
+}

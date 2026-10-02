@@ -1,0 +1,196 @@
+{
+  "id": "funk-race",
+  "measuredAt": "2026-10-02T19:28:29.109203+00:00",
+  "generationSidecar": "raw/funk-race.mp3.json",
+  "raw": {
+    "file": "raw/funk-race.mp3",
+    "sha256": "5d673e2cacfda8b2d9311e22b6abaa13ad66e8929b02feefbfbaf6d3b405bdc9",
+    "bytes": 321037,
+    "status": "fail",
+    "failures": [
+      "loudness",
+      "truePeak",
+      "loopSeam"
+    ],
+    "checks": {
+      "decode": true,
+      "duration": true,
+      "loudness": false,
+      "truePeak": false,
+      "silence": true,
+      "clipping": true,
+      "loopSeam": false
+    },
+    "durationSeconds": 20.06204081632653,
+    "durationWindowSeconds": [
+      19.65,
+      20.35
+    ],
+    "sampleRate": 44100,
+    "channels": 2,
+    "decodedFrames": 884736,
+    "containerDurationSeconds": 20.062,
+    "integratedLufs": -11.59,
+    "truePeakDbtp": -0.81,
+    "loudnessRangeLu": 0.4,
+    "loudnormAnalysis": {
+      "input_i": "-11.59",
+      "input_tp": "-0.81",
+      "input_lra": "0.40",
+      "input_thresh": "-21.59",
+      "output_i": "-14.03",
+      "output_tp": "-3.21",
+      "output_lra": "0.30",
+      "output_thresh": "-24.03",
+      "normalization_type": "dynamic",
+      "target_offset": "0.03"
+    },
+    "loudnessTargetLufs": -14,
+    "loudnessToleranceLu": 1,
+    "samplePeakDbfs": -0.8492916123447602,
+    "fullScaleSampleCount": 0,
+    "clippingScreenThreshold": 0.999,
+    "silence": {
+      "thresholdDbfs": -50,
+      "minimumIntervalSeconds": 0.1,
+      "intervalsFrames": [],
+      "fraction": 0.0,
+      "longestInteriorSeconds": 0
+    },
+    "loopSeam": {
+      "status": "fail",
+      "sampleJumpFullScale": 7.213679964479525e-08,
+      "boundaryRmsStepDb": 23.332140084559185,
+      "spectralCosine": 0.08464069637714015,
+      "windowSeconds": 0.05,
+      "repeatedJoinJumps": [
+        7.213679964479525e-08,
+        7.213679964479525e-08
+      ],
+      "cycles": 3,
+      "limits": {
+        "sampleJumpMax": 0.02,
+        "rmsStepMaxDb": 3,
+        "spectralCosineMin": 0.8
+      },
+      "musicalContinuity": "not measured",
+      "humanRepeatedListen": "not measured"
+    },
+    "loopBoundary": {
+      "startFrame": 0,
+      "endFrameExclusive": 884736,
+      "sampleRate": 44100,
+      "preRollFrames": 0,
+      "tailPolicy": "unaltered full-span generated candidate; no tail fold or seam repair"
+    }
+  },
+  "matched": {
+    "file": "matched/funk-race.mp3",
+    "sha256": "5c84f0ff308caf900f4c1a11e34eb56d0f833740cf669a80f540ba9b2131426d",
+    "bytes": 321871,
+    "status": "fail",
+    "failures": [
+      "loopSeam"
+    ],
+    "checks": {
+      "decode": true,
+      "duration": true,
+      "loudness": true,
+      "truePeak": true,
+      "silence": true,
+      "clipping": true,
+      "loopSeam": false
+    },
+    "durationSeconds": 20.06204081632653,
+    "durationWindowSeconds": [
+      19.65,
+      20.35
+    ],
+    "sampleRate": 44100,
+    "channels": 2,
+    "decodedFrames": 884736,
+    "containerDurationSeconds": 20.088163,
+    "integratedLufs": -14.45,
+    "truePeakDbtp": -3.64,
+    "loudnessRangeLu": 0.3,
+    "loudnormAnalysis": {
+      "input_i": "-14.45",
+      "input_tp": "-3.64",
+      "input_lra": "0.30",
+      "input_thresh": "-24.45",
+      "output_i": "-14.03",
+      "output_tp": "-3.19",
+      "output_lra": "0.30",
+      "output_thresh": "-24.03",
+      "normalization_type": "dynamic",
+      "target_offset": "0.03"
+    },
+    "loudnessTargetLufs": -14,
+    "loudnessToleranceLu": 1,
+    "samplePeakDbfs": -3.661400533690097,
+    "fullScaleSampleCount": 0,
+    "clippingScreenThreshold": 0.999,
+    "silence": {
+      "thresholdDbfs": -50,
+      "minimumIntervalSeconds": 0.1,
+      "intervalsFrames": [],
+      "fraction": 0.0,
+      "longestInteriorSeconds": 0
+    },
+    "loopSeam": {
+      "status": "fail",
+      "sampleJumpFullScale": 2.7419790882277084e-06,
+      "boundaryRmsStepDb": 23.362832455043478,
+      "spectralCosine": 0.0834309528645109,
+      "windowSeconds": 0.05,
+      "repeatedJoinJumps": [
+        2.7419790882277084e-06,
+        2.7419790882277084e-06
+      ],
+      "cycles": 3,
+      "limits": {
+        "sampleJumpMax": 0.02,
+        "rmsStepMaxDb": 3,
+        "spectralCosineMin": 0.8
+      },
+      "musicalContinuity": "not measured",
+      "humanRepeatedListen": "not measured"
+    },
+    "loopBoundary": {
+      "startFrame": 0,
+      "endFrameExclusive": 884736,
+      "sampleRate": 44100,
+      "preRollFrames": 0,
+      "tailPolicy": "unaltered full-span generated candidate; no tail fold or seam repair"
+    }
+  },
+  "processing": {
+    "operation": "two-pass ffmpeg loudnorm and MP3 re-encode; dynamic limiting when linear gain cannot meet target; no trim, EQ or seam repair",
+    "normalizationType": "linear",
+    "ffmpegFilter": "loudnorm=I=-14:TP=-2:LRA=11:measured_I=-11.59:measured_TP=-0.81:measured_LRA=0.40:measured_thresh=-21.59:offset=0.03:linear=true:print_format=json",
+    "credits": 0,
+    "sourceSha256": "5d673e2cacfda8b2d9311e22b6abaa13ad66e8929b02feefbfbaf6d3b405bdc9",
+    "targetReached": true,
+    "peakHeadroomDbtp": -2
+  },
+  "repeat": {
+    "file": "repeats/funk-race-three-cycles.ogg",
+    "cycles": 3,
+    "credits": 0,
+    "sourceSha256": "5c84f0ff308caf900f4c1a11e34eb56d0f833740cf669a80f540ba9b2131426d",
+    "sha256": "83bb012b6ffd647323587e74f30efc28fd04802363b1e70257be2c2fa531f6d5",
+    "operation": "three exact decoded cycles concatenated without fades, encoded OGG",
+    "durationSeconds": 60.18612244897959,
+    "truePeakDbtp": -3.92,
+    "decodePass": true,
+    "humanListen": "not measured"
+  },
+  "status": "fail",
+  "notMeasured": [
+    "in-game playback/masking/latency",
+    "Stick memory and voice budget",
+    "human conformance and preference",
+    "long-race fatigue",
+    "musical tempo/key/downbeat and semantic fidelity"
+  ]
+}

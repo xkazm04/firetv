@@ -1,0 +1,194 @@
+{
+  "id": "diesel-voice",
+  "measuredAt": "2026-10-02T19:28:28.643248+00:00",
+  "generationSidecar": "raw/diesel-voice.mp3.json",
+  "raw": {
+    "file": "raw/diesel-voice.mp3",
+    "sha256": "a9378ea8fdc035bc4c13294db16d39138ac8f9fb9bc7b0da0d9862a7f6c73a8b",
+    "bytes": 152599,
+    "status": "fail",
+    "failures": [
+      "loudness"
+    ],
+    "checks": {
+      "decode": true,
+      "duration": true,
+      "loudness": false,
+      "truePeak": true,
+      "silence": true,
+      "clipping": true
+    },
+    "durationSeconds": 9.47374149659864,
+    "durationWindowSeconds": [
+      4,
+      15
+    ],
+    "sampleRate": 44100,
+    "channels": 1,
+    "decodedFrames": 417792,
+    "containerDurationSeconds": 9.508571,
+    "integratedLufs": -23.46,
+    "truePeakDbtp": -8.21,
+    "loudnessRangeLu": 1.9,
+    "loudnormAnalysis": {
+      "input_i": "-23.46",
+      "input_tp": "-8.21",
+      "input_lra": "1.90",
+      "input_thresh": "-33.62",
+      "output_i": "-17.63",
+      "output_tp": "-2.00",
+      "output_lra": "1.70",
+      "output_thresh": "-27.84",
+      "normalization_type": "dynamic",
+      "target_offset": "-0.37"
+    },
+    "loudnessTargetLufs": -18,
+    "loudnessToleranceLu": 1,
+    "samplePeakDbfs": -8.266863654307185,
+    "fullScaleSampleCount": 0,
+    "clippingScreenThreshold": 0.999,
+    "silence": {
+      "thresholdDbfs": -50,
+      "minimumIntervalSeconds": 0.1,
+      "intervalsFrames": [
+        [
+          67318,
+          106114
+        ],
+        [
+          139832,
+          148350
+        ],
+        [
+          187233,
+          198802
+        ],
+        [
+          241569,
+          282261
+        ],
+        [
+          307260,
+          313391
+        ],
+        [
+          361794,
+          367401
+        ],
+        [
+          405077,
+          417792
+        ]
+      ],
+      "fraction": 0.29686542585784315,
+      "longestInteriorSeconds": 0.9227210884353741
+    },
+    "loopSeam": {
+      "status": "not applicable",
+      "reason": "one-shot"
+    },
+    "loopBoundary": null
+  },
+  "matched": {
+    "file": "matched/diesel-voice.mp3",
+    "sha256": "e667759e9ecb14d334011cb54310d20a64863b3906641713e7818aa1642cbacd",
+    "bytes": 152598,
+    "status": "pass",
+    "failures": [],
+    "checks": {
+      "decode": true,
+      "duration": true,
+      "loudness": true,
+      "truePeak": true,
+      "silence": true,
+      "clipping": true
+    },
+    "durationSeconds": 9.47374149659864,
+    "durationWindowSeconds": [
+      4,
+      15
+    ],
+    "sampleRate": 44100,
+    "channels": 1,
+    "decodedFrames": 417792,
+    "containerDurationSeconds": 9.508571,
+    "integratedLufs": -18.45,
+    "truePeakDbtp": -3.21,
+    "loudnessRangeLu": 1.9,
+    "loudnormAnalysis": {
+      "input_i": "-18.45",
+      "input_tp": "-3.21",
+      "input_lra": "1.90",
+      "input_thresh": "-28.61",
+      "output_i": "-17.63",
+      "output_tp": "-2.00",
+      "output_lra": "1.70",
+      "output_thresh": "-27.85",
+      "normalization_type": "dynamic",
+      "target_offset": "-0.37"
+    },
+    "loudnessTargetLufs": -18,
+    "loudnessToleranceLu": 1,
+    "samplePeakDbfs": -3.2670713600957537,
+    "fullScaleSampleCount": 0,
+    "clippingScreenThreshold": 0.999,
+    "silence": {
+      "thresholdDbfs": -50,
+      "minimumIntervalSeconds": 0.1,
+      "intervalsFrames": [
+        [
+          67327,
+          106057
+        ],
+        [
+          140061,
+          148171
+        ],
+        [
+          187454,
+          198487
+        ],
+        [
+          242021,
+          281851
+        ],
+        [
+          308492,
+          313345
+        ],
+        [
+          362059,
+          367298
+        ],
+        [
+          405235,
+          417792
+        ]
+      ],
+      "fraction": 0.2880667892156863,
+      "longestInteriorSeconds": 0.9031746031746032
+    },
+    "loopSeam": {
+      "status": "not applicable",
+      "reason": "one-shot"
+    },
+    "loopBoundary": null
+  },
+  "processing": {
+    "operation": "two-pass ffmpeg loudnorm and MP3 re-encode; dynamic limiting when linear gain cannot meet target; no trim, EQ or seam repair",
+    "normalizationType": "linear",
+    "ffmpegFilter": "loudnorm=I=-18:TP=-2:LRA=11:measured_I=-23.46:measured_TP=-8.21:measured_LRA=1.90:measured_thresh=-33.62:offset=-0.37:linear=true:print_format=json",
+    "credits": 0,
+    "sourceSha256": "a9378ea8fdc035bc4c13294db16d39138ac8f9fb9bc7b0da0d9862a7f6c73a8b",
+    "targetReached": true,
+    "peakHeadroomDbtp": -2
+  },
+  "status": "pass",
+  "notMeasured": [
+    "in-game playback/masking/latency",
+    "Stick memory and voice budget",
+    "human conformance and preference",
+    "long-race fatigue",
+    "speech transcription/identity/style"
+  ]
+}

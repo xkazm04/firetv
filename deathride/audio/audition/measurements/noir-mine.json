@@ -1,0 +1,146 @@
+{
+  "id": "noir-mine",
+  "measuredAt": "2026-10-02T19:28:45.953188+00:00",
+  "generationSidecar": "raw/noir-mine.mp3.json",
+  "raw": {
+    "file": "raw/noir-mine.mp3",
+    "sha256": "6d652fe63d97e6a63bdb37bd630aa26eb23d6cffbb604397fb11934521b52e8c",
+    "bytes": 33062,
+    "status": "fail",
+    "failures": [
+      "loudness"
+    ],
+    "checks": {
+      "decode": true,
+      "duration": true,
+      "loudness": false,
+      "truePeak": true,
+      "silence": true,
+      "clipping": true
+    },
+    "durationSeconds": 2.0,
+    "durationWindowSeconds": [
+      1.85,
+      2.15
+    ],
+    "sampleRate": 44100,
+    "channels": 2,
+    "decodedFrames": 88200,
+    "containerDurationSeconds": 2.037551,
+    "integratedLufs": -27.19,
+    "truePeakDbtp": -10.38,
+    "loudnessRangeLu": 0.0,
+    "loudnormAnalysis": {
+      "input_i": "-27.19",
+      "input_tp": "-10.38",
+      "input_lra": "0.00",
+      "input_thresh": "-39.91",
+      "output_i": "-19.99",
+      "output_tp": "-3.19",
+      "output_lra": "0.00",
+      "output_thresh": "-32.72",
+      "normalization_type": "linear",
+      "target_offset": "-0.01"
+    },
+    "loudnessTargetLufs": -20,
+    "loudnessToleranceLu": 2,
+    "samplePeakDbfs": -10.375579842063269,
+    "fullScaleSampleCount": 0,
+    "clippingScreenThreshold": 0.999,
+    "silence": {
+      "thresholdDbfs": -50,
+      "minimumIntervalSeconds": 0.1,
+      "intervalsFrames": [
+        [
+          69751,
+          88198
+        ]
+      ],
+      "fraction": 0.20914965986394557,
+      "longestInteriorSeconds": 0
+    },
+    "loopSeam": {
+      "status": "not applicable",
+      "reason": "one-shot"
+    },
+    "loopBoundary": null
+  },
+  "matched": {
+    "file": "matched/noir-mine.mp3",
+    "sha256": "ac64c2bc641e3e0fce8e4261b86ec5afb5eff7aa51fa61393b254a45d87f2b12",
+    "bytes": 33061,
+    "status": "pass",
+    "failures": [],
+    "checks": {
+      "decode": true,
+      "duration": true,
+      "loudness": true,
+      "truePeak": true,
+      "silence": true,
+      "clipping": true
+    },
+    "durationSeconds": 2.0,
+    "durationWindowSeconds": [
+      1.85,
+      2.15
+    ],
+    "sampleRate": 44100,
+    "channels": 2,
+    "decodedFrames": 88200,
+    "containerDurationSeconds": 2.037551,
+    "integratedLufs": -20.42,
+    "truePeakDbtp": -3.62,
+    "loudnessRangeLu": 0.0,
+    "loudnormAnalysis": {
+      "input_i": "-20.42",
+      "input_tp": "-3.62",
+      "input_lra": "0.00",
+      "input_thresh": "-33.15",
+      "output_i": "-20.00",
+      "output_tp": "-3.20",
+      "output_lra": "0.00",
+      "output_thresh": "-32.72",
+      "normalization_type": "linear",
+      "target_offset": "-0.00"
+    },
+    "loudnessTargetLufs": -20,
+    "loudnessToleranceLu": 2,
+    "samplePeakDbfs": -3.625131650167126,
+    "fullScaleSampleCount": 0,
+    "clippingScreenThreshold": 0.999,
+    "silence": {
+      "thresholdDbfs": -50,
+      "minimumIntervalSeconds": 0.1,
+      "intervalsFrames": [
+        [
+          74414,
+          88127
+        ]
+      ],
+      "fraction": 0.1554761904761905,
+      "longestInteriorSeconds": 0
+    },
+    "loopSeam": {
+      "status": "not applicable",
+      "reason": "one-shot"
+    },
+    "loopBoundary": null
+  },
+  "processing": {
+    "operation": "two-pass ffmpeg loudnorm and MP3 re-encode; dynamic limiting when linear gain cannot meet target; no trim, EQ or seam repair",
+    "normalizationType": "linear",
+    "ffmpegFilter": "loudnorm=I=-20:TP=-2:LRA=11:measured_I=-27.19:measured_TP=-10.38:measured_LRA=0.00:measured_thresh=-39.91:offset=-0.01:linear=true:print_format=json",
+    "credits": 0,
+    "sourceSha256": "6d652fe63d97e6a63bdb37bd630aa26eb23d6cffbb604397fb11934521b52e8c",
+    "targetReached": true,
+    "peakHeadroomDbtp": -2
+  },
+  "status": "pass",
+  "notMeasured": [
+    "in-game playback/masking/latency",
+    "Stick memory and voice budget",
+    "human conformance and preference",
+    "long-race fatigue",
+    "musical tempo/key/downbeat and semantic fidelity"
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "id": "8beb4b4f-b78a-4185-a066-ca9cb4e1cd14",
+  "ts": "2026-10-02T19:24:55.033Z",
+  "session": "x2-2026-10-02",
+  "status": "complete",
+  "kind": "sfx",
+  "out": "audio/audition/raw/funk-engine.mp3",
+  "seconds": 2,
+  "request": {
+    "text": "Battered road coupe at steady low revs. Constant body, seamlessly repeating; no ignition, acceleration, fade or backfire. Timbre: a throaty coupe idle with a loose spring rattle. Dirty close garage foley, springy snap, loose metal, short raw room, dangerous comic punch. 2 seconds. Original isolated effect; no music, no voice.",
+    "duration_seconds": 2,
+    "prompt_influence": 0.7,
+    "model_id": "eleven_text_to_sound_v2",
+    "loop": true
+  },
+  "endpoint": "/v1/sound-generation",
+  "format": "mp3_44100_128",
+  "estimatedCredits": 100,
+  "budgetCharge": 100,
+  "creditsBefore": 39929,
+  "accountTier": "starter",
+  "reserve": 8000,
+  "sessionCap": 9000,
+  "bytes": 37242,
+  "providerCredits": 20,
+  "sha256": "5fe2a93f7e60804e4c133c91b2c88188c667a1170b55060e8143ee2b463b0427",
+  "completedAt": "2026-10-02T19:25:01.717Z",
+  "creditsAfter": 39929,
+  "observedAccountDelta": 0,
+  "spendBasis": "Provider character-cost response header; account delta separately reported.",
+  "sessionBudgetUsed": 5264
+}
