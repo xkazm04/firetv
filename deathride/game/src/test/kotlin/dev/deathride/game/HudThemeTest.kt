@@ -7,6 +7,27 @@ import org.junit.jupiter.api.Test
 import java.io.File
 
 class HudThemeTest {
+    @Test fun weaponLabelsFollowActualArmingAmmoCooldownAndSignatureLocks() {
+        val world=World(913,combatEnabled=true)
+        // Keep a full, stationary human grid so the last-survivor rule cannot end the fixture.
+        for(c in world.cars)c.human=true
+        CarCatalog.apply(world.cars[0],0);world.reset()
+        val car=world.cars[0];val combat=world.combat;val inputs=Array(Tuning.CAR_COUNT){InputFrame()}
+        assertTrue(HudTheme.weaponState(combat,car,Weapons.MINE).startsWith("ARMING"))
+        assertFalse(combat.fire(0,Weapons.MINE))
+        while(combat.armingSeconds>0)world.step(inputs)
+        while(combat.ammo(0,Weapons.MINE)>0) {
+            assertEquals("READY",HudTheme.weaponState(combat,car,Weapons.MINE))
+            assertTrue(combat.fire(0,Weapons.MINE))
+            assertNotEquals("READY",HudTheme.weaponState(combat,car,Weapons.MINE))
+            assertFalse(combat.fire(0,Weapons.MINE))
+            while(combat.cooldown(0,Weapons.MINE)>1e-9)world.step(inputs)
+        }
+        assertEquals("EMPTY",HudTheme.weaponState(combat,car,Weapons.MINE));assertFalse(combat.fire(0,Weapons.MINE))
+        inputs[0].ability=1.0;world.step(inputs)
+        assertTrue(car.ability.weaponsLocked)
+        assertEquals("LOCKED",HudTheme.weaponState(combat,car,Weapons.RIVET));assertFalse(combat.fire(0,Weapons.RIVET))
+    }
     @Test fun everySignatureHasAnIconAndMissingOrExtremeMeterValuesStayBounded() {
         val catalog=JsonReader().parse(File("../assets/phase2-hud/catalog.json").readText())
         val names=catalog.get("assets").map{it.getString("logical_name")}.toSet()

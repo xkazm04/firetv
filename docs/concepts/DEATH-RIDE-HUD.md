@@ -32,4 +32,4 @@ Original work only. One design note, one status row, one session-log entry and o
 | H0 | Merge art, apply mine 0.5 m and re-balance | complete - clean merge; A3 tuning preserved; 3,120 exact outcome replays; 126 tests and APK green |
 | H1 | HUD inventory and design note | complete - TV/phone inventory, 1080p floors, fusion components, 14-image initial kit and fallback plan |
 | H2 | HUD assets and implementation (TV and phone) | complete - 14 selected assets / 22 calls; one UI page; TV/phone styled; 128 tests, 39 art tests, GL and browser gates green |
-| H3 | Stick evidence, owner checks | not started |
+| H3 | Stick evidence, owner checks | complete - HUD-only Stick delivery and evidence; 129 tests and browsers pass; full 66,000-race exact A3 replay; 900 s timing retains failed frame-tail/zero-loss gates; owner checks pending |

@@ -1,0 +1,47 @@
+{"second":0,"accepted":[0,0],"rejected":[0,0],"hostPumpStalls":0}
+{"second":4,"accepted":[122,122],"rejected":[0,0],"hostPumpStalls":0}
+{"second":64,"accepted":[1924,1924],"rejected":[0,0],"hostPumpStalls":0}
+{"second":124,"accepted":[3729,3729],"rejected":[0,0],"hostPumpStalls":0}
+{"second":186,"accepted":[5584,5584],"rejected":[0,0],"hostPumpStalls":0}
+{"second":247,"accepted":[7423,7423],"rejected":[5,5],"hostPumpStalls":0}
+{"second":307,"accepted":[9224,9224],"rejected":[5,5],"hostPumpStalls":0}
+{"second":368,"accepted":[11028,11028],"rejected":[5,5],"hostPumpStalls":0}
+{"second":428,"accepted":[12839,12839],"rejected":[5,5],"hostPumpStalls":0}
+{"second":488,"accepted":[14636,14636],"rejected":[5,5],"hostPumpStalls":0}
+{"second":548,"accepted":[16436,16436],"rejected":[5,5],"hostPumpStalls":0}
+{"second":608,"accepted":[18240,18240],"rejected":[5,5],"hostPumpStalls":0}
+{"second":668,"accepted":[20045,20045],"rejected":[5,5],"hostPumpStalls":0}
+{"second":720,"accepted":[21598,21598],"rejected":[5,5],"hostPumpStalls":0}
+{
+  "error": "AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:\n\n  assert.ok(result.clients.every(c=>c.accepted===c.sent&&c.rejected===0&&c.hz>29))\n\n    at file:///C:/Users/kazda/kiro/firetv-deathride-hud/deathride/tools/ability-stick-probe.mjs:99:9\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)",
+  "duration": 720.0847596,
+  "rounds": 16,
+  "classUses": {
+    "Needle": 5,
+    "Line": 14,
+    "Bastion": 20,
+    "Comet": 9,
+    "Trail": 5,
+    "Flint": 12,
+    "Quill": 4,
+    "Vandal": 6,
+    "Kestrel": 7,
+    "Bulwark": 9
+  },
+  "clients": [
+    {
+      "slot": 0,
+      "sent": 21603,
+      "accepted": 21598,
+      "rejected": 5,
+      "hz": 30.000634941920246
+    },
+    {
+      "slot": 1,
+      "sent": 21603,
+      "accepted": 21598,
+      "rejected": 5,
+      "hz": 30.000634941920246
+    }
+  ]
+}

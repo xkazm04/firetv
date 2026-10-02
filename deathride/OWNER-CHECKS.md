@@ -179,3 +179,17 @@ The N2 mine change is provisional: its warning/blast radius is now 0.5 m, with 2
 N1 remains assigned to the later art/abilities integration pass: include every HUD component and the phone ability control in its style inventory.
 
 For the H0-H3 HUD pass, include two observed readability defects: the lower course/status text fades into Ridge Wire snow, and the temporary lobby preparation message overlaps the pairing-reset hint. The abilities lobby now displays the correct port, 8767.
+
+## H3 - fusion HUD (2026-10-02)
+
+Use **Death Ride HUD** (`dev.deathride.hud`, port 8768). The existing TV and Abilities applications are separate. Scan the new lobby QR; choose a car and inspect its signature name before racing. This build combines the approved fusion direction with fourteen newly selected HUD assets. Their exact pixels and the original cut-letter heading face still need your visual verdict.
+
+From the sofa, read position, lap, speed, hull/armour, ammunition and the named signature without leaning forward. Good: the worn frames stay behind the information, energy changes visibly, the cooldown/phase words explain why a button cannot act, and the lower status strip remains clear on Ridge Wire snow. Bad: confusing letters, a frame crossing a value, an icon that becomes a blob, or colour being the only way to tell states apart. Body text stays at nominal 30 px at 1080p; automated bounds checks do not establish viewing-distance readability.
+
+Try every signature listed in A3 above. Compare ARMING, WIND-UP, ACTIVE, RECOVERING, COOL and READY with what the car actually does. Low-energy rendering is a defensive state; normal recharge currently finishes before cooldown. Armour is damage reduction, not another health pool. Guns and mines retain their separate ammunition and cooldowns. The minimap distinguishes human squares from rival dots. Check a wreck/result and a dropped connection: input should neutralise and the TV should show LINK QUIET / COASTING while the seat remains reserved.
+
+Open the garage and scroll its phone shop; then inspect the career story, difficulty, five rival portraits and their actual garages. Good: full copy stays readable, selection is clear and the story illustration does not compete with text. Bad: hidden prices, clipped stories, tiny portraits or a purchase that is hard to distinguish from navigation. Back/Home and resume should recover the same presentation.
+
+On a physical phone, try Classic, Cruise and Split, then mirror each. Steer while pressing and releasing fire, mine, swap, drift and ability; open settings during a hold and leave/rejoin the page. Good: independent fingers, reachable controls and immediate release. Bad: a stuck hold, accidental action or the fourth pedal row being uncomfortable. Browser touch tests and 44 px target checks establish bounds and event behavior, not thumb comfort or optical latency.
+
+The 0.5 m mine remains provisional, with 24 damage and 1.4 s arming. Check that its small ring can be seen and that a body must overlap it to trigger. Record the car, course, viewing distance/phone, state and concrete defect. The final measured gates and remaining limits are in `docs/concepts/deathride/H3-hud-report.md`; no human fairness, readability, comfort or fun verdict has been supplied. Sound remains absent. The cars retain their procedural presentation until their separate exact-source approval gate is met.

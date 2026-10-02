@@ -8,6 +8,11 @@ import com.badlogic.gdx.utils.ScreenUtils
 import com.badlogic.gdx.utils.JsonReader
 import com.badlogic.gdx.utils.JsonWriter
 import dev.deathride.game.AtlasArt
+import dev.deathride.game.GlyphLayer
+import dev.deathride.game.HandCutFont
+import dev.deathride.game.HudTheme
+import dev.deathride.core.Career
+import dev.deathride.core.AbilityCatalog
 import java.io.File
 
 /** Real GL upload, draw and isolated failure injection. Never mutates the accepted bundle. */
@@ -28,6 +33,23 @@ class AtlasAudit: ApplicationAdapter() {
             for((i,d) in dev.deathride.core.AbilityCatalog.all.withIndex())check(a.draw(batch,"hud/ability-"+d.id,70f+i*120,630f,96f,96f))
         }
         batch.end()
+        if(bundle=="phase2-hud") {
+            // Use actual glyph advances and the production wrapper, including the longest authored copy.
+            val bodyFont=nativeFont(HudTheme.BODY);val titleFont=HandCutFont.create(HudTheme.TITLE)
+            val body=GlyphLayer(bodyFont);val title=GlyphLayer(titleFont)
+            val titles=Career.events.map{event->
+                val width=title.width(event.name.uppercase());check(width<=677f){"Career heading overflow: ${event.name}: $width"}
+                body.clear();val bottom=body.wrapped(event.story.lines.joinToString(" "),66f,453f,677f,25f)
+                check(bottom>=378f){"Career story overflow: ${event.id}: $bottom"}
+                """{"event":"${event.id}","titleWidth":$width,"storyNextBaseline":$bottom}"""
+            }
+            for(d in AbilityCatalog.all)check(body.width(d.name.uppercase())<=222f){"Ability heading overflow: ${d.name}"}
+            for(laps in Career.events.map{it.laps}.distinct())for(lap in 1..laps)
+                check(196f+title.width("$lap/$laps")<=359f){"Two-digit career lap counter overflows its padded frame"}
+            File("evidence/phase2").mkdirs()
+            File("evidence/phase2/$prefix-text.json").writeText("""{"bodyLogicalSize":${HudTheme.BODY},"body1080pNominalSize":${HudTheme.BODY*1.5},"headingLogicalSize":${HudTheme.TITLE},"allTenAbilityNamesFit":true,"career":[${titles.joinToString(",")}],"limit":"Desktop font advances; Android screens are checked separately. Nominal font size is not each glyph's ink height."}""")
+            bodyFont.dispose();titleFont.dispose()
+        }
         val pix=Pixmap.createFromFrameBuffer(0,0,1280,720);var vivid=0
         for(y in 0 until pix.height)for(x in 0 until pix.width){val c=pix.getPixel(x,y);if((c ushr 24)>70)vivid++}
         check(vivid>10000){"uploaded atlas did not draw visible content: $vivid"}

@@ -411,7 +411,15 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         fun frame(x: Float,y: Float,w: Float,h: Float,key: String="hud/frame-instrument") {art.frame(batch,key,x,y,w,h)}
         when(phase) {
             "lobby" -> {frame(44f,96f,390f,506f,"hud/frame-panel");frame(455f,96f,781f,506f,"hud/frame-panel");frame(60f,124f,355f,52f,"hud/frame-button")}
-            "garage" -> {frame(44f,96f,1192f,506f,"hud/frame-panel");frame(61f,453f-selectedPart*52,513f,56f);frame(621f,197f,585f,58f,"hud/frame-button");for(i in 0..5)art.draw(batch,arrayOf("hud/icon-engine","hud/icon-handling","hud/icon-armour","hud/icon-engine","hud/icon-handling","hud/icon-armour")[i],548f,480f-i*52,32f,32f)}
+            "garage" -> {
+                frame(44f,96f,1192f,506f,"hud/frame-panel");frame(61f,453f-selectedPart*52,513f,56f);frame(621f,197f,585f,58f,"hud/frame-button")
+                art.draw(batch,"hud/icon-engine",548f,480f,32f,32f)
+                art.draw(batch,"hud/icon-handling",548f,428f,32f,32f)
+                // Brakes retain their explicit text: no unrelated icon implies an armour upgrade.
+                art.draw(batch,"hud/icon-armour",548f,324f,32f,32f)
+                art.draw(batch,"hud/icon-handling",548f,272f,32f,32f)
+                art.draw(batch,"hud/icon-heavy-gun",548f,220f,32f,32f)
+            }
             "career" -> {
                 frame(44f,96f,729f,506f,"hud/frame-panel");frame(788f,96f,448f,506f,"hud/frame-panel")
                 // Quiet opaque story text area remains separate from the low-contrast illustration.
@@ -422,7 +430,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
             "results" -> {frame(260f,96f,760f,506f,"hud/frame-panel");frame(281f,123f,718f,54f,"hud/frame-button")}
             "countdown" -> if(scene.ready)frame(542f,268f,196f,172f,"hud/frame-dial")
             "race" -> {
-                frame(24f,562f,156f,146f);frame(184f,562f,160f,146f);frame(348f,562f,185f,146f)
+                frame(24f,562f,156f,146f);frame(184f,562f,185f,146f);frame(373f,562f,160f,146f)
                 frame(539f,562f,208f,146f);frame(752f,562f,238f,146f);frame(994f,562f,250f,146f)
                 val c=activeDriver();val a=c.ability
                 art.draw(batch,Weapons.all[world.combat.selectedWeapon[c.id]].id,777f,680f,32f,32f)
@@ -457,7 +465,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
             title("DEATH RIDE",42f,699f)
             label(when(phase){"career"->"THE ASH CIRCUIT";"garage"->"PARTS / PER CAR";"results"->"RACE RESULTS";else->"${Courses.all[selectedTrack].name} / ${world.raceLaps} LAPS"},42f,644f)
             label("BACK: LOBBY   /   ${server.feel.id}",810f,691f)
-            label("TWO PHONES. ONE CIRCUIT.",810f,654f)
+            label(if(scene.ready)"TWO PHONES. ONE CIRCUIT." else "PREPARING CIRCUIT",810f,654f,if(scene.ready)muted else accent)
         }
         if(phase=="race" || phase=="countdown" || phase=="results") {
             for(c in world.cars)if(c.entered) {
@@ -470,7 +478,6 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
             label(if(server.slots[1].claimed)"P2 ${CarCatalog.all[profiles[1].selectedCar].id} / ${profiles[1].credits} CR" else "SECOND DRIVER / SCAN TO JOIN",455f,55f)
             label("PROGRESS SAVES",1010f,55f)
         }
-        if(!scene.ready)label("PREPARING ${Courses.all[selectedTrack].name.uppercase()}",440f,575f,accent)
         when(phase) {
             "lobby" -> {
                 val car=CarCatalog.all[selectedCars[0]]
@@ -533,14 +540,14 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
             "race" -> {
                 val c=activeDriver();val combat=world.combat;val weapon=combat.selectedWeapon[c.id];val a=c.ability;val d=a.definition
                 label("POSITION",40f,695f);title("${c.position}/${world.entrantCount}",48f,663f)
-                label("LAP",204f,695f);title("${min(world.raceLaps,c.lap.laps+1)}/${world.raceLaps}",200f,663f)
-                label("KM/H",370f,695f);title((c.speedMps*3.6).toInt().toString(),372f,663f)
+                label("LAP",204f,695f);title("${min(world.raceLaps,c.lap.laps+1)}/${world.raceLaps}",196f,663f)
+                label("KM/H",395f,695f);title((c.speedMps*3.6).toInt().toString(),397f,663f)
                 label("HULL ${combat.health(c.id).toInt()}/${combat.maxHealth(c.id).toInt()}",553f,695f,HudTheme.bone)
                 label("ARMOUR ${(c.armorReduction*100).toInt()}%",553f,636f)
                 label("${Weapons.all[weapon].id.uppercase()} ${combat.ammo(c.id,weapon)}",800f,695f,HudTheme.bone)
-                label(if(combat.armingSeconds>0)"ARMING ${ceil(combat.armingSeconds).toInt()}s" else if(combat.cooldown(c.id,weapon)>0)"COOL ${ceil(combat.cooldown(c.id,weapon)).toInt()}s" else "READY",800f,669f)
+                label(HudTheme.weaponState(combat,c,weapon),800f,669f)
                 label("MINE ${combat.ammo(c.id,Weapons.MINE)}",800f,638f,HudTheme.bone)
-                label(if(combat.cooldown(c.id,Weapons.MINE)>0)"COOL ${ceil(combat.cooldown(c.id,Weapons.MINE)).toInt()}s" else "READY",800f,615f)
+                label(HudTheme.weaponState(combat,c,Weapons.MINE),800f,615f)
                 if(d!=null) {
                     label(d.name.uppercase(),1008f,697f,HudTheme.bone)
                     label(HudTheme.abilityState(a,combat.armingSeconds),1038f,671f,accent)
@@ -548,7 +555,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
                 }
                 if(stateTime<1.2)title("GO",599f,390f)
                 for(slot in server.slots)if(slot.claimed && slot.stale) {label("PLAYER ${slot.id+1} / LINK QUIET / COASTING",365f,529f,warning);break}
-                label(if(combat.wrecked(c.id))"WRECKED / SPECTATING" else "${driverName(c)} / ${world.seconds.toInt()}s / ${Courses.all[selectedTrack].name}",363f,109f)
+                label(if(!scene.ready)"PREPARING CIRCUIT" else if(combat.wrecked(c.id))"WRECKED / SPECTATING" else "${driverName(c)} / ${world.seconds.toInt()}s / ${Courses.all[selectedTrack].name}",363f,109f)
             }
             "results" -> {
                 title("THE FINISH",286f,575f)
@@ -560,7 +567,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
                     label(when {combatWrecked(c)->"WRECKED / ${world.combat.kills[c.id]} KILLS";c.finishKind==FinishKind.ELIMINATION->"LAST SURVIVOR";c.finishSeconds>=0->"${(c.finishSeconds*10).toInt()/10.0}s";else->"LAP ${c.lap.laps+1}/${world.raceLaps}"},737f,479f-rank*40)
                 }
                 val receipt=profiles[0].lastReceipt
-                if(receipt!=null)label("PRIZE ${receipt.gross} - PIT ${receipt.repair} = +${receipt.banked} CR / BANK ${profiles[0].credits}",291f,220f,accent)
+                if(receipt!=null)label("PRIZE ${receipt.gross} / PIT ${receipt.repair} / BANKED +${receipt.banked} / BANK ${profiles[0].credits} CR",291f,220f,accent)
                 if(campaignRace) {detail.setColor(muted);detail.wrapped(careerMessage[0],291f,194f,705f,25f)}
                 label(if(campaignRace)"SELECT / NEXT ROUND" else "SELECT / REMATCH",495f,160f,bg)
             }

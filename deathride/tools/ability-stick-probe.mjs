@@ -11,14 +11,16 @@ import {Pilot} from './pilot.mjs';
 const [base,pin,output,secondsText='900']=process.argv.slice(2),duration=Number(secondsText);
 const screenshotsEnabled=process.env.PROBE_SCREENSHOTS!=='0';
 const minesEnabled=process.env.PROBE_MINES==='1';
+const rotateFirst=process.env.PROBE_ROTATE_FIRST==='1';
 const hostPriority=process.env.PROBE_PRIORITY||'Normal';
 assert.ok(['Normal','AboveNormal'].includes(hostPriority));
 if(hostPriority==='AboveNormal')setPriority(0,osConstants.priority.PRIORITY_ABOVE_NORMAL);
 assert.equal(new URL(base).port,process.env.DEATHRIDE_TEST_STREAM==='hud'?'8768':'8767');assert.ok(duration>=60&&duration<=1800);
 const device=process.env.PROBE_DEVICE||new URL(base).hostname+':5555',run=promisify(execFile);
+const adbPort=process.env.PROBE_ADB_PORT||'5037';assert.ok(/^\d+$/.test(adbPort));
 const pause=ms=>new Promise(r=>setTimeout(r,ms)),clients=[];
 const get=async path=>{const r=await fetch(base+path,{signal:AbortSignal.timeout(5000)});assert.ok(r.ok);return r.json()};
-async function runAdb(args,options){try{return await run('adb',['-s',device,...args],options)}catch(error){if(!/device .*not found|device offline/.test(String(error.stderr||error.message)))throw error;(result.adbReconnects??=[]).push({utc:new Date().toISOString(),command:args.join(' ')});await run('adb',['connect',device],{encoding:'utf8',windowsHide:true,timeout:10000});return await run('adb',['-s',device,...args],options)}}
+async function runAdb(args,options){try{return await run('adb',['-P',adbPort,'-s',device,...args],options)}catch(error){if(!/device .*not found|device offline|cannot connect to daemon|failed to start daemon/.test(String(error.stderr||error.message)))throw error;(result.adbReconnects??=[]).push({utc:new Date().toISOString(),command:args.join(' ')});await run('adb',['-P',adbPort,'connect',device],{encoding:'utf8',windowsHide:true,timeout:10000});return await run('adb',['-P',adbPort,'-s',device,...args],options)}}
 const adb=async(...a)=>(await runAdb(a,{encoding:'utf8',windowsHide:true,timeout:20000,maxBuffer:2e6})).stdout;
 const result={startedUtc:new Date().toISOString(),base,device,durationRequestedSeconds:duration,screenshotsEnabled,minesEnabled,nodeVersion:process.version,hostPriority,hostPriorityValue:getPriority(0),windowRetention:'Direct metrics and car/input state; repeated slot garage/career payloads omitted. Full catalog and round-end state retained.',rounds:[],windows:[],memory:[],screenshots:[],pumpStalls:[],rejections:[],classUses:{},classActiveHudSamples:{},limits:'Scripted LAN inputs; no human feel, physical-phone ergonomics or optical latency claim. Rolling frame windows overlap and are not summed.'};
 let pumping=false,timer,started=0,nextWindow=0,nextMemory=0,nextPing=30,memoryPending=null;
@@ -42,11 +44,18 @@ try {
  const tracks=['foundry','saltline','scree','sluice','ridge'];
  let roundIndex=0;
  while((performance.now()-started)/1000<duration){
-  const pair=(roundIndex%5)*2,track=tracks[roundIndex%5];
+  const pair=rotateFirst?roundIndex%10:(roundIndex%5)*2,track=tracks[roundIndex%5];
   for(const c of clients)c.command={s:0,a:0,b:0,h:0,fire:0,mine:0,weapon:0,ability:0};
   clients[0].send({t:'lobby'});await waitFor(s=>s.phase==='lobby','lobby');clients[0].send({t:'track',id:track});
-  for(let i=0;i<2;i++)clients[i].send({t:'car',id:catalog.cars[pair+i].id});
-  const lobby=await waitFor(s=>s.sceneryReady&&s.track.id===track&&clients.every((c,i)=>s.slots[i].car.id===catalog.cars[pair+i].id),'selection');
+  for(let i=0;i<2;i++)clients[i].send({t:'car',id:catalog.cars[(pair+i)%10].id});
+  if(screenshotsEnabled&&rotateFirst&&!result.preparingScreenshot) {
+   const selection=await waitFor(s=>s.track.id===track,'track selection published');
+   if(!selection.sceneryReady) {
+    const name=dirname(output)+'/preparing-circuit.png';const image=await runAdb(['exec-out','screencap','-p'],{encoding:'buffer',windowsHide:true,timeout:10000,maxBuffer:8e6});await writeFile(name,image.stdout);
+    result.preparingScreenshot={file:name,before:selection,after:await get('/stats'),limit:'Preparation requested before asynchronous image readback.'};
+   }
+  }
+  const lobby=await waitFor(s=>s.sceneryReady&&s.track.id===track&&clients.every((c,i)=>s.slots[i].car.id===catalog.cars[(pair+i)%10].id),'selection');
   const round={classes:lobby.slots.map(s=>s.car.id),track,startedSecond:(performance.now()-started)/1000};result.rounds.push(round);
   const pilot=new Pilot(routes,true);clients[0].send({t:'start'});await waitFor(s=>s.phase==='race','race');const roundStart=performance.now();
   while((performance.now()-roundStart)<60000&&(performance.now()-started)/1000<duration){
@@ -54,10 +63,28 @@ try {
    if(second>=nextWindow){result.windows.push({second,round:roundIndex,stats:{...s,slots:s.slots.map(({hostCareer,career,garage,...slot})=>slot)}});nextWindow=second+1}
    if(second>=nextPing){for(const c of clients)c.send({t:'ping',ts:performance.now()});nextPing=second+30}
    if(second>=nextMemory&&!memoryPending){nextMemory=second+60;memoryPending=memory(second).finally(()=>{memoryPending=null})}
-   for(const c of clients){const slot=s.slots[c.slot],alive=s.phase==='race'&&!slot.combat.wrecked;c.command={...pilot.command(s,c.slot),fire:alive?1:0,mine:alive&&minesEnabled?1:0,weapon:0,ability:alive?1:0};}
+   for(const c of clients){const slot=s.slots[c.slot],alive=s.phase==='race'&&!slot.combat.wrecked;c.command={...pilot.command(s,c.slot),fire:alive?1:0,mine:alive&&minesEnabled?1:0,weapon:0,ability:alive&&(!rotateFirst||s.raceSeconds>=6)?1:0};}
    const capture=screenshotsEnabled&&s.slots.find(slot=>slot.combat.ability?.phase==='ACTIVE'&&!result.screenshots.some(x=>x.car===slot.car.id));
    if(capture){const name=dirname(output)+'/active-'+capture.car.id+'.png';const image=await runAdb(['exec-out','screencap','-p'],{encoding:'buffer',windowsHide:true,timeout:10000,maxBuffer:8e6});await writeFile(name,image.stdout);result.screenshots.push({car:capture.car.id,second,phaseAtRequest:capture.combat.ability.phase,file:name,limit:'Capture follows request; short effects may have advanced before readback'})}
+   if(screenshotsEnabled&&rotateFirst&&s.phase==='race') {
+    // Match the renderer's observed main driver selection, then record both sides of readback.
+    const live=s.traffic.find(car=>car.human&&!car.wrecked&&!car.finished);
+    const driver=s.slots[live?.id??0];
+    const ability=driver.combat.ability;
+    const phase=driver.combat.armingSeconds>0?'ARMING':ability.phase!=='READY'?ability.phase:ability.cooldownSeconds>0?'COOLDOWN':ability.energy<ability.energyCost?'LOW-ENERGY':'READY';
+    const key=driver.car.id+'-'+phase;
+    result.tvStates??=[];
+    if(!result.tvStates.some(x=>x.key===key)) {
+     const name=dirname(output)+'/tv-'+key+'.png';
+     const image=await runAdb(['exec-out','screencap','-p'],{encoding:'buffer',windowsHide:true,timeout:10000,maxBuffer:8e6});await writeFile(name,image.stdout);
+     const after=await get('/stats');result.tvStates.push({key,second,file:name,before:{phase:s.phase,raceSeconds:s.raceSeconds,slots:s.slots},after:{phase:after.phase,raceSeconds:after.raceSeconds,slots:after.slots},limit:'State requested before asynchronous screencap; short phases may change during capture.'});
+    }
+   }
    if(screenshotsEnabled&&minesEnabled&&!result.mineScreenshot&&s.combatSummary.mines>0){const name=dirname(output)+'/mines.png';const image=await runAdb(['exec-out','screencap','-p'],{encoding:'buffer',windowsHide:true,timeout:10000,maxBuffer:8e6});await writeFile(name,image.stdout);result.mineScreenshot={second,file:name,combatAtRequest:s.combatSummary,limit:'Ordinary mine inputs; image follows telemetry request.'}}
+   if(screenshotsEnabled&&rotateFirst&&!result.wreckScreenshot&&s.slots.some(slot=>slot.combat.wrecked)) {
+    const name=dirname(output)+'/human-wreck.png';const image=await runAdb(['exec-out','screencap','-p'],{encoding:'buffer',windowsHide:true,timeout:10000,maxBuffer:8e6});await writeFile(name,image.stdout);
+    result.wreckScreenshot={file:name,before:s,after:await get('/stats'),limit:'Actual wreck from ordinary inputs; may transition to results during readback.'};
+   }
    if(s.phase==='results'){round.endedEarly=true;break}await pause(160);
   }
   round.final=await get('/stats');round.endedSecond=(performance.now()-started)/1000;

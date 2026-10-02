@@ -16,6 +16,14 @@ object HudTheme {
     val ochre=Color.valueOf("B4A044")
     val muted=Color.valueOf("C3B898")
     fun fraction(value: Double,total: Double): Float = if(!value.isFinite() || !total.isFinite() || total<=0)0f else (value/total).coerceIn(0.0,1.0).toFloat()
+    fun weaponState(combat: Combat,car: Car,weapon: Int): String = when {
+        !combat.canAct(car.id) -> "DISABLED"
+        combat.armingSeconds>0 -> "ARMING ${ceil(combat.armingSeconds).toInt()}s"
+        combat.ammo(car.id,weapon)<=0 -> "EMPTY"
+        car.ability.weaponsLocked -> "LOCKED"
+        combat.cooldown(car.id,weapon)>1e-9 -> "COOL ${ceil(combat.cooldown(car.id,weapon)).toInt()}s"
+        else -> "READY"
+    }
     fun abilityState(state: AbilityState,protection: Double): String {
         val definition=state.definition?:return "NO SIGNATURE"
         return when {
