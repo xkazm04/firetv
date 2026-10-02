@@ -30,5 +30,11 @@ Text and static HTML only; no changes to game code or data in this run (a later 
 
 | Id | Wave | Status |
 |---|---|---|
-| K1 | Four directions, design note | not started |
+| K1 | Four directions, design note | complete — 2026-10-02; [K1 note](deathride/K1-campaign-directions.md); design intent, owner choice pending |
 | K2 | Triage page, comparison matrix, choices template | not started |
+
+## Session log
+
+### K1 — 2026-10-02
+
+Read progression, C4, W7, G2, fusion owner choice/review and current career, roster, ability, weapon, surface and track data. Wrote [four comparable directions](deathride/K1-campaign-directions.md): Ash Circuit, Last Passage, Dead Air Championship and The Common Road. Each includes structure/counts, progression, five rivals plus a final antagonist, mechanic/cost mapping, three three-line cards, three taunts, risks and model changes. Distinguished signature cars from actual tier purchases, three AI settings from five licence tiers, proposed PR dips from G2's misses, and closed circuits from physical convoy/map systems. Read the cast/contract consumers to identify hard-coded Ash identities; alternatives include their generalization cost. Checked local source links and content counts; no game tests or new play evidence were needed for this text-only part. Game code/data/assets unchanged, zero Grok/ElevenLabs spend, no push. K2 page/template remains next; owner direction and all proposed feel remain unmeasured.
