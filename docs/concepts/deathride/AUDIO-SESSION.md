@@ -68,3 +68,23 @@ no audition content ships. Native OpenAL exercised eight simultaneous voices and
 resource disposal; full game smoke reached a six-car race. Decoded clips 3,970,682
 bytes; actual Stick PSS/listening unmeasured (no device). No spend, 6,400/9,000
 conservative run charge. One commit; never push.
+
+## X3.6 — 2026-10-02
+
+One locally composed 150-second style-01 full-song proof, not a paid provider take
+or repeated X2 loop. Intro/verse/peak/break/outro, original note score and synthesis,
+local crossfades and tails. First render failed three join level screens and is
+retained; four scored transition notes repair the same composition. Final FLAC
+and MP3 pass the declared screens; master -14.16 LUFS / -1.97 dBTP, four join passes.
+Design: [X3-6-full-songs.md](X3-6-full-songs.md). Owner board:
+file:///C:/Users/kazda/kiro/firetv-deathride-audiox/deathride/audio/x3/music/index.html
+New provider long-form quality remains untested; original local method is proved.
+Official API research, guarded v1 composition-plan support, nine tool tests and
+six offline dry runs support the post-reset plan. Six songs/two per chosen style:
+43,200 base, 54,000 with bounded repairs, 62,000 including reserve plus Garden VR
+allocation; earliest reset 2026-10-04 19:31:41 UTC. Nothing scheduled. Browser page,
+provenance/first-pass hashes and secret audit pass. Whole-run balance 24,672 ->
+22,913; conservative 6,400/9,000; header-confirmed 1,759; reserve intact. Runtime
+code/assets unchanged since green 144-test/APK gate. Handoff records owner picks,
+one held voice, campaign states, adaptive assets and physical Stick checks still
+needed. One commit for wave 6; no push, no question.

@@ -34,9 +34,9 @@ Suggested directions, rename and replace freely but keep them distinct:
 Honest labelling on the page: each sample shows its prompt, seconds, credits spent and generation date (from the ledger sidecar), the acceptance results (loudness, peak, loop seam where relevant), and what is **not** measured (nobody has judged it in game). Generated audio is accepted only after the deterministic checks (decode, duration within tolerance, loudness and true-peak measurement with ffmpeg if installed, loop seam check for loops, silence/clipping detect); a failed sample is shown and marked, not hidden.
 Run the audition within the credit cap, **stop at the page**, and write `deathride/audio/CHOICES-TEMPLATE.md` (what the owner should answer: per category, which direction or a mix, plus notes) like Garden VR's `CHOICES.md`.
 
-## X3 After the owner's pick (a later run, not this one)
+## X3 After the owner's pick
 
-`deathride/audio/OWNER-AUDIO-CHOICE.md` is the gate. When it exists: the audio bible (philosophy, buses and priorities, ducking, cooldowns, loop and tier rules), a cue manifest (data), the full effects set generated through the guarded tool, music tiers, the implementation in the game (libGDX sound with a cue service, procedural fallback, voice and memory budget), and a Stick check. Not in this run.
+`deathride/audio/OWNER-AUDIO-CHOICE.md` is the gate. The owner authorized the six-wave X3 run: bible/cue data, effects, engine triage only, campaign voice, game cue service and at most one full-song proof. Results and remaining physical Stick/adaptive-asset work are in `deathride/audio/x3/README.md`. Full paid songs are planned after the reset; the single local proof is not installed as race music.
 
 ## Rules
 
@@ -46,10 +46,10 @@ Original work only. The ElevenLabs key never enters the repo or the logs. One de
 |---|---|---|
 | X1 | Port the tool, audio brief | complete — [brief/design](DEATH-RIDE-AUDIO-BRIEF.md), guarded port, six guard tests and required build pass; zero generation spend |
 | X2 | Audition page with proof kits, spend report, choices template | complete — [audition](../../deathride/audio/audition/index.html), [design/results](deathride/X2-audio-audition.md); 4 equal kits / 32 takes, failures visible, conservative charge 7,828/9,000; stopped at page |
-| X3 | After the owner's pick | authorized by OWNER-AUDIO-CHOICE.md; executing six waves |
+| X3 | After the owner's pick | six authorized waves delivered; owner listening, campaign-state integration and physical Stick checks remain documented |
 | X3.1 | Bible, cue data, seam repair plan | complete — [design](deathride/X3-1-audio-contract.md); 62 cue contracts, zero spend |
 | X3.2 | Effects and deterministic acceptance | complete — [design](deathride/X3-2-effects.md); 34 new + 6 reused, 40 final signal passes, first failures retained; charge 3,440 |
 | X3.3 | Ten-class engine triage | complete — [design](deathride/X3-3-engine-triage.md); 20 short proofs, no production picks; charge 2,000 |
 | X3.4 | Announcer and Mechanic lines | complete with one held candidate — [design](deathride/X3-4-campaign-voices.md); 14 lines, 13 signal passes, seizure silence fail visible; charge 960 |
 | X3.5 | Runtime cue service and build | complete — [design](deathride/X3-5-runtime.md); 144 tests and debug APK pass, native eight-voice exercise, 3.97 MB decoded clips; physical Stick unmeasured |
-| X3.6 | Full-song proof/research and reset cost plan | pending; at most one proof |
+| X3.6 | Full-song proof/research and reset cost plan | complete — [design](deathride/X3-6-full-songs.md); one local 150 s style-01 proof, four repaired joins, zero paid music; six-track base estimate 43,200 after reset |

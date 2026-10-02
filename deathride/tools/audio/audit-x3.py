@@ -17,17 +17,17 @@ for r in ledger.values():
     assert r['sha256']==sha(r['out'])
     assert json.loads(Path(r['out']+'.json').read_text())==r
 counts={}
-for file in Path('audio/x3').glob('*/acceptance.json'):
+for file in Path('audio/x3').rglob('acceptance.json'):
     report=json.loads(file.read_text())
     for r in report['samples']:
-        for key in ['raw','edited','repeat']:
+        for key in ['raw','edited','repeat','preview']:
             item=r.get(key)
             if item:
                 assert item['sha256']==sha(item['file']),(r['id'],key)
                 if 'checks' in item:
                     assert item['status']==('pass' if all(item['checks'].values()) else 'fail')
                     assert set(item['failures'])=={k for k,v in item['checks'].items() if not v}
-    counts[file.parent.name]=dict(total=len(report['samples']),passed=sum(r['status']=='pass' for r in report['samples']))
+    counts[file.parent.relative_to(Path('audio/x3')).as_posix()]=dict(total=len(report['samples']),passed=sum(r['status']=='pass' for r in report['samples']))
 manifest=json.loads(Path('assets/audio/cues.json').read_text())
 assert manifest['maxVoices']==8
 assert len(manifest['cues'])==len({r['id'] for r in manifest['cues']})

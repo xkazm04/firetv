@@ -70,8 +70,33 @@ export function request(a) {
     if (body.text.length > 450) throw new Error('SFX prompt exceeds provider 450-character limit');
     estimate = Math.max(100, Math.ceil(seconds * 40)); endpoint = '/v1/sound-generation';
   } else if (kind === 'music') {
-    seconds = number(a.seconds ?? 20, 'seconds', 3, 180);
-    body = { prompt: need(a, 'prompt'), music_length_ms: Math.round(seconds * 1000), force_instrumental: true };
+    if (a['composition-plan']) {
+      if (a.prompt !== undefined || a.seconds !== undefined) throw new Error('Composition plan cannot be combined with prompt or seconds');
+      let plan;
+      try { plan = JSON.parse(fs.readFileSync(need(a, 'composition-plan'), 'utf8')); }
+      catch { throw new Error('Composition plan must be a readable JSON file'); }
+      const styles = value => Array.isArray(value) && value.length <= 24 && value.every(v => typeof v === 'string' && v.trim() && v.length <= 450);
+      if (!plan || !styles(plan.positive_global_styles) || !styles(plan.negative_global_styles) ||
+          !Array.isArray(plan.sections) || plan.sections.length < 1 || plan.sections.length > 12)
+        throw new Error('Invalid music_v1 composition plan styles or sections');
+      // Rebuild an allowlisted body: instrumental only, no unknown metadata/lyrics.
+      const sections = plan.sections.map(s => {
+        if (!s || typeof s.section_name !== 'string' || !s.section_name.trim() || s.section_name.length > 100 ||
+            !styles(s.positive_local_styles) || !styles(s.negative_local_styles) || !Array.isArray(s.lines) || s.lines.length)
+          throw new Error('Invalid instrumental section');
+        const duration_ms = number(s.duration_ms, 'section duration', 3000, 180000);
+        if (!Number.isInteger(duration_ms)) throw new Error('Section duration must be whole milliseconds');
+        return { section_name: s.section_name, positive_local_styles: s.positive_local_styles,
+          negative_local_styles: s.negative_local_styles, duration_ms, lines: [] };
+      });
+      seconds = number(sections.reduce((n, s) => n + s.duration_ms, 0) / 1000, 'seconds', 3, 180);
+      body = { composition_plan: { positive_global_styles: plan.positive_global_styles,
+        negative_global_styles: plan.negative_global_styles, sections }, model_id: 'music_v1', respect_sections_durations: true };
+    } else {
+      seconds = number(a.seconds ?? 20, 'seconds', 3, 180);
+      body = { prompt: need(a, 'prompt'), music_length_ms: Math.round(seconds * 1000), force_instrumental: true, model_id: 'music_v1' };
+      if (body.prompt.length > 4100) throw new Error('Music prompt exceeds provider 4100-character limit');
+    }
     estimate = Math.ceil(seconds * 60); endpoint = '/v1/music';
   } else if (kind === 'tts') {
     const text = a['text-file'] ? fs.readFileSync(need(a, 'text-file'), 'utf8') : need(a, 'text');
@@ -113,7 +138,7 @@ export async function main(argv = process.argv.slice(2)) {
     const voices = (d.voices ?? []).map(v => ({ id: v.voice_id, name: v.name, category: v.category, labels: v.labels, description: v.description }));
     console.log(JSON.stringify(voices.filter(v => JSON.stringify(v).toLowerCase().includes(filter)), null, 2)); return;
   }
-  if (!['sfx', 'music', 'tts'].includes(cmd)) throw new Error('Usage: credits | voices [--filter text] | sfx --text --seconds [--loop] | music --prompt --seconds | tts --voice --text|--text-file; generation requires --out --session NAME --session-cap CREDITS [--dry-run]');
+  if (!['sfx', 'music', 'tts'].includes(cmd)) throw new Error('Usage: credits | voices [--filter text] | sfx --text --seconds [--loop] | music --prompt --seconds OR --composition-plan FILE | tts --voice --text|--text-file; generation requires --out --session NAME --session-cap CREDITS [--dry-run]');
   const spec = request(a);
   const session = need(a, 'session');
   if (!/^[a-z0-9-]{1,64}$/.test(session)) throw new Error('Session must be a short lowercase alphanumeric/hyphen name');

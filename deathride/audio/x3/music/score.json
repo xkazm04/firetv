@@ -1,0 +1,7632 @@
+{
+  "title": "Dust road, unpaid miles",
+  "style": "01 Dust and drums",
+  "origin": "Original local note score and synthesis; no imported audio, franchise or artist prompt",
+  "bpm": 96,
+  "meter": "4/4",
+  "tonalCentre": "D minor with minor-third and flattened-seventh movement",
+  "seconds": 150,
+  "seed": 31003,
+  "renderer": "tools/audio/compose-x3-proof.py",
+  "rendererSha256": "0bb4d16e0aa80f56686b89d8c1d768130f4def44908e798ba8d276e2cce72826",
+  "sections": [
+    {
+      "name": "Intro",
+      "start": 0,
+      "bars": 8,
+      "description": "Low toms, open fifths and isolated echo guitar; motif enters gradually."
+    },
+    {
+      "name": "Verse",
+      "start": 20,
+      "bars": 16,
+      "description": "Bass pulse and alternating guitar questions; minor progression changes every two bars."
+    },
+    {
+      "name": "Peak",
+      "start": 60,
+      "bars": 16,
+      "description": "Double-time percussion, octave guitar answer, ascending fills and broader harmony."
+    },
+    {
+      "name": "Break",
+      "start": 100,
+      "bars": 8,
+      "description": "Drum bed drops out; low drone and high sparse plucks leave a deliberate space."
+    },
+    {
+      "name": "Outro",
+      "start": 120,
+      "bars": 12,
+      "description": "Half-time return, reduced motif, low final root and a four-second natural fade."
+    }
+  ],
+  "events": [
+    {
+      "section": "Intro",
+      "time": 0.012,
+      "local": 0.012,
+      "kind": "tom",
+      "note": 42,
+      "amp": 0.4225,
+      "pan": -0.12,
+      "duration": null
+    },
+    {
+      "section": "Intro",
+      "time": 1.887,
+      "local": 1.887,
+      "kind": "rim",
+      "note": 58,
+      "amp": 0.104,
+      "pan": 0.25,
+      "duration": null
+    },
+    {
+      "section": "Intro",
+      "time": 0.012,
+      "local": 0.012,
+      "kind": "guitar",
+      "note": 50,
+      "amp": 0.12582,
+      "pan": -0.35,
+      "duration": null
+    },
+    {
+      "section": "Intro",
+      "time": 1.5745,
+      "local": 1.5745,
+      "kind": "guitar",
+      "note": 57,
+      "amp": 0.11896,
+      "pan": 0.32,
+      "duration": null
+    },
+    {
+      "section": "Intro",
+      "time": 2.512,
+      "local": 2.512,
+      "kind": "tom",
+      "note": 42,
+      "amp": 0.44525,
+      "pan": -0.12,
+      "duration": null
+    },
+    {
+      "section": "Intro",
+      "time": 4.387,
+      "local": 4.387,
+      "kind": "rim",
+      "note": 58,
+      "amp": 0.1096,
+      "pan": 0.25,
+      "duration": null
+    },
+    {
+      "section": "Intro",
+      "time": 2.512,
+      "local": 2.512,
+      "kind": "guitar",
+      "note": 50,
+      "amp": 0.12387,
+      "pan": -0.35,
+      "duration": null
+    },
+    {
+      "section": "Intro",
+      "time": 4.0745,
+      "local": 4.0745,
+      "kind": "guitar",
+      "note": 57,
+      "amp": 0.11972,
+      "pan": 0.32,
+      "duration": null
+    },
+    {
+      "section": "Intro",
+      "time": 5.012,
+      "local": 5.012,
+      "kind": "tom",
+      "note": 42,
+      "amp": 0.468,
+      "pan": -0.12,
+      "duration": null
+    },
+    {
+      "section": "Intro",
+      "time": 6.887,
+      "local": 6.887,
+      "kind": "rim",
+      "note": 58,
+      "amp": 0.1152,
+      "pan": 0.25,
+      "duration": null
+    },
+    {
+      "section": "Intro",
+      "time": 5.012,
+      "local": 5.012,
+      "kind": "guitar",
+      "note": 50,
+      "amp": 0.12592,
+      "pan": -0.35,
+      "duration": null
+    },
+    {
+      "section": "Intro",
+      "time": 6.5745,
+      "local": 6.5745,
+      "kind": "guitar",
+      "note": 57,
+      "amp": 0.13503,
+      "pan": 0.32,
+      "duration": null
+    },
+    {
+      "section": "Intro",
+      "time": 7.512,
+      "local": 7.512,
+      "kind": "tom",
+      "note": 42,
+      "amp": 0.49075,
+      "pan": -0.12,
+      "duration": null
+    },
+    {
+      "section": "Intro",
+      "time": 9.387,
+      "local": 9.387,
+      "kind": "rim",
+      "note": 58,
+      "amp": 0.1208,
+      "pan": 0.25,
+      "duration": null
+    },
+    {
+      "section": "Intro",
+      "time": 7.512,
+      "local": 7.512,
+      "kind": "guitar",
+      "note": 50,
+      "amp": 0.14353,
+      "pan": -0.35,
+      "duration": null
+    },
+    {
+      "section": "Intro",
+      "time": 9.0745,
+      "local": 9.0745,
+      "kind": "guitar",
+      "note": 57,
+      "amp": 0.12641,
+      "pan": 0.32,
+      "duration": null
+    },
+    {
+      "section": "Intro",
+      "time": 10.012,
+      "local": 10.012,
+      "kind": "tom",
+      "note": 42,
+      "amp": 0.5135,
+      "pan": -0.12,
+      "duration": null
+    },
+    {
+      "section": "Intro",
+      "time": 11.262,
+      "local": 11.262,
+      "kind": "tom",
+      "note": 46,
+      "amp": 0.5135,
+      "pan": 0.15,
+      "duration": null
+    },
+    {
+      "section": "Intro",
+      "time": 11.887,
+      "local": 11.887,
+      "kind": "rim",
+      "note": 58,
+      "amp": 0.1264,
+      "pan": 0.25,
+      "duration": null
+    },
+    {
+      "section": "Intro",
+      "time": 10.012,
+      "local": 10.012,
+      "kind": "guitar",
+      "note": 46,
+      "amp": 0.14552,
+      "pan": -0.35,
+      "duration": null
+    },
+    {
+      "section": "Intro",
+      "time": 11.10575,
+      "local": 11.10575,
+      "kind": "guitar",
+      "note": 49,
+      "amp": 0.14889,
+      "pan": 0.32,
+      "duration": null
+    },
+    {
+      "section": "Intro",
+      "time": 11.887,
+      "local": 11.887,
+      "kind": "guitar",
+      "note": 53,
+      "amp": 0.14841,
+      "pan": -0.35,
+      "duration": null
+    },
+    {
+      "section": "Intro",
+      "time": 12.512,
+      "local": 12.512,
+      "kind": "tom",
+      "note": 42,
+      "amp": 0.53625,
+      "pan": -0.12,
+      "duration": null
+    },
+    {
+      "section": "Intro",
+      "time": 13.762,
+      "local": 13.762,
+      "kind": "tom",
+      "note": 46,
+      "amp": 0.53625,
+      "pan": 0.15,
+      "duration": null
+    },
+    {
+      "section": "Intro",
+      "time": 14.387,
+      "local": 14.387,
+      "kind": "rim",
+      "note": 58,
+      "amp": 0.132,
+      "pan": 0.25,
+      "duration": null
+    },
+    {
+      "section": "Intro",
+      "time": 12.512,
+      "local": 12.512,
+      "kind": "guitar",
+      "note": 46,
+      "amp": 0.14259,
+      "pan": -0.35,
+      "duration": null
+    },
+    {
+      "section": "Intro",
+      "time": 13.60575,
+      "local": 13.60575,
+      "kind": "guitar",
+      "note": 49,
+      "amp": 0.1545,
+      "pan": 0.32,
+      "duration": null
+    },
+    {
+      "section": "Intro",
+      "time": 14.387,
+      "local": 14.387,
+      "kind": "guitar",
+      "note": 53,
+      "amp": 0.14679,
+      "pan": -0.35,
+      "duration": null
+    },
+    {
+      "section": "Intro",
+      "time": 15.012,
+      "local": 15.012,
+      "kind": "tom",
+      "note": 42,
+      "amp": 0.559,
+      "pan": -0.12,
+      "duration": null
+    },
+    {
+      "section": "Intro",
+      "time": 16.262,
+      "local": 16.262,
+      "kind": "tom",
+      "note": 46,
+      "amp": 0.559,
+      "pan": 0.15,
+      "duration": null
+    },
+    {
+      "section": "Intro",
+      "time": 16.887,
+      "local": 16.887,
+      "kind": "rim",
+      "note": 58,
+      "amp": 0.1376,
+      "pan": 0.25,
+      "duration": null
+    },
+    {
+      "section": "Intro",
+      "time": 15.012,
+      "local": 15.012,
+      "kind": "guitar",
+      "note": 48,
+      "amp": 0.15904,
+      "pan": -0.35,
+      "duration": null
+    },
+    {
+      "section": "Intro",
+      "time": 16.10575,
+      "local": 16.10575,
+      "kind": "guitar",
+      "note": 51,
+      "amp": 0.15603,
+      "pan": 0.32,
+      "duration": null
+    },
+    {
+      "section": "Intro",
+      "time": 16.887,
+      "local": 16.887,
+      "kind": "guitar",
+      "note": 55,
+      "amp": 0.16135,
+      "pan": -0.35,
+      "duration": null
+    },
+    {
+      "section": "Intro",
+      "time": 17.512,
+      "local": 17.512,
+      "kind": "tom",
+      "note": 42,
+      "amp": 0.58175,
+      "pan": -0.12,
+      "duration": null
+    },
+    {
+      "section": "Intro",
+      "time": 18.762,
+      "local": 18.762,
+      "kind": "tom",
+      "note": 46,
+      "amp": 0.58175,
+      "pan": 0.15,
+      "duration": null
+    },
+    {
+      "section": "Intro",
+      "time": 19.387,
+      "local": 19.387,
+      "kind": "rim",
+      "note": 58,
+      "amp": 0.1432,
+      "pan": 0.25,
+      "duration": null
+    },
+    {
+      "section": "Intro",
+      "time": 17.512,
+      "local": 17.512,
+      "kind": "guitar",
+      "note": 48,
+      "amp": 0.1522,
+      "pan": -0.35,
+      "duration": null
+    },
+    {
+      "section": "Intro",
+      "time": 18.60575,
+      "local": 18.60575,
+      "kind": "guitar",
+      "note": 51,
+      "amp": 0.14854,
+      "pan": 0.32,
+      "duration": null
+    },
+    {
+      "section": "Intro",
+      "time": 19.387,
+      "local": 19.387,
+      "kind": "guitar",
+      "note": 55,
+      "amp": 0.16503,
+      "pan": -0.35,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 20.012,
+      "local": 0.012,
+      "kind": "tom",
+      "note": 42,
+      "amp": 0.585,
+      "pan": -0.12,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 21.262,
+      "local": 1.262,
+      "kind": "tom",
+      "note": 46,
+      "amp": 0.585,
+      "pan": 0.15,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 20.637,
+      "local": 0.637,
+      "kind": "rim",
+      "note": 58,
+      "amp": 0.144,
+      "pan": 0.25,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 21.887,
+      "local": 1.887,
+      "kind": "rim",
+      "note": 58,
+      "amp": 0.144,
+      "pan": 0.25,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 20.3245,
+      "local": 0.3245,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.03959,
+      "pan": -0.2078086051045464,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 20.9495,
+      "local": 0.9495,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.04281,
+      "pan": -0.3359480815034469,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 21.5745,
+      "local": 1.5745,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.03967,
+      "pan": 0.5072112124480409,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 22.1995,
+      "local": 2.1995,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.04626,
+      "pan": -0.2497606589728853,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 20.012,
+      "local": 0.012,
+      "kind": "bass",
+      "note": 26,
+      "amp": 0.207,
+      "pan": 0,
+      "duration": 0.875
+    },
+    {
+      "section": "Verse",
+      "time": 21.262,
+      "local": 1.262,
+      "kind": "bass",
+      "note": 26,
+      "amp": 0.207,
+      "pan": 0,
+      "duration": 0.40625
+    },
+    {
+      "section": "Verse",
+      "time": 22.1995,
+      "local": 2.1995,
+      "kind": "bass",
+      "note": 26,
+      "amp": 0.207,
+      "pan": 0,
+      "duration": 0.40625
+    },
+    {
+      "section": "Verse",
+      "time": 20.012,
+      "local": 0.012,
+      "kind": "guitar",
+      "note": 50,
+      "amp": 0.15802,
+      "pan": -0.35,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 20.9495,
+      "local": 0.9495,
+      "kind": "guitar",
+      "note": 57,
+      "amp": 0.15572,
+      "pan": 0.32,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 21.73075,
+      "local": 1.73075,
+      "kind": "guitar",
+      "note": 53,
+      "amp": 0.15796,
+      "pan": -0.35,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 22.1995,
+      "local": 2.1995,
+      "kind": "guitar",
+      "note": 60,
+      "amp": 0.16531,
+      "pan": 0.32,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 22.512,
+      "local": 2.512,
+      "kind": "tom",
+      "note": 42,
+      "amp": 0.585,
+      "pan": -0.12,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 23.762,
+      "local": 3.762,
+      "kind": "tom",
+      "note": 46,
+      "amp": 0.585,
+      "pan": 0.15,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 23.137,
+      "local": 3.137,
+      "kind": "rim",
+      "note": 58,
+      "amp": 0.144,
+      "pan": 0.25,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 24.387,
+      "local": 4.387,
+      "kind": "rim",
+      "note": 58,
+      "amp": 0.144,
+      "pan": 0.25,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 22.8245,
+      "local": 2.8245,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.04679,
+      "pan": -0.19370833940932186,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 23.4495,
+      "local": 3.4495,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.03855,
+      "pan": -0.6384585411862316,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 24.0745,
+      "local": 4.0745,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.04127,
+      "pan": -0.020467717518933615,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 24.6995,
+      "local": 4.6995,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.04151,
+      "pan": -0.26715929630966606,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 22.512,
+      "local": 2.512,
+      "kind": "bass",
+      "note": 26,
+      "amp": 0.207,
+      "pan": 0,
+      "duration": 0.875
+    },
+    {
+      "section": "Verse",
+      "time": 23.762,
+      "local": 3.762,
+      "kind": "bass",
+      "note": 26,
+      "amp": 0.207,
+      "pan": 0,
+      "duration": 0.40625
+    },
+    {
+      "section": "Verse",
+      "time": 24.6995,
+      "local": 4.6995,
+      "kind": "bass",
+      "note": 26,
+      "amp": 0.207,
+      "pan": 0,
+      "duration": 0.40625
+    },
+    {
+      "section": "Verse",
+      "time": 22.512,
+      "local": 2.512,
+      "kind": "guitar",
+      "note": 57,
+      "amp": 0.16548,
+      "pan": -0.35,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 23.762,
+      "local": 3.762,
+      "kind": "guitar",
+      "note": 55,
+      "amp": 0.15126,
+      "pan": 0.32,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 24.54325,
+      "local": 4.54325,
+      "kind": "guitar",
+      "note": 50,
+      "amp": 0.16596,
+      "pan": -0.35,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 25.012,
+      "local": 5.012,
+      "kind": "tom",
+      "note": 42,
+      "amp": 0.585,
+      "pan": -0.12,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 26.262,
+      "local": 6.262,
+      "kind": "tom",
+      "note": 46,
+      "amp": 0.585,
+      "pan": 0.15,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 25.637,
+      "local": 5.637,
+      "kind": "rim",
+      "note": 58,
+      "amp": 0.144,
+      "pan": 0.25,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 26.887,
+      "local": 6.887,
+      "kind": "rim",
+      "note": 58,
+      "amp": 0.144,
+      "pan": 0.25,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 25.3245,
+      "local": 5.3245,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.03817,
+      "pan": -0.4354808996325471,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 25.9495,
+      "local": 5.9495,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.03975,
+      "pan": 0.5140774809204068,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 26.5745,
+      "local": 6.5745,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.04373,
+      "pan": 0.08532067071085969,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 27.1995,
+      "local": 7.1995,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.04419,
+      "pan": 0.5370764557056763,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 25.012,
+      "local": 5.012,
+      "kind": "bass",
+      "note": 26,
+      "amp": 0.207,
+      "pan": 0,
+      "duration": 0.875
+    },
+    {
+      "section": "Verse",
+      "time": 26.262,
+      "local": 6.262,
+      "kind": "bass",
+      "note": 26,
+      "amp": 0.207,
+      "pan": 0,
+      "duration": 0.40625
+    },
+    {
+      "section": "Verse",
+      "time": 27.1995,
+      "local": 7.1995,
+      "kind": "bass",
+      "note": 26,
+      "amp": 0.207,
+      "pan": 0,
+      "duration": 0.40625
+    },
+    {
+      "section": "Verse",
+      "time": 25.012,
+      "local": 5.012,
+      "kind": "guitar",
+      "note": 50,
+      "amp": 0.17331,
+      "pan": -0.35,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 25.9495,
+      "local": 5.9495,
+      "kind": "guitar",
+      "note": 57,
+      "amp": 0.17436,
+      "pan": 0.32,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 26.73075,
+      "local": 6.73075,
+      "kind": "guitar",
+      "note": 53,
+      "amp": 0.16541,
+      "pan": -0.35,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 27.1995,
+      "local": 7.1995,
+      "kind": "guitar",
+      "note": 60,
+      "amp": 0.15838,
+      "pan": 0.32,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 27.512,
+      "local": 7.512,
+      "kind": "tom",
+      "note": 42,
+      "amp": 0.585,
+      "pan": -0.12,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 28.762,
+      "local": 8.762,
+      "kind": "tom",
+      "note": 46,
+      "amp": 0.585,
+      "pan": 0.15,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 28.137,
+      "local": 8.137,
+      "kind": "rim",
+      "note": 58,
+      "amp": 0.144,
+      "pan": 0.25,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 29.387,
+      "local": 9.387,
+      "kind": "rim",
+      "note": 58,
+      "amp": 0.144,
+      "pan": 0.25,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 27.8245,
+      "local": 7.8245,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.04288,
+      "pan": -0.45513389870618604,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 28.4495,
+      "local": 8.4495,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.03745,
+      "pan": 0.3767211660579085,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 29.0745,
+      "local": 9.0745,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.03981,
+      "pan": -0.29354088601311146,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 29.6995,
+      "local": 9.6995,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.04594,
+      "pan": -0.431604260689741,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 29.387,
+      "local": 9.387,
+      "kind": "tom",
+      "note": 50,
+      "amp": 0.234,
+      "pan": -0.3,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 29.54325,
+      "local": 9.54325,
+      "kind": "tom",
+      "note": 47,
+      "amp": 0.234,
+      "pan": 0.0,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 29.6995,
+      "local": 9.6995,
+      "kind": "tom",
+      "note": 44,
+      "amp": 0.234,
+      "pan": 0.3,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 27.512,
+      "local": 7.512,
+      "kind": "bass",
+      "note": 26,
+      "amp": 0.207,
+      "pan": 0,
+      "duration": 0.875
+    },
+    {
+      "section": "Verse",
+      "time": 28.762,
+      "local": 8.762,
+      "kind": "bass",
+      "note": 26,
+      "amp": 0.207,
+      "pan": 0,
+      "duration": 0.40625
+    },
+    {
+      "section": "Verse",
+      "time": 29.6995,
+      "local": 9.6995,
+      "kind": "bass",
+      "note": 26,
+      "amp": 0.207,
+      "pan": 0,
+      "duration": 0.40625
+    },
+    {
+      "section": "Verse",
+      "time": 27.512,
+      "local": 7.512,
+      "kind": "guitar",
+      "note": 57,
+      "amp": 0.15943,
+      "pan": -0.35,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 28.762,
+      "local": 8.762,
+      "kind": "guitar",
+      "note": 55,
+      "amp": 0.17149,
+      "pan": 0.32,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 29.54325,
+      "local": 9.54325,
+      "kind": "guitar",
+      "note": 50,
+      "amp": 0.17194,
+      "pan": -0.35,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 30.012,
+      "local": 10.012,
+      "kind": "tom",
+      "note": 42,
+      "amp": 0.585,
+      "pan": -0.12,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 31.262,
+      "local": 11.262,
+      "kind": "tom",
+      "note": 46,
+      "amp": 0.585,
+      "pan": 0.15,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 30.637,
+      "local": 10.637,
+      "kind": "rim",
+      "note": 58,
+      "amp": 0.144,
+      "pan": 0.25,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 31.887,
+      "local": 11.887,
+      "kind": "rim",
+      "note": 58,
+      "amp": 0.144,
+      "pan": 0.25,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 30.3245,
+      "local": 10.3245,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.04637,
+      "pan": 0.585927739414008,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 30.9495,
+      "local": 10.9495,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.03911,
+      "pan": -0.2111906780438368,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 31.5745,
+      "local": 11.5745,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.04535,
+      "pan": 0.5979323196687661,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 32.1995,
+      "local": 12.1995,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.03854,
+      "pan": -0.16281715409979797,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 30.012,
+      "local": 10.012,
+      "kind": "bass",
+      "note": 22,
+      "amp": 0.207,
+      "pan": 0,
+      "duration": 0.875
+    },
+    {
+      "section": "Verse",
+      "time": 31.262,
+      "local": 11.262,
+      "kind": "bass",
+      "note": 22,
+      "amp": 0.207,
+      "pan": 0,
+      "duration": 0.40625
+    },
+    {
+      "section": "Verse",
+      "time": 32.1995,
+      "local": 12.1995,
+      "kind": "bass",
+      "note": 22,
+      "amp": 0.207,
+      "pan": 0,
+      "duration": 0.40625
+    },
+    {
+      "section": "Verse",
+      "time": 30.012,
+      "local": 10.012,
+      "kind": "guitar",
+      "note": 46,
+      "amp": 0.17193,
+      "pan": -0.35,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 30.9495,
+      "local": 10.9495,
+      "kind": "guitar",
+      "note": 53,
+      "amp": 0.1535,
+      "pan": 0.32,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 31.73075,
+      "local": 11.73075,
+      "kind": "guitar",
+      "note": 49,
+      "amp": 0.16643,
+      "pan": -0.35,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 32.1995,
+      "local": 12.1995,
+      "kind": "guitar",
+      "note": 56,
+      "amp": 0.15874,
+      "pan": 0.32,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 32.512,
+      "local": 12.512,
+      "kind": "tom",
+      "note": 42,
+      "amp": 0.585,
+      "pan": -0.12,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 33.762,
+      "local": 13.762,
+      "kind": "tom",
+      "note": 46,
+      "amp": 0.585,
+      "pan": 0.15,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 33.137,
+      "local": 13.137,
+      "kind": "rim",
+      "note": 58,
+      "amp": 0.144,
+      "pan": 0.25,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 34.387,
+      "local": 14.387,
+      "kind": "rim",
+      "note": 58,
+      "amp": 0.144,
+      "pan": 0.25,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 32.8245,
+      "local": 12.8245,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.04316,
+      "pan": -0.559394724282815,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 33.4495,
+      "local": 13.4495,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.04068,
+      "pan": 0.3748652488693499,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 34.0745,
+      "local": 14.0745,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.03974,
+      "pan": 0.2987604077023137,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 34.6995,
+      "local": 14.6995,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.04215,
+      "pan": -0.16747132805261494,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 32.512,
+      "local": 12.512,
+      "kind": "bass",
+      "note": 22,
+      "amp": 0.207,
+      "pan": 0,
+      "duration": 0.875
+    },
+    {
+      "section": "Verse",
+      "time": 33.762,
+      "local": 13.762,
+      "kind": "bass",
+      "note": 22,
+      "amp": 0.207,
+      "pan": 0,
+      "duration": 0.40625
+    },
+    {
+      "section": "Verse",
+      "time": 34.6995,
+      "local": 14.6995,
+      "kind": "bass",
+      "note": 22,
+      "amp": 0.207,
+      "pan": 0,
+      "duration": 0.40625
+    },
+    {
+      "section": "Verse",
+      "time": 32.512,
+      "local": 12.512,
+      "kind": "guitar",
+      "note": 53,
+      "amp": 0.15809,
+      "pan": -0.35,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 33.762,
+      "local": 13.762,
+      "kind": "guitar",
+      "note": 51,
+      "amp": 0.16261,
+      "pan": 0.32,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 34.54325,
+      "local": 14.54325,
+      "kind": "guitar",
+      "note": 46,
+      "amp": 0.16719,
+      "pan": -0.35,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 35.012,
+      "local": 15.012,
+      "kind": "tom",
+      "note": 42,
+      "amp": 0.585,
+      "pan": -0.12,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 36.262,
+      "local": 16.262,
+      "kind": "tom",
+      "note": 46,
+      "amp": 0.585,
+      "pan": 0.15,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 35.637,
+      "local": 15.637,
+      "kind": "rim",
+      "note": 58,
+      "amp": 0.144,
+      "pan": 0.25,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 36.887,
+      "local": 16.887,
+      "kind": "rim",
+      "note": 58,
+      "amp": 0.144,
+      "pan": 0.25,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 35.3245,
+      "local": 15.3245,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.0416,
+      "pan": -0.06761394075507066,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 35.9495,
+      "local": 15.9495,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.03971,
+      "pan": 0.6158174440888321,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 36.5745,
+      "local": 16.5745,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.0391,
+      "pan": -0.4551909034079459,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 37.1995,
+      "local": 17.1995,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.04235,
+      "pan": -0.4343552132361474,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 35.012,
+      "local": 15.012,
+      "kind": "bass",
+      "note": 24,
+      "amp": 0.207,
+      "pan": 0,
+      "duration": 0.875
+    },
+    {
+      "section": "Verse",
+      "time": 36.262,
+      "local": 16.262,
+      "kind": "bass",
+      "note": 24,
+      "amp": 0.207,
+      "pan": 0,
+      "duration": 0.40625
+    },
+    {
+      "section": "Verse",
+      "time": 37.1995,
+      "local": 17.1995,
+      "kind": "bass",
+      "note": 24,
+      "amp": 0.207,
+      "pan": 0,
+      "duration": 0.40625
+    },
+    {
+      "section": "Verse",
+      "time": 35.012,
+      "local": 15.012,
+      "kind": "guitar",
+      "note": 48,
+      "amp": 0.16986,
+      "pan": -0.35,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 35.9495,
+      "local": 15.9495,
+      "kind": "guitar",
+      "note": 55,
+      "amp": 0.15256,
+      "pan": 0.32,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 36.73075,
+      "local": 16.73075,
+      "kind": "guitar",
+      "note": 51,
+      "amp": 0.1731,
+      "pan": -0.35,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 37.1995,
+      "local": 17.1995,
+      "kind": "guitar",
+      "note": 58,
+      "amp": 0.16083,
+      "pan": 0.32,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 37.512,
+      "local": 17.512,
+      "kind": "tom",
+      "note": 42,
+      "amp": 0.585,
+      "pan": -0.12,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 38.762,
+      "local": 18.762,
+      "kind": "tom",
+      "note": 46,
+      "amp": 0.585,
+      "pan": 0.15,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 38.137,
+      "local": 18.137,
+      "kind": "rim",
+      "note": 58,
+      "amp": 0.144,
+      "pan": 0.25,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 39.387,
+      "local": 19.387,
+      "kind": "rim",
+      "note": 58,
+      "amp": 0.144,
+      "pan": 0.25,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 37.8245,
+      "local": 17.8245,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.04092,
+      "pan": -0.45556428310728464,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 38.4495,
+      "local": 18.4495,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.03904,
+      "pan": -0.3747173633731856,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 39.0745,
+      "local": 19.0745,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.03929,
+      "pan": -0.15673387330713107,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 39.6995,
+      "local": 19.6995,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.04097,
+      "pan": -0.518277733523183,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 39.387,
+      "local": 19.387,
+      "kind": "tom",
+      "note": 50,
+      "amp": 0.234,
+      "pan": -0.3,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 39.54325,
+      "local": 19.54325,
+      "kind": "tom",
+      "note": 47,
+      "amp": 0.234,
+      "pan": 0.0,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 39.6995,
+      "local": 19.6995,
+      "kind": "tom",
+      "note": 44,
+      "amp": 0.234,
+      "pan": 0.3,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 37.512,
+      "local": 17.512,
+      "kind": "bass",
+      "note": 24,
+      "amp": 0.207,
+      "pan": 0,
+      "duration": 0.875
+    },
+    {
+      "section": "Verse",
+      "time": 38.762,
+      "local": 18.762,
+      "kind": "bass",
+      "note": 24,
+      "amp": 0.207,
+      "pan": 0,
+      "duration": 0.40625
+    },
+    {
+      "section": "Verse",
+      "time": 39.6995,
+      "local": 19.6995,
+      "kind": "bass",
+      "note": 24,
+      "amp": 0.207,
+      "pan": 0,
+      "duration": 0.40625
+    },
+    {
+      "section": "Verse",
+      "time": 37.512,
+      "local": 17.512,
+      "kind": "guitar",
+      "note": 55,
+      "amp": 0.17082,
+      "pan": -0.35,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 38.762,
+      "local": 18.762,
+      "kind": "guitar",
+      "note": 53,
+      "amp": 0.15827,
+      "pan": 0.32,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 39.54325,
+      "local": 19.54325,
+      "kind": "guitar",
+      "note": 48,
+      "amp": 0.16232,
+      "pan": -0.35,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 40.012,
+      "local": 20.012,
+      "kind": "tom",
+      "note": 42,
+      "amp": 0.585,
+      "pan": -0.12,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 41.262,
+      "local": 21.262,
+      "kind": "tom",
+      "note": 46,
+      "amp": 0.585,
+      "pan": 0.15,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 40.637,
+      "local": 20.637,
+      "kind": "rim",
+      "note": 58,
+      "amp": 0.144,
+      "pan": 0.25,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 41.887,
+      "local": 21.887,
+      "kind": "rim",
+      "note": 58,
+      "amp": 0.144,
+      "pan": 0.25,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 40.3245,
+      "local": 20.3245,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.03927,
+      "pan": -0.038973835434622406,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 40.9495,
+      "local": 20.9495,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.04319,
+      "pan": -0.47754061875756104,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 41.5745,
+      "local": 21.5745,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.04151,
+      "pan": -0.4993830853791247,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 42.1995,
+      "local": 22.1995,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.04539,
+      "pan": 0.31543213986117646,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 40.012,
+      "local": 20.012,
+      "kind": "bass",
+      "note": 26,
+      "amp": 0.207,
+      "pan": 0,
+      "duration": 0.875
+    },
+    {
+      "section": "Verse",
+      "time": 41.262,
+      "local": 21.262,
+      "kind": "bass",
+      "note": 26,
+      "amp": 0.207,
+      "pan": 0,
+      "duration": 0.40625
+    },
+    {
+      "section": "Verse",
+      "time": 42.1995,
+      "local": 22.1995,
+      "kind": "bass",
+      "note": 26,
+      "amp": 0.207,
+      "pan": 0,
+      "duration": 0.40625
+    },
+    {
+      "section": "Verse",
+      "time": 40.012,
+      "local": 20.012,
+      "kind": "guitar",
+      "note": 50,
+      "amp": 0.15422,
+      "pan": -0.35,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 40.9495,
+      "local": 20.9495,
+      "kind": "guitar",
+      "note": 57,
+      "amp": 0.14965,
+      "pan": 0.32,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 41.73075,
+      "local": 21.73075,
+      "kind": "guitar",
+      "note": 53,
+      "amp": 0.15659,
+      "pan": -0.35,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 42.1995,
+      "local": 22.1995,
+      "kind": "guitar",
+      "note": 60,
+      "amp": 0.16101,
+      "pan": 0.32,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 42.512,
+      "local": 22.512,
+      "kind": "tom",
+      "note": 42,
+      "amp": 0.585,
+      "pan": -0.12,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 43.762,
+      "local": 23.762,
+      "kind": "tom",
+      "note": 46,
+      "amp": 0.585,
+      "pan": 0.15,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 43.137,
+      "local": 23.137,
+      "kind": "rim",
+      "note": 58,
+      "amp": 0.144,
+      "pan": 0.25,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 44.387,
+      "local": 24.387,
+      "kind": "rim",
+      "note": 58,
+      "amp": 0.144,
+      "pan": 0.25,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 42.8245,
+      "local": 22.8245,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.03959,
+      "pan": 0.6030566418609625,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 43.4495,
+      "local": 23.4495,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.04044,
+      "pan": 0.46049131307351876,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 44.0745,
+      "local": 24.0745,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.0399,
+      "pan": 0.018396854374750582,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 44.6995,
+      "local": 24.6995,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.04243,
+      "pan": -0.26113350964871546,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 42.512,
+      "local": 22.512,
+      "kind": "bass",
+      "note": 26,
+      "amp": 0.207,
+      "pan": 0,
+      "duration": 0.875
+    },
+    {
+      "section": "Verse",
+      "time": 43.762,
+      "local": 23.762,
+      "kind": "bass",
+      "note": 26,
+      "amp": 0.207,
+      "pan": 0,
+      "duration": 0.40625
+    },
+    {
+      "section": "Verse",
+      "time": 44.6995,
+      "local": 24.6995,
+      "kind": "bass",
+      "note": 26,
+      "amp": 0.207,
+      "pan": 0,
+      "duration": 0.40625
+    },
+    {
+      "section": "Verse",
+      "time": 42.512,
+      "local": 22.512,
+      "kind": "guitar",
+      "note": 57,
+      "amp": 0.1709,
+      "pan": -0.35,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 43.762,
+      "local": 23.762,
+      "kind": "guitar",
+      "note": 55,
+      "amp": 0.17056,
+      "pan": 0.32,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 44.54325,
+      "local": 24.54325,
+      "kind": "guitar",
+      "note": 50,
+      "amp": 0.15134,
+      "pan": -0.35,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 45.012,
+      "local": 25.012,
+      "kind": "tom",
+      "note": 42,
+      "amp": 0.585,
+      "pan": -0.12,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 46.262,
+      "local": 26.262,
+      "kind": "tom",
+      "note": 46,
+      "amp": 0.585,
+      "pan": 0.15,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 45.637,
+      "local": 25.637,
+      "kind": "rim",
+      "note": 58,
+      "amp": 0.144,
+      "pan": 0.25,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 46.887,
+      "local": 26.887,
+      "kind": "rim",
+      "note": 58,
+      "amp": 0.144,
+      "pan": 0.25,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 45.3245,
+      "local": 25.3245,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.04485,
+      "pan": -0.0496255291823996,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 45.9495,
+      "local": 25.9495,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.03959,
+      "pan": 0.6167858586724208,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 46.5745,
+      "local": 26.5745,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.038,
+      "pan": -0.4962238093628178,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 47.1995,
+      "local": 27.1995,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.04379,
+      "pan": 0.3744002516951944,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 45.012,
+      "local": 25.012,
+      "kind": "bass",
+      "note": 26,
+      "amp": 0.207,
+      "pan": 0,
+      "duration": 0.875
+    },
+    {
+      "section": "Verse",
+      "time": 46.262,
+      "local": 26.262,
+      "kind": "bass",
+      "note": 26,
+      "amp": 0.207,
+      "pan": 0,
+      "duration": 0.40625
+    },
+    {
+      "section": "Verse",
+      "time": 47.1995,
+      "local": 27.1995,
+      "kind": "bass",
+      "note": 26,
+      "amp": 0.207,
+      "pan": 0,
+      "duration": 0.40625
+    },
+    {
+      "section": "Verse",
+      "time": 45.012,
+      "local": 25.012,
+      "kind": "guitar",
+      "note": 50,
+      "amp": 0.16874,
+      "pan": -0.35,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 45.9495,
+      "local": 25.9495,
+      "kind": "guitar",
+      "note": 57,
+      "amp": 0.16259,
+      "pan": 0.32,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 46.73075,
+      "local": 26.73075,
+      "kind": "guitar",
+      "note": 53,
+      "amp": 0.16776,
+      "pan": -0.35,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 47.1995,
+      "local": 27.1995,
+      "kind": "guitar",
+      "note": 60,
+      "amp": 0.15326,
+      "pan": 0.32,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 47.512,
+      "local": 27.512,
+      "kind": "tom",
+      "note": 42,
+      "amp": 0.585,
+      "pan": -0.12,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 48.762,
+      "local": 28.762,
+      "kind": "tom",
+      "note": 46,
+      "amp": 0.585,
+      "pan": 0.15,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 48.137,
+      "local": 28.137,
+      "kind": "rim",
+      "note": 58,
+      "amp": 0.144,
+      "pan": 0.25,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 49.387,
+      "local": 29.387,
+      "kind": "rim",
+      "note": 58,
+      "amp": 0.144,
+      "pan": 0.25,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 47.8245,
+      "local": 27.8245,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.04046,
+      "pan": -0.01058280222458341,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 48.4495,
+      "local": 28.4495,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.04033,
+      "pan": 0.26664477977503653,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 49.0745,
+      "local": 29.0745,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.03829,
+      "pan": 0.602203560328998,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 49.6995,
+      "local": 29.6995,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.03988,
+      "pan": 0.5874954486444951,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 49.387,
+      "local": 29.387,
+      "kind": "tom",
+      "note": 50,
+      "amp": 0.234,
+      "pan": -0.3,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 49.54325,
+      "local": 29.54325,
+      "kind": "tom",
+      "note": 47,
+      "amp": 0.234,
+      "pan": 0.0,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 49.6995,
+      "local": 29.6995,
+      "kind": "tom",
+      "note": 44,
+      "amp": 0.234,
+      "pan": 0.3,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 47.512,
+      "local": 27.512,
+      "kind": "bass",
+      "note": 26,
+      "amp": 0.207,
+      "pan": 0,
+      "duration": 0.875
+    },
+    {
+      "section": "Verse",
+      "time": 48.762,
+      "local": 28.762,
+      "kind": "bass",
+      "note": 26,
+      "amp": 0.207,
+      "pan": 0,
+      "duration": 0.40625
+    },
+    {
+      "section": "Verse",
+      "time": 49.6995,
+      "local": 29.6995,
+      "kind": "bass",
+      "note": 26,
+      "amp": 0.207,
+      "pan": 0,
+      "duration": 0.40625
+    },
+    {
+      "section": "Verse",
+      "time": 47.512,
+      "local": 27.512,
+      "kind": "guitar",
+      "note": 57,
+      "amp": 0.15757,
+      "pan": -0.35,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 48.762,
+      "local": 28.762,
+      "kind": "guitar",
+      "note": 55,
+      "amp": 0.16438,
+      "pan": 0.32,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 49.54325,
+      "local": 29.54325,
+      "kind": "guitar",
+      "note": 50,
+      "amp": 0.15895,
+      "pan": -0.35,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 50.012,
+      "local": 30.012,
+      "kind": "tom",
+      "note": 42,
+      "amp": 0.585,
+      "pan": -0.12,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 51.262,
+      "local": 31.262,
+      "kind": "tom",
+      "note": 46,
+      "amp": 0.585,
+      "pan": 0.15,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 50.637,
+      "local": 30.637,
+      "kind": "rim",
+      "note": 58,
+      "amp": 0.144,
+      "pan": 0.25,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 51.887,
+      "local": 31.887,
+      "kind": "rim",
+      "note": 58,
+      "amp": 0.144,
+      "pan": 0.25,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 50.3245,
+      "local": 30.3245,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.0457,
+      "pan": 0.11707450764568961,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 50.9495,
+      "local": 30.9495,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.03754,
+      "pan": -0.5219256190277242,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 51.5745,
+      "local": 31.5745,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.03972,
+      "pan": -0.13181788307388032,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 52.1995,
+      "local": 32.1995,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.03916,
+      "pan": -0.4101878323774566,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 50.012,
+      "local": 30.012,
+      "kind": "bass",
+      "note": 22,
+      "amp": 0.207,
+      "pan": 0,
+      "duration": 0.875
+    },
+    {
+      "section": "Verse",
+      "time": 51.262,
+      "local": 31.262,
+      "kind": "bass",
+      "note": 22,
+      "amp": 0.207,
+      "pan": 0,
+      "duration": 0.40625
+    },
+    {
+      "section": "Verse",
+      "time": 52.1995,
+      "local": 32.1995,
+      "kind": "bass",
+      "note": 22,
+      "amp": 0.207,
+      "pan": 0,
+      "duration": 0.40625
+    },
+    {
+      "section": "Verse",
+      "time": 50.012,
+      "local": 30.012,
+      "kind": "guitar",
+      "note": 46,
+      "amp": 0.17078,
+      "pan": -0.35,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 50.9495,
+      "local": 30.9495,
+      "kind": "guitar",
+      "note": 53,
+      "amp": 0.16625,
+      "pan": 0.32,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 51.73075,
+      "local": 31.73075,
+      "kind": "guitar",
+      "note": 49,
+      "amp": 0.15568,
+      "pan": -0.35,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 52.1995,
+      "local": 32.1995,
+      "kind": "guitar",
+      "note": 56,
+      "amp": 0.1539,
+      "pan": 0.32,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 52.512,
+      "local": 32.512,
+      "kind": "tom",
+      "note": 42,
+      "amp": 0.585,
+      "pan": -0.12,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 53.762,
+      "local": 33.762,
+      "kind": "tom",
+      "note": 46,
+      "amp": 0.585,
+      "pan": 0.15,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 53.137,
+      "local": 33.137,
+      "kind": "rim",
+      "note": 58,
+      "amp": 0.144,
+      "pan": 0.25,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 54.387,
+      "local": 34.387,
+      "kind": "rim",
+      "note": 58,
+      "amp": 0.144,
+      "pan": 0.25,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 52.8245,
+      "local": 32.8245,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.04121,
+      "pan": 0.4883877150313608,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 53.4495,
+      "local": 33.4495,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.04098,
+      "pan": -0.6200172039693745,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 54.0745,
+      "local": 34.0745,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.03747,
+      "pan": 0.14508882936033174,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 54.6995,
+      "local": 34.6995,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.03943,
+      "pan": 0.513310803545327,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 52.512,
+      "local": 32.512,
+      "kind": "bass",
+      "note": 22,
+      "amp": 0.207,
+      "pan": 0,
+      "duration": 0.875
+    },
+    {
+      "section": "Verse",
+      "time": 53.762,
+      "local": 33.762,
+      "kind": "bass",
+      "note": 22,
+      "amp": 0.207,
+      "pan": 0,
+      "duration": 0.40625
+    },
+    {
+      "section": "Verse",
+      "time": 54.6995,
+      "local": 34.6995,
+      "kind": "bass",
+      "note": 22,
+      "amp": 0.207,
+      "pan": 0,
+      "duration": 0.40625
+    },
+    {
+      "section": "Verse",
+      "time": 52.512,
+      "local": 32.512,
+      "kind": "guitar",
+      "note": 53,
+      "amp": 0.1619,
+      "pan": -0.35,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 53.762,
+      "local": 33.762,
+      "kind": "guitar",
+      "note": 51,
+      "amp": 0.16828,
+      "pan": 0.32,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 54.54325,
+      "local": 34.54325,
+      "kind": "guitar",
+      "note": 46,
+      "amp": 0.15127,
+      "pan": -0.35,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 55.012,
+      "local": 35.012,
+      "kind": "tom",
+      "note": 42,
+      "amp": 0.585,
+      "pan": -0.12,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 56.262,
+      "local": 36.262,
+      "kind": "tom",
+      "note": 46,
+      "amp": 0.585,
+      "pan": 0.15,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 55.637,
+      "local": 35.637,
+      "kind": "rim",
+      "note": 58,
+      "amp": 0.144,
+      "pan": 0.25,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 56.887,
+      "local": 36.887,
+      "kind": "rim",
+      "note": 58,
+      "amp": 0.144,
+      "pan": 0.25,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 55.3245,
+      "local": 35.3245,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.04579,
+      "pan": -0.3732732324117733,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 55.9495,
+      "local": 35.9495,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.04189,
+      "pan": -0.34077956117994407,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 56.5745,
+      "local": 36.5745,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.04533,
+      "pan": -0.5833568012948042,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 57.1995,
+      "local": 37.1995,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.04543,
+      "pan": 0.11528876810498268,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 55.012,
+      "local": 35.012,
+      "kind": "bass",
+      "note": 24,
+      "amp": 0.207,
+      "pan": 0,
+      "duration": 0.875
+    },
+    {
+      "section": "Verse",
+      "time": 56.262,
+      "local": 36.262,
+      "kind": "bass",
+      "note": 24,
+      "amp": 0.207,
+      "pan": 0,
+      "duration": 0.40625
+    },
+    {
+      "section": "Verse",
+      "time": 57.1995,
+      "local": 37.1995,
+      "kind": "bass",
+      "note": 24,
+      "amp": 0.207,
+      "pan": 0,
+      "duration": 0.40625
+    },
+    {
+      "section": "Verse",
+      "time": 55.012,
+      "local": 35.012,
+      "kind": "guitar",
+      "note": 48,
+      "amp": 0.17134,
+      "pan": -0.35,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 55.9495,
+      "local": 35.9495,
+      "kind": "guitar",
+      "note": 55,
+      "amp": 0.16032,
+      "pan": 0.32,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 56.73075,
+      "local": 36.73075,
+      "kind": "guitar",
+      "note": 51,
+      "amp": 0.15583,
+      "pan": -0.35,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 57.1995,
+      "local": 37.1995,
+      "kind": "guitar",
+      "note": 58,
+      "amp": 0.15686,
+      "pan": 0.32,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 57.512,
+      "local": 37.512,
+      "kind": "tom",
+      "note": 42,
+      "amp": 0.585,
+      "pan": -0.12,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 58.762,
+      "local": 38.762,
+      "kind": "tom",
+      "note": 46,
+      "amp": 0.585,
+      "pan": 0.15,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 58.137,
+      "local": 38.137,
+      "kind": "rim",
+      "note": 58,
+      "amp": 0.144,
+      "pan": 0.25,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 59.387,
+      "local": 39.387,
+      "kind": "rim",
+      "note": 58,
+      "amp": 0.144,
+      "pan": 0.25,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 57.8245,
+      "local": 37.8245,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.04333,
+      "pan": -0.3582187159554248,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 58.4495,
+      "local": 38.4495,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.04396,
+      "pan": 0.48828261904365433,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 59.0745,
+      "local": 39.0745,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.04353,
+      "pan": -0.4237676869177431,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 59.6995,
+      "local": 39.6995,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.04676,
+      "pan": 0.4602521434711967,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 59.387,
+      "local": 39.387,
+      "kind": "tom",
+      "note": 50,
+      "amp": 0.234,
+      "pan": -0.3,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 59.54325,
+      "local": 39.54325,
+      "kind": "tom",
+      "note": 47,
+      "amp": 0.234,
+      "pan": 0.0,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 59.6995,
+      "local": 39.6995,
+      "kind": "tom",
+      "note": 44,
+      "amp": 0.234,
+      "pan": 0.3,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 57.512,
+      "local": 37.512,
+      "kind": "bass",
+      "note": 24,
+      "amp": 0.207,
+      "pan": 0,
+      "duration": 0.875
+    },
+    {
+      "section": "Verse",
+      "time": 58.762,
+      "local": 38.762,
+      "kind": "bass",
+      "note": 24,
+      "amp": 0.207,
+      "pan": 0,
+      "duration": 0.40625
+    },
+    {
+      "section": "Verse",
+      "time": 59.6995,
+      "local": 39.6995,
+      "kind": "bass",
+      "note": 24,
+      "amp": 0.207,
+      "pan": 0,
+      "duration": 0.40625
+    },
+    {
+      "section": "Verse",
+      "time": 57.512,
+      "local": 37.512,
+      "kind": "guitar",
+      "note": 55,
+      "amp": 0.15547,
+      "pan": -0.35,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 58.762,
+      "local": 38.762,
+      "kind": "guitar",
+      "note": 53,
+      "amp": 0.15375,
+      "pan": 0.32,
+      "duration": null
+    },
+    {
+      "section": "Verse",
+      "time": 59.54325,
+      "local": 39.54325,
+      "kind": "guitar",
+      "note": 48,
+      "amp": 0.15155,
+      "pan": -0.35,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 60.012,
+      "local": 0.012,
+      "kind": "tom",
+      "note": 42,
+      "amp": 0.65,
+      "pan": -0.12,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 60.9495,
+      "local": 0.9495,
+      "kind": "tom",
+      "note": 46,
+      "amp": 0.65,
+      "pan": 0.15,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 61.262,
+      "local": 1.262,
+      "kind": "tom",
+      "note": 46,
+      "amp": 0.65,
+      "pan": 0.15,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 62.1995,
+      "local": 2.1995,
+      "kind": "tom",
+      "note": 46,
+      "amp": 0.65,
+      "pan": 0.15,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 60.637,
+      "local": 0.637,
+      "kind": "rim",
+      "note": 58,
+      "amp": 0.16,
+      "pan": 0.25,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 61.887,
+      "local": 1.887,
+      "kind": "rim",
+      "note": 58,
+      "amp": 0.16,
+      "pan": 0.25,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 60.3245,
+      "local": 0.3245,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.05044,
+      "pan": -0.4296370750882918,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 60.637,
+      "local": 0.637,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.04808,
+      "pan": 0.13179273695823757,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 60.9495,
+      "local": 0.9495,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.05148,
+      "pan": -0.2574374108228453,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 61.262,
+      "local": 1.262,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.05109,
+      "pan": 0.5888894381813773,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 61.5745,
+      "local": 1.5745,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.04444,
+      "pan": -0.428545391314733,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 61.887,
+      "local": 1.887,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.04978,
+      "pan": -0.5850299296304947,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 62.1995,
+      "local": 2.1995,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.04895,
+      "pan": -0.05326532764094827,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 60.012,
+      "local": 0.012,
+      "kind": "bass",
+      "note": 26,
+      "amp": 0.23,
+      "pan": 0,
+      "duration": 0.875
+    },
+    {
+      "section": "Peak",
+      "time": 60.9495,
+      "local": 0.9495,
+      "kind": "bass",
+      "note": 26,
+      "amp": 0.23,
+      "pan": 0,
+      "duration": 0.40625
+    },
+    {
+      "section": "Peak",
+      "time": 61.5745,
+      "local": 1.5745,
+      "kind": "bass",
+      "note": 26,
+      "amp": 0.23,
+      "pan": 0,
+      "duration": 0.40625
+    },
+    {
+      "section": "Peak",
+      "time": 62.1995,
+      "local": 2.1995,
+      "kind": "bass",
+      "note": 26,
+      "amp": 0.23,
+      "pan": 0,
+      "duration": 0.40625
+    },
+    {
+      "section": "Peak",
+      "time": 60.012,
+      "local": 0.012,
+      "kind": "guitar",
+      "note": 62,
+      "amp": 0.18059,
+      "pan": -0.35,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 60.637,
+      "local": 0.637,
+      "kind": "guitar",
+      "note": 57,
+      "amp": 0.17184,
+      "pan": 0.32,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 61.10575,
+      "local": 1.10575,
+      "kind": "guitar",
+      "note": 65,
+      "amp": 0.1786,
+      "pan": -0.35,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 61.5745,
+      "local": 1.5745,
+      "kind": "guitar",
+      "note": 60,
+      "amp": 0.17097,
+      "pan": 0.32,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 62.04325,
+      "local": 2.04325,
+      "kind": "guitar",
+      "note": 57,
+      "amp": 0.18813,
+      "pan": -0.35,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 62.512,
+      "local": 2.512,
+      "kind": "tom",
+      "note": 42,
+      "amp": 0.65,
+      "pan": -0.12,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 63.4495,
+      "local": 3.4495,
+      "kind": "tom",
+      "note": 46,
+      "amp": 0.65,
+      "pan": 0.15,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 63.762,
+      "local": 3.762,
+      "kind": "tom",
+      "note": 46,
+      "amp": 0.65,
+      "pan": 0.15,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 64.6995,
+      "local": 4.6995,
+      "kind": "tom",
+      "note": 46,
+      "amp": 0.65,
+      "pan": 0.15,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 63.137,
+      "local": 3.137,
+      "kind": "rim",
+      "note": 58,
+      "amp": 0.16,
+      "pan": 0.25,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 64.387,
+      "local": 4.387,
+      "kind": "rim",
+      "note": 58,
+      "amp": 0.16,
+      "pan": 0.25,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 62.8245,
+      "local": 2.8245,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.04594,
+      "pan": 0.40062238790621507,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 63.137,
+      "local": 3.137,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.04942,
+      "pan": -0.5288999786737653,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 63.4495,
+      "local": 3.4495,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.04647,
+      "pan": 0.6391017314165485,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 63.762,
+      "local": 3.762,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.04641,
+      "pan": -0.02463936719180071,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 64.0745,
+      "local": 4.0745,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.04797,
+      "pan": -0.10104412703683863,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 64.387,
+      "local": 4.387,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.05091,
+      "pan": 0.1400841469875148,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 64.6995,
+      "local": 4.6995,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.04548,
+      "pan": 0.4298009249950544,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 62.512,
+      "local": 2.512,
+      "kind": "bass",
+      "note": 26,
+      "amp": 0.23,
+      "pan": 0,
+      "duration": 0.875
+    },
+    {
+      "section": "Peak",
+      "time": 63.4495,
+      "local": 3.4495,
+      "kind": "bass",
+      "note": 26,
+      "amp": 0.23,
+      "pan": 0,
+      "duration": 0.40625
+    },
+    {
+      "section": "Peak",
+      "time": 64.0745,
+      "local": 4.0745,
+      "kind": "bass",
+      "note": 26,
+      "amp": 0.23,
+      "pan": 0,
+      "duration": 0.40625
+    },
+    {
+      "section": "Peak",
+      "time": 64.6995,
+      "local": 4.6995,
+      "kind": "bass",
+      "note": 26,
+      "amp": 0.23,
+      "pan": 0,
+      "duration": 0.40625
+    },
+    {
+      "section": "Peak",
+      "time": 62.512,
+      "local": 2.512,
+      "kind": "guitar",
+      "note": 62,
+      "amp": 0.17817,
+      "pan": -0.35,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 63.137,
+      "local": 3.137,
+      "kind": "guitar",
+      "note": 57,
+      "amp": 0.17536,
+      "pan": 0.32,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 63.60575,
+      "local": 3.60575,
+      "kind": "guitar",
+      "note": 65,
+      "amp": 0.17851,
+      "pan": -0.35,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 64.0745,
+      "local": 4.0745,
+      "kind": "guitar",
+      "note": 60,
+      "amp": 0.17521,
+      "pan": 0.32,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 64.54325,
+      "local": 4.54325,
+      "kind": "guitar",
+      "note": 57,
+      "amp": 0.18585,
+      "pan": -0.35,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 65.012,
+      "local": 5.012,
+      "kind": "tom",
+      "note": 42,
+      "amp": 0.65,
+      "pan": -0.12,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 65.9495,
+      "local": 5.9495,
+      "kind": "tom",
+      "note": 46,
+      "amp": 0.65,
+      "pan": 0.15,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 66.262,
+      "local": 6.262,
+      "kind": "tom",
+      "note": 46,
+      "amp": 0.65,
+      "pan": 0.15,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 67.1995,
+      "local": 7.1995,
+      "kind": "tom",
+      "note": 46,
+      "amp": 0.65,
+      "pan": 0.15,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 65.637,
+      "local": 5.637,
+      "kind": "rim",
+      "note": 58,
+      "amp": 0.16,
+      "pan": 0.25,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 66.887,
+      "local": 6.887,
+      "kind": "rim",
+      "note": 58,
+      "amp": 0.16,
+      "pan": 0.25,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 65.3245,
+      "local": 5.3245,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.05057,
+      "pan": -0.5058483382147004,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 65.637,
+      "local": 5.637,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.04451,
+      "pan": -0.03663784601143738,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 65.9495,
+      "local": 5.9495,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.0487,
+      "pan": -0.5722855060316743,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 66.262,
+      "local": 6.262,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.0494,
+      "pan": 0.5639850779200878,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 66.5745,
+      "local": 6.5745,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.04292,
+      "pan": -0.16250752359171355,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 66.887,
+      "local": 6.887,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.04872,
+      "pan": 0.031800025272265775,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 67.1995,
+      "local": 7.1995,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.04538,
+      "pan": 0.1941583609390506,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 65.012,
+      "local": 5.012,
+      "kind": "bass",
+      "note": 29,
+      "amp": 0.23,
+      "pan": 0,
+      "duration": 0.875
+    },
+    {
+      "section": "Peak",
+      "time": 65.9495,
+      "local": 5.9495,
+      "kind": "bass",
+      "note": 29,
+      "amp": 0.23,
+      "pan": 0,
+      "duration": 0.40625
+    },
+    {
+      "section": "Peak",
+      "time": 66.5745,
+      "local": 6.5745,
+      "kind": "bass",
+      "note": 29,
+      "amp": 0.23,
+      "pan": 0,
+      "duration": 0.40625
+    },
+    {
+      "section": "Peak",
+      "time": 67.1995,
+      "local": 7.1995,
+      "kind": "bass",
+      "note": 29,
+      "amp": 0.23,
+      "pan": 0,
+      "duration": 0.40625
+    },
+    {
+      "section": "Peak",
+      "time": 65.012,
+      "local": 5.012,
+      "kind": "guitar",
+      "note": 65,
+      "amp": 0.17454,
+      "pan": -0.35,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 65.637,
+      "local": 5.637,
+      "kind": "guitar",
+      "note": 60,
+      "amp": 0.18287,
+      "pan": 0.32,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 66.10575,
+      "local": 6.10575,
+      "kind": "guitar",
+      "note": 68,
+      "amp": 0.17439,
+      "pan": -0.35,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 66.5745,
+      "local": 6.5745,
+      "kind": "guitar",
+      "note": 63,
+      "amp": 0.17111,
+      "pan": 0.32,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 67.04325,
+      "local": 7.04325,
+      "kind": "guitar",
+      "note": 60,
+      "amp": 0.16772,
+      "pan": -0.35,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 67.512,
+      "local": 7.512,
+      "kind": "tom",
+      "note": 42,
+      "amp": 0.65,
+      "pan": -0.12,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 68.4495,
+      "local": 8.4495,
+      "kind": "tom",
+      "note": 46,
+      "amp": 0.65,
+      "pan": 0.15,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 68.762,
+      "local": 8.762,
+      "kind": "tom",
+      "note": 46,
+      "amp": 0.65,
+      "pan": 0.15,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 69.6995,
+      "local": 9.6995,
+      "kind": "tom",
+      "note": 46,
+      "amp": 0.65,
+      "pan": 0.15,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 68.137,
+      "local": 8.137,
+      "kind": "rim",
+      "note": 58,
+      "amp": 0.16,
+      "pan": 0.25,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 69.387,
+      "local": 9.387,
+      "kind": "rim",
+      "note": 58,
+      "amp": 0.16,
+      "pan": 0.25,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 67.8245,
+      "local": 7.8245,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.04387,
+      "pan": -0.5993486038085843,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 68.137,
+      "local": 8.137,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.04735,
+      "pan": -0.12141228443819085,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 68.4495,
+      "local": 8.4495,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.04863,
+      "pan": -0.1699493673597704,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 68.762,
+      "local": 8.762,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.04993,
+      "pan": 0.07334090086170197,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 69.0745,
+      "local": 9.0745,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.05152,
+      "pan": -0.1388472950385461,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 69.387,
+      "local": 9.387,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.05026,
+      "pan": 0.4955989477996031,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 69.6995,
+      "local": 9.6995,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.0451,
+      "pan": 0.04731989290979943,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 69.387,
+      "local": 9.387,
+      "kind": "tom",
+      "note": 50,
+      "amp": 0.26,
+      "pan": -0.3,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 69.54325,
+      "local": 9.54325,
+      "kind": "tom",
+      "note": 47,
+      "amp": 0.26,
+      "pan": 0.0,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 69.6995,
+      "local": 9.6995,
+      "kind": "tom",
+      "note": 44,
+      "amp": 0.26,
+      "pan": 0.3,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 67.512,
+      "local": 7.512,
+      "kind": "bass",
+      "note": 29,
+      "amp": 0.23,
+      "pan": 0,
+      "duration": 0.875
+    },
+    {
+      "section": "Peak",
+      "time": 68.4495,
+      "local": 8.4495,
+      "kind": "bass",
+      "note": 29,
+      "amp": 0.23,
+      "pan": 0,
+      "duration": 0.40625
+    },
+    {
+      "section": "Peak",
+      "time": 69.0745,
+      "local": 9.0745,
+      "kind": "bass",
+      "note": 29,
+      "amp": 0.23,
+      "pan": 0,
+      "duration": 0.40625
+    },
+    {
+      "section": "Peak",
+      "time": 69.6995,
+      "local": 9.6995,
+      "kind": "bass",
+      "note": 29,
+      "amp": 0.23,
+      "pan": 0,
+      "duration": 0.40625
+    },
+    {
+      "section": "Peak",
+      "time": 67.512,
+      "local": 7.512,
+      "kind": "guitar",
+      "note": 65,
+      "amp": 0.17259,
+      "pan": -0.35,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 68.137,
+      "local": 8.137,
+      "kind": "guitar",
+      "note": 60,
+      "amp": 0.17472,
+      "pan": 0.32,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 68.60575,
+      "local": 8.60575,
+      "kind": "guitar",
+      "note": 68,
+      "amp": 0.18509,
+      "pan": -0.35,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 69.0745,
+      "local": 9.0745,
+      "kind": "guitar",
+      "note": 63,
+      "amp": 0.1766,
+      "pan": 0.32,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 69.54325,
+      "local": 9.54325,
+      "kind": "guitar",
+      "note": 60,
+      "amp": 0.1739,
+      "pan": -0.35,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 70.012,
+      "local": 10.012,
+      "kind": "tom",
+      "note": 42,
+      "amp": 0.65,
+      "pan": -0.12,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 70.9495,
+      "local": 10.9495,
+      "kind": "tom",
+      "note": 46,
+      "amp": 0.65,
+      "pan": 0.15,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 71.262,
+      "local": 11.262,
+      "kind": "tom",
+      "note": 46,
+      "amp": 0.65,
+      "pan": 0.15,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 72.1995,
+      "local": 12.1995,
+      "kind": "tom",
+      "note": 46,
+      "amp": 0.65,
+      "pan": 0.15,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 70.637,
+      "local": 10.637,
+      "kind": "rim",
+      "note": 58,
+      "amp": 0.16,
+      "pan": 0.25,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 71.887,
+      "local": 11.887,
+      "kind": "rim",
+      "note": 58,
+      "amp": 0.16,
+      "pan": 0.25,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 70.3245,
+      "local": 10.3245,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.04486,
+      "pan": -0.544557332845806,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 70.637,
+      "local": 10.637,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.04712,
+      "pan": -0.27017472415662613,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 70.9495,
+      "local": 10.9495,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.04759,
+      "pan": -0.5734624293322216,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 71.262,
+      "local": 11.262,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.045,
+      "pan": 0.5410159817474066,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 71.5745,
+      "local": 11.5745,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.04793,
+      "pan": -0.06402377995571529,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 71.887,
+      "local": 11.887,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.04338,
+      "pan": -0.2041495530199281,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 72.1995,
+      "local": 12.1995,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.05061,
+      "pan": 0.6048201092238342,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 70.012,
+      "local": 10.012,
+      "kind": "bass",
+      "note": 24,
+      "amp": 0.23,
+      "pan": 0,
+      "duration": 0.875
+    },
+    {
+      "section": "Peak",
+      "time": 70.9495,
+      "local": 10.9495,
+      "kind": "bass",
+      "note": 24,
+      "amp": 0.23,
+      "pan": 0,
+      "duration": 0.40625
+    },
+    {
+      "section": "Peak",
+      "time": 71.5745,
+      "local": 11.5745,
+      "kind": "bass",
+      "note": 24,
+      "amp": 0.23,
+      "pan": 0,
+      "duration": 0.40625
+    },
+    {
+      "section": "Peak",
+      "time": 72.1995,
+      "local": 12.1995,
+      "kind": "bass",
+      "note": 24,
+      "amp": 0.23,
+      "pan": 0,
+      "duration": 0.40625
+    },
+    {
+      "section": "Peak",
+      "time": 70.012,
+      "local": 10.012,
+      "kind": "guitar",
+      "note": 60,
+      "amp": 0.17345,
+      "pan": -0.35,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 70.637,
+      "local": 10.637,
+      "kind": "guitar",
+      "note": 55,
+      "amp": 0.17876,
+      "pan": 0.32,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 71.10575,
+      "local": 11.10575,
+      "kind": "guitar",
+      "note": 63,
+      "amp": 0.18282,
+      "pan": -0.35,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 71.5745,
+      "local": 11.5745,
+      "kind": "guitar",
+      "note": 58,
+      "amp": 0.1802,
+      "pan": 0.32,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 72.04325,
+      "local": 12.04325,
+      "kind": "guitar",
+      "note": 55,
+      "amp": 0.17814,
+      "pan": -0.35,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 72.512,
+      "local": 12.512,
+      "kind": "tom",
+      "note": 42,
+      "amp": 0.65,
+      "pan": -0.12,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 73.4495,
+      "local": 13.4495,
+      "kind": "tom",
+      "note": 46,
+      "amp": 0.65,
+      "pan": 0.15,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 73.762,
+      "local": 13.762,
+      "kind": "tom",
+      "note": 46,
+      "amp": 0.65,
+      "pan": 0.15,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 74.6995,
+      "local": 14.6995,
+      "kind": "tom",
+      "note": 46,
+      "amp": 0.65,
+      "pan": 0.15,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 73.137,
+      "local": 13.137,
+      "kind": "rim",
+      "note": 58,
+      "amp": 0.16,
+      "pan": 0.25,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 74.387,
+      "local": 14.387,
+      "kind": "rim",
+      "note": 58,
+      "amp": 0.16,
+      "pan": 0.25,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 72.8245,
+      "local": 12.8245,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.04913,
+      "pan": -0.4455645831846347,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 73.137,
+      "local": 13.137,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.04604,
+      "pan": 0.46867729497184196,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 73.4495,
+      "local": 13.4495,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.04776,
+      "pan": 0.25056673699330745,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 73.762,
+      "local": 13.762,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.05014,
+      "pan": 0.0951435367368686,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 74.0745,
+      "local": 14.0745,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.04295,
+      "pan": -0.6279872460160615,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 74.387,
+      "local": 14.387,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.04489,
+      "pan": -0.41393939709724364,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 74.6995,
+      "local": 14.6995,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.04682,
+      "pan": 0.33284343062710453,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 72.512,
+      "local": 12.512,
+      "kind": "bass",
+      "note": 24,
+      "amp": 0.23,
+      "pan": 0,
+      "duration": 0.875
+    },
+    {
+      "section": "Peak",
+      "time": 73.4495,
+      "local": 13.4495,
+      "kind": "bass",
+      "note": 24,
+      "amp": 0.23,
+      "pan": 0,
+      "duration": 0.40625
+    },
+    {
+      "section": "Peak",
+      "time": 74.0745,
+      "local": 14.0745,
+      "kind": "bass",
+      "note": 24,
+      "amp": 0.23,
+      "pan": 0,
+      "duration": 0.40625
+    },
+    {
+      "section": "Peak",
+      "time": 74.6995,
+      "local": 14.6995,
+      "kind": "bass",
+      "note": 24,
+      "amp": 0.23,
+      "pan": 0,
+      "duration": 0.40625
+    },
+    {
+      "section": "Peak",
+      "time": 72.512,
+      "local": 12.512,
+      "kind": "guitar",
+      "note": 60,
+      "amp": 0.16786,
+      "pan": -0.35,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 73.137,
+      "local": 13.137,
+      "kind": "guitar",
+      "note": 55,
+      "amp": 0.17957,
+      "pan": 0.32,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 73.60575,
+      "local": 13.60575,
+      "kind": "guitar",
+      "note": 63,
+      "amp": 0.16863,
+      "pan": -0.35,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 74.0745,
+      "local": 14.0745,
+      "kind": "guitar",
+      "note": 58,
+      "amp": 0.19361,
+      "pan": 0.32,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 74.54325,
+      "local": 14.54325,
+      "kind": "guitar",
+      "note": 55,
+      "amp": 0.17438,
+      "pan": -0.35,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 75.012,
+      "local": 15.012,
+      "kind": "tom",
+      "note": 42,
+      "amp": 0.65,
+      "pan": -0.12,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 75.9495,
+      "local": 15.9495,
+      "kind": "tom",
+      "note": 46,
+      "amp": 0.65,
+      "pan": 0.15,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 76.262,
+      "local": 16.262,
+      "kind": "tom",
+      "note": 46,
+      "amp": 0.65,
+      "pan": 0.15,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 77.1995,
+      "local": 17.1995,
+      "kind": "tom",
+      "note": 46,
+      "amp": 0.65,
+      "pan": 0.15,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 75.637,
+      "local": 15.637,
+      "kind": "rim",
+      "note": 58,
+      "amp": 0.16,
+      "pan": 0.25,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 76.887,
+      "local": 16.887,
+      "kind": "rim",
+      "note": 58,
+      "amp": 0.16,
+      "pan": 0.25,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 75.3245,
+      "local": 15.3245,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.04565,
+      "pan": -0.5158798208207673,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 75.637,
+      "local": 15.637,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.04768,
+      "pan": 0.1250202718850285,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 75.9495,
+      "local": 15.9495,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.04589,
+      "pan": 0.5301367600591559,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 76.262,
+      "local": 16.262,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.04624,
+      "pan": 0.22939846649028484,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 76.5745,
+      "local": 16.5745,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.04987,
+      "pan": 0.2674556314902945,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 76.887,
+      "local": 16.887,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.04286,
+      "pan": -0.28927633963539995,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 77.1995,
+      "local": 17.1995,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.04956,
+      "pan": 0.10618838688655541,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 75.012,
+      "local": 15.012,
+      "kind": "bass",
+      "note": 31,
+      "amp": 0.23,
+      "pan": 0,
+      "duration": 0.875
+    },
+    {
+      "section": "Peak",
+      "time": 75.9495,
+      "local": 15.9495,
+      "kind": "bass",
+      "note": 31,
+      "amp": 0.23,
+      "pan": 0,
+      "duration": 0.40625
+    },
+    {
+      "section": "Peak",
+      "time": 76.5745,
+      "local": 16.5745,
+      "kind": "bass",
+      "note": 31,
+      "amp": 0.23,
+      "pan": 0,
+      "duration": 0.40625
+    },
+    {
+      "section": "Peak",
+      "time": 77.1995,
+      "local": 17.1995,
+      "kind": "bass",
+      "note": 31,
+      "amp": 0.23,
+      "pan": 0,
+      "duration": 0.40625
+    },
+    {
+      "section": "Peak",
+      "time": 75.012,
+      "local": 15.012,
+      "kind": "guitar",
+      "note": 67,
+      "amp": 0.17356,
+      "pan": -0.35,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 75.637,
+      "local": 15.637,
+      "kind": "guitar",
+      "note": 62,
+      "amp": 0.18578,
+      "pan": 0.32,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 76.10575,
+      "local": 16.10575,
+      "kind": "guitar",
+      "note": 70,
+      "amp": 0.18206,
+      "pan": -0.35,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 76.5745,
+      "local": 16.5745,
+      "kind": "guitar",
+      "note": 65,
+      "amp": 0.17528,
+      "pan": 0.32,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 77.04325,
+      "local": 17.04325,
+      "kind": "guitar",
+      "note": 62,
+      "amp": 0.1792,
+      "pan": -0.35,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 77.512,
+      "local": 17.512,
+      "kind": "tom",
+      "note": 42,
+      "amp": 0.65,
+      "pan": -0.12,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 78.4495,
+      "local": 18.4495,
+      "kind": "tom",
+      "note": 46,
+      "amp": 0.65,
+      "pan": 0.15,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 78.762,
+      "local": 18.762,
+      "kind": "tom",
+      "note": 46,
+      "amp": 0.65,
+      "pan": 0.15,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 79.6995,
+      "local": 19.6995,
+      "kind": "tom",
+      "note": 46,
+      "amp": 0.65,
+      "pan": 0.15,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 78.137,
+      "local": 18.137,
+      "kind": "rim",
+      "note": 58,
+      "amp": 0.16,
+      "pan": 0.25,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 79.387,
+      "local": 19.387,
+      "kind": "rim",
+      "note": 58,
+      "amp": 0.16,
+      "pan": 0.25,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 77.8245,
+      "local": 17.8245,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.05083,
+      "pan": -0.13576427347667475,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 78.137,
+      "local": 18.137,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.0518,
+      "pan": -0.5642783610898472,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 78.4495,
+      "local": 18.4495,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.0426,
+      "pan": 0.6215462403781157,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 78.762,
+      "local": 18.762,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.05058,
+      "pan": 0.07837853626772495,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 79.0745,
+      "local": 19.0745,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.05105,
+      "pan": -0.15787740666571787,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 79.387,
+      "local": 19.387,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.04694,
+      "pan": -0.03170178940466284,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 79.6995,
+      "local": 19.6995,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.04669,
+      "pan": -0.4024560758998275,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 79.387,
+      "local": 19.387,
+      "kind": "tom",
+      "note": 50,
+      "amp": 0.26,
+      "pan": -0.3,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 79.54325,
+      "local": 19.54325,
+      "kind": "tom",
+      "note": 47,
+      "amp": 0.26,
+      "pan": 0.0,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 79.6995,
+      "local": 19.6995,
+      "kind": "tom",
+      "note": 44,
+      "amp": 0.26,
+      "pan": 0.3,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 77.512,
+      "local": 17.512,
+      "kind": "bass",
+      "note": 31,
+      "amp": 0.23,
+      "pan": 0,
+      "duration": 0.875
+    },
+    {
+      "section": "Peak",
+      "time": 78.4495,
+      "local": 18.4495,
+      "kind": "bass",
+      "note": 31,
+      "amp": 0.23,
+      "pan": 0,
+      "duration": 0.40625
+    },
+    {
+      "section": "Peak",
+      "time": 79.0745,
+      "local": 19.0745,
+      "kind": "bass",
+      "note": 31,
+      "amp": 0.23,
+      "pan": 0,
+      "duration": 0.40625
+    },
+    {
+      "section": "Peak",
+      "time": 79.6995,
+      "local": 19.6995,
+      "kind": "bass",
+      "note": 31,
+      "amp": 0.23,
+      "pan": 0,
+      "duration": 0.40625
+    },
+    {
+      "section": "Peak",
+      "time": 77.512,
+      "local": 17.512,
+      "kind": "guitar",
+      "note": 67,
+      "amp": 0.17012,
+      "pan": -0.35,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 78.137,
+      "local": 18.137,
+      "kind": "guitar",
+      "note": 62,
+      "amp": 0.1881,
+      "pan": 0.32,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 78.60575,
+      "local": 18.60575,
+      "kind": "guitar",
+      "note": 70,
+      "amp": 0.17914,
+      "pan": -0.35,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 79.0745,
+      "local": 19.0745,
+      "kind": "guitar",
+      "note": 65,
+      "amp": 0.17001,
+      "pan": 0.32,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 79.54325,
+      "local": 19.54325,
+      "kind": "guitar",
+      "note": 62,
+      "amp": 0.16581,
+      "pan": -0.35,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 80.012,
+      "local": 20.012,
+      "kind": "tom",
+      "note": 42,
+      "amp": 0.65,
+      "pan": -0.12,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 80.9495,
+      "local": 20.9495,
+      "kind": "tom",
+      "note": 46,
+      "amp": 0.65,
+      "pan": 0.15,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 81.262,
+      "local": 21.262,
+      "kind": "tom",
+      "note": 46,
+      "amp": 0.65,
+      "pan": 0.15,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 82.1995,
+      "local": 22.1995,
+      "kind": "tom",
+      "note": 46,
+      "amp": 0.65,
+      "pan": 0.15,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 80.637,
+      "local": 20.637,
+      "kind": "rim",
+      "note": 58,
+      "amp": 0.16,
+      "pan": 0.25,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 81.887,
+      "local": 21.887,
+      "kind": "rim",
+      "note": 58,
+      "amp": 0.16,
+      "pan": 0.25,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 80.3245,
+      "local": 20.3245,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.0422,
+      "pan": 0.4460319599203534,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 80.637,
+      "local": 20.637,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.04462,
+      "pan": 0.5697542048248135,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 80.9495,
+      "local": 20.9495,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.04199,
+      "pan": -0.004921962154019521,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 81.262,
+      "local": 21.262,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.04827,
+      "pan": 0.21652652505977232,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 81.5745,
+      "local": 21.5745,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.04291,
+      "pan": -0.6383790848930505,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 81.887,
+      "local": 21.887,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.04672,
+      "pan": -0.1644483372699812,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 82.1995,
+      "local": 22.1995,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.04237,
+      "pan": -0.3569219995381298,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 80.012,
+      "local": 20.012,
+      "kind": "bass",
+      "note": 26,
+      "amp": 0.23,
+      "pan": 0,
+      "duration": 0.875
+    },
+    {
+      "section": "Peak",
+      "time": 80.9495,
+      "local": 20.9495,
+      "kind": "bass",
+      "note": 26,
+      "amp": 0.23,
+      "pan": 0,
+      "duration": 0.40625
+    },
+    {
+      "section": "Peak",
+      "time": 81.5745,
+      "local": 21.5745,
+      "kind": "bass",
+      "note": 26,
+      "amp": 0.23,
+      "pan": 0,
+      "duration": 0.40625
+    },
+    {
+      "section": "Peak",
+      "time": 82.1995,
+      "local": 22.1995,
+      "kind": "bass",
+      "note": 26,
+      "amp": 0.23,
+      "pan": 0,
+      "duration": 0.40625
+    },
+    {
+      "section": "Peak",
+      "time": 80.012,
+      "local": 20.012,
+      "kind": "guitar",
+      "note": 62,
+      "amp": 0.16728,
+      "pan": -0.35,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 80.637,
+      "local": 20.637,
+      "kind": "guitar",
+      "note": 57,
+      "amp": 0.18235,
+      "pan": 0.32,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 81.10575,
+      "local": 21.10575,
+      "kind": "guitar",
+      "note": 65,
+      "amp": 0.19152,
+      "pan": -0.35,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 81.5745,
+      "local": 21.5745,
+      "kind": "guitar",
+      "note": 60,
+      "amp": 0.16816,
+      "pan": 0.32,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 82.04325,
+      "local": 22.04325,
+      "kind": "guitar",
+      "note": 57,
+      "amp": 0.18857,
+      "pan": -0.35,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 82.512,
+      "local": 22.512,
+      "kind": "tom",
+      "note": 42,
+      "amp": 0.65,
+      "pan": -0.12,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 83.4495,
+      "local": 23.4495,
+      "kind": "tom",
+      "note": 46,
+      "amp": 0.65,
+      "pan": 0.15,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 83.762,
+      "local": 23.762,
+      "kind": "tom",
+      "note": 46,
+      "amp": 0.65,
+      "pan": 0.15,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 84.6995,
+      "local": 24.6995,
+      "kind": "tom",
+      "note": 46,
+      "amp": 0.65,
+      "pan": 0.15,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 83.137,
+      "local": 23.137,
+      "kind": "rim",
+      "note": 58,
+      "amp": 0.16,
+      "pan": 0.25,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 84.387,
+      "local": 24.387,
+      "kind": "rim",
+      "note": 58,
+      "amp": 0.16,
+      "pan": 0.25,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 82.8245,
+      "local": 22.8245,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.04425,
+      "pan": 0.23265123951765065,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 83.137,
+      "local": 23.137,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.04489,
+      "pan": -0.3756234537958526,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 83.4495,
+      "local": 23.4495,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.04272,
+      "pan": 0.40472543338594547,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 83.762,
+      "local": 23.762,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.04679,
+      "pan": -0.03798489057677701,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 84.0745,
+      "local": 24.0745,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.04682,
+      "pan": -0.2309051413312176,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 84.387,
+      "local": 24.387,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.04842,
+      "pan": 0.3558587556889653,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 84.6995,
+      "local": 24.6995,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.04629,
+      "pan": -0.2580362238632844,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 82.512,
+      "local": 22.512,
+      "kind": "bass",
+      "note": 26,
+      "amp": 0.23,
+      "pan": 0,
+      "duration": 0.875
+    },
+    {
+      "section": "Peak",
+      "time": 83.4495,
+      "local": 23.4495,
+      "kind": "bass",
+      "note": 26,
+      "amp": 0.23,
+      "pan": 0,
+      "duration": 0.40625
+    },
+    {
+      "section": "Peak",
+      "time": 84.0745,
+      "local": 24.0745,
+      "kind": "bass",
+      "note": 26,
+      "amp": 0.23,
+      "pan": 0,
+      "duration": 0.40625
+    },
+    {
+      "section": "Peak",
+      "time": 84.6995,
+      "local": 24.6995,
+      "kind": "bass",
+      "note": 26,
+      "amp": 0.23,
+      "pan": 0,
+      "duration": 0.40625
+    },
+    {
+      "section": "Peak",
+      "time": 82.512,
+      "local": 22.512,
+      "kind": "guitar",
+      "note": 62,
+      "amp": 0.16813,
+      "pan": -0.35,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 83.137,
+      "local": 23.137,
+      "kind": "guitar",
+      "note": 57,
+      "amp": 0.16919,
+      "pan": 0.32,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 83.60575,
+      "local": 23.60575,
+      "kind": "guitar",
+      "note": 65,
+      "amp": 0.19125,
+      "pan": -0.35,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 84.0745,
+      "local": 24.0745,
+      "kind": "guitar",
+      "note": 60,
+      "amp": 0.18073,
+      "pan": 0.32,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 84.54325,
+      "local": 24.54325,
+      "kind": "guitar",
+      "note": 57,
+      "amp": 0.17973,
+      "pan": -0.35,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 85.012,
+      "local": 25.012,
+      "kind": "tom",
+      "note": 42,
+      "amp": 0.65,
+      "pan": -0.12,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 85.9495,
+      "local": 25.9495,
+      "kind": "tom",
+      "note": 46,
+      "amp": 0.65,
+      "pan": 0.15,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 86.262,
+      "local": 26.262,
+      "kind": "tom",
+      "note": 46,
+      "amp": 0.65,
+      "pan": 0.15,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 87.1995,
+      "local": 27.1995,
+      "kind": "tom",
+      "note": 46,
+      "amp": 0.65,
+      "pan": 0.15,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 85.637,
+      "local": 25.637,
+      "kind": "rim",
+      "note": 58,
+      "amp": 0.16,
+      "pan": 0.25,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 86.887,
+      "local": 26.887,
+      "kind": "rim",
+      "note": 58,
+      "amp": 0.16,
+      "pan": 0.25,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 85.3245,
+      "local": 25.3245,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.05072,
+      "pan": 0.17423175487098075,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 85.637,
+      "local": 25.637,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.04615,
+      "pan": -0.2602598564644645,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 85.9495,
+      "local": 25.9495,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.05096,
+      "pan": 0.47894098730793366,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 86.262,
+      "local": 26.262,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.04549,
+      "pan": 0.6012281340543516,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 86.5745,
+      "local": 26.5745,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.04297,
+      "pan": 0.02703843337205336,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 86.887,
+      "local": 26.887,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.04222,
+      "pan": 0.6033101577361953,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 87.1995,
+      "local": 27.1995,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.05019,
+      "pan": 0.22001145152825152,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 85.012,
+      "local": 25.012,
+      "kind": "bass",
+      "note": 29,
+      "amp": 0.23,
+      "pan": 0,
+      "duration": 0.875
+    },
+    {
+      "section": "Peak",
+      "time": 85.9495,
+      "local": 25.9495,
+      "kind": "bass",
+      "note": 29,
+      "amp": 0.23,
+      "pan": 0,
+      "duration": 0.40625
+    },
+    {
+      "section": "Peak",
+      "time": 86.5745,
+      "local": 26.5745,
+      "kind": "bass",
+      "note": 29,
+      "amp": 0.23,
+      "pan": 0,
+      "duration": 0.40625
+    },
+    {
+      "section": "Peak",
+      "time": 87.1995,
+      "local": 27.1995,
+      "kind": "bass",
+      "note": 29,
+      "amp": 0.23,
+      "pan": 0,
+      "duration": 0.40625
+    },
+    {
+      "section": "Peak",
+      "time": 85.012,
+      "local": 25.012,
+      "kind": "guitar",
+      "note": 65,
+      "amp": 0.19105,
+      "pan": -0.35,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 85.637,
+      "local": 25.637,
+      "kind": "guitar",
+      "note": 60,
+      "amp": 0.17875,
+      "pan": 0.32,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 86.10575,
+      "local": 26.10575,
+      "kind": "guitar",
+      "note": 68,
+      "amp": 0.17806,
+      "pan": -0.35,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 86.5745,
+      "local": 26.5745,
+      "kind": "guitar",
+      "note": 63,
+      "amp": 0.16984,
+      "pan": 0.32,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 87.04325,
+      "local": 27.04325,
+      "kind": "guitar",
+      "note": 60,
+      "amp": 0.19108,
+      "pan": -0.35,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 87.512,
+      "local": 27.512,
+      "kind": "tom",
+      "note": 42,
+      "amp": 0.65,
+      "pan": -0.12,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 88.4495,
+      "local": 28.4495,
+      "kind": "tom",
+      "note": 46,
+      "amp": 0.65,
+      "pan": 0.15,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 88.762,
+      "local": 28.762,
+      "kind": "tom",
+      "note": 46,
+      "amp": 0.65,
+      "pan": 0.15,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 89.6995,
+      "local": 29.6995,
+      "kind": "tom",
+      "note": 46,
+      "amp": 0.65,
+      "pan": 0.15,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 88.137,
+      "local": 28.137,
+      "kind": "rim",
+      "note": 58,
+      "amp": 0.16,
+      "pan": 0.25,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 89.387,
+      "local": 29.387,
+      "kind": "rim",
+      "note": 58,
+      "amp": 0.16,
+      "pan": 0.25,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 87.8245,
+      "local": 27.8245,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.0465,
+      "pan": -0.20579204250804273,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 88.137,
+      "local": 28.137,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.04778,
+      "pan": -0.35433439728090493,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 88.4495,
+      "local": 28.4495,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.04947,
+      "pan": 0.1401057853871216,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 88.762,
+      "local": 28.762,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.05111,
+      "pan": 0.1343494931799717,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 89.0745,
+      "local": 29.0745,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.04472,
+      "pan": 0.13641840201465527,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 89.387,
+      "local": 29.387,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.04811,
+      "pan": 0.21360679583291742,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 89.6995,
+      "local": 29.6995,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.05039,
+      "pan": 0.6217432219959355,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 89.387,
+      "local": 29.387,
+      "kind": "tom",
+      "note": 50,
+      "amp": 0.26,
+      "pan": -0.3,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 89.54325,
+      "local": 29.54325,
+      "kind": "tom",
+      "note": 47,
+      "amp": 0.26,
+      "pan": 0.0,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 89.6995,
+      "local": 29.6995,
+      "kind": "tom",
+      "note": 44,
+      "amp": 0.26,
+      "pan": 0.3,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 87.512,
+      "local": 27.512,
+      "kind": "bass",
+      "note": 29,
+      "amp": 0.23,
+      "pan": 0,
+      "duration": 0.875
+    },
+    {
+      "section": "Peak",
+      "time": 88.4495,
+      "local": 28.4495,
+      "kind": "bass",
+      "note": 29,
+      "amp": 0.23,
+      "pan": 0,
+      "duration": 0.40625
+    },
+    {
+      "section": "Peak",
+      "time": 89.0745,
+      "local": 29.0745,
+      "kind": "bass",
+      "note": 29,
+      "amp": 0.23,
+      "pan": 0,
+      "duration": 0.40625
+    },
+    {
+      "section": "Peak",
+      "time": 89.6995,
+      "local": 29.6995,
+      "kind": "bass",
+      "note": 29,
+      "amp": 0.23,
+      "pan": 0,
+      "duration": 0.40625
+    },
+    {
+      "section": "Peak",
+      "time": 87.512,
+      "local": 27.512,
+      "kind": "guitar",
+      "note": 65,
+      "amp": 0.17012,
+      "pan": -0.35,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 88.137,
+      "local": 28.137,
+      "kind": "guitar",
+      "note": 60,
+      "amp": 0.16824,
+      "pan": 0.32,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 88.60575,
+      "local": 28.60575,
+      "kind": "guitar",
+      "note": 68,
+      "amp": 0.1898,
+      "pan": -0.35,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 89.0745,
+      "local": 29.0745,
+      "kind": "guitar",
+      "note": 63,
+      "amp": 0.17191,
+      "pan": 0.32,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 89.54325,
+      "local": 29.54325,
+      "kind": "guitar",
+      "note": 60,
+      "amp": 0.18527,
+      "pan": -0.35,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 90.012,
+      "local": 30.012,
+      "kind": "tom",
+      "note": 42,
+      "amp": 0.65,
+      "pan": -0.12,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 90.9495,
+      "local": 30.9495,
+      "kind": "tom",
+      "note": 46,
+      "amp": 0.65,
+      "pan": 0.15,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 91.262,
+      "local": 31.262,
+      "kind": "tom",
+      "note": 46,
+      "amp": 0.65,
+      "pan": 0.15,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 92.1995,
+      "local": 32.1995,
+      "kind": "tom",
+      "note": 46,
+      "amp": 0.65,
+      "pan": 0.15,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 90.637,
+      "local": 30.637,
+      "kind": "rim",
+      "note": 58,
+      "amp": 0.16,
+      "pan": 0.25,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 91.887,
+      "local": 31.887,
+      "kind": "rim",
+      "note": 58,
+      "amp": 0.16,
+      "pan": 0.25,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 90.3245,
+      "local": 30.3245,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.05097,
+      "pan": -0.4062805403534575,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 90.637,
+      "local": 30.637,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.04368,
+      "pan": 0.4363011381226193,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 90.9495,
+      "local": 30.9495,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.04438,
+      "pan": 0.4686513569694458,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 91.262,
+      "local": 31.262,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.04631,
+      "pan": 0.048299418684164985,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 91.5745,
+      "local": 31.5745,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.04637,
+      "pan": -0.4600581575413542,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 91.887,
+      "local": 31.887,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.04487,
+      "pan": 0.3696007279648218,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 92.1995,
+      "local": 32.1995,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.04312,
+      "pan": -0.37610761036791907,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 90.012,
+      "local": 30.012,
+      "kind": "bass",
+      "note": 24,
+      "amp": 0.23,
+      "pan": 0,
+      "duration": 0.875
+    },
+    {
+      "section": "Peak",
+      "time": 90.9495,
+      "local": 30.9495,
+      "kind": "bass",
+      "note": 24,
+      "amp": 0.23,
+      "pan": 0,
+      "duration": 0.40625
+    },
+    {
+      "section": "Peak",
+      "time": 91.5745,
+      "local": 31.5745,
+      "kind": "bass",
+      "note": 24,
+      "amp": 0.23,
+      "pan": 0,
+      "duration": 0.40625
+    },
+    {
+      "section": "Peak",
+      "time": 92.1995,
+      "local": 32.1995,
+      "kind": "bass",
+      "note": 24,
+      "amp": 0.23,
+      "pan": 0,
+      "duration": 0.40625
+    },
+    {
+      "section": "Peak",
+      "time": 90.012,
+      "local": 30.012,
+      "kind": "guitar",
+      "note": 60,
+      "amp": 0.17825,
+      "pan": -0.35,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 90.637,
+      "local": 30.637,
+      "kind": "guitar",
+      "note": 55,
+      "amp": 0.18727,
+      "pan": 0.32,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 91.10575,
+      "local": 31.10575,
+      "kind": "guitar",
+      "note": 63,
+      "amp": 0.18733,
+      "pan": -0.35,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 91.5745,
+      "local": 31.5745,
+      "kind": "guitar",
+      "note": 58,
+      "amp": 0.17848,
+      "pan": 0.32,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 92.04325,
+      "local": 32.04325,
+      "kind": "guitar",
+      "note": 55,
+      "amp": 0.17792,
+      "pan": -0.35,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 92.512,
+      "local": 32.512,
+      "kind": "tom",
+      "note": 42,
+      "amp": 0.65,
+      "pan": -0.12,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 93.4495,
+      "local": 33.4495,
+      "kind": "tom",
+      "note": 46,
+      "amp": 0.65,
+      "pan": 0.15,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 93.762,
+      "local": 33.762,
+      "kind": "tom",
+      "note": 46,
+      "amp": 0.65,
+      "pan": 0.15,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 94.6995,
+      "local": 34.6995,
+      "kind": "tom",
+      "note": 46,
+      "amp": 0.65,
+      "pan": 0.15,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 93.137,
+      "local": 33.137,
+      "kind": "rim",
+      "note": 58,
+      "amp": 0.16,
+      "pan": 0.25,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 94.387,
+      "local": 34.387,
+      "kind": "rim",
+      "note": 58,
+      "amp": 0.16,
+      "pan": 0.25,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 92.8245,
+      "local": 32.8245,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.04165,
+      "pan": 0.02167772403063084,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 93.137,
+      "local": 33.137,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.05093,
+      "pan": -0.44805107734151783,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 93.4495,
+      "local": 33.4495,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.04193,
+      "pan": 0.4002434960961604,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 93.762,
+      "local": 33.762,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.04738,
+      "pan": 0.6256765200590225,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 94.0745,
+      "local": 34.0745,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.04956,
+      "pan": -0.12113717479527863,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 94.387,
+      "local": 34.387,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.04724,
+      "pan": 0.03905463746331761,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 94.6995,
+      "local": 34.6995,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.04683,
+      "pan": -0.27951749143099863,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 92.512,
+      "local": 32.512,
+      "kind": "bass",
+      "note": 24,
+      "amp": 0.23,
+      "pan": 0,
+      "duration": 0.875
+    },
+    {
+      "section": "Peak",
+      "time": 93.4495,
+      "local": 33.4495,
+      "kind": "bass",
+      "note": 24,
+      "amp": 0.23,
+      "pan": 0,
+      "duration": 0.40625
+    },
+    {
+      "section": "Peak",
+      "time": 94.0745,
+      "local": 34.0745,
+      "kind": "bass",
+      "note": 24,
+      "amp": 0.23,
+      "pan": 0,
+      "duration": 0.40625
+    },
+    {
+      "section": "Peak",
+      "time": 94.6995,
+      "local": 34.6995,
+      "kind": "bass",
+      "note": 24,
+      "amp": 0.23,
+      "pan": 0,
+      "duration": 0.40625
+    },
+    {
+      "section": "Peak",
+      "time": 92.512,
+      "local": 32.512,
+      "kind": "guitar",
+      "note": 60,
+      "amp": 0.18559,
+      "pan": -0.35,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 93.137,
+      "local": 33.137,
+      "kind": "guitar",
+      "note": 55,
+      "amp": 0.16843,
+      "pan": 0.32,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 93.60575,
+      "local": 33.60575,
+      "kind": "guitar",
+      "note": 63,
+      "amp": 0.18818,
+      "pan": -0.35,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 94.0745,
+      "local": 34.0745,
+      "kind": "guitar",
+      "note": 58,
+      "amp": 0.18606,
+      "pan": 0.32,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 94.54325,
+      "local": 34.54325,
+      "kind": "guitar",
+      "note": 55,
+      "amp": 0.17344,
+      "pan": -0.35,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 95.012,
+      "local": 35.012,
+      "kind": "tom",
+      "note": 42,
+      "amp": 0.65,
+      "pan": -0.12,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 95.9495,
+      "local": 35.9495,
+      "kind": "tom",
+      "note": 46,
+      "amp": 0.65,
+      "pan": 0.15,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 96.262,
+      "local": 36.262,
+      "kind": "tom",
+      "note": 46,
+      "amp": 0.65,
+      "pan": 0.15,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 97.1995,
+      "local": 37.1995,
+      "kind": "tom",
+      "note": 46,
+      "amp": 0.65,
+      "pan": 0.15,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 95.637,
+      "local": 35.637,
+      "kind": "rim",
+      "note": 58,
+      "amp": 0.16,
+      "pan": 0.25,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 96.887,
+      "local": 36.887,
+      "kind": "rim",
+      "note": 58,
+      "amp": 0.16,
+      "pan": 0.25,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 95.3245,
+      "local": 35.3245,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.04412,
+      "pan": -0.4561573424195706,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 95.637,
+      "local": 35.637,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.04969,
+      "pan": -0.214620150142033,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 95.9495,
+      "local": 35.9495,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.04519,
+      "pan": 0.22364961241543346,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 96.262,
+      "local": 36.262,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.05031,
+      "pan": 0.008432719284987789,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 96.5745,
+      "local": 36.5745,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.04519,
+      "pan": 0.14897998295547366,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 96.887,
+      "local": 36.887,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.04497,
+      "pan": -0.45591396399434636,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 97.1995,
+      "local": 37.1995,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.0436,
+      "pan": 0.5696715409071528,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 95.012,
+      "local": 35.012,
+      "kind": "bass",
+      "note": 31,
+      "amp": 0.23,
+      "pan": 0,
+      "duration": 0.875
+    },
+    {
+      "section": "Peak",
+      "time": 95.9495,
+      "local": 35.9495,
+      "kind": "bass",
+      "note": 31,
+      "amp": 0.23,
+      "pan": 0,
+      "duration": 0.40625
+    },
+    {
+      "section": "Peak",
+      "time": 96.5745,
+      "local": 36.5745,
+      "kind": "bass",
+      "note": 31,
+      "amp": 0.23,
+      "pan": 0,
+      "duration": 0.40625
+    },
+    {
+      "section": "Peak",
+      "time": 97.1995,
+      "local": 37.1995,
+      "kind": "bass",
+      "note": 31,
+      "amp": 0.23,
+      "pan": 0,
+      "duration": 0.40625
+    },
+    {
+      "section": "Peak",
+      "time": 95.012,
+      "local": 35.012,
+      "kind": "guitar",
+      "note": 67,
+      "amp": 0.16948,
+      "pan": -0.35,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 95.637,
+      "local": 35.637,
+      "kind": "guitar",
+      "note": 62,
+      "amp": 0.18005,
+      "pan": 0.32,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 96.10575,
+      "local": 36.10575,
+      "kind": "guitar",
+      "note": 70,
+      "amp": 0.16647,
+      "pan": -0.35,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 96.5745,
+      "local": 36.5745,
+      "kind": "guitar",
+      "note": 65,
+      "amp": 0.19181,
+      "pan": 0.32,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 97.04325,
+      "local": 37.04325,
+      "kind": "guitar",
+      "note": 62,
+      "amp": 0.16813,
+      "pan": -0.35,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 97.512,
+      "local": 37.512,
+      "kind": "tom",
+      "note": 42,
+      "amp": 0.65,
+      "pan": -0.12,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 98.4495,
+      "local": 38.4495,
+      "kind": "tom",
+      "note": 46,
+      "amp": 0.65,
+      "pan": 0.15,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 98.762,
+      "local": 38.762,
+      "kind": "tom",
+      "note": 46,
+      "amp": 0.65,
+      "pan": 0.15,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 99.6995,
+      "local": 39.6995,
+      "kind": "tom",
+      "note": 46,
+      "amp": 0.65,
+      "pan": 0.15,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 98.137,
+      "local": 38.137,
+      "kind": "rim",
+      "note": 58,
+      "amp": 0.16,
+      "pan": 0.25,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 99.387,
+      "local": 39.387,
+      "kind": "rim",
+      "note": 58,
+      "amp": 0.16,
+      "pan": 0.25,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 97.8245,
+      "local": 37.8245,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.04519,
+      "pan": 0.6231411609909833,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 98.137,
+      "local": 38.137,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.04683,
+      "pan": -0.29294697796907565,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 98.4495,
+      "local": 38.4495,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.04354,
+      "pan": 0.60004826073847,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 98.762,
+      "local": 38.762,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.04708,
+      "pan": -0.5899720615237569,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 99.0745,
+      "local": 39.0745,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.04659,
+      "pan": -0.6471924384536278,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 99.387,
+      "local": 39.387,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.04878,
+      "pan": -0.18268089928736148,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 99.6995,
+      "local": 39.6995,
+      "kind": "metal",
+      "note": 80,
+      "amp": 0.04271,
+      "pan": 0.6053116180169592,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 99.387,
+      "local": 39.387,
+      "kind": "tom",
+      "note": 50,
+      "amp": 0.26,
+      "pan": -0.3,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 99.54325,
+      "local": 39.54325,
+      "kind": "tom",
+      "note": 47,
+      "amp": 0.26,
+      "pan": 0.0,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 99.6995,
+      "local": 39.6995,
+      "kind": "tom",
+      "note": 44,
+      "amp": 0.26,
+      "pan": 0.3,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 97.512,
+      "local": 37.512,
+      "kind": "bass",
+      "note": 31,
+      "amp": 0.23,
+      "pan": 0,
+      "duration": 0.875
+    },
+    {
+      "section": "Peak",
+      "time": 98.4495,
+      "local": 38.4495,
+      "kind": "bass",
+      "note": 31,
+      "amp": 0.23,
+      "pan": 0,
+      "duration": 0.40625
+    },
+    {
+      "section": "Peak",
+      "time": 99.0745,
+      "local": 39.0745,
+      "kind": "bass",
+      "note": 31,
+      "amp": 0.23,
+      "pan": 0,
+      "duration": 0.40625
+    },
+    {
+      "section": "Peak",
+      "time": 99.6995,
+      "local": 39.6995,
+      "kind": "bass",
+      "note": 31,
+      "amp": 0.23,
+      "pan": 0,
+      "duration": 0.40625
+    },
+    {
+      "section": "Peak",
+      "time": 97.512,
+      "local": 37.512,
+      "kind": "guitar",
+      "note": 67,
+      "amp": 0.17092,
+      "pan": -0.35,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 98.137,
+      "local": 38.137,
+      "kind": "guitar",
+      "note": 62,
+      "amp": 0.1918,
+      "pan": 0.32,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 98.60575,
+      "local": 38.60575,
+      "kind": "guitar",
+      "note": 70,
+      "amp": 0.19291,
+      "pan": -0.35,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 99.0745,
+      "local": 39.0745,
+      "kind": "guitar",
+      "note": 65,
+      "amp": 0.17845,
+      "pan": 0.32,
+      "duration": null
+    },
+    {
+      "section": "Peak",
+      "time": 99.54325,
+      "local": 39.54325,
+      "kind": "guitar",
+      "note": 62,
+      "amp": 0.16688,
+      "pan": -0.35,
+      "duration": null
+    },
+    {
+      "section": "Break",
+      "time": 100.012,
+      "local": 0.012,
+      "kind": "tom",
+      "note": 38,
+      "amp": 0.24,
+      "pan": -0.1,
+      "duration": null
+    },
+    {
+      "section": "Break",
+      "time": 100.012,
+      "local": 0.012,
+      "kind": "drone",
+      "note": 26,
+      "amp": 0.13,
+      "pan": 0,
+      "duration": 4.8
+    },
+    {
+      "section": "Break",
+      "time": 100.637,
+      "local": 0.637,
+      "kind": "guitar",
+      "note": 62,
+      "amp": 0.07175,
+      "pan": -0.35,
+      "duration": null
+    },
+    {
+      "section": "Break",
+      "time": 101.73075,
+      "local": 1.73075,
+      "kind": "guitar",
+      "note": 69,
+      "amp": 0.06662,
+      "pan": 0.32,
+      "duration": null
+    },
+    {
+      "section": "Break",
+      "time": 103.762,
+      "local": 3.762,
+      "kind": "guitar",
+      "note": 67,
+      "amp": 0.06785,
+      "pan": -0.35,
+      "duration": null
+    },
+    {
+      "section": "Break",
+      "time": 105.012,
+      "local": 5.012,
+      "kind": "drone",
+      "note": 26,
+      "amp": 0.13,
+      "pan": 0,
+      "duration": 4.8
+    },
+    {
+      "section": "Break",
+      "time": 105.637,
+      "local": 5.637,
+      "kind": "guitar",
+      "note": 62,
+      "amp": 0.06719,
+      "pan": -0.35,
+      "duration": null
+    },
+    {
+      "section": "Break",
+      "time": 106.73075,
+      "local": 6.73075,
+      "kind": "guitar",
+      "note": 69,
+      "amp": 0.07132,
+      "pan": 0.32,
+      "duration": null
+    },
+    {
+      "section": "Break",
+      "time": 108.762,
+      "local": 8.762,
+      "kind": "guitar",
+      "note": 67,
+      "amp": 0.06683,
+      "pan": -0.35,
+      "duration": null
+    },
+    {
+      "section": "Break",
+      "time": 110.012,
+      "local": 10.012,
+      "kind": "tom",
+      "note": 38,
+      "amp": 0.24,
+      "pan": -0.1,
+      "duration": null
+    },
+    {
+      "section": "Break",
+      "time": 110.012,
+      "local": 10.012,
+      "kind": "drone",
+      "note": 22,
+      "amp": 0.13,
+      "pan": 0,
+      "duration": 4.8
+    },
+    {
+      "section": "Break",
+      "time": 110.637,
+      "local": 10.637,
+      "kind": "guitar",
+      "note": 58,
+      "amp": 0.07012,
+      "pan": -0.35,
+      "duration": null
+    },
+    {
+      "section": "Break",
+      "time": 111.73075,
+      "local": 11.73075,
+      "kind": "guitar",
+      "note": 65,
+      "amp": 0.07403,
+      "pan": 0.32,
+      "duration": null
+    },
+    {
+      "section": "Break",
+      "time": 113.762,
+      "local": 13.762,
+      "kind": "guitar",
+      "note": 63,
+      "amp": 0.07325,
+      "pan": -0.35,
+      "duration": null
+    },
+    {
+      "section": "Break",
+      "time": 115.012,
+      "local": 15.012,
+      "kind": "drone",
+      "note": 24,
+      "amp": 0.13,
+      "pan": 0,
+      "duration": 4.8
+    },
+    {
+      "section": "Break",
+      "time": 115.637,
+      "local": 15.637,
+      "kind": "guitar",
+      "note": 60,
+      "amp": 0.07413,
+      "pan": -0.35,
+      "duration": null
+    },
+    {
+      "section": "Break",
+      "time": 116.73075,
+      "local": 16.73075,
+      "kind": "guitar",
+      "note": 67,
+      "amp": 0.07095,
+      "pan": 0.32,
+      "duration": null
+    },
+    {
+      "section": "Break",
+      "time": 118.762,
+      "local": 18.762,
+      "kind": "guitar",
+      "note": 65,
+      "amp": 0.07598,
+      "pan": -0.35,
+      "duration": null
+    },
+    {
+      "section": "Outro",
+      "time": 120.012,
+      "local": 0.012,
+      "kind": "tom",
+      "note": 42,
+      "amp": 0.52,
+      "pan": -0.12,
+      "duration": null
+    },
+    {
+      "section": "Outro",
+      "time": 121.262,
+      "local": 1.262,
+      "kind": "tom",
+      "note": 46,
+      "amp": 0.52,
+      "pan": 0.15,
+      "duration": null
+    },
+    {
+      "section": "Outro",
+      "time": 121.887,
+      "local": 1.887,
+      "kind": "rim",
+      "note": 58,
+      "amp": 0.128,
+      "pan": 0.25,
+      "duration": null
+    },
+    {
+      "section": "Outro",
+      "time": 120.012,
+      "local": 0.012,
+      "kind": "bass",
+      "note": 26,
+      "amp": 0.184,
+      "pan": 0,
+      "duration": 0.875
+    },
+    {
+      "section": "Outro",
+      "time": 121.262,
+      "local": 1.262,
+      "kind": "bass",
+      "note": 26,
+      "amp": 0.184,
+      "pan": 0,
+      "duration": 0.40625
+    },
+    {
+      "section": "Outro",
+      "time": 122.1995,
+      "local": 2.1995,
+      "kind": "bass",
+      "note": 26,
+      "amp": 0.184,
+      "pan": 0,
+      "duration": 0.40625
+    },
+    {
+      "section": "Outro",
+      "time": 120.012,
+      "local": 0.012,
+      "kind": "guitar",
+      "note": 50,
+      "amp": 0.14282,
+      "pan": -0.35,
+      "duration": null
+    },
+    {
+      "section": "Outro",
+      "time": 121.5745,
+      "local": 1.5745,
+      "kind": "guitar",
+      "note": 57,
+      "amp": 0.1465,
+      "pan": 0.32,
+      "duration": null
+    },
+    {
+      "section": "Outro",
+      "time": 122.512,
+      "local": 2.512,
+      "kind": "tom",
+      "note": 42,
+      "amp": 0.4875,
+      "pan": -0.12,
+      "duration": null
+    },
+    {
+      "section": "Outro",
+      "time": 123.762,
+      "local": 3.762,
+      "kind": "tom",
+      "note": 46,
+      "amp": 0.4875,
+      "pan": 0.15,
+      "duration": null
+    },
+    {
+      "section": "Outro",
+      "time": 124.387,
+      "local": 4.387,
+      "kind": "rim",
+      "note": 58,
+      "amp": 0.12,
+      "pan": 0.25,
+      "duration": null
+    },
+    {
+      "section": "Outro",
+      "time": 122.512,
+      "local": 2.512,
+      "kind": "bass",
+      "note": 26,
+      "amp": 0.1725,
+      "pan": 0,
+      "duration": 0.875
+    },
+    {
+      "section": "Outro",
+      "time": 123.762,
+      "local": 3.762,
+      "kind": "bass",
+      "note": 26,
+      "amp": 0.1725,
+      "pan": 0,
+      "duration": 0.40625
+    },
+    {
+      "section": "Outro",
+      "time": 124.6995,
+      "local": 4.6995,
+      "kind": "bass",
+      "note": 26,
+      "amp": 0.1725,
+      "pan": 0,
+      "duration": 0.40625
+    },
+    {
+      "section": "Outro",
+      "time": 122.512,
+      "local": 2.512,
+      "kind": "guitar",
+      "note": 50,
+      "amp": 0.13749,
+      "pan": -0.35,
+      "duration": null
+    },
+    {
+      "section": "Outro",
+      "time": 124.0745,
+      "local": 4.0745,
+      "kind": "guitar",
+      "note": 57,
+      "amp": 0.13347,
+      "pan": 0.32,
+      "duration": null
+    },
+    {
+      "section": "Outro",
+      "time": 125.012,
+      "local": 5.012,
+      "kind": "tom",
+      "note": 42,
+      "amp": 0.455,
+      "pan": -0.12,
+      "duration": null
+    },
+    {
+      "section": "Outro",
+      "time": 126.262,
+      "local": 6.262,
+      "kind": "tom",
+      "note": 46,
+      "amp": 0.455,
+      "pan": 0.15,
+      "duration": null
+    },
+    {
+      "section": "Outro",
+      "time": 126.887,
+      "local": 6.887,
+      "kind": "rim",
+      "note": 58,
+      "amp": 0.112,
+      "pan": 0.25,
+      "duration": null
+    },
+    {
+      "section": "Outro",
+      "time": 125.012,
+      "local": 5.012,
+      "kind": "bass",
+      "note": 26,
+      "amp": 0.161,
+      "pan": 0,
+      "duration": 0.875
+    },
+    {
+      "section": "Outro",
+      "time": 126.262,
+      "local": 6.262,
+      "kind": "bass",
+      "note": 26,
+      "amp": 0.161,
+      "pan": 0,
+      "duration": 0.40625
+    },
+    {
+      "section": "Outro",
+      "time": 127.1995,
+      "local": 7.1995,
+      "kind": "bass",
+      "note": 26,
+      "amp": 0.161,
+      "pan": 0,
+      "duration": 0.40625
+    },
+    {
+      "section": "Outro",
+      "time": 125.012,
+      "local": 5.012,
+      "kind": "guitar",
+      "note": 50,
+      "amp": 0.12245,
+      "pan": -0.35,
+      "duration": null
+    },
+    {
+      "section": "Outro",
+      "time": 126.5745,
+      "local": 6.5745,
+      "kind": "guitar",
+      "note": 57,
+      "amp": 0.12195,
+      "pan": 0.32,
+      "duration": null
+    },
+    {
+      "section": "Outro",
+      "time": 127.512,
+      "local": 7.512,
+      "kind": "tom",
+      "note": 42,
+      "amp": 0.4225,
+      "pan": -0.12,
+      "duration": null
+    },
+    {
+      "section": "Outro",
+      "time": 128.762,
+      "local": 8.762,
+      "kind": "tom",
+      "note": 46,
+      "amp": 0.4225,
+      "pan": 0.15,
+      "duration": null
+    },
+    {
+      "section": "Outro",
+      "time": 129.387,
+      "local": 9.387,
+      "kind": "rim",
+      "note": 58,
+      "amp": 0.104,
+      "pan": 0.25,
+      "duration": null
+    },
+    {
+      "section": "Outro",
+      "time": 127.512,
+      "local": 7.512,
+      "kind": "bass",
+      "note": 26,
+      "amp": 0.1495,
+      "pan": 0,
+      "duration": 0.875
+    },
+    {
+      "section": "Outro",
+      "time": 128.762,
+      "local": 8.762,
+      "kind": "bass",
+      "note": 26,
+      "amp": 0.1495,
+      "pan": 0,
+      "duration": 0.40625
+    },
+    {
+      "section": "Outro",
+      "time": 129.6995,
+      "local": 9.6995,
+      "kind": "bass",
+      "note": 26,
+      "amp": 0.1495,
+      "pan": 0,
+      "duration": 0.40625
+    },
+    {
+      "section": "Outro",
+      "time": 127.512,
+      "local": 7.512,
+      "kind": "guitar",
+      "note": 50,
+      "amp": 0.10856,
+      "pan": -0.35,
+      "duration": null
+    },
+    {
+      "section": "Outro",
+      "time": 129.0745,
+      "local": 9.0745,
+      "kind": "guitar",
+      "note": 57,
+      "amp": 0.1212,
+      "pan": 0.32,
+      "duration": null
+    },
+    {
+      "section": "Outro",
+      "time": 130.012,
+      "local": 10.012,
+      "kind": "tom",
+      "note": 42,
+      "amp": 0.39,
+      "pan": -0.12,
+      "duration": null
+    },
+    {
+      "section": "Outro",
+      "time": 131.262,
+      "local": 11.262,
+      "kind": "tom",
+      "note": 46,
+      "amp": 0.39,
+      "pan": 0.15,
+      "duration": null
+    },
+    {
+      "section": "Outro",
+      "time": 131.887,
+      "local": 11.887,
+      "kind": "rim",
+      "note": 58,
+      "amp": 0.096,
+      "pan": 0.25,
+      "duration": null
+    },
+    {
+      "section": "Outro",
+      "time": 130.012,
+      "local": 10.012,
+      "kind": "bass",
+      "note": 22,
+      "amp": 0.138,
+      "pan": 0,
+      "duration": 0.875
+    },
+    {
+      "section": "Outro",
+      "time": 131.262,
+      "local": 11.262,
+      "kind": "bass",
+      "note": 22,
+      "amp": 0.138,
+      "pan": 0,
+      "duration": 0.40625
+    },
+    {
+      "section": "Outro",
+      "time": 132.1995,
+      "local": 12.1995,
+      "kind": "bass",
+      "note": 22,
+      "amp": 0.138,
+      "pan": 0,
+      "duration": 0.40625
+    },
+    {
+      "section": "Outro",
+      "time": 130.012,
+      "local": 10.012,
+      "kind": "guitar",
+      "note": 46,
+      "amp": 0.10597,
+      "pan": -0.35,
+      "duration": null
+    },
+    {
+      "section": "Outro",
+      "time": 131.5745,
+      "local": 11.5745,
+      "kind": "guitar",
+      "note": 53,
+      "amp": 0.10085,
+      "pan": 0.32,
+      "duration": null
+    },
+    {
+      "section": "Outro",
+      "time": 132.512,
+      "local": 12.512,
+      "kind": "tom",
+      "note": 42,
+      "amp": 0.3575,
+      "pan": -0.12,
+      "duration": null
+    },
+    {
+      "section": "Outro",
+      "time": 133.762,
+      "local": 13.762,
+      "kind": "tom",
+      "note": 46,
+      "amp": 0.3575,
+      "pan": 0.15,
+      "duration": null
+    },
+    {
+      "section": "Outro",
+      "time": 134.387,
+      "local": 14.387,
+      "kind": "rim",
+      "note": 58,
+      "amp": 0.088,
+      "pan": 0.25,
+      "duration": null
+    },
+    {
+      "section": "Outro",
+      "time": 132.512,
+      "local": 12.512,
+      "kind": "bass",
+      "note": 22,
+      "amp": 0.1265,
+      "pan": 0,
+      "duration": 0.875
+    },
+    {
+      "section": "Outro",
+      "time": 133.762,
+      "local": 13.762,
+      "kind": "bass",
+      "note": 22,
+      "amp": 0.1265,
+      "pan": 0,
+      "duration": 0.40625
+    },
+    {
+      "section": "Outro",
+      "time": 134.6995,
+      "local": 14.6995,
+      "kind": "bass",
+      "note": 22,
+      "amp": 0.1265,
+      "pan": 0,
+      "duration": 0.40625
+    },
+    {
+      "section": "Outro",
+      "time": 132.512,
+      "local": 12.512,
+      "kind": "guitar",
+      "note": 46,
+      "amp": 0.10368,
+      "pan": -0.35,
+      "duration": null
+    },
+    {
+      "section": "Outro",
+      "time": 134.0745,
+      "local": 14.0745,
+      "kind": "guitar",
+      "note": 53,
+      "amp": 0.10376,
+      "pan": 0.32,
+      "duration": null
+    },
+    {
+      "section": "Outro",
+      "time": 135.012,
+      "local": 15.012,
+      "kind": "tom",
+      "note": 42,
+      "amp": 0.325,
+      "pan": -0.12,
+      "duration": null
+    },
+    {
+      "section": "Outro",
+      "time": 136.262,
+      "local": 16.262,
+      "kind": "tom",
+      "note": 46,
+      "amp": 0.325,
+      "pan": 0.15,
+      "duration": null
+    },
+    {
+      "section": "Outro",
+      "time": 136.887,
+      "local": 16.887,
+      "kind": "rim",
+      "note": 58,
+      "amp": 0.08,
+      "pan": 0.25,
+      "duration": null
+    },
+    {
+      "section": "Outro",
+      "time": 135.012,
+      "local": 15.012,
+      "kind": "bass",
+      "note": 24,
+      "amp": 0.115,
+      "pan": 0,
+      "duration": 0.875
+    },
+    {
+      "section": "Outro",
+      "time": 136.262,
+      "local": 16.262,
+      "kind": "bass",
+      "note": 24,
+      "amp": 0.115,
+      "pan": 0,
+      "duration": 0.40625
+    },
+    {
+      "section": "Outro",
+      "time": 137.1995,
+      "local": 17.1995,
+      "kind": "bass",
+      "note": 24,
+      "amp": 0.115,
+      "pan": 0,
+      "duration": 0.40625
+    },
+    {
+      "section": "Outro",
+      "time": 135.012,
+      "local": 15.012,
+      "kind": "guitar",
+      "note": 48,
+      "amp": 0.09549,
+      "pan": -0.35,
+      "duration": null
+    },
+    {
+      "section": "Outro",
+      "time": 136.5745,
+      "local": 16.5745,
+      "kind": "guitar",
+      "note": 55,
+      "amp": 0.08367,
+      "pan": 0.32,
+      "duration": null
+    },
+    {
+      "section": "Outro",
+      "time": 137.512,
+      "local": 17.512,
+      "kind": "tom",
+      "note": 42,
+      "amp": 0.2925,
+      "pan": -0.12,
+      "duration": null
+    },
+    {
+      "section": "Outro",
+      "time": 138.762,
+      "local": 18.762,
+      "kind": "tom",
+      "note": 46,
+      "amp": 0.2925,
+      "pan": 0.15,
+      "duration": null
+    },
+    {
+      "section": "Outro",
+      "time": 139.387,
+      "local": 19.387,
+      "kind": "rim",
+      "note": 58,
+      "amp": 0.072,
+      "pan": 0.25,
+      "duration": null
+    },
+    {
+      "section": "Outro",
+      "time": 137.512,
+      "local": 17.512,
+      "kind": "bass",
+      "note": 24,
+      "amp": 0.1035,
+      "pan": 0,
+      "duration": 0.875
+    },
+    {
+      "section": "Outro",
+      "time": 138.762,
+      "local": 18.762,
+      "kind": "bass",
+      "note": 24,
+      "amp": 0.1035,
+      "pan": 0,
+      "duration": 0.40625
+    },
+    {
+      "section": "Outro",
+      "time": 139.6995,
+      "local": 19.6995,
+      "kind": "bass",
+      "note": 24,
+      "amp": 0.1035,
+      "pan": 0,
+      "duration": 0.40625
+    },
+    {
+      "section": "Outro",
+      "time": 137.512,
+      "local": 17.512,
+      "kind": "guitar",
+      "note": 48,
+      "amp": 0.08158,
+      "pan": -0.35,
+      "duration": null
+    },
+    {
+      "section": "Outro",
+      "time": 139.0745,
+      "local": 19.0745,
+      "kind": "guitar",
+      "note": 55,
+      "amp": 0.07936,
+      "pan": 0.32,
+      "duration": null
+    },
+    {
+      "section": "Outro",
+      "time": 140.012,
+      "local": 20.012,
+      "kind": "tom",
+      "note": 42,
+      "amp": 0.26,
+      "pan": -0.12,
+      "duration": null
+    },
+    {
+      "section": "Outro",
+      "time": 141.262,
+      "local": 21.262,
+      "kind": "tom",
+      "note": 46,
+      "amp": 0.26,
+      "pan": 0.15,
+      "duration": null
+    },
+    {
+      "section": "Outro",
+      "time": 141.887,
+      "local": 21.887,
+      "kind": "rim",
+      "note": 58,
+      "amp": 0.064,
+      "pan": 0.25,
+      "duration": null
+    },
+    {
+      "section": "Outro",
+      "time": 140.012,
+      "local": 20.012,
+      "kind": "bass",
+      "note": 26,
+      "amp": 0.092,
+      "pan": 0,
+      "duration": 0.875
+    },
+    {
+      "section": "Outro",
+      "time": 140.012,
+      "local": 20.012,
+      "kind": "guitar",
+      "note": 50,
+      "amp": 0.07657,
+      "pan": -0.35,
+      "duration": null
+    },
+    {
+      "section": "Outro",
+      "time": 142.512,
+      "local": 22.512,
+      "kind": "tom",
+      "note": 42,
+      "amp": 0.2275,
+      "pan": -0.12,
+      "duration": null
+    },
+    {
+      "section": "Outro",
+      "time": 143.762,
+      "local": 23.762,
+      "kind": "tom",
+      "note": 46,
+      "amp": 0.2275,
+      "pan": 0.15,
+      "duration": null
+    },
+    {
+      "section": "Outro",
+      "time": 144.387,
+      "local": 24.387,
+      "kind": "rim",
+      "note": 58,
+      "amp": 0.056,
+      "pan": 0.25,
+      "duration": null
+    },
+    {
+      "section": "Outro",
+      "time": 142.512,
+      "local": 22.512,
+      "kind": "bass",
+      "note": 26,
+      "amp": 0.0805,
+      "pan": 0,
+      "duration": 0.875
+    },
+    {
+      "section": "Outro",
+      "time": 142.512,
+      "local": 22.512,
+      "kind": "guitar",
+      "note": 50,
+      "amp": 0.05799,
+      "pan": -0.35,
+      "duration": null
+    },
+    {
+      "section": "Outro",
+      "time": 145.012,
+      "local": 25.012,
+      "kind": "tom",
+      "note": 42,
+      "amp": 0.195,
+      "pan": -0.12,
+      "duration": null
+    },
+    {
+      "section": "Outro",
+      "time": 146.262,
+      "local": 26.262,
+      "kind": "tom",
+      "note": 46,
+      "amp": 0.195,
+      "pan": 0.15,
+      "duration": null
+    },
+    {
+      "section": "Outro",
+      "time": 146.887,
+      "local": 26.887,
+      "kind": "rim",
+      "note": 58,
+      "amp": 0.048,
+      "pan": 0.25,
+      "duration": null
+    },
+    {
+      "section": "Outro",
+      "time": 145.012,
+      "local": 25.012,
+      "kind": "bass",
+      "note": 26,
+      "amp": 0.069,
+      "pan": 0,
+      "duration": 0.875
+    },
+    {
+      "section": "Outro",
+      "time": 145.012,
+      "local": 25.012,
+      "kind": "guitar",
+      "note": 50,
+      "amp": 0.05421,
+      "pan": -0.35,
+      "duration": null
+    },
+    {
+      "section": "Outro",
+      "time": 147.512,
+      "local": 27.512,
+      "kind": "tom",
+      "note": 42,
+      "amp": 0.1625,
+      "pan": -0.12,
+      "duration": null
+    },
+    {
+      "section": "Outro",
+      "time": 148.762,
+      "local": 28.762,
+      "kind": "tom",
+      "note": 46,
+      "amp": 0.1625,
+      "pan": 0.15,
+      "duration": null
+    },
+    {
+      "section": "Outro",
+      "time": 149.387,
+      "local": 29.387,
+      "kind": "rim",
+      "note": 58,
+      "amp": 0.04,
+      "pan": 0.25,
+      "duration": null
+    },
+    {
+      "section": "Outro",
+      "time": 147.512,
+      "local": 27.512,
+      "kind": "bass",
+      "note": 26,
+      "amp": 0.0575,
+      "pan": 0,
+      "duration": 0.875
+    },
+    {
+      "section": "Outro",
+      "time": 147.512,
+      "local": 27.512,
+      "kind": "guitar",
+      "note": 50,
+      "amp": 0.0443,
+      "pan": -0.35,
+      "duration": null
+    },
+    {
+      "section": "Outro",
+      "time": 147.512,
+      "local": 27.512,
+      "kind": "drone",
+      "note": 26,
+      "amp": 0.15,
+      "pan": 0,
+      "duration": 2.48
+    }
+  ],
+  "sectionRenders": [
+    {
+      "section": "Intro",
+      "floatPcmSha256": "d45e8e0502b550028450c23a5f30dd305ea23408b5b4b07a0bd9234125c42541",
+      "events": 40
+    },
+    {
+      "section": "Verse",
+      "floatPcmSha256": "7fc464430b16e4f43c8f71f9caf366ffe771d57dfa2db58e6f637c815cb69412",
+      "events": 244
+    },
+    {
+      "section": "Peak",
+      "floatPcmSha256": "8cc97e43147c50760bb89b4207702ba6ba08d4fae17148be78058eeb9d3aebb2",
+      "events": 364
+    },
+    {
+      "section": "Break",
+      "floatPcmSha256": "98fbc5dfcb9bdb2f32378d98847ed2ff75246028fc6f8c326e1b03ac40dcf726",
+      "events": 18
+    },
+    {
+      "section": "Outro",
+      "floatPcmSha256": "7d0f7c2253bf2c9a3fe3c41a87bc3955438346a5ff9b9ebed78258a558a764c1",
+      "events": 85
+    }
+  ],
+  "transitionNotes": [
+    {
+      "into": "Verse",
+      "time": 19.25,
+      "kind": "drone",
+      "note": 38,
+      "amp": 0.3,
+      "pan": 0,
+      "duration": 1.8,
+      "fadeSeconds": 0.5
+    },
+    {
+      "into": "Peak",
+      "time": 59.25,
+      "kind": "drone",
+      "note": 45,
+      "amp": 0.3,
+      "pan": 0,
+      "duration": 1.8,
+      "fadeSeconds": 0.5
+    },
+    {
+      "into": "Break",
+      "time": 99.25,
+      "kind": "drone",
+      "note": 50,
+      "amp": 0.3,
+      "pan": 0,
+      "duration": 1.8,
+      "fadeSeconds": 0.5
+    },
+    {
+      "into": "Outro",
+      "time": 119.25,
+      "kind": "drone",
+      "note": 38,
+      "amp": 0.3,
+      "pan": 0,
+      "duration": 1.8,
+      "fadeSeconds": 0.5
+    }
+  ],
+  "arrangement": "Five independently rendered parts; 625 ms complementary sine-squared crossfades around four section boundaries; four original sustained transition notes with 500 ms fades; final four-second fade",
+  "mastering": {
+    "filter": "loudnorm=I=-14:TP=-2:LRA=11:measured_I=-18.36:measured_TP=-3.80:measured_LRA=14.80:measured_thresh=-29.64:offset=0.22:linear=true:print_format=json",
+    "normalization": "dynamic",
+    "bus": "tanh(1.25*x)*0.8 before raw score export"
+  },
+  "credits": 0
+}

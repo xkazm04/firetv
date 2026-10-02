@@ -1,0 +1,372 @@
+{
+  "at": "2026-10-02T22:44:00.670706+00:00",
+  "protocol": "x3-local-full-song-v1",
+  "samples": [
+    {
+      "id": "dust-road-proof",
+      "status": "pass",
+      "raw": {
+        "file": "audio/x3/music/dust-road-score.flac",
+        "sha256": "73adbd3045b86299fa0df406f1d28609f25ca3b8bc5e1261eda4b729d82237a4",
+        "bytes": 10355324,
+        "status": "fail",
+        "failures": [
+          "loudness"
+        ],
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": false,
+          "truePeak": true,
+          "silence": true,
+          "clipping": true
+        },
+        "durationSeconds": 150.0,
+        "durationWindowSeconds": [
+          149.65,
+          150.35
+        ],
+        "sampleRate": 22050,
+        "channels": 2,
+        "decodedFrames": 3307500,
+        "containerDurationSeconds": 150.0,
+        "integratedLufs": -18.36,
+        "truePeakDbtp": -3.8,
+        "loudnessRangeLu": 14.8,
+        "loudnormAnalysis": {
+          "input_i": "-18.36",
+          "input_tp": "-3.80",
+          "input_lra": "14.80",
+          "input_thresh": "-29.64",
+          "output_i": "-14.22",
+          "output_tp": "-2.00",
+          "output_lra": "9.60",
+          "output_thresh": "-24.99",
+          "normalization_type": "dynamic",
+          "target_offset": "0.22"
+        },
+        "loudnessTargetLufs": -14,
+        "loudnessToleranceLu": 1,
+        "samplePeakDbfs": -3.798359935239742,
+        "fullScaleSampleCount": 0,
+        "clippingScreenThreshold": 0.999,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [
+            [
+              3131939,
+              3142392
+            ],
+            [
+              3186480,
+              3197517
+            ],
+            [
+              3240872,
+              3252643
+            ],
+            [
+              3295160,
+              3307500
+            ]
+          ],
+          "fraction": 0.013787150415721844,
+          "longestInteriorSeconds": 0.5338321995464853
+        },
+        "loopSeam": {
+          "status": "not applicable",
+          "reason": "one-shot"
+        },
+        "loopBoundary": null
+      },
+      "edited": {
+        "file": "audio/x3/music/dust-road-proof.flac",
+        "sha256": "0ba9543e14da99b2ba29614ff1c8175757fc914dc3a4cb969b930434031172e8",
+        "bytes": 11161669,
+        "status": "pass",
+        "failures": [],
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": true,
+          "truePeak": true,
+          "silence": true,
+          "clipping": true,
+          "sectionJoins": true
+        },
+        "durationSeconds": 150.0,
+        "durationWindowSeconds": [
+          149.65,
+          150.35
+        ],
+        "sampleRate": 22050,
+        "channels": 2,
+        "decodedFrames": 3307500,
+        "containerDurationSeconds": 150.0,
+        "integratedLufs": -14.16,
+        "truePeakDbtp": -1.97,
+        "loudnessRangeLu": 9.7,
+        "loudnormAnalysis": {
+          "input_i": "-14.16",
+          "input_tp": "-1.97",
+          "input_lra": "9.70",
+          "input_thresh": "-24.96",
+          "output_i": "-14.12",
+          "output_tp": "-2.00",
+          "output_lra": "7.70",
+          "output_thresh": "-24.69",
+          "normalization_type": "dynamic",
+          "target_offset": "0.12"
+        },
+        "loudnessTargetLufs": -14,
+        "loudnessToleranceLu": 1,
+        "samplePeakDbfs": -1.9744779583749572,
+        "fullScaleSampleCount": 0,
+        "clippingScreenThreshold": 0.999,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [
+            [
+              3137052,
+              3142391
+            ],
+            [
+              3191422,
+              3197515
+            ],
+            [
+              3245204,
+              3252641
+            ],
+            [
+              3299386,
+              3307500
+            ]
+          ],
+          "fraction": 0.008158125472411187,
+          "longestInteriorSeconds": 0.33727891156462586
+        },
+        "loopSeam": {
+          "status": "not applicable",
+          "reason": "Linear song with intro/outro; no end-to-start loop claim"
+        },
+        "loopBoundary": null,
+        "sectionJoins": [
+          {
+            "atSeconds": 20,
+            "into": "Verse",
+            "sampleJumpFullScale": 0.005929708480834961,
+            "rmsStepDb": 4.6228108000035375,
+            "spectralCosine": 0.943751936637972,
+            "spectralPolicy": "reported, not gated: deliberate song section instrumentation changes",
+            "status": "pass"
+          },
+          {
+            "atSeconds": 60,
+            "into": "Peak",
+            "sampleJumpFullScale": 0.009640216827392578,
+            "rmsStepDb": 1.957384832166146,
+            "spectralCosine": 0.9681293079394916,
+            "spectralPolicy": "reported, not gated: deliberate song section instrumentation changes",
+            "status": "pass"
+          },
+          {
+            "atSeconds": 100,
+            "into": "Break",
+            "sampleJumpFullScale": 0.00022411346435546875,
+            "rmsStepDb": 1.4292205660203716,
+            "spectralCosine": 0.9954735485319883,
+            "spectralPolicy": "reported, not gated: deliberate song section instrumentation changes",
+            "status": "pass"
+          },
+          {
+            "atSeconds": 120,
+            "into": "Outro",
+            "sampleJumpFullScale": 0.003487229347229004,
+            "rmsStepDb": 4.518983004571144,
+            "spectralCosine": 0.9437016500074914,
+            "spectralPolicy": "reported, not gated: deliberate song section instrumentation changes",
+            "status": "pass"
+          }
+        ]
+      },
+      "preview": {
+        "file": "audio/x3/music/dust-road-proof.mp3",
+        "sha256": "a79f9b936d01ef5e74777ac4c0c34899ca694e6c96eff4a60b9ab88df43503eb",
+        "bytes": 2401636,
+        "status": "pass",
+        "failures": [],
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": true,
+          "truePeak": true,
+          "silence": true,
+          "clipping": true,
+          "sectionJoins": true
+        },
+        "durationSeconds": 150.0,
+        "durationWindowSeconds": [
+          149.65,
+          150.35
+        ],
+        "sampleRate": 22050,
+        "channels": 2,
+        "decodedFrames": 3307500,
+        "containerDurationSeconds": 150.073469,
+        "integratedLufs": -14.6,
+        "truePeakDbtp": -2.25,
+        "loudnessRangeLu": 9.6,
+        "loudnormAnalysis": {
+          "input_i": "-14.60",
+          "input_tp": "-2.25",
+          "input_lra": "9.60",
+          "input_thresh": "-25.40",
+          "output_i": "-14.13",
+          "output_tp": "-2.00",
+          "output_lra": "7.60",
+          "output_thresh": "-24.70",
+          "normalization_type": "dynamic",
+          "target_offset": "0.13"
+        },
+        "loudnessTargetLufs": -14,
+        "loudnessToleranceLu": 1,
+        "samplePeakDbfs": -2.2531452654361845,
+        "fullScaleSampleCount": 0,
+        "clippingScreenThreshold": 0.999,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [
+            [
+              3136382,
+              3142323
+            ],
+            [
+              3190837,
+              3197463
+            ],
+            [
+              3244460,
+              3252641
+            ],
+            [
+              3299379,
+              3307500
+            ]
+          ],
+          "fraction": 0.008728344671201814,
+          "longestInteriorSeconds": 0.3710204081632653
+        },
+        "loopSeam": {
+          "status": "not applicable",
+          "reason": "Linear song with intro/outro; no end-to-start loop claim"
+        },
+        "loopBoundary": null,
+        "sectionJoins": [
+          {
+            "atSeconds": 20,
+            "into": "Verse",
+            "sampleJumpFullScale": 0.005359828472137451,
+            "rmsStepDb": 4.612038436061614,
+            "spectralCosine": 0.9436900838991261,
+            "spectralPolicy": "reported, not gated: deliberate song section instrumentation changes",
+            "status": "pass"
+          },
+          {
+            "atSeconds": 60,
+            "into": "Peak",
+            "sampleJumpFullScale": 0.009185068309307098,
+            "rmsStepDb": 1.9817200776245316,
+            "spectralCosine": 0.969487305484546,
+            "spectralPolicy": "reported, not gated: deliberate song section instrumentation changes",
+            "status": "pass"
+          },
+          {
+            "atSeconds": 100,
+            "into": "Break",
+            "sampleJumpFullScale": 0.00011403858661651611,
+            "rmsStepDb": 1.4328608751082257,
+            "spectralCosine": 0.9954863313154819,
+            "spectralPolicy": "reported, not gated: deliberate song section instrumentation changes",
+            "status": "pass"
+          },
+          {
+            "atSeconds": 120,
+            "into": "Outro",
+            "sampleJumpFullScale": 0.003293462097644806,
+            "rmsStepDb": 4.5278714669812015,
+            "spectralCosine": 0.9438064693746976,
+            "spectralPolicy": "reported, not gated: deliberate song section instrumentation changes",
+            "status": "pass"
+          }
+        ]
+      }
+    }
+  ],
+  "structure": {
+    "sections": [
+      {
+        "name": "Intro",
+        "start": 0,
+        "bars": 8,
+        "description": "Low toms, open fifths and isolated echo guitar; motif enters gradually.",
+        "end": 20.0,
+        "events": 40,
+        "rmsDbfs": -16.88317143685402
+      },
+      {
+        "name": "Verse",
+        "start": 20,
+        "bars": 16,
+        "description": "Bass pulse and alternating guitar questions; minor progression changes every two bars.",
+        "end": 60.0,
+        "events": 244,
+        "rmsDbfs": -15.47927269567402
+      },
+      {
+        "name": "Peak",
+        "start": 60,
+        "bars": 16,
+        "description": "Double-time percussion, octave guitar answer, ascending fills and broader harmony.",
+        "end": 100.0,
+        "events": 364,
+        "rmsDbfs": -13.657264995341816
+      },
+      {
+        "name": "Break",
+        "start": 100,
+        "bars": 8,
+        "description": "Drum bed drops out; low drone and high sparse plucks leave a deliberate space.",
+        "end": 120.0,
+        "events": 18,
+        "rmsDbfs": -19.940946264148952
+      },
+      {
+        "name": "Outro",
+        "start": 120,
+        "bars": 12,
+        "description": "Half-time return, reduced motif, low final root and a four-second natural fade.",
+        "end": 150.0,
+        "events": 85,
+        "rmsDbfs": -19.76886853307177
+      }
+    ],
+    "identicalPcmBars": 0,
+    "uniqueBars": 60,
+    "peakEventsPerBar": 22.75,
+    "breakEventsPerBar": 2.25,
+    "status": "pass"
+  },
+  "credits": 0,
+  "paidMusicGenerations": 0,
+  "proofTracks": 1,
+  "notMeasured": [
+    "human musical/style preference",
+    "long-race fatigue",
+    "new provider long-form quality",
+    "physical Stick playback"
+  ]
+}

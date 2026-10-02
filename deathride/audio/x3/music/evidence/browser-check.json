@@ -1,0 +1,101 @@
+{
+  "at": "2026-10-02T22:44:59.034Z",
+  "page": "file:///C:/Users/kazda/kiro/firetv-deathride-audiox/deathride/audio/x3/music/index.html",
+  "layouts": [
+    {
+      "width": 320,
+      "light": false,
+      "overflow": false
+    },
+    {
+      "width": 390,
+      "light": false,
+      "overflow": false
+    },
+    {
+      "width": 768,
+      "light": false,
+      "overflow": false
+    },
+    {
+      "width": 1440,
+      "light": false,
+      "overflow": false
+    },
+    {
+      "width": 320,
+      "light": true,
+      "overflow": false
+    },
+    {
+      "width": 390,
+      "light": true,
+      "overflow": false
+    },
+    {
+      "width": 768,
+      "light": true,
+      "overflow": false
+    },
+    {
+      "width": 1440,
+      "light": true,
+      "overflow": false
+    }
+  ],
+  "media": [
+    {
+      "file": "file:///C:/Users/kazda/kiro/firetv-deathride-audiox/deathride/audio/x3/music/dust-road-proof.mp3",
+      "duration": 150,
+      "playStarted": true
+    },
+    {
+      "file": "file:///C:/Users/kazda/kiro/firetv-deathride-audiox/deathride/audio/x3/music/first-pass/dust-road-proof.mp3",
+      "duration": 150,
+      "playStarted": true
+    },
+    {
+      "file": "file:///C:/Users/kazda/kiro/firetv-deathride-audiox/deathride/audio/x3/music/dust-road-score.flac",
+      "duration": 150,
+      "playStarted": true
+    }
+  ],
+  "sections": [
+    {
+      "start": 0,
+      "seekAndPlay": true
+    },
+    {
+      "start": 20,
+      "seekAndPlay": true
+    },
+    {
+      "start": 60,
+      "seekAndPlay": true
+    },
+    {
+      "start": 100,
+      "seekAndPlay": true
+    },
+    {
+      "start": 120,
+      "seekAndPlay": true
+    }
+  ],
+  "result": "pass",
+  "checks": [
+    "8 layouts and themes",
+    "3 media decodes/starts for same composition",
+    "5 section seeks",
+    "single playback",
+    "stop",
+    "notes/theme persistence",
+    "export",
+    "artifact links"
+  ],
+  "notMeasured": [
+    "human listening",
+    "physical Stick",
+    "complete 150-second realtime playback"
+  ]
+}

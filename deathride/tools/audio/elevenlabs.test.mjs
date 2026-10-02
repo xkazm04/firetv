@@ -97,3 +97,27 @@ test('abandoned HTTP rejection still consumes its full reserved budget', () => {
   assert.deepEqual(usage, { spent: 100, pending: [] });
   assert.throws(() => checkBudget({ estimate: 100, remaining: 20000, reserve: 8000, spent: usage.spent, cap: 150 }), /cap/);
 });
+
+test('structured instrumental music uses section totals and retains the shared cap', t => {
+  const { root } = fixture(t), file = path.join(root, 'plan.json');
+  const section = { section_name: 'Intro', duration_ms: 24000, positive_local_styles: ['sparse'], negative_local_styles: ['vocals'], lines: [] };
+  const plan = { positive_global_styles: ['original instrumental'], negative_global_styles: ['vocals'], sections: Array.from({ length: 5 }, () => ({ ...section })) };
+  fs.writeFileSync(file, JSON.stringify(plan));
+  const input = { _: ['music'], out: 'audio/proof.mp3', 'composition-plan': file };
+  const spec = request(input);
+  assert.equal(spec.seconds, 120); assert.equal(spec.estimate, 7200);
+  assert.equal(spec.body.model_id, 'music_v1'); assert.equal(spec.body.respect_sections_durations, true);
+  assert.equal(spec.body.force_instrumental, undefined); assert.equal(spec.body.music_length_ms, undefined);
+  assert.throws(() => request({ ...input, prompt: 'mixed' }), /cannot be combined/);
+  assert.throws(() => request({ ...input, seconds: 20 }), /cannot be combined/);
+  assert.throws(() => checkBudget({ estimate: spec.estimate, remaining: 22913, reserve: 8000, spent: 6400, cap: 9000 }), /cap refused/);
+  for (const duration of [true, null, 24000.5, 40000]) {
+    plan.sections[0].duration_ms = duration;
+    if (duration === 40000) plan.sections = Array.from({ length: 5 }, () => ({ ...section, duration_ms: duration }));
+    fs.writeFileSync(file, JSON.stringify(plan));
+    assert.throws(() => request(input));
+  }
+  plan.sections = [{ ...section, lines: ['lyrics are outside this instrumental workflow'] }];
+  fs.writeFileSync(file, JSON.stringify(plan)); assert.throws(() => request(input), /instrumental section/);
+  assert.equal(fs.existsSync(path.join(root, 'requests.txt')), false);
+});

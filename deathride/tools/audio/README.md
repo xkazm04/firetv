@@ -17,7 +17,7 @@ The persisted session cap/reserve cannot change across invocations. An exclusive
 
 Budget charge per completed request is `max(estimate, provider character-cost)` when the numeric response header exists, otherwise `max(estimate, observed account decrease)`. SFX estimates use max(100, 40/second), music 60/second, speech 1/character. The ledger's pending and completion records share an ID and count once. Account deltas may include another project's use or omit delayed billing; they are not exact provider invoices. A local lock cannot lock Garden VR's separate tool or a provider price change. A fresh account check precedes every call; an unexpected cost/reserve breach stops immediately. Reset changes also stop the session. These limitations are disclosed rather than claiming distributed atomic credit reservation.
 
-Provider errors omit response bodies and headers; only a restricted machine error code may be recorded. Success sidecars record timestamp, prompt/request body, model where explicitly pinned, duration intent, byte hash, account tier, estimate, balance delta, numeric character-cost when present and budget charge. Music uses the provider default model (not pinned in this request), recorded as unpinned rather than invented. Music cost was not returned in a character-cost header during X2.
+Provider errors omit response bodies and headers; only a restricted machine error code may be recorded. Success sidecars record timestamp, prompt/request body, model where explicitly pinned, duration intent, byte hash, account tier, estimate, balance delta, numeric character-cost when present and budget charge. X2 music used the unpinned provider default; music cost was not returned in a character-cost header during X2. X3.6 pins future music requests to `music_v1` so a changing API default cannot silently change the plan schema.
 
 X2 found the SFX prompt limit of 450 characters and now refuses longer prompts locally. The first overlong request returned HTTP 400; read-only provider analytics confirmed its rejection. `reconcile-rejected.mjs` records that one specific attempt as `abandoned-reserved`, retaining its **full 100-credit charge** with no claim of zero billing. It is not a general retry/refund command. The corrected brief was dry-run again. Unknown transport/billing failures still block automatically.
 
@@ -33,3 +33,28 @@ node tools/audio/check-audition.mjs
 Measurement requires ffmpeg/ffprobe and NumPy; browser verification uses the existing `tools/package.json` Playwright dependency and installed Chrome. Measurements keep every original and all failures. Comparison copies use two-pass normalization, with dynamic limiting disclosed; repeat previews contain three unchanged decoded cycles. `run-audition.mjs` defaults to an offline plan/dry-run and accepts `--credits-final` for a read-only balance snapshot. `--generate` is the spending action; **the X2 run is finished, so do not invoke it as part of offline reproduction**.
 
 API references checked 2026-10-02: [SFX request, loop and credit header](https://elevenlabs.io/docs/api-reference/text-to-sound-effects/convert), [SFX prompt limit](https://help.elevenlabs.io/hc/en-us/articles/25735182995985-What-is-Sound-Effects), [request analytics](https://elevenlabs.io/docs/api-reference/analytics/workspace/requests). The conservative music estimate comes from the authorized plan and Garden VR tool; headers, balances and unresolved attribution are all reported separately.
+
+## X3 reproduction and future structured music
+
+X3 generation is finished. `run-x3.mjs --wave effects|engines|voices` defaults to
+offline estimates; **do not use `--generate` to reproduce the pages**. Original
+takes, edited clips and first-pass failures are committed. `build-x3-page.py`
+accepts each wave name; `check-x3-page.mjs` verifies its native players and controls.
+`audit-x3.py` validates hashes, budget, all current/first-pass screens and leaks.
+
+Music now also accepts `--composition-plan FILE`, mutually exclusive with
+`--prompt` and `--seconds`. This is an instrumental **v1** plan only: global style
+lists and named sections with local style lists, integer duration_ms and empty
+lines. Each section is at least three seconds; the sum must be <=180 seconds.
+The request pins the model and section-duration enforcement. It omits the
+prompt-only force_instrumental/music_length_ms fields; unwanted vocals must still
+be screened. Estimates use the section sum and the same 60 credits/second guard.
+
+`node tools/audio/plan-x3-tracks.mjs` writes six offline future-session dry runs.
+It never sends paid requests. The [music research](../../audio/x3/music/RESEARCH.md)
+contains post-reset timing, aggregate/reserve limits and model-version caveats.
+The local 150-second proof is reproducible with `compose-x3-proof.py` and
+`build-x3-music-page.py`; it spends zero credits. This proves a local arrangement
+method, not new provider long-form quality. Runtime verification is recorded by
+`python tools/audio/validate-runtime.py --build` (requires Windows and the repo's
+Java/Android SDK setup). No physical device acceptance is implied.

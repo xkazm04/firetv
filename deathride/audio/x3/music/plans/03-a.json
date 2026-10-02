@@ -1,0 +1,77 @@
+{
+  "positive_global_styles": [
+    "Original instrumental score",
+    "112 BPM, G minor, gritty electric bass, short brass stabs, wah-like guitar, raw drum breaks, playful energy",
+    "One coherent full song with changing sections",
+    "Bass call and brass response trade places; peak doubles brass rhythm, break exposes the bass."
+  ],
+  "negative_global_styles": [
+    "vocals",
+    "lyrics",
+    "spoken words",
+    "unvarying repeated loop",
+    "abrupt cutoff"
+  ],
+  "sections": [
+    {
+      "section_name": "Intro",
+      "duration_ms": 15000,
+      "positive_local_styles": [
+        "Establish timbre and a short original motif; sparse opening, no full beat initially"
+      ],
+      "negative_local_styles": [
+        "vocals",
+        "lyrics"
+      ],
+      "lines": []
+    },
+    {
+      "section_name": "Verse",
+      "duration_ms": 35000,
+      "positive_local_styles": [
+        "Develop motif and harmony; establish bass and beat; vary each phrase"
+      ],
+      "negative_local_styles": [
+        "vocals",
+        "lyrics"
+      ],
+      "lines": []
+    },
+    {
+      "section_name": "Peak",
+      "duration_ms": 35000,
+      "positive_local_styles": [
+        "Distinct high-energy section with additional rhythm and register; retain motif"
+      ],
+      "negative_local_styles": [
+        "vocals",
+        "lyrics"
+      ],
+      "lines": []
+    },
+    {
+      "section_name": "Break",
+      "duration_ms": 15000,
+      "positive_local_styles": [
+        "Clear instrumentation and energy reduction; develop an alternate motif answer"
+      ],
+      "negative_local_styles": [
+        "vocals",
+        "lyrics"
+      ],
+      "lines": []
+    },
+    {
+      "section_name": "Outro",
+      "duration_ms": 20000,
+      "positive_local_styles": [
+        "Return motif in reduced form; a composed final cadence and natural ending; do not loop"
+      ],
+      "negative_local_styles": [
+        "vocals",
+        "lyrics"
+      ],
+      "lines": []
+    }
+  ]
+}
