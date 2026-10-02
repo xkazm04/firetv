@@ -36,7 +36,7 @@ Original work only (nothing from the arcade game or the Death Rally titles; no f
 
 | Id | Wave | Status |
 |---|---|---|
-| Q0 | Plot, debt and ally model, finale rules (design note, data) | not started |
+| Q0 | Plot, debt and ally model, finale rules (design note, data) | complete ? Q0 note, 35 beats, rules, four promotion choices; green build and four browser suites |
 | Q1 | Debt, ally promotion, the Mechanic, cards and menus | not started |
 | Q2 | Death duel and the Mechanic's rig | not started |
 | Q3 | Balance simulation and fairness | not started |

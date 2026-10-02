@@ -2,7 +2,7 @@ import {chromium} from 'playwright';
 import assert from 'node:assert/strict';
 import {writeFile,mkdir} from 'node:fs/promises';
 const [base,pin,output='evidence/abilities/a2/controller']=process.argv.slice(2);
-assert.equal(new URL(base).port,process.env.DEATHRIDE_TEST_STREAM==='hud'?'8768':'8767','Only the isolated abilities listener is allowed');
+assert.equal(new URL(base).port,process.env.DEATHRIDE_BROWSER_PORT||(process.env.DEATHRIDE_TEST_STREAM==='hud'?'8768':'8767'),'Only the declared isolated listener is allowed');
 await mkdir(output,{recursive:true});
 const browser=await chromium.launch({headless:true,executablePath:process.env.CHROME_EXECUTABLE});
 const context=await browser.newContext({viewport:{width:896,height:414},isMobile:true,hasTouch:true});

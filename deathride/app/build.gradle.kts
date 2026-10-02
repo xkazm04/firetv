@@ -4,9 +4,9 @@ android {
     namespace = "dev.deathride.tv"
     compileSdk = 36
     defaultConfig {
-        applicationId = providers.gradleProperty("appId").getOrElse("dev.deathride.hud")
-        resValue("string", "app_name", providers.gradleProperty("appLabel").getOrElse("Death Ride HUD"))
-        resValue("integer", "race_port", providers.gradleProperty("racePort").getOrElse("8768"))
+        applicationId = providers.gradleProperty("appId").getOrElse("dev.deathride.campaign")
+        resValue("string", "app_name", providers.gradleProperty("appLabel").getOrElse("Death Ride Campaign"))
+        resValue("integer", "race_port", providers.gradleProperty("racePort").getOrElse("8770"))
         minSdk = 28; targetSdk = 34; versionCode = 1; versionName = "0.1-spike"
         ndk { abiFilters += listOf("arm64-v8a", "armeabi-v7a", "x86_64") }
     }
@@ -32,3 +32,4 @@ val extractNatives by tasks.registering {
     }
 }
 tasks.named("preBuild") { dependsOn(extractNatives) }
+
