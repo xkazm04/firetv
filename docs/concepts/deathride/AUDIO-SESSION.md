@@ -1,5 +1,15 @@
 # Audio execution session
 
+## X3.1 — 2026-10-02
+
+Owner-authorized X3 on `deathride/audio-x3`. Read owner audio gate first, supporting
+plan/audition/ledger/campaign and registry notes read-only. Wrote audio bible,
+62-cue runtime data contract and explicit seam repair plan; original failures stay
+unchanged. Design: [X3-1-audio-contract.md](X3-1-audio-contract.md). Starting live
+credits 24,672 at 21:25:35 UTC; zero spend. One session cap 9,000/reserve 8,000 for
+all paid X3 waves. No question, push, production car-engine selection or Stick claim.
+Catalogue contract checks passed. One commit for this wave.
+
 ## X1 — 2026-10-02
 
 Read the X1–X3 plan first, Garden VR audio references and registry subjects read-only; inventoried current source/data including all ten signatures and Scatter. Design note: [audio brief](../DEATH-RIDE-AUDIO-BRIEF.md). Ported the guarded tool with runtime-only key loading, own ledger, >=8,000 reserve, persistent <=9,000 session cap, offline estimates, exclusive local lock and durable reservations. No POST retry; unknown billing stops. Shared-account race and delta attribution limits are explicit. Dry-run 20 s music estimate 1,200; credits command reports 43,319 remaining, reset 2026-10-04T19:31:41Z. No generated audio or spend in X1. Six mocked/unit guard tests pass after correcting the Windows test-loader URL. Required `:core:test :link:test :app:assembleDebug` passes (3 s, cache used; existing SDK compatibility/native-strip warnings). No gameplay code changes, no device/owner claim. Next X2 equal proof kits, measurements and local audition page; X3 gated. One X1 commit, never pushed.
