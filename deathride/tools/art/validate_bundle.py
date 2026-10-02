@@ -26,9 +26,9 @@ def validate_coverage(catalog,region_ids):
         if any(i not in region_ids for i in expected):raise ValueError('MISSING_CATALOG_REGION')
     return {**{name:len(rows) for name,rows in contracts.items()},'provisional_rivals':1 if catalog.get('provisional_c4') else 0}
 
-def validate(folder):
+def validate(folder, report=None):
     folder=Path(folder);manifest=read_json(folder/'manifest.json');count=0;groups=[];region_ids=set()
-    for page in manifest['pages']+manifest['tiles']+manifest['themes']:
+    for page in manifest['pages']+manifest['tiles']+manifest['themes']+manifest.get('ribbons',[]):
         path=folder/page['file']
         if sha(path)!=page['sha256']:raise ValueError('PAGE_HASH_CHANGED')
         with Image.open(path) as im:
@@ -47,15 +47,25 @@ def validate(folder):
             if masks!=set(CASES):raise ValueError('AUTOTILE_INCOMPLETE')
             rules=read_json(folder/(data['group']+'-rules.json'))
             if len(rules['resolver'])!=256 or set(rules['resolver'])!=masks:raise ValueError('RESOLVER_INCOMPLETE')
-    resident=sum(p['rgba_bytes'] for p in manifest['pages']+manifest['tiles'])+max((p['rgba_bytes'] for p in manifest['themes']),default=0)+manifest['cars_reserved_rgba_bytes']
+    resident=sum(p['rgba_bytes'] for p in manifest['pages']+manifest['tiles']+manifest.get('ribbons',[]))+max((p['rgba_bytes'] for p in manifest['themes']),default=0)+manifest['cars_reserved_rgba_bytes']
     if resident!=manifest['resident_rgba_bytes_with_reserved_cars'] or resident>32*2**20:raise ValueError('RESIDENT_BUDGET')
     catalog=read_json(folder/'catalog.json');names=[r['logical_name'] for r in catalog['assets']]
     if len(names)!=len(set(names)):raise ValueError('DUPLICATE_LOGICAL_NAME')
     for item in catalog['assets']:
         if 'frames' in item and (len(item['frames'])!=6 or len(item['durations_ms'])!=6 or any(d<=0 for d in item['durations_ms'])):raise ValueError('ANIMATION_INCOMPLETE')
     coverage=validate_coverage(catalog,region_ids)
+    if catalog.get('natural_obstacles'):
+        ids={r['asset_id'] for r in catalog['assets']}
+        for item in catalog['natural_obstacles']['obstacles'].values():
+            foot=item['collision_footprint']
+            if item['asset_id'] not in ids or item['effect_class'] not in ('drag','solid','none'):
+                raise ValueError('OBSTACLE_ASSET_OR_EFFECT')
+            if foot['space']!='local-metres' or foot['shape']!='ellipse' or len(foot['radii'])!=2 or min(foot['radii'])<=0:
+                raise ValueError('OBSTACLE_FOOTPRINT')
+            if item['height_m']<=0 or not item['shadow']['renderer_generated']:
+                raise ValueError('OBSTACLE_HEIGHT_SHADOW')
     result={'status':'pass','atlas_groups':groups,'regions':count,'logical_assets':len(names),'tile_pages':len(manifest['tiles']),'theme_pages':len(manifest['themes']),'content_coverage':coverage,'resident_mib_with_car_reserve':resident/2**20,'scope':'PNG, hash, packing, content ID coverage, 47-case art, 256-mask resolver, six-frame durations and declared residency; no renderer/gameplay/owner claim'}
-    write_json(ART/'reports/p4-bundle-validation.json',result);print(result);return result
+    write_json(report or ART/'reports/p4-bundle-validation.json',result);print(result);return result
 
 if __name__=='__main__':
     import sys

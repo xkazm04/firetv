@@ -1,0 +1,193 @@
+[
+  {
+    "id": "v2-fusion-cars-bastion-v1",
+    "class": "Bastion",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v2-fusion-cars-bastion-v1\\attempt-02\\1.jpg",
+    "source_sha256": "484fc67333cc8e15a0a381e05631b29ed75aa5f9936f2ee95b155b79f1837f5f",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-fusion-cars-bastion-v1",
+      "class": "Bastion",
+      "prompt_action": "A heavy four-wheel spiked fortress: hugely swollen squared wheel guards, four enormous exposed tyres, broad slab roof with a short roof cannon aimed RIGHT, blunt full-width welded ram at RIGHT, stacked scrap armour and triangular shoulder teeth. Compressed cabin swallowed by armour. Soot, ochre and rust, bone chipped plate edges. The strongest broad solid mass of the roster. Total silhouette length-to-width ratio 2.0:1, including wheels and appendages. One intact identity reference only, no damage-state variation. Strict overhead roof planes only; NO visible front grille, side doors or vertical walls. Horizontal main axis and nose RIGHT. Keep ALL pixels inside the central 66 percent of the square, at least 17 percent empty margin on each side.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "",
+      "batch": "v2-fusion-cars",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "cars",
+      "surface_stack": ""
+    },
+    "verdict": "reject",
+    "codes": [
+      "CROPPED_OR_MARGIN"
+    ],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "baeb3c75341198559ebbbf8175e2effc5b3b5193b96f22afa7da9eeb41992936"
+    },
+    "metrics": {
+      "foreground_fraction": 0.4075899124145508,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        37,
+        232,
+        1005,
+        792
+      ],
+      "margin_fraction": 0.0185546875,
+      "aspect": 1.7285714285714286,
+      "expected_aspect": 2.0,
+      "aspect_relative_error": 0.13571428571428568,
+      "principal_axis_degrees": 0.05310845779587718,
+      "estimated_key_rgb": [
+        247.5,
+        216.0,
+        246.0
+      ],
+      "magenta_key": false,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 5.731082620556563,
+      "palette_p90_delta_e": 11.273582432518815
+    },
+    "placement": {
+      "source_bounds_px": [
+        37,
+        232,
+        1005,
+        792
+      ],
+      "source_pivot_px": [
+        521.0,
+        512.0
+      ],
+      "pivot_px": [
+        127.5,
+        127.5
+      ],
+      "cell_px": [
+        256,
+        256
+      ],
+      "subject_px": [
+        223,
+        129
+      ],
+      "scale": 0.2303719008264463,
+      "world_length_m": 9.3,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v2-fusion-cars\\v2-fusion-cars-bastion-v1.png",
+    "sha256": "a41bac1f69d003d8efc8b3ed5ba52e69a408acb242be6a38d7f3f67dd2a45b20"
+  },
+  {
+    "id": "v2-fusion-portraits-rook-v1",
+    "class": "rook",
+    "kind": "portrait",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v2-fusion-portraits-rook-v1\\attempt-02\\1.jpg",
+    "source_sha256": "b491e401e9fbf8193acd4eeae75407d7647d5391ad55f4cef209a7a628951a3d",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-fusion-portraits-rook-v1",
+      "class": "rook",
+      "prompt_action": "Original adult male bitter scavenger, medium-brown skin, gaunt angular cheeks, healed cheek scar, one broken goggle lens on the forehead, uneven close-cropped hair, dust scarf, single oversized jagged welded shoulder plate. Calculating sour expression and a narrow hunched silhouette. One head-and-shoulders bust, facing viewer. Entire hair and shoulders in the central 66 percent of the square; generous empty margin. Symmetric flat material shading, no directional facial lamp. No weapon, car, lettering, real person resemblance or background scene.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "portrait",
+      "reference": "",
+      "batch": "v2-fusion-portraits",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "portraits",
+      "surface_stack": ""
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "7aeb93313c54a865416d647db0f437f9d29148fe8dd251b0e0681c8acbfeb71b",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "baeb3c75341198559ebbbf8175e2effc5b3b5193b96f22afa7da9eeb41992936"
+    },
+    "metrics": {
+      "foreground_fraction": 0.33112144470214844,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        165,
+        112,
+        899,
+        904
+      ],
+      "margin_fraction": 0.109375,
+      "aspect": 0.9267676767676768,
+      "estimated_key_rgb": [
+        236.0,
+        92.0,
+        224.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 6.180977951581086,
+      "palette_p90_delta_e": 11.270185931722818
+    },
+    "placement": {
+      "source_bounds_px": [
+        165,
+        112,
+        899,
+        904
+      ],
+      "source_pivot_px": [
+        532.0,
+        508.0
+      ],
+      "pivot_px": [
+        128.0,
+        128.0
+      ],
+      "cell_px": [
+        256,
+        256
+      ],
+      "subject_px": [
+        230,
+        248
+      ],
+      "scale": 0.31313131313131315,
+      "world_length_m": null,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v2-fusion-portraits\\v2-fusion-portraits-rook-v1.png",
+    "sha256": "75bc390f3f9a36ccf08fdec2a11c2cc39f96552b1242bdc4af3e596f6984a67a"
+  }
+]

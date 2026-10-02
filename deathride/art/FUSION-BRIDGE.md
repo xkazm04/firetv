@@ -1,0 +1,3 @@
+# Shared fusion bridge
+
+FUSION BRIDGE: Anchor all families to soot #171513, dark earth #39302A, ochre #A37738, rust #B4512D, dried red #6C2427, bone #DDD0A6 and sparse hazard yellow #B4A044. Neutral flat diffuse light only; value changes are pigment and material, never a directional lamp; no baked cast shadow. At a 96-pixel subject read, broken outer contours occupy 1 to 2 pixels, interior marks at most 1 pixel; retain large quiet planes. Cluster heavy wear at joints and impact anchors: chipped paint, soot, exposed metal and rust; natural materials use sparse abrasion and dry broken texture. Ground, surface and decal boundaries have no continuous ink outline: use irregular dirt encroachment, worn rubber and fragmentary worn paint. Original designs only.

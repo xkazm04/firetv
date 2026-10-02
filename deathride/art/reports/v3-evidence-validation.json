@@ -1,0 +1,23 @@
+{
+  "status": "pass",
+  "modes_with_two_stick_repeats": 16,
+  "cached_geometry_identical_pixels": true,
+  "device_runs": 44,
+  "sessions": [
+    "v3-stick-c-session.json",
+    "v3-stick-d-session.json",
+    "v3-stick-e-session.json",
+    "v3-stick-f-session.json",
+    "v3-stick-g-session.json",
+    "v3-stick-h-session.json",
+    "v3-stick-i-session.json"
+  ],
+  "excluded_diagnostic_runs": 12,
+  "review_files": 41,
+  "apk_sha256": [
+    "2aeceddaee56445f7daa268e3f002c51524f15655108d05f1974701b273b7338",
+    "88d0ee77237d1b36bb4d36d2a2c86f1ec166f8048491a2d654e5481a56e35422",
+    "db785d5c78570623d16cb7127e7d6de8645c48f0be026392dae706d346499860"
+  ],
+  "scope": "hashes, real-device sample integrity, warmup/resolution, repeated measurements, paired binary identity, pixel equivalence, allocation accounting, separate package and portable exports; no owner acceptance, no full-game soak"
+}

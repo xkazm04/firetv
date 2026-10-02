@@ -1,0 +1,566 @@
+[
+  {
+    "id": "v4-fusion-landmarks-gantry-v1",
+    "class": "gantry",
+    "kind": "sprite",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v4-fusion-landmarks-gantry-v1\\attempt-01\\1.jpg",
+    "source_sha256": "d39d251087876a91f5eb647c524c86cfdd8c00a697a0c82c719bdc56194395f1",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v4-fusion-landmarks-gantry-v1",
+      "class": "gantry",
+      "prompt_action": "One track gantry seen directly from above: a single long thin horizontal bone-grey steel crossbeam connecting two square dirty ochre end supports, small rust-orange/ivory warning bands at both ends. Only top planes visible. No hanging sign, lettering, front wall or shadow. One SMALL isolated complete asset, floating in a large empty magenta field. All pixels within the middle HALF of the canvas; extremely generous empty margin on ALL four sides. Strong shape at 96 pixels, HUD at 32 pixels. Flat neutral material shading, no cast shadow, scene, car or lettering. Strict directly overhead plan view; no visible front or side wall.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "sprite",
+      "reference": "",
+      "batch": "v4-fusion-landmarks",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "128",
+      "style_file": "style-fusion.json",
+      "wave": "V4",
+      "asset_family": "landmarks",
+      "surface_stack": "seeded-decals-tall-props-baked-natural-bands",
+      "logical_name": "landmarks/gantry"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "metrics": {
+      "foreground_fraction": 0.12934207916259766,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        75,
+        387,
+        950,
+        636
+      ],
+      "margin_fraction": 0.072265625,
+      "aspect": 3.5140562248995986,
+      "estimated_key_rgb": [
+        186.0,
+        50.0,
+        132.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 9.627640985862003,
+      "palette_p90_delta_e": 15.617590332003253
+    },
+    "placement": {
+      "source_bounds_px": [
+        75,
+        387,
+        950,
+        636
+      ],
+      "source_pivot_px": [
+        512.5,
+        511.5
+      ],
+      "pivot_px": [
+        64.0,
+        32.0
+      ],
+      "cell_px": [
+        128,
+        64
+      ],
+      "subject_px": [
+        120,
+        34
+      ],
+      "scale": 0.13714285714285715,
+      "world_length_m": null,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 128
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v4-fusion-landmarks\\v4-fusion-landmarks-gantry-v1.png",
+    "sha256": "c57da722667c06b5ce53bffbcaabf87891301232effb090735f70ea2da394714"
+  },
+  {
+    "id": "v4-fusion-landmarks-split-marker-v1",
+    "class": "split-marker",
+    "kind": "sprite",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v4-fusion-landmarks-split-marker-v1\\attempt-01\\1.jpg",
+    "source_sha256": "9e815396310a3dbb32cdd79b0586cbfd2b9c5c1f2feb34b4eef9503686951266",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v4-fusion-landmarks-split-marker-v1",
+      "class": "split-marker",
+      "prompt_action": "One simple flat route-split marker: two bold bleached-bone chevrons diverging left and right from a short central charcoal stem, on two small rust plates. A readable flat overhead warning symbol, no words or numerals. One SMALL isolated complete asset, floating in a large empty magenta field. All pixels within the middle HALF of the canvas; extremely generous empty margin on ALL four sides. Strong shape at 96 pixels, HUD at 32 pixels. Flat neutral material shading, no cast shadow, scene, car or lettering. Strict directly overhead plan view; no visible front or side wall.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "sprite",
+      "reference": "",
+      "batch": "v4-fusion-landmarks",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "128",
+      "style_file": "style-fusion.json",
+      "wave": "V4",
+      "asset_family": "landmarks",
+      "surface_stack": "seeded-decals-tall-props-baked-natural-bands",
+      "logical_name": "landmarks/split-marker"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "metrics": {
+      "foreground_fraction": 0.3690357208251953,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        105,
+        94,
+        938,
+        879
+      ],
+      "margin_fraction": 0.083984375,
+      "aspect": 1.0611464968152866,
+      "estimated_key_rgb": [
+        207.0,
+        86.0,
+        190.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 3,
+      "palette_mean_delta_e": 9.625127380416236,
+      "palette_p90_delta_e": 13.631420808804346
+    },
+    "placement": {
+      "source_bounds_px": [
+        105,
+        94,
+        938,
+        879
+      ],
+      "source_pivot_px": [
+        521.5,
+        486.5
+      ],
+      "pivot_px": [
+        64.0,
+        63.5
+      ],
+      "cell_px": [
+        128,
+        128
+      ],
+      "subject_px": [
+        120,
+        113
+      ],
+      "scale": 0.14405762304921968,
+      "world_length_m": null,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 128
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v4-fusion-landmarks\\v4-fusion-landmarks-split-marker-v1.png",
+    "sha256": "a7a7fafac36884f4fbdeba24f7591115c7e80ccd18dc211c73ace54ad99ea779"
+  },
+  {
+    "id": "v4-fusion-landmarks-stone-stack-v1",
+    "class": "stone-stack",
+    "kind": "sprite",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v4-fusion-landmarks-stone-stack-v1\\attempt-01\\1.jpg",
+    "source_sha256": "78da6361e5828aeb9286e2252d5ff0cbb055046648c094260b6e279d0657bd75",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v4-fusion-landmarks-stone-stack-v1",
+      "class": "stone-stack",
+      "prompt_action": "A small compact pile of three angular slate-grey rocks of different sizes, seen directly from above. Faceted flat top planes, bold dark contours, neutral symmetric material shading, no cast shadow. One SMALL isolated complete asset, floating in a large empty magenta field. All pixels within the middle HALF of the canvas; extremely generous empty margin on ALL four sides. Strong shape at 96 pixels, HUD at 32 pixels. Flat neutral material shading, no cast shadow, scene, car or lettering. Strict directly overhead plan view; no visible front or side wall.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "sprite",
+      "reference": "",
+      "batch": "v4-fusion-landmarks",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "128",
+      "style_file": "style-fusion.json",
+      "wave": "V4",
+      "asset_family": "landmarks",
+      "surface_stack": "seeded-decals-tall-props-baked-natural-bands",
+      "logical_name": "landmarks/stone-stack"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "metrics": {
+      "foreground_fraction": 0.32898616790771484,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        139,
+        152,
+        886,
+        871
+      ],
+      "margin_fraction": 0.134765625,
+      "aspect": 1.03894297635605,
+      "estimated_key_rgb": [
+        219.0,
+        56.0,
+        164.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 9.536568130804937,
+      "palette_p90_delta_e": 16.09756516399306
+    },
+    "placement": {
+      "source_bounds_px": [
+        139,
+        152,
+        886,
+        871
+      ],
+      "source_pivot_px": [
+        512.5,
+        511.5
+      ],
+      "pivot_px": [
+        64.0,
+        64.0
+      ],
+      "cell_px": [
+        128,
+        128
+      ],
+      "subject_px": [
+        120,
+        116
+      ],
+      "scale": 0.1606425702811245,
+      "world_length_m": null,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 128
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v4-fusion-landmarks\\v4-fusion-landmarks-stone-stack-v1.png",
+    "sha256": "d2ca7d6ae8c84a621e831659396c97096a58084ef49f1956df26b136ed19f6fd"
+  },
+  {
+    "id": "v4-fusion-landmarks-sun-sign-v1",
+    "class": "sun-sign",
+    "kind": "sprite",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v4-fusion-landmarks-sun-sign-v1\\attempt-01\\1.jpg",
+    "source_sha256": "401871f0172b4025ce0e41739d770fee3a48c27abc692abcaffd2da541f74096",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v4-fusion-landmarks-sun-sign-v1",
+      "class": "sun-sign",
+      "prompt_action": "One flat square ochre route-warning plate bearing a simple bleached-bone sun pictogram, eight short rays around a solid rust-orange disc. No letters, numbers or brand. Front-facing flat sign icon, short bone-grey support at bottom. One SMALL isolated complete asset, floating in a large empty magenta field. All pixels within the middle HALF of the canvas; extremely generous empty margin on ALL four sides. Strong shape at 96 pixels, HUD at 32 pixels. Flat neutral material shading, no cast shadow, scene, car or lettering. Strict directly overhead plan view; no visible front or side wall.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "sprite",
+      "reference": "",
+      "batch": "v4-fusion-landmarks",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "128",
+      "style_file": "style-fusion.json",
+      "wave": "V4",
+      "asset_family": "landmarks",
+      "surface_stack": "seeded-decals-tall-props-baked-natural-bands",
+      "logical_name": "landmarks/sun-sign"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "metrics": {
+      "foreground_fraction": 0.38271045684814453,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        217,
+        137,
+        822,
+        910
+      ],
+      "margin_fraction": 0.111328125,
+      "aspect": 0.7826649417852523,
+      "estimated_key_rgb": [
+        234.0,
+        69.0,
+        225.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 6.533130516895178,
+      "palette_p90_delta_e": 9.835089775910271
+    },
+    "placement": {
+      "source_bounds_px": [
+        217,
+        137,
+        822,
+        910
+      ],
+      "source_pivot_px": [
+        519.5,
+        523.5
+      ],
+      "pivot_px": [
+        64.0,
+        64.0
+      ],
+      "cell_px": [
+        128,
+        128
+      ],
+      "subject_px": [
+        94,
+        120
+      ],
+      "scale": 0.15523932729624837,
+      "world_length_m": null,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 128
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v4-fusion-landmarks\\v4-fusion-landmarks-sun-sign-v1.png",
+    "sha256": "a7a3a4ccb8b7ca84e4bfd923d15ca6ed5d8ce7db956eaadcf1fad7be4b22cc89"
+  },
+  {
+    "id": "v4-fusion-landmarks-sluice-v1",
+    "class": "sluice",
+    "kind": "sprite",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v4-fusion-landmarks-sluice-v1\\attempt-01\\1.jpg",
+    "source_sha256": "2e595de46990d9f62c98d01c4eb1e3a5bb5dd1bbd4ef0216b67dda2260e240b0",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v4-fusion-landmarks-sluice-v1",
+      "class": "sluice",
+      "prompt_action": "One compact water-control gate seen directly from above: a rectangular soot-grey steel gate plate between two parallel grey rails, dark blue water visible in a narrow central slot. Only horizontal top surfaces, no vertical walls, no scene. One SMALL isolated complete asset, floating in a large empty magenta field. All pixels within the middle HALF of the canvas; extremely generous empty margin on ALL four sides. Strong shape at 96 pixels, HUD at 32 pixels. Flat neutral material shading, no cast shadow, scene, car or lettering. Strict directly overhead plan view; no visible front or side wall.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "sprite",
+      "reference": "",
+      "batch": "v4-fusion-landmarks",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "128",
+      "style_file": "style-fusion.json",
+      "wave": "V4",
+      "asset_family": "landmarks",
+      "surface_stack": "seeded-decals-tall-props-baked-natural-bands",
+      "logical_name": "landmarks/sluice"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "metrics": {
+      "foreground_fraction": 0.374908447265625,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        126,
+        228,
+        909,
+        796
+      ],
+      "margin_fraction": 0.1123046875,
+      "aspect": 1.3785211267605635,
+      "estimated_key_rgb": [
+        222.0,
+        74.0,
+        159.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 8.065642896486075,
+      "palette_p90_delta_e": 17.78749728411065
+    },
+    "placement": {
+      "source_bounds_px": [
+        126,
+        228,
+        909,
+        796
+      ],
+      "source_pivot_px": [
+        517.5,
+        512.0
+      ],
+      "pivot_px": [
+        64.0,
+        63.5
+      ],
+      "cell_px": [
+        128,
+        128
+      ],
+      "subject_px": [
+        120,
+        87
+      ],
+      "scale": 0.1532567049808429,
+      "world_length_m": null,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 128
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v4-fusion-landmarks\\v4-fusion-landmarks-sluice-v1.png",
+    "sha256": "a3ecb9abcf8024dac8077e882057882f2702cac76d689ad3a9c5355995f5debb"
+  },
+  {
+    "id": "v4-fusion-landmarks-snow-pole-v1",
+    "class": "snow-pole",
+    "kind": "sprite",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v4-fusion-landmarks-snow-pole-v1\\attempt-01\\1.jpg",
+    "source_sha256": "fe5945178bac71c51db3b8b6c0c42dba084df793eaa0dd2fff3ce13756db2675",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v4-fusion-landmarks-snow-pole-v1",
+      "class": "snow-pole",
+      "prompt_action": "One compact alpine route marker icon: a narrow vertical rust-orange and bleached-bone banded post with a small flat triangular ochre flag at its top, short charcoal foot. Front-facing flat warning pictogram, no depth, no lettering or shadow. One SMALL isolated complete asset, floating in a large empty magenta field. All pixels within the middle HALF of the canvas; extremely generous empty margin on ALL four sides. Strong shape at 96 pixels, HUD at 32 pixels. Flat neutral material shading, no cast shadow, scene, car or lettering. Strict directly overhead plan view; no visible front or side wall.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "sprite",
+      "reference": "",
+      "batch": "v4-fusion-landmarks",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "128",
+      "style_file": "style-fusion.json",
+      "wave": "V4",
+      "asset_family": "landmarks",
+      "surface_stack": "seeded-decals-tall-props-baked-natural-bands",
+      "logical_name": "landmarks/snow-pole"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "metrics": {
+      "foreground_fraction": 0.09029674530029297,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        371,
+        116,
+        787,
+        908
+      ],
+      "margin_fraction": 0.11328125,
+      "aspect": 0.5252525252525253,
+      "estimated_key_rgb": [
+        230.0,
+        87.0,
+        180.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 7.3733272957773535,
+      "palette_p90_delta_e": 12.303942689462808
+    },
+    "placement": {
+      "source_bounds_px": [
+        371,
+        116,
+        787,
+        908
+      ],
+      "source_pivot_px": [
+        579.0,
+        512.0
+      ],
+      "pivot_px": [
+        63.5,
+        64.0
+      ],
+      "cell_px": [
+        128,
+        128
+      ],
+      "subject_px": [
+        63,
+        120
+      ],
+      "scale": 0.15151515151515152,
+      "world_length_m": null,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 128
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v4-fusion-landmarks\\v4-fusion-landmarks-snow-pole-v1.png",
+    "sha256": "ef36a31717227c00cf7034bfd15f14b532a58410b6663890dacb1bc9743895eb"
+  }
+]

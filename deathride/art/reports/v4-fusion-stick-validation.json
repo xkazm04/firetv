@@ -1,0 +1,10 @@
+{
+  "status": "pass",
+  "runs": 4,
+  "modes": 2,
+  "samples_per_run": 900,
+  "warmup": 240,
+  "resident_mib": 31.25,
+  "integration_unchanged": true,
+  "summary": "Stick AFTKM, two runs per variant at 1080p: natural edges 16.69/17.89 ms p50/p95; matched control 16.70/18.11 ms. Full art allocation 31.25 MiB (+0.50 MiB ribbon); cached course vertices 28,800 bytes. Short isolated renderer measurements, not a full-game soak."
+}

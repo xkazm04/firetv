@@ -13,7 +13,7 @@ import sys
 import time
 import uuid
 from datetime import datetime, timezone
-from common import ART, ROOT, append_json, briefs, compile_prompt, digest, file_lock, make_contact_sheet, now, read_json, sha, write_json
+from common import ART, ROOT, append_json, briefs, compile_prompt, digest, file_lock, make_contact_sheet, now, read_json, sha, write_json, style_for
 
 # A bare number can be a token count or a dimension. Require error context for 429.
 QUOTA = re.compile(r'(?i)(rate.?limit(?:ed| exceeded| reached)|quota.{0,50}(exceed|exhaust|reach)|too many requests|\b(?:HTTP(?:/\d(?:\.\d)?)?\s*|status(?:_code| code)?[\"\s:=]*|error[\"\s:=]*)429\b|\b429\s+(?:too many|rate limit)|usage limit.{0,40}(exceed|reach)|insufficient.{0,15}credits)')
@@ -117,6 +117,9 @@ def candidates(row):
     return sorted(folder.glob('attempt-*/sidecar.json')) if folder.exists() else []
 
 def reference_gate(row,art=ART):
+    if row.get('wave') in ('V2','V4') or row.get('id','').startswith(('v2-','v4-')):
+        from style_choice import require_choice
+        require_choice(row, art)
     requirement=row.get('requires_approval','')
     if not requirement:return
     path=Path(art)/'reference-approvals.json'
@@ -254,13 +257,15 @@ def main():
     rows=briefs(args.briefs)
     rows=[r for r in rows if r['status']=='ready' and (not args.batch or r['batch']==args.batch)]
     if not rows: raise ValueError('no ready briefs')
-    style=read_json(ART/'style.json')
     budget=Budget()
     if args.mode=='dry-run':
         print(json.dumps({'images':len(rows),'batches':sorted({r['batch'] for r in rows}),'budget':budget.summary()},indent=2)); return
     with file_lock(ART/'.run.lock',timeout=1):
         for batch in dict.fromkeys(r['batch'] for r in rows):
             group=[r for r in rows if r['batch']==batch]
+            style=style_for(group[0])
+            if any(style_for(r)!=style for r in group):
+                raise ValueError('a proof batch must have exactly one style contract')
             if args.mode in ['approve-proof','reject-proof']:
                 if not args.review_note: raise ValueError('inspection evidence required')
                 found=candidates(group[0])

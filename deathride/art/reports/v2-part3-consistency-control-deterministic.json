@@ -1,0 +1,100 @@
+[
+  {
+    "id": "v2-part3-consistency-control-v1",
+    "class": "Line",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v2-part3-consistency-control-v1\\attempt-01\\1.jpg",
+    "source_sha256": "e1c218fb780eac5e42241ba70ced409aad5b0c026ff9c096a2a98c84dab072a3",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-part3-consistency-control-v1",
+      "class": "Line",
+      "prompt_action": "Use the supplied approved image as the exact identity. Freeze geometry, wheel count and wheel centres, chassis footprint, roof/cabin, attachments, camera, rightward heading, neutral lighting and framing. Preserve the same car and its material roles. A scavenged compact coupe with a rounded RIGHT nose, broad dark windshield, patched dried-red hood, one off-centre chipped bone stripe, welded door shields and a short bent flat rear spoiler at LEFT. A wedge of rough welded plates reinforces the nose. Recognisable low coupe roof, four inset wheels. Change ONLY painted body panels to muted bleached bone #DDD0A6. Preserve all glass, rubber, bare metal, structural parts, wear and existing contrasting identity stripe/patches. No new damage. No emblems, text or numbers. Keep the exact complete footprint and generous empty border.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "",
+      "batch": "v2-part3-consistency-control",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "cars",
+      "surface_stack": ""
+    },
+    "verdict": "reject",
+    "codes": [
+      "CROPPED_OR_MARGIN"
+    ],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "metrics": {
+      "foreground_fraction": 0.3874034881591797,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        38,
+        257,
+        999,
+        768
+      ],
+      "margin_fraction": 0.0244140625,
+      "aspect": 1.8806262230919766,
+      "expected_aspect": 2.08,
+      "aspect_relative_error": 0.09585277735962672,
+      "principal_axis_degrees": 0.2221196502833386,
+      "estimated_key_rgb": [
+        245.0,
+        138.0,
+        242.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 6.685685784766076,
+      "palette_p90_delta_e": 12.195960776919913
+    },
+    "placement": {
+      "source_bounds_px": [
+        38,
+        257,
+        999,
+        768
+      ],
+      "source_pivot_px": [
+        518.5,
+        512.5
+      ],
+      "pivot_px": [
+        127.5,
+        63.5
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        187,
+        99
+      ],
+      "scale": 0.19458896982310095,
+      "world_length_m": 7.8,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v2-part3-consistency-control\\v2-part3-consistency-control-v1.png",
+    "sha256": "11b19a6b18acfe1af9823c8d8f5cfad494e0cbe8518b67f8f98a84ae859d9b94"
+  }
+]

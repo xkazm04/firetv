@@ -1,0 +1,171 @@
+{
+  "at": "2026-10-02T12:00:22.178666+00:00",
+  "status": "pass",
+  "scope": "Evidence integrity and required inventory, not acceptance of held content or human calibration",
+  "portable_hash_checks": 532,
+  "approved_references": 6,
+  "reworks": 4,
+  "derived_states": 24,
+  "liveries": 18,
+  "control_arms": 2,
+  "generated_attempts": 63,
+  "current_rejects": [
+    {
+      "id": "v2-part3-rework-comet-v1",
+      "codes": [
+        "CROPPED_OR_MARGIN",
+        "HUMAN_CALIBRATION_PENDING",
+        "OWNER_APPROVAL_PENDING",
+        "VLM_LOW_CONFIDENCE"
+      ]
+    },
+    {
+      "id": "v2-part3-rework-kestrel-v3",
+      "codes": [
+        "ASPECT_BAND",
+        "CROPPED_OR_MARGIN",
+        "HUMAN_CALIBRATION_PENDING",
+        "OWNER_APPROVAL_PENDING",
+        "VLM_DISAGREEMENT",
+        "VLM_LOW_CONFIDENCE",
+        "VLM_UNCERTAIN"
+      ]
+    },
+    {
+      "id": "v2-part3-consistency-control-v1",
+      "codes": [
+        "CROPPED_OR_MARGIN",
+        "HUMAN_CALIBRATION_PENDING",
+        "OWNER_APPROVAL_PENDING",
+        "VLM_DISAGREEMENT",
+        "VLM_LOW_CONFIDENCE",
+        "VLM_UNCERTAIN"
+      ]
+    }
+  ],
+  "export_registration_holds": [],
+  "proofs": [
+    {
+      "batch": "v2-part3-line-states",
+      "source_sha256": "17acf92be42d81bf2bb6053fe372d10ed8126c614587c120130f2a4dee8d286d",
+      "checked_at": "2026-10-02T11:28:24.466796+00:00"
+    },
+    {
+      "batch": "v2-part3-line-liveries",
+      "source_sha256": "b812007803739568e620e7384c5fe15accc48eceae9ab0235382325a1c516efc",
+      "checked_at": "2026-10-02T11:28:24.563132+00:00"
+    },
+    {
+      "batch": "v2-part3-bastion-states",
+      "source_sha256": "63723399956962878f9c84a677078a55969f92f52e125216ecdd3a9610ae62f1",
+      "checked_at": "2026-10-02T11:28:24.653845+00:00"
+    },
+    {
+      "batch": "v2-part3-bastion-liveries",
+      "source_sha256": "fc75c79b73debd128f0f174ef43bbef1b2db9db1d43accdf17345b2028a572d0",
+      "checked_at": "2026-10-02T11:28:24.738589+00:00"
+    },
+    {
+      "batch": "v2-part3-trail-states",
+      "source_sha256": "b5612bf3cffa1dfe164295d6512681ea680ceaeacc2d92bec78d69e2ad40ba05",
+      "checked_at": "2026-10-02T11:28:24.820148+00:00"
+    },
+    {
+      "batch": "v2-part3-trail-liveries",
+      "source_sha256": "b4b7954e4be08e7a0d32acd4c956eac45eacb41efead0bf02c68d61c6f4f1537",
+      "checked_at": "2026-10-02T11:28:24.900116+00:00"
+    },
+    {
+      "batch": "v2-part3-flint-states",
+      "source_sha256": "ec72d7e7a3b3887aa9c8bcae64cf8e861eef9563e1e05d543c891f37a1e58b33",
+      "checked_at": "2026-10-02T11:28:24.986904+00:00"
+    },
+    {
+      "batch": "v2-part3-flint-liveries",
+      "source_sha256": "4f290242a7ee7dd6a45f8d85caa38e0cff1a1aacfcf47110839094cb55a7d898",
+      "checked_at": "2026-10-02T11:28:25.094521+00:00"
+    },
+    {
+      "batch": "v2-part3-vandal-states",
+      "source_sha256": "dac33bc5c956f31b541bcdcbf07d69559c033883e636d667231e914bf76847d0",
+      "checked_at": "2026-10-02T11:28:25.180261+00:00"
+    },
+    {
+      "batch": "v2-part3-vandal-liveries",
+      "source_sha256": "5029361823f9f37081869d5841c568478d287b459b2916e24ad3b63b1ef39850",
+      "checked_at": "2026-10-02T11:28:25.263003+00:00"
+    },
+    {
+      "batch": "v2-part3-bulwark-states",
+      "source_sha256": "f0fe95813ceb89d7c6d6a95fa34a83a4c56f35e89492a615cfbe22d22d32de97",
+      "checked_at": "2026-10-02T11:28:25.371500+00:00"
+    },
+    {
+      "batch": "v2-part3-bulwark-liveries",
+      "source_sha256": "7fdcc18a8e263202eb07b09d71b0fc51fcea22d1517fca876f99b73f3acf3a9e",
+      "checked_at": "2026-10-02T11:28:25.477384+00:00"
+    }
+  ],
+  "budget": {
+    "week": "2026-W40",
+    "images_reserved": 401,
+    "remaining": 149,
+    "videos": 0,
+    "stop": null
+  },
+  "part_reservations": 63,
+  "attempts_per_slot": {
+    "v2-part3-rework-needle": 1,
+    "v2-part3-rework-comet": 3,
+    "v2-part3-rework-quill": 2,
+    "v2-part3-rework-kestrel": 3,
+    "v2-part3-line-state-intact": 2,
+    "v2-part3-line-livery-bone": 1,
+    "v2-part3-bastion-state-intact": 2,
+    "v2-part3-bastion-livery-bone": 1,
+    "v2-part3-trail-state-intact": 2,
+    "v2-part3-trail-livery-bone": 1,
+    "v2-part3-flint-state-intact": 3,
+    "v2-part3-flint-livery-bone": 2,
+    "v2-part3-vandal-state-intact": 2,
+    "v2-part3-vandal-livery-bone": 1,
+    "v2-part3-bulwark-state-intact": 2,
+    "v2-part3-bulwark-livery-bone": 1,
+    "v2-part3-consistency-control": 1,
+    "v2-part3-line-state-damaged-1": 1,
+    "v2-part3-line-state-damaged-2": 1,
+    "v2-part3-line-state-wreck": 1,
+    "v2-part3-line-livery-red": 1,
+    "v2-part3-line-livery-ochre": 1,
+    "v2-part3-bastion-state-damaged-1": 1,
+    "v2-part3-bastion-state-damaged-2": 1,
+    "v2-part3-bastion-state-wreck": 1,
+    "v2-part3-bastion-livery-red": 1,
+    "v2-part3-bastion-livery-ochre": 1,
+    "v2-part3-trail-state-damaged-1": 1,
+    "v2-part3-trail-state-damaged-2": 1,
+    "v2-part3-trail-state-wreck": 1,
+    "v2-part3-trail-livery-red": 1,
+    "v2-part3-trail-livery-ochre": 1,
+    "v2-part3-flint-state-damaged-1": 2,
+    "v2-part3-flint-state-damaged-2": 1,
+    "v2-part3-flint-state-wreck": 1,
+    "v2-part3-flint-livery-red": 1,
+    "v2-part3-flint-livery-ochre": 1,
+    "v2-part3-vandal-state-damaged-1": 1,
+    "v2-part3-vandal-state-damaged-2": 1,
+    "v2-part3-vandal-state-wreck": 2,
+    "v2-part3-vandal-livery-red": 1,
+    "v2-part3-vandal-livery-ochre": 1,
+    "v2-part3-bulwark-state-damaged-1": 2,
+    "v2-part3-bulwark-state-damaged-2": 1,
+    "v2-part3-bulwark-state-wreck": 1,
+    "v2-part3-bulwark-livery-red": 1,
+    "v2-part3-bulwark-livery-ochre": 1
+  },
+  "guarded_one_image_results": 63,
+  "approved_reference_edit_inputs_verified": 53,
+  "semantic_observations": 126,
+  "current_paired_identity_observations": 84,
+  "blocked_rework_derivatives": 28
+}

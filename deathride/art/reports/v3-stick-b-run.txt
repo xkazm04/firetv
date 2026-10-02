@@ -1,0 +1,26 @@
+Waiting for 60-second idle integration window: {'at': '2026-10-01T14:35:35.095279+00:00', 'phase': 'lobby', 'paused': False, 'idle': True}
+Waiting for 60-second idle integration window: {'at': '2026-10-01T14:35:55.153346+00:00', 'phase': 'lobby', 'paused': False, 'idle': True}
+Waiting for 60-second idle integration window: {'at': '2026-10-01T14:36:15.240164+00:00', 'phase': 'lobby', 'paused': False, 'idle': True}
+Performing Streamed Install
+
+Success
+
+
+deathride/.art-venv/Scripts/python.exe : Traceback (most recent call last):
+At line:2 char:1
++ deathride/.art-venv/Scripts/python.exe deathride/tools/art/surface_ru ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (Traceback (most recent call last)::String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+
+  File "C:\Users\kazda\kiro\firetv-deathride-art\deathride\tools\art\surface_run.py", line 128, in <module>
+    if __name__=='__main__':main()
+                            ^^^^^^
+  File "C:\Users\kazda\kiro\firetv-deathride-art\deathride\tools\art\surface_run.py", line 125, in main
+    device(a.device,modes,styles,a.run)
+  File "C:\Users\kazda\kiro\firetv-deathride-art\deathride\tools\art\surface_run.py", line 77, in device
+    if current and not current.startswith(PACKAGE+'/'):raise RuntimeError('STICK_BUSY: lab lost foreground; discard
+interrupted timing')
+
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: STICK_BUSY: lab lost foreground; discard interrupted timing

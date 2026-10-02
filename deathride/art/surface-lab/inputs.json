@@ -1,0 +1,164 @@
+{
+  "schema": 1,
+  "seed": 713,
+  "macro_algorithm": "five periodic sine harmonics; numpy PCG64 phase seed 713; 128 square RGBA",
+  "scope": "review-only lab inputs; not production selections",
+  "records": [
+    {
+      "file": "baseline.png",
+      "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p4-tiles\\p4-tiles-asphalt-worn-v1.png",
+      "source_sha256": "ea4fe4991958ffad97a6ee6d6a814feb747e79d0992654b365f079ed237862b7",
+      "sha256": "ea4fe4991958ffad97a6ee6d6a814feb747e79d0992654b365f079ed237862b7",
+      "role": "v1 worn asphalt comparison",
+      "source_gate_codes": [],
+      "owner_approved": false
+    },
+    {
+      "file": "dirt.png",
+      "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\p4-tiles\\p4-tiles-dirt-v1.png",
+      "source_sha256": "334704ec6ea986c0ba3f8f0348d86da7d83b6a46ef4984edb394b5124717a6f9",
+      "sha256": "334704ec6ea986c0ba3f8f0348d86da7d83b6a46ef4984edb394b5124717a6f9",
+      "role": "same v1 dirt in every experiment",
+      "source_gate_codes": [],
+      "owner_approved": false
+    },
+    {
+      "file": "ground-0.png",
+      "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v1-rust-ink\\v1-rust-ink-ground-v1.png",
+      "source_sha256": "02274c413b2f5d56745370d932f4a49fccf44e22aadf837d8e2b0e3756249a66",
+      "sha256": "02274c413b2f5d56745370d932f4a49fccf44e22aadf837d8e2b0e3756249a66",
+      "role": "unapproved rust-ink style proof; failures visible",
+      "source_gate_codes": [],
+      "owner_approved": false
+    },
+    {
+      "file": "ground-1.png",
+      "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v1-bleached-poster\\v1-bleached-poster-ground-v1.png",
+      "source_sha256": "d217213b6868a4b3974b83d41854c0493a6b06b4140275fa004d57d85656ed30",
+      "sha256": "d217213b6868a4b3974b83d41854c0493a6b06b4140275fa004d57d85656ed30",
+      "role": "unapproved bleached-poster style proof; failures visible",
+      "source_gate_codes": [
+        "TILE_SEAM_PEAK"
+      ],
+      "owner_approved": false
+    },
+    {
+      "file": "ground-2.png",
+      "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v1-scrap-collage\\v1-scrap-collage-ground-v1.png",
+      "source_sha256": "7b08d1083b6f3fc9d1e23e05a56bbe2992fa22ec6f8d50984c29f424b6806343",
+      "sha256": "7b08d1083b6f3fc9d1e23e05a56bbe2992fa22ec6f8d50984c29f424b6806343",
+      "role": "unapproved scrap-collage style proof; failures visible",
+      "source_gate_codes": [],
+      "owner_approved": false
+    },
+    {
+      "file": "car.png",
+      "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v1-rust-ink\\v1-rust-ink-heavy-v1.png",
+      "source_sha256": "5d6007caed531ddd294a506e4ff011f7d255374a83a9d329fc516280a71b793d",
+      "sha256": "5d6007caed531ddd294a506e4ff011f7d255374a83a9d329fc516280a71b793d",
+      "role": "same original unapproved heavy proof in all modes",
+      "source_gate_codes": [],
+      "owner_approved": false
+    },
+    {
+      "atlas_region": 0,
+      "logical_name": "decals/cracks",
+      "source_id": "p4-decals-cracks-v2",
+      "source_sha256": "6adda5c8db235474d59f99e38289c77c7c8501b62d00170d6630119c192a86c6",
+      "role": "same v1 detail in all modes; surface technique experiment"
+    },
+    {
+      "atlas_region": 1,
+      "logical_name": "decals/oil",
+      "source_id": "p4-decals-oil-v1",
+      "source_sha256": "dfb104d09103cbb9aa59d448d3f2a519b06bce6ed17ca2f06abf654d3865dae2",
+      "role": "same v1 detail in all modes; surface technique experiment"
+    },
+    {
+      "atlas_region": 2,
+      "logical_name": "decals/skid",
+      "source_id": "p4-decals-skid-v1",
+      "source_sha256": "4d58410477c199c9911459307a3170007985cdecfb7fd9078136345e3b4e35be",
+      "role": "same v1 detail in all modes; surface technique experiment"
+    },
+    {
+      "atlas_region": 3,
+      "logical_name": "decals/scorch",
+      "source_id": "p4-decals-scorch-v1",
+      "source_sha256": "8576695172faf0eda9ac80086ca81669871aebf42ffb575e5a249ede41c339c2",
+      "role": "same v1 detail in all modes; surface technique experiment"
+    },
+    {
+      "atlas_region": 4,
+      "logical_name": "landmarks/stone-stack",
+      "source_id": "p4-landmarks-stone-stack-v1",
+      "source_sha256": "2a508803512f31a607259c23338ca7abade651db108142f1dd079568b84c37f9",
+      "role": "same v1 detail in all modes; surface technique experiment"
+    },
+    {
+      "atlas_region": 5,
+      "logical_name": "barriers/concrete-straight",
+      "source_id": "p4-barriers-concrete-straight-v1",
+      "source_sha256": "e6f3caab9f039d210aa36bb9207915534b3c4aeb6760838c9824c36022471368",
+      "role": "same v1 detail in all modes; surface technique experiment"
+    }
+  ],
+  "files": {
+    "baseline.png": {
+      "sha256": "ea4fe4991958ffad97a6ee6d6a814feb747e79d0992654b365f079ed237862b7",
+      "size": [
+        256,
+        256
+      ]
+    },
+    "car.png": {
+      "sha256": "5d6007caed531ddd294a506e4ff011f7d255374a83a9d329fc516280a71b793d",
+      "size": [
+        256,
+        256
+      ]
+    },
+    "details.png": {
+      "sha256": "a05e023ef2ee3c5ae42ffd7ae755c043f23ffdf85fc38022ebc3f10b24d5193b",
+      "size": [
+        512,
+        512
+      ]
+    },
+    "dirt.png": {
+      "sha256": "334704ec6ea986c0ba3f8f0348d86da7d83b6a46ef4984edb394b5124717a6f9",
+      "size": [
+        256,
+        256
+      ]
+    },
+    "ground-0.png": {
+      "sha256": "02274c413b2f5d56745370d932f4a49fccf44e22aadf837d8e2b0e3756249a66",
+      "size": [
+        256,
+        256
+      ]
+    },
+    "ground-1.png": {
+      "sha256": "d217213b6868a4b3974b83d41854c0493a6b06b4140275fa004d57d85656ed30",
+      "size": [
+        256,
+        256
+      ]
+    },
+    "ground-2.png": {
+      "sha256": "7b08d1083b6f3fc9d1e23e05a56bbe2992fa22ec6f8d50984c29f424b6806343",
+      "size": [
+        256,
+        256
+      ]
+    },
+    "macro.png": {
+      "sha256": "c29133bae24e571d89fcfb56bcec59ea040573a9e9d036f7c5e80fb6d87ae929",
+      "size": [
+        128,
+        128
+      ]
+    }
+  }
+}

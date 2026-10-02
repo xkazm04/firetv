@@ -1,0 +1,610 @@
+{
+  "v2-part3-rework-needle-v1": {
+    "source_sha256": "b03a72a9338ceb843abe7d21837d7b70f9b8abb63054590cf9cb75c18b27b9a2",
+    "export_sha256": "e393ccd8069395f17d859dbe388eb2d7d7d25f0b1d3460741c56cc9e701d8559",
+    "at": "2026-10-02T11:30:06.520965+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "Silver steel tubes and panels are visibly lighter than the original ochre construction. Four exposed tread tops, empty cage and forked right nose remain recognizable. Source and 96px export inspected; gates pass. Local overhead uncertainty retained. Owner approval pending.",
+    "verdict": "owner-review",
+    "codes": []
+  },
+  "v2-part3-rework-comet-v1": {
+    "source_sha256": "754ac11db79180719efb89c62d0bca79efd3590e2aadc758f37bb6dbef0e253b",
+    "export_sha256": "72c5c0d2eddd7efaf7527695fe16621034c3da37f18f52236cd086ef288d72d4",
+    "at": "2026-10-02T11:30:06.520965+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "Twin visible fan intakes and substantial rear turbine housings replace the old wing/exhaust language while retaining the long low right nose. This is the strongest design candidate among three attempts but its 13px minimum source margin fails. Selected only for owner review, not acceptance. No fourth call or padding.",
+    "verdict": "reject",
+    "codes": [
+      "CROPPED_OR_MARGIN"
+    ]
+  },
+  "v2-part3-rework-comet-v2": {
+    "source_sha256": "cd3c421c41f716ce4f8c96402f2b4b6c16f66b129aca3606766601076d251bb0",
+    "export_sha256": "3f521b800ed7583548c3e805de88ab3aa5e73d7936d95e5108cd8f02a3467071",
+    "at": "2026-10-02T11:30:06.520965+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "Rear turbines and reinforced cradle visible, but wheel/outrigger spread makes the silhouette too wide and the right edge is too close. Rejected source at attempt two.",
+    "verdict": "reject",
+    "codes": [
+      "CROPPED_OR_MARGIN",
+      "ASPECT_BAND"
+    ]
+  },
+  "v2-part3-rework-comet-v3": {
+    "source_sha256": "ec110d21608cee971b5854efc34f70e3ef752d8df67ca487823c71a8caab4876",
+    "export_sha256": "7927c4d9a82810c7060db5b7df2ced91283f5d8c66d8b663917c71cb9cacce25",
+    "at": "2026-10-02T11:30:06.520965+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "Obvious turbine fan mouths and massive rear plates, but the shortened broad chassis misses the long speed silhouette and the tip remains near the edge. Third attempt exhausted; earlier v1 retained as the strongest rejected design.",
+    "verdict": "reject",
+    "codes": [
+      "CROPPED_OR_MARGIN",
+      "ASPECT_BAND"
+    ]
+  },
+  "v2-part3-rework-quill-v1": {
+    "source_sha256": "62f6f225f6d3621dbdf4f7058aa711758555f12d31da40dc763654eb166dfd31",
+    "export_sha256": "d4f6e36832e875c22a1bd4c8fc845cc8a9ba33d955e85b1cfa80c7aae256019e",
+    "at": "2026-10-02T11:30:06.520965+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "Heavier central body with front/rear curved tusks, but source framing still fails; original source retained.",
+    "verdict": "reject",
+    "codes": [
+      "CROPPED_OR_MARGIN"
+    ]
+  },
+  "v2-part3-rework-quill-v2": {
+    "source_sha256": "50b3a9df92d64c24d3795918e6eaae078e37ab2a1b9f615bd66ea630ef39e4e4",
+    "export_sha256": "f840ac53d34e68ba5e1e9af712a92b3ababc424e0d7184ef91907aa4d61f4bc4",
+    "at": "2026-10-02T11:30:06.520965+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "Medium-weight broad central armour replaces the pencil chassis. Thick pale front and rear tusks and shorter shoulder teeth provide contact weapons at both ends. Four tread tops, +x roof plan and neutral material shading retained. Pixel gates pass; source and 96px export inspected. Owner approval pending.",
+    "verdict": "owner-review",
+    "codes": []
+  },
+  "v2-part3-rework-kestrel-v1": {
+    "source_sha256": "25b312317d8d3d96d575f4bdc8e6164e6421c4d345d7c43ddc8696b8ea908716",
+    "export_sha256": "36413db935eb62da7dd80ce2f1ea314d80458d00328ceecdf440e67b287864c3",
+    "at": "2026-10-02T11:30:06.520965+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "Rear coils and electrical cabling appear, but tight source margins remain. Front head still reads close to the old simple spear.",
+    "verdict": "reject",
+    "codes": [
+      "CROPPED_OR_MARGIN"
+    ]
+  },
+  "v2-part3-rework-kestrel-v2": {
+    "source_sha256": "e93d999994341c53718f595baad9426bb23625b756cf0a021d98ce4d301c93b2",
+    "export_sha256": "6c136be4c5605dd6490284680aa6c40ff5c6ec0b9332560bcb6aced65b23fe7f",
+    "at": "2026-10-02T11:30:06.520965+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "Electrical rear coils and energy core, visible cables and two barbed front launchers. Pixel gates pass, but two launchers differ from the requested single electric harpoon. Retained as a technically passing alternative, not the selected final interpretation.",
+    "verdict": "reject",
+    "codes": [
+      "OWNER_BRIEF_SINGLE_HARPOON"
+    ]
+  },
+  "v2-part3-rework-kestrel-v3": {
+    "source_sha256": "0252116d9d88498af123688e34d9ed1371155de8e3cacc26ba69433f59c70cfb",
+    "export_sha256": "a263ded858dba61e7807a302244ec24ea2e12f42cf1b56719b49c0735554d6cf",
+    "at": "2026-10-02T11:30:06.520965+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "One large hooked electric harpoon on the front rail, pale arcs across the rail and overcharged rear coils are readable. The generator added a wide tether loop and grew the subject despite framing constraints: source margin and aspect fail. Final bounded attempt, owner-unapproved and rejected.",
+    "verdict": "reject",
+    "codes": [
+      "CROPPED_OR_MARGIN",
+      "ASPECT_BAND"
+    ]
+  },
+  "v2-part3-consistency-control-v1": {
+    "source_sha256": "e1c218fb780eac5e42241ba70ced409aad5b0c026ff9c096a2a98c84dab072a3",
+    "export_sha256": "11b19a6b18acfe1af9823c8d8f5cfad494e0cbe8518b67f8f98a84ae859d9b94",
+    "at": "2026-10-02T11:30:06.520965+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "Unconditioned Line-shaped coupe differs in body outline and paint distribution despite identical action/style prompt. Right source margin fails. One diagnostic control only, never a reference or family selection.",
+    "verdict": "reject",
+    "codes": [
+      "CROPPED_OR_MARGIN"
+    ]
+  },
+  "v2-part3-line-state-intact-v1": {
+    "source_sha256": "9f9a4bbaeb4bbacbfecc42c07221c1774573804082ed5873f92b4f8c8d1bec60",
+    "export_sha256": "db1ba3ac857de29ec167f816ee483fbe2bbcd1e00d7b493d8ca8b0ee9a0b9d27",
+    "at": "2026-10-02T11:30:06.522469+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "Intact proof over-cleans the established distressed ink and wear; superseded by an explicitly roadworthy, worn reference edit. Flint also loses the original worn bed floor appearance.",
+    "verdict": "reject",
+    "codes": [
+      "STYLE_WEAR_LOST"
+    ]
+  },
+  "v2-part3-bastion-state-intact-v1": {
+    "source_sha256": "86b92f649484f54db22dd4f54ce92a99c4b09480c432d38735d6d82968708ca0",
+    "export_sha256": "16b21fbcfe0a96148e2d310804c412c87dbf6f1634f2d041330eb4614e8c266d",
+    "at": "2026-10-02T11:30:06.522469+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "Intact proof over-cleans the established distressed ink and wear; superseded by an explicitly roadworthy, worn reference edit. Flint also loses the original worn bed floor appearance.",
+    "verdict": "reject",
+    "codes": [
+      "STYLE_WEAR_LOST"
+    ]
+  },
+  "v2-part3-trail-state-intact-v1": {
+    "source_sha256": "f2729268968f46d5378bf318ff684e14fe861cdf23c483f6e35191e64cdbccff",
+    "export_sha256": "b1b44840a69cb145b7c06551f92c89186bf6123b8c37d5bb04a4f7f4bb89c8f2",
+    "at": "2026-10-02T11:30:06.522469+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "Intact proof over-cleans the established distressed ink and wear; superseded by an explicitly roadworthy, worn reference edit. Flint also loses the original worn bed floor appearance.",
+    "verdict": "reject",
+    "codes": [
+      "STYLE_WEAR_LOST"
+    ]
+  },
+  "v2-part3-flint-state-intact-v1": {
+    "source_sha256": "9c0d961b480d7f6e8918a0696b7b23ad61356c2f476c1a01d5c3dbdf1844fb3d",
+    "export_sha256": "ea0b5ae8bc9fbaba2a8fbf615f0038c5c298a8a74b687fcb173a45c77fbbecbc",
+    "at": "2026-10-02T11:30:06.522469+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "Intact proof over-cleans the established distressed ink and wear; superseded by an explicitly roadworthy, worn reference edit. Flint also loses the original worn bed floor appearance.",
+    "verdict": "reject",
+    "codes": [
+      "STYLE_WEAR_LOST"
+    ]
+  },
+  "v2-part3-flint-livery-bone-v1": {
+    "source_sha256": "586c83b195610080dc7e405d62fb5e6b0379905d2b9b696f56ba05726e9039be",
+    "export_sha256": "1f73d8fdf4394f90f7ab980fd216b72b7bb744ec9bc82aa18901df91bf1e41a3",
+    "at": "2026-10-02T11:30:06.523118+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "Obsolete verbal brief introduced a cross-brace that is absent from the exact approved source. Rejected after high-resolution source and paired inspection; corrected briefs make the plain bed floor authoritative.",
+    "verdict": "reject",
+    "codes": [
+      "REFERENCE_ATTACHMENT_DRIFT"
+    ]
+  },
+  "v2-part3-vandal-state-intact-v1": {
+    "source_sha256": "008ca9eada2f6f2b79a76fc0e2561edf8d9bf6c02c8d68b4a9adb64299e1c955",
+    "export_sha256": "dbf8ebba0317cf49815ccd67fad6d770c209fc4b6aef2e4ed232a42b28805c26",
+    "at": "2026-10-02T11:30:06.522469+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "Intact proof over-cleans the established distressed ink and wear; superseded by an explicitly roadworthy, worn reference edit. Flint also loses the original worn bed floor appearance.",
+    "verdict": "reject",
+    "codes": [
+      "STYLE_WEAR_LOST"
+    ]
+  },
+  "v2-part3-bulwark-state-intact-v1": {
+    "source_sha256": "ff9ab317e5d119ac377c4c7ea3608d98aff87999ac0cb0fa8f7c41c646b994d8",
+    "export_sha256": "adf85fc7b916e4862de06e7f71bc391332091960ce13af4e91a7de0e20c35cbe",
+    "at": "2026-10-02T11:30:06.522469+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "Intact proof over-cleans the established distressed ink and wear; superseded by an explicitly roadworthy, worn reference edit. Flint also loses the original worn bed floor appearance.",
+    "verdict": "reject",
+    "codes": [
+      "STYLE_WEAR_LOST"
+    ]
+  },
+  "v2-part3-flint-state-intact-v2": {
+    "source_sha256": "6071c23ace0e4163f32a2434352ade0abd4f2647eb0cb32a2a3fae1de027515b",
+    "export_sha256": "a8c7f32c70943de508ffde345321bf4c7949d8ec49ec1d1352c35a6695b51f37",
+    "at": "2026-10-02T11:30:06.523118+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "Obsolete verbal brief introduced a cross-brace that is absent from the exact approved source. Rejected after high-resolution source and paired inspection; corrected briefs make the plain bed floor authoritative.",
+    "verdict": "reject",
+    "codes": [
+      "REFERENCE_ATTACHMENT_DRIFT"
+    ]
+  },
+  "v2-part3-line-state-intact-v2": {
+    "source_sha256": "17acf92be42d81bf2bb6053fe372d10ed8126c614587c120130f2a4dee8d286d",
+    "export_sha256": "6e28709514c4d4f6bed704a0faabf5be9f26be4002651f695c3373bbc7d8276f",
+    "at": "2026-10-02T11:51:09.292957+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "Low coupe outline, four tyre positions, two dark glass planes and the chipped off-centre hood stripe remain recognizable. Roadworthy state retains the approved source wear, chipped pigment and rough ink instead of a factory-clean finish. Direct source/export family contact review complete; derivatives remain owner-unapproved.",
+    "verdict": "owner-review",
+    "codes": []
+  },
+  "v2-part3-line-state-damaged-1-v1": {
+    "source_sha256": "5a3ae12ebd2f4b3ec4bbb20c38c7d039d21ef6449ec1327a1d46e30bc007dda8",
+    "export_sha256": "b88144ec2509c0367e439de689e9d0ef2c6bf5d185478772ceec214d861c297c",
+    "at": "2026-10-02T11:51:09.292957+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "Low coupe outline, four tyre positions, two dark glass planes and the chipped off-centre hood stripe remain recognizable. Small new dents and chips provide restrained light collision damage without replacing major structures. Direct source/export family contact review complete; derivatives remain owner-unapproved.",
+    "verdict": "owner-review",
+    "codes": []
+  },
+  "v2-part3-line-state-damaged-2-v1": {
+    "source_sha256": "1b3636b8aa25da9c556708ce55d36c662a6e6eae2efc210b3407472fa56c8f2e",
+    "export_sha256": "cfff7c8683f96b8afca7e44e14cc49ff37e6799c36d1b100605f05496fb209e1",
+    "at": "2026-10-02T11:51:09.292957+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "Low coupe outline, four tyre positions, two dark glass planes and the chipped off-centre hood stripe remain recognizable. Buckled plates, exposed pale metal and fractured dark roof/glass details provide a clearly heavier damage level. Direct source/export family contact review complete; derivatives remain owner-unapproved.",
+    "verdict": "owner-review",
+    "codes": []
+  },
+  "v2-part3-line-state-wreck-v1": {
+    "source_sha256": "2f4c63ff1692c4f1c0f4bebee5c11b5f191da9fd16bf1616cfeda4e8ed96b812",
+    "export_sha256": "0d739e934c0984886a5eddf9402997c3a9c935a49d04b718ed8f36dd2d83706d",
+    "at": "2026-10-02T11:51:09.292957+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "Low coupe outline, four tyre positions, two dark glass planes and the chipped off-centre hood stripe remain recognizable. Blackened panels and broken/collapsed roof detail give a readable inert husk; no detached debris, smoke or flame. Direct source/export family contact review complete; derivatives remain owner-unapproved.",
+    "verdict": "owner-review",
+    "codes": []
+  },
+  "v2-part3-line-livery-bone-v1": {
+    "source_sha256": "b812007803739568e620e7384c5fe15accc48eceae9ab0235382325a1c516efc",
+    "export_sha256": "418d13565112070a93ba7661c87bf058aa53fa4e22160a209d7aebf41a2ebb88",
+    "at": "2026-10-02T11:51:09.292957+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "Low coupe outline, four tyre positions, two dark glass planes and the chipped off-centre hood stripe remain recognizable. Worn bone body paint contrasts with dark glazing and rubber; bare metal, wear and identity patches remain. Direct source/export family contact review complete; derivatives remain owner-unapproved.",
+    "verdict": "owner-review",
+    "codes": []
+  },
+  "v2-part3-line-livery-red-v1": {
+    "source_sha256": "e6ca83714d9156df367333504671e43db71a518b7d818197263e5b0bd2919bb3",
+    "export_sha256": "045b5d422ca2f6598f6156d927c528d39c1ed48f934134d5bde64132c9052145",
+    "at": "2026-10-02T11:51:09.292957+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "Low coupe outline, four tyre positions, two dark glass planes and the chipped off-centre hood stripe remain recognizable. Dried-red paint is limited to body panels, retaining contrasting structural details and existing wear. Direct source/export family contact review complete; derivatives remain owner-unapproved.",
+    "verdict": "owner-review",
+    "codes": []
+  },
+  "v2-part3-line-livery-ochre-v1": {
+    "source_sha256": "e0afa78ca5ac19e1cb12932cd06325cfba3cc9d9150a1fc01944431872ac22f9",
+    "export_sha256": "16bfd7f3026f9e09b26f055f796b629b5bd87fa22413e594d5110bc82607b4cf",
+    "at": "2026-10-02T11:51:09.292957+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "Low coupe outline, four tyre positions, two dark glass planes and the chipped off-centre hood stripe remain recognizable. Ochre paint creates the third body variant while retaining dark mechanical and pale structural roles. Direct source/export family contact review complete; derivatives remain owner-unapproved.",
+    "verdict": "owner-review",
+    "codes": []
+  },
+  "v2-part3-flint-state-damaged-1-v1-a1": {
+    "source_sha256": "8d45ce8e892792c44bdb22b7d65ad032ac5e02d9ccf3bfbd234d1aba0a724d79",
+    "export_sha256": "d38fe39f28952ed1c22dd3ffc21ab2a61efeda97d1e196a11a7b6361221db073",
+    "at": "2026-10-02T11:42:25.520352+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "Direct exported contact review: the light-damage edit accidentally CLEANED the pale bed floor, removing almost all established black chipped wear. Restore the original approved bed floor wear exactly: large ragged dark paint losses along all four edges and several irregular black chips in its middle. Keep the original two plain rectangular edge brackets, no cross-brace. Add a few visible SMALL new collision dents on the forward hood; do not remove existing wear anywhere. Light damage must be more worn/dented than the approved intact reference, never newly painted or cleaned. Freeze wheels, framing, rightward heading and all geometry.",
+    "verdict": "reject",
+    "codes": [
+      "STYLE_WEAR_LOST"
+    ]
+  },
+  "v2-part3-vandal-state-wreck-v1-a1": {
+    "source_sha256": "22797a32c50444a4fedcc8337ae575ebe1cde4bc6d24bb4020526c2b044067f0",
+    "export_sha256": "81266f436a1a3561f1779758a489cb387f8928cb7b4c52c92a31d1f53d488f75",
+    "at": "2026-10-02T11:42:25.520352+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "Measured source margin fails after the wreck edit grew ragged front debris beyond the approved car footprint. Preserve the EXACT approved chassis outline and all wheel centres. Burn and collapse the roof and hood INSIDE that outline; no projecting splinters, detached debris, extended ram or extra spikes. Recompose the entire complete car slightly SMALLER in the source frame with a generous clear magenta border on every side, at least 8 percent left and right. It must remain the same right-facing interceptor and preserve the paired diagonal shoulder panels. No smoke, flames or cast shadow. No cropping or clipped tips.",
+    "verdict": "reject",
+    "codes": [
+      "CROPPED_OR_MARGIN"
+    ]
+  },
+  "v2-part3-bulwark-state-damaged-1-v1-a1": {
+    "source_sha256": "24e1a5eab11d3bc7864e344ff3af8fd59473b7213e4673129f528b9f1e782df0",
+    "export_sha256": "94b41d1aefdcb6baa1c9a2c71546dba4ab0ecaec71d3ab3fb3124554dd231623",
+    "at": "2026-10-02T11:42:25.521859+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "Direct contact review: the light-damage result REMOVED all three long parallel roof ribs and replaced the roof with a plain slab. This violates the approved identity. Keep all THREE clearly separated straight pale roof ribs and their dark channels, both roof fittings, six wheels and exact overall chassis geometry. Add only a few small dents and chips BETWEEN the ribs and on the right front plate. Retain all original wear. Do not merge, erase, flatten or repaint the three ribs. Damage level one must be only a small increase in damage, not a redesigned roof.",
+    "verdict": "reject",
+    "codes": [
+      "REFERENCE_ATTACHMENT_DRIFT"
+    ]
+  },
+  "v2-part3-bastion-state-intact-v2": {
+    "source_sha256": "63723399956962878f9c84a677078a55969f92f52e125216ecdd3a9610ae62f1",
+    "export_sha256": "f83a26dab1f9c4e1397ff7f8e260827d0401ad254ac2717f4021c0172b781e2d",
+    "at": "2026-10-02T11:51:09.292957+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "Four massive tyres, broad toothed armour guards, right-facing roof weapon/central mounting area and blunt ram keep the fortress identity. Roadworthy state retains the approved source wear, chipped pigment and rough ink instead of a factory-clean finish. Direct source/export family contact review complete; derivatives remain owner-unapproved.",
+    "verdict": "owner-review",
+    "codes": []
+  },
+  "v2-part3-bastion-state-damaged-1-v1": {
+    "source_sha256": "3c5c6b1f4ed19ad4571ef9b144f66b041c566e6c59232cb8ae995538bb22b066",
+    "export_sha256": "db3142fcdc3a62b990c795a5cfb809cbe7c20b45cc1a7d66f5a4a7e9806adc9b",
+    "at": "2026-10-02T11:51:09.292957+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "Four massive tyres, broad toothed armour guards, right-facing roof weapon/central mounting area and blunt ram keep the fortress identity. Small new dents and chips provide restrained light collision damage without replacing major structures. Direct source/export family contact review complete; derivatives remain owner-unapproved.",
+    "verdict": "owner-review",
+    "codes": []
+  },
+  "v2-part3-bastion-state-damaged-2-v1": {
+    "source_sha256": "6af6a2d290c1a40cc250aaba9fc444fa755f1088d5a371e5fbacb5cb396a6441",
+    "export_sha256": "3c1c8c26f7105dc1c8a83e192b50d7121c8961f18b8ce65a5e8d8b98fe72500b",
+    "at": "2026-10-02T11:51:09.292957+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "Four massive tyres, broad toothed armour guards, right-facing roof weapon/central mounting area and blunt ram keep the fortress identity. Buckled plates, exposed pale metal and fractured dark roof/glass details provide a clearly heavier damage level. Final export inspected after a recorded half-pixel translation to the exact approved pivot; no rescale or source repair. Direct source/export family contact review complete; derivatives remain owner-unapproved.",
+    "verdict": "owner-review",
+    "codes": []
+  },
+  "v2-part3-bastion-state-wreck-v1": {
+    "source_sha256": "2cdef7942d2550f62ea73479b4b1774110bd79e5647f61f45a7f64794d52dec3",
+    "export_sha256": "3f2792306b0c505e00b9259f94f237c7ac236a4105a07e9cddad980dd3e23fc1",
+    "at": "2026-10-02T11:51:09.292957+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "Four massive tyres, broad toothed armour guards, right-facing roof weapon/central mounting area and blunt ram keep the fortress identity. Blackened panels and broken/collapsed roof detail give a readable inert husk; no detached debris, smoke or flame. Direct source/export family contact review complete; derivatives remain owner-unapproved.",
+    "verdict": "owner-review",
+    "codes": []
+  },
+  "v2-part3-bastion-livery-bone-v1": {
+    "source_sha256": "fc75c79b73debd128f0f174ef43bbef1b2db9db1d43accdf17345b2028a572d0",
+    "export_sha256": "879130826b208016aca60583a7bca83f127f1914e64c1600da7f921856fba914",
+    "at": "2026-10-02T11:51:09.292957+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "Four massive tyres, broad toothed armour guards, right-facing roof weapon/central mounting area and blunt ram keep the fortress identity. Worn bone body paint contrasts with dark glazing and rubber; bare metal, wear and identity patches remain. Direct source/export family contact review complete; derivatives remain owner-unapproved.",
+    "verdict": "owner-review",
+    "codes": []
+  },
+  "v2-part3-bastion-livery-red-v1": {
+    "source_sha256": "e9ff8481ca8c10819aad1028d77202dfa375d6d80ac6fe2c31cb869434e23f57",
+    "export_sha256": "df6ba52cdc886aaf35a4c63bcb81755e678c40fafa44f3da8d87ea64ac432517",
+    "at": "2026-10-02T11:51:09.292957+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "Four massive tyres, broad toothed armour guards, right-facing roof weapon/central mounting area and blunt ram keep the fortress identity. Dried-red paint is limited to body panels, retaining contrasting structural details and existing wear. Direct source/export family contact review complete; derivatives remain owner-unapproved.",
+    "verdict": "owner-review",
+    "codes": []
+  },
+  "v2-part3-bastion-livery-ochre-v1": {
+    "source_sha256": "77c5fb1d09636a9577ca5447ede2bb40bc90efc210ff4fb54324c6b15096efa7",
+    "export_sha256": "2f9ef0977908e3ec2641123e75a11188488d841d8972a173c218244276f32495",
+    "at": "2026-10-02T11:51:09.292957+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "Four massive tyres, broad toothed armour guards, right-facing roof weapon/central mounting area and blunt ram keep the fortress identity. Ochre paint creates the third body variant while retaining dark mechanical and pale structural roles. Direct source/export family contact review complete; derivatives remain owner-unapproved.",
+    "verdict": "owner-review",
+    "codes": []
+  },
+  "v2-part3-trail-state-intact-v2": {
+    "source_sha256": "b5612bf3cffa1dfe164295d6512681ea680ceaeacc2d92bec78d69e2ad40ba05",
+    "export_sha256": "3e4bf9d0167d48f0d53579aa4915bf8c431e552505a3a30c1cd063fc4b395cb0",
+    "at": "2026-10-02T11:51:09.292957+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "The squat hatch, rectangular rack braces, short nose and four treaded tyre positions retain the grip-car identity. Roadworthy state retains the approved source wear, chipped pigment and rough ink instead of a factory-clean finish. Direct source/export family contact review complete; derivatives remain owner-unapproved.",
+    "verdict": "owner-review",
+    "codes": []
+  },
+  "v2-part3-trail-state-damaged-1-v1": {
+    "source_sha256": "2ddc7699361f525989e2d4f6b43406ff3d34588804275c6cb8aadbea53b219e0",
+    "export_sha256": "fea1a8f888ab040ae25eabb07b834b783f84e47bc27f2560f46cc627977e5e5d",
+    "at": "2026-10-02T11:51:09.292957+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "The squat hatch, rectangular rack braces, short nose and four treaded tyre positions retain the grip-car identity. Small new dents and chips provide restrained light collision damage without replacing major structures. Direct source/export family contact review complete; derivatives remain owner-unapproved.",
+    "verdict": "owner-review",
+    "codes": []
+  },
+  "v2-part3-trail-state-damaged-2-v1": {
+    "source_sha256": "cce81778c54d013cd1f9b8822e6265363f24f206145a128a481a0fbc97a9f233",
+    "export_sha256": "a546d3159644e291bc7b91f4705f3e75e5714e51afeecea2e2bc9a0c0d7b2ba6",
+    "at": "2026-10-02T11:51:09.292957+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "The squat hatch, rectangular rack braces, short nose and four treaded tyre positions retain the grip-car identity. Buckled plates, exposed pale metal and fractured dark roof/glass details provide a clearly heavier damage level. Direct source/export family contact review complete; derivatives remain owner-unapproved.",
+    "verdict": "owner-review",
+    "codes": []
+  },
+  "v2-part3-trail-state-wreck-v1": {
+    "source_sha256": "0e4d91da90efcdfcce25d0acf7b6461bfdc77052e36f17a6f7bf9ec63f81466f",
+    "export_sha256": "0cc2a2ad751059be64edd2d15da1117e1eae4f9e3fec4ff5697139937797f639",
+    "at": "2026-10-02T11:51:09.292957+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "The squat hatch, rectangular rack braces, short nose and four treaded tyre positions retain the grip-car identity. Blackened panels and broken/collapsed roof detail give a readable inert husk; no detached debris, smoke or flame. Direct source/export family contact review complete; derivatives remain owner-unapproved.",
+    "verdict": "owner-review",
+    "codes": []
+  },
+  "v2-part3-trail-livery-bone-v1": {
+    "source_sha256": "b4b7954e4be08e7a0d32acd4c956eac45eacb41efead0bf02c68d61c6f4f1537",
+    "export_sha256": "de652176945907a3bbf6dff1357562e2fea3020688c9fe6cf84566630ce62202",
+    "at": "2026-10-02T11:51:09.292957+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "The squat hatch, rectangular rack braces, short nose and four treaded tyre positions retain the grip-car identity. Worn bone body paint contrasts with dark glazing and rubber; bare metal, wear and identity patches remain. Direct source/export family contact review complete; derivatives remain owner-unapproved.",
+    "verdict": "owner-review",
+    "codes": []
+  },
+  "v2-part3-trail-livery-red-v1": {
+    "source_sha256": "d8ae7df975abd72983b242ea3596b3cbedca667db871bff75cc8e2b7ef21125f",
+    "export_sha256": "acbdd4c5c6f0e7bc1cbbeeda2289177e0486a7493edd6c5d63fc01ae611cdff0",
+    "at": "2026-10-02T11:51:09.292957+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "The squat hatch, rectangular rack braces, short nose and four treaded tyre positions retain the grip-car identity. Dried-red paint is limited to body panels, retaining contrasting structural details and existing wear. Direct source/export family contact review complete; derivatives remain owner-unapproved.",
+    "verdict": "owner-review",
+    "codes": []
+  },
+  "v2-part3-trail-livery-ochre-v1": {
+    "source_sha256": "e7dbf96e4a2583e164ab8ede4925aa2a34e5c5d723cce9bf0713116c92a06778",
+    "export_sha256": "1596828edf7704ea7c72ce042064712247d481251e2bc9630a75504d115189e5",
+    "at": "2026-10-02T11:51:09.292957+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "The squat hatch, rectangular rack braces, short nose and four treaded tyre positions retain the grip-car identity. Ochre paint creates the third body variant while retaining dark mechanical and pale structural roles. Direct source/export family contact review complete; derivatives remain owner-unapproved.",
+    "verdict": "owner-review",
+    "codes": []
+  },
+  "v2-part3-flint-state-intact-v3": {
+    "source_sha256": "ec72d7e7a3b3887aa9c8bcae64cf8e861eef9563e1e05d543c891f37a1e58b33",
+    "export_sha256": "2e59db5ad7fbef250f041a7c74a89660c4b2c2190a0c2405fe7cf13d83da94c4",
+    "at": "2026-10-02T11:51:09.292957+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "The original plain pale rear-bed floor, two rectangular bed brackets, forward cab, hood chevron and broad right-facing shovel ram remain recognizable; no invented cross-brace. Roadworthy state retains the approved source wear, chipped pigment and rough ink instead of a factory-clean finish. Direct source/export family contact review complete; derivatives remain owner-unapproved.",
+    "verdict": "owner-review",
+    "codes": []
+  },
+  "v2-part3-flint-state-damaged-1-v1": {
+    "source_sha256": "26c815413f524d6d8c8b8655f5f37d9c4915a1784b9d33e975f84d0470144cad",
+    "export_sha256": "f8fd518da3d9ee7a6ad9b4e94d944b677ec5e988751953bcb3b86008dbf9533e",
+    "at": "2026-10-02T11:51:09.292957+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "The original plain pale rear-bed floor, two rectangular bed brackets, forward cab, hood chevron and broad right-facing shovel ram remain recognizable; no invented cross-brace. Small new dents and chips provide restrained light collision damage without replacing major structures. Corrected second attempt restores the bed-floor wear erased by the first attempt. Direct source/export family contact review complete; derivatives remain owner-unapproved.",
+    "verdict": "owner-review",
+    "codes": []
+  },
+  "v2-part3-flint-state-damaged-2-v1": {
+    "source_sha256": "fa05e3905e4ae8393592ca04dcb4568ba7d3cb1da3ca3b60739420913b5dd542",
+    "export_sha256": "a6f8f2776bd9472f42af701a6d44a332fc97a898e62de0c9a9013d72c45e9875",
+    "at": "2026-10-02T11:51:09.292957+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "The original plain pale rear-bed floor, two rectangular bed brackets, forward cab, hood chevron and broad right-facing shovel ram remain recognizable; no invented cross-brace. Buckled plates, exposed pale metal and fractured dark roof/glass details provide a clearly heavier damage level. Direct source/export family contact review complete; derivatives remain owner-unapproved.",
+    "verdict": "owner-review",
+    "codes": []
+  },
+  "v2-part3-flint-state-wreck-v1": {
+    "source_sha256": "8fcc7794fd203b77c1a648f20867c2ca7651dc6340f253fb548bb064e381438a",
+    "export_sha256": "06348107accf95f141667a4c25c1c3b41ab14704b35847654e81db8b9026fbb3",
+    "at": "2026-10-02T11:51:09.292957+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "The original plain pale rear-bed floor, two rectangular bed brackets, forward cab, hood chevron and broad right-facing shovel ram remain recognizable; no invented cross-brace. Blackened panels and broken/collapsed roof detail give a readable inert husk; no detached debris, smoke or flame. Direct source/export family contact review complete; derivatives remain owner-unapproved.",
+    "verdict": "owner-review",
+    "codes": []
+  },
+  "v2-part3-flint-livery-bone-v2": {
+    "source_sha256": "4f290242a7ee7dd6a45f8d85caa38e0cff1a1aacfcf47110839094cb55a7d898",
+    "export_sha256": "90da03e39a8d753fd5dfc44c35bf1abc07a297f4fc7e4750efebe72f7eecb6b3",
+    "at": "2026-10-02T11:51:09.292957+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "The original plain pale rear-bed floor, two rectangular bed brackets, forward cab, hood chevron and broad right-facing shovel ram remain recognizable; no invented cross-brace. Worn bone body paint contrasts with dark glazing and rubber; bare metal, wear and identity patches remain. Direct source/export family contact review complete; derivatives remain owner-unapproved.",
+    "verdict": "owner-review",
+    "codes": []
+  },
+  "v2-part3-flint-livery-red-v1": {
+    "source_sha256": "5bd63fdaa4fcedd4f023ccc87a25ab997745f338332f2c9e64606c9402f159d5",
+    "export_sha256": "28d46648fc324b4802b375ea6a8b72c1bfaabddad82e539b2ececac532c39449",
+    "at": "2026-10-02T11:51:09.292957+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "The original plain pale rear-bed floor, two rectangular bed brackets, forward cab, hood chevron and broad right-facing shovel ram remain recognizable; no invented cross-brace. Dried-red paint is limited to body panels, retaining contrasting structural details and existing wear. Direct source/export family contact review complete; derivatives remain owner-unapproved.",
+    "verdict": "owner-review",
+    "codes": []
+  },
+  "v2-part3-flint-livery-ochre-v1": {
+    "source_sha256": "18c8471c8d22a8b3ad9b05d09c81b81bff92c45aefe1b2bef2768a97a818929d",
+    "export_sha256": "59e21dee1746f0cf821476841645342222bedb1f20999b756908f47a5e6c6f29",
+    "at": "2026-10-02T11:51:09.292957+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "The original plain pale rear-bed floor, two rectangular bed brackets, forward cab, hood chevron and broad right-facing shovel ram remain recognizable; no invented cross-brace. Ochre paint creates the third body variant while retaining dark mechanical and pale structural roles. Direct source/export family contact review complete; derivatives remain owner-unapproved.",
+    "verdict": "owner-review",
+    "codes": []
+  },
+  "v2-part3-vandal-state-intact-v2": {
+    "source_sha256": "dac33bc5c956f31b541bcdcbf07d69559c033883e636d667231e914bf76847d0",
+    "export_sha256": "5b27a700d934589ac50db70220edfbe6a33f32b2c71df179469c6ef35f9d4ea9",
+    "at": "2026-10-02T11:51:09.292957+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "Long chamfered right hood, dark central roof, paired diagonal shoulder patches, short fins and low serrated ram retain the interceptor identity. Roadworthy state retains the approved source wear, chipped pigment and rough ink instead of a factory-clean finish. Direct source/export family contact review complete; derivatives remain owner-unapproved.",
+    "verdict": "owner-review",
+    "codes": []
+  },
+  "v2-part3-vandal-state-damaged-1-v1": {
+    "source_sha256": "0d840f0910116281124c5a95b5b47c8a87b962ad93a598e71408fcd01c77ba9a",
+    "export_sha256": "1342a5ed8cb32d28c4718b263a68d242cd074e515fe658e967477297e90b4a5b",
+    "at": "2026-10-02T11:51:09.292957+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "Long chamfered right hood, dark central roof, paired diagonal shoulder patches, short fins and low serrated ram retain the interceptor identity. Small new dents and chips provide restrained light collision damage without replacing major structures. Direct source/export family contact review complete; derivatives remain owner-unapproved.",
+    "verdict": "owner-review",
+    "codes": []
+  },
+  "v2-part3-vandal-state-damaged-2-v1": {
+    "source_sha256": "c9102d49dde8256d3b18636f5696f252554cf2ca72d4497e22c86e5b6cdadf34",
+    "export_sha256": "6422b2fea6c0179876be20f5b8b09ff86889db7747f146d4bc54c7f5081d050e",
+    "at": "2026-10-02T11:51:09.292957+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "Long chamfered right hood, dark central roof, paired diagonal shoulder patches, short fins and low serrated ram retain the interceptor identity. Buckled plates, exposed pale metal and fractured dark roof/glass details provide a clearly heavier damage level. Direct source/export family contact review complete; derivatives remain owner-unapproved.",
+    "verdict": "owner-review",
+    "codes": []
+  },
+  "v2-part3-vandal-state-wreck-v1": {
+    "source_sha256": "9198b96d98c946b73e2a85479515468c07d7c5c2a94a18bfe2f2b2e425448a57",
+    "export_sha256": "df58206b5ec93f5eb07e7f302e14c8116d15aa4d501f59a43a49454c108c3986",
+    "at": "2026-10-02T11:51:09.292957+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "Long chamfered right hood, dark central roof, paired diagonal shoulder patches, short fins and low serrated ram retain the interceptor identity. Blackened panels and broken/collapsed roof detail give a readable inert husk; no detached debris, smoke or flame. Corrected second attempt keeps all projecting tips within a passing source margin. Direct source/export family contact review complete; derivatives remain owner-unapproved.",
+    "verdict": "owner-review",
+    "codes": []
+  },
+  "v2-part3-vandal-livery-bone-v1": {
+    "source_sha256": "5029361823f9f37081869d5841c568478d287b459b2916e24ad3b63b1ef39850",
+    "export_sha256": "656d6f797506b8225c614d31c234f05f8685b6a982669e47e149a5ec63b17adb",
+    "at": "2026-10-02T11:51:09.292957+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "Long chamfered right hood, dark central roof, paired diagonal shoulder patches, short fins and low serrated ram retain the interceptor identity. Worn bone body paint contrasts with dark glazing and rubber; bare metal, wear and identity patches remain. Direct source/export family contact review complete; derivatives remain owner-unapproved.",
+    "verdict": "owner-review",
+    "codes": []
+  },
+  "v2-part3-vandal-livery-red-v1": {
+    "source_sha256": "32ed2a2986115b6fbe079a5788ba027faa26fdaa78076c8c0eacd84ececa064d",
+    "export_sha256": "9dafc94d6d27784e8576034ea7a663cb51676c3cdad81d437c12b006f50fef24",
+    "at": "2026-10-02T11:51:09.292957+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "Long chamfered right hood, dark central roof, paired diagonal shoulder patches, short fins and low serrated ram retain the interceptor identity. Dried-red paint is limited to body panels, retaining contrasting structural details and existing wear. Direct source/export family contact review complete; derivatives remain owner-unapproved.",
+    "verdict": "owner-review",
+    "codes": []
+  },
+  "v2-part3-vandal-livery-ochre-v1": {
+    "source_sha256": "f8cfd5f8134f3de7e551684f410a99eca2ffa18438b09ec37b6f27709f2a7233",
+    "export_sha256": "59a8e0cadba8ad5f2f3737337734b70c09b1ee5e423d67c01da8237617caad52",
+    "at": "2026-10-02T11:51:09.292957+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "Long chamfered right hood, dark central roof, paired diagonal shoulder patches, short fins and low serrated ram retain the interceptor identity. Ochre paint creates the third body variant while retaining dark mechanical and pale structural roles. Direct source/export family contact review complete; derivatives remain owner-unapproved.",
+    "verdict": "owner-review",
+    "codes": []
+  },
+  "v2-part3-bulwark-state-intact-v2": {
+    "source_sha256": "f0fe95813ceb89d7c6d6a95fa34a83a4c56f35e89492a615cfbe22d22d32de97",
+    "export_sha256": "b23210ecf1acd8ac462123dcce34d15dd891239508547117d5bb5a3be8753b8e",
+    "at": "2026-10-02T11:51:09.292957+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "Six wheel positions, broad end ram and ribbed armoured roof footprint retain the heavy-car identity; the burnt state exposes collapsed internal ribs. Roadworthy state retains the approved source wear, chipped pigment and rough ink instead of a factory-clean finish. Direct source/export family contact review complete; derivatives remain owner-unapproved.",
+    "verdict": "owner-review",
+    "codes": []
+  },
+  "v2-part3-bulwark-state-damaged-1-v1": {
+    "source_sha256": "03d41a6cb0da731d9e5b00096c5b53dc29dfd8ad15f6e998b903788b7aea781b",
+    "export_sha256": "4227e40e4a19221551aec388bc6e3a2a71765218f22e9f6f2755c86c043a2a9c",
+    "at": "2026-10-02T11:51:09.292957+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "Six wheel positions, broad end ram and ribbed armoured roof footprint retain the heavy-car identity; the burnt state exposes collapsed internal ribs. Small new dents and chips provide restrained light collision damage without replacing major structures. Corrected second attempt retains all three separate straight roof ribs erased in the rejected first attempt. Direct source/export family contact review complete; derivatives remain owner-unapproved.",
+    "verdict": "owner-review",
+    "codes": []
+  },
+  "v2-part3-bulwark-state-damaged-2-v1": {
+    "source_sha256": "271643a5b25cbe897618988ab064ee52ce54f1f702750532725002c5fc052458",
+    "export_sha256": "f494315acba32469d4009b4210a6c98840d0884e41d09401450b165be3516c40",
+    "at": "2026-10-02T11:51:09.292957+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "Six wheel positions, broad end ram and ribbed armoured roof footprint retain the heavy-car identity; the burnt state exposes collapsed internal ribs. Buckled plates, exposed pale metal and fractured dark roof/glass details provide a clearly heavier damage level. Final export inspected after a recorded half-pixel translation to the exact approved pivot; no rescale or source repair. Direct source/export family contact review complete; derivatives remain owner-unapproved.",
+    "verdict": "owner-review",
+    "codes": []
+  },
+  "v2-part3-bulwark-state-wreck-v1": {
+    "source_sha256": "a6473591440cd58d984383f0fa8db970a222f8c417ab0d7d505c3277cd770ff0",
+    "export_sha256": "e7fda0eb61b3b5237c306d28d76069580f59a9ba0b38d6c49718bf7c43842aa0",
+    "at": "2026-10-02T11:51:09.292957+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "Six wheel positions, broad end ram and ribbed armoured roof footprint retain the heavy-car identity; the burnt state exposes collapsed internal ribs. Blackened panels and broken/collapsed roof detail give a readable inert husk; no detached debris, smoke or flame. Direct source/export family contact review complete; derivatives remain owner-unapproved.",
+    "verdict": "owner-review",
+    "codes": []
+  },
+  "v2-part3-bulwark-livery-bone-v1": {
+    "source_sha256": "7fdcc18a8e263202eb07b09d71b0fc51fcea22d1517fca876f99b73f3acf3a9e",
+    "export_sha256": "667a1382c355f0628ed53a765d17bc4d6853f11300540ec6e85447d5b58e8c48",
+    "at": "2026-10-02T11:51:09.292957+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "Six wheel positions, broad end ram and ribbed armoured roof footprint retain the heavy-car identity; the burnt state exposes collapsed internal ribs. Worn bone body paint contrasts with dark glazing and rubber; bare metal, wear and identity patches remain. Direct source/export family contact review complete; derivatives remain owner-unapproved.",
+    "verdict": "owner-review",
+    "codes": []
+  },
+  "v2-part3-bulwark-livery-red-v1": {
+    "source_sha256": "40cad5d8bb1c0e87e50190492c0931201937d3b7ea47c804b5cc588ffdc8befb",
+    "export_sha256": "4fc0871d0de68bc9981082c51992591d78a73c0e8f992107f0eee6e7236dac90",
+    "at": "2026-10-02T11:51:09.292957+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "Six wheel positions, broad end ram and ribbed armoured roof footprint retain the heavy-car identity; the burnt state exposes collapsed internal ribs. Dried-red paint is limited to body panels, retaining contrasting structural details and existing wear. Direct source/export family contact review complete; derivatives remain owner-unapproved.",
+    "verdict": "owner-review",
+    "codes": []
+  },
+  "v2-part3-bulwark-livery-ochre-v1": {
+    "source_sha256": "fc42e894a8580574a93d7462cf816b8077cc4759f94603de0f94a57377dcdea2",
+    "export_sha256": "be2a46281f7c3ce16f8d49fac0a7209b12e1dc2d7a14234228cbb61547108e21",
+    "at": "2026-10-02T11:51:09.292957+00:00",
+    "reviewer": "executing agent; not owner",
+    "note": "Six wheel positions, broad end ram and ribbed armoured roof footprint retain the heavy-car identity; the burnt state exposes collapsed internal ribs. Ochre paint creates the third body variant while retaining dark mechanical and pale structural roles. Direct source/export family contact review complete; derivatives remain owner-unapproved.",
+    "verdict": "owner-review",
+    "codes": []
+  }
+}

@@ -1,0 +1,290 @@
+[
+  {
+    "id": "v2-part3-vandal-livery-bone-v1",
+    "class": "Vandal",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v2-part3-vandal-livery-bone-v1\\attempt-01\\1.jpg",
+    "source_sha256": "5029361823f9f37081869d5841c568478d287b459b2916e24ad3b63b1ef39850",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-part3-vandal-livery-bone-v1",
+      "class": "Vandal",
+      "prompt_action": "Use the supplied approved image as the exact identity. Freeze geometry, wheel count and wheel centres, chassis footprint, roof/cabin, attachments, camera, rightward heading, neutral lighting and framing. Preserve the same car and its material roles. An aggressive interceptor sedan: long chamfered dried-red hood at RIGHT, squared soot cabin, two blank chipped bone diagonal shoulder patches, short unequal fins at LEFT, four mostly enclosed wheels. Asymmetric welded door armour and a low serrated right-facing ram; broad prow, low compact rear. Change ONLY painted body panels to muted bleached bone #DDD0A6. Preserve all glass, rubber, bare metal, structural parts, wear and existing contrasting identity stripe/patches. No new damage. No emblems, text or numbers. Keep the exact complete footprint and generous empty border.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "art/review/fusion/sources/v2-fusion-cars-vandal-v1.jpg",
+      "batch": "v2-part3-vandal-liveries",
+      "approval": "pending",
+      "requires_approval": "v2-fusion-cars-vandal-v1",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "cars",
+      "surface_stack": ""
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "metrics": {
+      "foreground_fraction": 0.2823486328125,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        50,
+        307,
+        975,
+        712
+      ],
+      "margin_fraction": 0.0478515625,
+      "aspect": 2.2839506172839505,
+      "expected_aspect": 2.05,
+      "aspect_relative_error": 0.11412225233363449,
+      "principal_axis_degrees": 0.0147227074222295,
+      "estimated_key_rgb": [
+        231.0,
+        42.0,
+        153.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 6.468043952951007,
+      "palette_p90_delta_e": 10.71198326175675
+    },
+    "placement": {
+      "source_bounds_px": [
+        50,
+        307,
+        975,
+        712
+      ],
+      "source_pivot_px": [
+        512.5,
+        509.5
+      ],
+      "pivot_px": [
+        127.5,
+        64.0
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        197,
+        86
+      ],
+      "scale": 0.21297297297297296,
+      "world_length_m": 8.2,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v2-part3-vandal-liveries\\v2-part3-vandal-livery-bone-v1.png",
+    "sha256": "656d6f797506b8225c614d31c234f05f8685b6a982669e47e149a5ec63b17adb"
+  },
+  {
+    "id": "v2-part3-vandal-livery-red-v1",
+    "class": "Vandal",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v2-part3-vandal-livery-red-v1\\attempt-01\\1.jpg",
+    "source_sha256": "32ed2a2986115b6fbe079a5788ba027faa26fdaa78076c8c0eacd84ececa064d",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-part3-vandal-livery-red-v1",
+      "class": "Vandal",
+      "prompt_action": "Use the supplied approved image as the exact identity. Freeze geometry, wheel count and wheel centres, chassis footprint, roof/cabin, attachments, camera, rightward heading, neutral lighting and framing. Preserve the same car and its material roles. An aggressive interceptor sedan: long chamfered dried-red hood at RIGHT, squared soot cabin, two blank chipped bone diagonal shoulder patches, short unequal fins at LEFT, four mostly enclosed wheels. Asymmetric welded door armour and a low serrated right-facing ram; broad prow, low compact rear. Change ONLY painted body panels to dried blood red #6C2427. Preserve all glass, rubber, bare metal, structural parts, wear and existing contrasting identity stripe/patches. No new damage. No emblems, text or numbers. Keep the exact complete footprint and generous empty border.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "art/review/fusion/sources/v2-fusion-cars-vandal-v1.jpg",
+      "batch": "v2-part3-vandal-liveries",
+      "approval": "pending",
+      "requires_approval": "v2-fusion-cars-vandal-v1",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "cars",
+      "surface_stack": ""
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "metrics": {
+      "foreground_fraction": 0.28241443634033203,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        50,
+        307,
+        975,
+        712
+      ],
+      "margin_fraction": 0.0478515625,
+      "aspect": 2.2839506172839505,
+      "expected_aspect": 2.05,
+      "aspect_relative_error": 0.11412225233363449,
+      "principal_axis_degrees": 0.006071680344553725,
+      "estimated_key_rgb": [
+        232.0,
+        41.0,
+        152.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 9.59299254573043,
+      "palette_p90_delta_e": 18.126151794687058
+    },
+    "placement": {
+      "source_bounds_px": [
+        50,
+        307,
+        975,
+        712
+      ],
+      "source_pivot_px": [
+        512.5,
+        509.5
+      ],
+      "pivot_px": [
+        127.5,
+        64.0
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        197,
+        86
+      ],
+      "scale": 0.21297297297297296,
+      "world_length_m": 8.2,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v2-part3-vandal-liveries\\v2-part3-vandal-livery-red-v1.png",
+    "sha256": "9dafc94d6d27784e8576034ea7a663cb51676c3cdad81d437c12b006f50fef24"
+  },
+  {
+    "id": "v2-part3-vandal-livery-ochre-v1",
+    "class": "Vandal",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v2-part3-vandal-livery-ochre-v1\\attempt-01\\1.jpg",
+    "source_sha256": "f8cfd5f8134f3de7e551684f410a99eca2ffa18438b09ec37b6f27709f2a7233",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-part3-vandal-livery-ochre-v1",
+      "class": "Vandal",
+      "prompt_action": "Use the supplied approved image as the exact identity. Freeze geometry, wheel count and wheel centres, chassis footprint, roof/cabin, attachments, camera, rightward heading, neutral lighting and framing. Preserve the same car and its material roles. An aggressive interceptor sedan: long chamfered dried-red hood at RIGHT, squared soot cabin, two blank chipped bone diagonal shoulder patches, short unequal fins at LEFT, four mostly enclosed wheels. Asymmetric welded door armour and a low serrated right-facing ram; broad prow, low compact rear. Change ONLY painted body panels to sun-baked ochre #A37738. Preserve all glass, rubber, bare metal, structural parts, wear and existing contrasting identity stripe/patches. No new damage. No emblems, text or numbers. Keep the exact complete footprint and generous empty border.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "art/review/fusion/sources/v2-fusion-cars-vandal-v1.jpg",
+      "batch": "v2-part3-vandal-liveries",
+      "approval": "pending",
+      "requires_approval": "v2-fusion-cars-vandal-v1",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "cars",
+      "surface_stack": ""
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "metrics": {
+      "foreground_fraction": 0.28236961364746094,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        50,
+        307,
+        975,
+        712
+      ],
+      "margin_fraction": 0.0478515625,
+      "aspect": 2.2839506172839505,
+      "expected_aspect": 2.05,
+      "aspect_relative_error": 0.11412225233363449,
+      "principal_axis_degrees": 0.0018649976013330916,
+      "estimated_key_rgb": [
+        230.0,
+        41.0,
+        152.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 7.730158938821386,
+      "palette_p90_delta_e": 13.630558895809461
+    },
+    "placement": {
+      "source_bounds_px": [
+        50,
+        307,
+        975,
+        712
+      ],
+      "source_pivot_px": [
+        512.5,
+        509.5
+      ],
+      "pivot_px": [
+        127.5,
+        64.0
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        197,
+        86
+      ],
+      "scale": 0.21297297297297296,
+      "world_length_m": 8.2,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v2-part3-vandal-liveries\\v2-part3-vandal-livery-ochre-v1.png",
+    "sha256": "59a8e0cadba8ad5f2f3737337734b70c09b1ee5e423d67c01da8237617caad52"
+  }
+]

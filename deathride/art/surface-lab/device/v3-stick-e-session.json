@@ -1,0 +1,48 @@
+{
+  "started_at": "2026-10-01T15:07:55.986470+00:00",
+  "device": "10.0.0.139:5555",
+  "model": "AFTKM",
+  "prior_activity": "dev.deathride.tv/.MainActivity",
+  "apk_sha256": "88d0ee77237d1b36bb4d36d2a2c86f1ec166f8048491a2d654e5481a56e35422",
+  "package": "dev.deathride.artlab",
+  "preflight_integration_phase": "lobby",
+  "runs": [
+    {
+      "name": "v3-stick-e-1-painted",
+      "result_sha256": "d901a1d2159cbd143ab7965e30f04a1662bd3027625800cfb4dee2a24bd3d7ce",
+      "screenshot_sha256": "4f71b1920d92d677bd0776b7835cb77e74a35a4bb31932cd2339db67d0ee1e39"
+    },
+    {
+      "name": "v3-stick-e-1-combined",
+      "result_sha256": "0978b6bfc1b6761b9b1db5ee8b89c8b262b0354a01dd184085c7f4739339b90b",
+      "screenshot_sha256": "52f52399b3c9ef389bd25552c2aee597d544a4ea8c7a3700a212a12a51f5c839"
+    },
+    {
+      "name": "v3-stick-e-1-lean-stack",
+      "result_sha256": "c9cf92eaa9c3d80cd1ec0f147778c9a1bc16b79a0bc5dc74a22973dfa3d7cbaf",
+      "screenshot_sha256": "cbce0f29895d7fbe2783ea2cb27154a5254cb7d12f0839013dd3f3eb3b6d78b3"
+    },
+    {
+      "name": "v3-stick-e-2-painted",
+      "result_sha256": "5e6c34cc091683e2aff1008b12847ff101455e33fd45859872947ae078a9d6b7",
+      "screenshot_sha256": "f892fd0721465859fa247d058492c2c6b644d85af7c276ac34ef40af9e2c63ab"
+    },
+    {
+      "name": "v3-stick-e-2-combined",
+      "result_sha256": "4a165e194144efaafff466eab73d5314a8ffc79c38013668dd44268980bb82fe",
+      "screenshot_sha256": "13fd16d644346a6495bddc7c92ad3d2917c8a8a95e30879631e88dfb500612d8"
+    },
+    {
+      "name": "v3-stick-e-2-lean-stack",
+      "result_sha256": "891e1c331033aac626b97e63764cb3a74241c797a2b17163caa16f1bb3e6353c",
+      "screenshot_sha256": "5b6cedd1c072772284c2c6f4ba51bf536f5f85918df84c9cf8822e8c2b795e75"
+    }
+  ],
+  "requested_runs": 6,
+  "status": "complete",
+  "runner_sha256": "633494e5099331fcc7536805619562d8dca7ddb9ed086ba13419d6cea60f0014",
+  "coordination": "shared git-common-dir lease; refuse active race; abort if foreground changes; install only artlab",
+  "finished_at": "2026-10-01T15:10:44.193252+00:00",
+  "restored_prior_activity": true,
+  "integration_installation_unchanged": true
+}

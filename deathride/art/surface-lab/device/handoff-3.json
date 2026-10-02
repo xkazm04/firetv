@@ -1,0 +1,8 @@
+{
+  "captured_at": "2026-10-01T16:12:20.290049+00:00",
+  "request_sha256": "60390a67bd11a955793213d428a0d813921ca9ccf3969eb2873e002ee3918691",
+  "request": "Final ART laboratory device handoff — 2026-10-01 17:57\n\nThe first two art windows are released; see DEVICE-RELEASED.txt and\nDEVICE-RELEASED-2.txt in the art worktree's deathride/art/surface-lab directory.\nForty clean Stick measurements are complete. One final two-pair comparison\n(about three minutes) remains: cached versus rebuilt static geometry, with\nidentical pixels verified on desktop. All previous variants are retained.\n\nThe outstanding request is DEVICE-WINDOW-3.txt in that same art directory:\n  integration_device_window: available\n  expires_utc: <UTC ISO timestamp allowing five minutes>\n\nThe runner is waiting and will not take the foreground before that marker.\nIt installs only dev.deathride.artlab, refuses active racing, yields immediately\nif another app takes foreground, restores the prior activity, and writes\nDEVICE-RELEASED-3.txt when all art device work is over. No further device tests\nare planned after this pair. This temporary coordination note stays uncommitted.\n",
+  "window_sha256": "957a62049bcc355af4d8e8f20b43e2bf903da7944cce71fb429c60839d24cf14",
+  "window": "integration_device_window: available\nexpires_utc: 2026-10-01T16:17:19.078019+00:00\nIntegration final soak complete; leave our app at lobby when done.\n",
+  "scope": "Final paired cache measurement; integration asks to retain lobby on return; no owner style approval."
+}

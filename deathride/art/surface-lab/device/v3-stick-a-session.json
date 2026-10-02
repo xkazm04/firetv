@@ -1,0 +1,75 @@
+{
+  "started_at": "2026-10-01T14:27:14.578934+00:00",
+  "device": "10.0.0.139:5555",
+  "model": "AFTKM",
+  "prior_activity": "dev.deathride.tv/.MainActivity",
+  "apk_sha256": "88d0ee77237d1b36bb4d36d2a2c86f1ec166f8048491a2d654e5481a56e35422",
+  "package": "dev.deathride.artlab",
+  "preflight_integration_phase": "results",
+  "runs": [
+    {
+      "name": "v3-stick-a-0-baseline",
+      "result_sha256": "f4f2cb17a7f6a0ab3795dd5905aee21c64a6499c3912707a48b597e687288963",
+      "screenshot_sha256": "952d855d7572d7beaf7edfb44b93cfbc41abf415f7d791c811c6a18eddb23699"
+    },
+    {
+      "name": "v3-stick-a-0-painted",
+      "result_sha256": "f9492fa506c68e43b7d3ab178c6802d12d6bdfcf877b8e976fb212cf6ff970d5",
+      "screenshot_sha256": "ccd42428349463ae4cacf0297b27369203b2b3c48c83ef6700b954cf4a6e3965"
+    },
+    {
+      "name": "v3-stick-a-0-macro",
+      "result_sha256": "2d33e92a632c74b16c85be8f9c082ae4c9c8e13749af8cd83ba3964eb05a31f3",
+      "screenshot_sha256": "31f27c19a119fefd597adb82506bf2fd7d4b17385f3079d02088591e55b01c08"
+    },
+    {
+      "name": "v3-stick-a-0-decals",
+      "result_sha256": "1ffd66ec3617839a662d386bb5b8a6cd2c3b233166315b037f6512fcbe0dee04",
+      "screenshot_sha256": "7ae789ee77aefd921742c51a84ae9888ff9b20abcc051c2758baf9297fc19a39"
+    },
+    {
+      "name": "v3-stick-a-0-ribbon",
+      "result_sha256": "6457de276657892a77ece78715954a7683fb32f1ac5e7a958d289a3219e802fe",
+      "screenshot_sha256": "5601ce0b7b473f20103fc8432e71c44bf2777b45e56ce2ac56d6d11272e3c7cf"
+    },
+    {
+      "name": "v3-stick-a-0-edges",
+      "result_sha256": "a16bd05c44bab38dc8c2d46f4e4e3b921e4ba48c59d8c7d6aaa9e60ed14c9e91",
+      "screenshot_sha256": "fa0c45a08773f2fcb7172f9c705c9580b74acf3677f03af914018c54f599b606"
+    },
+    {
+      "name": "v3-stick-a-0-grade-dust",
+      "result_sha256": "605a5cb8f18f3b6b1988903d12833033f27c1348a18eca69ccff9cde3d46d068",
+      "screenshot_sha256": "d9d19d9d8ab23e6b8bbe41ce44fc9b6a55c021b69a9d3a5370eadc5909879947"
+    },
+    {
+      "name": "v3-stick-a-0-depth",
+      "result_sha256": "de234684e3a8bb9f98b4b099b91583c0c4a41e5c7f73d1347e577d6093a535f5",
+      "screenshot_sha256": "de71a6483e1306f70d21aaf81ec62d781a928031a0d45cedbb3a0aefbc770b39"
+    },
+    {
+      "name": "v3-stick-a-0-wear",
+      "result_sha256": "1f3fabe7bbf8c5cdc2802418a73f17d67f90e215dd4301c4f872eea551e0f94d",
+      "screenshot_sha256": "050d0cbe5a828eddd1dc60191235f1959b1fb9ca973ea5103df854ce5cad734c"
+    },
+    {
+      "name": "v3-stick-a-0-poster-grain",
+      "result_sha256": "ea17a0c13d3d48784a17284904f8fe42b8593d2b248c4ec49256d295508652ae",
+      "screenshot_sha256": "a41766abd461d3d764cd8bd42ccba70ff0723f683aaa1facaf12019149a3c572"
+    },
+    {
+      "name": "v3-stick-a-0-contrast",
+      "result_sha256": "2ecbe6a1d38b57d3ad168a4c59733647a1d56dad15f989900fd358a55316a6ef",
+      "screenshot_sha256": "d86544711f9110bb484c93e07bb3729ae7a8f5bb5c135b092a6f41fbbc0626b7"
+    },
+    {
+      "name": "v3-stick-a-0-combined",
+      "result_sha256": "c72fc6698e0f82c7334ae07261ff8c2401526b7ed7fabec92efbba9416cc3b33",
+      "screenshot_sha256": "1009f6b5dc556856a3edc9a31348e25a39ad39faa051dce34d445c76720a8da6"
+    }
+  ],
+  "coordination": "shared git-common-dir lease; refuse active race; abort if foreground changes; install only artlab",
+  "finished_at": "2026-10-01T14:33:41.492862+00:00",
+  "restored_prior_activity": false,
+  "integration_installation_unchanged": false
+}

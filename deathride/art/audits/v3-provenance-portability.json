@@ -1,0 +1,67 @@
+{
+  "status": "pass",
+  "policy": "Exact art bytes preserved with -text; CRLF in existing hash-bound records is intentional. New V3 plain-text logs were normalised before any report hash referenced them.",
+  "checked": [
+    {
+      "file": "deathride/art/usage.json",
+      "sha256": "cd272e61fc4807b44bb1a24cf7caca98fcf926036afd618ec9f7d18f8b630293",
+      "index_bytes_match": true
+    },
+    {
+      "file": "deathride/art/history.jsonl",
+      "sha256": "bd42855676a5447007ce7011f8842c91b0cdfe5aa1cda7167b8aee2a55305f3b",
+      "index_bytes_match": true
+    },
+    {
+      "file": "deathride/art/style-v1.json",
+      "sha256": "9fbe535a3f8a1d95c01891fa50e344c46c673673e09dd9747a52a352b9dfee16",
+      "index_bytes_match": true
+    },
+    {
+      "file": "deathride/art/style-rust-ink.json",
+      "sha256": "3828ffccfaa95d1b1dd7f8b69045b72f243eb2364e08af7ab0948767ea861a28",
+      "index_bytes_match": true
+    },
+    {
+      "file": "deathride/art/style-bleached-poster.json",
+      "sha256": "f82dbefafd61f9d9d16308593961bd7bb9003c10b0cad4f87ddecfd72bfacaeb",
+      "index_bytes_match": true
+    },
+    {
+      "file": "deathride/art/style-hot-ink.json",
+      "sha256": "56b58265e9ebff73fd6aae37d1b9c43b5b0c9233fc14e9bbe1674aafff500d8c",
+      "index_bytes_match": true
+    },
+    {
+      "file": "deathride/art/style-scrap-collage.json",
+      "sha256": "4129fadb475fb9c29008943e646d23554fb2f84af1350f456276fcac2fdac321",
+      "index_bytes_match": true
+    },
+    {
+      "file": "deathride/art/style-soot-pulp.json",
+      "sha256": "7051c3bdce33d6482162013e472dd3a1fbe53f03361e400cb85f64a88f545654",
+      "index_bytes_match": true
+    },
+    {
+      "file": "deathride/art/briefs/v1-directions.csv",
+      "sha256": "480d9b5d5fd514004fd653e02f92e309adddfbbe647a326ccd3e6945e00b0864",
+      "index_bytes_match": true
+    },
+    {
+      "file": "deathride/art/surface-lab/inputs.json",
+      "sha256": "3d57fe26e61702e751dd62a69baec2d151b46e9b6a77ef1a9cff5b93c9ada91b",
+      "index_bytes_match": true
+    },
+    {
+      "file": "deathride/art/review/v2/index.html",
+      "sha256": "b87d1853895cf5a17228ef51c8e651498deb8bc35c02efe9824855f6b69fa72f",
+      "index_bytes_match": true
+    }
+  ],
+  "existing_files_restored_eol_only": 787,
+  "other_existing_art_changes": [
+    "deathride/art/ACCEPTANCE.md",
+    "deathride/art/DELIVERY.md"
+  ],
+  "other_changes_reason": "Intentional V3 acceptance and delivery prose only; no generated asset, prompt, approval, grade or budget value changed."
+}

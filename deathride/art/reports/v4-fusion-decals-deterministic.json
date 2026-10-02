@@ -1,0 +1,472 @@
+[
+  {
+    "id": "v4-fusion-decals-skid-v1",
+    "class": "skid",
+    "kind": "sprite",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v4-fusion-decals-skid-v1\\attempt-02\\1.jpg",
+    "source_sha256": "762396a2ad88d390c1fd7bc2ea9973b76529b52ad800ee7880e81f701d03997c",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v4-fusion-decals-skid-v1",
+      "class": "skid",
+      "prompt_action": "Two short parallel charcoal tyre skid streaks with uneven broken ends and sparse rubber flecks. Flat overhead ground decal only. One SMALL isolated complete asset, floating in a large empty magenta field. All pixels within the middle HALF of the canvas; extremely generous empty margin on ALL four sides. Strong shape at 96 pixels, HUD at 32 pixels. Flat neutral material shading, no cast shadow, scene, car or lettering. Strict directly overhead plan view; no visible front or side wall.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "sprite",
+      "reference": "",
+      "batch": "v4-fusion-decals",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "128",
+      "style_file": "style-fusion.json",
+      "wave": "V4",
+      "asset_family": "decals",
+      "surface_stack": "seeded-decals-tall-props-baked-natural-bands",
+      "logical_name": "decals/skid"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "metrics": {
+      "foreground_fraction": 0.15815353393554688,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        86,
+        224,
+        938,
+        837
+      ],
+      "margin_fraction": 0.083984375,
+      "aspect": 1.3898858075040783,
+      "estimated_key_rgb": [
+        238.0,
+        41.0,
+        159.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 12,
+      "palette_mean_delta_e": 5.808956263857602,
+      "palette_p90_delta_e": 8.688242862412041
+    },
+    "placement": {
+      "source_bounds_px": [
+        86,
+        224,
+        938,
+        837
+      ],
+      "source_pivot_px": [
+        512.0,
+        530.5
+      ],
+      "pivot_px": [
+        64.0,
+        64.0
+      ],
+      "cell_px": [
+        128,
+        128
+      ],
+      "subject_px": [
+        120,
+        86
+      ],
+      "scale": 0.14084507042253522,
+      "world_length_m": null,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 128
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v4-fusion-decals\\v4-fusion-decals-skid-v1.png",
+    "sha256": "b22fbc92898df14f99f9d9ffa71295a24f16f7c082608bf0170e209d1ea3e807"
+  },
+  {
+    "id": "v4-fusion-decals-oil-v1",
+    "class": "oil",
+    "kind": "sprite",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v4-fusion-decals-oil-v1\\attempt-02\\1.jpg",
+    "source_sha256": "6ca0d41b54d4545cb4e250cd833acf735ddc4749d0b4255ea7071fb2570630e5",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v4-fusion-decals-oil-v1",
+      "class": "oil",
+      "prompt_action": "One irregular charcoal oil puddle with sparse soot-grey sheen, a flat asymmetrical filled shape with several tiny detached droplets. No outlined container. One SMALL isolated complete asset, floating in a large empty magenta field. All pixels within the middle HALF of the canvas; extremely generous empty margin on ALL four sides. Strong shape at 96 pixels, HUD at 32 pixels. Flat neutral material shading, no cast shadow, scene, car or lettering. Strict directly overhead plan view; no visible front or side wall.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "sprite",
+      "reference": "",
+      "batch": "v4-fusion-decals",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "128",
+      "style_file": "style-fusion.json",
+      "wave": "V4",
+      "asset_family": "decals",
+      "surface_stack": "seeded-decals-tall-props-baked-natural-bands",
+      "logical_name": "decals/oil"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "metrics": {
+      "foreground_fraction": 0.21285629272460938,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        166,
+        238,
+        871,
+        777
+      ],
+      "margin_fraction": 0.1494140625,
+      "aspect": 1.3079777365491652,
+      "estimated_key_rgb": [
+        228.0,
+        69.0,
+        220.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 6,
+      "palette_mean_delta_e": 3.4086244740957703,
+      "palette_p90_delta_e": 5.04016939542359
+    },
+    "placement": {
+      "source_bounds_px": [
+        166,
+        238,
+        871,
+        777
+      ],
+      "source_pivot_px": [
+        518.5,
+        507.5
+      ],
+      "pivot_px": [
+        64.0,
+        64.0
+      ],
+      "cell_px": [
+        128,
+        128
+      ],
+      "subject_px": [
+        120,
+        92
+      ],
+      "scale": 0.1702127659574468,
+      "world_length_m": null,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 128
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v4-fusion-decals\\v4-fusion-decals-oil-v1.png",
+    "sha256": "8cc622ffb53a7df5ab47a5e7b4785396955355fbec1385bbde791b76bd51eda0"
+  },
+  {
+    "id": "v4-fusion-decals-scorch-v2",
+    "class": "scorch",
+    "kind": "sprite",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v4-fusion-decals-scorch-v2\\attempt-01\\1.jpg",
+    "source_sha256": "0572ba909522bd98861fa4f6a37bb036d382c7d18415271a8417b399aa9c5c78",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v4-fusion-decals-scorch-v2",
+      "class": "scorch",
+      "prompt_action": "One small flat ground SCORCH DECAL: irregular charcoal black dry-brush stain, black centre, sparse short black abrasion flecks, hard painted opacity. This is a black stain only, not a metal panel or object. Isolate on completely uniform PURE WHITE background, no magenta anywhere. Huge empty white margins. No pink halo, gradients, glow, paint chips, yellow accent, rust ring, flame, gear, text or outline around the stain. Compact asymmetrical dark mark with uneven broken ends.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FFFFFF",
+      "count": "1",
+      "status": "ready",
+      "kind": "sprite",
+      "reference": "",
+      "batch": "v4-fusion-decals",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "128",
+      "style_file": "style-fusion.json",
+      "wave": "V4",
+      "asset_family": "decals",
+      "surface_stack": "seeded-decals-tall-props-baked-natural-bands",
+      "logical_name": "decals/scorch"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "metrics": {
+      "foreground_fraction": 0.12178230285644531,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        233,
+        343,
+        877,
+        794
+      ],
+      "margin_fraction": 0.1435546875,
+      "aspect": 1.4279379157427938,
+      "estimated_key_rgb": [
+        250.0,
+        250.0,
+        250.0
+      ],
+      "magenta_key": false,
+      "mixed_border_key": false,
+      "components": 10,
+      "palette_mean_delta_e": 5.435116839523628,
+      "palette_p90_delta_e": 11.757842540745473
+    },
+    "placement": {
+      "source_bounds_px": [
+        233,
+        343,
+        877,
+        794
+      ],
+      "source_pivot_px": [
+        555.0,
+        568.5
+      ],
+      "pivot_px": [
+        64.0,
+        64.0
+      ],
+      "cell_px": [
+        128,
+        128
+      ],
+      "subject_px": [
+        120,
+        84
+      ],
+      "scale": 0.18633540372670807,
+      "world_length_m": null,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 128
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v4-fusion-decals\\v4-fusion-decals-scorch-v2.png",
+    "sha256": "37ae330f29b2a782fd9555391c58c6e81085cf89378e6a4284f880e6a18cb977"
+  },
+  {
+    "id": "v4-fusion-decals-cracks-v1",
+    "class": "cracks",
+    "kind": "sprite",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v4-fusion-decals-cracks-v1\\attempt-02\\1.jpg",
+    "source_sha256": "e732fbc7b1c06ba3dcdc436003a01872a87fe6e25980e79b1f4c97e6ba006ba9",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v4-fusion-decals-cracks-v1",
+      "class": "cracks",
+      "prompt_action": "One small localized cluster of three thin branching near-black cracks with sparse grey edge chips, asymmetrical, flat overhead ground decal only. One SMALL isolated complete asset, floating in a large empty magenta field. All pixels within the middle HALF of the canvas; extremely generous empty margin on ALL four sides. Strong shape at 96 pixels, HUD at 32 pixels. Flat neutral material shading, no cast shadow, scene, car or lettering. Strict directly overhead plan view; no visible front or side wall.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "sprite",
+      "reference": "",
+      "batch": "v4-fusion-decals",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "128",
+      "style_file": "style-fusion.json",
+      "wave": "V4",
+      "asset_family": "decals",
+      "surface_stack": "seeded-decals-tall-props-baked-natural-bands",
+      "logical_name": "decals/cracks"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "metrics": {
+      "foreground_fraction": 0.010324478149414062,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        258,
+        290,
+        762,
+        692
+      ],
+      "margin_fraction": 0.251953125,
+      "aspect": 1.2537313432835822,
+      "estimated_key_rgb": [
+        191.0,
+        36.0,
+        110.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 7.227385325902414,
+      "palette_p90_delta_e": 12.245629079004317
+    },
+    "placement": {
+      "source_bounds_px": [
+        258,
+        290,
+        762,
+        692
+      ],
+      "source_pivot_px": [
+        510.0,
+        491.0
+      ],
+      "pivot_px": [
+        64.0,
+        64.0
+      ],
+      "cell_px": [
+        128,
+        128
+      ],
+      "subject_px": [
+        120,
+        96
+      ],
+      "scale": 0.23809523809523808,
+      "world_length_m": null,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 128
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v4-fusion-decals\\v4-fusion-decals-cracks-v1.png",
+    "sha256": "fa8da70a57dd94ca367b862040dcbb7fa315b6b7fc086e3cdf8ed0e6fbc00ff1"
+  },
+  {
+    "id": "v4-fusion-decals-impact-v1",
+    "class": "impact",
+    "kind": "sprite",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v4-fusion-decals-impact-v1\\attempt-02\\1.jpg",
+    "source_sha256": "7c42a85c9b7460e8a4d37f56670cc6c14b702226ea1f45f2b73c3b2f3a6b40dd",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v4-fusion-decals-impact-v1",
+      "class": "impact",
+      "prompt_action": "One blood-free metal impact mark: a small dark centre with five short grey radial scrapes and tiny ivory chips, flat overhead decal, no body or gore. One SMALL isolated complete asset, floating in a large empty magenta field. All pixels within the middle HALF of the canvas; extremely generous empty margin on ALL four sides. Strong shape at 96 pixels, HUD at 32 pixels. Flat neutral material shading, no cast shadow, scene, car or lettering. Strict directly overhead plan view; no visible front or side wall.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "sprite",
+      "reference": "",
+      "batch": "v4-fusion-decals",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "128",
+      "style_file": "style-fusion.json",
+      "wave": "V4",
+      "asset_family": "decals",
+      "surface_stack": "seeded-decals-tall-props-baked-natural-bands",
+      "logical_name": "decals/impact"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "metrics": {
+      "foreground_fraction": 0.06766414642333984,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        272,
+        266,
+        755,
+        759
+      ],
+      "margin_fraction": 0.2587890625,
+      "aspect": 0.9797160243407708,
+      "estimated_key_rgb": [
+        234.0,
+        34.0,
+        176.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 7,
+      "palette_mean_delta_e": 8.505755109730664,
+      "palette_p90_delta_e": 14.775621453639229
+    },
+    "placement": {
+      "source_bounds_px": [
+        272,
+        266,
+        755,
+        759
+      ],
+      "source_pivot_px": [
+        513.5,
+        512.5
+      ],
+      "pivot_px": [
+        64.0,
+        64.0
+      ],
+      "cell_px": [
+        128,
+        128
+      ],
+      "subject_px": [
+        118,
+        120
+      ],
+      "scale": 0.2434077079107505,
+      "world_length_m": null,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 128
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v4-fusion-decals\\v4-fusion-decals-impact-v1.png",
+    "sha256": "5cf957e4daa3827064f90e1aef468984b4c1de3d497e0ca8628ced5f5aea780d"
+  }
+]

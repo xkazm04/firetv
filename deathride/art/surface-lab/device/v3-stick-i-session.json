@@ -1,0 +1,28 @@
+{
+  "started_at": "2026-10-01T16:13:06.309915+00:00",
+  "device": "10.0.0.139:5555",
+  "model": "AFTKM",
+  "prior_activity": "dev.deathride.tv/.MainActivity",
+  "apk_sha256": "db785d5c78570623d16cb7127e7d6de8645c48f0be026392dae706d346499860",
+  "package": "dev.deathride.artlab",
+  "preflight_integration_phase": "lobby",
+  "runs": [
+    {
+      "name": "v3-stick-i-0-cached-stack",
+      "result_sha256": "14bc42bb19c892017c39a415dca93580e37831670c43bd10d00b99724d994511",
+      "screenshot_sha256": "ccdcc912d58ea2c05ae1b2d8afceb738019327c207c7508e7ce523c8d2f82d0c"
+    },
+    {
+      "name": "v3-stick-i-0-efficient-stack",
+      "result_sha256": "8cafb485983c12e4565104be2d96bcb0d6c6f8882c4d5c8981a688383b7210e4",
+      "screenshot_sha256": "ccdcc912d58ea2c05ae1b2d8afceb738019327c207c7508e7ce523c8d2f82d0c"
+    }
+  ],
+  "requested_runs": 2,
+  "status": "complete",
+  "runner_sha256": "e420285d25204668f906f5ea29c20fe08abb51e18fecfe405f86feb4adf28299",
+  "coordination": "shared git-common-dir lease; refuse active race; abort if foreground changes; install only artlab",
+  "finished_at": "2026-10-01T16:14:01.135262+00:00",
+  "restored_prior_activity": true,
+  "integration_installation_unchanged": true
+}

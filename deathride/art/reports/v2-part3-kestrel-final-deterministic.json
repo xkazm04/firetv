@@ -1,0 +1,101 @@
+[
+  {
+    "id": "v2-part3-rework-kestrel-v3",
+    "class": "Kestrel",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v2-part3-rework-kestrel-v3\\attempt-01\\1.jpg",
+    "source_sha256": "0252116d9d88498af123688e34d9ed1371155de8e3cacc26ba69433f59c70cfb",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-part3-rework-kestrel-v3",
+      "class": "Kestrel",
+      "prompt_action": "Edit this exact original electric sprint car. Keep the same roof-only overhead camera, RIGHT nose, worn Rust and Ink mechanical style, rear engine, yellow coil rings, contained electric arcs, four wheels, narrow silhouette and entire source framing. Change ONLY the front weapon assembly: remove the two separate rightward spear rails and replace them with ONE SINGLE centreline ELECTRIC HARPOON. One clearly barbed steel spearhead with two backward-facing hooks sits on a short central launch rail. A visible coiled tether and insulated cable connect this one weapon to the over-energised rear engine. Two short pale blue-white electric arcs bridge the head and its rail. This is one harpoon, not two spears. The one tip must stop at the same x position as the prior two tips or shorter; do not enlarge the subject or zoom in. Preserve at least the existing empty magenta source margins. No glow, bloom, shadows, lettering, occupants or detached electricity. All other geometry, wear and materials remain unchanged.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "art/review/fusion/sources/v2-part3-rework-kestrel-v2.jpg",
+      "batch": "v2-part3-kestrel-final",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "cars",
+      "surface_stack": ""
+    },
+    "verdict": "reject",
+    "codes": [
+      "CROPPED_OR_MARGIN",
+      "ASPECT_BAND"
+    ],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "metrics": {
+      "foreground_fraction": 0.2068939208984375,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        60,
+        316,
+        1002,
+        797
+      ],
+      "margin_fraction": 0.021484375,
+      "aspect": 1.9584199584199584,
+      "expected_aspect": 2.772727272727273,
+      "aspect_relative_error": 0.29368460516001504,
+      "principal_axis_degrees": 3.2788228660831717,
+      "estimated_key_rgb": [
+        234.0,
+        83.0,
+        181.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 5.955552541940156,
+      "palette_p90_delta_e": 10.424495095495068
+    },
+    "placement": {
+      "source_bounds_px": [
+        60,
+        316,
+        1002,
+        797
+      ],
+      "source_pivot_px": [
+        531.0,
+        556.5
+      ],
+      "pivot_px": [
+        128.0,
+        64.0
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        220,
+        112
+      ],
+      "scale": 0.23354564755838642,
+      "world_length_m": 9.15,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v2-part3-kestrel-final\\v2-part3-rework-kestrel-v3.png",
+    "sha256": "a263ded858dba61e7807a302244ec24ea2e12f42cf1b56719b49c0735554d6cf"
+  }
+]

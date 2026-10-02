@@ -1,0 +1,631 @@
+[
+  {
+    "id": "v1-soot-pulp-heavy-v1",
+    "class": "Bastion",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v1-soot-pulp-heavy-v1\\attempt-02\\1.jpg",
+    "source_sha256": "5d78edd891b2dc6187fe51dfa994c444c95d292e3667e471ee38781ed0cf4ad8",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v1-soot-pulp-heavy-v1",
+      "class": "Bastion",
+      "prompt_action": "One single original heavy combat wagon: a broad spiked fortress with four oversized exposed tyres, a blunt welded ram at the RIGHT nose, a short roof cannon pointing RIGHT, bolted roof plates and tyre-stack rear bumper at LEFT. Length twice width. Visible dents, chipped mismatched panels and rust, intact reference configuration. Strict overhead roof-plane view, horizontal axis, complete vehicle within the middle three quarters of the canvas, generous empty margin. No occupant or exposed driver.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "",
+      "batch": "v1-soot-pulp",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "128",
+      "style_file": "style-soot-pulp.json",
+      "wave": "V1",
+      "proof_role": "heavy"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "5ad626ea96aed613d0789a65cad05fdf0da497b04e9466a55ec28a1e2ba05c7d",
+    "style_version": "wasteland-soot-pulp-v2",
+    "processor_sources": {
+      "process.py": "baeb3c75341198559ebbbf8175e2effc5b3b5193b96f22afa7da9eeb41992936"
+    },
+    "metrics": {
+      "foreground_fraction": 0.35652923583984375,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        64,
+        226,
+        989,
+        796
+      ],
+      "margin_fraction": 0.0341796875,
+      "aspect": 1.6228070175438596,
+      "expected_aspect": 2.0,
+      "aspect_relative_error": 0.1885964912280702,
+      "principal_axis_degrees": 0.02176952530729927,
+      "estimated_key_rgb": [
+        245.0,
+        129.0,
+        233.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 6.2485248779220495,
+      "palette_p90_delta_e": 11.005688726773911
+    },
+    "placement": {
+      "source_bounds_px": [
+        64,
+        226,
+        989,
+        796
+      ],
+      "source_pivot_px": [
+        526.5,
+        511.0
+      ],
+      "pivot_px": [
+        127.5,
+        127.5
+      ],
+      "cell_px": [
+        256,
+        256
+      ],
+      "subject_px": [
+        223,
+        137
+      ],
+      "scale": 0.2410810810810811,
+      "world_length_m": 9.3,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 128
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v1-soot-pulp\\v1-soot-pulp-heavy-v1.png",
+    "sha256": "14d45cc19a2fb86fe4fab8488403303bb30aac47b8e231bfd5f54ee1764f8604"
+  },
+  {
+    "id": "v1-soot-pulp-light-v1",
+    "class": "Needle",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v1-soot-pulp-light-v1\\attempt-03\\1.jpg",
+    "source_sha256": "f609a0e2bee1f211f457ffb8865bbd63d573f191b55d6bb8043b6ad3b6b721c7",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v1-soot-pulp-light-v1",
+      "class": "Needle",
+      "prompt_action": "One single original light combat buggy: a very narrow stripped rat-rod with four exposed skinny wheels, empty skeletal cage, exposed engine at LEFT rear and a tapered forked ram at RIGHT nose. Length just over twice width. Patched panels, dents and soot, intact reference configuration. Strict overhead roof-plane view, horizontal axis, complete vehicle within the middle three quarters of the canvas, generous empty margin. No occupant or exposed driver.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "",
+      "batch": "v1-soot-pulp",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "128",
+      "style_file": "style-soot-pulp.json",
+      "wave": "V1",
+      "proof_role": "light"
+    },
+    "verdict": "reject",
+    "codes": [
+      "CROPPED_OR_MARGIN"
+    ],
+    "style_hash": "5ad626ea96aed613d0789a65cad05fdf0da497b04e9466a55ec28a1e2ba05c7d",
+    "style_version": "wasteland-soot-pulp-v2",
+    "processor_sources": {
+      "process.py": "baeb3c75341198559ebbbf8175e2effc5b3b5193b96f22afa7da9eeb41992936"
+    },
+    "metrics": {
+      "foreground_fraction": 0.23920917510986328,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        48,
+        294,
+        1014,
+        730
+      ],
+      "margin_fraction": 0.009765625,
+      "aspect": 2.2155963302752295,
+      "expected_aspect": 2.1999999999999997,
+      "aspect_relative_error": 0.007089241034195393,
+      "principal_axis_degrees": 0.02807183005083338,
+      "estimated_key_rgb": [
+        245.0,
+        245.0,
+        245.0
+      ],
+      "magenta_key": false,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 5.7038081091805,
+      "palette_p90_delta_e": 11.627565629508714
+    },
+    "placement": {
+      "source_bounds_px": [
+        48,
+        294,
+        1014,
+        730
+      ],
+      "source_pivot_px": [
+        531.0,
+        512.0
+      ],
+      "pivot_px": [
+        128.0,
+        63.5
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        158,
+        71
+      ],
+      "scale": 0.16356107660455488,
+      "world_length_m": 6.6,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 128
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v1-soot-pulp\\v1-soot-pulp-light-v1.png",
+    "sha256": "4ba65d3243f0292ef96fa54015ea9762a4bcc8ab5eafba4a7dbbf960f9bdc320"
+  },
+  {
+    "id": "v1-soot-pulp-portrait-v1",
+    "class": "rook",
+    "kind": "portrait",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v1-soot-pulp-portrait-v1\\attempt-02\\1.jpg",
+    "source_sha256": "4ba329826b3587b4989cf3674d6991ed4d984fe668b8f7a2c5e86cc9108f907b",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v1-soot-pulp-portrait-v1",
+      "class": "rook",
+      "prompt_action": "One isolated original fictional adult rival portrait, chest-up facing the viewer: gaunt weathered scavenger with angular cheekbones, a healed cheek scar, broken-lens goggles on the forehead, uneven cropped hair, dust scarf and one welded shoulder plate. Bitter calculating expression. The entire head and shoulder silhouette fits inside the middle three quarters with generous margin. Flat neutral even light; this is a portrait, not a person inside a vehicle.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "portrait",
+      "reference": "",
+      "batch": "v1-soot-pulp",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "256",
+      "style_file": "style-soot-pulp.json",
+      "wave": "V1",
+      "proof_role": "portrait"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "5ad626ea96aed613d0789a65cad05fdf0da497b04e9466a55ec28a1e2ba05c7d",
+    "style_version": "wasteland-soot-pulp-v2",
+    "processor_sources": {
+      "process.py": "baeb3c75341198559ebbbf8175e2effc5b3b5193b96f22afa7da9eeb41992936"
+    },
+    "metrics": {
+      "foreground_fraction": 0.31849098205566406,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        144,
+        99,
+        918,
+        936
+      ],
+      "margin_fraction": 0.0859375,
+      "aspect": 0.9247311827956989,
+      "estimated_key_rgb": [
+        187.0,
+        81.0,
+        143.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 5.98833422098573,
+      "palette_p90_delta_e": 12.004145744200253
+    },
+    "placement": {
+      "source_bounds_px": [
+        144,
+        99,
+        918,
+        936
+      ],
+      "source_pivot_px": [
+        531.0,
+        517.5
+      ],
+      "pivot_px": [
+        127.5,
+        128.0
+      ],
+      "cell_px": [
+        256,
+        256
+      ],
+      "subject_px": [
+        229,
+        248
+      ],
+      "scale": 0.2962962962962963,
+      "world_length_m": null,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v1-soot-pulp\\v1-soot-pulp-portrait-v1.png",
+    "sha256": "4f657d718c982a77f1c4ed9528863b411c94ebda4e22ecd5cbc1d1f861034993"
+  },
+  {
+    "id": "v1-soot-pulp-ground-v1",
+    "class": "asphalt-worn",
+    "kind": "tile",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v1-soot-pulp-ground-v1\\attempt-03\\1.jpg",
+    "source_sha256": "51ffc7c33669aa977df40a5d4190762dab18a313a75b19bbc896c157e4f89476",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v1-soot-pulp-ground-v1",
+      "class": "asphalt-worn",
+      "prompt_action": "Entire image is ONLY an empty worn asphalt material patch viewed directly overhead. Anonymous fine cracks, tiny abrasion strokes and grit; low contrast middle-dark values, uniform density and even light. One unrepeated stochastic field fills every edge and continues seamlessly across all boundaries. No repeated quadrants, mirrored halves, large cracks, identifiable motifs, objects, road markings, cars, border or grid.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "none",
+      "count": "1",
+      "status": "ready",
+      "kind": "tile",
+      "reference": "",
+      "batch": "v1-soot-pulp",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "256",
+      "style_file": "style-soot-pulp.json",
+      "wave": "V1",
+      "proof_role": "ground"
+    },
+    "verdict": "reject",
+    "codes": [
+      "TILE_SEAM_MEAN",
+      "TILE_SEAM_PEAK"
+    ],
+    "style_hash": "5ad626ea96aed613d0789a65cad05fdf0da497b04e9466a55ec28a1e2ba05c7d",
+    "style_version": "wasteland-soot-pulp-v2",
+    "processor_sources": {
+      "process.py": "baeb3c75341198559ebbbf8175e2effc5b3b5193b96f22afa7da9eeb41992936"
+    },
+    "raw_metrics": {
+      "edge_x_mean": 0.0986532373366013,
+      "edge_y_mean": 0.0714358660130719,
+      "edge_x_peak": 0.584313725490196,
+      "edge_y_peak": 0.6039215686274509,
+      "autocorrelation_peak": 0.1793053392651731,
+      "autocorrelation_shift_px": [
+        127,
+        45
+      ],
+      "basis": "decoded straight RGB / 255; autocorrelation circular luminance at 128px; excludes nearby shifts"
+    },
+    "raw_codes": [
+      "TILE_SEAM_MEAN",
+      "TILE_SEAM_PEAK"
+    ],
+    "metrics": {
+      "edge_x_mean": 0.08794424019607844,
+      "edge_y_mean": 0.06598243464052288,
+      "edge_x_peak": 0.49411764705882355,
+      "edge_y_peak": 0.5058823529411764,
+      "autocorrelation_peak": 0.17298587265818924,
+      "autocorrelation_shift_px": [
+        127,
+        45
+      ],
+      "basis": "decoded straight RGB / 255; autocorrelation circular luminance at 128px; excludes nearby shifts"
+    },
+    "repeat_path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v1-soot-pulp\\v1-soot-pulp-ground-v1-repeat.png",
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v1-soot-pulp\\v1-soot-pulp-ground-v1.png",
+    "sha256": "35861d2be518ce82e524fa07b8d3dc29cd9a461282d2e40815fff4d57972c1f5"
+  },
+  {
+    "id": "v1-soot-pulp-barrier-v1",
+    "class": "concrete",
+    "kind": "prop",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v1-soot-pulp-barrier-v1\\attempt-01\\1.jpg",
+    "source_sha256": "f9767719f8b09f47ffee2150714965d11cc71784ae401431d68eff683013ff79",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v1-soot-pulp-barrier-v1",
+      "class": "concrete",
+      "prompt_action": "One isolated original road barricade viewed strictly from above: a horizontal battered concrete block with bolted scrap end caps and a few blank hazard-yellow diagonal paint bands worn away. Chips, rust fasteners and patched top surface, no readable symbols. Top plane only, entire silhouette in the middle three quarters with generous margin; no ground or cast shadow.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "prop",
+      "reference": "",
+      "batch": "v1-soot-pulp",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "128",
+      "style_file": "style-soot-pulp.json",
+      "wave": "V1",
+      "proof_role": "barrier"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "5ad626ea96aed613d0789a65cad05fdf0da497b04e9466a55ec28a1e2ba05c7d",
+    "style_version": "wasteland-soot-pulp-v2",
+    "processor_sources": {
+      "process.py": "baeb3c75341198559ebbbf8175e2effc5b3b5193b96f22afa7da9eeb41992936"
+    },
+    "metrics": {
+      "foreground_fraction": 0.3636646270751953,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        56,
+        282,
+        969,
+        741
+      ],
+      "margin_fraction": 0.0537109375,
+      "aspect": 1.9891067538126361,
+      "estimated_key_rgb": [
+        244.0,
+        238.0,
+        248.0
+      ],
+      "magenta_key": false,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 8.334377658170984,
+      "palette_p90_delta_e": 14.107341659032118
+    },
+    "placement": {
+      "source_bounds_px": [
+        56,
+        282,
+        969,
+        741
+      ],
+      "source_pivot_px": [
+        512.5,
+        511.5
+      ],
+      "pivot_px": [
+        64.0,
+        64.0
+      ],
+      "cell_px": [
+        128,
+        128
+      ],
+      "subject_px": [
+        120,
+        60
+      ],
+      "scale": 0.13143483023001096,
+      "world_length_m": null,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 128
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v1-soot-pulp\\v1-soot-pulp-barrier-v1.png",
+    "sha256": "0b5ef9143dcbc4bd3b05a0dfbe3f8ab105ee1b3007b88628cd85e7bba49ab1a6"
+  },
+  {
+    "id": "v1-soot-pulp-icon-v1",
+    "class": "repair",
+    "kind": "icon",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v1-soot-pulp-icon-v1\\attempt-01\\1.jpg",
+    "source_sha256": "3e22f50fdefe85f5b092986bada414585fc3bfbb3f20784aedefe2f9468e232f",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v1-soot-pulp-icon-v1",
+      "class": "repair",
+      "prompt_action": "One isolated repair HUD icon: a single battered open-ended wrench with a wide recognisable jaw and taped grip, chipped bone metal and one small hazard-yellow patch. Diagonal simple silhouette legible at 32 pixels, sparse large marks, no badge, circular backing, lettering or additional objects. Entire wrench in the middle three quarters with generous margin.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "icon",
+      "reference": "",
+      "batch": "v1-soot-pulp",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "128",
+      "style_file": "style-soot-pulp.json",
+      "wave": "V1",
+      "proof_role": "icon"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "5ad626ea96aed613d0789a65cad05fdf0da497b04e9466a55ec28a1e2ba05c7d",
+    "style_version": "wasteland-soot-pulp-v2",
+    "processor_sources": {
+      "process.py": "baeb3c75341198559ebbbf8175e2effc5b3b5193b96f22afa7da9eeb41992936"
+    },
+    "metrics": {
+      "foreground_fraction": 0.19134807586669922,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        87,
+        91,
+        936,
+        933
+      ],
+      "margin_fraction": 0.0849609375,
+      "aspect": 1.008313539192399,
+      "estimated_key_rgb": [
+        250.0,
+        240.0,
+        248.0
+      ],
+      "magenta_key": false,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 7.094469774691605,
+      "palette_p90_delta_e": 12.205241149832057
+    },
+    "placement": {
+      "source_bounds_px": [
+        87,
+        91,
+        936,
+        933
+      ],
+      "source_pivot_px": [
+        511.5,
+        512.0
+      ],
+      "pivot_px": [
+        64.0,
+        63.5
+      ],
+      "cell_px": [
+        128,
+        128
+      ],
+      "subject_px": [
+        120,
+        119
+      ],
+      "scale": 0.1413427561837456,
+      "world_length_m": null,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 128
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v1-soot-pulp\\v1-soot-pulp-icon-v1.png",
+    "sha256": "e3ddd32a0ec84368747a5564c1bcac5a59b7b6cdcbd31e90aa3699f7d779506d"
+  },
+  {
+    "id": "v1-soot-pulp-effect-v1",
+    "class": "spark-burst",
+    "kind": "effect",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v1-soot-pulp-effect-v1\\attempt-01\\1.jpg",
+    "source_sha256": "931332224464415ec9ce0ea2f01cd06aaef46cd5b62e13796711540efc95cd09",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v1-soot-pulp-effect-v1",
+      "class": "spark-burst",
+      "prompt_action": "One isolated compact impact spark burst, a single still effect sprite: a central pale bone star with seven uneven short hot ochre and rust-orange tapered sparks radiating outwards. Strong central mass, crisp opaque painted sparks, no smoke, glow gradient, sheet, grid, object, lettering or background scene. Everything in the middle three quarters with generous margin.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "effect",
+      "reference": "",
+      "batch": "v1-soot-pulp",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "128",
+      "style_file": "style-soot-pulp.json",
+      "wave": "V1",
+      "proof_role": "effect"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "5ad626ea96aed613d0789a65cad05fdf0da497b04e9466a55ec28a1e2ba05c7d",
+    "style_version": "wasteland-soot-pulp-v2",
+    "processor_sources": {
+      "process.py": "baeb3c75341198559ebbbf8175e2effc5b3b5193b96f22afa7da9eeb41992936"
+    },
+    "metrics": {
+      "foreground_fraction": 0.19789505004882812,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        126,
+        150,
+        921,
+        875
+      ],
+      "margin_fraction": 0.1005859375,
+      "aspect": 1.096551724137931,
+      "estimated_key_rgb": [
+        238.0,
+        238.0,
+        238.0
+      ],
+      "magenta_key": false,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 7.765134730383801,
+      "palette_p90_delta_e": 14.072166272214407
+    },
+    "placement": {
+      "source_bounds_px": [
+        126,
+        150,
+        921,
+        875
+      ],
+      "source_pivot_px": [
+        523.5,
+        512.5
+      ],
+      "pivot_px": [
+        64.0,
+        63.5
+      ],
+      "cell_px": [
+        128,
+        128
+      ],
+      "subject_px": [
+        120,
+        109
+      ],
+      "scale": 0.1509433962264151,
+      "world_length_m": null,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 128
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v1-soot-pulp\\v1-soot-pulp-effect-v1.png",
+    "sha256": "6e67487b6d57a54bc0d25f46d59dcbeec8e3f7e949b19dad2672db22723a1b8c"
+  }
+]

@@ -1,0 +1,472 @@
+[
+  {
+    "id": "v4-fusion-pickups-ammo-v1",
+    "class": "ammo",
+    "kind": "sprite",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v4-fusion-pickups-ammo-v1\\attempt-01\\1.jpg",
+    "source_sha256": "178340a54b50c132d7f7cd58d6faca2725f822a4cd150c3d3105a82dede939e0",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v4-fusion-pickups-ammo-v1",
+      "class": "ammo",
+      "prompt_action": "A single compact dirty ochre ammunition box with three large ivory bullet silhouettes embossed on its top, bold readable pickup icon, no words. One SMALL isolated complete asset, floating in a large empty magenta field. All pixels within the middle HALF of the canvas; extremely generous empty margin on ALL four sides. Strong shape at 96 pixels, HUD at 32 pixels. Flat neutral material shading, no cast shadow, scene, car or lettering.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "sprite",
+      "reference": "",
+      "batch": "v4-fusion-pickups",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "128",
+      "style_file": "style-fusion.json",
+      "wave": "V4",
+      "asset_family": "pickups",
+      "surface_stack": "seeded-decals-tall-props-baked-natural-bands",
+      "logical_name": "pickups/ammo"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "25185fedcf1a78d6917c3f83ca440ce061b429a4596981ff0fd8f5de0028c780",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "metrics": {
+      "foreground_fraction": 0.2905082702636719,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        170,
+        255,
+        869,
+        776
+      ],
+      "margin_fraction": 0.1513671875,
+      "aspect": 1.3416506717850287,
+      "estimated_key_rgb": [
+        236.0,
+        74.0,
+        226.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 5.988069250951911,
+      "palette_p90_delta_e": 9.659691731414027
+    },
+    "placement": {
+      "source_bounds_px": [
+        170,
+        255,
+        869,
+        776
+      ],
+      "source_pivot_px": [
+        519.5,
+        515.5
+      ],
+      "pivot_px": [
+        64.0,
+        63.5
+      ],
+      "cell_px": [
+        128,
+        128
+      ],
+      "subject_px": [
+        120,
+        89
+      ],
+      "scale": 0.17167381974248927,
+      "world_length_m": null,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 128
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v4-fusion-pickups\\v4-fusion-pickups-ammo-v1.png",
+    "sha256": "1993f7d7adaeb9e0b3aa5a60ba45b582284087b9eb61971980909b261cb180c5"
+  },
+  {
+    "id": "v4-fusion-pickups-repair-v1",
+    "class": "repair",
+    "kind": "sprite",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v4-fusion-pickups-repair-v1\\attempt-01\\1.jpg",
+    "source_sha256": "fa4ae9e0d47633695702899a92f9e6caa9f5528622c7cb20044eb126614d04c3",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v4-fusion-pickups-repair-v1",
+      "class": "repair",
+      "prompt_action": "A single chunky bone-grey open-ended wrench crossed over a small rust toolbox, bold readable repair pickup icon, no letters. One SMALL isolated complete asset, floating in a large empty magenta field. All pixels within the middle HALF of the canvas; extremely generous empty margin on ALL four sides. Strong shape at 96 pixels, HUD at 32 pixels. Flat neutral material shading, no cast shadow, scene, car or lettering.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "sprite",
+      "reference": "",
+      "batch": "v4-fusion-pickups",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "128",
+      "style_file": "style-fusion.json",
+      "wave": "V4",
+      "asset_family": "pickups",
+      "surface_stack": "seeded-decals-tall-props-baked-natural-bands",
+      "logical_name": "pickups/repair"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "25185fedcf1a78d6917c3f83ca440ce061b429a4596981ff0fd8f5de0028c780",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "metrics": {
+      "foreground_fraction": 0.2195758819580078,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        148,
+        164,
+        877,
+        862
+      ],
+      "margin_fraction": 0.1435546875,
+      "aspect": 1.0444126074498568,
+      "estimated_key_rgb": [
+        222.0,
+        97.0,
+        199.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 7,
+      "palette_mean_delta_e": 7.492225660172961,
+      "palette_p90_delta_e": 12.522801837372922
+    },
+    "placement": {
+      "source_bounds_px": [
+        148,
+        164,
+        877,
+        862
+      ],
+      "source_pivot_px": [
+        512.5,
+        513.0
+      ],
+      "pivot_px": [
+        64.0,
+        63.5
+      ],
+      "cell_px": [
+        128,
+        128
+      ],
+      "subject_px": [
+        120,
+        115
+      ],
+      "scale": 0.1646090534979424,
+      "world_length_m": null,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 128
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v4-fusion-pickups\\v4-fusion-pickups-repair-v1.png",
+    "sha256": "fa2ea288e90172f9334398ad2a382c0a855a33d85e8340283792fee104ae15d8"
+  },
+  {
+    "id": "v4-fusion-pickups-cash-v1",
+    "class": "cash",
+    "kind": "sprite",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v4-fusion-pickups-cash-v1\\attempt-01\\1.jpg",
+    "source_sha256": "963a47820849d2e2b8b7950bfc097026a6f989923cd3a7e6c016e8d83ebab1e0",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v4-fusion-pickups-cash-v1",
+      "class": "cash",
+      "prompt_action": "A compact stack of three bleached bone rectangular currency notes held by an dirty ochre paper band, abstract blank notes with no monetary symbol, letters or numerals. One SMALL isolated complete asset, floating in a large empty magenta field. All pixels within the middle HALF of the canvas; extremely generous empty margin on ALL four sides. Strong shape at 96 pixels, HUD at 32 pixels. Flat neutral material shading, no cast shadow, scene, car or lettering.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "sprite",
+      "reference": "",
+      "batch": "v4-fusion-pickups",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "128",
+      "style_file": "style-fusion.json",
+      "wave": "V4",
+      "asset_family": "pickups",
+      "surface_stack": "seeded-decals-tall-props-baked-natural-bands",
+      "logical_name": "pickups/cash"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "25185fedcf1a78d6917c3f83ca440ce061b429a4596981ff0fd8f5de0028c780",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "metrics": {
+      "foreground_fraction": 0.25942420959472656,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        174,
+        148,
+        904,
+        881
+      ],
+      "margin_fraction": 0.1171875,
+      "aspect": 0.9959072305593452,
+      "estimated_key_rgb": [
+        215.0,
+        83.0,
+        203.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 6,
+      "palette_mean_delta_e": 9.061157165128238,
+      "palette_p90_delta_e": 14.728041373987942
+    },
+    "placement": {
+      "source_bounds_px": [
+        174,
+        148,
+        904,
+        881
+      ],
+      "source_pivot_px": [
+        539.0,
+        514.5
+      ],
+      "pivot_px": [
+        64.0,
+        64.0
+      ],
+      "cell_px": [
+        128,
+        128
+      ],
+      "subject_px": [
+        120,
+        120
+      ],
+      "scale": 0.16371077762619374,
+      "world_length_m": null,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 128
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v4-fusion-pickups\\v4-fusion-pickups-cash-v1.png",
+    "sha256": "dbfc9f7ee36cc51c376da36590d9484641990919485b367e8752a05a0431cc01"
+  },
+  {
+    "id": "v4-fusion-pickups-mine-v1",
+    "class": "mine",
+    "kind": "sprite",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v4-fusion-pickups-mine-v1\\attempt-01\\1.jpg",
+    "source_sha256": "fddeb25e8feec859f1b212e72329302ab7ef4e89215e07e1d52153f0e0512cb6",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v4-fusion-pickups-mine-v1",
+      "class": "mine",
+      "prompt_action": "One round charcoal mechanical disc mine viewed directly overhead, six chunky dirty ochre rim lugs and a small dried-red centre cap, no lettering. One SMALL isolated complete asset, floating in a large empty magenta field. All pixels within the middle HALF of the canvas; extremely generous empty margin on ALL four sides. Strong shape at 96 pixels, HUD at 32 pixels. Flat neutral material shading, no cast shadow, scene, car or lettering.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "sprite",
+      "reference": "",
+      "batch": "v4-fusion-pickups",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "128",
+      "style_file": "style-fusion.json",
+      "wave": "V4",
+      "asset_family": "pickups",
+      "surface_stack": "seeded-decals-tall-props-baked-natural-bands",
+      "logical_name": "pickups/mine"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "25185fedcf1a78d6917c3f83ca440ce061b429a4596981ff0fd8f5de0028c780",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "metrics": {
+      "foreground_fraction": 0.3360157012939453,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        157,
+        152,
+        880,
+        870
+      ],
+      "margin_fraction": 0.140625,
+      "aspect": 1.0069637883008355,
+      "estimated_key_rgb": [
+        230.0,
+        58.0,
+        157.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 5.727095255872229,
+      "palette_p90_delta_e": 9.362346560544204
+    },
+    "placement": {
+      "source_bounds_px": [
+        157,
+        152,
+        880,
+        870
+      ],
+      "source_pivot_px": [
+        518.5,
+        511.0
+      ],
+      "pivot_px": [
+        64.0,
+        63.5
+      ],
+      "cell_px": [
+        128,
+        128
+      ],
+      "subject_px": [
+        120,
+        119
+      ],
+      "scale": 0.16597510373443983,
+      "world_length_m": null,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 128
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v4-fusion-pickups\\v4-fusion-pickups-mine-v1.png",
+    "sha256": "77570c7bef4245711c5546f151f9dfa968422c79b4683dff4b94e695c354caa6"
+  },
+  {
+    "id": "v4-fusion-pickups-turbo-v1",
+    "class": "turbo",
+    "kind": "sprite",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v4-fusion-pickups-turbo-v1\\attempt-01\\1.jpg",
+    "source_sha256": "1c3e3dc2d44d6dd1fb65a3cc555e6e1ee13270d18d0da48a3e4cde9045a83fc2",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v4-fusion-pickups-turbo-v1",
+      "class": "turbo",
+      "prompt_action": "One compact rust-orange pressure bottle with a bone grey valve at top and a bold bleached bone lightning bolt on the bottle, readable turbo pickup icon. One SMALL isolated complete asset, floating in a large empty magenta field. All pixels within the middle HALF of the canvas; extremely generous empty margin on ALL four sides. Strong shape at 96 pixels, HUD at 32 pixels. Flat neutral material shading, no cast shadow, scene, car or lettering.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "sprite",
+      "reference": "",
+      "batch": "v4-fusion-pickups",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "128",
+      "style_file": "style-fusion.json",
+      "wave": "V4",
+      "asset_family": "pickups",
+      "surface_stack": "seeded-decals-tall-props-baked-natural-bands",
+      "logical_name": "pickups/turbo"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "25185fedcf1a78d6917c3f83ca440ce061b429a4596981ff0fd8f5de0028c780",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "metrics": {
+      "foreground_fraction": 0.16347980499267578,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        364,
+        138,
+        664,
+        887
+      ],
+      "margin_fraction": 0.1337890625,
+      "aspect": 0.40053404539385845,
+      "estimated_key_rgb": [
+        197.0,
+        78.0,
+        157.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 6.609057798545124,
+      "palette_p90_delta_e": 11.599411148692605
+    },
+    "placement": {
+      "source_bounds_px": [
+        364,
+        138,
+        664,
+        887
+      ],
+      "source_pivot_px": [
+        514.0,
+        512.5
+      ],
+      "pivot_px": [
+        32.0,
+        64.0
+      ],
+      "cell_px": [
+        64,
+        128
+      ],
+      "subject_px": [
+        48,
+        120
+      ],
+      "scale": 0.1602136181575434,
+      "world_length_m": null,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 128
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v4-fusion-pickups\\v4-fusion-pickups-turbo-v1.png",
+    "sha256": "2b194c1b156d42b1b896cef502e117a70c0e0334b3890cd81702216d44df8a2a"
+  }
+]

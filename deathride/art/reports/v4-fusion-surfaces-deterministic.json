@@ -1,0 +1,532 @@
+[
+  {
+    "id": "v4-fusion-surfaces-asphalt-worn-v1",
+    "class": "asphalt-worn",
+    "kind": "tile",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v4-fusion-surfaces-asphalt-worn-v1\\attempt-02\\1.jpg",
+    "source_sha256": "1257b92fd385d085df450780efa323dfe035e80f97382768026b86554793df6a",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v4-fusion-surfaces-asphalt-worn-v1",
+      "class": "asphalt-worn",
+      "prompt_action": "Entire image is ONLY one empty anonymous painted material field. Dark charcoal asphalt with slightly lighter fine aggregate and small scattered abrasion scuffs, medium wear, no large cracks. Fine understated dry-brush grain, quiet large values, no dramatic cracks, lighting gradient, focal motif, frame or border. Single unrepeated stochastic field, seamless edges; never repeated quadrants or mirrored halves. No road line, car, prop, object, lettering, ink perimeter or scene.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "none",
+      "count": "1",
+      "status": "ready",
+      "kind": "tile",
+      "reference": "",
+      "batch": "v4-fusion-surfaces",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V4",
+      "asset_family": "surfaces",
+      "surface_stack": "seeded-decals-tall-props-baked-natural-bands",
+      "logical_name": "tiles/asphalt-worn"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "raw_metrics": {
+      "edge_x_mean": 0.013273590686274511,
+      "edge_y_mean": 0.017408343545751635,
+      "edge_x_peak": 0.196078431372549,
+      "edge_y_peak": 0.23529411764705882,
+      "autocorrelation_peak": 0.09125887781522575,
+      "autocorrelation_shift_px": [
+        120,
+        46
+      ],
+      "basis": "decoded straight RGB / 255; autocorrelation circular luminance at 128px; excludes nearby shifts"
+    },
+    "raw_codes": [],
+    "metrics": {
+      "edge_x_mean": 0.009415849673202616,
+      "edge_y_mean": 0.011611519607843138,
+      "edge_x_peak": 0.07450980392156864,
+      "edge_y_peak": 0.11764705882352944,
+      "autocorrelation_peak": 0.08743498868779474,
+      "autocorrelation_shift_px": [
+        8,
+        82
+      ],
+      "basis": "decoded straight RGB / 255; autocorrelation circular luminance at 128px; excludes nearby shifts"
+    },
+    "repeat_path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v4-fusion-surfaces\\v4-fusion-surfaces-asphalt-worn-v1-repeat.png",
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v4-fusion-surfaces\\v4-fusion-surfaces-asphalt-worn-v1.png",
+    "sha256": "c97c0bf50f438de1937618282ba676ae0c70fa996f1b75b6345cdb868d026c82"
+  },
+  {
+    "id": "v4-fusion-surfaces-asphalt-heavy-v1",
+    "class": "asphalt-heavy",
+    "kind": "tile",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v4-fusion-surfaces-asphalt-heavy-v1\\attempt-02\\1.jpg",
+    "source_sha256": "c0c0f142e68151d327a161b25674f4456787cd927947763ab1d36033b6fbf985",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v4-fusion-surfaces-asphalt-heavy-v1",
+      "class": "asphalt-heavy",
+      "prompt_action": "Entire image is ONLY one empty anonymous painted material field. Worn grey asphalt with dense fine pitting and very short randomly distributed hairline cracks, high wear but no long continuous cracks or patches. Fine understated dry-brush grain, quiet large values, no dramatic cracks, lighting gradient, focal motif, frame or border. Single unrepeated stochastic field, seamless edges; never repeated quadrants or mirrored halves. No road line, car, prop, object, lettering, ink perimeter or scene.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "none",
+      "count": "1",
+      "status": "ready",
+      "kind": "tile",
+      "reference": "",
+      "batch": "v4-fusion-surfaces",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V4",
+      "asset_family": "surfaces",
+      "surface_stack": "seeded-decals-tall-props-baked-natural-bands",
+      "logical_name": "tiles/asphalt-heavy"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "raw_metrics": {
+      "edge_x_mean": 0.016969209558823528,
+      "edge_y_mean": 0.017289624183006534,
+      "edge_x_peak": 0.12941176470588237,
+      "edge_y_peak": 0.10980392156862745,
+      "autocorrelation_peak": 0.0353240386062298,
+      "autocorrelation_shift_px": [
+        0,
+        48
+      ],
+      "basis": "decoded straight RGB / 255; autocorrelation circular luminance at 128px; excludes nearby shifts"
+    },
+    "raw_codes": [],
+    "metrics": {
+      "edge_x_mean": 0.01127450980392157,
+      "edge_y_mean": 0.01210682189542484,
+      "edge_x_peak": 0.05882352941176472,
+      "edge_y_peak": 0.06666666666666665,
+      "autocorrelation_peak": 0.03755171655403283,
+      "autocorrelation_shift_px": [
+        119,
+        48
+      ],
+      "basis": "decoded straight RGB / 255; autocorrelation circular luminance at 128px; excludes nearby shifts"
+    },
+    "repeat_path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v4-fusion-surfaces\\v4-fusion-surfaces-asphalt-heavy-v1-repeat.png",
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v4-fusion-surfaces\\v4-fusion-surfaces-asphalt-heavy-v1.png",
+    "sha256": "845eab47a1bfa71a1ef67b35f436de48c92b69a01726b6934e14ffb16e78afff"
+  },
+  {
+    "id": "v4-fusion-surfaces-concrete-v1",
+    "class": "concrete",
+    "kind": "tile",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v4-fusion-surfaces-concrete-v1\\attempt-02\\1.jpg",
+    "source_sha256": "a9ddba8ab650c7bdda0006835ce250194905262a03c427d244d64073c828a66a",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v4-fusion-surfaces-concrete-v1",
+      "class": "concrete",
+      "prompt_action": "Entire image is ONLY one empty anonymous painted material field. Cool light-grey concrete, fine random pores and tiny chips, no slab seams or large cracks. Fine understated dry-brush grain, quiet large values, no dramatic cracks, lighting gradient, focal motif, frame or border. Single unrepeated stochastic field, seamless edges; never repeated quadrants or mirrored halves. No road line, car, prop, object, lettering, ink perimeter or scene.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "none",
+      "count": "1",
+      "status": "ready",
+      "kind": "tile",
+      "reference": "",
+      "batch": "v4-fusion-surfaces",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V4",
+      "asset_family": "surfaces",
+      "surface_stack": "seeded-decals-tall-props-baked-natural-bands",
+      "logical_name": "tiles/concrete"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "raw_metrics": {
+      "edge_x_mean": 0.01182598039215687,
+      "edge_y_mean": 0.012391493055555555,
+      "edge_x_peak": 0.16078431372549018,
+      "edge_y_peak": 0.23137254901960785,
+      "autocorrelation_peak": 0.2101166619513632,
+      "autocorrelation_shift_px": [
+        64,
+        0
+      ],
+      "basis": "decoded straight RGB / 255; autocorrelation circular luminance at 128px; excludes nearby shifts"
+    },
+    "raw_codes": [],
+    "metrics": {
+      "edge_x_mean": 0.009466911764705889,
+      "edge_y_mean": 0.010876225490196074,
+      "edge_x_peak": 0.07450980392156858,
+      "edge_y_peak": 0.0980392156862745,
+      "autocorrelation_peak": 0.19482566885971703,
+      "autocorrelation_shift_px": [
+        64,
+        0
+      ],
+      "basis": "decoded straight RGB / 255; autocorrelation circular luminance at 128px; excludes nearby shifts"
+    },
+    "repeat_path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v4-fusion-surfaces\\v4-fusion-surfaces-concrete-v1-repeat.png",
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v4-fusion-surfaces\\v4-fusion-surfaces-concrete-v1.png",
+    "sha256": "462c79ac455e24088f9b2b4735bc8c48dc4fb4560e2ff23391ae3736663ba911"
+  },
+  {
+    "id": "v4-fusion-surfaces-metal-v1",
+    "class": "metal",
+    "kind": "tile",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v4-fusion-surfaces-metal-v1\\attempt-02\\1.jpg",
+    "source_sha256": "8ad3a22e735bcb82ded4b1726f4749be2c3566f56b2eeb1e83fdda727727727d",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v4-fusion-surfaces-metal-v1",
+      "class": "metal",
+      "prompt_action": "Entire image is ONLY one empty anonymous painted material field. Cool grey matte industrial steel surface with sparse irregular fine scratches and subtle grain, no rivet grid, checker pattern or large panels. Fine understated dry-brush grain, quiet large values, no dramatic cracks, lighting gradient, focal motif, frame or border. Single unrepeated stochastic field, seamless edges; never repeated quadrants or mirrored halves. No road line, car, prop, object, lettering, ink perimeter or scene.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "none",
+      "count": "1",
+      "status": "ready",
+      "kind": "tile",
+      "reference": "",
+      "batch": "v4-fusion-surfaces",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V4",
+      "asset_family": "surfaces",
+      "surface_stack": "seeded-decals-tall-props-baked-natural-bands",
+      "logical_name": "tiles/metal"
+    },
+    "verdict": "reject",
+    "codes": [
+      "TILE_REPETITION"
+    ],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "raw_metrics": {
+      "edge_x_mean": 0.01769301470588235,
+      "edge_y_mean": 0.04566865808823529,
+      "edge_x_peak": 0.19999999999999996,
+      "edge_y_peak": 0.2431372549019608,
+      "autocorrelation_peak": 0.53338475016366,
+      "autocorrelation_shift_px": [
+        0,
+        16
+      ],
+      "basis": "decoded straight RGB / 255; autocorrelation circular luminance at 128px; excludes nearby shifts"
+    },
+    "raw_codes": [
+      "TILE_REPETITION"
+    ],
+    "metrics": {
+      "edge_x_mean": 0.03041768790849673,
+      "edge_y_mean": 0.057797181372549015,
+      "edge_x_peak": 0.207843137254902,
+      "edge_y_peak": 0.2078431372549019,
+      "autocorrelation_peak": 0.530624789808894,
+      "autocorrelation_shift_px": [
+        0,
+        16
+      ],
+      "basis": "decoded straight RGB / 255; autocorrelation circular luminance at 128px; excludes nearby shifts"
+    },
+    "repeat_path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v4-fusion-surfaces\\v4-fusion-surfaces-metal-v1-repeat.png",
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v4-fusion-surfaces\\v4-fusion-surfaces-metal-v1.png",
+    "sha256": "048bf65fdd4f0fec9e2fe95b2778532888eb3bea5aabf5cf86cc1cf3aff40548"
+  },
+  {
+    "id": "v4-fusion-surfaces-asphalt-clean-v1",
+    "class": "asphalt-clean",
+    "kind": "tile",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v4-fusion-surfaces-asphalt-clean-v1\\attempt-02\\1.jpg",
+    "source_sha256": "dacd4c9a4ad9185f8e7046f989ca4eceb729607c059ca98be645bb61e94f8177",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v4-fusion-surfaces-asphalt-clean-v1",
+      "class": "asphalt-clean",
+      "prompt_action": "Entire image is ONLY one empty anonymous painted material field. Dark soot asphalt, tiny sparse aggregate, near-uniform dark value, no cracks. Fine understated dry-brush grain, quiet large values, no dramatic cracks, lighting gradient, focal motif, frame or border. Single unrepeated stochastic field, seamless edges; never repeated quadrants or mirrored halves. No road line, car, prop, object, lettering, ink perimeter or scene.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "none",
+      "count": "1",
+      "status": "ready",
+      "kind": "tile",
+      "reference": "",
+      "batch": "v4-fusion-surfaces",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V4",
+      "asset_family": "surfaces",
+      "surface_stack": "seeded-decals-tall-props-baked-natural-bands",
+      "logical_name": "tiles/asphalt-clean"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "raw_metrics": {
+      "edge_x_mean": 0.03590558619281046,
+      "edge_y_mean": 0.03218826593137255,
+      "edge_x_peak": 0.13725490196078433,
+      "edge_y_peak": 0.12941176470588237,
+      "autocorrelation_peak": 0.3329928235571455,
+      "autocorrelation_shift_px": [
+        55,
+        0
+      ],
+      "basis": "decoded straight RGB / 255; autocorrelation circular luminance at 128px; excludes nearby shifts"
+    },
+    "raw_codes": [],
+    "metrics": {
+      "edge_x_mean": 0.033522263071895424,
+      "edge_y_mean": 0.026695261437908496,
+      "edge_x_peak": 0.09411764705882354,
+      "edge_y_peak": 0.09803921568627451,
+      "autocorrelation_peak": 0.32693998482652203,
+      "autocorrelation_shift_px": [
+        73,
+        0
+      ],
+      "basis": "decoded straight RGB / 255; autocorrelation circular luminance at 128px; excludes nearby shifts"
+    },
+    "repeat_path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v4-fusion-surfaces\\v4-fusion-surfaces-asphalt-clean-v1-repeat.png",
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v4-fusion-surfaces\\v4-fusion-surfaces-asphalt-clean-v1.png",
+    "sha256": "98dbdde5402e066b49af5a9704d31b985da7987b9c5a5bc1612646dea5630aeb"
+  },
+  {
+    "id": "v4-fusion-surfaces-ice-v1",
+    "class": "ice",
+    "kind": "tile",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v4-fusion-surfaces-ice-v1\\attempt-02\\1.jpg",
+    "source_sha256": "f3405e3c8a3117bcc0d7891d2bbbba3ff07fae1e78d016456b62223ae25681db",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v4-fusion-surfaces-ice-v1",
+      "class": "ice",
+      "prompt_action": "Entire image is ONLY one empty anonymous painted material field. Low-contrast dirty bone-grey fine frost, no large cracks, no blue border glow or directional reflection. Fine understated dry-brush grain, quiet large values, no dramatic cracks, lighting gradient, focal motif, frame or border. Single unrepeated stochastic field, seamless edges; never repeated quadrants or mirrored halves. No road line, car, prop, object, lettering, ink perimeter or scene.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "none",
+      "count": "1",
+      "status": "ready",
+      "kind": "tile",
+      "reference": "",
+      "batch": "v4-fusion-surfaces",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V4",
+      "asset_family": "surfaces",
+      "surface_stack": "seeded-decals-tall-props-baked-natural-bands",
+      "logical_name": "tiles/ice"
+    },
+    "verdict": "reject",
+    "codes": [
+      "TILE_REPETITION"
+    ],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "raw_metrics": {
+      "edge_x_mean": 0.005532577614379077,
+      "edge_y_mean": 0.004022416258169928,
+      "edge_x_peak": 0.3254901960784313,
+      "edge_y_peak": 0.06274509803921569,
+      "autocorrelation_peak": 0.4349588488392867,
+      "autocorrelation_shift_px": [
+        0,
+        55
+      ],
+      "basis": "decoded straight RGB / 255; autocorrelation circular luminance at 128px; excludes nearby shifts"
+    },
+    "raw_codes": [
+      "TILE_REPETITION"
+    ],
+    "metrics": {
+      "edge_x_mean": 0.00831290849673202,
+      "edge_y_mean": 0.007919730392156857,
+      "edge_x_peak": 0.30980392156862746,
+      "edge_y_peak": 0.207843137254902,
+      "autocorrelation_peak": 0.430099352333548,
+      "autocorrelation_shift_px": [
+        0,
+        55
+      ],
+      "basis": "decoded straight RGB / 255; autocorrelation circular luminance at 128px; excludes nearby shifts"
+    },
+    "repeat_path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v4-fusion-surfaces\\v4-fusion-surfaces-ice-v1-repeat.png",
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v4-fusion-surfaces\\v4-fusion-surfaces-ice-v1.png",
+    "sha256": "20f9675772a1d1e01af254c1f345977fdb69426fd3b1ceccf19898154fe01050"
+  },
+  {
+    "id": "v4-fusion-surfaces-oil-v1",
+    "class": "oil",
+    "kind": "tile",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v4-fusion-surfaces-oil-v1\\attempt-02\\1.jpg",
+    "source_sha256": "b1f89850f0bf08eee8774cf3a707da77bb949f480db859a782a137fae586ea92",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v4-fusion-surfaces-oil-v1",
+      "class": "oil",
+      "prompt_action": "Entire image is ONLY one empty anonymous painted material field. Soot-dark oily asphalt, very subtle brown grey sheen, small irregular matte scuffs, no puddle outline. Fine understated dry-brush grain, quiet large values, no dramatic cracks, lighting gradient, focal motif, frame or border. Single unrepeated stochastic field, seamless edges; never repeated quadrants or mirrored halves. No road line, car, prop, object, lettering, ink perimeter or scene.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "none",
+      "count": "1",
+      "status": "ready",
+      "kind": "tile",
+      "reference": "",
+      "batch": "v4-fusion-surfaces",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V4",
+      "asset_family": "surfaces",
+      "surface_stack": "seeded-decals-tall-props-baked-natural-bands",
+      "logical_name": "tiles/oil"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "raw_metrics": {
+      "edge_x_mean": 0.015942861519607842,
+      "edge_y_mean": 0.03294398488562091,
+      "edge_x_peak": 0.26666666666666666,
+      "edge_y_peak": 0.20392156862745098,
+      "autocorrelation_peak": 0.1276625083741357,
+      "autocorrelation_shift_px": [
+        95,
+        0
+      ],
+      "basis": "decoded straight RGB / 255; autocorrelation circular luminance at 128px; excludes nearby shifts"
+    },
+    "raw_codes": [],
+    "metrics": {
+      "edge_x_mean": 0.010911968954248364,
+      "edge_y_mean": 0.02395833333333333,
+      "edge_x_peak": 0.21960784313725487,
+      "edge_y_peak": 0.13333333333333333,
+      "autocorrelation_peak": 0.12424203398166134,
+      "autocorrelation_shift_px": [
+        95,
+        0
+      ],
+      "basis": "decoded straight RGB / 255; autocorrelation circular luminance at 128px; excludes nearby shifts"
+    },
+    "repeat_path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v4-fusion-surfaces\\v4-fusion-surfaces-oil-v1-repeat.png",
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v4-fusion-surfaces\\v4-fusion-surfaces-oil-v1.png",
+    "sha256": "7569f3871a32d20be84c2e3cf1a7316ab2f2d8043b1fbf8991b07044c50fe309"
+  },
+  {
+    "id": "v4-fusion-surfaces-kerb-v1",
+    "class": "kerb",
+    "kind": "tile",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v4-fusion-surfaces-kerb-v1\\attempt-02\\1.jpg",
+    "source_sha256": "4690d0023a67e9323859e19bc0fdb009d0be58074af370749a20296b42f12b3a",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v4-fusion-surfaces-kerb-v1",
+      "class": "kerb",
+      "prompt_action": "Entire image is ONLY one empty anonymous painted material field. Weathered bone and dried-dried-red painted concrete material, irregular broken patches of worn paint with dirt showing through; no uniform racing stripes or black outlining. Fine understated dry-brush grain, quiet large values, no dramatic cracks, lighting gradient, focal motif, frame or border. Single unrepeated stochastic field, seamless edges; never repeated quadrants or mirrored halves. No road line, car, prop, object, lettering, ink perimeter or scene.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "none",
+      "count": "1",
+      "status": "ready",
+      "kind": "tile",
+      "reference": "",
+      "batch": "v4-fusion-surfaces",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V4",
+      "asset_family": "surfaces",
+      "surface_stack": "seeded-decals-tall-props-baked-natural-bands",
+      "logical_name": "tiles/kerb"
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "raw_metrics": {
+      "edge_x_mean": 0.01878829656862745,
+      "edge_y_mean": 0.023538347630718954,
+      "edge_x_peak": 0.3019607843137255,
+      "edge_y_peak": 0.44705882352941173,
+      "autocorrelation_peak": 0.11590559475454948,
+      "autocorrelation_shift_px": [
+        28,
+        64
+      ],
+      "basis": "decoded straight RGB / 255; autocorrelation circular luminance at 128px; excludes nearby shifts"
+    },
+    "raw_codes": [
+      "TILE_SEAM_PEAK"
+    ],
+    "metrics": {
+      "edge_x_mean": 0.014052287581699345,
+      "edge_y_mean": 0.014853962418300655,
+      "edge_x_peak": 0.19999999999999996,
+      "edge_y_peak": 0.12549019607843134,
+      "autocorrelation_peak": 0.11357407430616606,
+      "autocorrelation_shift_px": [
+        28,
+        64
+      ],
+      "basis": "decoded straight RGB / 255; autocorrelation circular luminance at 128px; excludes nearby shifts"
+    },
+    "repeat_path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v4-fusion-surfaces\\v4-fusion-surfaces-kerb-v1-repeat.png",
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v4-fusion-surfaces\\v4-fusion-surfaces-kerb-v1.png",
+    "sha256": "c890c349f062f7da6e4d500b55765f7c30328a29fbf35cd16ece0e6d9e1d4166"
+  }
+]

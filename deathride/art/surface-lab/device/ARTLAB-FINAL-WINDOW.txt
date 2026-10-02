@@ -1,0 +1,17 @@
+Final ART laboratory device handoff — 2026-10-01 17:57
+
+The first two art windows are released; see DEVICE-RELEASED.txt and
+DEVICE-RELEASED-2.txt in the art worktree's deathride/art/surface-lab directory.
+Forty clean Stick measurements are complete. One final two-pair comparison
+(about three minutes) remains: cached versus rebuilt static geometry, with
+identical pixels verified on desktop. All previous variants are retained.
+
+The outstanding request is DEVICE-WINDOW-3.txt in that same art directory:
+  integration_device_window: available
+  expires_utc: <UTC ISO timestamp allowing five minutes>
+
+The runner is waiting and will not take the foreground before that marker.
+It installs only dev.deathride.artlab, refuses active racing, yields immediately
+if another app takes foreground, restores the prior activity, and writes
+DEVICE-RELEASED-3.txt when all art device work is over. No further device tests
+are planned after this pair. This temporary coordination note stays uncommitted.

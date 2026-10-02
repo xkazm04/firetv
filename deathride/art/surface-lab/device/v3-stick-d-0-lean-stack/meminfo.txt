@@ -1,0 +1,37 @@
+Applications Memory Usage (in Kilobytes):
+Uptime: 2103997022 Realtime: 2103997022
+
+** MEMINFO in pid 12897 [dev.deathride.artlab] **
+                   Pss  Private  Private  SwapPss      Rss     Heap     Heap     Heap
+                 Total    Dirty    Clean    Dirty    Total     Size    Alloc     Free
+                ------   ------   ------   ------   ------   ------   ------   ------
+  Native Heap     6303     6248       36       16     6784        0        0        0
+  Dalvik Heap      775      656       48       98     1360        0        0        0
+ Dalvik Other     1080      884       40        3     1512
+        Stack      436      436        0        0      436
+       Ashmem        2        0        0        0        8
+    Other dev       19        0       16        0      312
+     .so mmap     6654      160     2412        2    27976
+    .jar mmap     3665        0     1464        0    21600
+    .apk mmap     8597        8     8352        0    15928
+    .dex mmap       18        0        0        0       68
+    .oat mmap      136        0       72        0     1620
+    .art mmap     6378     5996        4      107    13920
+   Other mmap        8        4        0        0      544
+    GL mtrack    12332    12332        0        0    12332
+      Unknown      314      276        0        1      552
+        TOTAL    46944    27000    12444      227   104952        0        0        0
+
+ App Summary
+                       Pss(KB)                        Rss(KB)
+                        ------                         ------
+           Java Heap:     6656                          15280
+         Native Heap:     6248                           6784
+                Code:    12468                          67532
+               Stack:      436                            436
+            Graphics:    12332                          12332
+       Private Other:     1304
+              System:     7500
+             Unknown:                                    2588
+
+           TOTAL PSS:    46944            TOTAL RSS:   104952       TOTAL SWAP PSS:      227
