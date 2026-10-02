@@ -7,6 +7,10 @@ from gen import Budget
 from validate_bundle import validate
 
 def main():
+    review_path=ART/'review/fusion/review.json'
+    if review_path.exists() and read_json(review_path).get('part')==3:
+        from part3_validate import validate as validate_part3
+        return validate_part3()
     totals={};observations=0
     for wave in ('v2-fusion','v4-fusion'):
         rs=read_json(ART/'reports'/f'{wave}-attempts-deterministic.json')

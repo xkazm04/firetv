@@ -4,6 +4,9 @@ from validate_bundle import validate
 
 def main():
     folder=ART/'review/fusion';review=read_json(folder/'review.json');rows=review['records']
+    if review.get('part')==3:
+        from part3_validate import validate as validate_part3
+        return validate_part3()
     if len(rows)!=95 or review['owner_approved']:raise ValueError('review inventory/approval')
     checks=0
     for r in rows:

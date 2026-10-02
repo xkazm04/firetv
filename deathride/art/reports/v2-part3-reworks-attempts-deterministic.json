@@ -1,0 +1,899 @@
+[
+  {
+    "id": "v2-part3-rework-needle-v1-a1",
+    "class": "Needle",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v2-part3-rework-needle-v1\\attempt-01\\1.jpg",
+    "source_sha256": "b03a72a9338ceb843abe7d21837d7b70f9b8abb63054590cf9cb75c18b27b9a2",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-part3-rework-needle-v1-a1",
+      "class": "Needle",
+      "prompt_action": "Preserve the supplied skeletal buggy identity: empty slender cage, four skinny exposed wheels on outriggers, forked short RIGHT nose and exposed LEFT rear engine. Change the tubular construction and small body panels to clearly visible SILVER STEEL: broad pale neutral silver-grey metal planes with dark scratched edges, darker steel joints and sparse rust in seams. Steely value separation against dark ground, not white bone paint or yellow tubes. Keep the fragile open gaps and original proportions. Recompose as one SMALL COMPLETE car in the CENTRAL HALF of the square canvas, only 50 percent canvas width, at least 25 percent empty magenta space LEFT and RIGHT. All wheels, spikes, turbine mounts and electrical marks must stay in this small central region. Total silhouette length-to-width ratio 2.20:1 including all appendages. True roof-only overhead plan, horizontal chassis, nose RIGHT; tyre tread tops only, no side doors or wheel hubs. Neutral even material shading and NO cast shadow.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "art/review/fusion/sources/v2-fusion-cars-needle-v1.jpg",
+      "batch": "v2-part3-reworks",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "cars",
+      "surface_stack": ""
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "metrics": {
+      "foreground_fraction": 0.2064361572265625,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        92,
+        275,
+        980,
+        749
+      ],
+      "margin_fraction": 0.04296875,
+      "aspect": 1.8734177215189873,
+      "expected_aspect": 2.1999999999999997,
+      "aspect_relative_error": 0.14844649021864198,
+      "principal_axis_degrees": 0.1483519561836891,
+      "estimated_key_rgb": [
+        217.0,
+        51.0,
+        156.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 12.498074572194408,
+      "palette_p90_delta_e": 20.41709604801928
+    },
+    "placement": {
+      "source_bounds_px": [
+        92,
+        275,
+        980,
+        749
+      ],
+      "source_pivot_px": [
+        536.0,
+        512.0
+      ],
+      "pivot_px": [
+        128.0,
+        64.0
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        158,
+        84
+      ],
+      "scale": 0.17792792792792791,
+      "world_length_m": 6.6,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v2-part3-reworks-attempts\\v2-part3-rework-needle-v1-a1.png",
+    "sha256": "e393ccd8069395f17d859dbe388eb2d7d7d25f0b1d3460741c56cc9e701d8559",
+    "parent_id": "v2-part3-rework-needle-v1",
+    "attempt": 1
+  },
+  {
+    "id": "v2-part3-rework-comet-v1-a1",
+    "class": "Comet",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v2-part3-rework-comet-v1\\attempt-01\\1.jpg",
+    "source_sha256": "754ac11db79180719efb89c62d0bca79efd3590e2aadc758f37bb6dbef0e253b",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-part3-rework-comet-v1-a1",
+      "class": "Comet",
+      "prompt_action": "Rework the supplied long low speed racer with AIR-TURBINE ENGINES: two unmistakable cylindrical turbine housings along the LEFT rear chassis, visible open top intake mouths with fan blades, paired exhaust nozzles toward LEFT. A substantially more massive reinforced rear cradle with thick longitudinal spars and plated turbine mounts supports them. Keep the long tapered rust-orange RIGHT nose and small dark canopy; rear mass grows within a narrow footprint, NOT a wide transverse wing. Clearly a ground racing car with four wheels, no aircraft wings. Original improvised mechanical design. Recompose as one SMALL COMPLETE car in the CENTRAL HALF of the square canvas, only 50 percent canvas width, at least 25 percent empty magenta space LEFT and RIGHT. All wheels, spikes, turbine mounts and electrical marks must stay in this small central region. Total silhouette length-to-width ratio 2.57:1 including all appendages. True roof-only overhead plan, horizontal chassis, nose RIGHT; tyre tread tops only, no side doors or wheel hubs. Neutral even material shading and NO cast shadow.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "art/review/fusion/sources/v2-fusion-cars-comet-v1.jpg",
+      "batch": "v2-part3-reworks",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "cars",
+      "surface_stack": ""
+    },
+    "verdict": "reject",
+    "codes": [
+      "CROPPED_OR_MARGIN"
+    ],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "metrics": {
+      "foreground_fraction": 0.27474021911621094,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        37,
+        272,
+        1011,
+        751
+      ],
+      "margin_fraction": 0.0126953125,
+      "aspect": 2.0334029227557413,
+      "expected_aspect": 2.5714285714285716,
+      "aspect_relative_error": 0.20923219670610071,
+      "principal_axis_degrees": 0.12433395934266239,
+      "estimated_key_rgb": [
+        210.0,
+        31.0,
+        186.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 5.335493854381123,
+      "palette_p90_delta_e": 9.732767095477955
+    },
+    "placement": {
+      "source_bounds_px": [
+        37,
+        272,
+        1011,
+        751
+      ],
+      "source_pivot_px": [
+        524.0,
+        511.5
+      ],
+      "pivot_px": [
+        128.0,
+        64.0
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        216,
+        106
+      ],
+      "scale": 0.22176591375770022,
+      "world_length_m": 9.0,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v2-part3-reworks-attempts\\v2-part3-rework-comet-v1-a1.png",
+    "sha256": "72c5c0d2eddd7efaf7527695fe16621034c3da37f18f52236cd086ef288d72d4",
+    "parent_id": "v2-part3-rework-comet-v1",
+    "attempt": 1
+  },
+  {
+    "id": "v2-part3-rework-comet-v2-a1",
+    "class": "Comet",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v2-part3-rework-comet-v2\\attempt-01\\1.jpg",
+    "source_sha256": "cd3c421c41f716ce4f8c96402f2b4b6c16f66b129aca3606766601076d251bb0",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-part3-rework-comet-v2-a1",
+      "class": "Comet",
+      "prompt_action": "COMPOSITION FIRST: a SMALL ISOLATED CAR occupying only the middle 40 percent of a SQUARE picture. An enormous perfectly plain magenta empty field surrounds it, 30 percent empty canvas border on ALL FOUR sides. This is a distant small asset, not a closeup. Rework the original long low speed racer with AIR-TURBINE ENGINES: two unmistakable cylindrical turbine housings along the LEFT rear chassis, visible open top intake mouths with fan blades, paired exhaust nozzles toward LEFT. A substantially more massive reinforced rear cradle with thick longitudinal spars and plated turbine mounts supports them. Keep the long tapered rust-orange RIGHT nose and small dark canopy; rear mass grows within a narrow footprint, NOT a wide transverse wing. Clearly a ground racing car with four wheels, no aircraft wings. Original improvised mechanical design. Recompose as one SMALL COMPLETE car in the CENTRAL 40 PERCENT of the square canvas, only 40 percent canvas width, at least 30 percent empty magenta space LEFT and RIGHT. All wheels, spikes, turbine mounts and electrical marks must stay in this small central region. Total silhouette length-to-width ratio 2.57:1 including all appendages. True roof-only overhead plan, horizontal chassis, nose RIGHT; tyre tread tops only, no side doors or wheel hubs. Neutral even material shading and NO cast shadow. Source minimum margin 0.0126953125 fails unchanged 0.03 gate. Reference editing retained near-edge composition despite central-half instruction. Redraw from the complete owner design brief without source framing: one SMALL car floating in an enormous blank field; total subject only 40 percent of canvas width with at least 30 percent empty border on every side. All tips fully visible. No source padding, crop or stretch.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "",
+      "batch": "v2-part3-reworks",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "cars",
+      "surface_stack": ""
+    },
+    "verdict": "reject",
+    "codes": [
+      "CROPPED_OR_MARGIN",
+      "ASPECT_BAND"
+    ],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "metrics": {
+      "foreground_fraction": 0.23324298858642578,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        68,
+        258,
+        996,
+        763
+      ],
+      "margin_fraction": 0.02734375,
+      "aspect": 1.8376237623762377,
+      "expected_aspect": 2.5714285714285716,
+      "aspect_relative_error": 0.28536853685368535,
+      "principal_axis_degrees": 0.04664978594793456,
+      "estimated_key_rgb": [
+        234.0,
+        106.0,
+        180.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 5.430194447262828,
+      "palette_p90_delta_e": 9.691244475166854
+    },
+    "placement": {
+      "source_bounds_px": [
+        68,
+        258,
+        996,
+        763
+      ],
+      "source_pivot_px": [
+        532.0,
+        510.5
+      ],
+      "pivot_px": [
+        128.0,
+        64.0
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        216,
+        118
+      ],
+      "scale": 0.23275862068965517,
+      "world_length_m": 9.0,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v2-part3-reworks-attempts\\v2-part3-rework-comet-v2-a1.png",
+    "sha256": "3f521b800ed7583548c3e805de88ab3aa5e73d7936d95e5108cd8f02a3467071",
+    "parent_id": "v2-part3-rework-comet-v1",
+    "attempt": 1
+  },
+  {
+    "id": "v2-part3-rework-comet-v3-a1",
+    "class": "Comet",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v2-part3-rework-comet-v3\\attempt-01\\1.jpg",
+    "source_sha256": "ec110d21608cee971b5854efc34f70e3ef752d8df67ca487823c71a8caab4876",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-part3-rework-comet-v3-a1",
+      "class": "Comet",
+      "prompt_action": "A SMALL complete overhead car sprite, centred in a LARGE EMPTY square magenta field. Layout: the entire vehicle fits within a rectangle from x=240 to x=780 and y=402 to y=622 on a 1024 square canvas. Vast blank space surrounds this small car. Draw only ONE car. Original long low rust-orange turbine racer, nose RIGHT, rear LEFT. Length 2.57 times total width. Long pointed narrow nose, narrow dark canopy, FOUR small tucked wheels viewed as rectangular tread tops. At the rear: TWO air-turbine engines with obvious visible fan intakes and LEFT exhaust nozzles, mounted in a substantial thick reinforced plated cradle. The rear structure is massive but NARROW, confined to the wheel track; no wide wing, long wheel outriggers or tyre spikes. Thick rust and bone mounting plates support the turbines. Longitudinal bracing connects engine cradle to chassis. Worn silver metal, rust paint, scratched bone panels, soot joints. Strict orthographic roof-only plan, horizontal +x chassis, neutral flat diffuse material shading. No side walls, cast shadows or ground. Keep at least 200 pixels of blank space on left and right. Small distant diagram, never zoomed to fill the canvas. The whole car, all tips and exhausts fully contained.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "",
+      "batch": "v2-part3-comet-final",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "cars",
+      "surface_stack": ""
+    },
+    "verdict": "reject",
+    "codes": [
+      "CROPPED_OR_MARGIN",
+      "ASPECT_BAND"
+    ],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "metrics": {
+      "foreground_fraction": 0.336181640625,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        73,
+        243,
+        1007,
+        771
+      ],
+      "margin_fraction": 0.0166015625,
+      "aspect": 1.768939393939394,
+      "expected_aspect": 2.5714285714285716,
+      "aspect_relative_error": 0.31207912457912457,
+      "principal_axis_degrees": 0.0596261676711555,
+      "estimated_key_rgb": [
+        242.0,
+        64.0,
+        180.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 5.216103934783695,
+      "palette_p90_delta_e": 10.441445206597589
+    },
+    "placement": {
+      "source_bounds_px": [
+        73,
+        243,
+        1007,
+        771
+      ],
+      "source_pivot_px": [
+        540.0,
+        507.0
+      ],
+      "pivot_px": [
+        128.0,
+        128.0
+      ],
+      "cell_px": [
+        256,
+        256
+      ],
+      "subject_px": [
+        216,
+        122
+      ],
+      "scale": 0.23126338329764454,
+      "world_length_m": 9.0,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v2-part3-reworks-attempts\\v2-part3-rework-comet-v3-a1.png",
+    "sha256": "7927c4d9a82810c7060db5b7df2ced91283f5d8c66d8b663917c71cb9cacce25",
+    "parent_id": "v2-part3-rework-comet-v1",
+    "attempt": 1
+  },
+  {
+    "id": "v2-part3-rework-quill-v1-a1",
+    "class": "Quill",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v2-part3-rework-quill-v1\\attempt-01\\1.jpg",
+    "source_sha256": "62f6f225f6d3621dbdf4f7058aa711758555f12d31da40dc763654eb166dfd31",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-part3-rework-quill-v1-a1",
+      "class": "Quill",
+      "prompt_action": "Rework the supplied spider into a MEDIUM-WEIGHT CONTACT FIGHTER. Thicken the central armoured body and wheel-support structure, keep four wheels and some open mechanical gaps but give it substantial welded shoulders and a robust central cockpit. Bone-like curved ivory spikes surround this heavier construction: two or three large attached forward tusks point RIGHT and two or three large rear tusks point LEFT, plus short side teeth. Both front and rear close-contact weapons must be obvious at 96px. Spikes are artificial bone-shaped weapon structures, not loose bones; no gore. Bone and soot metal with rust joints, no lightweight pencil chassis. Recompose as one SMALL COMPLETE car in the CENTRAL HALF of the square canvas, only 50 percent canvas width, at least 25 percent empty magenta space LEFT and RIGHT. All wheels, spikes, turbine mounts and electrical marks must stay in this small central region. Total silhouette length-to-width ratio 2.09:1 including all appendages. True roof-only overhead plan, horizontal chassis, nose RIGHT; tyre tread tops only, no side doors or wheel hubs. Neutral even material shading and NO cast shadow.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "art/review/fusion/sources/v2-fusion-cars-quill-v1.jpg",
+      "batch": "v2-part3-reworks",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "cars",
+      "surface_stack": ""
+    },
+    "verdict": "reject",
+    "codes": [
+      "CROPPED_OR_MARGIN"
+    ],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "metrics": {
+      "foreground_fraction": 0.2552356719970703,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        41,
+        275,
+        1009,
+        747
+      ],
+      "margin_fraction": 0.0146484375,
+      "aspect": 2.0508474576271185,
+      "expected_aspect": 2.09375,
+      "aspect_relative_error": 0.020490766506450875,
+      "principal_axis_degrees": 0.03941587378218619,
+      "estimated_key_rgb": [
+        240.0,
+        79.0,
+        211.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 5.27540431106455,
+      "palette_p90_delta_e": 10.41577704776865
+    },
+    "placement": {
+      "source_bounds_px": [
+        41,
+        275,
+        1009,
+        747
+      ],
+      "source_pivot_px": [
+        525.0,
+        511.0
+      ],
+      "pivot_px": [
+        127.5,
+        63.5
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        161,
+        79
+      ],
+      "scale": 0.16632231404958678,
+      "world_length_m": 6.7,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v2-part3-reworks-attempts\\v2-part3-rework-quill-v1-a1.png",
+    "sha256": "d4f6e36832e875c22a1bd4c8fc845cc8a9ba33d955e85b1cfa80c7aae256019e",
+    "parent_id": "v2-part3-rework-quill-v2",
+    "attempt": 1
+  },
+  {
+    "id": "v2-part3-rework-quill-v2-a1",
+    "class": "Quill",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v2-part3-rework-quill-v2\\attempt-01\\1.jpg",
+    "source_sha256": "50b3a9df92d64c24d3795918e6eaae078e37ab2a1b9f615bd66ea630ef39e4e4",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-part3-rework-quill-v2-a1",
+      "class": "Quill",
+      "prompt_action": "COMPOSITION FIRST: a SMALL ISOLATED CAR occupying only the middle 40 percent of a SQUARE picture. An enormous perfectly plain magenta empty field surrounds it, 30 percent empty canvas border on ALL FOUR sides. This is a distant small asset, not a closeup. Rework the original spider into a MEDIUM-WEIGHT CONTACT FIGHTER. Thicken the central armoured body and wheel-support structure, keep four wheels and some open mechanical gaps but give it substantial welded shoulders and a robust central cockpit. Bone-like curved ivory spikes surround this heavier construction: two or three large attached forward tusks point RIGHT and two or three large rear tusks point LEFT, plus short side teeth. Both front and rear close-contact weapons must be obvious at 96px. Spikes are artificial bone-shaped weapon structures, not loose bones; no gore. Bone and soot metal with rust joints, no lightweight pencil chassis. Recompose as one SMALL COMPLETE car in the CENTRAL 40 PERCENT of the square canvas, only 40 percent canvas width, at least 30 percent empty magenta space LEFT and RIGHT. All wheels, spikes, turbine mounts and electrical marks must stay in this small central region. Total silhouette length-to-width ratio 2.09:1 including all appendages. True roof-only overhead plan, horizontal chassis, nose RIGHT; tyre tread tops only, no side doors or wheel hubs. Neutral even material shading and NO cast shadow. Source minimum margin 0.0146484375 fails unchanged 0.03 gate. Reference editing retained near-edge composition despite central-half instruction. Redraw from the complete owner design brief without source framing: one SMALL car floating in an enormous blank field; total subject only 40 percent of canvas width with at least 30 percent empty border on every side. All tips fully visible. No source padding, crop or stretch. Thick pale bone-like tusks project from BOTH the right front and the left rear as purposeful impact weapons, several large readable spikes, not thin decorative whiskers.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "",
+      "batch": "v2-part3-reworks",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "cars",
+      "surface_stack": ""
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "metrics": {
+      "foreground_fraction": 0.24648094177246094,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        77,
+        281,
+        969,
+        739
+      ],
+      "margin_fraction": 0.0537109375,
+      "aspect": 1.9475982532751093,
+      "expected_aspect": 2.09375,
+      "aspect_relative_error": 0.0698038193312911,
+      "principal_axis_degrees": 0.04780710439262456,
+      "estimated_key_rgb": [
+        199.0,
+        44.0,
+        133.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 6.184403521973952,
+      "palette_p90_delta_e": 10.295376902157003
+    },
+    "placement": {
+      "source_bounds_px": [
+        77,
+        281,
+        969,
+        739
+      ],
+      "source_pivot_px": [
+        523.0,
+        510.0
+      ],
+      "pivot_px": [
+        127.5,
+        63.5
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        161,
+        83
+      ],
+      "scale": 0.1804932735426009,
+      "world_length_m": 6.7,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v2-part3-reworks-attempts\\v2-part3-rework-quill-v2-a1.png",
+    "sha256": "f840ac53d34e68ba5e1e9af712a92b3ababc424e0d7184ef91907aa4d61f4bc4",
+    "parent_id": "v2-part3-rework-quill-v2",
+    "attempt": 1
+  },
+  {
+    "id": "v2-part3-rework-kestrel-v1-a1",
+    "class": "Kestrel",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v2-part3-rework-kestrel-v1\\attempt-01\\1.jpg",
+    "source_sha256": "25b312317d8d3d96d575f4bdc8e6164e6421c4d345d7c43ddc8696b8ea908716",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-part3-rework-kestrel-v1-a1",
+      "class": "Kestrel",
+      "prompt_action": "Rework the supplied long narrow sprint car with ELECTRICITY. An over-energised exposed LEFT rear engine carries chunky coil rings and short bright pale electric arcs contained within its housing, sparse muted blue-white electrical cores. Replace the plain RIGHT front spike with a recognisable ELECTRIC HARPOON: barbed spearhead on a short launching rail, visible coiled tether and insulated cable leading to the engine. Preserve the long narrow cockpit, tiny wheel pods and swept rear fins. Electric energy is drawn flat and crisp, no bloom, ground glow, cast light or detached lightning. Engine and harpoon read at 96px; all parts attached. Recompose as one SMALL COMPLETE car in the CENTRAL HALF of the square canvas, only 50 percent canvas width, at least 25 percent empty magenta space LEFT and RIGHT. All wheels, spikes, turbine mounts and electrical marks must stay in this small central region. Total silhouette length-to-width ratio 2.77:1 including all appendages. True roof-only overhead plan, horizontal chassis, nose RIGHT; tyre tread tops only, no side doors or wheel hubs. Neutral even material shading and NO cast shadow.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "art/review/fusion/sources/v2-fusion-cars-kestrel-v1.jpg",
+      "batch": "v2-part3-reworks",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "cars",
+      "surface_stack": ""
+    },
+    "verdict": "reject",
+    "codes": [
+      "CROPPED_OR_MARGIN"
+    ],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "metrics": {
+      "foreground_fraction": 0.1857900619506836,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        72,
+        298,
+        1007,
+        725
+      ],
+      "margin_fraction": 0.0166015625,
+      "aspect": 2.189695550351288,
+      "expected_aspect": 2.772727272727273,
+      "aspect_relative_error": 0.21027373593887977,
+      "principal_axis_degrees": 1.5250838590333011,
+      "estimated_key_rgb": [
+        243.0,
+        70.0,
+        246.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 7.475084396502001,
+      "palette_p90_delta_e": 12.7637111866595
+    },
+    "placement": {
+      "source_bounds_px": [
+        72,
+        298,
+        1007,
+        725
+      ],
+      "source_pivot_px": [
+        539.5,
+        511.5
+      ],
+      "pivot_px": [
+        128.0,
+        64.0
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        220,
+        100
+      ],
+      "scale": 0.23529411764705882,
+      "world_length_m": 9.15,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v2-part3-reworks-attempts\\v2-part3-rework-kestrel-v1-a1.png",
+    "sha256": "36413db935eb62da7dd80ce2f1ea314d80458d00328ceecdf440e67b287864c3",
+    "parent_id": "v2-part3-rework-kestrel-v3",
+    "attempt": 1
+  },
+  {
+    "id": "v2-part3-rework-kestrel-v2-a1",
+    "class": "Kestrel",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v2-part3-rework-kestrel-v2\\attempt-01\\1.jpg",
+    "source_sha256": "e93d999994341c53718f595baad9426bb23625b756cf0a021d98ce4d301c93b2",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-part3-rework-kestrel-v2-a1",
+      "class": "Kestrel",
+      "prompt_action": "COMPOSITION FIRST: a SMALL ISOLATED CAR occupying only the middle 40 percent of a SQUARE picture. An enormous perfectly plain magenta empty field surrounds it, 30 percent empty canvas border on ALL FOUR sides. This is a distant small asset, not a closeup. Rework the original long narrow sprint car with ELECTRICITY. An over-energised exposed LEFT rear engine carries chunky coil rings and short bright pale electric arcs contained within its housing, sparse muted blue-white electrical cores. Replace the plain RIGHT front spike with a recognisable ELECTRIC HARPOON: barbed spearhead on a short launching rail, visible coiled tether and insulated cable leading to the engine. Preserve the long narrow cockpit, tiny wheel pods and swept rear fins. Electric energy is drawn flat and crisp, no bloom, ground glow, cast light or detached lightning. Engine and harpoon read at 96px; all parts attached. Recompose as one SMALL COMPLETE car in the CENTRAL 40 PERCENT of the square canvas, only 40 percent canvas width, at least 30 percent empty magenta space LEFT and RIGHT. All wheels, spikes, turbine mounts and electrical marks must stay in this small central region. Total silhouette length-to-width ratio 2.77:1 including all appendages. True roof-only overhead plan, horizontal chassis, nose RIGHT; tyre tread tops only, no side doors or wheel hubs. Neutral even material shading and NO cast shadow. Source minimum margin 0.0166015625 fails unchanged 0.03 gate. Reference editing retained near-edge composition despite central-half instruction. Redraw from the complete owner design brief without source framing: one SMALL car floating in an enormous blank field; total subject only 40 percent of canvas width with at least 30 percent empty border on every side. All tips fully visible. No source padding, crop or stretch. The FRONT HARPOON is a large distinct forked BARBED STEEL head with two backward-facing hooks and two short flat electric arcs connecting head to rail; it is not a plain triangle or simple spike. The engine is visibly overcharged with short electric arcs between coils.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "",
+      "batch": "v2-part3-reworks",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "cars",
+      "surface_stack": ""
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "metrics": {
+      "foreground_fraction": 0.2007131576538086,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        67,
+        316,
+        985,
+        707
+      ],
+      "margin_fraction": 0.0380859375,
+      "aspect": 2.347826086956522,
+      "expected_aspect": 2.772727272727273,
+      "aspect_relative_error": 0.15324305060584464,
+      "principal_axis_degrees": 0.04957641140675695,
+      "estimated_key_rgb": [
+        235.0,
+        80.0,
+        182.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 5.684522984719884,
+      "palette_p90_delta_e": 9.872984269862974
+    },
+    "placement": {
+      "source_bounds_px": [
+        67,
+        316,
+        985,
+        707
+      ],
+      "source_pivot_px": [
+        526.0,
+        511.5
+      ],
+      "pivot_px": [
+        128.0,
+        64.0
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        220,
+        94
+      ],
+      "scale": 0.23965141612200436,
+      "world_length_m": 9.15,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v2-part3-reworks-attempts\\v2-part3-rework-kestrel-v2-a1.png",
+    "sha256": "6c136be4c5605dd6490284680aa6c40ff5c6ec0b9332560bcb6aced65b23fe7f",
+    "parent_id": "v2-part3-rework-kestrel-v3",
+    "attempt": 1
+  },
+  {
+    "id": "v2-part3-rework-kestrel-v3-a1",
+    "class": "Kestrel",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v2-part3-rework-kestrel-v3\\attempt-01\\1.jpg",
+    "source_sha256": "0252116d9d88498af123688e34d9ed1371155de8e3cacc26ba69433f59c70cfb",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-part3-rework-kestrel-v3-a1",
+      "class": "Kestrel",
+      "prompt_action": "Edit this exact original electric sprint car. Keep the same roof-only overhead camera, RIGHT nose, worn Rust and Ink mechanical style, rear engine, yellow coil rings, contained electric arcs, four wheels, narrow silhouette and entire source framing. Change ONLY the front weapon assembly: remove the two separate rightward spear rails and replace them with ONE SINGLE centreline ELECTRIC HARPOON. One clearly barbed steel spearhead with two backward-facing hooks sits on a short central launch rail. A visible coiled tether and insulated cable connect this one weapon to the over-energised rear engine. Two short pale blue-white electric arcs bridge the head and its rail. This is one harpoon, not two spears. The one tip must stop at the same x position as the prior two tips or shorter; do not enlarge the subject or zoom in. Preserve at least the existing empty magenta source margins. No glow, bloom, shadows, lettering, occupants or detached electricity. All other geometry, wear and materials remain unchanged.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "art/review/fusion/sources/v2-part3-rework-kestrel-v2.jpg",
+      "batch": "v2-part3-kestrel-final",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "cars",
+      "surface_stack": ""
+    },
+    "verdict": "reject",
+    "codes": [
+      "CROPPED_OR_MARGIN",
+      "ASPECT_BAND"
+    ],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "metrics": {
+      "foreground_fraction": 0.2068939208984375,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        60,
+        316,
+        1002,
+        797
+      ],
+      "margin_fraction": 0.021484375,
+      "aspect": 1.9584199584199584,
+      "expected_aspect": 2.772727272727273,
+      "aspect_relative_error": 0.29368460516001504,
+      "principal_axis_degrees": 3.2788228660831717,
+      "estimated_key_rgb": [
+        234.0,
+        83.0,
+        181.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 5.955552541940156,
+      "palette_p90_delta_e": 10.424495095495068
+    },
+    "placement": {
+      "source_bounds_px": [
+        60,
+        316,
+        1002,
+        797
+      ],
+      "source_pivot_px": [
+        531.0,
+        556.5
+      ],
+      "pivot_px": [
+        128.0,
+        64.0
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        220,
+        112
+      ],
+      "scale": 0.23354564755838642,
+      "world_length_m": 9.15,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v2-part3-reworks-attempts\\v2-part3-rework-kestrel-v3-a1.png",
+    "sha256": "a263ded858dba61e7807a302244ec24ea2e12f42cf1b56719b49c0735554d6cf",
+    "parent_id": "v2-part3-rework-kestrel-v3",
+    "attempt": 1
+  }
+]

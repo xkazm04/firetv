@@ -72,7 +72,7 @@ if no choice has been recorded in `deathride/art/OWNER-CHOICE.md` when V1 finish
 
 ## f. Execution status
 
-V1 and V3 retain their historical checkpoint wording; the recorded owner choice and current fusion outcome are in F1, V2, V4 and R2.
+V1 and V3 retain their historical checkpoint wording; the recorded owner choice and fusion outcome are in F1, V2, V4 and R2. V2-P3 records the subsequent owner car review and approved-family generation.
 
 | Id | Status | Evidence / next gate | Commit label | Date |
 |---|---|---|---|---|
@@ -82,6 +82,7 @@ V1 and V3 retain their historical checkpoint wording; the recorded owner choice 
 | V3 | Research and sixteen-mode surface lab delivered; 44 clean Stick runs; simple live edges/decals option, graded stacks held | `deathride/art/surface-lab/review.html`; same-binary A/B cost lines; owner stack choice still pending | art-v3-surface-lab-20261001 | 2026-10-01 |
 | V4 | Fusion world kit packed and measured; owner review pending | `deathride/V4-part2-fusion-world.md`; 74 assets / 178 regions; 31.25 MiB (+0.50 ribbon); four isolated Stick runs 16.69/17.89 ms | art-fusion-world-20261001 | 2026-10-01 |
 | R2 | Portable fusion owner review complete; stopped at exact-reference approval | `deathride/V2-part2-owner-review.md`; desktop/mobile, 270 pixel/hash checks; 338/350 reserved; three car rejects retained | art-fusion-review-20261001 | 2026-10-01 |
+| V2-P3 | Six exact references approved; 24 states and 18 liveries pass pixel gates; four reworks remain unapproved, Comet/Kestrel capped holds | `deathride/V2-part3-cars.md`; 63 image calls, paired identity/control evidence, six family sheets, 96px before/after; 39 tests and 532 portable hash checks pass; 401/550 reserved | art-v2-part3-cars-20261002 | 2026-10-02 |
 
 ## g. Session log
 
@@ -132,3 +133,13 @@ Validated hashes, atlas bounds/gutters, content aliases, animations, obstacle me
 Design/outcome in `deathride/V2-part2-owner-review.md`. Current review entry now opens the fusion: ten car comparisons, six rivals, 96px silhouettes, 68 world slots, optional eleven repaired originals, actual animation frames, selected obstacle metadata and full-residency Stick A/B. Earlier V1, five-direction and V3 reviews remain linked. Four desktop/mobile views pass images, 203 owner-page links, family/original filters, the three visible car holds, slider behavior and layout. Portable audit passes 270 source/export/frame hashes over 288 files, checks all 74 bundle selections and matches exact approval candidates without ignored raw sources.
 
 Stop with Comet, Quill and Kestrel still rejected and all ten approvals false. The exact-reference approval format/template is delivered; no 40 damage states or 30 liveries generated. Later collision hooking, integrated soak and owner taste remain pending. Weekly 338/350 reservations, 140 new this execution, 12 remain, zero videos, stop clear. Four local part commits, no push. Final owner entry: `deathride/art/review.html`.
+
+### V2 Part 3, 2026-10-02 — owner car changes and approved families
+
+Read OWNER-CHOICE.md Section C first and recorded the six explicitly authorised approvals from the exact template hashes and owner quotation. Preserved the prior style binding and rebound it to the appended owner evidence without changing drawing contracts. One design note is `deathride/V2-part3-cars.md`. Nine guarded attempts deliver silver Needle, turbine Comet, medium-weight bone-spiked Quill and electric-harpoon Kestrel. Needle/Quill pass pixels. Comet's best design retains a margin failure; the final single-harpoon Kestrel fails margin/aspect after adding a broad tether loop. Both are capped at three attempts, all alternatives retained, and all four reworks remain unapproved.
+
+Generated all four states and three liveries for each of the six approved references: 42 current derivatives, 53 attempts including eleven bounded corrections. All final derivatives pass pixel gates. Direct inspection corrected lost wear, obsolete Flint cross-brace prose, erased Bulwark roof ribs and Vandal wreck margin. All 63 Part 3 images have two semantic observations; all derivative attempts have paired exact-reference identity checks. One identical-prompt unconditioned control scores 0.927981 silhouette overlap versus 0.997931 conditioned, with no statistical claim. Two exports receive audited half-pixel pivot translations, no scaling or source padding. All 42 final export pivots/cells match approved references.
+
+Updated `art/review/fusion/index.html` contains four before/after pairs and true 96px silhouettes, six family sheets, the control, all attempts and the preserved world/Part 2 review. Desktop/mobile checks load 151 images and 244 links, preserve six approvals and all rejects, and exercise filters plus the existing surface slider. Thirty-nine pipeline tests, required core/link/APK tasks, 532 portable hashes and exact tool-input/proof/spend assertions pass. The unchanged world bundle remains 74 logical assets, 178 regions and 31.25 MiB. Current fusion entry points understand Part 3; historical templates, sources and gate numbers remain intact.
+
+Spend is 63 new image reservations, weekly 401/550 with 149 remaining, zero videos, no quota error and a clear stop latch. All paid results have exactly one verbatim-verified image tool call; derived edits use the approved image paths/hashes. Remaining: a future authorised iteration for the two capped rework defects, owner approval of all four reworks (their 28 derivatives still refuse before spend), derivative taste review and later integration/soak. One local part commit; never pushed.

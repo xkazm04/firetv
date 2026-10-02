@@ -66,7 +66,12 @@ def ask(item,model,model_digest,family=None):
             if im.convert('RGBA').getchannel('A').getextrema()[0]<255:cache_input['encoding']='alpha-over-70747a-v1'
     key=digest(cache_input)
     cache=ART/'grades'/model.replace(':','_')/(key+'.json')
-    if cache.exists():return read_json(cache)
+    if cache.exists():
+        cached=read_json(cache)
+        # The cache is keyed by pixels/prompt/model, not a report's asset alias.
+        # Preserve the original label as provenance while associating this exact
+        # observation with the caller (e.g. current source versus attempt archive).
+        return {**cached,'asset':item['id'],'cached_asset':cached['asset']}
     started=time.monotonic()
     record={'asset':item['id'],'model':model,'model_digest':model_digest,'input_hash':key,'image_hashes':[sha(p) for p in paths],'prompt':prompt,'schema':schema,'at':now(),'scope':'family' if family else 'semantic'}
     try:

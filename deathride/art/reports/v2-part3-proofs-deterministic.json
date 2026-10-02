@@ -1,0 +1,1154 @@
+[
+  {
+    "id": "v2-part3-line-state-intact-v1",
+    "class": "Line",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v2-part3-line-state-intact-v1\\attempt-01\\1.jpg",
+    "source_sha256": "9f9a4bbaeb4bbacbfecc42c07221c1774573804082ed5873f92b4f8c8d1bec60",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-part3-line-state-intact-v1",
+      "class": "Line",
+      "prompt_action": "Use the supplied approved image as the exact identity. Freeze geometry, wheel count and wheel centres, chassis footprint, roof/cabin, attachments, camera, rightward heading, neutral lighting and framing. Preserve the same car and its material roles. A scavenged compact coupe with a rounded RIGHT nose, broad dark windshield, patched dried-red hood, one off-centre chipped bone stripe, welded door shields and a short bent flat rear spoiler at LEFT. A wedge of rough welded plates reinforces the nose. Recognisable low coupe roof, four inset wheels. Change ONLY state: Intact clean panels. No damage. Existing stylistic rust and wear remain even in intact state. Keep the complete subject and clear magenta margin; no background scenery.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "art/review/fusion/sources/v2-fusion-cars-line-v1.jpg",
+      "batch": "v2-part3-line-states",
+      "approval": "pending",
+      "requires_approval": "v2-fusion-cars-line-v1",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "cars",
+      "surface_stack": ""
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "metrics": {
+      "foreground_fraction": 0.3389167785644531,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        57,
+        270,
+        985,
+        752
+      ],
+      "margin_fraction": 0.0380859375,
+      "aspect": 1.9253112033195021,
+      "expected_aspect": 2.08,
+      "aspect_relative_error": 0.07436961378870088,
+      "principal_axis_degrees": 0.05250433158296585,
+      "estimated_key_rgb": [
+        234.0,
+        18.0,
+        182.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 4.860247686518974,
+      "palette_p90_delta_e": 9.083505334433568
+    },
+    "placement": {
+      "source_bounds_px": [
+        57,
+        270,
+        985,
+        752
+      ],
+      "source_pivot_px": [
+        521.0,
+        511.0
+      ],
+      "pivot_px": [
+        127.5,
+        63.5
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        187,
+        97
+      ],
+      "scale": 0.20150862068965517,
+      "world_length_m": 7.8,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v2-part3-proofs\\v2-part3-line-state-intact-v1.png",
+    "sha256": "db1ba3ac857de29ec167f816ee483fbe2bbcd1e00d7b493d8ca8b0ee9a0b9d27"
+  },
+  {
+    "id": "v2-part3-line-livery-bone-v1",
+    "class": "Line",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v2-part3-line-livery-bone-v1\\attempt-01\\1.jpg",
+    "source_sha256": "b812007803739568e620e7384c5fe15accc48eceae9ab0235382325a1c516efc",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-part3-line-livery-bone-v1",
+      "class": "Line",
+      "prompt_action": "Use the supplied approved image as the exact identity. Freeze geometry, wheel count and wheel centres, chassis footprint, roof/cabin, attachments, camera, rightward heading, neutral lighting and framing. Preserve the same car and its material roles. A scavenged compact coupe with a rounded RIGHT nose, broad dark windshield, patched dried-red hood, one off-centre chipped bone stripe, welded door shields and a short bent flat rear spoiler at LEFT. A wedge of rough welded plates reinforces the nose. Recognisable low coupe roof, four inset wheels. Change ONLY painted body panels to muted bleached bone #DDD0A6. Preserve all glass, rubber, bare metal, structural parts, wear and existing contrasting identity stripe/patches. No new damage. No emblems, text or numbers. Keep the exact complete footprint and generous empty border.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "art/review/fusion/sources/v2-fusion-cars-line-v1.jpg",
+      "batch": "v2-part3-line-liveries",
+      "approval": "pending",
+      "requires_approval": "v2-fusion-cars-line-v1",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "cars",
+      "surface_stack": ""
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "metrics": {
+      "foreground_fraction": 0.3389129638671875,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        57,
+        270,
+        985,
+        752
+      ],
+      "margin_fraction": 0.0380859375,
+      "aspect": 1.9253112033195021,
+      "expected_aspect": 2.08,
+      "aspect_relative_error": 0.07436961378870088,
+      "principal_axis_degrees": 0.03492334308839227,
+      "estimated_key_rgb": [
+        237.0,
+        19.0,
+        182.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 6.155338425431955,
+      "palette_p90_delta_e": 10.175004018848027
+    },
+    "placement": {
+      "source_bounds_px": [
+        57,
+        270,
+        985,
+        752
+      ],
+      "source_pivot_px": [
+        521.0,
+        511.0
+      ],
+      "pivot_px": [
+        127.5,
+        63.5
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        187,
+        97
+      ],
+      "scale": 0.20150862068965517,
+      "world_length_m": 7.8,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v2-part3-proofs\\v2-part3-line-livery-bone-v1.png",
+    "sha256": "418d13565112070a93ba7661c87bf058aa53fa4e22160a209d7aebf41a2ebb88"
+  },
+  {
+    "id": "v2-part3-bastion-state-intact-v1",
+    "class": "Bastion",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v2-part3-bastion-state-intact-v1\\attempt-01\\1.jpg",
+    "source_sha256": "86b92f649484f54db22dd4f54ce92a99c4b09480c432d38735d6d82968708ca0",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-part3-bastion-state-intact-v1",
+      "class": "Bastion",
+      "prompt_action": "Use the supplied approved image as the exact identity. Freeze geometry, wheel count and wheel centres, chassis footprint, roof/cabin, attachments, camera, rightward heading, neutral lighting and framing. Preserve the same car and its material roles. A heavy four-wheel spiked fortress: hugely swollen squared wheel guards, four enormous exposed tyres, broad slab roof with a short roof cannon aimed RIGHT, blunt full-width welded ram at RIGHT, stacked scrap armour and triangular shoulder teeth. Compressed cabin swallowed by armour. Soot, ochre and rust, bone chipped plate edges. The strongest broad solid mass of the roster. Change ONLY state: Intact clean panels. No damage. Existing stylistic rust and wear remain even in intact state. Keep the complete subject and clear magenta margin; no background scenery.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "art/review/fusion/sources/v2-fusion-cars-bastion-v1.jpg",
+      "batch": "v2-part3-bastion-states",
+      "approval": "pending",
+      "requires_approval": "v2-fusion-cars-bastion-v1",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "cars",
+      "surface_stack": ""
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "metrics": {
+      "foreground_fraction": 0.2833871841430664,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        114,
+        271,
+        911,
+        751
+      ],
+      "margin_fraction": 0.1103515625,
+      "aspect": 1.6604166666666667,
+      "expected_aspect": 2.0,
+      "aspect_relative_error": 0.16979166666666667,
+      "principal_axis_degrees": 0.016795957098038904,
+      "estimated_key_rgb": [
+        236.0,
+        28.0,
+        146.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 6.6573042601310926,
+      "palette_p90_delta_e": 11.093783121246535
+    },
+    "placement": {
+      "source_bounds_px": [
+        114,
+        271,
+        911,
+        751
+      ],
+      "source_pivot_px": [
+        512.5,
+        511.0
+      ],
+      "pivot_px": [
+        127.5,
+        128.0
+      ],
+      "cell_px": [
+        256,
+        256
+      ],
+      "subject_px": [
+        223,
+        134
+      ],
+      "scale": 0.2797992471769134,
+      "world_length_m": 9.3,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v2-part3-proofs\\v2-part3-bastion-state-intact-v1.png",
+    "sha256": "16b21fbcfe0a96148e2d310804c412c87dbf6f1634f2d041330eb4614e8c266d"
+  },
+  {
+    "id": "v2-part3-bastion-livery-bone-v1",
+    "class": "Bastion",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v2-part3-bastion-livery-bone-v1\\attempt-01\\1.jpg",
+    "source_sha256": "fc75c79b73debd128f0f174ef43bbef1b2db9db1d43accdf17345b2028a572d0",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-part3-bastion-livery-bone-v1",
+      "class": "Bastion",
+      "prompt_action": "Use the supplied approved image as the exact identity. Freeze geometry, wheel count and wheel centres, chassis footprint, roof/cabin, attachments, camera, rightward heading, neutral lighting and framing. Preserve the same car and its material roles. A heavy four-wheel spiked fortress: hugely swollen squared wheel guards, four enormous exposed tyres, broad slab roof with a short roof cannon aimed RIGHT, blunt full-width welded ram at RIGHT, stacked scrap armour and triangular shoulder teeth. Compressed cabin swallowed by armour. Soot, ochre and rust, bone chipped plate edges. The strongest broad solid mass of the roster. Change ONLY painted body panels to muted bleached bone #DDD0A6. Preserve all glass, rubber, bare metal, structural parts, wear and existing contrasting identity stripe/patches. No new damage. No emblems, text or numbers. Keep the exact complete footprint and generous empty border.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "art/review/fusion/sources/v2-fusion-cars-bastion-v1.jpg",
+      "batch": "v2-part3-bastion-liveries",
+      "approval": "pending",
+      "requires_approval": "v2-fusion-cars-bastion-v1",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "cars",
+      "surface_stack": ""
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "metrics": {
+      "foreground_fraction": 0.28371429443359375,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        114,
+        271,
+        911,
+        751
+      ],
+      "margin_fraction": 0.1103515625,
+      "aspect": 1.6604166666666667,
+      "expected_aspect": 2.0,
+      "aspect_relative_error": 0.16979166666666667,
+      "principal_axis_degrees": 0.014070556404558872,
+      "estimated_key_rgb": [
+        238.0,
+        30.0,
+        149.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 7.312890619757822,
+      "palette_p90_delta_e": 12.66492647584804
+    },
+    "placement": {
+      "source_bounds_px": [
+        114,
+        271,
+        911,
+        751
+      ],
+      "source_pivot_px": [
+        512.5,
+        511.0
+      ],
+      "pivot_px": [
+        127.5,
+        128.0
+      ],
+      "cell_px": [
+        256,
+        256
+      ],
+      "subject_px": [
+        223,
+        134
+      ],
+      "scale": 0.2797992471769134,
+      "world_length_m": 9.3,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v2-part3-proofs\\v2-part3-bastion-livery-bone-v1.png",
+    "sha256": "879130826b208016aca60583a7bca83f127f1914e64c1600da7f921856fba914"
+  },
+  {
+    "id": "v2-part3-trail-state-intact-v1",
+    "class": "Trail",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v2-part3-trail-state-intact-v1\\attempt-01\\1.jpg",
+    "source_sha256": "f2729268968f46d5378bf318ff684e14fe861cdf23c483f6e35191e64cdbccff",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-part3-trail-state-intact-v1",
+      "class": "Trail",
+      "prompt_action": "Use the supplied approved image as the exact identity. Freeze geometry, wheel count and wheel centres, chassis footprint, roof/cabin, attachments, camera, rightward heading, neutral lighting and framing. Preserve the same car and its material roles. A squat grip-specialist rally hatchback: short boxy ochre roof, broad round exposed wheel arches, stubby RIGHT nose, four aggressively treaded tyres, empty roof-rack brace, small flat broken spoiler at LEFT. Chipped bone fender patches, torn rubber flaps and dusty rust underpanels. Compact wide agile stance, no mounted gun. Change ONLY state: Intact clean panels. No damage. Existing stylistic rust and wear remain even in intact state. Keep the complete subject and clear magenta margin; no background scenery.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "art/review/fusion/sources/v2-fusion-cars-trail-v1.jpg",
+      "batch": "v2-part3-trail-states",
+      "approval": "pending",
+      "requires_approval": "v2-fusion-cars-trail-v1",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "cars",
+      "surface_stack": ""
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "metrics": {
+      "foreground_fraction": 0.40276145935058594,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        61,
+        231,
+        980,
+        788
+      ],
+      "margin_fraction": 0.04296875,
+      "aspect": 1.6499102333931777,
+      "expected_aspect": 1.7692307692307694,
+      "aspect_relative_error": 0.06744204199516057,
+      "principal_axis_degrees": 0.016300464631449484,
+      "estimated_key_rgb": [
+        230.0,
+        34.0,
+        164.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 5.933199190906275,
+      "palette_p90_delta_e": 10.437074342503488
+    },
+    "placement": {
+      "source_bounds_px": [
+        61,
+        231,
+        980,
+        788
+      ],
+      "source_pivot_px": [
+        520.5,
+        509.5
+      ],
+      "pivot_px": [
+        128.0,
+        63.5
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        166,
+        101
+      ],
+      "scale": 0.18063112078346028,
+      "world_length_m": 6.9,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v2-part3-proofs\\v2-part3-trail-state-intact-v1.png",
+    "sha256": "b1b44840a69cb145b7c06551f92c89186bf6123b8c37d5bb04a4f7f4bb89c8f2"
+  },
+  {
+    "id": "v2-part3-trail-livery-bone-v1",
+    "class": "Trail",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v2-part3-trail-livery-bone-v1\\attempt-01\\1.jpg",
+    "source_sha256": "b4b7954e4be08e7a0d32acd4c956eac45eacb41efead0bf02c68d61c6f4f1537",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-part3-trail-livery-bone-v1",
+      "class": "Trail",
+      "prompt_action": "Use the supplied approved image as the exact identity. Freeze geometry, wheel count and wheel centres, chassis footprint, roof/cabin, attachments, camera, rightward heading, neutral lighting and framing. Preserve the same car and its material roles. A squat grip-specialist rally hatchback: short boxy ochre roof, broad round exposed wheel arches, stubby RIGHT nose, four aggressively treaded tyres, empty roof-rack brace, small flat broken spoiler at LEFT. Chipped bone fender patches, torn rubber flaps and dusty rust underpanels. Compact wide agile stance, no mounted gun. Change ONLY painted body panels to muted bleached bone #DDD0A6. Preserve all glass, rubber, bare metal, structural parts, wear and existing contrasting identity stripe/patches. No new damage. No emblems, text or numbers. Keep the exact complete footprint and generous empty border.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "art/review/fusion/sources/v2-fusion-cars-trail-v1.jpg",
+      "batch": "v2-part3-trail-liveries",
+      "approval": "pending",
+      "requires_approval": "v2-fusion-cars-trail-v1",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "cars",
+      "surface_stack": ""
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "metrics": {
+      "foreground_fraction": 0.4028282165527344,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        61,
+        231,
+        980,
+        788
+      ],
+      "margin_fraction": 0.04296875,
+      "aspect": 1.6499102333931777,
+      "expected_aspect": 1.7692307692307694,
+      "aspect_relative_error": 0.06744204199516057,
+      "principal_axis_degrees": 0.023553202960256436,
+      "estimated_key_rgb": [
+        238.0,
+        28.0,
+        167.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 8.865940959320286,
+      "palette_p90_delta_e": 13.976687368449943
+    },
+    "placement": {
+      "source_bounds_px": [
+        61,
+        231,
+        980,
+        788
+      ],
+      "source_pivot_px": [
+        520.5,
+        509.5
+      ],
+      "pivot_px": [
+        128.0,
+        63.5
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        166,
+        101
+      ],
+      "scale": 0.18063112078346028,
+      "world_length_m": 6.9,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v2-part3-proofs\\v2-part3-trail-livery-bone-v1.png",
+    "sha256": "de652176945907a3bbf6dff1357562e2fea3020688c9fe6cf84566630ce62202"
+  },
+  {
+    "id": "v2-part3-flint-state-intact-v1",
+    "class": "Flint",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v2-part3-flint-state-intact-v1\\attempt-01\\1.jpg",
+    "source_sha256": "9c0d961b480d7f6e8918a0696b7b23ad61356c2f476c1a01d5c3dbdf1844fb3d",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-part3-flint-state-intact-v1",
+      "class": "Flint",
+      "prompt_action": "Use the supplied approved image as the exact identity. Freeze geometry, wheel count and wheel centres, chassis footprint, roof/cabin, attachments, camera, rightward heading, neutral lighting and framing. Preserve the same car and its material roles. A blunt ram pickup: giant shovel-like welded wedge bumper at RIGHT, short rust forward cab, open EMPTY rectangular scrap cargo bed at LEFT, four oversized squared tyres. A battered bone cross-brace lies flat in the bed. Very squat blocky footprint and broad rightward ram, no occupants. Change ONLY state: Intact clean panels. No damage. Existing stylistic rust and wear remain even in intact state. Keep the complete subject and clear magenta margin; no background scenery.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "art/review/fusion/sources/v2-fusion-cars-flint-v1.jpg",
+      "batch": "v2-part3-flint-states",
+      "approval": "pending",
+      "requires_approval": "v2-fusion-cars-flint-v1",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "cars",
+      "surface_stack": ""
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "metrics": {
+      "foreground_fraction": 0.27994537353515625,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        107,
+        286,
+        990,
+        735
+      ],
+      "margin_fraction": 0.033203125,
+      "aspect": 1.9665924276169264,
+      "expected_aspect": 1.7317073170731707,
+      "aspect_relative_error": 0.13563788073653504,
+      "principal_axis_degrees": 0.07934949932196282,
+      "estimated_key_rgb": [
+        222.0,
+        65.0,
+        176.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 7.668675894148724,
+      "palette_p90_delta_e": 12.965629237248434
+    },
+    "placement": {
+      "source_bounds_px": [
+        107,
+        286,
+        990,
+        735
+      ],
+      "source_pivot_px": [
+        548.5,
+        510.5
+      ],
+      "pivot_px": [
+        128.0,
+        64.0
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        170,
+        86
+      ],
+      "scale": 0.19252548131370328,
+      "world_length_m": 7.1,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v2-part3-proofs\\v2-part3-flint-state-intact-v1.png",
+    "sha256": "ea0b5ae8bc9fbaba2a8fbf615f0038c5c298a8a74b687fcb173a45c77fbbecbc"
+  },
+  {
+    "id": "v2-part3-flint-livery-bone-v1",
+    "class": "Flint",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v2-part3-flint-livery-bone-v1\\attempt-01\\1.jpg",
+    "source_sha256": "586c83b195610080dc7e405d62fb5e6b0379905d2b9b696f56ba05726e9039be",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-part3-flint-livery-bone-v1",
+      "class": "Flint",
+      "prompt_action": "Use the supplied approved image as the exact identity. Freeze geometry, wheel count and wheel centres, chassis footprint, roof/cabin, attachments, camera, rightward heading, neutral lighting and framing. Preserve the same car and its material roles. A blunt ram pickup: giant shovel-like welded wedge bumper at RIGHT, short rust forward cab, open EMPTY rectangular scrap cargo bed at LEFT, four oversized squared tyres. A battered bone cross-brace lies flat in the bed. Very squat blocky footprint and broad rightward ram, no occupants. Change ONLY painted body panels to muted bleached bone #DDD0A6. Preserve all glass, rubber, bare metal, structural parts, wear and existing contrasting identity stripe/patches. No new damage. No emblems, text or numbers. Keep the exact complete footprint and generous empty border.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "art/review/fusion/sources/v2-fusion-cars-flint-v1.jpg",
+      "batch": "v2-part3-flint-liveries",
+      "approval": "pending",
+      "requires_approval": "v2-fusion-cars-flint-v1",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "cars",
+      "surface_stack": ""
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "metrics": {
+      "foreground_fraction": 0.2760133743286133,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        106,
+        286,
+        992,
+        736
+      ],
+      "margin_fraction": 0.03125,
+      "aspect": 1.968888888888889,
+      "expected_aspect": 1.7317073170731707,
+      "aspect_relative_error": 0.136964006259781,
+      "principal_axis_degrees": 0.05105110964930851,
+      "estimated_key_rgb": [
+        241.0,
+        55.0,
+        179.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 6.428303959583208,
+      "palette_p90_delta_e": 10.254047074150678
+    },
+    "placement": {
+      "source_bounds_px": [
+        106,
+        286,
+        992,
+        736
+      ],
+      "source_pivot_px": [
+        549.0,
+        511.0
+      ],
+      "pivot_px": [
+        128.0,
+        64.0
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        170,
+        86
+      ],
+      "scale": 0.19187358916478556,
+      "world_length_m": 7.1,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v2-part3-proofs\\v2-part3-flint-livery-bone-v1.png",
+    "sha256": "1f73d8fdf4394f90f7ab980fd216b72b7bb744ec9bc82aa18901df91bf1e41a3"
+  },
+  {
+    "id": "v2-part3-vandal-state-intact-v1",
+    "class": "Vandal",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v2-part3-vandal-state-intact-v1\\attempt-01\\1.jpg",
+    "source_sha256": "008ca9eada2f6f2b79a76fc0e2561edf8d9bf6c02c8d68b4a9adb64299e1c955",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-part3-vandal-state-intact-v1",
+      "class": "Vandal",
+      "prompt_action": "Use the supplied approved image as the exact identity. Freeze geometry, wheel count and wheel centres, chassis footprint, roof/cabin, attachments, camera, rightward heading, neutral lighting and framing. Preserve the same car and its material roles. An aggressive interceptor sedan: long chamfered dried-red hood at RIGHT, squared soot cabin, two blank chipped bone diagonal shoulder patches, short unequal fins at LEFT, four mostly enclosed wheels. Asymmetric welded door armour and a low serrated right-facing ram; broad prow, low compact rear. Change ONLY state: Intact clean panels. No damage. Existing stylistic rust and wear remain even in intact state. Keep the complete subject and clear magenta margin; no background scenery.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "art/review/fusion/sources/v2-fusion-cars-vandal-v1.jpg",
+      "batch": "v2-part3-vandal-states",
+      "approval": "pending",
+      "requires_approval": "v2-fusion-cars-vandal-v1",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "cars",
+      "surface_stack": ""
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "metrics": {
+      "foreground_fraction": 0.28233909606933594,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        50,
+        307,
+        975,
+        712
+      ],
+      "margin_fraction": 0.0478515625,
+      "aspect": 2.2839506172839505,
+      "expected_aspect": 2.05,
+      "aspect_relative_error": 0.11412225233363449,
+      "principal_axis_degrees": 0.01119163685796773,
+      "estimated_key_rgb": [
+        228.0,
+        40.0,
+        150.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 8.138886244479242,
+      "palette_p90_delta_e": 16.72699327282081
+    },
+    "placement": {
+      "source_bounds_px": [
+        50,
+        307,
+        975,
+        712
+      ],
+      "source_pivot_px": [
+        512.5,
+        509.5
+      ],
+      "pivot_px": [
+        127.5,
+        64.0
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        197,
+        86
+      ],
+      "scale": 0.21297297297297296,
+      "world_length_m": 8.2,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v2-part3-proofs\\v2-part3-vandal-state-intact-v1.png",
+    "sha256": "dbf8ebba0317cf49815ccd67fad6d770c209fc4b6aef2e4ed232a42b28805c26"
+  },
+  {
+    "id": "v2-part3-vandal-livery-bone-v1",
+    "class": "Vandal",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v2-part3-vandal-livery-bone-v1\\attempt-01\\1.jpg",
+    "source_sha256": "5029361823f9f37081869d5841c568478d287b459b2916e24ad3b63b1ef39850",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-part3-vandal-livery-bone-v1",
+      "class": "Vandal",
+      "prompt_action": "Use the supplied approved image as the exact identity. Freeze geometry, wheel count and wheel centres, chassis footprint, roof/cabin, attachments, camera, rightward heading, neutral lighting and framing. Preserve the same car and its material roles. An aggressive interceptor sedan: long chamfered dried-red hood at RIGHT, squared soot cabin, two blank chipped bone diagonal shoulder patches, short unequal fins at LEFT, four mostly enclosed wheels. Asymmetric welded door armour and a low serrated right-facing ram; broad prow, low compact rear. Change ONLY painted body panels to muted bleached bone #DDD0A6. Preserve all glass, rubber, bare metal, structural parts, wear and existing contrasting identity stripe/patches. No new damage. No emblems, text or numbers. Keep the exact complete footprint and generous empty border.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "art/review/fusion/sources/v2-fusion-cars-vandal-v1.jpg",
+      "batch": "v2-part3-vandal-liveries",
+      "approval": "pending",
+      "requires_approval": "v2-fusion-cars-vandal-v1",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "cars",
+      "surface_stack": ""
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "metrics": {
+      "foreground_fraction": 0.2823486328125,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        50,
+        307,
+        975,
+        712
+      ],
+      "margin_fraction": 0.0478515625,
+      "aspect": 2.2839506172839505,
+      "expected_aspect": 2.05,
+      "aspect_relative_error": 0.11412225233363449,
+      "principal_axis_degrees": 0.0147227074222295,
+      "estimated_key_rgb": [
+        231.0,
+        42.0,
+        153.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 6.468043952951007,
+      "palette_p90_delta_e": 10.71198326175675
+    },
+    "placement": {
+      "source_bounds_px": [
+        50,
+        307,
+        975,
+        712
+      ],
+      "source_pivot_px": [
+        512.5,
+        509.5
+      ],
+      "pivot_px": [
+        127.5,
+        64.0
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        197,
+        86
+      ],
+      "scale": 0.21297297297297296,
+      "world_length_m": 8.2,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v2-part3-proofs\\v2-part3-vandal-livery-bone-v1.png",
+    "sha256": "656d6f797506b8225c614d31c234f05f8685b6a982669e47e149a5ec63b17adb"
+  },
+  {
+    "id": "v2-part3-bulwark-state-intact-v1",
+    "class": "Bulwark",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v2-part3-bulwark-state-intact-v1\\attempt-01\\1.jpg",
+    "source_sha256": "ff9ab317e5d119ac377c4c7ea3608d98aff87999ac0cb0fa8f7c41c646b994d8",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-part3-bulwark-state-intact-v1",
+      "class": "Bulwark",
+      "prompt_action": "Use the supplied approved image as the exact identity. Freeze geometry, wheel count and wheel centres, chassis footprint, roof/cabin, attachments, camera, rightward heading, neutral lighting and framing. Preserve the same car and its material roles. An enormous six-wheel armoured endurance carrier: three pairs of massive tyres, full-width squared ram at RIGHT, three parallel bone roof ribs separated by soot channels, two squat roof gun mounts pointing RIGHT, short engine deck at LEFT. Layered rust plate skirts, toothed corner shields. A broad nearly solid battle-wagon mass with very little empty space. Change ONLY state: Intact clean panels. No damage. Existing stylistic rust and wear remain even in intact state. Keep the complete subject and clear magenta margin; no background scenery.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "art/review/fusion/sources/v2-fusion-cars-bulwark-v1.jpg",
+      "batch": "v2-part3-bulwark-states",
+      "approval": "pending",
+      "requires_approval": "v2-fusion-cars-bulwark-v1",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "cars",
+      "surface_stack": ""
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "metrics": {
+      "foreground_fraction": 0.39002132415771484,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        63,
+        239,
+        984,
+        784
+      ],
+      "margin_fraction": 0.0390625,
+      "aspect": 1.689908256880734,
+      "expected_aspect": 2.0217391304347827,
+      "aspect_relative_error": 0.16413139982243274,
+      "principal_axis_degrees": 0.06795491444009899,
+      "estimated_key_rgb": [
+        228.0,
+        63.0,
+        169.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 8.135624344005738,
+      "palette_p90_delta_e": 16.72562697134903
+    },
+    "placement": {
+      "source_bounds_px": [
+        63,
+        239,
+        984,
+        784
+      ],
+      "source_pivot_px": [
+        523.5,
+        511.5
+      ],
+      "pivot_px": [
+        127.5,
+        128.0
+      ],
+      "cell_px": [
+        256,
+        256
+      ],
+      "subject_px": [
+        223,
+        132
+      ],
+      "scale": 0.24212812160694897,
+      "world_length_m": 9.3,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v2-part3-proofs\\v2-part3-bulwark-state-intact-v1.png",
+    "sha256": "adf85fc7b916e4862de06e7f71bc391332091960ce13af4e91a7de0e20c35cbe"
+  },
+  {
+    "id": "v2-part3-bulwark-livery-bone-v1",
+    "class": "Bulwark",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v2-part3-bulwark-livery-bone-v1\\attempt-01\\1.jpg",
+    "source_sha256": "7fdcc18a8e263202eb07b09d71b0fc51fcea22d1517fca876f99b73f3acf3a9e",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-part3-bulwark-livery-bone-v1",
+      "class": "Bulwark",
+      "prompt_action": "Use the supplied approved image as the exact identity. Freeze geometry, wheel count and wheel centres, chassis footprint, roof/cabin, attachments, camera, rightward heading, neutral lighting and framing. Preserve the same car and its material roles. An enormous six-wheel armoured endurance carrier: three pairs of massive tyres, full-width squared ram at RIGHT, three parallel bone roof ribs separated by soot channels, two squat roof gun mounts pointing RIGHT, short engine deck at LEFT. Layered rust plate skirts, toothed corner shields. A broad nearly solid battle-wagon mass with very little empty space. Change ONLY painted body panels to muted bleached bone #DDD0A6. Preserve all glass, rubber, bare metal, structural parts, wear and existing contrasting identity stripe/patches. No new damage. No emblems, text or numbers. Keep the exact complete footprint and generous empty border.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "art/review/fusion/sources/v2-fusion-cars-bulwark-v1.jpg",
+      "batch": "v2-part3-bulwark-liveries",
+      "approval": "pending",
+      "requires_approval": "v2-fusion-cars-bulwark-v1",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "cars",
+      "surface_stack": ""
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "metrics": {
+      "foreground_fraction": 0.3909645080566406,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        63,
+        239,
+        984,
+        784
+      ],
+      "margin_fraction": 0.0390625,
+      "aspect": 1.689908256880734,
+      "expected_aspect": 2.0217391304347827,
+      "aspect_relative_error": 0.16413139982243274,
+      "principal_axis_degrees": 0.016356661937638177,
+      "estimated_key_rgb": [
+        235.0,
+        64.0,
+        175.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 7.173429674353814,
+      "palette_p90_delta_e": 10.576272441077055
+    },
+    "placement": {
+      "source_bounds_px": [
+        63,
+        239,
+        984,
+        784
+      ],
+      "source_pivot_px": [
+        523.5,
+        511.5
+      ],
+      "pivot_px": [
+        127.5,
+        128.0
+      ],
+      "cell_px": [
+        256,
+        256
+      ],
+      "subject_px": [
+        223,
+        132
+      ],
+      "scale": 0.24212812160694897,
+      "world_length_m": 9.3,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v2-part3-proofs\\v2-part3-bulwark-livery-bone-v1.png",
+    "sha256": "667a1382c355f0628ed53a765d17bc4d6853f11300540ec6e85447d5b58e8c48"
+  }
+]

@@ -75,6 +75,9 @@ def boards(roster,world):
 
 def main():
     import sys
+    if (OUT/'review.json').exists() and read_json(OUT/'review.json').get('part')==3:
+        from part3_review import main as publish_part3
+        return publish_part3()
     OUT.mkdir(parents=True,exist_ok=True);(OUT/'sources').mkdir(exist_ok=True);(OUT/'pixels').mkdir(exist_ok=True)
     roster=compose('v2-fusion');world=[] if '--roster-only' in sys.argv else compose('v4-fusion');boards(roster,world)
     selected={s['id'] for s in read_json(ART/'fusion-selections.json')['assets']} if world else set()

@@ -2,6 +2,10 @@ import {pathToFileURL,fileURLToPath} from 'node:url';
 import fs from 'node:fs/promises';
 const {chromium}=await import(pathToFileURL(process.argv[2]).href);
 const report=fileURLToPath(new URL('../../art/reports/',import.meta.url));
+const review=JSON.parse(await fs.readFile(new URL('../../art/review/fusion/review.json',import.meta.url),'utf8'));
+const expectedCurrent=review.records.filter(r=>!r.superseded).length;
+const expectedAll=review.records.length;
+const expectedAllCarRejects=review.records.filter(r=>r.family==='cars'&&r.verdict==='reject').length;
 const browser=await chromium.launch({channel:'chrome',headless:true});
 const results=[];
 try {
@@ -15,11 +19,11 @@ try {
     const families=await page.locator('#family option').evaluateAll(os=>os.map(o=>o.value));
     for(const family of families){await page.selectOption('#family',family);const bad=await page.locator('article:visible').evaluateAll((xs,f)=>xs.some(x=>f!=='all'&&x.dataset.family!==f),family);if(bad)throw Error('family filter failed');}
     await page.selectOption('#family','all');
-    if(await page.locator('article:visible').count()!==84)throw Error('expected 84 current candidates');
+    if(await page.locator('article:visible').count()!==expectedCurrent)throw Error('current candidate count differs from manifest');
     await page.check('#originals');
-    if(await page.locator('article:visible').count()!==95)throw Error('expected 95 candidates with repaired originals');
+    if(await page.locator('article:visible').count()!==expectedAll)throw Error('all candidate count differs from manifest');
     await page.selectOption('#family','cars');
-    if(await page.locator('article:visible .reject').count()!==3)throw Error('three car rejections must stay visible');
+    if(await page.locator('article:visible .reject').count()!==expectedAllCarRejects)throw Error('car rejections must stay visible');
     await page.selectOption('#family','all');await page.uncheck('#originals');
     const overflow=await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth);
     if(errors.length||overflow)throw Error(JSON.stringify({errors,overflow,width}));
