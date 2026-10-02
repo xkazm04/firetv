@@ -1,0 +1,98 @@
+[
+  {
+    "id": "v2-part3-rework-comet-v7",
+    "class": "Comet",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v2-part3-rework-comet-v7\\attempt-01\\1.jpg",
+    "source_sha256": "ddd9c3c684f65333251b386947b34354d980ce261cda9297eeb92ffac56e3acc",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-part3-rework-comet-v7",
+      "class": "Comet",
+      "prompt_action": "A small isolated overhead game sprite of one original turbine-powered speed car, nose RIGHT. Long narrow rust-orange wedge nose and tiny black teardrop cockpit; rear third a massive reinforced rectangular steel cradle carrying TWO round air-turbine intake fans. Four small road wheels. All pieces attached. Length 2.7 times width including tyres. No wing, no detached canopy, no extra objects. Draw the car SMALL: the complete car occupies only the MIDDLE HALF of a wide landscape canvas; leave the leftmost and rightmost quarters completely empty magenta. Neutral diffuse roof-plan drawing.",
+      "size": "1536x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "",
+      "batch": "v2-part4-comet-wide",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "cars",
+      "surface_stack": ""
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "metrics": {
+      "foreground_fraction": 0.2269053562623274,
+      "source_size_px": [
+        1248,
+        832
+      ],
+      "bounds_px": [
+        176,
+        210,
+        1080,
+        620
+      ],
+      "margin_fraction": 0.20192307692307693,
+      "aspect": 2.204878048780488,
+      "expected_aspect": 2.5714285714285716,
+      "aspect_relative_error": 0.1425474254742547,
+      "principal_axis_degrees": 0.029836567843156483,
+      "estimated_key_rgb": [
+        243.0,
+        102.0,
+        169.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 6.914613572505688,
+      "palette_p90_delta_e": 12.161205616772788
+    },
+    "placement": {
+      "source_bounds_px": [
+        176,
+        210,
+        1080,
+        620
+      ],
+      "source_pivot_px": [
+        628.0,
+        415.0
+      ],
+      "pivot_px": [
+        128.0,
+        64.0
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        216,
+        98
+      ],
+      "scale": 0.23893805309734514,
+      "world_length_m": 9.0,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v2-part4-comet-wide\\v2-part3-rework-comet-v7.png",
+    "sha256": "4099a1fd42fe0d52e8a30f06e692686ef09832ea941fb2a6b12178dc6a74a844"
+  }
+]

@@ -1,0 +1,100 @@
+[
+  {
+    "id": "v2-part3-rework-kestrel-v4",
+    "class": "Kestrel",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v2-part3-rework-kestrel-v4\\attempt-01\\1.jpg",
+    "source_sha256": "d9448c4079100cc2263f086855349926d6cce97c171efd9540158d43d0e30748",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-part3-rework-kestrel-v4",
+      "class": "Kestrel",
+      "prompt_action": "Structural reference edit for a NEW original Kestrel sprint racing car. Use the supplied approved sibling only for the rough hand-painted metal language, roof-only camera and four-wheel ground-car construction. REDESIGN its sedan shell into a very LONG NARROW sprint chassis, total length 2.8 times total width: a small dark single-seat capsule cockpit, long tapered pale steel RIGHT nose, four tiny tucked-in tread-top wheels, two short swept rust-red LEFT rear fins, and one compact exposed rear engine block between those fins. On the centreline of the nose put ONE short empty launching rail, with no spear yet. No rear window, sedan roof or passenger cabin. This is the structural step: no electricity, no loose cables, no weapons projecting out. Place this SMALL COMPLETE vehicle at only 55 percent of canvas width, centred with enormous empty magenta space around it; all tips inside the central area. Neutral diffuse light; no shadow; no visible side doors or wheel hubs.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "art/review/fusion/sources/v2-fusion-cars-line-v1.jpg",
+      "batch": "v2-part4-kestrel-structure",
+      "approval": "pending",
+      "requires_approval": "v2-fusion-cars-line-v1",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "cars",
+      "surface_stack": ""
+    },
+    "verdict": "reject",
+    "codes": [
+      "CROPPED_OR_MARGIN"
+    ],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "metrics": {
+      "foreground_fraction": 0.2057514190673828,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        40,
+        336,
+        1003,
+        687
+      ],
+      "margin_fraction": 0.0205078125,
+      "aspect": 2.7435897435897436,
+      "expected_aspect": 2.772727272727273,
+      "aspect_relative_error": 0.010508617065994152,
+      "principal_axis_degrees": 0.03215500300071126,
+      "estimated_key_rgb": [
+        236.0,
+        17.0,
+        180.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 5.73632132869917,
+      "palette_p90_delta_e": 10.433061681357916
+    },
+    "placement": {
+      "source_bounds_px": [
+        40,
+        336,
+        1003,
+        687
+      ],
+      "source_pivot_px": [
+        521.5,
+        511.5
+      ],
+      "pivot_px": [
+        128.0,
+        64.0
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        220,
+        80
+      ],
+      "scale": 0.2284527518172378,
+      "world_length_m": 9.15,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v2-part4-kestrel-structure\\v2-part3-rework-kestrel-v4.png",
+    "sha256": "684f1785ec7d5a7195c8ee531b6c0f284ed57caa55ee95a7dd78e14047340f20"
+  }
+]

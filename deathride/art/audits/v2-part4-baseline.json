@@ -1,0 +1,625 @@
+{
+  "at": "2026-10-02T15:36:30.452398+00:00",
+  "budget": {
+    "week": "2026-W40",
+    "images_reserved": 401,
+    "remaining": 149,
+    "videos": 0,
+    "stop": null
+  },
+  "approval_ledger": {
+    "schema": 1,
+    "references": {
+      "p3-ref-needle-v1": {
+        "owner_approved": false,
+        "source_sha256": null,
+        "owner_evidence": null,
+        "identity": "Narrow yellow open-wheel dune buggy with a slender empty roll cage, exposed engine at the LEFT rear and tapering short nose at the RIGHT. Length just over twice width.",
+        "candidate_source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\p3-ref-needle-v1\\attempt-02\\1.jpg",
+        "candidate_source_sha256": "cf77fc14308d1c6d69949279b44061d520e08d63f0bb55d51edffd76bb9df728",
+        "processed_sha256": "023a85a3a5b92976e6f74b7e9e9977438c316f3cf5a1873798ab9b705f977906",
+        "review_sheet": "contact-sheets/p3-reference-needle.png"
+      },
+      "p3-ref-line-v1": {
+        "owner_approved": false,
+        "source_sha256": null,
+        "owner_evidence": null,
+        "identity": "Compact red coupe with a blank ivory centre stripe, rounded RIGHT nose, broad blue-black windshield and a small flat rear spoiler at LEFT. Length twice width.",
+        "candidate_source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\p3-ref-line-v1\\attempt-01\\1.jpg",
+        "candidate_source_sha256": "b0ee6f908cc5e573caf21e8be7fb28dc0f45e2cec1de0eb472b07b927b7c11d0",
+        "processed_sha256": "ed86ff123274af24c86ef6e920d3908183d34c5de80a5b0576b316d0822bd77e",
+        "review_sheet": "contact-sheets/p3-reference-line.png"
+      },
+      "p3-ref-bastion-v1": {
+        "owner_approved": false,
+        "source_sha256": null,
+        "owner_evidence": null,
+        "identity": "Broad olive armored wagon with squared wheel guards, rectangular riveted roof plates, four oversized tyres and a short mechanical roof gun aimed RIGHT. Blunt RIGHT nose. Length twice width.",
+        "candidate_source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\p3-ref-bastion-v1\\attempt-01\\1.jpg",
+        "candidate_source_sha256": "e6dcb2828d638376aa183146eb4db5580f2bb436b7aa91d38f09981710896b58",
+        "processed_sha256": "14f48b54cc7dde384d943e0773d8f1133f3c1d7328dba8c7152577e6cb8edc9f",
+        "review_sheet": "contact-sheets/p3-reference-bastion.png"
+      },
+      "p3-ref-comet-v1": {
+        "owner_approved": false,
+        "source_sha256": null,
+        "owner_evidence": null,
+        "identity": "Long orange wedge racer with a triangular RIGHT nose, narrow blue-black teardrop canopy and wide completely blank rear wing at LEFT. Length two and a half times width.",
+        "candidate_source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\p3-ref-comet-v1\\attempt-01\\1.jpg",
+        "candidate_source_sha256": "2aee691f15a9dbec7f64b453f826567c79ae50b625a860a973856a9ba11e2e51",
+        "processed_sha256": "52cc8396aad54057b51595a5574b8e186f37eae8225e3bbfa3daaed9b59748de",
+        "review_sheet": "contact-sheets/p3-reference-comet.png"
+      },
+      "p3-ref-trail-v1": {
+        "owner_approved": false,
+        "source_sha256": null,
+        "owner_evidence": null,
+        "identity": "Short blue rally hatchback with stubby RIGHT nose, short boxy roof, wide rounded wheel arches and a small flat spoiler at LEFT. Compact length less than twice width.",
+        "candidate_source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\p3-ref-trail-v1\\attempt-01\\1.jpg",
+        "candidate_source_sha256": "61c6474a61f3f80a05d290b9688d4a8209e1d0bd0be0e8f305e5a2fa3f9d0219",
+        "processed_sha256": "f55eb198c0f5ce7f33322cf65961117d35c2d28e43823b7de43eb74ee4510b09",
+        "review_sheet": "contact-sheets/p3-reference-trail.png"
+      },
+      "p3-ref-flint-v1": {
+        "owner_approved": false,
+        "source_sha256": null,
+        "owner_evidence": null,
+        "identity": "Compact orange ram pickup: broad blunt wedge bumper at RIGHT, short forward cab, exposed rectangular rear cargo bed at LEFT, chunky squared wheel arches and four thick tyres. Squat length less than twice width.",
+        "candidate_source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\p3-ref-flint-v1\\attempt-01\\1.jpg",
+        "candidate_source_sha256": "ebef65e6a44e4a76f1180510bb004260bafbf544125d283548aed80eec2131b9",
+        "processed_sha256": "dc74ec9ab1af79c456c5cea1b0e50464b48a49a2171e9cb9eadb00f174e60419",
+        "review_sheet": "contact-sheets/p3-reference-flint.png"
+      },
+      "p3-ref-quill-v1": {
+        "owner_approved": false,
+        "source_sha256": null,
+        "owner_evidence": null,
+        "identity": "Light ivory and blue technical spider: slender central single-seat empty cockpit, detached slim wheel pods, sharply pinched waist, twin narrow rear booms at LEFT and round needle-like nose at RIGHT. Length just over twice width.",
+        "candidate_source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\p3-ref-quill-v1\\attempt-01\\1.jpg",
+        "candidate_source_sha256": "c9cf8126fc57a686602bc7e7fa3f4c1e867c41b297a9ad9c9111dc723858b2b7",
+        "processed_sha256": "0496521beeb4245690f9e4af0a16a80dc26c42a33f24f0778124272e5d2efd25",
+        "review_sheet": "contact-sheets/p3-reference-quill.png"
+      },
+      "p3-ref-vandal-v1": {
+        "owner_approved": false,
+        "source_sha256": null,
+        "owner_evidence": null,
+        "identity": "Red interceptor sedan: long chamfered hood at RIGHT, squared blue-black cabin, two blank ivory diagonal shoulder marks and split short rear fins at LEFT, four enclosed wheels. Length twice width.",
+        "candidate_source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\p3-ref-vandal-v1\\attempt-01\\1.jpg",
+        "candidate_source_sha256": "046df107f9e4661a1f0a8903e828eeb95bf1ea44abb304f11da2c6e859e756c7",
+        "processed_sha256": "b391b4394ddb7da0314682927e5545ab803407946b46fe585a5bc099c05bd3b2",
+        "review_sheet": "contact-sheets/p3-reference-vandal.png"
+      },
+      "p3-ref-kestrel-v1": {
+        "owner_approved": false,
+        "source_sha256": null,
+        "owner_evidence": null,
+        "identity": "Long blue and cool-grey sprint chassis: very long slender spear nose at RIGHT, narrow central dark capsule cockpit, two swept rear fins and exposed engine at LEFT, tiny tucked wheel pods. Length nearly three times width.",
+        "candidate_source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\p3-ref-kestrel-v1\\attempt-02\\1.jpg",
+        "candidate_source_sha256": "11045626b6d39cb0b07b98caca58fe723a7f4673eafeb54509c356d089b93568",
+        "processed_sha256": "5a1534d6c146f482aeb1a3b29abb452f060773b5d636af0200765339f48fe984",
+        "review_sheet": "contact-sheets/p3-reference-kestrel.png"
+      },
+      "p3-ref-bulwark-v1": {
+        "owner_approved": false,
+        "source_sha256": null,
+        "owner_evidence": null,
+        "identity": "Broad olive and ivory heavy endurance carrier: six wheels, squared full-width RIGHT ram bumper, broad armored central roof with three parallel ribs and a short squared engine deck at LEFT. Length twice width.",
+        "candidate_source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\p3-ref-bulwark-v1\\attempt-01\\1.jpg",
+        "candidate_source_sha256": "156fd98f289347e66d4c2fccdbaf9afc2556472eae266a91c843e88ecd48e2f6",
+        "processed_sha256": "ce7a389988ac1217d0932cfa050ac47954e9a404b9b1f44e50b14af781f6ea43",
+        "review_sheet": "contact-sheets/p3-reference-bulwark.png"
+      },
+      "v2-fusion-cars-bastion-v1": {
+        "owner_approved": true,
+        "source_sha256": "d2e297baf254c4c4d6dafab99d2ac3bbbc1266eb18c1038d09788569b41c7b2d",
+        "owner_evidence": "2026-10-02, OWNER-CHOICE.md section C: \"Approved the art direction, looks very solid. For cars.\" The executing owner instruction explicitly records approval for Line, Bastion, Trail, Flint, Vandal and Bulwark, which were not requested to change. Reviewed exact image: art/review/fusion/sources/v2-fusion-cars-bastion-v1.jpg",
+        "candidate_source": "art/review/fusion/sources/v2-fusion-cars-bastion-v1.jpg",
+        "processed_sha256": "d6026c87ed11cc1d1b582bbc9655a2402900a4ce25378ff0e9853848e2695cd9",
+        "pixel_codes": [],
+        "style_file": "style-fusion.json",
+        "style_sha256": "557d5e7843d22cd973a26af0313c366cff37db9353cc83915d2a2a71fa20d6be",
+        "review_page": "art/review/fusion/index.html",
+        "instruction": "Only owner may set true; resolve pixel rejections first. Approval covers exact source bytes only.",
+        "approved_at": "2026-10-02",
+        "owner_evidence_file": "art/OWNER-CHOICE.md#c-car-reference-review-owner-2026-10-02"
+      },
+      "v2-fusion-cars-needle-v1": {
+        "owner_approved": false,
+        "source_sha256": "e06d788e5aff2ac8ba53c813d41ae82d25bc9bbd06e87c135fed875707463de9",
+        "owner_evidence": null,
+        "candidate_source": "art/review/fusion/sources/v2-fusion-cars-needle-v1.jpg",
+        "processed_sha256": "86870319c59dca8af5918936e69b576ecb8efcfe08fbdf51e749e26b6cc6105a",
+        "pixel_codes": [],
+        "style_file": "style-fusion.json",
+        "style_sha256": "557d5e7843d22cd973a26af0313c366cff37db9353cc83915d2a2a71fa20d6be",
+        "review_page": "art/review/fusion/index.html",
+        "instruction": "Only owner may set true; resolve pixel rejections first. Approval covers exact source bytes only."
+      },
+      "v2-fusion-cars-line-v1": {
+        "owner_approved": true,
+        "source_sha256": "bbbe7fea32ba7ce10e1e333f92cbc9cd7233f2e6e49e11ee0a3baf28a933ae68",
+        "owner_evidence": "2026-10-02, OWNER-CHOICE.md section C: \"Approved the art direction, looks very solid. For cars.\" The executing owner instruction explicitly records approval for Line, Bastion, Trail, Flint, Vandal and Bulwark, which were not requested to change. Reviewed exact image: art/review/fusion/sources/v2-fusion-cars-line-v1.jpg",
+        "candidate_source": "art/review/fusion/sources/v2-fusion-cars-line-v1.jpg",
+        "processed_sha256": "71ca02befbd6153d935de530464ce1156517f6a972a24342f674b07b221ca9fb",
+        "pixel_codes": [],
+        "style_file": "style-fusion.json",
+        "style_sha256": "557d5e7843d22cd973a26af0313c366cff37db9353cc83915d2a2a71fa20d6be",
+        "review_page": "art/review/fusion/index.html",
+        "instruction": "Only owner may set true; resolve pixel rejections first. Approval covers exact source bytes only.",
+        "approved_at": "2026-10-02",
+        "owner_evidence_file": "art/OWNER-CHOICE.md#c-car-reference-review-owner-2026-10-02"
+      },
+      "v2-fusion-cars-comet-v1": {
+        "owner_approved": false,
+        "source_sha256": "42791856f218da677bc40304e34538011c7270eb2d9497ae6f0a747cf15bc0a7",
+        "owner_evidence": null,
+        "candidate_source": "art/review/fusion/sources/v2-fusion-cars-comet-v1.jpg",
+        "processed_sha256": "5f69c62ea3c8bda8f360b3c6ae3812dd0fdfe9b95b691c19ebf588201af88dc2",
+        "pixel_codes": [
+          "CROPPED_OR_MARGIN",
+          "ASPECT_BAND"
+        ],
+        "style_file": "style-fusion.json",
+        "style_sha256": "557d5e7843d22cd973a26af0313c366cff37db9353cc83915d2a2a71fa20d6be",
+        "review_page": "art/review/fusion/index.html",
+        "instruction": "Only owner may set true; resolve pixel rejections first. Approval covers exact source bytes only."
+      },
+      "v2-fusion-cars-trail-v1": {
+        "owner_approved": true,
+        "source_sha256": "920a5e898d6921489bc4ac1eb5e421124d71be50959476aec7a29031f2606275",
+        "owner_evidence": "2026-10-02, OWNER-CHOICE.md section C: \"Approved the art direction, looks very solid. For cars.\" The executing owner instruction explicitly records approval for Line, Bastion, Trail, Flint, Vandal and Bulwark, which were not requested to change. Reviewed exact image: art/review/fusion/sources/v2-fusion-cars-trail-v1.jpg",
+        "candidate_source": "art/review/fusion/sources/v2-fusion-cars-trail-v1.jpg",
+        "processed_sha256": "51db34ce414146a4b73f9ecd555457715db1b1978a368c134e9578f28d9ca841",
+        "pixel_codes": [],
+        "style_file": "style-fusion.json",
+        "style_sha256": "557d5e7843d22cd973a26af0313c366cff37db9353cc83915d2a2a71fa20d6be",
+        "review_page": "art/review/fusion/index.html",
+        "instruction": "Only owner may set true; resolve pixel rejections first. Approval covers exact source bytes only.",
+        "approved_at": "2026-10-02",
+        "owner_evidence_file": "art/OWNER-CHOICE.md#c-car-reference-review-owner-2026-10-02"
+      },
+      "v2-fusion-cars-flint-v1": {
+        "owner_approved": true,
+        "source_sha256": "aa4331cbe06cb472925ede07b70250fa566ce513a9097d15877015a6cc06fad0",
+        "owner_evidence": "2026-10-02, OWNER-CHOICE.md section C: \"Approved the art direction, looks very solid. For cars.\" The executing owner instruction explicitly records approval for Line, Bastion, Trail, Flint, Vandal and Bulwark, which were not requested to change. Reviewed exact image: art/review/fusion/sources/v2-fusion-cars-flint-v1.jpg",
+        "candidate_source": "art/review/fusion/sources/v2-fusion-cars-flint-v1.jpg",
+        "processed_sha256": "470653f26aa4f20f2fbe2444a258cfe948575cbb89cf63e50fdce295bdd01dc3",
+        "pixel_codes": [],
+        "style_file": "style-fusion.json",
+        "style_sha256": "557d5e7843d22cd973a26af0313c366cff37db9353cc83915d2a2a71fa20d6be",
+        "review_page": "art/review/fusion/index.html",
+        "instruction": "Only owner may set true; resolve pixel rejections first. Approval covers exact source bytes only.",
+        "approved_at": "2026-10-02",
+        "owner_evidence_file": "art/OWNER-CHOICE.md#c-car-reference-review-owner-2026-10-02"
+      },
+      "v2-fusion-cars-quill-v1": {
+        "owner_approved": false,
+        "source_sha256": "e70dc698e31b1d03d97608477321242e678bb1fda19372dbc228d9683d3f452d",
+        "owner_evidence": null,
+        "candidate_source": "art/review/fusion/sources/v2-fusion-cars-quill-v1.jpg",
+        "processed_sha256": "c13da647d895fc72724a19dc5deee1e7f574d42ca681ce12abd950827206765c",
+        "pixel_codes": [
+          "CROPPED_OR_MARGIN"
+        ],
+        "style_file": "style-fusion.json",
+        "style_sha256": "557d5e7843d22cd973a26af0313c366cff37db9353cc83915d2a2a71fa20d6be",
+        "review_page": "art/review/fusion/index.html",
+        "instruction": "Only owner may set true; resolve pixel rejections first. Approval covers exact source bytes only."
+      },
+      "v2-fusion-cars-vandal-v1": {
+        "owner_approved": true,
+        "source_sha256": "a671a83642e093157fe189271d70b2b03765e454a919d0dfe18a84351b90ae9c",
+        "owner_evidence": "2026-10-02, OWNER-CHOICE.md section C: \"Approved the art direction, looks very solid. For cars.\" The executing owner instruction explicitly records approval for Line, Bastion, Trail, Flint, Vandal and Bulwark, which were not requested to change. Reviewed exact image: art/review/fusion/sources/v2-fusion-cars-vandal-v1.jpg",
+        "candidate_source": "art/review/fusion/sources/v2-fusion-cars-vandal-v1.jpg",
+        "processed_sha256": "260736abe446429a32576adfea3d70856a27fa9ee8ad3ca01bb293c2b909154b",
+        "pixel_codes": [],
+        "style_file": "style-fusion.json",
+        "style_sha256": "557d5e7843d22cd973a26af0313c366cff37db9353cc83915d2a2a71fa20d6be",
+        "review_page": "art/review/fusion/index.html",
+        "instruction": "Only owner may set true; resolve pixel rejections first. Approval covers exact source bytes only.",
+        "approved_at": "2026-10-02",
+        "owner_evidence_file": "art/OWNER-CHOICE.md#c-car-reference-review-owner-2026-10-02"
+      },
+      "v2-fusion-cars-kestrel-v1": {
+        "owner_approved": false,
+        "source_sha256": "c660f4cc3695a4c8e3a5556724e4588fff1a2d5e8972ba437a667679462d41d1",
+        "owner_evidence": null,
+        "candidate_source": "art/review/fusion/sources/v2-fusion-cars-kestrel-v1.jpg",
+        "processed_sha256": "b731339b377c9e8fb912a77a3fc3836aab46d445e6cf6009f89d1c72f4c7a165",
+        "pixel_codes": [
+          "CROPPED_OR_MARGIN"
+        ],
+        "style_file": "style-fusion.json",
+        "style_sha256": "557d5e7843d22cd973a26af0313c366cff37db9353cc83915d2a2a71fa20d6be",
+        "review_page": "art/review/fusion/index.html",
+        "instruction": "Only owner may set true; resolve pixel rejections first. Approval covers exact source bytes only."
+      },
+      "v2-fusion-cars-bulwark-v1": {
+        "owner_approved": true,
+        "source_sha256": "59f406468e6050fe009745870bd20462b9d4ec37813523f1c5764c6f31c4439e",
+        "owner_evidence": "2026-10-02, OWNER-CHOICE.md section C: \"Approved the art direction, looks very solid. For cars.\" The executing owner instruction explicitly records approval for Line, Bastion, Trail, Flint, Vandal and Bulwark, which were not requested to change. Reviewed exact image: art/review/fusion/sources/v2-fusion-cars-bulwark-v1.jpg",
+        "candidate_source": "art/review/fusion/sources/v2-fusion-cars-bulwark-v1.jpg",
+        "processed_sha256": "8aa57e9aaf0b3affda9b8cedf6bf126d83b3ea8a27d4d437b16c40101a3d96cc",
+        "pixel_codes": [],
+        "style_file": "style-fusion.json",
+        "style_sha256": "557d5e7843d22cd973a26af0313c366cff37db9353cc83915d2a2a71fa20d6be",
+        "review_page": "art/review/fusion/index.html",
+        "instruction": "Only owner may set true; resolve pixel rejections first. Approval covers exact source bytes only.",
+        "approved_at": "2026-10-02",
+        "owner_evidence_file": "art/OWNER-CHOICE.md#c-car-reference-review-owner-2026-10-02"
+      },
+      "v2-part3-rework-needle-v1": {
+        "owner_approved": false,
+        "source_sha256": "b03a72a9338ceb843abe7d21837d7b70f9b8abb63054590cf9cb75c18b27b9a2",
+        "owner_evidence": null,
+        "candidate_source": "art/review/fusion/sources/v2-part3-rework-needle-v1.jpg",
+        "processed_sha256": "e393ccd8069395f17d859dbe388eb2d7d7d25f0b1d3460741c56cc9e701d8559",
+        "pixel_codes": [],
+        "style_file": "style-fusion.json",
+        "style_sha256": "557d5e7843d22cd973a26af0313c366cff37db9353cc83915d2a2a71fa20d6be",
+        "review_page": "art/review/fusion/index.html",
+        "instruction": "Part 3 owner rework candidate; exact-source owner approval required before derived generation."
+      },
+      "v2-part3-rework-comet-v1": {
+        "owner_approved": false,
+        "source_sha256": "754ac11db79180719efb89c62d0bca79efd3590e2aadc758f37bb6dbef0e253b",
+        "owner_evidence": null,
+        "candidate_source": "art/review/fusion/sources/v2-part3-rework-comet-v1.jpg",
+        "processed_sha256": "72c5c0d2eddd7efaf7527695fe16621034c3da37f18f52236cd086ef288d72d4",
+        "pixel_codes": [
+          "CROPPED_OR_MARGIN"
+        ],
+        "style_file": "style-fusion.json",
+        "style_sha256": "557d5e7843d22cd973a26af0313c366cff37db9353cc83915d2a2a71fa20d6be",
+        "review_page": "art/review/fusion/index.html",
+        "instruction": "Part 3 owner rework candidate; exact-source owner approval required before derived generation."
+      },
+      "v2-part3-rework-quill-v2": {
+        "owner_approved": false,
+        "source_sha256": "50b3a9df92d64c24d3795918e6eaae078e37ab2a1b9f615bd66ea630ef39e4e4",
+        "owner_evidence": null,
+        "candidate_source": "art/review/fusion/sources/v2-part3-rework-quill-v2.jpg",
+        "processed_sha256": "f840ac53d34e68ba5e1e9af712a92b3ababc424e0d7184ef91907aa4d61f4bc4",
+        "pixel_codes": [],
+        "style_file": "style-fusion.json",
+        "style_sha256": "557d5e7843d22cd973a26af0313c366cff37db9353cc83915d2a2a71fa20d6be",
+        "review_page": "art/review/fusion/index.html",
+        "instruction": "Part 3 owner rework candidate; exact-source owner approval required before derived generation."
+      },
+      "v2-part3-rework-kestrel-v3": {
+        "owner_approved": false,
+        "source_sha256": "0252116d9d88498af123688e34d9ed1371155de8e3cacc26ba69433f59c70cfb",
+        "owner_evidence": null,
+        "candidate_source": "art/review/fusion/sources/v2-part3-rework-kestrel-v3.jpg",
+        "processed_sha256": "a263ded858dba61e7807a302244ec24ea2e12f42cf1b56719b49c0735554d6cf",
+        "pixel_codes": [
+          "CROPPED_OR_MARGIN",
+          "ASPECT_BAND"
+        ],
+        "style_file": "style-fusion.json",
+        "style_sha256": "557d5e7843d22cd973a26af0313c366cff37db9353cc83915d2a2a71fa20d6be",
+        "review_page": "art/review/fusion/index.html",
+        "instruction": "Part 3 owner rework candidate; exact-source owner approval required before derived generation."
+      }
+    }
+  },
+  "retained_candidates": [
+    "v2-part3-rework-needle-v1",
+    "v2-part3-rework-quill-v2"
+  ],
+  "prior_failures": [
+    {
+      "id": "v2-part3-rework-needle-v1-a1",
+      "source_sha256": "b03a72a9338ceb843abe7d21837d7b70f9b8abb63054590cf9cb75c18b27b9a2",
+      "metrics": {
+        "foreground_fraction": 0.2064361572265625,
+        "source_size_px": [
+          1024,
+          1024
+        ],
+        "bounds_px": [
+          92,
+          275,
+          980,
+          749
+        ],
+        "margin_fraction": 0.04296875,
+        "aspect": 1.8734177215189873,
+        "expected_aspect": 2.1999999999999997,
+        "aspect_relative_error": 0.14844649021864198,
+        "principal_axis_degrees": 0.1483519561836891,
+        "estimated_key_rgb": [
+          217.0,
+          51.0,
+          156.0
+        ],
+        "magenta_key": true,
+        "mixed_border_key": false,
+        "components": 1,
+        "palette_mean_delta_e": 12.498074572194408,
+        "palette_p90_delta_e": 20.41709604801928
+      },
+      "codes": []
+    },
+    {
+      "id": "v2-part3-rework-comet-v1-a1",
+      "source_sha256": "754ac11db79180719efb89c62d0bca79efd3590e2aadc758f37bb6dbef0e253b",
+      "metrics": {
+        "foreground_fraction": 0.27474021911621094,
+        "source_size_px": [
+          1024,
+          1024
+        ],
+        "bounds_px": [
+          37,
+          272,
+          1011,
+          751
+        ],
+        "margin_fraction": 0.0126953125,
+        "aspect": 2.0334029227557413,
+        "expected_aspect": 2.5714285714285716,
+        "aspect_relative_error": 0.20923219670610071,
+        "principal_axis_degrees": 0.12433395934266239,
+        "estimated_key_rgb": [
+          210.0,
+          31.0,
+          186.0
+        ],
+        "magenta_key": true,
+        "mixed_border_key": false,
+        "components": 1,
+        "palette_mean_delta_e": 5.335493854381123,
+        "palette_p90_delta_e": 9.732767095477955
+      },
+      "codes": [
+        "CROPPED_OR_MARGIN"
+      ]
+    },
+    {
+      "id": "v2-part3-rework-comet-v2-a1",
+      "source_sha256": "cd3c421c41f716ce4f8c96402f2b4b6c16f66b129aca3606766601076d251bb0",
+      "metrics": {
+        "foreground_fraction": 0.23324298858642578,
+        "source_size_px": [
+          1024,
+          1024
+        ],
+        "bounds_px": [
+          68,
+          258,
+          996,
+          763
+        ],
+        "margin_fraction": 0.02734375,
+        "aspect": 1.8376237623762377,
+        "expected_aspect": 2.5714285714285716,
+        "aspect_relative_error": 0.28536853685368535,
+        "principal_axis_degrees": 0.04664978594793456,
+        "estimated_key_rgb": [
+          234.0,
+          106.0,
+          180.0
+        ],
+        "magenta_key": true,
+        "mixed_border_key": false,
+        "components": 1,
+        "palette_mean_delta_e": 5.430194447262828,
+        "palette_p90_delta_e": 9.691244475166854
+      },
+      "codes": [
+        "CROPPED_OR_MARGIN",
+        "ASPECT_BAND"
+      ]
+    },
+    {
+      "id": "v2-part3-rework-comet-v3-a1",
+      "source_sha256": "ec110d21608cee971b5854efc34f70e3ef752d8df67ca487823c71a8caab4876",
+      "metrics": {
+        "foreground_fraction": 0.336181640625,
+        "source_size_px": [
+          1024,
+          1024
+        ],
+        "bounds_px": [
+          73,
+          243,
+          1007,
+          771
+        ],
+        "margin_fraction": 0.0166015625,
+        "aspect": 1.768939393939394,
+        "expected_aspect": 2.5714285714285716,
+        "aspect_relative_error": 0.31207912457912457,
+        "principal_axis_degrees": 0.0596261676711555,
+        "estimated_key_rgb": [
+          242.0,
+          64.0,
+          180.0
+        ],
+        "magenta_key": true,
+        "mixed_border_key": false,
+        "components": 1,
+        "palette_mean_delta_e": 5.216103934783695,
+        "palette_p90_delta_e": 10.441445206597589
+      },
+      "codes": [
+        "CROPPED_OR_MARGIN",
+        "ASPECT_BAND"
+      ]
+    },
+    {
+      "id": "v2-part3-rework-quill-v1-a1",
+      "source_sha256": "62f6f225f6d3621dbdf4f7058aa711758555f12d31da40dc763654eb166dfd31",
+      "metrics": {
+        "foreground_fraction": 0.2552356719970703,
+        "source_size_px": [
+          1024,
+          1024
+        ],
+        "bounds_px": [
+          41,
+          275,
+          1009,
+          747
+        ],
+        "margin_fraction": 0.0146484375,
+        "aspect": 2.0508474576271185,
+        "expected_aspect": 2.09375,
+        "aspect_relative_error": 0.020490766506450875,
+        "principal_axis_degrees": 0.03941587378218619,
+        "estimated_key_rgb": [
+          240.0,
+          79.0,
+          211.0
+        ],
+        "magenta_key": true,
+        "mixed_border_key": false,
+        "components": 1,
+        "palette_mean_delta_e": 5.27540431106455,
+        "palette_p90_delta_e": 10.41577704776865
+      },
+      "codes": [
+        "CROPPED_OR_MARGIN"
+      ]
+    },
+    {
+      "id": "v2-part3-rework-quill-v2-a1",
+      "source_sha256": "50b3a9df92d64c24d3795918e6eaae078e37ab2a1b9f615bd66ea630ef39e4e4",
+      "metrics": {
+        "foreground_fraction": 0.24648094177246094,
+        "source_size_px": [
+          1024,
+          1024
+        ],
+        "bounds_px": [
+          77,
+          281,
+          969,
+          739
+        ],
+        "margin_fraction": 0.0537109375,
+        "aspect": 1.9475982532751093,
+        "expected_aspect": 2.09375,
+        "aspect_relative_error": 0.0698038193312911,
+        "principal_axis_degrees": 0.04780710439262456,
+        "estimated_key_rgb": [
+          199.0,
+          44.0,
+          133.0
+        ],
+        "magenta_key": true,
+        "mixed_border_key": false,
+        "components": 1,
+        "palette_mean_delta_e": 6.184403521973952,
+        "palette_p90_delta_e": 10.295376902157003
+      },
+      "codes": []
+    },
+    {
+      "id": "v2-part3-rework-kestrel-v1-a1",
+      "source_sha256": "25b312317d8d3d96d575f4bdc8e6164e6421c4d345d7c43ddc8696b8ea908716",
+      "metrics": {
+        "foreground_fraction": 0.1857900619506836,
+        "source_size_px": [
+          1024,
+          1024
+        ],
+        "bounds_px": [
+          72,
+          298,
+          1007,
+          725
+        ],
+        "margin_fraction": 0.0166015625,
+        "aspect": 2.189695550351288,
+        "expected_aspect": 2.772727272727273,
+        "aspect_relative_error": 0.21027373593887977,
+        "principal_axis_degrees": 1.5250838590333011,
+        "estimated_key_rgb": [
+          243.0,
+          70.0,
+          246.0
+        ],
+        "magenta_key": true,
+        "mixed_border_key": false,
+        "components": 1,
+        "palette_mean_delta_e": 7.475084396502001,
+        "palette_p90_delta_e": 12.7637111866595
+      },
+      "codes": [
+        "CROPPED_OR_MARGIN"
+      ]
+    },
+    {
+      "id": "v2-part3-rework-kestrel-v2-a1",
+      "source_sha256": "e93d999994341c53718f595baad9426bb23625b756cf0a021d98ce4d301c93b2",
+      "metrics": {
+        "foreground_fraction": 0.2007131576538086,
+        "source_size_px": [
+          1024,
+          1024
+        ],
+        "bounds_px": [
+          67,
+          316,
+          985,
+          707
+        ],
+        "margin_fraction": 0.0380859375,
+        "aspect": 2.347826086956522,
+        "expected_aspect": 2.772727272727273,
+        "aspect_relative_error": 0.15324305060584464,
+        "principal_axis_degrees": 0.04957641140675695,
+        "estimated_key_rgb": [
+          235.0,
+          80.0,
+          182.0
+        ],
+        "magenta_key": true,
+        "mixed_border_key": false,
+        "components": 1,
+        "palette_mean_delta_e": 5.684522984719884,
+        "palette_p90_delta_e": 9.872984269862974
+      },
+      "codes": []
+    },
+    {
+      "id": "v2-part3-rework-kestrel-v3-a1",
+      "source_sha256": "0252116d9d88498af123688e34d9ed1371155de8e3cacc26ba69433f59c70cfb",
+      "metrics": {
+        "foreground_fraction": 0.2068939208984375,
+        "source_size_px": [
+          1024,
+          1024
+        ],
+        "bounds_px": [
+          60,
+          316,
+          1002,
+          797
+        ],
+        "margin_fraction": 0.021484375,
+        "aspect": 1.9584199584199584,
+        "expected_aspect": 2.772727272727273,
+        "aspect_relative_error": 0.29368460516001504,
+        "principal_axis_degrees": 3.2788228660831717,
+        "estimated_key_rgb": [
+          234.0,
+          83.0,
+          181.0
+        ],
+        "magenta_key": true,
+        "mixed_border_key": false,
+        "components": 1,
+        "palette_mean_delta_e": 5.955552541940156,
+        "palette_p90_delta_e": 10.424495095495068
+      },
+      "codes": [
+        "CROPPED_OR_MARGIN",
+        "ASPECT_BAND"
+      ]
+    }
+  ]
+}

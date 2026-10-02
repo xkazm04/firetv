@@ -71,6 +71,21 @@ class Budget:
         path = self.art / 'usage.json'
         return read_json(path) if path.exists() else {'schema': 1, 'weeks': {}, 'stop': None}
 
+    def attempt_limit(self, asset):
+        slot = re.sub(r'-v\d+$', '', asset)
+        override = self.policy.get('asset_attempt_overrides', {}).get(slot)
+        if override is None:
+            return self.policy.get('max_attempts_per_asset', 3)
+        if not override.get('reason') or not override.get('authorization') or not override.get('audit_file'):
+            raise RuntimeError('ATTEMPT_OVERRIDE_EVIDENCE_REQUIRED: ' + slot)
+        audit = self.art / override['audit_file']
+        if not audit.is_file() or sha(audit) != override.get('audit_sha256'):
+            raise RuntimeError('ATTEMPT_OVERRIDE_AUDIT_MISMATCH: ' + slot)
+        limit = override.get('limit')
+        if type(limit) is not int or limit < 1:
+            raise RuntimeError('INVALID_ATTEMPT_LIMIT: ' + slot)
+        return limit
+
     def reserve(self, asset, attempt):
         with file_lock(self.art / '.budget.lock'):
             usage = self._load()
@@ -78,14 +93,22 @@ class Budget:
                 raise RuntimeError('SPEND_STOP: ' + str(usage['stop']))
             history=self.art/'history.jsonl'
             slot=re.sub(r'-v\d+$','',asset)
-            used=sum(e.get('event')=='reserved' and re.sub(r'-v\d+$','',e.get('asset',''))==slot
-                     for e in (json.loads(line) for line in history.read_text(encoding='utf-8').splitlines())) if history.exists() else 0
-            if used>=self.policy.get('max_attempts_per_asset',3):
+            events=[json.loads(line) for line in history.read_text(encoding='utf-8').splitlines()] if history.exists() else []
+            used=sum(e.get('event')=='reserved' and re.sub(r'-v\d+$','',e.get('asset',''))==slot for e in events)
+            if used>=self.attempt_limit(asset):
                 raise RuntimeError('ASSET_ATTEMPT_CAP across revisions: '+slot)
             week = datetime.now(timezone.utc).strftime('%G-W%V')
             bucket = usage['weeks'].setdefault(week, {'images_reserved': 0, 'videos_reserved': 0})
             if bucket['images_reserved'] >= self.policy['weekly_image_cap']:
                 raise RuntimeError('LOCAL_BUDGET_CAP')
+            for name, envelope in self.policy.get('session_envelopes', {}).items():
+                prefixes=tuple(envelope.get('asset_prefixes', []))
+                if prefixes and not asset.startswith(prefixes):
+                    continue
+                spent=(sum(e.get('event')=='reserved' and e.get('week')==week and e.get('at','')>=envelope['started_at'] and e.get('asset','').startswith(prefixes) for e in events)
+                       if prefixes else bucket['images_reserved']-envelope['starting_reservations'])
+                if envelope['week'] == week and spent >= envelope['max_new_images']:
+                    raise RuntimeError('SESSION_BUDGET_CAP: ' + name)
             bucket['images_reserved'] += 1
             write_json(self.art / 'usage.json', usage)
             append_json(self.art / 'history.jsonl', {'event':'reserved', 'asset':asset, 'attempt':attempt, 'week':week, 'at':now(), 'images':1, 'origin':'grok-cli'})
@@ -151,7 +174,7 @@ def generate(row, style, budget, refine=False):
         raise ValueError('refinement requires a generated image and recorded content rejection; never retry transport errors')
     if refine and rejection.get('image_sha256')!=old[-1].get('sha256'):
         raise ValueError('refinement rejection must name the exact latest image hash')
-    if len(old)>=budget.policy['max_attempts_per_asset']:
+    if len(old)>=budget.attempt_limit(row['id']):
         raise ValueError('attempt cap reached')
     if refine:
         prompt=compile_prompt(row,style,rejection['note'])

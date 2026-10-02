@@ -1,0 +1,98 @@
+[
+  {
+    "id": "v2-part3-rework-kestrel-v9",
+    "class": "Kestrel",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v2-part3-rework-kestrel-v9\\attempt-01\\1.jpg",
+    "source_sha256": "9d9a19f3da81a60464560bc1a409332feed97e5a4027ecb451e7af4ddc237ad5",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-part3-rework-kestrel-v9",
+      "class": "Kestrel",
+      "prompt_action": "DELETE the entire loose gun floating ABOVE the car and delete every blue lightning mark next to that loose gun. Fill that upper area with the same plain magenta background. Keep ONLY the single complete car already below it, including the car-mounted front spear extending to the right. Preserve the car exactly, including its exposed blue-white coil engine, black cockpit, four narrow wheels, dark metal front hood and the single attached centreline spear. Do not redraw or move the car. Do not add any loose object. Output exactly ONE vehicle and nothing else, on empty magenta.",
+      "size": "1536x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "art/raw/v2-part3-rework-kestrel-v8/attempt-01/1.jpg",
+      "batch": "v2-part4-kestrel-single",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "cars",
+      "surface_stack": ""
+    },
+    "verdict": "owner-review",
+    "codes": [],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "metrics": {
+      "foreground_fraction": 0.2132941552638067,
+      "source_size_px": [
+        1248,
+        832
+      ],
+      "bounds_px": [
+        193,
+        223,
+        1141,
+        608
+      ],
+      "margin_fraction": 0.12860576923076922,
+      "aspect": 2.4623376623376623,
+      "expected_aspect": 2.772727272727273,
+      "aspect_relative_error": 0.11194379391100706,
+      "principal_axis_degrees": 0.0302834300960161,
+      "estimated_key_rgb": [
+        234.0,
+        78.0,
+        135.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 5.540803981140435,
+      "palette_p90_delta_e": 9.905210994561024
+    },
+    "placement": {
+      "source_bounds_px": [
+        193,
+        223,
+        1141,
+        608
+      ],
+      "source_pivot_px": [
+        667.0,
+        415.5
+      ],
+      "pivot_px": [
+        128.0,
+        63.5
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        220,
+        89
+      ],
+      "scale": 0.2320675105485232,
+      "world_length_m": 9.15,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v2-part4-kestrel-single\\v2-part3-rework-kestrel-v9.png",
+    "sha256": "c19e05c7ad215f0747547b1d77cf07f530839d10f49707509c7c39d3455ecc52"
+  }
+]

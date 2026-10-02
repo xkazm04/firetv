@@ -48,3 +48,10 @@ Host reading (not the owner's words):
 > Fusion report looks nice, I approve this direction of art
 
 The fusion direction (sections A and B) is confirmed after seeing the fusion review. This approves the **direction**, not individual assets: the four reworked cars (Needle, Comet, Quill, Kestrel) remain unapproved until their exact references are approved, per `V2-REFERENCE-APPROVAL.md`.
+
+## E. Car rework approval (owner, 2026-10-02)
+
+> Approved car reworks
+
+Host reading: the four candidates the part-4 review page presented as selected (`review/fusion/review.json` `part4_selected`): Needle `v2-part3-rework-needle-v1`, Comet `v2-part3-rework-comet-v7`, Quill `v2-part3-rework-quill-v2`, Kestrel `v2-part3-rework-kestrel-v9`. All four pass the pixel gates (`pixel_codes` empty). Recorded in `reference-approvals.json`.
+The 28 derived jobs for them (four damage states and three liveries each) are now unblocked but not yet generated.

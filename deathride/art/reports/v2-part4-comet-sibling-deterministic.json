@@ -1,0 +1,100 @@
+[
+  {
+    "id": "v2-part3-rework-comet-v6",
+    "class": "Comet",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v2-part3-rework-comet-v6\\attempt-01\\1.jpg",
+    "source_sha256": "92f322794b19b765cc5e93053a940429aba3014b2fe97466f3089bc221f49776",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-part3-rework-comet-v6",
+      "class": "Comet",
+      "prompt_action": "Use this approved sibling as a drawing-style and four-wheel construction guide for a NEW original COMET air-turbine racing car. Replace the entire sedan shell: small teardrop black canopy just behind centre, long thin rust-orange wedge nose to RIGHT. Two LARGE round exposed air-turbine intake fans sit side by side on the LEFT rear deck, within a thick reinforced box cradle. The rear third is massive and rectangular; front two thirds taper to a long sharp narrow nose. Four small road wheels, no wings. Total silhouette is 2.7 times longer than wide. ONE SMALL car only, centred like a small catalogue thumbnail in an enormous plain magenta square. Its whole length is half the picture width. The complete nose, rear exhausts and all wheels have wide empty magenta space around them. Redesign the car, do not retain the supplied sedan outline. Top-down roof plan, nose RIGHT, flat neutral material shading.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "art/review/fusion/sources/v2-fusion-cars-line-v1.jpg",
+      "batch": "v2-part4-comet-sibling",
+      "approval": "pending",
+      "requires_approval": "v2-fusion-cars-line-v1",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "cars",
+      "surface_stack": ""
+    },
+    "verdict": "reject",
+    "codes": [
+      "CROPPED_OR_MARGIN"
+    ],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "metrics": {
+      "foreground_fraction": 0.23803138732910156,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        43,
+        214,
+        1012,
+        702
+      ],
+      "margin_fraction": 0.01171875,
+      "aspect": 1.985655737704918,
+      "expected_aspect": 2.5714285714285716,
+      "aspect_relative_error": 0.22780054644808756,
+      "principal_axis_degrees": 1.29415926129081,
+      "estimated_key_rgb": [
+        234.0,
+        19.0,
+        179.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 2,
+      "palette_mean_delta_e": 6.456483105434812,
+      "palette_p90_delta_e": 12.718951863939942
+    },
+    "placement": {
+      "source_bounds_px": [
+        43,
+        214,
+        1012,
+        702
+      ],
+      "source_pivot_px": [
+        527.5,
+        458.0
+      ],
+      "pivot_px": [
+        128.0,
+        63.5
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        216,
+        109
+      ],
+      "scale": 0.22291021671826625,
+      "world_length_m": 9.0,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v2-part4-comet-sibling\\v2-part3-rework-comet-v6.png",
+    "sha256": "92d2cde5d4bacf445619240ffd435179fc734df12a6756fc7e3c0db5c5e95f1d"
+  }
+]

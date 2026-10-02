@@ -10,5 +10,34 @@
   "prior_account_usage": "unknown; owner-approved art-test predates this ledger",
   "owner_raise": "2026-10-01 owner asked for mass Grok use after the weekly reset and for the v2 art direction; cap raised 180 to 350 by the host on that instruction",
   "policy": "Only the owner may raise caps. First quota/rate-limit error latches stop; no automatic retry. Reservations with unknown outcome count as spent.",
-  "owner_raise_2": "2026-10-02 host raised 350 to 550 to cover the four car reworks and the derived damage states and liveries for the six approved cars; the owner asked for mass use of Grok"
+  "owner_raise_2": "2026-10-02 host raised 350 to 550 to cover the four car reworks and the derived damage states and liveries for the six approved cars; the owner asked for mass use of Grok",
+  "asset_attempt_overrides": {
+    "v2-part3-rework-comet": {
+      "limit": 7,
+      "reason": "Three prior calls exhausted: v1 margin 13/1024; v2/v3 also aspect. Four additional maximum calls, starting with framing-only edit of strongest turbine reference.",
+      "authorization": "Executing ART PART 4 owner instruction: raise per-asset attempt ceiling only with a logged reason; keep total new spend under about 120 images.",
+      "audit_file": "audits/v2-part4-attempt-extension.json",
+      "audit_sha256": "1530d4523185dc3b76f64ecf479e8a7fcac7f7f93955eb3df8d611d5e7f687b7"
+    },
+    "v2-part3-rework-kestrel": {
+      "limit": 9,
+      "reason": "Direct actual-96px inspection: Kestrel v7 passes pixels but pale spear blends into broad pale hood, weakening electric-harpoon silhouette. Preserve v7 as a passing candidate. Permit at most two additional targeted geometry edits: remove front hood shoulders around the existing single harpoon, keeping wheel centres, engine and generous frame. No random variants or threshold changes.",
+      "authorization": "Executing ART PART 4 instruction permits per-asset ceiling raises with a logged reason; acceptable gated identity required, not pixel pass alone.",
+      "audit_file": "audits/v2-part4-kestrel-readability-extension.json",
+      "audit_sha256": "14fa02bc8c297447f03f0ce7b391e719fd4269aa688a0f02bdb50a5e6df41ef0"
+    }
+  },
+  "session_envelopes": {
+    "v2-part4": {
+      "week": "2026-W40",
+      "starting_reservations": 401,
+      "max_new_images": 120,
+      "authorization": "Executing ART PART 4 owner instruction: raise per-asset attempt ceiling only with a logged reason; keep total new spend under about 120 images.",
+      "started_at": "2026-10-02T15:36:30.446439+00:00",
+      "asset_prefixes": [
+        "v2-part3-rework-",
+        "v2-part4-"
+      ]
+    }
+  }
 }
