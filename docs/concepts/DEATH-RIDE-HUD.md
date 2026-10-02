@@ -30,6 +30,6 @@ Original work only. One design note, one status row, one session-log entry and o
 | Id | Wave | Status |
 |---|---|---|
 | H0 | Merge art, apply mine 0.5 m and re-balance | complete - clean merge; A3 tuning preserved; 3,120 exact outcome replays; 126 tests and APK green |
-| H1 | HUD inventory and design note | not started |
+| H1 | HUD inventory and design note | complete - TV/phone inventory, 1080p floors, fusion components, 14-image initial kit and fallback plan |
 | H2 | HUD assets and implementation (TV and phone) | not started |
 | H3 | Stick evidence, owner checks | not started |
