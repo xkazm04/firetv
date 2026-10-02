@@ -1,0 +1,201 @@
+{
+  "id": "flint-2",
+  "cue": null,
+  "category": "sfx",
+  "loop": true,
+  "measuredAt": "2026-10-02T21:50:37.479889+00:00",
+  "ownerStatus": "listening pending",
+  "notMeasured": [
+    "semantic fidelity",
+    "owner preference",
+    "in-game masking/latency",
+    "physical Stick playback/memory"
+  ],
+  "provenance": {
+    "sidecar": "audio\\x3\\engines\\raw\\flint-2.mp3.json",
+    "sourceSha256": "6eea8d7ba9ca131540726c57c821f5837aab48a0202319c9841e6e939adb073f",
+    "generatedAt": "2026-10-02T21:48:30.783Z",
+    "request": {
+      "text": "Small engine character proof: compact angry V motor snarl with rattling mounts. Constant low rev body, already running; no ignition, acceleration or fade. Seamless steady bed. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.",
+      "duration_seconds": 2,
+      "prompt_influence": 0.7,
+      "model_id": "eleven_text_to_sound_v2",
+      "loop": true
+    },
+    "budgetCharge": 100,
+    "providerCredits": 20,
+    "session": "x3-2026-10-02",
+    "reused": false
+  },
+  "raw": {
+    "file": "audio/x3/engines/raw/flint-2.mp3",
+    "sha256": "6eea8d7ba9ca131540726c57c821f5837aab48a0202319c9841e6e939adb073f",
+    "bytes": 37242,
+    "status": "fail",
+    "checks": {
+      "decode": true,
+      "duration": false,
+      "loudness": false,
+      "truePeak": false,
+      "silence": true,
+      "clipping": false,
+      "loopSeam": false
+    },
+    "failures": [
+      "duration",
+      "loudness",
+      "truePeak",
+      "clipping",
+      "loopSeam"
+    ],
+    "durationSeconds": 2.25,
+    "durationWindowSeconds": [
+      1.85,
+      2.15
+    ],
+    "sampleRate": 44100,
+    "channels": 2,
+    "decodedFrames": 99225,
+    "decodedBytes": 396900,
+    "integratedLufs": -8.34,
+    "truePeakDbtp": 1.17,
+    "loudnessRangeLu": 0.0,
+    "loudnessTargetLufs": -20,
+    "loudnessToleranceLu": 2,
+    "meterPaddingFrames": 0,
+    "fullScaleSampleCount": 124,
+    "silence": {
+      "thresholdDbfs": -50,
+      "minimumIntervalSeconds": 0.1,
+      "intervalsFrames": [],
+      "fraction": 0.0,
+      "longestInteriorSeconds": 0
+    },
+    "loopSeam": {
+      "status": "fail",
+      "sampleJumpFullScale": 0.03259336203336716,
+      "boundaryRmsStepDb": 3.137822615639219,
+      "spectralCosine": 0.9102369534186039,
+      "windowSeconds": 0.05,
+      "repeatedJoinJumps": [
+        0.03259336203336716,
+        0.03259336203336716
+      ],
+      "cycles": 3,
+      "limits": {
+        "sampleJumpMax": 0.02,
+        "rmsStepMaxDb": 3,
+        "spectralCosineMin": 0.8
+      },
+      "musicalContinuity": "not measured",
+      "humanRepeatedListen": "not measured"
+    },
+    "loopBoundary": {
+      "sampleRate": 44100,
+      "channels": 2,
+      "totalFrames": 99225,
+      "startFrame": 0,
+      "endFrameExclusive": 99225,
+      "preRollFrames": 0,
+      "tailPolicy": "baked overlap; plain full-span repeat"
+    }
+  },
+  "edit": {
+    "operation": "mono resample, DC removal, 125 ms complementary overlap, measured interior rotation",
+    "sourceStartFrame": 1378,
+    "loopFrames": 44100,
+    "overlapFrames": 2756,
+    "rate": 22050,
+    "rotationFrames": 7536,
+    "rotationPolicy": "48 interior candidates, minimum derivative/RMS/spectrum mismatch; no samples replaced",
+    "blurRisk": "Crossfade can blur motor pulses; repeated human listening pending"
+  },
+  "normalization": {
+    "operation": "measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling",
+    "softLimited": false,
+    "additionalCrestCompressionPasses": 0,
+    "gain": 0.31586390484234717,
+    "credits": 0
+  },
+  "edited": {
+    "file": "audio/x3/engines/edited/flint-2.wav",
+    "sha256": "82a10172506fe252f7bf4ccda8415d05244ac83c1043b42db79f46c48761ba0e",
+    "bytes": 88278,
+    "status": "pass",
+    "checks": {
+      "decode": true,
+      "duration": true,
+      "loudness": true,
+      "truePeak": true,
+      "silence": true,
+      "clipping": true,
+      "loopSeam": true
+    },
+    "failures": [],
+    "durationSeconds": 2.0,
+    "durationWindowSeconds": [
+      1.998,
+      2.002
+    ],
+    "sampleRate": 22050,
+    "channels": 1,
+    "decodedFrames": 44100,
+    "decodedBytes": 88200,
+    "integratedLufs": -20.01,
+    "truePeakDbtp": -7.43,
+    "loudnessRangeLu": 0.0,
+    "loudnessTargetLufs": -20,
+    "loudnessToleranceLu": 2,
+    "meterPaddingFrames": 0,
+    "fullScaleSampleCount": 0,
+    "silence": {
+      "thresholdDbfs": -50,
+      "minimumIntervalSeconds": 0.1,
+      "intervalsFrames": [],
+      "fraction": 0.0,
+      "longestInteriorSeconds": 0
+    },
+    "loopSeam": {
+      "status": "pass",
+      "sampleJumpFullScale": 0.000152587890625,
+      "boundaryRmsStepDb": 0.08854540283002083,
+      "spectralCosine": 0.997609523965374,
+      "windowSeconds": 0.05,
+      "repeatedJoinJumps": [
+        0.000152587890625,
+        0.000152587890625
+      ],
+      "cycles": 3,
+      "limits": {
+        "sampleJumpMax": 0.02,
+        "rmsStepMaxDb": 3,
+        "spectralCosineMin": 0.8
+      },
+      "musicalContinuity": "not measured",
+      "humanRepeatedListen": "not measured"
+    },
+    "loopBoundary": {
+      "sampleRate": 22050,
+      "channels": 1,
+      "totalFrames": 44100,
+      "startFrame": 0,
+      "endFrameExclusive": 44100,
+      "preRollFrames": 0,
+      "tailPolicy": "baked overlap; plain full-span repeat"
+    }
+  },
+  "status": "pass",
+  "sourceDefects": [
+    "duration",
+    "loudness",
+    "truePeak",
+    "clipping",
+    "loopSeam"
+  ],
+  "repeat": {
+    "file": "audio/x3/engines/repeats/flint-2-three-cycles.ogg",
+    "sha256": "7c9335d5e859d7424a7e0f90f009da9e5bbeadb84dda12dd659b79a50fadaa29",
+    "cycles": 3,
+    "humanListen": "not measured"
+  }
+}

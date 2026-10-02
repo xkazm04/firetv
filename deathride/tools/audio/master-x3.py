@@ -151,6 +151,11 @@ def main():
         shutil.copyfile(BASE/'acceptance.json',archive/'acceptance.json')
         for folder in ['edited','measurements','repeats']:
             shutil.copytree(BASE/folder,archive/folder)
+        for file in archive.rglob('*.json'):
+            text=file.read_text(encoding='utf-8')
+            for folder in ['edited','repeats']:
+                text=text.replace((BASE/folder).as_posix()+'/',(archive/folder).as_posix()+'/')
+            file.write_text(text,encoding='utf-8',newline='\n')
     rows=[]
     manifest_path=Path('assets/audio/cues.json')
     manifest=json.loads(manifest_path.read_text())

@@ -1,0 +1,32 @@
+{
+  "id": "7b1d8c38-abca-474b-95b5-a66f54b938b0",
+  "ts": "2026-10-02T21:47:20.525Z",
+  "session": "x3-2026-10-02",
+  "status": "complete",
+  "kind": "sfx",
+  "out": "audio/x3/engines/raw/line-2.mp3",
+  "seconds": 2,
+  "request": {
+    "text": "Small engine character proof: chunky midrange twin pulse and rattling intake. Constant low rev body, already running; no ignition, acceleration or fade. Seamless steady bed. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.",
+    "duration_seconds": 2,
+    "prompt_influence": 0.7,
+    "model_id": "eleven_text_to_sound_v2",
+    "loop": true
+  },
+  "endpoint": "/v1/sound-generation",
+  "format": "mp3_44100_128",
+  "estimatedCredits": 100,
+  "budgetCharge": 100,
+  "creditsBefore": 24273,
+  "accountTier": "starter",
+  "reserve": 8000,
+  "sessionCap": 9000,
+  "bytes": 37242,
+  "providerCredits": 20,
+  "sha256": "ee05438e32f35bd4ea7a777696101d8458201b3728e412f3d5f572a19d77ac50",
+  "completedAt": "2026-10-02T21:47:24.317Z",
+  "creditsAfter": 24273,
+  "observedAccountDelta": 0,
+  "spendBasis": "Provider character-cost response header; account delta separately reported.",
+  "sessionBudgetUsed": 3840
+}

@@ -49,7 +49,7 @@ Original work only. The ElevenLabs key never enters the repo or the logs. One de
 | X3 | After the owner's pick | authorized by OWNER-AUDIO-CHOICE.md; executing six waves |
 | X3.1 | Bible, cue data, seam repair plan | complete — [design](deathride/X3-1-audio-contract.md); 62 cue contracts, zero spend |
 | X3.2 | Effects and deterministic acceptance | complete — [design](deathride/X3-2-effects.md); 34 new + 6 reused, 40 final signal passes, first failures retained; charge 3,440 |
-| X3.3 | Ten-class engine triage | pending; proof clips only |
+| X3.3 | Ten-class engine triage | complete — [design](deathride/X3-3-engine-triage.md); 20 short proofs, no production picks; charge 2,000 |
 | X3.4 | Announcer and Mechanic lines | pending |
 | X3.5 | Runtime cue service and build | pending |
 | X3.6 | Full-song proof/research and reset cost plan | pending; at most one proof |

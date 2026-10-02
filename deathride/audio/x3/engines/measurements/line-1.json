@@ -1,0 +1,197 @@
+{
+  "id": "line-1",
+  "cue": null,
+  "category": "sfx",
+  "loop": true,
+  "measuredAt": "2026-10-02T21:50:33.652786+00:00",
+  "ownerStatus": "listening pending",
+  "notMeasured": [
+    "semantic fidelity",
+    "owner preference",
+    "in-game masking/latency",
+    "physical Stick playback/memory"
+  ],
+  "provenance": {
+    "sidecar": "audio\\x3\\engines\\raw\\line-1.mp3.json",
+    "sourceSha256": "8c0765bb150452a80e7127aa766373a2694acc7c29b5e011ecf2c88b656aa9a2",
+    "generatedAt": "2026-10-02T21:47:15.420Z",
+    "request": {
+      "text": "Small engine character proof: uneven old coupe throb with worn valve chatter. Constant low rev body, already running; no ignition, acceleration or fade. Seamless steady bed. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.",
+      "duration_seconds": 2,
+      "prompt_influence": 0.7,
+      "model_id": "eleven_text_to_sound_v2",
+      "loop": true
+    },
+    "budgetCharge": 100,
+    "providerCredits": 20,
+    "session": "x3-2026-10-02",
+    "reused": false
+  },
+  "raw": {
+    "file": "audio/x3/engines/raw/line-1.mp3",
+    "sha256": "8c0765bb150452a80e7127aa766373a2694acc7c29b5e011ecf2c88b656aa9a2",
+    "bytes": 37242,
+    "status": "fail",
+    "checks": {
+      "decode": true,
+      "duration": false,
+      "loudness": false,
+      "truePeak": true,
+      "silence": true,
+      "clipping": true,
+      "loopSeam": false
+    },
+    "failures": [
+      "duration",
+      "loudness",
+      "loopSeam"
+    ],
+    "durationSeconds": 2.25,
+    "durationWindowSeconds": [
+      1.85,
+      2.15
+    ],
+    "sampleRate": 44100,
+    "channels": 2,
+    "decodedFrames": 99225,
+    "decodedBytes": 396900,
+    "integratedLufs": -12.2,
+    "truePeakDbtp": -2.88,
+    "loudnessRangeLu": 0.0,
+    "loudnessTargetLufs": -20,
+    "loudnessToleranceLu": 2,
+    "meterPaddingFrames": 0,
+    "fullScaleSampleCount": 0,
+    "silence": {
+      "thresholdDbfs": -50,
+      "minimumIntervalSeconds": 0.1,
+      "intervalsFrames": [],
+      "fraction": 0.0,
+      "longestInteriorSeconds": 0
+    },
+    "loopSeam": {
+      "status": "fail",
+      "sampleJumpFullScale": 0.053328102454543114,
+      "boundaryRmsStepDb": 1.0195140071826296,
+      "spectralCosine": 0.9919565243842242,
+      "windowSeconds": 0.05,
+      "repeatedJoinJumps": [
+        0.053328102454543114,
+        0.053328102454543114
+      ],
+      "cycles": 3,
+      "limits": {
+        "sampleJumpMax": 0.02,
+        "rmsStepMaxDb": 3,
+        "spectralCosineMin": 0.8
+      },
+      "musicalContinuity": "not measured",
+      "humanRepeatedListen": "not measured"
+    },
+    "loopBoundary": {
+      "sampleRate": 44100,
+      "channels": 2,
+      "totalFrames": 99225,
+      "startFrame": 0,
+      "endFrameExclusive": 99225,
+      "preRollFrames": 0,
+      "tailPolicy": "baked overlap; plain full-span repeat"
+    }
+  },
+  "edit": {
+    "operation": "mono resample, DC removal, 125 ms complementary overlap, measured interior rotation",
+    "sourceStartFrame": 1378,
+    "loopFrames": 44100,
+    "overlapFrames": 2756,
+    "rate": 22050,
+    "rotationFrames": 5610,
+    "rotationPolicy": "48 interior candidates, minimum derivative/RMS/spectrum mismatch; no samples replaced",
+    "blurRisk": "Crossfade can blur motor pulses; repeated human listening pending"
+  },
+  "normalization": {
+    "operation": "measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling",
+    "softLimited": false,
+    "additionalCrestCompressionPasses": 0,
+    "gain": 0.44106236312143693,
+    "credits": 0
+  },
+  "edited": {
+    "file": "audio/x3/engines/edited/line-1.wav",
+    "sha256": "ba34cf46e2b8689324065cf587274f1b3a65e6c2b8c3753ae30cf926dafddfd0",
+    "bytes": 88278,
+    "status": "pass",
+    "checks": {
+      "decode": true,
+      "duration": true,
+      "loudness": true,
+      "truePeak": true,
+      "silence": true,
+      "clipping": true,
+      "loopSeam": true
+    },
+    "failures": [],
+    "durationSeconds": 2.0,
+    "durationWindowSeconds": [
+      1.998,
+      2.002
+    ],
+    "sampleRate": 22050,
+    "channels": 1,
+    "decodedFrames": 44100,
+    "decodedBytes": 88200,
+    "integratedLufs": -19.99,
+    "truePeakDbtp": -8.41,
+    "loudnessRangeLu": 0.0,
+    "loudnessTargetLufs": -20,
+    "loudnessToleranceLu": 2,
+    "meterPaddingFrames": 0,
+    "fullScaleSampleCount": 0,
+    "silence": {
+      "thresholdDbfs": -50,
+      "minimumIntervalSeconds": 0.1,
+      "intervalsFrames": [],
+      "fraction": 0.0,
+      "longestInteriorSeconds": 0
+    },
+    "loopSeam": {
+      "status": "pass",
+      "sampleJumpFullScale": 6.103515625e-05,
+      "boundaryRmsStepDb": 0.031800704481647846,
+      "spectralCosine": 0.9980504455927585,
+      "windowSeconds": 0.05,
+      "repeatedJoinJumps": [
+        6.103515625e-05,
+        6.103515625e-05
+      ],
+      "cycles": 3,
+      "limits": {
+        "sampleJumpMax": 0.02,
+        "rmsStepMaxDb": 3,
+        "spectralCosineMin": 0.8
+      },
+      "musicalContinuity": "not measured",
+      "humanRepeatedListen": "not measured"
+    },
+    "loopBoundary": {
+      "sampleRate": 22050,
+      "channels": 1,
+      "totalFrames": 44100,
+      "startFrame": 0,
+      "endFrameExclusive": 44100,
+      "preRollFrames": 0,
+      "tailPolicy": "baked overlap; plain full-span repeat"
+    }
+  },
+  "status": "pass",
+  "sourceDefects": [
+    "duration",
+    "loudness",
+    "loopSeam"
+  ],
+  "repeat": {
+    "file": "audio/x3/engines/repeats/line-1-three-cycles.ogg",
+    "sha256": "dee8861ef121297b0e6db57350f63cf5b283bbb0b7d0dd13b5e10d4685353a1b",
+    "cycles": 3,
+    "humanListen": "not measured"
+  }
+}

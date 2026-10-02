@@ -1,0 +1,4000 @@
+{
+  "protocol": "deathride-x3-screen-v1",
+  "wave": "engines",
+  "at": "2026-10-02T21:50:41.325281+00:00",
+  "sampleRate": 22050,
+  "ffmpegVersion": "ffmpeg version 2025-02-17-git-b92577405b-essentials_build-www.gyan.dev Copyright (c) 2000-2025 the FFmpeg developers",
+  "notes": "Original failures retained. Edited duration based on reproducible trim recipe; thresholds fixed in bible before edits. Short-clip meter padding disclosed.",
+  "samples": [
+    {
+      "id": "needle-1",
+      "cue": null,
+      "category": "sfx",
+      "loop": true,
+      "measuredAt": "2026-10-02T21:50:32.810281+00:00",
+      "ownerStatus": "listening pending",
+      "notMeasured": [
+        "semantic fidelity",
+        "owner preference",
+        "in-game masking/latency",
+        "physical Stick playback/memory"
+      ],
+      "provenance": {
+        "sidecar": "audio\\x3\\engines\\raw\\needle-1.mp3.json",
+        "sourceSha256": "999a1a219fd3bd5439956a1207b81155c2a7581f90d8757e17ebd1a9711e05f9",
+        "generatedAt": "2026-10-02T21:47:04.915Z",
+        "request": {
+          "text": "Small engine character proof: small strained single-cylinder buzz with papery exhaust. Constant low rev body, already running; no ignition, acceleration or fade. Seamless steady bed. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.",
+          "duration_seconds": 2,
+          "prompt_influence": 0.7,
+          "model_id": "eleven_text_to_sound_v2",
+          "loop": true
+        },
+        "budgetCharge": 100,
+        "providerCredits": 20,
+        "session": "x3-2026-10-02",
+        "reused": false
+      },
+      "raw": {
+        "file": "audio/x3/engines/raw/needle-1.mp3",
+        "sha256": "999a1a219fd3bd5439956a1207b81155c2a7581f90d8757e17ebd1a9711e05f9",
+        "bytes": 37242,
+        "status": "fail",
+        "checks": {
+          "decode": true,
+          "duration": false,
+          "loudness": false,
+          "truePeak": false,
+          "silence": true,
+          "clipping": false,
+          "loopSeam": false
+        },
+        "failures": [
+          "duration",
+          "loudness",
+          "truePeak",
+          "clipping",
+          "loopSeam"
+        ],
+        "durationSeconds": 2.25,
+        "durationWindowSeconds": [
+          1.85,
+          2.15
+        ],
+        "sampleRate": 44100,
+        "channels": 2,
+        "decodedFrames": 99225,
+        "decodedBytes": 396900,
+        "integratedLufs": -6.29,
+        "truePeakDbtp": 0.68,
+        "loudnessRangeLu": 0.0,
+        "loudnessTargetLufs": -20,
+        "loudnessToleranceLu": 2,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 17,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [],
+          "fraction": 0.0,
+          "longestInteriorSeconds": 0
+        },
+        "loopSeam": {
+          "status": "fail",
+          "sampleJumpFullScale": 0.20006117783486843,
+          "boundaryRmsStepDb": 1.0546603654056785,
+          "spectralCosine": 0.9941679107643023,
+          "windowSeconds": 0.05,
+          "repeatedJoinJumps": [
+            0.20006117783486843,
+            0.20006117783486843
+          ],
+          "cycles": 3,
+          "limits": {
+            "sampleJumpMax": 0.02,
+            "rmsStepMaxDb": 3,
+            "spectralCosineMin": 0.8
+          },
+          "musicalContinuity": "not measured",
+          "humanRepeatedListen": "not measured"
+        },
+        "loopBoundary": {
+          "sampleRate": 44100,
+          "channels": 2,
+          "totalFrames": 99225,
+          "startFrame": 0,
+          "endFrameExclusive": 99225,
+          "preRollFrames": 0,
+          "tailPolicy": "baked overlap; plain full-span repeat"
+        }
+      },
+      "edit": {
+        "operation": "mono resample, DC removal, 125 ms complementary overlap, measured interior rotation",
+        "sourceStartFrame": 1378,
+        "loopFrames": 44100,
+        "overlapFrames": 2756,
+        "rate": 22050,
+        "rotationFrames": 21621,
+        "rotationPolicy": "48 interior candidates, minimum derivative/RMS/spectrum mismatch; no samples replaced",
+        "blurRisk": "Crossfade can blur motor pulses; repeated human listening pending"
+      },
+      "normalization": {
+        "operation": "measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling",
+        "softLimited": false,
+        "additionalCrestCompressionPasses": 0,
+        "gain": 0.22310022074819555,
+        "credits": 0
+      },
+      "edited": {
+        "file": "audio/x3/engines/edited/needle-1.wav",
+        "sha256": "0f4a78453156ecde6239a31e4829bb2d3da20e7ee996e4c2ea8d9f450369ce26",
+        "bytes": 88278,
+        "status": "pass",
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": true,
+          "truePeak": true,
+          "silence": true,
+          "clipping": true,
+          "loopSeam": true
+        },
+        "failures": [],
+        "durationSeconds": 2.0,
+        "durationWindowSeconds": [
+          1.998,
+          2.002
+        ],
+        "sampleRate": 22050,
+        "channels": 1,
+        "decodedFrames": 44100,
+        "decodedBytes": 88200,
+        "integratedLufs": -20.01,
+        "truePeakDbtp": -10.66,
+        "loudnessRangeLu": 0.0,
+        "loudnessTargetLufs": -20,
+        "loudnessToleranceLu": 2,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 0,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [],
+          "fraction": 0.0,
+          "longestInteriorSeconds": 0
+        },
+        "loopSeam": {
+          "status": "pass",
+          "sampleJumpFullScale": 9.1552734375e-05,
+          "boundaryRmsStepDb": 0.01601662302080315,
+          "spectralCosine": 0.9956411477978583,
+          "windowSeconds": 0.05,
+          "repeatedJoinJumps": [
+            9.1552734375e-05,
+            9.1552734375e-05
+          ],
+          "cycles": 3,
+          "limits": {
+            "sampleJumpMax": 0.02,
+            "rmsStepMaxDb": 3,
+            "spectralCosineMin": 0.8
+          },
+          "musicalContinuity": "not measured",
+          "humanRepeatedListen": "not measured"
+        },
+        "loopBoundary": {
+          "sampleRate": 22050,
+          "channels": 1,
+          "totalFrames": 44100,
+          "startFrame": 0,
+          "endFrameExclusive": 44100,
+          "preRollFrames": 0,
+          "tailPolicy": "baked overlap; plain full-span repeat"
+        }
+      },
+      "status": "pass",
+      "sourceDefects": [
+        "duration",
+        "loudness",
+        "truePeak",
+        "clipping",
+        "loopSeam"
+      ],
+      "repeat": {
+        "file": "audio/x3/engines/repeats/needle-1-three-cycles.ogg",
+        "sha256": "9c98cf705f216648047fab09e2a195d8a09017581e8a72825e821b0e45688c1d",
+        "cycles": 3,
+        "humanListen": "not measured"
+      }
+    },
+    {
+      "id": "needle-2",
+      "cue": null,
+      "category": "sfx",
+      "loop": true,
+      "measuredAt": "2026-10-02T21:50:33.230138+00:00",
+      "ownerStatus": "listening pending",
+      "notMeasured": [
+        "semantic fidelity",
+        "owner preference",
+        "in-game masking/latency",
+        "physical Stick playback/memory"
+      ],
+      "provenance": {
+        "sidecar": "audio\\x3\\engines\\raw\\needle-2.mp3.json",
+        "sourceSha256": "c7d85b84132f37ea9e662a759e0599c66e3cb09eeae525ee5cb96394ef14fddb",
+        "generatedAt": "2026-10-02T21:47:10.141Z",
+        "request": {
+          "text": "Small engine character proof: thin racing rasp with loose high mechanical chatter. Constant low rev body, already running; no ignition, acceleration or fade. Seamless steady bed. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.",
+          "duration_seconds": 2,
+          "prompt_influence": 0.7,
+          "model_id": "eleven_text_to_sound_v2",
+          "loop": true
+        },
+        "budgetCharge": 100,
+        "providerCredits": 20,
+        "session": "x3-2026-10-02",
+        "reused": false
+      },
+      "raw": {
+        "file": "audio/x3/engines/raw/needle-2.mp3",
+        "sha256": "c7d85b84132f37ea9e662a759e0599c66e3cb09eeae525ee5cb96394ef14fddb",
+        "bytes": 37242,
+        "status": "fail",
+        "checks": {
+          "decode": true,
+          "duration": false,
+          "loudness": false,
+          "truePeak": false,
+          "silence": true,
+          "clipping": false,
+          "loopSeam": false
+        },
+        "failures": [
+          "duration",
+          "loudness",
+          "truePeak",
+          "clipping",
+          "loopSeam"
+        ],
+        "durationSeconds": 2.25,
+        "durationWindowSeconds": [
+          1.85,
+          2.15
+        ],
+        "sampleRate": 44100,
+        "channels": 2,
+        "decodedFrames": 99225,
+        "decodedBytes": 396900,
+        "integratedLufs": -4.39,
+        "truePeakDbtp": 1.01,
+        "loudnessRangeLu": 0.0,
+        "loudnessTargetLufs": -20,
+        "loudnessToleranceLu": 2,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 96,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [],
+          "fraction": 0.0,
+          "longestInteriorSeconds": 0
+        },
+        "loopSeam": {
+          "status": "fail",
+          "sampleJumpFullScale": 0.3561164289712906,
+          "boundaryRmsStepDb": 0.49579543875298443,
+          "spectralCosine": 0.9994476575355566,
+          "windowSeconds": 0.05,
+          "repeatedJoinJumps": [
+            0.3561164289712906,
+            0.3561164289712906
+          ],
+          "cycles": 3,
+          "limits": {
+            "sampleJumpMax": 0.02,
+            "rmsStepMaxDb": 3,
+            "spectralCosineMin": 0.8
+          },
+          "musicalContinuity": "not measured",
+          "humanRepeatedListen": "not measured"
+        },
+        "loopBoundary": {
+          "sampleRate": 44100,
+          "channels": 2,
+          "totalFrames": 99225,
+          "startFrame": 0,
+          "endFrameExclusive": 99225,
+          "preRollFrames": 0,
+          "tailPolicy": "baked overlap; plain full-span repeat"
+        }
+      },
+      "edit": {
+        "operation": "mono resample, DC removal, 125 ms complementary overlap, measured interior rotation",
+        "sourceStartFrame": 1378,
+        "loopFrames": 44100,
+        "overlapFrames": 2756,
+        "rate": 22050,
+        "rotationFrames": 32809,
+        "rotationPolicy": "48 interior candidates, minimum derivative/RMS/spectrum mismatch; no samples replaced",
+        "blurRisk": "Crossfade can blur motor pulses; repeated human listening pending"
+      },
+      "normalization": {
+        "operation": "measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling",
+        "softLimited": false,
+        "additionalCrestCompressionPasses": 0,
+        "gain": 0.1753880501841761,
+        "credits": 0
+      },
+      "edited": {
+        "file": "audio/x3/engines/edited/needle-2.wav",
+        "sha256": "b49916230df298f6ad76a0d801e43a8da3d569cc59d1181fe079621a2a169106",
+        "bytes": 88278,
+        "status": "pass",
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": true,
+          "truePeak": true,
+          "silence": true,
+          "clipping": true,
+          "loopSeam": true
+        },
+        "failures": [],
+        "durationSeconds": 2.0,
+        "durationWindowSeconds": [
+          1.998,
+          2.002
+        ],
+        "sampleRate": 22050,
+        "channels": 1,
+        "decodedFrames": 44100,
+        "decodedBytes": 88200,
+        "integratedLufs": -20.0,
+        "truePeakDbtp": -12.04,
+        "loudnessRangeLu": 0.0,
+        "loudnessTargetLufs": -20,
+        "loudnessToleranceLu": 2,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 0,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [],
+          "fraction": 0.0,
+          "longestInteriorSeconds": 0
+        },
+        "loopSeam": {
+          "status": "pass",
+          "sampleJumpFullScale": 0.0,
+          "boundaryRmsStepDb": 0.06504240109857988,
+          "spectralCosine": 0.9993478421728522,
+          "windowSeconds": 0.05,
+          "repeatedJoinJumps": [
+            0.0,
+            0.0
+          ],
+          "cycles": 3,
+          "limits": {
+            "sampleJumpMax": 0.02,
+            "rmsStepMaxDb": 3,
+            "spectralCosineMin": 0.8
+          },
+          "musicalContinuity": "not measured",
+          "humanRepeatedListen": "not measured"
+        },
+        "loopBoundary": {
+          "sampleRate": 22050,
+          "channels": 1,
+          "totalFrames": 44100,
+          "startFrame": 0,
+          "endFrameExclusive": 44100,
+          "preRollFrames": 0,
+          "tailPolicy": "baked overlap; plain full-span repeat"
+        }
+      },
+      "status": "pass",
+      "sourceDefects": [
+        "duration",
+        "loudness",
+        "truePeak",
+        "clipping",
+        "loopSeam"
+      ],
+      "repeat": {
+        "file": "audio/x3/engines/repeats/needle-2-three-cycles.ogg",
+        "sha256": "2ea5d131aefc4a56209f015aaf5d9cad9a120cda00864f352feb598f5519cc13",
+        "cycles": 3,
+        "humanListen": "not measured"
+      }
+    },
+    {
+      "id": "line-1",
+      "cue": null,
+      "category": "sfx",
+      "loop": true,
+      "measuredAt": "2026-10-02T21:50:33.652786+00:00",
+      "ownerStatus": "listening pending",
+      "notMeasured": [
+        "semantic fidelity",
+        "owner preference",
+        "in-game masking/latency",
+        "physical Stick playback/memory"
+      ],
+      "provenance": {
+        "sidecar": "audio\\x3\\engines\\raw\\line-1.mp3.json",
+        "sourceSha256": "8c0765bb150452a80e7127aa766373a2694acc7c29b5e011ecf2c88b656aa9a2",
+        "generatedAt": "2026-10-02T21:47:15.420Z",
+        "request": {
+          "text": "Small engine character proof: uneven old coupe throb with worn valve chatter. Constant low rev body, already running; no ignition, acceleration or fade. Seamless steady bed. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.",
+          "duration_seconds": 2,
+          "prompt_influence": 0.7,
+          "model_id": "eleven_text_to_sound_v2",
+          "loop": true
+        },
+        "budgetCharge": 100,
+        "providerCredits": 20,
+        "session": "x3-2026-10-02",
+        "reused": false
+      },
+      "raw": {
+        "file": "audio/x3/engines/raw/line-1.mp3",
+        "sha256": "8c0765bb150452a80e7127aa766373a2694acc7c29b5e011ecf2c88b656aa9a2",
+        "bytes": 37242,
+        "status": "fail",
+        "checks": {
+          "decode": true,
+          "duration": false,
+          "loudness": false,
+          "truePeak": true,
+          "silence": true,
+          "clipping": true,
+          "loopSeam": false
+        },
+        "failures": [
+          "duration",
+          "loudness",
+          "loopSeam"
+        ],
+        "durationSeconds": 2.25,
+        "durationWindowSeconds": [
+          1.85,
+          2.15
+        ],
+        "sampleRate": 44100,
+        "channels": 2,
+        "decodedFrames": 99225,
+        "decodedBytes": 396900,
+        "integratedLufs": -12.2,
+        "truePeakDbtp": -2.88,
+        "loudnessRangeLu": 0.0,
+        "loudnessTargetLufs": -20,
+        "loudnessToleranceLu": 2,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 0,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [],
+          "fraction": 0.0,
+          "longestInteriorSeconds": 0
+        },
+        "loopSeam": {
+          "status": "fail",
+          "sampleJumpFullScale": 0.053328102454543114,
+          "boundaryRmsStepDb": 1.0195140071826296,
+          "spectralCosine": 0.9919565243842242,
+          "windowSeconds": 0.05,
+          "repeatedJoinJumps": [
+            0.053328102454543114,
+            0.053328102454543114
+          ],
+          "cycles": 3,
+          "limits": {
+            "sampleJumpMax": 0.02,
+            "rmsStepMaxDb": 3,
+            "spectralCosineMin": 0.8
+          },
+          "musicalContinuity": "not measured",
+          "humanRepeatedListen": "not measured"
+        },
+        "loopBoundary": {
+          "sampleRate": 44100,
+          "channels": 2,
+          "totalFrames": 99225,
+          "startFrame": 0,
+          "endFrameExclusive": 99225,
+          "preRollFrames": 0,
+          "tailPolicy": "baked overlap; plain full-span repeat"
+        }
+      },
+      "edit": {
+        "operation": "mono resample, DC removal, 125 ms complementary overlap, measured interior rotation",
+        "sourceStartFrame": 1378,
+        "loopFrames": 44100,
+        "overlapFrames": 2756,
+        "rate": 22050,
+        "rotationFrames": 5610,
+        "rotationPolicy": "48 interior candidates, minimum derivative/RMS/spectrum mismatch; no samples replaced",
+        "blurRisk": "Crossfade can blur motor pulses; repeated human listening pending"
+      },
+      "normalization": {
+        "operation": "measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling",
+        "softLimited": false,
+        "additionalCrestCompressionPasses": 0,
+        "gain": 0.44106236312143693,
+        "credits": 0
+      },
+      "edited": {
+        "file": "audio/x3/engines/edited/line-1.wav",
+        "sha256": "ba34cf46e2b8689324065cf587274f1b3a65e6c2b8c3753ae30cf926dafddfd0",
+        "bytes": 88278,
+        "status": "pass",
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": true,
+          "truePeak": true,
+          "silence": true,
+          "clipping": true,
+          "loopSeam": true
+        },
+        "failures": [],
+        "durationSeconds": 2.0,
+        "durationWindowSeconds": [
+          1.998,
+          2.002
+        ],
+        "sampleRate": 22050,
+        "channels": 1,
+        "decodedFrames": 44100,
+        "decodedBytes": 88200,
+        "integratedLufs": -19.99,
+        "truePeakDbtp": -8.41,
+        "loudnessRangeLu": 0.0,
+        "loudnessTargetLufs": -20,
+        "loudnessToleranceLu": 2,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 0,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [],
+          "fraction": 0.0,
+          "longestInteriorSeconds": 0
+        },
+        "loopSeam": {
+          "status": "pass",
+          "sampleJumpFullScale": 6.103515625e-05,
+          "boundaryRmsStepDb": 0.031800704481647846,
+          "spectralCosine": 0.9980504455927585,
+          "windowSeconds": 0.05,
+          "repeatedJoinJumps": [
+            6.103515625e-05,
+            6.103515625e-05
+          ],
+          "cycles": 3,
+          "limits": {
+            "sampleJumpMax": 0.02,
+            "rmsStepMaxDb": 3,
+            "spectralCosineMin": 0.8
+          },
+          "musicalContinuity": "not measured",
+          "humanRepeatedListen": "not measured"
+        },
+        "loopBoundary": {
+          "sampleRate": 22050,
+          "channels": 1,
+          "totalFrames": 44100,
+          "startFrame": 0,
+          "endFrameExclusive": 44100,
+          "preRollFrames": 0,
+          "tailPolicy": "baked overlap; plain full-span repeat"
+        }
+      },
+      "status": "pass",
+      "sourceDefects": [
+        "duration",
+        "loudness",
+        "loopSeam"
+      ],
+      "repeat": {
+        "file": "audio/x3/engines/repeats/line-1-three-cycles.ogg",
+        "sha256": "dee8861ef121297b0e6db57350f63cf5b283bbb0b7d0dd13b5e10d4685353a1b",
+        "cycles": 3,
+        "humanListen": "not measured"
+      }
+    },
+    {
+      "id": "line-2",
+      "cue": null,
+      "category": "sfx",
+      "loop": true,
+      "measuredAt": "2026-10-02T21:50:34.075027+00:00",
+      "ownerStatus": "listening pending",
+      "notMeasured": [
+        "semantic fidelity",
+        "owner preference",
+        "in-game masking/latency",
+        "physical Stick playback/memory"
+      ],
+      "provenance": {
+        "sidecar": "audio\\x3\\engines\\raw\\line-2.mp3.json",
+        "sourceSha256": "ee05438e32f35bd4ea7a777696101d8458201b3728e412f3d5f572a19d77ac50",
+        "generatedAt": "2026-10-02T21:47:20.525Z",
+        "request": {
+          "text": "Small engine character proof: chunky midrange twin pulse and rattling intake. Constant low rev body, already running; no ignition, acceleration or fade. Seamless steady bed. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.",
+          "duration_seconds": 2,
+          "prompt_influence": 0.7,
+          "model_id": "eleven_text_to_sound_v2",
+          "loop": true
+        },
+        "budgetCharge": 100,
+        "providerCredits": 20,
+        "session": "x3-2026-10-02",
+        "reused": false
+      },
+      "raw": {
+        "file": "audio/x3/engines/raw/line-2.mp3",
+        "sha256": "ee05438e32f35bd4ea7a777696101d8458201b3728e412f3d5f572a19d77ac50",
+        "bytes": 37242,
+        "status": "fail",
+        "checks": {
+          "decode": true,
+          "duration": false,
+          "loudness": false,
+          "truePeak": false,
+          "silence": true,
+          "clipping": false,
+          "loopSeam": false
+        },
+        "failures": [
+          "duration",
+          "loudness",
+          "truePeak",
+          "clipping",
+          "loopSeam"
+        ],
+        "durationSeconds": 2.25,
+        "durationWindowSeconds": [
+          1.85,
+          2.15
+        ],
+        "sampleRate": 44100,
+        "channels": 2,
+        "decodedFrames": 99225,
+        "decodedBytes": 396900,
+        "integratedLufs": -7.31,
+        "truePeakDbtp": 0.83,
+        "loudnessRangeLu": 0.0,
+        "loudnessTargetLufs": -20,
+        "loudnessToleranceLu": 2,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 48,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [],
+          "fraction": 0.0,
+          "longestInteriorSeconds": 0
+        },
+        "loopSeam": {
+          "status": "fail",
+          "sampleJumpFullScale": 0.1424214094877243,
+          "boundaryRmsStepDb": 1.23300929748933,
+          "spectralCosine": 0.9960432403044657,
+          "windowSeconds": 0.05,
+          "repeatedJoinJumps": [
+            0.1424214094877243,
+            0.1424214094877243
+          ],
+          "cycles": 3,
+          "limits": {
+            "sampleJumpMax": 0.02,
+            "rmsStepMaxDb": 3,
+            "spectralCosineMin": 0.8
+          },
+          "musicalContinuity": "not measured",
+          "humanRepeatedListen": "not measured"
+        },
+        "loopBoundary": {
+          "sampleRate": 44100,
+          "channels": 2,
+          "totalFrames": 99225,
+          "startFrame": 0,
+          "endFrameExclusive": 99225,
+          "preRollFrames": 0,
+          "tailPolicy": "baked overlap; plain full-span repeat"
+        }
+      },
+      "edit": {
+        "operation": "mono resample, DC removal, 125 ms complementary overlap, measured interior rotation",
+        "sourceStartFrame": 1378,
+        "loopFrames": 44100,
+        "overlapFrames": 2756,
+        "rate": 22050,
+        "rotationFrames": 30925,
+        "rotationPolicy": "48 interior candidates, minimum derivative/RMS/spectrum mismatch; no samples replaced",
+        "blurRisk": "Crossfade can blur motor pulses; repeated human listening pending"
+      },
+      "normalization": {
+        "operation": "measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling",
+        "softLimited": false,
+        "additionalCrestCompressionPasses": 0,
+        "gain": 0.24603676041476275,
+        "credits": 0
+      },
+      "edited": {
+        "file": "audio/x3/engines/edited/line-2.wav",
+        "sha256": "07d2431750005e9c6953fe9761b5f82da4c1ff52229739ee8e2527df7c995c53",
+        "bytes": 88278,
+        "status": "pass",
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": true,
+          "truePeak": true,
+          "silence": true,
+          "clipping": true,
+          "loopSeam": true
+        },
+        "failures": [],
+        "durationSeconds": 2.0,
+        "durationWindowSeconds": [
+          1.998,
+          2.002
+        ],
+        "sampleRate": 22050,
+        "channels": 1,
+        "decodedFrames": 44100,
+        "decodedBytes": 88200,
+        "integratedLufs": -20.0,
+        "truePeakDbtp": -9.28,
+        "loudnessRangeLu": 0.0,
+        "loudnessTargetLufs": -20,
+        "loudnessToleranceLu": 2,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 0,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [],
+          "fraction": 0.0,
+          "longestInteriorSeconds": 0
+        },
+        "loopSeam": {
+          "status": "pass",
+          "sampleJumpFullScale": 0.000213623046875,
+          "boundaryRmsStepDb": 0.025845249431630808,
+          "spectralCosine": 0.9960719556229015,
+          "windowSeconds": 0.05,
+          "repeatedJoinJumps": [
+            0.000213623046875,
+            0.000213623046875
+          ],
+          "cycles": 3,
+          "limits": {
+            "sampleJumpMax": 0.02,
+            "rmsStepMaxDb": 3,
+            "spectralCosineMin": 0.8
+          },
+          "musicalContinuity": "not measured",
+          "humanRepeatedListen": "not measured"
+        },
+        "loopBoundary": {
+          "sampleRate": 22050,
+          "channels": 1,
+          "totalFrames": 44100,
+          "startFrame": 0,
+          "endFrameExclusive": 44100,
+          "preRollFrames": 0,
+          "tailPolicy": "baked overlap; plain full-span repeat"
+        }
+      },
+      "status": "pass",
+      "sourceDefects": [
+        "duration",
+        "loudness",
+        "truePeak",
+        "clipping",
+        "loopSeam"
+      ],
+      "repeat": {
+        "file": "audio/x3/engines/repeats/line-2-three-cycles.ogg",
+        "sha256": "25152ac636e4c07eef0c4bacb89de318288ea9ec8b4913d4261c2f0a7190faf8",
+        "cycles": 3,
+        "humanListen": "not measured"
+      }
+    },
+    {
+      "id": "bastion-1",
+      "cue": null,
+      "category": "sfx",
+      "loop": true,
+      "measuredAt": "2026-10-02T21:50:34.501176+00:00",
+      "ownerStatus": "listening pending",
+      "notMeasured": [
+        "semantic fidelity",
+        "owner preference",
+        "in-game masking/latency",
+        "physical Stick playback/memory"
+      ],
+      "provenance": {
+        "sidecar": "audio\\x3\\engines\\raw\\bastion-1.mp3.json",
+        "sourceSha256": "41b571cea9a1ff50814093a6caac1cd5d3d6797a606dd00d171cfb9410ca1416",
+        "generatedAt": "2026-10-02T21:47:26.023Z",
+        "request": {
+          "text": "Small engine character proof: slow heavy diesel knock and low chassis resonance. Constant low rev body, already running; no ignition, acceleration or fade. Seamless steady bed. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.",
+          "duration_seconds": 2,
+          "prompt_influence": 0.7,
+          "model_id": "eleven_text_to_sound_v2",
+          "loop": true
+        },
+        "budgetCharge": 100,
+        "providerCredits": 20,
+        "session": "x3-2026-10-02",
+        "reused": false
+      },
+      "raw": {
+        "file": "audio/x3/engines/raw/bastion-1.mp3",
+        "sha256": "41b571cea9a1ff50814093a6caac1cd5d3d6797a606dd00d171cfb9410ca1416",
+        "bytes": 37242,
+        "status": "fail",
+        "checks": {
+          "decode": true,
+          "duration": false,
+          "loudness": false,
+          "truePeak": false,
+          "silence": true,
+          "clipping": true,
+          "loopSeam": true
+        },
+        "failures": [
+          "duration",
+          "loudness",
+          "truePeak"
+        ],
+        "durationSeconds": 2.25,
+        "durationWindowSeconds": [
+          1.85,
+          2.15
+        ],
+        "sampleRate": 44100,
+        "channels": 2,
+        "decodedFrames": 99225,
+        "decodedBytes": 396900,
+        "integratedLufs": -12.37,
+        "truePeakDbtp": -0.42,
+        "loudnessRangeLu": 0.0,
+        "loudnessTargetLufs": -20,
+        "loudnessToleranceLu": 2,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 0,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [],
+          "fraction": 0.0,
+          "longestInteriorSeconds": 0
+        },
+        "loopSeam": {
+          "status": "pass",
+          "sampleJumpFullScale": 0.014526307582855225,
+          "boundaryRmsStepDb": 1.9161510724717614,
+          "spectralCosine": 0.997308039829589,
+          "windowSeconds": 0.05,
+          "repeatedJoinJumps": [
+            0.014526307582855225,
+            0.014526307582855225
+          ],
+          "cycles": 3,
+          "limits": {
+            "sampleJumpMax": 0.02,
+            "rmsStepMaxDb": 3,
+            "spectralCosineMin": 0.8
+          },
+          "musicalContinuity": "not measured",
+          "humanRepeatedListen": "not measured"
+        },
+        "loopBoundary": {
+          "sampleRate": 44100,
+          "channels": 2,
+          "totalFrames": 99225,
+          "startFrame": 0,
+          "endFrameExclusive": 99225,
+          "preRollFrames": 0,
+          "tailPolicy": "baked overlap; plain full-span repeat"
+        }
+      },
+      "edit": {
+        "operation": "mono resample, DC removal, 125 ms complementary overlap, measured interior rotation",
+        "sourceStartFrame": 1378,
+        "loopFrames": 44100,
+        "overlapFrames": 2756,
+        "rate": 22050,
+        "rotationFrames": 10363,
+        "rotationPolicy": "48 interior candidates, minimum derivative/RMS/spectrum mismatch; no samples replaced",
+        "blurRisk": "Crossfade can blur motor pulses; repeated human listening pending"
+      },
+      "normalization": {
+        "operation": "measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling",
+        "softLimited": false,
+        "additionalCrestCompressionPasses": 0,
+        "gain": 0.449779854893288,
+        "credits": 0
+      },
+      "edited": {
+        "file": "audio/x3/engines/edited/bastion-1.wav",
+        "sha256": "d03aa4e80241deae59b4caee4a15c9533724bd27fa8bc353a323ca53d41d48db",
+        "bytes": 88278,
+        "status": "pass",
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": true,
+          "truePeak": true,
+          "silence": true,
+          "clipping": true,
+          "loopSeam": true
+        },
+        "failures": [],
+        "durationSeconds": 2.0,
+        "durationWindowSeconds": [
+          1.998,
+          2.002
+        ],
+        "sampleRate": 22050,
+        "channels": 1,
+        "decodedFrames": 44100,
+        "decodedBytes": 88200,
+        "integratedLufs": -20.0,
+        "truePeakDbtp": -6.92,
+        "loudnessRangeLu": 0.0,
+        "loudnessTargetLufs": -20,
+        "loudnessToleranceLu": 2,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 0,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [],
+          "fraction": 0.0,
+          "longestInteriorSeconds": 0
+        },
+        "loopSeam": {
+          "status": "pass",
+          "sampleJumpFullScale": 6.103515625e-05,
+          "boundaryRmsStepDb": 0.43636232092770727,
+          "spectralCosine": 0.9901218152264748,
+          "windowSeconds": 0.05,
+          "repeatedJoinJumps": [
+            6.103515625e-05,
+            6.103515625e-05
+          ],
+          "cycles": 3,
+          "limits": {
+            "sampleJumpMax": 0.02,
+            "rmsStepMaxDb": 3,
+            "spectralCosineMin": 0.8
+          },
+          "musicalContinuity": "not measured",
+          "humanRepeatedListen": "not measured"
+        },
+        "loopBoundary": {
+          "sampleRate": 22050,
+          "channels": 1,
+          "totalFrames": 44100,
+          "startFrame": 0,
+          "endFrameExclusive": 44100,
+          "preRollFrames": 0,
+          "tailPolicy": "baked overlap; plain full-span repeat"
+        }
+      },
+      "status": "pass",
+      "sourceDefects": [
+        "duration",
+        "loudness",
+        "truePeak"
+      ],
+      "repeat": {
+        "file": "audio/x3/engines/repeats/bastion-1-three-cycles.ogg",
+        "sha256": "d985b1b34eb8b1c7529dff007fd452d4633cbc8da1fbc7f944a4f49abbac0023",
+        "cycles": 3,
+        "humanListen": "not measured"
+      }
+    },
+    {
+      "id": "bastion-2",
+      "cue": null,
+      "category": "sfx",
+      "loop": true,
+      "measuredAt": "2026-10-02T21:50:34.901881+00:00",
+      "ownerStatus": "listening pending",
+      "notMeasured": [
+        "semantic fidelity",
+        "owner preference",
+        "in-game masking/latency",
+        "physical Stick playback/memory"
+      ],
+      "provenance": {
+        "sidecar": "audio\\x3\\engines\\raw\\bastion-2.mp3.json",
+        "sourceSha256": "35f3e6630aeeb958296cff29d0686669f2a6a0aeb833b4ca5b423751b3001996",
+        "generatedAt": "2026-10-02T21:47:31.285Z",
+        "request": {
+          "text": "Small engine character proof: dense tractor diesel chug with loaded bearing growl. Constant low rev body, already running; no ignition, acceleration or fade. Seamless steady bed. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.",
+          "duration_seconds": 2,
+          "prompt_influence": 0.7,
+          "model_id": "eleven_text_to_sound_v2",
+          "loop": true
+        },
+        "budgetCharge": 100,
+        "providerCredits": 20,
+        "session": "x3-2026-10-02",
+        "reused": false
+      },
+      "raw": {
+        "file": "audio/x3/engines/raw/bastion-2.mp3",
+        "sha256": "35f3e6630aeeb958296cff29d0686669f2a6a0aeb833b4ca5b423751b3001996",
+        "bytes": 37242,
+        "status": "fail",
+        "checks": {
+          "decode": true,
+          "duration": false,
+          "loudness": false,
+          "truePeak": true,
+          "silence": true,
+          "clipping": true,
+          "loopSeam": true
+        },
+        "failures": [
+          "duration",
+          "loudness"
+        ],
+        "durationSeconds": 2.25,
+        "durationWindowSeconds": [
+          1.85,
+          2.15
+        ],
+        "sampleRate": 44100,
+        "channels": 2,
+        "decodedFrames": 99225,
+        "decodedBytes": 396900,
+        "integratedLufs": -13.52,
+        "truePeakDbtp": -3.08,
+        "loudnessRangeLu": 0.0,
+        "loudnessTargetLufs": -20,
+        "loudnessToleranceLu": 2,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 0,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [],
+          "fraction": 0.0,
+          "longestInteriorSeconds": 0
+        },
+        "loopSeam": {
+          "status": "pass",
+          "sampleJumpFullScale": 0.012037593871355057,
+          "boundaryRmsStepDb": 1.111118063828945,
+          "spectralCosine": 0.9819829732342348,
+          "windowSeconds": 0.05,
+          "repeatedJoinJumps": [
+            0.012037593871355057,
+            0.012037593871355057
+          ],
+          "cycles": 3,
+          "limits": {
+            "sampleJumpMax": 0.02,
+            "rmsStepMaxDb": 3,
+            "spectralCosineMin": 0.8
+          },
+          "musicalContinuity": "not measured",
+          "humanRepeatedListen": "not measured"
+        },
+        "loopBoundary": {
+          "sampleRate": 44100,
+          "channels": 2,
+          "totalFrames": 99225,
+          "startFrame": 0,
+          "endFrameExclusive": 99225,
+          "preRollFrames": 0,
+          "tailPolicy": "baked overlap; plain full-span repeat"
+        }
+      },
+      "edit": {
+        "operation": "mono resample, DC removal, 125 ms complementary overlap, measured interior rotation",
+        "sourceStartFrame": 1378,
+        "loopFrames": 44100,
+        "overlapFrames": 2756,
+        "rate": 22050,
+        "rotationFrames": 29024,
+        "rotationPolicy": "48 interior candidates, minimum derivative/RMS/spectrum mismatch; no samples replaced",
+        "blurRisk": "Crossfade can blur motor pulses; repeated human listening pending"
+      },
+      "normalization": {
+        "operation": "measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling",
+        "softLimited": false,
+        "additionalCrestCompressionPasses": 0,
+        "gain": 0.4847301126243662,
+        "credits": 0
+      },
+      "edited": {
+        "file": "audio/x3/engines/edited/bastion-2.wav",
+        "sha256": "76e8560b924e245d28be8e859902c416ff059d26a9db39c6d5632248f7104c83",
+        "bytes": 88278,
+        "status": "pass",
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": true,
+          "truePeak": true,
+          "silence": true,
+          "clipping": true,
+          "loopSeam": true
+        },
+        "failures": [],
+        "durationSeconds": 2.0,
+        "durationWindowSeconds": [
+          1.998,
+          2.002
+        ],
+        "sampleRate": 22050,
+        "channels": 1,
+        "decodedFrames": 44100,
+        "decodedBytes": 88200,
+        "integratedLufs": -19.98,
+        "truePeakDbtp": -6.53,
+        "loudnessRangeLu": 0.0,
+        "loudnessTargetLufs": -20,
+        "loudnessToleranceLu": 2,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 0,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [],
+          "fraction": 0.0,
+          "longestInteriorSeconds": 0
+        },
+        "loopSeam": {
+          "status": "pass",
+          "sampleJumpFullScale": 6.103515625e-05,
+          "boundaryRmsStepDb": 0.08068047493526069,
+          "spectralCosine": 0.9940537640919602,
+          "windowSeconds": 0.05,
+          "repeatedJoinJumps": [
+            6.103515625e-05,
+            6.103515625e-05
+          ],
+          "cycles": 3,
+          "limits": {
+            "sampleJumpMax": 0.02,
+            "rmsStepMaxDb": 3,
+            "spectralCosineMin": 0.8
+          },
+          "musicalContinuity": "not measured",
+          "humanRepeatedListen": "not measured"
+        },
+        "loopBoundary": {
+          "sampleRate": 22050,
+          "channels": 1,
+          "totalFrames": 44100,
+          "startFrame": 0,
+          "endFrameExclusive": 44100,
+          "preRollFrames": 0,
+          "tailPolicy": "baked overlap; plain full-span repeat"
+        }
+      },
+      "status": "pass",
+      "sourceDefects": [
+        "duration",
+        "loudness"
+      ],
+      "repeat": {
+        "file": "audio/x3/engines/repeats/bastion-2-three-cycles.ogg",
+        "sha256": "2c10e6ac3e71186eaf2d2e39f2def1c2383b12dc99098775481687641777d952",
+        "cycles": 3,
+        "humanListen": "not measured"
+      }
+    },
+    {
+      "id": "comet-1",
+      "cue": null,
+      "category": "sfx",
+      "loop": true,
+      "measuredAt": "2026-10-02T21:50:35.317340+00:00",
+      "ownerStatus": "listening pending",
+      "notMeasured": [
+        "semantic fidelity",
+        "owner preference",
+        "in-game masking/latency",
+        "physical Stick playback/memory"
+      ],
+      "provenance": {
+        "sidecar": "audio\\x3\\engines\\raw\\comet-1.mp3.json",
+        "sourceSha256": "020525a1c8cad240e3f0991d40b0ee98ade2fbf16ac59cf88979bd94244976c0",
+        "generatedAt": "2026-10-02T21:47:36.636Z",
+        "request": {
+          "text": "Small engine character proof: raw turbine whine over dirty air intake. Constant low rev body, already running; no ignition, acceleration or fade. Seamless steady bed. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.",
+          "duration_seconds": 2,
+          "prompt_influence": 0.7,
+          "model_id": "eleven_text_to_sound_v2",
+          "loop": true
+        },
+        "budgetCharge": 100,
+        "providerCredits": 20,
+        "session": "x3-2026-10-02",
+        "reused": false
+      },
+      "raw": {
+        "file": "audio/x3/engines/raw/comet-1.mp3",
+        "sha256": "020525a1c8cad240e3f0991d40b0ee98ade2fbf16ac59cf88979bd94244976c0",
+        "bytes": 37242,
+        "status": "fail",
+        "checks": {
+          "decode": true,
+          "duration": false,
+          "loudness": false,
+          "truePeak": false,
+          "silence": true,
+          "clipping": true,
+          "loopSeam": false
+        },
+        "failures": [
+          "duration",
+          "loudness",
+          "truePeak",
+          "loopSeam"
+        ],
+        "durationSeconds": 2.25,
+        "durationWindowSeconds": [
+          1.85,
+          2.15
+        ],
+        "sampleRate": 44100,
+        "channels": 2,
+        "decodedFrames": 99225,
+        "decodedBytes": 396900,
+        "integratedLufs": -7.33,
+        "truePeakDbtp": 0.02,
+        "loudnessRangeLu": 0.0,
+        "loudnessTargetLufs": -20,
+        "loudnessToleranceLu": 2,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 0,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [],
+          "fraction": 0.0,
+          "longestInteriorSeconds": 0
+        },
+        "loopSeam": {
+          "status": "fail",
+          "sampleJumpFullScale": 0.034497156739234924,
+          "boundaryRmsStepDb": 0.20624106220499608,
+          "spectralCosine": 0.9934679499456732,
+          "windowSeconds": 0.05,
+          "repeatedJoinJumps": [
+            0.034497156739234924,
+            0.034497156739234924
+          ],
+          "cycles": 3,
+          "limits": {
+            "sampleJumpMax": 0.02,
+            "rmsStepMaxDb": 3,
+            "spectralCosineMin": 0.8
+          },
+          "musicalContinuity": "not measured",
+          "humanRepeatedListen": "not measured"
+        },
+        "loopBoundary": {
+          "sampleRate": 44100,
+          "channels": 2,
+          "totalFrames": 99225,
+          "startFrame": 0,
+          "endFrameExclusive": 99225,
+          "preRollFrames": 0,
+          "tailPolicy": "baked overlap; plain full-span repeat"
+        }
+      },
+      "edit": {
+        "operation": "mono resample, DC removal, 125 ms complementary overlap, measured interior rotation",
+        "sourceStartFrame": 1378,
+        "loopFrames": 44100,
+        "overlapFrames": 2756,
+        "rate": 22050,
+        "rotationFrames": 29997,
+        "rotationPolicy": "48 interior candidates, minimum derivative/RMS/spectrum mismatch; no samples replaced",
+        "blurRisk": "Crossfade can blur motor pulses; repeated human listening pending"
+      },
+      "normalization": {
+        "operation": "measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling",
+        "softLimited": false,
+        "additionalCrestCompressionPasses": 0,
+        "gain": 0.26272415264688587,
+        "credits": 0
+      },
+      "edited": {
+        "file": "audio/x3/engines/edited/comet-1.wav",
+        "sha256": "9baef6786a6261c3f30e25fea116498be16f806a4bcea50c16e8d2eb67d54452",
+        "bytes": 88278,
+        "status": "pass",
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": true,
+          "truePeak": true,
+          "silence": true,
+          "clipping": true,
+          "loopSeam": true
+        },
+        "failures": [],
+        "durationSeconds": 2.0,
+        "durationWindowSeconds": [
+          1.998,
+          2.002
+        ],
+        "sampleRate": 22050,
+        "channels": 1,
+        "decodedFrames": 44100,
+        "decodedBytes": 88200,
+        "integratedLufs": -20.0,
+        "truePeakDbtp": -9.94,
+        "loudnessRangeLu": 0.0,
+        "loudnessTargetLufs": -20,
+        "loudnessToleranceLu": 2,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 0,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [],
+          "fraction": 0.0,
+          "longestInteriorSeconds": 0
+        },
+        "loopSeam": {
+          "status": "pass",
+          "sampleJumpFullScale": 3.0517578125e-05,
+          "boundaryRmsStepDb": 0.07138127400325985,
+          "spectralCosine": 0.995501088004129,
+          "windowSeconds": 0.05,
+          "repeatedJoinJumps": [
+            3.0517578125e-05,
+            3.0517578125e-05
+          ],
+          "cycles": 3,
+          "limits": {
+            "sampleJumpMax": 0.02,
+            "rmsStepMaxDb": 3,
+            "spectralCosineMin": 0.8
+          },
+          "musicalContinuity": "not measured",
+          "humanRepeatedListen": "not measured"
+        },
+        "loopBoundary": {
+          "sampleRate": 22050,
+          "channels": 1,
+          "totalFrames": 44100,
+          "startFrame": 0,
+          "endFrameExclusive": 44100,
+          "preRollFrames": 0,
+          "tailPolicy": "baked overlap; plain full-span repeat"
+        }
+      },
+      "status": "pass",
+      "sourceDefects": [
+        "duration",
+        "loudness",
+        "truePeak",
+        "loopSeam"
+      ],
+      "repeat": {
+        "file": "audio/x3/engines/repeats/comet-1-three-cycles.ogg",
+        "sha256": "3b20deecbad3dd7f823a3c128bd10ad30b2ca4e217019073a2d919e29796f5ef",
+        "cycles": 3,
+        "humanListen": "not measured"
+      }
+    },
+    {
+      "id": "comet-2",
+      "cue": null,
+      "category": "sfx",
+      "loop": true,
+      "measuredAt": "2026-10-02T21:50:35.778831+00:00",
+      "ownerStatus": "listening pending",
+      "notMeasured": [
+        "semantic fidelity",
+        "owner preference",
+        "in-game masking/latency",
+        "physical Stick playback/memory"
+      ],
+      "provenance": {
+        "sidecar": "audio\\x3\\engines\\raw\\comet-2.mp3.json",
+        "sourceSha256": "1fecb1d4ec828c043f4c3fa82949840470b7f0002bf2a00cb92a31d507334937",
+        "generatedAt": "2026-10-02T21:47:41.744Z",
+        "request": {
+          "text": "Small engine character proof: hot rising metallic turbine harmonics at steady speed. Constant low rev body, already running; no ignition, acceleration or fade. Seamless steady bed. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.",
+          "duration_seconds": 2,
+          "prompt_influence": 0.7,
+          "model_id": "eleven_text_to_sound_v2",
+          "loop": true
+        },
+        "budgetCharge": 100,
+        "providerCredits": 20,
+        "session": "x3-2026-10-02",
+        "reused": false
+      },
+      "raw": {
+        "file": "audio/x3/engines/raw/comet-2.mp3",
+        "sha256": "1fecb1d4ec828c043f4c3fa82949840470b7f0002bf2a00cb92a31d507334937",
+        "bytes": 37242,
+        "status": "fail",
+        "checks": {
+          "decode": true,
+          "duration": false,
+          "loudness": false,
+          "truePeak": false,
+          "silence": true,
+          "clipping": false,
+          "loopSeam": false
+        },
+        "failures": [
+          "duration",
+          "loudness",
+          "truePeak",
+          "clipping",
+          "loopSeam"
+        ],
+        "durationSeconds": 2.25,
+        "durationWindowSeconds": [
+          1.85,
+          2.15
+        ],
+        "sampleRate": 44100,
+        "channels": 2,
+        "decodedFrames": 99225,
+        "decodedBytes": 396900,
+        "integratedLufs": -9.8,
+        "truePeakDbtp": 0.49,
+        "loudnessRangeLu": 0.0,
+        "loudnessTargetLufs": -20,
+        "loudnessToleranceLu": 2,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 1,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [],
+          "fraction": 0.0,
+          "longestInteriorSeconds": 0
+        },
+        "loopSeam": {
+          "status": "fail",
+          "sampleJumpFullScale": 0.06479406356811523,
+          "boundaryRmsStepDb": 1.0911546842636686,
+          "spectralCosine": 0.9729625691964038,
+          "windowSeconds": 0.05,
+          "repeatedJoinJumps": [
+            0.06479406356811523,
+            0.06479406356811523
+          ],
+          "cycles": 3,
+          "limits": {
+            "sampleJumpMax": 0.02,
+            "rmsStepMaxDb": 3,
+            "spectralCosineMin": 0.8
+          },
+          "musicalContinuity": "not measured",
+          "humanRepeatedListen": "not measured"
+        },
+        "loopBoundary": {
+          "sampleRate": 44100,
+          "channels": 2,
+          "totalFrames": 99225,
+          "startFrame": 0,
+          "endFrameExclusive": 99225,
+          "preRollFrames": 0,
+          "tailPolicy": "baked overlap; plain full-span repeat"
+        }
+      },
+      "edit": {
+        "operation": "mono resample, DC removal, 125 ms complementary overlap, measured interior rotation",
+        "sourceStartFrame": 1378,
+        "loopFrames": 44100,
+        "overlapFrames": 2756,
+        "rate": 22050,
+        "rotationFrames": 4721,
+        "rotationPolicy": "48 interior candidates, minimum derivative/RMS/spectrum mismatch; no samples replaced",
+        "blurRisk": "Crossfade can blur motor pulses; repeated human listening pending"
+      },
+      "normalization": {
+        "operation": "measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling",
+        "softLimited": false,
+        "additionalCrestCompressionPasses": 0,
+        "gain": 0.3471362758876977,
+        "credits": 0
+      },
+      "edited": {
+        "file": "audio/x3/engines/edited/comet-2.wav",
+        "sha256": "0bd62e0d9b6d536d740f89b4fe816e2773d302d80d2d1d976591ee76a745e687",
+        "bytes": 88278,
+        "status": "pass",
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": true,
+          "truePeak": true,
+          "silence": true,
+          "clipping": true,
+          "loopSeam": true
+        },
+        "failures": [],
+        "durationSeconds": 2.0,
+        "durationWindowSeconds": [
+          1.998,
+          2.002
+        ],
+        "sampleRate": 22050,
+        "channels": 1,
+        "decodedFrames": 44100,
+        "decodedBytes": 88200,
+        "integratedLufs": -19.98,
+        "truePeakDbtp": -7.69,
+        "loudnessRangeLu": 0.0,
+        "loudnessTargetLufs": -20,
+        "loudnessToleranceLu": 2,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 0,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [],
+          "fraction": 0.0,
+          "longestInteriorSeconds": 0
+        },
+        "loopSeam": {
+          "status": "pass",
+          "sampleJumpFullScale": 3.0517578125e-05,
+          "boundaryRmsStepDb": 0.027585713517074634,
+          "spectralCosine": 0.99562289837832,
+          "windowSeconds": 0.05,
+          "repeatedJoinJumps": [
+            3.0517578125e-05,
+            3.0517578125e-05
+          ],
+          "cycles": 3,
+          "limits": {
+            "sampleJumpMax": 0.02,
+            "rmsStepMaxDb": 3,
+            "spectralCosineMin": 0.8
+          },
+          "musicalContinuity": "not measured",
+          "humanRepeatedListen": "not measured"
+        },
+        "loopBoundary": {
+          "sampleRate": 22050,
+          "channels": 1,
+          "totalFrames": 44100,
+          "startFrame": 0,
+          "endFrameExclusive": 44100,
+          "preRollFrames": 0,
+          "tailPolicy": "baked overlap; plain full-span repeat"
+        }
+      },
+      "status": "pass",
+      "sourceDefects": [
+        "duration",
+        "loudness",
+        "truePeak",
+        "clipping",
+        "loopSeam"
+      ],
+      "repeat": {
+        "file": "audio/x3/engines/repeats/comet-2-three-cycles.ogg",
+        "sha256": "71fa833bedbe9940f493f45a10b532deae2fe89c5f8f3a23f9919e0cd1f523b7",
+        "cycles": 3,
+        "humanListen": "not measured"
+      }
+    },
+    {
+      "id": "trail-1",
+      "cue": null,
+      "category": "sfx",
+      "loop": true,
+      "measuredAt": "2026-10-02T21:50:36.199104+00:00",
+      "ownerStatus": "listening pending",
+      "notMeasured": [
+        "semantic fidelity",
+        "owner preference",
+        "in-game masking/latency",
+        "physical Stick playback/memory"
+      ],
+      "provenance": {
+        "sidecar": "audio\\x3\\engines\\raw\\trail-1.mp3.json",
+        "sourceSha256": "d4ebd3c4cfdbd108f9ec1f4da73546d521716e0b3a16757c8bcdd20c215f112d",
+        "generatedAt": "2026-10-02T21:47:53.472Z",
+        "request": {
+          "text": "Small engine character proof: rally motor sputter with dry intake bark. Constant low rev body, already running; no ignition, acceleration or fade. Seamless steady bed. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.",
+          "duration_seconds": 2,
+          "prompt_influence": 0.7,
+          "model_id": "eleven_text_to_sound_v2",
+          "loop": true
+        },
+        "budgetCharge": 100,
+        "providerCredits": 20,
+        "session": "x3-2026-10-02",
+        "reused": false
+      },
+      "raw": {
+        "file": "audio/x3/engines/raw/trail-1.mp3",
+        "sha256": "d4ebd3c4cfdbd108f9ec1f4da73546d521716e0b3a16757c8bcdd20c215f112d",
+        "bytes": 37242,
+        "status": "fail",
+        "checks": {
+          "decode": true,
+          "duration": false,
+          "loudness": false,
+          "truePeak": false,
+          "silence": true,
+          "clipping": false,
+          "loopSeam": false
+        },
+        "failures": [
+          "duration",
+          "loudness",
+          "truePeak",
+          "clipping",
+          "loopSeam"
+        ],
+        "durationSeconds": 2.25,
+        "durationWindowSeconds": [
+          1.85,
+          2.15
+        ],
+        "sampleRate": 44100,
+        "channels": 2,
+        "decodedFrames": 99225,
+        "decodedBytes": 396900,
+        "integratedLufs": -4.14,
+        "truePeakDbtp": 2.31,
+        "loudnessRangeLu": 0.0,
+        "loudnessTargetLufs": -20,
+        "loudnessToleranceLu": 2,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 627,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [],
+          "fraction": 0.0,
+          "longestInteriorSeconds": 0
+        },
+        "loopSeam": {
+          "status": "fail",
+          "sampleJumpFullScale": 0.12577301263809204,
+          "boundaryRmsStepDb": 0.9888056534685199,
+          "spectralCosine": 0.9978668781111976,
+          "windowSeconds": 0.05,
+          "repeatedJoinJumps": [
+            0.12577301263809204,
+            0.12577301263809204
+          ],
+          "cycles": 3,
+          "limits": {
+            "sampleJumpMax": 0.02,
+            "rmsStepMaxDb": 3,
+            "spectralCosineMin": 0.8
+          },
+          "musicalContinuity": "not measured",
+          "humanRepeatedListen": "not measured"
+        },
+        "loopBoundary": {
+          "sampleRate": 44100,
+          "channels": 2,
+          "totalFrames": 99225,
+          "startFrame": 0,
+          "endFrameExclusive": 99225,
+          "preRollFrames": 0,
+          "tailPolicy": "baked overlap; plain full-span repeat"
+        }
+      },
+      "edit": {
+        "operation": "mono resample, DC removal, 125 ms complementary overlap, measured interior rotation",
+        "sourceStartFrame": 1378,
+        "loopFrames": 44100,
+        "overlapFrames": 2756,
+        "rate": 22050,
+        "rotationFrames": 17786,
+        "rotationPolicy": "48 interior candidates, minimum derivative/RMS/spectrum mismatch; no samples replaced",
+        "blurRisk": "Crossfade can blur motor pulses; repeated human listening pending"
+      },
+      "normalization": {
+        "operation": "measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling",
+        "softLimited": false,
+        "additionalCrestCompressionPasses": 0,
+        "gain": 0.1877154418375023,
+        "credits": 0
+      },
+      "edited": {
+        "file": "audio/x3/engines/edited/trail-1.wav",
+        "sha256": "847ce3cf8192f5f6e68857debd6805dd63778174843b275bab1ba451723990bd",
+        "bytes": 88278,
+        "status": "pass",
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": true,
+          "truePeak": true,
+          "silence": true,
+          "clipping": true,
+          "loopSeam": true
+        },
+        "failures": [],
+        "durationSeconds": 2.0,
+        "durationWindowSeconds": [
+          1.998,
+          2.002
+        ],
+        "sampleRate": 22050,
+        "channels": 1,
+        "decodedFrames": 44100,
+        "decodedBytes": 88200,
+        "integratedLufs": -19.99,
+        "truePeakDbtp": -12.57,
+        "loudnessRangeLu": 0.0,
+        "loudnessTargetLufs": -20,
+        "loudnessToleranceLu": 2,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 0,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [],
+          "fraction": 0.0,
+          "longestInteriorSeconds": 0
+        },
+        "loopSeam": {
+          "status": "pass",
+          "sampleJumpFullScale": 0.0,
+          "boundaryRmsStepDb": 0.024604603873299227,
+          "spectralCosine": 0.999292990361702,
+          "windowSeconds": 0.05,
+          "repeatedJoinJumps": [
+            0.0,
+            0.0
+          ],
+          "cycles": 3,
+          "limits": {
+            "sampleJumpMax": 0.02,
+            "rmsStepMaxDb": 3,
+            "spectralCosineMin": 0.8
+          },
+          "musicalContinuity": "not measured",
+          "humanRepeatedListen": "not measured"
+        },
+        "loopBoundary": {
+          "sampleRate": 22050,
+          "channels": 1,
+          "totalFrames": 44100,
+          "startFrame": 0,
+          "endFrameExclusive": 44100,
+          "preRollFrames": 0,
+          "tailPolicy": "baked overlap; plain full-span repeat"
+        }
+      },
+      "status": "pass",
+      "sourceDefects": [
+        "duration",
+        "loudness",
+        "truePeak",
+        "clipping",
+        "loopSeam"
+      ],
+      "repeat": {
+        "file": "audio/x3/engines/repeats/trail-1-three-cycles.ogg",
+        "sha256": "d68c433cd63ee534f53dcb05540eedd1f81eb7526ce9016392e79ea284b33434",
+        "cycles": 3,
+        "humanListen": "not measured"
+      }
+    },
+    {
+      "id": "trail-2",
+      "cue": null,
+      "category": "sfx",
+      "loop": true,
+      "measuredAt": "2026-10-02T21:50:36.612653+00:00",
+      "ownerStatus": "listening pending",
+      "notMeasured": [
+        "semantic fidelity",
+        "owner preference",
+        "in-game masking/latency",
+        "physical Stick playback/memory"
+      ],
+      "provenance": {
+        "sidecar": "audio\\x3\\engines\\raw\\trail-2.mp3.json",
+        "sourceSha256": "971aa998e6fd49f0041f6af73aae6626708df44cbd04254e7d94b035cebbc87a",
+        "generatedAt": "2026-10-02T21:48:07.474Z",
+        "request": {
+          "text": "Small engine character proof: coarse rally boxer rumble and gravelly exhaust. Constant low rev body, already running; no ignition, acceleration or fade. Seamless steady bed. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.",
+          "duration_seconds": 2,
+          "prompt_influence": 0.7,
+          "model_id": "eleven_text_to_sound_v2",
+          "loop": true
+        },
+        "budgetCharge": 100,
+        "providerCredits": 20,
+        "session": "x3-2026-10-02",
+        "reused": false
+      },
+      "raw": {
+        "file": "audio/x3/engines/raw/trail-2.mp3",
+        "sha256": "971aa998e6fd49f0041f6af73aae6626708df44cbd04254e7d94b035cebbc87a",
+        "bytes": 37242,
+        "status": "fail",
+        "checks": {
+          "decode": true,
+          "duration": false,
+          "loudness": false,
+          "truePeak": false,
+          "silence": true,
+          "clipping": true,
+          "loopSeam": false
+        },
+        "failures": [
+          "duration",
+          "loudness",
+          "truePeak",
+          "loopSeam"
+        ],
+        "durationSeconds": 2.25,
+        "durationWindowSeconds": [
+          1.85,
+          2.15
+        ],
+        "sampleRate": 44100,
+        "channels": 2,
+        "decodedFrames": 99225,
+        "decodedBytes": 396900,
+        "integratedLufs": -10.16,
+        "truePeakDbtp": -0.03,
+        "loudnessRangeLu": 0.0,
+        "loudnessTargetLufs": -20,
+        "loudnessToleranceLu": 2,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 0,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [],
+          "fraction": 0.0,
+          "longestInteriorSeconds": 0
+        },
+        "loopSeam": {
+          "status": "fail",
+          "sampleJumpFullScale": 0.03235805034637451,
+          "boundaryRmsStepDb": 2.128993782754743,
+          "spectralCosine": 0.9760813196776571,
+          "windowSeconds": 0.05,
+          "repeatedJoinJumps": [
+            0.03235805034637451,
+            0.03235805034637451
+          ],
+          "cycles": 3,
+          "limits": {
+            "sampleJumpMax": 0.02,
+            "rmsStepMaxDb": 3,
+            "spectralCosineMin": 0.8
+          },
+          "musicalContinuity": "not measured",
+          "humanRepeatedListen": "not measured"
+        },
+        "loopBoundary": {
+          "sampleRate": 44100,
+          "channels": 2,
+          "totalFrames": 99225,
+          "startFrame": 0,
+          "endFrameExclusive": 99225,
+          "preRollFrames": 0,
+          "tailPolicy": "baked overlap; plain full-span repeat"
+        }
+      },
+      "edit": {
+        "operation": "mono resample, DC removal, 125 ms complementary overlap, measured interior rotation",
+        "sourceStartFrame": 1378,
+        "loopFrames": 44100,
+        "overlapFrames": 2756,
+        "rate": 22050,
+        "rotationFrames": 27199,
+        "rotationPolicy": "48 interior candidates, minimum derivative/RMS/spectrum mismatch; no samples replaced",
+        "blurRisk": "Crossfade can blur motor pulses; repeated human listening pending"
+      },
+      "normalization": {
+        "operation": "measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling",
+        "softLimited": false,
+        "additionalCrestCompressionPasses": 0,
+        "gain": 0.33884415613920255,
+        "credits": 0
+      },
+      "edited": {
+        "file": "audio/x3/engines/edited/trail-2.wav",
+        "sha256": "8fd47e6aec695f7af463fe897f86c0f06209aed33e16656f0b1e693e795340d6",
+        "bytes": 88278,
+        "status": "pass",
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": true,
+          "truePeak": true,
+          "silence": true,
+          "clipping": true,
+          "loopSeam": true
+        },
+        "failures": [],
+        "durationSeconds": 2.0,
+        "durationWindowSeconds": [
+          1.998,
+          2.002
+        ],
+        "sampleRate": 22050,
+        "channels": 1,
+        "decodedFrames": 44100,
+        "decodedBytes": 88200,
+        "integratedLufs": -20.0,
+        "truePeakDbtp": -7.92,
+        "loudnessRangeLu": 0.0,
+        "loudnessTargetLufs": -20,
+        "loudnessToleranceLu": 2,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 0,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [],
+          "fraction": 0.0,
+          "longestInteriorSeconds": 0
+        },
+        "loopSeam": {
+          "status": "pass",
+          "sampleJumpFullScale": 0.00018310546875,
+          "boundaryRmsStepDb": 0.04219749126019716,
+          "spectralCosine": 0.9916028915124141,
+          "windowSeconds": 0.05,
+          "repeatedJoinJumps": [
+            0.00018310546875,
+            0.00018310546875
+          ],
+          "cycles": 3,
+          "limits": {
+            "sampleJumpMax": 0.02,
+            "rmsStepMaxDb": 3,
+            "spectralCosineMin": 0.8
+          },
+          "musicalContinuity": "not measured",
+          "humanRepeatedListen": "not measured"
+        },
+        "loopBoundary": {
+          "sampleRate": 22050,
+          "channels": 1,
+          "totalFrames": 44100,
+          "startFrame": 0,
+          "endFrameExclusive": 44100,
+          "preRollFrames": 0,
+          "tailPolicy": "baked overlap; plain full-span repeat"
+        }
+      },
+      "status": "pass",
+      "sourceDefects": [
+        "duration",
+        "loudness",
+        "truePeak",
+        "loopSeam"
+      ],
+      "repeat": {
+        "file": "audio/x3/engines/repeats/trail-2-three-cycles.ogg",
+        "sha256": "50fd14875ac8779e4c392de667ffa733d158a2fe7b2f6f70f9174d7511d730d0",
+        "cycles": 3,
+        "humanListen": "not measured"
+      }
+    },
+    {
+      "id": "flint-1",
+      "cue": null,
+      "category": "sfx",
+      "loop": true,
+      "measuredAt": "2026-10-02T21:50:37.028223+00:00",
+      "ownerStatus": "listening pending",
+      "notMeasured": [
+        "semantic fidelity",
+        "owner preference",
+        "in-game masking/latency",
+        "physical Stick playback/memory"
+      ],
+      "provenance": {
+        "sidecar": "audio\\x3\\engines\\raw\\flint-1.mp3.json",
+        "sourceSha256": "8f621328732ab02f1643c3d2030bd8c16b7fb34245ea1281d76682e3a477d4ef",
+        "generatedAt": "2026-10-02T21:48:19.375Z",
+        "request": {
+          "text": "Small engine character proof: short-stroke brawler growl with hard exhaust edges. Constant low rev body, already running; no ignition, acceleration or fade. Seamless steady bed. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.",
+          "duration_seconds": 2,
+          "prompt_influence": 0.7,
+          "model_id": "eleven_text_to_sound_v2",
+          "loop": true
+        },
+        "budgetCharge": 100,
+        "providerCredits": 20,
+        "session": "x3-2026-10-02",
+        "reused": false
+      },
+      "raw": {
+        "file": "audio/x3/engines/raw/flint-1.mp3",
+        "sha256": "8f621328732ab02f1643c3d2030bd8c16b7fb34245ea1281d76682e3a477d4ef",
+        "bytes": 37242,
+        "status": "fail",
+        "checks": {
+          "decode": true,
+          "duration": false,
+          "loudness": false,
+          "truePeak": false,
+          "silence": true,
+          "clipping": true,
+          "loopSeam": false
+        },
+        "failures": [
+          "duration",
+          "loudness",
+          "truePeak",
+          "loopSeam"
+        ],
+        "durationSeconds": 2.25,
+        "durationWindowSeconds": [
+          1.85,
+          2.15
+        ],
+        "sampleRate": 44100,
+        "channels": 2,
+        "decodedFrames": 99225,
+        "decodedBytes": 396900,
+        "integratedLufs": -12.51,
+        "truePeakDbtp": -0.21,
+        "loudnessRangeLu": 0.0,
+        "loudnessTargetLufs": -20,
+        "loudnessToleranceLu": 2,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 0,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [],
+          "fraction": 0.0,
+          "longestInteriorSeconds": 0
+        },
+        "loopSeam": {
+          "status": "fail",
+          "sampleJumpFullScale": 0.02240613102912903,
+          "boundaryRmsStepDb": 2.306692525992221,
+          "spectralCosine": 0.9871472693159806,
+          "windowSeconds": 0.05,
+          "repeatedJoinJumps": [
+            0.02240613102912903,
+            0.02240613102912903
+          ],
+          "cycles": 3,
+          "limits": {
+            "sampleJumpMax": 0.02,
+            "rmsStepMaxDb": 3,
+            "spectralCosineMin": 0.8
+          },
+          "musicalContinuity": "not measured",
+          "humanRepeatedListen": "not measured"
+        },
+        "loopBoundary": {
+          "sampleRate": 44100,
+          "channels": 2,
+          "totalFrames": 99225,
+          "startFrame": 0,
+          "endFrameExclusive": 99225,
+          "preRollFrames": 0,
+          "tailPolicy": "baked overlap; plain full-span repeat"
+        }
+      },
+      "edit": {
+        "operation": "mono resample, DC removal, 125 ms complementary overlap, measured interior rotation",
+        "sourceStartFrame": 1378,
+        "loopFrames": 44100,
+        "overlapFrames": 2756,
+        "rate": 22050,
+        "rotationFrames": 42166,
+        "rotationPolicy": "48 interior candidates, minimum derivative/RMS/spectrum mismatch; no samples replaced",
+        "blurRisk": "Crossfade can blur motor pulses; repeated human listening pending"
+      },
+      "normalization": {
+        "operation": "measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling",
+        "softLimited": false,
+        "additionalCrestCompressionPasses": 0,
+        "gain": 0.42315550971661636,
+        "credits": 0
+      },
+      "edited": {
+        "file": "audio/x3/engines/edited/flint-1.wav",
+        "sha256": "f00ed6282361f79515bc1e5306670d53888bf0190a9477327b3ef074794d1786",
+        "bytes": 88278,
+        "status": "pass",
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": true,
+          "truePeak": true,
+          "silence": true,
+          "clipping": true,
+          "loopSeam": true
+        },
+        "failures": [],
+        "durationSeconds": 2.0,
+        "durationWindowSeconds": [
+          1.998,
+          2.002
+        ],
+        "sampleRate": 22050,
+        "channels": 1,
+        "decodedFrames": 44100,
+        "decodedBytes": 88200,
+        "integratedLufs": -20.0,
+        "truePeakDbtp": -5.59,
+        "loudnessRangeLu": 0.0,
+        "loudnessTargetLufs": -20,
+        "loudnessToleranceLu": 2,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 0,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [],
+          "fraction": 0.0,
+          "longestInteriorSeconds": 0
+        },
+        "loopSeam": {
+          "status": "pass",
+          "sampleJumpFullScale": 0.0001220703125,
+          "boundaryRmsStepDb": 0.31335625173210546,
+          "spectralCosine": 0.9885357741637933,
+          "windowSeconds": 0.05,
+          "repeatedJoinJumps": [
+            0.0001220703125,
+            0.0001220703125
+          ],
+          "cycles": 3,
+          "limits": {
+            "sampleJumpMax": 0.02,
+            "rmsStepMaxDb": 3,
+            "spectralCosineMin": 0.8
+          },
+          "musicalContinuity": "not measured",
+          "humanRepeatedListen": "not measured"
+        },
+        "loopBoundary": {
+          "sampleRate": 22050,
+          "channels": 1,
+          "totalFrames": 44100,
+          "startFrame": 0,
+          "endFrameExclusive": 44100,
+          "preRollFrames": 0,
+          "tailPolicy": "baked overlap; plain full-span repeat"
+        }
+      },
+      "status": "pass",
+      "sourceDefects": [
+        "duration",
+        "loudness",
+        "truePeak",
+        "loopSeam"
+      ],
+      "repeat": {
+        "file": "audio/x3/engines/repeats/flint-1-three-cycles.ogg",
+        "sha256": "6f986d7e22b8819428eb4f505a242f048bd86dd91450ca5138e0094c8638918e",
+        "cycles": 3,
+        "humanListen": "not measured"
+      }
+    },
+    {
+      "id": "flint-2",
+      "cue": null,
+      "category": "sfx",
+      "loop": true,
+      "measuredAt": "2026-10-02T21:50:37.479889+00:00",
+      "ownerStatus": "listening pending",
+      "notMeasured": [
+        "semantic fidelity",
+        "owner preference",
+        "in-game masking/latency",
+        "physical Stick playback/memory"
+      ],
+      "provenance": {
+        "sidecar": "audio\\x3\\engines\\raw\\flint-2.mp3.json",
+        "sourceSha256": "6eea8d7ba9ca131540726c57c821f5837aab48a0202319c9841e6e939adb073f",
+        "generatedAt": "2026-10-02T21:48:30.783Z",
+        "request": {
+          "text": "Small engine character proof: compact angry V motor snarl with rattling mounts. Constant low rev body, already running; no ignition, acceleration or fade. Seamless steady bed. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.",
+          "duration_seconds": 2,
+          "prompt_influence": 0.7,
+          "model_id": "eleven_text_to_sound_v2",
+          "loop": true
+        },
+        "budgetCharge": 100,
+        "providerCredits": 20,
+        "session": "x3-2026-10-02",
+        "reused": false
+      },
+      "raw": {
+        "file": "audio/x3/engines/raw/flint-2.mp3",
+        "sha256": "6eea8d7ba9ca131540726c57c821f5837aab48a0202319c9841e6e939adb073f",
+        "bytes": 37242,
+        "status": "fail",
+        "checks": {
+          "decode": true,
+          "duration": false,
+          "loudness": false,
+          "truePeak": false,
+          "silence": true,
+          "clipping": false,
+          "loopSeam": false
+        },
+        "failures": [
+          "duration",
+          "loudness",
+          "truePeak",
+          "clipping",
+          "loopSeam"
+        ],
+        "durationSeconds": 2.25,
+        "durationWindowSeconds": [
+          1.85,
+          2.15
+        ],
+        "sampleRate": 44100,
+        "channels": 2,
+        "decodedFrames": 99225,
+        "decodedBytes": 396900,
+        "integratedLufs": -8.34,
+        "truePeakDbtp": 1.17,
+        "loudnessRangeLu": 0.0,
+        "loudnessTargetLufs": -20,
+        "loudnessToleranceLu": 2,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 124,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [],
+          "fraction": 0.0,
+          "longestInteriorSeconds": 0
+        },
+        "loopSeam": {
+          "status": "fail",
+          "sampleJumpFullScale": 0.03259336203336716,
+          "boundaryRmsStepDb": 3.137822615639219,
+          "spectralCosine": 0.9102369534186039,
+          "windowSeconds": 0.05,
+          "repeatedJoinJumps": [
+            0.03259336203336716,
+            0.03259336203336716
+          ],
+          "cycles": 3,
+          "limits": {
+            "sampleJumpMax": 0.02,
+            "rmsStepMaxDb": 3,
+            "spectralCosineMin": 0.8
+          },
+          "musicalContinuity": "not measured",
+          "humanRepeatedListen": "not measured"
+        },
+        "loopBoundary": {
+          "sampleRate": 44100,
+          "channels": 2,
+          "totalFrames": 99225,
+          "startFrame": 0,
+          "endFrameExclusive": 99225,
+          "preRollFrames": 0,
+          "tailPolicy": "baked overlap; plain full-span repeat"
+        }
+      },
+      "edit": {
+        "operation": "mono resample, DC removal, 125 ms complementary overlap, measured interior rotation",
+        "sourceStartFrame": 1378,
+        "loopFrames": 44100,
+        "overlapFrames": 2756,
+        "rate": 22050,
+        "rotationFrames": 7536,
+        "rotationPolicy": "48 interior candidates, minimum derivative/RMS/spectrum mismatch; no samples replaced",
+        "blurRisk": "Crossfade can blur motor pulses; repeated human listening pending"
+      },
+      "normalization": {
+        "operation": "measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling",
+        "softLimited": false,
+        "additionalCrestCompressionPasses": 0,
+        "gain": 0.31586390484234717,
+        "credits": 0
+      },
+      "edited": {
+        "file": "audio/x3/engines/edited/flint-2.wav",
+        "sha256": "82a10172506fe252f7bf4ccda8415d05244ac83c1043b42db79f46c48761ba0e",
+        "bytes": 88278,
+        "status": "pass",
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": true,
+          "truePeak": true,
+          "silence": true,
+          "clipping": true,
+          "loopSeam": true
+        },
+        "failures": [],
+        "durationSeconds": 2.0,
+        "durationWindowSeconds": [
+          1.998,
+          2.002
+        ],
+        "sampleRate": 22050,
+        "channels": 1,
+        "decodedFrames": 44100,
+        "decodedBytes": 88200,
+        "integratedLufs": -20.01,
+        "truePeakDbtp": -7.43,
+        "loudnessRangeLu": 0.0,
+        "loudnessTargetLufs": -20,
+        "loudnessToleranceLu": 2,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 0,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [],
+          "fraction": 0.0,
+          "longestInteriorSeconds": 0
+        },
+        "loopSeam": {
+          "status": "pass",
+          "sampleJumpFullScale": 0.000152587890625,
+          "boundaryRmsStepDb": 0.08854540283002083,
+          "spectralCosine": 0.997609523965374,
+          "windowSeconds": 0.05,
+          "repeatedJoinJumps": [
+            0.000152587890625,
+            0.000152587890625
+          ],
+          "cycles": 3,
+          "limits": {
+            "sampleJumpMax": 0.02,
+            "rmsStepMaxDb": 3,
+            "spectralCosineMin": 0.8
+          },
+          "musicalContinuity": "not measured",
+          "humanRepeatedListen": "not measured"
+        },
+        "loopBoundary": {
+          "sampleRate": 22050,
+          "channels": 1,
+          "totalFrames": 44100,
+          "startFrame": 0,
+          "endFrameExclusive": 44100,
+          "preRollFrames": 0,
+          "tailPolicy": "baked overlap; plain full-span repeat"
+        }
+      },
+      "status": "pass",
+      "sourceDefects": [
+        "duration",
+        "loudness",
+        "truePeak",
+        "clipping",
+        "loopSeam"
+      ],
+      "repeat": {
+        "file": "audio/x3/engines/repeats/flint-2-three-cycles.ogg",
+        "sha256": "7c9335d5e859d7424a7e0f90f009da9e5bbeadb84dda12dd659b79a50fadaa29",
+        "cycles": 3,
+        "humanListen": "not measured"
+      }
+    },
+    {
+      "id": "quill-1",
+      "cue": null,
+      "category": "sfx",
+      "loop": true,
+      "measuredAt": "2026-10-02T21:50:37.904712+00:00",
+      "ownerStatus": "listening pending",
+      "notMeasured": [
+        "semantic fidelity",
+        "owner preference",
+        "in-game masking/latency",
+        "physical Stick playback/memory"
+      ],
+      "provenance": {
+        "sidecar": "audio\\x3\\engines\\raw\\quill-1.mp3.json",
+        "sourceSha256": "c84ddcc9bd4690dd4491d411e172b3e4bb10a88493f4ff9c04d340dcf62ca80d",
+        "generatedAt": "2026-10-02T21:48:42.208Z",
+        "request": {
+          "text": "Small engine character proof: medium-mass dry engine growl and loose rack resonance. Constant low rev body, already running; no ignition, acceleration or fade. Seamless steady bed. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.",
+          "duration_seconds": 2,
+          "prompt_influence": 0.7,
+          "model_id": "eleven_text_to_sound_v2",
+          "loop": true
+        },
+        "budgetCharge": 100,
+        "providerCredits": 20,
+        "session": "x3-2026-10-02",
+        "reused": false
+      },
+      "raw": {
+        "file": "audio/x3/engines/raw/quill-1.mp3",
+        "sha256": "c84ddcc9bd4690dd4491d411e172b3e4bb10a88493f4ff9c04d340dcf62ca80d",
+        "bytes": 37242,
+        "status": "fail",
+        "checks": {
+          "decode": true,
+          "duration": false,
+          "loudness": false,
+          "truePeak": false,
+          "silence": true,
+          "clipping": false,
+          "loopSeam": false
+        },
+        "failures": [
+          "duration",
+          "loudness",
+          "truePeak",
+          "clipping",
+          "loopSeam"
+        ],
+        "durationSeconds": 2.25,
+        "durationWindowSeconds": [
+          1.85,
+          2.15
+        ],
+        "sampleRate": 44100,
+        "channels": 2,
+        "decodedFrames": 99225,
+        "decodedBytes": 396900,
+        "integratedLufs": -9.83,
+        "truePeakDbtp": 1.62,
+        "loudnessRangeLu": 0.0,
+        "loudnessTargetLufs": -20,
+        "loudnessToleranceLu": 2,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 102,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [],
+          "fraction": 0.0,
+          "longestInteriorSeconds": 0
+        },
+        "loopSeam": {
+          "status": "fail",
+          "sampleJumpFullScale": 0.048295438289642334,
+          "boundaryRmsStepDb": 1.5379352997113167,
+          "spectralCosine": 0.9779519255582262,
+          "windowSeconds": 0.05,
+          "repeatedJoinJumps": [
+            0.048295438289642334,
+            0.048295438289642334
+          ],
+          "cycles": 3,
+          "limits": {
+            "sampleJumpMax": 0.02,
+            "rmsStepMaxDb": 3,
+            "spectralCosineMin": 0.8
+          },
+          "musicalContinuity": "not measured",
+          "humanRepeatedListen": "not measured"
+        },
+        "loopBoundary": {
+          "sampleRate": 44100,
+          "channels": 2,
+          "totalFrames": 99225,
+          "startFrame": 0,
+          "endFrameExclusive": 99225,
+          "preRollFrames": 0,
+          "tailPolicy": "baked overlap; plain full-span repeat"
+        }
+      },
+      "edit": {
+        "operation": "mono resample, DC removal, 125 ms complementary overlap, measured interior rotation",
+        "sourceStartFrame": 1378,
+        "loopFrames": 44100,
+        "overlapFrames": 2756,
+        "rate": 22050,
+        "rotationFrames": 13163,
+        "rotationPolicy": "48 interior candidates, minimum derivative/RMS/spectrum mismatch; no samples replaced",
+        "blurRisk": "Crossfade can blur motor pulses; repeated human listening pending"
+      },
+      "normalization": {
+        "operation": "measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling",
+        "softLimited": false,
+        "additionalCrestCompressionPasses": 0,
+        "gain": 0.3499451670283573,
+        "credits": 0
+      },
+      "edited": {
+        "file": "audio/x3/engines/edited/quill-1.wav",
+        "sha256": "a5360475128b361ebcafc58d8ef005cf10cd53f39e04267ad04420caa6990782",
+        "bytes": 88278,
+        "status": "pass",
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": true,
+          "truePeak": true,
+          "silence": true,
+          "clipping": true,
+          "loopSeam": true
+        },
+        "failures": [],
+        "durationSeconds": 2.0,
+        "durationWindowSeconds": [
+          1.998,
+          2.002
+        ],
+        "sampleRate": 22050,
+        "channels": 1,
+        "decodedFrames": 44100,
+        "decodedBytes": 88200,
+        "integratedLufs": -19.99,
+        "truePeakDbtp": -6.99,
+        "loudnessRangeLu": 0.0,
+        "loudnessTargetLufs": -20,
+        "loudnessToleranceLu": 2,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 0,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [],
+          "fraction": 0.0,
+          "longestInteriorSeconds": 0
+        },
+        "loopSeam": {
+          "status": "pass",
+          "sampleJumpFullScale": 9.1552734375e-05,
+          "boundaryRmsStepDb": 0.10276233525162924,
+          "spectralCosine": 0.9994112240778786,
+          "windowSeconds": 0.05,
+          "repeatedJoinJumps": [
+            9.1552734375e-05,
+            9.1552734375e-05
+          ],
+          "cycles": 3,
+          "limits": {
+            "sampleJumpMax": 0.02,
+            "rmsStepMaxDb": 3,
+            "spectralCosineMin": 0.8
+          },
+          "musicalContinuity": "not measured",
+          "humanRepeatedListen": "not measured"
+        },
+        "loopBoundary": {
+          "sampleRate": 22050,
+          "channels": 1,
+          "totalFrames": 44100,
+          "startFrame": 0,
+          "endFrameExclusive": 44100,
+          "preRollFrames": 0,
+          "tailPolicy": "baked overlap; plain full-span repeat"
+        }
+      },
+      "status": "pass",
+      "sourceDefects": [
+        "duration",
+        "loudness",
+        "truePeak",
+        "clipping",
+        "loopSeam"
+      ],
+      "repeat": {
+        "file": "audio/x3/engines/repeats/quill-1-three-cycles.ogg",
+        "sha256": "7b2e2f187cb5b349d02e0331ecd5a3115e163c62ff209dc88d80c0d313eb02a6",
+        "cycles": 3,
+        "humanListen": "not measured"
+      }
+    },
+    {
+      "id": "quill-2",
+      "cue": null,
+      "category": "sfx",
+      "loop": true,
+      "measuredAt": "2026-10-02T21:50:38.314828+00:00",
+      "ownerStatus": "listening pending",
+      "notMeasured": [
+        "semantic fidelity",
+        "owner preference",
+        "in-game masking/latency",
+        "physical Stick playback/memory"
+      ],
+      "provenance": {
+        "sidecar": "audio\\x3\\engines\\raw\\quill-2.mp3.json",
+        "sourceSha256": "eb335e18128f1bc3cd64b99b5f00b03e467b0af107574a8c08ab52ea0c67085f",
+        "generatedAt": "2026-10-02T21:48:53.928Z",
+        "request": {
+          "text": "Small engine character proof: even low coupe throb with tight mechanical ticking. Constant low rev body, already running; no ignition, acceleration or fade. Seamless steady bed. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.",
+          "duration_seconds": 2,
+          "prompt_influence": 0.7,
+          "model_id": "eleven_text_to_sound_v2",
+          "loop": true
+        },
+        "budgetCharge": 100,
+        "providerCredits": 20,
+        "session": "x3-2026-10-02",
+        "reused": false
+      },
+      "raw": {
+        "file": "audio/x3/engines/raw/quill-2.mp3",
+        "sha256": "eb335e18128f1bc3cd64b99b5f00b03e467b0af107574a8c08ab52ea0c67085f",
+        "bytes": 37242,
+        "status": "fail",
+        "checks": {
+          "decode": true,
+          "duration": false,
+          "loudness": false,
+          "truePeak": false,
+          "silence": true,
+          "clipping": false,
+          "loopSeam": false
+        },
+        "failures": [
+          "duration",
+          "loudness",
+          "truePeak",
+          "clipping",
+          "loopSeam"
+        ],
+        "durationSeconds": 2.25,
+        "durationWindowSeconds": [
+          1.85,
+          2.15
+        ],
+        "sampleRate": 44100,
+        "channels": 2,
+        "decodedFrames": 99225,
+        "decodedBytes": 396900,
+        "integratedLufs": -8.17,
+        "truePeakDbtp": 1.34,
+        "loudnessRangeLu": 0.0,
+        "loudnessTargetLufs": -20,
+        "loudnessToleranceLu": 2,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 8,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [],
+          "fraction": 0.0,
+          "longestInteriorSeconds": 0
+        },
+        "loopSeam": {
+          "status": "fail",
+          "sampleJumpFullScale": 0.07405093684792519,
+          "boundaryRmsStepDb": 0.6624533927199577,
+          "spectralCosine": 0.969150843751197,
+          "windowSeconds": 0.05,
+          "repeatedJoinJumps": [
+            0.07405093684792519,
+            0.07405093684792519
+          ],
+          "cycles": 3,
+          "limits": {
+            "sampleJumpMax": 0.02,
+            "rmsStepMaxDb": 3,
+            "spectralCosineMin": 0.8
+          },
+          "musicalContinuity": "not measured",
+          "humanRepeatedListen": "not measured"
+        },
+        "loopBoundary": {
+          "sampleRate": 44100,
+          "channels": 2,
+          "totalFrames": 99225,
+          "startFrame": 0,
+          "endFrameExclusive": 99225,
+          "preRollFrames": 0,
+          "tailPolicy": "baked overlap; plain full-span repeat"
+        }
+      },
+      "edit": {
+        "operation": "mono resample, DC removal, 125 ms complementary overlap, measured interior rotation",
+        "sourceStartFrame": 1378,
+        "loopFrames": 44100,
+        "overlapFrames": 2756,
+        "rate": 22050,
+        "rotationFrames": 19671,
+        "rotationPolicy": "48 interior candidates, minimum derivative/RMS/spectrum mismatch; no samples replaced",
+        "blurRisk": "Crossfade can blur motor pulses; repeated human listening pending"
+      },
+      "normalization": {
+        "operation": "measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling",
+        "softLimited": false,
+        "additionalCrestCompressionPasses": 0,
+        "gain": 0.27352687263067127,
+        "credits": 0
+      },
+      "edited": {
+        "file": "audio/x3/engines/edited/quill-2.wav",
+        "sha256": "13b7cf3dba7b4906950ed417260a9f2c17dc6b1a690885e54e086e5a31673998",
+        "bytes": 88278,
+        "status": "pass",
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": true,
+          "truePeak": true,
+          "silence": true,
+          "clipping": true,
+          "loopSeam": true
+        },
+        "failures": [],
+        "durationSeconds": 2.0,
+        "durationWindowSeconds": [
+          1.998,
+          2.002
+        ],
+        "sampleRate": 22050,
+        "channels": 1,
+        "decodedFrames": 44100,
+        "decodedBytes": 88200,
+        "integratedLufs": -20.0,
+        "truePeakDbtp": -9.21,
+        "loudnessRangeLu": 0.0,
+        "loudnessTargetLufs": -20,
+        "loudnessToleranceLu": 2,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 0,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [],
+          "fraction": 0.0,
+          "longestInteriorSeconds": 0
+        },
+        "loopSeam": {
+          "status": "pass",
+          "sampleJumpFullScale": 6.103515625e-05,
+          "boundaryRmsStepDb": 0.08080176330808872,
+          "spectralCosine": 0.9946007926940466,
+          "windowSeconds": 0.05,
+          "repeatedJoinJumps": [
+            6.103515625e-05,
+            6.103515625e-05
+          ],
+          "cycles": 3,
+          "limits": {
+            "sampleJumpMax": 0.02,
+            "rmsStepMaxDb": 3,
+            "spectralCosineMin": 0.8
+          },
+          "musicalContinuity": "not measured",
+          "humanRepeatedListen": "not measured"
+        },
+        "loopBoundary": {
+          "sampleRate": 22050,
+          "channels": 1,
+          "totalFrames": 44100,
+          "startFrame": 0,
+          "endFrameExclusive": 44100,
+          "preRollFrames": 0,
+          "tailPolicy": "baked overlap; plain full-span repeat"
+        }
+      },
+      "status": "pass",
+      "sourceDefects": [
+        "duration",
+        "loudness",
+        "truePeak",
+        "clipping",
+        "loopSeam"
+      ],
+      "repeat": {
+        "file": "audio/x3/engines/repeats/quill-2-three-cycles.ogg",
+        "sha256": "9cc018c67d59e9b61a4fadb34746231cf29f4e24313b42167ccee558d0f47082",
+        "cycles": 3,
+        "humanListen": "not measured"
+      }
+    },
+    {
+      "id": "vandal-1",
+      "cue": null,
+      "category": "sfx",
+      "loop": true,
+      "measuredAt": "2026-10-02T21:50:38.763290+00:00",
+      "ownerStatus": "listening pending",
+      "notMeasured": [
+        "semantic fidelity",
+        "owner preference",
+        "in-game masking/latency",
+        "physical Stick playback/memory"
+      ],
+      "provenance": {
+        "sidecar": "audio\\x3\\engines\\raw\\vandal-1.mp3.json",
+        "sourceSha256": "6c95a8b7cf92e9b27acb391a2573f40074eeb16980fc188ff6aca2b72b9e204b",
+        "generatedAt": "2026-10-02T21:49:05.386Z",
+        "request": {
+          "text": "Small engine character proof: lumpy boosted motor with uneven exhaust pulses. Constant low rev body, already running; no ignition, acceleration or fade. Seamless steady bed. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.",
+          "duration_seconds": 2,
+          "prompt_influence": 0.7,
+          "model_id": "eleven_text_to_sound_v2",
+          "loop": true
+        },
+        "budgetCharge": 100,
+        "providerCredits": 20,
+        "session": "x3-2026-10-02",
+        "reused": false
+      },
+      "raw": {
+        "file": "audio/x3/engines/raw/vandal-1.mp3",
+        "sha256": "6c95a8b7cf92e9b27acb391a2573f40074eeb16980fc188ff6aca2b72b9e204b",
+        "bytes": 37242,
+        "status": "fail",
+        "checks": {
+          "decode": true,
+          "duration": false,
+          "loudness": false,
+          "truePeak": false,
+          "silence": true,
+          "clipping": true,
+          "loopSeam": true
+        },
+        "failures": [
+          "duration",
+          "loudness",
+          "truePeak"
+        ],
+        "durationSeconds": 2.25,
+        "durationWindowSeconds": [
+          1.85,
+          2.15
+        ],
+        "sampleRate": 44100,
+        "channels": 2,
+        "decodedFrames": 99225,
+        "decodedBytes": 396900,
+        "integratedLufs": -11.14,
+        "truePeakDbtp": -0.26,
+        "loudnessRangeLu": 0.0,
+        "loudnessTargetLufs": -20,
+        "loudnessToleranceLu": 2,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 0,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [],
+          "fraction": 0.0,
+          "longestInteriorSeconds": 0
+        },
+        "loopSeam": {
+          "status": "pass",
+          "sampleJumpFullScale": 0.015526745468378067,
+          "boundaryRmsStepDb": 2.707941451785314,
+          "spectralCosine": 0.9577211933264722,
+          "windowSeconds": 0.05,
+          "repeatedJoinJumps": [
+            0.015526745468378067,
+            0.015526745468378067
+          ],
+          "cycles": 3,
+          "limits": {
+            "sampleJumpMax": 0.02,
+            "rmsStepMaxDb": 3,
+            "spectralCosineMin": 0.8
+          },
+          "musicalContinuity": "not measured",
+          "humanRepeatedListen": "not measured"
+        },
+        "loopBoundary": {
+          "sampleRate": 44100,
+          "channels": 2,
+          "totalFrames": 99225,
+          "startFrame": 0,
+          "endFrameExclusive": 99225,
+          "preRollFrames": 0,
+          "tailPolicy": "baked overlap; plain full-span repeat"
+        }
+      },
+      "edit": {
+        "operation": "mono resample, DC removal, 125 ms complementary overlap, measured interior rotation",
+        "sourceStartFrame": 1378,
+        "loopFrames": 44100,
+        "overlapFrames": 2756,
+        "rate": 22050,
+        "rotationFrames": 8482,
+        "rotationPolicy": "48 interior candidates, minimum derivative/RMS/spectrum mismatch; no samples replaced",
+        "blurRisk": "Crossfade can blur motor pulses; repeated human listening pending"
+      },
+      "normalization": {
+        "operation": "measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling",
+        "softLimited": false,
+        "additionalCrestCompressionPasses": 0,
+        "gain": 0.37454154703610093,
+        "credits": 0
+      },
+      "edited": {
+        "file": "audio/x3/engines/edited/vandal-1.wav",
+        "sha256": "303d838d61db414e6c84413353e78104df2ce617705b8f87a816aa77d8485784",
+        "bytes": 88278,
+        "status": "pass",
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": true,
+          "truePeak": true,
+          "silence": true,
+          "clipping": true,
+          "loopSeam": true
+        },
+        "failures": [],
+        "durationSeconds": 2.0,
+        "durationWindowSeconds": [
+          1.998,
+          2.002
+        ],
+        "sampleRate": 22050,
+        "channels": 1,
+        "decodedFrames": 44100,
+        "decodedBytes": 88200,
+        "integratedLufs": -20.01,
+        "truePeakDbtp": -8.11,
+        "loudnessRangeLu": 0.0,
+        "loudnessTargetLufs": -20,
+        "loudnessToleranceLu": 2,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 0,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [],
+          "fraction": 0.0,
+          "longestInteriorSeconds": 0
+        },
+        "loopSeam": {
+          "status": "pass",
+          "sampleJumpFullScale": 0.00018310546875,
+          "boundaryRmsStepDb": 0.26654378281914337,
+          "spectralCosine": 0.98286102448185,
+          "windowSeconds": 0.05,
+          "repeatedJoinJumps": [
+            0.00018310546875,
+            0.00018310546875
+          ],
+          "cycles": 3,
+          "limits": {
+            "sampleJumpMax": 0.02,
+            "rmsStepMaxDb": 3,
+            "spectralCosineMin": 0.8
+          },
+          "musicalContinuity": "not measured",
+          "humanRepeatedListen": "not measured"
+        },
+        "loopBoundary": {
+          "sampleRate": 22050,
+          "channels": 1,
+          "totalFrames": 44100,
+          "startFrame": 0,
+          "endFrameExclusive": 44100,
+          "preRollFrames": 0,
+          "tailPolicy": "baked overlap; plain full-span repeat"
+        }
+      },
+      "status": "pass",
+      "sourceDefects": [
+        "duration",
+        "loudness",
+        "truePeak"
+      ],
+      "repeat": {
+        "file": "audio/x3/engines/repeats/vandal-1-three-cycles.ogg",
+        "sha256": "4ff26652ef30a545384bec628458a3cdca7f0102616dd402df7e22ad187b56be",
+        "cycles": 3,
+        "humanListen": "not measured"
+      }
+    },
+    {
+      "id": "vandal-2",
+      "cue": null,
+      "category": "sfx",
+      "loop": true,
+      "measuredAt": "2026-10-02T21:50:39.195528+00:00",
+      "ownerStatus": "listening pending",
+      "notMeasured": [
+        "semantic fidelity",
+        "owner preference",
+        "in-game masking/latency",
+        "physical Stick playback/memory"
+      ],
+      "provenance": {
+        "sidecar": "audio\\x3\\engines\\raw\\vandal-2.mp3.json",
+        "sourceSha256": "06abb0b2159ffc230edb397d6edbd736c04952671070c956c5f97300a448c39c",
+        "generatedAt": "2026-10-02T21:49:17.268Z",
+        "request": {
+          "text": "Small engine character proof: rough supercharger whirr over a ragged bass motor. Constant low rev body, already running; no ignition, acceleration or fade. Seamless steady bed. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.",
+          "duration_seconds": 2,
+          "prompt_influence": 0.7,
+          "model_id": "eleven_text_to_sound_v2",
+          "loop": true
+        },
+        "budgetCharge": 100,
+        "providerCredits": 20,
+        "session": "x3-2026-10-02",
+        "reused": false
+      },
+      "raw": {
+        "file": "audio/x3/engines/raw/vandal-2.mp3",
+        "sha256": "06abb0b2159ffc230edb397d6edbd736c04952671070c956c5f97300a448c39c",
+        "bytes": 37242,
+        "status": "fail",
+        "checks": {
+          "decode": true,
+          "duration": false,
+          "loudness": false,
+          "truePeak": false,
+          "silence": true,
+          "clipping": false,
+          "loopSeam": false
+        },
+        "failures": [
+          "duration",
+          "loudness",
+          "truePeak",
+          "clipping",
+          "loopSeam"
+        ],
+        "durationSeconds": 2.25,
+        "durationWindowSeconds": [
+          1.85,
+          2.15
+        ],
+        "sampleRate": 44100,
+        "channels": 2,
+        "decodedFrames": 99225,
+        "decodedBytes": 396900,
+        "integratedLufs": -9.02,
+        "truePeakDbtp": 1.09,
+        "loudnessRangeLu": 0.0,
+        "loudnessTargetLufs": -20,
+        "loudnessToleranceLu": 2,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 99,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [],
+          "fraction": 0.0,
+          "longestInteriorSeconds": 0
+        },
+        "loopSeam": {
+          "status": "fail",
+          "sampleJumpFullScale": 0.020016223192214966,
+          "boundaryRmsStepDb": 0.4930055405578083,
+          "spectralCosine": 0.999729439002766,
+          "windowSeconds": 0.05,
+          "repeatedJoinJumps": [
+            0.020016223192214966,
+            0.020016223192214966
+          ],
+          "cycles": 3,
+          "limits": {
+            "sampleJumpMax": 0.02,
+            "rmsStepMaxDb": 3,
+            "spectralCosineMin": 0.8
+          },
+          "musicalContinuity": "not measured",
+          "humanRepeatedListen": "not measured"
+        },
+        "loopBoundary": {
+          "sampleRate": 44100,
+          "channels": 2,
+          "totalFrames": 99225,
+          "startFrame": 0,
+          "endFrameExclusive": 99225,
+          "preRollFrames": 0,
+          "tailPolicy": "baked overlap; plain full-span repeat"
+        }
+      },
+      "edit": {
+        "operation": "mono resample, DC removal, 125 ms complementary overlap, measured interior rotation",
+        "sourceStartFrame": 1378,
+        "loopFrames": 44100,
+        "overlapFrames": 2756,
+        "rate": 22050,
+        "rotationFrames": 39391,
+        "rotationPolicy": "48 interior candidates, minimum derivative/RMS/spectrum mismatch; no samples replaced",
+        "blurRisk": "Crossfade can blur motor pulses; repeated human listening pending"
+      },
+      "normalization": {
+        "operation": "measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling",
+        "softLimited": false,
+        "additionalCrestCompressionPasses": 0,
+        "gain": 0.3079640341502392,
+        "credits": 0
+      },
+      "edited": {
+        "file": "audio/x3/engines/edited/vandal-2.wav",
+        "sha256": "1f47d86464d84b4f9073d9baf8c8e7a2c20aafa76dcb37e697c43e9dc127c023",
+        "bytes": 88278,
+        "status": "pass",
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": true,
+          "truePeak": true,
+          "silence": true,
+          "clipping": true,
+          "loopSeam": true
+        },
+        "failures": [],
+        "durationSeconds": 2.0,
+        "durationWindowSeconds": [
+          1.998,
+          2.002
+        ],
+        "sampleRate": 22050,
+        "channels": 1,
+        "decodedFrames": 44100,
+        "decodedBytes": 88200,
+        "integratedLufs": -20.0,
+        "truePeakDbtp": -8.61,
+        "loudnessRangeLu": 0.0,
+        "loudnessTargetLufs": -20,
+        "loudnessToleranceLu": 2,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 0,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [],
+          "fraction": 0.0,
+          "longestInteriorSeconds": 0
+        },
+        "loopSeam": {
+          "status": "pass",
+          "sampleJumpFullScale": 9.1552734375e-05,
+          "boundaryRmsStepDb": 0.13527738540758974,
+          "spectralCosine": 0.992729647188537,
+          "windowSeconds": 0.05,
+          "repeatedJoinJumps": [
+            9.1552734375e-05,
+            9.1552734375e-05
+          ],
+          "cycles": 3,
+          "limits": {
+            "sampleJumpMax": 0.02,
+            "rmsStepMaxDb": 3,
+            "spectralCosineMin": 0.8
+          },
+          "musicalContinuity": "not measured",
+          "humanRepeatedListen": "not measured"
+        },
+        "loopBoundary": {
+          "sampleRate": 22050,
+          "channels": 1,
+          "totalFrames": 44100,
+          "startFrame": 0,
+          "endFrameExclusive": 44100,
+          "preRollFrames": 0,
+          "tailPolicy": "baked overlap; plain full-span repeat"
+        }
+      },
+      "status": "pass",
+      "sourceDefects": [
+        "duration",
+        "loudness",
+        "truePeak",
+        "clipping",
+        "loopSeam"
+      ],
+      "repeat": {
+        "file": "audio/x3/engines/repeats/vandal-2-three-cycles.ogg",
+        "sha256": "6e05d309b484f402f429657da1a8e4343beb16f9671a431c808b943ded89d2bb",
+        "cycles": 3,
+        "humanListen": "not measured"
+      }
+    },
+    {
+      "id": "kestrel-1",
+      "cue": null,
+      "category": "sfx",
+      "loop": true,
+      "measuredAt": "2026-10-02T21:50:39.610787+00:00",
+      "ownerStatus": "listening pending",
+      "notMeasured": [
+        "semantic fidelity",
+        "owner preference",
+        "in-game masking/latency",
+        "physical Stick playback/memory"
+      ],
+      "provenance": {
+        "sidecar": "audio\\x3\\engines\\raw\\kestrel-1.mp3.json",
+        "sourceSha256": "7712b84fe4efac3dfd3c8efee0980057a52b2e8945ed10498ee291298d6ddde5",
+        "generatedAt": "2026-10-02T21:49:31.151Z",
+        "request": {
+          "text": "Small engine character proof: electric traction whine with restrained rough arc crackle. Constant low rev body, already running; no ignition, acceleration or fade. Seamless steady bed. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.",
+          "duration_seconds": 2,
+          "prompt_influence": 0.7,
+          "model_id": "eleven_text_to_sound_v2",
+          "loop": true
+        },
+        "budgetCharge": 100,
+        "providerCredits": 20,
+        "session": "x3-2026-10-02",
+        "reused": false
+      },
+      "raw": {
+        "file": "audio/x3/engines/raw/kestrel-1.mp3",
+        "sha256": "7712b84fe4efac3dfd3c8efee0980057a52b2e8945ed10498ee291298d6ddde5",
+        "bytes": 37242,
+        "status": "fail",
+        "checks": {
+          "decode": true,
+          "duration": false,
+          "loudness": false,
+          "truePeak": false,
+          "silence": true,
+          "clipping": false,
+          "loopSeam": false
+        },
+        "failures": [
+          "duration",
+          "loudness",
+          "truePeak",
+          "clipping",
+          "loopSeam"
+        ],
+        "durationSeconds": 2.25,
+        "durationWindowSeconds": [
+          1.85,
+          2.15
+        ],
+        "sampleRate": 44100,
+        "channels": 2,
+        "decodedFrames": 99225,
+        "decodedBytes": 396900,
+        "integratedLufs": -9.99,
+        "truePeakDbtp": 0.74,
+        "loudnessRangeLu": 0.0,
+        "loudnessTargetLufs": -20,
+        "loudnessToleranceLu": 2,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 2,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [],
+          "fraction": 0.0,
+          "longestInteriorSeconds": 0
+        },
+        "loopSeam": {
+          "status": "fail",
+          "sampleJumpFullScale": 0.07994618639349937,
+          "boundaryRmsStepDb": 0.2976326483135068,
+          "spectralCosine": 0.9987543501916761,
+          "windowSeconds": 0.05,
+          "repeatedJoinJumps": [
+            0.07994618639349937,
+            0.07994618639349937
+          ],
+          "cycles": 3,
+          "limits": {
+            "sampleJumpMax": 0.02,
+            "rmsStepMaxDb": 3,
+            "spectralCosineMin": 0.8
+          },
+          "musicalContinuity": "not measured",
+          "humanRepeatedListen": "not measured"
+        },
+        "loopBoundary": {
+          "sampleRate": 44100,
+          "channels": 2,
+          "totalFrames": 99225,
+          "startFrame": 0,
+          "endFrameExclusive": 99225,
+          "preRollFrames": 0,
+          "tailPolicy": "baked overlap; plain full-span repeat"
+        }
+      },
+      "edit": {
+        "operation": "mono resample, DC removal, 125 ms complementary overlap, measured interior rotation",
+        "sourceStartFrame": 1378,
+        "loopFrames": 44100,
+        "overlapFrames": 2756,
+        "rate": 22050,
+        "rotationFrames": 44036,
+        "rotationPolicy": "48 interior candidates, minimum derivative/RMS/spectrum mismatch; no samples replaced",
+        "blurRisk": "Crossfade can blur motor pulses; repeated human listening pending"
+      },
+      "normalization": {
+        "operation": "measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling",
+        "softLimited": false,
+        "additionalCrestCompressionPasses": 0,
+        "gain": 0.45081670454146017,
+        "credits": 0
+      },
+      "edited": {
+        "file": "audio/x3/engines/edited/kestrel-1.wav",
+        "sha256": "dd9ef88a1e178eebc355fb162d4e49e0a3240a2004710f85cc417e8ba93b41ef",
+        "bytes": 88278,
+        "status": "pass",
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": true,
+          "truePeak": true,
+          "silence": true,
+          "clipping": true,
+          "loopSeam": true
+        },
+        "failures": [],
+        "durationSeconds": 2.0,
+        "durationWindowSeconds": [
+          1.998,
+          2.002
+        ],
+        "sampleRate": 22050,
+        "channels": 1,
+        "decodedFrames": 44100,
+        "decodedBytes": 88200,
+        "integratedLufs": -20.0,
+        "truePeakDbtp": -6.06,
+        "loudnessRangeLu": 0.0,
+        "loudnessTargetLufs": -20,
+        "loudnessToleranceLu": 2,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 0,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [],
+          "fraction": 0.0,
+          "longestInteriorSeconds": 0
+        },
+        "loopSeam": {
+          "status": "pass",
+          "sampleJumpFullScale": 0.00030517578125,
+          "boundaryRmsStepDb": 0.10847478368326971,
+          "spectralCosine": 0.9999014279898393,
+          "windowSeconds": 0.05,
+          "repeatedJoinJumps": [
+            0.00030517578125,
+            0.00030517578125
+          ],
+          "cycles": 3,
+          "limits": {
+            "sampleJumpMax": 0.02,
+            "rmsStepMaxDb": 3,
+            "spectralCosineMin": 0.8
+          },
+          "musicalContinuity": "not measured",
+          "humanRepeatedListen": "not measured"
+        },
+        "loopBoundary": {
+          "sampleRate": 22050,
+          "channels": 1,
+          "totalFrames": 44100,
+          "startFrame": 0,
+          "endFrameExclusive": 44100,
+          "preRollFrames": 0,
+          "tailPolicy": "baked overlap; plain full-span repeat"
+        }
+      },
+      "status": "pass",
+      "sourceDefects": [
+        "duration",
+        "loudness",
+        "truePeak",
+        "clipping",
+        "loopSeam"
+      ],
+      "repeat": {
+        "file": "audio/x3/engines/repeats/kestrel-1-three-cycles.ogg",
+        "sha256": "49385d393bae1d34de7b3387f026172012c7876239cfb5eed6175f54705b65d9",
+        "cycles": 3,
+        "humanListen": "not measured"
+      }
+    },
+    {
+      "id": "kestrel-2",
+      "cue": null,
+      "category": "sfx",
+      "loop": true,
+      "measuredAt": "2026-10-02T21:50:40.032747+00:00",
+      "ownerStatus": "listening pending",
+      "notMeasured": [
+        "semantic fidelity",
+        "owner preference",
+        "in-game masking/latency",
+        "physical Stick playback/memory"
+      ],
+      "provenance": {
+        "sidecar": "audio\\x3\\engines\\raw\\kestrel-2.mp3.json",
+        "sourceSha256": "d0e503e684250009d7b1a09dcb62e7540860ce94d40988da6484c19ac579a823",
+        "generatedAt": "2026-10-02T21:49:43.098Z",
+        "request": {
+          "text": "Small engine character proof: low electric motor buzz and high strained inverter harmonics. Constant low rev body, already running; no ignition, acceleration or fade. Seamless steady bed. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.",
+          "duration_seconds": 2,
+          "prompt_influence": 0.7,
+          "model_id": "eleven_text_to_sound_v2",
+          "loop": true
+        },
+        "budgetCharge": 100,
+        "providerCredits": 20,
+        "session": "x3-2026-10-02",
+        "reused": false
+      },
+      "raw": {
+        "file": "audio/x3/engines/raw/kestrel-2.mp3",
+        "sha256": "d0e503e684250009d7b1a09dcb62e7540860ce94d40988da6484c19ac579a823",
+        "bytes": 37242,
+        "status": "fail",
+        "checks": {
+          "decode": true,
+          "duration": false,
+          "loudness": false,
+          "truePeak": false,
+          "silence": true,
+          "clipping": false,
+          "loopSeam": false
+        },
+        "failures": [
+          "duration",
+          "loudness",
+          "truePeak",
+          "clipping",
+          "loopSeam"
+        ],
+        "durationSeconds": 2.25,
+        "durationWindowSeconds": [
+          1.85,
+          2.15
+        ],
+        "sampleRate": 44100,
+        "channels": 2,
+        "decodedFrames": 99225,
+        "decodedBytes": 396900,
+        "integratedLufs": -6.69,
+        "truePeakDbtp": 0.64,
+        "loudnessRangeLu": 0.0,
+        "loudnessTargetLufs": -20,
+        "loudnessToleranceLu": 2,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 5,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [],
+          "fraction": 0.0,
+          "longestInteriorSeconds": 0
+        },
+        "loopSeam": {
+          "status": "fail",
+          "sampleJumpFullScale": 0.07511242479085922,
+          "boundaryRmsStepDb": 0.2999569899577149,
+          "spectralCosine": 0.9929481734114709,
+          "windowSeconds": 0.05,
+          "repeatedJoinJumps": [
+            0.07511242479085922,
+            0.07511242479085922
+          ],
+          "cycles": 3,
+          "limits": {
+            "sampleJumpMax": 0.02,
+            "rmsStepMaxDb": 3,
+            "spectralCosineMin": 0.8
+          },
+          "musicalContinuity": "not measured",
+          "humanRepeatedListen": "not measured"
+        },
+        "loopBoundary": {
+          "sampleRate": 44100,
+          "channels": 2,
+          "totalFrames": 99225,
+          "startFrame": 0,
+          "endFrameExclusive": 99225,
+          "preRollFrames": 0,
+          "tailPolicy": "baked overlap; plain full-span repeat"
+        }
+      },
+      "edit": {
+        "operation": "mono resample, DC removal, 125 ms complementary overlap, measured interior rotation",
+        "sourceStartFrame": 1378,
+        "loopFrames": 44100,
+        "overlapFrames": 2756,
+        "rate": 22050,
+        "rotationFrames": 31019,
+        "rotationPolicy": "48 interior candidates, minimum derivative/RMS/spectrum mismatch; no samples replaced",
+        "blurRisk": "Crossfade can blur motor pulses; repeated human listening pending"
+      },
+      "normalization": {
+        "operation": "measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling",
+        "softLimited": false,
+        "additionalCrestCompressionPasses": 0,
+        "gain": 0.23415314751693045,
+        "credits": 0
+      },
+      "edited": {
+        "file": "audio/x3/engines/edited/kestrel-2.wav",
+        "sha256": "d657e356c27aca7054564db6afa54249373c778c609c5203066240612d005b4b",
+        "bytes": 88278,
+        "status": "pass",
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": true,
+          "truePeak": true,
+          "silence": true,
+          "clipping": true,
+          "loopSeam": true
+        },
+        "failures": [],
+        "durationSeconds": 2.0,
+        "durationWindowSeconds": [
+          1.998,
+          2.002
+        ],
+        "sampleRate": 22050,
+        "channels": 1,
+        "decodedFrames": 44100,
+        "decodedBytes": 88200,
+        "integratedLufs": -20.01,
+        "truePeakDbtp": -10.12,
+        "loudnessRangeLu": 0.0,
+        "loudnessTargetLufs": -20,
+        "loudnessToleranceLu": 2,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 0,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [],
+          "fraction": 0.0,
+          "longestInteriorSeconds": 0
+        },
+        "loopSeam": {
+          "status": "pass",
+          "sampleJumpFullScale": 6.103515625e-05,
+          "boundaryRmsStepDb": 0.06116740285478824,
+          "spectralCosine": 0.9989867546357465,
+          "windowSeconds": 0.05,
+          "repeatedJoinJumps": [
+            6.103515625e-05,
+            6.103515625e-05
+          ],
+          "cycles": 3,
+          "limits": {
+            "sampleJumpMax": 0.02,
+            "rmsStepMaxDb": 3,
+            "spectralCosineMin": 0.8
+          },
+          "musicalContinuity": "not measured",
+          "humanRepeatedListen": "not measured"
+        },
+        "loopBoundary": {
+          "sampleRate": 22050,
+          "channels": 1,
+          "totalFrames": 44100,
+          "startFrame": 0,
+          "endFrameExclusive": 44100,
+          "preRollFrames": 0,
+          "tailPolicy": "baked overlap; plain full-span repeat"
+        }
+      },
+      "status": "pass",
+      "sourceDefects": [
+        "duration",
+        "loudness",
+        "truePeak",
+        "clipping",
+        "loopSeam"
+      ],
+      "repeat": {
+        "file": "audio/x3/engines/repeats/kestrel-2-three-cycles.ogg",
+        "sha256": "be53a26b99ef8578304b915e5ff91421f8691ee3175258d1c1a61d4dab0fc06d",
+        "cycles": 3,
+        "humanListen": "not measured"
+      }
+    },
+    {
+      "id": "bulwark-1",
+      "cue": null,
+      "category": "sfx",
+      "loop": true,
+      "measuredAt": "2026-10-02T21:50:40.481638+00:00",
+      "ownerStatus": "listening pending",
+      "notMeasured": [
+        "semantic fidelity",
+        "owner preference",
+        "in-game masking/latency",
+        "physical Stick playback/memory"
+      ],
+      "provenance": {
+        "sidecar": "audio\\x3\\engines\\raw\\bulwark-1.mp3.json",
+        "sourceSha256": "1fd35cafad20e7d744289648b62f73f85a84701f3b9035b5a2a7c8ff8ea69aae",
+        "generatedAt": "2026-10-02T21:49:54.687Z",
+        "request": {
+          "text": "Small engine character proof: armoured low diesel with enclosed heavy body. Constant low rev body, already running; no ignition, acceleration or fade. Seamless steady bed. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.",
+          "duration_seconds": 2,
+          "prompt_influence": 0.7,
+          "model_id": "eleven_text_to_sound_v2",
+          "loop": true
+        },
+        "budgetCharge": 100,
+        "providerCredits": 20,
+        "session": "x3-2026-10-02",
+        "reused": false
+      },
+      "raw": {
+        "file": "audio/x3/engines/raw/bulwark-1.mp3",
+        "sha256": "1fd35cafad20e7d744289648b62f73f85a84701f3b9035b5a2a7c8ff8ea69aae",
+        "bytes": 37242,
+        "status": "fail",
+        "checks": {
+          "decode": true,
+          "duration": false,
+          "loudness": false,
+          "truePeak": true,
+          "silence": true,
+          "clipping": true,
+          "loopSeam": true
+        },
+        "failures": [
+          "duration",
+          "loudness"
+        ],
+        "durationSeconds": 2.25,
+        "durationWindowSeconds": [
+          1.85,
+          2.15
+        ],
+        "sampleRate": 44100,
+        "channels": 2,
+        "decodedFrames": 99225,
+        "decodedBytes": 396900,
+        "integratedLufs": -11.92,
+        "truePeakDbtp": -1.23,
+        "loudnessRangeLu": 0.0,
+        "loudnessTargetLufs": -20,
+        "loudnessToleranceLu": 2,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 0,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [],
+          "fraction": 0.0,
+          "longestInteriorSeconds": 0
+        },
+        "loopSeam": {
+          "status": "pass",
+          "sampleJumpFullScale": 0.01779829361476004,
+          "boundaryRmsStepDb": 0.7252392455536765,
+          "spectralCosine": 0.9227537725912646,
+          "windowSeconds": 0.05,
+          "repeatedJoinJumps": [
+            0.01779829361476004,
+            0.01779829361476004
+          ],
+          "cycles": 3,
+          "limits": {
+            "sampleJumpMax": 0.02,
+            "rmsStepMaxDb": 3,
+            "spectralCosineMin": 0.8
+          },
+          "musicalContinuity": "not measured",
+          "humanRepeatedListen": "not measured"
+        },
+        "loopBoundary": {
+          "sampleRate": 44100,
+          "channels": 2,
+          "totalFrames": 99225,
+          "startFrame": 0,
+          "endFrameExclusive": 99225,
+          "preRollFrames": 0,
+          "tailPolicy": "baked overlap; plain full-span repeat"
+        }
+      },
+      "edit": {
+        "operation": "mono resample, DC removal, 125 ms complementary overlap, measured interior rotation",
+        "sourceStartFrame": 1378,
+        "loopFrames": 44100,
+        "overlapFrames": 2756,
+        "rate": 22050,
+        "rotationFrames": 18780,
+        "rotationPolicy": "48 interior candidates, minimum derivative/RMS/spectrum mismatch; no samples replaced",
+        "blurRisk": "Crossfade can blur motor pulses; repeated human listening pending"
+      },
+      "normalization": {
+        "operation": "measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling",
+        "softLimited": false,
+        "additionalCrestCompressionPasses": 0,
+        "gain": 0.3994845613082854,
+        "credits": 0
+      },
+      "edited": {
+        "file": "audio/x3/engines/edited/bulwark-1.wav",
+        "sha256": "5268a11faa3101bb13ee82e20926934f84a0241d77b16b1b71ed7c2080e8efdd",
+        "bytes": 88278,
+        "status": "pass",
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": true,
+          "truePeak": true,
+          "silence": true,
+          "clipping": true,
+          "loopSeam": true
+        },
+        "failures": [],
+        "durationSeconds": 2.0,
+        "durationWindowSeconds": [
+          1.998,
+          2.002
+        ],
+        "sampleRate": 22050,
+        "channels": 1,
+        "decodedFrames": 44100,
+        "decodedBytes": 88200,
+        "integratedLufs": -20.02,
+        "truePeakDbtp": -7.77,
+        "loudnessRangeLu": 0.0,
+        "loudnessTargetLufs": -20,
+        "loudnessToleranceLu": 2,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 0,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [],
+          "fraction": 0.0,
+          "longestInteriorSeconds": 0
+        },
+        "loopSeam": {
+          "status": "pass",
+          "sampleJumpFullScale": 9.1552734375e-05,
+          "boundaryRmsStepDb": 0.18973608156215555,
+          "spectralCosine": 0.9954505225154996,
+          "windowSeconds": 0.05,
+          "repeatedJoinJumps": [
+            9.1552734375e-05,
+            9.1552734375e-05
+          ],
+          "cycles": 3,
+          "limits": {
+            "sampleJumpMax": 0.02,
+            "rmsStepMaxDb": 3,
+            "spectralCosineMin": 0.8
+          },
+          "musicalContinuity": "not measured",
+          "humanRepeatedListen": "not measured"
+        },
+        "loopBoundary": {
+          "sampleRate": 22050,
+          "channels": 1,
+          "totalFrames": 44100,
+          "startFrame": 0,
+          "endFrameExclusive": 44100,
+          "preRollFrames": 0,
+          "tailPolicy": "baked overlap; plain full-span repeat"
+        }
+      },
+      "status": "pass",
+      "sourceDefects": [
+        "duration",
+        "loudness"
+      ],
+      "repeat": {
+        "file": "audio/x3/engines/repeats/bulwark-1-three-cycles.ogg",
+        "sha256": "b324c8ccfb85631b19f1bc177315047197625eb8bf77f60ecf6ca74a631b07e3",
+        "cycles": 3,
+        "humanListen": "not measured"
+      }
+    },
+    {
+      "id": "bulwark-2",
+      "cue": null,
+      "category": "sfx",
+      "loop": true,
+      "measuredAt": "2026-10-02T21:50:40.906310+00:00",
+      "ownerStatus": "listening pending",
+      "notMeasured": [
+        "semantic fidelity",
+        "owner preference",
+        "in-game masking/latency",
+        "physical Stick playback/memory"
+      ],
+      "provenance": {
+        "sidecar": "audio\\x3\\engines\\raw\\bulwark-2.mp3.json",
+        "sourceSha256": "52edde44618fb4fd219627b21b4e0dd990bbfb8ee24c4d613ef2cb6007006600",
+        "generatedAt": "2026-10-02T21:50:06.971Z",
+        "request": {
+          "text": "Small engine character proof: deep slow truck diesel throb through thick steel panels. Constant low rev body, already running; no ignition, acceleration or fade. Seamless steady bed. Dry close industrial metal, dirty low mechanical weight, hard midrange, tiny outdoor reflection. Original isolated effect; no music or voice.",
+          "duration_seconds": 2,
+          "prompt_influence": 0.7,
+          "model_id": "eleven_text_to_sound_v2",
+          "loop": true
+        },
+        "budgetCharge": 100,
+        "providerCredits": 20,
+        "session": "x3-2026-10-02",
+        "reused": false
+      },
+      "raw": {
+        "file": "audio/x3/engines/raw/bulwark-2.mp3",
+        "sha256": "52edde44618fb4fd219627b21b4e0dd990bbfb8ee24c4d613ef2cb6007006600",
+        "bytes": 37242,
+        "status": "fail",
+        "checks": {
+          "decode": true,
+          "duration": false,
+          "loudness": false,
+          "truePeak": false,
+          "silence": true,
+          "clipping": false,
+          "loopSeam": false
+        },
+        "failures": [
+          "duration",
+          "loudness",
+          "truePeak",
+          "clipping",
+          "loopSeam"
+        ],
+        "durationSeconds": 2.25,
+        "durationWindowSeconds": [
+          1.85,
+          2.15
+        ],
+        "sampleRate": 44100,
+        "channels": 2,
+        "decodedFrames": 99225,
+        "decodedBytes": 396900,
+        "integratedLufs": -9.84,
+        "truePeakDbtp": 0.15,
+        "loudnessRangeLu": 0.0,
+        "loudnessTargetLufs": -20,
+        "loudnessToleranceLu": 2,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 2,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [],
+          "fraction": 0.0,
+          "longestInteriorSeconds": 0
+        },
+        "loopSeam": {
+          "status": "fail",
+          "sampleJumpFullScale": 0.08690980076789856,
+          "boundaryRmsStepDb": 0.6324064254878454,
+          "spectralCosine": 0.984184332109907,
+          "windowSeconds": 0.05,
+          "repeatedJoinJumps": [
+            0.08690980076789856,
+            0.08690980076789856
+          ],
+          "cycles": 3,
+          "limits": {
+            "sampleJumpMax": 0.02,
+            "rmsStepMaxDb": 3,
+            "spectralCosineMin": 0.8
+          },
+          "musicalContinuity": "not measured",
+          "humanRepeatedListen": "not measured"
+        },
+        "loopBoundary": {
+          "sampleRate": 44100,
+          "channels": 2,
+          "totalFrames": 99225,
+          "startFrame": 0,
+          "endFrameExclusive": 99225,
+          "preRollFrames": 0,
+          "tailPolicy": "baked overlap; plain full-span repeat"
+        }
+      },
+      "edit": {
+        "operation": "mono resample, DC removal, 125 ms complementary overlap, measured interior rotation",
+        "sourceStartFrame": 1378,
+        "loopFrames": 44100,
+        "overlapFrames": 2756,
+        "rate": 22050,
+        "rotationFrames": 9404,
+        "rotationPolicy": "48 interior candidates, minimum derivative/RMS/spectrum mismatch; no samples replaced",
+        "blurRisk": "Crossfade can blur motor pulses; repeated human listening pending"
+      },
+      "normalization": {
+        "operation": "measured gain with -2 dBTP ceiling; tanh soft limiting if crest exceeds ceiling",
+        "softLimited": false,
+        "additionalCrestCompressionPasses": 0,
+        "gain": 0.3447466065731494,
+        "credits": 0
+      },
+      "edited": {
+        "file": "audio/x3/engines/edited/bulwark-2.wav",
+        "sha256": "bd6b6adae5385ba8e41debccc2ea18ba110e6d48c943d1a0802def82e8296d7b",
+        "bytes": 88278,
+        "status": "pass",
+        "checks": {
+          "decode": true,
+          "duration": true,
+          "loudness": true,
+          "truePeak": true,
+          "silence": true,
+          "clipping": true,
+          "loopSeam": true
+        },
+        "failures": [],
+        "durationSeconds": 2.0,
+        "durationWindowSeconds": [
+          1.998,
+          2.002
+        ],
+        "sampleRate": 22050,
+        "channels": 1,
+        "decodedFrames": 44100,
+        "decodedBytes": 88200,
+        "integratedLufs": -20.02,
+        "truePeakDbtp": -8.99,
+        "loudnessRangeLu": 0.0,
+        "loudnessTargetLufs": -20,
+        "loudnessToleranceLu": 2,
+        "meterPaddingFrames": 0,
+        "fullScaleSampleCount": 0,
+        "silence": {
+          "thresholdDbfs": -50,
+          "minimumIntervalSeconds": 0.1,
+          "intervalsFrames": [],
+          "fraction": 0.0,
+          "longestInteriorSeconds": 0
+        },
+        "loopSeam": {
+          "status": "pass",
+          "sampleJumpFullScale": 0.0,
+          "boundaryRmsStepDb": 0.008978532250478153,
+          "spectralCosine": 0.9976991632236621,
+          "windowSeconds": 0.05,
+          "repeatedJoinJumps": [
+            0.0,
+            0.0
+          ],
+          "cycles": 3,
+          "limits": {
+            "sampleJumpMax": 0.02,
+            "rmsStepMaxDb": 3,
+            "spectralCosineMin": 0.8
+          },
+          "musicalContinuity": "not measured",
+          "humanRepeatedListen": "not measured"
+        },
+        "loopBoundary": {
+          "sampleRate": 22050,
+          "channels": 1,
+          "totalFrames": 44100,
+          "startFrame": 0,
+          "endFrameExclusive": 44100,
+          "preRollFrames": 0,
+          "tailPolicy": "baked overlap; plain full-span repeat"
+        }
+      },
+      "status": "pass",
+      "sourceDefects": [
+        "duration",
+        "loudness",
+        "truePeak",
+        "clipping",
+        "loopSeam"
+      ],
+      "repeat": {
+        "file": "audio/x3/engines/repeats/bulwark-2-three-cycles.ogg",
+        "sha256": "e8948c67662e84b71a9f25e4067e127776266296948416dbd6e2f24072b9158e",
+        "cycles": 3,
+        "humanListen": "not measured"
+      }
+    }
+  ]
+}
