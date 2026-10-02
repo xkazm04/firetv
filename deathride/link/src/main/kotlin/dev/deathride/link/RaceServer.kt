@@ -194,10 +194,10 @@ class RaceServer(private val assets: (String)->String, private val log: (String)
                         val tier=msg["tier"]?.jsonPrimitive?.intOrNull
                         if(part>=0 && car>=0 && tier!=null && tier>=0 && msg.text("profile")==s.profileId)s.shopRequest.compareAndSet(null,ShopRequest(s.profileId,car,part,tier))
                     }
-                    "market" -> if(phase=="garage") {
+                    "market" -> if(phase=="garage" || phase=="career" && s.id==0 && msg.text("action")=="ally") {
                         val action=msg.text("action");val id=msg.text("id");val revision=msg["revision"]?.jsonPrimitive?.longOrNull
                         val car=CarCatalog.all.indexOfFirst{it.id==msg.text("car")}
-                        if(action in setOf("buy","trade","item","loan","repay","repair","service","contract") && id.length<=64 && revision!=null && revision>=0 && car>=0 && msg.text("profile")==s.profileId)
+                        if(action in setOf("buy","trade","item","loan","repay","repair","service","contract","ally") && id.length<=64 && revision!=null && revision>=0 && car>=0 && msg.text("profile")==s.profileId)
                             s.marketRequest.compareAndSet(null,MarketRequest(s.profileId,car,action,id,revision))
                     }
                     "feel" -> { val index=FeelProfiles.all.indexOfFirst { it.id==msg.text("id") }; if(index>=0)feelRequest.set(index) }

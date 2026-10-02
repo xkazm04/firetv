@@ -41,7 +41,8 @@ class Profile(val id: String,val withRivals: Boolean=true) {
     val condition=IntArray(CarCatalog.all.size){100}
     var inventory=0;internal set
     var raceItems=0;internal set
-    var debt=if(withRivals)AshRules["startingDebt"].toInt() else 0;internal set
+    var debt=0;internal set // Optional shop loans; league debt has its own auditable ledger.
+    val campaign=CampaignState(withRivals)
     var winStreak=0;internal set
     var contract=-1;internal set
     var contractWins=0;internal set
@@ -63,6 +64,7 @@ class Profile(val id: String,val withRivals: Boolean=true) {
         return result
     }
     fun copy(): Profile = Profile(id,withRivals).also { p ->
+        p.campaign.decode(campaign.encode())
         p.credits=credits;p.selectedCar=selectedCar;p.startedRaces=startedRaces;p.settledRace=settledRace;p.races=races;p.wins=wins
         tiers.copyInto(p.tiers);p.lastReceipt=lastReceipt
         owned.copyInto(p.owned);condition.copyInto(p.condition);p.inventory=inventory;p.raceItems=raceItems;p.debt=debt;p.winStreak=winStreak;p.contract=contract;p.contractWins=contractWins
@@ -109,7 +111,7 @@ object Garage {
         val offers=Parts.all.indices.joinToString(",","[","]"){offer(profile,it).json}
         val stats=CarCatalog.all[profile.selectedCar].json(profile.bonuses())
         // Messages are owned fixed strings; profile IDs are restricted at the boundary.
-        return "{\"profile\":\"${profile.id}\",\"credits\":${profile.credits},\"car\":$stats,\"races\":${profile.races},\"wins\":${profile.wins},\"offers\":$offers,\"market\":${Market.json(profile)},\"message\":\"$message\",\"saveStatus\":\"$saveStatus\",\"receipt\":${profile.lastReceipt?.json?:"null"}}"
+        return "{\"campaign\":${Campaign.json(profile)},\"profile\":\"${profile.id}\",\"credits\":${profile.credits},\"car\":$stats,\"races\":${profile.races},\"wins\":${profile.wins},\"offers\":$offers,\"market\":${Market.json(profile)},\"message\":\"$message\",\"saveStatus\":\"$saveStatus\",\"receipt\":${profile.lastReceipt?.json?:"null"}}"
     }
 }
 object Economy {
@@ -121,7 +123,7 @@ object Economy {
         profile.marketRevision++
         return ++profile.startedRaces
     }
-    fun settle(profile: Profile,ticket: Long,position: Int,kills: Int,hp: Double,rewardScale: Double=1.0,repairScale: Double=1.0,bonus: Int=0,cash: Int=0,course: String="",targetWrecked: Boolean=false,clean: Boolean=hp>=CombatRules["maxHp"],finished: Boolean=hp>0): Receipt? {
+    fun settle(profile: Profile,ticket: Long,position: Int,kills: Int,hp: Double,rewardScale: Double=1.0,repairScale: Double=1.0,bonus: Int=0,cash: Int=0,course: String="",targetWrecked: Boolean=false,clean: Boolean=hp>=CombatRules["maxHp"],finished: Boolean=hp>0,league: Boolean=false): Receipt? {
         require(position in 1..Tuning.CAR_COUNT && kills in 0 until Tuning.CAR_COUNT && hp.isFinite() && hp in 0.0..CombatRules["maxHp"])
         require(rewardScale.isFinite() && repairScale.isFinite() && rewardScale>0 && repairScale>=0 && bonus>=0 && cash in 0..MarketRules["raceCashCap"].toInt())
         if(ticket<=profile.settledRace || ticket>profile.startedRaces)return null
@@ -132,7 +134,8 @@ object Economy {
         val paid=min(service,floor(gross*EconomyRules["maxRepairPrizeShare"]).toInt())
         val net=gross-paid
         val debtPaid=min(profile.debt,min(floor(net*MarketRules["repaymentShare"]).toInt(),max(0,net-MarketRules["minimumTakeHome"].toInt())))
-        val banked=min(net-debtPaid,EconomyRules["creditCap"].toInt()-profile.credits)
+        val leaguePaid=if(league)Campaign.payment(profile,net,debtPaid) else 0
+        val banked=min(net-debtPaid-leaguePaid,EconomyRules["creditCap"].toInt()-profile.credits)
         profile.debt-=debtPaid;profile.lastDebtPayment=debtPaid;profile.marketRevision++;profile.raceItems=0
         profile.condition[profile.selectedCar]=if(profile.manualService)max(MarketRules["roadworthyPercent"].toInt(),floor(hp/maximum*100).toInt().coerceIn(0,100)) else 100
         profile.credits+=banked;profile.settledRace=ticket;profile.races++;if(position==1)profile.wins++

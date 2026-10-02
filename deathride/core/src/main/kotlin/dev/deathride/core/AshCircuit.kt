@@ -64,6 +64,7 @@ object RivalEconomy {
     }
     fun prepare(p: Profile,round: Int=p.careerRound) {
         require(p.withRivals)
+        Campaign.prepare(p,round)
         val point=CareerCurve.all[round];val course=Courses.all[Career.events[round].courseIndex]
         val serial=p.careerSeasons*Career.events.size+round
         val newEvent=p.rivalPreparedSerial!=serial
@@ -114,7 +115,7 @@ object RivalEconomy {
     fun fieldRating(p: Profile,round: Int=p.careerRound)=cast(round).map{index->val r=p.rivalProfiles[index];PowerRating.of(CarCatalog.all[r.selectedCar],r.bonuses())}.average()
     fun json(p: Profile): String = cast(p.careerRound).joinToString(",","[","]"){index->
         val r=p.rivalProfiles[index];val driver=Career.rivals[index];val story=AshStory.rivals.getValue(driver.id)
-        "{\"id\":\"${driver.id}\",\"name\":\"${driver.name}\",\"car\":\"${CarCatalog.all[r.selectedCar].id}\",\"powerRating\":${PowerRating.of(CarCatalog.all[r.selectedCar],r.bonuses())},\"credits\":${r.credits},\"debt\":${r.debt},\"parts\":${r.tiers.sum()},\"grudge\":${p.grudges[index]>0},\"relationship\":\"${if(p.grudges[index]>0)"grudge" else if(p.grudges[index]<0)"ally" else "neutral"}\",\"portrait\":\"${story.getValue("portraitKey")}\",\"biography\":\"${story.getValue("biography")}\",\"taunt\":\"${story.getValue(if(p.grudges[index]>0)"grudgeTaunt" else "taunt")}\"}"
+        "{\"id\":\"${driver.id}\",\"name\":\"${driver.name}\",\"car\":\"${CarCatalog.all[r.selectedCar].id}\",\"powerRating\":${PowerRating.of(CarCatalog.all[r.selectedCar],r.bonuses())},\"credits\":${r.credits},\"debt\":${r.debt},\"parts\":${r.tiers.sum()},\"grudge\":${p.grudges[index]>0},\"relationship\":\"${if(Campaign.taunt(p,driver.id)!=null)if(p.grudges[index]>0)"ally / grudge" else "ally" else if(p.grudges[index]>0)"grudge" else if(p.grudges[index]<0)"ally" else "neutral"}\",\"portrait\":\"${story.getValue("portraitKey")}\",\"biography\":\"${story.getValue("biography")}\",\"taunt\":\"${Campaign.taunt(p,driver.id)?:story.getValue(if(p.grudges[index]>0)"grudgeTaunt" else "taunt")}\"}"
     }
 }
 

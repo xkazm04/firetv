@@ -79,6 +79,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
     private val raceTickets=LongArray(2)
     private val raceProfiles=Array(2){""}
     private var selectedPart=0
+    private var selectedReward=0
     private var campaignRace=false
     private var raceRound=0
     private var raceDifficulty=0
@@ -116,14 +117,19 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
     }
     private fun openGarage() { if(phase=="lobby" || phase=="results" || phase=="career") { phase="garage";server.phase=phase;accumulator=0.0;rebuildUi() } }
     private fun buyMarket(i: Int,request: dev.deathride.link.MarketRequest) {
-        if(phase!="garage" || request.car!=profiles[i].selectedCar)return
+        if((phase!="garage" && !(phase=="career" && request.action=="ally" && i==0)) || request.car!=profiles[i].selectedCar)return
         var message=""
         if(editProfile(i){message=Market.transact(it,request.action,request.id,request.revision)}) {
-            selectedCars[i]=profiles[i].selectedCar;shopMessage[i]=message;Garage.apply(profiles[i],world.cars[i]);world.reset();publishGarage(i)
+            selectedCars[i]=profiles[i].selectedCar;shopMessage[i]=message;careerMessage[i]=message;Garage.apply(profiles[i],world.cars[i]);world.reset();publishGarage(i)
         }
     }
+    private fun careerSelect() {
+        val p=profiles[0];val index=Campaign.pending(p)
+        if(index<0){startRace(true);return}
+        buyMarket(0,dev.deathride.link.MarketRequest(p.id,p.selectedCar,"ally","${Campaign.allies[index].id}:${Campaign.choices[selectedReward]}",p.marketRevision))
+    }
     private fun openCareer() { if(phase=="lobby" || phase=="results") { if(!editProfile(0){RivalEconomy.prepare(it)})return;phase="career";server.phase=phase;accumulator=0.0;for((slot,index) in RivalEconomy.cast(profiles[0].careerRound).withIndex())Garage.apply(profiles[0].rivalProfiles[index],rivalPreviews[slot]);rebuildUi() } }
-    private fun selectDifficulty(direction: Int) { server.difficultyRequest.set((profiles[0].careerDifficulty+direction).mod(Career.difficulties.size)) }
+    private fun selectDifficulty(direction: Int) { if(Campaign.pending(profiles[0])>=0)selectedReward=(selectedReward+direction).mod(Campaign.choices.size) else server.difficultyRequest.set((profiles[0].careerDifficulty+direction).mod(Career.difficulties.size)) }
     private fun configureWorld(courseIndex: Int,career: Boolean,seed: Int=17) {
         val changed=selectedTrack!=courseIndex;selectedTrack=courseIndex
         // Publish invalidation before the new track ID; an HTTP reader must not see new-track/old-ready.
@@ -167,13 +173,13 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         Gdx.input.inputProcessor=object: InputAdapter() {
             override fun keyDown(keycode: Int): Boolean {
                 when(keycode) {
-                    Input.Keys.ENTER,Input.Keys.SPACE,Input.Keys.DPAD_CENTER,Input.Keys.BUTTON_A -> { if(phase=="garage")buyPart(0,selectedPart,profiles[0].tier(selectedCars[0],selectedPart),selectedCars[0]) else if(phase=="career")startRace(true) else if(phase=="results" && campaignRace)openCareer() else if(phase=="lobby" || phase=="results")startRace(); return true }
+                    Input.Keys.ENTER,Input.Keys.SPACE,Input.Keys.DPAD_CENTER,Input.Keys.BUTTON_A -> { if(phase=="garage")buyPart(0,selectedPart,profiles[0].tier(selectedCars[0],selectedPart),selectedCars[0]) else if(phase=="career")careerSelect() else if(phase=="results" && campaignRace)openCareer() else if(phase=="lobby" || phase=="results")startRace(); return true }
                     Input.Keys.BACK,Input.Keys.ESCAPE,Input.Keys.BUTTON_B -> { if(phase!="lobby")lobby() else Gdx.app.exit(); return true }
                     Input.Keys.LEFT -> { if(phase=="garage")server.slots[0].carRequest.set((selectedCars[0]-1).mod(CarCatalog.all.size)) else if(phase=="career")selectDifficulty(-1) else selectFeel(-1); return true }
                     Input.Keys.RIGHT -> { if(phase=="garage")server.slots[0].carRequest.set((selectedCars[0]+1)%CarCatalog.all.size) else if(phase=="career")selectDifficulty(1) else selectFeel(1); return true }
                     Input.Keys.MEDIA_PLAY_PAUSE -> { openGarage();return true }
                     Input.Keys.MENU -> { if(phase=="lobby" || phase=="results")server.trackRequest.set((selectedTrack+1)%Courses.all.size); return true }
-                    Input.Keys.DOWN -> if(phase=="garage") { selectedPart=(selectedPart+1)%Parts.all.size;return true } else if(phase=="lobby" || phase=="results") { server.slots[0].carRequest.set((selectedCars[0]+1)%CarCatalog.all.size); return true }
+                    Input.Keys.DOWN -> if(phase=="career") { startRace(true);return true } else if(phase=="garage") { selectedPart=(selectedPart+1)%Parts.all.size;return true } else if(phase=="lobby" || phase=="results") { server.slots[0].carRequest.set((selectedCars[0]+1)%CarCatalog.all.size); return true }
                     Input.Keys.UP -> if(phase=="garage") { selectedPart=(selectedPart-1).mod(Parts.all.size);return true } else if(phase=="lobby" || phase=="results") { openCareer();return true }
                     Input.Keys.MEDIA_REWIND -> if(phase=="lobby") { server.resetPairing();keyboard=false;return true }
                 }
@@ -397,7 +403,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
             }
             "career" -> {
                 panel(44f,96f,729f,506f);panel(788f,96f,448f,506f)
-                for(i in Career.difficulties.indices) {shape.color=if(i==profiles[0].careerDifficulty)accent else road;shape.rect(66f+i*229,230f,216f,42f)}
+                for(i in Career.difficulties.indices) {shape.color=if(i==if(Campaign.pending(profiles[0])>=0)selectedReward else profiles[0].careerDifficulty)accent else road;shape.rect(66f+i*229,230f,216f,42f)}
                 bar(66f,356f,677f,HudTheme.fraction(profiles[0].careerCleared.toDouble(),Career.events.size.toDouble()),accent)
                 shape.color=accent;shape.rect(66f,137f,677f,44f)
             }
@@ -513,7 +519,9 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
                 detail.setColor(muted);detail.wrapped(part.description,631f,276f,560f,25f)
                 label(if(offer.available)"SELECT: TIER ${offer.nextTier} / ${offer.price} CR" else offer.reason,642f,235f,bg)
                 detail.setColor(muted);detail.wrapped(shopMessage[0]+" / "+saveStatus[0],631f,186f,554f,25f)
-                label("UP / DOWN: PART    BACK: LOBBY",68f,120f)
+                label("THE MECHANIC",68f,201f,accent)
+                detail.setColor(muted);detail.wrapped(Campaign.mechanicLine(p),68f,175f,500f,24f)
+                label("LEAGUE ${p.campaign.debt} / LOANS ${p.debt} CR",68f,113f)
             }
             "career" -> {
                 val p=profiles[0];val event=Career.events[p.careerRound];val cup=Career.cups[event.cupIndex];val tier=Career.difficulties[p.careerDifficulty]
@@ -521,18 +529,27 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
                 title(event.name,66f,541f)
                 label(cup.name+" / ${event.laps} LAPS / "+Career.gradeName(p.careerTrophies[event.cupIndex]),66f,488f,HudTheme.bone)
                 detail.setColor(HudTheme.bone);detail.wrapped(event.story.lines.joinToString(" "),66f,453f,677f,25f)
-                label("SCORE ${p.careerPoints} / TARGETS ${cup.targets[1]} - ${cup.targets[2]} - ${cup.targets[3]}",66f,343f)
+                label("LEAGUE DEBT ${p.campaign.debt} CR / PAID ${p.campaign.lastPayment}",66f,343f)
                 val next=Career.unlocks.filter{it.afterRounds>p.careerCleared}.minByOrNull{it.afterRounds}
                 label(if(next!=null)"NEXT ${next.name} / ROUND ${next.afterRounds}" else "ALL CARS AND COURSES UNLOCKED",66f,312f,accent)
-                for(i in Career.difficulties.indices)label(Career.difficulties[i].name.uppercase(),83f+i*229,260f,if(i==p.careerDifficulty)bg else HudTheme.bone)
-                detail.setColor(muted);detail.wrapped(tier.description,66f,219f,677f,25f)
-                label("SELECT / RACE NEXT ROUND",220f,169f,bg)
-                label("PLAY Garage / LEFT-RIGHT Difficulty",66f,119f)
+                val pending=Campaign.pending(p)
+                if(pending>=0) {
+                    for(i in Campaign.choices.indices)label(Campaign.choices[i].uppercase(),83f+i*229,260f,if(i==selectedReward)bg else HudTheme.bone)
+                    val choice=Campaign.choices[selectedReward];val rejection=Campaign.reason(p,pending,choice)
+                    detail.setColor(muted);detail.wrapped(Campaign.allies[pending].id.uppercase()+": "+Campaign.label(p,pending,choice)+(if(rejection.isEmpty())"" else " / $rejection"),66f,219f,677f,25f)
+                    label("SELECT CLAIM / DOWN RACE",162f,169f,bg)
+                    label("LEFT-RIGHT Reward / PLAY Garage",66f,119f)
+                } else {
+                    for(i in Career.difficulties.indices)label(Career.difficulties[i].name.uppercase(),83f+i*229,260f,if(i==p.careerDifficulty)bg else HudTheme.bone)
+                    detail.setColor(muted);detail.wrapped(tier.description,66f,219f,677f,25f)
+                    label("SELECT / RACE NEXT ROUND",220f,169f,bg)
+                    label("PLAY Garage / LEFT-RIGHT Difficulty",66f,119f)
+                }
                 label("RIVALS / THEIR GARAGES",808f,577f,accent)
                 for((i,index) in RivalEconomy.cast(p.careerRound).withIndex()) {
                     val rival=Career.rivals[index];val g=p.rivalProfiles[index]
                     label(rival.name+" / "+CarCatalog.all[g.selectedCar].id,808f,540f-i*72,colors[i+1])
-                    label("PR ${PowerRating.of(CarCatalog.all[g.selectedCar],g.bonuses()).toInt()} / ${g.credits} CR"+(if(p.grudges[index]>0)" / GRUDGE" else ""),808f,514f-i*72)
+                    label("PR ${PowerRating.of(CarCatalog.all[g.selectedCar],g.bonuses()).toInt()} / ${g.credits} CR"+(if(Campaign.taunt(p,rival.id)!=null)" / ALLY" else if(p.grudges[index]>0)" / GRUDGE" else ""),808f,514f-i*72)
                 }
                 detail.setColor(muted);detail.wrapped(if(event.duel)"FINAL DUEL. P2 spectates. Beat Marrow to finish." else "P2 replaces a regular rival. P1 owns career progress.",808f,158f,400f,25f)
             }

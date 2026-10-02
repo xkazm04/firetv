@@ -3,6 +3,7 @@ import os
 from pathlib import Path
 import re
 import socket
+import shutil
 import subprocess
 import sys
 import time
@@ -14,6 +15,9 @@ env={**os.environ,'CHROME_EXECUTABLE':os.environ.get('CHROME_EXECUTABLE','C:/Pro
 checks=sys.argv[2:] or ['browser-check','combat-check','ability-controller-check','hud-browser-check']
 port=int(os.environ.get('DEATHRIDE_BROWSER_PORT','8768'))
 for name in checks:
+    if name=='campaign-browser-check':
+        (root/'profiles').mkdir(exist_ok=True)
+        shutil.copyfile(root/'core/build/reports/campaign/q1-fixture.sav',root/'profiles/campaign-probe-q1.sav')
     with socket.socket() as sock:assert sock.connect_ex(('127.0.0.1',port))!=0,'Refuse an occupied listener'
     log=output/(name+'-host.log')
     with log.open('w',encoding='utf-8') as hostlog:
@@ -29,7 +33,7 @@ for name in checks:
             target=output/name;target.mkdir(exist_ok=True)
             runenv={**env,'BROWSER_OUTPUT':str(target/'result.json'),'BROWSER_SCREENSHOT':str(target/'controller.png'),'COMBAT_OUTPUT':str(target)}
             args=['node','tools/'+name+'.mjs',f'http://127.0.0.1:{port}',pin]
-            if name in ['ability-controller-check','hud-browser-check']:args.append(str(target))
+            if name in ['ability-controller-check','hud-browser-check','campaign-browser-check']:args.append(str(target))
             with (output/(name+'.log')).open('w',encoding='utf-8') as runlog:
                 result=subprocess.run(args,env=runenv,stdout=runlog,stderr=subprocess.STDOUT,timeout=240,creationflags=subprocess.CREATE_NO_WINDOW)
             assert result.returncode==0,name+' failed; inspect '+str(output/(name+'.log'))

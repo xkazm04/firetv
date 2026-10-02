@@ -73,15 +73,17 @@ object Career {
         require(expectedRound in events.indices && cash in 0..MarketRules["raceCashCap"].toInt())
         require(difficulty in difficulties.indices && position in 1..Tuning.CAR_COUNT && kills in 0 until Tuning.CAR_COUNT && hp.isFinite() && hp in 0.0..CombatRules["maxHp"])
         if(ticket<=p.settledRace || ticket>p.startedRaces)return null
+        Campaign.prepare(p,expectedRound)
         val result=advance(p,expectedRound,position,qualified)
-        check(Economy.settle(p,ticket,position,kills,hp,rewardScale=CareerCurve.all[expectedRound].rewardScale,bonus=result.bonus,cash=cash,course=Courses.all[events[expectedRound].courseIndex].id,targetWrecked=targetWrecked,clean=clean,finished=finished)!=null)
+        check(Economy.settle(p,ticket,position,kills,hp,rewardScale=CareerCurve.all[expectedRound].rewardScale,bonus=result.bonus,cash=cash,course=Courses.all[events[expectedRound].courseIndex].id,targetWrecked=targetWrecked,clean=clean,finished=finished,league=true)!=null)
+        if(result.advanced && events[expectedRound].boss)Campaign.promoted(p,expectedRound)
         return result
     }
     internal fun advance(p: Profile,expectedRound: Int,position: Int,qualified: Boolean): CareerResult {
         require(position in 1..Tuning.CAR_COUNT)
         if(expectedRound!=p.careerRound)return CareerResult(false,0,0,"Career round changed - result not advanced")
         if(!qualified)return CareerResult(false,0,0,"Complete a lap or make progress before a wreck")
-        if(events[p.careerRound].duel && position!=1)return CareerResult(false,0,0,"Marrow holds the Crown - repair and retry")
+        if(events[p.careerRound].boss && position!=1)return CareerResult(false,0,0,"Win the boss race to earn promotion - repair and retry")
         val event=events[p.careerRound];p.careerPoints+=points[position-1]
         p.careerCleared=max(p.careerCleared,p.careerRound+1)
         val cupEnds=p.careerRound==events.lastIndex || events[p.careerRound+1].cupIndex!=event.cupIndex
@@ -116,7 +118,7 @@ object Career {
         val story=e.story.json
         val roster=if(p.withRivals)RivalEconomy.json(p) else "[]"
         val field=if(p.withRivals)RivalEconomy.fieldRating(p) else 0.0
-        return "{\"laps\":${e.laps},\"story\":$story,\"rivals\":$roster,\"fieldPowerRating\":$field,\"duel\":${e.duel},\"maximumPlayerTier\":${e.cupIndex},\"ownedCars\":[${p.owned.indices.filter{p.owned[it]}.joinToString(","){"\"${CarCatalog.all[it].id}\""}}],\"round\":${p.careerRound+1},\"roundCount\":${events.size},\"cleared\":${p.careerCleared},\"season\":${p.careerSeasons+1},\"event\":\"${e.name}\",\"course\":${course.json},\"cup\":\"${cup.name}\",\"points\":${p.careerPoints},\"bestTrophy\":\"${gradeName(p.careerTrophies[e.cupIndex])}\",\"targets\":[${cup.targets.drop(1).joinToString(",")}],\"bonuses\":[${cup.bonuses.drop(1).joinToString(",")}],\"trophies\":[${p.careerTrophies.joinToString(",")}],\"difficulty\":${difficulties[p.careerDifficulty].json},\"unlocks\":$locks,\"partUnlocks\":$parts,\"message\":\"$message\"}"
+        return "{\"campaign\":${Campaign.json(p)},\"laps\":${e.laps},\"story\":$story,\"rivals\":$roster,\"fieldPowerRating\":$field,\"duel\":${e.duel},\"maximumPlayerTier\":${e.cupIndex},\"ownedCars\":[${p.owned.indices.filter{p.owned[it]}.joinToString(","){"\"${CarCatalog.all[it].id}\""}}],\"round\":${p.careerRound+1},\"roundCount\":${events.size},\"cleared\":${p.careerCleared},\"season\":${p.careerSeasons+1},\"event\":\"${e.name}\",\"course\":${course.json},\"cup\":\"${cup.name}\",\"points\":${p.careerPoints},\"bestTrophy\":\"${gradeName(p.careerTrophies[e.cupIndex])}\",\"targets\":[${cup.targets.drop(1).joinToString(",")}],\"bonuses\":[${cup.bonuses.drop(1).joinToString(",")}],\"trophies\":[${p.careerTrophies.joinToString(",")}],\"difficulty\":${difficulties[p.careerDifficulty].json},\"unlocks\":$locks,\"partUnlocks\":$parts,\"message\":\"$message\"}"
     }
     val catalogJson get()="{\"difficulties\":[${difficulties.joinToString(","){it.json}}],\"rivals\":[${rivals.joinToString(","){it.json}}]}"
 }
