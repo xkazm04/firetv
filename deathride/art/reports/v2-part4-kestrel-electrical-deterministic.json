@@ -1,0 +1,100 @@
+[
+  {
+    "id": "v2-part3-rework-kestrel-v5",
+    "class": "Kestrel",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v2-part3-rework-kestrel-v5\\attempt-01\\1.jpg",
+    "source_sha256": "8badd0912bf6353fd6876e6de7a9b077c54236d9300980763f328624927bf0cd",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-part3-rework-kestrel-v5",
+      "class": "Kestrel",
+      "prompt_action": "Edit this narrow Kestrel sprint chassis. Replace the outermost quarter of the long pale RIGHT hood with ONE centreline electric harpoon launcher: a short dark rail and ONE hooked barbed pale steel spearhead, ending BEFORE the old hood tip. Shorten the nose structure so the entire weapon fits within the former hood area; the new rightmost tip must be at least 80 pixels away from the right image edge. Add three chunky transverse coil rings on the exposed LEFT engine, a small blue-white energy core, and two short crisp pale electric arcs INSIDE the coil housing. A single insulated cable follows the centreline from engine to launcher; its reel is tightly wound ON the chassis. No outside cable loop, no detached lightning, no second spear. Preserve the four tread-top wheels, narrow dark capsule cockpit, swept rear fins, worn bone/rust paint and long thin sprint proportions. Complete car fits between x=70 and x=940; empty magenta beyond every tip. No cast light or bloom. This is a new reference design, not damage or livery.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "art/raw/v2-part3-rework-kestrel-v4/attempt-01/1.jpg",
+      "batch": "v2-part4-kestrel-electrical",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "cars",
+      "surface_stack": ""
+    },
+    "verdict": "reject",
+    "codes": [
+      "CROPPED_OR_MARGIN"
+    ],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "metrics": {
+      "foreground_fraction": 0.20594501495361328,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        40,
+        336,
+        1024,
+        687
+      ],
+      "margin_fraction": 0.0,
+      "aspect": 2.8034188034188032,
+      "expected_aspect": 2.772727272727273,
+      "aspect_relative_error": 0.011069076642846953,
+      "principal_axis_degrees": 0.13066148479872838,
+      "estimated_key_rgb": [
+        229.0,
+        21.0,
+        178.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 6.168446650936335,
+      "palette_p90_delta_e": 11.483301270652186
+    },
+    "placement": {
+      "source_bounds_px": [
+        40,
+        336,
+        1024,
+        687
+      ],
+      "source_pivot_px": [
+        532.0,
+        511.5
+      ],
+      "pivot_px": [
+        128.0,
+        64.0
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        220,
+        78
+      ],
+      "scale": 0.22357723577235772,
+      "world_length_m": 9.15,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v2-part4-kestrel-electrical\\v2-part3-rework-kestrel-v5.png",
+    "sha256": "73e771cba66fc5eb2dcc92a8b748139561b27bce750f315f2f58e9add714ac83"
+  }
+]

@@ -1,0 +1,38 @@
+{
+  "at": "2026-10-02T15:41:21.363300+00:00",
+  "previous_id": "v2-part3-rework-kestrel-v4",
+  "new_id": "v2-part3-rework-kestrel-v5",
+  "source_sha256": "d9448c4079100cc2263f086855349926d6cce97c171efd9540158d43d0e30748",
+  "codes": [
+    "CROPPED_OR_MARGIN"
+  ],
+  "metrics": {
+    "foreground_fraction": 0.2057514190673828,
+    "source_size_px": [
+      1024,
+      1024
+    ],
+    "bounds_px": [
+      40,
+      336,
+      1003,
+      687
+    ],
+    "margin_fraction": 0.0205078125,
+    "aspect": 2.7435897435897436,
+    "expected_aspect": 2.772727272727273,
+    "aspect_relative_error": 0.010508617065994152,
+    "principal_axis_degrees": 0.03215500300071126,
+    "estimated_key_rgb": [
+      236.0,
+      17.0,
+      180.0
+    ],
+    "magenta_key": true,
+    "mixed_border_key": false,
+    "components": 1,
+    "palette_mean_delta_e": 5.73632132869917,
+    "palette_p90_delta_e": 10.433061681357916
+  },
+  "reason": "Framing language alone retained near-edge pixels. Make concrete geometry changes inside existing silhouette: shorten front structure, contain all fittings; Comet narrows its rear mounts to retain speed aspect; Kestrel adds exactly one harpoon and contained coil energy after separate structural proof. No source padding or stretching; new generated pixels must pass unchanged source gates."
+}

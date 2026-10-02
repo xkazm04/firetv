@@ -1,0 +1,100 @@
+[
+  {
+    "id": "v2-part3-rework-comet-v5",
+    "class": "Comet",
+    "kind": "car",
+    "source": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\raw\\v2-part3-rework-comet-v5\\attempt-01\\1.jpg",
+    "source_sha256": "d7a4b7fceb2818dd2910edde77f47f8b6a8177e21c8b849c46d4a841927a494c",
+    "gate_version": "acceptance-v1",
+    "gates_hash": "1e4613195bfd4c5ecc5d9ee3bef2530b272c4c8888ec671e9b63bf2e3b0c673d",
+    "brief": {
+      "id": "v2-part3-rework-comet-v5",
+      "class": "Comet",
+      "prompt_action": "Edit the Comet ground racer. Make two actual construction changes: replace the broad transverse FRONT bumper and long pale arrow tip at RIGHT with a shorter tapered rust-orange nose, ending well BEFORE the old front tip. Move both rear turbine assemblies closer to the centreline by narrowing their mounts, keeping two large round visible intake fans and heavy reinforced supporting plates at LEFT. Keep four wheels, slim dark cockpit, exhausts and worn metal treatment. The resulting silhouette is a long speed wedge, about 2.5 times longer than wide. Fit the COMPLETE NEW design inside a centred rectangle from x=100 to x=900 and y=330 to y=690 on the 1024-square magenta image: all nose tips, exhausts and ink marks are inside that rectangle. Paint the remaining image as empty magenta; no detached scraps or panels. Roof-only plan, nose RIGHT, neutral light.",
+      "size": "1024x1024",
+      "frame": "single",
+      "background_key": "#FF00FF",
+      "count": "1",
+      "status": "ready",
+      "kind": "car",
+      "reference": "art/raw/v2-part3-rework-comet-v4/attempt-01/1.jpg",
+      "batch": "v2-part4-comet-layout",
+      "approval": "pending",
+      "requires_approval": "",
+      "cell_limit": "256",
+      "style_file": "style-fusion.json",
+      "wave": "V2",
+      "asset_family": "cars",
+      "surface_stack": ""
+    },
+    "verdict": "reject",
+    "codes": [
+      "CROPPED_OR_MARGIN"
+    ],
+    "style_hash": "38feebc6e9d51f768fa4391bf22525e61d808a0de1a835e99de266d74f25dfec",
+    "style_version": "wasteland-family-fusion-v2",
+    "processor_sources": {
+      "process.py": "c1e2b87ba790d2d6bbaf60dabfcac43c1bd98aad4cfd15626841e8324ac17765"
+    },
+    "metrics": {
+      "foreground_fraction": 0.2748289108276367,
+      "source_size_px": [
+        1024,
+        1024
+      ],
+      "bounds_px": [
+        37,
+        272,
+        1011,
+        751
+      ],
+      "margin_fraction": 0.0126953125,
+      "aspect": 2.0334029227557413,
+      "expected_aspect": 2.5714285714285716,
+      "aspect_relative_error": 0.20923219670610071,
+      "principal_axis_degrees": 0.1421822906822189,
+      "estimated_key_rgb": [
+        204.0,
+        33.0,
+        181.0
+      ],
+      "magenta_key": true,
+      "mixed_border_key": false,
+      "components": 1,
+      "palette_mean_delta_e": 5.478272606871229,
+      "palette_p90_delta_e": 10.360356084340786
+    },
+    "placement": {
+      "source_bounds_px": [
+        37,
+        272,
+        1011,
+        751
+      ],
+      "source_pivot_px": [
+        524.0,
+        511.5
+      ],
+      "pivot_px": [
+        128.0,
+        64.0
+      ],
+      "cell_px": [
+        256,
+        128
+      ],
+      "subject_px": [
+        216,
+        106
+      ],
+      "scale": 0.22176591375770022,
+      "world_length_m": 9.0,
+      "gutter_px": 4,
+      "filter": "Linear",
+      "mipmaps": false,
+      "export_cell_limit_px": 256
+    },
+    "path": "C:\\Users\\kazda\\kiro\\firetv-deathride-art\\deathride\\art\\processed\\v2-part4-comet-layout\\v2-part3-rework-comet-v5.png",
+    "sha256": "5ec00c8bfd0df186e7715d41287821f6f4e3cff6d3ee2486080241b0eb9927ce"
+  }
+]

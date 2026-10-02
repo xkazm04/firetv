@@ -1,0 +1,130 @@
+{
+  "v2-part3-rework-comet-v4": {
+    "source_sha256": "6c0ebd3d159afc47f5e8f0871a0a01c08785c9d455ac3c75cbd47b4e0c3eecf9",
+    "export_sha256": "06fb4683314fddc1cbb2ed22a3792970f576a185cfe9ba13b7ca3cc2b2a2f818",
+    "at": "2026-10-02T15:49:40.752425+00:00",
+    "reviewer": "executing agent; NOT owner approval",
+    "note": "Framing-only edit retained full near-edge outline; source and exported form still has 13px margin. Twin turbine mechanism retained but the requested recomposition did not occur.",
+    "verdict": "reject",
+    "codes": [
+      "CROPPED_OR_MARGIN"
+    ]
+  },
+  "v2-part3-rework-comet-v5": {
+    "source_sha256": "d7a4b7fceb2818dd2910edde77f47f8b6a8177e21c8b849c46d4a841927a494c",
+    "export_sha256": "5ec00c8bfd0df186e7715d41287821f6f4e3cff6d3ee2486080241b0eb9927ce",
+    "at": "2026-10-02T15:49:40.753423+00:00",
+    "reviewer": "executing agent; NOT owner approval",
+    "note": "Requested shorter nose/narrower mounts did not change silhouette; generator mostly changed painted patches. This was a structure request, not an authorized livery. Still 13px source margin. Rejected and never a reference.",
+    "verdict": "reject",
+    "codes": [
+      "CROPPED_OR_MARGIN",
+      "REQUESTED_GEOMETRY_IGNORED"
+    ]
+  },
+  "v2-part3-rework-kestrel-v4": {
+    "source_sha256": "d9448c4079100cc2263f086855349926d6cce97c171efd9540158d43d0e30748",
+    "export_sha256": "684f1785ec7d5a7195c8ee531b6c0f284ed57caa55ee95a7dd78e14047340f20",
+    "at": "2026-10-02T15:49:40.753423+00:00",
+    "reviewer": "executing agent; NOT owner approval",
+    "note": "Approved Line sibling successfully becomes long narrow single-seat sprint chassis with four tread tops, rear fins and a separate exposed engine. Ratio 2.744 is correct. Its right hood ends 21px from the edge and electricity/harpoon are intentionally absent at this structural stage. Incomplete proof only.",
+    "verdict": "reject",
+    "codes": [
+      "CROPPED_OR_MARGIN",
+      "STRUCTURE_ONLY"
+    ]
+  },
+  "v2-part3-rework-kestrel-v5": {
+    "source_sha256": "8badd0912bf6353fd6876e6de7a9b077c54236d9300980763f328624927bf0cd",
+    "export_sha256": "73e771cba66fc5eb2dcc92a8b748139561b27bce750f315f2f58e9add714ac83",
+    "at": "2026-10-02T15:49:40.753928+00:00",
+    "reviewer": "executing agent; NOT owner approval",
+    "note": "Three coil rings and visible contained engine arcs appear, but the single harpoon extends to the right edge and has broad lighting spill around its tip. Cable loops outside the body. Source is cropped, so no padding or re-export may grant a pass.",
+    "verdict": "reject",
+    "codes": [
+      "CROPPED_OR_MARGIN",
+      "BAKED_LIGHTING",
+      "EXTERNAL_TETHER_LOOP"
+    ]
+  },
+  "v2-part3-rework-comet-v6": {
+    "source_sha256": "92f322794b19b765cc5e93053a940429aba3014b2fe97466f3089bc221f49776",
+    "export_sha256": "92d2cde5d4bacf445619240ffd435179fc734df12a6756fc7e3c0db5c5e95f1d",
+    "at": "2026-10-02T15:49:40.753928+00:00",
+    "reviewer": "executing agent; NOT owner approval",
+    "note": "New turbine rear cradle and narrow right wedge appear, but detached triangular canopy floats above car and right tip remains 12px from edge. Width measurement includes detached piece; not a complete attached car design.",
+    "verdict": "reject",
+    "codes": [
+      "CROPPED_OR_MARGIN",
+      "DETACHED_CANOPY"
+    ]
+  },
+  "v2-part3-rework-needle-v1": {
+    "source_sha256": "b03a72a9338ceb843abe7d21837d7b70f9b8abb63054590cf9cb75c18b27b9a2",
+    "export_sha256": "e393ccd8069395f17d859dbe388eb2d7d7d25f0b1d3460741c56cc9e701d8559",
+    "at": "2026-10-02T15:57:01.789881+00:00",
+    "reviewer": "executing agent; NOT owner approval",
+    "note": "Source and actual keyed export re-inspected. Silver steel body panels and thin tubes have clear value separation; open cage, skinny exposed wheels, empty interior and forked right nose retain the original identity. Pixel hashes exactly match Part 3. No new image needed.",
+    "verdict": "owner-review",
+    "codes": []
+  },
+  "v2-part3-rework-quill-v2": {
+    "source_sha256": "50b3a9df92d64c24d3795918e6eaae078e37ab2a1b9f615bd66ea630ef39e4e4",
+    "export_sha256": "f840ac53d34e68ba5e1e9af712a92b3ababc424e0d7184ef91907aa4d61f4bc4",
+    "at": "2026-10-02T15:57:01.789881+00:00",
+    "reviewer": "executing agent; NOT owner approval",
+    "note": "Source and keyed export re-inspected. Broad welded central body reads medium-weight, with large attached ivory tusks at both ends and shorter shoulder teeth. Front and rear contact silhouettes are obvious; neutral top-down drawing and four tyres preserved. Pixel hashes exactly match Part 3.",
+    "verdict": "owner-review",
+    "codes": []
+  },
+  "v2-part3-rework-comet-v7": {
+    "source_sha256": "ddd9c3c684f65333251b386947b34354d980ce261cda9297eeb92ffac56e3acc",
+    "export_sha256": "4099a1fd42fe0d52e8a30f06e692686ef09832ea941fb2a6b12178dc6a74a844",
+    "at": "2026-10-02T15:57:01.789881+00:00",
+    "reviewer": "executing agent; NOT owner approval",
+    "note": "Source and keyed export inspected. Two large bladed air-turbine intakes occupy a thick plated rear cradle, leading to a tapered orange speed nose and tiny dark canopy. Four tread tops, all parts attached, no loose canopy or cropped nose. Wide generated composition gives 20.2% minimum source margin. The turbine pack uses tandem fans, a valid visible air-turbine interpretation; owner taste pending.",
+    "verdict": "owner-review",
+    "codes": []
+  },
+  "v2-part3-rework-kestrel-v6": {
+    "source_sha256": "06c0d75ac962d8f347129c3007a9296cfc357564f7a7b71618d3a17800c96b01",
+    "export_sha256": "d443bb6dcd3d63719dd44f82f8cef26bebb2dd7a9f935dc566031501a41ab8ec",
+    "at": "2026-10-02T15:57:01.789881+00:00",
+    "reviewer": "executing agent; NOT owner approval",
+    "note": "Small landscape composition resolves source margins and contains a single short barbed harpoon over the hood. Bright cool energy core and coil rings stand out, without ground glow. However four large tyres and broad side pipes make aspect 1.911, outside unchanged band. Rejected for mechanical width.",
+    "verdict": "reject",
+    "codes": [
+      "ASPECT_BAND"
+    ]
+  },
+  "v2-part3-rework-kestrel-v7": {
+    "source_sha256": "1281a8b0435efaaca61d91e2c65d8aa56bd6f0a3d888cc9d4059ce4b9e906bd2",
+    "export_sha256": "84d557615e786d2cf453785b2481a98ee2dd3bb49aee419355284b7b711d7608",
+    "at": "2026-10-02T15:57:01.789881+00:00",
+    "reviewer": "executing agent; NOT owner approval",
+    "note": "Source and keyed export inspected. Four narrower tyres and removed outside piping yield aspect 2.237 within unchanged band, with 23.2% clear source margin. Three coil rings surround the bright blue-white engine core. One barbed spear and compact launcher lie along the front hood; no second launcher, detached lightning or wide tether loop. Harpoon presentation is deliberately flat and mostly inside the hood silhouette; owner may judge its projection/energy strength.",
+    "verdict": "owner-review",
+    "codes": []
+  },
+  "v2-part3-rework-kestrel-v8": {
+    "source_sha256": "619d579eed5b487d7ff80eb8486ebb13c41393f1ae2a2e3f1a6959b08a0aaf34",
+    "export_sha256": "c6ef1390a7f6110db65cd6a1e55427c61089a5d1f24286582bb35eb977830fd9",
+    "at": "2026-10-02T16:01:04.491389+00:00",
+    "reviewer": "executing agent; NOT owner",
+    "verdict": "reject",
+    "codes": [
+      "ASPECT_BAND",
+      "DETACHED_WEAPON"
+    ],
+    "note": "Harpoon change added a clearly separate floating weapon above the car and blue arcs off the chassis; aspect gate includes the extra object. Car-mounted spear does project beyond hood, but multi-object composition is rejected."
+  },
+  "v2-part3-rework-kestrel-v9": {
+    "source_sha256": "9d9a19f3da81a60464560bc1a409332feed97e5a4027ecb451e7af4ddc237ad5",
+    "export_sha256": "c19e05c7ad215f0747547b1d77cf07f530839d10f49707509c7c39d3455ecc52",
+    "at": "2026-10-02T16:03:53.026213+00:00",
+    "reviewer": "executing agent; NOT owner",
+    "verdict": "owner-review",
+    "codes": [],
+    "note": "Single attached mechanical launcher and barbed spear now project beyond the dark front hood, giving a visible weapon tip in the silhouette. Unwanted floating gun and detached electrical marks are removed by a new generated edit. Bright blue-white engine core and three coil rings remain; four narrow wheels, rear fins, right heading and neutral light preserved. No external tether loop or ground glow. Source margin 12.9%, aspect 2.462 pass unchanged gates. Electrical energy is concentrated at the engine; harpoon tip itself is dark steel. Owner judges the restrained electric presentation."
+  }
+}

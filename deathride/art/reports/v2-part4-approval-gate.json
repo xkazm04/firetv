@@ -1,0 +1,241 @@
+{
+  "at": "2026-10-02T16:13:56.339579+00:00",
+  "ledger_sha256": "3afd693e72171d48e9468abfa9bac5bdf7d1d227596b5b2e025cec456a544d71",
+  "checks": [
+    {
+      "asset": "v2-part4-needle-state-intact-v1",
+      "class": "Needle",
+      "reference_id": "v2-part3-rework-needle-v1",
+      "source_sha256": "b03a72a9338ceb843abe7d21837d7b70f9b8abb63054590cf9cb75c18b27b9a2",
+      "status": "blocked-owner-reference",
+      "error": "OWNER_REFERENCE_APPROVAL_REQUIRED: v2-part3-rework-needle-v1"
+    },
+    {
+      "asset": "v2-part4-needle-state-damaged-1-v1",
+      "class": "Needle",
+      "reference_id": "v2-part3-rework-needle-v1",
+      "source_sha256": "b03a72a9338ceb843abe7d21837d7b70f9b8abb63054590cf9cb75c18b27b9a2",
+      "status": "blocked-owner-reference",
+      "error": "OWNER_REFERENCE_APPROVAL_REQUIRED: v2-part3-rework-needle-v1"
+    },
+    {
+      "asset": "v2-part4-needle-state-damaged-2-v1",
+      "class": "Needle",
+      "reference_id": "v2-part3-rework-needle-v1",
+      "source_sha256": "b03a72a9338ceb843abe7d21837d7b70f9b8abb63054590cf9cb75c18b27b9a2",
+      "status": "blocked-owner-reference",
+      "error": "OWNER_REFERENCE_APPROVAL_REQUIRED: v2-part3-rework-needle-v1"
+    },
+    {
+      "asset": "v2-part4-needle-state-wreck-v1",
+      "class": "Needle",
+      "reference_id": "v2-part3-rework-needle-v1",
+      "source_sha256": "b03a72a9338ceb843abe7d21837d7b70f9b8abb63054590cf9cb75c18b27b9a2",
+      "status": "blocked-owner-reference",
+      "error": "OWNER_REFERENCE_APPROVAL_REQUIRED: v2-part3-rework-needle-v1"
+    },
+    {
+      "asset": "v2-part4-needle-livery-bone-v1",
+      "class": "Needle",
+      "reference_id": "v2-part3-rework-needle-v1",
+      "source_sha256": "b03a72a9338ceb843abe7d21837d7b70f9b8abb63054590cf9cb75c18b27b9a2",
+      "status": "blocked-owner-reference",
+      "error": "OWNER_REFERENCE_APPROVAL_REQUIRED: v2-part3-rework-needle-v1"
+    },
+    {
+      "asset": "v2-part4-needle-livery-red-v1",
+      "class": "Needle",
+      "reference_id": "v2-part3-rework-needle-v1",
+      "source_sha256": "b03a72a9338ceb843abe7d21837d7b70f9b8abb63054590cf9cb75c18b27b9a2",
+      "status": "blocked-owner-reference",
+      "error": "OWNER_REFERENCE_APPROVAL_REQUIRED: v2-part3-rework-needle-v1"
+    },
+    {
+      "asset": "v2-part4-needle-livery-ochre-v1",
+      "class": "Needle",
+      "reference_id": "v2-part3-rework-needle-v1",
+      "source_sha256": "b03a72a9338ceb843abe7d21837d7b70f9b8abb63054590cf9cb75c18b27b9a2",
+      "status": "blocked-owner-reference",
+      "error": "OWNER_REFERENCE_APPROVAL_REQUIRED: v2-part3-rework-needle-v1"
+    },
+    {
+      "asset": "v2-part4-comet-state-intact-v1",
+      "class": "Comet",
+      "reference_id": "v2-part3-rework-comet-v7",
+      "source_sha256": "ddd9c3c684f65333251b386947b34354d980ce261cda9297eeb92ffac56e3acc",
+      "status": "blocked-owner-reference",
+      "error": "OWNER_REFERENCE_APPROVAL_REQUIRED: v2-part3-rework-comet-v7"
+    },
+    {
+      "asset": "v2-part4-comet-state-damaged-1-v1",
+      "class": "Comet",
+      "reference_id": "v2-part3-rework-comet-v7",
+      "source_sha256": "ddd9c3c684f65333251b386947b34354d980ce261cda9297eeb92ffac56e3acc",
+      "status": "blocked-owner-reference",
+      "error": "OWNER_REFERENCE_APPROVAL_REQUIRED: v2-part3-rework-comet-v7"
+    },
+    {
+      "asset": "v2-part4-comet-state-damaged-2-v1",
+      "class": "Comet",
+      "reference_id": "v2-part3-rework-comet-v7",
+      "source_sha256": "ddd9c3c684f65333251b386947b34354d980ce261cda9297eeb92ffac56e3acc",
+      "status": "blocked-owner-reference",
+      "error": "OWNER_REFERENCE_APPROVAL_REQUIRED: v2-part3-rework-comet-v7"
+    },
+    {
+      "asset": "v2-part4-comet-state-wreck-v1",
+      "class": "Comet",
+      "reference_id": "v2-part3-rework-comet-v7",
+      "source_sha256": "ddd9c3c684f65333251b386947b34354d980ce261cda9297eeb92ffac56e3acc",
+      "status": "blocked-owner-reference",
+      "error": "OWNER_REFERENCE_APPROVAL_REQUIRED: v2-part3-rework-comet-v7"
+    },
+    {
+      "asset": "v2-part4-comet-livery-bone-v1",
+      "class": "Comet",
+      "reference_id": "v2-part3-rework-comet-v7",
+      "source_sha256": "ddd9c3c684f65333251b386947b34354d980ce261cda9297eeb92ffac56e3acc",
+      "status": "blocked-owner-reference",
+      "error": "OWNER_REFERENCE_APPROVAL_REQUIRED: v2-part3-rework-comet-v7"
+    },
+    {
+      "asset": "v2-part4-comet-livery-red-v1",
+      "class": "Comet",
+      "reference_id": "v2-part3-rework-comet-v7",
+      "source_sha256": "ddd9c3c684f65333251b386947b34354d980ce261cda9297eeb92ffac56e3acc",
+      "status": "blocked-owner-reference",
+      "error": "OWNER_REFERENCE_APPROVAL_REQUIRED: v2-part3-rework-comet-v7"
+    },
+    {
+      "asset": "v2-part4-comet-livery-ochre-v1",
+      "class": "Comet",
+      "reference_id": "v2-part3-rework-comet-v7",
+      "source_sha256": "ddd9c3c684f65333251b386947b34354d980ce261cda9297eeb92ffac56e3acc",
+      "status": "blocked-owner-reference",
+      "error": "OWNER_REFERENCE_APPROVAL_REQUIRED: v2-part3-rework-comet-v7"
+    },
+    {
+      "asset": "v2-part4-quill-state-intact-v1",
+      "class": "Quill",
+      "reference_id": "v2-part3-rework-quill-v2",
+      "source_sha256": "50b3a9df92d64c24d3795918e6eaae078e37ab2a1b9f615bd66ea630ef39e4e4",
+      "status": "blocked-owner-reference",
+      "error": "OWNER_REFERENCE_APPROVAL_REQUIRED: v2-part3-rework-quill-v2"
+    },
+    {
+      "asset": "v2-part4-quill-state-damaged-1-v1",
+      "class": "Quill",
+      "reference_id": "v2-part3-rework-quill-v2",
+      "source_sha256": "50b3a9df92d64c24d3795918e6eaae078e37ab2a1b9f615bd66ea630ef39e4e4",
+      "status": "blocked-owner-reference",
+      "error": "OWNER_REFERENCE_APPROVAL_REQUIRED: v2-part3-rework-quill-v2"
+    },
+    {
+      "asset": "v2-part4-quill-state-damaged-2-v1",
+      "class": "Quill",
+      "reference_id": "v2-part3-rework-quill-v2",
+      "source_sha256": "50b3a9df92d64c24d3795918e6eaae078e37ab2a1b9f615bd66ea630ef39e4e4",
+      "status": "blocked-owner-reference",
+      "error": "OWNER_REFERENCE_APPROVAL_REQUIRED: v2-part3-rework-quill-v2"
+    },
+    {
+      "asset": "v2-part4-quill-state-wreck-v1",
+      "class": "Quill",
+      "reference_id": "v2-part3-rework-quill-v2",
+      "source_sha256": "50b3a9df92d64c24d3795918e6eaae078e37ab2a1b9f615bd66ea630ef39e4e4",
+      "status": "blocked-owner-reference",
+      "error": "OWNER_REFERENCE_APPROVAL_REQUIRED: v2-part3-rework-quill-v2"
+    },
+    {
+      "asset": "v2-part4-quill-livery-bone-v1",
+      "class": "Quill",
+      "reference_id": "v2-part3-rework-quill-v2",
+      "source_sha256": "50b3a9df92d64c24d3795918e6eaae078e37ab2a1b9f615bd66ea630ef39e4e4",
+      "status": "blocked-owner-reference",
+      "error": "OWNER_REFERENCE_APPROVAL_REQUIRED: v2-part3-rework-quill-v2"
+    },
+    {
+      "asset": "v2-part4-quill-livery-red-v1",
+      "class": "Quill",
+      "reference_id": "v2-part3-rework-quill-v2",
+      "source_sha256": "50b3a9df92d64c24d3795918e6eaae078e37ab2a1b9f615bd66ea630ef39e4e4",
+      "status": "blocked-owner-reference",
+      "error": "OWNER_REFERENCE_APPROVAL_REQUIRED: v2-part3-rework-quill-v2"
+    },
+    {
+      "asset": "v2-part4-quill-livery-ochre-v1",
+      "class": "Quill",
+      "reference_id": "v2-part3-rework-quill-v2",
+      "source_sha256": "50b3a9df92d64c24d3795918e6eaae078e37ab2a1b9f615bd66ea630ef39e4e4",
+      "status": "blocked-owner-reference",
+      "error": "OWNER_REFERENCE_APPROVAL_REQUIRED: v2-part3-rework-quill-v2"
+    },
+    {
+      "asset": "v2-part4-kestrel-state-intact-v1",
+      "class": "Kestrel",
+      "reference_id": "v2-part3-rework-kestrel-v9",
+      "source_sha256": "9d9a19f3da81a60464560bc1a409332feed97e5a4027ecb451e7af4ddc237ad5",
+      "status": "blocked-owner-reference",
+      "error": "OWNER_REFERENCE_APPROVAL_REQUIRED: v2-part3-rework-kestrel-v9"
+    },
+    {
+      "asset": "v2-part4-kestrel-state-damaged-1-v1",
+      "class": "Kestrel",
+      "reference_id": "v2-part3-rework-kestrel-v9",
+      "source_sha256": "9d9a19f3da81a60464560bc1a409332feed97e5a4027ecb451e7af4ddc237ad5",
+      "status": "blocked-owner-reference",
+      "error": "OWNER_REFERENCE_APPROVAL_REQUIRED: v2-part3-rework-kestrel-v9"
+    },
+    {
+      "asset": "v2-part4-kestrel-state-damaged-2-v1",
+      "class": "Kestrel",
+      "reference_id": "v2-part3-rework-kestrel-v9",
+      "source_sha256": "9d9a19f3da81a60464560bc1a409332feed97e5a4027ecb451e7af4ddc237ad5",
+      "status": "blocked-owner-reference",
+      "error": "OWNER_REFERENCE_APPROVAL_REQUIRED: v2-part3-rework-kestrel-v9"
+    },
+    {
+      "asset": "v2-part4-kestrel-state-wreck-v1",
+      "class": "Kestrel",
+      "reference_id": "v2-part3-rework-kestrel-v9",
+      "source_sha256": "9d9a19f3da81a60464560bc1a409332feed97e5a4027ecb451e7af4ddc237ad5",
+      "status": "blocked-owner-reference",
+      "error": "OWNER_REFERENCE_APPROVAL_REQUIRED: v2-part3-rework-kestrel-v9"
+    },
+    {
+      "asset": "v2-part4-kestrel-livery-bone-v1",
+      "class": "Kestrel",
+      "reference_id": "v2-part3-rework-kestrel-v9",
+      "source_sha256": "9d9a19f3da81a60464560bc1a409332feed97e5a4027ecb451e7af4ddc237ad5",
+      "status": "blocked-owner-reference",
+      "error": "OWNER_REFERENCE_APPROVAL_REQUIRED: v2-part3-rework-kestrel-v9"
+    },
+    {
+      "asset": "v2-part4-kestrel-livery-red-v1",
+      "class": "Kestrel",
+      "reference_id": "v2-part3-rework-kestrel-v9",
+      "source_sha256": "9d9a19f3da81a60464560bc1a409332feed97e5a4027ecb451e7af4ddc237ad5",
+      "status": "blocked-owner-reference",
+      "error": "OWNER_REFERENCE_APPROVAL_REQUIRED: v2-part3-rework-kestrel-v9"
+    },
+    {
+      "asset": "v2-part4-kestrel-livery-ochre-v1",
+      "class": "Kestrel",
+      "reference_id": "v2-part3-rework-kestrel-v9",
+      "source_sha256": "9d9a19f3da81a60464560bc1a409332feed97e5a4027ecb451e7af4ddc237ad5",
+      "status": "blocked-owner-reference",
+      "error": "OWNER_REFERENCE_APPROVAL_REQUIRED: v2-part3-rework-kestrel-v9"
+    }
+  ],
+  "ready": 0,
+  "blocked": 28,
+  "before": {
+    "usage.json": "94027a5e2f1fb4efc15d6028960e5e2c68bde31e9f1ec2b827a6ac53788fe40c",
+    "history.jsonl": "7fc694629d3b5406525dd526549e79f475110ba0d922573a4cdc8b9f3fca928c"
+  },
+  "after": {
+    "usage.json": "94027a5e2f1fb4efc15d6028960e5e2c68bde31e9f1ec2b827a6ac53788fe40c",
+    "history.jsonl": "7fc694629d3b5406525dd526549e79f475110ba0d922573a4cdc8b9f3fca928c"
+  },
+  "new_images": 0
+}

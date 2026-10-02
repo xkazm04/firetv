@@ -1,0 +1,35 @@
+{
+  "at": "2026-10-02T16:13:58.868675+00:00",
+  "status": "pass",
+  "portable_hash_checks": 552,
+  "new_image_reservations": 10,
+  "other_task_reservations": 22,
+  "budget": {
+    "week": "2026-W40",
+    "images_reserved": 433,
+    "remaining": 117,
+    "videos": 0,
+    "stop": null
+  },
+  "current_pixel_passes": 4,
+  "new_attempts": 10,
+  "conditioned_calls": 8,
+  "semantic_observations_new_attempts": 20,
+  "retained_reference_observations": 4,
+  "feature_observations": 8,
+  "blocked_derived_jobs": 28,
+  "owner_approved_reworks": [],
+  "attempt_limits": {
+    "v2-part3-rework-comet": {
+      "used": 7,
+      "limit": 7
+    },
+    "v2-part3-rework-kestrel": {
+      "used": 9,
+      "limit": 9
+    }
+  },
+  "unchanged_world_residency_mib": 31.25,
+  "human_calibration": "pending",
+  "scope": "Portable exact source/export bytes, unchanged source gates, actual local observations, native 96px sizes, original approvals, proof checkpoints, all one-image calls, scoped retry ceilings and live approval blockers. No runtime claim."
+}
