@@ -120,7 +120,7 @@ class Combat(private val world: World,val enabled: Boolean) {
             states[id]=LifeState.WRECKED;wreckSource[id]=source;wreckSeconds[id]=world.seconds;deaths[kind.ordinal]++
             if(full)oneShotKills++
             if(source>=0 && source!=id)kills[source]++
-            val c=world.cars[id];c.aiInput.fire=0.0;c.aiInput.mine=0.0;c.filteredThrottle=0.0;c.drifting=false;lastTarget[id]=-1
+            val c=world.cars[id];c.aiInput.fire=0.0;c.aiInput.mine=0.0;c.filteredThrottle=0.0;c.drifting=false;DriftDynamics.reset(c);lastTarget[id]=-1
         }
     }
     private fun repair(id: Int,amount: Double) { if(canAct(id))hp[id]=min(maxHealth(id),hp[id]+amount) }

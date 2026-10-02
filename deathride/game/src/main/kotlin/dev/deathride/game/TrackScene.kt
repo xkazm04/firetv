@@ -265,7 +265,7 @@ class MotionEffects {
                     for(side in -1..1 step 2) {
                         val n=skidNext*6;skidNext=(skidNext+1)%(skids.size/6)
                         val ox=-sin(c.heading)*c.spec.circleRadiusM*.8*side;val oy=cos(c.heading)*c.spec.circleRadiusM*.8*side
-                        skids[n]=(lastX[c.id]+ox).toFloat();skids[n+1]=(lastY[c.id]+oy).toFloat();skids[n+2]=(c.x+ox).toFloat();skids[n+3]=(c.y+oy).toFloat();skids[n+4]=VisualTuning["skidLifeSeconds"].toFloat()
+                        skids[n]=(lastX[c.id]+ox).toFloat();skids[n+1]=(lastY[c.id]+oy).toFloat();skids[n+2]=(c.x+ox).toFloat();skids[n+3]=(c.y+oy).toFloat();skids[n+4]=VisualTuning["skidLifeSeconds"].toFloat();skids[n+5]=c.driftQuality.toFloat()
                     }
                 };lastX[c.id]=c.x;lastY[c.id]=c.y
             }
@@ -274,7 +274,7 @@ class MotionEffects {
                 dust[n]=(c.x-cos(c.heading)*c.spec.circleOffsetM).toFloat();dust[n+1]=(c.y-sin(c.heading)*c.spec.circleOffsetM).toFloat();dust[n+2]=VisualTuning["particleLifeSeconds"].toFloat();dust[n+3]=if(c.surface.id=="Gravel" || c.surface===Surfaces.offtrack)1f else 0f;dust[n+4]=c.id.toFloat()
             }
         }
-        if(skidsEnabled)for(n in skids.indices step 6)if(skids[n+4]>0) { skids[n+4]-=dt.toFloat();r.setColor(.04f,.045f,.045f,.40f*(skids[n+4]/VisualTuning["skidLifeSeconds"]).toFloat());r.rectLine(skids[n],skids[n+1],skids[n+2],skids[n+3],.30f) }
+        if(skidsEnabled)for(n in skids.indices step 6)if(skids[n+4]>0) { skids[n+4]-=dt.toFloat();r.setColor(.04f,.045f,.045f,.40f*(skids[n+4]/VisualTuning["skidLifeSeconds"]).toFloat());r.rectLine(skids[n],skids[n+1],skids[n+2],skids[n+3],.30f*(1+skids[n+5])) }
         for(n in dust.indices step 5)if(dust[n+2]>0) {
             dust[n+2]-=dt.toFloat();val age=1f-(dust[n+2]/VisualTuning["particleLifeSeconds"]).toFloat()
             r.setColor(if(dust[n+3]>0).65f else .75f,if(dust[n+3]>0).54f else .78f,if(dust[n+3]>0).37f else .79f,(1-age)*.30f)

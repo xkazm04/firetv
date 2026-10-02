@@ -4,8 +4,9 @@ android {
     namespace = "dev.deathride.tv"
     compileSdk = 36
     defaultConfig {
-        applicationId = providers.gradleProperty("appId").getOrElse("dev.deathride.tv")
-        resValue("string", "app_name", providers.gradleProperty("appLabel").getOrElse("Death Ride"))
+        applicationId = providers.gradleProperty("appId").getOrElse("dev.deathride.abilities")
+        resValue("string", "app_name", providers.gradleProperty("appLabel").getOrElse("Death Ride Abilities"))
+        resValue("integer", "race_port", providers.gradleProperty("racePort").getOrElse("8767"))
         minSdk = 28; targetSdk = 34; versionCode = 1; versionName = "0.1-spike"
         ndk { abiFilters += listOf("arm64-v8a", "armeabi-v7a", "x86_64") }
     }

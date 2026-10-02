@@ -27,6 +27,16 @@ tasks.register("reportClasspath") {
     doLast { layout.buildDirectory.file("report-classpath.txt").get().asFile.writeText(sourceSets.test.get().runtimeClasspath.asPath) }
 }
 
+tasks.register<JavaExec>("driftLab") {
+    group="verification"
+    description="Deterministic per-class drift scenarios and spin-duration sweep"
+    dependsOn(tasks.testClasses)
+    classpath=sourceSets.test.get().runtimeClasspath
+    mainClass.set("dev.deathride.core.DriftLabReportKt")
+    args(providers.gradleProperty("driftOutput").getOrElse("build/reports/drift-lab"))
+    args(providers.gradleProperty("driftOverrides").getOrElse(""),providers.gradleProperty("driftClass").getOrElse(""),providers.gradleProperty("driftTraces").getOrElse("true"),providers.gradleProperty("driftGeometryOverrides").getOrElse(""))
+}
+
 tasks.register<JavaExec>("combatDepthReport") {
     group="verification"
     dependsOn(tasks.testClasses)

@@ -1,0 +1,162 @@
+{
+  "source": "desktop-probe.json.gz",
+  "basis": "Ordinary scripted controller inputs; two LAN clients, four normal AIs; all shipped effects enabled. Not human feel or optical latency.",
+  "device": "Windows desktop; Java 22; loopback; concurrent core test load",
+  "sampleCaution": "Overlapping ten-second rolling windows; counts are not summed as independent frames. Startup/course transitions excluded from row maxima but retained in raw evidence and lifetime metrics.",
+  "rows": [
+    {
+      "classes": [
+        "Needle",
+        "Line"
+      ],
+      "fullRaceRollingWindows": 5,
+      "worstFrameP95Ms": 16.8722,
+      "worstFrameMaxMs": 18.9436,
+      "worstSimP95Ms": 0.1063,
+      "worstSimMaxMs": 0.3017,
+      "smokeEmitted": 49,
+      "skidsEmitted": 104,
+      "peakActiveEffects": 59,
+      "peakUnresolvedCars": 6,
+      "lastWindowFrame": {
+        "p50": 16.6671,
+        "p95": 16.863599999999998,
+        "max": 17.8185,
+        "count": 600
+      }
+    },
+    {
+      "classes": [
+        "Bastion",
+        "Comet"
+      ],
+      "fullRaceRollingWindows": 5,
+      "worstFrameP95Ms": 17.0369,
+      "worstFrameMaxMs": 23.2387,
+      "worstSimP95Ms": 0.0978,
+      "worstSimMaxMs": 0.8018,
+      "smokeEmitted": 71,
+      "skidsEmitted": 158,
+      "peakActiveEffects": 61,
+      "peakUnresolvedCars": 6,
+      "lastWindowFrame": {
+        "p50": 16.671100000000003,
+        "p95": 17.0369,
+        "max": 23.2387,
+        "count": 599
+      }
+    },
+    {
+      "classes": [
+        "Trail",
+        "Flint"
+      ],
+      "fullRaceRollingWindows": 5,
+      "worstFrameP95Ms": 17.075300000000002,
+      "worstFrameMaxMs": 25.199099999999998,
+      "worstSimP95Ms": 0.0846,
+      "worstSimMaxMs": 0.1763,
+      "smokeEmitted": 75,
+      "skidsEmitted": 170,
+      "peakActiveEffects": 66,
+      "peakUnresolvedCars": 6,
+      "lastWindowFrame": {
+        "p50": 16.672,
+        "p95": 16.9452,
+        "max": 20.2838,
+        "count": 599
+      }
+    },
+    {
+      "classes": [
+        "Quill",
+        "Vandal"
+      ],
+      "fullRaceRollingWindows": 5,
+      "worstFrameP95Ms": 16.834,
+      "worstFrameMaxMs": 17.919,
+      "worstSimP95Ms": 0.0743,
+      "worstSimMaxMs": 0.2973,
+      "smokeEmitted": 39,
+      "skidsEmitted": 81,
+      "peakActiveEffects": 47,
+      "peakUnresolvedCars": 6,
+      "lastWindowFrame": {
+        "p50": 16.6708,
+        "p95": 16.834,
+        "max": 17.919,
+        "count": 600
+      }
+    },
+    {
+      "classes": [
+        "Kestrel",
+        "Bulwark"
+      ],
+      "fullRaceRollingWindows": 5,
+      "worstFrameP95Ms": 16.827,
+      "worstFrameMaxMs": 17.5557,
+      "worstSimP95Ms": 0.0835,
+      "worstSimMaxMs": 0.1659,
+      "smokeEmitted": 39,
+      "skidsEmitted": 74,
+      "peakActiveEffects": 37,
+      "peakUnresolvedCars": 6,
+      "lastWindowFrame": {
+        "p50": 16.668599999999998,
+        "p95": 16.8243,
+        "max": 17.5557,
+        "count": 600
+      }
+    }
+  ],
+  "strictFrameTarget": {
+    "p95Ms": 16.7,
+    "maxMs": 33,
+    "passed": false
+  },
+  "lastLifetimeFrame": {
+    "p50": 16.6,
+    "p95": 16.900000000000002,
+    "max": 868.4804,
+    "count": 8761
+  },
+  "clients": [
+    {
+      "slot": 0,
+      "sent": 2774,
+      "accepted": 2774,
+      "rejected": 0,
+      "rttMs": {
+        "count": 2774,
+        "p50": 0.29889999999431893,
+        "p95": 0.5796000000000276,
+        "max": 5.1039999999998145
+      },
+      "hudSamples": 919,
+      "driftHudSamples": 85,
+      "spinHudSamples": 15,
+      "peakQuality": 0.6557992602443522,
+      "peakSlip": 1.6662953282765844,
+      "pulses": 11
+    },
+    {
+      "slot": 1,
+      "sent": 2774,
+      "accepted": 2774,
+      "rejected": 0,
+      "rttMs": {
+        "count": 2774,
+        "p50": 0.23519999999552965,
+        "p95": 0.4973000000027241,
+        "max": 4.140399999989313
+      },
+      "hudSamples": 919,
+      "driftHudSamples": 95,
+      "spinHudSamples": 11,
+      "peakQuality": 0.5586308647763876,
+      "peakSlip": 2.822080621066385,
+      "pulses": 8
+    }
+  ]
+}

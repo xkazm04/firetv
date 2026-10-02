@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import dev.deathride.core.Snapshot
 import dev.deathride.core.CombatRules
+import dev.deathride.core.VisualTuning
 import kotlin.math.*
 
 /** Fixed visual pools, fed only by the read-only simulation snapshot. */
@@ -12,13 +13,18 @@ class AtlasEffects(private val art: AtlasArt) {
     private val capacity=64
     private val pool=FloatArray(capacity*7)
     private val trace=DoubleArray(6);private val flash=DoubleArray(6);private val smoke=DoubleArray(6)
+    private val driftSmoke=DoubleArray(6)
     private val wreck=BooleanArray(6);private var blasts=IntArray(0)
     private var next=0;private var skidClock=0.0
-    fun clear() { pool.fill(0f);trace.fill(0.0);flash.fill(0.0);smoke.fill(0.0);wreck.fill(false);blasts.fill(0);next=0;skidClock=0.0 }
-    private fun emit(kind: Int,x: Double,y: Double,size: Double,heading: Double=0.0,life: Double=art.duration(keys[kind])) {
-        if(!art.available(keys[kind]) || life<=0)return
+    var driftSmokeEmitted=0L;private set
+    var driftSkidsEmitted=0L;private set
+    val activeCount: Int get() { var count=0;for(n in pool.indices step 7)if(pool[n+6]>0)count++;return count }
+    fun clear() { pool.fill(0f);trace.fill(0.0);flash.fill(0.0);smoke.fill(0.0);driftSmoke.fill(0.0);wreck.fill(false);blasts.fill(0);next=0;skidClock=0.0;driftSmokeEmitted=0;driftSkidsEmitted=0 }
+    private fun emit(kind: Int,x: Double,y: Double,size: Double,heading: Double=0.0,life: Double=art.duration(keys[kind])): Boolean {
+        if(!art.available(keys[kind]) || life<=0)return false
         val n=next*7;next=(next+1)%capacity
         pool[n]=kind.toFloat();pool[n+1]=x.toFloat();pool[n+2]=y.toFloat();pool[n+3]=size.toFloat();pool[n+4]=(heading*180/PI).toFloat();pool[n+5]=0f;pool[n+6]=life.toFloat()
+        return true
     }
     fun update(s: Snapshot,dt: Double) {
         if(blasts.size!=s.blastCount)blasts=IntArray(s.blastCount) // course transition only
@@ -30,7 +36,15 @@ class AtlasEffects(private val art: AtlasArt) {
             if(s.wrecked(i) && !wreck[i])emit(6,s.x(i),s.y(i),9.0,life=20.0)
             smoke[i]+=dt
             if(s.healthFraction(i)<CombatRules["smokeHpFraction"] && smoke[i]>=.4){smoke[i]=0.0;emit(3,s.x(i),s.y(i),5.0)}
-            if(skid && s.drifting(i) && s.speed(i)>5)emit(5,s.x(i),s.y(i),3.0,s.heading(i),8.0)
+            driftSmoke[i]+=dt
+            if(s.drifting(i) && !s.wrecked(i) && s.speed(i)>5) {
+                val quality=s.driftQuality(i)
+                if(skid && emit(5,s.x(i),s.y(i),3.0+quality*VisualTuning["driftSkidSizeGain"],s.heading(i),8.0))driftSkidsEmitted++
+                if(driftSmoke[i]>=VisualTuning["driftSmokeIntervalSeconds"]/(1+quality)) {
+                    driftSmoke[i]=0.0
+                    if(emit(3,s.x(i)-cos(s.heading(i))*2,s.y(i)-sin(s.heading(i))*2,VisualTuning["driftSmokeSizeM"]*(1+quality)))driftSmokeEmitted++
+                }
+            }
             trace[i]=s.traceSeconds(i);flash[i]=s.flash(i);wreck[i]=s.wrecked(i)
         }
         for(i in 0 until s.blastCount)if(s.blastRemaining(i)>0 && s.blastActivation(i)!=blasts[i]) {

@@ -1,0 +1,217 @@
+WARNING: We recommend using a newer Android Gradle plugin to use compileSdk = 36
+
+This Android Gradle plugin (8.7.3) was tested up to compileSdk = 35.
+
+You are strongly encouraged to update your project to use a newer
+Android Gradle plugin that has been tested with compileSdk = 36.
+
+If you are already using the latest version of the Android Gradle plugin,
+you may need to wait until a newer version with support for compileSdk = 36 is available.
+
+For more information refer to the compatibility table:
+https://d.android.com/r/tools/api-level-support
+
+To suppress this warning, add/update
+    android.suppressUnsupportedCompileSdk=36
+to this project's gradle.properties.
+> Task :core:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :game:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :link:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :game:processResources NO-SOURCE
+> Task :link:processResources NO-SOURCE
+> Task :link:processTestResources NO-SOURCE
+> Task :app:extractNatives UP-TO-DATE
+> Task :app:preBuild UP-TO-DATE
+> Task :app:preDebugBuild UP-TO-DATE
+> Task :app:mergeDebugNativeDebugMetadata NO-SOURCE
+> Task :app:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :app:checkDebugAarMetadata UP-TO-DATE
+> Task :app:generateDebugResValues UP-TO-DATE
+> Task :app:mapDebugSourceSetPaths UP-TO-DATE
+> Task :app:generateDebugResources UP-TO-DATE
+> Task :app:mergeDebugResources UP-TO-DATE
+> Task :app:packageDebugResources UP-TO-DATE
+> Task :app:parseDebugLocalResources UP-TO-DATE
+> Task :app:createDebugCompatibleScreenManifests UP-TO-DATE
+> Task :app:extractDeepLinksDebug UP-TO-DATE
+> Task :app:processDebugMainManifest UP-TO-DATE
+> Task :app:processDebugManifest UP-TO-DATE
+> Task :app:processDebugManifestForPackage UP-TO-DATE
+> Task :app:processDebugResources UP-TO-DATE
+> Task :app:javaPreCompileDebug UP-TO-DATE
+> Task :app:mergeDebugShaders UP-TO-DATE
+> Task :app:compileDebugShaders NO-SOURCE
+> Task :app:generateDebugAssets UP-TO-DATE
+> Task :app:mergeDebugAssets
+> Task :app:desugarDebugFileDependencies UP-TO-DATE
+> Task :app:checkDebugDuplicateClasses UP-TO-DATE
+> Task :app:mergeExtDexDebug UP-TO-DATE
+> Task :app:mergeDebugJniLibFolders UP-TO-DATE
+> Task :app:validateSigningDebug UP-TO-DATE
+> Task :app:writeDebugAppMetadata UP-TO-DATE
+> Task :app:writeDebugSigningConfigVersions UP-TO-DATE
+> Task :core:processResources
+> Task :core:processTestResources UP-TO-DATE
+> Task :app:compressDebugAssets
+> Task :core:compileKotlin
+> Task :core:compileJava NO-SOURCE
+> Task :core:classes
+> Task :core:jar
+> Task :link:compileKotlin
+> Task :link:compileJava NO-SOURCE
+> Task :link:classes UP-TO-DATE
+> Task :link:jar
+> Task :link:compileTestKotlin
+> Task :link:compileTestJava NO-SOURCE
+> Task :link:testClasses UP-TO-DATE
+
+> Task :core:compileTestKotlin
+w: file:///C:/Users/kazda/kiro/firetv-deathride-drift/deathride/core/src/test/kotlin/dev/deathride/core/CareerTest.kt:62:39 'val id: Long' is deprecated. Deprecated in Java.
+w: file:///C:/Users/kazda/kiro/firetv-deathride-drift/deathride/core/src/test/kotlin/dev/deathride/core/CareerV2Test.kt:126:84 'val id: Long' is deprecated. Deprecated in Java.
+w: file:///C:/Users/kazda/kiro/firetv-deathride-drift/deathride/core/src/test/kotlin/dev/deathride/core/CombatTest.kt:108:39 'val id: Long' is deprecated. Deprecated in Java.
+w: file:///C:/Users/kazda/kiro/firetv-deathride-drift/deathride/core/src/test/kotlin/dev/deathride/core/DriftModelTest.kt:122:39 'val id: Long' is deprecated. Deprecated in Java.
+w: file:///C:/Users/kazda/kiro/firetv-deathride-drift/deathride/core/src/test/kotlin/dev/deathride/core/FeelTest.kt:44:43 'val id: Long' is deprecated. Deprecated in Java.
+w: file:///C:/Users/kazda/kiro/firetv-deathride-drift/deathride/core/src/test/kotlin/dev/deathride/core/MovementTest.kt:61:39 'val id: Long' is deprecated. Deprecated in Java.
+w: file:///C:/Users/kazda/kiro/firetv-deathride-drift/deathride/core/src/test/kotlin/dev/deathride/core/SoakTest.kt:37:39 'val id: Long' is deprecated. Deprecated in Java.
+w: file:///C:/Users/kazda/kiro/firetv-deathride-drift/deathride/core/src/test/kotlin/dev/deathride/core/TracksTest.kt:81:68 'val id: Long' is deprecated. Deprecated in Java.
+
+> Task :core:compileTestJava NO-SOURCE
+> Task :core:testClasses UP-TO-DATE
+> Task :game:compileKotlin
+> Task :game:compileJava NO-SOURCE
+> Task :game:classes UP-TO-DATE
+> Task :game:jar
+> Task :app:mergeDebugNativeLibs UP-TO-DATE
+> Task :app:stripDebugDebugSymbols UP-TO-DATE
+> Task :app:compileDebugKotlin
+> Task :app:compileDebugJavaWithJavac NO-SOURCE
+> Task :app:dexBuilderDebug UP-TO-DATE
+> Task :app:processDebugJavaRes UP-TO-DATE
+> Task :app:mergeProjectDexDebug UP-TO-DATE
+> Task :app:mergeDebugGlobalSynthetics UP-TO-DATE
+> Task :app:mergeLibDexDebug
+> Task :app:mergeDebugJavaResource
+> Task :app:packageDebug
+> Task :app:createDebugApkListingFileRedirect UP-TO-DATE
+> Task :app:assembleDebug
+
+> Task :link:test
+
+LinkTest > badPinMalformedInputAndLifecycleAreContained() STANDARD_ERROR
+    SLF4J: Failed to load class "org.slf4j.impl.StaticLoggerBinder".
+    SLF4J: Defaulting to no-operation (NOP) logger implementation
+    SLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder for further details.
+
+LinkTest > badPinMalformedInputAndLifecycleAreContained() PASSED
+
+LinkTest > statsWindowAndLifetimeHaveIndependentCounts() PASSED
+
+LinkTest > occupiedPortReportsFailureWithoutKillingTheHost() PASSED
+
+> Task :core:test
+
+DriftModelTest > unpoweredSlideDissipatesEnergyAndHeavierLoadRetainsMoreMomentum() STANDARD_OUT
+    Same geometry and input; mass-only slide 0.5s: 17.19839661099138 vs 17.53606696054499 m/s
+
+DriftModelTest > unpoweredSlideDissipatesEnergyAndHeavierLoadRetainsMoreMomentum() PASSED
+
+DriftModelTest > scaledGeometryAndUpgradedMassChangeInertiaWithoutDuplicateShapeNumbers() PASSED
+
+DriftModelTest > aSpinIsReportedUntilSettledAndResetClearsIt() PASSED
+
+DriftModelTest > reverseMomentumIsNotDeletedAndBrakingDoesNotCreateReverse() PASSED
+
+DriftModelTest > qualityUsesRetentionDurationAndSmoothnessAndSnapshotIsCoherent() PASSED
+
+DriftModelTest > entryAndCatchWitnessesForEveryClass() STANDARD_OUT
+    class,scenario,peakSlipDeg,retainedAtRelease,recoverySeconds,spins,exitSpeedMps
+    Needle,0,14.783160399387315,0.9108177277114798,0.31666666666666665,0,13.809882243622239
+    Needle,1,29.27068672273976,0.7851658104391691,0.5833333333333334,0,13.026821657795233
+    Needle,2,180.0,0.7851658104391691,3.05,1,6.45805313906993
+    Needle,3,29.227088681328336,0.7851658104391691,0.48333333333333334,0,12.838882288083164
+    Line,0,7.266707411628029,0.8987865343525133,0.16666666666666666,0,11.230844594159093
+    Line,1,20.779923988332875,0.7509716587299035,0.4166666666666667,0,10.413990695463493
+    Line,2,34.8449059133441,0.7509716587299035,1.3833333333333333,0,8.08844738685739
+    Line,3,20.76807959313781,0.7509716587299035,0.3333333333333333,0,10.356668567034967
+    Bastion,0,4.532002058533358,0.8772097813028126,0.15,0,10.314464610971354
+    Bastion,1,16.171250703985233,0.7101073955762164,0.3,0,9.381951330270873
+    Bastion,2,22.354793216963476,0.7101073955762164,1.15,0,7.190863281027279
+    Bastion,3,16.1545069794768,0.7101073955762164,0.26666666666666666,0,9.36108164092487
+    Comet,0,8.727242712709655,0.9339036924914965,0.2,0,13.973149457428844
+    Comet,1,23.31336903142274,0.7864720967463422,0.48333333333333334,0,13.175784783039157
+    Comet,2,123.40017817446534,0.7864720967463422,2.0666666666666664,1,8.063980243246029
+    Comet,3,23.31336903142274,0.7864720967463422,0.35,0,13.068960251569758
+    Trail,0,2.4186407745264416,0.9222810800567571,0.18333333333333332,0,13.150055541071467
+    Trail,1,19.150616318291025,0.6802487022394953,0.21666666666666667,0,11.756435464906506
+    Trail,2,21.18481946235028,0.6802487022394953,1.1666666666666667,0,9.286004785895008
+    Trail,3,19.150616318291025,0.6802487022394953,0.18333333333333332,0,11.77196952132476
+    Flint,0,10.660077067878404,0.953865703261543,0.2,0,15.764037075551716
+    Flint,1,25.69302601740641,0.7930864001756898,0.4666666666666667,0,14.827198034354932
+    Flint,2,180.0,0.7930864001756898,2.1333333333333333,1,9.049839521034764
+    Flint,3,25.69302601740641,0.7930864001756898,0.35,0,14.722788892196041
+    Quill,0,11.830781469666782,0.9406379642616195,0.18333333333333332,0,16.549209401755284
+    Quill,1,28.940588749441783,0.7800973384103042,0.48333333333333334,0,15.540282985880978
+    Quill,2,180.0,0.7800973384103042,2.35,1,9.531794320802891
+    Quill,3,28.940588749441783,0.7800973384103042,0.36666666666666664,0,15.392142120617548
+    Vandal,0,8.34265166390283,0.8990460401673331,0.18333333333333332,0,12.936517378336882
+    Vandal,1,22.35298139694481,0.7347364787971219,0.45,0,12.031934246016647
+    Vandal,2,72.41273803034586,0.7347364787971219,1.4833333333333334,0,8.230527315373259
+    Vandal,3,22.35298139694481,0.7347364787971219,0.31666666666666665,0,11.955781583465436
+    Kestrel,0,9.817724556475238,0.8620017940362469,0.15,0,16.17459667474151
+    Kestrel,1,28.346773421061414,0.6813059063251563,0.65,0,15.297130699968612
+    Kestrel,2,124.87742793215503,0.6813059063251563,1.7166666666666666,1,10.692115574533736
+    Kestrel,3,28.346773421061414,0.6813059063251563,0.3,0,14.992082339852002
+    Bulwark,0,12.628200412264995,0.9424487251178237,0.25,0,15.696132334721986
+    Bulwark,1,24.623820041313557,0.7935342900881586,0.6166666666666667,0,14.889748691603177
+    Bulwark,2,155.85675933189867,0.7935342900881586,2.033333333333333,1,9.26503421557866
+    Bulwark,3,24.573587260453348,0.7935342900881586,0.4,0,14.736019068136187
+
+
+DriftModelTest > entryAndCatchWitnessesForEveryClass() PASSED
+
+DriftModelTest > axleCirclesAndContinuousCurveHaveRealConsumers() PASSED
+
+DriftModelTest > activeDriftAndSpinAllocateZeroAndReplay() PASSED
+
+DriftTest > hysteresisRetainsBothHistoriesInsideTheBand() PASSED
+
+DriftTest > brakingUnloadsLateralGrip() PASSED
+
+DriftTest > countersteeringCatchesTheSlide() STANDARD_OUT
+    Countersteer: slip 21.85452018530294 to 9.603135582092992 degrees in 0.2 simulated seconds
+
+DriftTest > countersteeringCatchesTheSlide() PASSED
+
+MovementTest > transferDriftSurfaceOrderingAndStaleSafety() PASSED
+
+MovementTest > everySurfaceCompletesSeededAiRacesDeterministically() FAILED
+    org.opentest4j.AssertionFailedError at MovementTest.kt:51
+
+MovementTest > glancingRetainsTangentButHeadOnLosesSpeed() PASSED
+
+MovementTest > massContactsConserveLinearMomentumAndFavorHeavyCar() PASSED
+
+MovementTest > advancedMovementAllocatesNothing() PASSED
+.\deathride\gradlew.bat :
+At line:2 char:1
++ .\deathride\gradlew.bat -p deathride :core:test --tests dev.deathride ...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+
+16 tests completed, 1 failed
+
+> Task :core:test FAILED
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':core:test'.
+> There were failing tests. See the report at:
+file:///C:/Users/kazda/kiro/firetv-deathride-drift/deathride/core/build/reports/tests/test/index.html
+
+* Try:
+> Run with --scan to get full insights.
+
+BUILD FAILED in 13s
+48 actionable tasks: 17 executed, 31 up-to-date
