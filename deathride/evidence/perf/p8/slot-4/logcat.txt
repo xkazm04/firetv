@@ -1,0 +1,881 @@
+--------- beginning of main
+10-03 05:17:57.560  6049  6049 I chatty  : uid=10279(dev.deathride.perf) expire 2 lines
+10-03 05:17:57.623  6049  6061 I chatty  : uid=10279(dev.deathride.perf) Signal Catcher expire 1 line
+10-03 05:18:03.205  6049  6080 I chatty  : uid=10279(dev.deathride.perf) Profile Saver expire 1 line
+10-03 05:18:05.544  6049  6049 I chatty  : uid=10279(dev.deathride.perf) expire 5 lines
+10-03 05:18:05.613  6049  6081 I chatty  : uid=10279(dev.deathride.perf) RenderThread expire 2 lines
+10-03 05:18:05.621  6049  6156 I chatty  : uid=10279(dev.deathride.perf) GLThread 42538 expire 17 lines
+10-03 05:18:06.344  6049  6171 I chatty  : uid=10279(dev.deathride.perf) expire 21 lines
+10-03 05:18:06.358  6049  6176 I chatty  : uid=10279(dev.deathride.perf) expire 18 lines
+10-03 05:18:06.369  6049  6169 I chatty  : uid=10279(dev.deathride.perf) expire 6 lines
+10-03 05:18:06.380  6049  6170 I chatty  : uid=10279(dev.deathride.perf) expire 6 lines
+10-03 05:18:06.413  6049  6181 I chatty  : uid=10279(dev.deathride.perf) expire 1 line
+10-03 05:18:06.430  6049  6184 I chatty  : uid=10279(dev.deathride.perf) expire 19 lines
+10-03 05:18:06.444  6049  6186 I chatty  : uid=10279(dev.deathride.perf) expire 19 lines
+10-03 05:18:06.494  6049  6190 I chatty  : uid=10279(dev.deathride.perf) expire 19 lines
+10-03 05:18:06.508  6049  6193 I chatty  : uid=10279(dev.deathride.perf) expire 18 lines
+10-03 05:18:06.542  6049  6196 I chatty  : uid=10279(dev.deathride.perf) expire 1 line
+10-03 05:18:06.552  6049  6197 I chatty  : uid=10279(dev.deathride.perf) expire 19 lines
+10-03 05:18:06.564  6049  6200 I chatty  : uid=10279(dev.deathride.perf) expire 19 lines
+10-03 05:18:06.599  6049  6199 I chatty  : uid=10279(dev.deathride.perf) DefaultDispatch expire 3 lines
+10-03 05:18:06.610  6049  6207 I chatty  : uid=10279(dev.deathride.perf) expire 19 lines
+10-03 05:18:06.632  6049  6210 I chatty  : uid=10279(dev.deathride.perf) expire 19 lines
+10-03 05:18:06.677  6049  6213 I chatty  : uid=10279(dev.deathride.perf) expire 14 lines
+10-03 05:18:06.689  6049  6217 I chatty  : uid=10279(dev.deathride.perf) expire 10 lines
+10-03 05:18:06.706  6049  6217 E FMQ     : grantorIdx must be less than 3
+10-03 05:18:06.707  6049  6213 I MediaCodecLogger: [ASAP] SW.c2.audio.raw Got First Input Frame 2234594987 pts:0
+10-03 05:18:06.708  6049  6217 I CCodecBufferChannel: [c2.android.raw.decoder#933] Created output block pool with allocatorID 16 => poolID 1485 - OK
+10-03 05:18:06.710  6049  6213 I MediaCodecLogger: updatePTSTime [SW.c2.audio.raw] First PTS after Flush or reset = 0
+10-03 05:18:06.710  6049  6217 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P3 - 2234594990
+10-03 05:18:06.711  6049  6213 I MediaCodecLogger: [ASAP] SW.c2.audio.raw Got First Frame Ready 2234594990(3)
+10-03 05:18:06.711  6049  6213 I MediaCodecLogger: updatePTSTime [SW.c2.audio.raw] EOS pts:-1
+10-03 05:18:06.715  6049  6217 E FMQ     : grantorIdx must be less than 3
+10-03 05:18:06.717  6049  6217 I MediaCodecLogger: [ASAP] SW.c2.audio.raw Got First Input Frame 2234594996 pts:0
+10-03 05:18:06.718  6049  6217 I MediaCodecLogger: updatePTSTime [SW.c2.audio.raw] First PTS after Flush or reset = 0
+10-03 05:18:06.718  6049  6217 I MediaCodecLogger: [ASAP] SW.c2.audio.raw Got First Frame Ready 2234594997(1)
+10-03 05:18:06.719  6049  6217 I MediaCodecLogger: updatePTSTime [SW.c2.audio.raw] EOS pts:-1
+10-03 05:18:06.720  6049  6220 I hw-BpHwBinder: onLastStrongRef automatically unlinking death recipients
+10-03 05:18:06.729  6049  6217 I hw-BpHwBinder: onLastStrongRef automatically unlinking death recipients
+10-03 05:18:06.748  6049  6222 I CCodec  : setting up 'default' as default (vendor) store
+10-03 05:18:06.751  6049  6222 I CCodec  : Created component [c2.android.raw.decoder]
+10-03 05:18:06.757  6049  6222 I CCodecConfig: query failed after returning 8 values (BAD_INDEX)
+10-03 05:18:06.758  6049  6222 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P2 + 2234595038
+10-03 05:18:06.761  6049  6222 W Codec2Client: query -- param skipped: index = 1107298332.
+10-03 05:18:06.761  6049  6222 I CCodecConfig: query failed after returning 8 values (BAD_INDEX)
+10-03 05:18:06.761  6049  6222 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P2 - 2234595041
+10-03 05:18:06.762  6049  6169 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P3 + 2234595042
+10-03 05:18:06.763  6049  6222 W Codec2Client: query -- param skipped: index = 1342179345.
+10-03 05:18:06.763  6049  6222 W Codec2Client: query -- param skipped: index = 2415921170.
+10-03 05:18:06.764  6049  6222 E FMQ     : grantorIdx must be less than 3
+10-03 05:18:06.764  6049  6222 E FMQ     : grantorIdx must be less than 3
+10-03 05:18:06.766  6049  6222 I CCodecBufferChannel: [c2.android.raw.decoder#530] Created output block pool with allocatorID 16 => poolID 1486 - OK
+10-03 05:18:06.767  6049  6223 I CCodec  : setting up 'default' as default (vendor) store
+10-03 05:18:06.768  6049  6222 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P3 - 2234595047
+10-03 05:18:06.768  6049  6223 I CCodec  : Created component [c2.android.raw.decoder]
+10-03 05:18:06.771  6049  6222 E FMQ     : grantorIdx must be less than 3
+10-03 05:18:06.774  6049  6222 I MediaCodecLogger: [ASAP] SW.c2.audio.raw Got First Input Frame 2234595053 pts:0
+10-03 05:18:06.776  6049  6222 I MediaCodecLogger: updatePTSTime [SW.c2.audio.raw] First PTS after Flush or reset = 0
+10-03 05:18:06.776  6049  6222 I MediaCodecLogger: [ASAP] SW.c2.audio.raw Got First Frame Ready 2234595056(3)
+10-03 05:18:06.777  6049  6222 I MediaCodecLogger: updatePTSTime [SW.c2.audio.raw] EOS pts:-1
+10-03 05:18:06.778  6049  6223 I CCodecConfig: query failed after returning 8 values (BAD_INDEX)
+10-03 05:18:06.780  6049  6223 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P2 + 2234595060
+10-03 05:18:06.784  6049  6223 W Codec2Client: query -- param skipped: index = 1107298332.
+10-03 05:18:06.784  6049  6223 I CCodecConfig: query failed after returning 8 values (BAD_INDEX)
+10-03 05:18:06.784  6049  6223 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P2 - 2234595064
+10-03 05:18:06.785  6049  6170 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P3 + 2234595065
+10-03 05:18:06.786  6049  6223 W Codec2Client: query -- param skipped: index = 1342179345.
+10-03 05:18:06.786  6049  6223 W Codec2Client: query -- param skipped: index = 2415921170.
+10-03 05:18:06.790  6049  6222 I hw-BpHwBinder: onLastStrongRef automatically unlinking death recipients
+10-03 05:18:06.790  6049  6223 E FMQ     : grantorIdx must be less than 3
+10-03 05:18:06.790  6049  6223 E FMQ     : grantorIdx must be less than 3
+10-03 05:18:06.795  6049  6223 I CCodecBufferChannel: [c2.android.raw.decoder#149] Created output block pool with allocatorID 16 => poolID 1487 - OK
+10-03 05:18:06.803  6049  6223 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P3 - 2234595082
+10-03 05:18:06.806  6049  6223 E FMQ     : grantorIdx must be less than 3
+10-03 05:18:06.807  6049  6223 I MediaCodecLogger: [ASAP] SW.c2.audio.raw Got First Input Frame 2234595087 pts:0
+10-03 05:18:06.809  6049  6223 I MediaCodecLogger: updatePTSTime [SW.c2.audio.raw] First PTS after Flush or reset = 0
+10-03 05:18:06.809  6049  6223 I MediaCodecLogger: [ASAP] SW.c2.audio.raw Got First Frame Ready 2234595088(1)
+10-03 05:18:06.811  6049  6223 I MediaCodecLogger: updatePTSTime [SW.c2.audio.raw] EOS pts:-1
+10-03 05:18:06.817  6049  6229 I CCodec  : setting up 'default' as default (vendor) store
+10-03 05:18:06.817  6049  6223 I hw-BpHwBinder: onLastStrongRef automatically unlinking death recipients
+10-03 05:18:06.820  6049  6229 I CCodec  : Created component [c2.android.raw.decoder]
+10-03 05:18:06.826  6049  6229 I CCodecConfig: query failed after returning 8 values (BAD_INDEX)
+10-03 05:18:06.827  6049  6229 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P2 + 2234595107
+10-03 05:18:06.829  6049  6229 W Codec2Client: query -- param skipped: index = 1107298332.
+10-03 05:18:06.830  6049  6229 I CCodecConfig: query failed after returning 8 values (BAD_INDEX)
+10-03 05:18:06.830  6049  6229 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P2 - 2234595109
+10-03 05:18:06.831  6049  6169 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P3 + 2234595110
+10-03 05:18:06.831  6049  6229 W Codec2Client: query -- param skipped: index = 1342179345.
+10-03 05:18:06.831  6049  6229 W Codec2Client: query -- param skipped: index = 2415921170.
+10-03 05:18:06.832  6049  6229 E FMQ     : grantorIdx must be less than 3
+10-03 05:18:06.833  6049  6229 E FMQ     : grantorIdx must be less than 3
+10-03 05:18:06.835  6049  6229 I CCodecBufferChannel: [c2.android.raw.decoder#216] Created output block pool with allocatorID 16 => poolID 1488 - OK
+10-03 05:18:06.837  6049  6229 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P3 - 2234595117
+10-03 05:18:06.842  6049  6229 E FMQ     : grantorIdx must be less than 3
+10-03 05:18:06.843  6049  6229 I MediaCodecLogger: [ASAP] SW.c2.audio.raw Got First Input Frame 2234595123 pts:0
+10-03 05:18:06.844  6049  6229 I MediaCodecLogger: updatePTSTime [SW.c2.audio.raw] First PTS after Flush or reset = 0
+10-03 05:18:06.845  6049  6229 I MediaCodecLogger: [ASAP] SW.c2.audio.raw Got First Frame Ready 2234595124(1)
+10-03 05:18:06.846  6049  6229 I MediaCodecLogger: updatePTSTime [SW.c2.audio.raw] EOS pts:-1
+10-03 05:18:06.854  6049  6232 I CCodec  : setting up 'default' as default (vendor) store
+10-03 05:18:06.857  6049  6232 I CCodec  : Created component [c2.android.raw.decoder]
+10-03 05:18:06.857  6049  6229 I hw-BpHwBinder: onLastStrongRef automatically unlinking death recipients
+10-03 05:18:06.864  6049  6232 I CCodecConfig: query failed after returning 8 values (BAD_INDEX)
+10-03 05:18:06.867  6049  6232 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P2 + 2234595146
+10-03 05:18:06.869  6049  6236 I CCodec  : setting up 'default' as default (vendor) store
+10-03 05:18:06.870  6049  6232 W Codec2Client: query -- param skipped: index = 1107298332.
+10-03 05:18:06.870  6049  6232 I CCodecConfig: query failed after returning 8 values (BAD_INDEX)
+10-03 05:18:06.870  6049  6232 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P2 - 2234595150
+10-03 05:18:06.871  6049  6236 I CCodec  : Created component [c2.android.raw.decoder]
+10-03 05:18:06.871  6049  6170 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P3 + 2234595151
+10-03 05:18:06.872  6049  6232 W Codec2Client: query -- param skipped: index = 1342179345.
+10-03 05:18:06.872  6049  6232 W Codec2Client: query -- param skipped: index = 2415921170.
+10-03 05:18:06.873  6049  6232 E FMQ     : grantorIdx must be less than 3
+10-03 05:18:06.873  6049  6232 E FMQ     : grantorIdx must be less than 3
+10-03 05:18:06.875  6049  6232 I CCodecBufferChannel: [c2.android.raw.decoder#261] Created output block pool with allocatorID 16 => poolID 1489 - OK
+10-03 05:18:06.876  6049  6236 I CCodecConfig: query failed after returning 8 values (BAD_INDEX)
+10-03 05:18:06.877  6049  6232 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P3 - 2234595157
+10-03 05:18:06.878  6049  6236 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P2 + 2234595158
+10-03 05:18:06.880  6049  6236 W Codec2Client: query -- param skipped: index = 1107298332.
+10-03 05:18:06.881  6049  6236 I CCodecConfig: query failed after returning 8 values (BAD_INDEX)
+10-03 05:18:06.881  6049  6236 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P2 - 2234595160
+10-03 05:18:06.882  6049  6232 E FMQ     : grantorIdx must be less than 3
+10-03 05:18:06.882  6049  6169 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P3 + 2234595161
+10-03 05:18:06.883  6049  6232 I MediaCodecLogger: [ASAP] SW.c2.audio.raw Got First Input Frame 2234595163 pts:0
+10-03 05:18:06.884  6049  6236 W Codec2Client: query -- param skipped: index = 1342179345.
+10-03 05:18:06.884  6049  6236 W Codec2Client: query -- param skipped: index = 2415921170.
+10-03 05:18:06.885  6049  6236 E FMQ     : grantorIdx must be less than 3
+10-03 05:18:06.885  6049  6232 I MediaCodecLogger: updatePTSTime [SW.c2.audio.raw] First PTS after Flush or reset = 0
+10-03 05:18:06.885  6049  6236 E FMQ     : grantorIdx must be less than 3
+10-03 05:18:06.886  6049  6232 I MediaCodecLogger: [ASAP] SW.c2.audio.raw Got First Frame Ready 2234595165(2)
+10-03 05:18:06.887  6049  6232 I MediaCodecLogger: updatePTSTime [SW.c2.audio.raw] EOS pts:-1
+10-03 05:18:06.888  6049  6236 I CCodecBufferChannel: [c2.android.raw.decoder#138] Created output block pool with allocatorID 16 => poolID 1490 - OK
+10-03 05:18:06.894  6049  6238 I hw-BpHwBinder: onLastStrongRef automatically unlinking death recipients
+10-03 05:18:06.898  6049  6236 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P3 - 2234595178
+10-03 05:18:06.903  6049  6236 E FMQ     : grantorIdx must be less than 3
+10-03 05:18:06.905  6049  6236 I MediaCodecLogger: [ASAP] SW.c2.audio.raw Got First Input Frame 2234595184 pts:0
+10-03 05:18:06.906  6049  6236 I MediaCodecLogger: updatePTSTime [SW.c2.audio.raw] First PTS after Flush or reset = 0
+10-03 05:18:06.906  6049  6236 I MediaCodecLogger: [ASAP] SW.c2.audio.raw Got First Frame Ready 2234595185(1)
+10-03 05:18:06.908  6049  6236 I MediaCodecLogger: updatePTSTime [SW.c2.audio.raw] EOS pts:-1
+10-03 05:18:06.916  6049  6236 I hw-BpHwBinder: onLastStrongRef automatically unlinking death recipients
+10-03 05:18:06.930  6049  6239 I CCodec  : setting up 'default' as default (vendor) store
+10-03 05:18:06.933  6049  6239 I CCodec  : Created component [c2.android.raw.decoder]
+10-03 05:18:06.939  6049  6239 I CCodecConfig: query failed after returning 8 values (BAD_INDEX)
+10-03 05:18:06.941  6049  6239 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P2 + 2234595220
+10-03 05:18:06.943  6049  6239 W Codec2Client: query -- param skipped: index = 1107298332.
+10-03 05:18:06.943  6049  6239 I CCodecConfig: query failed after returning 8 values (BAD_INDEX)
+10-03 05:18:06.943  6049  6239 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P2 - 2234595223
+10-03 05:18:06.944  6049  6170 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P3 + 2234595224
+10-03 05:18:06.945  6049  6239 W Codec2Client: query -- param skipped: index = 1342179345.
+10-03 05:18:06.945  6049  6239 W Codec2Client: query -- param skipped: index = 2415921170.
+10-03 05:18:06.946  6049  6239 E FMQ     : grantorIdx must be less than 3
+10-03 05:18:06.946  6049  6239 E FMQ     : grantorIdx must be less than 3
+10-03 05:18:06.949  6049  6239 I CCodecBufferChannel: [c2.android.raw.decoder#530] Created output block pool with allocatorID 16 => poolID 1491 - OK
+10-03 05:18:06.951  6049  6239 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P3 - 2234595230
+10-03 05:18:06.954  6049  6244 I CCodec  : setting up 'default' as default (vendor) store
+10-03 05:18:06.954  6049  6239 E FMQ     : grantorIdx must be less than 3
+10-03 05:18:06.955  6049  6244 I CCodec  : Created component [c2.android.raw.decoder]
+10-03 05:18:06.955  6049  6239 I MediaCodecLogger: [ASAP] SW.c2.audio.raw Got First Input Frame 2234595235 pts:0
+10-03 05:18:06.957  6049  6239 I MediaCodecLogger: updatePTSTime [SW.c2.audio.raw] First PTS after Flush or reset = 0
+10-03 05:18:06.957  6049  6239 I MediaCodecLogger: [ASAP] SW.c2.audio.raw Got First Frame Ready 2234595236(1)
+10-03 05:18:06.960  6049  6239 I MediaCodecLogger: updatePTSTime [SW.c2.audio.raw] EOS pts:-1
+10-03 05:18:06.961  6049  6244 I CCodecConfig: query failed after returning 8 values (BAD_INDEX)
+10-03 05:18:06.962  6049  6244 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P2 + 2234595242
+10-03 05:18:06.964  6049  6244 W Codec2Client: query -- param skipped: index = 1107298332.
+10-03 05:18:06.964  6049  6244 I CCodecConfig: query failed after returning 8 values (BAD_INDEX)
+10-03 05:18:06.965  6049  6244 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P2 - 2234595244
+10-03 05:18:06.966  6049  6169 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P3 + 2234595246
+10-03 05:18:06.967  6049  6244 W Codec2Client: query -- param skipped: index = 1342179345.
+10-03 05:18:06.967  6049  6244 W Codec2Client: query -- param skipped: index = 2415921170.
+10-03 05:18:06.968  6049  6244 E FMQ     : grantorIdx must be less than 3
+10-03 05:18:06.968  6049  6244 E FMQ     : grantorIdx must be less than 3
+10-03 05:18:06.968  6049  6239 I hw-BpHwBinder: onLastStrongRef automatically unlinking death recipients
+10-03 05:18:06.971  6049  6244 I CCodecBufferChannel: [c2.android.raw.decoder#765] Created output block pool with allocatorID 16 => poolID 1492 - OK
+10-03 05:18:06.973  6049  6244 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P3 - 2234595252
+10-03 05:18:06.977  6049  6244 E FMQ     : grantorIdx must be less than 3
+10-03 05:18:06.978  6049  6244 I MediaCodecLogger: [ASAP] SW.c2.audio.raw Got First Input Frame 2234595258 pts:0
+10-03 05:18:06.981  6049  6244 I MediaCodecLogger: updatePTSTime [SW.c2.audio.raw] First PTS after Flush or reset = 0
+10-03 05:18:06.981  6049  6244 I MediaCodecLogger: [ASAP] SW.c2.audio.raw Got First Frame Ready 2234595260(2)
+10-03 05:18:06.988  6049  6244 I MediaCodecLogger: updatePTSTime [SW.c2.audio.raw] EOS pts:-1
+10-03 05:18:06.989  6049  6247 I CCodec  : setting up 'default' as default (vendor) store
+10-03 05:18:06.991  6049  6247 I CCodec  : Created component [c2.android.raw.decoder]
+10-03 05:18:06.993  6049  6244 I hw-BpHwBinder: onLastStrongRef automatically unlinking death recipients
+10-03 05:18:07.000  6049  6247 I CCodecConfig: query failed after returning 8 values (BAD_INDEX)
+10-03 05:18:07.004  6049  6247 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P2 + 2234595284
+10-03 05:18:07.005  6049  6067 I .deathride.per: Background young concurrent copying GC freed 19439(1604KB) AllocSpace objects, 26(1020KB) LOS objects, 15% free, 10MB/12MB, paused 2.533ms total 125.692ms
+10-03 05:18:07.006  6049  6247 W Codec2Client: query -- param skipped: index = 1107298332.
+10-03 05:18:07.006  6049  6247 I CCodecConfig: query failed after returning 8 values (BAD_INDEX)
+10-03 05:18:07.007  6049  6247 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P2 - 2234595286
+10-03 05:18:07.008  6049  6170 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P3 + 2234595288
+10-03 05:18:07.009  6049  6247 W Codec2Client: query -- param skipped: index = 1342179345.
+10-03 05:18:07.009  6049  6247 W Codec2Client: query -- param skipped: index = 2415921170.
+10-03 05:18:07.010  6049  6247 E FMQ     : grantorIdx must be less than 3
+10-03 05:18:07.010  6049  6247 E FMQ     : grantorIdx must be less than 3
+10-03 05:18:07.013  6049  6247 I CCodecBufferChannel: [c2.android.raw.decoder#653] Created output block pool with allocatorID 16 => poolID 1493 - OK
+10-03 05:18:07.015  6049  6247 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P3 - 2234595294
+10-03 05:18:07.018  6049  6250 I CCodec  : setting up 'default' as default (vendor) store
+10-03 05:18:07.020  6049  6247 E FMQ     : grantorIdx must be less than 3
+10-03 05:18:07.020  6049  6250 I CCodec  : Created component [c2.android.raw.decoder]
+10-03 05:18:07.022  6049  6247 I MediaCodecLogger: [ASAP] SW.c2.audio.raw Got First Input Frame 2234595301 pts:0
+10-03 05:18:07.022  6049  6247 I MediaCodecLogger: updatePTSTime [SW.c2.audio.raw] First PTS after Flush or reset = 0
+10-03 05:18:07.023  6049  6247 I MediaCodecLogger: [ASAP] SW.c2.audio.raw Got First Frame Ready 2234595302(1)
+10-03 05:18:07.024  6049  6247 I MediaCodecLogger: updatePTSTime [SW.c2.audio.raw] EOS pts:-1
+10-03 05:18:07.025  6049  6250 I CCodecConfig: query failed after returning 8 values (BAD_INDEX)
+10-03 05:18:07.027  6049  6250 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P2 + 2234595307
+10-03 05:18:07.029  6049  6247 I hw-BpHwBinder: onLastStrongRef automatically unlinking death recipients
+10-03 05:18:07.029  6049  6250 W Codec2Client: query -- param skipped: index = 1107298332.
+10-03 05:18:07.030  6049  6250 I CCodecConfig: query failed after returning 8 values (BAD_INDEX)
+10-03 05:18:07.030  6049  6250 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P2 - 2234595309
+10-03 05:18:07.031  6049  6169 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P3 + 2234595310
+10-03 05:18:07.031  6049  6250 W Codec2Client: query -- param skipped: index = 1342179345.
+10-03 05:18:07.031  6049  6250 W Codec2Client: query -- param skipped: index = 2415921170.
+10-03 05:18:07.033  6049  6250 E FMQ     : grantorIdx must be less than 3
+10-03 05:18:07.033  6049  6250 E FMQ     : grantorIdx must be less than 3
+10-03 05:18:07.036  6049  6250 I CCodecBufferChannel: [c2.android.raw.decoder#261] Created output block pool with allocatorID 16 => poolID 1494 - OK
+10-03 05:18:07.038  6049  6250 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P3 - 2234595318
+10-03 05:18:07.041  6049  6250 E FMQ     : grantorIdx must be less than 3
+10-03 05:18:07.045  6049  6250 I MediaCodecLogger: [ASAP] SW.c2.audio.raw Got First Input Frame 2234595325 pts:0
+10-03 05:18:07.046  6049  6250 I MediaCodecLogger: updatePTSTime [SW.c2.audio.raw] First PTS after Flush or reset = 0
+10-03 05:18:07.047  6049  6250 I MediaCodecLogger: [ASAP] SW.c2.audio.raw Got First Frame Ready 2234595326(1)
+10-03 05:18:07.048  6049  6250 I MediaCodecLogger: updatePTSTime [SW.c2.audio.raw] EOS pts:-1
+10-03 05:18:07.054  6049  6253 I CCodec  : setting up 'default' as default (vendor) store
+10-03 05:18:07.056  6049  6253 I CCodec  : Created component [c2.android.raw.decoder]
+10-03 05:18:07.056  6049  6255 I hw-BpHwBinder: onLastStrongRef automatically unlinking death recipients
+10-03 05:18:07.062  6049  6253 I CCodecConfig: query failed after returning 8 values (BAD_INDEX)
+10-03 05:18:07.064  6049  6253 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P2 + 2234595343
+10-03 05:18:07.064  6049  6257 I CCodec  : setting up 'default' as default (vendor) store
+10-03 05:18:07.066  6049  6257 I CCodec  : Created component [c2.android.raw.decoder]
+10-03 05:18:07.066  6049  6253 W Codec2Client: query -- param skipped: index = 1107298332.
+10-03 05:18:07.066  6049  6253 I CCodecConfig: query failed after returning 8 values (BAD_INDEX)
+10-03 05:18:07.066  6049  6253 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P2 - 2234595346
+10-03 05:18:07.067  6049  6170 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P3 + 2234595346
+10-03 05:18:07.067  6049  6253 W Codec2Client: query -- param skipped: index = 1342179345.
+10-03 05:18:07.067  6049  6253 W Codec2Client: query -- param skipped: index = 2415921170.
+10-03 05:18:07.068  6049  6253 E FMQ     : grantorIdx must be less than 3
+10-03 05:18:07.069  6049  6253 E FMQ     : grantorIdx must be less than 3
+10-03 05:18:07.070  6049  6253 I CCodecBufferChannel: [c2.android.raw.decoder#698] Created output block pool with allocatorID 16 => poolID 1495 - OK
+10-03 05:18:07.072  6049  6257 I CCodecConfig: query failed after returning 8 values (BAD_INDEX)
+10-03 05:18:07.072  6049  6253 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P3 - 2234595352
+10-03 05:18:07.073  6049  6257 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P2 + 2234595353
+10-03 05:18:07.076  6049  6253 E FMQ     : grantorIdx must be less than 3
+10-03 05:18:07.077  6049  6257 W Codec2Client: query -- param skipped: index = 1107298332.
+10-03 05:18:07.078  6049  6253 I MediaCodecLogger: [ASAP] SW.c2.audio.raw Got First Input Frame 2234595357 pts:0
+10-03 05:18:07.078  6049  6257 I CCodecConfig: query failed after returning 8 values (BAD_INDEX)
+10-03 05:18:07.078  6049  6257 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P2 - 2234595357
+10-03 05:18:07.079  6049  6169 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P3 + 2234595359
+10-03 05:18:07.080  6049  6253 I MediaCodecLogger: updatePTSTime [SW.c2.audio.raw] First PTS after Flush or reset = 0
+10-03 05:18:07.080  6049  6253 I MediaCodecLogger: [ASAP] SW.c2.audio.raw Got First Frame Ready 2234595359(2)
+10-03 05:18:07.081  6049  6257 W Codec2Client: query -- param skipped: index = 1342179345.
+10-03 05:18:07.082  6049  6257 W Codec2Client: query -- param skipped: index = 2415921170.
+10-03 05:18:07.082  6049  6253 I MediaCodecLogger: updatePTSTime [SW.c2.audio.raw] EOS pts:-1
+10-03 05:18:07.083  6049  6257 E FMQ     : grantorIdx must be less than 3
+10-03 05:18:07.083  6049  6257 E FMQ     : grantorIdx must be less than 3
+10-03 05:18:07.085  6049  6257 I CCodecBufferChannel: [c2.android.raw.decoder#933] Created output block pool with allocatorID 16 => poolID 1496 - OK
+10-03 05:18:07.087  6049  6257 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P3 - 2234595367
+10-03 05:18:07.090  6049  6257 E FMQ     : grantorIdx must be less than 3
+10-03 05:18:07.091  6049  6253 I hw-BpHwBinder: onLastStrongRef automatically unlinking death recipients
+10-03 05:18:07.092  6049  6257 I MediaCodecLogger: [ASAP] SW.c2.audio.raw Got First Input Frame 2234595371 pts:0
+10-03 05:18:07.093  6049  6257 I MediaCodecLogger: updatePTSTime [SW.c2.audio.raw] First PTS after Flush or reset = 0
+10-03 05:18:07.095  6049  6257 I MediaCodecLogger: [ASAP] SW.c2.audio.raw Got First Frame Ready 2234595373(2)
+10-03 05:18:07.097  6049  6257 I MediaCodecLogger: updatePTSTime [SW.c2.audio.raw] EOS pts:-1
+10-03 05:18:07.106  6049  6260 I hw-BpHwBinder: onLastStrongRef automatically unlinking death recipients
+10-03 05:18:07.108  6049  6156 W .deathride.per: JNI critical lock held for 86.563ms on Thread[3,tid=6156,Runnable,Thread*=0xe989fa00,peer=0x12e40190,"GLThread 42538"]
+10-03 05:18:07.116  6049  6261 I CCodec  : setting up 'default' as default (vendor) store
+10-03 05:18:07.120  6049  6261 I CCodec  : Created component [c2.android.raw.decoder]
+10-03 05:18:07.124  6049  6263 I CCodec  : setting up 'default' as default (vendor) store
+10-03 05:18:07.125  6049  6261 I CCodecConfig: query failed after returning 8 values (BAD_INDEX)
+10-03 05:18:07.126  6049  6263 I CCodec  : Created component [c2.android.raw.decoder]
+10-03 05:18:07.127  6049  6261 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P2 + 2234595406
+10-03 05:18:07.129  6049  6261 W Codec2Client: query -- param skipped: index = 1107298332.
+10-03 05:18:07.129  6049  6261 I CCodecConfig: query failed after returning 8 values (BAD_INDEX)
+10-03 05:18:07.129  6049  6261 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P2 - 2234595408
+10-03 05:18:07.130  6049  6170 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P3 + 2234595410
+10-03 05:18:07.130  6049  6261 W Codec2Client: query -- param skipped: index = 1342179345.
+10-03 05:18:07.131  6049  6261 W Codec2Client: query -- param skipped: index = 2415921170.
+10-03 05:18:07.131  6049  6263 I CCodecConfig: query failed after returning 8 values (BAD_INDEX)
+10-03 05:18:07.132  6049  6261 E FMQ     : grantorIdx must be less than 3
+10-03 05:18:07.132  6049  6261 E FMQ     : grantorIdx must be less than 3
+10-03 05:18:07.133  6049  6263 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P2 + 2234595412
+10-03 05:18:07.133  6049  6261 I CCodecBufferChannel: [c2.android.raw.decoder#194] Created output block pool with allocatorID 16 => poolID 1497 - OK
+10-03 05:18:07.135  6049  6263 W Codec2Client: query -- param skipped: index = 1107298332.
+10-03 05:18:07.135  6049  6263 I CCodecConfig: query failed after returning 8 values (BAD_INDEX)
+10-03 05:18:07.135  6049  6263 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P2 - 2234595415
+10-03 05:18:07.135  6049  6261 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P3 - 2234595415
+10-03 05:18:07.137  6049  6169 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P3 + 2234595416
+10-03 05:18:07.138  6049  6263 W Codec2Client: query -- param skipped: index = 1342179345.
+10-03 05:18:07.139  6049  6261 E FMQ     : grantorIdx must be less than 3
+10-03 05:18:07.140  6049  6263 W Codec2Client: query -- param skipped: index = 2415921170.
+10-03 05:18:07.141  6049  6261 I MediaCodecLogger: [ASAP] SW.c2.audio.raw Got First Input Frame 2234595421 pts:0
+10-03 05:18:07.141  6049  6263 E FMQ     : grantorIdx must be less than 3
+10-03 05:18:07.142  6049  6263 E FMQ     : grantorIdx must be less than 3
+10-03 05:18:07.142  6049  6261 I MediaCodecLogger: updatePTSTime [SW.c2.audio.raw] First PTS after Flush or reset = 0
+10-03 05:18:07.143  6049  6261 I MediaCodecLogger: [ASAP] SW.c2.audio.raw Got First Frame Ready 2234595422(1)
+10-03 05:18:07.144  6049  6263 I CCodecBufferChannel: [c2.android.raw.decoder#530] Created output block pool with allocatorID 16 => poolID 1498 - OK
+10-03 05:18:07.144  6049  6261 I MediaCodecLogger: updatePTSTime [SW.c2.audio.raw] EOS pts:-1
+10-03 05:18:07.145  6049  6263 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P3 - 2234595425
+10-03 05:18:07.149  6049  6263 E FMQ     : grantorIdx must be less than 3
+10-03 05:18:07.151  6049  6263 I MediaCodecLogger: [ASAP] SW.c2.audio.raw Got First Input Frame 2234595430 pts:0
+10-03 05:18:07.151  6049  6261 I hw-BpHwBinder: onLastStrongRef automatically unlinking death recipients
+10-03 05:18:07.156  6049  6263 I MediaCodecLogger: updatePTSTime [SW.c2.audio.raw] First PTS after Flush or reset = 0
+10-03 05:18:07.156  6049  6263 I MediaCodecLogger: [ASAP] SW.c2.audio.raw Got First Frame Ready 2234595435(5)
+10-03 05:18:07.160  6049  6263 I MediaCodecLogger: updatePTSTime [SW.c2.audio.raw] EOS pts:-1
+10-03 05:18:07.169  6049  6266 I hw-BpHwBinder: onLastStrongRef automatically unlinking death recipients
+10-03 05:18:07.180  6049  6268 I CCodec  : setting up 'default' as default (vendor) store
+10-03 05:18:07.183  6049  6268 I CCodec  : Created component [c2.android.raw.decoder]
+10-03 05:18:07.189  6049  6268 I CCodecConfig: query failed after returning 8 values (BAD_INDEX)
+10-03 05:18:07.190  6049  6268 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P2 + 2234595470
+10-03 05:18:07.192  6049  6268 W Codec2Client: query -- param skipped: index = 1107298332.
+10-03 05:18:07.193  6049  6267 I CCodec  : setting up 'default' as default (vendor) store
+10-03 05:18:07.193  6049  6268 I CCodecConfig: query failed after returning 8 values (BAD_INDEX)
+10-03 05:18:07.193  6049  6268 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P2 - 2234595472
+10-03 05:18:07.194  6049  6170 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P3 + 2234595473
+10-03 05:18:07.194  6049  6268 W Codec2Client: query -- param skipped: index = 1342179345.
+10-03 05:18:07.194  6049  6268 W Codec2Client: query -- param skipped: index = 2415921170.
+10-03 05:18:07.195  6049  6267 I CCodec  : Created component [c2.android.raw.decoder]
+10-03 05:18:07.195  6049  6268 E FMQ     : grantorIdx must be less than 3
+10-03 05:18:07.195  6049  6268 E FMQ     : grantorIdx must be less than 3
+10-03 05:18:07.197  6049  6268 I CCodecBufferChannel: [c2.android.raw.decoder#261] Created output block pool with allocatorID 16 => poolID 1499 - OK
+10-03 05:18:07.199  6049  6268 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P3 - 2234595479
+10-03 05:18:07.201  6049  6267 I CCodecConfig: query failed after returning 8 values (BAD_INDEX)
+10-03 05:18:07.202  6049  6199 I DeathRide: pairing http://10.0.0.139:8772/?pin=9249
+10-03 05:18:07.203  6049  6267 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P2 + 2234595482
+10-03 05:18:07.204  6049  6267 W Codec2Client: query -- param skipped: index = 1107298332.
+10-03 05:18:07.205  6049  6267 I CCodecConfig: query failed after returning 8 values (BAD_INDEX)
+10-03 05:18:07.205  6049  6267 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P2 - 2234595484
+10-03 05:18:07.206  6049  6169 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P3 + 2234595485
+10-03 05:18:07.210  6049  6267 W Codec2Client: query -- param skipped: index = 1342179345.
+10-03 05:18:07.210  6049  6267 W Codec2Client: query -- param skipped: index = 2415921170.
+10-03 05:18:07.210  6049  6268 E FMQ     : grantorIdx must be less than 3
+10-03 05:18:07.211  6049  6267 E FMQ     : grantorIdx must be less than 3
+10-03 05:18:07.211  6049  6267 E FMQ     : grantorIdx must be less than 3
+10-03 05:18:07.212  6049  6268 I MediaCodecLogger: [ASAP] SW.c2.audio.raw Got First Input Frame 2234595491 pts:0
+10-03 05:18:07.213  6049  6267 I CCodecBufferChannel: [c2.android.raw.decoder#306] Created output block pool with allocatorID 16 => poolID 1500 - OK
+10-03 05:18:07.213  6049  6268 I MediaCodecLogger: updatePTSTime [SW.c2.audio.raw] First PTS after Flush or reset = 0
+10-03 05:18:07.213  6049  6268 I MediaCodecLogger: [ASAP] SW.c2.audio.raw Got First Frame Ready 2234595492(1)
+10-03 05:18:07.215  6049  6267 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P3 - 2234595494
+10-03 05:18:07.218  6049  6267 E FMQ     : grantorIdx must be less than 3
+10-03 05:18:07.219  6049  6267 I MediaCodecLogger: [ASAP] SW.c2.audio.raw Got First Input Frame 2234595499 pts:0
+10-03 05:18:07.220  6049  6267 I MediaCodecLogger: updatePTSTime [SW.c2.audio.raw] First PTS after Flush or reset = 0
+10-03 05:18:07.220  6049  6267 I MediaCodecLogger: [ASAP] SW.c2.audio.raw Got First Frame Ready 2234595500(1)
+10-03 05:18:07.226  6049  6267 I MediaCodecLogger: updatePTSTime [SW.c2.audio.raw] EOS pts:-1
+10-03 05:18:07.226  6049  6268 I MediaCodecLogger: updatePTSTime [SW.c2.audio.raw] EOS pts:-1
+10-03 05:18:07.232  6049  6267 I hw-BpHwBinder: onLastStrongRef automatically unlinking death recipients
+10-03 05:18:07.237  6049  6268 I hw-BpHwBinder: onLastStrongRef automatically unlinking death recipients
+10-03 05:18:07.252  6049  6276 I CCodec  : setting up 'default' as default (vendor) store
+10-03 05:18:07.253  6049  6277 I CCodec  : setting up 'default' as default (vendor) store
+10-03 05:18:07.255  6049  6276 I CCodec  : Created component [c2.android.raw.decoder]
+10-03 05:18:07.257  6049  6277 I CCodec  : Created component [c2.android.raw.decoder]
+10-03 05:18:07.261  6049  6276 I CCodecConfig: query failed after returning 8 values (BAD_INDEX)
+10-03 05:18:07.262  6049  6276 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P2 + 2234595542
+10-03 05:18:07.263  6049  6277 I CCodecConfig: query failed after returning 8 values (BAD_INDEX)
+10-03 05:18:07.265  6049  6277 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P2 + 2234595544
+10-03 05:18:07.265  6049  6276 W Codec2Client: query -- param skipped: index = 1107298332.
+10-03 05:18:07.265  6049  6276 I CCodecConfig: query failed after returning 8 values (BAD_INDEX)
+10-03 05:18:07.265  6049  6276 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P2 - 2234595545
+10-03 05:18:07.266  6049  6169 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P3 + 2234595545
+10-03 05:18:07.267  6049  6276 W Codec2Client: query -- param skipped: index = 1342179345.
+10-03 05:18:07.267  6049  6276 W Codec2Client: query -- param skipped: index = 2415921170.
+10-03 05:18:07.268  6049  6276 E FMQ     : grantorIdx must be less than 3
+10-03 05:18:07.268  6049  6276 E FMQ     : grantorIdx must be less than 3
+10-03 05:18:07.269  6049  6277 W Codec2Client: query -- param skipped: index = 1107298332.
+10-03 05:18:07.269  6049  6277 I CCodecConfig: query failed after returning 8 values (BAD_INDEX)
+10-03 05:18:07.269  6049  6277 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P2 - 2234595549
+10-03 05:18:07.269  6049  6276 I CCodecBufferChannel: [c2.android.raw.decoder#474] Created output block pool with allocatorID 16 => poolID 1501 - OK
+10-03 05:18:07.271  6049  6170 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P3 + 2234595551
+10-03 05:18:07.271  6049  6276 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P3 - 2234595551
+10-03 05:18:07.272  6049  6277 W Codec2Client: query -- param skipped: index = 1342179345.
+10-03 05:18:07.272  6049  6277 W Codec2Client: query -- param skipped: index = 2415921170.
+10-03 05:18:07.273  6049  6277 E FMQ     : grantorIdx must be less than 3
+10-03 05:18:07.273  6049  6277 E FMQ     : grantorIdx must be less than 3
+10-03 05:18:07.275  6049  6277 I CCodecBufferChannel: [c2.android.raw.decoder#765] Created output block pool with allocatorID 16 => poolID 1502 - OK
+10-03 05:18:07.275  6049  6276 E FMQ     : grantorIdx must be less than 3
+10-03 05:18:07.276  6049  6276 I MediaCodecLogger: [ASAP] SW.c2.audio.raw Got First Input Frame 2234595556 pts:0
+10-03 05:18:07.277  6049  6277 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P3 - 2234595556
+10-03 05:18:07.277  6049  6276 I MediaCodecLogger: updatePTSTime [SW.c2.audio.raw] First PTS after Flush or reset = 0
+10-03 05:18:07.277  6049  6276 I MediaCodecLogger: [ASAP] SW.c2.audio.raw Got First Frame Ready 2234595556(0)
+10-03 05:18:07.279  6049  6276 I MediaCodecLogger: updatePTSTime [SW.c2.audio.raw] EOS pts:-1
+10-03 05:18:07.280  6049  6277 E FMQ     : grantorIdx must be less than 3
+10-03 05:18:07.281  6049  6277 I MediaCodecLogger: [ASAP] SW.c2.audio.raw Got First Input Frame 2234595561 pts:0
+10-03 05:18:07.282  6049  6277 I MediaCodecLogger: updatePTSTime [SW.c2.audio.raw] First PTS after Flush or reset = 0
+10-03 05:18:07.283  6049  6277 I MediaCodecLogger: [ASAP] SW.c2.audio.raw Got First Frame Ready 2234595562(1)
+10-03 05:18:07.285  6049  6277 I MediaCodecLogger: updatePTSTime [SW.c2.audio.raw] EOS pts:-1
+10-03 05:18:07.286  6049  6276 I hw-BpHwBinder: onLastStrongRef automatically unlinking death recipients
+10-03 05:18:07.293  6049  6281 I hw-BpHwBinder: onLastStrongRef automatically unlinking death recipients
+10-03 05:18:07.307  6049  6283 I CCodec  : setting up 'default' as default (vendor) store
+10-03 05:18:07.308  6049  6282 I CCodec  : setting up 'default' as default (vendor) store
+10-03 05:18:07.310  6049  6283 I CCodec  : Created component [c2.android.raw.decoder]
+10-03 05:18:07.310  6049  6282 I CCodec  : Created component [c2.android.raw.decoder]
+10-03 05:18:07.316  6049  6283 I CCodecConfig: query failed after returning 8 values (BAD_INDEX)
+10-03 05:18:07.318  6049  6282 I CCodecConfig: query failed after returning 8 values (BAD_INDEX)
+10-03 05:18:07.318  6049  6283 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P2 + 2234595597
+10-03 05:18:07.319  6049  6282 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P2 + 2234595598
+10-03 05:18:07.319  6049  6283 W Codec2Client: query -- param skipped: index = 1107298332.
+10-03 05:18:07.320  6049  6283 I CCodecConfig: query failed after returning 8 values (BAD_INDEX)
+10-03 05:18:07.320  6049  6283 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P2 - 2234595599
+10-03 05:18:07.320  6049  6282 W Codec2Client: query -- param skipped: index = 1107298332.
+10-03 05:18:07.320  6049  6170 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P3 + 2234595600
+10-03 05:18:07.321  6049  6282 I CCodecConfig: query failed after returning 8 values (BAD_INDEX)
+10-03 05:18:07.321  6049  6282 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P2 - 2234595600
+10-03 05:18:07.321  6049  6283 W Codec2Client: query -- param skipped: index = 1342179345.
+10-03 05:18:07.321  6049  6283 W Codec2Client: query -- param skipped: index = 2415921170.
+10-03 05:18:07.321  6049  6169 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P3 + 2234595601
+10-03 05:18:07.322  6049  6283 E FMQ     : grantorIdx must be less than 3
+10-03 05:18:07.322  6049  6282 W Codec2Client: query -- param skipped: index = 1342179345.
+10-03 05:18:07.322  6049  6282 W Codec2Client: query -- param skipped: index = 2415921170.
+10-03 05:18:07.322  6049  6283 E FMQ     : grantorIdx must be less than 3
+10-03 05:18:07.323  6049  6282 E FMQ     : grantorIdx must be less than 3
+10-03 05:18:07.323  6049  6282 E FMQ     : grantorIdx must be less than 3
+10-03 05:18:07.323  6049  6283 I CCodecBufferChannel: [c2.android.raw.decoder#216] Created output block pool with allocatorID 16 => poolID 1503 - OK
+10-03 05:18:07.324  6049  6282 I CCodecBufferChannel: [c2.android.raw.decoder#194] Created output block pool with allocatorID 16 => poolID 1504 - OK
+10-03 05:18:07.325  6049  6283 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P3 - 2234595605
+10-03 05:18:07.328  6049  6282 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P3 - 2234595608
+10-03 05:18:07.329  6049  6283 E FMQ     : grantorIdx must be less than 3
+10-03 05:18:07.332  6049  6282 E FMQ     : grantorIdx must be less than 3
+10-03 05:18:07.332  6049  6283 I MediaCodecLogger: [ASAP] SW.c2.audio.raw Got First Input Frame 2234595612 pts:0
+10-03 05:18:07.333  6049  6282 I MediaCodecLogger: [ASAP] SW.c2.audio.raw Got First Input Frame 2234595613 pts:0
+10-03 05:18:07.334  6049  6283 I MediaCodecLogger: updatePTSTime [SW.c2.audio.raw] First PTS after Flush or reset = 0
+10-03 05:18:07.334  6049  6283 I MediaCodecLogger: [ASAP] SW.c2.audio.raw Got First Frame Ready 2234595613(1)
+10-03 05:18:07.335  6049  6283 I MediaCodecLogger: updatePTSTime [SW.c2.audio.raw] EOS pts:-1
+10-03 05:18:07.337  6049  6282 I MediaCodecLogger: updatePTSTime [SW.c2.audio.raw] First PTS after Flush or reset = 0
+10-03 05:18:07.337  6049  6282 I MediaCodecLogger: [ASAP] SW.c2.audio.raw Got First Frame Ready 2234595616(3)
+10-03 05:18:07.337  6049  6282 I MediaCodecLogger: updatePTSTime [SW.c2.audio.raw] EOS pts:-1
+10-03 05:18:07.343  6049  6286 I hw-BpHwBinder: onLastStrongRef automatically unlinking death recipients
+10-03 05:18:07.345  6049  6287 I hw-BpHwBinder: onLastStrongRef automatically unlinking death recipients
+10-03 05:18:07.360  6049  6067 I .deathride.per: Background concurrent copying GC freed 18287(823KB) AllocSpace objects, 6(1340KB) LOS objects, 49% free, 11MB/22MB, paused 2.911ms total 223.573ms
+10-03 05:18:07.366  6049  6288 I CCodec  : setting up 'default' as default (vendor) store
+10-03 05:18:07.369  6049  6289 I CCodec  : setting up 'default' as default (vendor) store
+10-03 05:18:07.369  6049  6288 I CCodec  : Created component [c2.android.raw.decoder]
+10-03 05:18:07.370  6049  6289 I CCodec  : Created component [c2.android.raw.decoder]
+10-03 05:18:07.374  6049  6288 I CCodecConfig: query failed after returning 8 values (BAD_INDEX)
+10-03 05:18:07.375  6049  6288 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P2 + 2234595655
+10-03 05:18:07.376  6049  6289 I CCodecConfig: query failed after returning 8 values (BAD_INDEX)
+10-03 05:18:07.378  6049  6288 W Codec2Client: query -- param skipped: index = 1107298332.
+10-03 05:18:07.378  6049  6288 I CCodecConfig: query failed after returning 8 values (BAD_INDEX)
+10-03 05:18:07.378  6049  6288 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P2 - 2234595658
+10-03 05:18:07.378  6049  6289 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P2 + 2234595658
+10-03 05:18:07.379  6049  6170 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P3 + 2234595659
+10-03 05:18:07.380  6049  6288 W Codec2Client: query -- param skipped: index = 1342179345.
+10-03 05:18:07.380  6049  6288 W Codec2Client: query -- param skipped: index = 2415921170.
+10-03 05:18:07.380  6049  6289 W Codec2Client: query -- param skipped: index = 1107298332.
+10-03 05:18:07.381  6049  6289 I CCodecConfig: query failed after returning 8 values (BAD_INDEX)
+10-03 05:18:07.381  6049  6289 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P2 - 2234595660
+10-03 05:18:07.381  6049  6288 E FMQ     : grantorIdx must be less than 3
+10-03 05:18:07.381  6049  6288 E FMQ     : grantorIdx must be less than 3
+10-03 05:18:07.381  6049  6169 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P3 + 2234595661
+10-03 05:18:07.382  6049  6289 W Codec2Client: query -- param skipped: index = 1342179345.
+10-03 05:18:07.382  6049  6289 W Codec2Client: query -- param skipped: index = 2415921170.
+10-03 05:18:07.383  6049  6289 E FMQ     : grantorIdx must be less than 3
+10-03 05:18:07.383  6049  6289 E FMQ     : grantorIdx must be less than 3
+10-03 05:18:07.384  6049  6288 I CCodecBufferChannel: [c2.android.raw.decoder#418] Created output block pool with allocatorID 16 => poolID 1505 - OK
+10-03 05:18:07.385  6049  6289 I CCodecBufferChannel: [c2.android.raw.decoder#317] Created output block pool with allocatorID 16 => poolID 1506 - OK
+10-03 05:18:07.386  6049  6288 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P3 - 2234595666
+10-03 05:18:07.387  6049  6289 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P3 - 2234595666
+10-03 05:18:07.389  6049  6288 E FMQ     : grantorIdx must be less than 3
+10-03 05:18:07.390  6049  6289 E FMQ     : grantorIdx must be less than 3
+10-03 05:18:07.390  6049  6288 I MediaCodecLogger: [ASAP] SW.c2.audio.raw Got First Input Frame 2234595670 pts:0
+10-03 05:18:07.391  6049  6289 I MediaCodecLogger: [ASAP] SW.c2.audio.raw Got First Input Frame 2234595671 pts:0
+10-03 05:18:07.392  6049  6288 I MediaCodecLogger: updatePTSTime [SW.c2.audio.raw] First PTS after Flush or reset = 0
+10-03 05:18:07.393  6049  6288 I MediaCodecLogger: [ASAP] SW.c2.audio.raw Got First Frame Ready 2234595672(2)
+10-03 05:18:07.393  6049  6288 I MediaCodecLogger: updatePTSTime [SW.c2.audio.raw] EOS pts:-1
+10-03 05:18:07.395  6049  6289 I MediaCodecLogger: updatePTSTime [SW.c2.audio.raw] First PTS after Flush or reset = 0
+10-03 05:18:07.395  6049  6289 I MediaCodecLogger: [ASAP] SW.c2.audio.raw Got First Frame Ready 2234595674(3)
+10-03 05:18:07.396  6049  6289 I MediaCodecLogger: updatePTSTime [SW.c2.audio.raw] EOS pts:-1
+10-03 05:18:07.401  6049  6288 I hw-BpHwBinder: onLastStrongRef automatically unlinking death recipients
+10-03 05:18:07.402  6049  6289 I hw-BpHwBinder: onLastStrongRef automatically unlinking death recipients
+10-03 05:18:07.419  6049  6296 I CCodec  : setting up 'default' as default (vendor) store
+10-03 05:18:07.423  6049  6297 I CCodec  : setting up 'default' as default (vendor) store
+10-03 05:18:07.423  6049  6296 I CCodec  : Created component [c2.android.raw.decoder]
+10-03 05:18:07.425  6049  6297 I CCodec  : Created component [c2.android.raw.decoder]
+10-03 05:18:07.432  6049  6297 I CCodecConfig: query failed after returning 8 values (BAD_INDEX)
+10-03 05:18:07.433  6049  6296 I CCodecConfig: query failed after returning 8 values (BAD_INDEX)
+10-03 05:18:07.434  6049  6297 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P2 + 2234595713
+10-03 05:18:07.435  6049  6296 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P2 + 2234595715
+10-03 05:18:07.436  6049  6297 W Codec2Client: query -- param skipped: index = 1107298332.
+10-03 05:18:07.436  6049  6297 I CCodecConfig: query failed after returning 8 values (BAD_INDEX)
+10-03 05:18:07.436  6049  6297 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P2 - 2234595716
+10-03 05:18:07.437  6049  6169 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P3 + 2234595717
+10-03 05:18:07.438  6049  6296 W Codec2Client: query -- param skipped: index = 1107298332.
+10-03 05:18:07.439  6049  6296 I CCodecConfig: query failed after returning 8 values (BAD_INDEX)
+10-03 05:18:07.439  6049  6296 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P2 - 2234595718
+10-03 05:18:07.440  6049  6297 W Codec2Client: query -- param skipped: index = 1342179345.
+10-03 05:18:07.440  6049  6297 W Codec2Client: query -- param skipped: index = 2415921170.
+10-03 05:18:07.440  6049  6170 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P3 + 2234595720
+10-03 05:18:07.441  6049  6297 E FMQ     : grantorIdx must be less than 3
+10-03 05:18:07.441  6049  6297 E FMQ     : grantorIdx must be less than 3
+10-03 05:18:07.441  6049  6296 W Codec2Client: query -- param skipped: index = 1342179345.
+10-03 05:18:07.441  6049  6296 W Codec2Client: query -- param skipped: index = 2415921170.
+10-03 05:18:07.442  6049  6296 E FMQ     : grantorIdx must be less than 3
+10-03 05:18:07.442  6049  6296 E FMQ     : grantorIdx must be less than 3
+10-03 05:18:07.443  6049  6296 I CCodecBufferChannel: [c2.android.raw.decoder#474] Created output block pool with allocatorID 16 => poolID 1508 - OK
+10-03 05:18:07.443  6049  6297 I CCodecBufferChannel: [c2.android.raw.decoder#765] Created output block pool with allocatorID 16 => poolID 1507 - OK
+10-03 05:18:07.445  6049  6296 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P3 - 2234595725
+10-03 05:18:07.445  6049  6297 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P3 - 2234595725
+10-03 05:18:07.450  6049  6296 E FMQ     : grantorIdx must be less than 3
+10-03 05:18:07.451  6049  6297 E FMQ     : grantorIdx must be less than 3
+10-03 05:18:07.452  6049  6296 I MediaCodecLogger: [ASAP] SW.c2.audio.raw Got First Input Frame 2234595732 pts:0
+10-03 05:18:07.452  6049  6297 I MediaCodecLogger: [ASAP] SW.c2.audio.raw Got First Input Frame 2234595732 pts:0
+10-03 05:18:07.453  6049  6296 I MediaCodecLogger: updatePTSTime [SW.c2.audio.raw] First PTS after Flush or reset = 0
+10-03 05:18:07.454  6049  6297 I MediaCodecLogger: updatePTSTime [SW.c2.audio.raw] First PTS after Flush or reset = 0
+10-03 05:18:07.455  6049  6296 I MediaCodecLogger: [ASAP] SW.c2.audio.raw Got First Frame Ready 2234595733(1)
+10-03 05:18:07.455  6049  6297 I MediaCodecLogger: [ASAP] SW.c2.audio.raw Got First Frame Ready 2234595733(1)
+10-03 05:18:07.455  6049  6296 I MediaCodecLogger: updatePTSTime [SW.c2.audio.raw] EOS pts:-1
+10-03 05:18:07.457  6049  6297 I MediaCodecLogger: updatePTSTime [SW.c2.audio.raw] EOS pts:-1
+10-03 05:18:07.465  6049  6297 I hw-BpHwBinder: onLastStrongRef automatically unlinking death recipients
+10-03 05:18:07.466  6049  6300 I hw-BpHwBinder: onLastStrongRef automatically unlinking death recipients
+10-03 05:18:07.484  6049  6302 I CCodec  : setting up 'default' as default (vendor) store
+10-03 05:18:07.484  6049  6303 I CCodec  : setting up 'default' as default (vendor) store
+10-03 05:18:07.487  6049  6303 I CCodec  : Created component [c2.android.raw.decoder]
+10-03 05:18:07.487  6049  6302 I CCodec  : Created component [c2.android.raw.decoder]
+10-03 05:18:07.494  6049  6303 I CCodecConfig: query failed after returning 8 values (BAD_INDEX)
+10-03 05:18:07.494  6049  6302 I CCodecConfig: query failed after returning 8 values (BAD_INDEX)
+10-03 05:18:07.495  6049  6303 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P2 + 2234595775
+10-03 05:18:07.497  6049  6302 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P2 + 2234595776
+10-03 05:18:07.497  6049  6303 W Codec2Client: query -- param skipped: index = 1107298332.
+10-03 05:18:07.497  6049  6303 I CCodecConfig: query failed after returning 8 values (BAD_INDEX)
+10-03 05:18:07.498  6049  6303 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P2 - 2234595777
+10-03 05:18:07.498  6049  6170 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P3 + 2234595778
+10-03 05:18:07.499  6049  6302 W Codec2Client: query -- param skipped: index = 1107298332.
+10-03 05:18:07.500  6049  6302 I CCodecConfig: query failed after returning 8 values (BAD_INDEX)
+10-03 05:18:07.500  6049  6302 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P2 - 2234595779
+10-03 05:18:07.500  6049  6303 W Codec2Client: query -- param skipped: index = 1342179345.
+10-03 05:18:07.500  6049  6303 W Codec2Client: query -- param skipped: index = 2415921170.
+10-03 05:18:07.501  6049  6169 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P3 + 2234595780
+10-03 05:18:07.501  6049  6303 E FMQ     : grantorIdx must be less than 3
+10-03 05:18:07.501  6049  6303 E FMQ     : grantorIdx must be less than 3
+10-03 05:18:07.503  6049  6303 I CCodecBufferChannel: [c2.android.raw.decoder#720] Created output block pool with allocatorID 16 => poolID 1509 - OK
+10-03 05:18:07.503  6049  6302 W Codec2Client: query -- param skipped: index = 1342179345.
+10-03 05:18:07.503  6049  6302 W Codec2Client: query -- param skipped: index = 2415921170.
+10-03 05:18:07.504  6049  6302 E FMQ     : grantorIdx must be less than 3
+10-03 05:18:07.504  6049  6302 E FMQ     : grantorIdx must be less than 3
+10-03 05:18:07.505  6049  6303 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P3 - 2234595784
+10-03 05:18:07.506  6049  6302 I CCodecBufferChannel: [c2.android.raw.decoder#530] Created output block pool with allocatorID 16 => poolID 1510 - OK
+10-03 05:18:07.508  6049  6302 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P3 - 2234595787
+10-03 05:18:07.509  6049  6303 E FMQ     : grantorIdx must be less than 3
+10-03 05:18:07.511  6049  6303 I MediaCodecLogger: [ASAP] SW.c2.audio.raw Got First Input Frame 2234595790 pts:0
+10-03 05:18:07.512  6049  6303 I MediaCodecLogger: updatePTSTime [SW.c2.audio.raw] First PTS after Flush or reset = 0
+10-03 05:18:07.513  6049  6302 E FMQ     : grantorIdx must be less than 3
+10-03 05:18:07.513  6049  6303 I MediaCodecLogger: [ASAP] SW.c2.audio.raw Got First Frame Ready 2234595791(1)
+10-03 05:18:07.514  6049  6302 I MediaCodecLogger: [ASAP] SW.c2.audio.raw Got First Input Frame 2234595793 pts:0
+10-03 05:18:07.515  6049  6302 I MediaCodecLogger: updatePTSTime [SW.c2.audio.raw] First PTS after Flush or reset = 0
+10-03 05:18:07.517  6049  6303 I MediaCodecLogger: updatePTSTime [SW.c2.audio.raw] EOS pts:-1
+10-03 05:18:07.517  6049  6302 I MediaCodecLogger: [ASAP] SW.c2.audio.raw Got First Frame Ready 2234595795(2)
+10-03 05:18:07.518  6049  6302 I MediaCodecLogger: updatePTSTime [SW.c2.audio.raw] EOS pts:-1
+10-03 05:18:07.522  6049  6156 W .deathride.per: JNI critical lock held for 101.814ms on Thread[3,tid=6156,Runnable,Thread*=0xe989fa00,peer=0x12e40190,"GLThread 42538"]
+10-03 05:18:07.522  6049  6303 I hw-BpHwBinder: onLastStrongRef automatically unlinking death recipients
+10-03 05:18:07.526  6049  6308 I hw-BpHwBinder: onLastStrongRef automatically unlinking death recipients
+10-03 05:18:07.541  6049  6311 I CCodec  : setting up 'default' as default (vendor) store
+10-03 05:18:07.546  6049  6311 I CCodec  : Created component [c2.android.raw.decoder]
+10-03 05:18:07.546  6049  6310 I CCodec  : setting up 'default' as default (vendor) store
+10-03 05:18:07.548  6049  6310 I CCodec  : Created component [c2.android.raw.decoder]
+10-03 05:18:07.552  6049  6311 I CCodecConfig: query failed after returning 8 values (BAD_INDEX)
+10-03 05:18:07.553  6049  6310 I CCodecConfig: query failed after returning 8 values (BAD_INDEX)
+10-03 05:18:07.553  6049  6311 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P2 + 2234595833
+10-03 05:18:07.555  6049  6310 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P2 + 2234595834
+10-03 05:18:07.557  6049  6310 W Codec2Client: query -- param skipped: index = 1107298332.
+10-03 05:18:07.557  6049  6310 I CCodecConfig: query failed after returning 8 values (BAD_INDEX)
+10-03 05:18:07.557  6049  6310 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P2 - 2234595837
+10-03 05:18:07.557  6049  6311 W Codec2Client: query -- param skipped: index = 1107298332.
+10-03 05:18:07.558  6049  6311 I CCodecConfig: query failed after returning 8 values (BAD_INDEX)
+10-03 05:18:07.558  6049  6311 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P2 - 2234595837
+10-03 05:18:07.559  6049  6169 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P3 + 2234595838
+10-03 05:18:07.559  6049  6170 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P3 + 2234595838
+10-03 05:18:07.559  6049  6311 W Codec2Client: query -- param skipped: index = 1342179345.
+10-03 05:18:07.560  6049  6310 W Codec2Client: query -- param skipped: index = 1342179345.
+10-03 05:18:07.560  6049  6311 W Codec2Client: query -- param skipped: index = 2415921170.
+10-03 05:18:07.560  6049  6310 W Codec2Client: query -- param skipped: index = 2415921170.
+10-03 05:18:07.561  6049  6311 E FMQ     : grantorIdx must be less than 3
+10-03 05:18:07.561  6049  6311 E FMQ     : grantorIdx must be less than 3
+10-03 05:18:07.561  6049  6310 E FMQ     : grantorIdx must be less than 3
+10-03 05:18:07.561  6049  6310 E FMQ     : grantorIdx must be less than 3
+10-03 05:18:07.563  6049  6311 I CCodecBufferChannel: [c2.android.raw.decoder#776] Created output block pool with allocatorID 16 => poolID 1511 - OK
+10-03 05:18:07.563  6049  6310 I CCodecBufferChannel: [c2.android.raw.decoder#451] Created output block pool with allocatorID 16 => poolID 1512 - OK
+10-03 05:18:07.565  6049  6311 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P3 - 2234595845
+10-03 05:18:07.565  6049  6310 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P3 - 2234595845
+10-03 05:18:07.569  6049  6311 E FMQ     : grantorIdx must be less than 3
+10-03 05:18:07.571  6049  6310 E FMQ     : grantorIdx must be less than 3
+10-03 05:18:07.571  6049  6311 I MediaCodecLogger: [ASAP] SW.c2.audio.raw Got First Input Frame 2234595850 pts:0
+10-03 05:18:07.572  6049  6311 I MediaCodecLogger: updatePTSTime [SW.c2.audio.raw] First PTS after Flush or reset = 0
+10-03 05:18:07.572  6049  6310 I MediaCodecLogger: [ASAP] SW.c2.audio.raw Got First Input Frame 2234595851 pts:0
+10-03 05:18:07.573  6049  6311 I MediaCodecLogger: [ASAP] SW.c2.audio.raw Got First Frame Ready 2234595852(2)
+10-03 05:18:07.573  6049  6310 I MediaCodecLogger: updatePTSTime [SW.c2.audio.raw] First PTS after Flush or reset = 0
+10-03 05:18:07.573  6049  6311 I MediaCodecLogger: updatePTSTime [SW.c2.audio.raw] EOS pts:-1
+10-03 05:18:07.574  6049  6310 I MediaCodecLogger: [ASAP] SW.c2.audio.raw Got First Frame Ready 2234595853(2)
+10-03 05:18:07.575  6049  6310 I MediaCodecLogger: updatePTSTime [SW.c2.audio.raw] EOS pts:-1
+10-03 05:18:07.580  6049  6311 I hw-BpHwBinder: onLastStrongRef automatically unlinking death recipients
+10-03 05:18:07.582  6049  6316 I hw-BpHwBinder: onLastStrongRef automatically unlinking death recipients
+10-03 05:18:07.605  6049  6320 I CCodec  : setting up 'default' as default (vendor) store
+10-03 05:18:07.607  6049  6319 I CCodec  : setting up 'default' as default (vendor) store
+10-03 05:18:07.609  6049  6320 I CCodec  : Created component [c2.android.raw.decoder]
+10-03 05:18:07.609  6049  6319 I CCodec  : Created component [c2.android.raw.decoder]
+10-03 05:18:07.614  6049  6320 I CCodecConfig: query failed after returning 8 values (BAD_INDEX)
+10-03 05:18:07.616  6049  6319 I CCodecConfig: query failed after returning 8 values (BAD_INDEX)
+10-03 05:18:07.616  6049  6320 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P2 + 2234595896
+10-03 05:18:07.618  6049  6319 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P2 + 2234595897
+10-03 05:18:07.618  6049  6320 W Codec2Client: query -- param skipped: index = 1107298332.
+10-03 05:18:07.618  6049  6320 I CCodecConfig: query failed after returning 8 values (BAD_INDEX)
+10-03 05:18:07.618  6049  6320 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P2 - 2234595898
+10-03 05:18:07.619  6049  6170 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P3 + 2234595899
+10-03 05:18:07.620  6049  6319 W Codec2Client: query -- param skipped: index = 1107298332.
+10-03 05:18:07.620  6049  6320 W Codec2Client: query -- param skipped: index = 1342179345.
+10-03 05:18:07.620  6049  6320 W Codec2Client: query -- param skipped: index = 2415921170.
+10-03 05:18:07.621  6049  6319 I CCodecConfig: query failed after returning 8 values (BAD_INDEX)
+10-03 05:18:07.621  6049  6319 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P2 - 2234595900
+10-03 05:18:07.621  6049  6320 E FMQ     : grantorIdx must be less than 3
+10-03 05:18:07.621  6049  6320 E FMQ     : grantorIdx must be less than 3
+10-03 05:18:07.623  6049  6320 I CCodecBufferChannel: [c2.android.raw.decoder#205] Created output block pool with allocatorID 16 => poolID 1513 - OK
+10-03 05:18:07.624  6049  6169 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P3 + 2234595903
+10-03 05:18:07.625  6049  6320 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P3 - 2234595905
+10-03 05:18:07.627  6049  6319 W Codec2Client: query -- param skipped: index = 1342179345.
+10-03 05:18:07.627  6049  6319 W Codec2Client: query -- param skipped: index = 2415921170.
+10-03 05:18:07.629  6049  6320 E FMQ     : grantorIdx must be less than 3
+10-03 05:18:07.630  6049  6320 I MediaCodecLogger: [ASAP] SW.c2.audio.raw Got First Input Frame 2234595909 pts:0
+10-03 05:18:07.630  6049  6319 E FMQ     : grantorIdx must be less than 3
+10-03 05:18:07.630  6049  6319 E FMQ     : grantorIdx must be less than 3
+10-03 05:18:07.631  6049  6320 I MediaCodecLogger: updatePTSTime [SW.c2.audio.raw] First PTS after Flush or reset = 0
+10-03 05:18:07.632  6049  6320 I MediaCodecLogger: [ASAP] SW.c2.audio.raw Got First Frame Ready 2234595911(2)
+10-03 05:18:07.632  6049  6319 I CCodecBufferChannel: [c2.android.raw.decoder#820] Created output block pool with allocatorID 16 => poolID 1514 - OK
+10-03 05:18:07.636  6049  6319 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P3 - 2234595916
+10-03 05:18:07.639  6049  6319 E FMQ     : grantorIdx must be less than 3
+10-03 05:18:07.642  6049  6319 I MediaCodecLogger: [ASAP] SW.c2.audio.raw Got First Input Frame 2234595921 pts:0
+10-03 05:18:07.643  6049  6320 I MediaCodecLogger: updatePTSTime [SW.c2.audio.raw] EOS pts:-1
+10-03 05:18:07.644  6049  6319 I MediaCodecLogger: updatePTSTime [SW.c2.audio.raw] First PTS after Flush or reset = 0
+10-03 05:18:07.644  6049  6319 I MediaCodecLogger: [ASAP] SW.c2.audio.raw Got First Frame Ready 2234595924(3)
+10-03 05:18:07.650  6049  6320 I hw-BpHwBinder: onLastStrongRef automatically unlinking death recipients
+10-03 05:18:07.673  6049  6319 I MediaCodecLogger: updatePTSTime [SW.c2.audio.raw] EOS pts:-1
+10-03 05:18:07.679  6049  6169 I MediaCodecLogger: 6049.SW.c2.audio.raw.TotalAudioPlaybackTimeMs = 5201
+10-03 05:18:07.679  6049  6325 I CCodec  : setting up 'default' as default (vendor) store
+10-03 05:18:07.681  6049  6325 I CCodec  : Created component [c2.android.raw.decoder]
+10-03 05:18:07.688  6049  6325 I CCodecConfig: query failed after returning 8 values (BAD_INDEX)
+10-03 05:18:07.690  6049  6325 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P2 + 2234595969
+10-03 05:18:07.691  6049  6325 W Codec2Client: query -- param skipped: index = 1107298332.
+10-03 05:18:07.692  6049  6325 I CCodecConfig: query failed after returning 8 values (BAD_INDEX)
+10-03 05:18:07.692  6049  6325 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P2 - 2234595972
+10-03 05:18:07.693  6049  6319 I hw-BpHwBinder: onLastStrongRef automatically unlinking death recipients
+10-03 05:18:07.693  6049  6170 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P3 + 2234595973
+10-03 05:18:07.695  6049  6325 W Codec2Client: query -- param skipped: index = 1342179345.
+10-03 05:18:07.695  6049  6325 W Codec2Client: query -- param skipped: index = 2415921170.
+10-03 05:18:07.696  6049  6325 E FMQ     : grantorIdx must be less than 3
+10-03 05:18:07.696  6049  6325 E FMQ     : grantorIdx must be less than 3
+10-03 05:18:07.699  6049  6325 I CCodecBufferChannel: [c2.android.raw.decoder#922] Created output block pool with allocatorID 16 => poolID 1515 - OK
+10-03 05:18:07.705  6049  6325 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P3 - 2234595985
+10-03 05:18:07.710  6049  6325 E FMQ     : grantorIdx must be less than 3
+10-03 05:18:07.712  6049  6325 I MediaCodecLogger: [ASAP] SW.c2.audio.raw Got First Input Frame 2234595992 pts:0
+10-03 05:18:07.714  6049  6325 I MediaCodecLogger: updatePTSTime [SW.c2.audio.raw] First PTS after Flush or reset = 0
+10-03 05:18:07.716  6049  6325 I MediaCodecLogger: [ASAP] SW.c2.audio.raw Got First Frame Ready 2234595994(2)
+10-03 05:18:07.732  6049  6328 I CCodec  : setting up 'default' as default (vendor) store
+10-03 05:18:07.735  6049  6325 I MediaCodecLogger: updatePTSTime [SW.c2.audio.raw] EOS pts:-1
+10-03 05:18:07.735  6049  6328 I CCodec  : Created component [c2.android.raw.decoder]
+10-03 05:18:07.741  6049  6328 I CCodecConfig: query failed after returning 8 values (BAD_INDEX)
+10-03 05:18:07.742  6049  6328 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P2 + 2234596022
+10-03 05:18:07.743  6049  6325 I hw-BpHwBinder: onLastStrongRef automatically unlinking death recipients
+10-03 05:18:07.746  6049  6328 W Codec2Client: query -- param skipped: index = 1107298332.
+10-03 05:18:07.747  6049  6328 I CCodecConfig: query failed after returning 8 values (BAD_INDEX)
+10-03 05:18:07.747  6049  6328 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P2 - 2234596026
+10-03 05:18:07.747  6049  6169 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P3 + 2234596027
+10-03 05:18:07.748  6049  6328 W Codec2Client: query -- param skipped: index = 1342179345.
+10-03 05:18:07.748  6049  6328 W Codec2Client: query -- param skipped: index = 2415921170.
+10-03 05:18:07.749  6049  6328 E FMQ     : grantorIdx must be less than 3
+10-03 05:18:07.749  6049  6328 E FMQ     : grantorIdx must be less than 3
+10-03 05:18:07.751  6049  6328 I CCodecBufferChannel: [c2.android.raw.decoder#103] Created output block pool with allocatorID 16 => poolID 1516 - OK
+10-03 05:18:07.754  6049  6328 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P3 - 2234596033
+10-03 05:18:07.758  6049  6328 E FMQ     : grantorIdx must be less than 3
+10-03 05:18:07.760  6049  6328 I MediaCodecLogger: [ASAP] SW.c2.audio.raw Got First Input Frame 2234596039 pts:0
+10-03 05:18:07.762  6049  6328 I MediaCodecLogger: updatePTSTime [SW.c2.audio.raw] First PTS after Flush or reset = 0
+10-03 05:18:07.762  6049  6328 I MediaCodecLogger: [ASAP] SW.c2.audio.raw Got First Frame Ready 2234596041(2)
+10-03 05:18:07.769  6049  6332 I CCodec  : setting up 'default' as default (vendor) store
+10-03 05:18:07.771  6049  6332 I CCodec  : Created component [c2.android.raw.decoder]
+10-03 05:18:07.776  6049  6332 I CCodecConfig: query failed after returning 8 values (BAD_INDEX)
+10-03 05:18:07.777  6049  6328 I MediaCodecLogger: updatePTSTime [SW.c2.audio.raw] EOS pts:-1
+10-03 05:18:07.778  6049  6332 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P2 + 2234596057
+10-03 05:18:07.780  6049  6156 W .deathride.per: JNI critical lock held for 128.515ms on Thread[3,tid=6156,Runnable,Thread*=0xe989fa00,peer=0x12e40190,"GLThread 42538"]
+10-03 05:18:07.781  6049  6332 W Codec2Client: query -- param skipped: index = 1107298332.
+10-03 05:18:07.782  6049  6332 I CCodecConfig: query failed after returning 8 values (BAD_INDEX)
+10-03 05:18:07.782  6049  6332 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P2 - 2234596062
+10-03 05:18:07.783  6049  6170 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P3 + 2234596063
+10-03 05:18:07.784  6049  6332 W Codec2Client: query -- param skipped: index = 1342179345.
+10-03 05:18:07.784  6049  6332 W Codec2Client: query -- param skipped: index = 2415921170.
+10-03 05:18:07.785  6049  6332 E FMQ     : grantorIdx must be less than 3
+10-03 05:18:07.785  6049  6328 I hw-BpHwBinder: onLastStrongRef automatically unlinking death recipients
+10-03 05:18:07.786  6049  6332 E FMQ     : grantorIdx must be less than 3
+10-03 05:18:07.788  6049  6332 I CCodecBufferChannel: [c2.android.raw.decoder#765] Created output block pool with allocatorID 16 => poolID 1517 - OK
+10-03 05:18:07.796  6049  6332 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P3 - 2234596076
+10-03 05:18:07.802  6049  6332 E FMQ     : grantorIdx must be less than 3
+10-03 05:18:07.804  6049  6332 I MediaCodecLogger: [ASAP] SW.c2.audio.raw Got First Input Frame 2234596083 pts:0
+10-03 05:18:07.805  6049  6332 I MediaCodecLogger: updatePTSTime [SW.c2.audio.raw] First PTS after Flush or reset = 0
+10-03 05:18:07.806  6049  6332 I MediaCodecLogger: [ASAP] SW.c2.audio.raw Got First Frame Ready 2234596085(2)
+10-03 05:18:07.822  6049  6332 I MediaCodecLogger: updatePTSTime [SW.c2.audio.raw] EOS pts:-1
+10-03 05:18:07.827  6049  6332 I hw-BpHwBinder: onLastStrongRef automatically unlinking death recipients
+10-03 05:18:07.834  6049  6335 I CCodec  : setting up 'default' as default (vendor) store
+10-03 05:18:07.837  6049  6335 I CCodec  : Created component [c2.android.raw.decoder]
+10-03 05:18:07.848  6049  6335 I CCodecConfig: query failed after returning 8 values (BAD_INDEX)
+10-03 05:18:07.852  6049  6335 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P2 + 2234596131
+10-03 05:18:07.854  6049  6335 W Codec2Client: query -- param skipped: index = 1107298332.
+10-03 05:18:07.855  6049  6335 I CCodecConfig: query failed after returning 8 values (BAD_INDEX)
+10-03 05:18:07.855  6049  6335 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P2 - 2234596134
+10-03 05:18:07.856  6049  6169 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P3 + 2234596136
+10-03 05:18:07.857  6049  6335 W Codec2Client: query -- param skipped: index = 1342179345.
+10-03 05:18:07.857  6049  6335 W Codec2Client: query -- param skipped: index = 2415921170.
+10-03 05:18:07.858  6049  6335 E FMQ     : grantorIdx must be less than 3
+10-03 05:18:07.858  6049  6335 E FMQ     : grantorIdx must be less than 3
+10-03 05:18:07.861  6049  6335 I CCodecBufferChannel: [c2.android.raw.decoder#776] Created output block pool with allocatorID 16 => poolID 1518 - OK
+10-03 05:18:07.863  6049  6335 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P3 - 2234596142
+10-03 05:18:07.866  6049  6335 E FMQ     : grantorIdx must be less than 3
+10-03 05:18:07.867  6049  6335 I MediaCodecLogger: [ASAP] SW.c2.audio.raw Got First Input Frame 2234596147 pts:0
+10-03 05:18:07.869  6049  6335 I MediaCodecLogger: updatePTSTime [SW.c2.audio.raw] First PTS after Flush or reset = 0
+10-03 05:18:07.870  6049  6335 I MediaCodecLogger: [ASAP] SW.c2.audio.raw Got First Frame Ready 2234596149(2)
+10-03 05:18:07.870  6049  6338 I CCodec  : setting up 'default' as default (vendor) store
+10-03 05:18:07.873  6049  6338 I CCodec  : Created component [c2.android.raw.decoder]
+10-03 05:18:07.881  6049  6338 I CCodecConfig: query failed after returning 8 values (BAD_INDEX)
+10-03 05:18:07.881  6049  6335 I MediaCodecLogger: updatePTSTime [SW.c2.audio.raw] EOS pts:-1
+10-03 05:18:07.882  6049  6338 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P2 + 2234596162
+10-03 05:18:07.884  6049  6338 W Codec2Client: query -- param skipped: index = 1107298332.
+10-03 05:18:07.885  6049  6338 I CCodecConfig: query failed after returning 8 values (BAD_INDEX)
+10-03 05:18:07.885  6049  6338 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P2 - 2234596164
+10-03 05:18:07.886  6049  6170 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P3 + 2234596165
+10-03 05:18:07.886  6049  6338 W Codec2Client: query -- param skipped: index = 1342179345.
+10-03 05:18:07.886  6049  6338 W Codec2Client: query -- param skipped: index = 2415921170.
+10-03 05:18:07.888  6049  6338 E FMQ     : grantorIdx must be less than 3
+10-03 05:18:07.888  6049  6338 E FMQ     : grantorIdx must be less than 3
+10-03 05:18:07.888  6049  6335 I hw-BpHwBinder: onLastStrongRef automatically unlinking death recipients
+10-03 05:18:07.890  6049  6338 I CCodecBufferChannel: [c2.android.raw.decoder#215] Created output block pool with allocatorID 16 => poolID 1519 - OK
+10-03 05:18:07.892  6049  6156 W .deathride.per: JNI critical lock held for 91.657ms on Thread[3,tid=6156,Runnable,Thread*=0xe989fa00,peer=0x12e40190,"GLThread 42538"]
+10-03 05:18:07.893  6049  6338 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P3 - 2234596173
+10-03 05:18:07.898  6049  6338 E FMQ     : grantorIdx must be less than 3
+10-03 05:18:07.900  6049  6338 I MediaCodecLogger: [ASAP] SW.c2.audio.raw Got First Input Frame 2234596180 pts:0
+10-03 05:18:07.901  6049  6338 I MediaCodecLogger: updatePTSTime [SW.c2.audio.raw] First PTS after Flush or reset = 0
+10-03 05:18:07.902  6049  6338 I MediaCodecLogger: [ASAP] SW.c2.audio.raw Got First Frame Ready 2234596181(1)
+10-03 05:18:07.915  6049  6341 I CCodec  : setting up 'default' as default (vendor) store
+10-03 05:18:07.917  6049  6341 I CCodec  : Created component [c2.android.raw.decoder]
+10-03 05:18:07.926  6049  6341 I CCodecConfig: query failed after returning 8 values (BAD_INDEX)
+10-03 05:18:07.928  6049  6341 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P2 + 2234596207
+10-03 05:18:07.930  6049  6341 W Codec2Client: query -- param skipped: index = 1107298332.
+10-03 05:18:07.930  6049  6341 I CCodecConfig: query failed after returning 8 values (BAD_INDEX)
+10-03 05:18:07.930  6049  6341 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P2 - 2234596210
+10-03 05:18:07.930  6049  6338 I MediaCodecLogger: updatePTSTime [SW.c2.audio.raw] EOS pts:-1
+10-03 05:18:07.931  6049  6169 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P3 + 2234596210
+10-03 05:18:07.932  6049  6341 W Codec2Client: query -- param skipped: index = 1342179345.
+10-03 05:18:07.932  6049  6341 W Codec2Client: query -- param skipped: index = 2415921170.
+10-03 05:18:07.933  6049  6341 E FMQ     : grantorIdx must be less than 3
+10-03 05:18:07.933  6049  6170 I MediaCodecLogger: 6049.SW.c2.audio.raw.TotalAudioPlaybackTimeMs = 5201
+10-03 05:18:07.933  6049  6341 E FMQ     : grantorIdx must be less than 3
+10-03 05:18:07.936  6049  6341 I CCodecBufferChannel: [c2.android.raw.decoder#675] Created output block pool with allocatorID 16 => poolID 1520 - OK
+10-03 05:18:07.936  6049  6338 I hw-BpHwBinder: onLastStrongRef automatically unlinking death recipients
+10-03 05:18:07.938  6049  6341 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P3 - 2234596218
+10-03 05:18:07.943  6049  6341 E FMQ     : grantorIdx must be less than 3
+10-03 05:18:07.945  6049  6341 I MediaCodecLogger: [ASAP] SW.c2.audio.raw Got First Input Frame 2234596224 pts:0
+10-03 05:18:07.946  6049  6341 I MediaCodecLogger: updatePTSTime [SW.c2.audio.raw] First PTS after Flush or reset = 0
+10-03 05:18:07.947  6049  6341 I MediaCodecLogger: [ASAP] SW.c2.audio.raw Got First Frame Ready 2234596226(2)
+10-03 05:18:07.959  6049  6344 I CCodec  : setting up 'default' as default (vendor) store
+10-03 05:18:07.961  6049  6344 I CCodec  : Created component [c2.android.raw.decoder]
+10-03 05:18:07.965  6049  6341 I MediaCodecLogger: updatePTSTime [SW.c2.audio.raw] EOS pts:-1
+10-03 05:18:07.972  6049  6341 I hw-BpHwBinder: onLastStrongRef automatically unlinking death recipients
+10-03 05:18:07.974  6049  6344 I CCodecConfig: query failed after returning 8 values (BAD_INDEX)
+10-03 05:18:07.975  6049  6344 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P2 + 2234596255
+10-03 05:18:07.978  6049  6344 W Codec2Client: query -- param skipped: index = 1107298332.
+10-03 05:18:07.978  6049  6344 I CCodecConfig: query failed after returning 8 values (BAD_INDEX)
+10-03 05:18:07.979  6049  6344 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P2 - 2234596258
+10-03 05:18:07.979  6049  6170 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P3 + 2234596259
+10-03 05:18:07.980  6049  6344 W Codec2Client: query -- param skipped: index = 1342179345.
+10-03 05:18:07.980  6049  6344 W Codec2Client: query -- param skipped: index = 2415921170.
+10-03 05:18:07.981  6049  6344 E FMQ     : grantorIdx must be less than 3
+10-03 05:18:07.981  6049  6344 E FMQ     : grantorIdx must be less than 3
+10-03 05:18:07.983  6049  6344 I CCodecBufferChannel: [c2.android.raw.decoder#607] Created output block pool with allocatorID 16 => poolID 1521 - OK
+10-03 05:18:07.985  6049  6344 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P3 - 2234596265
+10-03 05:18:07.988  6049  6344 E FMQ     : grantorIdx must be less than 3
+10-03 05:18:07.990  6049  6344 I MediaCodecLogger: [ASAP] SW.c2.audio.raw Got First Input Frame 2234596269 pts:0
+10-03 05:18:07.991  6049  6344 I MediaCodecLogger: updatePTSTime [SW.c2.audio.raw] First PTS after Flush or reset = 0
+10-03 05:18:07.992  6049  6344 I MediaCodecLogger: [ASAP] SW.c2.audio.raw Got First Frame Ready 2234596271(2)
+10-03 05:18:08.005  6049  6344 I MediaCodecLogger: updatePTSTime [SW.c2.audio.raw] EOS pts:-1
+10-03 05:18:08.012  6049  6344 I hw-BpHwBinder: onLastStrongRef automatically unlinking death recipients
+10-03 05:18:08.013  6049  6348 I CCodec  : setting up 'default' as default (vendor) store
+10-03 05:18:08.015  6049  6348 I CCodec  : Created component [c2.android.raw.decoder]
+10-03 05:18:08.021  6049  6348 I CCodecConfig: query failed after returning 8 values (BAD_INDEX)
+10-03 05:18:08.022  6049  6348 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P2 + 2234596302
+10-03 05:18:08.024  6049  6348 W Codec2Client: query -- param skipped: index = 1107298332.
+10-03 05:18:08.024  6049  6348 I CCodecConfig: query failed after returning 8 values (BAD_INDEX)
+10-03 05:18:08.024  6049  6348 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P2 - 2234596304
+10-03 05:18:08.025  6049  6169 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P3 + 2234596305
+10-03 05:18:08.031  6049  6348 W Codec2Client: query -- param skipped: index = 1342179345.
+10-03 05:18:08.031  6049  6348 W Codec2Client: query -- param skipped: index = 2415921170.
+10-03 05:18:08.033  6049  6348 E FMQ     : grantorIdx must be less than 3
+10-03 05:18:08.033  6049  6348 E FMQ     : grantorIdx must be less than 3
+10-03 05:18:08.035  6049  6348 I CCodecBufferChannel: [c2.android.raw.decoder#205] Created output block pool with allocatorID 16 => poolID 1522 - OK
+10-03 05:18:08.038  6049  6348 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P3 - 2234596317
+10-03 05:18:08.040  6049  6350 I CCodec  : setting up 'default' as default (vendor) store
+10-03 05:18:08.041  6049  6348 E FMQ     : grantorIdx must be less than 3
+10-03 05:18:08.042  6049  6350 I CCodec  : Created component [c2.android.raw.decoder]
+10-03 05:18:08.043  6049  6348 I MediaCodecLogger: [ASAP] SW.c2.audio.raw Got First Input Frame 2234596322 pts:0
+10-03 05:18:08.044  6049  6348 I MediaCodecLogger: updatePTSTime [SW.c2.audio.raw] First PTS after Flush or reset = 0
+10-03 05:18:08.045  6049  6348 I MediaCodecLogger: [ASAP] SW.c2.audio.raw Got First Frame Ready 2234596324(2)
+10-03 05:18:08.048  6049  6350 I CCodecConfig: query failed after returning 8 values (BAD_INDEX)
+10-03 05:18:08.050  6049  6350 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P2 + 2234596330
+10-03 05:18:08.052  6049  6350 W Codec2Client: query -- param skipped: index = 1107298332.
+10-03 05:18:08.053  6049  6350 I CCodecConfig: query failed after returning 8 values (BAD_INDEX)
+10-03 05:18:08.053  6049  6350 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P2 - 2234596332
+10-03 05:18:08.054  6049  6170 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P3 + 2234596333
+10-03 05:18:08.054  6049  6350 W Codec2Client: query -- param skipped: index = 1342179345.
+10-03 05:18:08.054  6049  6350 W Codec2Client: query -- param skipped: index = 2415921170.
+10-03 05:18:08.055  6049  6350 E FMQ     : grantorIdx must be less than 3
+10-03 05:18:08.055  6049  6350 E FMQ     : grantorIdx must be less than 3
+10-03 05:18:08.058  6049  6350 I CCodecBufferChannel: [c2.android.raw.decoder#932] Created output block pool with allocatorID 16 => poolID 1523 - OK
+10-03 05:18:08.060  6049  6350 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P3 - 2234596339
+10-03 05:18:08.063  6049  6348 I MediaCodecLogger: updatePTSTime [SW.c2.audio.raw] EOS pts:-1
+10-03 05:18:08.063  6049  6350 E FMQ     : grantorIdx must be less than 3
+10-03 05:18:08.064  6049  6350 I MediaCodecLogger: [ASAP] SW.c2.audio.raw Got First Input Frame 2234596344 pts:0
+10-03 05:18:08.066  6049  6350 I MediaCodecLogger: updatePTSTime [SW.c2.audio.raw] First PTS after Flush or reset = 0
+10-03 05:18:08.066  6049  6169 I MediaCodecLogger: 6049.SW.c2.audio.raw.TotalAudioPlaybackTimeMs = 5201
+10-03 05:18:08.068  6049  6350 I MediaCodecLogger: [ASAP] SW.c2.audio.raw Got First Frame Ready 2234596345(1)
+10-03 05:18:08.070  6049  6348 I hw-BpHwBinder: onLastStrongRef automatically unlinking death recipients
+10-03 05:18:08.101  6049  6350 I MediaCodecLogger: updatePTSTime [SW.c2.audio.raw] EOS pts:-1
+10-03 05:18:08.105  6049  6170 I MediaCodecLogger: 6049.SW.c2.audio.raw.TotalAudioPlaybackTimeMs = 5201
+10-03 05:18:08.109  6049  6350 I hw-BpHwBinder: onLastStrongRef automatically unlinking death recipients
+10-03 05:18:08.117  6049  6353 I CCodec  : setting up 'default' as default (vendor) store
+10-03 05:18:08.120  6049  6353 I CCodec  : Created component [c2.android.raw.decoder]
+10-03 05:18:08.125  6049  6353 I CCodecConfig: query failed after returning 8 values (BAD_INDEX)
+10-03 05:18:08.127  6049  6353 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P2 + 2234596406
+10-03 05:18:08.129  6049  6353 W Codec2Client: query -- param skipped: index = 1107298332.
+10-03 05:18:08.129  6049  6353 I CCodecConfig: query failed after returning 8 values (BAD_INDEX)
+10-03 05:18:08.129  6049  6353 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P2 - 2234596409
+10-03 05:18:08.130  6049  6169 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P3 + 2234596410
+10-03 05:18:08.131  6049  6353 W Codec2Client: query -- param skipped: index = 1342179345.
+10-03 05:18:08.131  6049  6353 W Codec2Client: query -- param skipped: index = 2415921170.
+10-03 05:18:08.132  6049  6353 E FMQ     : grantorIdx must be less than 3
+10-03 05:18:08.132  6049  6353 E FMQ     : grantorIdx must be less than 3
+10-03 05:18:08.134  6049  6353 I CCodecBufferChannel: [c2.android.raw.decoder#182] Created output block pool with allocatorID 16 => poolID 1524 - OK
+10-03 05:18:08.135  6049  6356 I CCodec  : setting up 'default' as default (vendor) store
+10-03 05:18:08.137  6049  6356 I CCodec  : Created component [c2.android.raw.decoder]
+10-03 05:18:08.138  6049  6353 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P3 - 2234596417
+10-03 05:18:08.143  6049  6353 E FMQ     : grantorIdx must be less than 3
+10-03 05:18:08.144  6049  6353 I MediaCodecLogger: [ASAP] SW.c2.audio.raw Got First Input Frame 2234596424 pts:0
+10-03 05:18:08.144  6049  6356 I CCodecConfig: query failed after returning 8 values (BAD_INDEX)
+10-03 05:18:08.145  6049  6353 I MediaCodecLogger: updatePTSTime [SW.c2.audio.raw] First PTS after Flush or reset = 0
+10-03 05:18:08.146  6049  6353 I MediaCodecLogger: [ASAP] SW.c2.audio.raw Got First Frame Ready 2234596425(1)
+10-03 05:18:08.146  6049  6356 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P2 + 2234596426
+10-03 05:18:08.149  6049  6356 W Codec2Client: query -- param skipped: index = 1107298332.
+10-03 05:18:08.149  6049  6356 I CCodecConfig: query failed after returning 8 values (BAD_INDEX)
+10-03 05:18:08.149  6049  6356 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P2 - 2234596429
+10-03 05:18:08.151  6049  6170 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P3 + 2234596430
+10-03 05:18:08.151  6049  6356 W Codec2Client: query -- param skipped: index = 1342179345.
+10-03 05:18:08.151  6049  6356 W Codec2Client: query -- param skipped: index = 2415921170.
+10-03 05:18:08.152  6049  6356 E FMQ     : grantorIdx must be less than 3
+10-03 05:18:08.153  6049  6356 E FMQ     : grantorIdx must be less than 3
+10-03 05:18:08.160  6049  6356 I CCodecBufferChannel: [c2.android.raw.decoder#159] Created output block pool with allocatorID 16 => poolID 1525 - OK
+10-03 05:18:08.162  6049  6356 I MediaCodecLogger: [ASAP] SW.c2.audio.raw P3 - 2234596442
+10-03 05:18:08.167  6049  6353 I MediaCodecLogger: updatePTSTime [SW.c2.audio.raw] EOS pts:-1
+10-03 05:18:08.169  6049  6356 E FMQ     : grantorIdx must be less than 3
+10-03 05:18:08.170  6049  6356 I MediaCodecLogger: [ASAP] SW.c2.audio.raw Got First Input Frame 2234596450 pts:0
+10-03 05:18:08.171  6049  6356 I MediaCodecLogger: updatePTSTime [SW.c2.audio.raw] First PTS after Flush or reset = 0
+10-03 05:18:08.172  6049  6356 I MediaCodecLogger: [ASAP] SW.c2.audio.raw Got First Frame Ready 2234596451(1)
+10-03 05:18:08.172  6049  6353 I hw-BpHwBinder: onLastStrongRef automatically unlinking death recipients
+10-03 05:18:08.186  6049  6356 I MediaCodecLogger: updatePTSTime [SW.c2.audio.raw] EOS pts:-1
+10-03 05:18:08.192  6049  6359 I hw-BpHwBinder: onLastStrongRef automatically unlinking death recipients
+10-03 05:18:08.196  6049  6156 I DeathRide: art ready regions=168 bytes=19660800 failures=0 heading=runtime-rotation
+10-03 05:18:10.111  6049  6156 I DeathRide: sceneryBake foundry slicedFrames=96 totalCpuMs=425.8120769999999 maxSliceMs=28.911154
+10-03 05:18:14.050  6049  6156 I DeathRide: race countdown mode=practice
+10-03 05:18:17.214  6049  6405 I DeathRide: {"phase":"race","raceSeconds":0.24999999999999997,"frameTimeMs":{"lifetimeBinMs":0.1,"lifetimeCapMs":5000.0,"last10s":{"p50":16.684,"p95":24.038846,"max":266.83876899999996,"count":479},"sinceStart":{"p50":16.6,"p95":24.0,"max":266.83876899999996,"count":479}},"simStepMs":{"lifetimeBinMs":0.001,"lifetimeCapMs":50.0,"last10s":{"p50":2.279923,"p95":7.685846,"max":21.153461,"count":232},"sinceStart":{"p50":2.279,"p95":7.6850000000000005,"max":21.153461,"count":232}},"discardedSimulationMs":{"last10s":244,"sinceStart":244},"inputAgeMs":[{"lifetimeBinMs":0.1,"lifetimeCapMs":5000.0,"last10s":{"p50":28.8276079999996,"p95":45.800224000000526,"max":50.6354080000001,"count":33},"sinceStart":{"p50":28.8,"p95":45.800000000000004,"max":50.6354080000001,"count":33}},{"lifetimeBinMs":0.1,"lifetimeCapMs":5000.0,"last10s":{"p50":28.569805000000997,"p95":45.538958000001,"max":50.39338899999984,"count":33},"sinceStart":{"p50":28.5,"p95":45.5,"max":50.39338899999984,"count":33}}],"combatSummary":{"mineBlastRadiusM":0.5,"mineTriggerRadiusM":0.5,"damageScale":1.0,"shotsByWeapon":[0,0,0,0],"active":6,"living":6,"finished":0,"shots":0,"projectiles":0,"mines":0,"blasts":0,"poolExhaustions":0,"abilityDamage":0.0,"abilityUses":0}}
+10-03 05:18:27.221  6049  6407 I DeathRide: {"phase":"race","raceSeconds":10.250000000000089,"frameTimeMs":{"lifetimeBinMs":0.1,"lifetimeCapMs":5000.0,"last10s":{"p50":16.678384,"p95":17.630769,"max":33.125231,"count":598},"sinceStart":{"p50":16.6,"p95":20.1,"max":266.83876899999996,"count":1078}},"simStepMs":{"lifetimeBinMs":0.001,"lifetimeCapMs":50.0,"last10s":{"p50":1.596769,"p95":2.904077,"max":6.675231,"count":599},"sinceStart":{"p50":1.669,"p95":4.756,"max":21.153461,"count":832}},"discardedSimulationMs":{"last10s":0,"sinceStart":244},"inputAgeMs":[{"lifetimeBinMs":0.1,"lifetimeCapMs":5000.0,"last10s":{"p50":21.625746999998228,"p95":39.923023999999714,"max":56.60456300000078,"count":599},"sinceStart":{"p50":22.1,"p95":41.1,"max":56.60456300000078,"count":632}},{"lifetimeBinMs":0.1,"lifetimeCapMs":5000.0,"last10s":{"p50":22.52618199999779,"p95":42.813858999999866,"max":56.335181999998895,"count":599},"sinceStart":{"p50":22.900000000000002,"p95":43.400000000000006,"max":56.335181999998895,"count":632}}],"combatSummary":{"mineBlastRadiusM":0.5,"mineTriggerRadiusM":0.5,"damageScale":1.0,"shotsByWeapon":[48,4,11,13],"active":6,"living":6,"finished":0,"shots":76,"projectiles":0,"mines":10,"blasts":0,"poolExhaustions":0,"abilityDamage":0.0,"abilityUses":2}}
+10-03 05:18:37.226  6049  6271 I DeathRide: {"phase":"race","raceSeconds":20.266666666666797,"frameTimeMs":{"lifetimeBinMs":0.1,"lifetimeCapMs":5000.0,"last10s":{"p50":16.680923,"p95":18.605538000000003,"max":26.698231,"count":598},"sinceStart":{"p50":16.6,"p95":19.0,"max":266.83876899999996,"count":1677}},"simStepMs":{"lifetimeBinMs":0.001,"lifetimeCapMs":50.0,"last10s":{"p50":1.422154,"p95":2.460462,"max":4.937385,"count":600},"sinceStart":{"p50":1.569,"p95":3.68,"max":21.153461,"count":1433}},"discardedSimulationMs":{"last10s":0,"sinceStart":244},"inputAgeMs":[{"lifetimeBinMs":0.1,"lifetimeCapMs":5000.0,"last10s":{"p50":21.010808999999426,"p95":40.87285500000144,"max":57.298116999998456,"count":600},"sinceStart":{"p50":21.5,"p95":40.900000000000006,"max":57.298116999998456,"count":1233}},{"lifetimeBinMs":0.1,"lifetimeCapMs":5000.0,"last10s":{"p50":20.79308300000048,"p95":40.57909800000198,"max":55.58554400000139,"count":600},"sinceStart":{"p50":21.700000000000003,"p95":41.800000000000004,"max":56.335181999998895,"count":1233}}],"combatSummary":{"mineBlastRadiusM":0.5,"mineTriggerRadiusM":0.5,"damageScale":1.0,"shotsByWeapon":[93,10,16,16],"active":4,"living":4,"finished":0,"shots":135,"projectiles":1,"mines":9,"blasts":0,"poolExhaustions":0,"abilityDamage":0.0,"abilityUses":5}}
+10-03 05:18:40.464  6049  6080 I .deathride.per: Waiting for a blocking GC ProfileSaver
+10-03 05:18:40.523  6049  6080 I .deathride.per: WaitForGcToComplete blocked ProfileSaver on HeapTrim for 59.724ms
+10-03 05:18:42.142  6049  6156 I DeathRide: sceneryBake saltline slicedFrames=69 totalCpuMs=272.8378439999999 maxSliceMs=7.276461
+10-03 05:18:42.488  6049  6156 I DeathRide: race countdown mode=practice
+10-03 05:18:47.233  6049  6407 I DeathRide: {"phase":"race","raceSeconds":1.8499999999999983,"frameTimeMs":{"lifetimeBinMs":0.1,"lifetimeCapMs":5000.0,"last10s":{"p50":16.682616,"p95":18.489769,"max":210.164154,"count":563},"sinceStart":{"p50":16.6,"p95":18.8,"max":266.83876899999996,"count":2240}},"simStepMs":{"lifetimeBinMs":0.001,"lifetimeCapMs":50.0,"last10s":{"p50":1.534385,"p95":2.728154,"max":4.592385,"count":312},"sinceStart":{"p50":1.56,"p95":3.407,"max":21.153461,"count":1745}},"discardedSimulationMs":{"last10s":316,"sinceStart":560},"inputAgeMs":[{"lifetimeBinMs":0.1,"lifetimeCapMs":5000.0,"last10s":{"p50":20.714472999999998,"p95":39.777672000003804,"max":51.251594000001205,"count":312},"sinceStart":{"p50":21.3,"p95":40.6,"max":57.298116999998456,"count":1545}},{"lifetimeBinMs":0.1,"lifetimeCapMs":5000.0,"last10s":{"p50":20.417875999999524,"p95":40.40848299999925,"max":51.8580750000001,"count":312},"sinceStart":{"p50":21.5,"p95":41.2,"max":56.335181999998895,"count":1545}}],"combatSummary":{"mineBlastRadiusM":0.5,"mineTriggerRadiusM":0.5,"damageScale":1.0,"shotsByWeapon":[0,0,0,0],"active":6,"living":6,"finished":0,"shots":0,"projectiles":0,"mines":0,"blasts":0,"poolExhaustions":0,"abilityDamage":0.0,"abilityUses":0}}
+10-03 05:18:57.238  6049  6384 I DeathRide: {"phase":"race","raceSeconds":11.850000000000168,"frameTimeMs":{"lifetimeBinMs":0.1,"lifetimeCapMs":5000.0,"last10s":{"p50":16.682692999999997,"p95":17.668615,"max":24.501307999999998,"count":599},"sinceStart":{"p50":16.6,"p95":18.6,"max":266.83876899999996,"count":2839}},"simStepMs":{"lifetimeBinMs":0.001,"lifetimeCapMs":50.0,"last10s":{"p50":1.770307,"p95":2.786308,"max":5.837923,"count":600},"sinceStart":{"p50":1.616,"p95":3.275,"max":21.153461,"count":2345}},"discardedSimulationMs":{"last10s":0,"sinceStart":560},"inputAgeMs":[{"lifetimeBinMs":0.1,"lifetimeCapMs":5000.0,"last10s":{"p50":20.052404000001843,"p95":41.19610400000238,"max":65.72541900000215,"count":600},"sinceStart":{"p50":21.1,"p95":40.900000000000006,"max":65.72541900000215,"count":2145}},{"lifetimeBinMs":0.1,"lifetimeCapMs":5000.0,"last10s":{"p50":19.46340699999564,"p95":40.29243000000133,"max":64.8076910000018,"count":600},"sinceStart":{"p50":21.1,"p95":41.0,"max":64.8076910000018,"count":2145}}],"combatSummary":{"mineBlastRadiusM":0.5,"mineTriggerRadiusM":0.5,"damageScale":1.0,"shotsByWeapon":[66,14,9,8],"active":6,"living":6,"finished":0,"shots":97,"projectiles":1,"mines":7,"blasts":0,"poolExhaustions":0,"abilityDamage":7.199999999999999,"abilityUses":5}}
+10-03 05:19:04.757  6049  6049 W Choreographer: Frame time is 0.05781 ms in the future!  Check that graphics HAL is generating vsync timestamps using the correct timebase.
+10-03 05:19:07.244  6049  6407 I DeathRide: {"phase":"race","raceSeconds":21.85000000000004,"frameTimeMs":{"lifetimeBinMs":0.1,"lifetimeCapMs":5000.0,"last10s":{"p50":16.681385,"p95":17.298000000000002,"max":31.571230999999997,"count":598},"sinceStart":{"p50":16.6,"p95":18.400000000000002,"max":266.83876899999996,"count":3438}},"simStepMs":{"lifetimeBinMs":0.001,"lifetimeCapMs":50.0,"last10s":{"p50":1.601923,"p95":2.407769,"max":4.499462,"count":600},"sinceStart":{"p50":1.612,"p95":3.057,"max":21.153461,"count":2945}},"discardedSimulationMs":{"last10s":0,"sinceStart":560},"inputAgeMs":[{"lifetimeBinMs":0.1,"lifetimeCapMs":5000.0,"last10s":{"p50":20.85348199999862,"p95":41.598919999996724,"max":56.71571199999744,"count":600},"sinceStart":{"p50":21.0,"p95":41.0,"max":65.72541900000215,"count":2745}},{"lifetimeBinMs":0.1,"lifetimeCapMs":5000.0,"last10s":{"p50":20.371453000007023,"p95":40.707737999997335,"max":55.8298150000046,"count":600},"sinceStart":{"p50":20.900000000000002,"p95":40.900000000000006,"max":64.8076910000018,"count":2745}}],"combatSummary":{"mineBlastRadiusM":0.5,"mineTriggerRadiusM":0.5,"damageScale":1.0,"shotsByWeapon":[154,17,15,11],"active":4,"living":4,"finished":0,"shots":197,"projectiles":0,"mines":10,"blasts":0,"poolExhaustions":0,"abilityDamage":7.199999999999999,"abilityUses":9}}
+10-03 05:19:17.251  6049  6240 I DeathRide: {"phase":"race","raceSeconds":31.849999999999472,"frameTimeMs":{"lifetimeBinMs":0.1,"lifetimeCapMs":5000.0,"last10s":{"p50":16.681462,"p95":17.669615999999998,"max":30.147077000000003,"count":598},"sinceStart":{"p50":16.6,"p95":18.1,"max":266.83876899999996,"count":4037}},"simStepMs":{"lifetimeBinMs":0.001,"lifetimeCapMs":50.0,"last10s":{"p50":1.595692,"p95":2.432769,"max":4.218539,"count":599},"sinceStart":{"p50":1.61,"p95":2.97,"max":21.153461,"count":3545}},"discardedSimulationMs":{"last10s":0,"sinceStart":560},"inputAgeMs":[{"lifetimeBinMs":0.1,"lifetimeCapMs":5000.0,"last10s":{"p50":20.24196700000175,"p95":38.639030999998795,"max":51.337896999990335,"count":599},"sinceStart":{"p50":20.900000000000002,"p95":40.6,"max":65.72541900000215,"count":3345}},{"lifetimeBinMs":0.1,"lifetimeCapMs":5000.0,"last10s":{"p50":19.31975400000374,"p95":37.134253999989596,"max":50.58162299999822,"count":599},"sinceStart":{"p50":20.6,"p95":40.300000000000004,"max":64.8076910000018,"count":3345}}],"combatSummary":{"mineBlastRadiusM":0.5,"mineTriggerRadiusM":0.5,"damageScale":1.0,"shotsByWeapon":[196,17,15,11],"active":4,"living":4,"finished":0,"shots":239,"projectiles":0,"mines":3,"blasts":0,"poolExhaustions":0,"abilityDamage":7.199999999999999,"abilityUses":11}}
+10-03 05:19:19.956  6049  6049 W Choreographer: Frame time is 0.034484 ms in the future!  Check that graphics HAL is generating vsync timestamps using the correct timebase.
+10-03 05:19:20.757  6049  6049 W Choreographer: Frame time is 0.147554 ms in the future!  Check that graphics HAL is generating vsync timestamps using the correct timebase.
+10-03 05:19:27.257  6049  6199 I DeathRide: {"phase":"race","raceSeconds":41.86666666666557,"frameTimeMs":{"lifetimeBinMs":0.1,"lifetimeCapMs":5000.0,"last10s":{"p50":16.682307,"p95":16.884539,"max":21.035692,"count":600},"sinceStart":{"p50":16.6,"p95":18.0,"max":266.83876899999996,"count":4637}},"simStepMs":{"lifetimeBinMs":0.001,"lifetimeCapMs":50.0,"last10s":{"p50":1.566231,"p95":2.445769,"max":4.692616,"count":601},"sinceStart":{"p50":1.606,"p95":2.888,"max":21.153461,"count":4146}},"discardedSimulationMs":{"last10s":0,"sinceStart":560},"inputAgeMs":[{"lifetimeBinMs":0.1,"lifetimeCapMs":5000.0,"last10s":{"p50":20.898746000006213,"p95":42.93542300000263,"max":49.963761999999406,"count":601},"sinceStart":{"p50":20.900000000000002,"p95":41.1,"max":65.72541900000215,"count":3946}},{"lifetimeBinMs":0.1,"lifetimeCapMs":5000.0,"last10s":{"p50":21.17123100000026,"p95":42.89674600001308,"max":49.91928500001086,"count":601},"sinceStart":{"p50":20.6,"p95":40.800000000000004,"max":64.8076910000018,"count":3946}}],"combatSummary":{"mineBlastRadiusM":0.5,"mineTriggerRadiusM":0.5,"damageScale":1.0,"shotsByWeapon":[238,17,15,11],"active":4,"living":4,"finished":0,"shots":281,"projectiles":0,"mines":0,"blasts":0,"poolExhaustions":0,"abilityDamage":7.199999999999999,"abilityUses":12}}
+10-03 05:19:37.262  6049  6404 I DeathRide: {"phase":"race","raceSeconds":51.866666666665004,"frameTimeMs":{"lifetimeBinMs":0.1,"lifetimeCapMs":5000.0,"last10s":{"p50":16.681615,"p95":16.859384000000002,"max":26.058153,"count":600},"sinceStart":{"p50":16.6,"p95":17.900000000000002,"max":266.83876899999996,"count":5237}},"simStepMs":{"lifetimeBinMs":0.001,"lifetimeCapMs":50.0,"last10s":{"p50":1.562154,"p95":2.503077,"max":12.597,"count":600},"sinceStart":{"p50":1.601,"p95":2.841,"max":21.153461,"count":4746}},"discardedSimulationMs":{"last10s":0,"sinceStart":560},"inputAgeMs":[{"lifetimeBinMs":0.1,"lifetimeCapMs":5000.0,"last10s":{"p50":20.46874699999171,"p95":39.3457550000021,"max":57.12892400000419,"count":601},"sinceStart":{"p50":20.8,"p95":40.7,"max":65.72541900000215,"count":4547}},{"lifetimeBinMs":0.1,"lifetimeCapMs":5000.0,"last10s":{"p50":20.604892999996082,"p95":39.20727800001623,"max":57.10721600000397,"count":601},"sinceStart":{"p50":20.6,"p95":40.5,"max":64.8076910000018,"count":4547}}],"combatSummary":{"mineBlastRadiusM":0.5,"mineTriggerRadiusM":0.5,"damageScale":1.0,"shotsByWeapon":[261,17,15,11],"active":4,"living":4,"finished":0,"shots":304,"projectiles":0,"mines":0,"blasts":0,"poolExhaustions":0,"abilityDamage":7.199999999999999,"abilityUses":14}}
+10-03 05:19:46.841  6049  6156 I DeathRide: sceneryBake scree slicedFrames=45 totalCpuMs=167.40368900000004 maxSliceMs=7.865538
+10-03 05:19:47.079  6049  6156 I DeathRide: race countdown mode=practice
+10-03 05:19:47.273  6049  6271 I DeathRide: {"phase":"countdown","raceSeconds":0.0,"frameTimeMs":{"lifetimeBinMs":0.1,"lifetimeCapMs":5000.0,"last10s":{"p50":16.682,"p95":17.884692,"max":157.22923,"count":580},"sinceStart":{"p50":16.6,"p95":17.900000000000002,"max":266.83876899999996,"count":5817}},"simStepMs":{"lifetimeBinMs":0.001,"lifetimeCapMs":50.0,"last10s":{"p50":1.583308,"p95":2.560615,"max":5.196308,"count":524},"sinceStart":{"p50":1.599,"p95":2.807,"max":21.153461,"count":5271}},"discardedSimulationMs":{"last10s":112,"sinceStart":672},"inputAgeMs":[{"lifetimeBinMs":0.1,"lifetimeCapMs":5000.0,"last10s":{"p50":20.34886299999198,"p95":41.65256299999601,"max":52.00666299999284,"count":524},"sinceStart":{"p50":20.8,"p95":40.7,"max":65.72541900000215,"count":5071}},{"lifetimeBinMs":0.1,"lifetimeCapMs":5000.0,"last10s":{"p50":20.76264800001809,"p95":42.51912400001311,"max":50.88274800000363,"count":524},"sinceStart":{"p50":20.6,"p95":40.7,"max":64.8076910000018,"count":5071}}],"combatSummary":{"mineBlastRadiusM":0.5,"mineTriggerRadiusM":0.5,"damageScale":1.0,"shotsByWeapon":[0,0,0,0],"active":6,"living":6,"finished":0,"shots":0,"projectiles":0,"mines":0,"blasts":0,"poolExhaustions":0,"abilityDamage":0.0,"abilityUses":0}}
+10-03 05:19:57.291  6049  6199 I DeathRide: {"phase":"race","raceSeconds":7.299999999999979,"frameTimeMs":{"lifetimeBinMs":0.1,"lifetimeCapMs":5000.0,"last10s":{"p50":16.680077,"p95":17.848615000000002,"max":30.958461,"count":598},"sinceStart":{"p50":16.6,"p95":17.900000000000002,"max":266.83876899999996,"count":6416}},"simStepMs":{"lifetimeBinMs":0.001,"lifetimeCapMs":50.0,"last10s":{"p50":1.841616,"p95":2.992231,"max":7.129615,"count":438},"sinceStart":{"p50":1.616,"p95":2.831,"max":21.153461,"count":5709}},"discardedSimulationMs":{"last10s":0,"sinceStart":672},"inputAgeMs":[{"lifetimeBinMs":0.1,"lifetimeCapMs":5000.0,"last10s":{"p50":21.66866999999911,"p95":43.173830999978236,"max":48.3985079999984,"count":438},"sinceStart":{"p50":20.900000000000002,"p95":41.1,"max":65.72541900000215,"count":5509}},{"lifetimeBinMs":0.1,"lifetimeCapMs":5000.0,"last10s":{"p50":21.84041600000637,"p95":42.730469999994966,"max":48.15423899999587,"count":438},"sinceStart":{"p50":20.8,"p95":41.0,"max":64.8076910000018,"count":5509}}],"combatSummary":{"mineBlastRadiusM":0.5,"mineTriggerRadiusM":0.5,"damageScale":1.0,"shotsByWeapon":[17,3,4,3],"active":6,"living":6,"finished":0,"shots":27,"projectiles":0,"mines":3,"blasts":0,"poolExhaustions":0,"abilityDamage":10.56,"abilityUses":4}}
+10-03 05:20:07.295  6049  6272 I DeathRide: {"phase":"race","raceSeconds":17.316666666666965,"frameTimeMs":{"lifetimeBinMs":0.1,"lifetimeCapMs":5000.0,"last10s":{"p50":16.682461999999997,"p95":18.599307999999997,"max":28.818231,"count":598},"sinceStart":{"p50":16.6,"p95":17.900000000000002,"max":266.83876899999996,"count":7015}},"simStepMs":{"lifetimeBinMs":0.001,"lifetimeCapMs":50.0,"last10s":{"p50":1.699308,"p95":2.698923,"max":8.052923,"count":601},"sinceStart":{"p50":1.6260000000000001,"p95":2.798,"max":21.153461,"count":6310}},"discardedSimulationMs":{"last10s":0,"sinceStart":672},"inputAgeMs":[{"lifetimeBinMs":0.1,"lifetimeCapMs":5000.0,"last10s":{"p50":21.188139999983832,"p95":38.95450899998832,"max":54.38370099999884,"count":600},"sinceStart":{"p50":20.900000000000002,"p95":40.800000000000004,"max":65.72541900000215,"count":6110}},{"lifetimeBinMs":0.1,"lifetimeCapMs":5000.0,"last10s":{"p50":21.389515999995638,"p95":38.7793859999947,"max":54.14222399999562,"count":601},"sinceStart":{"p50":20.8,"p95":40.7,"max":64.8076910000018,"count":6111}}],"combatSummary":{"mineBlastRadiusM":0.5,"mineTriggerRadiusM":0.5,"damageScale":1.0,"shotsByWeapon":[107,7,13,13],"active":4,"living":4,"finished":0,"shots":140,"projectiles":0,"mines":8,"blasts":0,"poolExhaustions":0,"abilityDamage":21.12,"abilityUses":8}}
+10-03 05:20:17.302  6049  6202 I DeathRide: {"phase":"race","raceSeconds":27.316666666666396,"frameTimeMs":{"lifetimeBinMs":0.1,"lifetimeCapMs":5000.0,"last10s":{"p50":16.682,"p95":17.704615999999998,"max":23.508923,"count":598},"sinceStart":{"p50":16.6,"p95":17.900000000000002,"max":266.83876899999996,"count":7614}},"simStepMs":{"lifetimeBinMs":0.001,"lifetimeCapMs":50.0,"last10s":{"p50":1.623384,"p95":2.335154,"max":5.946308,"count":599},"sinceStart":{"p50":1.625,"p95":2.767,"max":21.153461,"count":6910}},"discardedSimulationMs":{"last10s":0,"sinceStart":672},"inputAgeMs":[{"lifetimeBinMs":0.1,"lifetimeCapMs":5000.0,"last10s":{"p50":21.25175599999784,"p95":44.812871000001905,"max":50.99540200000047,"count":600},"sinceStart":{"p50":20.900000000000002,"p95":41.2,"max":65.72541900000215,"count":6711}},{"lifetimeBinMs":0.1,"lifetimeCapMs":5000.0,"last10s":{"p50":21.141239999997197,"p95":44.56610099998943,"max":52.371647999985726,"count":600},"sinceStart":{"p50":20.8,"p95":41.2,"max":64.8076910000018,"count":6711}}],"combatSummary":{"mineBlastRadiusM":0.5,"mineTriggerRadiusM":0.5,"damageScale":1.0,"shotsByWeapon":[174,7,13,13],"active":4,"living":4,"finished":0,"shots":207,"projectiles":0,"mines":2,"blasts":0,"poolExhaustions":0,"abilityDamage":21.12,"abilityUses":10}}
+10-03 05:20:27.309  6049  6198 I DeathRide: {"phase":"race","raceSeconds":37.3333333333325,"frameTimeMs":{"lifetimeBinMs":0.1,"lifetimeCapMs":5000.0,"last10s":{"p50":16.681923,"p95":16.99477,"max":20.942,"count":599},"sinceStart":{"p50":16.6,"p95":17.8,"max":266.83876899999996,"count":8214}},"simStepMs":{"lifetimeBinMs":0.001,"lifetimeCapMs":50.0,"last10s":{"p50":1.627077,"p95":2.523615,"max":11.242,"count":600},"sinceStart":{"p50":1.625,"p95":2.738,"max":21.153461,"count":7511}},"discardedSimulationMs":{"last10s":0,"sinceStart":672},"inputAgeMs":[{"lifetimeBinMs":0.1,"lifetimeCapMs":5000.0,"last10s":{"p50":21.26060199996573,"p95":40.575357999972766,"max":53.306111000012606,"count":600},"sinceStart":{"p50":20.900000000000002,"p95":41.1,"max":65.72541900000215,"count":7311}},{"lifetimeBinMs":0.1,"lifetimeCapMs":5000.0,"last10s":{"p50":21.155945999984397,"p95":40.248084999999264,"max":52.93890799998189,"count":600},"sinceStart":{"p50":20.900000000000002,"p95":41.0,"max":64.8076910000018,"count":7311}}],"combatSummary":{"mineBlastRadiusM":0.5,"mineTriggerRadiusM":0.5,"damageScale":1.0,"shotsByWeapon":[241,7,13,13],"active":4,"living":4,"finished":0,"shots":274,"projectiles":0,"mines":0,"blasts":0,"poolExhaustions":0,"abilityDamage":21.12,"abilityUses":12}}
+10-03 05:20:37.316  6049  6240 I DeathRide: {"phase":"race","raceSeconds":47.33333333333193,"frameTimeMs":{"lifetimeBinMs":0.1,"lifetimeCapMs":5000.0,"last10s":{"p50":16.682923,"p95":17.239846,"max":26.377846,"count":599},"sinceStart":{"p50":16.6,"p95":17.8,"max":266.83876899999996,"count":8814}},"simStepMs":{"lifetimeBinMs":0.001,"lifetimeCapMs":50.0,"last10s":{"p50":1.594692,"p95":2.590308,"max":4.732308,"count":599},"sinceStart":{"p50":1.623,"p95":2.729,"max":21.153461,"count":8111}},"discardedSimulationMs":{"last10s":0,"sinceStart":672},"inputAgeMs":[{"lifetimeBinMs":0.1,"lifetimeCapMs":5000.0,"last10s":{"p50":20.98873499999172,"p95":38.73332699999446,"max":62.757634999987204,"count":599},"sinceStart":{"p50":20.900000000000002,"p95":41.1,"max":65.72541900000215,"count":7911}},{"lifetimeBinMs":0.1,"lifetimeCapMs":5000.0,"last10s":{"p50":21.37565399997402,"p95":41.14605399998254,"max":62.35093099999358,"count":599},"sinceStart":{"p50":20.900000000000002,"p95":41.0,"max":64.8076910000018,"count":7911}}],"combatSummary":{"mineBlastRadiusM":0.5,"mineTriggerRadiusM":0.5,"damageScale":1.0,"shotsByWeapon":[295,7,13,13],"active":4,"living":4,"finished":0,"shots":328,"projectiles":0,"mines":0,"blasts":0,"poolExhaustions":0,"abilityDamage":21.12,"abilityUses":14}}
+10-03 05:20:47.320  6049  6198 I DeathRide: {"phase":"race","raceSeconds":57.349999999998026,"frameTimeMs":{"lifetimeBinMs":0.1,"lifetimeCapMs":5000.0,"last10s":{"p50":16.681231,"p95":17.03677,"max":19.380462,"count":600},"sinceStart":{"p50":16.6,"p95":17.7,"max":266.83876899999996,"count":9414}},"simStepMs":{"lifetimeBinMs":0.001,"lifetimeCapMs":50.0,"last10s":{"p50":1.667231,"p95":2.604615,"max":7.092154,"count":601},"sinceStart":{"p50":1.625,"p95":2.721,"max":21.153461,"count":8712}},"discardedSimulationMs":{"last10s":0,"sinceStart":672},"inputAgeMs":[{"lifetimeBinMs":0.1,"lifetimeCapMs":5000.0,"last10s":{"p50":21.488050999992993,"p95":42.95506599996588,"max":81.73284399998374,"count":601},"sinceStart":{"p50":21.0,"p95":41.2,"max":81.73284399998374,"count":8512}},{"lifetimeBinMs":0.1,"lifetimeCapMs":5000.0,"last10s":{"p50":21.344409000012092,"p95":42.55359299998963,"max":81.3668089999992,"count":601},"sinceStart":{"p50":20.900000000000002,"p95":41.2,"max":81.3668089999992,"count":8512}}],"combatSummary":{"mineBlastRadiusM":0.5,"mineTriggerRadiusM":0.5,"damageScale":1.0,"shotsByWeapon":[350,7,13,13],"active":4,"living":4,"finished":0,"shots":383,"projectiles":0,"mines":0,"blasts":0,"poolExhaustions":0,"abilityDamage":21.12,"abilityUses":16}}
+10-03 05:20:51.406  6049  6156 I DeathRide: sceneryBake sluice slicedFrames=39 totalCpuMs=136.91238099999998 maxSliceMs=4.939384
+10-03 05:20:51.704  6049  6156 I DeathRide: race countdown mode=practice
+10-03 05:20:57.328  6049  6406 I DeathRide: {"phase":"race","raceSeconds":2.716666666666662,"frameTimeMs":{"lifetimeBinMs":0.1,"lifetimeCapMs":5000.0,"last10s":{"p50":16.682692,"p95":17.976539,"max":138.068692,"count":576},"sinceStart":{"p50":16.6,"p95":17.7,"max":266.83876899999996,"count":9990}},"simStepMs":{"lifetimeBinMs":0.001,"lifetimeCapMs":50.0,"last10s":{"p50":1.699846,"p95":2.531154,"max":5.561385,"count":366},"sinceStart":{"p50":1.629,"p95":2.718,"max":21.153461,"count":9078}},"discardedSimulationMs":{"last10s":54,"sinceStart":726},"inputAgeMs":[{"lifetimeBinMs":0.1,"lifetimeCapMs":5000.0,"last10s":{"p50":21.7355979999993,"p95":40.70208200000343,"max":53.00073599998723,"count":367},"sinceStart":{"p50":21.0,"p95":41.2,"max":81.73284399998374,"count":8879}},{"lifetimeBinMs":0.1,"lifetimeCapMs":5000.0,"last10s":{"p50":21.331286999979056,"p95":40.32623999999487,"max":52.63514800000121,"count":367},"sinceStart":{"p50":21.0,"p95":41.1,"max":81.3668089999992,"count":8879}}],"combatSummary":{"mineBlastRadiusM":0.5,"mineTriggerRadiusM":0.5,"damageScale":1.0,"shotsByWeapon":[0,0,0,0],"active":6,"living":6,"finished":0,"shots":0,"projectiles":0,"mines":0,"blasts":0,"poolExhaustions":0,"abilityDamage":0.0,"abilityUses":0}}
+10-03 05:21:07.336  6049  6198 I DeathRide: {"phase":"race","raceSeconds":12.733333333333546,"frameTimeMs":{"lifetimeBinMs":0.1,"lifetimeCapMs":5000.0,"last10s":{"p50":16.681154,"p95":17.783692,"max":24.184462,"count":599},"sinceStart":{"p50":16.6,"p95":17.7,"max":266.83876899999996,"count":10590}},"simStepMs":{"lifetimeBinMs":0.001,"lifetimeCapMs":50.0,"last10s":{"p50":1.65423,"p95":2.546846,"max":5.701846,"count":600},"sinceStart":{"p50":1.631,"p95":2.709,"max":21.153461,"count":9679}},"discardedSimulationMs":{"last10s":0,"sinceStart":726},"inputAgeMs":[{"lifetimeBinMs":0.1,"lifetimeCapMs":5000.0,"last10s":{"p50":21.05761399999028,"p95":43.1669829999737,"max":51.94169099998544,"count":600},"sinceStart":{"p50":21.0,"p95":41.400000000000006,"max":81.73284399998374,"count":9479}},{"lifetimeBinMs":0.1,"lifetimeCapMs":5000.0,"last10s":{"p50":20.803124999976717,"p95":42.40500999998767,"max":50.48437200000626,"count":600},"sinceStart":{"p50":20.900000000000002,"p95":41.300000000000004,"max":81.3668089999992,"count":9479}}],"combatSummary":{"mineBlastRadiusM":0.5,"mineTriggerRadiusM":0.5,"damageScale":1.0,"shotsByWeapon":[68,10,12,15],"active":5,"living":5,"finished":0,"shots":105,"projectiles":0,"mines":9,"blasts":0,"poolExhaustions":0,"abilityDamage":23.279999999999998,"abilityUses":4}}

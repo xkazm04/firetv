@@ -1,0 +1,296 @@
+{
+  "sourceSha256": "08d5df3b03522facef6ba24a772eee9ee44d9cb9b3cd37fb8b66acb45a690cb7",
+  "apkSha256": "77d15b6e785753ee1a1f6799b540efd5a4641c0d5d32476464ad6dbe99f3b8c1",
+  "durationSeconds": 900.1888180999999,
+  "functionalPass": true,
+  "error": null,
+  "clients": [
+    {
+      "slot": 0,
+      "sent": 27006,
+      "accepted": 27006,
+      "rejected": 0,
+      "hz": 30.000372651818438
+    },
+    {
+      "slot": 1,
+      "sent": 27006,
+      "accepted": 27006,
+      "rejected": 0,
+      "hz": 30.000372651818438
+    }
+  ],
+  "pumpStalls": [],
+  "rejections": [],
+  "allWindows": {
+    "count": 763,
+    "worstP95Ms": 26.886,
+    "maxMs": 288.85699999999997,
+    "p50RangeMs": [
+      16.624153999999997,
+      16.721231
+    ],
+    "stepWorstP95Ms": 8.050462
+  },
+  "activeWindows": {
+    "count": 612,
+    "worstP95Ms": 22.43323,
+    "maxMs": 54.922616,
+    "p50RangeMs": [
+      16.624153999999997,
+      16.706693
+    ],
+    "stepWorstP95Ms": 3.433461
+  },
+  "sixLiveWindows": {
+    "count": 70,
+    "worstP95Ms": 22.43323,
+    "maxMs": 37.579539000000004,
+    "p50RangeMs": [
+      16.624153999999997,
+      16.699846
+    ],
+    "stepWorstP95Ms": 3.433461
+  },
+  "sinceStartFrameMs": {
+    "p50": 16.6,
+    "p95": 18.7,
+    "max": 288.85699999999997,
+    "count": 53917
+  },
+  "discardedSimulationMs": {
+    "last10s": 0,
+    "sinceStart": 1457
+  },
+  "inputAgeWorstP95Ms": [
+    45.45447100000456,
+    45.42939799999294
+  ],
+  "inputCounters": [
+    {
+      "stale": {
+        "last10s": 16,
+        "sinceStart": 75
+      },
+      "dropped": {
+        "last10s": 0,
+        "sinceStart": 0
+      },
+      "outOfOrder": {
+        "last10s": 0,
+        "sinceStart": 0
+      }
+    },
+    {
+      "stale": {
+        "last10s": 16,
+        "sinceStart": 51
+      },
+      "dropped": {
+        "last10s": 0,
+        "sinceStart": 0
+      },
+      "outOfOrder": {
+        "last10s": 0,
+        "sinceStart": 0
+      }
+    }
+  ],
+  "pssRangeMiB": [
+    107.0986328125,
+    140.1923828125
+  ],
+  "warmPssGrowthMiB": -26.3017578125,
+  "thermalStatuses": [
+    0
+  ],
+  "ownedTextureMiB": 39.9697265625,
+  "artMiB": 18.75,
+  "audio": {
+    "active": 4,
+    "highWater": 8,
+    "cap": 8,
+    "played": 4186,
+    "suppressed": 4465,
+    "stolen": 82,
+    "missing": 31,
+    "decodedBytes": 3970682,
+    "decodedBudgetBytes": 6291456,
+    "lastNarration": "",
+    "lastNarrationPlayed": false,
+    "narrationCount": 0,
+    "backend": {
+      "worker": true,
+      "handoff": "spsc-mailboxes",
+      "nativeActive": 4,
+      "nativeHighWater": 8,
+      "starts": 4161,
+      "failedStarts": 0,
+      "staleStarts": 3,
+      "cancelledStarts": 22,
+      "overflow": 0,
+      "maxQueueMs": 118.997538,
+      "maxNativeCallMs": 81.827076,
+      "maxStartCompletionMs": 128.616461,
+      "maxParameterQueueMs": 179.498231,
+      "startAgeLimitMs": 100
+    }
+  },
+  "classes": {
+    "Needle": 22,
+    "Line": 12,
+    "Bastion": 7,
+    "Comet": 13,
+    "Trail": 14,
+    "Flint": 8,
+    "Quill": 21,
+    "Vandal": 10,
+    "Kestrel": 11,
+    "Bulwark": 12
+  },
+  "rounds": 16,
+  "limits": "Overlapping window percentiles are not pooled. Native profiling intervals, if any, remain in raw evidence. Not optical latency or owner feel.",
+  "hostDiagnostics": {
+    "gcDurationMs": {
+      "count": 222,
+      "p50": 0.41920000314712524,
+      "p95": 1.107699990272522,
+      "p99": 1.5640999972820282,
+      "max": 3.854899972677231,
+      "mean": 0.5924558563006891
+    },
+    "heartbeatStalls": [],
+    "limit": "Independent host isolate and Node GC observations; they do not alter the fail-on-pump-stall gate."
+  },
+  "ackRttMs": {
+    "count": 54012,
+    "p50": 9.50879999998142,
+    "p95": 61.0002000000095,
+    "p99": 69.67780000006314,
+    "max": 105.90599999999904,
+    "mean": 19.257720182552063
+  },
+  "clockAdjustedAgeAtAckTimestampMs": {
+    "count": 54012,
+    "p50": 4.007737999956589,
+    "p95": 10.402326999988873,
+    "p99": 14.721727999916766,
+    "max": 49.363358999999036,
+    "mean": 4.818525143147662
+  },
+  "estimatedAckReturnMs": {
+    "count": 54012,
+    "p50": 3.775437999982387,
+    "p95": 56.37224099994637,
+    "p99": 63.616007999982685,
+    "max": 85.86303099995712,
+    "mean": 14.439195039404451
+  },
+  "ackTimingLimit": "Ack timestamp is after server JSON parsing, before mailbox offer. Offset is the one sent before that input. One-way estimates depend on calibration; no optical claim.",
+  "hudTransport": [
+    {
+      "hudDelta": true,
+      "hudMessages": 8915,
+      "hudCharacters": 14154719,
+      "hudFullSnapshots": 204
+    },
+    {
+      "hudDelta": true,
+      "hudMessages": 8912,
+      "hudCharacters": 13870097,
+      "hudFullSnapshots": 204
+    }
+  ],
+  "lastLoadObservation": {
+    "second": 899.9444952,
+    "slots": [
+      {
+        "stale": {
+          "last10s": 0,
+          "sinceStart": 59
+        },
+        "dropped": {
+          "last10s": 0,
+          "sinceStart": 0
+        },
+        "outOfOrder": {
+          "last10s": 0,
+          "sinceStart": 0
+        },
+        "inputAgeMs": {
+          "lifetimeBinMs": 0.1,
+          "lifetimeCapMs": 5000,
+          "last10s": {
+            "p50": 22.930855999933556,
+            "p95": 43.27154099999461,
+            "max": 54.05815699999221,
+            "count": 601
+          },
+          "sinceStart": {
+            "p50": 21.3,
+            "p95": 40.900000000000006,
+            "max": 73.92816199999652,
+            "count": 50203
+          }
+        }
+      },
+      {
+        "stale": {
+          "last10s": 0,
+          "sinceStart": 35
+        },
+        "dropped": {
+          "last10s": 0,
+          "sinceStart": 0
+        },
+        "outOfOrder": {
+          "last10s": 0,
+          "sinceStart": 0
+        },
+        "inputAgeMs": {
+          "lifetimeBinMs": 0.1,
+          "lifetimeCapMs": 5000,
+          "last10s": {
+            "p50": 23.692909999983385,
+            "p95": 44.157302000094205,
+            "max": 54.7881790001411,
+            "count": 601
+          },
+          "sinceStart": {
+            "p50": 21.8,
+            "p95": 41.6,
+            "max": 74.85020499999882,
+            "count": 50203
+          }
+        }
+      }
+    ],
+    "frame": {
+      "lifetimeBinMs": 0.1,
+      "lifetimeCapMs": 5000,
+      "last10s": {
+        "p50": 16.672231,
+        "p95": 18.624077,
+        "max": 24.577538999999998,
+        "count": 600
+      },
+      "sinceStart": {
+        "p50": 16.6,
+        "p95": 18.7,
+        "max": 288.85699999999997,
+        "count": 53871
+      }
+    }
+  },
+  "finalStatsLimit": "finalStats follows a 500 ms acknowledgement drain with pumping stopped; stale consumption during that deliberate quiet interval is retained separately from lastLoadObservation.",
+  "gates": {
+    "duration": true,
+    "zeroRejected": true,
+    "inputStream": true,
+    "functional": true,
+    "frameP95": false,
+    "frameMax": false,
+    "memory": true,
+    "textures": true
+  }
+}

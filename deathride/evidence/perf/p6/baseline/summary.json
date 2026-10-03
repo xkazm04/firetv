@@ -1,0 +1,534 @@
+{
+  "sourceSha256": "18cfa04b8c9e1a3a2ced80a84bf409817d1529d93e3a879928fa0c7c7b2726f1",
+  "apkSha256": "41d87f006d9b0ed3733f44fbe7eab62ebd080cb65c31556cc959f26e2167918c",
+  "durationSeconds": 900.0627342,
+  "functionalPass": false,
+  "error": "AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:\n\n  assert.ok(result.clients.every(c=>c.accepted===c.sent&&c.rejected===0&&c.hz>29))\n\n    at file:///C:/Users/kazda/kiro/firetv-deathride-perf/deathride/tools/ability-stick-probe.mjs:109:9\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)",
+  "clients": [
+    {
+      "slot": 0,
+      "sent": 27002,
+      "accepted": 26994,
+      "rejected": 8,
+      "hz": 30.000131073085814
+    },
+    {
+      "slot": 1,
+      "sent": 27002,
+      "accepted": 26992,
+      "rejected": 10,
+      "hz": 30.000131073085814
+    }
+  ],
+  "pumpStalls": [],
+  "rejections": [
+    {
+      "slot": 1,
+      "q": 3599,
+      "second": 120.2347905,
+      "rttMs": 264.479800000001,
+      "receiveAgeMs": 258.8478139999934,
+      "offset": 4764.314685999998,
+      "ack": {
+        "t": "ack",
+        "q": 3599,
+        "tvNow": 127440.0177,
+        "accepted": false
+      }
+    },
+    {
+      "slot": 0,
+      "q": 3599,
+      "second": 120.23825989999999,
+      "rttMs": 268.00539999999455,
+      "receiveAgeMs": 259.16591699999844,
+      "offset": 4762.74886,
+      "ack": {
+        "t": "ack",
+        "q": 3599,
+        "tvNow": 127438.713777,
+        "accepted": false
+      }
+    },
+    {
+      "slot": 1,
+      "q": 3608,
+      "second": 120.5591532,
+      "rttMs": 276.84279999999853,
+      "receiveAgeMs": 272.15526800000225,
+      "offset": 4764.314685999998,
+      "ack": {
+        "t": "ack",
+        "q": 3608,
+        "tvNow": 127765.324854,
+        "accepted": false
+      }
+    },
+    {
+      "slot": 0,
+      "q": 3608,
+      "second": 120.5628281,
+      "rttMs": 280.5789999999979,
+      "receiveAgeMs": 274.66993199999706,
+      "offset": 4762.74886,
+      "ack": {
+        "t": "ack",
+        "q": 3608,
+        "tvNow": 127766.212392,
+        "accepted": false
+      }
+    },
+    {
+      "slot": 0,
+      "q": 3627,
+      "second": 121.4888085,
+      "rttMs": 581.7448000000004,
+      "receiveAgeMs": 266.9806400000016,
+      "offset": 4762.74886,
+      "ack": {
+        "t": "ack",
+        "q": 3627,
+        "tvNow": 128383.3377,
+        "accepted": false
+      }
+    },
+    {
+      "slot": 1,
+      "q": 3627,
+      "second": 121.4888523,
+      "rttMs": 581.7418000000034,
+      "receiveAgeMs": 267.95455200001015,
+      "offset": 4764.314685999998,
+      "ack": {
+        "t": "ack",
+        "q": 3627,
+        "tvNow": 128385.924238,
+        "accepted": false
+      }
+    },
+    {
+      "slot": 0,
+      "q": 3637,
+      "second": 121.5056182,
+      "rttMs": 272.05479999999807,
+      "receiveAgeMs": 263.02447799999936,
+      "offset": 4762.74886,
+      "ack": {
+        "t": "ack",
+        "q": 3637,
+        "tvNow": 128705.881238,
+        "accepted": false
+      }
+    },
+    {
+      "slot": 1,
+      "q": 3637,
+      "second": 121.8050244,
+      "rttMs": 571.415599999993,
+      "receiveAgeMs": 269.0480979999993,
+      "offset": 4764.314685999998,
+      "ack": {
+        "t": "ack",
+        "q": 3637,
+        "tvNow": 128713.516084,
+        "accepted": false
+      }
+    },
+    {
+      "slot": 0,
+      "q": 3646,
+      "second": 121.8209225,
+      "rttMs": 275.13270000000193,
+      "receiveAgeMs": 271.02077100000315,
+      "offset": 4762.74886,
+      "ack": {
+        "t": "ack",
+        "q": 3646,
+        "tvNow": 129026.103931,
+        "accepted": false
+      }
+    },
+    {
+      "slot": 1,
+      "q": 3646,
+      "second": 121.83132069999999,
+      "rttMs": 285.4557000000059,
+      "receiveAgeMs": 278.86605200001213,
+      "offset": 4764.314685999998,
+      "ack": {
+        "t": "ack",
+        "q": 3646,
+        "tvNow": 129035.590238,
+        "accepted": false
+      }
+    },
+    {
+      "slot": 1,
+      "q": 3647,
+      "second": 121.84257679999999,
+      "rttMs": 266.1281999999919,
+      "receiveAgeMs": 253.03183700000227,
+      "offset": 4764.314685999998,
+      "ack": {
+        "t": "ack",
+        "q": 3647,
+        "tvNow": 129040.339623,
+        "accepted": false
+      }
+    },
+    {
+      "slot": 1,
+      "q": 12721,
+      "second": 424.3082545,
+      "rttMs": 265.6685999999754,
+      "receiveAgeMs": 252.2384669999592,
+      "offset": 4764.250465999998,
+      "ack": {
+        "t": "ack",
+        "q": 12721,
+        "tvNow": 431505.619333,
+        "accepted": false
+      }
+    },
+    {
+      "slot": 0,
+      "q": 12730,
+      "second": 424.6481129,
+      "rttMs": 308.0841000000364,
+      "receiveAgeMs": 274.074847000069,
+      "offset": 4764.284031999938,
+      "ack": {
+        "t": "ack",
+        "q": 12730,
+        "tvNow": 431824.932179,
+        "accepted": false
+      }
+    },
+    {
+      "slot": 1,
+      "q": 12730,
+      "second": 425.24351629999995,
+      "rttMs": 903.4298999999883,
+      "receiveAgeMs": 274.60658299998613,
+      "offset": 4764.250465999998,
+      "ack": {
+        "t": "ack",
+        "q": 12730,
+        "tvNow": 431825.487949,
+        "accepted": false
+      }
+    },
+    {
+      "slot": 0,
+      "q": 12740,
+      "second": 425.24356969999997,
+      "rttMs": 575.9931000000215,
+      "receiveAgeMs": 266.15704700007336,
+      "offset": 4764.284031999938,
+      "ack": {
+        "t": "ack",
+        "q": 12740,
+        "tvNow": 432144.562179,
+        "accepted": false
+      }
+    },
+    {
+      "slot": 1,
+      "q": 12740,
+      "second": 425.244092,
+      "rttMs": 576.4561000000103,
+      "receiveAgeMs": 263.6517749999766,
+      "offset": 4764.250465999998,
+      "ack": {
+        "t": "ack",
+        "q": 12740,
+        "tvNow": 432142.082641,
+        "accepted": false
+      }
+    },
+    {
+      "slot": 1,
+      "q": 12749,
+      "second": 425.25597589999995,
+      "rttMs": 276.2011000000057,
+      "receiveAgeMs": 271.659260000044,
+      "offset": 4764.250465999998,
+      "ack": {
+        "t": "ack",
+        "q": 12749,
+        "tvNow": 432462.229026,
+        "accepted": false
+      }
+    },
+    {
+      "slot": 0,
+      "q": 12749,
+      "second": 425.5441741,
+      "rttMs": 564.4643000000506,
+      "receiveAgeMs": 274.96623200009344,
+      "offset": 4764.284031999938,
+      "ack": {
+        "t": "ack",
+        "q": 12749,
+        "tvNow": 432465.504564,
+        "accepted": false
+      }
+    }
+  ],
+  "allWindows": {
+    "count": 778,
+    "worstP95Ms": 22.229846000000002,
+    "maxMs": 242.464769,
+    "p50RangeMs": [
+      16.66223,
+      16.814308
+    ],
+    "stepWorstP95Ms": 7.667923
+  },
+  "activeWindows": {
+    "count": 578,
+    "worstP95Ms": 20.231230999999998,
+    "maxMs": 33.088538,
+    "p50RangeMs": [
+      16.66223,
+      16.814308
+    ],
+    "stepWorstP95Ms": 3.508461
+  },
+  "sixLiveWindows": {
+    "count": 85,
+    "worstP95Ms": 18.798077,
+    "maxMs": 27.505000000000003,
+    "p50RangeMs": [
+      16.665692999999997,
+      16.691307
+    ],
+    "stepWorstP95Ms": 3.497
+  },
+  "sinceStartFrameMs": {
+    "p50": 16.6,
+    "p95": 18.7,
+    "max": 242.464769,
+    "count": 53848
+  },
+  "discardedSimulationMs": {
+    "last10s": 0,
+    "sinceStart": 1731
+  },
+  "inputAgeWorstP95Ms": [
+    227.98288600007072,
+    229.9947749999701
+  ],
+  "inputCounters": [
+    {
+      "stale": {
+        "last10s": 18,
+        "sinceStart": 92
+      },
+      "dropped": {
+        "last10s": 0,
+        "sinceStart": 8
+      },
+      "outOfOrder": {
+        "last10s": 0,
+        "sinceStart": 0
+      }
+    },
+    {
+      "stale": {
+        "last10s": 18,
+        "sinceStart": 70
+      },
+      "dropped": {
+        "last10s": 0,
+        "sinceStart": 10
+      },
+      "outOfOrder": {
+        "last10s": 0,
+        "sinceStart": 0
+      }
+    }
+  ],
+  "pssRangeMiB": [
+    112.701171875,
+    131.9267578125
+  ],
+  "warmPssGrowthMiB": -16.76953125,
+  "ownedTextureMiB": 39.9697265625,
+  "artMiB": 18.75,
+  "audio": {
+    "active": 5,
+    "highWater": 8,
+    "cap": 8,
+    "played": 4202,
+    "suppressed": 9171,
+    "stolen": 90,
+    "missing": 39,
+    "decodedBytes": 3970682,
+    "decodedBudgetBytes": 6291456,
+    "lastNarration": "",
+    "lastNarrationPlayed": false,
+    "narrationCount": 0,
+    "backend": {
+      "worker": true,
+      "handoff": "spsc-mailboxes",
+      "nativeActive": 5,
+      "nativeHighWater": 8,
+      "starts": 4175,
+      "failedStarts": 0,
+      "staleStarts": 0,
+      "cancelledStarts": 27,
+      "overflow": 0,
+      "maxQueueMs": 92.579154,
+      "maxNativeCallMs": 55.810307,
+      "maxStartCompletionMs": 114.787538,
+      "maxParameterQueueMs": 131.491923,
+      "startAgeLimitMs": 100
+    }
+  },
+  "classes": {
+    "Needle": 21,
+    "Line": 14,
+    "Bastion": 20,
+    "Comet": 11,
+    "Trail": 11,
+    "Flint": 12,
+    "Quill": 18,
+    "Vandal": 14,
+    "Kestrel": 14,
+    "Bulwark": 8
+  },
+  "rounds": 20,
+  "limits": "Overlapping window percentiles are not pooled. Native profiling intervals, if any, remain in raw evidence. Not optical latency or owner feel.",
+  "ackRttMs": {
+    "count": 54004,
+    "p50": 10.098999999987427,
+    "p95": 62.494000000006054,
+    "p99": 73.91190000006463,
+    "max": 903.4298999999883,
+    "mean": 21.07922761647304
+  },
+  "clockAdjustedAgeAtAckTimestampMs": {
+    "count": 54004,
+    "p50": 3.912374000006821,
+    "p95": 11.017156000016257,
+    "p99": 17.609054000116885,
+    "max": 278.86605200001213,
+    "mean": 5.577383427551163
+  },
+  "estimatedAckReturnMs": {
+    "count": 54004,
+    "p50": 4.220514999993611,
+    "p95": 57.200899000046775,
+    "p99": 65.02874199999496,
+    "max": 628.8233170000021,
+    "mean": 15.501844188921368
+  },
+  "ackTimingLimit": "Ack timestamp is after server JSON parsing, before mailbox offer. Offset is the one sent before that input. One-way estimates depend on calibration; no optical claim.",
+  "hudTransport": [
+    {
+      "hudDelta": true,
+      "hudMessages": 8909,
+      "hudCharacters": 14769804,
+      "hudFullSnapshots": 220
+    },
+    {
+      "hudDelta": true,
+      "hudMessages": 8904,
+      "hudCharacters": 14428602,
+      "hudFullSnapshots": 220
+    }
+  ],
+  "lastLoadObservation": {
+    "second": 899.8657583,
+    "slots": [
+      {
+        "stale": {
+          "last10s": 0,
+          "sinceStart": 74
+        },
+        "dropped": {
+          "last10s": 0,
+          "sinceStart": 8
+        },
+        "outOfOrder": {
+          "last10s": 0,
+          "sinceStart": 0
+        },
+        "inputAgeMs": {
+          "lifetimeBinMs": 0.1,
+          "lifetimeCapMs": 5000,
+          "last10s": {
+            "p50": 22.53560300008394,
+            "p95": 43.29950300010387,
+            "max": 51.591549000004306,
+            "count": 600
+          },
+          "sinceStart": {
+            "p50": 21.400000000000002,
+            "p95": 41.400000000000006,
+            "max": 300.47705500008306,
+            "count": 49138
+          }
+        }
+      },
+      {
+        "stale": {
+          "last10s": 0,
+          "sinceStart": 52
+        },
+        "dropped": {
+          "last10s": 0,
+          "sinceStart": 10
+        },
+        "outOfOrder": {
+          "last10s": 0,
+          "sinceStart": 0
+        },
+        "inputAgeMs": {
+          "lifetimeBinMs": 0.1,
+          "lifetimeCapMs": 5000,
+          "last10s": {
+            "p50": 23.44397200003732,
+            "p95": 44.16345700004604,
+            "max": 53.944711000076495,
+            "count": 600
+          },
+          "sinceStart": {
+            "p50": 21.5,
+            "p95": 41.6,
+            "max": 300.4708830000018,
+            "count": 49138
+          }
+        }
+      }
+    ],
+    "frame": {
+      "lifetimeBinMs": 0.1,
+      "lifetimeCapMs": 5000,
+      "last10s": {
+        "p50": 16.686538000000002,
+        "p95": 18.561846,
+        "max": 22.630231000000002,
+        "count": 599
+      },
+      "sinceStart": {
+        "p50": 16.6,
+        "p95": 18.7,
+        "max": 242.464769,
+        "count": 53804
+      }
+    }
+  },
+  "finalStatsLimit": "finalStats follows a 500 ms acknowledgement drain with pumping stopped; stale consumption during that deliberate quiet interval is retained separately from lastLoadObservation.",
+  "gates": {
+    "duration": true,
+    "zeroRejected": false,
+    "inputStream": true,
+    "functional": false,
+    "frameP95": false,
+    "frameMax": false,
+    "memory": true,
+    "textures": true
+  }
+}

@@ -2,7 +2,7 @@ import {chromium} from 'playwright';
 import assert from 'node:assert/strict';
 import {mkdir,writeFile,readFile} from 'node:fs/promises';
 const [base,pin,output]=process.argv.slice(2);
-assert.equal(new URL(base).port,'8770');await mkdir(output,{recursive:true});
+assert.equal(new URL(base).port,process.env.DEATHRIDE_BROWSER_PORT||'8770');await mkdir(output,{recursive:true});
 const browser=await chromium.launch({headless:true,executablePath:process.env.CHROME_EXECUTABLE});
 const stats=async()=>await(await fetch(base+'/stats')).json();
 const contexts=[],errors=[];

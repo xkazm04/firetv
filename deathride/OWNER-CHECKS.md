@@ -210,3 +210,59 @@ Report story clarity, reward usefulness, mine readability and whether fighting M
 Device gallery: file:///C:/Users/kazda/kiro/firetv-deathride-camp/deathride/evidence/campaign/q4/index.html
 
 Balance plots and honest censoring: file:///C:/Users/kazda/kiro/firetv-deathride-camp/deathride/evidence/campaign/q3/index.html
+
+## P0 — performance baseline
+
+The isolated **Death Ride Perf** application uses `dev.deathride.perf` / 8772.
+The merged car/HUD/campaign/audio baseline has measured frame and input failures;
+the P0 design lists their exact scope. No sofa, physical-phone or optical-latency
+pass is implied. After the performance waves, compare engine pitch, impact timing,
+six-car readability and control release with sound on. Report any audible delay,
+missing cue, visible hitch or sticky control with the car/course and approximate
+time. The final performance report will identify the measured delivery APK.
+
+P1 keeps audio enabled while native playback runs outside the render thread.
+Compare engine pitch during acceleration, abrupt stop/mute/Home, short gunshots
+and impacts. Record sounds that arrive late or vanish during busy combat; the
+worker reports delayed and discarded starts, and no listening pass is claimed.
+
+P2 passed one 15-minute ordinary-input soak with zero rejections. Reconnect each
+phone, switch car/course, enter garage/career and inspect changing metadata and
+combat HUD together. Check release after a connection interruption. A calibrated
+ack timestamp is not an optical latency measurement or a physical-phone pass.
+
+P3 keeps native resolution; a 720p diagnostic did not demonstrate the required
+frame result. Pacing variants are technical measurements, not an optical or
+sofa verdict. On the final build, check camera motion and repeated Home/resume
+with audio; the final report records which scheduling mode was retained.
+
+P4 preserves two local engine loops, spatial attenuation, pitch smoothing and
+low-health cue thresholds. Listen while the second driver drops out or wrecks;
+the allocation test verifies storage behavior, not audible quality.
+
+P5 preserves road-mark pixels in the desktop GL audit. On the final Stick build,
+inspect kerbs, start-grid lines and chevrons through all five courses, then Home
+and resume. Check sharpness and layer order while effects cross those markings.
+
+P7 removes the shared audio-worker monitor. Repeat abrupt engine/pitch changes,
+simultaneous impacts, mute and Home/resume. Queue delays and dropped onsets are
+still reported; the native trace proves the measured dependency is gone, not
+that every sound is perceived on time.
+
+P6 records an optional foreground Wi-Fi latency policy. A system lock and one
+zero-rejection run do not establish router/phone reliability; that run also
+had an invalid host-pump pause. On the final build, repeat physical-phone
+release/reconnect and Home/resume on the intended LAN. The report keeps input
+age, stale consumption and rejected-input counts visible.
+
+P8 delivery is the frozen perf APK with SHA-256
+`77d15b6e785753ee1a1f6799b540efd5a4641c0d5d32476464ad6dbe99f3b8c1`.
+It keeps native resolution, all effects/HUD/audio and the exact-pixel mark
+cache. Normal launch uses vsync/display rendering; slot waits, explicit
+callback priority and Wi-Fi policy are optional diagnostics, off by default.
+Read [the final performance report](../docs/concepts/deathride/PERF-REPORT.md)
+for exact gate results. Inspect busy six-car camera motion, road-mark layers,
+both phone reconnects and neutral release; Home must silence playback and
+resume must restore the scene and controls. Listen for late/missing onsets and
+pitch changes. Scripted checks and queue counters do not certify owner feel,
+physical-phone ergonomics, optical latency or perceived sound timing.

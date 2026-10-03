@@ -1,0 +1,295 @@
+{
+  "sourceSha256": "2aa6d65b6a627a4b665fe69fb5eaf14227bdfc43636ff33af67d3da5d9e4f3f4",
+  "apkSha256": "d325ec05af27f49161b528d0749cf1082772ed2cb5e38d38f149256d540ba682",
+  "durationSeconds": 900.2110832,
+  "functionalPass": false,
+  "error": "AssertionError [ERR_ASSERTION]: The expression evaluated to a falsy value:\n\n  assert.ok(result.clients.every(c=>c.accepted===c.sent&&c.rejected===0&&c.hz>29))\n\n    at file:///C:/Users/kazda/kiro/firetv-deathride-perf/deathride/tools/ability-stick-probe.mjs:108:9\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)",
+  "clients": [
+    {
+      "slot": 0,
+      "sent": 27007,
+      "accepted": 27004,
+      "rejected": 3,
+      "hz": 30.000741497202664
+    },
+    {
+      "slot": 1,
+      "sent": 27007,
+      "accepted": 27003,
+      "rejected": 4,
+      "hz": 30.000741497202664
+    }
+  ],
+  "pumpStalls": [],
+  "rejections": [
+    {
+      "slot": 1,
+      "q": 15500,
+      "second": 517.2392179999999,
+      "rttMs": 570.3444000000018,
+      "receiveAgeMs": 252.4225419999566,
+      "offset": 4412.959497000033,
+      "ack": {
+        "t": "ack",
+        "q": 15500,
+        "tvNow": 523633.173339,
+        "accepted": false
+      }
+    },
+    {
+      "slot": 1,
+      "q": 15509,
+      "second": 517.5367721,
+      "rttMs": 557.8544000000111,
+      "receiveAgeMs": 262.4563649999909,
+      "offset": 4412.959497000033,
+      "ack": {
+        "t": "ack",
+        "q": 15509,
+        "tvNow": 523953.251262,
+        "accepted": false
+      }
+    },
+    {
+      "slot": 0,
+      "q": 15509,
+      "second": 517.5497572,
+      "rttMs": 570.928099999961,
+      "receiveAgeMs": 263.3231969999615,
+      "offset": 4411.566804000002,
+      "ack": {
+        "t": "ack",
+        "q": 15509,
+        "tvNow": 523952.636801,
+        "accepted": false
+      }
+    },
+    {
+      "slot": 1,
+      "q": 15537,
+      "second": 518.1842274,
+      "rttMs": 276.5706000000355,
+      "receiveAgeMs": 270.68341899994994,
+      "offset": 4412.959497000033,
+      "ack": {
+        "t": "ack",
+        "q": 15537,
+        "tvNow": 524890.217416,
+        "accepted": false
+      }
+    },
+    {
+      "slot": 0,
+      "q": 15537,
+      "second": 518.2027973,
+      "rttMs": 295.1932000000379,
+      "receiveAgeMs": 269.31265799998073,
+      "offset": 4411.566804000002,
+      "ack": {
+        "t": "ack",
+        "q": 15537,
+        "tvNow": 524887.401262,
+        "accepted": false
+      }
+    },
+    {
+      "slot": 1,
+      "q": 15547,
+      "second": 518.5066039,
+      "rttMs": 271.3863999999594,
+      "receiveAgeMs": 262.47318099992117,
+      "offset": 4412.959497000033,
+      "ack": {
+        "t": "ack",
+        "q": 15547,
+        "tvNow": 525209.567878,
+        "accepted": false
+      }
+    },
+    {
+      "slot": 0,
+      "q": 15547,
+      "second": 518.5135451,
+      "rttMs": 278.38079999998445,
+      "receiveAgeMs": 264.3223040000303,
+      "offset": 4411.566804000002,
+      "ack": {
+        "t": "ack",
+        "q": 15547,
+        "tvNow": 525209.971108,
+        "accepted": false
+      }
+    }
+  ],
+  "allWindows": {
+    "count": 769,
+    "worstP95Ms": 27.986307,
+    "maxMs": 265.405538,
+    "p50RangeMs": [
+      16.513077000000003,
+      16.828307000000002
+    ],
+    "stepWorstP95Ms": 8.493923
+  },
+  "activeWindows": {
+    "count": 593,
+    "worstP95Ms": 22.671539,
+    "maxMs": 48.027,
+    "p50RangeMs": [
+      16.513077000000003,
+      16.828307000000002
+    ],
+    "stepWorstP95Ms": 3.691384
+  },
+  "sixLiveWindows": {
+    "count": 69,
+    "worstP95Ms": 22.263462,
+    "maxMs": 37.418615,
+    "p50RangeMs": [
+      16.528846,
+      16.739693
+    ],
+    "stepWorstP95Ms": 3.691384
+  },
+  "sinceStartFrameMs": {
+    "p50": 16.6,
+    "p95": 21.200000000000003,
+    "max": 265.405538,
+    "count": 53828
+  },
+  "discardedSimulationMs": {
+    "last10s": 0,
+    "sinceStart": 1540
+  },
+  "inputAgeWorstP95Ms": [
+    45.6540929999901,
+    45.80597500002477
+  ],
+  "inputCounters": [
+    {
+      "stale": {
+        "last10s": 16,
+        "sinceStart": 73
+      },
+      "dropped": {
+        "last10s": 0,
+        "sinceStart": 3
+      },
+      "outOfOrder": {
+        "last10s": 0,
+        "sinceStart": 0
+      }
+    },
+    {
+      "stale": {
+        "last10s": 16,
+        "sinceStart": 50
+      },
+      "dropped": {
+        "last10s": 0,
+        "sinceStart": 4
+      },
+      "outOfOrder": {
+        "last10s": 0,
+        "sinceStart": 0
+      }
+    }
+  ],
+  "pssRangeMiB": [
+    115.2060546875,
+    137.0771484375
+  ],
+  "warmPssGrowthMiB": -13.4580078125,
+  "ownedTextureMiB": 39.9697265625,
+  "artMiB": 18.75,
+  "audio": {
+    "active": 2,
+    "highWater": 8,
+    "cap": 8,
+    "played": 4263,
+    "suppressed": 5017,
+    "stolen": 85,
+    "missing": 35,
+    "decodedBytes": 3970682,
+    "decodedBudgetBytes": 6291456,
+    "lastNarration": "",
+    "lastNarrationPlayed": false,
+    "narrationCount": 0,
+    "backend": {
+      "worker": true,
+      "nativeActive": 2,
+      "nativeHighWater": 8,
+      "starts": 4239,
+      "failedStarts": 0,
+      "staleStarts": 1,
+      "cancelledStarts": 23,
+      "overflow": 0,
+      "maxQueueMs": 134.713385,
+      "maxNativeCallMs": 54.809231,
+      "maxStartCompletionMs": 134.701692,
+      "maxParameterQueueMs": 153.154308,
+      "startAgeLimitMs": 100
+    }
+  },
+  "classes": {
+    "Needle": 24,
+    "Line": 8,
+    "Bastion": 18,
+    "Comet": 10,
+    "Trail": 10,
+    "Flint": 12,
+    "Quill": 21,
+    "Vandal": 9,
+    "Kestrel": 11,
+    "Bulwark": 9
+  },
+  "rounds": 18,
+  "limits": "Overlapping window percentiles are not pooled. Native profiling intervals, if any, remain in raw evidence. Not optical latency or owner feel.",
+  "ackRttMs": {
+    "count": 54014,
+    "p50": 10.914300000004005,
+    "p95": 62.95339999999851,
+    "p99": 73.90220000001136,
+    "max": 867.132799999963,
+    "mean": 21.131323466138557
+  },
+  "clockAdjustedAgeAtAckTimestampMs": {
+    "count": 54014,
+    "p50": 4.65327900002012,
+    "p95": 11.575053999957163,
+    "p99": 17.657739999936894,
+    "max": 270.68341899994994,
+    "mean": 5.8479442207497625
+  },
+  "estimatedAckReturnMs": {
+    "count": 54014,
+    "p50": 4.265815999970073,
+    "p95": 57.39063600008376,
+    "p99": 65.42066200001864,
+    "max": 620.5371259999811,
+    "mean": 15.283379245388646
+  },
+  "ackTimingLimit": "Ack timestamp is after server JSON parsing, before mailbox offer. Offset is the one sent before that input. One-way estimates depend on calibration; no optical claim.",
+  "hudTransport": [
+    {
+      "hudDelta": null,
+      "hudMessages": null,
+      "hudCharacters": null,
+      "hudFullSnapshots": null
+    },
+    {
+      "hudDelta": null,
+      "hudMessages": null,
+      "hudCharacters": null,
+      "hudFullSnapshots": null
+    }
+  ],
+  "gates": {
+    "duration": true,
+    "zeroRejected": false,
+    "frameP95": false,
+    "frameMax": false,
+    "memory": true,
+    "textures": true
+  }
+}

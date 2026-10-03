@@ -74,3 +74,11 @@ deathride/art/reports/p4-draft-location.json
 /deathride/evidence/campaign/q4/boss-fast/result.json
 /deathride/evidence/campaign/q4/finale/result.json
 /deathride/evidence/campaign/q4/finale-retry/result.json
+
+# Performance raw JSON/traces are retained losslessly as gzip alongside summaries.
+/deathride/evidence/perf/**/raw.json
+/deathride/evidence/perf/**/phases.json
+/deathride/evidence/perf/**/allocations.json
+/deathride/evidence/perf/**/*.atrace
+/deathride/evidence/perf/**/simpleperf-callgraph.txt
+/deathride/evidence/perf/**/simpleperf-report.txt

@@ -1,0 +1,192 @@
+{
+  "scope": "Desktop warm active samples after first 600 active frames; AI proxy, no phone, JFR and phase recorder enabled. Not Stick timing.",
+  "frames": 3678,
+  "phases": {
+    "intervalMs": {
+      "median": 16.66415,
+      "p95": 18.209400000000002,
+      "mean": 18.43445946166395,
+      "max": 305.947
+    },
+    "workMs": {
+      "median": 0.2431,
+      "p95": 0.5587,
+      "mean": 0.2947865144100054,
+      "max": 2.9394
+    },
+    "cpuMs": {
+      "median": 0.0,
+      "p95": 0.0,
+      "mean": 0.03823409461663948,
+      "max": 15.625
+    },
+    "requestsMs": {
+      "median": 0.0038,
+      "p95": 0.0064,
+      "mean": 0.0043241435562805875,
+      "max": 0.4149
+    },
+    "prepareMs": {
+      "median": 0.0001,
+      "p95": 0.0003,
+      "mean": 0.00015842849374660142,
+      "max": 0.0066
+    },
+    "simulationMs": {
+      "median": 0.0726,
+      "p95": 0.1399,
+      "mean": 0.08232993474714519,
+      "max": 0.8654
+    },
+    "audioMs": {
+      "median": 0.0105,
+      "p95": 0.0267,
+      "mean": 0.013867727025557369,
+      "max": 0.3892
+    },
+    "telemetryMs": {
+      "median": 0.0007,
+      "p95": 0.2451,
+      "mean": 0.040730614464382815,
+      "max": 2.7261
+    },
+    "clearMs": {
+      "median": 0.0078,
+      "p95": 0.0127,
+      "mean": 0.008466231647634584,
+      "max": 0.1735
+    },
+    "cameraMs": {
+      "median": 0.0013,
+      "p95": 0.0026,
+      "mean": 0.0015085916258836323,
+      "max": 0.0561
+    },
+    "effectsUpdateMs": {
+      "median": 0.0015,
+      "p95": 0.0076,
+      "mean": 0.0025604132680804785,
+      "max": 0.2661
+    },
+    "sceneryDrawMs": {
+      "median": 0.022,
+      "p95": 0.0359,
+      "mean": 0.02397373572593801,
+      "max": 0.5401
+    },
+    "carsEffectsMs": {
+      "median": 0.0765,
+      "p95": 0.1259,
+      "mean": 0.08506348558999456,
+      "max": 0.7123
+    },
+    "hudMs": {
+      "median": 0.0286,
+      "p95": 0.0385,
+      "mean": 0.030142169657422512,
+      "max": 0.3581
+    },
+    "captionMs": {
+      "median": 0.0004,
+      "p95": 0.0008,
+      "mean": 0.0004546492659053834,
+      "max": 0.0088
+    },
+    "drawCalls": {
+      "median": 14.0,
+      "p95": 16.0,
+      "mean": 14.432028276237086,
+      "max": 17.0
+    },
+    "textureBinds": {
+      "median": 11.0,
+      "p95": 13.0,
+      "mean": 11.424959216965743,
+      "max": 13.0
+    },
+    "textureUploads": {
+      "median": 0.0,
+      "p95": 0.0,
+      "mean": 0.0,
+      "max": 0.0
+    },
+    "effectSlots": {
+      "median": 10.0,
+      "p95": 27.0,
+      "mean": 13.109570418705818,
+      "max": 34.0
+    },
+    "requestsBytes": {
+      "median": 0.0,
+      "p95": 0.0,
+      "mean": 0.0,
+      "max": 0.0
+    },
+    "prepareBytes": {
+      "median": 0.0,
+      "p95": 0.0,
+      "mean": 0.0,
+      "max": 0.0
+    },
+    "simulationBytes": {
+      "median": 0.0,
+      "p95": 0.0,
+      "mean": 0.7982599238716693,
+      "max": 2656.0
+    },
+    "audioBytes": {
+      "median": 0.0,
+      "p95": 0.0,
+      "mean": 8.609026644915716,
+      "max": 2424.0
+    },
+    "telemetryBytes": {
+      "median": 0.0,
+      "p95": 35584.0,
+      "mean": 5868.152256661229,
+      "max": 37072.0
+    },
+    "clearBytes": {
+      "median": 0.0,
+      "p95": 0.0,
+      "mean": 0.0,
+      "max": 0.0
+    },
+    "cameraBytes": {
+      "median": 0.0,
+      "p95": 0.0,
+      "mean": 0.0,
+      "max": 0.0
+    },
+    "effectsUpdateBytes": {
+      "median": 0.0,
+      "p95": 0.0,
+      "mean": 0.0,
+      "max": 0.0
+    },
+    "sceneryDrawBytes": {
+      "median": 120.0,
+      "p95": 120.0,
+      "mean": 120.02610114192495,
+      "max": 216.0
+    },
+    "carsEffectsBytes": {
+      "median": 512.0,
+      "p95": 568.0,
+      "mean": 495.9695486677542,
+      "max": 720.0
+    },
+    "hudBytes": {
+      "median": 64.0,
+      "p95": 64.0,
+      "mean": 64.06307775965199,
+      "max": 296.0
+    },
+    "captionBytes": {
+      "median": 0.0,
+      "p95": 0.0,
+      "mean": 0.0,
+      "max": 0.0
+    }
+  }
+}

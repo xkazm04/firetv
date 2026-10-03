@@ -10,7 +10,9 @@ import dev.deathride.core.*
 import kotlin.math.*
 
 /** One reusable GPU target and renderer; never allocate/delete them at a course change. */
-class SceneryCanvas {
+class SceneryCanvas(val cacheRoadMarks: Boolean=true) {
+    val roadMarks=RoadMarkMesh()
+    val markMatrix=Matrix4()
     val textureSize=VisualTuning["sceneryTextureSize"].toInt()
     val buffer=FrameBuffer(Pixmap.Format.RGBA8888,textureSize,textureSize,false)
     val renderer=ShapeRenderer(24000)
@@ -30,10 +32,11 @@ class SceneryCanvas {
         renderer.end();sprites.projectionMatrix=renderer.projectionMatrix;sprites.begin()
         art.draw(sprites,key,x,y,w,h,degrees);sprites.end();renderer.begin(ShapeRenderer.ShapeType.Filled)
     }
-    fun dispose() { sprites.dispose();renderer.dispose();buffer.dispose() }
+    fun dispose() { roadMarks.dispose();sprites.dispose();renderer.dispose();buffer.dispose() }
 }
 /** Static geometry and asset placement are generated in bounded render-thread slices. */
 class TrackScene(private val course: Course,private val canvas: SceneryCanvas,private val art: AtlasArt) {
+    init { canvas.roadMarks.clear() }
     private val region=TextureRegion(canvas.buffer.colorBufferTexture).apply { flip(false,true);texture.setFilter(Texture.TextureFilter.Linear,Texture.TextureFilter.Linear) }
     var ready=false;private set
     private var buildFrames=0
@@ -67,7 +70,7 @@ class TrackScene(private val course: Course,private val canvas: SceneryCanvas,pr
     private val marks=ArrayList<FloatArray>()
     private val oils=ArrayList<FloatArray>()
     private val shortcuts=ArrayList<FloatArray>()
-    private fun mark(ax: Float,ay: Float,bx: Float,by: Float,width: Float,r: Float,g: Float,b: Float) { marks.add(floatArrayOf(ax,ay,bx,by,width,r,g,b)) }
+    private fun mark(ax: Float,ay: Float,bx: Float,by: Float,width: Float,r: Float,g: Float,b: Float) { marks.add(floatArrayOf(ax,ay,bx,by,width,r,g,b));canvas.roadMarks.line(ax,ay,bx,by,width,r,g,b) }
     private val baking=sequence {
         val r=canvas.renderer;val point=TrackPoint();val q=TrackPoint();val rand=java.util.Random(VisualTuning["scenerySeed"].toLong())
         val desert=course.theme=="desert";val wet=course.theme=="wetland"
@@ -227,7 +230,7 @@ class TrackScene(private val course: Course,private val canvas: SceneryCanvas,pr
         canvas.buffer.begin();Gdx.gl.glViewport(0,0,canvas.textureSize,canvas.textureSize)
         val r=canvas.renderer;r.projectionMatrix=projectionMatrix;r.begin(ShapeRenderer.ShapeType.Filled)
         do {
-            if(!baking.hasNext()) { ready=true;break }
+            if(!baking.hasNext()) { canvas.roadMarks.upload();ready=true;break }
             baking.next()
         } while(System.nanoTime()<deadline)
         r.end();canvas.buffer.end();buildFrames++;val sliceMs=(System.nanoTime()-started)/1e6;buildCpuMs+=sliceMs;buildMaxMs=max(buildMaxMs,sliceMs)
@@ -242,7 +245,9 @@ class TrackScene(private val course: Course,private val canvas: SceneryCanvas,pr
     fun drawRoadMarks(r: ShapeRenderer) {
         if(liveRoad.isEmpty())return
         if(art.tile("tiles/gravel")==null)for(v in shortcuts){r.setColor(.43f,.36f,.25f,1f);r.triangle(v[0],v[1],v[5],v[6],v[10],v[11]);r.triangle(v[0],v[1],v[10],v[11],v[15],v[16])}
-        for(p in marks){r.setColor(p[5],p[6],p[7],1f);r.rectLine(p[0],p[1],p[2],p[3],p[4])}
+        if(ready && canvas.cacheRoadMarks){
+            r.end();canvas.roadMarks.draw(canvas.markMatrix.set(r.projectionMatrix).mul(r.transformMatrix));r.begin(ShapeRenderer.ShapeType.Filled)
+        }else for(p in marks){r.setColor(p[5],p[6],p[7],1f);r.rectLine(p[0],p[1],p[2],p[3],p[4])}
         for(p in oils)if(!art.available("decals/oil")){r.setColor(.08f,.12f,.14f,1f);r.ellipse(p[0]-3,p[1]-1.8f,6f,3.6f,24)}
     }
 

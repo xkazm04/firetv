@@ -1,0 +1,157 @@
+{
+  "tests": {
+    "core": 136,
+    "link": 5,
+    "game": 25,
+    "failures": 0
+  },
+  "scope": "P1 worker, plus completion of the P0 instrumented soak. P2 network changes are not in this APK.",
+  "files": [
+    {
+      "path": "deathride/evidence/perf/p0/desktop/results.png",
+      "bytes": 598865,
+      "sha256": "8e73d09ac06d411d5f4acbde02a83bea21b459b133ab4c9235aa44eb5194d86b"
+    },
+    {
+      "path": "deathride/evidence/perf/p0/profile/badging.txt",
+      "bytes": 5626,
+      "sha256": "8011399db4638b7fc1ef2ad047820015e77cd537734c11710a306be97c0d379c"
+    },
+    {
+      "path": "deathride/evidence/perf/p0/profile/install.txt",
+      "bytes": 38,
+      "sha256": "c4aa470acafcf8576c15b0f0b5ae7e852d1ec5413372d0e6a9272e788e1306d3"
+    },
+    {
+      "path": "deathride/evidence/perf/p0/profile/installed.json",
+      "bytes": 281,
+      "sha256": "c4dd5f74368a49122ca9b825e315c1a9aae625efc550a76f0adca81d69cd6fcc"
+    },
+    {
+      "path": "deathride/evidence/perf/p0/profile/logcat.txt",
+      "bytes": 203197,
+      "sha256": "e9c7718ec661a2710837d52be0801c01262c66518406b9b5cbb574eaa6b68ed7"
+    },
+    {
+      "path": "deathride/evidence/perf/p0/profile/probe.log",
+      "bytes": 1812,
+      "sha256": "7da934285dcac7b476b9ed03ae88fada77e9b9c9215d9aba32bc88c77ae04813"
+    },
+    {
+      "path": "deathride/evidence/perf/p0/profile/raw.json.gz",
+      "bytes": 7158214,
+      "sha256": "1549bbad7edbaf3851e7d349f297ee780812ab45b9d2e29901ad57244b710172"
+    },
+    {
+      "path": "deathride/evidence/perf/p0/profile/summary.json",
+      "bytes": 16701,
+      "sha256": "3ebf65c9a06e91fdbcc6f437a4c7f2d235c6ccbe79fb1c68d43048cf983f3ab7"
+    },
+    {
+      "path": "deathride/evidence/perf/p1/build-duration-fix.log",
+      "bytes": 8402,
+      "sha256": "041672c7e22aef839c8c8f88b84b0de11218fdd6f6a86a8f8859058c90992c42"
+    },
+    {
+      "path": "deathride/evidence/perf/p1/build-final.log",
+      "bytes": 8402,
+      "sha256": "f923b305762257a82cf96f9de3db034248d0e5006102e36fabd16abc2cc3f4ff"
+    },
+    {
+      "path": "deathride/evidence/perf/p1/build.log",
+      "bytes": 9742,
+      "sha256": "91b79e45950e0b33d7fe6b152cc69d8ed4510a012c9d840e5dad31c4c04e62e4"
+    },
+    {
+      "path": "deathride/evidence/perf/p1/clean/badging.txt",
+      "bytes": 5626,
+      "sha256": "8011399db4638b7fc1ef2ad047820015e77cd537734c11710a306be97c0d379c"
+    },
+    {
+      "path": "deathride/evidence/perf/p1/clean/install.txt",
+      "bytes": 38,
+      "sha256": "c4aa470acafcf8576c15b0f0b5ae7e852d1ec5413372d0e6a9272e788e1306d3"
+    },
+    {
+      "path": "deathride/evidence/perf/p1/clean/installed.json",
+      "bytes": 282,
+      "sha256": "36788e48a197d5f6a7b51594ca7def3e9c469f4d87f9d625cfefded0f66a4b8f"
+    },
+    {
+      "path": "deathride/evidence/perf/p1/clean/logcat.txt",
+      "bytes": 203397,
+      "sha256": "5a38b56ba65fc81553389b2e56dcbf6678c702f11442bbe0fcb7b1e4fabde8bd"
+    },
+    {
+      "path": "deathride/evidence/perf/p1/clean/probe.log",
+      "bytes": 2146,
+      "sha256": "76ce715929bc3c76d205f1e828584ccbe39b26e5f92a9dbf3d952d30164e1182"
+    },
+    {
+      "path": "deathride/evidence/perf/p1/clean/raw.json.gz",
+      "bytes": 1881739,
+      "sha256": "6b2801230f3374f25a86f20769817ebf150a9544d119711fd053de3221d42390"
+    },
+    {
+      "path": "deathride/evidence/perf/p1/clean/summary.json",
+      "bytes": 7188,
+      "sha256": "1a207ab327f8d8ab1ae20bd94336c91ce37d29579dcb428d3032af7ada5f4ade"
+    },
+    {
+      "path": "deathride/evidence/perf/p1/network/system-network-logcat.txt",
+      "bytes": 18521,
+      "sha256": "87c0e5857366422ea04855e89dd483c32fddb2ef6441106485ecc97b4b883f6e"
+    },
+    {
+      "path": "deathride/evidence/perf/p1/network/wifi.txt",
+      "bytes": 798181,
+      "sha256": "deb3cb7a573ff4df1119fbea532ec57cf35ac12d55aad61c2d26f3bb8b942cc1"
+    },
+    {
+      "path": "deathride/evidence/perf/p1/network/windows-wlan.json",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "deathride/evidence/perf/p1/profile/badging.txt",
+      "bytes": 5626,
+      "sha256": "8011399db4638b7fc1ef2ad047820015e77cd537734c11710a306be97c0d379c"
+    },
+    {
+      "path": "deathride/evidence/perf/p1/profile/install.txt",
+      "bytes": 38,
+      "sha256": "c4aa470acafcf8576c15b0f0b5ae7e852d1ec5413372d0e6a9272e788e1306d3"
+    },
+    {
+      "path": "deathride/evidence/perf/p1/profile/installed.json",
+      "bytes": 281,
+      "sha256": "d7a8296ea73cbdcb162a55b61fed4358df0a52cdaec8c5442b7102c94e6f0251"
+    },
+    {
+      "path": "deathride/evidence/perf/p1/profile/logcat.txt",
+      "bytes": 131299,
+      "sha256": "d7a116ea301a09a294694f77d01244e1ad835ff8525f72be03272c997006f777"
+    },
+    {
+      "path": "deathride/evidence/perf/p1/profile/probe.log",
+      "bytes": 1115,
+      "sha256": "d2bf830bd38588f46693b4b9ce0193078ecf272f760b2d4c56ba2460cce90733"
+    },
+    {
+      "path": "deathride/evidence/perf/p1/profile/raw.json.gz",
+      "bytes": 2903188,
+      "sha256": "2a77e8d7e66623a0ffce81bc2d4486211e0d3f14f50b72f2ead3d608495f7576"
+    },
+    {
+      "path": "deathride/evidence/perf/p1/profile/summary.json",
+      "bytes": 17016,
+      "sha256": "a11186da819384027c9b1bb72eb109964d17832007ff48fb1abd025c53fd7c05"
+    },
+    {
+      "path": "deathride/evidence/perf/p1/submission-allocation.log",
+      "bytes": 2318,
+      "sha256": "f0efed0348dbad1c79b21a91696f6d8f0c1684e71d893cb425f4d3762721b4ee"
+    }
+  ],
+  "apkSha256": "d325ec05af27f49161b528d0749cf1082772ed2cb5e38d38f149256d540ba682"
+}

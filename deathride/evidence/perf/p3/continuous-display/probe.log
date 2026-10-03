@@ -1,0 +1,36 @@
+{"second":0,"accepted":[0,0],"rejected":[0,0],"hostPumpStalls":0}
+{"second":4,"accepted":[127,127],"rejected":[0,0],"hostPumpStalls":0}
+{"second":69,"accepted":[2082,2082],"rejected":[0,0],"hostPumpStalls":0}
+{"second":134,"accepted":[4019,4019],"rejected":[0,0],"hostPumpStalls":0}
+{"second":180,"accepted":[5407,5407],"rejected":[0,0],"hostPumpStalls":0}
+{
+  "error": "AssertionError [ERR_ASSERTION]: Every class activated and reported ACTIVE\n    at file:///C:/Users/kazda/kiro/firetv-deathride-perf/deathride/tools/ability-stick-probe.mjs:108:9\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)",
+  "duration": 180.22135450000002,
+  "rounds": 4,
+  "classUses": {
+    "Needle": 9,
+    "Line": 4,
+    "Bastion": 6,
+    "Comet": 5,
+    "Trail": 2,
+    "Flint": 2,
+    "Quill": 2,
+    "Vandal": 2
+  },
+  "clients": [
+    {
+      "slot": 0,
+      "sent": 5407,
+      "accepted": 5407,
+      "rejected": 0,
+      "hz": 30.00199402008156
+    },
+    {
+      "slot": 1,
+      "sent": 5407,
+      "accepted": 5407,
+      "rejected": 0,
+      "hz": 30.00199402008156
+    }
+  ]
+}

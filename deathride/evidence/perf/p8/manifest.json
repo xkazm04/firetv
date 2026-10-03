@@ -1,0 +1,436 @@
+{
+  "generatedUtc": "2026-10-03T04:33:19.066144+00:00",
+  "scope": "P8 completed experiments; diagnostic observers are identified per run.",
+  "files": [
+    {
+      "path": "deathride/evidence/perf/p8/aligned-native/badging.txt",
+      "bytes": 5680,
+      "sha256": "1866dd47fdca736b6d079d9bae3d2226477e036981918c029636dd8b3eadb2e6"
+    },
+    {
+      "path": "deathride/evidence/perf/p8/aligned-native/install.txt",
+      "bytes": 38,
+      "sha256": "c4aa470acafcf8576c15b0f0b5ae7e852d1ec5413372d0e6a9272e788e1306d3"
+    },
+    {
+      "path": "deathride/evidence/perf/p8/aligned-native/installed.json",
+      "bytes": 360,
+      "sha256": "2f29e299e62263903e6fdd56597bd6a8a78274982d80639b7c40240264b91061"
+    },
+    {
+      "path": "deathride/evidence/perf/p8/aligned-native/logcat.txt",
+      "bytes": 129035,
+      "sha256": "61abd0a6ca7be76fdebb22c21c7a717666fd1a7d58e11bef643d984876fcd5f1"
+    },
+    {
+      "path": "deathride/evidence/perf/p8/aligned-native/probe.log",
+      "bytes": 1073,
+      "sha256": "5ecd36d7f955eaa13c9dc3c5f5c754ef1cca69b40769442b915b6e41943625a8"
+    },
+    {
+      "path": "deathride/evidence/perf/p8/aligned-native/raw.json.gz",
+      "bytes": 1406771,
+      "sha256": "8be1fb5b4bf20b08b219205ed7636e2f8103357e554433128b3acc1e92b653b4"
+    },
+    {
+      "path": "deathride/evidence/perf/p8/aligned-native/summary.json",
+      "bytes": 23489,
+      "sha256": "b9743db1593c7abe0c6c74ad816308c534e01a9a982c1fd0c88c81ce2c6c1153"
+    },
+    {
+      "path": "deathride/evidence/perf/p8/build-fixed-deadline.log",
+      "bytes": 6952,
+      "sha256": "26370121df68070c01dbbe4c8fbab236d787a522c48588b39de9b9c978d64fe5"
+    },
+    {
+      "path": "deathride/evidence/perf/p8/build-late-slots-isolated.log",
+      "bytes": 4046,
+      "sha256": "023bc6b3a1f0f65935880639d83b7d7b5115080e92be24c842e64ef31c0e5bc0"
+    },
+    {
+      "path": "deathride/evidence/perf/p8/build-late-slots.log",
+      "bytes": 4046,
+      "sha256": "8013a5696be85c33ef45eb2c8ac9fa4ec06f75abcd56b6f1d2fa71b480096ce9"
+    },
+    {
+      "path": "deathride/evidence/perf/p8/build.log",
+      "bytes": 8124,
+      "sha256": "a9183b9e88ffb7b188e85f2dab9f30b9de8f2bd1bc23a7c0356b7e1850588e58"
+    },
+    {
+      "path": "deathride/evidence/perf/p8/callback-baseline.json",
+      "bytes": 392,
+      "sha256": "6157ac898af5b6739c1491e1144e1f9cd588fa5f067d37697a89200c33a084d8"
+    },
+    {
+      "path": "deathride/evidence/perf/p8/callback-display/badging.txt",
+      "bytes": 5680,
+      "sha256": "1866dd47fdca736b6d079d9bae3d2226477e036981918c029636dd8b3eadb2e6"
+    },
+    {
+      "path": "deathride/evidence/perf/p8/callback-display/install.txt",
+      "bytes": 38,
+      "sha256": "c4aa470acafcf8576c15b0f0b5ae7e852d1ec5413372d0e6a9272e788e1306d3"
+    },
+    {
+      "path": "deathride/evidence/perf/p8/callback-display/installed.json",
+      "bytes": 338,
+      "sha256": "248ed9c0f9d44e3d88109c318287e7db573387e3d1f21eff1d0ac1048e96a896"
+    },
+    {
+      "path": "deathride/evidence/perf/p8/callback-display/logcat.txt",
+      "bytes": 106388,
+      "sha256": "62065bbe729d0b1977292c1ba66c0d9129247240378e015e26bbb2877743e8be"
+    },
+    {
+      "path": "deathride/evidence/perf/p8/callback-display/probe.log",
+      "bytes": 887,
+      "sha256": "057ab119ad49b42b5c5b270540a3fe2c2b93cef4ff28fd599144447bb24a0094"
+    },
+    {
+      "path": "deathride/evidence/perf/p8/callback-display/raw.json.gz",
+      "bytes": 1488568,
+      "sha256": "34a874fce0cdd5264c9b8665620c33dc96ae3761cea8ad6af9b645fb3e7999f0"
+    },
+    {
+      "path": "deathride/evidence/perf/p8/callback-display/summary.json",
+      "bytes": 20682,
+      "sha256": "a033a45f0284b83aaa8c236b469e88f97c6335d1e14c9d464f38fdc9c79d9baf"
+    },
+    {
+      "path": "deathride/evidence/perf/p8/callback-display/thread-priorities-before.txt",
+      "bytes": 1292,
+      "sha256": "8a672d8566c434254900acc1bfdbe619d400102f7d211b169db3c9d0a90076d2"
+    },
+    {
+      "path": "deathride/evidence/perf/p8/native/atrace.txt",
+      "bytes": 558,
+      "sha256": "274367de69fe279dde3f6d1c8f311842c63dbaf4e6360085e157d08ad93925c3"
+    },
+    {
+      "path": "deathride/evidence/perf/p8/native/audio-after.txt",
+      "bytes": 33381,
+      "sha256": "6435189fe3f7300060ef25b1b137f13cc4fc96fdbec56e0986acd7dbab69ecd7"
+    },
+    {
+      "path": "deathride/evidence/perf/p8/native/audio-before.txt",
+      "bytes": 32725,
+      "sha256": "a6ac06f0b4eaed6bc5e8a310ad38581e62aa6d545ea38bb4a03be9516197d32f"
+    },
+    {
+      "path": "deathride/evidence/perf/p8/native/callback-summary.json",
+      "bytes": 414,
+      "sha256": "8850b780ebd84a70a7874fcf6da3996f4386ba210a31d4cd5f9927bfa48b38dd"
+    },
+    {
+      "path": "deathride/evidence/perf/p8/native/events.json",
+      "bytes": 2370,
+      "sha256": "9318ac9c00d25be032cbc89fb29747559518fa0593fee6c30622091c136f50ff"
+    },
+    {
+      "path": "deathride/evidence/perf/p8/native/perf-data-source.json",
+      "bytes": 222,
+      "sha256": "bd95dbc6f6303469bde12bfd3d24bb56612964340645672efaa5a5f613de03da"
+    },
+    {
+      "path": "deathride/evidence/perf/p8/native/perf.data.gz",
+      "bytes": 183856,
+      "sha256": "297fac311826a6945eddebc8ea7e1826156ac6efdb90330f9bf2d1746f42405a"
+    },
+    {
+      "path": "deathride/evidence/perf/p8/native/simpleperf-callgraph.txt.gz",
+      "bytes": 482813,
+      "sha256": "5824eb77990770f3295ca8126e67808b0cbac00b4165f797510ae8054d82d6dc"
+    },
+    {
+      "path": "deathride/evidence/perf/p8/native/simpleperf-report.txt.gz",
+      "bytes": 19145,
+      "sha256": "2289d97a68746751a6ae4de67b025e940e6ced8d750b8b16730ff8e6e65fdc1b"
+    },
+    {
+      "path": "deathride/evidence/perf/p8/native/simpleperf.txt",
+      "bytes": 670,
+      "sha256": "9e34c020c29a1c10049100b716507992976b72d124065696fb0271c454c87331"
+    },
+    {
+      "path": "deathride/evidence/perf/p8/native/threads-before.txt",
+      "bytes": 215592,
+      "sha256": "67e38c9fc19efb24344bd598df488f73383149cfa250d59c9e559ed258c1f27d"
+    },
+    {
+      "path": "deathride/evidence/perf/p8/native/trace-summary.json",
+      "bytes": 52503,
+      "sha256": "6cd6f3b3985f295b3472d7e232cabab2fb94e89d4ec7758b116a0d977be2d107"
+    },
+    {
+      "path": "deathride/evidence/perf/p8/native/trace.txt.gz",
+      "bytes": 9209475,
+      "sha256": "f84e8bc4c6252412e5d8368c45254e08365645a3f58e5945180062ac3fba8564"
+    },
+    {
+      "path": "deathride/evidence/perf/p8/network-ring/events.json",
+      "bytes": 677,
+      "sha256": "6ad01a5e937488114b617ecf0f62dbfeba945fa7f7cfff7b3aaaa7d5d52eaa17"
+    },
+    {
+      "path": "deathride/evidence/perf/p8/network-ring/probe/badging.txt",
+      "bytes": 5680,
+      "sha256": "1866dd47fdca736b6d079d9bae3d2226477e036981918c029636dd8b3eadb2e6"
+    },
+    {
+      "path": "deathride/evidence/perf/p8/network-ring/probe/installed.json",
+      "bytes": 281,
+      "sha256": "02bd7647ef4deb69cff7a42a5e78e3e3b9b31a59fc9175a474e1076ca4826a4f"
+    },
+    {
+      "path": "deathride/evidence/perf/p8/network-ring/probe/logcat.txt",
+      "bytes": 233070,
+      "sha256": "b3ef65d1d2065497e7bd97e217684323a464777c215f2dc83121cff0da4384bb"
+    },
+    {
+      "path": "deathride/evidence/perf/p8/network-ring/probe/probe.log",
+      "bytes": 3133,
+      "sha256": "9087166bc8a6c7b2912d24366003fd04c90aa09807a81cdc9528d401b4bd078a"
+    },
+    {
+      "path": "deathride/evidence/perf/p8/network-ring/probe/raw.json.gz",
+      "bytes": 7226730,
+      "sha256": "4cc49effae1d0212406f6100dbed56e303c7efe96f66aca449031d593ac2da23"
+    },
+    {
+      "path": "deathride/evidence/perf/p8/network-ring/probe/summary.json",
+      "bytes": 24928,
+      "sha256": "e64e75d598e897e3ee0bb006ba5fb489fbc73c89c2050d9be7d6ba63d1ea63e2"
+    },
+    {
+      "path": "deathride/evidence/perf/p8/network-ring/rejection-correlation.json",
+      "bytes": 28249,
+      "sha256": "410cf12e22df1b4f5b949b37543c5de48aa1cd95252eb04b84c4a1baa6e23038"
+    },
+    {
+      "path": "deathride/evidence/perf/p8/network-ring/start.txt",
+      "bytes": 18,
+      "sha256": "1b7bb8e629a69f3ce32e8355cf8dc5a8a500c74daee56ff391e56b68045d568f"
+    },
+    {
+      "path": "deathride/evidence/perf/p8/network-ring/stop.txt",
+      "bytes": 7,
+      "sha256": "446076707d8c5a57d1a0264b6f813bccbec4d973bad8dafef2dc15e4e043180d"
+    },
+    {
+      "path": "deathride/evidence/perf/p8/network-ring/thread-priorities-named.txt",
+      "bytes": 1855,
+      "sha256": "8478d5640db4332acfad758bf035db318aba64116627d1fce4212a7f6c42986f"
+    },
+    {
+      "path": "deathride/evidence/perf/p8/network-ring/thread-priorities.txt",
+      "bytes": 2081,
+      "sha256": "6a41022496df6070cee38e9c028e55f5687169abf7b112e0b2917369c4f87877"
+    },
+    {
+      "path": "deathride/evidence/perf/p8/network-ring/trace-summary.json",
+      "bytes": 67835,
+      "sha256": "64101563b586355d70d0e6217ef5dfd8b7de8af01eab368b5621088a72c69ab7"
+    },
+    {
+      "path": "deathride/evidence/perf/p8/network-ring/trace.txt.gz",
+      "bytes": 14892764,
+      "sha256": "c32beab7d76b160e8f5f3b15130583d823cae0df3c1b9459978b4254a863f8bb"
+    },
+    {
+      "path": "deathride/evidence/perf/p8/network-ring/trigger.json",
+      "bytes": 256,
+      "sha256": "414659f28367e697c0ecaf9b869df34b8dca15743b3342626adbd482b8319119"
+    },
+    {
+      "path": "deathride/evidence/perf/p8/selection.json",
+      "bytes": 692,
+      "sha256": "084c5c2432592b2151e88fa6b19162bee99a62b63bf0fdfcfb2c57135dd05ae1"
+    },
+    {
+      "path": "deathride/evidence/perf/p8/slot-2/badging.txt",
+      "bytes": 5680,
+      "sha256": "1866dd47fdca736b6d079d9bae3d2226477e036981918c029636dd8b3eadb2e6"
+    },
+    {
+      "path": "deathride/evidence/perf/p8/slot-2/install.txt",
+      "bytes": 38,
+      "sha256": "c4aa470acafcf8576c15b0f0b5ae7e852d1ec5413372d0e6a9272e788e1306d3"
+    },
+    {
+      "path": "deathride/evidence/perf/p8/slot-2/installed.json",
+      "bytes": 384,
+      "sha256": "a76be25b999ebd9c027c701822771ff6ca578e430c5ce5fd3de91bc8a192f460"
+    },
+    {
+      "path": "deathride/evidence/perf/p8/slot-2/logcat.txt",
+      "bytes": 124743,
+      "sha256": "9de6d612b531880222a661e0c2e92630a9fc83e7a6da37b9c253b7223c009b00"
+    },
+    {
+      "path": "deathride/evidence/perf/p8/slot-2/probe.log",
+      "bytes": 886,
+      "sha256": "1e8439ca21e5a411e7659e117c3567d43a7d7142f79992d5df312c050bb47d56"
+    },
+    {
+      "path": "deathride/evidence/perf/p8/slot-2/raw.json.gz",
+      "bytes": 1444064,
+      "sha256": "5762d0c773488b9c8028d3ec1e8c75449a564b5eb92ec069f3e4078a8359e370"
+    },
+    {
+      "path": "deathride/evidence/perf/p8/slot-2/summary.json",
+      "bytes": 20320,
+      "sha256": "28dae4e04eb4e4bd6f5bc9ada6c3284c0479ba64f5b6617dede22cbdd32215c7"
+    },
+    {
+      "path": "deathride/evidence/perf/p8/slot-3/badging.txt",
+      "bytes": 5680,
+      "sha256": "1866dd47fdca736b6d079d9bae3d2226477e036981918c029636dd8b3eadb2e6"
+    },
+    {
+      "path": "deathride/evidence/perf/p8/slot-3/install.txt",
+      "bytes": 38,
+      "sha256": "c4aa470acafcf8576c15b0f0b5ae7e852d1ec5413372d0e6a9272e788e1306d3"
+    },
+    {
+      "path": "deathride/evidence/perf/p8/slot-3/installed.json",
+      "bytes": 384,
+      "sha256": "b661cc264ae35387039b1fdaa4acce5bf3bcfad857c3dcb6ba336a208d9729c6"
+    },
+    {
+      "path": "deathride/evidence/perf/p8/slot-3/logcat.txt",
+      "bytes": 116721,
+      "sha256": "31f170035213f72656e03f04d7ca41143e63aecd91afbdd69e53e2b8ed3fc44b"
+    },
+    {
+      "path": "deathride/evidence/perf/p8/slot-3/probe.log",
+      "bytes": 1099,
+      "sha256": "744e7ee4c31ed4b1f2ab5cb579ce91fb9f59facdade01b398d841ced28e03d2e"
+    },
+    {
+      "path": "deathride/evidence/perf/p8/slot-3/raw.json.gz",
+      "bytes": 1410145,
+      "sha256": "42528307489da30b70d7f8605bd9fc815b5707bafd17a82e5274c640d4712baf"
+    },
+    {
+      "path": "deathride/evidence/perf/p8/slot-3/summary.json",
+      "bytes": 25354,
+      "sha256": "4657278cb5fe9f84ca7648285fccef9da8591bc059409274abc24e703bcfc530"
+    },
+    {
+      "path": "deathride/evidence/perf/p8/slot-4/badging.txt",
+      "bytes": 5680,
+      "sha256": "1866dd47fdca736b6d079d9bae3d2226477e036981918c029636dd8b3eadb2e6"
+    },
+    {
+      "path": "deathride/evidence/perf/p8/slot-4/install.txt",
+      "bytes": 38,
+      "sha256": "c4aa470acafcf8576c15b0f0b5ae7e852d1ec5413372d0e6a9272e788e1306d3"
+    },
+    {
+      "path": "deathride/evidence/perf/p8/slot-4/installed.json",
+      "bytes": 384,
+      "sha256": "522bdd9741b1f1b5d3843eb84ed79de75f2ae33c23e080efdec5934c9f9d1b2f"
+    },
+    {
+      "path": "deathride/evidence/perf/p8/slot-4/logcat.txt",
+      "bytes": 107358,
+      "sha256": "d8d2eb48017618618af2ad4cc4b37c6c0d1ba606196446885bd32fb274a6a33b"
+    },
+    {
+      "path": "deathride/evidence/perf/p8/slot-4/probe.log",
+      "bytes": 1106,
+      "sha256": "ec1ff7f35646c8242ff515b599aafef9fb46e03c13d3f42582e4342f38357dc7"
+    },
+    {
+      "path": "deathride/evidence/perf/p8/slot-4/raw.json.gz",
+      "bytes": 1407647,
+      "sha256": "ea4366e8d3205e047ea891df4f5241743d2f0596dc9d04e96ada3acd6ec7e3ea"
+    },
+    {
+      "path": "deathride/evidence/perf/p8/slot-4/summary.json",
+      "bytes": 20473,
+      "sha256": "cf5553ee830333b743a2012116aedc8eec6765002f66fe90e56c026e3df05ac8"
+    },
+    {
+      "path": "deathride/evidence/perf/p8/slot-6/badging.txt",
+      "bytes": 5680,
+      "sha256": "1866dd47fdca736b6d079d9bae3d2226477e036981918c029636dd8b3eadb2e6"
+    },
+    {
+      "path": "deathride/evidence/perf/p8/slot-6/install.txt",
+      "bytes": 38,
+      "sha256": "c4aa470acafcf8576c15b0f0b5ae7e852d1ec5413372d0e6a9272e788e1306d3"
+    },
+    {
+      "path": "deathride/evidence/perf/p8/slot-6/installed.json",
+      "bytes": 386,
+      "sha256": "5547326bfd43947a9a96da76d05f173de5a5ac681c909773ed2d3a038525a477"
+    },
+    {
+      "path": "deathride/evidence/perf/p8/slot-6/logcat.txt",
+      "bytes": 124872,
+      "sha256": "68bc9d12f24e7d9502733522c1df57e6a6895e6a501583ab7495b44ba3bfd15a"
+    },
+    {
+      "path": "deathride/evidence/perf/p8/slot-6/probe.log",
+      "bytes": 1100,
+      "sha256": "4b4f70bf5b6f0107ddbfeab372aa97b8463f227462b70f2c0d9fd9dcd910ee08"
+    },
+    {
+      "path": "deathride/evidence/perf/p8/slot-6/raw.json.gz",
+      "bytes": 1403517,
+      "sha256": "e9d740a04f428d151a7684f819285b4e9870534adef68514780004f34d45146c"
+    },
+    {
+      "path": "deathride/evidence/perf/p8/slot-6/summary.json",
+      "bytes": 20862,
+      "sha256": "e8751cced3ca751981ed26f4895e9a58a13e6a9070fbad3600f26dfac03a8d77"
+    },
+    {
+      "path": "deathride/evidence/perf/p8/slot-6/thread-priorities-before.txt",
+      "bytes": 1292,
+      "sha256": "9ceed11bdf138e2737c920a03d1129e96e235d98cb4dc1df08fd7d30b8905d70"
+    },
+    {
+      "path": "deathride/evidence/perf/p8/slot-8/badging.txt",
+      "bytes": 5680,
+      "sha256": "1866dd47fdca736b6d079d9bae3d2226477e036981918c029636dd8b3eadb2e6"
+    },
+    {
+      "path": "deathride/evidence/perf/p8/slot-8/install.txt",
+      "bytes": 38,
+      "sha256": "c4aa470acafcf8576c15b0f0b5ae7e852d1ec5413372d0e6a9272e788e1306d3"
+    },
+    {
+      "path": "deathride/evidence/perf/p8/slot-8/installed.json",
+      "bytes": 386,
+      "sha256": "20386d88efe1745c56d2ff710468156efd461dc4ed351c6e9a8e7c7c1aae5560"
+    },
+    {
+      "path": "deathride/evidence/perf/p8/slot-8/logcat.txt",
+      "bytes": 104794,
+      "sha256": "2a7c428a9d7db91992ce0574a7f77e44edad7c860b97c661303a995820e54b11"
+    },
+    {
+      "path": "deathride/evidence/perf/p8/slot-8/probe.log",
+      "bytes": 887,
+      "sha256": "13bf911ba1828cf3f133b5b31df2fd82fc4454f029ee3a648a987ab715a7337e"
+    },
+    {
+      "path": "deathride/evidence/perf/p8/slot-8/raw.json.gz",
+      "bytes": 1436837,
+      "sha256": "e7d1c4f0c288b2863da8f30afd34328efcb5c794b64a1e2313d3dcb6f07be59b"
+    },
+    {
+      "path": "deathride/evidence/perf/p8/slot-8/summary.json",
+      "bytes": 20694,
+      "sha256": "d011b6293522e35c313968ed8dd6c11f96503bb26b3e8f4785e0e463d45cd4fc"
+    },
+    {
+      "path": "deathride/evidence/perf/p8/slot-8/thread-priorities-before.txt",
+      "bytes": 1259,
+      "sha256": "1b1a3acd1ce8d25bba0bb69b7202f3788bff428d647f2ce8f91d61d13d25ad3b"
+    }
+  ]
+}

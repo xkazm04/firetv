@@ -1,0 +1,118 @@
+         1790983340.548   575 26549 I perfmonitord:ProcessRssMonitor: wifi@1.0-servic      380   : 3064       628        3692      
+         1790983345.549   575 26549 I perfmonitord:ProcessRssMonitor: tee-supplicant       622   : 1916       1552       3468      
+         1790983354.552   575 26549 I perfmonitord:ProcessRssMonitor: wificond             594   : 2316       944        3260      
+         1790983375.559   575 26549 I perfmonitord:ProcessRssMonitor: wpa_supplicant       1164  : 1752       1092       2844      
+         1790983384.562   575 26549 I perfmonitord:ProcessRssMonitor: wlan_stats           3183  : 2208       480        2688      
+         1790986941.867   575 31061 I perfmonitord:ProcessRssMonitor: wpa_supplicant       1164  : 3052       952        4004      
+         1790986947.869   575 31061 I perfmonitord:ProcessRssMonitor: wifi@1.0-servic      380   : 3060       628        3688      
+         1790986951.870   575 31061 I perfmonitord:ProcessRssMonitor: tee-supplicant       622   : 1916       1552       3468      
+         1790986961.873   575 31061 I perfmonitord:ProcessRssMonitor: wificond             594   : 2316       944        3260      
+         1790986990.883   575 31061 I perfmonitord:ProcessRssMonitor: wlan_stats           3183  : 2208       480        2688      
+         1790990562.791   575  9656 I perfmonitord:ProcessRssMonitor: tee-supplicant       622   : 1916       1552       3468      
+         1790990569.792   575  9656 I perfmonitord:ProcessRssMonitor: wifi@1.0-servic      380   : 2608       696        3304      
+         1790990572.793   575  9656 I perfmonitord:ProcessRssMonitor: wificond             594   : 2312       944        3256      
+         1790990573.794   575  9656 I perfmonitord:ProcessRssMonitor: wpa_supplicant       1164  : 2172       1080       3252      
+         1790990601.804   575  9656 I perfmonitord:ProcessRssMonitor: wlan_stats           3183  : 2104       564        2668      
+         1790994088.896   575   575 I perfmonitord:ProcessMemMonitor: wifi@1.0-servic      380   : 1078 
+         1790994166.996   575 23616 I perfmonitord:ProcessRssMonitor: tee-supplicant       622   : 1916       1552       3468      
+         1790994175.999   575 23616 I perfmonitord:ProcessRssMonitor: wifi@1.0-servic      380   : 2552       708        3260      
+         1790994177.999   575 23616 I perfmonitord:ProcessRssMonitor: wificond             594   : 2312       944        3256      
+         1790994199.006   575 23616 I perfmonitord:ProcessRssMonitor: wpa_supplicant       1164  : 1828       1044       2872      
+         1790994210.009   575 23616 I perfmonitord:ProcessRssMonitor: wlan_stats           3183  : 2092       592        2684      
+         1790994375.775   695   761 W AmazonProtectionLevel: Using stock call, please migrate to new permissions amazon.aosp.permission.INTERACT_ACROSS_USERS_FULL or com.amazon.permission.INTERACT_ACROSS_USERS_FULL for package com.amazon.wifilocker
+         1790994772.301   695   761 W AmazonProtectionLevel: Using stock call, please migrate to new permissions amazon.aosp.permission.INTERACT_ACROSS_USERS_FULL or com.amazon.permission.INTERACT_ACROSS_USERS_FULL for package com.amazon.wifilocker
+         1790995151.853   695   981 E ConnectivityService: Exception in networkRemoveRouteParcel: android.os.ServiceSpecificException: No such process (code 3)
+         1790995169.568   695   761 W AmazonProtectionLevel: Using stock call, please migrate to new permissions amazon.aosp.permission.INTERACT_ACROSS_USERS_FULL or com.amazon.permission.INTERACT_ACROSS_USERS_FULL for package com.amazon.wifilocker
+         1790995314.377   380   380 I WifiHAL : Creating message to get link statistics; iface = 15
+         1790995314.378   380   380 E WifiHAL : Incorrect number of channels = 4
+         1790995314.378   695   977 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.973) failed {.code = ERROR_UNKNOWN, .description = unknown}
+         1790995317.385   380   380 I WifiHAL : Creating message to get link statistics; iface = 15
+         1790995317.385   380   380 E WifiHAL : Incorrect number of channels = 4
+         1790995317.386   695   977 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.973) failed {.code = ERROR_UNKNOWN, .description = unknown}
+         1790995320.393   380   380 I WifiHAL : Creating message to get link statistics; iface = 15
+         1790995320.393   380   380 E WifiHAL : Incorrect number of channels = 4
+         1790995320.393   695   977 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.973) failed {.code = ERROR_UNKNOWN, .description = unknown}
+         1790995323.401   380   380 I WifiHAL : Creating message to get link statistics; iface = 15
+         1790995323.401   380   380 E WifiHAL : Incorrect number of channels = 4
+         1790995323.401   695   977 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.973) failed {.code = ERROR_UNKNOWN, .description = unknown}
+         1790995326.409   380   380 I WifiHAL : Creating message to get link statistics; iface = 15
+         1790995326.409   380   380 E WifiHAL : Incorrect number of channels = 4
+         1790995326.409   695   977 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.973) failed {.code = ERROR_UNKNOWN, .description = unknown}
+         1790995329.422   380   380 I WifiHAL : Creating message to get link statistics; iface = 15
+         1790995329.423   380   380 E WifiHAL : Incorrect number of channels = 4
+         1790995329.423   695   977 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.973) failed {.code = ERROR_UNKNOWN, .description = unknown}
+         1790995332.140  3183  3183 I wlan_stats: HostAPd unsupported, not running, or permission denied
+         1790995332.145  3183  3183 I main.wlan_stats: wlan0:rssi=-53;rssi2=-54;noise=-92;noise2=-87;dbdc=0;band0_channel=7;txframes=21055794;txfails=4170182;txper=19%;txaggr=9341 5221 347 79 65 99 58 3;rxframes=11567348;rxcrc=46353444;rxper=80.0%;rxdrop=63946;phymod=AX;phyrate=172;lasttxrate=24M_BW20_OFDM;lastrxrate=NSS2_MCS7_BW20_SGI;
+         1790995332.145  3183  3183 I main.wlan_stats: RxBmcCipherMismatch=0;RxBmcIcvError=0;RxBmcPkt=0;SKIP_RX_BMC_RUN_COUNTER=30;
+         1790995332.145  3183  3183 I main.wlan_stats: tx_packets=17265212;tx_bytes=17201039696;tx_errors=30;tx_dropped=0;rx_packets=11883966;rx_bytes=6053667865;rx_errors=0;rx_dropped=0;
+         1790995332.145  3183  3183 I main.wlan_stats: max_rssi=-20;min_rssi=-85;max_noise=-84;min_noise=-92;noise histogram=51 2 11 39 49 3 94 165 882 1073 76900;
+         1790995332.147  3183  3183 I main.wlan_stats: ch_busy=15%;ch_idle=85%;ch_tx=3%;ch_rx=1%;total=1013489;busy=206704;my_tx=32650;my_rx=14841;tx_ok=87%;tx_fail=13%;tx_retry=0%;rx_ok=100%;rx_fcs=0%;tx_ok=303;tx_fail=43;txretry=0;rx_ok=110;rx_fcs=0;cck_false=0;cck_crc=0;ofdm_false=1;ofdm_crc=1;
+         1790995332.148  3183  3183 I main.wlan_stats: TXRATE=NSS2_MCS7, BW20, SGI, HE_SU, LDPC ; PER=0; PERCNT=90%;TXRATE=NSS2_MCS6, BW20, SGI, HE_SU, LDPC ; PER=0; PERCNT=10%;RXRATE=NSS2_MCS9, BW20, SGI, HE_SU, LDPC; PERCNT=10%;RXRATE=NSS2_MCS8, BW20, SGI, HE_SU, LDPC; PERCNT=90%;
+         1790995332.148  3183  3183 I main.wlan_stats: rateindex=NSS2_MCS7;rxmuratio=0.000000%;rxofdma=0;ru=0; 0; 0; 0; 0; 0;txofdma=0;rxmimo=0;
+         1790995332.148  3183  3183 I main.wlan_stats: process metric stats: num of samples63; beacon rssi: ins=-51, avg=-51; data rssi: ins=-53, avg=-51; data rssi2: ins=-54, avg=-52; noise:  ins=-92, avg=-92; noise2:  ins=-87, avg=-87; idle per: ins=85, sum=5469; max idle per: 92; min idle per: 80; 
+         1790995332.429   380   380 I WifiHAL : Creating message to get link statistics; iface = 15
+         1790995332.429   380   380 E WifiHAL : Incorrect number of channels = 4
+         1790995332.429   695   977 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.973) failed {.code = ERROR_UNKNOWN, .description = unknown}
+         1790995335.438   380   380 I WifiHAL : Creating message to get link statistics; iface = 15
+         1790995335.438   380   380 E WifiHAL : Incorrect number of channels = 4
+         1790995335.438   695   977 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.973) failed {.code = ERROR_UNKNOWN, .description = unknown}
+         1790995338.449   380   380 I WifiHAL : Creating message to get link statistics; iface = 15
+         1790995338.449   380   380 E WifiHAL : Incorrect number of channels = 4
+         1790995338.449   695   977 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.973) failed {.code = ERROR_UNKNOWN, .description = unknown}
+         1790995341.458   380   380 I WifiHAL : Creating message to get link statistics; iface = 15
+         1790995341.458   380   380 E WifiHAL : Incorrect number of channels = 4
+         1790995341.459   695   977 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.973) failed {.code = ERROR_UNKNOWN, .description = unknown}
+         1790995344.466   380   380 I WifiHAL : Creating message to get link statistics; iface = 15
+         1790995344.466   380   380 E WifiHAL : Incorrect number of channels = 4
+         1790995344.466   695   977 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.973) failed {.code = ERROR_UNKNOWN, .description = unknown}
+         1790995347.474   380   380 I WifiHAL : Creating message to get link statistics; iface = 15
+         1790995347.474   380   380 E WifiHAL : Incorrect number of channels = 4
+         1790995347.475   695   977 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.973) failed {.code = ERROR_UNKNOWN, .description = unknown}
+         1790995350.481   380   380 I WifiHAL : Creating message to get link statistics; iface = 15
+         1790995350.481   380   380 E WifiHAL : Incorrect number of channels = 4
+         1790995350.481   695   977 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.973) failed {.code = ERROR_UNKNOWN, .description = unknown}
+         1790995353.489   380   380 I WifiHAL : Creating message to get link statistics; iface = 15
+         1790995353.489   380   380 E WifiHAL : Incorrect number of channels = 4
+         1790995353.490   695   977 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.973) failed {.code = ERROR_UNKNOWN, .description = unknown}
+         1790995356.501   380   380 I WifiHAL : Creating message to get link statistics; iface = 15
+         1790995356.501   380   380 E WifiHAL : Incorrect number of channels = 4
+         1790995356.501   695   977 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.973) failed {.code = ERROR_UNKNOWN, .description = unknown}
+         1790995359.509   380   380 I WifiHAL : Creating message to get link statistics; iface = 15
+         1790995359.509   380   380 E WifiHAL : Incorrect number of channels = 4
+         1790995359.510   695   977 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.973) failed {.code = ERROR_UNKNOWN, .description = unknown}
+         1790995362.517   380   380 I WifiHAL : Creating message to get link statistics; iface = 15
+         1790995362.517   380   380 E WifiHAL : Incorrect number of channels = 4
+         1790995362.517   695   977 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.973) failed {.code = ERROR_UNKNOWN, .description = unknown}
+         1790995365.525   380   380 I WifiHAL : Creating message to get link statistics; iface = 15
+         1790995365.525   380   380 E WifiHAL : Incorrect number of channels = 4
+         1790995365.526   695   977 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.973) failed {.code = ERROR_UNKNOWN, .description = unknown}
+         1790995368.534   380   380 I WifiHAL : Creating message to get link statistics; iface = 15
+         1790995368.534   380   380 E WifiHAL : Incorrect number of channels = 4
+         1790995368.535   695   977 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.973) failed {.code = ERROR_UNKNOWN, .description = unknown}
+         1790995371.541   380   380 I WifiHAL : Creating message to get link statistics; iface = 15
+         1790995371.542   380   380 E WifiHAL : Incorrect number of channels = 4
+         1790995371.542   695   977 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.973) failed {.code = ERROR_UNKNOWN, .description = unknown}
+         1790995374.549   380   380 I WifiHAL : Creating message to get link statistics; iface = 15
+         1790995374.550   380   380 E WifiHAL : Incorrect number of channels = 4
+         1790995374.550   695   977 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.973) failed {.code = ERROR_UNKNOWN, .description = unknown}
+         1790995377.560   380   380 I WifiHAL : Creating message to get link statistics; iface = 15
+         1790995377.561   380   380 E WifiHAL : Incorrect number of channels = 4
+         1790995377.562   695   977 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.973) failed {.code = ERROR_UNKNOWN, .description = unknown}
+         1790995380.569   380   380 I WifiHAL : Creating message to get link statistics; iface = 15
+         1790995380.569   380   380 E WifiHAL : Incorrect number of channels = 4
+         1790995380.569   695   977 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.973) failed {.code = ERROR_UNKNOWN, .description = unknown}
+         1790995383.578   380   380 I WifiHAL : Creating message to get link statistics; iface = 15
+         1790995383.578   380   380 E WifiHAL : Incorrect number of channels = 4
+         1790995383.578   695   977 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.973) failed {.code = ERROR_UNKNOWN, .description = unknown}
+         1790995386.585   380   380 I WifiHAL : Creating message to get link statistics; iface = 15
+         1790995386.585   380   380 E WifiHAL : Incorrect number of channels = 4
+         1790995386.585   695   977 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.973) failed {.code = ERROR_UNKNOWN, .description = unknown}
+         1790995389.593   380   380 I WifiHAL : Creating message to get link statistics; iface = 15
+         1790995389.593   380   380 E WifiHAL : Incorrect number of channels = 4
+         1790995389.594   695   977 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.973) failed {.code = ERROR_UNKNOWN, .description = unknown}
+         1790995392.604   380   380 I WifiHAL : Creating message to get link statistics; iface = 15
+         1790995392.604   380   380 E WifiHAL : Incorrect number of channels = 4
+         1790995392.605   695   977 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.973) failed {.code = ERROR_UNKNOWN, .description = unknown}
+         1790995395.613   380   380 I WifiHAL : Creating message to get link statistics; iface = 15
+         1790995395.613   380   380 E WifiHAL : Incorrect number of channels = 4
+         1790995395.614   695   977 E WifiVendorHal: getWifiLinkLayerStats_1_3_Internal(l.973) failed {.code = ERROR_UNKNOWN, .description = unknown}

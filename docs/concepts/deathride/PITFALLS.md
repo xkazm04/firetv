@@ -46,3 +46,19 @@ The conditioned Line paint-change probe achieved aligned silhouette IoU 0.9980 v
 - 2026-10-01 D3: A bicycle's neutral body slip differs from W3's lateral damping. Applying the old raw-slip restoring term can unintentionally amplify grip yaw even with unchanged feel-profile CSV rows. Measure the old/new roster response, declare remaining geometry changes, and do not apply surface loss a second time in grip-reference compensation.
 - 2026-10-01 D3: CSV import must validate coupled assist/spin limits after loading the complete pair. A valid exported higher fade start can exceed the old default spin limit while loading, even though its exported spin limit is also higher. Validate atomically and retain previous tuning on failure.
 - 2026-10-01 D3: Parallel streams need distinct app IDs and listener ports. This branch defaults to dev.deathride.driftlab / 8766. Test hosts use ephemeral ports; wait for the actual terminal bind-failure state instead of sleeping a guessed duration on a busy build host. Never equate a green APK/test gate with a passed frame-time target or owner feel.
+
+## 2026-10-03 — Stick performance measurement
+
+- Moving native audio to a worker is insufficient if the render producer still
+  acquires a monitor held across worker/JIT activity. A scheduler trace caught
+  60.692 ms of that exact dependency. Verify the handoff, not just thread names.
+- Zero rejected inputs is not a qualification pass when the host stops sending.
+  The P6 lock arm paused its pump for 13.629 seconds. Preserve stale ages and
+  fail the host-stream gate; do not silently remove the interval.
+- Phase JSON export is an observer with measurable allocation and timing cost.
+  Preserve full exports and separate them from standard qualification. A clear
+  phase may contain dequeueBuffer sleep; GC total duration includes concurrent
+  work; neither is automatically render CPU or a stop-the-world pause.
+- A held low-latency Wi-Fi lock is not evidence that a driver implements it.
+  Shared receive gaps plus continued GL frames localize a delay, but do not
+  by themselves distinguish the wireless path from a common socket selector.

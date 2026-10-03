@@ -1,0 +1,15 @@
+{
+  "utc": "2026-10-03T04:08:52.180302+00:00",
+  "apk": "evidence\\perf\\p8\\late-slots.apk",
+  "apkSha256": "77d15b6e785753ee1a1f6799b540efd5a4641c0d5d32476464ad6dbe99f3b8c1",
+  "defaults": {
+    "pacing": "vsync",
+    "renderPriority": "display (-4)",
+    "callbackPriority": "system (observed -10)",
+    "resolution": "native",
+    "roadMarks": "cached",
+    "wifiLatency": "off",
+    "frameSlot": "off"
+  },
+  "reason": "All 2/3/4/6/8 ms slots fail both frame gates; extra waits/spin and callback override are not justified as defaults. Retain measured audio/HUD/allocation/mesh improvements and native vsync/display scheduling. Final delivery soak uses no intent extras."
+}
