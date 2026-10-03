@@ -5,3 +5,4 @@
 | Wave | Work | Validation / outcome |
 |---|---|---|
 | Z0 | Read plan, owner/campaign/ability/obstacle sources and core; authored design, six proposed CSV tables and evidence protocol; isolated app ID/port | Required Gradle tasks and desktop/classpath pass (6m22s); six runtime browser suites pass. Initial browser launch lacked Playwright; installed locally and retained failure. No behavior changes. |
+| Z1 | Measured 2,000 baseline and 2,320 final solo runs; authored longer roads/four finals, data-derived event/practice laps and 35 stable IDs | 192 vs 367 ordinary laps; reference opening/final envelopes pass. 167 core / 8 link / 37 game tests, APK and six browser suites pass. Failed geometry, survey and content-unlock attempts retained. Full-field campaign acceptance belongs to Z3. |

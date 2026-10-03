@@ -40,7 +40,8 @@ class CareerEvent(row: Map<String,String>) {
     val type=EventType.valueOf(row.getValue("type"))
     val elimination get()=type==EventType.ELIMINATION
     init {
-        require(playerTier in cupIndex..min(4,cupIndex+1) && cupIndex>=0 && courseIndex>=0 && (if(elimination)duel && laps==0 else laps in 3..30))
+        require(playerTier in cupIndex..min(4,cupIndex+1) && cupIndex>=0 && courseIndex>=0 && (if(elimination)duel && laps==0 else laps in 2..6))
+        require(laps==RacePacing.laps(id,Courses.all[courseIndex].id,playerTier)){"$id: laps must derive from the measured course and target time"}
         require(phase in setOf("build-up","pressure","qualifier","boss","finale"))
         require((phase=="finale")==elimination && (phase in setOf("boss","finale"))==boss)
     }

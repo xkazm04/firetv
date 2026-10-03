@@ -62,13 +62,13 @@ class TracksTest {
         }
     }
     @Test fun sixCarsFinishEveryCourseAndReplayDeterministically() {
-        val csv=StringBuilder("track,seed,finished,seconds,contactSteps,hash\n");val input=Array(6){InputFrame()}
+        val csv=StringBuilder("track,seed,finished,seconds,contactSteps,hash,laps\n");val input=Array(6){InputFrame()}
         for(c in Courses.all)repeat(4) { seed ->
             val a=World(seed,track=Track(course=c));val b=World(seed,track=Track(course=c))
             for(w in arrayOf(a,b)) { for(car in w.cars)CarCatalog.apply(car,car.id%5);w.reset() }
             var contacts=0
             while(a.finished<6 && a.seconds<TrackRules["maxRaceSeconds"]) { a.step(input);b.step(input);if(a.ramClosingMps.any { it>0 })contacts++ }
-            csv.append("${c.id},$seed,${a.finished},${a.seconds},$contacts,${a.stateHash()}\n")
+            csv.append("${c.id},$seed,${a.finished},${a.seconds},$contacts,${a.stateHash()},${a.raceLaps}\n")
             assertTrue(contacts>0,"${c.id}: expected physical competition between cars")
             assertEquals(a.stateHash(),b.stateHash());assertEquals(6,a.finished,"${c.id}: ${a.cars.map{it.lap.laps}}")
         }

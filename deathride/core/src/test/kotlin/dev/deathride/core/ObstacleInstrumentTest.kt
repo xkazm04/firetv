@@ -5,8 +5,8 @@ import org.junit.jupiter.api.Assertions.*
 
 class ObstacleInstrumentTest {
     @Test fun rotationCrossIsCompleteAndEveryAlarmCanFire() {
-        val cells=(0 until 25*5*6*4).map{ObstacleInstrument.cell(it)}
-        assertEquals(25*5*6,cells.groupBy{Triple(it.course,it.tier,it.rotation)}.size)
+        val cells=(0 until Courses.all.size*5*6*4).map{ObstacleInstrument.cell(it)}
+        assertEquals(Courses.all.size*5*6,cells.groupBy{Triple(it.course,it.tier,it.rotation)}.size)
         assertTrue(cells.groupBy{Triple(it.course,it.tier,it.rotation)}.values.all{it.size==4 && it.map{c->c.sample}.toSet().size==4})
         assertTrue(ObstacleInstrument.dominance(100,100));assertFalse(ObstacleInstrument.dominance(50,100))
         assertFalse(ObstacleInstrument.dominance(0,0))
