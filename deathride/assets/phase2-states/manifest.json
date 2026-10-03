@@ -5,13 +5,6 @@
   "truth": "Owner-approved exact car references with technically selected derived frames; derivative owner review pending.",
   "pages": [
     {
-      "file": "world-0.png",
-      "sha256": "76d659798513e6df3c1c9585556fcf1fac1f5b3da360b738707818e621416c24",
-      "width": 1024,
-      "height": 1024,
-      "rgba_bytes": 4194304
-    },
-    {
       "file": "autotile-track-edge-0.png",
       "sha256": "983384e90640093d6032ba722794c0c53c3d26e1df4084a0c8aa6b646a6eab8e",
       "width": 1024,
@@ -42,6 +35,13 @@
     {
       "file": "cars-1.png",
       "sha256": "aed1579f3c173ec605a329d9354ea522887aa7eee0715a4d086562d1adf61e94",
+      "width": 1024,
+      "height": 1024,
+      "rgba_bytes": 4194304
+    },
+    {
+      "file": "world-0.png",
+      "sha256": "4d26a6dd9195412be874ecd7d5a9490188bcdd9c28377712595d790e97a6b97d",
       "width": 1024,
       "height": 1024,
       "rgba_bytes": 4194304
@@ -209,5 +209,12 @@
   "cars_reserved_rgba_bytes": 0,
   "resident_rgba_bytes_with_reserved_cars": 32768000,
   "resident_policy": "All world/UI/autotile/material/ribbon pages + one backdrop + two car pages; car reserve consumed, never double counted. Game scenery/fonts excluded.",
-  "cpu_course_vertex_bytes": 28800
+  "cpu_course_vertex_bytes": 28800,
+  "environment_rework": {
+    "at": "2026-10-03T10:13:50.130021+00:00",
+    "candidate_count": 19,
+    "owner_approved": 0,
+    "page_change": 0,
+    "policy": "20 compact 64px environment cells fit spare space on the existing world page; original regions unchanged."
+  }
 }

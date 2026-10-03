@@ -13,12 +13,14 @@ class AtlasArt(private val root: FileHandle = Gdx.files.internal("phase2-v1"),pr
                private val extraBytes: () -> Long = { 0L }) {
     data class Region(val image: TextureRegion, val pivotX: Float, val pivotY: Float, val interior: IntArray?,val bodyBounds: IntArray?=null)
     data class Entry(val id: String, val group: String, val frames: Array<String>, val durations: IntArray,
-                     val loop: Boolean, val approved: Boolean, val referenceSelected: Boolean=false)
+                     val loop: Boolean, val approved: Boolean, val referenceSelected: Boolean=false, val usable: Boolean=true)
     private val entries=HashMap<String,Entry>()
     private val regions=HashMap<String,Region>()
     private val atlases=ArrayList<TextureAtlas>()
     private val tiles=HashMap<String,Texture>()
     private val patches=HashMap<String,NinePatch>()
+    private val environmentSets=HashMap<String,Array<String>>()
+    private val environmentObstacles=HashMap<String,String>()
     private var backdrop: Texture?=null
     private var backdropKey=""
     private val carKeys=CarCatalog.all.associate { it.id to arrayOf("clean","damaged-1","damaged-2","wreck").map{s->"cars/${it.id.lowercase()}/$s"}.toTypedArray() }
@@ -37,12 +39,18 @@ class AtlasArt(private val root: FileHandle = Gdx.files.internal("phase2-v1"),pr
                     val durations=v.get("durations_ms")?.asIntArray()?:intArrayOf(1)
                     require(frames.isNotEmpty() && frames.size==durations.size && durations.all{it>0} && durations.sumOf{it.toLong()}<=Int.MAX_VALUE)
                     val e=Entry(id,v.getString("group"),frames,durations,v.getBoolean("loop",false),v.getBoolean("owner_approved",false),
-                        v.getBoolean("reference_approved",false) && v.getBoolean("technical_accepted",false) && v.getString("reference_source_sha256","").length==64)
+                        v.getBoolean("reference_approved",false) && v.getBoolean("technical_accepted",false) && v.getString("reference_source_sha256","").length==64,
+                        EnvironmentArt.eligible(v))
                     entries[v.getString("logical_name")]=e;entries[id]=e
                 } catch(e: Exception){failed("catalog entry",e)}
             }
             fun aliases(v: JsonValue?) { if(v==null)return;for(a in v)if(a.isString)entries[a.asString()]?.let{entries[a.name]=it} else aliases(a) }
             aliases(catalog.get("content_portrait_aliases"));aliases(catalog.get("content_landmark_aliases"));aliases(catalog.get("content_combat_aliases"))
+            catalog.get("environment_sets")?.let { sets -> for(v in sets) {
+                val keys=v.asStringArray();if(keys.isNotEmpty())environmentSets[v.name]=keys
+            } }
+            catalog.get("environment_obstacles")?.let { obstacles -> for(v in obstacles)
+                environmentObstacles[v.getString("id")]=v.getString("logical_name") }
             loadAtlas("world");loadAtlas("ui")
             // Exact references are owner approved; derived frames carry separate technical selection.
             if(entries.values.any{it.group=="cars" && (it.approved || it.referenceSelected)})loadAtlas("cars")
@@ -92,10 +100,13 @@ class AtlasArt(private val root: FileHandle = Gdx.files.internal("phase2-v1"),pr
     }
     fun region(key: String,seconds: Double=0.0): Region? {
         val e=entries[key]?:return regions[key]
+        if(!e.usable)return null
         val frame=frameAt(e.durations,e.loop,seconds)
         return if(frame<0)null else regions[e.frames[frame]]
     }
-    fun available(key: String)=entries[key]?.let{e->e.frames.all{regions.containsKey(it)}}?:regions.containsKey(key)
+    fun available(key: String)=entries[key]?.let{e->e.usable && e.frames.all{regions.containsKey(it)}}?:regions.containsKey(key)
+    fun themeProps(theme: String)=environmentSets[theme]?:EnvironmentArt.fallbackSets[theme]?:EnvironmentArt.fallbackSets.getValue("industrial")
+    fun obstacleKey(id: String,fallback: String)=environmentObstacles[id]?.takeIf{available(it)}?:fallback
     fun duration(key: String)=(entries[key]?.durations?.sum()?:0)/1000.0
     /** Fixed corner widths from the measured transparent opening; labels live above this layer. */
     fun frame(batch: Batch,key: String,x: Float,y: Float,width: Float,height: Float): Boolean {

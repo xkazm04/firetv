@@ -167,7 +167,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         for(i in profiles.indices)world.cars[i].human=activeSeat(i) && (server.slots[i].claimed || i==0 && keyboard)
         world.reset();effects.clear();if(::atlasEffects.isInitialized)atlasEffects.clear();server.trackJson=Courses.all[courseIndex].json;server.surface=Surfaces.asphalt
         if(::raceAudio.isInitialized)raceAudio.bind(world)
-        if(changed)scene=TrackScene(Courses.all[courseIndex],sceneryCanvas,art)
+        if(changed)scene=TrackScene(Courses.all[courseIndex],sceneryCanvas,art,small)
     }
     private fun activeSeat(i: Int)=!(campaignRace && Career.events[raceRound].duel && i==1)
     private fun driverName(c: Car)=if(c.human)"PLAYER ${c.id+1}" else c.aiStyle?.name?.uppercase()?:"RIVAL ${c.id+1}"
@@ -209,7 +209,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         storyArt=StoryArt(Gdx.files.internal(if(proceduralOnly)"absent-story-audit" else "story-art")) {
             TextureBudget.remainingArt(fontTextureBytes,sceneryCanvas.textureSize.toLong()*sceneryCanvas.textureSize*4)-art.textureBytes-storyArt.textureBytes
         }
-        atlasEffects=AtlasEffects(art);scene=TrackScene(Courses.all[selectedTrack],sceneryCanvas,art);effects.clear()
+        atlasEffects=AtlasEffects(art);scene=TrackScene(Courses.all[selectedTrack],sceneryCanvas,art,small);effects.clear()
         Gdx.input.setCatchKey(Input.Keys.BACK,true)
         Gdx.input.inputProcessor=object: InputAdapter() {
             override fun keyDown(keycode: Int): Boolean {
@@ -266,7 +266,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
     private fun lobby() { raceTickets.fill(0);phase="lobby";campaignRace=false;server.raceMode="practice";configureWorld(selectedTrack,false);stateTime=0.0;server.phase=phase;audio.play("ui.back");rebuildUi() }
     override fun resize(width: Int,height: Int) { view.update(width,height,true) }
     override fun pause() { if(::raceAudio.isInitialized)raceAudio.pause();server.paused=true; server.suspendLink(); accumulator=0.0 }
-    override fun resume() { if(::raceAudio.isInitialized)raceAudio.resume();if(::scene.isInitialized)scene=TrackScene(Courses.all[selectedTrack],sceneryCanvas,art);if(::server.isInitialized) { server.paused=false; server.start() }; previousNanos=System.nanoTime(); accumulator=0.0 }
+    override fun resume() { if(::raceAudio.isInitialized)raceAudio.resume();if(::scene.isInitialized)scene=TrackScene(Courses.all[selectedTrack],sceneryCanvas,art,small);if(::server.isInitialized) { server.paused=false; server.start() }; previousNanos=System.nanoTime(); accumulator=0.0 }
     override fun render() {
         val nanos=System.nanoTime(); val actual=(nanos-previousNanos)/1e9; previousNanos=nanos
         profiler?.begin(nanos,actual);profileGl?.reset()

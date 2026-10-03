@@ -19,6 +19,7 @@ class SceneryCanvas(val cacheRoadMarks: Boolean=true) {
     val sprites=PolygonSpriteBatch()
     private val vertices=FloatArray(20)
     private val indices=shortArrayOf(0,1,2,2,3,0)
+    private val signLayout=GlyphLayout()
     fun tile(texture: Texture?,ax: Float,ay: Float,bx: Float,by: Float,cx: Float,cy: Float,dx: Float,dy: Float) {
         if(texture==null)return
         renderer.end();sprites.projectionMatrix=renderer.projectionMatrix;sprites.begin()
@@ -32,10 +33,23 @@ class SceneryCanvas(val cacheRoadMarks: Boolean=true) {
         renderer.end();sprites.projectionMatrix=renderer.projectionMatrix;sprites.begin()
         art.draw(sprites,key,x,y,w,h,degrees);sprites.end();renderer.begin(ShapeRenderer.ShapeType.Filled)
     }
+    fun slogan(font: BitmapFont,text: String,x: Float,y: Float,w: Float,h: Float) {
+        val sx=font.data.scaleX;val sy=font.data.scaleY;val color=font.color.toFloatBits()
+        signLayout.setText(font,text)
+        val scale=minOf(w/maxOf(1f,signLayout.width),h/maxOf(1f,signLayout.height))
+        renderer.end();sprites.projectionMatrix=renderer.projectionMatrix;sprites.begin()
+        try {
+            font.data.setScale(sx*scale,sy*scale);font.setColor(.09f,.08f,.07f,1f)
+            font.draw(sprites,text,x-w/2,y+h/2,w,com.badlogic.gdx.utils.Align.center,false)
+        } finally {
+            font.data.setScale(sx,sy);Color.abgr8888ToColor(font.color,color)
+            sprites.end();renderer.begin(ShapeRenderer.ShapeType.Filled)
+        }
+    }
     fun dispose() { roadMarks.dispose();sprites.dispose();renderer.dispose();buffer.dispose() }
 }
 /** Static geometry and asset placement are generated in bounded render-thread slices. */
-class TrackScene(private val course: Course,private val canvas: SceneryCanvas,private val art: AtlasArt) {
+class TrackScene(private val course: Course,private val canvas: SceneryCanvas,private val art: AtlasArt,private val signageFont: BitmapFont?=null) {
     init { canvas.roadMarks.clear() }
     private val region=TextureRegion(canvas.buffer.colorBufferTexture).apply { flip(false,true);texture.setFilter(Texture.TextureFilter.Linear,Texture.TextureFilter.Linear) }
     var ready=false;private set
@@ -189,15 +203,14 @@ class TrackScene(private val course: Course,private val canvas: SceneryCanvas,pr
             val x=left+rand.nextFloat()*width;val y=bottom+rand.nextFloat()*height
             course.project(x.toDouble(),y.toDouble(),projection)
             if(abs(projection.distance)>course.widthAt(projection.s)+12) {
-                val props=arrayOf("props/tyres","props/crate","props/drum","props/cone","props/crate-metal","props/drum-red")
+                val props=art.themeProps(course.theme)
                 val key=props[it%props.size]
-                if(art.available(key))canvas.sprite(art,key,x+4,y+2.5f,8f,6f)
-                else {
-                    r.setColor(.075f,.10f,.10f,1f);r.rect(x+1,y-1,8f,5f)
-                    r.setColor(.32f,.36f,.34f,1f);r.rect(x,y,8f,5f)
-                    r.setColor(.43f,.47f,.43f,1f);r.rect(x+.3f,y+3.8f,7.4f,.8f)
-                    r.setColor(.22f,.27f,.25f,1f);for(j in 1..5)r.rect(x+j*1.25f,y+.3f,.15f,4.2f)
+                if(art.available(key)) {
+                    canvas.sprite(art,key,x+4,y+2.5f,8f,6f)
+                    if(key=="environment/league-hoarding" && signageFont!=null)
+                        canvas.slogan(signageFont,EnvironmentArt.slogans[it%EnvironmentArt.slogans.size],x+4,y+2.5f,5.5f,1.6f)
                 }
+                else EnvironmentArt.fallback(r,course.theme,x,y)
             }
             yield(Unit)
         }

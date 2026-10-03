@@ -17,7 +17,7 @@ class ObstaclePainter {
                 shape.ellipse(sx-d.visualWidth.toFloat()*.5f,sy-d.visualHeight.toFloat()*.5f,
                     d.visualWidth.toFloat(),d.visualHeight.toFloat(),(o.heading*180/Math.PI).toFloat(),24)
             }
-            if((d.height>=3)!=tall || art.available(d.art))continue
+            if((d.height>=3)!=tall || art.available(art.obstacleKey(d.id,d.art)))continue
             if(d.effect==ObstacleEffect.DRAG)shape.setColor(.35f,.34f,.20f,1f) else shape.setColor(.30f,.33f,.29f,1f)
             shape.ellipse(x-d.visualWidth.toFloat()*.5f,y-d.visualHeight.toFloat()*.5f,
                 d.visualWidth.toFloat(),d.visualHeight.toFloat(),(o.heading*180/Math.PI).toFloat(),12)
@@ -37,7 +37,7 @@ class ObstaclePainter {
                 batch.color=Color.WHITE
             }
             if((d.height>=3)!=tall)continue
-            art.draw(batch,d.art,o.x.toFloat(),o.y.toFloat(),d.visualWidth.toFloat(),d.visualHeight.toFloat(),(o.heading*180/Math.PI).toFloat())
+            art.draw(batch,art.obstacleKey(d.id,d.art),o.x.toFloat(),o.y.toFloat(),d.visualWidth.toFloat(),d.visualHeight.toFloat(),(o.heading*180/Math.PI).toFloat())
         }
     }
 }
