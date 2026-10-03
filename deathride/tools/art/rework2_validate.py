@@ -6,7 +6,7 @@ from collections import Counter
 from pathlib import Path
 from common import ART, ROOT, briefs, read_json, write_json, sha, style_for
 from gen import Budget, fingerprint
-from rework2_pipeline import report, eligible
+from rework2_pipeline import report, eligible, candidate_records
 from validate_bundle import validate
 
 def audit(parts):
@@ -40,8 +40,8 @@ def audit(parts):
     for r in review['records']:
         assert not r['owner_approved'] and sha(folder/r['source'])==r['source_sha256'] and sha(folder/r['path'])==r['sha256']
         if r['part']=='faces':
-            from face_visibility import gate
-            assert gate(r['face_grades'],r['source_sha256'],r['sha256'],60 if r['kind']=='portrait' else 112)['passed']
+            from face_visibility import screen
+            assert screen(r)['passed']
         assertions+=3
     env=read_json(ART/'rework2-environment.json')
     assert sha(ROOT/'core/src/main/resources/data/obstacles.csv')==env['core_obstacles_sha256']
@@ -54,10 +54,52 @@ def audit(parts):
     # Every untouched original world region keeps exactly its prior visible pixels.
     old=read_json(ROOT/'assets/phase2-hud/world.json')['regions'];new={r['id']:r for r in read_json(ROOT/'assets/phase2-states/world.json')['regions']}
     for r in old:assert new[r['id']]['content_sha256']==r['content_sha256']
+    face_summary={}
+    if 'faces' in parts:
+        from rework2_faces_bundle import fields
+        face_records={r['id']:r for r in candidate_records('faces')}
+        face_selection=read_json(ART/'rework2-face-selections.json')
+        chosen=face_selection['candidates']
+        expected_faces={'portraits/'+name for name in ('rook','ox','vex','mica','relay','marrow','mechanic')}
+        expected_faces|={'story/'+name for name in ('debt-contract','ally-rook','ally-ox','ally-vex','ally-mica','car-seizure','rig-reveal','ending')}
+        assert set(chosen)==expected_faces, 'Incomplete face coverage must be resolved or explicitly reported before final validation'
+        assert not face_selection['owner_approved']
+        portrait_count=0
+        for logical,id in chosen.items():
+            r=face_records[id];assert eligible(r)
+            if not logical.startswith('portraits/'):continue
+            portrait_count+=1;e=entries['face-first/'+r['class']]
+            assert e['asset_id']==id and e['review_required'] and not e['owner_approved']
+            assert all(e[k]==v for k,v in fields(r).items())
+        old_ui=read_json(ROOT/'assets/phase2-hud/ui.json')['regions']
+        new_ui={r['id']:r for r in read_json(ROOT/'assets/phase2-states/ui.json')['regions']}
+        for r in old_ui:assert new_ui[r['id']]['content_sha256']==r['content_sha256']
+        story_root=ROOT/'assets/story-art';story=read_json(story_root/'catalog.json')
+        story_approvals=read_json(ART/'story-approvals.json')['assets']
+        baseline=read_json(ART/'contracts/rework2-base-story-catalog.json')
+        old_story={e['key']:e for e in baseline['assets']}
+        for e in story['assets']:
+            assert sha(story_root/e['file'])==e['sha256'] and not e['owner_approved']
+            if e['key'] in face_selection['story_exports']:
+                r=face_records[e['source_id']];assert eligible(r)
+                assert all(e[k]==v for k,v in fields(r).items())
+                a=story_approvals[e['key']]
+                assert not a['owner_approved'] and a['source_sha256']==e['source_sha256'] and a['export_sha256']==e['sha256']
+            else:assert e==old_story[e['key']]
+        from story_bundle import validate as validate_story
+        validate_story()
+        negative=read_json(ART/'reports/rework2-face-calibration-negative.json')
+        assert not negative['gate']['passed'] and 'FACE_TOO_SMALL' in negative['gate']['defects']
+        face_summary=dict(face_candidates=len(chosen),portrait_candidates=portrait_count,
+          unique_face_source_candidates=len({face_records[id]['source_sha256'] for id in chosen.values()}),
+          exact_face_reuses=sum(bool(face_records[id].get('reused_exact_export')) for id in chosen.values()),
+          story_replacements=len(face_selection['story_exports']),unchanged_original_ui_regions=len(old_ui),
+          negative_face_control_rejected=True)
     validate(ROOT/'assets/phase2-states',ART/'reports/rework2-environment-bundle.json')
     result=dict(status='pass',parts=parts,new_reservations=len(reserved),budget=Budget().summary(),
       candidates=len(review['records']),environment_candidates=len(selected),assertions=assertions,
       unchanged_original_world_regions=len(old),owner_approved=0,guarded_driver_unchanged=True,
+      **face_summary,
       scope='Proof chronology, one exact-prompt tool call per reservation, hash-bound screening, unchanged footprint/effect metadata, portable candidate pixels and atlas validation; no owner/device claim.')
     write_json(ART/'reports/rework2-validation.json',result);print(result)
 

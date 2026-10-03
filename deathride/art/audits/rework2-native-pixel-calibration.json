@@ -1,0 +1,270 @@
+[
+  {
+    "id": "rw2-face-rook-v1-a1",
+    "model": "mimo-9b:q8-64k",
+    "answer": {
+      "both_eyes_visible": true,
+      "confidence": 0.75,
+      "defects": [
+        "small_face"
+      ],
+      "description": "Face is small within the frame; head occupies roughly the upper-middle region while the torso and shoulder armour fill the lower half, making the composition body-dominant. Eyes are visible but the expression is subdued and partially obscured by the brow and low resolution.",
+      "expression_readable_native": false,
+      "eye_centres": [
+        205,
+        178,
+        395,
+        178
+      ],
+      "face_box": [
+        150,
+        45,
+        450,
+        400
+      ],
+      "face_unobscured": true,
+      "framing": "face_closeup",
+      "single_primary_face": true
+    },
+    "check": {
+      "passed": false,
+      "defects": [
+        "FACE_TOO_SMALL",
+        "EXPRESSION_UNREADABLE",
+        "LOCAL_MODEL_DEFECT"
+      ],
+      "face_height_fraction": 0.355,
+      "face_area_fraction": 0.1065,
+      "native_face_height_px": 21.299999999999997,
+      "native_eye_gap_px": 11.4,
+      "framing": "face_closeup",
+      "model_defects": [
+        "small_face"
+      ]
+    },
+    "prompt": "Inspect this single image only. It is an exact 60 pixel game image enlarged by nearest-neighbour sampling for inspection, so visible blocks are original pixels. face_box=[left,forehead,right,chin] coordinates 0..1000 of the ENTIRE image excluding hair, ears, neck, forehead goggles and armour. eye_centres=[left_eye_x,left_eye_y,right_eye_x,right_eye_y]. Assess actual framing and expression. Ignore expected blockiness of native pixels. List concrete face visibility defects only: small face, hidden eyes, unreadable expression or body-dominant composition. Do not flag cropped shoulders; face is the subject. Report required JSON fields.",
+    "input_sha256": "77227d59dfc02551bfce6a01a1f87510b00aab321e5cb75abc0f1590741a3fea"
+  },
+  {
+    "id": "rw2-face-rook-v1-a2",
+    "model": "mimo-9b:q8-64k",
+    "answer": {
+      "both_eyes_visible": true,
+      "confidence": 0.75,
+      "defects": [
+        "small_face"
+      ],
+      "description": "Face fills most of the frame but occupies only about 40% of image width; the 60x60 native resolution makes the face and expression coarse and low-detail, though both eyes remain visible and the expression is readable.",
+      "expression_readable_native": true,
+      "eye_centres": [
+        190,
+        270,
+        410,
+        270
+      ],
+      "face_box": [
+        120,
+        40,
+        480,
+        470
+      ],
+      "face_unobscured": true,
+      "framing": "face_closeup",
+      "single_primary_face": true
+    },
+    "check": {
+      "passed": false,
+      "defects": [
+        "LOCAL_MODEL_DEFECT"
+      ],
+      "face_height_fraction": 0.43,
+      "face_area_fraction": 0.1548,
+      "native_face_height_px": 25.8,
+      "native_eye_gap_px": 13.2,
+      "framing": "face_closeup",
+      "model_defects": [
+        "small_face"
+      ]
+    },
+    "prompt": "Inspect this single image only. It is an exact 60 pixel game image enlarged by nearest-neighbour sampling for inspection, so visible blocks are original pixels. face_box=[left,forehead,right,chin] coordinates 0..1000 of the ENTIRE image excluding hair, ears, neck, forehead goggles and armour. eye_centres=[left_eye_x,left_eye_y,right_eye_x,right_eye_y]. Assess actual framing and expression. Ignore expected blockiness of native pixels. List concrete face visibility defects only: small face, hidden eyes, unreadable expression or body-dominant composition. Do not flag cropped shoulders; face is the subject. Report required JSON fields.",
+    "input_sha256": "2be4087bb97930d66980e5fbb971fc39b942e81b8f57c95a47e97031fe16760c"
+  },
+  {
+    "id": "rw2-face-debt-contract-v2-a1",
+    "model": "mimo-9b:q8-64k",
+    "answer": {
+      "both_eyes_visible": true,
+      "confidence": 0.75,
+      "defects": [
+        "small_face"
+      ],
+      "description": "Face fills the frame but occupies only the central ~45% of the image width, leaving large dark background margins on both sides; the composition is face-dominant rather than body-dominant.",
+      "expression_readable_native": true,
+      "eye_centres": [
+        390,
+        540,
+        730,
+        540
+      ],
+      "face_box": [
+        250,
+        250,
+        870,
+        850
+      ],
+      "face_unobscured": true,
+      "framing": "face_closeup",
+      "single_primary_face": true
+    },
+    "check": {
+      "passed": false,
+      "defects": [
+        "LOCAL_MODEL_DEFECT"
+      ],
+      "face_height_fraction": 0.6,
+      "face_area_fraction": 0.372,
+      "native_face_height_px": 67.2,
+      "native_eye_gap_px": 38.080000000000005,
+      "framing": "face_closeup",
+      "model_defects": [
+        "small_face"
+      ]
+    },
+    "prompt": "Inspect this single image only. It is an exact 112 pixel game image enlarged by nearest-neighbour sampling for inspection, so visible blocks are original pixels. face_box=[left,forehead,right,chin] coordinates 0..1000 of the ENTIRE image excluding hair, ears, neck, forehead goggles and armour. eye_centres=[left_eye_x,left_eye_y,right_eye_x,right_eye_y]. Assess actual framing and expression. Ignore expected blockiness of native pixels. List concrete face visibility defects only: small face, hidden eyes, unreadable expression or body-dominant composition. Do not flag cropped shoulders; face is the subject. Report required JSON fields.",
+    "input_sha256": "b05767d85d7c9c6a374d5a8620bc3e1b3ef24b56ef744a4aaf603dc465733c94"
+  },
+  {
+    "id": "rw2-face-rook-v1-a1",
+    "model": "qwen3.8:27b-64k",
+    "answer": {
+      "face_box": [
+        280,
+        220,
+        680,
+        620
+      ],
+      "eye_centres": [
+        390,
+        330,
+        550,
+        330
+      ],
+      "framing": "head_shoulders",
+      "both_eyes_visible": true,
+      "expression_readable_native": true,
+      "face_unobscured": true,
+      "single_primary_face": true,
+      "confidence": 0.75,
+      "defects": [
+        "small_face"
+      ],
+      "description": "A pixelated portrait of a character with dark hair and goggles pushed up on the forehead, wearing a yellow scarf and grey armor. The face is centered but occupies a relatively small portion of the frame, with the body and armor taking up significant space."
+    },
+    "check": {
+      "passed": false,
+      "defects": [
+        "LOCAL_MODEL_DEFECT"
+      ],
+      "face_height_fraction": 0.4,
+      "face_area_fraction": 0.16000000000000003,
+      "native_face_height_px": 24.0,
+      "native_eye_gap_px": 9.6,
+      "framing": "head_shoulders",
+      "model_defects": [
+        "small_face"
+      ]
+    },
+    "prompt": "Inspect this single image only. It is an exact 60 pixel game image enlarged by nearest-neighbour sampling for inspection, so visible blocks are original pixels. face_box=[left,forehead,right,chin] coordinates 0..1000 of the ENTIRE image excluding hair, ears, neck, forehead goggles and armour. eye_centres=[left_eye_x,left_eye_y,right_eye_x,right_eye_y]. Assess actual framing and expression. Ignore expected blockiness of native pixels. List concrete face visibility defects only: small face, hidden eyes, unreadable expression or body-dominant composition. Do not flag cropped shoulders; face is the subject. Report required JSON fields.",
+    "input_sha256": "77227d59dfc02551bfce6a01a1f87510b00aab321e5cb75abc0f1590741a3fea"
+  },
+  {
+    "id": "rw2-face-rook-v1-a2",
+    "model": "qwen3.8:27b-64k",
+    "answer": {
+      "face_box": [
+        280,
+        300,
+        720,
+        780
+      ],
+      "eye_centres": [
+        400,
+        450,
+        600,
+        450
+      ],
+      "framing": "face_closeup",
+      "both_eyes_visible": true,
+      "expression_readable_native": true,
+      "face_unobscured": true,
+      "single_primary_face": true,
+      "confidence": 0.75,
+      "defects": [
+        "unreadable_expression"
+      ],
+      "description": "A pixelated portrait of a person with dark hair and goggles pushed up on their forehead. The face is centered in the frame, showing a neutral expression with visible eyes and mouth. The character wears a yellowish garment around the neck and shoulders. The image has a low-resolution, blocky aesthetic typical of retro video games."
+    },
+    "check": {
+      "passed": false,
+      "defects": [
+        "LOCAL_MODEL_DEFECT"
+      ],
+      "face_height_fraction": 0.48,
+      "face_area_fraction": 0.2112,
+      "native_face_height_px": 28.799999999999997,
+      "native_eye_gap_px": 12.0,
+      "framing": "face_closeup",
+      "model_defects": [
+        "unreadable_expression"
+      ]
+    },
+    "prompt": "Inspect this single image only. It is an exact 60 pixel game image enlarged by nearest-neighbour sampling for inspection, so visible blocks are original pixels. face_box=[left,forehead,right,chin] coordinates 0..1000 of the ENTIRE image excluding hair, ears, neck, forehead goggles and armour. eye_centres=[left_eye_x,left_eye_y,right_eye_x,right_eye_y]. Assess actual framing and expression. Ignore expected blockiness of native pixels. List concrete face visibility defects only: small face, hidden eyes, unreadable expression or body-dominant composition. Do not flag cropped shoulders; face is the subject. Report required JSON fields.",
+    "input_sha256": "2be4087bb97930d66980e5fbb971fc39b942e81b8f57c95a47e97031fe16760c"
+  },
+  {
+    "id": "rw2-face-debt-contract-v2-a1",
+    "model": "qwen3.8:27b-64k",
+    "answer": {
+      "face_box": [
+        180,
+        320,
+        820,
+        850
+      ],
+      "eye_centres": [
+        380,
+        550,
+        620,
+        550
+      ],
+      "framing": "face_closeup",
+      "both_eyes_visible": true,
+      "expression_readable_native": true,
+      "face_unobscured": true,
+      "single_primary_face": true,
+      "confidence": 0.75,
+      "defects": [
+        "small_face",
+        "unreadable_expression"
+      ],
+      "description": "A close-up, front-facing portrait of a stern, elderly male character with a white topknot, deep facial wrinkles, and a furrowed brow, rendered in a low-resolution pixel art style."
+    },
+    "check": {
+      "passed": false,
+      "defects": [
+        "LOCAL_MODEL_DEFECT"
+      ],
+      "face_height_fraction": 0.53,
+      "face_area_fraction": 0.3392,
+      "native_face_height_px": 59.36,
+      "native_eye_gap_px": 26.88,
+      "framing": "face_closeup",
+      "model_defects": [
+        "small_face",
+        "unreadable_expression"
+      ]
+    },
+    "prompt": "Inspect this single image only. It is an exact 112 pixel game image enlarged by nearest-neighbour sampling for inspection, so visible blocks are original pixels. face_box=[left,forehead,right,chin] coordinates 0..1000 of the ENTIRE image excluding hair, ears, neck, forehead goggles and armour. eye_centres=[left_eye_x,left_eye_y,right_eye_x,right_eye_y]. Assess actual framing and expression. Ignore expected blockiness of native pixels. List concrete face visibility defects only: small face, hidden eyes, unreadable expression or body-dominant composition. Do not flag cropped shoulders; face is the subject. Report required JSON fields.",
+    "input_sha256": "b05767d85d7c9c6a374d5a8620bc3e1b3ef24b56ef744a4aaf603dc465733c94"
+  }
+]

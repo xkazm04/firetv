@@ -1,0 +1,70 @@
+{
+  "at": "2026-10-03T10:35:03.307415+00:00",
+  "selected_detector": "qwen3.8:27b-64k",
+  "source_graders": [
+    "mimo-9b:q8-64k",
+    "qwen3.8:27b-64k"
+  ],
+  "minimum_face_height_fraction": 0.4,
+  "rationale": "MiMo face-localization pilot visibly shifted facial boxes and labelled a measured 60% close-up small. Its independent source/style grades remain; dedicated geometry uses Qwen with exact native preview plus direct inspection. Single-native-image and nearest-pixel trials are archived, not used to select favorable candidate grades. No geometric threshold changed.",
+  "controls": [
+    {
+      "id": "old-mechanic",
+      "manual_face_height_fraction": 0.22,
+      "expected": "reject",
+      "observed": "reject: model .28, area .0672, eye gap 6px",
+      "evidence": "reports/rework2-face-calibration-negative.json"
+    },
+    {
+      "id": "rw2-face-rook-v1-a2",
+      "manual_face_box_px": [
+        34,
+        41,
+        94,
+        111
+      ],
+      "canvas_px": [
+        128,
+        128
+      ],
+      "manual_face_height_fraction": 0.546875,
+      "model_face_height_fraction": 0.56
+    },
+    {
+      "id": "rw2-face-debt-contract-v2-a1",
+      "manual_face_box_px": [
+        151,
+        174,
+        349,
+        438
+      ],
+      "canvas_px": [
+        512,
+        512
+      ],
+      "manual_face_height_fraction": 0.515625,
+      "model": {
+        "version": "face-visibility-v1",
+        "passed": true,
+        "defects": [],
+        "checks": [
+          {
+            "passed": true,
+            "defects": [],
+            "face_height_fraction": 0.57,
+            "face_area_fraction": 0.27359999999999995,
+            "native_face_height_px": 63.839999999999996,
+            "native_eye_gap_px": 22.400000000000002,
+            "framing": "head_shoulders",
+            "model_defects": []
+          }
+        ],
+        "source_sha256": "b8e285afe5b6290daed5e07451f9c7ac921a183da4c8072dbc87d6465a907f67",
+        "export_sha256": "eeec2c676d6cac466e780842d6f78888a02a23d49d73a41b7728687ff1a8ef88",
+        "minimum_face_height_fraction": 0.4,
+        "scope": "Deterministic geometry over hash-bound Qwen localization of the exported frame, calibrated against measured controls; two separate local source/style graders; never owner approval."
+      }
+    }
+  ],
+  "limitation": "Small calibration set, stylized art, related model architecture; not general detector accuracy. Direct review required and no owner acceptance."
+}

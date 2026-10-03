@@ -49,6 +49,7 @@ class ReworkArtAudit: ApplicationAdapter() {
         val board=Pixmap.createFromFrameBuffer(0,0,1280,720)
         PixmapIO.writePNG(output.child("environment-atlas.png"),board,-1,true);board.dispose()
         canvas.dispose();font.dispose();atlas.dispose();batch.dispose()
+        FaceArtAudit.render(root,output)
         output.child("environment-gl.json").writeString("""{"status":"pass","candidateCount":${candidates.size},"ownerApproved":0,"candidateLookupDenied":true,"legacyObstacleFallback":true,"fiveThemeFallbacks":true,"signFontRestored":true,"runtimeArtBytes":$bytes,"scope":"Local desktop GL only; no device/performance or owner claim"}""",false)
         Gdx.app.log("DeathRide","environment rework GL audit passed");Gdx.app.exit()
     }

@@ -40,7 +40,7 @@ class AtlasArt(private val root: FileHandle = Gdx.files.internal("phase2-v1"),pr
                     require(frames.isNotEmpty() && frames.size==durations.size && durations.all{it>0} && durations.sumOf{it.toLong()}<=Int.MAX_VALUE)
                     val e=Entry(id,v.getString("group"),frames,durations,v.getBoolean("loop",false),v.getBoolean("owner_approved",false),
                         v.getBoolean("reference_approved",false) && v.getBoolean("technical_accepted",false) && v.getString("reference_source_sha256","").length==64,
-                        EnvironmentArt.eligible(v))
+                        EnvironmentArt.eligible(v) && FaceArt.screened(v))
                     entries[v.getString("logical_name")]=e;entries[id]=e
                 } catch(e: Exception){failed("catalog entry",e)}
             }
@@ -52,6 +52,11 @@ class AtlasArt(private val root: FileHandle = Gdx.files.internal("phase2-v1"),pr
             catalog.get("environment_obstacles")?.let { obstacles -> for(v in obstacles)
                 environmentObstacles[v.getString("id")]=v.getString("logical_name") }
             loadAtlas("world");loadAtlas("ui")
+            // Candidate aliases supersede existing portraits only after screening AND exact owner approval.
+            catalog.get("face_first_portrait_aliases")?.let { overrides -> for(v in overrides) {
+                val key=v.asString()
+                if(key.startsWith("face-first/") && available(key))entries[key]?.let{entries[v.name]=it}
+            } }
             // Exact references are owner approved; derived frames carry separate technical selection.
             if(entries.values.any{it.group=="cars" && (it.approved || it.referenceSelected)})loadAtlas("cars")
             for(e in entries.values.distinctBy{it.id})if(e.group=="tile")try {

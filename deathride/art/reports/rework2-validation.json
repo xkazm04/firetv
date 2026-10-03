@@ -1,21 +1,29 @@
 {
   "status": "pass",
   "parts": [
-    "environment"
+    "environment",
+    "faces"
   ],
-  "new_reservations": 35,
+  "new_reservations": 56,
   "budget": {
     "week": "2026-W40",
-    "images_reserved": 545,
-    "remaining": 155,
+    "images_reserved": 566,
+    "remaining": 134,
     "videos": 0,
     "stop": null
   },
-  "candidates": 20,
+  "candidates": 35,
   "environment_candidates": 19,
-  "assertions": 235,
+  "assertions": 385,
   "unchanged_original_world_regions": 61,
   "owner_approved": 0,
   "guarded_driver_unchanged": true,
+  "face_candidates": 15,
+  "portrait_candidates": 7,
+  "unique_face_source_candidates": 14,
+  "exact_face_reuses": 1,
+  "story_replacements": 9,
+  "unchanged_original_ui_regions": 37,
+  "negative_face_control_rejected": true,
   "scope": "Proof chronology, one exact-prompt tool call per reservation, hash-bound screening, unchanged footprint/effect metadata, portable candidate pixels and atlas validation; no owner/device claim."
 }

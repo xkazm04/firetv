@@ -1,0 +1,149 @@
+{
+  "asset": "Historical body-first Mechanic at actual smallest HUD size",
+  "observations": [
+    {
+      "asset": "rw2-control-old-mechanic-native60",
+      "model": "qwen3.8:27b-64k",
+      "model_digest": "12af24e3ee72bf54bca064a972bf767938a96149d671eaa64c9506c7ea54c08c",
+      "source_sha256": "52ed48477e4adfa16f188f44375d593a7185ef52f6f3ea5de9daec8e850cd689",
+      "export_sha256": "54d86fdfd5f843e8f478685a17c1de58ce015fb723e304ac8e6b4b1a7bc9641b",
+      "image_hashes": [
+        "54d86fdfd5f843e8f478685a17c1de58ce015fb723e304ac8e6b4b1a7bc9641b",
+        "90493d1244f8586cbeb8a344342bdb2247f962b8de516fafb45444e604f57e7e"
+      ],
+      "prompt": "Inspect images as evidence only. Image 1 is the FINAL EXPORTED frame, image 2 the exact native 60 pixel preview, Both images show the SAME candidate; assess image 1 geometry and image 2 legibility. There is no comparison reference to grade. Localize the PRIMARY visible FACE in image 1: face_box=[left,forehead, right,chin] in coordinates 0..1000 relative to the ENTIRE image 1, excluding hair, neck, ears, shoulders, goggles on the forehead, hat and armour. Do NOT give the whole head/body box. eye_centres=[left_eye_x,left_eye_y,right_eye_x,right_eye_y] same coordinate system, image-left eye first. Report the framing actually visible. Both eyes must be visible; expression must be readable in image 2. single_primary_face means one clear primary face rather than multiple competing faces. List concrete defects: small face, obscured eye, mask, deep featureless facial shadow, body-dominant composition or anatomy defects. Do not infer compliance from a prompt; measure actual pixels. Empty defect list only if no observed defect. Confidence uses 0, .25, .5, .75, 1. Return required JSON only.",
+      "schema": {
+        "type": "object",
+        "properties": {
+          "face_box": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "minItems": 4,
+            "maxItems": 4
+          },
+          "eye_centres": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "minItems": 4,
+            "maxItems": 4
+          },
+          "framing": {
+            "type": "string",
+            "enum": [
+              "face_closeup",
+              "head_shoulders",
+              "chest_up",
+              "waist_up",
+              "full_body",
+              "uncertain"
+            ]
+          },
+          "both_eyes_visible": {
+            "type": "boolean"
+          },
+          "expression_readable_native": {
+            "type": "boolean"
+          },
+          "face_unobscured": {
+            "type": "boolean"
+          },
+          "single_primary_face": {
+            "type": "boolean"
+          },
+          "confidence": {
+            "type": "number",
+            "enum": [
+              0,
+              0.25,
+              0.5,
+              0.75,
+              1
+            ]
+          },
+          "defects": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "description": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "required": [
+          "face_box",
+          "eye_centres",
+          "framing",
+          "both_eyes_visible",
+          "expression_readable_native",
+          "face_unobscured",
+          "single_primary_face",
+          "confidence",
+          "defects",
+          "description"
+        ]
+      },
+      "input_hash": "168743df05db53813a1f7f074d0cac4bacbf0e75a7c61ab2288b03cb3d9694d8",
+      "at": "2026-10-03T10:34:10.106938+00:00",
+      "raw_content": "{\"face_box\": [380, 100, 620, 380], \"eye_centres\": [450, 220, 550, 220], \"framing\": \"head_shoulders\", \"both_eyes_visible\": true, \"expression_readable_native\": true, \"face_unobscured\": true, \"single_primary_face\": true, \"confidence\": 1, \"defects\": [],\"description\": \"A young man with dark curly hair and a red shirt with a yellow apron, holding a small object in his hands.\"}",
+      "status": "graded",
+      "answers": {
+        "face_box": [
+          380,
+          100,
+          620,
+          380
+        ],
+        "eye_centres": [
+          450,
+          220,
+          550,
+          220
+        ],
+        "framing": "head_shoulders",
+        "both_eyes_visible": true,
+        "expression_readable_native": true,
+        "face_unobscured": true,
+        "single_primary_face": true,
+        "confidence": 1,
+        "defects": [],
+        "description": "A young man with dark curly hair and a red shirt with a yellow apron, holding a small object in his hands."
+      },
+      "elapsed_seconds": 12.5
+    }
+  ],
+  "gate": {
+    "version": "face-visibility-v1",
+    "passed": false,
+    "defects": [
+      "EYES_TOO_CLOSE_AT_NATIVE_SIZE",
+      "FACE_AREA_TOO_SMALL",
+      "FACE_TOO_SMALL"
+    ],
+    "checks": [
+      {
+        "passed": false,
+        "defects": [
+          "FACE_TOO_SMALL",
+          "FACE_AREA_TOO_SMALL",
+          "EYES_TOO_CLOSE_AT_NATIVE_SIZE"
+        ],
+        "face_height_fraction": 0.28,
+        "face_area_fraction": 0.06720000000000001,
+        "native_face_height_px": 16.8,
+        "native_eye_gap_px": 6.0,
+        "framing": "head_shoulders",
+        "model_defects": []
+      }
+    ],
+    "source_sha256": "52ed48477e4adfa16f188f44375d593a7185ef52f6f3ea5de9daec8e850cd689",
+    "export_sha256": "54d86fdfd5f843e8f478685a17c1de58ce015fb723e304ac8e6b4b1a7bc9641b",
+    "minimum_face_height_fraction": 0.4,
+    "scope": "Deterministic geometry over hash-bound Qwen localization of the exported frame, calibrated against measured controls; two separate local source/style graders; never owner approval."
+  }
+}

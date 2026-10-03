@@ -68,7 +68,7 @@ class StoryArt(private val root: FileHandle, private val headroom: () -> Long) {
         private val hash=Regex("[a-f0-9]{64}")
         private val file=Regex("[a-z0-9-]+\\.png")
         fun eligible(e: JsonValue): Boolean = try {
-            e.getBoolean("owner_approved",false) && e.getBoolean("technical_eligible",false) &&
+            e.getBoolean("owner_approved",false) && e.getBoolean("technical_eligible",false) && FaceArt.screened(e) &&
                 e.getString("owner_evidence","").isNotBlank() && file.matches(e.getString("file","")) &&
                 hash.matches(e.getString("source_sha256","")) && hash.matches(e.getString("sha256","")) &&
                 e.getString("approved_source_sha256","")==e.getString("source_sha256") &&

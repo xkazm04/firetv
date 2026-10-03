@@ -5,6 +5,7 @@ import shutil
 from pathlib import Path
 import urllib.request
 import json
+import copy
 from PIL import Image
 from common import ART, ROOT, briefs, read_json, write_json, sha, now, style_for, make_contact_sheet, digest
 from gen import Budget, candidates, fingerprint
@@ -23,18 +24,32 @@ def measure(part):
             if s['status']!='generated':continue
             assert sha(s['image'])==s['sha256'] and s['prompt_verbatim_verified']
             key=row['id']+f"-a{s['attempt']}";cached=prior.get(key,{})
-            if (cached.get('measure_version')==2 and cached.get('source_sha256')==s['sha256'] and
+            version=4 if part=='faces' else 2
+            if (cached.get('measure_version')==version and cached.get('source_sha256')==s['sha256'] and
                 cached.get('brief')==row and Path(cached.get('path','')).is_file() and
                 sha(cached['path'])==cached.get('sha256') and
                 cached.get('gates_hash')==digest(read_json(ART/'gates.json')) and cached.get('style_hash')==digest(style_for(row)) and
                 cached.get('processor_sources',{}).get('process.py')==sha(ROOT/'tools/art/process.py')):
                 records.append(cached);continue
             r=process_one(row,s['image'],ART/'processed/rework2'/row['id']/str(s['attempt']))
+            if part=='faces' and row['kind']=='portrait':
+                r['source_sprite_codes']=list(r['codes'])
+                # The owner makes the face the subject; a collar may meet the image edge.
+                # Face box / eyes / native readability still fail closed in face_visibility.py.
+                r['codes']=[c for c in r['codes'] if c!='CROPPED_OR_MARGIN']
+                r['framing_contract']='face-first-v1: collar/shoulder context may meet the frame; uncropped facial oval required by the separate face gate'
+                r['verdict']='reject' if r['codes'] else 'owner-review'
             if part=='faces' and row['kind']=='backdrop':
-                im=Image.open(r['path']).convert('RGBA');im.thumbnail((512,512),Image.Resampling.LANCZOS);im.save(r['path'])
-                r['sha256']=sha(r['path']);r['metrics']['export_size_px']=list(im.size)
+                # Preserve the complete source and its proportions; backdrop processor's
+                # historical square resize would stretch non-square generated panels.
+                im=Image.open(s['image']).convert('RGBA');im.thumbnail((512,512),Image.Resampling.LANCZOS)
+                canvas=Image.new('RGBA',(512,512),(31,27,24,255));offset=((512-im.width)//2,(512-im.height)//2)
+                canvas.paste(im,offset);canvas.save(r['path'])
+                r['sha256']=sha(r['path']);r['metrics']['export_size_px']=[512,512]
+                r['metrics']['source_fit_px']=list(im.size);r['metrics']['source_fit_offset_px']=list(offset)
+                r['framing_contract']='Complete source aspect-fit in 512px soot canvas; no source crop or stretch; face measured over entire final frame'
             r['id']+=f"-a{s['attempt']}"
-            r.update(attempt=s['attempt'],generation_sidecar=str(path.relative_to(ROOT)),owner_approved=False,measure_version=2)
+            r.update(attempt=s['attempt'],generation_sidecar=str(path.relative_to(ROOT)),owner_approved=False,measure_version=version)
             old=prior.get(r['id'],{})
             if old.get('source_sha256')==r['source_sha256'] and old.get('sha256')==r['sha256']:
                 for field in ('grades','semantic_verdict','semantic_codes','direct_review','face_gate','face_grades'):
@@ -71,7 +86,9 @@ def proof(part,batch,note):
     assert not r['codes'] and len(r.get('grades',[]))==2
     assert all(g['status']=='graded' and g['image_hashes']==[r['source_sha256']] for g in r['grades'])
     assert r.get('direct_review',{}).get('technical_eligible') and note
-    if part=='faces':assert r.get('face_gate',{}).get('passed')
+    if part=='faces':
+        from face_visibility import screen
+        assert screen(r)['passed']
     write_json(ART/'proofs'/f'{batch}.json',dict(batch=batch,input_hash=fingerprint(group,style_for(group[0])),
       image=r['source'],sha256=r['source_sha256'],verdict='batch-direction-checked',
       reviewer='executing-agent technical screening; NOT owner acceptance',note=note,at=now(),
@@ -79,11 +96,31 @@ def proof(part,batch,note):
     print('Technical proof recorded:',batch,flush=True)
 
 def eligible(r):
+    face_ok=True
+    if r['brief'].get('face_subject','')=='yes':
+        from face_visibility import screen
+        face_ok=screen(r)['passed']
     return (not r['codes'] and decide(r.get('grades',[]),r['kind'],.85)[0]!='reject' and
       len(r.get('grades',[]))==2 and all(g['status']=='graded' and g['image_hashes']==[r['source_sha256']] for g in r['grades']) and
       r.get('direct_review',{}).get('technical_eligible',False) and
       r['direct_review']['source_sha256']==r['source_sha256'] and r['direct_review']['export_sha256']==r['sha256'] and
-      (r['brief'].get('face_subject','')!='yes' or r.get('face_gate',{}).get('passed',False)))
+      face_ok)
+
+def candidate_records(part):
+    """Explicit exact-image reuse is a distinct owner choice, never an extra generated pass."""
+    records=read_json(report(part))
+    reuse_path=ART/'audits/rework2-face-reuse.json'
+    if part=='faces' and reuse_path.exists():
+        for usage in read_json(reuse_path)['usages']:
+            source=next(r for r in records if r['id']==usage['source_candidate_id'])
+            assert source['source_sha256']==usage['source_sha256'] and source['sha256']==usage['export_sha256']
+            if not eligible(source):continue
+            r=copy.deepcopy(source);r['id']=usage['id'];r['reused_exact_export']=True
+            r['source_candidate_id']=source['id']
+            r['brief'].update(logical_name=usage['logical_name'],before_path=usage['before_path'],review_native_px=112)
+            r['direct_review']['note']=usage['reason'];r['reuse_binding']=usage
+            records.append(r)
+    return records
 
 BEFORE={'scrap-pile':'crate-metal','tyre-wall':'tyres','oil-drums':'drum-red','rust-pylon':'sign',
  'league-gantry':'sign','derelict-crane':'crate','wreck-car':'crate-metal','quarry-face':'rock-field',
@@ -98,7 +135,7 @@ def review():
     all_records=[];cards=[];rejected=[]
     for part in ('environment','faces'):
         if not report(part).exists():continue
-        rs=read_json(report(part));selected={}
+        rs=candidate_records(part);selected={}
         for r in rs:
             if eligible(r):selected[r['brief']['logical_name']]=r['id']
         for r in rs:
@@ -123,7 +160,7 @@ def review():
                 before_dest=dest/(r['id']+'-before'+before.suffix);shutil.copy2(before,before_dest)
                 before_view=f'<figure><img src="images/{before_dest.name}" alt="Before {slug}"><figcaption>Before</figcaption></figure>'
             else:raise RuntimeError('Before image missing: '+r['id'])
-            native=60 if part=='faces' and r['kind']=='portrait' else 112 if part=='faces' else 64
+            native=int(r['brief'].get('review_native_px') or (60 if part=='faces' and r['kind']=='portrait' else 112 if part=='faces' else 64))
             im=Image.open(after).convert('RGBA');im.thumbnail((native,native),Image.Resampling.LANCZOS)
             native_path=dest/(r['id']+'-native.png');im.save(native_path)
             item={**r,'path':'images/'+after.name,'source':'images/'+source.name,'native':'images/'+native_path.name,
@@ -152,6 +189,10 @@ def review():
     if board.exists():
         shutil.copy2(board,folder/'environment-atlas.png')
         extra='<p><a href="environment-atlas.png">Actual local GL atlas board and procedural fallback marks</a> — deliberate candidate preview, not approved gameplay.</p>'
+    face_board=ROOT/'evidence/rework2/faces-atlas.png'
+    if face_board.exists():
+        shutil.copy2(face_board,folder/'faces-atlas.png')
+        extra+='<p><a href="faces-atlas.png">Actual local GL face atlas and story card board</a> — includes the real 60px portrait and 112px card sizes.</p>'
     budget=Budget().summary()
     data=dict(schema=1,at=now(),budget=budget,new_images=budget['images_reserved']-510,owner_approved_count=0,
       records=all_records,excluded=rejected)

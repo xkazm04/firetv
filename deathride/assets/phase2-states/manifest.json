@@ -19,13 +19,6 @@
       "rgba_bytes": 4194304
     },
     {
-      "file": "ui-0.png",
-      "sha256": "1557b15cc865e9b7db8bb7229eebde5735d5677fee9a8af763baaf0b44911c61",
-      "width": 1024,
-      "height": 1024,
-      "rgba_bytes": 4194304
-    },
-    {
       "file": "cars-0.png",
       "sha256": "99ad8e7ab089a8cf7ff7b3aa53bdcd64e3d37ed25b7e82676b976945f8097d14",
       "width": 1024,
@@ -42,6 +35,13 @@
     {
       "file": "world-0.png",
       "sha256": "4d26a6dd9195412be874ecd7d5a9490188bcdd9c28377712595d790e97a6b97d",
+      "width": 1024,
+      "height": 1024,
+      "rgba_bytes": 4194304
+    },
+    {
+      "file": "ui-0.png",
+      "sha256": "410b6b0630804ae79431c535b64d253ed3fd32c92d7c4f85df390d0535514e77",
       "width": 1024,
       "height": 1024,
       "rgba_bytes": 4194304
@@ -216,5 +216,13 @@
     "owner_approved": 0,
     "page_change": 0,
     "policy": "20 compact 64px environment cells fit spare space on the existing world page; original regions unchanged."
+  },
+  "face_rework": {
+    "at": "2026-10-03T10:52:36.957401+00:00",
+    "portrait_candidates": 7,
+    "exact_reuses": 1,
+    "owner_approved": 0,
+    "page_change": 0,
+    "policy": "Screened 128px face cells use spare UI atlas space. Prior portrait regions and aliases remain fallback until exact owner approval."
   }
 }

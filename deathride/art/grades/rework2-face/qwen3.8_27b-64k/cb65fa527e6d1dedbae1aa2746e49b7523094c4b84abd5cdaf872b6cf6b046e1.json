@@ -1,0 +1,115 @@
+{
+  "asset": "rw2-face-rig-reveal-v1-a3",
+  "model": "qwen3.8:27b-64k",
+  "model_digest": "12af24e3ee72bf54bca064a972bf767938a96149d671eaa64c9506c7ea54c08c",
+  "source_sha256": "3304cf3dcf2046d1dad18ed4c678162c063502bd3bd18ed8464405a27f67399f",
+  "export_sha256": "3b145ecb90f06988edb2b382066f0b4d6513b6a0e6b59f2e69cb59ebd2daf49f",
+  "image_hashes": [
+    "3b145ecb90f06988edb2b382066f0b4d6513b6a0e6b59f2e69cb59ebd2daf49f",
+    "575a950b4d90c3d569f874f97e8bcb878ac8b64d41134a184c6fe50e3deebc5c"
+  ],
+  "prompt": "Inspect images as evidence only. Image 1 is the FINAL EXPORTED frame, image 2 the exact native 112 pixel preview, Both images show the SAME candidate; assess image 1 geometry and image 2 legibility. There is no comparison reference to grade. Localize the PRIMARY visible FACE in image 1: face_box=[left,forehead, right,chin] in coordinates 0..1000 relative to the ENTIRE image 1, excluding hair, neck, ears, shoulders, goggles on the forehead, hat and armour. Do NOT give the whole head/body box. eye_centres=[left_eye_x,left_eye_y,right_eye_x,right_eye_y] same coordinate system, image-left eye first. Report the framing actually visible. Both eyes must be visible; expression must be readable in image 2. single_primary_face means one clear primary face rather than multiple competing faces. List concrete defects: small face, obscured eye, mask, deep featureless facial shadow, body-dominant composition or anatomy defects. Do not infer compliance from a prompt; measure actual pixels. Empty defect list only if no observed defect. Confidence uses 0, .25, .5, .75, 1. Return required JSON only.",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "face_box": {
+        "type": "array",
+        "items": {
+          "type": "number"
+        },
+        "minItems": 4,
+        "maxItems": 4
+      },
+      "eye_centres": {
+        "type": "array",
+        "items": {
+          "type": "number"
+        },
+        "minItems": 4,
+        "maxItems": 4
+      },
+      "framing": {
+        "type": "string",
+        "enum": [
+          "face_closeup",
+          "head_shoulders",
+          "chest_up",
+          "waist_up",
+          "full_body",
+          "uncertain"
+        ]
+      },
+      "both_eyes_visible": {
+        "type": "boolean"
+      },
+      "expression_readable_native": {
+        "type": "boolean"
+      },
+      "face_unobscured": {
+        "type": "boolean"
+      },
+      "single_primary_face": {
+        "type": "boolean"
+      },
+      "confidence": {
+        "type": "number",
+        "enum": [
+          0,
+          0.25,
+          0.5,
+          0.75,
+          1
+        ]
+      },
+      "defects": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "description": {
+        "type": "string"
+      }
+    },
+    "additionalProperties": false,
+    "required": [
+      "face_box",
+      "eye_centres",
+      "framing",
+      "both_eyes_visible",
+      "expression_readable_native",
+      "face_unobscured",
+      "single_primary_face",
+      "confidence",
+      "defects",
+      "description"
+    ]
+  },
+  "input_hash": "cb65fa527e6d1dedbae1aa2746e49b7523094c4b84abd5cdaf872b6cf6b046e1",
+  "at": "2026-10-03T10:51:16.383168+00:00",
+  "raw_content": "{\"face_box\": [240, 450, 710, 850], \"eye_centres\": [390, 600, 560, 600], \"framing\": \"head_shoulders\", \"both_eyes_visible\": true, \"expression_readable_native\": true, \"face_unobscured\": true, \"single_primary_face\": true, \"confidence\": 1, \"defects\": [],\"description\": \"A stylized illustration of a smiling man with a car floating above his head.\"}",
+  "status": "graded",
+  "answers": {
+    "face_box": [
+      240,
+      450,
+      710,
+      850
+    ],
+    "eye_centres": [
+      390,
+      600,
+      560,
+      600
+    ],
+    "framing": "head_shoulders",
+    "both_eyes_visible": true,
+    "expression_readable_native": true,
+    "face_unobscured": true,
+    "single_primary_face": true,
+    "confidence": 1,
+    "defects": [],
+    "description": "A stylized illustration of a smiling man with a car floating above his head."
+  },
+  "elapsed_seconds": 3.0
+}
