@@ -4,6 +4,8 @@ Written 2026-10-01 from the owner's brief. It binds Phase 2 waves **C1 (roster),
 Where it conflicts with `DEATH-RIDE-PHASE2.md`, this file wins for those waves. Numbers here are **proposals to be checked by simulation**, not facts; every claim of balance
 must come from a headless simulation, and every claim of feel stays `not measured` until the owner has driven it.
 
+Pass-two proposal, 2026-10-03: [campaign design v2](DEATH-RIDE-CAMPAIGN-DESIGN-V2.md) implements a varied 35-event / 367-lap schedule, promotion by a surviving finish ahead of the named boss, useful fallback ally assets and saved stolen-money restitution. **Owner flags:** proposed 3–5 hours replaces 5–8; late boss ratio bands become 0.93–1.03 within the shared cap-10 physical envelope. These changes await owner review; old-band failures and developed-class balance findings remain visible in the report. Stable event IDs preserve current save positions. All Stick checks for this pass are pending. The original proposals below remain historical context.
+
 ## a. The promise to the player
 
 You start with a poor car in a poor league, up against drivers with poor cars. Every race you clear pays money; money buys upgrades and then a better car; as you rise, so does the

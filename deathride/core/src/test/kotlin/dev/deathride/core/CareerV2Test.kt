@@ -70,7 +70,7 @@ class CareerV2Test {
         val p=Profile("legacy-unlocks");p.careerRound=2;p.careerCleared=2;p.careerPoints=12
         val body=ProfileCodec.encode(p).substringBefore("checksum=").lines().filter{line->
             !listOf("owned=","condition=","market=","ash=","grudges=","rivals=","campaign=").any{line.startsWith(it)} && line.isNotEmpty()
-        }.joinToString("\n",postfix="\n").replace("DEATHRIDE_PROFILE 5","DEATHRIDE_PROFILE 2").replace("trophies=0,0,0,0,0","trophies=0,0,0,0")
+        }.joinToString("\n",postfix="\n").replace("DEATHRIDE_PROFILE 6","DEATHRIDE_PROFILE 2").replace("trophies=0,0,0,0,0","trophies=0,0,0,0")
         val text=body+"checksum="+CRC32().apply{update(body.toByteArray())}.value.toString(16)+"\n"
         val migrated=ProfileCodec.decode(text,p.id)
         assertEquals(5,migrated.careerCleared);assertTrue(migrated.owned[CarCatalog.all.indexOfFirst{it.id=="Trail"}])
@@ -84,7 +84,7 @@ class CareerV2Test {
             if(round==0){p.careerSeasons=1;p.careerCleared=12}
             val body=ProfileCodec.encode(p).substringBefore("checksum=").lines().filter{line->
                 !listOf("ash=","grudges=","rivals=","campaign=").any{line.startsWith(it)} && line.isNotEmpty()
-            }.joinToString("\n",postfix="\n").replace("DEATHRIDE_PROFILE 5","DEATHRIDE_PROFILE 3").replace("trophies=0,0,0,0,0","trophies=0,0,0,0")
+            }.joinToString("\n",postfix="\n").replace("DEATHRIDE_PROFILE 6","DEATHRIDE_PROFILE 3").replace("trophies=0,0,0,0,0","trophies=0,0,0,0")
             val text=body+"checksum="+CRC32().apply{update(body.toByteArray())}.value.toString(16)+"\n"
             val migrated=ProfileCodec.decode(text,p.id);RivalEconomy.prepare(migrated)
             val course=Courses.all[Career.events[migrated.careerRound].courseIndex]

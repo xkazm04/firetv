@@ -13,6 +13,8 @@ private data class CampaignOutcome(val round:Int,val skill:Int,val car:Int,val b
     companion object {
         fun parse(s:String):CampaignOutcome {val x=s.split(',');return CampaignOutcome(x[0].toInt(),x[1].toInt(),x[2].toInt(),x[3].toInt(),x[4].toInt(),x[5].toDouble(),x[6].toDouble(),x[7].toInt(),x[8].toInt(),x[9].toDouble(),x[10].toInt(),x[11].toBoolean(),x[12].toBoolean(),x[13].toBoolean(),x[14].toBoolean(),x[15].toDouble(),x[16].toLong(),x[17].split(';').map{v->val a=v.split(':');RivalResult(a[0].toInt(),a[1].toInt(),a[2].toInt(),a[3].toDouble(),a[4].toInt(),a[5].toBoolean(),a[6].toBoolean(),a[7].toBoolean())})}
     }
+    fun bossPosition()=rivals.firstOrNull{it.index==Career.bossIndex(round)}?.position?:1
+    fun promoted()=finished && hp>0 && qualified && (position==1 || position<bossPosition())
 }
 private val campaignSkills=listOf("Rookie","Club","Pro").map{id->AiSkills.all.single{it.id==id}}
 private fun rivalResults(w:World,lead:Int=0)=w.cars.filter{it.entered&&it.rivalIndex>=0}.map{r->RivalResult(r.rivalIndex,r.position,w.combat.kills[r.id],w.combat.health(r.id),w.combat.cashCollected[r.id],w.combat.damageTaken[r.id]==0.0,r.finishSeconds>=0,w.combat.wreckSource[r.id]==lead)}
@@ -37,7 +39,7 @@ private fun campaignVerify(dir:File) {
         check(w.stateHash()==r.hash){"Final-core replay differs at event ${round+1}"};checked++
         val ref=rows.filter{it.skill==1&&it.car==canonical.selectedCar}.minBy{abs(it.playerPR-PowerRating.of(CarCatalog.all[canonical.selectedCar],canonical.bonuses()))}
         val ticket=Economy.start(canonical);RivalEconomy.settleResults(canonical,ticket,round,ref.rivals)
-        Career.settle(canonical,ticket,round,1,ref.position,ref.kills,ref.hp,ref.qualified,ref.cash,clean=ref.clean,finished=ref.finished)
+        Career.settle(canonical,ticket,round,1,ref.position,ref.kills,ref.hp,ref.qualified,ref.cash,clean=ref.clean,finished=ref.finished,bossPosition=ref.bossPosition())
     }
     File(dir,"final-core-replay.txt").writeText("$checked event samples reproduced their exact physical-library hashes on the final core.\n")
     println("Final-core exact replays: $checked")
@@ -107,7 +109,7 @@ private fun campaignPhysical(dir:File,seeds:Int,supplement:Boolean=false) {
         val reference=if(supplement)prior else rows
         val ref=reference.filter{it.skill==1 && it.car==canonical.selectedCar}.minBy{abs(it.playerPR-PowerRating.of(CarCatalog.all[canonical.selectedCar],canonical.bonuses()))}
         val ticket=Economy.start(canonical);RivalEconomy.settleResults(canonical,ticket,round,ref.rivals)
-        Career.settle(canonical,ticket,round,1,ref.position,ref.kills,ref.hp,ref.qualified,ref.cash,clean=ref.clean,finished=ref.finished)
+        Career.settle(canonical,ticket,round,1,ref.position,ref.kills,ref.hp,ref.qualified,ref.cash,clean=ref.clean,finished=ref.finished,bossPosition=ref.bossPosition())
         println("Physical ${round+1}/34: ${rows.size} races; firsts ${rows.count{it.position==1&&it.finished}}; early ${rows.count{it.early}}; field PR $fieldPR")
     }
 }
@@ -174,17 +176,17 @@ private fun campaignLedgers(dir:File,count:Int) {
     val plans=(0..2).map{skill->(0..4).map{tier->
         val round=if(tier==0)5 else tier*7-1
         CarCatalog.all.indices.filter{CarCatalog.all[it].tierRank==tier}.maxWith(compareBy<Int>{car->
-            indexed.getValue(Triple(round,skill,car)).filter{it.band==Parts.all.sumOf{p->p.maxTier}}.take(2).count{it.position==1&&it.finished}
+            indexed.getValue(Triple(round,skill,car)).filter{it.band==Parts.all.sumOf{p->p.maxTier}}.take(2).count{it.promoted()}
         }.thenBy{car->-indexed.getValue(Triple(round,skill,car)).filter{it.band==Parts.all.sumOf{p->p.maxTier}}.take(2).map{it.position}.average()})
     }}
     val duels=File(dir,"duels.csv").readLines().drop(1).filter{it.isNotBlank()}.map{it.split(',')}
     val output=File(dir,"careers-$buyer.csv").bufferedWriter();val trace=File(dir,"timeline-$buyer.csv").bufferedWriter()
-    File(dir,"buyer-$buyer.txt").writeText("Buyer=$buyer. Training seeds 0/1; ledger samples 2/3 regular, 2..19 boss. Plans="+plans.map{it.map{c->CarCatalog.all[c].id}}+"\n")
-    output.append("seed,skill,reward,completed,races,rook,ox,vex,mica,finale,round,cash,loanDebt,leagueDebt,paid,diverted,recovered,voided,bankruptcy,early,maxRatioGap,hours,rewards\n")
-    trace.append("seed,skill,reward,race,event,car,playerPR,fieldPR,ratio,income,cash,loanDebt,leagueDebt,paid,credited,diverted,position,qualified,advanced,early,physicalSeed,ratioGap\n")
+    File(dir,"buyer-$buyer.txt").writeText("Buyer=$buyer. Training seeds 0/1 maximize named-boss promotion then mean position; ledger samples 2/3 regular, 2..19 boss. Lead decision proxies against fixed Club opponents; not game difficulty. Plans="+plans.map{it.map{c->CarCatalog.all[c].id}}+"\n")
+    output.append("seed,skill,reward,completed,races,rook,ox,vex,mica,finale,round,cash,loanDebt,leagueDebt,paid,diverted,recovered,voided,bankruptcy,early,maxRatioGap,hours,rewards,restitutionPaid,restitutionDue,firstUpgrade,firstClubCar\n")
+    trace.append("seed,skill,reward,race,event,car,playerPR,fieldPR,ratio,income,cash,loanDebt,leagueDebt,paid,credited,diverted,position,qualified,advanced,early,physicalSeed,ratioGap,seconds,bossPosition,bossPR,restitutionPaid,restitutionDue,parts,nextUsefulPrice\n")
     repeat(count){n->
         val seed=37+n*7919;val rng=Random(seed.toLong());val skill=n%3;val reward=(n/3)%3;val p=Profile("ledger-$seed")
-        var races=0;var bankrupt=false;var early=0;var gapMax=0.0;var hours=0.0;val milestones=IntArray(5){-1}
+        var races=0;var bankrupt=false;var early=0;var gapMax=0.0;var hours=0.0;val milestones=IntArray(5){-1};var firstUpgrade=-1;var firstClub=-1
         while(p.careerSeasons==0 && races<AshRules["maximumCareerRaces"].toInt()) {
             val round=p.careerRound
             for(i in Campaign.allies.indices)if(p.campaign.rewards[i]==1){
@@ -207,7 +209,11 @@ private fun campaignLedgers(dir:File,count:Int) {
                 }
             }
             RivalEconomy.prepare(p)
+            if(firstUpgrade<0 && p.tiers.any{it>0})firstUpgrade=races
+            if(firstClub<0 && p.owned.indices.any{p.owned[it] && CarCatalog.all[it].tierRank==1})firstClub=races
             val pr=if(round==34)PowerRating.of(CarCatalog.all[DeathDuel.rigIndex]) else PowerRating.of(CarCatalog.all[p.selectedCar],p.bonuses())
+            val bossProfile=p.rivalProfiles[Career.bossIndex(round)];val bossPR=PowerRating.of(CarCatalog.all[bossProfile.selectedCar],bossProfile.bonuses())
+            val parts=p.tiers.sum();val nextPrice=Parts.all.indices.map{Garage.offer(p,it)}.filter{it.available || it.reason=="Earn more credits"}.minOfOrNull{it.price}?:0
             val field=RivalEconomy.fieldRating(p);val ratio=pr/field;var gap=0.0;val result:CampaignOutcome
             if(round==34){
                 if(milestones[4]<0)milestones[4]=races;DeathDuel.seize(p)
@@ -218,15 +224,15 @@ private fun campaignLedgers(dir:File,count:Int) {
                 val choices=cells.filter{it.band==band}.drop(2);result=choices[rng.nextInt(choices.size)];gap=abs(result.playerPR/result.fieldPR-ratio);gapMax=max(gapMax,gap)
             }
             val cash=p.credits;val ticket=Economy.start(p);RivalEconomy.settleResults(p,ticket,round,result.rivals)
-            val settled=Career.settle(p,ticket,round,1,result.position,result.kills,result.hp,result.qualified,result.cash,clean=result.clean,finished=result.finished)!!
+            val settled=Career.settle(p,ticket,round,1,result.position,result.kills,result.hp,result.qualified,result.cash,clean=result.clean,finished=result.finished,bossPosition=result.bossPosition())!!
             races++;hours+=result.seconds/3600;if(result.early)early++
             for(i in 0..3)if(p.campaign.rewards[i]>0 && milestones[i]<0)milestones[i]=races
             bankrupt=bankrupt || p.credits<0 || p.owned.none{it} || !p.owned[p.selectedCar] || p.condition[p.selectedCar]<MarketRules["roadworthyPercent"] || p.credits<cash
             val s=p.campaign;check(s.initial+s.interest-s.paid+s.diverted-s.recovered-s.voided==s.debt)
-            trace.append(listOf(seed,skill,reward,races,round+1,CarCatalog.all[p.selectedCar].id,pr,field,ratio,p.credits-cash,p.credits,p.debt,s.debt,s.lastPayment,s.lastCredited,s.lastDiverted,result.position,result.qualified,settled.advanced,result.early,result.seed,gap).joinToString(",")+"\n")
+            trace.append(listOf(seed,skill,reward,races,round+1,CarCatalog.all[p.selectedCar].id,pr,field,ratio,p.credits-cash,p.credits,p.debt,s.debt,s.lastPayment,s.lastCredited,s.lastDiverted,result.position,result.qualified,settled.advanced,result.early,result.seed,gap,result.seconds,result.bossPosition(),bossPR,s.restitutionPaid,s.restitutionDue,parts,nextPrice).joinToString(",")+"\n")
         }
         val s=p.campaign
-        output.append(listOf(seed,skill,reward,p.careerSeasons>0,races,*milestones.toTypedArray(),p.careerRound+1,p.credits,p.debt,s.debt,s.paid,s.diverted,s.recovered,s.voided,bankrupt,early,gapMax,hours,s.rewards.joinToString(";")).joinToString(",")+"\n")
+        output.append(listOf(seed,skill,reward,p.careerSeasons>0,races,*milestones.toTypedArray(),p.careerRound+1,p.credits,p.debt,s.debt,s.paid,s.diverted,s.recovered,s.voided,bankrupt,early,gapMax,hours,s.rewards.joinToString(";"),s.restitutionPaid,s.restitutionDue,firstUpgrade,firstClub).joinToString(",")+"\n")
         if(n%200==199)println("Ledgers ${n+1}/$count")
     }
     output.close();trace.close();println("Seeded ledgers $count complete; censored runs remain censored")

@@ -31,9 +31,10 @@ class CampaignState(fresh: Boolean) {
     var seizedCar=-1
     var finale=0 // 0 not seized, 1 loan rig active, 2 won and restored
     var lastGrant=0
-    fun encode()=(listOf(initial,debt,interest,paid,diverted,recovered,voided,lastPayment,lastCredited,lastDiverted,lastInterest,interestEvent.toLong(),if(exposed)1L else 0L)+rewards.map{it.toLong()}+listOf(seizedCar.toLong(),finale.toLong(),lastGrant.toLong())).joinToString(",")
+    var restitutionPaid=0L;var restitutionDue=0L
+    fun encode()=(listOf(initial,debt,interest,paid,diverted,recovered,voided,lastPayment,lastCredited,lastDiverted,lastInterest,interestEvent.toLong(),if(exposed)1L else 0L)+rewards.map{it.toLong()}+listOf(seizedCar.toLong(),finale.toLong(),lastGrant.toLong(),restitutionPaid,restitutionDue)).joinToString(",")
     fun decode(value: String) {
-        val a=value.split(',').map{it.toLong()};require(a.size==20)
+        val a=value.split(',').map{it.toLong()};require(a.size==20 || a.size==22)
         require(a.take(11).all{it in 0..1_000_000_000_000L})
         initial=a[0];debt=a[1];interest=a[2];paid=a[3];diverted=a[4];recovered=a[5];voided=a[6]
         lastPayment=a[7];lastCredited=a[8];lastDiverted=a[9];lastInterest=a[10]
@@ -45,6 +46,10 @@ class CampaignState(fresh: Boolean) {
         require(diverted<=paid && recovered<=diverted && lastPayment==lastCredited+lastDiverted)
         require((finale==0)==(seizedCar==-1))
         require(!exposed || rewards[1]>0)
+        restitutionPaid=if(a.size==22)a[20] else 0
+        restitutionDue=if(a.size==22)a[21] else if(exposed)diverted-recovered else 0
+        require(restitutionPaid in 0..1_000_000_000_000L && restitutionDue in 0..1_000_000_000_000L)
+        require(if(exposed)recovered+restitutionPaid+restitutionDue==diverted else restitutionPaid==0L && restitutionDue==0L)
     }
 }
 
@@ -63,11 +68,19 @@ object Campaign {
     fun prepare(p: Profile,round: Int=p.careerRound) {
         if(!p.withRivals)return
         val s=p.campaign
+        collectRestitution(p)
         if(p.careerSeasons>0 || round<=s.interestEvent)return
         s.interestEvent=round;s.lastInterest=0
         if(!s.exposed && s.debt>0 && round<CampaignRules["interestThroughEvent"].toInt()) {
             s.lastInterest=CampaignRules["interestPerEvent"].toLong();s.interest+=s.lastInterest;s.debt+=s.lastInterest
         }
+    }
+    /** A full wallet defers stolen-money restitution; it never consumes it. Outside the fixed step. */
+    private fun collectRestitution(p: Profile) {
+        val s=p.campaign
+        val amount=min(s.restitutionDue,(EconomyRules["creditCap"].toInt()-p.credits).toLong())
+        if(amount<=0)return
+        p.credits+=amount.toInt();s.restitutionDue-=amount;s.restitutionPaid+=amount;p.marketRevision++
     }
     fun payment(p: Profile,net: Int,loanPaid: Int): Int {
         val s=p.campaign;s.lastPayment=0;s.lastCredited=0;s.lastDiverted=0
@@ -87,6 +100,7 @@ object Campaign {
         val rival=Career.rivals.indexOfFirst{it.id==allies[index].id};p.grudges[rival]=-1
         if(round+1==CampaignRules["exposeAfterEvent"].toInt() && !s.exposed) {
             s.exposed=true;val recovered=min(s.debt,s.diverted-s.recovered);s.debt-=recovered;s.recovered+=recovered
+            s.restitutionDue=s.diverted-s.recovered
         }
     }
     fun migrate(p: Profile) {
@@ -96,6 +110,17 @@ object Campaign {
     }
     fun pending(p: Profile)=p.campaign.rewards.indexOfFirst{it==1}
     fun allyIndex(id: String)=allies.indexOfFirst{it.id==id}
+    fun rewardCar(p: Profile,index: Int): Int {
+        val named=allies[index].car
+        if(!p.owned[named])return named
+        return CarCatalog.all.indices.firstOrNull{CarCatalog.all[it].tierRank==CarCatalog.all[named].tierRank && !p.owned[it]}?:-1
+    }
+    fun rewardPart(p: Profile,index: Int): Int {
+        val named=allies[index].part
+        return (listOf(named)+Parts.all.indices.filter{it!=named}).firstOrNull {
+            val offer=Garage.offer(p,it);offer.available || offer.reason=="Earn more credits"
+        }?:-1
+    }
     fun taunt(p: Profile,rival: String): String? {
         val index=allyIndex(rival);if(index<0 || p.campaign.rewards[index]==0)return null
         val r=Career.rivals.indexOfFirst{it.id==rival}
@@ -106,8 +131,8 @@ object Campaign {
         val a=allies[index]
         return when(choice) {
             "money"->if(p.credits>=EconomyRules["creditCap"])"Wallet full - choose another reward" else ""
-            "car"->if(p.owned[a.car])"Car already owned" else if(!Career.unlocked(p,"car",CarCatalog.all[a.car].id))"Licence not earned" else ""
-            "part"->{val offer=Garage.offer(p,a.part);if(offer.available || offer.reason=="Earn more credits")"" else offer.reason}
+            "car"->{val car=rewardCar(p,index);if(car<0)"Both tier cars already owned" else if(!Career.unlocked(p,"car",CarCatalog.all[car].id))"Licence not earned" else ""}
+            "part"->if(rewardPart(p,index)>=0)"" else "No useful unlocked part on this car - choose another car or reward"
             else->"Unknown reward"
         }
     }
@@ -115,8 +140,8 @@ object Campaign {
         val a=allies[index]
         return when(choice) {
             "money"->"${min(a.money,EconomyRules["creditCap"].toInt()-p.credits)} CR (up to ${a.money})"
-            "car"->"Stock ${CarCatalog.all[a.car].id} / value ${CarCatalog.all[a.car].priceCredits} CR"
-            else->"${Parts.all[a.part].name} ${Garage.offer(p,a.part).nextTier} on ${CarCatalog.all[p.selectedCar].id}"
+            "car"->{val car=rewardCar(p,index);if(car<0)"Tier garage complete" else "Stock ${CarCatalog.all[car].id} / value ${CarCatalog.all[car].priceCredits} CR"}
+            else->{val part=rewardPart(p,index);if(part<0)"No useful unlocked part" else "${Parts.all[part].name} ${Garage.offer(p,part).nextTier} on ${CarCatalog.all[p.selectedCar].id}"}
         }
     }
     fun claim(p: Profile,id: String,revision: Long): String {
@@ -127,8 +152,8 @@ object Campaign {
         val a=allies[index];val description=label(p,index,choice);var grant=0
         when(choice) {
             "money"->{grant=min(a.money,EconomyRules["creditCap"].toInt()-p.credits);p.credits+=grant}
-            "car"->{p.owned[a.car]=true;p.condition[a.car]=100;grant=CarCatalog.all[a.car].priceCredits}
-            "part"->{grant=Garage.offer(p,a.part).price;p.tiers[p.selectedCar*Parts.all.size+a.part]++}
+            "car"->{val car=rewardCar(p,index);p.owned[car]=true;p.condition[car]=100;grant=CarCatalog.all[car].priceCredits}
+            "part"->{val part=rewardPart(p,index);grant=Garage.offer(p,part).price;p.tiers[p.selectedCar*Parts.all.size+part]++}
         }
         p.campaign.rewards[index]=choices.indexOf(choice)+2;p.campaign.lastGrant=grant;p.marketRevision++
         return "${a.id.replaceFirstChar{it.uppercase()}} promotion: $description claimed"
@@ -140,6 +165,6 @@ object Campaign {
             val offers=choices.joinToString(",","[","]"){choice->val error=reason(p,i,choice);"{\"id\":\"${a.id}:$choice\",\"label\":\"${label(p,i,choice)}\",\"available\":${error.isEmpty()},\"reason\":\"$error\"}"}
             "{\"id\":\"${a.id}\",\"state\":${s.rewards[i]},\"line\":\"${taunt(p,a.id)?:a.joinedLine}\",\"offers\":$offers}"
         }.joinToString(",","[","]")
-        return "{\"profile\":\"${p.id}\",\"car\":\"${CarCatalog.all[p.selectedCar].id}\",\"revision\":${p.marketRevision},\"debt\":${s.debt},\"initial\":${s.initial},\"interest\":${s.interest},\"paid\":${s.paid},\"diverted\":${s.diverted},\"recovered\":${s.recovered},\"voided\":${s.voided},\"lastPayment\":${s.lastPayment},\"lastCredited\":${s.lastCredited},\"lastDiverted\":${s.lastDiverted},\"lastInterest\":${s.lastInterest},\"exposed\":${s.exposed},\"loanDebt\":${p.debt},\"allies\":$rewards,\"mechanic\":\"${m.getValue("line")}\",\"tutorial\":\"${m.getValue("tutorial")}\",\"hub\":\"${m.getValue("hub")}\",\"finale\":${s.finale},\"seizedCar\":\"${if(s.seizedCar>=0)CarCatalog.all[s.seizedCar].id else ""}\"}"
+        return "{\"profile\":\"${p.id}\",\"car\":\"${CarCatalog.all[p.selectedCar].id}\",\"revision\":${p.marketRevision},\"debt\":${s.debt},\"initial\":${s.initial},\"interest\":${s.interest},\"paid\":${s.paid},\"diverted\":${s.diverted},\"recovered\":${s.recovered},\"restitutionPaid\":${s.restitutionPaid},\"restitutionDue\":${s.restitutionDue},\"voided\":${s.voided},\"lastPayment\":${s.lastPayment},\"lastCredited\":${s.lastCredited},\"lastDiverted\":${s.lastDiverted},\"lastInterest\":${s.lastInterest},\"exposed\":${s.exposed},\"loanDebt\":${p.debt},\"allies\":$rewards,\"mechanic\":\"${m.getValue("line")}\",\"tutorial\":\"${m.getValue("tutorial")}\",\"hub\":\"${m.getValue("hub")}\",\"finale\":${s.finale},\"seizedCar\":\"${if(s.seizedCar>=0)CarCatalog.all[s.seizedCar].id else ""}\"}"
     }
 }

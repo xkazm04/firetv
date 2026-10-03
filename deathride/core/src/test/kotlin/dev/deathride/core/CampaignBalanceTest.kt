@@ -12,7 +12,7 @@ class CampaignBalanceTest {
         }
         reject(14,CareerCurve.all[14].copy(rewardScale=1.0),"must not decrease")
         reject(34,CareerCurve.all[34].copy(ratioBasis="lap-field"),"Ratio basis")
-        reject(20,CareerCurve.all[20].copy(ratioTarget=.98),"planned dip")
+        reject(20,CareerCurve.all[20].copy(ratioTarget=1.10),"declared band")
         reject(0,CareerCurve.all[0].copy(fieldTarget=Double.NaN),"economy value")
         reject(3,CareerCurve.all[3].copy(number=99),"event/tier")
         assertTrue(CareerCurve.errors(CareerCurve.all.dropLast(1)).any{"ordered event" in it})

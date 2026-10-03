@@ -50,7 +50,7 @@ class CampaignTest {
             Campaign.claim(loaded,"rook:$choice",revision);Campaign.claim(loaded,"rook:money",loaded.marketRevision)
             assertEquals(state,ProfileCodec.encode(loaded));assertEquals(state,ProfileCodec.encode(loaded.copy()))
         }
-        val p=boss(0);p.credits=8000;p.owned[Campaign.allies[0].car]=true
+        val p=boss(0);p.credits=8000;p.owned[Campaign.allies[0].car]=true;p.owned[CarCatalog.all.indexOfFirst{it.id=="Bastion"}]=true
         assertTrue(Campaign.claim(p,"rook:money",p.marketRevision).contains("full"))
         assertTrue(Campaign.claim(p,"rook:car",p.marketRevision).contains("owned"));assertEquals(1,p.campaign.rewards[0])
     }
@@ -74,7 +74,7 @@ class CampaignTest {
         val p=boss(1);p.credits=712;p.debt=93
         fun sign(body: String)=body+"checksum="+CRC32().apply{update(body.toByteArray())}.value.toString(16)+"\n"
         val body=ProfileCodec.encode(p).substringBefore("checksum=")
-        val legacy=body.replace("DEATHRIDE_PROFILE 5","DEATHRIDE_PROFILE 4").lines().filterNot{it.startsWith("campaign=")}.joinToString("\n")
+        val legacy=body.replace("DEATHRIDE_PROFILE 6","DEATHRIDE_PROFILE 4").lines().filterNot{it.startsWith("campaign=")}.joinToString("\n")
         val migrated=ProfileCodec.decode(sign(legacy),p.id)
         assertEquals(p.credits,migrated.credits);assertEquals(p.debt,migrated.debt);assertArrayEquals(p.tiers,migrated.tiers);assertArrayEquals(p.owned,migrated.owned)
         assertEquals(0,migrated.campaign.debt);assertEquals(5,migrated.campaign.rewards[0]);assertEquals(5,migrated.campaign.rewards[1]);assertEquals(-1,Campaign.pending(migrated))

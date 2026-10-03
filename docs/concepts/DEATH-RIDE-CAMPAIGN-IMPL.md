@@ -3,6 +3,8 @@
 Written 2026-10-02. Owner choice and plot: `deathride/campaign/OWNER-CAMPAIGN-CHOICE.md` (read first, verbatim words and host reading). Triage page and note: `deathride/campaign/directions/index.html`, `docs/concepts/deathride/K1-campaign-directions.md`.
 Existing foundations: `DEATH-RIDE-PROGRESSION.md`, `deathride/docs/concepts` C4 (35 events, 18/21/24 laps, rival garages, three tiers), `G2-REPORT.md`, ten cars with abilities, Rivet/Hammer/Mine (mine blast 0.5 m), the HUD (`H3-hud-report.md`), art kit (rival portraits, story-card backdrops, `art/review/fusion`), audio direction (`deathride/audio/OWNER-AUDIO-CHOICE.md`: the Mechanic is the nervous, helpful young parts-store owner).
 
+Pass-two continuation: [DV0–DV3 campaign redesign](DEATH-RIDE-CAMPAIGN-DESIGN-V2.md) on `deathride/campaign-v2`. It preserves the owner plot and existing art, changes pacing/promotion/restitution with save v6, and retains the old quality misses for comparison. This continuation is headless and desktop only; the historical Q4 device authorization below does not apply to it.
+
 ## The plot to implement
 
 Integration update, 2026-10-03: Q0-Q4 is merged into `deathride/main` with X3 audio.
