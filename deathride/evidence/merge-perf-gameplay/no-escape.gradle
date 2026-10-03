@@ -1,0 +1,19 @@
+allprojects {
+    afterEvaluate { p ->
+        if (p.path == ':game') {
+            def ordinary = p.tasks.named('test').get()
+            p.tasks.register('mergeNoEscapeTest', Test) {
+                dependsOn p.tasks.named('testClasses')
+                testClassesDirs = ordinary.testClassesDirs
+                classpath = ordinary.classpath
+                useJUnitPlatform()
+                jvmArgs '-XX:-DoEscapeAnalysis'
+                filter {
+                    includeTestsMatching 'dev.deathride.game.AudioAllocationTest'
+                    includeTestsMatching 'dev.deathride.game.QueuedAudioTest.steadyParameterSubmissionAllocatesNothing'
+                }
+                testLogging { events 'passed', 'failed', 'skipped' }
+            }
+        }
+    }
+}

@@ -25,9 +25,13 @@ try {
  await wait(async()=>await guest.locator('[data-ally]').count()===12);
  assert.equal(await guest.locator('[data-ally]:enabled').count(),0,'Guest cannot claim host promotion');
  let g=(await stats()).slots[0].garage;assert.equal(g.profile,'campaign-probe-q1');
- const before=g.credits;await page.locator('[data-ally="rook:money"]').tap();
+ const before=g.credits;
+ const moneyOffer=g.campaign.allies[0].offers.find(x=>x.id==='rook:money');
+ const declaredGrant=Number(moneyOffer.label.match(/^(\d+) CR/)[1]);
+ assert.ok(declaredGrant>0);
+ await page.locator('[data-ally="rook:money"]').tap();
  await wait(async()=>(await stats()).slots[0].garage.campaign.allies[0].state===2);
- assert.equal((await stats()).slots[0].garage.credits,before+300);
+ assert.equal((await stats()).slots[0].garage.credits,before+declaredGrant);
  await wait(async()=>(await stats()).audio.lastNarration==='voice.mechanic.ally');
  const rewardAudio=(await stats()).audio;
  assert.equal(rewardAudio.lastNarrationPlayed,true,'Ally narration reaches the native playback backend');
@@ -45,7 +49,22 @@ try {
  await page.reload();await page.waitForFunction(()=>document.getElementById('player').textContent==='PLAYER 1');
  await wait(async()=>(await stats()).slots[0].garage.campaign.allies[2].state===4);
  assert.deepEqual((await stats()).slots[0].garage.campaign.allies.map(x=>x.state),[2,3,4,1]);
+ await page.locator('#closeCareer').tap();
+ await wait(async()=>(await stats()).phase==='lobby');
+ await page.locator('#carButton').tap();
+ const capChecks=[];
+ const expectedCaps=(process.env.CAMPAIGN_EXPECT_CAPS||'10,10').split(',').map(Number);
+ assert.ok(expectedCaps.length===2&&expectedCaps.every(n=>Number.isInteger(n)&&n>=10&&n<=16));
+ for(const [car,cap] of [['Quill',expectedCaps[0]],['Kestrel',expectedCaps[1]]]) {
+  await page.locator('#carChoice').selectOption(car);
+  await page.waitForFunction(expected=>{
+   const meters=[...document.querySelectorAll('#carStats meter')];
+   return meters.length===8&&meters.every(m=>m.max===expected);
+  },cap);
+  capChecks.push({car,cap});
+ }
+ await page.screenshot({path:output+'/late-upgrade-caps.png'});
  assert.deepEqual(errors,[]);
- await writeFile(output+'/result.json',JSON.stringify({fixture:'Explicit core-generated promotion fixture; actual phone transactions; not an earned browser career',checks:['Mechanic and ledger','guest cannot claim host reward','cash promotion reaches Mechanic audio cue','car promotion','legal part promotion','ledger conservation','reload retains claimed and pending choices'],campaign:state,rewardAudio,errors},null,2));
+ await writeFile(output+'/result.json',JSON.stringify({fixture:'Explicit core-generated promotion fixture; actual phone transactions; not an earned browser career',checks:['Mechanic and ledger','guest cannot claim host reward','cash promotion reaches Mechanic audio cue','car promotion','legal part promotion','ledger conservation','reload retains claimed and pending choices','live phone meters use the shared late-tier upgrade caps'],campaign:state,rewardAudio,capChecks,errors},null,2));
  console.log('Campaign ledger, Mechanic, all reward types and reload PASS');
 }finally{await browser.close()}

@@ -1,0 +1,192 @@
+{
+  "modules": {
+    "core": {
+      "tests": 150,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "link": {
+      "tests": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "game": {
+      "tests": 32,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "allocationAndDeterminism": [
+    {
+      "module": "core",
+      "class": "dev.deathride.core.AbilitiesTest",
+      "test": "allSignaturesReplayAndAllocateZeroBytesWhileActivating()",
+      "pass": true
+    },
+    {
+      "module": "core",
+      "class": "dev.deathride.core.BalanceSmokeTest",
+      "test": "scenarioCastAndDamageTimingAreValidAndReplay()",
+      "pass": true
+    },
+    {
+      "module": "core",
+      "class": "dev.deathride.core.CareerTest",
+      "test": "campaignCombatReplaysAndAllocatesNothing()",
+      "pass": true
+    },
+    {
+      "module": "core",
+      "class": "dev.deathride.core.CareerV2Test",
+      "test": "rivalSettlementIsIdempotentAndDuelSteppingAllocatesNothing()",
+      "pass": true
+    },
+    {
+      "module": "core",
+      "class": "dev.deathride.core.CombatDepthTest",
+      "test": "fullLoadoutReplaysAndNewStepPathsAllocateNothing()",
+      "pass": true
+    },
+    {
+      "module": "core",
+      "class": "dev.deathride.core.CombatTest",
+      "test": "seededCombatResolvesAllCoursesAndReplayMatches()",
+      "pass": true
+    },
+    {
+      "module": "core",
+      "class": "dev.deathride.core.CombatTest",
+      "test": "activeCombatAllocatesNothingAcrossRepeatedLiveStarts()",
+      "pass": true
+    },
+    {
+      "module": "core",
+      "class": "dev.deathride.core.DeathDuelTest",
+      "test": "realDispatchReplaysAndAllocatesZeroBytesInTheStep()",
+      "pass": true
+    },
+    {
+      "module": "core",
+      "class": "dev.deathride.core.DriftLabTest",
+      "test": "fullDriftExperimentReplaysAndAllocatesNothingWhileInputsVary()",
+      "pass": true
+    },
+    {
+      "module": "core",
+      "class": "dev.deathride.core.DriftModelTest",
+      "test": "activeDriftAndSpinAllocateZeroAndReplay()",
+      "pass": true
+    },
+    {
+      "module": "core",
+      "class": "dev.deathride.core.EnduranceTest",
+      "test": "promotionFieldsKeepLegalPurchasesAcrossJoinsAndIgnorePlayerPower()",
+      "pass": true
+    },
+    {
+      "module": "core",
+      "class": "dev.deathride.core.FeelTest",
+      "test": "humanProfilesAllocateNothingAfterWarmup()",
+      "pass": true
+    },
+    {
+      "module": "core",
+      "class": "dev.deathride.core.FeelTest",
+      "test": "shapingAndDeterminismAndImmediatePropulsionRelease()",
+      "pass": true
+    },
+    {
+      "module": "core",
+      "class": "dev.deathride.core.MovementTest",
+      "test": "everySurfaceCompletesSeededAiRacesDeterministically()",
+      "pass": true
+    },
+    {
+      "module": "core",
+      "class": "dev.deathride.core.MovementTest",
+      "test": "advancedMovementAllocatesNothing()",
+      "pass": true
+    },
+    {
+      "module": "core",
+      "class": "dev.deathride.core.ObstaclesTest",
+      "test": "activeContactDragPerceptionAndWholeStepAllocateNothingAndReplay()",
+      "pass": true
+    },
+    {
+      "module": "core",
+      "class": "dev.deathride.core.PresentationEventsTest",
+      "test": "eventObservationCannotChangeSimulation()",
+      "pass": true
+    },
+    {
+      "module": "core",
+      "class": "dev.deathride.core.RosterV2Test",
+      "test": "stockCourseMatrixCompletesAndReplays()",
+      "pass": true
+    },
+    {
+      "module": "core",
+      "class": "dev.deathride.core.SoakTest",
+      "test": "fixedStepHasNoSteadyStateAllocations()",
+      "pass": true
+    },
+    {
+      "module": "core",
+      "class": "dev.deathride.core.TrackContentTest",
+      "test": "newFeatureCourseRetainsAllocationGuarantee()",
+      "pass": true
+    },
+    {
+      "module": "core",
+      "class": "dev.deathride.core.TrackContentTest",
+      "test": "competitivePoolsFinishReplayAndPublishPacing()",
+      "pass": true
+    },
+    {
+      "module": "core",
+      "class": "dev.deathride.core.TracksTest",
+      "test": "authoredCourseStepAllocatesNothing()",
+      "pass": true
+    },
+    {
+      "module": "core",
+      "class": "dev.deathride.core.TracksTest",
+      "test": "sixCarsFinishEveryCourseAndReplayDeterministically()",
+      "pass": true
+    },
+    {
+      "module": "core",
+      "class": "dev.deathride.core.WorldTest",
+      "test": "deterministicSixtySeconds()",
+      "pass": true
+    },
+    {
+      "module": "link",
+      "class": "dev.deathride.link.PerfTraceTest",
+      "test": "appendAllocatesNothingAfterWarmup()",
+      "pass": true
+    },
+    {
+      "module": "game",
+      "class": "dev.deathride.game.AudioAllocationTest",
+      "test": "changingSpatialLoopsAndTwoDriverUpdatesAllocateNothingAfterWarmup()",
+      "pass": true
+    },
+    {
+      "module": "game",
+      "class": "dev.deathride.game.AudioTest",
+      "test": "actualDeathDuelDispatchReachesAudioWithoutLapCuesOrChangingReplay()",
+      "pass": true
+    },
+    {
+      "module": "game",
+      "class": "dev.deathride.game.QueuedAudioTest",
+      "test": "steadyParameterSubmissionAllocatesNothing()",
+      "pass": true
+    }
+  ]
+}

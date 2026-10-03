@@ -13,9 +13,21 @@ object AshStory {
     val cards=Content.table("story-cards").associate{it.getValue("id") to StoryCard(it.getValue("id"),it.getValue("title"),it.getValue("backdropKey"),(1..3).map{i->it.getValue("line$i")})}
     val rivals=Content.table("rival-stories").associateBy{it.getValue("id")}
 }
-data class CurvePoint(val event: String,val number: Int,val act: Int,val fieldTarget: Double,val ratioTarget: Double,val rewardScale: Double,val rivalGrant: Int,val fieldTier: Int=act)
+data class CurvePoint(val event: String,val number: Int,val act: Int,val fieldTarget: Double,val ratioTarget: Double,val rewardScale: Double,val rivalGrant: Int,val fieldTier: Int=act,val ratioBasis: String="lap-field")
 object CareerCurve {
-    val all=Content.table("career-curve").map{CurvePoint(it.getValue("event"),it.number("number").toInt(),it.number("act").toInt(),it.number("fieldTarget"),it.number("ratioTarget"),it.number("rewardScale"),it.number("rivalGrant").toInt(),it.number("fieldTier").toInt())}
+    val all=Content.table("career-curve").map{CurvePoint(it.getValue("event"),it.number("number").toInt(),it.number("act").toInt(),it.number("fieldTarget"),it.number("ratioTarget"),it.number("rewardScale"),it.number("rivalGrant").toInt(),it.number("fieldTier").toInt(),it.getValue("ratioBasis"))}
+    fun errors(points: List<CurvePoint> = all): List<String> = buildList {
+        if(points.map{it.event}!=Career.events.map{it.id})add("Curve must cover the ordered event schedule")
+        for((i,p) in points.withIndex()) {
+            if(p.number!=i+1 || p.act !in 0..4 || p.fieldTier !in p.act..minOf(4,p.act+1))add("Invalid curve event/tier")
+            if(!p.fieldTarget.isFinite() || p.fieldTarget<=0 || !p.ratioTarget.isFinite() || p.ratioTarget<=0 || !p.rewardScale.isFinite() || p.rewardScale<1 || p.rivalGrant<0)add("Invalid curve economy value")
+            if(i>0 && p.rewardScale<points[i-1].rewardScale)add("Division prize scale must not decrease")
+            val event=Career.events.getOrNull(i)?:continue
+            if(p.ratioBasis!=if(event.elimination)"supplied-rig" else "lap-field")add("Ratio basis must match event type")
+            if(event.boss && !event.elimination && p.ratioTarget !in .85.. .90)add("Boss target must retain the planned dip")
+        }
+    }
+    init { require(errors().isEmpty()){errors().joinToString("; ")} }
 }
 class RivalPlan(row: Map<String,String>) {
     val id=row.getValue("id");val cars=listOf("rookie","club","pro","elite","champion").map{tier->CarCatalog.all.indexOfFirst{it.id==row.getValue(tier)}}

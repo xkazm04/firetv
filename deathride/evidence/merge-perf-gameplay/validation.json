@@ -1,0 +1,80 @@
+{
+  "date": "2026-10-03",
+  "base": "4b3f65c",
+  "perfHead": "2e5fea4",
+  "perfMerge": "780be45",
+  "gameplayHead": "434ccdf",
+  "productionCoreAndDataEqualGameplay": true,
+  "androidLinkAudioEqualPerf": true,
+  "tests": {
+    "core": {
+      "tests": 150,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "link": {
+      "tests": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "game": {
+      "tests": 32,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "allocationDeterminismCases": 28,
+  "escapeAnalysisDisabledAllocationTests": 2,
+  "artTests": 45,
+  "metricTests": 9,
+  "controllerSuites": [
+    "browser-check",
+    "combat-check",
+    "ability-controller-check",
+    "hud-browser-check",
+    "campaign-browser-check",
+    "duel-browser-check"
+  ],
+  "offlineBrowserChecks": [
+    "story (desktop/mobile)",
+    "perf",
+    "gameplay obstacles",
+    "gameplay campaign",
+    "gameplay campaign release",
+    "audio x2",
+    "audio effects",
+    "audio engines",
+    "audio voices",
+    "audio music"
+  ],
+  "glChecks": [
+    "story-art",
+    "road-mark",
+    "obstacle",
+    "atlas",
+    "audio"
+  ],
+  "apk": {
+    "apk": "app/build/outputs/apk/debug/app-debug.apk",
+    "sha256": "f2e91a6125350e82a3e1f504c3cd7bec543ad061c970e83a96a4df472add9d32",
+    "bytes": 70832364,
+    "allPackagedStoryAtlasAudioBytesMatchSource": true,
+    "storyCandidates": 16,
+    "storyOwnerApproved": 0,
+    "storyFiles": 17,
+    "audioClips": 52
+  },
+  "deviceAccess": false,
+  "pushed": false,
+  "limits": [
+    "Existing perf frame gates remain failed; N3 preserves all effects and native resolution.",
+    "Campaign tuning remains partial; no new full cohort, Stick or owner-feel qualification."
+  ],
+  "harnessCorrections": [
+    "Atlas audit retried from deathride working directory, required for filesystem fallback fixtures.",
+    "Temporary Gradle init script UTF-8 BOM removed before no-escape allocation tests."
+  ]
+}

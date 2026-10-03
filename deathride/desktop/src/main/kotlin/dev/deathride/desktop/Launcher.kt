@@ -11,6 +11,7 @@ fun main(args: Array<String>) {
     if(args.contains("--drift-lab")){config.setTitle("Death Ride Drift Lab");Lwjgl3Application(DriftLabScreen(args.contains("--drift-lab-check"),duration),config);return}
     if(args.contains("--atlas-check")){Lwjgl3Application(AtlasAudit(),config);return}
     if(args.contains("--story-art-check")){Lwjgl3Application(StoryArtAudit(),config);return}
+    if(args.contains("--obstacle-check")){Lwjgl3Application(ObstacleAudit(),config);return}
     if(args.contains("--audio-check")){Lwjgl3Application(AudioAudit(),config);return}
     if(args.contains("--road-mark-check")){Lwjgl3Application(RoadMarkAudit(),config);return}
     val port=args.firstOrNull{it.startsWith("--port=")}?.substringAfter('=')?.toIntOrNull()?:8768

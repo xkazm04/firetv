@@ -128,10 +128,22 @@ A career ladder of many more events, named rival drivers with personalities as d
 | Integration | IP | Endurance career and legal promotion fields | V1, C4 | measured mean 5.85-6.54 h; boss/tail/first-purchase limits retained | integration-ip-20261001 | 2026-10-01 |
 | Integration | I2 | Stick texture and frame budget | I1 | 15-minute load/memory/median passed; tail/transition misses retained | integration-i2-20261001 | 2026-10-01 |
 | Integration | I3 | Gate G2 report, owner session | I2, C4 | evidence/report complete; G2 owner quality/feel pending | integration-i3-20261001 | 2026-10-01 |
+| Gameplay | G-OBS | Natural barriers, perception, lint, rendering and paired races | Consolidated campaign/audio | implemented; campaign sweep passes, practice moving timeout retained; owner/Stick pending | c8edb2e | 2026-10-03 |
+| Gameplay | G-BAL | Curve/payout correction and rejected headroom evidence | G-OBS / Q3 | partial; late dips and censoring unresolved; owner/Stick pending | this commit (G-BAL) | 2026-10-03 |
 
 ## g. Session log
 
 (each run appends: wave, date, what changed, commands with results, what is `not measured`, spend of the Grok budget, next wave)
+
+### G-BAL - 2026-10-03
+
+Design, retained candidates and measured limitations: [G-campaign-balance](deathride/G-campaign-balance.md). Partial economy correction: nondecreasing prize scales, revised ally cash, capped attainable field targets and an explicit supplied-rig finale ratio basis. The shared Elite 12 / Champion 16 experiment and 610 Marrow ceiling were reverted after class winner-share changes of roughly 20 points and increased PR-policy censoring. Stock physics/caps/prices, PR weights and abilities remain unchanged. Release ordinary library: 11,520 fresh-Q3-disjoint outcomes, 34 exact event replays, both 2,000-ledger buyers and 3,072 rotated duels. Final main-class/resource bytes equal the sampled runtime; both cohort outputs/timelines reproduce exactly after restoration. Primary boss ratios: 0.8551 / 0.8658 / 0.9908 / 1.0162 to 0.8551 / 0.8792 / 0.9385 / 0.9800; late and PR-control misses remain. Completed primary careers: 1292 to 1099; PR buyer: 541 to 419. This regression is disclosed; campaign balance is not accepted. Duel rig wins 313 / 212 / 241 per 1,024; per-rotation dominance/opening-loss diagnostics pass, while human-skill calibration remains unproven.
+
+Required `:core:test :link:test :game:test :app:assembleDebug` green (150 core / 3 link / 21 renderer); nine Python instrument tests prove winner-denominator, rotation, seed-diversity and early-loss alarms can fire. Curve, payout, save and reuse mutations pass. The rejected upgraded obstacle sweep finished all 36,000 entries with zero wrecks/unresolved and 6,000 exact hashes; a recovered 39.93-second interval remains documented. Same-seed cap control separates upgrade-driven class shifts from obstacle effects. Release desktop reward transactions, cap-10 meters and evidence pages pass. Both failed headroom cohorts, twelve finale probes, eleven ledger pilots and failed preflights/reuse are retained with their own inputs. Each cohort is conditional resampling, not 2,000 independent physical careers. Owner quality/feel, physical-phone comfort and every Stick check pending. No device access, Grok/art spend or push. Remaining: a joint late-roster design and fresh validation to fix the still-missed dips and censoring without class regressions.
+
+### G-OBS - 2026-10-03
+
+Design and outcome: [G-obstacles](deathride/G-obstacles.md). Added seeded per-course natural obstacles, mass contacts, time-based drag, perception-based braking/avoidance, weapon obstruction, linter mutations and atlas/shadow/fallback rendering. Retained rejected placements and corrected their recovery traps. Two final 6,000-race paired sweeps plus exact final-runtime replays: campaign mode has 18,000/18,000 finishers in each arm and no wrecks; practice has one moving watchdog survivor and six extra total wrecks, both disclosed. Winner share uses races, with full rotation and seed/hash checks. Required `:core:test :link:test :game:test :app:assembleDebug`, allocation/replay tests, Python instrument tests and desktop gallery checks pass at commit. Intermediate failed attempts remain in evidence. Owner feel and all Stick/device checks pending; no device access. Grok/art spend zero. Next wave: G-BAL fresh physical library, both 2,000-ledger buyers and 3,072 rotated duels; late PR headroom limitation remains under investigation.
 
 ### C1 restart ? 2026-10-01
 

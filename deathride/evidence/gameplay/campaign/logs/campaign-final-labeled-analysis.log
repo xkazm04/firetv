@@ -1,0 +1,754 @@
+{
+  "physical": {
+    "races": 11520,
+    "events": 34,
+    "cells": 1872,
+    "seedsPerCell": [
+      4,
+      20
+    ],
+    "minimumUniqueHashesPerCell": 4,
+    "earlyLosses": 0,
+    "unresolvedLead": 0,
+    "leadGridSlot": 0,
+    "opponentDifficulty": "Club",
+    "replayChecks": 34,
+    "training": "first two seeds per cell choose chassis; held-out seeds 2/3 regular and 2..19 boss resampled for ledgers",
+    "limitations": [
+      "Fixed reference rival trajectory; each ledger pays and shops its own rivals but resamples by nearest PR ratio",
+      "Two held-out outcomes per ordinary cell and eighteen per boss cell: 2,000 seeds are ledger variability, not 2,000 new physical outcomes",
+      "Normal-race lead stays in grid slot 0; paired rotation control is performed for the new duel"
+    ],
+    "completeCrossFromContent": true,
+    "sameReferenceGaragesInBaseAndBossSupplement": true
+  },
+  "duels": [
+    {
+      "skill": "Rookie",
+      "rotation": null,
+      "fights": 1024,
+      "rigWins": 313,
+      "bossWins": 607,
+      "draws": 104,
+      "rigWinRate": 0.3056640625,
+      "win95ci": null,
+      "resolvedRigWinRate": 0.3402173913043478,
+      "earlyLosses": 0,
+      "early95ci": null,
+      "meanSeconds": 305.1160156249861,
+      "medianSeconds": 270.6083333334159,
+      "meanDispatches": 54.76171875,
+      "meanMineHitsAllCars": 1.916015625,
+      "meanRigRepairPickups": 2.962890625,
+      "oneShots": 0,
+      "uniqueHashes": 1024,
+      "uniqueSeeds": 512
+    },
+    {
+      "skill": "Club",
+      "rotation": null,
+      "fights": 1024,
+      "rigWins": 212,
+      "bossWins": 701,
+      "draws": 111,
+      "rigWinRate": 0.20703125,
+      "win95ci": null,
+      "resolvedRigWinRate": 0.2322015334063527,
+      "earlyLosses": 0,
+      "early95ci": null,
+      "meanSeconds": 303.47558593748784,
+      "medianSeconds": 267.30000000008556,
+      "meanDispatches": 54.470703125,
+      "meanMineHitsAllCars": 2.025390625,
+      "meanRigRepairPickups": 2.892578125,
+      "oneShots": 0,
+      "uniqueHashes": 1024,
+      "uniqueSeeds": 512
+    },
+    {
+      "skill": "Pro",
+      "rotation": null,
+      "fights": 1024,
+      "rigWins": 241,
+      "bossWins": 647,
+      "draws": 136,
+      "rigWinRate": 0.2353515625,
+      "win95ci": null,
+      "resolvedRigWinRate": 0.2713963963963964,
+      "earlyLosses": 0,
+      "early95ci": null,
+      "meanSeconds": 309.5162434895591,
+      "medianSeconds": 282.92500000007135,
+      "meanDispatches": 55.5439453125,
+      "meanMineHitsAllCars": 2.1943359375,
+      "meanRigRepairPickups": 3.146484375,
+      "oneShots": 0,
+      "uniqueHashes": 1024,
+      "uniqueSeeds": 512
+    }
+  ],
+  "gates": {
+    "normalRaceOpeningLossRateBelow5Percent": true,
+    "openingLossRateBelow5Percent": true,
+    "noOneShotKills": true,
+    "seedDiversityAtLeast99PercentEveryCell": true,
+    "neitherSideOver85PercentOfResolvedWins": true,
+    "noObservedBankruptcy": true,
+    "allCareersCompleted": false,
+    "allBossEntryMediansInLegacyBand": false
+  }
+}
+{
+  "scope": "Q3 versus fresh gameplay library: economy data and obstacles differ, as do physical seeds. This is before/after evidence, not isolation of one causal factor. Each buyer has 2,000 resampled ledgers, not independent end-to-end physical careers.",
+  "careers": [
+    {
+      "buyer": "race",
+      "skill": "all",
+      "before": {
+        "careers": 2000,
+        "completed": 1292,
+        "censored": 708,
+        "bankruptcies": 0
+      },
+      "after": {
+        "careers": 2000,
+        "completed": 1099,
+        "censored": 901,
+        "bankruptcies": 0
+      },
+      "beforeFinaleArrivals": 1306,
+      "afterFinaleArrivals": 1145
+    },
+    {
+      "buyer": "race",
+      "skill": "Rookie",
+      "before": {
+        "careers": 667,
+        "completed": 1,
+        "censored": 666,
+        "bankruptcies": 0
+      },
+      "after": {
+        "careers": 667,
+        "completed": 0,
+        "censored": 667,
+        "bankruptcies": 0
+      },
+      "beforeFinaleArrivals": 1,
+      "afterFinaleArrivals": 0
+    },
+    {
+      "buyer": "race",
+      "skill": "Club",
+      "before": {
+        "careers": 667,
+        "completed": 626,
+        "censored": 41,
+        "bankruptcies": 0
+      },
+      "after": {
+        "careers": 667,
+        "completed": 434,
+        "censored": 233,
+        "bankruptcies": 0
+      },
+      "beforeFinaleArrivals": 639,
+      "afterFinaleArrivals": 479
+    },
+    {
+      "buyer": "race",
+      "skill": "Pro",
+      "before": {
+        "careers": 666,
+        "completed": 665,
+        "censored": 1,
+        "bankruptcies": 0
+      },
+      "after": {
+        "careers": 666,
+        "completed": 665,
+        "censored": 1,
+        "bankruptcies": 0
+      },
+      "beforeFinaleArrivals": 666,
+      "afterFinaleArrivals": 666
+    },
+    {
+      "buyer": "pr",
+      "skill": "all",
+      "before": {
+        "careers": 2000,
+        "completed": 541,
+        "censored": 1459,
+        "bankruptcies": 0
+      },
+      "after": {
+        "careers": 2000,
+        "completed": 419,
+        "censored": 1581,
+        "bankruptcies": 0
+      },
+      "beforeFinaleArrivals": 595,
+      "afterFinaleArrivals": 468
+    },
+    {
+      "buyer": "pr",
+      "skill": "Rookie",
+      "before": {
+        "careers": 667,
+        "completed": 0,
+        "censored": 667,
+        "bankruptcies": 0
+      },
+      "after": {
+        "careers": 667,
+        "completed": 0,
+        "censored": 667,
+        "bankruptcies": 0
+      },
+      "beforeFinaleArrivals": 0,
+      "afterFinaleArrivals": 0
+    },
+    {
+      "buyer": "pr",
+      "skill": "Club",
+      "before": {
+        "careers": 667,
+        "completed": 0,
+        "censored": 667,
+        "bankruptcies": 0
+      },
+      "after": {
+        "careers": 667,
+        "completed": 0,
+        "censored": 667,
+        "bankruptcies": 0
+      },
+      "beforeFinaleArrivals": 0,
+      "afterFinaleArrivals": 0
+    },
+    {
+      "buyer": "pr",
+      "skill": "Pro",
+      "before": {
+        "careers": 666,
+        "completed": 541,
+        "censored": 125,
+        "bankruptcies": 0
+      },
+      "after": {
+        "careers": 666,
+        "completed": 419,
+        "censored": 247,
+        "bankruptcies": 0
+      },
+      "beforeFinaleArrivals": 595,
+      "afterFinaleArrivals": 468
+    }
+  ],
+  "rewardPolicies": [
+    {
+      "buyer": "race",
+      "reward": "money",
+      "before": {
+        "careers": 668,
+        "completed": 426,
+        "censored": 242,
+        "bankruptcies": 0
+      },
+      "after": {
+        "careers": 668,
+        "completed": 364,
+        "censored": 304,
+        "bankruptcies": 0
+      }
+    },
+    {
+      "buyer": "race",
+      "reward": "car",
+      "before": {
+        "careers": 666,
+        "completed": 432,
+        "censored": 234,
+        "bankruptcies": 0
+      },
+      "after": {
+        "careers": 666,
+        "completed": 376,
+        "censored": 290,
+        "bankruptcies": 0
+      }
+    },
+    {
+      "buyer": "race",
+      "reward": "part",
+      "before": {
+        "careers": 666,
+        "completed": 434,
+        "censored": 232,
+        "bankruptcies": 0
+      },
+      "after": {
+        "careers": 666,
+        "completed": 359,
+        "censored": 307,
+        "bankruptcies": 0
+      }
+    },
+    {
+      "buyer": "pr",
+      "reward": "money",
+      "before": {
+        "careers": 668,
+        "completed": 185,
+        "censored": 483,
+        "bankruptcies": 0
+      },
+      "after": {
+        "careers": 668,
+        "completed": 150,
+        "censored": 518,
+        "bankruptcies": 0
+      }
+    },
+    {
+      "buyer": "pr",
+      "reward": "car",
+      "before": {
+        "careers": 666,
+        "completed": 172,
+        "censored": 494,
+        "bankruptcies": 0
+      },
+      "after": {
+        "careers": 666,
+        "completed": 129,
+        "censored": 537,
+        "bankruptcies": 0
+      }
+    },
+    {
+      "buyer": "pr",
+      "reward": "part",
+      "before": {
+        "careers": 666,
+        "completed": 184,
+        "censored": 482,
+        "bankruptcies": 0
+      },
+      "after": {
+        "careers": 666,
+        "completed": 140,
+        "censored": 526,
+        "bankruptcies": 0
+      }
+    }
+  ],
+  "bosses": [
+    {
+      "buyer": "race",
+      "event": 7,
+      "beforeMedian": 0.8550737164401208,
+      "afterMedian": 0.8550737164401208,
+      "beforeArrivals": 2000,
+      "afterArrivals": 2000,
+      "target": 0.89,
+      "basis": "lap-field",
+      "insideBossBand": true
+    },
+    {
+      "buyer": "race",
+      "event": 14,
+      "beforeMedian": 0.8658413805050655,
+      "afterMedian": 0.8791650132735417,
+      "beforeArrivals": 2000,
+      "afterArrivals": 2000,
+      "target": 0.89,
+      "basis": "lap-field",
+      "insideBossBand": true
+    },
+    {
+      "buyer": "race",
+      "event": 21,
+      "beforeMedian": 0.9907694894745844,
+      "afterMedian": 0.9384758657794557,
+      "beforeArrivals": 1897,
+      "afterArrivals": 1333,
+      "target": 0.89,
+      "basis": "lap-field",
+      "insideBossBand": false
+    },
+    {
+      "buyer": "race",
+      "event": 28,
+      "beforeMedian": 1.016167699440564,
+      "afterMedian": 0.9800225913061577,
+      "beforeArrivals": 1326,
+      "afterArrivals": 1223,
+      "target": 0.89,
+      "basis": "lap-field",
+      "insideBossBand": false
+    },
+    {
+      "buyer": "race",
+      "event": 35,
+      "beforeMedian": 0.5210604204916744,
+      "afterMedian": 0.5210604204916744,
+      "beforeArrivals": 1306,
+      "afterArrivals": 1145,
+      "target": 0.525,
+      "basis": "supplied-rig",
+      "insideBossBand": null
+    },
+    {
+      "buyer": "pr",
+      "event": 7,
+      "beforeMedian": 0.8828387009255638,
+      "afterMedian": 0.8828387009255638,
+      "beforeArrivals": 2000,
+      "afterArrivals": 2000,
+      "target": 0.89,
+      "basis": "lap-field",
+      "insideBossBand": true
+    },
+    {
+      "buyer": "pr",
+      "event": 14,
+      "beforeMedian": 0.9095046208000315,
+      "afterMedian": 0.9844507502302157,
+      "beforeArrivals": 700,
+      "afterArrivals": 678,
+      "target": 0.89,
+      "basis": "lap-field",
+      "insideBossBand": false
+    },
+    {
+      "buyer": "pr",
+      "event": 21,
+      "beforeMedian": 0.9886013325208612,
+      "afterMedian": 0.9918546517430453,
+      "beforeArrivals": 666,
+      "afterArrivals": 603,
+      "target": 0.89,
+      "basis": "lap-field",
+      "insideBossBand": false
+    },
+    {
+      "buyer": "pr",
+      "event": 28,
+      "beforeMedian": 1.0181522713270468,
+      "afterMedian": 1.0181522713270468,
+      "beforeArrivals": 650,
+      "afterArrivals": 528,
+      "target": 0.89,
+      "basis": "lap-field",
+      "insideBossBand": false
+    },
+    {
+      "buyer": "pr",
+      "event": 35,
+      "beforeMedian": 0.5210604204916744,
+      "afterMedian": 0.5210604204916744,
+      "beforeArrivals": 595,
+      "afterArrivals": 468,
+      "target": 0.525,
+      "basis": "supplied-rig",
+      "insideBossBand": null
+    }
+  ],
+  "duels": [
+    {
+      "skill": "Rookie",
+      "rotation": null,
+      "before": {
+        "fights": 1024,
+        "rigWins": 299,
+        "bossWins": 644,
+        "draws": 81,
+        "rigWinRate": 0.2919921875,
+        "resolvedRigWinRate": 0.3170731707317073,
+        "earlyLosses": 0
+      },
+      "after": {
+        "fights": 1024,
+        "rigWins": 313,
+        "bossWins": 607,
+        "draws": 104,
+        "rigWinRate": 0.3056640625,
+        "resolvedRigWinRate": 0.3402173913043478,
+        "earlyLosses": 0
+      }
+    },
+    {
+      "skill": "Rookie",
+      "rotation": 0,
+      "before": {
+        "fights": 512,
+        "rigWins": 137,
+        "bossWins": 326,
+        "draws": 49,
+        "rigWinRate": 0.267578125,
+        "resolvedRigWinRate": 0.2958963282937365,
+        "earlyLosses": 0
+      },
+      "after": {
+        "fights": 512,
+        "rigWins": 147,
+        "bossWins": 293,
+        "draws": 72,
+        "rigWinRate": 0.287109375,
+        "resolvedRigWinRate": 0.3340909090909091,
+        "earlyLosses": 0
+      }
+    },
+    {
+      "skill": "Rookie",
+      "rotation": 1,
+      "before": {
+        "fights": 512,
+        "rigWins": 162,
+        "bossWins": 318,
+        "draws": 32,
+        "rigWinRate": 0.31640625,
+        "resolvedRigWinRate": 0.3375,
+        "earlyLosses": 0
+      },
+      "after": {
+        "fights": 512,
+        "rigWins": 166,
+        "bossWins": 314,
+        "draws": 32,
+        "rigWinRate": 0.32421875,
+        "resolvedRigWinRate": 0.3458333333333333,
+        "earlyLosses": 0
+      }
+    },
+    {
+      "skill": "Club",
+      "rotation": null,
+      "before": {
+        "fights": 1024,
+        "rigWins": 248,
+        "bossWins": 686,
+        "draws": 90,
+        "rigWinRate": 0.2421875,
+        "resolvedRigWinRate": 0.26552462526766596,
+        "earlyLosses": 0
+      },
+      "after": {
+        "fights": 1024,
+        "rigWins": 212,
+        "bossWins": 701,
+        "draws": 111,
+        "rigWinRate": 0.20703125,
+        "resolvedRigWinRate": 0.2322015334063527,
+        "earlyLosses": 0
+      }
+    },
+    {
+      "skill": "Club",
+      "rotation": 0,
+      "before": {
+        "fights": 512,
+        "rigWins": 112,
+        "bossWins": 341,
+        "draws": 59,
+        "rigWinRate": 0.21875,
+        "resolvedRigWinRate": 0.24724061810154527,
+        "earlyLosses": 0
+      },
+      "after": {
+        "fights": 512,
+        "rigWins": 104,
+        "bossWins": 342,
+        "draws": 66,
+        "rigWinRate": 0.203125,
+        "resolvedRigWinRate": 0.23318385650224216,
+        "earlyLosses": 0
+      }
+    },
+    {
+      "skill": "Club",
+      "rotation": 1,
+      "before": {
+        "fights": 512,
+        "rigWins": 136,
+        "bossWins": 345,
+        "draws": 31,
+        "rigWinRate": 0.265625,
+        "resolvedRigWinRate": 0.28274428274428276,
+        "earlyLosses": 0
+      },
+      "after": {
+        "fights": 512,
+        "rigWins": 108,
+        "bossWins": 359,
+        "draws": 45,
+        "rigWinRate": 0.2109375,
+        "resolvedRigWinRate": 0.23126338329764454,
+        "earlyLosses": 0
+      }
+    },
+    {
+      "skill": "Pro",
+      "rotation": null,
+      "before": {
+        "fights": 1024,
+        "rigWins": 222,
+        "bossWins": 688,
+        "draws": 114,
+        "rigWinRate": 0.216796875,
+        "resolvedRigWinRate": 0.24395604395604395,
+        "earlyLosses": 0
+      },
+      "after": {
+        "fights": 1024,
+        "rigWins": 241,
+        "bossWins": 647,
+        "draws": 136,
+        "rigWinRate": 0.2353515625,
+        "resolvedRigWinRate": 0.2713963963963964,
+        "earlyLosses": 0
+      }
+    },
+    {
+      "skill": "Pro",
+      "rotation": 0,
+      "before": {
+        "fights": 512,
+        "rigWins": 110,
+        "bossWins": 330,
+        "draws": 72,
+        "rigWinRate": 0.21484375,
+        "resolvedRigWinRate": 0.25,
+        "earlyLosses": 0
+      },
+      "after": {
+        "fights": 512,
+        "rigWins": 127,
+        "bossWins": 313,
+        "draws": 72,
+        "rigWinRate": 0.248046875,
+        "resolvedRigWinRate": 0.28863636363636364,
+        "earlyLosses": 0
+      }
+    },
+    {
+      "skill": "Pro",
+      "rotation": 1,
+      "before": {
+        "fights": 512,
+        "rigWins": 112,
+        "bossWins": 358,
+        "draws": 42,
+        "rigWinRate": 0.21875,
+        "resolvedRigWinRate": 0.23829787234042554,
+        "earlyLosses": 0
+      },
+      "after": {
+        "fights": 512,
+        "rigWins": 114,
+        "bossWins": 334,
+        "draws": 64,
+        "rigWinRate": 0.22265625,
+        "resolvedRigWinRate": 0.2544642857142857,
+        "earlyLosses": 0
+      }
+    }
+  ],
+  "seedOverlap": {
+    "physical.csv": {
+      "beforeDistinct": 7488,
+      "afterDistinct": 7488,
+      "overlap": 0
+    },
+    "boss-extra.csv": {
+      "beforeDistinct": 4032,
+      "afterDistinct": 4032,
+      "overlap": 0
+    },
+    "duels.csv": {
+      "beforeDistinct": 512,
+      "afterDistinct": 512,
+      "overlap": 0
+    }
+  },
+  "remaining": [
+    "At least one buyer/event still misses the absolute 0.85-0.90 first-entry boss band. Inspect the policy-specific rows; the target has not been relaxed.",
+    "Censored careers remain at the unchanged 70-race limit; arrival is not completion.",
+    "Duel skill win rates are not a calibrated monotonic human difficulty scale.",
+    "Owner feel, phone comfort and every Stick check pending."
+  ],
+  "gatesBefore": {
+    "normalRaceOpeningLossRateBelow5Percent": true,
+    "openingLossRateBelow5Percent": true,
+    "noOneShotKills": true,
+    "seedDiversityAtLeast99PercentEveryCell": true,
+    "neitherSideOver85PercentOfResolvedWins": true,
+    "noObservedBankruptcy": true,
+    "allCareersCompleted": false,
+    "allBossEntryMediansInLegacyBand": false
+  },
+  "gatesAfter": {
+    "normalRaceOpeningLossRateBelow5Percent": true,
+    "openingLossRateBelow5Percent": true,
+    "noOneShotKills": true,
+    "seedDiversityAtLeast99PercentEveryCell": true,
+    "neitherSideOver85PercentOfResolvedWins": true,
+    "noObservedBankruptcy": true,
+    "allCareersCompleted": false,
+    "allBossEntryMediansInLegacyBand": false
+  },
+  "approximationBefore": [
+    {
+      "buyer": "race",
+      "ordinaryAttempts": 107780,
+      "medianRatioGap": 0.006266772341480431,
+      "p95RatioGap": 0.08343716362351616,
+      "maximumRatioGap": 0.15471434734018374,
+      "attemptsOutsideAuthoredEnvelope": 263,
+      "authoredEnvelope": [
+        0.8,
+        1.15
+      ]
+    },
+    {
+      "buyer": "pr",
+      "ordinaryAttempts": 131993,
+      "medianRatioGap": 4.413706658978889e-05,
+      "p95RatioGap": 0.06675576719082765,
+      "maximumRatioGap": 0.15313449317908923,
+      "attemptsOutsideAuthoredEnvelope": 1648,
+      "authoredEnvelope": [
+        0.8,
+        1.15
+      ]
+    }
+  ],
+  "approximationAfter": [
+    {
+      "buyer": "race",
+      "ordinaryAttempts": 113717,
+      "medianRatioGap": 0.01351655203622637,
+      "p95RatioGap": 0.08346973274733682,
+      "maximumRatioGap": 0.15312649474906348,
+      "attemptsOutsideAuthoredEnvelope": 18,
+      "authoredEnvelope": [
+        0.8,
+        1.15
+      ]
+    },
+    {
+      "buyer": "pr",
+      "ordinaryAttempts": 134345,
+      "medianRatioGap": 0.0,
+      "p95RatioGap": 0.06671391595568021,
+      "maximumRatioGap": 0.1531264947490636,
+      "attemptsOutsideAuthoredEnvelope": 1249,
+      "authoredEnvelope": [
+        0.8,
+        1.15
+      ]
+    }
+  ]
+}

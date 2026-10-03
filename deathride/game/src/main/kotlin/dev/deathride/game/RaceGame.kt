@@ -43,6 +43,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
     private val effects=MotionEffects()
     private val painter=CarPainter()
     private val combatPainter=CombatPainter()
+    private val obstaclePainter=ObstaclePainter()
     private val abilityPainter=AbilityPainter()
     private var selectedTrack=0
     private val selectedCars=IntArray(6){it%CarCatalog.all.size}
@@ -403,9 +404,10 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         Gdx.gl.glEnable(GL20.GL_BLEND);Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA,GL20.GL_ONE_MINUS_SRC_ALPHA)
         shape.projectionMatrix=worldMatrix;shape.begin(ShapeRenderer.ShapeType.Filled)
         scene.drawRoadMarks(shape)
+        obstaclePainter.shapes(shape,world,art,false)
         combatPainter.ground(shape,world)
         effects.draw(shape,world,dt,!art.available("decals/skid"))
-        shape.end();batch.begin();atlasEffects.ground(batch,world.snapshot);batch.end();shape.begin(ShapeRenderer.ShapeType.Filled)
+        shape.end();batch.begin();obstaclePainter.sprites(batch,world,art,false);atlasEffects.ground(batch,world.snapshot);batch.end();shape.begin(ShapeRenderer.ShapeType.Filled)
         for(c in world.cars) {
             if(!c.entered)continue
             val prev=world.previousSnapshot;val current=world.snapshot
@@ -428,6 +430,8 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
             art.car(batch,key,x,y,spec.lengthM.toFloat(),spec.widthM.toFloat(),heading,colors[c.id],s.flash(c.id)>0)
         }
         atlasEffects.air(batch,world.snapshot,world.seconds);abilityPainter.art(batch,world.snapshot,art);batch.end()
+        shape.begin(ShapeRenderer.ShapeType.Filled);obstaclePainter.shapes(shape,world,art,true);shape.end()
+        batch.begin();obstaclePainter.sprites(batch,world,art,true);batch.end()
     }
     private fun drawOverlay() {
         shape.projectionMatrix=view.camera.combined
