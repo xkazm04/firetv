@@ -415,7 +415,8 @@ class World(val seed: Int=17, val spec: CarSpec=CarSpec(), val track: Track=Trac
         val intendedLane=if(c.aiMode==AiMode.RECOVER) 0.0 else if(c.aiMode==AiMode.OVERTAKE) if(c.aiLane<0) passLane else -passLane else c.aiLane+(c.aiStyle?.laneBiasM?:0.0)
         val noseLook=(c.spec.circleOffsetM+c.spec.circleRadiusM)*2*TrackRules["aiLookCarLengths"]
         val look=if(c.aiMode==AiMode.RECOVER) noseLook else noseLook+c.speedMps*skill.lookAheadSeconds
-        var lane=combat.avoidMine(c,s,combat.seekRepair(c,intendedLane+(track.course?.laneAt(s+look,c.carClass?.stat("grip")?:0)?:0.0)))
+        // Route eligibility uses authored stock grip; installed tires still act through the physical spec.
+        var lane=combat.avoidMine(c,s,combat.seekRepair(c,intendedLane+(track.course?.laneAt(s+look,c.carClass?.stats?.get("grip")?.toInt()?:0)?:0.0)))
         c.aiDuelTarget=-1;c.aiDuelWait=false
         if(eventType==EventType.ELIMINATION && c.aiStyle===DeathDuel.boss) {
             var nearest=DeathDuel.perceptionM*DeathDuel.perceptionM

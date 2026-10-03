@@ -22,7 +22,7 @@ class RosterV2Test {
             val shape=CarShapes.forId(car.id)
             assertTrue(shape.lengthM in RosterRules["minimumLengthM"]..RosterRules["maximumLengthM"])
             assertTrue(shape.widthM in RosterRules["minimumWidthM"]..RosterRules["maximumWidthM"])
-            assertEquals(RosterRules.tiers.getValue(car.tier).second+car.stats.entries.sumOf{it.value*RosterRules.value.getValue(it.key)},car.priceCredits)
+            assertEquals(kotlin.math.ceil(RosterRules.tiers.getValue(car.tier).second+car.stats.entries.sumOf{it.value*RosterRules.value.getValue(it.key)}).toInt(),car.priceCredits)
             CarCatalog.apply(world.cars[0],index);world.reset()
             assertEquals(kotlin.math.floor(Weapons.all[Weapons.RIVET].ammo*car.ammoScale).toInt(),world.combat.ammo(0,Weapons.RIVET))
             report.append("${car.id},${car.tier},${car.priceCredits},${shape.lengthM},${shape.widthM},${car.ammoScale},${RosterRules.peerFindings(car).joinToString(";")}\n")

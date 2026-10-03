@@ -15,4 +15,12 @@ class CampaignReuseTest {
         assertTrue(campaignReuseDataErrors(original,allowed+mapOf("rival-garages.csv" to allowed.getValue("rival-garages.csv").replace("rook,9999","rook,600")),1).any{"Active rival" in it})
         assertTrue(campaignReuseDataErrors(original,allowed+mapOf("rival-garages.csv" to allowed.getValue("rival-garages.csv").replace("marrow,610","marrow,-1")),1).any{"Invalid Marrow" in it})
     }
+    @Test fun narrowLineReuseRejectsOtherPhysicalChangesAndWrongCeilings() {
+        val old=mapOf("class-upgrade-caps.csv" to "id,speed,grip\nLine,8.25,10\nNeedle,10,10\n", "cars/Line.csv" to "unchanged")
+        val next=old+mapOf("class-upgrade-caps.csv" to old.getValue("class-upgrade-caps.csv").replace("8.25","8.125"))
+        assertTrue(campaignLineReuseDataValid(old,next))
+        assertFalse(campaignLineReuseDataValid(old,next+mapOf("cars/Line.csv" to "changed")))
+        assertFalse(campaignLineReuseDataValid(old,old))
+        assertFalse(campaignLineReuseDataValid(old,next+mapOf("new.csv" to "extra")))
+    }
 }

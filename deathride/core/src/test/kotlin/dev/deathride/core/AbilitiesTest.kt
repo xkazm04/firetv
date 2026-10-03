@@ -41,7 +41,7 @@ class AbilitiesTest {
             }
         }
         val quill=CarCatalog.all.single{it.id=="Quill"}
-        assertEquals(6,quill.stat("mass"));assertTrue(quill.spec().massKg>CarCatalog.all.first().spec().massKg)
+        assertEquals(6.0,quill.stat("mass"));assertTrue(quill.spec().massKg>CarCatalog.all.first().spec().massKg)
     }
 
     @Test fun protectionCooldownEnergyWeaponLockAndResetHaveActualConsumersForEveryClass() {

@@ -178,7 +178,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
             var message=""
             if(editProfile(i){
                 if(campaignRace && i==0)RivalEconomy.settle(it,raceTickets[i],world,raceRound)
-                if(campaignRace && i==0)message=Career.settle(it,raceTickets[i],raceRound,raceDifficulty,c.position,world.combat.kills[i],world.combat.health(i),Career.qualifies(c,world),world.combat.cashCollected[i],world.cars.any{r->r.aiStyle?.id=="rook" && world.combat.wrecked(r.id)},world.combat.damageTaken[i]==0.0,c.finishSeconds>=0)?.message?:"Result already saved"
+                if(campaignRace && i==0)message=Career.settle(it,raceTickets[i],raceRound,raceDifficulty,c.position,world.combat.kills[i],world.combat.health(i),Career.qualifies(c,world),world.combat.cashCollected[i],world.cars.any{r->r.aiStyle?.id=="rook" && world.combat.wrecked(r.id)},world.combat.damageTaken[i]==0.0,c.finishSeconds>=0,Career.bossPosition(world,raceRound))?.message?:"Result already saved"
                 else Economy.settle(it,raceTickets[i],c.position,world.combat.kills[i],world.combat.health(i),rewardScale=if(campaignRace)CareerCurve.all[raceRound].rewardScale else 1.0,cash=world.combat.cashCollected[i],course=Courses.all[selectedTrack].id,targetWrecked=world.cars.any{r->r.aiStyle?.id=="rook" && world.combat.wrecked(r.id)},clean=world.combat.damageTaken[i]==0.0,finished=c.finishSeconds>=0)
             }) { shopMessage[i]="Pit service complete - ready to race";if(message.isNotEmpty())careerMessage[i]=message }
             raceTickets[i]=0;publishGarage(i)
@@ -653,10 +653,10 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
                     label(rival.name+" / "+CarCatalog.all[g.selectedCar].id,808f,540f-i*72,colors[i+1])
                     label("PR ${PowerRating.of(CarCatalog.all[g.selectedCar],g.bonuses()).toInt()} / ${g.credits} CR"+(if(Campaign.taunt(p,rival.id)!=null)" / ALLY" else if(p.grudges[index]>0)" / GRUDGE" else ""),808f,514f-i*72)
                 }
-                detail.setColor(muted);detail.wrapped(if(event.duel)"DEATH DUEL. Mechanic rig supplied. No lap win. P2 spectates." else "P2 replaces a regular rival. P1 owns career progress.",808f,158f,400f,25f)
+                detail.setColor(muted);detail.wrapped(if(event.duel)"DEATH DUEL. Mechanic rig supplied. No lap win. P2 spectates." else Career.objective(p.careerRound),808f,158f,400f,25f)
                 if(storyArt.available(StoryArt.ledgerIcon(p)))label(when(StoryArt.ledgerIcon(p)) {
                     "icon-cancelled" -> "CLAIM VOIDED ${p.campaign.voided} CR"
-                    "icon-recovery" -> "RECOVERED ${p.campaign.recovered} CR"
+                    "icon-recovery" -> "RECOVERED ${p.campaign.recovered+p.campaign.restitutionPaid} / HELD ${p.campaign.restitutionDue}"
                     else -> "DIVERTED ${p.campaign.diverted} CR"
                 },842f,210f)
             }

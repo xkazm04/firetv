@@ -12,13 +12,13 @@ class CampaignBalanceTest {
         }
         reject(14,CareerCurve.all[14].copy(rewardScale=1.0),"must not decrease")
         reject(34,CareerCurve.all[34].copy(ratioBasis="lap-field"),"Ratio basis")
-        reject(20,CareerCurve.all[20].copy(ratioTarget=.98),"planned dip")
+        reject(20,CareerCurve.all[20].copy(ratioTarget=1.10),"declared band")
         reject(0,CareerCurve.all[0].copy(fieldTarget=Double.NaN),"economy value")
         reject(3,CareerCurve.all[3].copy(number=99),"event/tier")
         assertTrue(CareerCurve.errors(CareerCurve.all.dropLast(1)).any{"ordered event" in it})
         val p=Profile("finale-reference");p.careerRound=34;p.careerCleared=34
         p.rivalProfiles.forEach{it.credits=8000};RivalEconomy.prepare(p)
-        val actual=PowerRating.of(CarCatalog.all[DeathDuel.rigIndex])/RivalEconomy.fieldRating(p)
+        val actual=DeathDuel.rigRating/RivalEconomy.fieldRating(p)
         assertEquals(CareerCurve.all.last().ratioTarget,actual,.015,"Reference PR describes the supplied rig; it does not assert a win rate")
     }
 

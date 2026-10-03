@@ -1,0 +1,25 @@
+{
+  "scope": "Exact 300-second accepted state, followed by diagnostic-only extension; acceptance limit unchanged",
+  "seed": 105254614,
+  "tier": "rookie",
+  "build": "developed",
+  "course": "straight",
+  "rotation": 0,
+  "sample": 234,
+  "hash": 2604451404742352589,
+  "unresolvedAtLimit": 2,
+  "cars": [
+    3,
+    4
+  ],
+  "classId": "Line",
+  "speedsAtLimit": [
+    34.64381124813167,
+    34.50464211839094
+  ],
+  "finishedSeconds": [
+    392.9499999999713,
+    393.2166666666377
+  ],
+  "status": "Moving watchdog tail; both finish in the extension, but the 300-second all-resolved gate remains failed"
+}

@@ -35,10 +35,15 @@ class CareerEvent(row: Map<String,String>) {
     val cupIndex=Career.cups.indexOfFirst{it.id==row.getValue("cup")};val courseIndex=Courses.all.indexOfFirst{it.id==row.getValue("course")}
     val story=AshStory.cards.getValue(row.getValue("story"));val boss=row.number("boss")!=0.0;val duel=row.number("duel")!=0.0
     val laps=row.number("laps").toInt()
+    val phase=row.getValue("phase")
     val playerTier=row.number("playerTier").toInt()
     val type=EventType.valueOf(row.getValue("type"))
     val elimination get()=type==EventType.ELIMINATION
-    init { require(playerTier in cupIndex..min(4,cupIndex+1) && cupIndex>=0 && courseIndex>=0 && (if(elimination)duel && laps==0 else laps in 3..30)) }
+    init {
+        require(playerTier in cupIndex..min(4,cupIndex+1) && cupIndex>=0 && courseIndex>=0 && (if(elimination)duel && laps==0 else laps in 3..30))
+        require(phase in setOf("build-up","pressure","qualifier","boss","finale"))
+        require((phase=="finale")==elimination && (phase in setOf("boss","finale"))==boss)
+    }
 }
 data class Unlock(val kind: String,val id: String,val afterRounds: Int,val name: String)
 data class PartUnlock(val part: Int,val tier: Int,val afterRounds: Int)
@@ -72,12 +77,16 @@ object Career {
         return if(p.careerCleared<gate.afterRounds)"Clear round ${gate.afterRounds} for tier $tier" else ""
     }
     fun qualifies(car: Car,world: World)=if(world.eventType==EventType.ELIMINATION)car.finishKind==FinishKind.ELIMINATION && !world.combat.wrecked(car.id) else car.lap.laps>0 || (world.combat.wrecked(car.id) || car.finishKind==FinishKind.ELIMINATION) && car.lap.progressM>=world.track.lengthM*get("minimumWreckProgressFraction")
-    fun settle(p: Profile,ticket: Long,expectedRound: Int,difficulty: Int,position: Int,kills: Int,hp: Double,qualified: Boolean,cash: Int=0,targetWrecked: Boolean=false,clean: Boolean=hp>=CombatRules["maxHp"],finished: Boolean=hp>0): CareerResult? {
+    fun bossIndex(round: Int)=rivals.indexOfFirst{it.id==listOf("rook","ox","vex","mica","marrow")[events[round].cupIndex]}
+    /** Read actual standings, not style/slot: P2 can replace a regular entrant. Missing evidence stays strict. */
+    fun bossPosition(world: World,round: Int)=world.cars.firstOrNull{it.entered && it.rivalIndex==bossIndex(round)}?.position?.takeIf{it in 1..Tuning.CAR_COUNT}?:1
+    fun settle(p: Profile,ticket: Long,expectedRound: Int,difficulty: Int,position: Int,kills: Int,hp: Double,qualified: Boolean,cash: Int=0,targetWrecked: Boolean=false,clean: Boolean=hp>=CombatRules["maxHp"],finished: Boolean=hp>0,bossPosition: Int=1): CareerResult? {
         require(expectedRound in events.indices && cash in 0..MarketRules["raceCashCap"].toInt())
         require(difficulty in difficulties.indices && position in 1..Tuning.CAR_COUNT && kills in 0 until Tuning.CAR_COUNT && hp.isFinite() && hp in 0.0..CombatRules["maxHp"])
         if(ticket<=p.settledRace || ticket>p.startedRaces)return null
         Campaign.prepare(p,expectedRound)
-        val result=advance(p,expectedRound,position,qualified && (!events[expectedRound].elimination || hp>0 && finished))
+        require(bossPosition in 1..Tuning.CAR_COUNT)
+        val result=advance(p,expectedRound,position,qualified && (!events[expectedRound].boss || hp>0 && finished))
         check(Economy.settle(p,ticket,position,kills,hp,rewardScale=CareerCurve.all[expectedRound].rewardScale,bonus=result.bonus,cash=cash,course=Courses.all[events[expectedRound].courseIndex].id,targetWrecked=targetWrecked,clean=clean,finished=finished,league=true)!=null)
         if(result.advanced && events[expectedRound].boss)Campaign.promoted(p,expectedRound)
         if(result.advanced && events[expectedRound].elimination)DeathDuel.victory(p)
@@ -87,7 +96,7 @@ object Career {
         require(position in 1..Tuning.CAR_COUNT)
         if(expectedRound!=p.careerRound)return CareerResult(false,0,0,"Career round changed - result not advanced")
         if(!qualified)return CareerResult(false,0,0,if(events[p.careerRound].elimination)"No survivor victory - the rig is ready for another attempt" else "Complete a lap or make progress before a wreck")
-        if(events[p.careerRound].boss && position!=1)return CareerResult(false,0,0,"Win the boss race to earn promotion - repair and retry")
+        if(events[p.careerRound].boss && position!=1)return CareerResult(false,0,0,if(events[p.careerRound].elimination)"Be the last car running - the rig is ready for another attempt" else "Win the boss race in first place to earn promotion - repair and retry")
         val event=events[p.careerRound];p.careerPoints+=points[position-1]
         p.careerCleared=max(p.careerCleared,p.careerRound+1)
         val cupEnds=p.careerRound==events.lastIndex || events[p.careerRound+1].cupIndex!=event.cupIndex
@@ -122,7 +131,12 @@ object Career {
         val story=DeathDuel.story(p).json
         val roster=if(p.withRivals)RivalEconomy.json(p) else "[]"
         val field=if(p.withRivals)RivalEconomy.fieldRating(p) else 0.0
-        return "{\"campaign\":${Campaign.json(p)},\"eventType\":\"${e.type}\",\"laps\":${e.laps},\"story\":$story,\"rivals\":$roster,\"fieldPowerRating\":$field,\"duel\":${e.duel},\"maximumPlayerTier\":${e.playerTier},\"ownedCars\":[${p.owned.indices.filter{p.owned[it]}.joinToString(","){"\"${CarCatalog.all[it].id}\""}}],\"round\":${p.careerRound+1},\"roundCount\":${events.size},\"cleared\":${p.careerCleared},\"season\":${p.careerSeasons+1},\"event\":\"${e.name}\",\"course\":${course.json},\"cup\":\"${cup.name}\",\"points\":${p.careerPoints},\"bestTrophy\":\"${gradeName(p.careerTrophies[e.cupIndex])}\",\"targets\":[${cup.targets.drop(1).joinToString(",")}],\"bonuses\":[${cup.bonuses.drop(1).joinToString(",")}],\"trophies\":[${p.careerTrophies.joinToString(",")}],\"difficulty\":${difficulties[p.careerDifficulty].json},\"unlocks\":$locks,\"partUnlocks\":$parts,\"message\":\"$message\"}"
+        return "{\"campaign\":${Campaign.json(p)},\"phase\":\"${e.phase}\",\"objective\":\"${objective(p.careerRound)}\",\"eventType\":\"${e.type}\",\"laps\":${e.laps},\"story\":$story,\"rivals\":$roster,\"fieldPowerRating\":$field,\"duel\":${e.duel},\"maximumPlayerTier\":${e.playerTier},\"ownedCars\":[${p.owned.indices.filter{p.owned[it]}.joinToString(","){"\"${CarCatalog.all[it].id}\""}}],\"round\":${p.careerRound+1},\"roundCount\":${events.size},\"cleared\":${p.careerCleared},\"season\":${p.careerSeasons+1},\"event\":\"${e.name}\",\"course\":${course.json},\"cup\":\"${cup.name}\",\"points\":${p.careerPoints},\"bestTrophy\":\"${gradeName(p.careerTrophies[e.cupIndex])}\",\"targets\":[${cup.targets.drop(1).joinToString(",")}],\"bonuses\":[${cup.bonuses.drop(1).joinToString(",")}],\"trophies\":[${p.careerTrophies.joinToString(",")}],\"difficulty\":${difficulties[p.careerDifficulty].json},\"unlocks\":$locks,\"partUnlocks\":$parts,\"message\":\"$message\"}"
+    }
+    fun objective(round: Int)=when {
+        events[round].elimination->"Last car running wins. Free supplied rig on every retry."
+        events[round].boss->"Win the boss race in first place to recruit ${rivals[bossIndex(round)].name}."
+        else->"Complete a lap or make progress before a wreck. Repairs are insured."
     }
     val catalogJson get()="{\"difficulties\":[${difficulties.joinToString(","){it.json}}],\"rivals\":[${rivals.joinToString(","){it.json}}]}"
 }

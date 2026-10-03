@@ -60,7 +60,7 @@ class CommerceTest {
     }
     @Test fun versionTwoMigratesOwnershipPartsAndConditionWithoutAddingDebt() {
         val p=Profile("legacy-market");p.credits=1500;p.selectedCar=4;p.careerCleared=6;Garage.buy(p,0,0)
-        val body=ProfileCodec.encode(p).substringBefore("checksum=").replace("DEATHRIDE_PROFILE 5","DEATHRIDE_PROFILE 2").lines().filterNot{it.startsWith("market=") || it.startsWith("owned=") || it.startsWith("condition=") || it.startsWith("ash=") || it.startsWith("grudges=") || it.startsWith("rivals=") || it.startsWith("campaign=")}.joinToString("\n").replace("trophies=0,0,0,0,0","trophies=0,0,0,0")
+        val body=ProfileCodec.encode(p).substringBefore("checksum=").replace("DEATHRIDE_PROFILE 6","DEATHRIDE_PROFILE 2").lines().filterNot{it.startsWith("market=") || it.startsWith("owned=") || it.startsWith("condition=") || it.startsWith("ash=") || it.startsWith("grudges=") || it.startsWith("rivals=") || it.startsWith("campaign=")}.joinToString("\n").replace("trophies=0,0,0,0,0","trophies=0,0,0,0")
         val old=body+"checksum="+CRC32().apply{update(body.toByteArray())}.value.toString(16)+"\n"
         val migrated=ProfileCodec.decode(old,p.id)
         assertEquals(p.credits,migrated.credits);assertArrayEquals(p.tiers,migrated.tiers);assertTrue(migrated.owned[4]);assertTrue(migrated.condition.all{it==100});assertEquals(0,migrated.debt)

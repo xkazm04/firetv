@@ -14,6 +14,7 @@ output=Path(sys.argv[1] if len(sys.argv)>1 else 'evidence/hud/h2/browser-suite')
 env={**os.environ,'CHROME_EXECUTABLE':os.environ.get('CHROME_EXECUTABLE','C:/Program Files/Google/Chrome/Application/chrome.exe'),'DEATHRIDE_TEST_STREAM':'hud'}
 checks=sys.argv[2:] or ['browser-check','combat-check','ability-controller-check','hud-browser-check']
 port=int(os.environ.get('DEATHRIDE_BROWSER_PORT','8768'))
+env['DEATHRIDE_BROWSER_PORT']=str(port)
 for name in checks:
     if name=='campaign-browser-check':
         (root/'profiles').mkdir(exist_ok=True)

@@ -1,0 +1,61 @@
+{
+  "scope": "Synthetic injected defects, never campaign outcomes",
+  "cases": [
+    {
+      "plantedCase": "balanced synthetic control",
+      "gate": "dominancePass",
+      "result": true,
+      "expected": true,
+      "maximumWinnerShare": 0.5
+    },
+    {
+      "plantedCase": "all wins assigned to A: reachable rate 1.0",
+      "gate": "dominancePass",
+      "result": false,
+      "expected": false,
+      "maximumWinnerShare": 1.0
+    },
+    {
+      "plantedCase": "constant terminal hashes",
+      "gate": "seedDiversity",
+      "result": false,
+      "expected": false,
+      "maximumWinnerShare": 0.5
+    },
+    {
+      "plantedCase": "missing rotation observation",
+      "gate": "completeCross",
+      "result": false,
+      "expected": false,
+      "maximumWinnerShare": 0.5054347826086957
+    },
+    {
+      "plantedCase": "rotations alias the same three labels",
+      "gate": "completeCross",
+      "result": false,
+      "expected": false,
+      "maximumWinnerShare": 0.5
+    },
+    {
+      "plantedCase": "correct labels but class assignments never rotate",
+      "gate": "actualClassSlotCross",
+      "result": false,
+      "expected": false,
+      "maximumWinnerShare": 0.5
+    },
+    {
+      "plantedCase": "one unpaired seed block",
+      "gate": "pairedRotations",
+      "result": false,
+      "expected": false,
+      "maximumWinnerShare": 0.5
+    },
+    {
+      "plantedCase": "one unresolved entrant",
+      "gate": "allResolved",
+      "result": false,
+      "expected": false,
+      "maximumWinnerShare": 0.5
+    }
+  ]
+}

@@ -4,6 +4,10 @@ Written 2026-10-01 from the owner's brief. It binds Phase 2 waves **C1 (roster),
 Where it conflicts with `DEATH-RIDE-PHASE2.md`, this file wins for those waves. Numbers here are **proposals to be checked by simulation**, not facts; every claim of balance
 must come from a headless simulation, and every claim of feel stays `not measured` until the owner has driven it.
 
+Pass-two proposal, 2026-10-03: [campaign design v2](DEATH-RIDE-CAMPAIGN-DESIGN-V2.md) implements a varied 35-event / 367-lap schedule, promotion by winning the boss race in first place, useful fallback ally assets and saved stolen-money restitution. **Owner flags:** proposed 4–6 hours replaces 5–8; late boss ratio bands become 0.93–1.03 inside a global ceiling of 10 and three weapon slots. The measured class-limit candidate caps Line speed at 8.125, Bastion grip at 9, Quill/Kestrel speed at 9.5; stock Line is speed 5.5 / acceleration 3 / handling 3. Effective fractional stats are shared by physics, PR and offers. The Mechanic loaner keeps its declared original basic body in separate data. Owner decisions of 2026-10-03 accept this design with item 02 reverted to first-place promotion; old-band failures and developed-class balance findings remain visible in the report. Stable event IDs preserve current save positions. All Stick checks for this pass are pending. The original proposals below remain historical context.
+
+Pass-two measurement clarification: PR is a planning index, not a guarantee of equal lap strength. `fieldTarget` is a rival purchase ceiling, not a hidden stat grant or a claim that every field attains that exact mean. Acceptance uses actual mean-field and named-boss PR, winner share and class course identity.
+
 ## a. The promise to the player
 
 You start with a poor car in a poor league, up against drivers with poor cars. Every race you clear pays money; money buys upgrades and then a better car; as you rise, so does the
@@ -40,7 +44,7 @@ Ten cars: at least two per tier-band built from these archetypes, so progression
 
 **Skill beats power, proven by simulation, not asserted.** For every tier, the simulation (2,000 seeded races per scenario, actual fixed-step rules, `encounter-balance-simulation`) must show:
 
-1. **No dominant class**: at equal tier, no class wins more than 55% of entries across the mixed track set, and every class is the best class (by mean finish time) on at least one track type and the worst on at least one (`tier-band-peer-outlier-linting`).
+1. **No dominant class**: at equal tier, no class takes more than 55% of race wins across the declared mixed track set (class wins divided by races, never by entries), and every class is the best class (by mean finish time) on at least one track type and the worst on at least one (`tier-band-peer-outlier-linting`).
 2. **Skill ladder, not an overspeed ladder**: the same light car driven by the AI at *Champion* skill (line quality, braking accuracy, reaction delay, the three skill axes of `skill-scaling-versus-power-scaling`) beats a *Rookie*-skill heavy of the same tier on technical tracks;
    the same heavy at Rookie skill beats a Rookie-skill light on a straight-heavy track. If skill moves the result by less than a declared margin, the skill axes are broken, not the cars.
 3. **The light car cannot win by speed**: with all AIs at equal skill, the light car's top-speed deficit must show up as time lost on a long-straight track (declared minimum), and must not be made up by free acceleration advantages alone.

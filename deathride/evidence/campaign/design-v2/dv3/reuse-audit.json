@@ -1,0 +1,21 @@
+{
+  "scope": "Only Line speed ceiling changes 8.25 to 8.125; unchanged main bytes and all other data checked in driver. All active canonical and rival Line builds stay below the new cap. Shared rows are not independent samples.",
+  "files": {
+    "physical.csv": {
+      "rows": 7488,
+      "changedLeadRowsRecomputed": 312,
+      "unchangedRows": 7176,
+      "sha256": "088e9f8eec60830b853025c49039b5942787743339af8ecb965df9a122d67e24"
+    },
+    "boss-extra.csv": {
+      "rows": 4032,
+      "changedLeadRowsRecomputed": 144,
+      "unchangedRows": 3888,
+      "sha256": "c7efac03bdd24b964b5d865080d7aabe3e34991d374de85bfef8d2d0be6d26b4"
+    }
+  },
+  "difficultyExactFirstSeedRows": 144,
+  "freshPairedDuelsByteIdentical": true,
+  "exactUnchangedWitnessesInGeneration": 38,
+  "referenceGaragesByteIdentical": true
+}

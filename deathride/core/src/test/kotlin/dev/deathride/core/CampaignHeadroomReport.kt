@@ -8,24 +8,24 @@ fun main() {
     out.writeText("event,car,tier,combinations,maximumLegalPR,parts\n")
     for(round in listOf(6,13,20,27))for((carIndex,car) in CarCatalog.all.withIndex()) {
         if(car.tierRank>Career.events[round].playerTier)continue
-        val p=Profile("bound-$round-$carIndex",false);p.careerCleared=round;p.selectedCar=carIndex
-        val tiers=IntArray(Parts.all.size);val bonus=IntArray(CarCatalog.statNames.size)
+        val p=Profile("bound-$round-$carIndex",false);p.careerCleared=round;p.selectedCar=carIndex;p.owned[carIndex]=true;p.credits=8000
+        val visited=HashSet<String>()
         var best=Double.NEGATIVE_INFINITY;var count=0;var bestParts=""
-        fun visit(part: Int) {
-            if(part==Parts.all.size) {
-                count++;val rating=PowerRating.of(car,bonus)
-                if(rating>best){best=rating;bestParts=tiers.joinToString(":")}
-                return
-            }
-            val definition=Parts.all[part]
-            for(tier in 0..Career.maximumPartTier(p,part)) {
-                tiers[part]=tier
-                for(s in bonus.indices)bonus[s]+=definition.bonuses[s]*tier
-                visit(part+1)
-                for(s in bonus.indices)bonus[s]-=definition.bonuses[s]*tier
+        fun visit() {
+            val key=Parts.all.indices.joinToString(":"){p.tier(carIndex,it).toString()}
+            if(!visited.add(key))return
+            count++;val rating=PowerRating.of(car,p.bonuses())
+            if(rating>best){best=rating;bestParts=key}
+            for(part in Parts.all.indices) {
+                val offer=Garage.offer(p,part);if(!offer.available)continue
+                val credits=p.credits;val revision=p.marketRevision
+                check(Garage.buy(p,part,offer.tier).startsWith("Installed"))
+                p.credits=8000 // Deliberately unbounded funding: legal acquisition envelope, not an affordable career.
+                visit()
+                p.tiers[carIndex*Parts.all.size+part]--;p.credits=credits;p.marketRevision=revision
             }
         }
-        visit(0)
+        visit()
         out.appendText("${round+1},${car.id},${car.tierRank},$count,$best,$bestParts\n")
     }
     println(out.readText())

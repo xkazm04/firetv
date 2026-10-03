@@ -31,7 +31,7 @@ class CareerTest {
         val p=Profile("migration");p.credits=1234;Garage.buy(p,2,0)
         fun sign(body: String)=body+"checksum="+CRC32().apply{update(body.toByteArray(Charsets.UTF_8))}.value.toString(16)+"\n"
         val body=ProfileCodec.encode(p).substringBefore("checksum=")
-        val old=sign(body.replace("DEATHRIDE_PROFILE 5","DEATHRIDE_PROFILE 1").lines().filterNot{it.startsWith("career=") || it.startsWith("trophies=") || it.startsWith("market=") || it.startsWith("owned=") || it.startsWith("condition=") || it.startsWith("ash=") || it.startsWith("grudges=") || it.startsWith("rivals=") || it.startsWith("campaign=")}.joinToString("\n"))
+        val old=sign(body.replace("DEATHRIDE_PROFILE 6","DEATHRIDE_PROFILE 1").lines().filterNot{it.startsWith("career=") || it.startsWith("trophies=") || it.startsWith("market=") || it.startsWith("owned=") || it.startsWith("condition=") || it.startsWith("ash=") || it.startsWith("grudges=") || it.startsWith("rivals=") || it.startsWith("campaign=")}.joinToString("\n"))
         val migrated=ProfileCodec.decode(old,p.id);assertEquals(p.credits,migrated.credits);assertArrayEquals(p.tiers,migrated.tiers);assertEquals(0,migrated.careerRound)
         assertThrows(IllegalArgumentException::class.java){ProfileCodec.decode(sign(body.replace("career=0,0,0,0,0","career=1,0,50,0,9")),p.id)}
     }

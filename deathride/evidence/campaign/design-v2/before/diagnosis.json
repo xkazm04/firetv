@@ -1,0 +1,1739 @@
+{
+  "source": "evidence\\gameplay\\campaign\\release",
+  "scope": "Retained release observations, not new independent races",
+  "buyers": {
+    "race": {
+      "n": 2000,
+      "completed": 1099,
+      "attempts": 118681,
+      "bankruptcy": 0,
+      "medianEndCash": 8000.0,
+      "meanPaid": 1662.296,
+      "meanRecovered": 26.725,
+      "actualRewards": [
+        {
+          "2": 2000
+        },
+        {
+          "0": 667,
+          "2": 920,
+          "4": 413
+        },
+        {
+          "0": 744,
+          "2": 793,
+          "3": 237,
+          "4": 220,
+          "1": 6
+        },
+        {
+          "0": 799,
+          "2": 1070,
+          "4": 116,
+          "1": 13,
+          "3": 2
+        }
+      ],
+      "groups": [
+        {
+          "skill": "Rookie",
+          "n": 667,
+          "completed": 0,
+          "censoredAt": {
+            "14": 667
+          },
+          "medianHours": 8.35869907407286,
+          "bossAttempts": {
+            "7": 10187,
+            "14": 28499
+          }
+        },
+        {
+          "skill": "Club",
+          "n": 667,
+          "completed": 434,
+          "censoredAt": {
+            "35": 54,
+            "23": 9,
+            "21": 77,
+            "33": 11,
+            "24": 3,
+            "32": 9,
+            "31": 9,
+            "28": 26,
+            "30": 6,
+            "29": 5,
+            "26": 6,
+            "34": 7,
+            "22": 6,
+            "27": 4,
+            "25": 1
+          },
+          "medianHours": 10.237203703700201,
+          "bossAttempts": {
+            "7": 4479,
+            "14": 3317,
+            "21": 11428,
+            "28": 1760,
+            "35": 2116
+          }
+        },
+        {
+          "skill": "Pro",
+          "n": 666,
+          "completed": 665,
+          "censoredAt": {
+            "35": 1
+          },
+          "medianHours": 6.873354166664428,
+          "bossAttempts": {
+            "7": 3557,
+            "14": 1688,
+            "21": 1410,
+            "28": 916,
+            "35": 2848
+          }
+        }
+      ],
+      "events": [
+        {
+          "event": 1,
+          "arrivals": 2000,
+          "attempts": 2000,
+          "advances": 2000,
+          "retries": 0,
+          "medianEntryPR": 332.099982802,
+          "medianFieldPR": 354.34911256759995,
+          "medianEntryRatio": 0.9372112727914468,
+          "medianIncome": 176.0,
+          "medianEntryCash": 0.0
+        },
+        {
+          "event": 2,
+          "arrivals": 2000,
+          "attempts": 2000,
+          "advances": 2000,
+          "retries": 0,
+          "medianEntryPR": 317.896209861,
+          "medianFieldPR": 358.1936916564,
+          "medianEntryRatio": 0.8890245892692586,
+          "medianIncome": 176.0,
+          "medianEntryCash": 20.0
+        },
+        {
+          "event": 3,
+          "arrivals": 2000,
+          "attempts": 2000,
+          "advances": 2000,
+          "retries": 0,
+          "medianEntryPR": 317.896209861,
+          "medianFieldPR": 369.6923895596,
+          "medianEntryRatio": 0.8599870767660277,
+          "medianIncome": 215.0,
+          "medianEntryCash": 128.0
+        },
+        {
+          "event": 4,
+          "arrivals": 2000,
+          "attempts": 2000,
+          "advances": 2000,
+          "retries": 0,
+          "medianEntryPR": 378.681409302,
+          "medianFieldPR": 376.07492983720005,
+          "medianEntryRatio": 1.0068770925090822,
+          "medianIncome": 308.0,
+          "medianEntryCash": 108.0
+        },
+        {
+          "event": 5,
+          "arrivals": 2000,
+          "attempts": 2000,
+          "advances": 2000,
+          "retries": 0,
+          "medianEntryPR": 403.30101708699993,
+          "medianFieldPR": 382.92102352560005,
+          "medianEntryRatio": 1.0532224461685566,
+          "medianIncome": 306.0,
+          "medianEntryCash": 79.0
+        },
+        {
+          "event": 6,
+          "arrivals": 2000,
+          "attempts": 2000,
+          "advances": 2000,
+          "retries": 0,
+          "medianEntryPR": 437.431287689,
+          "medianFieldPR": 396.61321090240006,
+          "medianEntryRatio": 1.1029165838770927,
+          "medianIncome": 311.0,
+          "medianEntryCash": 82.5
+        },
+        {
+          "event": 7,
+          "arrivals": 2000,
+          "attempts": 18223,
+          "advances": 2000,
+          "retries": 16223,
+          "medianEntryPR": 437.431287689,
+          "medianFieldPR": 511.5714344608001,
+          "medianEntryRatio": 0.8550737164401208,
+          "medianIncome": 221,
+          "medianEntryCash": 379.0
+        },
+        {
+          "event": 8,
+          "arrivals": 2000,
+          "attempts": 2000,
+          "advances": 2000,
+          "retries": 0,
+          "medianEntryPR": 525.0168699300001,
+          "medianFieldPR": 511.59147402880006,
+          "medianEntryRatio": 1.026242415252691,
+          "medianIncome": 356.0,
+          "medianEntryCash": 253.5
+        },
+        {
+          "event": 9,
+          "arrivals": 2000,
+          "attempts": 2000,
+          "advances": 2000,
+          "retries": 0,
+          "medianEntryPR": 525.0168699300001,
+          "medianFieldPR": 520.8711578028,
+          "medianEntryRatio": 1.0079591892641706,
+          "medianIncome": 375.0,
+          "medianEntryCash": 438.5
+        },
+        {
+          "event": 10,
+          "arrivals": 2000,
+          "attempts": 2000,
+          "advances": 2000,
+          "retries": 0,
+          "medianEntryPR": 567.7192735430001,
+          "medianFieldPR": 530.7361137752,
+          "medianEntryRatio": 1.0696827647637048,
+          "medianIncome": 412.0,
+          "medianEntryCash": 190.0
+        },
+        {
+          "event": 11,
+          "arrivals": 2000,
+          "attempts": 2000,
+          "advances": 2000,
+          "retries": 0,
+          "medianEntryPR": 567.8194713830001,
+          "medianFieldPR": 537.3016837211999,
+          "medianEntryRatio": 1.0567982356772876,
+          "medianIncome": 360.0,
+          "medianEntryCash": 431.0
+        },
+        {
+          "event": 12,
+          "arrivals": 2000,
+          "attempts": 2000,
+          "advances": 2000,
+          "retries": 0,
+          "medianEntryPR": 570.8946942129999,
+          "medianFieldPR": 553.3033026982,
+          "medianEntryRatio": 1.0317933969109074,
+          "medianIncome": 399.0,
+          "medianEntryCash": 310.0
+        },
+        {
+          "event": 13,
+          "arrivals": 2000,
+          "attempts": 2000,
+          "advances": 2000,
+          "retries": 0,
+          "medianEntryPR": 572.930015267,
+          "medianFieldPR": 577.2103182638,
+          "medianEntryRatio": 0.9927580900331557,
+          "medianIncome": 356.0,
+          "medianEntryCash": 166.0
+        },
+        {
+          "event": 14,
+          "arrivals": 2000,
+          "attempts": 33504,
+          "advances": 1333,
+          "retries": 31504,
+          "medianEntryPR": 552.4576243550001,
+          "medianFieldPR": 624.1433539836,
+          "medianEntryRatio": 0.8791650132735417,
+          "medianIncome": 313.0,
+          "medianEntryCash": 109.0
+        },
+        {
+          "event": 15,
+          "arrivals": 1333,
+          "attempts": 1333,
+          "advances": 1333,
+          "retries": 0,
+          "medianEntryPR": 620.7428964590001,
+          "medianFieldPR": 627.9819367322,
+          "medianEntryRatio": 0.988535624675893,
+          "medianIncome": 429,
+          "medianEntryCash": 208
+        },
+        {
+          "event": 16,
+          "arrivals": 1333,
+          "attempts": 1333,
+          "advances": 1333,
+          "retries": 0,
+          "medianEntryPR": 622.7782175130001,
+          "medianFieldPR": 628.6170208661999,
+          "medianEntryRatio": 0.9911343775716529,
+          "medianIncome": 483,
+          "medianEntryCash": 234
+        },
+        {
+          "event": 17,
+          "arrivals": 1333,
+          "attempts": 1333,
+          "advances": 1333,
+          "retries": 0,
+          "medianEntryPR": 625.7531098930001,
+          "medianFieldPR": 629.2521050002,
+          "medianEntryRatio": 0.9944394383755001,
+          "medianIncome": 480,
+          "medianEntryCash": 311
+        },
+        {
+          "event": 18,
+          "arrivals": 1333,
+          "attempts": 1333,
+          "advances": 1333,
+          "retries": 0,
+          "medianEntryPR": 627.788430947,
+          "medianFieldPR": 629.659169211,
+          "medianEntryRatio": 0.9944711089432318,
+          "medianIncome": 445,
+          "medianEntryCash": 388
+        },
+        {
+          "event": 19,
+          "arrivals": 1333,
+          "attempts": 1333,
+          "advances": 1333,
+          "retries": 0,
+          "medianEntryPR": 627.988826627,
+          "medianFieldPR": 632.3801600682,
+          "medianEntryRatio": 0.9930558646230672,
+          "medianIncome": 451,
+          "medianEntryCash": 346
+        },
+        {
+          "event": 20,
+          "arrivals": 1333,
+          "attempts": 1333,
+          "advances": 1333,
+          "retries": 0,
+          "medianEntryPR": 627.988826627,
+          "medianFieldPR": 635.1011509254,
+          "medianEntryRatio": 0.9888012731703655,
+          "medianIncome": 445,
+          "medianEntryCash": 603
+        },
+        {
+          "event": 21,
+          "arrivals": 1333,
+          "attempts": 12838,
+          "advances": 1256,
+          "retries": 11505,
+          "medianEntryPR": 615.5698956059999,
+          "medianFieldPR": 654.0688705308,
+          "medianEntryRatio": 0.9384758657794557,
+          "medianIncome": 301.0,
+          "medianEntryCash": 146
+        },
+        {
+          "event": 22,
+          "arrivals": 1250,
+          "attempts": 1250,
+          "advances": 1250,
+          "retries": 0,
+          "medianEntryPR": 658.8208708779999,
+          "medianFieldPR": 656.4123432580002,
+          "medianEntryRatio": 1.0036692296309442,
+          "medianIncome": 486.0,
+          "medianEntryCash": 453.0
+        },
+        {
+          "event": 23,
+          "arrivals": 1241,
+          "attempts": 1241,
+          "advances": 1241,
+          "retries": 0,
+          "medianEntryPR": 661.9962915480002,
+          "medianFieldPR": 656.4123432580002,
+          "medianEntryRatio": 1.0085067691784784,
+          "medianIncome": 564,
+          "medianEntryCash": 546
+        },
+        {
+          "event": 24,
+          "arrivals": 1238,
+          "attempts": 1238,
+          "advances": 1238,
+          "retries": 0,
+          "medianEntryPR": 664.1318104420001,
+          "medianFieldPR": 656.4123432580002,
+          "medianEntryRatio": 1.0117600884006621,
+          "medianIncome": 480.0,
+          "medianEntryCash": 997.0
+        },
+        {
+          "event": 25,
+          "arrivals": 1237,
+          "attempts": 1237,
+          "advances": 1237,
+          "retries": 0,
+          "medianEntryPR": 664.1318104420001,
+          "medianFieldPR": 656.4123432580002,
+          "medianEntryRatio": 1.0117600884006621,
+          "medianIncome": 481,
+          "medianEntryCash": 1482
+        },
+        {
+          "event": 26,
+          "arrivals": 1231,
+          "attempts": 1231,
+          "advances": 1231,
+          "retries": 0,
+          "medianEntryPR": 664.1318104420001,
+          "medianFieldPR": 656.4123432580002,
+          "medianEntryRatio": 1.0117600884006621,
+          "medianIncome": 480,
+          "medianEntryCash": 1952
+        },
+        {
+          "event": 27,
+          "arrivals": 1227,
+          "attempts": 1227,
+          "advances": 1227,
+          "retries": 0,
+          "medianEntryPR": 664.1318104420001,
+          "medianFieldPR": 656.4123432580002,
+          "medianEntryRatio": 1.0117600884006621,
+          "medianIncome": 474,
+          "medianEntryCash": 2441
+        },
+        {
+          "event": 28,
+          "arrivals": 1223,
+          "attempts": 2676,
+          "advances": 1201,
+          "retries": 1453,
+          "medianEntryPR": 645.9257494699999,
+          "medianFieldPR": 659.1127535523999,
+          "medianEntryRatio": 0.9800225913061577,
+          "medianIncome": 480.0,
+          "medianEntryCash": 258
+        },
+        {
+          "event": 29,
+          "arrivals": 1196,
+          "attempts": 1196,
+          "advances": 1196,
+          "retries": 0,
+          "medianEntryPR": 651.136491194,
+          "medianFieldPR": 656.356270498,
+          "medianEntryRatio": 0.9920473384065646,
+          "medianIncome": 537.0,
+          "medianEntryCash": 1958.0
+        },
+        {
+          "event": 30,
+          "arrivals": 1190,
+          "attempts": 1190,
+          "advances": 1190,
+          "retries": 0,
+          "medianEntryPR": 651.136491194,
+          "medianFieldPR": 656.356270498,
+          "medianEntryRatio": 0.9920473384065646,
+          "medianIncome": 604.0,
+          "medianEntryCash": 2530.0
+        },
+        {
+          "event": 31,
+          "arrivals": 1181,
+          "attempts": 1181,
+          "advances": 1181,
+          "retries": 0,
+          "medianEntryPR": 651.136491194,
+          "medianFieldPR": 656.356270498,
+          "medianEntryRatio": 0.9920473384065646,
+          "medianIncome": 581,
+          "medianEntryCash": 3102
+        },
+        {
+          "event": 32,
+          "arrivals": 1172,
+          "attempts": 1172,
+          "advances": 1172,
+          "retries": 0,
+          "medianEntryPR": 651.136491194,
+          "medianFieldPR": 656.356270498,
+          "medianEntryRatio": 0.9920473384065646,
+          "medianIncome": 603.0,
+          "medianEntryCash": 3681.0
+        },
+        {
+          "event": 33,
+          "arrivals": 1161,
+          "attempts": 1161,
+          "advances": 1161,
+          "retries": 0,
+          "medianEntryPR": 651.136491194,
+          "medianFieldPR": 656.356270498,
+          "medianEntryRatio": 0.9920473384065646,
+          "medianIncome": 598,
+          "medianEntryCash": 4259
+        },
+        {
+          "event": 34,
+          "arrivals": 1154,
+          "attempts": 1154,
+          "advances": 1154,
+          "retries": 0,
+          "medianEntryPR": 651.136491194,
+          "medianFieldPR": 656.356270498,
+          "medianEntryRatio": 0.9920473384065646,
+          "medianIncome": 521.0,
+          "medianEntryCash": 4840.0
+        },
+        {
+          "event": 35,
+          "arrivals": 1145,
+          "attempts": 4964,
+          "advances": 1099,
+          "retries": 3819,
+          "medianEntryPR": 332.099982802,
+          "medianFieldPR": 637.3540759220001,
+          "medianEntryRatio": 0.5210604204916744,
+          "medianIncome": 455.0,
+          "medianEntryCash": 5381
+        }
+      ]
+    },
+    "pr": {
+      "n": 2000,
+      "completed": 419,
+      "attempts": 136096,
+      "bankruptcy": 0,
+      "medianEndCash": 8000.0,
+      "meanPaid": 1650.3175,
+      "meanRecovered": 0.8365,
+      "actualRewards": [
+        {
+          "0": 1309,
+          "2": 436,
+          "3": 255
+        },
+        {
+          "0": 1378,
+          "2": 313,
+          "3": 211,
+          "4": 95,
+          "1": 3
+        },
+        {
+          "0": 1425,
+          "2": 363,
+          "3": 201,
+          "4": 7,
+          "1": 4
+        },
+        {
+          "0": 1478,
+          "2": 340,
+          "3": 171,
+          "4": 5,
+          "1": 6
+        }
+      ],
+      "groups": [
+        {
+          "skill": "Rookie",
+          "n": 667,
+          "completed": 0,
+          "censoredAt": {
+            "7": 645,
+            "14": 22
+          },
+          "medianHours": 9.122467592590684,
+          "bossAttempts": {
+            "7": 41597,
+            "14": 959
+          }
+        },
+        {
+          "skill": "Club",
+          "n": 667,
+          "completed": 0,
+          "censoredAt": {
+            "14": 28,
+            "7": 639
+          },
+          "medianHours": 8.77078703703545,
+          "bossAttempts": {
+            "7": 41074,
+            "14": 1446
+          }
+        },
+        {
+          "skill": "Pro",
+          "n": 666,
+          "completed": 419,
+          "censoredAt": {
+            "35": 57,
+            "7": 25,
+            "21": 32,
+            "26": 6,
+            "27": 13,
+            "20": 4,
+            "28": 15,
+            "33": 7,
+            "23": 7,
+            "29": 6,
+            "34": 11,
+            "17": 1,
+            "32": 6,
+            "31": 9,
+            "22": 4,
+            "11": 3,
+            "14": 7,
+            "24": 5,
+            "30": 7,
+            "13": 3,
+            "15": 3,
+            "18": 4,
+            "25": 3,
+            "9": 2,
+            "12": 3,
+            "16": 1,
+            "19": 2,
+            "10": 1
+          },
+          "medianHours": 9.347999999997548,
+          "bossAttempts": {
+            "7": 15286,
+            "14": 3382,
+            "21": 3608,
+            "28": 875,
+            "35": 1751
+          }
+        }
+      ],
+      "events": [
+        {
+          "event": 1,
+          "arrivals": 2000,
+          "attempts": 2000,
+          "advances": 2000,
+          "retries": 0,
+          "medianEntryPR": 332.099982802,
+          "medianFieldPR": 354.34911256759995,
+          "medianEntryRatio": 0.9372112727914468,
+          "medianIncome": 176.0,
+          "medianEntryCash": 0.0
+        },
+        {
+          "event": 2,
+          "arrivals": 2000,
+          "attempts": 2000,
+          "advances": 2000,
+          "retries": 0,
+          "medianEntryPR": 332.099982802,
+          "medianFieldPR": 358.1936916564,
+          "medianEntryRatio": 0.9271519586686898,
+          "medianIncome": 176.0,
+          "medianEntryCash": 132.0
+        },
+        {
+          "event": 3,
+          "arrivals": 2000,
+          "attempts": 2000,
+          "advances": 2000,
+          "retries": 0,
+          "medianEntryPR": 374.80238641500006,
+          "medianFieldPR": 369.6723499916,
+          "medianEntryRatio": 1.0140320147283233,
+          "medianIncome": 248.0,
+          "medianEntryCash": 129.0
+        },
+        {
+          "event": 4,
+          "arrivals": 2000,
+          "attempts": 2000,
+          "advances": 2000,
+          "retries": 0,
+          "medianEntryPR": 408.932657017,
+          "medianFieldPR": 376.07492983720005,
+          "medianEntryRatio": 1.0873701610315365,
+          "medianIncome": 196.0,
+          "medianEntryCash": 56.0
+        },
+        {
+          "event": 5,
+          "arrivals": 2000,
+          "attempts": 2000,
+          "advances": 2000,
+          "retries": 0,
+          "medianEntryPR": 408.932657017,
+          "medianFieldPR": 382.92102352560005,
+          "medianEntryRatio": 1.0679294995398991,
+          "medianIncome": 295.0,
+          "medianEntryCash": 313.0
+        },
+        {
+          "event": 6,
+          "arrivals": 2000,
+          "attempts": 2000,
+          "advances": 2000,
+          "retries": 0,
+          "medianEntryPR": 451.63506063,
+          "medianFieldPR": 397.30099862040004,
+          "medianEntryRatio": 1.1367579296258283,
+          "medianIncome": 247.0,
+          "medianEntryCash": 201.0
+        },
+        {
+          "event": 7,
+          "arrivals": 2000,
+          "attempts": 97957,
+          "advances": 691,
+          "retries": 95957,
+          "medianEntryPR": 451.63506063,
+          "medianFieldPR": 511.5714344608001,
+          "medianEntryRatio": 0.8828387009255638,
+          "medianIncome": 197,
+          "medianEntryCash": 340.0
+        },
+        {
+          "event": 8,
+          "arrivals": 691,
+          "attempts": 691,
+          "advances": 691,
+          "retries": 0,
+          "medianEntryPR": 576.4275042559999,
+          "medianFieldPR": 511.59147402880006,
+          "medianEntryRatio": 1.1267339928803228,
+          "medianIncome": 406,
+          "medianEntryCash": 2313
+        },
+        {
+          "event": 9,
+          "arrivals": 689,
+          "attempts": 689,
+          "advances": 689,
+          "retries": 0,
+          "medianEntryPR": 608.21545221,
+          "medianFieldPR": 520.8711578028,
+          "medianEntryRatio": 1.1676888671963446,
+          "medianIncome": 375,
+          "medianEntryCash": 1025
+        },
+        {
+          "event": 10,
+          "arrivals": 688,
+          "attempts": 688,
+          "advances": 688,
+          "retries": 0,
+          "medianEntryPR": 608.21545221,
+          "medianFieldPR": 530.7361137752,
+          "medianEntryRatio": 1.145984673783886,
+          "medianIncome": 418.0,
+          "medianEntryCash": 1387.5
+        },
+        {
+          "event": 11,
+          "arrivals": 685,
+          "attempts": 685,
+          "advances": 685,
+          "retries": 0,
+          "medianEntryPR": 608.21545221,
+          "medianFieldPR": 537.3016837211999,
+          "medianEntryRatio": 1.1319812884219371,
+          "medianIncome": 302,
+          "medianEntryCash": 1736
+        },
+        {
+          "event": 12,
+          "arrivals": 682,
+          "attempts": 682,
+          "advances": 682,
+          "retries": 0,
+          "medianEntryPR": 608.21545221,
+          "medianFieldPR": 553.3033026982,
+          "medianEntryRatio": 1.0992442106237559,
+          "medianIncome": 342.0,
+          "medianEntryCash": 2010.0
+        },
+        {
+          "event": 13,
+          "arrivals": 679,
+          "attempts": 679,
+          "advances": 679,
+          "retries": 0,
+          "medianEntryPR": 608.21545221,
+          "medianFieldPR": 577.2103182638,
+          "medianEntryRatio": 1.053715488038157,
+          "medianIncome": 240,
+          "medianEntryCash": 2301
+        },
+        {
+          "event": 14,
+          "arrivals": 678,
+          "attempts": 5787,
+          "advances": 622,
+          "retries": 5109,
+          "medianEntryPR": 618.598295447,
+          "medianFieldPR": 628.3890009429999,
+          "medianEntryRatio": 0.9844507502302157,
+          "medianIncome": 284,
+          "medianEntryCash": 218.0
+        },
+        {
+          "event": 15,
+          "arrivals": 619,
+          "attempts": 619,
+          "advances": 619,
+          "retries": 0,
+          "medianEntryPR": 645.7696373729999,
+          "medianFieldPR": 628.3890009429999,
+          "medianEntryRatio": 1.027659039868485,
+          "medianIncome": 516,
+          "medianEntryCash": 985
+        },
+        {
+          "event": 16,
+          "arrivals": 618,
+          "attempts": 618,
+          "advances": 618,
+          "retries": 0,
+          "medianEntryPR": 645.7696373729999,
+          "medianFieldPR": 629.0240850769999,
+          "medianEntryRatio": 1.0266214803109648,
+          "medianIncome": 445.0,
+          "medianEntryCash": 1420.5
+        },
+        {
+          "event": 17,
+          "arrivals": 617,
+          "attempts": 617,
+          "advances": 617,
+          "retries": 0,
+          "medianEntryPR": 645.7696373729999,
+          "medianFieldPR": 629.659169211,
+          "medianEntryRatio": 1.025586013751197,
+          "medianIncome": 357,
+          "medianEntryCash": 1876
+        },
+        {
+          "event": 18,
+          "arrivals": 613,
+          "attempts": 613,
+          "advances": 613,
+          "retries": 0,
+          "medianEntryPR": 645.7696373729999,
+          "medianFieldPR": 629.659169211,
+          "medianEntryRatio": 1.025586013751197,
+          "medianIncome": 425,
+          "medianEntryCash": 2269
+        },
+        {
+          "event": 19,
+          "arrivals": 611,
+          "attempts": 611,
+          "advances": 611,
+          "retries": 0,
+          "medianEntryPR": 645.7696373729999,
+          "medianFieldPR": 632.3801600682,
+          "medianEntryRatio": 1.0211731457599111,
+          "medianIncome": 268,
+          "medianEntryCash": 2668
+        },
+        {
+          "event": 20,
+          "arrivals": 607,
+          "attempts": 607,
+          "advances": 607,
+          "retries": 0,
+          "medianEntryPR": 645.7696373729999,
+          "medianFieldPR": 635.1011509254,
+          "medianEntryRatio": 1.0167980902444516,
+          "medianIncome": 249,
+          "medianEntryCash": 3066
+        },
+        {
+          "event": 21,
+          "arrivals": 603,
+          "attempts": 3608,
+          "advances": 575,
+          "retries": 3005,
+          "medianEntryPR": 651.0656361220001,
+          "medianFieldPR": 656.4123432580002,
+          "medianEntryRatio": 0.9918546517430453,
+          "medianIncome": 401.0,
+          "medianEntryCash": 360
+        },
+        {
+          "event": 22,
+          "arrivals": 571,
+          "attempts": 571,
+          "advances": 571,
+          "retries": 0,
+          "medianEntryPR": 651.2660318020002,
+          "medianFieldPR": 656.4123432580002,
+          "medianEntryRatio": 0.9921599410662251,
+          "medianIncome": 378,
+          "medianEntryCash": 3280
+        },
+        {
+          "event": 23,
+          "arrivals": 564,
+          "attempts": 564,
+          "advances": 564,
+          "retries": 0,
+          "medianEntryPR": 651.2660318020002,
+          "medianFieldPR": 656.4123432580002,
+          "medianEntryRatio": 0.9921599410662251,
+          "medianIncome": 473.0,
+          "medianEntryCash": 3648.5
+        },
+        {
+          "event": 24,
+          "arrivals": 559,
+          "attempts": 559,
+          "advances": 559,
+          "retries": 0,
+          "medianEntryPR": 651.2660318020002,
+          "medianFieldPR": 656.4123432580002,
+          "medianEntryRatio": 0.9921599410662251,
+          "medianIncome": 496,
+          "medianEntryCash": 4110
+        },
+        {
+          "event": 25,
+          "arrivals": 556,
+          "attempts": 556,
+          "advances": 556,
+          "retries": 0,
+          "medianEntryPR": 651.2660318020002,
+          "medianFieldPR": 656.4123432580002,
+          "medianEntryRatio": 0.9921599410662251,
+          "medianIncome": 420.0,
+          "medianEntryCash": 4610.5
+        },
+        {
+          "event": 26,
+          "arrivals": 550,
+          "attempts": 550,
+          "advances": 550,
+          "retries": 0,
+          "medianEntryPR": 651.2660318020002,
+          "medianFieldPR": 656.4123432580002,
+          "medianEntryRatio": 0.9921599410662251,
+          "medianIncome": 326.0,
+          "medianEntryCash": 5092.0
+        },
+        {
+          "event": 27,
+          "arrivals": 537,
+          "attempts": 537,
+          "advances": 537,
+          "retries": 0,
+          "medianEntryPR": 651.2660318020002,
+          "medianFieldPR": 656.4123432580002,
+          "medianEntryRatio": 0.9921599410662251,
+          "medianIncome": 224,
+          "medianEntryCash": 5371
+        },
+        {
+          "event": 28,
+          "arrivals": 528,
+          "attempts": 875,
+          "advances": 522,
+          "retries": 347,
+          "medianEntryPR": 671.07714709,
+          "medianFieldPR": 659.1127535523999,
+          "medianEntryRatio": 1.0181522713270468,
+          "medianIncome": 1172,
+          "medianEntryCash": 2347.0
+        },
+        {
+          "event": 29,
+          "arrivals": 516,
+          "attempts": 516,
+          "advances": 516,
+          "retries": 0,
+          "medianEntryPR": 671.07714709,
+          "medianFieldPR": 656.356270498,
+          "medianEntryRatio": 1.022428180020023,
+          "medianIncome": 596.0,
+          "medianEntryCash": 4720.5
+        },
+        {
+          "event": 30,
+          "arrivals": 509,
+          "attempts": 509,
+          "advances": 509,
+          "retries": 0,
+          "medianEntryPR": 671.07714709,
+          "medianFieldPR": 656.356270498,
+          "medianEntryRatio": 1.022428180020023,
+          "medianIncome": 530,
+          "medianEntryCash": 5290
+        },
+        {
+          "event": 31,
+          "arrivals": 500,
+          "attempts": 500,
+          "advances": 500,
+          "retries": 0,
+          "medianEntryPR": 671.07714709,
+          "medianFieldPR": 656.356270498,
+          "medianEntryRatio": 1.022428180020023,
+          "medianIncome": 409.0,
+          "medianEntryCash": 5813.5
+        },
+        {
+          "event": 32,
+          "arrivals": 494,
+          "attempts": 494,
+          "advances": 494,
+          "retries": 0,
+          "medianEntryPR": 671.07714709,
+          "medianFieldPR": 656.356270498,
+          "medianEntryRatio": 1.022428180020023,
+          "medianIncome": 578.0,
+          "medianEntryCash": 6284.5
+        },
+        {
+          "event": 33,
+          "arrivals": 487,
+          "attempts": 487,
+          "advances": 487,
+          "retries": 0,
+          "medianEntryPR": 671.07714709,
+          "medianFieldPR": 656.356270498,
+          "medianEntryRatio": 1.022428180020023,
+          "medianIncome": 564,
+          "medianEntryCash": 6844
+        },
+        {
+          "event": 34,
+          "arrivals": 476,
+          "attempts": 476,
+          "advances": 476,
+          "retries": 0,
+          "medianEntryPR": 671.07714709,
+          "medianFieldPR": 656.356270498,
+          "medianEntryRatio": 1.022428180020023,
+          "medianIncome": 602.0,
+          "medianEntryCash": 7396.0
+        },
+        {
+          "event": 35,
+          "arrivals": 468,
+          "attempts": 1751,
+          "advances": 419,
+          "retries": 1283,
+          "medianEntryPR": 332.099982802,
+          "medianFieldPR": 637.3540759220001,
+          "medianEntryRatio": 0.5210604204916744,
+          "medianIncome": 0,
+          "medianEntryCash": 7945.0
+        }
+      ]
+    }
+  },
+  "bossPhysical": [
+    {
+      "event": 7,
+      "skill": 0,
+      "car": 0,
+      "n": 20,
+      "firsts": 0,
+      "beatNamedBoss": 0
+    },
+    {
+      "event": 7,
+      "skill": 0,
+      "car": 1,
+      "n": 20,
+      "firsts": 0,
+      "beatNamedBoss": 0
+    },
+    {
+      "event": 7,
+      "skill": 0,
+      "car": 2,
+      "n": 20,
+      "firsts": 0,
+      "beatNamedBoss": 0
+    },
+    {
+      "event": 7,
+      "skill": 0,
+      "car": 4,
+      "n": 20,
+      "firsts": 3,
+      "beatNamedBoss": 7
+    },
+    {
+      "event": 7,
+      "skill": 1,
+      "car": 0,
+      "n": 20,
+      "firsts": 0,
+      "beatNamedBoss": 1
+    },
+    {
+      "event": 7,
+      "skill": 1,
+      "car": 1,
+      "n": 20,
+      "firsts": 0,
+      "beatNamedBoss": 2
+    },
+    {
+      "event": 7,
+      "skill": 1,
+      "car": 2,
+      "n": 20,
+      "firsts": 0,
+      "beatNamedBoss": 2
+    },
+    {
+      "event": 7,
+      "skill": 1,
+      "car": 4,
+      "n": 20,
+      "firsts": 7,
+      "beatNamedBoss": 12
+    },
+    {
+      "event": 7,
+      "skill": 2,
+      "car": 0,
+      "n": 20,
+      "firsts": 1,
+      "beatNamedBoss": 8
+    },
+    {
+      "event": 7,
+      "skill": 2,
+      "car": 1,
+      "n": 20,
+      "firsts": 1,
+      "beatNamedBoss": 4
+    },
+    {
+      "event": 7,
+      "skill": 2,
+      "car": 2,
+      "n": 20,
+      "firsts": 2,
+      "beatNamedBoss": 6
+    },
+    {
+      "event": 7,
+      "skill": 2,
+      "car": 4,
+      "n": 20,
+      "firsts": 17,
+      "beatNamedBoss": 19
+    },
+    {
+      "event": 14,
+      "skill": 0,
+      "car": 0,
+      "n": 20,
+      "firsts": 0,
+      "beatNamedBoss": 3
+    },
+    {
+      "event": 14,
+      "skill": 0,
+      "car": 1,
+      "n": 20,
+      "firsts": 0,
+      "beatNamedBoss": 0
+    },
+    {
+      "event": 14,
+      "skill": 0,
+      "car": 2,
+      "n": 20,
+      "firsts": 0,
+      "beatNamedBoss": 0
+    },
+    {
+      "event": 14,
+      "skill": 0,
+      "car": 3,
+      "n": 20,
+      "firsts": 0,
+      "beatNamedBoss": 0
+    },
+    {
+      "event": 14,
+      "skill": 0,
+      "car": 4,
+      "n": 20,
+      "firsts": 0,
+      "beatNamedBoss": 4
+    },
+    {
+      "event": 14,
+      "skill": 0,
+      "car": 5,
+      "n": 20,
+      "firsts": 1,
+      "beatNamedBoss": 13
+    },
+    {
+      "event": 14,
+      "skill": 1,
+      "car": 0,
+      "n": 20,
+      "firsts": 2,
+      "beatNamedBoss": 12
+    },
+    {
+      "event": 14,
+      "skill": 1,
+      "car": 1,
+      "n": 20,
+      "firsts": 0,
+      "beatNamedBoss": 3
+    },
+    {
+      "event": 14,
+      "skill": 1,
+      "car": 2,
+      "n": 20,
+      "firsts": 0,
+      "beatNamedBoss": 4
+    },
+    {
+      "event": 14,
+      "skill": 1,
+      "car": 3,
+      "n": 20,
+      "firsts": 0,
+      "beatNamedBoss": 11
+    },
+    {
+      "event": 14,
+      "skill": 1,
+      "car": 4,
+      "n": 20,
+      "firsts": 3,
+      "beatNamedBoss": 15
+    },
+    {
+      "event": 14,
+      "skill": 1,
+      "car": 5,
+      "n": 20,
+      "firsts": 8,
+      "beatNamedBoss": 20
+    },
+    {
+      "event": 14,
+      "skill": 2,
+      "car": 0,
+      "n": 20,
+      "firsts": 3,
+      "beatNamedBoss": 14
+    },
+    {
+      "event": 14,
+      "skill": 2,
+      "car": 1,
+      "n": 20,
+      "firsts": 0,
+      "beatNamedBoss": 10
+    },
+    {
+      "event": 14,
+      "skill": 2,
+      "car": 2,
+      "n": 20,
+      "firsts": 1,
+      "beatNamedBoss": 7
+    },
+    {
+      "event": 14,
+      "skill": 2,
+      "car": 3,
+      "n": 20,
+      "firsts": 5,
+      "beatNamedBoss": 12
+    },
+    {
+      "event": 14,
+      "skill": 2,
+      "car": 4,
+      "n": 20,
+      "firsts": 7,
+      "beatNamedBoss": 20
+    },
+    {
+      "event": 14,
+      "skill": 2,
+      "car": 5,
+      "n": 20,
+      "firsts": 12,
+      "beatNamedBoss": 20
+    },
+    {
+      "event": 21,
+      "skill": 0,
+      "car": 0,
+      "n": 20,
+      "firsts": 0,
+      "beatNamedBoss": 0
+    },
+    {
+      "event": 21,
+      "skill": 0,
+      "car": 1,
+      "n": 20,
+      "firsts": 0,
+      "beatNamedBoss": 0
+    },
+    {
+      "event": 21,
+      "skill": 0,
+      "car": 2,
+      "n": 20,
+      "firsts": 0,
+      "beatNamedBoss": 0
+    },
+    {
+      "event": 21,
+      "skill": 0,
+      "car": 3,
+      "n": 20,
+      "firsts": 0,
+      "beatNamedBoss": 0
+    },
+    {
+      "event": 21,
+      "skill": 0,
+      "car": 4,
+      "n": 20,
+      "firsts": 0,
+      "beatNamedBoss": 0
+    },
+    {
+      "event": 21,
+      "skill": 0,
+      "car": 5,
+      "n": 20,
+      "firsts": 0,
+      "beatNamedBoss": 0
+    },
+    {
+      "event": 21,
+      "skill": 0,
+      "car": 6,
+      "n": 20,
+      "firsts": 0,
+      "beatNamedBoss": 0
+    },
+    {
+      "event": 21,
+      "skill": 0,
+      "car": 7,
+      "n": 20,
+      "firsts": 0,
+      "beatNamedBoss": 0
+    },
+    {
+      "event": 21,
+      "skill": 1,
+      "car": 0,
+      "n": 20,
+      "firsts": 0,
+      "beatNamedBoss": 0
+    },
+    {
+      "event": 21,
+      "skill": 1,
+      "car": 1,
+      "n": 20,
+      "firsts": 0,
+      "beatNamedBoss": 0
+    },
+    {
+      "event": 21,
+      "skill": 1,
+      "car": 2,
+      "n": 20,
+      "firsts": 0,
+      "beatNamedBoss": 0
+    },
+    {
+      "event": 21,
+      "skill": 1,
+      "car": 3,
+      "n": 20,
+      "firsts": 0,
+      "beatNamedBoss": 0
+    },
+    {
+      "event": 21,
+      "skill": 1,
+      "car": 4,
+      "n": 20,
+      "firsts": 0,
+      "beatNamedBoss": 0
+    },
+    {
+      "event": 21,
+      "skill": 1,
+      "car": 5,
+      "n": 20,
+      "firsts": 1,
+      "beatNamedBoss": 1
+    },
+    {
+      "event": 21,
+      "skill": 1,
+      "car": 6,
+      "n": 20,
+      "firsts": 5,
+      "beatNamedBoss": 11
+    },
+    {
+      "event": 21,
+      "skill": 1,
+      "car": 7,
+      "n": 20,
+      "firsts": 1,
+      "beatNamedBoss": 2
+    },
+    {
+      "event": 21,
+      "skill": 2,
+      "car": 0,
+      "n": 20,
+      "firsts": 0,
+      "beatNamedBoss": 0
+    },
+    {
+      "event": 21,
+      "skill": 2,
+      "car": 1,
+      "n": 20,
+      "firsts": 0,
+      "beatNamedBoss": 1
+    },
+    {
+      "event": 21,
+      "skill": 2,
+      "car": 2,
+      "n": 20,
+      "firsts": 0,
+      "beatNamedBoss": 0
+    },
+    {
+      "event": 21,
+      "skill": 2,
+      "car": 3,
+      "n": 20,
+      "firsts": 5,
+      "beatNamedBoss": 5
+    },
+    {
+      "event": 21,
+      "skill": 2,
+      "car": 4,
+      "n": 20,
+      "firsts": 6,
+      "beatNamedBoss": 7
+    },
+    {
+      "event": 21,
+      "skill": 2,
+      "car": 5,
+      "n": 20,
+      "firsts": 6,
+      "beatNamedBoss": 7
+    },
+    {
+      "event": 21,
+      "skill": 2,
+      "car": 6,
+      "n": 20,
+      "firsts": 12,
+      "beatNamedBoss": 12
+    },
+    {
+      "event": 21,
+      "skill": 2,
+      "car": 7,
+      "n": 20,
+      "firsts": 3,
+      "beatNamedBoss": 3
+    },
+    {
+      "event": 28,
+      "skill": 0,
+      "car": 0,
+      "n": 20,
+      "firsts": 0,
+      "beatNamedBoss": 0
+    },
+    {
+      "event": 28,
+      "skill": 0,
+      "car": 1,
+      "n": 20,
+      "firsts": 0,
+      "beatNamedBoss": 0
+    },
+    {
+      "event": 28,
+      "skill": 0,
+      "car": 2,
+      "n": 20,
+      "firsts": 0,
+      "beatNamedBoss": 0
+    },
+    {
+      "event": 28,
+      "skill": 0,
+      "car": 3,
+      "n": 20,
+      "firsts": 0,
+      "beatNamedBoss": 0
+    },
+    {
+      "event": 28,
+      "skill": 0,
+      "car": 4,
+      "n": 20,
+      "firsts": 1,
+      "beatNamedBoss": 1
+    },
+    {
+      "event": 28,
+      "skill": 0,
+      "car": 5,
+      "n": 20,
+      "firsts": 3,
+      "beatNamedBoss": 6
+    },
+    {
+      "event": 28,
+      "skill": 0,
+      "car": 6,
+      "n": 20,
+      "firsts": 0,
+      "beatNamedBoss": 1
+    },
+    {
+      "event": 28,
+      "skill": 0,
+      "car": 7,
+      "n": 20,
+      "firsts": 0,
+      "beatNamedBoss": 2
+    },
+    {
+      "event": 28,
+      "skill": 0,
+      "car": 8,
+      "n": 20,
+      "firsts": 2,
+      "beatNamedBoss": 3
+    },
+    {
+      "event": 28,
+      "skill": 0,
+      "car": 9,
+      "n": 20,
+      "firsts": 0,
+      "beatNamedBoss": 3
+    },
+    {
+      "event": 28,
+      "skill": 1,
+      "car": 0,
+      "n": 20,
+      "firsts": 0,
+      "beatNamedBoss": 0
+    },
+    {
+      "event": 28,
+      "skill": 1,
+      "car": 1,
+      "n": 20,
+      "firsts": 0,
+      "beatNamedBoss": 0
+    },
+    {
+      "event": 28,
+      "skill": 1,
+      "car": 2,
+      "n": 20,
+      "firsts": 0,
+      "beatNamedBoss": 0
+    },
+    {
+      "event": 28,
+      "skill": 1,
+      "car": 3,
+      "n": 20,
+      "firsts": 0,
+      "beatNamedBoss": 2
+    },
+    {
+      "event": 28,
+      "skill": 1,
+      "car": 4,
+      "n": 20,
+      "firsts": 0,
+      "beatNamedBoss": 2
+    },
+    {
+      "event": 28,
+      "skill": 1,
+      "car": 5,
+      "n": 20,
+      "firsts": 8,
+      "beatNamedBoss": 13
+    },
+    {
+      "event": 28,
+      "skill": 1,
+      "car": 6,
+      "n": 20,
+      "firsts": 5,
+      "beatNamedBoss": 12
+    },
+    {
+      "event": 28,
+      "skill": 1,
+      "car": 7,
+      "n": 20,
+      "firsts": 2,
+      "beatNamedBoss": 5
+    },
+    {
+      "event": 28,
+      "skill": 1,
+      "car": 8,
+      "n": 20,
+      "firsts": 6,
+      "beatNamedBoss": 14
+    },
+    {
+      "event": 28,
+      "skill": 1,
+      "car": 9,
+      "n": 20,
+      "firsts": 10,
+      "beatNamedBoss": 14
+    },
+    {
+      "event": 28,
+      "skill": 2,
+      "car": 0,
+      "n": 20,
+      "firsts": 0,
+      "beatNamedBoss": 1
+    },
+    {
+      "event": 28,
+      "skill": 2,
+      "car": 1,
+      "n": 20,
+      "firsts": 1,
+      "beatNamedBoss": 2
+    },
+    {
+      "event": 28,
+      "skill": 2,
+      "car": 2,
+      "n": 20,
+      "firsts": 1,
+      "beatNamedBoss": 6
+    },
+    {
+      "event": 28,
+      "skill": 2,
+      "car": 3,
+      "n": 20,
+      "firsts": 5,
+      "beatNamedBoss": 8
+    },
+    {
+      "event": 28,
+      "skill": 2,
+      "car": 4,
+      "n": 20,
+      "firsts": 5,
+      "beatNamedBoss": 9
+    },
+    {
+      "event": 28,
+      "skill": 2,
+      "car": 5,
+      "n": 20,
+      "firsts": 13,
+      "beatNamedBoss": 16
+    },
+    {
+      "event": 28,
+      "skill": 2,
+      "car": 6,
+      "n": 20,
+      "firsts": 14,
+      "beatNamedBoss": 19
+    },
+    {
+      "event": 28,
+      "skill": 2,
+      "car": 7,
+      "n": 20,
+      "firsts": 9,
+      "beatNamedBoss": 11
+    },
+    {
+      "event": 28,
+      "skill": 2,
+      "car": 8,
+      "n": 20,
+      "firsts": 12,
+      "beatNamedBoss": 16
+    },
+    {
+      "event": 28,
+      "skill": 2,
+      "car": 9,
+      "n": 20,
+      "firsts": 12,
+      "beatNamedBoss": 14
+    }
+  ],
+  "sourceHashes": {
+    "boss-extra-garages.csv.gz": "5bd27feea173fa0cbc38303acd6b474f5896aab136a4a6c216e6f5c65c918f7a",
+    "boss-extra.csv.gz": "8b1f8c1c9f2214e754227c5fa73fd1b1bb9b71e180375caabef99a6a652bce24",
+    "careers-pr.csv.gz": "827af25f868e2334682b31b32916223d91c994cb9694df9c26ee8a19a8b9edee",
+    "careers-race.csv.gz": "aa17c0646ad59663418e4bad85e873c1363d1a501b9c75a37120b90936d15f50",
+    "duels.csv.gz": "f074ba4f99b3e36d6e125d274d61fb0b90422f96f6fc02b62a432576b12efdfc",
+    "physical.csv.gz": "da96a85ae8f59ba2c1b3417c1fbd07e7e0587f30d972b6e81db5693a7b1d23d1",
+    "reference-garages.csv.gz": "5bd27feea173fa0cbc38303acd6b474f5896aab136a4a6c216e6f5c65c918f7a",
+    "timeline-pr.csv.gz": "e34bd53e98d3fae0d59869da86041c81aed2c91f6da605fbbc0ce408f2727512",
+    "timeline-race.csv.gz": "d25e967a1c9a27e518e34c04fef9d2a23d6421a4fdc91247c291106bbc883e77"
+  }
+}

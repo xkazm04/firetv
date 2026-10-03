@@ -38,3 +38,18 @@ internal fun campaignValidateReuse(snapshot: File,rounds: Int) {
     check(campaignReuseDataErrors(data(oldData),data(currentData),rounds).isEmpty()){"Simulation inputs changed in the reused prefix"}
     check((0 until rounds).all{r->RivalEconomy.cast(r).none{Career.rivals[it].id=="marrow"}})
 }
+
+/** Only the declared positive-weight speed reduction may differ; no general PR-equivalence shortcut. */
+internal fun campaignLineReuseDataValid(before: Map<String,String>,after: Map<String,String>): Boolean {
+    val key="class-upgrade-caps.csv";val old=before[key]?:return false
+    if(!old.lineSequence().any{it.startsWith("Line,8.25,")})return false
+    return before+mapOf(key to old.replace("Line,8.25,","Line,8.125,"))==after
+}
+internal fun campaignValidateLineReuse(snapshot: File) {
+    fun files(root: File)=root.walkTopDown().filter{it.isFile}.associateBy{it.relativeTo(root).invariantSeparatorsPath}
+    val a=files(File(snapshot,"4"));val b=files(File(World::class.java.protectionDomain.codeSource.location.toURI()))
+    check(a.keys==b.keys && a.all{(name,file)->file.readBytes().contentEquals(b.getValue(name).readBytes())}){"Main runtime changed"}
+    fun data(root: File)=files(root).mapValues{it.value.readText().replace("\r\n","\n")}
+    val old=data(File(snapshot,"5/data"));val current=data(File(Content::class.java.getResource("/data/career-curve.csv")!!.toURI()).parentFile)
+    check(campaignLineReuseDataValid(old,current)){"Reuse requires exactly the Line 8.25 to 8.125 ceiling reduction"}
+}
