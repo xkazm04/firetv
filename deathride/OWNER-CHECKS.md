@@ -286,3 +286,16 @@ On desktop, earn an ally and compare the money, stock car and useful-part choice
 Drive through Vex and Mica with your actual retained garage. The original stat cap of 10 remains: the tested 12/16 expansion shifted class winner share too far and is not shipped. The release is only a partial economy correction; late boss PR targets remain missed, and primary completion fell from 1,292 to 1,099 of 2,000 sampled ledgers. Record the car, parts, first-entry ratio and retry count. The evidence retains every censored career at the unchanged 70-race limit. Do not interpret the rejected candidate's upgraded obstacle sweep as production tuning.
 
 In the seized-car finale, judge the supplied rig, dispatcher tell, retry and last-survivor victory. The 0.525 reference describes this basic rig against Marrow; it is not a promise of a lap advantage or a 52.5% win chance. Marrow retains the existing 635 shopping ceiling. The experimental 610 ceiling and higher shared caps are not shipped. Automation still does not establish a monotonic Rookie/Club/Pro difficulty curve or human fairness. Story/reward usefulness, finale feel, physical-phone comfort and all Stick checks remain pending. No Stick access occurred in this wave.
+
+
+## DV3 - campaign design pass 2 (2026-10-03; owner and Stick checks pending)
+
+Owner review: file:///C:/Users/kazda/kiro/firetv-deathride-campv2/deathride/campaign/design-v2/index.html
+
+Review the eight design decisions with Keep, Maybe or Reject and a note, then Copy Markdown. Two changes explicitly need an owner preference: the proposed 4-6 hour target replaces 5-8 hours, and late ordinary bosses use a proposed 0.93-1.03 PR band instead of the infeasible repeated 0.89 dip. The page retains failed old targets and censored careers. A Keep records a preference, not a balance or felt-play verdict.
+
+On desktop, earn a named-boss promotion while another entrant finishes first. Compare the ally's named car / missing peer, useful specialty / fallback part and money. After Ox, check that stolen money returns even if principal was already repaid, and that a full wallet defers restitution until there is room. Restart around each choice. Read the consequence beats and judge whether the bosses' public support, sibling protection, forged lien and foreshadowed dispatch rig are clear.
+
+Drive the varied build-up, pressure, qualifier and boss lap lengths. Record actual elapsed play including menus and reading, retry counts and selected difficulty. The simulated lead-decision proxies are not human players or the actual difficulty settings. Compare stock and developed class identities with the displayed fractional offers. In the finale, judge the fixed basic Mechanic rig, automatic mines, seizure, free retry and fight-to-the-death ending. No new art or recorded voice is supplied.
+
+Every Fire TV Stick install, input, performance, thermal, memory, reconnect and felt-play check remains pending. The device was reserved and never accessed during this pass. Desktop browser tests and headless simulations cannot certify those observations.

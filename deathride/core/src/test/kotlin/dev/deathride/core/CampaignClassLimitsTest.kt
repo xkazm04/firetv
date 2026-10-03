@@ -13,7 +13,7 @@ class CampaignClassLimitsTest {
             for(stat in CarCatalog.statNames)assertTrue(type.stat(stat,p.bonuses())<=type.upgradeLimits.getValue(stat))
             assertTrue(type.upgradeLimits.values.all{it<=10})
             assertEquals(3.0,type.upgradeLimits.getValue("slots"))
-            val expected=when(type.id){"Line"->"speed" to 8.25;"Bastion"->"grip" to 9.0;"Quill","Kestrel"->"speed" to 9.5;else->null}
+            val expected=when(type.id){"Line"->"speed" to 8.125;"Bastion"->"grip" to 9.0;"Quill","Kestrel"->"speed" to 9.5;else->null}
             if(expected!=null)assertEquals(expected.second,type.stat(expected.first,p.bonuses()),0.0)
             val w=World(482);Garage.apply(p,w.cars[0]);assertEquals(type.spec(p.bonuses()),w.cars[0].spec)
             assertTrue(p.credits>=0)

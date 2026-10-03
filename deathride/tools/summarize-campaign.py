@@ -24,6 +24,9 @@ def pack(path):
     raw=path.read_bytes();target=out/(path.name+'.gz');target.write_bytes(gzip.compress(raw,mtime=0));assert gzip.decompress(target.read_bytes())==raw
     return {'file':target.name,'sha256':hashlib.sha256(raw).hexdigest(),'bytes':len(raw)}
 duels=rows('duels.csv');physical=rows('physical.csv')+rows('boss-extra.csv');summary={'scope':'Fresh physical library; 2,000 held-out-outcome-resampled ledgers per buyer, not independent end-to-end physical careers','duels':[],'careers':[],'physical':{},'archives':[]}
+if (source/'reuse-audit.json').exists():
+    summary['reuseAudit']=json.loads((source/'reuse-audit.json').read_text())
+    summary['scope']='Final build: fresh v5 library with changed Line builds recomputed, audited unchanged-row reuse, and two rerun 2,000-ledger policies; not independent end-to-end careers'
 if (source/'report-status.json').exists():summary['decision']=json.loads((source/'report-status.json').read_text())
 # Report a replay only when its final-core evidence is present.
 replay=(source/'final-core-replay.txt').read_text()

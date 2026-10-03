@@ -1,0 +1,31 @@
+{
+  "scope": "Final candidate-v6-final executing runtime and built classes/resources; includes test adapters and external dependency digests",
+  "checkedDigests": 350,
+  "comparisons": [
+    {
+      "frozen": "build\\campaign-v2-runtime\\candidate-v6-final\\1",
+      "current": "core\\build\\classes\\kotlin\\test",
+      "files": 71,
+      "exact": true
+    },
+    {
+      "frozen": "build\\campaign-v2-runtime\\candidate-v6-final\\2",
+      "current": "core\\build\\resources\\test",
+      "files": 2,
+      "exact": true
+    },
+    {
+      "frozen": "build\\campaign-v2-runtime\\candidate-v6-final\\4",
+      "current": "core\\build\\classes\\kotlin\\main",
+      "files": 136,
+      "exact": true
+    },
+    {
+      "frozen": "build\\campaign-v2-runtime\\candidate-v6-final\\5",
+      "current": "core\\build\\resources\\main",
+      "files": 131,
+      "exact": true
+    }
+  ],
+  "sourceBaseCommit": "39f1196863d71b98af008cebce17a1acae2bef38"
+}
