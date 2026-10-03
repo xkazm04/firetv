@@ -290,6 +290,7 @@ class World(val seed: Int=17, val spec: CarSpec=CarSpec(), val track: Track=Trac
     var damageScale=1.0
     val cars=Array(Tuning.CAR_COUNT) { Car(it,track).also { c -> c.spec=spec } }
     val presentationEvents=PresentationEvents()
+    val obstacles=Obstacles(this)
     val combat=Combat(this,combatEnabled)
     val abilities=Abilities(this,abilitiesEnabled)
     val snapshot=Snapshot(combat); val previousSnapshot=Snapshot(combat)
@@ -304,7 +305,7 @@ class World(val seed: Int=17, val spec: CarSpec=CarSpec(), val track: Track=Trac
     val resolved get()=finished+combat.wreckCount
     init { reset() }
     fun reset() {
-        steps=0; seconds=0.0; finished=0;presentationEvents.clear()
+        steps=0; seconds=0.0; finished=0;presentationEvents.clear();obstacles.reset()
         if(eventType==EventType.ELIMINATION)DeathDuel.applyRig(cars[duelRigSlot])
         val seeded=if(cars.any{it.aiSkill!=null})java.util.Random(seed.toLong()) else null
         for(c in cars) {
@@ -352,11 +353,12 @@ class World(val seed: Int=17, val spec: CarSpec=CarSpec(), val track: Track=Trac
                     }
                 }
                 handling.integrate(c,input,c.spec,dt)
+                obstacles.drag(c,dt)
             }
             contain(c)
             trace[((steps%600)*6)+c.id]=c.aiMode.ordinal*10+c.aiReason
         }
-        repeat(3) { for(i in 0 until cars.size) for(j in i+1 until cars.size) collide(cars[i],cars[j]); for(c in cars)if(c.entered)contain(c) }
+        repeat(3) { for(i in 0 until cars.size) for(j in i+1 until cars.size) collide(cars[i],cars[j]); for(c in cars)if(c.entered){obstacles.collide(c);contain(c)} }
         // Emit at most one contact per pair/material after all solver iterations.
         for(c in cars)if(c.entered && c.wallImpactMps>1.0)
             presentationEvents.emit(if(track.course?.boundaryMaterial==BoundaryMaterial.METAL)PresentationKind.BARRIER_CONTACT else PresentationKind.WALL_CONTACT,
@@ -429,6 +431,7 @@ class World(val seed: Int=17, val spec: CarSpec=CarSpec(), val track: Track=Trac
                 }
             }
         }
+        lane=obstacles.avoid(c,s,lane)
         lane=lane.coerceIn(-track.widthAt(s+look)*.55,track.widthAt(s+look)*.55)
         track.sample(s+look, lane+sin(steps*.007+c.id+c.aiNoisePhase)*skill.laneErrorM,point)
         val desired=atan2(point.y-c.y,point.x-c.x)
@@ -437,7 +440,7 @@ class World(val seed: Int=17, val spec: CarSpec=CarSpec(), val track: Track=Trac
         val steer=(-error*2.3+c.yaw*.18).coerceIn(-1.0,1.0)
         val target=if(c.carClass==null) { if(point.curvature>0) 23.0-skill.cornerMarginMps else 29.0 } else min(c.spec.maxSpeedMps*c.abilitySpeedScale*CarCatalog.aiCruiseFraction, if(point.curvature>0) sqrt(DriftDynamics.lateralLimit(c.spec,track.surfaceAt(s+look,lane,c.spec.circleRadiusM),driftRules)*c.abilityGripScale*CarCatalog.aiGripFraction/point.curvature)-skill.cornerMarginMps else c.spec.maxSpeedMps*c.abilitySpeedScale)
         val surfaceLimit=if(point.curvature>0)1.0 else sqrt(c.surface.gripScale).coerceIn(Movement.aiSurfaceMargin,1.0)
-        val cornerTarget=target*surfaceLimit*(1.0-min(.55,abs(error)*.4))*(if(c.aiDuelWait)DeathDuel.chaseFraction else 1.0)
+        val cornerTarget=min(obstacles.speedLimit[c.id],target*surfaceLimit*(1.0-min(.55,abs(error)*.4))*(if(c.aiDuelWait)DeathDuel.chaseFraction else 1.0))
         var a=if(c.speedMps<cornerTarget) 1.0 else .12
         if(c.spec.driftGeometry!=null) {
             // Request only the acceleration left by the same friction circle used by handling.
@@ -446,7 +449,7 @@ class World(val seed: Int=17, val spec: CarSpec=CarSpec(), val track: Track=Trac
             val fraction=(demand/limit).coerceIn(0.0,1.0)
             a=min(a,limit*sqrt(1-fraction*fraction)/(c.spec.accelerationMps2*c.engineScale))
         }
-        val b=if(c.speedMps>cornerTarget+2.0) .45 else 0.0
+        val b=if(c.speedMps>obstacles.speedLimit[c.id])1.0 else if(c.speedMps>cornerTarget+2.0) .45 else 0.0
         // Grip-driving AI. A slide is caught with inputs through the identical axle solver.
         val catching=c.spec.driftGeometry!=null && abs(slip)>driftRules["assistFadeStartRadians"]
         c.aiInput.set(if(catching)(-slip*driftRules["aiCountersteerGain"]).coerceIn(-1.0,1.0) else steer,
@@ -488,7 +491,7 @@ class World(val seed: Int=17, val spec: CarSpec=CarSpec(), val track: Track=Trac
                 b.x+=nx*push*invB/invSum; b.y+=ny*push*invB/invSum
                 val relative=(b.vx-a.vx)*nx+(b.vy-a.vy)*ny
                 if(relative<0) {
-                    val impulse=-(1+min(sa.restitution,sb.restitution))*relative/invSum
+                    val impulse=ContactImpulse.magnitude(relative,min(sa.restitution,sb.restitution),invA,invB)
                     a.vx-=impulse*invA*nx; a.vy-=impulse*invA*ny
                     b.vx+=impulse*invB*nx; b.vy+=impulse*invB*ny
                     if(a.carClass!=null || b.carClass!=null) {

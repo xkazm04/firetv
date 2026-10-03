@@ -210,3 +210,13 @@ Report story clarity, reward usefulness, mine readability and whether fighting M
 Device gallery: file:///C:/Users/kazda/kiro/firetv-deathride-camp/deathride/evidence/campaign/q4/index.html
 
 Balance plots and honest censoring: file:///C:/Users/kazda/kiro/firetv-deathride-camp/deathride/evidence/campaign/q3/index.html
+
+## G-OBS - natural obstacles (2026-10-03; checks pending)
+
+Desktop gallery: file:///C:/Users/kazda/kiro/firetv-deathride-gameplay/deathride/evidence/gameplay/obstacles/index.html
+
+On desktop, drive across brush, soft dunes and rubble, then glance a boulder or tree trunk near a straight shoulder. Check that soft objects scrub speed smoothly and solids have a readable footprint, impact and recovery path. Try a light and a heavy car; solid scenery does not become a ram kill. Check that a tall crown can overlap the car visually without its shadow becoming a collision. Compare atlas and procedural fallback silhouettes in the gallery. Crucible has decoration only.
+
+Try firing a gun and harpoon across a trunk, using Hammer behind a boulder, and laying a mine on an occupied solid footprint. Solid cover should block the attack; brush should not absorb it; a refused mine placement should preserve ammunition. Watch a rival approach a visible barrier and recover after contact. Report course, car and exact obstacle if avoidance looks abrupt or recovery takes too long.
+
+The campaign-damage sweep has no stranded or wrecked cars, but practice retains one moving watchdog timeout and six additional total wrecks. Automation is not an owner feel verdict. All owner driving/art checks and every Fire TV Stick performance check are pending. The Stick was reserved for another run and was not accessed during this work.

@@ -128,10 +128,15 @@ A career ladder of many more events, named rival drivers with personalities as d
 | Integration | IP | Endurance career and legal promotion fields | V1, C4 | measured mean 5.85-6.54 h; boss/tail/first-purchase limits retained | integration-ip-20261001 | 2026-10-01 |
 | Integration | I2 | Stick texture and frame budget | I1 | 15-minute load/memory/median passed; tail/transition misses retained | integration-i2-20261001 | 2026-10-01 |
 | Integration | I3 | Gate G2 report, owner session | I2, C4 | evidence/report complete; G2 owner quality/feel pending | integration-i3-20261001 | 2026-10-01 |
+| Gameplay | G-OBS | Natural barriers, perception, lint, rendering and paired races | Consolidated campaign/audio | implemented; campaign sweep passes, practice moving timeout retained; owner/Stick pending | this commit (G-OBS) | 2026-10-03 |
 
 ## g. Session log
 
 (each run appends: wave, date, what changed, commands with results, what is `not measured`, spend of the Grok budget, next wave)
+
+### G-OBS - 2026-10-03
+
+Design and outcome: [G-obstacles](deathride/G-obstacles.md). Added seeded per-course natural obstacles, mass contacts, time-based drag, perception-based braking/avoidance, weapon obstruction, linter mutations and atlas/shadow/fallback rendering. Retained rejected placements and corrected their recovery traps. Two final 6,000-race paired sweeps plus exact final-runtime replays: campaign mode has 18,000/18,000 finishers in each arm and no wrecks; practice has one moving watchdog survivor and six extra total wrecks, both disclosed. Winner share uses races, with full rotation and seed/hash checks. Required `:core:test :link:test :game:test :app:assembleDebug`, allocation/replay tests, Python instrument tests and desktop gallery checks pass at commit. Intermediate failed attempts remain in evidence. Owner feel and all Stick/device checks pending; no device access. Grok/art spend zero. Next wave: G-BAL fresh physical library, both 2,000-ledger buyers and 3,072 rotated duels; late PR headroom limitation remains under investigation.
 
 ### C1 restart ? 2026-10-01
 

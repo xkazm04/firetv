@@ -60,12 +60,16 @@ private fun campaignDeviceFixtures(dir:File) {
 }
 
 private fun campaignPhysical(dir:File,seeds:Int,supplement:Boolean=false) {
-    val previous=if(supplement)File(dir,"physical.csv").readLines().drop(1).map{CampaignOutcome.parse(it)} else emptyList()
+    val streaming=supplement && System.getProperty("campaignStream")=="true"
+    val previous=if(supplement && !streaming)File(dir,"physical.csv").readLines().drop(1).map{CampaignOutcome.parse(it)} else emptyList()
     val out=File(dir,if(supplement)"boss-extra.csv" else "physical.csv");check(!out.exists()){ "Refuse to overwrite physical evidence" }
     out.writeText("round,skill,car,band,seed,playerPR,fieldPR,position,kills,hp,cash,clean,finished,qualified,early,seconds,hash,rivals\n")
     val garages=File(dir,if(supplement)"boss-extra-garages.csv" else "reference-garages.csv");garages.writeText("event,rival,car,pr,credits,debt,parts\n")
     val canonical=Profile("campaign-reference");val bands=listOf(0,4,Parts.all.sumOf{it.maxTier})
     for(round in 0..33) {
+        // Optional concurrent supplement: consume only a complete base event, never a partial row.
+        // Waiting is outside World.step and adds no randomness or simulated time.
+        val prior=if(streaming)awaitCampaignEvent(dir,round) else previous.filter{it.round==round}
         // Reference event schedule; this is not presented as an earned campaign.
         canonical.careerRound=round;canonical.careerCleared=round;CareerSpending.spend(canonical,8);RivalEconomy.prepare(canonical)
         val event=Career.events[round];val course=Courses.all[event.courseIndex];check(TrackLinter.errors(course).isEmpty())
@@ -74,7 +78,8 @@ private fun campaignPhysical(dir:File,seeds:Int,supplement:Boolean=false) {
         val cells=if(supplement && !event.boss)emptyList() else (0..2).flatMap{skill->CarCatalog.all.indices.filter{CarCatalog.all[it].tierRank<=event.playerTier}.flatMap{car->bands.flatMap{band->(if(supplement)4 until 4+seeds else 0 until seeds).map{sample->intArrayOf(skill,car,band,sample)}}}}
         val results=arrayOfNulls<CampaignOutcome>(cells.size)
         IntStream.range(0,cells.size).parallel().forEach{index->
-            val (skill,car,band,sample)=cells[index];val seed=round*1000003+skill*30011+car*7919+band*701+sample*97+8209
+            val (skill,car,band,sample)=cells[index]
+            val seed=round*1000003+skill*30011+car*7919+band*701+sample*97+(System.getProperty("campaignPhysicalSeedNamespace")?.toInt()?:8209)
             val lead=Profile("physical-lead",false).also{p->p.credits=8000;p.careerCleared=round;p.selectedCar=car;p.owned.fill(false);p.owned[car]=true;CareerSpending.upgrade(p,band)}
             fun make()=World(seed,track=Track(course=course),combatEnabled=true).also{w->RivalEconomy.apply(canonical.copy(),w,1,round);Garage.apply(lead,w.cars[0]);w.cars[0].aiSkill=campaignSkills[skill];w.reset()}
             val frames=Array(6){InputFrame()};val w=make()
@@ -84,12 +89,36 @@ private fun campaignPhysical(dir:File,seeds:Int,supplement:Boolean=false) {
             results[index]=CampaignOutcome(round,skill,car,band,seed,PowerRating.of(CarCatalog.all[car],lead.bonuses()),fieldPR,c.position,w.combat.kills[0],w.combat.health(0),w.combat.cashCollected[0],w.combat.damageTaken[0]==0.0,c.finishSeconds>=0,Career.qualifies(c,w),w.combat.wrecked(0)&&c.lap.laps==0,w.seconds,w.stateHash(),rivalResults(w))
         }
         val rows=results.map{it!!};if(rows.isNotEmpty())out.appendText(rows.joinToString("\n",postfix="\n"){it.row()})
-        val reference=if(supplement)previous.filter{it.round==round} else rows
+        val reference=if(supplement)prior else rows
         val ref=reference.filter{it.skill==1 && it.car==canonical.selectedCar}.minBy{abs(it.playerPR-PowerRating.of(CarCatalog.all[canonical.selectedCar],canonical.bonuses()))}
         val ticket=Economy.start(canonical);RivalEconomy.settleResults(canonical,ticket,round,ref.rivals)
         Career.settle(canonical,ticket,round,1,ref.position,ref.kills,ref.hp,ref.qualified,ref.cash,clean=ref.clean,finished=ref.finished)
         println("Physical ${round+1}/34: ${rows.size} races; firsts ${rows.count{it.position==1&&it.finished}}; early ${rows.count{it.early}}; field PR $fieldPR")
     }
+}
+
+private fun awaitCampaignEvent(dir: File,round: Int): List<CampaignOutcome> {
+    val expected=3*CarCatalog.all.count{it.tierRank<=Career.events[round].playerTier}*3*4
+    val deadline=System.nanoTime()+java.util.concurrent.TimeUnit.MINUTES.toNanos(30)
+    while(System.nanoTime()<deadline) {
+        val file=File(dir,"physical.csv")
+        if(file.exists()) {
+            val lines=campaignCompleteEvent(file.readText(),round,expected)
+            if(lines!=null)return lines.map{CampaignOutcome.parse(it)}
+        }
+        Thread.sleep(1000)
+    }
+    error("Timed out awaiting complete physical event ${round+1}; no outcomes invented")
+}
+
+internal fun campaignCompleteEvent(text: String,round: Int,expected: Int): List<String>? {
+    if(!text.endsWith("\n"))return null
+    val lines=text.lineSequence().drop(1).filter{it.startsWith("$round,")}.toList()
+    check(lines.size<=expected){"Too many physical rows at event ${round+1}"}
+    if(lines.size<expected)return null
+    val fields=lines.map{it.split(',')};check(fields.all{it.size==18}){"Malformed complete physical row"}
+    check(fields.map{it.take(5)}.distinct().size==expected){"Repeated physical seed/cell at event ${round+1}"}
+    return lines
 }
 
 private fun campaignDuel(dir:File,samples:Int,namespace:Int) {

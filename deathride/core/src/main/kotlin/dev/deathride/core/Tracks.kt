@@ -27,7 +27,9 @@ enum class BoundaryMaterial { METAL, CONCRETE }
 
 /** Immutable load-time spline bake. No list traversal, temporary points or allocation in sample/project. */
 class Course(val id: String,val name: String,val lesson: String,val startFraction: Double,val theme: String,
-             val nodes: List<TrackNode>,val spots: List<TrackSpot>,val features: List<TrackFeature> = TrackContent.features[id]?:emptyList()) {
+             val nodes: List<TrackNode>,val spots: List<TrackSpot>,val features: List<TrackFeature> = TrackContent.features[id]?:emptyList(),
+             val obstaclePlacements: List<ObstaclePlacement> = ObstacleContent.placements[id]?:emptyList()) {
+    val obstacles: Array<TrackObstacle>
     private val oil=Surfaces.practice.first { it.id=="Oil" }
     /** Shared by the rendered boundary and its contact presentation. */
     val boundaryMaterial=if(theme=="industrial")BoundaryMaterial.METAL else BoundaryMaterial.CONCRETE
@@ -73,6 +75,7 @@ class Course(val id: String,val name: String,val lesson: String,val startFractio
             for(i in 0 until count)nearest=min(nearest,sqrt(distance2(cx,cy,i)))
             (0 until count).filter { sqrt(distance2(cx,cy,it))<=nearest+cell*sqrt(2.0) }.toIntArray()
         }
+        obstacles=ObstacleContent.bake(this,obstaclePlacements)
     }
     private fun distance2(px: Double,py: Double,i: Int): Double {
         val t=((px-x[i])*dx[i]+(py-y[i])*dy[i])*inverseLength2[i]
@@ -129,7 +132,7 @@ object Courses {
 
 object TrackLinter {
     fun errors(c: Course): List<String> {
-        val errors=ArrayList<String>();errors.addAll(TrackContent.errors(c));val widest=CarShapes.all.maxOf { it.widthM };val longest=CarShapes.all.maxOf { it.lengthM }
+        val errors=ArrayList<String>();errors.addAll(TrackContent.errors(c));errors.addAll(ObstacleContent.errors(c));val widest=CarShapes.all.maxOf { it.widthM };val longest=CarShapes.all.maxOf { it.lengthM }
         if(c.width.min()*2<widest*TrackRules["minWidthCarWidths"])errors.add("${c.id}: road narrower than minimum car widths")
         if(c.curvature.max()*longest*TrackRules["minRadiusCarLengths"]>1)errors.add("${c.id}: corner radius too tight")
         if(c.checkpoints.size<4 || c.checkpoints.first()!=0.0 || c.checkpoints.toList().zipWithNext().any { it.first>=it.second } || c.checkpoints.last()>=1)errors.add("${c.id}: checkpoint order")

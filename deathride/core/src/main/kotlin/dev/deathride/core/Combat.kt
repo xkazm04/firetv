@@ -158,13 +158,14 @@ class Combat(private val world: World,val enabled: Boolean) {
     private fun muzzleX(c: Car)=c.x+cos(c.heading)*(c.spec.circleOffsetM+c.spec.circleRadiusM)
     private fun muzzleY(c: Car)=c.y+sin(c.heading)*(c.spec.circleOffsetM+c.spec.circleRadiusM)
     /** Same road obstruction test used by guns, ability tells and AI visibility. */
-    internal fun roadFraction(x: Double,y: Double,ex: Double,ey: Double,spacingM: Double): Double {
+    internal fun roadFraction(x: Double,y: Double,ex: Double,ey: Double,spacingM: Double,obstacles: Boolean=true): Double {
+        val barrier=if(obstacles)world.obstacles.solidFraction(x,y,ex,ey) else 1.0
         val dx=ex-x;val dy=ey-y;val checks=ceil(sqrt(dx*dx+dy*dy)/spacingM).toInt().coerceAtLeast(1)
         for(i in 1..checks) {
             val t=i.toDouble()/checks;world.track.project(x+dx*t,y+dy*t,projection)
-            if(abs(projection.distance)>world.track.widthAt(projection.s))return (i-1).toDouble()/checks
+            if(abs(projection.distance)>world.track.widthAt(projection.s))return min(barrier,(i-1).toDouble()/checks)
         }
-        return 1.0
+        return barrier
     }
     fun fire(id: Int,weapon: Int): Boolean {
         if(!enabled || !canAct(id) || weapon !in Weapons.all.indices || armingSeconds>0 || world.cars[id].ability.weaponsLocked)return false
@@ -187,6 +188,8 @@ class Combat(private val world: World,val enabled: Boolean) {
                 for(o in world.cars)if(o.id!=id && canAct(o.id)) { val t=cast(x,y,ex,ey,o,w.radiusM);if(t<time){target=o.id;time=t} }
                 val checks=ceil(w.rangeM/c.spec.circleRadiusM).toInt()
                 for(i in 1..checks) { val t=i.toDouble()/checks;if(t>=time)break;world.track.project(x+(ex-x)*t,y+(ey-y)*t,projection);if(abs(projection.distance)>world.track.widthAt(projection.s)){time=t;target=-1;break} }
+                val barrier=world.obstacles.solidFraction(x,y,ex,ey)
+                if(barrier<time){time=barrier;target=-1}
                 if(target>=0 && hitMask and (1 shl target)==0){hitMask=hitMask or (1 shl target);damage(target,w.damage*c.weaponDamageScale,id,if(weapon==Weapons.SCATTER)DamageKind.SCATTER else DamageKind.RIVET)}
                 if(ray==rays/2){traceX[id]=x;traceY[id]=y;traceEndX[id]=x+(ex-x)*time;traceEndY[id]=y+(ey-y)*time;traceSeconds[id]=w.lifeSeconds}
             }
@@ -199,6 +202,7 @@ class Combat(private val world: World,val enabled: Boolean) {
         var free: Mine?=null;for(m in mines)if(!m.active){free=m;break}
         if(free==null){poolExhaustions++;return false}
         val rear=c.spec.circleOffsetM+c.spec.circleRadiusM+CombatRules["dropClearanceM"]
+        if(world.obstacles.solidAt(c.x-cos(c.heading)*rear,c.y-sin(c.heading)*rear,Weapons.all[Weapons.MINE].radiusM))return false
         free.active=true;free.owner=c.id;free.x=c.x-cos(c.heading)*rear;free.y=c.y-sin(c.heading)*rear;free.ageSeconds=0.0;free.activation=++activation
         return true
     }
@@ -298,6 +302,8 @@ class Combat(private val world: World,val enabled: Boolean) {
             val nx=p.x+p.vx*factor;val ny=p.y+p.vy*factor
             var target=-1;var time=Double.POSITIVE_INFINITY
             for(c in world.cars)if(c.id!=p.owner && canAct(c.id) && p.hitMask and (1 shl c.id)==0) { val t=cast(p.x,p.y,nx,ny,c,hammer.radiusM);if(t<time){target=c.id;time=t} }
+            val barrier=world.obstacles.solidFraction(p.x,p.y,nx,ny)
+            if(barrier<1.0 && barrier<=time){p.active=false;continue}
             if(target>=0){p.hitMask=p.hitMask or (1 shl target);damage(target,hammer.damage*world.cars[p.owner].weaponDamageScale,p.owner,DamageKind.HAMMER);p.active=false}
             p.x=nx;p.y=ny;p.remainingM-=distance;p.remainingSeconds-=dt
             world.track.project(nx,ny,projection)
