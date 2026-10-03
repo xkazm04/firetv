@@ -12,10 +12,12 @@ fun main(args: Array<String>) {
         IntStream.range(0,rows.size).parallel().forEach { i ->
             val row=rows[i];val tier=row[2].toInt();val rotation=row[3].toInt()
             val course=Courses.all.single{it.id==row[1]};val pair=CarCatalog.all.indices.filter{CarCatalog.all[it].tierRank==tier}
+            val upgraded="upgraded" in tag
+            val bonuses=if(upgraded)pair.map{index->Profile("obstacle-upgrade-$index",false).also{p->p.selectedCar=index;p.owned[index]=true;p.careerCleared=34;p.credits=8000;CareerSpending.upgrade(p,17)}.bonuses()} else emptyList()
             val w=World(row[5].toInt(),track=Track(course=course),combatEnabled=true)
             w.obstacles.enabled=row[0]=="1"
             if("campaign" in tag)Encounters.apply(w,Career.cups[tier].id)
-            for(c in w.cars){CarCatalog.apply(c,pair[((c.id+rotation)%6)/3]);c.aiSkill=Career.difficulties[1].skill};w.reset()
+            for(c in w.cars){val slot=((c.id+rotation)%6)/3;CarCatalog.apply(c,pair[slot],if(upgraded)bonuses[slot] else null);c.aiSkill=Career.difficulties[1].skill};w.reset()
             val inputs=Array(6){InputFrame()};while(w.resolved<6 && w.seconds<w.raceLimitSeconds)w.step(inputs)
             if(w.stateHash()!=row[15].toLong())mismatches.add("$i ${row.take(6)} expected ${row[15]} actual ${w.stateHash()}")
             contacts.addAndGet(w.obstacles.solidContacts);drag.addAndGet(w.obstacles.dragTicks);avoidance.addAndGet(w.obstacles.avoidanceDecisions)

@@ -1,0 +1,35 @@
+package dev.deathride.core
+
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.Assertions.*
+
+class UpgradeHeadroomTest {
+    @Test fun sharedTierCapsKeepStockStatsAndBoundEveryDerivedParameter() {
+        assertTrue(PowerRating.errors().isEmpty(),"Stock tier budgets and identity stay unchanged")
+        // Independent positive extrema also cover skipping armour's handling penalty.
+        val maximum=IntArray(CarCatalog.statNames.size){s->Parts.all.sumOf{maxOf(0,it.maxTier*it.bonuses[s])}}
+        for(car in CarCatalog.all) {
+            for(stat in CarCatalog.statNames)assertEquals(car.stats.getValue(stat),car.stat(stat),"${car.id} stock $stat")
+            assertEquals(if(car.tierRank<3)10 else if(car.tierRank==3)12 else 16,car.upgradeStatMax)
+            for(stat in CarCatalog.statNames)assertTrue(car.stat(stat,maximum)<=if(stat=="slots")3 else car.upgradeStatMax)
+            val spec=car.spec(maximum)
+            assertTrue(spec.maxSpeedMps in 20.0..46.0 && spec.massKg in 450.0..2920.0 && spec.yawResponseSeconds>0 && spec.brakeMps2 in 16.0..29.0)
+            assertTrue(spec.accelerationMps2 in 5.0..21.0 && spec.maxLateralAccelerationMps2 in 10.0..42.0)
+            assertTrue(car.derive("armorReduction",maximum) in 0.0.. .64)
+            assertTrue(car.json(maximum).contains("\"statMax\":${car.upgradeStatMax}"),"The phone sees the same cap as the shop")
+        }
+    }
+
+    @Test fun playerAndRivalPurchasesShareTheSameLateChassisHeadroom() {
+        for(car in CarCatalog.all.indices.filter{CarCatalog.all[it].tierRank>=3}) {
+            fun funded(id: String)=Profile(id,false).also{p->p.careerCleared=34;p.credits=8000;p.selectedCar=car;p.owned[car]=true}
+            val player=funded("player");val rival=funded("rival")
+            CareerSpending.upgrade(player,17);CareerSpending.upgrade(rival,17)
+            assertArrayEquals(player.tiers,rival.tiers);assertEquals(player.credits,rival.credits)
+            val a=CarCatalog.all[car];assertEquals(a.spec(player.bonuses()),a.spec(rival.bonuses()))
+            assertEquals(PowerRating.of(a,player.bonuses()),PowerRating.of(a,rival.bonuses()))
+            assertTrue(CarCatalog.statNames.any{a.stat(it,player.bonuses())>10},"Purchased late upgrades have real physical effect")
+            assertEquals(ProfileCodec.encode(player),ProfileCodec.encode(ProfileCodec.decode(ProfileCodec.encode(player),player.id,false)))
+        }
+    }
+}

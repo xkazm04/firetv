@@ -220,3 +220,13 @@ On desktop, drive across brush, soft dunes and rubble, then glance a boulder or 
 Try firing a gun and harpoon across a trunk, using Hammer behind a boulder, and laying a mine on an occupied solid footprint. Solid cover should block the attack; brush should not absorb it; a refused mine placement should preserve ammunition. Watch a rival approach a visible barrier and recover after contact. Report course, car and exact obstacle if avoidance looks abrupt or recovery takes too long.
 
 The campaign-damage sweep has no stranded or wrecked cars, but practice retains one moving watchdog timeout and six additional total wrecks. Automation is not an owner feel verdict. All owner driving/art checks and every Fire TV Stick performance check are pending. The Stick was reserved for another run and was not accessed during this work.
+
+## G-BAL - campaign economy (2026-10-03; owner checks pending)
+
+Desktop and balance evidence: file:///C:/Users/kazda/kiro/firetv-deathride-gameplay/deathride/evidence/gameplay/campaign/index.html
+
+On desktop, earn an ally and compare the money, stock car and useful-part choices. Cash is now 350 / 650 / 1,000 / 1,400 CR for Rook / Ox / Vex / Mica, capped by wallet room. Prices are intentionally unequal. Check whether the earned choice feels useful, whether a nearly full wallet explains its smaller grant, and whether returning to the menu or restarting preserves the claim exactly once. The automated browser uses a funded fixture to verify transactions; it does not establish career pacing.
+
+Drive through Vex and Mica with your actual retained garage. The original stat cap of 10 remains: the tested 12/16 expansion shifted class winner share too far and is not shipped. The release is only a partial economy correction; late boss PR targets remain missed, and primary completion fell from 1,292 to 1,099 of 2,000 sampled ledgers. Record the car, parts, first-entry ratio and retry count. The evidence retains every censored career at the unchanged 70-race limit. Do not interpret the rejected candidate's upgraded obstacle sweep as production tuning.
+
+In the seized-car finale, judge the supplied rig, dispatcher tell, retry and last-survivor victory. The 0.525 reference describes this basic rig against Marrow; it is not a promise of a lap advantage or a 52.5% win chance. Marrow retains the existing 635 shopping ceiling. The experimental 610 ceiling and higher shared caps are not shipped. Automation still does not establish a monotonic Rookie/Club/Pro difficulty curve or human fairness. Story/reward usefulness, finale feel, physical-phone comfort and all Stick checks remain pending. No Stick access occurred in this wave.

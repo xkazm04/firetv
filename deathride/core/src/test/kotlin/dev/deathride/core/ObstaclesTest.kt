@@ -68,6 +68,13 @@ class ObstaclesTest {
             repeat(60){w.obstacles.drag(c,1.0/60)}
             assertEquals(if(effect=="brush")6.8 else 10.0,c.vx,1e-8)
         }
+        val base=Courses.all[0]
+        val overlap=Course(base.id,base.name,base.lesson,base.startFraction,base.theme,base.nodes,base.spots,emptyList(),
+            listOf("brush","rubble").map{ObstaclePlacement(it,.4,0.0,0.0,91)})
+        val w=World(track=Track(course=overlap));val c=w.cars[0];val o=w.obstacles.all[0]
+        c.x=o.x;c.y=o.y;c.vx=10.0;c.vy=0.0
+        repeat(60){w.obstacles.drag(c,Tuning.STEP_SECONDS)}
+        assertEquals(6.8,c.vx,1e-8,"Overlapping brush and rubble use the strongest patch, not compounded resistance")
     }
     @Test fun solidStopsBothMassesAndCentreOverlapWithoutNonFiniteState() {
         for(car in listOf(0,1)) {
@@ -129,11 +136,19 @@ class ObstaclesTest {
     }
     @Test fun activeContactDragPerceptionAndWholeStepAllocateNothingAndReplay() {
         val w=world();val c=w.cars[0];val o=w.obstacles.all[0];val frames=Array(6){InputFrame()}
+        val brush=world("brush");val dragged=brush.cars[0];val patch=brush.obstacles.all[0]
+        val observer=w.cars[1]
         val bean=java.lang.management.ManagementFactory.getThreadMXBean() as com.sun.management.ThreadMXBean
         bean.isThreadAllocatedMemoryEnabled=true
-        fun touch(){c.x=o.x;c.y=o.y;c.vx=10.0;w.obstacles.collide(c);w.obstacles.avoid(c,.4*w.track.lengthM,0.0);w.step(frames)}
+        fun touch(){
+            c.x=o.x;c.y=o.y;c.vx=10.0;w.obstacles.collide(c)
+            dragged.x=patch.x;dragged.y=patch.y;dragged.vx=10.0;brush.obstacles.drag(dragged,Tuning.STEP_SECONDS)
+            observer.x=o.x-o.cx*10;observer.y=o.y-o.cy*10;observer.heading=o.heading
+            w.obstacles.avoid(observer,.4*w.track.lengthM,0.0);w.step(frames)
+        }
         repeat(20000){touch()};val id=Thread.currentThread().threadId();val before=bean.getThreadAllocatedBytes(id)
         repeat(3000){touch()};assertEquals(0L,bean.getThreadAllocatedBytes(id)-before)
+        assertTrue(brush.obstacles.dragTicks>=23000 && w.obstacles.avoidanceDecisions>=23000 && w.obstacles.solidContacts>=23000)
         val a=world("brush");val b=world("brush");repeat(600){a.step(frames);b.step(frames)};assertEquals(a.stateHash(),b.stateHash())
     }
 }

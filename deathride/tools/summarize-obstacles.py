@@ -24,7 +24,10 @@ by_pair=defaultdict(dict)
 for r in rows:by_pair[tuple(r[k] for k in ['course','tier','rotation','sample'])][r['obstacles']]=r
 assert all(set(p)=={'0','1'} and p['0']['seed']==p['1']['seed'] for p in by_pair.values())
 campaign='campaign' in tag
-summary={'scope':f'Physical paired races, Club decisions, {"authored campaign tier damage scales" if campaign else "full practice damage"}, stock three copies of each tier chassis; all courses equally weighted, including stress entries outside competitive pools. No human/Stick verdict.','pairs':len(by_pair),'rotationCells':len(cells),'cellSamples':len(next(iter(cells.values()))),'minimumDistinctFraction':min(c['hashes']/c['runs'] for c in diversity),'modes':[],'tiers':[],'alarms':alarms}
+summary={'scope':f'Physical paired races, Club decisions, {"authored campaign tier damage scales" if campaign else "full practice damage"}, {"funded useful legal upgrades on" if "upgraded" in tag else "stock"} three copies of each tier chassis; all courses equally weighted, including stress entries outside competitive pools. No human/Stick verdict.','pairs':len(by_pair),'rotationCells':len(cells),'cellSamples':len(next(iter(cells.values()))),'minimumDistinctFraction':min(c['hashes']/c['runs'] for c in diversity),'modes':[],'tiers':[],'alarms':alarms}
+if (source.parent/'report-status.json').exists():
+ summary['decision']=json.loads((source.parent/'report-status.json').read_text())
+ summary['scope']=summary['decision']['label']+'. '+summary['decision']['reason']+' '+summary['scope']
 for mode in ['0','1']:
  a=[r for r in rows if r['obstacles']==mode]
  finished=[float(c.split(':')[1]) for r in a for c in r['cars'].split(';') if float(c.split(':')[1])>=0]

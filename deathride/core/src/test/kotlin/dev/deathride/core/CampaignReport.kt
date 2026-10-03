@@ -60,6 +60,13 @@ private fun campaignDeviceFixtures(dir:File) {
 }
 
 private fun campaignPhysical(dir:File,seeds:Int,supplement:Boolean=false) {
+    val reuse=System.getProperty("campaignReuseFrom")?.let{File(it)}
+    val reuseRounds=System.getProperty("campaignReuseRounds")?.toInt()?:0
+    if(reuse!=null) {
+        check(reuseRounds in 1..28)
+        campaignValidateReuse(File(System.getProperty("campaignReuseSnapshot")?:error("Reuse needs its frozen source snapshot")),reuseRounds)
+        File(dir,"reuse-scope.txt").writeText("First $reuseRounds events reuse the named source's immutable samples. Full core class bytes and all relevant data were compared; only future curve rows and inactive Marrow's shop ceiling may differ. Each reused event also reproduces its first complete outcome row exactly. Reused rows and replays are not new independent samples. Source: ${reuse.path}\n")
+    }
     val streaming=supplement && System.getProperty("campaignStream")=="true"
     val previous=if(supplement && !streaming)File(dir,"physical.csv").readLines().drop(1).map{CampaignOutcome.parse(it)} else emptyList()
     val out=File(dir,if(supplement)"boss-extra.csv" else "physical.csv");check(!out.exists()){ "Refuse to overwrite physical evidence" }
@@ -77,16 +84,24 @@ private fun campaignPhysical(dir:File,seeds:Int,supplement:Boolean=false) {
         for(index in RivalEconomy.cast(round)){val p=canonical.rivalProfiles[index];garages.appendText(listOf(round+1,Career.rivals[index].id,CarCatalog.all[p.selectedCar].id,PowerRating.of(CarCatalog.all[p.selectedCar],p.bonuses()),p.credits,p.debt,p.tiers.joinToString(":" )).joinToString(",")+"\n")}
         val cells=if(supplement && !event.boss)emptyList() else (0..2).flatMap{skill->CarCatalog.all.indices.filter{CarCatalog.all[it].tierRank<=event.playerTier}.flatMap{car->bands.flatMap{band->(if(supplement)4 until 4+seeds else 0 until seeds).map{sample->intArrayOf(skill,car,band,sample)}}}}
         val results=arrayOfNulls<CampaignOutcome>(cells.size)
+        val reused=if(reuse!=null && round<reuseRounds && cells.isNotEmpty())awaitCampaignRows(File(reuse,if(supplement)"boss-extra.csv" else "physical.csv"),round,cells.size) else null
         IntStream.range(0,cells.size).parallel().forEach{index->
             val (skill,car,band,sample)=cells[index]
             val seed=round*1000003+skill*30011+car*7919+band*701+sample*97+(System.getProperty("campaignPhysicalSeedNamespace")?.toInt()?:8209)
             val lead=Profile("physical-lead",false).also{p->p.credits=8000;p.careerCleared=round;p.selectedCar=car;p.owned.fill(false);p.owned[car]=true;CareerSpending.upgrade(p,band)}
             fun make()=World(seed,track=Track(course=course),combatEnabled=true).also{w->RivalEconomy.apply(canonical.copy(),w,1,round);Garage.apply(lead,w.cars[0]);w.cars[0].aiSkill=campaignSkills[skill];w.reset()}
+            if(reused!=null) {
+                val r=reused[index]
+                check(r.round==round && r.skill==skill && r.car==car && r.band==band && r.seed==seed)
+                check(r.fieldPR.toBits()==fieldPR.toBits() && r.playerPR.toBits()==PowerRating.of(CarCatalog.all[car],lead.bonuses()).toBits())
+                if(index!=0){results[index]=r;return@forEach}
+            }
             val frames=Array(6){InputFrame()};val w=make()
             while(w.cars[0].finishSeconds<0 && !w.combat.wrecked(0) && w.seconds<w.raceLimitSeconds)w.step(frames)
             if(index==0){val replay=make();repeat(w.steps){replay.step(frames)};check(replay.stateHash()==w.stateHash())}
             val c=w.cars[0]
             results[index]=CampaignOutcome(round,skill,car,band,seed,PowerRating.of(CarCatalog.all[car],lead.bonuses()),fieldPR,c.position,w.combat.kills[0],w.combat.health(0),w.combat.cashCollected[0],w.combat.damageTaken[0]==0.0,c.finishSeconds>=0,Career.qualifies(c,w),w.combat.wrecked(0)&&c.lap.laps==0,w.seconds,w.stateHash(),rivalResults(w))
+            if(reused!=null)check(results[index]!!.row()==reused[index].row()){"Reused event differs on final data: ${round+1}"}
         }
         val rows=results.map{it!!};if(rows.isNotEmpty())out.appendText(rows.joinToString("\n",postfix="\n"){it.row()})
         val reference=if(supplement)prior else rows
@@ -99,9 +114,12 @@ private fun campaignPhysical(dir:File,seeds:Int,supplement:Boolean=false) {
 
 private fun awaitCampaignEvent(dir: File,round: Int): List<CampaignOutcome> {
     val expected=3*CarCatalog.all.count{it.tierRank<=Career.events[round].playerTier}*3*4
+    return awaitCampaignRows(File(dir,"physical.csv"),round,expected)
+}
+
+private fun awaitCampaignRows(file: File,round: Int,expected: Int): List<CampaignOutcome> {
     val deadline=System.nanoTime()+java.util.concurrent.TimeUnit.MINUTES.toNanos(30)
     while(System.nanoTime()<deadline) {
-        val file=File(dir,"physical.csv")
         if(file.exists()) {
             val lines=campaignCompleteEvent(file.readText(),round,expected)
             if(lines!=null)return lines.map{CampaignOutcome.parse(it)}
