@@ -13,9 +13,13 @@ const screenshotsEnabled=process.env.PROBE_SCREENSHOTS!=='0';
 const minesEnabled=process.env.PROBE_MINES==='1';
 const rotateFirst=process.env.PROBE_ROTATE_FIRST==='1';
 const hostPriority=process.env.PROBE_PRIORITY||'Normal';
+const profiling=process.env.PROBE_PROFILE==='1';
 assert.ok(['Normal','AboveNormal'].includes(hostPriority));
 if(hostPriority==='AboveNormal')setPriority(0,osConstants.priority.PRIORITY_ABOVE_NORMAL);
-assert.equal(new URL(base).port,process.env.DEATHRIDE_TEST_STREAM==='hud'?'8768':'8767');assert.ok(duration>=60&&duration<=1800);
+const stream=process.env.DEATHRIDE_TEST_STREAM;
+const testPort=stream==='perf'?'8772':stream==='hud'?'8768':'8767';
+const testPackage=stream==='perf'?'dev.deathride.perf':stream==='hud'?'dev.deathride.hud':'dev.deathride.abilities';
+assert.equal(new URL(base).port,testPort);assert.ok(duration>=60&&duration<=1800);
 const device=process.env.PROBE_DEVICE||new URL(base).hostname+':5555',run=promisify(execFile);
 const adbPort=process.env.PROBE_ADB_PORT||'5037';assert.ok(/^\d+$/.test(adbPort));
 const pause=ms=>new Promise(r=>setTimeout(r,ms)),clients=[];
@@ -24,12 +28,14 @@ async function runAdb(args,options){try{return await run('adb',['-P',adbPort,'-s
 const adb=async(...a)=>(await runAdb(a,{encoding:'utf8',windowsHide:true,timeout:20000,maxBuffer:2e6})).stdout;
 const result={startedUtc:new Date().toISOString(),base,device,durationRequestedSeconds:duration,screenshotsEnabled,minesEnabled,nodeVersion:process.version,hostPriority,hostPriorityValue:getPriority(0),windowRetention:'Direct metrics and car/input state; repeated slot garage/career payloads omitted. Full catalog and round-end state retained.',rounds:[],windows:[],memory:[],screenshots:[],pumpStalls:[],rejections:[],classUses:{},classActiveHudSamples:{},limits:'Scripted LAN inputs; no human feel, physical-phone ergonomics or optical latency claim. Rolling frame windows overlap and are not summed.'};
 let pumping=false,timer,started=0,nextWindow=0,nextMemory=0,nextPing=30,memoryPending=null;
-async function memory(second){const [text,thermal]=await Promise.all([adb('shell','dumpsys','meminfo','--local',process.env.DEATHRIDE_TEST_STREAM==='hud'?'dev.deathride.hud':'dev.deathride.abilities'),adb('shell','dumpsys','thermalservice')]);result.memory.push({second,hostMemory:process.memoryUsage(),pssKb:Number(text.match(/TOTAL PSS:\s+(\d+)/)?.[1]??text.match(/TOTAL\s+(\d+)/)?.[1]??-1),thermalStatus:Number(thermal.match(/Thermal Status: (\d+)/)?.[1]??-1),text,thermal});console.log(JSON.stringify({second:Math.round(second),accepted:clients.map(c=>c.accepted),rejected:clients.map(c=>c.rejected),hostPumpStalls:result.pumpStalls.length}))}
+let nextProfile=0,frameCursor=0,inputCursor=0;
+if(profiling){result.profiles=[];result.ackObservations=[];}
+async function memory(second){const [text,thermal]=await Promise.all([adb('shell','dumpsys','meminfo','--local',testPackage),adb('shell','dumpsys','thermalservice')]);result.memory.push({second,hostMemory:process.memoryUsage(),pssKb:Number(text.match(/TOTAL PSS:\s+(\d+)/)?.[1]??text.match(/TOTAL\s+(\d+)/)?.[1]??-1),thermalStatus:Number(thermal.match(/Thermal Status: (\d+)/)?.[1]??-1),text,thermal});console.log(JSON.stringify({second:Math.round(second),accepted:clients.map(c=>c.accepted),rejected:clients.map(c=>c.rejected),hostPumpStalls:result.pumpStalls.length}))}
 async function waitFor(fn,label){const end=performance.now()+15000;while(performance.now()<end){const s=await get('/stats');if(fn(s))return s;await pause(100)}throw Error('Timed out: '+label)}
 async function join(){
  const c={ws:new WebSocket(base.replace('http','ws')+'/ws'),slot:-1,q:0,bestRtt:Infinity,pending:new Map(),accepted:0,rejected:0,sent:0,command:{s:0,a:0,b:0,h:0,fire:0,mine:0,weapon:0,ability:0}};clients.push(c);
  c.send=m=>{if(c.ws.readyState===WebSocket.OPEN)c.ws.send(JSON.stringify(m))};
- await new Promise((resolve,reject)=>{const timeout=setTimeout(()=>reject(Error('pair timeout')),8000);c.ws.on('error',reject);c.ws.on('open',()=>c.send({t:'hello',pin,profile:'ability-probe-'+randomUUID()}));c.ws.on('message',data=>{const m=JSON.parse(data),now=performance.now();if(m.t==='welcome'){c.slot=m.slot;clearTimeout(timeout);resolve()}if(m.t==='error'){clearTimeout(timeout);reject(Error(m.message))}if(m.t==='pong'&&now-m.ts<c.bestRtt){c.bestRtt=now-m.ts;c.send({t:'sync',offset:m.tvNow-(now+m.ts)/2})}if(m.t==='ack'){const sent=c.pending.get(m.q);c.pending.delete(m.q);if(m.accepted)c.accepted++;else{c.rejected++;result.rejections.push({slot:c.slot,q:m.q,second:(now-started)/1000,rttMs:sent===undefined?null:now-sent})}}if(m.t==='hud'&&m.combat?.ability?.phase==='ACTIVE'&&m.car){const id=m.car.id;result.classActiveHudSamples[id]=(result.classActiveHudSamples[id]||0)+1}})});
+ await new Promise((resolve,reject)=>{const timeout=setTimeout(()=>reject(Error('pair timeout')),8000);c.ws.on('error',reject);c.ws.on('open',()=>c.send({t:'hello',pin,profile:'ability-probe-'+randomUUID()}));c.ws.on('message',data=>{const m=JSON.parse(data),now=performance.now();if(m.t==='welcome'){c.slot=m.slot;clearTimeout(timeout);resolve()}if(m.t==='error'){clearTimeout(timeout);reject(Error(m.message))}if(m.t==='pong'&&now-m.ts<c.bestRtt){c.bestRtt=now-m.ts;c.send({t:'sync',offset:m.tvNow-(now+m.ts)/2})}if(m.t==='ack'){const sent=c.pending.get(m.q);if(profiling)result.ackObservations.push([c.slot,m.q,sent,now,m.tvNow,m.accepted]);c.pending.delete(m.q);if(m.accepted)c.accepted++;else{c.rejected++;result.rejections.push({slot:c.slot,q:m.q,second:(now-started)/1000,rttMs:sent===undefined?null:now-sent})}}if(m.t==='hud'&&m.combat?.ability?.phase==='ACTIVE'&&m.car){const id=m.car.id;result.classActiveHudSamples[id]=(result.classActiveHudSamples[id]||0)+1}})});
  for(let i=0;i<5;i++){c.send({t:'ping',ts:performance.now()});await pause(50)}return c;
 }
 try {
@@ -60,6 +66,7 @@ try {
   const pilot=new Pilot(routes,true);clients[0].send({t:'start'});await waitFor(s=>s.phase==='race','race');const roundStart=performance.now();
   while((performance.now()-roundStart)<60000&&(performance.now()-started)/1000<duration){
    const s=await get('/stats'),second=(performance.now()-started)/1000;
+   if(profiling&&second>=nextProfile){const p=await get(`/profile?frames=${frameCursor}&inputs=${inputCursor}`);result.profiles.push({second,...p});frameCursor=p.frames.end;inputCursor=p.inputs.end;nextProfile=second+10;}
    if(second>=nextWindow){result.windows.push({second,round:roundIndex,stats:{...s,slots:s.slots.map(({hostCareer,career,garage,...slot})=>slot)}});nextWindow=second+1}
    if(second>=nextPing){for(const c of clients)c.send({t:'ping',ts:performance.now()});nextPing=second+30}
    if(second>=nextMemory&&!memoryPending){nextMemory=second+60;memoryPending=memory(second).finally(()=>{memoryPending=null})}

@@ -210,3 +210,13 @@ Report story clarity, reward usefulness, mine readability and whether fighting M
 Device gallery: file:///C:/Users/kazda/kiro/firetv-deathride-camp/deathride/evidence/campaign/q4/index.html
 
 Balance plots and honest censoring: file:///C:/Users/kazda/kiro/firetv-deathride-camp/deathride/evidence/campaign/q3/index.html
+
+## P0 — performance baseline
+
+The isolated **Death Ride Perf** application uses `dev.deathride.perf` / 8772.
+The merged car/HUD/campaign/audio baseline has measured frame and input failures;
+the P0 design lists their exact scope. No sofa, physical-phone or optical-latency
+pass is implied. After the performance waves, compare engine pitch, impact timing,
+six-car readability and control release with sound on. Report any audible delay,
+missing cue, visible hitch or sticky control with the car/course and approximate
+time. The final performance report will identify the measured delivery APK.

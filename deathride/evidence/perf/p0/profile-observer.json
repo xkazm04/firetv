@@ -1,0 +1,25 @@
+{
+  "responseSeconds": 0.28100000001722947,
+  "responseBytes": 206667,
+  "allocationDelta": 5066752,
+  "runtimeBefore": {
+    "art.gc.blocking-gc-count": "0",
+    "art.gc.gc-time": "20230",
+    "art.gc.bytes-allocated": "4474188728",
+    "art.gc.bytes-freed": "4447045992",
+    "art.gc.gc-count-rate-histogram": "7:1,8:9,9:22,10:4,21:1",
+    "art.gc.blocking-gc-count-rate-histogram": "0:37",
+    "art.gc.gc-count": "343",
+    "art.gc.blocking-gc-time": "0"
+  },
+  "runtimeAfter": {
+    "art.gc.blocking-gc-count": "0",
+    "art.gc.gc-time": "20272",
+    "art.gc.bytes-allocated": "4479255480",
+    "art.gc.bytes-freed": "4460603136",
+    "art.gc.gc-count-rate-histogram": "7:1,8:9,9:22,10:4,21:1",
+    "art.gc.blocking-gc-count-rate-histogram": "0:37",
+    "art.gc.gc-count": "344",
+    "art.gc.blocking-gc-time": "0"
+  }
+}

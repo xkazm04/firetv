@@ -14,7 +14,9 @@ import dev.deathride.link.RaceServer
 import dev.deathride.game.audio.*
 import kotlin.math.*
 
-class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smoke: Boolean=false, val runSeconds: Double=0.0, val soak: Boolean=false, val keyboardCheck: Boolean=false, val fontFactory: ((Int)->BitmapFont)?=null, val proceduralOnly: Boolean=false, val serverPort: Int=8765) : ApplicationAdapter() {
+class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smoke: Boolean=false, val runSeconds: Double=0.0, val soak: Boolean=false, val keyboardCheck: Boolean=false, val fontFactory: ((Int)->BitmapFont)?=null, val proceduralOnly: Boolean=false, val serverPort: Int=8765, profilePlatform: ProfilePlatform?=null) : ApplicationAdapter() {
+    private val profiler=profilePlatform?.let{FrameProfiler(it)}
+    private var profileGl: ProfileGl?=null
     private lateinit var shape: ShapeRenderer
     private lateinit var batch: SpriteBatch
     private lateinit var font: BitmapFont
@@ -183,6 +185,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
     }
 
     override fun create() {
+        if(profiler!=null) { profileGl=ProfileGl(Gdx.gl20);Gdx.gl20=profileGl;Gdx.gl=profileGl }
         shape=ShapeRenderer(10000); batch=SpriteBatch()
         font=fontFactory?.invoke(HudTheme.BODY)?:BitmapFont().apply { data.setScale(1.6f) }
         large=HandCutFont.create(HudTheme.TITLE)
@@ -195,7 +198,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         if(Gdx.app.getPreferences("deathride-audio").getBoolean("muted",false))audio.setGain("master",0f)
         raceAudio=RaceAudioDirector(audio);raceAudio.bind(world)
         campaignAudio=CampaignAudioDirector(audio)
-        server=RaceServer(assets,logger,port=serverPort); for(i in world.cars.indices)CarCatalog.apply(world.cars[i],selectedCars[i]);world.reset(); server.start()
+        server=RaceServer(assets,logger,port=serverPort,profileFrames=profiler?.trace,profileRuntime=profiler?.let{{it.platform.runtimeJson()}}); for(i in world.cars.indices)CarCatalog.apply(world.cars[i],selectedCars[i]);world.reset(); server.start()
         profileStore=ProfileStore(Gdx.files.local("profiles").file());for(i in profiles.indices)loadProfile(i);world.reset()
         sceneryCanvas=SceneryCanvas();art=AtlasArt(Gdx.files.internal(if(proceduralOnly)"absent-art-audit" else "phase2-states"),TextureBudget.remainingArt(fontTextureBytes,sceneryCanvas.textureSize.toLong()*sceneryCanvas.textureSize*4));atlasEffects=AtlasEffects(art);scene=TrackScene(Courses.all[selectedTrack],sceneryCanvas,art);effects.clear()
         Gdx.input.setCatchKey(Input.Keys.BACK,true)
@@ -257,6 +260,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
     override fun resume() { if(::raceAudio.isInitialized)raceAudio.resume();if(::scene.isInitialized)scene=TrackScene(Courses.all[selectedTrack],sceneryCanvas,art);if(::server.isInitialized) { server.paused=false; server.start() }; previousNanos=System.nanoTime(); accumulator=0.0 }
     override fun render() {
         val nanos=System.nanoTime(); val actual=(nanos-previousNanos)/1e9; previousNanos=nanos
+        profiler?.begin(nanos,actual);profileGl?.reset()
         val now=server.nowMs(); server.metrics.frameMs.add(actual*1000,now); server.frameNumber++
         val elapsed=actual.coerceIn(0.0,.1); stateTime+=elapsed; uiTime+=elapsed; smokeTime+=actual
         for(i in server.slots.indices) {
@@ -283,7 +287,9 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         if(feelIndex>=0) { server.feel=FeelProfiles.all[feelIndex]; logger("feel ${server.feel.json}") }
         for(c in world.cars)c.feel=if(c.human)server.feel else FeelProfiles.spike
         when(server.command.getAndSet(0)) { 1 -> if(phase=="results" && campaignRace)openCareer() else if(phase=="lobby" || phase=="results")startRace(); 2 -> lobby();3 -> openGarage();4 -> openCareer();5 -> if(phase=="career")startRace(true) }
+        profiler?.mark(6,"DR.prepare")
         if(!scene.ready) { scene.advance();accumulator=0.0;if(scene.ready)rebuildUi() };server.sceneryReady=scene.ready
+        profiler?.mark(7,"DR.simulation")
         // Keep release/stale state current in menus without mislabelling it as simulation-age evidence.
         if(!scene.ready || phase=="countdown" || phase=="results" || phase=="garage" || phase=="career")for(i in server.slots.indices)server.consume(i,server.nowMs(),inputs[i],false)
         if(actual>.1)server.metrics.discardedSimMs.add(((actual-.1)*1000).toLong(),now)
@@ -316,7 +322,9 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
                 if((humans>0 && complete==humans) || world.resolved==world.entrantCount || world.seconds>=world.raceLimitSeconds)finishRace()
             }
         }
+        profiler?.mark(8,"DR.audio")
         raceAudio.update(world,phase,scene.ready,countdown,actual.coerceAtLeast(0.0))
+        profiler?.mark(9,"DR.telemetry")
         server.raceSeconds=world.seconds;server.raceLaps=world.raceLaps;server.eventType=world.eventType.name;server.raceEntrants=world.entrantCount
         if(uiTime>=.1) {
             uiTime=0.0
@@ -331,10 +339,15 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
             for(i in 0..1) { val c=world.cars[i]; val s=server.slots[i]; s.speed=c.speedMps; s.lap=min(c.lap.laps+1,world.raceLaps); s.position=c.position; s.impact=c.impact; s.drifting=c.drifting; s.driftQuality=c.driftQuality;s.slipRadians=c.slipRadians;s.spunOut=c.spunOut; s.loadTransfer=c.loadTransfer; s.surfaceId=c.surface.id; s.x=c.x; s.y=c.y;s.heading=c.heading;s.yaw=c.yaw;s.progressM=c.lap.progressM; s.combatJson=combatJson(i) }
             rebuildUi()
         }
+        profiler?.mark(10,"DR.clear")
         view.apply(); ScreenUtils.clear(bg)
+        profiler?.mark(11,"DR.camera")
         if(scene.ready)drawWorld(elapsed)
+        profiler?.mark(15,"DR.hud")
         drawOverlay()
+        profiler?.mark(16,"DR.caption")
         drawCaption()
+        profiler?.mark(17,"DR.tail")
         // Flash is a display event, consumed once after all other drawing.
         if(server.flash.getAndSet(false)) { Gdx.gl.glClearColor(1f,1f,1f,1f); Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT); server.flashFrames++ }
         if(soak && phase=="results" && !resultCaptured) { capture("results.png"); resultCaptured=true; logger("six-car race reached results at ${world.seconds} seconds") }
@@ -351,6 +364,8 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
             if(smokeTime>3 && !smokeStarted) { startRace(); smokeStarted=true }
             if(smokeTime>9) { capture("race.png"); logger("desktop smoke complete; GL ${Gdx.gl.glGetString(GL20.GL_RENDERER)}; hash ${world.stateHash()}"); Gdx.app.exit() }
         }
+        profiler?.finish(phase=="race" && scene.ready,world.entrantCount-world.resolved,
+            profileGl?.draws?:0,profileGl?.binds?:0,profileGl?.uploads?:0,atlasEffects.activeCount)
     }
     private fun capture(name: String) { val p=Pixmap.createFromFrameBuffer(0,0,Gdx.graphics.width,Gdx.graphics.height); val writer=PixmapIO.PNG(); writer.setFlipY(true); writer.write(Gdx.files.local("../evidence/$name"),p); writer.dispose(); p.dispose() }
     private fun activeDriver(): Car = world.cars.firstOrNull { it.human && !world.combat.wrecked(it.id) && it.finishSeconds<0 }
@@ -371,8 +386,11 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
             cameraZoom+=(target-cameraZoom)*ease;pixelsPerM=cameraZoom
         } else { focusX=(course.minX+course.maxX)*.5;focusY=(course.minY+course.maxY)*.5;cameraZoom=VisualTuning["soloPixelsPerM"] }
         worldMatrix.set(view.camera.combined).translate(640f,350f,0f).scale(pixelsPerM.toFloat(),pixelsPerM.toFloat(),1f).translate(-focusX.toFloat(),-focusY.toFloat(),0f)
+        profiler?.mark(12,"DR.effectsUpdate")
         atlasEffects.update(world.snapshot,dt)
+        profiler?.mark(13,"DR.sceneryDraw")
         batch.projectionMatrix=worldMatrix;batch.begin();scene.draw(batch);batch.end()
+        profiler?.mark(14,"DR.carsEffects")
         Gdx.gl.glEnable(GL20.GL_BLEND);Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA,GL20.GL_ONE_MINUS_SRC_ALPHA)
         shape.projectionMatrix=worldMatrix;shape.begin(ShapeRenderer.ShapeType.Filled)
         scene.drawRoadMarks(shape)

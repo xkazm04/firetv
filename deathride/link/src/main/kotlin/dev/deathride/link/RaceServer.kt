@@ -61,7 +61,9 @@ class Slot(val id: Int) {
     val claimed get()=token.isNotEmpty()
 }
 /** Socket callbacks own mailboxes; only the render thread owns the world. */
-class RaceServer(private val assets: (String)->String, private val log: (String)->Unit, val metrics: Metrics=Metrics(), val port: Int=8765) {
+class RaceServer(private val assets: (String)->String, private val log: (String)->Unit, val metrics: Metrics=Metrics(), val port: Int=8765,
+                 val profileFrames: PerfTrace?=null, private val profileRuntime: (()->String)?=null) {
+    private val profileInputs=profileFrames?.let{PerfTrace(arrayOf("receiveNs","slot","q","ageMs","parseMs","offerMs","ackEnqueueMs","reason","receiveGapMs"))}
     val slots=Array(2){Slot(it)}
     val command=AtomicInteger(0) // 1=practice/rematch, 2=lobby, 3=garage, 4=career menu, 5=career race
     val difficultyRequest=AtomicInteger(-1)
@@ -129,6 +131,11 @@ class RaceServer(private val assets: (String)->String, private val log: (String)
                         get("/hud.css") { call.respondText(assets("hud.css"),ContentType.Text.CSS) }
                 get("/manifest.webmanifest") { call.respondText(manifest,ContentType.Application.Json) }
                         get("/stats") { call.response.header("Cache-Control","no-store"); call.respondText(statsJson(),ContentType.Application.Json) }
+                        if(profileFrames!=null)get("/profile") {
+                            val frames=call.request.queryParameters["frames"]?.toLongOrNull()?:0
+                            val inputs=call.request.queryParameters["inputs"]?.toLongOrNull()?:0
+                            call.respondText("{\"frames\":${profileFrames.json(frames)},\"inputs\":${profileInputs!!.json(inputs)},\"runtime\":${profileRuntime?.invoke()?:"{}"}}",ContentType.Application.Json)
+                        }
                         get("/catalog") { call.respondText("{\"feelProfiles\":${FeelProfiles.json},\"driftFeedback\":{\"quality\":${VisualTuning["driftHapticQuality"]},\"milliseconds\":${VisualTuning["driftHapticMilliseconds"]},\"cooldownMilliseconds\":${VisualTuning["driftHapticCooldownMilliseconds"]}},\"cars\":${CarCatalog.json},\"statMax\":${CarCatalog.statMax},\"tracks\":${Courses.json},\"surfaces\":${Surfaces.json},\"weapons\":${Weapons.json},\"abilities\":${AbilityCatalog.json},\"layouts\":${ControllerLayouts.json},\"career\":${Career.catalogJson}}",ContentType.Application.Json) }
                         get("/health") { call.respondText("{\"ok\":true,\"phase\":\"$phase\",\"eventType\":\"$eventType\",\"raceEntrants\":$raceEntrants,\"raceLaps\":$raceLaps,\"raceMode\":\"$raceMode\",\"slots\":${slots.count{it.connected}}}",ContentType.Application.Json) }
                         get("/routes") { call.respondText(routesJson,ContentType.Application.Json) }
@@ -148,6 +155,8 @@ class RaceServer(private val assets: (String)->String, private val log: (String)
     }
     private suspend fun handle(socket: DefaultWebSocketServerSession) {
         var slot: Slot?=null; var generation=-1; var offset=0.0; var calibrated=false
+        val inputSample=if(profileInputs!=null)DoubleArray(9) else null
+        var previousInputNs=0L
         var hudJob: Job?=null
         try {
             withTimeout(10000) {
@@ -168,6 +177,7 @@ class RaceServer(private val assets: (String)->String, private val log: (String)
                 socket.close(CloseReason(CloseReason.Codes.NORMAL,"replaced"))
             }
             for(frame in socket.incoming) {
+                val receiveNs=if(profileInputs!=null)System.nanoTime() else 0L
                 if(generation!=s.generation)break
                 if(frame !is Frame.Text)continue
                 val msg=runCatching { Json.parseToJsonElement(frame.readText()).jsonObject }.getOrNull() ?: continue
@@ -179,11 +189,21 @@ class RaceServer(private val assets: (String)->String, private val log: (String)
                         val q=msg["q"]?.jsonPrimitive?.longOrNull ?: continue
                         val previousDropped=s.input.dropped; val previousOrder=s.input.outOfOrder
                         val timestamp=if(calibrated) msg.number("ts")+offset else now
+                        val offerNs=if(profileInputs!=null)System.nanoTime() else 0L
                         val accepted=s.input.offer(q,timestamp,now,msg.number("s"),msg.number("a"),msg.number("b"),msg["h"]?.jsonPrimitive?.doubleOrNull?:0.0,
                             msg["fire"]?.jsonPrimitive?.doubleOrNull?:0.0,msg["mine"]?.jsonPrimitive?.doubleOrNull?:0.0,msg["weapon"]?.jsonPrimitive?.intOrNull?:0,msg["ability"]?.jsonPrimitive?.doubleOrNull?:0.0)
+                        val offeredNs=if(profileInputs!=null)System.nanoTime() else 0L
                         metrics.dropped[s.id].add(s.input.dropped-previousDropped,now); metrics.outOfOrder[s.id].add(s.input.outOfOrder-previousOrder,now)
                         if(accepted && msg["f"]?.jsonPrimitive?.intOrNull==1) flash.set(true)
                         socket.send("{\"t\":\"ack\",\"q\":$q,\"tvNow\":$now,\"accepted\":$accepted}")
+                        if(inputSample!=null) {
+                            inputSample[0]=receiveNs.toDouble();inputSample[1]=s.id.toDouble();inputSample[2]=q.toDouble()
+                            inputSample[3]=now-timestamp;inputSample[4]=(offerNs-receiveNs)/1e6
+                            inputSample[5]=(offeredNs-offerNs)/1e6;inputSample[6]=(System.nanoTime()-offeredNs)/1e6
+                            inputSample[7]=when { accepted->0.0;s.input.outOfOrder>previousOrder->2.0;now-timestamp>Tuning.STALE_MS->1.0;timestamp-now>100->3.0;else->4.0 }
+                            inputSample[8]=if(previousInputNs==0L)0.0 else (receiveNs-previousInputNs)/1e6
+                            previousInputNs=receiveNs;profileInputs!!.append(inputSample)
+                        }
                     }
                     "track" -> { val index=Courses.all.indexOfFirst { it.id==msg.text("id") };if(index>=0 && (phase=="lobby" || phase=="results"))trackRequest.set(index) }
                     "surface" -> { val index=Surfaces.practice.indexOfFirst { it.id==msg.text("id") }; if(index>=0)surfaceRequest.set(index) }
