@@ -78,3 +78,25 @@ tasks.register<JavaExec>("abilityReport") {
     args(providers.gradleProperty("abilitySamples").getOrElse("2000"),providers.gradleProperty("abilityBaselineSamples").getOrElse("200"),providers.gradleProperty("abilityPart").getOrElse("roster"),providers.gradleProperty("abilityTag").getOrElse("accepted"),providers.gradleProperty("abilityTier").getOrElse("all"))
     args(providers.gradleProperty("abilitySeedNamespace").getOrElse("abilities"))
 }
+
+tasks.register<JavaExec>("trackQualityReport") {
+    group="verification"
+    description="T1 geometry and seeded six-car combat track instruments; never writes gameplay data"
+    dependsOn(tasks.testClasses)
+    classpath=sourceSets.test.get().runtimeClasspath
+    mainClass.set("dev.deathride.core.TrackQualityReportKt")
+    maxHeapSize="2g"
+    systemProperty("tracksRoot",rootProject.projectDir.absolutePath)
+    args(providers.gradleProperty("trackSeeds").getOrElse("12"),providers.gradleProperty("trackOutput").getOrElse(rootProject.file("tracks/atlas").absolutePath))
+}
+
+tasks.register<JavaExec>("trackLab") {
+    group="application"
+    description="Desktop Track Lab using the actual core spline, linter and AI; browser UI on localhost"
+    dependsOn(tasks.testClasses)
+    classpath=sourceSets.test.get().runtimeClasspath
+    mainClass.set("dev.deathride.core.TrackLabServerKt")
+    maxHeapSize="1g"
+    systemProperty("tracksRoot",rootProject.projectDir.absolutePath)
+    args(providers.gradleProperty("trackLabPort").getOrElse("8794"))
+}
