@@ -17,6 +17,9 @@ def validate():
         assert len(s['image_tool_calls'])==1 and s['image_tool_calls'][0]['arguments']['prompt']==s['prompt']
         assert len(r['grades'])==2 and all(g['status']=='graded' and g['image_hashes']==[r['source_sha256']] for g in r['grades'])
         assert r['direct_review'].get('reviewed') and r['direct_review']['source_sha256']==r['source_sha256']
+        if r.get('runtime_export'):
+            e=r['runtime_export'];assert sha(folder/e['path'])==e['sha256']
+            assert len(e['grades'])==2 and all(g['status']=='graded' and g['image_hashes']==[e['sha256']] for g in e['grades'])
         calls[s['asset'].rsplit('-v',1)[0]]+=1
     assert max(calls.values())<=3
     history=[__import__('json').loads(line) for line in (ART/'history.jsonl').read_text(encoding='utf-8').splitlines()]

@@ -9,7 +9,8 @@ import com.badlogic.gdx.utils.JsonValue
 import dev.deathride.core.*
 
 /** Presentation-only assets. A broken page or entry cannot disable the procedural renderer. */
-class AtlasArt(private val root: FileHandle = Gdx.files.internal("phase2-v1"),private val residentLimit: Long=TextureBudget.ART) {
+class AtlasArt(private val root: FileHandle = Gdx.files.internal("phase2-v1"),private val residentLimit: Long=TextureBudget.ART,
+               private val extraBytes: () -> Long = { 0L }) {
     data class Region(val image: TextureRegion, val pivotX: Float, val pivotY: Float, val interior: IntArray?,val bodyBounds: IntArray?=null)
     data class Entry(val id: String, val group: String, val frames: Array<String>, val durations: IntArray,
                      val loop: Boolean, val approved: Boolean, val referenceSelected: Boolean=false)
@@ -55,7 +56,7 @@ class AtlasArt(private val root: FileHandle = Gdx.files.internal("phase2-v1"),pr
     private fun loadTexture(file: String,limit: Int): Texture {
         val source=root.child(file)
         val bytes=source.read().use{TextureBudget.pngBytes(it,limit)}
-        require(textureBytes+bytes<=minOf(TextureBudget.ART,residentLimit)){"resident texture budget"}
+        require(textureBytes+bytes+extraBytes()<=minOf(TextureBudget.ART,residentLimit)){"resident texture budget"}
         val t=Texture(source);t.setFilter(Texture.TextureFilter.Linear,Texture.TextureFilter.Linear)
         textureBytes+=bytes;return t
     }

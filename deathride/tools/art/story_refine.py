@@ -1,4 +1,5 @@
 """One explicit final content correction per proof; uses the unchanged guarded driver."""
+from pathlib import Path
 from common import ART, ROOT, briefs, read_json, write_json, now, sha
 from family import write_csv
 from gen import candidates
@@ -30,5 +31,4 @@ def main():
     write_csv(path,rows);write_json(ART/'audits/story-final-proof-corrections.json',changes)
 
 if __name__=='__main__':
-    from pathlib import Path
     main()
