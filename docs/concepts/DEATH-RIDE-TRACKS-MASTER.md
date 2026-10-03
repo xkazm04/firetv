@@ -39,7 +39,7 @@ Original work only; no Grok or ElevenLabs spend; one design note, status row, se
 
 | Id | Wave | Status |
 |---|---|---|
-| T0 | Research and the design language | not started |
+| T0 | Research and the design language | complete — sourced research, registry ledger, grammar and measurable hypotheses in `deathride/T0-track-design-research.md`; green tests/build and offline browser baseline |
 | T1 | Instruments: quality report, atlas page, Track Lab | not started |
 | T2 | Master the library (after the AI run) | gated |
 | T3 | Evidence, owner pages, Stick check, knowledge note | gated |
