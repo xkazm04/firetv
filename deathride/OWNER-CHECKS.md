@@ -243,3 +243,8 @@ the allocation test verifies storage behavior, not audible quality.
 P5 preserves road-mark pixels in the desktop GL audit. On the final Stick build,
 inspect kerbs, start-grid lines and chevrons through all five courses, then Home
 and resume. Check sharpness and layer order while effects cross those markings.
+
+P7 removes the shared audio-worker monitor. Repeat abrupt engine/pitch changes,
+simultaneous impacts, mute and Home/resume. Queue delays and dropped onsets are
+still reported; the native trace proves the measured dependency is gone, not
+that every sound is perceived on time.

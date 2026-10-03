@@ -107,4 +107,28 @@ class QueuedAudioTest {
             service.update(.2);assertEquals(0,service.activeVoices)
         } finally {native.release.countDown();service.dispose()}
     }
+    @Test fun concurrentParameterUpdatesStayCoherentAndEveryVoiceReachesLatestValue() {
+        val bad=java.util.concurrent.atomic.AtomicBoolean(false)
+        val values=java.util.concurrent.atomic.AtomicIntegerArray(9)
+        val native=object: AudioBackend {
+            var next=0L
+            override fun prepare(cue: Cue)=true
+            override fun start(cue: Cue,gain: Float,pitch: Float,pan: Float)=++next
+            override fun parameters(handle: Long,gain: Float,pitch: Float,pan: Float){
+                if(pitch!=gain+1f || pan != -gain)bad.set(true)
+                values.set(handle.toInt(),gain.toRawBits())
+            }
+            override fun stop(handle: Long){}
+            override fun dispose(){}
+        }
+        val queue=QueuedAudioBackend(native,5000)
+        try {
+            queue.prepare(cue);val handles=LongArray(8){queue.start(cue,0f,1f,0f)}
+            await{handles.none{queue.pending(it)}}
+            repeat(50000){n->for(h in handles){val gain=if(n%2==0).2f else .8f;queue.parameters(h,gain,gain+1,-gain)}}
+            for(h in handles)queue.parameters(h,.25f,1.25f,-.25f)
+            await{(1..8).all{values.get(it)==.25f.toRawBits()}}
+            assertFalse(bad.get(),"worker mixed parameter revisions")
+        }finally{queue.dispose()}
+    }
 }
