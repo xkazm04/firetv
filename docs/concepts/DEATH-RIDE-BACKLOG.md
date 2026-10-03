@@ -20,3 +20,15 @@ Apply after the abilities run (A3) has finished, so its balance numbers are not 
 A3 result: 5 m to 0.5 m blast, effective trigger clamped to 0.5 m, mine/flash geometry scaled, existing 24 damage and timing retained. Body circles, not only car centres, determine overlap. Mine boundary, arming/escape, AI avoidance and one-shot checks pass. The complete 66,000-race rerun exposed a rare AI recovery jam; a recovery-only centreline target resolves it in 51.43 seconds and the fresh full matrix passes. No class-winner changes versus the 5 m baseline; individual driver winners and trajectories do change. See [A3 before/after and evidence](deathride/A3-balance-and-device.md). Owner-felt usefulness/readability is still pending; N1 remains the separate integration pass.
 
 Handoff to [the new H0-H3 plan](DEATH-RIDE-HUD.md): N2 has landed in the A3 work and should be preserved/rechecked after H0's art merge. N1's HUD inventory, styling and felt review are still pending that stream.
+
+## N3. Keep the full feature package, optimize later (owner, 2026-10-03)
+
+> lets keep full feature package, we will optimize once we think the game is close to complete the gameplay test from will be more in need
+
+Decision: do NOT cut effects or lower the render scale to close the Stick frame-time gate now. State on 2026-10-03: input robustness fixed (900 s soak, zero rejects), memory fine (peak PSS 140 MiB), frame p95 22.43 ms and worst 37.58 to 54.92 ms against 16.7 and 33 ms. The optimisation pass is deferred until the game is close to feature complete and play-testing is the priority; revisit then, with the perf report as the baseline (`deathride/evidence/perf/index.html`).
+
+## N4. Campaign design pass, and art feedback on the campaign art (owner, 2026-10-03)
+
+> Lets do another design pass for the campaign. ...Art direction for campaign is fine, props though do not reflect the environment game set, faces are often not visible as we focus too much on bodies of characters
+
+Decisions: (1) another design pass on the campaign (pacing, boss dips, completion rate, censoring: the gameplay run left late boss PR ratios at 0.9385 and 0.9800, outside target, with completions per 2,000 careers falling from 1,292 to 1,099 and from 541 to 419). (2) The campaign art direction stays. (3) Props must reflect the game's environment (the wasteland, rust-belt towns, foundry, salt flats and quarry, mountain road, the league speedway), not generic objects. (4) Portraits and story cards must show faces: less body, more face; expressions readable at HUD and card size.
