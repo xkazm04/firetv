@@ -26,7 +26,7 @@ class MainActivity : AndroidApplication() {
         // Explicit diagnostic variants; defaults retain the measured production behavior.
         paced=intent.getStringExtra("pacing")=="vsync"
         if(intent.getStringExtra("resolution")=="720")config.resolutionStrategy=com.badlogic.gdx.backends.android.surfaceview.FixedResolutionStrategy(1280,720)
-        initialize(RaceGame({ name -> assets.open(name).bufferedReader().use { it.readText() } }, { message -> Log.i("DeathRide", message) }, fontFactory=::nativeFont,serverPort=resources.getInteger(R.integer.race_port),profilePlatform=if(intent.getBooleanExtra("profile",false))AndroidProfile() else null), config)
+        initialize(RaceGame({ name -> assets.open(name).bufferedReader().use { it.readText() } }, { message -> Log.i("DeathRide", message) }, fontFactory=::nativeFont,serverPort=resources.getInteger(R.integer.race_port),profilePlatform=if(intent.getBooleanExtra("profile",false))AndroidProfile() else null,cacheRoadMarks=intent.getStringExtra("roadMarks")!="immediate"), config)
         if(paced)graphics.isContinuousRendering=false
         if(intent.getStringExtra("renderPriority")=="display")postRunnable{Process.setThreadPriority(Process.THREAD_PRIORITY_DISPLAY)}
         Log.i("DeathRide","renderVariant pacing=${if(paced)"vsync" else "continuous"} resolution=${intent.getStringExtra("resolution")?:"native"} priority=${intent.getStringExtra("renderPriority")?:"normal"}")

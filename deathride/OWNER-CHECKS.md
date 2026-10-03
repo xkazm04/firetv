@@ -239,3 +239,7 @@ with audio; the final report records which scheduling mode was retained.
 P4 preserves two local engine loops, spatial attenuation, pitch smoothing and
 low-health cue thresholds. Listen while the second driver drops out or wrecks;
 the allocation test verifies storage behavior, not audible quality.
+
+P5 preserves road-mark pixels in the desktop GL audit. On the final Stick build,
+inspect kerbs, start-grid lines and chevrons through all five courses, then Home
+and resume. Check sharpness and layer order while effects cross those markings.

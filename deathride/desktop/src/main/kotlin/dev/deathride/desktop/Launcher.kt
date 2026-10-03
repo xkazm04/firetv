@@ -11,6 +11,7 @@ fun main(args: Array<String>) {
     if(args.contains("--drift-lab")){config.setTitle("Death Ride Drift Lab");Lwjgl3Application(DriftLabScreen(args.contains("--drift-lab-check"),duration),config);return}
     if(args.contains("--atlas-check")){Lwjgl3Application(AtlasAudit(),config);return}
     if(args.contains("--audio-check")){Lwjgl3Application(AudioAudit(),config);return}
+    if(args.contains("--road-mark-check")){Lwjgl3Application(RoadMarkAudit(),config);return}
     val port=args.firstOrNull{it.startsWith("--port=")}?.substringAfter('=')?.toIntOrNull()?:8768
     val game=RaceGame({ name -> File("controller", name).readText() }, { println("DeathRide $it") }, args.contains("--smoke"), duration, args.contains("--soak"), args.contains("--keyboard-check"),fontFactory=::nativeFont,proceduralOnly=args.contains("--no-art"),serverPort=port,profilePlatform=if(args.contains("--profile"))DesktopProfile() else null)
     val listener=if(args.contains("--keyboard-check"))KeyboardAudit(game) else game
