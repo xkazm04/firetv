@@ -1,0 +1,51 @@
+{
+  "asset": "story-mechanic-v2",
+  "origin": "grok-cli",
+  "model": "grok-4.7",
+  "seed": null,
+  "timestamp": "2026-10-03T00:47:10.976166+00:00",
+  "attempt": 1,
+  "prompt": "Original digital hand-drawn 2D wasteland combat-game art. Wear belongs on every manufactured surface: dents, rust bloom, chipped paint, soot and dirt in seams; no factory-new finish. Shared material palette: soot black, sun-baked ochre, rust orange, dried-blood red and bleached bone; one toxic hazard-yellow accent. Detail clusters at silhouette anchors, never uniform noise. Neutral flat even diffuse light, symmetric material shading, no directional illumination and no baked cast shadow. Ominous pulp illustration built from pooled soot-black masses and a few jagged bleached-bone cut highlights, broad ragged silhouette edges, sparse scratched contour fragments. High value contrast is intrinsic paint colour, never directional illumination. Long skeletal negative spaces against swollen armoured masses; low interior detail density, rust underpainting and tiny hazard-yellow warning points. Severe haunted industrial mood, flat opaque colour with no fog baked into assets.\nFUSION BRIDGE: Anchor all families to soot #171513, dark earth #39302A, ochre #A37738, rust #B4512D, dried red #6C2427, bone #DDD0A6 and sparse hazard yellow #B4A044. Neutral flat diffuse light only; value changes are pigment and material, never a directional lamp; no baked cast shadow. At a 96-pixel subject read, broken outer contours occupy 1 to 2 pixels, interior marks at most 1 pixel; retain large quiet planes. Cluster heavy wear at joints and impact anchors: chipped paint, soot, exposed metal and rust; natural materials use sparse abrasion and dry broken texture. Ground, surface and decal boundaries have no continuous ink outline: use irregular dirt encroachment, worn rubber and fragmentary worn paint. Original designs only.\n\nACTION: Use case: precise-object-edit. Preserve this exact young adult face, curly hair, nervous helpful smile, red shirt, ochre apron, bearing and both hands. Shrink the ENTIRE bust to HALF its current image height, centered on the same square canvas. Finish the lower apron with a ragged rounded hem just below the hands. All of the hair, shoulders, hands and apron must be visible. Surround it with a huge perfectly uniform solid magenta field, at least a QUARTER of the image height ABOVE and BELOW the complete bust. No part may extend to the image edge. This is a small sticker centred in a large blank square. No design or colour change to the character.\nIsolate on a perfectly uniform solid #FF00FF background, without gradient. Leave clear space all around.\nNo franchise references, existing fictional characters or copied vehicles, brands, logos, text, letters, numbers, watermark, clean primaries, factory-new surfaces, photorealism, 3D render, perspective, cast shadows or cropped subject. No occupants inside vehicles. No decorative ground behind isolated subjects.",
+  "brief": {
+    "id": "story-mechanic-v2",
+    "class": "mechanic",
+    "prompt_action": "Use case: precise-object-edit. Preserve this exact young adult face, curly hair, nervous helpful smile, red shirt, ochre apron, bearing and both hands. Shrink the ENTIRE bust to HALF its current image height, centered on the same square canvas. Finish the lower apron with a ragged rounded hem just below the hands. All of the hair, shoulders, hands and apron must be visible. Surround it with a huge perfectly uniform solid magenta field, at least a QUARTER of the image height ABOVE and BELOW the complete bust. No part may extend to the image edge. This is a small sticker centred in a large blank square. No design or colour change to the character.",
+    "size": "1024x1024",
+    "frame": "single",
+    "background_key": "#FF00FF",
+    "count": "1",
+    "status": "ready",
+    "kind": "portrait",
+    "reference": "art/raw/story-mechanic-v1/attempt-01/1.jpg",
+    "batch": "story-portraits",
+    "approval": "pending",
+    "requires_approval": "",
+    "cell_limit": "256",
+    "style_file": "style-fusion.json",
+    "wave": "V2",
+    "asset_family": "portraits",
+    "surface_stack": "",
+    "logical_name": "mechanic"
+  },
+  "input_hash": "2fbea2ad7b5a5c23ded8978a36fbf8d9fc79d9d5b6f375c7db7d30951301c30b",
+  "status": "generated",
+  "image": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\raw\\story-mechanic-v2\\attempt-01\\1.jpg",
+  "session_id": "b5e0c883-38b1-4be3-a3bf-2765d73cdc4b",
+  "reference_sha256": "e531f2025704baf52a61cb8bdf623425d1287581872f90d8378d99557c0c0392",
+  "image_tool_calls": [
+    {
+      "name": "image_edit",
+      "arguments": {
+        "prompt": "Original digital hand-drawn 2D wasteland combat-game art. Wear belongs on every manufactured surface: dents, rust bloom, chipped paint, soot and dirt in seams; no factory-new finish. Shared material palette: soot black, sun-baked ochre, rust orange, dried-blood red and bleached bone; one toxic hazard-yellow accent. Detail clusters at silhouette anchors, never uniform noise. Neutral flat even diffuse light, symmetric material shading, no directional illumination and no baked cast shadow. Ominous pulp illustration built from pooled soot-black masses and a few jagged bleached-bone cut highlights, broad ragged silhouette edges, sparse scratched contour fragments. High value contrast is intrinsic paint colour, never directional illumination. Long skeletal negative spaces against swollen armoured masses; low interior detail density, rust underpainting and tiny hazard-yellow warning points. Severe haunted industrial mood, flat opaque colour with no fog baked into assets.\nFUSION BRIDGE: Anchor all families to soot #171513, dark earth #39302A, ochre #A37738, rust #B4512D, dried red #6C2427, bone #DDD0A6 and sparse hazard yellow #B4A044. Neutral flat diffuse light only; value changes are pigment and material, never a directional lamp; no baked cast shadow. At a 96-pixel subject read, broken outer contours occupy 1 to 2 pixels, interior marks at most 1 pixel; retain large quiet planes. Cluster heavy wear at joints and impact anchors: chipped paint, soot, exposed metal and rust; natural materials use sparse abrasion and dry broken texture. Ground, surface and decal boundaries have no continuous ink outline: use irregular dirt encroachment, worn rubber and fragmentary worn paint. Original designs only.\n\nACTION: Use case: precise-object-edit. Preserve this exact young adult face, curly hair, nervous helpful smile, red shirt, ochre apron, bearing and both hands. Shrink the ENTIRE bust to HALF its current image height, centered on the same square canvas. Finish the lower apron with a ragged rounded hem just below the hands. All of the hair, shoulders, hands and apron must be visible. Surround it with a huge perfectly uniform solid magenta field, at least a QUARTER of the image height ABOVE and BELOW the complete bust. No part may extend to the image edge. This is a small sticker centred in a large blank square. No design or colour change to the character.\nIsolate on a perfectly uniform solid #FF00FF background, without gradient. Leave clear space all around.\nNo franchise references, existing fictional characters or copied vehicles, brands, logos, text, letters, numbers, watermark, clean primaries, factory-new surfaces, photorealism, 3D render, perspective, cast shadows or cropped subject. No occupants inside vehicles. No decorative ground behind isolated subjects.",
+        "image": [
+          "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\raw\\story-mechanic-v1\\attempt-01\\1.jpg"
+        ],
+        "aspect_ratio": "1:1"
+      }
+    }
+  ],
+  "prompt_verbatim_verified": true,
+  "sha256": "52ed48477e4adfa16f188f44375d593a7185ef52f6f3ea5de9daec8e850cd689",
+  "returncode": 0,
+  "elapsed_seconds": 17.125
+}

@@ -1,0 +1,51 @@
+{
+  "asset": "story-rig-reference-v2",
+  "origin": "grok-cli",
+  "model": "grok-4.7",
+  "seed": null,
+  "timestamp": "2026-10-03T00:54:00.504271+00:00",
+  "attempt": 1,
+  "prompt": "Original digital hand-drawn 2D wasteland combat-game art. Wear belongs on every manufactured surface: dents, rust bloom, chipped paint, soot and dirt in seams; no factory-new finish. Shared material palette: soot black, sun-baked ochre, rust orange, dried-blood red and bleached bone; one toxic hazard-yellow accent. Detail clusters at silhouette anchors, never uniform noise. Neutral flat even diffuse light, symmetric material shading, no directional illumination and no baked cast shadow. Heavy rough dry-brush outlines with uneven broken edges; flat opaque painted fills, scratch hatching, only two value steps. Maximum broad-versus-narrow silhouette exaggeration, chunky angular appendages, clustered rivets and bare expanses. Aggressive blunt workshop menace.\nFUSION BRIDGE: Anchor all families to soot #171513, dark earth #39302A, ochre #A37738, rust #B4512D, dried red #6C2427, bone #DDD0A6 and sparse hazard yellow #B4A044. Neutral flat diffuse light only; value changes are pigment and material, never a directional lamp; no baked cast shadow. At a 96-pixel subject read, broken outer contours occupy 1 to 2 pixels, interior marks at most 1 pixel; retain large quiet planes. Cluster heavy wear at joints and impact anchors: chipped paint, soot, exposed metal and rust; natural materials use sparse abrasion and dry broken texture. Ground, surface and decal boundaries have no continuous ink outline: use irregular dirt encroachment, worn rubber and fragmentary worn paint. Original designs only.\n\nACTION: Use case: precise-object-edit. Keep the EXACT supplied car identity, all four wheel positions, red and bone panels, three rear mine discs, rear delivery chute, overhead camera and nose facing RIGHT. Only change the framing: shrink the complete car to HALF its current width and center it in a 1024 square. The entire vehicle including rear chute must occupy no more than the central 50 percent of canvas width. Surround it on EVERY side with a large perfectly uniform SOLID MAGENTA background. There must be at least one QUARTER of canvas width EMPTY on the left and on the right. Do not zoom in to fill the frame. This is a small overhead vehicle sticker on a huge blank magenta square. No shadows, text, extra parts or ground.\nTrue orthographic top-down: camera directly above, roof planes only, no visible front or side body faces. Cars point right, toward screen +x.\nIsolate on a perfectly uniform solid #FF00FF background, without gradient. Leave clear space all around.\nNo franchise references, existing fictional characters or copied vehicles, brands, logos, text, letters, numbers, watermark, clean primaries, factory-new surfaces, photorealism, 3D render, perspective, cast shadows or cropped subject. No occupants inside vehicles. No decorative ground behind isolated subjects.",
+  "brief": {
+    "id": "story-rig-reference-v2",
+    "class": "Line",
+    "prompt_action": "Use case: precise-object-edit. Keep the EXACT supplied car identity, all four wheel positions, red and bone panels, three rear mine discs, rear delivery chute, overhead camera and nose facing RIGHT. Only change the framing: shrink the complete car to HALF its current width and center it in a 1024 square. The entire vehicle including rear chute must occupy no more than the central 50 percent of canvas width. Surround it on EVERY side with a large perfectly uniform SOLID MAGENTA background. There must be at least one QUARTER of canvas width EMPTY on the left and on the right. Do not zoom in to fill the frame. This is a small overhead vehicle sticker on a huge blank magenta square. No shadows, text, extra parts or ground.",
+    "size": "1024x1024",
+    "frame": "single",
+    "background_key": "#FF00FF",
+    "count": "1",
+    "status": "ready",
+    "kind": "car",
+    "reference": "art/raw/story-rig-reference-v1/attempt-02/1.jpg",
+    "batch": "story-cars",
+    "approval": "pending",
+    "requires_approval": "",
+    "cell_limit": "128",
+    "style_file": "style-fusion.json",
+    "wave": "V2",
+    "asset_family": "cars",
+    "surface_stack": "",
+    "logical_name": "rig-reference"
+  },
+  "input_hash": "1621153749c790edcad24685fea7e483a2ae64e2b344aeeedeca9e7fa10633a2",
+  "status": "generated",
+  "image": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\raw\\story-rig-reference-v2\\attempt-01\\1.jpg",
+  "session_id": "429dc686-852a-4b5f-99e1-55ddbf287bc2",
+  "reference_sha256": "cbb600ea917e06cf61c505a2120759d5d4cd59894c607620d0d54eef5a031d4e",
+  "image_tool_calls": [
+    {
+      "name": "image_edit",
+      "arguments": {
+        "prompt": "Original digital hand-drawn 2D wasteland combat-game art. Wear belongs on every manufactured surface: dents, rust bloom, chipped paint, soot and dirt in seams; no factory-new finish. Shared material palette: soot black, sun-baked ochre, rust orange, dried-blood red and bleached bone; one toxic hazard-yellow accent. Detail clusters at silhouette anchors, never uniform noise. Neutral flat even diffuse light, symmetric material shading, no directional illumination and no baked cast shadow. Heavy rough dry-brush outlines with uneven broken edges; flat opaque painted fills, scratch hatching, only two value steps. Maximum broad-versus-narrow silhouette exaggeration, chunky angular appendages, clustered rivets and bare expanses. Aggressive blunt workshop menace.\nFUSION BRIDGE: Anchor all families to soot #171513, dark earth #39302A, ochre #A37738, rust #B4512D, dried red #6C2427, bone #DDD0A6 and sparse hazard yellow #B4A044. Neutral flat diffuse light only; value changes are pigment and material, never a directional lamp; no baked cast shadow. At a 96-pixel subject read, broken outer contours occupy 1 to 2 pixels, interior marks at most 1 pixel; retain large quiet planes. Cluster heavy wear at joints and impact anchors: chipped paint, soot, exposed metal and rust; natural materials use sparse abrasion and dry broken texture. Ground, surface and decal boundaries have no continuous ink outline: use irregular dirt encroachment, worn rubber and fragmentary worn paint. Original designs only.\n\nACTION: Use case: precise-object-edit. Keep the EXACT supplied car identity, all four wheel positions, red and bone panels, three rear mine discs, rear delivery chute, overhead camera and nose facing RIGHT. Only change the framing: shrink the complete car to HALF its current width and center it in a 1024 square. The entire vehicle including rear chute must occupy no more than the central 50 percent of canvas width. Surround it on EVERY side with a large perfectly uniform SOLID MAGENTA background. There must be at least one QUARTER of canvas width EMPTY on the left and on the right. Do not zoom in to fill the frame. This is a small overhead vehicle sticker on a huge blank magenta square. No shadows, text, extra parts or ground.\nTrue orthographic top-down: camera directly above, roof planes only, no visible front or side body faces. Cars point right, toward screen +x.\nIsolate on a perfectly uniform solid #FF00FF background, without gradient. Leave clear space all around.\nNo franchise references, existing fictional characters or copied vehicles, brands, logos, text, letters, numbers, watermark, clean primaries, factory-new surfaces, photorealism, 3D render, perspective, cast shadows or cropped subject. No occupants inside vehicles. No decorative ground behind isolated subjects.",
+        "image": [
+          "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\raw\\story-rig-reference-v1\\attempt-02\\1.jpg"
+        ],
+        "aspect_ratio": "1:1"
+      }
+    }
+  ],
+  "prompt_verbatim_verified": true,
+  "sha256": "95408ea36786112db7aa07f51df570e49171cebb2f77c2ade8eaecb569f47ae5",
+  "returncode": 0,
+  "elapsed_seconds": 26.094
+}

@@ -1,0 +1,47 @@
+{
+  "asset": "story-rig-reference-v1",
+  "origin": "grok-cli",
+  "model": "grok-4.7",
+  "seed": null,
+  "timestamp": "2026-10-03T00:44:44.202780+00:00",
+  "attempt": 1,
+  "prompt": "Original digital hand-drawn 2D wasteland combat-game art. Wear belongs on every manufactured surface: dents, rust bloom, chipped paint, soot and dirt in seams; no factory-new finish. Shared material palette: soot black, sun-baked ochre, rust orange, dried-blood red and bleached bone; one toxic hazard-yellow accent. Detail clusters at silhouette anchors, never uniform noise. Neutral flat even diffuse light, symmetric material shading, no directional illumination and no baked cast shadow. Heavy rough dry-brush outlines with uneven broken edges; flat opaque painted fills, scratch hatching, only two value steps. Maximum broad-versus-narrow silhouette exaggeration, chunky angular appendages, clustered rivets and bare expanses. Aggressive blunt workshop menace.\nFUSION BRIDGE: Anchor all families to soot #171513, dark earth #39302A, ochre #A37738, rust #B4512D, dried red #6C2427, bone #DDD0A6 and sparse hazard yellow #B4A044. Neutral flat diffuse light only; value changes are pigment and material, never a directional lamp; no baked cast shadow. At a 96-pixel subject read, broken outer contours occupy 1 to 2 pixels, interior marks at most 1 pixel; retain large quiet planes. Cluster heavy wear at joints and impact anchors: chipped paint, soot, exposed metal and rust; natural materials use sparse abrasion and dry broken texture. Ground, surface and decal boundaries have no continuous ink outline: use irregular dirt encroachment, worn rubber and fragmentary worn paint. Original designs only.\n\nACTION: A very basic scavenged compact coupe converted into a rough mine-dispatcher car. Rounded nose at RIGHT, four inset narrow tyres, short patched dried-red hood, dark windshield and a small bone roof patch. At LEFT rear a clearly exposed welded rectangular rack holds three round flat mine canisters and a short rear-facing delivery chute. Modest bent scrap rails, mismatched sheet metal, no turret, no luxury armour or giant engine. One continuous chassis, empty cabin. True overhead roof planes only, main axis horizontal, nose RIGHT, total length to width ratio 2.08:1. Keep ALL pixels within central 66 percent with 17 percent empty margins. One intact reference, no damage variants.\nTrue orthographic top-down: camera directly above, roof planes only, no visible front or side body faces. Cars point right, toward screen +x.\nIsolate on a perfectly uniform solid #FF00FF background, without gradient. Leave clear space all around.\nNo franchise references, existing fictional characters or copied vehicles, brands, logos, text, letters, numbers, watermark, clean primaries, factory-new surfaces, photorealism, 3D render, perspective, cast shadows or cropped subject. No occupants inside vehicles. No decorative ground behind isolated subjects.",
+  "brief": {
+    "id": "story-rig-reference-v1",
+    "class": "Line",
+    "prompt_action": "A very basic scavenged compact coupe converted into a rough mine-dispatcher car. Rounded nose at RIGHT, four inset narrow tyres, short patched dried-red hood, dark windshield and a small bone roof patch. At LEFT rear a clearly exposed welded rectangular rack holds three round flat mine canisters and a short rear-facing delivery chute. Modest bent scrap rails, mismatched sheet metal, no turret, no luxury armour or giant engine. One continuous chassis, empty cabin. True overhead roof planes only, main axis horizontal, nose RIGHT, total length to width ratio 2.08:1. Keep ALL pixels within central 66 percent with 17 percent empty margins. One intact reference, no damage variants.",
+    "size": "1024x1024",
+    "frame": "single",
+    "background_key": "#FF00FF",
+    "count": "1",
+    "status": "ready",
+    "kind": "car",
+    "reference": "",
+    "batch": "story-cars",
+    "approval": "pending",
+    "requires_approval": "",
+    "cell_limit": "128",
+    "style_file": "style-fusion.json",
+    "wave": "V2",
+    "asset_family": "cars",
+    "surface_stack": "",
+    "logical_name": "rig-reference"
+  },
+  "input_hash": "cd945cf25cc6762a75156fe41124c13bfdbb7825de841932dec04b632fcfb8b9",
+  "status": "generated",
+  "image": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\raw\\story-rig-reference-v1\\attempt-01\\1.jpg",
+  "session_id": "7a052dc4-545e-4c90-8a24-109f8371ae54",
+  "image_tool_calls": [
+    {
+      "name": "image_gen",
+      "arguments": {
+        "prompt": "Original digital hand-drawn 2D wasteland combat-game art. Wear belongs on every manufactured surface: dents, rust bloom, chipped paint, soot and dirt in seams; no factory-new finish. Shared material palette: soot black, sun-baked ochre, rust orange, dried-blood red and bleached bone; one toxic hazard-yellow accent. Detail clusters at silhouette anchors, never uniform noise. Neutral flat even diffuse light, symmetric material shading, no directional illumination and no baked cast shadow. Heavy rough dry-brush outlines with uneven broken edges; flat opaque painted fills, scratch hatching, only two value steps. Maximum broad-versus-narrow silhouette exaggeration, chunky angular appendages, clustered rivets and bare expanses. Aggressive blunt workshop menace.\nFUSION BRIDGE: Anchor all families to soot #171513, dark earth #39302A, ochre #A37738, rust #B4512D, dried red #6C2427, bone #DDD0A6 and sparse hazard yellow #B4A044. Neutral flat diffuse light only; value changes are pigment and material, never a directional lamp; no baked cast shadow. At a 96-pixel subject read, broken outer contours occupy 1 to 2 pixels, interior marks at most 1 pixel; retain large quiet planes. Cluster heavy wear at joints and impact anchors: chipped paint, soot, exposed metal and rust; natural materials use sparse abrasion and dry broken texture. Ground, surface and decal boundaries have no continuous ink outline: use irregular dirt encroachment, worn rubber and fragmentary worn paint. Original designs only.\n\nACTION: A very basic scavenged compact coupe converted into a rough mine-dispatcher car. Rounded nose at RIGHT, four inset narrow tyres, short patched dried-red hood, dark windshield and a small bone roof patch. At LEFT rear a clearly exposed welded rectangular rack holds three round flat mine canisters and a short rear-facing delivery chute. Modest bent scrap rails, mismatched sheet metal, no turret, no luxury armour or giant engine. One continuous chassis, empty cabin. True overhead roof planes only, main axis horizontal, nose RIGHT, total length to width ratio 2.08:1. Keep ALL pixels within central 66 percent with 17 percent empty margins. One intact reference, no damage variants.\nTrue orthographic top-down: camera directly above, roof planes only, no visible front or side body faces. Cars point right, toward screen +x.\nIsolate on a perfectly uniform solid #FF00FF background, without gradient. Leave clear space all around.\nNo franchise references, existing fictional characters or copied vehicles, brands, logos, text, letters, numbers, watermark, clean primaries, factory-new surfaces, photorealism, 3D render, perspective, cast shadows or cropped subject. No occupants inside vehicles. No decorative ground behind isolated subjects.",
+        "aspect_ratio": "1:1"
+      }
+    }
+  ],
+  "prompt_verbatim_verified": true,
+  "sha256": "533779b13497df2d42bf4249104e25d266bfba73ba954e08086dfa20923e6032",
+  "returncode": 0,
+  "elapsed_seconds": 26.109
+}

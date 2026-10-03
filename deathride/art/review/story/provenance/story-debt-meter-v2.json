@@ -1,0 +1,51 @@
+{
+  "asset": "story-debt-meter-v2",
+  "origin": "grok-cli",
+  "model": "grok-4.7",
+  "seed": null,
+  "timestamp": "2026-10-03T00:47:28.416088+00:00",
+  "attempt": 1,
+  "prompt": "Original digital hand-drawn 2D wasteland combat-game art. Wear belongs on every manufactured surface: dents, rust bloom, chipped paint, soot and dirt in seams; no factory-new finish. Shared material palette: soot black, sun-baked ochre, rust orange, dried-blood red and bleached bone; one toxic hazard-yellow accent. Detail clusters at silhouette anchors, never uniform noise. Neutral flat even diffuse light, symmetric material shading, no directional illumination and no baked cast shadow. Hand-inked action-comic drawing: thick tapered swooping outer contour, sharp thin interior nib strokes, two hard cel-shadow shapes, limited spatter clustered at stressed corners. Long thrusting wedges, exaggerated forward rams and swept fins. Medium mechanical detail density, hot rust-orange and dried-blood-red paint against soot, small hazard-yellow accents. Frenetic insolent mood, visible brush energy.\nFUSION BRIDGE: Anchor all families to soot #171513, dark earth #39302A, ochre #A37738, rust #B4512D, dried red #6C2427, bone #DDD0A6 and sparse hazard yellow #B4A044. Neutral flat diffuse light only; value changes are pigment and material, never a directional lamp; no baked cast shadow. At a 96-pixel subject read, broken outer contours occupy 1 to 2 pixels, interior marks at most 1 pixel; retain large quiet planes. Cluster heavy wear at joints and impact anchors: chipped paint, soot, exposed metal and rust; natural materials use sparse abrasion and dry broken texture. Ground, surface and decal boundaries have no continuous ink outline: use irregular dirt encroachment, worn rubber and fragmentary worn paint. Original designs only.\n\nACTION: Use case: precise-object-edit. Convert the supplied empty frame into a VERY LONG SHALLOW horizontal debt-meter slot. Keep the same Hot Ink chipped rust/bone rim and tiny yellow corner patch. The outer rim must be FIVE TIMES wider than high. Keep its width at 70 percent of the landscape canvas, but compress the opening HEIGHT to just 15 percent of canvas height. Repaint the rim to retain consistent thickness, never scale/distort the texture. Both interior and exterior perfectly uniform solid magenta. No fill, ticks, divisions, text or additional objects. Large margins on every side.\nIsolate on a perfectly uniform solid #FF00FF background, without gradient. Leave clear space all around.\nNo franchise references, existing fictional characters or copied vehicles, brands, logos, text, letters, numbers, watermark, clean primaries, factory-new surfaces, photorealism, 3D render, perspective, cast shadows or cropped subject. No occupants inside vehicles. No decorative ground behind isolated subjects.",
+  "brief": {
+    "id": "story-debt-meter-v2",
+    "class": "frame-debt",
+    "prompt_action": "Use case: precise-object-edit. Convert the supplied empty frame into a VERY LONG SHALLOW horizontal debt-meter slot. Keep the same Hot Ink chipped rust/bone rim and tiny yellow corner patch. The outer rim must be FIVE TIMES wider than high. Keep its width at 70 percent of the landscape canvas, but compress the opening HEIGHT to just 15 percent of canvas height. Repaint the rim to retain consistent thickness, never scale/distort the texture. Both interior and exterior perfectly uniform solid magenta. No fill, ticks, divisions, text or additional objects. Large margins on every side.",
+    "size": "1536x1024",
+    "frame": "single",
+    "background_key": "#FF00FF",
+    "count": "1",
+    "status": "ready",
+    "kind": "icon",
+    "reference": "art/raw/story-debt-meter-v1/attempt-02/1.jpg",
+    "batch": "story-hud-frames",
+    "approval": "pending",
+    "requires_approval": "",
+    "cell_limit": "128",
+    "style_file": "style-fusion.json",
+    "wave": "V2",
+    "asset_family": "hud-frames",
+    "surface_stack": "",
+    "logical_name": "debt-meter"
+  },
+  "input_hash": "869f63c85beb37c0280d34c8c1c394f5817f208e020163f56f930691f1f9c4f4",
+  "status": "generated",
+  "image": "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\raw\\story-debt-meter-v2\\attempt-01\\1.jpg",
+  "session_id": "ee4cb353-3729-4a78-86ac-bf67e8784f76",
+  "reference_sha256": "c25a33747524233aaa44e2d1136adbd7762a58739bb60a5e9abf5bff53dd9d8c",
+  "image_tool_calls": [
+    {
+      "name": "image_edit",
+      "arguments": {
+        "image": [
+          "C:\\Users\\kazda\\kiro\\firetv-deathride\\deathride\\art\\raw\\story-debt-meter-v1\\attempt-02\\1.jpg"
+        ],
+        "prompt": "Original digital hand-drawn 2D wasteland combat-game art. Wear belongs on every manufactured surface: dents, rust bloom, chipped paint, soot and dirt in seams; no factory-new finish. Shared material palette: soot black, sun-baked ochre, rust orange, dried-blood red and bleached bone; one toxic hazard-yellow accent. Detail clusters at silhouette anchors, never uniform noise. Neutral flat even diffuse light, symmetric material shading, no directional illumination and no baked cast shadow. Hand-inked action-comic drawing: thick tapered swooping outer contour, sharp thin interior nib strokes, two hard cel-shadow shapes, limited spatter clustered at stressed corners. Long thrusting wedges, exaggerated forward rams and swept fins. Medium mechanical detail density, hot rust-orange and dried-blood-red paint against soot, small hazard-yellow accents. Frenetic insolent mood, visible brush energy.\nFUSION BRIDGE: Anchor all families to soot #171513, dark earth #39302A, ochre #A37738, rust #B4512D, dried red #6C2427, bone #DDD0A6 and sparse hazard yellow #B4A044. Neutral flat diffuse light only; value changes are pigment and material, never a directional lamp; no baked cast shadow. At a 96-pixel subject read, broken outer contours occupy 1 to 2 pixels, interior marks at most 1 pixel; retain large quiet planes. Cluster heavy wear at joints and impact anchors: chipped paint, soot, exposed metal and rust; natural materials use sparse abrasion and dry broken texture. Ground, surface and decal boundaries have no continuous ink outline: use irregular dirt encroachment, worn rubber and fragmentary worn paint. Original designs only.\n\nACTION: Use case: precise-object-edit. Convert the supplied empty frame into a VERY LONG SHALLOW horizontal debt-meter slot. Keep the same Hot Ink chipped rust/bone rim and tiny yellow corner patch. The outer rim must be FIVE TIMES wider than high. Keep its width at 70 percent of the landscape canvas, but compress the opening HEIGHT to just 15 percent of canvas height. Repaint the rim to retain consistent thickness, never scale/distort the texture. Both interior and exterior perfectly uniform solid magenta. No fill, ticks, divisions, text or additional objects. Large margins on every side.\nIsolate on a perfectly uniform solid #FF00FF background, without gradient. Leave clear space all around.\nNo franchise references, existing fictional characters or copied vehicles, brands, logos, text, letters, numbers, watermark, clean primaries, factory-new surfaces, photorealism, 3D render, perspective, cast shadows or cropped subject. No occupants inside vehicles. No decorative ground behind isolated subjects.",
+        "aspect_ratio": "3:2"
+      }
+    }
+  ],
+  "prompt_verbatim_verified": true,
+  "sha256": "6ce7198f6118b96f3f877adf3cf52bab1358587c6e524c8956e1c463b23c62a4",
+  "returncode": 0,
+  "elapsed_seconds": 26.953
+}
