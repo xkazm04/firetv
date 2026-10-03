@@ -1,0 +1,23 @@
+{
+  "scope": "Physics-only exploratory surrogates, not production rules or legal-shop acceptance. All outcomes and failures retained. No higher-than-10 caps.",
+  "seedNamespace": 103070003,
+  "seedsPerCell": 32,
+  "pairedGridRotations": 6,
+  "racesPerCandidate": 5760,
+  "stockLineAccelerationDelta": -1,
+  "candidates": {
+    "relative2": "Bonuses at most 1 speed point and 2 points in every other stat, under existing global ceiling.",
+    "relative1": "Bonuses at most 1 point in every stat, under existing global ceiling.",
+    "selective": "Line speed <=8; Bastion grip <=9; Quill and Kestrel speed <=9; other caps unchanged.",
+    "fractional": "Line speed <=8.75; Bastion grip <=9; Quill and Kestrel speed <=9.5. Physics-spec-only surrogate; requires real fractional stat/offer authority if selected. Same stock Line acceleration -1."
+  },
+  "acceptance": "A candidate must first pass actual class wins / races and best/worst-course diagnostics. If selected, author shared data/rules, validate the real legal shop, rerun independent seed acceptance and fresh campaign cohorts. A physics surrogate alone cannot pass.",
+  "control": "Same 32 blocks as corrected before roster. All 10 classes / stock and developed / 3 courses / 6 grid shifts. Line stock launch change is separately visible in the stock rows.",
+  "priority": "Preserve class weaknesses and useful choices; do not fit a PR target by granting extra power.",
+  "followups": {
+    "line-half": "Tier 0 only; 64 blocks ? 6 rotations ? 3 courses ? stock/developed; speed cap 8.5 failed at Line developed 56.640625%.",
+    "line-quarter": "Same 64-block tier-0 cross with speed cap 8.25; stock Line 52.0182%, developed 51.1068%; both best/worst checks pass."
+  },
+  "rejectedLaunchCandidate": "Global max10 / slots3; Line speed8.25 and stock acceleration2; Bastion grip9; Quill/Kestrel speed9.5. Real shared stat/PR/offer authority implemented; acceptance still pending.",
+  "selectedCandidate": "candidate-v5: global max10 / slots3; Line speed8.25 ceiling with stock speed5.5 acceleration3 handling3; Bastion grip9; Quill/Kestrel speed9.5. Real shared fractional base/effective stats; whole-credit prices ceil. Mechanic rig fixed to original body. Full acceptance pending."
+}

@@ -1,0 +1,1239 @@
+{
+  "completeCross": true,
+  "actualClassSlotCross": true,
+  "pairedRotations": true,
+  "seedDiversity": true,
+  "allResolved": true,
+  "threshold": 0.55,
+  "metric": "Class wins / all races; range 0..1; fair share .5 for each symmetric two-class tier; declared course weights",
+  "weights": {
+    "technical": 0.25,
+    "straight": 0.5,
+    "loose": 0.25
+  },
+  "tiers": [
+    {
+      "tier": 0,
+      "build": "stock",
+      "mixedWinnerShare": {
+        "Line": 0.5208333333333334,
+        "Needle": 0.47916666666666663
+      },
+      "courses": {
+        "technical": {
+          "races": 192,
+          "wins": {
+            "Needle": 176,
+            "Line": 16
+          },
+          "winnerShare": {
+            "Line": 0.08333333333333333,
+            "Needle": 0.9166666666666666
+          },
+          "meanFinishSeconds": {
+            "Line": 50.69739583333174,
+            "Needle": 44.113194444443224
+          },
+          "rotations": {
+            "0": {
+              "Needle": 32
+            },
+            "1": {
+              "Needle": 32
+            },
+            "2": {
+              "Needle": 32
+            },
+            "3": {
+              "Needle": 22,
+              "Line": 10
+            },
+            "4": {
+              "Needle": 26,
+              "Line": 6
+            },
+            "5": {
+              "Needle": 32
+            }
+          }
+        },
+        "straight": {
+          "races": 192,
+          "wins": {
+            "Line": 181,
+            "Needle": 11
+          },
+          "winnerShare": {
+            "Line": 0.9427083333333334,
+            "Needle": 0.057291666666666664
+          },
+          "meanFinishSeconds": {
+            "Line": 232.21684027785471,
+            "Needle": 242.50541087971476
+          },
+          "rotations": {
+            "0": {
+              "Line": 29,
+              "Needle": 3
+            },
+            "1": {
+              "Line": 31,
+              "Needle": 1
+            },
+            "2": {
+              "Line": 32
+            },
+            "3": {
+              "Line": 31,
+              "Needle": 1
+            },
+            "4": {
+              "Line": 29,
+              "Needle": 3
+            },
+            "5": {
+              "Line": 29,
+              "Needle": 3
+            }
+          }
+        },
+        "loose": {
+          "races": 192,
+          "wins": {
+            "Needle": 170,
+            "Line": 22
+          },
+          "winnerShare": {
+            "Line": 0.11458333333333333,
+            "Needle": 0.8854166666666666
+          },
+          "meanFinishSeconds": {
+            "Line": 84.06614583332984,
+            "Needle": 76.48208912036732
+          },
+          "rotations": {
+            "0": {
+              "Needle": 32
+            },
+            "1": {
+              "Needle": 32
+            },
+            "2": {
+              "Needle": 31,
+              "Line": 1
+            },
+            "3": {
+              "Needle": 20,
+              "Line": 12
+            },
+            "4": {
+              "Line": 9,
+              "Needle": 23
+            },
+            "5": {
+              "Needle": 32
+            }
+          }
+        }
+      },
+      "dominancePass": true,
+      "bestAndWorstPass": true
+    },
+    {
+      "tier": 0,
+      "build": "developed",
+      "mixedWinnerShare": {
+        "Line": 0.5729166666666666,
+        "Needle": 0.42708333333333337
+      },
+      "courses": {
+        "technical": {
+          "races": 192,
+          "wins": {
+            "Needle": 173,
+            "Line": 19
+          },
+          "winnerShare": {
+            "Line": 0.09895833333333333,
+            "Needle": 0.9010416666666666
+          },
+          "meanFinishSeconds": {
+            "Line": 47.61406249999858,
+            "Needle": 42.476967592591464
+          },
+          "rotations": {
+            "0": {
+              "Needle": 32
+            },
+            "1": {
+              "Needle": 32
+            },
+            "2": {
+              "Needle": 32
+            },
+            "3": {
+              "Needle": 21,
+              "Line": 11
+            },
+            "4": {
+              "Needle": 25,
+              "Line": 7
+            },
+            "5": {
+              "Needle": 31,
+              "Line": 1
+            }
+          }
+        },
+        "straight": {
+          "races": 192,
+          "wins": {
+            "Line": 190,
+            "Needle": 2
+          },
+          "winnerShare": {
+            "Line": 0.9895833333333334,
+            "Needle": 0.010416666666666666
+          },
+          "meanFinishSeconds": {
+            "Line": 215.5953414352489,
+            "Needle": 228.23981481488858
+          },
+          "rotations": {
+            "0": {
+              "Line": 30,
+              "Needle": 2
+            },
+            "1": {
+              "Line": 32
+            },
+            "2": {
+              "Line": 32
+            },
+            "3": {
+              "Line": 32
+            },
+            "4": {
+              "Line": 32
+            },
+            "5": {
+              "Line": 32
+            }
+          }
+        },
+        "loose": {
+          "races": 192,
+          "wins": {
+            "Needle": 151,
+            "Line": 41
+          },
+          "winnerShare": {
+            "Line": 0.21354166666666666,
+            "Needle": 0.7864583333333334
+          },
+          "meanFinishSeconds": {
+            "Line": 77.90914351851538,
+            "Needle": 73.88110532407116
+          },
+          "rotations": {
+            "0": {
+              "Needle": 32
+            },
+            "1": {
+              "Needle": 32
+            },
+            "2": {
+              "Needle": 27,
+              "Line": 5
+            },
+            "3": {
+              "Line": 19,
+              "Needle": 13
+            },
+            "4": {
+              "Line": 16,
+              "Needle": 16
+            },
+            "5": {
+              "Needle": 31,
+              "Line": 1
+            }
+          }
+        }
+      },
+      "dominancePass": false,
+      "bestAndWorstPass": true
+    },
+    {
+      "tier": 1,
+      "build": "stock",
+      "mixedWinnerShare": {
+        "Bastion": 0.4817708333333333,
+        "Trail": 0.5182291666666667
+      },
+      "courses": {
+        "technical": {
+          "races": 192,
+          "wins": {
+            "Trail": 192
+          },
+          "winnerShare": {
+            "Bastion": 0.0,
+            "Trail": 1.0
+          },
+          "meanFinishSeconds": {
+            "Bastion": 57.62902199073876,
+            "Trail": 40.92248263888785
+          },
+          "rotations": {
+            "0": {
+              "Trail": 32
+            },
+            "1": {
+              "Trail": 32
+            },
+            "2": {
+              "Trail": 32
+            },
+            "3": {
+              "Trail": 32
+            },
+            "4": {
+              "Trail": 32
+            },
+            "5": {
+              "Trail": 32
+            }
+          }
+        },
+        "straight": {
+          "races": 192,
+          "wins": {
+            "Bastion": 185,
+            "Trail": 7
+          },
+          "winnerShare": {
+            "Bastion": 0.9635416666666666,
+            "Trail": 0.036458333333333336
+          },
+          "meanFinishSeconds": {
+            "Bastion": 209.6337094907997,
+            "Trail": 228.92171014500184
+          },
+          "rotations": {
+            "0": {
+              "Bastion": 31,
+              "Trail": 1
+            },
+            "1": {
+              "Bastion": 32
+            },
+            "2": {
+              "Bastion": 32
+            },
+            "3": {
+              "Bastion": 26,
+              "Trail": 6
+            },
+            "4": {
+              "Bastion": 32
+            },
+            "5": {
+              "Bastion": 32
+            }
+          }
+        },
+        "loose": {
+          "races": 192,
+          "wins": {
+            "Trail": 192
+          },
+          "winnerShare": {
+            "Bastion": 0.0,
+            "Trail": 1.0
+          },
+          "meanFinishSeconds": {
+            "Bastion": 87.82161458332963,
+            "Trail": 62.95734953703475
+          },
+          "rotations": {
+            "0": {
+              "Trail": 32
+            },
+            "1": {
+              "Trail": 32
+            },
+            "2": {
+              "Trail": 32
+            },
+            "3": {
+              "Trail": 32
+            },
+            "4": {
+              "Trail": 32
+            },
+            "5": {
+              "Trail": 32
+            }
+          }
+        }
+      },
+      "dominancePass": true,
+      "bestAndWorstPass": true
+    },
+    {
+      "tier": 1,
+      "build": "developed",
+      "mixedWinnerShare": {
+        "Bastion": 0.5,
+        "Trail": 0.5
+      },
+      "courses": {
+        "technical": {
+          "races": 192,
+          "wins": {
+            "Trail": 192
+          },
+          "winnerShare": {
+            "Bastion": 0.0,
+            "Trail": 1.0
+          },
+          "meanFinishSeconds": {
+            "Bastion": 53.953240740738956,
+            "Trail": 39.50844907407312
+          },
+          "rotations": {
+            "0": {
+              "Trail": 32
+            },
+            "1": {
+              "Trail": 32
+            },
+            "2": {
+              "Trail": 32
+            },
+            "3": {
+              "Trail": 32
+            },
+            "4": {
+              "Trail": 32
+            },
+            "5": {
+              "Trail": 32
+            }
+          }
+        },
+        "straight": {
+          "races": 192,
+          "wins": {
+            "Bastion": 192
+          },
+          "winnerShare": {
+            "Bastion": 1.0,
+            "Trail": 0.0
+          },
+          "meanFinishSeconds": {
+            "Bastion": 194.30361689819492,
+            "Trail": 214.61765217397598
+          },
+          "rotations": {
+            "0": {
+              "Bastion": 32
+            },
+            "1": {
+              "Bastion": 32
+            },
+            "2": {
+              "Bastion": 32
+            },
+            "3": {
+              "Bastion": 32
+            },
+            "4": {
+              "Bastion": 32
+            },
+            "5": {
+              "Bastion": 32
+            }
+          }
+        },
+        "loose": {
+          "races": 192,
+          "wins": {
+            "Trail": 192
+          },
+          "winnerShare": {
+            "Bastion": 0.0,
+            "Trail": 1.0
+          },
+          "meanFinishSeconds": {
+            "Bastion": 80.13735532407081,
+            "Trail": 62.31385995370145
+          },
+          "rotations": {
+            "0": {
+              "Trail": 32
+            },
+            "1": {
+              "Trail": 32
+            },
+            "2": {
+              "Trail": 32
+            },
+            "3": {
+              "Trail": 32
+            },
+            "4": {
+              "Trail": 32
+            },
+            "5": {
+              "Trail": 32
+            }
+          }
+        }
+      },
+      "dominancePass": true,
+      "bestAndWorstPass": true
+    },
+    {
+      "tier": 2,
+      "build": "stock",
+      "mixedWinnerShare": {
+        "Comet": 0.5078124999999999,
+        "Flint": 0.4921875
+      },
+      "courses": {
+        "technical": {
+          "races": 192,
+          "wins": {
+            "Flint": 186,
+            "Comet": 6
+          },
+          "winnerShare": {
+            "Comet": 0.03125,
+            "Flint": 0.96875
+          },
+          "meanFinishSeconds": {
+            "Comet": 50.14592013888733,
+            "Flint": 40.87468171296192
+          },
+          "rotations": {
+            "0": {
+              "Flint": 28,
+              "Comet": 4
+            },
+            "1": {
+              "Flint": 30,
+              "Comet": 2
+            },
+            "2": {
+              "Flint": 32
+            },
+            "3": {
+              "Flint": 32
+            },
+            "4": {
+              "Flint": 32
+            },
+            "5": {
+              "Flint": 32
+            }
+          }
+        },
+        "straight": {
+          "races": 192,
+          "wins": {
+            "Comet": 191,
+            "Flint": 1
+          },
+          "winnerShare": {
+            "Comet": 0.9947916666666666,
+            "Flint": 0.005208333333333333
+          },
+          "meanFinishSeconds": {
+            "Comet": 188.89411594207147,
+            "Flint": 214.79067944257176
+          },
+          "rotations": {
+            "0": {
+              "Comet": 32
+            },
+            "1": {
+              "Comet": 32
+            },
+            "2": {
+              "Comet": 32
+            },
+            "3": {
+              "Comet": 31,
+              "Flint": 1
+            },
+            "4": {
+              "Comet": 32
+            },
+            "5": {
+              "Comet": 32
+            }
+          }
+        },
+        "loose": {
+          "races": 192,
+          "wins": {
+            "Flint": 190,
+            "Comet": 2
+          },
+          "winnerShare": {
+            "Comet": 0.010416666666666666,
+            "Flint": 0.9895833333333334
+          },
+          "meanFinishSeconds": {
+            "Comet": 79.46406249999677,
+            "Flint": 67.78070023147892
+          },
+          "rotations": {
+            "0": {
+              "Flint": 31,
+              "Comet": 1
+            },
+            "1": {
+              "Flint": 31,
+              "Comet": 1
+            },
+            "2": {
+              "Flint": 32
+            },
+            "3": {
+              "Flint": 32
+            },
+            "4": {
+              "Flint": 32
+            },
+            "5": {
+              "Flint": 32
+            }
+          }
+        }
+      },
+      "dominancePass": true,
+      "bestAndWorstPass": true
+    },
+    {
+      "tier": 2,
+      "build": "developed",
+      "mixedWinnerShare": {
+        "Comet": 0.5065104166666666,
+        "Flint": 0.49348958333333337
+      },
+      "courses": {
+        "technical": {
+          "races": 192,
+          "wins": {
+            "Flint": 189,
+            "Comet": 3
+          },
+          "winnerShare": {
+            "Comet": 0.015625,
+            "Flint": 0.984375
+          },
+          "meanFinishSeconds": {
+            "Comet": 48.25147569444299,
+            "Flint": 39.519936342591635
+          },
+          "rotations": {
+            "0": {
+              "Flint": 30,
+              "Comet": 2
+            },
+            "1": {
+              "Comet": 1,
+              "Flint": 31
+            },
+            "2": {
+              "Flint": 32
+            },
+            "3": {
+              "Flint": 32
+            },
+            "4": {
+              "Flint": 32
+            },
+            "5": {
+              "Flint": 32
+            }
+          }
+        },
+        "straight": {
+          "races": 192,
+          "wins": {
+            "Comet": 192
+          },
+          "winnerShare": {
+            "Comet": 1.0,
+            "Flint": 0.0
+          },
+          "meanFinishSeconds": {
+            "Comet": 187.16102430559664,
+            "Flint": 202.58787085520171
+          },
+          "rotations": {
+            "0": {
+              "Comet": 32
+            },
+            "1": {
+              "Comet": 32
+            },
+            "2": {
+              "Comet": 32
+            },
+            "3": {
+              "Comet": 32
+            },
+            "4": {
+              "Comet": 32
+            },
+            "5": {
+              "Comet": 32
+            }
+          }
+        },
+        "loose": {
+          "races": 192,
+          "wins": {
+            "Flint": 190,
+            "Comet": 2
+          },
+          "winnerShare": {
+            "Comet": 0.010416666666666666,
+            "Flint": 0.9895833333333334
+          },
+          "meanFinishSeconds": {
+            "Comet": 76.2462094907377,
+            "Flint": 65.1765335648124
+          },
+          "rotations": {
+            "0": {
+              "Flint": 30,
+              "Comet": 2
+            },
+            "1": {
+              "Flint": 32
+            },
+            "2": {
+              "Flint": 32
+            },
+            "3": {
+              "Flint": 32
+            },
+            "4": {
+              "Flint": 32
+            },
+            "5": {
+              "Flint": 32
+            }
+          }
+        }
+      },
+      "dominancePass": true,
+      "bestAndWorstPass": true
+    },
+    {
+      "tier": 3,
+      "build": "stock",
+      "mixedWinnerShare": {
+        "Quill": 0.4518229166666667,
+        "Vandal": 0.5481770833333333
+      },
+      "courses": {
+        "technical": {
+          "races": 192,
+          "wins": {
+            "Quill": 184,
+            "Vandal": 8
+          },
+          "winnerShare": {
+            "Quill": 0.9583333333333334,
+            "Vandal": 0.041666666666666664
+          },
+          "meanFinishSeconds": {
+            "Quill": 38.835937499999076,
+            "Vandal": 45.40057870370241
+          },
+          "rotations": {
+            "0": {
+              "Quill": 32
+            },
+            "1": {
+              "Quill": 32
+            },
+            "2": {
+              "Quill": 31,
+              "Vandal": 1
+            },
+            "3": {
+              "Quill": 28,
+              "Vandal": 4
+            },
+            "4": {
+              "Quill": 29,
+              "Vandal": 3
+            },
+            "5": {
+              "Quill": 32
+            }
+          }
+        },
+        "straight": {
+          "races": 192,
+          "wins": {
+            "Vandal": 192
+          },
+          "winnerShare": {
+            "Quill": 0.0,
+            "Vandal": 1.0
+          },
+          "meanFinishSeconds": {
+            "Quill": 201.76538461543734,
+            "Vandal": 180.6945891204063
+          },
+          "rotations": {
+            "0": {
+              "Vandal": 32
+            },
+            "1": {
+              "Vandal": 32
+            },
+            "2": {
+              "Vandal": 32
+            },
+            "3": {
+              "Vandal": 32
+            },
+            "4": {
+              "Vandal": 32
+            },
+            "5": {
+              "Vandal": 32
+            }
+          }
+        },
+        "loose": {
+          "races": 192,
+          "wins": {
+            "Quill": 163,
+            "Vandal": 29
+          },
+          "winnerShare": {
+            "Quill": 0.8489583333333334,
+            "Vandal": 0.15104166666666666
+          },
+          "meanFinishSeconds": {
+            "Quill": 66.14939236110864,
+            "Vandal": 72.38614004629348
+          },
+          "rotations": {
+            "0": {
+              "Quill": 32
+            },
+            "1": {
+              "Quill": 32
+            },
+            "2": {
+              "Quill": 30,
+              "Vandal": 2
+            },
+            "3": {
+              "Vandal": 13,
+              "Quill": 19
+            },
+            "4": {
+              "Quill": 19,
+              "Vandal": 13
+            },
+            "5": {
+              "Quill": 31,
+              "Vandal": 1
+            }
+          }
+        }
+      },
+      "dominancePass": true,
+      "bestAndWorstPass": true
+    },
+    {
+      "tier": 3,
+      "build": "developed",
+      "mixedWinnerShare": {
+        "Quill": 0.453125,
+        "Vandal": 0.546875
+      },
+      "courses": {
+        "technical": {
+          "races": 192,
+          "wins": {
+            "Quill": 179,
+            "Vandal": 13
+          },
+          "winnerShare": {
+            "Quill": 0.9322916666666666,
+            "Vandal": 0.06770833333333333
+          },
+          "meanFinishSeconds": {
+            "Quill": 37.60353009259174,
+            "Vandal": 43.33064236110993
+          },
+          "rotations": {
+            "0": {
+              "Quill": 32
+            },
+            "1": {
+              "Quill": 32
+            },
+            "2": {
+              "Quill": 31,
+              "Vandal": 1
+            },
+            "3": {
+              "Quill": 24,
+              "Vandal": 8
+            },
+            "4": {
+              "Quill": 28,
+              "Vandal": 4
+            },
+            "5": {
+              "Quill": 32
+            }
+          }
+        },
+        "straight": {
+          "races": 192,
+          "wins": {
+            "Vandal": 192
+          },
+          "winnerShare": {
+            "Quill": 0.0,
+            "Vandal": 1.0
+          },
+          "meanFinishSeconds": {
+            "Quill": 191.47592267139777,
+            "Vandal": 180.11820023151697
+          },
+          "rotations": {
+            "0": {
+              "Vandal": 32
+            },
+            "1": {
+              "Vandal": 32
+            },
+            "2": {
+              "Vandal": 32
+            },
+            "3": {
+              "Vandal": 32
+            },
+            "4": {
+              "Vandal": 32
+            },
+            "5": {
+              "Vandal": 32
+            }
+          }
+        },
+        "loose": {
+          "races": 192,
+          "wins": {
+            "Quill": 169,
+            "Vandal": 23
+          },
+          "winnerShare": {
+            "Quill": 0.8802083333333334,
+            "Vandal": 0.11979166666666667
+          },
+          "meanFinishSeconds": {
+            "Quill": 63.83208912036803,
+            "Vandal": 69.31736111110847
+          },
+          "rotations": {
+            "0": {
+              "Quill": 32
+            },
+            "1": {
+              "Quill": 32
+            },
+            "2": {
+              "Quill": 28,
+              "Vandal": 4
+            },
+            "3": {
+              "Quill": 23,
+              "Vandal": 9
+            },
+            "4": {
+              "Quill": 22,
+              "Vandal": 10
+            },
+            "5": {
+              "Quill": 32
+            }
+          }
+        }
+      },
+      "dominancePass": true,
+      "bestAndWorstPass": true
+    },
+    {
+      "tier": 4,
+      "build": "stock",
+      "mixedWinnerShare": {
+        "Bulwark": 0.5234375,
+        "Kestrel": 0.4765625
+      },
+      "courses": {
+        "technical": {
+          "races": 192,
+          "wins": {
+            "Kestrel": 179,
+            "Bulwark": 13
+          },
+          "winnerShare": {
+            "Bulwark": 0.06770833333333333,
+            "Kestrel": 0.9322916666666666
+          },
+          "meanFinishSeconds": {
+            "Bulwark": 46.88052662036899,
+            "Kestrel": 38.45049189814725
+          },
+          "rotations": {
+            "0": {
+              "Kestrel": 32
+            },
+            "1": {
+              "Kestrel": 32
+            },
+            "2": {
+              "Kestrel": 31,
+              "Bulwark": 1
+            },
+            "3": {
+              "Kestrel": 23,
+              "Bulwark": 9
+            },
+            "4": {
+              "Kestrel": 29,
+              "Bulwark": 3
+            },
+            "5": {
+              "Kestrel": 32
+            }
+          }
+        },
+        "straight": {
+          "races": 192,
+          "wins": {
+            "Bulwark": 189,
+            "Kestrel": 3
+          },
+          "winnerShare": {
+            "Bulwark": 0.984375,
+            "Kestrel": 0.015625
+          },
+          "meanFinishSeconds": {
+            "Bulwark": 179.863859953739,
+            "Kestrel": 193.69576719581346
+          },
+          "rotations": {
+            "0": {
+              "Bulwark": 32
+            },
+            "1": {
+              "Bulwark": 29,
+              "Kestrel": 3
+            },
+            "2": {
+              "Bulwark": 32
+            },
+            "3": {
+              "Bulwark": 32
+            },
+            "4": {
+              "Bulwark": 32
+            },
+            "5": {
+              "Bulwark": 32
+            }
+          }
+        },
+        "loose": {
+          "races": 192,
+          "wins": {
+            "Kestrel": 181,
+            "Bulwark": 11
+          },
+          "winnerShare": {
+            "Bulwark": 0.057291666666666664,
+            "Kestrel": 0.9427083333333334
+          },
+          "meanFinishSeconds": {
+            "Bulwark": 72.00376157407128,
+            "Kestrel": 62.50879629629404
+          },
+          "rotations": {
+            "0": {
+              "Kestrel": 32
+            },
+            "1": {
+              "Kestrel": 32
+            },
+            "2": {
+              "Kestrel": 30,
+              "Bulwark": 2
+            },
+            "3": {
+              "Kestrel": 26,
+              "Bulwark": 6
+            },
+            "4": {
+              "Kestrel": 29,
+              "Bulwark": 3
+            },
+            "5": {
+              "Kestrel": 32
+            }
+          }
+        }
+      },
+      "dominancePass": true,
+      "bestAndWorstPass": true
+    },
+    {
+      "tier": 4,
+      "build": "developed",
+      "mixedWinnerShare": {
+        "Bulwark": 0.4609375,
+        "Kestrel": 0.5390625
+      },
+      "courses": {
+        "technical": {
+          "races": 192,
+          "wins": {
+            "Kestrel": 166,
+            "Bulwark": 26
+          },
+          "winnerShare": {
+            "Bulwark": 0.13541666666666666,
+            "Kestrel": 0.8645833333333334
+          },
+          "meanFinishSeconds": {
+            "Bulwark": 44.564236111109864,
+            "Kestrel": 38.995804398147214
+          },
+          "rotations": {
+            "0": {
+              "Kestrel": 32
+            },
+            "1": {
+              "Kestrel": 32
+            },
+            "2": {
+              "Kestrel": 31,
+              "Bulwark": 1
+            },
+            "3": {
+              "Kestrel": 18,
+              "Bulwark": 14
+            },
+            "4": {
+              "Bulwark": 6,
+              "Kestrel": 26
+            },
+            "5": {
+              "Kestrel": 27,
+              "Bulwark": 5
+            }
+          }
+        },
+        "straight": {
+          "races": 192,
+          "wins": {
+            "Bulwark": 149,
+            "Kestrel": 43
+          },
+          "winnerShare": {
+            "Bulwark": 0.7760416666666666,
+            "Kestrel": 0.22395833333333334
+          },
+          "meanFinishSeconds": {
+            "Bulwark": 178.95390625003455,
+            "Kestrel": 183.34024103472353
+          },
+          "rotations": {
+            "0": {
+              "Bulwark": 21,
+              "Kestrel": 11
+            },
+            "1": {
+              "Bulwark": 19,
+              "Kestrel": 13
+            },
+            "2": {
+              "Bulwark": 32
+            },
+            "3": {
+              "Bulwark": 26,
+              "Kestrel": 6
+            },
+            "4": {
+              "Bulwark": 28,
+              "Kestrel": 4
+            },
+            "5": {
+              "Kestrel": 9,
+              "Bulwark": 23
+            }
+          }
+        },
+        "loose": {
+          "races": 192,
+          "wins": {
+            "Kestrel": 162,
+            "Bulwark": 30
+          },
+          "winnerShare": {
+            "Bulwark": 0.15625,
+            "Kestrel": 0.84375
+          },
+          "meanFinishSeconds": {
+            "Bulwark": 68.98110532407145,
+            "Kestrel": 62.56984953703477
+          },
+          "rotations": {
+            "0": {
+              "Kestrel": 32
+            },
+            "1": {
+              "Kestrel": 32
+            },
+            "2": {
+              "Kestrel": 25,
+              "Bulwark": 7
+            },
+            "3": {
+              "Bulwark": 14,
+              "Kestrel": 18
+            },
+            "4": {
+              "Kestrel": 26,
+              "Bulwark": 6
+            },
+            "5": {
+              "Kestrel": 29,
+              "Bulwark": 3
+            }
+          }
+        }
+      },
+      "dominancePass": true,
+      "bestAndWorstPass": true
+    }
+  ]
+}

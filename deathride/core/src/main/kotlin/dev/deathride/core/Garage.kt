@@ -75,7 +75,7 @@ class Profile(val id: String,val withRivals: Boolean=true) {
     }
 }
 fun validProfileId(id: String)=id.matches(Regex("[A-Za-z0-9_-]{1,64}"))
-data class Offer(val partIndex: Int,val tier: Int,val nextTier: Int,val price: Int,val available: Boolean,val reason: String,val before: IntArray,val after: IntArray) {
+data class Offer(val partIndex: Int,val tier: Int,val nextTier: Int,val price: Int,val available: Boolean,val reason: String,val before: DoubleArray,val after: DoubleArray) {
     val json get(): String {
         val p=Parts.all[partIndex]
         return "{\"id\":\"${p.id}\",\"name\":\"${p.name}\",\"description\":\"${p.description}\",\"tier\":$tier,\"nextTier\":$nextTier,\"maxTier\":${p.maxTier},\"price\":$price,\"available\":$available,\"reason\":\"$reason\",\"before\":[${before.joinToString(",")}],\"after\":[${after.joinToString(",")}]}"
@@ -87,7 +87,7 @@ object Garage {
         val car=CarCatalog.all[profile.selectedCar];val part=Parts.all[partIndex];val tier=profile.tier(profile.selectedCar,partIndex)
         val old=profile.bonuses();val updated=old.copyOf()
         if(tier<part.maxTier)for(i in updated.indices)updated[i]+=part.bonuses[i]
-        val before=IntArray(old.size){car.stat(CarCatalog.statNames[it],old)};val after=IntArray(old.size){car.stat(CarCatalog.statNames[it],updated)}
+        val before=DoubleArray(old.size){car.stat(CarCatalog.statNames[it],old)};val after=DoubleArray(old.size){car.stat(CarCatalog.statNames[it],updated)}
         val price=part.price(tier+1,priceScale)
         val useful=before.indices.any { part.bonuses[it]>0 && after[it]>before[it] }
         val lock=Career.partLock(profile,partIndex,tier+1)

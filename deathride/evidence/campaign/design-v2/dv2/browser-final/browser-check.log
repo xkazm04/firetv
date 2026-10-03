@@ -1,0 +1,20 @@
+{
+  "browser": "Chromium headless, 896 x 414, mobile touch emulation; not a physical phone",
+  "checks": [
+    "two browser contexts pair",
+    "simultaneous steer + throttle via CDP touch",
+    "release steer holds gas",
+    "release gas clears throttle",
+    "reload reclaims original car",
+    "start/countdown/race",
+    "phone white and one TV flash",
+    "lobby command",
+    "zero page exceptions"
+  ],
+  "capabilities": {
+    "secureContext": true,
+    "wakeLock": true,
+    "fullscreen": true
+  },
+  "errors": []
+}

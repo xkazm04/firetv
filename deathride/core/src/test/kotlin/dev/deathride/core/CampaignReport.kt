@@ -160,7 +160,7 @@ private fun campaignDuel(dir:File,samples:Int,namespace:Int) {
         while(w.resolved<w.entrantCount && w.seconds<w.raceLimitSeconds)w.step(frames)
         if(sample==0){val replay=make();repeat(w.steps){replay.step(frames)};check(replay.stateHash()==w.stateHash())}
         val c=w.cars[lead];val win=Career.qualifies(c,w);val early=w.combat.wrecked(lead)&&w.combat.wreckSeconds[lead]<CampaignRules["duelOpeningSeconds"]
-        rows[index]=listOf(skill,rotation,sample,seed,win,w.duelDraw,early,w.seconds,w.combat.health(lead),w.combat.health(1-lead),c.ability.activation,w.combat.shots[Weapons.MINE],w.combat.hits[DamageKind.MINE.ordinal],w.combat.repairPickupsTaken[lead],w.combat.repairPickupsTaken[1-lead],w.combat.oneShotKills,w.stateHash(),c.lap.laps,w.cars[1-lead].lap.laps,PowerRating.of(CarCatalog.all[DeathDuel.rigIndex]),PowerRating.of(CarCatalog.all[boss.selectedCar],boss.bonuses())).joinToString(",")
+        rows[index]=listOf(skill,rotation,sample,seed,win,w.duelDraw,early,w.seconds,w.combat.health(lead),w.combat.health(1-lead),c.ability.activation,w.combat.shots[Weapons.MINE],w.combat.hits[DamageKind.MINE.ordinal],w.combat.repairPickupsTaken[lead],w.combat.repairPickupsTaken[1-lead],w.combat.oneShotKills,w.stateHash(),c.lap.laps,w.cars[1-lead].lap.laps,DeathDuel.rigRating,PowerRating.of(CarCatalog.all[boss.selectedCar],boss.bonuses())).joinToString(",")
     }
     output.writeText("skill,rotation,sample,seed,win,draw,early,seconds,hp,bossHp,dispatches,mineShots,mineHits,repairs,bossRepairs,oneShots,hash,laps,bossLaps,rigPR,bossPR\n"+rows.joinToString("\n",postfix="\n"))
     println("Duels ${rows.size}: "+rows.map{it!!.split(',')}.groupBy{it[0]}.mapValues{(_,v)->"wins ${v.count{it[4]=="true"}}, draws ${v.count{it[5]=="true"}}, early ${v.count{it[6]=="true"}}, mean ${v.map{it[7].toDouble()}.average()}s"})
@@ -211,7 +211,7 @@ private fun campaignLedgers(dir:File,count:Int) {
             RivalEconomy.prepare(p)
             if(firstUpgrade<0 && p.tiers.any{it>0})firstUpgrade=races
             if(firstClub<0 && p.owned.indices.any{p.owned[it] && CarCatalog.all[it].tierRank==1})firstClub=races
-            val pr=if(round==34)PowerRating.of(CarCatalog.all[DeathDuel.rigIndex]) else PowerRating.of(CarCatalog.all[p.selectedCar],p.bonuses())
+            val pr=if(round==34)DeathDuel.rigRating else PowerRating.of(CarCatalog.all[p.selectedCar],p.bonuses())
             val bossProfile=p.rivalProfiles[Career.bossIndex(round)];val bossPR=PowerRating.of(CarCatalog.all[bossProfile.selectedCar],bossProfile.bonuses())
             val parts=p.tiers.sum();val nextPrice=Parts.all.indices.map{Garage.offer(p,it)}.filter{it.available || it.reason=="Earn more credits"}.minOfOrNull{it.price}?:0
             val field=RivalEconomy.fieldRating(p);val ratio=pr/field;var gap=0.0;val result:CampaignOutcome

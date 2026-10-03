@@ -18,7 +18,7 @@ class CampaignBalanceTest {
         assertTrue(CareerCurve.errors(CareerCurve.all.dropLast(1)).any{"ordered event" in it})
         val p=Profile("finale-reference");p.careerRound=34;p.careerCleared=34
         p.rivalProfiles.forEach{it.credits=8000};RivalEconomy.prepare(p)
-        val actual=PowerRating.of(CarCatalog.all[DeathDuel.rigIndex])/RivalEconomy.fieldRating(p)
+        val actual=DeathDuel.rigRating/RivalEconomy.fieldRating(p)
         assertEquals(CareerCurve.all.last().ratioTarget,actual,.015,"Reference PR describes the supplied rig; it does not assert a win rate")
     }
 

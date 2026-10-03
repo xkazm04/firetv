@@ -3,12 +3,15 @@ package dev.deathride.core
 /** Campaign-only equipment and decision profile; all movement and hits use the common solver. */
 object DeathDuel {
     val rigIndex=CarCatalog.all.indexOfFirst{it.id=="Line"}
+    // Fixed mission loaner: preserves the authored basic rig when the buyable roster is rebalanced.
+    val rigClass=CarClass(CarCatalog.all[rigIndex].values+Content.table("mechanic-rig").single())
+    val rigRating=PowerRating.of(rigClass)
     val boss=Rival(Content.table("duel-boss").single())
     val perceptionM=CampaignRules["bossPerceptionM"]
     val chaseFraction=CampaignRules["bossWaitSpeedFraction"]
     val waitLaneM=CampaignRules["bossWaitLaneM"]
     fun applyRig(car: Car) {
-        CarCatalog.apply(car,rigIndex)
+        CarCatalog.apply(car,rigClass)
         car.ability.definition=AbilityCatalog.dispatcher
         car.startingCondition=1.0;car.utilityMask=0
     }
@@ -25,7 +28,7 @@ object DeathDuel {
     }
     fun carJson(p: Profile): String {
         if(!seized(p))return CarCatalog.all[p.selectedCar].json(p.bonuses())
-        return CarCatalog.all[rigIndex].json.replace(CarCatalog.all[rigIndex].ability.json,AbilityCatalog.dispatcher.json)
+        return rigClass.json.replace(rigClass.ability.json,AbilityCatalog.dispatcher.json)
     }
     fun story(p: Profile): StoryCard {
         val card=Career.events[p.careerRound].story

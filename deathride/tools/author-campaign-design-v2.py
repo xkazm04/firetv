@@ -1,4 +1,4 @@
-"""Author the pass-two schedule and original text. No art or audio mutation."""
+"""Author the pass-two schedule and original text. Class limits have a separate measured data authority. No art or audio mutation."""
 import csv
 from pathlib import Path
 
@@ -27,12 +27,13 @@ write('campaign', events)
 curve = read('career-curve')
 for i, r in enumerate(curve):
     r['ratioLow'], r['ratioHigh'] = '0.80', '1.15'
+    if 21 <= i < 34: r['ratioTarget'] = ['0.98','0.99','1.00','1.01','0.98','1.00','0.98'][i % 7]
     if i in [6, 13]:
         r['ratioLow'], r['ratioHigh'] = '0.85', '0.90'
     if i in [20, 27]:
         r['ratioLow'], r['ratioHigh'], r['ratioTarget'] = '0.93', '1.03', '0.98'
     if i == 34:
-        r['ratioLow'], r['ratioHigh'] = '0.50', '0.55'
+        r['ratioLow'], r['ratioHigh'], r['ratioTarget'] = '0.50', '0.55', '0.525'
 write('career-curve', curve)
 rules = read('ash-rules')
 for r in rules:
