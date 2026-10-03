@@ -64,6 +64,7 @@ for _ in range(100):
         except OSError:
             pass
 assert pin, 'Listener not ready; no fixed-delay pairing'
+(a.output / 'thread-priorities-before.txt').write_bytes(adb('shell','ps','-T','-p',pid,'-o','PID,TID,NI,CMD'))
 env = {**os.environ, 'DEATHRIDE_TEST_STREAM': 'perf', 'PROBE_SCREENSHOTS': '0',
     'PROBE_MINES': '1', 'PROBE_DEVICE': a.device, 'PROBE_ADB_PORT': '5041',
     'PROBE_PRIORITY': 'AboveNormal', 'PROBE_PROFILE': '1' if a.profile else '0', 'PROBE_APK_PATH': str(apk)}

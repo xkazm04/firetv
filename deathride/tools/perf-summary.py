@@ -33,10 +33,14 @@ result={'sourceSha256':hashlib.sha256(data).hexdigest(),'apkSha256':s.get('apkSh
     'inputAgeWorstP95Ms':[max((w['stats']['slots'][i]['inputAgeMs']['last10s']['p95'] for w in active),default=0) for i in range(2)],
     'inputCounters':[{k:slot[k] for k in ('stale','dropped','outOfOrder')} for slot in final['slots']],
     'pssRangeMiB':[min(pss),max(pss)] if pss else [],'warmPssGrowthMiB':growth,
+    'thermalStatuses':sorted(set(m.get('thermalStatus',-1) for m in s['memory'])),
     'ownedTextureMiB':max(w['stats']['art']['ownedTextureBytes']/1048576 for w in s['windows']),
     'artMiB':max(w['stats']['art']['textureBytes']/1048576 for w in s['windows']),
     'audio':final.get('audio'),'classes':s.get('classUses'),'rounds':len(s['rounds']),
     'limits':'Overlapping window percentiles are not pooled. Native profiling intervals, if any, remain in raw evidence. Not optical latency or owner feel.'}
+if 'hostGc' in s:
+    result['hostDiagnostics']={'gcDurationMs':q([e['durationMs'] for e in s['hostGc']]),'heartbeatStalls':s.get('hostHeartbeatStalls',[]),
+        'limit':'Independent host isolate and Node GC observations; they do not alter the fail-on-pump-stall gate.'}
 if s.get('ackObservations'):
     acks=[r for r in s['ackObservations'] if r[2] is not None]
     result['ackRttMs']=q([r[3]-r[2] for r in acks])

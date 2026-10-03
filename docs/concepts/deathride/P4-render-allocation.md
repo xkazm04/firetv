@@ -35,6 +35,6 @@ with vsync/display scheduling and `roadMarks=immediate`. This combined APK
 contains the following P5 cache experiment, explicitly disabled in this arm.
 All 10,804 inputs per seat accepted. Warm active window p95/max 19.647/28.553 ms;
 unique active-row p95 18.607 ms. Audio phase p95/p99/max .376/.967/9.781 ms.
-PSS 127.979?139.010 MiB. This is a diagnostic duration, not the 900 s gate.
+PSS 127.979-139.010 MiB. This is a diagnostic duration, not the 900 s gate.
 The older monitor handoff remains in this arm; P7 addresses its separately
 observed rare stall. No art, cue arbitration or freshness policy change.

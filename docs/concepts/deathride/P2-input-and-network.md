@@ -45,7 +45,7 @@ silently reported as zero. Dropped and ordering counters are zero.
 HUD payload averages 1,629/1,597 characters over 8,925/8,920 messages, with 215
 full metadata snapshots per seat. Active rolling frame p95/max 21.776/39.225 ms;
 six-live windows 21.342/34.432 ms. Both frame gates remain open. PSS
-120.076?127.856 MiB, warm median change -3.482 MiB; texture budgets pass.
+120.076-127.856 MiB, warm median change -3.482 MiB; texture budgets pass.
 Audio native start failures/overflow/stale starts zero; onset completion max
 97.867 ms and parameter wait max 134.184 ms remain visible.
 

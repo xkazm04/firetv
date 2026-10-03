@@ -254,3 +254,15 @@ zero-rejection run do not establish router/phone reliability; that run also
 had an invalid host-pump pause. On the final build, repeat physical-phone
 release/reconnect and Home/resume on the intended LAN. The report keeps input
 age, stale consumption and rejected-input counts visible.
+
+P8 delivery is the frozen perf APK with SHA-256
+`77d15b6e785753ee1a1f6799b540efd5a4641c0d5d32476464ad6dbe99f3b8c1`.
+It keeps native resolution, all effects/HUD/audio and the exact-pixel mark
+cache. Normal launch uses vsync/display rendering; slot waits, explicit
+callback priority and Wi-Fi policy are optional diagnostics, off by default.
+Read [the final performance report](../docs/concepts/deathride/PERF-REPORT.md)
+for exact gate results. Inspect busy six-car camera motion, road-mark layers,
+both phone reconnects and neutral release; Home must silence playback and
+resume must restore the scene and controls. Listen for late/missing onsets and
+pitch changes. Scripted checks and queue counters do not certify owner feel,
+physical-phone ergonomics, optical latency or perceived sound timing.

@@ -4,6 +4,7 @@ from pathlib import Path
 
 p=argparse.ArgumentParser();p.add_argument('output',type=Path)
 p.add_argument('--device',default='10.0.0.139:5555');p.add_argument('--seconds',type=int,default=20)
+p.add_argument('--view',action='store_true',help='Include UI Choreographer tracing for pacing diagnostics')
 a=p.parse_args();a.output.mkdir(parents=True,exist_ok=True)
 prefix=['adb','-P','5041','-s',a.device]
 events=[]
@@ -18,7 +19,7 @@ def run(name,args,timeout=60):
 run('threads-before',['shell','ps','-T','-A'])
 run('audio-before',['shell','dumpsys','media.audio_flinger'])
 trace='/data/local/tmp/deathride-perf.atrace'
-r=run('atrace',['shell','atrace','-z','-b','16384','-t',str(a.seconds),'-a','dev.deathride.perf','sched','freq','gfx','audio','dalvik','-o',trace])
+r=run('atrace',['shell','atrace','-z','-b','16384','-t',str(a.seconds),'-a','dev.deathride.perf','sched','freq','gfx','audio','dalvik',*(['view'] if a.view else []),'-o',trace])
 if r.returncode==0:
     raw=subprocess.check_output(prefix+['exec-out','cat',trace],creationflags=subprocess.CREATE_NO_WINDOW)
     (a.output/'trace.atrace').write_bytes(raw)

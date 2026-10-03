@@ -8,10 +8,12 @@ switch=re.compile(r'prev_comm=(.*?) prev_pid=(\d+) prev_prio=\d+ prev_state=(.*?
 stack=collections.defaultdict(list);spans=collections.defaultdict(list)
 running={};off={};wakeup={};cpu=collections.defaultdict(list);sleep=collections.defaultdict(list);runnable=collections.defaultdict(list)
 names={};tgids={}
+firstTime=None;lastTime=None
 for raw in text.splitlines():
     m=line.match(raw)
     if not m:continue
     name,tid,tgid,core,t,event,body=m.groups();tid=int(tid);t=float(t)
+    firstTime=t if firstTime is None else min(firstTime,t);lastTime=t if lastTime is None else max(lastTime,t)
     names[tid]=name;tgids[tid]=tgid
     if event=='sched_switch':
         sm=switch.match(body)
@@ -60,7 +62,7 @@ for (tid,label),ranges in spans.items():
     phases[label]={k:quant([r[k] for r in rows]) for k in ('wallMs','cpuMs','sleepMs','runnableMs')}
 threads=sorted([{'tid':tid,'name':names.get(tid),'tgid':tgids.get(tid),
     'cpuMs':sum(b-a for a,b in slices)*1000} for tid,slices in cpu.items() if tid!=0],key=lambda x:x['cpuMs'],reverse=True)
-result={'source':str(p),'phaseTimesMs':phases,'longAudio':longAudio,'threads':threads,
-        'limits':'20-second diagnostic trace; phase spans include tracing overhead. CPU slices are scheduler observations; nested phases are not summed.'}
+result={'source':str(p),'traceSpanSeconds':None if firstTime is None else lastTime-firstTime,'phaseTimesMs':phases,'longAudio':longAudio,'threads':threads,
+        'limits':'Bounded diagnostic trace; observed timestamp span is reported, and events.json records capture conditions. Phase spans include tracing overhead. CPU slices are scheduler observations; nested phases are not summed.'}
 p.with_name('trace-summary.json').write_text(json.dumps(result,indent=2))
 print(json.dumps({'phases':{k:{m:round(v[m]['p95'],3) for m in ('wallMs','cpuMs','sleepMs','runnableMs')} for k,v in phases.items()},'longAudio':longAudio[:10],'threads':threads[:12]},indent=2))

@@ -8,6 +8,8 @@ import {promisify} from 'node:util';
 import {randomUUID,createHash} from 'node:crypto';
 import {setPriority,getPriority,constants as osConstants} from 'node:os';
 import {Pilot} from './pilot.mjs';
+import {PerformanceObserver} from 'node:perf_hooks';
+import {Worker} from 'node:worker_threads';
 const [base,pin,output,secondsText='900']=process.argv.slice(2),duration=Number(secondsText);
 const screenshotsEnabled=process.env.PROBE_SCREENSHOTS!=='0';
 const minesEnabled=process.env.PROBE_MINES==='1';
@@ -27,6 +29,9 @@ const get=async path=>{const r=await fetch(base+path,{signal:AbortSignal.timeout
 async function runAdb(args,options){try{return await run('adb',['-P',adbPort,'-s',device,...args],options)}catch(error){if(!/device .*not found|device offline|cannot connect to daemon|failed to start daemon/.test(String(error.stderr||error.message)))throw error;(result.adbReconnects??=[]).push({utc:new Date().toISOString(),command:args.join(' ')});await run('adb',['-P',adbPort,'connect',device],{encoding:'utf8',windowsHide:true,timeout:10000});return await run('adb',['-P',adbPort,'-s',device,...args],options)}}
 const adb=async(...a)=>(await runAdb(a,{encoding:'utf8',windowsHide:true,timeout:20000,maxBuffer:2e6})).stdout;
 const result={startedUtc:new Date().toISOString(),hostTimeOriginEpochMs:performance.timeOrigin,base,device,durationRequestedSeconds:duration,screenshotsEnabled,minesEnabled,nodeVersion:process.version,hostPriority,hostPriorityValue:getPriority(0),windowRetention:'Direct metrics and car/input state; repeated slot garage/career payloads omitted. Full catalog and round-end state retained.',rounds:[],windows:[],memory:[],screenshots:[],pumpStalls:[],rejections:[],classUses:{},classActiveHudSamples:{},limits:'Scripted LAN inputs; no human feel, physical-phone ergonomics or optical latency claim. Rolling frame windows overlap and are not summed.'};
+const hostGc=new PerformanceObserver(list=>{for(const e of list.getEntries())if(result.hostGc.length<4096)result.hostGc.push({epochMs:performance.timeOrigin+e.startTime,durationMs:e.duration,kind:e.detail.kind})});
+result.hostGc=[];result.hostHeartbeatStalls=[];hostGc.observe({entryTypes:['gc']});
+const hostHeartbeat=new Worker(new URL('./perf-host-heartbeat.mjs',import.meta.url));hostHeartbeat.on('message',e=>result.hostHeartbeatStalls.push(e));
 let pumping=false,timer,started=0,nextWindow=0,nextMemory=0,nextPing=30,memoryPending=null;
 let nextProfile=0,frameCursor=0,inputCursor=0;
 const ackTracing=profiling||stream==='perf';
@@ -37,7 +42,7 @@ async function waitFor(fn,label){const end=performance.now()+15000;while(perform
 async function join(){
  const c={ws:new WebSocket(base.replace('http','ws')+'/ws'),slot:-1,q:0,offset:0,bestRtt:Infinity,pending:new Map(),accepted:0,rejected:0,sent:0,command:{s:0,a:0,b:0,h:0,fire:0,mine:0,weapon:0,ability:0}};clients.push(c);
  c.send=m=>{if(c.ws.readyState===WebSocket.OPEN)c.ws.send(JSON.stringify(m))};
- await new Promise((resolve,reject)=>{const timeout=setTimeout(()=>reject(Error('pair timeout')),8000);c.ws.on('error',reject);c.ws.on('open',()=>c.send({t:'hello',pin,profile:'ability-probe-'+randomUUID(),hudDelta:1}));c.ws.on('message',data=>{const m=JSON.parse(data),now=performance.now();if(m.t==='welcome'){c.slot=m.slot;clearTimeout(timeout);resolve()}if(m.t==='error'){clearTimeout(timeout);reject(Error(m.message))}if(m.t==='pong'&&now-m.ts<c.bestRtt){c.bestRtt=now-m.ts;c.offset=m.tvNow-(now+m.ts)/2;c.send({t:'sync',offset:c.offset})}if(m.t==='ack'){const generated=c.pending.get(m.q),sent=generated?.ts;if(ackTracing)result.ackObservations.push([c.slot,m.q,sent,now,m.tvNow,m.accepted,generated?.offset]);c.pending.delete(m.q);if(m.accepted)c.accepted++;else{c.rejected++;result.rejections.push({slot:c.slot,q:m.q,second:(now-started)/1000,rttMs:sent===undefined?null:now-sent,receiveAgeMs:sent===undefined?null:m.tvNow-sent-generated.offset,offset:generated?.offset,ack:m})}}if(m.t==='hud'&&m.car)c.car=m.car;if(m.t==='hud'&&m.combat?.ability?.phase==='ACTIVE'&&c.car){const id=c.car.id;result.classActiveHudSamples[id]=(result.classActiveHudSamples[id]||0)+1}})});
+ await new Promise((resolve,reject)=>{const timeout=setTimeout(()=>reject(Error('pair timeout')),8000);c.ws.on('error',reject);c.ws.on('open',()=>c.send({t:'hello',pin,profile:'ability-probe-'+randomUUID(),hudDelta:1}));c.ws.on('message',data=>{const m=JSON.parse(data),now=performance.now();if(m.t==='welcome'){c.slot=m.slot;clearTimeout(timeout);resolve()}if(m.t==='error'){clearTimeout(timeout);reject(Error(m.message))}if(m.t==='pong'&&now-m.ts<c.bestRtt){c.bestRtt=now-m.ts;c.offset=m.tvNow-(now+m.ts)/2;c.send({t:'sync',offset:c.offset})}if(m.t==='ack'){const generated=c.pending.get(m.q),sent=generated?.ts;if(ackTracing)result.ackObservations.push([c.slot,m.q,sent,now,m.tvNow,m.accepted,generated?.offset]);c.pending.delete(m.q);if(m.accepted)c.accepted++;else{c.rejected++;if(process.env.PROBE_REJECTION_LOG==='1')console.log(JSON.stringify({rejectionTrace:{slot:c.slot,q:m.q,hostPerfMs:now,utc:new Date().toISOString()}}));result.rejections.push({slot:c.slot,q:m.q,second:(now-started)/1000,rttMs:sent===undefined?null:now-sent,receiveAgeMs:sent===undefined?null:m.tvNow-sent-generated.offset,offset:generated?.offset,ack:m})}}if(m.t==='hud'&&m.car)c.car=m.car;if(m.t==='hud'&&m.combat?.ability?.phase==='ACTIVE'&&c.car){const id=c.car.id;result.classActiveHudSamples[id]=(result.classActiveHudSamples[id]||0)+1}})});
  for(let i=0;i<5;i++){c.send({t:'ping',ts:performance.now()});await pause(50)}return c;
 }
 try {
@@ -48,7 +53,7 @@ try {
  result.apkSha256=createHash('sha256').update(await readFile(process.env.PROBE_APK_PATH||'app/build/outputs/apk/debug/app-debug.apk')).digest('hex');
  await join();await join();assert.deepEqual(clients.map(c=>c.slot),[0,1]);await memory(0);
  started=performance.now();let next=started;pumping=true;
- function pump(){if(!pumping)return;const now=performance.now();if(now>=next){for(const c of clients){const q=c.q++,ts=performance.now();c.pending.set(q,{ts,offset:c.offset});c.send({t:'i',q,ts,...c.command});c.sent++}next+=1000/30;if(now-next>100){result.pumpStalls.push({second:(now-started)/1000,lateMs:now-next});next=now+1000/30}}timer=setTimeout(pump,Math.max(0,next-performance.now()))}pump();
+ function pump(){if(!pumping)return;const now=performance.now();if(now>=next){for(const c of clients){const q=c.q++,ts=performance.now();c.pending.set(q,{ts,offset:c.offset});c.send({t:'i',q,ts,...c.command});c.sent++}next+=1000/30;if(now-next>100){const stall={second:(now-started)/1000,lateMs:now-next,epochMs:performance.timeOrigin+now,cpu:process.cpuUsage(),memory:process.memoryUsage()};result.pumpStalls.push(stall);console.log(JSON.stringify({hostPumpStall:stall}));next=now+1000/30}}timer=setTimeout(pump,Math.max(0,next-performance.now()))}pump();
  const tracks=['foundry','saltline','scree','sluice','ridge'];
  let roundIndex=0;
  while((performance.now()-started)/1000<duration){
@@ -112,6 +117,6 @@ try {
 finally{
  pumping=false;clearTimeout(timer);for(const c of clients){c.send({t:'i',q:c.q++,ts:performance.now(),s:0,a:0,b:0,h:0,fire:0,mine:0,weapon:0,ability:0});c.ws.close()}
  if(memoryPending)await memoryPending.catch(()=>{});
- result.finishedUtc=new Date().toISOString();await writeFile(output,JSON.stringify(result,null,2)+'\n');
+ hostGc.disconnect();await hostHeartbeat.terminate();result.finishedUtc=new Date().toISOString();await writeFile(output,JSON.stringify(result,null,2)+'\n');
  console.log(JSON.stringify({functionalPass:result.functionalPass,error:result.error,duration:result.actualDurationSeconds,rounds:result.rounds.length,classUses:result.classUses,clients:result.clients},null,2));
 }

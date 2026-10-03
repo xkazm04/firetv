@@ -42,7 +42,7 @@ Keep native resolution: no art trade-off is justified. All real timestamps and
 failures remain in the evidence. Defaults are unchanged in this wave; later
 combined qualification will decide whether to retain paced scheduling.
 
-Rejected inputs show 281?308 ms shared receive gaps while 17?18 render frames
+Rejected inputs show 281-308 ms shared receive gaps while 17-18 render frames
 continue. Exact matching frame rows and input phases are in
 `vsync/input-stall-analysis.json`; the handler's parse/offer/ack enqueue is far
 shorter. Thus neither out-of-order handling nor a whole-process 300 ms pause

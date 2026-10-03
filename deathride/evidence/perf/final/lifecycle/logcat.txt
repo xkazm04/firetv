@@ -1,0 +1,23 @@
+--------- beginning of main
+10-03 06:24:58.177 21968 21984 I .deathride.per: Background concurrent copying GC freed 51305(3885KB) AllocSpace objects, 300(9272KB) LOS objects, 49% free, 12MB/24MB, paused 177us total 103.299ms
+10-03 06:24:59.742 21968 22028 I DeathRide: {"phase":"race","raceSeconds":11.833333333333501,"frameTimeMs":{"lifetimeBinMs":0.1,"lifetimeCapMs":5000.0,"last10s":{"p50":16.673539,"p95":18.708461999999997,"max":21.686615,"count":600},"sinceStart":{"p50":16.6,"p95":20.6,"max":321.875,"count":1058}},"simStepMs":{"lifetimeBinMs":0.001,"lifetimeCapMs":50.0,"last10s":{"p50":1.717,"p95":2.885692,"max":8.223692,"count":600},"sinceStart":{"p50":1.853,"p95":5.043,"max":22.712692,"count":826}},"discardedSimulationMs":{"last10s":0,"sinceStart":388},"inputAgeMs":[{"lifetimeBinMs":0.1,"lifetimeCapMs":5000.0,"last10s":{"p50":22.761770008939493,"p95":41.597077014901515,"max":57.26430801490096,"count":600},"sinceStart":{"p50":23.0,"p95":43.300000000000004,"max":73.46553899105947,"count":767}},{"lifetimeBinMs":0.1,"lifetimeCapMs":5000.0,"last10s":{"p50":21.671923002979383,"p95":39.45961601490126,"max":52.84861599105716,"count":600},"sinceStart":{"p50":22.0,"p95":40.400000000000006,"max":53.58407699702002,"count":735}}],"combatSummary":{"mineBlastRadiusM":0.5,"mineTriggerRadiusM":0.5,"damageScale":1.0,"shotsByWeapon":[57,7,12,12],"active":6,"living":6,"finished":0,"shots":88,"projectiles":0,"mines":9,"blasts":0,"poolExhaustions":0,"abilityDamage":15.12,"abilityUses":5}}
+10-03 06:25:03.215 21968 21968 I AndroidInput: sensor listener tear down
+10-03 06:25:03.378 21968 22005 I AndroidGraphics: paused
+10-03 06:25:04.274 21968 21994 I .deathride.per: Could not find corresponding native window for surface
+10-03 06:25:04.446 21968 21968 W IInputConnectionWrapper: setSelection on inactive InputConnection
+10-03 06:25:05.713 21968 21968 I AndroidInput: sensor listener setup
+10-03 06:25:05.764 21968 21994 I .deathride.per: Could not find corresponding native window for surface
+10-03 06:25:05.947 21968 22005 I AndroidGraphics: resumed
+10-03 06:25:06.000 21968 22296 I DeathRide: pairing http://10.0.0.139:8772/?pin=2789
+10-03 06:25:06.696 21968 21984 I .deathride.per: Background concurrent copying GC freed 65367(4498KB) AllocSpace objects, 320(9516KB) LOS objects, 49% free, 13MB/26MB, paused 2.402ms total 325.906ms
+10-03 06:25:06.707 21968 21986 E System  : Uncaught exception thrown by finalizer
+10-03 06:25:06.708 21968 21986 E System  : java.nio.file.ClosedWatchServiceException
+10-03 06:25:06.708 21968 21986 E System  : 	at sun.nio.fs.AbstractPoller.invoke(AbstractPoller.java:216)
+10-03 06:25:06.708 21968 21986 E System  : 	at sun.nio.fs.AbstractPoller.close(AbstractPoller.java:144)
+10-03 06:25:06.708 21968 21986 E System  : 	at sun.nio.fs.LinuxWatchService$Poller.finalize(LinuxWatchService.java:321)
+10-03 06:25:06.708 21968 21986 E System  : 	at java.lang.Daemons$FinalizerDaemon.doFinalize(Daemons.java:291)
+10-03 06:25:06.708 21968 21986 E System  : 	at java.lang.Daemons$FinalizerDaemon.runInternal(Daemons.java:278)
+10-03 06:25:06.708 21968 21986 E System  : 	at java.lang.Daemons$Daemon.run(Daemons.java:139)
+10-03 06:25:06.708 21968 21986 E System  : 	at java.lang.Thread.run(Thread.java:923)
+10-03 06:25:07.449 21968 22005 I DeathRide: sceneryBake foundry slicedFrames=81 totalCpuMs=417.8383089999999 maxSliceMs=41.668308
+10-03 06:25:12.877 21968 21984 I .deathride.per: Background concurrent copying GC freed 115798(8238KB) AllocSpace objects, 312(6576KB) LOS objects, 49% free, 13MB/27MB, paused 93us total 164.236ms

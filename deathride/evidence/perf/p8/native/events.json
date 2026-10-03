@@ -1,0 +1,112 @@
+[
+  {
+    "name": "threads-before",
+    "args": [
+      "shell",
+      "ps",
+      "-T",
+      "-A"
+    ],
+    "startUtc": "2026-10-03T03:22:34.488586+00:00",
+    "endUtc": "2026-10-03T03:22:35.351094+00:00",
+    "returncode": 0
+  },
+  {
+    "name": "audio-before",
+    "args": [
+      "shell",
+      "dumpsys",
+      "media.audio_flinger"
+    ],
+    "startUtc": "2026-10-03T03:22:35.351094+00:00",
+    "endUtc": "2026-10-03T03:22:35.516129+00:00",
+    "returncode": 0
+  },
+  {
+    "name": "atrace",
+    "args": [
+      "shell",
+      "atrace",
+      "-z",
+      "-b",
+      "16384",
+      "-t",
+      "20",
+      "-a",
+      "dev.deathride.perf",
+      "sched",
+      "freq",
+      "gfx",
+      "audio",
+      "dalvik",
+      "view",
+      "-o",
+      "/data/local/tmp/deathride-perf.atrace"
+    ],
+    "startUtc": "2026-10-03T03:22:35.516129+00:00",
+    "endUtc": "2026-10-03T03:23:11.479476+00:00",
+    "returncode": 0
+  },
+  {
+    "name": "simpleperf",
+    "args": [
+      "shell",
+      "simpleperf",
+      "record",
+      "--app",
+      "dev.deathride.perf",
+      "--duration",
+      "20",
+      "-g",
+      "-f",
+      "99",
+      "-o",
+      "/data/local/tmp/deathride-perf.data"
+    ],
+    "startUtc": "2026-10-03T03:23:18.921349+00:00",
+    "endUtc": "2026-10-03T03:23:42.529040+00:00",
+    "returncode": 0
+  },
+  {
+    "name": "simpleperf-report",
+    "args": [
+      "shell",
+      "simpleperf",
+      "report",
+      "-i",
+      "/data/local/tmp/deathride-perf.data",
+      "--sort",
+      "comm,pid,tid,dso,symbol"
+    ],
+    "startUtc": "2026-10-03T03:23:42.529040+00:00",
+    "endUtc": "2026-10-03T03:23:43.275524+00:00",
+    "returncode": 0
+  },
+  {
+    "name": "simpleperf-callgraph",
+    "args": [
+      "shell",
+      "simpleperf",
+      "report",
+      "-i",
+      "/data/local/tmp/deathride-perf.data",
+      "-g",
+      "--sort",
+      "comm,pid,tid,dso,symbol"
+    ],
+    "startUtc": "2026-10-03T03:23:43.276526+00:00",
+    "endUtc": "2026-10-03T03:23:48.772412+00:00",
+    "returncode": 0
+  },
+  {
+    "name": "audio-after",
+    "args": [
+      "shell",
+      "dumpsys",
+      "media.audio_flinger"
+    ],
+    "startUtc": "2026-10-03T03:23:48.772928+00:00",
+    "endUtc": "2026-10-03T03:23:48.936624+00:00",
+    "returncode": 0
+  }
+]
