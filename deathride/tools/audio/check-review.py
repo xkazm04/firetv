@@ -2,12 +2,13 @@
 from datetime import datetime, timezone
 from pathlib import Path
 import json
+import os
 import sys
 from urllib.parse import unquote, urlparse
 from playwright.sync_api import sync_playwright
 
 ROOT = Path(__file__).resolve().parents[2]
-OUT = ROOT / 'audio/review-evidence'
+OUT = Path(os.environ.get('AUDIO_REVIEW_OUTPUT', ROOT / 'audio/review-evidence'))
 REPORTS = {'x2': ('audition', 32, 9), 'effects': ('x3/effects', 40, 14),
            'engines': ('x3/engines', 20, 10), 'voices': ('x3/voices', 14, 16),
            'music': ('x3/music', 3, 1)}

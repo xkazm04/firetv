@@ -33,7 +33,10 @@ class RaceAudioDirector(val cues: CueService) {
         if(next==phase)return
         phase=next;cues.sceneChanged();world?.let{resetEdges(it);it.presentationEvents.clear()}
         when(next){
-            "race"->{cues.play("race.start");cues.play("music.hunt")}
+            "race"->{
+                cues.play("race.start");cues.play("music.hunt")
+                if(world?.eventType==EventType.ELIMINATION)cues.narrate("voice.announcer.duel")
+            }
             "lobby","garage","career"->cues.play("music.lobby")
         }
     }
@@ -88,7 +91,7 @@ class RaceAudioDirector(val cues: CueService) {
                 PresentationKind.BARRIER_CONTACT->"collision.barrier"
                 PresentationKind.PICKUP->{if(actor?.human!=true)continue;when(event.detail){1->"pickup.repair";2->"pickup.cash";else->"pickup.ammo"}}
                 PresentationKind.WRECK->{cues.stopCue("engine.base",event.actor);if(movementCar==event.actor)cues.stopGroup("movement");"race.wreck"}
-                PresentationKind.ABILITY->{val definition=actor?.ability?.definition?:continue;"ability.${definition.id}"}
+                PresentationKind.ABILITY->{val definition=actor?.ability?.definition?:continue;abilityCue(definition)}
             }
             val emitter=if(event.kind==PresentationKind.CAR_CONTACT)event.actor*Tuning.CAR_COUNT+event.target else event.actor
             val gain=if(event.kind==PresentationKind.CAR_CONTACT || event.kind==PresentationKind.WALL_CONTACT)(event.strength/12).toFloat().coerceIn(.25f,1f) else 1f
@@ -96,7 +99,7 @@ class RaceAudioDirector(val cues: CueService) {
         }
         for(c in w.cars)if(c.entered && c.human){
             val id=c.id
-            if(c.lap.laps>laps[id] && c.finishSeconds<0)cues.play("race.lap",id)
+            if(w.eventType==EventType.LAPS && c.lap.laps>laps[id] && c.finishSeconds<0)cues.play("race.lap",id)
             laps[id]=c.lap.laps
             val hp=w.combat.health(id)/w.combat.maxHealth(id)
             if(hp>.35)low[id]=false
@@ -110,9 +113,14 @@ class RaceAudioDirector(val cues: CueService) {
             empty[id]=noAmmo
             if(candidatePosition[id]!=c.position){candidatePosition[id]=c.position;positionHold[id]=0.0}
             else positionHold[id]+=dt
-            if(positionHold[id]>=.75 && positions[id]!=c.position){cues.play("race.position",id);positions[id]=c.position}
+            if(w.eventType==EventType.LAPS && positionHold[id]>=.75 && positions[id]!=c.position){cues.play("race.position",id);positions[id]=c.position}
         }
     }
     fun pause(){world?.presentationEvents?.clear();cues.pause()}
     fun resume(){world?.let{resetEdges(it);it.presentationEvents.clear()};cues.resume()}
+    companion object {
+        // The rig has no commissioned signature clip. Reuse the accepted rear-rack tell.
+        fun abilityCue(definition: AbilityDefinition)=
+            if(definition.kind==AbilityKind.DISPATCHER)"ability.bone-rack" else "ability.${definition.id}"
+    }
 }

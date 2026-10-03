@@ -16,7 +16,7 @@ class CareerV2Test {
         assertEquals(Career.rivals.map{it.id}.toSet(),AshStory.rivals.keys)
         assertEquals(Career.rivals.map{it.id},RivalEconomy.plans.map{it.id})
         assertTrue(Career.difficulties.all{it.rewardScale==1.0})
-        assertTrue(Career.events.all{it.laps in 3..30})
+        assertTrue(Career.events.all{if(it.elimination)it.laps==0 else it.laps in 3..30})
         assertTrue(CareerCurve.all.all{it.fieldTier in it.act..minOf(4,it.act+1)})
         for((index,e) in Career.events.withIndex()){assertEquals(e.cupIndex,CareerCurve.all[index].act);assertTrue(Courses.all[e.courseIndex].pool.minTier<=e.cupIndex && Courses.all[e.courseIndex].pool.maxTier>=e.cupIndex)}
     }
@@ -29,7 +29,7 @@ class CareerV2Test {
             val serial=p.rivalPreparedSerial;val serialized=p.rivalProfiles.map{ProfileCodec.encode(it)};RivalEconomy.prepare(p)
             assertEquals(serial,p.rivalPreparedSerial);assertEquals(serialized,p.rivalProfiles.map{ProfileCodec.encode(it)},"No duplicate sponsor grant or shopping")
             for(index in RivalEconomy.cast(round)){val npc=p.rivalProfiles[index];Economy.settle(npc,Economy.start(npc),3,0,80.0,rewardScale=CareerCurve.all[round].rewardScale)}
-            Career.settle(p,Economy.start(p),round,1,if(round==34)1 else 3,0,80.0,true)
+            Career.settle(p,Economy.start(p),round,1,if(Career.events[round].boss)1 else 3,0,80.0,true)
             assertEquals(ProfileCodec.encode(p),ProfileCodec.encode(ProfileCodec.decode(ProfileCodec.encode(p),p.id)))
         }
         File("build/reports/content/c4-nominal-ledger.csv").apply{parentFile.mkdirs();writeText(out.toString())}
@@ -69,8 +69,8 @@ class CareerV2Test {
     @Test fun versionTwoRetainsCarsEarnedUnderTheOldUnlockSchedule() {
         val p=Profile("legacy-unlocks");p.careerRound=2;p.careerCleared=2;p.careerPoints=12
         val body=ProfileCodec.encode(p).substringBefore("checksum=").lines().filter{line->
-            !listOf("owned=","condition=","market=","ash=","grudges=","rivals=").any{line.startsWith(it)} && line.isNotEmpty()
-        }.joinToString("\n",postfix="\n").replace("DEATHRIDE_PROFILE 4","DEATHRIDE_PROFILE 2").replace("trophies=0,0,0,0,0","trophies=0,0,0,0")
+            !listOf("owned=","condition=","market=","ash=","grudges=","rivals=","campaign=").any{line.startsWith(it)} && line.isNotEmpty()
+        }.joinToString("\n",postfix="\n").replace("DEATHRIDE_PROFILE 5","DEATHRIDE_PROFILE 2").replace("trophies=0,0,0,0,0","trophies=0,0,0,0")
         val text=body+"checksum="+CRC32().apply{update(body.toByteArray())}.value.toString(16)+"\n"
         val migrated=ProfileCodec.decode(text,p.id)
         assertEquals(5,migrated.careerCleared);assertTrue(migrated.owned[CarCatalog.all.indexOfFirst{it.id=="Trail"}])
@@ -83,8 +83,8 @@ class CareerV2Test {
             p.selectedCar=9;p.owned.fill(false);p.owned[9]=true
             if(round==0){p.careerSeasons=1;p.careerCleared=12}
             val body=ProfileCodec.encode(p).substringBefore("checksum=").lines().filter{line->
-                !listOf("ash=","grudges=","rivals=").any{line.startsWith(it)} && line.isNotEmpty()
-            }.joinToString("\n",postfix="\n").replace("DEATHRIDE_PROFILE 4","DEATHRIDE_PROFILE 3").replace("trophies=0,0,0,0,0","trophies=0,0,0,0")
+                !listOf("ash=","grudges=","rivals=","campaign=").any{line.startsWith(it)} && line.isNotEmpty()
+            }.joinToString("\n",postfix="\n").replace("DEATHRIDE_PROFILE 5","DEATHRIDE_PROFILE 3").replace("trophies=0,0,0,0,0","trophies=0,0,0,0")
             val text=body+"checksum="+CRC32().apply{update(body.toByteArray())}.value.toString(16)+"\n"
             val migrated=ProfileCodec.decode(text,p.id);RivalEconomy.prepare(migrated)
             val course=Courses.all[Career.events[migrated.careerRound].courseIndex]
@@ -105,7 +105,7 @@ class CareerV2Test {
         for(i in 2..5){assertFalse(w.combat.canAct(i));assertFalse(w.combat.fire(i,0))}
         val x=w.cars[0].x;w.cars[2].x=x;w.cars[2].y=w.cars[0].y;w.collide(w.cars[0],w.cars[2]);assertEquals(x,w.cars[0].x)
         val inputs=Array(6){InputFrame()};while(w.resolved<2 && w.seconds<w.raceLimitSeconds)w.step(inputs)
-        assertEquals(2,w.resolved);assertTrue(w.cars.filter{it.entered}.map{it.position}.toSet()==setOf(1,2));assertTrue(w.cars.drop(2).all{it.position==0})
+        assertTrue(w.resolved==2 || w.duelDraw);assertTrue(w.cars.filter{it.entered}.map{it.position}.toSet()==setOf(1,2));assertTrue(w.cars.drop(2).all{it.position==0})
         p.selectedCar=9;p.owned.fill(false);p.owned[9]=true
         assertFalse(Career.settle(p,Economy.start(p),34,1,2,0,0.0,true)!!.advanced);assertEquals(34,p.careerRound)
         assertTrue(Career.settle(p,Economy.start(p),34,1,1,0,50.0,true)!!.advanced);assertEquals(1,p.careerSeasons)

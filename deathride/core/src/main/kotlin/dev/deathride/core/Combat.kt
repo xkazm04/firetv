@@ -172,10 +172,7 @@ class Combat(private val world: World,val enabled: Boolean) {
         if(ammunition[n]<=0 || cooldowns[n]>1e-9)return false
         val c=world.cars[id];val w=Weapons.all[weapon]
         if(weapon==Weapons.MINE) {
-            var free: Mine?=null;for(m in mines)if(!m.active){free=m;break}
-            if(free==null){poolExhaustions++;return false}
-            val rear=c.spec.circleOffsetM+c.spec.circleRadiusM+CombatRules["dropClearanceM"]
-            free.active=true;free.owner=id;free.x=c.x-cos(c.heading)*rear;free.y=c.y-sin(c.heading)*rear;free.ageSeconds=0.0;free.activation=++activation
+            if(!placeMine(c))return false
         } else if(weapon==Weapons.HAMMER) {
             var free: Projectile?=null;for(p in projectiles)if(!p.active){free=p;break}
             if(free==null){poolExhaustions++;return false}
@@ -196,6 +193,21 @@ class Combat(private val world: World,val enabled: Boolean) {
         }
         ammunition[n]--;cooldowns[n]=w.cooldownSeconds;shots[weapon]++
         world.presentationEvents.emit(PresentationKind.FIRE,id,detail=weapon,x=c.x,y=c.y,seconds=world.seconds)
+        return true
+    }
+    private fun placeMine(c: Car): Boolean {
+        var free: Mine?=null;for(m in mines)if(!m.active){free=m;break}
+        if(free==null){poolExhaustions++;return false}
+        val rear=c.spec.circleOffsetM+c.spec.circleRadiusM+CombatRules["dropClearanceM"]
+        free.active=true;free.owner=c.id;free.x=c.x-cos(c.heading)*rear;free.y=c.y-sin(c.heading)*rear;free.ageSeconds=0.0;free.activation=++activation
+        return true
+    }
+    internal fun dispatchMine(id: Int): Boolean {
+        val c=world.cars[id]
+        if(!enabled || !canAct(id) || armingSeconds>0 || c.ability.definition?.kind!=AbilityKind.DISPATCHER || c.ability.phase!=AbilityPhase.ACTIVE)return false
+        if(!placeMine(c))return false
+        shots[Weapons.MINE]++
+        world.presentationEvents.emit(PresentationKind.FIRE,id,detail=Weapons.MINE,x=c.x,y=c.y,seconds=world.seconds)
         return true
     }
     private fun explode(m: Mine) {

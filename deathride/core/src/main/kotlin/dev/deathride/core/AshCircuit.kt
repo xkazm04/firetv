@@ -64,6 +64,7 @@ object RivalEconomy {
     }
     fun prepare(p: Profile,round: Int=p.careerRound) {
         require(p.withRivals)
+        Campaign.prepare(p,round)
         val point=CareerCurve.all[round];val course=Courses.all[Career.events[round].courseIndex]
         val serial=p.careerSeasons*Career.events.size+round
         val newEvent=p.rivalPreparedSerial!=serial
@@ -86,6 +87,7 @@ object RivalEconomy {
     }
     fun apply(p: Profile,world: World,difficulty: Int,round: Int=p.careerRound,guest: Boolean=false) {
         world.raceLaps=Career.events[round].laps
+        world.eventType=Career.events[round].type
         prepare(p,round);val cast=cast(round)
         for(c in world.cars){c.entered=c.id<=cast.size;c.rivalIndex=-1}
         val guestRacing=guest && !Career.events[round].duel
@@ -94,6 +96,10 @@ object RivalEconomy {
             val c=world.cars[slot+if(guestRacing)2 else 1];Garage.apply(p.rivalProfiles[index],c);c.aiSkill=Career.difficulties[difficulty].skill;c.aiStyle=style(p,index);c.rivalIndex=index;c.human=false
         }
         Encounters.apply(world,Career.cups[Career.events[round].cupIndex].id)
+        if(Career.events[round].elimination) {
+            world.cars[1].aiStyle=DeathDuel.boss
+            Encounters.apply(world,"death-duel")
+        }
     }
     fun settle(p: Profile,ticket: Long,world: World,round: Int) {
         val results=world.cars.filter{it.entered && it.rivalIndex>=0}.map{c->RivalResult(c.rivalIndex,c.position,world.combat.kills[c.id],world.combat.health(c.id),world.combat.cashCollected[c.id],world.combat.damageTaken[c.id]==0.0,c.finishSeconds>=0,world.combat.wreckSource[c.id]==0)}
@@ -114,14 +120,14 @@ object RivalEconomy {
     fun fieldRating(p: Profile,round: Int=p.careerRound)=cast(round).map{index->val r=p.rivalProfiles[index];PowerRating.of(CarCatalog.all[r.selectedCar],r.bonuses())}.average()
     fun json(p: Profile): String = cast(p.careerRound).joinToString(",","[","]"){index->
         val r=p.rivalProfiles[index];val driver=Career.rivals[index];val story=AshStory.rivals.getValue(driver.id)
-        "{\"id\":\"${driver.id}\",\"name\":\"${driver.name}\",\"car\":\"${CarCatalog.all[r.selectedCar].id}\",\"powerRating\":${PowerRating.of(CarCatalog.all[r.selectedCar],r.bonuses())},\"credits\":${r.credits},\"debt\":${r.debt},\"parts\":${r.tiers.sum()},\"grudge\":${p.grudges[index]>0},\"relationship\":\"${if(p.grudges[index]>0)"grudge" else if(p.grudges[index]<0)"ally" else "neutral"}\",\"portrait\":\"${story.getValue("portraitKey")}\",\"biography\":\"${story.getValue("biography")}\",\"taunt\":\"${story.getValue(if(p.grudges[index]>0)"grudgeTaunt" else "taunt")}\"}"
+        "{\"id\":\"${driver.id}\",\"name\":\"${driver.name}\",\"car\":\"${CarCatalog.all[r.selectedCar].id}\",\"powerRating\":${PowerRating.of(CarCatalog.all[r.selectedCar],r.bonuses())},\"credits\":${r.credits},\"debt\":${r.debt},\"parts\":${r.tiers.sum()},\"grudge\":${p.grudges[index]>0},\"relationship\":\"${if(Campaign.taunt(p,driver.id)!=null)if(p.grudges[index]>0)"ally / grudge" else "ally" else if(p.grudges[index]>0)"grudge" else if(p.grudges[index]<0)"ally" else "neutral"}\",\"portrait\":\"${story.getValue("portraitKey")}\",\"biography\":\"${story.getValue("biography")}\",\"taunt\":\"${Campaign.taunt(p,driver.id)?:story.getValue(if(p.grudges[index]>0)"grudgeTaunt" else "taunt")}\"}"
     }
 }
 
 /** Explicit policy family for reports, not a claim of globally optimal human play. */
 object CareerSpending {
     fun spend(p: Profile,partLimit: Int=2): Int {
-        val act=min(4,p.careerCleared/7);var purchases=0
+        val act=Career.events[p.careerRound].playerTier;var purchases=0
         val current=CarCatalog.all[p.selectedCar]
         if(current.tierRank<act) {
             val nextTier=min(act,current.tierRank+1)

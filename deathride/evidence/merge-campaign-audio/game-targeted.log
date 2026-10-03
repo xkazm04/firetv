@@ -1,0 +1,36 @@
+Starting a Gradle Daemon, 3 busy and 1 incompatible Daemons could not be reused, use --status for details
+> Task :game:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :core:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :link:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :link:processResources NO-SOURCE
+> Task :game:processResources NO-SOURCE
+> Task :game:processTestResources NO-SOURCE
+> Task :core:compileKotlin UP-TO-DATE
+> Task :core:compileJava NO-SOURCE
+> Task :core:processResources UP-TO-DATE
+> Task :core:classes UP-TO-DATE
+> Task :core:jar UP-TO-DATE
+> Task :link:compileKotlin UP-TO-DATE
+> Task :link:compileJava NO-SOURCE
+> Task :link:classes UP-TO-DATE
+> Task :link:jar UP-TO-DATE
+> Task :game:compileKotlin
+> Task :game:compileJava NO-SOURCE
+> Task :game:classes UP-TO-DATE
+> Task :game:jar
+> Task :game:compileTestKotlin
+> Task :game:compileTestJava NO-SOURCE
+> Task :game:testClasses UP-TO-DATE
+> Task :game:test
+w: Detected multiple Kotlin daemon sessions at
+
+[Incubating] Problems report is available at: file:///C:/Users/kazda/kiro/firetv-deathride/deathride/build/reports/problems/problems-report.html
+
+Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0.
+
+You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
+
+For more on this, please refer to https://docs.gradle.org/8.14/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.
+
+BUILD SUCCESSFUL in 13s
+9 actionable tasks: 4 executed, 5 up-to-date

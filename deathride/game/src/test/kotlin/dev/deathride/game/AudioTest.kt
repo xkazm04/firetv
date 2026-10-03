@@ -93,6 +93,7 @@ class AudioTest {
         val raw=File("../assets/audio/cues.json").readText();val m=CueManifest.parse(raw)
         assertEquals(62,m.cues.size);assertEquals(8,m.maxVoices)
         assertTrue(AbilityCatalog.all.all{"ability.${it.id}" in m.cues})
+        assertTrue(RaceAudioDirector.abilityCue(AbilityCatalog.dispatcher) in m.cues)
         val json=com.badlogic.gdx.utils.JsonReader().parse(raw)
         val shipped=json.get("cues").filter{it.getString("path").isNotEmpty()}
         for(r in shipped){
@@ -122,5 +123,89 @@ class AudioTest {
         assertEquals(1,backend.starts.count{it=="weapon.rivet.fire"})
         director.sceneChanged("results");director.results(world)
         assertFalse(backend.starts.any{it=="race.defeat" || it=="race.victory"})
+    }
+
+    private fun delivered()=CueManifest.parse(File("../assets/audio/cues.json").readText())
+    // Explicit ledger fixture: reported wins, not a simulated full career.
+    private fun profileAt(round: Int)=Profile("audio-fixture").also{p->
+        repeat(round){Career.settle(p,Economy.start(p),p.careerRound,0,1,0,100.0,true,finished=true)}
+    }
+
+    @Test fun campaignSeizureSequenceKeepsHeldCaptionAndCancelsOnSkipPauseOrExit(){
+        val backend=RecordingAudio();val service=CueService(delivered(),backend)
+        val director=CampaignAudioDirector(service)
+        val p=profileAt(34);DeathDuel.seize(p)
+        director.careerOpened(p)
+        assertEquals("voice.announcer.seizure",service.lastNarration)
+        service.update(30.0)
+        assertEquals("voice.mechanic.seizure",service.lastNarration)
+        assertEquals(delivered().cues.getValue("voice.mechanic.seizure").caption,service.caption)
+        assertFalse(backend.starts.contains("voice.mechanic.seizure")) // Held clip, real caption.
+        service.update(30.0);assertEquals("voice.mechanic.rig",service.lastNarration)
+        service.update(30.0);assertEquals("voice.mechanic.duel",service.lastNarration)
+        for(cancel in listOf<()->Unit>({service.skipNarration()},{service.sceneChanged()},{service.pause();service.resume()})){
+            director.careerOpened(p);val count=service.narrationCount;cancel();service.update(30.0)
+            assertEquals(count,service.narrationCount);assertEquals("",service.caption)
+        }
+        service.setGain("master",0f);director.careerOpened(p);service.update(30.0);service.update(30.0)
+        assertEquals("voice.mechanic.rig",service.lastNarration);assertTrue(service.caption.isNotEmpty())
+        assertEquals(0,service.activeVoices)
+    }
+
+    @Test fun committedBossAndFinaleResultsReachNarrationButLossesAndDuplicateReceiptsDoNot(){
+        val backend=RecordingAudio();val service=CueService(delivered(),backend);val director=CampaignAudioDirector(service)
+        fun settle(before: Profile,win: Boolean): Profile {
+            val p=before.copy();val ticket=Economy.start(p)
+            Career.settle(p,ticket,p.careerRound,0,if(win)1 else 6,0,100.0,win,finished=win)
+            director.settled(before,p);return p
+        }
+        val rook=profileAt(6)
+        settle(rook,false);assertEquals(0,service.narrationCount)
+        val ally=settle(rook,true);assertEquals(1,ally.campaign.rewards[0])
+        assertEquals("voice.announcer.ally",service.lastNarration)
+        service.sceneChanged();director.careerOpened(ally);service.update(30.0)
+        assertEquals("voice.mechanic.ally",service.lastNarration)
+        val count=service.narrationCount;director.settled(ally,ally.copy());assertEquals(count,service.narrationCount)
+        val ox=profileAt(13)
+        settle(ox,true);service.update(30.0);assertEquals("voice.mechanic.books",service.lastNarration)
+        val final=profileAt(34);DeathDuel.seize(final)
+        service.sceneChanged();val beforeLoss=service.narrationCount
+        settle(final,false);assertEquals(beforeLoss,service.narrationCount)
+        val won=settle(final,true);assertEquals(2,won.campaign.finale)
+        assertEquals("voice.announcer.freedom",service.lastNarration)
+        service.update(30.0);assertEquals("voice.mechanic.after",service.lastNarration)
+    }
+
+    @Test fun actualDeathDuelDispatchReachesAudioWithoutLapCuesOrChangingReplay(){
+        fun duel()=World(701,combatEnabled=true).also{w->
+            val p=profileAt(34)
+            // Funded final-event fixture; the production rival preparation gate still runs.
+            for(npc in p.rivalProfiles)Economy.settle(npc,Economy.start(npc),1,0,100.0,bonus=8000)
+            Career.prepareRivals(w,0,p)
+            for(c in w.cars){c.entered=c.id<2;c.human=true;CarCatalog.apply(c,DeathDuel.boss.carIndex)}
+            w.reset()
+        }
+        val backend=RecordingAudio();val service=CueService(delivered(),backend);val director=RaceAudioDirector(service)
+        val observed=duel();val silent=duel();director.bind(observed)
+        director.update(observed,"countdown",false,3.0,.1)
+        assertFalse(backend.starts.contains("voice.announcer.duel"))
+        director.update(observed,"race",true,0.0,.01)
+        assertEquals("voice.announcer.duel",service.lastNarration)
+        val input=Array(6){InputFrame(.12,1.0)}
+        repeat(1200){
+            observed.step(input);silent.step(input)
+            director.update(observed,"race",true,0.0,Tuning.STEP_SECONDS)
+        }
+        assertEquals(silent.stateHash(),observed.stateHash())
+        assertTrue(observed.cars[0].ability.activation>0)
+        assertTrue(backend.starts.contains("ability.bone-rack"))
+        assertTrue(backend.starts.contains("weapon.mine.drop"))
+        assertTrue(backend.starts.contains("weapon.mine.arm"))
+        for(n in 0..160)observed.cars[0].lap.update(observed.track.startM+n*observed.track.lengthM/32)
+        director.update(observed,"race",true,0.0,1.0)
+        assertFalse(backend.starts.contains("race.lap"));assertFalse(backend.starts.contains("race.position"))
+        assertEquals(1,backend.starts.count{it=="voice.announcer.duel"})
+        val practice=World(combatEnabled=true);director.bind(practice);director.sceneChanged("countdown");director.sceneChanged("race")
+        assertEquals(1,backend.starts.count{it=="voice.announcer.duel"})
     }
 }

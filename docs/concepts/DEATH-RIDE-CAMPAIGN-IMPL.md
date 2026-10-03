@@ -5,6 +5,15 @@ Existing foundations: `DEATH-RIDE-PROGRESSION.md`, `deathride/docs/concepts` C4 
 
 ## The plot to implement
 
+Integration update, 2026-10-03: Q0-Q4 is merged into `deathride/main` with X3 audio.
+Debt, ally rewards, saved seizure, elimination, dispatcher and captions coexist;
+the prepared campaign voices now have state triggers. The required build passes
+136 core / 3 link / 20 game tests and the debug APK, including allocation/replay
+checks, six controller browser suites and all five audio review pages.
+See [merge decisions, evidence and cleanup status](deathride/MERGE-campaign-audio.md).
+Q3/Q4 balance, frame-tail and owner-review limits remain open. These design-wave
+instructions below are historical; the merge adds no new physical Stick verdict.
+
 Debt to **Marrow**, who owns the league. Survival is at stake. Winnings pay down the debt, but Marrow controls the books. At the end of each division the **boss** is beaten and **turns to the player's side**: an ally who is a **medium of promotion**, paying out **money, a car or a part upgrade** (design the choice). **The Mechanic** runs the parts store (the shop) from the start, nervous, helpful, young; secretly builds a basic car with a **mine dispatcher** to end Marrow's reign.
 **Finale**: Marrow **takes the player's car as part of the debt** (the apex of his need for control); the Mechanic's rig is the player's last car; the final race is a **fight to the death**, not a several-lap race.
 
@@ -36,8 +45,9 @@ Original work only (nothing from the arcade game or the Death Rally titles; no f
 
 | Id | Wave | Status |
 |---|---|---|
-| Q0 | Plot, debt and ally model, finale rules (design note, data) | not started |
-| Q1 | Debt, ally promotion, the Mechanic, cards and menus | not started |
-| Q2 | Death duel and the Mechanic's rig | not started |
-| Q3 | Balance simulation and fairness | not started |
-| Q4 | Stick check, owner checks, report | not started |
+| Q0 | Plot, debt and ally model, finale rules (design note, data) | complete ? Q0 note, 35 beats, rules, four promotion choices; green build and four browser suites |
+| Q1 | Debt, ally promotion, the Mechanic, cards and menus | complete ? v5 ledger/migration, rewards and TV/phone menus; build, five browser suites and GL text checks green |
+| Q2 | Death duel and the Mechanic's rig | complete - elimination, saved seizure/restitution, automatic dispatcher and visible-target boss; required build and six browser suites green |
+| Q3 | Balance simulation and fairness | complete - qualifier licence correction; 11,520 physical races, 3,072 duels and two 2,000-ledger policy cohorts; late PR dips and censored careers explicitly open; required build and six browsers green |
+| Q4 | Stick check, owner checks, report | complete - campaign-only AFTKM install; actual boss win, saved ally cash, seizure and two duel losses/free retries; required build and six browsers green; frame p95/max misses and owner observations open |
+| MERGE | Campaign and X3 audio | complete implementation/build - 159 tests, APK, six controller suites, five audio pages and native audio/GL pass; branch deleted and worktree unregistered after verified archive; leftover directory removal blocked by policy |

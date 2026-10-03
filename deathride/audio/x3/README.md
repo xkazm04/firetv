@@ -55,6 +55,13 @@ allocation**. First stage is one per style. Nothing is scheduled or prepaid.
 
 ## Remaining decisions and device work
 
+Campaign merge update (2026-10-03): Q0-Q4 now supplies these states on
+`deathride/main`. Ally promotion/choice, Ox's receipts, seizure (including the held
+caption), rig briefing, actual elimination start and saved finale victory are wired.
+See [merge evidence and behavior decisions](../../../docs/concepts/deathride/MERGE-campaign-audio.md).
+The original X3-only limitations below are historical; merged Stick playback still
+needs device qualification.
+
 1. Owner audition: crunch retry, per-class engine character, voice delivery/text,
    and the synthesized song's musical/style value. Signal screens cannot choose
    these. Generate full per-car engine sets only after those choices.

@@ -2,7 +2,7 @@ import {chromium} from 'playwright';
 import assert from 'node:assert/strict';
 import {mkdir,writeFile} from 'node:fs/promises';
 const [base,pin,output='evidence/hud/h2/layouts']=process.argv.slice(2);
-assert.equal(new URL(base).port,'8768','Only HUD listener');
+assert.equal(new URL(base).port,process.env.DEATHRIDE_BROWSER_PORT||'8768','Only the declared isolated listener');
 await mkdir(output,{recursive:true});
 const browser=await chromium.launch({headless:true,executablePath:process.env.CHROME_EXECUTABLE});
 const context=await browser.newContext({viewport:{width:896,height:414},isMobile:true,hasTouch:true});

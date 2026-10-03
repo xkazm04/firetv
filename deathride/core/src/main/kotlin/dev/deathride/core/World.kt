@@ -152,6 +152,7 @@ class LapCounter(private val lengthM: Double, private val startM: Double, privat
 }
 enum class AiMode { DRIVE, OVERTAKE, RECOVER }
 enum class FinishKind { NONE, LAPS, ELIMINATION }
+enum class EventType { LAPS, ELIMINATION }
 class Car(val id: Int, track: Track) {
     var entered=true;var rivalIndex=-1
     var x=0.0; var y=0.0; var vx=0.0; var vy=0.0; var heading=0.0; var yaw=0.0
@@ -178,6 +179,7 @@ class Car(val id: Int, track: Track) {
     var aiMode=AiMode.DRIVE; var aiDwell=0; var aiBlockedSteps=0; var aiLane=0.0
     var aiReason=0; var aiPerceivedGapM=1000.0
     var aiSkill: AiSkill?=null;var aiStyle: Rival?=null;var aiCombatReason=0;var aiPickupTarget=-1;var aiNoisePhase=0.0
+    var aiDuelTarget=-1;var aiDuelWait=false
     val aiInput=InputFrame()
     val speedMps get()=sqrt(vx*vx+vy*vy)
 }
@@ -280,7 +282,10 @@ class Snapshot(private val combat: Combat?=null) {
 }
 class World(val seed: Int=17, val spec: CarSpec=CarSpec(), val track: Track=Track(), val handling: Handling=SlipHandling(),combatEnabled: Boolean=false,abilitiesEnabled: Boolean=combatEnabled) {
     var raceLaps=Tuning.RACE_LAPS; internal set
-    val raceLimitSeconds get()=TrackRules["maxRaceSeconds"]*raceLaps/Tuning.RACE_LAPS
+    var eventType=EventType.LAPS; internal set
+    var duelRigSlot=0; internal set
+    val raceLimitSeconds get()=if(eventType==EventType.ELIMINATION)CampaignRules["duelLimitSeconds"] else TrackRules["maxRaceSeconds"]*raceLaps/Tuning.RACE_LAPS
+    val duelDraw get()=eventType==EventType.ELIMINATION && finished==0 && (combat.wreckCount==entrantCount || seconds>=raceLimitSeconds)
     private val driftRules=(handling as? SlipHandling)?.driftParameters?:DriftParameters.defaults
     var damageScale=1.0
     val cars=Array(Tuning.CAR_COUNT) { Car(it,track).also { c -> c.spec=spec } }
@@ -289,6 +294,7 @@ class World(val seed: Int=17, val spec: CarSpec=CarSpec(), val track: Track=Trac
     val abilities=Abilities(this,abilitiesEnabled)
     val snapshot=Snapshot(combat); val previousSnapshot=Snapshot(combat)
     private val projection=Projection(); private val point=TrackPoint()
+    private val duelProjection=Projection()
     val ramClosingMps=DoubleArray(Tuning.CAR_COUNT*Tuning.CAR_COUNT)
     val trace=IntArray(Tuning.CAR_COUNT*600)
     var steps=0; private set
@@ -299,6 +305,7 @@ class World(val seed: Int=17, val spec: CarSpec=CarSpec(), val track: Track=Trac
     init { reset() }
     fun reset() {
         steps=0; seconds=0.0; finished=0;presentationEvents.clear()
+        if(eventType==EventType.ELIMINATION)DeathDuel.applyRig(cars[duelRigSlot])
         val seeded=if(cars.any{it.aiSkill!=null})java.util.Random(seed.toLong()) else null
         for(c in cars) {
             val grid=track.course?.grid?.get(c.id)
@@ -315,6 +322,7 @@ class World(val seed: Int=17, val spec: CarSpec=CarSpec(), val track: Track=Trac
             c.aiNoisePhase=0.0
             if(c.aiSkill!=null && seeded!=null) { c.aiLane+=(seeded.nextDouble()*2-1)*c.aiSkill!!.laneErrorM;c.aiNoisePhase=seeded.nextDouble()*2*PI }
             c.aiInput.fire=0.0;c.aiInput.mine=0.0;c.aiInput.weapon=0;c.aiInput.ability=0.0;c.aiCombatReason=0;c.aiPickupTarget=-1
+            c.aiDuelTarget=-1;c.aiDuelWait=false
             c.ability.reset();abilities.cancel(c)
             c.turboRemaining=if(c.utilityMask and (1 shl Consumables.TURBO)!=0)Consumables.all[Consumables.TURBO].duration else 0.0
             c.fuelRemaining=if(c.utilityMask and (1 shl Consumables.FUEL)!=0)Consumables.all[Consumables.FUEL].duration else 0.0;c.engineScale=1.0
@@ -365,7 +373,7 @@ class World(val seed: Int=17, val spec: CarSpec=CarSpec(), val track: Track=Trac
             if(handling is SlipHandling && c.spec.driftGeometry!=null)
                 DriftDynamics.updateSignals(c,if(c.human)inputs[c.id] else c.aiInput,0.0,handling.driftParameters)
             track.project(c.x,c.y,projection); c.lap.update(projection.s)
-            if(c.lap.laps>=raceLaps && c.finishSeconds<0) { c.finishSeconds=seconds;c.finishKind=FinishKind.LAPS; finished++;abilities.cancel(c) }
+            if(eventType==EventType.LAPS && c.lap.laps>=raceLaps && c.finishSeconds<0) { c.finishSeconds=seconds;c.finishKind=FinishKind.LAPS; finished++;abilities.cancel(c) }
         }
         if(combat.enabled && combat.wreckCount==entrantCount-1)for(c in cars)if(c.entered && !combat.wrecked(c.id) && c.finishSeconds<0) { c.finishSeconds=seconds;c.finishKind=FinishKind.ELIMINATION;finished++ }
         for(c in cars) {
@@ -405,7 +413,23 @@ class World(val seed: Int=17, val spec: CarSpec=CarSpec(), val track: Track=Trac
         val intendedLane=if(c.aiMode==AiMode.RECOVER) 0.0 else if(c.aiMode==AiMode.OVERTAKE) if(c.aiLane<0) passLane else -passLane else c.aiLane+(c.aiStyle?.laneBiasM?:0.0)
         val noseLook=(c.spec.circleOffsetM+c.spec.circleRadiusM)*2*TrackRules["aiLookCarLengths"]
         val look=if(c.aiMode==AiMode.RECOVER) noseLook else noseLook+c.speedMps*skill.lookAheadSeconds
-        val lane=combat.avoidMine(c,s,combat.seekRepair(c,intendedLane+(track.course?.laneAt(s+look,c.carClass?.stat("grip")?:0)?:0.0))).coerceIn(-track.widthAt(s+look)*.55,track.widthAt(s+look)*.55)
+        var lane=combat.avoidMine(c,s,combat.seekRepair(c,intendedLane+(track.course?.laneAt(s+look,c.carClass?.stat("grip")?:0)?:0.0)))
+        c.aiDuelTarget=-1;c.aiDuelWait=false
+        if(eventType==EventType.ELIMINATION && c.aiStyle===DeathDuel.boss) {
+            var nearest=DeathDuel.perceptionM*DeathDuel.perceptionM
+            for(o in cars)if(o!==c && combat.canAct(o.id)) {
+                val dx=o.x-c.x;val dy=o.y-c.y;val distance=dx*dx+dy*dy
+                if(distance<nearest && combat.roadFraction(c.x,c.y,o.x,o.y,c.spec.circleRadiusM)>=1.0) {
+                    nearest=distance;c.aiDuelTarget=o.id
+                    track.project(o.x,o.y,duelProjection);lane=duelProjection.distance
+                    c.aiDuelWait=dx*cos(c.heading)+dy*sin(c.heading)<0
+                    // Leave a passing lane while waiting for the visible car behind.
+                    // Matching its lane here merely parks a shield in front of its guns.
+                    if(c.aiDuelWait)lane=if(lane>=0)-DeathDuel.waitLaneM else DeathDuel.waitLaneM
+                }
+            }
+        }
+        lane=lane.coerceIn(-track.widthAt(s+look)*.55,track.widthAt(s+look)*.55)
         track.sample(s+look, lane+sin(steps*.007+c.id+c.aiNoisePhase)*skill.laneErrorM,point)
         val desired=atan2(point.y-c.y,point.x-c.x)
         val slip=if(c.speedMps>2.0) wrapAngle(atan2(c.vy,c.vx)-c.heading) else 0.0
@@ -413,7 +437,7 @@ class World(val seed: Int=17, val spec: CarSpec=CarSpec(), val track: Track=Trac
         val steer=(-error*2.3+c.yaw*.18).coerceIn(-1.0,1.0)
         val target=if(c.carClass==null) { if(point.curvature>0) 23.0-skill.cornerMarginMps else 29.0 } else min(c.spec.maxSpeedMps*c.abilitySpeedScale*CarCatalog.aiCruiseFraction, if(point.curvature>0) sqrt(DriftDynamics.lateralLimit(c.spec,track.surfaceAt(s+look,lane,c.spec.circleRadiusM),driftRules)*c.abilityGripScale*CarCatalog.aiGripFraction/point.curvature)-skill.cornerMarginMps else c.spec.maxSpeedMps*c.abilitySpeedScale)
         val surfaceLimit=if(point.curvature>0)1.0 else sqrt(c.surface.gripScale).coerceIn(Movement.aiSurfaceMargin,1.0)
-        val cornerTarget=target*surfaceLimit*(1.0-min(.55,abs(error)*.4))
+        val cornerTarget=target*surfaceLimit*(1.0-min(.55,abs(error)*.4))*(if(c.aiDuelWait)DeathDuel.chaseFraction else 1.0)
         var a=if(c.speedMps<cornerTarget) 1.0 else .12
         if(c.spec.driftGeometry!=null) {
             // Request only the acceleration left by the same friction circle used by handling.
@@ -489,6 +513,7 @@ class World(val seed: Int=17, val spec: CarSpec=CarSpec(), val track: Track=Trac
             hash=31*hash+c.countersteerSmoothness.toBits();hash=31*hash+c.previousDriftSteer.toBits()
         }
         for(c in cars){hash=31*hash+if(c.entered)1 else 0;hash=31*hash+c.turboRemaining.toBits();hash=31*hash+c.fuelRemaining.toBits();hash=31*hash+c.utilityMask}
+        if(eventType==EventType.ELIMINATION) { hash=31*hash+eventType.ordinal;hash=31*hash+duelRigSlot;for(c in cars){hash=31*hash+c.aiDuelTarget;hash=31*hash+if(c.aiDuelWait)1 else 0} }
         hash=abilities.appendHash(hash)
         return if(combat.enabled)combat.appendHash(hash) else hash
     }

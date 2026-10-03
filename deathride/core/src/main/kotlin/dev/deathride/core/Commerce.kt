@@ -42,6 +42,8 @@ object Market {
     }
     fun transact(p: Profile,action: String,id: String,expectedRevision: Long): String {
         if(expectedRevision!=p.marketRevision)return "Offer changed - refresh the garage"
+        if(action=="ally")return Campaign.claim(p,id,expectedRevision)
+        if(DeathDuel.seized(p))return "Car seized - the supplied rig needs no purchase"
         val result=when(action) {
             "buy","trade" -> {
                 val car=CarCatalog.all.indexOfFirst{it.id==id}

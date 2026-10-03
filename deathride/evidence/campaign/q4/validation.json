@@ -1,0 +1,44 @@
+{
+  "utc": "2026-10-02T23:36:50.606658+00:00",
+  "implementationCommit": "d354a22",
+  "tasks": [
+    ":core:test",
+    ":link:test",
+    ":game:test",
+    ":app:assembleDebug"
+  ],
+  "buildLog": "build-commit.log",
+  "tests": {
+    "core": {
+      "tests": 132,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "link": {
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "game": {
+      "tests": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "apkSha256": "b880fe7d5c963df3155e4bd9112a6b0d5b1006e803f5a7b5a2b5094bf2bec1ae",
+  "browserLog": "browser-commit.log",
+  "browserChecks": [
+    "browser-check",
+    "combat-check",
+    "ability-controller-check",
+    "hud-browser-check",
+    "campaign-browser-check",
+    "duel-browser-check"
+  ],
+  "allBrowsersPassed": true,
+  "deviceRawArchivesByteExact": true,
+  "galleryImagesChecked": 35
+}

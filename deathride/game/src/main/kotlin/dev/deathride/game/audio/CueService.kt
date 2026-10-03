@@ -28,7 +28,11 @@ class CueService(val manifest: CueManifest,private val backend: AudioBackend) {
     private var paused=false
     private var disposed=false
     private var captionRemaining=0.0
+    private val narration=java.util.ArrayDeque<String>(4)
     var caption="";private set
+    var lastNarration="";private set
+    var lastNarrationPlayed=false;private set
+    var narrationCount=0L;private set
     var listenerX=0.0
     var listenerY=0.0
     var highWater=0;private set
@@ -105,9 +109,24 @@ class CueService(val manifest: CueManifest,private val backend: AudioBackend) {
         if(cue.bus!="voice")return false
         // Text is independent of the Sound path, bus gain and mute state.
         caption=cue.caption;captionRemaining=max(cue.durationSeconds,3.0)
-        return play(id)
+        lastNarration=id;narrationCount++
+        lastNarrationPlayed=play(id)
+        return lastNarrationPlayed
     }
-    fun skipNarration(){stopBus("voice");caption="";captionRemaining=0.0}
+    /** A short scene-local script; combat cues are never queued. Skip cancels the whole script. */
+    fun narrateSequence(vararg ids: String) {
+        skipNarration()
+        if(disposed || paused)return
+        ids.take(4).filter{manifest.cues[it]?.bus=="voice"}.forEach{narration.addLast(it)}
+        advanceNarration()
+    }
+    private fun advanceNarration(){
+        if(captionRemaining==0.0 && narration.isNotEmpty()){
+            stopBus("voice")
+            narrate(narration.removeFirst())
+        }
+    }
+    fun skipNarration(){narration.clear();stopBus("voice");caption="";captionRemaining=0.0}
 
     fun update(dt: Double) {
         if(disposed || paused || !dt.isFinite() || dt<0)return
@@ -129,6 +148,7 @@ class CueService(val manifest: CueManifest,private val backend: AudioBackend) {
             val (attenuation,pan)=spatial(v.cue,v.x,v.y)
             backend.parameters(v.handle,volume(v.cue,v.gain,attenuation),v.pitch,pan)
         }
+        advanceNarration()
     }
     fun stopCue(id: String,emitter: Int?=null){voices.filter{it.cue.id==id && (emitter==null || it.emitter==emitter)}.toList().forEach{remove(it)}}
     fun stopGroup(group: String){voices.filter{it.cue.group==group}.toList().forEach{remove(it)}}
@@ -144,5 +164,5 @@ class CueService(val manifest: CueManifest,private val backend: AudioBackend) {
     fun pause(){sceneChanged();paused=true}
     fun resume(){paused=false}
     fun dispose(){if(!disposed){sceneChanged();backend.dispose();disposed=true}}
-    fun statsJson()="{\"active\":$activeVoices,\"highWater\":$highWater,\"cap\":${manifest.maxVoices},\"played\":$played,\"suppressed\":$suppressed,\"stolen\":$stolen,\"missing\":$missing,\"decodedBytes\":$decodedBytes,\"decodedBudgetBytes\":${manifest.decodedBudgetBytes}}"
+    fun statsJson()="{\"active\":$activeVoices,\"highWater\":$highWater,\"cap\":${manifest.maxVoices},\"played\":$played,\"suppressed\":$suppressed,\"stolen\":$stolen,\"missing\":$missing,\"decodedBytes\":$decodedBytes,\"decodedBudgetBytes\":${manifest.decodedBudgetBytes},\"lastNarration\":\"$lastNarration\",\"lastNarrationPlayed\":$lastNarrationPlayed,\"narrationCount\":$narrationCount}"
 }

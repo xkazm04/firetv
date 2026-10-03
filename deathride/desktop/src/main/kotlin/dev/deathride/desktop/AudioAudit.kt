@@ -45,7 +45,7 @@ class AudioAudit: ApplicationAdapter() {
         if(seconds>2.5){
             check(service.highWater==8);check(service.missing==0L)
             val report="{\"result\":\"pass\",\"backend\":\"LWJGL3/OpenAL native host\",\"audio\":${service.statsJson()},\"notMeasured\":[\"physical Fire TV\",\"speaker masking\",\"human listening\",\"native PSS\"]}"
-            Gdx.files.local("audio/x3/runtime/desktop-audio.json").writeString(report+"\n",false,"UTF-8")
+            Gdx.files.local(System.getenv("DEATHRIDE_AUDIO_AUDIT_OUTPUT")?:"audio/x3/runtime/desktop-audio.json").writeString(report+"\n",false,"UTF-8")
             println("DeathRide native audio audit $report");Gdx.app.exit()
         }
     }

@@ -18,6 +18,18 @@ class AbilityPainter {
         for(i in 0 until Tuning.CAR_COUNT)if(s.entered(i) && !s.wrecked(i)) {
             if(s.shockSeconds(i)>0){r.setColor(.25f,.9f,1f,.8f);ring(r,s.x(i),s.y(i),s.noseM(i),true)}
             val d=s.abilityDefinition(i)?:continue;val phase=s.abilityPhase(i)
+            if(d.kind==AbilityKind.DISPATCHER) {
+                val cx=cos(s.heading(i));val cy=sin(s.heading(i));val rear=s.noseM(i)*.6
+                val x=s.x(i)-cx*rear;val y=s.y(i)-cy*rear
+                r.setColor(.70f,.63f,.35f,1f)
+                r.rectLine((x-cy*s.radiusM(i)).toFloat(),(y+cx*s.radiusM(i)).toFloat(),(x+cy*s.radiusM(i)).toFloat(),(y-cx*s.radiusM(i)).toFloat(),.4f)
+                for(side in -1..1)r.circle((x-cy*side*s.radiusM(i)*.6).toFloat(),(y+cx*side*s.radiusM(i)*.6).toFloat(),.38f,8)
+                if(phase==AbilityPhase.WINDUP) {
+                    r.setColor(1f,.75f,.3f,.85f)
+                    val drop=s.noseM(i)+CombatRules["dropClearanceM"]
+                    ring(r,s.x(i)-cx*drop,s.y(i)-cy*drop,Weapons.all[Weapons.MINE].radiusM,true)
+                }
+            }
             if(phase==AbilityPhase.READY)continue
             val windup=phase==AbilityPhase.WINDUP;val cooling=phase==AbilityPhase.RECOVERY
             if(cooling)r.setColor(.8f,.35f,.2f,.45f) else if(windup)r.setColor(1f,.75f,.3f,.85f) else r.setColor(.35f,.95f,1f,.95f)

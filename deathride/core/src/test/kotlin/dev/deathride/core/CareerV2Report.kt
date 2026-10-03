@@ -29,7 +29,7 @@ fun main(args:Array<String>) {
             canonical.careerRound=round;canonical.careerCleared=round;CareerSpending.spend(canonical,4);RivalEconomy.prepare(canonical)
             val event=Career.events[round];val course=Courses.all[event.courseIndex];val fieldPR=RivalEconomy.fieldRating(canonical)
             for(index in RivalEconomy.cast(round)){val npc=canonical.rivalProfiles[index];garages.appendText(listOf(round+1,Career.rivals[index].id,CarCatalog.all[npc.selectedCar].id,PowerRating.of(CarCatalog.all[npc.selectedCar],npc.bonuses()),npc.credits,npc.debt,npc.tiers.joinToString(":" )).joinToString(",")+"\n")}
-            val cells=(0..2).flatMap{difficulty->CarCatalog.all.indices.filter{CarCatalog.all[it].tierRank<=event.cupIndex}.flatMap{car->bands.flatMap{band->(0 until seeds).map{sample->intArrayOf(difficulty,car,band,sample)}}}}
+            val cells=(0..2).flatMap{difficulty->CarCatalog.all.indices.filter{CarCatalog.all[it].tierRank<=event.playerTier}.flatMap{car->bands.flatMap{band->(0 until seeds).map{sample->intArrayOf(difficulty,car,band,sample)}}}}
             val results=arrayOfNulls<AshOutcome>(cells.size)
             IntStream.range(0,cells.size).parallel().forEach{index->
                 val cell=cells[index];val difficulty=cell[0];val car=cell[1];val band=cell[2];val sample=cell[3]
@@ -58,7 +58,7 @@ fun main(args:Array<String>) {
             if(first<0 && p.tiers.sum()>beforeParts)first=races
             val tier=CarCatalog.all[p.selectedCar].tierRank;if(milestones[tier]<0)milestones[tier]=races
             RivalEconomy.prepare(p);val round=p.careerRound;val pr=PowerRating.of(CarCatalog.all[p.selectedCar],p.bonuses());val field=RivalEconomy.fieldRating(p);val ratio=pr/field
-            check(p.owned[p.selectedCar] && CarCatalog.all[p.selectedCar].tierRank<=Career.events[round].cupIndex)
+            check(p.owned[p.selectedCar] && CarCatalog.all[p.selectedCar].tierRank<=Career.events[round].playerTier)
             val cells=indexed.getValue(Triple(round,difficulty,p.selectedCar));val chosenBand=cells.minBy{abs(it.playerPR/it.fieldPR-ratio)}.band
             val choices=cells.filter{it.band==chosenBand};val result=choices[rng.nextInt(choices.size)];val gap=abs(result.playerPR/result.fieldPR-ratio);gapMax=max(gapMax,gap)
             val nextPart=Parts.all.indices.map{Garage.offer(p,it)}.filter{it.available||it.reason=="Earn more credits"}.filter{o->val b=p.bonuses();for(i in b.indices)b[i]+=Parts.all[o.partIndex].bonuses[i];PowerRating.of(CarCatalog.all[p.selectedCar],b)>pr}.maxByOrNull{o->val b=p.bonuses();for(i in b.indices)b[i]+=Parts.all[o.partIndex].bonuses[i];(PowerRating.of(CarCatalog.all[p.selectedCar],b)-pr)/o.price}?.price?:0

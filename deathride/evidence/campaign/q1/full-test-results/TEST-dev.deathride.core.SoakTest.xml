@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="dev.deathride.core.SoakTest" tests="4" skipped="0" failures="0" errors="0" timestamp="2026-10-02T21:44:51.573Z" hostname="KAZIHO" time="1.384">
+  <properties/>
+  <testcase name="fixedStepHasNoSteadyStateAllocations()" classname="dev.deathride.core.SoakTest" time="0.389"/>
+  <testcase name="wallRecoveryDoesNotNeedReverseOrTeleport()" classname="dev.deathride.core.SoakTest" time="0.0"/>
+  <testcase name="fifteenSimulatedMinutesStayFiniteAndBounded()" classname="dev.deathride.core.SoakTest" time="0.994"/>
+  <testcase name="finishedHumanDoesNotHandSteeringToAi()" classname="dev.deathride.core.SoakTest" time="0.0"/>
+  <system-out><![CDATA[World.step allocated 0 bytes over 10,000 warmed steps on this JVM
+900 simulated seconds, 12 full six-car races; not a real-time/device soak
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

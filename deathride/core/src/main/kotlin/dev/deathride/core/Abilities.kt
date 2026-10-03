@@ -4,7 +4,7 @@ import kotlin.math.*
 import dev.deathride.core.StrictTrig.cos
 import dev.deathride.core.StrictTrig.sin
 
-enum class AbilityKind { DASH, SURGE, CHARGE, TURBINE, GRIP, LANCE, SPIKES, PATCH, HARPOON, GUARD }
+enum class AbilityKind { DASH, SURGE, CHARGE, TURBINE, GRIP, LANCE, SPIKES, PATCH, HARPOON, GUARD, DISPATCHER }
 enum class AbilityPhase { READY, WINDUP, ACTIVE, RECOVERY }
 
 /** Immutable type objects loaded once. CSV owns every gameplay coefficient. */
@@ -35,7 +35,9 @@ class AbilityDefinition(row: Map<String,String>) {
     val json="{\"id\":\"$id\",\"name\":\"$name\",\"car\":\"$car\",\"kind\":\"$kind\",\"cooldownSeconds\":$cooldownSeconds,\"energyCost\":$energyCost,\"energyCapacity\":$energyCapacity,\"effectId\":\"$effectId\",\"prAdjustment\":$prAdjustment}"
 }
 object AbilityCatalog {
-    val all=Content.table("abilities").map{AbilityDefinition(it)}
+    private val definitions=Content.table("abilities").map{AbilityDefinition(it)}
+    val all=definitions.filter{it.car!="MechanicRig"}
+    val dispatcher=definitions.single{it.car=="MechanicRig"}
     val byCar=all.associateBy{it.car}
     init { require(byCar.size==all.size && all.map{it.id}.distinct().size==all.size) }
     val json=all.joinToString(",","[","]"){it.json}
@@ -82,7 +84,8 @@ class Abilities(private val world: World,var enabled: Boolean) {
                 else->Unit
             }
         } else s.energy=min(d.energyCapacity,s.energy+d.energyPerSecond*dt)
-        if(input.ability>0 && !s.committed && s.cooldownSeconds<=1e-9 && s.energy+1e-9>=d.energyCost && world.combat.armingSeconds<=0)activate(c,d)
+        val requested=if(d.kind==AbilityKind.DISPATCHER)c.speedMps>=d.aiMinSpeedMps else input.ability>0
+        if(requested && !s.committed && s.cooldownSeconds<=1e-9 && s.energy+1e-9>=d.energyCost && world.combat.armingSeconds<=0)activate(c,d)
         if(s.phase==AbilityPhase.ACTIVE) {
             c.engineScale*=d.engineScale;c.abilitySpeedScale=d.speedScale;c.abilitySteerScale=d.steerScale
             c.abilityGripScale=if(d.kind!=AbilityKind.GRIP || c.surface.gripScale<Surfaces.asphalt.gripScale)d.gripScale else 1.0
@@ -115,7 +118,9 @@ class Abilities(private val world: World,var enabled: Boolean) {
             if(!world.combat.canAct(c.id)){cancel(c);continue}
             val s=c.ability;val d=s.definition?:continue
             if(s.phase!=AbilityPhase.ACTIVE)continue
-            if(d.ray && !s.fired) {
+            if(d.kind==AbilityKind.DISPATCHER && !s.fired) {
+                s.fired=true;world.combat.dispatchMine(c.id)
+            } else if(d.ray && !s.fired) {
                 s.fired=true;var target=-1;var first=Double.POSITIVE_INFINITY
                 for(o in world.cars)if(o!==c && world.combat.canAct(o.id)) {
                     val t=world.combat.cast(s.x,s.y,s.endX,s.endY,o,d.radiusM)
@@ -174,6 +179,7 @@ class Abilities(private val world: World,var enabled: Boolean) {
             AbilityKind.SPIKES->(front || rear) && c.speedMps>=d.aiMinSpeedMps
             AbilityKind.PATCH->rear && c.speedMps>=d.aiMinSpeedMps
             AbilityKind.GUARD->near && (rear || world.combat.health(c.id)<world.combat.maxHealth(c.id))
+            AbilityKind.DISPATCHER->false // Automatic speed-gated dispatcher; no target omniscience.
         }
         c.aiInput.ability=if(use)1.0 else 0.0
     }
