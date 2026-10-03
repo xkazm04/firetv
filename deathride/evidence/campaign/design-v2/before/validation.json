@@ -1,0 +1,24 @@
+{
+  "tasks": ":core:test :link:test :game:test :app:assembleDebug",
+  "results": {
+    "core": {
+      "tests": 150,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "link": {
+      "tests": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "game": {
+      "tests": 32,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "stick": "pending; not accessed"
+}
