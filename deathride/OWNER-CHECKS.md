@@ -235,3 +235,7 @@ P3 keeps native resolution; a 720p diagnostic did not demonstrate the required
 frame result. Pacing variants are technical measurements, not an optical or
 sofa verdict. On the final build, check camera motion and repeated Home/resume
 with audio; the final report records which scheduling mode was retained.
+
+P4 preserves two local engine loops, spatial attenuation, pitch smoothing and
+low-health cue thresholds. Listen while the second driver drops out or wrecks;
+the allocation test verifies storage behavior, not audible quality.

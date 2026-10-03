@@ -47,15 +47,18 @@ class CueService(val manifest: CueManifest,private val backend: AudioBackend) {
 
     fun preload(){manifest.cues.values.filter{it.path.isNotEmpty()}.distinctBy{it.path}.forEach{backend.prepare(it)}}
 
-    private fun spatial(cue: Cue,x: Double,y: Double): Pair<Float,Float> {
-        if(!cue.spatial)return 1f to 0f
+    private var spatialGain=1f
+    private var spatialPan=0f
+    private fun spatial(cue: Cue,x: Double,y: Double) {
+        spatialGain=1f;spatialPan=0f
+        if(!cue.spatial)return
         val dx=x-listenerX;val dy=y-listenerY
-        if(!dx.isFinite() || !dy.isFinite())return 0f to 0f
+        if(!dx.isFinite() || !dy.isFinite()){spatialGain=0f;return}
         val distance=hypot(dx,dy)
-        if(distance>=manifest.cutoffM)return 0f to 0f
+        if(distance>=manifest.cutoffM){spatialGain=0f;return}
         val attenuation=if(distance<=manifest.nearM)1.0 else
             ((manifest.cutoffM-distance)/(manifest.cutoffM-manifest.nearM)).coerceIn(0.0,1.0).pow(2)
-        return attenuation.toFloat() to (dx/manifest.farM).toFloat().coerceIn(-1f,1f)
+        spatialGain=attenuation.toFloat();spatialPan=(dx/manifest.farM).toFloat().coerceIn(-1f,1f)
     }
     private fun volume(cue: Cue,gain: Float,attenuation: Float): Float {
         val db=when(cue.bus){"music"->manifest.duckMusicDb;"engines"->manifest.duckEnginesDb;else->0.0}
@@ -72,9 +75,11 @@ class CueService(val manifest: CueManifest,private val backend: AudioBackend) {
         if(eventId!=0L){if(!seen.add(eventId))return drop();if(seen.size>256)seen.remove(seen.first())}
         val safeGain=if(gain.isFinite())gain.coerceIn(0f,1f) else 0f
         val safePitch=if(pitch.isFinite())pitch.coerceIn(cue.pitchMin,cue.pitchMax) else 1f
-        val (attenuation,pan)=spatial(cue,x,y)
-        val level=volume(cue,safeGain,attenuation)
-        val existing=if(cue.loop)voices.firstOrNull{it.cue.id==id && it.emitter==emitter} else null
+        spatial(cue,x,y)
+        val pan=spatialPan
+        val level=volume(cue,safeGain,spatialGain)
+        var existing: Voice?=null
+        if(cue.loop)for(i in voices.indices){val v=voices[i];if(v.cue.id==id && v.emitter==emitter){existing=v;break}}
         if(level<=.0001f){if(existing!=null)remove(existing);return drop()}
         if(existing!=null){existing.x=x;existing.y=y;existing.gain=safeGain;existing.targetPitch=safePitch;existing.lastTouch=clock;return true}
         val key=id to emitter
@@ -134,34 +139,37 @@ class CueService(val manifest: CueManifest,private val backend: AudioBackend) {
         if(disposed || paused || !dt.isFinite() || dt<0)return
         clock+=dt
         captionRemaining=max(0.0,captionRemaining-dt);if(captionRemaining==0.0)caption=""
-        val iterator=voices.iterator()
-        while(iterator.hasNext()){
-            val v=iterator.next()
+        var i=0
+        while(i<voices.size){
+            val v=voices[i]
             if(!backend.pending(v.handle))v.played+=dt*v.pitch
             if(backend.finished(v.handle) || !v.cue.loop && v.played>=v.cue.durationSeconds+.05 || v.cue.loop && clock-v.lastTouch>.3){
-                backend.stop(v.handle);iterator.remove()
-            }
+                backend.stop(v.handle);voices.removeAt(i)
+            }else i++
         }
-        val speaking=voices.any{it.cue.bus=="voice"}
+        var speaking=false
+        for(n in voices.indices)if(voices[n].cue.bus=="voice"){speaking=true;break}
         val target=if(speaking)1.0 else 0.0
         duck+=(target-duck)*min(1.0,dt/(if(speaking)manifest.duckAttack else manifest.duckRelease))
-        for(v in voices){
+        for(n in voices.indices){
+            val v=voices[n]
             v.pitch+=(v.targetPitch-v.pitch)*min(1.0,dt/.1).toFloat()
-            val (attenuation,pan)=spatial(v.cue,v.x,v.y)
-            backend.parameters(v.handle,volume(v.cue,v.gain,attenuation),v.pitch,pan)
+            spatial(v.cue,v.x,v.y)
+            backend.parameters(v.handle,volume(v.cue,v.gain,spatialGain),v.pitch,spatialPan)
         }
         advanceNarration()
     }
-    fun stopCue(id: String,emitter: Int?=null){voices.filter{it.cue.id==id && (emitter==null || it.emitter==emitter)}.toList().forEach{remove(it)}}
-    fun stopGroup(group: String){voices.filter{it.cue.group==group}.toList().forEach{remove(it)}}
-    fun stopBus(bus: String){voices.filter{it.cue.bus==bus}.toList().forEach{remove(it)}}
+    private inline fun stopMatching(predicate: (Voice)->Boolean){var i=0;while(i<voices.size){val v=voices[i];if(predicate(v)){backend.stop(v.handle);voices.removeAt(i)}else i++}}
+    fun stopCue(id: String,emitter: Int?=null){stopMatching{it.cue.id==id && (emitter==null || it.emitter==emitter)}}
+    fun stopGroup(group: String){stopMatching{it.cue.group==group}}
+    fun stopBus(bus: String){stopMatching{it.cue.bus==bus}}
     fun setGain(bus: String,gain: Float){
         if(bus !in gains)return
         gains[bus]=if(gain.isFinite())gain.coerceIn(0f,1f) else 0f
         if(gains[bus]==0f){if(bus=="master")stopAll() else stopBus(bus)}
     }
     fun gain(bus: String)=gains[bus]?:0f
-    private fun stopAll(){voices.toList().forEach{remove(it)};duck=0.0}
+    private fun stopAll(){stopMatching{true};duck=0.0}
     fun sceneChanged(){stopAll();skipNarration();seen.clear();lastStarts.clear()}
     fun pause(){sceneChanged();paused=true}
     fun resume(){paused=false}

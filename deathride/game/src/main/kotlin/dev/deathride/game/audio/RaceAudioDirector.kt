@@ -57,18 +57,18 @@ class RaceAudioDirector(val cues: CueService) {
             if(count!=lastCountdown){cues.play("race.countdown",eventId=0);lastCountdown=count}
         }
         if(phase!="race"){w.presentationEvents.clear();return}
-        val locals=w.cars.filter{it.entered && it.human && !w.combat.wrecked(it.id) && it.finishSeconds<0}
-        val listener=locals.firstOrNull()?:w.cars.firstOrNull{it.entered && !w.combat.wrecked(it.id)}?:w.cars[0]
+        var firstLocal: Car?=null;var secondLocal: Car?=null
+        for(c in w.cars)if(c.entered && c.human && !w.combat.wrecked(c.id) && c.finishSeconds<0){if(firstLocal==null)firstLocal=c else if(secondLocal==null)secondLocal=c}
+        val listener=firstLocal?:w.cars.firstOrNull{it.entered && !w.combat.wrecked(it.id)}?:w.cars[0]
         cues.listenerX=listener.x;cues.listenerY=listener.y
         // Prefer both local seats; spectator gets one leader engine. No full AI bed.
-        val audible=if(locals.isEmpty())listOf(listener) else locals.take(2)
         for(c in w.cars){
-            if(c in audible && !w.combat.wrecked(c.id) && c.finishSeconds<0){
+            if((c===firstLocal || c===secondLocal || firstLocal==null && c===listener) && !w.combat.wrecked(c.id) && c.finishSeconds<0){
                 val speed=(c.speedMps/c.spec.maxSpeedMps).coerceIn(0.0,1.0)
                 cues.play("engine.base",c.id,x=c.x,y=c.y,gain=(.35+.65*speed).toFloat(),pitch=(.8+.7*speed).toFloat())
             }else cues.stopCue("engine.base",c.id)
         }
-        val rolling=locals.firstOrNull()?:listener
+        val rolling=firstLocal?:listener
         val newMovement=when{
             w.combat.wrecked(rolling.id) || rolling.finishSeconds>=0 || rolling.speedMps<2.0->""
             rolling.drifting->"movement.drift"
@@ -103,7 +103,7 @@ class RaceAudioDirector(val cues: CueService) {
             laps[id]=c.lap.laps
             val hp=w.combat.health(id)/w.combat.maxHealth(id)
             if(hp>.35)low[id]=false
-            if(hp in .00001..<.25 && !low[id]){cues.play("race.low-hp",id);low[id]=true}
+            if(hp>=.00001 && hp<.25 && !low[id]){cues.play("race.low-hp",id);low[id]=true}
             val a=c.ability;val d=a.definition
             val nowReady=d!=null && a.phase==AbilityPhase.READY && a.cooldownSeconds<=0 && a.energy>=d.energyCost
             if(nowReady && !ready[id])cues.play("race.ability-ready",id)
