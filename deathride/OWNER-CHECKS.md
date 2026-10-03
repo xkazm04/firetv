@@ -248,3 +248,9 @@ P7 removes the shared audio-worker monitor. Repeat abrupt engine/pitch changes,
 simultaneous impacts, mute and Home/resume. Queue delays and dropped onsets are
 still reported; the native trace proves the measured dependency is gone, not
 that every sound is perceived on time.
+
+P6 records an optional foreground Wi-Fi latency policy. A system lock and one
+zero-rejection run do not establish router/phone reliability; that run also
+had an invalid host-pump pause. On the final build, repeat physical-phone
+release/reconnect and Home/resume on the intended LAN. The report keeps input
+age, stale consumption and rejected-input counts visible.

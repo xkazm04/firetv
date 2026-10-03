@@ -70,6 +70,8 @@ if s.get('profiles'):
         result['profile']['ackRttMs']=q([r[3]-r[2] for r in s['ackObservations'] if r[2] is not None])
 result['gates']={'duration':(s.get('actualDurationSeconds') or 0)>=900,
     'zeroRejected':bool(s.get('clients')) and all(c['rejected']==0 and c['accepted']==c['sent'] for c in s['clients']),
+    'inputStream':bool(s.get('clients')) and not s['pumpStalls'] and all(c['hz']>29 for c in s['clients']),
+    'functional':bool(s.get('functionalPass')),
     'frameP95':bool(active) and result['activeWindows']['worstP95Ms']<=16.7,
     'frameMax':bool(active) and result['activeWindows']['maxMs']<33,
     'memory':bool(pss) and max(pss)<=192 and growth is not None and growth<=8,
