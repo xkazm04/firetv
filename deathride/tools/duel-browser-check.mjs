@@ -24,6 +24,8 @@ try{
  assert.equal(await p.locator('#careerCar').isDisabled(),true);
  await until(async()=>(await stats()).audio.lastNarration==='voice.announcer.seizure');
  const seizureAudio=(await stats()).audio;
+ assert.equal(seizureAudio.musicMode,'none','Owner no-music mode reaches the native runtime');
+ assert.equal(seizureAudio.missing,0,'Intentional silence is distinct from missing audio');
  assert.equal(seizureAudio.lastNarrationPlayed,true,'Seizure narration reaches native playback');
  await p.screenshot({path:output+'/seizure.png'});
  await p.locator('#careerStart').tap();await until(async()=>(await stats()).phase==='race');
@@ -31,6 +33,7 @@ try{
  await until(async()=>(await stats()).audio.lastNarration==='voice.announcer.duel');
  const duelAudio=(await stats()).audio;
  assert.equal(duelAudio.lastNarrationPlayed,true,'Elimination narration reaches native playback');
+ assert.equal(duelAudio.musicMode,'none');assert.ok(duelAudio.intentionalSilence>0);
  assert.ok(duelAudio.played>0);assert.ok(duelAudio.highWater<=duelAudio.cap);
  assert.equal(s.slots[1].combat.spectating,true);assert.equal(await p.locator('#lapLabel').textContent(),'DUEL');
  // Ordinary touch acceleration. Automatic ability needs no ability press.

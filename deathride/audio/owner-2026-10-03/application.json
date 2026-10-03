@@ -1,0 +1,522 @@
+{
+  "authority": "docs/concepts/DEATH-RIDE-OWNER-DECISIONS-2026-10-03.md sections 2-4",
+  "generated_assets": 0,
+  "spend": 0,
+  "installed": [
+    {
+      "cue": "engine.base",
+      "sample": "engine-base",
+      "path": "audio/clips/engine.base.wav",
+      "sha256": "fd0f09457fbe925f6f27bfc589b7ef8f1bb3b9e7bc50952c35f199d3472ca699",
+      "technicalStatus": "pass",
+      "failures": []
+    },
+    {
+      "cue": "weapon.rivet.fire",
+      "sample": "rivet-base",
+      "path": "audio/clips/weapon.rivet.fire.wav",
+      "sha256": "44a39d7e0ad4ce66d7764ef6dea552387321ca55d7f22a7a7af4880ebf618fa5",
+      "technicalStatus": "pass",
+      "failures": []
+    },
+    {
+      "cue": "weapon.mine.blast",
+      "sample": "mine-base",
+      "path": "audio/clips/weapon.mine.blast.wav",
+      "sha256": "a69f237913aedfed5bd60041820dd55307962fca3f4b4795e2eb3e0d04d24683",
+      "technicalStatus": "pass",
+      "failures": []
+    },
+    {
+      "cue": "collision.car.base",
+      "sample": "crunch-base",
+      "path": "audio/clips/collision.car.base.wav",
+      "sha256": "e5822c6040079139c863b5ca141e37b68b4b961fda2b547099bc37ac9147530c",
+      "technicalStatus": "pass",
+      "failures": []
+    },
+    {
+      "cue": "pickup.cash",
+      "sample": "pickup-base",
+      "path": "audio/clips/pickup.cash.wav",
+      "sha256": "14262a3914741a18b3f83127278f21a44c1a0ab2c1e0d7751c53bde9488649d1",
+      "technicalStatus": "pass",
+      "failures": []
+    },
+    {
+      "cue": "ui.confirm",
+      "sample": "confirm-base",
+      "path": "audio/clips/ui.confirm.wav",
+      "sha256": "7a56955bec954912c58a680d1a587a56a12f381ffe8cf34c4e53fcb0bbef3ce1",
+      "technicalStatus": "pass",
+      "failures": []
+    },
+    {
+      "cue": "collision.car",
+      "sample": "crunch-retry",
+      "path": "audio/clips/collision.car.wav",
+      "sha256": "61717bb9d82afe0f189355e43081447c87ce578dce97250adea6fe61e2674a89",
+      "technicalStatus": "pass",
+      "failures": []
+    },
+    {
+      "cue": "collision.wall",
+      "sample": "wall",
+      "path": "audio/clips/collision.wall.wav",
+      "sha256": "5853b60a8d20366db9c241f90005caa46c1a606b597f6d990aee6ea22fb64832",
+      "technicalStatus": "pass",
+      "failures": []
+    },
+    {
+      "cue": "collision.barrier",
+      "sample": "barrier",
+      "path": "audio/clips/collision.barrier.wav",
+      "sha256": "cccfafcd7d72d253dcf0c6f4d35af3d49263d38de783f144158c786fda8eca87",
+      "technicalStatus": "pass",
+      "failures": []
+    },
+    {
+      "cue": "weapon.rivet.hit",
+      "sample": "rivet-hit",
+      "path": "audio/clips/weapon.rivet.hit.wav",
+      "sha256": "474dda64761055a1db7e02566856261522638d993221370b4606a8453379f857",
+      "technicalStatus": "pass",
+      "failures": []
+    },
+    {
+      "cue": "weapon.hammer.fire",
+      "sample": "hammer-fire",
+      "path": "audio/clips/weapon.hammer.fire.wav",
+      "sha256": "80c705a0306785d8ac406daab9fdae7827ddb9d5cebfc7dddef541f5270c5c92",
+      "technicalStatus": "pass",
+      "failures": []
+    },
+    {
+      "cue": "weapon.hammer.hit",
+      "sample": "hammer-hit",
+      "path": "audio/clips/weapon.hammer.hit.wav",
+      "sha256": "5e5b38a89f9012b9c99e5c95bcfd1f266f8d2e5a8c6ae014750078f1b79acb6a",
+      "technicalStatus": "pass",
+      "failures": []
+    },
+    {
+      "cue": "weapon.mine.arm",
+      "sample": "mine-arm",
+      "path": "audio/clips/weapon.mine.arm.wav",
+      "sha256": "f6267111468f1a7822ac912441d64554add3ffbbdc588ccc57d3f2e3ecd48500",
+      "technicalStatus": "pass",
+      "failures": []
+    },
+    {
+      "cue": "weapon.scatter.fire",
+      "sample": "scatter",
+      "path": "audio/clips/weapon.scatter.fire.wav",
+      "sha256": "dae7a3e86a848d701bd593e138dd70d1f30d71d7904720ada4b11dd352b4bdee",
+      "technicalStatus": "pass",
+      "failures": []
+    },
+    {
+      "cue": "pickup.ammo",
+      "sample": "pickup-ammo",
+      "path": "audio/clips/pickup.ammo.wav",
+      "sha256": "e21d242080cfb7404d2e9092ec01bb56f04450585fccbe6cf7bacaac9cd62513",
+      "technicalStatus": "pass",
+      "failures": []
+    },
+    {
+      "cue": "pickup.repair",
+      "sample": "pickup-repair",
+      "path": "audio/clips/pickup.repair.wav",
+      "sha256": "77ca39b4929c15a70d2c3bc59a1998c8d2cc4ebb53bea5182c6967a51378a0a2",
+      "technicalStatus": "pass",
+      "failures": []
+    },
+    {
+      "cue": "race.wreck",
+      "sample": "wreck",
+      "path": "audio/clips/race.wreck.wav",
+      "sha256": "46f7ab798fffb6f1a7dffa7f3a495e162bb9b94cf1e21b8a4972a20460f3f164",
+      "technicalStatus": "pass",
+      "failures": []
+    },
+    {
+      "cue": "race.countdown",
+      "sample": "countdown",
+      "path": "audio/clips/race.countdown.wav",
+      "sha256": "e5e9b61db1ea3e16f57a68c1bae9edbf27dc835081bbabb4994789d6fa6ff471",
+      "technicalStatus": "pass",
+      "failures": []
+    },
+    {
+      "cue": "race.start",
+      "sample": "start",
+      "path": "audio/clips/race.start.wav",
+      "sha256": "41d9cb64a4b4ed01cd5a5eb6d11f1aa4b54da4e6d8387175ea52b4c39d1ca70c",
+      "technicalStatus": "pass",
+      "failures": []
+    },
+    {
+      "cue": "race.victory",
+      "sample": "victory",
+      "path": "audio/clips/race.victory.wav",
+      "sha256": "b2bb7beadcc71986f8bc09adc1d924e2be2fd42134ccffc81e944c8ef6764be3",
+      "technicalStatus": "pass",
+      "failures": []
+    },
+    {
+      "cue": "race.defeat",
+      "sample": "defeat",
+      "path": "audio/clips/race.defeat.wav",
+      "sha256": "f3eea32a6ee1917a7dba80baf05433e6d4ead5fcd9358aba2ba41bb8c1dccc26",
+      "technicalStatus": "pass",
+      "failures": []
+    },
+    {
+      "cue": "ui.focus",
+      "sample": "ui-focus",
+      "path": "audio/clips/ui.focus.wav",
+      "sha256": "252dfdc89c0b3c8090e8aab48253a7f50e4960ee2b35b258f28780fa348f13d8",
+      "technicalStatus": "pass",
+      "failures": []
+    },
+    {
+      "cue": "ui.back",
+      "sample": "ui-back",
+      "path": "audio/clips/ui.back.wav",
+      "sha256": "e9167114248b55eebead6f08377a4d5e32d61baa110fd05c6aa51062fb9e5a41",
+      "technicalStatus": "pass",
+      "failures": []
+    },
+    {
+      "cue": "ui.denied",
+      "sample": "ui-denied",
+      "path": "audio/clips/ui.denied.wav",
+      "sha256": "730de0fe3630c6913fadd869001458edc969480dfe16a7b0bfa6602e28a4b080",
+      "technicalStatus": "pass",
+      "failures": []
+    },
+    {
+      "cue": "ui.purchase",
+      "sample": "ui-purchase",
+      "path": "audio/clips/ui.purchase.wav",
+      "sha256": "f28cb2c396acb79edfc4cf9f44a782804a7368c68ccd3e140a9477f03469872e",
+      "technicalStatus": "pass",
+      "failures": []
+    },
+    {
+      "cue": "ability.steel-flick",
+      "sample": "ability-steel-flick",
+      "path": "audio/clips/ability.steel-flick.wav",
+      "sha256": "3fb475db18a4f46a78fa5fe3391430cada5a77e4821ca5facde075a487c7d041",
+      "technicalStatus": "pass",
+      "failures": []
+    },
+    {
+      "cue": "ability.flywheel",
+      "sample": "ability-flywheel",
+      "path": "audio/clips/ability.flywheel.wav",
+      "sha256": "2681ee5d9af04fd34d1c597b8ee1caa6e6af68ef9b4475d96bc5c5bcd088bf1b",
+      "technicalStatus": "pass",
+      "failures": []
+    },
+    {
+      "cue": "ability.shoulder",
+      "sample": "ability-shoulder",
+      "path": "audio/clips/ability.shoulder.wav",
+      "sha256": "22bff2fd4f8850317a4555a2788e1df7216ca4d6ed1c35a5e5d47a228446aaa1",
+      "technicalStatus": "pass",
+      "failures": []
+    },
+    {
+      "cue": "ability.turbine",
+      "sample": "ability-turbine",
+      "path": "audio/clips/ability.turbine.wav",
+      "sha256": "75e9aca11d2731a0734b5b663d2c9541e14fc06aac80b9384bd5868efbf5f142",
+      "technicalStatus": "pass",
+      "failures": []
+    },
+    {
+      "cue": "ability.ground-bite",
+      "sample": "ability-ground-bite",
+      "path": "audio/clips/ability.ground-bite.wav",
+      "sha256": "3f468369ec5ad1e61d3bff5686ca4e36eca35ece67cf2b59741bf8c869c01ca9",
+      "technicalStatus": "pass",
+      "failures": []
+    },
+    {
+      "cue": "ability.punch-lance",
+      "sample": "ability-punch-lance",
+      "path": "audio/clips/ability.punch-lance.wav",
+      "sha256": "474d646d72ee54c8c7f62718f6229b77777a5e4dbbaee5229724a5f69f4e0f68",
+      "technicalStatus": "pass",
+      "failures": []
+    },
+    {
+      "cue": "ability.bone-rack",
+      "sample": "ability-bone-rack",
+      "path": "audio/clips/ability.bone-rack.wav",
+      "sha256": "a67d5e53ceba8772a52df43abd44ec5d0b63c49167737ec8b5d4d0cf87bce4b2",
+      "technicalStatus": "pass",
+      "failures": []
+    },
+    {
+      "cue": "ability.scrambler",
+      "sample": "ability-scrambler",
+      "path": "audio/clips/ability.scrambler.wav",
+      "sha256": "cebfe77495f1c083ded93cea579ba64e783f778d3b97a0dea0878f3a82b00653",
+      "technicalStatus": "pass",
+      "failures": []
+    },
+    {
+      "cue": "ability.arc-harpoon",
+      "sample": "ability-arc-harpoon",
+      "path": "audio/clips/ability.arc-harpoon.wav",
+      "sha256": "54d0cba0cc35e9f4d71e7a135d8d865a140d3720254980322f3f6885df1d699a",
+      "technicalStatus": "pass",
+      "failures": []
+    },
+    {
+      "cue": "ability.plate-brace",
+      "sample": "ability-plate-brace",
+      "path": "audio/clips/ability.plate-brace.wav",
+      "sha256": "a9569dbffab2029db404084e9f7d2f18fbf601685c82b6a574cbbae3ecc9e623",
+      "technicalStatus": "pass",
+      "failures": []
+    },
+    {
+      "cue": "voice.announcer.debt",
+      "sample": "announcer.debt",
+      "path": "audio/clips/voice.announcer.debt.wav",
+      "sha256": "e79d56839bca8a70c5e6b05ff728646dae6b53285d3d9a445b9305f693585928",
+      "technicalStatus": "pass",
+      "failures": []
+    },
+    {
+      "cue": "voice.announcer.boss",
+      "sample": "announcer.boss",
+      "path": "audio/clips/voice.announcer.boss.wav",
+      "sha256": "b9ed0cb04a81816f7d53deee11b85ffda4a6b6f972f8cb7d5204a1088ca9a6ac",
+      "technicalStatus": "pass",
+      "failures": []
+    },
+    {
+      "cue": "voice.announcer.ally",
+      "sample": "announcer.ally",
+      "path": "audio/clips/voice.announcer.ally.wav",
+      "sha256": "13897356bd2edc5a6698c409dcbef6ba9641cb02395ce88ce5b37c1d08feaa21",
+      "technicalStatus": "pass",
+      "failures": []
+    },
+    {
+      "cue": "voice.announcer.seizure",
+      "sample": "announcer.seizure",
+      "path": "audio/clips/voice.announcer.seizure.wav",
+      "sha256": "f8921b9a4f69435d1d1be64b5cfe3767cfa0c2267c43843f7e1324b439607eb5",
+      "technicalStatus": "pass",
+      "failures": []
+    },
+    {
+      "cue": "voice.announcer.duel",
+      "sample": "announcer.duel",
+      "path": "audio/clips/voice.announcer.duel.wav",
+      "sha256": "c53454a068397b2f99146640e6bfc187f40fbe9ed5e3eeadd80ac12881ebf8d8",
+      "technicalStatus": "pass",
+      "failures": []
+    },
+    {
+      "cue": "voice.announcer.freedom",
+      "sample": "announcer.freedom",
+      "path": "audio/clips/voice.announcer.freedom.wav",
+      "sha256": "b4767c9c67a8bff83249dd4b8b967dd69a0faf73e25d68687bde107c9b57fad4",
+      "technicalStatus": "pass",
+      "failures": []
+    },
+    {
+      "cue": "voice.mechanic.welcome",
+      "sample": "mechanic.welcome",
+      "path": "audio/clips/voice.mechanic.welcome.wav",
+      "sha256": "ac8993094d46f1a3d2cb0dedfafe7c499f45982942dbb16487df9db96b1c8fcf",
+      "technicalStatus": "pass",
+      "failures": []
+    },
+    {
+      "cue": "voice.mechanic.repair",
+      "sample": "mechanic.repair",
+      "path": "audio/clips/voice.mechanic.repair.wav",
+      "sha256": "a283889a8c33c7688f9b1eae07a6ad380e296506915c59a87aa2def22cfb08ee",
+      "technicalStatus": "pass",
+      "failures": []
+    },
+    {
+      "cue": "voice.mechanic.books",
+      "sample": "mechanic.books",
+      "path": "audio/clips/voice.mechanic.books.wav",
+      "sha256": "6e71a932309584f109f2cd83507804d3c5dd27e096cc70cbc348c887fb76e491",
+      "technicalStatus": "pass",
+      "failures": []
+    },
+    {
+      "cue": "voice.mechanic.ally",
+      "sample": "mechanic.ally",
+      "path": "audio/clips/voice.mechanic.ally.wav",
+      "sha256": "aa77035b55ba1692be76d5ca3ded87cef733b554b0c3d4d00156c422792e0ef6",
+      "technicalStatus": "pass",
+      "failures": []
+    },
+    {
+      "cue": "voice.mechanic.seizure",
+      "sample": "mechanic.seizure",
+      "path": "audio/clips/voice.mechanic.seizure.wav",
+      "sha256": "bd4c63d0b1e7cc1a9e33ad45f2b98d65d1c5e77e53e31e7981fac760d5deaff4",
+      "technicalStatus": "fail",
+      "failures": [
+        "silence"
+      ]
+    },
+    {
+      "cue": "voice.mechanic.rig",
+      "sample": "mechanic.rig",
+      "path": "audio/clips/voice.mechanic.rig.wav",
+      "sha256": "3a2022b8453794541478a2bb1e39c1b0752c09d2cad63031fd4bf85ffdc8b856",
+      "technicalStatus": "pass",
+      "failures": []
+    },
+    {
+      "cue": "voice.mechanic.duel",
+      "sample": "mechanic.duel",
+      "path": "audio/clips/voice.mechanic.duel.wav",
+      "sha256": "50e4e69dffa89f23e3b9f72a20ceaf9ed0bb78c88744ee2eaa165c8a32f8445a",
+      "technicalStatus": "pass",
+      "failures": []
+    },
+    {
+      "cue": "voice.mechanic.after",
+      "sample": "mechanic.after",
+      "path": "audio/clips/voice.mechanic.after.wav",
+      "sha256": "97afd59ad5d763e5a2c8d7881885091f5e1740e728f267d328d9890cb9b198a0",
+      "technicalStatus": "pass",
+      "failures": []
+    },
+    {
+      "cue": "engine.line.1",
+      "sample": "line-1",
+      "path": "audio/clips/engine.line.1.wav",
+      "sha256": "ba34cf46e2b8689324065cf587274f1b3a65e6c2b8c3753ae30cf926dafddfd0",
+      "technicalStatus": "pass",
+      "failures": []
+    },
+    {
+      "cue": "engine.bastion.1",
+      "sample": "bastion-1",
+      "path": "audio/clips/engine.bastion.1.wav",
+      "sha256": "d03aa4e80241deae59b4caee4a15c9533724bd27fa8bc353a323ca53d41d48db",
+      "technicalStatus": "pass",
+      "failures": []
+    },
+    {
+      "cue": "engine.bastion.2",
+      "sample": "bastion-2",
+      "path": "audio/clips/engine.bastion.2.wav",
+      "sha256": "76e8560b924e245d28be8e859902c416ff059d26a9db39c6d5632248f7104c83",
+      "technicalStatus": "pass",
+      "failures": []
+    },
+    {
+      "cue": "engine.comet.2",
+      "sample": "comet-2",
+      "path": "audio/clips/engine.comet.2.wav",
+      "sha256": "0bd62e0d9b6d536d740f89b4fe816e2773d302d80d2d1d976591ee76a745e687",
+      "technicalStatus": "pass",
+      "failures": []
+    },
+    {
+      "cue": "engine.trail.2",
+      "sample": "trail-2",
+      "path": "audio/clips/engine.trail.2.wav",
+      "sha256": "8fd47e6aec695f7af463fe897f86c0f06209aed33e16656f0b1e693e795340d6",
+      "technicalStatus": "pass",
+      "failures": []
+    },
+    {
+      "cue": "engine.flint.1",
+      "sample": "flint-1",
+      "path": "audio/clips/engine.flint.1.wav",
+      "sha256": "f00ed6282361f79515bc1e5306670d53888bf0190a9477327b3ef074794d1786",
+      "technicalStatus": "pass",
+      "failures": []
+    },
+    {
+      "cue": "engine.quill.1",
+      "sample": "quill-1",
+      "path": "audio/clips/engine.quill.1.wav",
+      "sha256": "a5360475128b361ebcafc58d8ef005cf10cd53f39e04267ad04420caa6990782",
+      "technicalStatus": "pass",
+      "failures": []
+    },
+    {
+      "cue": "engine.vandal.1",
+      "sample": "vandal-1",
+      "path": "audio/clips/engine.vandal.1.wav",
+      "sha256": "303d838d61db414e6c84413353e78104df2ce617705b8f87a816aa77d8485784",
+      "technicalStatus": "pass",
+      "failures": []
+    },
+    {
+      "cue": "engine.kestrel.1",
+      "sample": "kestrel-1",
+      "path": "audio/clips/engine.kestrel.1.wav",
+      "sha256": "dd9ef88a1e178eebc355fb162d4e49e0a3240a2004710f85cc417e8ba93b41ef",
+      "technicalStatus": "pass",
+      "failures": []
+    },
+    {
+      "cue": "engine.bulwark.1",
+      "sample": "bulwark-1",
+      "path": "audio/clips/engine.bulwark.1.wav",
+      "sha256": "5268a11faa3101bb13ee82e20926934f84a0241d77b16b1b71ed7c2080e8efdd",
+      "technicalStatus": "pass",
+      "failures": []
+    }
+  ],
+  "gaps": {
+    "movement.tyre": "Owner Reject: tyre. Silent; no replacement.",
+    "movement.skid": "Owner Reject: skid. Silent; no replacement.",
+    "movement.drift": "Owner Reject: drift. Silent; no replacement.",
+    "weapon.mine.drop": "Owner Reject: mine-drop. Silent; mine arm and blast remain.",
+    "race.lap": "Owner Reject: lap. Silent; no replacement.",
+    "race.position": "The position cue reused rejected lap bytes; silent too."
+  },
+  "engine_variants": {
+    "Needle": [],
+    "Line": [
+      "line-1"
+    ],
+    "Bastion": [
+      "bastion-1",
+      "bastion-2"
+    ],
+    "Comet": [
+      "comet-2"
+    ],
+    "Trail": [
+      "trail-2"
+    ],
+    "Flint": [
+      "flint-1"
+    ],
+    "Quill": [
+      "quill-1"
+    ],
+    "Vandal": [
+      "vandal-1"
+    ],
+    "Kestrel": [
+      "kestrel-1"
+    ],
+    "Bulwark": [
+      "bulwark-1"
+    ]
+  },
+  "music": "none; rejected proof remains in audio/x3/music outside assets",
+  "decodedBytes": 4881926
+}

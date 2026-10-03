@@ -198,6 +198,9 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
         text=GlyphLayer(font); headline=GlyphLayer(large); detail=GlyphLayer(small)
         captions=GlyphLayer(small)
         val cueManifest=runCatching{CueManifest.parse(Gdx.files.internal("audio/cues.json").readString("UTF-8"))}.getOrElse{logger("audio manifest unavailable; silent fallback");CueManifest.silent()}
+        logger("audio musicMode=${cueManifest.musicMode}")
+        for((id,gap) in cueManifest.gaps)logger("audio gap $id: $gap")
+        logger("audio countdown retained as delivered; owner Maybe, later review")
         val nativeAudio=GdxAudioBackend(cueManifest.decodedBudgetBytes)
         audio=CueService(cueManifest,if(Gdx.app.type==Application.ApplicationType.Android)QueuedAudioBackend(nativeAudio) else nativeAudio);audio.preload()
         if(Gdx.app.getPreferences("deathride-audio").getBoolean("muted",false))audio.setGain("master",0f)

@@ -1,5 +1,7 @@
 # Death Ride audio brief — X1, 2026-10-02
 
+Current application, 2026-10-03: [owner selections applied](deathride/OWNER-APPLY-3-AUDIO.md). Per-car engines and delivered voices are active; rejected movement/mine-drop/lap cues are silent; countdown is kept and flagged. **No music ships**. [Suno handoff](deathride/SUNO-MUSIC-BRIEF.md) reserves 19 future contexts. Earlier audition plans and measurements below remain historical evidence, not authorization for new spending.
+
 Design note for X1. This is an audition brief and a proposed implementation contract, not an implemented audio bible. X2 compares four philosophies; the owner chooses. X3 requires `deathride/audio/OWNER-AUDIO-CHOICE.md` and is outside this run.
 
 ## World and listening purpose

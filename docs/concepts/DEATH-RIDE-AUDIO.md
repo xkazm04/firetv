@@ -1,5 +1,7 @@
 # Death Ride: audio philosophy audition (X1-X3)
 
+Current application, 2026-10-03: [owner selections applied](deathride/OWNER-APPLY-3-AUDIO.md). Per-car engines and delivered voices are active; rejected movement/mine-drop/lap cues are silent; countdown is kept and flagged. **No music ships**. [Suno handoff](deathride/SUNO-MUSIC-BRIEF.md) reserves 19 future contexts. Earlier audition plans and measurements below remain historical evidence, not authorization for new spending.
+
 Written 2026-10-02 from the owner's note: in another project (Garden VR) the owner generated a handful of ElevenLabs samples and triaged directions and themes through an audition page
 (`C:\Users\kazda\kiro\garden-vr\docs\audio\audition\r2\index.html`, plus `docs\audio\AUDIO-BIBLE.md`, `docs\audio\CHOICES.md`, `tools\audio\elevenlabs.mjs`, all read only). Do the same here: **establish the audio philosophy first, then cover the game's effects with ElevenLabs.**
 The owner picks; this plan stops at the pick and does not mass-generate before it.

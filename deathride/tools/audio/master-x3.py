@@ -144,6 +144,8 @@ def normalize(path, category):
 
 
 def main():
+    if json.loads(Path('assets/audio/cues.json').read_text()).get('ownerDecisions'):
+        raise SystemExit('Dated owner selections are installed; historical X3 mastering must not overwrite them.')
     plan=json.loads((BASE/'plan.json').read_text())
     if (BASE/'acceptance.json').exists() and not (BASE/'first-pass').exists():
         archive=BASE/'first-pass'

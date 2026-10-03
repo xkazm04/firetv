@@ -42,10 +42,11 @@ class CueService(val manifest: CueManifest,private val backend: AudioBackend) {
     var stolen=0L;private set
     var missing=0L;private set
     var played=0L;private set
+    var intentionalSilence=0L;private set
     val activeVoices get()=voices.size
     val decodedBytes get()=backend.decodedBytes
 
-    fun preload(){manifest.cues.values.filter{it.path.isNotEmpty()}.distinctBy{it.path}.forEach{backend.prepare(it)}}
+    fun preload(){manifest.cues.values.filter{it.path.isNotEmpty() && (it.bus!="music" || manifest.musicMode!="none")}.distinctBy{it.path}.forEach{backend.prepare(it)}}
 
     private var spatialGain=1f
     private var spatialPan=0f
@@ -73,6 +74,9 @@ class CueService(val manifest: CueManifest,private val backend: AudioBackend) {
         val cue=manifest.cues[id]?:return drop()
         // Consume an event identity even if dropped, so it cannot be replayed later.
         if(eventId!=0L){if(!seen.add(eventId))return drop();if(seen.size>256)seen.remove(seen.first())}
+        if(id in manifest.silentCueIds || cue.bus=="music" && manifest.musicMode=="none"){
+            intentionalSilence++;return false
+        }
         val safeGain=if(gain.isFinite())gain.coerceIn(0f,1f) else 0f
         val safePitch=if(pitch.isFinite())pitch.coerceIn(cue.pitchMin,cue.pitchMax) else 1f
         spatial(cue,x,y)
@@ -103,7 +107,7 @@ class CueService(val manifest: CueManifest,private val backend: AudioBackend) {
         if(handle<0){missing++;return false}
         voices.add(Voice(cue,emitter,handle,++order,x,y,safeGain,safePitch,safePitch,lastTouch=clock))
         lastStarts[key]=clock
-        // Keys are normally <=62 cues x a few car/contact emitters. Bound callers too.
+        // Keys are normally a small cue vocabulary x a few car/contact emitters. Bound callers too.
         if(lastStarts.size>1024)lastStarts.entries.removeIf{clock-it.value>60}
         if(lastStarts.size>2048)lastStarts.clear()
         highWater=max(highWater,voices.size);played++
@@ -174,5 +178,5 @@ class CueService(val manifest: CueManifest,private val backend: AudioBackend) {
     fun pause(){sceneChanged();paused=true}
     fun resume(){paused=false}
     fun dispose(){if(!disposed){sceneChanged();backend.dispose();disposed=true}}
-    fun statsJson()="{\"active\":$activeVoices,\"highWater\":$highWater,\"cap\":${manifest.maxVoices},\"played\":$played,\"suppressed\":$suppressed,\"stolen\":$stolen,\"missing\":$missing,\"decodedBytes\":$decodedBytes,\"decodedBudgetBytes\":${manifest.decodedBudgetBytes},\"lastNarration\":\"$lastNarration\",\"lastNarrationPlayed\":$lastNarrationPlayed,\"narrationCount\":$narrationCount,\"backend\":${backend.statsJson()}}"
+    fun statsJson()="{\"active\":$activeVoices,\"highWater\":$highWater,\"cap\":${manifest.maxVoices},\"played\":$played,\"suppressed\":$suppressed,\"stolen\":$stolen,\"missing\":$missing,\"intentionalSilence\":$intentionalSilence,\"musicMode\":\"${manifest.musicMode}\",\"decodedBytes\":$decodedBytes,\"decodedBudgetBytes\":${manifest.decodedBudgetBytes},\"lastNarration\":\"$lastNarration\",\"lastNarrationPlayed\":$lastNarrationPlayed,\"narrationCount\":$narrationCount,\"backend\":${backend.statsJson()}}"
 }

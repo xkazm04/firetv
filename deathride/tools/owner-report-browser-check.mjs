@@ -17,10 +17,24 @@ try {
     for(const link of await page.locator('a[href]').evaluateAll(xs=>xs.map(x=>x.href)))
       if(link.startsWith('file:'))await access(fileURLToPath(new URL(link)));
     for(const img of await page.locator('img').all())await img.evaluate(el=>el.decode());
+    const media=await page.locator('audio').evaluateAll(async players=>{
+      const result=[];
+      for(const a of players){
+        a.muted=true;
+        await new Promise((resolve,reject)=>{
+          const timer=setTimeout(()=>reject(Error('Audio metadata timeout: '+a.src)),10000);
+          a.onloadedmetadata=()=>{clearTimeout(timer);resolve()};
+          a.onerror=()=>{clearTimeout(timer);reject(Error('Audio decode failed: '+a.src))};a.load();
+        });
+        if(!Number.isFinite(a.duration)||a.duration<=0)throw Error('Invalid audio duration');
+        await a.play();a.pause();result.push({file:a.getAttribute('src'),duration:a.duration,playStarted:true});
+      }
+      return result;
+    });
     assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
     assert.deepEqual(errors,[]);assert.deepEqual(remote,[]);
     await page.screenshot({path:resolve(output,`${width}.png`)});
-    results.push({width,pass:true,localLinks:true,errors,remote});
+    results.push({width,pass:true,localLinks:true,media,errors,remote});
     await page.close();
   }
   await writeFile(resolve(output,'result.json'),JSON.stringify({target,results},null,2)+'\n');

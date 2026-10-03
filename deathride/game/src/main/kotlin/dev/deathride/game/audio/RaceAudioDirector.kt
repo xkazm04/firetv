@@ -18,6 +18,7 @@ class RaceAudioDirector(val cues: CueService) {
     private val positionHold=DoubleArray(Tuning.CAR_COUNT)
     private var movement=""
     private var movementCar=-1
+    private val engineCues=Array(Tuning.CAR_COUNT){""}
 
     fun bind(next: World){
         world?.presentationEvents?.enabled=false
@@ -26,6 +27,7 @@ class RaceAudioDirector(val cues: CueService) {
     }
     private fun resetEdges(w: World){
         lastSeconds=w.seconds;lastCountdown=-1;movement="";movementCar=-1
+        engineCues.fill("")
         for(c in w.cars){laps[c.id]=c.lap.laps;low[c.id]=false;ready[c.id]=true;empty[c.id]=false
             positions[c.id]=c.position;candidatePosition[c.id]=c.position;positionHold[c.id]=0.0}
     }
@@ -63,10 +65,15 @@ class RaceAudioDirector(val cues: CueService) {
         cues.listenerX=listener.x;cues.listenerY=listener.y
         // Prefer both local seats; spectator gets one leader engine. No full AI bed.
         for(c in w.cars){
+            val engine=cues.manifest.engineCue(c.carClass?.id,c.id)
+            if(engineCues[c.id]!=engine){
+                if(engineCues[c.id].isNotEmpty())cues.stopCue(engineCues[c.id],c.id)
+                engineCues[c.id]=engine
+            }
             if((c===firstLocal || c===secondLocal || firstLocal==null && c===listener) && !w.combat.wrecked(c.id) && c.finishSeconds<0){
                 val speed=(c.speedMps/c.spec.maxSpeedMps).coerceIn(0.0,1.0)
-                cues.play("engine.base",c.id,x=c.x,y=c.y,gain=(.35+.65*speed).toFloat(),pitch=(.8+.7*speed).toFloat())
-            }else cues.stopCue("engine.base",c.id)
+                cues.play(engine,c.id,x=c.x,y=c.y,gain=(.35+.65*speed).toFloat(),pitch=(.8+.7*speed).toFloat())
+            }else cues.stopCue(engine,c.id)
         }
         val rolling=firstLocal?:listener
         val newMovement=when{
@@ -86,11 +93,11 @@ class RaceAudioDirector(val cues: CueService) {
                 PresentationKind.HIT->if(event.detail==DamageKind.HAMMER.ordinal)"weapon.hammer.hit" else "weapon.rivet.hit"
                 PresentationKind.MINE_ARM->"weapon.mine.arm"
                 PresentationKind.MINE_BLAST->"weapon.mine.blast"
-                PresentationKind.CAR_CONTACT->"collision.car"
+                PresentationKind.CAR_CONTACT->if(event.strength<6.0)"collision.car.base" else "collision.car"
                 PresentationKind.WALL_CONTACT->"collision.wall"
                 PresentationKind.BARRIER_CONTACT->"collision.barrier"
                 PresentationKind.PICKUP->{if(actor?.human!=true)continue;when(event.detail){1->"pickup.repair";2->"pickup.cash";else->"pickup.ammo"}}
-                PresentationKind.WRECK->{cues.stopCue("engine.base",event.actor);if(movementCar==event.actor)cues.stopGroup("movement");"race.wreck"}
+                PresentationKind.WRECK->{engineCues.getOrNull(event.actor)?.let{cues.stopCue(it,event.actor)};if(movementCar==event.actor)cues.stopGroup("movement");"race.wreck"}
                 PresentationKind.ABILITY->{val definition=actor?.ability?.definition?:continue;abilityCue(definition)}
             }
             val emitter=if(event.kind==PresentationKind.CAR_CONTACT)event.actor*Tuning.CAR_COUNT+event.target else event.actor

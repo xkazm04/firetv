@@ -91,7 +91,7 @@ class AudioTest {
     }
     @Test fun deliveredManifestMatchesHashesBudgetsAndAllActualSignatures(){
         val raw=File("../assets/audio/cues.json").readText();val m=CueManifest.parse(raw)
-        assertEquals(62,m.cues.size);assertEquals(8,m.maxVoices)
+        assertEquals(91,m.cues.size);assertEquals(8,m.maxVoices)
         assertTrue(AbilityCatalog.all.all{"ability.${it.id}" in m.cues})
         assertTrue(RaceAudioDirector.abilityCue(AbilityCatalog.dispatcher) in m.cues)
         val json=com.badlogic.gdx.utils.JsonReader().parse(raw)
@@ -103,7 +103,7 @@ class AudioTest {
         }
         val bytes=shipped.distinctBy{it.getString("path")}.sumOf{it.getLong("decodedBytes")}
         assertTrue(bytes<=6*1024*1024)
-        assertTrue(m.cues.getValue("voice.mechanic.seizure").path.isEmpty())
+        assertTrue(m.cues.getValue("voice.mechanic.seizure").path.isNotEmpty())
         assertTrue(m.cues.getValue("voice.mechanic.seizure").caption.isNotEmpty())
         assertThrows(IllegalArgumentException::class.java){CueManifest.parse(raw.replace("\"maxVoices\": 8","\"maxVoices\": 9"))}
         assertThrows(IllegalArgumentException::class.java){CueManifest.parse(raw.replace("audio/clips/engine.base.wav","../secret.wav"))}
@@ -126,12 +126,58 @@ class AudioTest {
     }
 
     private fun delivered()=CueManifest.parse(File("../assets/audio/cues.json").readText())
+
+    @Test fun ownerSilenceDoesNotAllocateOrMasqueradeAsMissingAndEffectsStillPlay(){
+        val m=delivered();val backend=RecordingAudio();val service=CueService(m,backend)
+        assertEquals("none",m.musicMode)
+        for(id in listOf("movement.tyre","movement.skid","movement.drift","weapon.mine.drop","race.lap","race.position","music.lobby","music.finale")){
+            assertFalse(service.play(id),id)
+        }
+        assertEquals(8L,service.intentionalSilence);assertEquals(0L,service.missing)
+        assertTrue(backend.starts.isEmpty());assertEquals(0,service.activeVoices)
+        for(id in listOf("race.victory","race.defeat","race.countdown","collision.car.base","collision.car")){
+            service.sceneChanged();assertTrue(service.play(id),id)
+        }
+        // Even an accidentally supplied music path cannot bypass the explicit mode.
+        val injected=cue("music.injected",bus="music").copy(stream=true)
+        val gated=CueService(m.copy(cues=m.cues+(injected.id to injected)),backend)
+        assertFalse(gated.play(injected.id));assertFalse(backend.starts.contains(injected.id))
+        val raw=File("../assets/audio/cues.json").readText()
+        val json=com.badlogic.gdx.utils.JsonReader().parse(raw)
+        val voice=json.get("cues").first{it.getString("id")=="voice.mechanic.seizure"}
+        assertEquals("fail",voice.getString("technicalStatus"))
+        assertEquals("owner-accepted",voice.getString("status"))
+        assertTrue(voice.get("technicalFailures").asStringArray().contains("silence"))
+        val withoutAuthority=raw.replace("\"ownerEvidence\": \"docs/concepts/DEATH-RIDE-OWNER-DECISIONS-2026-10-03.md sections 2-4\"", "\"ownerEvidence\": \"\"")
+        assertTrue(CueManifest.parse(withoutAuthority).cues.getValue("voice.mechanic.seizure").path.isEmpty())
+        assertThrows(IllegalArgumentException::class.java){CueManifest.parse(raw.replace("\"musicMode\": \"none\"","\"musicMode\": \"bad\""))}
+    }
+
+    @Test fun selectedCarEnginesRouteToPrimaryAlternateAndFallbackWithoutChangingSimulation(){
+        val m=delivered()
+        assertEquals("engine.base",m.engineCue("Needle"));assertEquals("engine.base",m.engineCue(null))
+        assertEquals("engine.bastion.1",m.engineCue("Bastion",0))
+        assertEquals("engine.bastion.2",m.engineCue("Bastion",1))
+        assertEquals("engine.bastion.1",m.engineCue("Bastion",2))
+        assertEquals("engine.comet.2",m.engineCue("Comet",0))
+        val backend=RecordingAudio();val service=CueService(m,backend);val director=RaceAudioDirector(service)
+        val w=World(combatEnabled=true)
+        for(c in w.cars){c.entered=c.id<2;c.human=c.id<2;CarCatalog.apply(c,2)}
+        assertEquals("Bastion",w.cars[0].carClass?.id)
+        val before=w.stateHash();director.update(w,"race",true,0.0,.01)
+        assertTrue(backend.starts.containsAll(listOf("engine.bastion.1","engine.bastion.2")))
+        assertEquals(before,w.stateHash())
+        CarCatalog.apply(w.cars[0],0);director.update(w,"race",true,0.0,.01)
+        assertTrue(backend.active.values.none{it.cue.id=="engine.bastion.1"})
+        assertTrue(backend.active.values.any{it.cue.id=="engine.base"})
+        director.sceneChanged("garage");assertEquals(0,service.activeVoices)
+    }
     // Explicit ledger fixture: reported wins, not a simulated full career.
     private fun profileAt(round: Int)=Profile("audio-fixture").also{p->
         repeat(round){Career.settle(p,Economy.start(p),p.careerRound,0,1,0,100.0,true,finished=true)}
     }
 
-    @Test fun campaignSeizureSequenceKeepsHeldCaptionAndCancelsOnSkipPauseOrExit(){
+    @Test fun campaignSeizureSequencePlaysDeliveredVoiceAndCancelsOnSkipPauseOrExit(){
         val backend=RecordingAudio();val service=CueService(delivered(),backend)
         val director=CampaignAudioDirector(service)
         val p=profileAt(34);DeathDuel.seize(p)
@@ -140,7 +186,7 @@ class AudioTest {
         service.update(30.0)
         assertEquals("voice.mechanic.seizure",service.lastNarration)
         assertEquals(delivered().cues.getValue("voice.mechanic.seizure").caption,service.caption)
-        assertFalse(backend.starts.contains("voice.mechanic.seizure")) // Held clip, real caption.
+        assertTrue(backend.starts.contains("voice.mechanic.seizure")) // Owner accepted the delivered pauses.
         service.update(30.0);assertEquals("voice.mechanic.rig",service.lastNarration)
         service.update(30.0);assertEquals("voice.mechanic.duel",service.lastNarration)
         for(cancel in listOf<()->Unit>({service.skipNarration()},{service.sceneChanged()},{service.pause();service.resume()})){
@@ -199,7 +245,8 @@ class AudioTest {
         assertEquals(silent.stateHash(),observed.stateHash())
         assertTrue(observed.cars[0].ability.activation>0)
         assertTrue(backend.starts.contains("ability.bone-rack"))
-        assertTrue(backend.starts.contains("weapon.mine.drop"))
+        assertFalse(backend.starts.contains("weapon.mine.drop")) // Owner rejected this cue, not mine arm/blast.
+        assertTrue(service.intentionalSilence>0)
         assertTrue(backend.starts.contains("weapon.mine.arm"))
         for(n in 0..160)observed.cars[0].lap.update(observed.track.startM+n*observed.track.lengthM/32)
         director.update(observed,"race",true,0.0,1.0)
