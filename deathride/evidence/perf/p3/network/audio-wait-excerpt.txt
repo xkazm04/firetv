@@ -1,0 +1,70 @@
+  GLThread 42372-22070   (  21980) [000] d..6 2230925.853091: sched_wakeup: comm=Binder:424_4 pid=1683 prio=116 target_cpu=002
+  GLThread 42372-22070   (  21980) [000] d..2 2230925.853104: sched_switch: prev_comm=GLThread 42372 prev_pid=22070 prev_prio=116 prev_state=S ==> next_comm=swapper/0 next_pid=0 next_prio=120
+  GLThread 42372-22070   (  21980) [003] .... 2230925.853300: tracing_mark_write: B|21980|Trace GPU completion fence 2470
+  GLThread 42372-22070   (  21980) [003] d..3 2230925.853316: sched_wakeup: comm=GPU completion pid=22279 prio=116 target_cpu=000
+  GLThread 42372-22070   (  21980) [003] .... 2230925.853322: tracing_mark_write: C|21980|GPU completion|1
+  GLThread 42372-22070   (  21980) [003] .... 2230925.853326: tracing_mark_write: E|21980
+  GLThread 42372-22070   (  21980) [003] .... 2230925.853332: tracing_mark_write: E|21980
+  GLThread 42372-22070   (  21980) [003] .... 2230925.853348: tracing_mark_write: E|21980
+  GLThread 42372-22070   (  21980) [003] d..2 2230925.853504: sched_switch: prev_comm=GLThread 42372 prev_pid=22070 prev_prio=116 prev_state=R ==> next_comm=kworker/u8:4 next_pid=14046 next_prio=120
+  GLThread 42372-22070   (  21980) [003] .... 2230925.853560: tracing_mark_write: B|21980|DR.requests
+  GLThread 42372-22070   (  21980) [003] .... 2230925.853623: tracing_mark_write: E|21980
+  GLThread 42372-22070   (  21980) [003] .... 2230925.853633: tracing_mark_write: B|21980|DR.prepare
+  GLThread 42372-22070   (  21980) [003] .... 2230925.853644: tracing_mark_write: E|21980
+  GLThread 42372-22070   (  21980) [003] .... 2230925.853652: tracing_mark_write: B|21980|DR.simulation
+  GLThread 42372-22070   (  21980) [003] d..2 2230925.854142: sched_switch: prev_comm=GLThread 42372 prev_pid=22070 prev_prio=116 prev_state=R ==> next_comm=kworker/u8:4 next_pid=14046 next_prio=120
+  GLThread 42372-22070   (  21980) [003] d..2 2230925.854347: sched_switch: prev_comm=GLThread 42372 prev_pid=22070 prev_prio=116 prev_state=R ==> next_comm=kworker/u8:4 next_pid=14046 next_prio=120
+  GLThread 42372-22070   (  21980) [003] .... 2230925.854896: tracing_mark_write: E|21980
+  GLThread 42372-22070   (  21980) [003] .... 2230925.854916: tracing_mark_write: B|21980|DR.audio
+  GLThread 42372-22070   (  21980) [003] .... 2230925.855008: tracing_mark_write: B|21980|monitor contention with owner DeathRideAudio (32) at void java.lang.Object.wait(long, int)(Object.java:-2) waiters=0 blocking from boolean dev.deathride.game.audio.QueuedAudioBackend.pending(long)(QueuedAudioBackend.kt:63)
+  GLThread 42372-22070   (  21980) [003] .... 2230925.855021: tracing_mark_write: B|21980|Lock contention on a monitor lock (owner tid: 22315)
+  GLThread 42372-22070   (  21980) [003] d..2 2230925.855041: sched_switch: prev_comm=GLThread 42372 prev_pid=22070 prev_prio=116 prev_state=S ==> next_comm=swapper/3 next_pid=0 next_prio=120
+ DefaultDispatch-22145   (  21980) [002] .... 2230925.880497: tracing_mark_write: B|21980|Lock contention on thread list lock (owner tid: 22307)
+ DefaultDispatch-22317   (  21980) [000] .... 2230925.880544: tracing_mark_write: B|21980|Lock contention on thread list lock (owner tid: 22145)
+ DefaultDispatch-22145   (  21980) [002] .... 2230925.880624: tracing_mark_write: B|21980|Lock contention on thread list lock (owner tid: 22307)
+ DefaultDispatch-22307   (  21980) [003] .... 2230925.880729: tracing_mark_write: B|21980|Lock contention on thread list lock (owner tid: 22145)
+  DeathRideAudio-22315   (  21980) [003] .... 2230925.914902: tracing_mark_write: E|21980
+ Jit thread pool-21994   (  21980) [001] .... 2230925.914918: tracing_mark_write: B|21980|Lock contention on Jit code cache (owner tid: 22315)
+  DeathRideAudio-22315   (  21980) [003] d..3 2230925.914953: sched_wakeup: comm=GLThread 42372 pid=22070 prio=116 target_cpu=003
+  DeathRideAudio-22315   (  21980) [003] d..2 2230925.914985: sched_switch: prev_comm=DeathRideAudio prev_pid=22315 prev_prio=120 prev_state=S ==> next_comm=swapper/3 next_pid=0 next_prio=120
+  GLThread 42372-22070   (  21980) [002] .... 2230925.914999: tracing_mark_write: E|21980
+  GLThread 42372-22070   (  21980) [002] .... 2230925.915014: tracing_mark_write: E|21980
+  GLThread 42372-22070   (  21980) [002] d..3 2230925.915095: sched_wakeup: comm=DeathRideAudio pid=22315 prio=120 target_cpu=003
+  DeathRideAudio-22315   (  21980) [003] .... 2230925.915128: tracing_mark_write: B|21980|Lock contention on Jit code cache (owner tid: 21994)
+  DeathRideAudio-22315   (  21980) [003] d..2 2230925.915147: sched_switch: prev_comm=DeathRideAudio prev_pid=22315 prev_prio=120 prev_state=S ==> next_comm=swapper/3 next_pid=0 next_prio=120
+  GLThread 42372-22070   (  21980) [002] .... 2230925.915179: tracing_mark_write: B|21980|monitor contention with owner DeathRideAudio (32) waiters=0 blocking from void dev.deathride.game.audio.QueuedAudioBackend.parameters(long, float, float, float)(QueuedAudioBackend.kt:55)
+  GLThread 42372-22070   (  21980) [002] .... 2230925.915190: tracing_mark_write: B|21980|Lock contention on a monitor lock (owner tid: 22315)
+  GLThread 42372-22070   (  21980) [002] d..2 2230925.915215: sched_switch: prev_comm=GLThread 42372 prev_pid=22070 prev_prio=116 prev_state=S ==> next_comm=swapper/2 next_pid=0 next_prio=120
+  DeathRideAudio-22315   (  21980) [003] .... 2230925.915898: tracing_mark_write: E|21980
+  DeathRideAudio-22315   (  21980) [003] .... 2230925.915906: tracing_mark_write: B|21980|Lock contention on Jit code cache (owner tid: 21994)
+  DeathRideAudio-22315   (  21980) [003] d..2 2230925.915919: sched_switch: prev_comm=DeathRideAudio prev_pid=22315 prev_prio=120 prev_state=S ==> next_comm=swapper/3 next_pid=0 next_prio=120
+  DeathRideAudio-22315   (  21980) [003] .... 2230925.915972: tracing_mark_write: E|21980
+  DeathRideAudio-22315   (  21980) [003] d..3 2230925.915995: sched_wakeup: comm=GLThread 42372 pid=22070 prio=116 target_cpu=002
+  GLThread 42372-22070   (  21980) [002] .... 2230925.916049: tracing_mark_write: E|21980
+  GLThread 42372-22070   (  21980) [002] .... 2230925.916061: tracing_mark_write: E|21980
+  DeathRideAudio-22315   (  21980) [003] d..6 2230925.916160: sched_wakeup: comm=Binder:584_8 pid=2076 prio=120 target_cpu=002
+  GLThread 42372-22070   (  21980) [002] d..2 2230925.916169: sched_switch: prev_comm=GLThread 42372 prev_pid=22070 prev_prio=116 prev_state=R ==> next_comm=Binder:584_8 next_pid=2076 next_prio=120
+  DeathRideAudio-22315   (  21980) [003] .... 2230925.916197: tracing_mark_write: B|21980|Lock contention on Jit code cache (owner tid: 21994)
+  DeathRideAudio-22315   (  21980) [003] d..2 2230925.916224: sched_switch: prev_comm=DeathRideAudio prev_pid=22315 prev_prio=120 prev_state=S ==> next_comm=swapper/3 next_pid=0 next_prio=120
+  GLThread 42372-22070   (  21980) [002] .... 2230925.916425: tracing_mark_write: E|21980
+  GLThread 42372-22070   (  21980) [002] .... 2230925.916443: tracing_mark_write: B|21980|DR.telemetry
+  GLThread 42372-22070   (  21980) [002] .... 2230925.916745: tracing_mark_write: C|21980|Heap size (KB)|15794
+  GLThread 42372-22070   (  21980) [002] .... 2230925.916902: tracing_mark_write: C|21980|Heap size (KB)|15810
+  GLThread 42372-22070   (  21980) [002] .... 2230925.917035: tracing_mark_write: C|21980|Heap size (KB)|15826
+  GLThread 42372-22070   (  21980) [002] d..2 2230925.917106: sched_switch: prev_comm=GLThread 42372 prev_pid=22070 prev_prio=116 prev_state=R ==> next_comm=writer next_pid=783 next_prio=101
+  DeathRideAudio-22315   (  21980) [003] d..2 2230925.917325: sched_switch: prev_comm=DeathRideAudio prev_pid=22315 prev_prio=120 prev_state=R ==> next_comm=hif_thread next_pid=1099 next_prio=110
+  DeathRideAudio-22315   (  21980) [003] .... 2230925.917371: tracing_mark_write: E|21980
+  GLThread 42372-22070   (  21980) [002] d..2 2230925.917433: sched_switch: prev_comm=GLThread 42372 prev_pid=22070 prev_prio=116 prev_state=R+ ==> next_comm=Binder:584_8 next_pid=2076 next_prio=120
+  DeathRideAudio-22315   (  21980) [003] dNh3 2230925.917579: sched_wakeup: comm=AudioTrack pid=22446 prio=104 target_cpu=003
+  DeathRideAudio-22315   (  21980) [003] d..2 2230925.917594: sched_switch: prev_comm=DeathRideAudio prev_pid=22315 prev_prio=120 prev_state=R+ ==> next_comm=AudioTrack next_pid=22446 next_prio=104
+  DeathRideAudio-22315   (  21980) [003] d..2 2230925.917888: sched_switch: prev_comm=DeathRideAudio prev_pid=22315 prev_prio=120 prev_state=S ==> next_comm=DefaultDispatch next_pid=22121 next_prio=120
+  GLThread 42372-22070   (  21980) [002] .... 2230925.918015: tracing_mark_write: C|21980|Heap size (KB)|15842
+  GLThread 42372-22070   (  21980) [002] .... 2230925.918633: tracing_mark_write: E|21980
+  GLThread 42372-22070   (  21980) [002] .... 2230925.918653: tracing_mark_write: B|21980|DR.clear
+  GLThread 42372-22070   (  21980) [002] d..2 2230925.918746: sched_switch: prev_comm=GLThread 42372 prev_pid=22070 prev_prio=116 prev_state=R ==> next_comm=DefaultDispatch next_pid=22318 next_prio=120
+           <...>-22193   (  21980) [001] .... 2230925.918842: tracing_mark_write: B|21980|Lock contention on thread list lock (owner tid: 22121)
+  GLThread 42372-22070   (  21980) [002] .... 2230925.918863: tracing_mark_write: B|21980|query
+  GLThread 42372-22070   (  21980) [002] d..2 2230925.918874: sched_switch: prev_comm=GLThread 42372 prev_pid=22070 prev_prio=116 prev_state=R ==> next_comm=DefaultDispatch next_pid=22122 next_prio=120
+ DefaultDispatch-22307   (  21980) [000] .... 2230925.918879: tracing_mark_write: B|21980|Lock contention on thread list lock (owner tid: 22193)
+  GLThread 42372-22070   (  21980) [002] .... 2230925.918935: tracing_mark_write: E|21980
+  GLThread 42372-22070   (  21980) [002] .... 2230925.918944: tracing_mark_write: B|21980|dequeueBuffer

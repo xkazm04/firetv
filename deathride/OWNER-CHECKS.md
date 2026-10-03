@@ -230,3 +230,8 @@ P2 passed one 15-minute ordinary-input soak with zero rejections. Reconnect each
 phone, switch car/course, enter garage/career and inspect changing metadata and
 combat HUD together. Check release after a connection interruption. A calibrated
 ack timestamp is not an optical latency measurement or a physical-phone pass.
+
+P3 keeps native resolution; a 720p diagnostic did not demonstrate the required
+frame result. Pacing variants are technical measurements, not an optical or
+sofa verdict. On the final build, check camera motion and repeated Home/resume
+with audio; the final report records which scheduling mode was retained.
