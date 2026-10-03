@@ -7,6 +7,8 @@ from rework2_pipeline import eligible, report
 from validate_bundle import validate
 
 def build():
+    if (ART/'owner-approvals-2026-10-03.json').exists():
+        raise RuntimeError('Dated owner decisions are active; use apply-owner-art.py to repack existing selections.')
     folder=ROOT/'assets/phase2-states';stage=ART/'processed/rework2-pack';stage.mkdir(parents=True,exist_ok=True)
     baseline=ART/'contracts/rework2-base-catalog.json'
     if not baseline.exists():shutil.copy2(folder/'catalog.json',baseline)

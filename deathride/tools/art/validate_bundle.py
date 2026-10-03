@@ -81,7 +81,11 @@ def validate(folder, report=None):
                 raise ValueError('OBSTACLE_FOOTPRINT')
             if item['height_m']<=0 or not item['shadow']['renderer_generated']:
                 raise ValueError('OBSTACLE_HEIGHT_SHADOW')
-    result={'status':'pass','atlas_groups':groups,'regions':count,'logical_assets':len(names),'tile_pages':len(manifest['tiles']),'theme_pages':len(manifest['themes']),'content_coverage':coverage,'resident_mib_with_car_reserve':resident/2**20,'scope':'PNG, hash, packing, content ID coverage, 47-case art, 256-mask resolver, six-frame durations and declared residency; no renderer/gameplay/owner claim'}
+    owner_application=None
+    if manifest.get('owner_application'):
+        from owner_art_validation import validate_owner_art
+        owner_application=validate_owner_art(folder)
+    result={'status':'pass','atlas_groups':groups,'regions':count,'logical_assets':len(names),'tile_pages':len(manifest['tiles']),'theme_pages':len(manifest['themes']),'content_coverage':coverage,'resident_mib_with_car_reserve':resident/2**20,'owner_application':owner_application,'scope':'PNG, hash, packing, content ID coverage, 47-case art, 256-mask resolver, six-frame durations, exact dated owner selections when present and declared residency; no device claim'}
     write_json(report or ART/'reports/p4-bundle-validation.json',result);print(result);return result
 
 if __name__=='__main__':

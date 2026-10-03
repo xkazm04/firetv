@@ -2,7 +2,8 @@ import {fileURLToPath} from 'node:url';
 import fs from 'node:fs/promises';
 import {chromium} from '../node_modules/playwright/index.mjs';
 const folder=new URL('../../art/review/rework2/',import.meta.url);
-const report=new URL('../../art/reports/',import.meta.url);
+const report=process.env.REWORK2_BROWSER_OUTPUT?new URL(process.env.REWORK2_BROWSER_OUTPUT):new URL('../../art/reports/',import.meta.url);
+await fs.mkdir(report,{recursive:true});
 const data=JSON.parse(await fs.readFile(new URL('review.json',folder),'utf8'));
 const browser=await chromium.launch({channel:'chrome',headless:true}),results=[];
 try {

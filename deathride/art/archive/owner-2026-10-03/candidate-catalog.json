@@ -1,0 +1,2824 @@
+{
+  "assets": [
+    {
+      "logical_name": "tiles/asphalt-worn",
+      "asset_id": "v4-fusion-surfaces-asphalt-worn-v1",
+      "group": "tile",
+      "owner_approved": false
+    },
+    {
+      "logical_name": "tiles/asphalt-heavy",
+      "asset_id": "v4-fusion-surfaces-asphalt-heavy-v1",
+      "group": "tile",
+      "owner_approved": false
+    },
+    {
+      "logical_name": "tiles/concrete",
+      "asset_id": "v4-fusion-surfaces-concrete-v1",
+      "group": "tile",
+      "owner_approved": false
+    },
+    {
+      "logical_name": "tiles/metal",
+      "asset_id": "v4-fusion-surfaces-metal-crop768-v1",
+      "group": "tile",
+      "owner_approved": false
+    },
+    {
+      "logical_name": "tiles/asphalt-clean",
+      "asset_id": "v4-fusion-surfaces-asphalt-clean-crop768-v1",
+      "group": "tile",
+      "owner_approved": false
+    },
+    {
+      "logical_name": "tiles/ice",
+      "asset_id": "v4-fusion-surfaces-ice-crop768-v1",
+      "group": "tile",
+      "owner_approved": false
+    },
+    {
+      "logical_name": "tiles/oil",
+      "asset_id": "v4-fusion-surfaces-oil-v1",
+      "group": "tile",
+      "owner_approved": false
+    },
+    {
+      "logical_name": "tiles/kerb",
+      "asset_id": "v4-fusion-surfaces-kerb-v1",
+      "group": "tile",
+      "owner_approved": false
+    },
+    {
+      "logical_name": "tiles/grass",
+      "asset_id": "v4-fusion-ground-grass-v1",
+      "group": "tile",
+      "owner_approved": false
+    },
+    {
+      "logical_name": "tiles/dirt",
+      "asset_id": "v4-fusion-ground-dirt-v1",
+      "group": "tile",
+      "owner_approved": false
+    },
+    {
+      "logical_name": "tiles/gravel",
+      "asset_id": "v4-fusion-ground-gravel-v1-wrap-v1",
+      "group": "tile",
+      "owner_approved": false
+    },
+    {
+      "logical_name": "barriers/concrete-straight",
+      "asset_id": "v4-fusion-barriers-concrete-straight-v1",
+      "group": "world",
+      "owner_approved": false,
+      "effect_class": "none",
+      "collision_footprint": null
+    },
+    {
+      "logical_name": "barriers/concrete-corner",
+      "asset_id": "v4-fusion-barriers-concrete-corner-v1",
+      "group": "world",
+      "owner_approved": false,
+      "effect_class": "none",
+      "collision_footprint": null
+    },
+    {
+      "logical_name": "barriers/metal-straight",
+      "asset_id": "v4-fusion-barriers-metal-straight-v1",
+      "group": "world",
+      "owner_approved": false,
+      "effect_class": "none",
+      "collision_footprint": null
+    },
+    {
+      "logical_name": "barriers/metal-corner",
+      "asset_id": "v4-fusion-barriers-metal-corner-v1",
+      "group": "world",
+      "owner_approved": false,
+      "effect_class": "none",
+      "collision_footprint": null
+    },
+    {
+      "logical_name": "barriers/hazard-straight",
+      "asset_id": "v4-fusion-barriers-hazard-straight-v1",
+      "group": "world",
+      "owner_approved": false,
+      "effect_class": "none",
+      "collision_footprint": null
+    },
+    {
+      "logical_name": "barriers/hazard-corner",
+      "asset_id": "v4-fusion-barriers-hazard-corner-v1",
+      "group": "world",
+      "owner_approved": false,
+      "effect_class": "none",
+      "collision_footprint": null
+    },
+    {
+      "logical_name": "props/tyres",
+      "asset_id": "v4-fusion-props-tyres-v1",
+      "group": "world",
+      "owner_approved": false,
+      "effect_class": "none",
+      "collision_footprint": null
+    },
+    {
+      "logical_name": "props/crate",
+      "asset_id": "v4-fusion-props-crate-v1",
+      "group": "world",
+      "owner_approved": false,
+      "effect_class": "none",
+      "collision_footprint": null
+    },
+    {
+      "logical_name": "props/cone",
+      "asset_id": "v4-fusion-props-cone-v1",
+      "group": "world",
+      "owner_approved": false,
+      "effect_class": "none",
+      "collision_footprint": null
+    },
+    {
+      "logical_name": "props/sign",
+      "asset_id": "v4-fusion-props-sign-v1",
+      "group": "world",
+      "owner_approved": false,
+      "effect_class": "none",
+      "collision_footprint": null
+    },
+    {
+      "logical_name": "props/drum",
+      "asset_id": "v4-fusion-props-drum-v1",
+      "group": "world",
+      "owner_approved": false,
+      "effect_class": "none",
+      "collision_footprint": null
+    },
+    {
+      "logical_name": "props/tyres-scattered",
+      "asset_id": "v4-fusion-props-tyres-scattered-v1",
+      "group": "world",
+      "owner_approved": false,
+      "effect_class": "drag",
+      "collision_footprint": {
+        "shape": "ellipse",
+        "space": "local-metres",
+        "centre": [
+          0,
+          0
+        ],
+        "radii": [
+          1.6,
+          1.25
+        ]
+      },
+      "height_m": 0.7,
+      "shadow": {
+        "renderer_generated": true,
+        "offset_per_height": [
+          0.3,
+          -0.22
+        ],
+        "opacity": 0.26
+      },
+      "core_hook_status": "metadata-only; not wired to physics"
+    },
+    {
+      "logical_name": "props/crate-metal",
+      "asset_id": "v4-fusion-props-crate-metal-v1",
+      "group": "world",
+      "owner_approved": false,
+      "effect_class": "none",
+      "collision_footprint": null
+    },
+    {
+      "logical_name": "props/drum-red",
+      "asset_id": "v4-fusion-props-drum-red-v1",
+      "group": "world",
+      "owner_approved": false,
+      "effect_class": "none",
+      "collision_footprint": null
+    },
+    {
+      "logical_name": "props/brush",
+      "asset_id": "v4-fusion-props-brush-v1",
+      "group": "world",
+      "owner_approved": false,
+      "effect_class": "drag",
+      "collision_footprint": {
+        "shape": "ellipse",
+        "space": "local-metres",
+        "centre": [
+          0,
+          0
+        ],
+        "radii": [
+          1.9,
+          1.4
+        ]
+      },
+      "height_m": 0.5,
+      "shadow": {
+        "renderer_generated": true,
+        "offset_per_height": [
+          0.3,
+          -0.22
+        ],
+        "opacity": 0.26
+      },
+      "core_hook_status": "metadata-only; not wired to physics"
+    },
+    {
+      "logical_name": "props/rock-field",
+      "asset_id": "v4-fusion-props-rock-field-v1",
+      "group": "world",
+      "owner_approved": false,
+      "effect_class": "solid",
+      "collision_footprint": {
+        "shape": "ellipse",
+        "space": "local-metres",
+        "centre": [
+          0,
+          0
+        ],
+        "radii": [
+          2.25,
+          1.55
+        ]
+      },
+      "height_m": 1.1,
+      "shadow": {
+        "renderer_generated": true,
+        "offset_per_height": [
+          0.3,
+          -0.22
+        ],
+        "opacity": 0.26
+      },
+      "core_hook_status": "metadata-only; not wired to physics"
+    },
+    {
+      "logical_name": "props/soft-dune",
+      "asset_id": "v4-fusion-props-soft-dune-v1-despill-v1",
+      "group": "world",
+      "owner_approved": false,
+      "effect_class": "drag",
+      "collision_footprint": {
+        "shape": "ellipse",
+        "space": "local-metres",
+        "centre": [
+          0,
+          0
+        ],
+        "radii": [
+          2.9,
+          1.6
+        ]
+      },
+      "height_m": 0.4,
+      "shadow": {
+        "renderer_generated": true,
+        "offset_per_height": [
+          0.3,
+          -0.22
+        ],
+        "opacity": 0.26
+      },
+      "core_hook_status": "metadata-only; not wired to physics"
+    },
+    {
+      "logical_name": "props/dead-tree",
+      "asset_id": "v4-fusion-props-dead-tree-v1",
+      "group": "world",
+      "owner_approved": false,
+      "effect_class": "solid",
+      "collision_footprint": {
+        "shape": "ellipse",
+        "space": "local-metres",
+        "centre": [
+          0,
+          0
+        ],
+        "radii": [
+          1.1,
+          0.85
+        ]
+      },
+      "height_m": 5.4,
+      "shadow": {
+        "renderer_generated": true,
+        "offset_per_height": [
+          0.3,
+          -0.22
+        ],
+        "opacity": 0.26
+      },
+      "core_hook_status": "metadata-only; not wired to physics"
+    },
+    {
+      "logical_name": "props/rock-spire",
+      "asset_id": "v4-fusion-props-rock-spire-v1-despill-v1",
+      "group": "world",
+      "owner_approved": false,
+      "effect_class": "solid",
+      "collision_footprint": {
+        "shape": "ellipse",
+        "space": "local-metres",
+        "centre": [
+          0,
+          0
+        ],
+        "radii": [
+          1.25,
+          0.9
+        ]
+      },
+      "height_m": 6.2,
+      "shadow": {
+        "renderer_generated": true,
+        "offset_per_height": [
+          0.3,
+          -0.22
+        ],
+        "opacity": 0.26
+      },
+      "core_hook_status": "metadata-only; not wired to physics"
+    },
+    {
+      "logical_name": "pickups/ammo",
+      "asset_id": "v4-fusion-pickups-ammo-v1",
+      "group": "ui",
+      "owner_approved": false
+    },
+    {
+      "logical_name": "pickups/repair",
+      "asset_id": "v4-fusion-pickups-repair-v1",
+      "group": "ui",
+      "owner_approved": false
+    },
+    {
+      "logical_name": "pickups/cash",
+      "asset_id": "v4-fusion-pickups-cash-v1",
+      "group": "ui",
+      "owner_approved": false
+    },
+    {
+      "logical_name": "pickups/mine",
+      "asset_id": "v4-fusion-pickups-mine-v1",
+      "group": "ui",
+      "owner_approved": false
+    },
+    {
+      "logical_name": "pickups/turbo",
+      "asset_id": "v4-fusion-pickups-turbo-v1",
+      "group": "ui",
+      "owner_approved": false
+    },
+    {
+      "logical_name": "decals/skid",
+      "asset_id": "v4-fusion-decals-skid-v1",
+      "group": "world",
+      "owner_approved": false,
+      "effect_class": "none",
+      "collision_footprint": null
+    },
+    {
+      "logical_name": "decals/oil",
+      "asset_id": "v4-fusion-decals-oil-v1",
+      "group": "world",
+      "owner_approved": false,
+      "effect_class": "none",
+      "collision_footprint": null
+    },
+    {
+      "logical_name": "decals/scorch",
+      "asset_id": "v4-fusion-decals-scorch-v2",
+      "group": "world",
+      "owner_approved": false,
+      "effect_class": "none",
+      "collision_footprint": null
+    },
+    {
+      "logical_name": "decals/cracks",
+      "asset_id": "v4-fusion-decals-cracks-v1",
+      "group": "world",
+      "owner_approved": false,
+      "effect_class": "none",
+      "collision_footprint": null
+    },
+    {
+      "logical_name": "decals/impact",
+      "asset_id": "v4-fusion-decals-impact-v1",
+      "group": "world",
+      "owner_approved": false,
+      "effect_class": "none",
+      "collision_footprint": null
+    },
+    {
+      "logical_name": "landmarks/gantry",
+      "asset_id": "v4-fusion-landmarks-gantry-v1",
+      "group": "world",
+      "owner_approved": false,
+      "effect_class": "none",
+      "collision_footprint": null
+    },
+    {
+      "logical_name": "landmarks/split-marker",
+      "asset_id": "v4-fusion-landmarks-split-marker-v1",
+      "group": "world",
+      "owner_approved": false,
+      "effect_class": "none",
+      "collision_footprint": null
+    },
+    {
+      "logical_name": "landmarks/stone-stack",
+      "asset_id": "v4-fusion-landmarks-stone-stack-v1",
+      "group": "world",
+      "owner_approved": false,
+      "effect_class": "none",
+      "collision_footprint": null
+    },
+    {
+      "logical_name": "landmarks/sun-sign",
+      "asset_id": "v4-fusion-landmarks-sun-sign-v1",
+      "group": "world",
+      "owner_approved": false,
+      "effect_class": "none",
+      "collision_footprint": null
+    },
+    {
+      "logical_name": "landmarks/sluice",
+      "asset_id": "v4-fusion-landmarks-sluice-v1",
+      "group": "world",
+      "owner_approved": false,
+      "effect_class": "none",
+      "collision_footprint": null
+    },
+    {
+      "logical_name": "landmarks/snow-pole",
+      "asset_id": "v4-fusion-landmarks-snow-pole-v1",
+      "group": "world",
+      "owner_approved": false,
+      "effect_class": "none",
+      "collision_footprint": null
+    },
+    {
+      "logical_name": "effects/muzzle",
+      "asset_id": "v4-fusion-effects-muzzle-layout-v1",
+      "group": "world",
+      "owner_approved": false,
+      "frames": [
+        "v4-fusion-effects-muzzle-layout-v1-0",
+        "v4-fusion-effects-muzzle-layout-v1-1",
+        "v4-fusion-effects-muzzle-layout-v1-2",
+        "v4-fusion-effects-muzzle-layout-v1-3",
+        "v4-fusion-effects-muzzle-layout-v1-4",
+        "v4-fusion-effects-muzzle-layout-v1-5"
+      ],
+      "durations_ms": [
+        35,
+        45,
+        45,
+        40,
+        40,
+        45
+      ],
+      "loop": false,
+      "pivot": "fixed cell centre"
+    },
+    {
+      "logical_name": "effects/explosion",
+      "asset_id": "v4-fusion-effects-explosion-layout-v1",
+      "group": "world",
+      "owner_approved": false,
+      "frames": [
+        "v4-fusion-effects-explosion-layout-v1-0",
+        "v4-fusion-effects-explosion-layout-v1-1",
+        "v4-fusion-effects-explosion-layout-v1-2",
+        "v4-fusion-effects-explosion-layout-v1-3",
+        "v4-fusion-effects-explosion-layout-v1-4",
+        "v4-fusion-effects-explosion-layout-v1-5"
+      ],
+      "durations_ms": [
+        45,
+        55,
+        65,
+        75,
+        90,
+        110
+      ],
+      "loop": false,
+      "pivot": "fixed cell centre"
+    },
+    {
+      "logical_name": "effects/smoke",
+      "asset_id": "v4-fusion-effects-smoke-v2-layout-v1",
+      "group": "world",
+      "owner_approved": false,
+      "frames": [
+        "v4-fusion-effects-smoke-v2-layout-v1-0",
+        "v4-fusion-effects-smoke-v2-layout-v1-1",
+        "v4-fusion-effects-smoke-v2-layout-v1-2",
+        "v4-fusion-effects-smoke-v2-layout-v1-3",
+        "v4-fusion-effects-smoke-v2-layout-v1-4",
+        "v4-fusion-effects-smoke-v2-layout-v1-5"
+      ],
+      "durations_ms": [
+        90,
+        100,
+        120,
+        140,
+        160,
+        180
+      ],
+      "loop": false,
+      "pivot": "fixed cell centre"
+    },
+    {
+      "logical_name": "effects/sparks",
+      "asset_id": "v4-fusion-effects-sparks-v2-layout-v1",
+      "group": "world",
+      "owner_approved": false,
+      "frames": [
+        "v4-fusion-effects-sparks-v2-layout-v1-0",
+        "v4-fusion-effects-sparks-v2-layout-v1-1",
+        "v4-fusion-effects-sparks-v2-layout-v1-2",
+        "v4-fusion-effects-sparks-v2-layout-v1-3",
+        "v4-fusion-effects-sparks-v2-layout-v1-4",
+        "v4-fusion-effects-sparks-v2-layout-v1-5"
+      ],
+      "durations_ms": [
+        35,
+        40,
+        45,
+        55,
+        65,
+        80
+      ],
+      "loop": false,
+      "pivot": "fixed cell centre"
+    },
+    {
+      "logical_name": "effects/fire",
+      "asset_id": "v4-fusion-effects-fire-repaint-v1",
+      "group": "world",
+      "owner_approved": false,
+      "frames": [
+        "v4-fusion-effects-fire-repaint-v1-0",
+        "v4-fusion-effects-fire-repaint-v1-1",
+        "v4-fusion-effects-fire-repaint-v1-2",
+        "v4-fusion-effects-fire-repaint-v1-3",
+        "v4-fusion-effects-fire-repaint-v1-4",
+        "v4-fusion-effects-fire-repaint-v1-5"
+      ],
+      "durations_ms": [
+        80,
+        80,
+        80,
+        80,
+        80,
+        80
+      ],
+      "loop": true,
+      "pivot": "fixed cell centre"
+    },
+    {
+      "logical_name": "hud/frame-health",
+      "asset_id": "v4-fusion-hud-frames-frame-health-v2",
+      "group": "ui",
+      "owner_approved": false
+    },
+    {
+      "logical_name": "hud/frame-turbo",
+      "asset_id": "v4-fusion-hud-frames-frame-turbo-v2",
+      "group": "ui",
+      "owner_approved": false
+    },
+    {
+      "logical_name": "hud/frame-panel",
+      "asset_id": "v4-fusion-hud-frames-frame-panel-v2",
+      "group": "ui",
+      "owner_approved": false
+    },
+    {
+      "logical_name": "hud/icon-armour",
+      "asset_id": "v4-fusion-hud-icons-icon-armour-v1",
+      "group": "ui",
+      "owner_approved": false
+    },
+    {
+      "logical_name": "hud/icon-engine",
+      "asset_id": "v4-fusion-hud-icons-icon-engine-v1",
+      "group": "ui",
+      "owner_approved": false
+    },
+    {
+      "logical_name": "hud/icon-handling",
+      "asset_id": "v4-fusion-hud-icons-icon-handling-v1",
+      "group": "ui",
+      "owner_approved": false
+    },
+    {
+      "logical_name": "hud/icon-light-gun",
+      "asset_id": "v4-fusion-hud-icons-icon-light-gun-v1",
+      "group": "ui",
+      "owner_approved": false
+    },
+    {
+      "logical_name": "hud/icon-heavy-gun",
+      "asset_id": "v4-fusion-hud-icons-icon-heavy-gun-v1",
+      "group": "ui",
+      "owner_approved": false
+    },
+    {
+      "logical_name": "hud/icon-fuel",
+      "asset_id": "v4-fusion-hud-icons-icon-fuel-v1",
+      "group": "ui",
+      "owner_approved": false
+    },
+    {
+      "logical_name": "combat-icons/scatter",
+      "asset_id": "v4-fusion-hud-icons-scatter-v1",
+      "group": "ui",
+      "owner_approved": false
+    },
+    {
+      "logical_name": "combat-icons/spikes",
+      "asset_id": "v4-fusion-hud-icons-spikes-v1",
+      "group": "ui",
+      "owner_approved": false
+    },
+    {
+      "logical_name": "combat-icons/sabotage",
+      "asset_id": "v4-fusion-hud-icons-sabotage-v1",
+      "group": "ui",
+      "owner_approved": false
+    },
+    {
+      "logical_name": "backdrops/industrial",
+      "asset_id": "v4-fusion-backdrops-industrial-v1",
+      "group": "theme",
+      "owner_approved": false
+    },
+    {
+      "logical_name": "backdrops/quarry",
+      "asset_id": "v4-fusion-backdrops-quarry-v1",
+      "group": "theme",
+      "owner_approved": false
+    },
+    {
+      "logical_name": "backdrops/desert",
+      "asset_id": "v4-fusion-backdrops-desert-v1",
+      "group": "theme",
+      "owner_approved": false
+    },
+    {
+      "logical_name": "backdrops/wetland",
+      "asset_id": "v4-fusion-backdrops-wetland-v1",
+      "group": "theme",
+      "owner_approved": false
+    },
+    {
+      "logical_name": "backdrops/alpine",
+      "asset_id": "v4-fusion-backdrops-alpine-v1",
+      "group": "theme",
+      "owner_approved": false
+    },
+    {
+      "logical_name": "portraits/rook",
+      "asset_id": "v2-fusion-portraits-rook-v1",
+      "group": "ui",
+      "owner_approved": false
+    },
+    {
+      "logical_name": "portraits/ox",
+      "asset_id": "v2-fusion-portraits-ox-v1",
+      "group": "ui",
+      "owner_approved": false
+    },
+    {
+      "logical_name": "portraits/vex",
+      "asset_id": "v2-fusion-portraits-vex-v1",
+      "group": "ui",
+      "owner_approved": false
+    },
+    {
+      "logical_name": "portraits/mica",
+      "asset_id": "v2-fusion-portraits-mica-v1",
+      "group": "ui",
+      "owner_approved": false
+    },
+    {
+      "logical_name": "portraits/relay",
+      "asset_id": "v2-fusion-portraits-relay-v1",
+      "group": "ui",
+      "owner_approved": false
+    },
+    {
+      "logical_name": "portraits/marrow",
+      "asset_id": "v2-fusion-portraits-marrow-v1",
+      "group": "ui",
+      "owner_approved": false
+    },
+    {
+      "logical_name": "hud/frame-instrument",
+      "asset_id": "v4-hud-instrument-v1",
+      "group": "ui",
+      "owner_approved": false
+    },
+    {
+      "logical_name": "hud/frame-meter",
+      "asset_id": "v4-hud-meter-v1",
+      "group": "ui",
+      "owner_approved": false
+    },
+    {
+      "logical_name": "hud/frame-button",
+      "asset_id": "v4-hud-button-v1",
+      "group": "ui",
+      "owner_approved": false
+    },
+    {
+      "logical_name": "hud/frame-dial",
+      "asset_id": "v4-hud-dial-v1",
+      "group": "ui",
+      "owner_approved": false
+    },
+    {
+      "logical_name": "hud/ability-steel-flick",
+      "asset_id": "v4-hud-steel-flick-v1",
+      "group": "ui",
+      "owner_approved": false
+    },
+    {
+      "logical_name": "hud/ability-flywheel",
+      "asset_id": "v4-hud-flywheel-v1",
+      "group": "ui",
+      "owner_approved": false
+    },
+    {
+      "logical_name": "hud/ability-shoulder",
+      "asset_id": "v4-hud-shoulder-v1",
+      "group": "ui",
+      "owner_approved": false
+    },
+    {
+      "logical_name": "hud/ability-turbine",
+      "asset_id": "v4-hud-turbine-v1",
+      "group": "ui",
+      "owner_approved": false
+    },
+    {
+      "logical_name": "hud/ability-ground-bite",
+      "asset_id": "v4-hud-ground-bite-v1",
+      "group": "ui",
+      "owner_approved": false
+    },
+    {
+      "logical_name": "hud/ability-punch-lance",
+      "asset_id": "v4-hud-punch-lance-v1",
+      "group": "ui",
+      "owner_approved": false
+    },
+    {
+      "logical_name": "hud/ability-bone-rack",
+      "asset_id": "v4-hud-bone-rack-v1",
+      "group": "ui",
+      "owner_approved": false
+    },
+    {
+      "logical_name": "hud/ability-scrambler",
+      "asset_id": "v4-hud-scrambler-v1",
+      "group": "ui",
+      "owner_approved": false
+    },
+    {
+      "logical_name": "hud/ability-arc-harpoon",
+      "asset_id": "v4-hud-arc-harpoon-v1",
+      "group": "ui",
+      "owner_approved": false
+    },
+    {
+      "logical_name": "hud/ability-plate-brace",
+      "asset_id": "v4-hud-plate-brace-v1",
+      "group": "ui",
+      "owner_approved": false
+    },
+    {
+      "logical_name": "cars/bastion/clean",
+      "asset_id": "v2-part3-bastion-state-intact-v2",
+      "group": "cars",
+      "car_class": "Bastion",
+      "owner_approved": false,
+      "reference_approved": true,
+      "technical_accepted": true,
+      "reference_id": "v2-fusion-cars-bastion-v1",
+      "reference_source_sha256": "d2e297baf254c4c4d6dafab99d2ac3bbbc1266eb18c1038d09788569b41c7b2d"
+    },
+    {
+      "logical_name": "cars/bastion/damaged-1",
+      "asset_id": "v2-part3-bastion-state-damaged-1-v1",
+      "group": "cars",
+      "car_class": "Bastion",
+      "owner_approved": false,
+      "reference_approved": true,
+      "technical_accepted": true,
+      "reference_id": "v2-fusion-cars-bastion-v1",
+      "reference_source_sha256": "d2e297baf254c4c4d6dafab99d2ac3bbbc1266eb18c1038d09788569b41c7b2d"
+    },
+    {
+      "logical_name": "cars/bastion/damaged-2",
+      "asset_id": "v2-part3-bastion-state-damaged-2-v1",
+      "group": "cars",
+      "car_class": "Bastion",
+      "owner_approved": false,
+      "reference_approved": true,
+      "technical_accepted": true,
+      "reference_id": "v2-fusion-cars-bastion-v1",
+      "reference_source_sha256": "d2e297baf254c4c4d6dafab99d2ac3bbbc1266eb18c1038d09788569b41c7b2d"
+    },
+    {
+      "logical_name": "cars/bastion/wreck",
+      "asset_id": "v2-part3-bastion-state-wreck-v1",
+      "group": "cars",
+      "car_class": "Bastion",
+      "owner_approved": false,
+      "reference_approved": true,
+      "technical_accepted": true,
+      "reference_id": "v2-fusion-cars-bastion-v1",
+      "reference_source_sha256": "d2e297baf254c4c4d6dafab99d2ac3bbbc1266eb18c1038d09788569b41c7b2d"
+    },
+    {
+      "logical_name": "cars/bastion/livery-bone",
+      "asset_id": "v2-part3-bastion-livery-bone-v1",
+      "group": "cars",
+      "car_class": "Bastion",
+      "owner_approved": false,
+      "reference_approved": true,
+      "technical_accepted": true,
+      "reference_id": "v2-fusion-cars-bastion-v1",
+      "reference_source_sha256": "d2e297baf254c4c4d6dafab99d2ac3bbbc1266eb18c1038d09788569b41c7b2d"
+    },
+    {
+      "logical_name": "cars/bastion/livery-red",
+      "asset_id": "v2-part3-bastion-livery-red-v1",
+      "group": "cars",
+      "car_class": "Bastion",
+      "owner_approved": false,
+      "reference_approved": true,
+      "technical_accepted": true,
+      "reference_id": "v2-fusion-cars-bastion-v1",
+      "reference_source_sha256": "d2e297baf254c4c4d6dafab99d2ac3bbbc1266eb18c1038d09788569b41c7b2d"
+    },
+    {
+      "logical_name": "cars/bastion/livery-ochre",
+      "asset_id": "v2-part3-bastion-livery-ochre-v1",
+      "group": "cars",
+      "car_class": "Bastion",
+      "owner_approved": false,
+      "reference_approved": true,
+      "technical_accepted": true,
+      "reference_id": "v2-fusion-cars-bastion-v1",
+      "reference_source_sha256": "d2e297baf254c4c4d6dafab99d2ac3bbbc1266eb18c1038d09788569b41c7b2d"
+    },
+    {
+      "logical_name": "cars/bulwark/clean",
+      "asset_id": "v2-part3-bulwark-state-intact-v2",
+      "group": "cars",
+      "car_class": "Bulwark",
+      "owner_approved": false,
+      "reference_approved": true,
+      "technical_accepted": true,
+      "reference_id": "v2-fusion-cars-bulwark-v1",
+      "reference_source_sha256": "59f406468e6050fe009745870bd20462b9d4ec37813523f1c5764c6f31c4439e"
+    },
+    {
+      "logical_name": "cars/bulwark/damaged-1",
+      "asset_id": "v2-part3-bulwark-state-damaged-1-v1",
+      "group": "cars",
+      "car_class": "Bulwark",
+      "owner_approved": false,
+      "reference_approved": true,
+      "technical_accepted": true,
+      "reference_id": "v2-fusion-cars-bulwark-v1",
+      "reference_source_sha256": "59f406468e6050fe009745870bd20462b9d4ec37813523f1c5764c6f31c4439e"
+    },
+    {
+      "logical_name": "cars/bulwark/damaged-2",
+      "asset_id": "v2-part3-bulwark-state-damaged-2-v1",
+      "group": "cars",
+      "car_class": "Bulwark",
+      "owner_approved": false,
+      "reference_approved": true,
+      "technical_accepted": true,
+      "reference_id": "v2-fusion-cars-bulwark-v1",
+      "reference_source_sha256": "59f406468e6050fe009745870bd20462b9d4ec37813523f1c5764c6f31c4439e"
+    },
+    {
+      "logical_name": "cars/bulwark/wreck",
+      "asset_id": "v2-part3-bulwark-state-wreck-v1",
+      "group": "cars",
+      "car_class": "Bulwark",
+      "owner_approved": false,
+      "reference_approved": true,
+      "technical_accepted": true,
+      "reference_id": "v2-fusion-cars-bulwark-v1",
+      "reference_source_sha256": "59f406468e6050fe009745870bd20462b9d4ec37813523f1c5764c6f31c4439e"
+    },
+    {
+      "logical_name": "cars/bulwark/livery-bone",
+      "asset_id": "v2-part3-bulwark-livery-bone-v1",
+      "group": "cars",
+      "car_class": "Bulwark",
+      "owner_approved": false,
+      "reference_approved": true,
+      "technical_accepted": true,
+      "reference_id": "v2-fusion-cars-bulwark-v1",
+      "reference_source_sha256": "59f406468e6050fe009745870bd20462b9d4ec37813523f1c5764c6f31c4439e"
+    },
+    {
+      "logical_name": "cars/bulwark/livery-red",
+      "asset_id": "v2-part3-bulwark-livery-red-v1",
+      "group": "cars",
+      "car_class": "Bulwark",
+      "owner_approved": false,
+      "reference_approved": true,
+      "technical_accepted": true,
+      "reference_id": "v2-fusion-cars-bulwark-v1",
+      "reference_source_sha256": "59f406468e6050fe009745870bd20462b9d4ec37813523f1c5764c6f31c4439e"
+    },
+    {
+      "logical_name": "cars/bulwark/livery-ochre",
+      "asset_id": "v2-part3-bulwark-livery-ochre-v1",
+      "group": "cars",
+      "car_class": "Bulwark",
+      "owner_approved": false,
+      "reference_approved": true,
+      "technical_accepted": true,
+      "reference_id": "v2-fusion-cars-bulwark-v1",
+      "reference_source_sha256": "59f406468e6050fe009745870bd20462b9d4ec37813523f1c5764c6f31c4439e"
+    },
+    {
+      "logical_name": "cars/comet/clean",
+      "asset_id": "v2-part4-comet-state-intact-v1",
+      "group": "cars",
+      "car_class": "Comet",
+      "owner_approved": false,
+      "reference_approved": true,
+      "technical_accepted": true,
+      "reference_id": "v2-part3-rework-comet-v7",
+      "reference_source_sha256": "ddd9c3c684f65333251b386947b34354d980ce261cda9297eeb92ffac56e3acc"
+    },
+    {
+      "logical_name": "cars/comet/damaged-1",
+      "asset_id": "v2-part4-comet-state-damaged-1-v1",
+      "group": "cars",
+      "car_class": "Comet",
+      "owner_approved": false,
+      "reference_approved": true,
+      "technical_accepted": true,
+      "reference_id": "v2-part3-rework-comet-v7",
+      "reference_source_sha256": "ddd9c3c684f65333251b386947b34354d980ce261cda9297eeb92ffac56e3acc"
+    },
+    {
+      "logical_name": "cars/comet/damaged-2",
+      "asset_id": "v2-part4-comet-state-damaged-2-v1",
+      "group": "cars",
+      "car_class": "Comet",
+      "owner_approved": false,
+      "reference_approved": true,
+      "technical_accepted": true,
+      "reference_id": "v2-part3-rework-comet-v7",
+      "reference_source_sha256": "ddd9c3c684f65333251b386947b34354d980ce261cda9297eeb92ffac56e3acc"
+    },
+    {
+      "logical_name": "cars/comet/wreck",
+      "asset_id": "v2-part4-comet-state-wreck-v1-a2",
+      "group": "cars",
+      "car_class": "Comet",
+      "owner_approved": false,
+      "reference_approved": true,
+      "technical_accepted": true,
+      "reference_id": "v2-part3-rework-comet-v7",
+      "reference_source_sha256": "ddd9c3c684f65333251b386947b34354d980ce261cda9297eeb92ffac56e3acc"
+    },
+    {
+      "logical_name": "cars/comet/livery-bone",
+      "asset_id": "v2-part4-comet-livery-bone-v1",
+      "group": "cars",
+      "car_class": "Comet",
+      "owner_approved": false,
+      "reference_approved": true,
+      "technical_accepted": true,
+      "reference_id": "v2-part3-rework-comet-v7",
+      "reference_source_sha256": "ddd9c3c684f65333251b386947b34354d980ce261cda9297eeb92ffac56e3acc"
+    },
+    {
+      "logical_name": "cars/comet/livery-red",
+      "asset_id": "v2-part4-comet-livery-red-v1",
+      "group": "cars",
+      "car_class": "Comet",
+      "owner_approved": false,
+      "reference_approved": true,
+      "technical_accepted": true,
+      "reference_id": "v2-part3-rework-comet-v7",
+      "reference_source_sha256": "ddd9c3c684f65333251b386947b34354d980ce261cda9297eeb92ffac56e3acc"
+    },
+    {
+      "logical_name": "cars/comet/livery-ochre",
+      "asset_id": "v2-part4-comet-livery-ochre-v1-a2",
+      "group": "cars",
+      "car_class": "Comet",
+      "owner_approved": false,
+      "reference_approved": true,
+      "technical_accepted": true,
+      "reference_id": "v2-part3-rework-comet-v7",
+      "reference_source_sha256": "ddd9c3c684f65333251b386947b34354d980ce261cda9297eeb92ffac56e3acc"
+    },
+    {
+      "logical_name": "cars/flint/clean",
+      "asset_id": "v2-part3-flint-state-intact-v3",
+      "group": "cars",
+      "car_class": "Flint",
+      "owner_approved": false,
+      "reference_approved": true,
+      "technical_accepted": true,
+      "reference_id": "v2-fusion-cars-flint-v1",
+      "reference_source_sha256": "aa4331cbe06cb472925ede07b70250fa566ce513a9097d15877015a6cc06fad0"
+    },
+    {
+      "logical_name": "cars/flint/damaged-1",
+      "asset_id": "v2-part3-flint-state-damaged-1-v1",
+      "group": "cars",
+      "car_class": "Flint",
+      "owner_approved": false,
+      "reference_approved": true,
+      "technical_accepted": true,
+      "reference_id": "v2-fusion-cars-flint-v1",
+      "reference_source_sha256": "aa4331cbe06cb472925ede07b70250fa566ce513a9097d15877015a6cc06fad0"
+    },
+    {
+      "logical_name": "cars/flint/damaged-2",
+      "asset_id": "v2-part3-flint-state-damaged-2-v1",
+      "group": "cars",
+      "car_class": "Flint",
+      "owner_approved": false,
+      "reference_approved": true,
+      "technical_accepted": true,
+      "reference_id": "v2-fusion-cars-flint-v1",
+      "reference_source_sha256": "aa4331cbe06cb472925ede07b70250fa566ce513a9097d15877015a6cc06fad0"
+    },
+    {
+      "logical_name": "cars/flint/wreck",
+      "asset_id": "v2-part3-flint-state-wreck-v1",
+      "group": "cars",
+      "car_class": "Flint",
+      "owner_approved": false,
+      "reference_approved": true,
+      "technical_accepted": true,
+      "reference_id": "v2-fusion-cars-flint-v1",
+      "reference_source_sha256": "aa4331cbe06cb472925ede07b70250fa566ce513a9097d15877015a6cc06fad0"
+    },
+    {
+      "logical_name": "cars/flint/livery-bone",
+      "asset_id": "v2-part3-flint-livery-bone-v2",
+      "group": "cars",
+      "car_class": "Flint",
+      "owner_approved": false,
+      "reference_approved": true,
+      "technical_accepted": true,
+      "reference_id": "v2-fusion-cars-flint-v1",
+      "reference_source_sha256": "aa4331cbe06cb472925ede07b70250fa566ce513a9097d15877015a6cc06fad0"
+    },
+    {
+      "logical_name": "cars/flint/livery-red",
+      "asset_id": "v2-part3-flint-livery-red-v1",
+      "group": "cars",
+      "car_class": "Flint",
+      "owner_approved": false,
+      "reference_approved": true,
+      "technical_accepted": true,
+      "reference_id": "v2-fusion-cars-flint-v1",
+      "reference_source_sha256": "aa4331cbe06cb472925ede07b70250fa566ce513a9097d15877015a6cc06fad0"
+    },
+    {
+      "logical_name": "cars/flint/livery-ochre",
+      "asset_id": "v2-part3-flint-livery-ochre-v1",
+      "group": "cars",
+      "car_class": "Flint",
+      "owner_approved": false,
+      "reference_approved": true,
+      "technical_accepted": true,
+      "reference_id": "v2-fusion-cars-flint-v1",
+      "reference_source_sha256": "aa4331cbe06cb472925ede07b70250fa566ce513a9097d15877015a6cc06fad0"
+    },
+    {
+      "logical_name": "cars/kestrel/clean",
+      "asset_id": "v2-part4-kestrel-state-intact-v1-a2",
+      "group": "cars",
+      "car_class": "Kestrel",
+      "owner_approved": false,
+      "reference_approved": true,
+      "technical_accepted": true,
+      "reference_id": "v2-part3-rework-kestrel-v9",
+      "reference_source_sha256": "9d9a19f3da81a60464560bc1a409332feed97e5a4027ecb451e7af4ddc237ad5"
+    },
+    {
+      "logical_name": "cars/kestrel/damaged-1",
+      "asset_id": "v2-part4-kestrel-state-damaged-1-v1-a3",
+      "group": "cars",
+      "car_class": "Kestrel",
+      "owner_approved": false,
+      "reference_approved": true,
+      "technical_accepted": true,
+      "reference_id": "v2-part3-rework-kestrel-v9",
+      "reference_source_sha256": "9d9a19f3da81a60464560bc1a409332feed97e5a4027ecb451e7af4ddc237ad5"
+    },
+    {
+      "logical_name": "cars/kestrel/damaged-2",
+      "asset_id": "v2-part4-kestrel-state-damaged-2-v1-a3",
+      "group": "cars",
+      "car_class": "Kestrel",
+      "owner_approved": false,
+      "reference_approved": true,
+      "technical_accepted": true,
+      "reference_id": "v2-part3-rework-kestrel-v9",
+      "reference_source_sha256": "9d9a19f3da81a60464560bc1a409332feed97e5a4027ecb451e7af4ddc237ad5"
+    },
+    {
+      "logical_name": "cars/kestrel/wreck",
+      "asset_id": "v2-part4-kestrel-state-wreck-v1-a2",
+      "group": "cars",
+      "car_class": "Kestrel",
+      "owner_approved": false,
+      "reference_approved": true,
+      "technical_accepted": true,
+      "reference_id": "v2-part3-rework-kestrel-v9",
+      "reference_source_sha256": "9d9a19f3da81a60464560bc1a409332feed97e5a4027ecb451e7af4ddc237ad5"
+    },
+    {
+      "logical_name": "cars/kestrel/livery-bone",
+      "asset_id": "v2-part4-kestrel-livery-bone-v1",
+      "group": "cars",
+      "car_class": "Kestrel",
+      "owner_approved": false,
+      "reference_approved": true,
+      "technical_accepted": true,
+      "reference_id": "v2-part3-rework-kestrel-v9",
+      "reference_source_sha256": "9d9a19f3da81a60464560bc1a409332feed97e5a4027ecb451e7af4ddc237ad5"
+    },
+    {
+      "logical_name": "cars/kestrel/livery-red",
+      "asset_id": "v2-part4-kestrel-livery-red-v1",
+      "group": "cars",
+      "car_class": "Kestrel",
+      "owner_approved": false,
+      "reference_approved": true,
+      "technical_accepted": true,
+      "reference_id": "v2-part3-rework-kestrel-v9",
+      "reference_source_sha256": "9d9a19f3da81a60464560bc1a409332feed97e5a4027ecb451e7af4ddc237ad5"
+    },
+    {
+      "logical_name": "cars/kestrel/livery-ochre",
+      "asset_id": "v2-part4-kestrel-livery-ochre-v1-a2",
+      "group": "cars",
+      "car_class": "Kestrel",
+      "owner_approved": false,
+      "reference_approved": true,
+      "technical_accepted": true,
+      "reference_id": "v2-part3-rework-kestrel-v9",
+      "reference_source_sha256": "9d9a19f3da81a60464560bc1a409332feed97e5a4027ecb451e7af4ddc237ad5"
+    },
+    {
+      "logical_name": "cars/line/clean",
+      "asset_id": "v2-part3-line-state-intact-v2",
+      "group": "cars",
+      "car_class": "Line",
+      "owner_approved": false,
+      "reference_approved": true,
+      "technical_accepted": true,
+      "reference_id": "v2-fusion-cars-line-v1",
+      "reference_source_sha256": "bbbe7fea32ba7ce10e1e333f92cbc9cd7233f2e6e49e11ee0a3baf28a933ae68"
+    },
+    {
+      "logical_name": "cars/line/damaged-1",
+      "asset_id": "v2-part3-line-state-damaged-1-v1",
+      "group": "cars",
+      "car_class": "Line",
+      "owner_approved": false,
+      "reference_approved": true,
+      "technical_accepted": true,
+      "reference_id": "v2-fusion-cars-line-v1",
+      "reference_source_sha256": "bbbe7fea32ba7ce10e1e333f92cbc9cd7233f2e6e49e11ee0a3baf28a933ae68"
+    },
+    {
+      "logical_name": "cars/line/damaged-2",
+      "asset_id": "v2-part3-line-state-damaged-2-v1",
+      "group": "cars",
+      "car_class": "Line",
+      "owner_approved": false,
+      "reference_approved": true,
+      "technical_accepted": true,
+      "reference_id": "v2-fusion-cars-line-v1",
+      "reference_source_sha256": "bbbe7fea32ba7ce10e1e333f92cbc9cd7233f2e6e49e11ee0a3baf28a933ae68"
+    },
+    {
+      "logical_name": "cars/line/wreck",
+      "asset_id": "v2-part3-line-state-wreck-v1",
+      "group": "cars",
+      "car_class": "Line",
+      "owner_approved": false,
+      "reference_approved": true,
+      "technical_accepted": true,
+      "reference_id": "v2-fusion-cars-line-v1",
+      "reference_source_sha256": "bbbe7fea32ba7ce10e1e333f92cbc9cd7233f2e6e49e11ee0a3baf28a933ae68"
+    },
+    {
+      "logical_name": "cars/line/livery-bone",
+      "asset_id": "v2-part3-line-livery-bone-v1",
+      "group": "cars",
+      "car_class": "Line",
+      "owner_approved": false,
+      "reference_approved": true,
+      "technical_accepted": true,
+      "reference_id": "v2-fusion-cars-line-v1",
+      "reference_source_sha256": "bbbe7fea32ba7ce10e1e333f92cbc9cd7233f2e6e49e11ee0a3baf28a933ae68"
+    },
+    {
+      "logical_name": "cars/line/livery-red",
+      "asset_id": "v2-part3-line-livery-red-v1",
+      "group": "cars",
+      "car_class": "Line",
+      "owner_approved": false,
+      "reference_approved": true,
+      "technical_accepted": true,
+      "reference_id": "v2-fusion-cars-line-v1",
+      "reference_source_sha256": "bbbe7fea32ba7ce10e1e333f92cbc9cd7233f2e6e49e11ee0a3baf28a933ae68"
+    },
+    {
+      "logical_name": "cars/line/livery-ochre",
+      "asset_id": "v2-part3-line-livery-ochre-v1",
+      "group": "cars",
+      "car_class": "Line",
+      "owner_approved": false,
+      "reference_approved": true,
+      "technical_accepted": true,
+      "reference_id": "v2-fusion-cars-line-v1",
+      "reference_source_sha256": "bbbe7fea32ba7ce10e1e333f92cbc9cd7233f2e6e49e11ee0a3baf28a933ae68"
+    },
+    {
+      "logical_name": "cars/needle/clean",
+      "asset_id": "v2-part4-needle-state-intact-reference",
+      "group": "cars",
+      "car_class": "Needle",
+      "owner_approved": false,
+      "reference_approved": true,
+      "technical_accepted": true,
+      "reference_id": "v2-part3-rework-needle-v1",
+      "reference_source_sha256": "b03a72a9338ceb843abe7d21837d7b70f9b8abb63054590cf9cb75c18b27b9a2"
+    },
+    {
+      "logical_name": "cars/needle/damaged-1",
+      "asset_id": "v2-part4-needle-state-damaged-1-v1-a2",
+      "group": "cars",
+      "car_class": "Needle",
+      "owner_approved": false,
+      "reference_approved": true,
+      "technical_accepted": true,
+      "reference_id": "v2-part3-rework-needle-v1",
+      "reference_source_sha256": "b03a72a9338ceb843abe7d21837d7b70f9b8abb63054590cf9cb75c18b27b9a2"
+    },
+    {
+      "logical_name": "cars/needle/damaged-2",
+      "asset_id": "v2-part4-needle-state-damaged-2-v1-a3",
+      "group": "cars",
+      "car_class": "Needle",
+      "owner_approved": false,
+      "reference_approved": true,
+      "technical_accepted": true,
+      "reference_id": "v2-part3-rework-needle-v1",
+      "reference_source_sha256": "b03a72a9338ceb843abe7d21837d7b70f9b8abb63054590cf9cb75c18b27b9a2"
+    },
+    {
+      "logical_name": "cars/needle/wreck",
+      "asset_id": "v2-part4-needle-state-wreck-v1",
+      "group": "cars",
+      "car_class": "Needle",
+      "owner_approved": false,
+      "reference_approved": true,
+      "technical_accepted": true,
+      "reference_id": "v2-part3-rework-needle-v1",
+      "reference_source_sha256": "b03a72a9338ceb843abe7d21837d7b70f9b8abb63054590cf9cb75c18b27b9a2"
+    },
+    {
+      "logical_name": "cars/needle/livery-bone",
+      "asset_id": "v2-part4-needle-livery-bone-v1-a3",
+      "group": "cars",
+      "car_class": "Needle",
+      "owner_approved": false,
+      "reference_approved": true,
+      "technical_accepted": true,
+      "reference_id": "v2-part3-rework-needle-v1",
+      "reference_source_sha256": "b03a72a9338ceb843abe7d21837d7b70f9b8abb63054590cf9cb75c18b27b9a2"
+    },
+    {
+      "logical_name": "cars/needle/livery-red",
+      "asset_id": "v2-part4-needle-livery-red-v1-a2",
+      "group": "cars",
+      "car_class": "Needle",
+      "owner_approved": false,
+      "reference_approved": true,
+      "technical_accepted": true,
+      "reference_id": "v2-part3-rework-needle-v1",
+      "reference_source_sha256": "b03a72a9338ceb843abe7d21837d7b70f9b8abb63054590cf9cb75c18b27b9a2"
+    },
+    {
+      "logical_name": "cars/needle/livery-ochre",
+      "asset_id": "v2-part4-needle-livery-ochre-v1-a2",
+      "group": "cars",
+      "car_class": "Needle",
+      "owner_approved": false,
+      "reference_approved": true,
+      "technical_accepted": true,
+      "reference_id": "v2-part3-rework-needle-v1",
+      "reference_source_sha256": "b03a72a9338ceb843abe7d21837d7b70f9b8abb63054590cf9cb75c18b27b9a2"
+    },
+    {
+      "logical_name": "cars/quill/clean",
+      "asset_id": "v2-part4-quill-state-intact-v1",
+      "group": "cars",
+      "car_class": "Quill",
+      "owner_approved": false,
+      "reference_approved": true,
+      "technical_accepted": true,
+      "reference_id": "v2-part3-rework-quill-v2",
+      "reference_source_sha256": "50b3a9df92d64c24d3795918e6eaae078e37ab2a1b9f615bd66ea630ef39e4e4"
+    },
+    {
+      "logical_name": "cars/quill/damaged-1",
+      "asset_id": "v2-part4-quill-state-damaged-1-v1",
+      "group": "cars",
+      "car_class": "Quill",
+      "owner_approved": false,
+      "reference_approved": true,
+      "technical_accepted": true,
+      "reference_id": "v2-part3-rework-quill-v2",
+      "reference_source_sha256": "50b3a9df92d64c24d3795918e6eaae078e37ab2a1b9f615bd66ea630ef39e4e4"
+    },
+    {
+      "logical_name": "cars/quill/damaged-2",
+      "asset_id": "v2-part4-quill-state-damaged-2-v1",
+      "group": "cars",
+      "car_class": "Quill",
+      "owner_approved": false,
+      "reference_approved": true,
+      "technical_accepted": true,
+      "reference_id": "v2-part3-rework-quill-v2",
+      "reference_source_sha256": "50b3a9df92d64c24d3795918e6eaae078e37ab2a1b9f615bd66ea630ef39e4e4"
+    },
+    {
+      "logical_name": "cars/quill/wreck",
+      "asset_id": "v2-part4-quill-state-wreck-v1",
+      "group": "cars",
+      "car_class": "Quill",
+      "owner_approved": false,
+      "reference_approved": true,
+      "technical_accepted": true,
+      "reference_id": "v2-part3-rework-quill-v2",
+      "reference_source_sha256": "50b3a9df92d64c24d3795918e6eaae078e37ab2a1b9f615bd66ea630ef39e4e4"
+    },
+    {
+      "logical_name": "cars/quill/livery-bone",
+      "asset_id": "v2-part4-quill-livery-bone-v1",
+      "group": "cars",
+      "car_class": "Quill",
+      "owner_approved": false,
+      "reference_approved": true,
+      "technical_accepted": true,
+      "reference_id": "v2-part3-rework-quill-v2",
+      "reference_source_sha256": "50b3a9df92d64c24d3795918e6eaae078e37ab2a1b9f615bd66ea630ef39e4e4"
+    },
+    {
+      "logical_name": "cars/quill/livery-red",
+      "asset_id": "v2-part4-quill-livery-red-v1",
+      "group": "cars",
+      "car_class": "Quill",
+      "owner_approved": false,
+      "reference_approved": true,
+      "technical_accepted": true,
+      "reference_id": "v2-part3-rework-quill-v2",
+      "reference_source_sha256": "50b3a9df92d64c24d3795918e6eaae078e37ab2a1b9f615bd66ea630ef39e4e4"
+    },
+    {
+      "logical_name": "cars/quill/livery-ochre",
+      "asset_id": "v2-part4-quill-livery-ochre-v1-a3",
+      "group": "cars",
+      "car_class": "Quill",
+      "owner_approved": false,
+      "reference_approved": true,
+      "technical_accepted": true,
+      "reference_id": "v2-part3-rework-quill-v2",
+      "reference_source_sha256": "50b3a9df92d64c24d3795918e6eaae078e37ab2a1b9f615bd66ea630ef39e4e4"
+    },
+    {
+      "logical_name": "cars/trail/clean",
+      "asset_id": "v2-part3-trail-state-intact-v2",
+      "group": "cars",
+      "car_class": "Trail",
+      "owner_approved": false,
+      "reference_approved": true,
+      "technical_accepted": true,
+      "reference_id": "v2-fusion-cars-trail-v1",
+      "reference_source_sha256": "920a5e898d6921489bc4ac1eb5e421124d71be50959476aec7a29031f2606275"
+    },
+    {
+      "logical_name": "cars/trail/damaged-1",
+      "asset_id": "v2-part3-trail-state-damaged-1-v1",
+      "group": "cars",
+      "car_class": "Trail",
+      "owner_approved": false,
+      "reference_approved": true,
+      "technical_accepted": true,
+      "reference_id": "v2-fusion-cars-trail-v1",
+      "reference_source_sha256": "920a5e898d6921489bc4ac1eb5e421124d71be50959476aec7a29031f2606275"
+    },
+    {
+      "logical_name": "cars/trail/damaged-2",
+      "asset_id": "v2-part3-trail-state-damaged-2-v1",
+      "group": "cars",
+      "car_class": "Trail",
+      "owner_approved": false,
+      "reference_approved": true,
+      "technical_accepted": true,
+      "reference_id": "v2-fusion-cars-trail-v1",
+      "reference_source_sha256": "920a5e898d6921489bc4ac1eb5e421124d71be50959476aec7a29031f2606275"
+    },
+    {
+      "logical_name": "cars/trail/wreck",
+      "asset_id": "v2-part3-trail-state-wreck-v1",
+      "group": "cars",
+      "car_class": "Trail",
+      "owner_approved": false,
+      "reference_approved": true,
+      "technical_accepted": true,
+      "reference_id": "v2-fusion-cars-trail-v1",
+      "reference_source_sha256": "920a5e898d6921489bc4ac1eb5e421124d71be50959476aec7a29031f2606275"
+    },
+    {
+      "logical_name": "cars/trail/livery-bone",
+      "asset_id": "v2-part3-trail-livery-bone-v1",
+      "group": "cars",
+      "car_class": "Trail",
+      "owner_approved": false,
+      "reference_approved": true,
+      "technical_accepted": true,
+      "reference_id": "v2-fusion-cars-trail-v1",
+      "reference_source_sha256": "920a5e898d6921489bc4ac1eb5e421124d71be50959476aec7a29031f2606275"
+    },
+    {
+      "logical_name": "cars/trail/livery-red",
+      "asset_id": "v2-part3-trail-livery-red-v1",
+      "group": "cars",
+      "car_class": "Trail",
+      "owner_approved": false,
+      "reference_approved": true,
+      "technical_accepted": true,
+      "reference_id": "v2-fusion-cars-trail-v1",
+      "reference_source_sha256": "920a5e898d6921489bc4ac1eb5e421124d71be50959476aec7a29031f2606275"
+    },
+    {
+      "logical_name": "cars/trail/livery-ochre",
+      "asset_id": "v2-part3-trail-livery-ochre-v1",
+      "group": "cars",
+      "car_class": "Trail",
+      "owner_approved": false,
+      "reference_approved": true,
+      "technical_accepted": true,
+      "reference_id": "v2-fusion-cars-trail-v1",
+      "reference_source_sha256": "920a5e898d6921489bc4ac1eb5e421124d71be50959476aec7a29031f2606275"
+    },
+    {
+      "logical_name": "cars/vandal/clean",
+      "asset_id": "v2-part3-vandal-state-intact-v2",
+      "group": "cars",
+      "car_class": "Vandal",
+      "owner_approved": false,
+      "reference_approved": true,
+      "technical_accepted": true,
+      "reference_id": "v2-fusion-cars-vandal-v1",
+      "reference_source_sha256": "a671a83642e093157fe189271d70b2b03765e454a919d0dfe18a84351b90ae9c"
+    },
+    {
+      "logical_name": "cars/vandal/damaged-1",
+      "asset_id": "v2-part3-vandal-state-damaged-1-v1",
+      "group": "cars",
+      "car_class": "Vandal",
+      "owner_approved": false,
+      "reference_approved": true,
+      "technical_accepted": true,
+      "reference_id": "v2-fusion-cars-vandal-v1",
+      "reference_source_sha256": "a671a83642e093157fe189271d70b2b03765e454a919d0dfe18a84351b90ae9c"
+    },
+    {
+      "logical_name": "cars/vandal/damaged-2",
+      "asset_id": "v2-part3-vandal-state-damaged-2-v1",
+      "group": "cars",
+      "car_class": "Vandal",
+      "owner_approved": false,
+      "reference_approved": true,
+      "technical_accepted": true,
+      "reference_id": "v2-fusion-cars-vandal-v1",
+      "reference_source_sha256": "a671a83642e093157fe189271d70b2b03765e454a919d0dfe18a84351b90ae9c"
+    },
+    {
+      "logical_name": "cars/vandal/wreck",
+      "asset_id": "v2-part3-vandal-state-wreck-v1",
+      "group": "cars",
+      "car_class": "Vandal",
+      "owner_approved": false,
+      "reference_approved": true,
+      "technical_accepted": true,
+      "reference_id": "v2-fusion-cars-vandal-v1",
+      "reference_source_sha256": "a671a83642e093157fe189271d70b2b03765e454a919d0dfe18a84351b90ae9c"
+    },
+    {
+      "logical_name": "cars/vandal/livery-bone",
+      "asset_id": "v2-part3-vandal-livery-bone-v1",
+      "group": "cars",
+      "car_class": "Vandal",
+      "owner_approved": false,
+      "reference_approved": true,
+      "technical_accepted": true,
+      "reference_id": "v2-fusion-cars-vandal-v1",
+      "reference_source_sha256": "a671a83642e093157fe189271d70b2b03765e454a919d0dfe18a84351b90ae9c"
+    },
+    {
+      "logical_name": "cars/vandal/livery-red",
+      "asset_id": "v2-part3-vandal-livery-red-v1",
+      "group": "cars",
+      "car_class": "Vandal",
+      "owner_approved": false,
+      "reference_approved": true,
+      "technical_accepted": true,
+      "reference_id": "v2-fusion-cars-vandal-v1",
+      "reference_source_sha256": "a671a83642e093157fe189271d70b2b03765e454a919d0dfe18a84351b90ae9c"
+    },
+    {
+      "logical_name": "cars/vandal/livery-ochre",
+      "asset_id": "v2-part3-vandal-livery-ochre-v1",
+      "group": "cars",
+      "car_class": "Vandal",
+      "owner_approved": false,
+      "reference_approved": true,
+      "technical_accepted": true,
+      "reference_id": "v2-fusion-cars-vandal-v1",
+      "reference_source_sha256": "a671a83642e093157fe189271d70b2b03765e454a919d0dfe18a84351b90ae9c"
+    },
+    {
+      "logical_name": "environment/scrap-pile",
+      "asset_id": "rw2-env-scrap-pile-v1-a2",
+      "group": "world",
+      "owner_approved": false,
+      "review_required": true,
+      "technical_eligible": true,
+      "owner_evidence": "",
+      "source_sha256": "f507b82f8a10612f3d6b0d15796a0b1b865db4ab7086e50a1d16a8f33da10c85",
+      "export_sha256": "55829cb638f020126f9e5d071439ec0da7d31764356c1305c3b1f176a6e0b942",
+      "approved_source_sha256": "",
+      "approved_export_sha256": "",
+      "effect_class": "none",
+      "collision_footprint": null
+    },
+    {
+      "logical_name": "environment/oil-drums",
+      "asset_id": "rw2-env-oil-drums-v1-a1",
+      "group": "world",
+      "owner_approved": false,
+      "review_required": true,
+      "technical_eligible": true,
+      "owner_evidence": "",
+      "source_sha256": "4d9627caf254043938e8b88f4a0475858b3159e9c58a9a68217578350fbe7863",
+      "export_sha256": "60944050ba18c0d07f910c7577dc7dd08e0ef07e6ae82007ff47e96878e50b39",
+      "approved_source_sha256": "",
+      "approved_export_sha256": "",
+      "effect_class": "none",
+      "collision_footprint": null
+    },
+    {
+      "logical_name": "environment/rust-pylon",
+      "asset_id": "rw2-env-rust-pylon-v1-a2",
+      "group": "world",
+      "owner_approved": false,
+      "review_required": true,
+      "technical_eligible": true,
+      "owner_evidence": "",
+      "source_sha256": "c68f9958091cb92f29648065102987ed4d90244acec7412754fca33f79fe9946",
+      "export_sha256": "9337984834c33eab491639886667e769393bf1f87440deeafb64170a5ca5adc7",
+      "approved_source_sha256": "",
+      "approved_export_sha256": "",
+      "effect_class": "none",
+      "collision_footprint": null
+    },
+    {
+      "logical_name": "environment/league-gantry",
+      "asset_id": "rw2-env-league-gantry-v1-a1",
+      "group": "world",
+      "owner_approved": false,
+      "review_required": true,
+      "technical_eligible": true,
+      "owner_evidence": "",
+      "source_sha256": "db55b5c7fc40d8747060eb10769d51f8c85252f0d946961572ed17c0da814980",
+      "export_sha256": "188740ee5829dadeb5b1dda1622e23a32d4bf47cc02a7966b54e55088b518fae",
+      "approved_source_sha256": "",
+      "approved_export_sha256": "",
+      "effect_class": "none",
+      "collision_footprint": null
+    },
+    {
+      "logical_name": "environment/derelict-crane",
+      "asset_id": "rw2-env-derelict-crane-v1-a2",
+      "group": "world",
+      "owner_approved": false,
+      "review_required": true,
+      "technical_eligible": true,
+      "owner_evidence": "",
+      "source_sha256": "eee1f27715b794baf1d7954ff685f0737717e4207558127e6440b6596dbc474b",
+      "export_sha256": "8c9a984e210544421a1720b38b96a6b65e2e84291fdbb72244d2c7e00cafaf88",
+      "approved_source_sha256": "",
+      "approved_export_sha256": "",
+      "effect_class": "none",
+      "collision_footprint": null
+    },
+    {
+      "logical_name": "environment/wreck-car",
+      "asset_id": "rw2-env-wreck-car-v1-a1",
+      "group": "world",
+      "owner_approved": false,
+      "review_required": true,
+      "technical_eligible": true,
+      "owner_evidence": "",
+      "source_sha256": "7b0db7fbc3f6aa340600e24a1c00474f37e4e6b7b3ffde97dd5ba01d279287cb",
+      "export_sha256": "e283ac6d3db4c134c26780487cc2453960f716f101904ba7f6588c04d39c292e",
+      "approved_source_sha256": "",
+      "approved_export_sha256": "",
+      "effect_class": "none",
+      "collision_footprint": null
+    },
+    {
+      "logical_name": "environment/quarry-face",
+      "asset_id": "rw2-env-quarry-face-v1-a2",
+      "group": "world",
+      "owner_approved": false,
+      "review_required": true,
+      "technical_eligible": true,
+      "owner_evidence": "",
+      "source_sha256": "316f097cd5bade22897421c1ba224f1026538b1689b330f5e094c4b5edeffe8b",
+      "export_sha256": "546faaac03940cc9df0ebd875dc53723e4e50f53c6c329d8d460e52807726b22",
+      "approved_source_sha256": "",
+      "approved_export_sha256": "",
+      "effect_class": "none",
+      "collision_footprint": null
+    },
+    {
+      "logical_name": "environment/slag-heap",
+      "asset_id": "rw2-env-slag-heap-v1-a1",
+      "group": "world",
+      "owner_approved": false,
+      "review_required": true,
+      "technical_eligible": true,
+      "owner_evidence": "",
+      "source_sha256": "73818142111ea4705530e6061b89b8eec4169da71c2e001c60f7ba3996b04f4e",
+      "export_sha256": "670b7122141dcd71bc236e8d48c8615a854463ff51c9ce3c9d1e39ab6d9fa7a3",
+      "approved_source_sha256": "",
+      "approved_export_sha256": "",
+      "effect_class": "none",
+      "collision_footprint": null
+    },
+    {
+      "logical_name": "environment/salt-crust",
+      "asset_id": "rw2-env-salt-crust-v1-a2",
+      "group": "world",
+      "owner_approved": false,
+      "review_required": true,
+      "technical_eligible": true,
+      "owner_evidence": "",
+      "source_sha256": "1f38f763c69a22314c546cf0a57dc1a3b3a58e726e00b1b5fe3a7d1edf6a280f",
+      "export_sha256": "5b4e741c369213eda4d4a296dc7f8b6c9691543c5d92e737f74bf853dd74c96d",
+      "approved_source_sha256": "",
+      "approved_export_sha256": "",
+      "effect_class": "none",
+      "collision_footprint": null
+    },
+    {
+      "logical_name": "environment/dead-brush",
+      "asset_id": "rw2-env-dead-brush-v1-a1",
+      "group": "world",
+      "owner_approved": false,
+      "review_required": true,
+      "technical_eligible": true,
+      "owner_evidence": "",
+      "source_sha256": "39a36d7bac52ceee8b1a80436ebc66f9e5969c87d799a974b26b9a01ffb1a74c",
+      "export_sha256": "9c7de7e655aacfebd69ebd2a32679142e3dbd3de15418c460e060a3914c8b3f6",
+      "approved_source_sha256": "",
+      "approved_export_sha256": "",
+      "effect_class": "none",
+      "collision_footprint": null
+    },
+    {
+      "logical_name": "environment/league-hoarding",
+      "asset_id": "rw2-env-league-hoarding-v1-a1",
+      "group": "world",
+      "owner_approved": false,
+      "review_required": true,
+      "technical_eligible": true,
+      "owner_evidence": "",
+      "source_sha256": "cf4958bd2e87a6c80bd0988b55ee12dd2cb30dba470837cf8c0177b891adc957",
+      "export_sha256": "b986cd50e56e0d87f3bdab9ad90acea03e3cc2e944c8822b20b641a26a409f54",
+      "approved_source_sha256": "",
+      "approved_export_sha256": "",
+      "effect_class": "none",
+      "collision_footprint": null
+    },
+    {
+      "logical_name": "environment/smelter-stacks",
+      "asset_id": "rw2-env-smelter-stacks-v1-a2",
+      "group": "world",
+      "owner_approved": false,
+      "review_required": true,
+      "technical_eligible": true,
+      "owner_evidence": "",
+      "source_sha256": "e6c64f4f2873190da4159006ea3d94c36907136ac76d4abcf367fe9013b64bab",
+      "export_sha256": "12fa688022ee74aef79291eae39300621c1942c5ad349a9e0e517acc4be1b53a",
+      "approved_source_sha256": "",
+      "approved_export_sha256": "",
+      "effect_class": "none",
+      "collision_footprint": null
+    },
+    {
+      "logical_name": "environment/sluice-gate",
+      "asset_id": "rw2-env-sluice-gate-v1-a1",
+      "group": "world",
+      "owner_approved": false,
+      "review_required": true,
+      "technical_eligible": true,
+      "owner_evidence": "",
+      "source_sha256": "42735e7f0b8fbbc87eb4842fbe7950f7f012c452f9620b7bb8ea61696a31e36a",
+      "export_sha256": "5ad31093f85c29955782ab6ed3ca8f717626e2f38ea35e60b5106eeed28b415b",
+      "approved_source_sha256": "",
+      "approved_export_sha256": "",
+      "effect_class": "none",
+      "collision_footprint": null
+    },
+    {
+      "logical_name": "environment/dead-tree",
+      "asset_id": "rw2-env-dead-tree-v1-a2",
+      "group": "world",
+      "owner_approved": false,
+      "review_required": true,
+      "technical_eligible": true,
+      "owner_evidence": "",
+      "source_sha256": "35cbd30070743f0e868275979c799da3ccc0c2dfe0908dc1650c785c6c947ba1",
+      "export_sha256": "09df1d1cdaface6bde0b12c6d437850334f3348453e5a17e72b7b086a8a9610c",
+      "approved_source_sha256": "",
+      "approved_export_sha256": "",
+      "effect_class": "none",
+      "collision_footprint": null
+    },
+    {
+      "logical_name": "environment/guard-rail",
+      "asset_id": "rw2-env-guard-rail-v1-a3",
+      "group": "world",
+      "owner_approved": false,
+      "review_required": true,
+      "technical_eligible": true,
+      "owner_evidence": "",
+      "source_sha256": "97ae2e0a97597816bdee69d44352f547fbfe43c12ae6c6b2971d95679e2477ab",
+      "export_sha256": "6f6fd1c9eeaa458c2b076e6a7a622f9a95189e1dbab4af8dbb4244adfb335bd2",
+      "approved_source_sha256": "",
+      "approved_export_sha256": "",
+      "effect_class": "none",
+      "collision_footprint": null
+    },
+    {
+      "logical_name": "environment/rock-fall",
+      "asset_id": "rw2-env-rock-fall-v1-a2",
+      "group": "world",
+      "owner_approved": false,
+      "review_required": true,
+      "technical_eligible": true,
+      "owner_evidence": "",
+      "source_sha256": "12fd9fa45e3fc62991611c085fe9278c5f233ba05f36a2c146b7768871664a8e",
+      "export_sha256": "9e907c1bbc4e0ecfdf63797cff841fb884bbbbfa699edc1d86c05c538a4f6501",
+      "approved_source_sha256": "",
+      "approved_export_sha256": "",
+      "effect_class": "none",
+      "collision_footprint": null
+    },
+    {
+      "logical_name": "environment/rock-spire",
+      "asset_id": "rw2-env-rock-spire-v1-a2",
+      "group": "world",
+      "owner_approved": false,
+      "review_required": true,
+      "technical_eligible": true,
+      "owner_evidence": "",
+      "source_sha256": "81e2629b6b5c37c99e9b4d174c13e418276e2bb5bc170154ccddfb13eddf989a",
+      "export_sha256": "f16a80217fcdfa34511e3952501478f1d5cffbc6a1acd0b3d3581ae9a8cf92f3",
+      "approved_source_sha256": "",
+      "approved_export_sha256": "",
+      "effect_class": "none",
+      "collision_footprint": null
+    },
+    {
+      "logical_name": "environment/tyres-scattered",
+      "asset_id": "rw2-env-tyres-scattered-v1-a1",
+      "group": "world",
+      "owner_approved": false,
+      "review_required": true,
+      "technical_eligible": true,
+      "owner_evidence": "",
+      "source_sha256": "f6e165fe2780554ffd4a512836b17b5c9c9cf56208c1ed8a7f17f31dc951e919",
+      "export_sha256": "3fe6adb69e87c8fe02c8c5dc4daf90b8c6cfbc46f013e980690ed081b3533559",
+      "approved_source_sha256": "",
+      "approved_export_sha256": "",
+      "effect_class": "none",
+      "collision_footprint": null
+    },
+    {
+      "logical_name": "environment/tyre-wall",
+      "asset_id": "rw2-env-tyre-wall-v2-a1",
+      "group": "world",
+      "owner_approved": false,
+      "review_required": true,
+      "technical_eligible": true,
+      "owner_evidence": "",
+      "source_sha256": "ce50a7010b8f38358394d4d608576310565a82210245ec1228299ceddfb790cd",
+      "export_sha256": "8f816699a8e05b57e7b0af43849b59218f74bf4fd4833844b6d45c6ee9bb1d86",
+      "approved_source_sha256": "",
+      "approved_export_sha256": "",
+      "effect_class": "none",
+      "collision_footprint": null
+    },
+    {
+      "logical_name": "face-first/rook",
+      "asset_id": "rw2-face-rook-v1-a2",
+      "group": "ui",
+      "review_required": true,
+      "technical_eligible": true,
+      "owner_approved": false,
+      "owner_evidence": "",
+      "source_sha256": "24b732cd26528ab145eea46ab204af39c7590a35c13e16c7a5c67a7d263594a8",
+      "export_sha256": "fa43631a5344a0087e1ccc62056cb594d2418c0406e74a8e61562faef373e1a5",
+      "approved_source_sha256": "",
+      "approved_export_sha256": "",
+      "face_required": true,
+      "face_visibility_version": "face-visibility-v1",
+      "face_visibility_passed": true,
+      "face_visibility_source_sha256": "24b732cd26528ab145eea46ab204af39c7590a35c13e16c7a5c67a7d263594a8",
+      "face_visibility_export_sha256": "fa43631a5344a0087e1ccc62056cb594d2418c0406e74a8e61562faef373e1a5",
+      "face_height_fraction": 0.56,
+      "face_eye_gap_native_px": 12.0
+    },
+    {
+      "logical_name": "face-first/ox",
+      "asset_id": "rw2-face-ox-v1-a1",
+      "group": "ui",
+      "review_required": true,
+      "technical_eligible": true,
+      "owner_approved": false,
+      "owner_evidence": "",
+      "source_sha256": "df4e213de7ad6d27e957c59c263feedadbb395e82128e8a80837ec79e0eee373",
+      "export_sha256": "47ef96a8acf76bf45ecc7cf2a18b50a8eba9fcabb23260862940e9ed86596093",
+      "approved_source_sha256": "",
+      "approved_export_sha256": "",
+      "face_required": true,
+      "face_visibility_version": "face-visibility-v1",
+      "face_visibility_passed": true,
+      "face_visibility_source_sha256": "df4e213de7ad6d27e957c59c263feedadbb395e82128e8a80837ec79e0eee373",
+      "face_visibility_export_sha256": "47ef96a8acf76bf45ecc7cf2a18b50a8eba9fcabb23260862940e9ed86596093",
+      "face_height_fraction": 0.6,
+      "face_eye_gap_native_px": 14.399999999999999
+    },
+    {
+      "logical_name": "face-first/vex",
+      "asset_id": "rw2-face-vex-v1-a1",
+      "group": "ui",
+      "review_required": true,
+      "technical_eligible": true,
+      "owner_approved": false,
+      "owner_evidence": "",
+      "source_sha256": "3bb11eb14015e230317e6f140802723d317291546f74d176dbe562e0572d1bb9",
+      "export_sha256": "befbb6136170ac1b320694fd9eb78b245072cb412cb380891a5356d91db4cc62",
+      "approved_source_sha256": "",
+      "approved_export_sha256": "",
+      "face_required": true,
+      "face_visibility_version": "face-visibility-v1",
+      "face_visibility_passed": true,
+      "face_visibility_source_sha256": "3bb11eb14015e230317e6f140802723d317291546f74d176dbe562e0572d1bb9",
+      "face_visibility_export_sha256": "befbb6136170ac1b320694fd9eb78b245072cb412cb380891a5356d91db4cc62",
+      "face_height_fraction": 0.44,
+      "face_eye_gap_native_px": 9.6
+    },
+    {
+      "logical_name": "face-first/mica",
+      "asset_id": "rw2-face-mica-v1-a1",
+      "group": "ui",
+      "review_required": true,
+      "technical_eligible": true,
+      "owner_approved": false,
+      "owner_evidence": "",
+      "source_sha256": "84b732b325fcb07c309491dcf8b6767ae6b03f6302ba8ecc6142b270a9491106",
+      "export_sha256": "51dff24b96c0f3d3ff5c5f8b1750b66ae8cdabb82aae8c74f292065a747a6706",
+      "approved_source_sha256": "",
+      "approved_export_sha256": "",
+      "face_required": true,
+      "face_visibility_version": "face-visibility-v1",
+      "face_visibility_passed": true,
+      "face_visibility_source_sha256": "84b732b325fcb07c309491dcf8b6767ae6b03f6302ba8ecc6142b270a9491106",
+      "face_visibility_export_sha256": "51dff24b96c0f3d3ff5c5f8b1750b66ae8cdabb82aae8c74f292065a747a6706",
+      "face_height_fraction": 0.66,
+      "face_eye_gap_native_px": 12.0
+    },
+    {
+      "logical_name": "face-first/relay",
+      "asset_id": "rw2-face-relay-v1-a1",
+      "group": "ui",
+      "review_required": true,
+      "technical_eligible": true,
+      "owner_approved": false,
+      "owner_evidence": "",
+      "source_sha256": "231b90325507be6a19c775c5b5eb1817221328e75fc6d71178c277df9de0b6d3",
+      "export_sha256": "370beffb5da3901e4303c66228e9f8ad64363208c47dae6d9b2d42bf33ad3fbd",
+      "approved_source_sha256": "",
+      "approved_export_sha256": "",
+      "face_required": true,
+      "face_visibility_version": "face-visibility-v1",
+      "face_visibility_passed": true,
+      "face_visibility_source_sha256": "231b90325507be6a19c775c5b5eb1817221328e75fc6d71178c277df9de0b6d3",
+      "face_visibility_export_sha256": "370beffb5da3901e4303c66228e9f8ad64363208c47dae6d9b2d42bf33ad3fbd",
+      "face_height_fraction": 0.6,
+      "face_eye_gap_native_px": 14.399999999999999
+    },
+    {
+      "logical_name": "face-first/marrow",
+      "asset_id": "rw2-face-marrow-v1-a1",
+      "group": "ui",
+      "review_required": true,
+      "technical_eligible": true,
+      "owner_approved": false,
+      "owner_evidence": "",
+      "source_sha256": "b08c90f6b3b43956ce6ce202743e9f50b40c2422bceb19319c5b442b300295d3",
+      "export_sha256": "c6af1128feb3a7c33fa61f748a62ff1d211fdfcb1e1075d6ff98ccc55e82b9f4",
+      "approved_source_sha256": "",
+      "approved_export_sha256": "",
+      "face_required": true,
+      "face_visibility_version": "face-visibility-v1",
+      "face_visibility_passed": true,
+      "face_visibility_source_sha256": "b08c90f6b3b43956ce6ce202743e9f50b40c2422bceb19319c5b442b300295d3",
+      "face_visibility_export_sha256": "c6af1128feb3a7c33fa61f748a62ff1d211fdfcb1e1075d6ff98ccc55e82b9f4",
+      "face_height_fraction": 0.6,
+      "face_eye_gap_native_px": 14.399999999999999
+    },
+    {
+      "logical_name": "face-first/mechanic",
+      "asset_id": "rw2-face-mechanic-v1-a1",
+      "group": "ui",
+      "review_required": true,
+      "technical_eligible": true,
+      "owner_approved": false,
+      "owner_evidence": "",
+      "source_sha256": "491632cfcb7cc2a7c9e5553ca4d5fdfc3b44e8d4ee9239c760d578cf3fb9cc81",
+      "export_sha256": "ab7a73dbd6a43421af3b9a287a30b0cf0fc08bb8f8032b2bc0340357070afb07",
+      "approved_source_sha256": "",
+      "approved_export_sha256": "",
+      "face_required": true,
+      "face_visibility_version": "face-visibility-v1",
+      "face_visibility_passed": true,
+      "face_visibility_source_sha256": "491632cfcb7cc2a7c9e5553ca4d5fdfc3b44e8d4ee9239c760d578cf3fb9cc81",
+      "face_visibility_export_sha256": "ab7a73dbd6a43421af3b9a287a30b0cf0fc08bb8f8032b2bc0340357070afb07",
+      "face_height_fraction": 0.56,
+      "face_eye_gap_native_px": 12.0
+    }
+  ],
+  "content_contracts": {
+    "rivals": [
+      {
+        "id": "rook",
+        "name": "Rook",
+        "car": "Needle",
+        "style": "Late pass specialist",
+        "laneBiasM": "1.8",
+        "passDistanceScale": "1.25",
+        "fireRangeScale": "0.8",
+        "heavyRangeScale": "1.4",
+        "mines": "0"
+      },
+      {
+        "id": "ox",
+        "name": "Ox",
+        "car": "Bastion",
+        "style": "Close-range bruiser",
+        "laneBiasM": "-1.8",
+        "passDistanceScale": "0.85",
+        "fireRangeScale": "0.85",
+        "heavyRangeScale": "0.7",
+        "mines": "1"
+      },
+      {
+        "id": "mica",
+        "name": "Mica",
+        "car": "Trail",
+        "style": "Patient corner hunter",
+        "laneBiasM": "0.8",
+        "passDistanceScale": "1.1",
+        "fireRangeScale": "0.75",
+        "heavyRangeScale": "1.3",
+        "mines": "1"
+      },
+      {
+        "id": "vex",
+        "name": "Vex",
+        "car": "Comet",
+        "style": "Straight-line gunner",
+        "laneBiasM": "-0.8",
+        "passDistanceScale": "1.3",
+        "fireRangeScale": "1",
+        "heavyRangeScale": "0.8",
+        "mines": "1"
+      },
+      {
+        "id": "relay",
+        "name": "Relay",
+        "car": "Line",
+        "style": "All-round tactician",
+        "laneBiasM": "0",
+        "passDistanceScale": "1",
+        "fireRangeScale": "0.9",
+        "heavyRangeScale": "1",
+        "mines": "1"
+      }
+    ],
+    "track-themes": [
+      {
+        "id": "industrial",
+        "surfaces": "Asphalt;Gravel;Oil",
+        "paletteKey": "oxide",
+        "propSet": "gantry;split-marker;tyre-stack",
+        "hazardSet": "oil-drum"
+      },
+      {
+        "id": "quarry",
+        "surfaces": "Asphalt;Gravel;Oil",
+        "paletteKey": "slate",
+        "propSet": "gantry;split-marker;stone-stack",
+        "hazardSet": "oil-drum"
+      },
+      {
+        "id": "desert",
+        "surfaces": "Asphalt;Gravel;Oil",
+        "paletteKey": "salt",
+        "propSet": "gantry;split-marker;sun-sign",
+        "hazardSet": "oil-drum"
+      },
+      {
+        "id": "wetland",
+        "surfaces": "Asphalt;Gravel;Oil;Ice",
+        "paletteKey": "moss",
+        "propSet": "gantry;split-marker;sluice",
+        "hazardSet": "oil-drum"
+      },
+      {
+        "id": "alpine",
+        "surfaces": "Asphalt;Gravel;Ice;Oil",
+        "paletteKey": "frost",
+        "propSet": "gantry;split-marker;snow-pole",
+        "hazardSet": "oil-drum"
+      }
+    ],
+    "weapons": [
+      {
+        "id": "Rivet",
+        "kind": "ray",
+        "damage": "2.4",
+        "cooldownSeconds": "0.20",
+        "ammo": "180",
+        "rangeM": "48",
+        "speedMps": "0",
+        "radiusM": "0.15",
+        "armingSeconds": "0",
+        "lifeSeconds": "0.08",
+        "traceSeconds": "0.08"
+      },
+      {
+        "id": "Hammer",
+        "kind": "projectile",
+        "damage": "21",
+        "cooldownSeconds": "1.4",
+        "ammo": "5",
+        "rangeM": "65",
+        "speedMps": "55",
+        "radiusM": "0.6",
+        "armingSeconds": "0",
+        "lifeSeconds": "1.19",
+        "traceSeconds": "0.06"
+      },
+      {
+        "id": "Mine",
+        "kind": "mine",
+        "damage": "24",
+        "cooldownSeconds": "2.5",
+        "ammo": "4",
+        "rangeM": "0",
+        "speedMps": "0",
+        "radiusM": "5",
+        "armingSeconds": "1.4",
+        "lifeSeconds": "18",
+        "traceSeconds": "0.35"
+      },
+      {
+        "id": "Scatter",
+        "kind": "spread",
+        "damage": "12",
+        "cooldownSeconds": "1.0",
+        "ammo": "12",
+        "rangeM": "22",
+        "speedMps": "0",
+        "radiusM": "0.25",
+        "armingSeconds": "0",
+        "lifeSeconds": "0.10",
+        "traceSeconds": "0.10"
+      }
+    ],
+    "consumables": [
+      {
+        "id": "spikes",
+        "name": "Contact spikes",
+        "price": "45",
+        "durationSeconds": "0",
+        "magnitude": "1.35",
+        "description": "One race of stronger contact damage with the normal ram cooldown"
+      },
+      {
+        "id": "turbo",
+        "name": "Turbo reserve",
+        "price": "55",
+        "durationSeconds": "4",
+        "magnitude": "1.30",
+        "description": "Four seconds of extra engine force on clear straights above launch speed"
+      },
+      {
+        "id": "fuel",
+        "name": "Hot fuel",
+        "price": "35",
+        "durationSeconds": "30",
+        "magnitude": "1.10",
+        "description": "Thirty seconds of extra engine force without raising the speed cap"
+      },
+      {
+        "id": "sabotage",
+        "name": "Ammo switch",
+        "price": "60",
+        "durationSeconds": "0",
+        "magnitude": "0.35",
+        "description": "Declared before the start: the first opposing driver loses a share of ammunition"
+      }
+    ]
+  },
+  "provisional_c4": {
+    "at": "2026-10-01T10:13:46.349865+00:00",
+    "status": "read-only uncommitted C4 preview, not claimed as committed authority",
+    "rivals_sha256": "805821d03aa92bac0160f005fc0456beabc5eeee0210f1e8be19959752e40678",
+    "stories_sha256": "6e85b6a7cc5ab9d7cc3122c84e2c0fda9bc786a91e2863536d6e6c209519cf0b",
+    "rival": {
+      "id": "marrow",
+      "name": "Marrow",
+      "car": "Bulwark",
+      "style": "Calculated close-range enforcer",
+      "laneBiasM": "0.4",
+      "passDistanceScale": "0.95",
+      "fireRangeScale": "0.95",
+      "heavyRangeScale": "0.9",
+      "mines": "1"
+    },
+    "story": {
+      "id": "marrow",
+      "portraitKey": "rival-marrow",
+      "biography": "The circuit owner who turned racing debts into a private fleet",
+      "taunt": "Every road here is in my books",
+      "grudgeTaunt": "You have damaged league property"
+    }
+  },
+  "content_portrait_aliases": {
+    "rival-rook": "v2-fusion-portraits-rook-v1",
+    "rival-ox": "v2-fusion-portraits-ox-v1",
+    "rival-vex": "v2-fusion-portraits-vex-v1",
+    "rival-mica": "v2-fusion-portraits-mica-v1",
+    "rival-relay": "v2-fusion-portraits-relay-v1",
+    "rival-marrow": "v2-fusion-portraits-marrow-v1"
+  },
+  "content_landmark_aliases": {
+    "tyre-stack": "v4-fusion-props-tyres-v1",
+    "oil-drum": "v4-fusion-props-drum-v1",
+    "gantry": "v4-fusion-landmarks-gantry-v1",
+    "sluice": "v4-fusion-landmarks-sluice-v1",
+    "snow-pole": "v4-fusion-landmarks-snow-pole-v1",
+    "split-marker": "v4-fusion-landmarks-split-marker-v1",
+    "stone-stack": "v4-fusion-landmarks-stone-stack-v1",
+    "sun-sign": "v4-fusion-landmarks-sun-sign-v1"
+  },
+  "content_combat_aliases": {
+    "weapons": {
+      "Rivet": "v4-fusion-hud-icons-icon-light-gun-v1",
+      "Hammer": "v4-fusion-hud-icons-icon-heavy-gun-v1",
+      "Mine": "v4-fusion-pickups-mine-v1",
+      "Scatter": "v4-fusion-hud-icons-scatter-v1"
+    },
+    "consumables": {
+      "spikes": "v4-fusion-hud-icons-spikes-v1",
+      "turbo": "v4-fusion-pickups-turbo-v1",
+      "fuel": "v4-fusion-hud-icons-icon-fuel-v1",
+      "sabotage": "v4-fusion-hud-icons-sabotage-v1"
+    }
+  },
+  "content_source": {
+    "commit": "e1640f0331a426489dad56a2a51f6b4eacf566e4",
+    "captured_at": "2026-10-01T09:56:30.476753+00:00",
+    "sources": {
+      "rivals": {
+        "path": "deathride/core/src/main/resources/data/rivals.csv",
+        "sha256": "7d88adab42262bb1ca7b333af496e50db823a43baf3bbf58a6629e2382a0c3fe"
+      },
+      "tracks": {
+        "path": "deathride/core/src/main/resources/data/tracks.csv",
+        "sha256": "51128ada6e73c6b97dde98276dde75ce86511f5510a337d6b10ede0c8891575c"
+      },
+      "track-themes": {
+        "path": "deathride/core/src/main/resources/data/track-themes.csv",
+        "sha256": "22b6d0d281c94685d49028f4fb0d8027c1ddea3f99c44f94770461f6c479f2e9"
+      },
+      "weapons": {
+        "path": "deathride/core/src/main/resources/data/weapons.csv",
+        "sha256": "77405ce9bde4d8bf6d3f82442c9c91eec952728189a635d06ecf3ba448139a80"
+      },
+      "consumables": {
+        "path": "deathride/core/src/main/resources/data/consumables.csv",
+        "sha256": "1e071069715ecd61063ec5d14df06454369e5bdffeed4479b298b655edd3d1be"
+      }
+    },
+    "scope": "Committed Content handoff; future C2/C4 additions must be reconciled at integration.",
+    "rival_count": 5,
+    "track_count": 25,
+    "themes": [
+      "industrial",
+      "quarry",
+      "desert",
+      "wetland",
+      "alpine"
+    ]
+  },
+  "scale": "Car dimensions and W6 camera stay authoritative. Atlas tile pixels do not define track width or world collision geometry.",
+  "natural_obstacles": {
+    "schema": 1,
+    "units": "metres; art proposal only, core hook must validate tuning",
+    "transform": "rotate local footprint by prop heading then translate by world centre; shadow is never collision",
+    "effect_classes": {
+      "none": "visual decoration only",
+      "drag": "inside footprint: proposed multiplicative speed/traction resistance",
+      "solid": "colliding footprint; later core resolves contact"
+    },
+    "default_decoration": {
+      "effect_class": "none",
+      "collision_footprint": null
+    },
+    "obstacles": {
+      "brush": {
+        "asset_id": "v4-fusion-props-brush-v1",
+        "logical_name": "props/brush",
+        "effect_class": "drag",
+        "collision_footprint": {
+          "shape": "ellipse",
+          "space": "local-metres",
+          "centre": [
+            0,
+            0
+          ],
+          "radii": [
+            1.9,
+            1.4
+          ]
+        },
+        "visual_extent_m": [
+          3.8,
+          2.8
+        ],
+        "height_m": 0.5,
+        "shadow": {
+          "renderer_generated": true,
+          "offset_per_height": [
+            0.3,
+            -0.22
+          ],
+          "opacity": 0.26
+        },
+        "core_hook_status": "metadata-only; not wired to physics",
+        "drag_multiplier": 0.68,
+        "placement": "seeded off racing line; later core validates passable width",
+        "owner_approved": false
+      },
+      "rock-field": {
+        "asset_id": "v4-fusion-props-rock-field-v1",
+        "logical_name": "props/rock-field",
+        "effect_class": "solid",
+        "collision_footprint": {
+          "shape": "ellipse",
+          "space": "local-metres",
+          "centre": [
+            0,
+            0
+          ],
+          "radii": [
+            2.25,
+            1.55
+          ]
+        },
+        "visual_extent_m": [
+          4.5,
+          3.1
+        ],
+        "height_m": 1.1,
+        "shadow": {
+          "renderer_generated": true,
+          "offset_per_height": [
+            0.3,
+            -0.22
+          ],
+          "opacity": 0.26
+        },
+        "core_hook_status": "metadata-only; not wired to physics",
+        "drag_multiplier": null,
+        "placement": "seeded off racing line; later core validates passable width",
+        "owner_approved": false
+      },
+      "soft-dune": {
+        "asset_id": "v4-fusion-props-soft-dune-v1-despill-v1",
+        "logical_name": "props/soft-dune",
+        "effect_class": "drag",
+        "collision_footprint": {
+          "shape": "ellipse",
+          "space": "local-metres",
+          "centre": [
+            0,
+            0
+          ],
+          "radii": [
+            2.9,
+            1.6
+          ]
+        },
+        "visual_extent_m": [
+          5.8,
+          3.2
+        ],
+        "height_m": 0.4,
+        "shadow": {
+          "renderer_generated": true,
+          "offset_per_height": [
+            0.3,
+            -0.22
+          ],
+          "opacity": 0.26
+        },
+        "core_hook_status": "metadata-only; not wired to physics",
+        "drag_multiplier": 0.68,
+        "placement": "seeded off racing line; later core validates passable width",
+        "owner_approved": false
+      },
+      "dead-tree": {
+        "asset_id": "v4-fusion-props-dead-tree-v1",
+        "logical_name": "props/dead-tree",
+        "effect_class": "solid",
+        "collision_footprint": {
+          "shape": "ellipse",
+          "space": "local-metres",
+          "centre": [
+            0,
+            0
+          ],
+          "radii": [
+            1.1,
+            0.85
+          ]
+        },
+        "visual_extent_m": [
+          3.19,
+          2.72
+        ],
+        "height_m": 5.4,
+        "shadow": {
+          "renderer_generated": true,
+          "offset_per_height": [
+            0.3,
+            -0.22
+          ],
+          "opacity": 0.26
+        },
+        "core_hook_status": "metadata-only; not wired to physics",
+        "drag_multiplier": null,
+        "placement": "seeded off racing line; later core validates passable width",
+        "owner_approved": false
+      },
+      "rock-spire": {
+        "asset_id": "v4-fusion-props-rock-spire-v1-despill-v1",
+        "logical_name": "props/rock-spire",
+        "effect_class": "solid",
+        "collision_footprint": {
+          "shape": "ellipse",
+          "space": "local-metres",
+          "centre": [
+            0,
+            0
+          ],
+          "radii": [
+            1.25,
+            0.9
+          ]
+        },
+        "visual_extent_m": [
+          3.625,
+          2.8800000000000003
+        ],
+        "height_m": 6.2,
+        "shadow": {
+          "renderer_generated": true,
+          "offset_per_height": [
+            0.3,
+            -0.22
+          ],
+          "opacity": 0.26
+        },
+        "core_hook_status": "metadata-only; not wired to physics",
+        "drag_multiplier": null,
+        "placement": "seeded off racing line; later core validates passable width",
+        "owner_approved": false
+      },
+      "tyres-scattered": {
+        "asset_id": "v4-fusion-props-tyres-scattered-v1",
+        "logical_name": "props/tyres-scattered",
+        "effect_class": "drag",
+        "collision_footprint": {
+          "shape": "ellipse",
+          "space": "local-metres",
+          "centre": [
+            0,
+            0
+          ],
+          "radii": [
+            1.6,
+            1.25
+          ]
+        },
+        "visual_extent_m": [
+          3.2,
+          2.5
+        ],
+        "height_m": 0.7,
+        "shadow": {
+          "renderer_generated": true,
+          "offset_per_height": [
+            0.3,
+            -0.22
+          ],
+          "opacity": 0.26
+        },
+        "core_hook_status": "metadata-only; not wired to physics",
+        "drag_multiplier": 0.68,
+        "placement": "seeded off racing line; later core validates passable width",
+        "owner_approved": false
+      }
+    }
+  },
+  "environment_sets": {
+    "industrial": [
+      "environment/scrap-pile",
+      "environment/tyre-wall",
+      "environment/oil-drums",
+      "environment/rust-pylon",
+      "environment/league-gantry",
+      "environment/smelter-stacks",
+      "environment/league-hoarding",
+      "environment/wreck-car"
+    ],
+    "quarry": [
+      "environment/quarry-face",
+      "environment/derelict-crane",
+      "environment/slag-heap",
+      "environment/wreck-car",
+      "environment/oil-drums",
+      "environment/rust-pylon"
+    ],
+    "desert": [
+      "environment/salt-crust",
+      "environment/dead-brush",
+      "props/soft-dune",
+      "environment/league-hoarding",
+      "environment/wreck-car",
+      "environment/rust-pylon"
+    ],
+    "wetland": [
+      "environment/sluice-gate",
+      "environment/dead-tree",
+      "environment/smelter-stacks",
+      "environment/scrap-pile",
+      "environment/oil-drums",
+      "environment/tyre-wall"
+    ],
+    "alpine": [
+      "environment/guard-rail",
+      "environment/rock-fall",
+      "environment/rock-spire",
+      "environment/tyres-scattered",
+      "environment/dead-brush",
+      "environment/wreck-car"
+    ]
+  },
+  "environment_obstacles": [
+    {
+      "id": "brush",
+      "logical_name": "environment/dead-brush",
+      "effect_class": "drag",
+      "collision_footprint": {
+        "shape": "ellipse",
+        "space": "local-metres",
+        "centre": [
+          0,
+          0
+        ],
+        "radii": [
+          1.9,
+          1.4
+        ]
+      },
+      "visual_extent_m": [
+        3.8,
+        2.8
+      ],
+      "height_m": 0.5,
+      "drag_multiplier": 0.68,
+      "shadow": {
+        "renderer_generated": true,
+        "offset_per_height": [
+          0.3,
+          -0.22
+        ],
+        "opacity": 0.26
+      },
+      "core_hook_status": "active gameplay; visual remap only",
+      "owner_approved": false
+    },
+    {
+      "id": "rock-field",
+      "logical_name": "environment/rock-fall",
+      "effect_class": "solid",
+      "collision_footprint": {
+        "shape": "ellipse",
+        "space": "local-metres",
+        "centre": [
+          0,
+          0
+        ],
+        "radii": [
+          2.25,
+          1.55
+        ]
+      },
+      "visual_extent_m": [
+        4.5,
+        3.1
+      ],
+      "height_m": 1.1,
+      "drag_multiplier": 1.0,
+      "shadow": {
+        "renderer_generated": true,
+        "offset_per_height": [
+          0.3,
+          -0.22
+        ],
+        "opacity": 0.26
+      },
+      "core_hook_status": "active gameplay; visual remap only",
+      "owner_approved": false
+    },
+    {
+      "id": "soft-dune",
+      "logical_name": "props/soft-dune",
+      "effect_class": "drag",
+      "collision_footprint": {
+        "shape": "ellipse",
+        "space": "local-metres",
+        "centre": [
+          0,
+          0
+        ],
+        "radii": [
+          2.9,
+          1.6
+        ]
+      },
+      "visual_extent_m": [
+        5.8,
+        3.2
+      ],
+      "height_m": 0.4,
+      "drag_multiplier": 0.68,
+      "shadow": {
+        "renderer_generated": true,
+        "offset_per_height": [
+          0.3,
+          -0.22
+        ],
+        "opacity": 0.26
+      },
+      "core_hook_status": "active gameplay; visual remap only",
+      "owner_approved": false
+    },
+    {
+      "id": "dead-tree",
+      "logical_name": "environment/dead-tree",
+      "effect_class": "solid",
+      "collision_footprint": {
+        "shape": "ellipse",
+        "space": "local-metres",
+        "centre": [
+          0,
+          0
+        ],
+        "radii": [
+          1.1,
+          0.85
+        ]
+      },
+      "visual_extent_m": [
+        3.19,
+        2.72
+      ],
+      "height_m": 5.4,
+      "drag_multiplier": 1.0,
+      "shadow": {
+        "renderer_generated": true,
+        "offset_per_height": [
+          0.3,
+          -0.22
+        ],
+        "opacity": 0.26
+      },
+      "core_hook_status": "active gameplay; visual remap only",
+      "owner_approved": false
+    },
+    {
+      "id": "rock-spire",
+      "logical_name": "environment/rock-spire",
+      "effect_class": "solid",
+      "collision_footprint": {
+        "shape": "ellipse",
+        "space": "local-metres",
+        "centre": [
+          0,
+          0
+        ],
+        "radii": [
+          1.25,
+          0.9
+        ]
+      },
+      "visual_extent_m": [
+        3.625,
+        2.8800000000000003
+      ],
+      "height_m": 6.2,
+      "drag_multiplier": 1.0,
+      "shadow": {
+        "renderer_generated": true,
+        "offset_per_height": [
+          0.3,
+          -0.22
+        ],
+        "opacity": 0.26
+      },
+      "core_hook_status": "active gameplay; visual remap only",
+      "owner_approved": false
+    },
+    {
+      "id": "tyres-scattered",
+      "logical_name": "environment/tyres-scattered",
+      "effect_class": "drag",
+      "collision_footprint": {
+        "shape": "ellipse",
+        "space": "local-metres",
+        "centre": [
+          0,
+          0
+        ],
+        "radii": [
+          1.6,
+          1.25
+        ]
+      },
+      "visual_extent_m": [
+        3.2,
+        2.5
+      ],
+      "height_m": 0.7,
+      "drag_multiplier": 0.68,
+      "shadow": {
+        "renderer_generated": true,
+        "offset_per_height": [
+          0.3,
+          -0.22
+        ],
+        "opacity": 0.26
+      },
+      "core_hook_status": "active gameplay; visual remap only",
+      "owner_approved": false
+    },
+    {
+      "id": "rubble",
+      "logical_name": "environment/rock-fall",
+      "effect_class": "drag",
+      "collision_footprint": {
+        "shape": "ellipse",
+        "space": "local-metres",
+        "centre": [
+          0,
+          0
+        ],
+        "radii": [
+          2.25,
+          1.55
+        ]
+      },
+      "visual_extent_m": [
+        4.5,
+        3.1
+      ],
+      "height_m": 1.1,
+      "drag_multiplier": 0.78,
+      "shadow": {
+        "renderer_generated": true,
+        "offset_per_height": [
+          0.3,
+          -0.22
+        ],
+        "opacity": 0.26
+      },
+      "core_hook_status": "active gameplay; visual remap only",
+      "owner_approved": false
+    },
+    {
+      "id": "tree-decoration",
+      "logical_name": "environment/dead-tree",
+      "effect_class": "none",
+      "collision_footprint": {
+        "shape": "ellipse",
+        "space": "local-metres",
+        "centre": [
+          0,
+          0
+        ],
+        "radii": [
+          1.1,
+          0.85
+        ]
+      },
+      "visual_extent_m": [
+        3.19,
+        2.72
+      ],
+      "height_m": 5.4,
+      "drag_multiplier": 1.0,
+      "shadow": {
+        "renderer_generated": true,
+        "offset_per_height": [
+          0.3,
+          -0.22
+        ],
+        "opacity": 0.26
+      },
+      "core_hook_status": "active gameplay; visual remap only",
+      "owner_approved": false
+    }
+  ],
+  "league_slogans": [
+    "THE TRACK COLLECTS",
+    "YOUR DEBT. OUR FINISH.",
+    "WIN THE HEAT. KEEP THE RECEIPT."
+  ],
+  "environment_policy": "All rw2 candidates require owner approval. Missing/unapproved assets retain procedural or existing obstacle fallback.",
+  "face_first_portrait_aliases": {
+    "rival-rook": "face-first/rook",
+    "rival-ox": "face-first/ox",
+    "rival-vex": "face-first/vex",
+    "rival-mica": "face-first/mica",
+    "rival-relay": "face-first/relay",
+    "rival-marrow": "face-first/marrow"
+  }
+}

@@ -7,8 +7,8 @@
     "ui",
     "world"
   ],
-  "regions": 288,
-  "logical_assets": 184,
+  "regions": 269,
+  "logical_assets": 165,
   "tile_pages": 11,
   "theme_pages": 5,
   "content_coverage": {
@@ -19,5 +19,23 @@
     "provisional_rivals": 1
   },
   "resident_mib_with_car_reserve": 31.25,
-  "scope": "PNG, hash, packing, content ID coverage, 47-case art, 256-mask resolver, six-frame durations and declared residency; no renderer/gameplay/owner claim"
+  "owner_application": {
+    "status": "pass",
+    "kept": 14,
+    "rejected": 21,
+    "active_environment": 4,
+    "active_portraits": 4,
+    "active_story_textures": 7,
+    "prior_portraits_preserved": [
+      "ox",
+      "relay",
+      "marrow"
+    ],
+    "retained_dune": false,
+    "original_world_regions_preserved": 60,
+    "original_ui_regions_preserved": 37,
+    "gameplay_metadata_unchanged": true,
+    "new_generated_assets": 0
+  },
+  "scope": "PNG, hash, packing, content ID coverage, 47-case art, 256-mask resolver, six-frame durations, exact dated owner selections when present and declared residency; no device claim"
 }

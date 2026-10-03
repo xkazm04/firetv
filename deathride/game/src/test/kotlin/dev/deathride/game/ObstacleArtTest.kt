@@ -22,9 +22,10 @@ class ObstacleArtTest {
             assertEquals(m.getDouble("height_m"),d.height)
             val shadow=m.get("shadow");val offset=shadow.get("offset_per_height").asDoubleArray()
             assertEquals(offset[0],d.shadowX);assertEquals(offset[1],d.shadowY);assertEquals(shadow.getDouble("opacity"),d.shadowAlpha)
-            assertTrue(catalog.any{it.getString("logical_name")==d.art && it.getString("asset_id")==m.getString("asset_id")})
+            if(m.name=="soft-dune")assertFalse(catalog.any{it.getString("logical_name")==d.art},"Owner rejected the retained dune; physics stays, renderer falls back")
+            else assertTrue(catalog.any{it.getString("logical_name")==d.art && it.getString("asset_id")==m.getString("asset_id")})
         }
-        for(d in ObstacleContent.definitions.values)assertTrue(catalog.any{it.getString("logical_name")==d.art})
+        for(d in ObstacleContent.definitions.values)assertEquals(d.art!="props/soft-dune",catalog.any{it.getString("logical_name")==d.art})
         assertEquals(ObstacleEffect.NONE,ObstacleContent.definitions.getValue("tree-decoration").effect)
         assertEquals(ObstacleEffect.DRAG,ObstacleContent.definitions.getValue("rubble").effect)
     }

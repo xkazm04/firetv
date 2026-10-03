@@ -10,6 +10,16 @@ from rework2_pipeline import report, eligible, candidate_records
 from validate_bundle import validate
 
 def audit(parts):
+    if (ART/'owner-approvals-2026-10-03.json').exists():
+        from owner_art_validation import validate_owner_art
+        from story_bundle import validate as validate_story
+        result=validate_owner_art()
+        assert sha(ROOT/'tools/art/gen.py')==read_json(ART/'audits/rework2-start.json')['generator_sha256']
+        validate(ROOT/'assets/phase2-states',ART/'reports/rework2-environment-bundle.json')
+        validate_story()
+        write_json(ART/'reports/rework2-validation.json',result)
+        print(result)
+        return result
     events=[json.loads(line) for line in (ART/'history.jsonl').read_text(encoding='utf-8').splitlines()]
     reserved=[e for e in events if e.get('event')=='reserved' and e.get('asset','').startswith('rw2-')]
     assert len(reserved)<=150 and Budget().summary()['images_reserved']<=700

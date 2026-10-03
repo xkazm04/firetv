@@ -17,7 +17,7 @@ object EnvironmentArt {
     val fallbackSets=mapOf(
         "industrial" to arrayOf("props/tyres","props/drum-red","props/crate-metal"),
         "quarry" to arrayOf("props/rock-field","props/rock-spire","props/drum"),
-        "desert" to arrayOf("props/soft-dune","props/brush","props/sign"),
+        "desert" to arrayOf("props/brush","props/sign","props/drum"),
         "wetland" to arrayOf("props/dead-tree","props/brush","landmarks/sluice"),
         "alpine" to arrayOf("props/rock-field","props/rock-spire","props/tyres-scattered"))
     val slogans=arrayOf("THE TRACK\nCOLLECTS","YOUR DEBT.\nOUR FINISH.","WIN THE HEAT.\nKEEP THE RECEIPT.")

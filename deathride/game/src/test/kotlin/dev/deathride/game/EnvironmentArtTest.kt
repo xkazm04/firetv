@@ -25,6 +25,6 @@ class EnvironmentArtTest {
         assertEquals(TrackContent.themes.map{it.id}.toSet(),EnvironmentArt.fallbackSets.keys)
         assertEquals(5,EnvironmentArt.fallbackSets.values.map{it.toList()}.toSet().size)
         assertFalse(EnvironmentArt.fallbackSets.getValue("alpine").any{it.contains("crate")})
-        assertTrue(EnvironmentArt.fallbackSets.getValue("desert").contains("props/soft-dune"))
+        assertFalse(EnvironmentArt.fallbackSets.values.any{it.contains("props/soft-dune")})
     }
 }

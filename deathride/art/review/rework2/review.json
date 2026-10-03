@@ -13269,5 +13269,50 @@
       },
       "owner_approved": false
     }
-  ]
+  ],
+  "owner_application": {
+    "date": "2026-10-03",
+    "authority": "docs/concepts/DEATH-RIDE-OWNER-DECISIONS-2026-10-03.md section 1",
+    "kept": 14,
+    "rejected": 21,
+    "report": "../../../evidence/owner-decisions/art/index.html",
+    "decisions": {
+      "environment/scrap-pile": "Keep",
+      "environment/oil-drums": "Keep",
+      "environment/rust-pylon": "Keep",
+      "environment/league-gantry": "Keep",
+      "environment/derelict-crane": "Reject",
+      "environment/wreck-car": "Reject",
+      "environment/quarry-face": "Reject",
+      "environment/slag-heap": "Reject",
+      "environment/salt-crust": "Reject",
+      "environment/dead-brush": "Reject",
+      "environment/league-hoarding": "Reject",
+      "environment/smelter-stacks": "Reject",
+      "environment/sluice-gate": "Reject",
+      "environment/dead-tree": "Reject",
+      "environment/guard-rail": "Reject",
+      "environment/rock-fall": "Reject",
+      "environment/rock-spire": "Reject",
+      "environment/tyres-scattered": "Reject",
+      "environment/tyre-wall": "Reject",
+      "portraits/rook": "Keep",
+      "portraits/ox": "Reject",
+      "portraits/vex": "Keep",
+      "portraits/mica": "Keep",
+      "portraits/relay": "Reject",
+      "portraits/marrow": "Reject",
+      "portraits/mechanic": "Keep",
+      "story/debt-contract": "Keep",
+      "story/ally-rook": "Keep",
+      "story/ally-ox": "Keep",
+      "story/ally-vex": "Keep",
+      "story/ally-mica": "Keep",
+      "story/car-seizure": "Reject",
+      "story/ending": "Keep",
+      "story/rig-reveal": "Reject",
+      "Retained natural dune": "Reject"
+    },
+    "history": "Original candidate-screening flags below describe the review-time state; dated decisions are in the separate exact-hash ledger."
+  }
 }

@@ -13,7 +13,7 @@ import dev.deathride.game.*
 import java.io.File
 import java.security.MessageDigest
 
-/** Local GL only. Real candidates remain unapproved; loader-positive fixtures contain synthetic pixels. */
+/** Local GL only. Verify dated owner selections plus synthetic stale/budget rejection controls. */
 class StoryArtAudit: ApplicationAdapter() {
     override fun create() {
         val root=Gdx.files.internal("story-art")
@@ -21,8 +21,10 @@ class StoryArtAudit: ApplicationAdapter() {
         val keys=catalog.get("assets").map{it.getString("key")}.toSet()
         val batch=SpriteBatch();batch.projectionMatrix=Matrix4().setToOrtho2D(0f,0f,1280f,720f)
         val disabled=StoryArt(root){StoryArt.MAX_BYTES}
-        disabled.select(keys);check(disabled.textureBytes==0L && keys.none{disabled.available(it)})
-        batch.begin();check(!disabled.draw(batch,"mechanic",0f,0f,100f,100f));batch.end();disabled.dispose()
+        val approved=catalog.get("assets").filter{StoryArt.eligible(it)}.map{it.getString("key")}.toSet()
+        for(key in keys){disabled.select(setOf(key));check(disabled.available(key)==(key in approved))}
+        disabled.select(setOf("mechanic"));batch.begin();check(disabled.draw(batch,"mechanic",0f,0f,100f,100f));batch.end()
+        disabled.select(emptySet());check(disabled.textureBytes==0L);disabled.dispose()
         File("build").mkdirs()
         val temp=FileHandle(java.nio.file.Files.createTempDirectory(File("build").toPath(),"story-synthetic-").toFile())
         val absent=StoryArt(temp){StoryArt.MAX_BYTES};absent.select(setOf("fixture"));check(absent.textureBytes==0L);absent.dispose()
@@ -57,7 +59,7 @@ class StoryArtAudit: ApplicationAdapter() {
             body.clear();val bottom=body.wrapped(Campaign.mechanicLine(p),148f,175f,420f,24f)
             check(bottom>=127f){"Mechanic text collision at round $round: $bottom"}
         }
-        val output=Gdx.files.local("evidence/story-art");output.mkdirs()
+        val output=Gdx.files.local(System.getenv("DEATHRIDE_STORY_AUDIT_OUTPUT")?:"evidence/owner-decisions/art/story-gl");output.mkdirs()
         // Deliberate contact board, not an enabled-game screenshot. No approval fields are changed.
         ScreenUtils.clear(.09f,.08f,.07f,1f);body.clear();body.setColor(HudTheme.bone)
         body.addText("UNAPPROVED STORY CANDIDATES / LOCAL GL REVIEW",28f,698f)
@@ -79,7 +81,7 @@ class StoryArtAudit: ApplicationAdapter() {
         body.draw(batch);batch.end()
         val board=Pixmap.createFromFrameBuffer(0,0,1280,720);PixmapIO.writePNG(output.child("candidate-gl-board.png"),board,-1,true);board.dispose()
         textures.forEach{it.dispose()};bodyFont.dispose();batch.dispose()
-        output.child("gl-validation.json").writeString("""{"status":"pass","realAssetsApproved":0,"realCandidatesDisabled":true,"syntheticUploadAndDraw":true,"releaseOnSceneChange":true,"missingRejectedChangedMalformedAndBudgetFallback":true,"text":[${checks.joinToString(",")}],"scope":"Desktop GL and actual font metrics only; no Stick, owner or performance claim"}""",false)
-        Gdx.app.log("DeathRide","story art GL audit passed; all real assets remain disabled");Gdx.app.exit()
+        output.child("gl-validation.json").writeString("""{"status":"pass","realAssetsApproved":${approved.size},"ownerGatesMatch":true,"syntheticUploadAndDraw":true,"releaseOnSceneChange":true,"missingRejectedChangedMalformedAndBudgetFallback":true,"text":[${checks.joinToString(",")}],"scope":"Desktop GL and actual font metrics; no Stick or performance claim"}""",false)
+        Gdx.app.log("DeathRide","story art GL audit passed; ${approved.size} exact owner-kept assets enabled");Gdx.app.exit()
     }
 }

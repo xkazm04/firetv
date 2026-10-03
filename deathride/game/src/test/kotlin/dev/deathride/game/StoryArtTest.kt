@@ -36,13 +36,18 @@ class StoryArtTest {
         val unsafe=entry();unsafe.get("file").set("../test.png");assertFalse(StoryArt.eligible(unsafe))
         assertFalse(StoryArt.eligible(JsonReader().parse("{}")))
     }
-    @Test fun shippedCandidatesCannotLoadWithoutOwnerDecision() {
+    @Test fun onlyExactOwnerKeptStoryAssetsAreEnabled() {
         val root=FileHandle(File("../assets/story-art"))
         val catalog=JsonReader().parse(root.child("catalog.json"))
         val assets=catalog.get("assets").toList()
         assertEquals(16,assets.size)
-        assertTrue(assets.all{!it.getBoolean("owner_approved") && !StoryArt.eligible(it)})
-        for(e in assets)assertEquals(e.getString("sha256"),MessageDigest.getInstance("SHA-256").digest(root.child(e.getString("file")).readBytes()).joinToString(""){"%02x".format(it)})
+        val kept=setOf("mechanic","debt-contract","ally-rook","ally-ox","ally-vex","ally-mica","ending")
+        assertEquals(kept,assets.filter{StoryArt.eligible(it)}.map{it.getString("key")}.toSet())
+        for(e in assets){
+            val bytes=root.child(e.getString("file")).readBytes()
+            assertEquals(e.getString("sha256"),MessageDigest.getInstance("SHA-256").digest(bytes).joinToString(""){"%02x".format(it)})
+            assertEquals(e.getString("key") in kept,StoryArt.matches(e,bytes))
+        }
     }
     @Test fun panelsFollowEarnedPromotionSeizureAndActualVictory() {
         val p=Profile("story-art-fixture")

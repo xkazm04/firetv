@@ -1,0 +1,424 @@
+{
+  "status": "pass",
+  "kept": 14,
+  "rejected": 21,
+  "active_environment": 4,
+  "active_portraits": 4,
+  "active_story_textures": 7,
+  "prior_portraits_preserved": [
+    "ox",
+    "relay",
+    "marrow"
+  ],
+  "retained_dune": false,
+  "original_world_regions_preserved": 60,
+  "original_ui_regions_preserved": 37,
+  "gameplay_metadata_unchanged": true,
+  "new_generated_assets": 0,
+  "theme_sets": {
+    "industrial": [
+      "environment/scrap-pile",
+      "props/tyres",
+      "environment/oil-drums",
+      "environment/rust-pylon",
+      "environment/league-gantry",
+      "props/drum",
+      "props/sign",
+      "props/crate-metal"
+    ],
+    "quarry": [
+      "props/rock-field",
+      "props/crate",
+      "props/crate-metal",
+      "environment/oil-drums",
+      "environment/rust-pylon"
+    ],
+    "desert": [
+      "props/brush",
+      "props/sign",
+      "props/crate-metal",
+      "environment/rust-pylon"
+    ],
+    "wetland": [
+      "props/crate-metal",
+      "props/dead-tree",
+      "props/drum",
+      "environment/scrap-pile",
+      "environment/oil-drums",
+      "props/tyres"
+    ],
+    "alpine": [
+      "props/sign",
+      "props/rock-field",
+      "props/rock-spire",
+      "props/tyres-scattered",
+      "props/brush",
+      "props/crate-metal"
+    ]
+  },
+  "theme_gaps": {
+    "industrial": "Earlier tyres, drum, sign and crate replace rejected tyre wall, stacks, hoarding and wreck.",
+    "quarry": "Earlier rock field and crates replace the crane, quarry face, slag and wreck; no distinct crane silhouette.",
+    "desert": "No salt-crust or retained dune sprite. Earlier brush/sign/crate and kept pylon share the smaller set; procedural ground remains.",
+    "wetland": "Earlier crate, tree, drum and tyres replace rejected sluice, stacks and tyre wall.",
+    "alpine": "Earlier sign, rocks, brush, tyres and crate replace rejected rail, rock fall, spire, scattered tyres and wreck."
+  },
+  "residency": {
+    "declared_atlas_with_reserve_mib": 31.25,
+    "desktop_atlas_mib": 18.75,
+    "worst_story_menu_bytes": 1283072,
+    "scope": "Atlas residency is unchanged; story scenes additionally obey the existing 1.5 MiB and shared-headroom limits. No device measurement."
+  },
+  "decisions": {
+    "environment/scrap-pile": {
+      "decision": "Keep",
+      "asset_id": "rw2-env-scrap-pile-v1-a2",
+      "owner_approved": true,
+      "owner_evidence": "docs/concepts/DEATH-RIDE-OWNER-DECISIONS-2026-10-03.md section 1",
+      "source_sha256": "f507b82f8a10612f3d6b0d15796a0b1b865db4ab7086e50a1d16a8f33da10c85",
+      "export_sha256": "55829cb638f020126f9e5d071439ec0da7d31764356c1305c3b1f176a6e0b942",
+      "archived_export": "art/review/rework2/images/rw2-env-scrap-pile-v1-a2.png",
+      "fallback": ""
+    },
+    "environment/oil-drums": {
+      "decision": "Keep",
+      "asset_id": "rw2-env-oil-drums-v1-a1",
+      "owner_approved": true,
+      "owner_evidence": "docs/concepts/DEATH-RIDE-OWNER-DECISIONS-2026-10-03.md section 1",
+      "source_sha256": "4d9627caf254043938e8b88f4a0475858b3159e9c58a9a68217578350fbe7863",
+      "export_sha256": "60944050ba18c0d07f910c7577dc7dd08e0ef07e6ae82007ff47e96878e50b39",
+      "archived_export": "art/review/rework2/images/rw2-env-oil-drums-v1-a1.png",
+      "fallback": ""
+    },
+    "environment/rust-pylon": {
+      "decision": "Keep",
+      "asset_id": "rw2-env-rust-pylon-v1-a2",
+      "owner_approved": true,
+      "owner_evidence": "docs/concepts/DEATH-RIDE-OWNER-DECISIONS-2026-10-03.md section 1",
+      "source_sha256": "c68f9958091cb92f29648065102987ed4d90244acec7412754fca33f79fe9946",
+      "export_sha256": "9337984834c33eab491639886667e769393bf1f87440deeafb64170a5ca5adc7",
+      "archived_export": "art/review/rework2/images/rw2-env-rust-pylon-v1-a2.png",
+      "fallback": ""
+    },
+    "environment/league-gantry": {
+      "decision": "Keep",
+      "asset_id": "rw2-env-league-gantry-v1-a1",
+      "owner_approved": true,
+      "owner_evidence": "docs/concepts/DEATH-RIDE-OWNER-DECISIONS-2026-10-03.md section 1",
+      "source_sha256": "db55b5c7fc40d8747060eb10769d51f8c85252f0d946961572ed17c0da814980",
+      "export_sha256": "188740ee5829dadeb5b1dda1622e23a32d4bf47cc02a7966b54e55088b518fae",
+      "archived_export": "art/review/rework2/images/rw2-env-league-gantry-v1-a1.png",
+      "fallback": ""
+    },
+    "environment/derelict-crane": {
+      "decision": "Reject",
+      "asset_id": "rw2-env-derelict-crane-v1-a2",
+      "owner_approved": false,
+      "owner_evidence": "docs/concepts/DEATH-RIDE-OWNER-DECISIONS-2026-10-03.md section 1",
+      "source_sha256": "eee1f27715b794baf1d7954ff685f0737717e4207558127e6440b6596dbc474b",
+      "export_sha256": "8c9a984e210544421a1720b38b96a6b65e2e84291fdbb72244d2c7e00cafaf88",
+      "archived_export": "art/review/rework2/images/rw2-env-derelict-crane-v1-a2.png",
+      "fallback": "props/crate"
+    },
+    "environment/wreck-car": {
+      "decision": "Reject",
+      "asset_id": "rw2-env-wreck-car-v1-a1",
+      "owner_approved": false,
+      "owner_evidence": "docs/concepts/DEATH-RIDE-OWNER-DECISIONS-2026-10-03.md section 1",
+      "source_sha256": "7b0db7fbc3f6aa340600e24a1c00474f37e4e6b7b3ffde97dd5ba01d279287cb",
+      "export_sha256": "e283ac6d3db4c134c26780487cc2453960f716f101904ba7f6588c04d39c292e",
+      "archived_export": "art/review/rework2/images/rw2-env-wreck-car-v1-a1.png",
+      "fallback": "props/crate-metal"
+    },
+    "environment/quarry-face": {
+      "decision": "Reject",
+      "asset_id": "rw2-env-quarry-face-v1-a2",
+      "owner_approved": false,
+      "owner_evidence": "docs/concepts/DEATH-RIDE-OWNER-DECISIONS-2026-10-03.md section 1",
+      "source_sha256": "316f097cd5bade22897421c1ba224f1026538b1689b330f5e094c4b5edeffe8b",
+      "export_sha256": "546faaac03940cc9df0ebd875dc53723e4e50f53c6c329d8d460e52807726b22",
+      "archived_export": "art/review/rework2/images/rw2-env-quarry-face-v1-a2.png",
+      "fallback": "props/rock-field"
+    },
+    "environment/slag-heap": {
+      "decision": "Reject",
+      "asset_id": "rw2-env-slag-heap-v1-a1",
+      "owner_approved": false,
+      "owner_evidence": "docs/concepts/DEATH-RIDE-OWNER-DECISIONS-2026-10-03.md section 1",
+      "source_sha256": "73818142111ea4705530e6061b89b8eec4169da71c2e001c60f7ba3996b04f4e",
+      "export_sha256": "670b7122141dcd71bc236e8d48c8615a854463ff51c9ce3c9d1e39ab6d9fa7a3",
+      "archived_export": "art/review/rework2/images/rw2-env-slag-heap-v1-a1.png",
+      "fallback": "props/rock-field"
+    },
+    "environment/salt-crust": {
+      "decision": "Reject",
+      "asset_id": "rw2-env-salt-crust-v1-a2",
+      "owner_approved": false,
+      "owner_evidence": "docs/concepts/DEATH-RIDE-OWNER-DECISIONS-2026-10-03.md section 1",
+      "source_sha256": "1f38f763c69a22314c546cf0a57dc1a3b3a58e726e00b1b5fe3a7d1edf6a280f",
+      "export_sha256": "5b4e741c369213eda4d4a296dc7f8b6c9691543c5d92e737f74bf853dd74c96d",
+      "archived_export": "art/review/rework2/images/rw2-env-salt-crust-v1-a2.png",
+      "fallback": "procedural/salt-crust"
+    },
+    "environment/dead-brush": {
+      "decision": "Reject",
+      "asset_id": "rw2-env-dead-brush-v1-a1",
+      "owner_approved": false,
+      "owner_evidence": "docs/concepts/DEATH-RIDE-OWNER-DECISIONS-2026-10-03.md section 1",
+      "source_sha256": "39a36d7bac52ceee8b1a80436ebc66f9e5969c87d799a974b26b9a01ffb1a74c",
+      "export_sha256": "9c7de7e655aacfebd69ebd2a32679142e3dbd3de15418c460e060a3914c8b3f6",
+      "archived_export": "art/review/rework2/images/rw2-env-dead-brush-v1-a1.png",
+      "fallback": "props/brush"
+    },
+    "environment/league-hoarding": {
+      "decision": "Reject",
+      "asset_id": "rw2-env-league-hoarding-v1-a1",
+      "owner_approved": false,
+      "owner_evidence": "docs/concepts/DEATH-RIDE-OWNER-DECISIONS-2026-10-03.md section 1",
+      "source_sha256": "cf4958bd2e87a6c80bd0988b55ee12dd2cb30dba470837cf8c0177b891adc957",
+      "export_sha256": "b986cd50e56e0d87f3bdab9ad90acea03e3cc2e944c8822b20b641a26a409f54",
+      "archived_export": "art/review/rework2/images/rw2-env-league-hoarding-v1-a1.png",
+      "fallback": "props/sign"
+    },
+    "environment/smelter-stacks": {
+      "decision": "Reject",
+      "asset_id": "rw2-env-smelter-stacks-v1-a2",
+      "owner_approved": false,
+      "owner_evidence": "docs/concepts/DEATH-RIDE-OWNER-DECISIONS-2026-10-03.md section 1",
+      "source_sha256": "e6c64f4f2873190da4159006ea3d94c36907136ac76d4abcf367fe9013b64bab",
+      "export_sha256": "12fa688022ee74aef79291eae39300621c1942c5ad349a9e0e517acc4be1b53a",
+      "archived_export": "art/review/rework2/images/rw2-env-smelter-stacks-v1-a2.png",
+      "fallback": "props/drum"
+    },
+    "environment/sluice-gate": {
+      "decision": "Reject",
+      "asset_id": "rw2-env-sluice-gate-v1-a1",
+      "owner_approved": false,
+      "owner_evidence": "docs/concepts/DEATH-RIDE-OWNER-DECISIONS-2026-10-03.md section 1",
+      "source_sha256": "42735e7f0b8fbbc87eb4842fbe7950f7f012c452f9620b7bb8ea61696a31e36a",
+      "export_sha256": "5ad31093f85c29955782ab6ed3ca8f717626e2f38ea35e60b5106eeed28b415b",
+      "archived_export": "art/review/rework2/images/rw2-env-sluice-gate-v1-a1.png",
+      "fallback": "props/crate-metal"
+    },
+    "environment/dead-tree": {
+      "decision": "Reject",
+      "asset_id": "rw2-env-dead-tree-v1-a2",
+      "owner_approved": false,
+      "owner_evidence": "docs/concepts/DEATH-RIDE-OWNER-DECISIONS-2026-10-03.md section 1",
+      "source_sha256": "35cbd30070743f0e868275979c799da3ccc0c2dfe0908dc1650c785c6c947ba1",
+      "export_sha256": "09df1d1cdaface6bde0b12c6d437850334f3348453e5a17e72b7b086a8a9610c",
+      "archived_export": "art/review/rework2/images/rw2-env-dead-tree-v1-a2.png",
+      "fallback": "props/dead-tree"
+    },
+    "environment/guard-rail": {
+      "decision": "Reject",
+      "asset_id": "rw2-env-guard-rail-v1-a3",
+      "owner_approved": false,
+      "owner_evidence": "docs/concepts/DEATH-RIDE-OWNER-DECISIONS-2026-10-03.md section 1",
+      "source_sha256": "97ae2e0a97597816bdee69d44352f547fbfe43c12ae6c6b2971d95679e2477ab",
+      "export_sha256": "6f6fd1c9eeaa458c2b076e6a7a622f9a95189e1dbab4af8dbb4244adfb335bd2",
+      "archived_export": "art/review/rework2/images/rw2-env-guard-rail-v1-a3.png",
+      "fallback": "props/sign"
+    },
+    "environment/rock-fall": {
+      "decision": "Reject",
+      "asset_id": "rw2-env-rock-fall-v1-a2",
+      "owner_approved": false,
+      "owner_evidence": "docs/concepts/DEATH-RIDE-OWNER-DECISIONS-2026-10-03.md section 1",
+      "source_sha256": "12fd9fa45e3fc62991611c085fe9278c5f233ba05f36a2c146b7768871664a8e",
+      "export_sha256": "9e907c1bbc4e0ecfdf63797cff841fb884bbbbfa699edc1d86c05c538a4f6501",
+      "archived_export": "art/review/rework2/images/rw2-env-rock-fall-v1-a2.png",
+      "fallback": "props/rock-field"
+    },
+    "environment/rock-spire": {
+      "decision": "Reject",
+      "asset_id": "rw2-env-rock-spire-v1-a2",
+      "owner_approved": false,
+      "owner_evidence": "docs/concepts/DEATH-RIDE-OWNER-DECISIONS-2026-10-03.md section 1",
+      "source_sha256": "81e2629b6b5c37c99e9b4d174c13e418276e2bb5bc170154ccddfb13eddf989a",
+      "export_sha256": "f16a80217fcdfa34511e3952501478f1d5cffbc6a1acd0b3d3581ae9a8cf92f3",
+      "archived_export": "art/review/rework2/images/rw2-env-rock-spire-v1-a2.png",
+      "fallback": "props/rock-spire"
+    },
+    "environment/tyres-scattered": {
+      "decision": "Reject",
+      "asset_id": "rw2-env-tyres-scattered-v1-a1",
+      "owner_approved": false,
+      "owner_evidence": "docs/concepts/DEATH-RIDE-OWNER-DECISIONS-2026-10-03.md section 1",
+      "source_sha256": "f6e165fe2780554ffd4a512836b17b5c9c9cf56208c1ed8a7f17f31dc951e919",
+      "export_sha256": "3fe6adb69e87c8fe02c8c5dc4daf90b8c6cfbc46f013e980690ed081b3533559",
+      "archived_export": "art/review/rework2/images/rw2-env-tyres-scattered-v1-a1.png",
+      "fallback": "props/tyres-scattered"
+    },
+    "environment/tyre-wall": {
+      "decision": "Reject",
+      "asset_id": "rw2-env-tyre-wall-v2-a1",
+      "owner_approved": false,
+      "owner_evidence": "docs/concepts/DEATH-RIDE-OWNER-DECISIONS-2026-10-03.md section 1",
+      "source_sha256": "ce50a7010b8f38358394d4d608576310565a82210245ec1228299ceddfb790cd",
+      "export_sha256": "8f816699a8e05b57e7b0af43849b59218f74bf4fd4833844b6d45c6ee9bb1d86",
+      "archived_export": "art/review/rework2/images/rw2-env-tyre-wall-v2-a1.png",
+      "fallback": "props/tyres"
+    },
+    "portraits/rook": {
+      "decision": "Keep",
+      "asset_id": "rw2-face-rook-v1-a2",
+      "owner_approved": true,
+      "owner_evidence": "docs/concepts/DEATH-RIDE-OWNER-DECISIONS-2026-10-03.md section 1",
+      "source_sha256": "24b732cd26528ab145eea46ab204af39c7590a35c13e16c7a5c67a7d263594a8",
+      "export_sha256": "fa43631a5344a0087e1ccc62056cb594d2418c0406e74a8e61562faef373e1a5",
+      "archived_export": "art/review/rework2/images/rw2-face-rook-v1-a2.png",
+      "fallback": ""
+    },
+    "portraits/ox": {
+      "decision": "Reject",
+      "asset_id": "rw2-face-ox-v1-a1",
+      "owner_approved": false,
+      "owner_evidence": "docs/concepts/DEATH-RIDE-OWNER-DECISIONS-2026-10-03.md section 1",
+      "source_sha256": "df4e213de7ad6d27e957c59c263feedadbb395e82128e8a80837ec79e0eee373",
+      "export_sha256": "47ef96a8acf76bf45ecc7cf2a18b50a8eba9fcabb23260862940e9ed86596093",
+      "archived_export": "art/review/rework2/images/rw2-face-ox-v1-a1.png",
+      "fallback": "portraits/ox"
+    },
+    "portraits/vex": {
+      "decision": "Keep",
+      "asset_id": "rw2-face-vex-v1-a1",
+      "owner_approved": true,
+      "owner_evidence": "docs/concepts/DEATH-RIDE-OWNER-DECISIONS-2026-10-03.md section 1",
+      "source_sha256": "3bb11eb14015e230317e6f140802723d317291546f74d176dbe562e0572d1bb9",
+      "export_sha256": "befbb6136170ac1b320694fd9eb78b245072cb412cb380891a5356d91db4cc62",
+      "archived_export": "art/review/rework2/images/rw2-face-vex-v1-a1.png",
+      "fallback": ""
+    },
+    "portraits/mica": {
+      "decision": "Keep",
+      "asset_id": "rw2-face-mica-v1-a1",
+      "owner_approved": true,
+      "owner_evidence": "docs/concepts/DEATH-RIDE-OWNER-DECISIONS-2026-10-03.md section 1",
+      "source_sha256": "84b732b325fcb07c309491dcf8b6767ae6b03f6302ba8ecc6142b270a9491106",
+      "export_sha256": "51dff24b96c0f3d3ff5c5f8b1750b66ae8cdabb82aae8c74f292065a747a6706",
+      "archived_export": "art/review/rework2/images/rw2-face-mica-v1-a1.png",
+      "fallback": ""
+    },
+    "portraits/relay": {
+      "decision": "Reject",
+      "asset_id": "rw2-face-relay-v1-a1",
+      "owner_approved": false,
+      "owner_evidence": "docs/concepts/DEATH-RIDE-OWNER-DECISIONS-2026-10-03.md section 1",
+      "source_sha256": "231b90325507be6a19c775c5b5eb1817221328e75fc6d71178c277df9de0b6d3",
+      "export_sha256": "370beffb5da3901e4303c66228e9f8ad64363208c47dae6d9b2d42bf33ad3fbd",
+      "archived_export": "art/review/rework2/images/rw2-face-relay-v1-a1.png",
+      "fallback": "portraits/relay"
+    },
+    "portraits/marrow": {
+      "decision": "Reject",
+      "asset_id": "rw2-face-marrow-v1-a1",
+      "owner_approved": false,
+      "owner_evidence": "docs/concepts/DEATH-RIDE-OWNER-DECISIONS-2026-10-03.md section 1",
+      "source_sha256": "b08c90f6b3b43956ce6ce202743e9f50b40c2422bceb19319c5b442b300295d3",
+      "export_sha256": "c6af1128feb3a7c33fa61f748a62ff1d211fdfcb1e1075d6ff98ccc55e82b9f4",
+      "archived_export": "art/review/rework2/images/rw2-face-marrow-v1-a1.png",
+      "fallback": "portraits/marrow"
+    },
+    "portraits/mechanic": {
+      "decision": "Keep",
+      "asset_id": "rw2-face-mechanic-v1-a1",
+      "owner_approved": true,
+      "owner_evidence": "docs/concepts/DEATH-RIDE-OWNER-DECISIONS-2026-10-03.md section 1",
+      "source_sha256": "491632cfcb7cc2a7c9e5553ca4d5fdfc3b44e8d4ee9239c760d578cf3fb9cc81",
+      "export_sha256": "ab7a73dbd6a43421af3b9a287a30b0cf0fc08bb8f8032b2bc0340357070afb07",
+      "archived_export": "art/review/rework2/images/rw2-face-mechanic-v1-a1.png",
+      "fallback": ""
+    },
+    "story/debt-contract": {
+      "decision": "Keep",
+      "asset_id": "rw2-face-debt-contract-v2-a1",
+      "owner_approved": true,
+      "owner_evidence": "docs/concepts/DEATH-RIDE-OWNER-DECISIONS-2026-10-03.md section 1",
+      "source_sha256": "b8e285afe5b6290daed5e07451f9c7ac921a183da4c8072dbc87d6465a907f67",
+      "export_sha256": "eeec2c676d6cac466e780842d6f78888a02a23d49d73a41b7728687ff1a8ef88",
+      "archived_export": "art/review/rework2/images/rw2-face-debt-contract-v2-a1.png",
+      "fallback": ""
+    },
+    "story/ally-rook": {
+      "decision": "Keep",
+      "asset_id": "rw2-face-ally-rook-v1-a1",
+      "owner_approved": true,
+      "owner_evidence": "docs/concepts/DEATH-RIDE-OWNER-DECISIONS-2026-10-03.md section 1",
+      "source_sha256": "8f5312bfcd66f2e7d6411625d64bd2d02d249037117de7e682944976ce562ed5",
+      "export_sha256": "7b90ca54d170fbb917038b4ac4bf139bc8471c100f78fb24c90b1f2b8a259767",
+      "archived_export": "art/review/rework2/images/rw2-face-ally-rook-v1-a1.png",
+      "fallback": ""
+    },
+    "story/ally-ox": {
+      "decision": "Keep",
+      "asset_id": "rw2-face-ally-ox-v1-a1",
+      "owner_approved": true,
+      "owner_evidence": "docs/concepts/DEATH-RIDE-OWNER-DECISIONS-2026-10-03.md section 1",
+      "source_sha256": "bfc9dcae046b53d3a556e64571d4b7d47e2a06eb61417bf2a012f981434032ca",
+      "export_sha256": "9ebc5650549fc7ae5c714949e82ce91076859dd2092a5983f84146c38f63600b",
+      "archived_export": "art/review/rework2/images/rw2-face-ally-ox-v1-a1.png",
+      "fallback": ""
+    },
+    "story/ally-vex": {
+      "decision": "Keep",
+      "asset_id": "rw2-face-ally-vex-v1-a1",
+      "owner_approved": true,
+      "owner_evidence": "docs/concepts/DEATH-RIDE-OWNER-DECISIONS-2026-10-03.md section 1",
+      "source_sha256": "15fc9d7f406b4d10639682c6d2d2e23b4e945946bdaeaed8bbfe6a0236c92476",
+      "export_sha256": "2c23dc8d67a3f923faa2683584c2f662cde5b63106bd47ed0b8e121ad4044f41",
+      "archived_export": "art/review/rework2/images/rw2-face-ally-vex-v1-a1.png",
+      "fallback": ""
+    },
+    "story/ally-mica": {
+      "decision": "Keep",
+      "asset_id": "rw2-face-ally-mica-v1-a1",
+      "owner_approved": true,
+      "owner_evidence": "docs/concepts/DEATH-RIDE-OWNER-DECISIONS-2026-10-03.md section 1",
+      "source_sha256": "0653f83fb359f4fa50443845fbce2160fab51a5794cc137401895b8934229b84",
+      "export_sha256": "b6c827aa3100f88db1512a44a42b4b0840dc831e53895bd108e6d64f357c83a8",
+      "archived_export": "art/review/rework2/images/rw2-face-ally-mica-v1-a1.png",
+      "fallback": ""
+    },
+    "story/car-seizure": {
+      "decision": "Reject",
+      "asset_id": "rw2-face-car-seizure-v1-a1",
+      "owner_approved": false,
+      "owner_evidence": "docs/concepts/DEATH-RIDE-OWNER-DECISIONS-2026-10-03.md section 1",
+      "source_sha256": "b20fd3113303d91fd5819c04c7980c20b779a6fc60cfc5c08f444f6f91ca295f",
+      "export_sha256": "0776b88902a614b786470c31a4b7736b614f1b5bca6d8ec5f292c84b0c6eeb00",
+      "archived_export": "art/review/rework2/images/rw2-face-car-seizure-v1-a1.png",
+      "fallback": "pre-rework card; procedural until separately approved"
+    },
+    "story/ending": {
+      "decision": "Keep",
+      "asset_id": "rw2-face-ending-v1-a2",
+      "owner_approved": true,
+      "owner_evidence": "docs/concepts/DEATH-RIDE-OWNER-DECISIONS-2026-10-03.md section 1",
+      "source_sha256": "0ada892adf866d51d3a3acf89a7293d09140d01c7a94caa3bc3de2307498c458",
+      "export_sha256": "bb70e94eff1cb42d023347c64711c9a09e05ddacea675a7455108c48587ff3ff",
+      "archived_export": "art/review/rework2/images/rw2-face-ending-v1-a2.png",
+      "fallback": ""
+    },
+    "story/rig-reveal": {
+      "decision": "Reject",
+      "asset_id": "rw2-reuse-rig-reveal",
+      "owner_approved": false,
+      "owner_evidence": "docs/concepts/DEATH-RIDE-OWNER-DECISIONS-2026-10-03.md section 1",
+      "source_sha256": "491632cfcb7cc2a7c9e5553ca4d5fdfc3b44e8d4ee9239c760d578cf3fb9cc81",
+      "export_sha256": "ab7a73dbd6a43421af3b9a287a30b0cf0fc08bb8f8032b2bc0340357070afb07",
+      "archived_export": "art/review/rework2/images/rw2-reuse-rig-reveal.png",
+      "fallback": "pre-rework card; procedural until separately approved"
+    },
+    "Retained natural dune": {
+      "decision": "Reject",
+      "asset_id": "v4-fusion-props-soft-dune-v1-despill-v1",
+      "owner_approved": false,
+      "owner_evidence": "docs/concepts/DEATH-RIDE-OWNER-DECISIONS-2026-10-03.md section 1",
+      "source_sha256": "959eb3dedeb1fd60e11c5bf949072bb43c34f6a234d229b102732008b56ff209",
+      "export_sha256": "959eb3dedeb1fd60e11c5bf949072bb43c34f6a234d229b102732008b56ff209",
+      "archived_export": "art/review/rework2/images/retained-soft-dune.png",
+      "fallback": "procedural dune; gameplay footprint unchanged"
+    }
+  }
+}

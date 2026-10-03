@@ -16,6 +16,8 @@ def fields(r):
       face_eye_gap_native_px=min(c['native_eye_gap_px'] for c in g['checks']))
 
 def build():
+    if (ART/'owner-approvals-2026-10-03.json').exists():
+        raise RuntimeError('Dated owner decisions are active; use apply-owner-art.py to repack existing selections.')
     folder=ROOT/'assets/phase2-states';source=ROOT/'assets/phase2-hud'
     stage=ART/'processed/rework2-face-pack';stage.mkdir(parents=True,exist_ok=True)
     chosen={}

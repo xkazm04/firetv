@@ -34,14 +34,14 @@
     },
     {
       "file": "world-0.png",
-      "sha256": "4d26a6dd9195412be874ecd7d5a9490188bcdd9c28377712595d790e97a6b97d",
+      "sha256": "923ba3c25a8df002999234453b305950f6575a9114cec5a104b7fbcc00c93ad1",
       "width": 1024,
       "height": 1024,
       "rgba_bytes": 4194304
     },
     {
       "file": "ui-0.png",
-      "sha256": "410b6b0630804ae79431c535b64d253ed3fd32c92d7c4f85df390d0535514e77",
+      "sha256": "f5064b4b68387d1a3d8990e4d89d878be9d0218fa0537312377e71a59a374ee0",
       "width": 1024,
       "height": 1024,
       "rgba_bytes": 4194304
@@ -212,17 +212,62 @@
   "cpu_course_vertex_bytes": 28800,
   "environment_rework": {
     "at": "2026-10-03T10:13:50.130021+00:00",
-    "candidate_count": 19,
-    "owner_approved": 0,
+    "candidate_count": 4,
+    "owner_approved": 4,
     "page_change": 0,
-    "policy": "20 compact 64px environment cells fit spare space on the existing world page; original regions unchanged."
+    "policy": "Owner Keep assets active with exact hashes. Reject candidates excluded; earlier kit or procedural fallback. No new generation."
   },
   "face_rework": {
     "at": "2026-10-03T10:52:36.957401+00:00",
-    "portrait_candidates": 7,
-    "exact_reuses": 1,
-    "owner_approved": 0,
+    "portrait_candidates": 4,
+    "exact_reuses": 0,
+    "owner_approved": 4,
     "page_change": 0,
-    "policy": "Screened 128px face cells use spare UI atlas space. Prior portrait regions and aliases remain fallback until exact owner approval."
+    "policy": "Rook, Vex, Mica and Mechanic kept. Original Ox, Relay and Marrow remain. Six story scenes kept; seizure/rig fall back."
+  },
+  "owner_application": {
+    "authority": "docs/concepts/DEATH-RIDE-OWNER-DECISIONS-2026-10-03.md section 1",
+    "kept": 14,
+    "rejected": 21,
+    "new_assets": 0,
+    "kept_asset_ids": [
+      "rw2-env-league-gantry-v1-a1",
+      "rw2-env-oil-drums-v1-a1",
+      "rw2-env-rust-pylon-v1-a2",
+      "rw2-env-scrap-pile-v1-a2",
+      "rw2-face-ally-mica-v1-a1",
+      "rw2-face-ally-ox-v1-a1",
+      "rw2-face-ally-rook-v1-a1",
+      "rw2-face-ally-vex-v1-a1",
+      "rw2-face-debt-contract-v2-a1",
+      "rw2-face-ending-v1-a2",
+      "rw2-face-mechanic-v1-a1",
+      "rw2-face-mica-v1-a1",
+      "rw2-face-rook-v1-a2",
+      "rw2-face-vex-v1-a1"
+    ],
+    "rejected_asset_ids": [
+      "rw2-env-dead-brush-v1-a1",
+      "rw2-env-dead-tree-v1-a2",
+      "rw2-env-derelict-crane-v1-a2",
+      "rw2-env-guard-rail-v1-a3",
+      "rw2-env-league-hoarding-v1-a1",
+      "rw2-env-quarry-face-v1-a2",
+      "rw2-env-rock-fall-v1-a2",
+      "rw2-env-rock-spire-v1-a2",
+      "rw2-env-salt-crust-v1-a2",
+      "rw2-env-slag-heap-v1-a1",
+      "rw2-env-sluice-gate-v1-a1",
+      "rw2-env-smelter-stacks-v1-a2",
+      "rw2-env-tyre-wall-v2-a1",
+      "rw2-env-tyres-scattered-v1-a1",
+      "rw2-env-wreck-car-v1-a1",
+      "rw2-face-car-seizure-v1-a1",
+      "rw2-face-marrow-v1-a1",
+      "rw2-face-ox-v1-a1",
+      "rw2-face-relay-v1-a1",
+      "rw2-reuse-rig-reveal",
+      "v4-fusion-props-soft-dune-v1-despill-v1"
+    ]
   }
 }
