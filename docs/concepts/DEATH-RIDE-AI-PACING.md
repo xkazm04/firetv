@@ -49,7 +49,7 @@ Original work only. One design note, status row, session-log entry and one commi
 
 | Id | Wave | Status |
 |---|---|---|
-| Z0 | AI behaviour design and data model | not started |
+| Z0 | AI behaviour design and data model | complete: design and six proposed CSV tables; required build and six browser suites pass |
 | Z1 | Pacing by time, lap counts and track design | not started |
 | Z2 | Implementation and tests | not started |
 | Z3 | Simulation and balance | not started |
