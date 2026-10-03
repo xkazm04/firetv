@@ -52,7 +52,7 @@ class Combat(private val world: World,val enabled: Boolean) {
     private val cooldowns=DoubleArray(ammunition.size)
     private val ramCooldown=DoubleArray(Tuning.CAR_COUNT*Tuning.CAR_COUNT)
     private val wallCooldown=DoubleArray(Tuning.CAR_COUNT)
-    private val lastTarget=IntArray(Tuning.CAR_COUNT){-1}
+    internal val lastTarget=IntArray(Tuning.CAR_COUNT){-1}
     val selectedWeapon=IntArray(Tuning.CAR_COUNT)
     val kills=IntArray(Tuning.CAR_COUNT)
     val damageEvents=IntArray(Tuning.CAR_COUNT)
@@ -87,6 +87,7 @@ class Combat(private val world: World,val enabled: Boolean) {
         pickups=sites.map { world.track.sample(world.track.startM+it.fraction*world.track.lengthM,it.laneM,point);Pickup(PickupTypes.all.first { type->type.id==it.kind },point.x,point.y) }.toTypedArray()
     }
     fun health(id: Int)=hp[id]
+    fun settlementHealth(id: Int)=hp[id]/world.cars[id].aiBossHealthScale
     fun maxHealth(id: Int)=world.cars[id].maxHp
     fun state(id: Int)=states[id]
     fun wrecked(id: Int)=states[id]==LifeState.WRECKED
@@ -122,6 +123,7 @@ class Combat(private val world: World,val enabled: Boolean) {
         if(dealt>0 && kind!=DamageKind.RAM && kind!=DamageKind.WALL && kind!=DamageKind.MINE)
             world.presentationEvents.emit(PresentationKind.HIT,source,id,kind.ordinal,world.cars[id].x,world.cars[id].y,dealt,world.seconds)
         damageByKind[kind.ordinal]+=dealt
+        world.ai.onDamage(id,source,dealt)
         if(kind==DamageKind.ABILITY && source>=0){abilityDamage[source]+=dealt;abilityHits[source]++}
         damageFlashSeconds[id]=CombatRules["damageFlashSeconds"]
         if(source>=0 && source!=id)damageDealt[source]+=dealt
@@ -230,6 +232,7 @@ class Combat(private val world: World,val enabled: Boolean) {
     }
     /** Called only on the driver's existing perception/reaction cadence. */
     fun think(c: Car) {
+        if(world.ai.think(c))return
         if(!enabled || !canAct(c.id)){c.aiInput.fire=0.0;c.aiInput.mine=0.0;return}
         var target=-1;var distance=Weapons.all[Weapons.RIVET].rangeM*(c.aiStyle?.fireRangeScale?:1.0);var chaser=false
         val cx=cos(c.heading);val cy=sin(c.heading)

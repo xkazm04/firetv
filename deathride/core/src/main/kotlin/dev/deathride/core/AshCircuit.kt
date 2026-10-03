@@ -100,6 +100,8 @@ object RivalEconomy {
     fun apply(p: Profile,world: World,difficulty: Int,round: Int=p.careerRound,guest: Boolean=false) {
         world.raceLaps=Career.events[round].laps
         world.eventType=Career.events[round].type
+        world.aiLeadSlot=0
+        world.aiBossRival=if(Career.events[round].boss)Career.bossIndex(round) else -1
         prepare(p,round);val cast=cast(round)
         for(c in world.cars){c.entered=c.id<=cast.size;c.rivalIndex=-1}
         val guestRacing=guest && !Career.events[round].duel
@@ -114,7 +116,7 @@ object RivalEconomy {
         }
     }
     fun settle(p: Profile,ticket: Long,world: World,round: Int) {
-        val results=world.cars.filter{it.entered && it.rivalIndex>=0}.map{c->RivalResult(c.rivalIndex,c.position,world.combat.kills[c.id],world.combat.health(c.id),world.combat.cashCollected[c.id],world.combat.damageTaken[c.id]==0.0,c.finishSeconds>=0,world.combat.wreckSource[c.id]==0)}
+        val results=world.cars.filter{it.entered && it.rivalIndex>=0}.map{c->RivalResult(c.rivalIndex,c.position,world.combat.kills[c.id],world.combat.settlementHealth(c.id),world.combat.cashCollected[c.id],world.combat.damageTaken[c.id]==0.0,c.finishSeconds>=0,world.combat.wreckSource[c.id]==0)}
         settleResults(p,ticket,round,results)
     }
     fun settleResults(p: Profile,ticket: Long,round: Int,results: List<RivalResult>) {

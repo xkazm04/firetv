@@ -17,7 +17,7 @@ private data class CampaignOutcome(val round:Int,val skill:Int,val car:Int,val b
     fun promoted()=finished && hp>0 && qualified && position==1
 }
 private val campaignSkills=listOf("Rookie","Club","Pro").map{id->AiSkills.all.single{it.id==id}}
-private fun rivalResults(w:World,lead:Int=0)=w.cars.filter{it.entered&&it.rivalIndex>=0}.map{r->RivalResult(r.rivalIndex,r.position,w.combat.kills[r.id],w.combat.health(r.id),w.combat.cashCollected[r.id],w.combat.damageTaken[r.id]==0.0,r.finishSeconds>=0,w.combat.wreckSource[r.id]==lead)}
+private fun rivalResults(w:World,lead:Int=0)=w.cars.filter{it.entered&&it.rivalIndex>=0}.map{r->RivalResult(r.rivalIndex,r.position,w.combat.kills[r.id],w.combat.settlementHealth(r.id),w.combat.cashCollected[r.id],w.combat.damageTaken[r.id]==0.0,r.finishSeconds>=0,w.combat.wreckSource[r.id]==lead)}
 
 /** Fresh physical library and explicitly conditional ledger resampling. No simulated position dice. */
 fun main(args:Array<String>) {
@@ -79,6 +79,8 @@ private fun campaignPhysical(dir:File,seeds:Int,supplement:Boolean=false) {
     val previous=if(supplement && !streaming)File(dir,"physical.csv").readLines().drop(1).map{CampaignOutcome.parse(it)} else emptyList()
     val out=File(dir,if(supplement)"boss-extra.csv" else "physical.csv");check(!out.exists()){ "Refuse to overwrite physical evidence" }
     out.writeText("round,skill,car,band,seed,playerPR,fieldPR,position,kills,hp,cash,clean,finished,qualified,early,seconds,hash,rivals\n")
+    val aiOut=File(dir,if(supplement)"boss-extra-ai.csv" else "physical-ai.csv")
+    aiOut.writeText("round,skill,car,band,seed,steps,seconds,leaderDamage,hunterRoleDamage,huntIntentDamage,maxAttackers,leaderChanges,huntDecisions,unresolvedAtLeadExit,traceCount\n")
     val garages=File(dir,if(supplement)"boss-extra-garages.csv" else "reference-garages.csv");garages.writeText("event,rival,car,pr,credits,debt,parts\n")
     val canonical=Profile("campaign-reference");val bands=listOf(0,4,Parts.all.sumOf{it.maxTier})
     for(round in 0..33) {
@@ -100,12 +102,13 @@ private fun campaignPhysical(dir:File,seeds:Int,supplement:Boolean=false) {
         for(index in RivalEconomy.cast(round)){val p=canonical.rivalProfiles[index];garages.appendText(listOf(round+1,Career.rivals[index].id,CarCatalog.all[p.selectedCar].id,PowerRating.of(CarCatalog.all[p.selectedCar],p.bonuses()),p.credits,p.debt,p.tiers.joinToString(":" )).joinToString(",")+"\n")}
         val cells=if(supplement && !event.boss)emptyList() else (0..2).flatMap{skill->CarCatalog.all.indices.filter{CarCatalog.all[it].tierRank<=event.playerTier}.flatMap{car->bands.flatMap{band->(if(supplement)4 until 4+seeds else 0 until seeds).map{sample->intArrayOf(skill,car,band,sample)}}}}
         val results=arrayOfNulls<CampaignOutcome>(cells.size)
+        val aiRows=arrayOfNulls<String>(cells.size)
         val reused=if(reuse!=null && round<reuseRounds && cells.isNotEmpty())awaitCampaignRows(File(reuse,if(supplement)"boss-extra.csv" else "physical.csv"),round,cells.size) else null
         IntStream.range(0,cells.size).parallel().forEach{index->
             val (skill,car,band,sample)=cells[index]
             val seed=round*1000003+skill*30011+car*7919+band*701+sample*97+(System.getProperty("campaignPhysicalSeedNamespace")?.toInt()?:8209)
             val lead=Profile("physical-lead",false).also{p->p.credits=8000;p.careerCleared=round;p.selectedCar=car;p.owned.fill(false);p.owned[car]=true;CareerSpending.upgrade(p,band)}
-            fun make()=World(seed,track=Track(course=course),combatEnabled=true).also{w->RivalEconomy.apply(canonical.copy(),w,1,round);Garage.apply(lead,w.cars[0]);w.cars[0].aiSkill=campaignSkills[skill];w.reset()}
+            fun make()=World(seed,track=Track(course=course),combatEnabled=true).also{w->RivalEconomy.apply(canonical.copy(),w,1,round);Garage.apply(lead,w.cars[0]);w.cars[0].aiSkill=campaignSkills[skill];w.ai.enabled=System.getProperty("aiControl")!="off";w.reset()}
             var exactReuse=false
             if(reused!=null) {
                 val r=reused[index]
@@ -120,9 +123,19 @@ private fun campaignPhysical(dir:File,seeds:Int,supplement:Boolean=false) {
             if(index==0){val replay=make();repeat(w.steps){replay.step(frames)};check(replay.stateHash()==w.stateHash())}
             val c=w.cars[0]
             results[index]=CampaignOutcome(round,skill,car,band,seed,PowerRating.of(CarCatalog.all[car],lead.bonuses()),fieldPR,c.position,w.combat.kills[0],w.combat.health(0),w.combat.cashCollected[0],w.combat.damageTaken[0]==0.0,c.finishSeconds>=0,Career.qualifies(c,w),w.combat.wrecked(0)&&c.lap.laps==0,w.seconds,w.stateHash(),rivalResults(w))
+            aiRows[index]=listOf(round,skill,car,band,seed,w.steps,w.seconds,w.ai.leaderDamage,w.ai.hunterRoleDamage,w.ai.huntIntentDamage,w.ai.maximumAttackers,w.ai.leaderChanges,w.ai.huntDecisions,w.entrantCount-w.resolved,w.ai.traceCount).joinToString(",")
+            if(index==0) {
+                val trace=StringBuilder("tick,car,mode,role,phase,position,visible,candidates,target,reason,commitTick,weakness,tactic,hunting,margin10000,attackers\n")
+                for(n in max(0,w.ai.traceCount-w.ai.traceCapacity) until w.ai.traceCount) {
+                    val start=(n%w.ai.traceCapacity)*AiBehaviour.TRACE_STRIDE
+                    trace.append((0 until AiBehaviour.TRACE_STRIDE).joinToString(","){w.ai.trace[start+it].toString()}).append('\n')
+                }
+                File(dir,"${if(supplement)"boss" else "physical"}-trace-${round+1}.csv").writeText(trace.toString())
+            }
             if(exactReuse)check(results[index]!!.row()==reused!![index].row()){"Reused event differs on final data: ${round+1}"}
         }
         val rows=results.map{it!!};if(rows.isNotEmpty())out.appendText(rows.joinToString("\n",postfix="\n"){it.row()})
+        val telemetry=aiRows.filterNotNull();if(telemetry.isNotEmpty())aiOut.appendText(telemetry.joinToString("\n",postfix="\n"))
         val reference=if(supplement)prior else rows
         val ref=reference.filter{it.skill==1 && it.car==canonical.selectedCar}.minBy{abs(it.playerPR-PowerRating.of(CarCatalog.all[canonical.selectedCar],canonical.bonuses()))}
         val ticket=Economy.start(canonical);RivalEconomy.settleResults(canonical,ticket,round,ref.rivals)
@@ -167,7 +180,7 @@ private fun campaignDuel(dir:File,samples:Int,namespace:Int) {
     IntStream.range(0,cells.size).parallel().forEach{index->
         val (skill,rotation,sample)=cells[index];val seed=namespace+sample*7919 // paired across skill and grid, independent namespaces for experiments
         fun make()=World(seed,track=Track(course=Courses.all[Career.events[34].courseIndex]),combatEnabled=true).also{w->
-            w.eventType=EventType.ELIMINATION;w.raceLaps=0;w.duelRigSlot=rotation
+            w.eventType=EventType.ELIMINATION;w.raceLaps=0;w.duelRigSlot=rotation;w.aiLeadSlot=rotation
             for(c in w.cars)c.entered=c.id<2
             Garage.apply(boss,w.cars[1-rotation]);w.cars[1-rotation].aiStyle=DeathDuel.boss;w.cars[1-rotation].aiSkill=Career.difficulties[1].skill;w.cars[1-rotation].rivalIndex=bossIndex
             w.cars[rotation].aiSkill=campaignSkills[skill];Encounters.apply(w,"death-duel");w.reset()

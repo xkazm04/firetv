@@ -36,16 +36,16 @@ class CareerTest {
         assertThrows(IllegalArgumentException::class.java){ProfileCodec.decode(sign(body.replace("career=0,0,0,0,0","career=1,0,50,0,9")),p.id)}
     }
     @Test fun tiersChangeDecisionsWithoutChangingPower() {
-        val world=World(track=Track(course=Courses.all[0]),combatEnabled=true)
+        val world=World(combatEnabled=true)
         for(c in world.cars){CarCatalog.apply(c,1);c.human=true}
         world.reset();repeat(300){world.step(neutral)}
-        val c=world.cars[1];c.x=0.0;c.y=0.0;c.heading=0.0
+        val c=world.cars[1];c.x=0.0;c.y=40.0;c.heading=0.0
         for(i in world.cars.indices)if(i!=1){world.cars[i].x=1000.0+i*20;world.cars[i].y=1000.0}
-        world.cars[0].x=-10.0;world.cars[0].y=0.0
+        world.cars[0].x=-10.0;world.cars[0].y=40.0
         val spec=c.spec;val hp=world.combat.health(1);val ammo=world.combat.ammo(1,Weapons.MINE)
-        c.aiSkill=Career.difficulties[0].skill;world.combat.think(c);assertEquals(0.0,c.aiInput.mine)
-        c.aiSkill=Career.difficulties[1].skill;world.combat.think(c);assertEquals(1.0,c.aiInput.mine);assertEquals(2,c.aiCombatReason)
-        c.aiStyle=Career.rivals[0];world.combat.think(c);assertEquals(0.0,c.aiInput.mine,"Rook's profile never drops mines")
+        c.aiSkill=Career.difficulties[0].skill;world.ai.reset();world.combat.think(c);assertEquals(0.0,c.aiInput.mine)
+        c.aiSkill=Career.difficulties[1].skill;world.ai.reset();world.combat.think(c);assertEquals(1.0,c.aiInput.mine);assertEquals(2,c.aiCombatReason)
+        c.aiStyle=Career.rivals[0];world.ai.reset();world.combat.think(c);assertEquals(0.0,c.aiInput.mine,"Rook's profile never drops mines")
         c.aiStyle=null;val pickup=world.combat.pickups.first{it.type.id=="repair"};pickup.cooldownSeconds=0.0
         c.x=pickup.x-15;c.y=pickup.y;c.heading=0.0;world.combat.damage(c.id,80.0,-1,DamageKind.WALL)
         c.aiSkill=Career.difficulties[1].skill;world.combat.seekRepair(c,0.0);assertEquals(-1,c.aiPickupTarget)

@@ -6,8 +6,10 @@ import kotlin.math.*
 class WorldTest {
     private fun inputs()=Array(6){InputFrame()}
     @Test fun eliteMineEncounterRecoversWithoutStrandingTheRemainingCars() {
+        for(strategy in listOf(false,true)) {
         val track=Track(45.0,20.0,10.0)
         val w=World(-1935872170,track=track,combatEnabled=true)
+        w.ai.enabled=strategy
         for(c in w.cars) {
             val name=if(c.id%2==0)"Vandal" else "Quill"
             CarCatalog.apply(c,CarCatalog.all.indexOfFirst{it.id==name})
@@ -18,8 +20,10 @@ class WorldTest {
             if(w.resolved<6)w.step(input)
             if(w.cars.any{it.aiMode==AiMode.RECOVER})recovering=true
         }
-        assertTrue(recovering);assertEquals(6,w.resolved)
-        println("Recovered all six entrants in ${w.seconds} simulated seconds")
+        if(!strategy)assertTrue(recovering,"The original jam must still exercise recovery in the legacy control")
+        assertEquals(6,w.resolved,"strategy=$strategy")
+        println("All six entrants resolved in ${w.seconds} simulated seconds; strategy=$strategy; recovery needed=$recovering")
+        }
     }
     @Test fun signedSeedsUseTheSameBoundedLaneCycleWithoutIntegerOverflow() {
         val lanes=setOf(-3.4,-1.7,0.0,1.7,3.4)

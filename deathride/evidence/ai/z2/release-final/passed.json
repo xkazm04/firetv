@@ -1,0 +1,43 @@
+{
+  "commands": [
+    [
+      "cmd",
+      "/c",
+      "C:\\Users\\kazda\\kiro\\firetv-deathride-ai\\deathride\\gradlew.bat",
+      ":core:test",
+      ":link:test",
+      ":game:test",
+      ":app:assembleDebug",
+      ":desktop:installDist",
+      ":core:reportClasspath"
+    ],
+    [
+      "python",
+      "tools/hud-browser-suite.py",
+      "evidence\\ai\\z2\\release-final\\browser",
+      "browser-check",
+      "combat-check",
+      "ability-controller-check",
+      "hud-browser-check",
+      "campaign-browser-check",
+      "duel-browser-check"
+    ]
+  ],
+  "counts": {
+    "core": {
+      "tests": 177,
+      "failures": 0,
+      "errors": 0
+    },
+    "link": {
+      "tests": 8,
+      "failures": 0,
+      "errors": 0
+    },
+    "game": {
+      "tests": 37,
+      "failures": 0,
+      "errors": 0
+    }
+  }
+}

@@ -17,7 +17,7 @@ fun main(args: Array<String>) {
     IntStream.range(0,cells.size).parallel().forEach{index->
         val (courseIndex,carIndex,skillIndex,sample)=cells[index]
         val course=Courses.all[courseIndex];val seed=104000003+sample*7919
-        val w=World(seed,track=Track(course=course));w.raceLaps=4
+        val w=World(seed,track=Track(course=course));w.raceLaps=4;w.ai.enabled=false
         for(c in w.cars)c.entered=c.id==0
         CarCatalog.apply(w.cars[0],carIndex);w.cars[0].aiSkill=skills[skillIndex];w.reset()
         val frames=Array(6){InputFrame()};var first=-1.0

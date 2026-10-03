@@ -51,6 +51,6 @@ Original work only. One design note, status row, session-log entry and one commi
 |---|---|---|
 | Z0 | AI behaviour design and data model | complete: design and six proposed CSV tables; required build and six browser suites pass |
 | Z1 | Pacing by time, lap counts and track design | complete: 192 ordinary laps; 29 measured courses; four new finals; required build and six browser suites pass |
-| Z2 | Implementation and tests | not started |
+| Z2 | Implementation and tests | complete: data-driven intent, shared leases, boss health/weakness and trace; 177 core / 8 link / 37 game tests, APK and six browser suites pass |
 | Z3 | Simulation and balance | not started |
 | Z4 | Owner review page and Stick check | not started |
