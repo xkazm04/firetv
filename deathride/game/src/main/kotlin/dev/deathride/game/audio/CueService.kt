@@ -9,8 +9,10 @@ interface AudioBackend {
     fun parameters(handle: Long,gain: Float,pitch: Float,pan: Float)
     fun stop(handle: Long)
     fun finished(handle: Long): Boolean = false
+    fun pending(handle: Long): Boolean = false
     fun dispose()
     val decodedBytes: Long get()=0
+    fun statsJson(): String = "{}"
 }
 
 /** One authority for every Sound and Music playback instance. Render-thread only. */
@@ -43,7 +45,7 @@ class CueService(val manifest: CueManifest,private val backend: AudioBackend) {
     val activeVoices get()=voices.size
     val decodedBytes get()=backend.decodedBytes
 
-    fun preload(){manifest.cues.values.filter{!it.stream && it.path.isNotEmpty()}.distinctBy{it.path}.forEach{backend.prepare(it)}}
+    fun preload(){manifest.cues.values.filter{it.path.isNotEmpty()}.distinctBy{it.path}.forEach{backend.prepare(it)}}
 
     private fun spatial(cue: Cue,x: Double,y: Double): Pair<Float,Float> {
         if(!cue.spatial)return 1f to 0f
@@ -135,7 +137,7 @@ class CueService(val manifest: CueManifest,private val backend: AudioBackend) {
         val iterator=voices.iterator()
         while(iterator.hasNext()){
             val v=iterator.next()
-            v.played+=dt*v.pitch
+            if(!backend.pending(v.handle))v.played+=dt*v.pitch
             if(backend.finished(v.handle) || !v.cue.loop && v.played>=v.cue.durationSeconds+.05 || v.cue.loop && clock-v.lastTouch>.3){
                 backend.stop(v.handle);iterator.remove()
             }
@@ -164,5 +166,5 @@ class CueService(val manifest: CueManifest,private val backend: AudioBackend) {
     fun pause(){sceneChanged();paused=true}
     fun resume(){paused=false}
     fun dispose(){if(!disposed){sceneChanged();backend.dispose();disposed=true}}
-    fun statsJson()="{\"active\":$activeVoices,\"highWater\":$highWater,\"cap\":${manifest.maxVoices},\"played\":$played,\"suppressed\":$suppressed,\"stolen\":$stolen,\"missing\":$missing,\"decodedBytes\":$decodedBytes,\"decodedBudgetBytes\":${manifest.decodedBudgetBytes},\"lastNarration\":\"$lastNarration\",\"lastNarrationPlayed\":$lastNarrationPlayed,\"narrationCount\":$narrationCount}"
+    fun statsJson()="{\"active\":$activeVoices,\"highWater\":$highWater,\"cap\":${manifest.maxVoices},\"played\":$played,\"suppressed\":$suppressed,\"stolen\":$stolen,\"missing\":$missing,\"decodedBytes\":$decodedBytes,\"decodedBudgetBytes\":${manifest.decodedBudgetBytes},\"lastNarration\":\"$lastNarration\",\"lastNarrationPlayed\":$lastNarrationPlayed,\"narrationCount\":$narrationCount,\"backend\":${backend.statsJson()}}"
 }

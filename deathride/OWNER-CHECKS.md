@@ -220,3 +220,8 @@ pass is implied. After the performance waves, compare engine pitch, impact timin
 six-car readability and control release with sound on. Report any audible delay,
 missing cue, visible hitch or sticky control with the car/course and approximate
 time. The final performance report will identify the measured delivery APK.
+
+P1 keeps audio enabled while native playback runs outside the render thread.
+Compare engine pitch during acceleration, abrupt stop/mute/Home, short gunshots
+and impacts. Record sounds that arrive late or vanish during busy combat; the
+worker reports delayed and discarded starts, and no listening pass is claimed.
