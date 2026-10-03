@@ -1,0 +1,278 @@
+{
+  "sourceSha256": "e7e571dac8bf065b0f13acd11872bc0bb312d748effba153706f56b516423340",
+  "apkSha256": "22abcdd5caedb6e7ba6f805667ec3b716e60e0ffeeeae2252296598be93c8564",
+  "durationSeconds": 900.2224823,
+  "functionalPass": true,
+  "error": null,
+  "clients": [
+    {
+      "slot": 0,
+      "sent": 27007,
+      "accepted": 27007,
+      "rejected": 0,
+      "hz": 30.000361611719768
+    },
+    {
+      "slot": 1,
+      "sent": 27007,
+      "accepted": 27007,
+      "rejected": 0,
+      "hz": 30.000361611719768
+    }
+  ],
+  "pumpStalls": [],
+  "rejections": [],
+  "allWindows": {
+    "count": 752,
+    "worstP95Ms": 26.142308,
+    "maxMs": 306.578692,
+    "p50RangeMs": [
+      16.509231,
+      16.792538999999998
+    ],
+    "stepWorstP95Ms": 7.298462
+  },
+  "activeWindows": {
+    "count": 586,
+    "worstP95Ms": 21.775539,
+    "maxMs": 39.225461,
+    "p50RangeMs": [
+      16.509231,
+      16.792538999999998
+    ],
+    "stepWorstP95Ms": 3.284769
+  },
+  "sixLiveWindows": {
+    "count": 61,
+    "worstP95Ms": 21.342308,
+    "maxMs": 34.431846,
+    "p50RangeMs": [
+      16.530614999999997,
+      16.721461
+    ],
+    "stepWorstP95Ms": 3.222308
+  },
+  "sinceStartFrameMs": {
+    "p50": 16.6,
+    "p95": 20.5,
+    "max": 306.578692,
+    "count": 53845
+  },
+  "discardedSimulationMs": {
+    "last10s": 0,
+    "sinceStart": 2058
+  },
+  "inputAgeWorstP95Ms": [
+    45.14518700004555,
+    45.10470600007102
+  ],
+  "inputCounters": [
+    {
+      "stale": {
+        "last10s": 17,
+        "sinceStart": 72
+      },
+      "dropped": {
+        "last10s": 0,
+        "sinceStart": 0
+      },
+      "outOfOrder": {
+        "last10s": 0,
+        "sinceStart": 0
+      }
+    },
+    {
+      "stale": {
+        "last10s": 17,
+        "sinceStart": 48
+      },
+      "dropped": {
+        "last10s": 0,
+        "sinceStart": 0
+      },
+      "outOfOrder": {
+        "last10s": 0,
+        "sinceStart": 0
+      }
+    }
+  ],
+  "pssRangeMiB": [
+    120.076171875,
+    127.8564453125
+  ],
+  "warmPssGrowthMiB": -3.482421875,
+  "ownedTextureMiB": 39.9697265625,
+  "artMiB": 18.75,
+  "audio": {
+    "active": 3,
+    "highWater": 8,
+    "cap": 8,
+    "played": 4202,
+    "suppressed": 7828,
+    "stolen": 92,
+    "missing": 35,
+    "decodedBytes": 3970682,
+    "decodedBudgetBytes": 6291456,
+    "lastNarration": "",
+    "lastNarrationPlayed": false,
+    "narrationCount": 0,
+    "backend": {
+      "worker": true,
+      "nativeActive": 3,
+      "nativeHighWater": 8,
+      "starts": 4177,
+      "failedStarts": 0,
+      "staleStarts": 0,
+      "cancelledStarts": 25,
+      "overflow": 0,
+      "maxQueueMs": 75.090077,
+      "maxNativeCallMs": 45.302154,
+      "maxStartCompletionMs": 97.867462,
+      "maxParameterQueueMs": 134.184154,
+      "startAgeLimitMs": 100
+    }
+  },
+  "classes": {
+    "Needle": 24,
+    "Line": 6,
+    "Bastion": 14,
+    "Comet": 15,
+    "Trail": 24,
+    "Flint": 12,
+    "Quill": 14,
+    "Vandal": 8,
+    "Kestrel": 12,
+    "Bulwark": 5
+  },
+  "rounds": 18,
+  "limits": "Overlapping window percentiles are not pooled. Native profiling intervals, if any, remain in raw evidence. Not optical latency or owner feel.",
+  "ackRttMs": {
+    "count": 54014,
+    "p50": 10.06449999997858,
+    "p95": 61.82090000004973,
+    "p99": 71.14379999996163,
+    "max": 115.8637999999919,
+    "mean": 19.672113814936488
+  },
+  "clockAdjustedAgeAtAckTimestampMs": {
+    "count": 54014,
+    "p50": 4.109292999986792,
+    "p95": 10.418900999997277,
+    "p99": 14.86958200004301,
+    "max": 91.31475200003479,
+    "mean": 4.875188512562314
+  },
+  "estimatedAckReturnMs": {
+    "count": 54014,
+    "p50": 4.23562099999981,
+    "p95": 56.963091000099666,
+    "p99": 64.32399499998428,
+    "max": 112.03952499991283,
+    "mean": 14.796925302380298
+  },
+  "ackTimingLimit": "Ack timestamp is after server JSON parsing, before mailbox offer. Offset is the one sent before that input. One-way estimates depend on calibration; no optical claim.",
+  "hudTransport": [
+    {
+      "hudDelta": true,
+      "hudMessages": 8925,
+      "hudCharacters": 14542174,
+      "hudFullSnapshots": 215
+    },
+    {
+      "hudDelta": true,
+      "hudMessages": 8920,
+      "hudCharacters": 14244892,
+      "hudFullSnapshots": 215
+    }
+  ],
+  "lastLoadObservation": {
+    "second": 899.9777750999999,
+    "slots": [
+      {
+        "stale": {
+          "last10s": 0,
+          "sinceStart": 55
+        },
+        "dropped": {
+          "last10s": 0,
+          "sinceStart": 0
+        },
+        "outOfOrder": {
+          "last10s": 0,
+          "sinceStart": 0
+        },
+        "inputAgeMs": {
+          "lifetimeBinMs": 0.1,
+          "lifetimeCapMs": 5000,
+          "last10s": {
+            "p50": 21.81216199998744,
+            "p95": 39.625815999927,
+            "max": 60.82057799992617,
+            "count": 599
+          },
+          "sinceStart": {
+            "p50": 20.200000000000003,
+            "p95": 40,
+            "max": 107.31964400003199,
+            "count": 49689
+          }
+        }
+      },
+      {
+        "stale": {
+          "last10s": 0,
+          "sinceStart": 31
+        },
+        "dropped": {
+          "last10s": 0,
+          "sinceStart": 0
+        },
+        "outOfOrder": {
+          "last10s": 0,
+          "sinceStart": 0
+        },
+        "inputAgeMs": {
+          "lifetimeBinMs": 0.1,
+          "lifetimeCapMs": 5000,
+          "last10s": {
+            "p50": 21.972919000079855,
+            "p95": 39.68825799995102,
+            "max": 60.9032039999729,
+            "count": 599
+          },
+          "sinceStart": {
+            "p50": 20.200000000000003,
+            "p95": 40.1,
+            "max": 107.43005500000436,
+            "count": 49689
+          }
+        }
+      }
+    ],
+    "frame": {
+      "lifetimeBinMs": 0.1,
+      "lifetimeCapMs": 5000,
+      "last10s": {
+        "p50": 16.639077,
+        "p95": 20.133923000000003,
+        "max": 26.671384999999997,
+        "count": 599
+      },
+      "sinceStart": {
+        "p50": 16.6,
+        "p95": 20.5,
+        "max": 306.578692,
+        "count": 53798
+      }
+    }
+  },
+  "finalStatsLimit": "finalStats follows a 500 ms acknowledgement drain with pumping stopped; stale consumption during that deliberate quiet interval is retained separately from lastLoadObservation.",
+  "gates": {
+    "duration": true,
+    "zeroRejected": true,
+    "frameP95": false,
+    "frameMax": false,
+    "memory": true,
+    "textures": true
+  }
+}

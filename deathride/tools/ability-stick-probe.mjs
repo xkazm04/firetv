@@ -37,7 +37,7 @@ async function waitFor(fn,label){const end=performance.now()+15000;while(perform
 async function join(){
  const c={ws:new WebSocket(base.replace('http','ws')+'/ws'),slot:-1,q:0,offset:0,bestRtt:Infinity,pending:new Map(),accepted:0,rejected:0,sent:0,command:{s:0,a:0,b:0,h:0,fire:0,mine:0,weapon:0,ability:0}};clients.push(c);
  c.send=m=>{if(c.ws.readyState===WebSocket.OPEN)c.ws.send(JSON.stringify(m))};
- await new Promise((resolve,reject)=>{const timeout=setTimeout(()=>reject(Error('pair timeout')),8000);c.ws.on('error',reject);c.ws.on('open',()=>c.send({t:'hello',pin,profile:'ability-probe-'+randomUUID()}));c.ws.on('message',data=>{const m=JSON.parse(data),now=performance.now();if(m.t==='welcome'){c.slot=m.slot;clearTimeout(timeout);resolve()}if(m.t==='error'){clearTimeout(timeout);reject(Error(m.message))}if(m.t==='pong'&&now-m.ts<c.bestRtt){c.bestRtt=now-m.ts;c.offset=m.tvNow-(now+m.ts)/2;c.send({t:'sync',offset:c.offset})}if(m.t==='ack'){const generated=c.pending.get(m.q),sent=generated?.ts;if(ackTracing)result.ackObservations.push([c.slot,m.q,sent,now,m.tvNow,m.accepted,generated?.offset]);c.pending.delete(m.q);if(m.accepted)c.accepted++;else{c.rejected++;result.rejections.push({slot:c.slot,q:m.q,second:(now-started)/1000,rttMs:sent===undefined?null:now-sent,receiveAgeMs:sent===undefined?null:m.tvNow-sent-generated.offset,offset:generated?.offset,ack:m})}}if(m.t==='hud'&&m.combat?.ability?.phase==='ACTIVE'&&m.car){const id=m.car.id;result.classActiveHudSamples[id]=(result.classActiveHudSamples[id]||0)+1}})});
+ await new Promise((resolve,reject)=>{const timeout=setTimeout(()=>reject(Error('pair timeout')),8000);c.ws.on('error',reject);c.ws.on('open',()=>c.send({t:'hello',pin,profile:'ability-probe-'+randomUUID(),hudDelta:1}));c.ws.on('message',data=>{const m=JSON.parse(data),now=performance.now();if(m.t==='welcome'){c.slot=m.slot;clearTimeout(timeout);resolve()}if(m.t==='error'){clearTimeout(timeout);reject(Error(m.message))}if(m.t==='pong'&&now-m.ts<c.bestRtt){c.bestRtt=now-m.ts;c.offset=m.tvNow-(now+m.ts)/2;c.send({t:'sync',offset:c.offset})}if(m.t==='ack'){const generated=c.pending.get(m.q),sent=generated?.ts;if(ackTracing)result.ackObservations.push([c.slot,m.q,sent,now,m.tvNow,m.accepted,generated?.offset]);c.pending.delete(m.q);if(m.accepted)c.accepted++;else{c.rejected++;result.rejections.push({slot:c.slot,q:m.q,second:(now-started)/1000,rttMs:sent===undefined?null:now-sent,receiveAgeMs:sent===undefined?null:m.tvNow-sent-generated.offset,offset:generated?.offset,ack:m})}}if(m.t==='hud'&&m.car)c.car=m.car;if(m.t==='hud'&&m.combat?.ability?.phase==='ACTIVE'&&c.car){const id=c.car.id;result.classActiveHudSamples[id]=(result.classActiveHudSamples[id]||0)+1}})});
  for(let i=0;i<5;i++){c.send({t:'ping',ts:performance.now()});await pause(50)}return c;
 }
 try {
@@ -45,7 +45,7 @@ try {
  const catalog=await get('/catalog'),routes=await get('/routes');result.catalog=catalog;
  assert.equal((await get('/stats')).slots.filter(s=>s.connected).length,0,'Refuse an occupied host');
  result.model=(await adb('shell','getprop','ro.product.model')).trim();result.display=await adb('shell','wm','size');
- result.apkSha256=createHash('sha256').update(await readFile('app/build/outputs/apk/debug/app-debug.apk')).digest('hex');
+ result.apkSha256=createHash('sha256').update(await readFile(process.env.PROBE_APK_PATH||'app/build/outputs/apk/debug/app-debug.apk')).digest('hex');
  await join();await join();assert.deepEqual(clients.map(c=>c.slot),[0,1]);await memory(0);
  started=performance.now();let next=started;pumping=true;
  function pump(){if(!pumping)return;const now=performance.now();if(now>=next){for(const c of clients){const q=c.q++,ts=performance.now();c.pending.set(q,{ts,offset:c.offset});c.send({t:'i',q,ts,...c.command});c.sent++}next+=1000/30;if(now-next>100){result.pumpStalls.push({second:(now-started)/1000,lateMs:now-next});next=now+1000/30}}timer=setTimeout(pump,Math.max(0,next-performance.now()))}pump();
@@ -68,6 +68,7 @@ try {
   const pilot=new Pilot(routes,true);clients[0].send({t:'start'});await waitFor(s=>s.phase==='race','race');const roundStart=performance.now();
   while((performance.now()-roundStart)<60000&&(performance.now()-started)/1000<duration){
    const s=await get('/stats'),second=(performance.now()-started)/1000;
+   result.lastLoadObservation={second,slots:s.slots.map(slot=>({stale:slot.stale,dropped:slot.dropped,outOfOrder:slot.outOfOrder,inputAgeMs:slot.inputAgeMs})),frame:s.frameTimeMs};
    if(profiling&&second>=nextProfile){const p=await get(`/profile?frames=${frameCursor}&inputs=${inputCursor}`);result.profiles.push({second,...p});frameCursor=p.frames.end;inputCursor=p.inputs.end;nextProfile=second+10;}
    if(second>=nextWindow){result.windows.push({second,round:roundIndex,stats:{...s,slots:s.slots.map(({hostCareer,career,garage,...slot})=>slot)}});nextWindow=second+1}
    if(second>=nextPing){for(const c of clients)c.send({t:'ping',ts:performance.now()});nextPing=second+30}

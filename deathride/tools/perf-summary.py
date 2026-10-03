@@ -37,6 +37,16 @@ result={'sourceSha256':hashlib.sha256(data).hexdigest(),'apkSha256':s.get('apkSh
     'artMiB':max(w['stats']['art']['textureBytes']/1048576 for w in s['windows']),
     'audio':final.get('audio'),'classes':s.get('classUses'),'rounds':len(s['rounds']),
     'limits':'Overlapping window percentiles are not pooled. Native profiling intervals, if any, remain in raw evidence. Not optical latency or owner feel.'}
+if s.get('ackObservations'):
+    acks=[r for r in s['ackObservations'] if r[2] is not None]
+    result['ackRttMs']=q([r[3]-r[2] for r in acks])
+    calibrated=[r for r in acks if len(r)>6 and r[6] is not None]
+    result['clockAdjustedAgeAtAckTimestampMs']=q([r[4]-r[2]-r[6] for r in calibrated])
+    result['estimatedAckReturnMs']=q([r[3]-(r[4]-r[6]) for r in calibrated])
+    result['ackTimingLimit']='Ack timestamp is after server JSON parsing, before mailbox offer. Offset is the one sent before that input. One-way estimates depend on calibration; no optical claim.'
+result['hudTransport']=[{k:slot.get(k) for k in ('hudDelta','hudMessages','hudCharacters','hudFullSnapshots')} for slot in final['slots']]
+result['lastLoadObservation']=s.get('lastLoadObservation')
+result['finalStatsLimit']='finalStats follows a 500 ms acknowledgement drain with pumping stopped; stale consumption during that deliberate quiet interval is retained separately from lastLoadObservation.'
 if s.get('profiles'):
     profiles=s['profiles'];cols=profiles[0]['frames']['columns'];rows=[];gaps=[];end=None
     for profile in profiles:

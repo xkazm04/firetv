@@ -11,6 +11,7 @@ p.add_argument('--seconds', type=int, default=900)
 p.add_argument('--install', action='store_true')
 p.add_argument('--profile', action='store_true')
 p.add_argument('--extra', action='append', default=[])
+p.add_argument('--apk', type=Path, default=ROOT / 'app/build/outputs/apk/debug/app-debug.apk')
 a = p.parse_args()
 a.output.mkdir(parents=True, exist_ok=True)
 package = 'dev.deathride.perf'
@@ -20,7 +21,7 @@ def adb(*args, **kw):
     return subprocess.check_output(['adb', '-P', '5041', '-s', a.device, *args],
         creationflags=subprocess.CREATE_NO_WINDOW, timeout=60, **kw)
 
-apk = ROOT / 'app/build/outputs/apk/debug/app-debug.apk'
+apk = a.apk.resolve()
 receipt = {'apkSha256': hashlib.sha256(apk.read_bytes()).hexdigest(),
     'device': a.device, 'package': package, 'profile': a.profile, 'extra': a.extra}
 # aapt identity check before any installation.
@@ -65,7 +66,7 @@ for _ in range(100):
 assert pin, 'Listener not ready; no fixed-delay pairing'
 env = {**os.environ, 'DEATHRIDE_TEST_STREAM': 'perf', 'PROBE_SCREENSHOTS': '0',
     'PROBE_MINES': '1', 'PROBE_DEVICE': a.device, 'PROBE_ADB_PORT': '5041',
-    'PROBE_PRIORITY': 'AboveNormal', 'PROBE_PROFILE': '1' if a.profile else '0'}
+    'PROBE_PRIORITY': 'AboveNormal', 'PROBE_PROFILE': '1' if a.profile else '0', 'PROBE_APK_PATH': str(apk)}
 with (a.output / 'logcat.txt').open('wb') as log:
     logcat = subprocess.Popen(['adb', '-P', '5041', '-s', a.device, 'logcat', '--pid=' + pid,
         '-v', 'threadtime'], stdout=log, stderr=subprocess.STDOUT, creationflags=subprocess.CREATE_NO_WINDOW)

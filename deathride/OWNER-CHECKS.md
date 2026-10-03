@@ -225,3 +225,8 @@ P1 keeps audio enabled while native playback runs outside the render thread.
 Compare engine pitch during acceleration, abrupt stop/mute/Home, short gunshots
 and impacts. Record sounds that arrive late or vanish during busy combat; the
 worker reports delayed and discarded starts, and no listening pass is claimed.
+
+P2 passed one 15-minute ordinary-input soak with zero rejections. Reconnect each
+phone, switch car/course, enter garage/career and inspect changing metadata and
+combat HUD together. Check release after a connection interruption. A calibrated
+ack timestamp is not an optical latency measurement or a physical-phone pass.
