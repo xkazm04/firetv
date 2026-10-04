@@ -72,6 +72,7 @@ Authority: DEATH-RIDE-OWNER-DECISIONS-2026-10-04.md. Per-part details and remain
 
 | Id | Part | Status |
 |---|---|---|
-| A1 | Owner selections, alternates and excluded archive | complete ? 37 Keeps retained, 34 assigned events and three practice alternates; 63 Rejects plus three unreviewed archived; 256 tests/build/browser green; scrap-7 pending A2 |
-| A2 | New scrap-7 boss choices | complete ? three distinct layouts pass 72 trials each; scrap-7-f provisional by safety/pacing ranking; owner page and inspected sheet; 257 tests/build/browser green |
-| A3 | Approved finale technical repair | complete ? visual-contact search pace, shared physics; original unresolved 3/12 ? 0/12 and held-out 0/128; layout/grid/supplies/watchdog unchanged; 258 tests/build/browser green |
+| A1 | Owner selections, alternates and excluded archive | complete - 37 Keeps retained, 34 assigned events and three practice alternates; 63 Rejects plus three unreviewed archived; 256 tests/build/browser green; scrap-7 pending A2 |
+| A2 | New scrap-7 boss choices | complete - three distinct layouts pass 72 trials each; scrap-7-f provisional by safety/pacing ranking; owner page and inspected sheet; 257 tests/build/browser green |
+| A3 | Approved finale technical repair | complete - visual-contact search pace, shared physics; original unresolved 3/12 -> 0/12 and held-out 0/128; layout/grid/supplies/watchdog unchanged; 258 tests/build/browser green |
+| A4 | Final assignment, paired proof and review | evidence complete - 35 stable events, 38 playable courses, 39 composer gate passes plus accepted Runoff, broad duel timeouts 274/3072 -> 0; class/boss balance and PR-policy regression flagged honestly; final sheet inspected, regions/save compatibility and 259 tests/build/browser green; see deathride/OWNER-TRACKS-4-PROOF.md |

@@ -7,8 +7,8 @@ import {inflateRawSync} from 'node:zlib';
 
 const output = resolve(process.argv[2] || 'evidence/tracks/t1/browser');
 await mkdir(output, {recursive: true});
-const atlasURL = pathToFileURL(resolve('tracks/atlas/index.html')).href;
-const labURL = pathToFileURL(resolve('tracks/lab/index.html')).href;
+const atlasURL = pathToFileURL(resolve('tracks/atlas/legacy.html')).href;
+const labURL = pathToFileURL(resolve('tracks/lab/index.html')).href+'?course=foundry';
 const browser = await chromium.launch({channel: 'chrome', headless: true});
 const results = [];
 const report = JSON.parse(await readFile('tracks/atlas/data.json', 'utf8'));

@@ -10,13 +10,23 @@ class OwnerTracksTest {
         val course=Courses.all[event.courseIndex]
         assertEquals("scrap-7-f",course.id)
         val row=Content.table("campaign").single{it["id"]=="scrap-7"}
-        assertEquals("3",row["laps"])
+        assertEquals("3",row["laps"]);assertEquals(1,event.playerTier);assertEquals(event.region.id,course.region.id)
         for(id in listOf("scrap-7-d","scrap-7-e","scrap-7-f")) {
             assertTrue(File(TrackQuality.root,"tracks/candidates/drafts/$id.json").exists())
-            assertEquals("scrap-7",id.substringBeforeLast('-'))
         }
     }
 
+    @Test fun publicCatalogAndRemoteCycleContainExactlyFinalAssignmentsAndAlternates() {
+        val rows=TrackQuality.csv(File(TrackQuality.root,"tracks/candidates/owner-assignment.csv").readText())
+        val expected=rows.map{it.getValue("course")}+rows.flatMap{it.getValue("alternate").split(';').filter{it.isNotEmpty()}}
+        assertEquals(38,expected.size);assertEquals(expected.toSet(),Courses.playable.map{it.id}.toSet())
+        var index=Courses.playableIndices.first();val visited=mutableListOf<Int>()
+        repeat(38){visited+=index;index=Courses.nextPlayable(index)}
+        assertEquals(Courses.playableIndices,visited);assertEquals(visited.first(),index)
+        assertFalse(Courses.json.contains("\"id\":\"foundry\""))
+        assertTrue(Courses.all.any{it.id=="foundry"}) // Old identifiers remain loadable.
+        for(c in Courses.playable)assertTrue(Courses.json.contains("\"id\":\"${c.id}\""))
+    }
     @Test fun assignmentsPreserveEveryStableEventAndItsNonLayoutFields() {
         val before=TrackQuality.csv(File(TrackQuality.root,"tracks/excluded/owner-2026-10-04/campaign-before.csv").readText())
         val after=Content.table("campaign")

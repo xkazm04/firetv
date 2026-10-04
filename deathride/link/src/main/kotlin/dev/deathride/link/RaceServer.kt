@@ -217,7 +217,7 @@ class RaceServer(private val assets: (String)->String, private val log: (String)
                             previousInputNs=receiveNs;profileInputs!!.append(inputSample)
                         }
                     }
-                    "track" -> { val index=Courses.all.indexOfFirst { it.id==msg.text("id") };if(index>=0 && (phase=="lobby" || phase=="results"))trackRequest.set(index) }
+                    "track" -> { val index=Courses.all.indexOfFirst { it.id==msg.text("id") };if(index in Courses.playableIndices && (phase=="lobby" || phase=="results"))trackRequest.set(index) }
                     "surface" -> { val index=Surfaces.practice.indexOfFirst { it.id==msg.text("id") }; if(index>=0)surfaceRequest.set(index) }
                     "car" -> { val index=CarCatalog.all.indexOfFirst { it.id==msg.text("id") }; if(index>=0 && (phase=="lobby" || phase=="results" || phase=="garage" || phase=="career"))s.carRequest.set(index) }
                     "garage" -> if(phase=="lobby" || phase=="results" || phase=="career")command.compareAndSet(0,3)

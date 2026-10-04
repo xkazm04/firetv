@@ -12,7 +12,7 @@ try {
  const control=await compile(recipe),branch=await compile(split),crossing=await compile(junction);assert.deepEqual(control.geometry.lint,[]);assert.deepEqual(branch.geometry.lint,[]);assert.deepEqual(crossing.geometry.lint,[]);assert.equal(branch.course.branches.length,1);assert.equal(crossing.course.junctions.length,1);
  for(const width of [1440,390]) {
   const context=await browser.newContext({viewport:{width,height:1000},acceptDownloads:true});const page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));
-  await page.goto(pathToFileURL(resolve('tracks/lab/index.html')).href);await page.waitForFunction(()=>window.labReady && !document.querySelector('#race').disabled);
+  await page.goto(pathToFileURL(resolve('tracks/lab/index.html')).href+'?course=foundry');await page.waitForFunction(()=>window.labReady && !document.querySelector('#race').disabled);
   await page.locator('#composer-panel').evaluate(e=>e.open=true);await page.locator('#load-recipe').click();assert.ok(await page.locator('#race').isDisabled());
   await page.locator('#compose').click();await page.waitForFunction(()=>document.querySelector('#composer-status').textContent.startsWith('Compiled')&&!document.querySelector('#race').disabled);
   assert.match(await page.locator('#primitives').textContent(),/hairpin|chicane/);assert.equal(await page.locator('#nodes-csv').inputValue(),control.csv.nodes);

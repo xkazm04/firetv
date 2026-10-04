@@ -33,7 +33,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
     private lateinit var campaignAudio: CampaignAudioDirector
     private lateinit var captions: GlyphLayer
     private var drawnCaption=""
-    private var world=World(track=Track(course=trackPreview?.course?:courseCatalog[0]),combatEnabled=true)
+    private var world=World(track=Track(course=trackPreview?.course?:courseCatalog[Courses.playableIndices.first()]),combatEnabled=true)
     private lateinit var sceneryCanvas: SceneryCanvas
     private lateinit var scene: TrackScene
     private lateinit var art: AtlasArt
@@ -45,13 +45,13 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
     private val atmosphere=RegionAtmosphere()
     private var activeRegion=regionOverride?:courseCatalog[selectedTrackIndex()].region
     private val regionLooks=Regions.all.associate{it.id to RegionLook(it)}
-    private fun selectedTrackIndex()=if(trackPreview==null)0 else courseCatalog.lastIndex
+    private fun selectedTrackIndex()=if(trackPreview==null)Courses.playableIndices.first() else courseCatalog.lastIndex
     private fun makeScene()=TrackScene(courseCatalog[selectedTrack],sceneryCanvas,art,small,activeRegion,regionPresentation,regionCandidates)
     private val painter=CarPainter()
     private val combatPainter=CombatPainter()
     private val obstaclePainter=ObstaclePainter()
     private val abilityPainter=AbilityPainter()
-    private var selectedTrack=if(trackPreview==null)0 else courseCatalog.lastIndex
+    private var selectedTrack=if(trackPreview==null)Courses.playableIndices.first() else courseCatalog.lastIndex
     private val selectedCars=IntArray(6){it%CarCatalog.all.size}
     private val inputs=Array(6){InputFrame()}
     private val view=FitViewport(1280f,720f)
@@ -243,7 +243,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
                     Input.Keys.LEFT -> { if(phase=="garage")server.slots[0].carRequest.set((selectedCars[0]-1).mod(CarCatalog.all.size)) else if(phase=="career")selectDifficulty(-1) else selectFeel(-1); return true }
                     Input.Keys.RIGHT -> { if(phase=="garage")server.slots[0].carRequest.set((selectedCars[0]+1)%CarCatalog.all.size) else if(phase=="career")selectDifficulty(1) else selectFeel(1); return true }
                     Input.Keys.MEDIA_PLAY_PAUSE -> { openGarage();return true }
-                    Input.Keys.MENU -> { if(phase=="lobby" || phase=="results")server.trackRequest.set((selectedTrack+1)%Courses.all.size); return true }
+                    Input.Keys.MENU -> { if(phase=="lobby" || phase=="results")server.trackRequest.set(Courses.nextPlayable(selectedTrack)); return true }
                     Input.Keys.DOWN -> if(phase=="career") { startRace(true);return true } else if(phase=="garage") { selectedPart=(selectedPart+1)%Parts.all.size;return true } else if(phase=="lobby" || phase=="results") { server.slots[0].carRequest.set((selectedCars[0]+1)%CarCatalog.all.size); return true }
                     Input.Keys.UP -> if(phase=="garage") { selectedPart=(selectedPart-1).mod(Parts.all.size);return true } else if(phase=="lobby" || phase=="results") { openCareer();return true }
                     Input.Keys.MEDIA_REWIND -> if(phase=="lobby") { server.resetPairing();keyboard=false;return true }
@@ -305,7 +305,7 @@ class RaceGame(val assets: (String)->String, val logger: (String)->Unit, val smo
             if(market!=null && market.profileId==profiles[i].id)buyMarket(i,market)
         }
         val courseIndex=server.trackRequest.getAndSet(-1)
-        if(courseIndex>=0 && (phase=="lobby" || phase=="results")) {
+        if(courseIndex in Courses.playableIndices && (phase=="lobby" || phase=="results")) {
             configureWorld(courseIndex,false);rebuildUi()
         }
         val surfaceIndex=server.surfaceRequest.getAndSet(-1)

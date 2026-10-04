@@ -15,7 +15,7 @@ Authoring may run in a build scratch directory while part 1 validates; scratch d
 | scrap-7-e | staggered-bays | 264.42 | 244.17 | 9 | 2 | pass |
 | scrap-7-f | nested-switchbacks | 276.80 | 251.88 | 4 | 2 | pass; provisional assignment |
 
-All three use tier 1, three laps, 12 seeds ? six grid/identity rotations, three clean races, exact replay and rotated reference. No unresolved race or shape/geometry flag in final proofs; zero similar outline pairs across all 39 composer choices. The early-wreck threshold here is the existing deliberately harsh six-car stress threshold; actual campaign damage/fairness is measured separately in part 4.
+All three use tier 1, three laps, 12 seeds x six grid/identity rotations, three clean races, exact replay and rotated reference. No unresolved race or shape/geometry flag in final proofs; zero similar outline pairs across all 39 composer choices. The early-wreck threshold here is the existing deliberately harsh six-car stress threshold; actual campaign damage/fairness is measured separately in part 4.
 
 The first e pilot was too short (235.93 s combat median); scale changed to 1.18. The first f pilot had 19 early wrecks/72 and two unresolved trials. Paired recovery alone left 15 early wrecks and unresolved trials. The final f recipe uses scale .88, widens its 3.7-width technical anchors to 4.15 and retains seven dual recovery sites plus three early pairs. These are new designs, not changes to owner-approved geometry. Retained failed pilot JSON and full trial logs show the iterations. d needed no quality revision. Seeds, original family recipes and search rule are in tools/OwnerScrapSearch.java and owner-scrap-search logs.
 

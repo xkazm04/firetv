@@ -14,7 +14,9 @@ fun main(args:Array<String>) {
     val seeds=args.firstOrNull()?.toInt()?:12;val filters=(args.getOrNull(1)?:"").split(',');val threads=args.getOrNull(2)?.toInt()?:4
     val folder=CandidateAuthor.folder;val rows=(TrackQuality.csv(File(folder,"manifest.csv").readText())+mapOf("candidate" to "switchback-4-runoff","slot" to "switchback-4")).filter{row->filters.any{row.getValue("candidate").startsWith(it)}}
     val arenaLaps="--arena-laps" in args
-    val out=File(folder,"proof-$seeds"+if(arenaLaps)"-traversal" else "").apply{mkdirs()};val executor=Executors.newFixedThreadPool(threads)
+    val out=args.firstOrNull{it.startsWith("--out=")}?.substringAfter('=')?.let{File(it)}?:File(folder,"proof-$seeds"+if(arenaLaps)"-traversal" else "")
+    out.mkdirs();val executor=Executors.newFixedThreadPool(threads)
+    val engineSha256=java.security.MessageDigest.getInstance("SHA-256").digest(World::class.java.getResourceAsStream("World.class")!!.use{it.readBytes()}).joinToString(""){"%02x".format(it)}
     try {
         val work=rows.map { row -> executor.submit<String> {
             val id=row.getValue("candidate");val selected=CandidateAuthor.slots.single{it.id==row.getValue("slot")};val accepted=selected.role=="accepted";val slot=if(accepted)selected.copy(laps=selected.oldLaps,min=0.0,max=600.0)else selected
@@ -25,7 +27,7 @@ fun main(args:Array<String>) {
             if(!accepted)check(TrackQuality.gates(geometry.values,setOf("geometry","lap")).all{it["status"]=="pass"}){"$id geometry quality gate"}
             val digest=candidateProofDigest(c,slot.tier,slot.laps)
             val file=File(out,"$id.json")
-            if(file.exists() && file.readText().contains("\"digest\":\"$digest\""))return@submit "CACHED $id"
+            if("--force" !in args && file.exists() && file.readText().contains("\"digest\":\"$digest\""))return@submit "CACHED $id"
             val arena=slot.role=="arena" && !arenaLaps;val trials=mutableListOf<QualityTrial>()
             for(seedIndex in 0 until seeds)for(rotation in 0..5)trials+=qualityTrial(c,7319+seedIndex*104729,rotation,arena,limitSeconds=if(arena)360.0 else 600.0,tier=slot.tier,laps=slot.laps)
             val clean=(0..2).map { qualityTrial(c,2971+it*65537,it,limitSeconds=600.0,tier=slot.tier,laps=slot.laps,combatEnabled=false) }
@@ -51,7 +53,7 @@ fun main(args:Array<String>) {
             if(trials.any{it.stoppingReason=="right-censored-timeout"})flags+="unresolved race"
             for(g in aggregate.getValue("gates") as List<*>) {val gate=g as Map<*,*>;if(gate["status"]!="pass")flags+="${gate["metric"]}"}
             val hunter=mapOf("huntDecisions" to trials.sumOf{it.hunter["huntDecisions"]?.toLong()?:0},"huntIntentDamage" to trials.sumOf{it.hunter["huntIntentDamage"]?.toDouble()?:0.0},"hunterRoleDamage" to trials.sumOf{it.hunter["hunterRoleDamage"]?.toDouble()?:0.0},"leaderDamage" to trials.sumOf{it.hunter["leaderDamage"]?.toDouble()?:0.0})
-            val result=mapOf("candidate" to id,"digest" to digest,"proofMode" to if(arenaLaps)"six-car lap traversal of arena" else if(arena)"artificial six-car elimination stress" else "six-car lap race","seeds" to seeds,"rotations" to 6,"sixCarTrials" to trials.size,"tier" to slot.tier,"laps" to slot.laps,"arena" to arena,"aggregate" to aggregate,
+            val result=mapOf("engineSha256" to engineSha256,"freshRun" to ("--force" in args),"candidate" to id,"digest" to digest,"proofMode" to if(arenaLaps)"six-car lap traversal of arena" else if(arena)"artificial six-car elimination stress" else "six-car lap race","seeds" to seeds,"rotations" to 6,"sixCarTrials" to trials.size,"tier" to slot.tier,"laps" to slot.laps,"arena" to arena,"aggregate" to aggregate,
                 "clean" to clean.map{it.data()},"cleanFinishSeconds" to candidateQuantiles(finishTimes),"lapWinnerSeconds" to candidateQuantiles(winners),"eliminationInsteadOfLaps" to earlyWins,
                 "repeatHashMatches" to replay,"rotationReferenceDifferenceSeconds" to rotationDifference,"hunter" to hunter,"flags" to flags.distinct(),"status" to if(flags.isEmpty())"proved" else "flagged")
             file.writeText(TrackQuality.json(result))

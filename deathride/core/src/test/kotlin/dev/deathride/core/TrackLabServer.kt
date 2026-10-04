@@ -73,7 +73,7 @@ fun main(args: Array<String>) {
             if (x.requestMethod == "OPTIONS") { x.sendResponseHeaders(204, -1); x.close(); return@createContext }
             val path = x.requestURI.path
             if (path == "/api/catalog" && x.requestMethod == "GET") {
-                val catalog = mapOf("version" to TrackQuality.VERSION, "courses" to Courses.all.map { mapOf("course" to qualityCourseData(it), "csv" to TrackLabCodec.csv(it)) },
+                val catalog = mapOf("version" to TrackQuality.VERSION, "playable" to Courses.playable.map{it.id}, "courses" to Courses.all.map { mapOf("course" to qualityCourseData(it), "csv" to TrackLabCodec.csv(it)) },
                     "composerExample" to TrackComposer.example(),
                     "surfaces" to Surfaces.all.map { it.id }, "obstacles" to ObstacleContent.definitions.values.map { mapOf("id" to it.id, "effect" to it.effect.name) },
                     "themes" to TrackContent.themes.map { mapOf("id" to it.id, "surfaces" to it.surfaces.toList(), "landmarks" to it.props.toList()) })

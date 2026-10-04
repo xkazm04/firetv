@@ -155,7 +155,14 @@ object Courses {
             Content.table("tracks/$id").map { TrackNode(it.number("xM"),it.number("yM"),it.number("halfWidthM"),Surfaces.all.first { s->s.id==it.getValue("surface") },it.number("aiLaneM")) },
             Content.table("tracks/$id-spots").map { TrackSpot(it.getValue("kind"),it.number("fraction"),it.number("laneM")) })
     }
-    val json=all.joinToString(",","[","]"){it.json}
+    // Keep stable legacy indices for saved identifiers and archived authoring fixtures.
+    // Only owner-selected campaign courses and retained alternates are offered for play.
+    val playableIndices=Content.table("active-tracks").map { row->
+        all.indexOfFirst{it.id==row.getValue("id")}.also{require(it>=0){"Unknown active course"}}
+    }.also{require(it.isNotEmpty() && it.distinct().size==it.size)}
+    val playable=playableIndices.map{all[it]}
+    fun nextPlayable(index:Int)=playableIndices[(playableIndices.indexOf(index)+1).mod(playableIndices.size)]
+    val json=playable.joinToString(",","[","]"){it.json}
 }
 
 object TrackLinter {
