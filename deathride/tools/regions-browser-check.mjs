@@ -4,7 +4,7 @@ import {access,mkdir,writeFile,readFile} from 'node:fs/promises';
 import {resolve} from 'node:path';
 import {pathToFileURL,fileURLToPath} from 'node:url';
 
-const out=resolve('evidence/regions/g3/browser');
+const out=resolve(process.env.TRACK_EVIDENCE ? process.env.TRACK_EVIDENCE+'/regions-browser' : 'evidence/regions/g3/browser');
 await mkdir(out,{recursive:true});
 const browser=await chromium.launch({channel:'chrome',headless:true});
 const url=pathToFileURL(resolve('regions/index.html')).href, results=[];

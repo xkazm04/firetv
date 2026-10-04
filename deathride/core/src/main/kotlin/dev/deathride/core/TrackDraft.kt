@@ -16,7 +16,7 @@ object TrackDraft {
     }
     fun course(fields: Map<String, String>): Course {
         val original = Courses.all.singleOrNull { it.id == fields["id"] } ?: error("Choose a known course")
-        val previewName=fields["previewName"]?.also { require(it.matches(Regex("[a-z]+-[1-7]-[abc]"))) }
+        val previewName=fields["previewName"]?.also { require(it.matches(Regex("[a-z]+-[1-7]-[a-f]"))) }
         val region=fields["region"]?.let(Regions::named)?:previewName?.let{Regions.forDivision(it.substringBefore('-'))}?:original.region
         fun rows(key: String, maximum: Int) = csv(fields.getValue(key)).also { require(it.size <= maximum) { "$key: too many rows" } }
         fun surface(id: String) = Surfaces.all.singleOrNull { it.id == id } ?: error("Unknown surface: $id")

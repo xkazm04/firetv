@@ -11,7 +11,7 @@ for(const row of manifest) {
  if(d.role==='arena')try{const duel=JSON.parse(await readFile(`${folder}/${d.id}-duel.json`,'utf8'));if(duel.digest===d.proofDigest)d.duelProof=duel}catch{}
  d.technicalFlags=[...(d.proof?.flags||[]),...d.shape.gates.filter(g=>g.status!=='pass').map(g=>`shape: ${g.metric}`)];if(d.role==='arena'&&(!d.duelProof||d.duelProof.timeouts))d.technicalFlags.push(d.duelProof?`actual duel unresolved: ${d.duelProof.timeouts}/${d.duelProof.trials.length}`:'actual duel proof pending');
  d.technicalStatus=d.proof?.seeds===12?(d.technicalFlags.length?'flagged':'proved'):'pending';
- d.ownerKeep=owner.keeps.includes(d.id);d.assignment=owner.assignment[d.slot]===d.id?'Campaign':owner.alternates.includes(d.id)?'Practice alternate':'Owner review';courses.push(d);
+ d.ownerKeep=owner.keeps.includes(d.id);d.provisional=owner.provisional===d.id;d.assignment=owner.assignment[d.slot]===d.id?(d.provisional?'Provisional campaign':'Campaign'):owner.alternates.includes(d.id)?'Practice alternate':'Owner review';courses.push(d);
 }
 const legacy=JSON.parse(await readFile('tracks/atlas/shapes.json','utf8')),runoff=legacy.courses.find(c=>c.id==='runoff');
 courses.push({id:'switchback-4-runoff',slot:'switchback-4',role:'accepted',tier:3,laps:6,oldLaps:6,family:'Owner accepted original',course:runoff.course,before:runoff.course,shape:runoff.shape,gates:[],geometry:{lint:[]},accepted:true});
@@ -36,4 +36,5 @@ const result={version:'owner-applied-v1',generated:new Date().toISOString(),expe
  truth:'Recorded owner Keeps are installed; three duplicate Keeps remain practice alternates. Rejected and unreviewed proposals are archived outside the active library. Scrap-7 replacement and finale repair status are recorded in the apply notes. Runoff remains unchanged, including its measured baseline flag. Human feel and Stick evidence remain separate from simulation.'};
 await writeFile('tracks/atlas/candidates.json',JSON.stringify(result));await writeFile('tracks/atlas/candidates-data.js',`window.TRACK_CANDIDATES=${JSON.stringify(result)};\n`);
 await writeFile(`${folder}/outline-pairs.json`,JSON.stringify(pairs));
+const boss=courses.filter(c=>c.slot==='scrap-7');if(boss.length===3){const review={...result,candidates:boss,expectedCandidates:3,expectedSlots:1,pendingSlots:[],pairs:pairs.filter(p=>boss.some(c=>c.id===p.a)&&boss.some(c=>c.id===p.b)),hunterEvidence:null,activeHunterEvidence:null,truth:'Three NEW tier-1 boss layouts, three laps. No owner choice is inferred. The marked provisional assignment is reversible; Keep, Maybe or Reject each with notes and Copy Markdown.'};await writeFile('tracks/atlas/scrap-7-data.js',`window.TRACK_CANDIDATES=${JSON.stringify(review)};\n`);}
 console.log(JSON.stringify({candidates:manifest.length,slots:new Set(courses.map(c=>c.slot)).size,similar:pairs.filter(p=>p.similar).length,proved:courses.filter(c=>c.technicalStatus==='proved').length}));

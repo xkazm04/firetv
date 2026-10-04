@@ -5,6 +5,18 @@ import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 
 class OwnerTracksTest {
+    @Test fun provisionalBossRetainsThreeLapsTierOneAndItsRegion() {
+        val event=Career.events.single{it.id=="scrap-7"}
+        val course=Courses.all[event.courseIndex]
+        assertEquals("scrap-7-f",course.id)
+        val row=Content.table("campaign").single{it["id"]=="scrap-7"}
+        assertEquals("3",row["laps"])
+        for(id in listOf("scrap-7-d","scrap-7-e","scrap-7-f")) {
+            assertTrue(File(TrackQuality.root,"tracks/candidates/drafts/$id.json").exists())
+            assertEquals("scrap-7",id.substringBeforeLast('-'))
+        }
+    }
+
     @Test fun assignmentsPreserveEveryStableEventAndItsNonLayoutFields() {
         val before=TrackQuality.csv(File(TrackQuality.root,"tracks/excluded/owner-2026-10-04/campaign-before.csv").readText())
         val after=Content.table("campaign")

@@ -113,7 +113,7 @@ fun main(args: Array<String>) {
                     "/tracks/atlas/gate-proof.json" to "tracks/atlas/gate-proof.json", "/tracks/atlas/trials.ndjson.gz" to "tracks/atlas/trials.ndjson.gz", "/tracks/review.js" to "tracks/review.js",
                     "/docs/concepts/deathride/T0-track-design-research.md" to "../docs/concepts/deathride/T0-track-design-research.md",
                     "/docs/concepts/deathride/T1-track-instruments.md" to "../docs/concepts/deathride/T1-track-instruments.md")
-                val relative = allowed[path]?:if(path.matches(Regex("/tracks/candidates/drafts/[a-z]+-[1-7]-[abc]\\.json")))path.drop(1)else null
+                val relative = allowed[path]?:if(path.matches(Regex("/tracks/candidates/drafts/[a-z]+-[1-7]-[a-f]\\.json")))path.drop(1)else null
                 val file = relative?.let { File(TrackQuality.root, it) }
                 if (file == null || !file.isFile) send(x, 404, "text/plain", "Not found".toByteArray())
                 else send(x, 200, when (file.extension) { "html" -> "text/html; charset=utf-8"; "js" -> "text/javascript; charset=utf-8"; "css" -> "text/css; charset=utf-8"; "json" -> "application/json"; "gz" -> "application/gzip"; else -> "text/plain; charset=utf-8" }, file.readBytes())

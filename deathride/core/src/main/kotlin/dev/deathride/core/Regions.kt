@@ -58,5 +58,5 @@ object Regions {
     fun named(id: String)=all.single{it.id==id}
     fun forDivision(id: String)=all.single{it.division==id}
     fun forCourse(id: String,theme: String): RegionDefinition =
-        all.singleOrNull{id in it.defaultCourses}?:all.singleOrNull{id.matches(Regex("${it.division}-[1-7]-[abc]"))}?:all.single{it.defaultTheme==theme}
+        all.singleOrNull{id in it.defaultCourses}?:all.singleOrNull{id.matches(Regex("${it.division}-[1-7]-[a-f]"))}?:all.single{it.defaultTheme==theme}
 }
