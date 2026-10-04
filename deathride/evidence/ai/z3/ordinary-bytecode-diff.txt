@@ -1,0 +1,53 @@
+--- lane
++++ balanced
+@@ -2587,22 +2587,35 @@
+      114: putfield      #REF                // Field huntIntentDamage:D
+      117: aload         5
+      119: invokevirtual #REF                // Method dev/deathride/core/AiDecision.getTemperament:()Ldev/deathride/core/Temperament;
+-     122: ifnull        155
++     122: ifnull        186
+      125: aload         5
+-     127: aload_0
+-     128: getfield      #REF                 // Field world:Ldev/deathride/core/World;
+-     131: invokevirtual #REF                // Method dev/deathride/core/World.getSeconds:()D
+-     134: aload         5
+-     136: invokevirtual #REF                // Method dev/deathride/core/AiDecision.getPlan:()Ldev/deathride/core/RacePlan;
+-     139: dup
+-     140: invokestatic  #REF                // Method kotlin/jvm/internal/Intrinsics.checkNotNull:(Ljava/lang/Object;)V
+-     143: invokevirtual #REF               // Method dev/deathride/core/RacePlan.getRecovery:()D
+-     146: dadd
+-     147: invokevirtual #REF                // Method dev/deathride/core/AiDecision.setRecoverUntil:(D)V
+-     150: aload_0
+-     151: iload_2
+-     152: invokespecial #REF                // Method release:(I)V
+-     155: return
++     127: invokevirtual #REF                // Method dev/deathride/core/AiDecision.getPlan:()Ldev/deathride/core/RacePlan;
++     130: dup
++     131: invokestatic  #REF                // Method kotlin/jvm/internal/Intrinsics.checkNotNull:(Ljava/lang/Object;)V
++     134: invokevirtual #REF               // Method dev/deathride/core/RacePlan.getRecovery:()D
++     137: aload_0
++     138: getfield      #REF                 // Field world:Ldev/deathride/core/World;
++     141: invokevirtual #REF                // Method dev/deathride/core/World.getEventType:()Ldev/deathride/core/EventType;
++     144: getstatic     #REF                // Field dev/deathride/core/EventType.ELIMINATION:Ldev/deathride/core/EventType;
++     147: if_acmpne     162
++     150: getstatic     #REF                 // Field dev/deathride/core/AiControls.INSTANCE:Ldev/deathride/core/AiControls;
++     153: ldc_w         #REF               // String duelHitRecoveryScale
++     156: invokevirtual #REF                 // Method dev/deathride/core/AiControls.get:(Ljava/lang/String;)D
++     159: goto          163
++     162: dconst_1
++     163: dmul
++     164: dstore        6
++     166: aload         5
++     168: aload_0
++     169: getfield      #REF                 // Field world:Ldev/deathride/core/World;
++     172: invokevirtual #REF                // Method dev/deathride/core/World.getSeconds:()D
++     175: dload         6
++     177: dadd
++     178: invokevirtual #REF                // Method dev/deathride/core/AiDecision.setRecoverUntil:(D)V
++     181: aload_0
++     182: iload_2
++     183: invokespecial #REF                // Method release:(I)V
++     186: return
+ 
+   public final void afterStep();
+     Code:

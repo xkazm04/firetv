@@ -1,0 +1,84 @@
+{
+  "pass": true,
+  "results": [
+    {
+      "page": "atlas",
+      "width": 1440,
+      "pass": true,
+      "cards": 26,
+      "layers": [
+        "map",
+        "contacts",
+        "wrecks",
+        "spins",
+        "speed",
+        "lines",
+        "traps"
+      ],
+      "persistence": true,
+      "escapedMarkdown": true,
+      "clipboardFallback": true,
+      "remote": [],
+      "errors": []
+    },
+    {
+      "page": "atlas",
+      "width": 390,
+      "pass": true,
+      "cards": 26,
+      "layers": [
+        "map",
+        "contacts",
+        "wrecks",
+        "spins",
+        "speed",
+        "lines",
+        "traps"
+      ],
+      "persistence": true,
+      "escapedMarkdown": true,
+      "clipboardFallback": true,
+      "remote": [],
+      "errors": []
+    },
+    {
+      "page": "atlas",
+      "storageDeniedFallback": true,
+      "pass": true
+    },
+    {
+      "page": "lab",
+      "width": 1440,
+      "pass": true,
+      "liveLint": true,
+      "pointDrag": true,
+      "surfaces": true,
+      "pickups": true,
+      "obstacles": true,
+      "malformedFeaturesRejected": true,
+      "undoRedo": true,
+      "csvZipRoundTrip": true,
+      "race": true,
+      "errors": [],
+      "remote": []
+    },
+    {
+      "page": "lab",
+      "width": 390,
+      "pass": true,
+      "liveLint": true,
+      "pointDrag": true,
+      "surfaces": true,
+      "pickups": true,
+      "obstacles": true,
+      "malformedFeaturesRejected": true,
+      "undoRedo": true,
+      "csvZipRoundTrip": true,
+      "race": false,
+      "errors": [],
+      "remote": []
+    }
+  ],
+  "catalogUnchanged": true,
+  "malformedDraftRejected": true
+}

@@ -78,20 +78,20 @@ class InputMailbox {
     @Synchronized fun newConnection() { seq = -1; receivedMs = -1e12; throttle = 0.0; brake = 0.0; handbrake=0.0;fire=0.0;mine=0.0;ability=0.0 }
 }
 class TrackPoint { var x = 0.0; var y = 0.0; var heading = 0.0; var curvature = 0.0 }
-class Projection { var s = 0.0; var distance = 0.0; var nx = 0.0; var ny = 1.0 }
+class Projection { var s = 0.0; var distance = 0.0; var nx = 0.0; var ny = 1.0; var route=0 }
 data class Track(val straightM: Double = 120.0, val radiusM: Double = 40.0, val halfWidthM: Double = 12.0, var surface: Surface=Surfaces.asphalt, val course: Course?=null) {
     var surfaceOverride=false
-    fun widthAt(s: Double)=course?.widthAt(s)?:halfWidthM
+    fun widthAt(s: Double,route: Int=0)=course?.widthAt(s,route)?:halfWidthM
     /** Edge materials touch the car's lateral contact footprint; authored interior bands use its centre. */
-    fun surfaceAt(s: Double, lateral: Double, contactRadiusM: Double=0.0): Surface = when {
-        abs(lateral)+contactRadiusM>widthAt(s)-Movement.vergeWidthM -> Surfaces.offtrack
-        abs(lateral)+contactRadiusM>widthAt(s)-Movement.vergeWidthM-Movement.kerbWidthM -> Surfaces.kerb
-        else -> if(surfaceOverride || course==null)surface else course.surfaceAt(s,lateral)
+    fun surfaceAt(s: Double, lateral: Double, contactRadiusM: Double=0.0,route: Int=0): Surface = when {
+        abs(lateral)+contactRadiusM>widthAt(s,route)-Movement.vergeWidthM -> Surfaces.offtrack
+        abs(lateral)+contactRadiusM>widthAt(s,route)-Movement.vergeWidthM-Movement.kerbWidthM -> Surfaces.kerb
+        else -> if(surfaceOverride || course==null)surface else course.surfaceAt(s,lateral,route)
     }
     val lengthM = course?.lengthM ?: (2 * straightM + 2 * PI * radiusM)
     val startM = course?.let { it.startFraction*it.lengthM } ?: (straightM * 0.5)
-    fun sample(distanceM: Double, laneM: Double, out: TrackPoint) {
-        if(course!=null) { course.sample(distanceM,laneM,out);return }
+    fun sample(distanceM: Double, laneM: Double, out: TrackPoint,route: Int=0) {
+        if(course!=null) { course.sample(distanceM,laneM,out,route);return }
         var s = ((distanceM % lengthM) + lengthM) % lengthM
         val h = straightM * .5
         when {
@@ -107,8 +107,9 @@ data class Track(val straightM: Double = 120.0, val radiusM: Double = 40.0, val 
             }
         }
     }
-    fun project(x: Double, y: Double, out: Projection) {
-        if(course!=null) { course.project(x,y,out);return }
+    fun project(x: Double, y: Double, out: Projection,hintS: Double=Double.NaN,routeHint: Int=0) {
+        if(course!=null) { course.project(x,y,out,hintS,routeHint);return }
+        out.route=0
         val h=straightM*.5
         if (x in -h..h) {
             out.nx=0.0; out.ny=if (y>=0) 1.0 else -1.0
@@ -154,6 +155,7 @@ enum class AiMode { DRIVE, OVERTAKE, RECOVER }
 enum class FinishKind { NONE, LAPS, ELIMINATION }
 enum class EventType { LAPS, ELIMINATION }
 class Car(val id: Int, track: Track) {
+    var trackRoute=0
     var entered=true;var rivalIndex=-1
     var x=0.0; var y=0.0; var vx=0.0; var vy=0.0; var heading=0.0; var yaw=0.0
     var previousX=0.0; var previousY=0.0; var previousHeading=0.0
@@ -176,6 +178,7 @@ class Car(val id: Int, track: Track) {
     var feel=FeelProfiles.spike
     var filteredSteer=0.0; var filteredThrottle=0.0
     var human=false; var finishSeconds=-1.0; var position=id+1; var impact=0.0
+    var aiBossHealthScale=1.0; val effectiveStats=DoubleArray(8)
     var aiMode=AiMode.DRIVE; var aiDwell=0; var aiBlockedSteps=0; var aiLane=0.0
     var aiReason=0; var aiPerceivedGapM=1000.0
     var aiSkill: AiSkill?=null;var aiStyle: Rival?=null;var aiCombatReason=0;var aiPickupTarget=-1;var aiNoisePhase=0.0
@@ -281,10 +284,12 @@ class Snapshot(private val combat: Combat?=null) {
     fun blastRadius(i: Int)=blastState[i*5+3];fun blastActivation(i: Int)=blastState[i*5+4].toInt()
 }
 class World(val seed: Int=17, val spec: CarSpec=CarSpec(), val track: Track=Track(), val handling: Handling=SlipHandling(),combatEnabled: Boolean=false,abilitiesEnabled: Boolean=combatEnabled) {
-    var raceLaps=Tuning.RACE_LAPS; internal set
+    var raceLaps=track.course?.raceProfile?.laps?:track.course?.let{RacePacing.practiceLaps(it.id,it.pool.minTier)}?:Tuning.RACE_LAPS; internal set
     var eventType=EventType.LAPS; internal set
     var duelRigSlot=0; internal set
-    val raceLimitSeconds get()=if(eventType==EventType.ELIMINATION)CampaignRules["duelLimitSeconds"] else TrackRules["maxRaceSeconds"]*raceLaps/Tuning.RACE_LAPS
+    var aiLeadSlot=0; internal set
+    var aiBossRival=-1; internal set
+    val raceLimitSeconds get()=track.course?.raceProfile?.budgetSeconds?:if(eventType==EventType.ELIMINATION)CampaignRules["duelLimitSeconds"] else TrackRules["maxRaceSeconds"]*max(Tuning.RACE_LAPS,raceLaps)/Tuning.RACE_LAPS
     val duelDraw get()=eventType==EventType.ELIMINATION && finished==0 && (combat.wreckCount==entrantCount || seconds>=raceLimitSeconds)
     private val driftRules=(handling as? SlipHandling)?.driftParameters?:DriftParameters.defaults
     var damageScale=1.0
@@ -293,6 +298,7 @@ class World(val seed: Int=17, val spec: CarSpec=CarSpec(), val track: Track=Trac
     val obstacles=Obstacles(this)
     val combat=Combat(this,combatEnabled)
     val abilities=Abilities(this,abilitiesEnabled)
+    val ai=AiBehaviour(this)
     val snapshot=Snapshot(combat); val previousSnapshot=Snapshot(combat)
     private val projection=Projection(); private val point=TrackPoint()
     private val duelProjection=Projection()
@@ -309,6 +315,7 @@ class World(val seed: Int=17, val spec: CarSpec=CarSpec(), val track: Track=Trac
         if(eventType==EventType.ELIMINATION)DeathDuel.applyRig(cars[duelRigSlot])
         val seeded=if(cars.any{it.aiSkill!=null})java.util.Random(seed.toLong()) else null
         for(c in cars) {
+            c.trackRoute=0
             val grid=track.course?.grid?.get(c.id)
             val rowLength=if(c.carClass==null)7.0 else CarShapes.all.maxOf { it.lengthM }+TrackRules["gridClearanceM"]
             val s=if(grid==null)track.startM-rowLength-(c.id/2)*rowLength else track.startM+grid.fraction*track.lengthM
@@ -328,16 +335,22 @@ class World(val seed: Int=17, val spec: CarSpec=CarSpec(), val track: Track=Trac
             c.turboRemaining=if(c.utilityMask and (1 shl Consumables.TURBO)!=0)Consumables.all[Consumables.TURBO].duration else 0.0
             c.fuelRemaining=if(c.utilityMask and (1 shl Consumables.FUEL)!=0)Consumables.all[Consumables.FUEL].duration else 0.0;c.engineScale=1.0
         }
+        ai.reset()
         combat.reset()
         previousSnapshot.capture(cars); snapshot.capture(cars)
     }
     fun step(inputs: Array<InputFrame>, dt: Double=Tuning.STEP_SECONDS) {
         previousSnapshot.capture(cars)
         steps++; seconds+=dt; ramClosingMps.fill(0.0)
+        ai.beforeStep()
         for(c in cars) {
             if(!c.entered)continue
             c.previousX=c.x; c.previousY=c.y; c.previousHeading=c.heading; c.impact*=.87
-            c.wallImpactMps=0.0; track.project(c.x,c.y,projection); c.surface=track.surfaceAt(projection.s,projection.distance,if(c.carClass==null)0.0 else c.spec.circleRadiusM)
+            c.wallImpactMps=0.0; track.project(c.x,c.y,projection,track.startM+c.lap.progressM,c.trackRoute)
+            // A shove or a shallow fork can put an AI on the other real ribbon. Its steering
+            // must follow the same passage as physical containment, rather than aim through the gap.
+            c.trackRoute=projection.route
+            c.surface=track.surfaceAt(projection.s,projection.distance,if(c.carClass==null)0.0 else c.spec.circleRadiusM,projection.route)
             if(combat.wrecked(c.id)) {
                 val drag=exp(-CombatRules["wreckDragPerSecond"]*dt);c.vx*=drag;c.vy*=drag;c.yaw*=drag
                 c.x+=c.vx*dt;c.y+=c.vy*dt;c.heading=wrapAngle(c.heading+c.yaw*dt)
@@ -348,7 +361,7 @@ class World(val seed: Int=17, val spec: CarSpec=CarSpec(), val track: Track=Trac
                 if(input.throttle>Consumables.triggerThrottle && input.brake==0.0) {
                     if(c.fuelRemaining>0){c.engineScale*=Consumables.all[Consumables.FUEL].magnitude;c.fuelRemaining=max(0.0,c.fuelRemaining-dt)}
                     if(c.turboRemaining>0 && c.speedMps>Consumables.turboMinimumSpeedMps) {
-                        track.project(c.x,c.y,projection);track.sample(projection.s,0.0,point)
+                        track.project(c.x,c.y,projection,track.startM+c.lap.progressM,c.trackRoute);track.sample(projection.s,0.0,point,c.trackRoute)
                         if(point.curvature<TrackContent["maximumAccelerationCurvature"]){c.engineScale*=Consumables.all[Consumables.TURBO].magnitude;c.turboRemaining=max(0.0,c.turboRemaining-dt)}
                     }
                 }
@@ -374,7 +387,7 @@ class World(val seed: Int=17, val spec: CarSpec=CarSpec(), val track: Track=Trac
             // advancing any timers twice, so the snapshot describes the post-contact car.
             if(handling is SlipHandling && c.spec.driftGeometry!=null)
                 DriftDynamics.updateSignals(c,if(c.human)inputs[c.id] else c.aiInput,0.0,handling.driftParameters)
-            track.project(c.x,c.y,projection); c.lap.update(projection.s)
+            track.project(c.x,c.y,projection,track.startM+c.lap.progressM,c.trackRoute); c.lap.update(projection.s)
             if(eventType==EventType.LAPS && c.lap.laps>=raceLaps && c.finishSeconds<0) { c.finishSeconds=seconds;c.finishKind=FinishKind.LAPS; finished++;abilities.cancel(c) }
         }
         if(combat.enabled && combat.wreckCount==entrantCount-1)for(c in cars)if(c.entered && !combat.wrecked(c.id) && c.finishSeconds<0) { c.finishSeconds=seconds;c.finishKind=FinishKind.ELIMINATION;finished++ }
@@ -383,6 +396,7 @@ class World(val seed: Int=17, val spec: CarSpec=CarSpec(), val track: Track=Trac
             c.position=1
             for(o in cars) if(o.entered && o!==c && ahead(o,c)) c.position++
         }
+        ai.afterStep()
         snapshot.capture(cars)
     }
     private fun ahead(a: Car,b: Car): Boolean {
@@ -397,10 +411,13 @@ class World(val seed: Int=17, val spec: CarSpec=CarSpec(), val track: Track=Trac
         c.aiDwell++
         if(c.speedMps<1.2) c.aiBlockedSteps++ else c.aiBlockedSteps=0
         if(steps%skill.reactionSteps!=c.id%skill.reactionSteps) return
-        combat.think(c)
-        abilities.think(c)
-        track.project(c.x,c.y,projection)
+        track.project(c.x,c.y,projection,track.startM+c.lap.progressM,c.trackRoute)
         val s=projection.s
+        val course=track.course
+        if(course!=null && course.branches.isNotEmpty()) {
+            if(c.trackRoute>0) {val route=course.branches[c.trackRoute-1];val f=course.phase(s)/course.lengthM;if(f>route.end+.01 || f<route.start-.08)c.trackRoute=0}
+            for(i in course.branches.indices) {val branch=course.branches[i];val gap=branch.start*course.lengthM-course.phase(s);if(gap in 0.0..55.0)c.trackRoute=if((c.id+seed+c.lap.laps).mod(2)==0)i+1 else 0}
+        }
         var gap=1000.0
         for(o in cars) if(o.entered && o!==c && !combat.wrecked(o.id)) {
             val dx=o.x-c.x; val dy=o.y-c.y
@@ -411,6 +428,8 @@ class World(val seed: Int=17, val spec: CarSpec=CarSpec(), val track: Track=Trac
         if(c.aiBlockedSteps>150 && c.aiDwell>90) { c.aiMode=AiMode.RECOVER; c.aiDwell=0; c.aiReason=1 }
         else if(gap<(c.spec.circleRadiusM+c.spec.circleOffsetM)*2*TrackRules["aiOvertakeCarLengths"]*(c.aiStyle?.passDistanceScale?:1.0) && c.aiDwell>90 && c.aiMode==AiMode.DRIVE) { c.aiMode=AiMode.OVERTAKE; c.aiDwell=0; c.aiReason=2 }
         else if(c.aiMode!=AiMode.DRIVE && c.aiDwell>180 && c.speedMps>5) { c.aiMode=AiMode.DRIVE; c.aiDwell=0; c.aiReason=3 }
+        combat.think(c)
+        abilities.think(c)
         val passLane=c.spec.circleRadiusM*2*TrackRules["aiPassCarWidths"]
         val intendedLane=if(c.aiMode==AiMode.RECOVER) 0.0 else if(c.aiMode==AiMode.OVERTAKE) if(c.aiLane<0) passLane else -passLane else c.aiLane+(c.aiStyle?.laneBiasM?:0.0)
         val noseLook=(c.spec.circleOffsetM+c.spec.circleRadiusM)*2*TrackRules["aiLookCarLengths"]
@@ -424,7 +443,7 @@ class World(val seed: Int=17, val spec: CarSpec=CarSpec(), val track: Track=Trac
                 val dx=o.x-c.x;val dy=o.y-c.y;val distance=dx*dx+dy*dy
                 if(distance<nearest && combat.roadFraction(c.x,c.y,o.x,o.y,c.spec.circleRadiusM)>=1.0) {
                     nearest=distance;c.aiDuelTarget=o.id
-                    track.project(o.x,o.y,duelProjection);lane=duelProjection.distance
+                    track.project(o.x,o.y,duelProjection,track.startM+o.lap.progressM,o.trackRoute);lane=duelProjection.distance
                     c.aiDuelWait=dx*cos(c.heading)+dy*sin(c.heading)<0
                     // Leave a passing lane while waiting for the visible car behind.
                     // Matching its lane here merely parks a shield in front of its guns.
@@ -432,16 +451,19 @@ class World(val seed: Int=17, val spec: CarSpec=CarSpec(), val track: Track=Trac
                 }
             }
         }
-        lane=obstacles.avoid(c,s,lane)
-        lane=lane.coerceIn(-track.widthAt(s+look)*.55,track.widthAt(s+look)*.55)
-        track.sample(s+look, lane+sin(steps*.007+c.id+c.aiNoisePhase)*skill.laneErrorM,point)
+        lane=obstacles.avoid(c,s,ai.lane(c,lane))
+        lane=lane.coerceIn(-track.widthAt(s+look,c.trackRoute)*ai.risk(c),track.widthAt(s+look,c.trackRoute)*ai.risk(c))
+        track.sample(s+look, lane+sin(steps*.007+c.id+c.aiNoisePhase)*skill.laneErrorM,point,c.trackRoute)
         val desired=atan2(point.y-c.y,point.x-c.x)
         val slip=if(c.speedMps>2.0) wrapAngle(atan2(c.vy,c.vx)-c.heading) else 0.0
         val error=wrapAngle(desired-c.heading-slip*.35)
         val steer=(-error*2.3+c.yaw*.18).coerceIn(-1.0,1.0)
-        val target=if(c.carClass==null) { if(point.curvature>0) 23.0-skill.cornerMarginMps else 29.0 } else min(c.spec.maxSpeedMps*c.abilitySpeedScale*CarCatalog.aiCruiseFraction, if(point.curvature>0) sqrt(DriftDynamics.lateralLimit(c.spec,track.surfaceAt(s+look,lane,c.spec.circleRadiusM),driftRules)*c.abilityGripScale*CarCatalog.aiGripFraction/point.curvature)-skill.cornerMarginMps else c.spec.maxSpeedMps*c.abilitySpeedScale)
+        val target=if(c.carClass==null) { if(point.curvature>0) 23.0-ai.cornerMargin(c,skill) else 29.0 } else min(c.spec.maxSpeedMps*c.abilitySpeedScale*CarCatalog.aiCruiseFraction, if(point.curvature>0) sqrt(DriftDynamics.lateralLimit(c.spec,track.surfaceAt(s+look,lane,c.spec.circleRadiusM,c.trackRoute),driftRules)*c.abilityGripScale*CarCatalog.aiGripFraction/point.curvature)-ai.cornerMargin(c,skill) else c.spec.maxSpeedMps*c.abilitySpeedScale)
         val surfaceLimit=if(point.curvature>0)1.0 else sqrt(c.surface.gripScale).coerceIn(Movement.aiSurfaceMargin,1.0)
-        val cornerTarget=min(obstacles.speedLimit[c.id],target*surfaceLimit*(1.0-min(.55,abs(error)*.4))*(if(c.aiDuelWait)DeathDuel.chaseFraction else 1.0))
+        // Patrol slowly after losing visual contact so the slower mission rig can catch up.
+        // This depends only on the existing perception result; no unseen opponent position is read.
+        val duelPace=if(c.aiDuelWait)DeathDuel.chaseFraction else if(eventType==EventType.ELIMINATION && c.aiStyle===DeathDuel.boss && c.aiDuelTarget<0 && seconds>=CampaignRules["duelOpeningSeconds"])DeathDuel.searchFraction else 1.0
+        val cornerTarget=min(obstacles.speedLimit[c.id],target*ai.speedFraction(c)*surfaceLimit*(1.0-min(.55,abs(error)*.4))*duelPace)
         var a=if(c.speedMps<cornerTarget) 1.0 else .12
         if(c.spec.driftGeometry!=null) {
             // Request only the acceleration left by the same friction circle used by handling.
@@ -455,15 +477,15 @@ class World(val seed: Int=17, val spec: CarSpec=CarSpec(), val track: Track=Trac
         val catching=c.spec.driftGeometry!=null && abs(slip)>driftRules["assistFadeStartRadians"]
         c.aiInput.set(if(catching)(-slip*driftRules["aiCountersteerGain"]).coerceIn(-1.0,1.0) else steer,
             if(catching)min(a,driftRules["aiSlipThrottleLimit"]) else a,b)
-        c.aiInput.handbrake=0.0
+        c.aiInput.handbrake=ai.drift(c,steer)
     }
     fun contain(c: Car) {
         val spec=c.spec
         val radius=spec.circleRadiusM
         for(end in -1..1 step 2) {
             val ox=cos(c.heading)*spec.circleOffsetM*end; val oy=sin(c.heading)*spec.circleOffsetM*end
-            track.project(c.x+ox,c.y+oy,projection)
-            val limit=track.widthAt(projection.s)-radius
+            track.project(c.x+ox,c.y+oy,projection,track.startM+c.lap.progressM,c.trackRoute)
+            val limit=track.widthAt(projection.s,projection.route)-radius
             if(abs(projection.distance)>limit) {
                 val sign=if(projection.distance>0) 1.0 else -1.0
                 val nx=projection.nx*sign; val ny=projection.ny*sign
@@ -519,6 +541,8 @@ class World(val seed: Int=17, val spec: CarSpec=CarSpec(), val track: Track=Trac
         for(c in cars){hash=31*hash+if(c.entered)1 else 0;hash=31*hash+c.turboRemaining.toBits();hash=31*hash+c.fuelRemaining.toBits();hash=31*hash+c.utilityMask}
         if(eventType==EventType.ELIMINATION) { hash=31*hash+eventType.ordinal;hash=31*hash+duelRigSlot;for(c in cars){hash=31*hash+c.aiDuelTarget;hash=31*hash+if(c.aiDuelWait)1 else 0} }
         hash=abilities.appendHash(hash)
+        if(track.course?.branches?.isNotEmpty()==true)for(c in cars)hash=31*hash+c.trackRoute
+        hash=ai.appendHash(hash)
         return if(combat.enabled)combat.appendHash(hash) else hash
     }
 }

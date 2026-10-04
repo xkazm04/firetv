@@ -23,6 +23,9 @@ class AtlasArt(private val root: FileHandle = Gdx.files.internal("phase2-v1"),pr
     private val environmentObstacles=HashMap<String,String>()
     private var backdrop: Texture?=null
     private var backdropKey=""
+    private var selectedRegion=""
+    private val variantSlots=HashSet<String>()
+    val activeRegionVariants: Set<String> get()=variantSlots.toSet()
     private val carKeys=CarCatalog.all.associate { it.id to arrayOf("clean","damaged-1","damaged-2","wreck").map{s->"cars/${it.id.lowercase()}/$s"}.toTypedArray() }
     private val liveryKeys=CarCatalog.all.associate { it.id to arrayOf("clean","livery-bone","livery-red","livery-ochre").map{s->"cars/${it.id.lowercase()}/$s"}.toTypedArray() }
     var textureBytes=0L; private set
@@ -66,8 +69,8 @@ class AtlasArt(private val root: FileHandle = Gdx.files.internal("phase2-v1"),pr
         } catch(e: Exception){failed("catalog",e)}
         Gdx.app.log("DeathRide","art ready regions=$regionCount bytes=$textureBytes failures=$failures heading=runtime-rotation")
     }
-    private fun loadTexture(file: String,limit: Int): Texture {
-        val source=root.child(file)
+    private fun loadTexture(file: String,limit: Int): Texture = loadTexture(root.child(file),limit)
+    private fun loadTexture(source: FileHandle,limit: Int): Texture {
         val bytes=source.read().use{TextureBudget.pngBytes(it,limit)}
         require(textureBytes+bytes+extraBytes()<=minOf(TextureBudget.ART,residentLimit)){"resident texture budget"}
         val t=Texture(source);t.setFilter(Texture.TextureFilter.Linear,Texture.TextureFilter.Linear)
@@ -129,6 +132,28 @@ class AtlasArt(private val root: FileHandle = Gdx.files.internal("phase2-v1"),pr
         patch.draw(batch,x,y,width,height);draws++;return true
     }
     fun tile(key: String)=tiles[entries[key]?.id?:key]
+    fun hasRegionVariant(slot: String)=slot in variantSlots
+    /** Release the old slot BEFORE decoding its replacement. No five-region residency spike. */
+    fun selectRegion(region: RegionDefinition?,candidates: Boolean=true) {
+        val selection=(region?.id?:"base")+":"+candidates
+        if(selection==selectedRegion)return
+        selectedRegion=selection;variantSlots.clear()
+        val regionRoot=root.sibling("regions")
+        val manifest=try { if(region!=null)RegionMaterials.manifest(regionRoot) else null }catch(e: Exception){failed("region materials",e);null}
+        for((slot,key) in RegionMaterials.tileSlots) {
+            val entry=entries[key]?:continue
+            tiles.remove(entry.id)?.let{textureBytes-=it.width.toLong()*it.height*4;it.dispose()}
+            val candidate=manifest?.firstOrNull{region!=null && RegionMaterials.eligible(it,region,slot,candidates)}
+            var replacement: Texture?=null
+            if(candidate!=null)try {
+                val source=RegionMaterials.verifiedFile(regionRoot,candidate)
+                replacement=loadTexture(source,TextureBudget.TILE_EDGE);variantSlots.add(slot)
+            }catch(e: Exception){failed("region $slot",e)}
+            if(replacement==null)try { replacement=loadTexture(entry.id+".png",TextureBudget.TILE_EDGE) }catch(e: Exception){failed("base $slot",e)}
+            replacement?.let{it.setWrap(Texture.TextureWrap.Repeat,Texture.TextureWrap.Repeat);tiles[entry.id]=it}
+        }
+        Gdx.app.log("DeathRide","regionMaterials $selection candidates=${variantSlots.size} bytes=$textureBytes")
+    }
     fun draw(batch: Batch,key: String,x: Float,y: Float,width: Float,height: Float,degrees: Float=0f,seconds: Double=0.0): Boolean {
         val r=region(key,seconds)?:return false
         val sx=width/r.image.regionWidth;val sy=height/r.image.regionHeight

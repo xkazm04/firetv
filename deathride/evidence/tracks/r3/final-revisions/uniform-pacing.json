@@ -1,0 +1,7 @@
+{
+  "foundry-2-b": 1.4,
+  "scrap-7-c": 1.06,
+  "reason": "Actual six-car median lap winner below role band; preserve width and lap count.",
+  "foundryCorrection": "Uniform radius scaling failed the existing maximum straight-fraction gate at 0.891. Retain the 1.4 coordinate scale but restore the original corner radii. The corrected 72-trial run passes at 196.5 s combat / 201.6 s clean median.",
+  "scrapResult": "Uniform 1.06 coordinate/radius scale passed at 251.7 s combat / 279.5 s clean median; runtime watchdog 480 s resolves the slow tail."
+}

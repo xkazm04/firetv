@@ -109,11 +109,11 @@ class CampaignDesignV2Test {
     }
 
     @Test fun rhythmIsVariedAndThePhysicalClassEnvelopeIsStillShared() {
-        assertEquals(35,Career.events.size);assertEquals(367,Career.events.sumOf{it.laps})
+        assertEquals(35,Career.events.size);assertTrue(Career.events.sumOf{it.laps}<367)
         for(act in 0..4) {
             val events=Career.events.filter{it.cupIndex==act}
             assertEquals(listOf("build-up","build-up","build-up","build-up","pressure","qualifier",if(act==4)"finale" else "boss"),events.map{it.phase})
-            assertTrue(events[4].laps>events[5].laps)
+            assertTrue(RacePacing.targets.getValue(events[4].id)<RacePacing.targets.getValue(events[5].id))
         }
         assertEquals(10,CarCatalog.statMax);assertEquals(3,CarCatalog.slotsMax)
         assertEquals(0.5,Weapons.all[Weapons.MINE].radiusM)

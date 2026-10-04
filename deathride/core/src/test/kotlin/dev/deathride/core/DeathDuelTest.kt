@@ -17,6 +17,18 @@ class DeathDuelTest {
         p.careerRound=34;p.careerCleared=34;p.credits=8000;p.selectedCar=DeathDuel.boss.carIndex;p.owned[p.selectedCar]=true
         p.rivalProfiles.forEach{it.credits=8000};RivalEconomy.prepare(p)
     }
+    @Test fun approvedFinaleRegressionsResolveWithActualEquipmentAndUnchangedWatchdog() {
+        val course=Courses.all.single{it.id=="crown-7-a"}
+        val nodes=course.nodes.toList();val grid=course.grid.toList()
+        for(seed in listOf(7319,112048,216777)) {
+            val w=arenaDuelWorld(course,seed)
+            assertEquals(2,w.entrantCount);assertEquals(2,w.resolved)
+            assertEquals(1,w.finished);assertFalse(w.duelDraw)
+            assertTrue(w.seconds<CampaignRules["duelLimitSeconds"])
+            assertEquals(0,w.combat.oneShotKills)
+            assertEquals(nodes,course.nodes);assertEquals(grid,course.grid)
+        }
+    }
     @Test fun lapCountsAndTimeoutLeaderNeverWinAnElimination() {
         val w=world();val c=w.cars[0]
         // Exercise the real lap gate with four complete ordered circuits, then the world's finish gate.

@@ -1,0 +1,15 @@
+.eyebrow{font-size:.74rem;letter-spacing:.13em;font-weight:750;color:var(--muted)}
+.lede{font-size:1.2rem}.notice{padding:18px 22px;background:var(--wash);border-left:4px solid var(--accent)}
+.notice p:last-child{margin-bottom:0}.region-nav{display:flex;gap:10px 24px;flex-wrap:wrap;margin:24px 0}
+.region-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px}
+.region-card{border-top:5px solid var(--region-accent);scroll-margin-top:16px}
+.region-card header p{margin:8px 0}.region-card h2{margin:10px 0;font-size:2rem}
+figure{margin:20px -10px 10px}figure img,.menu-capture{display:block;width:100%;height:auto;border-radius:5px}
+figcaption{font-size:.8rem;color:var(--muted);margin:7px 10px}.truth-badge{font-size:.72rem;letter-spacing:.08em;font-weight:750;color:var(--warn)}
+.palette{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));list-style:none;padding:0;gap:10px;font-size:.72rem}
+.palette li{min-width:0}.swatch{display:block;height:26px;border:1px solid var(--line);border-radius:3px;margin-bottom:4px}.palette code{display:block;font-size:.65rem}
+details{margin-top:20px}summary{cursor:pointer;font-weight:650;padding:10px 0}details h3{margin:22px 0 10px}
+.props{list-style:none;padding:0;display:flex;gap:12px;flex-wrap:wrap}.props li{flex:1;min-width:90px;font-size:.8rem}.props img{width:100%;height:100px;object-fit:contain;background:var(--wash);border-radius:4px}.props small{display:block}
+.table-scroll{max-width:100%;overflow:auto;font-size:.8rem}.device-pending{border-left:3px solid var(--warn);padding-left:12px}
+#export{min-height:280px;font:13px/1.6 Consolas,monospace}footer{margin-top:40px;font-size:.85rem;color:var(--muted)}
+@media(max-width:800px){.region-grid{grid-template-columns:1fr}.palette{gap:7px}.report-toolbar label{width:100%;justify-content:space-between}.report-toolbar select{max-width:65%}}

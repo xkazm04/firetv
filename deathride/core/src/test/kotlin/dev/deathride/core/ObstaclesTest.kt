@@ -29,7 +29,7 @@ class ObstaclesTest {
         for(c in w.cars){CarCatalog.apply(c,0);c.human=true};w.reset()
     }
     @Test fun authoredPlacementsPassAndEveryNewLintRuleRejectsItsMutation() {
-        assertEquals(Courses.all.map{it.id}.toSet(),ObstacleContent.placements.keys)
+        assertEquals(Courses.all.filter{it.obstaclePlacements.isNotEmpty()}.map{it.id}.toSet(),ObstacleContent.placements.keys)
         for(c in Courses.all)assertEquals(emptyList<String>(),ObstacleContent.errors(c),c.id)
         val c=course();val o=c.obstacles.single()
         fun rejects(rule: String,mutant: TrackObstacle){assertTrue(ObstacleContent.errors(c,arrayOf(mutant)).any{it.contains(rule)},rule)}

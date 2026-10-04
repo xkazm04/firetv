@@ -16,3 +16,27 @@ G1: the first Grok proof reported `HTTP 402 Payment Required: Grok Build usage b
 Continued only no-spend work: 16 affine ground recolours pass unchanged seam/repetition gates, have 32 exact-hash local-model observations and direct actual-repeat inspection. All local responses carry low-confidence routing, exposed in owner review; no calibration or owner acceptance is claimed. Reused the four prior kept exports in 11 regional memberships without editing their pixels or their approval ledger. Five region pages provide 86 review cards in total (27 candidates/reuses, 59 missing-image briefs), blank Keep/Maybe/Reject controls, notes and Copy Markdown. Desktop/mobile browser checks pass. Staged material slots outside packaged assets; no new sprite atlas/panel exists. Current art remains 31.25 MiB; complete conditional region plan is 30.25 MiB. Protected-file audit verifies 157 runtime/data/style/approval files unchanged. Required Gradle tasks, 57 art tests and both bundle validations are the pre-commit gates. No Stick, G2/G3 work, push or question.
 
 Stop reason: provider balance exhausted, not time exhaustion. Remaining G1: 40 new props, ten panels, seven atmosphere sheets and two structural ground fields; all proof/grading/packing work for them remains gated. A later authorised recovery must inspect provider availability and this genuine quota latch; this session never clears it or spends again.
+
+## Engine/data continuation on deathride/tracks ? G2
+
+2026-10-04. First merged `deathride/main` cleanly (`eb4711de`); merged baseline build green. Read G0/G1, owner decisions and R0?R3; the concurrent 2026-10-04 owner record was incorporated before final commits. Added the five-region CSV authority, campaign/default/draft assignments, renderer tint/one-slot variants/grade/procedural backdrop and weather, region names and division banners. Weather uses at most 24 of the existing 160 motion slots; physics, course geometry, v6 saves, owner choices and paid ledgers are unchanged. Added metadata to 102 candidate drafts/ZIPs and all 103 atlas entries while preserving original geometry and ZIP entries.
+
+| Wave | Result | Evidence |
+|---|---|---|
+| G2 | Engine/data implemented; required build, 202 core/8 link/43 game tests, content/contract/browser/bundle checks pass. 45 desktop GL captures and five actual division menus. Stick timing pending-busy. | [Design/results](G2-region-engine.md), `deathride/evidence/regions/g2/` |
+
+G2 final build log: `commit-build.log`, followed by `final-ui-build.log` after the desktop menu-fixture correction. Candidate/browser checks pass at 1440 and 390; Track Lab previews execute real six-car simulations. Capture hashes and constant 18.75 MiB loaded-art subset recorded; total planned active bundle plus car reserve remains 31.25 MiB. G1's 16 ground recolours now carry the owner's dated Keep evidence; missing new art has procedural fallbacks; rejected art stays excluded. Initial TCP/5555 /24 scan found shared Stick `10.0.0.139` busy with `dev.deathride.perf`: no install/launch/stop, no device delta claimed. APK package verified `dev.deathride.regions`. No provider spend, push or question. Remaining G2 gate: measured on-device off/on frame-time delta when Stick is available.
+
+G2 incorporates concurrent owner decision commit `f88f41be`: all delivered G1 regions approved and R3 triage recorded. Final comparison uses kept `scrap-1-c`; the separate apply run owns production track selection/repair.
+
+G2 committed locally as `8f7f7de0`.
+
+## Owner comparison continuation ? G3
+
+2026-10-04. Delivered a generated offline same-course comparison with five blank region choice cards and 45 actual desktop GL captures across three views/material modes, individual approved material links, palettes, exact kept props, weather caps, backdrop/plot and actual campaign banners. Reused the audio report CSS/interaction/export format with region-specific truth disclaimer and export destination. Approved material/fallback and desktop/device truth are explicit; no owner picks inferred. The source/capture freshness check and 1440/390 light/dark browser checks pass, including all views, links/images, three picks, clear, persistence, escaped Markdown, clipboard fallback and denied storage. Required Gradle tasks green; 253 tests pass/up-to-date.
+
+| Wave | Result | Evidence |
+|---|---|---|
+| G3 | Owner comparison delivered and browser/build gates pass; Stick screenshots and frame-time delta pending-busy, owner feel unmeasured. | [Design/results](G3-region-owner-review.md), `deathride/evidence/regions/g3/`, `deathride/regions/` |
+
+Final /24 TCP/5555 scan at 14:03:56 UTC found `10.0.0.139` still running `dev.deathride.perf`; did not install or launch `dev.deathride.regions`, stop another application, or touch `dev.deathride.tv`. Timing delta remains null. Remaining: when free, collect per-region Stick screenshots and identical off/on warm-up/trace runs, report actual percentiles and delta, then obtain owner region/individual-art/sofa decisions. Existing G1 art gaps and three R3 arena failures stay separately pending. No image/audio provider spend, push or question.

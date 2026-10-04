@@ -46,7 +46,7 @@ object CarCatalog {
     init { require(upgradeLimits.keys==all.map{it.id}.toSet()) }
     val json=all.joinToString(",","[","]") { it.json }
     fun apply(car: Car,index: Int,bonuses: IntArray?=null)=apply(car,all[index],bonuses)
-    fun apply(car: Car,type: CarClass,bonuses: IntArray?=null) { car.carClass=type; car.ability.definition=type.ability;car.spec=type.spec(bonuses);car.maxHp=CombatRules["maxHp"]*CarLoadouts.forCar(type).hullScale;car.startingCondition=1.0;car.utilityMask=0;car.armorReduction=type.derive("armorReduction",bonuses);car.weaponSlots=type.derive("weaponSlots",bonuses).toInt() }
+    fun apply(car: Car,type: CarClass,bonuses: IntArray?=null) { car.aiBossHealthScale=1.0;for(i in statNames.indices)car.effectiveStats[i]=type.stat(statNames[i],bonuses);car.carClass=type; car.ability.definition=type.ability;car.spec=type.spec(bonuses);car.maxHp=CombatRules["maxHp"]*CarLoadouts.forCar(type).hullScale;car.startingCondition=1.0;car.utilityMask=0;car.armorReduction=type.derive("armorReduction",bonuses);car.weaponSlots=type.derive("weaponSlots",bonuses).toInt() }
 }
 
 /** Load-time audit data; deliberately never consulted by the fixed simulation step. */

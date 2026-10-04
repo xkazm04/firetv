@@ -12,6 +12,7 @@ import kotlin.math.*
 /** One reusable GPU target and renderer; never allocate/delete them at a course change. */
 class SceneryCanvas(val cacheRoadMarks: Boolean=true) {
     val roadMarks=RoadMarkMesh()
+    val regionShader=RegionShader.create()
     val markMatrix=Matrix4()
     val textureSize=VisualTuning["sceneryTextureSize"].toInt()
     val buffer=FrameBuffer(Pixmap.Format.RGBA8888,textureSize,textureSize,false)
@@ -20,10 +21,10 @@ class SceneryCanvas(val cacheRoadMarks: Boolean=true) {
     private val vertices=FloatArray(20)
     private val indices=shortArrayOf(0,1,2,2,3,0)
     private val signLayout=GlyphLayout()
-    fun tile(texture: Texture?,ax: Float,ay: Float,bx: Float,by: Float,cx: Float,cy: Float,dx: Float,dy: Float) {
+    fun tile(texture: Texture?,ax: Float,ay: Float,bx: Float,by: Float,cx: Float,cy: Float,dx: Float,dy: Float,tint: Color=Color.WHITE) {
         if(texture==null)return
         renderer.end();sprites.projectionMatrix=renderer.projectionMatrix;sprites.begin()
-        val color=Color.WHITE_FLOAT_BITS
+        val color=tint.toFloatBits()
         fun vertex(n: Int,x: Float,y: Float){vertices[n]=x;vertices[n+1]=y;vertices[n+2]=color;vertices[n+3]=x/8f;vertices[n+4]=-y/8f}
         vertex(0,ax,ay);vertex(5,bx,by);vertex(10,cx,cy);vertex(15,dx,dy)
         sprites.draw(texture,vertices,0,20,indices,0,6);sprites.end();renderer.begin(ShapeRenderer.ShapeType.Filled)
@@ -46,11 +47,14 @@ class SceneryCanvas(val cacheRoadMarks: Boolean=true) {
             sprites.end();renderer.begin(ShapeRenderer.ShapeType.Filled)
         }
     }
-    fun dispose() { roadMarks.dispose();sprites.dispose();renderer.dispose();buffer.dispose() }
+    fun dispose() { regionShader.dispose();roadMarks.dispose();sprites.dispose();renderer.dispose();buffer.dispose() }
 }
 /** Static geometry and asset placement are generated in bounded render-thread slices. */
-class TrackScene(private val course: Course,private val canvas: SceneryCanvas,private val art: AtlasArt,private val signageFont: BitmapFont?=null) {
-    init { canvas.roadMarks.clear() }
+class TrackScene(private val course: Course,private val canvas: SceneryCanvas,private val art: AtlasArt,private val signageFont: BitmapFont?=null,
+                 val regionDefinition: RegionDefinition=course.region,private val regionEnabled: Boolean=true,
+                 candidates: Boolean=true) {
+    private val look=if(regionEnabled)RegionLook(regionDefinition) else null
+    init { canvas.roadMarks.clear();art.selectRegion(if(regionEnabled)regionDefinition else null,candidates) }
     private val region=TextureRegion(canvas.buffer.colorBufferTexture).apply { flip(false,true);texture.setFilter(Texture.TextureFilter.Linear,Texture.TextureFilter.Linear) }
     var ready=false;private set
     private var buildFrames=0
@@ -61,22 +65,28 @@ class TrackScene(private val course: Course,private val canvas: SceneryCanvas,pr
     private val width=(course.maxX-course.minX+margin*2).toFloat();private val height=(course.maxY-course.minY+margin*2).toFloat()
     val center=FloatArray((VisualTuning["roadSamples"].toInt()+1)*2)
     val samples=VisualTuning["roadSamples"].toInt()
+    val branchCenters=course.branches.map { branch -> FloatArray(258).also { values -> val p=TrackPoint();for(i in 0..128){branch.alternative.sample((branch.altStart+(branch.altEnd-branch.altStart)*i/128)*branch.alternative.lengthM,0.0,p);values[i*2]=p.x.toFloat();values[i*2+1]=p.y.toFloat()} } }
     private val projectionMatrix=Matrix4().setToOrtho2D(left,bottom,width,height)
     // Repeat-addressed road stays sharp at the following camera's density. The low-resolution
     // scenery target is only a static background/fallback, never the source of road texel density.
     private val liveRoad=buildMap<Texture,FloatArray> {
         val grouped=LinkedHashMap<Texture,ArrayList<Float>>()
         val p=TrackPoint()
-        fun quad(texture: Texture?,a: Double,b: Double,loA: Double,hiA: Double,loB: Double,hiB: Double) {
+        fun quad(texture: Texture?,a: Double,b: Double,loA: Double,hiA: Double,loB: Double,hiB: Double,road: Course=course,slot: String="asphalt") {
             if(texture==null)return
             val vertices=grouped.getOrPut(texture){ArrayList()}
-            fun vertex(s: Double,lane: Double){course.sample(s,lane,p);vertices.add(p.x.toFloat());vertices.add(p.y.toFloat());vertices.add(Color.WHITE_FLOAT_BITS);vertices.add(p.x.toFloat()/8f);vertices.add(-p.y.toFloat()/8f)}
+            fun vertex(s: Double,lane: Double){road.sample(s,lane,p);vertices.add(p.x.toFloat());vertices.add(p.y.toFloat());vertices.add(look?.tileColor(slot,art.hasRegionVariant(slot))?.toFloatBits()?:Color.WHITE_FLOAT_BITS);vertices.add(p.x.toFloat()/8f);vertices.add(-p.y.toFloat()/8f)}
             vertex(a,loA);vertex(b,loB);vertex(b,hiB);vertex(a,hiA)
         }
         for(i in 0 until samples) {
             val a=course.lengthM*i/samples;val b=course.lengthM*(i+1)/samples
             val key=when(course.surfaces[course.index(a)].id){"Gravel"->"tiles/gravel";"Ice"->"tiles/ice";"Oil"->"tiles/oil";else->"tiles/asphalt-worn"}
-            quad(art.tile(key),a,b,-course.widthAt(a),course.widthAt(a),-course.widthAt(b),course.widthAt(b))
+            quad(art.tile(key),a,b,-course.widthAt(a),course.widthAt(a),-course.widthAt(b),course.widthAt(b),slot=look?.slot(course.surfaces[course.index(a)].id)?:"asphalt")
+        }
+        for(branch in course.branches)for(i in 0 until 128) {
+            val road=branch.alternative;val a=road.lengthM*(branch.altStart+(branch.altEnd-branch.altStart)*i/128);val b=road.lengthM*(branch.altStart+(branch.altEnd-branch.altStart)*(i+1)/128)
+            val key=when(road.surfaces[road.index(a)].id){"Gravel"->"tiles/gravel";"Ice"->"tiles/ice";"Oil"->"tiles/oil";else->"tiles/asphalt-worn"}
+            quad(art.tile(key),a,b,-road.widthAt(a),road.widthAt(a),-road.widthAt(b),road.widthAt(b),road,look?.slot(road.surfaces[road.index(a)].id)?:"asphalt")
         }
         // Preserve compositing order: shortcuts are separate from the base surface batches.
         for((t,v) in grouped)put(t,v.toFloatArray())
@@ -88,22 +98,25 @@ class TrackScene(private val course: Course,private val canvas: SceneryCanvas,pr
     private val baking=sequence {
         val r=canvas.renderer;val point=TrackPoint();val q=TrackPoint();val rand=java.util.Random(VisualTuning["scenerySeed"].toLong())
         val desert=course.theme=="desert";val wet=course.theme=="wetland"
-        ScreenUtils.clear(if(desert).29f else .13f,if(desert).25f else .19f,if(wet).20f else .15f,1f)
-        val groundTile=art.tile(if(desert)"tiles/dirt" else if(course.theme=="alpine")"tiles/ice" else "tiles/grass")
+        if(look!=null)ScreenUtils.clear(look.color(look.groundSlot)) else ScreenUtils.clear(if(desert).29f else .13f,if(desert).25f else .19f,if(wet).20f else .15f,1f)
+        val groundTile=art.tile(if(look!=null)RegionMaterials.tileSlots.getValue(look.groundSlot) else if(desert)"tiles/dirt" else if(course.theme=="alpine")"tiles/ice" else "tiles/grass")
         // Opaque material art already supplies grain. Retain procedural specks only for fallback.
         if(groundTile==null)repeat(VisualTuning["groundGrainCount"].toInt()) {
             val x=left+rand.nextFloat()*width;val y=bottom+rand.nextFloat()*height;val v=rand.nextFloat()*.055f
-            r.setColor((if(desert).32f else .15f)+v,(if(desert).28f else .21f)+v,(if(wet).23f else .17f)+v,1f)
+            if(look!=null){val c=look.color(look.groundSlot);r.setColor(c.r+v,c.g+v,c.b+v,1f)} else r.setColor((if(desert).32f else .15f)+v,(if(desert).28f else .21f)+v,(if(wet).23f else .17f)+v,1f)
             r.rect(x,y,.25f+rand.nextFloat()*1.4f,.15f+rand.nextFloat()*.8f);yield(Unit)
         }
-        canvas.tile(groundTile,left,bottom,left+width,bottom,left+width,bottom+height,left,bottom+height)
+        canvas.tile(groundTile,left,bottom,left+width,bottom,left+width,bottom+height,left,bottom+height,look?.tileColor(look.groundSlot,art.hasRegionVariant(look.groundSlot))?:Color.WHITE)
+        // Distant silhouettes stay beyond every playable road/branch, baked into the existing target.
+        look?.backdrop(r,left,bottom+height-margin.toFloat()*.8f,width,margin.toFloat()*.7f)
         // Outer shoulders underneath a continuous asphalt ribbon.
-        suspend fun SequenceScope<Unit>.ribbon(extra: Double,layer: Int) {
-            for(i in 0 until samples) {
-                val s=course.lengthM*i/samples;val next=course.lengthM*(i+1)/samples
-                val w=course.widthAt(s)+extra;val wn=course.widthAt(next)+extra
-                val surf=course.surfaces[course.index(s)].id
-                when(layer) {
+        suspend fun SequenceScope<Unit>.ribbon(extra: Double,layer: Int,road: Course=course,from: Double=0.0,to: Double=1.0) {
+            val n=ceil(samples*(to-from)).toInt().coerceAtLeast(16)
+            for(i in 0 until n) {
+                val s=road.lengthM*(from+(to-from)*i/n);val next=road.lengthM*(from+(to-from)*(i+1)/n)
+                val w=road.widthAt(s)+extra;val wn=road.widthAt(next)+extra
+                val surf=road.surfaces[road.index(s)].id
+                if(look!=null)r.color=look.color(when(layer){0->"oil";1->"gravel";else->look.slot(surf)}) else when(layer) {
                     0 -> r.setColor(.095f,.12f,.12f,1f)
                     1 -> r.setColor(.33f,.34f,.29f,1f)
                     else -> when(surf) {
@@ -112,16 +125,17 @@ class TrackScene(private val course: Course,private val canvas: SceneryCanvas,pr
                         else -> r.setColor(.245f,.27f,.28f,1f)
                     }
                 }
-                course.sample(s,w,point);val ax=point.x.toFloat();val ay=point.y.toFloat()
-                course.sample(s,-w,point);val bx=point.x.toFloat();val by=point.y.toFloat()
-                course.sample(next,-wn,point);val cx=point.x.toFloat();val cy=point.y.toFloat()
-                course.sample(next,wn,point);val dx=point.x.toFloat();val dy=point.y.toFloat()
+                road.sample(s,w,point);val ax=point.x.toFloat();val ay=point.y.toFloat()
+                road.sample(s,-w,point);val bx=point.x.toFloat();val by=point.y.toFloat()
+                road.sample(next,-wn,point);val cx=point.x.toFloat();val cy=point.y.toFloat()
+                road.sample(next,wn,point);val dx=point.x.toFloat();val dy=point.y.toFloat()
                 r.triangle(ax,ay,bx,by,cx,cy);r.triangle(ax,ay,cx,cy,dx,dy)
                 yield(Unit)
             }
         }
         // Road material art is drawn live; do not bake hundreds of duplicate texture passes.
         ribbon(2.2,0);ribbon(1.1,1);ribbon(0.0,2)
+        for(branch in course.branches)ribbon(0.0,2,branch.alternative,branch.altStart,branch.altEnd)
         // Draw the actual authored shortcut bands: art never defines collision or changes the route.
         for(f in course.features)if(f.kind=="shortcut") {
             val count=ceil((f.end-f.start)*samples).toInt().coerceAtLeast(1)
@@ -131,8 +145,8 @@ class TrackScene(private val course: Course,private val canvas: SceneryCanvas,pr
                 course.sample(b,f.laneM-f.widthM*.5,point);val bx=point.x.toFloat();val by=point.y.toFloat()
                 course.sample(b,f.laneM+f.widthM*.5,point);val cx=point.x.toFloat();val cy=point.y.toFloat()
                 course.sample(a,f.laneM+f.widthM*.5,point);val dx=point.x.toFloat();val dy=point.y.toFloat()
-                r.setColor(.43f,.36f,.25f,1f);r.triangle(ax,ay,bx,by,cx,cy);r.triangle(ax,ay,cx,cy,dx,dy)
-                val white=Color.WHITE_FLOAT_BITS
+                if(look!=null)r.color=look.color("gravel") else r.setColor(.43f,.36f,.25f,1f);r.triangle(ax,ay,bx,by,cx,cy);r.triangle(ax,ay,cx,cy,dx,dy)
+                val white=look?.tileColor("gravel",art.hasRegionVariant("gravel"))?.toFloatBits()?:Color.WHITE_FLOAT_BITS
                 shortcuts.add(floatArrayOf(ax,ay,white,ax/8,-ay/8,bx,by,white,bx/8,-by/8,cx,cy,white,cx/8,-cy/8,dx,dy,white,dx/8,-dy/8))
                 // The cached live quad supplies material art; these triangles are its fallback.
                 yield(Unit)
@@ -142,7 +156,7 @@ class TrackScene(private val course: Course,private val canvas: SceneryCanvas,pr
         if(missingRoadArt)repeat(VisualTuning["roadGrainCount"].toInt()) {
             val s=rand.nextDouble()*course.lengthM;val lateral=(rand.nextDouble()*2-1)*(course.widthAt(s)-.7)
             course.sample(s,lateral,point);val v=.24f+rand.nextFloat()*.065f
-            when(course.surfaces[course.index(s)].id) {
+            if(look!=null){val c=look.color(look.slot(course.surfaces[course.index(s)].id));r.setColor(c.r+v*.12f,c.g+v*.12f,c.b+v*.12f,1f)} else when(course.surfaces[course.index(s)].id) {
                 "Gravel" -> r.setColor(v+.15f,v+.08f,v-.02f,1f)
                 "Ice" -> r.setColor(v+.09f,v+.21f,v+.24f,1f)
                 else -> r.setColor(v,v+.025f,v+.035f,1f)
@@ -151,12 +165,13 @@ class TrackScene(private val course: Course,private val canvas: SceneryCanvas,pr
         }
         for(i in 0..samples) {
             val s=course.lengthM*i/samples;course.sample(s,0.0,point);center[i*2]=point.x.toFloat();center[i*2+1]=point.y.toFloat()
-            if(i==samples)continue
+            if(i==samples || TrackJunctions.nearPassage(course,s) || TrackBranches.merging(course,s))continue
             val next=course.lengthM*(i+1)/samples
             for(side in -1..1 step 2) {
+                if(TrackBranches.boundaryCovered(course,s,side))continue
                 val w=course.widthAt(s);val wn=course.widthAt(next)
                 course.sample(s,side*(w-Movement.vergeWidthM),point);course.sample(next,side*(wn-Movement.vergeWidthM),q)
-                if(i%4<2)r.setColor(.87f,.80f,.65f,1f) else r.setColor(.63f,.20f,.13f,1f)
+                if(look!=null)r.color=look.color(if(i%4<2)"kerb" else "accent") else if(i%4<2)r.setColor(.87f,.80f,.65f,1f) else r.setColor(.63f,.20f,.13f,1f)
                 r.rectLine(point.x.toFloat(),point.y.toFloat(),q.x.toFloat(),q.y.toFloat(),Movement.kerbWidthM.toFloat())
                 mark(point.x.toFloat(),point.y.toFloat(),q.x.toFloat(),q.y.toFloat(),Movement.kerbWidthM.toFloat(),r.color.r,r.color.g,r.color.b)
                 course.sample(s,side*(w+.5),point);course.sample(next,side*(wn+.5),q)
@@ -167,6 +182,29 @@ class TrackScene(private val course: Course,private val canvas: SceneryCanvas,pr
             if(i%9<3) { course.sample(s,0.0,point);course.sample(next,0.0,q);r.setColor(.46f,.48f,.43f,1f);r.rectLine(point.x.toFloat(),point.y.toFloat(),q.x.toFloat(),q.y.toFloat(),.16f);mark(point.x.toFloat(),point.y.toFloat(),q.x.toFloat(),q.y.toFloat(),.16f,.46f,.48f,.43f) };yield(Unit)
         }
         yield(Unit)
+        // Draw the alternate passage's outer wall; omit only edges inside the main ribbon.
+        // This load-time query deliberately ignores route projection, which chooses the nearest occupied ribbon.
+        fun insideMain(px: Double,py: Double): Boolean {
+            var best=Double.POSITIVE_INFINITY;var width=0.0
+            for(i in 0 until course.count) {
+                val dx=course.x[i+1]-course.x[i];val dy=course.y[i+1]-course.y[i]
+                val t=(((px-course.x[i])*dx+(py-course.y[i])*dy)/(dx*dx+dy*dy)).coerceIn(0.0,1.0)
+                val x=px-course.x[i]-t*dx;val y=py-course.y[i]-t*dy;val d=x*x+y*y
+                if(d<best){best=d;width=course.width[i]+t*(course.width[i+1]-course.width[i])}
+            }
+            return best<(width-.2)*(width-.2)
+        }
+        for(branch in course.branches)for(i in 0 until 128) {
+            val road=branch.alternative;val a=road.lengthM*(branch.altStart+(branch.altEnd-branch.altStart)*i/128);val b=road.lengthM*(branch.altStart+(branch.altEnd-branch.altStart)*(i+1)/128)
+            for(side in listOf(-1,1)) {
+                road.sample(a,side*(road.widthAt(a)+.5),point);road.sample(b,side*(road.widthAt(b)+.5),q)
+                if(insideMain(point.x,point.y) || insideMain(q.x,q.y))continue
+                r.setColor(.5f,.55f,.52f,1f);r.rectLine(point.x.toFloat(),point.y.toFloat(),q.x.toFloat(),q.y.toFloat(),.32f)
+                mark(point.x.toFloat(),point.y.toFloat(),q.x.toFloat(),q.y.toFloat(),.32f,.5f,.55f,.52f)
+                if(i%3==0)canvas.sprite(art,if(course.boundaryMaterial==BoundaryMaterial.METAL)"barriers/metal-straight" else "barriers/concrete-straight",point.x.toFloat(),point.y.toFloat(),5f,1.8f,(point.heading*180/PI).toFloat())
+            }
+            yield(Unit)
+        }
         val start=course.startFraction*course.lengthM
         val w=course.widthAt(start)-Movement.vergeWidthM
         var lane=-w
@@ -196,6 +234,14 @@ class TrackScene(private val course: Course,private val canvas: SceneryCanvas,pr
             course.sample(f.start*course.lengthM-f.warningM,course.widthAt(f.start*course.lengthM)+5,point)
             canvas.sprite(art,f.landmark,point.x.toFloat(),point.y.toFloat(),8f,8f);yield(Unit)
         }
+        for(junction in course.junctions)for(fraction in listOf(junction.first,junction.second)) {
+            val s=fraction*course.lengthM-junction.warningM;course.sample(s,course.widthAt(s)+5,point)
+            canvas.sprite(art,TrackContent.themes.single { it.id==course.theme }.props.last(),point.x.toFloat(),point.y.toFloat(),8f,8f);yield(Unit)
+        }
+        if(course.raceProfile!=null)for(i in 0 until course.count)if(course.surfaces[i].id!="Asphalt" && course.surfaces[i]!==course.surfaces[(i+course.count-1)%course.count]) {
+            val s=course.arc[i]-45;course.sample(s,course.widthAt(s)+5,point)
+            canvas.sprite(art,TrackContent.themes.single { it.id==course.theme }.props.last(),point.x.toFloat(),point.y.toFloat(),8f,8f);yield(Unit)
+        }
         yield(Unit)
         // Recognizable infield landmarks, placed only well clear of the road.
         val projection=Projection()
@@ -203,14 +249,14 @@ class TrackScene(private val course: Course,private val canvas: SceneryCanvas,pr
             val x=left+rand.nextFloat()*width;val y=bottom+rand.nextFloat()*height
             course.project(x.toDouble(),y.toDouble(),projection)
             if(abs(projection.distance)>course.widthAt(projection.s)+12) {
-                val props=art.themeProps(course.theme)
+                val props=look?.definition?.props?:art.themeProps(course.theme).toList()
                 val key=props[it%props.size]
                 if(art.available(key)) {
                     canvas.sprite(art,key,x+4,y+2.5f,8f,6f)
                     if(key=="environment/league-hoarding" && signageFont!=null)
                         canvas.slogan(signageFont,EnvironmentArt.slogans[it%EnvironmentArt.slogans.size],x+4,y+2.5f,5.5f,1.6f)
                 }
-                else EnvironmentArt.fallback(r,course.theme,x,y)
+                else if(look!=null)look.prop(r,x,y) else EnvironmentArt.fallback(r,course.theme,x,y)
             }
             yield(Unit)
         }
@@ -250,10 +296,13 @@ class TrackScene(private val course: Course,private val canvas: SceneryCanvas,pr
         if(ready)Gdx.app.log("DeathRide","sceneryBake ${course.id} slicedFrames=$buildFrames totalCpuMs=$buildCpuMs maxSliceMs=$buildMaxMs")
     }
     fun draw(batch: SpriteBatch) {
+        val previous=batch.shader
+        if(look!=null){batch.shader=canvas.regionShader;val g=regionDefinition.grade;canvas.regionShader.setUniformf("u_regionGrade",g[0].toFloat(),g[1].toFloat(),g[2].toFloat())}
         batch.draw(region,left,bottom,width,height)
         for((texture,vertices) in liveRoad)batch.draw(texture,vertices,0,vertices.size)
         art.tile("tiles/gravel")?.let{t->for(v in shortcuts)batch.draw(t,v,0,v.size)}
         for(p in oils)art.draw(batch,"decals/oil",p[0],p[1],6f,3.6f,p[2])
+        if(look!=null)batch.shader=previous
     }
     fun drawRoadMarks(r: ShapeRenderer) {
         if(liveRoad.isEmpty())return
@@ -269,7 +318,7 @@ class TrackScene(private val course: Course,private val canvas: SceneryCanvas,pr
 /** Fixed-size visual history; motion effects are cosmetic and do not feed physics. */
 class MotionEffects {
     private val skids=FloatArray(VisualTuning["skidCapacity"].toInt()*6)
-    private val dust=FloatArray(VisualTuning["particleCapacity"].toInt()*5)
+    private val dust=FloatArray(RegionAtmosphere.VEHICLE_CAPACITY*5)
     private var skidNext=0;private var dustNext=0;private var skidClock=0.0;private var dustClock=0.0
     private val lastX=DoubleArray(6);private val lastY=DoubleArray(6)
     fun clear() { skids.fill(0f);dust.fill(0f);lastX.fill(Double.NaN);lastY.fill(Double.NaN) }

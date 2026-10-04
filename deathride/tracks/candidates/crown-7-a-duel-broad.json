@@ -1,0 +1,70 @@
+{
+  "candidate": "crown-7-a",
+  "fixture": "512 shared seeds per cell; three lead-skill proxies against a fixed Club boss; two equipment/grid rotations; legal 8000-credit garages. Separate from the both-Pro original regression fixture.",
+  "results": {
+    "before": [
+      {
+        "skill": 0,
+        "trials": 1024,
+        "rigWins": 150,
+        "mutualWrecks": 0,
+        "timeouts": 101,
+        "early": 0,
+        "oneShots": 0,
+        "medianSeconds": 287.4000000000673
+      },
+      {
+        "skill": 1,
+        "trials": 1024,
+        "rigWins": 187,
+        "mutualWrecks": 0,
+        "timeouts": 78,
+        "early": 0,
+        "oneShots": 0,
+        "medianSeconds": 266.65000000008615
+      },
+      {
+        "skill": 2,
+        "trials": 1024,
+        "rigWins": 151,
+        "mutualWrecks": 0,
+        "timeouts": 95,
+        "early": 0,
+        "oneShots": 0,
+        "medianSeconds": 259.7083333334258
+      }
+    ],
+    "after": [
+      {
+        "skill": 0,
+        "trials": 1024,
+        "rigWins": 535,
+        "mutualWrecks": 2,
+        "timeouts": 0,
+        "early": 0,
+        "oneShots": 0,
+        "medianSeconds": 142.37500000000546
+      },
+      {
+        "skill": 1,
+        "trials": 1024,
+        "rigWins": 451,
+        "mutualWrecks": 0,
+        "timeouts": 0,
+        "early": 0,
+        "oneShots": 0,
+        "medianSeconds": 126.23333333332745
+      },
+      {
+        "skill": 2,
+        "trials": 1024,
+        "rigWins": 335,
+        "mutualWrecks": 0,
+        "timeouts": 0,
+        "early": 0,
+        "oneShots": 0,
+        "medianSeconds": 118.8916666666612
+      }
+    ]
+  }
+}

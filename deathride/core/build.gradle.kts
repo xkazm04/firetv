@@ -78,3 +78,73 @@ tasks.register<JavaExec>("abilityReport") {
     args(providers.gradleProperty("abilitySamples").getOrElse("2000"),providers.gradleProperty("abilityBaselineSamples").getOrElse("200"),providers.gradleProperty("abilityPart").getOrElse("roster"),providers.gradleProperty("abilityTag").getOrElse("accepted"),providers.gradleProperty("abilityTier").getOrElse("all"))
     args(providers.gradleProperty("abilitySeedNamespace").getOrElse("abilities"))
 }
+
+tasks.register<JavaExec>("trackQualityReport") {
+    group="verification"
+    description="T1 geometry and seeded six-car combat track instruments; never writes gameplay data"
+    dependsOn(tasks.testClasses)
+    classpath=sourceSets.test.get().runtimeClasspath
+    mainClass.set("dev.deathride.core.TrackQualityReportKt")
+    maxHeapSize="2g"
+    systemProperty("tracksRoot",rootProject.projectDir.absolutePath)
+    args(providers.gradleProperty("trackSeeds").getOrElse("12"),providers.gradleProperty("trackOutput").getOrElse(rootProject.file("tracks/atlas").absolutePath))
+}
+
+tasks.register<JavaExec>("trackLab") {
+    group="application"
+    description="Desktop Track Lab using the actual core spline, linter and AI; browser UI on localhost"
+    dependsOn(tasks.testClasses)
+    classpath=sourceSets.test.get().runtimeClasspath
+    mainClass.set("dev.deathride.core.TrackLabServerKt")
+    maxHeapSize="1g"
+    systemProperty("tracksRoot",rootProject.projectDir.absolutePath)
+    args(providers.gradleProperty("trackLabPort").getOrElse("8794"))
+}
+
+tasks.register<JavaExec>("trackShapeReport") {
+    group="verification"
+    dependsOn(tasks.testClasses)
+    classpath=sourceSets.test.get().runtimeClasspath
+    mainClass.set("dev.deathride.core.TrackShapeReportKt")
+    maxHeapSize="2g"
+    systemProperty("tracksRoot",rootProject.projectDir.absolutePath)
+}
+
+tasks.register<JavaExec>("trackComposerReport") {
+    group="verification"
+    dependsOn(tasks.testClasses)
+    classpath=sourceSets.test.get().runtimeClasspath
+    mainClass.set("dev.deathride.core.TrackComposerReportKt")
+    maxHeapSize="2g"
+    systemProperty("tracksRoot",rootProject.projectDir.absolutePath)
+    providers.gradleProperty("trackRecipe").orNull?.let { args(it) }
+}
+
+tasks.register<JavaExec>("trackCandidateAuthor") {
+    group="verification"
+    dependsOn(tasks.testClasses)
+    classpath=sourceSets.test.get().runtimeClasspath
+    mainClass.set("dev.deathride.core.TrackCandidateAuthorKt")
+    maxHeapSize="3g"
+    systemProperty("tracksRoot",rootProject.projectDir.absolutePath)
+    providers.gradleProperty("candidateLimit").orNull?.let { args(it) }
+}
+
+tasks.register<JavaExec>("trackCandidateProof") {
+    group="verification"
+    dependsOn(tasks.testClasses)
+    classpath=sourceSets.test.get().runtimeClasspath
+    mainClass.set("dev.deathride.core.TrackCandidateProofKt")
+    maxHeapSize="3g"
+    systemProperty("tracksRoot",rootProject.projectDir.absolutePath)
+    args(providers.gradleProperty("candidateSeeds").getOrElse("12"),providers.gradleProperty("candidateFilter").getOrElse(""),providers.gradleProperty("candidateThreads").getOrElse("4"))
+}
+
+tasks.register<JavaExec>("trackCandidatePack") {
+    group="verification"
+    dependsOn(tasks.testClasses)
+    classpath=sourceSets.test.get().runtimeClasspath
+    mainClass.set("dev.deathride.core.TrackCandidatePackKt")
+    maxHeapSize="2g"
+    systemProperty("tracksRoot",rootProject.projectDir.absolutePath)
+}

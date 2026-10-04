@@ -25,6 +25,7 @@ class Rival(val values: Map<String,String>) {
 }
 class Cup(row: Map<String,String>) {
     val id=row.getValue("id");val name=row.getValue("name")
+    val region=Regions.forDivision(id)
     val targets=intArrayOf(0,row.number("bronzePoints").toInt(),row.number("silverPoints").toInt(),row.number("goldPoints").toInt())
     val bonuses=intArrayOf(0,row.number("bronzeBonus").toInt(),row.number("silverBonus").toInt(),row.number("goldBonus").toInt())
     init { require((1..3).all{targets[it]>targets[it-1] && bonuses[it]>bonuses[it-1]}) }
@@ -33,6 +34,7 @@ class Cup(row: Map<String,String>) {
 class CareerEvent(row: Map<String,String>) {
     val id=row.getValue("id");val name=row.getValue("name")
     val cupIndex=Career.cups.indexOfFirst{it.id==row.getValue("cup")};val courseIndex=Courses.all.indexOfFirst{it.id==row.getValue("course")}
+    val region=Career.cups[cupIndex].region
     val story=AshStory.cards.getValue(row.getValue("story"));val boss=row.number("boss")!=0.0;val duel=row.number("duel")!=0.0
     val laps=row.number("laps").toInt()
     val phase=row.getValue("phase")
@@ -40,7 +42,8 @@ class CareerEvent(row: Map<String,String>) {
     val type=EventType.valueOf(row.getValue("type"))
     val elimination get()=type==EventType.ELIMINATION
     init {
-        require(playerTier in cupIndex..min(4,cupIndex+1) && cupIndex>=0 && courseIndex>=0 && (if(elimination)duel && laps==0 else laps in 3..30))
+        require(playerTier in cupIndex..min(4,cupIndex+1) && cupIndex>=0 && courseIndex>=0 && (if(elimination)duel && laps==0 else laps in 2..6))
+        require(laps==RacePacing.laps(id,Courses.all[courseIndex].id,playerTier)){"$id: laps must derive from the measured course and target time"}
         require(phase in setOf("build-up","pressure","qualifier","boss","finale"))
         require((phase=="finale")==elimination && (phase in setOf("boss","finale"))==boss)
     }
@@ -131,7 +134,7 @@ object Career {
         val story=DeathDuel.story(p).json
         val roster=if(p.withRivals)RivalEconomy.json(p) else "[]"
         val field=if(p.withRivals)RivalEconomy.fieldRating(p) else 0.0
-        return "{\"campaign\":${Campaign.json(p)},\"phase\":\"${e.phase}\",\"objective\":\"${objective(p.careerRound)}\",\"eventType\":\"${e.type}\",\"laps\":${e.laps},\"story\":$story,\"rivals\":$roster,\"fieldPowerRating\":$field,\"duel\":${e.duel},\"maximumPlayerTier\":${e.playerTier},\"ownedCars\":[${p.owned.indices.filter{p.owned[it]}.joinToString(","){"\"${CarCatalog.all[it].id}\""}}],\"round\":${p.careerRound+1},\"roundCount\":${events.size},\"cleared\":${p.careerCleared},\"season\":${p.careerSeasons+1},\"event\":\"${e.name}\",\"course\":${course.json},\"cup\":\"${cup.name}\",\"points\":${p.careerPoints},\"bestTrophy\":\"${gradeName(p.careerTrophies[e.cupIndex])}\",\"targets\":[${cup.targets.drop(1).joinToString(",")}],\"bonuses\":[${cup.bonuses.drop(1).joinToString(",")}],\"trophies\":[${p.careerTrophies.joinToString(",")}],\"difficulty\":${difficulties[p.careerDifficulty].json},\"unlocks\":$locks,\"partUnlocks\":$parts,\"message\":\"$message\"}"
+        return "{\"campaign\":${Campaign.json(p)},\"phase\":\"${e.phase}\",\"objective\":\"${objective(p.careerRound)}\",\"eventType\":\"${e.type}\",\"laps\":${e.laps},\"story\":$story,\"rivals\":$roster,\"fieldPowerRating\":$field,\"duel\":${e.duel},\"maximumPlayerTier\":${e.playerTier},\"ownedCars\":[${p.owned.indices.filter{p.owned[it]}.joinToString(","){"\"${CarCatalog.all[it].id}\""}}],\"round\":${p.careerRound+1},\"roundCount\":${events.size},\"cleared\":${p.careerCleared},\"season\":${p.careerSeasons+1},\"event\":\"${e.name}\",\"course\":${course.json(e.region)},\"cup\":\"${cup.name}\",\"region\":\"${e.region.id}\",\"regionName\":\"${e.region.name}\",\"points\":${p.careerPoints},\"bestTrophy\":\"${gradeName(p.careerTrophies[e.cupIndex])}\",\"targets\":[${cup.targets.drop(1).joinToString(",")}],\"bonuses\":[${cup.bonuses.drop(1).joinToString(",")}],\"trophies\":[${p.careerTrophies.joinToString(",")}],\"difficulty\":${difficulties[p.careerDifficulty].json},\"unlocks\":$locks,\"partUnlocks\":$parts,\"message\":\"$message\"}"
     }
     fun objective(round: Int)=when {
         events[round].elimination->"Last car running wins. Free supplied rig on every retry."

@@ -152,12 +152,15 @@ class Abilities(private val world: World,var enabled: Boolean) {
     }
     /** Called on the ordinary driver's reaction cadence, never from a renderer or every-frame perfect aim. */
     fun think(c: Car) {
+        world.ai.think(c)
         c.aiInput.ability=0.0
         val d=c.ability.definition?:return
         if(!enabled || !world.combat.canAct(c.id) || c.ability.committed || c.ability.cooldownSeconds>0 || c.ability.energy<d.energyCost)return
+        if(!world.ai.abilityCadence(c))return
+        val offensive=d.kind==AbilityKind.CHARGE || d.kind==AbilityKind.LANCE || d.kind==AbilityKind.HARPOON || d.kind==AbilityKind.SPIKES || d.kind==AbilityKind.PATCH
         val skill=c.aiSkill?:AiSkills.legacy[(c.id+world.seed).mod(AiSkills.legacy.size)]
         val look=(c.spec.circleOffsetM+c.spec.circleRadiusM)*2*TrackRules["aiLookCarLengths"]+c.speedMps*skill.lookAheadSeconds
-        world.track.project(c.x,c.y,projection);world.track.sample(projection.s+look,0.0,point)
+        world.track.project(c.x,c.y,projection,world.track.startM+c.lap.progressM,c.trackRoute);world.track.sample(projection.s+look,0.0,point,c.trackRoute)
         val straight=abs(point.curvature)<=d.aiMaxCurvature
         var front=false;var rear=false;var near=false
         val cx=cos(c.heading);val cy=sin(c.heading)
@@ -165,6 +168,7 @@ class Abilities(private val world: World,var enabled: Boolean) {
             val dx=o.x-c.x;val dy=o.y-c.y
             val along=dx*cx+dy*cy;val side=abs(-dx*cy+dy*cx)
             if(dx*dx+dy*dy>d.aiRangeM*d.aiRangeM || world.combat.roadFraction(c.x,c.y,o.x,o.y,c.spec.circleRadiusM)<1.0)continue
+            if(offensive && !world.ai.offensiveAbilityAllowed(c,o.id))continue
             near=true
             if(side<o.spec.circleRadiusM+(if(d.ray)d.radiusM else c.spec.circleRadiusM)) {
                 if(along>0)front=true else rear=true

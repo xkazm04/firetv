@@ -109,7 +109,8 @@ class CombatTest {
     }
     @Test fun seededCombatResolvesAllCoursesAndReplayMatches() {
         val report=StringBuilder("track,seed,seconds,finished,wrecks,shots,kills,oneShots,rivetKills,hammerKills,mineKills,ramKills,wallKills,firstWreckSeconds,hash\n")
-        for(course in Courses.all)repeat(4) { seed ->
+        // Preserve the legacy mixed-tier 180 s regression; owner courses use their actual tier/profile in candidate proof.
+        for(course in Courses.all.filter{it.raceProfile==null})repeat(4) { seed ->
             fun world()=World(seed,track=Track(course=course),combatEnabled=true).also { w->for(c in w.cars)CarCatalog.apply(c,c.id%5);w.reset() }
             val a=world();val b=world()
             while(a.resolved<6 && a.seconds<TrackRules["maxRaceSeconds"]) { a.step(neutral);b.step(neutral) }

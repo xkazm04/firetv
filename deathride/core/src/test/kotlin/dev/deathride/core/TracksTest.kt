@@ -57,18 +57,19 @@ class TracksTest {
         for(course in Courses.all) {
             val t=Track(course=course);val lap=LapCounter(t.lengthM,t.startM,course.checkpoints)
             lap.reset(t.startM-1)
-            for(i in 0..(t.lengthM*4).toInt()) { val s=t.startM-1+i*.5;t.sample(s,2.0,p);t.project(p.x,p.y,projection);assertEquals(2.0,projection.distance,.2);lap.update(projection.s) }
+            for(i in 0..(t.lengthM*4).toInt()) { val s=t.startM-1+i*.5;t.sample(s,2.0,p);t.project(p.x,p.y,projection,s);assertEquals(2.0,projection.distance,.2);lap.update(projection.s) }
             assertEquals(1,lap.laps,course.id)
         }
     }
     @Test fun sixCarsFinishEveryCourseAndReplayDeterministically() {
-        val csv=StringBuilder("track,seed,finished,seconds,contactSteps,hash\n");val input=Array(6){InputFrame()}
-        for(c in Courses.all)repeat(4) { seed ->
+        val csv=StringBuilder("track,seed,finished,seconds,contactSteps,hash,laps\n");val input=Array(6){InputFrame()}
+        // Legacy mixed-class control; installed courses are measured at their declared tier and full duration.
+        for(c in Courses.all.filter{it.raceProfile==null})repeat(4) { seed ->
             val a=World(seed,track=Track(course=c));val b=World(seed,track=Track(course=c))
             for(w in arrayOf(a,b)) { for(car in w.cars)CarCatalog.apply(car,car.id%5);w.reset() }
             var contacts=0
             while(a.finished<6 && a.seconds<TrackRules["maxRaceSeconds"]) { a.step(input);b.step(input);if(a.ramClosingMps.any { it>0 })contacts++ }
-            csv.append("${c.id},$seed,${a.finished},${a.seconds},$contacts,${a.stateHash()}\n")
+            csv.append("${c.id},$seed,${a.finished},${a.seconds},$contacts,${a.stateHash()},${a.raceLaps}\n")
             assertTrue(contacts>0,"${c.id}: expected physical competition between cars")
             assertEquals(a.stateHash(),b.stateHash());assertEquals(6,a.finished,"${c.id}: ${a.cars.map{it.lap.laps}}")
         }

@@ -1,0 +1,507 @@
+window.REGION_DATA = {
+  "schema": 1,
+  "authority": "core/src/main/resources/data/region.csv",
+  "authoritySha256": "cac5b3e363f99095d97c993bc13c78cdc203e7a241244260fdeeee8094bbfdff",
+  "regions": [
+    {
+      "id": "scrap",
+      "name": "Ash Yards",
+      "division": "scrap",
+      "defaultCourses": [
+        "foundry",
+        "switchback",
+        "slagway",
+        "scree",
+        "sluice",
+        "slagway-final",
+        "scrap-1-c",
+        "scrap-2-a",
+        "scrap-2-c",
+        "scrap-3-c",
+        "scrap-4-b",
+        "scrap-4-c",
+        "scrap-5-a",
+        "scrap-5-c",
+        "scrap-6-b",
+        "scrap-7-f"
+      ],
+      "defaultTheme": "industrial",
+      "accent": "#B4A044",
+      "asphalt": "#39302A",
+      "dirt": "#65513D",
+      "gravel": "#756047",
+      "sand": "#8C704B",
+      "salt": "#ACA080",
+      "ice": "#8C8879",
+      "snow": "#B8AE91",
+      "oil": "#171513",
+      "kerb": "#A69A78",
+      "groundVariants": "asphalt:g1-scrap-asphalt-tint-v1;dirt:g1-scrap-dirt-tint-v1;gravel:g1-scrap-gravel-tint-v1",
+      "grade": [
+        0.98,
+        0.95,
+        0.9
+      ],
+      "vignette": 0.06,
+      "fog": 0.04,
+      "weather": [
+        {
+          "kind": "ash",
+          "cap": 12,
+          "rate": 3.0,
+          "life": 4.0,
+          "pixels": 12.0,
+          "alpha": 0.55
+        }
+      ],
+      "weatherCap": 12,
+      "propBias": "environment/scrap-pile:3;environment/oil-drums:1;environment/rust-pylon:1",
+      "backdrop": "sorting-sheds",
+      "ambience": [
+        "region.scrap.wind-wire",
+        "region.scrap.sheet-creak",
+        "region.scrap.sorting-clank"
+      ],
+      "boss": "Rook",
+      "climate": "Dry soot fall; cool overcast; brittle dust and sorted salvage.",
+      "plot": "Burned vehicle sorting yards outside the workshops. Marrow owns the debt; Rook controls the gate and becomes the first ally after defeat. Scrap 1's ash on the key and scrap 6's numbers under soot are literal environmental clues: useful metal is sorted; tagged only later with game typography; and hauled toward the foundry. The Mechanic's improvised garage belongs here.",
+      "palette": {
+        "accent": "#B4A044",
+        "asphalt": "#39302A",
+        "dirt": "#65513D",
+        "gravel": "#756047",
+        "sand": "#8C704B",
+        "salt": "#ACA080",
+        "ice": "#8C8879",
+        "snow": "#B8AE91",
+        "oil": "#171513",
+        "kerb": "#A69A78"
+      },
+      "variants": {
+        "asphalt": "g1-scrap-asphalt-tint-v1",
+        "dirt": "g1-scrap-dirt-tint-v1",
+        "gravel": "g1-scrap-gravel-tint-v1"
+      },
+      "props": [
+        {
+          "key": "environment/scrap-pile",
+          "weight": 3
+        },
+        {
+          "key": "environment/oil-drums",
+          "weight": 1
+        },
+        {
+          "key": "environment/rust-pylon",
+          "weight": 1
+        }
+      ]
+    },
+    {
+      "id": "foundry",
+      "name": "Cinder Row",
+      "division": "foundry",
+      "defaultCourses": [
+        "crucible",
+        "railcut",
+        "ballast",
+        "reedcut",
+        "ridge",
+        "foundry-final",
+        "foundry-1-c",
+        "foundry-2-b",
+        "foundry-3-b",
+        "foundry-4-c",
+        "foundry-5-a",
+        "foundry-6-b",
+        "foundry-7-b"
+      ],
+      "defaultTheme": "quarry",
+      "accent": "#B4512D",
+      "asphalt": "#302925",
+      "dirt": "#624536",
+      "gravel": "#76523C",
+      "sand": "#93643E",
+      "salt": "#B9A57C",
+      "ice": "#8C8270",
+      "snow": "#B8AC8C",
+      "oil": "#171513",
+      "kerb": "#AB7D45",
+      "groundVariants": "asphalt:g1-foundry-asphalt-tint-v1;dirt:g1-foundry-dirt-tint-v1;gravel:g1-foundry-gravel-tint-v1",
+      "grade": [
+        1.02,
+        0.96,
+        0.9
+      ],
+      "vignette": 0.07,
+      "fog": 0.03,
+      "weather": [
+        {
+          "kind": "embers",
+          "cap": 10,
+          "rate": 4.0,
+          "life": 2.5,
+          "pixels": 10.0,
+          "alpha": 0.55
+        }
+      ],
+      "weatherCap": 10,
+      "propBias": "environment/oil-drums:1;environment/rust-pylon:1",
+      "backdrop": "cast-halls",
+      "ambience": [
+        "region.foundry.furnace-breath",
+        "region.foundry.cooling-ticks",
+        "region.foundry.press-cycle"
+      ],
+      "boss": "Ox",
+      "climate": "Dry furnace dust; cold clinker and intermittent ember specks.",
+      "plot": "The league's working foundry belt melts the salvage into its own fleet. Ox holds the crew account and duplicate receipts: foundry 7's victory exposes stolen payments and stops the diversion. Infrastructure reads as a chain of material handling; not random factory rubble.",
+      "palette": {
+        "accent": "#B4512D",
+        "asphalt": "#302925",
+        "dirt": "#624536",
+        "gravel": "#76523C",
+        "sand": "#93643E",
+        "salt": "#B9A57C",
+        "ice": "#8C8270",
+        "snow": "#B8AC8C",
+        "oil": "#171513",
+        "kerb": "#AB7D45"
+      },
+      "variants": {
+        "asphalt": "g1-foundry-asphalt-tint-v1",
+        "dirt": "g1-foundry-dirt-tint-v1",
+        "gravel": "g1-foundry-gravel-tint-v1"
+      },
+      "props": [
+        {
+          "key": "environment/oil-drums",
+          "weight": 1
+        },
+        {
+          "key": "environment/rust-pylon",
+          "weight": 1
+        }
+      ]
+    },
+    {
+      "id": "salt",
+      "name": "Salt Cut",
+      "division": "salt",
+      "defaultCourses": [
+        "redline",
+        "cutface",
+        "saltline",
+        "dustwake",
+        "mirage",
+        "mirage-final",
+        "salt-1-b",
+        "salt-2-c",
+        "salt-3-a",
+        "salt-4-c",
+        "salt-5-a",
+        "salt-6-a",
+        "salt-7-b"
+      ],
+      "defaultTheme": "desert",
+      "accent": "#A37738",
+      "asphalt": "#655C4B",
+      "dirt": "#987546",
+      "gravel": "#AA8F60",
+      "sand": "#BEA271",
+      "salt": "#CFC29C",
+      "ice": "#A79F88",
+      "snow": "#CFC6AA",
+      "oil": "#2A2520",
+      "kerb": "#DDD0A6",
+      "groundVariants": "asphalt:g1-salt-asphalt-tint-v1;dirt:g1-salt-dirt-tint-v1;gravel:g1-salt-gravel-tint-v1",
+      "grade": [
+        1.02,
+        1.0,
+        0.94
+      ],
+      "vignette": 0.03,
+      "fog": 0.04,
+      "weather": [
+        {
+          "kind": "salt-glints",
+          "cap": 8,
+          "rate": 4.0,
+          "life": 2.0,
+          "pixels": 6.0,
+          "alpha": 0.55
+        },
+        {
+          "kind": "dust",
+          "cap": 4,
+          "rate": 1.0,
+          "life": 4.0,
+          "pixels": 64.0,
+          "alpha": 0.13
+        }
+      ],
+      "weatherCap": 12,
+      "propBias": "environment/rust-pylon:1;environment/oil-drums:1",
+      "backdrop": "mineral-terraces",
+      "ambience": [
+        "region.salt.dry-gust",
+        "region.salt.sieve-rattle",
+        "region.salt.distant-hauler"
+      ],
+      "boss": "Vex",
+      "climate": "Desiccating wind; white mineral flats meet ochre extraction terraces.",
+      "plot": "A drained mineral basin whose white flats run into ochre extraction cuts. Marrow owns the haul contracts; Vex knows the shipping routes and becomes an ally. Salt 3's crate switch; salt 5's missing lap and Relay at dusk fit a place where loads and records can disappear. Quarry and salt are two faces of the same act.",
+      "palette": {
+        "accent": "#A37738",
+        "asphalt": "#655C4B",
+        "dirt": "#987546",
+        "gravel": "#AA8F60",
+        "sand": "#BEA271",
+        "salt": "#CFC29C",
+        "ice": "#A79F88",
+        "snow": "#CFC6AA",
+        "oil": "#2A2520",
+        "kerb": "#DDD0A6"
+      },
+      "variants": {
+        "asphalt": "g1-salt-asphalt-tint-v1",
+        "dirt": "g1-salt-dirt-tint-v1",
+        "gravel": "g1-salt-gravel-tint-v1"
+      },
+      "props": [
+        {
+          "key": "environment/rust-pylon",
+          "weight": 1
+        },
+        {
+          "key": "environment/oil-drums",
+          "weight": 1
+        }
+      ]
+    },
+    {
+      "id": "switchback",
+      "name": "Thin Air",
+      "division": "switchback",
+      "defaultCourses": [
+        "runoff",
+        "spillway",
+        "frostline",
+        "highpass",
+        "summit",
+        "frostline-final",
+        "switchback-1-a",
+        "switchback-2-c",
+        "switchback-3-c",
+        "switchback-5-a",
+        "switchback-6-c",
+        "switchback-7-c"
+      ],
+      "defaultTheme": "alpine",
+      "accent": "#C3B99C",
+      "asphalt": "#514D43",
+      "dirt": "#716957",
+      "gravel": "#8E8570",
+      "sand": "#A3987C",
+      "salt": "#BDB294",
+      "ice": "#A9A58F",
+      "snow": "#D4CCAE",
+      "oil": "#25231F",
+      "kerb": "#C3B99C",
+      "groundVariants": "asphalt:g1-switchback-asphalt-tint-v1;dirt:g1-switchback-dirt-tint-v1;gravel:g1-switchback-gravel-tint-v1;ice:g1-switchback-ice-tint-v1",
+      "grade": [
+        0.96,
+        0.97,
+        0.94
+      ],
+      "vignette": 0.05,
+      "fog": 0.06,
+      "weather": [
+        {
+          "kind": "sleet",
+          "cap": 14,
+          "rate": 7.0,
+          "life": 2.0,
+          "pixels": 14.0,
+          "alpha": 0.55
+        },
+        {
+          "kind": "snow",
+          "cap": 6,
+          "rate": 2.0,
+          "life": 3.0,
+          "pixels": 10.0,
+          "alpha": 0.55
+        }
+      ],
+      "weatherCap": 20,
+      "propBias": "environment/rust-pylon:1;environment/oil-drums:1",
+      "backdrop": "bare-ridges",
+      "ambience": [
+        "region.switchback.crosswind",
+        "region.switchback.cable-hum",
+        "region.switchback.grit-ticks"
+      ],
+      "boss": "Mica",
+      "climate": "Exposed sleet and dirty snow pockets among scoured grey-bone rock.",
+      "plot": "The only service road above the basin. Mica controls the passage; the books and a voice on the line reveal the sibling's survival while the coalition refuses a private deal. The road is held together by anchors; grit stores and patched utilities. Mica joins after the act's win.",
+      "palette": {
+        "accent": "#C3B99C",
+        "asphalt": "#514D43",
+        "dirt": "#716957",
+        "gravel": "#8E8570",
+        "sand": "#A3987C",
+        "salt": "#BDB294",
+        "ice": "#A9A58F",
+        "snow": "#D4CCAE",
+        "oil": "#25231F",
+        "kerb": "#C3B99C"
+      },
+      "variants": {
+        "asphalt": "g1-switchback-asphalt-tint-v1",
+        "dirt": "g1-switchback-dirt-tint-v1",
+        "gravel": "g1-switchback-gravel-tint-v1",
+        "ice": "g1-switchback-ice-tint-v1"
+      },
+      "props": [
+        {
+          "key": "environment/rust-pylon",
+          "weight": 1
+        },
+        {
+          "key": "environment/oil-drums",
+          "weight": 1
+        }
+      ]
+    },
+    {
+      "id": "crown",
+      "name": "The Crown",
+      "division": "crown",
+      "defaultCourses": [
+        "furnace",
+        "crown",
+        "haulroad",
+        "sunspike",
+        "lowwater",
+        "crown-1-a",
+        "crown-2-a",
+        "crown-3-a",
+        "crown-4-a",
+        "crown-5-c",
+        "crown-6-a",
+        "crown-7-a"
+      ],
+      "defaultTheme": "wetland",
+      "accent": "#6C2427",
+      "asphalt": "#302B27",
+      "dirt": "#594936",
+      "gravel": "#75654C",
+      "sand": "#92774F",
+      "salt": "#B6A884",
+      "ice": "#938B78",
+      "snow": "#C2B89A",
+      "oil": "#171513",
+      "kerb": "#6C2427",
+      "groundVariants": "asphalt:g1-crown-asphalt-tint-v1;dirt:g1-crown-dirt-tint-v1;gravel:g1-crown-gravel-tint-v1",
+      "grade": [
+        0.96,
+        0.93,
+        0.9
+      ],
+      "vignette": 0.08,
+      "fog": 0.1,
+      "weather": [
+        {
+          "kind": "fog",
+          "cap": 3,
+          "rate": 0.5,
+          "life": 6.0,
+          "pixels": 128.0,
+          "alpha": 0.1
+        }
+      ],
+      "weatherCap": 3,
+      "propBias": "environment/league-gantry:3;environment/oil-drums:1",
+      "backdrop": "empty-stands",
+      "ambience": [
+        "region.crown.empty-stands",
+        "region.crown.fixture-rattle",
+        "region.crown.vent-drone"
+      ],
+      "boss": "Marrow",
+      "climate": "Hollow decayed spectacle; stagnant low mist and empty grandstands.",
+      "plot": "The league's decayed speedway and maintenance compound. Grandstands; floodlight frames and blank display machinery celebrate a system whose accounts are now public. The final seized-car beat and the Mechanic's supplied rig belong here. Rook; Ox; Vex and Mica are allies; Marrow is defeated; never recruited.",
+      "palette": {
+        "accent": "#6C2427",
+        "asphalt": "#302B27",
+        "dirt": "#594936",
+        "gravel": "#75654C",
+        "sand": "#92774F",
+        "salt": "#B6A884",
+        "ice": "#938B78",
+        "snow": "#C2B89A",
+        "oil": "#171513",
+        "kerb": "#6C2427"
+      },
+      "variants": {
+        "asphalt": "g1-crown-asphalt-tint-v1",
+        "dirt": "g1-crown-dirt-tint-v1",
+        "gravel": "g1-crown-gravel-tint-v1"
+      },
+      "props": [
+        {
+          "key": "environment/league-gantry",
+          "weight": 3
+        },
+        {
+          "key": "environment/oil-drums",
+          "weight": 1
+        }
+      ]
+    }
+  ],
+  "candidateRegions": {
+    "scrap-1-c": "scrap",
+    "scrap-2-a": "scrap",
+    "scrap-2-c": "scrap",
+    "salt-1-b": "salt",
+    "salt-5-a": "salt",
+    "switchback-1-a": "switchback",
+    "switchback-2-c": "switchback",
+    "scrap-3-c": "scrap",
+    "scrap-4-b": "scrap",
+    "scrap-4-c": "scrap",
+    "scrap-5-a": "scrap",
+    "scrap-5-c": "scrap",
+    "scrap-6-b": "scrap",
+    "foundry-1-c": "foundry",
+    "foundry-3-b": "foundry",
+    "foundry-5-a": "foundry",
+    "foundry-6-b": "foundry",
+    "foundry-7-b": "foundry",
+    "salt-6-a": "salt",
+    "salt-7-b": "salt",
+    "switchback-5-a": "switchback",
+    "switchback-6-c": "switchback",
+    "switchback-7-c": "switchback",
+    "crown-1-a": "crown",
+    "crown-2-a": "crown",
+    "crown-3-a": "crown",
+    "crown-4-a": "crown",
+    "foundry-4-c": "foundry",
+    "salt-4-c": "salt",
+    "switchback-3-c": "switchback",
+    "crown-5-c": "crown",
+    "crown-6-a": "crown",
+    "crown-7-a": "crown",
+    "foundry-2-b": "foundry",
+    "salt-2-c": "salt",
+    "salt-3-a": "salt",
+    "switchback-4-runoff": "switchback",
+    "scrap-7-d": "scrap",
+    "scrap-7-e": "scrap",
+    "scrap-7-f": "scrap"
+  },
+  "truth": "Presentation candidates; geometry and owner track choices unchanged. Weather never affects physics."
+};
