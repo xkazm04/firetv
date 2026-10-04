@@ -1,0 +1,200 @@
+{
+  "schema": 1,
+  "scope": "Static Z4 owner review; no inferred choices",
+  "hashMode": "SHA-256; text CRLF normalized to LF; gzip bytes unchanged",
+  "decisions": [
+    {
+      "id": "car-Needle",
+      "label": "Needle temperament",
+      "evidence": "ai-temperaments.csv / Needle"
+    },
+    {
+      "id": "car-Line",
+      "label": "Line temperament",
+      "evidence": "ai-temperaments.csv / Line"
+    },
+    {
+      "id": "car-Bastion",
+      "label": "Bastion temperament",
+      "evidence": "ai-temperaments.csv / Bastion"
+    },
+    {
+      "id": "car-Comet",
+      "label": "Comet temperament",
+      "evidence": "ai-temperaments.csv / Comet"
+    },
+    {
+      "id": "car-Trail",
+      "label": "Trail temperament",
+      "evidence": "ai-temperaments.csv / Trail"
+    },
+    {
+      "id": "car-Flint",
+      "label": "Flint temperament",
+      "evidence": "ai-temperaments.csv / Flint"
+    },
+    {
+      "id": "car-Quill",
+      "label": "Quill temperament",
+      "evidence": "ai-temperaments.csv / Quill"
+    },
+    {
+      "id": "car-Vandal",
+      "label": "Vandal temperament",
+      "evidence": "ai-temperaments.csv / Vandal"
+    },
+    {
+      "id": "car-Kestrel",
+      "label": "Kestrel temperament",
+      "evidence": "ai-temperaments.csv / Kestrel"
+    },
+    {
+      "id": "car-Bulwark",
+      "label": "Bulwark temperament",
+      "evidence": "ai-temperaments.csv / Bulwark"
+    },
+    {
+      "id": "car-rig",
+      "label": "rig temperament",
+      "evidence": "ai-temperaments.csv / rig"
+    },
+    {
+      "id": "rival-rook",
+      "label": "Rook persona",
+      "evidence": "ai-personas.csv / rook"
+    },
+    {
+      "id": "rival-ox",
+      "label": "Ox persona",
+      "evidence": "ai-personas.csv / ox"
+    },
+    {
+      "id": "rival-mica",
+      "label": "Mica persona",
+      "evidence": "ai-personas.csv / mica"
+    },
+    {
+      "id": "rival-vex",
+      "label": "Vex persona",
+      "evidence": "ai-personas.csv / vex"
+    },
+    {
+      "id": "rival-relay",
+      "label": "Relay persona",
+      "evidence": "ai-personas.csv / relay"
+    },
+    {
+      "id": "rival-marrow",
+      "label": "Marrow persona",
+      "evidence": "ai-personas.csv / marrow"
+    },
+    {
+      "id": "race-phases",
+      "label": "Four-phase race plan",
+      "evidence": "ai-phases.csv"
+    },
+    {
+      "id": "hunter-rules",
+      "label": "Bounded, symmetric leader hunt",
+      "evidence": "ai-plans.csv / Z3 pressure"
+    },
+    {
+      "id": "boss-tactics",
+      "label": "Visible weakness tactics",
+      "evidence": "ai-weaknesses.csv"
+    },
+    {
+      "id": "boss-health",
+      "label": "Extended boss health",
+      "evidence": "ai-bosses.csv / final duel"
+    },
+    {
+      "id": "pacing-scrap",
+      "label": "Scrap division pacing",
+      "evidence": "campaign.csv / events 1\u20137"
+    },
+    {
+      "id": "pacing-foundry",
+      "label": "Foundry division pacing",
+      "evidence": "campaign.csv / events 8\u201314"
+    },
+    {
+      "id": "pacing-salt",
+      "label": "Salt division pacing",
+      "evidence": "campaign.csv / events 15\u201321"
+    },
+    {
+      "id": "pacing-switchback",
+      "label": "Switchback division pacing",
+      "evidence": "campaign.csv / events 22\u201328"
+    },
+    {
+      "id": "pacing-crown",
+      "label": "Crown division pacing",
+      "evidence": "campaign.csv / events 29\u201335"
+    },
+    {
+      "id": "lengthened-courses",
+      "label": "Lengthened courses and four new finals",
+      "evidence": "course-redesigns.csv / Z1 pacing"
+    },
+    {
+      "id": "career-balance",
+      "label": "Career completion and retry balance",
+      "evidence": "Z3 cohorts / boss ratios"
+    },
+    {
+      "id": "duel-balance",
+      "label": "Finale difficulty",
+      "evidence": "Z3 final duels / held-out seeds"
+    },
+    {
+      "id": "leader-pressure",
+      "label": "Observed leader pressure",
+      "evidence": "Z3 pressure / early-wreck metrics"
+    },
+    {
+      "id": "class-balance",
+      "label": "Class share and skill effects",
+      "evidence": "Z3 roster / rotation / skill"
+    },
+    {
+      "id": "stick-observation",
+      "label": "Stick behaviour and pacing",
+      "evidence": "Z4 isolated dev.deathride.ai run"
+    }
+  ],
+  "counts": {
+    "temperaments": 11,
+    "personas": 6,
+    "plans": 4,
+    "phases": 4,
+    "weaknesses": 7,
+    "events": 35,
+    "changedCourses": 21
+  },
+  "sources": {
+    "core/src/main/resources/data/abilities.csv": "7a4b7ffb5c417de0b1f61fc8a524d2ccf9255dd9ef3e2028e63d8cb3c36aefbc",
+    "core/src/main/resources/data/ai-bosses.csv": "e21eb89f9969b7c7297a7921888550906ad27190822e64043c7ddfad5eefa07b",
+    "core/src/main/resources/data/ai-control-rules.csv": "18c9f27c85a722c1d2cd62df36d96c5e9c8e3fbd4db970f7396c1583fdde7b8b",
+    "core/src/main/resources/data/ai-personas.csv": "f6e662a3e3396951544874536393671807f98184d60f8cf0cdf819ba654f3b14",
+    "core/src/main/resources/data/ai-phases.csv": "819ab2ccfa93fbfe23383667ce7215cbb8bf408b9fb1e443a731fceef7b8ad3a",
+    "core/src/main/resources/data/ai-plans.csv": "415469b1d229802203010b1d50d1053833a8487f11d1d8f09aadaf8f12d3a94d",
+    "core/src/main/resources/data/ai-temperaments.csv": "43081c1fe07eb9e8a759baab1b601e13bd3afd6f49fd9dbad755a70f2a93a590",
+    "core/src/main/resources/data/ai-weaknesses.csv": "920f9cb9d9c31d9159c81045b086e80a910b6d0fa3e55ab36296833cd0679e89",
+    "core/src/main/resources/data/campaign.csv": "d4254f5d29597fd09c785136d369de18d2862bfb5569f6f19d01e4c7fd3df951",
+    "core/src/main/resources/data/cars.csv": "f1676ebb5ec0b1b3912d06dc83403672d17dd08589d0279dc6da44d783a107b7",
+    "core/src/main/resources/data/combat.csv": "6474cf1403d9a05247274ab6f8cdadc3e3c7ceefd15f20991ffca51712d67d55",
+    "core/src/main/resources/data/course-pacing.csv": "7bb2db05b2d577593e0023d4308e3647ee853a0bf65ee3ccad07d58ca456826a",
+    "core/src/main/resources/data/course-redesigns.csv": "0df70aa8b082b02557e7d306724e194c5a2531a7ef4127b6e817ad1a77486b35",
+    "core/src/main/resources/data/event-pacing.csv": "a5f4d474b3ba695e7ccce4c78e1d347ab5e72442e2cf0bc3a0ba90b685167d17",
+    "core/src/main/resources/data/rivals.csv": "13137d7fa7218c0e414fbee3e37f1633c1087c06a1655d0a7e8ad87b3992f174",
+    "core/src/main/resources/data/roster-tiers.csv": "c2beb394c1f0abc307d5779affcc7433cd93c5d99e832caf28dcb7997fac4ad7",
+    "evidence/ai/z3/raw/after/boss-extra.csv.gz": "2562616f7611295bdeddf34ca72fb175759566bdaf76b0a66cb2355c3eae847e",
+    "evidence/ai/z3/raw/after/physical.csv.gz": "e22c8f22096b1c3a06686e6288cfbcb5b69d73f412a31092f41c5cac087b8480",
+    "evidence/ai/z3/raw/before/boss-extra.csv.gz": "3b32a57e44dd17c5206e811a0ae9083c26823cdbda57221a8eecbd39096a1357",
+    "evidence/ai/z3/raw/before/physical.csv.gz": "29ec8fef700c2af1ec8f733d5cd7f985ddcce5f43cb399803081b472f904485e",
+    "evidence/ai/z3/report.json": "bd87ab3fb2704978be162aa2bb7b9e41c73ca99f7e69e77cc2d4cb9463c99117",
+    "evidence/ai/z4/stick/summary.json": "f592b1ba3cb72b272c308c324a2428443d92ca04a6bfe4b6370826ff0f8946c4"
+  }
+}

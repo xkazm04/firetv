@@ -1,0 +1,55 @@
+{
+  "target": "file:///C:/Users/kazda/kiro/firetv-deathride-ai/deathride/ai/design/index.html",
+  "sourceHashes": true,
+  "layouts": [
+    {
+      "theme": "light",
+      "width": 320,
+      "overflow": false
+    },
+    {
+      "theme": "light",
+      "width": 390,
+      "overflow": false
+    },
+    {
+      "theme": "light",
+      "width": 768,
+      "overflow": false
+    },
+    {
+      "theme": "light",
+      "width": 1440,
+      "overflow": false
+    },
+    {
+      "theme": "dark",
+      "width": 320,
+      "overflow": false
+    },
+    {
+      "theme": "dark",
+      "width": 390,
+      "overflow": false
+    },
+    {
+      "theme": "dark",
+      "width": 768,
+      "overflow": false
+    },
+    {
+      "theme": "dark",
+      "width": 1440,
+      "overflow": false
+    }
+  ],
+  "checks": [
+    "offline local assets, source hashes, exact table/event counts, disclosed findings, no default picks",
+    "all 32 choices/notes, reload persistence, safe four-column Markdown, clear preserves note",
+    "clipboard API, native fallback, denied manual-copy selection",
+    "storage denial/corruption/malformed state, mobile expanded controls"
+  ],
+  "pass": true,
+  "errors": [],
+  "remoteRequests": []
+}
